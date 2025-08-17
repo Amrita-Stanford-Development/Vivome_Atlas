@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Biological Data Visualization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: #fff;
+      color: #000;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    body.modal-open {
+      background: rgba(0, 0, 0, 0.7);
+    }
+    
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      transition: filter 0.3s ease;
+    }
+    
+    body.modal-open #bgCanvas {
+      filter: blur(3px) brightness(0.3);
+    }
+    
+    .menu-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+    }
+    
+    .menu-container.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.8);
+    }
+    
+    .controls { 
+      width: 100%;
+      padding: 40px;
+      background: rgba(248, 249, 250, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.15),
+        0 15px 30px rgba(0, 0, 0, 0.1),
+        0 5px 15px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translateY(-10px);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    
+    .controls:hover {
+      transform: translateY(-15px);
+      box-shadow: 
+        0 35px 70px rgba(0, 0, 0, 0.2),
+        0 25px 50px rgba(0, 0, 0, 0.15),
+        0 10px 25px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    }
+    
+    .parameter-title {
+      margin: 0 0 16px 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #333;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .parameter-group { 
+      margin-bottom: 16px;
+    }
+    
+    .parameter-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #555;
+      font-size: 11px;
+      text-align: center;
+    }
+    
+    .parameter-value {
+      color: #007bff;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    
+    .vertical-slider {
+      width: 100%;
+      height: 100px;
+      margin: 8px 0;
+      -webkit-appearance: slider-vertical;
+      appearance: slider-vertical;
+      background: #ddd;
+      outline: none;
+      border-radius: 4px;
+    }
+    
+    .vertical-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #007bff;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .vertical-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #007bff;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .controls-left {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .controls-right {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .controls-title {
+      margin: 0 0 30px 0;
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      grid-column: 1 / -1;
+    }
+    
+    .explanation-title {
+      margin: 0 0 20px 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    #explanationContainer {
+      position: relative;
+      min-height: 200px;
+    }
+    
+    .explanation-content {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #555;
+      text-align: justify;
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+    
+    .explanation-content.hidden {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+    
+    .explanation-content p {
+      margin: 0 0 14px 0;
+    }
+    
+    .explanation-content p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .highlight {
+      background: linear-gradient(120deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    
+    .radio-option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 16px 20px;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      position: relative;
+      font-weight: 500;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 2px solid transparent;
+    }
+    
+    .radio-option:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: translateX(5px);
+    }
+    
+    .radio-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .radio-custom {
+      width: 24px;
+      height: 24px;
+      border: 3px solid #ddd;
+      border-radius: 50%;
+      margin-right: 16px;
+      transition: all 0.2s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .radio-option input[type="radio"]:checked + .radio-custom {
+      border-color: #007bff;
+      background-color: #007bff;
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+    }
+    
+    .radio-option input[type="radio"]:checked + .radio-custom::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: white;
+    }
+    
+    .radio-option input[type="radio"]:checked ~ span {
+      color: #007bff;
+      font-weight: 600;
+    }
+    
+    .sliders { 
+      display: none;
+      margin-bottom: 20px;
+    }
+    
+    .sliders.visible {
+      display: block;
+    }
+    
+    .slider-group {
+      margin-bottom: 15px;
+    }
+    
+    .slider-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+    
+    .slider-value {
+      color: #007bff;
+      font-weight: 600;
+    }
+    
+    .custom-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #ddd;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    
+    .custom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #007bff;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .create-plot-btn {
+      width: 100%;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: "Poppins", sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .create-plot-btn:hover {
+      background: linear-gradient(135deg, #0056b3, #004085);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+    }
+    
+    .create-plot-btn:active {
+      transform: translateY(0);
+    }
+    
+    .plot-modal {
+      position: fixed;
+      top: 1%;
+      left: 0;
+      width: 100%;
+      height: 98%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    .plot-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .plot-container {
+      width: 80%;
+      max-width: 1200px;
+      height: 90%;
+      max-height: 900px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 
+        0 50px 100px rgba(0, 0, 0, 0.3),
+        0 25px 50px rgba(0, 0, 0, 0.2),
+        0 10px 25px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      transform: scale(0.8) translateY(50px);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .plot-modal.active .plot-container {
+      transform: scale(1) translateY(0);
+    }
+    
+    .plot-header {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    
+    .plot-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .plot-content {
+      flex: 1;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      font-size: 18px;
+      color: #666;
+      overflow: hidden;
+    }
+    
+    .plot-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+    }
+    
+    .parameter-card {
+      position: absolute;
+      left: -200px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 120px;
+      padding: 12px;
+      background: rgba(248, 249, 250, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.1),
+        0 5px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-50%) translateX(-20px);
+    }
+    
+    .parameter-card.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(-50%) translateX(0);
+    }
+    
+    #backButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 12px 20px;
+      background: rgba(248, 249, 250, 0.95);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    
+    #backButton:hover { 
+      background: rgba(233, 236, 239, 0.95);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    body.modal-open #backButton {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    @media (max-width: 768px) {
+      .controls {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 30px;
+      }
+      
+      .controls-title {
+        font-size: 24px;
+      }
+      
+      .plot-container {
+        width: 95%;
+        height: 95%;
+      }
+      
+      .plot-header {
+        padding: 15px 20px;
+      }
+      
+      .plot-title {
+        font-size: 18px;
+      }
+      
+      .parameter-card {
+        position: static;
+        transform: none;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .menu-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+  <button id="backButton" onclick="window.location.href='index.html'">Back</button>
+  
+  <div class="menu-container" id="menuContainer">
+    <div class="parameter-card" id="parameterCard">
+      <h4 class="parameter-title">Parameters</h4>
+      <div class="parameter-group">
+        <label class="parameter-label">RNA: <span id="rnaValVertical" class="parameter-value">5</span>%</label>
+        <input type="range" id="rnaSliderVertical" min="0" max="4" step="1" value="0" class="vertical-slider" orient="vertical">
+      </div>
+      <div class="parameter-group">
+        <label class="parameter-label">Prot: <span id="protValVertical" class="parameter-value">5</span>%</label>
+        <input type="range" id="protSliderVertical" min="0" max="4" step="1" value="0" class="vertical-slider" orient="vertical">
+      </div>
+    </div>
+    
+    <div class="controls">
+      <h3 class="controls-title">Select Visualization Mode</h3>
+      
+      <div class="controls-left">
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="mode" value="supervised" checked>
+            <span class="radio-custom"></span>
+            <span>Supervised Learning</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="mode" value="semisupervised">
+            <span class="radio-custom"></span>
+            <span>Semi-Supervised Learning</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="mode" value="unsupervised">
+            <span class="radio-custom"></span>
+            <span>Unsupervised Learning</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="mode" value="miscellaneous">
+            <span class="radio-custom"></span>
+            <span>Miscellaneous Analysis</span>
+          </label>
+        </div>
+        
+        <button class="create-plot-btn" onclick="createPlot()">Create Plot</button>
+      </div>
+      
+      <div class="controls-right">
+        <div id="explanationContainer">
+          <div id="supervisedExplanation" class="explanation-content">
+            <p>The <span class="highlight">Supervised Learning</span> visualization displays data where all samples have known labels and classifications.</p>
+            <p>This mode is ideal for understanding how different cell types cluster when their identities are already established, allowing you to validate classification algorithms and explore pattern recognition.</p>
+            <p>Use this visualization to examine the separation between different biological conditions and identify potential biomarkers.</p>
+          </div>
+          
+          <div id="semisupervisedExplanation" class="explanation-content hidden">
+            <p>The <span class="highlight">Semi-Supervised Learning</span> visualization combines labeled and unlabeled data to reveal hidden patterns in your dataset.</p>
+            <p>This approach is particularly powerful when you have limited labeled samples but abundant unlabeled data, which is common in biological research.</p>
+            <p>Adjust the RNA and Proteomics label percentages to see how different amounts of labeled data affect the clustering and classification results.</p>
+          </div>
+          
+          <div id="unsupervisedExplanation" class="explanation-content hidden">
+            <p>The <span class="highlight">Unsupervised Learning</span> visualization explores data without prior knowledge of sample labels or classifications.</p>
+            <p>This mode is excellent for discovering unknown cell populations, identifying novel biomarkers, and understanding the natural structure of your biological data.</p>
+            <p>Use this approach to find unexpected patterns and relationships that might not be apparent through supervised methods.</p>
+          </div>
+          
+          <div id="miscellaneousExplanation" class="explanation-content hidden">
+            <p>The <span class="highlight">Miscellaneous Analysis</span> provides specialized visualization tools for advanced data exploration and quality control.</p>
+            <p>This mode includes various analytical approaches such as dimensionality reduction techniques, correlation analysis, and data quality assessment tools.</p>
+            <p>Perfect for preliminary data exploration and identifying potential issues or interesting features in your dataset before applying specific machine learning approaches.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="plot-modal" id="plotModal">
+    <div class="plot-container">
+      <div class="plot-header">
+        <h2 class="plot-title" id="plotTitle">Visualization</h2>
+        <button class="back-btn" onclick="closePlot()">← Back to Menu</button>
+      </div>
+      <div class="plot-content" id="plotContent">
+        Click "Create Plot" to generate your visualization
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modeRadios = document.querySelectorAll('input[name="mode"]');
+    const rnaSliderVertical = document.getElementById('rnaSliderVertical');
+    const protSliderVertical = document.getElementById('protSliderVertical');
+    const rnaValVerticalEl = document.getElementById('rnaValVertical');
+    const protValVerticalEl = document.getElementById('protValVertical');
+    const values = [5,10,25,50,75];
+
+    function updateSliderDisplays() {
+      // Only update vertical sliders now
+      const rnaVerticalIdx = rnaSliderVertical ? rnaSliderVertical.value : 0;
+      const protVerticalIdx = protSliderVertical ? protSliderVertical.value : 0;
+      
+      if (rnaValVerticalEl) rnaValVerticalEl.textContent = values[rnaVerticalIdx];
+      if (protValVerticalEl) protValVerticalEl.textContent = values[protVerticalIdx];
+    }
+
+    function updateSliders() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const parameterCard = document.getElementById('parameterCard');
+      
+      if (mode === 'semisupervised') {
+        parameterCard.classList.add('visible');
+      } else {
+        parameterCard.classList.remove('visible');
+      }
+      
+      updateExplanation(mode);
+    }
+
+    function updateExplanation(mode) {
+      const explanations = {
+        'supervised': document.getElementById('supervisedExplanation'),
+        'semisupervised': document.getElementById('semisupervisedExplanation'),
+        'unsupervised': document.getElementById('unsupervisedExplanation'),
+        'miscellaneous': document.getElementById('miscellaneousExplanation')
+      };
+      
+      // Hide all explanations first
+      Object.values(explanations).forEach(el => el.classList.add('hidden'));
+      
+      // Show the selected explanation
+      if (explanations[mode]) {
+        explanations[mode].classList.remove('hidden');
+      }
+    }
+
+    function createPlot() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const plotContent = document.getElementById('plotContent');
+      const plotTitle = document.getElementById('plotTitle');
+      const menuContainer = document.getElementById('menuContainer');
+      const plotModal = document.getElementById('plotModal');
+      const body = document.body;
+      
+      // Set iframe source and title based on mode
+      let src = '';
+      let title = '';
+      
+      if (mode === 'supervised') {
+        src = 'Plots/Supervised.html';
+        title = 'Supervised Learning Visualization';
+      } else if (mode === 'unsupervised') {
+        src = 'Plots/Unsupervised.html';
+        title = 'Unsupervised Learning Visualization';
+      } else if (mode === 'miscellaneous') {
+        src = 'Plots/Miscellaneous.html';
+        title = 'Miscellaneous Analysis Visualization';
+      } else {
+        const rna = values[rnaSliderVertical ? rnaSliderVertical.value : 0];
+        const prot = values[protSliderVertical ? protSliderVertical.value : 0];
+        src = `Plots/PCA3D_semi_r${rna}_p${prot}.html`;
+        title = `Semi-Supervised Learning (RNA: ${rna}%, Prot: ${prot}%)`;
+      }
+      
+      // Create iframe to load the HTML file
+      plotContent.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
+      plotTitle.textContent = title;
+      
+      // Show modal with animation
+      body.classList.add('modal-open');
+      menuContainer.classList.add('hidden');
+      setTimeout(() => {
+        plotModal.classList.add('active');
+      }, 150);
+    }
+
+    // Remove the mock visualization function since we're now using real iframes
+    
+    function closePlot() {
+      const menuContainer = document.getElementById('menuContainer');
+      const plotModal = document.getElementById('plotModal');
+      const body = document.body;
+      
+      // Hide modal with animation
+      plotModal.classList.remove('active');
+      setTimeout(() => {
+        body.classList.remove('modal-open');
+        menuContainer.classList.remove('hidden');
+        document.getElementById('plotContent').innerHTML = 'Click "Create Plot" to generate your visualization';
+      }, 300);
+    }
+
+    // Event listeners
+    modeRadios.forEach(r => r.addEventListener('change', updateSliders));
+    
+    if (rnaSliderVertical) rnaSliderVertical.addEventListener('input', updateSliderDisplays);
+    if (protSliderVertical) protSliderVertical.addEventListener('input', updateSliderDisplays);
+
+    // Initialize
+    updateSliderDisplays();
+    updateSliders();
+
+    // Background animation code
+    const bgCanvas = document.getElementById('bgCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+
+    function resizeBg() {
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeBg);
+    resizeBg();
+
+    // Particle system for cellular/molecular visualization
+    class Particle {
+      constructor() {
+        this.reset();
+        this.y = Math.random() * bgCanvas.height;
+      }
+
+      reset() {
+        this.x = Math.random() * bgCanvas.width;
+        this.y = bgCanvas.height + Math.random() * 100;
+        this.size = Math.random() * 3 + 1;
+        this.speedY = -Math.random() * 0.42 - 0.17;
+        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.opacity = Math.random() * 0.6 + 0.3;
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        
+        // Properties for DNA/RNA helixes
+        this.helixPhase = Math.random() * Math.PI * 2;
+        this.helixLength = Math.random() * 30 + 20;
+        this.helixAmplitude = Math.random() * 8 + 4;
+      }
+
+      update(time) {
+        this.y += this.speedY;
+        this.x += this.speedX + Math.sin(time * 0.42 + this.pulsePhase) * 0.17;
+        
+        if (this.y < -50) {
+          this.reset();
+        }
+        
+        // Wrap around horizontally
+        if (this.x < -50) this.x = bgCanvas.width + 50;
+        if (this.x > bgCanvas.width + 50) this.x = -50;
+      }
+
+      draw(ctx, time) {
+        ctx.save();
+        const pulse = 1 + Math.sin(time * 1.7 + this.pulsePhase) * 0.2;
+        const currentSize = this.size * pulse;
+        
+        ctx.globalAlpha = this.opacity;
+        
+        if (this.type === 'cell') {
+          // Draw cell-like particles
+          const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, currentSize * 3);
+          gradient.addColorStop(0, 'rgba(0, 142, 204, 0.7)');
+          gradient.addColorStop(0.5, 'rgba(0, 142, 204, 0.4)');
+          gradient.addColorStop(1, 'rgba(0, 142, 204, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, currentSize * 3, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Inner nucleus
+          ctx.fillStyle = 'rgba(0, 142, 204, 0.9)';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (this.type === 'molecule') {
+          // Draw molecule-like particles
+          ctx.fillStyle = 'rgba(92, 184, 92, 0.7)';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (this.type === 'miniDNA') {
+          // Draw small DNA double helix
+          this.drawMiniDNA(ctx, time, currentSize);
+        } else if (this.type === 'miniRNA') {
+          // Draw small RNA single helix
+          this.drawMiniRNA(ctx, time, currentSize);
+        }
+        
+        ctx.restore();
+      }
+      
+      drawMiniDNA(ctx, time, size) {
+        const points = 8;
+        const spacing = this.helixLength / points;
+        
+        // Add rotation and tilt to make DNA not vertically straight
+        const rotation = this.helixPhase * 0.3; // Use helixPhase for consistent rotation per particle
+        const tilt = Math.sin(time * 0.1 + this.helixPhase) * 0.4; // Gentle swaying
+        
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(rotation + tilt);
+        ctx.translate(-this.x, -this.y);
+        
+        // Draw first strand
+        ctx.strokeStyle = 'rgba(0, 142, 204, 0.75)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        
+        for (let i = 0; i < points; i++) {
+          const localY = i * spacing - this.helixLength / 2;
+          const x1 = this.x + Math.sin(time * 0.3 + this.helixPhase + i * 0.5) * this.helixAmplitude;
+          const y1 = this.y + localY;
+          
+          if (i === 0) {
+            ctx.moveTo(x1, y1);
+          } else {
+            ctx.lineTo(x1, y1);
+          }
+        }
+        ctx.stroke();
+        
+        // Draw second strand
+        ctx.beginPath();
+        for (let i = 0; i < points; i++) {
+          const localY = i * spacing - this.helixLength / 2;
+          const x2 = this.x + Math.sin(time * 0.3 + this.helixPhase + i * 0.5 + Math.PI) * this.helixAmplitude;
+          const y2 = this.y + localY;
+          
+          if (i === 0) {
+            ctx.moveTo(x2, y2);
+          } else {
+            ctx.lineTo(x2, y2);
+          }
+        }
+        ctx.stroke();
+        
+        // Draw base pairs
+        ctx.strokeStyle = 'rgba(92, 184, 92, 0.6)';
+        ctx.lineWidth = 0.8;
+        
+        for (let i = 0; i < points; i += 2) {
+          const localY = i * spacing - this.helixLength / 2;
+          const x1 = this.x + Math.sin(time * 0.3 + this.helixPhase + i * 0.5) * this.helixAmplitude;
+          const x2 = this.x + Math.sin(time * 0.3 + this.helixPhase + i * 0.5 + Math.PI) * this.helixAmplitude;
+          const y = this.y + localY;
+          
+          ctx.beginPath();
+          ctx.moveTo(x1, y);
+          ctx.lineTo(x2, y);
+          ctx.stroke();
+        }
+        
+        ctx.restore();
+      }
+      
+      drawMiniRNA(ctx, time, size) {
+        const points = 8;
+        const spacing = this.helixLength / points;
+        
+        // Add rotation and tilt to make RNA not vertically straight
+        const rotation = this.helixPhase * 0.4; // Slightly different rotation than DNA
+        const tilt = Math.sin(time * 0.12 + this.helixPhase) * 0.5; // Gentle swaying
+        
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(rotation + tilt);
+        ctx.translate(-this.x, -this.y);
+        
+        // Draw single RNA strand
+        ctx.strokeStyle = 'rgba(220, 53, 69, 0.75)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        for (let i = 0; i < points; i++) {
+          const localY = i * spacing - this.helixLength / 2;
+          const x = this.x + Math.sin(time * 0.25 + this.helixPhase + i * 0.4) * this.helixAmplitude;
+          const y = this.y + localY;
+          
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+        
+        // Add small nucleotide dots along RNA
+        ctx.fillStyle = 'rgba(255, 193, 7, 0.7)';
+        for (let i = 0; i < points; i += 2) {
+          const localY = i * spacing - this.helixLength / 2;
+          const x = this.x + Math.sin(time * 0.25 + this.helixPhase + i * 0.4) * this.helixAmplitude;
+          const y = this.y + localY;
+          
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        
+        ctx.restore();
+      }
+    }
+
+    // Network nodes for molecular connections
+    class NetworkNode {
+      constructor() {
+        this.x = Math.random() * bgCanvas.width;
+        this.y = Math.random() * bgCanvas.height;
+        this.vx = (Math.random() - 0.5) * 0.42;
+        this.vy = (Math.random() - 0.5) * 0.42;
+        this.radius = Math.random() * 2 + 1;
+        this.connections = [];
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        // Bounce off edges
+        if (this.x < 0 || this.x > bgCanvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > bgCanvas.height) this.vy *= -1;
+        
+        // Keep in bounds
+        this.x = Math.max(0, Math.min(bgCanvas.width, this.x));
+        this.y = Math.max(0, Math.min(bgCanvas.height, this.y));
+      }
+
+      draw(ctx) {
+        ctx.fillStyle = 'rgba(0, 142, 204, 0.5)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Flowing gradient waves
+    class FlowField {
+      constructor() {
+        this.resolution = 50;
+        this.cols = Math.ceil(bgCanvas.width / this.resolution);
+        this.rows = Math.ceil(bgCanvas.height / this.resolution);
+        this.zOffset = 0;
+      }
+
+      draw(ctx, time) {
+        ctx.save();
+        ctx.globalAlpha = 0.05;
+        
+        for (let i = 0; i < this.cols; i++) {
+          for (let j = 0; j < this.rows; j++) {
+            const x = i * this.resolution;
+            const y = j * this.resolution;
+            
+            const angle = (Math.sin(x * 0.01 + time * 0.17) + Math.cos(y * 0.01 + time * 0.127)) * Math.PI;
+            const length = this.resolution * 0.8;
+            
+            ctx.strokeStyle = `hsla(${200 + Math.sin(time + i * 0.1) * 20}, 70%, 50%, 0.15)`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(
+              x + Math.cos(angle) * length,
+              y + Math.sin(angle) * length
+            );
+            ctx.stroke();
+          }
+        }
+        
+        ctx.restore();
+      }
+    }
+
+    // Initialize background elements
+    const dnaParticles = Array.from({ length: 50 }, () => {
+      const particle = new Particle();
+      particle.type = 'miniDNA';
+      return particle;
+    });
+    
+    const rnaParticles = Array.from({ length: 50 }, () => {
+      const particle = new Particle();
+      particle.type = 'miniRNA';
+      return particle;
+    });
+    
+    const circularParticles = Array.from({ length: 150 }, () => {
+      const particle = new Particle();
+      particle.type = Math.random() < 0.5 ? 'cell' : 'molecule';
+      return particle;
+    });
+    
+    const particles = [...dnaParticles, ...rnaParticles, ...circularParticles];
+    const networkNodes = Array.from({ length: 50 }, () => new NetworkNode());
+    const flowField = new FlowField();
+
+    // Connect nearby network nodes
+    function updateNetworkConnections() {
+      const maxDistance = 140;
+      networkNodes.forEach((node, i) => {
+        node.connections = [];
+        networkNodes.slice(i + 1).forEach(otherNode => {
+          const dx = node.x - otherNode.x;
+          const dy = node.y - otherNode.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < maxDistance) {
+            node.connections.push({ node: otherNode, distance });
+          }
+        });
+      });
+    }
+
+    // Main animation loop
+    function drawBackground() {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      const time = Date.now() * 0.00085;
+      
+      // Draw gradient base with breathing effect (using bluish tones from documentation)
+      const breathingIntensity = 0.5 + 0.3 * Math.sin(time * 0.8);
+      const waveIntensity1 = 0.4 + 0.2 * Math.sin(time * 0.5);
+      const waveIntensity2 = 0.3 + 0.15 * Math.sin(time * 0.7 + Math.PI / 3);
+      
+      const gradient = bgCtx.createLinearGradient(0, 0, bgCanvas.width, bgCanvas.height);
+      
+      const baseHue = 210;
+      const baseSat = 12 + (breathingIntensity * 20) + (waveIntensity1 * 8);
+      const waveOffset = waveIntensity2 * 5;
+      
+      gradient.addColorStop(0, `hsl(${baseHue}, ${Math.min(baseSat + waveOffset, 50)}%, ${94 + breathingIntensity * 2}%)`);
+      gradient.addColorStop(0.25, `hsl(${baseHue + 2}, ${Math.min(baseSat * 0.9 + waveOffset, 45)}%, ${93 + breathingIntensity * 1.5}%)`);
+      gradient.addColorStop(0.5, `hsl(${baseHue + 5}, ${Math.min(baseSat * 0.8 + waveIntensity1 * 8, 50)}%, ${92 + breathingIntensity * 1}%)`);
+      gradient.addColorStop(0.75, `hsl(${baseHue + 3}, ${Math.min(baseSat * 0.7 + waveOffset, 45)}%, ${91 + breathingIntensity * 0.8}%)`);
+      gradient.addColorStop(1, `hsl(${baseHue + 8}, ${Math.min(baseSat * 0.6 + waveIntensity2 * 10, 50)}%, ${90 + breathingIntensity * 0.5}%)`);
+      
+      bgCtx.fillStyle = gradient;
+      bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+      
+      // Add shimmer effect
+      const shimmerGradient = bgCtx.createRadialGradient(
+        bgCanvas.width * (0.3 + 0.2 * Math.sin(time * 0.3)), 
+        bgCanvas.height * (0.4 + 0.15 * Math.cos(time * 0.25)),
+        0,
+        bgCanvas.width * (0.3 + 0.2 * Math.sin(time * 0.3)), 
+        bgCanvas.height * (0.4 + 0.15 * Math.cos(time * 0.25)),
+        bgCanvas.width * 0.8
+      );
+      
+      shimmerGradient.addColorStop(0, `hsla(220, 35%, 96%, ${0.04 + waveIntensity1 * 0.03})`);
+      shimmerGradient.addColorStop(0.5, `hsla(215, 30%, 94%, ${0.02 + waveIntensity2 * 0.02})`);
+      shimmerGradient.addColorStop(1, 'hsla(210, 20%, 92%, 0)');
+      
+      bgCtx.fillStyle = shimmerGradient;
+      bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+      
+      // Draw flow field
+      flowField.draw(bgCtx, time);
+      
+      // Update and draw network
+      networkNodes.forEach(node => {
+        node.update();
+      });
+      
+      if (Math.random() < 0.1) {
+        updateNetworkConnections();
+      }
+      
+      // Draw network connections
+      bgCtx.save();
+      bgCtx.globalAlpha = 0.1;
+      networkNodes.forEach(node => {
+        node.connections.forEach(connection => {
+          const opacity = 1 - (connection.distance / 140);
+          bgCtx.strokeStyle = `rgba(0, 142, 204, ${opacity * 0.6})`;
+          bgCtx.lineWidth = 0.8;
+          bgCtx.beginPath();
+          bgCtx.moveTo(node.x, node.y);
+          bgCtx.lineTo(connection.node.x, connection.node.y);
+          bgCtx.stroke();
+        });
+      });
+      
+      // Draw network nodes
+      networkNodes.forEach(node => node.draw(bgCtx));
+      bgCtx.restore();
+      
+      // Update and draw particles
+      particles.forEach(particle => {
+        particle.update(time);
+        particle.draw(bgCtx, time);
+      });
+      
+      // Draw subtle grid pattern
+      bgCtx.save();
+      bgCtx.globalAlpha = 0.03;
+      bgCtx.strokeStyle = 'rgba(0, 142, 204, 0.5)';
+      bgCtx.lineWidth = 0.5;
+      
+      const gridSize = 100;
+      for (let x = 0; x < bgCanvas.width; x += gridSize) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(x, 0);
+        bgCtx.lineTo(x, bgCanvas.height);
+        bgCtx.stroke();
+      }
+      
+      for (let y = 0; y < bgCanvas.height; y += gridSize) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(0, y);
+        bgCtx.lineTo(bgCanvas.width, y);
+        bgCtx.stroke();
+      }
+      bgCtx.restore();
+      
+      // Add subtle vignette effect
+      const vignette = bgCtx.createRadialGradient(
+        bgCanvas.width / 2, bgCanvas.height / 2, 0,
+        bgCanvas.width / 2, bgCanvas.height / 2, Math.max(bgCanvas.width, bgCanvas.height) * 0.7
+      );
+      vignette.addColorStop(0, 'rgba(245, 245, 243, 0)');
+      vignette.addColorStop(1, 'rgba(0, 142, 204, 0.08)');
+      bgCtx.fillStyle = vignette;
+      bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+      
+      requestAnimationFrame(drawBackground);
+    }
+    
+    // Start animation
+    updateNetworkConnections();
+    drawBackground();
+  </script>
+</body>
+</html>
