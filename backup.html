@@ -586,19 +586,6 @@
             height: calc(100vh - 160px);
             overflow-y: auto;
             padding: 1.5rem;
-            padding-top: 0;
-        }
-        
-        .gene-profile-table-header {
-            position: sticky;
-            top: 0;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
-            backdrop-filter: blur(20px);
-            z-index: 20;
-            padding: 1rem 0 0.5rem 0;
-            margin: 0 -1.5rem 0 -1.5rem;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
         }
         
         .gene-profile-table {
@@ -614,7 +601,9 @@
             text-align: left;
             font-weight: 600;
             border-bottom: 2px solid rgba(0, 142, 204, 0.2);
-            position: static;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         .gene-profile-table td {
@@ -883,21 +872,21 @@
                 <div class="gene-profile-header">
                     <h3 id="gene-profile-title">Gene Profile</h3>
                     <div class="gene-profile-controls">
+                        <button class="menu-toggle-btn" id="menu-toggle-btn">
+                            <span>☰</span>
+                            <span id="menu-toggle-text">Show Menu</span>
+                        </button>
                         <button class="gene-profile-close" id="gene-profile-close">×</button>
                     </div>
                 </div>
                 <div class="gene-profile-content">
-                    <div class="gene-profile-table-header">
-                        <table class="gene-profile-table">
-                            <thead>
-                                <tr>
-                                    <th>Gene</th>
-                                    <th>Expression</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
                     <table class="gene-profile-table" id="gene-profile-table">
+                        <thead>
+                            <tr>
+                                <th>Gene</th>
+                                <th>Expression</th>
+                            </tr>
+                        </thead>
                         <tbody id="gene-profile-tbody">
                             <!-- Gene data will be populated here -->
                         </tbody>
@@ -1366,15 +1355,9 @@
             }
             
             updateStats() {
-                const rnaCountEl = document.getElementById('rna-count');
-                const protCountEl = document.getElementById('prot-count');
-                const classCountEl = document.getElementById('class-count');
-                
-                if (rnaCountEl) rnaCountEl.textContent = this.data.rna.length.toLocaleString();
-                if (protCountEl) protCountEl.textContent = this.data.prot.length.toLocaleString();
-                if (classCountEl) classCountEl.textContent = this.cellTypes.size;
-                
-                console.log(`Stats updated: ${this.data.rna.length} RNA, ${this.data.prot.length} PROT, ${this.cellTypes.size} cell types`);
+                document.getElementById('rna-count').textContent = this.data.rna.length.toLocaleString();
+                document.getElementById('prot-count').textContent = this.data.prot.length.toLocaleString();
+                document.getElementById('class-count').textContent = this.cellTypes.size;
             }
             
             createCellTypeFilters() {
@@ -1465,6 +1448,11 @@
                 // Gene profile panel close button
                 document.getElementById('gene-profile-close').addEventListener('click', () => {
                     this.closeGeneProfile();
+                });
+                
+                // Menu toggle button (in gene profile header)
+                document.getElementById('menu-toggle-btn').addEventListener('click', () => {
+                    this.toggleMenu();
                 });
                 
                 // Menu toggle tab (floating tab on left side)
@@ -1747,156 +1735,112 @@
                 }
                 
                 try {
-                    // Handle split RNA files
-                    if (modality === 'rna') {
-                        return await this.loadRNAGeneProfile(cellData);
-                    } else {
-                        const fileName = './Atlas/atlas_PROT_lat128.csv';
-                        return await this.loadSingleFileGeneProfile(fileName, cellData, modality);
+                    const fileName = modality === 'rna' ? './Atlas/atlas_RNA_lat128-001.csv' : './Atlas/atlas_PROT_lat128.csv';
+                    
+                    console.log(`Loading gene profile for ${modality} cell with orig_index: ${cellData.orig_index}`);
+                    
+                    // Use streaming fetch with ReadableStream for memory efficiency
+                    const response = await fetch(fileName);
+                    if (!response.ok) {
+                        throw new Error(`Failed to load ${modality} data: ${response.status} ${response.statusText}`);
                     }
+                    
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    
+                    let buffer = '';
+                    let headers = null;
+                    let targetRow = null;
+                    let rowCount = 0;
+                    let foundTarget = false;
+                    
+                    // Process file in chunks to avoid memory overload
+                    while (!foundTarget) {
+                        const { done, value } = await reader.read();
+                        
+                        if (done) break;
+                        
+                        // Decode chunk and add to buffer
+                        buffer += decoder.decode(value, { stream: true });
+                        
+                        // Process complete lines
+                        let lineEnd;
+                        while ((lineEnd = buffer.indexOf('\n')) !== -1) {
+                            const line = buffer.slice(0, lineEnd).trim();
+                            buffer = buffer.slice(lineEnd + 1);
+                            
+                            if (!line) continue;
+                            
+                            // Parse header row
+                            if (!headers) {
+                                headers = this.parseCSVLine(line);
+                                continue;
+                            }
+                            
+                            // Parse data row
+                            const values = this.parseCSVLine(line);
+                            if (values.length > 2) {
+                                const origIndex = parseInt(values[2]); // orig_index is column 2
+                                
+                                if (origIndex === cellData.orig_index) {
+                                    targetRow = values;
+                                    foundTarget = true;
+                                    break;
+                                }
+                            }
+                            
+                            rowCount++;
+                            
+                            // Update progress every 1000 rows
+                            if (rowCount % 1000 === 0) {
+                                this.updateLoadingProgress(rowCount, modality);
+                                // Yield control to prevent browser freezing
+                                await new Promise(resolve => setTimeout(resolve, 1));
+                            }
+                        }
+                    }
+                    
+                    // Close the reader
+                    reader.releaseLock();
+                    
+                    if (!targetRow || !headers) {
+                        throw new Error(`Cell with orig_index ${cellData.orig_index} not found in ${modality} data`);
+                    }
+                    
+                    // Extract gene profile efficiently
+                    const geneProfile = {};
+                    const geneIndices = [];
+                    
+                    // Pre-compute gene column indices for faster access
+                    headers.forEach((header, index) => {
+                        if (header.startsWith('gene_')) {
+                            geneIndices.push({ index, name: header.replace('gene_', '') });
+                        }
+                    });
+                    
+                    // Extract gene values using pre-computed indices
+                    geneIndices.forEach(({ index, name }) => {
+                        const value = parseFloat(targetRow[index]);
+                        if (!isNaN(value)) {
+                            geneProfile[name] = value;
+                        }
+                    });
+                    
+                    // Cache the result for future use
+                    this.geneProfileCache.set(cacheKey, geneProfile);
+                    
+                    console.log(`Loaded gene profile for ${modality} cell ${cellData.orig_index}: ${Object.keys(geneProfile).length} genes`);
+                    
+                    return geneProfile;
+                    
                 } catch (error) {
                     console.error('Error loading gene profile:', error);
                     throw error;
                 }
             }
             
-            async loadRNAGeneProfile(cellData) {
-                const cacheKey = `rna_${cellData.orig_index}`;
-                
-                // Check cache first
-                if (this.geneProfileCache.has(cacheKey)) {
-                    return this.geneProfileCache.get(cacheKey);
-                }
-                
-                // Try both RNA files
-                const fileParts = [
-                    './Atlas/atlas_RNA_lat128-001-part1.csv',
-                    './Atlas/atlas_RNA_lat128-001-part2.csv'
-                ];
-                
-                for (let i = 0; i < fileParts.length; i++) {
-                    const fileName = fileParts[i];
-                    console.log(`Searching for RNA cell ${cellData.orig_index} in ${fileName}`);
-                    
-                    try {
-                        const geneProfile = await this.loadSingleFileGeneProfile(fileName, cellData, 'rna', true);
-                        if (geneProfile && Object.keys(geneProfile).length > 0) {
-                            // Found in this file, cache and return
-                            this.geneProfileCache.set(cacheKey, geneProfile);
-                            console.log(`Found RNA cell ${cellData.orig_index} in ${fileName}`);
-                            return geneProfile;
-                        }
-                    } catch (error) {
-                        console.log(`Cell ${cellData.orig_index} not found in ${fileName}, trying next file...`);
-                        // Continue to next file
-                    }
-                }
-                
-                // If we get here, the cell wasn't found in any file
-                throw new Error(`RNA cell with orig_index ${cellData.orig_index} not found in any atlas file`);
-            }
-            
-            async loadSingleFileGeneProfile(fileName, cellData, modality, suppressErrors = false) {
-                console.log(`Loading gene profile for ${modality} cell with orig_index: ${cellData.orig_index} from ${fileName}`);
-                
-                // Use streaming fetch with ReadableStream for memory efficiency
-                const response = await fetch(fileName);
-                if (!response.ok) {
-                    throw new Error(`Failed to load ${modality} data from ${fileName}: ${response.status} ${response.statusText}`);
-                }
-                
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                
-                let buffer = '';
-                let headers = null;
-                let targetRow = null;
-                let rowCount = 0;
-                let foundTarget = false;
-                
-                // Process file in chunks to avoid memory overload
-                while (!foundTarget) {
-                    const { done, value } = await reader.read();
-                    
-                    if (done) break;
-                    
-                    // Decode chunk and add to buffer
-                    buffer += decoder.decode(value, { stream: true });
-                    
-                    // Process complete lines
-                    let lineEnd;
-                    while ((lineEnd = buffer.indexOf('\n')) !== -1) {
-                        const line = buffer.slice(0, lineEnd).trim();
-                        buffer = buffer.slice(lineEnd + 1);
-                        
-                        if (!line) continue;
-                        
-                        // Parse header row
-                        if (!headers) {
-                            headers = this.parseCSVLine(line);
-                            continue;
-                        }
-                        
-                        // Parse data row
-                        const values = this.parseCSVLine(line);
-                        if (values.length > 2) {
-                            const origIndex = parseInt(values[2]); // orig_index is column 2
-                            
-                            if (origIndex === cellData.orig_index) {
-                                targetRow = values;
-                                foundTarget = true;
-                                break;
-                            }
-                        }
-                        
-                        rowCount++;
-                        
-                        // Update progress every 1000 rows
-                        if (rowCount % 1000 === 0) {
-                            this.updateLoadingProgress(rowCount, modality, fileName);
-                            // Yield control to prevent browser freezing
-                            await new Promise(resolve => setTimeout(resolve, 1));
-                        }
-                    }
-                }
-                
-                // Close the reader
-                reader.releaseLock();
-                
-                if (!targetRow || !headers) {
-                    if (suppressErrors) {
-                        return null; // Return null for split files when cell not found
-                    }
-                    throw new Error(`Cell with orig_index ${cellData.orig_index} not found in ${fileName}`);
-                }
-                
-                // Extract gene profile efficiently
-                const geneProfile = {};
-                const geneIndices = [];
-                
-                // Pre-compute gene column indices for faster access
-                headers.forEach((header, index) => {
-                    if (header.startsWith('gene_')) {
-                        geneIndices.push({ index, name: header.replace('gene_', '') });
-                    }
-                });
-                
-                // Extract gene values using pre-computed indices
-                geneIndices.forEach(({ index, name }) => {
-                    const value = parseFloat(targetRow[index]);
-                    if (!isNaN(value)) {
-                        geneProfile[name] = value;
-                    }
-                });
-                
-                console.log(`Loaded gene profile for ${modality} cell ${cellData.orig_index} from ${fileName}: ${Object.keys(geneProfile).length} genes`);
-                
-                return geneProfile;
-            }
-            
-            updateLoadingProgress(rowCount, modality, fileName = '') {
-                const fileInfo = fileName ? ` (${fileName.split('/').pop()})` : '';
-                const progressText = `Searching ${modality.toUpperCase()} data${fileInfo}... (${rowCount.toLocaleString()} rows processed)`;
+            updateLoadingProgress(rowCount, modality) {
+                const progressText = `Searching ${modality.toUpperCase()} data... (${rowCount.toLocaleString()} rows processed)`;
                 if (this.geneProfileTBody) {
                     this.geneProfileTBody.innerHTML = `
                         <tr>
@@ -1946,6 +1890,7 @@
                     this.visualizationArea.classList.add('menu-collapsed');
                     this.visualizationArea.classList.add('with-gene-panel');
                     this.menuToggleTab.classList.add('visible');
+                    this.updateMenuToggleButton(false);
                     
                     // Trigger 3D canvas resize
                     setTimeout(() => {
@@ -1953,7 +1898,7 @@
                     }, 400);
                     
                     // Immediately show the panel with loading state
-                    this.geneProfileTitle.textContent = `${modality.toUpperCase()} • ${cellData.class_name} • Loading...`;
+                    this.geneProfileTitle.textContent = `Gene Profile - ${modality.toUpperCase()} Cell (${cellData.class_name})`;
                     this.geneProfileTBody.innerHTML = `
                         <tr>
                             <td colspan="2" style="text-align: center; padding: 3rem;">
@@ -1981,7 +1926,7 @@
                     const geneProfile = await this.loadCellGeneProfile(cellData, modality);
                     
                     // Update panel title to show completion
-                    this.geneProfileTitle.textContent = `${modality.toUpperCase()} • ${cellData.class_name} • ${Object.keys(geneProfile).length} genes`;
+                    this.geneProfileTitle.textContent = `Gene Profile - ${modality.toUpperCase()} Cell (${cellData.class_name}) - ${Object.keys(geneProfile).length} genes`;
                     
                     // Clear loading state
                     this.geneProfileTBody.innerHTML = '';
@@ -2043,6 +1988,7 @@
                 this.visualizationArea.classList.remove('menu-collapsed');
                 this.visualizationArea.classList.remove('with-gene-panel');
                 this.menuToggleTab.classList.remove('visible');
+                this.updateMenuToggleButton(true);
                 
                 // Trigger 3D canvas resize
                 setTimeout(() => {
@@ -2127,5 +2073,6 @@
             window.vivomeAtlas = new VivomeAtlasThree();
         });
     </script>
+    
 </body>
-</html>
+</html> 
