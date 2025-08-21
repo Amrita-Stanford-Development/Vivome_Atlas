@@ -672,6 +672,7 @@
       <div class="nav-container">
         <nav class="nav-menu">
           <a href="#overview" class="nav-link active">Overview</a>
+          <a href="#hub-model" class="nav-link">Hub Model</a>
           <a href="#motivation" class="nav-link">Novelty</a>
           <a href="#approach" class="nav-link">Approach</a>
           <a href="#outcomes" class="nav-link">Outcomes</a>
@@ -769,6 +770,26 @@
                 </ul>
                 <p>Cutting-edge metabolite quantification revealing cellular functional states and energy dynamics.</p>
               </div>
+
+              <div class="point">
+                <h3>🔗 Single-Cell ATAC-seq</h3>
+                <ul>
+                  <li>Chromatin accessibility profiling measuring 50,000-100,000 peaks per cell</li>
+                  <li>10x Genomics PBMC ATAC datasets with matched cell types</li>
+                  <li>Thousands of cells revealing regulatory landscape dynamics</li>
+                </ul>
+                <p>Epigenomic profiling providing insights into gene regulatory networks and chromatin states.</p>
+              </div>
+
+              <div class="point">
+                <h3>🌐 Other Emerging Modalities</h3>
+                <ul>
+                  <li>Spatial transcriptomics for tissue architecture context</li>
+                  <li>Single-cell multi-omics (CITE-seq, SHARE-seq)</li>
+                  <li>Functional genomics (Perturb-seq, CROP-seq)</li>
+                </ul>
+                <p>Future-ready platform designed to incorporate emerging single-cell technologies and multi-modal datasets.</p>
+              </div>
             </div>
 
             <div class="outcome-box">
@@ -779,6 +800,18 @@
             <div class="outcome-box">
               <h3>Expected Outcome</h3>
               <p>A reusable "living" atlas with versioned reference embeddings and pretrained encoders for RNA, protein, lipid, metabolite, and other omics modalities that enables robust cross-modal label transfer and comparative analysis across diverse assays.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="hub-model" class="doc-section">
+          <div class="section-card">
+            <h2>Hub Model</h2>
+            <div style="text-align: center; padding: 2rem 0;">
+              <object data="model.pdf" type="application/pdf" width="100%" height="600px" style="border-radius: 15px; box-shadow: 0 8px 25px rgba(0, 142, 204, 0.15);">
+                <embed src="model.pdf" type="application/pdf" width="100%" height="600px" style="border-radius: 15px;">
+                <p>Your browser does not support PDF viewing. <a href="model.pdf" target="_blank">Click here to download the PDF</a></p>
+              </object>
             </div>
           </div>
         </section>
@@ -1110,19 +1143,88 @@ where: <br> z_i = anchor embedding (RNA)<br>
             <h2>References</h2>
             <div class="key-points">
               <div class="point">
+                <strong>Cao et al.</strong> (2024). Multi-omics single-cell data integration and regulatory inference with graph-linked embedding. <em>Nature Biotechnology</em> 42:470-486.
+              </div>
+              <div class="point">
+                <strong>Ashuach et al.</strong> (2023). MultiVI: deep generative model for the integration of multimodal data. <em>Nature Methods</em> 20:1222-1231.
+              </div>
+              <div class="point">
+                <strong>Chen et al.</strong> (2023). SIMBA: single-cell embedding along with features. <em>Nature Methods</em> 20:1003-1013.
+              </div>
+              <div class="point">
+                <strong>Heumos et al.</strong> (2025). Benchmarking single-cell multi-modal data integrations. <em>Nature Methods</em> 22:89-101.
+              </div>
+              <div class="point">
+                <strong>Specht et al.</strong> (2021). Multiplexed single-cell proteomics using SCoPE2. <em>Nature Protocols</em> 16:5398-5425.
+              </div>
+              <div class="point">
+                <strong>Derks et al.</strong> (2023). Increasing the throughput of sensitive proteomics by plexDIA. <em>Nature Biotechnology</em> 41:50-59.
+              </div>
+              <div class="point">
+                <strong>Brunner et al.</strong> (2024). Pick-up single-cell proteomic analysis for quantifying up to 3000 proteins in a mammalian cell. <em>Nature Communications</em> 15:1854.
+              </div>
+              <div class="point">
+                <strong>Ctortecka et al.</strong> (2024). Automated single-cell proteomics providing sufficient proteome depth to study complex biology beyond cell type classifications. <em>Nature Communications</em> 15:5506.
+              </div>
+              <div class="point">
+                <strong>Feng et al.</strong> (2021). Single-cell lipidomics with high structural specificity by mass spectrometry. <em>Nature Communications</em> 12:2869.
+              </div>
+              <div class="point">
+                <strong>Duncan et al.</strong> (2023). Single-cell lipidomics enabled by dual-polarity ionization and ion mobility-mass spectrometry imaging. <em>Nature Communications</em> 14:5185.
+              </div>
+              <div class="point">
+                <strong>Wei et al.</strong> (2025). Dynamic single-cell metabolomics reveals cell-cell interaction between tumor cells and macrophages. <em>Nature Communications</em> 16:674.
+              </div>
+              <div class="point">
+                <strong>Mao et al.</strong> (2025). Single-cell simultaneous metabolome and transcriptome profiling revealing metabolite-gene correlation network. <em>Advanced Science</em> 12:2411276.
+              </div>
+              <div class="point">
+                <strong>Granja et al.</strong> (2021). ArchR is a scalable software package for integrative single-cell chromatin accessibility analysis. <em>Nature Genetics</em> 53:403-411.
+              </div>
+              <div class="point">
+                <strong>Jia et al.</strong> (2022). scDART: integrating unmatched scRNA-seq and scATAC-seq data and learning cross-modality relationship simultaneously. <em>Genome Biology</em> 23:139.
+              </div>
+              <div class="point">
+                <strong>Li et al.</strong> (2024). Scalable and unbiased sequence-informed embedding of single-cell ATAC-seq data with CellSpace. <em>Nature Methods</em> 21:1782-1793.
+              </div>
+              <div class="point">
+                <strong>Deng et al.</strong> (2021). Spatially mapped single-cell chromatin accessibility. <em>Nature Communications</em> 12:1274.
+              </div>
+              <div class="point">
+                <strong>Heumos et al.</strong> (2024). Delineating the effective use of self-supervised learning in single-cell genomics. <em>Nature Machine Intelligence</em> 6:1284-1299.
+              </div>
+              <div class="point">
+                <strong>Yang et al.</strong> (2022). scBERT as a large-scale pretrained deep language model for cell type annotation of single-cell RNA-seq data. <em>Nature Machine Intelligence</em> 4:852-866.
+              </div>
+              <div class="point">
+                <strong>Cui et al.</strong> (2024). Transformers in single-cell omics: a review and new perspectives. <em>Nature Methods</em> 21:1430-1442.
+              </div>
+              <div class="point">
+                <strong>Ramirez et al.</strong> (2023). Transformer for one stop interpretable cell type annotation. <em>Nature Communications</em> 14:223.
+              </div>
+              <div class="point">
+                <strong>HCA Consortium</strong> (2024). The Human Cell Atlas from a cell census to a unified foundation model. <em>Nature</em> 626:505-513.
+              </div>
+              <div class="point">
                 <strong>Tabula Sapiens Consortium</strong> (2022). The Tabula Sapiens: A multiple-organ, single-cell transcriptomic atlas of humans. <em>Science</em> 376:eabl4896.
               </div>
               <div class="point">
-                <strong>Lin et al.</strong> (2022). scJoint integrates atlas-scale single-cell RNA-seq and ATAC-seq data with transfer learning. <em>Nature Biotechnology</em> 40:703.
+                <strong>Sun et al.</strong> (2024). Single Cell Atlas: a single-cell multi-omics human cell encyclopedia. <em>Genome Biology</em> 25:98.
               </div>
               <div class="point">
-                <strong>Cao et al.</strong> (2023). Multi-omics single-cell data integration and regulatory inference with graph-linked embedding. <em>Nature Biotechnology</em> 41:833.
+                <strong>Domínguez Conde et al.</strong> (2022). Cross-tissue immune cell analysis reveals tissue-specific features in humans. <em>Science</em> 376:eabl5197.
               </div>
               <div class="point">
-                <strong>Specht et al.</strong> (2021). Single-cell proteomic and transcriptomic analysis of macrophage heterogeneity using SCoPE2. <em>Nature Methods</em> 18.
+                <strong>Hao et al.</strong> (2021). Integrated analysis of multimodal single-cell data. <em>Cell</em> 184:3573-3587.
               </div>
               <div class="point">
-                <strong>Stuart & Satija labs</strong> (2021). Signac PBMC ATAC tutorial - illustrating gene activity matrix creation for scATAC→gene linkage.
+                <strong>Lopez et al.</strong> (2018). Deep generative modeling for single-cell transcriptomics. <em>Nature Methods</em> 15:1053-1058.
+              </div>
+              <div class="point">
+                <strong>Argelaguet et al.</strong> (2020). MOFA+: a statistical framework for comprehensive integration of multi-modal single-cell data. <em>Genome Biology</em> 21:111.
+              </div>
+              <div class="point">
+                <strong>Lin et al.</strong> (2022). scJoint integrates atlas-scale single-cell RNA-seq and ATAC-seq data with transfer learning. <em>Nature Biotechnology</em> 40:703-710.
               </div>
             </div>
           </div>
