@@ -546,13 +546,17 @@
   <div class="menu-container" id="menuContainer">
     <div class="parameter-card" id="parameterCard">
       <h4 class="parameter-title">Parameters</h4>
-      <div class="parameter-group">
+      <div class="parameter-group" id="rnaGroup">
         <label class="parameter-label">RNA: <span id="rnaValVertical" class="parameter-value">5</span>%</label>
         <input type="range" id="rnaSliderVertical" min="0" max="4" step="1" value="0" class="vertical-slider" orient="vertical">
       </div>
-      <div class="parameter-group">
+      <div class="parameter-group" id="protGroup">
         <label class="parameter-label">Prot: <span id="protValVertical" class="parameter-value">5</span>%</label>
         <input type="range" id="protSliderVertical" min="0" max="4" step="1" value="0" class="vertical-slider" orient="vertical">
+      </div>
+      <div class="parameter-group" id="latentGroup">
+        <label class="parameter-label">Latent: <span id="latentValVertical" class="parameter-value">128</span></label>
+        <input type="range" id="latentSliderVertical" min="0" max="4" step="1" value="2" class="vertical-slider" orient="vertical">
       </div>
     </div>
     
@@ -632,27 +636,46 @@
     const modeRadios = document.querySelectorAll('input[name="mode"]');
     const rnaSliderVertical = document.getElementById('rnaSliderVertical');
     const protSliderVertical = document.getElementById('protSliderVertical');
+    const latentSliderVertical = document.getElementById('latentSliderVertical');
     const rnaValVerticalEl = document.getElementById('rnaValVertical');
     const protValVerticalEl = document.getElementById('protValVertical');
+    const latentValVerticalEl = document.getElementById('latentValVertical');
     const values = [5,10,25,50,75];
+    const latentValues = [32,64,128,256,512];
 
     function updateSliderDisplays() {
-      // Only update vertical sliders now
+      // Update vertical sliders
       const rnaVerticalIdx = rnaSliderVertical ? rnaSliderVertical.value : 0;
       const protVerticalIdx = protSliderVertical ? protSliderVertical.value : 0;
+      const latentVerticalIdx = latentSliderVertical ? latentSliderVertical.value : 2;
       
       if (rnaValVerticalEl) rnaValVerticalEl.textContent = values[rnaVerticalIdx];
       if (protValVerticalEl) protValVerticalEl.textContent = values[protVerticalIdx];
+      if (latentValVerticalEl) latentValVerticalEl.textContent = latentValues[latentVerticalIdx];
     }
 
     function updateSliders() {
       const mode = document.querySelector('input[name="mode"]:checked').value;
       const parameterCard = document.getElementById('parameterCard');
+      const rnaGroup = document.getElementById('rnaGroup');
+      const protGroup = document.getElementById('protGroup');
+      const latentGroup = document.getElementById('latentGroup');
       
       if (mode === 'semisupervised') {
         parameterCard.classList.add('visible');
+        rnaGroup.style.display = 'block';
+        protGroup.style.display = 'block';
+        latentGroup.style.display = 'none';
+      } else if (mode === 'supervised') {
+        parameterCard.classList.add('visible');
+        rnaGroup.style.display = 'none';
+        protGroup.style.display = 'none';
+        latentGroup.style.display = 'block';
       } else {
         parameterCard.classList.remove('visible');
+        rnaGroup.style.display = 'block';
+        protGroup.style.display = 'block';
+        latentGroup.style.display = 'none';
       }
       
       updateExplanation(mode);
@@ -688,8 +711,9 @@
       let title = '';
       
       if (mode === 'supervised') {
-        src = 'Plots/Supervised.html';
-        title = 'Supervised Learning Visualization';
+        const latent = latentValues[latentSliderVertical ? latentSliderVertical.value : 2];
+        src = `Plots/Supervised/interactive_latent${latent}_to3d_PCA_mm.html`;
+        title = `Supervised Learning (Latent Dim: ${latent})`;
       } else if (mode === 'unsupervised') {
         src = 'Plots/Unsupervised.html';
         title = 'Unsupervised Learning Visualization';
@@ -699,7 +723,7 @@
       } else {
         const rna = values[rnaSliderVertical ? rnaSliderVertical.value : 0];
         const prot = values[protSliderVertical ? protSliderVertical.value : 0];
-        src = `Plots/PCA3D_semi_r${rna}_p${prot}.html`;
+        src = `Plots/Semi Supervised/PCA3D_semi_r${rna}_p${prot}.html`;
         title = `Semi-Supervised Learning (RNA: ${rna}%, Prot: ${prot}%)`;
       }
       
@@ -736,6 +760,7 @@
     
     if (rnaSliderVertical) rnaSliderVertical.addEventListener('input', updateSliderDisplays);
     if (protSliderVertical) protSliderVertical.addEventListener('input', updateSliderDisplays);
+    if (latentSliderVertical) latentSliderVertical.addEventListener('input', updateSliderDisplays);
 
     // Initialize
     updateSliderDisplays();
