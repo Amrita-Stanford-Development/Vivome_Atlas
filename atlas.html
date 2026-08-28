@@ -1734,6 +1734,7 @@
             }
 
             async _streamAllProfiles(modality, fileNames) {
+                let lfsBlocked = false;
                 for (const fileName of fileNames) {
                     try {
                         const response = await fetch(fileName);
@@ -1751,6 +1752,11 @@
                             if (done) break;
 
                             buffer += decoder.decode(value, { stream: true });
+
+                            if (headers === null && this.isLfsPointer(buffer)) {
+                                lfsBlocked = true;
+                                break;
+                            }
 
                             let lineEnd;
                             while ((lineEnd = buffer.indexOf('\n')) !== -1) {
@@ -1789,10 +1795,19 @@
                     } catch (e) {
                         // try next file
                     }
+                    if (lfsBlocked) break;
+                }
+                if (lfsBlocked) {
+                    throw new Error(
+                        'RNA expression data is not present in this deployment. ' +
+                        'The file is a 1.43 GB Git LFS object that has not been fetched. ' +
+                        'Run: git lfs install && git lfs pull'
+                    );
                 }
             }
 
             async _streamSearchProfile(cellData, modality, fileNames) {
+                let lfsBlocked = false;
                 for (const fileName of fileNames) {
                     try {
                         const response = await fetch(fileName);
@@ -1811,6 +1826,11 @@
                             if (done) break;
 
                             buffer += decoder.decode(value, { stream: true });
+
+                            if (headers === null && this.isLfsPointer(buffer)) {
+                                lfsBlocked = true;
+                                break;
+                            }
 
                             let lineEnd;
                             while ((lineEnd = buffer.indexOf('\n')) !== -1) {
@@ -1851,6 +1871,14 @@
                     } catch (e) {
                         // try next file
                     }
+                    if (lfsBlocked) break;
+                }
+                if (lfsBlocked) {
+                    throw new Error(
+                        'RNA expression data is not present in this deployment. ' +
+                        'The file is a 1.43 GB Git LFS object that has not been fetched. ' +
+                        'Run: git lfs install && git lfs pull'
+                    );
                 }
                 throw new Error(`Cell with orig_index ${cellData.orig_index} not found in ${modality} data`);
             }
@@ -1875,6 +1903,13 @@
                 }
             }
             
+            // Mirrors isLfsPointer in js/manifest.js. Duplicated because the main
+            // atlas script is a classic script and cannot import ES modules.
+            isLfsPointer(text) {
+                return typeof text === 'string'
+                    && text.startsWith('version https://git-lfs.github.com/spec/v1');
+            }
+
             parseCSVLine(line) {
                 const result = [];
                 let inQuotes = false;
