@@ -1,0 +1,10 @@
+{
+  "name": "vivome-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Static web resource for the VivOME joint latent atlas.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
