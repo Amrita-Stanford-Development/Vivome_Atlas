@@ -792,6 +792,53 @@
                 font-size: 1.5rem;
             }
         }
+        .support-tiles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .support-tile {
+            background: #f0f0f0;
+            border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+        .support-tile-value { font-size: 20px; font-weight: 600; color: #0066A3; }
+        .support-tile-label { font-size: 10px; color: #4B4B4B; text-transform: uppercase; letter-spacing: 0.04em; }
+        .support-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .support-table th {
+            text-align: left;
+            font-weight: 600;
+            color: #4B4B4B;
+            border-bottom: 1px solid #d9d9d9;
+            padding: 4px 6px;
+        }
+        .support-table td { padding: 4px 6px; border-bottom: 1px solid #efefef; vertical-align: top; }
+        .support-name { color: #4B4B4B; }
+        .support-num { text-align: right; font-variant-numeric: tabular-nums; }
+        .support-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            white-space: nowrap;
+        }
+        .badge-cross_modal { background: #008ECC; color: #ffffff; }
+        .badge-rna_only { background: #f0f0f0; color: #4B4B4B; }
+        .badge-prot_only { background: #0099E6; color: #ffffff; }
+        .metric-basis { display: block; font-size: 9px; color: #8a8a8a; }
+        .pending { color: #8a8a8a; font-style: italic; }
+        .panel-note { font-size: 10px; line-height: 1.5; color: #6a6a6a; margin-top: 8px; }
+        .pending-banner {
+            background: #fff8e6;
+            border-left: 3px solid #008ECC;
+            padding: 10px 12px;
+            font-size: 12px;
+            color: #4B4B4B;
+            margin-bottom: 12px;
+        }
+        .panel-error { font-size: 11px; color: #dc3545; }
     </style>
 </head>
 <body>
@@ -848,6 +895,22 @@
                     <div class="cell-type-filters" id="prot-cell-type-filters">
                         <!-- Dynamically populated -->
                     </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Cross-Modal Support</h3>
+                    <div class="support-tiles" id="support-tiles"></div>
+                    <div id="support-table-mount"></div>
+                    <p class="panel-note">
+                        Protein coverage exists for only part of the label space. Cell types marked
+                        RNA only have no proteomics evidence in this build, and projections onto them
+                        should not be read as cross-modal results.
+                    </p>
+                </div>
+
+                <div class="control-section">
+                    <h3>Alignment Diagnostics</h3>
+                    <div id="diagnostics-mount"></div>
                 </div>
             </div>
             
@@ -2020,6 +2083,21 @@
         // Initialize the atlas when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             window.vivomeAtlas = new VivomeAtlasThree();
+        });
+    </script>
+
+    <script type="module">
+        import { loadManifest } from './js/manifest.js';
+        import { buildSupportSummary, buildSupportTable, buildDiagnosticsTable } from './js/panels.js';
+
+        loadManifest().then((manifest) => {
+            document.getElementById('support-tiles').innerHTML = buildSupportSummary(manifest);
+            document.getElementById('support-table-mount').innerHTML = buildSupportTable(manifest);
+            document.getElementById('diagnostics-mount').innerHTML = buildDiagnosticsTable(manifest);
+        }).catch((err) => {
+            const message = `<p class="panel-error">Support data unavailable: ${err.message}</p>`;
+            document.getElementById('support-table-mount').innerHTML = message;
+            document.getElementById('diagnostics-mount').innerHTML = message;
         });
     </script>
 </body>
