@@ -150,11 +150,6 @@
             z-index: 50;
         }
         
-        .controls-panel.hidden {
-            transform: translateX(-100%);
-            opacity: 0;
-        }
-        
         .control-section {
             margin-bottom: 2rem !important;
             position: relative !important;
@@ -276,34 +271,6 @@
         
         .toggle-switch.active::after {
             transform: translateX(24px);
-        }
-        
-        .view-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-        }
-        
-        .view-btn {
-            padding: 0.8rem;
-            background: rgba(0, 142, 204, 0.1);
-            border: 1px solid rgba(0, 142, 204, 0.2);
-            border-radius: 8px;
-            color: #008ECC;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        
-        .view-btn:hover {
-            background: rgba(0, 142, 204, 0.2);
-            transform: translateY(-1px);
-        }
-        
-        .view-btn.active {
-            background: #008ECC;
-            color: white;
         }
         
         /* Default Browser Scrollbar with Blue Color for Main Controls Panel */
@@ -846,10 +813,6 @@
                         <div>Protein Cells</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="metab-count">-</div>
-                        <div>Metabolomics Cells</div>
-                    </div>
-                    <div class="stat-item">
                         <div class="stat-value" id="class-count">-</div>
                         <div>Cell Types</div>
                     </div>
@@ -870,10 +833,6 @@
                             <span>Protein Cells</span>
                             <div class="toggle-switch active" id="prot-toggle"></div>
                         </div>
-                        <div class="toggle-item">
-                            <span>Metabolomics Cells</span>
-                            <div class="toggle-switch" id="metab-toggle"></div>
-                        </div>
                     </div>
                 </div>
                 
@@ -887,13 +846,6 @@
                 <div class="control-section">
                     <h3>Proteomics Cell Types</h3>
                     <div class="cell-type-filters" id="prot-cell-type-filters">
-                        <!-- Dynamically populated -->
-                    </div>
-                </div>
-                
-                <div class="control-section">
-                    <h3>Metabolomics Cell Types</h3>
-                    <div class="cell-type-filters" id="metab-cell-type-filters">
                         <!-- Dynamically populated -->
                     </div>
                 </div>
@@ -954,7 +906,7 @@
     <script>
         class VivomeAtlasThree {
             constructor() {
-                this.data = { rna: [], prot: [], metab: [] };
+                this.data = { rna: [], prot: [] };
                 this.cellTypes = new Set();
                 this.geneProfileCache = new Map(); // Cache for loaded gene profiles
                 this.colorPalette = [
@@ -964,26 +916,17 @@
                     '#4080ff', '#ff1010', '#cc0000', '#ff2020', '#8040ff',
                     '#40ff80', '#ff4040', '#990000', '#ffff40', '#ff3333'
                 ];
-                // Experimental metabolomics colors (more muted/different from original palette)
-                this.metabColorPalette = [
-                    '#A0A0A0', '#B0B0B0', '#C0C0C0', '#D0D0D0', '#E0E0E0',
-                    '#F0F0F0', '#888888', '#999999', '#AAAAAA', '#BBBBBB',
-                    '#CCCCCC', '#DDDDDD', '#EEEEEE', '#777777', '#666666'
-                ];
                 this.visibilityState = {
                     rna: true,
                     prot: true,
-                    metab: false,
                     cellTypes: new Set()
                 };
-                this.currentView = 'default';
-                
                 // Three.js objects
                 this.scene = null;
                 this.camera = null;
                 this.renderer = null;
                 this.controls = null;
-                this.particles = { rna: null, prot: null, metab: null };
+                this.particles = { rna: null, prot: null };
                 this.raycaster = new THREE.Raycaster();
                 this.mouse = new THREE.Vector2();
                 this.tooltip = document.getElementById('tooltip');
@@ -996,8 +939,11 @@
                 this.menuToggleBtn = document.getElementById('menu-toggle-btn');
                 this.menuToggleText = document.getElementById('menu-toggle-text');
                 this.menuToggleTab = document.getElementById('menu-toggle-tab');
-                this.lastRaycastTime = 0; // For throttling raycasting
-                
+                this.lastRaycastTime = 0;
+                this.needsRender = true;
+                this.raycastTargets = [];
+                this.geneProfileLoadPromise = null; // deduplicates concurrent PROT load requests
+
                 // Auto-rotation properties
                 this.autoRotation = {
                     enabled: true,
@@ -1133,15 +1079,13 @@
                     
                     // Set new timer to resume auto-rotation after inactivity
                     this.autoRotation.resumeDelay = setTimeout(() => {
-                        console.log('Resuming auto-rotation after inactivity');
                         this.autoRotation.enabled = true;
                     }, this.autoRotation.inactivityTimeout);
                 };
                 
                 // Mouse events
                 canvas.addEventListener('mousedown', (event) => {
-                    console.log('Mouse down:', event.button);
-                    handleUserActivity(); // Stop auto-rotation on interaction
+                    handleUserActivity();
                     
                     if (event.button === 0) { // Left mouse
                         isMouseDown = true;
@@ -1210,14 +1154,11 @@
                     
                     // Update raycaster for tooltips
                     this.updateMousePosition(event);
+                    this.needsRender = true;
                 });
                 
                 canvas.addEventListener('mouseup', (event) => {
-                    console.log('Mouse up:', event.button, 'hasDragged:', hasDragged, 'isMouseDown:', isMouseDown);
-                    
                     if (event.button === 0 && isMouseDown && !hasDragged) {
-                        console.log('Detected click! Calling handleCellClick');
-                        // Handle click only if it was a simple click (not a drag)
                         this.handleCellClick(event);
                     }
                     
@@ -1240,26 +1181,29 @@
                 });
                 
                 // Orbit camera update (with auto-rotation)
+                let prevTargetX = targetX, prevTargetY = targetY, prevTargetZoom = targetZoom;
                 const updateCamera = () => {
-                    // Apply auto-rotation when enabled and not panning
                     if (this.autoRotation.enabled && !isPanning) {
-                        targetX += this.autoRotation.speed; // Slow right-to-left rotation
+                        targetX += this.autoRotation.speed;
                     }
-                    
-                    if (!isPanning) {
-                        const radius = targetZoom;
-                        this.camera.position.x = radius * Math.sin(targetX) * Math.cos(targetY);
-                        this.camera.position.y = -radius * Math.sin(targetY); // Flip Y-axis
-                        this.camera.position.z = radius * Math.cos(targetX) * Math.cos(targetY);
-                        this.camera.lookAt(0, 0, 0);
-                        
-                        // Flip the camera's up vector to complete the flip
-                        this.camera.up.set(0, -1, 0);
+
+                    const changed = targetX !== prevTargetX || targetY !== prevTargetY || targetZoom !== prevTargetZoom;
+                    if (changed || isPanning) {
+                        if (!isPanning) {
+                            const radius = targetZoom;
+                            this.camera.position.x = radius * Math.sin(targetX) * Math.cos(targetY);
+                            this.camera.position.y = -radius * Math.sin(targetY);
+                            this.camera.position.z = radius * Math.cos(targetX) * Math.cos(targetY);
+                            this.camera.lookAt(0, 0, 0);
+                            this.camera.up.set(0, -1, 0);
+                        }
+                        this.updateCameraInfo(targetZoom, targetX, targetY);
+                        this.needsRender = true;
+                        prevTargetX = targetX;
+                        prevTargetY = targetY;
+                        prevTargetZoom = targetZoom;
                     }
-                    
-                    // Update camera info display
-                    this.updateCameraInfo(targetZoom, targetX, targetY);
-                    
+
                     requestAnimationFrame(updateCamera);
                 };
                 updateCamera();
@@ -1273,70 +1217,32 @@
             
             async loadData() {
                 try {
-                    // Load only metadata (coordinates + cell info) for initial visualization
-                    const rnaResponse = await fetch('./Atlas/metadata_RNA_lat128.csv');
-                    if (!rnaResponse.ok) {
-                        throw new Error(`Failed to load RNA metadata: ${rnaResponse.status} ${rnaResponse.statusText}`);
-                    }
-                    
-                    const protResponse = await fetch('./Atlas/metadata_PROT_lat128.csv');
-                    if (!protResponse.ok) {
-                        throw new Error(`Failed to load PROT metadata: ${protResponse.status} ${protResponse.statusText}`);
-                    }
-                    
-                    const metabResponse = await fetch('./Atlas/metadata_METABOLOMICS_lat128.csv');
-                    if (!metabResponse.ok) {
-                        throw new Error(`Failed to load METABOLOMICS metadata: ${metabResponse.status} ${metabResponse.statusText}`);
-                    }
-                    
-                    const rnaCsvText = await rnaResponse.text();
-                    const protCsvText = await protResponse.text();
-                    const metabCsvText = await metabResponse.text();
-                    
-                    const rnaParsed = Papa.parse(rnaCsvText, {
-                        header: true,
-                        dynamicTyping: true,
-                        skipEmptyLines: true
-                    });
-                    
-                    const protParsed = Papa.parse(protCsvText, {
-                        header: true,
-                        dynamicTyping: true,
-                        skipEmptyLines: true
-                    });
-                    
-                    const metabParsed = Papa.parse(metabCsvText, {
-                        header: true,
-                        dynamicTyping: true,
-                        skipEmptyLines: true
-                    });
-                    
-                    if (rnaParsed.errors.length > 0) {
-                        console.warn('RNA metadata parsing warnings:', rnaParsed.errors);
-                    }
-                    
-                    if (protParsed.errors.length > 0) {
-                        console.warn('PROT metadata parsing warnings:', protParsed.errors);
-                    }
-                    
-                    if (metabParsed.errors.length > 0) {
-                        console.warn('METABOLOMICS metadata parsing warnings:', metabParsed.errors);
-                    }
-                    
-                    this.processMetadata(rnaParsed.data, protParsed.data, metabParsed.data);
+                    const [rnaResponse, protResponse] = await Promise.all([
+                        fetch('./Atlas/metadata_RNA_lat128.csv'),
+                        fetch('./Atlas/metadata_PROT_lat128.csv')
+                    ]);
+                    if (!rnaResponse.ok) throw new Error(`Failed to load RNA metadata: ${rnaResponse.status}`);
+                    if (!protResponse.ok) throw new Error(`Failed to load PROT metadata: ${protResponse.status}`);
+
+                    const [rnaCsvText, protCsvText] = await Promise.all([
+                        rnaResponse.text(),
+                        protResponse.text()
+                    ]);
+
+                    const rnaParsed = Papa.parse(rnaCsvText, { header: true, dynamicTyping: true, skipEmptyLines: true });
+                    const protParsed = Papa.parse(protCsvText, { header: true, dynamicTyping: true, skipEmptyLines: true });
+
+                    this.processMetadata(rnaParsed.data, protParsed.data);
                     this.updateStats();
                     this.createCellTypeFilters();
-                    
-                    console.log('Initial visualization loaded. Gene profiles will be loaded on-demand when cells are clicked.');
-                    
                 } catch (error) {
                     console.error('Error loading metadata:', error);
                     throw new Error('Could not load atlas metadata. Please ensure the Atlas folder contains the required metadata files.');
                 }
             }
             
-            processMetadata(rnaData, protData, metabData) {
-                this.data = { rna: [], prot: [], metab: [] };
+            processMetadata(rnaData, protData) {
+                this.data = { rna: [], prot: [] };
                 this.cellTypes.clear();
                 
                 // First, collect RNA and PROT cell types to maintain original color order
@@ -1371,18 +1277,7 @@
                 
                 // Store original cell types for consistent coloring
                 this.originalCellTypes = Array.from(originalCellTypes).sort();
-                
-                // Collect METABOLOMICS coordinates
-                metabData.forEach((row) => {
-                    if (row.modality && !isNaN(row.PC1) && !isNaN(row.PC2) && !isNaN(row.PC3)) {
-                        allCoords.push({
-                            x: parseFloat(row.PC1),
-                            y: parseFloat(row.PC2),
-                            z: parseFloat(row.PC3)
-                        });
-                    }
-                });
-                
+
                 // Find data bounds for normalization
                 let minX = Infinity, maxX = -Infinity;
                 let minY = Infinity, maxY = -Infinity;
@@ -1402,9 +1297,6 @@
                 const centerX = (minX + maxX) / 2;
                 const centerY = (minY + maxY) / 2;
                 const centerZ = (minZ + maxZ) / 2;
-                
-                console.log(`Data bounds: X(${minX.toFixed(2)}, ${maxX.toFixed(2)}), Y(${minY.toFixed(2)}, ${maxY.toFixed(2)}), Z(${minZ.toFixed(2)}, ${maxZ.toFixed(2)})`);
-                console.log(`Scale factor: ${scale.toFixed(4)}`);
                 
                 // Process RNA metadata with scaling
                 rnaData.forEach((row, index) => {
@@ -1441,49 +1333,26 @@
                         this.cellTypes.add(point.class_name);
                     }
                 });
-                
-                // Process METABOLOMICS metadata with scaling
-                metabData.forEach((row, index) => {
-                    if (row.modality && !isNaN(row.PC1) && !isNaN(row.PC2) && !isNaN(row.PC3)) {
-                        const point = {
-                            x: (parseFloat(row.PC1) - centerX) * scale,
-                            y: (parseFloat(row.PC2) - centerY) * scale,
-                            z: (parseFloat(row.PC3) - centerZ) * scale,
-                            class_name: row.class_name || 'Unknown',
-                            class_idx: parseInt(row.class_idx) || 0,
-                            orig_index: parseInt(row.orig_index) || index,
-                            modality: 'metab'
-                        };
-                        
-                        this.data.metab.push(point);
-                        this.cellTypes.add(point.class_name);
-                    }
-                });
-                
+
                 // Initialize all cell types as visible
                 this.cellTypes.forEach(cellType => {
                     this.visibilityState.cellTypes.add(cellType);
                 });
                 
-                console.log(`Loaded ${this.data.rna.length} RNA cells, ${this.data.prot.length} protein cells, and ${this.data.metab.length} metabolomics cells (metadata only, scaled)`);
-                console.log(`Found ${this.cellTypes.size} cell types:`, Array.from(this.cellTypes));
             }
-            
+
             updateStats() {
                 document.getElementById('rna-count').textContent = this.data.rna.length.toLocaleString();
                 document.getElementById('prot-count').textContent = this.data.prot.length.toLocaleString();
-                document.getElementById('metab-count').textContent = this.data.metab.length.toLocaleString();
                 document.getElementById('class-count').textContent = this.cellTypes.size;
             }
-            
+
             createCellTypeFilters() {
                 const rnaContainer = document.getElementById('rna-cell-type-filters');
                 const protContainer = document.getElementById('prot-cell-type-filters');
-                const metabContainer = document.getElementById('metab-cell-type-filters');
                 rnaContainer.innerHTML = '';
                 protContainer.innerHTML = '';
-                metabContainer.innerHTML = '';
-                
+
                 // Get cell types that exist in RNA data
                 const rnaCellTypes = new Set();
                 this.data.rna.forEach(point => {
@@ -1500,14 +1369,6 @@
                     }
                 });
                 
-                // Get cell types that exist in Metabolomics data
-                const metabCellTypes = new Set();
-                this.data.metab.forEach(point => {
-                    if (this.visibilityState.cellTypes.has(point.class_name)) {
-                        metabCellTypes.add(point.class_name);
-                    }
-                });
-                
                 // Create RNA cell type filters
                 Array.from(rnaCellTypes).sort().forEach((cellType) => {
                     const filterItem = this.createFilterItem(cellType, 'rna');
@@ -1518,12 +1379,6 @@
                 Array.from(protCellTypes).sort().forEach((cellType) => {
                     const filterItem = this.createFilterItem(cellType, 'prot');
                     protContainer.appendChild(filterItem);
-                });
-                
-                // Create Metabolomics cell type filters
-                Array.from(metabCellTypes).sort().forEach((cellType) => {
-                    const filterItem = this.createFilterItem(cellType, 'metab');
-                    metabContainer.appendChild(filterItem);
                 });
             }
             
@@ -1551,7 +1406,7 @@
                 const cellTypesArray = this.originalCellTypes || Array.from(this.cellTypes).sort();
                 const index = cellTypesArray.indexOf(cellType);
                 
-                // If cell type not found in original list (like new metabolomics types), add to end
+                // If cell type not found in original list, add to end
                 if (index === -1) {
                     const allCellTypes = Array.from(this.cellTypes).sort();
                     const newIndex = allCellTypes.indexOf(cellType);
@@ -1585,11 +1440,7 @@
                 document.getElementById('prot-toggle').addEventListener('click', () => {
                     this.toggleModality('prot');
                 });
-                
-                document.getElementById('metab-toggle').addEventListener('click', () => {
-                    this.toggleModality('metab');
-                });
-                
+
                 // Gene profile panel close button
                 document.getElementById('gene-profile-close').addEventListener('click', () => {
                     this.closeGeneProfile();
@@ -1607,71 +1458,46 @@
             }
             
             toggleModality(modality) {
-                if (modality === 'metab' && !this.visibilityState[modality]) {
-                    // Show experimental notice when enabling metabolomics for the first time
-                    const shouldEnable = confirm(
-                        "Metabolomics Data - Experimental Feature\n\n" +
-                        "The metabolomics visualization is currently under development and experimentation. " +
-                        "The data and interactions may not be fully optimized yet.\n\n" +
-                        "Would you like to enable it anyway?"
-                    );
-                    
-                    if (!shouldEnable) {
-                        return; // Don't enable if user cancels
-                    }
-                }
-                
                 this.visibilityState[modality] = !this.visibilityState[modality];
-                const toggle = document.getElementById(`${modality}-toggle`);
-                toggle.classList.toggle('active', this.visibilityState[modality]);
-                this.updateVisualization();
+                document.getElementById(`${modality}-toggle`).classList.toggle('active', this.visibilityState[modality]);
+                if (this.particles[modality]) {
+                    this.particles[modality].visible = this.visibilityState[modality];
+                    this.buildRaycastTargets();
+                }
+                this.needsRender = true;
             }
             
             createVisualization() {
-                console.log('Creating visualization...');
-                // Remove existing particles
-                if (this.particles.rna) {
-                    this.scene.remove(this.particles.rna);
+                if (this.particles.rna) this.scene.remove(this.particles.rna);
+                if (this.particles.prot) this.scene.remove(this.particles.prot);
+
+                this.particles.rna = this.createParticleSystem('rna', this.data.rna, 0.5);
+                this.scene.add(this.particles.rna);
+                this.particles.rna.visible = this.visibilityState.rna;
+
+                this.particles.prot = this.createParticleSystem('prot', this.data.prot, 0.9);
+                this.scene.add(this.particles.prot);
+                this.particles.prot.visible = this.visibilityState.prot;
+
+                this.buildRaycastTargets();
+                this.needsRender = true;
+            }
+
+            buildRaycastTargets() {
+                this.raycastTargets = [];
+                if (this.particles.rna && this.visibilityState.rna) {
+                    this.raycastTargets.push(...this.particles.rna.children);
                 }
-                if (this.particles.prot) {
-                    this.scene.remove(this.particles.prot);
+                if (this.particles.prot && this.visibilityState.prot) {
+                    this.raycastTargets.push(...this.particles.prot.children);
                 }
-                if (this.particles.metab) {
-                    this.scene.remove(this.particles.metab);
-                }
-                
-                // Create RNA particles with smaller size
-                if (this.visibilityState.rna) {
-                    console.log('Creating RNA particles from', this.data.rna.length, 'cells');
-                    this.particles.rna = this.createParticleSystem('rna', this.data.rna, 0.5);
-                    this.scene.add(this.particles.rna);
-                    console.log('RNA particles created, children:', this.particles.rna.children.length);
-                }
-                
-                // Create protein particles with larger size
-                if (this.visibilityState.prot) {
-                    console.log('Creating PROT particles from', this.data.prot.length, 'cells');
-                    this.particles.prot = this.createParticleSystem('prot', this.data.prot, 0.9);
-                    this.scene.add(this.particles.prot);
-                    console.log('PROT particles created, children:', this.particles.prot.children.length);
-                }
-                
-                // Create metabolomics particles with medium size
-                if (this.visibilityState.metab) {
-                    console.log('Creating METAB particles from', this.data.metab.length, 'cells');
-                    this.particles.metab = this.createParticleSystem('metab', this.data.metab, 0.7);
-                    this.scene.add(this.particles.metab);
-                    console.log('METAB particles created, children:', this.particles.metab.children.length);
-                }
-                
-                console.log('Visualization created. Total scene children:', this.scene.children.length);
             }
             
             createParticleSystem(modality, data, baseSize) {
                 const group = new THREE.Group();
                 
-                // Use instanced geometry with higher quality spheres
-                const sphereGeometry = new THREE.SphereGeometry(baseSize, 16, 12); // High-quality spheres
+                const segs = modality === 'rna' ? [8, 6] : [10, 8];
+                const sphereGeometry = new THREE.SphereGeometry(baseSize, segs[0], segs[1]);
                 
                 // Group cells by color to reduce draw calls
                 const cellsByColor = {};
@@ -1698,7 +1524,7 @@
                     
                     const color = new THREE.Color(colorHex);
                     
-                    // Create material - use original appearance for RNA/PROT, experimental for metabolomics
+                    // Create material - RNA is semi-transparent, PROT is solid
                     let material;
                     if (modality === 'rna') {
                         // RNA: Original semi-transparent appearance
@@ -1724,20 +1550,8 @@
                             envMapIntensity: 0.8
                         });
                         material.emissive = new THREE.Color(color).multiplyScalar(0.15);
-                    } else if (modality === 'metab') {
-                        // METAB: Experimental appearance - more distinct from RNA/PROT
-                        material = new THREE.MeshStandardMaterial({
-                            color: color,
-                            metalness: 0.1,
-                            roughness: 0.4,
-                            transparent: true,
-                            opacity: 0.7,
-                            side: THREE.FrontSide,
-                            envMapIntensity: 0.6
-                        });
-                        material.emissive = new THREE.Color(color).multiplyScalar(0.25);
                     }
-                    
+
                     const instancedMesh = new THREE.InstancedMesh(sphereGeometry, material, cells.length);
                     instancedMesh.userData = { modality, cells };
                     instancedMesh.castShadow = true;
@@ -1760,88 +1574,44 @@
             updateVisualization() {
                 this.createVisualization();
             }
-            
-            setView(viewName) {
-                this.currentView = viewName;
-                
-                const cameraPositions = {
-                    default: { x: -33, y: -39, z: -40 },
-                    top: { x: 0, y: 100, z: 0 },
-                    side: { x: 100, y: 0, z: 0 },
-                    front: { x: 0, y: 0, z: 100 }
-                };
-                
-                const targetPos = cameraPositions[viewName] || cameraPositions.default;
-                
-                // Smooth camera transition
-                const startPos = this.camera.position.clone();
-                const endPos = new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z);
-                
-                let progress = 0;
-                const animate = () => {
-                    progress += 0.05;
-                    if (progress <= 1) {
-                        this.camera.position.lerpVectors(startPos, endPos, this.easeInOutCubic(progress));
-                        this.camera.lookAt(0, 0, 0);
-                        requestAnimationFrame(animate);
-                    }
-                };
-                animate();
-            }
-            
-            easeInOutCubic(t) {
-                return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-            }
+
             
             animate() {
                 requestAnimationFrame(() => this.animate());
-                
-                // Update raycaster for hover effects
-                this.raycaster.setFromCamera(this.mouse, this.camera);
-                
-                // Throttle raycasting for better performance
-                if (!this.lastRaycastTime || Date.now() - this.lastRaycastTime > 50) { // Only raycast every 50ms
-                    this.lastRaycastTime = Date.now();
-                    
-                    // Check for intersections with instanced meshes
-                    const intersects = [];
-                    if (this.particles.rna && this.visibilityState.rna) {
-                        this.particles.rna.children.forEach(instancedMesh => {
-                            const hits = this.raycaster.intersectObject(instancedMesh);
-                            intersects.push(...hits);
-                        });
-                    }
-                    if (this.particles.prot && this.visibilityState.prot) {
-                        this.particles.prot.children.forEach(instancedMesh => {
-                            const hits = this.raycaster.intersectObject(instancedMesh);
-                            intersects.push(...hits);
-                        });
-                    }
-                    
-                    // Handle tooltip
-                    if (intersects.length > 0) {
-                        const intersect = intersects[0];
-                        const instancedMesh = intersect.object;
-                        const instanceId = intersect.instanceId;
-                        
-                        if (instancedMesh.userData.cells && instancedMesh.userData.cells[instanceId]) {
-                            const cellInfo = instancedMesh.userData.cells[instanceId];
-                            const point = cellInfo.cellData;
-                            this.showTooltip(
-                                `${instancedMesh.userData.modality.toUpperCase()} Cell\n` +
-                                `Type: ${point.class_name}\n` +
-                                `Index: ${point.orig_index}\n` +
-                                `PC1: ${point.x.toFixed(2)}\n` +
-                                `PC2: ${point.y.toFixed(2)}\n` +
-                                `PC3: ${point.z.toFixed(2)}`
-                            );
+
+                // Throttled raycasting for hover tooltip (50ms)
+                const now = Date.now();
+                if (now - this.lastRaycastTime > 50) {
+                    this.lastRaycastTime = now;
+
+                    if (this.raycastTargets.length > 0) {
+                        this.raycaster.setFromCamera(this.mouse, this.camera);
+                        const intersects = this.raycaster.intersectObjects(this.raycastTargets);
+
+                        if (intersects.length > 0) {
+                            const { object: mesh, instanceId } = intersects[0];
+                            if (mesh.userData.cells && mesh.userData.cells[instanceId]) {
+                                const point = mesh.userData.cells[instanceId].cellData;
+                                this.showTooltip(
+                                    `${mesh.userData.modality.toUpperCase()} Cell\n` +
+                                    `Type: ${point.class_name}\n` +
+                                    `Index: ${point.orig_index}\n` +
+                                    `PC1: ${point.x.toFixed(2)}\n` +
+                                    `PC2: ${point.y.toFixed(2)}\n` +
+                                    `PC3: ${point.z.toFixed(2)}`
+                                );
+                                this.needsRender = true;
+                            }
+                        } else {
+                            this.hideTooltip();
                         }
-                    } else {
-                        this.hideTooltip();
                     }
                 }
-                
-                this.renderer.render(this.scene, this.camera);
+
+                if (this.needsRender) {
+                    this.renderer.render(this.scene, this.camera);
+                    this.needsRender = false;
+                }
             }
             
             showTooltip(text) {
@@ -1862,205 +1632,164 @@
             }
             
             handleCellClick(event) {
-                console.log('handleCellClick called');
                 this.updateMousePosition(event);
                 this.raycaster.setFromCamera(this.mouse, this.camera);
-                
-                console.log('Mouse position:', this.mouse.x, this.mouse.y);
-                console.log('Camera position:', this.camera.position);
-                console.log('Scene children count:', this.scene.children.length);
-                
-                const intersects = [];
-                
-                // Debug: Check if particles exist
-                console.log('RNA particles:', this.particles.rna);
-                console.log('PROT particles:', this.particles.prot);
-                console.log('RNA visible:', this.visibilityState.rna);
-                console.log('PROT visible:', this.visibilityState.prot);
-                
-                if (this.particles.rna && this.visibilityState.rna) {
-                    console.log('Checking RNA particles, children count:', this.particles.rna.children.length);
-                    this.particles.rna.children.forEach((instancedMesh, index) => {
-                        const hits = this.raycaster.intersectObject(instancedMesh);
-                        console.log(`RNA mesh ${index} hits:`, hits.length);
-                        intersects.push(...hits);
-                    });
-                }
-                
-                if (this.particles.prot && this.visibilityState.prot) {
-                    console.log('Checking PROT particles, children count:', this.particles.prot.children.length);
-                    this.particles.prot.children.forEach((instancedMesh, index) => {
-                        const hits = this.raycaster.intersectObject(instancedMesh);
-                        console.log(`PROT mesh ${index} hits:`, hits.length);
-                        intersects.push(...hits);
-                    });
-                }
-                
-                console.log('Total intersects found:', intersects.length);
-                
+
+                const intersects = this.raycaster.intersectObjects(this.raycastTargets);
                 if (intersects.length > 0) {
-                    const intersect = intersects[0];
-                    const instancedMesh = intersect.object;
-                    const instanceId = intersect.instanceId;
-                    
-                    console.log('Intersect found:', intersect);
-                    console.log('Instance ID:', instanceId);
-                    console.log('Mesh userData:', instancedMesh.userData);
-                    
-                    if (instancedMesh.userData.cells && instancedMesh.userData.cells[instanceId]) {
-                        const cellInfo = instancedMesh.userData.cells[instanceId];
-                        const point = cellInfo.cellData;
-                        console.log('Cell data found:', point);
-                        console.log('Calling showGeneProfile...');
-                        // Use async function to load gene profile on demand
-                        this.showGeneProfile(point, instancedMesh.userData.modality);
-                    } else {
-                        console.log('No cell data found for instance:', instanceId);
+                    const { object: mesh, instanceId } = intersects[0];
+                    if (mesh.userData.cells && mesh.userData.cells[instanceId]) {
+                        const point = mesh.userData.cells[instanceId].cellData;
+                        this.showGeneProfile(point, mesh.userData.modality);
                     }
-                } else {
-                    console.log('No intersections found - you may have clicked on empty space');
                 }
             }
             
             async loadCellGeneProfile(cellData, modality) {
                 const cacheKey = `${modality}_${cellData.orig_index}`;
-                
-                // Check cache first
                 if (this.geneProfileCache.has(cacheKey)) {
                     return this.geneProfileCache.get(cacheKey);
                 }
-                
-                try {
-                    let fileNames;
-                    if (modality === 'rna') {
-                        // RNA data is split into two files
-                        fileNames = [
-                            './Atlas/atlas_RNA_lat128-001-part1.csv',
-                            './Atlas/atlas_RNA_lat128-001-part2.csv'
-                        ];
-                    } else {
-                        // PROT data is in a single file
-                        fileNames = ['./Atlas/atlas_PROT_lat128.csv'];
+
+                // PROT: load all 1,490 profiles at once so every subsequent click is instant
+                if (modality === 'prot') {
+                    if (!this.geneProfileLoadPromise) {
+                        this.geneProfileLoadPromise = this._streamAllProfiles(
+                            'prot', ['./Atlas/atlas_PROT_lat128.csv']
+                        );
                     }
-                    
-                    console.log(`Loading gene profile for ${modality} cell with orig_index: ${cellData.orig_index}`);
-                    console.log(`Searching in files:`, fileNames);
-                    
-                    // Search through all relevant files
-                    for (let i = 0; i < fileNames.length; i++) {
-                        const fileName = fileNames[i];
-                        console.log(`Checking file ${i + 1}/${fileNames.length}: ${fileName}`);
-                        
-                        try {
-                            const response = await fetch(fileName);
-                            if (!response.ok) {
-                                console.warn(`Failed to load ${fileName}: ${response.status} ${response.statusText}`);
-                                continue; // Try the next file
-                            }
-                            
-                            const reader = response.body.getReader();
-                            const decoder = new TextDecoder();
-                            
-                            let buffer = '';
-                            let headers = null;
-                            let targetRow = null;
-                            let rowCount = 0;
-                            let foundTarget = false;
-                            
-                            // Process file in chunks to avoid memory overload
-                            while (!foundTarget) {
-                                const { done, value } = await reader.read();
-                                
-                                if (done) break;
-                                
-                                // Decode chunk and add to buffer
-                                buffer += decoder.decode(value, { stream: true });
-                                
-                                // Process complete lines
-                                let lineEnd;
-                                while ((lineEnd = buffer.indexOf('\n')) !== -1) {
-                                    const line = buffer.slice(0, lineEnd).trim();
-                                    buffer = buffer.slice(lineEnd + 1);
-                                    
-                                    if (!line) continue;
-                                    
-                                    // Parse header row
-                                    if (!headers) {
-                                        headers = this.parseCSVLine(line);
-                                        continue;
-                                    }
-                                    
-                                    // Parse data row
-                                    const values = this.parseCSVLine(line);
-                                    if (values.length > 2) {
-                                        const origIndex = parseInt(values[2]); // orig_index is column 2
-                                        
-                                        if (origIndex === cellData.orig_index) {
-                                            targetRow = values;
-                                            foundTarget = true;
-                                            break;
-                                        }
-                                    }
-                                    
+                    await this.geneProfileLoadPromise;
+                    if (this.geneProfileCache.has(cacheKey)) return this.geneProfileCache.get(cacheKey);
+                    throw new Error(`Cell with orig_index ${cellData.orig_index} not found in PROT data`);
+                }
+
+                // RNA: stream-search (files may be very large / LFS-stored)
+                return this._streamSearchProfile(cellData, modality, [
+                    './Atlas/atlas_RNA_lat128-001-part1.csv',
+                    './Atlas/atlas_RNA_lat128-001-part2.csv'
+                ]);
+            }
+
+            async _streamAllProfiles(modality, fileNames) {
+                for (const fileName of fileNames) {
+                    try {
+                        const response = await fetch(fileName);
+                        if (!response.ok) continue;
+
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder();
+                        let buffer = '';
+                        let headers = null;
+                        let geneIndices = null;
+                        let rowCount = 0;
+
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+
+                            buffer += decoder.decode(value, { stream: true });
+
+                            let lineEnd;
+                            while ((lineEnd = buffer.indexOf('\n')) !== -1) {
+                                const line = buffer.slice(0, lineEnd).trim();
+                                buffer = buffer.slice(lineEnd + 1);
+                                if (!line) continue;
+
+                                const values = this.parseCSVLine(line);
+                                if (!headers) {
+                                    headers = values;
+                                    geneIndices = [];
+                                    headers.forEach((h, i) => {
+                                        if (h.startsWith('gene_')) geneIndices.push({ i, name: h.replace('gene_', '') });
+                                    });
+                                    continue;
+                                }
+
+                                if (values.length > 2) {
+                                    const origIndex = parseInt(values[2]);
+                                    const geneProfile = {};
+                                    geneIndices.forEach(({ i, name }) => {
+                                        const v = parseFloat(values[i]);
+                                        if (!isNaN(v)) geneProfile[name] = v;
+                                    });
+                                    this.geneProfileCache.set(`${modality}_${origIndex}`, geneProfile);
                                     rowCount++;
-                                    
-                                    // Update progress every 1000 rows
-                                    if (rowCount % 1000 === 0) {
-                                        this.updateLoadingProgress(rowCount, modality, fileName);
-                                        // Yield control to prevent browser freezing
-                                        await new Promise(resolve => setTimeout(resolve, 1));
-                                    }
+                                }
+
+                                if (rowCount % 200 === 0) {
+                                    this.updateLoadingProgress(rowCount, modality, fileName);
+                                    await new Promise(resolve => setTimeout(resolve, 1));
                                 }
                             }
-                            
-                            // Close the reader
-                            reader.releaseLock();
-                            
-                            if (foundTarget && targetRow && headers) {
-                                console.log(`Found target cell in ${fileName}`);
-                                
-                                // Extract gene profile efficiently
-                                const geneProfile = {};
-                                const geneIndices = [];
-                                
-                                // Pre-compute gene column indices for faster access
-                                headers.forEach((header, index) => {
-                                    if (header.startsWith('gene_')) {
-                                        geneIndices.push({ index, name: header.replace('gene_', '') });
-                                    }
-                                });
-                                
-                                // Extract gene values using pre-computed indices
-                                geneIndices.forEach(({ index, name }) => {
-                                    const value = parseFloat(targetRow[index]);
-                                    if (!isNaN(value)) {
-                                        geneProfile[name] = value;
-                                    }
-                                });
-                                
-                                // Cache the result for future use
-                                this.geneProfileCache.set(cacheKey, geneProfile);
-                                
-                                console.log(`Loaded gene profile for ${modality} cell ${cellData.orig_index}: ${Object.keys(geneProfile).length} genes`);
-                                
-                                return geneProfile;
-                            } else {
-                                console.log(`Cell not found in ${fileName}, trying next file...`);
-                            }
-                            
-                        } catch (fileError) {
-                            console.warn(`Error processing ${fileName}:`, fileError);
-                            continue; // Try the next file
                         }
+                        reader.releaseLock();
+                    } catch (e) {
+                        // try next file
                     }
-                    
-                    // If we get here, the cell wasn't found in any file
-                    throw new Error(`Cell with orig_index ${cellData.orig_index} not found in any ${modality} data files`);
-                    
-                } catch (error) {
-                    console.error('Error loading gene profile:', error);
-                    throw error;
                 }
+            }
+
+            async _streamSearchProfile(cellData, modality, fileNames) {
+                for (const fileName of fileNames) {
+                    try {
+                        const response = await fetch(fileName);
+                        if (!response.ok) continue;
+
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder();
+                        let buffer = '';
+                        let headers = null;
+                        let geneIndices = null;
+                        let rowCount = 0;
+                        let found = false;
+
+                        while (!found) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+
+                            buffer += decoder.decode(value, { stream: true });
+
+                            let lineEnd;
+                            while ((lineEnd = buffer.indexOf('\n')) !== -1) {
+                                const line = buffer.slice(0, lineEnd).trim();
+                                buffer = buffer.slice(lineEnd + 1);
+                                if (!line) continue;
+
+                                const values = this.parseCSVLine(line);
+                                if (!headers) {
+                                    headers = values;
+                                    geneIndices = [];
+                                    headers.forEach((h, i) => {
+                                        if (h.startsWith('gene_')) geneIndices.push({ i, name: h.replace('gene_', '') });
+                                    });
+                                    continue;
+                                }
+
+                                if (values.length > 2 && parseInt(values[2]) === cellData.orig_index) {
+                                    const geneProfile = {};
+                                    geneIndices.forEach(({ i, name }) => {
+                                        const v = parseFloat(values[i]);
+                                        if (!isNaN(v)) geneProfile[name] = v;
+                                    });
+                                    const cacheKey = `${modality}_${cellData.orig_index}`;
+                                    this.geneProfileCache.set(cacheKey, geneProfile);
+                                    reader.releaseLock();
+                                    return geneProfile;
+                                }
+
+                                rowCount++;
+                                if (rowCount % 1000 === 0) {
+                                    this.updateLoadingProgress(rowCount, modality, fileName);
+                                    await new Promise(resolve => setTimeout(resolve, 1));
+                                }
+                            }
+                        }
+                        reader.releaseLock();
+                    } catch (e) {
+                        // try next file
+                    }
+                }
+                throw new Error(`Cell with orig_index ${cellData.orig_index} not found in ${modality} data`);
             }
             
             updateLoadingProgress(rowCount, modality, fileName = '') {
@@ -2184,9 +1913,6 @@
                     });
                     
                     this.geneProfileTBody.appendChild(fragment);
-                    
-                    console.log(`Successfully loaded gene profile for ${modality} cell ${cellData.orig_index}: ${genes.length} genes`);
-                    
                 } catch (error) {
                     console.error('Error showing gene profile:', error);
                     this.geneProfileTitle.textContent = `Error Loading Gene Profile`;
@@ -2267,9 +1993,7 @@
                 this.camera.aspect = width / height;
                 this.camera.updateProjectionMatrix();
                 this.renderer.setSize(width, height);
-                
-                // Force a render after resize
-                this.renderer.render(this.scene, this.camera);
+                this.needsRender = true;
             }
             
             hideLoading() {

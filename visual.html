@@ -164,13 +164,6 @@
       grid-column: 1 / -1;
     }
     
-    .explanation-title {
-      margin: 0 0 20px 0;
-      font-size: 20px;
-      font-weight: 600;
-      color: #333;
-    }
-    
     #explanationContainer {
       position: relative;
       min-height: 200px;
@@ -284,44 +277,6 @@
     
     .sliders.visible {
       display: block;
-    }
-    
-    .slider-group {
-      margin-bottom: 15px;
-    }
-    
-    .slider-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #555;
-      font-size: 14px;
-    }
-    
-    .slider-value {
-      color: #007bff;
-      font-weight: 600;
-    }
-    
-    .custom-slider {
-      width: 100%;
-      height: 8px;
-      border-radius: 5px;
-      background: #ddd;
-      outline: none;
-      -webkit-appearance: none;
-    }
-    
-    .custom-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #007bff;
-      cursor: pointer;
-      border: 2px solid white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     
     .create-plot-btn {
@@ -575,16 +530,6 @@
             <span class="radio-custom"></span>
             <span>Semi-Supervised Learning</span>
           </label>
-          <label class="radio-option">
-            <input type="radio" name="mode" value="unsupervised">
-            <span class="radio-custom"></span>
-            <span>Unsupervised Learning</span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="mode" value="miscellaneous">
-            <span class="radio-custom"></span>
-            <span>Miscellaneous Analysis</span>
-          </label>
         </div>
         
         <button class="create-plot-btn" onclick="createPlot()">Create Plot</button>
@@ -602,18 +547,6 @@
             <p>The <span class="highlight">Semi-Supervised Learning</span> visualization combines labeled and unlabeled data to reveal hidden patterns in your dataset.</p>
             <p>This approach is particularly powerful when you have limited labeled samples but abundant unlabeled data, which is common in biological research.</p>
             <p>Adjust the RNA and Proteomics label percentages to see how different amounts of labeled data affect the clustering and classification results.</p>
-          </div>
-          
-          <div id="unsupervisedExplanation" class="explanation-content hidden">
-            <p>The <span class="highlight">Unsupervised Learning</span> visualization explores data without prior knowledge of sample labels or classifications.</p>
-            <p>This mode is excellent for discovering unknown cell populations, identifying novel biomarkers, and understanding the natural structure of your biological data.</p>
-            <p>Use this approach to find unexpected patterns and relationships that might not be apparent through supervised methods.</p>
-          </div>
-          
-          <div id="miscellaneousExplanation" class="explanation-content hidden">
-            <p>The <span class="highlight">Miscellaneous Analysis</span> provides specialized visualization tools for advanced data exploration and quality control.</p>
-            <p>This mode includes various analytical approaches such as dimensionality reduction techniques, correlation analysis, and data quality assessment tools.</p>
-            <p>Perfect for preliminary data exploration and identifying potential issues or interesting features in your dataset before applying specific machine learning approaches.</p>
           </div>
         </div>
       </div>
@@ -655,6 +588,7 @@
     }
 
     function updateSliders() {
+      updateSliderDisplays();
       const mode = document.querySelector('input[name="mode"]:checked').value;
       const parameterCard = document.getElementById('parameterCard');
       const rnaGroup = document.getElementById('rnaGroup');
@@ -684,9 +618,7 @@
     function updateExplanation(mode) {
       const explanations = {
         'supervised': document.getElementById('supervisedExplanation'),
-        'semisupervised': document.getElementById('semisupervisedExplanation'),
-        'unsupervised': document.getElementById('unsupervisedExplanation'),
-        'miscellaneous': document.getElementById('miscellaneousExplanation')
+        'semisupervised': document.getElementById('semisupervisedExplanation')
       };
       
       // Hide all explanations first
@@ -714,12 +646,6 @@
         const latent = latentValues[latentSliderVertical ? latentSliderVertical.value : 2];
         src = `Plots/Supervised/interactive_latent${latent}_to3d_PCA_mm.html`;
         title = `Supervised Learning (Latent Dim: ${latent})`;
-      } else if (mode === 'unsupervised') {
-        src = 'Plots/Unsupervised.html';
-        title = 'Unsupervised Learning Visualization';
-      } else if (mode === 'miscellaneous') {
-        src = 'Plots/Miscellaneous.html';
-        title = 'Miscellaneous Analysis Visualization';
       } else {
         const rna = values[rnaSliderVertical ? rnaSliderVertical.value : 0];
         const prot = values[protSliderVertical ? protSliderVertical.value : 0];
@@ -732,6 +658,7 @@
       plotTitle.textContent = title;
       
       // Show modal with animation
+      animationPaused = true;
       body.classList.add('modal-open');
       menuContainer.classList.add('hidden');
       setTimeout(() => {
@@ -746,12 +673,17 @@
       const plotModal = document.getElementById('plotModal');
       const body = document.body;
       
+      // Cleanup iframe before removing from DOM
+      const iframe = document.getElementById('plotContent').querySelector('iframe');
+      if (iframe) iframe.src = '';
+
       // Hide modal with animation
       plotModal.classList.remove('active');
       setTimeout(() => {
         body.classList.remove('modal-open');
         menuContainer.classList.remove('hidden');
         document.getElementById('plotContent').innerHTML = 'Click "Create Plot" to generate your visualization';
+        animationPaused = false;
       }, 300);
     }
 
@@ -763,10 +695,10 @@
     if (latentSliderVertical) latentSliderVertical.addEventListener('input', updateSliderDisplays);
 
     // Initialize
-    updateSliderDisplays();
     updateSliders();
 
     // Background animation code
+    let animationPaused = false;
     const bgCanvas = document.getElementById('bgCanvas');
     const bgCtx = bgCanvas.getContext('2d');
 
@@ -1073,8 +1005,8 @@
       });
     }
 
-    // Main animation loop
-    function drawBackground() {
+    // Main animation loop (internal — called only when not paused)
+    function _drawBackground() {
       bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
       const time = Date.now() * 0.00085;
       
@@ -1183,10 +1115,13 @@
       vignette.addColorStop(1, 'rgba(0, 142, 204, 0.08)');
       bgCtx.fillStyle = vignette;
       bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-      
+    }
+
+    function drawBackground() {
+      if (!animationPaused) _drawBackground();
       requestAnimationFrame(drawBackground);
     }
-    
+
     // Start animation
     updateNetworkConnections();
     drawBackground();
