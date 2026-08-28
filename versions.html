@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivOME Atlas — Versions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #f5f5f3;
+            color: #4B4B4B;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        .wrap { max-width: 860px; margin: 0 auto; }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 6px 14px;
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            color: #0066A3;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-button:hover { background: #008ECC; color: #ffffff; border-color: #008ECC; }
+        h1 { font-size: 26px; color: #0066A3; font-weight: 600; margin-bottom: 4px; }
+        .subtitle { font-size: 14px; color: #6a6a6a; margin-bottom: 28px; }
+        section { background: #ffffff; border-radius: 8px; padding: 22px 26px; margin-bottom: 20px; }
+        h2 { font-size: 16px; color: #0066A3; font-weight: 600; margin-bottom: 14px; }
+        .model-card { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+        .card-field dt { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #8a8a8a; }
+        .card-field dd { font-size: 16px; color: #4B4B4B; font-variant-numeric: tabular-nums; }
+        .pending { color: #8a8a8a; font-style: italic; }
+        .panel-note { font-size: 12px; color: #6a6a6a; margin-top: 14px; }
+        .panel-error { font-size: 13px; color: #dc3545; }
+        .avail { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .avail th { text-align: left; padding: 6px 8px; border-bottom: 1px solid #d9d9d9; font-size: 11px; text-transform: uppercase; color: #8a8a8a; }
+        .avail td { padding: 8px; border-bottom: 1px solid #efefef; vertical-align: top; }
+        code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+        ol { margin-left: 20px; font-size: 13px; }
+        ol li { margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <a href="index.html" class="back-button">Back</a>
+        <h1>Atlas Versions</h1>
+        <p class="subtitle">Model card, data availability, and the protocol for releasing a new atlas version.</p>
+
+        <section>
+            <h2>Current release</h2>
+            <div id="model-card-mount"></div>
+        </section>
+
+        <section>
+            <h2>Data availability</h2>
+            <table class="avail">
+                <thead><tr><th>Asset</th><th>Status</th><th>Notes</th></tr></thead>
+                <tbody id="availability-mount"></tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Release protocol</h2>
+            <ol>
+                <li>Freeze inputs: record accession numbers, download dates, and checksums for every dataset.</li>
+                <li>Train and export, then regenerate the manifest with <code>python3 tools/build_manifest.py</code>.</li>
+                <li>Bump <code>ATLAS_VERSION</code> in <code>tools/build_manifest.py</code> and commit the regenerated manifest.</li>
+                <li>Tag the release and archive it for a persistent identifier.</li>
+                <li>Record label stability against the previous version and add it to this page.</li>
+            </ol>
+            <p class="panel-note">
+                Label stability across versions is not yet measured. It is reported here from the
+                first release that has a predecessor to compare against.
+            </p>
+        </section>
+    </div>
+
+    <script type="module">
+        import { loadManifest } from './js/manifest.js';
+        import { buildModelCard, escapeHtml } from './js/panels.js';
+
+        loadManifest().then((manifest) => {
+            document.getElementById('model-card-mount').innerHTML = buildModelCard(manifest);
+            document.getElementById('availability-mount').innerHTML =
+                Object.entries(manifest.data_availability).map(([key, info]) => `
+                    <tr>
+                        <td><code>${escapeHtml(key)}</code></td>
+                        <td>${escapeHtml(info.status)}</td>
+                        <td>${escapeHtml(info.note)}${info.remedy ? ` <code>${escapeHtml(info.remedy)}</code>` : ''}</td>
+                    </tr>`).join('');
+        }).catch((err) => {
+            document.getElementById('model-card-mount').innerHTML =
+                `<p class="panel-error">Manifest unavailable: ${err.message}</p>`;
+        });
+    </script>
+</body>
+</html>
