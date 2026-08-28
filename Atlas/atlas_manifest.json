@@ -1,0 +1,749 @@
+{
+  "schema_version": "1.0",
+  "atlas_version": "0.1.0",
+  "generated": "2026-08-29",
+  "model": {
+    "name": "CrossModalNet",
+    "latent_dim": 128,
+    "training_regime": "supervised",
+    "seeds": {
+      "value": null,
+      "status": "pending",
+      "phase": "Phase 1",
+      "note": "Single run only; ten-seed statistics pending"
+    },
+    "notes": "Coordinates shown in the viewer are a 3-component PCA projection of the 128-d latent space. The latent coordinates themselves are not distributed with this build."
+  },
+  "modalities": {
+    "rna": {
+      "label": "RNA",
+      "cells": 85233,
+      "classes": 22,
+      "source": "scRNA-seq"
+    },
+    "prot": {
+      "label": "Protein",
+      "cells": 1490,
+      "classes": 2,
+      "source": "SCoPE2 mass spectrometry"
+    }
+  },
+  "cell_types": [
+    {
+      "class_idx": 0,
+      "name": "b cell",
+      "rna_cells": 3893,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 1,
+      "name": "basophil",
+      "rna_cells": 41,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 2,
+      "name": "cd4-positive, alpha-beta t cell",
+      "rna_cells": 4900,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 3,
+      "name": "cd8-positive, alpha-beta t cell",
+      "rna_cells": 4572,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 4,
+      "name": "classical monocyte",
+      "rna_cells": 10591,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 5,
+      "name": "common myeloid progenitor",
+      "rna_cells": 3,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 6,
+      "name": "erythrocyte",
+      "rna_cells": 11548,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 7,
+      "name": "hematopoietic precursor cell",
+      "rna_cells": 131,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 8,
+      "name": "hematopoietic stem cell",
+      "rna_cells": 64,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 9,
+      "name": "intermediate monocyte",
+      "rna_cells": 1036,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 10,
+      "name": "macrophage",
+      "rna_cells": 1228,
+      "prot_cells": 394,
+      "support": "cross_modal",
+      "pca_centroid_cosine": {
+        "value": 0.997242,
+        "status": "measured",
+        "basis": "3-PC projection"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 11,
+      "name": "mature nk t cell",
+      "rna_cells": 202,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 12,
+      "name": "monocyte",
+      "rna_cells": 9602,
+      "prot_cells": 1096,
+      "support": "cross_modal",
+      "pca_centroid_cosine": {
+        "value": 0.998634,
+        "status": "measured",
+        "basis": "3-PC projection"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 13,
+      "name": "myeloid dendritic cell",
+      "rna_cells": 1,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 14,
+      "name": "naive thymus-derived cd4-positive, alpha-beta t cell",
+      "rna_cells": 490,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 15,
+      "name": "natural killer cell",
+      "rna_cells": 3057,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 16,
+      "name": "neutrophil",
+      "rna_cells": 32198,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 17,
+      "name": "non-classical monocyte",
+      "rna_cells": 353,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 18,
+      "name": "plasma cell",
+      "rna_cells": 816,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 19,
+      "name": "plasmacytoid dendritic cell",
+      "rna_cells": 29,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 20,
+      "name": "platelet",
+      "rna_cells": 438,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    },
+    {
+      "class_idx": 21,
+      "name": "regulatory t cell",
+      "rna_cells": 40,
+      "prot_cells": 0,
+      "support": "rna_only",
+      "pca_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 2",
+        "note": "No paired modality coverage for this class"
+      },
+      "latent_centroid_cosine": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires 128-d latent coordinate export"
+      },
+      "modality_probe_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 4",
+        "note": "Requires linear modality probe run"
+      },
+      "transfer_accuracy": {
+        "value": null,
+        "status": "pending",
+        "phase": "Phase 1",
+        "note": "Requires multi-seed transfer evaluation"
+      }
+    }
+  ],
+  "summary": {
+    "total": 22,
+    "cross_modal": 2,
+    "rna_only": 20,
+    "prot_only": 0
+  },
+  "benchmark": {
+    "status": "pending",
+    "phase": "Phase 4",
+    "note": "No comparison against established methods has been run yet.",
+    "methods": [
+      "CrossModalNet (ours)",
+      "Seurat bridge integration",
+      "GLUE",
+      "MaxFuse",
+      "scArches",
+      "Harmony (shared features)",
+      "PCA + nearest neighbour (floor)"
+    ],
+    "rows": []
+  },
+  "data_availability": {
+    "rna_expression": {
+      "status": "lfs_not_fetched",
+      "note": "Git LFS object (~1.43 GB) is not present in this checkout.",
+      "remedy": "git lfs install && git lfs pull"
+    },
+    "prot_expression": {
+      "status": "available",
+      "note": "Atlas/atlas_PROT_lat128.csv"
+    },
+    "latent_coordinates": {
+      "status": "not_distributed",
+      "note": "Only the 3-component PCA projection ships with this build."
+    }
+  }
+}
