@@ -828,16 +828,9 @@
         .badge-rna_only { background: #f0f0f0; color: #4B4B4B; }
         .badge-prot_only { background: #0099E6; color: #ffffff; }
         .metric-basis { display: block; font-size: 9px; color: #8a8a8a; }
+        /* Pending must never be mistaken for a measured value. */
         .pending { color: #8a8a8a; font-style: italic; }
         .panel-note { font-size: 10px; line-height: 1.5; color: #6a6a6a; margin-top: 8px; }
-        .pending-banner {
-            background: #fff8e6;
-            border-left: 3px solid #008ECC;
-            padding: 10px 12px;
-            font-size: 12px;
-            color: #4B4B4B;
-            margin-bottom: 12px;
-        }
         .panel-error { font-size: 11px; color: #dc3545; }
     </style>
 </head>
@@ -1903,8 +1896,11 @@
                 }
             }
             
-            // Mirrors isLfsPointer in js/manifest.js. Duplicated because the main
-            // atlas script is a classic script and cannot import ES modules.
+            // Mirrors isLfsPointer in js/manifest.js. This class lives in a classic
+            // script, so it cannot `import` directly; converting the script to a
+            // module would remove the copy. Until then tests/lfs.test.js asserts
+            // the magic string below is byte-identical to LFS_MAGIC in that module,
+            // so the two cannot drift apart silently.
             isLfsPointer(text) {
                 return typeof text === 'string'
                     && text.startsWith('version https://git-lfs.github.com/spec/v1');
@@ -2121,16 +2117,18 @@
         });
     </script>
 
-    <script type="module">
+    <!-- async so this module graph does not gate DOMContentLoaded, which the
+         viewer's 5.5 MB CSV load is waiting on. -->
+    <script type="module" async>
         import { loadManifest } from './js/manifest.js';
-        import { buildSupportSummary, buildSupportTable, buildDiagnosticsTable } from './js/panels.js';
+        import { buildSupportSummary, buildSupportTable, buildDiagnosticsTable, errorPanel } from './js/panels.js';
 
         loadManifest().then((manifest) => {
             document.getElementById('support-tiles').innerHTML = buildSupportSummary(manifest);
             document.getElementById('support-table-mount').innerHTML = buildSupportTable(manifest);
             document.getElementById('diagnostics-mount').innerHTML = buildDiagnosticsTable(manifest);
         }).catch((err) => {
-            const message = `<p class="panel-error">Support data unavailable: ${err.message}</p>`;
+            const message = errorPanel(err);
             document.getElementById('support-table-mount').innerHTML = message;
             document.getElementById('diagnostics-mount').innerHTML = message;
         });

@@ -4,32 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VivOME Atlas — Project Data</title>
+    <link rel="stylesheet" href="css/page.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-            background: #f5f5f3;
-            color: #4B4B4B;
-            line-height: 1.6;
-            padding: 40px 20px;
-        }
-        .wrap { max-width: 860px; margin: 0 auto; }
-        .back-button {
-            display: inline-block;
-            margin-bottom: 24px;
-            padding: 6px 14px;
-            background: #ffffff;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            color: #0066A3;
-            text-decoration: none;
-            font-size: 13px;
-        }
-        .back-button:hover { background: #008ECC; color: #ffffff; border-color: #008ECC; }
-        h1 { font-size: 26px; color: #0066A3; font-weight: 600; margin-bottom: 4px; }
-        .subtitle { font-size: 14px; color: #6a6a6a; margin-bottom: 28px; }
-        section { background: #ffffff; border-radius: 8px; padding: 22px 26px; margin-bottom: 20px; }
-        h2 { font-size: 16px; color: #0066A3; font-weight: 600; margin-bottom: 14px; }
         label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #8a8a8a; margin-bottom: 6px; }
         select, input[type="file"] {
             width: 100%; padding: 8px; font-size: 13px;
@@ -41,14 +17,10 @@
         }
         button:hover { background: #0066A3; }
         button:disabled { background: #c9c9c9; cursor: not-allowed; }
-        .pending-banner { background: #fff8e6; border-left: 3px solid #008ECC; padding: 12px 14px; font-size: 13px; margin-bottom: 16px; }
-        .panel-note { font-size: 12px; color: #6a6a6a; margin-top: 14px; }
-        .panel-error { font-size: 13px; color: #dc3545; }
         .result { font-size: 13px; margin-top: 16px; }
         .result dt { font-size: 10px; text-transform: uppercase; color: #8a8a8a; letter-spacing: 0.05em; }
         .result dd { margin-bottom: 10px; font-variant-numeric: tabular-nums; }
         pre { background: #f0f0f0; padding: 14px; border-radius: 6px; font-size: 12px; overflow-x: auto; }
-        code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
         .supported-list { font-size: 13px; margin-top: 8px; }
         .supported-list strong { color: #0066A3; }
     </style>
@@ -95,6 +67,10 @@
         <section>
             <h2>Service contract</h2>
             <p style="font-size: 13px;">The backend built in Phase 5 implements this interface.</p>
+            <div class="pending-banner">
+                <strong>Schema illustration.</strong> Every value below is a placeholder showing
+                the response shape. None of them is a measurement.
+            </div>
             <pre>POST /api/project
 Content-Type: multipart/form-data
 
@@ -103,26 +79,26 @@ Content-Type: multipart/form-data
 
 200 Response
 {
-  "atlas_version": "0.1.0",
-  "n_cells": 298,
-  "n_features_matched": 1204,
-  "n_features_unmatched": 87,
+  "atlas_version"        : &lt;string&gt;,
+  "n_cells"              : &lt;int&gt;,
+  "n_features_matched"   : &lt;int&gt;,
+  "n_features_unmatched" : &lt;int&gt;,
   "cells": [
     {
-      "cell_id": "AAACCTGAGAAACCAT-1",
-      "coordinates": [0.41, -0.22, 0.09],
-      "label": "monocyte",
-      "label_set": ["monocyte", "macrophage"],
-      "confidence": 0.91,
-      "abstained": false
+      "cell_id"     : &lt;string&gt;,
+      "coordinates" : [&lt;float&gt;, &lt;float&gt;, &lt;float&gt;],
+      "label"       : &lt;string&gt;,
+      "label_set"   : [&lt;string&gt;, ...],
+      "confidence"  : &lt;float 0-1&gt;,
+      "abstained"   : false
     },
     {
-      "cell_id": "AAACCTGAGAAACCGC-1",
-      "coordinates": [1.83, 0.94, -1.10],
-      "label": null,
-      "label_set": [],
-      "confidence": null,
-      "abstained": true,
+      "cell_id"       : &lt;string&gt;,
+      "coordinates"   : [&lt;float&gt;, &lt;float&gt;, &lt;float&gt;],
+      "label"         : null,
+      "label_set"     : [],
+      "confidence"    : null,
+      "abstained"     : true,
       "abstain_reason": "outside supported latent space"
     }
   ]
@@ -135,13 +111,40 @@ Content-Type: multipart/form-data
         </section>
     </div>
 
-    <script type="module">
-        import { loadManifest } from './js/manifest.js';
-        import { escapeHtml } from './js/panels.js';
+    <script type="module" async>
+        import { loadManifest, formatCount } from './js/manifest.js';
+        import { buildSupportedLabelSpace, errorPanel, escapeHtml } from './js/panels.js';
 
         const fileInput = document.getElementById('matrix');
         const submitButton = document.getElementById('submit');
         const resultMount = document.getElementById('result');
+
+        // Expression matrices are routinely gigabytes. Read only the header slice
+        // and count the rest by streaming, so peak memory stays flat regardless
+        // of file size.
+        const HEADER_BYTES = 64 * 1024;
+
+        async function readHeaderLine(file) {
+            const text = await file.slice(0, HEADER_BYTES).text();
+            const newline = text.indexOf('\n');
+            return (newline === -1 ? text : text.slice(0, newline)).replace(/\r$/, '');
+        }
+
+        async function countNonEmptyLines(file) {
+            const reader = file.stream().getReader();
+            const decoder = new TextDecoder();
+            let count = 0;
+            let tail = '';
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                const parts = (tail + decoder.decode(value, { stream: true })).split('\n');
+                tail = parts.pop();
+                for (const part of parts) if (part.trim() !== '') count++;
+            }
+            if (tail.trim() !== '') count++;
+            return count;
+        }
 
         fileInput.addEventListener('change', () => {
             submitButton.disabled = fileInput.files.length === 0;
@@ -153,39 +156,31 @@ Content-Type: multipart/form-data
             if (!file) return;
             submitButton.disabled = true;
             try {
-                const text = await file.text();
-                const lines = text.split(/\r?\n/).filter((line) => line.trim() !== '');
-                if (lines.length < 2) throw new Error('File needs a header row and at least one feature row.');
-                const cells = lines[0].split(',').length - 1;
-                const features = lines.length - 1;
+                const header = await readHeaderLine(file);
+                if (header.trim() === '') throw new Error('File has no header row.');
+                const cells = header.split(',').length - 1;
                 if (cells < 1) throw new Error('Header row lists no cell IDs.');
+                const features = await countNonEmptyLines(file) - 1;
+                if (features < 1) throw new Error('File has a header row but no feature rows.');
                 resultMount.innerHTML = `
                     <dl class="result">
                         <dt>File</dt><dd>${escapeHtml(file.name)} (${(file.size / 1024).toFixed(1)} KB)</dd>
-                        <dt>Cells detected</dt><dd>${cells.toLocaleString('en-US')}</dd>
-                        <dt>Features detected</dt><dd>${features.toLocaleString('en-US')}</dd>
+                        <dt>Cells detected</dt><dd>${formatCount(cells)}</dd>
+                        <dt>Features detected</dt><dd>${formatCount(features)}</dd>
                         <dt>Projection</dt>
                         <dd class="panel-error">Not performed — the projection service is not deployed.</dd>
                     </dl>`;
             } catch (err) {
-                resultMount.innerHTML = `<p class="panel-error">${escapeHtml(err.message)}</p>`;
+                resultMount.innerHTML = errorPanel(err);
             } finally {
                 submitButton.disabled = false;
             }
         });
 
         loadManifest().then((manifest) => {
-            const supported = manifest.cell_types
-                .filter((c) => c.support === 'cross_modal')
-                .map((c) => escapeHtml(c.name));
-            const rnaOnly = manifest.summary.rna_only;
-            document.getElementById('supported').innerHTML = `
-                <p><strong>Cross-modal support (${supported.length}):</strong> ${supported.join(', ')}</p>
-                <p><strong>RNA-only (${rnaOnly}):</strong> projection onto these types has no
-                proteomics evidence and the service abstains for protein queries.</p>`;
+            document.getElementById('supported').innerHTML = buildSupportedLabelSpace(manifest);
         }).catch((err) => {
-            document.getElementById('supported').innerHTML =
-                `<p class="panel-error">Manifest unavailable: ${err.message}</p>`;
+            document.getElementById('supported').innerHTML = errorPanel(err);
         });
     </script>
 </body>

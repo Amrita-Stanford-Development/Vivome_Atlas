@@ -41,23 +41,23 @@ def read_metadata(path: Path) -> list[dict]:
         return list(csv.DictReader(handle))
 
 
+PC_COLUMNS = ("PC1", "PC2", "PC3")
+
+
 def class_stats(rows: list[dict]) -> dict:
     """-> {class_idx: {"name": str, "count": int, "centroid": (x, y, z)}}"""
-    acc = defaultdict(lambda: {"name": None, "n": 0, "sx": 0.0, "sy": 0.0, "sz": 0.0})
+    groups = defaultdict(list)
     for row in rows:
-        entry = acc[int(row["class_idx"])]
-        entry["name"] = row["class_name"]
-        entry["n"] += 1
-        entry["sx"] += float(row["PC1"])
-        entry["sy"] += float(row["PC2"])
-        entry["sz"] += float(row["PC3"])
+        groups[int(row["class_idx"])].append(row)
     return {
         idx: {
-            "name": e["name"],
-            "count": e["n"],
-            "centroid": (e["sx"] / e["n"], e["sy"] / e["n"], e["sz"] / e["n"]),
+            "name": group[0]["class_name"],
+            "count": len(group),
+            "centroid": tuple(
+                sum(float(r[pc]) for r in group) / len(group) for pc in PC_COLUMNS
+            ),
         }
-        for idx, e in acc.items()
+        for idx, group in groups.items()
     }
 
 

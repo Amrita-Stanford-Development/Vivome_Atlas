@@ -821,18 +821,14 @@
     const colors = ['#5CB85C', '#0275D8', '#008ECC', '#0066A3', '#5BC0DE'];
     const urls = ['visual.html', 'atlas.html', 'project.html', 'benchmark.html', 'versions.html'];
 
+    // Pure arithmetic — no layout reads. Called hundreds of times per scene
+    // build, so the boxes it tests are precomputed by updateLabelBoundaries.
     function overlapsWithLabels(x, y, radius) {
-      const canvasRect = canvas.getBoundingClientRect();
-      for (const bounds of labelBoundaries) {
-        const labelLeft = bounds.left - canvasRect.left - 10;
-        const labelRight = bounds.right - canvasRect.left + 10;
-        const labelTop = bounds.top - canvasRect.top - 10;
-        const labelBottom = bounds.bottom - canvasRect.top + 10;
-        
-        if (x + radius > labelLeft && 
-            x - radius < labelRight &&
-            y + radius > labelTop && 
-            y - radius < labelBottom) {
+      for (const b of labelBoundaries) {
+        if (x + radius > b.left &&
+            x - radius < b.right &&
+            y + radius > b.top &&
+            y - radius < b.bottom) {
           return true;
         }
       }
@@ -840,12 +836,20 @@
     }
 
     function updateLabelBoundaries() {
+      // The canvas rect is invariant across a scene build, so resolve the
+      // label boxes to padded canvas-relative coordinates once, here.
+      const canvasRect = canvas.getBoundingClientRect();
       labelBoundaries = [];
       for (let i = 0; i < urls.length; i++) {
         const label = document.getElementById(`label${i}`);
         if (label) {
           const rect = label.getBoundingClientRect();
-          labelBoundaries.push(rect);
+          labelBoundaries.push({
+            left: rect.left - canvasRect.left - 10,
+            right: rect.right - canvasRect.left + 10,
+            top: rect.top - canvasRect.top - 10,
+            bottom: rect.bottom - canvasRect.top + 10,
+          });
         }
       }
     }
