@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivOME Atlas — Benchmark</title>
+    <link rel="stylesheet" href="css/page.css">
+    <style>
+        .wrap { max-width: 940px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <a href="index.html" class="back-button">Back</a>
+        <h1>Standing Benchmark</h1>
+        <p class="subtitle">Fixed datasets, fixed metrics, every method scored the same way.</p>
+
+        <section>
+            <h2>Cross-modal integration comparison</h2>
+            <div class="table-scroll" id="benchmark-mount"></div>
+            <p class="panel-note">
+                Transfer accuracy is the headline number most integration papers report.
+                The modality probe column is the diagnostic: a linear classifier trained to
+                recover the source modality from the integrated representation. High transfer
+                accuracy together with high probe accuracy means the modalities point in the
+                same direction without sharing a representation.
+            </p>
+        </section>
+
+        <section>
+            <h2>Why both columns</h2>
+            <p style="font-size: 13px;">
+                A method can score well on mixing and transfer while a probe still recovers the
+                source modality almost perfectly. Reporting transfer accuracy alone hides that.
+                Running the probe across every method is what turns the observation into a
+                property of the field rather than a quirk of one model.
+            </p>
+        </section>
+    </div>
+
+    <script type="module" async>
+        import { loadManifest } from './js/manifest.js';
+        import { buildBenchmarkTable, errorPanel } from './js/panels.js';
+
+        loadManifest().then((manifest) => {
+            document.getElementById('benchmark-mount').innerHTML = buildBenchmarkTable(manifest);
+        }).catch((err) => {
+            document.getElementById('benchmark-mount').innerHTML = errorPanel(err);
+        });
+    </script>
+</body>
+</html>

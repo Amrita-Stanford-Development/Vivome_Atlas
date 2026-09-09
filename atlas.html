@@ -792,6 +792,46 @@
                 font-size: 1.5rem;
             }
         }
+        .support-tiles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .support-tile {
+            background: #f0f0f0;
+            border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+        .support-tile-value { font-size: 20px; font-weight: 600; color: #0066A3; }
+        .support-tile-label { font-size: 10px; color: #4B4B4B; text-transform: uppercase; letter-spacing: 0.04em; }
+        .support-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .support-table th {
+            text-align: left;
+            font-weight: 600;
+            color: #4B4B4B;
+            border-bottom: 1px solid #d9d9d9;
+            padding: 4px 6px;
+        }
+        .support-table td { padding: 4px 6px; border-bottom: 1px solid #efefef; vertical-align: top; }
+        .support-name { color: #4B4B4B; }
+        .support-num { text-align: right; font-variant-numeric: tabular-nums; }
+        .support-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            white-space: nowrap;
+        }
+        .badge-cross_modal { background: #008ECC; color: #ffffff; }
+        .badge-rna_only { background: #f0f0f0; color: #4B4B4B; }
+        .badge-prot_only { background: #0099E6; color: #ffffff; }
+        .metric-basis { display: block; font-size: 9px; color: #8a8a8a; }
+        /* Pending must never be mistaken for a measured value. */
+        .pending { color: #8a8a8a; font-style: italic; }
+        .panel-note { font-size: 10px; line-height: 1.5; color: #6a6a6a; margin-top: 8px; }
+        .panel-error { font-size: 11px; color: #dc3545; }
     </style>
 </head>
 <body>
@@ -848,6 +888,22 @@
                     <div class="cell-type-filters" id="prot-cell-type-filters">
                         <!-- Dynamically populated -->
                     </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Cross-Modal Support</h3>
+                    <div class="support-tiles" id="support-tiles"></div>
+                    <div id="support-table-mount"></div>
+                    <p class="panel-note">
+                        Protein coverage exists for only part of the label space. Cell types marked
+                        RNA only have no proteomics evidence in this build, and projections onto them
+                        should not be read as cross-modal results.
+                    </p>
+                </div>
+
+                <div class="control-section">
+                    <h3>Alignment Diagnostics</h3>
+                    <div id="diagnostics-mount"></div>
                 </div>
             </div>
             
@@ -1671,6 +1727,7 @@
             }
 
             async _streamAllProfiles(modality, fileNames) {
+                let lfsBlocked = false;
                 for (const fileName of fileNames) {
                     try {
                         const response = await fetch(fileName);
@@ -1688,6 +1745,11 @@
                             if (done) break;
 
                             buffer += decoder.decode(value, { stream: true });
+
+                            if (headers === null && this.isLfsPointer(buffer)) {
+                                lfsBlocked = true;
+                                break;
+                            }
 
                             let lineEnd;
                             while ((lineEnd = buffer.indexOf('\n')) !== -1) {
@@ -1726,10 +1788,19 @@
                     } catch (e) {
                         // try next file
                     }
+                    if (lfsBlocked) break;
+                }
+                if (lfsBlocked) {
+                    throw new Error(
+                        'RNA expression data is not present in this deployment. ' +
+                        'The file is a 1.43 GB Git LFS object that has not been fetched. ' +
+                        'Run: git lfs install && git lfs pull'
+                    );
                 }
             }
 
             async _streamSearchProfile(cellData, modality, fileNames) {
+                let lfsBlocked = false;
                 for (const fileName of fileNames) {
                     try {
                         const response = await fetch(fileName);
@@ -1748,6 +1819,11 @@
                             if (done) break;
 
                             buffer += decoder.decode(value, { stream: true });
+
+                            if (headers === null && this.isLfsPointer(buffer)) {
+                                lfsBlocked = true;
+                                break;
+                            }
 
                             let lineEnd;
                             while ((lineEnd = buffer.indexOf('\n')) !== -1) {
@@ -1788,6 +1864,14 @@
                     } catch (e) {
                         // try next file
                     }
+                    if (lfsBlocked) break;
+                }
+                if (lfsBlocked) {
+                    throw new Error(
+                        'RNA expression data is not present in this deployment. ' +
+                        'The file is a 1.43 GB Git LFS object that has not been fetched. ' +
+                        'Run: git lfs install && git lfs pull'
+                    );
                 }
                 throw new Error(`Cell with orig_index ${cellData.orig_index} not found in ${modality} data`);
             }
@@ -1812,6 +1896,16 @@
                 }
             }
             
+            // Mirrors isLfsPointer in js/manifest.js. This class lives in a classic
+            // script, so it cannot `import` directly; converting the script to a
+            // module would remove the copy. Until then tests/lfs.test.js asserts
+            // the magic string below is byte-identical to LFS_MAGIC in that module,
+            // so the two cannot drift apart silently.
+            isLfsPointer(text) {
+                return typeof text === 'string'
+                    && text.startsWith('version https://git-lfs.github.com/spec/v1');
+            }
+
             parseCSVLine(line) {
                 const result = [];
                 let inQuotes = false;
@@ -2020,6 +2114,23 @@
         // Initialize the atlas when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             window.vivomeAtlas = new VivomeAtlasThree();
+        });
+    </script>
+
+    <!-- async so this module graph does not gate DOMContentLoaded, which the
+         viewer's 5.5 MB CSV load is waiting on. -->
+    <script type="module" async>
+        import { loadManifest } from './js/manifest.js';
+        import { buildSupportSummary, buildSupportTable, buildDiagnosticsTable, errorPanel } from './js/panels.js';
+
+        loadManifest().then((manifest) => {
+            document.getElementById('support-tiles').innerHTML = buildSupportSummary(manifest);
+            document.getElementById('support-table-mount').innerHTML = buildSupportTable(manifest);
+            document.getElementById('diagnostics-mount').innerHTML = buildDiagnosticsTable(manifest);
+        }).catch((err) => {
+            const message = errorPanel(err);
+            document.getElementById('support-table-mount').innerHTML = message;
+            document.getElementById('diagnostics-mount').innerHTML = message;
         });
     </script>
 </body>

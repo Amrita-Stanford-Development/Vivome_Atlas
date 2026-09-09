@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivOME Atlas — Versions</title>
+    <link rel="stylesheet" href="css/page.css">
+    <style>
+        ol { margin-left: 20px; font-size: 13px; }
+        ol li { margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <a href="index.html" class="back-button">Back</a>
+        <h1>Atlas Versions</h1>
+        <p class="subtitle">Model card, data availability, and the protocol for releasing a new atlas version.</p>
+
+        <section>
+            <h2>Current release</h2>
+            <div id="model-card-mount"></div>
+        </section>
+
+        <section>
+            <h2>Data availability</h2>
+            <div class="table-scroll" id="availability-mount"></div>
+        </section>
+
+        <section>
+            <h2>Release protocol</h2>
+            <ol>
+                <li>Freeze inputs: record accession numbers, download dates, and checksums for every dataset.</li>
+                <li>Train and export, then regenerate the manifest with <code>python3 tools/build_manifest.py</code>.</li>
+                <li>Bump <code>ATLAS_VERSION</code> in <code>tools/build_manifest.py</code> and commit the regenerated manifest.</li>
+                <li>Tag the release and archive it for a persistent identifier.</li>
+                <li>Record label stability against the previous version and add it to this page.</li>
+            </ol>
+            <p class="panel-note">
+                Label stability across versions is not yet measured. It is reported here from the
+                first release that has a predecessor to compare against.
+            </p>
+        </section>
+    </div>
+
+    <script type="module" async>
+        import { loadManifest } from './js/manifest.js';
+        import { buildModelCard, buildAvailabilityTable, errorPanel } from './js/panels.js';
+
+        loadManifest().then((manifest) => {
+            document.getElementById('model-card-mount').innerHTML = buildModelCard(manifest);
+            document.getElementById('availability-mount').innerHTML = buildAvailabilityTable(manifest);
+        }).catch((err) => {
+            document.getElementById('model-card-mount').innerHTML = errorPanel(err);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+# CLAUDE.md
+
+Working notes for this repository. Read before changing anything.
+
+## What this is
+
+A static web resource for the VivOME joint latent atlas. Plain HTML + CSS +
+ES modules. **No build step, no bundler, no framework, no dependencies.**
+Do not introduce one. `package.json` exists only to set `"type": "module"`
+and to run `node --test`.
+
+The app exists to deliver the *resource claim* of
+`VivOME_NatComms_Implementation_Plan.md` — a versioned atlas with a projection
+service, calibrated confidence, and explicit abstention. App work runs in
+parallel with the modeling track and must not block on it.
+
+## The rule that governs everything
+
+**No page displays a number that was not computed from data in this
+repository.**
+
+`Atlas/atlas_manifest.json` is the single source of truth. Every metric is a
+record, either measured or pending:
+
+```json
+{ "value": 0.998634, "status": "measured", "basis": "3-PC projection" }
+{ "value": null, "status": "pending", "phase": "Phase 2", "note": "..." }
+```
+
+`isMeasured()` in `js/manifest.js` is the single guard: a metric renders only
+when `status === 'measured'`, `value !== null`, and the value is finite.
+Everything else — pending, absent, malformed, truncated — renders as
+`Pending`. Do not add a display path that bypasses it, and do not hardcode a
+metric into HTML. See [docs/manifest.md](docs/manifest.md).
+
+## Conventions
+
+- `js/manifest.js` and `js/panels.js` are **pure** — no DOM access, no side
+  effects. That is what lets the same code run under `node --test` and be
+  assigned to `innerHTML` in the browser. Keep them pure.
+- Panel builders return HTML strings. Every interpolated value from the
+  manifest goes through `escapeHtml()` — cell-type names are data, and the
+  test fixture deliberately includes a `<script>` payload to prove it.
+- Pages mount panels with `<script type="module" async>` and always attach a
+  `.catch()` that renders `errorPanel(err)`. A failed manifest load shows an
+  error, never a blank panel or a stale number.
+- `atlas.html` is a classic script and cannot import `js/manifest.js`, so the
+  Git LFS magic string is duplicated there. `tests/lfs.test.js` pins the two
+  copies byte-for-byte. If you touch either, the test must stay green.
+- Nav and back links point to `index.html`.
+
+## After changing data
+
+Regenerate the manifest and commit it:
+
+```bash
+python3 tools/build_manifest.py
+```
+
+Bump `ATLAS_VERSION` in `tools/build_manifest.py` for a real release; the full
+protocol is on `versions.html` and in [docs/manifest.md](docs/manifest.md).
+
+## Tests
+
+```bash
+node --test                                  # from the repo root
+cd tools && python3 -m unittest discover     # manifest builder
+```
+
+Run both before committing. `tests/lfs.test.js` asserts the shipped RNA parts
+are still unfetched LFS pointers — if you have run `git lfs pull` locally it
+will fail, which is expected and is not a reason to change the test.
+
+## Working agreements
+
+- **List what you intend to delete, and get approval, before deleting it.**
+  This repo mixes generated bundles, precomputed plots, and hand-written
+  pages; things that look dead are often deliberate (`miscellaneous.html` is
+  intentionally blank).
+- `SUMMARY.md` and `README.md` describe the current state only. No "what was
+  removed" sections — git history is the record of change.
+- Pending is a feature. When a metric cannot be computed yet, add a pending
+  record with the phase that will produce it. Never fill a gap with a
+  plausible number.

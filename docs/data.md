@@ -1,0 +1,69 @@
+# Data
+
+## `Atlas/`
+
+Latent embeddings and metadata, latent dim 128.
+
+| File | Contents |
+|---|---|
+| `atlas_RNA_lat128.parquet` | RNA coordinates — **Git LFS**, ~1.43 GB |
+| `atlas_RNA_lat128-001-part1.csv`, `-part2.csv` | Split CSV form of the same — **Git LFS** |
+| `metadata_RNA_lat128.csv` | RNA metadata, ~85,233 rows |
+| `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
+| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows |
+| `shared_genes_lat128.txt` | Shared gene list used for alignment |
+| `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
+
+Metadata columns: `latent_dim, modality, orig_index, class_idx, class_name,
+PC1, PC2, PC3`.
+
+Class names are quoted CSV fields and **some contain commas** (`class_idx` 2,
+3, and 14). Parse with `csv.DictReader` or equivalent — a naive `split(',')`
+corrupts those rows.
+
+## What ships and what does not
+
+| Artifact | Status |
+|---|---|
+| 3-component PCA projection of the latent space | Ships — this is what the viewer plots |
+| Full 128-d latent coordinates | **Not distributed** with this build |
+| Protein expression matrix | Available (`atlas_PROT_lat128.csv`) |
+| RNA expression matrix | Git LFS object, absent until fetched |
+
+The viewer's 3D coordinates are a PCA projection, not the latent space itself.
+Any statement about latent geometry needs the 128-d export, which is why
+`latent_centroid_cosine` is a Phase 1 pending record.
+
+## Git LFS
+
+```bash
+git lfs install
+git lfs pull
+```
+
+Three files are LFS-tracked (see `.gitattributes`). A fresh clone without
+`git lfs pull` holds pointer files that begin:
+
+```
+version https://git-lfs.github.com/spec/v1
+```
+
+The app handles this rather than crashing. `isLfsPointer()` in
+`js/manifest.js` detects the magic string, and `atlas.html` checks before
+parsing an RNA profile and shows `git lfs pull` as the remedy.
+
+`atlas.html`'s main script is a classic script and cannot import the module,
+so the magic string exists in two places. `tests/lfs.test.js` pins them
+byte-for-byte — a typo in either copy would silently disable the guard on one
+side while the suite stayed green.
+
+That suite also asserts the shipped part files are *still* unfetched pointers.
+If you have run `git lfs pull` locally the test fails by design; do not
+"fix" it by weakening the assertion.
+
+## `Plots/`
+
+30 precomputed interactive 3D plots, standalone HTML.
+
+- `Supervised/` — 5 plots, `interactive_latent{32,64,128,256,512}_to3d_PCA_mm.html`, one per latent dimension.
+- `Semi Supervised/` — 25 plots, `PCA3D_semi_r{5,10,25,50,75}_p{5,10,25,50,75}.html`, a sweep over RNA (`r`) and protein (`p`) label percentages.
