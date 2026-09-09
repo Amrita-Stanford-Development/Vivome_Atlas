@@ -57,6 +57,18 @@ Each modality has coordinates plus a metadata table with
 - `shared_genes_lat128.txt` — shared gene list used for alignment.
 - Large RNA files are tracked via **Git LFS** (see `.gitattributes`).
 
+### `docs/` — documentation
+
+| Document | Covers |
+|----------|--------|
+| `docs/manifest.md` | Manifest pipeline, the measured/pending contract, release protocol |
+| `docs/data.md` | Data layout, Git LFS, what ships and what does not |
+| `docs/projection-service.md` | The `POST /api/project` contract, conformal label sets, abstention |
+| `docs/plans/` | Implementation plans |
+
+`README.md` is the repository front door; `CLAUDE.md` records the conventions
+any change has to respect.
+
 ### `Plots/` — 30 precomputed interactive 3D plots
 
 - **`Supervised/`** — 5 plots, `interactive_latent{32,64,128,256,512}_to3d_PCA_mm.html`
