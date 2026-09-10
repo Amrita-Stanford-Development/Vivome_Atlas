@@ -1,0 +1,22 @@
+{
+  "winner": "H module, uniform",
+  "winner_config": {
+    "enc": "module",
+    "sampler": "uniform",
+    "consist": true
+  },
+  "mean_bal_acc_realistic_coverage": {
+    "H module, uniform": 70.64373892231949,
+    "F2 module, profile": 70.48786644201803,
+    "C mask channel, uniform": 69.13268266160097
+  },
+  "seed_sd": {
+    "H module, uniform": 1.9403807857157087,
+    "F2 module, profile": 2.063266595605153,
+    "C mask channel, uniform": 1.3365346290894669
+  },
+  "n_seeds": 5,
+  "target_module_size": 18,
+  "feature_space_size": 9002,
+  "decisively_separated": false
+}

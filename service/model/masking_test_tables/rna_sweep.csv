@@ -1,0 +1,91 @@
+arm,seed,coverage,bal_acc
+"C mask channel, uniform",0,0.1,61.718304798623656
+"C mask channel, uniform",0,0.184,70.54200167119384
+"C mask channel, uniform",0,0.32,75.9952088458696
+"C mask channel, uniform",0,0.35,76.25367528016496
+"C mask channel, uniform",0,0.55,78.39605183022546
+"C mask channel, uniform",0,1.0,78.29708427230895
+"C mask channel, uniform",1,0.1,61.762509530404344
+"C mask channel, uniform",1,0.184,68.73637201925611
+"C mask channel, uniform",1,0.32,75.59738597415358
+"C mask channel, uniform",1,0.35,72.22953020241596
+"C mask channel, uniform",1,0.55,77.19313550717473
+"C mask channel, uniform",1,1.0,76.23482067656921
+"C mask channel, uniform",2,0.1,60.446647959560906
+"C mask channel, uniform",2,0.184,67.8798216168537
+"C mask channel, uniform",2,0.32,71.33460307778552
+"C mask channel, uniform",2,0.35,71.30077837414142
+"C mask channel, uniform",2,0.55,76.88353339177907
+"C mask channel, uniform",2,1.0,75.51038977236571
+"C mask channel, uniform",3,0.1,61.894993958142585
+"C mask channel, uniform",3,0.184,64.57813855641088
+"C mask channel, uniform",3,0.32,73.5638403399734
+"C mask channel, uniform",3,0.35,72.44274875616505
+"C mask channel, uniform",3,0.55,77.58373479078567
+"C mask channel, uniform",3,1.0,74.8496308240859
+"C mask channel, uniform",4,0.1,63.46030252949174
+"C mask channel, uniform",4,0.184,68.195490185945
+"C mask channel, uniform",4,0.32,71.84906713521792
+"C mask channel, uniform",4,0.35,72.87223242024889
+"C mask channel, uniform",4,0.55,73.22642060981661
+"C mask channel, uniform",4,1.0,74.40063115730459
+"F2 module, profile",0,0.1,65.76202425103023
+"F2 module, profile",0,0.184,71.65335282933106
+"F2 module, profile",0,0.32,80.12769042225777
+"F2 module, profile",0,0.35,77.73565847258872
+"F2 module, profile",0,0.55,79.55012678530642
+"F2 module, profile",0,1.0,79.10909656279938
+"F2 module, profile",1,0.1,60.79062547900025
+"F2 module, profile",1,0.184,72.14136293026249
+"F2 module, profile",1,0.32,74.9946903277803
+"F2 module, profile",1,0.35,76.60440665174349
+"F2 module, profile",1,0.55,77.58120946123671
+"F2 module, profile",1,1.0,78.62010225543547
+"F2 module, profile",2,0.1,63.76799294969779
+"F2 module, profile",2,0.184,69.88158908605241
+"F2 module, profile",2,0.32,71.58508825283774
+"F2 module, profile",2,0.35,72.88010503334537
+"F2 module, profile",2,0.55,74.24851262805122
+"F2 module, profile",2,1.0,77.01138369494721
+"F2 module, profile",3,0.1,63.109096168676345
+"F2 module, profile",3,0.184,67.9314975260702
+"F2 module, profile",3,0.32,72.51789907903226
+"F2 module, profile",3,0.35,72.91339040934115
+"F2 module, profile",3,0.55,73.60957496781346
+"F2 module, profile",3,1.0,76.38981820762454
+"F2 module, profile",4,0.1,61.78515316005063
+"F2 module, profile",4,0.184,67.69631167309969
+"F2 module, profile",4,0.32,72.40022155903657
+"F2 module, profile",4,0.35,73.47917257912621
+"F2 module, profile",4,0.55,73.73442101954294
+"F2 module, profile",4,1.0,73.35768334764524
+"H module, uniform",0,0.1,65.03822647032024
+"H module, uniform",0,0.184,71.90936306436669
+"H module, uniform",0,0.32,76.01283049415837
+"H module, uniform",0,0.35,74.51410411598859
+"H module, uniform",0,0.55,79.02226551107556
+"H module, uniform",0,1.0,78.14733813271009
+"H module, uniform",1,0.1,67.09619843886749
+"H module, uniform",1,0.184,71.59005981283022
+"H module, uniform",1,0.32,77.47797702236873
+"H module, uniform",1,0.35,77.05077135192215
+"H module, uniform",1,0.55,78.06134512743562
+"H module, uniform",1,1.0,77.94860755879903
+"H module, uniform",2,0.1,61.20201195577872
+"H module, uniform",2,0.184,70.16807562066498
+"H module, uniform",2,0.32,71.79786578483845
+"H module, uniform",2,0.35,75.05486223494727
+"H module, uniform",2,0.55,77.103324156567
+"H module, uniform",2,1.0,75.29234614947701
+"H module, uniform",3,0.1,60.450215168332754
+"H module, uniform",3,0.184,68.42541649554916
+"H module, uniform",3,0.32,72.30799624480034
+"H module, uniform",3,0.35,72.46385590736938
+"H module, uniform",3,0.55,73.94781371384893
+"H module, uniform",3,1.0,74.90526999965198
+"H module, uniform",4,0.1,60.6002340410719
+"H module, uniform",4,0.184,71.06203101933362
+"H module, uniform",4,0.32,74.92364103486833
+"H module, uniform",4,0.35,73.7290421680124
+"H module, uniform",4,0.55,74.95071448047335
+"H module, uniform",4,1.0,75.844819879219

@@ -1,0 +1,37 @@
+{
+  "source_file": "/content/drive/My Drive/Vivome - Live Atlas/Data/scProteomics/PBMC_240cells_proteins.tsv",
+  "n_cells_raw": 238,
+  "n_cells_kept": 237,
+  "n_proteins_raw": 3100,
+  "n_genes_kept": 2402,
+  "min_proteins_per_cell": 200,
+  "min_detection_rate": 0.05,
+  "missing_fraction_after_filter": 0.5244293609052934,
+  "acquisition_batches": {
+    "041725": 52,
+    "041225": 40,
+    "041325": 40,
+    "041425": 40,
+    "041025": 39,
+    "041525": 26
+  },
+  "overlap_with_reference": 1111,
+  "reference_genes_padded": 1792,
+  "lineages_scored": [
+    "T cell",
+    "NK cell",
+    "Monocyte",
+    "Platelet",
+    "Dendritic"
+  ],
+  "weak_label_counts": {
+    "unassigned": 97,
+    "T cell": 61,
+    "NK cell": 56,
+    "Dendritic": 11,
+    "Platelet": 7,
+    "Monocyte": 5
+  },
+  "best_k": 2,
+  "seed": 0
+}

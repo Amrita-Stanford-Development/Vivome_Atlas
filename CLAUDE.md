@@ -5,9 +5,17 @@ Working notes for this repository. Read before changing anything.
 ## What this is
 
 A static web resource for the VivOME joint latent atlas. Plain HTML + CSS +
-ES modules. **No build step, no bundler, no framework, no dependencies.**
-Do not introduce one. `package.json` exists only to set `"type": "module"`
-and to run `node --test`.
+ES modules, at the repository root. **No build step, no bundler, no
+framework, no dependencies.** Do not introduce one here. `package.json`
+exists only to set `"type": "module"` and to run `node --test`.
+
+`service/` is a separate concern: the Phase 5 projection service backend,
+real Python with real dependencies (torch, an OT solver — see
+`service/requirements.txt`). The "no dependencies" rule above is about the
+static app; it does not extend to `service/`. See `service/README.md`
+before touching it — its own working agreements are stricter in places
+(several pipeline choices there look wrong until you've read the design
+rationale each module docstring cites).
 
 The app exists to deliver the *resource claim* of
 `VivOME_NatComms_Implementation_Plan.md` — a versioned atlas with a projection
@@ -63,13 +71,15 @@ protocol is on `versions.html` and in [docs/manifest.md](docs/manifest.md).
 ## Tests
 
 ```bash
-node --test                                  # from the repo root
-cd tools && python3 -m unittest discover     # manifest builder
+node --test                                          # from the repo root
+cd tools && python3 -m unittest discover             # manifest builder
+python3 -m unittest discover -s service/tests -t .   # projection service, from the repo root
 ```
 
-Run both before committing. `tests/lfs.test.js` asserts the shipped RNA parts
-are still unfetched LFS pointers — if you have run `git lfs pull` locally it
-will fail, which is expected and is not a reason to change the test.
+Run all three before committing. `tests/lfs.test.js` asserts the shipped RNA
+parts are still unfetched LFS pointers — if you have run `git lfs pull`
+locally it will fail, which is expected and is not a reason to change the
+test.
 
 ## Working agreements
 

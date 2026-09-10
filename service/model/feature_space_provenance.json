@@ -1,0 +1,21 @@
+{
+  "sources": {
+    "bubis_hela": 5811,
+    "bubis_lung": 5853,
+    "bubis_candidates": 6230,
+    "pbmc240": 3196,
+    "scope2": 2935,
+    "fulcher": 1661
+  },
+  "union_raw": 9316,
+  "union_no_ig": 9255,
+  "rna_genes": 61806,
+  "feature_space": 9002,
+  "core_set": 4864,
+  "old_reference": 2903,
+  "retained_from_old": 2903,
+  "dropped_from_old": 0,
+  "newly_added": 6099,
+  "blood_only_union": 4949,
+  "ig_tcr_excluded": 61
+}

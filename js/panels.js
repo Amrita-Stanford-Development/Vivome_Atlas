@@ -137,6 +137,51 @@ export function buildModelCard(manifest) {
     <p class="panel-note">${escapeHtml(m.notes)}</p>`;
 }
 
+// The next reference's architecture is decided; the reference itself is not
+// trained (service/model/README.md). This is deliberately a separate panel
+// from buildModelCard, not a merge into it: `manifest.model` describes the
+// currently deployed release, and this section must never be read as
+// updating that release's own numbers. Renders nothing when next_reference
+// is absent — older manifests without this field still render the page.
+export function buildNextReferenceCard(manifest) {
+  const n = manifest.next_reference;
+  if (!n) return '';
+  const field = (label, value) =>
+    `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+  const sources = Object.entries(n.detected_by_source ?? {})
+    .map(([source, count]) => `${escapeHtml(source)} (${formatCount(count)})`)
+    .join(', ');
+  return `
+    <dl class="model-card">
+      ${field('Encoder family', escapeHtml(n.encoder_family))}
+      ${field('Mask sampling', escapeHtml(n.mask_sampling))}
+      ${field('Feature space', `${formatCount(n.feature_space_size)} genes (was ${formatCount(n.previous_feature_space_size)})`)}
+      ${field('Detected by source', sources)}
+      ${field('Reference trained', n.trained ? 'Yes' : 'Not yet')}
+    </dl>
+    <p class="panel-note">${escapeHtml(n.note)}</p>`;
+}
+
+// The currently deployed model's own numbers, kept as the documented prior
+// baseline rather than erased when the architecture moves on. Both this and
+// buildNextReferenceCard are additive, independent sections — neither one
+// edits buildModelCard's rendering of manifest.model.
+export function buildPriorBaselineCard(manifest) {
+  const p = manifest.previous_release;
+  if (!p) return '';
+  const field = (label, value) =>
+    `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+  return `
+    <dl class="model-card">
+      ${field('Model', escapeHtml(p.model_name))}
+      ${field('Shared genes', formatCount(p.n_shared_genes))}
+      ${field('Zero-shot AUC (raw)', metricText(p.zero_shot_auc_raw, (x) => formatMetric(x, 4)))}
+      ${field('Zero-shot AUC (smoothed)', metricText(p.zero_shot_auc_smoothed, (x) => formatMetric(x, 4)))}
+      ${field('Shipped properties', (p.shipped_properties ?? []).map(escapeHtml).join(', '))}
+    </dl>
+    <p class="panel-note">${escapeHtml(p.note)}</p>`;
+}
+
 export function buildAvailabilityTable(manifest) {
   const rows = Object.entries(manifest.data_availability).map(([key, info]) => `
     <tr>

@@ -7,6 +7,8 @@ single-cell modalities into one shared space. This build covers **RNA** and
 **Protein**.
 
 No build step, no dependencies, no framework — plain HTML, CSS, and ES modules.
+The one exception is `service/`, a separate Python backend for the
+projection service — see [Layout](#layout) and `service/README.md`.
 
 ---
 
@@ -26,7 +28,9 @@ The atlas fetches data from `Atlas/` over HTTP, so opening `index.html` from
 **Git LFS is not optional for the RNA view.** `Atlas/atlas_RNA_lat128.parquet`
 (~1.43 GB) and the two split CSV parts are LFS objects. Without `git lfs pull`
 your checkout holds pointer files; the app detects this and tells you the
-remedy rather than failing on a parse error.
+remedy rather than failing on a parse error. `service/model/dev/H_seed4.pt`
+(~94 MB, the projection service's dev placeholder checkpoint) is LFS-tracked
+too — the same `git lfs pull` fetches it.
 
 ## Pages
 
@@ -50,6 +54,8 @@ js/         manifest.js, panels.js — pure ES modules, unit-tested
 tools/      build_manifest.py and its unittest suite
 tests/      node --test suites for the JS modules
 docs/       documentation (see docs/README.md)
+service/    Phase 5 projection service backend — separate dependencies,
+            separate tests, see service/README.md
 ```
 
 ## The manifest rule
@@ -73,8 +79,9 @@ python3 tools/build_manifest.py
 Nothing to install.
 
 ```bash
-node --test                                  # JS modules under js/
-cd tools && python3 -m unittest discover     # manifest builder
+node --test                                          # JS modules under js/
+cd tools && python3 -m unittest discover             # manifest builder
+python3 -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
 ```
 
 ## Current state
@@ -86,6 +93,12 @@ RNA-only. RNA 85,233 cells; Protein 1,490 cells (SCoPE2 mass spectrometry).
 Alignment metrics, the modality probe, transfer accuracy, multi-seed
 statistics, and every benchmark row are **pending** — they require the
 training pipeline and are marked as such throughout.
+
+The reference architecture for the *next* version is decided (a 9,002-gene
+feature space, module pooling encoder) but not yet trained — see
+`versions.html`'s "Architecture change in progress" and
+`service/model/README.md`. The model described above is still what's
+actually deployed.
 
 ## Documentation
 
