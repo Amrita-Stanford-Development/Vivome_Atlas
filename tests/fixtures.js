@@ -39,6 +39,20 @@ export function manifestFixture() {
         transfer_accuracy: pending('Phase 1') },
     ],
     summary: { total: 3, cross_modal: 2, rna_only: 1, prot_only: 0 },
+    next_reference: {
+      status: 'architecture_decided', trained: false,
+      feature_space_size: 9002, previous_feature_space_size: 2903,
+      detected_by_source: { scope2: 2907, fulcher: 1654 },
+      encoder_family: 'module pooling', mask_sampling: 'uniform', consistency_loss: true,
+      note: 'Architecture settled by a five-seed masking comparison; the reference is not trained yet.',
+    },
+    previous_release: {
+      model_name: 'CrossModalNet', n_shared_genes: 2903,
+      zero_shot_auc_raw: measured(0.6416827225906852, 'jointly trained, had seen SCoPE2'),
+      zero_shot_auc_smoothed: measured(0.6679295268442699, 'jointly trained, had seen SCoPE2, query-time smoothing'),
+      shipped_properties: ['ribosome', 'antigen_presentation', 'oxphos', 'glycolysis'],
+      note: 'Jointly trained and had implicitly seen SCoPE2; kept as the documented prior baseline.',
+    },
     benchmark: {
       status: 'pending', phase: 'Phase 4', note: 'Not run yet.',
       methods: ['CrossModalNet (ours)', 'GLUE'], rows: [],

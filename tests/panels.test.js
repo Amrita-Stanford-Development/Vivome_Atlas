@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
-  buildDiagnosticsTable, buildBenchmarkTable, buildModelCard,
+  buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
   buildAvailabilityTable, buildSupportedLabelSpace,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture } from './fixtures.js';
@@ -143,6 +143,39 @@ test('model card renders Pending, not NaN, for absent modality counts', () => {
   const html = buildModelCard(m);
   assert.ok(!html.includes('NaN'), html);
   assert.ok(!html.includes('undefined'), html);
+});
+
+test('next reference card shows the settled architecture facts', () => {
+  const html = buildNextReferenceCard(manifestFixture());
+  assert.match(html, /module pooling/);
+  assert.match(html, /uniform/);
+  assert.match(html, /9,002/);
+  assert.match(html, /Not yet/);
+});
+
+test('next reference card never reads as an update to the deployed model card', () => {
+  const html = buildNextReferenceCard(manifestFixture());
+  assert.ok(!html.includes('CrossModalNet'), 'must not merge with the current release\'s own model card');
+});
+
+test('next reference card renders nothing when the manifest has no next_reference', () => {
+  const m = manifestFixture();
+  delete m.next_reference;
+  assert.equal(buildNextReferenceCard(m), '');
+});
+
+test('prior baseline card shows the real kept numbers, not erased', () => {
+  const html = buildPriorBaselineCard(manifestFixture());
+  assert.match(html, /CrossModalNet/);
+  assert.match(html, /2,903/);
+  assert.match(html, /0\.6417/);
+  assert.match(html, /ribosome/);
+});
+
+test('prior baseline card renders nothing when the manifest has no previous_release', () => {
+  const m = manifestFixture();
+  delete m.previous_release;
+  assert.equal(buildPriorBaselineCard(m), '');
 });
 
 test('availability table maps status enums to readable labels', () => {

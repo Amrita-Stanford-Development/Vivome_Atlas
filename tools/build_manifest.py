@@ -19,6 +19,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ATLAS_DIR = REPO_ROOT / "Atlas"
 OUTPUT_PATH = ATLAS_DIR / "atlas_manifest.json"
+SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
+
+# decisive_summary.json's winner_config.enc -> a readable label for the manifest.
+# Keep this in sync with service/pipeline/encoder.py's _ENCODER_FAMILIES table;
+# an unrecognised value there raises loudly for the same reason it does here.
+ENCODER_FAMILY_LABELS = {"module": "module pooling"}
 
 SCHEMA_VERSION = "1.0"
 ATLAS_VERSION = "0.1.0"
@@ -79,7 +85,80 @@ def measured(value, basis: str) -> dict:
     return {"value": value, "status": "measured", "basis": basis}
 
 
-def build_manifest(rna_rows: list[dict], prot_rows: list[dict]) -> dict:
+def build_next_reference_facts(decisive_summary: dict, feature_space_detail_rows: list[dict]) -> dict:
+    """The v3 reference's architecture is decided; the reference itself is
+    not trained (Download_Checklist.md, "Still waiting on"). These are
+    settled design facts, sourced from the actual decisive-test record and
+    the actual feature-space union — not a rerun of provenance.json's own
+    precomputed totals — kept in their own section so they are never
+    mistaken for a property of `model` above, which describes the currently
+    deployed release. transfer_accuracy, model.seeds, and benchmark.rows
+    describe that current release and are correctly untouched by this."""
+    winner_config = decisive_summary["winner_config"]
+    encoder_family = ENCODER_FAMILY_LABELS.get(winner_config["enc"])
+    if encoder_family is None:
+        raise ValueError(
+            f"Unrecognised encoder family {winner_config['enc']!r} in decisive_summary.json; "
+            "add it to ENCODER_FAMILY_LABELS (and service/pipeline/encoder.py's _ENCODER_FAMILIES)."
+        )
+
+    source_columns = [
+        c for c in feature_space_detail_rows[0] if c not in ("gene", "n_sources", "in_old_reference")
+    ]
+    detected_by_source = {
+        source: sum(1 for row in feature_space_detail_rows if row[source] == "True")
+        for source in source_columns
+    }
+    retained_from_old = sum(1 for row in feature_space_detail_rows if row["in_old_reference"] == "True")
+
+    return {
+        "status": "architecture_decided",
+        "trained": False,
+        "feature_space_size": len(feature_space_detail_rows),
+        "previous_feature_space_size": retained_from_old,
+        "detected_by_source": detected_by_source,
+        "encoder_family": encoder_family,
+        "mask_sampling": winner_config["sampler"],
+        "consistency_loss": winner_config["consist"],
+        "note": (
+            "Architecture settled by a five-seed masking comparison "
+            f"(decisive_summary.json, n_seeds={decisive_summary['n_seeds']}). The production "
+            "reference has not been trained with it — the checkpoints from that comparison used "
+            "a simplified recipe (missing the class imbalance correction, the hubness penalty, and "
+            "the sink penalty) and are development placeholders only. `model` above describes the "
+            "currently deployed release, not this architecture."
+        ),
+    }
+
+
+def build_previous_release_facts(legacy_provenance: dict) -> dict:
+    """The currently deployed model's own numbers, kept as the documented
+    prior baseline rather than erased when the architecture moves on
+    (Claude_Code_Context_Brief.md, "For the model card"). CrossModalNet was
+    jointly trained on RNA and proteomics together and had implicitly seen
+    SCoPE2 during training — part of why these zero-shot numbers read
+    higher than the honestly separated architecture's will. Both numbers
+    are real; they answer different questions."""
+    return {
+        "model_name": "CrossModalNet",
+        "n_shared_genes": legacy_provenance["n_shared_genes"],
+        "zero_shot_auc_raw": measured(legacy_provenance["zero_shot_auc_raw"], "jointly trained, had seen SCoPE2"),
+        "zero_shot_auc_smoothed": measured(legacy_provenance["zero_shot_auc_smoothed"], "jointly trained, had seen SCoPE2, query-time smoothing"),
+        "shipped_properties": legacy_provenance["shipped_properties"],
+        "note": (
+            "CrossModalNet was jointly trained on RNA and proteomics together, so it had "
+            "implicitly seen SCoPE2 during training — part of why these numbers read higher "
+            "than the frozen-reference architecture's zero-shot number will. Kept here as the "
+            "documented prior baseline, not erased; the honestly separated number is pending "
+            "until the v3 reference is trained (see next_reference above)."
+        ),
+    }
+
+
+def build_manifest(
+    rna_rows: list[dict], prot_rows: list[dict],
+    next_reference: dict | None = None, previous_release: dict | None = None,
+) -> dict:
     rna = class_stats(rna_rows)
     prot = class_stats(prot_rows)
 
@@ -149,6 +228,8 @@ def build_manifest(rna_rows: list[dict], prot_rows: list[dict]) -> dict:
         },
         "cell_types": cell_types,
         "summary": summary,
+        "next_reference": next_reference,
+        "previous_release": previous_release,
         "benchmark": {
             "status": "pending",
             "phase": "Phase 4",
@@ -172,14 +253,28 @@ def build_manifest(rna_rows: list[dict], prot_rows: list[dict]) -> dict:
 
 
 def main() -> None:
+    with (SERVICE_MODEL_DIR / "decisive_summary.json").open(encoding="utf-8") as handle:
+        decisive_summary = json.load(handle)
+    with (SERVICE_MODEL_DIR / "feature_space_detail.csv").open(newline="", encoding="utf-8") as handle:
+        feature_space_detail_rows = list(csv.DictReader(handle))
+    with (SERVICE_MODEL_DIR / "legacy_v2" / "provenance.json").open(encoding="utf-8") as handle:
+        legacy_provenance = json.load(handle)
+
+    next_reference = build_next_reference_facts(decisive_summary, feature_space_detail_rows)
+    previous_release = build_previous_release_facts(legacy_provenance)
+
     manifest = build_manifest(
         read_metadata(ATLAS_DIR / "metadata_RNA_lat128.csv"),
         read_metadata(ATLAS_DIR / "metadata_PROT_lat128.csv"),
+        next_reference=next_reference,
+        previous_release=previous_release,
     )
     OUTPUT_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     s = manifest["summary"]
     print(f"Wrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")
     print(f"  {s['total']} cell types: {s['cross_modal']} cross-modal, {s['rna_only']} RNA-only")
+    print(f"  next_reference: feature_space_size={next_reference['feature_space_size']}, "
+          f"encoder_family={next_reference['encoder_family']!r}, trained={next_reference['trained']}")
 
 
 if __name__ == "__main__":

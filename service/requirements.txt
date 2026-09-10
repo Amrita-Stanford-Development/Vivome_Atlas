@@ -1,0 +1,8 @@
+# The static app (root of this repo) has zero dependencies by design — see
+# CLAUDE.md. This backend is a separate concern with real dependencies,
+# isolated here so the frontend's "no dependencies" rule is never at risk of
+# being read as applying to it.
+torch>=2.0
+numpy>=1.24
+scipy>=1.10
+POT>=0.9

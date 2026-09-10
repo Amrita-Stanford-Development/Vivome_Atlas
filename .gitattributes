@@ -1,3 +1,8 @@
 Atlas/atlas_RNA_lat128.parquet filter=lfs diff=lfs merge=lfs -text
 Atlas/atlas_RNA_lat128-001-part1.csv filter=lfs diff=lfs merge=lfs -text
 Atlas/atlas_RNA_lat128-001-part2.csv filter=lfs diff=lfs merge=lfs -text
+
+# ~94 MB, close enough to GitHub's 100 MB hard limit on a plain git object
+# to track via LFS even though the repo's other non-RNA files under that
+# threshold (e.g. the ~45 MB protein CSV) are not.
+service/model/dev/H_seed4.pt filter=lfs diff=lfs merge=lfs -text
