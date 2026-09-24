@@ -55,27 +55,45 @@ approximately reconstruct. `service/model/app_export/README.md` documents
 why these specific files are now committed (with the raw TSV under Git
 LFS) for exactly this reason.
 
-## scANVI's run-to-run variance
+## scANVI's run-to-run variance — now quantified across 3 seeds
 
-Two runs of the exact same scANVI architecture and training budget (200
+Three runs of the exact same scANVI architecture and training budget (200
 pretrain epochs + 100 fine-tune epochs, early stopping, full 85,232-cell
-RNA reference) produced meaningfully different point estimates — not
-because anything crashed or diverged, but because the first run had no
-fixed random seed. See [bugs-and-fixes.md](bugs-and-fixes.md#6-scanvi-no-fixed-seed-meant-the-first-runs-numbers-werent-reproducible)
-for the mechanism, and [results.md](results.md) for both runs' full
-numbers.
+RNA reference, seeds 0/1/2) produced a very different spread depending on
+*which* protocol is used to score the resulting embedding:
 
-**What this means concretely:** treat any single scANVI measurement in this
-comparison as one draw from a distribution with real spread, not a fixed
-ground truth. A more rigorous future version of this benchmark should run
-scANVI (and arguably every stochastically-trained method — MaxFuse's random
-batching, scGLUE's minibatch shuffling) multiple times with different seeds
-and report a mean ± spread, the same way `model.seeds` already does for the
-production reference elsewhere in this project
-(`service/model/v3_tables/reference_seeds.csv`, five seeds, mean balanced
-accuracy 0.7143). This has **not** been done yet for any baseline in this
-comparison — every number in [results.md](results.md) beyond "ours" and
-scANVI-v2 is a single run.
+- **Shared kNN rule, restricted:** remarkably stable — 76.26% to 77.26%
+  balanced accuracy, a spread of under 1 point.
+- **scANVI's own native classifier, restricted:** highly unstable — 57.89%
+  to 86.37%, a spread of **28.5 points**. One seed's native classifier
+  (86.37%) exceeds "ours"'s native-centroid number (79.79%); another seed's
+  (57.89%) is barely above the trivial majority-class floor (50.00%).
+- **Native nearest-centroid, restricted:** also unstable — 50.70% to
+  77.36%, a spread of 26.7 points.
+
+See [results.md](results.md#scanvi-across-seeds) for the complete
+per-seed, per-protocol table.
+
+**What this means concretely:** the shared kNN-classifier rule is not just
+methodologically fairer (it's the same rule for every method) — it also
+happens to be *far* more stable for scANVI specifically than its own native
+training-dependent classifier. Any claim about "how scANVI compares to
+ours" that relies on a single scANVI run's *native* classifier number
+should be treated with real skepticism; a claim based on the shared rule is
+much more trustworthy, precisely because it barely moved across 3
+independent training runs. This asymmetry itself is worth remembering: a
+method's own preferred evaluation protocol can be much noisier than a
+neutral one applied to its embedding, and that noise can point in whichever
+direction makes for a good headline if only one seed is ever reported.
+
+No baseline besides scANVI has been run more than once — MaxFuse's random
+batching and scGLUE's minibatch shuffling both have their own
+un-quantified run-to-run variance, plausibly smaller than scANVI's given
+neither uses a comparably deep stochastic training loop, but this has not
+been measured. For scale, the production reference's own 5-seed training
+run (`service/model/v3_tables/reference_seeds.csv`) measured mean balanced
+accuracy 0.7143 on its own (different) validation task — that task's own
+spread is far smaller than scANVI's native-classifier spread found here.
 
 ## The rule-2 subsampling fallback was never needed, and so was never built
 
