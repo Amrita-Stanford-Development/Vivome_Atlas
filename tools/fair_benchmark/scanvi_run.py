@@ -1,8 +1,13 @@
-"""scANVI, rerun once more with explicit seeding (the original run did not
-fix a seed, so this rerun's point estimate is not guaranteed bit-identical
-to the one already reported) and this time saving embeddings + predictions
-to disk, specifically so a bootstrap CI can be computed without ever having
-to retrain scANVI again. Same architecture/training budget as before.
+"""scANVI. Explicit seeding (an early, undocumented run had none, so its
+point estimate was never reproducible on a rerun -- see
+Documentation/bugs-and-fixes.md#6) and always saves embeddings +
+predictions to disk, so a bootstrap CI never requires retraining scANVI a
+second time. Takes an optional seed argument (default 0); run it once per
+seed (0, 1, 2) to build the 3-seed table in Documentation/results.md.
+
+    python3 scanvi_run.py 0
+    python3 scanvi_run.py 1
+    python3 scanvi_run.py 2
 """
 import sys, time, json, warnings
 from pathlib import Path
@@ -17,7 +22,7 @@ from evaluate import knn_classifier_predict, nearest_centroid_predict, evaluate_
 
 D = Path(__file__).resolve().parent / "results"
 
-SEED = 0
+SEED = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 scvi.settings.seed = SEED
 torch.manual_seed(SEED)
 np.random.seed(SEED)
@@ -70,8 +75,8 @@ diverged = bool(np.isnan(emb).sum() or np.isinf(emb).sum())
 print(f"embeddings {emb.shape}, NaN {np.isnan(emb).sum()}. elapsed {time.time()-t0:.1f}s", flush=True)
 
 rna_emb, prot_emb = emb[:len(rna_Z)], emb[len(rna_Z):]
-np.save(f"{D}/rna_scanvi.npy", rna_emb)
-np.save(f"{D}/prot_scanvi.npy", prot_emb)
+np.save(f"{D}/rna_scanvi_seed{SEED}.npy", rna_emb)
+np.save(f"{D}/prot_scanvi_seed{SEED}.npy", prot_emb)
 
 # scANVI's own native label-transfer classifier
 native_pred_unrestricted = np.asarray(scanvi_model.predict())[len(rna_Z):]
@@ -81,8 +86,8 @@ classes_scanvi = list(soft.columns)
 supported = ("macrophage", "monocyte")
 supported_idx = [classes_scanvi.index(c) for c in supported if c in classes_scanvi]
 native_pred_restricted = np.array(supported)[soft_prot[:, supported_idx].argmax(axis=1)]
-np.save(f"{D}/native_scanvi_pred_unrestricted.npy", native_pred_unrestricted, allow_pickle=True)
-np.save(f"{D}/native_scanvi_pred_restricted.npy", native_pred_restricted, allow_pickle=True)
+np.save(f"{D}/native_scanvi_pred_unrestricted_seed{SEED}.npy", native_pred_unrestricted, allow_pickle=True)
+np.save(f"{D}/native_scanvi_pred_restricted_seed{SEED}.npy", native_pred_restricted, allow_pickle=True)
 
 knn = knn_classifier_predict(rna_emb, rna_labels, prot_emb)
 nc = nearest_centroid_predict(rna_emb, rna_labels, prot_emb)
@@ -95,12 +100,12 @@ result = {
     "subsample": None,
     "diverged": diverged,
     "seed": SEED,
-    "note": "Rerun with an explicit seed (the first run did not fix one) to also cache embeddings/predictions for bootstrap CIs. Point estimates below may differ slightly from the originally reported 11.07/7.53 unrestricted and 58.86/64.48 restricted (shared kNN) figures -- both runs' raw numbers are disclosed in prose.",
+    "note": f"Explicit seed={SEED}. Point estimates vary meaningfully across seeds -- see Documentation/results.md's 3-seed table before treating any single seed's numbers as representative.",
     "knn_classifier": evaluate_arm(true_labels, knn["unrestricted"], knn["restricted"], n_classes, 2),
     "native_nearest_centroid": evaluate_arm(true_labels, nc["unrestricted"], nc["restricted"], n_classes, 2),
     "native_scanvi_classifier": evaluate_arm(true_labels, native_pred_unrestricted, native_pred_restricted, n_classes, len(supported_idx)),
 }
 print(json.dumps(result, indent=2, default=str))
-with open(f"{D}/result_scanvi_v2.json", "w") as f:
+with open(f"{D}/result_scanvi_seed{SEED}.json", "w") as f:
     json.dump(result, f, indent=2, default=str)
 print(f"\nTOTAL elapsed {time.time()-t0:.1f}s")

@@ -231,6 +231,26 @@ methodologically; mechanically:
 - `evaluate_arm(true_labels, pred_unrestricted, pred_restricted, n_classes_unrestricted, n_classes_restricted)`
   → bundles the above into the `{"unrestricted": {...}, "restricted": {...}}`
   shape every `result_*_v2.json` uses.
+- `pool_first_knn_predict(rna_emb, rna_labels, prot_emb, supported=..., k=30)`
+  → restricted-only array of predicted labels, mirroring
+  `service/pipeline/assignment.py`'s real `_assign_knn` (imports and reuses
+  `service.pipeline.topk.chunked_topk` directly — not a reimplementation).
+- `paired_bootstrap_diff(true_labels, pred_a, pred_b, n_boot=2000, seed=0)`
+  → `{"point_estimate_pct": float, "ci_95_pct": [lo, hi]}` for
+  `balanced_accuracy(pred_a) - balanced_accuracy(pred_b)`, using the same
+  resampled indices for both predictions in every resample.
+
+### `paired_and_pool_first.py`
+
+Follow-up analysis script, run after every other script has produced its
+cached embeddings. Computes, for every arm: the pool-first restricted kNN
+number alongside the existing post-hoc-masking one
+(`results/result_pool_first_knn.json`), and — for "ours" against each of
+the 3 scANVI seeds — the paired bootstrap difference in both regimes
+(`results/result_paired_bootstrap.json`). Zero retraining; reads only
+already-cached `.npy` embeddings (including all 3 scANVI seeds' — run
+`scanvi_run.py` under seeds 0, 1, and 2, each producing its own
+`rna_scanvi_seed{N}.npy`/`prot_scanvi_seed{N}.npy`, before running this).
 
 ## Reproducing from a fresh clone
 
@@ -252,9 +272,12 @@ cd tools/fair_benchmark
 python3 load.py
 python3 maxfuse_run.py      # ~21 min
 python3 scglue_run.py       # ~29 min
-python3 scanvi_run.py       # ~35 min
+python3 scanvi_run.py 0     # ~35 min -- repeat with 1 and 2 for the 3-seed table
+python3 scanvi_run.py 1
+python3 scanvi_run.py 2
 python3 recompute_v2.py     # seconds -- scores PCA/Harmony/MaxFuse/scGLUE/majority
 python3 ours_run.py         # ~1 min -- scores "ours" through the same harness
+python3 paired_and_pool_first.py   # seconds -- needs all 3 scANVI seeds' embeddings cached
 ```
 
 The three heavy scripts (`maxfuse_run.py`, `scglue_run.py`, `scanvi_run.py`)

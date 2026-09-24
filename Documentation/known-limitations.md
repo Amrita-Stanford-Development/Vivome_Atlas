@@ -43,10 +43,19 @@ possible, was a second, separate, and more serious bug:
 `service/pipeline/encoder.py` used the wrong activation function (ReLU
 instead of the notebook's GELU) — see
 [bugs-and-fixes.md](bugs-and-fixes.md#0-servicepipelineencoderpy-used-the-wrong-activation-function--relu-instead-of-gelu-fixed-in-the-real-repo)
-for the full story. With both bugs fixed, the complete production pipeline
-(alignment → smoothing → encoder) run on the real raw TSV reproduces the
-notebook's saved embedding at **cosine similarity 1.000000 for every one
-of the 1,490 cells.**
+for the full story. **Important qualifier: every "ours" number this
+benchmark computed through `service/pipeline` before that fix landed
+(commit `056f136`) — including the 85.50%/83.32% restricted reconstruction
+figure cited earlier in this section's history — ran through the buggy
+ReLU encoder and should be treated as invalid, not as evidence about the
+file-provenance issue on its own.** With the notebook's own exact
+preprocessing convention and the GELU fix together, the pipeline reproduces
+the notebook's saved embedding at cosine similarity 1.000000 for every one
+of the 1,490 cells. Using the *actual, unchanged* production convention
+instead (`service/pipeline/pipeline.py`'s real Stage 2 code, which differs
+from the notebook's — see the next section) reaches ~0.9985 median cosine
+on this same input, not 1.0 — a second, smaller, distinct, and still-open
+gap.
 
 **The broader lesson, worth keeping even though the specific problem is
 fixed:** an artifact that exists only as an uncommitted local file is one
@@ -54,6 +63,60 @@ fixed:** an artifact that exists only as an uncommitted local file is one
 approximately reconstruct. `service/model/app_export/README.md` documents
 why these specific files are now committed (with the raw TSV under Git
 LFS) for exactly this reason.
+
+## The `full_query_values` convention gap — service vs. notebook (open, not fixed)
+
+**Status: found, measured, deliberately not fixed yet** — this is a
+different, standing gap from the two resolved bugs above, and should not be
+confused with either.
+
+Stage 2's fuzzy smoothing needs the query's own complete feature set
+(`full_query_values`) to build its neighbour graph, separately from the
+value channel it actually smooths. The export notebook and the shipped
+`service/pipeline/pipeline.py` compute this differently:
+
+- **Notebook:** `zscore_cols(clean_numeric(df))` — dataset-level median
+  fill for any missing value, then per-gene z-score, and the *same*
+  z-scored matrix is reused both for Stage 1 alignment and as
+  `full_query_values` for Stage 2.
+- **Production (`pipeline.py`, unchanged, current behavior):**
+  `full_query_values = np.nan_to_num(raw.values.T, nan=0.0)` — the query's
+  *raw, un-z-scored* values, with missing entries simply zeroed. No median
+  fill, no z-scoring.
+
+**Measured impact, two ways:**
+
+1. On the real SCoPE2 GENELEVEL TSV (zero missing values, and values
+   already in a small, roughly-normalized range) the two conventions land
+   close together: production's convention reaches ~0.9985 median cosine
+   similarity to the notebook's saved embedding (5th percentile ~0.987),
+   not the notebook-convention's exact 1.0. `service/tests/test_e2e_real_export.py`
+   pins this.
+2. On a real dataset with substantial missingness — a disclosed, minimal
+   gene-level reduction of `service/examples/pbmc240_proteins_raw.tsv` (the
+   raw DIA-NN search output, ~63% missing values by design; not the
+   undocumented, unavailable `PBMC_240cells_proteins.tsv` intermediate the
+   original notebook used, so absolute embedding values here are not
+   validated ground truth — only the *relative* divergence between the two
+   conventions run on the same input is measured) — **the two conventions
+   diverge sharply: median cosine 0.7848, 5th percentile 0.2263, mean
+   0.7259, minimum −0.5633 (i.e. some cells' embeddings are anti-correlated
+   between the two conventions), and 38 of 238 cells land below 0.5
+   cosine.**
+
+**What this means concretely:** SCoPE2's zero missingness is the unusual
+case, not the representative one — most real single-cell proteomics
+datasets (PBMC240's own provenance records ~52% missingness after
+filtering; the raw file is ~63%) have substantial per-cell dropout. For
+those datasets, whether Stage 2's smoothing graph is built on raw or
+z-scored values, with zeros or medians standing in for missing entries, is
+not a minor implementation detail — it can produce embeddings that point in
+different directions entirely for a meaningful fraction of cells. This
+gap has **not been fixed**, per explicit instruction to measure first and
+change nothing yet. Whichever convention is chosen going forward, it should
+be chosen deliberately (ideally re-validated against a real, labeled,
+high-missingness dataset), not left as an accidental difference between
+what shipped and what was measured.
 
 ## scANVI's run-to-run variance — now quantified across 3 seeds
 

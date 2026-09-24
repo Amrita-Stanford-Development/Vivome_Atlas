@@ -55,6 +55,23 @@ feedback added:
   misread as informative on its own, and **rank the table by balanced
   accuracy, not accuracy.**
 
+A third round added:
+
+- **D. Score "ours" through the exact same harness, using the real
+  embedding** (not a reconstruction) once it was obtained — see
+  [known-limitations.md](known-limitations.md).
+- **E. A paired bootstrap on the balanced-accuracy difference** between
+  "ours" and scANVI (the closest competitor), per scANVI seed, under the
+  shared kNN rule — a statistically stronger comparison than checking
+  whether two independent confidence intervals happen to overlap.
+- **F. A "pool-first" restricted kNN variant** that mirrors
+  `service/pipeline/assignment.py`'s actual `_assign_knn` algorithm
+  (candidate pool restricted *before* the neighbour search, not after),
+  reported alongside — never instead of — the shared rule's post-hoc
+  masking, so the difference between "the evaluation rule's number" and
+  "what the product would actually deliver" is visible rather than
+  conflated.
+
 ## What "restricted" vs. "unrestricted" means
 
 Only two of the 22 RNA cell classes — **macrophage** and **monocyte** —
@@ -132,3 +149,35 @@ invisible unless the floor itself sits in the same table. **This is also
 why the final table is ranked by balanced accuracy, not accuracy** —
 accuracy alone rewards a classifier for doing nothing more than guessing
 the majority class.
+
+### Paired bootstrap (rule E)
+
+`paired_bootstrap_diff(true_labels, pred_a, pred_b, n_boot=2000, seed=0)` —
+the same stratified resampling as `bootstrap_ci`, but applied to **both**
+methods' predictions with the *same* resampled indices in every resample,
+directly producing a distribution of `balanced_accuracy(a) -
+balanced_accuracy(b)`. This is the statistically correct way to compare two
+methods scored on an identical query set — comparing two independently
+bootstrapped CIs and checking whether they overlap is a weaker, more
+conservative test that can miss a real, consistent difference. See
+[results.md](results.md#paired-bootstrap-ours-minus-scanvi) for what this
+found comparing "ours" against each scANVI seed.
+
+### Pool-first restricted kNN (rule F)
+
+`pool_first_knn_predict(rna_emb, rna_labels, prot_emb, supported, k)` —
+restricted-regime only, and reported *alongside*, never instead of, the
+shared rule's post-hoc masking. Mirrors
+`service/pipeline/assignment.py`'s real `_assign_knn` implementation
+exactly, down to reusing the same `service.pipeline.topk.chunked_topk`
+helper: the pool of candidate RNA cells is filtered down to
+`{macrophage, monocyte}` cells **before** the k-nearest-neighbour search
+runs, and the vote tally happens only among that restricted pool. This is a
+structurally different algorithm from post-hoc masking (fit on all 22
+classes, restrict the output columns afterward) — not just a different way
+of computing the same thing — and answers a different question: not "how
+good is this embedding under a fixed, product-agnostic rule" but "what
+would the live service actually return if `ASSIGNMENT_METHOD` were set to
+`'knn'`." See [results.md](results.md#pool-first-knn-what-the-product-would-actually-deliver)
+for what this found — the gap between the two rules turned out to be large
+for good embeddings and negligible for near-chance ones.

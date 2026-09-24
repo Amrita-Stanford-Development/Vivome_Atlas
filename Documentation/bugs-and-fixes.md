@@ -33,26 +33,44 @@ carry most of a representation's structure even through the wrong
 nonlinearity) without reproducing it.
 
 **Fix:** `nn.ReLU()` → `nn.GELU()` in `ModulePoolingEncoder.__init__`, in
-both of the body's two hidden layers. Verified directly: running the real
-raw TSV through the complete, fixed pipeline (alignment → fixed smoothing
-→ GELU-corrected encoder) now reproduces the notebook's saved embedding at
+both of the body's two hidden layers. Verified: running the real raw TSV
+through the notebook's own preprocessing convention (dataset-level median
+fill, then z-score, for both alignment and the smoothing graph) plus the
+GELU-corrected encoder reproduces the notebook's saved embedding at
 **cosine similarity 1.000000 for every one of the 1,490 cells** — median,
-5th percentile, mean, and minimum all exactly 1.0. Added
-`test_body_uses_gelu_not_relu` to `service/tests/test_encoder.py` as a
-permanent regression guard, since `strict=True` state-dict loading will
-never catch this class of bug on its own.
+5th percentile, mean, and minimum all exactly 1.0, confirming the
+activation function was the entire remaining gap once that exact
+preprocessing is used. Running the real *production* pipeline
+(`service/pipeline/pipeline.py`'s actual, un-changed Stage 2 convention,
+which differs from the notebook's — see
+[known-limitations.md](known-limitations.md#the-full_query_values-convention-gap-service-vs-notebook))
+with the same GELU fix reaches ~0.9985 median cosine on this same input,
+not exactly 1.0 — still an enormous improvement over the ~0.75 the ReLU
+bug produced, but a second, smaller, separate, and currently unfixed
+convention gap, documented on its own in
+[known-limitations.md](known-limitations.md). Added
+`test_body_uses_gelu_not_relu` and `test_e2e_real_export.py` to
+`service/tests/` as permanent regression guards — the latter tests the
+*real* production convention (not the notebook's), with thresholds set to
+what that real, imperfect convention actually achieves.
 
-**Postscript — this changes an earlier conclusion in this document.** An
-earlier round of this benchmark work found that a from-scratch
-reconstruction of "ours" could get very close to the historical restricted
-figure (85.50%/83.32% vs. 86.17%/79.79%) but not the unrestricted one, and
-attributed essentially the entire residual gap to the protein-side file
-provenance issue (the reconstruction reading a narrower, wrong-gene-panel
-file — see [known-limitations.md](known-limitations.md)). That
-reconstruction *also* ran through this same buggy ReLU encoder. With both
-bugs now fixed and the real files in hand, "ours" is scored directly on
+**Postscript — this changes an earlier conclusion in this document, and
+invalidates every "ours" number this benchmark work computed through
+`service/pipeline` before this fix (commit `056f136`).** An earlier round
+of this benchmark work found that a from-scratch reconstruction of "ours"
+could get very close to the historical restricted figure (85.50%/83.32% vs.
+86.17%/79.79%) but not the unrestricted one, and attributed essentially the
+entire residual gap to the protein-side file provenance issue (the
+reconstruction reading a narrower, wrong-gene-panel file — see
+[known-limitations.md](known-limitations.md)). **That attribution was
+wrong, or at least badly incomplete: that reconstruction ran through this
+same buggy ReLU encoder, so its 85.50%/83.32% and every other number it
+produced cannot be trusted as evidence about the file-provenance issue in
+isolation — the two problems were confounded.** With both bugs now fixed
+and the real files in hand, "ours" is scored directly on
 `prot_embedding_scope2.npy` with no reconstruction step at all — see
-[results.md](results.md). The file-provenance issue was real and worth
+[results.md](results.md), which no longer contains any pre-`056f136`
+reconstruction number. The file-provenance issue was real and worth
 finding, but the activation-function bug was the larger effect.
 
 ## 1. `service/pipeline/smoothing.py` had drifted from the notebook that measured its own numbers (fixed in the real repo)
@@ -106,12 +124,17 @@ scratchpad):
 All three repo test suites pass after the fix: 51 JS tests, 31 manifest
 tests, 86 backend tests.
 
-**Residual gap, not a code bug:** after this fix, a from-scratch
-reconstruction of "ours" got the *restricted* regime to 85.50%/83.32% —
-very close to the documented 86.17%/79.79%. The *unrestricted* regime did
-not close the same way. That residual gap turned out to be a separate,
-data-provenance issue — see
-[known-limitations.md](known-limitations.md#the-atlas_prot_lat128csv-provenance-problem).
+**Residual gap — reported at the time as "not a code bug," which was
+premature.** After this fix, a from-scratch reconstruction of "ours" got
+the *restricted* regime to 85.50%/83.32% — very close to the documented
+86.17%/79.79%. The *unrestricted* regime did not close the same way. This
+was attributed entirely to a separate data-provenance issue (see
+[known-limitations.md](known-limitations.md#the-atlas_prot_lat128csv-provenance-problem)).
+**That reconstruction was also running through the ReLU-instead-of-GELU
+encoder bug (entry 0), not found until a later round — the 85.50%/83.32%
+number itself, and the attribution of the unrestricted gap to file
+provenance alone, should both be treated as superseded, not as evidence
+about either issue in isolation.** See entry 0's postscript.
 
 ## 2. Harmony's `Z_corr` output orientation
 
