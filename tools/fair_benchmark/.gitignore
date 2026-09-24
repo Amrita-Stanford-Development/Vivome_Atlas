@@ -1,0 +1,4 @@
+# Large, regenerable data/embedding artifacts -- not source, don't commit.
+results/
+*.log
+__pycache__/
