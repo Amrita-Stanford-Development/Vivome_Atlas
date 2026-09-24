@@ -1,0 +1,136 @@
+{
+  "bundle_created": "2026-09-22 17:27:23",
+  "source_drive_root": "/content/drive/My Drive/Vivome - Live Atlas",
+  "gene_list_hash": "5751dd1e569f",
+  "n_genes": 9002,
+  "n_classes": 22,
+  "latent_dim": 128,
+  "supported_classes": [
+    "macrophage",
+    "monocyte"
+  ],
+  "n_files": 24,
+  "total_bytes": 154777032,
+  "files": [
+    {
+      "path": "export/reference_model.pt",
+      "bytes": 98277775,
+      "sha256": "08b1a0b86ab9679f2d76b66c76f977314f2222713d92e0775770d3cf569f8e39"
+    },
+    {
+      "path": "export/feature_space_genes.csv",
+      "bytes": 56189,
+      "sha256": "8f3ed396180d1db1aebfa042b03cb229620bca06be929aee98e94ca7aa8390d2"
+    },
+    {
+      "path": "export/module_assignment.npy",
+      "bytes": 36136,
+      "sha256": "1677e1fe96eb218975548c49caa1f7ea209ea6b188fcb2a24fbdfa6f2289d0df"
+    },
+    {
+      "path": "export/reference_centroids.npy",
+      "bytes": 11392,
+      "sha256": "df34a4a262712135f0c1480384c13ca50cb08e7823346e4acef173b1f4bfefe8"
+    },
+    {
+      "path": "export/reference_embedding.npy",
+      "bytes": 43639424,
+      "sha256": "202c38e78752bec1fb760bbe31c79a16687f7353202a2fb06d7d5afaed9df90b"
+    },
+    {
+      "path": "export/reference_metadata.csv",
+      "bytes": 2728595,
+      "sha256": "5560732582b2de5ee460c59641787293564373bcfe01c71a179261ba314c7579"
+    },
+    {
+      "path": "export/provenance.json",
+      "bytes": 2124,
+      "sha256": "013cf4c8ef48a56f354c475c77ee9ad400f7019aa933e585bde128b8f6f4d769"
+    },
+    {
+      "path": "app_export/atlas_RNA_v3_meta.csv",
+      "bytes": 6316073,
+      "sha256": "61063c0dce7e058e8fdbaad2e55e2ce8857700b62e463c9bf6edb0974e22966c"
+    },
+    {
+      "path": "app_export/atlas_PROT_v3_meta.csv",
+      "bytes": 145026,
+      "sha256": "1c5234d279803b0fe91a7323c2f9f18693c968acc370b5c226bee0da34430cb1"
+    },
+    {
+      "path": "app_export/pca3_projection.npz",
+      "bytes": 2854,
+      "sha256": "372a78ad96cd228ce2db7a92d0d71b3cfff43745be934a5a40786b01c8012e7e"
+    },
+    {
+      "path": "app_export/prot_embedding_scope2.npy",
+      "bytes": 763008,
+      "sha256": "c27c0830343babec6bd9ad0a3eaac19e42176c9efa2d4e791fa2b45094780167"
+    },
+    {
+      "path": "app_export/latent_centroid_cosine.csv",
+      "bytes": 1415,
+      "sha256": "c372ac1e0248374210a6d438dfc92fbcef8f5dded363d8de6fc2879c8567c572"
+    },
+    {
+      "path": "app_export/modality_probe.json",
+      "bytes": 339,
+      "sha256": "5ab8945ca630569167e18a6acc61f7db8afdf2c06d747b378ee9c5ae37e88bf2"
+    },
+    {
+      "path": "app_export/support_restricted_assignment.csv",
+      "bytes": 273,
+      "sha256": "d14c290d9385c3732b02ada0d3f5d9875bfdf2d5cdb03ba61092f653e0c45290"
+    },
+    {
+      "path": "app_export/reference_properties.npy",
+      "bytes": 2727584,
+      "sha256": "4d639a1502d7d3406ff48c2d9d090658decd45ccad04cf4a7c89cd0f67e889d0"
+    },
+    {
+      "path": "app_export/property_names.json",
+      "bytes": 382,
+      "sha256": "4dab9360ededabc99c8e3a673d1b71a05354a6ba06b734d6e3b28085c25a9244"
+    },
+    {
+      "path": "app_export/app_export_summary.json",
+      "bytes": 616,
+      "sha256": "a2fdfa5de9872b5ea560b192e57abb57e16c8be9eab4985ea072696094c0d2db"
+    },
+    {
+      "path": "tables/held_out_types.csv",
+      "bytes": 298,
+      "sha256": "b9fd957c535abfebc5b14d9d1e6ba572f41f358c320f59d1be7b6ff1ab5de224"
+    },
+    {
+      "path": "tables/property_validation.csv",
+      "bytes": 646,
+      "sha256": "974cf1f1c618be493290e853faef1a48f78b1c961b54babd4ac455bd0078469a"
+    },
+    {
+      "path": "tables/reference_reliability.csv",
+      "bytes": 1870,
+      "sha256": "3fe63740a00e58684d24214f9bf4d8f401bf25478bdcc647c97a4d7a973499c9"
+    },
+    {
+      "path": "tables/reference_seeds.csv",
+      "bytes": 431,
+      "sha256": "d8c29033be915e2b36adc85b7c8d67238a8bc1880ac3bf7e842628a8ff8f5646"
+    },
+    {
+      "path": "tables/rna_to_rna_real_masks.csv",
+      "bytes": 410,
+      "sha256": "d6a625980c34d1546a9e623d0b0e8db3fa8a1f0c81c009a61a784fa00d177467"
+    },
+    {
+      "path": "tables/scope2_hierarchical_calls.csv",
+      "bytes": 63916,
+      "sha256": "44caf17563fd15416f80d20a773960958c308a6bb9b04c87f631631f6b13bb4f"
+    },
+    {
+      "path": "tables/zero_shot_all_datasets.csv",
+      "bytes": 256,
+      "sha256": "308428bb7cc74753cd0e9dd47de175c6634b85768999c6223f1e86ce45664300"
+    }
+  ]
+}

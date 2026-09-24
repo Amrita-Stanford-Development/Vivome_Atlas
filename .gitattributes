@@ -6,3 +6,13 @@ Atlas/atlas_RNA_lat128-001-part2.csv filter=lfs diff=lfs merge=lfs -text
 # to track via LFS even though the repo's other non-RNA files under that
 # threshold (e.g. the ~45 MB protein CSV) are not.
 service/model/dev/H_seed4.pt filter=lfs diff=lfs merge=lfs -text
+
+# Same reasoning, same size class (~94 MB) — the production v3 checkpoint.
+service/model/reference_model.pt filter=lfs diff=lfs merge=lfs -text
+
+# ~82 MB, the real raw SCoPE2 protein input (blood_joint_cells_by_proteins_
+# GENELEVEL.tsv) that the export notebook actually used and this repo lost
+# once before by never committing it (see Documentation/known-limitations.md).
+# Close enough to the 100 MB limit, and too important to lose again, to
+# track via LFS despite being below the ~94 MB class above.
+service/model/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv filter=lfs diff=lfs merge=lfs -text
