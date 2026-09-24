@@ -3,61 +3,57 @@
 Open, unresolved issues. Read this before trusting any single number out of
 [results.md](results.md) in isolation.
 
-## The `atlas_PROT_lat128.csv` provenance problem
+## The `atlas_PROT_lat128.csv` provenance problem — RESOLVED
 
-`tools/fair_benchmark/ours_run.py` needs a protein input file to reconstruct
-"ours" through the shared harness. The only candidate found in this
-repository, or anywhere on the development machine, is
-`Atlas/atlas_PROT_lat128.csv`.
+**Status: resolved.** The real files were re-fetched from the project's
+Google Drive and committed to this repository at `service/model/app_export/`
+(sha256-verified against `BUNDLE_MANIFEST.json`). This section keeps the
+original history for context; see [results.md](results.md) for the current
+numbers, which no longer depend on any reconstruction.
+
+**What the problem was:** `tools/fair_benchmark/ours_run.py` originally
+needed a protein input file to reconstruct "ours" through the shared
+harness, and the only candidate found in this repository, or anywhere on
+the development machine, was `Atlas/atlas_PROT_lat128.csv`.
 
 `git log` on that file shows it was added in this repository's **very
 first commit** (`307e483`, 2025-08-17) — it **predates the entire v3
 model**. Its `gene_*` columns are restricted to exactly the ~2,907-gene
 RNA/protein intersection used for the atlas viewer's "click a point, see
-its gene profile" feature, almost certainly a legacy artifact of the
-*original* (pre-v2, pre-v3) atlas viewer, not the protein assay's true
-native gene panel.
+its gene profile" feature, a legacy artifact of the *original* (pre-v2,
+pre-v3) atlas viewer, not the protein assay's true native gene panel.
 
 The export notebook that produced the shipped 45.37%/31.08% (unrestricted)
 and 86.17%/79.79% (restricted) figures instead reads
 `blood_joint_cells_by_proteins_GENELEVEL.tsv` — the protein assay's own
-full native panel, almost certainly containing far more than 2,907 genes —
-and uses *that* full panel to build Stage 2's fuzzy-smoothing kNN graph.
-Feeding the smoothing step a narrower "own full feature set" than the
-notebook used produces a structurally different graph, and therefore a
-different downstream embedding, even with completely correct code.
+full native panel (2,935 genes, confirmed once obtained) — and uses *that*
+full panel to build Stage 2's fuzzy-smoothing kNN graph. At the time, this
+raw TSV, and a second independently useful artifact
+(`prot_embedding_scope2.npy`, the notebook's own saved protein embeddings,
+which had briefly existed at `service/model/v3_pending/app_export/` before
+that directory was deleted without ever being committed to git), were both
+confirmed absent from this machine by exhaustive search.
 
-**That raw TSV file does not exist anywhere on this machine or in this
-repository's history.** Confirmed by exhaustive search: the whole
-filesystem, `.Trash`, and `git log --all --diff-filter=A` across every
-branch (in case it was ever committed and later removed — it wasn't). It
-only ever lived on the original project's Google Drive, referenced by path
-in `service/docs/download-checklist.md`'s Tier 4 (optional demo data) and
-never fetched into this repository.
+**What actually happened once the real files arrived:** re-running "ours"
+directly against `prot_embedding_scope2.npy` (no reconstruction at all —
+see `tools/fair_benchmark/ours_run.py`) confirmed the file-panel theory was
+*part* of the story but not the dominant one. The real, bigger cause,
+found via the end-to-end pipeline check this real data finally made
+possible, was a second, separate, and more serious bug:
+`service/pipeline/encoder.py` used the wrong activation function (ReLU
+instead of the notebook's GELU) — see
+[bugs-and-fixes.md](bugs-and-fixes.md#0-servicepipelineencoderpy-used-the-wrong-activation-function--relu-instead-of-gelu-fixed-in-the-real-repo)
+for the full story. With both bugs fixed, the complete production pipeline
+(alignment → smoothing → encoder) run on the real raw TSV reproduces the
+notebook's saved embedding at **cosine similarity 1.000000 for every one
+of the 1,490 cells.**
 
-A second, independently useful artifact — `prot_embedding_scope2.npy`, the
-export notebook's *own* saved protein embeddings, which would have let
-`ours_run.py` skip reconstruction entirely and score the real thing
-directly — existed earlier in this project's history at
-`service/model/v3_pending/app_export/prot_embedding_scope2.npy`, but that
-directory was deleted (with the repository owner's explicit approval,
-following this repo's "list before delete" working agreement) before ever
-being committed to git. It, too, is unrecoverable from this machine.
-
-**What this means concretely:** `ours_run.py`'s *restricted* number
-(83.89%/74.50%, or 85.50%/83.32% under the native nearest-centroid rule) is
-close to the historical figure and reasonably trustworthy. Its
-*unrestricted* number is the one most affected by this gap — treat it as a
-lower-fidelity reconstruction, not a faithful replay of the methodology
-that produced 45.37%/31.08%. The historical figures are reported
-separately, explicitly labeled, in the same table — see
-[results.md](results.md) — specifically so the two are never confused for
-each other.
-
-**Not fixable from this machine.** Resolving this fully requires either
-locating and fetching the original raw TSV from wherever the project's
-Google Drive now lives, or permanently accepting the reconstruction's
-disclosed limitation. There is no code fix available here.
+**The broader lesson, worth keeping even though the specific problem is
+fixed:** an artifact that exists only as an uncommitted local file is one
+`rm -rf` away from requiring a fresh multi-week investigation to
+approximately reconstruct. `service/model/app_export/README.md` documents
+why these specific files are now committed (with the raw TSV under Git
+LFS) for exactly this reason.
 
 ## scANVI's run-to-run variance
 
@@ -96,6 +92,19 @@ subsample size and index set across every script — does not exist yet.**
 If a future method (or a future, larger RNA reference) genuinely cannot run
 at full scale, that coordination needs to be built from scratch; nothing
 here provides it.
+
+## RNA cell count: 85,232 vs. 85,233
+
+The Atlas CSVs baselines train on (`Atlas/atlas_RNA_lat128-001-part{1,2}.csv`)
+are missing one cell (`orig_index=42616`, a neutrophil) that
+`service/model/reference_embedding.npy` has — see
+[bugs-and-fixes.md](bugs-and-fixes.md#7-atlasatlas_rna_lat128-001-part12csv-are-missing-one-cell-between-them).
+"Ours" is aligned down to the baselines' 85,232-cell set rather than the
+baselines being retrained on the corrected 85,233. The Atlas CSVs
+themselves still have this one-row gap; if they're ever regenerated (e.g.
+from `tools/promote_v3_atlas.py`, or however the LFS split was originally
+produced), it should be fixed at the source rather than patched around
+again in every future benchmarking script.
 
 ## No held-out validation of the shared kNN rule's `k=30`
 

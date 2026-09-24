@@ -156,32 +156,46 @@ training.
 ### `ours_run.py`
 
 Runs the shipped model ("ours") through the *exact same* shared harness as
-every baseline (methodology rule A).
+every baseline (methodology rule A) — on **real artifacts, no
+reconstruction**.
 
 **RNA side:** loads `service/model/reference_embedding.npy` directly — the
 real, live, already-computed embedding for all 85,233 RNA cells that the
-deployed service actually ships. No reconstruction. Labels come from
+deployed service actually ships. Labels come from
 `service.pipeline.reference.load_reference_metadata()`'s
-`class_idx_by_cell`, aligned row-for-row with the embedding array.
+`class_idx_by_cell`, aligned row-for-row with the embedding array. Row
+42616 (a neutrophil cell absent from the Atlas CSVs) is dropped so this
+script's RNA set exactly matches the 85,232 cells every baseline trained on
+— see [bugs-and-fixes.md](bugs-and-fixes.md#7).
 
-**Protein side:** reconstructed via the real (and, as of this benchmark
-work, newly-fixed — see [bugs-and-fixes.md](bugs-and-fixes.md))
-`service.pipeline` stack: `alignment.align_to_feature_space` →
-`smoothing.fuzzy_smooth` → the real production encoder
-(`encoder.load_encoder()`). The one input file available for this,
-`Atlas/atlas_PROT_lat128.csv`, has a real, disclosed provenance problem —
-see [known-limitations.md](known-limitations.md) before trusting this
-arm's *unrestricted* number in particular.
+**Protein side:** `service/model/app_export/prot_embedding_scope2.npy` —
+the export notebook's own real, saved embedding for all 1,490 SCoPE2
+protein cells. Labels come from
+`service/model/app_export/atlas_PROT_v3_meta.csv`'s `true_class_name`
+column, in that file's own row order. See
+`service/model/app_export/README.md` for these files' provenance and
+sha256 verification.
+
+An earlier version of this script reconstructed the protein embedding from
+`Atlas/atlas_PROT_lat128.csv` via the real `service.pipeline` stack
+(`alignment.align_to_feature_space` → `smoothing.fuzzy_smooth` →
+`encoder.load_encoder()`), because the real embedding wasn't available in
+this repository at the time. That reconstruction is gone now that the real
+artifacts are committed — but comparing the two was exactly what surfaced
+two real production bugs (see [bugs-and-fixes.md](bugs-and-fixes.md)), and
+`service/tests/test_e2e_real_export.py` keeps that same comparison running
+permanently as a regression guard.
 
 Imports directly from the real `service` package
 (`sys.path.insert(0, str(Path(__file__).resolve().parents[2]))`, i.e. the
 repo root) — this script only works when run from inside a checkout of
 this repository, not standalone.
 
-Writes `results/result_ours_v2.json`, which includes both the harness
-reconstruction's numbers *and* the historical documented figures
+Writes `results/result_ours.json`, which includes the real-embedding
+harness numbers alongside the historical documented figures
 (`service/model/v3_tables/support_restricted_assignment.csv`) as a
-separate, clearly-labeled field — never merged into one number.
+separate, clearly-labeled field for comparison — never merged into one
+number.
 
 ### `recompute_v2.py`
 
@@ -222,8 +236,11 @@ methodologically; mechanically:
 
 ```bash
 cd Vivome_Atlas
-git lfs pull   # fetches the RNA expression matrix (large; flips
-               # tests/lfs.test.js red by design, see that test's comment)
+git lfs pull   # fetches the RNA expression matrix AND
+               # service/model/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv
+               # (large; flips tests/lfs.test.js red by design, see that
+               # test's comment, and is required for ours_run.py and
+               # service/tests/test_e2e_real_export.py)
 python3 -m pip install -r service/requirements.txt   # includes scikit-learn,
                                                        # needed by both the
                                                        # real service and this

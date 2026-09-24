@@ -1,8 +1,59 @@
 # Bugs and fixes
 
 Every real, confirmed bug hit while building this tool, in the order they
-mattered. One of these was a bug in the **actual production service**, not
-just this benchmark tooling — flagged clearly below.
+mattered. Two of these are bugs in the **actual production service**, not
+just this benchmark tooling — flagged clearly below. The second one
+(`encoder.py`'s activation function) turned out to be the dominant cause of
+a discrepancy this document's earlier version had misattributed entirely to
+a data-provenance gap — see the postscript at the end of entry 0.
+
+## 0. `service/pipeline/encoder.py` used the wrong activation function — ReLU instead of GELU (fixed in the real repo)
+
+**The single most consequential bug found in this entire investigation.**
+Once the real notebook-produced protein embedding (`prot_embedding_scope2.npy`)
+and the real raw input it came from
+(`blood_joint_cells_by_proteins_GENELEVEL.tsv`) were obtained (see
+[known-limitations.md](known-limitations.md)), running that raw file
+through the full, already-fixed `service/pipeline` (alignment → smoothing →
+encoder) gave embeddings only **~0.75 median cosine similarity** to the
+notebook's real embedding — nowhere near the ~1.0 a correct pipeline should
+produce, per the repository owner's own explicit acceptance criterion.
+
+Direct comparison of `service/pipeline/encoder.py`'s `ModulePoolingEncoder`
+against the notebook's `ModulePoolEnc`/`mlp()` found the cause immediately:
+the notebook's trained architecture uses `nn.GELU()` between its `Linear`→
+`LayerNorm` layers; the shipped `encoder.py` used `nn.ReLU()` in the exact
+same position. **Activation functions carry no learnable parameters**, so
+`model.load_state_dict(state_dict, strict=True)` — which only checks
+parameter *names and shapes* — loaded the real, correctly-trained weights
+into a model that computes a genuinely different function. No error, no
+warning, no shape mismatch: just a systematically wrong forward pass that
+happened to still correlate with the right answer (real trained weights
+carry most of a representation's structure even through the wrong
+nonlinearity) without reproducing it.
+
+**Fix:** `nn.ReLU()` → `nn.GELU()` in `ModulePoolingEncoder.__init__`, in
+both of the body's two hidden layers. Verified directly: running the real
+raw TSV through the complete, fixed pipeline (alignment → fixed smoothing
+→ GELU-corrected encoder) now reproduces the notebook's saved embedding at
+**cosine similarity 1.000000 for every one of the 1,490 cells** — median,
+5th percentile, mean, and minimum all exactly 1.0. Added
+`test_body_uses_gelu_not_relu` to `service/tests/test_encoder.py` as a
+permanent regression guard, since `strict=True` state-dict loading will
+never catch this class of bug on its own.
+
+**Postscript — this changes an earlier conclusion in this document.** An
+earlier round of this benchmark work found that a from-scratch
+reconstruction of "ours" could get very close to the historical restricted
+figure (85.50%/83.32% vs. 86.17%/79.79%) but not the unrestricted one, and
+attributed essentially the entire residual gap to the protein-side file
+provenance issue (the reconstruction reading a narrower, wrong-gene-panel
+file — see [known-limitations.md](known-limitations.md)). That
+reconstruction *also* ran through this same buggy ReLU encoder. With both
+bugs now fixed and the real files in hand, "ours" is scored directly on
+`prot_embedding_scope2.npy` with no reconstruction step at all — see
+[results.md](results.md). The file-provenance issue was real and worth
+finding, but the activation-function bug was the larger effect.
 
 ## 1. `service/pipeline/smoothing.py` had drifted from the notebook that measured its own numbers (fixed in the real repo)
 
@@ -170,6 +221,29 @@ underlying `torch`/`numpy` seeds) explicitly *before* constructing any
 immediately after training, specifically so a bootstrap CI (or any other
 downstream analysis) never requires retraining a stochastic model a second
 time just to recover something that should have been saved the first time.
+
+## 7. `Atlas/atlas_RNA_lat128-001-part{1,2}.csv` are missing one cell between them
+
+The baselines' RNA reference load (`tools/fair_benchmark/load.py`) counts
+85,232 cells; `service/model/reference_embedding.npy` (the real, live
+artifact) has 85,233. Tracing it down: `-part1.csv` ends at
+`orig_index=42615`; `-part2.csv` starts at `orig_index=42617`.
+`orig_index=42616` — a neutrophil cell, barcode
+`TSP14_Blood_NA_10X_2_1_AGGAGGTGTGTCCAAT` — exists in
+`reference_embedding.npy`/`reference_metadata` but was dropped somewhere in
+whatever process split the original 85,233-row file into these two
+Git-LFS-sized halves.
+
+**Fix:** since every baseline had already trained on the 85,232-cell set
+(retraining them was explicitly out of scope — see
+[known-limitations.md](known-limitations.md)), "ours" is aligned *down* to
+match: `tools/fair_benchmark/ours_run.py` drops row 42616 from
+`reference_embedding.npy` before fitting anything, rather than the Atlas
+CSVs being fixed to add the missing row back (which would require
+retraining every baseline on the corrected 85,233-cell set instead). One
+cell out of 85,233, in the single largest RNA class (32,197 neutrophils
+originally), has no material effect on any result — but every arm should
+still see the identical set, and now they do.
 
 ## A benign, session-long red herring: Apple Accelerate BLAS warnings
 
