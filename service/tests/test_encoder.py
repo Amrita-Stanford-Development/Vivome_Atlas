@@ -2,7 +2,6 @@ import unittest
 import warnings
 
 import numpy as np
-import torch
 
 from service import config
 from service.pipeline import encoder
@@ -19,8 +18,8 @@ class StripPrefixesTests(unittest.TestCase):
         self.assertEqual(stripped, {"A": 1, "body.0.weight": 2})
 
 
-class LoadEncoderRealDevCheckpointTests(unittest.TestCase):
-    """Exercises the real dev placeholder checkpoint end to end — this is
+class LoadEncoderRealProductionCheckpointTests(unittest.TestCase):
+    """Exercises the real v3 production checkpoint end to end — this is
     the actual artifact the pipeline runs against today."""
 
     @classmethod
@@ -30,15 +29,14 @@ class LoadEncoderRealDevCheckpointTests(unittest.TestCase):
             cls.handle = encoder.load_encoder()
             cls.dev_warnings = caught
 
-    def test_loads_as_the_dev_placeholder_and_warns(self):
-        self.assertTrue(self.handle.is_dev_placeholder)
-        self.assertEqual(self.handle.weights_path, config.DEV_CHECKPOINT_PATH)
-        self.assertTrue(any("DEVELOPMENT placeholder" in str(w.message) for w in self.dev_warnings))
+    def test_loads_the_production_reference_and_does_not_warn(self):
+        self.assertFalse(self.handle.is_dev_placeholder)
+        self.assertEqual(self.handle.weights_path, config.REFERENCE_MODEL_PATH)
+        self.assertFalse(any("DEVELOPMENT placeholder" in str(w.message) for w in self.dev_warnings))
 
-    def test_model_version_label_says_development_not_production(self):
+    def test_model_version_label_says_production(self):
         label = encoder.model_version_label(self.handle)
-        self.assertIn("development", label.lower())
-        self.assertNotEqual(label, encoder.MODEL_VERSION_LABEL_PRODUCTION)
+        self.assertEqual(label, encoder.MODEL_VERSION_LABEL_PRODUCTION)
 
     def test_encode_returns_l2_normalised_embeddings(self):
         n_genes = self.handle.model.A.shape[0]
@@ -54,6 +52,21 @@ class LoadEncoderRealDevCheckpointTests(unittest.TestCase):
         out = self.handle.encode(np.zeros((1, n_genes), dtype=np.float32), np.zeros((1, n_genes), dtype=np.float32))
         self.assertFalse(np.isnan(out).any())
 
+    def test_body_uses_gelu_not_relu(self):
+        # Regression guard: the trained checkpoint (VivOME_Prototype_Export.ipynb's
+        # ModulePoolEnc) uses GELU. An earlier version of this file used ReLU
+        # instead -- load_state_dict(strict=True) doesn't catch this, since
+        # activations carry no parameters, so the encoder silently loaded
+        # real weights into the wrong architecture and produced embeddings
+        # that only reached ~0.75 cosine similarity to the real ones instead
+        # of the exact match a correct architecture gives. See
+        # Documentation/bugs-and-fixes.md.
+        import torch.nn as nn
+        activations = [m for m in self.handle.model.body if isinstance(m, (nn.GELU, nn.ReLU))]
+        self.assertTrue(activations, "expected at least one activation layer in body")
+        self.assertTrue(all(isinstance(m, nn.GELU) for m in activations),
+                         f"expected GELU, found {[type(m).__name__ for m in activations]}")
+
     def test_encode_is_deterministic_in_eval_mode(self):
         n_genes = self.handle.model.A.shape[0]
         rng = np.random.default_rng(0)
@@ -62,6 +75,29 @@ class LoadEncoderRealDevCheckpointTests(unittest.TestCase):
         out1 = self.handle.encode(values, mask)
         out2 = self.handle.encode(values, mask)
         np.testing.assert_array_equal(out1, out2)
+
+
+class LoadEncoderDevPlaceholderTests(unittest.TestCase):
+    """The dev checkpoint is no longer ENCODER_WEIGHTS_PATH's default, but
+    the warn-path guard must still fire for anything that explicitly points
+    at it (e.g. a VIVOME_ENCODER_WEIGHTS override for local testing)."""
+
+    @classmethod
+    def setUpClass(cls):
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            cls.handle = encoder.load_encoder(weights_path=config.DEV_CHECKPOINT_PATH)
+            cls.dev_warnings = caught
+
+    def test_loads_as_the_dev_placeholder_and_warns(self):
+        self.assertTrue(self.handle.is_dev_placeholder)
+        self.assertEqual(self.handle.weights_path, config.DEV_CHECKPOINT_PATH)
+        self.assertTrue(any("DEVELOPMENT placeholder" in str(w.message) for w in self.dev_warnings))
+
+    def test_model_version_label_says_development_not_production(self):
+        label = encoder.model_version_label(self.handle)
+        self.assertIn("development", label.lower())
+        self.assertNotEqual(label, encoder.MODEL_VERSION_LABEL_PRODUCTION)
 
 
 class UnknownArchitectureFamilyTests(unittest.TestCase):

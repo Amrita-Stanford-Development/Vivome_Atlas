@@ -58,8 +58,8 @@ class ModulePoolingEncoder(nn.Module):
         self.register_buffer("A", torch.zeros(n_genes, n_modules))
         in_dim = 2 * n_genes + 2 * n_modules
         self.body = nn.Sequential(
-            nn.Linear(in_dim, hidden1, bias=False), nn.LayerNorm(hidden1), nn.ReLU(), nn.Dropout(dropout),
-            nn.Linear(hidden1, hidden2, bias=False), nn.LayerNorm(hidden2), nn.ReLU(), nn.Dropout(dropout),
+            nn.Linear(in_dim, hidden1, bias=False), nn.LayerNorm(hidden1), nn.GELU(), nn.Dropout(dropout),
+            nn.Linear(hidden1, hidden2, bias=False), nn.LayerNorm(hidden2), nn.GELU(), nn.Dropout(dropout),
         )
         self.proj = nn.Linear(hidden2, latent_dim, bias=False)
         self.norm = nn.LayerNorm(latent_dim)
