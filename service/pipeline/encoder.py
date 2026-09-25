@@ -120,9 +120,27 @@ def _read_encoder_family(architecture_config_path: Path) -> str:
     )
 
 
+def trace_encoder(model: ModulePoolingEncoder) -> torch.jit.ScriptModule:
+    """TorchScript export (Track B, "Serving"). Tracing, not scripting, is
+    safe here: `forward()` has no data-dependent control flow, only matmul,
+    clamp_min, cat, LayerNorm, GELU, Dropout (a no-op in eval mode) and
+    normalize -- so the traced graph is exact for any input sharing the
+    same n_genes as the example used to trace it. Equivalence against the
+    eager model this traces is pinned in service/tests/test_encoder.py
+    (<1e-5 max abs diff on 1,000 cells, the Track B spec's tolerance).
+    Traced with batch size 2, not 1, so a singleton batch dim never gets
+    baked into the graph as a constant."""
+    n_genes = model.A.shape[0]
+    example_values = torch.zeros(2, n_genes)
+    example_mask = torch.ones(2, n_genes)
+    with torch.no_grad():
+        return torch.jit.trace(model, (example_values, example_mask))
+
+
 @dataclass(frozen=True)
 class EncoderHandle:
     model: ModulePoolingEncoder
+    traced_model: torch.jit.ScriptModule
     weights_path: Path
     is_dev_placeholder: bool
 
@@ -131,11 +149,14 @@ class EncoderHandle:
         order. Returns (n_cells, latent_dim) float32, L2 normalised —
         matches the reference_embedding.npy / reference_centroids.npy
         contract exactly, so downstream stages never branch on whether
-        they're holding a query or reference embedding."""
+        they're holding a query or reference embedding.
+
+        Runs through the traced (TorchScript) model, not the eager one —
+        `model` stays around for introspection (`.A`, `.body`, `.proj`)."""
         with torch.no_grad():
             values_t = torch.as_tensor(values, dtype=torch.float32)
             mask_t = torch.as_tensor(mask, dtype=torch.float32)
-            out = self.model(values_t, mask_t)
+            out = self.traced_model(values_t, mask_t)
         return out.numpy().astype(np.float32)
 
 
@@ -171,7 +192,11 @@ def load_encoder(
             f"Implemented families: {sorted(_ENCODER_FAMILIES)}."
         )
     model = builder(state_dict)
-    return EncoderHandle(model=model, weights_path=Path(weights_path), is_dev_placeholder=is_dev_placeholder)
+    traced_model = trace_encoder(model)
+    return EncoderHandle(
+        model=model, traced_model=traced_model,
+        weights_path=Path(weights_path), is_dev_placeholder=is_dev_placeholder,
+    )
 
 
 MODEL_VERSION_LABEL_DEV = "development-placeholder (H_seed4, decisive-test recipe — not production)"

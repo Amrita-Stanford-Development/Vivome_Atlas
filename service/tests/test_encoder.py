@@ -2,6 +2,7 @@ import unittest
 import warnings
 
 import numpy as np
+import torch
 
 from service import config
 from service.pipeline import encoder
@@ -75,6 +76,41 @@ class LoadEncoderRealProductionCheckpointTests(unittest.TestCase):
         out1 = self.handle.encode(values, mask)
         out2 = self.handle.encode(values, mask)
         np.testing.assert_array_equal(out1, out2)
+
+
+class TorchScriptExportEquivalenceTests(unittest.TestCase):
+    """Track B, "Serving": the traced (TorchScript) model that `.encode()`
+    actually runs must match the eager model within the spec's 1e-5
+    tolerance on 1,000 cells."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.handle = encoder.load_encoder()
+
+    def test_traced_model_matches_eager_model_on_1000_cells(self):
+        n_genes = self.handle.model.A.shape[0]
+        rng = np.random.default_rng(0)
+        values = rng.normal(size=(1000, n_genes)).astype(np.float32)
+        mask = (rng.random((1000, n_genes)) > 0.3).astype(np.float32)
+
+        with torch.no_grad():
+            eager_out = self.handle.model(torch.as_tensor(values), torch.as_tensor(mask)).numpy()
+            traced_out = self.handle.traced_model(torch.as_tensor(values), torch.as_tensor(mask)).numpy()
+
+        max_abs_diff = np.max(np.abs(eager_out - traced_out))
+        self.assertLess(max_abs_diff, 1e-5)
+
+    def test_encode_runs_through_the_traced_model(self):
+        n_genes = self.handle.model.A.shape[0]
+        rng = np.random.default_rng(1)
+        values = rng.normal(size=(3, n_genes)).astype(np.float32)
+        mask = (rng.random((3, n_genes)) > 0.5).astype(np.float32)
+
+        via_encode = self.handle.encode(values, mask)
+        with torch.no_grad():
+            via_traced = self.handle.traced_model(torch.as_tensor(values), torch.as_tensor(mask)).numpy()
+
+        np.testing.assert_array_equal(via_encode, via_traced)
 
 
 class LoadEncoderDevPlaceholderTests(unittest.TestCase):

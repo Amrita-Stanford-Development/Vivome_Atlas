@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from service import config
-from service.pipeline import abstention, alignment, assignment, calibration, coordinates, encoder, fallback, gene_ids, reference, smoothing, transfer
+from service.pipeline import abstention, alignment, assignment, calibration, coordinates, encoder, fallback, gene_ids, reference, search, smoothing, transfer
 
 
 @dataclass(frozen=True)
@@ -135,7 +135,7 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
     calibrated = calibration.calibrate_and_build_sets(probs, rng=rng)
 
     # Stage 6 (raw pass — Stage 7 may downgrade an AMBIGUOUS verdict below)
-    max_similarity = abstention.max_cosine_to_reference(query_embeddings, bundle.reference_embeddings)
+    max_similarity = search.faiss_max_cosine_to_reference(query_embeddings, bundle.reference_embeddings)
     abstention_result = abstention.score_abstention(
         max_similarity=max_similarity,
         per_cell_observed_genes=aligned.per_cell_observed_genes,
