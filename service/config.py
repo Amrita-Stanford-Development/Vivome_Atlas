@@ -108,11 +108,13 @@ OT_MAX_ITER = 1000
 # refused 79% of real PBMC240 cells and 100% of real Fulcher cells outright
 # (T1 NB1) — a fixed count is robust across datasets with very different
 # native panel sizes in a way a fraction of one fixed denominator isn't.
-# PROVISIONAL: this default (100) has not been calibrated against a real
-# accuracy-vs-observed-genes curve yet. T1 NB1b will produce
-# docs/plans/nb1b/coverage_curve_v0.csv; re-derive this constant from it
-# and remove it from PROVISIONAL_CONSTANTS below when that lands.
-MIN_OBSERVED_GENES = 100
+# CALIBRATED ON SIMULATIONS, REVISIT: T1 NB1b's accuracy-vs-observed-genes
+# curve shows chance-level accuracy below 100 genes and stable accuracy
+# from about 200 on; 100-300 is thinly sampled in that curve, so this
+# value is evidence-backed, not an arbitrary placeholder, but still worth
+# revisiting once more of that range is sampled. See
+# docs/plans/nb1b/ for the curve.
+MIN_OBSERVED_GENES = 200
 PROVISIONAL_CONSTANTS = ("MIN_OBSERVED_GENES",)
 
 # Stage 1 — a query is treated as linear-scale intensity data (needing a

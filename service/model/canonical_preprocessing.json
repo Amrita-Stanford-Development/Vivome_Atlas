@@ -5,16 +5,23 @@
     "rule": "no negative observed values AND median of observed values > 50 -> detected as linear scale, log2-transformed",
     "zero_handling": "an observed value of exactly 0 is treated as not-detected (NaN), never log2(0)",
     "config_constant": "LINEAR_SCALE_MEDIAN_THRESHOLD",
-    "config_value": 50.0
+    "config_value": 50.0,
+    "status": "settled",
+    "evidence": "T1 NB1b: skipping log2 cost about 3 points of accuracy in simulation"
   },
-  "min_observed_genes": 100,
+  "min_observed_genes": 200,
+  "min_observed_genes_status": "calibrated_on_simulations_revisit",
   "mask_convention": "per_cell",
-  "provisional": ["min_observed_genes"],
-  "notes": "min_observed_genes is a placeholder default, not yet calibrated against a real accuracy-vs-observed-genes curve. T1 NB1b will produce docs/plans/nb1b/coverage_curve_v0.csv; re-derive this value from it and remove it from provisional once that lands. mask_convention stays per_cell (not median-filled per dataset) per T1 NB1's simulations with realistic dropout, pending T1 NB1b's ablation confirming or revising that.",
+  "mask_convention_status": "settled",
+  "notes": "min_observed_genes: T1 NB1b's accuracy-vs-observed-genes curve shows chance-level accuracy below 100 observed genes and stable accuracy from about 200 on; 100-300 is thinly sampled in that curve, so 200 is evidence-backed, not an arbitrary placeholder, but still worth revisiting once more of that range is sampled (docs/plans/nb1b/). mask_convention: T1 NB1b's 2x2 ablation confirmed per-cell masking beats dataset-level median fill by 3.2 points unrestricted and 4.7 points oracle-restricted in simulation -- settled, not pending further ablation.",
   "verified_against": {
     "scope2_unrestricted": [45.369127516778526, 31.083265404424022],
     "scope2_restricted": [86.1744966442953, 79.7915354403646],
-    "scope2_service_embedding_cosine_to_notebook": 1.0
+    "scope2_service_embedding_cosine_to_notebook": 1.0,
+    "pbmc240_recipe_reconstruction_cosine_to_processed_file": 0.9969
+  },
+  "known_limitations": {
+    "hardcoded_supported_classes": "CROSS_MODAL_SUPPORTED_CLASSES = (macrophage, monocyte) means every non-myeloid upload (T cell, NK cell, etc.) can only ever be labelled macrophage or monocyte, or abstain -- never its true lineage. Not fixed by any preprocessing choice in this file. Owner: T1 NB2 (label space estimation)."
   },
   "source_commit": "faithfulness/a2"
 }
