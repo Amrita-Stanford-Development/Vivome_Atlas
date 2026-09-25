@@ -24,6 +24,15 @@ def _env_path(name: str, default: Path) -> Path:
 FEATURE_SPACE_GENES_PATH = _env_path(
     "VIVOME_FEATURE_SPACE_GENES", MODEL_DIR / "feature_space_genes.csv"
 )
+
+# Track B: frozen, versioned gene identifier cross-reference (symbol,
+# Ensembl gene ID, UniProt accession) for the 9,002 feature-space genes.
+# Built once, offline, from HGNC's public bulk dataset — see
+# gene_id_map_v1_provenance.json alongside it for the source URL, download
+# date, and sha256. Never re-fetched or looked up live at request time.
+GENE_ID_MAP_PATH = _env_path(
+    "VIVOME_GENE_ID_MAP", MODEL_DIR / "gene_id_map_v1.tsv"
+)
 REFERENCE_METADATA_PATH = _env_path(
     "VIVOME_REFERENCE_METADATA", MODEL_DIR / "reference_metadata.csv"
 )

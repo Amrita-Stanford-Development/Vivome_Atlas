@@ -108,11 +108,15 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         app._bundle = bundle
         app._bundle_error = None
 
-        matrix_text = fixtures.synthetic_matrix_csv(feature_genes[:100], ["c1", "c2"])
+        # 25 cells: above validation.MIN_CELLS_REFUSE (20) -- the minimum
+        # cell count is Track B behavior, exercised on its own in
+        # test_validation.py; this test's own concern is the 200 happy path.
+        cell_ids = [f"c{i}" for i in range(25)]
+        matrix_text = fixtures.synthetic_matrix_csv(feature_genes[:100], cell_ids)
         status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix_text.encode())
         self.assertEqual(status, 200)
-        self.assertEqual(payload["n_cells"], 2)
-        self.assertEqual(len(payload["cells"]), 2)
+        self.assertEqual(payload["n_cells"], 25)
+        self.assertEqual(len(payload["cells"]), 25)
 
 
 def _load_encoder_only():

@@ -24,7 +24,7 @@ import threading
 from email import message_from_bytes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-from service.pipeline import alignment, pipeline, reference
+from service.pipeline import alignment, pipeline, reference, validation
 
 logger = logging.getLogger("vivome.projection_service")
 
@@ -125,12 +125,27 @@ class ProjectionHandler(BaseHTTPRequestHandler):
 
         try:
             raw = alignment.parse_matrix_csv(matrix_text)
+            warnings = validation.validate(raw)
+        except validation.ValidationError as exc:
+            self._send_json(400, {"error": str(exc)})
+            return
+        except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
+            logger.exception("could not parse the submitted matrix")
+            self._send_json(400, {"error": "could not process the submitted matrix"})
+            return
+
+        try:
             result = pipeline.run_projection(bundle, raw)
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})
             return
 
+        if warnings.low_cell_count:
+            result.setdefault("warnings", []).append(
+                f"fewer than {validation.MIN_CELLS_WARN} cells uploaded — "
+                "per-upload statistics (smoothing, coverage) are less reliable at this size."
+            )
         self._send_json(200, result)
 
     def log_message(self, format: str, *args) -> None:  # noqa: A002 (stdlib signature)

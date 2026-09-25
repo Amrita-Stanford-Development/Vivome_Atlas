@@ -23,6 +23,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from service import config
+from service.pipeline import gene_ids
 
 
 @dataclass(frozen=True)
@@ -154,13 +155,21 @@ def align_to_feature_space(raw: RawMatrix, feature_genes: list[str]) -> AlignedQ
     n_genes = len(feature_genes)
     gene_index = {g: i for i, g in enumerate(feature_genes)}
 
+    # Track B: resolve whatever identifier convention this upload used
+    # (symbol, Ensembl ID, UniProt accession, or a semicolon-separated
+    # DIA-NN protein group) to feature-space gene symbols before matching.
+    # An identifier that doesn't resolve becomes None here, which
+    # gene_index.get(None) already treats as "not in the feature space" —
+    # exactly like an unrecognised symbol always has.
+    resolved_gene_names = gene_ids.resolve_to_feature_symbols(raw.gene_names)
+
     z = zscore_per_gene(raw.values) if raw.values.size else raw.values
 
     values = np.zeros((n_cells, n_genes), dtype=np.float32)
     mask = np.full((n_cells, n_genes), config.MASK_MISSING, dtype=np.float32)
     matched_columns: set[int] = set()
 
-    for raw_i, gene in enumerate(raw.gene_names):
+    for raw_i, gene in enumerate(resolved_gene_names):
         col = gene_index.get(gene)
         if col is None:
             continue
@@ -169,7 +178,7 @@ def align_to_feature_space(raw: RawMatrix, feature_genes: list[str]) -> AlignedQ
         mask[:, col] = np.where(observed, config.MASK_OBSERVED, config.MASK_MISSING)
         matched_columns.add(col)
 
-    n_matched_rows = sum(1 for g in raw.gene_names if g in gene_index)
+    n_matched_rows = sum(1 for g in resolved_gene_names if g in gene_index)
     return AlignedQuery(
         values=values,
         mask=mask,

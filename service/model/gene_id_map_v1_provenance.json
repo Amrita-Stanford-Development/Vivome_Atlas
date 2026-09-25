@@ -1,0 +1,20 @@
+{
+  "version": "v1",
+  "created": "2026-09-25",
+  "source": {
+    "name": "HGNC complete gene set",
+    "url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt",
+    "downloaded": "2026-09-25",
+    "sha256": "3e5da5b757afce6cae333d3e6c97a59ff3aadfb13da1c70f89d9a8f252b9e7ec",
+    "n_rows": 45111,
+    "note": "HGNC's own bulk cross-reference file, updated by HGNC every Tuesday and Friday; ensembl_gene_id and uniprot_ids columns reflect whatever Ensembl/UniProt release HGNC had last synced against as of the download date above, not a separately pinned Ensembl release number -- HGNC does not publish one alongside this file. Ensembl gene IDs (ENSG...) are themselves stable across releases for genes that aren't renamed/merged/split, which covers the overwhelming majority of this mapping."
+  },
+  "feature_space_genes": 9002,
+  "match_counts": {
+    "symbol": 8957,
+    "alias_or_prev_symbol": 44,
+    "ambiguous": 1
+  },
+  "gene_id_map_sha256": "d8997839867a620f2e7f67292aaf66e04008297120bc42f64063edf7e8c88627",
+  "resolution_method": "exact symbol match first; falls back to HGNC alias_symbol/prev_symbol only when the feature-space symbol has no direct current-symbol match; a fallback is accepted only if all matching HGNC rows agree on the same Ensembl gene ID, otherwise recorded as ambiguous with every candidate HGNC ID listed in gene_id_map_v1.tsv's ambiguous_candidates column"
+}

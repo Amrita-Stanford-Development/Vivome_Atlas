@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from service import config
-from service.pipeline import abstention, alignment, assignment, calibration, coordinates, encoder, fallback, reference, smoothing, transfer
+from service.pipeline import abstention, alignment, assignment, calibration, coordinates, encoder, fallback, gene_ids, reference, smoothing, transfer
 
 
 @dataclass(frozen=True)
@@ -88,6 +88,14 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
         position for position, name in enumerate(class_name_by_position)
         if name in config.CROSS_MODAL_SUPPORTED_CLASSES
     }
+
+    # Track B: resolve this upload's gene identifiers (symbol, Ensembl ID,
+    # UniProt accession, or a DIA-NN-style semicolon group) for reporting —
+    # align_to_feature_space (Stage 1, below) does its own, identical
+    # resolution internally to actually match genes; this second call
+    # exists only so the response can report matched/unmapped/ambiguous
+    # counts without changing align_to_feature_space's return type.
+    gene_id_resolution = gene_ids.resolve_identifiers(raw.gene_names)
 
     # Stage 0 — detect and correct linear-scale intensity input (e.g. a raw
     # DIA-NN report) before anything else touches it. Never transforms data
@@ -201,6 +209,13 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
         "n_features_matched": aligned.n_features_matched,
         "n_features_unmatched": aligned.n_features_unmatched,
         "value_scale": {"detected": value_scale.detected, "transformed": value_scale.transformed},
+        "gene_id_resolution": {
+            "matched": gene_id_resolution.matched,
+            "unmapped": gene_id_resolution.unmapped,
+            "ambiguous": gene_id_resolution.ambiguous,
+            "unmapped_identifiers": gene_id_resolution.unmapped_identifiers,
+            "ambiguous_identifiers": gene_id_resolution.ambiguous_identifiers,
+        },
         # Recorded for comparison, not the abstain decision itself — Stage 6
         # still uses abstention.py's live per-request quantile. This is the
         # reference's own pre-calibrated value (provenance.json), which

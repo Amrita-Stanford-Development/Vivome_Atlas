@@ -63,6 +63,14 @@ class RunProjectionEndToEndTests(unittest.TestCase):
         result = self._run()
         self.assertEqual(result["model_version"], "production")
 
+    def test_response_reports_gene_id_resolution(self):
+        result = self._run()
+        resolution = result["gene_id_resolution"]
+        for key in ("matched", "unmapped", "ambiguous", "unmapped_identifiers", "ambiguous_identifiers"):
+            self.assertIn(key, resolution)
+        self.assertEqual(resolution["matched"], 200)  # matches n_features_matched for this fixture's real symbols
+        self.assertEqual(resolution["unmapped"], 2)  # matches n_features_unmatched: 2 real-looking but absent gene names
+
     def test_response_carries_the_recorded_reference_abstain_threshold(self):
         result = self._run()
         self.assertAlmostEqual(result["reference_abstain_threshold"], 0.9779149889945984)

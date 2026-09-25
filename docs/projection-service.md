@@ -33,6 +33,8 @@ row.
   "n_features_matched"   : "<int>",
   "n_features_unmatched" : "<int>",
   "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>"},
+  "gene_id_resolution"   : {"matched": "<int>", "unmapped": "<int>", "ambiguous": "<int>",
+                            "unmapped_identifiers": ["<string>", "..."], "ambiguous_identifiers": ["<string>", "..."]},
   "cells": [
     {
       "cell_id"        : "<string>",
@@ -65,6 +67,20 @@ touched it. `"detected": "log"` means the upload already looked log-scale
 and was left alone; `"unknown"` means the upload had no observed values at
 all. The detection rule and its threshold are in
 `service/model/canonical_preprocessing.json`.
+
+**`gene_id_resolution`** reports how the upload's own feature identifiers
+(gene symbols, Ensembl gene IDs, UniProt accessions, or a DIA-NN-style
+semicolon-separated protein group of any of these) were resolved onto the
+service's fixed 9,002-gene feature space, using the frozen, versioned
+mapping table `service/model/gene_id_map_v1.tsv` (built once, offline, from
+HGNC's public bulk dataset — never a live per-request lookup).
+`unmapped_identifiers` lists identifiers that matched nothing;
+`ambiguous_identifiers` lists identifiers (almost always a semicolon
+protein group) whose members disagreed on which gene they meant, so none
+was guessed. `matched`/`unmapped` here can differ from
+`n_features_matched`/`n_features_unmatched` above — this reports whether
+the *identifier itself* resolved to *any* known gene, not whether that gene
+happens to be one of the 9,002 in this service's feature space.
 
 **`observed_genes`**, per cell, is the absolute count of feature-space genes
 that cell had a value for — what the coverage floor
