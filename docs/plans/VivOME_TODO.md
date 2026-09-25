@@ -75,14 +75,14 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 ### Track B, deployment hardening (branch `hardening/b`)
 
-- [ ] `gene_ids.py` plus the frozen `gene_id_map_v1.tsv`
-- [ ] Accept symbols, Ensembl IDs, UniProt groups and DIA-NN reports
-- [ ] Orientation detection, rejecting ambiguous input
-- [ ] Minimum cell count and value scale detection (the detection feeds A2's log transform)
-- [ ] TorchScript or ONNX export with an equivalence test
-- [ ] FAISS search with an exact equivalence test
-- [ ] `MODEL_CARD.md` and `versions.html` content, using the corrected test cell numbers below
-- [ ] Per upload logging
+- [x] `gene_ids.py` plus the frozen `gene_id_map_v1.tsv` (`cf3b98e`)
+- [x] Accept symbols, Ensembl IDs, UniProt groups and DIA-NN reports (`cf3b98e`)
+- [x] Orientation detection, rejecting ambiguous input (`cf3b98e`)
+- [x] Minimum cell count and value scale detection (the detection feeds A2's log transform) (`cf3b98e`)
+- [x] TorchScript or ONNX export with an equivalence test (`3c7da75`)
+- [x] FAISS search with an exact equivalence test (`3c7da75`)
+- [x] `MODEL_CARD.md` and `versions.html` content, using the corrected test cell numbers below (`f09c3be`)
+- [x] Per upload logging (`f09c3be`)
 
 ### Track C, v3.1 scaffold (branch `integration/v31-scaffold`)
 
@@ -209,3 +209,4 @@ because the held out classes were in training.
 | 2026-09-25 | Track A2: log transform, smoothing graph on z-scored values, coverage floor as an absolute gene count. SCoPE2 now reproduces the notebook embedding exactly (cosine 1.000000; 45.37/31.08, 86.17/79.79 to 4 decimals). Real PBMC240 divergence measured before/after (0.78 -> ~0.93 same-input; still 0.21 against the independently-produced zscored file, not yet explained at this point). Golden fixtures on 50 SCoPE2 + 50 real PBMC240 cells. `canonical_preprocessing.json` written for the notebooks | `2334e48`, `bb8ce6b` |
 | 2026-09-25 | A2 review: PBMC240 divergence explained — the comparison file uses a deliberately different recipe (5% detection filter, log2(x+1), per-cell median normalization, ~52.6% values imputed from Normal(1st pct, 0.3)), not a service bug. Reproducing that exact recipe as a diagnostic gets median cosine 0.9969 to the real file. Cell alignment re-confirmed correct (237/237 matched by cleaned ID). 3-way *restricted* weak-lineage accuracy (service / processed file / service+per-cell-norm-no-imputation) came out identical across all three (8.4% overall, 100% myeloid recall, 0% lymphoid recall) — initially misattributed to the OOD-abstention threshold; see the next entry for the correction. Added "per-cell loading normalization" as an open decision for NB1b. No service code changed this round | diagnostics only, not committed to `service/` |
 | 2026-09-25 | A2 close-out from T1 NB1b: `MIN_OBSERVED_GENES` calibrated 100 -> 200 (chance below 100, stable from ~200 in NB1b's curve); mask convention settled (per cell beats median fill by 3.2/4.7 points); log transform's value independently confirmed (~3 points). Corrected the lineage explanation: 0% lymphoid recall was forced by the hardcoded `CROSS_MODAL_SUPPORTED_CLASSES` restriction, not the OOD threshold — unrestricted (22-class) rescoring gets 46.6%/35.1%/21.8% lymphoid recall for the three variants respectively, with the untouched fixed service unexpectedly *beating* both alternatives. Recorded as a known correctness limitation (not just accuracy) until T1 NB2 lands | `config.py` (`MIN_OBSERVED_GENES=200`), `canonical_preprocessing.json` |
+| 2026-09-25 | Track B complete: `gene_ids.py` + frozen `gene_id_map_v1.tsv` (HGNC bulk download, sha256'd) resolving symbols/Ensembl/UniProt/DIA-NN groups; upload orientation and minimum-cell-count validation; `topk.py`'s kNN and a new `search.py`'s max-cosine both moved to FAISS `IndexFlatIP` (exact, not approximate) with equivalence tests against the original numpy code; the encoder now serves through a TorchScript trace, equivalent to the eager model to <1e-5 max abs diff on 1,000 cells; `MODEL_CARD.md` and a matching `versions.html` section state the RNA-supervised/zero-shot-proteomics claim, the corrected SCoPE2-mask test-cells-only numbers (93.2/65.7, not the invalid published 95.5/74.8), and the four known failure modes; per-upload logging (input hash, coverage, observed genes, value scale, supported classes, abstention rate by reason, model/mapping versions). `abstention.py`, `assignment.py`, `calibration.py`, `smoothing.py` untouched, per the track's forbidden-files list. Golden fixtures from A2 pass unchanged; 131 backend tests pass | `cf3b98e`, `3c7da75`, `f09c3be` |
