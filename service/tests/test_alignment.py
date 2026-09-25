@@ -19,6 +19,28 @@ class ParseMatrixCsvTests(unittest.TestCase):
         self.assertTrue(np.isnan(raw.values[0, 0]))
         self.assertEqual(raw.values[0, 1], 2.0)
 
+    def test_tab_separated_file_is_auto_detected(self):
+        text = "gene\tcellA\tcellB\nGENE1\t1.0\t2.0\nGENE2\t3.0\t4.0\n"
+        raw = alignment.parse_matrix_csv(text)
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2"])
+        self.assertEqual(raw.cell_ids, ["cellA", "cellB"])
+        np.testing.assert_array_equal(raw.values, [[1.0, 2.0], [3.0, 4.0]])
+
+    def test_dia_nn_report_uses_genes_column_and_drops_annotation_columns(self):
+        header = "Protein.Group\tProtein.Names\tGenes\tFirst.Protein.Description\t" \
+                 "N.Sequences\tN.Proteotypic.Sequences\t" \
+                 r"E:\raw\Astral_SP_1.raw" + "\t" + r"E:\raw\Astral_SP_2.raw"
+        row1 = "P1\tNAME1\tGENE1\tdesc\t3\t2\t1.0\t2.0"
+        row2 = "P2;P3\tNAME2;NAME3\tGENE2;GENE3\tdesc2\t1\t1\t\t4.0"
+        text = "\n".join([header, row1, row2])
+
+        raw = alignment.parse_matrix_csv(text)
+
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2;GENE3"])
+        self.assertEqual(raw.cell_ids, ["Astral_SP_1", "Astral_SP_2"])
+        self.assertTrue(np.isnan(raw.values[1, 0]))
+        np.testing.assert_array_equal(raw.values, [[1.0, 2.0], [raw.values[1, 0], 4.0]])
+
 
 class ZScorePerGeneTests(unittest.TestCase):
     def test_zscores_use_only_this_datasets_own_stats(self):

@@ -19,11 +19,17 @@ POST /api/project
 Content-Type: multipart/form-data
 
   modality : "rna" | "prot"
-  matrix   : CSV, features in rows, cells in columns
+  matrix   : CSV or TSV (auto-detected), features in rows, cells in columns
 ```
 
 The matrix has feature names in the first column and cell IDs in the header
-row.
+row. A real DIA-NN report is also accepted directly: when a "Genes" column
+is present, its values (which may be semicolon-separated protein groups)
+become the gene identifiers, DIA-NN's other annotation columns
+(`Protein.Group`, `Protein.Names`, `First.Protein.Description`,
+`N.Sequences`, `N.Proteotypic.Sequences`) are excluded from the cell
+columns, and each remaining column's Windows raw-file-path header is
+cleaned to its basename without `.raw`.
 
 ```json
 200 Response

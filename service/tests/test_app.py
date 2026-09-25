@@ -4,11 +4,14 @@ import unittest
 import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
+from pathlib import Path
 from unittest.mock import patch
 
-from service import app
+from service import app, config
 from service.pipeline import coordinates, pipeline, reference
 from service.tests import fixtures
+
+EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
 
 
 class ParseMultipartTests(unittest.TestCase):
@@ -137,6 +140,35 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         for expected in ("n_cells=25", "feature_coverage=", "value_scale=", "supported_classes=",
                          "abstention_rate=", "model_version=", "gene_map_version="):
             self.assertIn(expected, line)
+
+    def test_real_dia_nn_pbmc240_upload_runs_end_to_end(self):
+        """Track B follow-up: the actual PBMC_240cells_proteins.tsv DIA-NN
+        report (service/examples/pbmc240_proteins_raw.tsv -- the same file
+        service/examples/pbmc240_provenance.json describes), tab-separated
+        with real DIA-NN annotation columns, run through the real HTTP
+        endpoint end to end -- not a synthetic fixture, and not the pipeline
+        stages called directly (see test_e2e_real_export.py for that
+        variant)."""
+        self._install_synthetic_bundle()
+        matrix_bytes = (EXAMPLES / "pbmc240_proteins_raw.tsv").read_bytes()
+
+        status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix_bytes)
+
+        self.assertEqual(status, 200)
+        self.assertEqual(payload["n_cells"], 238)
+
+        cell_ids = [cell["cell_id"] for cell in payload["cells"]]
+        self.assertTrue(all("\\" not in cid and not cid.lower().endswith(".raw") for cid in cell_ids))
+
+        observed_genes = sorted(cell["observed_genes"] for cell in payload["cells"])
+        n_pass_floor = sum(1 for g in observed_genes if g >= config.MIN_OBSERVED_GENES)
+        print(
+            f"\n[integration] real PBMC240 DIA-NN upload: {n_pass_floor}/{len(observed_genes)} "
+            f"cells pass the {config.MIN_OBSERVED_GENES}-gene floor; observed_genes "
+            f"min={observed_genes[0]} median={observed_genes[len(observed_genes) // 2]} "
+            f"max={observed_genes[-1]}"
+        )
+        self.assertGreater(observed_genes[-1], 0)
 
 
 def _load_encoder_only():

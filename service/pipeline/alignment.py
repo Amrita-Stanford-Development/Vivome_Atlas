@@ -19,6 +19,7 @@ from __future__ import annotations
 import csv
 import io
 from dataclasses import dataclass
+from pathlib import PureWindowsPath
 
 import numpy as np
 
@@ -74,20 +75,60 @@ class AlignedQuery:
         return self.mask.sum(axis=1).astype(int)
 
 
+_DIA_NN_ANNOTATION_COLUMNS = frozenset({
+    "Protein.Group", "Protein.Names", "Genes",
+    "First.Protein.Description", "N.Sequences", "N.Proteotypic.Sequences",
+})
+
+
+def _clean_dia_nn_cell_id(raw_header: str) -> str:
+    """DIA-NN report columns are Windows raw-file paths (e.g.
+    r"E:\\...\\Astral_TopMedPBMC1_041025_SP_1.raw"). PureWindowsPath parses
+    the backslashes correctly regardless of the host OS running this
+    service."""
+    basename = PureWindowsPath(raw_header).name
+    if basename.lower().endswith(".raw"):
+        basename = basename[: -len(".raw")]
+    return basename
+
+
 def parse_matrix_csv(text: str) -> RawMatrix:
     """Contract shape (docs/projection-service.md, project.html): features
     in rows, cells in columns; first column is the feature name, header row
-    is cell IDs."""
-    reader = csv.reader(io.StringIO(text))
+    is cell IDs. Comma or tab separated, auto-detected from the header
+    line -- a real DIA-NN report is tab separated.
+
+    A DIA-NN report also carries its own annotation columns
+    (Protein.Group, Protein.Names, Genes, First.Protein.Description,
+    N.Sequences, N.Proteotypic.Sequences) ahead of the per-cell columns.
+    When a "Genes" column is present, its values become the gene
+    identifiers (may be semicolon-separated protein groups -- gene_ids.py
+    already resolves those), the other annotation columns are excluded
+    from the cell columns, and each surviving cell column's Windows
+    raw-file-path header is cleaned to its basename without ".raw"."""
+    first_line = text.split("\n", 1)[0]
+    delimiter = "\t" if first_line.count("\t") > first_line.count(",") else ","
+    reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     header = next(reader)
-    cell_ids = header[1:]
+
+    is_dia_nn_report = "Genes" in header
+    gene_col_idx = header.index("Genes") if is_dia_nn_report else 0
+    cell_col_indices = [
+        i for i, name in enumerate(header)
+        if i != gene_col_idx and name not in _DIA_NN_ANNOTATION_COLUMNS
+    ]
+    cell_ids = [
+        _clean_dia_nn_cell_id(header[i]) if is_dia_nn_report else header[i]
+        for i in cell_col_indices
+    ]
+
     gene_names: list[str] = []
     rows: list[list[float]] = []
     for row in reader:
-        if not row or not row[0]:
+        if not row or not row[gene_col_idx]:
             continue
-        gene_names.append(row[0])
-        rows.append([float(v) if v != "" else np.nan for v in row[1:]])
+        gene_names.append(row[gene_col_idx])
+        rows.append([float(row[i]) if row[i] != "" else np.nan for i in cell_col_indices])
     values = np.array(rows, dtype=np.float32) if rows else np.empty((0, len(cell_ids)), dtype=np.float32)
     return RawMatrix(gene_names=gene_names, cell_ids=cell_ids, values=values)
 
