@@ -54,6 +54,45 @@
         </section>
 
         <section>
+            <h2>Projection service model card</h2>
+            <p style="font-size: 13px;">
+                The reference encoder is <strong>trained, supervised, on RNA only</strong> —
+                85,233 cells across 22 immune/blood cell classes. It is applied
+                <strong>zero-shot to proteomics uploads</strong>: no protein labels and no
+                paired RNA-protein cells were used at any point in training. Full detail,
+                sources, and the numbers below: <code>service/model/MODEL_CARD.md</code>.
+            </p>
+            <table class="support-table" style="margin: 8px 0 12px;">
+                <thead><tr><th>Measure</th><th>Value</th></tr></thead>
+                <tbody>
+                    <tr><td>RNA→RNA, SCoPE2 mask, test cells only</td><td>93.2% acc / 65.7% bal (OT)</td></tr>
+                    <tr><td>Protein, restricted to the 2 supported classes</td><td>86.2% acc / 79.8% bal</td></tr>
+                    <tr><td>Protein, unrestricted (22 classes)</td><td>45.4% acc / 31.1% bal</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 13px;">
+                A previously published RNA→RNA figure of 95.5% / 74.8% is superseded by the
+                93.2% / 65.7% figures above — the published number's test split included cells
+                the model had trained on.
+            </p>
+            <p style="font-size: 13px; margin-bottom: 4px;"><strong>Known failure modes:</strong></p>
+            <ol style="font-size: 13px;">
+                <li>Hardcoded two-class label space: a non-myeloid protein upload (T cell, NK
+                    cell, B cell, etc.) can only ever be labelled macrophage, monocyte, or
+                    abstain — never its true label. A correctness limitation, not only an
+                    accuracy one.</li>
+                <li>Macrophage placement: cross-modal alignment is weak for macrophage
+                    specifically (latent centroid cosine 0.19 vs. 0.83 for monocyte;
+                    protein-side recall 0.76%), even though the macrophage-vs-monocyte
+                    ranking itself is correct (AUC 0.928).</li>
+                <li>Only 2 of 22 reference classes (macrophage, monocyte) have ever been
+                    validated against real protein data.</li>
+                <li>No donor-level holdout in training — every known donor contributed about
+                    65% of its own cells to the training set.</li>
+            </ol>
+        </section>
+
+        <section>
             <h2>Data availability</h2>
             <div class="table-scroll" id="availability-mount"></div>
         </section>

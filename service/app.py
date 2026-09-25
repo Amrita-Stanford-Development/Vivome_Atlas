@@ -18,12 +18,15 @@ restart the process to pick them up.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
+import statistics
 import threading
 from email import message_from_bytes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+from service import config
 from service.pipeline import alignment, pipeline, reference, validation
 
 logger = logging.getLogger("vivome.projection_service")
@@ -73,6 +76,36 @@ def _parse_multipart(content_type: str, body: bytes) -> dict[str, bytes]:
         payload = part.get_payload(decode=True)
         fields[name] = payload if payload is not None else b""
     return fields
+
+
+def _log_upload(matrix_text: str, result: dict) -> None:
+    """Per-upload audit line (Track B) — enough to debug a bad projection or
+    watch for drift (coverage collapsing, abstention rate climbing) without
+    storing any cell-level data. `input_hash` lets the same upload be
+    correlated across log lines without keeping the matrix itself."""
+    reason_counts: dict[str, int] = {}
+    for cell in result["cells"]:
+        if cell["abstained"]:
+            reason_counts[cell["abstain_reason"]] = reason_counts.get(cell["abstain_reason"], 0) + 1
+    n_cells = result["n_cells"]
+    n_abstained = sum(reason_counts.values())
+    n_features_total = result["n_features_matched"] + result["n_features_unmatched"]
+
+    logger.info(
+        "upload input_hash=%s n_cells=%d feature_coverage=%.4f observed_genes_median=%s "
+        "value_scale=%s supported_classes=%s abstention_rate=%.4f abstain_reasons=%s "
+        "model_version=%s gene_map_version=%s",
+        hashlib.sha256(matrix_text.encode("utf-8")).hexdigest()[:16],
+        n_cells,
+        result["n_features_matched"] / n_features_total if n_features_total else 0.0,
+        statistics.median(cell["observed_genes"] for cell in result["cells"]) if result["cells"] else None,
+        result["value_scale"],
+        config.CROSS_MODAL_SUPPORTED_CLASSES,
+        n_abstained / n_cells if n_cells else 0.0,
+        reason_counts,
+        result["model_version"],
+        config.GENE_ID_MAP_PATH.stem,
+    )
 
 
 class ProjectionHandler(BaseHTTPRequestHandler):
@@ -140,6 +173,8 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})
             return
+
+        _log_upload(matrix_text, result)
 
         if warnings.low_cell_count:
             result.setdefault("warnings", []).append(

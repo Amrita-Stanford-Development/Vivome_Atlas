@@ -92,7 +92,7 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 503)
         self.assertIn("reason", payload)
 
-    def test_full_round_trip_with_a_synthetic_bundle_returns_200(self):
+    def _install_synthetic_bundle(self):
         metadata = reference.load_reference_metadata()
         feature_genes = reference.load_feature_space_genes()
         embeddings, centroids = fixtures.synthetic_reference_embeddings(metadata)
@@ -107,6 +107,10 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         )
         app._bundle = bundle
         app._bundle_error = None
+        return feature_genes
+
+    def test_full_round_trip_with_a_synthetic_bundle_returns_200(self):
+        feature_genes = self._install_synthetic_bundle()
 
         # 25 cells: above validation.MIN_CELLS_REFUSE (20) -- the minimum
         # cell count is Track B behavior, exercised on its own in
@@ -117,6 +121,22 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(payload["n_cells"], 25)
         self.assertEqual(len(payload["cells"]), 25)
+
+    def test_a_successful_upload_emits_a_per_upload_log_line(self):
+        feature_genes = self._install_synthetic_bundle()
+        cell_ids = [f"c{i}" for i in range(25)]
+        matrix_text = fixtures.synthetic_matrix_csv(feature_genes[:100], cell_ids)
+
+        with self.assertLogs("vivome.projection_service", level="INFO") as captured:
+            status, _ = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix_text.encode())
+        self.assertEqual(status, 200)
+
+        upload_lines = [line for line in captured.output if "upload input_hash=" in line]
+        self.assertEqual(len(upload_lines), 1)
+        line = upload_lines[0]
+        for expected in ("n_cells=25", "feature_coverage=", "value_scale=", "supported_classes=",
+                         "abstention_rate=", "model_version=", "gene_map_version="):
+            self.assertIn(expected, line)
 
 
 def _load_encoder_only():
