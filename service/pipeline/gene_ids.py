@@ -69,6 +69,13 @@ class ResolvedIdentifiers:
     ambiguous_identifiers: list[str]
 
 
+def _uniprot_base_accession(accession: str) -> str:
+    """UniProt isoform notation (e.g. P12345-2) numbers one spliced variant
+    of the same gene product; gene_id_map_v1.tsv's uniprot_ids column only
+    ever stores the base accession before the hyphen."""
+    return accession.split("-", 1)[0]
+
+
 def _resolve_one(identifier: str, gene_map: GeneIdMap) -> tuple[str | None, str]:
     """A semicolon-separated group (the DIA-NN convention for an
     unresolved protein group) tries every member as a symbol, Ensembl ID,
@@ -88,6 +95,8 @@ def _resolve_one(identifier: str, gene_map: GeneIdMap) -> tuple[str | None, str]
             candidates.add(gene_map.ensembl_to_feature[part])
         elif part in gene_map.uniprot_to_feature:
             candidates.add(gene_map.uniprot_to_feature[part])
+        elif "-" in part and _uniprot_base_accession(part) in gene_map.uniprot_to_feature:
+            candidates.add(gene_map.uniprot_to_feature[_uniprot_base_accession(part)])
 
     if len(candidates) == 1:
         return next(iter(candidates)), "matched"

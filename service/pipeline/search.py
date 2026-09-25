@@ -11,12 +11,16 @@ service/tests/test_search.py.
 from __future__ import annotations
 
 import os
+import sys
 
 # See the matching comment in topk.py: faiss and torch each bundle their own
-# libomp on macOS, so this must be set before `import faiss` regardless of
-# which module gets there first.
-os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
-os.environ.setdefault("OMP_NUM_THREADS", "1")
+# libomp on macOS specifically, so this must be set before `import faiss`
+# regardless of which module gets there first -- and must NOT be set on
+# Linux, where the collision doesn't happen and forcing a single thread
+# would just throttle every search.
+if sys.platform == "darwin":
+    os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+    os.environ.setdefault("OMP_NUM_THREADS", "1")
 
 import numpy as np
 import faiss

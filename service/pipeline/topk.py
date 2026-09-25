@@ -15,16 +15,22 @@ are untouched, only the internal search algorithm is new.
 from __future__ import annotations
 
 import os
+import sys
 
 # faiss-cpu and torch each bundle their own copy of libomp on macOS; loading
 # both in one process aborts at faiss's OpenMP init ("Error #15: ... libomp
 # already initialized", then a pthread_mutex_init crash even once that's
 # suppressed) unless faiss is told up front to tolerate the duplicate and
-# stick to a single thread. Set before `import faiss` so it applies no
-# matter which module imports faiss (or torch) first; `setdefault` leaves an
-# explicit external override alone.
-os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
-os.environ.setdefault("OMP_NUM_THREADS", "1")
+# stick to a single thread. This is a macOS packaging collision specifically
+# -- Linux wheels for faiss-cpu and torch don't both bundle their own libomp
+# the same way, so a Linux deployment must NOT set these: forcing FAISS to a
+# single thread there would silently throttle every search for no reason.
+# Set before `import faiss` so it applies no matter which module imports
+# faiss (or torch) first; `setdefault` leaves an explicit external override
+# alone.
+if sys.platform == "darwin":
+    os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+    os.environ.setdefault("OMP_NUM_THREADS", "1")
 
 import numpy as np
 import faiss

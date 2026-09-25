@@ -27,6 +27,11 @@ class ResolveIdentifiersTests(unittest.TestCase):
         r = gene_ids.resolve_identifiers(["P04637"], _tiny_map())
         self.assertEqual(r.resolved, ["TP53"])
 
+    def test_uniprot_isoform_accession_resolves_to_its_base_accession(self):
+        r = gene_ids.resolve_identifiers(["P04637-2"], _tiny_map())
+        self.assertEqual(r.resolved, ["TP53"])
+        self.assertEqual(r.matched, 1)
+
     def test_unmapped_identifier_is_reported_by_name(self):
         r = gene_ids.resolve_identifiers(["NOT_A_REAL_GENE"], _tiny_map())
         self.assertEqual(r.resolved, [None])
@@ -72,6 +77,10 @@ class LoadGeneIdMapTests(unittest.TestCase):
         # A1BG: HGNC:5, ENSG00000121410, UniProt P04217 -- stable, well-known.
         r = gene_ids.resolve_identifiers(["A1BG", "ENSG00000121410", "P04217"], self.gene_map)
         self.assertEqual(r.resolved, ["A1BG", "A1BG", "A1BG"])
+
+    def test_a_known_genes_uniprot_isoform_accession_also_resolves(self):
+        r = gene_ids.resolve_identifiers(["P04217-2"], self.gene_map)
+        self.assertEqual(r.resolved, ["A1BG"])
 
     def test_ambiguous_feature_gene_has_no_ensembl_or_uniprot_entry(self):
         # A feature-space gene whose own HGNC resolution was itself
