@@ -1,0 +1,20 @@
+{
+  "created": "2026-09-22 17:16:02",
+  "source_export": "/content/drive/My Drive/Vivome - Live Atlas/Data/Results/ReferenceProjection_v3/export",
+  "gene_list_hash": "5751dd1e569f",
+  "n_genes": 9002,
+  "n_classes": 22,
+  "latent_dim": 128,
+  "supported_classes": [
+    "macrophage",
+    "monocyte"
+  ],
+  "rna_cells": 85233,
+  "prot_cells": 1490,
+  "scope2_coverage_pct": 32.292823791503906,
+  "pca3_explained_variance_pct": 69.72093200683594,
+  "abstain_threshold": 0.9779149889945984,
+  "abstain_rate_pct": 80.20134228187919,
+  "modality_probe_balanced_accuracy_pct": 98.99328859060402,
+  "section_F_run": true
+}

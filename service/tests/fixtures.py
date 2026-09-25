@@ -1,10 +1,11 @@
-"""Shared synthetic fixtures. Where a real artifact exists (the dev
-checkpoint, feature_space_genes.csv, reference_metadata.csv) tests use it
-directly; reference_embedding.npy/centroids.npy/properties do not exist
-anywhere yet (see service/model/README.md), so fixtures synthesize them at
-the real reference's own scale (85,233 cells, 22 classes) — realistic
-enough to exercise the chunked top-k/max-similarity code paths honestly,
-without claiming to be real biology.
+"""Shared synthetic fixtures. Where a real artifact exists and is small
+(feature_space_genes.csv, reference_metadata.csv) tests use it directly.
+reference_embedding.npy/centroids.npy/properties are real now too, but
+tests still synthesize them at the real reference's own scale (85,233
+cells, 22 classes) rather than loading the real ~130MB of arrays — kept
+deterministic, fast, and independent of which checkpoint happens to be
+staged, while still realistic enough to exercise the chunked
+top-k/max-similarity code paths honestly.
 """
 from __future__ import annotations
 
@@ -43,10 +44,11 @@ def synthetic_reference_embeddings(metadata: "reference.ReferenceMetadata", dim:
 
 def synthetic_reference_properties(n_ref: int, seed: int = 0):
     """(names, values): includes every SHIPPED_PROPERTIES name plus one
-    unvalidated extra ("interferon_response"), so transfer.py's filtering
-    is exercised, not just its arithmetic."""
+    unvalidated extra ("interferon" — one of the two real candidates that
+    failed the v3 validation run), so transfer.py's filtering is exercised,
+    not just its arithmetic."""
     rng = np.random.default_rng(seed)
-    names = list(config.SHIPPED_PROPERTIES) + ["interferon_response"]
+    names = list(config.SHIPPED_PROPERTIES) + ["interferon"]
     values = rng.normal(size=(n_ref, len(names))).astype(np.float32)
     return names, values
 

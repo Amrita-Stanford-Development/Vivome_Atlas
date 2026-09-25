@@ -1,0 +1,1491 @@
+call,level,confidence
+abstain,out of distribution,0.498469132946374
+abstain,out of distribution,0.6832473220299963
+monocyte,class,0.9318900592984534
+abstain,out of distribution,0.9749146466682442
+abstain,out of distribution,0.999940323553967
+abstain,out of distribution,0.7762029851126748
+abstain,out of distribution,0.8053461927010723
+abstain,out of distribution,0.4896426074578137
+abstain,out of distribution,0.8882918320854682
+abstain,out of distribution,0.8732477049202769
+abstain,out of distribution,0.819870713673402
+abstain,out of distribution,0.6757765996027509
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6510374808105999
+abstain,out of distribution,0.9648593313720841
+abstain,out of distribution,0.9829103414816979
+abstain,out of distribution,0.701165180038641
+abstain,out of distribution,0.5353690855094376
+abstain,out of distribution,0.781265842178231
+monocyte,class,0.63682083752697
+monocyte,class,0.8773427258355342
+abstain,out of distribution,0.7243355912138051
+abstain,out of distribution,0.0
+monocyte,class,0.8795144131015962
+monocyte,class,0.8923773860886286
+abstain,out of distribution,0.9479512386408927
+monocyte,class,0.9066297643407047
+myeloid dendritic cell,class,0.5763994314967922
+monocyte,class,0.8458112254879504
+abstain,out of distribution,0.9566578651456762
+abstain,out of distribution,0.8346964475447342
+abstain,out of distribution,0.9351219030444163
+abstain,out of distribution,0.474560223773115
+monocyte,class,0.841216882955653
+monocyte,class,0.834533650548026
+monocyte,class,0.8622898495071308
+monocyte,class,0.8643293755839252
+abstain,out of distribution,0.6991360053854474
+abstain,out of distribution,0.7303509070350925
+abstain,out of distribution,0.9716263792271614
+monocyte,class,0.9295273044442256
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9913393801503932
+abstain,out of distribution,0.7152797411716857
+abstain,out of distribution,0.5962098395095582
+monocyte,class,0.9407041093323331
+abstain,out of distribution,0.7769484834151177
+abstain,out of distribution,0.8786323991630988
+abstain,out of distribution,0.5475494117907308
+monocyte,class,0.8000997122278306
+monocyte,class,0.8915513541494904
+abstain,out of distribution,0.5805345442524461
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9274531024138606
+monocyte,class,0.9434897451887058
+abstain,out of distribution,0.5090707897882996
+abstain,out of distribution,0.6854988109127144
+abstain,out of distribution,0.6171680196838915
+monocyte,class,0.8842693396072591
+monocyte,class,0.8039651654031358
+abstain,out of distribution,0.6585734935459451
+abstain,out of distribution,0.91500136803516
+abstain,out of distribution,0.6133729780729146
+abstain,out of distribution,0.6078517672581267
+abstain,out of distribution,0.0
+monocyte,class,0.7481300151755755
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9010284915556519
+abstain,out of distribution,0.9495706823775375
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7407437793829373
+abstain,out of distribution,0.7784403083051061
+monocyte,class,0.7397774205561658
+abstain,out of distribution,0.521104104912124
+abstain,out of distribution,0.5257856352759095
+abstain,out of distribution,0.9966109355223536
+abstain,out of distribution,0.6704383619940831
+abstain,out of distribution,0.5697612211273511
+monocyte,class,0.8637131852852373
+abstain,out of distribution,0.5248356026914183
+abstain,out of distribution,0.6177667676304296
+monocyte,class,0.6818992695864032
+abstain,out of distribution,0.6948273548790699
+abstain,out of distribution,0.9818767237401499
+abstain,out of distribution,0.0
+abstain,out of distribution,0.92168865137241
+abstain,out of distribution,0.8093055591965184
+monocyte,class,0.7510643945515344
+abstain,out of distribution,0.9013176044398016
+abstain,out of distribution,0.8849212626677271
+abstain,out of distribution,0.4883607584508299
+abstain,out of distribution,0.5561308765502438
+abstain,out of distribution,0.7035356167542031
+abstain,out of distribution,0.7616510188771178
+monocyte,class,0.7862803678108048
+abstain,out of distribution,0.9580500065825311
+abstain,out of distribution,0.7686005305717265
+abstain,out of distribution,0.8620322151926928
+abstain,out of distribution,0.9927371969652493
+abstain,out of distribution,0.6117957299423148
+abstain,out of distribution,0.7322380783139841
+monocyte,class,0.8556480669517121
+abstain,out of distribution,0.8071564591118592
+abstain,out of distribution,0.7997618968427742
+monocyte,class,0.8634126695389053
+abstain,out of distribution,0.9354076259841086
+monocyte,class,0.76598004444431
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9993389866781653
+monocyte,class,0.707768017611336
+abstain,out of distribution,0.99073433049681
+abstain,out of distribution,0.5408873486035132
+abstain,out of distribution,0.5748702951146575
+abstain,out of distribution,0.9183496492749356
+natural killer cell,class,0.7081194534101588
+abstain,out of distribution,0.7959758342505969
+abstain,out of distribution,0.8503645322681562
+abstain,out of distribution,0.6536735158576181
+abstain,out of distribution,0.8904196860943752
+abstain,out of distribution,0.514975504804325
+monocyte,class,0.8255691218127461
+abstain,out of distribution,0.5164689690262787
+abstain,out of distribution,0.7671236530447357
+abstain,out of distribution,0.6917369742934844
+abstain,out of distribution,0.82906445392793
+monocyte,class,0.701886001669506
+monocyte,class,0.8897319561195979
+monocyte,class,0.9031850177037531
+abstain,out of distribution,0.7292889901494508
+abstain,out of distribution,0.8300454848445081
+abstain,out of distribution,0.5374904323607371
+monocyte,class,0.9011117624329162
+abstain,out of distribution,0.6183447974156411
+abstain,out of distribution,0.0
+monocyte,class,0.9227821206741117
+abstain,out of distribution,0.9111172551564377
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9573174214343204
+abstain,out of distribution,0.9427731415751367
+abstain,out of distribution,0.8559118477588297
+abstain,out of distribution,0.5132789705403681
+abstain,out of distribution,0.9690313739276348
+abstain,out of distribution,0.5892765463059769
+abstain,out of distribution,0.7798213492853194
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5406130544971078
+abstain,out of distribution,0.5083323696744633
+abstain,out of distribution,0.6275372852032307
+monocyte,class,0.8008791684016083
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5325345152502184
+abstain,out of distribution,0.8863355094369761
+abstain,out of distribution,0.8438722593394652
+abstain,out of distribution,0.978419885924341
+abstain,out of distribution,0.8955330342787344
+abstain,out of distribution,0.5515187503714574
+abstain,out of distribution,0.4918200742976101
+monocyte,class,0.5335911449894337
+monocyte,class,0.87863240015624
+abstain,out of distribution,0.9143211419529432
+monocyte,class,0.6847170525572187
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7398046748443636
+monocyte,class,0.6551071493697721
+abstain,out of distribution,0.5978959624412926
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7402726646794833
+monocyte,class,0.8212572350782804
+abstain,out of distribution,0.8974425641304435
+monocyte,class,0.8141519749938991
+monocyte,class,0.8656765317829189
+abstain,out of distribution,0.6967123893193019
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7674500753856128
+abstain,out of distribution,0.9999792316918416
+abstain,out of distribution,0.909053273288764
+abstain,out of distribution,0.5245355967829558
+abstain,out of distribution,0.9411407328659825
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5869994290813961
+monocyte,class,0.6737536953221792
+abstain,out of distribution,0.7791420925030252
+abstain,out of distribution,0.8473704285626714
+monocyte,class,0.8956458710146317
+abstain,out of distribution,0.9978677281957381
+abstain,out of distribution,0.5046900780725466
+abstain,out of distribution,0.8260647235417528
+abstain,out of distribution,0.5022491065295696
+abstain,out of distribution,0.8773205738266996
+abstain,out of distribution,0.9211426576633949
+monocyte,class,0.9209764584146304
+monocyte,class,0.8660427207688873
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5614048092409841
+abstain,out of distribution,0.9777920044358782
+abstain,out of distribution,0.5974577634707223
+abstain,out of distribution,0.9623591204392319
+abstain,out of distribution,0.9977824214770682
+monocyte,class,0.8267611195087075
+abstain,out of distribution,0.9812981071312094
+abstain,out of distribution,0.9484099725935742
+abstain,out of distribution,0.9513428050765665
+abstain,out of distribution,0.48572605991224643
+abstain,out of distribution,0.9946442080783112
+abstain,out of distribution,0.7026587846933118
+monocyte,class,0.689652248054649
+abstain,out of distribution,0.7738592922824398
+abstain,out of distribution,0.9746986888580658
+abstain,out of distribution,0.5313129651798835
+abstain,out of distribution,0.638811840252607
+monocyte,class,0.8847686512007782
+monocyte,class,0.8624253037745434
+abstain,out of distribution,0.5824730271865513
+abstain,out of distribution,0.5028226124623303
+abstain,out of distribution,0.5768311894803634
+abstain,out of distribution,0.9956153125014093
+abstain,out of distribution,0.9630945597244067
+abstain,out of distribution,0.7354862989846415
+abstain,out of distribution,0.5690330603406202
+"cd8-positive, alpha-beta t cell",class,0.9944620293376767
+monocyte,class,0.8700771715741253
+abstain,out of distribution,0.600227559874902
+abstain,out of distribution,0.8139825003851509
+abstain,out of distribution,0.9640243995090572
+monocyte,class,0.8286064789493838
+abstain,out of distribution,0.590535593115731
+monocyte,class,0.917866866920812
+abstain,out of distribution,0.7632566761323899
+abstain,out of distribution,0.9371895056300876
+abstain,out of distribution,0.9536248427164475
+abstain,out of distribution,0.6158079920577044
+abstain,out of distribution,0.6954061155379854
+abstain,out of distribution,0.8432780330116577
+monocyte,class,0.8392144443573238
+abstain,out of distribution,0.5956748860594092
+monocyte,class,0.6383284652815573
+abstain,out of distribution,0.8500847768113369
+abstain,out of distribution,0.5740251338554954
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8977445485477984
+abstain,out of distribution,0.9924033737169832
+abstain,out of distribution,0.7051552338478524
+abstain,out of distribution,0.7668553795364392
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9790480586595115
+abstain,out of distribution,0.5099515439299802
+abstain,out of distribution,0.9305953425180726
+abstain,out of distribution,0.6377456693210336
+monocyte,class,0.704735812006531
+monocyte,class,0.8814969423994387
+abstain,out of distribution,0.8706110203475074
+abstain,out of distribution,0.5917064349526877
+abstain,out of distribution,0.5032086681413848
+abstain,out of distribution,0.4982619045910155
+abstain,out of distribution,0.750125754150122
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+monocyte,class,0.7076221512455
+abstain,out of distribution,0.7330255143809126
+abstain,out of distribution,0.8746137757775879
+abstain,out of distribution,0.7633192335442718
+monocyte,class,0.7306118533352113
+abstain,out of distribution,0.9497641516084185
+abstain,out of distribution,0.8196779263752623
+abstain,out of distribution,0.8107223333556574
+abstain,out of distribution,0.7580728746125823
+abstain,out of distribution,0.7955219983561262
+abstain,out of distribution,0.7518987556676215
+monocyte,class,0.7309656465238732
+monocyte,class,0.7442845768521889
+monocyte,class,0.8013224861166933
+abstain,out of distribution,0.6277879059878267
+abstain,out of distribution,0.5015467253649624
+abstain,out of distribution,0.5693806580844907
+abstain,out of distribution,0.6169163625115995
+monocyte,class,0.9003852217795939
+abstain,out of distribution,0.91769481421221
+monocyte,class,0.7285078763145094
+abstain,out of distribution,0.9652405094686775
+abstain,out of distribution,0.7105439837521662
+abstain,out of distribution,0.5292277913425182
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7746044384624556
+abstain,out of distribution,0.7981116258798682
+abstain,out of distribution,0.9752618668312052
+monocyte,class,0.8087725558597472
+abstain,out of distribution,0.6086285173034498
+"cd8-positive, alpha-beta t cell",class,0.9314459419979
+abstain,out of distribution,0.9925088684272617
+abstain,out of distribution,0.5429608887231289
+abstain,out of distribution,0.965328965901323
+abstain,out of distribution,0.0
+monocyte,class,0.7144783175195909
+abstain,out of distribution,0.6282523976117025
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9641890872622683
+monocyte,class,0.738612273346786
+abstain,out of distribution,0.8773003291825433
+abstain,out of distribution,0.6091915639491542
+abstain,out of distribution,0.7401961592500064
+abstain,out of distribution,0.7321341343031659
+abstain,out of distribution,0.8442274058531175
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9956260855431005
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5832194363346968
+monocyte,class,0.8914270474019127
+abstain,out of distribution,0.5319451323424523
+abstain,out of distribution,0.9726699088262275
+abstain,out of distribution,0.5056698455708897
+abstain,out of distribution,0.0
+monocyte,class,0.9072548858987874
+abstain,out of distribution,0.5412272501080776
+abstain,out of distribution,0.9100203650240424
+abstain,out of distribution,0.6410667018580117
+abstain,out of distribution,0.5150937865572643
+abstain,out of distribution,0.9641836019772358
+abstain,out of distribution,0.6030471730142336
+abstain,out of distribution,0.5644715620795306
+abstain,out of distribution,0.8595388512815973
+abstain,out of distribution,0.5030761620527234
+abstain,out of distribution,0.6943206162214305
+abstain,out of distribution,0.7303239351353676
+abstain,out of distribution,0.5472904906211646
+abstain,out of distribution,0.5984763265089863
+abstain,out of distribution,0.9114082625599497
+monocyte,class,0.8851026443553186
+abstain,out of distribution,0.9529351210527435
+abstain,out of distribution,0.53622600538606
+monocyte,class,0.8179411454746204
+abstain,out of distribution,0.7163528572651764
+monocyte,class,0.9325428044289196
+abstain,out of distribution,0.7576397789028284
+abstain,out of distribution,0.8751594474547059
+abstain,out of distribution,0.7502960843873462
+abstain,out of distribution,0.9734457742737168
+abstain,out of distribution,0.6874378193407747
+monocyte,class,0.877835586535376
+abstain,out of distribution,0.8428586934868655
+monocyte,class,0.9029689609405053
+monocyte,class,0.8443357160350371
+abstain,out of distribution,0.5237040680827333
+monocyte,class,0.8509206251238187
+abstain,out of distribution,0.6926061939338425
+abstain,out of distribution,0.7431855873852948
+abstain,out of distribution,0.4875532751104828
+abstain,out of distribution,0.9921373065375443
+abstain,out of distribution,0.7430917265001701
+abstain,out of distribution,0.8511657869656125
+abstain,out of distribution,0.6765493026403191
+abstain,out of distribution,0.7740696808776475
+abstain,out of distribution,0.5655140495535161
+abstain,out of distribution,0.5307830191854643
+abstain,out of distribution,0.751344792910243
+abstain,out of distribution,0.9059103773733007
+monocyte,class,0.9308105792454013
+abstain,out of distribution,0.8266094048577435
+abstain,out of distribution,0.564350336358607
+abstain,out of distribution,0.5537336806221221
+abstain,out of distribution,0.5526522405674795
+abstain,out of distribution,0.9448231830348378
+abstain,out of distribution,0.9306859265917543
+monocyte,class,0.9069699119395522
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7381030905751624
+abstain,out of distribution,0.5543694166373003
+abstain,out of distribution,0.8299694113504766
+abstain,out of distribution,0.9260370801850225
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5439504225927265
+abstain,out of distribution,0.4912620968809765
+monocyte,class,0.7155553522763713
+abstain,out of distribution,0.6919271069578875
+abstain,out of distribution,0.8552349545723851
+abstain,out of distribution,0.7983498754898847
+abstain,out of distribution,0.6256756196355182
+abstain,out of distribution,0.5329390519437309
+monocyte,class,0.7275291635353214
+abstain,out of distribution,0.715456320991338
+abstain,out of distribution,0.5719851638161505
+abstain,out of distribution,0.5292412510819953
+abstain,out of distribution,0.6579203580796079
+abstain,out of distribution,0.7813948172939298
+abstain,out of distribution,0.7083063015815744
+abstain,out of distribution,0.6504276516604397
+abstain,out of distribution,0.522643035500794
+abstain,out of distribution,0.4828427841664525
+abstain,out of distribution,0.6691737376140852
+abstain,out of distribution,0.6072648641811931
+abstain,out of distribution,0.6611428552431321
+abstain,out of distribution,0.895695450312197
+abstain,out of distribution,0.609856904906095
+abstain,out of distribution,0.0
+monocyte,class,0.9157732851603563
+abstain,out of distribution,0.5967471895938229
+abstain,out of distribution,0.7040935181642408
+abstain,out of distribution,0.5132698802104928
+abstain,out of distribution,0.7450004286954881
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5812687050022355
+abstain,out of distribution,0.4939010020617148
+monocyte,class,0.6698244838472865
+abstain,out of distribution,0.9441929489358952
+abstain,out of distribution,0.7295808627519164
+abstain,out of distribution,0.706642379932825
+abstain,out of distribution,0.6609666035999714
+abstain,out of distribution,0.6848129761243524
+abstain,out of distribution,0.6155504840368521
+abstain,out of distribution,0.5758116663410526
+abstain,out of distribution,0.6767108523969956
+abstain,out of distribution,0.5967900548133789
+abstain,out of distribution,0.0
+abstain,out of distribution,0.962876183428121
+monocyte,class,0.8121581267565042
+abstain,out of distribution,0.5501406718314354
+monocyte,class,0.9249152902735872
+abstain,out of distribution,0.9462636395340709
+abstain,out of distribution,0.7421857412731622
+abstain,out of distribution,0.6212537135515066
+monocyte,class,0.7745268880562299
+monocyte,class,0.8318423261878092
+abstain,out of distribution,0.6318513432748198
+monocyte,class,0.9453910165557372
+abstain,out of distribution,0.9729399153387444
+abstain,out of distribution,0.6367843752995789
+abstain,out of distribution,0.8619909350663554
+abstain,out of distribution,0.5869098088493465
+abstain,out of distribution,0.9157177641453677
+abstain,out of distribution,0.9322702966896677
+abstain,out of distribution,0.5354489651800836
+abstain,out of distribution,0.5915325912037265
+abstain,out of distribution,0.7097122240754081
+abstain,out of distribution,0.5010098397688647
+monocyte,class,0.845628608903709
+abstain,out of distribution,0.6321339367458517
+abstain,out of distribution,0.6460657679529631
+"cd8-positive, alpha-beta t cell",class,0.5420361048708475
+abstain,out of distribution,0.9402427403068064
+abstain,out of distribution,0.7142967627073559
+abstain,out of distribution,0.6246434101223861
+abstain,out of distribution,0.6625630450245968
+monocyte,class,0.7638932887033619
+abstain,out of distribution,0.5464408180941548
+abstain,out of distribution,0.751077711277671
+monocyte,class,0.7731670921883811
+abstain,out of distribution,0.48962642442666354
+monocyte,class,0.858017302158569
+abstain,out of distribution,0.6526877452283814
+abstain,out of distribution,0.6447291615578052
+abstain,out of distribution,0.9290424245011603
+abstain,out of distribution,0.8837796215643299
+abstain,out of distribution,0.538957223532249
+abstain,out of distribution,0.5625711729533418
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8430059640093224
+abstain,out of distribution,0.9797617836109684
+monocyte,class,0.9058129538018792
+abstain,out of distribution,0.5310279957889246
+monocyte,class,0.7510834856882995
+abstain,out of distribution,0.0
+abstain,out of distribution,0.980112142969303
+abstain,out of distribution,0.5564985099520317
+abstain,out of distribution,0.7447499862902682
+abstain,out of distribution,0.5647838216966501
+abstain,out of distribution,0.9783834891232679
+abstain,out of distribution,0.6290302861116818
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5095862507125659
+abstain,out of distribution,0.522064262579174
+abstain,out of distribution,0.667664338611479
+monocyte,class,0.7875142947352726
+monocyte,class,0.7232819871388434
+monocyte,class,0.6721186126520216
+abstain,out of distribution,0.9478257962060977
+abstain,out of distribution,0.8588084591845427
+monocyte,class,0.8865740675062838
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5498459298172623
+abstain,out of distribution,0.9857438442786282
+abstain,out of distribution,0.48162128428857004
+abstain,out of distribution,0.6835850043721767
+abstain,out of distribution,0.581171019260809
+monocyte,class,0.7793609421623833
+abstain,out of distribution,0.9602313723862137
+abstain,out of distribution,0.9698779133191332
+monocyte,class,0.6826173283093285
+abstain,out of distribution,0.7666251822916383
+abstain,out of distribution,0.6692966447914301
+myeloid dendritic cell,class,0.562252661991066
+abstain,out of distribution,0.7477290117829805
+abstain,out of distribution,0.7204087290421035
+abstain,out of distribution,0.8214545646167423
+abstain,out of distribution,0.5152603915209399
+abstain,out of distribution,0.7804456550550486
+abstain,out of distribution,0.8990697935488907
+monocyte,class,0.8643601156164618
+abstain,out of distribution,0.5903167384030168
+abstain,out of distribution,0.5957654131720166
+monocyte,class,0.5502645233060406
+abstain,out of distribution,0.5550658593499062
+abstain,out of distribution,0.9619720391340665
+abstain,out of distribution,0.6769016641644606
+abstain,out of distribution,0.7202375149053895
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9969473380746193
+abstain,out of distribution,0.0
+abstain,out of distribution,0.49767256134272986
+monocyte,class,0.8094304239866628
+monocyte,class,0.8310758420004768
+abstain,out of distribution,0.7457459227184703
+abstain,out of distribution,0.9646608045057461
+abstain,out of distribution,0.548537362107253
+abstain,out of distribution,0.6759235594401234
+abstain,out of distribution,0.9893182254151384
+abstain,out of distribution,0.5508136281165121
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5897222597141983
+abstain,out of distribution,0.4757009117029656
+abstain,out of distribution,0.9391822242836284
+abstain,out of distribution,0.5695897938199095
+abstain,out of distribution,0.9663248544343386
+abstain,out of distribution,0.6335932006613113
+abstain,out of distribution,0.6280761903794123
+abstain,out of distribution,0.653069897761111
+abstain,out of distribution,0.6678064493797339
+natural killer cell,class,0.7693337365933465
+abstain,out of distribution,0.8689656231616815
+abstain,out of distribution,0.5667525732475396
+abstain,out of distribution,0.7119997162972383
+abstain,out of distribution,0.5439480856776446
+monocyte,class,0.8462134234906202
+monocyte,class,0.8710683497457432
+abstain,out of distribution,0.5355069755943318
+monocyte,class,0.7151334166971925
+abstain,out of distribution,0.6354553347328641
+abstain,out of distribution,0.5871390242191927
+monocyte,class,0.7878214442771106
+monocyte,class,0.8120232834839577
+abstain,out of distribution,0.9784046726829888
+abstain,out of distribution,0.5906133407022565
+abstain,out of distribution,0.0
+monocyte,class,0.7639660007804588
+abstain,out of distribution,0.9182044576908838
+abstain,out of distribution,0.5050869552821924
+abstain,out of distribution,0.7929803024213272
+abstain,out of distribution,0.677090981350552
+monocyte,class,0.8967832398836284
+abstain,out of distribution,0.9919966973390693
+abstain,out of distribution,0.9013823278674813
+abstain,out of distribution,0.6225897979877293
+abstain,out of distribution,0.717143283845782
+abstain,out of distribution,0.6003955662670648
+abstain,out of distribution,0.5713197609481551
+abstain,out of distribution,0.4775720483437778
+abstain,out of distribution,0.5213361202853181
+abstain,out of distribution,0.8627101408864885
+"cd8-positive, alpha-beta t cell",class,0.9980550710070527
+abstain,out of distribution,0.8319502211310037
+abstain,out of distribution,0.8907938999366248
+abstain,out of distribution,0.9388554274705196
+monocyte,class,0.7618314596619215
+abstain,out of distribution,0.5875756888690176
+abstain,out of distribution,0.6586277582256241
+abstain,out of distribution,0.9726842747233776
+abstain,out of distribution,0.6153098915511311
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6632869472629457
+abstain,out of distribution,0.6891913401076497
+abstain,out of distribution,0.8538815195241781
+monocyte,class,0.7232012223357223
+monocyte,class,0.8690849744875041
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8830840984581393
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5311761515932597
+abstain,out of distribution,0.7989006840747075
+abstain,out of distribution,0.952330562916338
+abstain,out of distribution,0.5620517698156783
+abstain,out of distribution,0.6928866539454991
+abstain,out of distribution,0.8566616166318606
+abstain,out of distribution,0.8046689526165905
+monocyte,class,0.9031097385537751
+monocyte,class,0.65089235653248
+monocyte,class,0.8433594505067659
+abstain,out of distribution,0.5901224762612439
+monocyte,class,0.8206616676249273
+monocyte,class,0.712435794917781
+abstain,out of distribution,0.6986368951653001
+abstain,out of distribution,0.6381914888376973
+abstain,out of distribution,0.7094509371787598
+abstain,out of distribution,0.6315022695508826
+abstain,out of distribution,0.4876083369531975
+abstain,out of distribution,0.608382270551902
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5874470040458541
+abstain,out of distribution,0.5049954985612047
+abstain,out of distribution,0.5756680655929121
+abstain,out of distribution,0.5438264770693721
+abstain,out of distribution,0.7174030345701181
+abstain,out of distribution,0.9470314257748421
+abstain,out of distribution,0.491491454625859
+abstain,out of distribution,0.7870065595177284
+abstain,out of distribution,0.5612573922085314
+abstain,out of distribution,0.4853635606877816
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9444377939447989
+abstain,out of distribution,0.9835184214563546
+abstain,out of distribution,0.6112678259098697
+abstain,out of distribution,0.5073441957566746
+monocyte,class,0.7881836087741224
+abstain,out of distribution,0.6287210325539094
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6006554752135549
+monocyte,class,0.8631260313827736
+monocyte,class,0.8427588577469464
+abstain,out of distribution,0.8056013410443287
+abstain,out of distribution,0.5351591509944175
+abstain,out of distribution,0.8255518740638957
+abstain,out of distribution,0.7593947974814826
+abstain,out of distribution,0.9213163218532087
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8250108947526023
+abstain,out of distribution,0.0
+monocyte,class,0.7219702347672062
+myeloid,lineage,0.4948780481577968
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9272058284709844
+abstain,out of distribution,0.7055964700109498
+abstain,out of distribution,0.7096201197659953
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9908741274468073
+abstain,out of distribution,0.6065361608378028
+monocyte,class,0.5296424337162909
+abstain,out of distribution,0.822568448293313
+monocyte,class,0.8319776201562956
+monocyte,class,0.7633993160641155
+abstain,out of distribution,0.9723734226283459
+abstain,out of distribution,0.5383696479136002
+abstain,out of distribution,0.6655924765402704
+abstain,out of distribution,0.5062557430484262
+abstain,out of distribution,0.9382401449866806
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9946378951234195
+abstain,out of distribution,0.6183413155770165
+abstain,out of distribution,0.9981818483672781
+monocyte,class,0.8444796022173962
+abstain,out of distribution,0.9871975468099462
+abstain,out of distribution,0.8316770428368943
+abstain,out of distribution,0.9185942893656714
+abstain,out of distribution,0.5376735501698815
+abstain,out of distribution,0.9134249970565667
+abstain,out of distribution,0.7793985946388766
+abstain,out of distribution,0.6901636056053003
+abstain,out of distribution,0.5342811912607394
+abstain,out of distribution,0.6814827885190461
+abstain,out of distribution,0.741876657271835
+abstain,out of distribution,0.5588470600156653
+abstain,out of distribution,0.5947488793886624
+abstain,out of distribution,0.676104118552822
+monocyte,class,0.6118868284458767
+abstain,out of distribution,0.580347330046329
+monocyte,class,0.815976905979101
+abstain,out of distribution,0.8716074596683141
+monocyte,class,0.8248308272221493
+monocyte,class,0.6847337439200407
+monocyte,class,0.8062324482986608
+abstain,out of distribution,0.9986706096210591
+abstain,out of distribution,0.9997681230598703
+"cd8-positive, alpha-beta t cell",class,0.6956706714183067
+abstain,out of distribution,0.6957666329797325
+abstain,out of distribution,0.5326589251077091
+abstain,out of distribution,0.6108669212172431
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8024966496523629
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5793627417812128
+abstain,out of distribution,0.6738067056162451
+abstain,out of distribution,0.9850840308140375
+abstain,out of distribution,0.6345780374198711
+abstain,out of distribution,0.0
+monocyte,class,0.7897315027436559
+monocyte,class,0.7655338223544662
+monocyte,class,0.7347753443314763
+abstain,out of distribution,0.0
+monocyte,class,0.6981222052338467
+abstain,out of distribution,0.5434070947836133
+abstain,out of distribution,0.48885344973254047
+abstain,out of distribution,0.7366452399327139
+monocyte,class,0.8192099369677261
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7490784060977744
+abstain,out of distribution,0.4902296395662724
+abstain,out of distribution,0.5284859626358508
+abstain,out of distribution,0.8467440496632491
+abstain,out of distribution,0.5671811091030368
+abstain,out of distribution,0.574195969397453
+abstain,out of distribution,0.6270073673863903
+abstain,out of distribution,0.9193887786496547
+abstain,out of distribution,0.7090129684632265
+abstain,out of distribution,0.6078143002084074
+monocyte,class,0.564882060875303
+monocyte,class,0.5826323413314319
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9998331653744482
+monocyte,class,0.8339045167474052
+abstain,out of distribution,0.5336966918377088
+abstain,out of distribution,0.9757687435419519
+abstain,out of distribution,0.9120896861703973
+monocyte,class,0.7350889682155594
+abstain,out of distribution,0.9067716236621854
+abstain,out of distribution,0.8538545529080812
+abstain,out of distribution,0.5595936893115148
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7733556173863968
+abstain,out of distribution,0.9322909678950984
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9975914708294287
+abstain,out of distribution,0.9593084274903863
+monocyte,class,0.7432463395334071
+monocyte,class,0.6606449232943739
+abstain,out of distribution,0.5351115887377218
+monocyte,class,0.7886256418121436
+monocyte,class,0.7723971463516603
+monocyte,class,0.7694300816238882
+abstain,out of distribution,0.7600194597676224
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7400178463891263
+monocyte,class,0.8764137757236334
+abstain,out of distribution,0.9499879826363434
+monocyte,class,0.7420014358255961
+abstain,out of distribution,0.6147802963679094
+abstain,out of distribution,0.9378068233267155
+abstain,out of distribution,0.5722179936114452
+abstain,out of distribution,0.0
+monocyte,class,0.6397480943902047
+abstain,out of distribution,0.6139123313996101
+abstain,out of distribution,0.5112103895075082
+abstain,out of distribution,0.8546548170790873
+"cd8-positive, alpha-beta t cell",class,0.9781884536278631
+abstain,out of distribution,0.0
+monocyte,class,0.8092680073183738
+abstain,out of distribution,0.570866104753062
+monocyte,class,0.6910791362277491
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6187577365761412
+abstain,out of distribution,0.644795370664756
+abstain,out of distribution,0.6779759600750025
+abstain,out of distribution,0.9568896242658493
+abstain,out of distribution,0.9837337855008916
+abstain,out of distribution,0.5050621335081399
+abstain,out of distribution,0.9609866366596943
+abstain,out of distribution,0.6755749746142372
+abstain,out of distribution,0.878949388239316
+monocyte,class,0.8329542617954221
+abstain,out of distribution,0.6015668331327942
+abstain,out of distribution,0.49893093754876205
+abstain,out of distribution,0.9933572451059269
+abstain,out of distribution,0.6096893805755669
+monocyte,class,0.6437584890624216
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5586724363530166
+abstain,out of distribution,0.9858133823465022
+abstain,out of distribution,0.9764095989822629
+abstain,out of distribution,0.8359185752721049
+abstain,out of distribution,0.5974299894278374
+monocyte,class,0.754000718116693
+abstain,out of distribution,0.8012256418346897
+abstain,out of distribution,0.7710397498760359
+abstain,out of distribution,0.8120407466328761
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6404654679941928
+abstain,out of distribution,0.8964839003693953
+abstain,out of distribution,0.5782212719139208
+abstain,out of distribution,0.4829427506340019
+abstain,out of distribution,0.9959161839985942
+abstain,out of distribution,0.9565499380414643
+abstain,out of distribution,0.5146713134953075
+abstain,out of distribution,0.9214951388514591
+abstain,out of distribution,0.709788617549954
+abstain,out of distribution,0.7270537545190222
+abstain,out of distribution,0.5510370825771204
+abstain,out of distribution,0.8130876223699823
+abstain,out of distribution,0.9572059933851583
+monocyte,class,0.8752993975565778
+abstain,out of distribution,0.624507733575447
+abstain,out of distribution,0.8966597806702478
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9900891344102061
+abstain,out of distribution,0.5408412390610319
+abstain,out of distribution,0.9403461852420607
+abstain,out of distribution,0.9698029818430575
+abstain,out of distribution,0.546518550176508
+abstain,out of distribution,0.5406715385350659
+abstain,out of distribution,0.5706944485439478
+abstain,out of distribution,0.48158875243804394
+abstain,out of distribution,0.6528023935896435
+monocyte,class,0.8739039402844185
+abstain,out of distribution,0.8943755903877846
+abstain,out of distribution,0.8947594393117227
+abstain,out of distribution,0.9821054470266543
+abstain,out of distribution,0.5136856165025243
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+monocyte,class,0.6508467133921927
+abstain,out of distribution,0.6697037167749144
+monocyte,class,0.6826650763001062
+abstain,out of distribution,0.9381698347832493
+monocyte,class,0.8689785416939076
+abstain,out of distribution,0.8366039749074452
+abstain,out of distribution,0.8838460205848783
+abstain,out of distribution,0.513492708520505
+abstain,out of distribution,0.0
+abstain,out of distribution,0.647425447992729
+abstain,out of distribution,0.732476242778056
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+monocyte,class,0.8160388852146911
+abstain,out of distribution,0.5350528330227253
+monocyte,class,0.7573086267518266
+abstain,out of distribution,0.6197494327537899
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9212584471072633
+abstain,out of distribution,0.6161011016753472
+abstain,out of distribution,0.5580863979256147
+monocyte,class,0.7098903755319402
+abstain,out of distribution,0.5580977248522128
+abstain,out of distribution,0.9759186024564028
+abstain,out of distribution,0.6877895309823504
+abstain,out of distribution,0.6853394647812524
+abstain,out of distribution,0.7715630841578459
+monocyte,class,0.803658914779627
+abstain,out of distribution,0.5998151697610672
+abstain,out of distribution,0.5518926783206323
+abstain,out of distribution,0.5739129276360935
+abstain,out of distribution,0.819679875203029
+monocyte,class,0.766850071635367
+abstain,out of distribution,0.0
+monocyte,class,0.8042146954757412
+abstain,out of distribution,0.5602331213914566
+abstain,out of distribution,0.8466284914442754
+abstain,out of distribution,0.9882579771666947
+abstain,out of distribution,0.0
+monocyte,class,0.8803597742730958
+abstain,out of distribution,0.6376120695544465
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7325136198670972
+abstain,out of distribution,0.747320863124722
+abstain,out of distribution,0.5965588932971418
+abstain,out of distribution,0.9613233469439555
+abstain,out of distribution,0.705963298618495
+abstain,out of distribution,0.7572697446855555
+monocyte,class,0.8978704430535409
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9704289068814054
+abstain,out of distribution,0.834659232789609
+abstain,out of distribution,0.6554423534882012
+abstain,out of distribution,0.7309606693932809
+abstain,out of distribution,0.4737792081369921
+monocyte,class,0.7556173601942333
+monocyte,class,0.8540038473808885
+abstain,out of distribution,0.6857540913409215
+abstain,out of distribution,0.0
+monocyte,class,0.7305885800333896
+abstain,out of distribution,0.6393909352218897
+abstain,out of distribution,0.5601553818425171
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5652059656288728
+abstain,out of distribution,0.6508456804400428
+abstain,out of distribution,0.6450904222600816
+abstain,out of distribution,0.6360415560157813
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5852719270159614
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8815449104054263
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5739800584454062
+abstain,out of distribution,0.7235936257892006
+abstain,out of distribution,0.5168848473809242
+abstain,out of distribution,0.7668297742822464
+monocyte,class,0.7449949699061311
+abstain,out of distribution,0.5507300553220441
+abstain,out of distribution,0.6224820982386223
+abstain,out of distribution,0.5364877865917147
+abstain,out of distribution,0.6949242024203643
+abstain,out of distribution,0.49062065131215765
+abstain,out of distribution,0.5959118408722229
+abstain,out of distribution,0.6014067946644434
+monocyte,class,0.7534744259611701
+abstain,out of distribution,0.6336827359179632
+abstain,out of distribution,0.6273904547233358
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9547624050381007
+abstain,out of distribution,0.578662111162716
+abstain,out of distribution,0.5726186118535107
+abstain,out of distribution,0.9924670813648149
+abstain,out of distribution,0.8363347610059422
+abstain,out of distribution,0.750055310540174
+abstain,out of distribution,0.652121292461549
+abstain,out of distribution,0.6451671118748283
+abstain,out of distribution,0.5303406494579019
+abstain,out of distribution,0.8327388557661618
+abstain,out of distribution,0.9925667223415247
+abstain,out of distribution,0.5852290624692427
+abstain,out of distribution,0.9986044812321481
+abstain,out of distribution,0.819310448432708
+monocyte,class,0.7688667356792455
+abstain,out of distribution,0.6486558801311585
+abstain,out of distribution,0.8192713614741437
+abstain,out of distribution,0.5302449136006403
+abstain,out of distribution,0.701107778072734
+abstain,out of distribution,0.7373351854382658
+abstain,out of distribution,0.9956575675964501
+abstain,out of distribution,0.5602130520010871
+abstain,out of distribution,0.9941748664355569
+abstain,out of distribution,0.6988609008063039
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6502219935936251
+monocyte,class,0.8286321000532374
+abstain,out of distribution,0.6822357359295355
+abstain,out of distribution,0.7784953725607332
+monocyte,class,0.7946269154655924
+abstain,out of distribution,0.5524139607161711
+abstain,out of distribution,0.6270803297267621
+abstain,out of distribution,0.49821139155052996
+abstain,out of distribution,0.5895286041046193
+abstain,out of distribution,0.9021732555831724
+abstain,out of distribution,0.964525503257433
+monocyte,class,0.8516739946832826
+abstain,out of distribution,0.8888417523208666
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6582780189684692
+abstain,out of distribution,0.6560632966068443
+abstain,out of distribution,0.6473021865220413
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7268679922222392
+abstain,out of distribution,0.5243882396835572
+abstain,out of distribution,0.5928176159389162
+abstain,out of distribution,0.7756463134456564
+abstain,out of distribution,0.8765937162685492
+monocyte,class,0.7822671910377035
+abstain,out of distribution,0.9325833133288047
+abstain,out of distribution,0.7203565950391401
+abstain,out of distribution,0.9496290830777404
+abstain,out of distribution,0.6827755172052951
+abstain,out of distribution,0.7501071313713358
+abstain,out of distribution,0.6938441945369092
+abstain,out of distribution,0.5304481779305379
+abstain,out of distribution,0.4894984370846028
+abstain,out of distribution,0.9723582174418836
+abstain,out of distribution,0.5597771186212779
+abstain,out of distribution,0.5816897419443599
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5031399873800776
+abstain,out of distribution,0.5224890973493421
+abstain,out of distribution,0.5178378328957871
+abstain,out of distribution,0.622136495250342
+abstain,out of distribution,0.9910807099435578
+abstain,out of distribution,0.7355542208348197
+abstain,out of distribution,0.5575761798432307
+abstain,out of distribution,0.5421615265843658
+abstain,out of distribution,0.8141743004000256
+abstain,out of distribution,0.9763380369622573
+abstain,out of distribution,0.6336887101009739
+monocyte,class,0.8737326218195693
+abstain,out of distribution,0.6263223850362304
+abstain,out of distribution,0.6565346113856495
+abstain,out of distribution,0.502271241717291
+monocyte,class,0.7352906232954554
+abstain,out of distribution,0.9033927585567131
+monocyte,class,0.694551064533315
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9558139521400444
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6792129134635001
+abstain,out of distribution,0.5335728189419555
+abstain,out of distribution,0.7533031200739388
+monocyte,class,0.6620250237384223
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7105226845397239
+abstain,out of distribution,0.977964653448535
+monocyte,class,0.7572165973323047
+abstain,out of distribution,0.832528881143159
+abstain,out of distribution,0.9807039251765499
+abstain,out of distribution,0.8455189211188169
+monocyte,class,0.7262267251371939
+abstain,out of distribution,0.5660950988240961
+abstain,out of distribution,0.5680633791571952
+monocyte,class,0.7157888269169767
+monocyte,class,0.7716897013453596
+abstain,out of distribution,0.8475850212975315
+abstain,out of distribution,0.9830684945758519
+abstain,out of distribution,0.6066656506357958
+abstain,out of distribution,0.6377661223077358
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7081442242193983
+abstain,out of distribution,0.9908518290790627
+abstain,out of distribution,0.7426539953548027
+abstain,out of distribution,0.7001760845114848
+monocyte,class,0.8477528885546172
+abstain,out of distribution,0.5534727935629455
+abstain,out of distribution,0.0
+monocyte,class,0.8049071228591586
+abstain,out of distribution,0.5745895689997457
+abstain,out of distribution,0.5155957124874025
+abstain,out of distribution,0.6841463540602458
+abstain,out of distribution,0.5092451652889661
+abstain,out of distribution,0.7499421206137371
+abstain,out of distribution,0.7044982975584472
+monocyte,class,0.8316993679590658
+abstain,out of distribution,0.9752384408579055
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7096743980936149
+monocyte,class,0.847183762425459
+abstain,out of distribution,0.6036860526306328
+abstain,out of distribution,0.5215290472143986
+abstain,out of distribution,0.5443986210293822
+abstain,out of distribution,0.7188332394628458
+abstain,out of distribution,0.6842623694845048
+abstain,out of distribution,0.7425266063959356
+monocyte,class,0.7592390239251563
+monocyte,class,0.9079724027513896
+abstain,out of distribution,0.9426054312197629
+abstain,out of distribution,0.6871456452897853
+abstain,out of distribution,0.5876080288192114
+abstain,out of distribution,0.6183938387352901
+abstain,out of distribution,0.5803516400772182
+abstain,out of distribution,0.9011979209249589
+abstain,out of distribution,0.0
+monocyte,class,0.874676056113831
+monocyte,class,0.8554547940013533
+abstain,out of distribution,0.7342107980202429
+monocyte,class,0.931775682962867
+abstain,out of distribution,0.6496314755858631
+abstain,out of distribution,0.9408090971989972
+abstain,out of distribution,0.5468211883045027
+abstain,out of distribution,0.5404901136054677
+monocyte,class,0.8423239179202379
+abstain,out of distribution,0.8583777894388785
+abstain,out of distribution,0.9849846019722348
+abstain,out of distribution,0.5672100520619842
+abstain,out of distribution,0.615759486801724
+monocyte,class,0.9171525967578482
+abstain,out of distribution,0.7392943962760518
+monocyte,class,0.8905435313764108
+abstain,out of distribution,0.9663450607511053
+abstain,out of distribution,0.0
+monocyte,class,0.9167881365241526
+monocyte,class,0.95100509539281
+abstain,out of distribution,0.9035783444747473
+abstain,out of distribution,0.6037769761301504
+monocyte,class,0.6732762325158355
+abstain,out of distribution,0.857525364115174
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6782245019236066
+abstain,out of distribution,0.6696896904067501
+abstain,out of distribution,0.5581086059301514
+abstain,out of distribution,0.5390564525262388
+abstain,out of distribution,0.6376331201945729
+abstain,empty conformal set,0.0
+abstain,out of distribution,0.9076121537888572
+abstain,out of distribution,0.6652055983831237
+abstain,out of distribution,0.6456552263640031
+abstain,out of distribution,0.6230285344942915
+abstain,out of distribution,0.9931739058915016
+abstain,out of distribution,0.523121050653715
+monocyte,class,0.8194734779301276
+monocyte,class,0.6349026484831277
+monocyte,class,0.8404860650163514
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9999542372371959
+abstain,out of distribution,0.980203186649544
+abstain,out of distribution,0.5942310268142051
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5317712163850621
+abstain,out of distribution,0.7311256324690982
+abstain,out of distribution,0.5428750524661448
+abstain,out of distribution,0.5388754070999039
+abstain,out of distribution,0.6045682537101502
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5285709956755849
+abstain,out of distribution,0.5405524309014008
+abstain,out of distribution,0.9873703042640868
+abstain,out of distribution,0.6790992002493915
+monocyte,class,0.5210733711475823
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6177763028619025
+abstain,out of distribution,0.5996671522754675
+abstain,out of distribution,0.5623575609802669
+abstain,out of distribution,0.7187585395316842
+abstain,out of distribution,0.9971876658607821
+abstain,out of distribution,0.7183719340339785
+abstain,out of distribution,0.6907156465801192
+abstain,out of distribution,0.6745462155402504
+monocyte,class,0.7269432880895536
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5011673011552087
+abstain,out of distribution,0.973293847736732
+monocyte,class,0.9271850337282402
+abstain,out of distribution,0.9974455498261161
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9556736882377608
+abstain,out of distribution,0.6745812812213716
+monocyte,class,0.9277403121993975
+monocyte,class,0.8125093811576585
+abstain,out of distribution,0.7893174816087593
+monocyte,class,0.7913240190928273
+abstain,out of distribution,0.6479718096570534
+abstain,out of distribution,0.8482621541369879
+abstain,out of distribution,0.6348617829451768
+abstain,out of distribution,0.9727710231834749
+abstain,out of distribution,0.9844428963769503
+abstain,out of distribution,0.8721492404534903
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9444327167563388
+abstain,out of distribution,0.49732368977832647
+abstain,out of distribution,0.6490074746812902
+abstain,out of distribution,0.658462380348603
+abstain,out of distribution,0.7223998905708617
+abstain,out of distribution,0.6771705232366344
+monocyte,class,0.7901078676221193
+abstain,out of distribution,0.0
+monocyte,class,0.8213088299713799
+abstain,out of distribution,0.8051006315636157
+abstain,out of distribution,0.49460031615044314
+abstain,out of distribution,0.8972387457863381
+abstain,out of distribution,0.6351086711795975
+monocyte,class,0.7840176367439717
+abstain,out of distribution,0.7518408105109861
+monocyte,class,0.8180768999182582
+abstain,out of distribution,0.7600380422940778
+abstain,out of distribution,0.5090421227401359
+abstain,out of distribution,0.5725067265510472
+abstain,out of distribution,0.6347280591835519
+abstain,out of distribution,0.0
+abstain,out of distribution,0.4782204072803853
+abstain,out of distribution,0.995047359659707
+abstain,out of distribution,0.6714217896160326
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8787902731737082
+abstain,out of distribution,0.9383318991278522
+abstain,out of distribution,0.6949449582231507
+abstain,out of distribution,0.972737779115311
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6777652387697682
+abstain,out of distribution,0.7334530868694429
+abstain,out of distribution,0.9345683567106566
+abstain,out of distribution,0.8380146956633125
+monocyte,class,0.7297716126159964
+abstain,out of distribution,0.7579302540095628
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5297658322485639
+abstain,out of distribution,0.5105802577196441
+abstain,out of distribution,0.6795300975335228
+monocyte,class,0.874223331901577
+abstain,out of distribution,0.7166113011769916
+abstain,out of distribution,0.6268786915993418
+abstain,out of distribution,0.6419755728159255
+abstain,out of distribution,0.8406005611255906
+abstain,out of distribution,0.0
+abstain,out of distribution,0.778342808279559
+abstain,out of distribution,0.8828986114926607
+abstain,out of distribution,0.9817030927281181
+abstain,out of distribution,0.9873497140179506
+monocyte,class,0.876383390923824
+abstain,out of distribution,0.989816940594144
+abstain,out of distribution,0.5112255661676632
+abstain,out of distribution,0.6897406610798247
+abstain,out of distribution,0.7931348574646694
+monocyte,class,0.9254287182271097
+abstain,out of distribution,0.550467550420614
+abstain,out of distribution,0.9857535939859704
+monocyte,class,0.7817751854084268
+monocyte,class,0.9352872357894232
+abstain,out of distribution,0.5814683546813275
+monocyte,class,0.9281006744149315
+abstain,out of distribution,0.5426136446164375
+abstain,out of distribution,0.9258420664723684
+monocyte,class,0.8757437845254822
+monocyte,class,0.9074718439323975
+abstain,out of distribution,0.640069779788476
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7636839903596704
+monocyte,class,0.9238959775681842
+abstain,out of distribution,0.0
+monocyte,class,0.872403964163571
+abstain,out of distribution,0.879905741642844
+abstain,out of distribution,0.963306671616034
+monocyte,class,0.8738473286538956
+monocyte,class,0.8534960089597502
+abstain,out of distribution,0.9758975752900411
+abstain,out of distribution,0.6646628609119993
+abstain,out of distribution,0.6108604509373929
+abstain,out of distribution,0.9832550168742719
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5301983014082943
+abstain,out of distribution,0.6605335050026224
+monocyte,class,0.7386714674508874
+abstain,out of distribution,0.0
+monocyte,class,0.8564028035285359
+abstain,out of distribution,0.5031760015940875
+monocyte,class,0.7496054983908005
+abstain,out of distribution,0.5678101922030899
+abstain,out of distribution,0.7842255511660247
+abstain,out of distribution,0.5439867682684533
+abstain,out of distribution,0.6258978114838978
+abstain,out of distribution,0.6995525157546075
+monocyte,class,0.7507099359646422
+"cd8-positive, alpha-beta t cell",class,0.7845849195025554
+monocyte,class,0.8864876446435416
+abstain,out of distribution,0.7574383258429914
+abstain,out of distribution,0.817950510034167
+abstain,out of distribution,0.7468130645525818
+abstain,out of distribution,0.8368019071334486
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.714575671253796
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9691927843026782
+abstain,out of distribution,0.0
+monocyte,class,0.8680304879508295
+monocyte,class,0.8090603979858794
+monocyte,class,0.824230238509741
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8334785599418709
+abstain,out of distribution,0.0
+abstain,out of distribution,0.7409497266062526
+abstain,out of distribution,0.5738408453740182
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9673466581584712
+abstain,out of distribution,0.5213777318872032
+abstain,out of distribution,0.6674571742228185
+abstain,out of distribution,0.6824354218443135
+abstain,out of distribution,0.0
+abstain,out of distribution,0.835859632858898
+monocyte,class,0.7281735387255636
+abstain,out of distribution,0.0
+abstain,out of distribution,0.901642864655726
+natural killer cell,class,0.9329564402869818
+abstain,out of distribution,0.9284225814457723
+abstain,out of distribution,0.8405042342573029
+abstain,out of distribution,0.0
+natural killer cell,class,0.7721126315114846
+abstain,out of distribution,0.5769638656364396
+abstain,out of distribution,0.6389287123450188
+abstain,out of distribution,0.6563378256992901
+abstain,out of distribution,0.7896666243643038
+myeloid,lineage,0.5062579421882879
+abstain,out of distribution,0.9116839076463439
+abstain,out of distribution,0.8559786462539305
+abstain,out of distribution,0.9131961787684051
+monocyte,class,0.9134207456600358
+monocyte,class,0.9108854299105935
+abstain,out of distribution,0.6613729510031452
+monocyte,class,0.7564582014396094
+abstain,out of distribution,0.6937760316907878
+monocyte,class,0.6633150363815344
+abstain,out of distribution,0.8602632141319919
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5140302377428952
+abstain,out of distribution,0.5669275170036816
+abstain,out of distribution,0.8743114673494717
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9973768850274287
+abstain,out of distribution,0.5841679166471664
+abstain,out of distribution,0.821665840738706
+abstain,out of distribution,0.98280004100145
+abstain,out of distribution,0.0
+natural killer cell,class,0.711882481503117
+monocyte,class,0.8302388225380612
+abstain,out of distribution,0.6026822164766942
+monocyte,class,0.9164128130010936
+abstain,out of distribution,0.5943804077265313
+abstain,out of distribution,0.673659528675614
+monocyte,class,0.7204942902658532
+abstain,out of distribution,0.9471384314489764
+abstain,out of distribution,0.0
+abstain,out of distribution,0.50228966565705
+abstain,out of distribution,0.512861528804609
+abstain,out of distribution,0.6855845849877922
+abstain,out of distribution,0.8844708175090945
+abstain,out of distribution,0.7457613315725343
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8513926204695059
+abstain,out of distribution,0.6887584979762615
+abstain,out of distribution,0.9958186804335863
+abstain,out of distribution,0.9913467016039793
+classical monocyte,class,0.9990679634458718
+abstain,out of distribution,0.9908190884084253
+monocyte,class,0.6457521378007502
+abstain,out of distribution,0.6268533911655225
+abstain,out of distribution,0.7415784628366181
+abstain,out of distribution,0.8741042665989134
+abstain,out of distribution,0.988068074327415
+abstain,out of distribution,0.7364372597421042
+abstain,out of distribution,0.7570592145823368
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5857680116526146
+abstain,out of distribution,0.6755573675264492
+monocyte,class,0.7953921107245171
+abstain,out of distribution,0.6116712618246521
+abstain,out of distribution,0.7009694854793742
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8964159021446603
+monocyte,class,0.600967124717245
+abstain,out of distribution,0.9719520410085035
+abstain,out of distribution,0.8131652101783392
+abstain,out of distribution,0.9525830785787789
+monocyte,class,0.8495684569615768
+abstain,out of distribution,0.5107349050136797
+abstain,out of distribution,0.627544703877216
+monocyte,class,0.7597974123072547
+abstain,out of distribution,0.9125488903736091
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5095057261125825
+monocyte,class,0.6839844499313675
+monocyte,class,0.7310283723974477
+abstain,out of distribution,0.7455264192670525
+abstain,out of distribution,0.5925412197807524
+abstain,out of distribution,0.7258714226049492
+abstain,out of distribution,0.5639665685287193
+abstain,out of distribution,0.6930577715353262
+abstain,out of distribution,0.5823642122207732
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9976092885671685
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5159225115971149
+monocyte,class,0.7810051704567184
+abstain,out of distribution,0.7001132516676272
+abstain,out of distribution,0.6068427593767401
+abstain,out of distribution,0.6056409039678088
+monocyte,class,0.8135746759251441
+abstain,out of distribution,0.6050968375190803
+abstain,out of distribution,0.6444608764210973
+abstain,out of distribution,0.9523991145798858
+abstain,out of distribution,0.550387042341776
+abstain,out of distribution,0.6834613768965032
+abstain,out of distribution,0.9037209822071981
+abstain,out of distribution,0.9293497043255845
+abstain,out of distribution,0.9469612224679783
+abstain,out of distribution,0.8955957231817484
+monocyte,class,0.8298000127165519
+abstain,out of distribution,0.5054992004252561
+abstain,out of distribution,0.5981061154722965
+abstain,out of distribution,0.5395154475477681
+monocyte,class,0.7984532627102741
+abstain,out of distribution,0.7449977429735712
+abstain,out of distribution,0.9952080635052225
+abstain,out of distribution,0.9821554049413419
+abstain,out of distribution,0.7791026767366341
+abstain,out of distribution,0.5124406621626629
+abstain,out of distribution,0.698060180574768
+abstain,out of distribution,0.6988852284043379
+abstain,out of distribution,0.5311704081137288
+abstain,out of distribution,0.6311298289851149
+abstain,out of distribution,0.5624068215104272
+monocyte,class,0.7884615098103067
+natural killer cell,class,0.6212247973085141
+abstain,out of distribution,0.6582985974251088
+abstain,out of distribution,0.605560055553217
+abstain,out of distribution,0.726240973096595
+abstain,out of distribution,0.7014623388764075
+abstain,out of distribution,0.48708873914809075
+abstain,out of distribution,0.7341176319528411
+abstain,out of distribution,0.6831492656242257
+abstain,out of distribution,0.6993645466478998
+abstain,out of distribution,0.6279076640567334
+abstain,out of distribution,0.4711219697725413
+abstain,out of distribution,0.6363907259161067
+abstain,out of distribution,0.7791061994083975
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6102017296999066
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6357025260857687
+monocyte,class,0.8494707807946416
+abstain,out of distribution,0.7866813465170919
+abstain,out of distribution,0.5269944946974938
+abstain,out of distribution,0.4939874653820258
+abstain,out of distribution,0.0
+monocyte,class,0.7364747413890824
+abstain,out of distribution,0.6956064994565194
+abstain,out of distribution,0.4880822797519867
+abstain,out of distribution,0.5097296175802135
+abstain,out of distribution,0.5471860218858414
+abstain,out of distribution,0.0
+abstain,out of distribution,0.9819848135354874
+abstain,out of distribution,0.0
+monocyte,class,0.9160375559552435
+abstain,out of distribution,0.49480835000721707
+abstain,out of distribution,0.969494177336657
+abstain,out of distribution,0.697874904926571
+abstain,out of distribution,0.9044131422120172
+abstain,out of distribution,0.901555952003349
+abstain,out of distribution,0.7262235650245705
+monocyte,class,0.8518314698476327
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5681078660155672
+abstain,out of distribution,0.0
+abstain,out of distribution,0.6269717908821965
+abstain,out of distribution,0.5212528846316922
+abstain,out of distribution,0.939098807088464
+abstain,out of distribution,0.6539866798191439
+monocyte,class,0.744167571446987
+abstain,out of distribution,0.6127325204191287
+monocyte,class,0.7812948721144803
+abstain,out of distribution,0.5757825589920631
+abstain,out of distribution,0.9909815155574426
+monocyte,class,0.8138840082144284
+monocyte,class,0.6063381998561698
+abstain,out of distribution,0.6058942239109112
+abstain,out of distribution,0.0
+monocyte,class,0.7349544075020229
+monocyte,class,0.8162245075890162
+monocyte,class,0.8167466752307743
+abstain,out of distribution,0.5946552004872195
+abstain,out of distribution,0.9678136381578857
+abstain,out of distribution,0.615371780213517
+monocyte,class,0.8286757670018031
+abstain,out of distribution,0.7374684289115746
+abstain,out of distribution,0.609620865625542
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5484656202974129
+abstain,out of distribution,0.7418751537116834
+monocyte,class,0.8607269774458568
+abstain,out of distribution,0.6069771922081642
+abstain,out of distribution,0.0
+abstain,out of distribution,0.8408556839818212
+monocyte,class,0.8800556582634786
+monocyte,class,0.8776797496657116
+abstain,out of distribution,0.0
+monocyte,class,0.6511689287745467
+monocyte,class,0.7579443326006161
+abstain,out of distribution,0.9699279169920623
+abstain,out of distribution,0.690629593824185
+abstain,out of distribution,0.9921043458014636
+abstain,out of distribution,0.0
+abstain,out of distribution,0.4993182141030853
+abstain,out of distribution,0.48588794251147205
+abstain,out of distribution,0.7870010178112203
+monocyte,class,0.6542174892595619
+abstain,out of distribution,0.5723071289183348
+abstain,out of distribution,0.9896775623484761
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5636806170378892
+abstain,out of distribution,0.9787598782106812
+monocyte,class,0.860987581164457
+abstain,out of distribution,0.881134002966973
+abstain,out of distribution,0.9970066173773774
+abstain,out of distribution,0.4922549694429389
+abstain,out of distribution,0.6025089047349897
+abstain,out of distribution,0.8169345702655337
+monocyte,class,0.8368106316564764
+abstain,out of distribution,0.6170304786008153
+abstain,out of distribution,0.7746800359303618
+abstain,out of distribution,0.8232811571273633
+abstain,out of distribution,0.0
+abstain,out of distribution,0.720868344759822
+abstain,out of distribution,0.0
+monocyte,class,0.6742380695428287
+abstain,out of distribution,0.5598705155334761
+abstain,out of distribution,0.6162449943118743
+abstain,out of distribution,0.6290378349745778
+abstain,out of distribution,0.8150520066616285
+abstain,out of distribution,0.6837981403908125
+abstain,out of distribution,0.5010135767909735
+abstain,out of distribution,0.5505418987057878
+abstain,out of distribution,0.7241897203126775
+abstain,out of distribution,0.0
+monocyte,class,0.6766011928878847
+monocyte,class,0.757851259262316
+abstain,out of distribution,0.5631876408465518
+abstain,out of distribution,0.5329172586561719
+abstain,out of distribution,0.7471199025992276
+abstain,out of distribution,0.7822810275405498
+abstain,out of distribution,0.0
+abstain,out of distribution,0.5349609268353855
+abstain,out of distribution,0.8347293847582267
+abstain,out of distribution,0.8593206545376261
+abstain,out of distribution,0.837076017888549
+abstain,out of distribution,0.0

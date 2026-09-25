@@ -2,10 +2,11 @@
 """Generate Atlas/atlas_manifest.json from the metadata CSVs.
 
 Every number emitted here is computed from data present in this repository.
-Metrics that require the training pipeline — latent-space alignment, the
-modality probe, transfer accuracy, benchmark rows — are emitted as explicit
-pending records so the web layer renders them as pending instead of
-inventing a value.
+Metrics with no source data yet — currently only benchmark rows against
+established integration methods, and per-class transfer accuracy (a
+per-*dataset* version exists, see `transfer_accuracy`'s note below, but
+nothing decomposes it per class) — are emitted as explicit pending records
+so the web layer renders them as pending instead of inventing a value.
 """
 from __future__ import annotations
 
@@ -20,6 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 ATLAS_DIR = REPO_ROOT / "Atlas"
 OUTPUT_PATH = ATLAS_DIR / "atlas_manifest.json"
 SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
+V3_TABLES_DIR = SERVICE_MODEL_DIR / "v3_tables"
 
 # decisive_summary.json's winner_config.enc -> a readable label for the manifest.
 # Keep this in sync with service/pipeline/encoder.py's _ENCODER_FAMILIES table;
@@ -27,7 +29,7 @@ SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
 ENCODER_FAMILY_LABELS = {"module": "module pooling"}
 
 SCHEMA_VERSION = "1.0"
-ATLAS_VERSION = "0.1.0"
+ATLAS_VERSION = "0.2.0"
 
 BENCHMARK_METHODS = [
     "CrossModalNet (ours)",
@@ -85,15 +87,12 @@ def measured(value, basis: str) -> dict:
     return {"value": value, "status": "measured", "basis": basis}
 
 
-def build_next_reference_facts(decisive_summary: dict, feature_space_detail_rows: list[dict]) -> dict:
-    """The v3 reference's architecture is decided; the reference itself is
-    not trained (Download_Checklist.md, "Still waiting on"). These are
-    settled design facts, sourced from the actual decisive-test record and
-    the actual feature-space union — not a rerun of provenance.json's own
-    precomputed totals — kept in their own section so they are never
-    mistaken for a property of `model` above, which describes the currently
-    deployed release. transfer_accuracy, model.seeds, and benchmark.rows
-    describe that current release and are correctly untouched by this."""
+def build_deployed_architecture_facts(decisive_summary: dict, feature_space_detail_rows: list[dict]) -> dict:
+    """Architecture facts about the currently *deployed* v3 reference,
+    folded into `model` — sourced from the decisive masking test's own
+    record (architecture unchanged since that test settled it) and the
+    actual feature-space union, not a rerun of provenance.json's own
+    precomputed totals."""
     winner_config = decisive_summary["winner_config"]
     encoder_family = ENCODER_FAMILY_LABELS.get(winner_config["enc"])
     if encoder_family is None:
@@ -112,33 +111,67 @@ def build_next_reference_facts(decisive_summary: dict, feature_space_detail_rows
     retained_from_old = sum(1 for row in feature_space_detail_rows if row["in_old_reference"] == "True")
 
     return {
-        "status": "architecture_decided",
-        "trained": False,
         "feature_space_size": len(feature_space_detail_rows),
         "previous_feature_space_size": retained_from_old,
         "detected_by_source": detected_by_source,
         "encoder_family": encoder_family,
         "mask_sampling": winner_config["sampler"],
-        "consistency_loss": winner_config["consist"],
-        "note": (
-            "Architecture settled by a five-seed masking comparison "
-            f"(decisive_summary.json, n_seeds={decisive_summary['n_seeds']}). The production "
-            "reference has not been trained with it — the checkpoints from that comparison used "
-            "a simplified recipe (missing the class imbalance correction, the hubness penalty, and "
-            "the sink penalty) and are development placeholders only. `model` above describes the "
-            "currently deployed release, not this architecture."
-        ),
     }
 
 
+def build_model_seeds(reference_seeds_rows: list[dict], provenance: dict) -> dict:
+    """model.seeds: a seed COUNT (rendered with 0 decimal places,
+    js/panels.js:buildModelCard), not an accuracy — the accuracy and its CI
+    go in `basis`, which is exactly what the UI surfaces alongside it."""
+    n_seeds = len(reference_seeds_rows)
+    mean_bal_acc = provenance["reference_seed_mean_bal_acc"]
+    ci_low, ci_high = provenance["reference_seed_ci95"]
+    return measured(
+        n_seeds,
+        f"balanced accuracy {mean_bal_acc:.4f}, 95% CI [{ci_low:.4f}, {ci_high:.4f}]",
+    )
+
+
+def read_latent_centroid_cosine(rows: list[dict]) -> dict[int, dict]:
+    """service/model/v3_tables/latent_centroid_cosine.csv -> {class_idx: metric}.
+    Measured only for the 2 classes with cross-modal coverage; the pending
+    rows use an empty string for latent_centroid_cosine, never "0.0"."""
+    out = {}
+    for row in rows:
+        idx = int(row["class_idx"])
+        if row["status"] == "measured" and row["latent_centroid_cosine"] != "":
+            n_prot = row["n_prot_cells"]
+            out[idx] = measured(
+                round(float(row["latent_centroid_cosine"]), 6),
+                f"128-d latent centroid cosine, {n_prot} protein cells",
+            )
+        else:
+            out[idx] = pending("N/A", row["reason"])
+    return out
+
+
+def read_modality_probe_accuracy(modality_probe: dict) -> dict:
+    """A single global metric (5-fold CV over all cross-modal cells), not
+    per-class — reused as-is for every cross-modal row. The "global metric,
+    not per-class" wording is load-bearing: this schema slot is per-row, and
+    without it a reader would take the repeated value for a genuine
+    per-class measurement."""
+    pct = modality_probe["modality_probe_balanced_accuracy_pct"]
+    return measured(round(pct / 100, 6), f"{modality_probe['basis']}; global metric, not per-class")
+
+
 def build_previous_release_facts(legacy_provenance: dict) -> dict:
-    """The currently deployed model's own numbers, kept as the documented
-    prior baseline rather than erased when the architecture moves on
-    (Claude_Code_Context_Brief.md, "For the model card"). CrossModalNet was
-    jointly trained on RNA and proteomics together and had implicitly seen
-    SCoPE2 during training — part of why these zero-shot numbers read
-    higher than the honestly separated architecture's will. Both numbers
-    are real; they answer different questions."""
+    """The superseded model's own numbers, kept as the documented prior
+    baseline rather than erased now that the architecture has moved on
+    (service/docs/context-brief.md, "For the model card"). CrossModalNet
+    was jointly trained on RNA and proteomics together and had implicitly
+    seen SCoPE2 during training — part of why these zero-shot numbers read
+    higher than the honestly separated v3 architecture's own zero-shot
+    results do. Both are real; they answer different questions, and were
+    measured under different methodologies (this is a raw/smoothed AUC
+    pair from the old joint-training evaluation, not a single number
+    directly comparable to v3's own per-dataset zero-shot table in
+    service/model/v3_tables/zero_shot_all_datasets.csv)."""
     return {
         "model_name": "CrossModalNet",
         "n_shared_genes": legacy_provenance["n_shared_genes"],
@@ -148,16 +181,18 @@ def build_previous_release_facts(legacy_provenance: dict) -> dict:
         "note": (
             "CrossModalNet was jointly trained on RNA and proteomics together, so it had "
             "implicitly seen SCoPE2 during training — part of why these numbers read higher "
-            "than the frozen-reference architecture's zero-shot number will. Kept here as the "
-            "documented prior baseline, not erased; the honestly separated number is pending "
-            "until the v3 reference is trained (see next_reference above)."
+            "than an honestly separated architecture's would. Kept here as the documented "
+            "prior baseline, not erased, now that the frozen RNA-only v3 reference (see the "
+            "model card above) has superseded it."
         ),
     }
 
 
 def build_manifest(
     rna_rows: list[dict], prot_rows: list[dict],
-    next_reference: dict | None = None, previous_release: dict | None = None,
+    model_seeds: dict, deployed_architecture: dict,
+    latent_centroid_cosine_by_idx: dict[int, dict], modality_probe_accuracy: dict,
+    previous_release: dict | None = None,
 ) -> dict:
     rna = class_stats(rna_rows)
     prot = class_stats(prot_rows)
@@ -185,9 +220,18 @@ def build_manifest(
             "prot_cells": p["count"] if p else 0,
             "support": support,
             "pca_centroid_cosine": pca_cos,
-            "latent_centroid_cosine": pending("Phase 1", "Requires 128-d latent coordinate export"),
-            "modality_probe_accuracy": pending("Phase 4", "Requires linear modality probe run"),
-            "transfer_accuracy": pending("Phase 1", "Requires multi-seed transfer evaluation"),
+            "latent_centroid_cosine": latent_centroid_cosine_by_idx.get(
+                idx, pending("N/A", "No cross modal coverage")
+            ),
+            "modality_probe_accuracy": modality_probe_accuracy if support == "cross_modal" else pending(
+                "N/A", "No cross modal coverage"
+            ),
+            "transfer_accuracy": pending(
+                "N/A",
+                "Measured per dataset at realistic coverage, not per class — see "
+                "service/docs/context-brief.md §1 and service/model/v3_tables/"
+                "rna_to_rna_real_masks.csv for the real numbers.",
+            ),
         })
 
     summary = {
@@ -197,21 +241,25 @@ def build_manifest(
         "prot_only": sum(1 for c in cell_types if c["support"] == "prot_only"),
     }
 
+    model = {
+        "name": "VivOME v3 reference",
+        "latent_dim": 128,
+        "training_regime": "supervised",
+        "seeds": model_seeds,
+        "notes": (
+            "A frozen, RNA-only reference encoder — proteomics queries are projected at "
+            "inference and never used to retrain it. Coordinates shown in the viewer are a "
+            "3-component PCA projection of the 128-d latent space; the latent coordinates "
+            "themselves are not distributed with this build."
+        ),
+        **deployed_architecture,
+    }
+
     return {
         "schema_version": SCHEMA_VERSION,
         "atlas_version": ATLAS_VERSION,
         "generated": date.today().isoformat(),
-        "model": {
-            "name": "CrossModalNet",
-            "latent_dim": 128,
-            "training_regime": "supervised",
-            "seeds": pending("Phase 1", "Single run only; ten-seed statistics pending"),
-            "notes": (
-                "Coordinates shown in the viewer are a 3-component PCA projection of the "
-                "128-d latent space. The latent coordinates themselves are not distributed "
-                "with this build."
-            ),
-        },
+        "model": model,
         "modalities": {
             "rna": {
                 "label": "RNA",
@@ -228,7 +276,12 @@ def build_manifest(
         },
         "cell_types": cell_types,
         "summary": summary,
-        "next_reference": next_reference,
+        # No architecture change is currently in flight — the last one this
+        # field described (CrossModalNet -> the frozen RNA-only reference
+        # above) is complete, so there is no "next" to report. The schema
+        # keeps supporting this field (js/panels.js:buildNextReferenceCard)
+        # for whenever the next one starts.
+        "next_reference": None,
         "previous_release": previous_release,
         "benchmark": {
             "status": "pending",
@@ -259,22 +312,36 @@ def main() -> None:
         feature_space_detail_rows = list(csv.DictReader(handle))
     with (SERVICE_MODEL_DIR / "legacy_v2" / "provenance.json").open(encoding="utf-8") as handle:
         legacy_provenance = json.load(handle)
+    with (SERVICE_MODEL_DIR / "provenance.json").open(encoding="utf-8") as handle:
+        provenance = json.load(handle)
+    with (V3_TABLES_DIR / "reference_seeds.csv").open(newline="", encoding="utf-8") as handle:
+        reference_seeds_rows = list(csv.DictReader(handle))
+    with (V3_TABLES_DIR / "latent_centroid_cosine.csv").open(newline="", encoding="utf-8") as handle:
+        latent_centroid_cosine_rows = list(csv.DictReader(handle))
+    with (V3_TABLES_DIR / "modality_probe.json").open(encoding="utf-8") as handle:
+        modality_probe = json.load(handle)
 
-    next_reference = build_next_reference_facts(decisive_summary, feature_space_detail_rows)
+    deployed_architecture = build_deployed_architecture_facts(decisive_summary, feature_space_detail_rows)
+    model_seeds = build_model_seeds(reference_seeds_rows, provenance)
+    latent_centroid_cosine_by_idx = read_latent_centroid_cosine(latent_centroid_cosine_rows)
+    modality_probe_accuracy = read_modality_probe_accuracy(modality_probe)
     previous_release = build_previous_release_facts(legacy_provenance)
 
     manifest = build_manifest(
         read_metadata(ATLAS_DIR / "metadata_RNA_lat128.csv"),
         read_metadata(ATLAS_DIR / "metadata_PROT_lat128.csv"),
-        next_reference=next_reference,
+        model_seeds=model_seeds,
+        deployed_architecture=deployed_architecture,
+        latent_centroid_cosine_by_idx=latent_centroid_cosine_by_idx,
+        modality_probe_accuracy=modality_probe_accuracy,
         previous_release=previous_release,
     )
     OUTPUT_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     s = manifest["summary"]
     print(f"Wrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")
     print(f"  {s['total']} cell types: {s['cross_modal']} cross-modal, {s['rna_only']} RNA-only")
-    print(f"  next_reference: feature_space_size={next_reference['feature_space_size']}, "
-          f"encoder_family={next_reference['encoder_family']!r}, trained={next_reference['trained']}")
+    print(f"  model.seeds={model_seeds['value']}, feature_space_size={deployed_architecture['feature_space_size']}, "
+          f"encoder_family={deployed_architecture['encoder_family']!r}")
 
 
 if __name__ == "__main__":

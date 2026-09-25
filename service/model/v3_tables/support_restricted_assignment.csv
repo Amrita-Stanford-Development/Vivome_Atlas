@@ -1,0 +1,4 @@
+regime,accuracy_pct,balanced_acc_pct,n_candidate_classes
+"unrestricted, all 22 classes",45.369127516778526,31.083265404424022,22
+restricted to cross modal supported classes,86.1744966442953,79.7915354403646,2
+"restricted, threshold tuned on the margin",,85.9665048723554,2

@@ -27,7 +27,7 @@ from service import config
 class CalibrationResult:
     qhat: float
     calibration_indices: np.ndarray
-    label_sets: list[list[int]]  # one per query cell, in probs row order
+    label_sets: list[list[int]]  # one per query cell, values are `probs` COLUMN positions (0..n_classes-1), not the dataset's class_idx — see assignment.top_label
 
 
 def _select_calibration_indices(n_query: int, rng: np.random.Generator) -> np.ndarray:

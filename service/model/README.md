@@ -24,32 +24,28 @@ missing.**
 | `feature_space_genes.csv` | **Real, authoritative.** The fixed 9,002-gene input space. Replaces the old 2,903-gene list entirely. |
 | `feature_space_detail.csv` | **Real.** Per gene, which of the six proteomics sources detected it. |
 | `feature_space_provenance.json` | **Real.** The union math behind the 9,002 figure. |
-| `reference_metadata.csv` | **Real, authoritative.** Cell id, class index, class name, lineage for all 85,233 RNA cells. Labels don't depend on encoder architecture — this stays valid across the architecture change. |
-| `decisive_summary.json` | **Real.** The architecture decision: module pooling encoder, uniform mask sampler, consistency loss on, over the 9,002-gene space. This is the config the production reference will be trained with — `pipeline/encoder.py` reads it rather than hardcoding a family. |
+| `reference_metadata.csv` | **Real, authoritative.** Cell id, class index, class name, lineage for all 85,233 RNA cells. Labels don't depend on encoder architecture — this stayed valid across the architecture change. |
+| `decisive_summary.json` | **Real.** The architecture decision: module pooling encoder, uniform mask sampler, consistency loss on, over the 9,002-gene space — the config the production reference below was trained with. `pipeline/encoder.py` reads it rather than hardcoding a family. |
 | `masking_test_tables/rna_sweep.csv`, `masking_test_tables/scope2_projection.csv` | **Real.** The paired comparison numbers behind the architecture decision. |
-| `dev/H_seed4.pt` | **Real, but a development placeholder** — see `dev/README.md`. |
+| `reference_model.pt` | **Real, production.** The trained v3 checkpoint — 20,058,134 params, `strict=True` load verified. `config.ENCODER_WEIGHTS_PATH` defaults to this now. |
+| `reference_embedding.npy` | **Real.** (85233, 128) float32, L2 normalised — every reference cell in latent space. |
+| `reference_centroids.npy` | **Real.** (22, 128) float32, L2 normalised, ordered by class_idx. |
+| `provenance.json` | **Real.** Serving constants and headline measurements (gene list hash, module count, the calibrated abstain threshold, seed statistics) — see `pipeline/reference.py:load_provenance`. Recorded in every response for comparison; not yet the abstain decision itself (see `pipeline/abstention.py`'s module docstring). |
+| `reference_properties.npy` + `property_names.json` | **Real.** (85233, 8) float32 per-cell continuous property scores, with `property_names.json` giving column names and order (a `.npy`, not the `.csv` the contract table above names — see `pipeline/reference.py:load_reference_properties`). |
+| `v3_tables/` | **Real.** The measured tables behind `model.seeds`, `latent_centroid_cosine`, the restricted-assignment decision, property validation, and hierarchical fallback behaviour — see `service/docs/context-brief.md`. |
+| `VivOME_Prototype_Export.ipynb` | **Real.** The notebook that produced the v3 export — kept as the training/export provenance for everything else in this table. |
+| `v3_export_manifest.json` | **Real.** The v3 bundle's own sha256 checksum manifest, verified (24/24 match) before any of it was promoted here. |
+| `dev/H_seed4.pt` | **Real, development placeholder** — see `dev/README.md`. No longer the default; still used explicitly by `service/tests/test_encoder.py`'s dev-path guard test. |
 | `legacy_v2/` | **Real, historical.** The old CrossModalNet run's audit trail and provenance — see `legacy_v2/README.md`. |
 
-## What's still pending
+## Known gaps
 
-Blocked on the full v3 training run — logit adjustment for class imbalance,
-supervised contrastive loss, hubness penalty, sink penalty, five seeds,
-module pooling encoder, on the 9,002-gene space, with query-time fuzzy
-smoothing wired into the pipeline it will actually be evaluated in:
-
-| File | Blocked on |
-|---|---|
-| `reference_model.pt` | Full v3 training run |
-| `reference_embedding.npy` | Same |
-| `reference_centroids.npy` | Same |
-| `provenance.json` (this directory's own, the real contract file) | Same |
-| `reference_properties.csv` (Stage 8 continuous properties, per RNA cell) | Not part of the six-file contract above and not produced by any pipeline in this repo — needs the RNA reference's full transcriptome, which is not itself in this repo. Compute once RNA data access exists, name the shipped subset in `config.SHIPPED_PROPERTIES`. |
-
-`pipeline/reference.py`'s loaders raise `PendingArtifactError` naming which
-of these is missing, rather than a bare `FileNotFoundError` — the same
-"pending, not fabricated" principle as `Atlas/atlas_manifest.json`, applied
-at request time.
-
-`transfer_accuracy` and `model.seeds` in the atlas manifest are correctly
-pending until the above exists. The architecture being decided does not
-mean the model is trained.
+- **`assignment.py`'s method comparison (nearest-centroid vs. OT vs. kNN)
+  was measured *unrestricted*.** `config.ASSIGNMENT_METHOD` defaults to
+  nearest-centroid on that evidence, but re-running the comparison *inside*
+  `config.CROSS_MODAL_SUPPORTED_CLASSES`'s restricted candidate set has not
+  been done — see `assignment.py`'s module docstring.
+- **The abstain threshold is still computed live, per request**, not from
+  `provenance.json`'s calibrated `abstain_threshold` — see
+  `abstention.py`'s module docstring for why switching is a real behaviour
+  change, not a data swap, and what would need verifying first.

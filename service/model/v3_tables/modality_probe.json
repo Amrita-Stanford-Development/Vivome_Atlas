@@ -1,0 +1,13 @@
+{
+  "modality_probe_balanced_accuracy_pct": 98.99328859060402,
+  "std_pct": 0.28075839816579345,
+  "folds": [
+    98.99328859060402,
+    98.8255033557047,
+    98.65771812080537,
+    99.496644295302,
+    98.99328859060404
+  ],
+  "n_per_class": 1490,
+  "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n"
+}

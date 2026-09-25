@@ -54,7 +54,6 @@ Each modality has coordinates plus a metadata table with
 | RNA | ~85,233 | `atlas_RNA_lat128.parquet` (Git LFS), split CSV parts (LFS), `metadata_RNA_lat128.csv` |
 | Protein | 1,490 | `atlas_PROT_lat128.parquet` / `.csv` (~45 MB), `metadata_PROT_lat128.csv` |
 
-- `shared_genes_lat128.txt` — shared gene list used for alignment.
 - Large RNA files are tracked via **Git LFS** (see `.gitattributes`).
 
 ### `docs/` — documentation
@@ -74,14 +73,15 @@ any change has to respect.
 A separate Python backend implementing `POST /api/project` (contract:
 `docs/projection-service.md`) — real dependencies (torch, an OT solver),
 isolated from the dependency-free static app. Every pipeline stage (query
-alignment, fuzzy smoothing, the reference encoder, unbalanced OT label
-assignment, conformal calibration, abstention, hierarchical fallback,
-property transfer) is implemented and tested against synthetic reference
-fixtures; the live service cannot yet serve a real prediction, since
-`reference_embedding.npy`, `reference_centroids.npy`, and per-cell property
-values are all blocked on the full v3 training run. See `service/README.md`
-and `service/model/README.md` for what exists today versus what's pending,
-and the design rationale behind each stage's less-obvious choices.
+alignment, fuzzy smoothing, the reference encoder, restricted-candidate
+label assignment, conformal calibration, abstention, hierarchical fallback,
+property transfer) is implemented, tested, and runs end to end against the
+real v3 reference — `reference_model.pt`, `reference_embedding.npy`,
+`reference_centroids.npy`, and per-cell property values are all real. It is
+not deployed or reachable from the static site. See `service/README.md`
+and `service/model/README.md` for what exists today and the remaining
+known gaps, and the design rationale behind each stage's less-obvious
+choices.
 
 ### `Plots/` — 30 precomputed interactive 3D plots
 

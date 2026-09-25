@@ -5,7 +5,7 @@ import {
   buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
   buildAvailabilityTable, buildSupportedLabelSpace,
 } from '../js/panels.js';
-import { measured, pending, manifestFixture } from './fixtures.js';
+import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
 
 test('escapeHtml neutralises angle brackets and quotes', () => {
   assert.equal(escapeHtml('<b>"x"&\'y\'</b>'),
@@ -62,24 +62,29 @@ test('support table renders Pending, not NaN, for a missing cell count', () => {
   assert.match(html, /Pending/);
 });
 
-test('diagnostics table renders measured cosine and Pending elsewhere', () => {
+test('diagnostics table renders every measured column for a cross-modal class', () => {
   const html = buildDiagnosticsTable(manifestFixture());
-  assert.match(html, /0\.9986/);
-  assert.match(html, /Pending/);
+  assert.match(html, /0\.8206/); // monocyte pca_centroid_cosine
+  assert.match(html, /0\.8303/); // monocyte latent_centroid_cosine
 });
 
 test('diagnostics table labels the basis of the measured value', () => {
   assert.match(buildDiagnosticsTable(manifestFixture()), /3-PC projection/);
 });
 
-test('diagnostics table marks pending cells with the pending class', () => {
-  const html = buildDiagnosticsTable(manifestFixture());
+test('diagnostics table marks a pending cell with the pending class', () => {
+  // Both cross-modal rows are fully measured in the current real manifest
+  // (both diagnostic classes have cross-modal coverage) — override one
+  // field back to pending to exercise that render branch.
+  const m = manifestFixture();
+  m.cell_types.find((c) => c.name === 'macrophage').latent_centroid_cosine = pending('N/A');
+  const html = buildDiagnosticsTable(m);
   assert.match(html, /<span class="pending">Pending<\/span>/);
 });
 
 test('diagnostics table does not mark a measured cell as pending', () => {
   const html = buildDiagnosticsTable(manifestFixture());
-  assert.ok(!/<span class="pending">0\.9986/.test(html));
+  assert.ok(!/<span class="pending">0\.8206/.test(html));
 });
 
 test('diagnostics table includes only cross-modal rows', () => {
@@ -89,7 +94,9 @@ test('diagnostics table includes only cross-modal rows', () => {
 });
 
 test('diagnostics table never prints a bare zero for a pending metric', () => {
-  assert.ok(!/>0\.000</.test(buildDiagnosticsTable(manifestFixture())));
+  const m = manifestFixture();
+  m.cell_types.find((c) => c.name === 'macrophage').latent_centroid_cosine = pending('N/A');
+  assert.ok(!/>0\.000</.test(buildDiagnosticsTable(m)));
 });
 
 test('benchmark table renders a pending notice and lists planned methods', () => {
@@ -121,20 +128,39 @@ test('benchmark table uses one header list for both branches', () => {
   assert.equal(pendingHead, measuredHead);
 });
 
-test('model card shows version, dims, and a pending seed count', () => {
+test('model card shows version, dims, and a measured seed count', () => {
   const html = buildModelCard(manifestFixture());
-  assert.match(html, /0\.1\.0/);
+  assert.match(html, /0\.2\.0/);
   assert.match(html, /128/);
+  assert.match(html, /<dd>5<\/dd>/);
+  assert.ok(!/<span class="pending">5/.test(html),
+    'a measured seed count must not carry the pending style');
+});
+
+test('model card marks a pending seed count with the pending style', () => {
+  const m = manifestFixture();
+  m.model.seeds = pending('Phase 1');
+  const html = buildModelCard(m);
   assert.match(html, /<span class="pending">Pending<\/span>/);
 });
 
-test('model card stops marking seeds pending once they are measured', () => {
+test('model card renders the folded-in architecture facts', () => {
+  const html = buildModelCard(manifestFixture());
+  assert.match(html, /9,002/);
+  assert.match(html, /module pooling/);
+  assert.match(html, /uniform/);
+});
+
+test('model card omits the architecture fields on an older manifest that predates them', () => {
   const m = manifestFixture();
-  m.model.seeds = measured(10, 'completed runs');
+  delete m.model.feature_space_size;
+  delete m.model.previous_feature_space_size;
+  delete m.model.encoder_family;
+  delete m.model.mask_sampling;
+  delete m.model.detected_by_source;
   const html = buildModelCard(m);
-  assert.match(html, /<dd>10<\/dd>/);
-  assert.ok(!/<span class="pending">10/.test(html),
-    'a measured seed count must not carry the pending style');
+  assert.ok(!html.includes('undefined'), html);
+  assert.ok(!html.includes('NaN'), html);
 });
 
 test('model card renders Pending, not NaN, for absent modality counts', () => {
@@ -146,7 +172,13 @@ test('model card renders Pending, not NaN, for absent modality counts', () => {
 });
 
 test('next reference card shows the settled architecture facts', () => {
-  const html = buildNextReferenceCard(manifestFixture());
+  // The real manifest's next_reference is null today — the architecture
+  // change it described is complete (folded into `model` instead). This
+  // rendering path stays real code, worth testing against a hypothetical
+  // future one via its own fixture.
+  const m = manifestFixture();
+  m.next_reference = nextReferenceFixture();
+  const html = buildNextReferenceCard(m);
   assert.match(html, /module pooling/);
   assert.match(html, /uniform/);
   assert.match(html, /9,002/);
@@ -154,8 +186,10 @@ test('next reference card shows the settled architecture facts', () => {
 });
 
 test('next reference card never reads as an update to the deployed model card', () => {
-  const html = buildNextReferenceCard(manifestFixture());
-  assert.ok(!html.includes('CrossModalNet'), 'must not merge with the current release\'s own model card');
+  const m = manifestFixture();
+  m.next_reference = nextReferenceFixture();
+  const html = buildNextReferenceCard(m);
+  assert.ok(!html.includes('VivOME v3 reference'), 'must not merge with the current release\'s own model card');
 });
 
 test('next reference card renders nothing when the manifest has no next_reference', () => {

@@ -12,12 +12,15 @@ pending artifact (see Download_Checklist.md, "Still waiting on"),
 `/api/project` answers 503 with which artifact is blocking it, instead of
 crashing the whole process — the server is legitimately "up" (dev
 placeholder in-progress work can still hit other diagnostics) even before
-the production reference lands.
+the production reference lands. A failed load is cached too, so dropping
+the missing files in while the process is running does not self-heal —
+restart the process to pick them up.
 """
 from __future__ import annotations
 
 import json
 import logging
+import threading
 from email import message_from_bytes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -27,6 +30,11 @@ logger = logging.getLogger("vivome.projection_service")
 
 _bundle: pipeline.ReferenceBundle | None = None
 _bundle_error: str | None = None
+# ThreadingHTTPServer serves every request on its own thread; without this,
+# a burst of concurrent first requests can each see _bundle is None and each
+# call the expensive ReferenceBundle.load() (torch.load plus a full PCA fit)
+# at once.
+_bundle_lock = threading.Lock()
 
 
 def _get_bundle() -> pipeline.ReferenceBundle:
@@ -35,13 +43,20 @@ def _get_bundle() -> pipeline.ReferenceBundle:
         return _bundle
     if _bundle_error is not None:
         raise reference.PendingArtifactError(_bundle_error)
-    try:
-        _bundle = pipeline.ReferenceBundle.load()
-        logger.info("Reference bundle loaded. model_version=%s", _bundle.model_version)
-        return _bundle
-    except reference.PendingArtifactError as exc:
-        _bundle_error = str(exc)
-        raise
+    with _bundle_lock:
+        # Re-check inside the lock: another thread may have finished
+        # loading (or failing) while this one was waiting for it.
+        if _bundle is not None:
+            return _bundle
+        if _bundle_error is not None:
+            raise reference.PendingArtifactError(_bundle_error)
+        try:
+            _bundle = pipeline.ReferenceBundle.load()
+            logger.info("Reference bundle loaded. model_version=%s", _bundle.model_version)
+            return _bundle
+        except reference.PendingArtifactError as exc:
+            _bundle_error = str(exc)
+            raise
 
 
 def _parse_multipart(content_type: str, body: bytes) -> dict[str, bytes]:

@@ -4,6 +4,7 @@ import unittest
 import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
+from unittest.mock import patch
 
 from service import app
 from service.pipeline import coordinates, pipeline, reference
@@ -78,9 +79,16 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertIn("modality", payload["error"])
 
     def test_missing_bundle_artifacts_answer_503_not_500(self):
-        """No real reference_embedding.npy/centroids.npy exist yet, so a
-        real server hit today must fail honestly, not crash."""
-        status, payload = _post_multipart(f"{self.base_url}/api/project", b"rna", b"gene,c1\nA1BG,1.0\n")
+        """Real reference_embedding.npy/centroids.npy exist now
+        (service/model/README.md), so this no longer happens by ambient
+        accident — force it deliberately. The guarantee this test protects
+        (a genuinely missing artifact answers 503, never a 500 crash) still
+        matters, e.g. for a bad VIVOME_REFERENCE_EMBEDDING override."""
+        with patch(
+            "service.pipeline.reference.load_reference_embedding",
+            side_effect=reference.PendingArtifactError("forced for this test"),
+        ):
+            status, payload = _post_multipart(f"{self.base_url}/api/project", b"rna", b"gene,c1\nA1BG,1.0\n")
         self.assertEqual(status, 503)
         self.assertIn("reason", payload)
 
@@ -93,7 +101,9 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
             encoder_handle=_load_encoder_only(),
             feature_genes=feature_genes, metadata=metadata,
             reference_embeddings=embeddings, reference_centroids=centroids,
+            reference_class_positions=metadata.class_positions_by_cell(),
             pca=coordinates.fit_pca_3d(embeddings), property_names=names, property_values=values,
+            provenance=reference.load_provenance(),
         )
         app._bundle = bundle
         app._bundle_error = None

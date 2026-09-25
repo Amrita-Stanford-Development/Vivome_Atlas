@@ -1,63 +1,118 @@
-# What to Download, and From Where
+# VivOME Prototype, Files to Download from Drive
 
-Everything below comes from Google Drive under `Vivome - Live Atlas/Data/Results/`.
-Updated now that the encoder architecture decision has actually run. The
-production reference has still not been trained, that is the one thing left.
+Everything below is relative to the Drive root `Vivome - Live Atlas`.
 
----
+Tiers 1 to 3 are required, roughly 138 MB in total. Tier 4 is optional demo
+data. Tier 5 is listed so it can be deliberately skipped.
 
-## Download now
-
-### From `FeatureSpace/`
-
-| File | What it is |
-|---|---|
-| `feature_space_genes.csv` | The fixed 9,002 gene input space. Replaces the 2,903 gene list and `shared_genes_lat128.txt` entirely. |
-| `feature_space_detail.csv` | Per gene, which of the six proteomics sources detected it. Useful for the model card and for explaining coverage numbers. |
-| `provenance.json` | The union math behind the 9,002 figure. |
-
-### From `MaskingDecisiveTest/`
-
-| File | What it is |
-|---|---|
-| `decisive_summary.json` | **New.** The architecture question is settled. Module pooling encoder, uniform mask sampler, consistency loss on, 501 modules at target size 18, on the 9,002 gene space. This is the config the production reference will be trained with. |
-| `ckpt/H_seed0.pt` through `H_seed4.pt` | The five checkpoints from the winning arm in the decisive test. **These are not the production model.** They were trained to answer one narrow question, which architecture generalises best under masking, using a simplified recipe, cross entropy plus a contrastive term plus consistency. They do not include the class imbalance correction, the hubness penalty, or the sink penalty that the full training recipe uses, and they were never combined with query time smoothing. Treat them as a development placeholder only, useful for wiring up and testing the backend pipeline end to end before the real model exists, and label them clearly as such anywhere they appear. |
-| `tables/rna_sweep.csv`, `tables/scope2_projection.csv` | The paired comparison numbers behind the architecture decision, useful for the model card's methodology section. |
-
-### From `ReferenceProjection_v2/export/`
-
-| File | What it is |
-|---|---|
-| `reference_metadata.csv` | Cell id, class index, class name, lineage for all 85,233 RNA cells. Labels do not depend on encoder architecture, this stays valid. |
-| `shared_genes.csv` | The old 2,903 gene list. Audit trail only, do not use as input anywhere. |
-| `provenance.json` | The old CrossModalNet run's numbers, the documented "before" baseline the current model card describes. |
-
-### From `PBMC240/`
-
-| File | What it is |
-|---|---|
-| `tables/pbmc240_cell_metadata.csv` | Weak, marker derived labels for three lineages. Demo upload material, not ground truth. |
-| `provenance.json` | Real coverage against the space, 34.8 percent. |
+Last verified against a run on 2026-09-22 17:16.
 
 ---
 
-## Still waiting on
+## Tier 1, the serving core. Required.
 
-**The production reference model.** `decisive_summary.json` fixes the
-architecture, it does not produce a trained model. Someone still has to run
-the full training recipe, logit adjustment for class imbalance, supervised
-contrastive loss, hubness penalty, sink penalty, five seeds, using the module
-pooling encoder from the decisive test, on the 9,002 gene space, with query
-time fuzzy smoothing wired into the pipeline it will actually be evaluated
-in. Until that finishes, none of the following exist:
+Folder: `Data/Results/ReferenceProjection_v3/export/`
 
-| File | Blocked on |
+Download all seven files. This directory is a closed contract, the encoder
+cannot be instantiated without all of it.
+
+| File | Shape / size | What it is |
+|---|---|---|
+| `reference_model.pt` | ~80 MB, 20,058,134 params | Frozen state dict. Keys prefixed `encoder.` and `classifier.`. Loads with `strict=True`, verified. |
+| `feature_space_genes.csv` | 9,002 rows, one column `gene` | The canonical feature order. Not a set, an ordered list. Uppercase symbols. Gene list hash `5751dd1e569f`. |
+| `module_assignment.npy` | int array, length 9,002, values 0 to 500 | Maps each gene to one of 501 co-expression modules. The encoder's module pooling layer is built from this as a one hot matrix. Without it the model will not load. |
+| `reference_centroids.npy` | (22, 128) float32 | Per class centroids, L2 normalised. |
+| `reference_embedding.npy` | (85233, 128) float32, ~43.6 MB | Every reference cell in latent space, L2 normalised. Needed at serve time for abstention scoring, which is max cosine against every reference cell, and for nearest neighbour property transfer. The plotting coordinates in tier 2 do not replace this. |
+| `reference_metadata.csv` | 85,233 rows | Columns `cell`, `class_idx`, `class_name`, `lineage`. Row order matches `reference_embedding.npy`. Authoritative source for the 22 class names. |
+| `provenance.json` | few KB | Every serving constant, plus seed statistics and zero shot records. Read thresholds from here, never hardcode them. |
+
+---
+
+## Tier 2, application data. Required.
+
+Folder: `Data/Results/ReferenceProjection_v3/app_export/`
+
+Generated by `VivOME_Prototype_Export.ipynb`, run and verified. Roughly 10 MB
+total. This folder is what lets the site stop plotting the superseded build.
+
+| File | Size | What it is |
+|---|---|---|
+| `atlas_RNA_v3_meta.csv` | 6.32 MB | 85,233 RNA cells with `PC1`, `PC2`, `PC3`, class, lineage, modality. Replaces `metadata_RNA_lat128.csv`. |
+| `atlas_PROT_v3_meta.csv` | 0.15 MB | 1,490 SCoPE2 cells with the same PC columns, plus `pred_class_name`, `true_class_name`, `max_cos_ref`, `abstained`. Replaces `metadata_PROT_lat128.csv`. |
+| `pca3_projection.npz` | small | The fitted 3 component projection, `components` (3,128), `mean` (128,), `explained_variance_ratio`. Every new dataset must be projected through this, not through its own PCA, or the viewer compares coordinates from different spaces. |
+| `prot_embedding_scope2.npy` | 0.76 MB | (1490, 128) float32, the protein side in full latent space. |
+| `latent_centroid_cosine.csv` | small | 22 rows, measured for 2, explicit pending for 20. |
+| `modality_probe.json` | small | Probe accuracy with folds and basis string. |
+| `support_restricted_assignment.csv` | small | The three assignment regimes. Drives a serving decision, see the context file. |
+| `reference_properties.npy` | 2.73 MB | (85233, 8) float32 property scores per reference cell. Row order matches `reference_embedding.npy`. |
+| `property_names.json` | small | The 8 property names in column order, plus the row order guarantee. |
+| `app_export_summary.json` | small | Provenance for this folder, including the source export path and gene list hash. |
+
+All eight properties scored successfully, so property transfer can be served.
+Ship only the ones that passed validation, see `property_validation.csv` in
+tier 3.
+
+---
+
+## Tier 3, numbers the site has to display. Required.
+
+Folder: `Data/Results/ReferenceProjection_v3/tables/`
+
+Small CSVs, a few hundred KB in total.
+
+| File | Feeds |
 |---|---|
-| `reference_model.pt` | Full v3 training run |
-| `reference_embedding.npy` | Same |
-| `reference_centroids.npy` | Same |
-| `provenance.json` (v3's own) | Same |
+| `reference_seeds.csv` | The `model.seeds` metric. Five seeds, mean balanced accuracy 0.7143. |
+| `reference_reliability.csv` | Per class quality panel, recall and silhouette per class. |
+| `rna_to_rna_real_masks.csv` | The `transfer_accuracy` metric, accuracy at each dataset's real coverage. |
+| `zero_shot_all_datasets.csv` | The cross modal support map, and the honest zero shot numbers. |
+| `held_out_types.csv` | Out of distribution detection evidence, AUC 1.000 across five held out classes. |
+| `property_validation.csv` | Which of the eight properties passed validation and may ship. |
+| `scope2_hierarchical_calls.csv` | Hierarchical fallback behaviour on a real dataset. |
 
-`transfer_accuracy` and `model.seeds` in the manifest are correctly pending
-until this exists. The architecture being decided does not mean the model is
-trained.
+---
+
+## Tier 4, example data for a working demo. Optional.
+
+Only needed if the prototype lets a visitor click "try it" rather than
+requiring them to bring a file. Note that tier 2 already contains SCoPE2
+fully embedded, so a read only demo needs nothing from here. This tier is for
+exercising the upload path end to end.
+
+| Path | Size | Notes |
+|---|---|---|
+| `Data/scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv` | 1,490 cells | SCoPE2 at gene level. Exercises the whole pipeline at 32.3 percent coverage. |
+| `Data/scProteomics/blood_joint_cells_by_proteins.tsv` | same cells | Carries the `cell_type` column, for showing ground truth beside the prediction. |
+| `Data/Results/PBMC240/pbmc240_zscored_all_genes.csv` | 237 cells | Second platform, 26.5 percent coverage. |
+| `Data/Results/PBMC240/tables/pbmc240_cell_metadata.csv` | 237 rows | Weak marker derived labels. Label quality is poor, see the context file. |
+| `Data/scProteomics/abundance_protein_MD.tsv` | 2,130 cells | Fulcher. Lowest coverage at 18.4 percent, useful for exercising the coverage floor. No usable labels. |
+
+---
+
+## Tier 5, do not download.
+
+Listed explicitly so the decision is deliberate rather than accidental.
+
+| Path | Why not |
+|---|---|
+| `ReferenceProjection_v3/ckpt/reference_seed{0..4}.pt` | Training checkpoints, roughly 80 MB each. Only seed 0 is production, and it is already in `export/`. |
+| `Data/scRNA-seq/Blood_TSP1_30_..._Nov122024.h5ad` | Multi GB. Only needed to retrain or to recompute property scores. Both are done, `reference_properties.npy` is in tier 2. |
+| `ReferenceProjection_v2/**` | Superseded by v3 entirely. |
+| `MaskingExperiment/**`, `MaskingDecisiveTest/**`, `MaskingBaseline/**`, `FeatureSpace/**` | The experiments that chose the architecture. Conclusions are in the context file, the files are not serving artifacts. |
+| `SelfTrainingPilot/**`, `CellLineVsPrimary/**` | Negative results. Conclusions are in the context file. |
+| `Vivome Atlas/shared_genes_lat128.txt` | The old 2,903 gene space. Mixing it with the 9,002 gene space would silently corrupt every projection. |
+| `Data/Results/RNA - Prot/Supervised/lat128/**` | The old jointly trained CrossModalNet run. That model had seen SCoPE2 during training, so its numbers are not comparable. The repo currently serves this. It should stop. |
+
+---
+
+## Verify after download
+
+Six checks. All six passed at export time, so a failure means a corrupted or
+partial download rather than a bad export.
+
+- `reference_embedding.npy` and `reference_centroids.npy` are L2 normalised, all row norms within 1e-3 of 1.0.
+- `reference_model.pt` loads with `strict=True`, and every key starts with `encoder.` or `classifier.`.
+- `len(feature_space_genes.csv) == provenance.json["n_shared_genes"] == 9002`, and the gene list hash is `5751dd1e569f`.
+- `atlas_RNA_v3_meta.csv` has 85,233 rows, matching `reference_embedding.npy`.
+- `reference_properties.npy` has shape (85233, 8), matching the embedding row count and `property_names.json`.
+- `app_export_summary.json`'s `gene_list_hash` matches `provenance.json`. If these ever disagree, the two folders came from different builds and must not be mixed.

@@ -7,15 +7,16 @@ head must match the class_idx order. Both files exist today and do not
 depend on which encoder architecture is production.
 
 `reference_embedding.npy`, `reference_centroids.npy`, and per-cell property
-values are blocked on the full v3 training run (see
-service/model/README.md). Loading them before they exist raises
-`PendingArtifactError` with the reason, rather than a bare
-FileNotFoundError, so a caller can render Stage 4/6/8 as pending instead of
-crashing.
+values are all real now (see service/model/README.md), but the loaders below
+still raise `PendingArtifactError` rather than a bare `FileNotFoundError`
+when a path doesn't resolve to a file — e.g. an env-var override pointed at
+the wrong location — so a caller can render the affected stage as pending
+instead of crashing on an unrelated-looking traceback.
 """
 from __future__ import annotations
 
 import csv
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -62,6 +63,19 @@ class ReferenceMetadata:
     def n_classes(self) -> int:
         return len(self.classes)
 
+    def class_positions_by_cell(self) -> np.ndarray:
+        """Each cell's class translated from class_idx to its row POSITION
+        in self.classes (0..n_classes-1, sorted by class_idx) — the indexing
+        reference_centroids and everything in assignment.py actually use.
+        The single source for this translation; previously reimplemented
+        independently in ReferenceBundle.load() and two test files, which
+        risked the tests keeping passing against a stale translation after
+        a real fix landed only in production code."""
+        position_by_class_idx = {c.class_idx: i for i, c in enumerate(self.classes)}
+        return np.array(
+            [position_by_class_idx[idx] for idx in self.class_idx_by_cell], dtype=np.int64
+        )
+
     def __post_init__(self):
         object.__setattr__(self, "_by_idx", {c.class_idx: c for c in self.classes})
         object.__setattr__(self, "_name_to_idx", {c.class_name: c.class_idx for c in self.classes})
@@ -97,9 +111,8 @@ def load_reference_embedding(path: Path = config.REFERENCE_EMBEDDING_PATH) -> np
     (max cosine similarity to any single reference cell)."""
     if not path.exists():
         raise PendingArtifactError(
-            f"{path} does not exist. reference_embedding.npy is blocked on the "
-            "full v3 training run (see service/model/README.md); Stage 6 "
-            "abstention scoring cannot run against real data until it lands."
+            f"{path} does not exist. Stage 6 abstention scoring cannot run "
+            "against real data without it — check for a stray path override."
         )
     return np.load(path).astype(np.float32)
 
@@ -109,27 +122,49 @@ def load_reference_centroids(path: Path = config.REFERENCE_CENTROIDS_PATH) -> np
     Required for Stage 4 (unbalanced OT onto reference centroids)."""
     if not path.exists():
         raise PendingArtifactError(
-            f"{path} does not exist. reference_centroids.npy is blocked on the "
-            "full v3 training run (see service/model/README.md); Stage 4 label "
-            "assignment cannot run against real centroids until it lands."
+            f"{path} does not exist. Stage 4 label assignment cannot run "
+            "against real centroids without it — check for a stray path override."
         )
     return np.load(path).astype(np.float32)
 
 
-def load_reference_properties(path: Path = config.REFERENCE_PROPERTIES_PATH) -> "tuple[list[str], np.ndarray]":
+def load_reference_properties(
+    path: Path = config.REFERENCE_PROPERTIES_PATH,
+    names_path: Path = config.PROPERTY_NAMES_PATH,
+) -> "tuple[list[str], np.ndarray]":
     """Per-reference-cell continuous property values, computed on RNA's full
-    transcriptome (Stage 8). Not part of the six-file contract and not
-    produced by any pipeline in this repo yet — see service/model/README.md.
-    Returns (property_names, values) with values shape (n_rna_cells, n_properties)."""
+    transcriptome (Stage 8). Not part of the six-file contract — row order
+    matches reference_embedding.npy / reference_metadata.csv; column names
+    and order come from property_names.json, not a CSV header (this is a raw
+    float32 array). Returns (property_names, values), values shape
+    (n_rna_cells, n_properties)."""
     if not path.exists():
         raise PendingArtifactError(
-            f"{path} does not exist. Per-cell reference property values have not "
-            "been computed for any reference version yet (not part of the "
-            "reference_model.pt/embedding/centroids contract). Stage 8 property "
-            "transfer cannot run against real data until this artifact exists."
+            f"{path} does not exist. Stage 8 property transfer cannot run "
+            "against real data without it — check for a stray path override."
         )
-    with open(path, newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle)
-        names = [c for c in reader.fieldnames if c != "cell"]
-        values = np.array([[float(row[n]) for n in names] for row in reader], dtype=np.float32)
+    if not names_path.exists():
+        raise PendingArtifactError(
+            f"{names_path} does not exist. {path} exists but cannot be "
+            "interpreted without its column names — check for a stray path override."
+        )
+    with open(names_path, encoding="utf-8") as handle:
+        names = json.load(handle)["property_names"]
+    values = np.load(path).astype(np.float32)
+    if values.shape[1] != len(names):
+        raise PendingArtifactError(
+            f"{path} has {values.shape[1]} columns but {names_path} names "
+            f"{len(names)} properties — they came from different builds."
+        )
     return names, values
+
+
+def load_provenance(path: Path = config.REFERENCE_PROVENANCE_PATH) -> dict:
+    """The reference's serving constants and headline measurements — gene list
+    hash, class/module counts, the calibrated abstain threshold, seed
+    statistics. Recorded for comparison/audit; see abstention.py's module
+    docstring for why the live per-request threshold is still what's used."""
+    if not path.exists():
+        raise PendingArtifactError(f"{path} does not exist.")
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle)

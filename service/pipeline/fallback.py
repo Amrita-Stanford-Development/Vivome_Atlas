@@ -1,13 +1,15 @@
 """Stage 7 — hierarchical fallback (Claude_Code_Context_Brief.md, "Stage 7").
 
-Six pairs of adjacent cell types were found genuinely confusable across
-independent tests, each reflecting a real biological continuum rather than
-a modelling failure. When a conformal set's members fall *entirely* within
-one of these pairs, the broader shared category is a more honest answer
-than either specific label and more useful than an empty set. This is
-different from generic abstention: the model has real partial information
-here, it simply cannot resolve the last step, so these cells are reported
-resolved (abstained=False), not ambiguous.
+The brief names six phrases of adjacent cell types found genuinely
+confusable across independent tests, each reflecting a real biological
+continuum rather than a modelling failure — but two of those phrases name
+the same unordered pair (see below), so five *distinct* pairs are
+implemented here. When a conformal set's members fall *entirely* within one
+of these pairs, the broader shared category is a more honest answer than
+either specific label and more useful than an empty set. This is different
+from generic abstention: the model has real partial information here, it
+simply cannot resolve the last step, so these cells are reported resolved
+(abstained=False), not ambiguous.
 
 Two of the phrases in the brief name the same unordered pair — "CD8 positive
 T cell and natural killer cell" and, later, "natural killer cell and CD8 T

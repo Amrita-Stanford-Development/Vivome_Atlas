@@ -1,0 +1,6 @@
+held_out,n_unseen,score_unseen,score_seen,detect_auc
+neutrophil,1500,0.9980169534683228,1.0,1.0
+erythrocyte,1500,0.9969996809959412,1.0,1.0
+classical monocyte,1500,0.9987042546272278,1.0,1.0
+monocyte,1500,0.9985281825065613,1.0,1.0
+"cd4-positive, alpha-beta t cell",1500,0.9988358020782471,1.0,1.0

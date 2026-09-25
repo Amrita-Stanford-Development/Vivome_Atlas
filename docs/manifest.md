@@ -54,15 +54,26 @@ Computed from repository data:
 - Cross-modal support classification (`cross_modal`, `rna_only`, `prot_only`)
 - `pca_centroid_cosine` — cosine similarity between RNA and protein class
   centroids **in the 3-PC projection**, for classes present in both modalities
+- `model.seeds` — a seed *count* (5), from `service/model/v3_tables/reference_seeds.csv`;
+  the accuracy and its 95% CI go in the record's `basis`, not `value` — see
+  `js/panels.js:buildModelCard`, which renders `value` with 0 decimal places
+- `model.feature_space_size`, `encoder_family`, `mask_sampling`, `detected_by_source` —
+  the settled architecture facts, folded into `model` (see "Architecture"
+  below)
+- `latent_centroid_cosine`, `modality_probe_accuracy` — measured for the 2
+  cross-modal classes (macrophage, monocyte) from
+  `service/model/v3_tables/latent_centroid_cosine.csv` and `modality_probe.json`.
+  The probe is one **global** score (a linear classifier's accuracy telling
+  RNA from protein in the shared latent space), repeated on both cross-modal
+  rows — not a per-class measurement, hence the "global metric, not
+  per-class" wording in its `basis`.
 
 Emitted as pending, with the phase that will produce each:
 
 | Metric | Phase | Blocked on |
 |---|---|---|
-| `latent_centroid_cosine` | Phase 1 | 128-d latent coordinate export |
-| `transfer_accuracy` | Phase 1 | Multi-seed transfer evaluation |
-| `model.seeds` | Phase 1 | Ten-seed statistics; current build is a single run |
-| `modality_probe_accuracy` | Phase 4 | Linear modality probe run |
+| `latent_centroid_cosine`, `modality_probe_accuracy` for RNA-only/protein-only classes | N/A | No cross-modal coverage for those classes — a correct record, not a gap to fill |
+| `transfer_accuracy` (any class) | N/A | A real measurement exists, but only per *dataset* (`service/model/v3_tables/rna_to_rna_real_masks.csv`), not per class — no per-class version has been computed |
 | `benchmark.rows` | Phase 4 | No comparison against established methods has been run |
 
 A class present in only one modality gets a Phase 2 pending record for
@@ -70,9 +81,26 @@ A class present in only one modality gets a Phase 2 pending record for
 degenerate centroid (zero norm) also yields pending rather than a fabricated
 cosine; `cosine()` returns `None` and the builder converts it.
 
+## Architecture
+
+`next_reference` is `null` in the current manifest — the last architecture
+change it described (`CrossModalNet` to the frozen RNA-only v3 reference) is
+complete, so there is nothing "next" to report. `js/panels.js:buildNextReferenceCard`
+still renders a non-null value, kept as real, tested code for whenever the
+next change starts — but `build_deployed_architecture_facts` is **not** a
+drop-in source for it: that function now returns only the facts folded into
+`model` (`feature_space_size`, `previous_feature_space_size`,
+`detected_by_source`, `encoder_family`, `mask_sampling`). Populating
+`next_reference` again means also supplying `trained` (`false`) and `note`
+(why it isn't trained yet) — `buildNextReferenceCard` reads both and
+`escapeHtml(undefined)` renders the literal string `"undefined"` if `note`
+is missing. Until then, those facts live on `model` directly. `previous_release` is a
+separate, permanent record of `CrossModalNet`'s own numbers — untouched by
+this transition, kept as documented history rather than erased.
+
 ## Current output
 
-Atlas version `0.1.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
+Atlas version `0.2.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 
@@ -87,7 +115,7 @@ in the browser.
 |---|---|
 | `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `atlas.html` |
 | `buildBenchmarkTable` | `benchmark.html` |
-| `buildModelCard`, `buildAvailabilityTable` | `versions.html` |
+| `buildModelCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace` | `project.html` |
 
 Every interpolated value goes through `escapeHtml()`. Cell-type names come

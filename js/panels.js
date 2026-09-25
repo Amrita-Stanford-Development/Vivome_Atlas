@@ -87,9 +87,10 @@ export function buildDiagnosticsTable(manifest) {
   return table(['Cell type', 'Centroid cosine', 'Latent cosine', 'Modality probe'], rows) + `
     <p class="panel-note">
       Centroid cosine is computed on the 3-component PCA projection that this build ships.
-      It is not a latent-space alignment measurement. High centroid similarity alongside a
-      high modality probe score is the directional-alignment signature; the probe column
-      fills in once Phase 4 runs.
+      It is not a latent-space alignment measurement — that is what the latent cosine column
+      is. The modality probe column is one global score (how well a linear classifier tells
+      RNA from protein in the shared latent space), repeated on every cross-modal row rather
+      than measured per class.
     </p>`;
 }
 
@@ -119,20 +120,44 @@ export function buildBenchmarkTable(manifest) {
   return table(BENCHMARK_HEADERS, rows);
 }
 
+const cardField = (label, value) =>
+  `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+
+// Shared by buildModelCard's optional architecture block and
+// buildNextReferenceCard — both describe an encoder's settled design facts
+// (feature space, encoder family, mask sampling, gene sources), just for
+// the currently-deployed architecture vs. a possible future one. Kept as
+// one implementation so the two cards can't drift in how they format the
+// same underlying fields.
+function architectureFieldsHtml(source) {
+  const sources = Object.entries(source.detected_by_source ?? {})
+    .map(([name, count]) => `${escapeHtml(name)} (${formatCount(count)})`)
+    .join(', ');
+  return [
+    cardField('Feature space', `${formatCount(source.feature_space_size)} genes (was ${formatCount(source.previous_feature_space_size)})`),
+    cardField('Encoder family', escapeHtml(source.encoder_family)),
+    cardField('Mask sampling', escapeHtml(source.mask_sampling)),
+    cardField('Detected by source', sources),
+  ].join('');
+}
+
 export function buildModelCard(manifest) {
   const m = manifest.model;
-  const field = (label, value) =>
-    `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+  // Architecture facts (feature_space_size, encoder_family, ...) are
+  // optional — present for the current v3 reference, absent on an older
+  // manifest that predates this schema addition.
+  const architectureFields = m.feature_space_size == null ? '' : architectureFieldsHtml(m);
   return `
     <dl class="model-card">
-      ${field('Atlas version', escapeHtml(manifest.atlas_version))}
-      ${field('Generated', escapeHtml(manifest.generated))}
-      ${field('Model', escapeHtml(m.name))}
-      ${field('Latent dimension', formatCount(m.latent_dim))}
-      ${field('Training regime', escapeHtml(m.training_regime))}
-      ${field('Seeds', metricText(m.seeds, (x) => formatMetric(x, 0)))}
-      ${field('RNA cells', formatCount(manifest.modalities.rna?.cells))}
-      ${field('Protein cells', formatCount(manifest.modalities.prot?.cells))}
+      ${cardField('Atlas version', escapeHtml(manifest.atlas_version))}
+      ${cardField('Generated', escapeHtml(manifest.generated))}
+      ${cardField('Model', escapeHtml(m.name))}
+      ${cardField('Latent dimension', formatCount(m.latent_dim))}
+      ${cardField('Training regime', escapeHtml(m.training_regime))}
+      ${cardField('Seeds', metricText(m.seeds, (x) => formatMetric(x, 0)))}
+      ${cardField('RNA cells', formatCount(manifest.modalities.rna?.cells))}
+      ${cardField('Protein cells', formatCount(manifest.modalities.prot?.cells))}
+      ${architectureFields}
     </dl>
     <p class="panel-note">${escapeHtml(m.notes)}</p>`;
 }
@@ -146,18 +171,10 @@ export function buildModelCard(manifest) {
 export function buildNextReferenceCard(manifest) {
   const n = manifest.next_reference;
   if (!n) return '';
-  const field = (label, value) =>
-    `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
-  const sources = Object.entries(n.detected_by_source ?? {})
-    .map(([source, count]) => `${escapeHtml(source)} (${formatCount(count)})`)
-    .join(', ');
   return `
     <dl class="model-card">
-      ${field('Encoder family', escapeHtml(n.encoder_family))}
-      ${field('Mask sampling', escapeHtml(n.mask_sampling))}
-      ${field('Feature space', `${formatCount(n.feature_space_size)} genes (was ${formatCount(n.previous_feature_space_size)})`)}
-      ${field('Detected by source', sources)}
-      ${field('Reference trained', n.trained ? 'Yes' : 'Not yet')}
+      ${architectureFieldsHtml(n)}
+      ${cardField('Reference trained', n.trained ? 'Yes' : 'Not yet')}
     </dl>
     <p class="panel-note">${escapeHtml(n.note)}</p>`;
 }
@@ -169,15 +186,13 @@ export function buildNextReferenceCard(manifest) {
 export function buildPriorBaselineCard(manifest) {
   const p = manifest.previous_release;
   if (!p) return '';
-  const field = (label, value) =>
-    `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
   return `
     <dl class="model-card">
-      ${field('Model', escapeHtml(p.model_name))}
-      ${field('Shared genes', formatCount(p.n_shared_genes))}
-      ${field('Zero-shot AUC (raw)', metricText(p.zero_shot_auc_raw, (x) => formatMetric(x, 4)))}
-      ${field('Zero-shot AUC (smoothed)', metricText(p.zero_shot_auc_smoothed, (x) => formatMetric(x, 4)))}
-      ${field('Shipped properties', (p.shipped_properties ?? []).map(escapeHtml).join(', '))}
+      ${cardField('Model', escapeHtml(p.model_name))}
+      ${cardField('Shared genes', formatCount(p.n_shared_genes))}
+      ${cardField('Zero-shot AUC (raw)', metricText(p.zero_shot_auc_raw, (x) => formatMetric(x, 4)))}
+      ${cardField('Zero-shot AUC (smoothed)', metricText(p.zero_shot_auc_smoothed, (x) => formatMetric(x, 4)))}
+      ${cardField('Shipped properties', (p.shipped_properties ?? []).map(escapeHtml).join(', '))}
     </dl>
     <p class="panel-note">${escapeHtml(p.note)}</p>`;
 }

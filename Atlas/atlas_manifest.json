@@ -1,18 +1,29 @@
 {
   "schema_version": "1.0",
-  "atlas_version": "0.1.0",
-  "generated": "2026-09-10",
+  "atlas_version": "0.2.0",
+  "generated": "2026-09-23",
   "model": {
-    "name": "CrossModalNet",
+    "name": "VivOME v3 reference",
     "latent_dim": 128,
     "training_regime": "supervised",
     "seeds": {
-      "value": null,
-      "status": "pending",
-      "phase": "Phase 1",
-      "note": "Single run only; ten-seed statistics pending"
+      "value": 5,
+      "status": "measured",
+      "basis": "balanced accuracy 0.7143, 95% CI [0.6851, 0.7435]"
     },
-    "notes": "Coordinates shown in the viewer are a 3-component PCA projection of the 128-d latent space. The latent coordinates themselves are not distributed with this build."
+    "notes": "A frozen, RNA-only reference encoder \u2014 proteomics queries are projected at inference and never used to retrain it. Coordinates shown in the viewer are a 3-component PCA projection of the 128-d latent space; the latent coordinates themselves are not distributed with this build.",
+    "feature_space_size": 9002,
+    "previous_feature_space_size": 2903,
+    "detected_by_source": {
+      "bubis_hela": 5774,
+      "bubis_lung": 5785,
+      "bubis_candidates": 6023,
+      "pbmc240": 3136,
+      "scope2": 2907,
+      "fulcher": 1654
+    },
+    "encoder_family": "module pooling",
+    "mask_sampling": "uniform"
   },
   "modalities": {
     "rna": {
@@ -44,20 +55,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -75,20 +86,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -106,20 +117,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -137,20 +148,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -168,20 +179,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -199,20 +210,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -230,20 +241,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -261,20 +272,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -292,20 +303,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -323,20 +334,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -346,27 +357,25 @@
       "prot_cells": 394,
       "support": "cross_modal",
       "pca_centroid_cosine": {
-        "value": 0.997242,
+        "value": 0.563158,
         "status": "measured",
         "basis": "3-PC projection"
       },
       "latent_centroid_cosine": {
-        "value": null,
-        "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "value": 0.189762,
+        "status": "measured",
+        "basis": "128-d latent centroid cosine, 394 protein cells"
       },
       "modality_probe_accuracy": {
-        "value": null,
-        "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "value": 0.989933,
+        "status": "measured",
+        "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; global metric, not per-class"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -384,20 +393,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -407,27 +416,25 @@
       "prot_cells": 1096,
       "support": "cross_modal",
       "pca_centroid_cosine": {
-        "value": 0.998634,
+        "value": 0.820639,
         "status": "measured",
         "basis": "3-PC projection"
       },
       "latent_centroid_cosine": {
-        "value": null,
-        "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "value": 0.830313,
+        "status": "measured",
+        "basis": "128-d latent centroid cosine, 1096 protein cells"
       },
       "modality_probe_accuracy": {
-        "value": null,
-        "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "value": 0.989933,
+        "status": "measured",
+        "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; global metric, not per-class"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -445,20 +452,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -476,20 +483,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -507,20 +514,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -538,20 +545,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -569,20 +576,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -600,20 +607,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -631,20 +638,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -662,20 +669,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -693,20 +700,20 @@
       "latent_centroid_cosine": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires 128-d latent coordinate export"
+        "phase": "N/A",
+        "note": "no cross modal coverage"
       },
       "modality_probe_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 4",
-        "note": "Requires linear modality probe run"
+        "phase": "N/A",
+        "note": "No cross modal coverage"
       },
       "transfer_accuracy": {
         "value": null,
         "status": "pending",
-        "phase": "Phase 1",
-        "note": "Requires multi-seed transfer evaluation"
+        "phase": "N/A",
+        "note": "Measured per dataset at realistic coverage, not per class \u2014 see service/docs/context-brief.md \u00a71 and service/model/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     }
   ],
@@ -716,24 +723,7 @@
     "rna_only": 20,
     "prot_only": 0
   },
-  "next_reference": {
-    "status": "architecture_decided",
-    "trained": false,
-    "feature_space_size": 9002,
-    "previous_feature_space_size": 2903,
-    "detected_by_source": {
-      "bubis_hela": 5774,
-      "bubis_lung": 5785,
-      "bubis_candidates": 6023,
-      "pbmc240": 3136,
-      "scope2": 2907,
-      "fulcher": 1654
-    },
-    "encoder_family": "module pooling",
-    "mask_sampling": "uniform",
-    "consistency_loss": true,
-    "note": "Architecture settled by a five-seed masking comparison (decisive_summary.json, n_seeds=5). The production reference has not been trained with it \u2014 the checkpoints from that comparison used a simplified recipe (missing the class imbalance correction, the hubness penalty, and the sink penalty) and are development placeholders only. `model` above describes the currently deployed release, not this architecture."
-  },
+  "next_reference": null,
   "previous_release": {
     "model_name": "CrossModalNet",
     "n_shared_genes": 2903,
@@ -753,7 +743,7 @@
       "oxphos",
       "glycolysis"
     ],
-    "note": "CrossModalNet was jointly trained on RNA and proteomics together, so it had implicitly seen SCoPE2 during training \u2014 part of why these numbers read higher than the frozen-reference architecture's zero-shot number will. Kept here as the documented prior baseline, not erased; the honestly separated number is pending until the v3 reference is trained (see next_reference above)."
+    "note": "CrossModalNet was jointly trained on RNA and proteomics together, so it had implicitly seen SCoPE2 during training \u2014 part of why these numbers read higher than an honestly separated architecture's would. Kept here as the documented prior baseline, not erased, now that the frozen RNA-only v3 reference (see the model card above) has superseded it."
   },
   "benchmark": {
     "status": "pending",

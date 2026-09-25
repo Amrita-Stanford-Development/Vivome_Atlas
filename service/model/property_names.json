@@ -1,0 +1,18 @@
+{
+  "property_names": [
+    "cell_cycle_S",
+    "cell_cycle_G2M",
+    "interferon",
+    "oxphos",
+    "glycolysis",
+    "antigen_presentation",
+    "inflammatory",
+    "ribosome"
+  ],
+  "shape": [
+    85233,
+    8
+  ],
+  "row_order": "matches reference_embedding.npy and reference_metadata.csv",
+  "note": "ship only properties that passed validation, see property_validation.csv"
+}

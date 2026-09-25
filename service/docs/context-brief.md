@@ -1,262 +1,298 @@
-# Context for Building the Projection Service
+# VivOME Prototype, Build Context
 
-This is the brief a local coding agent needs before touching Phase 5. Every
-choice below came from a specific measured failure, not from a default or a
-best practice guess. The most important job of this document is to stop a
-well meaning agent from quietly reverting one of these choices back to the
-more obvious seeming alternative, since several of the correct answers here
-are the less obvious option.
+Everything needed to build the projection service prototype and repoint the
+atlas site at the current model. Methodology that does not affect the build is
+left out.
 
-The contract in `docs/projection-service.md` is already correct and does not
-need to change. This document explains how to actually satisfy it.
+Read alongside `download-checklist.md`, which says which files to fetch, and
+the repo's existing `docs/projection-service.md`, whose response contract is
+still correct and does not need changing.
 
----
-
-## The shape of the pipeline
-
-```
-uploaded matrix
-      |
-align to the 9,002 gene feature space, build an observed mask
-      |
-fuzzy smooth the query, using the query's own full feature set
-      |
-embed through the frozen reference encoder, values plus mask
-      |
-assign labels, unbalanced optimal transport onto reference centroids
-      |
-calibrate a conformal set, on a random held out slice
-      |
-score abstention, max cosine similarity to any reference cell
-      |
-transfer continuous properties, k nearest neighbour weighted mean
-      |
-response: coordinates, label_set, confidence, abstained, matched/unmatched counts
-```
-
-Every stage below maps to one box in that diagram.
+Every number here was measured. Sources are the v3 export, the v3 tables, and
+a verified run of `VivOME_Prototype_Export.ipynb` on 2026-09-22.
 
 ---
 
-## Stage 1, query alignment
+## 1. What the product is
 
-Take the uploaded matrix, reindex to `feature_space_genes.csv`, in that exact
-order. Genes present get their values, genes absent get zero. Build a second
-array the same shape, one where present, zero where absent. Both arrays go
-into the model, not just the values.
+A user uploads an expression matrix, features in rows, cells in columns. The
+service places those cells into a shared 128 dimensional latent space built
+from RNA, and returns coordinates, a calibrated label set, a confidence, and
+an explicit abstention when the cell falls outside what the atlas has evidence
+for.
 
-**Z score per dataset, independently.** Do not reuse any statistic from RNA
-training. Every dataset in this project, SCoPE2, PBMC240, Fulcher, was
-z scored using its own mean and standard deviation, computed only from the
-genes it actually measured. Applying RNA's z score parameters to a new
-proteomics dataset would be wrong, since the two are on completely different
-scales to begin with.
-
-**Coverage will be low, and that is normal, not a bug to fix.** Measured
-values against the 9,002 gene space: SCoPE2 32.3 percent, PBMC240 34.8
-percent, Fulcher 18.4 percent. If a dataset comes back reporting 90 percent
-coverage, that is the surprising result, not 20 percent.
-
-**Do not filter the feature space down to only well covered genes.** This was
-tried directly. Restricting SCoPE2 to only the genes it actually has costs
-0.005 AUC against using the full space with the rest zero filled. A random
-subset of the same size costs 0.098. The full space with zero fill is
-correct, confirmed against three fill strategies, gaussian noise and hot deck
-imputation were both worse than zero fill in every test run.
+The reference is frozen. Nothing about an upload retrains anything. This was
+an open question until recently, four different adaptation mechanisms were
+tried and all four failed, so `encode(values, mask) -> embedding` stays a
+single forward pass, milliseconds, synchronous. The submit and poll API shape
+that was being considered is not needed.
 
 ---
 
-## Stage 2, fuzzy smoothing
+## 2. Serving constants
 
-Before the query touches the encoder, build a nearest neighbour graph within
-the query dataset using its own complete feature set, not just the 9,002
-shared genes, then smooth the shared feature values along that graph. This
-is the MaxFuse idea, denoise the weakly linked shared features using the
-richer within modality structure. It gave a measured plus 0.026 AUC on
-SCoPE2, and the improvement was monotone across every setting tried.
+All in `provenance.json`. Read them from the file, do not copy them into code,
+because the file is the thing that gets versioned.
 
-This step is independent of which encoder architecture won the masking
-comparison. Keep it regardless.
+| Key | Value | Meaning |
+|---|---|---|
+| `n_shared_genes` | 9002 | Feature space size |
+| `n_classes` | 22 | Reference classes |
+| `latent_dim` | 128 | Embedding width |
+| `n_modules` | 501 | Module pooling groups |
+| `mask_convention` | `1.0 observed, 0.0 missing` | Both arrays go into the model, values and mask |
+| `abstain_threshold` | 0.9779 | Below this, abstain |
+| `conformal_alpha` | 0.10 | 90 percent target coverage |
+| `ot_eps`, `ot_tau` | 0.05, 0.10 | Optimal transport parameters, if OT is used at all, see section 6 |
+| `production_seed` | 0 | Which of five seeds shipped |
+| `gene_list_hash` | `5751dd1e569f` | Guard against a mismatched feature space |
 
----
-
-## Stage 3, the reference encoder
-
-Which exact architecture to instantiate here is written in
-`decisive_summary.json` once the five seed test finishes. Do not hardcode a
-choice, read the config from that file.
-
-What is settled regardless of which variant won:
-
-**Masking during training is not optional.** An encoder trained without it
-collapses to 44.9 percent balanced accuracy at 10 percent coverage, against
-62 to 72 percent for every masked variant tested. Whatever ships, it was
-trained with an explicit mask channel, values concatenated with a binary
-present indicator, not values alone with missing entries silently zeroed.
-
-**Uniform random masking during training beat masking that mimics real
-detection patterns, twice, in two separate comparisons.** This was
-counterintuitive going in. Do not swap in a smarter sampler later without
-re running the comparison, since the more sophisticated option lost both
-times.
-
-**Drop any augmentation that changes the input distribution's shape.** An
-earlier version tried matching skew and kurtosis between proteomics and RNA.
-Every transform that moved the distribution closer to RNA's shape made
-transfer worse, not better, and the correlation between closing that gap and
-losing accuracy was strongly positive. Do not reintroduce distribution
-matching as a preprocessing step.
+The encoder is module pooling with an explicit mask channel. Input is values
+concatenated with the binary mask, plus module pooled means and per module
+coverage. It will not accept values alone.
 
 ---
 
-## Stage 4, label assignment
+## 3. The single most important serving decision
 
-**Use unbalanced optimal transport, at a relaxed marginal setting, not
-nearest neighbour voting.** This beat kNN by 14.46 points of balanced
-accuracy in a controlled RNA against RNA test, and separately gave the best
-AUC on real SCoPE2 data. kNN is not a safe fallback default here, it
-measurably loses.
+**Constrain label assignment to the classes that have cross modal support.**
 
-**The marginal constraint must stay relaxed. Do not tighten it.** This is the
-single most important warning in this document, since it was gotten wrong
-once already in this project. Enforcing strict marginals, forcing transport
-mass to spread evenly across all reference classes, collapsed SCoPE2 accuracy
-from 72 to 47 percent and dropped neutrophil recall from 100 to 55.9 percent
-in the RNA test. The reference has far more classes than most queries will
-ever contain evidence for, so the constraint that seems like it should
-improve calibration actively destroys the result. If a future engineer
-reads the optimal transport code and thinks the marginal weight looks
-suspiciously permissive, that permissiveness is a validated finding, not
-an oversight.
+Only 2 of the 22 reference classes have any proteomics cells anywhere in the
+project, macrophage with 394 and monocyte with 1,096. The other 20 are RNA
+only. Letting all 22 compete for the argmax means 20 classes with zero protein
+evidence can win, and they frequently do.
 
-Reasonable starting parameters, confirmed working across two independent
-datasets: entropic regularisation epsilon around 0.05, marginal relaxation
-tau in the range that behaves like 0.1 rather than anything above 10.
+Measured on real SCoPE2 data, same frozen encoder, same embeddings, the only
+change being which classes are candidates:
 
----
+| Regime | Accuracy | Balanced accuracy | Candidates |
+|---|---|---|---|
+| Unrestricted, all 22 classes | 45.37 | 31.08 | 22 |
+| Restricted to supported classes | 86.17 | 79.79 | 2 |
+| Restricted, threshold tuned on the margin | not applicable | 85.97 | 2 |
 
-## Stage 5, conformal calibration
+Macrophage versus monocyte AUC is 0.9278, and the best margin threshold sits
+at −0.1586.
 
-**Calibrate on a random subset of the query, not a confidence filtered
-one.** This is the second thing that was gotten wrong once already.
-Calibrating only on the query's most confident cells gave 36.2 percent
-empirical coverage against a 90 percent target, because confidence filtering
-violates the exchangeability assumption conformal prediction depends on.
-Switching to a random subset, still using the model's own predictions as the
-calibration labels since no ground truth exists for a new upload, recovered
-70 percent coverage, and calibrating against true labels in a controlled
-test reached 92.3 percent, close to nominal.
+Three caveats, all of which must survive into whatever the site says:
 
-If there is any temptation to select "good" calibration examples to make the
-guarantee look tighter, that temptation is exactly the bug that was already
-found and fixed once.
+The restricted regime is a two class problem, so its chance level is 50
+percent, not the 4.5 percent that applies across 22 classes. The two rows are
+not directly comparable, and 79.79 percent balanced accuracy is the honest
+reading against a 50 percent baseline.
 
----
+The tuned threshold row picked its threshold using true labels. It is an upper
+bound on what a perfectly calibrated service could reach, not something
+achievable on an unlabelled upload. The label free number is 79.79.
 
-## Stage 6, abstention
+Both restricted rows describe performance on cells that genuinely are
+macrophages or monocytes. They say nothing about a cell of some other type
+arriving, which is what abstention handles.
 
-**Score out of distribution risk by maximum cosine similarity to any single
-reference cell, not by the normalised vote share among nearest neighbours.**
-The vote share approach reached an AUC of 0.974 detecting an unseen
-neutrophil population but scored below chance, 0.345 and 0.239, on
-erythrocyte and classical monocyte, meaning unseen cells looked more
-confident than seen ones. Maximum cosine similarity scored a perfect 1.000
-across every held out class type tested. The failure mode of vote share is
-that a query cell can sit far from the entire reference and still produce a
-sharply peaked distribution over whichever few neighbours happen to be
-nearest, which reads as high confidence when it should read as low.
+With those caveats stated, the conclusion holds. A change in the candidate set
+alone moves balanced accuracy by 48.7 points. Most of what the unrestricted
+number reads as a modality gap is distractor contamination.
 
-`abstained: true` should fire when this score falls below whatever threshold
-calibration settles on, and the `abstain_reason` field should be able to
-distinguish at minimum: falls outside any supported region, coverage too low
-to trust the projection at all, and ambiguous between two or more classes,
-which is a different situation from being outside the reference entirely.
-
-**Below roughly 15 to 20 percent feature coverage, results stop being
-trustworthy in a way that a simple confidence score will not catch.**
-Accuracy at 10 percent coverage was non monotone across variants in one
-comparison, higher than at 20 and 30 percent, which is the signature of an
-input that is mostly zeros producing an arbitrary rather than a meaningful
-answer. Consider an explicit coverage floor, below which the service returns
-an honest low coverage refusal rather than a confidence score computed from
-noise.
+One consequence for the model card. The four failed self adaptation
+experiments, and the cell line versus primary comparison, were all measured
+under the unrestricted 22 class regime. They should not be quoted as ceilings
+for the restricted serving configuration, because they did not measure it.
 
 ---
 
-## Stage 7, hierarchical fallback
+## 4. Abstention and the coverage floor
 
-Six specific pairs of adjacent cell types were found to be genuinely
-confusable across independent tests, not as an artefact of any one dataset:
-macrophage and monocyte, naive CD4 T cell and CD4 T cell more broadly, CD8
-positive T cell and natural killer cell, mature NK T cell and CD8 T cell,
-natural killer cell and CD8 T cell, intermediate monocyte and classical
-monocyte. Every one of these reflects a real biological continuum rather
-than a modelling failure.
+Abstention is not a disclaimer bolted onto a weak result, it is the behaviour
+the data calls for. At the calibrated threshold of 0.9779, 80.2 percent of
+real SCoPE2 cells abstain. A prototype that returned a confident label for
+every uploaded cell would be wrong.
 
-When a conformal set's members fall entirely within one of these known pairs,
-returning the broader shared category is more honest than returning either
-specific label, and more useful than an empty set. This is different from
-generic abstention, since the model has genuine partial information here, it
-simply cannot resolve the last step.
+Score out of distribution risk by maximum cosine similarity to any single
+reference cell. This requires `reference_embedding.npy` at serve time, all
+85,233 rows, not just the centroids.
 
----
+Coverage floor: below roughly 15 to 20 percent feature coverage, results stop
+being trustworthy in a way confidence scores do not catch. Accuracy at 10
+percent coverage came out non monotone, higher than at 20 and 30 percent,
+which is the signature of mostly zero input producing an arbitrary answer. An
+explicit low coverage refusal is more honest than a confidence number computed
+from noise. Real datasets measured 32.3, 26.5 and 18.4 percent. A dataset
+reporting 90 percent coverage is the surprising case, not 20.
 
-## Stage 8, property transfer
-
-Continuous properties, cell cycle scores, pathway activity, transfer by
-similarity weighted averaging over the k nearest reference neighbours in
-embedding space, computed on RNA's full transcriptome rather than only the
-9,002 gene feature space, since the reference side is not limited by what
-proteomics can measure.
-
-**Only ship properties that pass validation, do not ship all of them with a
-caveat.** In the one validation run performed, 4 of 8 candidate properties
-passed a correlation threshold of 0.5 against true values in a held out RNA
-test, ribosome content and antigen presentation scoring well, interferon
-response and cell cycle scoring poorly. Report a per property reliability
-number if there is room in the response schema, rather than a single global
-disclaimer.
-
-Report an uncertainty alongside every transferred value, the weighted spread
-across the contributing neighbours, not just the point estimate. A value
-averaged from neighbours that disagree sharply is a different claim than one
-averaged from neighbours that agree, and the response should be able to
-represent that difference.
+`abstain_reason` should distinguish at least three cases: outside any
+supported region, coverage too low to project at all, and ambiguous between
+classes.
 
 ---
 
-## What is genuinely still open, do not assume an answer
+## 5. Measured constraints that look like mistakes
 
-**Which exact encoder architecture is production.** Waiting on
-`decisive_summary.json`.
+Each of these is the less obvious option, and each was measured. They are
+listed because a reasonable engineer will otherwise revert them.
 
-**Whether the sorted PBMC dataset from O'Connor et al will ever be
-available.** That paper has no data availability statement as published, an
-email has gone out asking, and it remains the only proteomics data in this
-project with experimentally sorted rather than inferred or RNA transferred
-labels. Nothing about the pipeline should assume it will arrive.
+**Z score each uploaded dataset independently**, using only its own mean and
+standard deviation, over only the genes it actually measured. Do not reuse any
+statistic from RNA training. The two modalities are on unrelated scales.
 
-**Benchmark comparisons against GLUE, MaxFuse, Seurat, or scArches.** None
-have been run. `benchmark.rows` is correctly pending and should stay that
-way until they are.
+**Keep the full 9,002 gene space and zero fill what is missing.** Restricting
+to only well covered genes costs 0.005 AUC. A random subset of the same size
+costs 0.098. Zero fill beat gaussian noise and hot deck imputation in every
+test.
 
-**Whether the reference should eventually widen beyond blood.** Tissue
-resident macrophages differ enough by organ, Kupffer cells against alveolar
-macrophages against blood macrophages, that naively pooling organs under one
-label would likely make the reference worse, not better, for the classes
-that already struggle. Any multi organ expansion needs organ specific labels
-retained, not merged.
+**Do not add distribution matching as preprocessing.** Matching skew and
+kurtosis between proteomics and RNA was tried. Every transform that moved the
+distribution closer to RNA made transfer worse, and the correlation between
+closing that gap and losing accuracy was strongly positive.
+
+**Calibrate conformal prediction on a random subset of the query, never a
+confidence filtered one.** Confidence filtering violates exchangeability.
+Filtering gave 36.2 percent empirical coverage against a 90 percent target. A
+random subset recovered 70 percent. This bug has already been found and fixed
+once, so treat any instinct to select good calibration examples as the bug
+reappearing.
+
+**Score abstention by maximum cosine to any single reference cell, not by vote
+share among nearest neighbours.** Vote share reached AUC 0.974 on one held out
+class but scored below chance, 0.345 and 0.239, on two others, meaning unseen
+cells read as more confident than seen ones. Maximum cosine scored 1.000
+across every held out class tested.
+
+**If unbalanced optimal transport is used, keep the marginal constraint
+relaxed.** Enforcing strict marginals collapsed accuracy from 72 to 47 percent
+and dropped neutrophil recall from 100 to 55.9 percent. Permissiveness here is
+a validated finding, not an oversight.
 
 ---
 
-## For the model card in `versions.html`
+## 6. One thing still unresolved
 
-The current card describes `CrossModalNet`, a single run, jointly trained on
-RNA and proteomics together. The actual architecture now in use is a frozen
-RNA only reference with a separately trained query encoder, which is a
-structural difference worth stating plainly rather than treating as a metric
-update. The old jointly trained model had implicitly seen SCoPE2 during
-training, which is part of why its zero shot numbers looked better than the
-honestly separated reference architecture's do. Both numbers are real, they
-answer different questions, and the model card should say which one is being
-reported and why the newer, lower number is the trustworthy one.
+Which label assignment method to use within the supported set. Do not hardcode
+one.
+
+Earlier RNA to RNA tests found optimal transport beating k nearest neighbour
+by 14.46 points, and an older brief accordingly told builders to use OT and
+warned that kNN loses. On real protein data that inverted, twice.
+
+| Test | Nearest centroid | OT relaxed | kNN |
+|---|---|---|---|
+| v3, real SCoPE2, frozen embedding | 45.4 | 33.6 | not run |
+| Self training pilot, adapted embedding | 38.3 | 33.8 | 40.4 |
+
+Both cross modal measurements have OT losing. The likely reason is that OT
+helps when queries are noisy but centred correctly, and here they are
+systematically displaced, which is a different problem.
+
+Make the assignment method a configuration value with all three implemented.
+Nearest centroid over the supported set is the reasonable default on current
+evidence. Note that both rows above were measured unrestricted, so the
+comparison should be rerun inside the restricted regime before it is treated
+as settled.
+
+---
+
+## 7. Hierarchical fallback
+
+Six pairs of cell types were confirmed as genuine biological continua across
+independent tests, not modelling failures:
+
+1. macrophage, monocyte
+2. naive thymus-derived cd4-positive, alpha-beta t cell and cd4-positive, alpha-beta t cell
+3. cd8-positive, alpha-beta t cell and natural killer cell
+4. mature nk t cell and cd8-positive, alpha-beta t cell
+5. natural killer cell and cd8-positive, alpha-beta t cell
+6. intermediate monocyte and classical monocyte
+
+When a conformal set falls entirely inside one of these pairs, returning the
+broader shared category is more honest than picking one side, and more useful
+than an empty set. This is distinct from abstention, the model has real
+partial information and simply cannot resolve the last step.
+
+---
+
+## 8. Alignment diagnostics, now measured
+
+Two metrics moved out of `pending` with the latest run.
+
+**Modality probe, 98.99 percent balanced accuracy**, standard deviation 0.28
+across 5 folds, logistic regression on the 128 dimensional latent with RNA
+subsampled to the protein count so the number is not an artefact of a 57 to 1
+imbalance. Fifty percent would mean the modalities are indistinguishable. At
+99 percent they are almost perfectly separable, which means the
+representations stay modality specific even where same type cells point in
+similar directions. The old build scored 98.7 percent, so this property
+survived the architecture change intact.
+
+**Latent centroid cosine**, measured for the 2 classes with cross modal
+coverage, explicitly pending for the other 20.
+
+| Class | Protein cells | Cosine |
+|---|---|---|
+| monocyte | 1,096 | 0.830 |
+| macrophage | 394 | 0.190 |
+
+A trap worth naming. The site already has a metric called
+`pca_centroid_cosine`, computed in the 3 component projection, and the older
+explainability work reported figures above 0.98. That is a different quantity
+from the table above, which is the full 128 dimensional latent on the frozen
+RNA only reference. The flattering number is the less meaningful one. Label
+the two distinctly in any panel, and do not let a reader assume the 0.98 style
+figure describes latent space alignment.
+
+Macrophage at 0.190 is also the quantitative form of the problem section 3
+describes. Monocyte sits near its RNA centroid, macrophage does not.
+
+---
+
+## 9. What must still render as pending
+
+The repo's rule holds, no page displays a number that was not computed from
+data in the repository.
+
+| Metric | Blocked on |
+|---|---|
+| `benchmark.rows` | No comparison against GLUE, MaxFuse, scArches, Seurat bridge or Harmony has been run. None. |
+| Label stability across versions | Needs a predecessor release to compare against |
+| `latent_centroid_cosine` for 20 of 22 classes | No cross modal coverage exists for them. This is the correct record, not a gap to fill. |
+
+`modality_probe_accuracy`, `latent_centroid_cosine` for the supported pair,
+`model.seeds` and `transfer_accuracy` can all now be measured records.
+
+---
+
+## 10. The site currently serves a superseded model
+
+`versions.html` describes `CrossModalNet`, a single run, trained jointly on
+RNA and proteomics together on a 2,903 gene space. The current model is a
+frozen RNA only reference on a 9,002 gene space, with the query side handled
+separately at inference.
+
+This is a structural change, not a metric refresh, and the model card should
+say so. The old jointly trained model had implicitly seen SCoPE2 during
+training, which is part of why its numbers looked better. Both are real, they
+answer different questions, and the card should state which is being reported
+and why the newer, lower number is the trustworthy one.
+
+The 3D viewer data also comes from the old build. Replacements are in
+`app_export/`. The three component projection captures 69.7 percent of latent
+variance, 38.05, 19.12 and 12.55 per component. Every new dataset must be
+projected through the saved `pca3_projection.npz` rather than its own PCA, or
+the viewer plots coordinates from different spaces on the same axes.
+
+---
+
+## 11. Two failure modes already hit once
+
+Recorded because both cost real time and both look plausible on the way in.
+
+**Calibrating against the wrong condition.** An abstention threshold was first
+calibrated on full coverage RNA self scores, giving 1.0000, which abstained on
+100 percent of real cells regardless of correctness. Recalibrating against RNA
+masked to each dataset's real coverage gave 0.9779 and a sensible 80.2 percent
+rate. Any threshold must be calibrated under the conditions it will be applied
+in.
+
+**A cache path that silently never engages.** Checkpoint resumption was added
+to avoid retraining after a Colab disconnect, then did not fire on either
+subsequent run, costing a full retrain each time, because nothing verified the
+path existed. If the prototype caches anything, assert the cache was actually
+read, do not assume it.

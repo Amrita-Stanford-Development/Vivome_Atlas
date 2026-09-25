@@ -1,0 +1,23 @@
+class_idx,class_name,n_prot_cells,latent_centroid_cosine,status,reason
+0,b cell,0,,pending,no cross modal coverage
+1,basophil,0,,pending,no cross modal coverage
+2,"cd4-positive, alpha-beta t cell",0,,pending,no cross modal coverage
+3,"cd8-positive, alpha-beta t cell",0,,pending,no cross modal coverage
+4,classical monocyte,0,,pending,no cross modal coverage
+5,common myeloid progenitor,0,,pending,no cross modal coverage
+6,erythrocyte,0,,pending,no cross modal coverage
+7,hematopoietic precursor cell,0,,pending,no cross modal coverage
+8,hematopoietic stem cell,0,,pending,no cross modal coverage
+9,intermediate monocyte,0,,pending,no cross modal coverage
+10,macrophage,394,0.18976207077503204,measured,"128-d latent, SCoPE2 true labels"
+11,mature nk t cell,0,,pending,no cross modal coverage
+12,monocyte,1096,0.8303128480911255,measured,"128-d latent, SCoPE2 true labels"
+13,myeloid dendritic cell,0,,pending,no cross modal coverage
+14,"naive thymus-derived cd4-positive, alpha-beta t cell",0,,pending,no cross modal coverage
+15,natural killer cell,0,,pending,no cross modal coverage
+16,neutrophil,0,,pending,no cross modal coverage
+17,non-classical monocyte,0,,pending,no cross modal coverage
+18,plasma cell,0,,pending,no cross modal coverage
+19,plasmacytoid dendritic cell,0,,pending,no cross modal coverage
+20,platelet,0,,pending,no cross modal coverage
+21,regulatory t cell,0,,pending,no cross modal coverage

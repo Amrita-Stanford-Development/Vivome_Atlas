@@ -86,19 +86,24 @@ python3 -m unittest discover -s service/tests -t .   # projection service (needs
 
 ## Current state
 
-Atlas version `0.1.0`, manifest schema `1.0`. Model `CrossModalNet`, latent
-dim 128, supervised regime, single run. 22 cell types: 2 cross-modal, 20
-RNA-only. RNA 85,233 cells; Protein 1,490 cells (SCoPE2 mass spectrometry).
+Atlas version `0.2.0`, manifest schema `1.0`. Model `VivOME v3 reference` —
+a frozen, RNA-only encoder over a 9,002-gene feature space, module pooling
+architecture, 5 production seeds — latent dim 128. 22 cell types: 2
+cross-modal (macrophage, monocyte), 20 RNA-only. RNA 85,233 cells; Protein
+1,490 cells (SCoPE2 mass spectrometry).
 
-Alignment metrics, the modality probe, transfer accuracy, multi-seed
-statistics, and every benchmark row are **pending** — they require the
-training pipeline and are marked as such throughout.
+Latent centroid cosine and the modality probe are measured for the 2
+cross-modal classes. Per-class transfer accuracy and every benchmark row
+are **pending** — the former has no per-class source data yet (a
+per-*dataset* version exists, see `service/docs/context-brief.md`), the
+latter requires running established integration methods for comparison.
 
-The reference architecture for the *next* version is decided (a 9,002-gene
-feature space, module pooling encoder) but not yet trained — see
-`versions.html`'s "Architecture change in progress" and
-`service/model/README.md`. The model described above is still what's
-actually deployed.
+The prior architecture, `CrossModalNet` (jointly trained on RNA and
+proteomics, 2,903-gene space), is kept as a documented baseline, not
+erased — see `versions.html`'s "Prior baseline" card and
+`service/model/legacy_v2/README.md`. The projection service pipeline (see
+`service/README.md`) runs end to end against the v3 reference but is not
+deployed or reachable from this site yet.
 
 ## Documentation
 

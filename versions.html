@@ -22,27 +22,33 @@
         </section>
 
         <section>
-            <h2>Architecture change in progress</h2>
+            <h2>Architecture change: complete</h2>
             <p style="font-size: 13px;">
-                The reference is moving from <code>CrossModalNet</code>, a single model jointly
+                The reference moved from <code>CrossModalNet</code>, a single model jointly
                 trained on RNA and proteomics together, to a <strong>frozen RNA-only reference
-                with a separately trained query encoder</strong>. This is a structural change, not
-                a metric update — the joint model could implicitly see SCoPE2 during training,
-                which is part of why its zero-shot numbers below read higher than the honestly
-                separated architecture's will. Both sets of numbers are real; they answer
-                different questions, and the lower number once it exists is the trustworthy one,
-                not a regression.
+                with a separately trained query encoder</strong>. This was a structural change,
+                not a metric update — the joint model could implicitly see SCoPE2 during
+                training, which is part of why its zero-shot numbers below read higher than the
+                honestly separated architecture's do. Both sets of numbers are real; they answer
+                different questions, and the lower number is the trustworthy one, not a
+                regression. The same argument explains the drop in the <code>pca_centroid_cosine</code>
+                column of the <a href="index.html">diagnostics table</a> for both cross-modal
+                classes — read the current values there, not here, since this page doesn't
+                duplicate manifest-driven numbers into static text: the old jointly trained
+                model's centroids trivially coincided across modalities, and the new frozen
+                RNA-only reference never saw protein data
+                during training, so its centroids no longer do.
             </p>
             <p style="font-size: 13px;">
-                The new architecture is <em>decided</em>, not yet <em>trained</em>: a five-seed
-                comparison over the widened 9,002-gene feature space settled on a module-pooling
-                encoder under uniform masking. The reference itself — <code>reference_model.pt</code>,
-                <code>reference_embedding.npy</code>, <code>reference_centroids.npy</code> — still
-                needs the full training run before the projection service can serve real
-                predictions; see <a href="project.html">the projection page</a>.
+                The architecture was <em>decided</em> by a five-seed comparison over the widened
+                9,002-gene feature space (module-pooling encoder, uniform masking — see the model
+                card above for the settled details), and the reference is now trained with it:
+                <code>reference_model.pt</code>, <code>reference_embedding.npy</code>, and
+                <code>reference_centroids.npy</code> are real, live artifacts. The projection
+                pipeline runs against them end to end; it is not yet deployed behind
+                <a href="project.html">the projection page</a>, which is a separate,
+                still-open piece of work.
             </p>
-            <h3 style="font-size: 14px; margin-bottom: 4px;">Next reference — settled design</h3>
-            <div id="next-reference-mount"></div>
             <h3 style="font-size: 14px; margin: 16px 0 4px;">Prior baseline — kept, not erased</h3>
             <div id="prior-baseline-mount"></div>
         </section>
@@ -71,13 +77,12 @@
     <script type="module" async>
         import { loadManifest } from './js/manifest.js';
         import {
-            buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
+            buildModelCard, buildPriorBaselineCard,
             buildAvailabilityTable, errorPanel,
         } from './js/panels.js';
 
         loadManifest().then((manifest) => {
             document.getElementById('model-card-mount').innerHTML = buildModelCard(manifest);
-            document.getElementById('next-reference-mount').innerHTML = buildNextReferenceCard(manifest);
             document.getElementById('prior-baseline-mount').innerHTML = buildPriorBaselineCard(manifest);
             document.getElementById('availability-mount').innerHTML = buildAvailabilityTable(manifest);
         }).catch((err) => {

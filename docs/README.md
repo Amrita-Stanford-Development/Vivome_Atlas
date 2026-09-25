@@ -7,6 +7,12 @@
 | [projection-service.md](projection-service.md) | The `POST /api/project` contract, conformal label sets, abstention |
 | [plans/](plans/) | Implementation plans |
 
+The contract above is implemented at [`../service/`](../service/) — see
+[`service/README.md`](../service/README.md) for the pipeline stage-by-stage
+design rationale, what's real versus pending, and known sharp edges, and
+[`service/model/README.md`](../service/model/README.md) for the reference
+artifacts themselves.
+
 Start at the repository [README](../README.md) for setup and layout, and
 [CLAUDE.md](../CLAUDE.md) for the conventions any change has to respect.
 
