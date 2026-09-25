@@ -7,9 +7,9 @@ The reference encoder (`ModulePoolingEncoder`, `reference_model.pt`) is
 cell classes (`reference_metadata.csv`). It is applied **zero-shot to
 proteomics uploads**: no protein labels and no paired RNA-protein cells were
 used at any point in training or in choosing the architecture. Every number
-below is either measured directly or cites the file that measured it —
+below cites the committed file that measured it —
 `docs/plans/VivOME_TODO.md` §5 ("Current verified numbers") is the running
-source of truth this card draws from.
+index of those files, not a source in its own right.
 
 ## Architecture
 
@@ -32,16 +32,33 @@ source of truth this card draws from.
 
 | Measure | Value | Source |
 |---|---|---|
-| RNA→RNA, SCoPE2 mask, **test cells only** | 93.2% acc / 65.7% bal (OT); 67.3% bal (nearest-centroid) | Corrected; see note below |
-| RNA→RNA, full coverage, **test cells only** | 94.6% acc / 80.0% bal (OT) | Corrected; see note below |
-| Protein (SCoPE2, 1,490 real cells), **restricted** to the two supported classes | 86.2% acc / 79.8% bal | What the live service delivers today |
-| Protein (SCoPE2), **unrestricted** across all 22 classes | 45.4% acc / 31.1% bal | Shows the restricted number's cost — see failure mode 1 |
-| Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | Lower is better; still high |
+| RNA→RNA, SCoPE2 mask, **test cells only** | 93.2% acc / 65.7% bal (OT); 67.3% bal (nearest-centroid) | `docs/plans/nb1/rna_to_rna_membership_corrected.csv` |
+| RNA→RNA, full coverage, **test cells only** | 94.6% acc / 80.0% bal (OT) | `docs/plans/nb1/rna_to_rna_membership_corrected.csv` |
+| Protein (SCoPE2, 1,490 real cells), **restricted** to the two supported classes | 86.2% acc / 79.8% bal | `service/model/v3_tables/support_restricted_assignment.csv` |
+| Protein (SCoPE2), **unrestricted** across all 22 classes | 45.4% acc / 31.1% bal | `service/model/v3_tables/support_restricted_assignment.csv` — see the variance caveat below |
+| Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `docs/plans/VivOME_TODO.md` §5 |
 
 **A previously published RNA→RNA figure of 95.5% / 74.8% (SCoPE2 mask) is
 superseded by the 93.2% / 65.7% figures above.** The published number
 included cells the model had trained on in its own test split — an invalid
 measurement. The corrected numbers here score test cells only.
+
+**The restricted 79.8% balanced accuracy is exact for SCoPE2 by
+construction, not a generalizable result.** SCoPE2's protein cells are only
+ever macrophage or monocyte, so restricting Stage 4's candidate space to
+exactly those two classes (`config.CROSS_MODAL_SUPPORTED_CLASSES`) is, on
+this one dataset, restricting to the true label set — the number reflects
+that match, not a property of the model that holds on other data. On any
+upload containing other cell types (e.g. PBMC240, which has T and NK
+cells), the same hardcoded restriction is actively wrong: see failure mode
+1 below.
+
+**SCoPE2 unrestricted results vary strongly across retrains.** A faithful
+retrain of the same recipe scored 9.1% balanced accuracy unrestricted,
+against the 31.1% shipped in the table above — the unrestricted number is
+not a stable property of this architecture at this sample size. Seed
+variance for this measurement is not yet quantified (pending T1 NB1c);
+until it lands, treat the 31.1% figure as one draw, not a target.
 
 ## Known failure modes
 
@@ -64,9 +81,9 @@ measurement. The corrected numbers here score test cells only.
    Macrophage and monocyte are the only classes ever checked against real
    protein ground truth. The other 20 classes' embeddings have not been
    validated against protein data at all.
-4. **No donor-level holdout in training.** Every donor identified so far
-   (TSP14, TSP21, TSP25) contributed roughly 65% of its own cells to
-   training (`docs/plans/VivOME_TODO.md` §4). Published RNA→RNA numbers
+4. **No donor-level holdout in training.** All nine donors contributed
+   roughly 65% of their own cells to training (`docs/plans/VivOME_TODO.md`
+   §4) — not a subset of donors, all of them. Published RNA→RNA numbers
    reflect this; a true held-out-donor evaluation does not yet exist.
    Planned for v4 (T2 NB8).
 

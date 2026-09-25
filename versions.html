@@ -63,17 +63,29 @@
                 sources, and the numbers below: <code>service/model/MODEL_CARD.md</code>.
             </p>
             <table class="support-table" style="margin: 8px 0 12px;">
-                <thead><tr><th>Measure</th><th>Value</th></tr></thead>
+                <thead><tr><th>Measure</th><th>Value</th><th>Source</th></tr></thead>
                 <tbody>
-                    <tr><td>RNA→RNA, SCoPE2 mask, test cells only</td><td>93.2% acc / 65.7% bal (OT)</td></tr>
-                    <tr><td>Protein, restricted to the 2 supported classes</td><td>86.2% acc / 79.8% bal</td></tr>
-                    <tr><td>Protein, unrestricted (22 classes)</td><td>45.4% acc / 31.1% bal</td></tr>
+                    <tr><td>RNA→RNA, SCoPE2 mask, test cells only</td><td>93.2% acc / 65.7% bal (OT)</td>
+                        <td><code>docs/plans/nb1/rna_to_rna_membership_corrected.csv</code></td></tr>
+                    <tr><td>Protein, restricted to the 2 supported classes</td><td>86.2% acc / 79.8% bal</td>
+                        <td><code>service/model/v3_tables/support_restricted_assignment.csv</code></td></tr>
+                    <tr><td>Protein, unrestricted (22 classes)</td><td>45.4% acc / 31.1% bal</td>
+                        <td><code>service/model/v3_tables/support_restricted_assignment.csv</code></td></tr>
                 </tbody>
             </table>
             <p style="font-size: 13px;">
                 A previously published RNA→RNA figure of 95.5% / 74.8% is superseded by the
                 93.2% / 65.7% figures above — the published number's test split included cells
                 the model had trained on.
+            </p>
+            <p style="font-size: 13px;">
+                The restricted 79.8% is exact for SCoPE2 <em>by construction</em>: SCoPE2's
+                protein cells are only ever macrophage or monocyte, so restricting to exactly
+                those two classes matches its true label set on this one dataset. On other data
+                with other cell types present, the same hardcoded restriction is wrong — see
+                failure mode 1. Separately, SCoPE2 unrestricted results vary strongly across
+                retrains: a faithful retrain of the same recipe scored 9.1% balanced accuracy
+                against the 31.1% shipped above. Seed variance measurement is pending (T1 NB1c).
             </p>
             <p style="font-size: 13px; margin-bottom: 4px;"><strong>Known failure modes:</strong></p>
             <ol style="font-size: 13px;">
@@ -87,8 +99,8 @@
                     ranking itself is correct (AUC 0.928).</li>
                 <li>Only 2 of 22 reference classes (macrophage, monocyte) have ever been
                     validated against real protein data.</li>
-                <li>No donor-level holdout in training — every known donor contributed about
-                    65% of its own cells to the training set.</li>
+                <li>No donor-level holdout in training — all nine donors contributed about
+                    65% of their own cells to the training set.</li>
             </ol>
         </section>
 

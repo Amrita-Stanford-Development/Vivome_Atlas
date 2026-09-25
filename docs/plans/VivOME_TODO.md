@@ -124,7 +124,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 - [x] **T1 NB1, simulation bench.** All gates pass; output in `Data/Results/Tier1_v31/NB1/`
   - [x] Re encoding reproduces `reference_embedding.npy` (median cosine 1.000000)
   - [x] Seed 0 split reproduced exactly (0.917341 / 0.724889)
-  - [x] Training membership: every donor contributed about 65 percent of its cells to training. No donor level holdout exists for v3
+  - [x] Training membership: all nine donors contributed about 65 percent of their cells to training. No donor level holdout exists for v3
   - [x] Calibration suite (from val) and evaluation suite (from test), 240 uploads each, disjoint from each other and from training
   - [x] Real missingness profiles for SCoPE2, PBMC240 and Fulcher
   - [x] v3 baseline on the evaluation suite
@@ -153,7 +153,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 | Coverage floor definition | NB1b curve, then A2 | **Calibrated:** `MIN_OBSERVED_GENES = 200` (chance below 100, stable from ~200; 100-300 thinly sampled — "calibrated on simulations, revisit", not fully closed) |
 | Per-cell loading normalization (subtract each cell's own median after log2, e.g. to correct for loading/depth differences between cells) | NB1b, then A2 | Open. Not in the service. Unrestricted (22-class) real-data rescoring on PBMC240 found the untouched fixed service (46.6% lymphoid recall) actually *beats* the per-cell-normalization variant (21.8%) and the heavily-preprocessed comparison file (35.1%) — a real result, but one real dataset's spot check, not NB1b's controlled simulation. Decide from NB1b's ablation, not this |
 | Keep smoothing on by default | NB1b | Open. It hurts natural compositions by 10 points |
-| Were TSP14, TSP21, TSP25 in production training | NB1 | **Settled: yes, about 65 percent of their cells** |
+| Were TSP14, TSP21, TSP25 in production training | NB1 | **Settled: yes, about 65 percent of their cells — and so was every other donor (all nine), see §3 above, not only these three** |
 | Product decision rule | NB2, on simulations only | Open. Centroid 79.79 vs pool first kNN 77.50 on SCoPE2 is recorded, not decisive |
 | Per request vs binned calibration | NB2 | Open |
 | Flat vs hierarchical label space | NB2, T2 NB7 | Open |
