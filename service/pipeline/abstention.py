@@ -15,6 +15,14 @@ stop being trustworthy in a way a confidence score won't catch (accuracy at
 10% coverage was non-monotone against 20%/30% in one comparison, the
 signature of a mostly-zero input producing an arbitrary answer). This is
 checked first, per cell, and short-circuits straight to abstention.
+
+That floor was originally a fraction of the fixed 9,002-gene feature space
+(COVERAGE_FLOOR = 0.15, i.e. 1,350 genes) — which refused 79% of real
+PBMC240 cells and 100% of real Fulcher cells outright (T1 NB1), since a
+fraction of one fixed denominator doesn't transfer across datasets with
+very different native panel sizes. Replaced with an absolute observed-gene
+count (config.MIN_OBSERVED_GENES, PROVISIONAL until T1 NB1b's coverage
+curve calibrates it) — see alignment.py's `per_cell_observed_genes`.
 """
 from __future__ import annotations
 
@@ -68,17 +76,17 @@ def _ood_threshold(calibration_scores: np.ndarray, quantile: float) -> float:
 
 def score_abstention(
     max_similarity: np.ndarray,
-    per_cell_coverage: np.ndarray,
+    per_cell_observed_genes: np.ndarray,
     label_sets: list[list[int]],
     calibration_indices: np.ndarray,
     similarity_quantile: float = 0.05,
-    coverage_floor: float = config.COVERAGE_FLOOR,
+    min_observed_genes: int = config.MIN_OBSERVED_GENES,
 ) -> AbstentionResult:
     """Priority, per cell: coverage floor, then out-of-distribution, then
     an empty or genuinely ambiguous conformal set. Stage 7 (fallback) should
     run before this is treated as final for the AMBIGUOUS case: a label_set
-    that collapses to one of the six known confusable pairs is not
-    ambiguous, it is a resolvable partial identification.
+    that collapses to one of the five known confusable pairs (fallback.py)
+    is not ambiguous, it is a resolvable partial identification.
     """
     n_cells = max_similarity.shape[0]
     threshold = _ood_threshold(max_similarity[calibration_indices], similarity_quantile)
@@ -87,7 +95,7 @@ def score_abstention(
     reasons: list[AbstainReason] = [AbstainReason.NONE] * n_cells
 
     for i in range(n_cells):
-        if per_cell_coverage[i] < coverage_floor:
+        if per_cell_observed_genes[i] < min_observed_genes:
             abstained[i] = True
             reasons[i] = AbstainReason.LOW_COVERAGE
         elif max_similarity[i] < threshold:

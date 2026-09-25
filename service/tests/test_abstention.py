@@ -35,41 +35,47 @@ class ScoreAbstentionPriorityTests(unittest.TestCase):
     """Coverage floor > out-of-distribution > empty/ambiguous conformal set,
     per the brief's stage ordering."""
 
-    def _run(self, coverage, max_similarity, label_sets):
-        n = len(coverage)
+    def _run(self, observed_genes, max_similarity, label_sets):
+        n = len(observed_genes)
         calibration_indices = np.arange(n)
         return abstention.score_abstention(
             max_similarity=np.array(max_similarity),
-            per_cell_coverage=np.array(coverage),
+            per_cell_observed_genes=np.array(observed_genes),
             label_sets=label_sets,
             calibration_indices=calibration_indices,
             similarity_quantile=0.5,  # median of calibration scores as threshold, for a crisp test
+            min_observed_genes=100,
         )
 
     def test_low_coverage_abstains_regardless_of_similarity_or_confidence(self):
-        result = self._run(coverage=[0.01, 0.9], max_similarity=[0.99, 0.99], label_sets=[[0], [0]])
+        result = self._run(observed_genes=[5, 900], max_similarity=[0.99, 0.99], label_sets=[[0], [0]])
         self.assertTrue(result.abstained[0])
         self.assertEqual(result.reason[0], abstention.AbstainReason.LOW_COVERAGE)
 
     def test_out_of_distribution_abstains_even_with_a_confident_singleton_set(self):
-        result = self._run(coverage=[0.9, 0.9], max_similarity=[0.01, 0.99], label_sets=[[0], [0]])
+        result = self._run(observed_genes=[900, 900], max_similarity=[0.01, 0.99], label_sets=[[0], [0]])
         self.assertTrue(result.abstained[0])
         self.assertEqual(result.reason[0], abstention.AbstainReason.OUT_OF_DISTRIBUTION)
 
     def test_empty_label_set_is_no_confident_label(self):
-        result = self._run(coverage=[0.9, 0.9], max_similarity=[0.99, 0.99], label_sets=[[], [0]])
+        result = self._run(observed_genes=[900, 900], max_similarity=[0.99, 0.99], label_sets=[[], [0]])
         self.assertTrue(result.abstained[0])
         self.assertEqual(result.reason[0], abstention.AbstainReason.NO_CONFIDENT_LABEL)
 
     def test_multi_class_label_set_is_ambiguous(self):
-        result = self._run(coverage=[0.9, 0.9], max_similarity=[0.99, 0.99], label_sets=[[0, 1], [0]])
+        result = self._run(observed_genes=[900, 900], max_similarity=[0.99, 0.99], label_sets=[[0, 1], [0]])
         self.assertTrue(result.abstained[0])
         self.assertEqual(result.reason[0], abstention.AbstainReason.AMBIGUOUS)
 
     def test_singleton_set_within_support_is_not_abstained(self):
-        result = self._run(coverage=[0.9], max_similarity=[0.99], label_sets=[[3]])
+        result = self._run(observed_genes=[900], max_similarity=[0.99], label_sets=[[3]])
         self.assertFalse(result.abstained[0])
         self.assertEqual(result.reason[0], abstention.AbstainReason.NONE)
+
+    def test_min_observed_genes_boundary_is_exclusive_below(self):
+        result = self._run(observed_genes=[99, 100], max_similarity=[0.99, 0.99], label_sets=[[0], [0]])
+        self.assertTrue(result.abstained[0])
+        self.assertFalse(result.abstained[1])
 
 
 if __name__ == "__main__":

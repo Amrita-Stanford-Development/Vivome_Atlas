@@ -54,10 +54,23 @@ class AlignedQuery:
     def per_cell_coverage(self) -> np.ndarray:
         """(n_cells,): the fraction of genes actually observed for each
         individual cell — can be lower than `coverage` when a matched gene
-        has per-cell dropout, and is what Stage 6's coverage floor checks
-        against, since a floor is a per-cell trust decision."""
+        has per-cell dropout. Diagnostic only; Stage 6's coverage floor
+        checks `per_cell_observed_genes` (an absolute count) instead — see
+        that property's docstring for why."""
         n_genes = self.mask.shape[1]
         return self.mask.mean(axis=1) if n_genes else np.zeros(self.mask.shape[0])
+
+    @property
+    def per_cell_observed_genes(self) -> np.ndarray:
+        """(n_cells,) int: the absolute count of feature-space genes
+        observed for each cell. What Stage 6's coverage floor
+        (config.MIN_OBSERVED_GENES) checks against, replacing the old
+        fractional COVERAGE_FLOOR — a fixed gene count is comparable across
+        datasets with very different native panel sizes (a 200-gene panel
+        at 80% coverage and a 9,000-gene panel at 80% coverage carry very
+        different amounts of actual signal), where a fraction of one fixed
+        9,002-gene denominator isn't."""
+        return self.mask.sum(axis=1).astype(int)
 
 
 def parse_matrix_csv(text: str) -> RawMatrix:
@@ -76,6 +89,54 @@ def parse_matrix_csv(text: str) -> RawMatrix:
         rows.append([float(v) if v != "" else np.nan for v in row[1:]])
     values = np.array(rows, dtype=np.float32) if rows else np.empty((0, len(cell_ids)), dtype=np.float32)
     return RawMatrix(gene_names=gene_names, cell_ids=cell_ids, values=values)
+
+
+@dataclass(frozen=True)
+class ValueScale:
+    detected: str  # "linear" | "log" | "unknown" (no observed values at all)
+    transformed: bool
+
+
+def detect_and_transform_value_scale(
+    raw_values: np.ndarray,
+    median_threshold: float = config.LINEAR_SCALE_MEDIAN_THRESHOLD,
+) -> tuple[np.ndarray, ValueScale]:
+    """raw_values: (n_raw_genes, n_cells), NaN for missing (this dataset's
+    raw units, before any z-scoring). A DIA-NN or similar linear-intensity
+    report arrives in units of hundreds to tens of thousands; the encoder
+    was trained on log-scale, then z-scored values, and z-scoring linear
+    intensities directly does not recover that distribution — the highest-
+    abundance proteins still dominate.
+
+    Detected as linear scale, and log2-transformed, when every observed
+    value is non-negative AND the median observed value exceeds
+    `median_threshold`. Real log-scale data (what this pipeline expects) is
+    typically single or low double digits and commonly has negative values
+    (a log-ratio relative to a reference), so a single negative observed
+    value is enough to skip the transform entirely — never transform data
+    that might already be on a log scale.
+
+    An observed value of exactly 0 is treated as "not detected" (set to
+    NaN, matching this dataset's existing missing-value semantics) rather
+    than log2-transformed to -inf.
+    """
+    observed = ~np.isnan(raw_values)
+    if not observed.any():
+        return raw_values, ValueScale(detected="unknown", transformed=False)
+
+    observed_values = raw_values[observed]
+    has_negative = bool((observed_values < 0).any())
+    median_value = float(np.median(observed_values))
+    is_linear = (not has_negative) and (median_value > median_threshold)
+    if not is_linear:
+        return raw_values, ValueScale(detected="log", transformed=False)
+
+    transformed = raw_values.copy()
+    zero_mask = observed & (transformed == 0)
+    transformed[zero_mask] = np.nan
+    log_mask = observed & ~zero_mask
+    transformed[log_mask] = np.log2(transformed[log_mask])
+    return transformed, ValueScale(detected="linear", transformed=True)
 
 
 def zscore_per_gene(raw_values: np.ndarray, eps: float = 1e-8) -> np.ndarray:

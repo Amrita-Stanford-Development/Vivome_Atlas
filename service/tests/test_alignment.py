@@ -88,6 +88,71 @@ class AlignToFeatureSpaceTests(unittest.TestCase):
         self.assertAlmostEqual(aligned.coverage, 1 / 4)
         np.testing.assert_array_equal(aligned.per_cell_coverage, [1 / 4])
 
+    def test_per_cell_observed_genes_is_an_absolute_count_not_a_fraction(self):
+        # values is (n_genes, n_cells): A1BG = [1.0, NaN], A2M = [3.0, 4.0]
+        # -- c1 observes both genes (A1BG=1.0, A2M=3.0), c2 only A2M.
+        raw = alignment.RawMatrix(
+            gene_names=["A1BG", "A2M"], cell_ids=["c1", "c2"],
+            values=np.array([[1.0, np.nan], [3.0, 4.0]]),
+        )
+        aligned = alignment.align_to_feature_space(raw, self.feature_genes)
+        np.testing.assert_array_equal(aligned.per_cell_observed_genes, [2, 1])
+
+
+class DetectAndTransformValueScaleTests(unittest.TestCase):
+    def test_linear_scale_is_detected_and_log2_transformed(self):
+        raw = np.array([[100.0, 4000.0, 20000.0]])
+        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        self.assertEqual(scale.detected, "linear")
+        self.assertTrue(scale.transformed)
+        np.testing.assert_allclose(transformed, np.log2(raw))
+
+    def test_already_log_scale_is_not_transformed(self):
+        raw = np.array([[1.0, 2.0, 3.0]])
+        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        self.assertEqual(scale.detected, "log")
+        self.assertFalse(scale.transformed)
+        np.testing.assert_array_equal(transformed, raw)
+
+    def test_any_negative_value_prevents_the_transform_even_with_a_high_median(self):
+        raw = np.array([[-5.0, 4000.0, 20000.0]])
+        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        self.assertEqual(scale.detected, "log")
+        self.assertFalse(scale.transformed)
+        np.testing.assert_array_equal(transformed, raw)
+
+    def test_zero_is_treated_as_not_detected_not_log2_of_zero(self):
+        raw = np.array([[0.0, 4000.0, 20000.0]])
+        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        self.assertTrue(scale.transformed)
+        self.assertTrue(np.isnan(transformed[0, 0]))
+        self.assertFalse(np.isnan(transformed[0, 1]))
+
+    def test_nan_entries_are_ignored_by_detection_and_left_nan(self):
+        raw = np.array([[np.nan, 4000.0, 20000.0]])
+        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        self.assertEqual(scale.detected, "linear")
+        self.assertTrue(np.isnan(transformed[0, 0]))
+
+    def test_no_observed_values_at_all_is_unknown_not_a_crash(self):
+        raw = np.array([[np.nan, np.nan]])
+        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        self.assertEqual(scale.detected, "unknown")
+        self.assertFalse(scale.transformed)
+
+    def test_a_log_matrix_and_its_linear_equivalent_transform_to_the_same_values(self):
+        """The end-to-end acceptance test from the roadmap: log2(x) and its
+        2**x version must be recoverable to the same (transformed) values.
+        Magnitudes chosen so 2**x lands in a realistic linear-intensity
+        range (hundreds to low thousands, median > 50) -- log2 of small
+        values (e.g. 1.5) round-trips to a linear value the detector
+        wouldn't flag as linear-scale at all, which would defeat the test."""
+        log_values = np.array([[7.0, 8.5, 6.0, 10.0]])
+        linear_values = 2 ** log_values
+        transformed_linear, scale = alignment.detect_and_transform_value_scale(linear_values)
+        self.assertTrue(scale.transformed)
+        np.testing.assert_allclose(transformed_linear, log_values, atol=1e-5)
+
 
 if __name__ == "__main__":
     unittest.main()
