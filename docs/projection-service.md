@@ -4,10 +4,13 @@ The projection service accepts an expression matrix and places its cells into
 the shared latent space. It is the core of the resource claim: an atlas you
 can *send data to*, not only look at.
 
-> **Status: not implemented.** The backend is Phase 5 of the implementation
-> plan. `project.html` today performs client-side validation only and
-> publishes the contract below. Every value in the schema is a placeholder
-> showing the response shape — none of them is a measurement.
+> **Status: implemented, not deployed.** The pipeline in `service/` runs
+> end to end against the real v3 reference (`service/model/README.md`) and
+> is covered by `service/tests/`. It is not wired up to this site —
+> `project.html` today performs client-side validation only, has no
+> fetch/XHR anywhere, and publishes the contract below. Every value in the
+> schema is a placeholder showing the response shape — none of them is a
+> measurement.
 
 ## Contract
 
@@ -29,27 +32,48 @@ row.
   "n_cells"              : "<int>",
   "n_features_matched"   : "<int>",
   "n_features_unmatched" : "<int>",
+  "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>"},
   "cells": [
     {
-      "cell_id"     : "<string>",
-      "coordinates" : ["<float>", "<float>", "<float>"],
-      "label"       : "<string>",
-      "label_set"   : ["<string>", "..."],
-      "confidence"  : "<float 0-1>",
-      "abstained"   : false
+      "cell_id"        : "<string>",
+      "coordinates"    : ["<float>", "<float>", "<float>"],
+      "observed_genes" : "<int>",
+      "label"          : "<string>",
+      "label_set"      : ["<string>", "..."],
+      "confidence"     : "<float 0-1>",
+      "abstained"      : false
     },
     {
-      "cell_id"       : "<string>",
-      "coordinates"   : ["<float>", "<float>", "<float>"],
-      "label"         : null,
-      "label_set"     : [],
-      "confidence"    : null,
-      "abstained"     : true,
-      "abstain_reason": "outside supported latent space"
+      "cell_id"        : "<string>",
+      "coordinates"    : ["<float>", "<float>", "<float>"],
+      "observed_genes" : "<int>",
+      "label"          : null,
+      "label_set"      : [],
+      "confidence"     : null,
+      "abstained"      : true,
+      "abstain_reason" : "outside supported latent space"
     }
   ]
 }
 ```
+
+**`value_scale`** (additive, not yet in a strict reading of the contract
+above — see `service/README.md`) reports whether the upload was detected as
+linear-scale intensity data (e.g. a raw DIA-NN report, values in the
+hundreds to tens of thousands) and log2-transformed before anything else
+touched it. `"detected": "log"` means the upload already looked log-scale
+and was left alone; `"unknown"` means the upload had no observed values at
+all. The detection rule and its threshold are in
+`service/model/canonical_preprocessing.json`.
+
+**`observed_genes`**, per cell, is the absolute count of feature-space genes
+that cell had a value for — what the coverage floor
+(`config.MIN_OBSERVED_GENES`, currently a provisional default, see
+`service/model/canonical_preprocessing.json`) checks against, replacing an
+earlier fractional floor that refused the large majority of real
+mass-spec-proteomics cells outright (a fixed gene count travels across
+datasets with very different native panel sizes better than a fraction of
+one fixed 9,002-gene denominator does).
 
 ## Two design commitments
 

@@ -1,0 +1,20 @@
+{
+  "convention": "service",
+  "graph_input": "zscored",
+  "log_transform": {
+    "rule": "no negative observed values AND median of observed values > 50 -> detected as linear scale, log2-transformed",
+    "zero_handling": "an observed value of exactly 0 is treated as not-detected (NaN), never log2(0)",
+    "config_constant": "LINEAR_SCALE_MEDIAN_THRESHOLD",
+    "config_value": 50.0
+  },
+  "min_observed_genes": 100,
+  "mask_convention": "per_cell",
+  "provisional": ["min_observed_genes"],
+  "notes": "min_observed_genes is a placeholder default, not yet calibrated against a real accuracy-vs-observed-genes curve. T1 NB1b will produce docs/plans/nb1b/coverage_curve_v0.csv; re-derive this value from it and remove it from provisional once that lands. mask_convention stays per_cell (not median-filled per dataset) per T1 NB1's simulations with realistic dropout, pending T1 NB1b's ablation confirming or revising that.",
+  "verified_against": {
+    "scope2_unrestricted": [45.369127516778526, 31.083265404424022],
+    "scope2_restricted": [86.1744966442953, 79.7915354403646],
+    "scope2_service_embedding_cosine_to_notebook": 1.0
+  },
+  "source_commit": "faithfulness/a2"
+}
