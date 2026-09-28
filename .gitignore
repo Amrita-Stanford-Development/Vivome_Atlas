@@ -2,3 +2,10 @@ __pycache__/
 *.py[cod]
 .DS_Store
 node_modules/
+
+# T1 NB1d bundle: ~230MB of per-seed embeddings, regenerable from the
+# notebook run, not source. The small tables/ and nb1d_summary.json that
+# every reported number cites are copied to docs/plans/nb1d/ and committed
+# there instead.
+New_Files/NB1d/embeddings/
+New_Files/nb1d.zip

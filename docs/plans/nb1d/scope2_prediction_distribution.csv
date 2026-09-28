@@ -1,0 +1,164 @@
+model,family,true,rank,predicted,lineage,share
+v3_seed0,v3,macrophage,1,"cd8-positive, alpha-beta t cell",lymphoid,78.68020304568529
+v3_seed0,v3,macrophage,2,basophil,myeloid,7.614213197969544
+v3_seed0,v3,macrophage,3,natural killer cell,lymphoid,5.583756345177665
+v3_seed0,v3,macrophage,4,myeloid dendritic cell,myeloid,3.2994923857868024
+v3_seed0,v3,macrophage,5,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,1.2690355329949239
+v3_seed0,v3,macrophage,6,regulatory t cell,lymphoid,1.2690355329949239
+v3_seed0,v3,macrophage,7,monocyte,myeloid,1.2690355329949239
+v3_seed0,v3,macrophage,8,macrophage,myeloid,0.7614213197969544
+v3_seed0,v3,macrophage,9,plasma cell,lymphoid,0.25380710659898476
+v3_seed0,v3,monocyte,1,monocyte,myeloid,61.40510948905109
+v3_seed0,v3,monocyte,2,myeloid dendritic cell,myeloid,14.963503649635038
+v3_seed0,v3,monocyte,3,"cd8-positive, alpha-beta t cell",lymphoid,13.412408759124087
+v3_seed0,v3,monocyte,4,basophil,myeloid,8.394160583941606
+v3_seed0,v3,monocyte,5,neutrophil,myeloid,1.2773722627737227
+v3_seed0,v3,monocyte,6,classical monocyte,myeloid,0.2737226277372263
+v3_seed0,v3,monocyte,7,mature nk t cell,lymphoid,0.09124087591240876
+v3_seed0,v3,monocyte,8,macrophage,myeloid,0.09124087591240876
+v3_seed0,v3,monocyte,9,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,0.09124087591240876
+v3_seed1,v3,macrophage,1,classical monocyte,myeloid,62.43654822335025
+v3_seed1,v3,macrophage,2,monocyte,myeloid,12.18274111675127
+v3_seed1,v3,macrophage,3,macrophage,myeloid,9.898477157360407
+v3_seed1,v3,macrophage,4,"cd8-positive, alpha-beta t cell",lymphoid,6.598984771573605
+v3_seed1,v3,macrophage,5,plasma cell,lymphoid,5.0761421319796955
+v3_seed1,v3,macrophage,6,neutrophil,myeloid,1.7766497461928936
+v3_seed1,v3,macrophage,7,natural killer cell,lymphoid,1.7766497461928936
+v3_seed1,v3,macrophage,8,regulatory t cell,lymphoid,0.25380710659898476
+v3_seed1,v3,monocyte,1,monocyte,myeloid,86.4963503649635
+v3_seed1,v3,monocyte,2,classical monocyte,myeloid,9.945255474452555
+v3_seed1,v3,monocyte,3,macrophage,myeloid,2.0985401459854014
+v3_seed1,v3,monocyte,4,"cd8-positive, alpha-beta t cell",lymphoid,0.8211678832116789
+v3_seed1,v3,monocyte,5,basophil,myeloid,0.5474452554744526
+v3_seed1,v3,monocyte,6,regulatory t cell,lymphoid,0.09124087591240876
+v3_seed2,v3,macrophage,1,neutrophil,myeloid,56.598984771573605
+v3_seed2,v3,macrophage,2,"cd8-positive, alpha-beta t cell",lymphoid,35.53299492385787
+v3_seed2,v3,macrophage,3,basophil,myeloid,3.5532994923857872
+v3_seed2,v3,macrophage,4,monocyte,myeloid,2.284263959390863
+v3_seed2,v3,macrophage,5,natural killer cell,lymphoid,2.030456852791878
+v3_seed2,v3,monocyte,1,monocyte,myeloid,53.284671532846716
+v3_seed2,v3,monocyte,2,neutrophil,myeloid,38.32116788321168
+v3_seed2,v3,monocyte,3,classical monocyte,myeloid,4.37956204379562
+v3_seed2,v3,monocyte,4,"cd8-positive, alpha-beta t cell",lymphoid,3.5583941605839415
+v3_seed2,v3,monocyte,5,basophil,myeloid,0.45620437956204374
+v3_seed3,v3,macrophage,1,monocyte,myeloid,35.025380710659896
+v3_seed3,v3,macrophage,2,macrophage,myeloid,27.157360406091367
+v3_seed3,v3,macrophage,3,"cd8-positive, alpha-beta t cell",lymphoid,19.035532994923855
+v3_seed3,v3,macrophage,4,myeloid dendritic cell,myeloid,14.213197969543149
+v3_seed3,v3,macrophage,5,plasma cell,lymphoid,2.7918781725888326
+v3_seed3,v3,macrophage,6,neutrophil,myeloid,0.7614213197969544
+v3_seed3,v3,macrophage,7,natural killer cell,lymphoid,0.25380710659898476
+v3_seed3,v3,macrophage,8,classical monocyte,myeloid,0.25380710659898476
+v3_seed3,v3,macrophage,9,non-classical monocyte,myeloid,0.25380710659898476
+v3_seed3,v3,macrophage,10,intermediate monocyte,myeloid,0.25380710659898476
+v3_seed3,v3,monocyte,1,myeloid dendritic cell,myeloid,39.324817518248175
+v3_seed3,v3,monocyte,2,neutrophil,myeloid,37.31751824817518
+v3_seed3,v3,monocyte,3,monocyte,myeloid,16.697080291970803
+v3_seed3,v3,monocyte,4,"cd8-positive, alpha-beta t cell",lymphoid,3.832116788321168
+v3_seed3,v3,monocyte,5,classical monocyte,myeloid,1.824817518248175
+v3_seed3,v3,monocyte,6,macrophage,myeloid,0.8211678832116789
+v3_seed3,v3,monocyte,7,non-classical monocyte,myeloid,0.09124087591240876
+v3_seed3,v3,monocyte,8,intermediate monocyte,myeloid,0.09124087591240876
+v3_seed4,v3,macrophage,1,natural killer cell,lymphoid,48.47715736040609
+v3_seed4,v3,macrophage,2,neutrophil,myeloid,26.14213197969543
+v3_seed4,v3,macrophage,3,"cd8-positive, alpha-beta t cell",lymphoid,15.736040609137056
+v3_seed4,v3,macrophage,4,mature nk t cell,lymphoid,9.390862944162437
+v3_seed4,v3,macrophage,5,erythrocyte,erythroid,0.25380710659898476
+v3_seed4,v3,monocyte,1,neutrophil,myeloid,83.85036496350365
+v3_seed4,v3,monocyte,2,natural killer cell,lymphoid,6.295620437956205
+v3_seed4,v3,monocyte,3,"cd8-positive, alpha-beta t cell",lymphoid,5.291970802919708
+v3_seed4,v3,monocyte,4,myeloid dendritic cell,myeloid,3.010948905109489
+v3_seed4,v3,monocyte,5,mature nk t cell,lymphoid,1.094890510948905
+v3_seed4,v3,monocyte,6,monocyte,myeloid,0.2737226277372263
+v3_seed4,v3,monocyte,7,basophil,myeloid,0.18248175182481752
+V2_seed0,V2,macrophage,1,"cd4-positive, alpha-beta t cell",lymphoid,42.38578680203046
+V2_seed0,V2,macrophage,2,mature nk t cell,lymphoid,27.918781725888326
+V2_seed0,V2,macrophage,3,"cd8-positive, alpha-beta t cell",lymphoid,8.121827411167512
+V2_seed0,V2,macrophage,4,b cell,lymphoid,6.091370558375635
+V2_seed0,V2,macrophage,5,erythrocyte,erythroid,5.32994923857868
+V2_seed0,V2,macrophage,6,neutrophil,myeloid,3.5532994923857872
+V2_seed0,V2,macrophage,7,natural killer cell,lymphoid,3.0456852791878175
+V2_seed0,V2,macrophage,8,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,1.2690355329949239
+V2_seed0,V2,macrophage,9,macrophage,myeloid,1.015228426395939
+V2_seed0,V2,macrophage,10,plasma cell,lymphoid,1.015228426395939
+V2_seed0,V2,macrophage,11,myeloid dendritic cell,myeloid,0.25380710659898476
+V2_seed0,V2,monocyte,1,neutrophil,myeloid,34.762773722627735
+V2_seed0,V2,monocyte,2,myeloid dendritic cell,myeloid,29.105839416058394
+V2_seed0,V2,monocyte,3,erythrocyte,erythroid,9.58029197080292
+V2_seed0,V2,monocyte,4,mature nk t cell,lymphoid,9.032846715328468
+V2_seed0,V2,monocyte,5,"cd4-positive, alpha-beta t cell",lymphoid,6.660583941605839
+V2_seed0,V2,monocyte,6,"cd8-positive, alpha-beta t cell",lymphoid,4.014598540145985
+V2_seed0,V2,monocyte,7,monocyte,myeloid,2.4635036496350367
+V2_seed0,V2,monocyte,8,platelet,other,1.3686131386861315
+V2_seed0,V2,monocyte,9,natural killer cell,lymphoid,1.2773722627737227
+V2_seed0,V2,monocyte,10,b cell,lymphoid,1.094890510948905
+V2_seed0,V2,monocyte,11,macrophage,myeloid,0.6386861313868614
+V2_seed1,V2,macrophage,1,"cd4-positive, alpha-beta t cell",lymphoid,58.88324873096447
+V2_seed1,V2,macrophage,2,erythrocyte,erythroid,27.411167512690355
+V2_seed1,V2,macrophage,3,"cd8-positive, alpha-beta t cell",lymphoid,8.883248730964468
+V2_seed1,V2,macrophage,4,monocyte,myeloid,1.5228426395939088
+V2_seed1,V2,macrophage,5,plasma cell,lymphoid,1.015228426395939
+V2_seed1,V2,macrophage,6,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,1.015228426395939
+V2_seed1,V2,macrophage,7,b cell,lymphoid,0.5076142131979695
+V2_seed1,V2,macrophage,8,mature nk t cell,lymphoid,0.25380710659898476
+V2_seed1,V2,macrophage,9,macrophage,myeloid,0.25380710659898476
+V2_seed1,V2,macrophage,10,myeloid dendritic cell,myeloid,0.25380710659898476
+V2_seed1,V2,monocyte,1,erythrocyte,erythroid,54.379562043795616
+V2_seed1,V2,monocyte,2,monocyte,myeloid,17.7007299270073
+V2_seed1,V2,monocyte,3,myeloid dendritic cell,myeloid,15.328467153284672
+V2_seed1,V2,monocyte,4,"cd4-positive, alpha-beta t cell",lymphoid,6.751824817518248
+V2_seed1,V2,monocyte,5,"cd8-positive, alpha-beta t cell",lymphoid,4.014598540145985
+V2_seed1,V2,monocyte,6,neutrophil,myeloid,1.551094890510949
+V2_seed1,V2,monocyte,7,b cell,lymphoid,0.18248175182481752
+V2_seed1,V2,monocyte,8,classical monocyte,myeloid,0.09124087591240876
+V2_seed2,V2,macrophage,1,"cd4-positive, alpha-beta t cell",lymphoid,60.659898477157356
+V2_seed2,V2,macrophage,2,erythrocyte,erythroid,19.543147208121827
+V2_seed2,V2,macrophage,3,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,12.690355329949238
+V2_seed2,V2,macrophage,4,"cd8-positive, alpha-beta t cell",lymphoid,2.7918781725888326
+V2_seed2,V2,macrophage,5,mature nk t cell,lymphoid,2.7918781725888326
+V2_seed2,V2,macrophage,6,non-classical monocyte,myeloid,0.5076142131979695
+V2_seed2,V2,macrophage,7,myeloid dendritic cell,myeloid,0.5076142131979695
+V2_seed2,V2,macrophage,8,b cell,lymphoid,0.5076142131979695
+V2_seed2,V2,monocyte,1,erythrocyte,erythroid,47.35401459854015
+V2_seed2,V2,monocyte,2,myeloid dendritic cell,myeloid,36.86131386861314
+V2_seed2,V2,monocyte,3,"cd4-positive, alpha-beta t cell",lymphoid,12.043795620437956
+V2_seed2,V2,monocyte,4,"cd8-positive, alpha-beta t cell",lymphoid,1.916058394160584
+V2_seed2,V2,monocyte,5,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,1.0036496350364963
+V2_seed2,V2,monocyte,6,monocyte,myeloid,0.45620437956204374
+V2_seed2,V2,monocyte,7,platelet,other,0.36496350364963503
+V2_seed3,V2,macrophage,1,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,67.76649746192894
+V2_seed3,V2,macrophage,2,neutrophil,myeloid,22.081218274111674
+V2_seed3,V2,macrophage,3,erythrocyte,erythroid,3.5532994923857872
+V2_seed3,V2,macrophage,4,macrophage,myeloid,2.7918781725888326
+V2_seed3,V2,macrophage,5,"cd8-positive, alpha-beta t cell",lymphoid,2.5380710659898478
+V2_seed3,V2,macrophage,6,myeloid dendritic cell,myeloid,0.5076142131979695
+V2_seed3,V2,macrophage,7,mature nk t cell,lymphoid,0.25380710659898476
+V2_seed3,V2,macrophage,8,monocyte,myeloid,0.25380710659898476
+V2_seed3,V2,macrophage,9,b cell,lymphoid,0.25380710659898476
+V2_seed3,V2,monocyte,1,neutrophil,myeloid,56.56934306569343
+V2_seed3,V2,monocyte,2,myeloid dendritic cell,myeloid,27.73722627737226
+V2_seed3,V2,monocyte,3,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,9.67153284671533
+V2_seed3,V2,monocyte,4,monocyte,myeloid,2.281021897810219
+V2_seed3,V2,monocyte,5,"cd8-positive, alpha-beta t cell",lymphoid,1.824817518248175
+V2_seed3,V2,monocyte,6,erythrocyte,erythroid,1.1861313868613137
+V2_seed3,V2,monocyte,7,macrophage,myeloid,0.2737226277372263
+V2_seed3,V2,monocyte,8,platelet,other,0.2737226277372263
+V2_seed3,V2,monocyte,9,natural killer cell,lymphoid,0.18248175182481752
+V2_seed4,V2,macrophage,1,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,69.03553299492386
+V2_seed4,V2,macrophage,2,erythrocyte,erythroid,24.873096446700508
+V2_seed4,V2,macrophage,3,myeloid dendritic cell,myeloid,1.7766497461928936
+V2_seed4,V2,macrophage,4,"cd8-positive, alpha-beta t cell",lymphoid,1.2690355329949239
+V2_seed4,V2,macrophage,5,macrophage,myeloid,1.015228426395939
+V2_seed4,V2,macrophage,6,"cd4-positive, alpha-beta t cell",lymphoid,1.015228426395939
+V2_seed4,V2,macrophage,7,monocyte,myeloid,0.7614213197969544
+V2_seed4,V2,macrophage,8,plasma cell,lymphoid,0.25380710659898476
+V2_seed4,V2,monocyte,1,myeloid dendritic cell,myeloid,30.748175182481752
+V2_seed4,V2,monocyte,2,erythrocyte,erythroid,28.740875912408757
+V2_seed4,V2,monocyte,3,neutrophil,myeloid,24.72627737226277
+V2_seed4,V2,monocyte,4,"naive thymus-derived cd4-positive, alpha-beta t cell",lymphoid,10.583941605839415
+V2_seed4,V2,monocyte,5,monocyte,myeloid,2.8284671532846715
+V2_seed4,V2,monocyte,6,"cd8-positive, alpha-beta t cell",lymphoid,1.0036496350364963
+V2_seed4,V2,monocyte,7,classical monocyte,myeloid,0.7299270072992701
+V2_seed4,V2,monocyte,8,platelet,other,0.45620437956204374
+V2_seed4,V2,monocyte,9,natural killer cell,lymphoid,0.09124087591240876
+V2_seed4,V2,monocyte,10,b cell,lymphoid,0.09124087591240876

@@ -1,0 +1,65 @@
+{
+  "created": "2026-09-25 18:26:18",
+  "models": {
+    "v3_seed0": {
+      "family": "v3",
+      "checkpoint": "/Data/Results/ReferenceProjection_v3/ckpt/reference_seed0.pt",
+      "standardization": "global"
+    },
+    "v3_seed1": {
+      "family": "v3",
+      "checkpoint": "/Data/Results/ReferenceProjection_v3/ckpt/reference_seed1.pt",
+      "standardization": "global"
+    },
+    "v3_seed2": {
+      "family": "v3",
+      "checkpoint": "/Data/Results/ReferenceProjection_v3/ckpt/reference_seed2.pt",
+      "standardization": "global"
+    },
+    "v3_seed3": {
+      "family": "v3",
+      "checkpoint": "/Data/Results/ReferenceProjection_v3/ckpt/reference_seed3.pt",
+      "standardization": "global"
+    },
+    "v3_seed4": {
+      "family": "v3",
+      "checkpoint": "/Data/Results/ReferenceProjection_v3/ckpt/reference_seed4.pt",
+      "standardization": "global"
+    },
+    "V2_seed0": {
+      "family": "V2",
+      "checkpoint": "/Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed0.pt",
+      "standardization": "batch_gene"
+    },
+    "V2_seed1": {
+      "family": "V2",
+      "checkpoint": "/Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed1.pt",
+      "standardization": "batch_gene"
+    },
+    "V2_seed2": {
+      "family": "V2",
+      "checkpoint": "/Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed2.pt",
+      "standardization": "batch_gene"
+    },
+    "V2_seed3": {
+      "family": "V2",
+      "checkpoint": "/Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed3.pt",
+      "standardization": "batch_gene"
+    },
+    "V2_seed4": {
+      "family": "V2",
+      "checkpoint": "/Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed4.pt",
+      "standardization": "batch_gene"
+    }
+  },
+  "row_orders": {
+    "reference": "ReferenceProjection_v3/export/reference_metadata.csv",
+    "scope2": "scope2_cell_ids.csv",
+    "pbmc240": "pbmc240_raw_cell_ids.csv"
+  },
+  "query_preprocessing": {
+    "scope2": "notebook convention, per upload gene z, smoothing graph from the full z scored matrix",
+    "pbmc240": "A2 service path: log2 observed, per cell mask, per upload gene z, graph from own z scored matrix, 200 gene floor"
+  },
+  "note": "v3_seed0 is the shipped model. Report every comparison as mean and SD over the five seeds of each family."
+}
