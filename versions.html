@@ -67,10 +67,14 @@
                 <tbody>
                     <tr><td>RNA→RNA, SCoPE2 mask, test cells only</td><td>93.2% acc / 65.7% bal (OT)</td>
                         <td><code>docs/plans/nb1/rna_to_rna_membership_corrected.csv</code></td></tr>
-                    <tr><td>Protein, restricted to the 2 supported classes</td><td>86.2% acc / 79.8% bal</td>
-                        <td><code>service/model/v3_tables/support_restricted_assignment.csv</code></td></tr>
-                    <tr><td>Protein, unrestricted (22 classes)</td><td>45.4% acc / 31.1% bal</td>
-                        <td><code>service/model/v3_tables/support_restricted_assignment.csv</code></td></tr>
+                    <tr><td>Protein, restricted, shipped checkpoint (<code>v3_seed0</code>)</td><td>86.2% acc / 79.8% bal</td>
+                        <td><code>docs/plans/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
+                    <tr><td>Protein, restricted, 5-seed mean of the shipped architecture</td><td>75.3% ± 11.8 acc / 71.5% ± 10.6 bal</td>
+                        <td><code>docs/plans/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
+                    <tr><td>Protein, unrestricted (22 classes), shipped checkpoint (<code>v3_seed0</code>)</td><td>55.4% acc / 38.7% bal</td>
+                        <td><code>docs/plans/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
+                    <tr><td>Protein, unrestricted (22 classes), 5-seed mean of the shipped architecture</td><td>38.4% ± 25.7 acc / 29.1% ± 18.3 bal</td>
+                        <td><code>docs/plans/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
                 </tbody>
             </table>
             <p style="font-size: 13px;">
@@ -79,13 +83,25 @@
                 the model had trained on.
             </p>
             <p style="font-size: 13px;">
-                The restricted 79.8% is exact for SCoPE2 <em>by construction</em>: SCoPE2's
-                protein cells are only ever macrophage or monocyte, so restricting to exactly
-                those two classes matches its true label set on this one dataset. On other data
-                with other cell types present, the same hardcoded restriction is wrong — see
-                failure mode 1. Separately, SCoPE2 unrestricted results vary strongly across
-                retrains: a faithful retrain of the same recipe scored 9.1% balanced accuracy
-                against the 31.1% shipped above. Seed variance measurement is pending (T1 NB1c).
+                The restricted 79.8% is <code>v3_seed0</code>'s own number, and is exact for
+                SCoPE2 <em>by construction</em>, on two separate counts. First: SCoPE2's protein
+                cells are only ever macrophage or monocyte, so restricting to exactly those two
+                classes matches its true label set on this one dataset — on other data with other
+                cell types present, the same hardcoded restriction is wrong (see failure mode 1).
+                Second: <code>v3_seed0</code> — the checkpoint actually running in production —
+                is the best of five independently trained seeds of the same architecture by a
+                wide margin (79.8% vs. a 5-seed mean of 71.5% ± 10.6, range 59.0–88.4).
+            </p>
+            <p style="font-size: 13px;">
+                Against scArches/scANVI, the strongest available cross-modal baseline, the
+                shipped checkpoint's restricted-regime lead is real (it beats every scANVI seed
+                under every protocol tested) but does not generalize: averaged across all 5
+                seeds, the architecture's shared-kNN-rule restricted mean (71.5%) trails
+                scANVI's 3-seed mean (77.15%) — only 3 of 15 seed-pairings favor this
+                architecture there, 12 favor scANVI. The one regime it reliably wins is
+                unrestricted (12 of 15 pairings, mean margin +18.1 points). Full breakdown:
+                <code>docs/plans/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, narrative in
+                <code>Documentation/results.md</code>.
             </p>
             <p style="font-size: 13px; margin-bottom: 4px;"><strong>Known failure modes:</strong></p>
             <ol style="font-size: 13px;">
@@ -101,6 +117,12 @@
                     validated against real protein data.</li>
                 <li>No donor-level holdout in training — all nine donors contributed about
                     65% of their own cells to the training set.</li>
+                <li>High seed-to-seed variance on real cross-modal transfer, not yet explained:
+                    retraining the same architecture moves SCoPE2 restricted balanced accuracy
+                    by up to 29 points (59.0–88.4% across 5 seeds); the shipped seed happens to
+                    be the best of the five, not a principled choice. A separate development-only
+                    check on real PBMC240 data (lineage level) shows the same pattern — see
+                    <code>service/model/MODEL_CARD.md</code> for the full detail.</li>
             </ol>
         </section>
 
