@@ -8,22 +8,47 @@ labels touched only at this final scoring step, in every arm**. 95%
 bootstrap confidence intervals (2,000 stratified resamples) in brackets.
 Ranked by **balanced accuracy**, not accuracy.
 
-**"Ours" is scored on the real artifacts, not a reconstruction:**
-`service/model/reference_embedding.npy` (RNA, live production embedding)
-and `service/model/app_export/prot_embedding_scope2.npy` (the export
-notebook's own real, saved SCoPE2 protein embedding, sha256-verified
-against `BUNDLE_MANIFEST.json`), with labels from
-`atlas_PROT_v3_meta.csv`'s `true_class_name` column in that file's own row
-order — never `Atlas/atlas_PROT_lat128.csv`, a legacy file with an
-unverified row order (see [known-limitations.md](known-limitations.md)).
-An earlier version of this table scored a from-scratch *reconstruction* of
-the protein embedding instead; that reconstruction turned out to be
-distorted by two real bugs (one in the protein-side file used, one — the
-larger effect — in `service/pipeline/encoder.py`'s activation function; see
-[bugs-and-fixes.md](bugs-and-fixes.md)) and has been removed from this
-table entirely, not kept as a labeled row.
+**"Ours" is now scored across all five seeds of two model families, not one
+checkpoint (Track D, T1 NB1d):** `v3_seed0` is the shipped model —
+everything in this document before this revision scored that one seed
+only, labeled just "Ours." `v3_seed1`–`v3_seed4` are four more independently
+trained runs of the same architecture; `V2_seed0`–`V2_seed4` are a second
+candidate architecture (mini-upload gene z-scoring, same shape as v3)
+evaluated as a possible replacement. Every "Ours" row below is a 5-seed
+mean ± SD (min–max in parentheses), computed by
+`tools/fair_benchmark/evaluate.py`'s real, unchanged scoring functions
+against each seed's own RNA reference and SCoPE2 protein embeddings
+(`New_Files/NB1d/embeddings/`, gitignored — the small tables anything here
+cites are committed at `docs/plans/nb1d/`). A single seed's number is never
+reported alone again in this section: `docs/plans/nb1d/ours_scope2_5seed_scores.csv`
+has every individual seed's score if you need one.
+**This is a real, material correction, not just more decimal places:**
+the single-seed "Ours" number this document reported before was `v3_seed0`
+specifically, and `v3_seed0` turns out to be the best-performing of the
+five v3 seeds by a wide margin on SCoPE2 restricted (79.79% balanced vs.
+a 5-seed mean of 63.32% ± 10.84 — see the table below) — the original
+number was real, but not representative of the architecture, only of the
+one seed that happened to ship.
 
-**Sanity check (run before trusting anything else here):** the real
+An earlier version of this table (before the corrections above existed)
+scored a from-scratch *reconstruction* of the protein embedding instead of
+any real saved artifact; that reconstruction turned out to be distorted by
+two real bugs (one in the protein-side file used, one — the larger effect —
+in `service/pipeline/encoder.py`'s activation function; see
+[bugs-and-fixes.md](bugs-and-fixes.md)) and has been removed from this
+table entirely, not kept as a labeled row. Every "Ours" number in this
+document, single-seed or five-seed, is scored on real saved embeddings —
+either `service/model/reference_embedding.npy` /
+`service/model/app_export/prot_embedding_scope2.npy` (the shipped
+`v3_seed0`) or T1 NB1d's own per-seed exports (everything else) — never a
+reconstruction, and protein labels come from
+`docs/plans/nb1d/scope2_cell_ids.csv` for the 5-seed numbers (confirmed
+identical, row for row, to `atlas_PROT_v3_meta.csv`'s `true_class_name` and
+to `Atlas/atlas_PROT_lat128.csv`'s `class_name`) — never a file with an
+unverified row order (see [known-limitations.md](known-limitations.md)).
+
+**Sanity check (run before trusting anything else here, `v3_seed0`/shipped
+model specifically):** the real
 protein embedding, scored by cosine-argmax against
 `service/model/reference_centroids.npy` (the trained centroids, not
 recomputed class means), reproduces the historical figures to 4 decimal
@@ -54,47 +79,74 @@ monocyte.
 
 | Rank | Method | Protocol | Accuracy % | Balanced accuracy % |
 |---|---|---|---|---|
-| 1 | **Ours** | shared kNN rule | 84.97 [83.22, 86.78]\* | **88.40** [86.85, 89.92]\* |
-| 2 | **Ours** | native nearest-centroid | 86.17 [84.56, 87.85]\* | 79.79 [77.38, 82.27]\* |
-| 3 | scANVI (3-seed mean) | shared kNN rule | 70.67 (±2.48) | 76.89 (±0.99) |
-| 4 | scANVI (3-seed mean) | native scANVI classifier | 74.77 (±18.59) | 73.15 (±28.49) |
-| 5 | scANVI (3-seed mean) | native nearest-centroid | 61.21 (±19.13) | 64.42 (±26.66) |
-| 6 | MaxFuse | shared kNN rule | 69.80 [68.39, 71.21]\* | 50.05 [48.49, 51.63]\* |
+| 1 | **Ours (v3, 5-seed)** | shared kNN rule | 75.32 ± 11.79 (55.03–84.97) | **71.50 ± 10.60** (59.04–88.40) |
+| 2 | **Ours (v3, 5-seed)** | native nearest-centroid | 79.38 ± 4.71 (73.76–86.17) | 63.32 ± 10.84 (50.79–79.79) |
+| 3 | **Ours (v3, 5-seed)** | pool-first restricted (real) | 78.11 ± 4.69 (74.23–83.29) | 61.64 ± 11.80 (51.35–77.50) |
+| 4 | scANVI (3-seed mean) | shared kNN rule | 70.67 (±2.48) | 76.89 (±0.99) |
+| 5 | scANVI (3-seed mean) | native scANVI classifier | 74.77 (±18.59) | 73.15 (±28.49) |
+| 6 | scANVI (3-seed mean) | native nearest-centroid | 61.21 (±19.13) | 64.42 (±26.66) |
+| 7 | **Ours (V2, 5-seed)** | native nearest-centroid | 69.64 ± 7.62 (57.18–76.17) | 60.96 ± 10.03 (51.43–73.23) |
+| 8 | **Ours (V2, 5-seed)** | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
+| 9 | **Ours (V2, 5-seed)** | shared kNN rule | 74.81 ± 4.83 (66.64–79.33) | 58.26 ± 6.40 (48.23–63.11) |
+| 10 | MaxFuse | shared kNN rule | 69.80 [68.39, 71.21]\* | 50.05 [48.49, 51.63]\* |
 | — | **Majority class ("monocyte")** | trivial floor | 73.56 [71.34, 75.77]\* | 50.00 [50.00, 50.00]\* |
-| 7 | Harmony (batch-correction floor) | native nearest-centroid | 50.20 [47.65, 52.68]\* | 54.20 [51.42, 57.02]\* |
-| 8 | Harmony (batch-correction floor) | shared kNN rule | 46.78 [44.36, 49.40]\* | 50.49 [47.70, 53.38]\* |
-| 9 | MaxFuse | native nearest-centroid | 51.95 [49.53, 54.50]\* | 52.38 [49.45, 55.29]\* |
-| 10 | PCA floor | shared kNN rule | 67.25 [65.17, 69.40]\* | 57.66 [55.04, 60.37]\* |
-| 11 | PCA floor | native nearest-centroid | 55.97 [53.42, 58.52]\* | 58.21 [55.42, 60.96]\* |
-| 12 | scGLUE | shared kNN rule | 28.59 [27.32, 29.93]\* | 48.21 [46.52, 49.78]\* |
-| 13 | scGLUE | native nearest-centroid | 47.92 [45.37, 50.54]\* | 47.20 [44.22, 50.20]\* |
+| 11 | Harmony (batch-correction floor) | native nearest-centroid | 50.20 [47.65, 52.68]\* | 54.20 [51.42, 57.02]\* |
+| 12 | Harmony (batch-correction floor) | shared kNN rule | 46.78 [44.36, 49.40]\* | 50.49 [47.70, 53.38]\* |
+| 13 | MaxFuse | native nearest-centroid | 51.95 [49.53, 54.50]\* | 52.38 [49.45, 55.29]\* |
+| 14 | PCA floor | shared kNN rule | 67.25 [65.17, 69.40]\* | 57.66 [55.04, 60.37]\* |
+| 15 | PCA floor | native nearest-centroid | 55.97 [53.42, 58.52]\* | 58.21 [55.42, 60.96]\* |
+| 16 | scGLUE | shared kNN rule | 28.59 [27.32, 29.93]\* | 48.21 [46.52, 49.78]\* |
+| 17 | scGLUE | native nearest-centroid | 47.92 [45.37, 50.54]\* | 47.20 [44.22, 50.20]\* |
 
-\* 95% bootstrap CI (single run). scANVI rows show 3-seed mean (±spread —
-**range, max−min**, across seeds 0/1/2, not standard deviation; see the
-[paired bootstrap](#paired-bootstrap-ours-minus-scanvi) section below for
-the SD alongside the range) instead — see
-[scANVI across seeds](#scanvi-across-seeds) for the per-seed breakdown;
-seed 0 alone is not representative given the spread.
+\* 95% bootstrap CI (single run, that method's only seed). scANVI rows show
+3-seed mean (±spread — **range, max−min**, across seeds 0/1/2, not
+standard deviation) — see [scANVI across seeds](#scanvi-across-seeds) for
+the per-seed breakdown. "Ours" rows show 5-seed mean ± SD (min–max) —
+see [Ours across seeds](#ours-across-five-seeds-v3-and-v2) below; no
+single seed is representative, in either direction, of either family.
+Rank ordering above is by mean balanced accuracy; ranking any individual
+"Ours" seed against scANVI's per-seed spread is a materially different,
+noisier comparison — see the paired bootstrap section.
 
-**Reading this table:** on the real embedding, under the one rule applied
-identically to every method, "ours" leads scANVI's 3-seed mean by **11.5
-points of balanced accuracy** (88.40% vs. 76.89%). This is not just an
-eyeballed non-overlap of two independent CIs — a **paired** bootstrap
-(same resampled query cells scored under both methods in every resample,
-which is the statistically correct comparison here) confirms the
-restricted-regime difference is **+11.1 to +12.1 points across all 3
-scANVI seeds, with every seed's 95% CI on the difference excluding zero**
-(smallest: seed 0, [+9.10, +13.22]) — see
-[Paired bootstrap](#paired-bootstrap-ours-minus-scanvi) below for the full
-table. Under scANVI's own native classifier the mean gap narrows (73.15%
-vs. "ours"'s native-centroid 79.79%) but the ±28.49-point range across
-seeds (SD ≈12.3) means that comparison is far less trustworthy than the
-shared-rule one; see [scANVI across seeds](#scanvi-across-seeds) below.
-scANVI is the clear second-place method regardless of protocol. The three
-genuinely unsupervised methods (MaxFuse, Harmony, scGLUE) all cluster in
-the high-40s to low-50s% — indistinguishable from each other and from the
-50.00% trivial
-floor.
+**Reading this table:** the picture is far less one-sided than the
+original single-seed version of this document reported, and this reverses
+the original headline. Under the shared kNN rule, v3's 5-seed mean
+balanced accuracy (71.50%) is **below** scANVI's 3-seed mean (76.89%) —
+the original claim that "ours" beats
+scANVI by double digits under this rule was true only for `v3_seed0`
+specifically (88.40%, the best of the five v3 seeds by a wide margin), not
+for the v3 architecture generally. Under native nearest-centroid, v3's
+5-seed mean (63.32%) also trails scANVI's native-classifier mean (73.15%,
+though that number itself has a huge ±28.49-point seed spread) and its
+native-centroid mean (64.42%, statistically indistinguishable from v3's
+63.32%). V2 does no better than v3 against scANVI on SCoPE2 under any
+protocol. The **only** regime and seed where "ours" clearly, robustly beats
+scANVI is `v3_seed0` — the one seed that happened to ship — which is why
+the paired-bootstrap section below reports the comparison per seed, not as
+a single family-level verdict. The three genuinely unsupervised methods
+(MaxFuse, Harmony, scGLUE) remain in the high-40s to low-50s% — still
+indistinguishable from each other and from the 50.00% trivial floor,
+regardless of anything above.
+
+### Ours across five seeds (v3 and V2)
+
+| Family | Protocol | Accuracy % (mean ± SD, min–max) | Balanced accuracy % (mean ± SD, min–max) |
+|---|---|---|---|
+| v3 | shared kNN rule | 75.32 ± 11.79 (55.03–84.97) | 71.50 ± 10.60 (59.04–88.40) |
+| v3 | native nearest-centroid | 79.38 ± 4.71 (73.76–86.17) | 63.32 ± 10.84 (50.79–79.79) |
+| v3 | pool-first restricted (real) | 78.11 ± 4.69 (74.23–83.29) | 61.64 ± 11.80 (51.35–77.50) |
+| V2 | shared kNN rule | 74.81 ± 4.83 (66.64–79.33) | 58.26 ± 6.40 (48.23–63.11) |
+| V2 | native nearest-centroid | 69.64 ± 7.62 (57.18–76.17) | 60.96 ± 10.03 (51.43–73.23) |
+| V2 | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
+
+Source: `docs/plans/nb1d/ours_scope2_5seed_scores.csv` (per-seed),
+`docs/plans/nb1d/ours_scope2_5seed_family_summary.csv` (this table),
+computed by `tools/fair_benchmark/evaluate.py`'s unchanged
+`knn_classifier_predict`, `nearest_centroid_predict`, and
+`pool_first_knn_predict` against T1 NB1d's per-seed embeddings. v3's
+shared-kNN-rule SD (10.60 points) is comparable in size to the entire gap
+this document previously reported between "ours" and scANVI (11.5 points)
+— a single seed's number was never a safe stand-in for the architecture.
 
 **For the record, since it materially changed once real data replaced the
 reconstruction:** the earlier reconstruction-based table had scANVI's
@@ -105,7 +157,9 @@ reconstruction was computed through `service/pipeline` before the
 `service/pipeline/encoder.py` ReLU/GELU fix (commit `056f136` — see
 [bugs-and-fixes.md](bugs-and-fixes.md#0)), so every number it produced,
 including this one, is invalid on its own terms, not just "distorted." On
-the real embedding, "ours" leads scANVI under every protocol tested.
+the real embedding, `v3_seed0` leads scANVI under every protocol tested —
+but, per the 5-seed table above, that is `v3_seed0`'s own result, not a
+result of the v3 architecture in general.
 
 ## Unrestricted regime (all 22 RNA classes as candidates)
 
@@ -114,32 +168,43 @@ have any real protein ground truth. Much harder for every method.
 
 | Rank | Method | Protocol | Accuracy % | Balanced accuracy % |
 |---|---|---|---|---|
-| 1 | **Ours** | shared kNN rule | 55.37 [53.42, 57.32]\* | **38.69** [37.17, 40.30]\* |
-| 2 | **Ours** | native nearest-centroid | 45.37 [43.29, 47.45]\* | 31.08 [29.60, 32.51]\* |
+| 1 | **Ours (v3, 5-seed)** | shared kNN rule | 38.36 ± 25.71 (1.88–69.26) | **29.07 ± 18.34** (1.28–49.84) |
+| 2 | **Ours (v3, 5-seed)** | native nearest-centroid | 34.09 ± 25.25 (0.20–66.24) | 25.60 ± 17.35 (0.14–48.20) |
 | 3 | scANVI (3-seed mean) | native scANVI classifier | 18.01 (±19.26) | 12.92 (±15.04) |
 | 4 | scANVI (3-seed mean) | shared kNN rule | 17.27 (±11.07) | 11.77 (±7.53) |
 | 5 | PCA floor | shared kNN rule | 15.84 [14.09, 17.72]\* | 11.01 [9.79, 12.37]\* |
-| 6 | scANVI (3-seed mean) | native nearest-centroid | 10.60 (±7.92) | 7.48 (±6.20) |
-| 7 | MaxFuse | native nearest-centroid | 5.91 [4.76, 7.11]\* | 4.91 [3.84, 5.99]\* |
-| 8 | Harmony | shared kNN rule | 7.11 [5.84, 8.32]\* | 4.84 [3.97, 5.66]\* |
-| 9 | PCA floor | native nearest-centroid | 3.69 [2.82, 4.70]\* | 2.59 [1.96, 3.31]\* |
-| 10 | Harmony | native nearest-centroid | 3.76 [2.89, 4.77]\* | 2.55 [1.96, 3.24]\* |
-| 11 | MaxFuse | shared kNN rule | 1.07 [0.60, 1.61]\* | 0.81 [0.41, 1.25]\* |
-| 12 | scGLUE | shared kNN rule | 0.47 [0.20, 0.87]\* | 0.40 [0.14, 0.76]\* |
-| 13 | scGLUE | native nearest-centroid | 0.20 [0.00, 0.47]\* | 0.30 [0.00, 0.73]\* |
+| 6 | **Ours (V2, 5-seed)** | shared kNN rule | 12.17 ± 8.12 (2.89–22.48) | 8.63 ± 5.40 (1.96–15.28) |
+| 7 | scANVI (3-seed mean) | native nearest-centroid | 10.60 (±7.92) | 7.48 (±6.20) |
+| 8 | MaxFuse | native nearest-centroid | 5.91 [4.76, 7.11]\* | 4.91 [3.84, 5.99]\* |
+| 9 | Harmony | shared kNN rule | 7.11 [5.84, 8.32]\* | 4.84 [3.97, 5.66]\* |
+| 10 | **Ours (V2, 5-seed)** | native nearest-centroid | 4.05 ± 5.12 (0.34–13.09) | 3.08 ± 3.40 (0.23–8.98) |
+| 11 | PCA floor | native nearest-centroid | 3.69 [2.82, 4.70]\* | 2.59 [1.96, 3.31]\* |
+| 12 | Harmony | native nearest-centroid | 3.76 [2.89, 4.77]\* | 2.55 [1.96, 3.24]\* |
+| 13 | MaxFuse | shared kNN rule | 1.07 [0.60, 1.61]\* | 0.81 [0.41, 1.25]\* |
+| 14 | scGLUE | shared kNN rule | 0.47 [0.20, 0.87]\* | 0.40 [0.14, 0.76]\* |
+| 15 | scGLUE | native nearest-centroid | 0.20 [0.00, 0.47]\* | 0.30 [0.00, 0.73]\* |
 
 \* 95% bootstrap CI (single run). scANVI rows show 3-seed mean (±spread,
-max−min across seeds 0/1/2) instead — see
-[scANVI across seeds](#scanvi-across-seeds).
+max−min across seeds 0/1/2) — see
+[scANVI across seeds](#scanvi-across-seeds). "Ours" rows show 5-seed mean
+± SD (min–max) — see [Ours across seeds](#ours-across-five-seeds-v3-and-v2).
 
 *(Majority-class floor omitted here: predicting "monocyte" scores the same
 73.56%/50.00% regardless of candidate-class count, since it never varies
 its prediction.)*
 
-**Reading this table:** everyone, "ours" included, is far worse here than
-in the restricted regime — full 22-way transfer from RNA to a genuinely
-different measurement modality, at real SCoPE2 noise levels, is hard for
-every method. "Ours" still leads by a wide margin under both protocols.
+**Reading this table:** everyone is far worse here than in the restricted
+regime — full 22-way transfer from RNA to a genuinely different
+measurement modality, at real SCoPE2 noise levels, is hard for every
+method. Unlike the restricted regime, v3's 5-seed mean (29.07% balanced)
+*does* clearly lead scANVI's 3-seed mean (12.92% at best) here, and by a
+wide margin under either protocol — 12 of the 15 v3-seed × scANVI-seed
+paired-bootstrap comparisons in this regime have a CI excluding zero in
+v3's favor (see the paired bootstrap section). V2, however, does **not**
+clearly beat scANVI here (8.63% mean vs. scANVI's 11.77–12.92%) — only 4 of
+15 V2-seed × scANVI-seed pairings favor V2 significantly, 8 favor scANVI.
+The unrestricted regime is the one place in this document where v3 and
+scANVI are not close: v3 wins decisively, and V2 does not inherit that win.
 
 **Correcting an earlier claim in this document:** a previous version of
 this table, using the (now-removed) reconstruction, observed that its
@@ -153,66 +218,90 @@ cited) were computed through `service/pipeline` before the encoder's
 ReLU/GELU fix (commit `056f136`), so they were never trustworthy evidence
 about classifier choice, embedding quality, or anything else in the first
 place.** Under the *same* native-nearest-centroid rule, the real embedding
-scores 31.08% — more than 4× the reconstruction's (invalid) 6.98% on that
-identical rule. The embedding itself — corrected for both the file-panel
-issue and the ReLU bug — was the dominant source of the earlier gap, not
-the choice of decision rule. (Classifier choice
-still matters at the margins — "ours" shared-kNN unrestricted, 38.69%, is
-higher than its own native-centroid unrestricted, 31.08% — but this is a
-real, secondary effect on top of a correct embedding, not the primary
-explanation for a large discrepancy.)
+(`v3_seed0` specifically, the number this document reported before the
+5-seed correction above) scores 31.08% — more than 4× the reconstruction's
+(invalid) 6.98% on that identical rule. The embedding itself — corrected
+for both the file-panel issue and the ReLU bug — was the dominant source
+of the earlier gap, not the choice of decision rule. (Classifier choice
+still matters at the margins — `v3_seed0`'s shared-kNN unrestricted,
+55.37% acc / 38.69% bal, is higher than its own native-centroid
+unrestricted, 45.37% acc / 31.08% bal — but this is a real, secondary
+effect on top of a correct embedding, not the primary explanation for a
+large discrepancy. The 5-seed family means above are lower than either of
+`v3_seed0`'s own numbers, consistent with `v3_seed0` being the strongest
+of the five seeds on SCoPE2.)
 
 ## scANVI across seeds
 
 All 3 seeds (0, 1, 2) complete, same architecture and training budget
 (200 pretrain epochs + 100 fine-tune epochs, early stopping) each time.
 
+**These are a fresh re-run (Track D, T1 NB1d follow-up), not the original
+numbers** — scANVI was retrained from scratch to get real per-cell
+predictions to pair-bootstrap against the new 5-seed "ours" data (none were
+cached from the original run). Seeds 1 and 2 reproduced their original
+numbers closely; **seed 0 did not** (its native-scANVI-classifier restricted
+balanced accuracy moved from 57.89% originally to 73.51% here) — scVI/scANVI
+training on this hardware (Apple MPS backend) is not bit-for-bit
+deterministic even with an explicit seed set, unlike a CUDA run would be.
+The table below is what this document's other sections (including the
+paired bootstrap) actually use; the original run's numbers are kept in git
+history, not reproduced here.
+
 | Protocol | Regime | Seed 0 bal | Seed 1 bal | Seed 2 bal | Mean bal | Spread (max−min) |
 |---|---|---|---|---|---|---|
-| Shared kNN rule | restricted | 77.26 | 77.16 | 76.26 | **76.89** | **0.99** |
-| Shared kNN rule | unrestricted | 15.24 | 7.71 | 12.35 | 11.77 | 7.53 |
-| Native scANVI classifier | restricted | 57.89 | 75.18 | 86.37 | 73.15 | **28.49** |
-| Native scANVI classifier | unrestricted | 12.86 | 5.43 | 20.47 | 12.92 | 15.04 |
-| Native nearest-centroid | restricted | 50.70 | 65.20 | 77.36 | 64.42 | 26.66 |
-| Native nearest-centroid | unrestricted | 4.79 | 6.66 | 10.99 | 7.48 | 6.20 |
+| Shared kNN rule | restricted | 78.04 | 77.16 | 76.26 | **77.15** | **1.77** |
+| Shared kNN rule | unrestricted | 12.73 | 7.71 | 12.35 | 10.93 | 5.02 |
+| Native scANVI classifier | restricted | 73.51 | 75.18 | 86.37 | 78.35 | **12.86** |
+| Native scANVI classifier | unrestricted | 12.38 | 5.43 | 20.47 | 12.76 | 15.04 |
+| Native nearest-centroid | restricted | 49.99 | 65.20 | 77.36 | 64.18 | 27.37 |
+| Native nearest-centroid | unrestricted | 7.07 | 6.66 | 10.99 | 8.24 | 4.33 |
 
 (Accuracy figures, for completeness — shared kNN rule restricted:
-69.53/70.47/72.01; native scANVI classifier restricted: 65.91/73.89/84.50;
-native nearest-centroid restricted: 52.35/59.80/71.48.)
+71.28/70.47/72.01; native scANVI classifier restricted: 74.90/73.89/84.50;
+native nearest-centroid restricted: 55.84/59.80/71.48.)
 
 **Reading this table — and answering the question this whole investigation
-started with:**
+started with, now against the 5-seed "ours" data above:**
 
 - **Under the shared kNN rule — the one apples-to-apples protocol applied
   identically to every method — scANVI is remarkably *stable* across seeds
-  (76.26–77.26%, a spread of under 1 point) and "ours" (88.40%) leads its
-  3-seed mean (76.89%) by 11.5 points, with zero overlap across any seed.
-  This comparison is solid.**
+  (76.26–78.04%, a spread of under 2 points), and its 3-seed mean (77.15%)
+  is now *higher* than v3's 5-seed mean (71.50%) under the same rule.
+  Only `v3_seed0` (88.40%) individually beats every scANVI seed; the other
+  four v3 seeds (59.04–70.10%) do not. This comparison is solid precisely
+  because it is stable — and what it now shows is that v3 does not reliably
+  beat scANVI here, `v3_seed0` does.**
 - Under scANVI's *own* native classifier, the picture is far noisier: a
-  28.5-point spread across 3 seeds (57.89% to 86.37%). Seed 2's native
-  classifier (86.37%) actually *exceeds* "ours"'s native-nearest-centroid
-  number (79.79%) — though it's still below "ours"'s shared-kNN number
-  (88.40%). Averaged across seeds (73.15%), scANVI's own classifier trails
-  "ours" by a smaller, noisier margin than the shared-rule comparison
-  shows.
-- The honest summary: **"ours" leads scANVI clearly and robustly under the
-  one rule that's actually comparable across methods. Under scANVI's own
-  best-case, best-seed native protocol, the gap narrows and in one seed
-  nearly closes against "ours"'s own native protocol** — but that
-  observation is itself evidence of how unstable scANVI's own native
-  training is here, not evidence the two methods are close in general.
+  12.9-point spread across 3 seeds (73.51% to 86.37%) this run (was a
+  28.5-point spread, 57.89–86.37%, in the original run — itself evidence of
+  how much a single scANVI training run can move). Seed 2's native
+  classifier (86.37%) exceeds every "ours" number in this document except
+  `v3_seed0`'s two best protocols. Averaged across seeds (78.35%), scANVI's
+  own classifier is now *ahead* of v3's native-nearest-centroid mean
+  (63.32%).
+- The honest summary: **`v3_seed0` — the one seed that shipped — beats
+  scANVI clearly under every protocol tested. The v3 architecture generally
+  does not: its 5-seed mean trails scANVI's 3-seed mean under both the
+  shared kNN rule (71.50% vs. 77.15%) and native protocols (63.32% vs.
+  scANVI's 64.42–78.35% depending on protocol). This reverses what this
+  document said before the 5-seed correction — it is not evidence the two
+  methods perform similarly in general; it is evidence that a single
+  seed, in either direction, is not a safe basis for that comparison.**
 
-Context: the shipped reference ("ours") is one trained model, not an
-ensemble — its bootstrap CI reflects sampling uncertainty in the 1,490-cell
-SCoPE2 query, not training variance. For scale on training variance
-specifically: the production reference's own 5-seed training run
-(`service/model/v3_tables/reference_seeds.csv`) measured mean balanced
-accuracy 0.7143 on its own (RNA-only) validation task — a different task
-and dataset than this benchmark's protein-transfer scoring, not directly
-comparable to any number above, but useful context for how much a *trained
-model's own seed* typically moves a number in this project (that task's
-own spread is far smaller than scANVI's 28.5-point native-classifier
-spread here).
+Context: this document now has training-variance data for "ours" too,
+not just sampling-uncertainty CIs on one trained model. Restricted-regime
+shared-kNN-rule balanced accuracy spans 59.04–88.40% across v3's own 5
+training seeds (SD 10.60) — a wider spread than scANVI's 3-seed spread
+under the same rule (76.26–78.04%, SD ≈0.93). The production reference's
+separate 5-seed training run on its own RNA-only validation task
+(`service/model/v3_tables/reference_seeds.csv`, mean balanced accuracy
+0.7143) is a different task and dataset from this benchmark's
+protein-transfer scoring and not directly comparable to any number above —
+but it is notable that RNA-only validation shows far less seed-to-seed
+spread than this document's real cross-modal SCoPE2 scoring does, meaning
+whatever makes v3 unstable here is specific to the RNA→protein transfer
+step, not the RNA-side training itself.
 
 ## Paired bootstrap: ours minus scANVI
 
@@ -223,30 +312,64 @@ indices are applied to *both* methods in every one of 2,000 resamples, and
 the balanced-accuracy difference is computed per resample, directly giving
 a CI on the difference itself.
 
-| scANVI seed | Regime | Δ balanced accuracy (ours − scANVI), pts | 95% CI |
+**This section changed the most of anything in this document under Track
+D.** The original version ran this comparison for `v3_seed0` only — every
+number in it was real, but it silently generalized a single seed's result
+to "ours vs. scANVI." This version runs all **90** pairings (10 "ours"
+model-seeds × 3 scANVI seeds × 3 regimes) and reports how many actually
+support a claim of "ours ahead." Full table:
+`docs/plans/nb1d/paired_bootstrap_ours_vs_scanvi.csv`.
+
+### `v3_seed0` (the shipped model) — unchanged conclusion
+
+| scANVI seed | Regime | Δ balanced accuracy (v3_seed0 − scANVI), pts | 95% CI |
 |---|---|---|---|
-| 0 | restricted | +11.14 | [+9.10, +13.22] |
-| 1 | restricted | +11.24 | [+9.14, +13.35] |
-| 2 | restricted | +12.14 | [+9.88, +14.43] |
-| 0 | unrestricted | +23.46 | [+21.72, +25.23] |
+| 0 | restricted, shared kNN rule | +10.36 | [+8.21, +12.55] |
+| 1 | restricted, shared kNN rule | +11.24 | [+9.14, +13.35] |
+| 2 | restricted, shared kNN rule | +12.14 | [+9.88, +14.43] |
+| 0 | restricted, pool-first | +22.15 | [+18.84, +25.39] |
+| 1 | restricted, pool-first | +15.51 | [+12.31, +18.68] |
+| 2 | restricted, pool-first | +9.84 | [+6.50, +13.13] |
+| 0 | unrestricted | +25.97 | [+24.16, +27.69] |
 | 1 | unrestricted | +30.98 | [+29.27, +32.71] |
 | 2 | unrestricted | +26.34 | [+24.50, +28.11] |
 
-**Every single seed, both regimes: the 95% CI on the difference excludes
-zero, and by a wide margin.** This is the most rigorous statement this
-document can make about "ours vs. scANVI, shared kNN rule": the lead is
-real, positive, and consistent across all 3 independently-trained scANVI
-models, not an artifact of comparing two possibly-overlapping independent
-intervals.
+Every one of `v3_seed0`'s 9 pairings excludes zero, in `v3_seed0`'s favor.
+This specific claim — about this specific, shipped checkpoint — is
+unchanged and still correct.
 
-(scANVI's spread figures elsewhere in this document — e.g. "±0.99" for the
-shared-rule restricted regime — are the **range** (max−min) across the 3
-seed values, not standard deviation. For that same regime, SD is ≈0.55
-(sample, ddof=1) or ≈0.45 (population, ddof=0); for the shared-rule
-unrestricted regime, range is 7.53 and SD is ≈3.80/≈3.10. Range is reported
-as the primary figure throughout this document because n=3 is too small
-for SD to be a very meaningful summary on its own, but both are given here
-for precision.)
+### All 10 "ours" model-seeds × all 3 scANVI seeds — the claim does not generalize
+
+| Family | Regime | CI excludes zero, ours ahead | CI excludes zero, scANVI ahead | Not significant | Mean Δ ± SD, pts |
+|---|---|---|---|---|---|
+| v3 | unrestricted | 12 / 15 | 3 / 15 | 0 / 15 | +18.14 ± 17.14 |
+| v3 | restricted, shared kNN rule | 3 / 15 | 12 / 15 | 0 / 15 | −5.65 ± 9.84 |
+| v3 | restricted, pool-first | 5 / 15 | 8 / 15 | 2 / 15 | −0.03 ± 12.10 |
+| V2 | unrestricted | 4 / 15 | 8 / 15 | 3 / 15 | −2.30 ± 5.53 |
+| V2 | restricted, shared kNN rule | 0 / 15 | 15 / 15 | 0 / 15 | −18.89 ± 5.97 |
+| V2 | restricted, pool-first | 4 / 15 | 11 / 15 | 0 / 15 | −4.04 ± 11.33 |
+
+**Reading this table:** of the 90 pairings, only **28 exclude zero in
+"ours"'s favor** (62 either exclude zero in scANVI's favor or are not
+significant). The **unrestricted regime is the one place v3 reliably beats
+scANVI** (12 of 15 pairings, mean +18.14 points) — consistent with the
+unrestricted-regime table above. Everywhere restricted candidates are
+involved, the picture reverses: v3's shared-kNN-rule restricted mean is
+**negative** (scANVI ahead by 5.65 points on average), and pool-first is a
+coin flip. V2 never reliably beats scANVI under any regime tested, and is
+reliably *behind* under the restricted shared-kNN rule (15 of 15 pairings
+favor scANVI). **The corrected claim: "ours beats scANVI by +9 to +14
+points under the shared kNN restricted rule" is true of `v3_seed0`
+specifically and does not hold for the v3 architecture, or for V2, in
+general.** This is the single most important correction Track D made to
+this document.
+
+(scANVI's spread figures elsewhere in this document are reported as
+**range** (max−min) across seeds, not SD, because n=3 is too small for SD
+to be a very meaningful summary on its own — see the scANVI-across-seeds
+section above for both figures on scANVI's own numbers. "Ours" now has 5
+seeds per family, where SD is a more meaningful summary; both tables above
+use it directly.)
 
 ## Pool-first kNN: what the product would actually deliver
 
@@ -267,8 +390,10 @@ currently configured as the shipped default.
 
 | Method | Post-hoc masking bal. acc. % | Pool-first (real) bal. acc. % | Δ |
 |---|---|---|---|
-| **Ours** | 88.40 [86.85, 89.92] | 77.50 [74.92, 80.02] | −10.9 |
-| scANVI (seed 0) | 77.26 [75.37, 79.15] | 49.85 [48.09, 51.71] | −27.4 |
+| **Ours (`v3_seed0`, shipped)** | 88.40 [86.85, 89.92] | 77.50 [74.92, 80.02] | −10.9 |
+| **Ours (v3, 5-seed mean)** | 71.50 ± 10.60 | 61.64 ± 11.80 | −9.9 (mean) |
+| **Ours (V2, 5-seed mean)** | 58.26 ± 6.40 | 57.63 ± 10.87 | −0.6 (mean) |
+| scANVI (seed 0) | 78.04 [76.02, 79.98] | 55.35 [53.29, 57.69] | −22.7 |
 | scANVI (seed 1) | 77.16 [75.24, 79.14] | 61.99 [59.55, 64.45] | −15.2 |
 | scANVI (seed 2) | 76.26 [73.96, 78.54] | 67.66 [65.27, 70.28] | −8.6 |
 | PCA floor | 57.66 [55.04, 60.37] | 53.37 [51.23, 55.65] | −4.3 |
@@ -276,23 +401,33 @@ currently configured as the shipped default.
 | MaxFuse | 50.05 [48.49, 51.63] | 50.00 [50.00, 50.00] | −0.1 |
 | scGLUE | 48.21 [46.52, 49.78] | 49.80 [48.09, 51.55] | +1.6 |
 
+(scANVI's seed-0 numbers here are this run's re-trained model — see the
+reproducibility note in the scANVI-across-seeds section; seed 0's earlier
+pool-first number, 49.85%, is not reproduced this run.)
+
 **Reading this table:** pool-first restriction costs a large amount of
 balanced accuracy for the embeddings that actually carry real cell-type
-signal ("ours": −10.9 points; scANVI: −8.6 to −27.4 points, itself highly
-seed-dependent), and costs essentially nothing for the near-chance
-embeddings (MaxFuse, scGLUE — restricting the pool barely matters when the
-full-pool search was already close to random). This makes sense
-mechanically: if a query cell's true nearest neighbours in a *good*
+signal (v3's 5-seed mean: −9.9 points; scANVI: −8.6 to −22.7 points,
+itself highly seed-dependent), and costs essentially nothing for the
+near-chance embeddings (MaxFuse, scGLUE — restricting the pool barely
+matters when the full-pool search was already close to random). This makes
+sense mechanically: if a query cell's true nearest neighbours in a *good*
 embedding happen to be an easy, well-separated set that includes some
 non-restricted-class cells, post-hoc masking still benefits from finding
 those genuinely close neighbours first and only tallying the restricted
 subset among them; pool-first forces the search into a smaller,
-sometimes-worse-matching subset from the start. **"Ours" still clearly
-leads every pool-first scANVI number (77.50% vs. 49.85–67.66%)**, but
-77.50% pool-first is a real, disclosed drop from the 88.40% the post-hoc
-evaluation rule reports — worth knowing before assuming the live service's
-actual kNN option (if ever selected over the current `nearest_centroid`
-default) would deliver the higher number.
+sometimes-worse-matching subset from the start.
+
+**Unlike the post-hoc-masking comparison above, "ours" does not clearly
+lead scANVI under pool-first either** — v3's 5-seed pool-first mean
+(61.64%) sits inside scANVI's 3-seed pool-first range (55.35–67.66%), and
+V2's mean (57.63%) is below two of scANVI's three seeds. Only `v3_seed0`
+(77.50%) clearly leads every scANVI pool-first number. This matches the
+paired-bootstrap finding above: pool-first restricted is one of the
+regimes where "ours" does not reliably beat scANVI once more than one seed
+is considered — worth knowing before assuming the live service's actual
+kNN option (if ever selected over the current `nearest_centroid` default)
+would deliver a number resembling `v3_seed0`'s specifically.
 
 ## Two protocols, not a chosen one
 
@@ -306,10 +441,21 @@ discipline applies to the pool-first-vs-post-hoc-masking kNN choice above.
 
 ## What's still open
 
+- **Why v3's SCoPE2 restricted-regime performance varies so much by seed
+  (59.04–88.40% balanced, shared kNN rule) is not explained here** — only
+  measured. `v3_seed0` shipping was not a principled choice among the five;
+  it is simply the seed that was trained first. Not addressed by Track D;
+  a real open question for whichever notebook takes it up next.
 - No baseline besides scANVI has been run more than once; MaxFuse's random
   batching and scGLUE's minibatch shuffling both have their own
   un-quantified run-to-run variance (see
   [known-limitations.md](known-limitations.md)).
+- **scANVI training on this hardware (Apple MPS) is not fully
+  reproducible even with an explicit seed** — seed 0's re-run this round
+  landed meaningfully differently from its original run (see the
+  scANVI-across-seeds section). Seeds 1 and 2 reproduced closely. Not
+  investigated further here; worth knowing before treating any single
+  scANVI seed's number as fixed.
 - `Atlas/atlas_manifest.json`'s `benchmark.rows` is untouched — still `[]`,
   `status: "pending"` — regardless of everything above. Nothing here is
   wired into the live site.
