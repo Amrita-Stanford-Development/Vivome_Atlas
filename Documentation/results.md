@@ -429,6 +429,55 @@ is considered — worth knowing before assuming the live service's actual
 kNN option (if ever selected over the current `nearest_centroid` default)
 would deliver a number resembling `v3_seed0`'s specifically.
 
+## PBMC240 lineage arm — a development dataset, not a held-out evaluation
+
+The real PBMC240 DIA-NN report (237 cells, ~75% missing values in the
+shared gene space — nothing like SCoPE2's zero missingness) is scored here
+at **lineage level** (myeloid vs. lymphoid), using weak labels from
+clustering, not curated ground truth. **Label this arm plainly: it is a
+development dataset used to choose V2 over v3, not a held-out evaluation of
+either.** 122 of the 237 cells have a confident weak label (117 lymphoid, 5
+myeloid); the other 115 ("unassigned") are excluded from scoring, matching
+how T1 NB1d itself scored this arm.
+
+| Method | Protocol | Lineage accuracy % |
+|---|---|---|
+| **Ours (V2, 5-seed)** | native nearest-centroid → lineage | 92.30 ± 0.73 (91.80–93.44) |
+| **Majority class ("lymphoid")** | trivial floor | 95.90 |
+| **Ours (v3, 5-seed)** | native nearest-centroid → lineage | 54.75 ± 7.41 (45.90–64.75) |
+| scANVI (3-seed mean) | shared kNN rule → lineage | 12.57 (9.02–15.57) |
+| scANVI (3-seed mean) | native scANVI classifier → lineage | 10.38 (7.38–16.39) |
+
+Source: `docs/plans/nb1d/real_data_per_seed.csv` ("ours"),
+`docs/plans/nb1d/scanvi_pbmc240_lineage_per_seed.csv` (scANVI, produced by
+`tools/fair_benchmark/scanvi_run_pbmc240.py` — a fresh integration of RNA +
+this arm's own real PBMC240 raw matrix in the shared gene space, not the
+SCoPE2 scANVI run above; a different query set needs its own joint
+embedding). Class→lineage mapping is `service/model/reference_metadata.csv`'s
+own `lineage` column, the same one the live service and every other
+lineage figure in this project use.
+
+**Reading this table — the majority-class floor changes what "92.3%" and
+"54.8%" mean.** With 117 of 122 scored cells lymphoid, always predicting
+"lymphoid" scores 95.90% by construction. **V2's 92.30% is below that
+trivial floor.** v3's 54.75% is far below it — worse than a coin flip
+between "always guess lymphoid" and "guess randomly," on this severely
+imbalanced real sample. scANVI does markedly worse than either "ours"
+family here (10–13% mean), which given the same 95.90% floor means its
+integration is actively anti-correlated with the true lineage on this
+real, high-missingness input, not merely noisy. **None of the three methods
+clears the trivial floor on this arm.** The comparison that matters here
+is not "which method wins" but the one T1 NB1d actually used PBMC240 for:
+V2's 92.30% ± 0.73 is a large, low-variance improvement over v3's 54.75% ±
+7.41 on real data with substantial missingness — the reason V2 was carried
+forward as a candidate (`docs/plans/nb1d/nb1d_summary.json`'s
+`decision.carry_V2: true`) — even though neither beats the naive baseline,
+and even though V2 does not carry that advantage onto SCoPE2 (see the
+tables above, where V2 is no better than v3 against scANVI). **Report both
+findings together, honestly:** V2 is the right call for real, messy,
+high-missingness uploads; it is not a strictly better encoder than v3 in
+every respect measured in this document.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the
