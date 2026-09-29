@@ -4,7 +4,7 @@ The old `CrossModalNet` run: jointly trained on RNA and proteomics together,
 over the old 2,903-gene shared space. Superseded by the 9,002-gene feature
 space and the frozen-reference architecture (`decisive_summary.json`), but
 kept here rather than deleted — see
-[`../../../docs/manifest.md`](../../../docs/manifest.md) and
+[`../../../../docs/manifest.md`](../../../../docs/manifest.md) and
 `versions.html`'s "prior baseline" card, which reads `provenance.json`
 directly.
 

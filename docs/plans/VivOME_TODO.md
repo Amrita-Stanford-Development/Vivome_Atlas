@@ -15,7 +15,7 @@ Last updated: 2026-09-29 (records follow-up: NB1c recorded as run with its outpu
 - [x] Fix the inverted alpha and the wrong neighbour graph in `smoothing.py`
 - [x] Rebuild the fair benchmark under the nine rules
 - [x] Fix the encoder: ReLU replaced by GELU, e2e cosine 1.000000 on SCoPE2 (`056f136`)
-- [x] Commit `service/model/app_export/`, with LFS for the TSV (`2d3ad76`)
+- [x] Commit `service/model/source/app_export/`, with LFS for the TSV (`2d3ad76`)
 - [x] Rescore ours on the real embedding and delete the reconstruction rows (`f15cbd1`)
 - [x] Sanity check reproduced to 4 decimals; trained centroids identical to class mean centroids
 - [x] Fix the cell count mismatch (row 42616)
@@ -89,7 +89,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 - [x] Real DIA-NN upload support: TSV auto-detection, annotation-column handling (a "Genes" column becomes the identifier, DIA-NN's other annotation columns are excluded, Windows raw-file-path headers are cleaned to their basename without `.raw`). Verified end to end through `app.py` against the actual `PBMC_240cells_proteins.tsv` (`service/examples/pbmc240_proteins_raw.tsv`): 237/238 cells pass the 200-gene floor (observed_genes min=0, median=1040, max=2254). Integration test added (`b5a15a8`)
 - [x] OpenMP workaround scoped to `sys.platform == "darwin"` only — the faiss-cpu/torch duplicate-libomp collision is a macOS packaging issue specifically; documented that a Linux deployment must not set these, since forcing FAISS to a single thread there would just throttle every search for no reason it has (`9109ce2`)
 - [x] UniProt isoform accessions (e.g. `P12345-2`) now resolve to their base accession (`9109ce2`)
-- [x] `MODEL_CARD.md` / `versions.html` corrected: **all nine donors** (not only TSP14/21/25, which was a naming example, not the full list) had about 65% of their cells in training; the restricted 79.8% balanced accuracy is **exact for SCoPE2 by construction** (its protein cells are only ever macrophage or monocyte, so restricting to those two classes matches the true label set on this one dataset — not a generalizable result); added the SCoPE2-unrestricted seed-variance caveat (a faithful retrain scored 9.1% balanced accuracy against the 31.1% shipped, seed variance measurement pending T1 NB1c); every number now cites its committed source file directly (`docs/plans/nb1/rna_to_rna_membership_corrected.csv`, `service/model/v3_tables/support_restricted_assignment.csv`) instead of pointing generically at this file's own summary table (`d5b426a`)
+- [x] `MODEL_CARD.md` / `versions.html` corrected: **all nine donors** (not only TSP14/21/25, which was a naming example, not the full list) had about 65% of their cells in training; the restricted 79.8% balanced accuracy is **exact for SCoPE2 by construction** (its protein cells are only ever macrophage or monocyte, so restricting to those two classes matches the true label set on this one dataset — not a generalizable result); added the SCoPE2-unrestricted seed-variance caveat (a faithful retrain scored 9.1% balanced accuracy against the 31.1% shipped, seed variance measurement pending T1 NB1c); every number now cites its committed source file directly (`docs/plans/nb1/rna_to_rna_membership_corrected.csv`, `service/model/evidence/v3_tables/support_restricted_assignment.csv`) instead of pointing generically at this file's own summary table (`d5b426a`)
 
 ### Track C, v3.1 scaffold (branch `integration/v31-scaffold`)
 

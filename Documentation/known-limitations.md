@@ -6,7 +6,7 @@ Open, unresolved issues. Read this before trusting any single number out of
 ## The `atlas_PROT_lat128.csv` provenance problem — RESOLVED
 
 **Status: resolved.** The real files were re-fetched from the project's
-Google Drive and committed to this repository at `service/model/app_export/`
+Google Drive and committed to this repository at `service/model/source/app_export/`
 (sha256-verified against `BUNDLE_MANIFEST.json`). This section keeps the
 original history for context; see [results.md](results.md) for the current
 numbers, which no longer depend on any reconstruction.
@@ -60,7 +60,7 @@ gap.
 **The broader lesson, worth keeping even though the specific problem is
 fixed:** an artifact that exists only as an uncommitted local file is one
 `rm -rf` away from requiring a fresh multi-week investigation to
-approximately reconstruct. `service/model/app_export/README.md` documents
+approximately reconstruct. `service/model/source/app_export/README.md` documents
 why these specific files are now committed (with the raw TSV under Git
 LFS) for exactly this reason.
 
@@ -154,7 +154,7 @@ batching and scGLUE's minibatch shuffling both have their own
 un-quantified run-to-run variance, plausibly smaller than scANVI's given
 neither uses a comparably deep stochastic training loop, but this has not
 been measured. For scale, the production reference's own 5-seed training
-run (`service/model/v3_tables/reference_seeds.csv`) measured mean balanced
+run (`service/model/evidence/v3_tables/reference_seeds.csv`) measured mean balanced
 accuracy 0.7143 on its own (different) validation task — that task's own
 spread is far smaller than scANVI's native-classifier spread found here.
 
@@ -178,7 +178,7 @@ here provides it.
 
 The Atlas CSVs baselines train on (`Atlas/atlas_RNA_lat128-001-part{1,2}.csv`)
 are missing one cell (`orig_index=42616`, a neutrophil) that
-`service/model/reference_embedding.npy` has — see
+`service/model/runtime/reference_embedding.npy` has — see
 [bugs-and-fixes.md](bugs-and-fixes.md#7-atlasatlas_rna_lat128-001-part12csv-are-missing-one-cell-between-them).
 "Ours" is aligned down to the baselines' 85,232-cell set rather than the
 baselines being retrained on the corrected 85,233. The Atlas CSVs

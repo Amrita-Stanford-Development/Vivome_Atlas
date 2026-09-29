@@ -16,7 +16,7 @@ from service import config
 
 class CrossModalSupportedClassesMatchesRealDataTests(unittest.TestCase):
     def test_matches_classes_with_nonzero_protein_cells(self):
-        path = config.MODEL_DIR / "v3_tables" / "latent_centroid_cosine.csv"
+        path = config.MODEL_DIR / "evidence" / "v3_tables" / "latent_centroid_cosine.csv"
         with open(path, newline="", encoding="utf-8") as handle:
             rows = list(csv.DictReader(handle))
         classes_with_protein_coverage = {row["class_name"] for row in rows if int(row["n_prot_cells"]) > 0}

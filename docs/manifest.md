@@ -54,7 +54,7 @@ Computed from repository data:
 - Cross-modal support classification (`cross_modal`, `rna_only`, `prot_only`)
 - `pca_centroid_cosine` — cosine similarity between RNA and protein class
   centroids **in the 3-PC projection**, for classes present in both modalities
-- `model.seeds` — a seed *count* (5), from `service/model/v3_tables/reference_seeds.csv`;
+- `model.seeds` — a seed *count* (5), from `service/model/evidence/v3_tables/reference_seeds.csv`;
   the accuracy and its 95% CI go in the record's `basis`, not `value` — see
   `web/js/panels.js:buildModelCard`, which renders `value` with 0 decimal places
 - `model.feature_space_size`, `encoder_family`, `mask_sampling`, `detected_by_source` —
@@ -62,7 +62,7 @@ Computed from repository data:
   below)
 - `latent_centroid_cosine`, `modality_probe_accuracy` — measured for the 2
   cross-modal classes (macrophage, monocyte) from
-  `service/model/v3_tables/latent_centroid_cosine.csv` and `modality_probe.json`.
+  `service/model/evidence/v3_tables/latent_centroid_cosine.csv` and `modality_probe.json`.
   The probe is one **global** score (a linear classifier's accuracy telling
   RNA from protein in the shared latent space), repeated on both cross-modal
   rows — not a per-class measurement, hence the "global metric, not
@@ -73,7 +73,7 @@ Emitted as pending, with the phase that will produce each:
 | Metric | Phase | Blocked on |
 |---|---|---|
 | `latent_centroid_cosine`, `modality_probe_accuracy` for RNA-only/protein-only classes | N/A | No cross-modal coverage for those classes — a correct record, not a gap to fill |
-| `transfer_accuracy` (any class) | N/A | A real measurement exists, but only per *dataset* (`service/model/v3_tables/rna_to_rna_real_masks.csv`), not per class — no per-class version has been computed |
+| `transfer_accuracy` (any class) | N/A | A real measurement exists, but only per *dataset* (`service/model/evidence/v3_tables/rna_to_rna_real_masks.csv`), not per class — no per-class version has been computed |
 | `benchmark.rows` | Phase 4 | No comparison against established methods has been run |
 
 A class present in only one modality gets a Phase 2 pending record for

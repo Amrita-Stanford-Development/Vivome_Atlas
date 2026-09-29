@@ -40,7 +40,7 @@ corrupts those rows.
 
 The viewer's 3D coordinates are a PCA projection, not the latent space itself.
 `latent_centroid_cosine` (the full 128-d measurement) is now measured for the
-2 cross-modal classes, from `service/model/reference_embedding.npy` — see
+2 cross-modal classes, from `service/model/runtime/reference_embedding.npy` — see
 [manifest.md](manifest.md). It stays pending for the other 20, which have no
 cross-modal coverage to measure it from.
 

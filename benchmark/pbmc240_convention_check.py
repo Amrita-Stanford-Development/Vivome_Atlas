@@ -4,7 +4,7 @@ inside align_to_feature_space -- service/pipeline/pipeline.py's actual,
 unchanged code) and the NOTEBOOK convention (dataset-level median fill then
 z-score, reused for both alignment and the smoothing graph) on a real
 dataset that actually has missing values. The SCoPE2 export
-(service/model/app_export/) has none, so it can't reveal this gap --
+(service/model/source/app_export/) has none, so it can't reveal this gap --
 service/tests/test_e2e_real_export.py's ~0.9985 median cosine is as close
 as that dataset can show. Does NOT change either convention -- measurement
 only. See Documentation/known-limitations.md#the-full_query_values-convention-gap-service-vs-notebook.

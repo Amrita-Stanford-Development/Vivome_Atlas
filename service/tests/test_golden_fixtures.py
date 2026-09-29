@@ -21,7 +21,7 @@ import pandas as pd
 from service.pipeline import pipeline, alignment
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
-APP_EXPORT = Path(__file__).resolve().parents[1] / "model" / "app_export"
+APP_EXPORT = Path(__file__).resolve().parents[1] / "model" / "source" / "app_export"
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
 
 

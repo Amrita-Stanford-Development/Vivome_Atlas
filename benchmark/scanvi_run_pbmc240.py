@@ -85,7 +85,7 @@ pbmc_meta = pd.read_csv(f"{D}/pbmc_meta.csv")
 print(f"variant={VARIANT} RNA cells: {len(rna_meta)}, PBMC240 cells: {len(pbmc_meta)}. elapsed {time.time()-t0:.1f}s", flush=True)
 
 rna_labels = rna_meta["class_name"].to_numpy()
-class_to_lineage = pd.read_csv(REPO / "service/model/reference_metadata.csv") \
+class_to_lineage = pd.read_csv(REPO / "service/model/runtime/reference_metadata.csv") \
     .groupby("class_name")["lineage"].first().to_dict()
 true_lineage = pbmc_meta["weak_lineage"].to_numpy()
 scored_mask = np.isin(true_lineage, ["lymphoid", "myeloid"])  # excludes "unassigned"

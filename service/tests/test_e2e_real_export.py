@@ -1,6 +1,6 @@
 """End-to-end regression guard against the real v3 export bundle.
 
-service/model/app_export/ carries the export notebook's own real, saved
+service/model/source/app_export/ carries the export notebook's own real, saved
 protein embedding (prot_embedding_scope2.npy) and the real raw input that
 produced it (blood_joint_cells_by_proteins_GENELEVEL.tsv). Running that raw
 file through the ACTUAL production pipeline code (service/pipeline/pipeline.py's
@@ -41,7 +41,7 @@ import pandas as pd
 
 from service.pipeline import alignment, smoothing, encoder, reference
 
-APP_EXPORT = Path(__file__).resolve().parents[1] / "model" / "app_export"
+APP_EXPORT = Path(__file__).resolve().parents[1] / "model" / "source" / "app_export"
 
 
 @unittest.skipUnless(

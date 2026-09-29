@@ -51,7 +51,7 @@ serves real predictions end to end. It is not deployed or reachable from
 the static site — `project.html` performs client-side validation only and
 has no fetch/XHR anywhere; wiring that up is separate, still-open work.
 
-The dev placeholder checkpoint (`model/dev/H_seed4.pt`) is no longer the
+The dev placeholder checkpoint (`model/legacy/dev/H_seed4.pt`) is no longer the
 default — `config.DEV_CHECKPOINT_PATH` still exists and
 `service/tests/test_encoder.py` still exercises it explicitly (the warn-path
 guard must keep firing for anything that points at it deliberately, e.g. a

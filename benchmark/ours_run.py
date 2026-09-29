@@ -2,18 +2,18 @@
 
 No reconstruction: both embeddings are real, already-computed artifacts.
 
-RNA side: service/model/reference_embedding.npy, the real frozen v3
+RNA side: service/model/runtime/reference_embedding.npy, the real frozen v3
 reference embedding for all 85,233 RNA cells -- the actual artifact the
 live service ships. Row 42616 (a neutrophil cell absent from
 Atlas/atlas_RNA_lat128-001-part{1,2}.csv, see
 Documentation/bugs-and-fixes.md) is dropped so "ours" uses the identical
 85,232-cell RNA set every baseline already trained on.
 
-Protein side: service/model/app_export/prot_embedding_scope2.npy, the
+Protein side: service/model/source/app_export/prot_embedding_scope2.npy, the
 export notebook's own real, saved embedding for all 1,490 SCoPE2 protein
 cells (sha256-verified against BUNDLE_MANIFEST.json when it was added --
-see service/model/app_export/README.md). Labels come from
-service/model/app_export/atlas_PROT_v3_meta.csv's true_class_name column,
+see service/model/source/app_export/README.md). Labels come from
+service/model/source/app_export/atlas_PROT_v3_meta.csv's true_class_name column,
 in that file's own row order -- never web/data/atlas_PROT_lat128.csv, a
 legacy file with an unverified row order (see
 Documentation/known-limitations.md).
@@ -41,7 +41,7 @@ from evaluate import knn_classifier_predict, nearest_centroid_predict, evaluate_
 
 D = Path(__file__).resolve().parent
 REPO = Path(__file__).resolve().parents[1]
-APP_EXPORT = REPO / "service" / "model" / "app_export"
+APP_EXPORT = REPO / "service" / "model" / "source" / "app_export"
 MISSING_ROW = 42616  # neutrophil cell absent from the Atlas CSVs; drop to match baselines
 
 # --- protein side: real embedding, real labels ---
@@ -52,7 +52,7 @@ assert len(true_labels) == prot_emb.shape[0]
 print(f"protein: {prot_emb.shape}, labels aligned: {len(true_labels)}")
 
 # --- RNA side: real embedding, dropped to the shared 85,232-cell set ---
-rna_emb_full = np.load(REPO / "service" / "model" / "reference_embedding.npy")
+rna_emb_full = np.load(REPO / "service" / "model" / "runtime" / "reference_embedding.npy")
 metadata = reference.load_reference_metadata()
 class_names_by_idx = [c.class_name for c in metadata.classes]
 rna_labels_full = np.array([class_names_by_idx[i] for i in metadata.class_idx_by_cell])
@@ -75,14 +75,14 @@ result = {
     "n_prot_cells": int(prot_emb.shape[0]),
     "subsample": None,
     "diverged": False,
-    "note": "Real embeddings, no reconstruction. RNA: service/model/reference_embedding.npy "
+    "note": "Real embeddings, no reconstruction. RNA: service/model/runtime/reference_embedding.npy "
             "(row 42616 dropped to match baselines). Protein: "
-            "service/model/app_export/prot_embedding_scope2.npy, labels from "
+            "service/model/source/app_export/prot_embedding_scope2.npy, labels from "
             "atlas_PROT_v3_meta.csv's true_class_name column, same row order.",
     "knn_classifier": evaluate_arm(true_labels, knn["unrestricted"], knn["restricted"], n_classes, 2),
     "native_nearest_centroid": evaluate_arm(true_labels, nc["unrestricted"], nc["restricted"], n_classes, 2),
     "historical_documented_figures": {
-        "source": "service/model/v3_tables/support_restricted_assignment.csv",
+        "source": "service/model/evidence/v3_tables/support_restricted_assignment.csv",
         "unrestricted": {"accuracy_pct": 45.369127516778526, "balanced_accuracy_pct": 31.083265404424022},
         "restricted": {"accuracy_pct": 86.1744966442953, "balanced_accuracy_pct": 79.7915354403646},
     },

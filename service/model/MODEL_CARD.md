@@ -136,10 +136,10 @@ fixed and zero-shot on the query.**
 
 ## Versioning
 
-- Model artifact provenance: `service/model/provenance.json` (`created`,
+- Model artifact provenance: `service/model/runtime/provenance.json` (`created`,
   `gene_list_hash`, training config).
-- Gene identifier mapping table: `service/model/gene_id_map_v1.tsv`, built
+- Gene identifier mapping table: `service/model/runtime/gene_id_map_v1.tsv`, built
   from a one-time HGNC bulk download — provenance, source sha256, and the
-  derived table's own sha256 in `service/model/gene_id_map_v1_provenance.json`.
+  derived table's own sha256 in `service/model/runtime/gene_id_map_v1_provenance.json`.
 - Site-facing atlas version: `ATLAS_VERSION` in `service/config.py` /
   `scripts/build_manifest.py`.

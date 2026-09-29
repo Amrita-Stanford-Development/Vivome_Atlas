@@ -23,7 +23,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 V3_APP_EXPORT = REPO_ROOT / "service" / "model" / "v3_pending" / "app_export"
 ATLAS_DIR = REPO_ROOT / "web" / "data"
-REFERENCE_METADATA = REPO_ROOT / "service" / "model" / "reference_metadata.csv"
+REFERENCE_METADATA = REPO_ROOT / "service" / "model" / "runtime" / "reference_metadata.csv"
 
 RNA_COLUMNS = ["latent_dim", "modality", "orig_index", "class_idx", "class_name", "lineage", "PC1", "PC2", "PC3"]
 PROT_COLUMNS = [

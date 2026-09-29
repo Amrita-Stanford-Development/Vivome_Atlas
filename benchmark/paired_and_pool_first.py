@@ -68,12 +68,12 @@ for seed in (0, 1, 2):
 metadata = reference.load_reference_metadata()
 class_names_by_idx = [c.class_name for c in metadata.classes]
 ours_rna_labels_full = np.array([class_names_by_idx[i] for i in metadata.class_idx_by_cell])
-ours_rna_emb_full = np.load(REPO / "service" / "model" / "reference_embedding.npy")
+ours_rna_emb_full = np.load(REPO / "service" / "model" / "runtime" / "reference_embedding.npy")
 keep = np.ones(ours_rna_emb_full.shape[0], dtype=bool)
 keep[MISSING_ROW] = False
 ours_rna_emb, ours_rna_labels = ours_rna_emb_full[keep], ours_rna_labels_full[keep]
-ours_prot_emb = np.load(REPO / "service" / "model" / "app_export" / "prot_embedding_scope2.npy")
-ours_prot_meta = pd.read_csv(REPO / "service" / "model" / "app_export" / "atlas_PROT_v3_meta.csv")
+ours_prot_emb = np.load(REPO / "service" / "model" / "source" / "app_export" / "prot_embedding_scope2.npy")
+ours_prot_meta = pd.read_csv(REPO / "service" / "model" / "source" / "app_export" / "atlas_PROT_v3_meta.csv")
 ours_true_labels = ours_prot_meta["true_class_name"].to_numpy()
 arms["Ours"] = (ours_rna_emb, ours_prot_emb, ours_rna_labels, ours_true_labels)
 

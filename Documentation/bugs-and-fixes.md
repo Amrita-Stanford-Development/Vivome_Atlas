@@ -86,8 +86,8 @@ reference:
 - restricted ({macrophage, monocyte}): 86.17% accuracy / 79.79% balanced
   accuracy
 
-(Both pinned in `service/model/v3_tables/support_restricted_assignment.csv`,
-produced by `service/model/VivOME_Prototype_Export.ipynb`.)
+(Both pinned in `service/model/evidence/v3_tables/support_restricted_assignment.csv`,
+produced by `service/model/source/VivOME_Prototype_Export.ipynb`.)
 
 **Root cause**, found by direct code comparison against the notebook:
 
@@ -248,7 +248,7 @@ time just to recover something that should have been saved the first time.
 ## 7. `Atlas/atlas_RNA_lat128-001-part{1,2}.csv` are missing one cell between them
 
 The baselines' RNA reference load (`benchmark/load.py`) counts
-85,232 cells; `service/model/reference_embedding.npy` (the real, live
+85,232 cells; `service/model/runtime/reference_embedding.npy` (the real, live
 artifact) has 85,233. Tracing it down: `-part1.csv` ends at
 `orig_index=42615`; `-part2.csv` starts at `orig_index=42617`.
 `orig_index=42616` — a neutrophil cell, barcode

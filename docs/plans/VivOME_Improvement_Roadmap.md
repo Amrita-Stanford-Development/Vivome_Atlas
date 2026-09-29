@@ -440,7 +440,7 @@ assignment.py, calibration.py or abstention.py, and do not change the mask or
 value conventions in alignment.py (track A2 owns those).
 
 1. Gene identifiers. Create service/pipeline/gene_ids.py and a frozen, versioned
-   mapping table service/model/gene_id_map_v1.tsv (pinned Ensembl release,
+   mapping table service/model/runtime/gene_id_map_v1.tsv (pinned Ensembl release,
    HGNC IDs, UniProt accessions, symbols, with a sha256 and the release numbers
    recorded). Map the 9,002 feature space to Ensembl IDs and report any that do
    not map. At upload time accept symbols (case insensitive), Ensembl IDs, or

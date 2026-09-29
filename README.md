@@ -28,7 +28,7 @@ The atlas fetches data from `web/data/` over HTTP, so opening `index.html` from
 **Git LFS is not optional for the RNA view.** `web/data/atlas_RNA_lat128.parquet`
 (~1.43 GB) and the two split CSV parts are LFS objects. Without `git lfs pull`
 your checkout holds pointer files; the app detects this and tells you the
-remedy rather than failing on a parse error. `service/model/dev/H_seed4.pt`
+remedy rather than failing on a parse error. `service/model/legacy/dev/H_seed4.pt`
 (~94 MB, the projection service's dev placeholder checkpoint) is LFS-tracked
 too — the same `git lfs pull` fetches it.
 
@@ -102,7 +102,7 @@ latter requires running established integration methods for comparison.
 The prior architecture, `CrossModalNet` (jointly trained on RNA and
 proteomics, 2,903-gene space), is kept as a documented baseline, not
 erased — see `versions.html`'s "Prior baseline" card and
-`service/model/legacy_v2/README.md`. The projection service pipeline (see
+`service/model/legacy/v2/README.md`. The projection service pipeline (see
 `service/README.md`) runs end to end against the v3 reference but is not
 deployed or reachable from this site yet.
 

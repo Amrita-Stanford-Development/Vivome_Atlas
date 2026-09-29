@@ -159,7 +159,7 @@ Runs the shipped model ("ours") through the *exact same* shared harness as
 every baseline (methodology rule A) — on **real artifacts, no
 reconstruction**.
 
-**RNA side:** loads `service/model/reference_embedding.npy` directly — the
+**RNA side:** loads `service/model/runtime/reference_embedding.npy` directly — the
 real, live, already-computed embedding for all 85,233 RNA cells that the
 deployed service actually ships. Labels come from
 `service.pipeline.reference.load_reference_metadata()`'s
@@ -168,12 +168,12 @@ deployed service actually ships. Labels come from
 script's RNA set exactly matches the 85,232 cells every baseline trained on
 — see [bugs-and-fixes.md](bugs-and-fixes.md#7).
 
-**Protein side:** `service/model/app_export/prot_embedding_scope2.npy` —
+**Protein side:** `service/model/source/app_export/prot_embedding_scope2.npy` —
 the export notebook's own real, saved embedding for all 1,490 SCoPE2
 protein cells. Labels come from
-`service/model/app_export/atlas_PROT_v3_meta.csv`'s `true_class_name`
+`service/model/source/app_export/atlas_PROT_v3_meta.csv`'s `true_class_name`
 column, in that file's own row order. See
-`service/model/app_export/README.md` for these files' provenance and
+`service/model/source/app_export/README.md` for these files' provenance and
 sha256 verification.
 
 An earlier version of this script reconstructed the protein embedding from
@@ -193,7 +193,7 @@ this repository, not standalone.
 
 Writes `results/result_ours.json`, which includes the real-embedding
 harness numbers alongside the historical documented figures
-(`service/model/v3_tables/support_restricted_assignment.csv`) as a
+(`service/model/evidence/v3_tables/support_restricted_assignment.csv`) as a
 separate, clearly-labeled field for comparison — never merged into one
 number.
 
@@ -257,7 +257,7 @@ already-cached `.npy` embeddings (including all 3 scANVI seeds' — run
 ```bash
 cd Vivome_Atlas
 git lfs pull   # fetches the RNA expression matrix AND
-               # service/model/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv
+               # service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv
                # (large; flips web/tests/lfs.test.js red by design, see that
                # test's comment, and is required for ours_run.py and
                # service/tests/test_e2e_real_export.py)

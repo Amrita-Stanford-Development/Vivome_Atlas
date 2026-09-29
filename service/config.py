@@ -11,6 +11,10 @@ from pathlib import Path
 
 SERVICE_ROOT = Path(__file__).resolve().parent
 MODEL_DIR = SERVICE_ROOT / "model"
+# What the server loads at runtime (a deployment ships this folder); see
+# service/model/README.md for the other folders (evidence/, source/, legacy/).
+RUNTIME_DIR = MODEL_DIR / "runtime"
+LEGACY_DIR = MODEL_DIR / "legacy"
 
 
 def _env_path(name: str, default: Path) -> Path:
@@ -22,7 +26,7 @@ def _env_path(name: str, default: Path) -> Path:
 # These three exist today, are architecture-independent, and do not change
 # when the production checkpoint lands.
 FEATURE_SPACE_GENES_PATH = _env_path(
-    "VIVOME_FEATURE_SPACE_GENES", MODEL_DIR / "feature_space_genes.csv"
+    "VIVOME_FEATURE_SPACE_GENES", RUNTIME_DIR / "feature_space_genes.csv"
 )
 
 # Track B: frozen, versioned gene identifier cross-reference (symbol,
@@ -31,10 +35,10 @@ FEATURE_SPACE_GENES_PATH = _env_path(
 # gene_id_map_v1_provenance.json alongside it for the source URL, download
 # date, and sha256. Never re-fetched or looked up live at request time.
 GENE_ID_MAP_PATH = _env_path(
-    "VIVOME_GENE_ID_MAP", MODEL_DIR / "gene_id_map_v1.tsv"
+    "VIVOME_GENE_ID_MAP", RUNTIME_DIR / "gene_id_map_v1.tsv"
 )
 REFERENCE_METADATA_PATH = _env_path(
-    "VIVOME_REFERENCE_METADATA", MODEL_DIR / "reference_metadata.csv"
+    "VIVOME_REFERENCE_METADATA", RUNTIME_DIR / "reference_metadata.csv"
 )
 
 # The real v3 export. REFERENCE_MODEL_PATH documents where it lands; it is
@@ -43,16 +47,16 @@ REFERENCE_METADATA_PATH = _env_path(
 # FileNotFoundError, so the pipeline fails legibly — a guard that matters
 # again the moment someone points one of these at a scratch/override path.
 REFERENCE_MODEL_PATH = _env_path(
-    "VIVOME_REFERENCE_MODEL", MODEL_DIR / "reference_model.pt"
+    "VIVOME_REFERENCE_MODEL", RUNTIME_DIR / "reference_model.pt"
 )
 REFERENCE_EMBEDDING_PATH = _env_path(
-    "VIVOME_REFERENCE_EMBEDDING", MODEL_DIR / "reference_embedding.npy"
+    "VIVOME_REFERENCE_EMBEDDING", RUNTIME_DIR / "reference_embedding.npy"
 )
 REFERENCE_CENTROIDS_PATH = _env_path(
-    "VIVOME_REFERENCE_CENTROIDS", MODEL_DIR / "reference_centroids.npy"
+    "VIVOME_REFERENCE_CENTROIDS", RUNTIME_DIR / "reference_centroids.npy"
 )
 REFERENCE_PROVENANCE_PATH = _env_path(
-    "VIVOME_REFERENCE_PROVENANCE", MODEL_DIR / "provenance.json"
+    "VIVOME_REFERENCE_PROVENANCE", RUNTIME_DIR / "provenance.json"
 )
 
 # Not part of the six-file contract: per-reference-cell continuous property
@@ -62,24 +66,24 @@ REFERENCE_PROVENANCE_PATH = _env_path(
 # PROPERTY_NAMES_PATH's `property_names` list, not from this file's own header
 # (it's a raw float32 array, not a CSV).
 REFERENCE_PROPERTIES_PATH = _env_path(
-    "VIVOME_REFERENCE_PROPERTIES", MODEL_DIR / "reference_properties.npy"
+    "VIVOME_REFERENCE_PROPERTIES", RUNTIME_DIR / "reference_properties.npy"
 )
 PROPERTY_NAMES_PATH = _env_path(
-    "VIVOME_PROPERTY_NAMES", MODEL_DIR / "property_names.json"
+    "VIVOME_PROPERTY_NAMES", RUNTIME_DIR / "property_names.json"
 )
 
 # --- Development-only placeholder ---
 # Answers "which architecture generalises best", not the production model.
 # It is missing the class imbalance correction, the hubness penalty, the
 # sink penalty, and query-time smoothing was never combined with it during
-# training. See service/model/dev/README.md.
+# training. See service/model/legacy/dev/README.md.
 DEV_CHECKPOINT_PATH = _env_path(
-    "VIVOME_DEV_CHECKPOINT", MODEL_DIR / "dev" / "H_seed4.pt"
+    "VIVOME_DEV_CHECKPOINT", LEGACY_DIR / "dev" / "H_seed4.pt"
 )
 
 # --- The single knob the encoder actually loads from ---
 # Defaults to the real v3 export now that it exists. Falling back to the dev
-# placeholder means setting VIVOME_ENCODER_WEIGHTS=service/model/dev/H_seed4.pt
+# placeholder means setting VIVOME_ENCODER_WEIGHTS=service/model/legacy/dev/H_seed4.pt
 # (or overriding this default directly) — encoder.py and every pipeline stage
 # downstream of it read only this path and never touch DEV_CHECKPOINT_PATH or
 # REFERENCE_MODEL_PATH directly.
@@ -91,7 +95,7 @@ ENCODER_WEIGHTS_PATH = _env_path("VIVOME_ENCODER_WEIGHTS", REFERENCE_MODEL_PATH)
 # `winner_config`, so this stays pointed at decisive_summary.json, which is
 # still the accurate record (the architecture hasn't changed since that test).
 DECISIVE_SUMMARY_PATH = _env_path(
-    "VIVOME_DECISIVE_SUMMARY", MODEL_DIR / "decisive_summary.json"
+    "VIVOME_DECISIVE_SUMMARY", RUNTIME_DIR / "decisive_summary.json"
 )
 
 ATLAS_VERSION = "0.2.0"
@@ -139,7 +143,7 @@ LINEAR_SCALE_MEDIAN_THRESHOLD = 50.0
 # feature set (brief Stage 2, the MaxFuse idea). k, alpha, and the PCA
 # dimension match VivOME_Prototype_Export.ipynb exactly — that notebook is
 # what measured the +0.026 AUC on SCoPE2 cited in smoothing.py, and what
-# produced service/model/v3_tables/support_restricted_assignment.csv.
+# produced service/model/evidence/v3_tables/support_restricted_assignment.csv.
 SMOOTHING_K = 15
 SMOOTHING_ALPHA = 0.6
 SMOOTHING_N_PCA = 50
@@ -164,7 +168,7 @@ SHIPPED_PROPERTIES = (
 # docstring for the measured evidence behind both of these.
 #
 # Only these classes have any protein cells anywhere in the reference
-# (service/model/v3_tables/support_restricted_assignment.csv): restricting
+# (service/model/evidence/v3_tables/support_restricted_assignment.csv): restricting
 # assignment to them moves balanced accuracy from 31.08% (all 22 classes
 # candidate) to 79.79% (these 2 candidate) on real SCoPE2 data.
 CROSS_MODAL_SUPPORTED_CLASSES = ("macrophage", "monocyte")

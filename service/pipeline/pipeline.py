@@ -32,7 +32,7 @@ class ReferenceBundle:
     pca: "coordinates.PcaTransform"
     property_names: list[str]
     property_values: np.ndarray  # (n_ref, n_properties)
-    provenance: dict  # service/model/provenance.json — recorded, see pipeline.py's abstain-threshold note
+    provenance: dict  # service/model/runtime/provenance.json — recorded, see pipeline.py's abstain-threshold note
 
     @property
     def model_version(self) -> str:

@@ -38,8 +38,8 @@ in `service/pipeline/encoder.py`'s activation function; see
 [bugs-and-fixes.md](bugs-and-fixes.md)) and has been removed from this
 table entirely, not kept as a labeled row. Every "Ours" number in this
 document, single-seed or five-seed, is scored on real saved embeddings —
-either `service/model/reference_embedding.npy` /
-`service/model/app_export/prot_embedding_scope2.npy` (the shipped
+either `service/model/runtime/reference_embedding.npy` /
+`service/model/source/app_export/prot_embedding_scope2.npy` (the shipped
 `v3_seed0`) or T1 NB1d's own per-seed exports (everything else) — never a
 reconstruction, and protein labels come from
 `docs/plans/nb1d/scope2_cell_ids.csv` for the 5-seed numbers (confirmed
@@ -50,7 +50,7 @@ unverified row order (see [known-limitations.md](known-limitations.md)).
 **Sanity check (run before trusting anything else here, `v3_seed0`/shipped
 model specifically):** the real
 protein embedding, scored by cosine-argmax against
-`service/model/reference_centroids.npy` (the trained centroids, not
+`service/model/runtime/reference_centroids.npy` (the trained centroids, not
 recomputed class means), reproduces the historical figures to 4 decimal
 places: 45.3691%/31.0833% unrestricted, 86.1745%/79.7915% restricted
 (targets: 45.37/31.08, 86.17/79.79). The trained centroids and
@@ -301,7 +301,7 @@ shared-kNN-rule balanced accuracy spans 59.04–88.40% across v3's own 5
 training seeds (SD 10.60) — a wider spread than scANVI's 3-seed spread
 under the same rule (76.26–78.04%, SD ≈0.93). The production reference's
 separate 5-seed training run on its own RNA-only validation task
-(`service/model/v3_tables/reference_seeds.csv`, mean balanced accuracy
+(`service/model/evidence/v3_tables/reference_seeds.csv`, mean balanced accuracy
 0.7143) is a different task and dataset from this benchmark's
 protein-transfer scoring and not directly comparable to any number above —
 but it is notable that RNA-only validation shows far less seed-to-seed
@@ -502,7 +502,7 @@ produced by `benchmark/scanvi_run_pbmc240.py`, a fresh
 integration of RNA + this arm's own real PBMC240 matrix in the shared gene
 space, not the SCoPE2 scANVI run above; a different query set needs its
 own joint embedding). Class→lineage mapping is
-`service/model/reference_metadata.csv`'s own `lineage` column, the same one
+`service/model/runtime/reference_metadata.csv`'s own `lineage` column, the same one
 the live service and every other lineage figure in this project use.
 
 **Reading this table — recall and composition tell a different, more

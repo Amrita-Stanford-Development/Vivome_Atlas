@@ -55,7 +55,7 @@ tracked via Git LFS — see `.gitattributes`) means this can't happen again.
 from service.pipeline import alignment, smoothing, encoder, reference
 import numpy as np, pandas as pd
 
-df = pd.read_csv("service/model/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+df = pd.read_csv("service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv",
                   sep="\t", index_col=0)
 df.columns = df.columns.astype(str).str.upper()
 raw = alignment.RawMatrix(gene_names=df.columns.tolist(),
@@ -71,7 +71,7 @@ full_query_values = ((clean - clean.mean()) / (clean.std(ddof=0) + 1e-8)).to_num
 smoothed = smoothing.fuzzy_smooth(aligned.values, full_query_values)
 service_emb = encoder.load_encoder().encode(smoothed, aligned.mask)
 
-notebook_emb = np.load("service/model/app_export/prot_embedding_scope2.npy")
+notebook_emb = np.load("service/model/source/app_export/prot_embedding_scope2.npy")
 # cosine(service_emb, notebook_emb) should be ~1.0 for every cell.
 # If it drops, service/pipeline has regressed -- see
 # Documentation/bugs-and-fixes.md for the two real bugs (smoothing.py's

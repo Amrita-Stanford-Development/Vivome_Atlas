@@ -78,7 +78,7 @@ all. The detection rule and its threshold are in
 (gene symbols, Ensembl gene IDs, UniProt accessions, or a DIA-NN-style
 semicolon-separated protein group of any of these) were resolved onto the
 service's fixed 9,002-gene feature space, using the frozen, versioned
-mapping table `service/model/gene_id_map_v1.tsv` (built once, offline, from
+mapping table `service/model/runtime/gene_id_map_v1.tsv` (built once, offline, from
 HGNC's public bulk dataset — never a live per-request lookup).
 `unmapped_identifiers` lists identifiers that matched nothing;
 `ambiguous_identifiers` lists identifiers (almost always a semicolon

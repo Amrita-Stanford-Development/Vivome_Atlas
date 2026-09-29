@@ -21,7 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 ATLAS_DIR = REPO_ROOT / "web" / "data"
 OUTPUT_PATH = ATLAS_DIR / "atlas_manifest.json"
 SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
-V3_TABLES_DIR = SERVICE_MODEL_DIR / "v3_tables"
+V3_TABLES_DIR = SERVICE_MODEL_DIR / "evidence" / "v3_tables"
 
 # decisive_summary.json's winner_config.enc -> a readable label for the manifest.
 # Keep this in sync with service/pipeline/encoder.py's _ENCODER_FAMILIES table;
@@ -133,7 +133,7 @@ def build_model_seeds(reference_seeds_rows: list[dict], provenance: dict) -> dic
 
 
 def read_latent_centroid_cosine(rows: list[dict]) -> dict[int, dict]:
-    """service/model/v3_tables/latent_centroid_cosine.csv -> {class_idx: metric}.
+    """service/model/evidence/v3_tables/latent_centroid_cosine.csv -> {class_idx: metric}.
     Measured only for the 2 classes with cross-modal coverage; the pending
     rows use an empty string for latent_centroid_cosine, never "0.0"."""
     out = {}
@@ -171,7 +171,7 @@ def build_previous_release_facts(legacy_provenance: dict) -> dict:
     measured under different methodologies (this is a raw/smoothed AUC
     pair from the old joint-training evaluation, not a single number
     directly comparable to v3's own per-dataset zero-shot table in
-    service/model/v3_tables/zero_shot_all_datasets.csv)."""
+    service/model/evidence/v3_tables/zero_shot_all_datasets.csv)."""
     return {
         "model_name": "CrossModalNet",
         "n_shared_genes": legacy_provenance["n_shared_genes"],
@@ -229,7 +229,7 @@ def build_manifest(
             "transfer_accuracy": pending(
                 "N/A",
                 "Measured per dataset at realistic coverage, not per class — see "
-                "service/docs/context-brief.md §1 and service/model/v3_tables/"
+                "service/docs/context-brief.md §1 and service/model/evidence/v3_tables/"
                 "rna_to_rna_real_masks.csv for the real numbers.",
             ),
         })
@@ -306,13 +306,13 @@ def build_manifest(
 
 
 def main() -> None:
-    with (SERVICE_MODEL_DIR / "decisive_summary.json").open(encoding="utf-8") as handle:
+    with (SERVICE_MODEL_DIR / "runtime" / "decisive_summary.json").open(encoding="utf-8") as handle:
         decisive_summary = json.load(handle)
-    with (SERVICE_MODEL_DIR / "feature_space_detail.csv").open(newline="", encoding="utf-8") as handle:
+    with (SERVICE_MODEL_DIR / "evidence" / "feature_space_detail.csv").open(newline="", encoding="utf-8") as handle:
         feature_space_detail_rows = list(csv.DictReader(handle))
-    with (SERVICE_MODEL_DIR / "legacy_v2" / "provenance.json").open(encoding="utf-8") as handle:
+    with (SERVICE_MODEL_DIR / "legacy" / "v2" / "provenance.json").open(encoding="utf-8") as handle:
         legacy_provenance = json.load(handle)
-    with (SERVICE_MODEL_DIR / "provenance.json").open(encoding="utf-8") as handle:
+    with (SERVICE_MODEL_DIR / "runtime" / "provenance.json").open(encoding="utf-8") as handle:
         provenance = json.load(handle)
     with (V3_TABLES_DIR / "reference_seeds.csv").open(newline="", encoding="utf-8") as handle:
         reference_seeds_rows = list(csv.DictReader(handle))
