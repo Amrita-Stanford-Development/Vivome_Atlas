@@ -3,8 +3,8 @@
 Implements the Phase 5 backend behind `POST /api/project`, whose contract
 is published at [`../docs/service/projection-api.md`](../docs/service/projection-api.md)
 (unchanged by this work — see that file for the wire schema). This directory
-is a separate concern from the rest of the repo: the static app at the
-repository root has zero dependencies by design (`CLAUDE.md`); this backend
+is a separate concern from the rest of the repo: the static site in
+`web/` has zero dependencies by design (`CLAUDE.md`); this backend
 does real inference and has real dependencies (`requirements.txt`), kept
 entirely contained here.
 

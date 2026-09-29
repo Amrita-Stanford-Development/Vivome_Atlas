@@ -1,4 +1,4 @@
-# Architecture
+# Benchmark harness
 
 All scripts live in `benchmark/`, use repo-relative paths (work
 from a fresh clone, no hardcoded machine-specific paths), and write their

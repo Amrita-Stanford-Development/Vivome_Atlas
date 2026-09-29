@@ -1,7 +1,7 @@
 """Builds the PBMC240 inputs scanvi_run_pbmc240.py scores, in the same
 shared raw gene space load.py built for the RNA reference and SCoPE2
 (results/gene_cols.txt) -- so scanvi_run_pbmc240.py, or any other
-fair_benchmark arm, can score PBMC240 exactly the way the existing arms
+benchmark arm, can score PBMC240 exactly the way the existing arms
 score SCoPE2.
 
 Row order for both variants is pinned to T1 NB1d's own

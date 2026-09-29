@@ -16,7 +16,9 @@ over every tracked (and untracked, not-ignored) text file:
   (exact path or glob line), so the index can't rot as the project grows.
 
 Only tokens that look like real paths are checked (a file extension, or a
-trailing `/`), so prose like "data/metadata split" is left alone.
+trailing `/`), so prose like "data/metadata split" is left alone. Lines of a
+directory-tree drawing (├ └ │) are skipped: their names are relative to the
+branch they hang from.
 
     python3 scripts/check_paths.py        # exit 1 and a list if anything is broken
 """
@@ -109,7 +111,9 @@ def check_text_file(rel: str, top_level: set[str]) -> list[str]:
                 continue
             if not _resolves(target, path) and not _allowed(target):
                 problems.append(f"{rel}:{lineno}: broken {kind}: {target}")
-        for token, first in PATH_TOKEN.findall(line):
+        # A directory-tree drawing names folders relative to their branch.
+        tree_line = bool(re.search("[├└│]", line))
+        for token, first in [] if tree_line else PATH_TOKEN.findall(line):
             if first not in top_level or not _looks_like_path(token) or re.search(r"[*{}<>$]|\.\.\.", token):
                 continue
             if not _resolves(token, path) and not _allowed(token):

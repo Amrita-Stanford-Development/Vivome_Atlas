@@ -5,7 +5,7 @@ Working notes for this repository. Read before changing anything.
 ## What this is
 
 A static web resource for the VivOME joint latent atlas. Plain HTML + CSS +
-ES modules, at the repository root. **No build step, no bundler, no
+ES modules, in `web/`. **No build step, no bundler, no
 framework, no dependencies.** Do not introduce one here. `package.json`
 exists only to set `"type": "module"` and to run `node --test`.
 
@@ -21,6 +21,25 @@ The app exists to deliver the *resource claim* of
 `research/implementation-plan.md` — a versioned atlas with a projection
 service, calibrated confidence, and explicit abstention. App work runs in
 parallel with the modeling track and must not block on it.
+
+## Where things live
+
+[docs/project-structure.md](docs/project-structure.md) is the map: what each
+folder is for, where a new file goes, naming rules. Every tracked file has
+one line in [docs/file-index.md](docs/file-index.md).
+
+- Adding, moving or deleting a tracked file means updating
+  `docs/file-index.md` in the same commit.
+- Moving a file means rewriting every citation of it (code, docstrings,
+  docs, HTML, the manifest's notes).
+- `scripts/check_paths.py` enforces both. It runs in the `scripts` test
+  suite and fails on an unlisted file or a cited path that doesn't resolve.
+
+## Roadmap work
+
+Before starting a roadmap task, read `research/todo.md` and the relevant
+track in `research/roadmap.md`. When you finish, tick the completed items in
+`research/todo.md` with their commit hashes and add a changelog line.
 
 ## The rule that governs everything
 
@@ -66,13 +85,13 @@ python3 scripts/build_manifest.py
 ```
 
 Bump `ATLAS_VERSION` in `scripts/build_manifest.py` for a real release; the full
-protocol is on `versions.html` and in [docs/web/manifest.md](docs/web/manifest.md).
+protocol is on `web/versions.html` and in [docs/web/manifest.md](docs/web/manifest.md).
 
 ## Tests
 
 ```bash
 node --test                                          # from the repo root
-python3 -m unittest discover -s scripts             # manifest builder + repo path check
+python3 -m unittest discover -s scripts              # manifest builder + path/index check
 python3 -m unittest discover -s service/tests -t .   # projection service, from the repo root
 ```
 
@@ -87,7 +106,7 @@ test.
   This repo mixes generated bundles, precomputed plots, and hand-written
   pages; things that look dead are often deliberate (`miscellaneous.html` is
   intentionally blank).
-- `SUMMARY.md` and `README.md` describe the current state only. No "what was
+- `README.md` and `docs/` describe the current state only. No "what was
   removed" sections — git history is the record of change.
 - Pending is a feature. When a metric cannot be computed yet, add a pending
   record with the phase that will produce it. Never fill a gap with a

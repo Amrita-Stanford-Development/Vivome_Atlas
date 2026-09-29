@@ -1293,7 +1293,7 @@
                     this.createCellTypeFilters();
                 } catch (error) {
                     console.error('Error loading metadata:', error);
-                    throw new Error('Could not load atlas metadata. Please ensure the Atlas folder contains the required metadata files.');
+                    throw new Error('Could not load atlas metadata. Please ensure the data/ folder contains the required metadata files.');
                 }
             }
             
@@ -2105,7 +2105,7 @@
                     <div class="error-message">
                         <h3 style="color: #dc3545; margin-top: 0;">Error Loading Atlas</h3>
                         <p style="color: #666;">${message}</p>
-                        <p style="color: #666;">Please check that the Atlas folder contains the required CSV files.</p>
+                        <p style="color: #666;">Please check that the data/ folder contains the required CSV files.</p>
                     </div>
                 `;
             }

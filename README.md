@@ -6,9 +6,10 @@ A static web resource for exploring a joint latent embedding that places
 single-cell modalities into one shared space. This build covers **RNA** and
 **Protein**.
 
-No build step, no dependencies, no framework — plain HTML, CSS, and ES modules.
-The one exception is `service/`, a separate Python backend for the
-projection service — see [Layout](#layout) and `service/README.md`.
+The website (`web/`) has no build step, no dependencies and no framework:
+plain HTML, CSS and ES modules. The projection service (`service/`) is a
+separate Python backend with its own dependencies. See
+[Repository map](#repository-map).
 
 ---
 
@@ -17,7 +18,7 @@ projection service — see [Layout](#layout) and `service/README.md`.
 ```bash
 git clone git@github.com:Amrita-Stanford-Development/Vivome_Atlas.git
 cd Vivome_Atlas
-git lfs install && git lfs pull     # required for the RNA data (see below)
+git lfs install && git lfs pull     # required for the RNA view and the model (see below)
 cd web && python3 -m http.server 8000
 # open http://localhost:8000/index.html
 ```
@@ -25,12 +26,40 @@ cd web && python3 -m http.server 8000
 The atlas fetches data from `web/data/` over HTTP, so opening `index.html` from
 `file://` will not load. Serve the `web/` folder.
 
-**Git LFS is not optional for the RNA view.** `web/data/atlas_RNA_lat128.parquet`
-(~1.43 GB) and the two split CSV parts are LFS objects. Without `git lfs pull`
-your checkout holds pointer files; the app detects this and tells you the
-remedy rather than failing on a parse error. `service/model/legacy/dev/H_seed4.pt`
-(~94 MB, the projection service's dev placeholder checkpoint) is LFS-tracked
-too — the same `git lfs pull` fetches it.
+To run the projection service locally, see `service/README.md`:
+
+```bash
+pip install -r service/requirements.txt
+python3 -m service.app              # from the repository root
+```
+
+**Git LFS is not optional.** Six files are LFS objects. Without
+`git lfs pull` your checkout holds small pointer files in their place. The
+site detects this and shows the fix instead of failing on a parse error.
+
+| File | Size | Used by |
+|---|---|---|
+| `web/data/atlas_RNA_lat128.parquet` | ~1.43 GB | RNA view in `atlas.html` |
+| `web/data/atlas_RNA_lat128-001-part1.csv`, `-part2.csv` | split CSV of the same | RNA view in `atlas.html` |
+| `service/model/runtime/reference_model.pt` | ~94 MB | the production encoder |
+| `service/model/legacy/dev/H_seed4.pt` | ~94 MB | development placeholder checkpoint (one guard test) |
+| `service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv` | ~82 MB | real SCoPE2 input for the end-to-end regression tests |
+
+## Repository map
+
+```
+web/          the public website: static pages, data, plots, JS tests
+service/      the projection API (Python): pipeline, model files, tests
+benchmark/    fair comparison vs scANVI, MaxFuse, scGLUE, Harmony
+scripts/      manifest builder and repository checks
+docs/         how the products work: manifest, data, API contract
+research/     the R&D record: roadmap, TODO, notebook outputs, benchmark write-up
+data/         external datasets; incoming/ is a local, gitignored staging folder
+```
+
+[docs/project-structure.md](docs/project-structure.md) explains each folder
+and where new files go. [docs/file-index.md](docs/file-index.md) gives one
+line for every file.
 
 ## Pages
 
@@ -39,25 +68,10 @@ too — the same `git lfs pull` fetches it.
 | `index.html` | Landing page — animated intro, nav to every section |
 | `atlas.html` | Interactive 3D cell viewer with cross-modal support map and alignment diagnostics |
 | `visual.html` | Viewer for the 30 precomputed 3D plots (supervised + semi-supervised) |
-| `project.html` | Submit an expression matrix for projection into the shared latent space |
+| `project.html` | The projection contract and the label space the service supports |
 | `benchmark.html` | Standing comparison against established integration methods |
 | `versions.html` | Model card, data availability, release protocol |
 | `miscellaneous.html` | Intentionally blank (former roadmap page) |
-
-## Layout
-
-```
-web/data/      latent embeddings, metadata CSVs, atlas_manifest.json
-web/plots/      30 precomputed interactive 3D plots
-web/css/        page.css — shared page styling
-web/js/         manifest.js, panels.js — pure ES modules, unit-tested
-scripts/    build_manifest.py, check_paths.py and their unittest suites
-benchmark/  fair comparison harness vs scANVI, MaxFuse, scGLUE, Harmony
-web/tests/      node --test suites for the JS modules
-docs/       documentation (see docs/README.md)
-service/    Phase 5 projection service backend — separate dependencies,
-            separate tests, see service/README.md
-```
 
 ## The manifest rule
 
@@ -108,6 +122,8 @@ deployed or reachable from this site yet.
 
 ## Documentation
 
-- [docs/README.md](docs/README.md) — documentation index
-- [SUMMARY.md](SUMMARY.md) — detailed repository inventory
-- [research/implementation-plan.md](research/implementation-plan.md) — the paper plan this work serves
+- [docs/README.md](docs/README.md) indexes the product docs and the research record.
+- [docs/project-structure.md](docs/project-structure.md) covers the folder layout and where things go.
+- [docs/file-index.md](docs/file-index.md) has one line per file.
+- [CLAUDE.md](CLAUDE.md) sets the rules any change has to respect.
+- [research/implementation-plan.md](research/implementation-plan.md) is the paper plan this work serves.
