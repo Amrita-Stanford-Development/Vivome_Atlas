@@ -61,7 +61,7 @@ class LoadEncoderRealProductionCheckpointTests(unittest.TestCase):
         # real weights into the wrong architecture and produced embeddings
         # that only reached ~0.75 cosine similarity to the real ones instead
         # of the exact match a correct architecture gives. See
-        # Documentation/bugs-and-fixes.md.
+        # research/benchmark/bugs-and-fixes.md.
         import torch.nn as nn
         activations = [m for m in self.handle.model.body if isinstance(m, (nn.GELU, nn.ReLU))]
         self.assertTrue(activations, "expected at least one activation layer in body")

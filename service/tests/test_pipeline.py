@@ -12,7 +12,7 @@ accepting a flaky test that depends on where an opaque trained network
 happens to place a crafted input relative to synthetic centroids. Stage 7's
 resolution logic itself is covered directly and exhaustively in
 test_fallback.py; what this test verifies is that the orchestrator wires
-Stages 1-8 into a response matching docs/projection-service.md's schema.
+Stages 1-8 into a response matching docs/service/projection-api.md's schema.
 """
 import unittest
 from unittest.mock import patch

@@ -1,7 +1,7 @@
 """FAISS-based max-cosine-to-reference search (Track B).
 
 `abstention.py` is on the forbidden-to-edit list for this track (see the
-Track B section of docs/plans/VivOME_Improvement_Roadmap.md), so the FAISS
+Track B section of research/roadmap.md), so the FAISS
 replacement for its `max_cosine_to_reference` lives here instead; only
 pipeline.py's Stage 6 call site was changed, to call this function, and
 `abstention.py` itself is untouched. Equivalence against the original numpy

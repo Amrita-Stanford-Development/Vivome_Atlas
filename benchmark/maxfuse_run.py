@@ -9,7 +9,7 @@ instead of one per method that could drift apart.
 
 Needed cca_components=10 (down from an initial 20) to avoid a real
 `numpy.linalg.LinAlgError: SVD did not converge` that a batch hit at full
-85,232-cell scale -- see Documentation/bugs-and-fixes.md.
+85,232-cell scale -- see research/benchmark/bugs-and-fixes.md.
 """
 import sys, time
 from pathlib import Path

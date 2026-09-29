@@ -67,7 +67,7 @@ pages display. Metrics that need the training pipeline are stored as explicit
 
 **No page ever displays a number that was not computed from data in this
 repository.** This is enforced in code, not by convention — see
-[docs/manifest.md](docs/manifest.md).
+[docs/web/manifest.md](docs/web/manifest.md).
 
 Regenerate after any change to the metadata CSVs:
 
@@ -96,7 +96,7 @@ cross-modal (macrophage, monocyte), 20 RNA-only. RNA 85,233 cells; Protein
 Latent centroid cosine and the modality probe are measured for the 2
 cross-modal classes. Per-class transfer accuracy and every benchmark row
 are **pending** — the former has no per-class source data yet (a
-per-*dataset* version exists, see `service/docs/context-brief.md`), the
+per-*dataset* version exists, see `docs/service/context-brief.md`), the
 latter requires running established integration methods for comparison.
 
 The prior architecture, `CrossModalNet` (jointly trained on RNA and
@@ -110,4 +110,4 @@ deployed or reachable from this site yet.
 
 - [docs/README.md](docs/README.md) — documentation index
 - [SUMMARY.md](SUMMARY.md) — detailed repository inventory
-- [VivOME_NatComms_Implementation_Plan.md](VivOME_NatComms_Implementation_Plan.md) — the paper plan this work serves
+- [research/implementation-plan.md](research/implementation-plan.md) — the paper plan this work serves

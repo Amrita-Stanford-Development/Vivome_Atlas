@@ -5,7 +5,7 @@ here specifically because this exact set was lost once before: an earlier
 version of this project had them staged (unpromoted) at
 `service/model/v3_pending/app_export/`, that directory was deleted as part
 of a cleanup, and — because it had never been committed to git — the
-files were gone for good. `Documentation/known-limitations.md` documents
+files were gone for good. `research/benchmark/known-limitations.md` documents
 what that cost: weeks of a benchmark rebuild reconstructing "ours" from a
 legacy, wrong-gene-panel protein file instead of using the real thing.
 
@@ -34,7 +34,7 @@ tracked via Git LFS — see `.gitattributes`) means this can't happen again.
   cells, same row order as the embedding above. Use the `true_class_name`
   column for ground-truth labels — **not** `web/data/atlas_PROT_lat128.csv`,
   a legacy, pre-v3 file with an unrelated, unverified row order (see
-  `Documentation/known-limitations.md`).
+  `research/benchmark/known-limitations.md`).
 - **`blood_joint_cells_by_proteins_GENELEVEL.tsv`** — the real raw SCoPE2
   protein-by-gene matrix (1,490 cells × 2,935 native genes) the notebook's
   `load_proteomics()` actually reads. This is the correct input for
@@ -74,7 +74,7 @@ service_emb = encoder.load_encoder().encode(smoothed, aligned.mask)
 notebook_emb = np.load("service/model/source/app_export/prot_embedding_scope2.npy")
 # cosine(service_emb, notebook_emb) should be ~1.0 for every cell.
 # If it drops, service/pipeline has regressed -- see
-# Documentation/bugs-and-fixes.md for the two real bugs (smoothing.py's
+# research/benchmark/bugs-and-fixes.md for the two real bugs (smoothing.py's
 # alpha convention, encoder.py's activation function) this check already
 # caught once.
 ```

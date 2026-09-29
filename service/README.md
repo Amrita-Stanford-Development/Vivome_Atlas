@@ -1,7 +1,7 @@
 # Projection service
 
 Implements the Phase 5 backend behind `POST /api/project`, whose contract
-is published at [`../docs/projection-service.md`](../docs/projection-service.md)
+is published at [`../docs/service/projection-api.md`](../docs/service/projection-api.md)
 (unchanged by this work — see that file for the wire schema). This directory
 is a separate concern from the rest of the repo: the static app at the
 repository root has zero dependencies by design (`CLAUDE.md`); this backend
@@ -11,8 +11,8 @@ entirely contained here.
 ## Design source
 
 Every pipeline decision below came from a specific measured failure in this
-project, documented in full in [`docs/context-brief.md`](docs/context-brief.md)
-and [`docs/download-checklist.md`](docs/download-checklist.md) — relocated
+project, documented in full in [`../docs/service/context-brief.md`](../docs/service/context-brief.md)
+and [`../docs/service/download-checklist.md`](../docs/service/download-checklist.md) — relocated
 here verbatim from the staging area they were written in, so the original
 rationale stays in the repo, not just this document's paraphrase of it. The
 short version, stage by stage:

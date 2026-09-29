@@ -163,7 +163,7 @@ def read_modality_probe_accuracy(modality_probe: dict) -> dict:
 def build_previous_release_facts(legacy_provenance: dict) -> dict:
     """The superseded model's own numbers, kept as the documented prior
     baseline rather than erased now that the architecture has moved on
-    (service/docs/context-brief.md, "For the model card"). CrossModalNet
+    (docs/service/context-brief.md, "For the model card"). CrossModalNet
     was jointly trained on RNA and proteomics together and had implicitly
     seen SCoPE2 during training — part of why these zero-shot numbers read
     higher than the honestly separated v3 architecture's own zero-shot
@@ -229,7 +229,7 @@ def build_manifest(
             "transfer_accuracy": pending(
                 "N/A",
                 "Measured per dataset at realistic coverage, not per class — see "
-                "service/docs/context-brief.md §1 and service/model/evidence/v3_tables/"
+                "docs/service/context-brief.md §1 and service/model/evidence/v3_tables/"
                 "rna_to_rna_real_masks.csv for the real numbers.",
             ),
         })

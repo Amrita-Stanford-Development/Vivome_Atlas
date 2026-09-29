@@ -19,8 +19,8 @@ mean ± SD (min–max in parentheses), computed by
 `benchmark/evaluate.py`'s real, unchanged scoring functions
 against each seed's own RNA reference and SCoPE2 protein embeddings
 (`New_Files/NB1d/embeddings/`, gitignored — the small tables anything here
-cites are committed at `docs/plans/nb1d/`). A single seed's number is never
-reported alone again in this section: `docs/plans/nb1d/ours_scope2_5seed_scores.csv`
+cites are committed at `research/notebook-outputs/nb1d/`). A single seed's number is never
+reported alone again in this section: `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv`
 has every individual seed's score if you need one.
 **This is a real, material correction, not just more decimal places:**
 the single-seed "Ours" number this document reported before was `v3_seed0`
@@ -42,7 +42,7 @@ either `service/model/runtime/reference_embedding.npy` /
 `service/model/source/app_export/prot_embedding_scope2.npy` (the shipped
 `v3_seed0`) or T1 NB1d's own per-seed exports (everything else) — never a
 reconstruction, and protein labels come from
-`docs/plans/nb1d/scope2_cell_ids.csv` for the 5-seed numbers (confirmed
+`research/notebook-outputs/nb1d/scope2_cell_ids.csv` for the 5-seed numbers (confirmed
 identical, row for row, to `atlas_PROT_v3_meta.csv`'s `true_class_name` and
 to `web/data/atlas_PROT_lat128.csv`'s `class_name`) — never a file with an
 unverified row order (see [known-limitations.md](known-limitations.md)).
@@ -145,8 +145,8 @@ regardless of anything above.
 | V2 | native nearest-centroid | 69.64 ± 7.62 (57.18–76.17) | 60.96 ± 10.03 (51.43–73.23) |
 | V2 | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
 
-Source: `docs/plans/nb1d/ours_scope2_5seed_scores.csv` (per-seed),
-`docs/plans/nb1d/ours_scope2_5seed_family_summary.csv` (this table),
+Source: `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` (per-seed),
+`research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` (this table),
 computed by `benchmark/evaluate.py`'s unchanged
 `knn_classifier_predict`, `nearest_centroid_predict`, and
 `pool_first_knn_predict` against T1 NB1d's per-seed embeddings. v3's
@@ -324,7 +324,7 @@ number in it was real, but it silently generalized a single seed's result
 to "ours vs. scANVI." This version runs all **90** pairings (10 "ours"
 model-seeds × 3 scANVI seeds × 3 regimes) and reports how many actually
 support a claim of "ours ahead." Full table:
-`docs/plans/nb1d/paired_bootstrap_ours_vs_scanvi.csv`.
+`research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv`.
 
 ### `v3_seed0` (the shipped model) — unchanged conclusion
 
@@ -473,7 +473,7 @@ version of "scANVI underperforms because of a preprocessing
 disadvantage" survives uncorrected; both variants' own numbers are also
 shown for transparency. Source for both:
 `benchmark/pbmc240_lineage_prep.py`; per-seed results:
-`docs/plans/nb1d/scanvi_pbmc240_input_variants.csv`.
+`research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv`.
 
 **Plain accuracy is not reported here — it is uninformative at 117 vs. 5.**
 A single overall accuracy number is dominated almost entirely by lymphoid
@@ -492,9 +492,9 @@ modes directly; accuracy alone shows neither.
 | scANVI, raw input | shared kNN rule → lineage | 8.83 (5.13–11.97) | 100.0 (5/5, every seed) | ~15% lymphoid, **~74% myeloid**, ~11% erythroid/other |
 | scANVI, raw input | native scANVI classifier → lineage | 6.55 (3.42–12.82) | 100.0 (5/5, every seed) | ~9% lymphoid, **~91% myeloid** |
 
-Source: `docs/plans/nb1d/real_data_per_seed.csv` ("ours" recall and
+Source: `research/notebook-outputs/nb1d/real_data_per_seed.csv` ("ours" recall and
 predicted-composition columns) and
-`docs/plans/nb1d/scanvi_pbmc240_input_variants.csv` (scANVI, both input
+`research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv` (scANVI, both input
 variants, computed from the cached per-cell predictions
 `benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage{,_processed}_seed{0,1,2}.npy`
 — gitignored, but not disposable; see `benchmark/.gitignore` —
@@ -531,7 +531,7 @@ visible, never to rank methods on it in isolation.** The comparison that
 matters here is not "which method wins" but the one T1 NB1d actually used
 PBMC240 for: V2's lymphoid recall is a large, low-variance improvement
 over v3's on real data with substantial missingness — the reason V2 was
-carried forward as a candidate (`docs/plans/nb1d/nb1d_summary.json`'s
+carried forward as a candidate (`research/notebook-outputs/nb1d/nb1d_summary.json`'s
 `decision.carry_V2: true`) — even though V2 does not carry that advantage
 onto SCoPE2 (see the tables above, where V2 is no better than v3 against
 scANVI). **Report both findings together, honestly:** V2 is the right

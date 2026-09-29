@@ -51,7 +51,7 @@ missing.**
 | `feature_space_detail.csv` | **Real.** Per gene, which of the six proteomics sources detected it. |
 | `feature_space_provenance.json` | **Real.** The union math behind the 9,002 figure. |
 | `masking_test_tables/rna_sweep.csv`, `masking_test_tables/scope2_projection.csv` | **Real.** The paired comparison numbers behind the architecture decision. |
-| `v3_tables/` | **Real.** The measured tables behind `model.seeds`, `latent_centroid_cosine`, the restricted-assignment decision, property validation, and hierarchical fallback behaviour — see `service/docs/context-brief.md`. |
+| `v3_tables/` | **Real.** The measured tables behind `model.seeds`, `latent_centroid_cosine`, the restricted-assignment decision, property validation, and hierarchical fallback behaviour — see `docs/service/context-brief.md`. |
 
 ## source/
 

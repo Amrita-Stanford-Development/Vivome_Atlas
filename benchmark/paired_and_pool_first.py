@@ -10,7 +10,7 @@ number in this benchmark uses).
 Reads cached embeddings only -- no retraining. Requires load.py,
 maxfuse_run.py, scglue_run.py, and scanvi_run.py (run once per seed: 0, 1,
 2, each producing rna_scanvi_seed{N}.npy/prot_scanvi_seed{N}.npy) to have
-already populated results/ -- see Documentation/architecture.md.
+already populated results/ -- see research/benchmark/harness.md.
 """
 import json
 from pathlib import Path
@@ -25,7 +25,7 @@ from evaluate import knn_classifier_predict, pool_first_knn_predict, score, boot
 
 D = Path(__file__).resolve().parent / "results"
 REPO = Path(__file__).resolve().parents[1]
-MISSING_ROW = 42616  # see Documentation/bugs-and-fixes.md#7
+MISSING_ROW = 42616  # see research/benchmark/bugs-and-fixes.md#7
 
 rna_X = np.load(D / "rna_X.npy")
 prot_X = np.load(D / "prot_X.npy")

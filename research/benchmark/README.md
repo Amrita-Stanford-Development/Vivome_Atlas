@@ -7,7 +7,7 @@ scGLUE), built after the repository owner rejected an earlier, methodologically
 unfair version of the same comparison.
 
 **This is documentation about investigative/benchmarking work, not about the
-shipped static app.** It lives here (`Documentation/`), separate from
+shipped static app.** It lives here (`research/benchmark/`), separate from
 `docs/` (which documents the live app — manifest, data files, the projection
 service). Nothing described here is wired into the site:
 `web/data/atlas_manifest.json`'s `benchmark.rows` stays `[]`/pending regardless
@@ -19,7 +19,7 @@ of what these documents say, until the repository owner explicitly signs off.
    rules for what makes this comparison fair, and exactly how the shared
    evaluation protocol (classifier choice, restricted/unrestricted regimes,
    bootstrap confidence intervals, the majority-class floor) implements them.
-2. **[architecture.md](architecture.md)** — what each file in
+2. **[harness.md](harness.md)** — what each file in
    `benchmark/` does, what it reads, what it writes, and how to
    run the whole pipeline end to end.
 3. **[bugs-and-fixes.md](bugs-and-fixes.md)** — every real bug hit while
@@ -50,7 +50,7 @@ into the live site until the methodology is clean.
 
 The runnable scripts are committed at `benchmark/` (paths fixed
 to be repo-relative, so they run from a fresh clone — see
-[architecture.md](architecture.md) for how). Their **outputs**
+[harness.md](harness.md) for how). Their **outputs**
 (`benchmark/results/*.npy`, `*.csv`, `*.json`, `*.log`) are
 `.gitignore`d — regenerable, large (the RNA expression matrix alone is
 ~1&nbsp;GB), and not source. Re-run `load.py` first to regenerate them

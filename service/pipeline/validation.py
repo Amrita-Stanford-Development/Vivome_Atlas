@@ -51,7 +51,7 @@ def validate_orientation(raw: alignment.RawMatrix, gene_map: gene_ids.GeneIdMap 
             f"cells in columns): {gene_side_rate*100:.0f}% of the first column's values "
             f"resolve as gene identifiers, versus {cell_side_rate*100:.0f}% of the header "
             "row's values -- this looks like it may be transposed. Refusing rather than "
-            "guessing; see docs/projection-service.md for the expected orientation."
+            "guessing; see docs/service/projection-api.md for the expected orientation."
         )
 
 

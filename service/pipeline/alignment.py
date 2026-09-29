@@ -93,7 +93,7 @@ def _clean_dia_nn_cell_id(raw_header: str) -> str:
 
 
 def parse_matrix_csv(text: str) -> RawMatrix:
-    """Contract shape (docs/projection-service.md, project.html): features
+    """Contract shape (docs/service/projection-api.md, project.html): features
     in rows, cells in columns; first column is the feature name, header row
     is cell IDs. Comma or tab separated, auto-detected from the header
     line -- a real DIA-NN report is tab separated.

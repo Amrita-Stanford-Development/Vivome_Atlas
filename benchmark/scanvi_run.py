@@ -1,9 +1,9 @@
 """scANVI. Explicit seeding (an early, undocumented run had none, so its
 point estimate was never reproducible on a rerun -- see
-Documentation/bugs-and-fixes.md#6) and always saves embeddings +
+research/benchmark/bugs-and-fixes.md#6) and always saves embeddings +
 predictions to disk, so a bootstrap CI never requires retraining scANVI a
 second time. Takes an optional seed argument (default 0); run it once per
-seed (0, 1, 2) to build the 3-seed table in Documentation/results.md.
+seed (0, 1, 2) to build the 3-seed table in research/benchmark/results.md.
 
     python3 scanvi_run.py 0
     python3 scanvi_run.py 1
@@ -100,7 +100,7 @@ result = {
     "subsample": None,
     "diverged": diverged,
     "seed": SEED,
-    "note": f"Explicit seed={SEED}. Point estimates vary meaningfully across seeds -- see Documentation/results.md's 3-seed table before treating any single seed's numbers as representative.",
+    "note": f"Explicit seed={SEED}. Point estimates vary meaningfully across seeds -- see research/benchmark/results.md's 3-seed table before treating any single seed's numbers as representative.",
     "knn_classifier": evaluate_arm(true_labels, knn["unrestricted"], knn["restricted"], n_classes, 2),
     "native_nearest_centroid": evaluate_arm(true_labels, nc["unrestricted"], nc["restricted"], n_classes, 2),
     "native_scanvi_classifier": evaluate_arm(true_labels, native_pred_unrestricted, native_pred_restricted, n_classes, len(supported_idx)),

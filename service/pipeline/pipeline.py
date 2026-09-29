@@ -1,5 +1,5 @@
 """The orchestrator: wires Stages 1-8 together and builds the response dict
-for `POST /api/project` (docs/projection-service.md).
+for `POST /api/project` (docs/service/projection-api.md).
 
 All six contract artifacts plus per-cell reference properties are real
 (service/model/README.md). `ReferenceBundle.load()` still surfaces a missing
@@ -69,7 +69,7 @@ class ReferenceBundle:
 
 def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.random.Generator | None = None) -> dict:
     """Runs Stages 1-8 and returns the response dict. `cells` entries match
-    docs/projection-service.md exactly; `properties` and `model_version` are
+    docs/service/projection-api.md exactly; `properties` and `model_version` are
     additive fields not yet in that published contract (see
     service/README.md) and should not be assumed by a strict reader of the
     doc alone.
@@ -112,7 +112,7 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
     # the 9,002-gene subset), not raw units: raw units let the highest-
     # abundance proteins dominate the neighbour graph's PCA, a real,
     # measured divergence from the methodology that produced this
-    # project's headline numbers (Documentation/known-limitations.md in
+    # project's headline numbers (research/benchmark/known-limitations.md in
     # the fair-benchmark work; T1 NB1 independently found the same gap on
     # PBMC240, median cosine 0.78 against the notebook convention).
     full_query_values = alignment.zscore_per_gene(raw.values).T  # (n_cells, n_native_features)

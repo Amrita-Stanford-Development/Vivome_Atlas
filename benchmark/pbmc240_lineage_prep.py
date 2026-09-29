@@ -35,7 +35,7 @@ import pandas as pd
 
 REPO = Path(__file__).resolve().parents[1]
 OUT = Path(__file__).resolve().parent / "results"
-NB1D_LABELS = REPO / "docs" / "plans" / "nb1d" / "pbmc240_raw_cell_ids.csv"
+NB1D_LABELS = REPO / "research" / "notebook-outputs" / "nb1d" / "pbmc240_raw_cell_ids.csv"
 
 
 def _clean_dia_nn_cell_id(raw_header: str) -> str:

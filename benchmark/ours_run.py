@@ -6,7 +6,7 @@ RNA side: service/model/runtime/reference_embedding.npy, the real frozen v3
 reference embedding for all 85,233 RNA cells -- the actual artifact the
 live service ships. Row 42616 (a neutrophil cell absent from
 Atlas/atlas_RNA_lat128-001-part{1,2}.csv, see
-Documentation/bugs-and-fixes.md) is dropped so "ours" uses the identical
+research/benchmark/bugs-and-fixes.md) is dropped so "ours" uses the identical
 85,232-cell RNA set every baseline already trained on.
 
 Protein side: service/model/source/app_export/prot_embedding_scope2.npy, the
@@ -16,7 +16,7 @@ see service/model/source/app_export/README.md). Labels come from
 service/model/source/app_export/atlas_PROT_v3_meta.csv's true_class_name column,
 in that file's own row order -- never web/data/atlas_PROT_lat128.csv, a
 legacy file with an unverified row order (see
-Documentation/known-limitations.md).
+research/benchmark/known-limitations.md).
 
 An earlier version of this script reconstructed the protein embedding from
 scratch via service.pipeline (alignment -> smoothing -> encoder) because
@@ -26,7 +26,7 @@ directly here is what actually matters, and reconstructing when the real
 artifact exists would just reintroduce noise for no reason. The
 reconstruction *did* serve one purpose on its way out: comparing it against
 the real embedding is what caught two real production bugs in
-service/pipeline -- see Documentation/bugs-and-fixes.md, and
+service/pipeline -- see research/benchmark/bugs-and-fixes.md, and
 service/tests/test_e2e_real_export.py for the regression guard that keeps
 them fixed.
 """

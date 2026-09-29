@@ -1,5 +1,5 @@
 """Implements `POST /api/project` exactly as published in
-docs/projection-service.md, backed by the Stage 1-8 pipeline in
+docs/service/projection-api.md, backed by the Stage 1-8 pipeline in
 service/pipeline/.
 
 Stdlib only (http.server + email, for multipart parsing without the

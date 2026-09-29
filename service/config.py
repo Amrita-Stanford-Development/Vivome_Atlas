@@ -22,7 +22,7 @@ def _env_path(name: str, default: Path) -> Path:
     return Path(override) if override else default
 
 
-# --- Contract artifacts (docs/projection-service.md's backend, not the page) ---
+# --- Contract artifacts (docs/service/projection-api.md's backend, not the page) ---
 # These three exist today, are architecture-independent, and do not change
 # when the production checkpoint lands.
 FEATURE_SPACE_GENES_PATH = _env_path(
@@ -126,7 +126,7 @@ OT_MAX_ITER = 1000
 # from about 200 on; 100-300 is thinly sampled in that curve, so this
 # value is evidence-backed, not an arbitrary placeholder, but still worth
 # revisiting once more of that range is sampled. See
-# docs/plans/nb1b/ for the curve.
+# research/notebook-outputs/nb1b/ for the curve.
 MIN_OBSERVED_GENES = 200
 PROVISIONAL_CONSTANTS = ("MIN_OBSERVED_GENES",)
 

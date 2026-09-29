@@ -129,7 +129,7 @@ This is cheap by design: it resamples already-computed `(true, pred)` pairs
 — no re-embedding, no refitting, no retraining. That is *why* a CI could be
 added to every already-finished arm's cached embeddings (`recompute_v2.py`)
 without rerunning any of the actual (expensive) model training — see
-[architecture.md](architecture.md).
+[harness.md](harness.md).
 
 ### The majority-class floor
 

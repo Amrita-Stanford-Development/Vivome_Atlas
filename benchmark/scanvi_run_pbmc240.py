@@ -47,7 +47,7 @@ Explicit seeding, like scanvi_run.py -- run once per seed per variant:
     python3 scanvi_run_pbmc240.py 2 processed
 
 This is a development-dataset comparison point (PBMC240 raw was used to
-choose V2 over v3 -- see docs/plans/nb1d/nb1d_summary.json's "note"), not a
+choose V2 over v3 -- see research/notebook-outputs/nb1d/nb1d_summary.json's "note"), not a
 held-out evaluation; label it that way wherever it's reported.
 
 Always saves its trained embeddings and lineage predictions to results/

@@ -8,7 +8,7 @@ cell classes (`reference_metadata.csv`). It is applied **zero-shot to
 proteomics uploads**: no protein labels and no paired RNA-protein cells were
 used at any point in training or in choosing the architecture. Every number
 below cites the committed file that measured it —
-`docs/plans/VivOME_TODO.md` §5 ("Current verified numbers") is the running
+`research/todo.md` §5 ("Current verified numbers") is the running
 index of those files, not a source in its own right.
 
 ## Architecture
@@ -32,13 +32,13 @@ index of those files, not a source in its own right.
 
 | Measure | Value | Source |
 |---|---|---|
-| RNA→RNA, SCoPE2 mask, **test cells only** | 93.2% acc / 65.7% bal (OT); 67.3% bal (nearest-centroid) | `docs/plans/nb1/rna_to_rna_membership_corrected.csv` |
-| RNA→RNA, full coverage, **test cells only** | 94.6% acc / 80.0% bal (OT) | `docs/plans/nb1/rna_to_rna_membership_corrected.csv` |
-| Protein (SCoPE2, 1,490 real cells), **restricted** to the two supported classes, **shipped checkpoint (`v3_seed0`)** | 86.2% acc / 79.8% bal | `docs/plans/nb1d/ours_scope2_5seed_scores.csv` |
-| Protein (SCoPE2), **restricted, 5-seed mean of the shipped architecture** | 75.3% ± 11.8 acc / 71.5% ± 10.6 bal (range 59.0–88.4 bal) | `docs/plans/nb1d/ours_scope2_5seed_family_summary.csv` |
-| Protein (SCoPE2), **unrestricted** across all 22 classes, **shipped checkpoint (`v3_seed0`)** | 55.4% acc / 38.7% bal | `docs/plans/nb1d/ours_scope2_5seed_scores.csv` |
-| Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture** | 38.4% ± 25.7 acc / 29.1% ± 18.3 bal (range 1.3–49.8 bal) | `docs/plans/nb1d/ours_scope2_5seed_family_summary.csv` |
-| Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `docs/plans/VivOME_TODO.md` §5 |
+| RNA→RNA, SCoPE2 mask, **test cells only** | 93.2% acc / 65.7% bal (OT); 67.3% bal (nearest-centroid) | `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` |
+| RNA→RNA, full coverage, **test cells only** | 94.6% acc / 80.0% bal (OT) | `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` |
+| Protein (SCoPE2, 1,490 real cells), **restricted** to the two supported classes, **shipped checkpoint (`v3_seed0`)** | 86.2% acc / 79.8% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
+| Protein (SCoPE2), **restricted, 5-seed mean of the shipped architecture** | 75.3% ± 11.8 acc / 71.5% ± 10.6 bal (range 59.0–88.4 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Protein (SCoPE2), **unrestricted** across all 22 classes, **shipped checkpoint (`v3_seed0`)** | 55.4% acc / 38.7% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
+| Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture** | 38.4% ± 25.7 acc / 29.1% ± 18.3 bal (range 1.3–49.8 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `research/todo.md` §5 |
 
 **A previously published RNA→RNA figure of 95.5% / 74.8% (SCoPE2 mask) is
 superseded by the 93.2% / 65.7% figures above.** The published number
@@ -70,8 +70,8 @@ restricted mean (71.5% bal) *trails* scANVI's 3-seed mean (77.15%) — only
 3 of 15 seed-pairings favor "ours" there, 12 favor scANVI. The one regime
 the architecture reliably wins is unrestricted (12 of 15 pairings, mean
 margin +18.1 points). Full breakdown:
-`docs/plans/nb1d/paired_bootstrap_ours_vs_scanvi.csv`, narrative in
-`Documentation/results.md`. **The takeaway for anyone reading only this
+`research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv`, narrative in
+`research/benchmark/results.md`. **The takeaway for anyone reading only this
 card: "beats the strongest available baseline" is true of the specific
 checkpoint running in production, not a property of the architecture that
 would necessarily hold if it were retrained.**
@@ -102,7 +102,7 @@ fixed and zero-shot on the query.**
    protein ground truth. The other 20 classes' embeddings have not been
    validated against protein data at all.
 4. **No donor-level holdout in training.** All nine donors contributed
-   roughly 65% of their own cells to training (`docs/plans/VivOME_TODO.md`
+   roughly 65% of their own cells to training (`research/todo.md`
    §4) — not a subset of donors, all of them. Published RNA→RNA numbers
    reflect this; a true held-out-donor evaluation does not yet exist.
    Planned for v4 (T2 NB8).
@@ -116,7 +116,7 @@ fixed and zero-shot on the query.**
    whatever drives this instability is specific to the RNA→protein transfer
    step, not the RNA-side training. A separate development-only check
    (PBMC240 raw, real ~75%-missing data, lineage-level labels — see
-   `docs/plans/nb1d/`) is scored by recall per lineage, not plain accuracy —
+   `research/notebook-outputs/nb1d/`) is scored by recall per lineage, not plain accuracy —
    accuracy is uninformative at this sample's 117-lymphoid-vs-5-myeloid
    split, and a per-class recall is only meaningful read against its
    counterpart, not against an overall accuracy figure: a trivial model
@@ -131,7 +131,7 @@ fixed and zero-shot on the query.**
    architecture is anecdotal — one misclassified cell moves it 20
    points — reported alongside lymphoid recall only to show overall
    behavior, never to rank on its own.) V2 is not shipped and does not
-   carry that margin onto SCoPE2 (see `Documentation/results.md`); this is
+   carry that margin onto SCoPE2 (see `research/benchmark/results.md`); this is
    recorded as an open question, not a recommendation to switch.
 
 ## Versioning

@@ -60,10 +60,10 @@ Each modality has coordinates plus a metadata table with
 
 | Document | Covers |
 |----------|--------|
-| `docs/manifest.md` | Manifest pipeline, the measured/pending contract, release protocol |
-| `docs/data.md` | Data layout, Git LFS, what ships and what does not |
-| `docs/projection-service.md` | The `POST /api/project` contract, conformal label sets, abstention |
-| `docs/plans/` | Implementation plans |
+| `docs/web/manifest.md` | Manifest pipeline, the measured/pending contract, release protocol |
+| `docs/web/data.md` | Data layout, Git LFS, what ships and what does not |
+| `docs/service/projection-api.md` | The `POST /api/project` contract, conformal label sets, abstention |
+| `research/` | Implementation plans |
 
 `README.md` is the repository front door; `CLAUDE.md` records the conventions
 any change has to respect.
@@ -71,7 +71,7 @@ any change has to respect.
 ### `service/` — Phase 5 projection service backend
 
 A separate Python backend implementing `POST /api/project` (contract:
-`docs/projection-service.md`) — real dependencies (torch, an OT solver),
+`docs/service/projection-api.md`) — real dependencies (torch, an OT solver),
 isolated from the dependency-free static app. Every pipeline stage (query
 alignment, fuzzy smoothing, the reference encoder, restricted-candidate
 label assignment, conformal calibration, abstention, hierarchical fallback,

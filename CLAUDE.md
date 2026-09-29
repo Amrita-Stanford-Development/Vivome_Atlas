@@ -18,7 +18,7 @@ before touching it — its own working agreements are stricter in places
 rationale each module docstring cites).
 
 The app exists to deliver the *resource claim* of
-`VivOME_NatComms_Implementation_Plan.md` — a versioned atlas with a projection
+`research/implementation-plan.md` — a versioned atlas with a projection
 service, calibrated confidence, and explicit abstention. App work runs in
 parallel with the modeling track and must not block on it.
 
@@ -39,7 +39,7 @@ record, either measured or pending:
 when `status === 'measured'`, `value !== null`, and the value is finite.
 Everything else — pending, absent, malformed, truncated — renders as
 `Pending`. Do not add a display path that bypasses it, and do not hardcode a
-metric into HTML. See [docs/manifest.md](docs/manifest.md).
+metric into HTML. See [docs/web/manifest.md](docs/web/manifest.md).
 
 ## Conventions
 
@@ -66,7 +66,7 @@ python3 scripts/build_manifest.py
 ```
 
 Bump `ATLAS_VERSION` in `scripts/build_manifest.py` for a real release; the full
-protocol is on `versions.html` and in [docs/manifest.md](docs/manifest.md).
+protocol is on `versions.html` and in [docs/web/manifest.md](docs/web/manifest.md).
 
 ## Tests
 

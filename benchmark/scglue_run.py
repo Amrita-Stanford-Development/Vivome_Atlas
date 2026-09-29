@@ -8,7 +8,7 @@ instead of one per method that could drift apart.
 At full scale scGLUE's own dataset-size heuristic picks max_epochs/patience
 automatically (48/4 here, vs. 207/18 at a much smaller trial) -- this
 script does not override that. Training converged smoothly at this scale
-(no divergence); see Documentation/bugs-and-fixes.md for a smaller-scale
+(no divergence); see research/benchmark/bugs-and-fixes.md for a smaller-scale
 run where it did not.
 """
 import time

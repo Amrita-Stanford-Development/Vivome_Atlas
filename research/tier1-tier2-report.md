@@ -1,7 +1,7 @@
 # VivOME v3 Improvement Plan: Label-Free scRNA-seq to MS Proteomics Cell Type Transfer
 
 Research report, 2026-09-24. Source for the Tier 1 and Tier 2 items in
-`VivOME_Improvement_Roadmap.md`.
+`research/roadmap.md`.
 
 > **Status note, added 2026-09-25.** Three findings from after this report change how
 > it should be read. None of them contradicts it, but they reorder the work.
@@ -20,11 +20,11 @@ Research report, 2026-09-24. Source for the Tier 1 and Tier 2 items in
 >    shared kNN rule).~~ **Corrected 2026-09-29 (Track D, T1 NB1d):** that lead holds for
 >    the shipped checkpoint `v3_seed0` only. Across five v3 seeds, scANVI is ahead under
 >    the restricted shared kNN rule in 12 of 15 seed pairings; v3 reliably leads only
->    unrestricted (12 of 15). See `VivOME_TODO.md` §5. Any claimed lead still needs at
+>    unrestricted (12 of 15). See `research/todo.md` §5. Any claimed lead still needs at
 >    least two more MS datasets, as the report says.
 >
 > Published v3 RNA to RNA numbers (95.5 / 74.8) included training cells; the honest
-> test cell numbers are 93.2 / 65.7. See `VivOME_TODO.md` for current verified numbers.
+> test cell numbers are 93.2 / 65.7. See `research/todo.md` for current verified numbers.
 
 ---
 

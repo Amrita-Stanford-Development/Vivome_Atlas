@@ -8,7 +8,7 @@ Stage 1-3 sequence, replicated call-for-call here since run_projection()
 doesn't expose the raw 128-d embedding in its response) should reproduce
 the notebook's embedding closely -- this is the check that caught two real
 bugs during the fair-baseline-comparison work
-(Documentation/bugs-and-fixes.md): smoothing.py's inverted alpha convention
+(research/benchmark/bugs-and-fixes.md): smoothing.py's inverted alpha convention
 and wrong neighbour graph, and encoder.py's ReLU-instead-of-GELU activation.
 Both are fixed; this test is what would have caught either one before it
 shipped, and is here so neither can silently regress.
@@ -26,7 +26,7 @@ missingness (PBMC240's raw DIA-NN search output, ~63% NaN) the two
 conventions diverge sharply -- median cosine ~0.78, 5th percentile ~0.23,
 some cells anti-correlated. This is a real, measured, currently-UNFIXED gap
 between the shipped pipeline and the methodology that produced the
-project's headline numbers; see Documentation/known-limitations.md. This
+project's headline numbers; see research/benchmark/known-limitations.md. This
 test intentionally uses the real pipeline.py convention (not the
 notebook's) so it tests what a live user's upload actually gets, and its
 threshold is set to what that real, imperfect convention actually achieves

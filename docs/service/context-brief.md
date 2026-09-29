@@ -5,7 +5,7 @@ atlas site at the current model. Methodology that does not affect the build is
 left out.
 
 Read alongside `download-checklist.md`, which says which files to fetch, and
-the repo's existing `docs/projection-service.md`, whose response contract is
+the repo's existing `docs/service/projection-api.md`, whose response contract is
 still correct and does not need changing.
 
 Every number here was measured. Sources are the v3 export, the v3 tables, and

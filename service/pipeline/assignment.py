@@ -1,5 +1,5 @@
 """Stage 4 — label assignment (Claude_Code_Context_Brief.md, "Stage 4";
-service/docs/context-brief.md §3, §6 for the measured evidence below).
+docs/service/context-brief.md §3, §6 for the measured evidence below).
 
 Two independent, measured decisions, both encoded in service/config.py
 rather than here — this module reads them, it doesn't restate them:

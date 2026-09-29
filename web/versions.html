@@ -66,15 +66,15 @@
                 <thead><tr><th>Measure</th><th>Value</th><th>Source</th></tr></thead>
                 <tbody>
                     <tr><td>RNA→RNA, SCoPE2 mask, test cells only</td><td>93.2% acc / 65.7% bal (OT)</td>
-                        <td><code>docs/plans/nb1/rna_to_rna_membership_corrected.csv</code></td></tr>
+                        <td><code>research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv</code></td></tr>
                     <tr><td>Protein, restricted, shipped checkpoint (<code>v3_seed0</code>)</td><td>86.2% acc / 79.8% bal</td>
-                        <td><code>docs/plans/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
+                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
                     <tr><td>Protein, restricted, 5-seed mean of the shipped architecture</td><td>75.3% ± 11.8 acc / 71.5% ± 10.6 bal</td>
-                        <td><code>docs/plans/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
+                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
                     <tr><td>Protein, unrestricted (22 classes), shipped checkpoint (<code>v3_seed0</code>)</td><td>55.4% acc / 38.7% bal</td>
-                        <td><code>docs/plans/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
+                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
                     <tr><td>Protein, unrestricted (22 classes), 5-seed mean of the shipped architecture</td><td>38.4% ± 25.7 acc / 29.1% ± 18.3 bal</td>
-                        <td><code>docs/plans/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
+                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
                 </tbody>
             </table>
             <p style="font-size: 13px;">
@@ -100,8 +100,8 @@
                 scANVI's 3-seed mean (77.15%) — only 3 of 15 seed-pairings favor this
                 architecture there, 12 favor scANVI. The one regime it reliably wins is
                 unrestricted (12 of 15 pairings, mean margin +18.1 points). Full breakdown:
-                <code>docs/plans/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, narrative in
-                <code>Documentation/results.md</code>. A methodological asymmetry in scANVI's
+                <code>research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, narrative in
+                <code>research/benchmark/results.md</code>. A methodological asymmetry in scANVI's
                 favor throughout this comparison: scANVI trains on the query cells
                 (transductive); this encoder is fixed and zero-shot on the query.
             </p>

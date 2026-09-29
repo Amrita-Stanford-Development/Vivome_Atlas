@@ -365,7 +365,7 @@ within 1 point of v3.
 |---|---|---|
 | `service/pipeline/smoothing.py`, preprocessing conventions in `alignment.py` and `pipeline.py` Stage 1 and 2 | A2 | read only |
 | New `service/pipeline/gene_ids.py`, input validation, export, FAISS, model card, logging | B | read only |
-| New interfaces for label space, abstention, conformal; `encoder.py` hidden feature hook; response schema; `docs/projection-service.md` | C | read only |
+| New interfaces for label space, abstention, conformal; `encoder.py` hidden feature hook; response schema; `docs/service/projection-api.md` | C | read only |
 | `benchmark/**` | D | read only |
 | `data/**` ingestion scripts and registry | E | read only |
 | Wiring NB4 exports into the pipeline | F | after A2, B, C merge |
@@ -382,7 +382,7 @@ Paste each into its own Claude Code session. A is already running.
 ### Track A2, preprocessing fixes (revised 2026-09-25, replaces the original A2 prompt)
 
 ```
-Branch: faithfulness/a2. Read docs/plans/VivOME_TODO.md section 1 first.
+Branch: faithfulness/a2. Read research/todo.md section 1 first.
 
 Fix the live service's preprocessing defects. The e2e check found median cosine
 0.78 (5th percentile 0.23, some cells anti correlated) on raw PBMC240 between the
@@ -409,7 +409,7 @@ after, never to choose.
 4. Coverage floor. Replace COVERAGE_FLOOR = 0.15 (1,350 of 9,002 genes) with
    MIN_OBSERVED_GENES, an absolute count, default 100, marked PROVISIONAL until
    T1 NB1b's coverage curve is committed (the owner will add
-   docs/plans/nb1b/coverage_curve_v0.csv). Report each cell's observed gene count
+   research/notebook-outputs/nb1b/coverage_curve_v0.csv). Report each cell's observed gene count
    in the response.
 
 5. Re measure. Raw PBMC240 (DIA-NN report) through the fixed pipeline: report the
@@ -429,7 +429,7 @@ after, never to choose.
 8. If T1 NB1b later exports a new encoder with per cell standardization, that is
    a separate integration (track F style), not part of this task.
 
-9. Update docs/plans/VivOME_TODO.md: tick what you finished, add commit hashes.
+9. Update research/todo.md: tick what you finished, add commit hashes.
 ```
 
 ### Track B, deployment hardening
@@ -461,7 +461,7 @@ value conventions in alignment.py (track A2 owns those).
    max cosine and kNN searches with FAISS, with an exact equivalence test
    against the current numpy results.
 
-4. Model card: service/model/MODEL_CARD.md and versions.html content. State
+4. Model card: service/model/MODEL_CARD.md and web/versions.html content. State
    the claim precisely: reference supervised on RNA, zero shot on proteomics,
    no protein labels, no cell pairing. Include coverage stratified accuracy
    from the v3 tables and the known failure modes (macrophage placement, 2 of 22
@@ -506,7 +506,7 @@ alignment.py or smoothing.py.
    per class support score), abstain_reason split into no_reference_support,
    low_coverage, ambiguous, and a calibration block stating what the coverage
    guarantee applies to ("masked RNA", not protein). Update
-   docs/projection-service.md with a v3.1 section; do not remove v3 fields.
+   docs/service/projection-api.md with a v3.1 section; do not remove v3 fields.
 
 No new methods are implemented here. This track only builds the sockets.
 ```

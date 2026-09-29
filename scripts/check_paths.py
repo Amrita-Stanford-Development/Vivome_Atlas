@@ -59,7 +59,7 @@ ALLOWED_MISSING = (
 
 # Frozen historical records: their code samples use paths relative to files
 # of their own era, so they are neither checked nor rewritten.
-FROZEN = ("research/archive/", "docs/plans/2026-08-29-resource-layer.md", "scripts/check_paths.py")
+FROZEN = ("research/archive/", "scripts/check_paths.py")
 
 MD_LINK = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 HTML_ATTR = re.compile(r"(?:href|src)=\"([^\"]+)\"")

@@ -13,7 +13,7 @@
   "min_observed_genes_status": "calibrated_on_simulations_revisit",
   "mask_convention": "per_cell",
   "mask_convention_status": "settled",
-  "notes": "min_observed_genes: T1 NB1b's accuracy-vs-observed-genes curve shows chance-level accuracy below 100 observed genes and stable accuracy from about 200 on; 100-300 is thinly sampled in that curve, so 200 is evidence-backed, not an arbitrary placeholder, but still worth revisiting once more of that range is sampled (docs/plans/nb1b/). mask_convention: T1 NB1b's 2x2 ablation confirmed per-cell masking beats dataset-level median fill by 3.2 points unrestricted and 4.7 points oracle-restricted in simulation -- settled, not pending further ablation.",
+  "notes": "min_observed_genes: T1 NB1b's accuracy-vs-observed-genes curve shows chance-level accuracy below 100 observed genes and stable accuracy from about 200 on; 100-300 is thinly sampled in that curve, so 200 is evidence-backed, not an arbitrary placeholder, but still worth revisiting once more of that range is sampled (research/notebook-outputs/nb1b/). mask_convention: T1 NB1b's 2x2 ablation confirmed per-cell masking beats dataset-level median fill by 3.2 points unrestricted and 4.7 points oracle-restricted in simulation -- settled, not pending further ablation.",
   "verified_against": {
     "scope2_unrestricted": [45.369127516778526, 31.083265404424022],
     "scope2_restricted": [86.1744966442953, 79.7915354403646],
