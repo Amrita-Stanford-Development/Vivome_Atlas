@@ -6,7 +6,7 @@ notebook output path, and log it in the changelog at the bottom.
 
 Status markers: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked.
 
-Last updated: 2026-09-29 (records cleanup: §5 split into `v3_seed0` vs 5-seed rows, stale track and notebook statuses corrected, run history moved into `docs/plans/`)
+Last updated: 2026-09-29 (records follow-up: NB1c recorded as run with its outputs in `docs/plans/nb1c/`, run history entries 15–16 committed, Track E set as the next track)
 
 ---
 
@@ -119,7 +119,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 ### Track E, Tier 2 data ingestion (branch `data/e`)
 
-- [ ] Unblocked, not started: track B's gene ID mapping table (`cf3b98e`) is on `main` since 2026-09-29
+- [ ] **Next Claude Code track (owner decision, 2026-09-29 — see §4).** Unblocked, not started: track B's gene ID mapping table (`cf3b98e`) is on `main` since 2026-09-29. Owner-named inputs: NB1d embeddings (staged locally in `New_Files/NB1d/`, gitignored, not to be deleted), Fulcher2026 and the model checkpoints (not yet in the working tree as of 2026-09-29)
 
 ### Track F, v3.1 integration (branch `integration/v31`)
 
@@ -140,8 +140,8 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
   - [x] v3 baseline on the evaluation suite
   - [x] Composition experiment (see section 1, narrow uploads)
 - [x] **T1 NB1b, composition robust standardization.** Run (run history entry 14). Four variants (v3 recipe control, per cell z, mini upload gene z, dual), selected on the calibration suite, reported on the evaluation suite; implementation control passed (retrained v3 recipe within 0.9 points of the shipped model). Evaluation suite, unrestricted balanced accuracy, all 240 uploads: v3 shipped 35.2 vs dual channel (3 seeds) 72.1 (+36.9, 95% CI 33.7 to 40.2); single cell type 11.3 vs 80.6. **Verdict: NO GO on the pre-set criteria** — every simulation gate passed, but the confirmatory real-data gate failed (real SCoPE2 restricted below 77.8; the size of the miss was not saved in the run, see `tables/real_data_confirmatory.csv` on Drive). Also produced the preprocessing ablation and coverage curve behind the A2 close-out (`cf83c5f`)
-- **T1 NB1c, seed variance.** Status not recorded in this repo. Referenced during the Track B follow-up as the pending seed-variance measurement, but no NB1c output or notes are committed here; the 5-seed numbers in §5 come from NB1d's export. Owner to confirm, and to supply run history entry 15
-- [x] **T1 NB1d, five-seed real-data comparison, v3 vs V2.** Per-seed embeddings for `v3_seed0`–`4` and `V2_seed0`–`4` (V2 is NB1b's mini upload gene z variant, `V2_batchgene_aug` checkpoints) on SCoPE2 and raw PBMC240. Gates: reference reproduced, SCoPE2 31.08 reproduced. Decision: carry V2 (PBMC240 CI gate and RNA oracle gate both pass); PBMC240 is a development dataset from here on. Tables and summary committed at `docs/plans/nb1d/` (`209508f`), embeddings local only and gitignored. Scored in Track D (`62aefe8`, `7a4c4b2`)
+- [x] **T1 NB1c, real-data diagnostics.** Run (run history entry 15; outputs committed at `docs/plans/nb1c/`). No training; scored twelve models (v3 shipped, v3's five production seeds, six NB1b checkpoints) on real data. Reproduction gate passed (31.08 / 79.79). Three findings: (1) the shipped SCoPE2 numbers are a favourable seed — across v3's five seeds, SCoPE2 unrestricted balanced accuracy 25.6 ± 17.3 (0.1–48.2), restricted 63.3 ± 10.8 (50.8–79.8) (`nb1c_summary.json`, `v3_seed_variance`); (2) the published SCoPE2 matrix is 100% gene-centred with 50.1% negative values, so it cannot test how the pipeline handles a real upload, while raw PBMC240 keeps its abundance (0% centred, 62.7% missing) (`matrix_structure.csv`); (3) on raw PBMC240 through the service path, V2 scores 91.8 lineage accuracy against 45.9 for v3 shipped, while per cell z (5.7) and the dual encoder (0.0–13.9) collapse (`pbmc240_raw_service_path.csv`)
+- [x] **T1 NB1d, five-seed real-data comparison, v3 vs V2.** Run (run history entry 16). Trained V2 seeds 1–4 and exported per-seed embeddings for `v3_seed0`–`4` and `V2_seed0`–`4` (V2 is NB1b's mini upload gene z variant, `V2_batchgene_aug` checkpoints) on SCoPE2 and raw PBMC240. Gates: reference reproduced, SCoPE2 31.08 reproduced. Decision, on a rule fixed before the run: carry V2 into NB2 with v3 as the control (PBMC240 CI gate and RNA oracle gate both pass); PBMC240 is a development dataset from here on. Tables and summary committed at `docs/plans/nb1d/` (`209508f`), embeddings local only and gitignored. Scored in Track D (`62aefe8`, `7a4c4b2`)
 - [ ] **T1 NB2, label space and decision rule.** Should start after NB1b, since NB1b may change the encoder
 - [ ] **T1 NB3, abstention and conformal.** Needs `abstention.py` and `calibration.py`, plus `encode_with_hidden` from C
 - [ ] **T1 NB4, integration, evaluation and export**
@@ -169,6 +169,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 | Product decision rule | NB2, on simulations only | Open. Centroid 79.79 vs pool first kNN 77.50 on SCoPE2 is recorded, not decisive |
 | Per request vs binned calibration | NB2 | Open |
 | Flat vs hierarchical label space | NB2, T2 NB7 | Open |
+| Next Claude Code track after D | Owner, 2026-09-29 | **Settled: Track E before Track C.** A held-out MS dataset is now the priority: SCoPE2's published matrix is centred per gene and per cell, so it cannot test a real upload (NB1c), and PBMC240 was used to choose V2, so it is now a development dataset (NB1d). Confirmation needs a fresh MS dataset, which Track E ingests. C keeps its place in the A2 → B → C → F merge order, and must land before T1 NB3 starts (NB3 needs C's `encode_with_hidden`) |
 
 ---
 
@@ -178,7 +179,9 @@ SCoPE2, 1,490 cells, real embedding, unless marked RNA. **Every "ours" row
 without "5 seeds" is the shipped checkpoint, `v3_seed0`** (`provenance.json`'s
 `production_seed: 0`) — the best of five v3 seeds on SCoPE2, so those rows are
 what the product delivers today, not properties of the architecture. The
-"5 seeds" rows are the architecture-level numbers (T1 NB1d, Track D).
+"5 seeds" rows are the architecture-level numbers: v3's seed variance was
+first measured in T1 NB1c (`docs/plans/nb1c/`), then rescored by Track D on
+T1 NB1d's per-seed embeddings (`docs/plans/nb1d/`).
 
 | Measure | Value |
 |---|---|
@@ -248,3 +251,4 @@ because the held out classes were in training.
 | 2026-09-29 | Track D follow-up: PBMC240 arm rescored by lineage recall, not plain accuracy (uninformative at 117 lymphoid vs. 5 myeloid). ~~V2's lymphoid recall sits just below the 95.90% majority floor, v3's well below it, scANVI's far below it~~ **Corrected below — comparing a per-class recall against the overall-accuracy majority floor was itself a mistake; see the next entry.** scANVI's apparent 100% myeloid recall is a collapse (74–91% of all 237 cells predicted "myeloid"), not competence, exposed only by looking at predicted composition instead of accuracy. Added a plain statement that scANVI is transductive (trains on the query cells) while the shipped encoder is zero-shot on the query — an asymmetry that favors scANVI. scANVI's per-seed predictions and latents (both SCoPE2 and PBMC240 arms) are now cached under `tools/fair_benchmark/results/` (gitignored, documented as non-disposable) so neither comparison requires retraining again | `095895b` |
 | 2026-09-29 | Track D fix: removed every comparison of lymphoid recall against the 95.90% majority-class floor (results.md, MODEL_CARD.md) — a category error, since a trivial "always lymphoid" model itself scores 100% lymphoid recall / 0% myeloid recall, not 95.90%. Replaced with reading each method's two recalls as a pair. Documented exactly what scANVI received on PBMC240 (raw DIA-NN intensities, no log transform, no per-cell normalization, 1,215/2,907 shared genes detected, vs. the already-log2'd/per-cell-normalized/imputed `pbmc240_zscored_all_genes.csv`, 1,111/2,907 shared genes) and added a second scANVI sensitivity arm (3 seeds) on that processed file. Processed input is uniformly better for scANVI (lymphoid recall 17.95% shared-kNN / 21.37% native, vs. raw's 8.83% / 6.55%) but still far below "ours," and still shows the same myeloid-heavy composition collapse (63–92%) — the input-fairness question is answered, the underlying finding does not change. `docs/plans/nb1d/scanvi_pbmc240_input_variants.csv` holds both variants' numbers | `7bfc4b8` |
 | 2026-09-29 | Records cleanup, docs only. §5 "Current verified numbers" still stated "+9.1 to +14.4, CI excludes 0 on every seed" as current: its single-seed rows are now labelled `v3_seed0` (the shipped checkpoint), the `v3_seed0` paired-bootstrap spans updated to the retrained scANVI (+8.2 to +14.4 restricted, +24.2 to +32.7 unrestricted), and 5-seed family rows, the 90-pairing verdict counts and the PBMC240 recall rows added, all from `docs/plans/nb1d/`. Same stale claim struck through in `research_tier1_tier2.md`'s 2026-09-25 status note. Statuses: A2's floor and mask items closed as superseded by `cf83c5f`; Track E unblocked; Track F now waits only on C and NB4; NB1b recorded as run (NO GO on the real-data gate); NB1d added; NB1c flagged as unconfirmed; narrow-uploads item marked fixed in simulation only. Repointed three references to Track D commits the `benchmark/d` rebase left unreachable (`35b3e29`, `ed9ffc5`) to their equivalents on `main` (`209508f`, `62aefe8`, `7a4c4b2`). `Notebook_Run_History.md` moved from untracked `New_Files/` into `docs/plans/` (entries 1–14; 15 and 16 still to be written by the owner); `docs/plans/README.md` now indexes the folder | `2e7cc3b` |
+| 2026-09-29 | Records follow-up, docs only. Committed the owner's updated `Notebook_Run_History.md` (entry 14's real-data numbers filled in, entries 15 NB1c and 16 NB1d added). NB1c's outputs (four tables, `nb1c_summary.json`) moved from `docs/plans/NB1c/tables/` to a flat `docs/plans/nb1c/`, matching `nb1/` and `nb1d/`, and committed; NB1c marked as run in §3, citing them, and §5 now credits NB1c with first measuring v3's seed variance. **Owner decision recorded in §4: Track E before Track C** — confirmation needs a fresh MS dataset, since SCoPE2 is gene-centred and PBMC240 is now a development dataset | (this commit) |

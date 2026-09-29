@@ -1,0 +1,94 @@
+{
+  "created": "2026-09-25 14:42:56",
+  "reproduction_gate": true,
+  "models": [
+    "v3_shipped",
+    "v3_seed0",
+    "v3_seed1",
+    "v3_seed2",
+    "v3_seed3",
+    "v3_seed4",
+    "V0r_v3_recipe_seed0",
+    "V1_row_seed0",
+    "V2_batchgene_aug_seed0",
+    "V3_dual_aug_seed0",
+    "V3_dual_aug_seed1",
+    "V3_dual_aug_seed2"
+  ],
+  "missing_checkpoints": [],
+  "scope2_centred_per_gene": true,
+  "structure": [
+    {
+      "matrix": "RNA reference, log normalised (5,000 cells)",
+      "cells": 5000,
+      "genes": 9002,
+      "min": 0.0,
+      "max": 9.106291770935059,
+      "pct_negative": 0.0,
+      "pct_missing": 0.0,
+      "pct_genes_centred": 18.530278974824224,
+      "median_abs_gene_mean_over_sd": 0.3193457328821735,
+      "median_abs_cell_mean_over_sd": 0.3593437518810526,
+      "gene_mean_spread": 1.1346700979611706
+    },
+    {
+      "matrix": "SCoPE2 published gene level matrix",
+      "cells": 1490,
+      "genes": 2935,
+      "min": -2.59705830393677,
+      "max": 3.02123686760758,
+      "pct_negative": 50.12579033419846,
+      "pct_missing": 0.0,
+      "pct_genes_centred": 100.0,
+      "median_abs_gene_mean_over_sd": 2.522046206733281e-17,
+      "median_abs_cell_mean_over_sd": 0.01353410928256673,
+      "gene_mean_spread": 5.2432199769384496e-17
+    },
+    {
+      "matrix": "PBMC240 raw DIA-NN, log2 (service input)",
+      "cells": 238,
+      "genes": 3087,
+      "min": -0.05662173143686117,
+      "max": 27.38737249896527,
+      "pct_negative": 0.00013610886531483342,
+      "pct_missing": 62.72522614487972,
+      "pct_genes_centred": 0.0,
+      "median_abs_gene_mean_over_sd": 16.0533050376148,
+      "median_abs_cell_mean_over_sd": 6.439032200439094,
+      "gene_mean_spread": 2.921100650765951
+    },
+    {
+      "matrix": "PBMC240 processed file (imputed, z scored)",
+      "cells": 237,
+      "genes": 2402,
+      "min": -12.478926,
+      "max": 12.27275,
+      "pct_negative": 57.757073043912065,
+      "pct_missing": 0.0,
+      "pct_genes_centred": 100.0,
+      "median_abs_gene_mean_over_sd": 1.4506329283964854e-09,
+      "median_abs_cell_mean_over_sd": 0.28656797182496757,
+      "gene_mean_spread": 2.074617510993443e-09
+    }
+  ],
+  "v3_seed_variance": {
+    "scope2_bal_unres": {
+      "mean": 25.597419318981807,
+      "sd": 17.34687638202214,
+      "min": 0.13686131386861314,
+      "max": 48.197413761161954
+    },
+    "scope2_bal_restr": {
+      "mean": 63.32366890214532,
+      "sd": 10.842694274295612,
+      "min": 50.787126236614924,
+      "max": 79.7915354403646
+    },
+    "pbmcfile_lineage_acc": {
+      "mean": 41.475409836065566,
+      "sd": 5.267629184609714,
+      "min": 33.60655737704918,
+      "max": 47.540983606557376
+    }
+  }
+}

@@ -166,11 +166,13 @@ A synthetic check had shown why both channels matter: gene wise z scoring within
 single population erases its identity, per cell z keeps it.
 
 **Verdict: NO GO on the pre set criteria.** Every simulation gate passed, but the
-confirmatory real data gate failed, with real SCoPE2 restricted below 77.8. The
-real data section's output was not saved in the run, so the size of the miss is
-pending (`tables/real_data_confirmatory.csv` on Drive). Plan: carry both v3 and the
-dual encoder into NB2 and decide at NB4 on the full pipeline, without moving the
-gate after the fact.
+confirmatory real data gate failed. From `tables/real_data_confirmatory.csv`, the
+dual encoder scored 0.0 to 2.4 unrestricted and 49.9 to 64.6 restricted on real
+SCoPE2 across its three seeds, against 31.1 and 79.8 for v3 shipped. The retrained
+v3 recipe, the implementation control, scored only 9.1 unrestricted, although it
+matched v3 on RNA. That gap raised the seed variance question NB1c answered.
+Per cell z alone scored 0.0 unrestricted on SCoPE2 but 97.5 on the processed
+PBMC240 file, so the two real datasets pointed in opposite directions.
 
 It also settled Track A2's preprocessing choices on the shipped model: the per cell
 mask beat median fill by 3.2 points unrestricted and 4.7 oracle, skipping the log
@@ -179,11 +181,78 @@ graph on raw rather than z scored log values made no difference. The coverage
 curve puts the floor at about 200 observed genes, with accuracy at chance below
 100.
 
+### 15. `T1_NB1c_Real_Data_Diagnostics.ipynb`
+Seven cells, no training, 3.4 minutes. Scored twelve models (v3 shipped, v3's five
+production seeds, six NB1b checkpoints) on real data to explain NB1b's
+contradictions. The reproduction gate passed (31.08 / 79.79), and v3 seed 0 is
+byte identical to the shipped export. Three findings:
+
+- **The shipped SCoPE2 numbers are a favourable seed.** Across v3's own five
+  seeds, SCoPE2 unrestricted balanced accuracy was 25.6 ± 17.3 (range 0.1 to 48.2)
+  and restricted was 63.3 ± 10.8 (range 50.8 to 79.8). The shipped 79.8 is the
+  best of the five. The comparison against scANVI used seed 0 alone.
+- **The published SCoPE2 matrix is centred per protein and per cell.** All genes
+  have mean zero and half the values are negative. Absolute abundance was removed
+  upstream, so SCoPE2 cannot test how the pipeline handles a real upload. Raw
+  PBMC240 keeps its abundance (no centred genes, no negative values, 63 percent
+  missing).
+- **On raw PBMC240 through the fixed service path, V2 stands out.** The mini
+  upload gene z encoder scored 91.8 lineage accuracy, against 45.9 for v3 shipped
+  and 45.9 to 64.8 across v3's seeds. Its predicted composition, 77 percent
+  lymphoid, fits a PBMC sample. Per cell z (5.7) and the dual encoder (0.0 to
+  13.9) collapsed. Per cell z had scored 97.5 on the processed PBMC file, which was
+  already gene centred.
+
+The explanation proposed here: each gene carries a roughly fixed protein to mRNA
+offset in log space. Per upload gene z cancels it, per cell z keeps it. The same
+centring causes composition dependence, so V2 keeps gene z and learns to cope with
+narrow uploads. NB1b's simulation missed this because its stress multiplied log
+values per gene, which gene z removes entirely.
+
+### 16. `T1_NB1d_V2_Seed_Check.ipynb`
+Thirteen cells, 30.6 minutes. Trained V2 seeds 1 to 4 (about 5 minutes each) and
+compared five V2 seeds against v3's five seeds. All gates passed, including the
+SCoPE2 reproduction and the cosine match to the app export. v3's provenance shows
+seed 0 was the default production seed, not chosen on SCoPE2. On RNA validation it
+sits mid range.
+
+| Five seeds each, smoothing on | v3 | V2 |
+|---|---|---|
+| Raw PBMC240 lineage accuracy | 54.8 ± 7.4 | 92.3 ± 0.7 |
+| Cells where all five seeds agree on lineage, PBMC240 | 67.5% | 88.2% |
+| RNA evaluation slice, unrestricted balanced | 36.1 ± 2.7 | 55.3 ± 1.8 |
+| RNA, single cell type uploads | 18.1 | 35.8 |
+| RNA, oracle restricted | 75.7 | 84.3 |
+| SCoPE2 unrestricted balanced | 25.6 ± 17.3 | 3.1 ± 3.4 |
+| SCoPE2 restricted balanced | 63.3 ± 10.8 | 61.0 ± 10.0 |
+
+Seed averaged paired bootstrap on PBMC240, V2 minus v3: +37.5 points, 95% CI
++29.5 to +45.4, on 122 weakly labelled cells. **Decision, on a rule fixed before
+the run: carry V2 into NB2, with v3 as the control.**
+
+The mechanism test on RNA supported the offset explanation. A per gene offset of
+twice the spread of gene means left V2 and v3 almost unchanged (V2 55.3 to 54.7,
+v3 flat), while per cell z lost 10.6 points and the dual encoder 16.6. On clean RNA
+those two beat V2, which is why NB1b's simulation picked the dual encoder. The
+real PBMC collapse is far larger than this stress produces, so real offsets are
+probably well above twice the spread.
+
+SCoPE2 remains unexplained. V2 sends most macrophages to CD4 T cell classes and
+monocytes to neutrophil, dendritic and erythrocyte classes, so the lineage is wrong,
+not only the fine label. v3 seed 0 also sends 79 percent of macrophages to CD8 T
+cells, and scores 79.8 only because the restriction forces a two class choice.
+Centring alone does not explain it, since V2 scores 67.6 on SCoPE2 like RNA
+uploads. Carrier channel ratios, batch correction, imputation and per cell
+centring are the remaining suspects. PBMC240 has now been used to choose an
+encoder, so it is a development dataset. Confirmation needs a fresh MS dataset.
+Per seed embeddings are exported in `NB1d/embeddings/` for the Track D rerun
+against scANVI.
+
 ---
 
 ## The throughline
 
-Fourteen notebooks built end to end, three existing ones worked inside of. None of
+Sixteen notebooks built end to end, three existing ones worked inside of. None of
 this was planned as a sequence in advance, each notebook answered a question the
 previous one's actual results raised. The diagnostics notebooks exist because v2
 produced numbers that didn't add up on inspection. The masking notebooks exist
@@ -198,4 +267,7 @@ adaptation tried so far. NB1 exists because every Tier 1 choice needed a test be
 that did not use protein labels, and in building it found that the preprocessing
 every real query receives was itself causing much of the failure. NB1b exists to
 remove that cause, and succeeded on RNA while leaving one real protein question
-open.
+open. NB1c exists because NB1b's two real datasets disagreed. It found that
+the shipped SCoPE2 numbers were a lucky seed and that SCoPE2 cannot test a real
+upload. NB1d exists to check that V2's result on raw data was not luck too. It
+held across all five seeds, and V2 became the encoder going into NB2.
