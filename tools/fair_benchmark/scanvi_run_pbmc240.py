@@ -18,6 +18,11 @@ Explicit seeding, like scanvi_run.py -- run once per seed (0, 1, 2):
 This is a development-dataset comparison point (PBMC240 raw was used to
 choose V2 over v3 -- see docs/plans/nb1d/nb1d_summary.json's "note"), not a
 held-out evaluation; label it that way wherever it's reported.
+
+Always saves its trained embeddings and lineage predictions to results/
+(gitignored, but not disposable -- see the comment in .gitignore), so a
+lineage-recall or composition analysis never requires retraining scANVI a
+second time.
 """
 import sys, time, json, warnings
 from pathlib import Path

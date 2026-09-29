@@ -101,7 +101,9 @@
                 architecture there, 12 favor scANVI. The one regime it reliably wins is
                 unrestricted (12 of 15 pairings, mean margin +18.1 points). Full breakdown:
                 <code>docs/plans/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, narrative in
-                <code>Documentation/results.md</code>.
+                <code>Documentation/results.md</code>. A methodological asymmetry in scANVI's
+                favor throughout this comparison: scANVI trains on the query cells
+                (transductive); this encoder is fixed and zero-shot on the query.
             </p>
             <p style="font-size: 13px; margin-bottom: 4px;"><strong>Known failure modes:</strong></p>
             <ol style="font-size: 13px;">

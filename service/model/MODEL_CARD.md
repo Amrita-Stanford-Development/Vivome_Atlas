@@ -76,6 +76,10 @@ card: "beats the strongest available baseline" is true of the specific
 checkpoint running in production, not a property of the architecture that
 would necessarily hold if it were retrained.**
 
+**A methodological asymmetry in scANVI's favor, throughout the comparison
+above: scANVI trains on the query cells (transductive); this encoder is
+fixed and zero-shot on the query.**
+
 ## Known failure modes
 
 1. **Hardcoded two-class label space.**
@@ -112,14 +116,17 @@ would necessarily hold if it were retrained.**
    whatever drives this instability is specific to the RNA→protein transfer
    step, not the RNA-side training. A separate development-only check
    (PBMC240 raw, real ~75%-missing data, lineage-level labels — see
-   `docs/plans/nb1d/`) shows the same architecture's 5-seed mean lineage
-   accuracy (54.8% ± 7.4%) falling *below* the 95.9% trivial majority-class
-   floor on that sample, while a second candidate architecture ("V2")
-   reaches 92.3% ± 0.7% — still below the floor, but a large, low-variance
-   margin over the shipped architecture on real messy data specifically.
-   V2 is not shipped and does not carry that margin onto SCoPE2 (see
-   `Documentation/results.md`); this is recorded as an open question, not a
-   recommendation to switch.
+   `docs/plans/nb1d/`) is scored by recall per lineage, not plain accuracy —
+   accuracy is uninformative at this sample's 117-lymphoid-vs-5-myeloid
+   split. The shipped architecture's 5-seed mean **lymphoid recall**
+   (52.8% ± 7.7%, n=117) falls well *below* the 95.9% trivial
+   majority-class floor; a second candidate architecture ("V2") reaches
+   92.8% ± 0.8% — still below the floor, but a large, low-variance margin
+   over the shipped architecture on real messy data specifically. (Both
+   architectures' apparent 100%/80% myeloid recall, n=5, is anecdotal, not
+   a competence claim.) V2 is not shipped and does not carry that margin
+   onto SCoPE2 (see `Documentation/results.md`); this is recorded as an
+   open question, not a recommendation to switch.
 
 ## Versioning
 

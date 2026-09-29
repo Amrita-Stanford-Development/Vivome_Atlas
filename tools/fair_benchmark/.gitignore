@@ -1,4 +1,12 @@
 # Large, regenerable data/embedding artifacts -- not source, don't commit.
+# Not all of it is disposable scratch, though: load.py's rna_X.npy/prot_X.npy
+# are cheap to regenerate, but scanvi_run.py and scanvi_run_pbmc240.py's own
+# outputs (rna_scanvi_seed{N}.npy, prot_scanvi_seed{N}.npy,
+# pbmc_scanvi_seed{N}.npy, the pred_*_seed{N}.npy prediction arrays, and
+# result_scanvi*_seed{N}.json) are the product of real scVI/scANVI training
+# runs (each on the order of an hour) -- don't delete those without
+# regenerating first if you need them again; nothing else in this repo
+# reproduces them, only the two scripts that wrote them.
 results/
 *.log
 __pycache__/
