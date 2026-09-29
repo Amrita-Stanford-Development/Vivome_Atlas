@@ -31,12 +31,12 @@ ours_run.py                  # 3. "ours" through the same harness (independent
 
 Reads directly from the real repo:
 
-- `Atlas/atlas_RNA_lat128-001-part1.csv` + `-part2.csv` → the full
+- `web/data/atlas_RNA_lat128-001-part1.csv` + `-part2.csv` → the full
   **85,232-cell** RNA reference. This is Git-LFS content — `git lfs pull`
   it first. (This repo deliberately ships these as unfetched LFS pointers
-  by default; see `tests/lfs.test.js`. Fetching them is fine, it's just
+  by default; see `web/tests/lfs.test.js`. Fetching them is fine, it's just
   the one test that then correctly reports them as fetched.)
-- `Atlas/atlas_PROT_lat128.csv` → the 1,490-cell SCoPE2 protein query. See
+- `web/data/atlas_PROT_lat128.csv` → the 1,490-cell SCoPE2 protein query. See
   [known-limitations.md](known-limitations.md) for an important caveat
   about this specific file's provenance.
 
@@ -177,7 +177,7 @@ column, in that file's own row order. See
 sha256 verification.
 
 An earlier version of this script reconstructed the protein embedding from
-`Atlas/atlas_PROT_lat128.csv` via the real `service.pipeline` stack
+`web/data/atlas_PROT_lat128.csv` via the real `service.pipeline` stack
 (`alignment.align_to_feature_space` → `smoothing.fuzzy_smooth` →
 `encoder.load_encoder()`), because the real embedding wasn't available in
 this repository at the time. That reconstruction is gone now that the real
@@ -258,7 +258,7 @@ already-cached `.npy` embeddings (including all 3 scANVI seeds' — run
 cd Vivome_Atlas
 git lfs pull   # fetches the RNA expression matrix AND
                # service/model/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv
-               # (large; flips tests/lfs.test.js red by design, see that
+               # (large; flips web/tests/lfs.test.js red by design, see that
                # test's comment, and is required for ours_run.py and
                # service/tests/test_e2e_real_export.py)
 python3 -m pip install -r service/requirements.txt   # includes scikit-learn,

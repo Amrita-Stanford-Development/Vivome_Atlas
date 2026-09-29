@@ -27,7 +27,7 @@ parallel with the modeling track and must not block on it.
 **No page displays a number that was not computed from data in this
 repository.**
 
-`Atlas/atlas_manifest.json` is the single source of truth. Every metric is a
+`web/data/atlas_manifest.json` is the single source of truth. Every metric is a
 record, either measured or pending:
 
 ```json
@@ -35,7 +35,7 @@ record, either measured or pending:
 { "value": null, "status": "pending", "phase": "Phase 2", "note": "..." }
 ```
 
-`isMeasured()` in `js/manifest.js` is the single guard: a metric renders only
+`isMeasured()` in `web/js/manifest.js` is the single guard: a metric renders only
 when `status === 'measured'`, `value !== null`, and the value is finite.
 Everything else — pending, absent, malformed, truncated — renders as
 `Pending`. Do not add a display path that bypasses it, and do not hardcode a
@@ -43,7 +43,7 @@ metric into HTML. See [docs/manifest.md](docs/manifest.md).
 
 ## Conventions
 
-- `js/manifest.js` and `js/panels.js` are **pure** — no DOM access, no side
+- `web/js/manifest.js` and `web/js/panels.js` are **pure** — no DOM access, no side
   effects. That is what lets the same code run under `node --test` and be
   assigned to `innerHTML` in the browser. Keep them pure.
 - Panel builders return HTML strings. Every interpolated value from the
@@ -52,8 +52,8 @@ metric into HTML. See [docs/manifest.md](docs/manifest.md).
 - Pages mount panels with `<script type="module" async>` and always attach a
   `.catch()` that renders `errorPanel(err)`. A failed manifest load shows an
   error, never a blank panel or a stale number.
-- `atlas.html` is a classic script and cannot import `js/manifest.js`, so the
-  Git LFS magic string is duplicated there. `tests/lfs.test.js` pins the two
+- `atlas.html` is a classic script and cannot import `web/js/manifest.js`, so the
+  Git LFS magic string is duplicated there. `web/tests/lfs.test.js` pins the two
   copies byte-for-byte. If you touch either, the test must stay green.
 - Nav and back links point to `index.html`.
 
@@ -76,7 +76,7 @@ cd tools && python3 -m unittest discover             # manifest builder
 python3 -m unittest discover -s service/tests -t .   # projection service, from the repo root
 ```
 
-Run all three before committing. `tests/lfs.test.js` asserts the shipped RNA
+Run all three before committing. `web/tests/lfs.test.js` asserts the shipped RNA
 parts are still unfetched LFS pointers — if you have run `git lfs pull`
 locally it will fail, which is expected and is not a reason to change the
 test.

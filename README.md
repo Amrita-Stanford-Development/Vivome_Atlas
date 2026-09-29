@@ -18,14 +18,14 @@ projection service — see [Layout](#layout) and `service/README.md`.
 git clone git@github.com:Amrita-Stanford-Development/Vivome_Atlas.git
 cd Vivome_Atlas
 git lfs install && git lfs pull     # required for the RNA data (see below)
-python3 -m http.server 8000
+cd web && python3 -m http.server 8000
 # open http://localhost:8000/index.html
 ```
 
-The atlas fetches data from `Atlas/` over HTTP, so opening `index.html` from
-`file://` will not load. Serve the folder.
+The atlas fetches data from `web/data/` over HTTP, so opening `index.html` from
+`file://` will not load. Serve the `web/` folder.
 
-**Git LFS is not optional for the RNA view.** `Atlas/atlas_RNA_lat128.parquet`
+**Git LFS is not optional for the RNA view.** `web/data/atlas_RNA_lat128.parquet`
 (~1.43 GB) and the two split CSV parts are LFS objects. Without `git lfs pull`
 your checkout holds pointer files; the app detects this and tells you the
 remedy rather than failing on a parse error. `service/model/dev/H_seed4.pt`
@@ -47,12 +47,12 @@ too — the same `git lfs pull` fetches it.
 ## Layout
 
 ```
-Atlas/      latent embeddings, metadata CSVs, atlas_manifest.json
-Plots/      30 precomputed interactive 3D plots
-css/        page.css — shared page styling
-js/         manifest.js, panels.js — pure ES modules, unit-tested
+web/data/      latent embeddings, metadata CSVs, atlas_manifest.json
+web/plots/      30 precomputed interactive 3D plots
+web/css/        page.css — shared page styling
+web/js/         manifest.js, panels.js — pure ES modules, unit-tested
 tools/      build_manifest.py and its unittest suite
-tests/      node --test suites for the JS modules
+web/tests/      node --test suites for the JS modules
 docs/       documentation (see docs/README.md)
 service/    Phase 5 projection service backend — separate dependencies,
             separate tests, see service/README.md
@@ -60,7 +60,7 @@ service/    Phase 5 projection service backend — separate dependencies,
 
 ## The manifest rule
 
-`Atlas/atlas_manifest.json` is the single source of truth for every number the
+`web/data/atlas_manifest.json` is the single source of truth for every number the
 pages display. Metrics that need the training pipeline are stored as explicit
 *pending* records and render as `Pending`.
 
@@ -79,7 +79,7 @@ python3 tools/build_manifest.py
 Nothing to install.
 
 ```bash
-node --test                                          # JS modules under js/
+node --test                                          # JS modules under web/js/
 cd tools && python3 -m unittest discover             # manifest builder
 python3 -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
 ```

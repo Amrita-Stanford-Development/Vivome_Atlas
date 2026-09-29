@@ -64,7 +64,7 @@ FROZEN = ("research/archive/", "docs/plans/2026-08-29-resource-layer.md", "scrip
 
 MD_LINK = re.compile(r"\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 HTML_ATTR = re.compile(r"(?:href|src)=\"([^\"]+)\"")
-PATH_TOKEN = re.compile(r"(?<![\w/.~-])((?:\.\.?/)*([A-Za-z_][\w-]*)/[\w./-]*[\w/])(?![\w/-])")
+PATH_TOKEN = re.compile(r"(?<![\w/.~-])((?:\.\.?/)*([A-Za-z_][\w-]*)/(?:[\w./-]*[\w/])?)(?![\w/-])")
 
 
 def repo_files(*, include_untracked: bool = True) -> list[str]:

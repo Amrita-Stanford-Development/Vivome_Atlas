@@ -1,14 +1,14 @@
 # The manifest
 
-`Atlas/atlas_manifest.json` is the single source of truth for every number the
+`web/data/atlas_manifest.json` is the single source of truth for every number the
 web pages display. It is generated, never hand-edited.
 
 ```bash
 python3 tools/build_manifest.py
 ```
 
-The builder reads `Atlas/metadata_RNA_lat128.csv` and
-`Atlas/metadata_PROT_lat128.csv` and writes the manifest. It prints the cell
+The builder reads `web/data/metadata_RNA_lat128.csv` and
+`web/data/metadata_PROT_lat128.csv` and writes the manifest. It prints the cell
 type summary so you can sanity-check the result.
 
 ## The measured/pending contract
@@ -25,7 +25,7 @@ A `measured` record carries the **basis** on which it was computed. A
 produce it, and a note saying what is missing. `metricBasis()` coalesces the
 two, so a panel shows either the basis or the phase without branching.
 
-`isMeasured()` in `js/manifest.js` is the single guard on the display path:
+`isMeasured()` in `web/js/manifest.js` is the single guard on the display path:
 
 ```js
 metric?.status === 'measured'
@@ -56,7 +56,7 @@ Computed from repository data:
   centroids **in the 3-PC projection**, for classes present in both modalities
 - `model.seeds` — a seed *count* (5), from `service/model/v3_tables/reference_seeds.csv`;
   the accuracy and its 95% CI go in the record's `basis`, not `value` — see
-  `js/panels.js:buildModelCard`, which renders `value` with 0 decimal places
+  `web/js/panels.js:buildModelCard`, which renders `value` with 0 decimal places
 - `model.feature_space_size`, `encoder_family`, `mask_sampling`, `detected_by_source` —
   the settled architecture facts, folded into `model` (see "Architecture"
   below)
@@ -85,7 +85,7 @@ cosine; `cosine()` returns `None` and the builder converts it.
 
 `next_reference` is `null` in the current manifest — the last architecture
 change it described (`CrossModalNet` to the frozen RNA-only v3 reference) is
-complete, so there is nothing "next" to report. `js/panels.js:buildNextReferenceCard`
+complete, so there is nothing "next" to report. `web/js/panels.js:buildNextReferenceCard`
 still renders a non-null value, kept as real, tested code for whenever the
 next change starts — but `build_deployed_architecture_facts` is **not** a
 drop-in source for it: that function now returns only the facts folded into
@@ -106,7 +106,7 @@ cells (SCoPE2 mass spectrometry).
 
 ## Consumers
 
-`js/manifest.js` loads, validates, and formats. `js/panels.js` turns the
+`web/js/manifest.js` loads, validates, and formats. `web/js/panels.js` turns the
 result into HTML strings. Both are pure — no DOM, no side effects — which is
 what lets the same code be unit-tested under Node and assigned to `innerHTML`
 in the browser.
@@ -119,7 +119,7 @@ in the browser.
 | `buildSupportedLabelSpace` | `project.html` |
 
 Every interpolated value goes through `escapeHtml()`. Cell-type names come
-from data, and `tests/fixtures.js` deliberately names one class
+from data, and `web/tests/fixtures.js` deliberately names one class
 `<script>alert(1)</script>` so the suite proves it.
 
 ## Release protocol
@@ -136,10 +136,10 @@ that has a predecessor to compare against.
 ## Tests
 
 ```bash
-node --test                                  # tests/manifest.test.js, panels.test.js, lfs.test.js
+node --test                                  # web/tests/manifest.test.js, panels.test.js, lfs.test.js
 cd tools && python3 -m unittest discover     # test_build_manifest.py
 ```
 
-The JS suites share `tests/fixtures.js`, one manifest shaped like the real
+The JS suites share `web/tests/fixtures.js`, one manifest shaped like the real
 generated file. If you change the schema, change the fixture — the suites
 read the key set and the metric records from it.

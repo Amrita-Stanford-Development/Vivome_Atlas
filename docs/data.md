@@ -1,6 +1,6 @@
 # Data
 
-## `Atlas/`
+## `web/data/`
 
 Latent embeddings and metadata, latent dim 128.
 
@@ -59,11 +59,11 @@ version https://git-lfs.github.com/spec/v1
 ```
 
 The app handles this rather than crashing. `isLfsPointer()` in
-`js/manifest.js` detects the magic string, and `atlas.html` checks before
+`web/js/manifest.js` detects the magic string, and `atlas.html` checks before
 parsing an RNA profile and shows `git lfs pull` as the remedy.
 
 `atlas.html`'s main script is a classic script and cannot import the module,
-so the magic string exists in two places. `tests/lfs.test.js` pins them
+so the magic string exists in two places. `web/tests/lfs.test.js` pins them
 byte-for-byte — a typo in either copy would silently disable the guard on one
 side while the suite stayed green.
 
@@ -71,7 +71,7 @@ That suite also asserts the shipped part files are *still* unfetched pointers.
 If you have run `git lfs pull` locally the test fails by design; do not
 "fix" it by weakening the assertion.
 
-## `Plots/`
+## `web/plots/`
 
 30 precomputed interactive 3D plots, standalone HTML.
 

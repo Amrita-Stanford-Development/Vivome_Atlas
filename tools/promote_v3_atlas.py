@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Promote the v3 bundle's Atlas viewer metadata to the live filenames.
 
-Writes Atlas/metadata_RNA_lat128.csv and Atlas/metadata_PROT_lat128.csv in
+Writes web/data/metadata_RNA_lat128.csv and web/data/metadata_PROT_lat128.csv in
 their existing column schema, from service/model/v3_pending/app_export/
 atlas_{RNA,PROT}_v3_meta.csv — so atlas.html, tools/build_manifest.py, and
 every doc that names these two files needs zero changes; only their content
@@ -22,7 +22,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 V3_APP_EXPORT = REPO_ROOT / "service" / "model" / "v3_pending" / "app_export"
-ATLAS_DIR = REPO_ROOT / "Atlas"
+ATLAS_DIR = REPO_ROOT / "web" / "data"
 REFERENCE_METADATA = REPO_ROOT / "service" / "model" / "reference_metadata.csv"
 
 RNA_COLUMNS = ["latent_dim", "modality", "orig_index", "class_idx", "class_name", "lineage", "PC1", "PC2", "PC3"]
@@ -87,8 +87,8 @@ def main() -> None:
     class_idx_by_name = {row["class_name"]: row["class_idx"] for row in _read_rows(REFERENCE_METADATA)}
     n_rna = promote_rna()
     n_prot = promote_prot(class_idx_by_name)
-    print(f"Wrote {n_rna} RNA rows to Atlas/metadata_RNA_lat128.csv")
-    print(f"Wrote {n_prot} protein rows to Atlas/metadata_PROT_lat128.csv")
+    print(f"Wrote {n_rna} RNA rows to web/data/metadata_RNA_lat128.csv")
+    print(f"Wrote {n_prot} protein rows to web/data/metadata_PROT_lat128.csv")
 
 
 if __name__ == "__main__":

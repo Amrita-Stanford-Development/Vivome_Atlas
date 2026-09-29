@@ -14,7 +14,7 @@ numbers, which no longer depend on any reconstruction.
 **What the problem was:** `tools/fair_benchmark/ours_run.py` originally
 needed a protein input file to reconstruct "ours" through the shared
 harness, and the only candidate found in this repository, or anywhere on
-the development machine, was `Atlas/atlas_PROT_lat128.csv`.
+the development machine, was `web/data/atlas_PROT_lat128.csv`.
 
 `git log` on that file shows it was added in this repository's **very
 first commit** (`307e483`, 2025-08-17) — it **predates the entire v3

@@ -1,4 +1,4 @@
-// Loading and formatting for Atlas/atlas_manifest.json.
+// Loading and formatting for web/data/atlas_manifest.json.
 // Pure functions only — no DOM access — so this runs under `node --test`.
 
 export const PENDING_LABEL = 'Pending';
@@ -24,7 +24,7 @@ export function validateManifest(manifest) {
   return manifest;
 }
 
-export async function loadManifest(url = './Atlas/atlas_manifest.json') {
+export async function loadManifest(url = './data/atlas_manifest.json') {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Manifest fetch failed: ${response.status} ${response.statusText}`);

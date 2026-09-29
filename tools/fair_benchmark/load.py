@@ -21,10 +21,10 @@ OUT = Path(__file__).resolve().parent / "results"
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    rna1 = pd.read_csv(f"{D}/Atlas/atlas_RNA_lat128-001-part1.csv")
-    rna2 = pd.read_csv(f"{D}/Atlas/atlas_RNA_lat128-001-part2.csv")
+    rna1 = pd.read_csv(f"{D}/web/data/atlas_RNA_lat128-001-part1.csv")
+    rna2 = pd.read_csv(f"{D}/web/data/atlas_RNA_lat128-001-part2.csv")
     rna = pd.concat([rna1, rna2], ignore_index=True)
-    prot = pd.read_csv(f"{D}/Atlas/atlas_PROT_lat128.csv")
+    prot = pd.read_csv(f"{D}/web/data/atlas_PROT_lat128.csv")
 
     rna_gene_cols = [c for c in rna.columns if c.startswith("gene_")]
     prot_gene_cols = [c for c in prot.columns if c.startswith("gene_")]

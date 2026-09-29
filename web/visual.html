@@ -644,12 +644,12 @@
       
       if (mode === 'supervised') {
         const latent = latentValues[latentSliderVertical ? latentSliderVertical.value : 2];
-        src = `Plots/Supervised/interactive_latent${latent}_to3d_PCA_mm.html`;
+        src = `plots/supervised/interactive_latent${latent}_to3d_PCA_mm.html`;
         title = `Supervised Learning (Latent Dim: ${latent})`;
       } else {
         const rna = values[rnaSliderVertical ? rnaSliderVertical.value : 0];
         const prot = values[protSliderVertical ? protSliderVertical.value : 0];
-        src = `Plots/Semi Supervised/PCA3D_semi_r${rna}_p${prot}.html`;
+        src = `plots/semi-supervised/PCA3D_semi_r${rna}_p${prot}.html`;
         title = `Semi-Supervised Learning (RNA: ${rna}%, Prot: ${prot}%)`;
       }
       

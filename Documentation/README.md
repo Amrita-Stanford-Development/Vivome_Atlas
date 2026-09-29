@@ -10,7 +10,7 @@ unfair version of the same comparison.
 shipped static app.** It lives here (`Documentation/`), separate from
 `docs/` (which documents the live app — manifest, data files, the projection
 service). Nothing described here is wired into the site:
-`Atlas/atlas_manifest.json`'s `benchmark.rows` stays `[]`/pending regardless
+`web/data/atlas_manifest.json`'s `benchmark.rows` stays `[]`/pending regardless
 of what these documents say, until the repository owner explicitly signs off.
 
 ## Read these in order

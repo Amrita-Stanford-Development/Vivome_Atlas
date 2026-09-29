@@ -14,7 +14,7 @@ export notebook's own real, saved embedding for all 1,490 SCoPE2 protein
 cells (sha256-verified against BUNDLE_MANIFEST.json when it was added --
 see service/model/app_export/README.md). Labels come from
 service/model/app_export/atlas_PROT_v3_meta.csv's true_class_name column,
-in that file's own row order -- never Atlas/atlas_PROT_lat128.csv, a
+in that file's own row order -- never web/data/atlas_PROT_lat128.csv, a
 legacy file with an unverified row order (see
 Documentation/known-limitations.md).
 

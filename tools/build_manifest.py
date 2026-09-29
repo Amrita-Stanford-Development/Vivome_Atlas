@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Atlas/atlas_manifest.json from the metadata CSVs.
+"""Generate web/data/atlas_manifest.json from the metadata CSVs.
 
 Every number emitted here is computed from data present in this repository.
 Metrics with no source data yet — currently only benchmark rows against
@@ -18,7 +18,7 @@ from datetime import date
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-ATLAS_DIR = REPO_ROOT / "Atlas"
+ATLAS_DIR = REPO_ROOT / "web" / "data"
 OUTPUT_PATH = ATLAS_DIR / "atlas_manifest.json"
 SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
 V3_TABLES_DIR = SERVICE_MODEL_DIR / "v3_tables"
@@ -121,7 +121,7 @@ def build_deployed_architecture_facts(decisive_summary: dict, feature_space_deta
 
 def build_model_seeds(reference_seeds_rows: list[dict], provenance: dict) -> dict:
     """model.seeds: a seed COUNT (rendered with 0 decimal places,
-    js/panels.js:buildModelCard), not an accuracy — the accuracy and its CI
+    web/js/panels.js:buildModelCard), not an accuracy — the accuracy and its CI
     go in `basis`, which is exactly what the UI surfaces alongside it."""
     n_seeds = len(reference_seeds_rows)
     mean_bal_acc = provenance["reference_seed_mean_bal_acc"]
@@ -279,7 +279,7 @@ def build_manifest(
         # No architecture change is currently in flight — the last one this
         # field described (CrossModalNet -> the frozen RNA-only reference
         # above) is complete, so there is no "next" to report. The schema
-        # keeps supporting this field (js/panels.js:buildNextReferenceCard)
+        # keeps supporting this field (web/js/panels.js:buildNextReferenceCard)
         # for whenever the next one starts.
         "next_reference": None,
         "previous_release": previous_release,
@@ -296,7 +296,7 @@ def build_manifest(
                 "note": "Git LFS object (~1.43 GB) is not present in this checkout.",
                 "remedy": "git lfs install && git lfs pull",
             },
-            "prot_expression": {"status": "available", "note": "Atlas/atlas_PROT_lat128.csv"},
+            "prot_expression": {"status": "available", "note": "web/data/atlas_PROT_lat128.csv"},
             "latent_coordinates": {
                 "status": "not_distributed",
                 "note": "Only the 3-component PCA projection ships with this build.",

@@ -67,7 +67,7 @@ export function manifestFixture() {
         note: 'Git LFS object (~1.43 GB) is not present in this checkout.',
         remedy: 'git lfs install && git lfs pull',
       },
-      prot_expression: { status: 'available', note: 'Atlas/atlas_PROT_lat128.csv' },
+      prot_expression: { status: 'available', note: 'web/data/atlas_PROT_lat128.csv' },
     },
   };
 }

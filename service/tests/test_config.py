@@ -1,6 +1,6 @@
 """Drift detection for hardcoded config constants that duplicate a fact
 derivable from real reference data. Not a way to eliminate the duplication
-(service/ stays deliberately independent of Atlas/'s data files —
+(service/ stays deliberately independent of web/data/'s data files —
 CLAUDE.md — and a config constant serving as an explicit, reviewed
 declaration of what's supported is the same pattern already used for
 CONFUSABLE_PAIRS and SHIPPED_PROPERTIES), but catches the case a code

@@ -1274,8 +1274,8 @@
             async loadData() {
                 try {
                     const [rnaResponse, protResponse] = await Promise.all([
-                        fetch('./Atlas/metadata_RNA_lat128.csv'),
-                        fetch('./Atlas/metadata_PROT_lat128.csv')
+                        fetch('./data/metadata_RNA_lat128.csv'),
+                        fetch('./data/metadata_PROT_lat128.csv')
                     ]);
                     if (!rnaResponse.ok) throw new Error(`Failed to load RNA metadata: ${rnaResponse.status}`);
                     if (!protResponse.ok) throw new Error(`Failed to load PROT metadata: ${protResponse.status}`);
@@ -1711,7 +1711,7 @@
                 if (modality === 'prot') {
                     if (!this.geneProfileLoadPromise) {
                         this.geneProfileLoadPromise = this._streamAllProfiles(
-                            'prot', ['./Atlas/atlas_PROT_lat128.csv']
+                            'prot', ['./data/atlas_PROT_lat128.csv']
                         );
                     }
                     await this.geneProfileLoadPromise;
@@ -1721,8 +1721,8 @@
 
                 // RNA: stream-search (files may be very large / LFS-stored)
                 return this._streamSearchProfile(cellData, modality, [
-                    './Atlas/atlas_RNA_lat128-001-part1.csv',
-                    './Atlas/atlas_RNA_lat128-001-part2.csv'
+                    './data/atlas_RNA_lat128-001-part1.csv',
+                    './data/atlas_RNA_lat128-001-part2.csv'
                 ]);
             }
 
@@ -1896,9 +1896,9 @@
                 }
             }
             
-            // Mirrors isLfsPointer in js/manifest.js. This class lives in a classic
+            // Mirrors isLfsPointer in web/js/manifest.js. This class lives in a classic
             // script, so it cannot `import` directly; converting the script to a
-            // module would remove the copy. Until then tests/lfs.test.js asserts
+            // module would remove the copy. Until then web/tests/lfs.test.js asserts
             // the magic string below is byte-identical to LFS_MAGIC in that module,
             // so the two cannot drift apart silently.
             isLfsPointer(text) {

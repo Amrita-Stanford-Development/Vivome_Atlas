@@ -228,7 +228,7 @@ class TestBuildDeployedArchitectureFacts(unittest.TestCase):
 
 class TestBuildModelSeeds(unittest.TestCase):
     def test_value_is_a_seed_count_not_an_accuracy(self):
-        # js/panels.js:buildModelCard renders this with 0 decimal places —
+        # web/js/panels.js:buildModelCard renders this with 0 decimal places —
         # an accuracy like 0.7143 would render as "1". The count belongs in
         # value; the accuracy and its CI belong in basis.
         rows = [{"seed": str(i)} for i in range(5)]
@@ -258,7 +258,7 @@ class TestReadLatentCentroidCosine(unittest.TestCase):
 
 class TestReadModalityProbeAccuracy(unittest.TestCase):
     def test_value_is_a_fraction_not_a_percent(self):
-        # js/manifest.js:formatPercent multiplies by 100 — a value already
+        # web/js/manifest.js:formatPercent multiplies by 100 — a value already
         # in percent (98.99) would render as "9899.3%".
         metric = read_modality_probe_accuracy({
             "modality_probe_balanced_accuracy_pct": 98.99328859060402,

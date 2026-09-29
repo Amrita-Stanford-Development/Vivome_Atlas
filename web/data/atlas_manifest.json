@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "atlas_version": "0.2.0",
-  "generated": "2026-09-23",
+  "generated": "2026-09-30",
   "model": {
     "name": "VivOME v3 reference",
     "latent_dim": 128,
@@ -768,7 +768,7 @@
     },
     "prot_expression": {
       "status": "available",
-      "note": "Atlas/atlas_PROT_lat128.csv"
+      "note": "web/data/atlas_PROT_lat128.csv"
     },
     "latent_coordinates": {
       "status": "not_distributed",

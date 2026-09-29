@@ -32,14 +32,14 @@ tracked via Git LFS — see `.gitattributes`) means this can't happen again.
   `atlas_PROT_v3_meta.csv` exactly.
 - **`atlas_PROT_v3_meta.csv`** — per-cell metadata for the same 1,490
   cells, same row order as the embedding above. Use the `true_class_name`
-  column for ground-truth labels — **not** `Atlas/atlas_PROT_lat128.csv`,
+  column for ground-truth labels — **not** `web/data/atlas_PROT_lat128.csv`,
   a legacy, pre-v3 file with an unrelated, unverified row order (see
   `Documentation/known-limitations.md`).
 - **`blood_joint_cells_by_proteins_GENELEVEL.tsv`** — the real raw SCoPE2
   protein-by-gene matrix (1,490 cells × 2,935 native genes) the notebook's
   `load_proteomics()` actually reads. This is the correct input for
   reproducing the notebook's pipeline end to end — not
-  `Atlas/atlas_PROT_lat128.csv`, which is restricted to a ~2,907-gene
+  `web/data/atlas_PROT_lat128.csv`, which is restricted to a ~2,907-gene
   RNA-intersection subset and predates the v3 model entirely.
 - **`BUNDLE_MANIFEST.json`** — the full v3 export bundle's file manifest
   (24 files, sha256 + byte count each). Kept for provenance and to verify

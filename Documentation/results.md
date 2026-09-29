@@ -44,7 +44,7 @@ either `service/model/reference_embedding.npy` /
 reconstruction, and protein labels come from
 `docs/plans/nb1d/scope2_cell_ids.csv` for the 5-seed numbers (confirmed
 identical, row for row, to `atlas_PROT_v3_meta.csv`'s `true_class_name` and
-to `Atlas/atlas_PROT_lat128.csv`'s `class_name`) — never a file with an
+to `web/data/atlas_PROT_lat128.csv`'s `class_name`) — never a file with an
 unverified row order (see [known-limitations.md](known-limitations.md)).
 
 **Sanity check (run before trusting anything else here, `v3_seed0`/shipped
@@ -568,6 +568,6 @@ discipline applies to the pool-first-vs-post-hoc-masking kNN choice above.
   scANVI-across-seeds section). Seeds 1 and 2 reproduced closely. Not
   investigated further here; worth knowing before treating any single
   scANVI seed's number as fixed.
-- `Atlas/atlas_manifest.json`'s `benchmark.rows` is untouched — still `[]`,
+- `web/data/atlas_manifest.json`'s `benchmark.rows` is untouched — still `[]`,
   `status: "pending"` — regardless of everything above. Nothing here is
   wired into the live site.
