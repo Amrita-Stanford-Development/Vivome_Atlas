@@ -15,9 +15,13 @@ Research report, 2026-09-24. Source for the Tier 1 and Tier 2 items in
 >    now fixed; a smoothing graph on raw values; no log transform of linear
 >    intensities; a coverage floor refusing 79 to 100 percent of real MS cells). These
 >    come before any accuracy work.
-> 3. **The lead over scANVI is now established on SCoPE2**: paired bootstrap CIs exclude
+> 3. ~~**The lead over scANVI is now established on SCoPE2**: paired bootstrap CIs exclude
 >    zero on every seed (+9.1 to +14.4 points restricted, +21.7 to +32.7 unrestricted,
->    shared kNN rule). It still needs at least two more MS datasets, as the report says.
+>    shared kNN rule).~~ **Corrected 2026-09-29 (Track D, T1 NB1d):** that lead holds for
+>    the shipped checkpoint `v3_seed0` only. Across five v3 seeds, scANVI is ahead under
+>    the restricted shared kNN rule in 12 of 15 seed pairings; v3 reliably leads only
+>    unrestricted (12 of 15). See `VivOME_TODO.md` §5. Any claimed lead still needs at
+>    least two more MS datasets, as the report says.
 >
 > Published v3 RNA to RNA numbers (95.5 / 74.8) included training cells; the honest
 > test cell numbers are 93.2 / 65.7. See `VivOME_TODO.md` for current verified numbers.
