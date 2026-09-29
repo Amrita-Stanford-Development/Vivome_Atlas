@@ -18,7 +18,7 @@ evaluated as a possible replacement. Every "Ours" row below is a 5-seed
 mean ± SD (min–max in parentheses), computed by
 `benchmark/evaluate.py`'s real, unchanged scoring functions
 against each seed's own RNA reference and SCoPE2 protein embeddings
-(`New_Files/NB1d/embeddings/`, gitignored — the small tables anything here
+(`data/incoming/NB1d/embeddings/`, gitignored — the small tables anything here
 cites are committed at `research/notebook-outputs/nb1d/`). A single seed's number is never
 reported alone again in this section: `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv`
 has every individual seed's score if you need one.
