@@ -118,15 +118,21 @@ fixed and zero-shot on the query.**
    (PBMC240 raw, real ~75%-missing data, lineage-level labels — see
    `docs/plans/nb1d/`) is scored by recall per lineage, not plain accuracy —
    accuracy is uninformative at this sample's 117-lymphoid-vs-5-myeloid
-   split. The shipped architecture's 5-seed mean **lymphoid recall**
-   (52.8% ± 7.7%, n=117) falls well *below* the 95.9% trivial
-   majority-class floor; a second candidate architecture ("V2") reaches
-   92.8% ± 0.8% — still below the floor, but a large, low-variance margin
-   over the shipped architecture on real messy data specifically. (Both
-   architectures' apparent 100%/80% myeloid recall, n=5, is anecdotal, not
-   a competence claim.) V2 is not shipped and does not carry that margin
-   onto SCoPE2 (see `Documentation/results.md`); this is recorded as an
-   open question, not a recommendation to switch.
+   split, and a per-class recall is only meaningful read against its
+   counterpart, not against an overall accuracy figure: a trivial model
+   that calls every cell "lymphoid" scores 100% lymphoid recall and 0%
+   myeloid recall. The shipped architecture's 5-seed mean **lymphoid
+   recall** (52.8% ± 7.7%, n=117) paired with its **myeloid recall**
+   (100.0%, n=5, anecdotal) shows real separation between lineages, not a
+   one-class collapse; a second candidate architecture ("V2") reaches
+   92.8% ± 0.8% lymphoid recall (80.0% myeloid, n=5, anecdotal) — a large,
+   low-variance margin over the shipped architecture on real messy data
+   specifically. (With only 5 myeloid cells, myeloid recall for every
+   architecture is anecdotal — one misclassified cell moves it 20
+   points — reported alongside lymphoid recall only to show overall
+   behavior, never to rank on its own.) V2 is not shipped and does not
+   carry that margin onto SCoPE2 (see `Documentation/results.md`); this is
+   recorded as an open question, not a recommendation to switch.
 
 ## Versioning
 

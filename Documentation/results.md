@@ -446,6 +446,35 @@ either.** 122 of the 237 cells have a confident weak label (**117
 lymphoid, 5 myeloid**); the other 115 ("unassigned") are excluded from
 scoring, matching how T1 NB1d itself scored this arm.
 
+### What scANVI actually received on PBMC240
+
+"Ours" (v3, V2) never sees PBMC240 in a preprocessing choice — the live
+service's own fixed pipeline runs identically regardless of input. scANVI,
+by contrast, is trained from scratch on whatever matrix it's handed, so
+its input is a real methodological choice that needs stating exactly, not
+assumed neutral. Two variants were tested:
+
+| | **raw** | **processed** |
+|---|---|---|
+| Source | `service/examples/pbmc240_proteins_raw.tsv` (the real DIA-NN report) | `service/examples/pbmc240_zscored_all_genes.csv` (this project's own earlier A2-investigation recipe) |
+| Scale | Linear (as-measured intensity units) — **not log-transformed** | log2(x+1) |
+| Per-cell normalization | None | Median-normalized (subtract each cell's own median, add back the global median of medians) |
+| Missing values, within-panel | Left as NaN | Imputed: left-censored `Normal(1st percentile, 0.3)` |
+| Genes | Reduced to the shared 2,907-gene fair-benchmark space; PBMC240 detected 1,215 of them | This file's own ≥5% detection-rate filter kept 2,402 genes; 1,111 of those overlap the shared 2,907-gene space |
+| Final step, both variants | Per-gene z-score over observed values only, then **any entry still missing after reindexing to the shared 2,907-gene space set to 0** (genes never detected, for "raw"; genes outside this file's own filtered panel, for "processed" — 1,796 columns, 61.8% of the matrix) | (same) |
+
+**Neither variant is NaN-free once reindexed to the full shared gene
+space** — "processed" is not "raw, but complete"; it differs in how the
+genes it does have are prepared (log-transformed, per-cell normalized,
+imputed within its own smaller panel) and in exactly which genes those
+are, not in whether missingness exists. The result reported as scANVI's
+number in the table below is **the better of the two inputs**, so no
+version of "scANVI underperforms because of a preprocessing
+disadvantage" survives uncorrected; both variants' own numbers are also
+shown for transparency. Source for both:
+`tools/fair_benchmark/pbmc240_lineage_prep.py`; per-seed results:
+`docs/plans/nb1d/scanvi_pbmc240_input_variants.csv`.
+
 **Plain accuracy is not reported here — it is uninformative at 117 vs. 5.**
 A single overall accuracy number is dominated almost entirely by lymphoid
 performance (117 of 122 cells) and can hide a method that gets every
@@ -458,52 +487,59 @@ modes directly; accuracy alone shows neither.
 |---|---|---|---|---|
 | **Ours (v3, 5-seed)** | native nearest-centroid → lineage | 52.82 ± 7.73 (43.59–63.25) | 100.0 ± 0.0 (5/5, every seed) | ~47% lymphoid, ~50% myeloid, ~3% other lineages |
 | **Ours (V2, 5-seed)** | native nearest-centroid → lineage | 92.82 ± 0.76 (92.31–94.02) | 80.0 ± 0.0 (4/5, every seed) | ~78% lymphoid, ~17% myeloid, ~5% other lineages |
-| scANVI (3-seed) | shared kNN rule → lineage | 8.83 (5.13–11.97) | 100.0 (5/5, every seed) | ~15% lymphoid, **~74% myeloid**, ~11% erythroid/other |
-| scANVI (3-seed) | native scANVI classifier → lineage | 6.55 (3.42–12.82) | 100.0 (5/5, every seed) | ~8% lymphoid, **~91% myeloid** |
+| scANVI, **processed input (better of the two — reported result)** | shared kNN rule → lineage | 17.95 (15.38–19.66) | 100.0 (5/5, every seed) | ~16% lymphoid, **~66% myeloid**, ~17% erythroid/other |
+| scANVI, **processed input (better of the two — reported result)** | native scANVI classifier → lineage | 21.37 (5.13–50.43) | 100.0 (5/5, every seed) | ~17% lymphoid, **~82% myeloid** |
+| scANVI, raw input | shared kNN rule → lineage | 8.83 (5.13–11.97) | 100.0 (5/5, every seed) | ~15% lymphoid, **~74% myeloid**, ~11% erythroid/other |
+| scANVI, raw input | native scANVI classifier → lineage | 6.55 (3.42–12.82) | 100.0 (5/5, every seed) | ~9% lymphoid, **~91% myeloid** |
 
 Source: `docs/plans/nb1d/real_data_per_seed.csv` ("ours" recall and
 predicted-composition columns) and
-`docs/plans/nb1d/scanvi_pbmc240_lineage_recall_and_composition.csv`
-(scANVI, computed from the cached per-cell predictions
-`tools/fair_benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage_seed{0,1,2}.npy`
+`docs/plans/nb1d/scanvi_pbmc240_input_variants.csv` (scANVI, both input
+variants, computed from the cached per-cell predictions
+`tools/fair_benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage{,_processed}_seed{0,1,2}.npy`
 — gitignored, but not disposable; see `tools/fair_benchmark/.gitignore` —
 produced by `tools/fair_benchmark/scanvi_run_pbmc240.py`, a fresh
-integration of RNA + this arm's own real PBMC240 raw matrix in the shared
-gene space, not the SCoPE2 scANVI run above; a different query set needs
-its own joint embedding). Class→lineage mapping is
+integration of RNA + this arm's own real PBMC240 matrix in the shared gene
+space, not the SCoPE2 scANVI run above; a different query set needs its
+own joint embedding). Class→lineage mapping is
 `service/model/reference_metadata.csv`'s own `lineage` column, the same one
 the live service and every other lineage figure in this project use.
 
 **Reading this table — recall and composition tell a different, more
 specific story than the accuracy number this section previously led with.**
-**Every method's 5/5-myeloid-cells-correct is anecdotal, not evidence of
-real myeloid competence** — with only 5 myeloid cells, one misclassified
-cell would already drop this to 80%, and scANVI's apparent "100% myeloid
-recall" is not competence at all: its predicted composition shows it
-labels **74–91% of all 237 cells "myeloid"**, so the 5 real myeloid cells
-are simply swept up inside a hugely over-predicted bucket, not correctly
-identified. This is the majority-class-floor problem inverted: v3 and V2's
-5/5 is a *plausible* real signal given their sane overall composition
-(myeloid predicted 17–50% of the time, not 74%+); scANVI's is not. On the
-harder, actually-informative number — **lymphoid recall, where n=117 makes
-the estimate meaningful** — **V2 (92.82% ± 0.76) is close to but still
-below the 95.90% majority-class floor; v3 (52.82% ± 7.73) is well below
-it; scANVI (6.55–8.83%) is far below it, an order of magnitude worse than
-guessing "lymphoid" for everyone.** **None of the three methods clears the
-trivial floor on this arm.** The comparison that matters here is not
-"which method wins" but the one T1 NB1d actually used PBMC240 for: V2's
-lymphoid recall is a large, low-variance improvement over v3's on real
-data with substantial missingness — the reason V2 was carried forward as a
-candidate (`docs/plans/nb1d/nb1d_summary.json`'s `decision.carry_V2:
-true`) — even though neither beats the naive baseline, and even though V2
-does not carry that advantage onto SCoPE2 (see the tables above, where V2
-is no better than v3 against scANVI). **Report both findings together,
-honestly:** V2 is the right call for real, messy, high-missingness
-uploads; it is not a strictly better encoder than v3 in every respect
-measured in this document. (See the transductive-vs.-zero-shot caveat near
-the top of this document — it applies here too, and if anything makes
-scANVI's collapse into predicting one dominant lineage more notable, not
-less.)
+The right way to read a per-class recall is paired with its counterpart,
+not against overall accuracy: **a trivial model that calls every cell
+"lymphoid" scores 100% lymphoid recall and 0% myeloid recall** — a single
+recall number in isolation says nothing until read alongside the other
+one. Read as pairs: v3 (52.82% lymphoid, 100.0% myeloid) and V2 (92.82%
+lymphoid, 80.0% myeloid) both show real, non-trivial separation between
+the two lineages — neither is the trivial "call everything one class"
+failure mode. scANVI's best pair (17.95–21.37% lymphoid on the processed
+input, 100.0% myeloid) looks superficially similar to "ours" on myeloid
+recall alone, but its predicted composition (66–82% of all 237 cells
+labelled "myeloid") shows this remains close to that trivial failure mode
+in practice: near-universal "myeloid" predictions trivially catch the 5
+real myeloid cells while missing the large majority of the 117 real
+lymphoid ones — and this is *after* giving scANVI the better-prepared of
+two inputs (see "What scANVI actually received," above); the raw input's
+numbers (8.83%/6.55% lymphoid, 74–91% myeloid composition) are worse
+still. **With only 5 myeloid
+cells, every method's myeloid recall is anecdotal — one misclassified cell
+moves it by 20 points — and is reported alongside lymphoid recall only so
+a method's overall behavior (real separation vs. one-class collapse) is
+visible, never to rank methods on it in isolation.** The comparison that
+matters here is not "which method wins" but the one T1 NB1d actually used
+PBMC240 for: V2's lymphoid recall is a large, low-variance improvement
+over v3's on real data with substantial missingness — the reason V2 was
+carried forward as a candidate (`docs/plans/nb1d/nb1d_summary.json`'s
+`decision.carry_V2: true`) — even though V2 does not carry that advantage
+onto SCoPE2 (see the tables above, where V2 is no better than v3 against
+scANVI). **Report both findings together, honestly:** V2 is the right
+call for real, messy, high-missingness uploads; it is not a strictly
+better encoder than v3 in every respect measured in this document. (See
+the transductive-vs.-zero-shot caveat near the top of this document — it
+applies here too, and if anything makes scANVI's near-collapse into
+predicting one dominant lineage more notable, not less.)
 
 ## Two protocols, not a chosen one
 
