@@ -8,9 +8,9 @@ Latent embeddings and metadata, latent dim 128.
 |---|---|
 | `atlas_RNA_lat128.parquet` | RNA coordinates — **Git LFS**, ~1.43 GB |
 | `atlas_RNA_lat128-001-part1.csv`, `-part2.csv` | Split CSV form of the same — **Git LFS** |
-| `metadata_RNA_lat128.csv` | RNA metadata, 85,233 rows — from the v3 reference (`tools/promote_v3_atlas.py`) |
+| `metadata_RNA_lat128.csv` | RNA metadata, 85,233 rows — from the v3 reference (`scripts/archive/promote_v3_atlas.py`) |
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
-| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows — from the v3 reference (`tools/promote_v3_atlas.py`) |
+| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows — from the v3 reference (`scripts/archive/promote_v3_atlas.py`) |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
 
 RNA metadata columns: `latent_dim, modality, orig_index, class_idx,
@@ -22,7 +22,7 @@ class_name, pred_class_name, max_cos_ref, abstained, PC1, PC2, PC3`.
 what this column has always meant); `pred_class_name`, `max_cos_ref`, and
 `abstained` are extra columns beyond the RNA schema — the v3 reference's own
 prediction, its similarity to the reference, and whether it would abstain.
-Both `atlas.html` and `tools/build_manifest.py` read columns by name and
+Both `atlas.html` and `scripts/build_manifest.py` read columns by name and
 ignore the ones they don't recognise.
 
 Class names are quoted CSV fields and **some contain commas** (`class_idx` 2,

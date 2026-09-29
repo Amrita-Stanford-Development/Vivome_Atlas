@@ -1,8 +1,8 @@
 # Architecture
 
-All scripts live in `tools/fair_benchmark/`, use repo-relative paths (work
+All scripts live in `benchmark/`, use repo-relative paths (work
 from a fresh clone, no hardcoded machine-specific paths), and write their
-outputs to `tools/fair_benchmark/results/` (`.gitignore`d — regenerate
+outputs to `benchmark/results/` (`.gitignore`d — regenerate
 locally, don't expect it to be there after a fresh clone).
 
 ## Run order
@@ -19,7 +19,7 @@ recompute_v2.py              # 3. scores EVERYTHING: PCA, Harmony (refit fresh),
                               #    majority-class baseline. No retraining.
 ours_run.py                  # 3. "ours" through the same harness (independent
                               #    of recompute_v2.py; reads real repo artifacts
-                              #    directly, not tools/fair_benchmark/results/)
+                              #    directly, not benchmark/results/)
 ```
 
 `evaluate.py` is imported by every scoring step (`recompute_v2.py`,
@@ -268,7 +268,7 @@ python3 -m pip install -r service/requirements.txt   # includes scikit-learn,
 python3 -m pip install harmonypy maxfuse scarches scvi-tools scglue \
     anndata networkx   # one-off benchmark-only dependencies, not shipped
                         # with the real service
-cd tools/fair_benchmark
+cd benchmark
 python3 load.py
 python3 maxfuse_run.py      # ~21 min
 python3 scglue_run.py       # ~29 min

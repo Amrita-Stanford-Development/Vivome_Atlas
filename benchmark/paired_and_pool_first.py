@@ -24,7 +24,7 @@ from service.pipeline import reference
 from evaluate import knn_classifier_predict, pool_first_knn_predict, score, bootstrap_ci, paired_bootstrap_diff
 
 D = Path(__file__).resolve().parent / "results"
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[1]
 MISSING_ROW = 42616  # see Documentation/bugs-and-fixes.md#7
 
 rna_X = np.load(D / "rna_X.npy")

@@ -142,4 +142,4 @@ fixed and zero-shot on the query.**
   from a one-time HGNC bulk download — provenance, source sha256, and the
   derived table's own sha256 in `service/model/gene_id_map_v1_provenance.json`.
 - Site-facing atlas version: `ATLAS_VERSION` in `service/config.py` /
-  `tools/build_manifest.py`.
+  `scripts/build_manifest.py`.

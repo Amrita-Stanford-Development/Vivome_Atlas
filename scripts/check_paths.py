@@ -51,7 +51,6 @@ ALLOWED_MISSING = (
     "Atlas/shared_genes_lat128.txt",
     "Atlas/Data/",
     "benchmark/PROTOCOL.md",
-    "tools/fair_benchmark/PROTOCOL.md",
     # NB1b's tables are cited as MIN_OBSERVED_GENES's evidence but were never
     # committed; the owner has to supply them. Remove once they land.
     "docs/plans/nb1b/",

@@ -33,14 +33,14 @@ them fixed.
 import sys, json
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 import pandas as pd
 from service.pipeline import reference
 from evaluate import knn_classifier_predict, nearest_centroid_predict, evaluate_arm
 
 D = Path(__file__).resolve().parent
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[1]
 APP_EXPORT = REPO / "service" / "model" / "app_export"
 MISSING_ROW = 42616  # neutrophil cell absent from the Atlas CSVs; drop to match baselines
 

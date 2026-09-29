@@ -33,7 +33,7 @@ from pathlib import Path, PureWindowsPath
 import numpy as np
 import pandas as pd
 
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[1]
 OUT = Path(__file__).resolve().parent / "results"
 NB1D_LABELS = REPO / "docs" / "plans" / "nb1d" / "pbmc240_raw_cell_ids.csv"
 
@@ -42,7 +42,7 @@ def _clean_dia_nn_cell_id(raw_header: str) -> str:
     """DIA-NN report columns are Windows raw-file paths. Duplicated from
     service/pipeline/alignment.py's helper of the same name (Track B,
     branch hardening/b, not yet merged here) rather than cross-branch
-    importing -- this branch only owns tools/fair_benchmark/."""
+    importing -- this branch only owns benchmark/."""
     basename = PureWindowsPath(raw_header).name
     if basename.lower().endswith(".raw"):
         basename = basename[: -len(".raw")]

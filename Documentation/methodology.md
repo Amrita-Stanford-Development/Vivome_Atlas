@@ -86,7 +86,7 @@ code, and the same one the original export notebook's own "Section E"
 analysis used ("does restricting to the supported label space help... a
 product decision, not a methodology one").
 
-## The shared evaluation protocol (`tools/fair_benchmark/evaluate.py`)
+## The shared evaluation protocol (`benchmark/evaluate.py`)
 
 Every method — floors, baselines, and "ours" alike — is scored by the
 *same* two prediction rules, so that a difference in the reported number

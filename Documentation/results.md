@@ -16,7 +16,7 @@ trained runs of the same architecture; `V2_seed0`–`V2_seed4` are a second
 candidate architecture (mini-upload gene z-scoring, same shape as v3)
 evaluated as a possible replacement. Every "Ours" row below is a 5-seed
 mean ± SD (min–max in parentheses), computed by
-`tools/fair_benchmark/evaluate.py`'s real, unchanged scoring functions
+`benchmark/evaluate.py`'s real, unchanged scoring functions
 against each seed's own RNA reference and SCoPE2 protein embeddings
 (`New_Files/NB1d/embeddings/`, gitignored — the small tables anything here
 cites are committed at `docs/plans/nb1d/`). A single seed's number is never
@@ -147,7 +147,7 @@ regardless of anything above.
 
 Source: `docs/plans/nb1d/ours_scope2_5seed_scores.csv` (per-seed),
 `docs/plans/nb1d/ours_scope2_5seed_family_summary.csv` (this table),
-computed by `tools/fair_benchmark/evaluate.py`'s unchanged
+computed by `benchmark/evaluate.py`'s unchanged
 `knn_classifier_predict`, `nearest_centroid_predict`, and
 `pool_first_knn_predict` against T1 NB1d's per-seed embeddings. v3's
 shared-kNN-rule SD (10.60 points) is comparable in size to the entire gap
@@ -388,7 +388,7 @@ does in production. The real code (`_assign_knn`) restricts the *candidate
 pool* of RNA cells to the supported classes **before** running the
 nearest-neighbour search — a structurally different algorithm, not just a
 different bookkeeping step. `pool_first_knn_predict` in
-`tools/fair_benchmark/evaluate.py` mirrors `_assign_knn` exactly (same
+`benchmark/evaluate.py` mirrors `_assign_knn` exactly (same
 `chunked_topk` helper, same pool-restriction-then-vote logic), so this
 table shows what the product would actually deliver if `ASSIGNMENT_METHOD`
 were set to `"knn"` — distinct from `nearest_centroid`, the method
@@ -472,7 +472,7 @@ number in the table below is **the better of the two inputs**, so no
 version of "scANVI underperforms because of a preprocessing
 disadvantage" survives uncorrected; both variants' own numbers are also
 shown for transparency. Source for both:
-`tools/fair_benchmark/pbmc240_lineage_prep.py`; per-seed results:
+`benchmark/pbmc240_lineage_prep.py`; per-seed results:
 `docs/plans/nb1d/scanvi_pbmc240_input_variants.csv`.
 
 **Plain accuracy is not reported here — it is uninformative at 117 vs. 5.**
@@ -496,9 +496,9 @@ Source: `docs/plans/nb1d/real_data_per_seed.csv` ("ours" recall and
 predicted-composition columns) and
 `docs/plans/nb1d/scanvi_pbmc240_input_variants.csv` (scANVI, both input
 variants, computed from the cached per-cell predictions
-`tools/fair_benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage{,_processed}_seed{0,1,2}.npy`
-— gitignored, but not disposable; see `tools/fair_benchmark/.gitignore` —
-produced by `tools/fair_benchmark/scanvi_run_pbmc240.py`, a fresh
+`benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage{,_processed}_seed{0,1,2}.npy`
+— gitignored, but not disposable; see `benchmark/.gitignore` —
+produced by `benchmark/scanvi_run_pbmc240.py`, a fresh
 integration of RNA + this arm's own real PBMC240 matrix in the shared gene
 space, not the SCoPE2 scANVI run above; a different query set needs its
 own joint embedding). Class→lineage mapping is

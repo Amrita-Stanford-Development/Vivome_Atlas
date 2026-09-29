@@ -62,17 +62,17 @@ metric into HTML. See [docs/manifest.md](docs/manifest.md).
 Regenerate the manifest and commit it:
 
 ```bash
-python3 tools/build_manifest.py
+python3 scripts/build_manifest.py
 ```
 
-Bump `ATLAS_VERSION` in `tools/build_manifest.py` for a real release; the full
+Bump `ATLAS_VERSION` in `scripts/build_manifest.py` for a real release; the full
 protocol is on `versions.html` and in [docs/manifest.md](docs/manifest.md).
 
 ## Tests
 
 ```bash
 node --test                                          # from the repo root
-cd tools && python3 -m unittest discover             # manifest builder
+python3 -m unittest discover -s scripts             # manifest builder + repo path check
 python3 -m unittest discover -s service/tests -t .   # projection service, from the repo root
 ```
 

@@ -98,7 +98,7 @@ choices.
 web pages display. Regenerate it after any change to the metadata CSVs:
 
 ```bash
-python3 tools/build_manifest.py
+python3 scripts/build_manifest.py
 ```
 
 Metrics that require the training pipeline — latent-space alignment, the
@@ -112,7 +112,7 @@ No dependencies to install for the app itself. From the repository root:
 
 ```bash
 node --test                                          # JS modules under web/js/
-cd tools && python3 -m unittest discover             # manifest builder
+python3 -m unittest discover -s scripts             # manifest builder + repo path check
 python3 -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
 ```
 

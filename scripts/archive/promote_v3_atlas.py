@@ -3,7 +3,7 @@
 
 Writes web/data/metadata_RNA_lat128.csv and web/data/metadata_PROT_lat128.csv in
 their existing column schema, from service/model/v3_pending/app_export/
-atlas_{RNA,PROT}_v3_meta.csv — so atlas.html, tools/build_manifest.py, and
+atlas_{RNA,PROT}_v3_meta.csv — so atlas.html, scripts/build_manifest.py, and
 every doc that names these two files needs zero changes; only their content
 changes, in place.
 
@@ -13,14 +13,14 @@ protein `true_class_name` equal the old `class_name`, row for row — the
 join atlas.html's gene-profile feature depends on (matching a raw-LFS-file
 row position against `orig_index`) survives this promotion unchanged.
 
-Run once, from the repo root: python3 tools/promote_v3_atlas.py
+Run once, from the repo root: python3 scripts/archive/promote_v3_atlas.py
 """
 from __future__ import annotations
 
 import csv
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 V3_APP_EXPORT = REPO_ROOT / "service" / "model" / "v3_pending" / "app_export"
 ATLAS_DIR = REPO_ROOT / "web" / "data"
 REFERENCE_METADATA = REPO_ROOT / "service" / "model" / "reference_metadata.csv"

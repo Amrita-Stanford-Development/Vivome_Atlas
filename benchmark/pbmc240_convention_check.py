@@ -21,13 +21,13 @@ input, is the thing being measured.
 """
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np
 import pandas as pd
 
 from service.pipeline import alignment, smoothing, encoder, reference
 
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[1]
 
 raw_df = pd.read_csv(REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv", sep="\t")
 raw_df = raw_df.dropna(subset=["Genes"])

@@ -247,7 +247,7 @@ time just to recover something that should have been saved the first time.
 
 ## 7. `Atlas/atlas_RNA_lat128-001-part{1,2}.csv` are missing one cell between them
 
-The baselines' RNA reference load (`tools/fair_benchmark/load.py`) counts
+The baselines' RNA reference load (`benchmark/load.py`) counts
 85,232 cells; `service/model/reference_embedding.npy` (the real, live
 artifact) has 85,233. Tracing it down: `-part1.csv` ends at
 `orig_index=42615`; `-part2.csv` starts at `orig_index=42617`.
@@ -260,7 +260,7 @@ Git-LFS-sized halves.
 **Fix:** since every baseline had already trained on the 85,232-cell set
 (retraining them was explicitly out of scope — see
 [known-limitations.md](known-limitations.md)), "ours" is aligned *down* to
-match: `tools/fair_benchmark/ours_run.py` drops row 42616 from
+match: `benchmark/ours_run.py` drops row 42616 from
 `reference_embedding.npy` before fitting anything, rather than the Atlas
 CSVs being fixed to add the missing row back (which would require
 retraining every baseline on the corrected 85,233-cell set instead). One

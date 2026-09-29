@@ -366,7 +366,7 @@ within 1 point of v3.
 | `service/pipeline/smoothing.py`, preprocessing conventions in `alignment.py` and `pipeline.py` Stage 1 and 2 | A2 | read only |
 | New `service/pipeline/gene_ids.py`, input validation, export, FAISS, model card, logging | B | read only |
 | New interfaces for label space, abstention, conformal; `encoder.py` hidden feature hook; response schema; `docs/projection-service.md` | C | read only |
-| `tools/fair_benchmark/**` | D | read only |
+| `benchmark/**` | D | read only |
 | `data/**` ingestion scripts and registry | E | read only |
 | Wiring NB4 exports into the pipeline | F | after A2, B, C merge |
 
@@ -514,10 +514,10 @@ No new methods are implemented here. This track only builds the sockets.
 ### Track D, benchmark extension
 
 ```
-Branch: benchmark/d. Owns tools/fair_benchmark/ only. Starts after the rescore
+Branch: benchmark/d. Owns benchmark/ only. Starts after the rescore
 run finishes. Nothing goes on the site; benchmark.rows stays pending.
 
-1. Freeze tools/fair_benchmark/PROTOCOL.md before any new run: datasets, cell
+1. Freeze benchmark/PROTOCOL.md before any new run: datasets, cell
    set, decision rules, k, seeds, metrics, CI method. Any later change is
    logged there with the reason.
 

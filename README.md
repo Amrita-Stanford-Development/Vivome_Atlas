@@ -51,7 +51,8 @@ web/data/      latent embeddings, metadata CSVs, atlas_manifest.json
 web/plots/      30 precomputed interactive 3D plots
 web/css/        page.css — shared page styling
 web/js/         manifest.js, panels.js — pure ES modules, unit-tested
-tools/      build_manifest.py and its unittest suite
+scripts/    build_manifest.py, check_paths.py and their unittest suites
+benchmark/  fair comparison harness vs scANVI, MaxFuse, scGLUE, Harmony
 web/tests/      node --test suites for the JS modules
 docs/       documentation (see docs/README.md)
 service/    Phase 5 projection service backend — separate dependencies,
@@ -71,7 +72,7 @@ repository.** This is enforced in code, not by convention — see
 Regenerate after any change to the metadata CSVs:
 
 ```bash
-python3 tools/build_manifest.py
+python3 scripts/build_manifest.py
 ```
 
 ## Tests
@@ -80,7 +81,7 @@ Nothing to install.
 
 ```bash
 node --test                                          # JS modules under web/js/
-cd tools && python3 -m unittest discover             # manifest builder
+python3 -m unittest discover -s scripts             # manifest builder + repo path check
 python3 -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
 ```
 

@@ -67,7 +67,7 @@ from scvi.model import SCVI, SCANVI
 from sklearn.neighbors import KNeighborsClassifier
 
 D = Path(__file__).resolve().parent / "results"
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[1]
 
 SEED = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 VARIANT = sys.argv[2] if len(sys.argv) > 2 else "raw"

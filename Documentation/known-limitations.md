@@ -11,7 +11,7 @@ Google Drive and committed to this repository at `service/model/app_export/`
 original history for context; see [results.md](results.md) for the current
 numbers, which no longer depend on any reconstruction.
 
-**What the problem was:** `tools/fair_benchmark/ours_run.py` originally
+**What the problem was:** `benchmark/ours_run.py` originally
 needed a protein input file to reconstruct "ours" through the shared
 harness, and the only candidate found in this repository, or anywhere on
 the development machine, was `web/data/atlas_PROT_lat128.csv`.
@@ -36,7 +36,7 @@ confirmed absent from this machine by exhaustive search.
 
 **What actually happened once the real files arrived:** re-running "ours"
 directly against `prot_embedding_scope2.npy` (no reconstruction at all —
-see `tools/fair_benchmark/ours_run.py`) confirmed the file-panel theory was
+see `benchmark/ours_run.py`) confirmed the file-panel theory was
 *part* of the story but not the dominant one. The real, bigger cause,
 found via the end-to-end pipeline check this real data finally made
 possible, was a second, separate, and more serious bug:
@@ -183,7 +183,7 @@ are missing one cell (`orig_index=42616`, a neutrophil) that
 "Ours" is aligned down to the baselines' 85,232-cell set rather than the
 baselines being retrained on the corrected 85,233. The Atlas CSVs
 themselves still have this one-row gap; if they're ever regenerated (e.g.
-from `tools/promote_v3_atlas.py`, or however the LFS split was originally
+from `scripts/archive/promote_v3_atlas.py`, or however the LFS split was originally
 produced), it should be fixed at the source rather than patched around
 again in every future benchmarking script.
 

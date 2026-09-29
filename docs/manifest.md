@@ -4,7 +4,7 @@
 web pages display. It is generated, never hand-edited.
 
 ```bash
-python3 tools/build_manifest.py
+python3 scripts/build_manifest.py
 ```
 
 The builder reads `web/data/metadata_RNA_lat128.csv` and
@@ -126,7 +126,7 @@ from data, and `web/tests/fixtures.js` deliberately names one class
 
 1. Freeze inputs — record accession numbers, download dates, and checksums for every dataset.
 2. Train and export, then regenerate the manifest.
-3. Bump `ATLAS_VERSION` in `tools/build_manifest.py` and commit the regenerated manifest.
+3. Bump `ATLAS_VERSION` in `scripts/build_manifest.py` and commit the regenerated manifest.
 4. Tag the release and archive it for a persistent identifier.
 5. Record label stability against the previous version and add it to `versions.html`.
 
@@ -137,7 +137,7 @@ that has a predecessor to compare against.
 
 ```bash
 node --test                                  # web/tests/manifest.test.js, panels.test.js, lfs.test.js
-cd tools && python3 -m unittest discover     # test_build_manifest.py
+python3 -m unittest discover -s scripts     # test_build_manifest.py + repo path check
 ```
 
 The JS suites share `web/tests/fixtures.js`, one manifest shaped like the real
