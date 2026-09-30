@@ -1,0 +1,111 @@
+comparison,rules,model_a,model_b,diff_bal_acc_pct,ci_lo,ci_hi,ci_excludes_zero,favours
+V2 vs v3,nearest_centroid,V2_seed0,v3_seed0,14.3764,10.6135,17.8749,True,V2
+V2 vs v3,nearest_centroid,V2_seed0,v3_seed1,18.5044,15.1880,21.6734,True,V2
+V2 vs v3,nearest_centroid,V2_seed0,v3_seed2,18.5388,15.3509,21.7644,True,V2
+V2 vs v3,nearest_centroid,V2_seed0,v3_seed3,18.2723,14.3933,22.0034,True,V2
+V2 vs v3,nearest_centroid,V2_seed0,v3_seed4,10.8565,7.3234,14.5050,True,V2
+V2 vs v3,nearest_centroid,V2_seed1,v3_seed0,11.0413,7.7279,14.1130,True,V2
+V2 vs v3,nearest_centroid,V2_seed1,v3_seed1,15.1694,12.1251,18.2311,True,V2
+V2 vs v3,nearest_centroid,V2_seed1,v3_seed2,15.2038,12.2594,18.1027,True,V2
+V2 vs v3,nearest_centroid,V2_seed1,v3_seed3,14.9372,11.3358,18.2767,True,V2
+V2 vs v3,nearest_centroid,V2_seed1,v3_seed4,7.5215,4.3316,10.8972,True,V2
+V2 vs v3,nearest_centroid,V2_seed2,v3_seed0,10.6839,7.1382,13.9659,True,V2
+V2 vs v3,nearest_centroid,V2_seed2,v3_seed1,14.8120,11.6947,18.0061,True,V2
+V2 vs v3,nearest_centroid,V2_seed2,v3_seed2,14.8464,11.6060,17.9415,True,V2
+V2 vs v3,nearest_centroid,V2_seed2,v3_seed3,14.5798,10.8713,18.2199,True,V2
+V2 vs v3,nearest_centroid,V2_seed2,v3_seed4,7.1641,3.8041,10.6034,True,V2
+V2 vs v3,nearest_centroid,V2_seed3,v3_seed0,15.0943,11.5470,18.4455,True,V2
+V2 vs v3,nearest_centroid,V2_seed3,v3_seed1,19.2223,16.1452,22.3491,True,V2
+V2 vs v3,nearest_centroid,V2_seed3,v3_seed2,19.2567,16.0667,22.4568,True,V2
+V2 vs v3,nearest_centroid,V2_seed3,v3_seed3,18.9902,15.1661,22.5920,True,V2
+V2 vs v3,nearest_centroid,V2_seed3,v3_seed4,11.5744,8.2459,15.0347,True,V2
+V2 vs v3,nearest_centroid,V2_seed4,v3_seed0,15.0445,11.5936,18.3211,True,V2
+V2 vs v3,nearest_centroid,V2_seed4,v3_seed1,19.1726,16.2873,22.1858,True,V2
+V2 vs v3,nearest_centroid,V2_seed4,v3_seed2,19.2070,16.0485,22.2733,True,V2
+V2 vs v3,nearest_centroid,V2_seed4,v3_seed3,18.9404,15.2507,22.6083,True,V2
+V2 vs v3,nearest_centroid,V2_seed4,v3_seed4,11.5247,8.1277,15.0926,True,V2
+V2 vs v3,shared_knn,V2_seed0,v3_seed0,14.7740,11.7651,17.9791,True,V2
+V2 vs v3,shared_knn,V2_seed0,v3_seed1,16.7265,14.0020,19.5091,True,V2
+V2 vs v3,shared_knn,V2_seed0,v3_seed2,17.1261,14.1992,20.0010,True,V2
+V2 vs v3,shared_knn,V2_seed0,v3_seed3,14.3362,11.2737,17.3764,True,V2
+V2 vs v3,shared_knn,V2_seed0,v3_seed4,9.7777,6.8464,12.7890,True,V2
+V2 vs v3,shared_knn,V2_seed1,v3_seed0,11.8611,8.6990,14.9166,True,V2
+V2 vs v3,shared_knn,V2_seed1,v3_seed1,13.8136,10.8997,16.6836,True,V2
+V2 vs v3,shared_knn,V2_seed1,v3_seed2,14.2132,11.1121,17.1035,True,V2
+V2 vs v3,shared_knn,V2_seed1,v3_seed3,11.4233,8.2848,14.4071,True,V2
+V2 vs v3,shared_knn,V2_seed1,v3_seed4,6.8649,4.0398,9.7231,True,V2
+V2 vs v3,shared_knn,V2_seed2,v3_seed0,9.9877,6.9826,13.0918,True,V2
+V2 vs v3,shared_knn,V2_seed2,v3_seed1,11.9402,9.2318,14.7855,True,V2
+V2 vs v3,shared_knn,V2_seed2,v3_seed2,12.3398,9.3962,15.2088,True,V2
+V2 vs v3,shared_knn,V2_seed2,v3_seed3,9.5498,6.4816,12.4819,True,V2
+V2 vs v3,shared_knn,V2_seed2,v3_seed4,4.9914,2.0696,7.8455,True,V2
+V2 vs v3,shared_knn,V2_seed3,v3_seed0,15.3335,12.2344,18.3592,True,V2
+V2 vs v3,shared_knn,V2_seed3,v3_seed1,17.2859,14.1961,20.2649,True,V2
+V2 vs v3,shared_knn,V2_seed3,v3_seed2,17.6856,14.6238,20.7358,True,V2
+V2 vs v3,shared_knn,V2_seed3,v3_seed3,14.8956,11.8065,17.9780,True,V2
+V2 vs v3,shared_knn,V2_seed3,v3_seed4,10.3372,7.6414,13.2062,True,V2
+V2 vs v3,shared_knn,V2_seed4,v3_seed0,16.3133,13.3599,19.3079,True,V2
+V2 vs v3,shared_knn,V2_seed4,v3_seed1,18.2658,15.4152,21.1258,True,V2
+V2 vs v3,shared_knn,V2_seed4,v3_seed2,18.6654,15.7483,21.6169,True,V2
+V2 vs v3,shared_knn,V2_seed4,v3_seed3,15.8755,12.8314,18.9852,True,V2
+V2 vs v3,shared_knn,V2_seed4,v3_seed4,11.3170,8.6470,14.1089,True,V2
+v3 vs scANVI,shared_knn,v3_seed0,scanvi_log2_seed0,21.6515,18.8582,24.4724,True,v3
+v3 vs scANVI,shared_knn,v3_seed0,scanvi_log2_seed1,21.8126,18.7232,24.7301,True,v3
+v3 vs scANVI,shared_knn,v3_seed0,scanvi_log2_seed2,17.9070,15.1542,20.5449,True,v3
+v3 vs scANVI,shared_knn,v3_seed1,scanvi_log2_seed0,19.6990,17.0884,22.1862,True,v3
+v3 vs scANVI,shared_knn,v3_seed1,scanvi_log2_seed1,19.8601,17.0702,22.5008,True,v3
+v3 vs scANVI,shared_knn,v3_seed1,scanvi_log2_seed2,15.9545,13.3900,18.5132,True,v3
+v3 vs scANVI,shared_knn,v3_seed2,scanvi_log2_seed0,19.2993,16.5563,21.9912,True,v3
+v3 vs scANVI,shared_knn,v3_seed2,scanvi_log2_seed1,19.4605,16.5396,22.3544,True,v3
+v3 vs scANVI,shared_knn,v3_seed2,scanvi_log2_seed2,15.5549,12.6955,18.3917,True,v3
+v3 vs scANVI,shared_knn,v3_seed3,scanvi_log2_seed0,22.0893,19.2105,24.9532,True,v3
+v3 vs scANVI,shared_knn,v3_seed3,scanvi_log2_seed1,22.2504,19.2688,25.1504,True,v3
+v3 vs scANVI,shared_knn,v3_seed3,scanvi_log2_seed2,18.3448,15.2892,21.2658,True,v3
+v3 vs scANVI,shared_knn,v3_seed4,scanvi_log2_seed0,26.6477,23.7395,29.6098,True,v3
+v3 vs scANVI,shared_knn,v3_seed4,scanvi_log2_seed1,26.8089,23.7988,29.7439,True,v3
+v3 vs scANVI,shared_knn,v3_seed4,scanvi_log2_seed2,22.9033,20.0130,25.6080,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed0,scanvi_log2_seed0,34.2757,31.5921,37.1058,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed0,scanvi_log2_seed1,28.6498,25.6602,31.7854,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed0,scanvi_log2_seed2,12.3574,9.7318,15.1161,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed1,scanvi_log2_seed0,30.1476,27.7565,32.6051,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed1,scanvi_log2_seed1,24.5217,21.9372,27.0847,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed1,scanvi_log2_seed2,8.2294,5.8489,10.5855,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed2,scanvi_log2_seed0,30.1133,27.5476,32.7197,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed2,scanvi_log2_seed1,24.4873,21.6861,27.1693,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed2,scanvi_log2_seed2,8.1950,5.7013,10.7196,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed3,scanvi_log2_seed0,30.3798,27.3826,33.4266,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed3,scanvi_log2_seed1,24.7539,21.5799,28.0802,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed3,scanvi_log2_seed2,8.4615,5.5155,11.6088,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed4,scanvi_log2_seed0,37.7956,34.6738,40.7273,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed4,scanvi_log2_seed1,32.1696,28.7919,35.2864,True,v3
+v3 vs scANVI,nearest_centroid vs native,v3_seed4,scanvi_log2_seed2,15.8773,12.7888,18.9570,True,v3
+V2 vs scANVI,shared_knn,V2_seed0,scanvi_log2_seed0,36.4255,33.8617,38.8117,True,V2
+V2 vs scANVI,shared_knn,V2_seed0,scanvi_log2_seed1,36.5866,33.7908,39.2670,True,V2
+V2 vs scANVI,shared_knn,V2_seed0,scanvi_log2_seed2,32.6810,29.9681,35.2236,True,V2
+V2 vs scANVI,shared_knn,V2_seed1,scanvi_log2_seed0,33.5126,30.9298,35.9869,True,V2
+V2 vs scANVI,shared_knn,V2_seed1,scanvi_log2_seed1,33.6737,30.9764,36.3986,True,V2
+V2 vs scANVI,shared_knn,V2_seed1,scanvi_log2_seed2,29.7681,27.0506,32.2843,True,V2
+V2 vs scANVI,shared_knn,V2_seed2,scanvi_log2_seed0,31.6391,29.2930,33.9719,True,V2
+V2 vs scANVI,shared_knn,V2_seed2,scanvi_log2_seed1,31.8003,29.1711,34.3878,True,V2
+V2 vs scANVI,shared_knn,V2_seed2,scanvi_log2_seed2,27.8947,25.2444,30.2812,True,V2
+V2 vs scANVI,shared_knn,V2_seed3,scanvi_log2_seed0,36.9849,34.3442,39.4744,True,V2
+V2 vs scANVI,shared_knn,V2_seed3,scanvi_log2_seed1,37.1460,34.2724,39.9389,True,V2
+V2 vs scANVI,shared_knn,V2_seed3,scanvi_log2_seed2,33.2404,30.3731,35.7724,True,V2
+V2 vs scANVI,shared_knn,V2_seed4,scanvi_log2_seed0,37.9648,35.4139,40.4426,True,V2
+V2 vs scANVI,shared_knn,V2_seed4,scanvi_log2_seed1,38.1259,35.4397,40.7847,True,V2
+V2 vs scANVI,shared_knn,V2_seed4,scanvi_log2_seed2,34.2203,31.4466,36.6789,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed0,scanvi_log2_seed0,48.6521,46.0356,51.4351,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed0,scanvi_log2_seed1,43.0262,40.1335,45.9809,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed0,scanvi_log2_seed2,26.7338,24.0190,29.5489,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed1,scanvi_log2_seed0,45.3170,42.9199,47.6518,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed1,scanvi_log2_seed1,39.6911,37.0542,42.4265,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed1,scanvi_log2_seed2,23.3988,21.0249,25.8122,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed2,scanvi_log2_seed0,44.9596,42.3971,47.5191,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed2,scanvi_log2_seed1,39.3337,36.4442,42.1579,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed2,scanvi_log2_seed2,23.0413,20.4706,25.6738,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed3,scanvi_log2_seed0,49.3700,46.8482,52.0114,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed3,scanvi_log2_seed1,43.7440,40.8883,46.6074,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed3,scanvi_log2_seed2,27.4517,24.8264,30.0070,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed4,scanvi_log2_seed0,49.3202,46.9675,51.6822,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed4,scanvi_log2_seed1,43.6943,41.0151,46.4028,True,V2
+V2 vs scANVI,nearest_centroid vs native,V2_seed4,scanvi_log2_seed2,27.4020,25.1168,29.8139,True,V2

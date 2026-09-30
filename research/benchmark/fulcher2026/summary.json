@@ -1,0 +1,35 @@
+{
+  "n_scored": 1251,
+  "scanvi_headline_variant": "log2",
+  "scanvi_shared_knn_mean_bal_acc_pct": {
+    "log2": 21.3637,
+    "log2_cellmedian": 17.8454
+  },
+  "scanvi_diverged_runs": [],
+  "ci_excludes_zero_counts": {
+    "V2 vs scANVI [nearest_centroid vs native]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "V2 vs scANVI [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "V2 vs v3 [nearest_centroid]": {
+      "pairings": 25,
+      "V2": 25
+    },
+    "V2 vs v3 [shared_knn]": {
+      "pairings": 25,
+      "V2": 25
+    },
+    "v3 vs scANVI [nearest_centroid vs native]": {
+      "pairings": 15,
+      "v3": 15
+    },
+    "v3 vs scANVI [shared_knn]": {
+      "pairings": 15,
+      "v3": 15
+    }
+  }
+}

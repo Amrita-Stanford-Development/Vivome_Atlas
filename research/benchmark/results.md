@@ -541,6 +541,123 @@ the transductive-vs.-zero-shot caveat near the top of this document — it
 applies here too, and if anything makes scANVI's near-collapse into
 predicting one dominant lineage more notable, not less.)
 
+## Fulcher 2026 — the first held-out evaluation
+
+**What this is.** Fulcher 2026 is TMT32-multiplexed single-cell proteomics
+of human PBMCs, processed with FragPipe. Nothing in this project was fitted,
+tuned or selected on it. The protocol,
+[protocol-fulcher2026.md](protocol-fulcher2026.md), was committed at
+`2bcb657`, before any score existed. The only change since is amendment 1, a
+label-free centroid sanity check, also made before scoring. We score 1,251
+labelled cells in six types: CD4T 308, CD8T 181, NK 150, B 102, monocyte
+456, DC 54. The upload holds all 1,275 QC-passed cells, including 24 Unknown
+that are kept in but not scored. Every model classifies against all 22
+reference classes, mapped to the six types or "other" by the protocol's
+fixed table. Chance balanced accuracy is 16.7%. Tables are in
+[`fulcher2026`](fulcher2026/per_seed_scores.csv).
+
+**Two caveats, stated plainly.**
+
+- **The labels are not independent ground truth.** They are the authors' own
+  annotation: a Seurat label transfer from an scRNA-seq reference, then
+  cluster refinement. A score here measures agreement with that annotation.
+- **This is a different technology from PBMC240.** Fulcher 2026 is TMT
+  (FragPipe). PBMC240 is label-free DIA (DIA-NN), and SCoPE2 is a third
+  technology again.
+
+**Setup.**
+
+- **Our models.** The five v3 seeds (seed 0 is the served model) and the
+  five V2 seeds all ran through the service's own query path,
+  `pipeline.embed_query`, with no batch correction.
+- **The gate passed before anything was embedded.** V2_seed0 reproduces
+  NB1d's PBMC240 latents at a median cosine of 0.99965
+  ([gate.json](fulcher2026/gate.json)).
+- **scANVI** ran three seeds per input variant, using the same training setup
+  as the PBMC240 arm. It is transductive: it trains on the Fulcher cells
+  themselves. Its headline variant, chosen by the protocol's rule, is
+  `log2`.
+
+### Balanced accuracy over the six types
+
+5-seed mean ± SD (min–max); scANVI is the 3-seed figure.
+
+| Model | Nearest centroid (product rule) | Shared kNN rule |
+|---|---|---|
+| **V2** | **57.3 ± 2.2** (54.8–59.2) | **55.5 ± 2.6** (51.8–58.1) |
+| **v3** | 42.3 ± 3.4 (39.9–47.6) | 42.0 ± 2.9 (39.5–46.8) |
+| `v3_seed0` (served) | 44.1 | 41.8 |
+| scANVI, `log2` (headline) | 19.0 ± 11.4 (native classifier) | 21.4 ± 2.2 |
+| scANVI, `log2_cellmedian` | 17.2 ± 9.3 (native classifier) | 17.8 ± 8.1 |
+
+Source: [family_summary.csv](fulcher2026/family_summary.csv) and
+[per_seed_scores.csv](fulcher2026/per_seed_scores.csv).
+
+### Paired bootstrap
+
+Balanced accuracy difference, 2,000 stratified resamples; the source is
+[paired_bootstrap.csv](fulcher2026/paired_bootstrap.csv).
+
+| Comparison | Rules | Pairings with CI excluding 0 | Mean difference (range) |
+|---|---|---|---|
+| V2 − v3 | nearest centroid | **25 of 25**, all favour V2 | +15.0 (+7.2 to +19.3) |
+| V2 − v3 | shared kNN | **25 of 25**, all favour V2 | +13.4 (+5.0 to +18.7) |
+| v3 − scANVI | nearest centroid vs native | **15 of 15**, all favour v3 | +23.4 (+8.2 to +37.8) |
+| v3 − scANVI | shared kNN | **15 of 15**, all favour v3 | +20.7 (+15.6 to +26.8) |
+| V2 − scANVI | nearest centroid vs native | **15 of 15**, all favour V2 | +38.3 (+23.0 to +49.4) |
+| V2 − scANVI | shared kNN | **15 of 15**, all favour V2 | +34.1 (+27.9 to +38.1) |
+
+### What the numbers show
+
+1. **V2 beats v3 on held-out data, in every seed pairing under both rules.**
+   V2 was chosen over v3 on PBMC240, which is why PBMC240 can no longer test
+   that choice. Fulcher can, and it agrees: +13 to +15 points of balanced
+   accuracy, with every one of the 50 CIs above zero. This is a finding,
+   not a decision. The served model is unchanged, and switching is the
+   owner's call.
+2. **The two models fail differently.** The patterns below are nearest
+   centroid, summed over seeds, with rows as true types
+   ([confusion.csv](fulcher2026/confusion.csv)).
+   - **v3's lymphoid errors.** It calls 41% of CD4T cells CD8T and 43% of NK
+     cells CD8T, and sends 23% of CD4T and 40% of B cells to "other".
+   - **v3's lineage recall.** Lymphoid 78.3% and myeloid 98.9%: about a fifth
+     of lymphoid cells land in non-lymphoid classes.
+   - **V2 separates lineages almost perfectly.** Lymphoid recall is 98.5% and
+     myeloid 93.1%, with B recall at 96.1%.
+   - **V2's weakness is CD8T.** It calls 63% of CD8T cells CD4T.
+3. **v3 overuses "macrophage".** It calls 9.6% of all cells macrophage, a
+   class absent from blood. Under the protocol's mapping that counts as
+   "other" (owner decision, fixed before scoring). V2 uses it for 1.2%. Even
+   so, v3's monocyte recall is 84.1%.
+4. **DC is essentially unrecognised by every method.** DC recall is at most
+   8.9% (V2, nearest centroid), and the shared kNN rule gives 0–0.4%. The
+   reference holds 1 myeloid DC and 29 plasmacytoid DC cells out of 85,233,
+   so the DC classes barely exist to be matched. True DCs are mostly called
+   monocyte (76% for v3, 45% for V2).
+5. **scANVI is near chance in this configuration.** The headline variant
+   reaches 21.4% (shared kNN) against 16.7% chance.
+   - **What it predicts.** Neutrophil, basophil or erythrocyte, none of which
+     are PBMC types, for about half of all cells
+     ([predicted_composition.csv](fulcher2026/predicted_composition.csv)).
+     Its lymphoid recall is 32–38%.
+   - **Likely cause.** Only 932 of the 2,907 shared genes are measured in
+     Fulcher, so about two thirds of every query cell's input columns are
+     zero. This matches its weak PBMC240 behaviour under heavy missingness.
+     The setup was inherited unchanged from Track D and was not tuned for
+     TMT data. The result describes this configuration, not scANVI's best
+     possible performance.
+   - **No bug was found.** The query genes are aligned by name, and no run
+     diverged.
+
+### Still open from this evaluation
+
+- Whether to serve V2 instead of v3. Fulcher is the first held-out evidence
+  on that question. SCoPE2 pointed the other way, but its published matrix
+  is centred, so it can't test a real upload.
+- CD4T/CD8T separation (V2) and lymphoid placement (v3) on real protein
+  data.
+- DC is effectively unsupported by the reference.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the

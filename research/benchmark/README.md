@@ -31,6 +31,10 @@ of what these documents say, until the repository owner explicitly signs off.
    reconstruction that cannot be fixed from this machine.
 5. **[results.md](results.md)** — the actual numbers, kept up to date as
    runs complete.
+6. **[protocol-fulcher2026.md](protocol-fulcher2026.md)** — the frozen
+   protocol for the first held-out evaluation (Fulcher 2026, TMT PBMCs). Its
+   results are in results.md, section "Fulcher 2026", with tables in
+   [fulcher2026/](fulcher2026/per_seed_scores.csv).
 
 ## The one-paragraph version
 

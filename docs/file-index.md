@@ -197,6 +197,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
+- `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
+- `research/benchmark/fulcher2026/family_summary.csv` — Fulcher 2026: mean, SD, min and max of every metric per family and rule
+- `research/benchmark/fulcher2026/predicted_composition.csv` — Fulcher 2026: predicted share of each coarse type and each reference class, per model-seed and rule
+- `research/benchmark/fulcher2026/confusion.csv` — Fulcher 2026: 6 true × 7 predicted type counts, per model-seed and rule
+- `research/benchmark/fulcher2026/paired_bootstrap.csv` — Fulcher 2026: paired bootstrap CI for every V2/v3/scANVI seed pairing
+- `research/benchmark/fulcher2026/summary.json` — Fulcher 2026: scANVI headline variant, diverged runs, count of CIs excluding zero per comparison
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only

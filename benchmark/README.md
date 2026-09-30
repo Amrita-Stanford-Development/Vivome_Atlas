@@ -20,6 +20,14 @@ python3 benchmark/ours_run.py          #    and ours, through the same evaluate.
 ```
 
 PBMC240 arm: `pbmc240_lineage_prep.py`, then `scanvi_run_pbmc240.py`.
+
+Fulcher 2026, the held-out arm, fixed by
+[research/benchmark/protocol-fulcher2026.md](../research/benchmark/protocol-fulcher2026.md):
+1. `datasets.py` registers the dataset.
+2. `fulcher2026_embed.py` runs the checkpoint gate, then embeds with all ten
+   models.
+3. `scanvi_run_fulcher2026.py SEED VARIANT` runs scANVI, six times in all.
+4. `fulcher2026_score.py` scores; it is the only step that reads labels.
 Follow-ups: `paired_and_pool_first.py` and `pbmc240_convention_check.py`.
 
 Outputs go to `results/`. It is gitignored and ~1 GB. Some of it is scANVI
