@@ -106,7 +106,7 @@ export function buildBenchmarkTable(manifest) {
       </tr>`).join('');
     return `
       <div class="pending-banner">
-        <strong>${escapeHtml(b.phase)}: not yet run.</strong> ${escapeHtml(b.note)}
+        <strong>${escapeHtml(b.phase)}: pending sign-off.</strong> ${escapeHtml(b.note)}
       </div>` + table(BENCHMARK_HEADERS, planned);
   }
   const rows = b.rows.map((r) => `

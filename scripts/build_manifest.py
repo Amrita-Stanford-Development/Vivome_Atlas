@@ -35,14 +35,16 @@ ENCODER_FAMILY_LABELS = {"module": "module pooling"}
 SCHEMA_VERSION = "1.0"
 ATLAS_VERSION = "0.2.0"
 
+# The arms benchmark/ scores (research/benchmark/results.md). Their rows stay
+# pending here until the owner signs them off (research/roadmap.md, Track D).
 BENCHMARK_METHODS = [
-    "CrossModalNet (ours)",
-    "Seurat bridge integration",
-    "GLUE",
+    "VivOME v3 reference (ours)",
+    "VivOME V2 candidate (ours)",
+    "scANVI (scArches)",
     "MaxFuse",
-    "scArches",
-    "Harmony (shared features)",
-    "PCA + nearest neighbour (floor)",
+    "scGLUE",
+    "Harmony",
+    "Majority-class floor",
 ]
 
 
@@ -292,7 +294,8 @@ def build_manifest(
         "benchmark": {
             "status": "pending",
             "phase": "Phase 4",
-            "note": "No comparison against established methods has been run yet.",
+            "note": "The comparison has been run and is written up in research/benchmark/results.md. "
+                    "Its rows are published here once the owner signs them off.",
             "methods": BENCHMARK_METHODS,
             "rows": [],
         },

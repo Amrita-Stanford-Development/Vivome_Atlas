@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-10-01",
+    "title": "The Project page projects",
+    "text": "Run the projection service on your own machine and the Project page sends it your matrix. It shows every cell's label or abstention with its reason, and you can download the full response.",
+    "link": "project.html",
+    "link_text": "Project your data"
+  },
+  {
+    "date": "2026-10-01",
+    "title": "The model card compares like with like",
+    "text": "Every accuracy on the Versions page now names the decision rule it was scored with, and comes from the committed tables. One comparison had set a seed under one rule against a mean under another; it now pairs them under the same rule.",
+    "link": "versions.html",
+    "link_text": "Read the model card"
+  },
+  {
     "date": "2026-09-30",
     "title": "v3.1 is in progress",
     "text": "Label space estimation, a defined abstention rule and conformal calibration are being built and tested in notebooks T1 NB2 to NB4. Nothing reaches the atlas or the service until each one passes its go or no-go.",

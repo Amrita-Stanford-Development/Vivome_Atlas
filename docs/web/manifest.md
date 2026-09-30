@@ -88,7 +88,7 @@ Emitted as pending, with the phase that will produce each:
 |---|---|---|
 | `latent_centroid_cosine`, `modality_probe_accuracy` for RNA-only/protein-only classes | N/A | No cross-modal coverage for those classes — a correct record, not a gap to fill |
 | `transfer_accuracy` (any class) | N/A | A real measurement exists, but only per *dataset* (`service/model/evidence/v3_tables/rna_to_rna_real_masks.csv`), not per class — no per-class version has been computed |
-| `benchmark.rows` | Phase 4 | No comparison against established methods has been run |
+| `benchmark.rows` | Phase 4 | Run and written up (`research/benchmark/results.md`); published only on the owner's sign-off |
 
 A class present in only one modality gets a Phase 2 pending record for
 `pca_centroid_cosine` — there is no paired coverage to compute it from. A
