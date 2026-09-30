@@ -137,7 +137,10 @@ KHOURY2026 = {
         "cell_metadata": "61622d71e7540791d445cd024254694082714579de90741093be14bb0ea348e6",
     },
     "label_column": "cell_type",
-    "label_source": "protein-only Seurat clustering of these data, clusters named by canonical protein markers; no RNA reference",
+    "label_source": "protein-only Seurat clustering of these data (row-centred matrix, PCs 1-4, resolution 0.3, donor regressed), "
+                    "5 clusters renamed by hand from marker proteins; no RNA reference (protocol amendment 1)",
+    # Provenance only, not loaded: the authors' code, cited line by line in the protocol.
+    "code_sha256": {"PBMC_covariation-main.zip": "99c37ff79c41e4d97109a76e707bc9ff83b3fb998a89225c7dd62b80b5191e28"},
     "type_names": {"CD4 T cells": "CD4T", "CD8 T cells": "CD8T", "NK cells": "NK", "B cells": "B", "Monocytes": "monocyte"},
     "types": ("CD4T", "CD8T", "NK", "B", "monocyte"),
 }

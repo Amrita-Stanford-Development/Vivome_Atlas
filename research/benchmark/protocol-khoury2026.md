@@ -213,3 +213,109 @@ unsealing.
 - **Committed tables** under `research/benchmark/khoury2026`.
 - **Write-up** in `research/benchmark/results.md`, with the three caveats
   stated in plain sentences.
+
+## Amendment 1, 2026-09-30, before unsealing: provenance confirmed from the authors' code
+
+The authors' code is now in `data/incoming/Khoury2026` as
+`PBMC_covariation-main.zip` (sha256
+`99c37ff79c41e4d97109a76e707bc9ff83b3fb998a89225c7dd62b80b5191e28`), unzipped
+beside it. Every claim below cites that code by file and line. The
+annotation script, earlier noted as missing from our copy, is present. This
+work is label-free: code was read, and no label or score was looked at.
+
+### Labels (`Protein_data_integration_annotation.R`)
+
+Confirmed: protein-only Seurat clustering, 5 clusters renamed by hand from
+marker proteins, no RNA reference, and every cell takes its cluster's label.
+
+- **Clustering input.** The row-centred matrix, `Normalized_Centered`
+  (read at lines 150–155), with each gene's remaining NAs filled by its
+  median (lines 168–173). The top 2,000 genes by variance are the features
+  (lines 191–193).
+- **Clustering.** `ScaleData(..., vars.to.regress = "sample")` regresses the
+  donor (line 194). Then `RunPCA` (line 195), `FindNeighbors(dims = 1:4)`
+  (line 198), and `FindClusters(resolution = 0.3, random.seed = 0)`
+  (line 199).
+- **Markers.** NA-aware Welch-t marker tests per cluster run on the
+  NA-preserving centred matrix (lines 237–293), followed by a DotPlot of
+  known marker genes (lines 302–319). The canonical marker list is
+  CD3D/CD3E/CD247/ZAP70 (T), CD8A/GZMA (CD8 T), GNLY (NK), MS4A1/CD74/CD37
+  (B), and CD14/ITGAM/FCER1G (monocyte) (lines 221–228).
+- **Hand renaming.** A hard-coded mapping of clusters 0–4 to "Monocytes",
+  "CD4 T cells", "CD8 T cells", "B cells" and "NK cells" (lines 326–327),
+  applied by `RenameIdents` (line 333).
+- **Every cell takes its cluster's label.** The per-cell table is read from
+  `active.ident` (lines 352–355), and the object is saved as `SCP_PBMC.rds`
+  (lines 653–654).
+- **No RNA reference.** No RNA data, reference mapping, label transfer or
+  anchors appear anywhere in this script. The repository does process
+  scRNA-seq from the same donors (`SS3xpress_preprocessing_and_QC.R`), but
+  this script doesn't use it.
+
+**Difference from the owner's description.** The clusters, and so the labels,
+came from the row-centred matrix. They did not come from
+`Protein_x_Cell_Matrix_Column_Normalized.csv`, the matrix we score. Both
+matrices derive from the same MS1 measurements.
+
+### Matrix (`n6p1_preprocessing_and_QC.R`, then `Protein_data_integration_annotation.R`)
+
+**Per batch,** citing `n6p1_preprocessing_and_QC.R`:
+
+1. Read the DIA-NN report (line 22). Filter to Lib.Q.Value ≤ 0.01,
+   Lib.PG.Q.Value ≤ 0.05, MS1 area > 0 and human proteins (line 46). Keep
+   the d0/d4 single cells (line 153).
+2. `diann_maxlfq` on `Ms1.Area`, grouped by gene (lines 158–163).
+3. Column-only normalisation and log2: `Normalize_saad_column_only(log = "yes")`
+   (line 167).
+4. kNN imputation, `hknn(k = 3)` (line 217), then column normalisation
+   (line 218).
+5. ComBat on the mTRAQ plex (line 224), then column normalisation
+   (line 225).
+6. **limma `removeBatchEffect` on run order** (line 239), then column
+   normalisation (line 240).
+7. The per-batch missing values are restored (line 241), and the result is
+   saved as `Genes_n6p1_for_abundance_analysis.csv` (lines 341–349).
+
+**Across batches,** citing `Protein_data_integration_annotation.R`:
+
+8. The five per-batch files are stacked (lines 61–68) and pivoted into a
+   gene × cell matrix (lines 76–82).
+9. Column-only normalisation (line 85).
+10. kNN imputation, `hknn(k = 3)` (line 105), then column normalisation
+    (line 106).
+11. ComBat on the dataset batch (line 108), then column normalisation
+    (line 109).
+12. The original missing values are restored (line 114). The result is
+    written as `Protein_x_Cell_Matrix_Column_Normalized.csv` (lines 131–132).
+
+The same per-batch chain appears in the other four batch scripts, with
+maxLFQ, column-only log2, hknn and ComBat on the plex at the corresponding
+lines. They differ only in step 6:
+
+| Batch | Run-order limma step |
+|---|---|
+| n2p1 | present: `n2p1_preprocessing_and_QC.R` line 504, NA restore line 506 |
+| n2p2 | present: `n2p2_preprocessing_and_QC.R` line 510, NA restore line 512 |
+| n6p1 | present: `n6p1_preprocessing_and_QC.R` line 239, NA restore line 241 |
+| n3p1 | absent: `n3p1_preprocessing_and_QC.R` restores NAs straight after ComBat, line 222 |
+| n6p2 | absent: `n6p2_preprocessing_and_QC.R` restores NAs straight after ComBat, line 220 |
+
+**Differences from the owner's description:**
+
+- The description omits the limma run-order correction, which applies in
+  three of the five batches.
+- It also omits the per-batch NA restore that comes before integration.
+- It shows one column normalisation at the end. In fact every step is
+  followed by a column-only renormalisation.
+
+None of this changes what we do. We still score the `Column_Normalized`
+matrix, which the service detects as log scale and does not transform.
+
+### Effect on the caveats
+
+Caveat 1 stands and is now sharper. The labels are clusters of the same
+MS1 measurements, computed on a row-centred, median-imputed version of the
+matrix we score, with the donor regressed and only PCs 1–4 used. Caveat 2
+also stands and is extended. The scored matrix carries ComBat on the mTRAQ
+plex in every batch, limma run-order correction in three batches, and a
+cross-batch ComBat. These are all the authors' corrections; we add none.
