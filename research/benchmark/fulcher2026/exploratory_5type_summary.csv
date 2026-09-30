@@ -1,0 +1,11 @@
+family,rule,mean,std,min,max,count
+V2,nearest_centroid,65.5036,2.6108,62.5573,67.5565,5
+V2,shared_knn,62.9557,3.2072,58.8586,65.7566,5
+scANVI_log2,native,23.5306,13.4100,11.7970,38.1478,3
+scANVI_log2,shared_knn,24.2589,3.5002,21.1074,28.0261,3
+scANVI_log2_cellmedian,native,21.1653,11.6469,8.9128,32.0934,3
+scANVI_log2_cellmedian,shared_knn,21.0558,9.6034,10.0047,27.3752,3
+scANVI_log2_measuredgenes,native,42.0087,1.8485,40.1624,43.8594,3
+scANVI_log2_measuredgenes,shared_knn,53.9060,1.1148,52.7195,54.9316,3
+v3,nearest_centroid,46.8211,3.7791,42.3867,51.6359,5
+v3,shared_knn,46.7901,3.7018,41.4656,51.4893,5

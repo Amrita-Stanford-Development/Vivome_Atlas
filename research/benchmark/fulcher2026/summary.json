@@ -1,17 +1,36 @@
 {
   "n_scored": 1251,
-  "scanvi_headline_variant": "log2",
+  "scanvi_headline_arm": {
+    "original_protocol": "log2",
+    "amendment_2_best_arm": "log2_measuredgenes"
+  },
   "scanvi_shared_knn_mean_bal_acc_pct": {
     "log2": 21.3637,
-    "log2_cellmedian": 17.8454
+    "log2_cellmedian": 17.8454,
+    "log2_measuredgenes": 47.8262
+  },
+  "scanvi_gene_space": {
+    "genes": 2907,
+    "measured_in_fulcher": 932,
+    "never_measured_zero_filled": 1975,
+    "per_cell_observed_min": 402,
+    "per_cell_observed_median": 571.0
   },
   "scanvi_diverged_runs": [],
   "ci_excludes_zero_counts": {
-    "V2 vs scANVI [nearest_centroid vs native]": {
+    "V2 vs scANVI_log2 [nearest_centroid vs native]": {
       "pairings": 15,
       "V2": 15
     },
-    "V2 vs scANVI [shared_knn]": {
+    "V2 vs scANVI_log2 [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "V2 vs scANVI_log2_measuredgenes [nearest_centroid vs native]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "V2 vs scANVI_log2_measuredgenes [shared_knn]": {
       "pairings": 15,
       "V2": 15
     },
@@ -23,13 +42,23 @@
       "pairings": 25,
       "V2": 25
     },
-    "v3 vs scANVI [nearest_centroid vs native]": {
+    "v3 vs scANVI_log2 [nearest_centroid vs native]": {
       "pairings": 15,
       "v3": 15
     },
-    "v3 vs scANVI [shared_knn]": {
+    "v3 vs scANVI_log2 [shared_knn]": {
       "pairings": 15,
       "v3": 15
+    },
+    "v3 vs scANVI_log2_measuredgenes [nearest_centroid vs native]": {
+      "pairings": 15,
+      "v3": 9,
+      "neither": 6
+    },
+    "v3 vs scANVI_log2_measuredgenes [shared_knn]": {
+      "pairings": 15,
+      "scanvi_log2_measuredgenes": 12,
+      "neither": 3
     }
   }
 }

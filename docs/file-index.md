@@ -158,6 +158,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
 - `benchmark/fulcher2026_score.py` — Fulcher 2026 scoring, the only step that reads its labels: both rules, all metrics, the paired bootstrap
+- `benchmark/fulcher2026_product_check.py` — Fulcher 2026 product check: POSTs the upload to a running service with default settings and records the returned composition (label-free)
 
 ## scripts/ — build and repository checks
 
@@ -203,6 +204,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/fulcher2026/confusion.csv` — Fulcher 2026: 6 true × 7 predicted type counts, per model-seed and rule
 - `research/benchmark/fulcher2026/paired_bootstrap.csv` — Fulcher 2026: paired bootstrap CI for every V2/v3/scANVI seed pairing
 - `research/benchmark/fulcher2026/summary.json` — Fulcher 2026: scANVI headline variant, diverged runs, count of CIs excluding zero per comparison
+- `research/benchmark/fulcher2026/product_check.json` — Fulcher 2026 product check record: service defaults, response header, returned label composition, whether output is restricted
+- `research/benchmark/fulcher2026/scanvi_gene_space.csv` — Fulcher 2026: every gene in scANVI's 2,907-gene space, how many Fulcher cells measured it, and which scANVI arms used it
+- `research/benchmark/fulcher2026/exploratory_5type_per_seed.csv` — Fulcher 2026, exploratory (added after results): 5-type score with CD4T and CD8T merged into T, per model-seed and rule
+- `research/benchmark/fulcher2026/exploratory_5type_summary.csv` — Fulcher 2026, exploratory (added after results): the 5-type score's mean, SD, min and max per family and rule
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only

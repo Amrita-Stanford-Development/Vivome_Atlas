@@ -31,3 +31,9 @@ scANVI_log2_cellmedian,scanvi_log2_cellmedian_seed1,1,native,1251,18.1904,0.3247
 scANVI_log2_cellmedian,scanvi_log2_cellmedian_seed1,1,shared_knn,1251,22.4828,12.9870,9.9448,9.3333,33.3333,69.2982,0.0000,46.5587,94.9020
 scANVI_log2_cellmedian,scanvi_log2_cellmedian_seed2,2,native,1251,25.9022,0.0000,62.4309,0.0000,0.0000,92.9825,0.0000,60.3239,99.0196
 scANVI_log2_cellmedian,scanvi_log2_cellmedian_seed2,2,shared_knn,1251,22.5086,3.8961,42.5414,1.3333,0.0000,87.2807,0.0000,44.8043,98.6275
+scANVI_log2_measuredgenes,scanvi_log2_measuredgenes_seed0,0,native,1251,37.8775,50.0000,39.2265,21.3333,27.4510,89.2544,0.0000,77.0580,99.0196
+scANVI_log2_measuredgenes,scanvi_log2_measuredgenes_seed0,0,shared_knn,1251,46.8722,56.1688,24.8619,36.0000,74.5098,89.6930,0.0000,81.6464,94.3137
+scANVI_log2_measuredgenes,scanvi_log2_measuredgenes_seed1,1,native,1251,39.6473,37.3377,36.4641,32.0000,40.1961,91.8860,0.0000,69.5007,99.0196
+scANVI_log2_measuredgenes,scanvi_log2_measuredgenes_seed1,1,shared_knn,1251,48.0438,47.4026,24.3094,52.0000,71.5686,92.9825,0.0000,76.3833,94.1176
+scANVI_log2_measuredgenes,scanvi_log2_measuredgenes_seed2,2,native,1251,35.4311,19.8052,43.0939,4.6667,56.8627,88.1579,0.0000,68.2861,98.2353
+scANVI_log2_measuredgenes,scanvi_log2_measuredgenes_seed2,2,shared_knn,1251,48.5626,41.2338,38.6740,50.0000,73.5294,87.9386,0.0000,87.1795,93.5294

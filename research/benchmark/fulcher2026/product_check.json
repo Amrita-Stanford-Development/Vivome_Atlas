@@ -1,0 +1,55 @@
+{
+  "what": "Fulcher 2026 upload POSTed to the running service, default settings, as a user would; label-free",
+  "service_defaults": {
+    "CROSS_MODAL_SUPPORTED_CLASSES": [
+      "macrophage",
+      "monocyte"
+    ],
+    "ASSIGNMENT_METHOD": "nearest_centroid",
+    "MIN_OBSERVED_GENES": 200
+  },
+  "response": {
+    "atlas_version": "0.2.0",
+    "model_version": "production",
+    "n_cells": 1275,
+    "n_features_matched": 1654,
+    "n_features_unmatched": 7,
+    "value_scale": {
+      "detected": "linear",
+      "transformed": true
+    },
+    "gene_id_resolution": {
+      "matched": 1654,
+      "unmapped": 7,
+      "ambiguous": 0,
+      "unmapped_identifiers": [
+        "TMA7B",
+        "GATD3B",
+        "NHERF1",
+        "HLA-DRB3",
+        "H2BC26",
+        "PTGR3",
+        "SKIC8"
+      ],
+      "ambiguous_identifiers": []
+    },
+    "reference_abstain_threshold": 0.9779149889945984
+  },
+  "returned_composition_count": {
+    "monocyte": 565,
+    "macrophage": 554,
+    "abstained: no_confident_label": 89,
+    "abstained: outside_supported_region": 67
+  },
+  "returned_composition_pct": {
+    "monocyte": 44.31,
+    "macrophage": 43.45,
+    "abstained: no_confident_label": 6.98,
+    "abstained: outside_supported_region": 5.25
+  },
+  "distinct_labels_returned": [
+    "macrophage",
+    "monocyte"
+  ],
+  "output_restricted_to_supported_classes": true
+}
