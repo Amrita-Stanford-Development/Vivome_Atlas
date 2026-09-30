@@ -116,6 +116,73 @@ def load_fulcher2026_benchmark_matrix(variant: str) -> tuple[np.ndarray, list[st
     return df.reindex(columns=genes).to_numpy(dtype=np.float32), raw.cell_ids, genes
 
 
+_KHOURY = REPO / "data" / "incoming" / "Khoury2026"
+
+# SEALED: the final test set. Scored exactly once, at the final v3.1
+# evaluation (research/benchmark/protocol-khoury2026.md). Until then, per-cell
+# labels cannot be loaded; only aggregate type counts can.
+KHOURY2026 = {
+    "name": "Khoury 2026: PBMC single-cell proteomics, timsTOF, mTRAQ 2-plex (Zenodo 22649483)",
+    "role": "SEALED final test set; scored once, at the final v3.1 evaluation; never used to train, tune or select",
+    "sealed": True,
+    "protocol": "research/benchmark/protocol-khoury2026.md",
+    "files": {
+        # log2, column-normalised only, ComBat-corrected, original missing values restored as NA.
+        # Never the Normalized_Centered or Imputed matrices.
+        "matrix": _KHOURY / "Protein_x_Cell_Matrix_Column_Normalized.csv",
+        "cell_metadata": _KHOURY / "PBMC_covariation_protein_cell_metadata.csv",
+    },
+    "sha256": {
+        "matrix": "514c08ca01dac2d58a2cfed97fb574a3c555c82ab6169eb68946c86bf25f1c1b",
+        "cell_metadata": "61622d71e7540791d445cd024254694082714579de90741093be14bb0ea348e6",
+    },
+    "label_column": "cell_type",
+    "label_source": "protein-only Seurat clustering of these data, clusters named by canonical protein markers; no RNA reference",
+    "type_names": {"CD4 T cells": "CD4T", "CD8 T cells": "CD8T", "NK cells": "NK", "B cells": "B", "Monocytes": "monocyte"},
+    "types": ("CD4T", "CD8T", "NK", "B", "monocyte"),
+}
+
+
+def load_khoury2026_upload() -> alignment.RawMatrix:
+    """All 1,651 matrix cells as the service would receive them, parsed by the
+    service's own parser. Every cell must be QC-passed and included in the
+    authors' analysis. The values are already log2."""
+    entry = KHOURY2026
+    _check_hashes(entry)
+    raw = alignment.parse_matrix_csv(entry["files"]["matrix"].read_text())
+    meta = pd.read_csv(entry["files"]["cell_metadata"]).set_index("cell_id").reindex(raw.cell_ids)
+    bad = meta.index[(meta["qc_status"] != "Pass") | (meta["included_in_analysis"] != "Yes")].tolist()
+    if bad:
+        raise ValueError(f"{len(bad)} matrix cells are not QC-passed/included, e.g. {bad[:3]}")
+    return raw
+
+
+def khoury2026_type_counts() -> dict[str, int]:
+    """Aggregate label counts over the upload's cells: the only label
+    information readable while the dataset is sealed."""
+    entry = KHOURY2026
+    raw = load_khoury2026_upload()
+    meta = pd.read_csv(entry["files"]["cell_metadata"]).set_index("cell_id").reindex(raw.cell_ids)
+    labels = meta[entry["label_column"]].map(entry["type_names"])
+    if labels.isna().any():
+        raise ValueError("unexpected or missing cell types among matrix cells")
+    return {t: int((labels == t).sum()) for t in entry["types"]}
+
+
+def load_khoury2026_labels(*, unseal: bool = False) -> pd.DataFrame:
+    """cell_id, label in upload order. Refuses while sealed: only the final
+    v3.1 evaluation, following protocol-khoury2026.md, passes unseal=True."""
+    entry = KHOURY2026
+    if entry["sealed"] and not unseal:
+        raise PermissionError(f"Khoury 2026 is sealed; labels load only at the final v3.1 evaluation ({entry['protocol']})")
+    raw = load_khoury2026_upload()
+    meta = pd.read_csv(entry["files"]["cell_metadata"]).set_index("cell_id").reindex(raw.cell_ids)
+    return pd.DataFrame({"cell_id": raw.cell_ids, "label": meta[entry["label_column"]].map(entry["type_names"]).to_numpy()})
+
+
 if __name__ == "__main__":
     raw = load_fulcher2026_upload()
     print(f"Fulcher 2026 upload: {len(raw.gene_names)} genes x {len(raw.cell_ids)} cells (hashes verified)")
+    raw = load_khoury2026_upload()
+    print(f"Khoury 2026 upload (sealed): {len(raw.gene_names)} genes x {len(raw.cell_ids)} cells (hashes verified); "
+          f"type counts {khoury2026_type_counts()}")

@@ -154,7 +154,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/paired_and_pool_first.py` — paired bootstrap of ours vs. scANVI, and the pool-first kNN check
 - `benchmark/pbmc240_lineage_prep.py` — builds the PBMC240 inputs in the shared gene space, row order pinned to NB1d
 - `benchmark/pbmc240_convention_check.py` — measures how far the service and benchmark preprocessing conventions diverge on PBMC240
-- `benchmark/datasets.py` — registry of held-out datasets (Fulcher 2026): input paths and sha256, role, label rules; separate upload and label loaders
+- `benchmark/datasets.py` — registry of held-out datasets: Fulcher 2026, and Khoury 2026 (sealed: its labels load only at the final v3.1 evaluation); hashed inputs, separate upload and label loaders
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
 - `benchmark/fulcher2026_score.py` — Fulcher 2026 scoring, the only step that reads its labels: both rules, all metrics, the paired bootstrap
@@ -197,6 +197,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/bugs-and-fixes.md` — every real bug hit while building the benchmark, including one in the production service
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
+- `research/benchmark/protocol-khoury2026.md` — the SEALED Khoury 2026 final test set: label-free facts recorded at sealing, and the protocol for its one scoring at the final v3.1 evaluation
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
 - `research/benchmark/fulcher2026/family_summary.csv` — Fulcher 2026: mean, SD, min and max of every metric per family and rule

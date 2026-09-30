@@ -6,7 +6,7 @@ notebook output path, and log it in the changelog at the bottom.
 
 Status markers: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked.
 
-Last updated: 2026-09-30 (Fulcher follow-up done: scANVI fairness arm, product check, V2 selected as the v3.1 candidate)
+Last updated: 2026-09-30 (Fulcher follow-up done; V2 selected as the v3.1 candidate; Khoury 2026 registered and SEALED)
 
 ---
 
@@ -131,6 +131,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
   - [x] scANVI fairness. The 2,907-gene space is reported per gene; 1,975 of those genes were zero-filled for every Fulcher cell. A new arm on the 932 measured genes (3 seeds) is scANVI's best arm at 47.8 shared kNN; the headline is now its best arm, with both rules reported (amendment 2: `21d9f1f`; results: `794fad5`).
   - [x] End-to-end product check. The output is restricted to macrophage/monocyte, logged in §1 as critical (`794fad5`).
   - [x] Exploratory 5-type score (T = CD4T + CD8T), labelled "added after results" (`794fad5`).
+- [x] **Khoury 2026 registered as a SEALED final test set** (timsTOF, mTRAQ 2-plex, 1,651 PBMCs, 2 donors, 5 types; protein-only Seurat labels). Scored exactly once, at the final v3.1 evaluation, under `research/benchmark/protocol-khoury2026.md`. Until then: no embeddings, no scores, and no per-cell labels (the loader refuses). Only label-free facts are recorded.
 - **Fulcher 2026 has been scored once.** Nothing is tuned on it, and it is re-scored only at the final v3.1 evaluation.
 - [ ] Rest of the roadmap's Track E (registry, download scripts, leakage guard, further MS datasets): not started
 
@@ -237,7 +238,7 @@ Sources for the 5-seed, paired-bootstrap and PBMC240 rows:
 `paired_bootstrap_ours_vs_scanvi.csv`, `real_data_per_seed.csv`,
 `scanvi_pbmc240_input_variants.csv`. Full writeup: `research/benchmark/results.md`.
 
-Still needed before claiming state of the art: at least one more held-out MS dataset beyond Fulcher 2026.
+Still needed before claiming state of the art: the sealed Khoury 2026 final test (scored once, at the final v3.1 evaluation), on top of Fulcher 2026.
 The published held out cell type AUC of 1.000 is not a valid unseen type test,
 because the held out classes were in training.
 
@@ -273,3 +274,4 @@ because the held out classes were in training.
 | 2026-09-30 | Repository reorganisation, no behaviour change. Site → `web/` (`Atlas` → `web/data/`, `Plots` → `web/plots/{supervised,semi-supervised}/`); `tools` → `scripts/`, `tools/fair_benchmark` → `benchmark/`; `service/model/` grouped into `runtime/` (what config.py loads), `evidence/`, `source/`, `legacy/{v2,dev}`; `Documentation` → `research/benchmark/` (`architecture.md` → `harness.md`); `docs/plans` → `research/` (this file was `VivOME_TODO.md` there, the roadmap `VivOME_Improvement_Roadmap.md`; notebook tables → `research/notebook-outputs/`); `service/docs` → `docs/service/`; `New_Files` → `data/incoming/` (gitignored; its four duplicates of `app_export/` files deleted after a sha256 re-check). New `docs/project-structure.md` and `docs/file-index.md`; `scripts/check_paths.py` fails on any unresolved cited path or unindexed file. `SUMMARY.md` removed. LFS blob ids unchanged; regenerated manifest differs only in cited paths; benchmark outputs reproduce from the new paths. Found and fixed on the way: `faiss-cpu` missing from `service/requirements.txt`. Still open: NB1b's tables, cited as `MIN_OBSERVED_GENES`'s evidence, were never committed (allowlisted in `check_paths.py` until they land) | `c4f737b`, `b745134`, `5c795ea`, `ee6e192`, `66c6272`, `024156b`, `ebdc4c0`, `23a3b70` |
 | 2026-09-30 | Track E, Fulcher 2026 held-out evaluation. Protocol frozen before scoring (`2bcb657`); gate passed (V2_seed0 0.99965 median cosine vs NB1d on PBMC240). Balanced accuracy over 6 types, nearest centroid / shared kNN: V2 57.3 / 55.5, v3 42.3 / 42.0 (served `v3_seed0` 44.1 / 41.8), scANVI 19.0 / 21.4 (chance 16.7); V2 > v3 in 50/50 pairings, each > scANVI in 30/30. Caveats recorded: labels are the authors' Seurat transfer plus refinement, and the data are TMT. Also: FragPipe TMT parser (`b18f90e`), `embed_query` (`0837e61`), NB1b tables committed with the path-check exception dropped (`629dd98`), and the per-stage pipeline brief restored as `docs/service/pipeline-brief.md` (`5b54660`). Served model unchanged | `5b54660`, `b18f90e`, `0837e61`, `2bcb657`, `0ac2e27`, `18f416f`, `629dd98`, `4ba53aa`, `629d2cf` |
 | 2026-09-30 | Fulcher follow-up. scANVI fairness: its 2,907-gene space left 1,975 genes zero-filled for every Fulcher cell. On the 932 measured genes it reaches 47.8 shared kNN (was 21.4), which beats v3 under shared kNN (12 of 15 pairings) but not V2 (V2 wins 30 of 30); the earlier "v3 beats scANVI 30 of 30" held only against the zero-filled arm. Product check: the running service labels a PBMC upload only macrophage/monocyte (logged critical in §1, NB2 + Track C, not fixed), and identical uploads give different abstentions (unseeded calibration slice). Exploratory 5-type score added after results. Decision: V2 selected as the v3.1 candidate encoder; v3 stays served until the NB2 decision rule, recalibrated abstention and conformal, and the NB4 export. Fulcher scored once; re-scored only at the final v3.1 evaluation | `21d9f1f`, `794fad5` |
+| 2026-09-30 | Khoury 2026 registered as a SEALED final test set. Hash-checked registry; the label loader refuses while sealed. Protocol written with 5 types and Fulcher's rules; models are the final v3.1 candidates, v3 as served, and scANVI's best arm. Label-free facts only: 1,651 cells, 3,732 genes, 3,110 of 9,002 feature genes matched, 879–1,715 observed per cell, all pass the 200 floor, 2 donors crossed with 5 batches. Value scale detected as log, so no double log2. Not embedded, not scored | `KHOURY_HASH` |
