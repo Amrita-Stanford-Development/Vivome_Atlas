@@ -1,0 +1,77 @@
+{
+  "criterion": "V2_seed0 median cosine >= 0.999 (nb1d_first_symbol)",
+  "models": {
+    "V2_seed0": {
+      "nb1d_first_symbol": {
+        "median": 0.9996485710144043,
+        "p05": 0.9944964647293091,
+        "min": 0.9833570718765259
+      },
+      "service_identifiers": {
+        "median": 0.9988900423049927,
+        "p05": 0.9902917146682739,
+        "min": 0.9179300665855408
+      }
+    },
+    "v3_seed0": {
+      "nb1d_first_symbol": {
+        "median": 0.9995377063751221,
+        "p05": 0.9901120662689209,
+        "min": 0.9621257781982422
+      },
+      "service_identifiers": {
+        "median": 0.99773770570755,
+        "p05": 0.9784880876541138,
+        "min": 0.8866277933120728
+      }
+    }
+  },
+  "v3_seed0_centroids_vs_runtime": {
+    "min_row_cosine": 0.9999999403953552,
+    "max_abs_diff": 2.403557300567627e-05
+  },
+  "passed": true,
+  "checkpoints": {
+    "v3_seed0": {
+      "file": "reference_model.pt",
+      "sha256": "08b1a0b86ab9679f2d76b66c76f977314f2222713d92e0775770d3cf569f8e39"
+    },
+    "v3_seed1": {
+      "file": "reference_seed1.pt",
+      "sha256": "8419a82914d247e51da776e015083289cfeb997c0d217cd262f84134f798f83b"
+    },
+    "v3_seed2": {
+      "file": "reference_seed2.pt",
+      "sha256": "6bbe3d5e8add039afd663809ef9192f1a9b539b6fb9fde4f2c733a56cd3f5b43"
+    },
+    "v3_seed3": {
+      "file": "reference_seed3.pt",
+      "sha256": "9560cda736364c2e25b4fe01ffbb5b60cf445e1699d981a57bd53abae01d6ed7"
+    },
+    "v3_seed4": {
+      "file": "reference_seed4.pt",
+      "sha256": "c1eda4167541be25f5863328b1bd71f21f5f6304a9ccd04a176e5209d938e17e"
+    },
+    "V2_seed0": {
+      "file": "V2_batchgene_aug_seed0.pt",
+      "sha256": "c08c0cf8d4ade284bb18570bfd315905c57f271a0d374732c917dd54f6101063"
+    },
+    "V2_seed1": {
+      "file": "V2_batchgene_aug_seed1.pt",
+      "sha256": "42cdea2a558068d92d23519846da39c691dfcb324dbb6f486e08d8d67044fbd2"
+    },
+    "V2_seed2": {
+      "file": "V2_batchgene_aug_seed2.pt",
+      "sha256": "a2c7424626fdb30960c1e30b4def45e0fe5e6a755197627abc5fe292f54400e7"
+    },
+    "V2_seed3": {
+      "file": "V2_batchgene_aug_seed3.pt",
+      "sha256": "6d5ddefc2155f3fd2f7942464039378f8882e51d71d84a3a889fa2ce009a7724"
+    },
+    "V2_seed4": {
+      "file": "V2_batchgene_aug_seed4.pt",
+      "sha256": "5950061279cb1f6a5e469159effa5de76a3ca7d016a30c68608097980240a1e5"
+    }
+  },
+  "served_equals_reference_seed0_weights": true
+}

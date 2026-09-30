@@ -31,13 +31,14 @@ REPO = datasets.REPO
 OUT = Path(__file__).resolve().parent / "results" / "fulcher2026"
 TABLES = REPO / "research" / "benchmark" / "fulcher2026"
 NB1D = REPO / "data" / "incoming" / "NB1d" / "embeddings"
-CHECKPOINTS = REPO / "data" / "incoming" / "checkpoints"
+V3_CKPT = REPO / "data" / "incoming" / "Reference_Projection_V3_ckpt"
+V2_CKPT = REPO / "data" / "incoming" / "NB1b" / "ckpt"
 RUNTIME = REPO / "service" / "model" / "runtime"
 GATE_MODEL, GATE_MIN_MEDIAN_COSINE = "V2_seed0", 0.999
 
 MODELS = {"v3_seed0": RUNTIME / "reference_model.pt"}
-MODELS.update({f"v3_seed{s}": CHECKPOINTS / f"reference_seed{s}.pt" for s in range(1, 5)})
-MODELS.update({f"V2_seed{s}": CHECKPOINTS / f"V2_batchgene_aug_seed{s}.pt" for s in range(5)})
+MODELS.update({f"v3_seed{s}": V3_CKPT / f"reference_seed{s}.pt" for s in range(1, 5)})
+MODELS.update({f"V2_seed{s}": V2_CKPT / f"V2_batchgene_aug_seed{s}.pt" for s in range(5)})
 
 
 def sha256(path: Path) -> str:
@@ -96,6 +97,12 @@ def main() -> None:
 
     gate = run_gate(genes)
     gate["checkpoints"] = {name: {"file": path.name, "sha256": sha256(path)} for name, path in MODELS.items()}
+    # The served file and NB1d's reference_seed0.pt differ as files; record whether their weights do.
+    import torch
+    served_sd, seed0_sd = (torch.load(p, map_location="cpu", weights_only=False)
+                           for p in (MODELS["v3_seed0"], V3_CKPT / "reference_seed0.pt"))
+    gate["served_equals_reference_seed0_weights"] = list(served_sd) == list(seed0_sd) and all(
+        torch.equal(served_sd[k], seed0_sd[k]) for k in served_sd)
     (TABLES / "gate.json").write_text(json.dumps(gate, indent=2) + "\n")
     print(json.dumps(gate["models"], indent=2))
     if not gate["passed"]:

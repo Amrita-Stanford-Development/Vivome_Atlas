@@ -196,6 +196,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/bugs-and-fixes.md` — every real bug hit while building the benchmark, including one in the production service
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
+- `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only
