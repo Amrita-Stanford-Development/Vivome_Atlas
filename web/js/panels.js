@@ -304,3 +304,82 @@ export function factText(manifest, key) {
   const fact = FACTS[key];
   return fact ? fact(manifest ?? {}) : `<span class="pending">${PENDING_LABEL}</span>`;
 }
+
+// ---- Projection results (project.html) ----
+// A response from the projection service (docs/service/projection-api.md).
+// Its numbers are computed by the service from the visitor's own upload, not
+// read from the manifest; cell ids come from the visitor's file, so every
+// value is escaped like any other data.
+
+const ABSTAIN_TEXT = {
+  coverage_too_low: 'Too few observed genes',
+  outside_supported_region: 'Outside the region the atlas has evidence for',
+  no_confident_label: 'No class met the confidence bar',
+  ambiguous_between_classes: 'Ambiguous between classes',
+};
+
+const abstainText = (reason) => ABSTAIN_TEXT[reason] ?? reason ?? 'Abstained';
+const cellsOf = (result) => (Array.isArray(result?.cells) ? result.cells : []);
+const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(1)}%` : '');
+
+export function buildProjectionSummary(result) {
+  const cells = cellsOf(result);
+  const abstained = cells.filter((c) => c.abstained).length;
+  const space = result?.label_space;
+  const candidates = space?.candidate_classes ?? [];
+  const spaceText = space?.restricted_to_supported_classes
+    ? `Restricted to ${candidates.map(escapeHtml).join(', ')}`
+    : `All ${formatCount(candidates.length)} reference classes`;
+  const scale = result?.value_scale;
+  const scaleText = scale?.transformed ? 'Linear intensities, log2-transformed' : 'Already on a log scale';
+  return `
+    <dl class="model-card">
+      ${cardField('Cells', formatCount(result?.n_cells))}
+      ${cardField('Features matched', `${formatCount(result?.n_features_matched)} of ${formatCount(
+        (result?.n_features_matched ?? 0) + (result?.n_features_unmatched ?? 0))}`)}
+      ${cardField('Labelled', `${formatCount(cells.length - abstained)} (${share(cells.length - abstained, cells.length)})`)}
+      ${cardField('Abstained', `${formatCount(abstained)} (${share(abstained, cells.length)})`)}
+      ${cardField('Label space', spaceText)}
+      ${cardField('Values', scaleText)}
+      ${cardField('Model', textOrPending(result?.model_version))}
+      ${cardField('Atlas version', textOrPending(result?.atlas_version))}
+    </dl>`;
+}
+
+// How many cells got each label, and how many abstained for each reason.
+export function buildProjectionLabels(result) {
+  const cells = cellsOf(result);
+  const counts = new Map();
+  for (const c of cells) {
+    const key = c.abstained ? `\u0000${c.abstain_reason}` : c.label;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  const rows = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([key, count]) => {
+      const name = key.startsWith('\u0000')
+        ? `<span class="pending">Abstained: ${escapeHtml(abstainText(key.slice(1)))}</span>`
+        : escapeHtml(key);
+      return `<tr><td class="support-name">${name}</td><td class="support-num">${formatCount(count)}</td>`
+        + `<td class="support-num">${share(count, cells.length)}</td></tr>`;
+    }).join('');
+  return table(['Label', 'Cells', 'Share'], rows);
+}
+
+// One row per cell, the first `limit` of them.
+export function buildProjectionCells(result, limit = 200) {
+  const cells = cellsOf(result);
+  const rows = cells.slice(0, limit).map((c) => {
+    const labelSet = (c.label_set ?? []).map(escapeHtml).join(', ');
+    const confidence = Number.isFinite(c.confidence) ? c.confidence.toFixed(3) : '';
+    const label = c.abstained
+      ? `<span class="pending">${escapeHtml(abstainText(c.abstain_reason))}</span>`
+      : escapeHtml(c.label);
+    return `<tr><td><code>${escapeHtml(c.cell_id)}</code></td><td>${label}</td><td>${labelSet}</td>`
+      + `<td class="support-num">${confidence}</td><td class="support-num">${formatCount(c.observed_genes)}</td></tr>`;
+  }).join('');
+  const note = cells.length > limit
+    ? `<p class="panel-note">Showing the first ${formatCount(limit)} of ${formatCount(cells.length)} cells. Download the response for all of them.</p>`
+    : '';
+  return table(['Cell', 'Label', 'Label set', 'Confidence', 'Observed genes'], rows) + note;
+}

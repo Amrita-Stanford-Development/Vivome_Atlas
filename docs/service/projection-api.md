@@ -4,13 +4,12 @@ The projection service accepts an expression matrix and places its cells into
 the shared latent space. It is the core of the resource claim: an atlas you
 can *send data to*, not only look at.
 
-> **Status: implemented, not deployed.** The pipeline in `service/` runs
+> **Status: implemented, not hosted.** The pipeline in `service/` runs
 > end to end against the real v3 reference (`service/model/README.md`) and
-> is covered by `service/tests/`. It is not wired up to this site —
-> `project.html` today performs client-side validation only, has no
-> fetch/XHR anywhere, and publishes the contract below. Every value in the
-> schema is a placeholder showing the response shape — none of them is a
-> measurement.
+> is covered by `service/tests/`. `web/project.html` sends an upload to a
+> service the visitor runs locally (`python3 -m service.app`) and renders
+> the response; there is no hosted service yet. Every value in the schema
+> below is a placeholder showing the response shape, not a measurement.
 
 ## Contract
 
@@ -73,11 +72,20 @@ cleaned to its basename without `.raw`.
       "label_set"      : [],
       "confidence"     : null,
       "abstained"      : true,
-      "abstain_reason" : "outside supported latent space"
+      "abstain_reason" : "coverage_too_low" | "outside_supported_region" | "no_confident_label" | "ambiguous_between_classes"
     }
   ]
 }
 ```
+
+`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version"}`,
+or 503 with `{"status": "unavailable", "reason"}` while an artifact is
+missing. `project.html` calls it before offering an upload.
+
+A browser may read the service's responses only from an allowed origin
+(`config.ALLOWED_ORIGINS`, env `VIVOME_ALLOWED_ORIGINS`, comma separated).
+The default allows the site served locally on port 8000. The service also
+answers CORS preflights, including Chrome's Private Network Access check.
 
 **`value_scale`** (additive, not yet in a strict reading of the contract
 above — see `service/README.md`) reports whether the upload was detected as
@@ -146,5 +154,5 @@ inputs: expression matrices are routinely gigabytes.
 - The header line is read from the first 64 KB slice only (`readHeaderLine`).
 - Rows are counted by streaming the file through a reader (`countNonEmptyLines`).
 
-Peak memory stays flat regardless of file size — the file is never read into
-memory whole. Keep that property when wiring the real upload.
+Peak memory stays flat regardless of file size: the file is never read into
+memory whole. The upload itself is streamed by the browser as `FormData`.

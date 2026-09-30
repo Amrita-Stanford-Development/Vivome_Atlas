@@ -20,7 +20,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/index.html` — landing page: the intro, then a camera flight through the water in nine chapters, ending in the finale
 - `web/home.html` — the dashboard: a way in to every tool, the current release, what's new
 - `web/atlas.html` — interactive 3D cell viewer (RNA + protein), with the cross-modal support map and alignment diagnostics
-- `web/project.html` — projection page: the upload contract and the supported label space
+- `web/project.html` — the projection tool: sends a matrix to a locally run service and shows each cell's label or abstention, with a downloadable response
 - `web/benchmark.html` — standing comparison against established integration methods (rows stay pending until sign-off)
 - `web/versions.html` — model card, data availability, prior baseline, release protocol
 - `web/miscellaneous.html` — intentionally blank (the former roadmap page); kept on purpose

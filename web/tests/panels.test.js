@@ -4,6 +4,7 @@ import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
   buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
   buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew, buildProofPoints, factText,
+  buildProjectionSummary, buildProjectionLabels, buildProjectionCells,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
 
@@ -322,4 +323,60 @@ test('an unknown or missing fact reads Pending, and names are escaped', () => {
   const m = manifestFixture();
   m.model.name = '<b>x</b>';
   assert.ok(!factText(m, 'model_name').includes('<b>'));
+});
+
+const projection = () => ({
+  atlas_version: '0.2.0',
+  model_version: 'production',
+  n_cells: 3,
+  n_features_matched: 900,
+  n_features_unmatched: 100,
+  value_scale: { detected: 'linear', transformed: true },
+  label_space: { restricted_to_supported_classes: false, candidate_classes: ['a', 'b', 'c'] },
+  cells: [
+    { cell_id: '<img src=x onerror=alert(1)>', label: 'monocyte', label_set: ['monocyte'], confidence: 0.91234, abstained: false, observed_genes: 1200 },
+    { cell_id: 'c2', label: 'monocyte', label_set: ['monocyte', 'macrophage'], confidence: 0.5, abstained: false, observed_genes: 800 },
+    { cell_id: 'c3', label: null, label_set: [], confidence: null, abstained: true, abstain_reason: 'coverage_too_low', observed_genes: 12 },
+  ],
+});
+
+test('projection summary reports the upload, the label space and the abstention share', () => {
+  const html = buildProjectionSummary(projection());
+  assert.match(html, /Cells<\/dt><dd>3/);
+  assert.match(html, /900 of 1,000/);
+  assert.match(html, /Labelled<\/dt><dd>2 \(66\.7%\)/);
+  assert.match(html, /Abstained<\/dt><dd>1 \(33\.3%\)/);
+  assert.match(html, /All 3 reference classes/);
+  assert.match(html, /log2-transformed/);
+  const restricted = projection();
+  restricted.label_space = { restricted_to_supported_classes: true, candidate_classes: ['macrophage', 'monocyte'] };
+  assert.match(buildProjectionSummary(restricted), /Restricted to macrophage, monocyte/);
+});
+
+test('projection labels count each label and each abstain reason, most first', () => {
+  const html = buildProjectionLabels(projection());
+  assert.ok(html.indexOf('monocyte') < html.indexOf('Abstained'), html);
+  assert.match(html, /monocyte<\/td><td class="support-num">2<\/td><td class="support-num">66\.7%/);
+  assert.match(html, /Abstained: Too few observed genes/);
+});
+
+test('projection cells escape ids from the upload and show abstentions plainly', () => {
+  const html = buildProjectionCells(projection());
+  assert.ok(!html.includes('<img'), 'a cell id from the upload must not become markup');
+  assert.match(html, /&lt;img/);
+  assert.match(html, /0\.912/);
+  assert.match(html, /Too few observed genes/);
+});
+
+test('projection cells show the first rows and say how many there are', () => {
+  const html = buildProjectionCells(projection(), 2);
+  assert.equal((html.match(/<tr>/g) ?? []).length, 3, 'header row plus two cells');
+  assert.match(html, /first 2 of 3 cells/);
+});
+
+test('projection builders survive a malformed response', () => {
+  for (const build of [buildProjectionSummary, buildProjectionLabels, buildProjectionCells]) {
+    const html = build({});
+    assert.ok(!html.includes('undefined') && !html.includes('NaN'), `${build.name}: ${html}`);
+  }
 });

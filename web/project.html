@@ -26,6 +26,19 @@
         .result dt { color: var(--ink-faint); }
         .result dd { font-variant-numeric: tabular-nums; color: var(--ink); }
         pre { font-size: 12.5px; line-height: 1.55; padding: 16px 18px; overflow-x: auto; color: var(--ink); }
+        .row { display: flex; gap: 10px; align-items: stretch; margin-bottom: 10px; }
+        .row input { flex: 1; margin: 0; }
+        input[type="url"] { display: block; width: 100%; font: inherit; font-size: 14px; color: var(--ink); padding: 10px 12px; border: 0; }
+        .btn-quiet { color: var(--ink); background: var(--paper); box-shadow: 1px 2px 5px rgba(var(--shade), 0.16); }
+        .btn-quiet:hover { background: var(--accent-tint); }
+        .btn-quiet:disabled { color: var(--ink-faint); background: var(--well); }
+        .service-status { font-size: 14px; }
+        .service-status.is-ready { color: var(--prot); }
+        .service-status.is-down { color: var(--error); }
+        .check { display: flex; gap: 10px; align-items: baseline; font-weight: 400; margin-bottom: 18px; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+        .sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+        #results h3 { margin: 26px 0 10px; }
         .supported-list { font-size: 15px; }
         .supported-list p + p { margin-top: 8px; }
     </style>
@@ -47,31 +60,54 @@
 
     <main id="main" class="page">
         <h1 class="page-title">Project your data</h1>
-        <p class="lede">Submit an expression matrix and receive coordinates in the shared latent space.</p>
+        <p class="lede">Send an expression matrix and get back, for every cell, coordinates in the shared space and a label or an abstention with its reason.</p>
 
         <section class="sheet">
-            <h2>Submit a matrix</h2>
-            <div class="pending-banner">
-                <strong>The projection service is not yet deployed.</strong>
-                The backend pipeline is real and runs end to end against the trained v3
-                reference (<a href="versions.html">versions</a>), but this page isn't wired up
-                to it yet. It validates your file locally and reports what it found. It does
-                not return coordinates or labels, because this page producing either on its
-                own would mean inventing them.
+            <h2>Connect to a projection service</h2>
+            <p>
+                There is no hosted service yet. This page sends your matrix to a projection
+                service you run yourself, from a clone of the repository, and to nothing else:
+            </p>
+            <pre class="well">pip install -r service/requirements.txt
+python3 -m service.app</pre>
+            <label for="service-url">Service address</label>
+            <div class="row">
+                <input type="url" id="service-url" class="well" value="http://127.0.0.1:8001" spellcheck="false">
+                <button type="button" id="check-service" class="btn btn-quiet">Check</button>
             </div>
+            <p class="service-status" id="service-status" role="status">Not checked yet.</p>
+        </section>
 
+        <section class="sheet">
+            <h2>Send a matrix</h2>
             <label for="modality">Modality</label>
             <select id="modality" class="well">
-                <option value="rna">RNA: genes &times; cells</option>
                 <option value="prot">Protein: proteins &times; cells</option>
+                <option value="rna">RNA: genes &times; cells</option>
             </select>
 
-            <label for="matrix">Matrix file (CSV, first column = feature name, header row = cell IDs)</label>
-            <input type="file" id="matrix" class="well" accept=".csv,text/csv">
+            <label for="matrix">Matrix file: features in rows, cells in columns (CSV or TSV, or a DIA-NN report)</label>
+            <input type="file" id="matrix" class="well" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values">
 
-            <button id="submit" class="btn" disabled>Validate matrix</button>
+            <label class="check"><input type="checkbox" id="restrict"> Limit labels to the cell types with protein evidence (see the supported label space below)</label>
 
-            <div id="result"></div>
+            <div class="actions">
+                <button type="button" id="validate" class="btn btn-quiet" disabled>Check the file</button>
+                <button type="button" id="project" class="btn" disabled>Project</button>
+            </div>
+            <div id="file-result"></div>
+        </section>
+
+        <section class="sheet" id="results" hidden>
+            <div class="sheet-head">
+                <h2>Results</h2>
+                <button type="button" id="download" class="btn btn-quiet">Download the response</button>
+            </div>
+            <div id="projection-summary"></div>
+            <h3>Labels</h3>
+            <div class="table-scroll" id="projection-labels"></div>
+            <h3>Cells</h3>
+            <div class="table-scroll" id="projection-cells"></div>
         </section>
 
         <section class="sheet" id="labels">
@@ -86,7 +122,7 @@
 
         <section class="sheet">
             <h2>Service contract</h2>
-            <p>The backend built in Phase 5 implements this interface.</p>
+            <p>What this page sends and what comes back. The full contract is in <code>docs/service/projection-api.md</code>.</p>
             <div class="pending-banner">
                 <strong>Schema illustration.</strong> Every value below is a placeholder showing
                 the response shape. None of them is a measurement.
@@ -95,32 +131,39 @@
 Content-Type: multipart/form-data
 
   modality                      : "rna" | "prot"
-  matrix                        : CSV, features in rows, cells in columns
+  matrix                        : CSV or TSV (or a DIA-NN report), features in rows, cells in columns
   restrict_to_supported_classes : "true" | "false"   (optional, default "false")
 
 200 Response
 {
   "atlas_version"        : &lt;string&gt;,
+  "model_version"        : &lt;string&gt;,
   "n_cells"              : &lt;int&gt;,
   "n_features_matched"   : &lt;int&gt;,
   "n_features_unmatched" : &lt;int&gt;,
+  "value_scale"          : {"detected": &lt;string&gt;, "transformed": &lt;bool&gt;},
+  "label_space"          : {"restricted_to_supported_classes": &lt;bool&gt;, "candidate_classes": [&lt;string&gt;, ...]},
+  "gene_id_resolution"   : {"matched": &lt;int&gt;, "unmapped": &lt;int&gt;, "ambiguous": &lt;int&gt;, ...},
   "cells": [
     {
-      "cell_id"     : &lt;string&gt;,
-      "coordinates" : [&lt;float&gt;, &lt;float&gt;, &lt;float&gt;],
-      "label"       : &lt;string&gt;,
-      "label_set"   : [&lt;string&gt;, ...],
-      "confidence"  : &lt;float 0-1&gt;,
-      "abstained"   : false
+      "cell_id"        : &lt;string&gt;,
+      "coordinates"    : [&lt;float&gt;, &lt;float&gt;, &lt;float&gt;],
+      "observed_genes" : &lt;int&gt;,
+      "label"          : &lt;string&gt;,
+      "label_set"      : [&lt;string&gt;, ...],
+      "confidence"     : &lt;float 0-1&gt;,
+      "abstained"      : false
     },
     {
-      "cell_id"       : &lt;string&gt;,
-      "coordinates"   : [&lt;float&gt;, &lt;float&gt;, &lt;float&gt;],
-      "label"         : null,
-      "label_set"     : [],
-      "confidence"    : null,
-      "abstained"     : true,
-      "abstain_reason": "outside supported latent space"
+      "cell_id"        : &lt;string&gt;,
+      "coordinates"    : [&lt;float&gt;, &lt;float&gt;, &lt;float&gt;],
+      "observed_genes" : &lt;int&gt;,
+      "label"          : null,
+      "label_set"      : [],
+      "confidence"     : null,
+      "abstained"      : true,
+      "abstain_reason" : "coverage_too_low" | "outside_supported_region"
+                         | "no_confident_label" | "ambiguous_between_classes"
     }
   ]
 }</pre>
@@ -148,11 +191,53 @@ Content-Type: multipart/form-data
     <script type="module" src="js/background.js"></script>
     <script type="module" async>
         import { loadManifest, formatCount } from './js/manifest.js';
-        import { buildSupportedLabelSpace, errorPanel, escapeHtml } from './js/panels.js';
+        import {
+            buildSupportedLabelSpace, buildProjectionSummary, buildProjectionLabels, buildProjectionCells,
+            errorPanel, escapeHtml,
+        } from './js/panels.js';
 
-        const fileInput = document.getElementById('matrix');
-        const submitButton = document.getElementById('submit');
-        const resultMount = document.getElementById('result');
+        const $ = (id) => document.getElementById(id);
+        const fileInput = $('matrix');
+        const serviceInput = $('service-url');
+        const statusLine = $('service-status');
+        let serviceReady = false;
+        let lastResponse = null;
+
+        // The address is a per-visitor convenience; the page works without storage.
+        const SERVICE_KEY = 'vivome-service-url';
+        try { serviceInput.value = localStorage.getItem(SERVICE_KEY) || serviceInput.value; } catch { /* no storage */ }
+        const serviceUrl = () => serviceInput.value.trim().replace(/\/+$/, '');
+
+        function setStatus(text, state) {
+            statusLine.textContent = text;
+            statusLine.classList.toggle('is-ready', state === 'ready');
+            statusLine.classList.toggle('is-down', state === 'down');
+        }
+
+        function updateButtons() {
+            const hasFile = fileInput.files.length > 0;
+            $('validate').disabled = !hasFile;
+            $('project').disabled = !(hasFile && serviceReady);
+        }
+
+        async function checkService() {
+            try { localStorage.setItem(SERVICE_KEY, serviceInput.value.trim()); } catch { /* no storage */ }
+            setStatus('Checking...', null);
+            serviceReady = false;
+            try {
+                const response = await fetch(`${serviceUrl()}/api/status`);
+                const payload = await response.json();
+                if (response.ok && payload.status === 'ready') {
+                    serviceReady = true;
+                    setStatus(`Ready: ${payload.model_version} model, atlas ${payload.atlas_version}.`, 'ready');
+                } else {
+                    setStatus(`The service is running but cannot project yet: ${payload.reason ?? payload.error ?? response.status}`, 'down');
+                }
+            } catch {
+                setStatus(`No service answered at ${serviceUrl()}. Start one with the commands above, then check again.`, 'down');
+            }
+            updateButtons();
+        }
 
         // Expression matrices are routinely gigabytes. Read only the header slice
         // and count the rest by streaming, so peak memory stays flat regardless
@@ -181,41 +266,82 @@ Content-Type: multipart/form-data
             return count;
         }
 
-        fileInput.addEventListener('change', () => {
-            submitButton.disabled = fileInput.files.length === 0;
-            resultMount.innerHTML = '';
-        });
-
-        submitButton.addEventListener('click', async () => {
+        async function checkFile() {
             const file = fileInput.files[0];
-            if (!file) return;
-            submitButton.disabled = true;
+            const header = await readHeaderLine(file);
+            if (header.trim() === '') throw new Error('The file has no header row.');
+            // TSV and DIA-NN reports are tab separated; everything else, comma.
+            const columns = header.split(header.includes('\t') ? '\t' : ',').length;
+            const features = await countNonEmptyLines(file) - 1;
+            if (columns < 2) throw new Error('The header row lists no cells.');
+            if (features < 1) throw new Error('The file has a header row but no feature rows.');
+            return { name: file.name, size: file.size, columns, features };
+        }
+
+        $('validate').addEventListener('click', async () => {
+            $('validate').disabled = true;
             try {
-                const header = await readHeaderLine(file);
-                if (header.trim() === '') throw new Error('File has no header row.');
-                const cells = header.split(',').length - 1;
-                if (cells < 1) throw new Error('Header row lists no cell IDs.');
-                const features = await countNonEmptyLines(file) - 1;
-                if (features < 1) throw new Error('File has a header row but no feature rows.');
-                resultMount.innerHTML = `
+                const f = await checkFile();
+                $('file-result').innerHTML = `
                     <dl class="result">
-                        <dt>File</dt><dd>${escapeHtml(file.name)} (${(file.size / 1024).toFixed(1)} KB)</dd>
-                        <dt>Cells detected</dt><dd>${formatCount(cells)}</dd>
-                        <dt>Features detected</dt><dd>${formatCount(features)}</dd>
-                        <dt>Projection</dt>
-                        <dd class="panel-error">Not performed: the projection service is not deployed.</dd>
+                        <dt>File</dt><dd>${escapeHtml(f.name)} (${(f.size / 1024).toFixed(1)} KB)</dd>
+                        <dt>Columns</dt><dd>${formatCount(f.columns)} (cells, plus any annotation columns)</dd>
+                        <dt>Feature rows</dt><dd>${formatCount(f.features)}</dd>
                     </dl>`;
             } catch (err) {
-                resultMount.innerHTML = errorPanel(err);
+                $('file-result').innerHTML = errorPanel(err);
             } finally {
-                submitButton.disabled = false;
+                updateButtons();
             }
         });
 
+        $('project').addEventListener('click', async () => {
+            const file = fileInput.files[0];
+            const form = new FormData();
+            form.append('modality', $('modality').value);
+            form.append('restrict_to_supported_classes', $('restrict').checked ? 'true' : 'false');
+            form.append('matrix', file, file.name);
+            $('project').disabled = true;
+            $('file-result').innerHTML = '<p class="panel-note">Projecting. Large files take a while.</p>';
+            try {
+                const response = await fetch(`${serviceUrl()}/api/project`, { method: 'POST', body: form });
+                const payload = await response.json();
+                if (!response.ok) {
+                    throw new Error([payload.error, payload.reason].filter(Boolean).join(': ') || `The service answered ${response.status}.`);
+                }
+                lastResponse = payload;
+                $('file-result').innerHTML = (payload.warnings ?? []).map((w) => `<p class="note">${escapeHtml(w)}</p>`).join('');
+                $('projection-summary').innerHTML = buildProjectionSummary(payload);
+                $('projection-labels').innerHTML = buildProjectionLabels(payload);
+                $('projection-cells').innerHTML = buildProjectionCells(payload);
+                $('results').hidden = false;
+                $('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                $('file-result').innerHTML = errorPanel(err instanceof TypeError
+                    ? new Error(`Could not reach the service at ${serviceUrl()}.`) : err);
+            } finally {
+                updateButtons();
+            }
+        });
+
+        $('download').addEventListener('click', () => {
+            if (!lastResponse) return;
+            const blob = new Blob([JSON.stringify(lastResponse, null, 2)], { type: 'application/json' });
+            const link = Object.assign(document.createElement('a'), {
+                href: URL.createObjectURL(blob), download: 'vivome-projection.json',
+            });
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+
+        fileInput.addEventListener('change', () => { $('file-result').innerHTML = ''; updateButtons(); });
+        $('check-service').addEventListener('click', checkService);
+        checkService();
+
         loadManifest().then((manifest) => {
-            document.getElementById('supported').innerHTML = buildSupportedLabelSpace(manifest);
+            $('supported').innerHTML = buildSupportedLabelSpace(manifest);
         }).catch((err) => {
-            document.getElementById('supported').innerHTML = errorPanel(err);
+            $('supported').innerHTML = errorPanel(err);
         });
     </script>
 </body>

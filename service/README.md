@@ -47,9 +47,10 @@ Every pipeline stage is implemented, tested (`tests/`, against synthetic
 reference fixtures at the real 85,233-cell scale, deliberately kept
 synthetic for speed and determinism rather than loading the real ~130MB of
 arrays), and running against the real artifacts above. `POST /api/project`
-serves real predictions end to end. It is not deployed or reachable from
-the static site — `project.html` performs client-side validation only and
-has no fetch/XHR anywhere; wiring that up is separate, still-open work.
+serves real predictions end to end. It is not hosted: `web/project.html`
+sends uploads to a service the visitor runs locally, checking
+`GET /api/status` first, and the service answers only allowed origins
+(`config.ALLOWED_ORIGINS`).
 
 The dev placeholder checkpoint (`model/legacy/dev/H_seed4.pt`) is no longer the
 default — `config.DEV_CHECKPOINT_PATH` still exists and

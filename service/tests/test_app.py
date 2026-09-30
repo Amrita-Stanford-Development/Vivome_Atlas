@@ -76,6 +76,50 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         app._bundle = None
         app._bundle_error = None
 
+    def _get(self, path, headers=None, method="GET"):
+        request = urllib.request.Request(f"{self.base_url}{path}", method=method, headers=headers or {})
+        try:
+            with urllib.request.urlopen(request) as response:
+                body = response.read()
+                return response.status, dict(response.headers), json.loads(body) if body else None
+        except urllib.error.HTTPError as exc:
+            return exc.code, dict(exc.headers), json.loads(exc.read())
+
+    def test_status_says_ready_with_the_model_once_the_reference_loads(self):
+        self._install_synthetic_bundle()
+        status, _, payload = self._get("/api/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(payload["status"], "ready")
+        self.assertEqual(payload["atlas_version"], config.ATLAS_VERSION)
+        self.assertIn("model_version", payload)
+
+    def test_status_answers_503_with_the_reason_when_an_artifact_is_missing(self):
+        with patch("service.pipeline.reference.load_reference_embedding",
+                   side_effect=reference.PendingArtifactError("forced for this test")):
+            status, _, payload = self._get("/api/status")
+        self.assertEqual(status, 503)
+        self.assertEqual(payload["status"], "unavailable")
+        self.assertIn("forced for this test", payload["reason"])
+
+    def test_an_allowed_origin_may_read_responses_and_others_may_not(self):
+        self._install_synthetic_bundle()
+        allowed = config.ALLOWED_ORIGINS[0]
+        _, headers, _ = self._get("/api/status", {"Origin": allowed})
+        self.assertEqual(headers.get("Access-Control-Allow-Origin"), allowed)
+        _, headers, _ = self._get("/api/status", {"Origin": "https://example.com"})
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+
+    def test_preflight_allows_the_site_including_a_private_network_request(self):
+        allowed = config.ALLOWED_ORIGINS[0]
+        status, headers, _ = self._get("/api/project", {
+            "Origin": allowed, "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Private-Network": "true",
+        }, method="OPTIONS")
+        self.assertEqual(status, 204)
+        self.assertEqual(headers.get("Access-Control-Allow-Origin"), allowed)
+        self.assertEqual(headers.get("Access-Control-Allow-Private-Network"), "true")
+        self.assertIn("POST", headers.get("Access-Control-Allow-Methods", ""))
+
     def test_unknown_path_is_404(self):
         status, payload = _post_multipart(f"{self.base_url}/not/a/real/endpoint", b"rna", b"gene,c1\n")
         self.assertEqual(status, 404)

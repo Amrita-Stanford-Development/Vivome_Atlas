@@ -122,13 +122,55 @@ def _log_upload(matrix_text: str, result: dict) -> None:
 class ProjectionHandler(BaseHTTPRequestHandler):
     server_version = "VivOMEProjectionService/0.1"
 
+    def _send_cors_headers(self) -> None:
+        """Lets the site's projection page read the response when it is
+        served from an allowed origin (config.ALLOWED_ORIGINS); any other
+        origin gets no CORS headers, so a browser keeps the response from it."""
+        origin = self.headers.get("Origin")
+        if origin and origin in config.ALLOWED_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+
     def _send_json(self, status: int, payload: dict) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
+        self._send_cors_headers()
         self.end_headers()
         self.wfile.write(body)
+
+    def do_OPTIONS(self) -> None:  # noqa: N802 (stdlib naming)
+        """CORS preflight. A plain FormData POST needs none, but a browser
+        may still send one, for instance Chrome's check before a public
+        page reaches a service on this machine (Private Network Access)."""
+        self.send_response(204)
+        self._send_cors_headers()
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        if self.headers.get("Access-Control-Request-Private-Network") == "true" \
+                and self.headers.get("Origin") in config.ALLOWED_ORIGINS:
+            self.send_header("Access-Control-Allow-Private-Network", "true")
+        self.send_header("Access-Control-Max-Age", "600")
+        self.end_headers()
+
+    def do_GET(self) -> None:  # noqa: N802 (stdlib naming)
+        """GET /api/status: whether the service can project, and with which
+        model, so the site's projection page can say so before an upload.
+        Loads the reference on first call, which also warms the service up."""
+        if self.path != "/api/status":
+            self._send_json(404, {"error": f"no such endpoint: {self.path}"})
+            return
+        try:
+            bundle = _get_bundle()
+        except reference.PendingArtifactError as exc:
+            self._send_json(503, {"status": "unavailable", "reason": str(exc)})
+            return
+        self._send_json(200, {
+            "status": "ready",
+            "atlas_version": config.ATLAS_VERSION,
+            "model_version": bundle.model_version,
+        })
 
     def do_POST(self) -> None:  # noqa: N802 (stdlib naming)
         if self.path != "/api/project":
