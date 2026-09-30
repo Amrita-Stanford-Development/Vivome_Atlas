@@ -12,6 +12,7 @@ Latent embeddings and metadata, latent dim 128.
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
 | `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows — from the v3 reference (`scripts/archive/promote_v3_atlas.py`) |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
+| `story_cells.json` | Generated with the manifest: every protein cell and a class-stratified, fixed-seed sample of about 2,000 RNA cells, at the viewer's 3-PC coordinates, for the landing story's scene |
 
 RNA metadata columns: `latent_dim, modality, orig_index, class_idx,
 class_name, lineage, PC1, PC2, PC3`.

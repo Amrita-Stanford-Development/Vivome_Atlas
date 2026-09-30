@@ -52,7 +52,7 @@ styles. Page-specific layout (grids, spacing) may live in the page's own
 | `--ink` / `--ink-soft` / `--ink-faint` | `#1D2B36` / `#4B4B4B` / `#666666` | headings / body / labels and Pending |
 | `--line` | `#E4E3DE` | hairlines |
 | `--accent` | `#0066A3` | the one accent: links, focus rings |
-| `--accent-bright` | `#007AB8` | the cutout's fill only |
+| `--accent-bright` | `#0073AD` | the cutout and the landing wordmark only |
 | `--rna` | `#C8641E` | reserved: RNA, and nothing else |
 | `--prot` | `#2F8F6A` | reserved: protein, and nothing else |
 | `--dot` | `#E4577A` | reserved: the logo's living dot |
@@ -95,6 +95,49 @@ heading at most, always on the word that carries the meaning.
   - "state of the art": needs the sealed Khoury test;
   - "deployed" or "hosted": the projection service runs locally.
 
+## The landing story
+
+`web/index.html` is one camera flight through the water, in the nine
+chapters of `CHAPTERS` (`web/js/motion.js`): the landing card, then eight
+chapters that each say one thing about the product, ending in the finale.
+
+- **The field.** `web/js/field.js` draws soft glowing points on one WebGL
+  canvas. `background.js` runs in still-water mode underneath it
+  (`body[data-field="still"]`) and brings its own particles back if WebGL
+  is missing.
+  - Scrolling flies the camera forward, so the ambient water streams past.
+  - In each chapter, a pool of particles leaves the water and gathers into
+    that chapter's structure, from `web/js/formations.js`. In order: the
+    intro question spelt out, a cell, the cell unwinding into an RNA strand
+    and a protein chain, the atlas, a 96-well plate, growth rings, and the
+    wordmark with the living dot.
+  - The atlas chapters use the real cells in `web/data/story_cells.json`:
+    - the RNA reference first;
+    - then the protein sample streaming into its real places;
+    - then the abstained cells lifting out as hollow rings.
+- **The text** is real HTML that reads without JS. Each chapter reveals it
+  its own way (`data-reveal`, `web/js/reveal.js`):
+  - words inking in;
+  - a masked headline with a row of facts;
+  - RNA and protein columns;
+  - a pinned 1 to 4 stepper;
+  - a strike-through;
+  - drawn underlines;
+  - a timeline;
+  - a letter-by-letter finale.
+
+  Hidden start states apply only under `html.js`. A soft pool of clearer
+  water sits behind each block so it reads over the particles.
+- **Numbers.** Every number in the prose is a `data-fact` slot, filled from
+  the manifest by `factText` in `web/js/panels.js`. The finale's proof
+  points come from `buildProofPoints`.
+- **Timing.** One scroll listener and one render loop (`web/js/story.js`).
+  Every progress value comes from a chapter's own rect.
+  `web/tests/motion.test.js` fails if the page's chapters drift from
+  `CHAPTERS`.
+- **Phones** get the same flight with fewer particles and a quieter field.
+  **Reduced motion** gets still water, no pinning, and all the text.
+
 ## Shared chrome
 
 The header (wordmark, the tool links, Dashboard) and the footer are static
@@ -112,6 +155,6 @@ when a release does.
 |---|---|---|
 | The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | dashboard release card, versions model card |
 | The next release while it is in progress | `manifest.next_reference` | dashboard "Next release" card (hidden while null) |
-| Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest |
+| Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer, and the landing scene via `story_cells.json`; regenerate the manifest |
 | Benchmark rows | `manifest.benchmark` | benchmark page, dashboard status bead |
 | Announcements | `web/data/whats_new.json` (text only, no metrics) | dashboard "What's new" |

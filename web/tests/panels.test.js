@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
   buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
-  buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew,
+  buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew, buildProofPoints, factText,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
 
@@ -290,4 +290,36 @@ test("the shipped what's new entries render with no metrics in them", async () =
     // Version names (v3.1) are names, not measurements.
     assert.ok(!/\d%|(?<![v\d.])\d+\.\d/.test(`${e.title} ${e.text}`), `metric-like text in: ${e.title}`);
   }
+});
+
+test('proof points come from the manifest', () => {
+  const html = buildProofPoints(manifestFixture());
+  assert.match(html, /RNA cells in the reference<\/dt><dd>85,233/);
+  assert.match(html, /protein cells, projected zero-shot<\/dt><dd>1,490/);
+  assert.match(html, /cell types<\/dt><dd>3</);
+  assert.match(html, /atlas version<\/dt><dd>0\.2\.0/);
+});
+
+test('proof points read Pending, never NaN or undefined, when the manifest is short', () => {
+  const html = buildProofPoints({ modalities: {}, summary: {} });
+  assert.ok(!html.includes('NaN') && !html.includes('undefined'), html);
+  assert.equal(html.match(/Pending/g).length, 4);
+});
+
+test('facts read the manifest for the landing prose', () => {
+  const m = manifestFixture();
+  assert.equal(factText(m, 'rna_cells'), '85,233');
+  assert.equal(factText(m, 'feature_space'), '9,002');
+  assert.equal(factText(m, 'atlas_version'), '0.2.0');
+  assert.equal(factText(m, 'model_name'), 'VivOME v3 reference');
+  assert.equal(factText(m, 'previous_model'), 'CrossModalNet');
+});
+
+test('an unknown or missing fact reads Pending, and names are escaped', () => {
+  assert.match(factText(manifestFixture(), 'no_such_fact'), /Pending/);
+  assert.match(factText({}, 'rna_cells'), /Pending/);
+  assert.match(factText(null, 'model_name'), /Pending/);
+  const m = manifestFixture();
+  m.model.name = '<b>x</b>';
+  assert.ok(!factText(m, 'model_name').includes('<b>'));
 });

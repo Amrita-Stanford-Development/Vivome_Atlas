@@ -1,1236 +1,199 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VivOME – A Living Joint Latent Atlas for Single-Cell Omics</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #F5F5F3;
-      color: #4B4B4B;
-      font-family: "Poppins", sans-serif;
-      height: 100vh;
-      overflow: hidden;
-    }
-    #bgCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    .container {
-      display: flex;
-      height: 100%;
-      position: relative;
-      z-index: 1;
-    }
-    .left {
-      flex: 0.8; /* Reduced from 1 to 0.8 to make left panel smaller */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 5vw;
-    }
-    .left-panel {
-        background: rgba(245, 245, 243, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 3rem;
-        border: 1px solid rgba(0, 142, 204, 0.1);
-        transform: translateY(-2px) translateZ(0);
-        /* Remove any default box-shadow and let animation handle everything */
-        animation: panelBreathing 6s ease-in-out infinite;
-    }
-    
-    @keyframes panelBreathing {
-      0% { 
-        box-shadow: 
-          0 35px 70px 0 rgba(0, 142, 204, 0.18),
-          0 25px 50px 0 rgba(0, 142, 204, 0.14),
-          0 18px 35px 0 rgba(0, 0, 0, 0.1),
-          0 12px 25px 0 rgba(0, 0, 0, 0.07),
-          inset 0 1px 0 rgba(255, 255, 255, 0.85);
-      }
-      
-      25% {
-        box-shadow: 
-          0 45px 90px 0 rgba(0, 142, 204, 0.25),
-          0 32px 65px 0 rgba(0, 142, 204, 0.20),
-          0 25px 50px 0 rgba(0, 0, 0, 0.13),
-          0 18px 35px 0 rgba(0, 0, 0, 0.09),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9);
-      }
-      
-      50% { 
-        box-shadow: 
-          0 55px 110px 0 rgba(0, 142, 204, 0.32),
-          0 40px 80px 0 rgba(0, 142, 204, 0.26),
-          0 30px 60px 0 rgba(0, 0, 0, 0.16),
-          0 22px 45px 0 rgba(0, 0, 0, 0.11),
-          inset 0 1px 0 rgba(255, 255, 255, 0.95);
-      }
-      
-      75% {
-        box-shadow: 
-          0 45px 90px 0 rgba(0, 142, 204, 0.25),
-          0 32px 65px 0 rgba(0, 142, 204, 0.20),
-          0 25px 50px 0 rgba(0, 0, 0, 0.13),
-          0 18px 35px 0 rgba(0, 0, 0, 0.09),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9);
-      }
-      
-      100% { 
-        box-shadow: 
-          0 35px 70px 0 rgba(0, 142, 204, 0.18),
-          0 25px 50px 0 rgba(0, 142, 204, 0.14),
-          0 18px 35px 0 rgba(0, 0, 0, 0.1),
-          0 12px 25px 0 rgba(0, 0, 0, 0.07),
-          inset 0 1px 0 rgba(255, 255, 255, 0.85);
-      }
-    }
-    .left h1 {
-      font-size: 8rem;
-      margin: 0 0 0.5rem 0;
-      font-weight: 700;
-      color: #008ECC;
-      animation: breathing 6s ease-in-out infinite;
-      text-shadow:
-        0 0 8px rgba(0, 142, 204, 0.3),
-        0 0 16px rgba(0, 142, 204, 0.2);
-    }
-
-    @keyframes breathing {
-      0%, 100% { 
-        text-shadow: 
-          0 0 8px rgba(0, 142, 204, 0.3),
-          0 0 16px rgba(0, 142, 204, 0.2);
-      }
-      50% { 
-        text-shadow: 
-          0 0 12px rgba(0, 142, 204, 0.4),
-          0 0 24px rgba(0, 142, 204, 0.3);
-      }
-    }
-    .left p {
-      font-size: 1.5rem;
-      margin: 0;
-      color: #5A5A5A;
-      text-shadow: none;
-    }
-    .right {
-      flex: 1.2; /* Increased from 1 to 1.2 to make right panel wider */
-      position: relative;
-    }
-    #scene {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    .overlay-label {
-      position: absolute;
-      color: #000;
-      font-size: 1.1rem;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 8px;
-      pointer-events: none;
-      white-space: nowrap;
-      background: rgba(255,255,255,0.9);
-      text-shadow: none;
-      border: 1px solid rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      opacity: 0.4;
-    }
-
-    @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-        overflow-y: auto;
-      }
-      .left {
-        padding: 10vw 5vw;
-        align-items: center;
-        text-align: center;
-        flex: 0;
-      }
-      .left h1 {
-        font-size: 4rem;
-      }
-      .left p {
-        font-size: 1rem;
-      }
-      .right {
-        flex: 1;
-        min-height: 50vh;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivOME · Two omes, one living space</title>
+    <meta name="description" content="VivOME is a versioned atlas that places RNA and protein measurements of single cells in one shared space, and says so when it can't.">
+    <!-- The intro plays once per session. Read the flag before first paint so
+         a returning visitor never sees the overlay flash. -->
+    <script>document.documentElement.classList.add('js'); try { if (sessionStorage.getItem('vivome-intro') === 'seen') document.documentElement.dataset.intro = 'seen'; } catch (e) {}</script>
+    <noscript><style>.intro { display: none; } html[lang] { --wordmark-delay: 0.1s !important; --landing-delay: 0.35s !important; }</style></noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="css/story.css">
 </head>
-<body>
-  <canvas id="bgCanvas"></canvas>
-  <div class="container">
-    <div class="left">
-      <div class="left-panel">
-        <h1 id="title">VivOME</h1>
-        <p id="subtitle">A Living Joint Latent Atlas for Single-Cell Omics</p>
-      </div>
+<body class="story-page" data-field="still">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="project.html">Project</a>
+                <a href="benchmark.html">Benchmark</a>
+                <a href="versions.html">Versions</a>
+                <a class="site-nav-home" href="home.html">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="intro" aria-hidden="true">
+        <p class="intro-question">Where does your cell belong?</p>
+        <span class="intro-progress"></span>
     </div>
-    <div class="right">
-      <canvas id="scene"></canvas>
-      <div id="label0" class="overlay-label">Dashboard</div>
-      <div id="label1" class="overlay-label">Live Atlas</div>
-      <div id="label2" class="overlay-label">Project Data</div>
-      <div id="label3" class="overlay-label">Benchmark</div>
-      <div id="label4" class="overlay-label">Versions</div>
-    </div>
-  </div>
 
-  <script>
-    // --- Enhanced Scientific Background Canvas Animation ---
-    const bgCanvas = document.getElementById('bgCanvas');
-    const bgCtx = bgCanvas.getContext('2d');
-    const leftPanel = document.querySelector('.left-panel');
+    <canvas class="story-field" aria-hidden="true"></canvas>
 
-    function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+    <main id="main" class="story">
+        <section class="landing" data-chapter="landing" aria-labelledby="landing-title">
+            <div class="landing-card sheet breathe">
+                <h1 id="landing-title" class="landing-wordmark">Viv<span class="cut">OME</span></h1>
+                <p class="landing-catch landing-in">Two <span class="cut">omes.</span> One living space.</p>
+                <p class="landing-line landing-in">A versioned atlas that places RNA and protein measurements of single cells in one shared space, and says so when it can't.</p>
+            </div>
+            <p class="scroll-hint landing-in">Scroll to see how</p>
+        </section>
 
-    // Offscreen canvases for static layers (grid + vignette) — drawn once, blitted each frame
-    let offscreenGrid = null;
-    let offscreenVignette = null;
+        <section class="chapter side-left" data-chapter="twice" data-reveal="highlight" aria-labelledby="twice-title">
+            <div class="chapter-text">
+                <h2 id="twice-title" class="chapter-title">Every cell is written <span class="cut">twice.</span></h2>
+                <p class="editorial" data-words>Its RNA shows which genes are switched on. Its proteins show what the cell is actually doing.</p>
+                <p class="editorial" data-words>Single-cell RNA sequencing has large, labelled references to read the first against. Single-cell proteomics is younger: its measurements are sparser, its panels differ from lab to lab, and it has few labelled references.</p>
+                <p class="editorial" data-words>So a protein measurement of a single cell often arrives without a name.</p>
+            </div>
+        </section>
 
-    function buildStaticLayers() {
-      offscreenGrid = document.createElement('canvas');
-      offscreenGrid.width = window.innerWidth;
-      offscreenGrid.height = window.innerHeight;
-      const gCtx = offscreenGrid.getContext('2d');
-      gCtx.globalAlpha = 0.03;
-      gCtx.strokeStyle = 'rgba(0, 142, 204, 0.5)';
-      gCtx.lineWidth = 0.5;
-      const gridSize = 100;
-      for (let x = 0; x < offscreenGrid.width; x += gridSize) {
-        gCtx.beginPath(); gCtx.moveTo(x, 0); gCtx.lineTo(x, offscreenGrid.height); gCtx.stroke();
-      }
-      for (let y = 0; y < offscreenGrid.height; y += gridSize) {
-        gCtx.beginPath(); gCtx.moveTo(0, y); gCtx.lineTo(offscreenGrid.width, y); gCtx.stroke();
-      }
+        <section class="chapter side-right" data-chapter="both" data-reveal="mask" aria-labelledby="both-title">
+            <div class="chapter-text">
+                <h2 id="both-title" class="chapter-title masked"><span class="line"><span>One space</span></span> <span class="line"><span>for <span class="cut">both.</span></span></span></h2>
+                <p class="lead rise">VivOME is a joint latent atlas: one coordinate space where RNA and protein measurements of single cells sit side by side, so a cell measured either way is read against the same reference.</p>
+                <p class="lead rise">The reference is built from RNA cells across immune and blood cell types, over one shared gene feature space:</p>
+                <dl class="facts">
+                    <div class="fact"><dt>RNA cells in the reference</dt><dd data-fact="rna_cells">&nbsp;</dd></div>
+                    <div class="fact"><dt>immune and blood cell types</dt><dd data-fact="cell_types">&nbsp;</dd></div>
+                    <div class="fact"><dt>genes in the feature space</dt><dd data-fact="feature_space">&nbsp;</dd></div>
+                    <div class="fact"><dt>dimensions in the latent space</dt><dd data-fact="latent_dim">&nbsp;</dd></div>
+                </dl>
+                <p class="aside rise">It's built for labs that measure single cells and need to know which cells they have, from a reference that says what it doesn't know.</p>
+            </div>
+        </section>
 
-      offscreenVignette = document.createElement('canvas');
-      offscreenVignette.width = window.innerWidth;
-      offscreenVignette.height = window.innerHeight;
-      const vCtx = offscreenVignette.getContext('2d');
-      const vignette = vCtx.createRadialGradient(
-        window.innerWidth / 2, window.innerHeight / 2, 0,
-        window.innerWidth / 2, window.innerHeight / 2, Math.max(window.innerWidth, window.innerHeight) * 0.7
-      );
-      vignette.addColorStop(0, 'rgba(245, 245, 243, 0)');
-      vignette.addColorStop(1, 'rgba(0, 142, 204, 0.08)');
-      vCtx.fillStyle = vignette;
-      vCtx.fillRect(0, 0, offscreenVignette.width, offscreenVignette.height);
-    }
+        <section class="chapter side-centre" data-chapter="read" data-reveal="split" aria-labelledby="read-title">
+            <h2 id="read-title" class="chapter-title centred">Trained on RNA. Read on <span class="cut">protein.</span></h2>
+            <div class="cols">
+                <div class="col col-rna">
+                    <span class="bead bead-rna">RNA</span>
+                    <p class="editorial" data-words>The reference encoder learns from RNA alone, with labels.</p>
+                </div>
+                <div class="col col-prot">
+                    <span class="bead bead-prot">Protein</span>
+                    <p class="editorial" data-words>Protein measurements are projected into the same space when they arrive, zero-shot. No protein labels and no paired RNA and protein cells are used in training.</p>
+                </div>
+            </div>
+            <p class="closing">The reference has never seen the kind of data it's asked to place. That is what makes its placements worth trusting, and worth checking.</p>
+        </section>
 
-    function resizeBg() {
-      bgCanvas.width = window.innerWidth;
-      bgCanvas.height = window.innerHeight;
-      buildStaticLayers();
-    }
-    window.addEventListener('resize', debounce(resizeBg, 150));
-    resizeBg();
+        <div class="chapter pin" data-chapter="matrix" data-reveal="steps" data-pin>
+            <section class="pin-stage side-left" aria-labelledby="matrix-title">
+                <div class="chapter-text">
+                    <h2 id="matrix-title" class="chapter-title">Bring your own <span class="cut">matrix.</span></h2>
+                    <ol class="steps">
+                        <li class="step">
+                            <span class="step-num" aria-hidden="true">1</span>
+                            <h3>Upload</h3>
+                            <p>An RNA or protein matrix. DIA-NN reports and FragPipe output are read as they come.</p>
+                        </li>
+                        <li class="step">
+                            <span class="step-num" aria-hidden="true">2</span>
+                            <h3>Align</h3>
+                            <p>Gene symbols, Ensembl and UniProt identifiers are mapped onto the reference's genes. Raw intensities are recognised and moved to a log scale. Cells with too few observed genes are refused, not guessed.</p>
+                        </li>
+                        <li class="step">
+                            <span class="step-num" aria-hidden="true">3</span>
+                            <h3>Place</h3>
+                            <p>Each cell is encoded into the shared space and lands beside the reference cells it most resembles.</p>
+                        </li>
+                        <li class="step">
+                            <span class="step-num" aria-hidden="true">4</span>
+                            <h3>Decide</h3>
+                            <p>Each cell comes back with coordinates, a set of plausible labels and a confidence, or an abstention and its reason. The same file always returns the same answer.</p>
+                        </li>
+                    </ol>
+                    <p class="note">The projection service runs locally and is in preview. It is not yet hosted. <a href="project.html">See the projection service</a></p>
+                </div>
+            </section>
+        </div>
 
-    // Particle system for cellular/molecular visualization
-    class Particle {
-      constructor() {
-        this.reset();
-        this.y = Math.random() * bgCanvas.height;
-      }
+        <section class="chapter side-right" data-chapter="unsure" data-reveal="strike" aria-labelledby="unsure-title">
+            <div class="chapter-text">
+                <h2 id="unsure-title" class="chapter-title">When unsure, it <span class="cut">says so.</span></h2>
+                <p class="editorial struck"><span class="struck-text">Most classifiers always return a label.</span></p>
+                <p class="editorial answer">VivOME abstains when a cell falls outside the space it has evidence for, and tells you why.</p>
+                <a class="chapter-link answer" href="project.html#labels">How the service decides</a>
+            </div>
+        </section>
 
-      reset() {
-        this.x = Math.random() * bgCanvas.width; // Back to full width
-        this.y = bgCanvas.height + Math.random() * 100;
-        this.size = Math.random() * 3 + 1;
-        this.speedY = -Math.random() * 0.42 - 0.17; // Reduced by 15%
-        this.speedX = (Math.random() - 0.5) * 0.25; // Reduced by 15%
-        this.opacity = Math.random() * 0.6 + 0.3; // Increased from 0.5+0.2 to 0.6+0.3
-        this.pulsePhase = Math.random() * Math.PI * 2;
-        
-        // Define particle types - DNA/RNA only on left side
-        const rand = Math.random();
-        const isLeftSide = this.x < bgCanvas.width * 0.5;
-        
-        if (isLeftSide) {
-          // Left side: MORE DNA/RNA with doubled concentration
-          if (rand < 0.2) {
-            this.type = 'cell';
-          } else if (rand < 0.4) {
-            this.type = 'molecule';
-          } else if (rand < 0.7) {
-            this.type = 'miniDNA'; // Increased from 0.8 to 0.7 (30% DNA vs 20%)
-          } else {
-            this.type = 'miniRNA'; // 30% RNA vs 20%
-          }
-        } else {
-          // Right side: only cells and molecules, no DNA/RNA
-          if (rand < 0.5) {
-            this.type = 'cell';
-          } else {
-            this.type = 'molecule';
-          }
-        }
-        
-        // Properties for DNA/RNA helixes
-        if (this.type === 'miniDNA' || this.type === 'miniRNA') {
-          this.helixPhase = Math.random() * Math.PI * 2;
-          this.helixLength = Math.random() * 30 + 20; // Length of the mini helix
-          this.helixAmplitude = Math.random() * 8 + 4; // Small amplitude for mini helixes
-          this.rotation = Math.random() * Math.PI; // Random rotation from 0 to 180 degrees
-          this.rotationSpeed = (Math.random() - 0.5) * 0.01; // Slow rotation over time
-        }
-      }
+        <section class="chapter side-left" data-chapter="scored" data-reveal="underline" aria-labelledby="scored-title">
+            <div class="chapter-text">
+                <h2 id="scored-title" class="chapter-title">Scored the <span class="cut">same</span> way.</h2>
+                <p class="lead">Integration methods are easy to flatter. VivOME's benchmark:</p>
+                <ul class="rules">
+                    <li><span class="draw">gives every method the same RNA reference and the same labels;</span></li>
+                    <li><span class="draw">touches protein labels only at the final scoring;</span></li>
+                    <li><span class="draw">reports a modality probe beside every accuracy.</span> The probe checks whether RNA and protein truly share one space, or only point the same way.</li>
+                </ul>
+                <p class="aside">Results are published once they're signed off. Until then, the page says Pending.</p>
+                <a class="chapter-link" href="benchmark.html">See the benchmark</a>
+            </div>
+        </section>
 
-      update(time) {
-        this.y += this.speedY;
-        this.x += this.speedX + Math.sin(time * 0.42 + this.pulsePhase) * 0.17; // Reduced by 15%
-        
-        // Update rotation for DNA/RNA helixes
-        if (this.type === 'miniDNA' || this.type === 'miniRNA') {
-          this.rotation += this.rotationSpeed;
-        }
-        
-        if (this.y < -50) {
-          this.reset();
-        }
-        
-        // Wrap around horizontally across full width
-        if (this.x < -50) this.x = bgCanvas.width + 50;
-        if (this.x > bgCanvas.width + 50) this.x = -50;
-      }
+        <section class="chapter side-right" data-chapter="versioned" data-reveal="timeline" aria-labelledby="versioned-title">
+            <div class="chapter-text">
+                <h2 id="versioned-title" class="chapter-title">A living atlas, <span class="cut">versioned.</span></h2>
+                <ol class="timeline">
+                    <li class="release">
+                        <h3 data-fact="previous_model">&nbsp;</h3>
+                        <p>The first model, trained on RNA and protein together. It's kept as the documented baseline, not erased.</p>
+                    </li>
+                    <li class="release release-current">
+                        <h3><span data-fact="model_name">&nbsp;</span>, atlas <span data-fact="atlas_version">&nbsp;</span></h3>
+                        <p>The current release. A frozen, RNA-only reference, with a model card and its known failure modes written down.</p>
+                    </li>
+                    <li class="release release-testing">
+                        <h3>v3.1, in testing</h3>
+                        <p>A label space estimated for each upload, abstention with a defined false-abstention rate, and conformal calibration. It ships only if it passes.</p>
+                    </li>
+                </ol>
+                <p class="aside">Every release follows one protocol: frozen inputs, a regenerated manifest, a new version number.</p>
+                <a class="chapter-link" href="versions.html">Read the model card</a>
+            </div>
+        </section>
 
-      draw(ctx, time) {
-        ctx.save();
-        const pulse = 1 + Math.sin(time * 1.7 + this.pulsePhase) * 0.2; // Reduced by 15%
-        const currentSize = this.size * pulse;
-        
-        ctx.globalAlpha = this.opacity;
-        
-        if (this.type === 'cell') {
-          // Draw cell-like particles
-          const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, currentSize * 3);
-          gradient.addColorStop(0, 'rgba(0, 142, 204, 0.7)'); // Increased from 0.6 to 0.7
-          gradient.addColorStop(0.5, 'rgba(0, 142, 204, 0.4)'); // Increased from 0.3 to 0.4
-          gradient.addColorStop(1, 'rgba(0, 142, 204, 0)');
-          
-          ctx.fillStyle = gradient;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, currentSize * 3, 0, Math.PI * 2);
-          ctx.fill();
-          
-          // Inner nucleus
-          ctx.fillStyle = 'rgba(0, 142, 204, 0.9)'; // Increased from 0.8 to 0.9
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (this.type === 'molecule') {
-          // Draw molecule-like particles
-          ctx.fillStyle = 'rgba(92, 184, 92, 0.7)'; // Increased from 0.6 to 0.7
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (this.type === 'miniDNA') {
-          // Draw small DNA double helix
-          this.drawMiniDNA(ctx, time, currentSize);
-        } else if (this.type === 'miniRNA') {
-          // Draw small RNA single helix
-          this.drawMiniRNA(ctx, time, currentSize);
-        }
-        
-        ctx.restore();
-      }
-      
-      drawMiniDNA(ctx, time, size) {
-        const points = 8; // Fewer points for small helix
-        const spacing = this.helixLength / points;
-        
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation); // Apply rotation
-        
-        // Draw first strand
-        ctx.strokeStyle = 'rgba(0, 142, 204, 0.75)'; // Increased from 0.6 to 0.75
-        ctx.lineWidth = 1.5; // Increased from 1 to 1.5
-        ctx.beginPath();
-        
-        for (let i = 0; i < points; i++) {
-          const localY = i * spacing - this.helixLength / 2;
-          const x1 = Math.sin(time * 0.3 + this.helixPhase + i * 0.5) * this.helixAmplitude;
-          const y1 = localY;
-          
-          if (i === 0) {
-            ctx.moveTo(x1, y1);
-          } else {
-            ctx.lineTo(x1, y1);
-          }
-        }
-        ctx.stroke();
-        
-        // Draw second strand
-        ctx.beginPath();
-        for (let i = 0; i < points; i++) {
-          const localY = i * spacing - this.helixLength / 2;
-          const x2 = Math.sin(time * 0.3 + this.helixPhase + i * 0.5 + Math.PI) * this.helixAmplitude;
-          const y2 = localY;
-          
-          if (i === 0) {
-            ctx.moveTo(x2, y2);
-          } else {
-            ctx.lineTo(x2, y2);
-          }
-        }
-        ctx.stroke();
-        
-        // Draw base pairs (every other point)
-        ctx.strokeStyle = 'rgba(92, 184, 92, 0.6)'; // Increased from 0.4 to 0.6
-        ctx.lineWidth = 0.8; // Increased from 0.5 to 0.8
-        
-        for (let i = 0; i < points; i += 2) {
-          const localY = i * spacing - this.helixLength / 2;
-          const x1 = Math.sin(time * 0.3 + this.helixPhase + i * 0.5) * this.helixAmplitude;
-          const x2 = Math.sin(time * 0.3 + this.helixPhase + i * 0.5 + Math.PI) * this.helixAmplitude;
-          const y = localY;
-          
-          ctx.beginPath();
-          ctx.moveTo(x1, y);
-          ctx.lineTo(x2, y);
-          ctx.stroke();
-        }
-        
-        ctx.restore();
-      }
-      
-      drawMiniRNA(ctx, time, size) {
-        const points = 8; // Fewer points for small helix
-        const spacing = this.helixLength / points;
-        
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation); // Apply rotation
-        
-        // Draw single RNA strand
-        ctx.strokeStyle = 'rgba(220, 53, 69, 0.75)'; // Increased from 0.6 to 0.75
-        ctx.lineWidth = 2; // Increased from 1.5 to 2
-        ctx.beginPath();
-        
-        for (let i = 0; i < points; i++) {
-          const localY = i * spacing - this.helixLength / 2;
-          const x = Math.sin(time * 0.25 + this.helixPhase + i * 0.4) * this.helixAmplitude;
-          const y = localY;
-          
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
-        
-        // Add small nucleotide dots along RNA
-        ctx.fillStyle = 'rgba(255, 193, 7, 0.7)'; // Increased from 0.5 to 0.7
-        for (let i = 0; i < points; i += 2) {
-          const localY = i * spacing - this.helixLength / 2;
-          const x = Math.sin(time * 0.25 + this.helixPhase + i * 0.4) * this.helixAmplitude;
-          const y = localY;
-          
-          ctx.beginPath();
-          ctx.arc(x, y, 1.2, 0, Math.PI * 2); // Increased size from 1 to 1.2
-          ctx.fill();
-        }
-        
-        ctx.restore();
-      }
-    }
+        <div class="chapter pin finale" data-chapter="evidence" data-reveal="letters" data-pin>
+            <section class="pin-stage finale-stage" aria-labelledby="evidence-title">
+                <div class="finale-card sheet breathe">
+                    <h2 id="evidence-title" class="finale-title" aria-label="No cell placed without evidence." data-letters>No cell placed without <span class="cut">evidence.</span></h2>
+                    <div class="finale-rest">
+                        <p>Every number on this site is computed from the data behind it. When a number doesn't exist yet, the page says Pending.</p>
+                        <div id="proof-points"></div>
+                        <div class="finale-actions">
+                            <a class="btn" href="atlas.html">Explore the atlas</a>
+                            <a href="home.html">Open the dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 
-    // DNA Helix class
-    class DNAHelix {
-      constructor(index) {
-        this.index = index;
-        this.x = bgCanvas.width * 0.03; // Set to 3% of screen width
-        this.baseY = bgCanvas.height * 0.5;
-        this.amplitude = 60; // Reduced amplitude to avoid crossing into text area
-        this.wavelength = 150; // Shorter wavelength for more DNA-like appearance
-        this.phase = 0;
-        this.opacity = 0.2; // Increased opacity
-      }
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="home.html">Dashboard</a>
+                <a href="versions.html">Model card and releases</a>
+                <a href="benchmark.html">Benchmark</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
 
-      draw(ctx, time) {
-        ctx.save();
-        ctx.globalAlpha = this.opacity;
-        
-        const points = 80; // More points for smoother curves
-        const spacing = bgCanvas.height / points;
-        
-        // Draw first strand
-        ctx.strokeStyle = 'rgba(0, 142, 204, 0.8)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        
-        const strand1Points = [];
-        const strand2Points = [];
-        
-        for (let i = 0; i < points; i++) {
-          const y = i * spacing;
-          const x1 = this.x + Math.sin((y / this.wavelength) + time * 0.255 + this.phase) * this.amplitude;
-          const x2 = this.x + Math.sin((y / this.wavelength) + time * 0.255 + this.phase + Math.PI) * this.amplitude;
-          
-          strand1Points.push({ x: x1, y: y });
-          strand2Points.push({ x: x2, y: y });
-          
-          if (i === 0) {
-            ctx.moveTo(x1, y);
-          } else {
-            ctx.lineTo(x1, y);
-          }
-        }
-        ctx.stroke();
-        
-        // Draw second strand (opposite phase)
-        ctx.beginPath();
-        for (let i = 0; i < points; i++) {
-          const point = strand2Points[i];
-          if (i === 0) {
-            ctx.moveTo(point.x, point.y);
-          } else {
-            ctx.lineTo(point.x, point.y);
-          }
-        }
-        ctx.stroke();
-        
-        // Draw DNA ladder rungs (base pairs) - the key addition!
-        ctx.strokeStyle = 'rgba(92, 184, 92, 0.7)';
-        ctx.lineWidth = 2;
-        
-        // Draw base pairs every few points to create ladder effect
-        for (let i = 0; i < points; i += 4) { // Every 4th point for proper spacing
-          const point1 = strand1Points[i];
-          const point2 = strand2Points[i];
-          
-          if (point1 && point2) {
-            ctx.beginPath();
-            ctx.moveTo(point1.x, point1.y);
-            ctx.lineTo(point2.x, point2.y);
-            ctx.stroke();
-            
-            // Add small circles at the ends to represent nucleotides
-            ctx.fillStyle = 'rgba(255, 193, 7, 0.8)'; // Amber color for nucleotides
-            ctx.beginPath();
-            ctx.arc(point1.x, point1.y, 2, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = 'rgba(220, 53, 69, 0.8)'; // Red color for complementary nucleotides
-            ctx.beginPath();
-            ctx.arc(point2.x, point2.y, 2, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-        
-        ctx.restore();
-      }
-    }
-
-    // Network nodes for molecular connections
-    class NetworkNode {
-      constructor() {
-        this.x = Math.random() * bgCanvas.width; // Back to full width
-        this.y = Math.random() * bgCanvas.height;
-        this.vx = (Math.random() - 0.5) * 0.42; // Reduced by 15%
-        this.vy = (Math.random() - 0.5) * 0.42; // Reduced by 15%
-        this.radius = Math.random() * 2 + 1;
-        this.connections = [];
-      }
-
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        
-        // Bounce off edges (full width)
-        if (this.x < 0 || this.x > bgCanvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > bgCanvas.height) this.vy *= -1;
-        
-        // Keep in bounds (full width)
-        this.x = Math.max(0, Math.min(bgCanvas.width, this.x));
-        this.y = Math.max(0, Math.min(bgCanvas.height, this.y));
-      }
-
-      draw(ctx) {
-        ctx.fillStyle = 'rgba(0, 142, 204, 0.5)'; // Increased opacity
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    // Initialize background elements
-    const particles = Array.from({ length: 245 }, () => new Particle()); // Increased from 140 to 245 (75% increase)
-    const dnaHelixes = Array.from({ length: 1 }, (_, i) => new DNAHelix(i)); // Only one DNA helix
-    const networkNodes = Array.from({ length: 50 }, () => new NetworkNode()); // Increased from 35 to 50 for proportional increase
-
-    // Connect nearby network nodes
-    function updateNetworkConnections() {
-      const maxDistance = 140; // Slightly reduced for better clustering
-      networkNodes.forEach((node, i) => {
-        node.connections = [];
-        networkNodes.slice(i + 1).forEach(otherNode => {
-          const dx = node.x - otherNode.x;
-          const dy = node.y - otherNode.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < maxDistance) {
-            node.connections.push({ node: otherNode, distance });
-          }
-        });
-      });
-    }
-
-    // Flowing gradient waves
-    class FlowField {
-      constructor() {
-        this.resolution = 50;
-        this.cols = Math.ceil(bgCanvas.width / this.resolution);
-        this.rows = Math.ceil(bgCanvas.height / this.resolution);
-        this.zOffset = 0;
-      }
-
-      draw(ctx, time) {
-        ctx.save();
-        ctx.globalAlpha = 0.05; // Increased opacity
-        
-        for (let i = 0; i < this.cols; i++) {
-          for (let j = 0; j < this.rows; j++) {
-            const x = i * this.resolution;
-            const y = j * this.resolution;
-            
-            // Create flow field based on Perlin-like noise
-            const angle = (Math.sin(x * 0.01 + time * 0.17) + Math.cos(y * 0.01 + time * 0.127)) * Math.PI; // Reduced by 15%
-            const length = this.resolution * 0.8;
-            
-            ctx.strokeStyle = `hsla(${200 + Math.sin(time + i * 0.1) * 20}, 70%, 50%, 0.15)`; // Increased opacity
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(
-              x + Math.cos(angle) * length,
-              y + Math.sin(angle) * length
-            );
-            ctx.stroke();
-          }
-        }
-        
-        ctx.restore();
-      }
-    }
-
-    // Animated gradient waves
-    class GradientWaves {
-      constructor() {
-        this.waves = [
-          { amplitude: 150, frequency: 0.003, speed: 0.02, offset: 0 },
-          { amplitude: 100, frequency: 0.005, speed: -0.015, offset: Math.PI / 3 },
-          { amplitude: 80, frequency: 0.008, speed: 0.025, offset: Math.PI * 2 / 3 }
-        ];
-      }
-
-      draw(ctx, time) {
-        ctx.save();
-        
-        // Create multiple gradient layers
-        for (let layerIndex = 0; layerIndex < 3; layerIndex++) {
-          const wave = this.waves[layerIndex];
-          const points = 50;
-          const spacing = bgCanvas.width / points;
-          
-          // Calculate wave path
-          const path = [];
-          for (let i = 0; i <= points; i++) {
-            const x = i * spacing;
-            const y = bgCanvas.height * 0.3 + 
-                     Math.sin(x * wave.frequency + time * wave.speed + wave.offset) * wave.amplitude +
-                     Math.sin(x * wave.frequency * 1.5 + time * wave.speed * 0.7 + wave.offset) * (wave.amplitude * 0.3);
-            path.push({ x, y });
-          }
-          
-          // Create gradient
-          const gradient = ctx.createLinearGradient(0, 0, 0, bgCanvas.height);
-          const baseOpacity = 0.08 - layerIndex * 0.02;
-          
-          if (layerIndex === 0) {
-            gradient.addColorStop(0, `rgba(173, 216, 230, ${baseOpacity})`); // Light blue
-            gradient.addColorStop(0.3, `rgba(135, 206, 235, ${baseOpacity * 0.8})`); // Sky blue  
-            gradient.addColorStop(0.6, `rgba(176, 224, 230, ${baseOpacity * 0.6})`); // Powder blue
-            gradient.addColorStop(1, `rgba(240, 248, 255, ${baseOpacity * 0.3})`); // Alice blue
-          } else if (layerIndex === 1) {
-            gradient.addColorStop(0, `rgba(135, 206, 235, ${baseOpacity})`); // Sky blue
-            gradient.addColorStop(0.4, `rgba(0, 191, 255, ${baseOpacity * 0.7})`); // Deep sky blue
-            gradient.addColorStop(0.7, `rgba(173, 216, 230, ${baseOpacity * 0.5})`); // Light blue
-            gradient.addColorStop(1, `rgba(230, 245, 255, ${baseOpacity * 0.2})`); // Very light blue
-          } else {
-            gradient.addColorStop(0, `rgba(176, 224, 230, ${baseOpacity})`); // Powder blue
-            gradient.addColorStop(0.5, `rgba(175, 238, 238, ${baseOpacity * 0.6})`); // Pale turquoise
-            gradient.addColorStop(1, `rgba(245, 255, 255, ${baseOpacity * 0.1})`); // Azure
-          }
-          
-          ctx.fillStyle = gradient;
-          
-          // Draw wave shape
-          ctx.beginPath();
-          ctx.moveTo(0, bgCanvas.height);
-          
-          // Draw wave curve
-          for (let i = 0; i < path.length; i++) {
-            if (i === 0) {
-              ctx.lineTo(path[i].x, path[i].y);
-            } else {
-              // Use quadratic curves for smoother waves
-              const prevPoint = path[i - 1];
-              const currentPoint = path[i];
-              const controlX = (prevPoint.x + currentPoint.x) / 2;
-              const controlY = (prevPoint.y + currentPoint.y) / 2;
-              ctx.quadraticCurveTo(prevPoint.x, prevPoint.y, controlX, controlY);
-            }
-          }
-          
-          // Close the shape
-          ctx.lineTo(bgCanvas.width, bgCanvas.height);
-          ctx.closePath();
-          ctx.fill();
-        }
-        
-        ctx.restore();
-      }
-    }
-
-    const flowField = new FlowField();
-
-    // Main animation loop
-    function drawBackground() {
-      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-      const time = Date.now() * 0.00085; // Reduced by 15%
-      
-      // Draw gradient base with breathing blue tint effect and liquid-like waves
-      const breathingIntensity = 0.5 + 0.3 * Math.sin(time * 0.8); // Breathing cycle
-      const waveIntensity1 = 0.4 + 0.2 * Math.sin(time * 0.5); // Slow wave
-      const waveIntensity2 = 0.3 + 0.15 * Math.sin(time * 0.7 + Math.PI / 3); // Different phase wave
-      
-      // Create liquid-like blue gradient with moderate blue tones
-      const gradient = bgCtx.createLinearGradient(0, 0, bgCanvas.width, bgCanvas.height);
-      
-      // Moderate bluish tones - max 50% saturation
-      const baseHue = 210; // Light blue hue
-      const baseSat = 12 + (breathingIntensity * 20) + (waveIntensity1 * 8); // 12-40% saturation range
-      const waveOffset = waveIntensity2 * 5; // Moderate wave variation
-      
-      gradient.addColorStop(0, `hsl(${baseHue}, ${Math.min(baseSat + waveOffset, 50)}%, ${94 + breathingIntensity * 2}%)`);
-      gradient.addColorStop(0.25, `hsl(${baseHue + 2}, ${Math.min(baseSat * 0.9 + waveOffset, 45)}%, ${93 + breathingIntensity * 1.5}%)`);
-      gradient.addColorStop(0.5, `hsl(${baseHue + 5}, ${Math.min(baseSat * 0.8 + waveIntensity1 * 8, 50)}%, ${92 + breathingIntensity * 1}%)`);
-      gradient.addColorStop(0.75, `hsl(${baseHue + 3}, ${Math.min(baseSat * 0.7 + waveOffset, 45)}%, ${91 + breathingIntensity * 0.8}%)`);
-      gradient.addColorStop(1, `hsl(${baseHue + 8}, ${Math.min(baseSat * 0.6 + waveIntensity2 * 10, 50)}%, ${90 + breathingIntensity * 0.5}%)`);
-      
-      bgCtx.fillStyle = gradient;
-      bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-      
-      // Add moderate liquid shimmer effect
-      const shimmerGradient = bgCtx.createRadialGradient(
-        bgCanvas.width * (0.3 + 0.2 * Math.sin(time * 0.3)), 
-        bgCanvas.height * (0.4 + 0.15 * Math.cos(time * 0.25)),
-        0,
-        bgCanvas.width * (0.3 + 0.2 * Math.sin(time * 0.3)), 
-        bgCanvas.height * (0.4 + 0.15 * Math.cos(time * 0.25)),
-        bgCanvas.width * 0.8
-      );
-      
-      shimmerGradient.addColorStop(0, `hsla(220, ${Math.min(35, 35)}%, 96%, ${0.04 + waveIntensity1 * 0.03})`);
-      shimmerGradient.addColorStop(0.5, `hsla(215, ${Math.min(30, 30)}%, 94%, ${0.02 + waveIntensity2 * 0.02})`);
-      shimmerGradient.addColorStop(1, 'hsla(210, 20%, 92%, 0)');
-      
-      bgCtx.fillStyle = shimmerGradient;
-      bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
-      
-      // Draw flow field
-      flowField.draw(bgCtx, time);
-      
-      // Draw DNA helixes
-      dnaHelixes.forEach(helix => helix.draw(bgCtx, time));
-      
-      // Update and draw network
-      networkNodes.forEach(node => {
-        node.update();
-      });
-      
-      // Draw network connections
-      bgCtx.save();
-      bgCtx.globalAlpha = 0.1; // Slightly increased for better protein-like connectivity
-      networkNodes.forEach(node => {
-        node.connections.forEach(connection => {
-          const opacity = 1 - (connection.distance / 140); // Adjusted for new max distance
-          bgCtx.strokeStyle = `rgba(0, 142, 204, ${opacity * 0.6})`; // Increased connection visibility
-          bgCtx.lineWidth = 0.8; // Slightly thicker connections
-          bgCtx.beginPath();
-          bgCtx.moveTo(node.x, node.y);
-          bgCtx.lineTo(connection.node.x, connection.node.y);
-          bgCtx.stroke();
-        });
-      });
-      
-      // Draw network nodes
-      networkNodes.forEach(node => node.draw(bgCtx));
-      bgCtx.restore();
-      
-      // Update and draw particles
-      particles.forEach(particle => {
-        particle.update(time);
-        particle.draw(bgCtx, time);
-      });
-      
-      // Blit pre-rendered static layers (grid + vignette)
-      if (offscreenGrid) bgCtx.drawImage(offscreenGrid, 0, 0);
-      if (offscreenVignette) bgCtx.drawImage(offscreenVignette, 0, 0);
-      
-      requestAnimationFrame(drawBackground);
-    }
-    
-    // Start animation
-    updateNetworkConnections();
-    drawBackground();
-
-    // --- Interactive Scene Canvas (Branched Peptide Theme) ---
-    const canvas = document.getElementById('scene');
-    const ctx = canvas.getContext('2d');
-    let mainCircles = [];
-    let allCircles = [];
-    let hoveredCircle = null;
-    let labelBoundaries = [];
-
-    // --- Seeded Pseudo-Random Number Generator for consistent layout ---
-    let seed = 12345;
-    function seededRandom() {
-        seed = (seed * 9301 + 49297) % 233280;
-        return seed / 233280;
-    }
-
-    const radii = [28, 14, 7, 4];
-    const colors = ['#5CB85C', '#0275D8', '#008ECC', '#0066A3', '#5BC0DE'];
-    const urls = ['home.html', 'atlas.html', 'project.html', 'benchmark.html', 'versions.html'];
-
-    // Pure arithmetic — no layout reads. Called hundreds of times per scene
-    // build, so the boxes it tests are precomputed by updateLabelBoundaries.
-    function overlapsWithLabels(x, y, radius) {
-      for (const b of labelBoundaries) {
-        if (x + radius > b.left &&
-            x - radius < b.right &&
-            y + radius > b.top &&
-            y - radius < b.bottom) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function updateLabelBoundaries() {
-      // The canvas rect is invariant across a scene build, so resolve the
-      // label boxes to padded canvas-relative coordinates once, here.
-      const canvasRect = canvas.getBoundingClientRect();
-      labelBoundaries = [];
-      for (let i = 0; i < urls.length; i++) {
-        const label = document.getElementById(`label${i}`);
-        if (label) {
-          const rect = label.getBoundingClientRect();
-          labelBoundaries.push({
-            left: rect.left - canvasRect.left - 10,
-            right: rect.right - canvasRect.left + 10,
-            top: rect.top - canvasRect.top - 10,
-            bottom: rect.bottom - canvasRect.top + 10,
-          });
-        }
-      }
-    }
-
-    function createBranches(parent, level, maxLevel, circleCounter) {
-        if (level > maxLevel) return;
-        parent.branches = [];
-        // Increased branch count by 50% for more complex protein structure
-        const numBranches = level === 1 ? (Math.floor(seededRandom() * 2) + 3) : (Math.floor(seededRandom() * 2) + 2);
-
-        for (let i = 0; i < numBranches; i++) {
-            let newBranch;
-            let overlaps;
-            let attempts = 0;
-
-            do {
-                overlaps = false;
-                let angle;
-                let distance;
-
-                const parentMain = parent.root;
-
-                if (parentMain.id === 0) {
-                    const minAngle = Math.PI / 4;
-                    const maxAngle = (7 * Math.PI) / 4;
-                    angle = minAngle + seededRandom() * (maxAngle - minAngle);
-                } else {
-                    const minAngle = (3 * Math.PI) / 4;
-                    const maxAngle = (9 * Math.PI) / 4;
-                    angle = minAngle + seededRandom() * (maxAngle - minAngle);
-                }
-                
-                // Slightly reduced spacing to accommodate more branches while avoiding clutter
-                distance = parent.r + seededRandom() * 70 + radii[level] * 5;
-                
-                const newX = parent.x + Math.cos(angle) * distance;
-                const newY = parent.y + Math.sin(angle) * distance;
-                const newR = radii[level];
-
-                if (newX - newR < 0 || newX + newR > canvas.width || 
-                    newY - newR < 0 || newY + newR > canvas.height) {
-                    overlaps = true;
-                    attempts++;
-                    continue;
-                }
-
-                for (const existingCircle of allCircles) {
-                    const dx = newX - existingCircle.x;
-                    const dy = newY - existingCircle.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < newR + existingCircle.r + 25) { // Slightly reduced padding for denser structure
-                        overlaps = true;
-                        break;
-                    }
-                }
-
-                if (!overlaps && overlapsWithLabels(newX, newY, newR + 30)) {
-                    overlaps = true;
-                }
-                
-                if (!overlaps) {
-                    newBranch = {
-                        id: `${parent.id}-${i}`,
-                        animId: circleCounter++,
-                        baseX: newX,
-                        baseY: newY,
-                        x: newX,
-                        y: newY,
-                        r: newR,
-                        isMain: false,
-                        color: parent.color,
-                        parent: parent,
-                        root: parent.root,
-                        velocityX: 0,
-                        velocityY: 0
-                    };
-                }
-                attempts++;
-            } while (overlaps && attempts < 100);
-
-            if (newBranch) {
-                parent.branches.push(newBranch);
-                allCircles.push(newBranch);
-                createBranches(newBranch, level + 1, maxLevel, circleCounter);
-            }
-        }
-    }
-
-    function initScene() {
-        seed = 12345;
-        const container = document.querySelector('.right');
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-        mainCircles = [];
-        allCircles = [];
-        let circleCounter = 0;
-
-        updateLabelBoundaries();
-
-        const centerX = canvas.width / 2;
-        const yStep = canvas.height / (urls.length + 1);
-        const xOffset = canvas.width / 6.5; // Reduced from /7 to /6.5 to shift more left
-
-        for (let i = 0; i < urls.length; i++) {
-            const mainCircle = {
-                id: i,
-                animId: circleCounter++,
-                x: centerX + (i % 2 === 0 ? -xOffset : xOffset),
-                y: yStep * (i + 1),
-                r: radii[0],
-                isMain: true,
-                color: colors[i],
-                url: urls[i],
-                velocityX: 0,
-                velocityY: 0,
-                root: null // set below
-            };
-            mainCircle.root = mainCircle;
-            const mc = mainCircle;
-            const mr = parseInt(mc.color.slice(1,3),16), mg = parseInt(mc.color.slice(3,5),16), mb = parseInt(mc.color.slice(5,7),16);
-            mc.rgba05 = `rgba(${mr},${mg},${mb},0.5)`;
-            mc.rgba07 = `rgba(${mr},${mg},${mb},0.7)`;
-            mainCircles.push(mainCircle);
-            allCircles.push(mainCircle);
-            createBranches(mainCircle, 1, 3, circleCounter);
-        }
-        updateLabels();
-    }
-    
-    window.addEventListener('resize', debounce(() => {
-        updateLabelBoundaries();
-        initScene();
-    }, 150), true);
-    initScene();
-
-    function updateLabels() {
-      mainCircles.forEach((c) => {
-        const label = document.getElementById(`label${c.id}`);
-        const labelOffset = c.r + 30;
-        const xPos = c.id % 2 === 0 ? c.x - labelOffset - label.offsetWidth : c.x + labelOffset;
-        
-        const isHovered = hoveredCircle === c;
-        
-        label.style.opacity = isHovered ? '1' : '0.4';
-        label.style.transform = `scale(${isHovered ? 1.1 : 1})`;
-        label.style.left = `${xPos}px`;
-        label.style.top = `${c.y - label.offsetHeight / 2}px`;
-      });
-      
-      setTimeout(updateLabelBoundaries, 0);
-    }
-
-    function drawConnections(node, hoveredColor) {
-        if (!node.branches) return;
-        
-        const isParentHovered = hoveredCircle === node;
-        const isSameColorGroup = hoveredColor && node.root.color === hoveredColor;
-
-        node.branches.forEach(branch => {
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(branch.x, branch.y);
-            ctx.lineWidth = (isParentHovered || isSameColorGroup) ? 4 : 2;
-
-            if (isParentHovered || isSameColorGroup) {
-                ctx.strokeStyle = node.root.rgba05;
-            } else {
-                ctx.strokeStyle = 'rgba(0, 142, 204, 0.2)';
-            }
-            
-            ctx.stroke();
-            drawConnections(branch, hoveredColor);
-        });
-    }
-
-    function drawCircle(c, time) {
-      const isSameColorGroup = hoveredCircle && c.root.color === hoveredCircle.color;
-      
-      const pulse = 1 + 0.05 * Math.sin(time * 0.68 + c.animId); // Reduced by 15%
-      const radius = c.r * (isSameColorGroup ? 1.15 : 1) * pulse; // Simplified: just make bigger when in same color group
-      const glow = isSameColorGroup ? 35 : 20;
-
-      ctx.save();
-      ctx.globalAlpha = 1; // Always fully opaque
-      ctx.shadowBlur = glow;
-      ctx.shadowColor = c.color;
-      ctx.fillStyle = c.color;
-      ctx.beginPath();
-      ctx.arc(c.x, c.y, radius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-      c.currentRadius = radius;
-    }
-
-    function updateBranchPositions(time) {
-        const canvasRect = canvas.getBoundingClientRect();
-        
-        allCircles.forEach(c => {
-            if (!c.isMain) {
-                const driftAngle = time * 0.255 + c.animId; // Reduced by 15%
-                const driftRadius = 15;
-                
-                const desiredX = c.baseX + Math.cos(driftAngle) * driftRadius;
-                const desiredY = c.baseY + Math.sin(driftAngle) * driftRadius;
-                
-                let reflectionApplied = false;
-                
-                for (const bounds of labelBoundaries) {
-                    const padding = 15;
-                    const labelLeft = bounds.left - canvasRect.left - padding;
-                    const labelRight = bounds.right - canvasRect.left + padding;
-                    const labelTop = bounds.top - canvasRect.top - padding;
-                    const labelBottom = bounds.bottom - canvasRect.top + padding;
-                    
-                    if (desiredX + c.r > labelLeft && 
-                        desiredX - c.r < labelRight &&
-                        desiredY + c.r > labelTop && 
-                        desiredY - c.r < labelBottom) {
-                        
-                        reflectionApplied = true;
-                        
-                        const distToLeft = Math.abs(desiredX - labelLeft);
-                        const distToRight = Math.abs(desiredX - labelRight);
-                        const distToTop = Math.abs(desiredY - labelTop);
-                        const distToBottom = Math.abs(desiredY - labelBottom);
-                        
-                        const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
-                        
-                        if (minDist === distToLeft) {
-                            c.baseX = labelLeft - c.r - driftRadius - 5;
-                            c.velocityX = -Math.abs(c.velocityX || 1);
-                        } else if (minDist === distToRight) {
-                            c.baseX = labelRight + c.r + driftRadius + 5;
-                            c.velocityX = Math.abs(c.velocityX || 1);
-                        } else if (minDist === distToTop) {
-                            c.baseY = labelTop - c.r - driftRadius - 5;
-                            c.velocityY = -Math.abs(c.velocityY || 1);
-                        } else {
-                            c.baseY = labelBottom + c.r + driftRadius + 5;
-                            c.velocityY = Math.abs(c.velocityY || 1);
-                        }
-                        break;
-                    }
-                }
-                
-                if (c.velocityX) c.velocityX *= 0.98;
-                if (c.velocityY) c.velocityY *= 0.98;
-                
-                c.x = c.baseX + Math.cos(driftAngle) * driftRadius;
-                c.y = c.baseY + Math.sin(driftAngle) * driftRadius;
-            }
-        });
-    }
-
-    // Function to check if point is near a line segment
-    function isPointNearLine(px, py, x1, y1, x2, y2, threshold = 8) {
-      const A = px - x1;
-      const B = py - y1;
-      const C = x2 - x1;
-      const D = y2 - y1;
-
-      const dot = A * C + B * D;
-      const lenSq = C * C + D * D;
-      
-      if (lenSq === 0) return Math.sqrt(A * A + B * B) <= threshold;
-      
-      let param = dot / lenSq;
-      param = Math.max(0, Math.min(1, param));
-      
-      const xx = x1 + param * C;
-      const yy = y1 + param * D;
-      
-      const dx = px - xx;
-      const dy = py - yy;
-      return Math.sqrt(dx * dx + dy * dy) <= threshold;
-    }
-
-    // Function to check if mouse is over any connection lines
-    function checkLineHover(mouseX, mouseY) {
-      // Check main circle connections
-      for (let i = 0; i < mainCircles.length - 1; i++) {
-        const c1 = mainCircles[i];
-        const c2 = mainCircles[i + 1];
-        if (isPointNearLine(mouseX, mouseY, c1.x, c1.y, c2.x, c2.y)) {
-          return c1; // Return the first circle as the hovered reference
-        }
-      }
-      
-      // Check branch connections recursively
-      function checkBranchLines(node) {
-        if (!node.branches) return null;
-        
-        for (const branch of node.branches) {
-          if (isPointNearLine(mouseX, mouseY, node.x, node.y, branch.x, branch.y)) {
-            return node.root;
-          }
-          
-          const childResult = checkBranchLines(branch);
-          if (childResult) return childResult;
-        }
-        return null;
-      }
-      
-      for (const mainCircle of mainCircles) {
-        const result = checkBranchLines(mainCircle);
-        if (result) return result;
-      }
-      
-      return null;
-    }
-
-    canvas.addEventListener('mousemove', e => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      let isOverElement = false;
-      
-      // First check all circles (both main and small ones)
-      for (const c of allCircles) {
-        const dist = Math.sqrt((mouseX - c.x) ** 2 + (mouseY - c.y) ** 2);
-        if (dist <= c.currentRadius || dist <= c.r) {
-          hoveredCircle = c.root;
-          isOverElement = true;
-          break;
-        }
-      }
-      
-      // If not over a circle, check if over any connection lines
-      if (!isOverElement) {
-        const lineHover = checkLineHover(mouseX, mouseY);
-        if (lineHover) {
-          hoveredCircle = lineHover;
-          isOverElement = true;
-        }
-      }
-      
-      if (!isOverElement) hoveredCircle = null;
-      canvas.style.cursor = isOverElement ? 'pointer' : 'default';
-      updateLabels();
-    });
-
-    canvas.addEventListener('click', e => {
-      if (hoveredCircle) {
-        window.location.href = hoveredCircle.url;
-      }
-    });
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const time = Date.now() * 0.00085; // Reduced by 15%
-      
-      updateBranchPositions(time);
-      
-      const hoveredColor = hoveredCircle ? hoveredCircle.color : null;
-      for (let i = 0; i < mainCircles.length - 1; i++) {
-          const c1 = mainCircles[i];
-          const c2 = mainCircles[i + 1];
-          const isHovered = hoveredCircle === c1 || hoveredCircle === c2;
-          ctx.beginPath();
-          ctx.moveTo(c1.x, c1.y);
-          ctx.lineTo(c2.x, c2.y);
-          ctx.lineWidth = isHovered ? 6 : 3; // Restored intensity
-          
-          // Use the hovered ball's color when hovered, otherwise use default blue
-          if (isHovered) {
-              ctx.strokeStyle = hoveredCircle.rgba07;
-          } else {
-              ctx.strokeStyle = 'rgba(0, 142, 204, 0.3)';
-          }
-          
-          ctx.stroke();
-      }
-      mainCircles.forEach(c => drawConnections(c, hoveredColor));
-
-      allCircles.forEach(c => {
-        drawCircle(c, time);
-      });
-      
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
+    <script type="module" src="js/background.js"></script>
+    <script type="module" src="js/story.js"></script>
 </body>
 </html>

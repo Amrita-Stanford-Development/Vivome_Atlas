@@ -269,3 +269,38 @@ export function buildWhatsNew(entries) {
   }).join('');
   return `<ol class="news">${items}</ol>`;
 }
+
+// The landing finale's proof points: plain facts from the manifest, each
+// through the same guards as every other panel, so a missing count reads
+// Pending instead of a number nobody measured.
+export function buildProofPoints(manifest) {
+  const point = (value, label) =>
+    `<div class="proof-point"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+  return `
+    <dl class="proof-points">
+      ${point(formatCount(manifest.modalities?.rna?.cells), 'RNA cells in the reference')}
+      ${point(formatCount(manifest.modalities?.prot?.cells), 'protein cells, projected zero-shot')}
+      ${point(formatCount(manifest.summary?.total), 'cell types')}
+      ${point(textOrPending(manifest.atlas_version), 'atlas version')}
+    </dl>`;
+}
+
+// Numbers and names inside the landing's prose (<span data-fact="...">),
+// looked up in the manifest and guarded like every panel: an unknown key or
+// a missing value reads Pending, never a number nobody measured.
+const FACTS = {
+  rna_cells: (m) => formatCount(m.modalities?.rna?.cells),
+  prot_cells: (m) => formatCount(m.modalities?.prot?.cells),
+  cell_types: (m) => formatCount(m.summary?.total),
+  cross_modal_types: (m) => formatCount(m.summary?.cross_modal),
+  feature_space: (m) => formatCount(m.model?.feature_space_size),
+  latent_dim: (m) => formatCount(m.model?.latent_dim),
+  atlas_version: (m) => textOrPending(m.atlas_version),
+  model_name: (m) => textOrPending(m.model?.name),
+  previous_model: (m) => textOrPending(m.previous_release?.model_name),
+};
+
+export function factText(manifest, key) {
+  const fact = FACTS[key];
+  return fact ? fact(manifest ?? {}) : `<span class="pending">${PENDING_LABEL}</span>`;
+}

@@ -8,7 +8,8 @@ python3 scripts/build_manifest.py
 ```
 
 The builder reads `web/data/metadata_RNA_lat128.csv` and
-`web/data/metadata_PROT_lat128.csv` and writes the manifest. It prints the cell
+`web/data/metadata_PROT_lat128.csv` and writes the manifest, plus
+`web/data/story_cells.json`, the landing scene's sample of the same cells. It prints the cell
 type summary so you can sanity-check the result.
 
 ## The measured/pending contract

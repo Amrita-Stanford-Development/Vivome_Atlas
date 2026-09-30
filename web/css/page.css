@@ -24,9 +24,9 @@
     --well: #ECEBE7;
 
     /* The one accent: links, focus, the OME cutout. The bright step is the
-       cutout's fill only; white on it is 4.7:1, AA at any size. */
+       cutout's fill only; white on it is 5.2:1, AA at any size. */
     --accent: #0066A3;
-    --accent-bright: #007AB8;
+    --accent-bright: #0073AD;
     --accent-tint: rgba(0, 142, 204, 0.10);
 
     /* Reserved: each colour means exactly one thing and is never decoration.

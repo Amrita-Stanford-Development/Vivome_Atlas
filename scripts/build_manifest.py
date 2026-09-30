@@ -13,6 +13,7 @@ from __future__ import annotations
 import csv
 import json
 import math
+import random
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
@@ -20,6 +21,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ATLAS_DIR = REPO_ROOT / "web" / "data"
 OUTPUT_PATH = ATLAS_DIR / "atlas_manifest.json"
+STORY_PATH = ATLAS_DIR / "story_cells.json"
 SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
 V3_TABLES_DIR = SERVICE_MODEL_DIR / "evidence" / "v3_tables"
 
@@ -305,6 +307,41 @@ def build_manifest(
     }
 
 
+# The landing story's field (web/js/field.js) draws real atlas points, but the
+# full RNA metadata is 6 MB: too much for a landing page. It gets every
+# protein cell and a class-stratified, fixed-seed sample of RNA cells.
+STORY_RNA_SAMPLE = 2000
+STORY_MIN_PER_CLASS = 12
+STORY_SEED = 0
+
+
+def build_story_cells(rna_rows: list[dict], prot_rows: list[dict], *,
+                      sample: int = STORY_RNA_SAMPLE, min_per_class: int = STORY_MIN_PER_CLASS,
+                      seed: int = STORY_SEED) -> dict:
+    """Select, never compute: the same 3-PC coordinates the atlas viewer plots,
+    rounded to 3 places. Each class keeps its share of `sample`, with at least
+    `min_per_class` cells so small classes stay visible. Protein rows carry
+    the reference's own abstention flag (1 = abstained)."""
+    rng = random.Random(seed)
+    by_class: dict[str, list[dict]] = defaultdict(list)
+    for r in rna_rows:
+        by_class[r["class_name"]].append(r)
+    picked: list[dict] = []
+    for name in sorted(by_class):
+        rows = by_class[name]
+        k = min(len(rows), max(min_per_class, round(sample * len(rows) / len(rna_rows))))
+        picked.extend(rng.sample(rows, k))
+
+    def pcs(r: dict) -> list[float]:
+        return [round(float(r[c]), 3) for c in PC_COLUMNS]
+
+    return {
+        "source": "web/data/metadata_RNA_lat128.csv (sampled), web/data/metadata_PROT_lat128.csv (all rows)",
+        "rna": [pcs(r) for r in picked],
+        "prot": [pcs(r) + [1 if r.get("abstained") == "True" else 0] for r in prot_rows],
+    }
+
+
 def main() -> None:
     with (SERVICE_MODEL_DIR / "runtime" / "decisive_summary.json").open(encoding="utf-8") as handle:
         decisive_summary = json.load(handle)
@@ -327,9 +364,11 @@ def main() -> None:
     modality_probe_accuracy = read_modality_probe_accuracy(modality_probe)
     previous_release = build_previous_release_facts(legacy_provenance)
 
+    rna_rows = read_metadata(ATLAS_DIR / "metadata_RNA_lat128.csv")
+    prot_rows = read_metadata(ATLAS_DIR / "metadata_PROT_lat128.csv")
     manifest = build_manifest(
-        read_metadata(ATLAS_DIR / "metadata_RNA_lat128.csv"),
-        read_metadata(ATLAS_DIR / "metadata_PROT_lat128.csv"),
+        rna_rows,
+        prot_rows,
         model_seeds=model_seeds,
         deployed_architecture=deployed_architecture,
         latent_centroid_cosine_by_idx=latent_centroid_cosine_by_idx,
@@ -337,8 +376,11 @@ def main() -> None:
         previous_release=previous_release,
     )
     OUTPUT_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    story = build_story_cells(rna_rows, prot_rows)
+    STORY_PATH.write_text(json.dumps(story, separators=(",", ":")) + "\n", encoding="utf-8")
     s = manifest["summary"]
     print(f"Wrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")
+    print(f"Wrote {STORY_PATH.relative_to(REPO_ROOT)}: {len(story['rna'])} RNA, {len(story['prot'])} protein cells")
     print(f"  {s['total']} cell types: {s['cross_modal']} cross-modal, {s['rna_only']} RNA-only")
     print(f"  model.seeds={model_seeds['value']}, feature_space_size={deployed_architecture['feature_space_size']}, "
           f"encoder_family={deployed_architecture['encoder_family']!r}")
