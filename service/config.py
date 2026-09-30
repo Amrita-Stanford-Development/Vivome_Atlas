@@ -122,11 +122,12 @@ OT_MAX_ITER = 1000
 # (T1 NB1) — a fixed count is robust across datasets with very different
 # native panel sizes in a way a fraction of one fixed denominator isn't.
 # CALIBRATED ON SIMULATIONS, REVISIT: T1 NB1b's accuracy-vs-observed-genes
-# curve shows chance-level accuracy below 100 genes and stable accuracy
-# from about 200 on; 100-300 is thinly sampled in that curve, so this
-# value is evidence-backed, not an arbitrary placeholder, but still worth
-# revisiting once more of that range is sampled. See
-# research/notebook-outputs/nb1b/ for the curve.
+# curve shows chance-level accuracy below 100 genes (8.8% unrestricted,
+# 34 cells) and stable accuracy from about 300 on. The range in between is
+# barely sampled: no cells at all in 100-200, and 19 in 200-300. So this
+# value is evidence-backed, not an arbitrary placeholder, but where exactly
+# between 100 and 300 the floor belongs is untested. See
+# research/notebook-outputs/nb1b/coverage_curve_v0.csv.
 MIN_OBSERVED_GENES = 200
 PROVISIONAL_CONSTANTS = ("MIN_OBSERVED_GENES",)
 

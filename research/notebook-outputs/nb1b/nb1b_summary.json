@@ -1,0 +1,64 @@
+{
+  "created": "2026-09-25 13:08:11",
+  "winner": "V3_dual_aug",
+  "winner_keys": [
+    "V3_dual_aug_seed0",
+    "V3_dual_aug_seed1",
+    "V3_dual_aug_seed2"
+  ],
+  "winner_smoothing": false,
+  "gates": {
+    "equivalence": true,
+    "implementation_control": true,
+    "real_reproduction": true,
+    "single_class_up_15": true,
+    "scope2_like_up_5": true,
+    "oracle_not_down_1": true,
+    "broad_not_down_1": true,
+    "real_scope2_restr_ge_77.8": false
+  },
+  "go": false,
+  "a2_ablation": [
+    {
+      "pipeline": "A_fix",
+      "uploads": 72,
+      "bal_unres": 33.402780192946565,
+      "bal_oracle": 74.85298384462678,
+      "in_support": 41.40097759767981,
+      "cos_to_A": 1.0
+    },
+    {
+      "pipeline": "B_service_log",
+      "uploads": 72,
+      "bal_unres": 33.3783540134851,
+      "bal_oracle": 74.49011223110048,
+      "in_support": 41.09128532612757,
+      "cos_to_A": 0.9965453147888184
+    },
+    {
+      "pipeline": "C_service_lin",
+      "uploads": 72,
+      "bal_unres": 30.320601989178808,
+      "bal_oracle": 69.97782209911968,
+      "in_support": 37.15986606917099,
+      "cos_to_A": 0.957364022731781
+    },
+    {
+      "pipeline": "D_lin_graphfix",
+      "uploads": 72,
+      "bal_unres": 31.48881133178966,
+      "bal_oracle": 72.72949360956476,
+      "in_support": 37.49095726657127,
+      "cos_to_A": 0.9745296239852905
+    },
+    {
+      "pipeline": "E_notebook",
+      "uploads": 72,
+      "bal_unres": 30.225213973660047,
+      "bal_oracle": 70.13706040206048,
+      "in_support": 39.177702670878475,
+      "cos_to_A": 0.9790685772895813
+    }
+  ],
+  "suggested_floor_v0": 200
+}

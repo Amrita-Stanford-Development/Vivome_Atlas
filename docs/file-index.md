@@ -200,6 +200,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only
 - `research/notebook-outputs/nb1/v3_baseline_eval_suite.csv` — NB1: the v3 baseline across every simulation-bench scenario
+- `research/notebook-outputs/nb1b/nb1b_summary.json` — NB1b: the winning recipe (V3_dual_aug), gate results, the go/no-go, the A2 ablation, and the suggested gene floor (200)
+- `research/notebook-outputs/nb1b/coverage_curve_v0.csv` — NB1b: v3 accuracy by observed-gene bin; the evidence for `MIN_OBSERVED_GENES = 200`
+- `research/notebook-outputs/nb1b/coverage_curve_winner.csv` — NB1b: the same curve for the winning retrained model
+- `research/notebook-outputs/nb1b/a2_preprocessing_ablation.csv` — NB1b: A2 preprocessing ablation (mask convention, log transform, smoothing graph), per profile
+- `research/notebook-outputs/nb1b/eval_suite_report.csv` — NB1b: every model × scenario × missingness × smoothing on the simulation bench
+- `research/notebook-outputs/nb1b/eval_winner_vs_v0.csv` — NB1b: winning model vs v3 per scenario, with bootstrap CIs
+- `research/notebook-outputs/nb1b/real_data_confirmatory.csv` — NB1b: each candidate on SCoPE2, PBMC240 lineage and the modality probe
+- `research/notebook-outputs/nb1b/screening_calib.csv` — NB1b: the screening runs used to pick candidates
 - `research/notebook-outputs/nb1c/nb1c_summary.json` — NB1c: reproduction gate, models run, v3 seed variance
 - `research/notebook-outputs/nb1c/matrix_structure.csv` — NB1c: structure of each input matrix (range, negatives, missingness, centring)
 - `research/notebook-outputs/nb1c/pbmc240_raw_service_path.csv` — NB1c: twelve models on raw PBMC240 through the service path (lineage recall)
