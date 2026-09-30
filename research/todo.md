@@ -94,13 +94,13 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 ### Track C, v3.1 scaffold (branch `integration/v31-scaffold`)
 
-- [ ] `PIPELINE_VERSION` flag, default `v3`
-- [ ] Golden test proving v3 behaviour is unchanged
-- [ ] `LabelSpaceEstimator`, `AbstentionScorer`, `ConformalCalibrator` interfaces with v3 implementations
-- [ ] `encode_with_hidden` returning 512 dimensional features
-- [ ] Temperature and bias options in `assignment.py`
-- [ ] Response schema v3.1 and a section in `docs/service/projection-api.md`
-- [ ] Stage 7 fallback confidence, per label-space mode. The winning share within the pair was chosen for the restricted mode; now that unrestricted is the default, the summed pair probability may carry information again (`service/pipeline/pipeline.py` Stage 7 comment, `b023799`)
+- [x] `PIPELINE_VERSION` flag, default `v3`; env `VIVOME_PIPELINE_VERSION`; `pipeline.components_for` (`167f138`)
+- [x] Golden test proving v3 behaviour is unchanged: four full responses (SCoPE2 and PBMC240, unrestricted and restricted) frozen before the change are reproduced byte for byte; `service/tests/test_pipeline_versions.py` pins them (`167f138`)
+- [x] `LabelSpaceEstimator`, `AbstentionScorer`, `ConformalCalibrator` interfaces with v3 implementations; v3.1 loaders for `service/model/v3_1/` raise `PendingArtifactError` naming the notebook, and v3.1 refuses (503) until Track F implements it (`167f138`)
+- [x] `encode_with_hidden` returning 512 dimensional features, embedding identical to `encode()`; the checkpoint's 22-class classifier head kept for NB2 (`classifier_logits`) (`167f138`)
+- [x] Temperature and bias options in `assignment.py` (nearest centroid; defaults take today's exact path) (`167f138`)
+- [x] Response schema v3.1 and a section in `docs/service/projection-api.md` (`167f138`)
+- [~] Stage 7 fallback confidence, per label-space mode. The socket is in (`config.FALLBACK_CONFIDENCE`, `fallback.pair_confidence`, both rules); which rule each mode uses is still to be measured, and both v3 modes keep the winning share (`167f138`)
 - [ ] Replace the interim unrestricted default with a real label-space rule (with T1 NB2). On Fulcher the interim default abstains on 48% of cells and labels only 2.1% of cells monocyte
 
 ### Track D, benchmark extension (branch `benchmark/d`)
@@ -141,7 +141,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 ### Track F, v3.1 integration (branch `integration/v31`)
 
-- [!] Blocked on track C and the T1 NB4 export (A2 and B are merged)
+- [!] Blocked on the T1 NB4 export. Track C's sockets are in (`167f138`, branch `integration/v31-scaffold`, not yet merged)
 
 ---
 
@@ -280,3 +280,4 @@ because the held out classes were in training.
 | 2026-09-30 | Fulcher follow-up. scANVI fairness: its 2,907-gene space left 1,975 genes zero-filled for every Fulcher cell. On the 932 measured genes it reaches 47.8 shared kNN (was 21.4), which beats v3 under shared kNN (12 of 15 pairings) but not V2 (V2 wins 30 of 30); the earlier "v3 beats scANVI 30 of 30" held only against the zero-filled arm. Product check: the running service labels a PBMC upload only macrophage/monocyte (logged critical in §1, NB2 + Track C, not fixed), and identical uploads give different abstentions (unseeded calibration slice). Exploratory 5-type score added after results. Decision: V2 selected as the v3.1 candidate encoder; v3 stays served until the NB2 decision rule, recalibrated abstention and conformal, and the NB4 export. Fulcher scored once; re-scored only at the final v3.1 evaluation | `21d9f1f`, `794fad5` |
 | 2026-09-30 | Khoury 2026 registered as a SEALED final test set. Hash-checked registry; the label loader refuses while sealed. Protocol written with 5 types and Fulcher's rules; models are the final v3.1 candidates, v3 as served, and scANVI's best arm. Label-free facts only: 1,651 cells, 3,732 genes, 3,110 of 9,002 feature genes matched, 879–1,715 observed per cell, all pass the 200 floor, 2 donors crossed with 5 batches. Value scale detected as log, so no double log2. Not embedded, not scored | `6d67d32` |
 | 2026-09-30 | Owner follow-up. (1) Khoury kept whole and sealed. Label and matrix provenance confirmed from the authors' code, with file and line citations; three differences from the description are recorded (`b71e0c6`). (2) Fulcher's first scoring stays the held-out result; from now on it is a development dataset, and Khoury is the only sealed test (`22d784f`). (3) scANVI gene-space fairness: SCoPE2 needed no rerun (no zero-fill). PBMC240's measured-genes arm is scANVI's best at 38.75 / 39.60 lymphoid recall, still below v3 and V2. The table is now built by a script, correcting one hand-assembled cell (`c2f824d`, `22cd9a8`). (4) Interim product fix: the macrophage/monocyte restriction is opt-in, and the default is unrestricted. On Fulcher that default labels lymphoid cells but abstains on 48% and calls only 2.1% monocyte (`b023799`). (5) The calibration subset is seeded from the upload hash, so identical uploads give identical responses; covered by HTTP and pipeline tests (`b023799`) | `b71e0c6`, `22d784f`, `b023799`, `c2f824d`, `22cd9a8` |
+| 2026-10-01 | Track C, the v3.1 scaffold (`167f138`, branch `integration/v31-scaffold`). `PIPELINE_VERSION` switch with v3 as default and unchanged (four frozen full responses reproduced byte for byte); label space, abstention and conformal interfaces with v3 implementations; v3.1 loaders for NB2 and NB3's export files, refusing with 503 until Track F; `encode_with_hidden` (512-d) and the classifier head kept for NB2; temperature and per-class bias in Stage 4; per-method Stage 7 confidence rule (choice still open); additive v3.1 response schema, documented. Left open: the real label-space rule, which needs NB2's results. |
