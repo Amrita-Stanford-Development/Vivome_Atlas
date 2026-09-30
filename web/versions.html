@@ -64,13 +64,12 @@
             </p>
             <p>
                 The architecture was <em>decided</em> by a five-seed comparison over the widened
-                9,002-gene feature space (module-pooling encoder, uniform masking; see the model
+                <span data-fact="feature_space">&nbsp;</span>-gene feature space (module-pooling encoder, uniform masking; see the model
                 card above for the settled details), and the reference is now trained with it:
                 <code>reference_model.pt</code>, <code>reference_embedding.npy</code>, and
                 <code>reference_centroids.npy</code> are real, live artifacts. The projection
-                pipeline runs against them end to end; it is not yet deployed behind
-                <a href="project.html">the projection page</a>, which is a separate,
-                still-open piece of work.
+                pipeline runs against them end to end. It is not yet hosted:
+                <a href="project.html">the projection page</a> sends an upload to a service you run locally.
             </p>
             <h3>Prior baseline, kept rather than erased</h3>
             <div id="prior-baseline-mount"></div>
@@ -80,73 +79,74 @@
             <h2>Projection service model card</h2>
             <p>
                 The reference encoder is <strong>trained, supervised, on RNA only</strong>:
-                85,233 cells across 22 immune/blood cell classes. It is applied
+                <span data-fact="rna_cells">&nbsp;</span> cells across
+                <span data-fact="cell_types">&nbsp;</span> immune and blood cell classes. It is applied
                 <strong>zero-shot to proteomics uploads</strong>: no protein labels and no
-                paired RNA-protein cells were used at any point in training. Full detail,
-                sources, and the numbers below: <code>service/model/MODEL_CARD.md</code>.
+                paired RNA-protein cells were used at any point in training. Full detail and
+                sources: <code>service/model/MODEL_CARD.md</code>.
             </p>
-            <table class="support-table">
-                <thead><tr><th>Measure</th><th>Value</th><th>Source</th></tr></thead>
-                <tbody>
-                    <tr><td>RNA→RNA, SCoPE2 mask, test cells only</td><td>93.2% acc / 65.7% bal (OT)</td>
-                        <td><code>research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv</code></td></tr>
-                    <tr><td>Protein, restricted, shipped checkpoint (<code>v3_seed0</code>)</td><td>86.2% acc / 79.8% bal</td>
-                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
-                    <tr><td>Protein, restricted, 5-seed mean of the shipped architecture</td><td>75.3% ± 11.8 acc / 71.5% ± 10.6 bal</td>
-                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
-                    <tr><td>Protein, unrestricted (22 classes), shipped checkpoint (<code>v3_seed0</code>)</td><td>55.4% acc / 38.7% bal</td>
-                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv</code></td></tr>
-                    <tr><td>Protein, unrestricted (22 classes), 5-seed mean of the shipped architecture</td><td>38.4% ± 25.7 acc / 29.1% ± 18.3 bal</td>
-                        <td><code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code></td></tr>
-                </tbody>
-            </table>
-            <p>
-                A previously published RNA→RNA figure of 95.5% / 74.8% is superseded by the
-                93.2% / 65.7% figures above. The published number's test split included cells
-                the model had trained on.
+            <div class="table-scroll" id="model-card-table"></div>
+            <p class="panel-note">
+                Each row is scored under one decision rule. Nearest centroid is what the
+                service runs; shared kNN is the rule every benchmark method is scored with.
+                Compare a shipped-checkpoint number with a 5-seed mean only under the same rule.
             </p>
             <p>
-                The restricted 79.8% is <code>v3_seed0</code>'s own number, and is exact for
+                A previously published RNA to RNA figure of <span data-fact="rna_to_rna_superseded">&nbsp;</span>
+                is superseded by the test-cells-only <span data-fact="rna_to_rna_test">&nbsp;</span> above:
+                the published number's test split included cells the model had trained on.
+            </p>
+            <p>
+                The restricted <span data-fact="restricted_centroid_seed0">&nbsp;</span> is
+                <code>v3_seed0</code>'s own number under the service's rule, and is exact for
                 SCoPE2 <em>by construction</em>, on two separate counts. First: SCoPE2's protein
                 cells are only ever macrophage or monocyte, so restricting to exactly those two
                 classes matches its true label set on this one dataset. On other data with other
-                cell types present, the same restriction is wrong (see failure mode 1).
+                cell types present, the same restriction is wrong (see the first failure mode).
                 Second: <code>v3_seed0</code>, the checkpoint actually running in production,
-                is the best of five independently trained seeds of the same architecture by a
-                wide margin (79.8% vs. a 5-seed mean of 71.5% ± 10.6, range 59.0–88.4).
+                is the best of the independently trained seeds of the same architecture by a
+                wide margin: <span data-fact="restricted_centroid_seed0">&nbsp;</span> against a
+                5-seed mean of <span data-fact="restricted_centroid_mean">&nbsp;</span> under the same
+                rule (range <span data-fact="restricted_centroid_range">&nbsp;</span>).
             </p>
             <p>
                 Against scArches/scANVI, the strongest available cross-modal baseline, the
                 shipped checkpoint's restricted-regime lead is real (it beats every scANVI seed
-                under every protocol tested) but does not generalize: averaged across all 5
-                seeds, the architecture's shared-kNN-rule restricted mean (71.5%) trails
-                scANVI's 3-seed mean (77.15%): only 3 of 15 seed-pairings favor this
-                architecture there, 12 favor scANVI. The one regime it reliably wins is
-                unrestricted (12 of 15 pairings, mean margin +18.1 points). Full breakdown:
+                under every protocol tested) but does not generalize. Averaged across the
+                seeds, the architecture's shared-kNN restricted mean
+                (<span data-fact="restricted_knn_mean">&nbsp;</span>) trails scANVI's: only
+                <span data-fact="scanvi_restricted_pairings">&nbsp;</span> seed pairings favour this
+                architecture there. The one regime it reliably wins is unrestricted
+                (<span data-fact="scanvi_unrestricted_pairings">&nbsp;</span> pairings, mean margin
+                <span data-fact="scanvi_unrestricted_margin">&nbsp;</span>). Full breakdown:
                 <code>research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, narrative in
                 <code>research/benchmark/results.md</code>. A methodological asymmetry in scANVI's
-                favor throughout this comparison: scANVI trains on the query cells
+                favour throughout this comparison: scANVI trains on the query cells
                 (transductive); this encoder is fixed and zero-shot on the query.
             </p>
             <p><strong>Known failure modes:</strong></p>
             <ol>
                 <li>Two-class label space, now opt-in: when a request restricts labels to the
                     supported classes, a non-myeloid protein upload (T cell, NK cell, B cell,
-                    etc.) can only ever be labelled macrophage, monocyte, or abstain, never its
-                    true label. The default now assigns among all 22 classes; that is an interim
-                    fix, not a solution (see the model card).</li>
+                    and so on) can only ever be labelled macrophage, monocyte, or abstain, never
+                    its true label. The default now assigns among every reference class; that is
+                    an interim fix, not a solution (see the model card).</li>
                 <li>Macrophage placement: cross-modal alignment is weak for macrophage
-                    specifically (latent centroid cosine 0.19 vs. 0.83 for monocyte;
-                    protein-side recall 0.76%), even though the macrophage-vs-monocyte
-                    ranking itself is correct (AUC 0.928).</li>
-                <li>Only 2 of 22 reference classes (macrophage, monocyte) have ever been
-                    validated against real protein data.</li>
-                <li>No donor-level holdout in training: all nine donors contributed about
-                    65% of their own cells to the training set.</li>
+                    specifically (latent centroid cosine <span data-fact="latent_cosine_macrophage">&nbsp;</span>
+                    against <span data-fact="latent_cosine_monocyte">&nbsp;</span> for monocyte), and most
+                    macrophage protein cells are assigned to another class, even though the
+                    macrophage-versus-monocyte ranking points the right way (see the model card).</li>
+                <li>Only <span data-fact="cross_modal_types">&nbsp;</span> of
+                    <span data-fact="cell_types">&nbsp;</span> reference classes (macrophage, monocyte)
+                    have ever been validated against real protein data.</li>
+                <li>No donor-level holdout in training: every donor contributed a large share of
+                    its own cells to the training set (see the model card).</li>
                 <li>High seed-to-seed variance on real cross-modal transfer, not yet explained:
                     retraining the same architecture moves SCoPE2 restricted balanced accuracy
-                    by up to 29 points (59.0–88.4% across 5 seeds); the shipped seed happens to
-                    be the best of the five, not a principled choice. A separate development-only
+                    by up to <span data-fact="restricted_knn_spread">&nbsp;</span>
+                    (<span data-fact="restricted_knn_range">&nbsp;</span> across
+                    <span data-fact="seeds">&nbsp;</span> seeds, shared kNN); the shipped seed happens
+                    to be the best of them, not a principled choice. A separate development-only
                     check on real PBMC240 data (lineage level) shows the same pattern; see
                     <code>service/model/MODEL_CARD.md</code> for the full detail.</li>
             </ol>
@@ -188,18 +188,22 @@
 
     <script type="module" src="js/background.js"></script>
     <script type="module" async>
-        import { loadManifest } from './js/manifest.js';
+        import { loadManifest, PENDING_LABEL } from './js/manifest.js';
         import {
             buildModelCard, buildPriorBaselineCard,
-            buildAvailabilityTable, errorPanel,
+            buildAvailabilityTable, buildModelCardTable, factText, errorPanel,
         } from './js/panels.js';
 
         loadManifest().then((manifest) => {
             document.getElementById('model-card-mount').innerHTML = buildModelCard(manifest);
             document.getElementById('prior-baseline-mount').innerHTML = buildPriorBaselineCard(manifest);
             document.getElementById('availability-mount').innerHTML = buildAvailabilityTable(manifest);
+            document.getElementById('model-card-table').innerHTML = buildModelCardTable(manifest);
+            for (const el of document.querySelectorAll('[data-fact]')) el.innerHTML = factText(manifest, el.dataset.fact);
         }).catch((err) => {
             document.getElementById('model-card-mount').innerHTML = errorPanel(err);
+            document.getElementById('model-card-table').innerHTML = errorPanel(err);
+            for (const el of document.querySelectorAll('[data-fact]')) el.textContent = PENDING_LABEL;
         });
     </script>
 </body>

@@ -383,3 +383,75 @@ export function buildProjectionCells(result, limit = 200) {
     : '';
   return table(['Cell', 'Label', 'Label set', 'Confidence', 'Observed genes'], rows) + note;
 }
+
+// ---- The model card's accuracy table (versions.html) ----
+// manifest.model_card: each row names its decision rule, because a
+// shipped-checkpoint number and a 5-seed mean compare only under one rule.
+
+const pct1 = (x) => `${(x * 100).toFixed(1)}`;
+
+function cardValue(metric) {
+  if (!isMeasured(metric)) return `<span class="pending">${PENDING_LABEL}</span>`;
+  const sd = Number.isFinite(metric.sd) ? ` &plusmn; ${pct1(metric.sd)}` : '';
+  const range = Number.isFinite(metric.min) && Number.isFinite(metric.max)
+    ? `<span class="metric-basis">range ${pct1(metric.min)} to ${pct1(metric.max)}%</span>` : '';
+  return `${escapeHtml(formatPercent(metric))}${sd}${range}`;
+}
+
+export function buildModelCardTable(manifest) {
+  const rows = manifest.model_card?.rows ?? [];
+  if (rows.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
+  const body = rows.map((r) => `
+    <tr>
+      <td>${escapeHtml(r.measure)}<span class="metric-basis"><code>${escapeHtml(metricBasis(r.accuracy))}</code></span></td>
+      <td>${escapeHtml(r.rule)}</td>
+      <td class="support-num">${cardValue(r.accuracy)}</td>
+      <td class="support-num">${cardValue(r.balanced_accuracy)}</td>
+    </tr>`).join('');
+  return table(['Measure', 'Decision rule', 'Accuracy', 'Balanced accuracy'], body);
+}
+
+const cardRow = (m, key) => (m.model_card?.rows ?? []).find((r) => r.key === key);
+const balanced = (m, key) => cardRow(m, key)?.balanced_accuracy;
+const withSd = (metric) => (isMeasured(metric) && Number.isFinite(metric.sd)
+  ? `${escapeHtml(formatPercent(metric))} &plusmn; ${pct1(metric.sd)}` : textOrPending(null));
+const rangeOf = (metric) => (isMeasured(metric) && Number.isFinite(metric.min) && Number.isFinite(metric.max)
+  ? `${pct1(metric.min)} to ${pct1(metric.max)}%` : textOrPending(null));
+const spreadOf = (metric) => (isMeasured(metric) && Number.isFinite(metric.min) && Number.isFinite(metric.max)
+  ? `${pct1(metric.max - metric.min)} points` : textOrPending(null));
+const pairings = (m, regime) => {
+  const v = m.model_card?.vs_scanvi?.[regime];
+  return Number.isFinite(v?.v3_ahead) && Number.isFinite(v?.pairings)
+    ? `${formatCount(v.v3_ahead)} of ${formatCount(v.pairings)}` : textOrPending(null);
+};
+const latentCosine = (m, name) => {
+  const c = (m.cell_types ?? []).find((t) => t.name === name);
+  return escapeHtml(formatMetric(c?.latent_centroid_cosine, 2));
+};
+
+Object.assign(FACTS, {
+  restricted_centroid_seed0: (m) => escapeHtml(formatPercent(balanced(m, 'restricted_native_centroid:seed0'))),
+  restricted_centroid_mean: (m) => withSd(balanced(m, 'restricted_native_centroid:mean')),
+  restricted_centroid_range: (m) => rangeOf(balanced(m, 'restricted_native_centroid:mean')),
+  restricted_knn_mean: (m) => withSd(balanced(m, 'restricted_shared_knn:mean')),
+  restricted_knn_range: (m) => rangeOf(balanced(m, 'restricted_shared_knn:mean')),
+  restricted_knn_spread: (m) => spreadOf(balanced(m, 'restricted_shared_knn:mean')),
+  scanvi_restricted_pairings: (m) => pairings(m, 'restricted_shared_knn'),
+  scanvi_unrestricted_pairings: (m) => pairings(m, 'unrestricted'),
+  scanvi_unrestricted_margin: (m) => {
+    const d = m.model_card?.vs_scanvi?.unrestricted?.mean_difference;
+    return isMeasured(d) ? `${pct1(Number(d.value))} points` : textOrPending(null);
+  },
+  latent_cosine_macrophage: (m) => latentCosine(m, 'macrophage'),
+  latent_cosine_monocyte: (m) => latentCosine(m, 'monocyte'),
+});
+
+const pair = (row) => (row && isMeasured(row.accuracy) && isMeasured(row.balanced_accuracy)
+  ? `${escapeHtml(formatPercent(row.accuracy))} / ${escapeHtml(formatPercent(row.balanced_accuracy))}`
+  : textOrPending(null));
+
+Object.assign(FACTS, {
+  rna_to_rna_test: (m) => pair(cardRow(m, 'rna_to_rna_test')),
+  rna_to_rna_superseded: (m) => pair(m.model_card?.rna_to_rna_superseded),
+  seeds: (m) => escapeHtml(formatMetric(m.model?.seeds, 0)),
+});

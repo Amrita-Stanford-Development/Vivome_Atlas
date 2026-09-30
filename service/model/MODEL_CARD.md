@@ -34,10 +34,14 @@ index of those files, not a source in its own right.
 |---|---|---|
 | RNA→RNA, SCoPE2 mask, **test cells only** | 93.2% acc / 65.7% bal (OT); 67.3% bal (nearest-centroid) | `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` |
 | RNA→RNA, full coverage, **test cells only** | 94.6% acc / 80.0% bal (OT) | `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` |
-| Protein (SCoPE2, 1,490 real cells), **restricted** to the two supported classes, **shipped checkpoint (`v3_seed0`)** | 86.2% acc / 79.8% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
-| Protein (SCoPE2), **restricted, 5-seed mean of the shipped architecture** | 75.3% ± 11.8 acc / 71.5% ± 10.6 bal (range 59.0–88.4 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
-| Protein (SCoPE2), **unrestricted** across all 22 classes, **shipped checkpoint (`v3_seed0`)** | 55.4% acc / 38.7% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
-| Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture** | 38.4% ± 25.7 acc / 29.1% ± 18.3 bal (range 1.3–49.8 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Protein (SCoPE2, 1,490 real cells), **restricted** to the two supported classes, **shipped checkpoint (`v3_seed0`)**, nearest centroid (the service's rule) | 86.2% acc / 79.8% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
+| Protein (SCoPE2), **restricted, 5-seed mean of the shipped architecture**, nearest centroid | 79.4% ± 4.7 acc / 63.3% ± 10.8 bal (range 50.8–79.8 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Protein (SCoPE2), **restricted, shipped checkpoint (`v3_seed0`)**, shared kNN (the benchmark's rule) | 85.0% acc / 88.4% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
+| Protein (SCoPE2), **restricted, 5-seed mean of the shipped architecture**, shared kNN | 75.3% ± 11.8 acc / 71.5% ± 10.6 bal (range 59.0–88.4 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Protein (SCoPE2), **unrestricted** across all 22 classes, **shipped checkpoint (`v3_seed0`)**, nearest centroid | 45.4% acc / 31.1% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
+| Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture**, nearest centroid | 34.1% ± 25.2 acc / 25.6% ± 17.3 bal (range 0.1–48.2 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Protein (SCoPE2), **unrestricted, shipped checkpoint (`v3_seed0`)**, shared kNN | 55.4% acc / 38.7% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
+| Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture**, shared kNN | 38.4% ± 25.7 acc / 29.1% ± 18.3 bal (range 1.3–49.8 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
 | Protein, **Fulcher 2026** (held-out scoring; TMT PBMCs, 1,251 cells, 6 types, chance 16.7%), unrestricted, **shipped checkpoint (`v3_seed0`)** | 44.1% bal (nearest centroid) / 41.8% (shared kNN) | `research/benchmark/fulcher2026/per_seed_scores.csv` |
 | Protein, Fulcher 2026, **5-seed mean of the shipped architecture** | 42.3% ± 3.4 / 42.0% ± 2.9 bal | `research/benchmark/fulcher2026/family_summary.csv` |
 | Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `research/todo.md` §5 |
@@ -58,8 +62,10 @@ containing other cell types (e.g. PBMC240, which has T and NK cells), the
 same restriction is actively wrong. That is why it is now opt-in; see failure mode 1 below.
 Second: `v3_seed0` — the checkpoint actually shipped — is the
 best-performing of five independently trained seeds of the same
-architecture by a wide margin (79.8% vs. a 5-seed mean of 71.5% ± 10.6,
-range 59.0–88.4). Neither caveat was known when this figure was first
+architecture by a wide margin, under either decision rule: 79.8% vs. a
+5-seed mean of 63.3% ± 10.8 (range 50.8–79.8) under nearest centroid, the
+service's rule; 88.4% vs. 71.5% ± 10.6 (range 59.0–88.4) under shared kNN.
+Compare a seed with a mean only under the same rule. Neither caveat was known when this figure was first
 published; both are measured directly in the table above, not inferred.
 
 **Against scArches/scANVI (a real, supervised, label-consuming cross-modal

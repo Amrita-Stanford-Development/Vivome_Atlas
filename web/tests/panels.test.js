@@ -4,7 +4,7 @@ import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
   buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
   buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew, buildProofPoints, factText,
-  buildProjectionSummary, buildProjectionLabels, buildProjectionCells,
+  buildProjectionSummary, buildProjectionLabels, buildProjectionCells, buildModelCardTable,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
 
@@ -378,5 +378,52 @@ test('projection builders survive a malformed response', () => {
   for (const build of [buildProjectionSummary, buildProjectionLabels, buildProjectionCells]) {
     const html = build({});
     assert.ok(!html.includes('undefined') && !html.includes('NaN'), `${build.name}: ${html}`);
+  }
+});
+
+const withModelCard = () => {
+  const m = manifestFixture();
+  const rec = (value, extra = {}) => ({ ...measured(value, 'research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv'), ...extra });
+  m.model_card = {
+    rows: [
+      { key: 'restricted_native_centroid:seed0', measure: 'Protein, restricted, shipped', rule: "nearest centroid (the service's rule)",
+        accuracy: rec(0.861745), balanced_accuracy: rec(0.797915) },
+      { key: 'restricted_native_centroid:mean', measure: 'Protein, restricted, 5-seed mean', rule: "nearest centroid (the service's rule)",
+        accuracy: rec(0.793826, { sd: 0.047084 }), balanced_accuracy: rec(0.633237, { sd: 0.108427, min: 0.507871, max: 0.797915 }) },
+      { key: 'restricted_shared_knn:mean', measure: '<b>x</b>', rule: "shared kNN (the benchmark's rule)",
+        accuracy: rec(0.753154, { sd: 0.117906 }), balanced_accuracy: rec(0.714998, { sd: 0.106004, min: 0.590433, max: 0.883992 }) },
+    ],
+    vs_scanvi: {
+      restricted_shared_knn: { pairings: 15, v3_ahead: 3, mean_difference: measured(-0.05654, 'x') },
+      unrestricted: { pairings: 15, v3_ahead: 12, mean_difference: measured(0.181375, 'x') },
+    },
+  };
+  return m;
+};
+
+test("the model card table names each row's rule and shows mean, spread and range", () => {
+  const html = buildModelCardTable(withModelCard());
+  assert.match(html, /nearest centroid \(the service&#39;s rule\)/);
+  assert.match(html, /79\.8%/);
+  assert.match(html, /63\.3% &plusmn; 10\.8/);
+  assert.match(html, /range 50\.8 to 79\.8%/);
+  assert.ok(!html.includes('<b>x</b>'), 'measure names are escaped');
+});
+
+test('the model card table reads Pending when the manifest has none', () => {
+  assert.match(buildModelCardTable(manifestFixture()), /Pending/);
+});
+
+test('model card facts compare like with like and come from the manifest', () => {
+  const m = withModelCard();
+  assert.equal(factText(m, 'restricted_centroid_seed0'), '79.8%');
+  assert.equal(factText(m, 'restricted_centroid_mean'), '63.3% &plusmn; 10.8');
+  assert.equal(factText(m, 'restricted_centroid_range'), '50.8 to 79.8%');
+  assert.equal(factText(m, 'restricted_knn_spread'), '29.4 points');
+  assert.equal(factText(m, 'scanvi_restricted_pairings'), '3 of 15');
+  assert.equal(factText(m, 'scanvi_unrestricted_pairings'), '12 of 15');
+  assert.equal(factText(m, 'scanvi_unrestricted_margin'), '18.1 points');
+  for (const key of ['restricted_centroid_mean', 'scanvi_unrestricted_margin', 'restricted_knn_range']) {
+    assert.match(factText(manifestFixture(), key), /Pending/, `${key} without a model card`);
   }
 });
