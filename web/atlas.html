@@ -3,895 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VivOME Atlas - 3D Cell Visualization</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Atlas · VivOME</title>
+    <meta name="description" content="Explore RNA and protein cells from the VivOME atlas in one 3D space.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        *, *::before, *::after { 
-            box-sizing: border-box; 
-        }
-        
-        body {
-            margin: 0;
-            background: #ffffff;
-            color: #4B4B4B;
-            font-family: "Poppins", sans-serif;
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .back-button {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            padding: 0.4rem 0.8rem;
-            text-decoration: none;
-            color: #666;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(100, 100, 100, 0.2);
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            font-size: 0.8rem;
-            z-index: 1000;
-        }
+        /* The atlas is an app view: the header on top, the controls and the
+           viewer filling the rest of the window. Tokens and the sheet, glass
+           and well objects come from css/page.css. */
+        body { height: 100vh; overflow: hidden; }
+        .site-header-inner { max-width: none; padding-left: 28px; padding-right: 28px; }
 
-        .back-button:hover {
-            background: rgba(255, 255, 255, 1);
-            color: #333;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-            border-color: rgba(100, 100, 100, 0.4);
-        }
-        
-        .atlas-container {
-            display: flex;
-            height: 100vh;
-            flex-direction: column;
-        }
-        
-        .atlas-header {
-            background: linear-gradient(135deg, #008ECC 0%, #0066A3 100%);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 2rem;
-            box-shadow: 
-                0 4px 20px rgba(0, 142, 204, 0.3),
-                0 1px 3px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-            padding-left: 100px;
-            position: relative;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        .atlas-title {
-            display: flex;
-            align-items: center;
-            position: fixed;
-            left: 50%;
-            top: 1rem;
-            transform: translateX(-50%);
-            z-index: 200;
-            pointer-events: none;
-        }
-        
-        .atlas-title h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .atlas-title h1::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            opacity: 0.6;
-        }
-        
-        .header-stats {
-            margin-left: auto;
-            display: flex;
-            gap: 2rem;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: #ffffff;
-            font-size: 1.1rem;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        
-        .main-content {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-        
+        .main-content { flex: 1; display: flex; min-height: 0; position: relative; }
+
         .controls-panel {
             width: 340px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(0, 142, 204, 0.15);
-            padding: 1.5rem;
+            flex: none;
             overflow-y: auto;
-            box-shadow: 
-                2px 0 20px rgba(0, 142, 204, 0.06),
-                0 0 40px rgba(0, 142, 204, 0.03);
-            position: relative;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            z-index: 50;
+            padding: 20px 10px 28px 20px;
+            transition: margin-left 0.4s ease, opacity 0.4s ease;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 102, 163, 0.35) transparent;
         }
-        
-        .control-section {
-            margin-bottom: 2rem !important;
-            position: relative !important;
-            padding: 1rem !important;
-            border-radius: 12px !important;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.7) 0%, rgba(248, 250, 252, 0.9) 100%) !important;
-            border: 1px solid rgba(0, 142, 204, 0.08) !important;
-            box-shadow: 
-                0 8px 25px rgba(0, 142, 204, 0.12),
-                0 4px 15px rgba(0, 0, 0, 0.08),
-                0 2px 8px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+        .controls-panel.collapsed { margin-left: -340px; opacity: 0; pointer-events: none; }
+
+        /* Compact halo cards, so they don't glow into each other. */
+        .controls-panel .sheet {
+            padding: 16px 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 14px 30px rgba(0, 142, 204, 0.16), 0 6px 14px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.85);
         }
-        
-        .control-section::before {
-            content: '' !important;
-            position: absolute !important;
-            top: -2px !important;
-            left: -2px !important;
-            right: -2px !important;
-            bottom: -2px !important;
-            background: linear-gradient(145deg, 
-                rgba(0, 142, 204, 0.15) 0%, 
-                rgba(0, 200, 255, 0.2) 50%, 
-                rgba(0, 142, 204, 0.15) 100%) !important;
-            border-radius: 14px !important;
-            opacity: 0.4 !important;
-            filter: blur(5px) !important;
-            z-index: -1 !important;
-            pointer-events: none !important;
-        }
-        
-        .control-section h3 {
-            color: #ffffff !important;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: -1rem -1rem 1rem -1rem;
-            padding: 0.8rem 1rem;
-            background: linear-gradient(135deg, #008ECC 0%, #0066A3 100%) !important;
-            border-radius: 12px 12px 0 0;
-            border-bottom: none;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .control-section h3::before {
-            content: '';
-            position: absolute;
-            left: 1rem;
-            bottom: -1px;
-            width: 30px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 1px;
-        }
-        
-        .toggle-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-        
-        .toggle-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 142, 204, 0.1);
-            transition: all 0.3s ease;
-            color: #4B4B4B;
-            box-shadow: 
-                0 2px 8px rgba(0, 142, 204, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-        
-        .toggle-item:hover {
-            background: linear-gradient(135deg, rgba(0, 142, 204, 0.05) 0%, rgba(0, 142, 204, 0.08) 100%);
-            border-color: rgba(0, 142, 204, 0.2);
-            transform: translateY(-1px);
-            box-shadow: 
-                0 4px 15px rgba(0, 142, 204, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-        
+        .control-section h2 { font-size: 15px; margin-bottom: 12px; }
+
+        .atlas-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+        .atlas-stats .well { padding: 8px 6px; text-align: center; }
+        .stat-value { font-size: 17px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+        .stat-label { font-size: 11px; color: var(--ink-faint); }
+
+        .toggle-group { display: flex; flex-direction: column; gap: 10px; }
+        .toggle-item { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--ink); }
         .toggle-switch {
             position: relative;
-            width: 50px;
-            height: 26px;
-            background: linear-gradient(145deg, #e0e0e0 0%, #ccc 100%);
-            border-radius: 13px;
+            width: 44px;
+            height: 24px;
+            padding: 0;
+            border: 0;
+            border-radius: 12px;
+            background: var(--well);
+            box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.22);
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.1),
-                0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: background 0.2s ease;
         }
-        
-        .toggle-switch.active {
-            background: linear-gradient(145deg, #008ECC 0%, #0066A3 100%);
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.2),
-                0 0 10px rgba(0, 142, 204, 0.3);
-        }
-        
         .toggle-switch::after {
-            content: '';
+            content: "";
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 22px;
-            height: 22px;
-            background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(var(--shade), 0.3);
+            transition: transform 0.2s ease;
         }
-        
-        .toggle-switch.active::after {
-            transform: translateX(24px);
-        }
-        
-        /* Default Browser Scrollbar with Blue Color for Main Controls Panel */
-        .controls-panel {
-            width: 340px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(0, 142, 204, 0.15);
-            padding: 1.5rem;
-            overflow-y: auto;
-            box-shadow: 
-                2px 0 20px rgba(0, 142, 204, 0.06),
-                0 0 40px rgba(0, 142, 204, 0.03);
-            position: relative;
-            scrollbar-width: auto;
-            scrollbar-color: #008ECC #f0f0f0;
-        }
-        
-        .controls-panel::-webkit-scrollbar {
-            width: 17px; /* Default browser width */
-        }
-        
-        .controls-panel::-webkit-scrollbar-track {
-            background: #f0f0f0;
-        }
-        
-        .controls-panel::-webkit-scrollbar-thumb {
-            background: #008ECC;
-            border-radius: 0;
-        }
-        
-        .controls-panel::-webkit-scrollbar-thumb:hover {
-            background: #0099E6;
-        }
-        
-        .controls-panel::-webkit-scrollbar-button {
-            background: #008ECC;
-            height: 17px;
-        }
-        
-        .controls-panel::-webkit-scrollbar-button:hover {
-            background: #0099E6;
-        }
-        
-        /* Custom Scrollbar Only for Cell Type Filters */
-        .cell-type-filters::-webkit-scrollbar {
-            width: 14px;
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-track {
-            background: linear-gradient(180deg, rgba(248, 250, 252, 0.8) 0%, rgba(240, 245, 250, 0.9) 100%);
-            border-radius: 7px;
-            border: 1px solid rgba(0, 142, 204, 0.1);
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #008ECC 0%, #0066A3 100%);
-            border-radius: 7px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                0 2px 4px rgba(0, 142, 204, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #0099E6 0%, #0077BB 100%);
-            box-shadow: 
-                0 2px 6px rgba(0, 142, 204, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-button {
-            display: block;
-            height: 14px;
-            background: linear-gradient(180deg, #008ECC 0%, #0066A3 100%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-button:start:decrement {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpolygon fill='white' points='6,2 10,8 2,8'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 8px 8px;
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-button:end:increment {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpolygon fill='white' points='6,10 2,4 10,4'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 8px 8px;
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-button:hover {
-            background-color: #0099E6;
-        }
-        
-        .cell-type-filters::-webkit-scrollbar-button:active {
-            background-color: #006BB3;
-        }
-        
-        .cell-type-filters {
-            max-height: 250px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #008ECC rgba(248, 250, 252, 0.8);
-        }
-        
+        .toggle-switch.active { background: var(--on, var(--accent)); }
+        .toggle-switch.active::after { transform: translateX(20px); }
+        #rna-toggle { --on: var(--rna); }
+        #prot-toggle { --on: var(--prot); }
+
+        .cell-type-filters { max-height: 250px; overflow-y: auto; margin: 0 -6px; scrollbar-width: thin; }
         .filter-item {
             display: flex;
             align-items: flex-start;
-            gap: 0.8rem;
-            padding: 0.6rem;
-            margin-bottom: 0.4rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            color: #4B4B4B;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(248, 250, 252, 0.3) 100%);
-            border: 1px solid transparent;
-            min-height: 40px;
-        }
-        
-        .filter-item:hover {
-            background: linear-gradient(135deg, rgba(0, 142, 204, 0.05) 0%, rgba(0, 142, 204, 0.08) 100%);
-            border-color: rgba(0, 142, 204, 0.1);
-        }
-        
-        .filter-item.selected {
-            opacity: 1;
-        }
-        
-        .filter-item.deselected {
-            opacity: 0.3;
-        }
-        
-        .filter-item.deselected:hover {
-            opacity: 0.5;
-        }
-        
-        /* Removed all filter-checkbox CSS - no longer needed */
-        
-        .color-indicator {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 
-                0 2px 6px rgba(0, 0, 0, 0.15),
-                inset 0 1px 1px rgba(255, 255, 255, 0.5);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        
-        .filter-item span {
-            flex: 1;
-            word-wrap: break-word;
-            line-height: 1.3;
-            max-width: 220px;
-            font-size: 0.9rem;
-        }
-        
-        .visualization-area {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            transition: margin-right 0.4s ease;
-        }
-        
-        .visualization-area.with-gene-panel {
-            margin-right: 400px;
-        }
-        
-        .three-container {
-            flex: 1;
-            position: relative;
-            transition: width 0.4s ease, margin-right 0.4s ease;
-        }
-        
-        .visualization-area.with-gene-panel .three-container {
-            width: calc(100vw - 400px);
-            margin-right: 0;
-        }
-        
-        .visualization-area.menu-collapsed .three-container {
-            width: 100vw;
-        }
-        
-        .visualization-area.menu-collapsed.with-gene-panel .three-container {
-            width: calc(100vw - 400px);
-        }
-        
-        .gene-profile-panel {
-            position: fixed;
-            top: 90px;
-            right: 0;
-            width: 400px;
-            height: calc(100vh - 110px);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(200, 200, 200, 0.3);
-            border-radius: 12px 0 0 0;
-            overflow: hidden;
-            transform: translateX(100%);
-            transition: transform 0.4s ease;
-            z-index: 100;
-            box-shadow: 
-                -2px 0 20px rgba(0, 0, 0, 0.1),
-                0 -2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .gene-profile-panel.open {
-            transform: translateX(0);
-        }
-        
-        .gene-profile-header {
-            background: linear-gradient(135deg, #008ECC 0%, #0066A3 100%);
-            color: white;
-            padding: 1rem;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 142, 204, 0.2);
-            position: relative;
-        }
-        
-        .gene-profile-header h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            flex: 1;
-        }
-        
-        .gene-profile-controls {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        
-        .menu-toggle-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 0.8rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            transition: background 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        
-        .menu-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .gene-profile-close {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease;
-        }
-        
-        .gene-profile-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .gene-profile-content {
-            height: calc(100vh - 160px);
-            overflow-y: auto;
-            padding: 1.5rem;
-        }
-        
-        .gene-profile-table {
+            gap: 10px;
             width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-        
-        .gene-profile-table th {
-            background: linear-gradient(135deg, rgba(0, 142, 204, 0.1) 0%, rgba(0, 142, 204, 0.05) 100%);
-            color: #008ECC;
-            padding: 0.6rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid rgba(0, 142, 204, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .gene-profile-table td {
-            padding: 0.5rem 0.6rem;
-            border-bottom: 1px solid rgba(0, 142, 204, 0.08);
-            transition: background 0.2s ease;
-        }
-        
-        .gene-profile-table tr:hover td {
-            background: rgba(0, 142, 204, 0.05);
-        }
-        
-        .gene-profile-table .gene-name {
-            font-weight: 500;
-            color: #4B4B4B;
-        }
-        
-        .gene-profile-table .gene-value {
-            font-family: monospace;
-            color: #008ECC;
-            text-align: right;
-        }
-        
-        .gene-profile-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .gene-profile-content::-webkit-scrollbar-track {
-            background: rgba(248, 250, 252, 0.8);
-            border-radius: 4px;
-        }
-        
-        .gene-profile-content::-webkit-scrollbar-thumb {
-            background: #008ECC;
-            border-radius: 4px;
-        }
-        
-        .gene-profile-content::-webkit-scrollbar-thumb:hover {
-            background: #0099E6;
-        }
-        
-        #three-canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        
-        /* Force white theme for loading - override any inherited styles */
-        #loading-overlay {
-            background: rgba(255, 255, 255, 0.95) !important;
-            color: #008ECC !important;
-        }
-        
-        /* Removed all loading checkbox CSS overrides */
-        
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 15, 35, 0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-        
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(0, 255, 255, 0.2);
-            border-top: 4px solid #00ffff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-text {
-            color: #00ffff;
-            font-weight: 500;
-            font-size: 1.1rem;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-        
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-            padding: 1rem;
+            padding: 6px;
+            border: 0;
             border-radius: 8px;
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            margin: 1rem;
+            background: none;
+            font: inherit;
+            font-size: 13px;
+            line-height: 1.35;
+            text-align: left;
+            color: var(--ink-soft);
+            cursor: pointer;
         }
-        
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .scene-info {
-            position: absolute;
-            bottom: 1rem;
-            left: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 0.5rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: #666;
-            backdrop-filter: blur(10px);
+        .filter-item:hover { background: var(--accent-tint); }
+        .filter-item.deselected { opacity: 0.35; }
+        .filter-item.deselected:hover { opacity: 0.55; }
+        .color-indicator {
+            width: 12px;
+            height: 12px;
+            flex: none;
+            margin-top: 3px;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #FFFFFF, 0 1px 3px rgba(var(--shade), 0.35);
         }
 
-        .camera-info {
-            position: absolute;
-            bottom: 1rem;
-            right: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 0.5rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: #666;
-            backdrop-filter: blur(10px);
-            font-family: monospace;
-            line-height: 1.4;
-        }
-        
-        .menu-toggle-tab {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 60px;
-            background: linear-gradient(135deg, #008ECC 0%, #0066A3 100%);
-            border-radius: 0 8px 8px 0;
+        .controls-panel .support-table { font-size: 12px; }
+        .controls-panel .support-tile-value { font-size: 18px; }
+
+        .visualization-area {
+            flex: 1;
+            min-width: 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 20px 20px 20px 10px;
+            transition: margin-right 0.4s ease;
+        }
+        .visualization-area.with-gene-panel { margin-right: 396px; }
+
+        /* The viewer is one large white halo card. */
+        .three-container {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 142, 204, 0.10);
+            border-radius: var(--r-sheet);
+            box-shadow: var(--halo);
+        }
+        #three-canvas { width: 100%; height: 100%; display: block; }
+
+        .gene-profile-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            bottom: 20px;
+            width: 376px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+            transform: translateX(calc(100% + 40px));
+            transition: transform 0.4s ease;
+        }
+        .gene-profile-panel.open { transform: none; }
+        .gene-profile-header { display: flex; align-items: center; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+        .gene-profile-header h3 { flex: 1; margin: 0; font-size: 15px; }
+        .gene-profile-controls { display: flex; gap: 6px; }
+        .menu-toggle-btn, .gene-profile-close {
+            font: inherit;
+            font-size: 13px;
+            line-height: 1.2;
+            padding: 6px 11px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--well);
+            color: var(--ink);
             cursor: pointer;
-            z-index: 150;
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .menu-toggle-tab .toggle-icon {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        
-        .menu-toggle-tab.visible {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-        
-        .menu-toggle-tab:hover {
-            background: linear-gradient(135deg, #0099E6 0%, #0077BB 100%) !important;
-            transform: translateY(-50%) translateX(5px) !important;
-        }
-        
-        .controls-panel.collapsed {
-            transform: translateX(-100%) !important;
-            opacity: 0 !important;
-        }
-        
-        @media (max-width: 1024px) {
-            .controls-panel {
-                width: 320px;
-            }
-            
-            .header-stats {
-                display: none;
-            }
-            
-            .atlas-header {
-                padding-left: 80px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .controls-panel {
-                width: 100%;
-                height: auto;
-                max-height: 200px;
-                order: 2;
-            }
-            
-            .visualization-area {
-                order: 1;
-                height: 60vh;
-            }
-            
-            .atlas-header {
-                padding: 1rem;
-                padding-left: 70px;
-            }
-            
-            .atlas-title h1 {
-                font-size: 1.5rem;
-            }
-        }
-        .support-tiles {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .support-tile {
-            background: #f0f0f0;
-            border-radius: 6px;
-            padding: 8px 4px;
-            text-align: center;
-        }
-        .support-tile-value { font-size: 20px; font-weight: 600; color: #0066A3; }
-        .support-tile-label { font-size: 10px; color: #4B4B4B; text-transform: uppercase; letter-spacing: 0.04em; }
-        .support-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        .support-table th {
-            text-align: left;
-            font-weight: 600;
-            color: #4B4B4B;
-            border-bottom: 1px solid #d9d9d9;
-            padding: 4px 6px;
-        }
-        .support-table td { padding: 4px 6px; border-bottom: 1px solid #efefef; vertical-align: top; }
-        .support-name { color: #4B4B4B; }
-        .support-num { text-align: right; font-variant-numeric: tabular-nums; }
-        .support-badge {
-            display: inline-block;
-            padding: 1px 6px;
-            border-radius: 10px;
-            font-size: 9px;
             white-space: nowrap;
         }
-        .badge-cross_modal { background: #008ECC; color: #ffffff; }
-        .badge-rna_only { background: #f0f0f0; color: #4B4B4B; }
-        .badge-prot_only { background: #0099E6; color: #ffffff; }
-        .metric-basis { display: block; font-size: 9px; color: #8a8a8a; }
-        /* Pending must never be mistaken for a measured value. */
-        .pending { color: #8a8a8a; font-style: italic; }
-        .panel-note { font-size: 10px; line-height: 1.5; color: #6a6a6a; margin-top: 8px; }
-        .panel-error { font-size: 11px; color: #dc3545; }
+        .menu-toggle-btn:hover, .gene-profile-close:hover { background: var(--accent-tint); }
+        .gene-profile-content { flex: 1; overflow-y: auto; padding: 4px 18px 18px; }
+        .gene-profile-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .gene-profile-table th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 10px 6px 8px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--ink-faint);
+            background: rgb(250, 250, 249);
+            border-bottom: 1px solid var(--line);
+        }
+        .gene-profile-table td { padding: 6px; border-bottom: 1px solid var(--line); }
+        .gene-profile-table tr:hover td { background: var(--accent-tint); }
+        .gene-profile-table .gene-name { color: var(--ink); }
+        .gene-profile-table .gene-value { text-align: right; font-variant-numeric: tabular-nums; }
+
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.95);
+            transition: opacity 0.3s ease;
+        }
+        .loading-spinner {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-tint);
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-size: 15px; font-weight: 500; color: var(--ink); }
+        .error-message { max-width: 460px; margin: 16px; padding: 20px 22px; border-radius: 12px; background: rgba(180, 35, 24, 0.06); color: var(--error); }
+
+        .tooltip {
+            position: absolute;
+            z-index: 6;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.45;
+            white-space: pre-line;
+            color: #FFFFFF;
+            background: rgba(29, 43, 54, 0.92);
+        }
+        .scene-info, .camera-info { position: absolute; bottom: 14px; padding: 6px 11px; font-size: 12px; color: var(--ink-soft); }
+        .scene-info { left: 14px; }
+        .camera-info { right: 14px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+
+        .menu-toggle-tab {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            z-index: 6;
+            width: 28px;
+            height: 56px;
+            border: 0;
+            border-radius: 0 10px 10px 0;
+            background: var(--accent);
+            color: #FFFFFF;
+            font-size: 16px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        .menu-toggle-tab.visible { opacity: 1; visibility: visible; }
+
+        @media (max-width: 768px) {
+            body { height: auto; overflow: auto; }
+            .main-content { flex-direction: column; }
+            .visualization-area { order: 1; height: 60vh; padding: 12px 16px; }
+            .visualization-area.with-gene-panel { margin-right: 0; }
+            .controls-panel { order: 2; width: 100%; padding: 8px 16px 24px; overflow: visible; }
+            .controls-panel.collapsed { display: none; }
+            .gene-profile-panel { position: fixed; inset: auto 12px 12px 12px; width: auto; height: 60vh; }
+            .scene-info { display: none; }
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-button">Back</a>
-    
-    <div class="atlas-container">
-        <header class="atlas-header">
-            <div class="header-content">
-                <div class="atlas-title">
-                    <h1>VivOME Atlas</h1>
-                </div>
-                <div class="header-stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="rna-count">-</div>
-                        <div>RNA Cells</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="prot-count">-</div>
-                        <div>Protein Cells</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="class-count">-</div>
-                        <div>Cell Types</div>
-                    </div>
-                </div>
-            </div>
-        </header>
-        
-        <div class="main-content">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html" aria-current="page">Atlas</a>
+                <a href="project.html">Project</a>
+                <a href="benchmark.html">Benchmark</a>
+                <a href="versions.html">Versions</a>
+                <a class="site-nav-home" href="home.html">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="main-content">
             <div class="controls-panel" id="controls-panel">
-                <div class="control-section">
-                    <h3>Modality Control</h3>
+                <h1 class="visually-hidden">Atlas</h1>
+                <div class="atlas-stats">
+                    <div class="well"><div class="stat-value" id="rna-count">-</div><div class="stat-label">RNA cells</div></div>
+                    <div class="well"><div class="stat-value" id="prot-count">-</div><div class="stat-label">Protein cells</div></div>
+                    <div class="well"><div class="stat-value" id="class-count">-</div><div class="stat-label">Cell types</div></div>
+                </div>
+
+                <section class="control-section sheet">
+                    <h2>Modality</h2>
                     <div class="toggle-group">
                         <div class="toggle-item">
-                            <span>RNA Cells</span>
-                            <div class="toggle-switch active" id="rna-toggle"></div>
+                            <span id="rna-toggle-label">RNA cells</span>
+                            <button type="button" class="toggle-switch active" id="rna-toggle" role="switch" aria-checked="true" aria-labelledby="rna-toggle-label"></button>
                         </div>
                         <div class="toggle-item">
-                            <span>Protein Cells</span>
-                            <div class="toggle-switch active" id="prot-toggle"></div>
+                            <span id="prot-toggle-label">Protein cells</span>
+                            <button type="button" class="toggle-switch active" id="prot-toggle" role="switch" aria-checked="true" aria-labelledby="prot-toggle-label"></button>
                         </div>
                     </div>
-                </div>
+                </section>
                 
-                <div class="control-section">
-                    <h3>RNA Cell Types</h3>
+                <section class="control-section sheet">
+                    <h2>RNA cell types</h2>
                     <div class="cell-type-filters" id="rna-cell-type-filters">
                         <!-- Dynamically populated -->
                     </div>
-                </div>
-                
-                <div class="control-section">
-                    <h3>Proteomics Cell Types</h3>
+                </section>
+
+                <section class="control-section sheet">
+                    <h2>Protein cell types</h2>
                     <div class="cell-type-filters" id="prot-cell-type-filters">
                         <!-- Dynamically populated -->
                     </div>
-                </div>
+                </section>
 
-                <div class="control-section">
-                    <h3>Cross-Modal Support</h3>
+                <section class="control-section sheet">
+                    <h2>Cross-modal support</h2>
                     <div class="support-tiles" id="support-tiles"></div>
                     <div id="support-table-mount"></div>
                     <p class="panel-note">
@@ -899,30 +314,28 @@
                         RNA only have no proteomics evidence in this build, and projections onto them
                         should not be read as cross-modal results.
                     </p>
-                </div>
+                </section>
 
-                <div class="control-section">
-                    <h3>Alignment Diagnostics</h3>
+                <section class="control-section sheet">
+                    <h2>Alignment diagnostics</h2>
                     <div id="diagnostics-mount"></div>
-                </div>
+                </section>
             </div>
             
-            <div class="menu-toggle-tab" id="menu-toggle-tab">
-                <span class="toggle-icon">☰</span>
-            </div>
+            <button type="button" class="menu-toggle-tab" id="menu-toggle-tab" aria-label="Show controls">☰</button>
             
             <div class="visualization-area" id="visualization-area">
                 <div class="three-container">
                     <div class="loading-overlay" id="loading-overlay">
                         <div class="loading-spinner"></div>
-                        <div class="loading-text">Loading VivOME Atlas data...</div>
+                        <div class="loading-text">Loading the atlas</div>
                     </div>
                     <canvas id="three-canvas"></canvas>
                     <div class="tooltip" id="tooltip"></div>
-                    <div class="scene-info" id="scene-info">
-                        Mouse: Rotate | Wheel: Zoom | Right-click: Pan | Click: Gene Profile
+                    <div class="scene-info glass" id="scene-info">
+                        Drag to rotate, scroll to zoom, right-drag to pan, click a cell for its gene profile
                     </div>
-                    <div class="camera-info" id="camera-info">
+                    <div class="camera-info glass" id="camera-info">
                         Zoom: 65<br>
                         Pan X: -2.45<br>
                         Pan Y: 0.64<br>
@@ -931,15 +344,14 @@
                 </div>
             </div>
             
-            <div class="gene-profile-panel" id="gene-profile-panel">
+            <aside class="gene-profile-panel sheet" id="gene-profile-panel" aria-label="Gene profile">
                 <div class="gene-profile-header">
                     <h3 id="gene-profile-title">Gene Profile</h3>
                     <div class="gene-profile-controls">
-                        <button class="menu-toggle-btn" id="menu-toggle-btn">
-                            <span>☰</span>
-                            <span id="menu-toggle-text">Show Menu</span>
+                        <button type="button" class="menu-toggle-btn" id="menu-toggle-btn">
+                            <span id="menu-toggle-text">Show controls</span>
                         </button>
-                        <button class="gene-profile-close" id="gene-profile-close">×</button>
+                        <button type="button" class="gene-profile-close" id="gene-profile-close" aria-label="Close gene profile">&times;</button>
                     </div>
                 </div>
                 <div class="gene-profile-content">
@@ -955,22 +367,34 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
+            </aside>
+    </main>
 
+    <script type="module" src="js/background.js"></script>
     <script>
+        // Class names and error text are data: escape them before they reach
+        // innerHTML. The platform does the escaping (textContent round-trip).
+        const escapeText = (value) => {
+            const holder = document.createElement('div');
+            holder.textContent = String(value);
+            return holder.innerHTML;
+        };
+
         class VivomeAtlasThree {
             constructor() {
                 this.data = { rna: [], prot: [] };
                 this.cellTypes = new Set();
                 this.geneProfileCache = new Map(); // Cache for loaded gene profiles
+                // One colour per cell type, in sorted class order: eight hues in
+                // three lightness tiers, so neighbouring classes always differ in
+                // hue. Passed the dataviz palette validator on white (lightness,
+                // chroma, CVD and normal-vision separation of adjacent slots,
+                // 2026-09-30); the labelled filter list and tooltip carry identity
+                // for the lighter slots, which sit under 3:1 on white.
                 this.colorPalette = [
-                    '#00ffff', '#ff0040', '#00ff00', '#ff4000', '#8000ff',
-                    '#ffff00', '#ff00ff', '#40ff00', '#0080ff', '#ff8000',
-                    '#00c0ff', '#80ff00', '#00ff80', '#ff0000', '#0040ff',
-                    '#4080ff', '#ff1010', '#cc0000', '#ff2020', '#8040ff',
-                    '#40ff80', '#ff4040', '#990000', '#ffff40', '#ff3333'
+                    '#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948',
+                    '#1f5ea8', '#b85020', '#13875e', '#9c6b00', '#b8406f', '#3d7a1f', '#7a5cc4', '#a8322f',
+                    '#5b9be6', '#c77a3e', '#4cc496', '#c49a1c', '#d05f95', '#6f9e2e'
                 ];
                 this.visibilityState = {
                     rna: true,
@@ -1015,12 +439,6 @@
             async init() {
                 try {
                     // Ensure loading overlay is white theme from start
-                    const loadingOverlay = document.getElementById('loading-overlay');
-                    if (loadingOverlay) {
-                        loadingOverlay.style.background = 'rgba(255, 255, 255, 0.95)';
-                        loadingOverlay.style.color = '#008ECC';
-                    }
-                    
                     this.setupThreeJS();
                     await this.loadData();
                     this.setupEventListeners();
@@ -1439,16 +857,18 @@
             }
             
             createFilterItem(cellType, modality) {
-                const filterItem = document.createElement('div');
+                const filterItem = document.createElement('button');
+                filterItem.type = 'button';
                 filterItem.className = 'filter-item selected';
                 filterItem.setAttribute('data-modality', modality);
-                
-                const color = this.getColorForCellType(cellType);
-                
-                filterItem.innerHTML = `
-                    <div class="color-indicator" style="background-color: ${color}"></div>
-                    <span>${cellType}</span>
-                `;
+                filterItem.setAttribute('aria-pressed', 'true');
+
+                const swatch = document.createElement('span');
+                swatch.className = 'color-indicator';
+                swatch.style.backgroundColor = this.getColorForCellType(cellType);
+                const label = document.createElement('span');
+                label.textContent = cellType;
+                filterItem.append(swatch, label);
                 
                 filterItem.addEventListener('click', () => {
                     this.toggleCellType(cellType, filterItem);
@@ -1478,11 +898,13 @@
                     this.visibilityState.cellTypes.delete(cellType);
                     filterItem.classList.remove('selected');
                     filterItem.classList.add('deselected');
+                    filterItem.setAttribute('aria-pressed', 'false');
                 } else {
                     // Select
                     this.visibilityState.cellTypes.add(cellType);
                     filterItem.classList.remove('deselected');
                     filterItem.classList.add('selected');
+                    filterItem.setAttribute('aria-pressed', 'true');
                 }
                 this.updateVisualization();
             }
@@ -1515,7 +937,9 @@
             
             toggleModality(modality) {
                 this.visibilityState[modality] = !this.visibilityState[modality];
-                document.getElementById(`${modality}-toggle`).classList.toggle('active', this.visibilityState[modality]);
+                const toggle = document.getElementById(`${modality}-toggle`);
+                toggle.classList.toggle('active', this.visibilityState[modality]);
+                toggle.setAttribute('aria-checked', String(this.visibilityState[modality]));
                 if (this.particles[modality]) {
                     this.particles[modality].visible = this.visibilityState[modality];
                     this.buildRaycastTargets();
@@ -1672,7 +1096,7 @@
             
             showTooltip(text) {
                 this.tooltip.style.opacity = '1';
-                this.tooltip.innerHTML = text.replace(/\n/g, '<br>');
+                this.tooltip.textContent = text;
                 
                 // Position tooltip near mouse
                 const rect = this.renderer.domElement.getBoundingClientRect();
@@ -1955,7 +1379,7 @@
                                     Retrieving Gene Expression Data
                                 </div>
                                 <div style="color: #666; font-size: 0.9rem; line-height: 1.4;">
-                                    <div>Cell Type: <strong>${cellData.class_name}</strong></div>
+                                    <div>Cell type: <strong>${escapeText(cellData.class_name)}</strong></div>
                                     <div>Cell Index: <strong>${cellData.orig_index}</strong></div>
                                     <div>Modality: <strong>${modality.toUpperCase()}</strong></div>
                                     <div style="margin-top: 1rem; font-size: 0.8rem; color: #008ECC;">
@@ -2015,7 +1439,7 @@
                             <td colspan="2" style="text-align: center; padding: 2rem; color: #dc3545;">
                                 <div style="margin-bottom: 1rem;">❌ Error loading gene expression data</div>
                                 <div style="font-size: 0.8rem; color: #666;">
-                                    ${error.message || 'Unknown error occurred'}
+                                    ${escapeText(error.message || 'Unknown error occurred')}
                                 </div>
                                 <div style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
                                     The file may be too large or the server may not support the required features.
@@ -2064,7 +1488,7 @@
             
             updateMenuToggleButton(menuVisible) {
                 if (this.menuToggleText) {
-                    this.menuToggleText.textContent = menuVisible ? 'Hide Menu' : 'Show Menu';
+                    this.menuToggleText.textContent = menuVisible ? 'Hide controls' : 'Show controls';
                 }
             }
             
@@ -2104,7 +1528,7 @@
                 overlay.innerHTML = `
                     <div class="error-message">
                         <h3 style="color: #dc3545; margin-top: 0;">Error Loading Atlas</h3>
-                        <p style="color: #666;">${message}</p>
+                        <p style="color: #666;">${escapeText(message)}</p>
                         <p style="color: #666;">Please check that the data/ folder contains the required CSV files.</p>
                     </div>
                 `;

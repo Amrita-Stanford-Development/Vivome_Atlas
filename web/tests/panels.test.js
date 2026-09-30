@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
   buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
-  buildAvailabilityTable, buildSupportedLabelSpace,
+  buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
 
@@ -229,4 +229,65 @@ test('supported label space lists cross-modal types and the RNA-only count', () 
   assert.match(html, /monocyte/);
   assert.match(html, /macrophage/);
   assert.match(html, /RNA-only \(1\)/);
+});
+
+test('release status shows the manifest release facts', () => {
+  const html = buildReleaseStatus(manifestFixture());
+  assert.match(html, /Atlas version<\/dt><dd>0\.2\.0/);
+  assert.match(html, /VivOME v3 reference/);
+  assert.match(html, /RNA cells<\/dt><dd>85,233/);
+  assert.match(html, /Protein cells<\/dt><dd>1,490/);
+});
+
+test('release status renders Pending, never undefined, for missing fields', () => {
+  const m = manifestFixture();
+  delete m.atlas_version;
+  delete m.model.name;
+  m.modalities = {};
+  const html = buildReleaseStatus(m);
+  assert.ok(!html.includes('undefined'), html);
+  assert.ok(!html.includes('NaN'), html);
+  assert.match(html, /Pending/);
+});
+
+test('release status escapes model names', () => {
+  const m = manifestFixture();
+  m.model.name = '<script>alert(1)</script>';
+  assert.ok(!buildReleaseStatus(m).includes('<script>'));
+});
+
+test("what's new formats dates and escapes every field", () => {
+  const html = buildWhatsNew([{
+    date: '2026-09-30', title: '<b>t</b>', text: '<img src=x>', link: 'atlas.html', link_text: '<i>go</i>',
+  }]);
+  assert.match(html, /30 September 2026/);
+  assert.match(html, /datetime="2026-09-30"/);
+  assert.ok(!html.includes('<b>') && !html.includes('<img') && !html.includes('<i>'), html);
+  assert.match(html, /href="atlas\.html"/);
+});
+
+test("what's new drops links that are not pages of this site", () => {
+  for (const link of ['javascript:alert(1)', 'https://example.com', '../secret.html', '//x.html']) {
+    const html = buildWhatsNew([{ date: '2026-09-30', title: 't', text: 'x', link }]);
+    assert.ok(!html.includes('href='), `${link} should not render: ${html}`);
+  }
+  const anchored = buildWhatsNew([{ date: '2026-09-30', title: 't', text: 'x', link: 'project.html#labels' }]);
+  assert.match(anchored, /href="project\.html#labels"/);
+});
+
+test("what's new says so when there is nothing to announce", () => {
+  assert.match(buildWhatsNew([]), /No announcements yet/);
+  assert.match(buildWhatsNew(null), /No announcements yet/);
+});
+
+test("the shipped what's new entries render with no metrics in them", async () => {
+  const { readFileSync } = await import('node:fs');
+  const entries = JSON.parse(readFileSync(new URL('../data/whats_new.json', import.meta.url), 'utf8'));
+  assert.ok(entries.length > 0);
+  for (const e of entries) {
+    assert.match(e.date, /^\d{4}-\d{2}-\d{2}$/, e.title);
+    // Numbers belong in the manifest; an announcement links to them instead.
+    // Version names (v3.1) are names, not measurements.
+    assert.ok(!/\d%|(?<![v\d.])\d+\.\d/.test(`${e.title} ${e.text}`), `metric-like text in: ${e.title}`);
+  }
 });

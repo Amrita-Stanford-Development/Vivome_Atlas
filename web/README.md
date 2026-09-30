@@ -16,7 +16,7 @@ data.
 | `css/page.css` | shared styling |
 | `js/manifest.js`, `js/panels.js` | pure modules (no DOM access) that load the manifest and build panel HTML |
 | `data/` | `atlas_manifest.json` (generated; the only source of displayed numbers), cell metadata, embeddings; see [docs/web/data.md](../docs/web/data.md) |
-| `plots/` | 30 standalone Plotly plots shown by `visual.html` |
+| `plots/` | 30 standalone Plotly plots from the original 2025 model; no page shows them now |
 | `tests/` | `node --test` suites for `js/`, run with `node --test` from the repo root |
 
 The rule for every page: no number is displayed unless it was computed from

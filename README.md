@@ -66,8 +66,8 @@ line for every file.
 | Page | What it does |
 |------|--------------|
 | `index.html` | Landing page — animated intro, nav to every section |
+| `home.html` | Dashboard: a way in to every tool, the current release, what's new |
 | `atlas.html` | Interactive 3D cell viewer with cross-modal support map and alignment diagnostics |
-| `visual.html` | Viewer for the 30 precomputed 3D plots (supervised + semi-supervised) |
 | `project.html` | The projection contract and the label space the service supports |
 | `benchmark.html` | Standing comparison against established integration methods |
 | `versions.html` | Model card, data availability, release protocol |

@@ -1,90 +1,411 @@
-/* Shared chrome for the standalone resource pages (versions, benchmark,
-   project) and the styling contract for the markup js/panels.js emits.
-   atlas.html keeps its own inline styles — its sidebar renders the same
-   panels at a smaller scale. */
+/* VivOME site styles: one world, used by every page.
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+   The world is a living specimen: cells, DNA and RNA strands drifting over a
+   breathing blue field (web/js/background.js, behind every page). Four
+   objects carry every UI role (docs/web/design.md):
+     glass  chrome: header, toolbars, sidebars
+     well   pressed in: inputs, the active item, empty values
+     sheet  the white card with the blue halo: anything you read
+     bead   a small cell: badges and status
+   Also the styling contract for the markup web/js/panels.js emits.
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    background: #f5f5f3;
-    color: #4B4B4B;
-    line-height: 1.6;
-    padding: 40px 20px;
+   Everything sits in layers so a page's own unlayered <style> still wins. */
+
+@layer base, components;
+
+:root {
+    --field: #EAF0F6;
+    --bench: #F5F5F3;
+    --paper: #FFFFFF;
+    --ink: #1D2B36;
+    --ink-soft: #4B4B4B;
+    --ink-faint: #666666;
+    --line: #E4E3DE;
+    --well: #ECEBE7;
+
+    /* The one accent: links, focus, the OME cutout. The bright step is the
+       cutout's fill only; white on it is 4.7:1, AA at any size. */
+    --accent: #0066A3;
+    --accent-bright: #007AB8;
+    --accent-tint: rgba(0, 142, 204, 0.10);
+
+    /* Reserved: each colour means exactly one thing and is never decoration.
+       RNA and protein passed the CVD and contrast validator as a pair with
+       the accent (2026-09-30). */
+    --rna: #C8641E;
+    --prot: #2F8F6A;
+    --dot: #E4577A;        /* the logo's living dot, used nowhere else */
+    --error: #B42318;
+
+    /* Shadows are tinted with the ink or the accent, never plain black. */
+    --shade: 22, 52, 78;
+    --halo:
+        0 35px 70px 0 rgba(0, 142, 204, 0.18),
+        0 25px 50px 0 rgba(0, 142, 204, 0.14),
+        0 18px 35px 0 rgba(0, 0, 0, 0.10),
+        0 12px 25px 0 rgba(0, 0, 0, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+
+    --font: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --r-chrome: 10px;
+    --r-sheet: 20px;
+    --r-well: 10px;
+    --gutter: 24px;
+    --page-max: 1120px;
 }
 
-.wrap { max-width: 860px; margin: 0 auto; }
+@layer base {
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
 
-.back-button {
-    display: inline-block;
-    margin-bottom: 24px;
-    padding: 6px 14px;
-    background: #ffffff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    color: #0066A3;
-    text-decoration: none;
-    font-size: 13px;
-}
-.back-button:hover { background: #008ECC; color: #ffffff; border-color: #008ECC; }
+    html { -webkit-text-size-adjust: 100%; }
 
-h1 { font-size: 26px; color: #0066A3; font-weight: 600; margin-bottom: 4px; }
-h2 { font-size: 16px; color: #0066A3; font-weight: 600; margin-bottom: 14px; }
-.subtitle { font-size: 14px; color: #6a6a6a; margin-bottom: 28px; }
+    body {
+        font-family: var(--font);
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+        /* The field's resting colour, for the moment before the canvas draws. */
+        background-color: var(--field);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-section { background: #ffffff; border-radius: 8px; padding: 22px 26px; margin-bottom: 20px; }
+    h1, h2, h3 { color: var(--ink); font-weight: 600; line-height: 1.15; }
+    h1 { font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.03em; }
+    h2 { font-size: 20px; letter-spacing: -0.015em; margin-bottom: 14px; }
+    h3 { font-size: 16px; letter-spacing: -0.01em; margin-bottom: 8px; }
+    p, li { max-width: 72ch; }
 
-code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+    a { color: var(--accent); text-underline-offset: 0.18em; }
+    a:hover { text-decoration-thickness: 2px; }
 
-/* --- Styling contract for js/panels.js output --- */
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
-.table-scroll { overflow-x: auto; }
+    code {
+        font-size: 0.86em;
+        background: var(--well);
+        padding: 1px 5px;
+        border-radius: 4px;
+        overflow-wrap: anywhere;
+    }
 
-.support-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-.support-tile { background: #f0f0f0; border-radius: 6px; padding: 8px 4px; text-align: center; }
-.support-tile-value { font-size: 20px; font-weight: 600; color: #0066A3; }
-.support-tile-label { font-size: 10px; color: #4B4B4B; text-transform: uppercase; letter-spacing: 0.04em; }
+    strong { color: var(--ink); font-weight: 600; }
 
-.support-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.support-table th {
-    text-align: left;
-    padding: 6px 8px;
-    border-bottom: 1px solid #d9d9d9;
-    font-size: 11px;
-    text-transform: uppercase;
-    color: #8a8a8a;
-}
-.support-table td { padding: 8px; border-bottom: 1px solid #efefef; vertical-align: top; }
-.support-name { color: #4B4B4B; }
-.support-num { text-align: right; font-variant-numeric: tabular-nums; }
-
-.support-badge {
-    display: inline-block;
-    padding: 1px 6px;
-    border-radius: 10px;
-    font-size: 10px;
-    white-space: nowrap;
-}
-.badge-cross_modal { background: #008ECC; color: #ffffff; }
-.badge-rna_only { background: #f0f0f0; color: #4B4B4B; }
-.badge-prot_only { background: #0099E6; color: #ffffff; }
-
-.metric-basis { display: block; font-size: 10px; color: #8a8a8a; }
-
-.model-card { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
-.card-field dt { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #8a8a8a; }
-.card-field dd { font-size: 16px; color: #4B4B4B; font-variant-numeric: tabular-nums; }
-
-/* Pending must never be mistaken for a measured value. */
-.pending { color: #8a8a8a; font-style: italic; }
-
-.pending-banner {
-    background: #fff8e6;
-    border-left: 3px solid #008ECC;
-    padding: 12px 14px;
-    font-size: 13px;
-    margin-bottom: 16px;
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
 }
 
-.panel-note { font-size: 12px; color: #6a6a6a; margin-top: 14px; }
-.panel-error { font-size: 13px; color: #dc3545; }
+@layer components {
+    /* ---- the four objects ---- */
+
+    .glass {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.62));
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 2px 6px 18px -8px rgba(var(--shade), 0.22);
+        -webkit-backdrop-filter: blur(14px) saturate(1.15);
+        backdrop-filter: blur(14px) saturate(1.15);
+        border-radius: var(--r-chrome);
+    }
+
+    .well {
+        background: var(--well);
+        box-shadow: inset 2px 2px 5px rgba(var(--shade), 0.13), inset -1px -1px 0 rgba(255, 255, 255, 0.9);
+        border-radius: var(--r-well);
+    }
+
+    /* The white card with the blue halo (the original landing card). */
+    .sheet {
+        background: rgba(250, 250, 249, 0.95);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 142, 204, 0.10);
+        border-radius: var(--r-sheet);
+        box-shadow: var(--halo);
+        padding: 28px 32px;
+    }
+
+    /* The halo slowly breathes. One card per page at most: the one the page
+       is about. */
+    .breathe { animation: breathe 6s ease-in-out infinite; }
+    @keyframes breathe {
+        0%, 100% { box-shadow: var(--halo); }
+        50% {
+            box-shadow:
+                0 55px 110px 0 rgba(0, 142, 204, 0.32),
+                0 40px 80px 0 rgba(0, 142, 204, 0.26),
+                0 30px 60px 0 rgba(0, 0, 0, 0.16),
+                0 22px 45px 0 rgba(0, 0, 0, 0.11),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+    }
+
+    .site-bg {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .bead {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 10px 2px 6px;
+        border-radius: 999px;
+        background: linear-gradient(145deg, #FFFFFF, #F1F0EC);
+        box-shadow: 1px 2px 4px rgba(var(--shade), 0.12), inset 0 1px 0 #FFFFFF;
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+        white-space: nowrap;
+    }
+    .bead::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--c, var(--ink-faint));
+        flex: none;
+    }
+    .bead-rna { --c: var(--rna); }
+    .bead-prot { --c: var(--prot); }
+    .bead-both::before { background: linear-gradient(90deg, var(--rna) 50%, var(--prot) 50%); }
+    .bead-open::before { background: transparent; box-shadow: inset 0 0 0 1.5px var(--c, var(--ink-faint)); }
+
+    /* ---- the motif: one key word set in an accent block ---- */
+
+    .cut {
+        background: var(--accent-bright);
+        color: #FFFFFF;
+        padding: 0 0.14em;
+        margin: 0 0.02em;
+        border-radius: 0.12em;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+    }
+
+    /* ---- buttons: glass, and the one accent-filled primary ---- */
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.2;
+        padding: 10px 18px;
+        border: 0;
+        border-radius: var(--r-chrome);
+        color: #FFFFFF;
+        background: linear-gradient(180deg, #0A74B6, var(--accent));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 2px 6px 14px -6px rgba(0, 70, 120, 0.5);
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .btn:hover { background: var(--accent); }
+    .btn:disabled { background: #B9C2C9; box-shadow: none; cursor: not-allowed; }
+
+    /* A heading or label for screen readers only. */
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    /* ---- site chrome ---- */
+
+    .skip-link {
+        position: absolute;
+        left: 12px;
+        top: -48px;
+        z-index: 20;
+        padding: 8px 14px;
+        background: var(--paper);
+        border-radius: var(--r-chrome);
+    }
+    .skip-link:focus { top: 12px; }
+
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-radius: 0;
+        border-width: 0 0 1px;
+    }
+    .site-header-inner {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 12px var(--gutter);
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .wordmark {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .site-nav {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        margin-left: auto;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .site-nav::-webkit-scrollbar { display: none; }
+    .site-nav a {
+        color: var(--ink-soft);
+        text-decoration: none;
+        font-size: 14px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { background: var(--accent-tint); color: var(--ink); }
+    .site-nav a[aria-current="page"] {
+        color: var(--ink);
+        background: var(--well);
+        box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.14);
+    }
+    .site-nav .site-nav-home { color: var(--accent); font-weight: 500; margin-left: 8px; }
+
+    .site-footer {
+        margin-top: auto;
+        border-top: 1px solid var(--line);
+    }
+    .site-footer-inner {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 28px var(--gutter) 36px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 8px 28px;
+        font-size: 13px;
+        color: var(--ink-faint);
+    }
+    .site-footer .wordmark { font-size: 16px; }
+    .site-footer nav { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; }
+    .site-footer a { color: var(--ink-soft); text-decoration: none; }
+    .site-footer a:hover { color: var(--accent); text-decoration: underline; }
+
+    /* ---- page layout ---- */
+
+    .page {
+        width: 100%;
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 48px var(--gutter) 88px;
+    }
+    .page-title { margin-bottom: 8px; }
+    .lede { font-size: 18px; color: var(--ink-soft); max-width: 60ch; margin-bottom: 36px; }
+
+    .page > section,
+    .page .stack > section { margin-bottom: 40px; }
+
+    .note {
+        background: var(--accent-tint);
+        border-radius: var(--r-well);
+        padding: 12px 16px;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    @media (max-width: 720px) {
+        :root { --gutter: 16px; }
+        .site-header { position: static; }
+        .site-header-inner { gap: 12px; flex-wrap: wrap; row-gap: 4px; }
+        .site-nav { margin-left: -10px; width: calc(100% + 10px); order: 2; flex-wrap: wrap; overflow: visible; }
+        .site-nav a { padding: 5px 10px; }
+        .site-nav .site-nav-home { margin-left: 0; }
+        .page { padding-top: 32px; }
+        .sheet { padding: 20px 18px; }
+        .lede { font-size: 16px; }
+    }
+
+    /* ---- styling contract for web/js/panels.js output ---- */
+
+    .table-scroll { overflow-x: auto; }
+
+    .support-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .support-tile {
+        background: var(--well);
+        box-shadow: inset 2px 2px 5px rgba(var(--shade), 0.10), inset -1px -1px 0 rgba(255, 255, 255, 0.9);
+        border-radius: var(--r-well);
+        padding: 10px 6px;
+        text-align: center;
+    }
+    .support-tile-value { font-size: 22px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .support-tile-label { font-size: 12px; color: var(--ink-faint); }
+
+    .support-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .support-table th {
+        text-align: left;
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--ink-faint);
+        padding: 0 10px 8px 0;
+        border-bottom: 1px solid var(--line);
+    }
+    .support-table td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .support-table tr:last-child td { border-bottom: 0; }
+    .support-name { color: var(--ink); }
+    .support-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* A support badge is a bead whose colour says which modalities have the type. */
+    .support-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 1px 9px 1px 5px;
+        border-radius: 999px;
+        background: linear-gradient(145deg, #FFFFFF, #F1F0EC);
+        box-shadow: 1px 2px 4px rgba(var(--shade), 0.12), inset 0 1px 0 #FFFFFF;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    .support-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .badge-cross_modal::before { background: linear-gradient(90deg, var(--rna) 50%, var(--prot) 50%); }
+    .badge-rna_only::before { background: var(--rna); }
+    .badge-prot_only::before { background: var(--prot); }
+
+    .metric-basis { display: block; font-size: 11px; color: var(--ink-faint); }
+
+    .model-card { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 18px 24px; }
+    .card-field dt { font-size: 12px; color: var(--ink-faint); }
+    .card-field dd { font-size: 16px; color: var(--ink); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+    /* Pending must never be mistaken for a measured value. */
+    .pending { color: var(--ink-faint); font-style: italic; }
+
+    .pending-banner {
+        background: var(--accent-tint);
+        border-radius: var(--r-well);
+        padding: 12px 16px;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .panel-note { font-size: 13px; color: var(--ink-faint); margin-top: 14px; }
+    .panel-error { font-size: 14px; color: var(--error); }
+}

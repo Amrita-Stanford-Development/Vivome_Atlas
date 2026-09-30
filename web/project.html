@@ -3,62 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VivOME Atlas — Project Data</title>
+    <title>Project your data · VivOME</title>
+    <meta name="description" content="Check an RNA or protein matrix against the VivOME projection contract and the supported label space.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/page.css">
     <style>
-        label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #8a8a8a; margin-bottom: 6px; }
+        .page { max-width: 980px; }
+        .sheet > p { font-size: 15px; }
+        label { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
         select, input[type="file"] {
-            width: 100%; padding: 8px; font-size: 13px;
-            border: 1px solid #d9d9d9; border-radius: 4px; background: #ffffff; margin-bottom: 16px;
+            display: block; width: 100%; font: inherit; font-size: 14px; color: var(--ink);
+            padding: 10px 12px; margin-bottom: 18px; border: 0;
         }
-        button {
-            background: #008ECC; color: #ffffff; border: none; border-radius: 4px;
-            padding: 10px 20px; font-size: 14px; cursor: pointer;
+        input[type="file"]::file-selector-button {
+            font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer;
+            border: 0; border-radius: 8px; padding: 6px 12px; margin-right: 12px;
+            background: var(--paper); box-shadow: 1px 2px 4px rgba(var(--shade), 0.14);
         }
-        button:hover { background: #0066A3; }
-        button:disabled { background: #c9c9c9; cursor: not-allowed; }
-        .result { font-size: 13px; margin-top: 16px; }
-        .result dt { font-size: 10px; text-transform: uppercase; color: #8a8a8a; letter-spacing: 0.05em; }
-        .result dd { margin-bottom: 10px; font-variant-numeric: tabular-nums; }
-        pre { background: #f0f0f0; padding: 14px; border-radius: 6px; font-size: 12px; overflow-x: auto; }
-        .supported-list { font-size: 13px; margin-top: 8px; }
-        .supported-list strong { color: #0066A3; }
+        .result { font-size: 14px; margin-top: 18px; display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; }
+        .result dt { color: var(--ink-faint); }
+        .result dd { font-variant-numeric: tabular-nums; color: var(--ink); }
+        pre { font-size: 12.5px; line-height: 1.55; padding: 16px 18px; overflow-x: auto; color: var(--ink); }
+        .supported-list { font-size: 15px; }
+        .supported-list p + p { margin-top: 8px; }
     </style>
 </head>
 <body>
-    <div class="wrap">
-        <a href="index.html" class="back-button">Back</a>
-        <h1>Project Your Data</h1>
-        <p class="subtitle">Submit an expression matrix and receive coordinates in the shared latent space.</p>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="project.html" aria-current="page">Project</a>
+                <a href="benchmark.html">Benchmark</a>
+                <a href="versions.html">Versions</a>
+                <a class="site-nav-home" href="home.html">Dashboard</a>
+            </nav>
+        </div>
+    </header>
 
-        <section>
+    <main id="main" class="page">
+        <h1 class="page-title">Project your data</h1>
+        <p class="lede">Submit an expression matrix and receive coordinates in the shared latent space.</p>
+
+        <section class="sheet">
             <h2>Submit a matrix</h2>
             <div class="pending-banner">
                 <strong>The projection service is not yet deployed.</strong>
                 The backend pipeline is real and runs end to end against the trained v3
                 reference (<a href="versions.html">versions</a>), but this page isn't wired up
-                to it yet. It validates your file locally and reports what it found — it does
+                to it yet. It validates your file locally and reports what it found. It does
                 not return coordinates or labels, because this page producing either on its
                 own would mean inventing them.
             </div>
 
             <label for="modality">Modality</label>
-            <select id="modality">
-                <option value="rna">RNA — genes &times; cells</option>
-                <option value="prot">Protein — proteins &times; cells</option>
+            <select id="modality" class="well">
+                <option value="rna">RNA: genes &times; cells</option>
+                <option value="prot">Protein: proteins &times; cells</option>
             </select>
 
             <label for="matrix">Matrix file (CSV, first column = feature name, header row = cell IDs)</label>
-            <input type="file" id="matrix" accept=".csv,text/csv">
+            <input type="file" id="matrix" class="well" accept=".csv,text/csv">
 
-            <button id="submit" disabled>Validate matrix</button>
+            <button id="submit" class="btn" disabled>Validate matrix</button>
 
             <div id="result"></div>
         </section>
 
-        <section>
+        <section class="sheet" id="labels">
             <h2>Supported label space</h2>
-            <p style="font-size: 13px;">
+            <p>
                 A projection is only meaningful onto cell types the atlas actually supports.
                 The service returns no label when a query falls outside this space rather
                 than guessing at it.
@@ -66,14 +84,14 @@
             <div class="supported-list" id="supported"></div>
         </section>
 
-        <section>
+        <section class="sheet">
             <h2>Service contract</h2>
-            <p style="font-size: 13px;">The backend built in Phase 5 implements this interface.</p>
+            <p>The backend built in Phase 5 implements this interface.</p>
             <div class="pending-banner">
                 <strong>Schema illustration.</strong> Every value below is a placeholder showing
                 the response shape. None of them is a measurement.
             </div>
-            <pre>POST /api/project
+            <pre class="well">POST /api/project
 Content-Type: multipart/form-data
 
   modality                      : "rna" | "prot"
@@ -112,8 +130,22 @@ Content-Type: multipart/form-data
                 the region the atlas has evidence for.
             </p>
         </section>
-    </div>
+    </main>
 
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="home.html">Dashboard</a>
+                <a href="versions.html">Model card and releases</a>
+                <a href="benchmark.html">Benchmark</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
     <script type="module" async>
         import { loadManifest, formatCount } from './js/manifest.js';
         import { buildSupportedLabelSpace, errorPanel, escapeHtml } from './js/panels.js';
@@ -171,7 +203,7 @@ Content-Type: multipart/form-data
                         <dt>Cells detected</dt><dd>${formatCount(cells)}</dd>
                         <dt>Features detected</dt><dd>${formatCount(features)}</dd>
                         <dt>Projection</dt>
-                        <dd class="panel-error">Not performed — the projection service is not deployed.</dd>
+                        <dd class="panel-error">Not performed: the projection service is not deployed.</dd>
                     </dl>`;
             } catch (err) {
                 resultMount.innerHTML = errorPanel(err);

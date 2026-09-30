@@ -75,7 +75,9 @@ If you have run `git lfs pull` locally the test fails by design; do not
 
 ## `web/plots/`
 
-30 precomputed interactive 3D plots, standalone HTML.
+30 precomputed interactive 3D plots, standalone HTML, from the original 2025
+model (before the v3 reference). No page shows them since `visual.html` was
+removed; plots from the current runs will replace them.
 
 - `supervised/` — 5 plots, `interactive_latent{32,64,128,256,512}_to3d_PCA_mm.html`, one per latent dimension.
 - `semi-supervised/` — 25 plots, `PCA3D_semi_r{5,10,25,50,75}_p{5,10,25,50,75}.html`, a sweep over RNA (`r`) and protein (`p`) label percentages.

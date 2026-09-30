@@ -1,0 +1,21 @@
+[
+  {
+    "date": "2026-09-30",
+    "title": "v3.1 is in progress",
+    "text": "Label space estimation, a defined abstention rule and conformal calibration are being built and tested in notebooks T1 NB2 to NB4. Nothing reaches the atlas or the service until each one passes its go or no-go.",
+    "link": "versions.html",
+    "link_text": "Read the current model card"
+  },
+  {
+    "date": "2026-09-30",
+    "title": "One design across the site",
+    "text": "Every page now shares one look, and this dashboard is the way in to each tool."
+  },
+  {
+    "date": "2026-09-25",
+    "title": "The atlas runs on the v3 reference",
+    "text": "The atlas viewer shows cells placed by the frozen, RNA-only v3 reference. Protein cells are placed zero-shot: no protein labels were used in training.",
+    "link": "atlas.html",
+    "link_text": "Open the atlas"
+  }
+]

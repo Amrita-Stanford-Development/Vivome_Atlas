@@ -67,7 +67,7 @@ export function buildSupportTable(manifest) {
     <tr>
       <td class="support-name">${escapeHtml(c.name)}</td>
       <td class="support-num">${formatCount(c.rna_cells)}</td>
-      <td class="support-num">${c.prot_cells > 0 ? formatCount(c.prot_cells) : '&mdash;'}</td>
+      <td class="support-num">${c.prot_cells > 0 ? formatCount(c.prot_cells) : 'none'}</td>
       <td><span class="support-badge badge-${escapeHtml(c.support)}">${
         escapeHtml(SUPPORT_LABEL[c.support] ?? c.support)
       }</span></td>
@@ -87,8 +87,7 @@ export function buildDiagnosticsTable(manifest) {
   return table(['Cell type', 'Centroid cosine', 'Latent cosine', 'Modality probe'], rows) + `
     <p class="panel-note">
       Centroid cosine is computed on the 3-component PCA projection that this build ships.
-      It is not a latent-space alignment measurement — that is what the latent cosine column
-      is. The modality probe column is one global score (how well a linear classifier tells
+      It is not a latent-space alignment measurement; the latent cosine column is. The modality probe column is one global score (how well a linear classifier tells
       RNA from protein in the shared latent space), repeated on every cross-modal row rather
       than measured per class.
     </p>`;
@@ -101,13 +100,13 @@ export function buildBenchmarkTable(manifest) {
   if (b.status !== 'measured' || b.rows.length === 0) {
     const planned = b.methods.map((m) => `
       <tr>
-        <td>${escapeHtml(m)}</td><td>&mdash;</td>
+        <td>${escapeHtml(m)}</td><td class="pending">Not run</td>
         <td class="support-num pending">${PENDING_LABEL}</td>
         <td class="support-num pending">${PENDING_LABEL}</td>
       </tr>`).join('');
     return `
       <div class="pending-banner">
-        <strong>${escapeHtml(b.phase)} &mdash; not yet run.</strong> ${escapeHtml(b.note)}
+        <strong>${escapeHtml(b.phase)}: not yet run.</strong> ${escapeHtml(b.note)}
       </div>` + table(BENCHMARK_HEADERS, planned);
   }
   const rows = b.rows.map((r) => `
@@ -217,4 +216,56 @@ export function buildSupportedLabelSpace(manifest) {
     proteomics evidence yet. By default the service can still assign them to protein queries;
     a request can set <code>restrict_to_supported_classes</code> to limit labels to the
     cross-modal types.</p>`;
+}
+
+// A missing string field renders as Pending, never as the literal "undefined"
+// that escapeHtml(undefined) would produce.
+const textOrPending = (value) => (value === null || value === undefined || value === ''
+  ? `<span class="pending">${PENDING_LABEL}</span>`
+  : escapeHtml(value));
+
+// The dashboard's compact view of the release in manifest.model. The full
+// card, with architecture and seeds, stays on versions.html (buildModelCard).
+export function buildReleaseStatus(manifest) {
+  return `
+    <dl class="model-card">
+      ${cardField('Atlas version', textOrPending(manifest.atlas_version))}
+      ${cardField('Model', textOrPending(manifest.model?.name))}
+      ${cardField('Generated', textOrPending(manifest.generated))}
+      ${cardField('RNA cells', formatCount(manifest.modalities?.rna?.cells))}
+      ${cardField('Protein cells', formatCount(manifest.modalities?.prot?.cells))}
+      ${cardField('Cell types', formatCount(manifest.summary?.total))}
+    </dl>`;
+}
+
+const NEWS_DATE = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' });
+
+// Links in web/data/whats_new.json may only point at pages of this site, so
+// a bad entry can't smuggle in a javascript: or off-site URL.
+const SITE_PAGE = /^[a-z0-9_-]+\.html(#[a-z0-9_-]+)?$/i;
+
+function newsDate(iso) {
+  const date = new Date(`${iso}T00:00:00Z`);
+  return Number.isNaN(date.getTime()) ? escapeHtml(iso) : NEWS_DATE.format(date);
+}
+
+// Entries are text only (web/data/whats_new.json). Numbers belong in the
+// manifest, so an announcement links to the page that shows them.
+export function buildWhatsNew(entries) {
+  if (!Array.isArray(entries) || entries.length === 0) {
+    return '<p class="panel-note">No announcements yet.</p>';
+  }
+  const items = entries.map((e) => {
+    const link = SITE_PAGE.test(e.link ?? '')
+      ? `<a href="${escapeHtml(e.link)}">${escapeHtml(e.link_text ?? 'Read more')}</a>`
+      : '';
+    return `
+      <li>
+        <time datetime="${escapeHtml(e.date)}">${newsDate(e.date)}</time>
+        <h3>${escapeHtml(e.title)}</h3>
+        <p>${escapeHtml(e.text)}</p>
+        ${link}
+      </li>`;
+  }).join('');
+  return `<ol class="news">${items}</ol>`;
 }
