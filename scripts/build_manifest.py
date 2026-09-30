@@ -180,7 +180,7 @@ def build_previous_release_facts(legacy_provenance: dict) -> dict:
         "shipped_properties": legacy_provenance["shipped_properties"],
         "note": (
             "CrossModalNet was jointly trained on RNA and proteomics together, so it had "
-            "implicitly seen SCoPE2 during training — part of why these numbers read higher "
+            "implicitly seen SCoPE2 during training, part of why these numbers read higher "
             "than an honestly separated architecture's would. Kept here as the documented "
             "prior baseline, not erased, now that the frozen RNA-only v3 reference (see the "
             "model card above) has superseded it."
@@ -228,7 +228,7 @@ def build_manifest(
             ),
             "transfer_accuracy": pending(
                 "N/A",
-                "Measured per dataset at realistic coverage, not per class — see "
+                "Measured per dataset at realistic coverage, not per class; see "
                 "docs/service/context-brief.md §1 and service/model/evidence/v3_tables/"
                 "rna_to_rna_real_masks.csv for the real numbers.",
             ),
@@ -247,7 +247,7 @@ def build_manifest(
         "training_regime": "supervised",
         "seeds": model_seeds,
         "notes": (
-            "A frozen, RNA-only reference encoder — proteomics queries are projected at "
+            "A frozen, RNA-only reference encoder: proteomics queries are projected at "
             "inference and never used to retrain it. Coordinates shown in the viewer are a "
             "3-component PCA projection of the 128-d latent space; the latent coordinates "
             "themselves are not distributed with this build."

@@ -11,7 +11,7 @@
       "status": "measured",
       "basis": "balanced accuracy 0.7143, 95% CI [0.6851, 0.7435]"
     },
-    "notes": "A frozen, RNA-only reference encoder \u2014 proteomics queries are projected at inference and never used to retrain it. Coordinates shown in the viewer are a 3-component PCA projection of the 128-d latent space; the latent coordinates themselves are not distributed with this build.",
+    "notes": "A frozen, RNA-only reference encoder: proteomics queries are projected at inference and never used to retrain it. Coordinates shown in the viewer are a 3-component PCA projection of the 128-d latent space; the latent coordinates themselves are not distributed with this build.",
     "feature_space_size": 9002,
     "previous_feature_space_size": 2903,
     "detected_by_source": {
@@ -68,7 +68,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -99,7 +99,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -130,7 +130,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -161,7 +161,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -192,7 +192,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -223,7 +223,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -254,7 +254,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -285,7 +285,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -316,7 +316,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -347,7 +347,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -375,7 +375,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -406,7 +406,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -434,7 +434,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -465,7 +465,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -496,7 +496,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -527,7 +527,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -558,7 +558,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -589,7 +589,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -620,7 +620,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -651,7 +651,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -682,7 +682,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     },
     {
@@ -713,7 +713,7 @@
         "value": null,
         "status": "pending",
         "phase": "N/A",
-        "note": "Measured per dataset at realistic coverage, not per class \u2014 see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
+        "note": "Measured per dataset at realistic coverage, not per class; see docs/service/context-brief.md \u00a71 and service/model/evidence/v3_tables/rna_to_rna_real_masks.csv for the real numbers."
       }
     }
   ],
@@ -743,7 +743,7 @@
       "oxphos",
       "glycolysis"
     ],
-    "note": "CrossModalNet was jointly trained on RNA and proteomics together, so it had implicitly seen SCoPE2 during training \u2014 part of why these numbers read higher than an honestly separated architecture's would. Kept here as the documented prior baseline, not erased, now that the frozen RNA-only v3 reference (see the model card above) has superseded it."
+    "note": "CrossModalNet was jointly trained on RNA and proteomics together, so it had implicitly seen SCoPE2 during training, part of why these numbers read higher than an honestly separated architecture's would. Kept here as the documented prior baseline, not erased, now that the frozen RNA-only v3 reference (see the model card above) has superseded it."
   },
   "benchmark": {
     "status": "pending",
