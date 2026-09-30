@@ -154,6 +154,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/paired_and_pool_first.py` — paired bootstrap of ours vs. scANVI, and the pool-first kNN check
 - `benchmark/pbmc240_lineage_prep.py` — builds the PBMC240 inputs in the shared gene space, row order pinned to NB1d
 - `benchmark/pbmc240_convention_check.py` — measures how far the service and benchmark preprocessing conventions diverge on PBMC240
+- `benchmark/datasets.py` — registry of held-out datasets (Fulcher 2026): input paths and sha256, role, label rules; separate upload and label loaders
 
 ## scripts/ — build and repository checks
 
@@ -191,6 +192,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/results.md` — every benchmark result, with its source table
 - `research/benchmark/bugs-and-fixes.md` — every real bug hit while building the benchmark, including one in the production service
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
+- `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only
