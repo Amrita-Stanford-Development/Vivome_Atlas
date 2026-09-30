@@ -46,6 +46,14 @@ Explicit seeding, like scanvi_run.py -- run once per seed per variant:
     python3 scanvi_run_pbmc240.py 1 processed
     python3 scanvi_run_pbmc240.py 2 processed
 
+Optional third argument, the gene set (Track D gene-space follow-up):
+"all" (default) is the 2,907-gene space above. "measured" restricts both the
+RNA reference and the query to the genes this variant measures in at least
+one PBMC240 cell: 1,215 for raw, 1,111 for processed. The rest of the space
+would otherwise be zero for every query cell. For example:
+
+    python3 scanvi_run_pbmc240.py 0 processed measured
+
 This is a development-dataset comparison point (PBMC240 raw was used to
 choose V2 over v3 -- see research/notebook-outputs/nb1d/nb1d_summary.json's "note"), not a
 held-out evaluation; label it that way wherever it's reported.
@@ -72,7 +80,10 @@ REPO = Path(__file__).resolve().parents[1]
 SEED = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 VARIANT = sys.argv[2] if len(sys.argv) > 2 else "raw"
 assert VARIANT in ("raw", "processed"), f"unknown variant {VARIANT!r}, expected 'raw' or 'processed'"
-SUFFIX = "" if VARIANT == "raw" else "_processed"  # keeps the already-cached "raw" filenames unchanged
+GENES = sys.argv[3] if len(sys.argv) > 3 else "all"
+assert GENES in ("all", "measured"), f"unknown gene set {GENES!r}, expected 'all' or 'measured'"
+# Keeps the already-cached "raw" and "processed" filenames unchanged.
+SUFFIX = ("" if VARIANT == "raw" else "_processed") + ("" if GENES == "all" else "_measuredgenes")
 scvi.settings.seed = SEED
 torch.manual_seed(SEED)
 np.random.seed(SEED)
@@ -82,6 +93,10 @@ rna_X = np.load(f"{D}/rna_X.npy")
 pbmc_X = np.load(f"{D}/pbmc_X{'' if VARIANT == 'raw' else '_processed'}.npy")
 rna_meta = pd.read_csv(f"{D}/rna_meta.csv")
 pbmc_meta = pd.read_csv(f"{D}/pbmc_meta.csv")
+if GENES == "measured":
+    measured = np.isfinite(pbmc_X).any(axis=0)
+    rna_X, pbmc_X = rna_X[:, measured], pbmc_X[:, measured]
+print(f"gene set={GENES}: {pbmc_X.shape[1]} genes, {int(np.isfinite(pbmc_X).any(axis=0).sum())} measured in PBMC240", flush=True)
 print(f"variant={VARIANT} RNA cells: {len(rna_meta)}, PBMC240 cells: {len(pbmc_meta)}. elapsed {time.time()-t0:.1f}s", flush=True)
 
 rna_labels = rna_meta["class_name"].to_numpy()
@@ -181,6 +196,8 @@ result = {
     "method": "scArches / scANVI",
     "arm": "PBMC240, development dataset used to choose V2",
     "input_variant": VARIANT,
+    "genes": GENES,
+    "n_genes": int(pbmc_X.shape[1]),
     "n_rna_cells": len(rna_labels),
     "n_pbmc_cells": len(pbmc_meta),
     "n_scored_cells": int(scored_mask.sum()),

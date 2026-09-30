@@ -242,6 +242,14 @@ of the five seeds on SCoPE2.)
 All 3 seeds (0, 1, 2) complete, same architecture and training budget
 (200 pretrain epochs + 100 fine-tune epochs, early stopping) each time.
 
+**Gene space (checked 2026-09-30, after the Fulcher gene-space finding).**
+scANVI is trained and queried on load.py's 2,907-gene space. SCoPE2 has a
+value for every one of those genes in every one of its 1,490 cells: there
+are no NaN values, no zero columns and no constant columns. Its published
+gene-level matrix was already imputed by its authors. So nothing on SCoPE2
+was zero-filled, the arm needs no gene-restricted rerun, and the numbers
+below stand. Fulcher and PBMC240 differ; see their sections.
+
 **These are a fresh re-run (Track D, T1 NB1d follow-up), not the original
 numbers** — scANVI was retrained from scratch to get real per-cell
 predictions to pair-bootstrap against the new 5-seed "ours" data (none were

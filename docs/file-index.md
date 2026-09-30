@@ -147,13 +147,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/evaluate.py` — the one shared evaluation protocol: classifier, regimes, bootstrap CIs
 - `benchmark/ours_run.py` — scores the shipped encoder through the shared harness
 - `benchmark/scanvi_run.py` — scANVI arm on SCoPE2, explicitly seeded
-- `benchmark/scanvi_run_pbmc240.py` — scANVI arm on PBMC240, raw and processed inputs
+- `benchmark/scanvi_run_pbmc240.py` — scANVI arm on PBMC240: raw or processed input, over the 2,907-gene space or only the genes PBMC240 measures
 - `benchmark/maxfuse_run.py` — MaxFuse arm on the full RNA reference
 - `benchmark/scglue_run.py` — scGLUE arm on the full RNA reference
 - `benchmark/recompute_v2.py` — re-scores every finished arm under the current protocol
 - `benchmark/paired_and_pool_first.py` — paired bootstrap of ours vs. scANVI, and the pool-first kNN check
 - `benchmark/pbmc240_lineage_prep.py` — builds the PBMC240 inputs in the shared gene space, row order pinned to NB1d
 - `benchmark/pbmc240_convention_check.py` — measures how far the service and benchmark preprocessing conventions diverge on PBMC240
+- `benchmark/pbmc240_scanvi_table.py` — rebuilds the PBMC240 scANVI table (every input variant × gene set × seed × rule) from the cached per-cell predictions
 - `benchmark/datasets.py` — registry of held-out datasets: Fulcher 2026, and Khoury 2026 (sealed: its labels load only at the final v3.1 evaluation); hashed inputs, separate upload and label loaders
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels

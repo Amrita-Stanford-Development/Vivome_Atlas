@@ -38,6 +38,8 @@ index of those files, not a source in its own right.
 | Protein (SCoPE2), **restricted, 5-seed mean of the shipped architecture** | 75.3% ± 11.8 acc / 71.5% ± 10.6 bal (range 59.0–88.4 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
 | Protein (SCoPE2), **unrestricted** across all 22 classes, **shipped checkpoint (`v3_seed0`)** | 55.4% acc / 38.7% bal | `research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv` |
 | Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture** | 38.4% ± 25.7 acc / 29.1% ± 18.3 bal (range 1.3–49.8 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
+| Protein, **Fulcher 2026** (held-out scoring; TMT PBMCs, 1,251 cells, 6 types, chance 16.7%), unrestricted, **shipped checkpoint (`v3_seed0`)** | 44.1% bal (nearest centroid) / 41.8% (shared kNN) | `research/benchmark/fulcher2026/per_seed_scores.csv` |
+| Protein, Fulcher 2026, **5-seed mean of the shipped architecture** | 42.3% ± 3.4 / 42.0% ± 2.9 bal | `research/benchmark/fulcher2026/family_summary.csv` |
 | Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `research/todo.md` §5 |
 
 **A previously published RNA→RNA figure of 95.5% / 74.8% (SCoPE2 mask) is
@@ -75,6 +77,21 @@ margin +18.1 points). Full breakdown:
 card: "beats the strongest available baseline" is true of the specific
 checkpoint running in production, not a property of the architecture that
 would necessarily hold if it were retrained.**
+
+**On Fulcher 2026, the held-out PBMC dataset, the shipped architecture
+does not beat scANVI's best arm.** That arm has its RNA reference
+restricted to the 932 genes Fulcher measures.
+- **Under the shared kNN rule,** scANVI is ahead in 12 of 15 seed pairings
+  (mean −5.8 points). The other 3 are inconclusive.
+- **Product rule vs scANVI's native classifier,** v3 is ahead in 9 of 15
+  (6 inconclusive).
+- **V2, the selected v3.1 candidate encoder,** is ahead in all 30 pairings.
+
+The first Fulcher write-up had v3 ahead in all 30 pairings. That was
+against a scANVI arm with two thirds of its genes zero-filled, and it has
+been corrected (`research/benchmark/results.md`, section "Fulcher 2026").
+The SCoPE2 comparison above is unaffected: SCoPE2 has a value for all 2,907
+benchmark genes in every cell, so nothing there was zero-filled.
 
 **A methodological asymmetry in scANVI's favor, throughout the comparison
 above: scANVI trains on the query cells (transductive); this encoder is
