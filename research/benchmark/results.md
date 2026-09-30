@@ -471,15 +471,26 @@ assumed neutral. Two variants were tested:
 | Genes | Reduced to the shared 2,907-gene fair-benchmark space; PBMC240 detected 1,215 of them | This file's own ≥5% detection-rate filter kept 2,402 genes; 1,111 of those overlap the shared 2,907-gene space |
 | Final step, both variants | Per-gene z-score over observed values only, then **any entry still missing after reindexing to the shared 2,907-gene space set to 0** (genes never detected, for "raw"; genes outside this file's own filtered panel, for "processed" — 1,796 columns, 61.8% of the matrix) | (same) |
 
+**The measured-genes arm (added 2026-09-30, after the Fulcher gene-space
+finding).** Both variants above leave most of the 2,907-gene space
+unmeasured for every PBMC240 cell: 1,692 genes for raw and 1,796 for
+processed. Those genes are set to 0 after scaling, and scANVI reads them as
+measurements. The `processed_measuredgenes` arm instead restricts both the
+RNA reference and the query to the 1,111 genes the processed input
+measures, run with 3 seeds (`scanvi_run_pbmc240.py SEED processed
+measured`). The gene set is chosen from measurement alone, with no labels
+involved. It is scANVI's best arm, and it is the scANVI result reported
+below.
+
 **Neither variant is NaN-free once reindexed to the full shared gene
 space** — "processed" is not "raw, but complete"; it differs in how the
 genes it does have are prepared (log-transformed, per-cell normalized,
 imputed within its own smaller panel) and in exactly which genes those
 are, not in whether missingness exists. The result reported as scANVI's
-number in the table below is **the better of the two inputs**, so no
-version of "scANVI underperforms because of a preprocessing
-disadvantage" survives uncorrected; both variants' own numbers are also
-shown for transparency. Source for both:
+number in the table below is **its best arm** (the measured-genes arm),
+so no version of "scANVI underperforms because of a preprocessing or
+gene-space disadvantage" survives uncorrected. Every arm's own numbers are
+also shown. Source for both:
 `benchmark/pbmc240_lineage_prep.py`; per-seed results:
 `research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv`.
 
@@ -495,18 +506,23 @@ modes directly; accuracy alone shows neither.
 |---|---|---|---|---|
 | **Ours (v3, 5-seed)** | native nearest-centroid → lineage | 52.82 ± 7.73 (43.59–63.25) | 100.0 ± 0.0 (5/5, every seed) | ~47% lymphoid, ~50% myeloid, ~3% other lineages |
 | **Ours (V2, 5-seed)** | native nearest-centroid → lineage | 92.82 ± 0.76 (92.31–94.02) | 80.0 ± 0.0 (4/5, every seed) | ~78% lymphoid, ~17% myeloid, ~5% other lineages |
-| scANVI, **processed input (better of the two — reported result)** | shared kNN rule → lineage | 17.95 (15.38–19.66) | 100.0 (5/5, every seed) | ~16% lymphoid, **~66% myeloid**, ~17% erythroid/other |
-| scANVI, **processed input (better of the two — reported result)** | native scANVI classifier → lineage | 21.37 (5.13–50.43) | 100.0 (5/5, every seed) | ~17% lymphoid, **~82% myeloid** |
+| scANVI, **measured genes, processed input (best arm — reported result)** | shared kNN rule → lineage | 38.75 ± 2.75 (36.75–41.88) | 100.0 (5/5, every seed) | ~33% lymphoid, **~51% myeloid**, ~15% erythroid, ~1% other |
+| scANVI, **measured genes, processed input (best arm — reported result)** | native scANVI classifier → lineage | 39.60 ± 5.56 (34.19–45.30) | 100.0 (5/5, every seed) | ~34% lymphoid, **~59% myeloid**, ~7% erythroid |
+| scANVI, processed input, 2,907-gene space | shared kNN rule → lineage | 17.95 (15.38–19.66) | 100.0 (5/5, every seed) | ~16% lymphoid, **~66% myeloid**, ~17% erythroid/other |
+| scANVI, processed input, 2,907-gene space | native scANVI classifier → lineage | 21.37 (5.13–50.43) | 100.0 (5/5, every seed) | ~17% lymphoid, **~82% myeloid** |
 | scANVI, raw input | shared kNN rule → lineage | 8.83 (5.13–11.97) | 100.0 (5/5, every seed) | ~15% lymphoid, **~74% myeloid**, ~11% erythroid/other |
 | scANVI, raw input | native scANVI classifier → lineage | 6.55 (3.42–12.82) | 100.0 (5/5, every seed) | ~9% lymphoid, **~91% myeloid** |
 
 Source: `research/notebook-outputs/nb1d/real_data_per_seed.csv` ("ours" recall and
 predicted-composition columns) and
-`research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv` (scANVI, both input
-variants, computed from the cached per-cell predictions
-`benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage{,_processed}_seed{0,1,2}.npy`
-— gitignored, but not disposable; see `benchmark/.gitignore` —
-produced by `benchmark/scanvi_run_pbmc240.py`, a fresh
+`research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv` (scANVI, every arm,
+built by `benchmark/pbmc240_scanvi_table.py` from the cached per-cell predictions
+`benchmark/results/pbmc_scanvi_{knn,native}_pred_lineage*_seed{0,1,2}.npy`.
+The script replaced a hand-assembled table and reproduces it except for one
+cell: the processed, shared kNN, seed 0 row had dropped one
+progenitor-predicted cell from "other", so it summed to 99.58%. The cached
+predictions are gitignored but not disposable; see `benchmark/.gitignore`.
+They were produced by `benchmark/scanvi_run_pbmc240.py`, a fresh
 integration of RNA + this arm's own real PBMC240 matrix in the shared gene
 space, not the SCoPE2 scANVI run above; a different query set needs its
 own joint embedding). Class→lineage mapping is
@@ -522,16 +538,16 @@ recall number in isolation says nothing until read alongside the other
 one. Read as pairs: v3 (52.82% lymphoid, 100.0% myeloid) and V2 (92.82%
 lymphoid, 80.0% myeloid) both show real, non-trivial separation between
 the two lineages — neither is the trivial "call everything one class"
-failure mode. scANVI's best pair (17.95–21.37% lymphoid on the processed
-input, 100.0% myeloid) looks superficially similar to "ours" on myeloid
-recall alone, but its predicted composition (66–82% of all 237 cells
-labelled "myeloid") shows this remains close to that trivial failure mode
-in practice: near-universal "myeloid" predictions trivially catch the 5
-real myeloid cells while missing the large majority of the 117 real
-lymphoid ones — and this is *after* giving scANVI the better-prepared of
-two inputs (see "What scANVI actually received," above); the raw input's
-numbers (8.83%/6.55% lymphoid, 74–91% myeloid composition) are worse
-still. **With only 5 myeloid
+failure mode. scANVI's best arm (38.75–39.60% lymphoid on the measured genes, 100.0%
+myeloid) looks superficially similar to "ours" on myeloid recall alone,
+but its predicted composition shows it still leans toward that trivial
+failure mode: 51–59% of all 237 cells are labelled "myeloid", which
+catches the 5 real myeloid cells while missing most of the 117 real
+lymphoid ones. Restricting to the measured genes roughly doubles its
+lymphoid recall, from 17.95–21.37% on the 2,907-gene space. The raw
+input's numbers (8.83%/6.55% lymphoid, 74–91% myeloid composition) are
+worse still. Even at its best arm, scANVI stays below v3 (52.82%) and far
+below V2 (92.82%) on lymphoid recall. **With only 5 myeloid
 cells, every method's myeloid recall is anecdotal — one misclassified cell
 moves it by 20 points — and is reported alongside lymphoid recall only so
 a method's overall behavior (real separation vs. one-class collapse) is

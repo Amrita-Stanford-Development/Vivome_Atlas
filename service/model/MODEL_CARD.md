@@ -154,9 +154,14 @@ fixed and zero-shot on the query.**
    specifically. (With only 5 myeloid cells, myeloid recall for every
    architecture is anecdotal — one misclassified cell moves it 20
    points — reported alongside lymphoid recall only to show overall
-   behavior, never to rank on its own.) V2 is not shipped and does not
-   carry that margin onto SCoPE2 (see `research/benchmark/results.md`); this is
-   recorded as an open question, not a recommendation to switch.
+   behavior, never to rank on its own.) scANVI's best PBMC240 arm, with the
+   RNA reference restricted to the 1,111 genes PBMC240 measures, reaches
+   38.75% (shared kNN) and 39.60% (native) lymphoid recall. That is below
+   both architectures. V2 does not carry its PBMC240 margin onto SCoPE2 (see
+   `research/benchmark/results.md`). On the held-out Fulcher 2026 data it
+   beats v3 in all 50 seed pairings. V2 is now the selected v3.1 candidate
+   encoder. v3 stays served until the NB2 decision rule, recalibrated
+   abstention and conformal, and the NB4 export are in place.
 
 ## Versioning
 
