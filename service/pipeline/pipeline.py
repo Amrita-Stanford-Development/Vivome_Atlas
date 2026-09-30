@@ -67,6 +67,39 @@ class ReferenceBundle:
         )
 
 
+def embed_query(
+    encoder_handle: "encoder.EncoderHandle", feature_genes: list[str], raw: alignment.RawMatrix,
+) -> tuple[np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
+    """Stages 0-3: value scale, alignment, smoothing, encoding — the whole
+    query side, from a parsed upload to latent vectors. run_projection and
+    the benchmark harness (benchmark/) both call this, so an
+    evaluation scores exactly what the service computes."""
+    # Stage 0 — detect and correct linear-scale intensity input (e.g. a raw
+    # DIA-NN report) before anything else touches it. Never transforms data
+    # already on a log scale (see alignment.detect_and_transform_value_scale).
+    transformed_values, value_scale = alignment.detect_and_transform_value_scale(raw.values)
+    raw = dataclasses.replace(raw, values=transformed_values)
+
+    # Stage 1
+    aligned = alignment.align_to_feature_space(raw, feature_genes)
+
+    # Stage 2 — smooth using the query's own complete feature set, not just
+    # the genes that also happen to be in the shared space. Z-scored per
+    # gene (alignment.zscore_per_gene — the same convention Stage 1 uses for
+    # the 9,002-gene subset), not raw units: raw units let the highest-
+    # abundance proteins dominate the neighbour graph's PCA, a real,
+    # measured divergence from the methodology that produced this
+    # project's headline numbers (research/benchmark/known-limitations.md in
+    # the fair-benchmark work; T1 NB1 independently found the same gap on
+    # PBMC240, median cosine 0.78 against the notebook convention).
+    full_query_values = alignment.zscore_per_gene(raw.values).T  # (n_cells, n_native_features)
+    smoothed_values = smoothing.fuzzy_smooth(aligned.values, full_query_values)
+
+    # Stage 3
+    query_embeddings = encoder_handle.encode(smoothed_values, aligned.mask)
+    return query_embeddings, aligned, value_scale
+
+
 def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.random.Generator | None = None) -> dict:
     """Runs Stages 1-8 and returns the response dict. `cells` entries match
     docs/service/projection-api.md exactly; `properties` and `model_version` are
@@ -97,29 +130,8 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
     # counts without changing align_to_feature_space's return type.
     gene_id_resolution = gene_ids.resolve_identifiers(raw.gene_names)
 
-    # Stage 0 — detect and correct linear-scale intensity input (e.g. a raw
-    # DIA-NN report) before anything else touches it. Never transforms data
-    # already on a log scale (see alignment.detect_and_transform_value_scale).
-    transformed_values, value_scale = alignment.detect_and_transform_value_scale(raw.values)
-    raw = dataclasses.replace(raw, values=transformed_values)
-
-    # Stage 1
-    aligned = alignment.align_to_feature_space(raw, bundle.feature_genes)
-
-    # Stage 2 — smooth using the query's own complete feature set, not just
-    # the genes that also happen to be in the shared space. Z-scored per
-    # gene (alignment.zscore_per_gene — the same convention Stage 1 uses for
-    # the 9,002-gene subset), not raw units: raw units let the highest-
-    # abundance proteins dominate the neighbour graph's PCA, a real,
-    # measured divergence from the methodology that produced this
-    # project's headline numbers (research/benchmark/known-limitations.md in
-    # the fair-benchmark work; T1 NB1 independently found the same gap on
-    # PBMC240, median cosine 0.78 against the notebook convention).
-    full_query_values = alignment.zscore_per_gene(raw.values).T  # (n_cells, n_native_features)
-    smoothed_values = smoothing.fuzzy_smooth(aligned.values, full_query_values)
-
-    # Stage 3
-    query_embeddings = bundle.encoder_handle.encode(smoothed_values, aligned.mask)
+    # Stages 0-3
+    query_embeddings, aligned, value_scale = embed_query(bundle.encoder_handle, bundle.feature_genes, raw)
 
     # Stage 4 — restricted to config.CROSS_MODAL_SUPPORTED_CLASSES (see
     # assignment.py's module docstring for the measured justification).
