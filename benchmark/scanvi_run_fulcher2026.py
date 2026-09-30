@@ -10,16 +10,26 @@ labels), in one of two input variants:
 - "log2_cellmedian": the same, minus each cell's median over its observed
   proteins in the full 1,661-protein table.
 
-Both variants are then reduced to load.py's shared gene space
-(results/gene_cols.txt; 932 of its 2,907 genes are present in Fulcher),
-z-scored per gene over observed values, and unobserved entries are set to 0.
-This is the same final treatment the PBMC240 arm uses.
+Both variants are reduced to a gene set (third argument):
+
+- "all" (the protocol's arm): load.py's shared gene space
+  (results/gene_cols.txt), the 2,907 genes the atlas RNA reference and SCoPE2
+  share. Fulcher measures 932 of them, so 1,975 are zero for every query
+  cell.
+- "measured" (follow-up arm, protocol amendment 2): only the 932 genes
+  measured in at least one Fulcher cell. The RNA reference is restricted to
+  the same genes.
+
+Every arm then z-scores each gene over its observed values (RNA and query
+separately) and sets unobserved query entries to 0. This is the same final
+treatment the PBMC240 arm uses.
 
 This script never reads a label. It saves embeddings and predicted reference
 classes, from scANVI's native classifier and from the shared kNN rule, to
 results/fulcher2026/. All scoring happens in fulcher2026_score.py.
 
-    python3 benchmark/scanvi_run_fulcher2026.py SEED VARIANT   # SEED in 0,1,2; VARIANT log2 | log2_cellmedian
+    python3 benchmark/scanvi_run_fulcher2026.py SEED VARIANT [GENES]
+    # SEED 0-2; VARIANT log2 | log2_cellmedian; GENES all (default) | measured
 
 Each run is roughly an hour of CPU training. The outputs are gitignored but
 not disposable (see .gitignore).
@@ -48,23 +58,15 @@ VARIANTS = ("log2", "log2_cellmedian")
 
 SEED = int(sys.argv[1])
 VARIANT = sys.argv[2]
+GENES = sys.argv[3] if len(sys.argv) > 3 else "all"
 assert VARIANT in VARIANTS, f"unknown variant {VARIANT!r}, expected one of {VARIANTS}"
+assert GENES in ("all", "measured"), f"unknown gene set {GENES!r}"
+ARM = VARIANT + ("" if GENES == "all" else "_measuredgenes")  # "all" keeps the original file names
 scvi.settings.seed = SEED
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 OUT.mkdir(parents=True, exist_ok=True)
 t0 = time.time()
-
-
-def query_matrix(variant: str) -> tuple[np.ndarray, list[str]]:
-    raw = datasets.load_fulcher2026_upload()  # genes x cells, linear, NaN = missing
-    assert np.nanmin(raw.values) > 0, "log2 needs positive intensities"
-    logx = np.log2(raw.values.astype(np.float64))
-    if variant == "log2_cellmedian":
-        logx = logx - np.nanmedian(logx, axis=0, keepdims=True)  # per cell (column)
-    df = pd.DataFrame(logx.T, index=raw.cell_ids, columns=[g.upper() for g in raw.gene_names])
-    shared_genes = [line.strip()[len("gene_"):] for line in open(D / "gene_cols.txt")]
-    return df.reindex(columns=shared_genes).to_numpy(dtype=np.float32), raw.cell_ids
 
 
 def zscore_cols(X, eps=1e-8):
@@ -81,9 +83,12 @@ def zscore_cols_nan_aware(X, eps=1e-8):
 
 rna_X = np.load(D / "rna_X.npy")
 rna_labels = pd.read_csv(D / "rna_meta.csv")["class_name"].to_numpy()
-query_X, cell_ids = query_matrix(VARIANT)
-print(f"variant={VARIANT} seed={SEED} RNA cells {len(rna_labels)}, Fulcher cells {len(cell_ids)}, "
-      f"{int(np.isfinite(query_X).any(axis=0).sum())} shared genes observed. {time.time()-t0:.1f}s", flush=True)
+query_X, cell_ids, genes = datasets.load_fulcher2026_benchmark_matrix(VARIANT)
+if GENES == "measured":
+    measured = np.isfinite(query_X).any(axis=0)
+    rna_X, query_X = rna_X[:, measured], query_X[:, measured]
+print(f"arm={ARM} seed={SEED} RNA cells {len(rna_labels)}, Fulcher cells {len(cell_ids)}, "
+      f"{query_X.shape[1]} genes, {int(np.isfinite(query_X).any(axis=0).sum())} measured in Fulcher. {time.time()-t0:.1f}s", flush=True)
 
 with warnings.catch_warnings():
     # Degenerate all-NaN shared-gene columns warn in nanmean/nanstd; they become 0.
@@ -109,7 +114,7 @@ with warnings.catch_warnings():
 emb = scanvi_model.get_latent_representation()
 diverged = not bool(np.isfinite(emb).all())
 rna_emb, query_emb = emb[:len(rna_Z)], emb[len(rna_Z):]
-stem = OUT / f"scanvi_{VARIANT}_seed{SEED}"
+stem = OUT / f"scanvi_{ARM}_seed{SEED}"
 np.save(f"{stem}_rna_emb.npy", rna_emb)
 np.save(f"{stem}_query_emb.npy", query_emb)
 
@@ -120,7 +125,8 @@ if not diverged:
     pred["shared_knn"] = clf.predict(query_emb)
 pred.to_csv(f"{stem}_pred.csv", index=False)
 
-meta = {"method": "scANVI", "dataset": "Fulcher 2026 (held out)", "variant": VARIANT, "seed": SEED,
+meta = {"method": "scANVI", "dataset": "Fulcher 2026 (held out)", "variant": VARIANT, "genes": GENES,
+        "n_genes": int(query_X.shape[1]), "seed": SEED,
         "n_rna_cells": int(len(rna_Z)), "n_query_cells": int(len(query_Z)), "diverged": diverged,
         "elapsed_s": round(time.time() - t0, 1)}
 json.dump(meta, open(f"{stem}.json", "w"), indent=2)

@@ -4,7 +4,7 @@ both decision rules, the metrics, the scANVI headline-variant rule, and the
 paired bootstrap. It reuses evaluate.py unchanged.
 
 Needs, in results/fulcher2026/: the ten <model>_latent.npy files and
-cell_ids.txt (from fulcher2026_embed.py), and the six scANVI runs (from
+cell_ids.txt (from fulcher2026_embed.py), and all nine scANVI runs, three arms (from
 scanvi_run_fulcher2026.py). Writes CSV tables and summary.json to
 research/benchmark/fulcher2026. Deterministic, so a rerun reproduces the
 tables byte for byte.
@@ -33,7 +33,15 @@ PREDICTED = TYPES + ("other",)
 LINEAGE_OF_TYPE = {"CD4T": "lymphoid", "CD8T": "lymphoid", "NK": "lymphoid", "B": "lymphoid",
                    "monocyte": "myeloid", "DC": "myeloid"}
 FAMILIES = {"v3": [f"v3_seed{s}" for s in range(5)], "V2": [f"V2_seed{s}" for s in range(5)]}
-SCANVI_VARIANTS, SCANVI_SEEDS = ("log2", "log2_cellmedian"), (0, 1, 2)
+SCANVI_SEEDS = (0, 1, 2)
+# scANVI arms: the protocol's two input variants, then amendment 2's
+# measured-genes arm. The original headline rule picks among the first two;
+# amendment 2's picks among all three.
+SCANVI_ARMS_ORIGINAL = ("log2", "log2_cellmedian")
+SCANVI_ARMS = SCANVI_ARMS_ORIGINAL + ("log2_measuredgenes",)
+# Exploratory, added after results (amendment 2): CD4T and CD8T merged into T.
+TYPES_5 = ("T", "NK", "B", "monocyte", "DC")
+MERGE_T = {"CD4T": "T", "CD8T": "T"}
 
 # The protocol's class mapping. Any reference class not listed is "other".
 COARSE = {
@@ -99,16 +107,16 @@ def main() -> None:
         for seed, model in enumerate(models):
             for rule, pred in predict_ours(model, cell_names, class_names).items():
                 predictions[(family, model, seed, rule)] = pred[scored]
-    for variant in SCANVI_VARIANTS:
+    for arm in SCANVI_ARMS:
         for seed in SCANVI_SEEDS:
-            stem = RESULTS / f"scanvi_{variant}_seed{seed}"
+            stem = RESULTS / f"scanvi_{arm}_seed{seed}"
             if json.loads(Path(f"{stem}.json").read_text())["diverged"]:
-                diverged.append(f"scanvi_{variant}_seed{seed}")
+                diverged.append(f"scanvi_{arm}_seed{seed}")
                 continue
             pred = pd.read_csv(f"{stem}_pred.csv")
             assert pred["cell_id"].tolist() == cell_ids
             for rule in ("native", "shared_knn"):
-                predictions[(f"scANVI_{variant}", f"scanvi_{variant}_seed{seed}", seed, rule)] = pred[rule].to_numpy()[scored]
+                predictions[(f"scANVI_{arm}", f"scanvi_{arm}_seed{seed}", seed, rule)] = pred[rule].to_numpy()[scored]
 
     rows, compositions, confusions = [], [], []
     with warnings.catch_warnings():
@@ -129,14 +137,16 @@ def main() -> None:
                .rename_axis(["family", "rule", "metric"]).reset_index())
 
     knn_rows = per_seed[per_seed["rule"] == "shared_knn"]
-    knn_means = {v: knn_rows.loc[knn_rows["family"] == f"scANVI_{v}", "balanced_accuracy_pct"].mean()
-                 for v in SCANVI_VARIANTS}
-    headline = max(SCANVI_VARIANTS, key=lambda v: knn_means[v])
+    knn_means = {arm: knn_rows.loc[knn_rows["family"] == f"scANVI_{arm}", "balanced_accuracy_pct"].mean()
+                 for arm in SCANVI_ARMS}
+    headlines = {"original_protocol": max(SCANVI_ARMS_ORIGINAL, key=lambda a: knn_means[a]),
+                 "amendment_2_best_arm": max(SCANVI_ARMS, key=lambda a: knn_means[a])}
 
     comparisons = [("V2 vs v3", rule, "V2", rule, "v3", rule) for rule in ("nearest_centroid", "shared_knn")]
-    for family in FAMILIES:
-        comparisons += [(f"{family} vs scANVI", "shared_knn", family, "shared_knn", f"scANVI_{headline}", "shared_knn"),
-                        (f"{family} vs scANVI", "nearest_centroid vs native", family, "nearest_centroid", f"scANVI_{headline}", "native")]
+    for arm in dict.fromkeys(headlines.values()):  # each distinct headline arm, once
+        for family in FAMILIES:
+            comparisons += [(f"{family} vs scANVI_{arm}", "shared_knn", family, "shared_knn", f"scANVI_{arm}", "shared_knn"),
+                            (f"{family} vs scANVI_{arm}", "nearest_centroid vs native", family, "nearest_centroid", f"scANVI_{arm}", "native")]
     boot = []
     for name, label, fam_a, rule_a, fam_b, rule_b in comparisons:
         runs_a = [(k[1], p) for k, p in predictions.items() if k[0] == fam_a and k[3] == rule_a]
@@ -154,6 +164,29 @@ def main() -> None:
     counts = {key: {"pairings": len(g), **g["favours"].value_counts().to_dict()}
               for key, g in boot.groupby(["comparison", "rules"])}
 
+    # Exploratory, added after results (amendment 2): five types, T = CD4T + CD8T.
+    true_5 = np.array([MERGE_T.get(t, t) for t in true_type])
+    rows_5 = []
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        for (family, model, seed, rule), pred in predictions.items():
+            pred_5 = np.array([MERGE_T.get(COARSE.get(c, "other"), COARSE.get(c, "other")) for c in pred])
+            row = {"family": family, "model": model, "seed": seed, "rule": rule,
+                   "balanced_accuracy_5type_pct": balanced_accuracy_score(true_5, pred_5) * 100}
+            row.update({f"recall_{t}_pct": (pred_5[true_5 == t] == t).mean() * 100 for t in TYPES_5})
+            rows_5.append(row)
+    per_seed_5 = pd.DataFrame(rows_5)
+    summary_5 = (per_seed_5.groupby(["family", "rule"])["balanced_accuracy_5type_pct"]
+                 .agg(["mean", "std", "min", "max", "count"]).reset_index())
+
+    # Which genes scANVI saw (label-free): every gene of the benchmark space,
+    # whether Fulcher measured it, and in how many of the 1,275 cells.
+    bench_x, _, bench_genes = datasets.load_fulcher2026_benchmark_matrix("log2")
+    observed_cells = np.isfinite(bench_x).sum(axis=0)
+    gene_space = pd.DataFrame({"gene": bench_genes, "fulcher_cells_observed": observed_cells,
+                               "in_arm_log2": True, "in_arm_log2_cellmedian": True,
+                               "in_arm_log2_measuredgenes": observed_cells > 0})
+
     TABLES.mkdir(parents=True, exist_ok=True)
     fmt = {"index": False, "float_format": "%.4f"}
     per_seed.to_csv(TABLES / "per_seed_scores.csv", **fmt)
@@ -161,15 +194,24 @@ def main() -> None:
     pd.DataFrame(compositions).to_csv(TABLES / "predicted_composition.csv", **fmt)
     pd.DataFrame(confusions).to_csv(TABLES / "confusion.csv", **fmt)
     boot.to_csv(TABLES / "paired_bootstrap.csv", **fmt)
+    per_seed_5.to_csv(TABLES / "exploratory_5type_per_seed.csv", **fmt)
+    summary_5.to_csv(TABLES / "exploratory_5type_summary.csv", **fmt)
+    gene_space.to_csv(TABLES / "scanvi_gene_space.csv", **fmt)
     (TABLES / "summary.json").write_text(json.dumps({
         "n_scored": int(scored.sum()),
-        "scanvi_headline_variant": headline,
-        "scanvi_shared_knn_mean_bal_acc_pct": {v: round(m, 4) for v, m in knn_means.items()},
+        "scanvi_headline_arm": headlines,
+        "scanvi_shared_knn_mean_bal_acc_pct": {a: round(m, 4) for a, m in knn_means.items()},
+        "scanvi_gene_space": {"genes": len(bench_genes), "measured_in_fulcher": int((observed_cells > 0).sum()),
+                              "never_measured_zero_filled": int((observed_cells == 0).sum()),
+                              "per_cell_observed_min": int(np.isfinite(bench_x).sum(1).min()),
+                              "per_cell_observed_median": float(np.median(np.isfinite(bench_x).sum(1)))},
         "scanvi_diverged_runs": diverged,
         "ci_excludes_zero_counts": {f"{c} [{r}]": v for (c, r), v in counts.items()},
     }, indent=2) + "\n")
     print(summary.query("metric == 'balanced_accuracy_pct'")[["family", "rule", "mean", "std", "min", "max"]].to_string(index=False))
     print(json.dumps({f"{c} [{r}]": v for (c, r), v in counts.items()}, indent=2))
+    print("exploratory 5-type (added after results):")
+    print(summary_5.to_string(index=False))
 
 
 if __name__ == "__main__":

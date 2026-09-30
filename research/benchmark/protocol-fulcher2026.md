@@ -253,3 +253,33 @@ which would show up as differences of order 0.1 or more.
 **Scope.** Nothing had been scored. The change doesn't involve labels and
 doesn't affect any score. Both numbers are recorded in `gate.json`.
 
+
+## Amendment 2, 2026-09-30, after the first results (owner-directed)
+
+Added after results, on the owner's instruction. It is written before the
+new arm below has produced any result.
+
+**1. A third scANVI arm, restricted to measured genes.** The protocol's
+scANVI arms use load.py's 2,907-gene space. That space is the set of genes
+shared by the atlas RNA reference and SCoPE2, and it was fixed before
+Fulcher existed. Fulcher measures only 932 of those genes, so 1,975 input
+columns are zero for every query cell. The new arm, `log2_measuredgenes`,
+restricts both the RNA reference and the query to the 932 genes measured
+in at least one Fulcher cell. The gene set is chosen from measurement
+alone; no labels are involved. It uses the `log2` input, seeds 0–2, and is
+otherwise unchanged.
+
+**2. scANVI's headline is its best arm.** The best arm, by 3-seed mean
+shared-kNN balanced accuracy, now becomes the headline, choosing among all
+three arms. Like the original rule, this can only favour scANVI. The
+results report both versions: the original rule (the better of the first
+two arms) and this one. The paired bootstrap is run against each headline
+arm when the two rules pick different arms.
+
+**3. An exploratory 5-type score.** CD4T and CD8T are merged into T, for
+v3, V2 and every scANVI arm. It is labelled "added after results" wherever
+it appears, and it never replaces the six-type primary metric.
+
+**Unchanged.** Everything else, including our models' scores. Fulcher has
+been scored once in this round; nothing is tuned on it, and it is re-scored
+only at the final v3.1 evaluation.

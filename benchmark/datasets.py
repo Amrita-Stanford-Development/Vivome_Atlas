@@ -14,6 +14,7 @@ import sys
 from dataclasses import replace
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parents[1]
@@ -87,6 +88,32 @@ def load_fulcher2026_labels() -> pd.DataFrame:
     if labels.isna().any() or unexpected:
         raise ValueError(f"unexpected labels among QC-passed cells: {sorted(unexpected)}, NaN={labels.isna().sum()}")
     return pd.DataFrame({"cell_id": keep, "label": labels.to_numpy()})
+
+
+def benchmark_gene_space() -> list[str]:
+    """The baselines' shared gene space: the 2,907 genes the atlas RNA
+    reference and SCoPE2 files both carry (load.py writes results/gene_cols.txt)."""
+    path = Path(__file__).resolve().parent / "results" / "gene_cols.txt"
+    return [line.strip()[len("gene_"):] for line in path.read_text().split("\n") if line.strip()]
+
+
+def load_fulcher2026_benchmark_matrix(variant: str) -> tuple[np.ndarray, list[str], list[str]]:
+    """The Fulcher upload as the baselines receive it: (cells x genes) over
+    benchmark_gene_space(), NaN wherever Fulcher has no value (a gene it never
+    measured, or a cell where that gene is missing).
+    variant "log2": log2 of the linear intensities; "log2_cellmedian": the
+    same minus each cell's median over its observed proteins in the full
+    1,661-protein table. No labels involved."""
+    raw = load_fulcher2026_upload()
+    assert np.nanmin(raw.values) > 0, "log2 needs positive intensities"
+    logx = np.log2(raw.values.astype(np.float64))
+    if variant == "log2_cellmedian":
+        logx = logx - np.nanmedian(logx, axis=0, keepdims=True)
+    elif variant != "log2":
+        raise ValueError(f"unknown variant {variant!r}")
+    genes = benchmark_gene_space()
+    df = pd.DataFrame(logx.T, index=raw.cell_ids, columns=[g.upper() for g in raw.gene_names])
+    return df.reindex(columns=genes).to_numpy(dtype=np.float32), raw.cell_ids, genes
 
 
 if __name__ == "__main__":
