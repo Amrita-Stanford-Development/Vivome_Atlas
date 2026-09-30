@@ -26,12 +26,15 @@ curve calibrates it) — see alignment.py's `per_cell_observed_genes`.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from enum import Enum
+from typing import Protocol
 
 import numpy as np
 
 from service import config
+from service.pipeline import reference
 
 
 class AbstainReason(str, Enum):
@@ -110,3 +113,55 @@ def score_abstention(
         # else: exactly one confident class within the supported region — not abstained.
 
     return AbstentionResult(abstained=abstained, reason=reasons, max_reference_similarity=max_similarity)
+
+
+# --- Track C: the socket T1 NB3's abstention plugs into ---
+
+class AbstainCategory(str, Enum):
+    """The v3.1 response's three-way split of why a cell was refused
+    (research/roadmap.md, Track C, item 5). v3 responses keep AbstainReason."""
+    NO_REFERENCE_SUPPORT = "no_reference_support"
+    LOW_COVERAGE = "low_coverage"
+    AMBIGUOUS = "ambiguous"
+
+
+CATEGORY_BY_REASON = {
+    AbstainReason.LOW_COVERAGE: AbstainCategory.LOW_COVERAGE,
+    AbstainReason.OUT_OF_DISTRIBUTION: AbstainCategory.NO_REFERENCE_SUPPORT,
+    # An empty conformal set and a multi-class one both mean the model could
+    # not settle on one class inside the supported region.
+    AbstainReason.NO_CONFIDENT_LABEL: AbstainCategory.AMBIGUOUS,
+    AbstainReason.AMBIGUOUS: AbstainCategory.AMBIGUOUS,
+}
+
+
+class AbstentionScorer(Protocol):
+    # True when the scorer reads the encoder's 512-dimensional pre-projection
+    # features (NB3's out-of-distribution score does); the pipeline only pays
+    # for encode_with_hidden then.
+    needs_hidden: bool
+
+    def score(self, *, max_similarity: np.ndarray, hidden_features: "np.ndarray | None",
+              per_cell_observed_genes: np.ndarray, label_sets: list[list[int]],
+              calibration_indices: np.ndarray) -> AbstentionResult:
+        ...
+
+
+class V3AbstentionScorer:
+    """Today's behaviour, unchanged: score_abstention above."""
+    needs_hidden = False
+
+    def score(self, *, max_similarity, hidden_features, per_cell_observed_genes, label_sets, calibration_indices):
+        return score_abstention(
+            max_similarity=max_similarity, per_cell_observed_genes=per_cell_observed_genes,
+            label_sets=label_sets, calibration_indices=calibration_indices,
+        )
+
+
+def load_v31_artifacts() -> dict:
+    """T1 NB3's out-of-distribution config and 512-dimensional reference
+    index. PendingArtifactError until the export lands."""
+    with open(reference.require_v31_artifact(config.V31_OOD_CONFIG_PATH, "T1 NB3"), encoding="utf-8") as handle:
+        ood_config = json.load(handle)
+    index = np.load(reference.require_v31_artifact(config.V31_OOD_REFERENCE_INDEX_PATH, "T1 NB3"))
+    return {"ood_config": ood_config, "ood_reference_index": index}

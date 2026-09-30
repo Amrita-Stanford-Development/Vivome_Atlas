@@ -83,11 +83,20 @@ def _assign_ot(query_embeddings, centroids, epsilon, tau, max_iter):
     return plan / np.clip(row_sums, 1e-12, None)
 
 
-def _assign_nearest_centroid(query_embeddings, centroids):
+def _assign_nearest_centroid(query_embeddings, centroids, temperature=1.0, bias=None):
     """Softmax over cosine similarity to each candidate centroid. Both sides
     are L2-normalised, so this is a similarity-weighted distribution rather
-    than a hard argmax — top_label still recovers the argmax downstream."""
+    than a hard argmax — top_label still recovers the argmax downstream.
+
+    `temperature` divides and `bias` (one value per candidate class) shifts
+    the similarities before the softmax: the socket for fitted calibration
+    parameters (T1 NB2's temperature plus per-class bias; Track C). The
+    defaults skip both steps, so the output is exactly v3's."""
     sim = query_embeddings @ centroids.T
+    if temperature != 1.0:
+        sim = sim / temperature
+    if bias is not None:
+        sim = sim + bias
     sim = sim - sim.max(axis=1, keepdims=True)  # numerically stable softmax
     weights = np.exp(sim)
     return weights / weights.sum(axis=1, keepdims=True)
@@ -127,6 +136,8 @@ def assign_labels(
     tau: float = config.OT_TAU,
     max_iter: int = config.OT_MAX_ITER,
     knn_k: int = config.TRANSFER_K,
+    temperature: float = 1.0,
+    class_bias: "np.ndarray | None" = None,
 ) -> np.ndarray:
     """query_embeddings: (n_query, dim), reference_centroids: (n_classes,
     dim), both L2 normalised (contract). `allowed_positions`, if given,
@@ -140,6 +151,11 @@ def assign_labels(
     row-position mapping, same indexing as `reference_centroids`. `knn_k`
     borrows `config.TRANSFER_K`'s value by default; no dedicated measurement
     has chosen a k specifically for this method.
+
+    `temperature` and `class_bias` ((n_classes,), in centroid row position
+    order) apply to nearest-centroid's softmax only; the defaults reproduce
+    today's output exactly. OT and kNN have no softmax to calibrate, so they
+    refuse the options rather than silently ignore them.
     """
     n_classes = reference_centroids.shape[0]
     restricted_centroids, allowed_idx = _restrict(reference_centroids, allowed_positions)
@@ -151,10 +167,14 @@ def assign_labels(
             "result; check the class names, don't silently score against zero candidates."
         )
 
+    if method != "nearest_centroid" and (temperature != 1.0 or class_bias is not None):
+        raise ValueError(f"temperature and class_bias apply to method='nearest_centroid' only, not {method!r}.")
+
     if method == "ot":
         restricted_probs = _assign_ot(query_embeddings, restricted_centroids, epsilon, tau, max_iter)
     elif method == "nearest_centroid":
-        restricted_probs = _assign_nearest_centroid(query_embeddings, restricted_centroids)
+        bias = None if class_bias is None else np.asarray(class_bias, dtype=np.float32)[allowed_idx]
+        restricted_probs = _assign_nearest_centroid(query_embeddings, restricted_centroids, temperature, bias)
     elif method == "knn":
         if reference_embeddings is None or reference_class_positions is None:
             raise ValueError("method='knn' requires reference_embeddings and reference_class_positions")

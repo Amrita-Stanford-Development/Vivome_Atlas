@@ -50,13 +50,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/config.py` — every model path (each can be overridden with a `VIVOME_*` environment variable) and every tuned constant
 - `service/requirements.txt` — the service's Python dependencies: torch, NumPy, SciPy, scikit-learn, POT (optimal transport), faiss-cpu
 - `service/pipeline/__init__.py` — package marker
-- `service/pipeline/pipeline.py` — orchestrator: runs Stages 1–8 and builds the response
+- `service/pipeline/pipeline.py` — orchestrator: runs Stages 1–8 and builds the response; the v3 / v3.1 component switch (`components_for`)
 - `service/pipeline/alignment.py` — Stage 1: map the upload onto the 9,002-gene feature space; value-scale and mask conventions
 - `service/pipeline/smoothing.py` — Stage 2: fuzzy neighbourhood smoothing of sparse proteomics profiles
-- `service/pipeline/encoder.py` — Stage 3: the module-pooling reference encoder, and loading it
-- `service/pipeline/assignment.py` — Stage 4: label assignment (nearest centroid, OT or kNN) within the supported classes
-- `service/pipeline/calibration.py` — Stage 5: conformal calibration on a random slice of the query
-- `service/pipeline/abstention.py` — Stage 6: when to refuse a call
+- `service/pipeline/encoder.py` — Stage 3: the module-pooling reference encoder and loading it; `encode_with_hidden` and the classifier head, for v3.1
+- `service/pipeline/assignment.py` — Stage 4: label assignment (nearest centroid, OT or kNN) within the label space; temperature and per-class bias for fitted calibration
+- `service/pipeline/label_space.py` — which classes a query may be labelled with: the v3 rule, and the socket for T1 NB2's estimate
+- `service/pipeline/calibration.py` — Stage 5: conformal calibration on a random slice of the query; the socket for T1 NB3's calibration
+- `service/pipeline/abstention.py` — Stage 6: when to refuse a call; the socket for T1 NB3's abstention, and the v3.1 reason categories
 - `service/pipeline/fallback.py` — Stage 7: hierarchical fallback to a lineage when a class call is too uncertain
 - `service/pipeline/transfer.py` — Stage 8: transfer continuous cell properties from the reference
 - `service/pipeline/reference.py` — loads the reference files in `model/runtime/`, with typed errors when one is missing
@@ -74,10 +75,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/fixtures.py` — shared synthetic fixtures; uses the real reference files where they are small enough
 - `service/tests/fixtures/golden_scope2_50.json` — frozen full response for 50 SCoPE2 cells (golden regression)
 - `service/tests/fixtures/golden_pbmc240_50.json` — frozen full response for 50 PBMC240 cells (golden regression)
+- `service/tests/fixtures/v3_full_*.json` — four full v3 responses frozen before the pipeline version switch (Track C), in both label-space modes
 - `service/tests/test_app.py` — HTTP endpoint: request parsing, error responses, response schema
 - `service/tests/test_pipeline.py` — end-to-end wiring on the real production checkpoint and reference
 - `service/tests/test_e2e_real_export.py` — regression guard: the real SCoPE2 export still reproduces the notebook's own outputs
 - `service/tests/test_golden_fixtures.py` — full responses must match the frozen golden fixtures
+- `service/tests/test_pipeline_versions.py` — Track C: v3 unchanged against the frozen responses, v3.1 refused until its artifacts land, the v3.1 schema, the label space socket
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
 - `service/tests/test_alignment.py` — Stage 1 tests
 - `service/tests/test_smoothing.py` — Stage 2 tests

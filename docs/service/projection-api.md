@@ -111,6 +111,70 @@ mass-spec-proteomics cells outright (a fixed gene count travels across
 datasets with very different native panel sizes better than a fraction of
 one fixed 9,002-gene denominator does).
 
+## v3.1 (in development)
+
+The service answers with the v3 pipeline unless `VIVOME_PIPELINE_VERSION=v3.1`
+is set (`config.PIPELINE_VERSION`). v3.1 replaces three stages with the
+versions fitted in T1 NB2 and NB3 (`research/roadmap.md`):
+
+- a label space estimated for each upload;
+- abstention with a defined false-abstention rate;
+- class-conditional conformal sets.
+
+Track F lands their artifacts under `service/model/v3_1/`, together with the
+code that reads them. Until then a v3.1 service answers 503 and names what
+is missing.
+
+A v3.1 response is additive: every v3 field above stays, with the same
+meaning. It adds:
+
+```
+{
+  "pipeline_version"  : "v3.1",
+  "supported_classes" : {
+    "names"   : [<string>, ...],               the classes this upload may be labelled with
+    "method"  : <string>,                      how they were chosen
+    "support" : {<class name>: <float>} | null per-class support score
+  },
+  "calibration" : {
+    "method"              : <string>,
+    "target_coverage"     : <float>,
+    "applies_to"          : <string>,          what the coverage target is a guarantee about
+    "n_calibration_cells" : <int>
+  },
+  "cells": [
+    { ..., "abstained": true, "abstain_reason": <v3 reason>,
+      "abstain_category": "no_reference_support" | "low_coverage" | "ambiguous" }
+  ]
+}
+```
+
+`abstain_category` groups the v3 reasons:
+
+| `abstain_reason` | `abstain_category` |
+|---|---|
+| `outside_supported_region` | `no_reference_support` |
+| `coverage_too_low` | `low_coverage` |
+| `no_confident_label` | `ambiguous` |
+| `ambiguous_between_classes` | `ambiguous` |
+
+`calibration.applies_to` states what the coverage target covers.
+
+- v3.1's conformal sets are calibrated on masked RNA donors, so the guarantee
+  is stated for masked RNA, not for protein.
+- v3's sets are calibrated on the upload's own top predictions, with no
+  ground truth, so their target is nominal.
+
+The components are swappable in code (`pipeline.components_for`):
+- `label_space.LabelSpaceEstimator`;
+- `abstention.AbstentionScorer`, which can ask for the encoder's
+  512-dimensional pre-projection features (`encode_with_hidden`);
+- `calibration.ConformalCalibrator`.
+
+Stage 4's nearest-centroid softmax takes a fitted temperature and per-class
+bias (`assignment.assign_labels`). Stage 7 chooses its confidence rule per
+label-space method (`config.FALLBACK_CONFIDENCE`).
+
 ## Two design commitments
 
 **`label_set` is a conformal prediction set at the stated coverage level, not

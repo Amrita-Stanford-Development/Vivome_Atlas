@@ -93,7 +93,9 @@ winning share, normalised within the pair, is what actually varies. See
 Since the restriction became opt-in (below), the default is unrestricted
 again. That is the case where summed confidence carried information, so
 which rule to use per mode is open again (Track C in `research/todo.md`).
-Both modes report the winning share for now.
+The rule is now chosen per label-space method (`config.FALLBACK_CONFIDENCE`,
+`fallback.pair_confidence`); both modes keep the winning share until it is
+measured.
 
 **The macrophage/monocyte restriction is opt-in per request** (form field
 `restrict_to_supported_classes`, default false; see
@@ -110,6 +112,16 @@ reachable.
 subset is drawn from a generator seeded with a hash of the upload
 (`pipeline.upload_seed`). Before this, it was unseeded, and the same file
 could return different abstentions.
+
+**Two pipeline versions, one live.** `config.PIPELINE_VERSION` (env
+`VIVOME_PIPELINE_VERSION`) chooses the label space, conformal and abstention
+components (`pipeline.components_for`). `v3`, the default, is today's
+pipeline. `service/tests/test_pipeline_versions.py` pins it against full
+responses frozen before the switch existed, in both label-space modes.
+`v3.1` is the socket for T1 NB2 and NB3's fitted components. Until Track F
+brings their artifacts into `service/model/v3_1/` and implements them, it
+answers 503 and names what is missing. The v3.1 response schema is in
+[`../docs/service/projection-api.md`](../docs/service/projection-api.md).
 
 ## Running it
 

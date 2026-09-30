@@ -17,10 +17,12 @@ fixed once.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Protocol
 
 import numpy as np
 
 from service import config
+from service.pipeline import reference
 
 
 @dataclass(frozen=True)
@@ -65,3 +67,41 @@ def calibrate_and_build_sets(
         np.flatnonzero(probs[i] >= threshold).tolist() for i in range(n_query)
     ]
     return CalibrationResult(qhat=qhat, calibration_indices=calibration_indices, label_sets=label_sets)
+
+
+# --- Track C: the socket T1 NB3's conformal calibration plugs into ---
+
+class ConformalCalibrator(Protocol):
+    def calibrate(self, probs: np.ndarray, rng: np.random.Generator, label_space) -> CalibrationResult:
+        ...
+
+    def describe(self, result: CalibrationResult) -> dict:
+        """The response's `calibration` block: what the coverage target is,
+        and what it is a guarantee about."""
+        ...
+
+
+class V3ConformalCalibrator:
+    """Today's behaviour, unchanged: calibrate_and_build_sets above."""
+
+    def calibrate(self, probs, rng, label_space):
+        return calibrate_and_build_sets(probs, rng=rng)
+
+    def describe(self, result):
+        return {
+            "method": "split conformal on a random slice of this upload",
+            "target_coverage": 1 - config.CONFORMAL_ALPHA,
+            # There is no ground truth for an upload, so the slice's labels are
+            # the model's own top predictions: the target is nominal, not a
+            # guarantee about true cell types.
+            "applies_to": "the model's own top predictions on this upload, not true labels",
+            "n_calibration_cells": int(len(result.calibration_indices)),
+        }
+
+
+def load_v31_artifacts() -> dict:
+    """T1 NB3's class-conditional calibration, calibrated on masked RNA
+    donors. PendingArtifactError until the export lands."""
+    path = reference.require_v31_artifact(config.V31_CONFORMAL_CALIBRATION_PATH, "T1 NB3")
+    with np.load(path) as data:
+        return {key: data[key] for key in data.files}

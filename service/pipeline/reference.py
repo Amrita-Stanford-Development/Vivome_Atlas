@@ -168,3 +168,16 @@ def load_provenance(path: Path = config.REFERENCE_PROVENANCE_PATH) -> dict:
         raise PendingArtifactError(f"{path} does not exist.")
     with open(path, encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def require_v31_artifact(path: Path, produced_by: str) -> Path:
+    """The v3.1 components' files (config.V31_DIR) come from T1 NB4's export,
+    brought into the service by Track F (research/roadmap.md). Until then
+    each is missing, and asking for it raises PendingArtifactError naming the
+    notebook that produces it, the same as any other missing artifact."""
+    if not path.exists():
+        raise PendingArtifactError(
+            f"{path} does not exist. It is produced by {produced_by} and lands under "
+            "service/model/v3_1/ in Track F (research/roadmap.md, section 8)."
+        )
+    return path

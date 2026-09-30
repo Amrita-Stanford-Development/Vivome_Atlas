@@ -27,6 +27,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import numpy as np
+
 
 @dataclass(frozen=True)
 class ConfusablePair:
@@ -72,3 +74,14 @@ def resolve_fallback(label_set_class_names: list[str]) -> str | None:
         return None
     pair = _PAIR_BY_MEMBERS.get(frozenset(label_set_class_names))
     return pair.fallback_label if pair else None
+
+
+def pair_confidence(pair_mass: np.ndarray, rule: str) -> float:
+    """The confidence reported for a resolved pair, from its two classes'
+    probabilities, by config.FALLBACK_CONFIDENCE's rule for the label-space
+    method in use (see that setting for why the rule depends on it)."""
+    if rule == "within_pair_share":
+        return float(pair_mass.max() / pair_mass.sum())
+    if rule == "pair_mass":
+        return float(pair_mass.sum())
+    raise ValueError(f"Unknown fallback confidence rule {rule!r}; expected 'within_pair_share' or 'pair_mass'.")

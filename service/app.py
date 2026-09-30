@@ -160,11 +160,14 @@ class ProjectionHandler(BaseHTTPRequestHandler):
 
         try:
             bundle = _get_bundle()
-        except reference.PendingArtifactError as exc:
+            # config.PIPELINE_VERSION's components. v3.1 answers 503, naming
+            # what is missing, until Track F lands its artifacts and code.
+            components = pipeline.components_for(config.PIPELINE_VERSION)
+        except (reference.PendingArtifactError, NotImplementedError) as exc:
             self._send_json(503, {
                 "error": "projection service not yet available",
                 "reason": str(exc),
-                "see": "Download_Checklist.md, 'Still waiting on', and service/model/README.md",
+                "see": "docs/service/download-checklist.md and service/model/README.md",
             })
             return
 
@@ -180,7 +183,8 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             return
 
         try:
-            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict)
+            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict,
+                                             components=components)
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})

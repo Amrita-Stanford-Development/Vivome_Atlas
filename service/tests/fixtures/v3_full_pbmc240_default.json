@@ -1,0 +1,2117 @@
+{
+ "atlas_version": "0.2.0",
+ "cells": [
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_1.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.4181496500968933,
+    0.6410437226295471,
+    -0.11324060708284378
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1089,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6366763710975647,
+     "value": 0.5926629304885864
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.09202606976032257,
+     "value": 0.0047936346381902695
+    },
+    "glycolysis": {
+     "uncertainty": 0.2429022341966629,
+     "value": 0.7043197154998779
+    },
+    "inflammatory": {
+     "uncertainty": 0.3195337653160095,
+     "value": 0.21236202120780945
+    },
+    "oxphos": {
+     "uncertainty": 0.1887250691652298,
+     "value": 0.4874935746192932
+    },
+    "ribosome": {
+     "uncertainty": 0.4585087299346924,
+     "value": 1.6089447736740112
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_2.raw",
+   "confidence": 0.11446567624807358,
+   "coordinates": [
+    -0.5834043025970459,
+    -0.7546780109405518,
+    0.3170660436153412
+   ],
+   "label": "erythrocyte",
+   "label_set": [
+    "erythrocyte"
+   ],
+   "observed_genes": 290,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.08622192591428757,
+     "value": 0.06015661731362343
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.056430086493492126,
+     "value": 0.014634257182478905
+    },
+    "glycolysis": {
+     "uncertainty": 0.1267227679491043,
+     "value": 0.19387108087539673
+    },
+    "inflammatory": {
+     "uncertainty": 0.022073129191994667,
+     "value": -0.029953917488455772
+    },
+    "oxphos": {
+     "uncertainty": 0.22893589735031128,
+     "value": 0.3016885221004486
+    },
+    "ribosome": {
+     "uncertainty": 0.5272398591041565,
+     "value": 1.2312238216400146
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_3.raw",
+   "confidence": 0.11316043138504028,
+   "coordinates": [
+    -0.526303231716156,
+    0.6608684659004211,
+    0.24160946905612946
+   ],
+   "label": "classical monocyte",
+   "label_set": [
+    "classical monocyte"
+   ],
+   "observed_genes": 1157,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6431453824043274,
+     "value": 0.5187463164329529
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.059523362666368484,
+     "value": -0.012821122072637081
+    },
+    "glycolysis": {
+     "uncertainty": 0.3960860073566437,
+     "value": 0.6870964765548706
+    },
+    "inflammatory": {
+     "uncertainty": 0.2720763683319092,
+     "value": 0.2964766323566437
+    },
+    "oxphos": {
+     "uncertainty": 0.44483545422554016,
+     "value": 0.6135572195053101
+    },
+    "ribosome": {
+     "uncertainty": 0.6611582040786743,
+     "value": 1.5015372037887573
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_4.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.4948697090148926,
+    0.7820864319801331,
+    0.05105261877179146
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 859,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6259262561798096,
+     "value": 0.4438594877719879
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05401671305298805,
+     "value": -0.008713264018297195
+    },
+    "glycolysis": {
+     "uncertainty": 0.19790863990783691,
+     "value": 0.5831015706062317
+    },
+    "inflammatory": {
+     "uncertainty": 0.31378480792045593,
+     "value": 0.14389806985855103
+    },
+    "oxphos": {
+     "uncertainty": 0.4026150405406952,
+     "value": 0.46581515669822693
+    },
+    "ribosome": {
+     "uncertainty": 0.6916705369949341,
+     "value": 1.2090378999710083
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_5.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.35309526324272156,
+    0.6233828067779541,
+    -0.20466439425945282
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1060,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6721598505973816,
+     "value": 0.6190060377120972
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.09110862016677856,
+     "value": 0.005461300723254681
+    },
+    "glycolysis": {
+     "uncertainty": 0.20380321145057678,
+     "value": 0.7717960476875305
+    },
+    "inflammatory": {
+     "uncertainty": 0.20813153684139252,
+     "value": 0.12283489853143692
+    },
+    "oxphos": {
+     "uncertainty": 0.17741306126117706,
+     "value": 0.562910258769989
+    },
+    "ribosome": {
+     "uncertainty": 0.39019834995269775,
+     "value": 1.6708016395568848
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_6.raw",
+   "confidence": 0.07926350086927414,
+   "coordinates": [
+    -0.40436041355133057,
+    0.02195708639919758,
+    -0.2578636109828949
+   ],
+   "label": "plasma cell",
+   "label_set": [
+    "plasma cell"
+   ],
+   "observed_genes": 1121,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.7454723715782166,
+     "value": 0.46780550479888916
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05310135334730148,
+     "value": 0.008973891846835613
+    },
+    "glycolysis": {
+     "uncertainty": 0.41662582755088806,
+     "value": 0.5674970149993896
+    },
+    "inflammatory": {
+     "uncertainty": 0.27922940254211426,
+     "value": 0.16241435706615448
+    },
+    "oxphos": {
+     "uncertainty": 0.5051199793815613,
+     "value": 0.5841519832611084
+    },
+    "ribosome": {
+     "uncertainty": 0.8209077715873718,
+     "value": 2.1083731651306152
+    }
+   }
+  },
+  {
+   "abstain_reason": "no_confident_label",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_7.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.10164617747068405,
+    0.2513103485107422,
+    -0.44967177510261536
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1173,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.466636061668396,
+     "value": -0.03192432224750519
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.09655523300170898,
+     "value": 0.0005477058584801853
+    },
+    "glycolysis": {
+     "uncertainty": 0.8020682334899902,
+     "value": 0.4795096814632416
+    },
+    "inflammatory": {
+     "uncertainty": 0.13752871751785278,
+     "value": -0.08184614032506943
+    },
+    "oxphos": {
+     "uncertainty": 0.6352477073669434,
+     "value": 0.6096744537353516
+    },
+    "ribosome": {
+     "uncertainty": 1.3951177597045898,
+     "value": 1.386637806892395
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_8.raw",
+   "confidence": 0.09164952486753464,
+   "coordinates": [
+    -0.539216160774231,
+    0.23874777555465698,
+    -0.7363713383674622
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1147,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.30055442452430725,
+     "value": -0.2897571921348572
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.2625771462917328,
+     "value": 0.06470391899347305
+    },
+    "glycolysis": {
+     "uncertainty": 0.3343532085418701,
+     "value": 0.3229975402355194
+    },
+    "inflammatory": {
+     "uncertainty": 0.2569862902164459,
+     "value": 0.10643387585878372
+    },
+    "oxphos": {
+     "uncertainty": 0.23859991133213043,
+     "value": 0.3067147731781006
+    },
+    "ribosome": {
+     "uncertainty": 0.7957598567008972,
+     "value": 1.039474368095398
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_9.raw",
+   "confidence": 0.5154222846031189,
+   "coordinates": [
+    -0.3844188451766968,
+    -0.060205813497304916,
+    -0.9135256409645081
+   ],
+   "label": "cytotoxic lymphocyte (cd8 t cell / nk cell)",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 930,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.45470356941223145,
+     "value": 0.017689606174826622
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06830050051212311,
+     "value": -0.01004196610301733
+    },
+    "glycolysis": {
+     "uncertainty": 0.41985228657722473,
+     "value": 0.3016418516635895
+    },
+    "inflammatory": {
+     "uncertainty": 0.23860324919223785,
+     "value": 0.21238690614700317
+    },
+    "oxphos": {
+     "uncertainty": 0.3879639208316803,
+     "value": 0.5523871779441833
+    },
+    "ribosome": {
+     "uncertainty": 0.29561617970466614,
+     "value": 2.4134016036987305
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_10.raw",
+   "confidence": 0.09157363325357437,
+   "coordinates": [
+    -0.3136667311191559,
+    0.14073091745376587,
+    -0.7489059567451477
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1443,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3065586984157562,
+     "value": -0.27304786443710327
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06362918764352798,
+     "value": -0.008861171081662178
+    },
+    "glycolysis": {
+     "uncertainty": 0.2944846749305725,
+     "value": 0.2288653552532196
+    },
+    "inflammatory": {
+     "uncertainty": 0.2566649317741394,
+     "value": 0.11310043185949326
+    },
+    "oxphos": {
+     "uncertainty": 0.22098931670188904,
+     "value": 0.4184771478176117
+    },
+    "ribosome": {
+     "uncertainty": 0.911392867565155,
+     "value": 1.496325135231018
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_11.raw",
+   "confidence": 0.10890592634677887,
+   "coordinates": [
+    -0.6030186414718628,
+    0.6607394218444824,
+    0.10523010790348053
+   ],
+   "label": "classical monocyte",
+   "label_set": [
+    "classical monocyte"
+   ],
+   "observed_genes": 1095,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.35610201954841614,
+     "value": 0.12036854028701782
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.09459322690963745,
+     "value": 0.004939892794936895
+    },
+    "glycolysis": {
+     "uncertainty": 0.21277081966400146,
+     "value": 0.33734598755836487
+    },
+    "inflammatory": {
+     "uncertainty": 0.27312567830085754,
+     "value": 0.2963235676288605
+    },
+    "oxphos": {
+     "uncertainty": 0.30867695808410645,
+     "value": 0.36816883087158203
+    },
+    "ribosome": {
+     "uncertainty": 0.4595378041267395,
+     "value": 0.6242984533309937
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_12.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.46386316418647766,
+    0.5819835066795349,
+    0.1402757167816162
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1782,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5138086080551147,
+     "value": 0.5267309546470642
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.057969313114881516,
+     "value": 0.01489145029336214
+    },
+    "glycolysis": {
+     "uncertainty": 0.337106317281723,
+     "value": 0.7694044709205627
+    },
+    "inflammatory": {
+     "uncertainty": 0.17018626630306244,
+     "value": 0.013932151719927788
+    },
+    "oxphos": {
+     "uncertainty": 0.26605862379074097,
+     "value": 0.7115153074264526
+    },
+    "ribosome": {
+     "uncertainty": 0.6666060090065002,
+     "value": 1.5042532682418823
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_13.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.5216188430786133,
+    0.8086226582527161,
+    0.018079617992043495
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1071,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6142364740371704,
+     "value": 0.48753106594085693
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02982870675623417,
+     "value": -0.0231791902333498
+    },
+    "glycolysis": {
+     "uncertainty": 0.30152806639671326,
+     "value": 0.641727089881897
+    },
+    "inflammatory": {
+     "uncertainty": 0.304915189743042,
+     "value": 0.20215512812137604
+    },
+    "oxphos": {
+     "uncertainty": 0.44971588253974915,
+     "value": 0.7485753297805786
+    },
+    "ribosome": {
+     "uncertainty": 0.716926097869873,
+     "value": 1.4495733976364136
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_15.raw",
+   "confidence": 0.13115352392196655,
+   "coordinates": [
+    -0.5880468487739563,
+    -0.8077465295791626,
+    0.40148791670799255
+   ],
+   "label": "erythrocyte",
+   "label_set": [
+    "erythrocyte"
+   ],
+   "observed_genes": 728,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.06874767690896988,
+     "value": 0.04323866218328476
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.037760037928819656,
+     "value": 0.009865379892289639
+    },
+    "glycolysis": {
+     "uncertainty": 0.1315447837114334,
+     "value": 0.19214287400245667
+    },
+    "inflammatory": {
+     "uncertainty": 0.020635874941945076,
+     "value": -0.030310271307826042
+    },
+    "oxphos": {
+     "uncertainty": 0.2879480719566345,
+     "value": 0.30696019530296326
+    },
+    "ribosome": {
+     "uncertainty": 0.4888300597667694,
+     "value": 1.1970012187957764
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_16.raw",
+   "confidence": 0.09561558812856674,
+   "coordinates": [
+    -0.45961079001426697,
+    0.1293172687292099,
+    -0.792262613773346
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 758,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.29719752073287964,
+     "value": -0.30709245800971985
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.3822720944881439,
+     "value": 0.14500011503696442
+    },
+    "glycolysis": {
+     "uncertainty": 0.34100377559661865,
+     "value": 0.3397578299045563
+    },
+    "inflammatory": {
+     "uncertainty": 0.2549227178096771,
+     "value": 0.07253964990377426
+    },
+    "oxphos": {
+     "uncertainty": 0.2608598470687866,
+     "value": 0.3282172679901123
+    },
+    "ribosome": {
+     "uncertainty": 0.8752234578132629,
+     "value": 1.2051657438278198
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_17.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.4785792827606201,
+    0.5579341053962708,
+    0.10854044556617737
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1622,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4908825159072876,
+     "value": 0.686431348323822
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.040440160781145096,
+     "value": -0.03526350483298302
+    },
+    "glycolysis": {
+     "uncertainty": 0.31773293018341064,
+     "value": 0.8922484517097473
+    },
+    "inflammatory": {
+     "uncertainty": 0.20326511561870575,
+     "value": 0.07736758887767792
+    },
+    "oxphos": {
+     "uncertainty": 0.282228022813797,
+     "value": 0.7346909642219543
+    },
+    "ribosome": {
+     "uncertainty": 0.5627819895744324,
+     "value": 1.7332440614700317
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_18.raw",
+   "confidence": 0.11868425458669662,
+   "coordinates": [
+    0.5308123230934143,
+    -0.35889679193496704,
+    0.38972505927085876
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 992,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.13931705057621002,
+     "value": -0.2430126965045929
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11078410595655441,
+     "value": 0.023468349128961563
+    },
+    "glycolysis": {
+     "uncertainty": 0.5915488600730896,
+     "value": 0.32108116149902344
+    },
+    "inflammatory": {
+     "uncertainty": 0.3673684000968933,
+     "value": 0.24794097244739532
+    },
+    "oxphos": {
+     "uncertainty": 0.4416809380054474,
+     "value": 0.3868991434574127
+    },
+    "ribosome": {
+     "uncertainty": 0.6211833357810974,
+     "value": -0.08219808340072632
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_19.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.3633991777896881,
+    -0.08683299273252487,
+    -0.575472354888916
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1109,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.24188880622386932,
+     "value": -0.177083820104599
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07525353878736496,
+     "value": -0.003958974964916706
+    },
+    "glycolysis": {
+     "uncertainty": 0.30587461590766907,
+     "value": 0.39396947622299194
+    },
+    "inflammatory": {
+     "uncertainty": 0.13042636215686798,
+     "value": -0.09535704553127289
+    },
+    "oxphos": {
+     "uncertainty": 0.31672176718711853,
+     "value": 0.6207703948020935
+    },
+    "ribosome": {
+     "uncertainty": 0.5372723340988159,
+     "value": 3.0838983058929443
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_20.raw",
+   "confidence": 0.1282997727394104,
+   "coordinates": [
+    0.7181475162506104,
+    0.04760181903839111,
+    0.031457822769880295
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1541,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.19371365010738373,
+     "value": -0.3420911729335785
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.028862934559583664,
+     "value": -0.016871517524123192
+    },
+    "glycolysis": {
+     "uncertainty": 0.4767627418041229,
+     "value": 0.06076935678720474
+    },
+    "inflammatory": {
+     "uncertainty": 0.4099496901035309,
+     "value": 0.42986831068992615
+    },
+    "oxphos": {
+     "uncertainty": 0.3833029270172119,
+     "value": 0.07303466647863388
+    },
+    "ribosome": {
+     "uncertainty": 0.3622868061065674,
+     "value": -0.3617746829986572
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_21.raw",
+   "confidence": 0.5247445106506348,
+   "coordinates": [
+    -0.40023523569107056,
+    -0.01071743294596672,
+    -0.8942955136299133
+   ],
+   "label": "cytotoxic lymphocyte (cd8 t cell / nk cell)",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1086,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.42300695180892944,
+     "value": -0.07801004499197006
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05776650458574295,
+     "value": -0.015283510088920593
+    },
+    "glycolysis": {
+     "uncertainty": 0.4009476602077484,
+     "value": 0.3637261688709259
+    },
+    "inflammatory": {
+     "uncertainty": 0.3494541049003601,
+     "value": 0.21183407306671143
+    },
+    "oxphos": {
+     "uncertainty": 0.3483639359474182,
+     "value": 0.5085029006004333
+    },
+    "ribosome": {
+     "uncertainty": 0.4783235788345337,
+     "value": 2.4521217346191406
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_22.raw",
+   "confidence": 0.11903055757284164,
+   "coordinates": [
+    0.6573476791381836,
+    0.19601798057556152,
+    0.04782363027334213
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 941,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.14408385753631592,
+     "value": -0.12423241138458252
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.023851042613387108,
+     "value": -0.01052921637892723
+    },
+    "glycolysis": {
+     "uncertainty": 0.34762585163116455,
+     "value": 0.2633245885372162
+    },
+    "inflammatory": {
+     "uncertainty": 0.27444207668304443,
+     "value": 0.2205975353717804
+    },
+    "oxphos": {
+     "uncertainty": 0.362202912569046,
+     "value": 0.17566320300102234
+    },
+    "ribosome": {
+     "uncertainty": 0.5917585492134094,
+     "value": 0.1918187439441681
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_23.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.415621817111969,
+    0.5966430306434631,
+    0.15046827495098114
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1606,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.41503310203552246,
+     "value": 0.12784869968891144
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.028168175369501114,
+     "value": -0.017075195908546448
+    },
+    "glycolysis": {
+     "uncertainty": 0.47619688510894775,
+     "value": 0.4864360988140106
+    },
+    "inflammatory": {
+     "uncertainty": 0.29687777161598206,
+     "value": 0.10662302374839783
+    },
+    "oxphos": {
+     "uncertainty": 0.43197691440582275,
+     "value": 0.47008436918258667
+    },
+    "ribosome": {
+     "uncertainty": 0.511021614074707,
+     "value": 1.2128584384918213
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_24.raw",
+   "confidence": 0.10532844066619873,
+   "coordinates": [
+    -0.31096935272216797,
+    0.0340273380279541,
+    -0.7962852716445923
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1013,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1786581128835678,
+     "value": -0.32234394550323486
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06500014662742615,
+     "value": -0.009599834680557251
+    },
+    "glycolysis": {
+     "uncertainty": 0.3118281066417694,
+     "value": 0.20366069674491882
+    },
+    "inflammatory": {
+     "uncertainty": 0.29945021867752075,
+     "value": 0.185650035738945
+    },
+    "oxphos": {
+     "uncertainty": 0.3357308804988861,
+     "value": 0.4110237956047058
+    },
+    "ribosome": {
+     "uncertainty": 0.9791300296783447,
+     "value": 1.4775056838989258
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_25.raw",
+   "confidence": 0.10076641291379929,
+   "coordinates": [
+    -0.4826600253582001,
+    0.13544397056102753,
+    -0.7851653695106506
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1027,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.16592702269554138,
+     "value": -0.34396350383758545
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.3865123987197876,
+     "value": 0.13592901825904846
+    },
+    "glycolysis": {
+     "uncertainty": 0.3372063934803009,
+     "value": 0.3823797106742859
+    },
+    "inflammatory": {
+     "uncertainty": 0.2657795548439026,
+     "value": 0.10966338962316513
+    },
+    "oxphos": {
+     "uncertainty": 0.26362547278404236,
+     "value": 0.3386596441268921
+    },
+    "ribosome": {
+     "uncertainty": 0.8715097904205322,
+     "value": 1.1328685283660889
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_26.raw",
+   "confidence": 0.1228613629937172,
+   "coordinates": [
+    0.6407660841941833,
+    0.008975077420473099,
+    0.03442802652716637
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1328,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1921718567609787,
+     "value": -0.1991676539182663
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.046028461307287216,
+     "value": -0.01165834441781044
+    },
+    "glycolysis": {
+     "uncertainty": 0.44197478890419006,
+     "value": 0.43365252017974854
+    },
+    "inflammatory": {
+     "uncertainty": 0.2845157980918884,
+     "value": 0.13753104209899902
+    },
+    "oxphos": {
+     "uncertainty": 0.3757246434688568,
+     "value": 0.28460070490837097
+    },
+    "ribosome": {
+     "uncertainty": 0.5143771171569824,
+     "value": 0.09924519062042236
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_27.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.4864616096019745,
+    0.4836641550064087,
+    -0.3687199056148529
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 991,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6916983723640442,
+     "value": 0.4162166714668274
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.024540195241570473,
+     "value": -0.033209178596735
+    },
+    "glycolysis": {
+     "uncertainty": 0.2920100688934326,
+     "value": 0.4064406454563141
+    },
+    "inflammatory": {
+     "uncertainty": 0.24358013272285461,
+     "value": 0.0009270335431210697
+    },
+    "oxphos": {
+     "uncertainty": 0.2647029757499695,
+     "value": 0.17808900773525238
+    },
+    "ribosome": {
+     "uncertainty": 0.5789214372634888,
+     "value": 0.8249106407165527
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_28.raw",
+   "confidence": 0.5551514029502869,
+   "coordinates": [
+    -0.023345952853560448,
+    -0.07208629697561264,
+    -0.7909705638885498
+   ],
+   "label": "cytotoxic lymphocyte (cd8 t cell / nk cell)",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1052,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2362821102142334,
+     "value": -0.29075005650520325
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.10696984827518463,
+     "value": 0.053843747824430466
+    },
+    "glycolysis": {
+     "uncertainty": 0.3851686418056488,
+     "value": 0.4711416959762573
+    },
+    "inflammatory": {
+     "uncertainty": 0.252535879611969,
+     "value": 0.2573722302913666
+    },
+    "oxphos": {
+     "uncertainty": 0.33387741446495056,
+     "value": 0.5394675135612488
+    },
+    "ribosome": {
+     "uncertainty": 0.5790225267410278,
+     "value": 2.18208909034729
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_29.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.580226480960846,
+    0.6897285580635071,
+    0.1908002644777298
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1738,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5744251608848572,
+     "value": 0.595711886882782
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04851849377155304,
+     "value": -0.013170488178730011
+    },
+    "glycolysis": {
+     "uncertainty": 0.4422489106655121,
+     "value": 0.8161852955818176
+    },
+    "inflammatory": {
+     "uncertainty": 0.19229549169540405,
+     "value": 0.1776210367679596
+    },
+    "oxphos": {
+     "uncertainty": 0.31264322996139526,
+     "value": 0.7586475014686584
+    },
+    "ribosome": {
+     "uncertainty": 0.758107602596283,
+     "value": 1.52251398563385
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_30.raw",
+   "confidence": 0.13042500615119934,
+   "coordinates": [
+    0.7484127283096313,
+    0.026182932779192924,
+    0.036636192351579666
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 859,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.24684834480285645,
+     "value": -0.1446765810251236
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02254469506442547,
+     "value": -0.016982102766633034
+    },
+    "glycolysis": {
+     "uncertainty": 0.14305134117603302,
+     "value": -0.11480338871479034
+    },
+    "inflammatory": {
+     "uncertainty": 0.22293061017990112,
+     "value": 0.25684887170791626
+    },
+    "oxphos": {
+     "uncertainty": 0.23375874757766724,
+     "value": -0.06674406677484512
+    },
+    "ribosome": {
+     "uncertainty": 0.18352249264717102,
+     "value": -0.2527565062046051
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_31.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.3630414605140686,
+    0.27798402309417725,
+    -0.6040132641792297
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1217,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.426567405462265,
+     "value": -0.06854008138179779
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06415947526693344,
+     "value": 0.01000300981104374
+    },
+    "glycolysis": {
+     "uncertainty": 0.36858034133911133,
+     "value": 0.3141428530216217
+    },
+    "inflammatory": {
+     "uncertainty": 0.28310728073120117,
+     "value": 0.25099098682403564
+    },
+    "oxphos": {
+     "uncertainty": 0.30306679010391235,
+     "value": 0.4520109295845032
+    },
+    "ribosome": {
+     "uncertainty": 1.034825325012207,
+     "value": 1.8473743200302124
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_32.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.4156567454338074,
+    0.5190339684486389,
+    0.0655459314584732
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1178,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3873615562915802,
+     "value": 0.07568062096834183
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.031064532697200775,
+     "value": -0.00984268169850111
+    },
+    "glycolysis": {
+     "uncertainty": 0.2579213082790375,
+     "value": 0.7379715442657471
+    },
+    "inflammatory": {
+     "uncertainty": 0.2867719531059265,
+     "value": 0.25481128692626953
+    },
+    "oxphos": {
+     "uncertainty": 0.26692116260528564,
+     "value": 0.5121948719024658
+    },
+    "ribosome": {
+     "uncertainty": 0.45618173480033875,
+     "value": 1.204416275024414
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_33.raw",
+   "confidence": 0.1274707317352295,
+   "coordinates": [
+    0.7277987599372864,
+    0.0758335068821907,
+    -0.033869728446006775
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1046,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1370520144701004,
+     "value": -0.43226727843284607
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.150202214717865,
+     "value": 0.07055792212486267
+    },
+    "glycolysis": {
+     "uncertainty": 0.450611412525177,
+     "value": 0.37093275785446167
+    },
+    "inflammatory": {
+     "uncertainty": 0.39011532068252563,
+     "value": 0.19609470665454865
+    },
+    "oxphos": {
+     "uncertainty": 0.4196126163005829,
+     "value": 0.23104558885097504
+    },
+    "ribosome": {
+     "uncertainty": 0.7791942358016968,
+     "value": 0.08502372354269028
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_34.raw",
+   "confidence": 0.09643130004405975,
+   "coordinates": [
+    -0.18513068556785583,
+    0.24802985787391663,
+    -0.7464909553527832
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 946,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.27629566192626953,
+     "value": -0.3210179805755615
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.3021784722805023,
+     "value": 0.08502089232206345
+    },
+    "glycolysis": {
+     "uncertainty": 0.37473323941230774,
+     "value": 0.31418800354003906
+    },
+    "inflammatory": {
+     "uncertainty": 0.2508333921432495,
+     "value": 0.036719631403684616
+    },
+    "oxphos": {
+     "uncertainty": 0.28164589405059814,
+     "value": 0.36946043372154236
+    },
+    "ribosome": {
+     "uncertainty": 1.0119792222976685,
+     "value": 1.1942806243896484
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_35.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.5841675996780396,
+    0.4938044548034668,
+    -0.22337014973163605
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1018,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.8258708119392395,
+     "value": 0.7255046367645264
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06286391615867615,
+     "value": -0.003652031533420086
+    },
+    "glycolysis": {
+     "uncertainty": 0.39802148938179016,
+     "value": 0.4229417145252228
+    },
+    "inflammatory": {
+     "uncertainty": 0.17628797888755798,
+     "value": -0.022827161476016045
+    },
+    "oxphos": {
+     "uncertainty": 0.32023295760154724,
+     "value": 0.46400147676467896
+    },
+    "ribosome": {
+     "uncertainty": 0.7040777802467346,
+     "value": 1.1127086877822876
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_36.raw",
+   "confidence": 0.1194554790854454,
+   "coordinates": [
+    0.6619084477424622,
+    0.0819668248295784,
+    -0.1874144822359085
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1132,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.15971872210502625,
+     "value": -0.3728172481060028
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.14634624123573303,
+     "value": 0.05329231172800064
+    },
+    "glycolysis": {
+     "uncertainty": 0.34542179107666016,
+     "value": 0.5268096923828125
+    },
+    "inflammatory": {
+     "uncertainty": 0.19779925048351288,
+     "value": 0.03566472977399826
+    },
+    "oxphos": {
+     "uncertainty": 0.3552810549736023,
+     "value": 0.3432304263114929
+    },
+    "ribosome": {
+     "uncertainty": 0.5978096127510071,
+     "value": 0.37830790877342224
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_37.raw",
+   "confidence": 0.12380659580230713,
+   "coordinates": [
+    0.703589916229248,
+    0.12875467538833618,
+    -0.10551326721906662
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 975,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1242465004324913,
+     "value": -0.4498353600502014
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.2636321485042572,
+     "value": 0.20341704785823822
+    },
+    "glycolysis": {
+     "uncertainty": 0.2951864004135132,
+     "value": 0.6422507166862488
+    },
+    "inflammatory": {
+     "uncertainty": 0.22602686285972595,
+     "value": 0.014940734021365643
+    },
+    "oxphos": {
+     "uncertainty": 0.2940720021724701,
+     "value": 0.4588982164859772
+    },
+    "ribosome": {
+     "uncertainty": 0.4718557298183441,
+     "value": 0.7662445902824402
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_38.raw",
+   "confidence": 0.12276338785886765,
+   "coordinates": [
+    0.666964054107666,
+    0.09546280652284622,
+    0.006444936152547598
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1340,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.26094117760658264,
+     "value": -0.07536294311285019
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04852250963449478,
+     "value": -0.0007040674681775272
+    },
+    "glycolysis": {
+     "uncertainty": 0.3749662935733795,
+     "value": 0.17118822038173676
+    },
+    "inflammatory": {
+     "uncertainty": 0.3887300193309784,
+     "value": 0.12217262387275696
+    },
+    "oxphos": {
+     "uncertainty": 0.2848609983921051,
+     "value": 0.16015250980854034
+    },
+    "ribosome": {
+     "uncertainty": 0.3592885732650757,
+     "value": 0.04004814475774765
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_39.raw",
+   "confidence": 0.10223626345396042,
+   "coordinates": [
+    0.4973909556865692,
+    0.12862883508205414,
+    -0.3540530204772949
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1131,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.20761385560035706,
+     "value": -0.3305094838142395
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.14451292157173157,
+     "value": 0.053793393075466156
+    },
+    "glycolysis": {
+     "uncertainty": 0.3788013458251953,
+     "value": 0.45081424713134766
+    },
+    "inflammatory": {
+     "uncertainty": 0.2400428056716919,
+     "value": 0.08745662122964859
+    },
+    "oxphos": {
+     "uncertainty": 0.3092471659183502,
+     "value": 0.409951776266098
+    },
+    "ribosome": {
+     "uncertainty": 0.5315307378768921,
+     "value": 0.42585310339927673
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_40.raw",
+   "confidence": null,
+   "coordinates": [
+    0.30295076966285706,
+    -0.6351044178009033,
+    0.420459508895874
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1149,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.15410204231739044,
+     "value": -0.24484501779079437
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11105939745903015,
+     "value": 0.024481669068336487
+    },
+    "glycolysis": {
+     "uncertainty": 0.5273265242576599,
+     "value": 0.2324373424053192
+    },
+    "inflammatory": {
+     "uncertainty": 0.32105180621147156,
+     "value": 0.1753014624118805
+    },
+    "oxphos": {
+     "uncertainty": 0.3978559076786041,
+     "value": 0.2995932698249817
+    },
+    "ribosome": {
+     "uncertainty": 0.6144797205924988,
+     "value": -0.08214108645915985
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_41.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.6044487953186035,
+    0.3903884291648865,
+    0.26135942339897156
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 1380,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5602022409439087,
+     "value": 0.5180407762527466
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.028308600187301636,
+     "value": -0.016413576900959015
+    },
+    "glycolysis": {
+     "uncertainty": 0.3914670944213867,
+     "value": 0.27155807614326477
+    },
+    "inflammatory": {
+     "uncertainty": 0.1974439024925232,
+     "value": 0.05178993567824364
+    },
+    "oxphos": {
+     "uncertainty": 0.32017844915390015,
+     "value": 0.3490060865879059
+    },
+    "ribosome": {
+     "uncertainty": 0.5860194563865662,
+     "value": 1.071393370628357
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_42.raw",
+   "confidence": 0.11092401295900345,
+   "coordinates": [
+    0.6053612232208252,
+    0.1921095848083496,
+    -0.251465767621994
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1116,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1936642825603485,
+     "value": -0.2705814838409424
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05973255634307861,
+     "value": 0.0030150171369314194
+    },
+    "glycolysis": {
+     "uncertainty": 0.3388844132423401,
+     "value": 0.48998698592185974
+    },
+    "inflammatory": {
+     "uncertainty": 0.2323738932609558,
+     "value": 0.10287653654813766
+    },
+    "oxphos": {
+     "uncertainty": 0.28945815563201904,
+     "value": 0.45610475540161133
+    },
+    "ribosome": {
+     "uncertainty": 0.4572784900665283,
+     "value": 0.5544686913490295
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_43.raw",
+   "confidence": 0.1277620941400528,
+   "coordinates": [
+    0.735971987247467,
+    0.08190544694662094,
+    -0.037768639624118805
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1101,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.22826607525348663,
+     "value": -0.342267781496048
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.12878850102424622,
+     "value": 0.034752342849969864
+    },
+    "glycolysis": {
+     "uncertainty": 0.34952256083488464,
+     "value": 0.19996264576911926
+    },
+    "inflammatory": {
+     "uncertainty": 0.37058454751968384,
+     "value": 0.2200366109609604
+    },
+    "oxphos": {
+     "uncertainty": 0.3787526786327362,
+     "value": 0.06050436198711395
+    },
+    "ribosome": {
+     "uncertainty": 0.6342968940734863,
+     "value": -0.08278971165418625
+    }
+   }
+  },
+  {
+   "abstain_reason": "no_confident_label",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_44.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.504438042640686,
+    -0.19121667742729187,
+    -0.5677712559700012
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 939,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.797450840473175,
+     "value": 0.148447647690773
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.3751645088195801,
+     "value": 0.11092908680438995
+    },
+    "glycolysis": {
+     "uncertainty": 0.43534451723098755,
+     "value": 0.3253591060638428
+    },
+    "inflammatory": {
+     "uncertainty": 0.2874118983745575,
+     "value": 0.09475893527269363
+    },
+    "oxphos": {
+     "uncertainty": 0.5197981595993042,
+     "value": 0.5500726103782654
+    },
+    "ribosome": {
+     "uncertainty": 1.326655387878418,
+     "value": 3.0646352767944336
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_45.raw",
+   "confidence": 0.13168974220752716,
+   "coordinates": [
+    0.7453387379646301,
+    -0.006910892203450203,
+    0.036895010620355606
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 1260,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.11379540711641312,
+     "value": -0.36353883147239685
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.011400134302675724,
+     "value": -0.02193509414792061
+    },
+    "glycolysis": {
+     "uncertainty": 0.7917793989181519,
+     "value": 0.42500630021095276
+    },
+    "inflammatory": {
+     "uncertainty": 0.36562615633010864,
+     "value": 0.6977025270462036
+    },
+    "oxphos": {
+     "uncertainty": 0.3863505423069,
+     "value": 0.24136696755886078
+    },
+    "ribosome": {
+     "uncertainty": 0.35849761962890625,
+     "value": -0.4860617220401764
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_46.raw",
+   "confidence": 0.1305057853460312,
+   "coordinates": [
+    0.6727539300918579,
+    -0.22479812800884247,
+    0.19228918850421906
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 743,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.10461416840553284,
+     "value": -0.328890860080719
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05403894931077957,
+     "value": 0.003460558131337166
+    },
+    "glycolysis": {
+     "uncertainty": 0.5249102115631104,
+     "value": 0.4964291453361511
+    },
+    "inflammatory": {
+     "uncertainty": 0.34453049302101135,
+     "value": 0.2352433055639267
+    },
+    "oxphos": {
+     "uncertainty": 0.46014389395713806,
+     "value": 0.5162675976753235
+    },
+    "ribosome": {
+     "uncertainty": 0.6001430749893188,
+     "value": -0.033511683344841
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_47.raw",
+   "confidence": 0.09572173655033112,
+   "coordinates": [
+    -0.49433594942092896,
+    0.24238602817058563,
+    -0.5926845669746399
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1090,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.37472495436668396,
+     "value": -0.22932152450084686
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07854791730642319,
+     "value": -0.007972246035933495
+    },
+    "glycolysis": {
+     "uncertainty": 0.2756029963493347,
+     "value": 0.31529444456100464
+    },
+    "inflammatory": {
+     "uncertainty": 0.2656361758708954,
+     "value": 0.24847322702407837
+    },
+    "oxphos": {
+     "uncertainty": 0.28255540132522583,
+     "value": 0.447481244802475
+    },
+    "ribosome": {
+     "uncertainty": 0.8367217779159546,
+     "value": 1.2251163721084595
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_48.raw",
+   "confidence": 0.09554465860128403,
+   "coordinates": [
+    -0.6664383411407471,
+    0.5278829336166382,
+    -0.18432487547397614
+   ],
+   "label": "classical monocyte",
+   "label_set": [
+    "classical monocyte"
+   ],
+   "observed_genes": 1046,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.8560808300971985,
+     "value": 0.6395201086997986
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03974304720759392,
+     "value": -0.0017566304886713624
+    },
+    "glycolysis": {
+     "uncertainty": 0.42355284094810486,
+     "value": 0.5492990612983704
+    },
+    "inflammatory": {
+     "uncertainty": 0.27733057737350464,
+     "value": 0.14889751374721527
+    },
+    "oxphos": {
+     "uncertainty": 0.4505941867828369,
+     "value": 0.6478076577186584
+    },
+    "ribosome": {
+     "uncertainty": 0.8214893937110901,
+     "value": 1.1533986330032349
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_49.raw",
+   "confidence": 0.13084647059440613,
+   "coordinates": [
+    0.7447323203086853,
+    0.0057740723714232445,
+    0.035019587725400925
+   ],
+   "label": "neutrophil",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 968,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.11934532970190048,
+     "value": -0.4003375172615051
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.008545780554413795,
+     "value": -0.02829890139400959
+    },
+    "glycolysis": {
+     "uncertainty": 0.3731003999710083,
+     "value": 0.12321319431066513
+    },
+    "inflammatory": {
+     "uncertainty": 0.3805968463420868,
+     "value": 0.546966552734375
+    },
+    "oxphos": {
+     "uncertainty": 0.26655036211013794,
+     "value": 0.30628299713134766
+    },
+    "ribosome": {
+     "uncertainty": 0.49809810519218445,
+     "value": -0.39518633484840393
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_50.raw",
+   "confidence": 0.08509041368961334,
+   "coordinates": [
+    0.21876169741153717,
+    0.22515062987804413,
+    -0.5916616320610046
+   ],
+   "label": "cd8-positive, alpha-beta t cell",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1014,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2752764821052551,
+     "value": -0.3318714201450348
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.12048766016960144,
+     "value": 0.012903731316328049
+    },
+    "glycolysis": {
+     "uncertainty": 0.3920285999774933,
+     "value": 0.2469586431980133
+    },
+    "inflammatory": {
+     "uncertainty": 0.198260098695755,
+     "value": 0.031295668333768845
+    },
+    "oxphos": {
+     "uncertainty": 0.3323574960231781,
+     "value": 0.41306272149086
+    },
+    "ribosome": {
+     "uncertainty": 1.0242469310760498,
+     "value": 1.0376566648483276
+    }
+   }
+  },
+  {
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_51.raw",
+   "confidence": null,
+   "coordinates": [
+    -0.47186025977134705,
+    0.5369404554367065,
+    0.0692056268453598
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 939,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4732753038406372,
+     "value": 0.22014781832695007
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03787781298160553,
+     "value": -0.022748710587620735
+    },
+    "glycolysis": {
+     "uncertainty": 0.34107857942581177,
+     "value": 0.7704107165336609
+    },
+    "inflammatory": {
+     "uncertainty": 0.18842816352844238,
+     "value": 0.07020729035139084
+    },
+    "oxphos": {
+     "uncertainty": 0.3843337297439575,
+     "value": 0.6612318754196167
+    },
+    "ribosome": {
+     "uncertainty": 0.5169011354446411,
+     "value": 1.1545343399047852
+    }
+   }
+  }
+ ],
+ "gene_id_resolution": {
+  "ambiguous": 0,
+  "ambiguous_identifiers": [],
+  "matched": 3054,
+  "unmapped": 33,
+  "unmapped_identifiers": [
+   "BACC1",
+   "GBA1",
+   "H2AC25",
+   "H2BC26",
+   "IGHV1-3",
+   "IGHV3-15",
+   "IGHV3-23",
+   "IGHV3-49",
+   "IGHV3-7",
+   "IGHV4-30-4",
+   "IGHV5-10-1",
+   "IGKV2-24",
+   "IGKV2-28",
+   "IGKV3-11",
+   "IGKV3-15",
+   "IGKV4-1",
+   "IGLV1-47",
+   "IGLV3-16",
+   "IGLV3-19",
+   "KPLCE",
+   "MTCL3",
+   "MYL11",
+   "NHERF1",
+   "OCC1",
+   "SKIC2",
+   "SKIC8",
+   "TMT1A",
+   "TRA",
+   "TRAV19",
+   "TRAV22",
+   "TRBJ2-4",
+   "TRBV6-2",
+   "TRBV7-2"
+  ]
+ },
+ "label_space": {
+  "candidate_classes": [
+   "b cell",
+   "basophil",
+   "cd4-positive, alpha-beta t cell",
+   "cd8-positive, alpha-beta t cell",
+   "classical monocyte",
+   "common myeloid progenitor",
+   "erythrocyte",
+   "hematopoietic precursor cell",
+   "hematopoietic stem cell",
+   "intermediate monocyte",
+   "macrophage",
+   "mature nk t cell",
+   "monocyte",
+   "myeloid dendritic cell",
+   "naive thymus-derived cd4-positive, alpha-beta t cell",
+   "natural killer cell",
+   "neutrophil",
+   "non-classical monocyte",
+   "plasma cell",
+   "plasmacytoid dendritic cell",
+   "platelet",
+   "regulatory t cell"
+  ],
+  "restricted_to_supported_classes": false
+ },
+ "model_version": "production",
+ "n_cells": 50,
+ "n_features_matched": 3054,
+ "n_features_unmatched": 33,
+ "reference_abstain_threshold": 0.9779149889945984,
+ "value_scale": {
+  "detected": "linear",
+  "transformed": true
+ }
+}

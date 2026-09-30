@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from service.pipeline import fallback
 
 
@@ -35,6 +37,19 @@ class ResolveFallbackTests(unittest.TestCase):
 
         monocyte_pair = next(p for p in fallback.CONFUSABLE_PAIRS if "intermediate monocyte" in p.members)
         self.assertEqual(monocyte_pair.fallback_label, "monocyte")
+
+
+
+class PairConfidenceTests(unittest.TestCase):
+    def test_within_pair_share_is_the_winners_share_of_the_pair(self):
+        self.assertAlmostEqual(fallback.pair_confidence(np.array([0.3, 0.1]), "within_pair_share"), 0.75)
+
+    def test_pair_mass_is_the_pairs_summed_probability(self):
+        self.assertAlmostEqual(fallback.pair_confidence(np.array([0.3, 0.1]), "pair_mass"), 0.4)
+
+    def test_an_unknown_rule_raises(self):
+        with self.assertRaises(ValueError):
+            fallback.pair_confidence(np.array([0.5, 0.5]), "average")
 
 
 if __name__ == "__main__":

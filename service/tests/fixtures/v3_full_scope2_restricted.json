@@ -1,0 +1,2102 @@
+{
+ "atlas_version": "0.2.0",
+ "cells": [
+  {
+   "abstained": false,
+   "cell_id": "0",
+   "confidence": 0.6145541667938232,
+   "coordinates": [
+    -0.3567696809768677,
+    0.48964399099349976,
+    -0.19039800763130188
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.9363772869110107,
+     "value": 0.6158003807067871
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.01629401557147503,
+     "value": -0.034651488065719604
+    },
+    "glycolysis": {
+     "uncertainty": 0.44719552993774414,
+     "value": 0.5368320941925049
+    },
+    "inflammatory": {
+     "uncertainty": 0.18751424551010132,
+     "value": 0.04722455516457558
+    },
+    "oxphos": {
+     "uncertainty": 0.3160058856010437,
+     "value": 0.43951067328453064
+    },
+    "ribosome": {
+     "uncertainty": 0.6892556548118591,
+     "value": 1.2439324855804443
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "1",
+   "confidence": 0.6386333107948303,
+   "coordinates": [
+    -0.35991302132606506,
+    0.5192884206771851,
+    -0.03140325844287872
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5338238477706909,
+     "value": 0.3345792889595032
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03997592628002167,
+     "value": -0.009219085797667503
+    },
+    "glycolysis": {
+     "uncertainty": 0.25330767035484314,
+     "value": 0.6864846348762512
+    },
+    "inflammatory": {
+     "uncertainty": 0.16233518719673157,
+     "value": 0.07742202281951904
+    },
+    "oxphos": {
+     "uncertainty": 0.19130633771419525,
+     "value": 0.5180088877677917
+    },
+    "ribosome": {
+     "uncertainty": 0.3616236448287964,
+     "value": 1.450282096862793
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "2",
+   "confidence": 0.653708815574646,
+   "coordinates": [
+    -0.4427453577518463,
+    0.5938689708709717,
+    0.06785686314105988
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3070083260536194,
+     "value": 0.10651955753564835
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.018054544925689697,
+     "value": -0.023904792964458466
+    },
+    "glycolysis": {
+     "uncertainty": 0.20103195309638977,
+     "value": 0.7384020090103149
+    },
+    "inflammatory": {
+     "uncertainty": 0.2644580602645874,
+     "value": 0.3029034733772278
+    },
+    "oxphos": {
+     "uncertainty": 0.199372798204422,
+     "value": 0.540351152420044
+    },
+    "ribosome": {
+     "uncertainty": 0.3197225034236908,
+     "value": 1.314032793045044
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "3",
+   "confidence": 0.5000739097595215,
+   "coordinates": [
+    -0.3934071958065033,
+    0.08259737491607666,
+    -0.9331148266792297
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.25529980659484863,
+     "value": -0.142027348279953
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.4352521300315857,
+     "value": 0.18708856403827667
+    },
+    "glycolysis": {
+     "uncertainty": 0.3745562732219696,
+     "value": 0.3350529074668884
+    },
+    "inflammatory": {
+     "uncertainty": 0.19082708656787872,
+     "value": 0.12541334331035614
+    },
+    "oxphos": {
+     "uncertainty": 0.349341481924057,
+     "value": 0.5837498307228088
+    },
+    "ribosome": {
+     "uncertainty": 0.3850691020488739,
+     "value": 2.4036011695861816
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "4",
+   "confidence": 0.5049875378608704,
+   "coordinates": [
+    0.6329942345619202,
+    0.22324267029762268,
+    -0.037359487265348434
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.15995542705059052,
+     "value": -0.14058977365493774
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03228703513741493,
+     "value": -0.007758765947073698
+    },
+    "glycolysis": {
+     "uncertainty": 0.33066388964653015,
+     "value": 0.4072156250476837
+    },
+    "inflammatory": {
+     "uncertainty": 0.1781734675168991,
+     "value": 0.133262500166893
+    },
+    "oxphos": {
+     "uncertainty": 0.3560088574886322,
+     "value": 0.357500821352005
+    },
+    "ribosome": {
+     "uncertainty": 0.6016327142715454,
+     "value": 0.551811158657074
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "5",
+   "confidence": 0.5177828073501587,
+   "coordinates": [
+    -0.38400164246559143,
+    -0.04788510501384735,
+    -0.9476361274719238
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2172747701406479,
+     "value": -0.23450830578804016
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.30621832609176636,
+     "value": 0.06937594711780548
+    },
+    "glycolysis": {
+     "uncertainty": 0.3180564343929291,
+     "value": 0.18467944860458374
+    },
+    "inflammatory": {
+     "uncertainty": 0.1975388377904892,
+     "value": 0.1528511643409729
+    },
+    "oxphos": {
+     "uncertainty": 0.30042678117752075,
+     "value": 0.4022914171218872
+    },
+    "ribosome": {
+     "uncertainty": 0.49753180146217346,
+     "value": 2.244600296020508
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "6",
+   "confidence": 0.5189216136932373,
+   "coordinates": [
+    -0.25930696725845337,
+    0.020284369587898254,
+    -0.8515524864196777
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.609604001045227,
+     "value": -0.1449154168367386
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05754677578806877,
+     "value": -0.04313449561595917
+    },
+    "glycolysis": {
+     "uncertainty": 0.3661419749259949,
+     "value": 0.2633984088897705
+    },
+    "inflammatory": {
+     "uncertainty": 0.2269240915775299,
+     "value": 0.23501156270503998
+    },
+    "oxphos": {
+     "uncertainty": 0.2220565229654312,
+     "value": 0.5324114561080933
+    },
+    "ribosome": {
+     "uncertainty": 0.2732493281364441,
+     "value": 2.802420139312744
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "7",
+   "confidence": 0.5110335946083069,
+   "coordinates": [
+    -0.3016524910926819,
+    0.23581819236278534,
+    -0.8182639479637146
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.41188105940818787,
+     "value": -0.21091172099113464
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06321913748979568,
+     "value": -0.009804826229810715
+    },
+    "glycolysis": {
+     "uncertainty": 0.3545583188533783,
+     "value": 0.3366423547267914
+    },
+    "inflammatory": {
+     "uncertainty": 0.2683006823062897,
+     "value": 0.1290694922208786
+    },
+    "oxphos": {
+     "uncertainty": 0.26664403080940247,
+     "value": 0.44965311884880066
+    },
+    "ribosome": {
+     "uncertainty": 1.05439293384552,
+     "value": 1.687167763710022
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "8",
+   "confidence": null,
+   "coordinates": [
+    -0.33829882740974426,
+    0.47996786236763,
+    -0.6065388917922974
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.7356637120246887,
+     "value": 0.2686797082424164
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.045600526034832,
+     "value": -0.012904884293675423
+    },
+    "glycolysis": {
+     "uncertainty": 0.4560938775539398,
+     "value": 0.43987518548965454
+    },
+    "inflammatory": {
+     "uncertainty": 0.2236199527978897,
+     "value": 0.04319726675748825
+    },
+    "oxphos": {
+     "uncertainty": 0.31170815229415894,
+     "value": 0.40810060501098633
+    },
+    "ribosome": {
+     "uncertainty": 0.9692937731742859,
+     "value": 1.0128954648971558
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "9",
+   "confidence": 0.6565098166465759,
+   "coordinates": [
+    -0.22354361414909363,
+    0.4497818946838379,
+    -0.06479950249195099
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3245660364627838,
+     "value": 0.2579621970653534
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04562078416347504,
+     "value": 0.00024581915931776166
+    },
+    "glycolysis": {
+     "uncertainty": 0.32149359583854675,
+     "value": 0.7257400751113892
+    },
+    "inflammatory": {
+     "uncertainty": 0.26904457807540894,
+     "value": 0.20712509751319885
+    },
+    "oxphos": {
+     "uncertainty": 0.23465421795845032,
+     "value": 0.5980257391929626
+    },
+    "ribosome": {
+     "uncertainty": 0.5239859819412231,
+     "value": 1.170925259590149
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "10",
+   "confidence": 0.5108375549316406,
+   "coordinates": [
+    -0.37977921962738037,
+    -0.061361610889434814,
+    -0.9278502464294434
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1891201138496399,
+     "value": -0.32926473021507263
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04516293480992317,
+     "value": -0.038487132638692856
+    },
+    "glycolysis": {
+     "uncertainty": 0.2058943212032318,
+     "value": 0.14672358334064484
+    },
+    "inflammatory": {
+     "uncertainty": 0.20503024756908417,
+     "value": 0.4796789288520813
+    },
+    "oxphos": {
+     "uncertainty": 0.16546112298965454,
+     "value": 0.42961713671684265
+    },
+    "ribosome": {
+     "uncertainty": 0.45522260665893555,
+     "value": 2.159930467605591
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "11",
+   "confidence": 0.5788499116897583,
+   "coordinates": [
+    -0.04597843438386917,
+    0.4826042354106903,
+    -0.29559803009033203
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3541952073574066,
+     "value": 0.16053363680839539
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02287442609667778,
+     "value": -0.023947445675730705
+    },
+    "glycolysis": {
+     "uncertainty": 0.4057602286338806,
+     "value": 0.5508161783218384
+    },
+    "inflammatory": {
+     "uncertainty": 0.19723400473594666,
+     "value": 0.11956320703029633
+    },
+    "oxphos": {
+     "uncertainty": 0.2660282850265503,
+     "value": 0.3528270721435547
+    },
+    "ribosome": {
+     "uncertainty": 0.8137900233268738,
+     "value": 0.9727368950843811
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "12",
+   "confidence": 0.6106799840927124,
+   "coordinates": [
+    -0.23549404740333557,
+    0.527776300907135,
+    -0.3845050036907196
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5126425623893738,
+     "value": 0.4512018859386444
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02493155002593994,
+     "value": -0.013346770778298378
+    },
+    "glycolysis": {
+     "uncertainty": 0.21760669350624084,
+     "value": 0.8032708764076233
+    },
+    "inflammatory": {
+     "uncertainty": 0.2131592333316803,
+     "value": 0.119905486702919
+    },
+    "oxphos": {
+     "uncertainty": 0.12224703282117844,
+     "value": 0.5477380752563477
+    },
+    "ribosome": {
+     "uncertainty": 0.3742348253726959,
+     "value": 1.4670153856277466
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "13",
+   "confidence": 0.608083188533783,
+   "coordinates": [
+    -0.2882384657859802,
+    0.5040006041526794,
+    -0.42070338129997253
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.7160702347755432,
+     "value": 0.615295946598053
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.021022282540798187,
+     "value": -0.020774349570274353
+    },
+    "glycolysis": {
+     "uncertainty": 0.25064024329185486,
+     "value": 0.6800544857978821
+    },
+    "inflammatory": {
+     "uncertainty": 0.17717285454273224,
+     "value": 0.1191989853978157
+    },
+    "oxphos": {
+     "uncertainty": 0.19715049862861633,
+     "value": 0.4768548905849457
+    },
+    "ribosome": {
+     "uncertainty": 0.5952565670013428,
+     "value": 1.3637347221374512
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "14",
+   "confidence": 0.5045666098594666,
+   "coordinates": [
+    -0.35249918699264526,
+    0.05565619468688965,
+    -0.8401623964309692
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3425198793411255,
+     "value": -0.1646081805229187
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05840275436639786,
+     "value": 0.008094524964690208
+    },
+    "glycolysis": {
+     "uncertainty": 0.3423563539981842,
+     "value": 0.21284188330173492
+    },
+    "inflammatory": {
+     "uncertainty": 0.33377382159233093,
+     "value": 0.30384811758995056
+    },
+    "oxphos": {
+     "uncertainty": 0.3204362094402313,
+     "value": 0.5199377536773682
+    },
+    "ribosome": {
+     "uncertainty": 1.1084755659103394,
+     "value": 2.070855140686035
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "15",
+   "confidence": 0.504514217376709,
+   "coordinates": [
+    -0.34575748443603516,
+    0.08628836274147034,
+    -0.8970023989677429
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.22734445333480835,
+     "value": -0.18162879347801208
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.41862940788269043,
+     "value": 0.2309265285730362
+    },
+    "glycolysis": {
+     "uncertainty": 0.37986087799072266,
+     "value": 0.35307005047798157
+    },
+    "inflammatory": {
+     "uncertainty": 0.2244742065668106,
+     "value": 0.17858944833278656
+    },
+    "oxphos": {
+     "uncertainty": 0.291062593460083,
+     "value": 0.6942645311355591
+    },
+    "ribosome": {
+     "uncertainty": 0.41940125823020935,
+     "value": 2.402256727218628
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "16",
+   "confidence": 0.5199488401412964,
+   "coordinates": [
+    -0.396847665309906,
+    -0.04452544078230858,
+    -0.9365755915641785
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.16620856523513794,
+     "value": -0.3394540846347809
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05492320656776428,
+     "value": -0.02754061296582222
+    },
+    "glycolysis": {
+     "uncertainty": 0.29503366351127625,
+     "value": 0.20600223541259766
+    },
+    "inflammatory": {
+     "uncertainty": 0.21867135167121887,
+     "value": 0.37395429611206055
+    },
+    "oxphos": {
+     "uncertainty": 0.23682518303394318,
+     "value": 0.4371190369129181
+    },
+    "ribosome": {
+     "uncertainty": 0.46665921807289124,
+     "value": 2.118473768234253
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "17",
+   "confidence": null,
+   "coordinates": [
+    -0.3268142640590668,
+    0.4315958619117737,
+    -0.5773261785507202
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.7598699927330017,
+     "value": 0.18596671521663666
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05342324450612068,
+     "value": -0.0011427967110648751
+    },
+    "glycolysis": {
+     "uncertainty": 0.4901062250137329,
+     "value": 0.33972734212875366
+    },
+    "inflammatory": {
+     "uncertainty": 0.19850970804691315,
+     "value": -0.010634670965373516
+    },
+    "oxphos": {
+     "uncertainty": 0.3394801914691925,
+     "value": 0.3872756063938141
+    },
+    "ribosome": {
+     "uncertainty": 0.9374204874038696,
+     "value": 0.9553003311157227
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "18",
+   "confidence": 0.6456040740013123,
+   "coordinates": [
+    -0.20929460227489471,
+    0.5183020234107971,
+    -0.022984201088547707
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3172994554042816,
+     "value": 0.2680574059486389
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.020143013447523117,
+     "value": -0.017835065722465515
+    },
+    "glycolysis": {
+     "uncertainty": 0.31740930676460266,
+     "value": 0.6821817755699158
+    },
+    "inflammatory": {
+     "uncertainty": 0.25321638584136963,
+     "value": 0.2443942278623581
+    },
+    "oxphos": {
+     "uncertainty": 0.22989723086357117,
+     "value": 0.5527271032333374
+    },
+    "ribosome": {
+     "uncertainty": 0.49038267135620117,
+     "value": 1.1180895566940308
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "19",
+   "confidence": 0.6246817708015442,
+   "coordinates": [
+    -0.2798742949962616,
+    0.5621556043624878,
+    -0.012891510501503944
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3401736319065094,
+     "value": 0.3612736761569977
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02196638658642769,
+     "value": -0.018110306933522224
+    },
+    "glycolysis": {
+     "uncertainty": 0.31092211604118347,
+     "value": 0.6521521806716919
+    },
+    "inflammatory": {
+     "uncertainty": 0.141309455037117,
+     "value": 0.14963309466838837
+    },
+    "oxphos": {
+     "uncertainty": 0.238839253783226,
+     "value": 0.4928009808063507
+    },
+    "ribosome": {
+     "uncertainty": 0.4669674336910248,
+     "value": 1.1720854043960571
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "20",
+   "confidence": 0.6449500322341919,
+   "coordinates": [
+    -0.3549356758594513,
+    0.5472797751426697,
+    0.04583967104554176
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2743729054927826,
+     "value": 0.2102334350347519
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.018360763788223267,
+     "value": -0.010237496346235275
+    },
+    "glycolysis": {
+     "uncertainty": 0.19170905649662018,
+     "value": 0.8167114853858948
+    },
+    "inflammatory": {
+     "uncertainty": 0.24424493312835693,
+     "value": 0.17346476018428802
+    },
+    "oxphos": {
+     "uncertainty": 0.17470137774944305,
+     "value": 0.6272494792938232
+    },
+    "ribosome": {
+     "uncertainty": 0.2926692068576813,
+     "value": 1.3104820251464844
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "21",
+   "confidence": 0.6391487121582031,
+   "coordinates": [
+    -0.20573031902313232,
+    0.5155559778213501,
+    0.027399886399507523
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3227721154689789,
+     "value": 0.2592797875404358
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02079695835709572,
+     "value": -0.0167227890342474
+    },
+    "glycolysis": {
+     "uncertainty": 0.32520854473114014,
+     "value": 0.669195294380188
+    },
+    "inflammatory": {
+     "uncertainty": 0.2522304952144623,
+     "value": 0.25406792759895325
+    },
+    "oxphos": {
+     "uncertainty": 0.24595500528812408,
+     "value": 0.5329769849777222
+    },
+    "ribosome": {
+     "uncertainty": 0.580076277256012,
+     "value": 1.0056512355804443
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "22",
+   "confidence": 0.5226446390151978,
+   "coordinates": [
+    -0.3396075665950775,
+    0.1357828676700592,
+    -0.9348333477973938
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.20086155831813812,
+     "value": -0.27724605798721313
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0717439353466034,
+     "value": -0.014223700389266014
+    },
+    "glycolysis": {
+     "uncertainty": 0.3318841755390167,
+     "value": 0.22623884677886963
+    },
+    "inflammatory": {
+     "uncertainty": 0.22996024787425995,
+     "value": 0.3249055743217468
+    },
+    "oxphos": {
+     "uncertainty": 0.29451045393943787,
+     "value": 0.5426921844482422
+    },
+    "ribosome": {
+     "uncertainty": 0.26339760422706604,
+     "value": 2.411062002182007
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "23",
+   "confidence": 0.6571701169013977,
+   "coordinates": [
+    -0.4246211349964142,
+    0.544274091720581,
+    0.07970552891492844
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.30569618940353394,
+     "value": 0.019228914752602577
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0414038710296154,
+     "value": -0.012735010124742985
+    },
+    "glycolysis": {
+     "uncertainty": 0.26075249910354614,
+     "value": 0.6413697004318237
+    },
+    "inflammatory": {
+     "uncertainty": 0.3037016689777374,
+     "value": 0.3070693612098694
+    },
+    "oxphos": {
+     "uncertainty": 0.3044635057449341,
+     "value": 0.4710138738155365
+    },
+    "ribosome": {
+     "uncertainty": 0.30358046293258667,
+     "value": 1.0386420488357544
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "24",
+   "confidence": 0.6456544399261475,
+   "coordinates": [
+    -0.40188121795654297,
+    0.5945402979850769,
+    0.07689975947141647
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.47199633717536926,
+     "value": 0.20982225239276886
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.014944310300052166,
+     "value": -0.03112967312335968
+    },
+    "glycolysis": {
+     "uncertainty": 0.18548911809921265,
+     "value": 0.6861429214477539
+    },
+    "inflammatory": {
+     "uncertainty": 0.23446024954319,
+     "value": 0.13639165461063385
+    },
+    "oxphos": {
+     "uncertainty": 0.2291441112756729,
+     "value": 0.5679428577423096
+    },
+    "ribosome": {
+     "uncertainty": 0.35119345784187317,
+     "value": 1.1934934854507446
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "25",
+   "confidence": null,
+   "coordinates": [
+    -0.3944978713989258,
+    0.31112203001976013,
+    -0.6477028727531433
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.39963629841804504,
+     "value": -0.17806707322597504
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.3769986033439636,
+     "value": 0.16411951184272766
+    },
+    "glycolysis": {
+     "uncertainty": 0.3617927134037018,
+     "value": 0.3996197283267975
+    },
+    "inflammatory": {
+     "uncertainty": 0.2551007866859436,
+     "value": 0.0768350288271904
+    },
+    "oxphos": {
+     "uncertainty": 0.30451953411102295,
+     "value": 0.41986003518104553
+    },
+    "ribosome": {
+     "uncertainty": 0.9465023875236511,
+     "value": 1.421424150466919
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "26",
+   "confidence": 0.6474483609199524,
+   "coordinates": [
+    -0.384287029504776,
+    0.5316058993339539,
+    0.014115683734416962
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.30848559737205505,
+     "value": 0.33002880215644836
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03994966670870781,
+     "value": -0.004377529490739107
+    },
+    "glycolysis": {
+     "uncertainty": 0.17665155231952667,
+     "value": 0.7472870945930481
+    },
+    "inflammatory": {
+     "uncertainty": 0.2820183038711548,
+     "value": 0.21614746749401093
+    },
+    "oxphos": {
+     "uncertainty": 0.15234817564487457,
+     "value": 0.6314671039581299
+    },
+    "ribosome": {
+     "uncertainty": 0.27045366168022156,
+     "value": 1.4259988069534302
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "27",
+   "confidence": 0.5979152917861938,
+   "coordinates": [
+    0.04372723400592804,
+    0.492338627576828,
+    -0.000931861693970859
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.39507612586021423,
+     "value": 0.10385314375162125
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.023217158392071724,
+     "value": -0.019963398575782776
+    },
+    "glycolysis": {
+     "uncertainty": 0.4818408191204071,
+     "value": 0.3942113518714905
+    },
+    "inflammatory": {
+     "uncertainty": 0.22516439855098724,
+     "value": 0.14329253137111664
+    },
+    "oxphos": {
+     "uncertainty": 0.30618488788604736,
+     "value": 0.2669030427932739
+    },
+    "ribosome": {
+     "uncertainty": 0.7977709770202637,
+     "value": 0.5998966097831726
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "28",
+   "confidence": 0.6370657682418823,
+   "coordinates": [
+    -0.27019211649894714,
+    0.5409267544746399,
+    0.012461796402931213
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.32753971219062805,
+     "value": 0.33313652873039246
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.020715195685625076,
+     "value": -0.016785986721515656
+    },
+    "glycolysis": {
+     "uncertainty": 0.29950961470603943,
+     "value": 0.6988211274147034
+    },
+    "inflammatory": {
+     "uncertainty": 0.14143866300582886,
+     "value": 0.15045066177845
+    },
+    "oxphos": {
+     "uncertainty": 0.21233290433883667,
+     "value": 0.5170924663543701
+    },
+    "ribosome": {
+     "uncertainty": 0.4728604257106781,
+     "value": 1.1835424900054932
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "29",
+   "confidence": null,
+   "coordinates": [
+    -0.1689978986978531,
+    0.4189334809780121,
+    -0.6762223839759827
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.33898136019706726,
+     "value": -0.302261620759964
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.2976337969303131,
+     "value": 0.07763797044754028
+    },
+    "glycolysis": {
+     "uncertainty": 0.43050962686538696,
+     "value": 0.23831607401371002
+    },
+    "inflammatory": {
+     "uncertainty": 0.25988662242889404,
+     "value": -0.0026871103327721357
+    },
+    "oxphos": {
+     "uncertainty": 0.33102521300315857,
+     "value": 0.3984644114971161
+    },
+    "ribosome": {
+     "uncertainty": 0.991914689540863,
+     "value": 0.9398456811904907
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "30",
+   "confidence": 0.5134753584861755,
+   "coordinates": [
+    -0.3406895101070404,
+    0.08312276005744934,
+    -0.9587407112121582
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2834303379058838,
+     "value": -0.287092387676239
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06228937208652496,
+     "value": -0.0445452444255352
+    },
+    "glycolysis": {
+     "uncertainty": 0.22212623059749603,
+     "value": 0.09753777831792831
+    },
+    "inflammatory": {
+     "uncertainty": 0.28614580631256104,
+     "value": 0.2307252436876297
+    },
+    "oxphos": {
+     "uncertainty": 0.23430383205413818,
+     "value": 0.40709981322288513
+    },
+    "ribosome": {
+     "uncertainty": 0.4553046226501465,
+     "value": 2.1015491485595703
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "31",
+   "confidence": 0.5489727854728699,
+   "coordinates": [
+    -0.20822852849960327,
+    0.36897000670433044,
+    -0.713212251663208
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.35235631465911865,
+     "value": -0.2841906249523163
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.060110222548246384,
+     "value": -0.00514369597658515
+    },
+    "glycolysis": {
+     "uncertainty": 0.4098629653453827,
+     "value": 0.22326186299324036
+    },
+    "inflammatory": {
+     "uncertainty": 0.2456560879945755,
+     "value": 0.017556481063365936
+    },
+    "oxphos": {
+     "uncertainty": 0.3285869061946869,
+     "value": 0.4053349494934082
+    },
+    "ribosome": {
+     "uncertainty": 1.1593503952026367,
+     "value": 1.0514452457427979
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "32",
+   "confidence": 0.5020534992218018,
+   "coordinates": [
+    -0.37218302488327026,
+    0.12813985347747803,
+    -0.925025224685669
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.19490626454353333,
+     "value": -0.32869774103164673
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.056333255022764206,
+     "value": -0.029744038358330727
+    },
+    "glycolysis": {
+     "uncertainty": 0.24287019670009613,
+     "value": 0.1367674320936203
+    },
+    "inflammatory": {
+     "uncertainty": 0.2431642711162567,
+     "value": 0.4217374920845032
+    },
+    "oxphos": {
+     "uncertainty": 0.2758127748966217,
+     "value": 0.45457783341407776
+    },
+    "ribosome": {
+     "uncertainty": 0.32352256774902344,
+     "value": 2.3167576789855957
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "33",
+   "confidence": 0.6469196081161499,
+   "coordinates": [
+    -0.282524049282074,
+    0.535011351108551,
+    0.06956396251916885
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.28879401087760925,
+     "value": 0.1823955476284027
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.019870296120643616,
+     "value": -0.018569305539131165
+    },
+    "glycolysis": {
+     "uncertainty": 0.2908608913421631,
+     "value": 0.6652635931968689
+    },
+    "inflammatory": {
+     "uncertainty": 0.25558099150657654,
+     "value": 0.2186216115951538
+    },
+    "oxphos": {
+     "uncertainty": 0.22079351544380188,
+     "value": 0.5443689227104187
+    },
+    "ribosome": {
+     "uncertainty": 0.4393744468688965,
+     "value": 1.0654062032699585
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "34",
+   "confidence": 0.6537901759147644,
+   "coordinates": [
+    -0.2645028531551361,
+    0.5284923911094666,
+    -0.01862010359764099
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3289720416069031,
+     "value": 0.29243963956832886
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.040787942707538605,
+     "value": -0.007967573590576649
+    },
+    "glycolysis": {
+     "uncertainty": 0.30238914489746094,
+     "value": 0.7387597560882568
+    },
+    "inflammatory": {
+     "uncertainty": 0.26650047302246094,
+     "value": 0.20576457679271698
+    },
+    "oxphos": {
+     "uncertainty": 0.2377636432647705,
+     "value": 0.5766082406044006
+    },
+    "ribosome": {
+     "uncertainty": 0.4985807240009308,
+     "value": 1.1566104888916016
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "35",
+   "confidence": 0.6637117862701416,
+   "coordinates": [
+    -0.3805544674396515,
+    0.4840419888496399,
+    -0.015472464263439178
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.657211422920227,
+     "value": 0.24475276470184326
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0642850324511528,
+     "value": 0.005928837228566408
+    },
+    "glycolysis": {
+     "uncertainty": 0.3002314567565918,
+     "value": 0.4813220798969269
+    },
+    "inflammatory": {
+     "uncertainty": 0.19495649635791779,
+     "value": 0.07534635066986084
+    },
+    "oxphos": {
+     "uncertainty": 0.34459051489830017,
+     "value": 0.36871570348739624
+    },
+    "ribosome": {
+     "uncertainty": 0.3877412676811218,
+     "value": 1.0536198616027832
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "36",
+   "confidence": 0.6433748602867126,
+   "coordinates": [
+    -0.3545892536640167,
+    0.5483973622322083,
+    -0.023980502039194107
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.26859399676322937,
+     "value": 0.22484013438224792
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.019792433828115463,
+     "value": -0.01404721848666668
+    },
+    "glycolysis": {
+     "uncertainty": 0.1804371327161789,
+     "value": 0.7638981938362122
+    },
+    "inflammatory": {
+     "uncertainty": 0.2389000803232193,
+     "value": 0.19078242778778076
+    },
+    "oxphos": {
+     "uncertainty": 0.15036961436271667,
+     "value": 0.5965583324432373
+    },
+    "ribosome": {
+     "uncertainty": 0.2582550644874573,
+     "value": 1.3051624298095703
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "37",
+   "confidence": 0.5793828368186951,
+   "coordinates": [
+    -0.024650312960147858,
+    0.45604208111763,
+    -0.2677765488624573
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.34057456254959106,
+     "value": 0.1885480433702469
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.022770626470446587,
+     "value": -0.02381615713238716
+    },
+    "glycolysis": {
+     "uncertainty": 0.43463099002838135,
+     "value": 0.5213308334350586
+    },
+    "inflammatory": {
+     "uncertainty": 0.21903996169567108,
+     "value": 0.13362082839012146
+    },
+    "oxphos": {
+     "uncertainty": 0.2661271095275879,
+     "value": 0.3508378565311432
+    },
+    "ribosome": {
+     "uncertainty": 0.8837999701499939,
+     "value": 0.9150421023368835
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "38",
+   "confidence": 0.6343826651573181,
+   "coordinates": [
+    -0.36376360058784485,
+    0.6238251328468323,
+    0.04263443127274513
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4065942168235779,
+     "value": 0.27563416957855225
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.020179251208901405,
+     "value": -0.024483419954776764
+    },
+    "glycolysis": {
+     "uncertainty": 0.2083560973405838,
+     "value": 0.677759051322937
+    },
+    "inflammatory": {
+     "uncertainty": 0.2528153955936432,
+     "value": 0.18954113125801086
+    },
+    "oxphos": {
+     "uncertainty": 0.17384079098701477,
+     "value": 0.5489280819892883
+    },
+    "ribosome": {
+     "uncertainty": 0.29116910696029663,
+     "value": 1.200372576713562
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "39",
+   "confidence": 0.5352956652641296,
+   "coordinates": [
+    -0.38433077931404114,
+    0.1898798942565918,
+    -0.7811321020126343
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4005797803401947,
+     "value": -0.178711399435997
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.3764735460281372,
+     "value": 0.1614266037940979
+    },
+    "glycolysis": {
+     "uncertainty": 0.337568998336792,
+     "value": 0.33264634013175964
+    },
+    "inflammatory": {
+     "uncertainty": 0.23141999542713165,
+     "value": 0.0858825221657753
+    },
+    "oxphos": {
+     "uncertainty": 0.31497254967689514,
+     "value": 0.4538799524307251
+    },
+    "ribosome": {
+     "uncertainty": 0.9848307967185974,
+     "value": 1.6357228755950928
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "40",
+   "confidence": 0.6593802571296692,
+   "coordinates": [
+    -0.35365262627601624,
+    0.5236126780509949,
+    0.07044795900583267
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.259149968624115,
+     "value": 0.19891706109046936
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.037867799401283264,
+     "value": 0.002056471537798643
+    },
+    "glycolysis": {
+     "uncertainty": 0.14165988564491272,
+     "value": 0.768305242061615
+    },
+    "inflammatory": {
+     "uncertainty": 0.30408817529678345,
+     "value": 0.2230086773633957
+    },
+    "oxphos": {
+     "uncertainty": 0.12729987502098083,
+     "value": 0.6463245749473572
+    },
+    "ribosome": {
+     "uncertainty": 0.30174124240875244,
+     "value": 1.2378841638565063
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "41",
+   "confidence": 0.544753909111023,
+   "coordinates": [
+    0.07548046857118607,
+    0.4825340807437897,
+    -0.18339645862579346
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3944454789161682,
+     "value": 0.05613032355904579
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02326241321861744,
+     "value": -0.025580136105418205
+    },
+    "glycolysis": {
+     "uncertainty": 0.5749582648277283,
+     "value": 0.42075315117836
+    },
+    "inflammatory": {
+     "uncertainty": 0.23647210001945496,
+     "value": 0.07211194932460785
+    },
+    "oxphos": {
+     "uncertainty": 0.4033205807209015,
+     "value": 0.263838529586792
+    },
+    "ribosome": {
+     "uncertainty": 0.9758076667785645,
+     "value": 0.6364852786064148
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "42",
+   "confidence": 0.5062397122383118,
+   "coordinates": [
+    -0.35740208625793457,
+    -0.021956346929073334,
+    -0.8783553838729858
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.44419771432876587,
+     "value": -0.11074717342853546
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04791757091879845,
+     "value": -0.022137532010674477
+    },
+    "glycolysis": {
+     "uncertainty": 0.2521660625934601,
+     "value": 0.3106016218662262
+    },
+    "inflammatory": {
+     "uncertainty": 0.25738856196403503,
+     "value": 0.244355246424675
+    },
+    "oxphos": {
+     "uncertainty": 0.3223274350166321,
+     "value": 0.6653196811676025
+    },
+    "ribosome": {
+     "uncertainty": 0.5862334966659546,
+     "value": 2.8305373191833496
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "43",
+   "confidence": 0.5162393450737,
+   "coordinates": [
+    -0.3532988131046295,
+    0.02330271527171135,
+    -0.957141637802124
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2721269130706787,
+     "value": -0.18799875676631927
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04830075800418854,
+     "value": -0.03432006388902664
+    },
+    "glycolysis": {
+     "uncertainty": 0.34661340713500977,
+     "value": 0.32537925243377686
+    },
+    "inflammatory": {
+     "uncertainty": 0.2747478783130646,
+     "value": 0.4349157512187958
+    },
+    "oxphos": {
+     "uncertainty": 0.20327426493167877,
+     "value": 0.5038497447967529
+    },
+    "ribosome": {
+     "uncertainty": 0.36569127440452576,
+     "value": 2.261003255844116
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "44",
+   "confidence": 0.6022542715072632,
+   "coordinates": [
+    -0.027391016483306885,
+    0.4121403098106384,
+    -0.1691034734249115
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3312421143054962,
+     "value": 0.2007097601890564
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.023718951269984245,
+     "value": -0.022111527621746063
+    },
+    "glycolysis": {
+     "uncertainty": 0.43554452061653137,
+     "value": 0.5202869772911072
+    },
+    "inflammatory": {
+     "uncertainty": 0.21279503405094147,
+     "value": 0.1617937833070755
+    },
+    "oxphos": {
+     "uncertainty": 0.2317170798778534,
+     "value": 0.37690189480781555
+    },
+    "ribosome": {
+     "uncertainty": 0.8902220129966736,
+     "value": 0.9054421186447144
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "45",
+   "confidence": 0.6665294766426086,
+   "coordinates": [
+    -0.37717702984809875,
+    0.5121855735778809,
+    0.04813745990395546
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.39309391379356384,
+     "value": 0.13277111947536469
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04172491282224655,
+     "value": -0.007314622867852449
+    },
+    "glycolysis": {
+     "uncertainty": 0.22044849395751953,
+     "value": 0.6944957971572876
+    },
+    "inflammatory": {
+     "uncertainty": 0.45494043827056885,
+     "value": 0.38943612575531006
+    },
+    "oxphos": {
+     "uncertainty": 0.23519733548164368,
+     "value": 0.6119611263275146
+    },
+    "ribosome": {
+     "uncertainty": 0.4574393630027771,
+     "value": 1.0326471328735352
+    }
+   }
+  },
+  {
+   "abstain_reason": "outside_supported_region",
+   "abstained": true,
+   "cell_id": "46",
+   "confidence": null,
+   "coordinates": [
+    -0.25532081723213196,
+    0.4247751533985138,
+    -0.7012406587600708
+   ],
+   "label": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.34488990902900696,
+     "value": -0.32344257831573486
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06519494205713272,
+     "value": -0.006233576685190201
+    },
+    "glycolysis": {
+     "uncertainty": 0.4177844226360321,
+     "value": 0.12131629139184952
+    },
+    "inflammatory": {
+     "uncertainty": 0.1704069972038269,
+     "value": -0.09610722959041595
+    },
+    "oxphos": {
+     "uncertainty": 0.3592637777328491,
+     "value": 0.27624228596687317
+    },
+    "ribosome": {
+     "uncertainty": 0.7548751831054688,
+     "value": 0.5564848780632019
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "47",
+   "confidence": 0.5040042996406555,
+   "coordinates": [
+    -0.3919505476951599,
+    -0.048563096672296524,
+    -0.9152151346206665
+   ],
+   "label": "macrophage",
+   "label_set": [
+    "macrophage"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5004097819328308,
+     "value": -0.18244822323322296
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06570544093847275,
+     "value": -0.028792625293135643
+    },
+    "glycolysis": {
+     "uncertainty": 0.2938096225261688,
+     "value": 0.22168400883674622
+    },
+    "inflammatory": {
+     "uncertainty": 0.28200870752334595,
+     "value": 0.28395816683769226
+    },
+    "oxphos": {
+     "uncertainty": 0.22533197700977325,
+     "value": 0.45364102721214294
+    },
+    "ribosome": {
+     "uncertainty": 0.2556217610836029,
+     "value": 2.6455583572387695
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "48",
+   "confidence": 0.555504560470581,
+   "coordinates": [
+    -0.37096545100212097,
+    0.3382396697998047,
+    -0.7801743149757385
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3423410952091217,
+     "value": -0.21238107979297638
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.30632489919662476,
+     "value": 0.08529303222894669
+    },
+    "glycolysis": {
+     "uncertainty": 0.4110439121723175,
+     "value": 0.376850962638855
+    },
+    "inflammatory": {
+     "uncertainty": 0.23799455165863037,
+     "value": 0.10435077548027039
+    },
+    "oxphos": {
+     "uncertainty": 0.3002558648586273,
+     "value": 0.5356497764587402
+    },
+    "ribosome": {
+     "uncertainty": 0.9781596064567566,
+     "value": 1.6285494565963745
+    }
+   }
+  },
+  {
+   "abstained": false,
+   "cell_id": "49",
+   "confidence": 0.6560346484184265,
+   "coordinates": [
+    -0.38186514377593994,
+    0.5760568976402283,
+    0.0652221143245697
+   ],
+   "label": "monocyte",
+   "label_set": [
+    "monocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3408897817134857,
+     "value": 0.16413363814353943
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.015372682362794876,
+     "value": -0.024114226922392845
+    },
+    "glycolysis": {
+     "uncertainty": 0.21204760670661926,
+     "value": 0.7397739887237549
+    },
+    "inflammatory": {
+     "uncertainty": 0.2240246683359146,
+     "value": 0.2407340407371521
+    },
+    "oxphos": {
+     "uncertainty": 0.22016459703445435,
+     "value": 0.5244390368461609
+    },
+    "ribosome": {
+     "uncertainty": 0.33632272481918335,
+     "value": 1.17447829246521
+    }
+   }
+  }
+ ],
+ "gene_id_resolution": {
+  "ambiguous": 0,
+  "ambiguous_identifiers": [],
+  "matched": 2907,
+  "unmapped": 28,
+  "unmapped_identifiers": [
+   "ADISSP",
+   "CIROZ",
+   "CSNK2A2IP",
+   "DRC10",
+   "DRC2",
+   "ENTREP1",
+   "FERRY3",
+   "H2BC26",
+   "H4C16",
+   "LOC102724428",
+   "LRTM3",
+   "MTCL2",
+   "MTCL3",
+   "NHERF1",
+   "NHSL3",
+   "NUCLEOLIN",
+   "PGCKA1",
+   "POFUT4",
+   "PRP4K",
+   "RIGI",
+   "SACK1D",
+   "SACK1F",
+   "SKIC8",
+   "SLC9D1",
+   "TEKTL1",
+   "TOP6BL",
+   "TSLIG3C",
+   "WHR1"
+  ]
+ },
+ "label_space": {
+  "candidate_classes": [
+   "macrophage",
+   "monocyte"
+  ],
+  "restricted_to_supported_classes": true
+ },
+ "model_version": "production",
+ "n_cells": 50,
+ "n_features_matched": 2907,
+ "n_features_unmatched": 28,
+ "reference_abstain_threshold": 0.9779149889945984,
+ "value_scale": {
+  "detected": "log",
+  "transformed": false
+ }
+}

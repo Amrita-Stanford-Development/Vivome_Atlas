@@ -48,6 +48,24 @@ class LoadEncoderRealProductionCheckpointTests(unittest.TestCase):
         self.assertEqual(out.shape, (4, self.handle.model.proj.out_features))
         np.testing.assert_allclose(np.linalg.norm(out, axis=1), 1.0, atol=1e-5)
 
+    def test_encode_with_hidden_gives_exactly_encodes_embedding_and_512_features(self):
+        n_genes = self.handle.model.A.shape[0]
+        rng = np.random.default_rng(1)
+        values = rng.normal(size=(6, n_genes)).astype(np.float32)
+        mask = (rng.random((6, n_genes)) > 0.6).astype(np.float32)
+        embedding, hidden = self.handle.encode_with_hidden(values, mask)
+        np.testing.assert_array_equal(embedding, self.handle.encode(values, mask))
+        self.assertEqual(hidden.shape, (6, 512))
+        self.assertEqual(hidden.dtype, np.float32)
+
+    def test_classifier_head_is_kept_for_nb2_and_gives_one_logit_per_class(self):
+        self.assertIsNotNone(self.handle.classifier)
+        n_genes = self.handle.model.A.shape[0]
+        embedding = self.handle.encode(np.zeros((3, n_genes), np.float32), np.ones((3, n_genes), np.float32))
+        logits = self.handle.classifier_logits(embedding)
+        self.assertEqual(logits.shape, (3, 22))
+        self.assertFalse(np.isnan(logits).any())
+
     def test_all_missing_row_does_not_produce_nan(self):
         n_genes = self.handle.model.A.shape[0]
         out = self.handle.encode(np.zeros((1, n_genes), dtype=np.float32), np.zeros((1, n_genes), dtype=np.float32))

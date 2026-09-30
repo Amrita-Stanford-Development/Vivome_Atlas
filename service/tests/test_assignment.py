@@ -169,5 +169,44 @@ class AssignmentMethodTests(unittest.TestCase):
         np.testing.assert_array_equal(nc.argmax(axis=1), knn.argmax(axis=1))
 
 
+
+class CalibrationSocketTests(unittest.TestCase):
+    """Track C: temperature and per-class bias on nearest-centroid's softmax,
+    for T1 NB2's fitted parameters. Defaults must reproduce v3 exactly."""
+
+    def setUp(self):
+        self.centroids = _unit_rows(np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]))
+        rng = np.random.default_rng(3)
+        self.query = _unit_rows(rng.normal(size=(20, 3)))
+
+    def test_defaults_are_exactly_todays_output(self):
+        plain = assignment.assign_labels(self.query, self.centroids)
+        explicit = assignment.assign_labels(self.query, self.centroids, temperature=1.0, class_bias=None)
+        np.testing.assert_array_equal(plain, explicit)
+
+    def test_a_lower_temperature_sharpens_without_changing_the_winner(self):
+        plain = assignment.assign_labels(self.query, self.centroids)
+        sharp = assignment.assign_labels(self.query, self.centroids, temperature=0.1)
+        np.testing.assert_array_equal(plain.argmax(axis=1), sharp.argmax(axis=1))
+        self.assertTrue((sharp.max(axis=1) >= plain.max(axis=1)).all())
+
+    def test_a_class_bias_moves_mass_to_that_class(self):
+        bias = np.array([0.0, 0.0, 5.0])
+        biased = assignment.assign_labels(self.query, self.centroids, class_bias=bias)
+        self.assertTrue((biased.argmax(axis=1) == 2).all())
+
+    def test_bias_is_indexed_by_full_position_under_a_restriction(self):
+        bias = np.array([0.0, 5.0, 0.0])  # favours class 1, which is restricted out
+        probs = assignment.assign_labels(self.query, self.centroids, allowed_positions={0, 2}, class_bias=bias)
+        self.assertTrue((probs[:, 1] == 0).all())
+        unbiased = assignment.assign_labels(self.query, self.centroids, allowed_positions={0, 2})
+        np.testing.assert_allclose(probs, unbiased, atol=1e-6)
+
+    def test_methods_without_a_softmax_refuse_the_options(self):
+        for method in ("ot", "knn"):
+            with self.assertRaises(ValueError):
+                assignment.assign_labels(self.query, self.centroids, method=method, temperature=0.5)
+
+
 if __name__ == "__main__":
     unittest.main()

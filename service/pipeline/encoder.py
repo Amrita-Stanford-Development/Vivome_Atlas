@@ -4,10 +4,11 @@ The interface (`ReferenceEncoder.encode(values, mask) -> embedding`) is built
 directly against the artifact contract in the implementation plan / task
 brief: a state dict with "encoder." and "classifier." prefixed keys. It is
 NOT built against the dev checkpoint's incidental shape. The loader below
-strips an "encoder." prefix when present and always drops "classifier.*"
-keys (label assignment here is unbalanced OT onto centroids, not the joint
-model's own classifier head) — so it accepts both the dev checkpoint's bare
-keys today and the production export's prefixed keys later, unchanged.
+strips an "encoder." prefix when present and drops "classifier.*" keys from
+the encoder's weights (label assignment here is onto centroids, not the
+joint model's own classifier head; the head is kept separately on the handle
+for T1 NB2) — so it accepts both the dev checkpoint's bare keys and the
+production export's prefixed keys, unchanged.
 
 Every dimension (gene count, module count, hidden widths, latent dim) is
 read from the checkpoint's own tensor shapes, never hardcoded — a
@@ -26,6 +27,7 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
 
 import numpy as np
@@ -64,16 +66,35 @@ class ModulePoolingEncoder(nn.Module):
         self.proj = nn.Linear(hidden2, latent_dim, bias=False)
         self.norm = nn.LayerNorm(latent_dim)
 
-    def forward(self, values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    def hidden(self, values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        """The body's output: the pre-projection features (512 wide for the
+        v3 reference), before the projection, LayerNorm and L2 norm."""
         masked = values * mask
         module_gene_count = self.A.sum(0).clamp_min(1e-6)
         module_mask_sum = mask @ self.A
         module_value = (masked @ self.A) / module_mask_sum.clamp_min(1e-6)
         module_mask_frac = module_mask_sum / module_gene_count
         x = torch.cat([masked, mask, module_value, module_mask_frac], dim=-1)
-        h = self.body(x)
-        z = self.norm(self.proj(h))
-        return F.normalize(z, dim=-1)
+        return self.body(x)
+
+    def embed(self, h: torch.Tensor) -> torch.Tensor:
+        return F.normalize(self.norm(self.proj(h)), dim=-1)
+
+    def forward(self, values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        return self.embed(self.hidden(values, mask))
+
+
+class _WithHidden(nn.Module):
+    """Traced alongside the plain encoder for encode_with_hidden: the same
+    graph, returning the pre-projection features as well as the embedding."""
+
+    def __init__(self, model: ModulePoolingEncoder):
+        super().__init__()
+        self.model = model
+
+    def forward(self, values: torch.Tensor, mask: torch.Tensor):
+        h = self.model.hidden(values, mask)
+        return self.model.embed(h), h
 
 
 def _strip_prefixes(state_dict: dict) -> dict:
@@ -120,7 +141,7 @@ def _read_encoder_family(architecture_config_path: Path) -> str:
     )
 
 
-def trace_encoder(model: ModulePoolingEncoder) -> torch.jit.ScriptModule:
+def trace_encoder(model: nn.Module) -> torch.jit.ScriptModule:
     """TorchScript export (Track B, "Serving"). Tracing, not scripting, is
     safe here: `forward()` has no data-dependent control flow, only matmul,
     clamp_min, cat, LayerNorm, GELU, Dropout (a no-op in eval mode) and
@@ -130,7 +151,7 @@ def trace_encoder(model: ModulePoolingEncoder) -> torch.jit.ScriptModule:
     (<1e-5 max abs diff on 1,000 cells, the Track B spec's tolerance).
     Traced with batch size 2, not 1, so a singleton batch dim never gets
     baked into the graph as a constant."""
-    n_genes = model.A.shape[0]
+    n_genes = (model.model if isinstance(model, _WithHidden) else model).A.shape[0]
     example_values = torch.zeros(2, n_genes)
     example_mask = torch.ones(2, n_genes)
     with torch.no_grad():
@@ -143,6 +164,10 @@ class EncoderHandle:
     traced_model: torch.jit.ScriptModule
     weights_path: Path
     is_dev_placeholder: bool
+    # The checkpoint's classifier head, (weight (n_classes, latent_dim), bias
+    # (n_classes,)), kept for T1 NB2, which starts from its logits. v3 never
+    # uses it (Stage 4 assigns onto centroids); None when a checkpoint has none.
+    classifier: "tuple[np.ndarray, np.ndarray] | None" = None
 
     def encode(self, values: np.ndarray, mask: np.ndarray) -> np.ndarray:
         """values, mask: (n_cells, n_genes) in feature_space_genes.csv
@@ -158,6 +183,28 @@ class EncoderHandle:
             mask_t = torch.as_tensor(mask, dtype=torch.float32)
             out = self.traced_model(values_t, mask_t)
         return out.numpy().astype(np.float32)
+
+    @cached_property
+    def _traced_with_hidden(self) -> torch.jit.ScriptModule:
+        return trace_encoder(_WithHidden(self.model))
+
+    def encode_with_hidden(self, values: np.ndarray, mask: np.ndarray) -> "tuple[np.ndarray, np.ndarray]":
+        """(embedding, hidden): the embedding exactly as encode() returns it,
+        and the (n_cells, 512) pre-projection features T1 NB3's
+        out-of-distribution score reads (Track C). Traced on first use."""
+        with torch.no_grad():
+            values_t = torch.as_tensor(values, dtype=torch.float32)
+            mask_t = torch.as_tensor(mask, dtype=torch.float32)
+            z, h = self._traced_with_hidden(values_t, mask_t)
+        return z.numpy().astype(np.float32), h.numpy().astype(np.float32)
+
+    def classifier_logits(self, embeddings: np.ndarray) -> np.ndarray:
+        """(n_cells, n_classes) logits from the checkpoint's classifier head,
+        for T1 NB2's calibration. Raises if the checkpoint carries no head."""
+        if self.classifier is None:
+            raise ValueError(f"{self.weights_path} has no classifier head (no classifier.fc.* keys).")
+        weight, bias = self.classifier
+        return (embeddings @ weight.T + bias).astype(np.float32)
 
 
 def load_encoder(
@@ -183,6 +230,10 @@ def load_encoder(
 
     raw_state_dict = torch.load(weights_path, map_location="cpu", weights_only=False)
     state_dict = _strip_prefixes(raw_state_dict)
+    classifier = None
+    if "classifier.fc.weight" in raw_state_dict and "classifier.fc.bias" in raw_state_dict:
+        classifier = (raw_state_dict["classifier.fc.weight"].numpy().astype(np.float32),
+                      raw_state_dict["classifier.fc.bias"].numpy().astype(np.float32))
 
     family = _read_encoder_family(architecture_config_path)
     builder = _ENCODER_FAMILIES.get(family)
@@ -196,6 +247,7 @@ def load_encoder(
     return EncoderHandle(
         model=model, traced_model=traced_model,
         weights_path=Path(weights_path), is_dev_placeholder=is_dev_placeholder,
+        classifier=classifier,
     )
 
 

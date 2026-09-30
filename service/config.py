@@ -100,6 +100,27 @@ DECISIVE_SUMMARY_PATH = _env_path(
 
 ATLAS_VERSION = "0.2.0"
 
+# --- Track C: which pipeline answers a request ---
+# "v3" is today's behaviour, byte for byte (service/tests/test_pipeline_versions.py
+# pins it against responses frozen before this flag existed). "v3.1" swaps in the
+# label space, abstention and conformal components fitted by T1 NB2 to NB4. Their
+# artifacts land under V31_DIR in Track F; until then asking for v3.1 raises
+# PendingArtifactError, the same honest "not yet available" as any missing file.
+# Stays "v3" until the owner signs off (research/roadmap.md, Track F).
+PIPELINE_VERSIONS = ("v3", "v3.1")
+PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3")
+if PIPELINE_VERSION not in PIPELINE_VERSIONS:
+    raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
+
+# Where T1 NB4's export lands (Track F), one file per component. Names follow
+# research/roadmap.md's NB2 and NB3 "Outputs".
+V31_DIR = _env_path("VIVOME_V31_DIR", MODEL_DIR / "v3_1")
+V31_LABEL_SPACE_CONFIG_PATH = V31_DIR / "label_space_config.json"   # T1 NB2
+V31_BCTS_PARAMS_PATH = V31_DIR / "bcts_params.json"                 # T1 NB2
+V31_OOD_CONFIG_PATH = V31_DIR / "ood_config.json"                   # T1 NB3
+V31_OOD_REFERENCE_INDEX_PATH = V31_DIR / "ood_reference_index.npy"  # T1 NB3
+V31_CONFORMAL_CALIBRATION_PATH = V31_DIR / "conformal_calibration.npz"  # T1 NB3
+
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration
 # slice. Brief Stage 5: must be a random subset, never confidence-filtered.
 CALIBRATION_FRACTION = 0.2
@@ -182,6 +203,20 @@ CROSS_MODAL_SUPPORTED_CLASSES = ("macrophage", "monocyte")
 # comparison *inside* the restricted regime above is open follow-up work, not
 # done here; this default reflects current evidence, not a settled question.
 ASSIGNMENT_METHOD = "nearest_centroid"  # "nearest_centroid" | "ot" | "knn"
+
+# Stage 7 — the confidence reported for a cell resolved to a confusable pair's
+# broader label, per label-space method (label_space.LabelSpace.method):
+#   "within_pair_share": the winning class's share within the pair
+#   "pair_mass": the pair's summed probability
+# Under a restriction to exactly that pair the two probabilities sum to ~1 by
+# construction, so pair_mass would read 1.0 for every resolved cell; the
+# winning share is what varies. With every class a candidate, pair_mass may
+# carry information again. Which rule suits which mode is open (research/todo.md,
+# Track C); both modes keep the v3 rule until it is measured.
+FALLBACK_CONFIDENCE = {
+    "all_classes": "within_pair_share",
+    "cross_modal_supported": "within_pair_share",
+}
 
 MASK_OBSERVED = 1.0
 MASK_MISSING = 0.0
