@@ -6,7 +6,7 @@ notebook output path, and log it in the changelog at the bottom.
 
 Status markers: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked.
 
-Last updated: 2026-09-30 (repository reorganisation: standard layout, structure map, per-file index; Track E is still the next track)
+Last updated: 2026-09-30 (Track E: Fulcher 2026 held-out evaluation done; V2 beats v3 and scANVI in every pairing)
 
 ---
 
@@ -119,7 +119,14 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 ### Track E, Tier 2 data ingestion (branch `data/e`)
 
-- [ ] **Next Claude Code track (owner decision, 2026-09-29 — see §4).** Unblocked, not started: track B's gene ID mapping table (`cf3b98e`) is on `main` since 2026-09-29. Owner-named inputs: NB1d embeddings (staged locally in `data/incoming/NB1d/`, gitignored, not to be deleted), Fulcher2026 and the model checkpoints (not yet in the working tree as of 2026-09-29)
+- [x] Fulcher 2026 as the first held-out MS evaluation dataset (owner-fixed dataset and protocol, 2026-09-30):
+  - [x] Protocol frozen before any scoring: `research/benchmark/protocol-fulcher2026.md` (`2bcb657`). Amendment 1, a label-free centroid check made before scoring, is in `0ac2e27`.
+  - [x] FragPipe TMT-Integrator parser in the upload path, with tests; `NA` reads as missing (`b18f90e`).
+  - [x] `pipeline.embed_query`: Stages 0–3 as one function, shared by the service and the benchmark; golden fixtures unchanged (`0837e61`).
+  - [x] Dataset registered in `benchmark/datasets.py`, hash-checked, with separate upload and label loaders (`2bcb657`).
+  - [x] All 10 checkpoints load through the unchanged `load_encoder`, with no code change needed. Gate passed: V2_seed0 reproduces NB1d on PBMC240 at a median cosine of 0.99965 with NB1d's gene convention, and 0.99889 with the service's. `reference_seed0.pt` is weight-identical to the served model (`4ba53aa`).
+  - [x] Scored v3 and V2 (5 seeds each, both rules) and scANVI (3 seeds × 2 inputs), with paired bootstraps; tables in `research/benchmark/fulcher2026/`, write-up in `research/benchmark/results.md` (`629d2cf`).
+- [ ] Rest of the roadmap's Track E (registry, download scripts, leakage guard, further MS datasets): not started
 
 ### Track F, v3.1 integration (branch `integration/v31`)
 
@@ -171,6 +178,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 | Flat vs hierarchical label space | NB2, T2 NB7 | Open |
 | Next Claude Code track after D | Owner, 2026-09-29 | **Settled: Track E before Track C.** A held-out MS dataset is now the priority: SCoPE2's published matrix is centred per gene and per cell, so it cannot test a real upload (NB1c), and PBMC240 was used to choose V2, so it is now a development dataset (NB1d). Confirmation needs a fresh MS dataset, which Track E ingests. C keeps its place in the A2 → B → C → F merge order, and must land before T1 NB3 starts (NB3 needs C's `encode_with_hidden`) |
 
+| Serve V2 instead of v3 | Owner, after Fulcher 2026 | **Open, now with held-out evidence.** On Fulcher 2026, V2 beats v3 in 50 of 50 seed pairings, by +15.0 balanced accuracy (nearest centroid) and +13.4 (shared kNN), and separates lineages far better (lymphoid recall 98.5 vs 78.3). Against: V2 calls 63% of CD8T cells CD4T; on SCoPE2, v3 leads (though SCoPE2's matrix is centred and can't test a real upload); and this is one held-out dataset whose labels are the authors' annotation. The served model is unchanged |
 ---
 
 ## 5. Current verified numbers
@@ -202,6 +210,9 @@ T1 NB1d's per-seed embeddings (`research/notebook-outputs/nb1d/`).
 | v3 (5 seeds) minus scANVI (3 seeds), unrestricted, shared kNN | ours ahead 12, scANVI ahead 3; mean Δ +18.14 ± 17.14 |
 | V2 (5 seeds) minus scANVI (3 seeds) | never reliably ahead: restricted shared kNN 0 ahead / 15 behind; pool first 4 / 11; unrestricted 4 / 8 (3 not significant) |
 | PBMC240 raw, lineage (development dataset, used to choose V2), lymphoid recall n=117 / myeloid recall n=5 (anecdotal), 5 seeds | v3 52.82 ± 7.73 / 100.0; V2 92.82 ± 0.76 / 80.0; scANVI, better of two inputs (processed), 3 seeds: 17.95 shared kNN / 21.37 native, myeloid 100.0 with 66–82% of all cells called myeloid |
+| **Fulcher 2026 (held out, TMT, 1,251 cells, 6 types, chance 16.7), bal. acc., nearest centroid / shared kNN** | V2 57.32 ± 2.20 / 55.47 ± 2.64; v3 42.34 ± 3.42 / 42.05 ± 2.93 (`v3_seed0` 44.1 / 41.8); scANVI (log2) 18.98 ± 11.38 native / 21.36 ± 2.21 kNN |
+| Fulcher 2026 paired bootstrap | V2 > v3 in 50 of 50 pairings (mean +15.0 / +13.4); v3 > scANVI and V2 > scANVI in 30 of 30 each; every CI excludes 0 |
+| Fulcher 2026 lineage recall, nearest centroid, lymphoid / myeloid | V2 98.5 / 93.1; v3 78.3 / 98.9. DC recall ≤ 8.9 for every method |
 | Unsupervised methods (MaxFuse, Harmony, scGLUE), restricted | about 47 to 54 bal, at chance |
 | Majority class floor, restricted | 73.56 / 50.00 |
 | RNA to RNA, SCoPE2 mask, **test cells only** (replaces the published 95.5 / 74.8) | 93.19 / 65.71 (OT), centroid 67.29 bal |
@@ -214,12 +225,13 @@ T1 NB1d's per-seed embeddings (`research/notebook-outputs/nb1d/`).
 | Abstention at 0.9779 | 80.2 percent |
 | Conformal empirical coverage | 33.7 percent (target 90) |
 
+Sources for the Fulcher 2026 rows: `research/benchmark/fulcher2026/family_summary.csv` and `paired_bootstrap.csv`.
 Sources for the 5-seed, paired-bootstrap and PBMC240 rows:
 `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv`,
 `paired_bootstrap_ours_vs_scanvi.csv`, `real_data_per_seed.csv`,
 `scanvi_pbmc240_input_variants.csv`. Full writeup: `research/benchmark/results.md`.
 
-Still needed before claiming state of the art: at least two more MS datasets.
+Still needed before claiming state of the art: at least one more held-out MS dataset beyond Fulcher 2026.
 The published held out cell type AUC of 1.000 is not a valid unseen type test,
 because the held out classes were in training.
 
@@ -253,3 +265,4 @@ because the held out classes were in training.
 | 2026-09-29 | Records cleanup, docs only. §5 "Current verified numbers" still stated "+9.1 to +14.4, CI excludes 0 on every seed" as current: its single-seed rows are now labelled `v3_seed0` (the shipped checkpoint), the `v3_seed0` paired-bootstrap spans updated to the retrained scANVI (+8.2 to +14.4 restricted, +24.2 to +32.7 unrestricted), and 5-seed family rows, the 90-pairing verdict counts and the PBMC240 recall rows added, all from `research/notebook-outputs/nb1d/`. Same stale claim struck through in `research_tier1_tier2.md`'s 2026-09-25 status note. Statuses: A2's floor and mask items closed as superseded by `cf83c5f`; Track E unblocked; Track F now waits only on C and NB4; NB1b recorded as run (NO GO on the real-data gate); NB1d added; NB1c flagged as unconfirmed; narrow-uploads item marked fixed in simulation only. Repointed three references to Track D commits the `benchmark/d` rebase left unreachable (`35b3e29`, `ed9ffc5`) to their equivalents on `main` (`209508f`, `62aefe8`, `7a4c4b2`). `Notebook_Run_History.md` moved from untracked `data/incoming/` into `research/` (entries 1–14; 15 and 16 still to be written by the owner); `research/README.md` now indexes the folder | `2e7cc3b` |
 | 2026-09-29 | Records follow-up, docs only. Committed the owner's updated `Notebook_Run_History.md` (entry 14's real-data numbers filled in, entries 15 NB1c and 16 NB1d added). NB1c's outputs (four tables, `nb1c_summary.json`) moved from an upper-case `NB1c/tables/` drop folder to a flat `research/notebook-outputs/nb1c/`, matching `notebook-outputs/nb1/` and `notebook-outputs/nb1d/`, and committed; NB1c marked as run in §3, citing them, and §5 now credits NB1c with first measuring v3's seed variance. **Owner decision recorded in §4: Track E before Track C** — confirmation needs a fresh MS dataset, since SCoPE2 is gene-centred and PBMC240 is now a development dataset | `c081ca0` |
 | 2026-09-30 | Repository reorganisation, no behaviour change. Site → `web/` (`Atlas` → `web/data/`, `Plots` → `web/plots/{supervised,semi-supervised}/`); `tools` → `scripts/`, `tools/fair_benchmark` → `benchmark/`; `service/model/` grouped into `runtime/` (what config.py loads), `evidence/`, `source/`, `legacy/{v2,dev}`; `Documentation` → `research/benchmark/` (`architecture.md` → `harness.md`); `docs/plans` → `research/` (this file was `VivOME_TODO.md` there, the roadmap `VivOME_Improvement_Roadmap.md`; notebook tables → `research/notebook-outputs/`); `service/docs` → `docs/service/`; `New_Files` → `data/incoming/` (gitignored; its four duplicates of `app_export/` files deleted after a sha256 re-check). New `docs/project-structure.md` and `docs/file-index.md`; `scripts/check_paths.py` fails on any unresolved cited path or unindexed file. `SUMMARY.md` removed. LFS blob ids unchanged; regenerated manifest differs only in cited paths; benchmark outputs reproduce from the new paths. Found and fixed on the way: `faiss-cpu` missing from `service/requirements.txt`. Still open: NB1b's tables, cited as `MIN_OBSERVED_GENES`'s evidence, were never committed (allowlisted in `check_paths.py` until they land) | `c4f737b`, `b745134`, `5c795ea`, `ee6e192`, `66c6272`, `024156b`, `ebdc4c0`, `23a3b70` |
+| 2026-09-30 | Track E, Fulcher 2026 held-out evaluation. Protocol frozen before scoring (`2bcb657`); gate passed (V2_seed0 0.99965 median cosine vs NB1d on PBMC240). Balanced accuracy over 6 types, nearest centroid / shared kNN: V2 57.3 / 55.5, v3 42.3 / 42.0 (served `v3_seed0` 44.1 / 41.8), scANVI 19.0 / 21.4 (chance 16.7); V2 > v3 in 50/50 pairings, each > scANVI in 30/30. Caveats recorded: labels are the authors' Seurat transfer plus refinement, and the data are TMT. Also: FragPipe TMT parser (`b18f90e`), `embed_query` (`0837e61`), NB1b tables committed with the path-check exception dropped (`629dd98`), and the per-stage pipeline brief restored as `docs/service/pipeline-brief.md` (`5b54660`). Served model unchanged | `5b54660`, `b18f90e`, `0837e61`, `2bcb657`, `0ac2e27`, `18f416f`, `629dd98`, `4ba53aa`, `629d2cf` |
