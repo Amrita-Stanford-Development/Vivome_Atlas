@@ -42,8 +42,6 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/data/atlas_RNA_lat128.parquet` — RNA cells with 3-PC coordinates and per-gene values (Git LFS, ~1.43 GB)
 - `web/data/atlas_RNA_lat128-001-part1.csv` — first half of the RNA table as CSV (Git LFS)
 - `web/data/atlas_RNA_lat128-001-part2.csv` — second half of the RNA table as CSV (Git LFS)
-- `web/plots/supervised/interactive_latent*_to3d_PCA_mm.html` — 5 standalone Plotly plots from the original 2025 model, one per latent size (32, 64, 128, 256, 512); no page shows them
-- `web/plots/semi-supervised/PCA3D_semi_r*_p*.html` — 25 standalone Plotly plots from the original 2025 model: RNA label % (`r`) × protein label % (`p`), each in {5, 10, 25, 50, 75}; no page shows them
 
 ## service/ — the projection API (Python, its own dependencies)
 
