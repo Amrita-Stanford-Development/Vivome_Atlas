@@ -157,6 +157,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/datasets.py` — registry of held-out datasets (Fulcher 2026): input paths and sha256, role, label rules; separate upload and label loaders
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
+- `benchmark/fulcher2026_score.py` — Fulcher 2026 scoring, the only step that reads its labels: both rules, all metrics, the paired bootstrap
 
 ## scripts/ — build and repository checks
 
