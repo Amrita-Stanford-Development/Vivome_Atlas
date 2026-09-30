@@ -1,4 +1,4 @@
-"""Stage 7 — hierarchical fallback (Claude_Code_Context_Brief.md, "Stage 7").
+"""Stage 7 — hierarchical fallback (docs/service/pipeline-brief.md, "Stage 7").
 
 The brief names six phrases of adjacent cell types found genuinely
 confusable across independent tests, each reflecting a real biological

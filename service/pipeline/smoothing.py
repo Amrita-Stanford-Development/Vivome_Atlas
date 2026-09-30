@@ -1,4 +1,4 @@
-"""Stage 2 — fuzzy smoothing (Claude_Code_Context_Brief.md, "Stage 2").
+"""Stage 2 — fuzzy smoothing (docs/service/pipeline-brief.md, "Stage 2").
 
 Before the query touches the encoder, build a nearest-neighbour graph within
 the query dataset using its own complete feature set — not just the 9,002

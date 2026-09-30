@@ -1,4 +1,4 @@
-"""Stage 3 — the reference encoder (Claude_Code_Context_Brief.md, "Stage 3").
+"""Stage 3 — the reference encoder (docs/service/pipeline-brief.md, "Stage 3").
 
 The interface (`ReferenceEncoder.encode(values, mask) -> embedding`) is built
 directly against the artifact contract in the implementation plan / task

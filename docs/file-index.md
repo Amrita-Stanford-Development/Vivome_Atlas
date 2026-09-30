@@ -172,7 +172,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `docs/web/manifest.md` — the manifest: schema, the measured/pending contract, regeneration, release protocol
 - `docs/web/data.md` — the site's data files, Git LFS, what ships and what doesn't
 - `docs/service/projection-api.md` — the `POST /api/project` contract: request, response, conformal label sets, abstention
-- `docs/service/context-brief.md` — the service build brief: the eight pipeline stages and the measured evidence behind each (cited in pipeline docstrings as `Claude_Code_Context_Brief.md`, its original name)
+- `docs/service/context-brief.md` — the post-training build brief: serving constants, the restricted-assignment decision, abstention, measured constraints that look like mistakes
+- `docs/service/pipeline-brief.md` — the original per-stage design brief (Stages 1–8) that the pipeline module docstrings cite; restored from history
 - `docs/service/download-checklist.md` — which files the service needed from Google Drive, and where each one landed
 
 ## research/ — the R&D record

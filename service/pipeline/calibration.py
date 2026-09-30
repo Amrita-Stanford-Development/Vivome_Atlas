@@ -1,4 +1,4 @@
-"""Stage 5 — conformal calibration (Claude_Code_Context_Brief.md, "Stage 5").
+"""Stage 5 — conformal calibration (docs/service/pipeline-brief.md, "Stage 5").
 
 Calibrate on a random subset of the query, never a confidence-filtered one.
 This was gotten wrong once already in this project: calibrating only on the

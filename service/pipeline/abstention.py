@@ -1,4 +1,4 @@
-"""Stage 6 — abstention (Claude_Code_Context_Brief.md, "Stage 6").
+"""Stage 6 — abstention (docs/service/pipeline-brief.md, "Stage 6").
 
 Score out-of-distribution risk by maximum cosine similarity to any single
 reference cell, never by normalised vote share among nearest neighbours.

@@ -1,4 +1,4 @@
-"""Stage 1 — query alignment (Claude_Code_Context_Brief.md, "Stage 1").
+"""Stage 1 — query alignment (docs/service/pipeline-brief.md, "Stage 1").
 
 Reindex the uploaded matrix onto the fixed 9,002-gene feature space, in
 `feature_space_genes.csv` order, with an explicit observed/missing mask.

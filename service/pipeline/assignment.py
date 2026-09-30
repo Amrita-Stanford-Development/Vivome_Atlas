@@ -1,4 +1,4 @@
-"""Stage 4 — label assignment (Claude_Code_Context_Brief.md, "Stage 4";
+"""Stage 4 — label assignment (docs/service/pipeline-brief.md, "Stage 4";
 docs/service/context-brief.md §3, §6 for the measured evidence below).
 
 Two independent, measured decisions, both encoded in service/config.py

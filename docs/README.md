@@ -23,7 +23,8 @@ and read [CLAUDE.md](../CLAUDE.md) before changing anything.
 | Document | Covers |
 |---|---|
 | [service/projection-api.md](service/projection-api.md) | The `POST /api/project` contract: request, response, conformal label sets, abstention |
-| [service/context-brief.md](service/context-brief.md) | The build brief: the eight pipeline stages and the evidence behind each |
+| [service/pipeline-brief.md](service/pipeline-brief.md) | The original per-stage design brief (Stages 1–8) the pipeline code cites |
+| [service/context-brief.md](service/context-brief.md) | The post-training brief: serving constants, restricted assignment, abstention, measured constraints |
 | [service/download-checklist.md](service/download-checklist.md) | Which files the service needed from Google Drive, and where each one landed |
 | [../service/README.md](../service/README.md) | Design rationale for each stage, what's real vs. pending, how to run and test |
 | [../service/model/README.md](../service/model/README.md) | The model files, grouped by role |

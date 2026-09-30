@@ -1,4 +1,4 @@
-"""Stage 8 — property transfer (Claude_Code_Context_Brief.md, "Stage 8").
+"""Stage 8 — property transfer (docs/service/pipeline-brief.md, "Stage 8").
 
 Continuous properties transfer by similarity-weighted averaging over the k
 nearest reference neighbours in embedding space — computed on RNA's full
