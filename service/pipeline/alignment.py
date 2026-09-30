@@ -81,6 +81,20 @@ _DIA_NN_ANNOTATION_COLUMNS = frozenset({
 })
 
 
+# FragPipe TMT-Integrator protein tables (e.g. abundance_protein_MD.tsv):
+# these annotation columns precede the per-channel columns, and the
+# reference-channel intensities (ReferenceIntensity, RefInt_*, RefDInt_*)
+# are not cells.
+_FRAGPIPE_TMT_ANNOTATION_COLUMNS = frozenset({
+    "Index", "NumberPSM", "Gene", "MaxPepProb", "Protein", "Protein ID", "Entry Name",
+    "Protein Description", "Organism", "Indistinguishable Proteins", "ReferenceIntensity",
+})
+_FRAGPIPE_TMT_REFERENCE_PREFIXES = ("RefInt_", "RefDInt_")
+
+# Missing-value spellings: blank (the contract, DIA-NN) and R's "NA" (FragPipe).
+_MISSING_VALUES = frozenset({"", "NA"})
+
+
 def _clean_dia_nn_cell_id(raw_header: str) -> str:
     """DIA-NN report columns are Windows raw-file paths (e.g.
     r"E:\\...\\Astral_TopMedPBMC1_041025_SP_1.raw"). PureWindowsPath parses
@@ -105,17 +119,34 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     identifiers (may be semicolon-separated protein groups -- gene_ids.py
     already resolves those), the other annotation columns are excluded
     from the cell columns, and each surviving cell column's Windows
-    raw-file-path header is cleaned to its basename without ".raw"."""
+    raw-file-path header is cleaned to its basename without ".raw".
+
+    A FragPipe TMT-Integrator protein table is recognised by a "Gene" column
+    (and no "Genes" column): "Gene" supplies the identifiers, its annotation
+    columns and reference-channel columns are excluded, and the channel
+    headers are kept verbatim. "NA" is read as missing in every format."""
     first_line = text.split("\n", 1)[0]
     delimiter = "\t" if first_line.count("\t") > first_line.count(",") else ","
     reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     header = next(reader)
 
     is_dia_nn_report = "Genes" in header
-    gene_col_idx = header.index("Genes") if is_dia_nn_report else 0
+    is_fragpipe_tmt = not is_dia_nn_report and "Gene" in header
+    if is_dia_nn_report:
+        gene_col_idx = header.index("Genes")
+    elif is_fragpipe_tmt:
+        gene_col_idx = header.index("Gene")
+    else:
+        gene_col_idx = 0
+
+    def is_annotation(name: str) -> bool:
+        if is_fragpipe_tmt:
+            return name in _FRAGPIPE_TMT_ANNOTATION_COLUMNS or name.startswith(_FRAGPIPE_TMT_REFERENCE_PREFIXES)
+        return name in _DIA_NN_ANNOTATION_COLUMNS
+
     cell_col_indices = [
         i for i, name in enumerate(header)
-        if i != gene_col_idx and name not in _DIA_NN_ANNOTATION_COLUMNS
+        if i != gene_col_idx and not is_annotation(name)
     ]
     cell_ids = [
         _clean_dia_nn_cell_id(header[i]) if is_dia_nn_report else header[i]
@@ -128,7 +159,7 @@ def parse_matrix_csv(text: str) -> RawMatrix:
         if not row or not row[gene_col_idx]:
             continue
         gene_names.append(row[gene_col_idx])
-        rows.append([float(row[i]) if row[i] != "" else np.nan for i in cell_col_indices])
+        rows.append([np.nan if row[i] in _MISSING_VALUES else float(row[i]) for i in cell_col_indices])
     values = np.array(rows, dtype=np.float32) if rows else np.empty((0, len(cell_ids)), dtype=np.float32)
     return RawMatrix(gene_names=gene_names, cell_ids=cell_ids, values=values)
 

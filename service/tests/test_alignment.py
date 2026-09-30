@@ -41,6 +41,30 @@ class ParseMatrixCsvTests(unittest.TestCase):
         self.assertTrue(np.isnan(raw.values[1, 0]))
         np.testing.assert_array_equal(raw.values, [[1.0, 2.0], [raw.values[1, 0], 4.0]])
 
+    def test_fragpipe_tmt_table_uses_gene_column_and_drops_annotation_and_reference_columns(self):
+        header = "\t".join([
+            "Index", "NumberPSM", "Gene", "MaxPepProb", "Protein", "Protein ID", "Entry Name",
+            "Protein Description", "Organism", "Indistinguishable Proteins", "ReferenceIntensity",
+            "run1_127N", "RefInt_run1_126", "run1_rerun_127C", "RefDInt_run1_135ND",
+        ])
+        row1 = "\t".join(["sp|P1|A_HUMAN", "12", "GENE1", "1", "P1", "P1", "A_HUMAN", "desc",
+                          "Homo sapiens", "", "1000", "100.5", "999", "NA", "998"])
+        row2 = "\t".join(["sp|P2|B_HUMAN", "3", "GENE2", "0.99", "P2", "P2", "B_HUMAN", "desc2",
+                          "Homo sapiens", "P3", "2000", "NA", "999", "300.25", "998"])
+        raw = alignment.parse_matrix_csv("\n".join([header, row1, row2]))
+
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2"])
+        self.assertEqual(raw.cell_ids, ["run1_127N", "run1_rerun_127C"])
+        self.assertEqual(raw.values[0, 0], np.float32(100.5))
+        self.assertEqual(raw.values[1, 1], np.float32(300.25))
+        self.assertTrue(np.isnan(raw.values[0, 1]))
+        self.assertTrue(np.isnan(raw.values[1, 0]))
+
+    def test_na_is_missing_in_the_plain_contract_too(self):
+        raw = alignment.parse_matrix_csv("gene,cellA,cellB\nGENE1,NA,2.0\n")
+        self.assertTrue(np.isnan(raw.values[0, 0]))
+        self.assertEqual(raw.values[0, 1], 2.0)
+
 
 class ZScorePerGeneTests(unittest.TestCase):
     def test_zscores_use_only_this_datasets_own_stats(self):
