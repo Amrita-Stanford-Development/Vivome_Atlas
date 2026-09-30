@@ -155,6 +155,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/pbmc240_lineage_prep.py` — builds the PBMC240 inputs in the shared gene space, row order pinned to NB1d
 - `benchmark/pbmc240_convention_check.py` — measures how far the service and benchmark preprocessing conventions diverge on PBMC240
 - `benchmark/datasets.py` — registry of held-out datasets (Fulcher 2026): input paths and sha256, role, label rules; separate upload and label loaders
+- `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
+- `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
 
 ## scripts/ — build and repository checks
 

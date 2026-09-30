@@ -236,3 +236,20 @@ stratified resamples and seed 0.
 
 The served model, the service defaults, `MODEL_CARD.md` and the manifest do
 not change. `benchmark.rows` stays pending.
+
+## Amendment 1, 2026-09-30, before any scoring
+
+**What changed.** The centroid check in "Gate" was "max absolute difference
+below 1e-5". It is now "every row's cosine similarity to the served centroid
+is at least 0.99999".
+
+**Why.** NB1d's v3_seed0 `centroids.npy` and
+`service/model/runtime/reference_centroids.npy` agree to a minimum row cosine
+of 0.99999994, but their maximum absolute difference is 2.4e-5. That is
+float32 rounding between two computations of the same unit vectors, not a
+different model. The check exists to catch a wrong checkpoint or class order,
+which would show up as differences of order 0.1 or more.
+
+**Scope.** Nothing had been scored. The change doesn't involve labels and
+doesn't affect any score. Both numbers are recorded in `gate.json`.
+
