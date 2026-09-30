@@ -283,3 +283,16 @@ it appears, and it never replaces the six-type primary metric.
 **Unchanged.** Everything else, including our models' scores. Fulcher has
 been scored once in this round; nothing is tuned on it, and it is re-scored
 only at the final v3.1 evaluation.
+
+## Note, 2026-09-30: Fulcher 2026 becomes a development dataset (owner decision)
+
+This supersedes amendment 2's "re-scored only at the final v3.1 evaluation".
+
+- **The held-out result stands.** Fulcher 2026's first scoring under this
+  frozen protocol is the held-out result: commit `629d2cf`, plus the
+  amendment-2 additions in `794fad5`. It stays the held-out result.
+- **From now on it is a development dataset,** like PBMC240. It may be
+  embedded, scored and used to inform decisions. Any later score on it is a
+  development number, and is never reported as held out.
+- **Khoury 2026 is now the only sealed final test**
+  ([protocol-khoury2026.md](protocol-khoury2026.md)).

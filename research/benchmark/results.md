@@ -560,8 +560,11 @@ tuned or selected on it.
   mapped to the six types or "other" by the protocol's fixed table. Chance
   balanced accuracy is 16.7%.
 - **Tables** are in [`fulcher2026`](fulcher2026/per_seed_scores.csv).
-- **Scored once.** Fulcher has been scored in this round only. Nothing is
-  tuned on it, and it is re-scored only at the final v3.1 evaluation.
+- **Held-out result, then development data.** The results in this section
+  are Fulcher's one held-out scoring under the frozen protocol. Since
+  2026-09-30, by owner decision, Fulcher is a development dataset like
+  PBMC240. Later scores on it are development numbers, and Khoury 2026 is
+  the only sealed final test.
 
 **Two caveats, stated plainly.**
 

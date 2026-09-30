@@ -132,7 +132,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
   - [x] End-to-end product check. The output is restricted to macrophage/monocyte, logged in §1 as critical (`794fad5`).
   - [x] Exploratory 5-type score (T = CD4T + CD8T), labelled "added after results" (`794fad5`).
 - [x] **Khoury 2026 registered as a SEALED final test set** (timsTOF, mTRAQ 2-plex, 1,651 PBMCs, 2 donors, 5 types; protein-only Seurat labels). Scored exactly once, at the final v3.1 evaluation, under `research/benchmark/protocol-khoury2026.md`. Until then: no embeddings, no scores, and no per-cell labels (the loader refuses). Only label-free facts are recorded.
-- **Fulcher 2026 has been scored once.** Nothing is tuned on it, and it is re-scored only at the final v3.1 evaluation.
+- **Fulcher 2026's role (owner decision, 2026-09-30; supersedes "re-scored only at the final v3.1 evaluation").** Its first scoring under the frozen protocol (`629d2cf`, `794fad5`) remains the held-out result. From now on it is a development dataset, like PBMC240. **Khoury 2026 is the only sealed final test.**
 - [ ] Rest of the roadmap's Track E (registry, download scripts, leakage guard, further MS datasets): not started
 
 ### Track F, v3.1 integration (branch `integration/v31`)
@@ -217,7 +217,7 @@ T1 NB1d's per-seed embeddings (`research/notebook-outputs/nb1d/`).
 | v3 (5 seeds) minus scANVI (3 seeds), unrestricted, shared kNN | ours ahead 12, scANVI ahead 3; mean Δ +18.14 ± 17.14 |
 | V2 (5 seeds) minus scANVI (3 seeds) | never reliably ahead: restricted shared kNN 0 ahead / 15 behind; pool first 4 / 11; unrestricted 4 / 8 (3 not significant) |
 | PBMC240 raw, lineage (development dataset, used to choose V2), lymphoid recall n=117 / myeloid recall n=5 (anecdotal), 5 seeds | v3 52.82 ± 7.73 / 100.0; V2 92.82 ± 0.76 / 80.0; scANVI, better of two inputs (processed), 3 seeds: 17.95 shared kNN / 21.37 native, myeloid 100.0 with 66–82% of all cells called myeloid |
-| **Fulcher 2026 (held out, TMT, 1,251 cells, 6 types, chance 16.7, scored once), bal. acc., nearest centroid / shared kNN** | V2 57.32 ± 2.20 / 55.47 ± 2.64; v3 42.34 ± 3.42 / 42.05 ± 2.93 (`v3_seed0` 44.1 / 41.8); scANVI best arm (932 measured genes) 37.65 ± 2.12 native / 47.83 ± 0.87 kNN; scANVI on the 2,907-gene space (1,975 zero-filled) 18.98 / 21.36 |
+| **Fulcher 2026 (the held-out scoring, now a development dataset; TMT, 1,251 cells, 6 types, chance 16.7), bal. acc., nearest centroid / shared kNN** | V2 57.32 ± 2.20 / 55.47 ± 2.64; v3 42.34 ± 3.42 / 42.05 ± 2.93 (`v3_seed0` 44.1 / 41.8); scANVI best arm (932 measured genes) 37.65 ± 2.12 native / 47.83 ± 0.87 kNN; scANVI on the 2,907-gene space (1,975 zero-filled) 18.98 / 21.36 |
 | Fulcher 2026 paired bootstrap vs scANVI's best arm | V2 > v3 in 50 of 50; V2 > scANVI in 30 of 30 (+7.6 kNN, +19.7 product rule vs native); **v3 vs scANVI: behind in 12 of 15 under shared kNN (mean −5.8), ahead in 9 of 15 product rule vs native (6 not significant)**. Against the zero-filled 2,907-gene arm, which the first write-up used, v3 led in 30 of 30 |
 | Fulcher 2026 lineage recall, nearest centroid, lymphoid / myeloid | V2 98.5 / 93.1; v3 78.3 / 98.9. DC recall ≤ 8.9 for every method |
 | Unsupervised methods (MaxFuse, Harmony, scGLUE), restricted | about 47 to 54 bal, at chance |
@@ -238,7 +238,7 @@ Sources for the 5-seed, paired-bootstrap and PBMC240 rows:
 `paired_bootstrap_ours_vs_scanvi.csv`, `real_data_per_seed.csv`,
 `scanvi_pbmc240_input_variants.csv`. Full writeup: `research/benchmark/results.md`.
 
-Still needed before claiming state of the art: the sealed Khoury 2026 final test (scored once, at the final v3.1 evaluation), on top of Fulcher 2026.
+Still needed before claiming state of the art: the sealed Khoury 2026 final test, scored once at the final v3.1 evaluation. It is the only sealed test; Fulcher 2026 is now development data.
 The published held out cell type AUC of 1.000 is not a valid unseen type test,
 because the held out classes were in training.
 
