@@ -53,7 +53,7 @@ those two classes (`config.CROSS_MODAL_SUPPORTED_CLASSES`) is, on this one
 dataset, restricting to the true label set — the number reflects that
 match, not a property of the model that holds on other data. On any upload
 containing other cell types (e.g. PBMC240, which has T and NK cells), the
-same hardcoded restriction is actively wrong: see failure mode 1 below.
+same restriction is actively wrong. That is why it is now opt-in; see failure mode 1 below.
 Second: `v3_seed0` — the checkpoint actually shipped — is the
 best-performing of five independently trained seeds of the same
 architecture by a wide margin (79.8% vs. a 5-seed mean of 71.5% ± 10.6,
@@ -82,15 +82,22 @@ fixed and zero-shot on the query.**
 
 ## Known failure modes
 
-1. **Hardcoded two-class label space.**
-   `config.CROSS_MODAL_SUPPORTED_CLASSES = ("macrophage", "monocyte")`. A
-   protein upload of any non-myeloid cell type (T cell, NK cell, B cell,
-   etc.) can only ever be assigned "macrophage", "monocyte", or abstain —
-   never its true label — no matter how well-separated its embedding is.
-   Confirmed on real PBMC240 data: the same embeddings that score 0%
-   lymphoid recall restricted score 46.6% lymphoid recall unrestricted. This
-   is a **correctness** limitation, not only an accuracy one. Tracked until
-   label-space estimation (T1 NB2) lands.
+1. **The two-class label space, now opt-in.**
+   `config.CROSS_MODAL_SUPPORTED_CLASSES = ("macrophage", "monocyte")`.
+   - **When restricted,** a protein upload of any non-myeloid cell type
+     (T cell, NK cell, B cell, etc.) can only ever be assigned "macrophage",
+     "monocyte", or abstain. It can never get its true label, however
+     well-separated its embedding is. Confirmed on real data twice:
+     - PBMC240: the same embeddings that score 0% lymphoid recall restricted
+       score 46.6% unrestricted.
+     - The held-out Fulcher 2026 PBMC upload: the restricted service labelled
+       every cell it didn't abstain on as macrophage or monocyte.
+   - **Since 2026-09-30 the restriction is opt-in per request**
+     (`restrict_to_supported_classes`), and the default assigns among all 22
+     classes. That default is an interim fix, not a solution. On Fulcher it
+     abstains on 48% of cells and labels only 2.1% monocyte, against 36% in
+     the annotation (`research/benchmark/results.md`).
+   - **Owners:** T1 NB2 (label space estimation) and Track C.
 2. **Macrophage placement.** Even within the two supported classes,
    cross-modal alignment is weak for macrophage: latent centroid cosine is
    0.19 for macrophage vs. 0.830 for monocyte, and protein-side macrophage

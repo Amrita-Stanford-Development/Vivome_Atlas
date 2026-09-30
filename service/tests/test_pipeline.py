@@ -59,6 +59,34 @@ class RunProjectionEndToEndTests(unittest.TestCase):
         self.assertEqual(result["n_features_unmatched"], 2)
         self.assertEqual(result["n_features_matched"], 200)
 
+    def test_label_space_defaults_to_every_reference_class(self):
+        result = self._run()
+        self.assertFalse(result["label_space"]["restricted_to_supported_classes"])
+        self.assertEqual(result["label_space"]["candidate_classes"], [c.class_name for c in self.metadata.classes])
+
+    def test_opting_in_restricts_every_label_set_to_the_supported_classes(self):
+        rng = np.random.default_rng(0)
+        cells = [f"cell_{i}" for i in range(6)]
+        raw = alignment.parse_matrix_csv(fixtures.synthetic_matrix_csv(
+            list(rng.choice(self.feature_genes, size=200, replace=False)), cells))
+        result = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=True)
+        supported = set(pipeline.config.CROSS_MODAL_SUPPORTED_CLASSES)
+        self.assertEqual(set(result["label_space"]["candidate_classes"]), supported)
+        for cell in result["cells"]:
+            self.assertTrue(set(cell["label_set"]) <= supported)
+
+    def test_without_an_rng_the_calibration_slice_is_seeded_from_the_upload(self):
+        rng = np.random.default_rng(1)
+        text = fixtures.synthetic_matrix_csv(list(rng.choice(self.feature_genes, size=200, replace=False)),
+                                             [f"cell_{i}" for i in range(30)])
+        raw = alignment.parse_matrix_csv(text)
+        default = pipeline.run_projection(self.bundle, raw)
+        self.assertEqual(default, pipeline.run_projection(self.bundle, alignment.parse_matrix_csv(text)))
+        self.assertEqual(default, pipeline.run_projection(
+            self.bundle, raw, rng=np.random.default_rng(pipeline.upload_seed(raw))))
+        # The upload is sensitive to the slice, so the checks above have teeth.
+        self.assertNotEqual(default, pipeline.run_projection(self.bundle, raw, rng=np.random.default_rng(12345)))
+
     def test_model_version_is_labelled_production(self):
         result = self._run()
         self.assertEqual(result["model_version"], "production")

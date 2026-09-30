@@ -11,6 +11,7 @@ misconfiguration rather than an artifact that genuinely doesn't exist yet.
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 from dataclasses import dataclass
 
 import numpy as np
@@ -100,14 +101,43 @@ def embed_query(
     return query_embeddings, aligned, value_scale
 
 
-def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.random.Generator | None = None) -> dict:
+def upload_seed(raw: alignment.RawMatrix) -> int:
+    """A seed derived from the upload itself: its gene names, cell ids and
+    values. Stage 5 draws its random calibration slice from this, so the same
+    file always gives the same conformal sets and abstentions. With an
+    unseeded generator, identical uploads used to disagree (Fulcher 2026:
+    15.6% vs 12.2% abstained)."""
+    digest = hashlib.sha256()
+    digest.update("\n".join(raw.gene_names).encode("utf-8"))
+    digest.update(b"\0")
+    digest.update("\n".join(raw.cell_ids).encode("utf-8"))
+    digest.update(b"\0")
+    digest.update(np.ascontiguousarray(raw.values, dtype=np.float32).tobytes())
+    return int.from_bytes(digest.digest()[:8], "big")
+
+
+def run_projection(
+    bundle: ReferenceBundle,
+    raw: alignment.RawMatrix,
+    rng: np.random.Generator | None = None,
+    restrict_to_supported_classes: bool = False,
+) -> dict:
     """Runs Stages 1-8 and returns the response dict. `cells` entries match
     docs/service/projection-api.md exactly; `properties` and `model_version` are
     additive fields not yet in that published contract (see
     service/README.md) and should not be assumed by a strict reader of the
     doc alone.
+
+    Stage 4 chooses among all reference classes by default.
+    `restrict_to_supported_classes=True` opts in to the old behaviour:
+    labels are limited to config.CROSS_MODAL_SUPPORTED_CLASSES. It is not the
+    default because a lymphoid upload then has no correct label: the Fulcher
+    2026 PBMC upload came back entirely macrophage/monocyte or abstained.
+
+    Without an explicit `rng`, the calibration slice is seeded from the
+    upload (upload_seed), so identical uploads give identical responses.
     """
-    rng = rng or np.random.default_rng()
+    rng = rng or np.random.default_rng(upload_seed(raw))
 
     # assign_labels/top_label/calibrate_and_build_sets all work in centroid
     # ROW POSITION (0..n_classes-1), not the dataset's class_idx — the two
@@ -120,7 +150,7 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
     allowed_positions = {
         position for position, name in enumerate(class_name_by_position)
         if name in config.CROSS_MODAL_SUPPORTED_CLASSES
-    }
+    } if restrict_to_supported_classes else None
 
     # Track B: resolve this upload's gene identifiers (symbol, Ensembl ID,
     # UniProt accession, or a DIA-NN-style semicolon group) for reporting —
@@ -133,8 +163,10 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
     # Stages 0-3
     query_embeddings, aligned, value_scale = embed_query(bundle.encoder_handle, bundle.feature_genes, raw)
 
-    # Stage 4 — restricted to config.CROSS_MODAL_SUPPORTED_CLASSES (see
-    # assignment.py's module docstring for the measured justification).
+    # Stage 4 — all reference classes by default. Restricted to
+    # config.CROSS_MODAL_SUPPORTED_CLASSES only when the request opts in (see
+    # assignment.py's module docstring for why that restriction exists, and
+    # run_projection's docstring for why it is no longer the default).
     probs = assignment.assign_labels(
         query_embeddings, bundle.reference_centroids,
         reference_embeddings=bundle.reference_embeddings,
@@ -163,12 +195,15 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
     # That was the original design, and it was right for an *unrestricted*
     # assignment (Stage 4 competing across all classes, so the sum genuinely
     # reflected how much of the total mass this broader claim captured). But
-    # config.CROSS_MODAL_SUPPORTED_CLASSES now restricts Stage 4 to exactly
-    # the two classes in the only confusable pair that can still trigger this
-    # branch — so the two probabilities always sum to ~1.0 by construction,
-    # and reporting that sum as "confidence" would report 1.0 for every
-    # resolved cell regardless of whether the split was 50/50 or 99/1. The
-    # winning share is what actually varies and is worth reporting.
+    # when config.CROSS_MODAL_SUPPORTED_CLASSES restricts Stage 4 to exactly
+    # the two classes in that one confusable pair, the two probabilities
+    # always sum to ~1.0 by construction, and reporting that sum as
+    # "confidence" would report 1.0 for every resolved cell regardless of
+    # whether the split was 50/50 or 99/1. The winning share is what varies.
+    # Now that restriction is opt-in, the unrestricted default is the case
+    # where the summed probability would again carry information. Choosing
+    # between the two rules per mode is open (research/todo.md, Track C);
+    # until then both modes report the winning share.
     resolved_label = [None] * len(calibrated.label_sets)
     resolved_confidence = [None] * len(calibrated.label_sets)
     for i, reason in enumerate(abstention_result.reason):
@@ -221,6 +256,11 @@ def run_projection(bundle: ReferenceBundle, raw: alignment.RawMatrix, rng: np.ra
         "n_features_matched": aligned.n_features_matched,
         "n_features_unmatched": aligned.n_features_unmatched,
         "value_scale": {"detected": value_scale.detected, "transformed": value_scale.transformed},
+        "label_space": {
+            "restricted_to_supported_classes": restrict_to_supported_classes,
+            "candidate_classes": [class_name_by_position[p] for p in sorted(allowed_positions)]
+                                 if allowed_positions is not None else class_name_by_position,
+        },
         "gene_id_resolution": {
             "matched": gene_id_resolution.matched,
             "unmapped": gene_id_resolution.unmapped,

@@ -722,21 +722,46 @@ would, with default settings: the FragPipe table as written, filtered to the
 1,275 QC-passed cells. It records only what comes back, never an accuracy
 ([product_check.json](fulcher2026/product_check.json)).
 
-**The service returned only macrophage (43.5%) or monocyte (44.3%), and
-abstained on the rest (12.2%).** Every non-abstained cell's label and
-conformal set is one of the two `CROSS_MODAL_SUPPORTED_CLASSES`. By the
-authors' annotation, 741 of the 1,251 labelled cells are lymphoid (T, NK or
-B cells), so the product labels every lymphoid cell it doesn't abstain on
-as a myeloid type. This is the model card's failure mode 1, now confirmed
-on a held-out upload. It is logged as a critical product defect, owned by
-NB2 and Track C, and deliberately not fixed here.
+**Before the interim fix, when the default restricted labels to
+macrophage/monocyte.** The service returned only macrophage (43.5%) or
+monocyte (44.3%), and abstained on the rest (12.2%). By the authors'
+annotation, 741 of the 1,251 labelled cells are lymphoid. The same file
+also gave different abstentions on a repeat POST (15.6%), because the Stage 5
+calibration subset was unseeded.
 
-**Identical uploads do not return identical results.** The first POST of
-the same file (same input hash) abstained on 15.6% of cells, not 12.2%. The
-HTTP handler calls `run_projection` without a seed. So each request draws a
-fresh random calibration slice (Stage 5), and conformal sets and
-abstentions change between identical requests. This is logged alongside
-the defect above, and also not fixed here.
+**After the interim fix.** The restriction is now opt-in, via the
+`restrict_to_supported_classes` request field, and the calibration subset
+is seeded from a hash of the upload. The committed check now shows the new
+default. Two POSTs of the same file return identical records, and the
+output is no longer restricted:
+
+| Returned | Share of 1,275 cells |
+|---|---|
+| abstained: ambiguous between classes | 40.4% |
+| abstained: no confident label | 4.5% |
+| abstained: outside supported region | 3.5% |
+| cytotoxic lymphocyte (CD8 T / NK fallback) | 20.5% |
+| CD8 T | 11.5% |
+| neutrophil | 6.1% |
+| macrophage | 5.4% |
+| B cell | 2.6% |
+| NK cell | 2.3% |
+| classical monocyte, monocyte | 2.1% |
+| regulatory T, plasma cell, myeloid DC, mature NK T | 1.1% |
+
+Lymphoid cells now get lymphoid labels, and four of the five confusable
+pairs can be reached again. The result is still far from usable:
+
+- **Almost half the cells abstain,** mostly because their conformal sets
+  span several of the 22 classes.
+- **Monocytes are almost never called monocyte.** By the authors'
+  annotation, 36% of cells are monocytes. The service labels 2.1% of cells
+  monocyte and sends the rest to neutrophil, macrophage or abstention.
+
+This is v3, the served model. NB2's decision rule, recalibrated abstention
+and conformal, and the v3.1 encoder are the planned fixes. This check
+reports composition only. It is not scored, and Fulcher is development data
+now.
 
 ### Decision taken
 

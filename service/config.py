@@ -172,6 +172,9 @@ SHIPPED_PROPERTIES = (
 # (service/model/evidence/v3_tables/support_restricted_assignment.csv): restricting
 # assignment to them moves balanced accuracy from 31.08% (all 22 classes
 # candidate) to 79.79% (these 2 candidate) on real SCoPE2 data.
+# Opt-in per request since 2026-09-30 (restrict_to_supported_classes), not
+# the default: a SCoPE2 upload is only ever macrophage/monocyte, but a PBMC
+# upload restricted this way has no correct label for its lymphoid cells.
 CROSS_MODAL_SUPPORTED_CLASSES = ("macrophage", "monocyte")
 
 # On real protein data, nearest-centroid beat both OT and kNN — the opposite

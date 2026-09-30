@@ -78,6 +78,16 @@ def _parse_multipart(content_type: str, body: bytes) -> dict[str, bytes]:
     return fields
 
 
+def _parse_bool_field(value: bytes | None) -> bool:
+    """Optional true/false form field; absent or empty means false."""
+    text = (value or b"").decode("utf-8").strip().lower()
+    if text in ("", "false", "0", "no"):
+        return False
+    if text in ("true", "1", "yes"):
+        return True
+    raise ValueError(f"restrict_to_supported_classes must be true or false, got {text!r}")
+
+
 def _log_upload(matrix_text: str, result: dict) -> None:
     """Per-upload audit line (Track B) — enough to debug a bad projection or
     watch for drift (coverage collapsing, abstention rate climbing) without
@@ -93,14 +103,15 @@ def _log_upload(matrix_text: str, result: dict) -> None:
 
     logger.info(
         "upload input_hash=%s n_cells=%d feature_coverage=%.4f observed_genes_median=%s "
-        "value_scale=%s supported_classes=%s abstention_rate=%.4f abstain_reasons=%s "
+        "value_scale=%s label_space=%s abstention_rate=%.4f abstain_reasons=%s "
         "model_version=%s gene_map_version=%s",
         hashlib.sha256(matrix_text.encode("utf-8")).hexdigest()[:16],
         n_cells,
         result["n_features_matched"] / n_features_total if n_features_total else 0.0,
         statistics.median(cell["observed_genes"] for cell in result["cells"]) if result["cells"] else None,
         result["value_scale"],
-        config.CROSS_MODAL_SUPPORTED_CLASSES,
+        ("restricted:" + ",".join(result["label_space"]["candidate_classes"])
+         if result["label_space"]["restricted_to_supported_classes"] else "unrestricted"),
         n_abstained / n_cells if n_cells else 0.0,
         reason_counts,
         result["model_version"],
@@ -139,6 +150,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
                 self._send_json(400, {"error": f"modality must be 'rna' or 'prot', got {modality!r}"})
                 return
             matrix_text = fields["matrix"].decode("utf-8")
+            restrict = _parse_bool_field(fields.get("restrict_to_supported_classes"))
         except KeyError as exc:
             self._send_json(400, {"error": f"missing required field: {exc}"})
             return
@@ -168,7 +180,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             return
 
         try:
-            result = pipeline.run_projection(bundle, raw)
+            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict)
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})

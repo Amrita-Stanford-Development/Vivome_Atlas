@@ -83,20 +83,33 @@ Summed probability was right when Stage 4 competed across all 22 classes —
 it measured how much total mass the broader claim captured. It stopped
 being meaningful once `config.CROSS_MODAL_SUPPORTED_CLASSES` restricted
 Stage 4 to exactly the two classes in the only pair that can still trigger
-this branch (macrophage/monocyte): the two probabilities now always sum to
+this branch (macrophage/monocyte). The two probabilities then always sum to
 ~1.0 by construction, so summed confidence would read 1.0 for every
 resolved cell regardless of whether the split was 50/50 or 99/1. The
 winning share, normalised within the pair, is what actually varies. See
 `service/pipeline/pipeline.py`'s Stage 7 comment and
 `service/tests/test_pipeline.py`'s `FallbackConfidenceTests`.
 
-**4 of the 5 `CONFUSABLE_PAIRS` are currently unreachable.** Restricting
-Stage 4 to `config.CROSS_MODAL_SUPPORTED_CLASSES` means no conformal set can
-ever contain a class outside {macrophage, monocyte} — so `resolve_fallback`
-can only ever match that one pair. The other four (naive/CD4, CD8/NK,
-mature-NKT/CD8, intermediate/classical-monocyte) are real, tested, and
-dormant until label assignment is either unrestricted or restricted to a
-wider supported set.
+Since the restriction became opt-in (below), the default is unrestricted
+again. That is the case where summed confidence carried information, so
+which rule to use per mode is open again (Track C in `research/todo.md`).
+Both modes report the winning share for now.
+
+**The macrophage/monocyte restriction is opt-in per request** (form field
+`restrict_to_supported_classes`, default false; see
+[`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
+Restricting Stage 4 to `config.CROSS_MODAL_SUPPORTED_CLASSES` lifts SCoPE2's
+balanced accuracy from 31.08% to 79.79%, because SCoPE2 only contains those
+two types. It is wrong for anything else. Given a Fulcher 2026 PBMC upload,
+the restricted service labelled every cell it didn't abstain on as
+macrophage or monocyte. Restricted, `resolve_fallback` can match only that
+one pair. Unrestricted, the default, all five `CONFUSABLE_PAIRS` are
+reachable.
+
+**Identical uploads give identical responses.** The Stage 5 calibration
+subset is drawn from a generator seeded with a hash of the upload
+(`pipeline.upload_seed`). Before this, it was unseeded, and the same file
+could return different abstentions.
 
 ## Running it
 

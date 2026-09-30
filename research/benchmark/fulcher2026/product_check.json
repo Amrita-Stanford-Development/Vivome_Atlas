@@ -18,6 +18,33 @@
       "detected": "linear",
       "transformed": true
     },
+    "label_space": {
+      "restricted_to_supported_classes": false,
+      "candidate_classes": [
+        "b cell",
+        "basophil",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "common myeloid progenitor",
+        "erythrocyte",
+        "hematopoietic precursor cell",
+        "hematopoietic stem cell",
+        "intermediate monocyte",
+        "macrophage",
+        "mature nk t cell",
+        "monocyte",
+        "myeloid dendritic cell",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "neutrophil",
+        "non-classical monocyte",
+        "plasma cell",
+        "plasmacytoid dendritic cell",
+        "platelet",
+        "regulatory t cell"
+      ]
+    },
     "gene_id_resolution": {
       "matched": 1654,
       "unmapped": 7,
@@ -36,20 +63,52 @@
     "reference_abstain_threshold": 0.9779149889945984
   },
   "returned_composition_count": {
-    "monocyte": 565,
-    "macrophage": 554,
-    "abstained: no_confident_label": 89,
-    "abstained: outside_supported_region": 67
+    "abstained: ambiguous_between_classes": 515,
+    "cytotoxic lymphocyte (cd8 t cell / nk cell)": 261,
+    "cd8-positive, alpha-beta t cell": 147,
+    "neutrophil": 78,
+    "macrophage": 69,
+    "abstained: no_confident_label": 58,
+    "abstained: outside_supported_region": 44,
+    "b cell": 33,
+    "natural killer cell": 29,
+    "classical monocyte": 19,
+    "monocyte": 8,
+    "regulatory t cell": 7,
+    "plasma cell": 3,
+    "myeloid dendritic cell": 2,
+    "mature nk t cell": 2
   },
   "returned_composition_pct": {
-    "monocyte": 44.31,
-    "macrophage": 43.45,
-    "abstained: no_confident_label": 6.98,
-    "abstained: outside_supported_region": 5.25
+    "abstained: ambiguous_between_classes": 40.39,
+    "cytotoxic lymphocyte (cd8 t cell / nk cell)": 20.47,
+    "cd8-positive, alpha-beta t cell": 11.53,
+    "neutrophil": 6.12,
+    "macrophage": 5.41,
+    "abstained: no_confident_label": 4.55,
+    "abstained: outside_supported_region": 3.45,
+    "b cell": 2.59,
+    "natural killer cell": 2.27,
+    "classical monocyte": 1.49,
+    "monocyte": 0.63,
+    "regulatory t cell": 0.55,
+    "plasma cell": 0.24,
+    "myeloid dendritic cell": 0.16,
+    "mature nk t cell": 0.16
   },
   "distinct_labels_returned": [
+    "b cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "cytotoxic lymphocyte (cd8 t cell / nk cell)",
     "macrophage",
-    "monocyte"
+    "mature nk t cell",
+    "monocyte",
+    "myeloid dendritic cell",
+    "natural killer cell",
+    "neutrophil",
+    "plasma cell",
+    "regulatory t cell"
   ],
-  "output_restricted_to_supported_classes": true
+  "output_restricted_to_supported_classes": false
 }

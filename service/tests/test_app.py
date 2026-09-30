@@ -7,6 +7,8 @@ from http.server import ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
+
 from service import app, config
 from service.pipeline import coordinates, pipeline, reference
 from service.tests import fixtures
@@ -31,11 +33,13 @@ class ParseMultipartTests(unittest.TestCase):
         self.assertEqual(fields["matrix"], b"gene,c1\nA1BG,1.0\n")
 
 
-def _post_multipart(url: str, modality: bytes, matrix: bytes) -> tuple[int, dict]:
+def _post_multipart(url: str, modality: bytes, matrix: bytes, extra: dict[str, bytes] | None = None) -> tuple[int, dict]:
     boundary = "TESTBOUNDARY"
     body = (
         f'--{boundary}\r\nContent-Disposition: form-data; name="modality"\r\n\r\n'.encode()
         + modality
+        + b"".join(f'\r\n--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n'.encode() + value
+                   for name, value in (extra or {}).items())
         + f'\r\n--{boundary}\r\nContent-Disposition: form-data; name="matrix"; filename="m.csv"\r\n\r\n'.encode()
         + matrix
         + f"\r\n--{boundary}--\r\n".encode()
@@ -137,9 +141,43 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         upload_lines = [line for line in captured.output if "upload input_hash=" in line]
         self.assertEqual(len(upload_lines), 1)
         line = upload_lines[0]
-        for expected in ("n_cells=25", "feature_coverage=", "value_scale=", "supported_classes=",
+        for expected in ("n_cells=25", "feature_coverage=", "value_scale=", "label_space=unrestricted",
                          "abstention_rate=", "model_version=", "gene_map_version="):
             self.assertIn(expected, line)
+
+    def test_the_same_file_posted_twice_gives_identical_output(self):
+        # 200 randomly drawn genes: an upload whose conformal sets depend on the
+        # calibration slice. Checked to fail against the old unseeded code.
+        feature_genes = self._install_synthetic_bundle()
+        genes = list(np.random.default_rng(1).choice(feature_genes, size=200, replace=False))
+        matrix = fixtures.synthetic_matrix_csv(genes, [f"c{i}" for i in range(80)]).encode()
+        first = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+        second = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+        self.assertEqual(first[0], 200)
+        self.assertEqual(first, second)
+
+    def test_label_space_is_unrestricted_by_default_and_restricted_on_request(self):
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        url = f"{self.base_url}/api/project"
+
+        status, default = _post_multipart(url, b"prot", matrix)
+        self.assertEqual(status, 200)
+        self.assertFalse(default["label_space"]["restricted_to_supported_classes"])
+        self.assertEqual(len(default["label_space"]["candidate_classes"]), 22)
+
+        status, restricted = _post_multipart(url, b"prot", matrix, {"restrict_to_supported_classes": b"true"})
+        self.assertEqual(status, 200)
+        self.assertTrue(restricted["label_space"]["restricted_to_supported_classes"])
+        self.assertEqual(set(restricted["label_space"]["candidate_classes"]), set(config.CROSS_MODAL_SUPPORTED_CLASSES))
+        for cell in restricted["cells"]:
+            self.assertTrue(set(cell["label_set"]) <= set(config.CROSS_MODAL_SUPPORTED_CLASSES))
+
+    def test_a_malformed_restriction_option_is_400(self):
+        status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", b"gene,c1\nA1BG,1.0\n",
+                                          {"restrict_to_supported_classes": b"sometimes"})
+        self.assertEqual(status, 400)
+        self.assertIn("restrict_to_supported_classes", payload["error"])
 
     def test_real_dia_nn_pbmc240_upload_runs_end_to_end(self):
         """Track B follow-up: the actual PBMC_240cells_proteins.tsv DIA-NN

@@ -213,6 +213,8 @@ export function buildSupportedLabelSpace(manifest) {
     .map((c) => escapeHtml(c.name));
   return `
     <p><strong>Cross-modal support (${formatCount(supported.length)}):</strong> ${supported.join(', ')}</p>
-    <p><strong>RNA-only (${formatCount(manifest.summary?.rna_only)}):</strong> projection onto these
-    types has no proteomics evidence and the service abstains for protein queries.</p>`;
+    <p><strong>RNA-only (${formatCount(manifest.summary?.rna_only)}):</strong> these types have no
+    proteomics evidence yet. By default the service can still assign them to protein queries;
+    a request can set <code>restrict_to_supported_classes</code> to limit labels to the
+    cross-modal types.</p>`;
 }

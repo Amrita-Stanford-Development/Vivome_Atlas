@@ -21,7 +21,7 @@
     "pbmc240_recipe_reconstruction_cosine_to_processed_file": 0.9969
   },
   "known_limitations": {
-    "hardcoded_supported_classes": "CROSS_MODAL_SUPPORTED_CLASSES = (macrophage, monocyte) means every non-myeloid upload (T cell, NK cell, etc.) can only ever be labelled macrophage or monocyte, or abstain -- never its true lineage. Not fixed by any preprocessing choice in this file. Owner: T1 NB2 (label space estimation)."
+    "hardcoded_supported_classes": "CROSS_MODAL_SUPPORTED_CLASSES = (macrophage, monocyte). Since 2026-09-30 the restriction is opt-in per request (restrict_to_supported_classes); the default assigns among all 22 reference classes. Restricted, a non-myeloid upload (T cell, NK cell, etc.) can only be labelled macrophage or monocyte, or abstain (confirmed on Fulcher 2026). Owners: T1 NB2 (label space estimation) and Track C."
   },
   "source_commit": "faithfulness/a2"
 }

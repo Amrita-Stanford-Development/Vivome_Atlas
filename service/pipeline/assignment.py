@@ -5,7 +5,11 @@ Two independent, measured decisions, both encoded in service/config.py
 rather than here — this module reads them, it doesn't restate them:
 
 **Restrict the candidate set to classes with cross-modal support**
-(`config.CROSS_MODAL_SUPPORTED_CLASSES`). Letting all 22 reference classes
+(`config.CROSS_MODAL_SUPPORTED_CLASSES`) — opt-in per request since
+2026-09-30. `pipeline.run_projection` passes `allowed_positions=None`
+(every class a candidate) by default, because on a PBMC upload the
+restriction leaves every lymphoid cell without a correct label. The SCoPE2
+evidence below is why the option exists. Letting all 22 reference classes
 compete lets the 20 with zero protein evidence win, and on real SCoPE2 data
 they frequently do — restricting the candidate set alone moves balanced
 accuracy from 31.08% to 79.79%. This restriction is a hard mask: an

@@ -76,8 +76,9 @@
             <pre>POST /api/project
 Content-Type: multipart/form-data
 
-  modality : "rna" | "prot"
-  matrix   : CSV, features in rows, cells in columns
+  modality                      : "rna" | "prot"
+  matrix                        : CSV, features in rows, cells in columns
+  restrict_to_supported_classes : "true" | "false"   (optional, default "false")
 
 200 Response
 {

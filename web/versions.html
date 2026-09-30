@@ -87,7 +87,7 @@
                 SCoPE2 <em>by construction</em>, on two separate counts. First: SCoPE2's protein
                 cells are only ever macrophage or monocyte, so restricting to exactly those two
                 classes matches its true label set on this one dataset — on other data with other
-                cell types present, the same hardcoded restriction is wrong (see failure mode 1).
+                cell types present, the same restriction is wrong (see failure mode 1).
                 Second: <code>v3_seed0</code> — the checkpoint actually running in production —
                 is the best of five independently trained seeds of the same architecture by a
                 wide margin (79.8% vs. a 5-seed mean of 71.5% ± 10.6, range 59.0–88.4).
@@ -107,10 +107,11 @@
             </p>
             <p style="font-size: 13px; margin-bottom: 4px;"><strong>Known failure modes:</strong></p>
             <ol style="font-size: 13px;">
-                <li>Hardcoded two-class label space: a non-myeloid protein upload (T cell, NK
-                    cell, B cell, etc.) can only ever be labelled macrophage, monocyte, or
-                    abstain — never its true label. A correctness limitation, not only an
-                    accuracy one.</li>
+                <li>Two-class label space, now opt-in: when a request restricts labels to the
+                    supported classes, a non-myeloid protein upload (T cell, NK cell, B cell,
+                    etc.) can only ever be labelled macrophage, monocyte, or abstain — never its
+                    true label. The default now assigns among all 22 classes; that is an interim
+                    fix, not a solution (see the model card).</li>
                 <li>Macrophage placement: cross-modal alignment is weak for macrophage
                     specifically (latent centroid cosine 0.19 vs. 0.83 for monocyte;
                     protein-side recall 0.76%), even though the macrophage-vs-monocyte

@@ -68,7 +68,10 @@ class GoldenFixtureTestsBase:
             cls.golden = json.load(f)
         bundle = pipeline.ReferenceBundle.load()
         raw = cls.raw_loader()
-        cls.fresh = pipeline.run_projection(bundle, raw, rng=np.random.default_rng(0))
+        # The fixtures were frozen under the macrophage/monocyte restriction,
+        # which is now opt-in, so these runs opt in explicitly.
+        cls.fresh = pipeline.run_projection(bundle, raw, rng=np.random.default_rng(0),
+                                            restrict_to_supported_classes=True)
 
     def test_dataset_level_fields_match(self):
         for key in ("atlas_version", "model_version", "n_cells", "n_features_matched",

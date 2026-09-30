@@ -18,9 +18,22 @@ can *send data to*, not only look at.
 POST /api/project
 Content-Type: multipart/form-data
 
-  modality : "rna" | "prot"
-  matrix   : CSV or TSV (auto-detected), features in rows, cells in columns
+  modality                      : "rna" | "prot"
+  matrix                        : CSV or TSV (auto-detected), features in rows, cells in columns
+  restrict_to_supported_classes : "true" | "false"   (optional; default "false")
 ```
+
+**`restrict_to_supported_classes`** limits every label to the classes with
+cross-modal protein evidence (`config.CROSS_MODAL_SUPPORTED_CLASSES`,
+currently macrophage and monocyte). By default labels are assigned among
+all 22 reference classes. The restriction is right for an upload known to
+contain only those cell types, such as SCoPE2. It is wrong for anything
+else: a PBMC upload restricted this way can only be labelled macrophage or
+monocyte, or abstain. The response's `label_space` field reports which
+candidate set was used.
+
+The same file always returns the same response. The random calibration
+subset (Stage 5) is seeded from a hash of the uploaded matrix.
 
 The matrix has feature names in the first column and cell IDs in the header
 row. A real DIA-NN report is also accepted directly: when a "Genes" column
@@ -39,6 +52,7 @@ cleaned to its basename without `.raw`.
   "n_features_matched"   : "<int>",
   "n_features_unmatched" : "<int>",
   "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>"},
+  "label_space"          : {"restricted_to_supported_classes": "<bool>", "candidate_classes": ["<string>", "..."]},
   "gene_id_resolution"   : {"matched": "<int>", "unmapped": "<int>", "ambiguous": "<int>",
                             "unmapped_identifiers": ["<string>", "..."], "ambiguous_identifiers": ["<string>", "..."]},
   "cells": [
@@ -120,7 +134,9 @@ A projection is only meaningful onto cell types the atlas supports.
 `project.html` renders the supported set from the manifest via
 `buildSupportedLabelSpace()`, so it tracks the atlas rather than being
 restated. With the current build that is 22 cell types, only 2 of which have
-cross-modal coverage — a query outside them should abstain.
+cross-modal coverage. By default the service assigns among all 22; the
+2 cross-modal ones are the candidate set only when a request sets
+`restrict_to_supported_classes`.
 
 ## Client-side validation
 
