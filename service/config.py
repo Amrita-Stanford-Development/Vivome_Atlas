@@ -100,16 +100,6 @@ DECISIVE_SUMMARY_PATH = _env_path(
 
 ATLAS_VERSION = "0.2.0"
 
-# The site's projection page (web/project.html) calls this service from the
-# browser, so the service says which origins may read its responses (CORS).
-# The default is the site served locally, as web/README.md documents; a
-# deployment lists its own origins, comma separated.
-ALLOWED_ORIGINS = tuple(
-    origin.strip()
-    for origin in os.environ.get("VIVOME_ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",")
-    if origin.strip()
-)
-
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration
 # slice. Brief Stage 5: must be a random subset, never confidence-filtered.
 CALIBRATION_FRACTION = 0.2
@@ -195,3 +185,13 @@ ASSIGNMENT_METHOD = "nearest_centroid"  # "nearest_centroid" | "ot" | "knn"
 
 MASK_OBSERVED = 1.0
 MASK_MISSING = 0.0
+
+# The site's projection page (web/project.html) calls this service from the
+# browser, so the service says which origins may read its responses (CORS).
+# The default is the site served locally, as web/README.md documents; a
+# deployment lists its own origins, comma separated.
+ALLOWED_ORIGINS = tuple(
+    origin.strip()
+    for origin in os.environ.get("VIVOME_ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",")
+    if origin.strip()
+)
