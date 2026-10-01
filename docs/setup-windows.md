@@ -40,14 +40,34 @@ C:\Vivome\drive\          the project Drive's Data\ folder
 ## 2. Clone (Git Bash)
 
 ```bash
+git config --global user.name "Amarnath K R"
+git config --global user.email "aiamrita.stanford@gmail.com"
+git config --global credential.https://github.com.username AiAmrita
 git config --global core.autocrlf false
 git config --global core.longpaths true
 git lfs install
 mkdir -p /c/Vivome && cd /c/Vivome
-git clone https://github.com/Amrita-Stanford-Development/Vivome_Atlas.git   # signs you in through the browser
+git clone https://github.com/Amrita-Stanford-Development/Vivome_Atlas.git
 cd Vivome_Atlas && git checkout integration/v31
 git lfs pull                                                                 # about 3.5 GB
 ```
+
+Later updates, from `/c/Vivome/Vivome_Atlas`: `git pull && git lfs pull`.
+
+**Push access.** The repository belongs to the personal account
+Amrita-Stanford-Development and is public, so anyone can clone it, but only
+the owner and collaborators can push. To push as AiAmrita:
+
+1. Signed in to GitHub as **Amrita-Stanford-Development**, open the
+   repository's Settings → Collaborators
+   (github.com/Amrita-Stanford-Development/Vivome_Atlas/settings/access),
+   choose **Add people** and invite **AiAmrita**.
+2. Signed in as **AiAmrita**, accept the invitation from the email or from
+   github.com/Amrita-Stanford-Development/Vivome_Atlas/invitations.
+3. In the repository, run `git push --dry-run`. The first time, Git
+   Credential Manager opens the browser to sign in; choose AiAmrita.
+   "Everything up-to-date" means push access works; a 403 error means the
+   invitation hasn't been accepted yet.
 
 `core.autocrlf false` matters: `.gitattributes` keeps the sha256-checked
 model files byte-exact and the shell and R scripts with LF line endings, and
