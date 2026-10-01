@@ -6,15 +6,12 @@ Stdlib only (http.server + email, for multipart parsing without the
 deprecated `cgi` module) — this is one small, well-defined endpoint, not a
 reason to add a web framework dependency.
 
-The reference bundle (encoder + reference embeddings/centroids/properties)
-loads once, lazily, on first request, and is cached. If it is missing a
-pending artifact (see Download_Checklist.md, "Still waiting on"),
-`/api/project` answers 503 with which artifact is blocking it, instead of
-crashing the whole process — the server is legitimately "up" (dev
-placeholder in-progress work can still hit other diagnostics) even before
-the production reference lands. A failed load is cached too, so dropping
-the missing files in while the process is running does not self-heal —
-restart the process to pick them up.
+The reference bundle (encoder + reference embeddings/centroids/properties,
+and for v3.1 its spec, read and validated once) loads when the server
+starts and is cached once it loads. A load that fails is not cached: every
+request tries again, so files fetched while the process runs are picked up
+without a restart. Until then both endpoints answer with the reason: 503
+for a missing or not-yet-fetched artifact, 500 for any other load error.
 """
 from __future__ import annotations
 
@@ -32,7 +29,6 @@ from service.pipeline import alignment, pipeline, reference, validation
 logger = logging.getLogger("vivome.projection_service")
 
 _bundle: pipeline.ReferenceBundle | None = None
-_bundle_error: str | None = None
 # ThreadingHTTPServer serves every request on its own thread; without this,
 # a burst of concurrent first requests can each see _bundle is None and each
 # call the expensive ReferenceBundle.load() (torch.load plus a full PCA fit)
@@ -41,25 +37,31 @@ _bundle_lock = threading.Lock()
 
 
 def _get_bundle() -> pipeline.ReferenceBundle:
-    global _bundle, _bundle_error
+    """The loaded bundle; raises whatever the load raised. Nothing is
+    remembered from a failed load, so the next call checks the files again."""
+    global _bundle
     if _bundle is not None:
         return _bundle
-    if _bundle_error is not None:
-        raise reference.PendingArtifactError(_bundle_error)
     with _bundle_lock:
-        # Re-check inside the lock: another thread may have finished
-        # loading (or failing) while this one was waiting for it.
-        if _bundle is not None:
-            return _bundle
-        if _bundle_error is not None:
-            raise reference.PendingArtifactError(_bundle_error)
-        try:
+        # Re-check inside the lock: another thread may have finished loading
+        # while this one was waiting for it.
+        if _bundle is None:
             _bundle = pipeline.load_bundle(config.PIPELINE_VERSION)
             logger.info("Reference bundle loaded. model_version=%s", _bundle.model_version)
-            return _bundle
-        except reference.PendingArtifactError as exc:
-            _bundle_error = str(exc)
-            raise
+        return _bundle
+
+
+def _bundle_or_error() -> tuple[pipeline.ReferenceBundle | None, int, str]:
+    """(bundle, 200, "") or (None, status, reason): 503 while an artifact is
+    missing, 500 for any other load error. Either way the client gets an
+    answer with the reason, never a dropped connection."""
+    try:
+        return _get_bundle(), 200, ""
+    except reference.PendingArtifactError as exc:
+        return None, 503, str(exc)
+    except Exception as exc:  # noqa: BLE001 — a broken artifact must still produce an HTTP answer
+        logger.exception("could not load the reference bundle")
+        return None, 500, f"the reference could not be loaded: {type(exc).__name__}: {exc}"
 
 
 def _parse_multipart(content_type: str, body: bytes) -> dict[str, bytes]:
@@ -161,10 +163,9 @@ class ProjectionHandler(BaseHTTPRequestHandler):
         if self.path != "/api/status":
             self._send_json(404, {"error": f"no such endpoint: {self.path}"})
             return
-        try:
-            bundle = _get_bundle()
-        except reference.PendingArtifactError as exc:
-            self._send_json(503, {"status": "unavailable", "reason": str(exc)})
+        bundle, status, reason = _bundle_or_error()
+        if bundle is None:
+            self._send_json(status, {"status": "unavailable", "reason": reason})
             return
         self._send_json(200, {
             "status": "ready",
@@ -201,12 +202,11 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": f"malformed request: {exc}"})
             return
 
-        try:
-            bundle = _get_bundle()
-        except reference.PendingArtifactError as exc:
-            self._send_json(503, {
+        bundle, status, reason = _bundle_or_error()
+        if bundle is None:
+            self._send_json(status, {
                 "error": "projection service not yet available",
-                "reason": str(exc),
+                "reason": reason,
                 "see": "docs/service/download-checklist.md and service/model/README.md",
             })
             return
@@ -245,6 +245,11 @@ class ProjectionHandler(BaseHTTPRequestHandler):
 def main(host: str = "127.0.0.1", port: int = 8001) -> None:
     logging.basicConfig(level=logging.INFO)
     server = ThreadingHTTPServer((host, port), ProjectionHandler)
+    # Load now, so the spec is read and checked at startup. A failure is
+    # logged and retried on the first request.
+    _, status, reason = _bundle_or_error()
+    if status != 200:
+        logger.warning("Reference bundle not loaded yet (%d): %s", status, reason)
     logger.info("Projection service listening on http://%s:%d/api/project", host, port)
     try:
         server.serve_forever()

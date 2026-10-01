@@ -32,7 +32,7 @@ import numpy as np
 
 from service import config
 from service.pipeline import (
-    abstention, coordinates, encoder, gene_ids, label_space, pipeline, reference, search, transfer,
+    abstention, calibration, coordinates, encoder, gene_ids, label_space, pipeline, reference, search, transfer,
 )
 
 MODEL_VERSION_LABEL = "v3.1 ensemble (T1 NB2: V2 seeds 0 to 4)"
@@ -114,12 +114,16 @@ def _verify_manifest() -> dict:
             f"{manifest_path} does not exist. v3.1's files are T1 NB2's export (service/model/README.md, v3_1/)."
         )
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    for rel, entry in manifest["files"].items():
+    # Every file's presence first (cheap), so a missing file is named without
+    # hashing half a gigabyte; the service rechecks on every request until it loads.
+    for rel in manifest["files"]:
         path = config.V31_DIR / rel
         if not path.exists():
             raise reference.PendingArtifactError(
                 f"{path} does not exist (listed in {manifest_path}). Run scripts/fetch_v31_members.py."
             )
+    for rel, entry in manifest["files"].items():
+        path = config.V31_DIR / rel
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if digest != entry["sha256"]:
             raise reference.PendingArtifactError(
@@ -133,6 +137,80 @@ def load_spec() -> dict:
     if not config.V31_SPEC_PATH.exists():
         raise reference.PendingArtifactError(f"{config.V31_SPEC_PATH} does not exist. It is T1 NB2's export.")
     return json.loads(config.V31_SPEC_PATH.read_text(encoding="utf-8"))
+
+
+# Service-side behaviour flags. NB2's export carries none, so each takes its
+# default; a later notebook's spec can set them under "service_flags".
+# Neither has been evaluated on RNA yet (research/todo.md, Track F).
+SERVICE_FLAGS = {
+    "set_includes_best_guess": True,  # calibration.MondrianCalibrator
+    "restricted_renormalise": True,  # label_space.V31LabelSpace
+}
+
+
+def service_flags(spec: dict) -> dict:
+    return {**SERVICE_FLAGS, **spec.get("service_flags", {})}
+
+
+def validate_spec(spec: dict, class_names: list[str]) -> None:
+    """Every check v3.1 relies on, once, when the bundle loads. A spec that
+    fails any of them is refused (the service answers 500 with the list)
+    rather than served with a silent misreading."""
+    problems = []
+    try:
+        if spec["class_order"] != class_names:
+            problems.append("class_order is not the reference's class order; the centroids would be misread")
+        if spec["preprocessing"]["convention"] != "service" or not spec["preprocessing"]["smoothing"]:
+            problems.append("preprocessing asks for something other than the service convention with smoothing")
+        if not int(spec["preprocessing"]["min_observed_genes"]) > 0:
+            problems.append("min_observed_genes must be positive")
+        if spec["assignment"]["rule"] != "centroid" or spec["label_space"]["method"] != "none":
+            problems.append("assignment rule or label space is not one this module implements")
+        members = spec["encoder"]["members"]
+        if config.V31_COORDINATE_MEMBER not in members:
+            problems.append(f"the coordinate member {config.V31_COORDINATE_MEMBER} is not a member")
+        for name in members:
+            t = spec["assignment"]["temperature"].get(name)
+            if not (isinstance(t, (int, float)) and np.isfinite(t) and t > 0):
+                problems.append(f"no positive temperature for {name}")
+        if spec["conformal"]["type"] != "mondrian" or not 0 < float(spec["conformal"]["alpha"]) < 1:
+            problems.append("conformal must be mondrian with 0 < alpha < 1")
+        qhat = spec["conformal"]["qhat_by_class"]
+        for name in class_names:
+            q = qhat.get(name)
+            if not (isinstance(q, (int, float)) and 0 <= q <= 1):
+                problems.append(f"no qhat in [0, 1] for {name!r}")
+            node = spec["hierarchy"].get(name, {})
+            if not (isinstance(node.get("group"), str) and isinstance(node.get("lineage"), str)):
+                problems.append(f"no group and lineage for {name!r}")
+        if not -1 <= float(spec["ood"]["threshold"]) <= 1:
+            problems.append("ood threshold is not a cosine")
+        unknown = set(spec.get("service_flags", {})) - set(SERVICE_FLAGS)
+        if unknown or not all(isinstance(v, bool) for v in spec.get("service_flags", {}).values()):
+            problems.append(f"service_flags must be booleans among {sorted(SERVICE_FLAGS)}")
+    except (KeyError, TypeError, ValueError) as exc:
+        problems.append(f"missing or malformed field: {exc!r}")
+    if problems:
+        raise ValueError(f"{config.V31_SPEC_PATH} is not a usable v3.1 spec: " + "; ".join(problems))
+
+
+def build_components(spec: dict) -> "pipeline.Components":
+    """The label space, conformal and abstention stages, from one spec.
+    qhat is read by class name, in class_order."""
+    flags = service_flags(spec)
+    conformal = spec["conformal"]
+    return pipeline.Components(
+        version="v3.1",
+        label_space=label_space.V31LabelSpace(renormalise=flags["restricted_renormalise"]),
+        calibrator=calibration.MondrianCalibrator(
+            np.array([conformal["qhat_by_class"][name] for name in spec["class_order"]]),
+            conformal["marginal_qhat"], conformal["alpha"], conformal["calibrated_on"],
+            include_best_guess=flags["set_includes_best_guess"],
+        ),
+        abstention=abstention.V31AbstentionScorer(
+            float(spec["ood"]["threshold"]), int(spec["preprocessing"]["min_observed_genes"]),
+        ),
+    )
 
 
 @dataclass(frozen=True)
@@ -149,6 +227,7 @@ class V31Bundle:
     property_names: list[str]
     property_values: np.ndarray
     spec: dict
+    components: "pipeline.Components"  # built from `spec` at load; every request uses these
 
     pipeline_version = "v3.1"
 
@@ -159,15 +238,10 @@ class V31Bundle:
     @classmethod
     def load(cls) -> "V31Bundle":
         _verify_manifest()
-        spec = load_spec()
+        spec = load_spec()  # the one read; components and thresholds below all come from it
         metadata = reference.load_reference_metadata()
         class_names = [c.class_name for c in metadata.classes]
-        if class_names != spec["class_order"]:
-            raise ValueError("The reference's classes are not in NB2's class_order; the centroids would be misread.")
-        if spec["preprocessing"]["convention"] != "service" or not spec["preprocessing"]["smoothing"]:
-            raise ValueError("NB2's spec asks for preprocessing this service does not implement.")
-        if spec["assignment"]["rule"] != "centroid" or spec["label_space"]["method"] != "none":
-            raise ValueError("NB2's spec names an assignment rule or label space this module does not implement.")
+        validate_spec(spec, class_names)
 
         members = []
         for name in spec["encoder"]["members"]:
@@ -189,6 +263,7 @@ class V31Bundle:
             min_observed_genes=int(spec["preprocessing"]["min_observed_genes"]),
             pca=sign_fixed(coordinates.fit_pca_3d(members[coordinate_member].reference_latents)),
             property_names=property_names, property_values=property_values, spec=spec,
+            components=build_components(spec),
         )
 
 
@@ -218,6 +293,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
         member_probabilities(z, m.centroids, m.temperature) for z, m in zip(embeddings, bundle.members)
     ])
     space = components.label_space.estimate(None, names, restrict_to_supported_classes)
+    probs = components.label_space.probabilities(probs, space)  # renormalised over a restricted space
 
     # Stage 5: Mondrian sets. Stage 6: coverage, then out of distribution.
     calibrated = components.calibrator.calibrate(probs, None, space)
@@ -292,6 +368,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
             "names": [names[p] for p in positions],
             "method": space.method,
             "support": None,
+            "renormalised": space.positions is not None and components.label_space.renormalise,
         },
         "calibration": components.calibrator.describe(calibrated),
         "gene_id_resolution": {

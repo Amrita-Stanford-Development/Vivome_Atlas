@@ -102,21 +102,33 @@ class MondrianCalibrator:
     """v3.1 (T1 NB2): class-conditional conformal sets with a fixed qhat per
     class, fitted on labelled RNA simulated uploads. A class is in a cell's
     set when p(class) >= 1 - qhat[class] and the class is in the label
-    space. Nothing is drawn from the upload, so there is no calibration slice."""
+    space. Nothing is drawn from the upload, so there is no calibration slice.
 
-    def __init__(self, qhat_by_position: np.ndarray, marginal_qhat: float, alpha: float, calibrated_on: str):
+    With `include_best_guess` (the spec's service flag
+    `set_includes_best_guess`), every set also contains the cell's argmax
+    class within the label space. Sets only grow, so coverage is kept, and a
+    one-class answer is always the best guess: without it, a class whose qhat
+    is near 1 (mature nk t cell: bar 0.011) could be named alone at about 1%
+    probability while another class held far more."""
+
+    def __init__(self, qhat_by_position: np.ndarray, marginal_qhat: float, alpha: float, calibrated_on: str,
+                 include_best_guess: bool = True):
         self.qhat = np.asarray(qhat_by_position, dtype=np.float64)
         self.marginal_qhat = float(marginal_qhat)
         self.alpha = float(alpha)
         self.calibrated_on = calibrated_on
+        self.include_best_guess = include_best_guess
 
     def calibrate(self, probs, rng, label_space):
         threshold = 1.0 - self.qhat
         member = probs >= threshold
+        allowed = np.ones(probs.shape[1], dtype=bool)
         if label_space.positions is not None:
-            allowed = np.zeros(probs.shape[1], dtype=bool)
+            allowed[:] = False
             allowed[sorted(label_space.positions)] = True
             member &= allowed
+        if self.include_best_guess:
+            member[np.arange(len(probs)), np.where(allowed, probs, -1.0).argmax(axis=1)] = True
         label_sets = [np.flatnonzero(row).tolist() for row in member]
         return CalibrationResult(qhat=self.marginal_qhat, calibration_indices=np.zeros(0, dtype=np.int64),
                                  label_sets=label_sets)
@@ -127,4 +139,5 @@ class MondrianCalibrator:
             "target_coverage": 1 - self.alpha,
             "applies_to": f"{self.calibrated_on}; approximate on protein",
             "n_calibration_cells": 0,
+            "set_includes_best_guess": self.include_best_guess,
         }

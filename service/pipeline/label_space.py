@@ -44,9 +44,28 @@ class V3LabelSpace:
 class V31LabelSpace:
     """v3.1 (T1 NB2 chose method "none"): no per-upload estimate, every class
     a candidate. A request may still opt in to the cross-modal supported
-    classes, as in v3; NB2 did not evaluate that option."""
+    classes, as in v3; NB2 did not evaluate that option.
+
+    With `renormalise` (the spec's service flag `restricted_renormalise`), a
+    restricted request rescales each cell's probabilities over the allowed
+    classes before its set is built, as nb2_core.estimate_label_space does
+    for a restricted label space. Without it, NB2's per-class qhat meets
+    22-class probabilities of which the allowed classes hold little, and most
+    restricted cells come back with an empty set."""
+
+    def __init__(self, renormalise: bool = True):
+        self.renormalise = renormalise
 
     def estimate(self, query_embeddings, class_names, restrict):
         if restrict:
             return V3LabelSpace().estimate(query_embeddings, class_names, True)
         return LabelSpace(positions=None, support=None, method="none")
+
+    def probabilities(self, probs: np.ndarray, space: LabelSpace) -> np.ndarray:
+        """The probabilities sets, confidence and best guess are read from."""
+        if space.positions is None or not self.renormalise:
+            return probs
+        kept = np.zeros_like(probs)
+        idx = sorted(space.positions)
+        kept[:, idx] = probs[:, idx]
+        return kept / np.clip(kept.sum(axis=1, keepdims=True), 1e-12, None)

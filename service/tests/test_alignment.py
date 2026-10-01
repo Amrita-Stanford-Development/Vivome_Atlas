@@ -202,3 +202,54 @@ class DetectAndTransformValueScaleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class InputRobustnessTests(unittest.TestCase):
+    def test_an_empty_header_names_no_cell(self):
+        raw = alignment.parse_matrix_csv("gene\tc1\tc2\t\nCD3E\t1\t2\t\n")
+        self.assertEqual(raw.cell_ids, ["c1", "c2"])
+        self.assertEqual(raw.values.shape, (1, 2))
+
+    def test_infinite_values_are_missing_before_scale_detection(self):
+        values = np.array([[100, 200, -np.inf, 400, 500], [300, 100, 200, 500, np.inf]], dtype=np.float32)
+        out, scale = alignment.detect_and_transform_value_scale(values)
+        self.assertEqual(scale.detected, "linear", "-inf must not read as a negative, log-scale value")
+        self.assertTrue(np.isnan(out[0, 2]) and np.isnan(out[1, 4]))
+        np.testing.assert_allclose(out[0, [0, 1, 3, 4]], np.log2([100, 200, 400, 500]), rtol=1e-6)
+        z = alignment.zscore_per_gene(out.astype(np.float64))
+        self.assertTrue(np.isfinite(z).all())
+        self.assertGreater(np.abs(z[0]).sum(), 0, "one infinite value must not erase its whole gene")
+
+
+class CollapseDuplicateGenesTests(unittest.TestCase):
+    def test_rows_for_one_gene_merge_by_per_cell_median_skipping_missing(self):
+        nan = np.nan
+        raw = alignment.RawMatrix(
+            gene_names=["TP53", "A1BG", "tp53", "TP53", "NOT_A_GENE", "NOT_A_GENE"], cell_ids=["a", "b", "c"],
+            values=np.array([[1, nan, 5], [2, 2, 2], [3, nan, nan], [8, 4, nan], [9, 9, 9], [7, 7, 7]], dtype=np.float32),
+        )
+        out = alignment.collapse_duplicate_genes(raw)
+        self.assertEqual(out.gene_names, ["TP53", "A1BG", "NOT_A_GENE", "NOT_A_GENE"])
+        np.testing.assert_array_equal(out.values[0], [3, 4, 5])  # medians of (1,3,8), (4), (5)
+        np.testing.assert_array_equal(out.values[1], raw.values[1])
+        np.testing.assert_array_equal(out.values[2:], raw.values[4:], "rows that resolve to no gene are kept as they are")
+
+    def test_a_cell_missing_in_every_duplicate_stays_missing(self):
+        raw = alignment.RawMatrix(gene_names=["TP53", "TP53"], cell_ids=["a", "b"],
+                                  values=np.array([[np.nan, 1], [np.nan, 3]], dtype=np.float32))
+        out = alignment.collapse_duplicate_genes(raw)
+        self.assertTrue(np.isnan(out.values[0, 0]))
+        self.assertEqual(out.values[0, 1], 2)
+
+    def test_the_service_keeps_every_observed_value_of_a_duplicated_gene(self):
+        """PBMC240's DIA-NN report has two PKM rows: 237 cells observed in one,
+        22 in the other. Only the last row used to survive."""
+        from pathlib import Path
+        from service.pipeline import pipeline, reference
+        raw = alignment.parse_matrix_csv(
+            (Path(__file__).resolve().parents[1] / "examples" / "pbmc240_proteins_raw.tsv").read_text())
+        genes = reference.load_feature_space_genes()
+        _, aligned, _ = pipeline._prepare_query(genes, raw)
+        self.assertEqual(int(aligned.mask[:, genes.index("PKM")].sum()), 237)
+        self.assertEqual(aligned.n_features_matched + aligned.n_features_unmatched,
+                         len(alignment.collapse_duplicate_genes(raw).gene_names))

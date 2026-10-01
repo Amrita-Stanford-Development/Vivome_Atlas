@@ -91,3 +91,19 @@ class LoadGeneIdMapTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SharedAccessionTests(unittest.TestCase):
+    """An accession HGNC lists under several feature genes names all of them:
+    it is ambiguous, never resolved to one."""
+
+    def test_a_shared_accession_is_ambiguous_alone_in_a_group_and_as_an_isoform(self):
+        r = gene_ids.resolve_identifiers(["P69905", "Q9H3K6-2", "HBA1", "HBA1;P69905"])
+        self.assertEqual(r.resolved, [None, None, "HBA1", None])
+        self.assertEqual(r.ambiguous_identifiers, ["P69905", "Q9H3K6-2", "HBA1;P69905"])
+
+    def test_the_real_map_lists_the_shared_accessions_and_maps_none_of_them(self):
+        gene_map = gene_ids.load_gene_id_map()
+        self.assertEqual(gene_map.shared_accessions["P69905"], frozenset({"HBA1", "HBA2"}))
+        for accession in gene_map.shared_accessions:
+            self.assertNotIn(accession, gene_map.uniprot_to_feature)

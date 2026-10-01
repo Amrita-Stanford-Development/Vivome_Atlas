@@ -1,7 +1,10 @@
 """v3.1 (service/pipeline/ensemble.py) against T1 NB2's own reference
-implementation, research/notebook-outputs/nb2/nb2_core.py, on synthetic
-inputs: probabilities to 1e-6, conformal sets and per-cell outputs exactly.
-Every setting comes from NB2's spec (service/model/v3_1/nb2_spec_v31.json).
+implementation, research/notebook-outputs/nb2/nb2_core.py: on synthetic
+inputs (probabilities to 1e-6, conformal sets and per-cell outputs exactly),
+and on real cells through the whole project_prepared path. Every setting
+comes from NB2's spec (service/model/v3_1/nb2_spec_v31.json). The two
+service flags NB2 did not have are tested against nb2_core too: the set flag
+as NB2's set plus its argmax, renormalisation as estimate_label_space does it.
 """
 import importlib.util
 import json
@@ -11,7 +14,9 @@ from pathlib import Path
 import numpy as np
 
 from service import config
-from service.pipeline import abstention, calibration, ensemble, label_space, search
+from service.pipeline import (
+    abstention, alignment, calibration, ensemble, gene_ids, label_space, pipeline, reference, search,
+)
 
 REPO = Path(__file__).resolve().parents[2]
 NB2_CORE = REPO / "research" / "notebook-outputs" / "nb2" / "nb2_core.py"
@@ -42,7 +47,14 @@ class AgainstNb2CoreTests(unittest.TestCase):
         # the sets range from empty to several classes.
         cls.centroids = [_unit(rng.normal(size=(n_classes, d))) for _ in cls.temps]
         truth = rng.integers(0, n_classes, size=n)
-        cls.embeddings = [_unit(c[truth] + rng.normal(scale=0.08, size=(n, d))) for c in cls.centroids]
+        # The last 120 cells sit between a CD8 T cell and an NK cell: one
+        # lineage, two groups, so some sets resolve at lineage level.
+        a, b = cls.classes.index("cd8-positive, alpha-beta t cell"), cls.classes.index("natural killer cell")
+        cls.embeddings = []
+        for c in cls.centroids:
+            z = c[truth] + rng.normal(scale=0.08, size=(n, d))
+            z[-120:] = c[a] + c[b] + rng.normal(scale=0.08, size=(120, d))
+            cls.embeddings.append(_unit(z))
         cls.references = [_unit(c[rng.integers(0, n_classes, size=4000)] + rng.normal(scale=0.08, size=(4000, d)))
                           .astype(np.float32) for c in cls.centroids]
 
@@ -60,7 +72,8 @@ class AgainstNb2CoreTests(unittest.TestCase):
 
     def test_mondrian_sets_match_exactly(self):
         probs = self._theirs()
-        calibrator = calibration.MondrianCalibrator(self.qhat, self.spec["conformal"]["marginal_qhat"], 0.1, "RNA")
+        calibrator = calibration.MondrianCalibrator(self.qhat, self.spec["conformal"]["marginal_qhat"], 0.1, "RNA",
+                                                    include_best_guess=False)
         ours = calibrator.calibrate(probs, None, label_space.V31LabelSpace().estimate(None, self.classes, False))
         theirs = self.n2.prediction_sets(probs, self.qhat, np.ones(len(self.classes), bool))
         self.assertEqual(ours.label_sets, [np.flatnonzero(row).tolist() for row in theirs])
@@ -107,7 +120,132 @@ class AgainstNb2CoreTests(unittest.TestCase):
                     ours = (level_kind[level], code)
             self.assertEqual(ours, (int(kind[i]), int(val[i])), f"cell {i}")
             seen.add(ours[0])
-        self.assertTrue({0, 3, 5, 6} <= seen, f"synthetic cells should reach every output kind, got {seen}")
+        self.assertTrue({0, 1, 2, 3, 5, 6} <= seen, f"synthetic cells should reach every output kind, got {seen}")
+
+    def test_the_set_flag_adds_the_argmax_to_nb2s_sets_and_nothing_else(self):
+        probs = self._theirs()
+        theirs = self.n2.prediction_sets(probs, self.qhat, np.ones(len(self.classes), bool))
+        theirs[np.arange(len(probs)), probs.argmax(1)] = True
+        calibrator = calibration.MondrianCalibrator(self.qhat, 0.9, 0.1, "RNA", include_best_guess=True)
+        ours = calibrator.calibrate(probs, None, label_space.V31LabelSpace().estimate(None, self.classes, False))
+        self.assertEqual(ours.label_sets, [np.flatnonzero(row).tolist() for row in theirs])
+        top, _ = ensemble.best_guess(probs, None)
+        for s, t in zip(ours.label_sets, top):
+            if len(s) == 1:
+                self.assertEqual(s, [t], "a one-class set is always the best guess")
+
+    def test_restricted_probabilities_are_renormalised_as_nb2_restricts_a_label_space(self):
+        probs = self._theirs()
+        keep = np.zeros(len(self.classes), bool)
+        keep[[self.classes.index("macrophage"), self.classes.index("monocyte")]] = True
+        space = label_space.V31LabelSpace().estimate(None, self.classes, True)
+        ours = label_space.V31LabelSpace(renormalise=True).probabilities(probs, space)
+        q = probs * keep[None, :]
+        np.testing.assert_allclose(ours, q / np.clip(q.sum(1, keepdims=True), 1e-12, None), atol=1e-12)  # nb2_core lines 114-117
+        np.testing.assert_array_equal(label_space.V31LabelSpace(renormalise=False).probabilities(probs, space), probs)
+
+
+class SpecTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.spec = ensemble.load_spec()
+        cls.names = cls.spec["class_order"]
+
+    def test_the_delivered_spec_is_valid_and_its_flags_default_on(self):
+        ensemble.validate_spec(self.spec, self.names)
+        self.assertEqual(ensemble.service_flags(self.spec), {"set_includes_best_guess": True, "restricted_renormalise": True})
+
+    def test_qhat_is_read_by_class_name_whatever_the_order(self):
+        """In NB2's spec class_order, qhat and hierarchy are all alphabetical,
+        so an index-based mix-up would not show. Reverse both."""
+        order = self.names[::-1]
+        qhat = dict(reversed(list(self.spec["conformal"]["qhat_by_class"].items())))
+        shuffled = {**self.spec, "class_order": order, "conformal": {**self.spec["conformal"], "qhat_by_class": qhat}}
+        components = ensemble.build_components(shuffled)
+        self.assertEqual(components.calibrator.qhat.tolist(),
+                         [self.spec["conformal"]["qhat_by_class"][n] for n in order])
+
+    def test_a_class_order_other_than_the_references_is_refused(self):
+        with self.assertRaisesRegex(ValueError, "class_order"):
+            ensemble.validate_spec({**self.spec, "class_order": self.names[::-1]}, self.names)
+
+    def test_a_missing_temperature_qhat_or_unknown_flag_is_refused(self):
+        member = self.spec["encoder"]["members"][0]
+        no_t = {**self.spec, "assignment": {**self.spec["assignment"], "temperature": {
+            k: v for k, v in self.spec["assignment"]["temperature"].items() if k != member}}}
+        no_q = {**self.spec, "conformal": {**self.spec["conformal"], "qhat_by_class": {
+            k: v for k, v in self.spec["conformal"]["qhat_by_class"].items() if k != "b cell"}}}
+        for bad, needle in ((no_t, member), (no_q, "b cell"), ({**self.spec, "service_flags": {"bogus": True}}, "service_flags")):
+            with self.assertRaisesRegex(ValueError, needle):
+                ensemble.validate_spec(bad, self.names)
+
+
+class FullPathAgainstNb2CoreTests(unittest.TestCase):
+    """project_prepared on real PBMC240 cells (the service parse), every cell
+    against nb2_core computed independently from the members' embeddings:
+    label, level, abstain reason, confidence, best guess. NB2's rule (flags
+    off) must match exactly; the served rule (flags on) must match NB2's sets
+    plus the argmax."""
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.bundle = pipeline.load_bundle("v3.1")
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/fetch_v31_members.py.")
+        cls.n2 = _load_nb2_core()
+        raw = alignment.parse_matrix_csv((Path(__file__).resolve().parents[1] / "examples" / "pbmc240_proteins_raw.tsv").read_text())
+        cls.prepared = pipeline._prepare_query(cls.bundle.feature_genes, raw)
+        cls.resolution = gene_ids.resolve_identifiers(raw.gene_names)
+        smoothed, aligned, _ = cls.prepared
+        b, spec = cls.bundle, cls.bundle.spec
+        z = [m.encoder_handle.encode(smoothed, aligned.mask) for m in b.members]
+        cls.P = np.mean([cls.n2.softmax((zi @ m.centroids.T).astype(np.float64), m.temperature)
+                         for zi, m in zip(z, b.members)], 0)
+        cls.ood = np.mean([np.max(zi.astype(np.float64) @ m.reference_latents.astype(np.float64).T, axis=1)
+                           for zi, m in zip(z, b.members)], 0)
+        cls.qhat = np.array([spec["conformal"]["qhat_by_class"][c] for c in b.class_names])
+        groups = sorted({spec["hierarchy"][c]["group"] for c in b.class_names})
+        lineages = sorted({spec["hierarchy"][c]["lineage"] for c in b.class_names})
+        cls.levels = {"class": b.class_names, "group": groups, "lineage": lineages}
+        cls.grp = np.array([groups.index(spec["hierarchy"][c]["group"]) for c in b.class_names])
+        cls.lin = np.array([lineages.index(spec["hierarchy"][c]["lineage"]) for c in b.class_names])
+
+    def _check(self, flags_on: bool):
+        b = self.bundle
+        components = ensemble.build_components({**b.spec, "service_flags": {k: flags_on for k in ensemble.SERVICE_FLAGS}})
+        smoothed, aligned, scale = self.prepared
+        response = ensemble.project_prepared(b, smoothed, aligned, scale, self.resolution, False, components)
+        S = self.n2.prediction_sets(self.P, self.qhat, np.ones(len(b.class_names), bool))
+        if flags_on:
+            S[np.arange(len(S)), self.P.argmax(1)] = True
+        kind, val = self.n2.resolve(S, self.grp, self.lin, self.ood < b.ood_threshold,
+                                    aligned.per_cell_observed_genes < b.min_observed_genes)
+        reason = {3: "no_confident_label", 4: "ambiguous_between_classes", 5: "outside_supported_region",
+                  6: "coverage_too_low"}
+        seen = set()
+        for i, cell in enumerate(response["cells"]):
+            k = int(kind[i])
+            seen.add(k)
+            if k <= 2:
+                level = ("class", "group", "lineage")[k]
+                self.assertEqual((cell["label"], cell["label_level"]), (self.levels[level][val[i]], level), f"cell {i}")
+                self.assertAlmostEqual(cell["confidence"], float(self.P[i, S[i]].sum()), places=6)
+            else:
+                self.assertEqual(cell.get("abstain_reason"), reason[k], f"cell {i}")
+            if k == 6:
+                self.assertNotIn("best_guess", cell)
+            else:
+                self.assertEqual(cell["best_guess"]["label"], b.class_names[int(self.P[i].argmax())])
+                self.assertAlmostEqual(cell["best_guess"]["probability"], float(self.P[i].max()), places=6)
+            self.assertAlmostEqual(cell["reference_similarity"], float(self.ood[i]), places=5)
+        return seen
+
+    def test_nb2s_rule_matches_nb2_core_cell_for_cell(self):
+        self.assertTrue({1, 2, 4, 6} <= self._check(flags_on=False))
+
+    def test_the_served_rule_matches_nb2s_sets_plus_the_argmax(self):
+        self._check(flags_on=True)
 
 
 class BestGuessTests(unittest.TestCase):

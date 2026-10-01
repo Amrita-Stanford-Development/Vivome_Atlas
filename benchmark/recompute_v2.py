@@ -80,7 +80,7 @@ print("scGLUE done")
 maj_class = pd.Series(true_labels).value_counts().idxmax()
 pred_maj = np.full(len(true_labels), maj_class)
 result = {
-    "method": "Majority class (always predict most common RNA class)",
+    "method": "Majority class (always predict the protein query's most common class)",
     "role": "trivial baseline",
     "n_rna_cells": len(rna_labels), "subsample": None, "diverged": False,
     "knn_classifier": None,

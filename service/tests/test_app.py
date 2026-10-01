@@ -74,7 +74,6 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
 
     def setUp(self):
         app._bundle = None
-        app._bundle_error = None
 
     def _get(self, path, headers=None, method="GET"):
         request = urllib.request.Request(f"{self.base_url}{path}", method=method, headers=headers or {})
@@ -142,7 +141,31 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 503)
         self.assertIn("reason", payload)
 
+    def test_a_load_error_answers_500_with_the_reason_on_both_endpoints(self):
+        with patch("service.pipeline.pipeline.load_bundle", side_effect=OSError("disk unreadable")):
+            status, _, payload = self._get("/api/status")
+            self.assertEqual(status, 500)
+            self.assertIn("disk unreadable", payload["reason"])
+            status, payload = _post_multipart(f"{self.base_url}/api/project", b"rna", b"gene,c1\nA1BG,1.0\n")
+            self.assertEqual(status, 500)
+            self.assertIn("disk unreadable", payload["reason"])
+
+    def test_a_missing_artifact_is_checked_again_on_the_next_request(self):
+        """Files fetched while the service runs are picked up without a restart."""
+        bundle = self._synthetic_bundle()
+        with patch("service.pipeline.pipeline.load_bundle",
+                   side_effect=[reference.PendingArtifactError("not fetched yet"), bundle]) as load:
+            first, _, payload = self._get("/api/status")
+            second, _, _ = self._get("/api/status")
+        self.assertEqual((first, second), (503, 200))
+        self.assertIn("not fetched yet", payload["reason"])
+        self.assertEqual(load.call_count, 2)
+
     def _install_synthetic_bundle(self):
+        app._bundle = self._synthetic_bundle()
+        return app._bundle.feature_genes
+
+    def _synthetic_bundle(self):
         metadata = reference.load_reference_metadata()
         feature_genes = reference.load_feature_space_genes()
         embeddings, centroids = fixtures.synthetic_reference_embeddings(metadata)
@@ -155,9 +178,7 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
             pca=coordinates.fit_pca_3d(embeddings), property_names=names, property_values=values,
             provenance=reference.load_provenance(),
         )
-        app._bundle = bundle
-        app._bundle_error = None
-        return feature_genes
+        return bundle
 
     def test_full_round_trip_with_a_synthetic_bundle_returns_200(self):
         feature_genes = self._install_synthetic_bundle()

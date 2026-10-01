@@ -23,6 +23,14 @@ on RNA only and applied zero-shot to protein.
 - **Answers** come at the level the set supports: one class, the group the
   set's classes share, the lineage they share, or abstain. Every cell not
   refused for coverage also gets a best guess.
+- **Two service flags, on by default** (`ensemble.SERVICE_FLAGS`; NB2's
+  spec has neither):
+  - every set also contains the best guess, so a one-class answer is always
+    the best guess;
+  - a restricted request renormalises probabilities over the allowed
+    classes before its sets are built.
+
+  Neither has been evaluated on RNA (Known limits, 7).
 
 Spec: `service/model/v3_1/nb2_spec_v31.json`. Code:
 `service/pipeline/ensemble.py`. Response:
@@ -31,8 +39,9 @@ Spec: `service/model/v3_1/nb2_spec_v31.json`. Code:
 ### Evaluation suite
 
 The suite is T1 NB1's 240 simulated RNA uploads from test-split cells,
-masked like real mass-spectrometry data. "v3 as served" is NB2's replica of
-the v3 service: Stages 4 to 6, without the Stage 7 fallback. Source:
+masked like real mass-spectrometry data. The v3.1 column is NB2's rule,
+without the two service flags. "v3 as served" is NB2's replica of the v3
+service: Stages 4 to 6, without the Stage 7 fallback. Source:
 `research/notebook-outputs/nb2/nb2_summary.json` and
 `research/notebook-outputs/nb2/tables/eval_summary.csv`.
 
@@ -60,34 +69,51 @@ Under NB2's missing-not-at-random masking, v3.1 scores:
 ### Development data
 
 - **The gate.** NB2 scored SCoPE2 and PBMC240 with its own parse.
-  `benchmark/v31_dev_gate.py` runs the served pipeline on the same parse
-  and reproduces every figure in
-  `research/notebook-outputs/nb2/tables/dev_datasets.csv`: committed share,
-  each abstention reason, and composition within 0.1 point.
+  `benchmark/v31_dev_gate.py` runs the served pipeline on the same parse,
+  under NB2's rule (service flags off). Every share in
+  `research/notebook-outputs/nb2/tables/dev_datasets.csv` matches to two
+  decimals: committed, class level, and each abstention reason.
+  - PBMC240's composition matches entry for entry.
+  - SCoPE2's composition differs by one cell.
+  - The record is `research/benchmark/v31_dev_gate.json`. The gate's
+    tolerance is 0.5 point, and it also runs as
+    `service/tests/test_v31_gate.py`.
 - **SCoPE2.** 1,490 cells, all macrophage or monocyte.
-  - 72.6% committed.
-  - Of the committed answers, 39.5% are correct at the stated level, and
-    all of those are "myeloid" lineage answers. None of its 152 class
-    answers or 397 group answers is correct. "T cell" alone is 31.0% of
-    all cells.
-- **PBMC240.** 238 cells with weak lineage labels.
-  - 74.0% committed, 1.7% of cells at class level.
-  - NB2 reports 79.5% lymphoid correct and 60% myeloid correct; the myeloid
-    figure covers 5 cells and is anecdotal.
+  - **Under NB2's rule:**
+    - 72.6% of cells are committed.
+    - 39.5% of committed answers are correct at the stated level, all of them "myeloid" lineage answers.
+    - None of its 152 class answers or 397 group answers is correct.
+    - "T cell" alone is 462 cells, 31.0%.
+  - **As served (flags on):**
+    - 56.0% of cells are committed.
+    - 55.8% of committed answers are correct, still all "myeloid".
+  - Source: `research/benchmark/v31_service_flags.json`.
+- **PBMC240.** 238 cells, 122 of them with weak lineage labels (117
+  lymphoid, 5 myeloid).
+  - Under NB2's rule: 73.95% committed, 2.1% of cells at class level through
+    the service (1.7% under NB2's parse).
+  - 79.5% of lymphoid cells (93 of 117) and 3 of 5 myeloid cells get their
+    lineage. The myeloid figure is anecdotal.
+  - As served: 73.1% committed; 92 of 117 lymphoid cells.
 
-v3.1 on PBMC240 through the service parser: committed 72.7 vs 74.0 under the notebook parse; the difference is gene identifier resolution (HGNC map, ambiguous groups unmatched) and the graph input, not the pipeline.
+Through the service, PBMC240 first differed from NB2 by 1.3 points of
+committed cells (72.7 against 74.0). The cause was a service bug: when several
+upload rows mapped to the same gene, only the last row was kept. With
+duplicates collapsed by per cell median, as NB2 does, the service reproduces
+NB2's committed, out of distribution and ambiguous figures exactly; two
+composition entries differ by up to 0.8 point.
 
-**Fulcher 2026** is development data since 2026-09-30. Its numbers below
-come from 1,275 cells through the service parser with default settings,
-1,251 of them scored against the authors' six types
+**Fulcher 2026** has been development data since 2026-09-30. Its numbers
+below come from 1,275 cells through the service parser with default settings
+(both flags on). 1,251 of them are scored against the authors' six types
 (`research/benchmark/fulcher2026/v31_development.json`):
-- **Committed:** 89.4%, and 97.2% of committed answers are correct at the
+- **Committed:** 89.2% of cells. 97.3% of committed answers are correct at the
   stated level.
 - **Mostly group or lineage answers.**
   - CD4T and CD8T are mostly answered at group level ("T cell").
   - NK and monocyte are almost all answered at lineage level.
   - B is mostly answered at class level.
-- **DC** is committed on only 53.7% of cells.
+- **DC** is committed on only 51.9% of cells.
 - **Best guess:** 57.9% balanced accuracy over the six types. Single V2
   seeds under nearest centroid score 57.3 ± 2.2.
 
@@ -99,11 +125,13 @@ come from 1,275 cells through the service parser with default settings,
    The max-cosine score barely separates a scrambled profile from a real
    one. A better score is an open problem.
 2. **B cell coverage is 69%,** against the 90% target, and 64% under
-   missing-not-at-random masking. It is the lowest class; the others range
-   from 84% to 96% (`eval_per_class_coverage.csv`,
-   `eval_mnar_per_class_coverage.csv`).
-3. **SCoPE2 still fails.** See Development data above: no class or group
-   answer is right, and the best guess is right for 1.1% balanced. In
+   missing-not-at-random masking. It is the lowest class. The others range
+   from 84% to 96% under standard masking (`eval_per_class_coverage.csv`)
+   and from 76% to 95% under missing-not-at-random masking, where
+   erythrocyte is next lowest (`eval_mnar_per_class_coverage.csv`).
+3. **SCoPE2 still fails.** See Development data above: under either rule no
+   class or group answer is right, and the best guess is right for 1.1%
+   balanced (`research/benchmark/v31_service_flags.json`). In
    v3.1's coordinate space the SCoPE2 macrophage and monocyte centroids sit
    far from their RNA classes. The 3-PC centroid cosine for each is in
    `web/data/atlas_manifest.json`.
@@ -116,6 +144,15 @@ come from 1,275 cells through the service parser with default settings,
    measured (the spec's `caveats`).
 6. **The calibration suite comes from the validation split,** which also
    set the encoders' early stopping.
+7. **The two service flags have not been evaluated on RNA.** They change
+   development-data results (`research/benchmark/results.md`, "v3.1's two
+   service flags"), but the evaluation-suite figures above are NB2's rule
+   without them. The next notebook should measure both on NB1's suite.
+8. **Restricted mode was not evaluated under v3.1.**
+   - On SCoPE2 with the flags on, every cell commits.
+   - But 97.9% of answers are "monocyte/macrophage", the group made of
+     exactly the two allowed classes.
+   - It is not recommended under v3.1.
 
 ## v3 reference
 
@@ -163,7 +200,7 @@ index of those files, not a source in its own right.
 | Protein (SCoPE2), **unrestricted, 5-seed mean of the shipped architecture**, shared kNN | 38.4% ± 25.7 acc / 29.1% ± 18.3 bal (range 1.3–49.8 bal) | `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv` |
 | Protein, **Fulcher 2026** (held-out scoring; TMT PBMCs, 1,251 cells, 6 types, chance 16.7%), unrestricted, **shipped checkpoint (`v3_seed0`)** | 44.1% bal (nearest centroid) / 41.8% (shared kNN) | `research/benchmark/fulcher2026/per_seed_scores.csv` |
 | Protein, Fulcher 2026, **5-seed mean of the shipped architecture** | 42.3% ± 3.4 / 42.0% ± 2.9 bal | `research/benchmark/fulcher2026/family_summary.csv` |
-| Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `research/todo.md` §5 |
+| Modality probe (RNA vs. protein separability in latent space) | 98.99% ± 0.28% | `service/model/evidence/v3_tables/modality_probe.json` |
 
 **A previously published RNA→RNA figure of 95.5% / 74.8% (SCoPE2 mask) is
 superseded by the 93.2% / 65.7% figures above.** The published number
@@ -230,22 +267,30 @@ fixed and zero-shot on the query.**
      (T cell, NK cell, B cell, etc.) can only ever be assigned "macrophage",
      "monocyte", or abstain. It can never get its true label, however
      well-separated its embedding is. Confirmed on real data twice:
-     - PBMC240: the same embeddings that score 0% lymphoid recall restricted
-       score 46.6% unrestricted.
+     - PBMC240: restricted, no lymphoid cell can be labelled lymphoid.
+       Unrestricted, the shipped v3 recalls 43.6% of them
+       (`research/notebook-outputs/nb1c/pbmc240_raw_service_path.csv`,
+       `v3_shipped`, smoothing on).
      - The held-out Fulcher 2026 PBMC upload: the restricted service labelled
        every cell it didn't abstain on as macrophage or monocyte.
    - **Since 2026-09-30 the restriction is opt-in per request**
      (`restrict_to_supported_classes`), and the default assigns among all 22
-     classes. That default is an interim fix, not a solution. On Fulcher it
-     abstains on 48% of cells and labels only 2.1% monocyte, against 36% in
-     the annotation (`research/benchmark/results.md`).
-   - **Owners:** T1 NB2 (label space estimation) and Track C.
-2. **Macrophage placement.** Even within the two supported classes,
-   cross-modal alignment is weak for macrophage: latent centroid cosine is
-   0.19 for macrophage vs. 0.830 for monocyte, and protein-side macrophage
-   recall is 0.76%. The macrophage-vs-monocyte ranking is directionally
-   correct (AUC 0.928) but the absolute placement is not — most macrophage
-   protein cells are misassigned to monocyte or a distractor class.
+     classes. Under v3 that default abstains on 48% of Fulcher cells and
+     labels only 2.1% monocyte, against 36% in the annotation
+     (`research/benchmark/fulcher2026/product_check.json`).
+   - **Under v3.1, the default,** lymphoid cells get lymphoid answers: on
+     Fulcher, 89% of cells are committed and 97% of committed answers are
+     correct at the stated level (v3.1, Development data above).
+2. **Macrophage placement.** Cross-modal alignment is weak for macrophage.
+   - **Latent centroid cosine:** 0.19 for macrophage against 0.830 for
+     monocyte (`service/model/evidence/v3_tables/latent_centroid_cosine.csv`).
+   - **Restricted to the two supported classes,** `v3_seed0` recalls 66.2%
+     of protein macrophage cells
+     (`research/notebook-outputs/nb1d/real_data_per_seed.csv`,
+     `scope2_mac_recall_restr`).
+   - **Across all 22 classes** it recalls 0.76%: it sends 78.7% of them to
+     CD8 T cells and only 1.3% to monocyte
+     (`research/notebook-outputs/nb1d/scope2_prediction_distribution.csv`).
 3. **2 of 22 reference classes have any protein-side validation.**
    Macrophage and monocyte are the only classes ever checked against real
    protein ground truth. The other 20 classes' embeddings have not been

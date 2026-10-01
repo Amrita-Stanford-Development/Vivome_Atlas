@@ -1,0 +1,403 @@
+{
+  "what": "v3.1's service flags off (NB2's rule) and on (served default), service parser",
+  "flags": [
+    "restricted_renormalise",
+    "set_includes_best_guess"
+  ],
+  "runs": {
+    "SCoPE2": {
+      "nb2_rule": {
+        "cells": 1490,
+        "share_pct": {
+          "committed": 72.55,
+          "fine": 10.2,
+          "abstain_ood": 0.0,
+          "abstain_ambiguous": 24.5,
+          "abstain_empty": 2.95,
+          "group": 26.64,
+          "lineage": 35.7
+        },
+        "composition_pct": {
+          "T cell": 31.01,
+          "lineage:myeloid": 28.66,
+          "abstain": 27.45,
+          "lineage:lymphoid": 7.05,
+          "dendritic cell": 4.23,
+          "granulocyte": 0.81,
+          "erythroid": 0.81
+        },
+        "class_answers": 152,
+        "class_answers_equal_best_guess": 24,
+        "class_answer_min_confidence": 0.0107,
+        "correct_at_stated_level": {
+          "group": 397,
+          "group_correct": 0,
+          "class": 152,
+          "class_correct": 0,
+          "lineage": 532,
+          "lineage_correct": 427,
+          "correct_when_committed": 39.5
+        },
+        "best_guess_balanced_accuracy_pct": 1.08
+      },
+      "served": {
+        "cells": 1490,
+        "share_pct": {
+          "committed": 55.97,
+          "fine": 4.56,
+          "abstain_ood": 0.0,
+          "abstain_ambiguous": 44.03,
+          "abstain_empty": 0.0,
+          "group": 16.58,
+          "lineage": 34.83
+        },
+        "composition_pct": {
+          "abstain": 44.03,
+          "lineage:myeloid": 31.21,
+          "T cell": 16.58,
+          "lineage:lymphoid": 3.62,
+          "erythroid": 2.42,
+          "granulocyte": 2.15
+        },
+        "class_answers": 68,
+        "class_answers_equal_best_guess": 68,
+        "class_answer_min_confidence": 0.3036,
+        "correct_at_stated_level": {
+          "group": 247,
+          "group_correct": 0,
+          "lineage": 519,
+          "lineage_correct": 465,
+          "class": 68,
+          "class_correct": 0,
+          "correct_when_committed": 55.76
+        },
+        "best_guess_balanced_accuracy_pct": 1.08
+      }
+    },
+    "SCoPE2, restricted": {
+      "nb2_rule": {
+        "cells": 1490,
+        "share_pct": {
+          "committed": 31.21,
+          "fine": 28.19,
+          "abstain_ood": 0.0,
+          "abstain_ambiguous": 0.0,
+          "abstain_empty": 68.79,
+          "group": 3.02,
+          "lineage": 0.0
+        },
+        "composition_pct": {
+          "abstain": 68.79,
+          "monocyte/macrophage": 31.21
+        },
+        "class_answers": 420,
+        "class_answers_equal_best_guess": 396,
+        "class_answer_min_confidence": 0.051,
+        "correct_at_stated_level": {
+          "class": 420,
+          "class_correct": 384,
+          "group": 45,
+          "group_correct": 45,
+          "correct_when_committed": 92.26
+        },
+        "best_guess_balanced_accuracy_pct": 61.3
+      },
+      "served": {
+        "cells": 1490,
+        "share_pct": {
+          "committed": 100.0,
+          "fine": 2.15,
+          "abstain_ood": 0.0,
+          "abstain_ambiguous": 0.0,
+          "abstain_empty": 0.0,
+          "group": 97.85,
+          "lineage": 0.0
+        },
+        "composition_pct": {
+          "monocyte/macrophage": 100.0
+        },
+        "class_answers": 32,
+        "class_answers_equal_best_guess": 32,
+        "class_answer_min_confidence": 0.9504,
+        "correct_at_stated_level": {
+          "group": 1458,
+          "group_correct": 1458,
+          "class": 32,
+          "class_correct": 32,
+          "correct_when_committed": 100.0
+        },
+        "best_guess_balanced_accuracy_pct": 61.3
+      }
+    },
+    "PBMC240": {
+      "nb2_rule": {
+        "cells": 238,
+        "share_pct": {
+          "committed": 73.95,
+          "fine": 2.1,
+          "abstain_ood": 1.68,
+          "abstain_ambiguous": 23.95,
+          "abstain_empty": 0.0,
+          "group": 23.11,
+          "lineage": 48.74
+        },
+        "composition_pct": {
+          "lineage:lymphoid": 39.08,
+          "abstain": 26.05,
+          "T cell": 21.85,
+          "lineage:myeloid": 9.66,
+          "B cell": 1.68,
+          "monocyte/macrophage": 1.26,
+          "progenitor": 0.42
+        },
+        "class_answers": 5,
+        "class_answers_equal_best_guess": 5,
+        "class_answer_min_confidence": 0.3858,
+        "weak_lineage": {
+          "lymphoid_n": 117,
+          "lymphoid_correct": 93,
+          "myeloid_n": 5,
+          "myeloid_correct": 3,
+          "lymphoid_correct_pct": 79.49,
+          "myeloid_correct_pct": 60.0
+        }
+      },
+      "served": {
+        "cells": 238,
+        "share_pct": {
+          "committed": 73.11,
+          "fine": 2.1,
+          "abstain_ood": 1.68,
+          "abstain_ambiguous": 24.79,
+          "abstain_empty": 0.0,
+          "group": 22.69,
+          "lineage": 48.32
+        },
+        "composition_pct": {
+          "lineage:lymphoid": 39.08,
+          "abstain": 26.89,
+          "T cell": 21.43,
+          "lineage:myeloid": 9.24,
+          "B cell": 1.68,
+          "monocyte/macrophage": 1.26,
+          "progenitor": 0.42
+        },
+        "class_answers": 5,
+        "class_answers_equal_best_guess": 5,
+        "class_answer_min_confidence": 0.3858,
+        "weak_lineage": {
+          "lymphoid_n": 117,
+          "lymphoid_correct": 92,
+          "myeloid_n": 5,
+          "myeloid_correct": 3,
+          "lymphoid_correct_pct": 78.63,
+          "myeloid_correct_pct": 60.0
+        }
+      }
+    },
+    "Fulcher 2026": {
+      "nb2_rule": {
+        "cells": 1275,
+        "share_pct": {
+          "committed": 89.41,
+          "fine": 8.55,
+          "abstain_ood": 0.39,
+          "abstain_ambiguous": 10.2,
+          "abstain_empty": 0.0,
+          "group": 22.67,
+          "lineage": 58.2
+        },
+        "composition_pct": {
+          "lineage:myeloid": 35.14,
+          "lineage:lymphoid": 23.06,
+          "T cell": 22.43,
+          "abstain": 10.59,
+          "B cell": 8.63,
+          "monocyte/macrophage": 0.16
+        },
+        "class_answers": 109,
+        "class_answers_equal_best_guess": 108,
+        "class_answer_min_confidence": 0.1631,
+        "committed_scored": 1117,
+        "correct_scored": 1086,
+        "correct_when_committed_pct": 97.22,
+        "by_author_type": {
+          "CD4T": {
+            "n": 308,
+            "committed": 272,
+            "correct": 248,
+            "committed_pct": 88.31,
+            "correct_at_stated_level_pct": 91.18,
+            "stated_level_counts": {
+              "class": 25,
+              "group": 180,
+              "lineage": 67
+            }
+          },
+          "CD8T": {
+            "n": 181,
+            "committed": 169,
+            "correct": 167,
+            "committed_pct": 93.37,
+            "correct_at_stated_level_pct": 98.82,
+            "stated_level_counts": {
+              "class": 1,
+              "group": 100,
+              "lineage": 68
+            }
+          },
+          "NK": {
+            "n": 150,
+            "committed": 138,
+            "correct": 137,
+            "committed_pct": 92.0,
+            "correct_at_stated_level_pct": 99.28,
+            "stated_level_counts": {
+              "class": 0,
+              "group": 1,
+              "lineage": 137
+            }
+          },
+          "B": {
+            "n": 102,
+            "committed": 87,
+            "correct": 86,
+            "committed_pct": 85.29,
+            "correct_at_stated_level_pct": 98.85,
+            "stated_level_counts": {
+              "class": 82,
+              "group": 4,
+              "lineage": 1
+            }
+          },
+          "monocyte": {
+            "n": 456,
+            "committed": 422,
+            "correct": 421,
+            "committed_pct": 92.54,
+            "correct_at_stated_level_pct": 99.76,
+            "stated_level_counts": {
+              "class": 0,
+              "group": 1,
+              "lineage": 421
+            }
+          },
+          "DC": {
+            "n": 54,
+            "committed": 29,
+            "correct": 27,
+            "committed_pct": 53.7,
+            "correct_at_stated_level_pct": 93.1,
+            "stated_level_counts": {
+              "class": 1,
+              "group": 1,
+              "lineage": 27
+            }
+          }
+        },
+        "best_guess_balanced_accuracy_6types_pct": 57.94
+      },
+      "served": {
+        "cells": 1275,
+        "share_pct": {
+          "committed": 89.18,
+          "fine": 8.47,
+          "abstain_ood": 0.39,
+          "abstain_ambiguous": 10.43,
+          "abstain_empty": 0.0,
+          "group": 22.67,
+          "lineage": 58.04
+        },
+        "composition_pct": {
+          "lineage:myeloid": 34.98,
+          "lineage:lymphoid": 23.06,
+          "T cell": 22.43,
+          "abstain": 10.82,
+          "B cell": 8.63,
+          "monocyte/macrophage": 0.08
+        },
+        "class_answers": 108,
+        "class_answers_equal_best_guess": 108,
+        "class_answer_min_confidence": 0.3551,
+        "committed_scored": 1114,
+        "correct_scored": 1084,
+        "correct_when_committed_pct": 97.31,
+        "by_author_type": {
+          "CD4T": {
+            "n": 308,
+            "committed": 272,
+            "correct": 248,
+            "committed_pct": 88.31,
+            "correct_at_stated_level_pct": 91.18,
+            "stated_level_counts": {
+              "class": 24,
+              "group": 181,
+              "lineage": 67
+            }
+          },
+          "CD8T": {
+            "n": 181,
+            "committed": 169,
+            "correct": 167,
+            "committed_pct": 93.37,
+            "correct_at_stated_level_pct": 98.82,
+            "stated_level_counts": {
+              "class": 1,
+              "group": 100,
+              "lineage": 68
+            }
+          },
+          "NK": {
+            "n": 150,
+            "committed": 138,
+            "correct": 137,
+            "committed_pct": 92.0,
+            "correct_at_stated_level_pct": 99.28,
+            "stated_level_counts": {
+              "class": 0,
+              "group": 1,
+              "lineage": 137
+            }
+          },
+          "B": {
+            "n": 102,
+            "committed": 87,
+            "correct": 86,
+            "committed_pct": 85.29,
+            "correct_at_stated_level_pct": 98.85,
+            "stated_level_counts": {
+              "class": 82,
+              "group": 4,
+              "lineage": 1
+            }
+          },
+          "monocyte": {
+            "n": 456,
+            "committed": 420,
+            "correct": 419,
+            "committed_pct": 92.11,
+            "correct_at_stated_level_pct": 99.76,
+            "stated_level_counts": {
+              "class": 0,
+              "group": 1,
+              "lineage": 419
+            }
+          },
+          "DC": {
+            "n": 54,
+            "committed": 28,
+            "correct": 27,
+            "committed_pct": 51.85,
+            "correct_at_stated_level_pct": 96.43,
+            "stated_level_counts": {
+              "class": 1,
+              "group": 0,
+              "lineage": 27
+            }
+          }
+        },
+        "best_guess_balanced_accuracy_6types_pct": 57.94
+      }
+    }
+  }
+}

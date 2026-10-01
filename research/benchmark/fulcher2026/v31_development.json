@@ -2,37 +2,47 @@
   "what": "Fulcher 2026 (development data) through v3.1, service parser, default settings",
   "pipeline_version": "v3.1",
   "model_version": "v3.1 ensemble (T1 NB2: V2 seeds 0 to 4)",
+  "service_flags": {
+    "set_includes_best_guess": true,
+    "restricted_renormalise": true
+  },
   "n_cells": 1275,
   "n_scored": 1251,
   "share_of_all_cells_pct": {
-    "committed": 89.41,
-    "fine": 8.55,
+    "committed": 89.18,
+    "fine": 8.47,
     "abstain_ood": 0.39,
-    "abstain_ambiguous": 10.2,
+    "abstain_ambiguous": 10.43,
     "abstain_empty": 0.0
   },
   "composition_pct": {
-    "lineage:myeloid": 35.14,
+    "lineage:myeloid": 34.98,
     "lineage:lymphoid": 23.06,
     "T cell": 22.43,
-    "abstain": 10.59,
+    "abstain": 10.82,
     "B cell": 8.63,
-    "monocyte/macrophage": 0.16
+    "monocyte/macrophage": 0.08
   },
-  "correct_when_committed_pct": 97.22,
+  "committed_scored": 1114,
+  "correct_scored": 1084,
+  "correct_when_committed_pct": 97.31,
   "by_author_type": {
     "CD4T": {
       "n": 308,
+      "committed": 272,
+      "correct": 248,
       "committed_pct": 88.31,
       "correct_at_stated_level_pct": 91.18,
       "stated_level_counts": {
-        "class": 25,
-        "group": 180,
+        "class": 24,
+        "group": 181,
         "lineage": 67
       }
     },
     "CD8T": {
       "n": 181,
+      "committed": 169,
+      "correct": 167,
       "committed_pct": 93.37,
       "correct_at_stated_level_pct": 98.82,
       "stated_level_counts": {
@@ -43,6 +53,8 @@
     },
     "NK": {
       "n": 150,
+      "committed": 138,
+      "correct": 137,
       "committed_pct": 92.0,
       "correct_at_stated_level_pct": 99.28,
       "stated_level_counts": {
@@ -53,6 +65,8 @@
     },
     "B": {
       "n": 102,
+      "committed": 87,
+      "correct": 86,
       "committed_pct": 85.29,
       "correct_at_stated_level_pct": 98.85,
       "stated_level_counts": {
@@ -63,21 +77,25 @@
     },
     "monocyte": {
       "n": 456,
-      "committed_pct": 92.54,
+      "committed": 420,
+      "correct": 419,
+      "committed_pct": 92.11,
       "correct_at_stated_level_pct": 99.76,
       "stated_level_counts": {
         "class": 0,
         "group": 1,
-        "lineage": 421
+        "lineage": 419
       }
     },
     "DC": {
       "n": 54,
-      "committed_pct": 53.7,
-      "correct_at_stated_level_pct": 93.1,
+      "committed": 28,
+      "correct": 27,
+      "committed_pct": 51.85,
+      "correct_at_stated_level_pct": 96.43,
       "stated_level_counts": {
         "class": 1,
-        "group": 1,
+        "group": 0,
         "lineage": 27
       }
     }

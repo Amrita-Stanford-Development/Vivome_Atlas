@@ -51,6 +51,13 @@ order. Genes present get their values, genes absent get zero. Build a second
 array the same shape, one where present, zero where absent. Both arrays go
 into the model, not just the values.
 
+**Several rows for one gene become one.** When upload rows resolve to the
+same feature gene (a DIA-NN report often has two protein groups for one
+gene), each cell takes the median of those rows' observed values, after
+log2, as T1 NB2 does (`alignment.collapse_duplicate_genes`). Keeping one row
+would drop real observations: PBMC240's PKM is observed in 237 cells in one
+row and 22 in the other.
+
 **Z score per dataset, independently.** Do not reuse any statistic from RNA
 training. Every dataset in this project, SCoPE2, PBMC240, Fulcher, was
 z scored using its own mean and standard deviation, computed only from the
@@ -59,7 +66,7 @@ proteomics dataset would be wrong, since the two are on completely different
 scales to begin with.
 
 **Coverage will be low, and that is normal, not a bug to fix.** Measured
-values against the 9,002 gene space: SCoPE2 32.3 percent, PBMC240 34.8
+values against the 9,002 gene space: SCoPE2 32.3 percent, PBMC240 33.3
 percent, Fulcher 18.4 percent. If a dataset comes back reporting 90 percent
 coverage, that is the surprising result, not 20 percent.
 

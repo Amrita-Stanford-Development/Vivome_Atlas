@@ -90,19 +90,10 @@ def components_for(version: str) -> Components:
             calibrator=calibration.V3ConformalCalibrator(), abstention=abstention.V3AbstentionScorer(),
         )
     if version == "v3.1":
+        # A served v3.1 bundle carries its own (bundle.components, built from
+        # the spec it validated at load); this reads the spec afresh, for tools.
         from service.pipeline import ensemble  # imports this module
-        spec = ensemble.load_spec()
-        qhat = np.array([spec["conformal"]["qhat_by_class"][name] for name in spec["class_order"]])
-        return Components(
-            version="v3.1", label_space=label_space.V31LabelSpace(),
-            calibrator=calibration.MondrianCalibrator(
-                qhat, spec["conformal"]["marginal_qhat"], spec["conformal"]["alpha"],
-                spec["conformal"]["calibrated_on"],
-            ),
-            abstention=abstention.V31AbstentionScorer(
-                float(spec["ood"]["threshold"]), int(spec["preprocessing"]["min_observed_genes"]),
-            ),
-        )
+        return ensemble.build_components(ensemble.load_spec())
     raise ValueError(f"Unknown pipeline version {version!r}; expected one of {config.PIPELINE_VERSIONS}.")
 
 
@@ -128,7 +119,8 @@ def _prepare_query(
     transformed_values, value_scale = alignment.detect_and_transform_value_scale(raw.values)
     raw = dataclasses.replace(raw, values=transformed_values)
 
-    # Stage 1
+    # Stage 1 — several rows for one gene become one, on log-scale values.
+    raw = alignment.collapse_duplicate_genes(raw)
     aligned = alignment.align_to_feature_space(raw, feature_genes)
 
     # Stage 2 — smooth using the query's own complete feature set, not just
@@ -212,10 +204,10 @@ def run_projection(
     `calibration`, and per cell `label_level`, `best_guess` and
     `abstain_category` (docs/service/projection-api.md, "v3.1").
     """
-    components = components or components_for(bundle.pipeline_version)
     if bundle.pipeline_version == "v3.1":
         from service.pipeline import ensemble  # imports this module
-        return ensemble.project(bundle, raw, restrict_to_supported_classes, components)
+        return ensemble.project(bundle, raw, restrict_to_supported_classes, components or bundle.components)
+    components = components or components_for(bundle.pipeline_version)
     rng = rng or np.random.default_rng(upload_seed(raw))
 
     # assign_labels/top_label/calibrate_and_build_sets all work in centroid

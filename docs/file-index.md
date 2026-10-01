@@ -92,7 +92,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_e2e_real_export.py` — regression guard: the real SCoPE2 export still reproduces the notebook's own outputs
 - `service/tests/test_golden_fixtures.py` — full responses must match the frozen golden fixtures
 - `service/tests/test_pipeline_versions.py` — Tracks C and F: v3 unchanged against the frozen responses, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space
-- `service/tests/test_ensemble.py` — v3.1 against NB2's own `nb2_core.py` on synthetic inputs: probabilities to 1e-6, conformal sets and per-cell outputs exactly
+- `service/tests/test_ensemble.py` — v3.1 against NB2's own `nb2_core.py`: synthetic inputs, the full path on real PBMC240 cells, both service flags, spec validation
+- `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
 - `service/tests/test_alignment.py` — Stage 1 tests
 - `service/tests/test_smoothing.py` — Stage 2 tests
@@ -181,7 +182,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/fulcher2026_product_check.py` — Fulcher 2026 product check: POSTs the upload to a running service with default settings and records the returned composition (label-free)
 - `benchmark/fulcher2026_v31.py` — Fulcher 2026 (development data) through v3.1: committed share, correctness at the stated level per author type, composition, best guess
 - `benchmark/notebook_convention.py` — NB2's own query parse (the "notebook convention"), to reproduce its development numbers; not the product parser
-- `benchmark/v31_dev_gate.py` — Track F gate: the served v3.1 pipeline must reproduce NB2's development table within 0.5 points
+- `benchmark/v31_dev_gate.py` — Track F gate: the served v3.1 pipeline, under NB2's rule, must reproduce NB2's development table within 0.5 points; writes its record
+- `benchmark/v31_service_flags.py` — v3.1's two service flags off (NB2's rule) and on (served), on SCoPE2, PBMC240 and Fulcher
+- `benchmark/scope2_5seed_paired.py` — Track D's paired bootstrap, ten ours-seeds × three scANVI seeds × three regimes, on SCoPE2
 
 ## scripts/ — build and repository checks
 
@@ -237,6 +240,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/fulcher2026/exploratory_5type_per_seed.csv` — Fulcher 2026, exploratory (added after results): 5-type score with CD4T and CD8T merged into T, per model-seed and rule
 - `research/benchmark/fulcher2026/exploratory_5type_summary.csv` — Fulcher 2026, exploratory (added after results): the 5-type score's mean, SD, min and max per family and rule
 - `research/benchmark/fulcher2026/v31_development.json` — Fulcher 2026 through v3.1 (development data): shares, composition, per author type correctness at the stated level, best guess
+- `research/benchmark/v31_dev_gate.json` — the Track F gate's record: every NB2 and v3.1 figure compared, SCoPE2 correctness, PBMC240 through the service parser
+- `research/benchmark/v31_service_flags.json` — v3.1's service flags off and on: shares, composition, correctness and one-class answers per dataset
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only

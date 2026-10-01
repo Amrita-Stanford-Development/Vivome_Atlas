@@ -12,7 +12,7 @@ corrupted an earlier build of this project.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import pandas as pd
@@ -26,6 +26,9 @@ class GeneIdMap:
     ensembl_to_feature: dict[str, str]  # Ensembl gene ID -> feature-space gene symbol
     uniprot_to_feature: dict[str, str]  # UniProt accession -> feature-space gene symbol
     feature_genes: frozenset[str]  # every feature-space gene symbol, for quick membership checks
+    # An accession HGNC lists under several feature genes (P69905: HBA1 and
+    # HBA2): it names all of them, so it is ambiguous, never one of them.
+    shared_accessions: dict[str, frozenset[str]] = field(default_factory=dict)
 
 
 def load_gene_id_map(path: Path = config.GENE_ID_MAP_PATH) -> GeneIdMap:
@@ -33,11 +36,14 @@ def load_gene_id_map(path: Path = config.GENE_ID_MAP_PATH) -> GeneIdMap:
     resolution was itself ambiguous — see the provenance file) contribute
     only their symbol; they never gain an Ensembl/UniProt cross-reference,
     since guessing one of several disagreeing HGNC candidates would be
-    exactly the kind of silent guess this table exists to avoid."""
+    exactly the kind of silent guess this table exists to avoid. For the
+    same reason an accession listed under several feature genes maps to none
+    of them (`shared_accessions`)."""
     df = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
     symbol_to_feature: dict[str, str] = {}
     ensembl_to_feature: dict[str, str] = {}
     uniprot_to_feature: dict[str, str] = {}
+    genes_by_accession: dict[str, set[str]] = {}
 
     for _, row in df.iterrows():
         feature_symbol = row["gene_symbol"]
@@ -49,13 +55,17 @@ def load_gene_id_map(path: Path = config.GENE_ID_MAP_PATH) -> GeneIdMap:
         if row["uniprot_ids"]:
             for accession in row["uniprot_ids"].split("|"):
                 if accession:
-                    uniprot_to_feature[accession] = feature_symbol
+                    genes_by_accession.setdefault(accession, set()).add(feature_symbol)
 
+    for accession, genes in genes_by_accession.items():
+        if len(genes) == 1:
+            uniprot_to_feature[accession] = next(iter(genes))
     return GeneIdMap(
         symbol_to_feature=symbol_to_feature,
         ensembl_to_feature=ensembl_to_feature,
         uniprot_to_feature=uniprot_to_feature,
         feature_genes=frozenset(df["gene_symbol"]),
+        shared_accessions={a: frozenset(g) for a, g in genes_by_accession.items() if len(g) > 1},
     )
 
 
@@ -97,6 +107,8 @@ def _resolve_one(identifier: str, gene_map: GeneIdMap) -> tuple[str | None, str]
             candidates.add(gene_map.uniprot_to_feature[part])
         elif "-" in part and _uniprot_base_accession(part) in gene_map.uniprot_to_feature:
             candidates.add(gene_map.uniprot_to_feature[_uniprot_base_accession(part)])
+        else:
+            candidates |= gene_map.shared_accessions.get(_uniprot_base_accession(part), frozenset())
 
     if len(candidates) == 1:
         return next(iter(candidates)), "matched"

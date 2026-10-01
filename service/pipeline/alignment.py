@@ -10,7 +10,7 @@ genes either: that cost 0.005 AUC on SCoPE2, worse than doing nothing.
 Z-scoring is per dataset, per gene, using only this upload's own cells —
 never a statistic carried over from RNA training or from another dataset.
 
-Coverage is expected to be low (SCoPE2 32.3%, PBMC240 34.8%, Fulcher 18.4%
+Coverage is expected to be low (SCoPE2 32.3%, PBMC240 33.3%, Fulcher 18.4%
 against the 9,002 space). That is the normal case, not a failure signal —
 see abstention.py for where low coverage actually gets acted on.
 """
@@ -18,7 +18,9 @@ from __future__ import annotations
 
 import csv
 import io
-from dataclasses import dataclass
+import warnings
+from collections import defaultdict
+from dataclasses import dataclass, replace
 from pathlib import PureWindowsPath
 
 import numpy as np
@@ -144,9 +146,10 @@ def parse_matrix_csv(text: str) -> RawMatrix:
             return name in _FRAGPIPE_TMT_ANNOTATION_COLUMNS or name.startswith(_FRAGPIPE_TMT_REFERENCE_PREFIXES)
         return name in _DIA_NN_ANNOTATION_COLUMNS
 
+    # An empty header (e.g. from a trailing delimiter) names no cell.
     cell_col_indices = [
         i for i, name in enumerate(header)
-        if i != gene_col_idx and not is_annotation(name)
+        if i != gene_col_idx and not is_annotation(name) and name.strip()
     ]
     cell_ids = [
         _clean_dia_nn_cell_id(header[i]) if is_dia_nn_report else header[i]
@@ -191,8 +194,12 @@ def detect_and_transform_value_scale(
 
     An observed value of exactly 0 is treated as "not detected" (set to
     NaN, matching this dataset's existing missing-value semantics) rather
-    than log2-transformed to -inf.
+    than log2-transformed to -inf. So is +/-inf, before anything else: a
+    log table exported from R writes log2(0) as -Inf, and one infinite value
+    would otherwise turn its whole gene to 0 while still marked observed,
+    and make a linear file look like log scale.
     """
+    raw_values = np.where(np.isfinite(raw_values), raw_values, np.nan).astype(raw_values.dtype, copy=False)
     observed = ~np.isnan(raw_values)
     if not observed.any():
         return raw_values, ValueScale(detected="unknown", transformed=False)
@@ -210,6 +217,38 @@ def detect_and_transform_value_scale(
     log_mask = observed & ~zero_mask
     transformed[log_mask] = np.log2(transformed[log_mask])
     return transformed, ValueScale(detected="linear", transformed=True)
+
+
+def collapse_duplicate_genes(raw: RawMatrix) -> RawMatrix:
+    """Rows whose identifiers resolve to the same feature-space gene become
+    one row: per cell, the median of those rows' observed values, skipping
+    missing ones (T1 NB2's convention). Called after Stage 0, so the median is
+    of log-scale values. Rows that resolve to no feature gene are kept as they
+    are; the merged row keeps its first row's identifier and position.
+
+    Without this, align_to_feature_space kept only the last such row: on
+    PBMC240's DIA-NN report that dropped 1,338 observed values over ten genes
+    (PKM: 237 observed cells down to 22)."""
+    rows_by_gene: dict[str, list[int]] = defaultdict(list)
+    for i, gene in enumerate(gene_ids.resolve_to_feature_symbols(raw.gene_names)):
+        if gene is not None:
+            rows_by_gene[gene].append(i)
+    merged = {rows[0]: rows for rows in rows_by_gene.values() if len(rows) > 1}
+    if not merged:
+        return raw
+    dropped = {i for rows in merged.values() for i in rows[1:]}
+    names, values = [], []
+    for i, name in enumerate(raw.gene_names):
+        if i in dropped:
+            continue
+        if i in merged:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)  # a cell missing in every duplicate stays NaN
+                values.append(np.nanmedian(raw.values[merged[i]], axis=0))
+        else:
+            values.append(raw.values[i])
+        names.append(name)
+    return replace(raw, gene_names=names, values=np.array(values, dtype=raw.values.dtype))
 
 
 def zscore_per_gene(raw_values: np.ndarray, eps: float = 1e-8) -> np.ndarray:

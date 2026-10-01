@@ -6,18 +6,18 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,4,12,monocyte,neutrophil,0.8566591,False,-0.18052135,-0.16032544,-0.21314526
 128,PROT,5,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8738204,False,0.28711993,-0.3367293,0.050183237
 128,PROT,6,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8627351,False,0.3347467,-0.31958985,0.18725634
-128,PROT,7,12,monocyte,neutrophil,0.86504257,False,-0.03782288,-0.13768312,-0.12611338
-128,PROT,8,12,monocyte,erythrocyte,0.8603889,False,0.08059026,-0.20600535,-0.070758894
-128,PROT,9,12,monocyte,erythrocyte,0.85765713,False,-0.031770952,-0.2650898,-0.19205667
+128,PROT,7,12,monocyte,neutrophil,0.86504257,True,-0.03782288,-0.13768312,-0.12611338
+128,PROT,8,12,monocyte,erythrocyte,0.8603889,True,0.08059026,-0.20600535,-0.070758894
+128,PROT,9,12,monocyte,erythrocyte,0.85765713,True,-0.031770952,-0.2650898,-0.19205667
 128,PROT,10,10,macrophage,"cd4-positive, alpha-beta t cell",0.8932843,False,0.37731323,-0.3105639,0.34639028
-128,PROT,11,12,monocyte,erythrocyte,0.8378746,False,-0.03170168,-0.15927956,-0.17076987
-128,PROT,12,12,monocyte,erythrocyte,0.8508762,False,0.05134759,-0.21185908,-0.058328662
+128,PROT,11,12,monocyte,erythrocyte,0.8378746,True,-0.03170168,-0.15927956,-0.17076987
+128,PROT,12,12,monocyte,erythrocyte,0.8508762,True,0.05134759,-0.21185908,-0.058328662
 128,PROT,13,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.89181787,False,0.37858698,-0.29842678,0.31856504
-128,PROT,14,10,macrophage,erythrocyte,0.82993424,False,0.051873863,-0.2784113,-0.2072483
+128,PROT,14,10,macrophage,erythrocyte,0.82993424,True,0.051873863,-0.2784113,-0.2072483
 128,PROT,15,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85162294,False,0.3054556,-0.37675604,0.22202495
 128,PROT,16,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8978071,False,0.34294078,-0.34527162,0.24113342
 128,PROT,17,12,monocyte,erythrocyte,0.83952266,True,0.053623974,-0.24817656,-0.14049307
-128,PROT,18,12,monocyte,erythrocyte,0.8709117,True,-0.086110555,-0.1498843,-0.33331257
+128,PROT,18,12,monocyte,erythrocyte,0.8709117,False,-0.086110555,-0.1498843,-0.33331257
 128,PROT,19,12,monocyte,myeloid dendritic cell,0.90563184,False,0.0809612,0.25037184,-0.1977719
 128,PROT,20,12,monocyte,myeloid dendritic cell,0.9617835,False,0.35682815,0.38287053,-0.17840151
 128,PROT,21,12,monocyte,myeloid dendritic cell,0.91302145,False,0.20648903,0.33545434,-0.124429114
@@ -28,10 +28,10 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,26,12,monocyte,myeloid dendritic cell,0.939608,False,0.22463074,0.39270785,-0.13482863
 128,PROT,27,12,monocyte,myeloid dendritic cell,0.9404976,False,0.074466884,0.45329055,-0.2117297
 128,PROT,28,12,monocyte,myeloid dendritic cell,0.9213425,False,0.065690145,0.23198104,-0.1774863
-128,PROT,29,12,monocyte,erythrocyte,0.8556,True,-0.0799474,-0.19256823,-0.28364393
+128,PROT,29,12,monocyte,erythrocyte,0.8556,False,-0.0799474,-0.19256823,-0.28364393
 128,PROT,30,10,macrophage,"cd8-positive, alpha-beta t cell",0.8721318,False,0.27834094,-0.28408533,0.08356125
 128,PROT,31,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86984074,False,0.2909043,-0.28936937,0.15107968
-128,PROT,32,10,macrophage,erythrocyte,0.84855145,False,0.20954941,-0.26152924,-0.018287
+128,PROT,32,10,macrophage,erythrocyte,0.84855145,True,0.20954941,-0.26152924,-0.018287
 128,PROT,33,12,monocyte,myeloid dendritic cell,0.93853295,False,0.28889036,0.3512178,-0.18313469
 128,PROT,34,12,monocyte,neutrophil,0.8585596,False,-0.1376876,-0.012208613,-0.19536236
 128,PROT,35,12,monocyte,erythrocyte,0.85742855,True,0.028058063,-0.21475098,-0.29126477
@@ -45,9 +45,9 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,43,10,macrophage,"cd4-positive, alpha-beta t cell",0.87527674,False,0.3476337,-0.22370647,0.19246645
 128,PROT,44,12,monocyte,erythrocyte,0.8582918,True,-0.044749115,-0.21914849,-0.27810562
 128,PROT,45,12,monocyte,myeloid dendritic cell,0.9112164,False,-0.03683279,0.22366811,-0.2027027
-128,PROT,46,12,monocyte,erythrocyte,0.8578439,False,0.06925319,-0.21279144,-0.19427209
+128,PROT,46,12,monocyte,erythrocyte,0.8578439,True,0.06925319,-0.21279144,-0.19427209
 128,PROT,47,12,monocyte,"cd4-positive, alpha-beta t cell",0.8770439,False,0.3807372,-0.19026098,0.32558337
-128,PROT,48,12,monocyte,erythrocyte,0.8507347,False,0.06795985,-0.18363488,-0.19942728
+128,PROT,48,12,monocyte,erythrocyte,0.8507347,True,0.06795985,-0.18363488,-0.19942728
 128,PROT,49,12,monocyte,myeloid dendritic cell,0.9150971,False,0.010274986,0.22652963,-0.19915725
 128,PROT,50,12,monocyte,myeloid dendritic cell,0.89155406,False,0.10377639,0.18962267,-0.17087576
 128,PROT,51,12,monocyte,neutrophil,0.85545826,False,0.0043889983,0.14833349,-0.19496728
@@ -55,26 +55,26 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,53,12,monocyte,erythrocyte,0.8226042,True,0.058899995,-0.21014248,-0.13122052
 128,PROT,54,12,monocyte,monocyte,0.9773245,False,0.40616062,0.47468004,-0.21853893
 128,PROT,55,12,monocyte,neutrophil,0.8536336,False,-0.07749261,-0.15343443,-0.19858123
-128,PROT,56,12,monocyte,erythrocyte,0.8530194,True,-0.11107039,-0.1786375,-0.2617698
+128,PROT,56,12,monocyte,erythrocyte,0.8530194,False,-0.11107039,-0.1786375,-0.2617698
 128,PROT,57,10,macrophage,"cd4-positive, alpha-beta t cell",0.86934155,False,0.3956043,-0.1747821,0.2668607
 128,PROT,58,12,monocyte,neutrophil,0.90341043,False,-0.022019643,0.089413606,-0.2338142
 128,PROT,59,12,monocyte,neutrophil,0.8986144,False,-0.1924114,0.025846539,-0.227041
 128,PROT,60,10,macrophage,"cd4-positive, alpha-beta t cell",0.926579,False,0.403231,-0.3418952,0.49158973
 128,PROT,61,10,macrophage,"cd4-positive, alpha-beta t cell",0.9054674,False,0.34113568,-0.32714447,0.26654798
-128,PROT,62,12,monocyte,erythrocyte,0.8166356,False,0.05555478,-0.20582567,-0.12735128
-128,PROT,63,12,monocyte,neutrophil,0.8617774,False,0.08883928,-0.16489647,0.01610964
+128,PROT,62,12,monocyte,erythrocyte,0.8166356,True,0.05555478,-0.20582567,-0.12735128
+128,PROT,63,12,monocyte,neutrophil,0.8617774,True,0.08883928,-0.16489647,0.01610964
 128,PROT,64,12,monocyte,myeloid dendritic cell,0.8556463,True,0.04219194,0.012887317,-0.18805331
 128,PROT,65,12,monocyte,monocyte,0.874819,True,0.3016295,0.042531215,-0.08038707
 128,PROT,66,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.91312474,False,0.4044063,-0.4077877,0.50379795
 128,PROT,67,10,macrophage,erythrocyte,0.8654804,False,0.024714883,-0.2941858,-0.37402958
-128,PROT,68,10,macrophage,erythrocyte,0.8601662,False,0.10297212,-0.19985102,-0.074090905
+128,PROT,68,10,macrophage,erythrocyte,0.8601662,True,0.10297212,-0.19985102,-0.074090905
 128,PROT,69,12,monocyte,erythrocyte,0.8292366,True,0.3632772,-0.17563029,0.042070992
 128,PROT,70,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84998083,True,0.38510075,-0.31331363,0.38578492
 128,PROT,71,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.89945585,False,0.41544592,-0.31757703,0.3285448
 128,PROT,72,12,monocyte,myeloid dendritic cell,0.95795405,False,0.33897376,0.44761136,-0.12901284
 128,PROT,73,12,monocyte,erythrocyte,0.8537194,True,0.097725116,-0.2020379,-0.036710724
-128,PROT,74,12,monocyte,erythrocyte,0.8344496,True,-0.087835,-0.09665946,-0.33035102
-128,PROT,75,12,monocyte,erythrocyte,0.8358056,False,-0.022219125,-0.06366871,-0.1981921
+128,PROT,74,12,monocyte,erythrocyte,0.8344496,False,-0.087835,-0.09665946,-0.33035102
+128,PROT,75,12,monocyte,erythrocyte,0.8358056,True,-0.022219125,-0.06366871,-0.1981921
 128,PROT,76,12,monocyte,neutrophil,0.8949569,False,-0.07125787,0.10889583,-0.20282419
 128,PROT,77,12,monocyte,myeloid dendritic cell,0.91601294,False,0.17380723,0.344319,-0.14231507
 128,PROT,78,12,monocyte,myeloid dendritic cell,0.96214616,False,0.32835034,0.46599194,-0.1899532
@@ -95,10 +95,10 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,93,12,monocyte,neutrophil,0.84337586,True,-0.13505493,-0.017696416,-0.023855938
 128,PROT,94,12,monocyte,monocyte,0.9568596,False,0.37396842,0.3920936,-0.16939667
 128,PROT,95,12,monocyte,erythrocyte,0.8198366,True,0.17790464,-0.21825668,-0.024397502
-128,PROT,96,12,monocyte,erythrocyte,0.83913106,False,0.04066989,-0.11920917,-0.2310693
+128,PROT,96,12,monocyte,erythrocyte,0.83913106,True,0.04066989,-0.11920917,-0.2310693
 128,PROT,97,10,macrophage,myeloid dendritic cell,0.8277135,True,0.2738539,-0.108618386,-0.037337743
-128,PROT,98,12,monocyte,erythrocyte,0.8248445,False,0.007982498,-0.27075455,-0.08502217
-128,PROT,99,12,monocyte,erythrocyte,0.8548061,False,0.12214807,-0.34980026,-0.025897535
+128,PROT,98,12,monocyte,erythrocyte,0.8248445,True,0.007982498,-0.27075455,-0.08502217
+128,PROT,99,12,monocyte,erythrocyte,0.8548061,True,0.12214807,-0.34980026,-0.025897535
 128,PROT,100,12,monocyte,erythrocyte,0.8448025,True,0.17848246,-0.14075255,-0.013259501
 128,PROT,101,12,monocyte,monocyte,0.92338145,False,0.47204375,0.2391796,-0.121427655
 128,PROT,102,10,macrophage,"cd8-positive, alpha-beta t cell",0.8610652,True,0.40418804,-0.19852969,0.1831372
@@ -106,19 +106,19 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,104,12,monocyte,erythrocyte,0.8650433,False,-0.11141626,-0.14696439,-0.27932277
 128,PROT,105,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8325323,True,0.3408834,-0.24584027,0.2839019
 128,PROT,106,12,monocyte,myeloid dendritic cell,0.8915388,False,0.025550952,-0.030865312,-0.22361508
-128,PROT,107,12,monocyte,erythrocyte,0.83643055,True,-0.053236604,-0.23174316,-0.20086218
+128,PROT,107,12,monocyte,erythrocyte,0.83643055,False,-0.053236604,-0.23174316,-0.20086218
 128,PROT,108,12,monocyte,myeloid dendritic cell,0.86981374,True,0.09320285,0.062088802,-0.060354434
 128,PROT,109,12,monocyte,myeloid dendritic cell,0.96378815,False,0.25698134,0.4721765,-0.169595
 128,PROT,110,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9527935,False,0.43065655,-0.39535165,0.4909425
-128,PROT,111,12,monocyte,erythrocyte,0.83774805,False,0.05207316,-0.22625616,-0.078954175
+128,PROT,111,12,monocyte,erythrocyte,0.83774805,True,0.05207316,-0.22625616,-0.078954175
 128,PROT,112,12,monocyte,neutrophil,0.86058664,False,-0.07551979,0.022701345,-0.10246482
 128,PROT,113,10,macrophage,erythrocyte,0.8097601,True,0.27585837,-0.13995239,-0.015427638
 128,PROT,114,10,macrophage,"cd4-positive, alpha-beta t cell",0.8978983,False,0.1414266,-0.499442,0.09575219
-128,PROT,115,12,monocyte,erythrocyte,0.84878427,False,0.18570773,-0.3057292,-0.060257938
+128,PROT,115,12,monocyte,erythrocyte,0.84878427,True,0.18570773,-0.3057292,-0.060257938
 128,PROT,116,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.83344555,True,0.412014,-0.13239099,0.26471737
-128,PROT,117,12,monocyte,erythrocyte,0.8268857,False,0.012434097,-0.25114578,-0.20088033
-128,PROT,118,12,monocyte,erythrocyte,0.8024664,False,-0.05397362,-0.2856732,-0.26089945
-128,PROT,119,12,monocyte,neutrophil,0.81684864,False,-0.14633916,-0.08474438,-0.2004846
+128,PROT,117,12,monocyte,erythrocyte,0.8268857,True,0.012434097,-0.25114578,-0.20088033
+128,PROT,118,12,monocyte,erythrocyte,0.8024664,True,-0.05397362,-0.2856732,-0.26089945
+128,PROT,119,12,monocyte,neutrophil,0.81684864,True,-0.14633916,-0.08474438,-0.2004846
 128,PROT,120,12,monocyte,"cd8-positive, alpha-beta t cell",0.84924555,False,0.15149285,-0.12696685,-0.050985273
 128,PROT,121,12,monocyte,neutrophil,0.8588706,False,-0.121856615,-0.044691812,-0.21582632
 128,PROT,122,12,monocyte,"cd4-positive, alpha-beta t cell",0.86738616,True,0.4071777,-0.19939733,0.35214674
@@ -129,36 +129,36 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,127,12,monocyte,myeloid dendritic cell,0.9176855,False,0.20130149,0.32765013,-0.18459769
 128,PROT,128,10,macrophage,"cd8-positive, alpha-beta t cell",0.8325726,True,0.27855483,-0.20958391,0.07093498
 128,PROT,129,10,macrophage,"cd4-positive, alpha-beta t cell",0.877001,False,0.24767475,-0.3705483,0.10660657
-128,PROT,130,12,monocyte,erythrocyte,0.8312813,False,-0.036435597,-0.22661404,-0.087520406
+128,PROT,130,12,monocyte,erythrocyte,0.8312813,True,-0.036435597,-0.22661404,-0.087520406
 128,PROT,131,12,monocyte,myeloid dendritic cell,0.9719945,False,0.35598883,0.48827013,-0.15527265
-128,PROT,132,12,monocyte,erythrocyte,0.8393389,False,0.1313591,-0.35175535,-0.06105443
+128,PROT,132,12,monocyte,erythrocyte,0.8393389,True,0.1313591,-0.35175535,-0.06105443
 128,PROT,133,12,monocyte,erythrocyte,0.84001696,True,0.027246416,-0.24068157,-0.3146419
 128,PROT,134,12,monocyte,myeloid dendritic cell,0.9507443,False,0.18531264,0.41340294,-0.16294119
-128,PROT,135,12,monocyte,erythrocyte,0.84803855,False,0.01137353,-0.19043215,-0.24880211
+128,PROT,135,12,monocyte,erythrocyte,0.84803855,True,0.01137353,-0.19043215,-0.24880211
 128,PROT,136,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8974949,False,0.38311923,-0.37039715,0.44594917
 128,PROT,137,10,macrophage,"cd4-positive, alpha-beta t cell",0.92505455,False,0.41573402,-0.36737743,0.49679083
 128,PROT,138,10,macrophage,neutrophil,0.85578537,False,0.10105259,-0.040382612,-0.1698793
-128,PROT,139,12,monocyte,erythrocyte,0.8436713,False,-0.0013521767,-0.24254705,-0.13338646
+128,PROT,139,12,monocyte,erythrocyte,0.8436713,True,-0.0013521767,-0.24254705,-0.13338646
 128,PROT,140,12,monocyte,erythrocyte,0.8532318,True,0.04592647,-0.07128949,-0.069785744
-128,PROT,141,12,monocyte,erythrocyte,0.8354187,False,0.040544413,-0.20839314,-0.20218208
-128,PROT,142,12,monocyte,erythrocyte,0.83128196,False,-0.038873475,-0.1834612,-0.16421326
-128,PROT,143,10,macrophage,erythrocyte,0.8833307,False,0.052657366,-0.26661718,-0.15384474
-128,PROT,144,12,monocyte,erythrocyte,0.85017526,False,-0.05625624,-0.20931508,-0.24026684
+128,PROT,141,12,monocyte,erythrocyte,0.8354187,True,0.040544413,-0.20839314,-0.20218208
+128,PROT,142,12,monocyte,erythrocyte,0.83128196,True,-0.038873475,-0.1834612,-0.16421326
+128,PROT,143,10,macrophage,erythrocyte,0.8833307,True,0.052657366,-0.26661718,-0.15384474
+128,PROT,144,12,monocyte,erythrocyte,0.85017526,True,-0.05625624,-0.20931508,-0.24026684
 128,PROT,145,12,monocyte,neutrophil,0.846588,True,-0.0036561617,-0.037086304,-0.08290249
 128,PROT,146,12,monocyte,myeloid dendritic cell,0.9561531,False,0.4085662,0.35546902,-0.056973234
 128,PROT,147,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86645955,True,0.30109808,-0.32763216,0.16285078
 128,PROT,148,12,monocyte,myeloid dendritic cell,0.88263905,False,0.15307626,0.08219889,-0.21338037
 128,PROT,149,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8998089,False,0.34975046,-0.39929315,0.26237828
-128,PROT,150,12,monocyte,erythrocyte,0.82775766,False,-0.009758467,-0.12269265,-0.18075718
+128,PROT,150,12,monocyte,erythrocyte,0.82775766,True,-0.009758467,-0.12269265,-0.18075718
 128,PROT,151,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8628956,False,0.17760605,-0.1774286,0.080703266
-128,PROT,152,12,monocyte,erythrocyte,0.8421105,False,-0.069702506,-0.16013554,-0.18538816
+128,PROT,152,12,monocyte,erythrocyte,0.8421105,True,-0.069702506,-0.16013554,-0.18538816
 128,PROT,153,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.91639364,False,0.38532355,-0.44236058,0.37896264
 128,PROT,154,10,macrophage,"cd4-positive, alpha-beta t cell",0.897981,False,0.41695642,-0.2595541,0.41315344
 128,PROT,155,12,monocyte,neutrophil,0.875051,False,-0.00069290464,0.05938697,-0.19640607
-128,PROT,156,12,monocyte,erythrocyte,0.8344135,False,0.09993089,-0.20782132,-0.028685879
+128,PROT,156,12,monocyte,erythrocyte,0.8344135,True,0.09993089,-0.20782132,-0.028685879
 128,PROT,157,12,monocyte,myeloid dendritic cell,0.9382404,False,0.22977437,0.4026299,-0.1738101
 128,PROT,158,12,monocyte,myeloid dendritic cell,0.9412614,False,0.25426662,0.37921292,-0.20768836
-128,PROT,159,10,macrophage,erythrocyte,0.8497912,False,0.11817902,-0.19390981,-0.07684583
+128,PROT,159,10,macrophage,erythrocyte,0.8497912,True,0.11817902,-0.19390981,-0.07684583
 128,PROT,160,12,monocyte,myeloid dendritic cell,0.90347373,False,0.14020023,0.16392472,-0.24443929
 128,PROT,161,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.93559664,False,0.43811953,-0.3894772,0.52863485
 128,PROT,162,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9232359,False,0.39167383,-0.385396,0.45217606
@@ -166,27 +166,27 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,164,12,monocyte,myeloid dendritic cell,0.9364025,False,-0.07779308,0.36431068,-0.17027238
 128,PROT,165,10,macrophage,"cd4-positive, alpha-beta t cell",0.87533647,False,0.2882893,-0.23862442,0.069931954
 128,PROT,166,12,monocyte,myeloid dendritic cell,0.89735574,True,-0.06680173,0.047873992,-0.29104602
-128,PROT,167,12,monocyte,erythrocyte,0.83824885,False,0.054261595,-0.31052867,-0.17637745
+128,PROT,167,12,monocyte,erythrocyte,0.83824885,True,0.054261595,-0.31052867,-0.17637745
 128,PROT,168,12,monocyte,myeloid dendritic cell,0.94874966,False,0.25457257,0.40813795,-0.17540605
 128,PROT,169,12,monocyte,"cd4-positive, alpha-beta t cell",0.8385127,True,0.27861056,-0.25018418,0.0753872
 128,PROT,170,12,monocyte,myeloid dendritic cell,0.88809526,False,0.19093612,0.09793172,-0.19807039
 128,PROT,171,12,monocyte,myeloid dendritic cell,0.9603853,False,0.22143199,0.46399456,-0.19274676
-128,PROT,172,12,monocyte,neutrophil,0.86340654,True,-0.12198432,-0.00989983,-0.23123296
-128,PROT,173,12,monocyte,erythrocyte,0.8412529,False,0.09336021,-0.31191537,-0.08947364
+128,PROT,172,12,monocyte,neutrophil,0.86340654,False,-0.12198432,-0.00989983,-0.23123296
+128,PROT,173,12,monocyte,erythrocyte,0.8412529,True,0.09336021,-0.31191537,-0.08947364
 128,PROT,174,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84350985,False,0.20684683,-0.32610816,0.06739425
-128,PROT,175,12,monocyte,erythrocyte,0.8370967,False,-0.04419493,-0.0977314,-0.21375063
-128,PROT,176,12,monocyte,erythrocyte,0.8596309,False,0.052885752,-0.15835395,-0.04834433
+128,PROT,175,12,monocyte,erythrocyte,0.8370967,True,-0.04419493,-0.0977314,-0.21375063
+128,PROT,176,12,monocyte,erythrocyte,0.8596309,True,0.052885752,-0.15835395,-0.04834433
 128,PROT,177,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88873816,False,0.19822186,-0.40705496,0.084124446
-128,PROT,178,12,monocyte,erythrocyte,0.8017017,False,-0.063030556,-0.2521147,-0.16897886
-128,PROT,179,10,macrophage,erythrocyte,0.84112394,False,-0.0043780147,-0.24121584,-0.1981934
-128,PROT,180,12,monocyte,erythrocyte,0.83464813,False,-0.07593301,-0.20990027,-0.19955015
+128,PROT,178,12,monocyte,erythrocyte,0.8017017,True,-0.063030556,-0.2521147,-0.16897886
+128,PROT,179,10,macrophage,erythrocyte,0.84112394,True,-0.0043780147,-0.24121584,-0.1981934
+128,PROT,180,12,monocyte,erythrocyte,0.83464813,True,-0.07593301,-0.20990027,-0.19955015
 128,PROT,181,12,monocyte,erythrocyte,0.8326227,True,0.17398846,-0.27161187,-0.099323325
 128,PROT,182,12,monocyte,myeloid dendritic cell,0.95811117,False,0.22436222,0.47577244,-0.19481377
 128,PROT,183,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8418697,True,0.307806,-0.3319667,0.09775856
-128,PROT,184,12,monocyte,erythrocyte,0.849321,False,-0.0037604251,-0.16133712,-0.1375285
+128,PROT,184,12,monocyte,erythrocyte,0.849321,True,-0.0037604251,-0.16133712,-0.1375285
 128,PROT,185,12,monocyte,myeloid dendritic cell,0.9540378,False,0.21054359,0.41195837,-0.20778659
-128,PROT,186,12,monocyte,erythrocyte,0.83652705,False,-0.025458075,-0.2068579,-0.20296586
-128,PROT,187,10,macrophage,erythrocyte,0.83850396,False,0.108134046,-0.42652914,-0.07944358
+128,PROT,186,12,monocyte,erythrocyte,0.83652705,True,-0.025458075,-0.2068579,-0.20296586
+128,PROT,187,10,macrophage,erythrocyte,0.83850396,True,0.108134046,-0.42652914,-0.07944358
 128,PROT,188,10,macrophage,"cd4-positive, alpha-beta t cell",0.9135914,False,0.383453,-0.31941563,0.33206436
 128,PROT,189,12,monocyte,neutrophil,0.85708416,False,-0.1603372,-0.08354434,-0.2308878
 128,PROT,190,12,monocyte,erythrocyte,0.8277153,True,0.12803195,-0.15980223,-0.21200818
@@ -194,65 +194,65 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,192,12,monocyte,myeloid dendritic cell,0.9423704,False,0.19540906,0.37615883,-0.20591024
 128,PROT,193,12,monocyte,myeloid dendritic cell,0.9132708,False,0.079597145,0.30502707,-0.12808731
 128,PROT,194,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84832686,False,0.38287568,-0.29703242,0.27811217
-128,PROT,195,12,monocyte,neutrophil,0.8494352,False,-0.0640505,-0.15801455,-0.18610778
-128,PROT,196,10,macrophage,erythrocyte,0.8550458,False,0.021157432,-0.09377642,-0.23810953
+128,PROT,195,12,monocyte,neutrophil,0.8494352,True,-0.0640505,-0.15801455,-0.18610778
+128,PROT,196,10,macrophage,erythrocyte,0.8550458,True,0.021157432,-0.09377642,-0.23810953
 128,PROT,197,12,monocyte,myeloid dendritic cell,0.8856937,False,0.08921531,0.19935706,-0.07936497
-128,PROT,198,12,monocyte,erythrocyte,0.82448643,False,-0.13984972,-0.18266687,-0.27188706
+128,PROT,198,12,monocyte,erythrocyte,0.82448643,True,-0.13984972,-0.18266687,-0.27188706
 128,PROT,199,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8942073,False,0.18949582,-0.3074055,0.087129496
 128,PROT,200,12,monocyte,myeloid dendritic cell,0.9614838,False,0.35026124,0.45321685,-0.18636215
 128,PROT,201,12,monocyte,"cd4-positive, alpha-beta t cell",0.8819865,False,0.16649982,-0.35256788,-0.026523625
-128,PROT,202,12,monocyte,erythrocyte,0.8469294,False,0.22303817,-0.19186051,0.08150428
+128,PROT,202,12,monocyte,erythrocyte,0.8469294,True,0.22303817,-0.19186051,0.08150428
 128,PROT,203,10,macrophage,erythrocyte,0.8572399,True,0.100528926,-0.23966895,-0.1113571
 128,PROT,204,12,monocyte,neutrophil,0.8412628,True,0.1702682,-0.07861184,-0.073283486
-128,PROT,205,10,macrophage,erythrocyte,0.8660445,False,0.036519933,-0.15459155,-0.25657058
+128,PROT,205,10,macrophage,erythrocyte,0.8660445,True,0.036519933,-0.15459155,-0.25657058
 128,PROT,206,12,monocyte,erythrocyte,0.84914005,True,0.024404673,-0.14923362,-0.25169897
 128,PROT,207,12,monocyte,myeloid dendritic cell,0.91694117,False,0.070185505,0.27214304,-0.21785045
 128,PROT,208,10,macrophage,"cd4-positive, alpha-beta t cell",0.90437716,False,0.23001625,-0.3095053,0.18792337
 128,PROT,209,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8368648,False,0.08562229,-0.40223888,0.01771564
 128,PROT,210,12,monocyte,"cd4-positive, alpha-beta t cell",0.9283118,False,0.40517431,-0.37272108,0.47118124
-128,PROT,211,12,monocyte,erythrocyte,0.84204215,False,0.10531354,-0.32971215,-0.095654674
+128,PROT,211,12,monocyte,erythrocyte,0.84204215,True,0.10531354,-0.32971215,-0.095654674
 128,PROT,212,12,monocyte,myeloid dendritic cell,0.93390894,False,0.27485272,0.42046818,-0.16359523
 128,PROT,213,12,monocyte,erythrocyte,0.8593823,True,0.09282044,-0.103546776,-0.15854752
 128,PROT,214,12,monocyte,myeloid dendritic cell,0.90048635,False,0.04804209,0.20081018,-0.059362974
 128,PROT,215,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8866995,False,0.46671486,-0.2925614,0.4170792
 128,PROT,216,10,macrophage,"cd4-positive, alpha-beta t cell",0.8730609,False,0.322446,-0.26627403,0.105431594
 128,PROT,217,12,monocyte,myeloid dendritic cell,0.9436003,False,0.24054411,0.36987835,-0.062478404
-128,PROT,218,12,monocyte,erythrocyte,0.82314014,False,0.03262374,-0.18698089,-0.13251895
+128,PROT,218,12,monocyte,erythrocyte,0.82314014,True,0.03262374,-0.18698089,-0.13251895
 128,PROT,219,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85822344,False,0.34189397,-0.28789252,0.2245612
 128,PROT,220,12,monocyte,myeloid dendritic cell,0.900599,True,0.049748063,0.12989439,-0.22471538
 128,PROT,221,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8970353,False,0.34832588,-0.41739348,0.35650417
 128,PROT,222,12,monocyte,myeloid dendritic cell,0.93896663,False,0.20873116,0.29526755,-0.23563495
 128,PROT,223,10,macrophage,"cd4-positive, alpha-beta t cell",0.8621477,False,0.25740147,-0.1757992,0.047103565
 128,PROT,224,10,macrophage,"cd4-positive, alpha-beta t cell",0.90205896,False,0.33407748,-0.20573853,0.25913346
-128,PROT,225,12,monocyte,erythrocyte,0.84756774,False,0.0724386,-0.3185817,-0.05182782
-128,PROT,226,12,monocyte,neutrophil,0.8806146,True,-0.1289655,-0.11939207,-0.30639246
+128,PROT,225,12,monocyte,erythrocyte,0.84756774,True,0.0724386,-0.3185817,-0.05182782
+128,PROT,226,12,monocyte,neutrophil,0.8806146,False,-0.1289655,-0.11939207,-0.30639246
 128,PROT,227,10,macrophage,"cd4-positive, alpha-beta t cell",0.8763035,False,0.33300665,-0.30423498,0.1885022
 128,PROT,228,12,monocyte,myeloid dendritic cell,0.8972932,False,0.15924807,0.2144104,-0.16562627
 128,PROT,229,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.87685776,True,0.35000798,-0.21576123,0.23473412
 128,PROT,230,12,monocyte,neutrophil,0.859108,True,0.009710783,-0.110476755,-0.12963556
-128,PROT,231,12,monocyte,erythrocyte,0.83006513,False,-0.059709005,-0.19127722,-0.24438086
+128,PROT,231,12,monocyte,erythrocyte,0.83006513,True,-0.059709005,-0.19127722,-0.24438086
 128,PROT,232,12,monocyte,neutrophil,0.8555438,False,-0.04501199,0.04940461,-0.14621909
 128,PROT,233,12,monocyte,erythrocyte,0.8204483,True,0.0144339,-0.24938469,-0.28884917
 128,PROT,234,10,macrophage,"cd4-positive, alpha-beta t cell",0.9221158,False,0.33008114,-0.34030655,0.3473688
-128,PROT,235,12,monocyte,neutrophil,0.838219,False,-0.13367493,-0.14254771,-0.17967479
+128,PROT,235,12,monocyte,neutrophil,0.838219,True,-0.13367493,-0.14254771,-0.17967479
 128,PROT,236,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9010211,False,0.34013805,-0.36211374,0.28606465
 128,PROT,237,12,monocyte,myeloid dendritic cell,0.9560291,False,0.24857093,0.45092365,-0.16016391
 128,PROT,238,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86237013,False,0.08329085,-0.25180832,-0.0774226
-128,PROT,239,12,monocyte,neutrophil,0.84781486,True,-0.079572335,-0.10437455,-0.18860093
+128,PROT,239,12,monocyte,neutrophil,0.84781486,False,-0.079572335,-0.10437455,-0.18860093
 128,PROT,240,12,monocyte,myeloid dendritic cell,0.96295965,False,0.21917078,0.4756527,-0.07244961
 128,PROT,241,10,macrophage,"cd4-positive, alpha-beta t cell",0.8638765,True,0.36451143,-0.21903345,0.2381231
 128,PROT,242,10,macrophage,"cd8-positive, alpha-beta t cell",0.8632968,False,0.12942646,-0.19330221,0.046245653
 128,PROT,243,12,monocyte,"cd4-positive, alpha-beta t cell",0.8766278,False,0.2341694,-0.16353299,0.01044591
 128,PROT,244,10,macrophage,"cd4-positive, alpha-beta t cell",0.8400377,True,0.39861092,-0.14825593,0.2767955
-128,PROT,245,12,monocyte,erythrocyte,0.8227007,False,-0.036611807,-0.27002797,-0.18291153
+128,PROT,245,12,monocyte,erythrocyte,0.8227007,True,-0.036611807,-0.27002797,-0.18291153
 128,PROT,246,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8499344,False,0.37802082,-0.33021843,0.2751279
 128,PROT,247,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8485781,True,0.3700692,-0.3052445,0.33197483
 128,PROT,248,10,macrophage,"cd4-positive, alpha-beta t cell",0.8391943,True,0.26200497,-0.15432246,0.039056756
 128,PROT,249,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8222577,False,0.31062177,-0.3560492,0.14622577
-128,PROT,250,12,monocyte,erythrocyte,0.8676225,False,0.06771022,-0.06543637,-0.3254677
+128,PROT,250,12,monocyte,erythrocyte,0.8676225,True,0.06771022,-0.06543637,-0.3254677
 128,PROT,251,12,monocyte,myeloid dendritic cell,0.9387002,False,0.0338535,0.2660883,-0.07610215
 128,PROT,252,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9324795,False,0.3880608,-0.38678786,0.49391666
-128,PROT,253,12,monocyte,neutrophil,0.8352855,True,-0.030778965,-0.17498714,-0.18787833
+128,PROT,253,12,monocyte,neutrophil,0.8352855,False,-0.030778965,-0.17498714,-0.18787833
 128,PROT,254,12,monocyte,erythrocyte,0.84228516,True,0.0004902467,-0.20047511,-0.20255664
 128,PROT,255,12,monocyte,neutrophil,0.8419296,True,-0.04420771,0.04585326,-0.11771747
 128,PROT,256,12,monocyte,neutrophil,0.84137523,True,-0.10575269,0.011692735,-0.18904577
@@ -267,8 +267,8 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,265,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9066688,False,0.29359835,-0.32550234,0.24500231
 128,PROT,266,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8859687,False,0.41510266,-0.24601099,0.39712444
 128,PROT,267,12,monocyte,erythrocyte,0.8541654,True,-0.042230397,-0.07189848,-0.24196295
-128,PROT,268,12,monocyte,erythrocyte,0.83845913,False,-0.06999718,-0.08352805,-0.28021023
-128,PROT,269,12,monocyte,erythrocyte,0.86425817,False,0.17301498,-0.3298446,-0.07812808
+128,PROT,268,12,monocyte,erythrocyte,0.83845913,True,-0.06999718,-0.08352805,-0.28021023
+128,PROT,269,12,monocyte,erythrocyte,0.86425817,True,0.17301498,-0.3298446,-0.07812808
 128,PROT,270,12,monocyte,myeloid dendritic cell,0.92725915,False,0.20787375,0.30211633,-0.09283529
 128,PROT,271,12,monocyte,myeloid dendritic cell,0.9297077,False,-0.012824748,0.28860223,-0.20332825
 128,PROT,272,12,monocyte,myeloid dendritic cell,0.95014036,False,0.28697765,0.40616766,-0.14585906
@@ -282,63 +282,63 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,280,10,macrophage,"cd4-positive, alpha-beta t cell",0.85832024,True,0.3100798,-0.19327638,0.18681526
 128,PROT,281,12,monocyte,erythrocyte,0.8617245,True,-0.0796799,-0.07025777,-0.21689981
 128,PROT,282,12,monocyte,myeloid dendritic cell,0.8462432,True,-0.0013339787,0.05446702,-0.053145394
-128,PROT,283,12,monocyte,erythrocyte,0.8748447,False,0.106720895,-0.342219,-0.15807237
+128,PROT,283,12,monocyte,erythrocyte,0.8748447,True,0.106720895,-0.342219,-0.15807237
 128,PROT,284,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8541915,True,0.38589728,-0.37143394,0.3338038
-128,PROT,285,12,monocyte,erythrocyte,0.84694034,True,-0.11331476,-0.20091937,-0.27265513
+128,PROT,285,12,monocyte,erythrocyte,0.84694034,False,-0.11331476,-0.20091937,-0.27265513
 128,PROT,286,10,macrophage,"cd4-positive, alpha-beta t cell",0.86555547,False,0.2244858,-0.25424525,0.054882515
 128,PROT,287,12,monocyte,myeloid dendritic cell,0.91371095,False,0.15569262,0.31743014,-0.08796192
 128,PROT,288,12,monocyte,myeloid dendritic cell,0.9059886,False,0.0431418,0.18576883,-0.23906316
 128,PROT,289,10,macrophage,"cd4-positive, alpha-beta t cell",0.91934174,False,0.16800609,-0.4061589,0.1897838
 128,PROT,290,10,macrophage,"cd4-positive, alpha-beta t cell",0.8605242,False,0.2852201,-0.2506364,-0.013031901
 128,PROT,291,12,monocyte,"cd8-positive, alpha-beta t cell",0.8579861,False,-0.046378303,-0.13804089,-0.04326283
-128,PROT,292,12,monocyte,erythrocyte,0.8438964,False,-0.0042917333,-0.14729671,-0.20473701
+128,PROT,292,12,monocyte,erythrocyte,0.8438964,True,-0.0042917333,-0.14729671,-0.20473701
 128,PROT,293,12,monocyte,neutrophil,0.83960736,True,0.02872372,0.029026119,-0.095173806
 128,PROT,294,12,monocyte,myeloid dendritic cell,0.911553,False,0.005846855,0.24685314,-0.11029716
-128,PROT,295,12,monocyte,erythrocyte,0.832059,False,-0.01906604,-0.1550589,-0.17039375
+128,PROT,295,12,monocyte,erythrocyte,0.832059,True,-0.01906604,-0.1550589,-0.17039375
 128,PROT,296,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8691392,False,0.3939582,-0.35095865,0.33944336
 128,PROT,297,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88870776,False,0.31902426,-0.331175,0.22005256
 128,PROT,298,12,monocyte,myeloid dendritic cell,0.93600905,False,0.19844581,0.43979648,-0.13955048
 128,PROT,299,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.89332163,False,0.36953154,-0.34715176,0.44101527
-128,PROT,300,12,monocyte,erythrocyte,0.8392909,False,-0.008878667,-0.23177183,-0.31985652
+128,PROT,300,12,monocyte,erythrocyte,0.8392909,True,-0.008878667,-0.23177183,-0.31985652
 128,PROT,301,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.90312004,False,0.39266264,-0.3174034,0.33695996
-128,PROT,302,12,monocyte,erythrocyte,0.82833403,False,-0.08344805,-0.09663706,-0.23264691
-128,PROT,303,12,monocyte,erythrocyte,0.83662355,False,-0.011571548,-0.2029911,-0.24585131
+128,PROT,302,12,monocyte,erythrocyte,0.82833403,True,-0.08344805,-0.09663706,-0.23264691
+128,PROT,303,12,monocyte,erythrocyte,0.83662355,True,-0.011571548,-0.2029911,-0.24585131
 128,PROT,304,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9159392,False,0.4193963,-0.39178067,0.48905814
-128,PROT,305,10,macrophage,erythrocyte,0.8135627,False,-0.03420904,-0.3227213,-0.23920728
+128,PROT,305,10,macrophage,erythrocyte,0.8135627,True,-0.03420904,-0.3227213,-0.23920728
 128,PROT,306,12,monocyte,"cd8-positive, alpha-beta t cell",0.85207903,False,0.012748684,-0.24472281,-0.07717048
 128,PROT,307,12,monocyte,myeloid dendritic cell,0.96427,False,0.32289675,0.44811526,-0.15826082
 128,PROT,308,12,monocyte,myeloid dendritic cell,0.94301844,False,0.17904928,0.4215466,-0.099631585
 128,PROT,309,12,monocyte,myeloid dendritic cell,0.86525285,True,0.18192688,0.13062546,-0.032164644
 128,PROT,310,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85713613,True,0.36402544,-0.3020048,0.20477882
-128,PROT,311,12,monocyte,erythrocyte,0.8245991,False,-0.030477017,-0.24196574,-0.22623175
+128,PROT,311,12,monocyte,erythrocyte,0.8245991,True,-0.030477017,-0.24196574,-0.22623175
 128,PROT,312,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9130367,False,0.38595685,-0.33530548,0.41323882
 128,PROT,313,10,macrophage,"cd4-positive, alpha-beta t cell",0.88500464,False,0.34934524,-0.32121375,0.3979321
 128,PROT,314,12,monocyte,myeloid dendritic cell,0.94322425,False,0.18402119,0.41811067,-0.19910254
 128,PROT,315,12,monocyte,erythrocyte,0.85887897,True,0.036902882,-0.29279485,-0.2044182
 128,PROT,316,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9155804,False,0.40484777,-0.38630614,0.45445317
 128,PROT,317,12,monocyte,neutrophil,0.87598383,False,-0.14825836,0.045639876,-0.1590943
-128,PROT,318,12,monocyte,erythrocyte,0.8543916,True,-0.083148055,-0.1430967,-0.31531847
+128,PROT,318,12,monocyte,erythrocyte,0.8543916,False,-0.083148055,-0.1430967,-0.31531847
 128,PROT,319,10,macrophage,"cd4-positive, alpha-beta t cell",0.8735361,False,0.30708992,-0.16701137,0.11815919
-128,PROT,320,12,monocyte,erythrocyte,0.8442048,False,-0.020328462,-0.18560602,-0.2768788
-128,PROT,321,12,monocyte,erythrocyte,0.8489073,False,0.03227554,-0.18017553,-0.29553252
+128,PROT,320,12,monocyte,erythrocyte,0.8442048,True,-0.020328462,-0.18560602,-0.2768788
+128,PROT,321,12,monocyte,erythrocyte,0.8489073,True,0.03227554,-0.18017553,-0.29553252
 128,PROT,322,12,monocyte,"cd8-positive, alpha-beta t cell",0.85762465,False,0.19987063,-0.14632234,0.026072783
 128,PROT,323,12,monocyte,neutrophil,0.83917475,True,-0.10487861,-0.06736143,-0.16965482
-128,PROT,324,12,monocyte,erythrocyte,0.8227552,False,-0.050999098,-0.091503546,-0.1642729
-128,PROT,325,12,monocyte,erythrocyte,0.81538343,False,-0.0016426727,-0.3139586,-0.1636177
+128,PROT,324,12,monocyte,erythrocyte,0.8227552,True,-0.050999098,-0.091503546,-0.1642729
+128,PROT,325,12,monocyte,erythrocyte,0.81538343,True,-0.0016426727,-0.3139586,-0.1636177
 128,PROT,326,10,macrophage,"cd4-positive, alpha-beta t cell",0.90947515,False,0.36104718,-0.27122095,0.28276122
 128,PROT,327,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.90511036,False,0.37076357,-0.3506996,0.4102426
 128,PROT,328,10,macrophage,"cd4-positive, alpha-beta t cell",0.85599214,True,0.3306853,-0.14231132,0.16141863
 128,PROT,329,12,monocyte,myeloid dendritic cell,0.9232648,False,0.1599,0.22781275,-0.25393215
-128,PROT,330,10,macrophage,erythrocyte,0.8511324,False,0.012219095,-0.097913526,-0.19877954
-128,PROT,331,12,monocyte,erythrocyte,0.8538467,False,-0.05133327,-0.1477196,-0.1966141
+128,PROT,330,10,macrophage,erythrocyte,0.8511324,True,0.012219095,-0.097913526,-0.19877954
+128,PROT,331,12,monocyte,erythrocyte,0.8538467,True,-0.05133327,-0.1477196,-0.1966141
 128,PROT,332,12,monocyte,myeloid dendritic cell,0.94141215,False,0.3086089,0.245072,-0.25489777
 128,PROT,333,12,monocyte,"cd4-positive, alpha-beta t cell",0.9200078,False,0.3417481,-0.3135531,0.39360067
 128,PROT,334,12,monocyte,myeloid dendritic cell,0.95501006,False,0.31254354,0.3828593,-0.19353178
 128,PROT,335,12,monocyte,myeloid dendritic cell,0.8849475,True,0.10535835,0.043093696,-0.20039526
-128,PROT,336,12,monocyte,erythrocyte,0.8364212,False,-0.08158937,-0.16292655,-0.13957001
+128,PROT,336,12,monocyte,erythrocyte,0.8364212,True,-0.08158937,-0.16292655,-0.13957001
 128,PROT,337,12,monocyte,erythrocyte,0.8521365,True,0.014420145,-0.21819708,-0.26510623
 128,PROT,338,10,macrophage,"cd4-positive, alpha-beta t cell",0.93659925,False,0.40770385,-0.38282338,0.51221263
-128,PROT,339,12,monocyte,erythrocyte,0.84808844,True,-0.05228995,-0.17594245,-0.24839513
+128,PROT,339,12,monocyte,erythrocyte,0.84808844,False,-0.05228995,-0.17594245,-0.24839513
 128,PROT,340,12,monocyte,myeloid dendritic cell,0.95932543,False,0.29130316,0.41938183,-0.20934553
 128,PROT,341,10,macrophage,"cd4-positive, alpha-beta t cell",0.90390396,False,0.38446754,-0.291971,0.3663801
 128,PROT,342,12,monocyte,myeloid dendritic cell,0.924732,False,0.21426612,0.24616253,-0.23697147
@@ -346,7 +346,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,344,12,monocyte,erythrocyte,0.8626564,True,-0.020268468,-0.24607447,-0.27918366
 128,PROT,345,12,monocyte,myeloid dendritic cell,0.8762574,False,0.037430223,0.15074387,-0.12010771
 128,PROT,346,12,monocyte,myeloid dendritic cell,0.9110597,False,0.032248676,0.26171684,-0.21943825
-128,PROT,347,12,monocyte,erythrocyte,0.8246891,False,0.11218293,-0.3273399,-0.08961377
+128,PROT,347,12,monocyte,erythrocyte,0.8246891,True,0.11218293,-0.3273399,-0.08961377
 128,PROT,348,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86507225,False,0.20310016,-0.22052895,0.11012611
 128,PROT,349,10,macrophage,"cd4-positive, alpha-beta t cell",0.892937,False,0.302671,-0.29780635,0.24917154
 128,PROT,350,10,macrophage,"cd8-positive, alpha-beta t cell",0.88658124,False,0.24670427,-0.2272762,0.04353184
@@ -366,22 +366,22 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,364,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.885435,False,0.2919011,-0.28792834,0.2069851
 128,PROT,365,12,monocyte,myeloid dendritic cell,0.9260624,False,0.11906887,0.11074484,-0.25595796
 128,PROT,366,10,macrophage,"cd4-positive, alpha-beta t cell",0.8675951,True,0.3406717,-0.1226897,0.21403456
-128,PROT,367,10,macrophage,erythrocyte,0.8538952,False,0.12072011,-0.33743745,0.029622298
-128,PROT,368,12,monocyte,erythrocyte,0.8584541,False,-0.040636484,-0.1373884,-0.16555196
+128,PROT,367,10,macrophage,erythrocyte,0.8538952,True,0.12072011,-0.33743745,0.029622298
+128,PROT,368,12,monocyte,erythrocyte,0.8584541,True,-0.040636484,-0.1373884,-0.16555196
 128,PROT,369,10,macrophage,"cd8-positive, alpha-beta t cell",0.86029595,False,0.15863757,-0.2831626,0.023996452
-128,PROT,370,12,monocyte,erythrocyte,0.8324448,False,0.08617397,-0.12695682,-0.101475865
+128,PROT,370,12,monocyte,erythrocyte,0.8324448,True,0.08617397,-0.12695682,-0.101475865
 128,PROT,371,12,monocyte,erythrocyte,0.8516687,True,-0.035245597,-0.019693386,-0.18306023
-128,PROT,372,12,monocyte,neutrophil,0.83243227,False,-0.12705441,-0.11939161,-0.17913516
-128,PROT,373,12,monocyte,neutrophil,0.84829396,False,-0.23520541,-0.036615543,-0.21560167
+128,PROT,372,12,monocyte,neutrophil,0.83243227,True,-0.12705441,-0.11939161,-0.17913516
+128,PROT,373,12,monocyte,neutrophil,0.84829396,True,-0.23520541,-0.036615543,-0.21560167
 128,PROT,374,12,monocyte,myeloid dendritic cell,0.90417516,False,0.17668818,0.23794468,-0.13263403
 128,PROT,375,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8758305,False,0.18379702,-0.29086128,0.094630145
 128,PROT,376,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86376476,False,0.19476777,-0.3610311,0.10007031
-128,PROT,377,12,monocyte,erythrocyte,0.84863645,False,-0.05731756,-0.21040063,-0.21592373
-128,PROT,378,12,monocyte,erythrocyte,0.8335311,False,0.105849706,-0.27641383,-0.12706122
+128,PROT,377,12,monocyte,erythrocyte,0.84863645,True,-0.05731756,-0.21040063,-0.21592373
+128,PROT,378,12,monocyte,erythrocyte,0.8335311,True,0.105849706,-0.27641383,-0.12706122
 128,PROT,379,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88179743,False,0.3612562,-0.3449122,0.41041306
 128,PROT,380,12,monocyte,myeloid dendritic cell,0.9086731,False,0.26612476,0.30996823,-0.028916437
-128,PROT,381,12,monocyte,erythrocyte,0.81536686,False,0.20714758,-0.33119425,-0.051376734
-128,PROT,382,12,monocyte,erythrocyte,0.8246487,False,-0.044592693,-0.037067514,-0.22856262
+128,PROT,381,12,monocyte,erythrocyte,0.81536686,True,0.20714758,-0.33119425,-0.051376734
+128,PROT,382,12,monocyte,erythrocyte,0.8246487,True,-0.044592693,-0.037067514,-0.22856262
 128,PROT,383,12,monocyte,myeloid dendritic cell,0.9187522,False,0.03329623,0.24071229,-0.22671191
 128,PROT,384,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8228798,True,0.2939781,-0.15702868,0.11128265
 128,PROT,385,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8082938,True,0.4002414,-0.21947055,0.23332173
@@ -409,7 +409,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,407,12,monocyte,myeloid dendritic cell,0.9472663,False,0.29755145,0.37241918,-0.24610394
 128,PROT,408,12,monocyte,myeloid dendritic cell,0.93605554,False,-0.0016077126,0.30559355,-0.18009973
 128,PROT,409,12,monocyte,neutrophil,0.86827964,False,-0.17412336,0.04289774,-0.16916022
-128,PROT,410,12,monocyte,erythrocyte,0.8555276,False,-0.05860834,-0.14784151,-0.22718613
+128,PROT,410,12,monocyte,erythrocyte,0.8555276,True,-0.05860834,-0.14784151,-0.22718613
 128,PROT,411,10,macrophage,"cd4-positive, alpha-beta t cell",0.8997285,False,0.36395764,-0.25190976,0.3669111
 128,PROT,412,10,macrophage,"cd4-positive, alpha-beta t cell",0.89704305,False,0.29661664,-0.36237633,0.27752072
 128,PROT,413,10,macrophage,"cd8-positive, alpha-beta t cell",0.8508231,False,0.21934296,-0.23273884,-0.05024924
@@ -422,18 +422,18 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,420,12,monocyte,erythrocyte,0.86528623,False,-0.049211722,-0.19199568,-0.2950424
 128,PROT,421,10,macrophage,"cd4-positive, alpha-beta t cell",0.90646803,False,0.33791775,-0.3033638,0.3251011
 128,PROT,422,12,monocyte,myeloid dendritic cell,0.9213382,False,0.016052617,0.27909446,-0.17769349
-128,PROT,423,12,monocyte,erythrocyte,0.9056368,False,0.06432004,0.00817169,-0.35254362
+128,PROT,423,12,monocyte,erythrocyte,0.9056368,True,0.06432004,0.00817169,-0.35254362
 128,PROT,424,12,monocyte,neutrophil,0.8280196,False,-0.05746067,-0.07841221,-0.1900346
 128,PROT,425,12,monocyte,myeloid dendritic cell,0.9289382,False,0.26280776,0.32757878,-0.2486303
-128,PROT,426,10,macrophage,erythrocyte,0.8527632,False,0.21376786,-0.33693305,-0.013980456
+128,PROT,426,10,macrophage,erythrocyte,0.8527632,True,0.21376786,-0.33693305,-0.013980456
 128,PROT,427,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9197583,False,0.36641166,-0.38379738,0.3968291
 128,PROT,428,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.89698565,False,0.29247972,-0.34941354,0.31067437
 128,PROT,429,12,monocyte,neutrophil,0.8836673,False,-0.02283634,0.006448308,-0.24622892
-128,PROT,430,12,monocyte,erythrocyte,0.84456414,False,0.11833968,-0.17472734,-0.06476827
+128,PROT,430,12,monocyte,erythrocyte,0.84456414,True,0.11833968,-0.17472734,-0.06476827
 128,PROT,431,12,monocyte,erythrocyte,0.8615449,True,0.04117219,-0.26969904,-0.33521396
-128,PROT,432,12,monocyte,neutrophil,0.8567009,False,-0.06607909,-0.17468165,-0.14231594
+128,PROT,432,12,monocyte,neutrophil,0.8567009,True,-0.06607909,-0.17468165,-0.14231594
 128,PROT,433,12,monocyte,erythrocyte,0.8731631,False,-0.053063463,-0.15495913,-0.31659114
-128,PROT,434,12,monocyte,erythrocyte,0.8371784,False,0.03592076,-0.124879435,-0.18192218
+128,PROT,434,12,monocyte,erythrocyte,0.8371784,True,0.03592076,-0.124879435,-0.18192218
 128,PROT,435,12,monocyte,myeloid dendritic cell,0.9251909,False,0.031184295,0.19018315,-0.29830396
 128,PROT,436,12,monocyte,myeloid dendritic cell,0.9261595,False,0.042402312,0.29510167,-0.22497553
 128,PROT,437,12,monocyte,myeloid dendritic cell,0.9522643,False,0.2906722,0.38964555,-0.25633204
@@ -454,7 +454,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,452,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.873675,False,0.33372018,-0.2730722,0.26706526
 128,PROT,453,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8184169,True,0.29968673,-0.20656042,0.0672778
 128,PROT,454,12,monocyte,neutrophil,0.87318784,True,0.079142414,0.04916275,-0.16991399
-128,PROT,455,12,monocyte,neutrophil,0.8665655,True,-0.16192555,-0.036104146,-0.24174792
+128,PROT,455,12,monocyte,neutrophil,0.8665655,False,-0.16192555,-0.036104146,-0.24174792
 128,PROT,456,10,macrophage,"cd4-positive, alpha-beta t cell",0.8796528,False,0.34792745,-0.25271457,0.29063594
 128,PROT,457,10,macrophage,"cd4-positive, alpha-beta t cell",0.8679463,True,0.37484112,-0.2509337,0.33505952
 128,PROT,458,10,macrophage,mature nk t cell,0.84256554,True,0.39627665,-0.2801729,0.13563737
@@ -464,15 +464,15 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,462,12,monocyte,myeloid dendritic cell,0.8953522,False,-0.02300482,0.16120279,-0.17530498
 128,PROT,463,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8160674,True,0.39495042,-0.27207023,0.22627103
 128,PROT,464,12,monocyte,neutrophil,0.8517003,False,-0.102158725,0.0069967406,-0.0969462
-128,PROT,465,12,monocyte,neutrophil,0.8677375,True,-0.2051215,-0.10648267,-0.20728198
+128,PROT,465,12,monocyte,neutrophil,0.8677375,False,-0.2051215,-0.10648267,-0.20728198
 128,PROT,466,12,monocyte,neutrophil,0.8777501,False,-0.094104394,0.0785797,-0.22322623
-128,PROT,467,10,macrophage,erythrocyte,0.8499776,False,0.13987027,-0.27801442,-0.04616526
+128,PROT,467,10,macrophage,erythrocyte,0.8499776,True,0.13987027,-0.27801442,-0.04616526
 128,PROT,468,12,monocyte,myeloid dendritic cell,0.90410185,False,0.0719902,0.15514907,-0.23208016
 128,PROT,469,12,monocyte,neutrophil,0.87529457,True,0.05005144,-0.03256489,-0.13864517
 128,PROT,470,10,macrophage,mature nk t cell,0.84972954,True,0.37304652,-0.14314854,0.26869425
 128,PROT,471,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8531866,False,0.33987415,-0.14880873,0.15768562
 128,PROT,472,10,macrophage,"cd4-positive, alpha-beta t cell",0.83459127,True,0.3510264,-0.2023866,0.2533023
-128,PROT,473,12,monocyte,neutrophil,0.84901315,True,-0.1377695,-0.12414213,-0.2179209
+128,PROT,473,12,monocyte,neutrophil,0.84901315,False,-0.1377695,-0.12414213,-0.2179209
 128,PROT,474,12,monocyte,myeloid dendritic cell,0.92090905,False,0.17464893,0.25730437,-0.22628261
 128,PROT,475,12,monocyte,myeloid dendritic cell,0.9037573,False,-0.009958604,0.22521694,-0.22156817
 128,PROT,476,12,monocyte,myeloid dendritic cell,0.96142244,False,0.27868965,0.46590546,-0.17411307
@@ -482,21 +482,21 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,480,10,macrophage,"cd4-positive, alpha-beta t cell",0.91356134,False,0.34547678,-0.29762736,0.44062614
 128,PROT,481,12,monocyte,neutrophil,0.85143167,True,0.03285312,-0.07630383,-0.13790333
 128,PROT,482,10,macrophage,"cd4-positive, alpha-beta t cell",0.90831125,False,0.32428288,-0.21145728,0.2993163
-128,PROT,483,12,monocyte,erythrocyte,0.8510623,False,-0.03496298,-0.17895146,-0.16943708
+128,PROT,483,12,monocyte,erythrocyte,0.8510623,True,-0.03496298,-0.17895146,-0.16943708
 128,PROT,484,12,monocyte,myeloid dendritic cell,0.8646204,True,0.11539624,-0.019433029,-0.12645689
 128,PROT,485,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85514355,True,0.35377496,-0.19130246,0.27885345
 128,PROT,486,12,monocyte,neutrophil,0.8533902,True,0.06454081,-0.060249005,-0.0735169
-128,PROT,487,12,monocyte,erythrocyte,0.8285844,False,0.040606186,-0.33763915,-0.1640672
+128,PROT,487,12,monocyte,erythrocyte,0.8285844,True,0.040606186,-0.33763915,-0.1640672
 128,PROT,488,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.87978905,False,0.10819794,-0.35593343,-0.072588146
 128,PROT,489,12,monocyte,myeloid dendritic cell,0.96983814,False,0.28039804,0.49317682,-0.2126241
 128,PROT,490,12,monocyte,erythrocyte,0.85336894,True,-0.04655623,-0.21707256,-0.3088787
 128,PROT,491,12,monocyte,myeloid dendritic cell,0.90914375,False,0.053809904,0.2206888,-0.0648946
 128,PROT,492,12,monocyte,myeloid dendritic cell,0.9018321,False,0.009699134,0.1936665,-0.11775134
-128,PROT,493,10,macrophage,erythrocyte,0.8295908,False,0.013332134,-0.26255116,-0.27769303
+128,PROT,493,10,macrophage,erythrocyte,0.8295908,True,0.013332134,-0.26255116,-0.27769303
 128,PROT,494,12,monocyte,erythrocyte,0.842682,True,0.18436742,-0.30982447,-0.07935064
-128,PROT,495,12,monocyte,erythrocyte,0.84547424,True,0.010632088,-0.1795985,-0.31875882
-128,PROT,496,12,monocyte,erythrocyte,0.8495673,False,0.14942122,-0.27306694,0.07567848
-128,PROT,497,12,monocyte,erythrocyte,0.8390999,False,0.08830881,-0.43817216,-0.090025
+128,PROT,495,12,monocyte,erythrocyte,0.84547424,False,0.010632088,-0.1795985,-0.31875882
+128,PROT,496,12,monocyte,erythrocyte,0.8495673,True,0.14942122,-0.27306694,0.07567848
+128,PROT,497,12,monocyte,erythrocyte,0.8390999,True,0.08830881,-0.43817216,-0.090025
 128,PROT,498,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88089895,False,0.3271982,-0.25838408,0.20985776
 128,PROT,499,12,monocyte,myeloid dendritic cell,0.8761362,True,0.18850048,0.04074215,-0.11777354
 128,PROT,500,12,monocyte,myeloid dendritic cell,0.880676,True,0.009356086,0.13513295,-0.077886276
@@ -504,11 +504,11 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,502,12,monocyte,myeloid dendritic cell,0.86438113,True,0.15102391,-0.024639726,-0.04097628
 128,PROT,503,12,monocyte,myeloid dendritic cell,0.8418174,True,0.07052119,0.071565375,-0.101348
 128,PROT,504,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8433595,True,0.43664783,-0.27053154,0.33408898
-128,PROT,505,12,monocyte,erythrocyte,0.8596506,False,0.008959283,-0.20280977,-0.22947027
+128,PROT,505,12,monocyte,erythrocyte,0.8596506,True,0.008959283,-0.20280977,-0.22947027
 128,PROT,506,12,monocyte,neutrophil,0.86598986,False,-0.03781861,0.055691343,-0.1761314
-128,PROT,507,10,macrophage,erythrocyte,0.8618504,False,0.09737355,-0.2740202,-0.07064178
-128,PROT,508,12,monocyte,erythrocyte,0.84970915,False,0.044432625,-0.32488874,-0.12665224
-128,PROT,509,12,monocyte,erythrocyte,0.82683456,False,-0.010571158,-0.13478108,-0.15617268
+128,PROT,507,10,macrophage,erythrocyte,0.8618504,True,0.09737355,-0.2740202,-0.07064178
+128,PROT,508,12,monocyte,erythrocyte,0.84970915,True,0.044432625,-0.32488874,-0.12665224
+128,PROT,509,12,monocyte,erythrocyte,0.82683456,True,-0.010571158,-0.13478108,-0.15617268
 128,PROT,510,12,monocyte,myeloid dendritic cell,0.92198,False,0.117832504,0.305258,-0.11823162
 128,PROT,511,12,monocyte,erythrocyte,0.8638787,True,0.047309585,-0.08622285,-0.21644853
 128,PROT,512,12,monocyte,monocyte,0.9642121,False,0.3995378,0.43172488,-0.1592394
@@ -517,21 +517,21 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,515,12,monocyte,neutrophil,0.8180672,True,0.099140905,-0.09896834,-0.05521266
 128,PROT,516,12,monocyte,myeloid dendritic cell,0.9653896,False,0.10739124,0.48439196,-0.09117989
 128,PROT,517,12,monocyte,"cd8-positive, alpha-beta t cell",0.84503603,True,0.07976933,-0.04779064,-0.09305483
-128,PROT,518,12,monocyte,erythrocyte,0.8491705,False,-0.016352784,-0.2953855,-0.063752286
+128,PROT,518,12,monocyte,erythrocyte,0.8491705,True,-0.016352784,-0.2953855,-0.063752286
 128,PROT,519,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9244472,False,0.3356198,-0.37233543,0.3438624
 128,PROT,520,12,monocyte,myeloid dendritic cell,0.9313384,False,0.21508248,0.314173,-0.14004214
-128,PROT,521,10,macrophage,erythrocyte,0.8476654,False,0.22090133,-0.14426899,0.055571735
+128,PROT,521,10,macrophage,erythrocyte,0.8476654,True,0.22090133,-0.14426899,0.055571735
 128,PROT,522,10,macrophage,"cd4-positive, alpha-beta t cell",0.9166182,False,0.3365286,-0.28784382,0.372035
 128,PROT,523,12,monocyte,erythrocyte,0.845181,True,0.18126112,-0.15226935,0.065310106
-128,PROT,524,12,monocyte,erythrocyte,0.844499,False,0.04692989,-0.21085224,-0.23369987
+128,PROT,524,12,monocyte,erythrocyte,0.844499,True,0.04692989,-0.21085224,-0.23369987
 128,PROT,525,12,monocyte,erythrocyte,0.85676444,True,0.054079082,-0.23084132,-0.14839737
 128,PROT,526,12,monocyte,myeloid dendritic cell,0.9028637,False,-0.009142149,0.30834436,-0.09975577
 128,PROT,527,12,monocyte,myeloid dendritic cell,0.9693638,False,0.41650057,0.43611246,-0.14171341
-128,PROT,528,12,monocyte,erythrocyte,0.8389913,False,0.011056054,-0.2247631,-0.22435875
-128,PROT,529,10,macrophage,erythrocyte,0.8281972,False,0.09284532,-0.21327935,-0.09065514
+128,PROT,528,12,monocyte,erythrocyte,0.8389913,True,0.011056054,-0.2247631,-0.22435875
+128,PROT,529,10,macrophage,erythrocyte,0.8281972,True,0.09284532,-0.21327935,-0.09065514
 128,PROT,530,12,monocyte,"cd4-positive, alpha-beta t cell",0.9112151,False,0.32970202,-0.22213902,0.3145757
 128,PROT,531,10,macrophage,"cd4-positive, alpha-beta t cell",0.8827449,False,0.39650276,-0.29632735,0.33588192
-128,PROT,532,12,monocyte,erythrocyte,0.86307657,True,-0.021787249,-0.15856948,-0.24016118
+128,PROT,532,12,monocyte,erythrocyte,0.86307657,False,-0.021787249,-0.15856948,-0.24016118
 128,PROT,533,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.95836973,False,0.41895643,-0.45934954,0.5207059
 128,PROT,534,12,monocyte,myeloid dendritic cell,0.89307356,False,-0.048259728,0.14246236,-0.15155834
 128,PROT,535,12,monocyte,erythrocyte,0.8563654,True,0.041328724,-0.15652536,-0.10865242
@@ -539,25 +539,25 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,537,12,monocyte,myeloid dendritic cell,0.9388262,False,0.06870965,0.3199091,-0.23471153
 128,PROT,538,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86700666,True,0.38622496,-0.2998765,0.30704883
 128,PROT,539,12,monocyte,myeloid dendritic cell,0.93095094,False,0.1781837,0.32823756,-0.21792927
-128,PROT,540,12,monocyte,erythrocyte,0.8814515,False,0.1459174,-0.004319907,-0.23916137
+128,PROT,540,12,monocyte,erythrocyte,0.8814515,True,0.1459174,-0.004319907,-0.23916137
 128,PROT,541,12,monocyte,myeloid dendritic cell,0.87403744,False,0.27285624,0.14975646,-0.13753168
-128,PROT,542,12,monocyte,erythrocyte,0.82507074,False,-0.019844476,-0.19856557,-0.17716625
+128,PROT,542,12,monocyte,erythrocyte,0.82507074,True,-0.019844476,-0.19856557,-0.17716625
 128,PROT,543,12,monocyte,neutrophil,0.880017,False,-0.0015006897,-0.010239854,-0.2313696
 128,PROT,544,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.82127106,True,0.42039454,-0.23996584,0.37404388
 128,PROT,545,12,monocyte,myeloid dendritic cell,0.9158638,False,0.07970934,0.25623822,-0.2601094
 128,PROT,546,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8729516,False,0.23397286,-0.31346285,0.032163
-128,PROT,547,12,monocyte,erythrocyte,0.8433733,False,-0.0007189975,-0.23547752,-0.079257146
+128,PROT,547,12,monocyte,erythrocyte,0.8433733,True,-0.0007189975,-0.23547752,-0.079257146
 128,PROT,548,12,monocyte,erythrocyte,0.8339957,True,-0.0047519277,-0.25024918,-0.25457224
 128,PROT,549,12,monocyte,"cd4-positive, alpha-beta t cell",0.88929904,False,0.42481115,-0.27916506,0.40571785
 128,PROT,550,12,monocyte,myeloid dendritic cell,0.9649207,False,0.313104,0.44215336,-0.14729369
 128,PROT,551,12,monocyte,erythrocyte,0.838532,True,-0.011640268,-0.36441928,-0.30331233
-128,PROT,552,10,macrophage,erythrocyte,0.82078916,False,0.056170966,-0.45144793,-0.26357663
+128,PROT,552,10,macrophage,erythrocyte,0.82078916,True,0.056170966,-0.45144793,-0.26357663
 128,PROT,553,12,monocyte,myeloid dendritic cell,0.9656714,False,0.30738235,0.50293666,-0.14529638
 128,PROT,554,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8623203,True,0.28816074,-0.32185975,0.14108478
 128,PROT,555,12,monocyte,myeloid dendritic cell,0.9363076,False,-0.08972316,0.28443146,-0.05216542
 128,PROT,556,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85514605,False,0.22424112,-0.28152683,0.041303713
 128,PROT,557,12,monocyte,neutrophil,0.8655697,False,-0.0025341664,0.063900694,-0.1589835
-128,PROT,558,12,monocyte,erythrocyte,0.86108416,False,0.1604447,-0.19581774,0.012577922
+128,PROT,558,12,monocyte,erythrocyte,0.86108416,True,0.1604447,-0.19581774,0.012577922
 128,PROT,559,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8939475,False,0.20530555,-0.43943164,0.15058129
 128,PROT,560,10,macrophage,"cd8-positive, alpha-beta t cell",0.87648344,False,0.1229925,-0.24865982,0.041003846
 128,PROT,561,12,monocyte,"cd4-positive, alpha-beta t cell",0.909798,False,0.37699968,-0.30866784,0.40254253
@@ -565,23 +565,23 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,563,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.87065184,False,0.2607893,-0.3355498,0.12242593
 128,PROT,564,12,monocyte,myeloid dendritic cell,0.9476288,False,0.35498434,0.38380903,-0.16823535
 128,PROT,565,12,monocyte,myeloid dendritic cell,0.8782588,False,0.16420947,0.17557098,-0.19946495
-128,PROT,566,12,monocyte,erythrocyte,0.8299977,False,-0.035656415,-0.18768604,-0.23213886
+128,PROT,566,12,monocyte,erythrocyte,0.8299977,True,-0.035656415,-0.18768604,-0.23213886
 128,PROT,567,10,macrophage,"cd4-positive, alpha-beta t cell",0.88618743,False,0.38968527,-0.29559,0.34637004
 128,PROT,568,12,monocyte,myeloid dendritic cell,0.90771866,False,0.13332936,0.29681852,-0.12940472
 128,PROT,569,12,monocyte,neutrophil,0.84620667,False,-0.07927364,-0.053586308,-0.19578147
 128,PROT,570,12,monocyte,"cd4-positive, alpha-beta t cell",0.9364033,False,0.42551008,-0.34749782,0.49179697
 128,PROT,571,12,monocyte,"cd4-positive, alpha-beta t cell",0.87157935,False,0.2063448,-0.17925349,0.06385264
-128,PROT,572,12,monocyte,erythrocyte,0.8457754,False,-0.07541549,-0.18075635,-0.20137769
+128,PROT,572,12,monocyte,erythrocyte,0.8457754,True,-0.07541549,-0.18075635,-0.20137769
 128,PROT,573,12,monocyte,myeloid dendritic cell,0.94451237,False,0.30778137,0.3802517,-0.1373958
 128,PROT,574,12,monocyte,myeloid dendritic cell,0.9676649,False,0.40443367,0.45022342,-0.15673943
-128,PROT,575,10,macrophage,erythrocyte,0.8185951,False,0.075689614,-0.31737232,-0.12330007
-128,PROT,576,12,monocyte,erythrocyte,0.85734797,False,0.08603386,-0.269233,0.0025015408
+128,PROT,575,10,macrophage,erythrocyte,0.8185951,True,0.075689614,-0.31737232,-0.12330007
+128,PROT,576,12,monocyte,erythrocyte,0.85734797,True,0.08603386,-0.269233,0.0025015408
 128,PROT,577,12,monocyte,erythrocyte,0.8483407,True,0.2570142,-0.2163447,-0.0603699
-128,PROT,578,12,monocyte,erythrocyte,0.82829726,False,0.013792974,-0.21150494,-0.07860333
+128,PROT,578,12,monocyte,erythrocyte,0.82829726,True,0.013792974,-0.21150494,-0.07860333
 128,PROT,579,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84452313,False,0.18382722,-0.32547846,0.094129324
 128,PROT,580,12,monocyte,"cd4-positive, alpha-beta t cell",0.8680976,False,0.16053094,-0.26610416,0.040947903
-128,PROT,581,10,macrophage,erythrocyte,0.8570555,False,0.050831992,-0.18895382,-0.19145124
-128,PROT,582,12,monocyte,erythrocyte,0.84664106,True,0.028265867,-0.18906143,-0.24909085
+128,PROT,581,10,macrophage,erythrocyte,0.8570555,True,0.050831992,-0.18895382,-0.19145124
+128,PROT,582,12,monocyte,erythrocyte,0.84664106,False,0.028265867,-0.18906143,-0.24909085
 128,PROT,583,10,macrophage,"cd4-positive, alpha-beta t cell",0.89598036,False,0.307503,-0.24848585,0.28761247
 128,PROT,584,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9137638,False,0.39136147,-0.4184405,0.4518057
 128,PROT,585,12,monocyte,myeloid dendritic cell,0.892774,False,0.106997974,0.14933977,-0.21925943
@@ -589,8 +589,8 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,587,12,monocyte,neutrophil,0.86546105,True,0.039336238,-0.00095203746,-0.19823487
 128,PROT,588,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.90182066,False,0.33930036,-0.36905932,0.32628292
 128,PROT,589,12,monocyte,monocyte,0.95897233,False,0.38025406,0.43893966,-0.14005207
-128,PROT,590,12,monocyte,erythrocyte,0.86416066,False,0.051769502,0.012676874,-0.2067036
-128,PROT,591,12,monocyte,erythrocyte,0.8363353,False,-0.06895865,-0.192656,-0.16811499
+128,PROT,590,12,monocyte,erythrocyte,0.86416066,True,0.051769502,0.012676874,-0.2067036
+128,PROT,591,12,monocyte,erythrocyte,0.8363353,True,-0.06895865,-0.192656,-0.16811499
 128,PROT,592,12,monocyte,neutrophil,0.88894176,False,-0.07242605,0.032810133,-0.24499008
 128,PROT,593,10,macrophage,mature nk t cell,0.83108616,True,0.42563632,-0.16738412,0.3387016
 128,PROT,594,12,monocyte,neutrophil,0.8792983,False,-0.012279507,0.05386138,-0.20174688
@@ -600,11 +600,11 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,598,12,monocyte,erythrocyte,0.8569237,True,-0.0342365,-0.21510181,-0.32403743
 128,PROT,599,12,monocyte,erythrocyte,0.8367506,True,-0.10047537,-0.293517,-0.2366719
 128,PROT,600,12,monocyte,neutrophil,0.8612046,False,-0.055236846,-0.016605848,-0.15409961
-128,PROT,601,12,monocyte,erythrocyte,0.84972286,False,-0.060494915,-0.16359428,-0.19993205
-128,PROT,602,12,monocyte,erythrocyte,0.8566307,False,-0.08697727,-0.04427843,-0.2898247
-128,PROT,603,12,monocyte,erythrocyte,0.8419779,False,0.0075362013,-0.20823517,-0.23629016
-128,PROT,604,12,monocyte,erythrocyte,0.85148346,False,-0.097572155,-0.16129094,-0.25572675
-128,PROT,605,10,macrophage,erythrocyte,0.8668516,False,0.10222513,-0.15437718,-0.19589305
+128,PROT,601,12,monocyte,erythrocyte,0.84972286,True,-0.060494915,-0.16359428,-0.19993205
+128,PROT,602,12,monocyte,erythrocyte,0.8566307,True,-0.08697727,-0.04427843,-0.2898247
+128,PROT,603,12,monocyte,erythrocyte,0.8419779,True,0.0075362013,-0.20823517,-0.23629016
+128,PROT,604,12,monocyte,erythrocyte,0.85148346,True,-0.097572155,-0.16129094,-0.25572675
+128,PROT,605,10,macrophage,erythrocyte,0.8668516,True,0.10222513,-0.15437718,-0.19589305
 128,PROT,606,12,monocyte,erythrocyte,0.8595198,True,0.0170621,-0.28975013,-0.29774585
 128,PROT,607,12,monocyte,myeloid dendritic cell,0.9717636,False,0.31467202,0.49618998,-0.12896569
 128,PROT,608,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.907368,False,0.44393638,-0.3418306,0.3802672
@@ -620,10 +620,10 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,618,12,monocyte,myeloid dendritic cell,0.9597319,False,0.25208586,0.46169573,-0.16228579
 128,PROT,619,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8929068,False,0.388291,-0.2993782,0.2535656
 128,PROT,620,12,monocyte,myeloid dendritic cell,0.8626377,False,0.051323447,0.029112758,-0.14240214
-128,PROT,621,12,monocyte,erythrocyte,0.8224036,False,-0.017868942,-0.22282116,-0.15009795
+128,PROT,621,12,monocyte,erythrocyte,0.8224036,True,-0.017868942,-0.22282116,-0.15009795
 128,PROT,622,12,monocyte,erythrocyte,0.8498915,True,-0.062314674,-0.065198615,-0.18329024
 128,PROT,623,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88807154,False,0.3322685,-0.3238436,0.2687706
-128,PROT,624,12,monocyte,erythrocyte,0.82105446,False,0.0316304,-0.25949773,-0.055113163
+128,PROT,624,12,monocyte,erythrocyte,0.82105446,True,0.0316304,-0.25949773,-0.055113163
 128,PROT,625,10,macrophage,erythrocyte,0.8159822,True,0.23291685,-0.14551598,0.010434783
 128,PROT,626,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.873613,False,0.4462814,-0.358727,0.46894068
 128,PROT,627,12,monocyte,myeloid dendritic cell,0.96676624,False,0.38787434,0.44263408,-0.13413985
@@ -633,35 +633,35 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,631,12,monocyte,erythrocyte,0.83748925,True,0.04836036,-0.13539664,-0.18856846
 128,PROT,632,10,macrophage,"cd4-positive, alpha-beta t cell",0.92068386,False,0.41819733,-0.31069165,0.42802793
 128,PROT,633,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9423404,False,0.4149048,-0.38835108,0.5198842
-128,PROT,634,10,macrophage,erythrocyte,0.85417205,False,0.011726264,-0.19342008,-0.242832
+128,PROT,634,10,macrophage,erythrocyte,0.85417205,True,0.011726264,-0.19342008,-0.242832
 128,PROT,635,12,monocyte,"cd4-positive, alpha-beta t cell",0.9159709,False,0.30148664,-0.2860382,0.2860969
 128,PROT,636,12,monocyte,myeloid dendritic cell,0.9015423,False,0.031447552,0.19562712,-0.16924724
 128,PROT,637,12,monocyte,erythrocyte,0.8772318,True,-0.0131164165,-0.19405772,-0.34074146
 128,PROT,638,12,monocyte,myeloid dendritic cell,0.9794447,False,0.3777652,0.5293116,-0.1875916
 128,PROT,639,12,monocyte,myeloid dendritic cell,0.9251982,False,0.33125535,0.35397303,-0.16803604
-128,PROT,640,12,monocyte,erythrocyte,0.8710686,False,0.09895601,-0.21605891,-0.07933217
+128,PROT,640,12,monocyte,erythrocyte,0.8710686,True,0.09895601,-0.21605891,-0.07933217
 128,PROT,641,10,macrophage,erythrocyte,0.8160632,True,0.24427824,-0.17016979,-0.23133491
-128,PROT,642,10,macrophage,erythrocyte,0.8538885,False,0.075499594,-0.19003484,-0.06551478
+128,PROT,642,10,macrophage,erythrocyte,0.8538885,True,0.075499594,-0.19003484,-0.06551478
 128,PROT,643,12,monocyte,"cd8-positive, alpha-beta t cell",0.8643347,False,0.05016308,-0.19298865,0.09461198
 128,PROT,644,10,macrophage,"cd4-positive, alpha-beta t cell",0.9368459,False,0.33727548,-0.33896187,0.36106724
-128,PROT,645,12,monocyte,erythrocyte,0.812586,False,-0.1019825,-0.042074785,-0.19654053
+128,PROT,645,12,monocyte,erythrocyte,0.812586,True,-0.1019825,-0.042074785,-0.19654053
 128,PROT,646,10,macrophage,"cd4-positive, alpha-beta t cell",0.88866967,False,0.14606884,-0.39865702,-0.006968772
-128,PROT,647,12,monocyte,neutrophil,0.8474177,False,-0.032323994,-0.114208154,-0.04670488
+128,PROT,647,12,monocyte,neutrophil,0.8474177,True,-0.032323994,-0.114208154,-0.04670488
 128,PROT,648,12,monocyte,erythrocyte,0.8484381,True,-0.007369479,-0.33266196,-0.3442342
 128,PROT,649,12,monocyte,myeloid dendritic cell,0.874016,True,0.20838149,0.20186138,-0.053670105
 128,PROT,650,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.90878725,False,0.4300952,-0.3878741,0.46361688
-128,PROT,651,12,monocyte,erythrocyte,0.8386591,False,-0.019658033,-0.2072662,-0.27094948
+128,PROT,651,12,monocyte,erythrocyte,0.8386591,True,-0.019658033,-0.2072662,-0.27094948
 128,PROT,652,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8701498,False,0.25934565,-0.30604264,0.09592305
 128,PROT,653,12,monocyte,neutrophil,0.84045905,False,-0.11780917,0.016412994,-0.2394005
-128,PROT,654,12,monocyte,neutrophil,0.8582741,False,-0.17960478,-0.13107826,-0.2189009
+128,PROT,654,12,monocyte,neutrophil,0.8582741,True,-0.17960478,-0.13107826,-0.2189009
 128,PROT,655,12,monocyte,neutrophil,0.8764965,True,-0.109028354,0.08261928,-0.045985848
 128,PROT,656,12,monocyte,neutrophil,0.86926305,False,-0.21152489,0.11696209,-0.12182682
 128,PROT,657,12,monocyte,"cd8-positive, alpha-beta t cell",0.8458187,True,0.24894322,-0.08891062,-0.013578327
 128,PROT,658,10,macrophage,erythrocyte,0.8557084,True,0.02151591,-0.3543291,-0.42723092
-128,PROT,659,12,monocyte,erythrocyte,0.84039974,False,0.061877124,-0.10757777,-0.120233126
+128,PROT,659,12,monocyte,erythrocyte,0.84039974,True,0.061877124,-0.10757777,-0.120233126
 128,PROT,660,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8793238,False,0.4247013,-0.33342016,0.35727176
 128,PROT,661,12,monocyte,myeloid dendritic cell,0.9455128,False,0.23927034,0.42603165,-0.18705453
-128,PROT,662,12,monocyte,erythrocyte,0.8441458,False,0.0007450778,-0.15712987,-0.22742714
+128,PROT,662,12,monocyte,erythrocyte,0.8441458,True,0.0007450778,-0.15712987,-0.22742714
 128,PROT,663,12,monocyte,neutrophil,0.8767845,False,0.025075033,-0.0016325392,-0.22721392
 128,PROT,664,12,monocyte,myeloid dendritic cell,0.94007,False,0.21862811,0.35907906,-0.080623575
 128,PROT,665,12,monocyte,myeloid dendritic cell,0.91124934,False,0.17331211,0.19429359,-0.17344065
@@ -670,18 +670,18 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,668,12,monocyte,myeloid dendritic cell,0.9152363,False,0.28741425,0.27131814,-0.13228911
 128,PROT,669,12,monocyte,myeloid dendritic cell,0.90059835,False,0.18725055,0.19136572,-0.092657395
 128,PROT,670,12,monocyte,"cd8-positive, alpha-beta t cell",0.8474282,False,-0.11746263,-0.18408231,-0.0028256525
-128,PROT,671,12,monocyte,erythrocyte,0.8527503,False,-0.012505786,-0.2617127,-0.032121282
+128,PROT,671,12,monocyte,erythrocyte,0.8527503,True,-0.012505786,-0.2617127,-0.032121282
 128,PROT,672,12,monocyte,"cd8-positive, alpha-beta t cell",0.89351285,False,0.09350003,-0.381231,0.10409683
-128,PROT,673,12,monocyte,neutrophil,0.85997885,True,-0.19136114,-0.09175182,-0.25544834
+128,PROT,673,12,monocyte,neutrophil,0.85997885,False,-0.19136114,-0.09175182,-0.25544834
 128,PROT,674,12,monocyte,myeloid dendritic cell,0.8733012,True,0.08672029,-0.013693564,-0.0442687
 128,PROT,675,12,monocyte,myeloid dendritic cell,0.8283917,True,0.12571818,-0.01568791,-0.024850557
-128,PROT,676,10,macrophage,erythrocyte,0.8563949,False,0.25119957,-0.2802234,-0.047186516
+128,PROT,676,10,macrophage,erythrocyte,0.8563949,True,0.25119957,-0.2802234,-0.047186516
 128,PROT,677,12,monocyte,erythrocyte,0.85136855,True,0.055796996,-0.12645704,-0.15877873
 128,PROT,678,12,monocyte,myeloid dendritic cell,0.92348003,False,0.18751916,0.23991977,-0.082218684
-128,PROT,679,12,monocyte,erythrocyte,0.8489364,False,0.019274386,-0.17744753,-0.013913222
+128,PROT,679,12,monocyte,erythrocyte,0.8489364,True,0.019274386,-0.17744753,-0.013913222
 128,PROT,680,10,macrophage,erythrocyte,0.8462318,True,0.3337545,-0.27204344,0.036575682
-128,PROT,681,12,monocyte,erythrocyte,0.8188041,False,-0.0687546,-0.17796287,-0.19148424
-128,PROT,682,12,monocyte,erythrocyte,0.8074257,False,-0.019343192,-0.29222968,-0.21485949
+128,PROT,681,12,monocyte,erythrocyte,0.8188041,True,-0.0687546,-0.17796287,-0.19148424
+128,PROT,682,12,monocyte,erythrocyte,0.8074257,True,-0.019343192,-0.29222968,-0.21485949
 128,PROT,683,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86879694,False,0.34957504,-0.38858268,0.28616604
 128,PROT,684,12,monocyte,erythrocyte,0.86080205,True,0.037935752,-0.052447982,-0.22377455
 128,PROT,685,12,monocyte,"cd8-positive, alpha-beta t cell",0.8857845,False,0.22084028,-0.15306185,0.13830535
@@ -691,13 +691,13 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,689,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9001463,False,0.41910198,-0.46936953,0.4451503
 128,PROT,690,12,monocyte,myeloid dendritic cell,0.9562796,False,0.22705421,0.49333623,-0.12656407
 128,PROT,691,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85519236,True,0.275409,-0.18640324,0.0988511
-128,PROT,692,12,monocyte,neutrophil,0.8383385,False,-0.11608532,-0.20637676,-0.13259795
+128,PROT,692,12,monocyte,neutrophil,0.8383385,True,-0.11608532,-0.20637676,-0.13259795
 128,PROT,693,12,monocyte,erythrocyte,0.8170327,True,-0.18430063,-0.20635717,-0.2525248
 128,PROT,694,12,monocyte,myeloid dendritic cell,0.943144,False,0.053407103,0.39370218,-0.1252148
 128,PROT,695,12,monocyte,myeloid dendritic cell,0.9099859,False,0.0017993713,0.27599606,-0.06599741
-128,PROT,696,12,monocyte,erythrocyte,0.83778924,False,-0.035221856,-0.18488543,-0.20488736
+128,PROT,696,12,monocyte,erythrocyte,0.83778924,True,-0.035221856,-0.18488543,-0.20488736
 128,PROT,697,10,macrophage,"cd4-positive, alpha-beta t cell",0.9045967,False,0.31185633,-0.30348286,0.37367815
-128,PROT,698,12,monocyte,erythrocyte,0.85451996,False,0.07153473,-0.32090116,-0.06421585
+128,PROT,698,12,monocyte,erythrocyte,0.85451996,True,0.07153473,-0.32090116,-0.06421585
 128,PROT,699,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8619236,False,0.21261969,-0.23129417,0.06959198
 128,PROT,700,10,macrophage,"cd4-positive, alpha-beta t cell",0.9231256,False,0.22697838,-0.3483079,0.20600195
 128,PROT,701,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88508224,False,0.40344116,-0.33104992,0.34763715
@@ -705,7 +705,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,703,12,monocyte,myeloid dendritic cell,0.88718593,False,-0.0074804695,0.10488837,-0.1812958
 128,PROT,704,12,monocyte,"cd8-positive, alpha-beta t cell",0.8587753,True,0.2428936,-0.2665261,0.048294444
 128,PROT,705,12,monocyte,myeloid dendritic cell,0.9030365,False,0.18480991,0.1884041,-0.21447593
-128,PROT,706,12,monocyte,erythrocyte,0.8334385,False,0.09802954,-0.07816398,-0.03873882
+128,PROT,706,12,monocyte,erythrocyte,0.8334385,True,0.09802954,-0.07816398,-0.03873882
 128,PROT,707,12,monocyte,myeloid dendritic cell,0.8772438,True,0.14606492,-0.0010801485,0.0609161
 128,PROT,708,12,monocyte,myeloid dendritic cell,0.9683784,False,0.28204197,0.48615775,-0.20106271
 128,PROT,709,12,monocyte,myeloid dendritic cell,0.92550105,False,0.07648699,0.3035374,-0.13660978
@@ -715,12 +715,12 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,713,12,monocyte,"cd4-positive, alpha-beta t cell",0.92343587,False,0.400934,-0.36088297,0.46144646
 128,PROT,714,12,monocyte,"cd4-positive, alpha-beta t cell",0.9129175,False,0.34404415,-0.3059475,0.2992853
 128,PROT,715,10,macrophage,"cd8-positive, alpha-beta t cell",0.84544945,True,0.20528412,-0.14974447,-0.018036138
-128,PROT,716,10,macrophage,erythrocyte,0.85099584,False,-0.04417647,-0.15320534,-0.30010638
+128,PROT,716,10,macrophage,erythrocyte,0.85099584,True,-0.04417647,-0.15320534,-0.30010638
 128,PROT,717,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.89088374,False,0.3802223,-0.34722763,0.41200307
 128,PROT,718,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8691101,False,0.21965261,-0.31945518,0.061662547
 128,PROT,719,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8815546,False,0.425863,-0.27672043,0.37701255
-128,PROT,720,12,monocyte,erythrocyte,0.8414009,False,0.07472881,-0.3433863,-0.15283023
-128,PROT,721,12,monocyte,erythrocyte,0.8405186,False,0.055099104,-0.20198737,-0.28108022
+128,PROT,720,12,monocyte,erythrocyte,0.8414009,True,0.07472881,-0.3433863,-0.15283023
+128,PROT,721,12,monocyte,erythrocyte,0.8405186,True,0.055099104,-0.20198737,-0.28108022
 128,PROT,722,12,monocyte,erythrocyte,0.8371849,True,-0.07456451,-0.093981184,-0.23138101
 128,PROT,723,12,monocyte,neutrophil,0.8607769,False,-0.0028945752,-0.004208899,-0.15160662
 128,PROT,724,12,monocyte,myeloid dendritic cell,0.88722456,False,0.13671423,0.13152221,-0.093831874
@@ -728,19 +728,19 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,726,12,monocyte,myeloid dendritic cell,0.9223844,False,-0.054282382,0.32387638,-0.13254306
 128,PROT,727,12,monocyte,neutrophil,0.83968866,False,-0.0059727994,-0.04219489,-0.054098845
 128,PROT,728,12,monocyte,erythrocyte,0.84533083,True,0.06885711,-0.12704629,-0.08489398
-128,PROT,729,12,monocyte,erythrocyte,0.8161276,False,0.008993298,-0.11637192,-0.20959607
-128,PROT,730,12,monocyte,erythrocyte,0.8409132,False,-0.0033454285,-0.24052009,-0.23172915
+128,PROT,729,12,monocyte,erythrocyte,0.8161276,True,0.008993298,-0.11637192,-0.20959607
+128,PROT,730,12,monocyte,erythrocyte,0.8409132,True,-0.0033454285,-0.24052009,-0.23172915
 128,PROT,731,12,monocyte,myeloid dendritic cell,0.942054,False,0.028410142,0.42466262,-0.18466565
 128,PROT,732,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8966538,False,0.30959478,-0.38275465,0.23572901
 128,PROT,733,12,monocyte,erythrocyte,0.83727705,True,0.11082136,-0.060280714,-0.15448584
 128,PROT,734,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8780023,False,0.34182885,-0.3333958,0.2696541
 128,PROT,735,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8721498,False,0.36748266,-0.29300803,0.26456517
-128,PROT,736,12,monocyte,erythrocyte,0.83695257,True,-0.09245561,-0.12813489,-0.22066888
+128,PROT,736,12,monocyte,erythrocyte,0.83695257,False,-0.09245561,-0.12813489,-0.22066888
 128,PROT,737,12,monocyte,erythrocyte,0.85720015,True,0.05183543,-0.12860362,-0.3088428
 128,PROT,738,12,monocyte,myeloid dendritic cell,0.9512494,False,0.28093675,0.3720412,-0.18966024
 128,PROT,739,12,monocyte,neutrophil,0.85379475,False,0.055638738,0.0026980438,-0.17851444
 128,PROT,740,12,monocyte,erythrocyte,0.83958626,True,-0.03048171,-0.12054939,-0.14878899
-128,PROT,741,12,monocyte,erythrocyte,0.821849,False,-0.037259735,-0.10806414,-0.15878846
+128,PROT,741,12,monocyte,erythrocyte,0.821849,True,-0.037259735,-0.10806414,-0.15878846
 128,PROT,742,10,macrophage,"cd8-positive, alpha-beta t cell",0.85973483,False,0.056684725,-0.18793283,-0.10873892
 128,PROT,743,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.905711,False,0.42573017,-0.3166511,0.40951887
 128,PROT,744,12,monocyte,myeloid dendritic cell,0.8991536,False,0.25122163,0.23840927,-0.09279742
@@ -748,60 +748,60 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,746,12,monocyte,myeloid dendritic cell,0.9540078,False,0.1889308,0.45995763,-0.15484883
 128,PROT,747,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8675699,True,0.41622522,-0.33781722,0.4246428
 128,PROT,748,12,monocyte,erythrocyte,0.8621607,True,0.16348127,-0.18191041,-0.085519366
-128,PROT,749,10,macrophage,erythrocyte,0.8384701,False,0.0726867,-0.29284838,-0.24840778
+128,PROT,749,10,macrophage,erythrocyte,0.8384701,True,0.0726867,-0.29284838,-0.24840778
 128,PROT,750,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84965247,False,0.35131752,-0.31766915,0.28514117
-128,PROT,751,10,macrophage,erythrocyte,0.84290457,False,0.0076544182,-0.1394797,-0.30095118
-128,PROT,752,12,monocyte,erythrocyte,0.8493082,False,0.013494391,-0.2842887,-0.26537478
+128,PROT,751,10,macrophage,erythrocyte,0.84290457,True,0.0076544182,-0.1394797,-0.30095118
+128,PROT,752,12,monocyte,erythrocyte,0.8493082,True,0.013494391,-0.2842887,-0.26537478
 128,PROT,753,12,monocyte,neutrophil,0.85602266,False,-0.03765191,-0.0638048,-0.17933147
 128,PROT,754,12,monocyte,erythrocyte,0.83943194,True,-0.16794024,-0.28817594,-0.26557657
-128,PROT,755,12,monocyte,erythrocyte,0.8491933,True,-0.15459757,-0.081077434,-0.26903647
+128,PROT,755,12,monocyte,erythrocyte,0.8491933,False,-0.15459757,-0.081077434,-0.26903647
 128,PROT,756,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86973846,True,0.27589616,-0.29101443,0.18484434
 128,PROT,757,12,monocyte,myeloid dendritic cell,0.88251865,True,0.08973681,0.1351775,-0.04658446
-128,PROT,758,12,monocyte,erythrocyte,0.831738,False,0.034351077,-0.19078557,-0.078248575
-128,PROT,759,12,monocyte,erythrocyte,0.85473,False,-0.025465729,-0.15066901,-0.14947283
+128,PROT,758,12,monocyte,erythrocyte,0.831738,True,0.034351077,-0.19078557,-0.078248575
+128,PROT,759,12,monocyte,erythrocyte,0.85473,True,-0.025465729,-0.15066901,-0.14947283
 128,PROT,760,10,macrophage,erythrocyte,0.853909,True,-0.01252853,-0.33270094,-0.3521782
 128,PROT,761,12,monocyte,erythrocyte,0.8464894,True,0.15339695,-0.1508435,-0.10778874
 128,PROT,762,12,monocyte,myeloid dendritic cell,0.9219966,False,0.25468126,0.3958389,-0.089515366
 128,PROT,763,10,macrophage,"cd4-positive, alpha-beta t cell",0.84487313,True,0.3210983,-0.23285325,0.15801248
 128,PROT,764,10,macrophage,"cd4-positive, alpha-beta t cell",0.85082024,True,0.3563518,-0.093308814,0.16838832
-128,PROT,765,10,macrophage,erythrocyte,0.8308053,False,0.008724251,-0.23543397,-0.28200173
+128,PROT,765,10,macrophage,erythrocyte,0.8308053,True,0.008724251,-0.23543397,-0.28200173
 128,PROT,766,12,monocyte,erythrocyte,0.84658146,True,-0.03667177,-0.24103777,-0.33605447
 128,PROT,767,12,monocyte,erythrocyte,0.8410266,True,-0.0120237935,-0.15864943,-0.21739256
 128,PROT,768,12,monocyte,myeloid dendritic cell,0.9021802,False,0.17197633,0.20220019,-0.05008002
-128,PROT,769,12,monocyte,erythrocyte,0.8401972,False,-0.076990224,-0.047998905,-0.18469402
-128,PROT,770,12,monocyte,erythrocyte,0.8232196,False,0.020159243,-0.23679717,-0.15580094
-128,PROT,771,10,macrophage,erythrocyte,0.85296375,False,0.027762102,-0.18006393,-0.16352645
+128,PROT,769,12,monocyte,erythrocyte,0.8401972,True,-0.076990224,-0.047998905,-0.18469402
+128,PROT,770,12,monocyte,erythrocyte,0.8232196,True,0.020159243,-0.23679717,-0.15580094
+128,PROT,771,10,macrophage,erythrocyte,0.85296375,True,0.027762102,-0.18006393,-0.16352645
 128,PROT,772,12,monocyte,erythrocyte,0.83419865,True,0.27211103,-0.22675571,0.018882677
 128,PROT,773,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9433344,False,0.39367518,-0.4387313,0.469979
 128,PROT,774,12,monocyte,myeloid dendritic cell,0.9709712,False,0.33358952,0.49622732,-0.16132921
 128,PROT,775,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86991274,False,0.3612027,-0.38095188,0.28990382
 128,PROT,776,12,monocyte,myeloid dendritic cell,0.8692869,False,0.02421826,0.13857077,-0.1321067
 128,PROT,777,12,monocyte,"cd8-positive, alpha-beta t cell",0.86440736,True,0.1371192,-0.03701691,0.014394255
-128,PROT,778,10,macrophage,erythrocyte,0.87037116,False,0.09537977,-0.3185326,-0.07895896
+128,PROT,778,10,macrophage,erythrocyte,0.87037116,True,0.09537977,-0.3185326,-0.07895896
 128,PROT,779,10,macrophage,"cd8-positive, alpha-beta t cell",0.8474207,False,0.017343866,-0.29417282,-0.018403456
 128,PROT,780,10,macrophage,"cd4-positive, alpha-beta t cell",0.9292909,False,0.39686468,-0.36701557,0.3549925
 128,PROT,781,12,monocyte,"cd4-positive, alpha-beta t cell",0.9220622,False,0.42326176,-0.3502245,0.4491034
 128,PROT,782,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8217268,True,0.32785255,-0.18715109,0.12367918
 128,PROT,783,12,monocyte,myeloid dendritic cell,0.9541712,False,0.25356126,0.4036476,-0.1775094
 128,PROT,784,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.91318667,False,0.39732015,-0.43792245,0.4295015
-128,PROT,785,12,monocyte,erythrocyte,0.84225094,False,0.05492816,-0.2111538,-0.105235875
+128,PROT,785,12,monocyte,erythrocyte,0.84225094,True,0.05492816,-0.2111538,-0.105235875
 128,PROT,786,10,macrophage,plasma cell,0.88908625,True,0.3501569,-0.3398818,0.2768939
 128,PROT,787,12,monocyte,myeloid dendritic cell,0.93037176,False,0.20405935,0.37121594,-0.14641404
 128,PROT,788,12,monocyte,erythrocyte,0.8241798,True,0.28775486,-0.33892545,-0.0032299173
 128,PROT,789,10,macrophage,"cd4-positive, alpha-beta t cell",0.8282925,True,0.30026183,-0.03732597,0.113243036
 128,PROT,790,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8512188,True,0.40162295,-0.26548135,0.34612158
-128,PROT,791,10,macrophage,erythrocyte,0.8483683,False,-0.04797839,-0.31045675,-0.25669506
+128,PROT,791,10,macrophage,erythrocyte,0.8483683,True,-0.04797839,-0.31045675,-0.25669506
 128,PROT,792,12,monocyte,myeloid dendritic cell,0.90188634,False,0.09615389,0.27434397,-0.08351334
 128,PROT,793,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86481524,True,0.26895204,-0.17066097,0.1461433
 128,PROT,794,10,macrophage,erythrocyte,0.8703688,True,0.008747167,-0.28339693,-0.39182755
-128,PROT,795,12,monocyte,erythrocyte,0.8395753,False,-0.0015438757,-0.18437034,-0.10131356
+128,PROT,795,12,monocyte,erythrocyte,0.8395753,True,-0.0015438757,-0.18437034,-0.10131356
 128,PROT,796,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.92825234,False,0.37381494,-0.41451162,0.49646026
-128,PROT,797,12,monocyte,erythrocyte,0.84425765,False,0.21736652,-0.20326298,0.008605103
+128,PROT,797,12,monocyte,erythrocyte,0.84425765,True,0.21736652,-0.20326298,0.008605103
 128,PROT,798,12,monocyte,erythrocyte,0.8421594,True,-0.029936548,-0.24368706,-0.22510016
 128,PROT,799,12,monocyte,erythrocyte,0.85224235,False,-0.018761843,-0.19310255,-0.3599751
 128,PROT,800,12,monocyte,myeloid dendritic cell,0.89629793,True,0.29235518,0.0043371315,-0.12487662
 128,PROT,801,10,macrophage,"cd4-positive, alpha-beta t cell",0.89463294,False,0.33217672,-0.34943524,0.34259698
-128,PROT,802,10,macrophage,erythrocyte,0.84832114,False,-0.01613062,-0.11829096,-0.24151054
+128,PROT,802,10,macrophage,erythrocyte,0.84832114,True,-0.01613062,-0.11829096,-0.24151054
 128,PROT,803,12,monocyte,neutrophil,0.83778703,True,0.0025621275,-0.07916124,-0.03935692
 128,PROT,804,12,monocyte,"cd8-positive, alpha-beta t cell",0.8422946,False,0.2634454,-0.22253141,0.1213228
 128,PROT,805,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8709238,False,0.25368792,-0.306967,0.12716995
@@ -809,13 +809,13 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,807,12,monocyte,myeloid dendritic cell,0.94767284,False,0.24333476,0.3690671,-0.1659397
 128,PROT,808,12,monocyte,myeloid dendritic cell,0.85980636,True,0.15537325,-0.0067087947,-0.12871717
 128,PROT,809,12,monocyte,myeloid dendritic cell,0.9592722,False,0.1697488,0.4930267,-0.13577105
-128,PROT,810,10,macrophage,erythrocyte,0.8454359,False,0.06338165,-0.31583655,-0.24424298
-128,PROT,811,12,monocyte,erythrocyte,0.8559823,False,-0.045610078,-0.14043243,-0.2954596
+128,PROT,810,10,macrophage,erythrocyte,0.8454359,True,0.06338165,-0.31583655,-0.24424298
+128,PROT,811,12,monocyte,erythrocyte,0.8559823,True,-0.045610078,-0.14043243,-0.2954596
 128,PROT,812,12,monocyte,erythrocyte,0.85794276,True,0.06858554,-0.19123477,-0.32580352
 128,PROT,813,12,monocyte,erythrocyte,0.8619884,True,0.034982253,-0.2539946,-0.3578884
 128,PROT,814,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.87370205,False,0.42083234,-0.34324452,0.40151927
 128,PROT,815,12,monocyte,erythrocyte,0.8460166,True,0.22038995,-0.18502167,-0.093394615
-128,PROT,816,12,monocyte,neutrophil,0.84277785,True,-0.13662271,-0.06906903,-0.15518412
+128,PROT,816,12,monocyte,neutrophil,0.84277785,False,-0.13662271,-0.06906903,-0.15518412
 128,PROT,817,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.82803726,True,0.36838797,-0.19266604,0.3094846
 128,PROT,818,12,monocyte,myeloid dendritic cell,0.9185033,False,0.15878057,0.28126144,-0.25114045
 128,PROT,819,12,monocyte,myeloid dendritic cell,0.89845407,False,0.04867109,0.13070844,-0.21516027
@@ -833,7 +833,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,831,12,monocyte,myeloid dendritic cell,0.93822336,False,0.17326823,0.37242344,-0.19931811
 128,PROT,832,12,monocyte,neutrophil,0.89283246,False,-0.140129,0.026364794,-0.2671968
 128,PROT,833,10,macrophage,mature nk t cell,0.81644267,True,0.41722605,-0.13881584,0.21238989
-128,PROT,834,12,monocyte,neutrophil,0.84283715,True,-0.07859918,-0.06147551,-0.22690214
+128,PROT,834,12,monocyte,neutrophil,0.84283715,False,-0.07859918,-0.06147551,-0.22690214
 128,PROT,835,12,monocyte,myeloid dendritic cell,0.92374647,False,0.15644349,0.25646377,-0.26385945
 128,PROT,836,12,monocyte,myeloid dendritic cell,0.92915344,False,0.046474528,0.29206744,-0.20331582
 128,PROT,837,12,monocyte,erythrocyte,0.84749985,True,-0.022723006,-0.13493355,-0.1156552
@@ -841,7 +841,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,839,12,monocyte,myeloid dendritic cell,0.9062824,False,0.06398912,0.28018153,-0.17171088
 128,PROT,840,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8027479,True,0.3594317,-0.22162211,0.21677634
 128,PROT,841,12,monocyte,myeloid dendritic cell,0.88275373,False,0.20343669,0.06856769,-0.15028873
-128,PROT,842,12,monocyte,neutrophil,0.85633266,True,-0.084895805,-0.046321996,-0.17688699
+128,PROT,842,12,monocyte,neutrophil,0.85633266,False,-0.084895805,-0.046321996,-0.17688699
 128,PROT,843,12,monocyte,erythrocyte,0.8347448,True,0.16400424,-0.21711513,-0.14911644
 128,PROT,844,12,monocyte,neutrophil,0.8885468,False,-0.09028398,0.113594696,-0.19592883
 128,PROT,845,12,monocyte,neutrophil,0.88459617,False,-0.12543896,0.08651527,-0.23513772
@@ -853,12 +853,12 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,851,12,monocyte,myeloid dendritic cell,0.91830844,False,0.12112157,0.20323178,-0.23473123
 128,PROT,852,10,macrophage,erythrocyte,0.8426095,True,-0.055736005,-0.25540444,-0.29549006
 128,PROT,853,12,monocyte,neutrophil,0.8922429,False,-0.062066782,0.15624805,-0.24910168
-128,PROT,854,12,monocyte,erythrocyte,0.8491337,False,-0.14181413,-0.09869053,-0.21616986
+128,PROT,854,12,monocyte,erythrocyte,0.8491337,True,-0.14181413,-0.09869053,-0.21616986
 128,PROT,855,12,monocyte,myeloid dendritic cell,0.9296457,False,0.28093746,0.32174125,-0.2460109
 128,PROT,856,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8204767,True,0.4405732,-0.20845832,0.3493488
 128,PROT,857,12,monocyte,erythrocyte,0.85198843,True,0.06746491,-0.1329409,-0.13425002
-128,PROT,858,12,monocyte,neutrophil,0.85021913,True,-0.1816252,-0.11441618,-0.21185756
-128,PROT,859,12,monocyte,erythrocyte,0.86242163,False,0.056044385,-0.114767924,-0.13434097
+128,PROT,858,12,monocyte,neutrophil,0.85021913,False,-0.1816252,-0.11441618,-0.21185756
+128,PROT,859,12,monocyte,erythrocyte,0.86242163,True,0.056044385,-0.114767924,-0.13434097
 128,PROT,860,12,monocyte,myeloid dendritic cell,0.8980982,False,0.09638265,0.13014607,-0.2256807
 128,PROT,861,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8423673,True,0.40101314,-0.30642432,0.41036844
 128,PROT,862,12,monocyte,myeloid dendritic cell,0.92272174,False,0.16080801,0.2577467,-0.2426513
@@ -878,54 +878,54 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,876,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.887761,False,0.44849062,-0.29876506,0.35092306
 128,PROT,877,10,macrophage,"cd4-positive, alpha-beta t cell",0.8687517,True,0.4759377,-0.26969177,0.42109105
 128,PROT,878,10,macrophage,mature nk t cell,0.83980227,True,0.31467202,-0.11853503,0.09999338
-128,PROT,879,12,monocyte,erythrocyte,0.84517324,False,0.0741509,-0.20848219,-0.08471725
+128,PROT,879,12,monocyte,erythrocyte,0.84517324,True,0.0741509,-0.20848219,-0.08471725
 128,PROT,880,12,monocyte,neutrophil,0.8944348,False,0.014500495,0.069029294,-0.23335797
 128,PROT,881,12,monocyte,neutrophil,0.87174857,False,-0.12238971,-0.00960683,-0.2672319
 128,PROT,882,12,monocyte,neutrophil,0.879393,False,0.09197012,0.13539715,-0.16282427
-128,PROT,883,12,monocyte,neutrophil,0.85684216,True,-0.17462659,-0.09054005,-0.22324955
+128,PROT,883,12,monocyte,neutrophil,0.85684216,False,-0.17462659,-0.09054005,-0.22324955
 128,PROT,884,12,monocyte,myeloid dendritic cell,0.8977814,False,0.057741802,0.21778162,-0.21118757
-128,PROT,885,12,monocyte,neutrophil,0.8561031,True,-0.14581563,-0.08723762,-0.21046597
+128,PROT,885,12,monocyte,neutrophil,0.8561031,False,-0.14581563,-0.08723762,-0.21046597
 128,PROT,886,12,monocyte,neutrophil,0.8738419,False,-0.10965671,0.028948098,-0.22947928
 128,PROT,887,12,monocyte,myeloid dendritic cell,0.90891635,False,0.07830404,0.22307752,-0.219496
-128,PROT,888,12,monocyte,erythrocyte,0.84367263,False,-0.038952284,-0.20924273,-0.21153717
+128,PROT,888,12,monocyte,erythrocyte,0.84367263,True,-0.038952284,-0.20924273,-0.21153717
 128,PROT,889,12,monocyte,myeloid dendritic cell,0.91119975,False,0.043210324,0.18286599,-0.2581419
 128,PROT,890,12,monocyte,myeloid dendritic cell,0.9076584,False,0.052895054,0.20931578,-0.13215668
-128,PROT,891,12,monocyte,erythrocyte,0.84291667,False,-0.10492052,-0.14096266,-0.2188921
+128,PROT,891,12,monocyte,erythrocyte,0.84291667,True,-0.10492052,-0.14096266,-0.2188921
 128,PROT,892,12,monocyte,neutrophil,0.85575885,False,-0.028255459,0.037977546,-0.16904707
 128,PROT,893,12,monocyte,neutrophil,0.88720435,False,-0.007840538,0.13556424,-0.18785535
 128,PROT,894,12,monocyte,neutrophil,0.903255,False,-0.005022598,0.18201408,-0.24405439
 128,PROT,895,12,monocyte,"cd4-positive, alpha-beta t cell",0.8519491,True,0.24053934,-0.19722249,0.14000235
-128,PROT,896,10,macrophage,erythrocyte,0.85067874,False,0.016435608,-0.066409,-0.246808
+128,PROT,896,10,macrophage,erythrocyte,0.85067874,True,0.016435608,-0.066409,-0.246808
 128,PROT,897,12,monocyte,myeloid dendritic cell,0.876078,False,0.041456807,0.15484765,-0.15985325
 128,PROT,898,10,macrophage,"cd4-positive, alpha-beta t cell",0.91308844,False,0.30034927,-0.3755001,0.25302556
-128,PROT,899,12,monocyte,erythrocyte,0.8571895,False,0.029752921,-0.10976213,-0.040557552
-128,PROT,900,12,monocyte,erythrocyte,0.8486331,False,-0.031003365,-0.26744443,-0.24345572
+128,PROT,899,12,monocyte,erythrocyte,0.8571895,True,0.029752921,-0.10976213,-0.040557552
+128,PROT,900,12,monocyte,erythrocyte,0.8486331,True,-0.031003365,-0.26744443,-0.24345572
 128,PROT,901,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8891398,False,0.36341467,-0.29265714,0.28799698
-128,PROT,902,10,macrophage,erythrocyte,0.8612445,False,0.046365585,-0.20301111,-0.21301973
-128,PROT,903,12,monocyte,erythrocyte,0.8413836,False,0.09860367,-0.2393712,-0.012524719
-128,PROT,904,12,monocyte,erythrocyte,0.8172391,False,-0.023998639,-0.3136754,-0.24711114
+128,PROT,902,10,macrophage,erythrocyte,0.8612445,True,0.046365585,-0.20301111,-0.21301973
+128,PROT,903,12,monocyte,erythrocyte,0.8413836,True,0.09860367,-0.2393712,-0.012524719
+128,PROT,904,12,monocyte,erythrocyte,0.8172391,True,-0.023998639,-0.3136754,-0.24711114
 128,PROT,905,12,monocyte,myeloid dendritic cell,0.9573231,False,0.20010795,0.45128566,-0.14079835
 128,PROT,906,12,monocyte,erythrocyte,0.8776081,False,-0.033723418,-0.17673959,-0.3556053
 128,PROT,907,12,monocyte,erythrocyte,0.87289727,True,0.022012454,-0.23227513,-0.3276259
 128,PROT,908,12,monocyte,myeloid dendritic cell,0.96345884,False,0.0024402884,0.45683536,-0.107219204
-128,PROT,909,12,monocyte,erythrocyte,0.81750214,False,-0.043114845,-0.2341775,-0.2647104
+128,PROT,909,12,monocyte,erythrocyte,0.81750214,True,-0.043114845,-0.2341775,-0.2647104
 128,PROT,910,12,monocyte,myeloid dendritic cell,0.9030043,False,0.3065256,0.25892228,0.019298032
-128,PROT,911,12,monocyte,neutrophil,0.8403222,False,-0.16469169,-0.16142483,-0.0295915
-128,PROT,912,12,monocyte,erythrocyte,0.8341718,False,-0.061859697,-0.118293494,-0.18353237
+128,PROT,911,12,monocyte,neutrophil,0.8403222,True,-0.16469169,-0.16142483,-0.0295915
+128,PROT,912,12,monocyte,erythrocyte,0.8341718,True,-0.061859697,-0.118293494,-0.18353237
 128,PROT,913,12,monocyte,myeloid dendritic cell,0.9518918,False,0.2874183,0.46427795,-0.14040947
 128,PROT,914,12,monocyte,erythrocyte,0.8466522,True,-0.06157204,-0.16309363,-0.29755464
-128,PROT,915,12,monocyte,erythrocyte,0.8373596,False,-0.061000627,-0.12001603,-0.23814273
+128,PROT,915,12,monocyte,erythrocyte,0.8373596,True,-0.061000627,-0.12001603,-0.23814273
 128,PROT,916,12,monocyte,"cd8-positive, alpha-beta t cell",0.8659111,False,0.11399463,-0.28491104,0.08720933
 128,PROT,917,10,macrophage,erythrocyte,0.84757346,True,0.34375313,-0.12815136,-0.006719571
-128,PROT,918,12,monocyte,erythrocyte,0.860396,False,0.090562746,-0.27340323,0.0179373
+128,PROT,918,12,monocyte,erythrocyte,0.860396,True,0.090562746,-0.27340323,0.0179373
 128,PROT,919,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84462583,True,0.23392925,-0.21688285,-0.022750186
 128,PROT,920,12,monocyte,neutrophil,0.85518855,True,-0.03543403,-0.05614167,-0.11575058
 128,PROT,921,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9112751,False,0.4214147,-0.3177352,0.4015232
-128,PROT,922,12,monocyte,neutrophil,0.8506049,True,-0.15379371,0.019057935,-0.16816111
+128,PROT,922,12,monocyte,neutrophil,0.8506049,False,-0.15379371,0.019057935,-0.16816111
 128,PROT,923,12,monocyte,neutrophil,0.86725587,False,-0.01467537,-0.06577863,-0.19510312
 128,PROT,924,12,monocyte,myeloid dendritic cell,0.9121342,False,0.10402681,0.2866962,-0.21049999
 128,PROT,925,12,monocyte,myeloid dendritic cell,0.9123287,False,0.13488369,0.15174417,-0.30659503
-128,PROT,926,12,monocyte,neutrophil,0.8698492,True,-0.06918236,0.0069006365,-0.19647151
+128,PROT,926,12,monocyte,neutrophil,0.8698492,False,-0.06918236,0.0069006365,-0.19647151
 128,PROT,927,12,monocyte,myeloid dendritic cell,0.92386407,False,0.2396356,0.36558902,-0.13790438
 128,PROT,928,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8747269,False,0.4259842,-0.34474936,0.4924679
 128,PROT,929,12,monocyte,myeloid dendritic cell,0.9357889,False,0.16615391,0.23982121,-0.19260901
@@ -933,18 +933,18 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,931,12,monocyte,neutrophil,0.88171244,False,-0.07908873,0.11445027,-0.21089062
 128,PROT,932,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8422078,False,0.43468368,-0.30898818,0.43887734
 128,PROT,933,12,monocyte,"cd8-positive, alpha-beta t cell",0.8444232,True,0.2212062,-0.22062522,0.095677115
-128,PROT,934,12,monocyte,erythrocyte,0.85875815,True,-0.036424745,-0.17613296,-0.25488764
+128,PROT,934,12,monocyte,erythrocyte,0.85875815,False,-0.036424745,-0.17613296,-0.25488764
 128,PROT,935,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.80501205,True,0.42049658,-0.19027658,0.3413963
 128,PROT,936,10,macrophage,"cd4-positive, alpha-beta t cell",0.8291499,True,0.3302359,-0.1328027,0.022450613
 128,PROT,937,12,monocyte,myeloid dendritic cell,0.9271736,False,0.09008113,0.25808093,-0.23775941
 128,PROT,938,12,monocyte,myeloid dendritic cell,0.92314565,False,0.03536533,0.28352615,-0.19071615
 128,PROT,939,12,monocyte,myeloid dendritic cell,0.92165184,False,-0.013693832,0.30632463,-0.14640749
 128,PROT,940,10,macrophage,"cd4-positive, alpha-beta t cell",0.84919274,True,0.31760263,-0.14240666,0.10287027
-128,PROT,941,12,monocyte,erythrocyte,0.87137806,True,-0.1472324,-0.07009128,-0.25779632
+128,PROT,941,12,monocyte,erythrocyte,0.87137806,False,-0.1472324,-0.07009128,-0.25779632
 128,PROT,942,12,monocyte,myeloid dendritic cell,0.9318594,False,0.12205398,0.33955395,-0.22586505
 128,PROT,943,12,monocyte,myeloid dendritic cell,0.9074019,False,0.07277106,0.18909664,-0.2271669
 128,PROT,944,12,monocyte,"cd4-positive, alpha-beta t cell",0.8637382,True,0.28219458,-0.12524875,0.14608854
-128,PROT,945,12,monocyte,erythrocyte,0.84570444,False,0.106877826,-0.27684653,-0.13606016
+128,PROT,945,12,monocyte,erythrocyte,0.84570444,True,0.106877826,-0.27684653,-0.13606016
 128,PROT,946,12,monocyte,neutrophil,0.86297256,False,0.0022970804,0.040831223,-0.22727507
 128,PROT,947,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88913095,False,0.3186855,-0.36496204,0.34343827
 128,PROT,948,12,monocyte,neutrophil,0.89400357,False,-0.10541272,0.17700212,-0.2025387
@@ -967,7 +967,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,965,12,monocyte,neutrophil,0.8626979,False,-0.10351193,0.015012047,-0.18339294
 128,PROT,966,12,monocyte,myeloid dendritic cell,0.9219983,False,0.046843998,0.3095909,-0.14928572
 128,PROT,967,10,macrophage,myeloid dendritic cell,0.84218866,True,0.2411406,-0.071013235,-0.02725121
-128,PROT,968,10,macrophage,erythrocyte,0.8316592,False,0.030822694,-0.22500983,-0.14246401
+128,PROT,968,10,macrophage,erythrocyte,0.8316592,True,0.030822694,-0.22500983,-0.14246401
 128,PROT,969,12,monocyte,myeloid dendritic cell,0.8729619,False,0.07187104,0.034612667,-0.2036381
 128,PROT,970,12,monocyte,myeloid dendritic cell,0.9213111,False,0.32168844,0.25224483,-0.2253465
 128,PROT,971,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9124218,False,0.41899353,-0.38951296,0.49690273
@@ -978,74 +978,74 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,976,12,monocyte,myeloid dendritic cell,0.9380349,False,-0.042487346,0.33350256,-0.14486712
 128,PROT,977,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.87319106,False,0.29627126,-0.304783,0.31635576
 128,PROT,978,10,macrophage,"cd4-positive, alpha-beta t cell",0.892725,False,0.46123874,-0.286495,0.47252524
-128,PROT,979,12,monocyte,erythrocyte,0.82727206,False,-0.11674305,-0.1868154,-0.24144304
-128,PROT,980,12,monocyte,erythrocyte,0.84546375,False,0.002626656,-0.18907262,-0.20383243
+128,PROT,979,12,monocyte,erythrocyte,0.82727206,True,-0.11674305,-0.1868154,-0.24144304
+128,PROT,980,12,monocyte,erythrocyte,0.84546375,True,0.002626656,-0.18907262,-0.20383243
 128,PROT,981,12,monocyte,myeloid dendritic cell,0.92696774,False,0.10570843,0.37118205,-0.1544923
-128,PROT,982,12,monocyte,erythrocyte,0.86106765,False,-0.0004956731,-0.19101027,-0.22968107
+128,PROT,982,12,monocyte,erythrocyte,0.86106765,True,-0.0004956731,-0.19101027,-0.22968107
 128,PROT,983,12,monocyte,myeloid dendritic cell,0.89297897,False,0.050029553,0.18986703,-0.029604618
 128,PROT,984,12,monocyte,erythrocyte,0.83797437,True,-0.0139915105,-0.2747746,-0.3568859
 128,PROT,985,12,monocyte,myeloid dendritic cell,0.9316127,False,0.19446981,0.36224833,-0.15666357
-128,PROT,986,10,macrophage,erythrocyte,0.859513,False,0.11859434,-0.18659022,-0.03227881
+128,PROT,986,10,macrophage,erythrocyte,0.859513,True,0.11859434,-0.18659022,-0.03227881
 128,PROT,987,12,monocyte,myeloid dendritic cell,0.9263976,False,0.28896576,0.36531663,-0.24525544
 128,PROT,988,10,macrophage,erythrocyte,0.86448514,True,0.06399481,-0.12661792,-0.2050755
 128,PROT,989,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8255103,True,0.36120737,-0.29641584,0.11284431
 128,PROT,990,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85789937,True,0.4020557,-0.3764739,0.36902925
 128,PROT,991,12,monocyte,myeloid dendritic cell,0.9052327,False,0.060885247,0.14380114,-0.21693759
-128,PROT,992,12,monocyte,erythrocyte,0.8347303,False,-0.066279635,-0.11321263,-0.23563917
+128,PROT,992,12,monocyte,erythrocyte,0.8347303,True,-0.066279635,-0.11321263,-0.23563917
 128,PROT,993,12,monocyte,neutrophil,0.90882814,False,-0.21342698,0.21711445,-0.1389776
 128,PROT,994,12,monocyte,neutrophil,0.86177045,False,-0.0491964,0.019496864,-0.16594113
-128,PROT,995,12,monocyte,erythrocyte,0.8495614,False,0.001560773,-0.12816238,-0.26401418
+128,PROT,995,12,monocyte,erythrocyte,0.8495614,True,0.001560773,-0.12816238,-0.26401418
 128,PROT,996,12,monocyte,"cd8-positive, alpha-beta t cell",0.8496851,True,0.17536011,-0.17559618,-0.02629371
 128,PROT,997,10,macrophage,erythrocyte,0.8618809,True,-0.0030622152,-0.28086355,-0.31326145
 128,PROT,998,12,monocyte,neutrophil,0.877965,False,-0.0925779,0.108362705,-0.24895732
-128,PROT,999,12,monocyte,erythrocyte,0.8347489,False,0.020085912,-0.22084261,-0.11684864
+128,PROT,999,12,monocyte,erythrocyte,0.8347489,True,0.020085912,-0.22084261,-0.11684864
 128,PROT,1000,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8523914,True,0.39066288,-0.3288406,0.32175422
 128,PROT,1001,12,monocyte,myeloid dendritic cell,0.928789,False,-0.010993292,0.28924045,-0.19412267
-128,PROT,1002,12,monocyte,erythrocyte,0.8404214,False,-0.03280908,-0.23383293,-0.27908105
+128,PROT,1002,12,monocyte,erythrocyte,0.8404214,True,-0.03280908,-0.23383293,-0.27908105
 128,PROT,1003,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8522879,True,0.42860252,-0.25562343,0.3860983
 128,PROT,1004,12,monocyte,neutrophil,0.8680437,False,-0.06774309,0.07865387,-0.19811976
-128,PROT,1005,12,monocyte,erythrocyte,0.84978753,False,0.14951491,-0.043502383,-0.22843222
+128,PROT,1005,12,monocyte,erythrocyte,0.84978753,True,0.14951491,-0.043502383,-0.22843222
 128,PROT,1006,12,monocyte,neutrophil,0.84942436,True,0.07471632,-0.14276162,0.032209463
 128,PROT,1007,12,monocyte,myeloid dendritic cell,0.9318142,False,0.24866581,0.2764617,-0.23613629
 128,PROT,1008,12,monocyte,myeloid dendritic cell,0.89979535,False,0.19885302,0.16462183,-0.1053338
 128,PROT,1009,12,monocyte,neutrophil,0.8809635,False,-0.06868914,0.045327995,-0.21431303
-128,PROT,1010,10,macrophage,erythrocyte,0.88199997,False,0.15380064,-0.34740514,-0.04171412
+128,PROT,1010,10,macrophage,erythrocyte,0.88199997,True,0.15380064,-0.34740514,-0.04171412
 128,PROT,1011,12,monocyte,myeloid dendritic cell,0.9075757,False,0.050394323,0.124347515,-0.28295764
 128,PROT,1012,12,monocyte,neutrophil,0.89866847,False,-0.008220225,0.09359236,-0.22880149
 128,PROT,1013,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8276318,True,0.41894028,-0.18689537,0.3473797
 128,PROT,1014,10,macrophage,plasma cell,0.7901743,True,0.37111324,-0.11943558,0.14106742
 128,PROT,1015,12,monocyte,myeloid dendritic cell,0.9117203,False,0.12296242,0.21483074,-0.23918301
-128,PROT,1016,10,macrophage,erythrocyte,0.85269105,False,-0.012765866,-0.24083874,-0.22972669
+128,PROT,1016,10,macrophage,erythrocyte,0.85269105,True,-0.012765866,-0.24083874,-0.22972669
 128,PROT,1017,12,monocyte,neutrophil,0.8378738,False,-0.11420805,0.043178204,-0.16018182
 128,PROT,1018,12,monocyte,myeloid dendritic cell,0.88779795,False,0.002276506,0.13149373,-0.22145854
 128,PROT,1019,12,monocyte,neutrophil,0.88087684,False,-0.028762087,0.042659454,-0.24417445
 128,PROT,1020,12,monocyte,myeloid dendritic cell,0.9063424,False,0.050806005,0.16440861,-0.15638337
 128,PROT,1021,12,monocyte,neutrophil,0.8432535,False,-0.104151085,-0.0884627,-0.19170992
 128,PROT,1022,12,monocyte,erythrocyte,0.86432946,True,-0.008400445,-0.06812087,-0.15422378
-128,PROT,1023,12,monocyte,erythrocyte,0.8954102,False,0.0866214,-0.04109321,-0.32466403
+128,PROT,1023,12,monocyte,erythrocyte,0.8954102,True,0.0866214,-0.04109321,-0.32466403
 128,PROT,1024,12,monocyte,neutrophil,0.8675686,False,-0.254375,0.03369602,-0.106642395
-128,PROT,1025,12,monocyte,erythrocyte,0.85472023,False,-0.026290951,-0.13789317,-0.24602842
+128,PROT,1025,12,monocyte,erythrocyte,0.85472023,True,-0.026290951,-0.13789317,-0.24602842
 128,PROT,1026,12,monocyte,myeloid dendritic cell,0.87471247,True,-0.025419386,0.026034338,-0.2365587
 128,PROT,1027,12,monocyte,myeloid dendritic cell,0.9583437,False,0.3607888,0.45045754,-0.21917707
 128,PROT,1028,10,macrophage,b cell,0.79987884,True,0.28981814,-0.19904757,-0.096307226
 128,PROT,1029,10,macrophage,"cd8-positive, alpha-beta t cell",0.8549417,True,0.26903433,-0.09755972,0.07824709
 128,PROT,1030,12,monocyte,neutrophil,0.87116784,False,-0.052549567,0.018316602,-0.25030252
-128,PROT,1031,12,monocyte,erythrocyte,0.8481315,True,-0.046691258,-0.104327224,-0.1577912
+128,PROT,1031,12,monocyte,erythrocyte,0.8481315,False,-0.046691258,-0.104327224,-0.1577912
 128,PROT,1032,12,monocyte,myeloid dendritic cell,0.93879586,False,0.26905304,0.34842876,-0.20820019
 128,PROT,1033,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85660535,False,0.29083276,-0.23278165,0.13608898
 128,PROT,1034,12,monocyte,erythrocyte,0.8606098,True,0.015648236,-0.03641384,-0.22403127
 128,PROT,1035,12,monocyte,myeloid dendritic cell,0.9470711,False,0.19779928,0.3803505,-0.1802727
-128,PROT,1036,12,monocyte,erythrocyte,0.8705966,False,0.018123629,-0.17258148,-0.2653807
+128,PROT,1036,12,monocyte,erythrocyte,0.8705966,True,0.018123629,-0.17258148,-0.2653807
 128,PROT,1037,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8656548,False,0.23617269,-0.203438,0.15024018
 128,PROT,1038,12,monocyte,monocyte,0.9783872,False,0.4564292,0.4325411,-0.17467201
 128,PROT,1039,12,monocyte,erythrocyte,0.84716064,True,0.00463726,-0.2019221,-0.2807521
 128,PROT,1040,10,macrophage,"cd4-positive, alpha-beta t cell",0.9054033,False,0.38728902,-0.27654526,0.27582476
 128,PROT,1041,10,macrophage,"cd4-positive, alpha-beta t cell",0.89467657,False,0.29188323,-0.33151427,0.15113698
-128,PROT,1042,12,monocyte,erythrocyte,0.88553125,True,-0.052864924,-0.036527775,-0.2657527
+128,PROT,1042,12,monocyte,erythrocyte,0.88553125,False,-0.052864924,-0.036527775,-0.2657527
 128,PROT,1043,12,monocyte,neutrophil,0.8635813,True,-0.011702123,0.01085302,-0.19459589
 128,PROT,1044,12,monocyte,"cd8-positive, alpha-beta t cell",0.86823034,True,0.24708275,-0.22325808,0.1087304
 128,PROT,1045,12,monocyte,neutrophil,0.8495042,True,-0.23673186,0.018872729,-0.17755714
-128,PROT,1046,12,monocyte,erythrocyte,0.8281633,False,-0.057350386,-0.1996377,-0.12107602
+128,PROT,1046,12,monocyte,erythrocyte,0.8281633,True,-0.057350386,-0.1996377,-0.12107602
 128,PROT,1047,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8591345,False,0.25475323,-0.1968495,0.11123053
 128,PROT,1048,12,monocyte,myeloid dendritic cell,0.9765113,False,0.3205142,0.46078047,-0.22207426
 128,PROT,1049,10,macrophage,"cd8-positive, alpha-beta t cell",0.88814723,False,0.2328651,-0.2859679,0.06984195
@@ -1053,19 +1053,19 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1051,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8724511,False,0.3253575,-0.2021278,0.1646424
 128,PROT,1052,10,macrophage,"cd4-positive, alpha-beta t cell",0.88584167,False,0.31318143,-0.3381601,0.24660374
 128,PROT,1053,12,monocyte,monocyte,0.93338186,False,0.21589836,0.33622658,-0.17740561
-128,PROT,1054,12,monocyte,erythrocyte,0.85475427,False,-0.055798553,-0.14653488,-0.27820578
+128,PROT,1054,12,monocyte,erythrocyte,0.85475427,True,-0.055798553,-0.14653488,-0.27820578
 128,PROT,1055,12,monocyte,"cd8-positive, alpha-beta t cell",0.8632041,False,0.04402511,-0.30454382,-0.074612506
-128,PROT,1056,10,macrophage,erythrocyte,0.8341486,False,-0.012815822,-0.3921842,-0.17859484
+128,PROT,1056,10,macrophage,erythrocyte,0.8341486,True,-0.012815822,-0.3921842,-0.17859484
 128,PROT,1057,12,monocyte,myeloid dendritic cell,0.93547803,False,0.2569487,0.33910802,-0.17892775
-128,PROT,1058,10,macrophage,erythrocyte,0.8503205,False,0.14976862,-0.2179732,-0.17105529
+128,PROT,1058,10,macrophage,erythrocyte,0.8503205,True,0.14976862,-0.2179732,-0.17105529
 128,PROT,1059,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9001857,False,0.44825932,-0.39061427,0.47920913
-128,PROT,1060,12,monocyte,erythrocyte,0.84277153,True,-0.080294535,-0.10667558,-0.25784925
+128,PROT,1060,12,monocyte,erythrocyte,0.84277153,False,-0.080294535,-0.10667558,-0.25784925
 128,PROT,1061,12,monocyte,neutrophil,0.8402357,True,-0.036350355,-0.10470288,-0.13285616
 128,PROT,1062,12,monocyte,erythrocyte,0.8447399,True,0.06782973,-0.13775568,-0.14902182
 128,PROT,1063,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84295595,True,0.2917708,-0.36613512,0.17524622
 128,PROT,1064,12,monocyte,neutrophil,0.86609304,False,-0.04570613,0.007557096,-0.18134668
 128,PROT,1065,12,monocyte,neutrophil,0.8720244,True,-0.07423953,0.057787865,-0.059994843
-128,PROT,1066,12,monocyte,erythrocyte,0.8341104,False,0.013699623,-0.23519596,-0.22721198
+128,PROT,1066,12,monocyte,erythrocyte,0.8341104,True,0.013699623,-0.23519596,-0.22721198
 128,PROT,1067,10,macrophage,"cd4-positive, alpha-beta t cell",0.9223587,False,0.35085177,-0.31380492,0.34442252
 128,PROT,1068,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9061124,False,0.43109956,-0.30018714,0.40512523
 128,PROT,1069,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.92046213,False,0.42291063,-0.42065158,0.46238282
@@ -1079,25 +1079,25 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1077,12,monocyte,"cd4-positive, alpha-beta t cell",0.8760351,False,0.18016772,-0.24041434,0.06273095
 128,PROT,1078,12,monocyte,myeloid dendritic cell,0.9420864,False,0.18973376,0.4098576,-0.12382809
 128,PROT,1079,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8564876,False,0.2651081,-0.34972548,0.2253775
-128,PROT,1080,12,monocyte,erythrocyte,0.84390545,False,0.058814544,-0.18080808,-0.06477164
+128,PROT,1080,12,monocyte,erythrocyte,0.84390545,True,0.058814544,-0.18080808,-0.06477164
 128,PROT,1081,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9028802,False,0.41152006,-0.39090437,0.3759734
 128,PROT,1082,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8917944,False,0.43180498,-0.33264363,0.367783
 128,PROT,1083,12,monocyte,erythrocyte,0.83031493,True,0.058689177,-0.17302406,-0.12911363
-128,PROT,1084,12,monocyte,erythrocyte,0.8430866,False,-0.025281312,-0.25590995,-0.3174469
-128,PROT,1085,12,monocyte,erythrocyte,0.8314999,False,-0.07983355,-0.24794067,-0.16633455
-128,PROT,1086,12,monocyte,erythrocyte,0.84090024,False,-0.088813655,-0.054272965,-0.19139276
+128,PROT,1084,12,monocyte,erythrocyte,0.8430866,True,-0.025281312,-0.25590995,-0.3174469
+128,PROT,1085,12,monocyte,erythrocyte,0.8314999,True,-0.07983355,-0.24794067,-0.16633455
+128,PROT,1086,12,monocyte,erythrocyte,0.84090024,True,-0.088813655,-0.054272965,-0.19139276
 128,PROT,1087,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.90764314,False,0.4286664,-0.33731362,0.46636966
-128,PROT,1088,12,monocyte,erythrocyte,0.8406545,False,-0.07561248,-0.18256417,-0.25868478
+128,PROT,1088,12,monocyte,erythrocyte,0.8406545,True,-0.07561248,-0.18256417,-0.25868478
 128,PROT,1089,10,macrophage,erythrocyte,0.86348295,True,0.031188227,-0.2146615,-0.30994835
 128,PROT,1090,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88162744,False,0.21330664,-0.26973146,0.09899423
 128,PROT,1091,12,monocyte,myeloid dendritic cell,0.90590966,False,0.12904267,0.28588673,-0.13793546
-128,PROT,1092,12,monocyte,erythrocyte,0.8490901,False,0.18427572,-0.36451367,-0.08216649
+128,PROT,1092,12,monocyte,erythrocyte,0.8490901,True,0.18427572,-0.36451367,-0.08216649
 128,PROT,1093,12,monocyte,"cd8-positive, alpha-beta t cell",0.8515072,True,0.25422657,-0.2785313,0.14346394
 128,PROT,1094,12,monocyte,erythrocyte,0.8294371,True,0.012537107,-0.077653795,-0.16499196
 128,PROT,1095,10,macrophage,"cd4-positive, alpha-beta t cell",0.8666555,False,0.3750425,-0.25396657,0.14395441
 128,PROT,1096,12,monocyte,erythrocyte,0.8625029,True,0.080966584,0.047412504,-0.18478028
 128,PROT,1097,12,monocyte,neutrophil,0.86686885,True,-0.050479878,0.058475465,-0.09613526
-128,PROT,1098,12,monocyte,erythrocyte,0.8392623,False,0.23333298,-0.30194154,-0.040166743
+128,PROT,1098,12,monocyte,erythrocyte,0.8392623,True,0.23333298,-0.30194154,-0.040166743
 128,PROT,1099,12,monocyte,b cell,0.78666925,True,0.38369158,-0.24742602,0.23991679
 128,PROT,1100,12,monocyte,"cd8-positive, alpha-beta t cell",0.8393136,False,0.16307533,-0.181718,-0.030993529
 128,PROT,1101,12,monocyte,myeloid dendritic cell,0.9250786,False,0.25601184,0.28771093,-0.20255914
@@ -1105,34 +1105,34 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1103,12,monocyte,myeloid dendritic cell,0.9207845,True,0.24204075,0.14024425,0.013208759
 128,PROT,1104,10,macrophage,"cd4-positive, alpha-beta t cell",0.8718871,True,0.38588384,-0.13771836,0.28362867
 128,PROT,1105,12,monocyte,myeloid dendritic cell,0.9359587,False,0.25707665,0.3365657,-0.21393861
-128,PROT,1106,10,macrophage,erythrocyte,0.8278062,False,0.09058114,-0.36571366,-0.16810523
-128,PROT,1107,12,monocyte,neutrophil,0.8535749,True,-0.08948862,-0.0076915524,-0.22352758
+128,PROT,1106,10,macrophage,erythrocyte,0.8278062,True,0.09058114,-0.36571366,-0.16810523
+128,PROT,1107,12,monocyte,neutrophil,0.8535749,False,-0.08948862,-0.0076915524,-0.22352758
 128,PROT,1108,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86112297,False,0.37474433,-0.28003114,0.18262544
-128,PROT,1109,12,monocyte,erythrocyte,0.84591925,False,-0.07532916,-0.16248342,-0.21093366
+128,PROT,1109,12,monocyte,erythrocyte,0.84591925,True,-0.07532916,-0.16248342,-0.21093366
 128,PROT,1110,12,monocyte,monocyte,0.96325237,False,0.345929,0.43435422,-0.21561639
 128,PROT,1111,12,monocyte,myeloid dendritic cell,0.9379295,False,0.089418545,0.4241445,-0.1812409
 128,PROT,1112,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8899881,False,0.39493006,-0.29861543,0.37941587
 128,PROT,1113,12,monocyte,erythrocyte,0.8834756,False,-0.00898734,-0.16562991,-0.37132427
-128,PROT,1114,12,monocyte,erythrocyte,0.86641467,False,0.015430631,-0.18712418,-0.20903437
-128,PROT,1115,12,monocyte,erythrocyte,0.888764,False,0.02585895,-0.062840946,-0.33386457
+128,PROT,1114,12,monocyte,erythrocyte,0.86641467,True,0.015430631,-0.18712418,-0.20903437
+128,PROT,1115,12,monocyte,erythrocyte,0.888764,True,0.02585895,-0.062840946,-0.33386457
 128,PROT,1116,12,monocyte,erythrocyte,0.84114635,True,0.051556002,-0.0675519,-0.17315675
 128,PROT,1117,10,macrophage,erythrocyte,0.8420647,True,0.10913983,-0.061944198,-0.16973245
-128,PROT,1118,10,macrophage,erythrocyte,0.8368622,False,0.023541221,-0.29038304,-0.17996092
+128,PROT,1118,10,macrophage,erythrocyte,0.8368622,True,0.023541221,-0.29038304,-0.17996092
 128,PROT,1119,12,monocyte,"cd8-positive, alpha-beta t cell",0.8585862,True,0.017010551,-0.12787314,0.016018422
-128,PROT,1120,10,macrophage,erythrocyte,0.8494438,False,0.0078140525,-0.2307716,-0.26382208
-128,PROT,1121,12,monocyte,erythrocyte,0.848121,False,-0.08123555,-0.16452502,-0.2394642
+128,PROT,1120,10,macrophage,erythrocyte,0.8494438,True,0.0078140525,-0.2307716,-0.26382208
+128,PROT,1121,12,monocyte,erythrocyte,0.848121,True,-0.08123555,-0.16452502,-0.2394642
 128,PROT,1122,12,monocyte,myeloid dendritic cell,0.9459813,False,0.18230365,0.399496,-0.12103898
 128,PROT,1123,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.89000064,False,0.34753212,-0.41008165,0.28985047
 128,PROT,1124,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84831965,True,0.396981,-0.32229474,0.26953617
-128,PROT,1125,12,monocyte,erythrocyte,0.8427102,False,-0.001474048,-0.20960763,-0.17268522
+128,PROT,1125,12,monocyte,erythrocyte,0.8427102,True,-0.001474048,-0.20960763,-0.17268522
 128,PROT,1126,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9270604,False,0.40525872,-0.40751728,0.46060756
 128,PROT,1127,12,monocyte,erythrocyte,0.81808674,True,0.23049784,-0.18183675,-0.12609714
 128,PROT,1128,10,macrophage,"cd4-positive, alpha-beta t cell",0.85219926,True,0.3241673,-0.07455443,0.17489403
 128,PROT,1129,12,monocyte,myeloid dendritic cell,0.9517355,False,0.29252428,0.3832015,-0.23389399
 128,PROT,1130,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9745638,False,0.43077663,-0.4476735,0.56508803
 128,PROT,1131,12,monocyte,myeloid dendritic cell,0.8627988,True,0.15392095,0.030941946,-0.07461452
-128,PROT,1132,12,monocyte,erythrocyte,0.8464738,False,-0.028041113,-0.32208613,-0.20838036
-128,PROT,1133,12,monocyte,erythrocyte,0.82230693,False,-0.1145593,-0.13335784,-0.19068424
+128,PROT,1132,12,monocyte,erythrocyte,0.8464738,True,-0.028041113,-0.32208613,-0.20838036
+128,PROT,1133,12,monocyte,erythrocyte,0.82230693,True,-0.1145593,-0.13335784,-0.19068424
 128,PROT,1134,12,monocyte,myeloid dendritic cell,0.8882685,False,0.14915998,0.2367359,-0.14305805
 128,PROT,1135,10,macrophage,"cd4-positive, alpha-beta t cell",0.8787656,False,0.40101537,-0.23212397,0.3187419
 128,PROT,1136,12,monocyte,myeloid dendritic cell,0.95833606,False,0.28487146,0.42939308,-0.20181887
@@ -1141,15 +1141,15 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1139,12,monocyte,neutrophil,0.87550724,False,-0.08187004,0.17339288,-0.20193762
 128,PROT,1140,12,monocyte,erythrocyte,0.8264683,True,0.24987218,-0.35503665,0.068029545
 128,PROT,1141,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8712975,False,0.28604022,-0.2358776,0.122951634
-128,PROT,1142,12,monocyte,erythrocyte,0.82616675,False,-0.14500354,-0.20206569,-0.28249475
-128,PROT,1143,10,macrophage,erythrocyte,0.85915357,False,4.019148e-05,-0.1384584,-0.24611712
+128,PROT,1142,12,monocyte,erythrocyte,0.82616675,True,-0.14500354,-0.20206569,-0.28249475
+128,PROT,1143,10,macrophage,erythrocyte,0.85915357,True,4.019148e-05,-0.1384584,-0.24611712
 128,PROT,1144,10,macrophage,"cd4-positive, alpha-beta t cell",0.92028075,False,0.22069189,-0.3678446,0.18753536
 128,PROT,1145,10,macrophage,plasma cell,0.8176435,True,0.3545852,-0.29274872,0.22282623
-128,PROT,1146,12,monocyte,erythrocyte,0.84690094,False,-0.040408514,-0.18838555,-0.25191468
+128,PROT,1146,12,monocyte,erythrocyte,0.84690094,True,-0.040408514,-0.18838555,-0.25191468
 128,PROT,1147,10,macrophage,"cd4-positive, alpha-beta t cell",0.87458694,False,0.11804944,-0.27780366,-0.0048449775
 128,PROT,1148,12,monocyte,myeloid dendritic cell,0.96229684,False,0.22459693,0.49080768,-0.11012081
-128,PROT,1149,12,monocyte,erythrocyte,0.842251,False,-0.03227919,-0.21028578,-0.26193526
-128,PROT,1150,12,monocyte,erythrocyte,0.8589679,False,-0.039697275,-0.18661758,-0.34008804
+128,PROT,1149,12,monocyte,erythrocyte,0.842251,True,-0.03227919,-0.21028578,-0.26193526
+128,PROT,1150,12,monocyte,erythrocyte,0.8589679,True,-0.039697275,-0.18661758,-0.34008804
 128,PROT,1151,12,monocyte,neutrophil,0.8475811,False,-0.12111429,-0.05035284,-0.18017274
 128,PROT,1152,12,monocyte,neutrophil,0.9028861,False,-0.046524625,0.18076237,-0.19232778
 128,PROT,1153,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86897135,False,0.35238788,-0.20691618,0.28059337
@@ -1157,7 +1157,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1155,12,monocyte,myeloid dendritic cell,0.8936111,False,0.14161682,0.18173514,-0.20972334
 128,PROT,1156,10,macrophage,"cd4-positive, alpha-beta t cell",0.8779519,False,0.3809902,-0.26668134,0.28852385
 128,PROT,1157,10,macrophage,b cell,0.83453035,False,0.25418758,-0.3090341,0.025798846
-128,PROT,1158,12,monocyte,erythrocyte,0.86192304,False,-0.022630041,-0.10853257,-0.27676225
+128,PROT,1158,12,monocyte,erythrocyte,0.86192304,True,-0.022630041,-0.10853257,-0.27676225
 128,PROT,1159,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.859583,True,0.42720786,-0.3313906,0.42229936
 128,PROT,1160,12,monocyte,myeloid dendritic cell,0.90121144,False,0.1340178,0.089138925,-0.26073843
 128,PROT,1161,12,monocyte,myeloid dendritic cell,0.94075507,False,0.18487482,0.38631392,-0.1771868
@@ -1165,14 +1165,14 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1163,12,monocyte,neutrophil,0.84692085,True,-0.007994656,-0.06949305,-0.06929369
 128,PROT,1164,12,monocyte,neutrophil,0.81875294,True,0.024055414,-0.18283544,-0.16697434
 128,PROT,1165,12,monocyte,erythrocyte,0.86330336,True,-0.029581083,-0.24769899,-0.32474312
-128,PROT,1166,12,monocyte,neutrophil,0.83910906,False,-0.1380658,-0.08396837,-0.10228175
-128,PROT,1167,12,monocyte,erythrocyte,0.84403336,False,-0.049631134,-0.17642298,-0.14724058
+128,PROT,1166,12,monocyte,neutrophil,0.83910906,True,-0.1380658,-0.08396837,-0.10228175
+128,PROT,1167,12,monocyte,erythrocyte,0.84403336,True,-0.049631134,-0.17642298,-0.14724058
 128,PROT,1168,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9035271,False,0.40584642,-0.31606615,0.3878028
 128,PROT,1169,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9246291,False,0.36929426,-0.42481515,0.34766865
 128,PROT,1170,10,macrophage,"cd4-positive, alpha-beta t cell",0.88438547,False,0.16844364,-0.28548756,-0.018175976
 128,PROT,1171,12,monocyte,myeloid dendritic cell,0.90068215,False,0.094826,0.1902889,-0.2566884
-128,PROT,1172,10,macrophage,erythrocyte,0.8619324,False,0.0032847004,-0.2602001,-0.17847888
-128,PROT,1173,12,monocyte,erythrocyte,0.8307066,False,0.04968313,-0.17466074,-0.14066173
+128,PROT,1172,10,macrophage,erythrocyte,0.8619324,True,0.0032847004,-0.2602001,-0.17847888
+128,PROT,1173,12,monocyte,erythrocyte,0.8307066,True,0.04968313,-0.17466074,-0.14066173
 128,PROT,1174,12,monocyte,myeloid dendritic cell,0.9005087,False,-0.07718938,0.19120458,-0.055091225
 128,PROT,1175,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85705185,False,0.22404402,-0.24966621,0.13466136
 128,PROT,1176,12,monocyte,myeloid dendritic cell,0.96669734,False,0.35233596,0.37970045,-0.20556542
@@ -1180,27 +1180,27 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1178,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8523935,False,0.37795135,-0.39316332,0.3324105
 128,PROT,1179,12,monocyte,neutrophil,0.8804366,False,-0.15039691,0.07803191,-0.2194474
 128,PROT,1180,12,monocyte,monocyte,0.97161597,False,0.35886338,0.39823678,-0.2169282
-128,PROT,1181,12,monocyte,erythrocyte,0.8489901,False,0.12048232,-0.29087356,-0.094975896
+128,PROT,1181,12,monocyte,erythrocyte,0.8489901,True,0.12048232,-0.29087356,-0.094975896
 128,PROT,1182,12,monocyte,myeloid dendritic cell,0.91885835,False,0.19434881,0.23661596,-0.20050216
 128,PROT,1183,10,macrophage,"cd8-positive, alpha-beta t cell",0.85190314,False,0.19210355,-0.34794992,0.053581584
 128,PROT,1184,12,monocyte,erythrocyte,0.84737396,True,0.093328334,-0.13654308,-0.095053084
 128,PROT,1185,12,monocyte,neutrophil,0.8762986,False,-0.10484927,0.07344534,-0.26712814
 128,PROT,1186,12,monocyte,myeloid dendritic cell,0.9267068,False,0.1998464,0.33500254,-0.19832298
 128,PROT,1187,12,monocyte,erythrocyte,0.850438,True,-0.037038304,-0.205559,-0.29775697
-128,PROT,1188,12,monocyte,erythrocyte,0.8178379,False,-0.017985838,-0.2605392,-0.23425893
-128,PROT,1189,12,monocyte,erythrocyte,0.834,False,-0.036206886,-0.20529047,-0.19651581
+128,PROT,1188,12,monocyte,erythrocyte,0.8178379,True,-0.017985838,-0.2605392,-0.23425893
+128,PROT,1189,12,monocyte,erythrocyte,0.834,True,-0.036206886,-0.20529047,-0.19651581
 128,PROT,1190,12,monocyte,myeloid dendritic cell,0.9644211,False,0.32703525,0.4430791,-0.17148063
-128,PROT,1191,12,monocyte,neutrophil,0.85818946,False,0.13972029,-0.1428491,0.084646165
+128,PROT,1191,12,monocyte,neutrophil,0.85818946,True,0.13972029,-0.1428491,0.084646165
 128,PROT,1192,12,monocyte,myeloid dendritic cell,0.918832,False,0.07166183,0.066680185,-0.29554
-128,PROT,1193,10,macrophage,erythrocyte,0.8419992,False,0.27029726,-0.21102706,-0.02137085
-128,PROT,1194,12,monocyte,erythrocyte,0.8540803,False,0.14467011,-0.22224753,0.028366387
-128,PROT,1195,12,monocyte,erythrocyte,0.87496024,True,-0.12437264,-0.13612674,-0.2618378
+128,PROT,1193,10,macrophage,erythrocyte,0.8419992,True,0.27029726,-0.21102706,-0.02137085
+128,PROT,1194,12,monocyte,erythrocyte,0.8540803,True,0.14467011,-0.22224753,0.028366387
+128,PROT,1195,12,monocyte,erythrocyte,0.87496024,False,-0.12437264,-0.13612674,-0.2618378
 128,PROT,1196,12,monocyte,myeloid dendritic cell,0.9216998,False,0.1934467,0.23037553,-0.20326243
 128,PROT,1197,10,macrophage,"cd8-positive, alpha-beta t cell",0.8838396,False,0.21384387,-0.28771076,0.05942413
 128,PROT,1198,10,macrophage,myeloid dendritic cell,0.831522,True,0.28134653,-0.05001106,0.06734367
 128,PROT,1199,10,macrophage,"cd8-positive, alpha-beta t cell",0.8568761,True,0.22609586,-0.25052914,0.07716659
-128,PROT,1200,10,macrophage,erythrocyte,0.8426894,False,-0.059801985,-0.3371736,-0.28772774
-128,PROT,1201,12,monocyte,erythrocyte,0.8288001,False,-0.058113586,-0.22563991,-0.27259332
+128,PROT,1200,10,macrophage,erythrocyte,0.8426894,True,-0.059801985,-0.3371736,-0.28772774
+128,PROT,1201,12,monocyte,erythrocyte,0.8288001,True,-0.058113586,-0.22563991,-0.27259332
 128,PROT,1202,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8172116,True,0.33706757,-0.25996438,0.18297188
 128,PROT,1203,10,macrophage,"cd4-positive, alpha-beta t cell",0.8784906,False,0.3898683,-0.30794486,0.29708317
 128,PROT,1204,12,monocyte,myeloid dendritic cell,0.935246,False,0.18018529,0.30907133,-0.06998724
@@ -1216,15 +1216,15 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1214,12,monocyte,myeloid dendritic cell,0.9038788,False,0.18139258,0.3094246,-0.20567213
 128,PROT,1215,10,macrophage,"cd4-positive, alpha-beta t cell",0.86098385,False,0.2456985,-0.2170444,0.0145773385
 128,PROT,1216,12,monocyte,myeloid dendritic cell,0.94411296,False,0.27933016,0.373221,-0.120785415
-128,PROT,1217,12,monocyte,erythrocyte,0.8586758,False,0.16404246,-0.30157042,-0.07815474
-128,PROT,1218,10,macrophage,erythrocyte,0.86266196,False,0.18402839,-0.24195172,-0.26107416
-128,PROT,1219,12,monocyte,erythrocyte,0.85058403,False,0.08911941,-0.21053596,-0.086395025
+128,PROT,1217,12,monocyte,erythrocyte,0.8586758,True,0.16404246,-0.30157042,-0.07815474
+128,PROT,1218,10,macrophage,erythrocyte,0.86266196,True,0.18402839,-0.24195172,-0.26107416
+128,PROT,1219,12,monocyte,erythrocyte,0.85058403,True,0.08911941,-0.21053596,-0.086395025
 128,PROT,1220,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8882634,False,0.3857984,-0.35031426,0.38222006
 128,PROT,1221,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8743957,False,0.40588447,-0.36030546,0.37945494
 128,PROT,1222,12,monocyte,neutrophil,0.8374616,False,-0.05508952,-0.027165733,-0.18490998
 128,PROT,1223,12,monocyte,myeloid dendritic cell,0.949111,False,0.14192477,0.47995535,-0.15576372
 128,PROT,1224,12,monocyte,erythrocyte,0.8566675,True,0.004554217,0.035877593,-0.14184295
-128,PROT,1225,12,monocyte,neutrophil,0.84941053,True,-0.15436125,0.009670353,-0.19963242
+128,PROT,1225,12,monocyte,neutrophil,0.84941053,False,-0.15436125,0.009670353,-0.19963242
 128,PROT,1226,10,macrophage,"cd4-positive, alpha-beta t cell",0.8662163,False,0.21400118,-0.23159197,0.047235865
 128,PROT,1227,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8851425,False,0.43467543,-0.31133524,0.38118926
 128,PROT,1228,12,monocyte,erythrocyte,0.8280942,True,0.16969873,-0.08556517,-0.17382306
@@ -1234,7 +1234,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1232,12,monocyte,"cd4-positive, alpha-beta t cell",0.8555893,True,0.31983632,-0.14985783,0.17533068
 128,PROT,1233,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85253966,False,0.41320515,-0.32547334,0.37453255
 128,PROT,1234,10,macrophage,"cd4-positive, alpha-beta t cell",0.8212674,True,0.38929564,-0.24300048,0.11277062
-128,PROT,1235,12,monocyte,erythrocyte,0.8297881,False,0.045702156,-0.18117112,-0.11297659
+128,PROT,1235,12,monocyte,erythrocyte,0.8297881,True,0.045702156,-0.18117112,-0.11297659
 128,PROT,1236,10,macrophage,"cd4-positive, alpha-beta t cell",0.90064967,False,0.40983737,-0.3488552,0.40124267
 128,PROT,1237,10,macrophage,"cd4-positive, alpha-beta t cell",0.9037708,False,0.21362111,-0.37636682,0.18314594
 128,PROT,1238,12,monocyte,neutrophil,0.8604867,True,0.023825955,-0.053699832,-0.0010796536
@@ -1246,8 +1246,8 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1244,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8899666,False,0.42627013,-0.30043662,0.28248125
 128,PROT,1245,10,macrophage,erythrocyte,0.85014933,True,0.01428292,-0.31388804,-0.35416946
 128,PROT,1246,10,macrophage,"cd4-positive, alpha-beta t cell",0.9027418,False,0.20381199,-0.3725628,0.19459914
-128,PROT,1247,12,monocyte,erythrocyte,0.8516949,False,-0.13449478,-0.20168035,-0.3298602
-128,PROT,1248,12,monocyte,erythrocyte,0.8341263,False,-0.109245166,-0.18497023,-0.26982668
+128,PROT,1247,12,monocyte,erythrocyte,0.8516949,True,-0.13449478,-0.20168035,-0.3298602
+128,PROT,1248,12,monocyte,erythrocyte,0.8341263,True,-0.109245166,-0.18497023,-0.26982668
 128,PROT,1249,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.9310018,False,0.3875543,-0.32919475,0.42135927
 128,PROT,1250,10,macrophage,erythrocyte,0.8504351,True,-0.00907171,-0.3414486,-0.352591
 128,PROT,1251,12,monocyte,myeloid dendritic cell,0.966094,False,0.27751118,0.5086586,-0.20028765
@@ -1270,56 +1270,56 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1268,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8990367,False,0.424367,-0.3930073,0.4063844
 128,PROT,1269,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8475609,True,0.43221092,-0.33698833,0.38892734
 128,PROT,1270,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8363956,True,0.33049476,-0.38079172,0.28651035
-128,PROT,1271,12,monocyte,erythrocyte,0.83937824,False,-0.14576942,-0.1754492,-0.19898316
+128,PROT,1271,12,monocyte,erythrocyte,0.83937824,True,-0.14576942,-0.1754492,-0.19898316
 128,PROT,1272,12,monocyte,erythrocyte,0.8573791,True,-0.1017999,-0.18069331,-0.34539554
-128,PROT,1273,10,macrophage,erythrocyte,0.83648074,False,-0.004801628,-0.32072243,-0.25743392
+128,PROT,1273,10,macrophage,erythrocyte,0.83648074,True,-0.004801628,-0.32072243,-0.25743392
 128,PROT,1274,12,monocyte,"cd8-positive, alpha-beta t cell",0.8510051,False,0.22257325,-0.265071,0.09899563
 128,PROT,1275,12,monocyte,erythrocyte,0.85643053,True,-0.059699997,-0.23388991,-0.35419324
 128,PROT,1276,10,macrophage,"cd4-positive, alpha-beta t cell",0.877837,False,0.29645824,-0.23965126,0.18403186
 128,PROT,1277,10,macrophage,mature nk t cell,0.84595346,True,0.28292492,-0.30731803,0.14579701
-128,PROT,1278,10,macrophage,erythrocyte,0.8517051,False,0.17357135,-0.20599699,-0.0052090124
+128,PROT,1278,10,macrophage,erythrocyte,0.8517051,True,0.17357135,-0.20599699,-0.0052090124
 128,PROT,1279,12,monocyte,myeloid dendritic cell,0.91072834,False,0.15600331,0.113352306,-0.043086436
 128,PROT,1280,12,monocyte,neutrophil,0.86009884,False,-0.05783238,-0.052418683,-0.171149
 128,PROT,1281,12,monocyte,myeloid dendritic cell,0.88040704,False,0.02436841,-0.03415403,-0.2071513
 128,PROT,1282,12,monocyte,neutrophil,0.8858803,False,-0.13651739,0.14663489,-0.15224014
-128,PROT,1283,12,monocyte,erythrocyte,0.84343165,False,0.07597635,-0.16143815,-0.22975333
+128,PROT,1283,12,monocyte,erythrocyte,0.84343165,True,0.07597635,-0.16143815,-0.22975333
 128,PROT,1284,12,monocyte,myeloid dendritic cell,0.9550524,False,0.3516635,0.42168602,-0.20325477
 128,PROT,1285,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86387557,False,0.32665184,-0.2351801,0.21976677
-128,PROT,1286,12,monocyte,erythrocyte,0.82440615,False,0.037075743,-0.22959472,-0.23316923
-128,PROT,1287,12,monocyte,erythrocyte,0.81721765,False,0.016957564,-0.20877923,-0.16846934
+128,PROT,1286,12,monocyte,erythrocyte,0.82440615,True,0.037075743,-0.22959472,-0.23316923
+128,PROT,1287,12,monocyte,erythrocyte,0.81721765,True,0.016957564,-0.20877923,-0.16846934
 128,PROT,1288,12,monocyte,myeloid dendritic cell,0.9495779,False,-0.03381643,0.36679173,-0.12769474
-128,PROT,1289,12,monocyte,erythrocyte,0.8332597,False,0.056945484,-0.23212244,-0.19386026
-128,PROT,1290,10,macrophage,erythrocyte,0.8627812,False,0.17459454,-0.17316975,0.024255693
+128,PROT,1289,12,monocyte,erythrocyte,0.8332597,True,0.056945484,-0.23212244,-0.19386026
+128,PROT,1290,10,macrophage,erythrocyte,0.8627812,True,0.17459454,-0.17316975,0.024255693
 128,PROT,1291,12,monocyte,neutrophil,0.83948565,True,-0.035589658,-0.09143789,-0.11962312
-128,PROT,1292,12,monocyte,erythrocyte,0.81243837,False,-0.13030459,-0.25312525,-0.25206813
-128,PROT,1293,12,monocyte,erythrocyte,0.8293967,False,-0.05317234,-0.14899458,-0.24620052
+128,PROT,1292,12,monocyte,erythrocyte,0.81243837,True,-0.13030459,-0.25312525,-0.25206813
+128,PROT,1293,12,monocyte,erythrocyte,0.8293967,True,-0.05317234,-0.14899458,-0.24620052
 128,PROT,1294,12,monocyte,neutrophil,0.85915565,True,0.081146866,-0.19001995,0.004976697
-128,PROT,1295,10,macrophage,erythrocyte,0.8419145,False,-0.06420357,-0.28072143,-0.24483539
+128,PROT,1295,10,macrophage,erythrocyte,0.8419145,True,-0.06420357,-0.28072143,-0.24483539
 128,PROT,1296,12,monocyte,erythrocyte,0.87540567,False,-0.017200496,-0.26652262,-0.40094832
 128,PROT,1297,12,monocyte,myeloid dendritic cell,0.974449,False,0.38697624,0.49301523,-0.15904498
 128,PROT,1298,12,monocyte,erythrocyte,0.86364555,True,-0.024831908,-0.19354817,-0.29625985
 128,PROT,1299,12,monocyte,myeloid dendritic cell,0.95102835,False,0.20049015,0.45193446,-0.15602744
 128,PROT,1300,12,monocyte,"cd8-positive, alpha-beta t cell",0.8568317,True,0.1528542,-0.06655731,0.059295088
-128,PROT,1301,12,monocyte,erythrocyte,0.8521644,False,-0.0064942283,-0.3045373,-0.22214499
-128,PROT,1302,12,monocyte,erythrocyte,0.829943,False,-0.09779237,-0.18666227,-0.23195393
-128,PROT,1303,10,macrophage,erythrocyte,0.87398565,False,0.0673145,-0.21798304,-0.020835344
+128,PROT,1301,12,monocyte,erythrocyte,0.8521644,True,-0.0064942283,-0.3045373,-0.22214499
+128,PROT,1302,12,monocyte,erythrocyte,0.829943,True,-0.09779237,-0.18666227,-0.23195393
+128,PROT,1303,10,macrophage,erythrocyte,0.87398565,True,0.0673145,-0.21798304,-0.020835344
 128,PROT,1304,10,macrophage,"cd4-positive, alpha-beta t cell",0.8743311,False,0.2419832,-0.14839591,0.11383499
-128,PROT,1305,10,macrophage,erythrocyte,0.8776151,False,0.053024318,-0.24915187,-0.14431532
-128,PROT,1306,12,monocyte,erythrocyte,0.8480495,False,-0.094203584,-0.20515336,-0.2828546
+128,PROT,1305,10,macrophage,erythrocyte,0.8776151,True,0.053024318,-0.24915187,-0.14431532
+128,PROT,1306,12,monocyte,erythrocyte,0.8480495,True,-0.094203584,-0.20515336,-0.2828546
 128,PROT,1307,12,monocyte,neutrophil,0.8705351,False,-0.06458882,0.062892966,-0.17799819
-128,PROT,1308,12,monocyte,erythrocyte,0.83614886,False,-0.05835789,-0.22354479,-0.13449763
+128,PROT,1308,12,monocyte,erythrocyte,0.83614886,True,-0.05835789,-0.22354479,-0.13449763
 128,PROT,1309,12,monocyte,neutrophil,0.8620192,True,-0.039225917,0.046344906,-0.1548585
-128,PROT,1310,12,monocyte,erythrocyte,0.84955275,False,-0.028674973,-0.19650212,-0.29161218
+128,PROT,1310,12,monocyte,erythrocyte,0.84955275,True,-0.028674973,-0.19650212,-0.29161218
 128,PROT,1311,12,monocyte,myeloid dendritic cell,0.84398043,False,0.06796151,0.0013634933,-0.06454344
 128,PROT,1312,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8532526,True,0.4139233,-0.28448066,0.37925935
-128,PROT,1313,10,macrophage,erythrocyte,0.88937247,False,0.06393991,-0.34236082,-0.113999315
+128,PROT,1313,10,macrophage,erythrocyte,0.88937247,True,0.06393991,-0.34236082,-0.113999315
 128,PROT,1314,12,monocyte,myeloid dendritic cell,0.94309485,False,0.14268774,0.4173772,-0.11631506
-128,PROT,1315,10,macrophage,erythrocyte,0.84463346,False,0.087178625,-0.2953542,-0.2683552
+128,PROT,1315,10,macrophage,erythrocyte,0.84463346,True,0.087178625,-0.2953542,-0.2683552
 128,PROT,1316,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.91303986,False,0.38658968,-0.33335015,0.33720303
 128,PROT,1317,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8725583,False,0.37835342,-0.43804678,0.33533037
-128,PROT,1318,12,monocyte,erythrocyte,0.84782684,True,-0.05648215,-0.10525422,-0.18040636
-128,PROT,1319,12,monocyte,platelet,0.8947797,False,-0.065299384,0.12852441,-0.1940768
-128,PROT,1320,12,monocyte,erythrocyte,0.8469718,True,-0.110407434,-0.17709762,-0.16226484
+128,PROT,1318,12,monocyte,erythrocyte,0.84782684,False,-0.05648215,-0.10525422,-0.18040636
+128,PROT,1319,12,monocyte,platelet,0.8947797,True,-0.065299384,0.12852441,-0.1940768
+128,PROT,1320,12,monocyte,erythrocyte,0.8469718,False,-0.110407434,-0.17709762,-0.16226484
 128,PROT,1321,12,monocyte,myeloid dendritic cell,0.93201274,False,0.036544994,0.21090603,-0.28051707
 128,PROT,1322,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86845386,True,0.3532081,-0.1940131,0.35073903
 128,PROT,1323,12,monocyte,neutrophil,0.85866135,False,-0.18293597,-0.013658209,-0.22779232
@@ -1333,35 +1333,35 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1331,12,monocyte,"cd4-positive, alpha-beta t cell",0.88325703,False,0.33331215,-0.28978902,0.25404197
 128,PROT,1332,12,monocyte,neutrophil,0.85556126,False,-0.03760111,0.06212007,-0.1524647
 128,PROT,1333,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.87422884,False,0.39408278,-0.30505806,0.2929412
-128,PROT,1334,10,macrophage,erythrocyte,0.80899876,False,-0.07020848,-0.19339833,-0.18187352
-128,PROT,1335,12,monocyte,neutrophil,0.8252195,False,-0.031194216,-0.12639713,-0.0955677
-128,PROT,1336,12,monocyte,erythrocyte,0.87053984,False,0.0036999602,-0.09166032,-0.2194046
+128,PROT,1334,10,macrophage,erythrocyte,0.80899876,True,-0.07020848,-0.19339833,-0.18187352
+128,PROT,1335,12,monocyte,neutrophil,0.8252195,True,-0.031194216,-0.12639713,-0.0955677
+128,PROT,1336,12,monocyte,erythrocyte,0.87053984,True,0.0036999602,-0.09166032,-0.2194046
 128,PROT,1337,12,monocyte,myeloid dendritic cell,0.93245316,False,0.07885419,0.30398738,-0.2571023
 128,PROT,1338,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8602996,True,0.38100982,-0.2662242,0.3340629
 128,PROT,1339,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.86094105,True,0.4124666,-0.28254014,0.4159164
 128,PROT,1340,12,monocyte,erythrocyte,0.8509577,True,0.032988198,-0.1519441,-0.22831938
 128,PROT,1341,10,macrophage,myeloid dendritic cell,0.93212783,False,0.07346817,0.26800564,-0.14106697
 128,PROT,1342,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.84266984,True,0.3702164,-0.20806569,0.2204019
-128,PROT,1343,12,monocyte,neutrophil,0.84482133,False,-0.0955066,-0.16664718,-0.11652
-128,PROT,1344,12,monocyte,erythrocyte,0.8245379,False,-0.026129412,-0.295565,-0.23734024
-128,PROT,1345,12,monocyte,erythrocyte,0.8489227,False,-0.014387764,-0.28271303,-0.1991816
+128,PROT,1343,12,monocyte,neutrophil,0.84482133,True,-0.0955066,-0.16664718,-0.11652
+128,PROT,1344,12,monocyte,erythrocyte,0.8245379,True,-0.026129412,-0.295565,-0.23734024
+128,PROT,1345,12,monocyte,erythrocyte,0.8489227,True,-0.014387764,-0.28271303,-0.1991816
 128,PROT,1346,12,monocyte,neutrophil,0.88182175,False,-0.11977626,0.0931394,-0.1400601
-128,PROT,1347,10,macrophage,erythrocyte,0.86029756,False,0.08987627,-0.33555856,-0.14544453
+128,PROT,1347,10,macrophage,erythrocyte,0.86029756,True,0.08987627,-0.33555856,-0.14544453
 128,PROT,1348,12,monocyte,"cd8-positive, alpha-beta t cell",0.86314297,False,0.18499115,-0.19006476,0.10002843
 128,PROT,1349,12,monocyte,myeloid dendritic cell,0.86230624,True,0.13244255,-0.1072079,-0.036752056
-128,PROT,1350,12,monocyte,erythrocyte,0.82876235,False,-0.013842755,-0.22923294,-0.17890258
+128,PROT,1350,12,monocyte,erythrocyte,0.82876235,True,-0.013842755,-0.22923294,-0.17890258
 128,PROT,1351,12,monocyte,erythrocyte,0.8537712,True,0.19022886,-0.09308612,-0.18604538
 128,PROT,1352,12,monocyte,myeloid dendritic cell,0.9404181,False,0.05644689,0.35228318,-0.21995579
 128,PROT,1353,12,monocyte,myeloid dendritic cell,0.95732373,False,0.25456136,0.4979135,-0.0882872
-128,PROT,1354,12,monocyte,erythrocyte,0.84469795,False,-0.03971454,-0.21918051,-0.2157422
+128,PROT,1354,12,monocyte,erythrocyte,0.84469795,True,-0.03971454,-0.21918051,-0.2157422
 128,PROT,1355,12,monocyte,neutrophil,0.8664467,False,-0.0076379254,0.031195555,-0.19691241
 128,PROT,1356,12,monocyte,erythrocyte,0.86137295,False,-0.046564728,-0.19016324,-0.32240793
 128,PROT,1357,10,macrophage,erythrocyte,0.84839803,True,0.007974007,-0.3649967,-0.31931746
 128,PROT,1358,12,monocyte,myeloid dendritic cell,0.94306576,False,0.15119691,0.39130276,-0.03891
-128,PROT,1359,12,monocyte,erythrocyte,0.8560541,False,0.17015682,-0.26333266,0.03935774
+128,PROT,1359,12,monocyte,erythrocyte,0.8560541,True,0.17015682,-0.26333266,0.03935774
 128,PROT,1360,12,monocyte,neutrophil,0.84588814,True,-0.085928835,-0.06986027,-0.16621694
 128,PROT,1361,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.88576186,False,0.35939327,-0.3516042,0.3767881
-128,PROT,1362,12,monocyte,erythrocyte,0.8481234,False,-0.06371654,-0.20203446,-0.18297912
+128,PROT,1362,12,monocyte,erythrocyte,0.8481234,True,-0.06371654,-0.20203446,-0.18297912
 128,PROT,1363,12,monocyte,myeloid dendritic cell,0.8935752,False,0.02067099,0.17325823,-0.17004438
 128,PROT,1364,12,monocyte,myeloid dendritic cell,0.9376879,False,0.09133995,0.29061377,-0.25560176
 128,PROT,1365,12,monocyte,myeloid dendritic cell,0.9075408,False,0.1321334,0.13409533,-0.17748933
@@ -1384,20 +1384,20 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1382,10,macrophage,"cd4-positive, alpha-beta t cell",0.88727987,False,0.33284727,-0.28207293,0.29959935
 128,PROT,1383,12,monocyte,neutrophil,0.8407812,False,-0.17294434,-0.083062746,-0.16929112
 128,PROT,1384,12,monocyte,myeloid dendritic cell,0.90851176,False,0.0067371028,0.20014195,-0.27494407
-128,PROT,1385,12,monocyte,erythrocyte,0.85359937,False,-0.072276354,-0.069158174,-0.21091412
+128,PROT,1385,12,monocyte,erythrocyte,0.85359937,True,-0.072276354,-0.069158174,-0.21091412
 128,PROT,1386,12,monocyte,myeloid dendritic cell,0.90027934,False,0.02179452,0.16193114,-0.16139963
-128,PROT,1387,12,monocyte,erythrocyte,0.8566564,True,-0.10384091,-0.10775502,-0.21107295
+128,PROT,1387,12,monocyte,erythrocyte,0.8566564,False,-0.10384091,-0.10775502,-0.21107295
 128,PROT,1388,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.79837304,True,0.40033448,-0.16995578,0.26815397
 128,PROT,1389,12,monocyte,myeloid dendritic cell,0.9356837,False,0.12035693,0.32810307,-0.211602
 128,PROT,1390,12,monocyte,neutrophil,0.88415897,False,-0.010934054,0.068613045,-0.16434808
-128,PROT,1391,12,monocyte,neutrophil,0.8511597,True,-0.15322079,-0.056216672,-0.18158826
+128,PROT,1391,12,monocyte,neutrophil,0.8511597,False,-0.15322079,-0.056216672,-0.18158826
 128,PROT,1392,12,monocyte,myeloid dendritic cell,0.916994,False,0.07821361,0.25004002,-0.25449848
 128,PROT,1393,12,monocyte,neutrophil,0.8876336,False,0.037408248,0.064578354,-0.1996504
 128,PROT,1394,10,macrophage,"cd4-positive, alpha-beta t cell",0.9007684,False,0.37867558,-0.22707555,0.31272832
-128,PROT,1395,10,macrophage,erythrocyte,0.8487735,False,0.21420002,-0.1963949,-0.14248365
-128,PROT,1396,10,macrophage,erythrocyte,0.8368583,False,0.006206129,-0.24289845,-0.20290467
+128,PROT,1395,10,macrophage,erythrocyte,0.8487735,True,0.21420002,-0.1963949,-0.14248365
+128,PROT,1396,10,macrophage,erythrocyte,0.8368583,True,0.006206129,-0.24289845,-0.20290467
 128,PROT,1397,12,monocyte,monocyte,0.9638084,False,0.3773787,0.34173304,-0.19240375
-128,PROT,1398,12,monocyte,erythrocyte,0.8519845,False,-0.047557343,-0.15761697,-0.2776316
+128,PROT,1398,12,monocyte,erythrocyte,0.8519845,True,-0.047557343,-0.15761697,-0.2776316
 128,PROT,1399,10,macrophage,"cd4-positive, alpha-beta t cell",0.8835929,False,0.36587393,-0.2376261,0.26234552
 128,PROT,1400,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.85148066,False,0.2576874,-0.28096387,0.07737493
 128,PROT,1401,10,macrophage,"cd4-positive, alpha-beta t cell",0.8888413,False,0.3836378,-0.2715108,0.31795982
@@ -1410,7 +1410,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1408,12,monocyte,erythrocyte,0.8400016,True,-0.12640542,-0.094397694,-0.2490841
 128,PROT,1409,12,monocyte,myeloid dendritic cell,0.91996944,False,0.32155028,0.30917227,-0.048302595
 128,PROT,1410,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8955169,False,0.3528173,-0.36006582,0.32946783
-128,PROT,1411,12,monocyte,erythrocyte,0.84707725,False,0.032836333,-0.2461769,-0.19368915
+128,PROT,1411,12,monocyte,erythrocyte,0.84707725,True,0.032836333,-0.2461769,-0.19368915
 128,PROT,1412,12,monocyte,myeloid dendritic cell,0.9448121,False,0.29698175,0.4104266,-0.1569093
 128,PROT,1413,12,monocyte,myeloid dendritic cell,0.8857969,True,0.11231558,0.08812935,-0.16458985
 128,PROT,1414,12,monocyte,myeloid dendritic cell,0.91543543,False,0.17794798,0.21575107,-0.27044487
@@ -1433,7 +1433,7 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1431,12,monocyte,erythrocyte,0.84223795,True,-0.036655825,-0.10449377,-0.29904252
 128,PROT,1432,10,macrophage,"cd4-positive, alpha-beta t cell",0.8196829,False,0.31245187,-0.21131615,0.06949919
 128,PROT,1433,12,monocyte,myeloid dendritic cell,0.9228266,False,0.019521728,0.30061847,-0.19513498
-128,PROT,1434,12,monocyte,platelet,0.8742285,False,0.015525854,-0.0007174218,-0.2649833
+128,PROT,1434,12,monocyte,platelet,0.8742285,True,0.015525854,-0.0007174218,-0.2649833
 128,PROT,1435,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.92453307,False,0.3856358,-0.4156785,0.48802713
 128,PROT,1436,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8554705,False,0.41630405,-0.31029972,0.4109008
 128,PROT,1437,12,monocyte,myeloid dendritic cell,0.8940449,False,0.24797547,0.26749086,-0.13528417
@@ -1441,46 +1441,46 @@ latent_dim,modality,orig_index,class_idx,class_name,pred_class_name,max_cos_ref,
 128,PROT,1439,10,macrophage,"cd4-positive, alpha-beta t cell",0.89112806,False,0.41554177,-0.23181419,0.33411348
 128,PROT,1440,12,monocyte,myeloid dendritic cell,0.95622796,False,0.24115157,0.45280397,-0.14153664
 128,PROT,1441,12,monocyte,myeloid dendritic cell,0.91714716,False,0.033468813,0.2557423,-0.23045245
-128,PROT,1442,12,monocyte,erythrocyte,0.82158583,False,0.15169269,-0.26873195,-0.010803847
+128,PROT,1442,12,monocyte,erythrocyte,0.82158583,True,0.15169269,-0.26873195,-0.010803847
 128,PROT,1443,12,monocyte,neutrophil,0.8766139,True,-0.00893541,0.10495164,-0.15413854
-128,PROT,1444,10,macrophage,erythrocyte,0.8593503,False,0.14042774,-0.20188151,-0.1360844
+128,PROT,1444,10,macrophage,erythrocyte,0.8593503,True,0.14042774,-0.20188151,-0.1360844
 128,PROT,1445,10,macrophage,"cd4-positive, alpha-beta t cell",0.86225855,False,0.28947935,-0.25095132,0.13507673
 128,PROT,1446,12,monocyte,myeloid dendritic cell,0.9363241,False,0.09779267,0.3231505,-0.1424637
 128,PROT,1447,12,monocyte,neutrophil,0.8656451,False,-0.071392335,-0.07792094,-0.23219241
 128,PROT,1448,12,monocyte,erythrocyte,0.85912836,True,0.0125183575,-0.13599196,-0.225946
 128,PROT,1449,12,monocyte,myeloid dendritic cell,0.9274503,False,0.20424111,0.40397668,-0.22679338
-128,PROT,1450,12,monocyte,erythrocyte,0.8318065,False,0.09189731,-0.2713956,-0.20597753
+128,PROT,1450,12,monocyte,erythrocyte,0.8318065,True,0.09189731,-0.2713956,-0.20597753
 128,PROT,1451,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8425802,False,0.31819016,-0.29944423,0.15086
 128,PROT,1452,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.885629,False,0.31873825,-0.29641014,0.2231922
 128,PROT,1453,12,monocyte,neutrophil,0.86325914,False,-0.024816433,0.057687595,-0.087069325
-128,PROT,1454,12,monocyte,erythrocyte,0.83355486,False,0.049659062,-0.24633251,-0.21949138
+128,PROT,1454,12,monocyte,erythrocyte,0.83355486,True,0.049659062,-0.24633251,-0.21949138
 128,PROT,1455,12,monocyte,myeloid dendritic cell,0.8911667,False,0.066815965,0.04171733,-0.20300032
 128,PROT,1456,12,monocyte,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8570274,True,0.40032354,-0.13541624,0.3115556
-128,PROT,1457,10,macrophage,erythrocyte,0.8249656,False,-0.07031719,-0.27563888,-0.2858319
+128,PROT,1457,10,macrophage,erythrocyte,0.8249656,True,-0.07031719,-0.27563888,-0.2858319
 128,PROT,1458,12,monocyte,myeloid dendritic cell,0.94837,False,0.14062288,0.41156232,-0.17113774
 128,PROT,1459,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8919903,False,0.4025348,-0.33651617,0.4281303
-128,PROT,1460,12,monocyte,erythrocyte,0.8440404,False,0.040100615,-0.33969334,-0.15049449
+128,PROT,1460,12,monocyte,erythrocyte,0.8440404,True,0.040100615,-0.33969334,-0.15049449
 128,PROT,1461,12,monocyte,myeloid dendritic cell,0.89382565,True,0.073623285,0.09967084,-0.15140761
 128,PROT,1462,12,monocyte,myeloid dendritic cell,0.9573261,False,0.25907078,0.4443727,-0.17003654
-128,PROT,1463,12,monocyte,erythrocyte,0.8444091,False,-0.08290927,-0.25081718,-0.31842193
-128,PROT,1464,10,macrophage,erythrocyte,0.88558465,False,0.1903266,-0.3167728,-0.029624715
-128,PROT,1465,12,monocyte,erythrocyte,0.8234829,False,-0.053578716,-0.15060157,-0.20374015
-128,PROT,1466,12,monocyte,erythrocyte,0.85079324,False,0.017884161,-0.2064855,-0.07791679
-128,PROT,1467,12,monocyte,erythrocyte,0.842399,False,0.00049652444,-0.24311264,-0.19449686
+128,PROT,1463,12,monocyte,erythrocyte,0.8444091,True,-0.08290927,-0.25081718,-0.31842193
+128,PROT,1464,10,macrophage,erythrocyte,0.88558465,True,0.1903266,-0.3167728,-0.029624715
+128,PROT,1465,12,monocyte,erythrocyte,0.8234829,True,-0.053578716,-0.15060157,-0.20374015
+128,PROT,1466,12,monocyte,erythrocyte,0.85079324,True,0.017884161,-0.2064855,-0.07791679
+128,PROT,1467,12,monocyte,erythrocyte,0.842399,True,0.00049652444,-0.24311264,-0.19449686
 128,PROT,1468,12,monocyte,myeloid dendritic cell,0.8867547,False,0.025853287,0.10281096,-0.21547803
 128,PROT,1469,12,monocyte,myeloid dendritic cell,0.93069494,False,-0.003970233,0.30208206,-0.14405386
 128,PROT,1470,12,monocyte,myeloid dendritic cell,0.8756744,False,0.13778877,0.059666757,-0.06278477
 128,PROT,1471,12,monocyte,myeloid dendritic cell,0.9556416,False,0.17450942,0.4299749,-0.11897396
 128,PROT,1472,12,monocyte,erythrocyte,0.8567832,False,-0.021678105,-0.1645563,-0.29622573
-128,PROT,1473,12,monocyte,erythrocyte,0.8681223,True,0.066345446,-0.18380605,-0.17113939
+128,PROT,1473,12,monocyte,erythrocyte,0.8681223,False,0.066345446,-0.18380605,-0.17113939
 128,PROT,1474,12,monocyte,neutrophil,0.916083,False,-0.005904537,0.20906071,-0.26300785
 128,PROT,1475,12,monocyte,neutrophil,0.8862376,False,0.029915418,0.06516609,-0.20664623
 128,PROT,1476,12,monocyte,myeloid dendritic cell,0.8656079,True,-0.040350243,0.08808937,-0.08385567
-128,PROT,1477,12,monocyte,neutrophil,0.87326986,True,-0.1320325,-0.14805064,-0.30413455
+128,PROT,1477,12,monocyte,neutrophil,0.87326986,False,-0.1320325,-0.14805064,-0.30413455
 128,PROT,1478,12,monocyte,myeloid dendritic cell,0.9155256,False,0.12127814,0.24454774,-0.23649095
 128,PROT,1479,12,monocyte,neutrophil,0.86290854,False,-0.03901757,-0.030953757,-0.1700758
 128,PROT,1480,12,monocyte,myeloid dendritic cell,0.9134281,False,0.17409056,0.26967663,-0.16574866
-128,PROT,1481,12,monocyte,erythrocyte,0.8500679,True,-0.11102795,-0.15160935,-0.27611655
+128,PROT,1481,12,monocyte,erythrocyte,0.8500679,False,-0.11102795,-0.15160935,-0.27611655
 128,PROT,1482,12,monocyte,myeloid dendritic cell,0.92178327,False,0.09475959,0.29295442,-0.2112086
 128,PROT,1483,12,monocyte,myeloid dendritic cell,0.9082341,False,0.14062598,0.20506752,-0.22712797
 128,PROT,1484,10,macrophage,"naive thymus-derived cd4-positive, alpha-beta t cell",0.8640274,True,0.419486,-0.30608308,0.45009017

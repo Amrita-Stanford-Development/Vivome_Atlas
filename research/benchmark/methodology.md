@@ -133,10 +133,11 @@ without rerunning any of the actual (expensive) model training — see
 
 ### The majority-class floor
 
-Predict "monocyte" (the majority class in both the RNA reference and the
-protein query — not a coincidence, since it is the numerically dominant
-myeloid lineage in blood) for every one of the 1,490 protein cells,
-regardless of any embedding. This gives **73.56% accuracy, 50.00% balanced
+Predict "monocyte", the protein query's majority class, for every one of
+the 1,490 protein cells, regardless of any embedding. The class is taken
+from the query's own labels, so this floor is label-informed. The RNA
+reference's majority class is neutrophil (32,197 cells; monocyte has
+9,602), which never appears among the query's labels and would score 0%. This gives **73.56% accuracy, 50.00% balanced
 accuracy** — verified directly against the real data (1096 + 394 = 1490
 total; 1096/1490 = 73.56%; a constant predictor's balanced accuracy is
 always exactly 50% for a 2-class problem, by definition — 100% recall on

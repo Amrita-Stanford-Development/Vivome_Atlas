@@ -3,8 +3,13 @@ must reproduce research/notebook-outputs/nb2/tables/dev_datasets.csv within
 0.5 points (committed share, each abstention reason, each composition entry).
 
 Both datasets are read with NB2's own parse (benchmark/notebook_convention.py),
-then run through service/pipeline/ensemble.py unchanged. Nothing is tuned to
-pass. The service parser's numbers are printed too, for the record.
+then run through service/pipeline/ensemble.py unchanged, under NB2's rule as
+specified: both service flags (ensemble.SERVICE_FLAGS) off, since NB2 did not
+have them. Nothing is tuned to pass. PBMC240 through the service's own parser
+is compared too, for the record, not gated.
+
+Every figure it prints is also written to research/benchmark/v31_dev_gate.json.
+service/tests/test_v31_gate.py runs the same gate as a test.
 
     python3 -m benchmark.v31_dev_gate        # from the repository root; exit 1 on a miss
 """
@@ -12,6 +17,7 @@ from __future__ import annotations
 
 import collections
 import csv
+import json
 import sys
 from pathlib import Path
 
@@ -22,6 +28,7 @@ from service.pipeline import alignment, ensemble, gene_ids, pipeline
 
 REPO = Path(__file__).resolve().parents[1]
 DEV_TABLE = REPO / "research" / "notebook-outputs" / "nb2" / "tables" / "dev_datasets.csv"
+RECORD = REPO / "research" / "benchmark" / "v31_dev_gate.json"
 SCOPE2 = REPO / "service" / "model" / "source" / "app_export" / "blood_joint_cells_by_proteins_GENELEVEL.tsv"
 SCOPE2_TRUTH = REPO / "web" / "data" / "metadata_PROT_lat128.csv"  # class_name: SCoPE2's own labels, same row order
 PBMC240 = REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv"
@@ -71,23 +78,27 @@ def expected(dataset: str) -> tuple[dict, dict]:
     return share, composition
 
 
-def compare(dataset: str, share: dict, composition: dict) -> list[str]:
+def compare(dataset: str, share: dict, composition: dict) -> list[dict]:
+    """One row per figure: NB2's value, v3.1's, and whether it is within
+    tolerance. NB2 rounds its composition to one decimal, so composition
+    allows for that rounding too."""
     want_share, want_comp = expected(dataset)
-    misses = []
-    for key, want in want_share.items():
-        got = share[key]
-        flag = "" if abs(got - want) <= TOLERANCE else "   <-- MISS"
-        print(f"  {key:18s} NB2 {want:6.2f}   v3.1 {got:6.2f}{flag}")
-        if flag:
-            misses.append(f"{dataset} {key}")
+    rows = [{"figure": key, "kind": "share", "nb2": want, "v31": share[key],
+             "within": abs(share[key] - want) <= TOLERANCE} for key, want in want_share.items()]
     for key in sorted(set(want_comp) | set(composition), key=lambda k: -want_comp.get(k, 0)):
         want, got = want_comp.get(key, 0.0), composition.get(key, 0.0)
-        # NB2 rounds its composition to one decimal; allow for that rounding too.
-        flag = "" if abs(got - want) <= TOLERANCE + 0.05 else "   <-- MISS"
-        print(f"  {key:22s} NB2 {want:5.1f}   v3.1 {got:5.1f}{flag}")
-        if flag:
-            misses.append(f"{dataset} composition {key}")
-    return misses
+        rows.append({"figure": key, "kind": "composition", "nb2": want, "v31": got,
+                     "within": abs(got - want) <= TOLERANCE + 0.05})
+    return rows
+
+
+def print_rows(rows: list[dict]) -> None:
+    for r in rows:
+        flag = "" if r["within"] else "   <-- MISS"
+        if r["kind"] == "share":
+            print(f"  {r['figure']:18s} NB2 {r['nb2']:6.2f}   v3.1 {r['v31']:6.2f}{flag}")
+        else:
+            print(f"  {r['figure']:22s} NB2 {r['nb2']:5.1f}   v3.1 {r['v31']:5.1f}{flag}")
 
 
 def correct_at_stated_level(response: dict, truth: list[str], hierarchy: dict) -> dict:
@@ -121,30 +132,58 @@ def run(bundle, components, frame: pd.DataFrame, value_scale) -> dict:
     return ensemble.project_prepared(bundle, smoothed, aligned, value_scale, resolution, False, components)
 
 
-def main() -> int:
-    bundle = pipeline.load_bundle("v3.1")
-    components = pipeline.components_for("v3.1")
+def nb2_components(bundle):
+    """The bundle's components with every service flag off: NB2's rule."""
+    return ensemble.build_components({**bundle.spec, "service_flags": {k: False for k in ensemble.SERVICE_FLAGS}})
+
+
+def run_gate(bundle=None) -> dict:
+    """The whole gate, as a record: every figure compared, the misses, and
+    the figures kept for the record (SCoPE2 correctness, the service parser)."""
+    bundle = bundle or pipeline.load_bundle("v3.1")
+    components = nb2_components(bundle)
+    record = {"what": "T1 NB2's development table, reproduced by the served v3.1 pipeline",
+              "rule": "NB2's as specified: service flags off", "tolerance": {"share": TOLERANCE, "composition": TOLERANCE + 0.05},
+              "datasets": {}}
     misses = []
     for dataset, frame, scale in (
         ("SCoPE2", scope2_frame(), alignment.ValueScale(detected="log", transformed=False)),
         ("PBMC240", nc.read_dia_nn(PBMC240), alignment.ValueScale(detected="linear", transformed=True)),
     ):
-        print(f"{dataset}, notebook parse ({frame.shape[0]} cells)")
         response = run(bundle, components, frame, scale)
         share, composition = summarise(response, bundle.hierarchy)
-        misses += compare(dataset, share, composition)
+        rows = compare(dataset, share, composition)
+        misses += [f"{dataset} {r['figure']}" for r in rows if not r["within"]]
+        entry = {"parse": "notebook", "cells": len(response["cells"]), "figures": rows}
         if dataset == "SCoPE2":
-            # For the record (not gated): SCoPE2 is the one dataset here with per-cell labels.
+            # Not gated: SCoPE2 is the one dataset here with per-cell labels.
             truth = pd.read_csv(SCOPE2_TRUTH)["class_name"].tolist()
-            print(f"  SCoPE2 correct at the stated level: {correct_at_stated_level(response, truth, bundle.hierarchy)}")
+            entry["correct_at_stated_level"] = correct_at_stated_level(response, truth, bundle.hierarchy)
+        record["datasets"][dataset] = entry
 
-    # The product parser, for the record (not gated).
-    service_resp = pipeline.run_projection(bundle, alignment.parse_matrix_csv(PBMC240.read_text()))
-    share, _ = summarise(service_resp, bundle.hierarchy)
-    print(f"PBMC240 through the service parser: committed {share['committed']:.1f}")
+    # The product parser, compared the same way, not gated.
+    service = pipeline.run_projection(bundle, alignment.parse_matrix_csv(PBMC240.read_text()), components=components)
+    share, composition = summarise(service, bundle.hierarchy)
+    record["pbmc240_service_parser"] = {"parse": "service", "cells": len(service["cells"]),
+                                        "figures": compare("PBMC240", share, composition)}
+    record["misses"] = misses
+    record["passed"] = not misses
+    return record
 
-    print("GATE PASSED" if not misses else f"GATE FAILED: {', '.join(misses)}")
-    return 1 if misses else 0
+
+def main() -> int:
+    record = run_gate()
+    for dataset, entry in record["datasets"].items():
+        print(f"{dataset}, notebook parse ({entry['cells']} cells)")
+        print_rows(entry["figures"])
+        if "correct_at_stated_level" in entry:
+            print(f"  SCoPE2 correct at the stated level: {entry['correct_at_stated_level']}")
+    print(f"PBMC240, service parser ({record['pbmc240_service_parser']['cells']} cells; not gated)")
+    print_rows(record["pbmc240_service_parser"]["figures"])
+    print("GATE PASSED" if record["passed"] else f"GATE FAILED: {', '.join(record['misses'])}")
+    RECORD.write_text(json.dumps(record, indent=2) + "\n")
+    print(f"Wrote {RECORD.relative_to(REPO)}")
+    return 0 if record["passed"] else 1
 
 
 if __name__ == "__main__":

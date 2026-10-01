@@ -37,6 +37,11 @@ v3.1 (Track F), from the repository root; both need the v3.1 checkpoints
   NB2's own parse (`notebook_convention.py`).
 - `python3 -m benchmark.fulcher2026_v31` scores Fulcher 2026, as
   development data, through v3.1.
+- `python3 -m benchmark.v31_service_flags` runs SCoPE2, PBMC240 and Fulcher
+  with v3.1's two service flags off and on.
+
+Track D's SCoPE2 paired bootstrap (ten ours-seeds against three scANVI
+seeds) is rebuilt by `scope2_5seed_paired.py` from cached embeddings.
 
 Outputs go to `results/`. It is gitignored and ~1 GB. Some of it is scANVI
 training output that took about an hour per seed, so regenerate before

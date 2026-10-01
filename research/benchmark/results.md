@@ -85,22 +85,22 @@ monocyte.
 
 | Rank | Method | Protocol | Accuracy % | Balanced accuracy % |
 |---|---|---|---|---|
-| 1 | **Ours (v3, 5-seed)** | shared kNN rule | 75.32 ± 11.79 (55.03–84.97) | **71.50 ± 10.60** (59.04–88.40) |
-| 2 | **Ours (v3, 5-seed)** | native nearest-centroid | 79.38 ± 4.71 (73.76–86.17) | 63.32 ± 10.84 (50.79–79.79) |
-| 3 | **Ours (v3, 5-seed)** | pool-first restricted (real) | 78.11 ± 4.69 (74.23–83.29) | 61.64 ± 11.80 (51.35–77.50) |
-| 4 | scANVI (3-seed mean) | shared kNN rule | 70.67 (±2.48) | 76.89 (±0.99) |
-| 5 | scANVI (3-seed mean) | native scANVI classifier | 74.77 (±18.59) | 73.15 (±28.49) |
-| 6 | scANVI (3-seed mean) | native nearest-centroid | 61.21 (±19.13) | 64.42 (±26.66) |
+| 1 | scANVI (3-seed mean) | native scANVI classifier | 77.76 (±10.60) | 78.35 (±12.86) |
+| 2 | scANVI (3-seed mean) | shared kNN rule | 71.25 (±1.54) | 77.15 (±1.77) |
+| 3 | **Ours (v3, 5-seed)** | shared kNN rule | 75.32 ± 11.79 (55.03–84.97) | **71.50 ± 10.60** (59.04–88.40) |
+| 4 | scANVI (3-seed mean) | native nearest-centroid | 62.37 (±15.64) | 64.18 (±27.37) |
+| 5 | **Ours (v3, 5-seed)** | native nearest-centroid | 79.38 ± 4.71 (73.76–86.17) | 63.32 ± 10.84 (50.79–79.79) |
+| 6 | **Ours (v3, 5-seed)** | pool-first restricted (real) | 78.11 ± 4.69 (74.23–83.29) | 61.64 ± 11.80 (51.35–77.50) |
 | 7 | **Ours (V2, 5-seed)** | native nearest-centroid | 69.64 ± 7.62 (57.18–76.17) | 60.96 ± 10.03 (51.43–73.23) |
-| 8 | **Ours (V2, 5-seed)** | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
-| 9 | **Ours (V2, 5-seed)** | shared kNN rule | 74.81 ± 4.83 (66.64–79.33) | 58.26 ± 6.40 (48.23–63.11) |
-| 10 | MaxFuse | shared kNN rule | 69.80 [68.39, 71.21]\* | 50.05 [48.49, 51.63]\* |
-| — | **Majority class ("monocyte")** | trivial floor | 73.56 [71.34, 75.77]\* | 50.00 [50.00, 50.00]\* |
-| 11 | Harmony (batch-correction floor) | native nearest-centroid | 50.20 [47.65, 52.68]\* | 54.20 [51.42, 57.02]\* |
-| 12 | Harmony (batch-correction floor) | shared kNN rule | 46.78 [44.36, 49.40]\* | 50.49 [47.70, 53.38]\* |
+| 8 | **Ours (V2, 5-seed)** | shared kNN rule | 74.81 ± 4.83 (66.64–79.33) | 58.26 ± 6.40 (48.23–63.11) |
+| 9 | PCA floor | native nearest-centroid | 55.97 [53.42, 58.52]\* | 58.21 [55.42, 60.96]\* |
+| 10 | PCA floor | shared kNN rule | 67.25 [65.17, 69.40]\* | 57.66 [55.04, 60.37]\* |
+| 11 | **Ours (V2, 5-seed)** | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
+| 12 | Harmony (batch-correction floor) | native nearest-centroid | 50.20 [47.65, 52.68]\* | 54.20 [51.42, 57.02]\* |
 | 13 | MaxFuse | native nearest-centroid | 51.95 [49.53, 54.50]\* | 52.38 [49.45, 55.29]\* |
-| 14 | PCA floor | shared kNN rule | 67.25 [65.17, 69.40]\* | 57.66 [55.04, 60.37]\* |
-| 15 | PCA floor | native nearest-centroid | 55.97 [53.42, 58.52]\* | 58.21 [55.42, 60.96]\* |
+| 14 | Harmony (batch-correction floor) | shared kNN rule | 46.78 [44.36, 49.40]\* | 50.49 [47.70, 53.38]\* |
+| 15 | MaxFuse | shared kNN rule | 69.80 [68.39, 71.21]\* | 50.05 [48.49, 51.63]\* |
+| — | **Majority class ("monocyte", the protein query's own)** | trivial floor | 73.56 [71.34, 75.77]\* | 50.00 [50.00, 50.00]\* |
 | 16 | scGLUE | shared kNN rule | 28.59 [27.32, 29.93]\* | 48.21 [46.52, 49.78]\* |
 | 17 | scGLUE | native nearest-centroid | 47.92 [45.37, 50.54]\* | 47.20 [44.22, 50.20]\* |
 
@@ -117,14 +117,14 @@ noisier comparison — see the paired bootstrap section.
 **Reading this table:** the picture is far less one-sided than the
 original single-seed version of this document reported, and this reverses
 the original headline. Under the shared kNN rule, v3's 5-seed mean
-balanced accuracy (71.50%) is **below** scANVI's 3-seed mean (76.89%) —
+balanced accuracy (71.50%) is **below** scANVI's 3-seed mean (77.15%) —
 the original claim that "ours" beats
 scANVI by double digits under this rule was true only for `v3_seed0`
 specifically (88.40%, the best of the five v3 seeds by a wide margin), not
 for the v3 architecture generally. Under native nearest-centroid, v3's
-5-seed mean (63.32%) also trails scANVI's native-classifier mean (73.15%,
-though that number itself has a huge ±28.49-point seed spread) and its
-native-centroid mean (64.42%, statistically indistinguishable from v3's
+5-seed mean (63.32%) also trails scANVI's native-classifier mean (78.35%,
+though that number itself has a 12.86-point seed spread) and its
+native-centroid mean (64.18%, statistically indistinguishable from v3's
 63.32%). V2 does no better than v3 against scANVI on SCoPE2 under any
 protocol. The **only** regime and seed where "ours" clearly, robustly beats
 scANVI is `v3_seed0` — the one seed that happened to ship — which is why
@@ -163,9 +163,13 @@ reconstruction was computed through `service/pipeline` before the
 `service/pipeline/encoder.py` ReLU/GELU fix (commit `056f136` — see
 [bugs-and-fixes.md](bugs-and-fixes.md#0)), so every number it produced,
 including this one, is invalid on its own terms, not just "distorted." On
-the real embedding, `v3_seed0` leads scANVI under every protocol tested —
-but, per the 5-seed table above, that is `v3_seed0`'s own result, not a
-result of the v3 architecture in general.
+the real embedding, `v3_seed0` leads scANVI's 3-seed mean under every
+protocol tested, and every scANVI seed in all 9 paired-bootstrap checks
+(shared kNN rule, three regimes). It does not lead every scANVI seed under
+every rule: seed 2's native classifier (86.37%) is above `v3_seed0`'s
+nearest-centroid (79.79%) and pool-first (77.50%) results. And per the
+5-seed table above, all of this is `v3_seed0`'s own result, not a result of
+the v3 architecture in general.
 
 ## Unrestricted regime (all 22 RNA classes as candidates)
 
@@ -176,11 +180,11 @@ have any real protein ground truth. Much harder for every method.
 |---|---|---|---|---|
 | 1 | **Ours (v3, 5-seed)** | shared kNN rule | 38.36 ± 25.71 (1.88–69.26) | **29.07 ± 18.34** (1.28–49.84) |
 | 2 | **Ours (v3, 5-seed)** | native nearest-centroid | 34.09 ± 25.25 (0.20–66.24) | 25.60 ± 17.35 (0.14–48.20) |
-| 3 | scANVI (3-seed mean) | native scANVI classifier | 18.01 (±19.26) | 12.92 (±15.04) |
-| 4 | scANVI (3-seed mean) | shared kNN rule | 17.27 (±11.07) | 11.77 (±7.53) |
-| 5 | PCA floor | shared kNN rule | 15.84 [14.09, 17.72]\* | 11.01 [9.79, 12.37]\* |
+| 3 | scANVI (3-seed mean) | native scANVI classifier | 17.70 (±19.26) | 12.76 (±15.04) |
+| 4 | PCA floor | shared kNN rule | 15.84 [14.09, 17.72]\* | 11.01 [9.79, 12.37]\* |
+| 5 | scANVI (3-seed mean) | shared kNN rule | 16.04 (±7.38) | 10.93 (±5.02) |
 | 6 | **Ours (V2, 5-seed)** | shared kNN rule | 12.17 ± 8.12 (2.89–22.48) | 8.63 ± 5.40 (1.96–15.28) |
-| 7 | scANVI (3-seed mean) | native nearest-centroid | 10.60 (±7.92) | 7.48 (±6.20) |
+| 7 | scANVI (3-seed mean) | native nearest-centroid | 11.72 (±5.17) | 8.24 (±4.33) |
 | 8 | MaxFuse | native nearest-centroid | 5.91 [4.76, 7.11]\* | 4.91 [3.84, 5.99]\* |
 | 9 | Harmony | shared kNN rule | 7.11 [5.84, 8.32]\* | 4.84 [3.97, 5.66]\* |
 | 10 | **Ours (V2, 5-seed)** | native nearest-centroid | 4.05 ± 5.12 (0.34–13.09) | 3.08 ± 3.40 (0.23–8.98) |
@@ -197,17 +201,19 @@ max−min across seeds 0/1/2) — see
 
 *(Majority-class floor omitted here: predicting "monocyte" scores the same
 73.56%/50.00% regardless of candidate-class count, since it never varies
-its prediction.)*
+its prediction. It is the protein query's own majority class, so the
+73.56% accuracy floor uses the query's labels; the RNA reference's
+majority class is neutrophil.)*
 
 **Reading this table:** everyone is far worse here than in the restricted
 regime — full 22-way transfer from RNA to a genuinely different
 measurement modality, at real SCoPE2 noise levels, is hard for every
 method. Unlike the restricted regime, v3's 5-seed mean (29.07% balanced)
-*does* clearly lead scANVI's 3-seed mean (12.92% at best) here, and by a
+*does* clearly lead scANVI's 3-seed mean (12.76% at best) here, and by a
 wide margin under either protocol — 12 of the 15 v3-seed × scANVI-seed
 paired-bootstrap comparisons in this regime have a CI excluding zero in
 v3's favor (see the paired bootstrap section). V2, however, does **not**
-clearly beat scANVI here (8.63% mean vs. scANVI's 11.77–12.92%) — only 4 of
+clearly beat scANVI here (8.63% mean vs. scANVI's 10.93–12.76%) — only 4 of
 15 V2-seed × scANVI-seed pairings favor V2 significantly, 8 favor scANVI.
 The unrestricted regime is the one place in this document where v3 and
 scANVI are not close: v3 wins decisively, and V2 does not inherit that win.
@@ -283,22 +289,23 @@ started with, now against the 5-seed "ours" data above:**
   (76.26–78.04%, a spread of under 2 points), and its 3-seed mean (77.15%)
   is now *higher* than v3's 5-seed mean (71.50%) under the same rule.
   Only `v3_seed0` (88.40%) individually beats every scANVI seed; the other
-  four v3 seeds (59.04–70.10%) do not. This comparison is solid precisely
+  four v3 seeds (59.04–71.01%) do not. This comparison is solid precisely
   because it is stable — and what it now shows is that v3 does not reliably
   beat scANVI here, `v3_seed0` does.**
 - Under scANVI's *own* native classifier, the picture is far noisier: a
   12.9-point spread across 3 seeds (73.51% to 86.37%) this run (was a
   28.5-point spread, 57.89–86.37%, in the original run — itself evidence of
   how much a single scANVI training run can move). Seed 2's native
-  classifier (86.37%) exceeds every "ours" number in this document except
-  `v3_seed0`'s two best protocols. Averaged across seeds (78.35%), scANVI's
+  classifier (86.37%) exceeds every restricted "ours" number on SCoPE2
+  except `v3_seed0`'s shared kNN result (88.40%). Averaged across seeds (78.35%), scANVI's
   own classifier is now *ahead* of v3's native-nearest-centroid mean
   (63.32%).
 - The honest summary: **`v3_seed0` — the one seed that shipped — beats
-  scANVI clearly under every protocol tested. The v3 architecture generally
+  scANVI's 3-seed mean under every protocol tested, and every scANVI seed
+  in all 9 paired-bootstrap checks. The v3 architecture generally
   does not: its 5-seed mean trails scANVI's 3-seed mean under both the
   shared kNN rule (71.50% vs. 77.15%) and native protocols (63.32% vs.
-  scANVI's 64.42–78.35% depending on protocol). This reverses what this
+  scANVI's 64.18–78.35% depending on protocol). This reverses what this
   document said before the 5-seed correction — it is not evidence the two
   methods perform similarly in general; it is evidence that a single
   seed, in either direction, is not a safe basis for that comparison.**
@@ -307,7 +314,7 @@ Context: this document now has training-variance data for "ours" too,
 not just sampling-uncertainty CIs on one trained model. Restricted-regime
 shared-kNN-rule balanced accuracy spans 59.04–88.40% across v3's own 5
 training seeds (SD 10.60) — a wider spread than scANVI's 3-seed spread
-under the same rule (76.26–78.04%, SD ≈0.93). The production reference's
+under the same rule (76.26–78.04%, SD 0.89). The production reference's
 separate 5-seed training run on its own RNA-only validation task
 (`service/model/evidence/v3_tables/reference_seeds.csv`, mean balanced accuracy
 0.7143) is a different task and dataset from this benchmark's
@@ -508,7 +515,7 @@ modes directly; accuracy alone shows neither.
 | **Ours (V2, 5-seed)** | native nearest-centroid → lineage | 92.82 ± 0.76 (92.31–94.02) | 80.0 ± 0.0 (4/5, every seed) | ~78% lymphoid, ~17% myeloid, ~5% other lineages |
 | scANVI, **measured genes, processed input (best arm — reported result)** | shared kNN rule → lineage | 38.75 ± 2.75 (36.75–41.88) | 100.0 (5/5, every seed) | ~33% lymphoid, **~51% myeloid**, ~15% erythroid, ~1% other |
 | scANVI, **measured genes, processed input (best arm — reported result)** | native scANVI classifier → lineage | 39.60 ± 5.56 (34.19–45.30) | 100.0 (5/5, every seed) | ~34% lymphoid, **~59% myeloid**, ~7% erythroid |
-| scANVI, processed input, 2,907-gene space | shared kNN rule → lineage | 17.95 (15.38–19.66) | 100.0 (5/5, every seed) | ~16% lymphoid, **~66% myeloid**, ~17% erythroid/other |
+| scANVI, processed input, 2,907-gene space | shared kNN rule → lineage | 17.95 (15.38–19.66) | 100.0 (5/5, every seed) | ~16% lymphoid, **~66% myeloid**, ~18% erythroid/other |
 | scANVI, processed input, 2,907-gene space | native scANVI classifier → lineage | 21.37 (5.13–50.43) | 100.0 (5/5, every seed) | ~17% lymphoid, **~82% myeloid** |
 | scANVI, raw input | shared kNN rule → lineage | 8.83 (5.13–11.97) | 100.0 (5/5, every seed) | ~15% lymphoid, **~74% myeloid**, ~11% erythroid/other |
 | scANVI, raw input | native scANVI classifier → lineage | 6.55 (3.42–12.82) | 100.0 (5/5, every seed) | ~9% lymphoid, **~91% myeloid** |
@@ -568,13 +575,25 @@ predicting one dominant lineage more notable, not less.)
 ### v3.1 on PBMC240
 
 `benchmark/v31_dev_gate.py` runs the served v3.1 pipeline on PBMC240 and
-SCoPE2, read with NB2's own parse (`benchmark/notebook_convention.py`). It
-reproduces NB2's development table
-(`research/notebook-outputs/nb2/tables/dev_datasets.csv`) exactly. For
-PBMC240 that is 73.95% committed, 23.95% ambiguous and 1.68% out of
-distribution.
+SCoPE2, read with NB2's own parse (`benchmark/notebook_convention.py`), under
+NB2's rule as specified (the two service flags off; see "v3.1's two service
+flags" below). Its record is [v31_dev_gate.json](v31_dev_gate.json).
+- **Shares.** Every share in NB2's development table
+  (`research/notebook-outputs/nb2/tables/dev_datasets.csv`) matches to two
+  decimals: committed, class level, and each abstention reason. For
+  PBMC240 that is 73.95% committed, 23.95% ambiguous and 1.68% out of
+  distribution.
+- **Composition.** PBMC240's matches NB2 entry for entry. SCoPE2's differs
+  by one cell: 462 "T cell" answers (31.0%; NB2 printed 30.9%) and 105
+  lymphoid-lineage answers (7.0%; NB2 7.1%).
+- **Tolerance.** The gate allows 0.5 point; nothing comes near it.
 
-v3.1 on PBMC240 through the service parser: committed 72.7 vs 74.0 under the notebook parse; the difference is gene identifier resolution (HGNC map, ambiguous groups unmatched) and the graph input, not the pipeline.
+Through the service, PBMC240 first differed from NB2 by 1.3 points of
+committed cells (72.7 against 74.0). The cause was a service bug: when several
+upload rows mapped to the same gene, only the last row was kept. With
+duplicates collapsed by per cell median, as NB2 does, the service reproduces
+NB2's committed, out of distribution and ambiguous figures exactly; two
+composition entries differ by up to 0.8 point.
 
 ## Fulcher 2026 — the first held-out evaluation
 
@@ -793,18 +812,19 @@ pairs can be reached again. The result is still far from usable:
   annotation, 36% of cells are monocytes. The service labels 2.1% of cells
   monocyte and sends the rest to neutrophil, macrophage or abstention.
 
-This is v3, the served model. NB2's decision rule, recalibrated abstention
-and conformal, and the v3.1 encoder are the planned fixes. This check
-reports composition only. It is not scored, and Fulcher is development data
-now.
+This check ran on v3, the default pipeline at the time
+(`product_check.json`, `model_version` "production"). v3.1 has been the
+default since; its result on the same upload is in "v3.1 on Fulcher" below.
+This check reports composition only. It is not scored, and Fulcher is
+development data now.
 
 ### v3.1 on Fulcher (development data)
 
 Fulcher is development data now, so this is not a second held-out score.
 `benchmark/fulcher2026_v31.py` sends the 1,275-cell upload through the
-service parser to the served v3.1 pipeline, with default settings. It reads
-the authors' labels afterwards, for scoring only
-([v31_development.json](fulcher2026/v31_development.json)).
+service parser to the served v3.1 pipeline, with default settings (both
+service flags on). It reads the authors' labels afterwards, for scoring
+only ([v31_development.json](fulcher2026/v31_development.json)).
 
 A committed answer is judged at the level it is stated:
 - **A class** is judged through the protocol's fixed mapping, so
@@ -814,17 +834,17 @@ A committed answer is judged at the level it is stated:
 
 | Author type | Cells | Committed | Correct at the stated level | Class / group / lineage answers |
 |---|---|---|---|---|
-| CD4T | 308 | 88.3% | 91.2% | 25 / 180 / 67 |
+| CD4T | 308 | 88.3% | 91.2% | 24 / 181 / 67 |
 | CD8T | 181 | 93.4% | 98.8% | 1 / 100 / 68 |
 | NK | 150 | 92.0% | 99.3% | 0 / 1 / 137 |
-| B | 102 | 85.3% | 98.8% | 82 / 4 / 1 |
-| monocyte | 456 | 92.5% | 99.8% | 0 / 1 / 421 |
-| DC | 54 | 53.7% | 93.1% | 1 / 1 / 27 |
-| **All 1,251** | 1,251 | 89.3% | **97.2%** | 109 / 287 / 721 |
+| B | 102 | 85.3% | 98.9% | 82 / 4 / 1 |
+| monocyte | 456 | 92.1% | 99.8% | 0 / 1 / 419 |
+| DC | 54 | 51.9% | 96.4% | 1 / 0 / 27 |
+| **All 1,251** | 1,251 | 89.0% | **97.3%** | 108 / 287 / 719 |
 
-- **All 1,275 cells:** 89.4% committed, 8.6% at class level;
-  10.2% abstain ambiguous, 0.39% out of distribution.
-- **Composition**, with a class counted under its group: lineage:myeloid 35.1%; lineage:lymphoid 23.1%; T cell 22.4%; abstain 10.6%; B cell 8.6%; monocyte/macrophage 0.2%.
+- **All 1,275 cells:** 89.2% committed, 8.5% at class level;
+  10.4% abstain ambiguous, 0.39% out of distribution.
+- **Composition**, with a class counted under its group: lineage:myeloid 35.0%; lineage:lymphoid 23.1%; T cell 22.4%; abstain 10.8%; B cell 8.6%; monocyte/macrophage 0.1%.
 - **Best guess:** 57.9% balanced accuracy over the six
   types, mapped by the same table. Every scored cell has one. For
   comparison, single V2 seeds under nearest centroid score 57.3 ± 2.2.
@@ -851,6 +871,66 @@ service's default pipeline. v3 stays selectable.
 - DC is effectively unsupported by the reference.
 - scANVI's native classifier trails its own kNN rule by 10 points on
   Fulcher. It is not investigated here.
+
+## v3.1's two service flags (development data)
+
+The review of 2026-10-01 found two behaviours that follow NB2's rule but
+mislead on protein. Two service flags answer them, both on by default
+(`service/pipeline/ensemble.py`, `SERVICE_FLAGS`; a later spec can set them
+under `service_flags`):
+- **`set_includes_best_guess`.** Every conformal set also contains the
+  cell's argmax class. Sets only grow, so coverage is kept, and a one-class
+  answer is always the best guess. Under NB2's rule a class whose qhat is
+  near 1 could be named alone at about 1% probability: mature nk t cell's
+  bar is 0.011.
+- **`restricted_renormalise`.** A restricted request rescales each cell's
+  probabilities over the allowed classes before its set is built, as
+  `nb2_core.estimate_label_space` does for a restricted label space.
+
+`benchmark/v31_service_flags.py` runs each dataset through the service
+parser under NB2's rule (both flags off) and as served (both on). Labels are
+read after each projection
+([v31_service_flags.json](v31_service_flags.json)).
+
+| Run | Rule | Committed | Class / group / lineage % | Abstain: ambiguous / empty set / out of distribution % | Correct | One-class answers that are the best guess | Lowest one-class confidence |
+|---|---|---|---|---|---|---|---|
+| SCoPE2 | NB2's rule | 72.6% | 10.2 / 26.6 / 35.7 | 24.5 / 3.0 / 0.0 | 39.5% | 24 of 152 | 0.011 |
+| SCoPE2 | served | 56.0% | 4.6 / 16.6 / 34.8 | 44.0 / 0.0 / 0.0 | 55.8% | 68 of 68 | 0.304 |
+| SCoPE2, restricted | NB2's rule | 31.2% | 28.2 / 3.0 / 0.0 | 0.0 / 68.8 / 0.0 | 92.3% | 396 of 420 | 0.051 |
+| SCoPE2, restricted | served | 100.0% | 2.1 / 97.9 / 0.0 | 0.0 / 0.0 / 0.0 | 100.0% | 32 of 32 | 0.950 |
+| PBMC240 | NB2's rule | 73.9% | 2.1 / 23.1 / 48.7 | 23.9 / 0.0 / 1.7 | lymphoid 93 of 117, myeloid 3 of 5 | 5 of 5 | 0.386 |
+| PBMC240 | served | 73.1% | 2.1 / 22.7 / 48.3 | 24.8 / 0.0 / 1.7 | lymphoid 92 of 117, myeloid 3 of 5 | 5 of 5 | 0.386 |
+| Fulcher 2026 | NB2's rule | 89.4% | 8.5 / 22.7 / 58.2 | 10.2 / 0.0 / 0.4 | 97.2% | 108 of 109 | 0.163 |
+| Fulcher 2026 | served | 89.2% | 8.5 / 22.7 / 58.0 | 10.4 / 0.0 / 0.4 | 97.3% | 108 of 108 | 0.355 |
+
+"Correct" is judged at the stated level, against SCoPE2's labels and
+Fulcher's author types. For PBMC240 it counts labelled cells whose
+committed answer names their weak lineage only. PBMC240's remaining 0.4%
+is its one cell refused for coverage.
+
+**What changes:**
+- **SCoPE2.** Committed falls from 72.6% to 56.0%. Most of the one-class answers
+  that were not the best guess become multi-class sets the hierarchy
+  cannot resolve. Correct when committed rises from 39.5% to 55.8%. Still,
+  no class or group answer is right: every correct answer is "myeloid".
+- **Empty sets disappear.** A cell whose set was empty now names its best
+  guess alone. On SCoPE2 that removes the 3.0% "no confident label"
+  abstentions.
+- **PBMC240 and Fulcher barely move:** under a point of committed cells,
+  one PBMC240 lymphoid cell and 0.1 point of Fulcher's correctness.
+- **Restricted SCoPE2.**
+  - Under NB2's rule, 68.8% of cells have an empty set.
+  - With renormalisation, every cell commits, but 97.9% answer "monocyte/macrophage".
+    That group is exactly the two allowed classes, so the answer adds nothing
+    to the restriction itself. The 32 one-class answers are all right.
+  - The best guess, 61.3% balanced accuracy, is the same under both rules.
+  - Restricted mode was never evaluated in NB2 and is not recommended
+    under v3.1 (`docs/service/projection-api.md`).
+
+**Open:** neither flag has been evaluated on RNA. The next notebook should
+measure both on NB1's evaluation suite (coverage, correct when committed,
+answer levels) before they are trusted beyond these development datasets
+(`research/todo.md`, Track F).
 
 ## Two protocols, not a chosen one
 

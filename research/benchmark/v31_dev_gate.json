@@ -1,0 +1,291 @@
+{
+  "what": "T1 NB2's development table, reproduced by the served v3.1 pipeline",
+  "rule": "NB2's as specified: service flags off",
+  "tolerance": {
+    "share": 0.5,
+    "composition": 0.55
+  },
+  "datasets": {
+    "SCoPE2": {
+      "parse": "notebook",
+      "cells": 1490,
+      "figures": [
+        {
+          "figure": "committed",
+          "kind": "share",
+          "nb2": 72.5503355704698,
+          "v31": 72.5503355704698,
+          "within": true
+        },
+        {
+          "figure": "fine",
+          "kind": "share",
+          "nb2": 10.201342281879194,
+          "v31": 10.201342281879194,
+          "within": true
+        },
+        {
+          "figure": "abstain_ood",
+          "kind": "share",
+          "nb2": 0.0,
+          "v31": 0.0,
+          "within": true
+        },
+        {
+          "figure": "abstain_ambiguous",
+          "kind": "share",
+          "nb2": 24.496644295302016,
+          "v31": 24.496644295302012,
+          "within": true
+        },
+        {
+          "figure": "abstain_empty",
+          "kind": "share",
+          "nb2": 2.953020134228188,
+          "v31": 2.953020134228188,
+          "within": true
+        },
+        {
+          "figure": "T cell",
+          "kind": "composition",
+          "nb2": 30.9,
+          "v31": 31.006711409395972,
+          "within": true
+        },
+        {
+          "figure": "lineage:myeloid",
+          "kind": "composition",
+          "nb2": 28.7,
+          "v31": 28.65771812080537,
+          "within": true
+        },
+        {
+          "figure": "abstain",
+          "kind": "composition",
+          "nb2": 27.4,
+          "v31": 27.449664429530202,
+          "within": true
+        },
+        {
+          "figure": "lineage:lymphoid",
+          "kind": "composition",
+          "nb2": 7.1,
+          "v31": 7.046979865771812,
+          "within": true
+        },
+        {
+          "figure": "dendritic cell",
+          "kind": "composition",
+          "nb2": 4.2,
+          "v31": 4.228187919463087,
+          "within": true
+        },
+        {
+          "figure": "erythroid",
+          "kind": "composition",
+          "nb2": 0.8,
+          "v31": 0.8053691275167785,
+          "within": true
+        },
+        {
+          "figure": "granulocyte",
+          "kind": "composition",
+          "nb2": 0.8,
+          "v31": 0.8053691275167785,
+          "within": true
+        }
+      ],
+      "correct_at_stated_level": {
+        "group": 397,
+        "group_correct": 0,
+        "class": 152,
+        "class_correct": 0,
+        "lineage": 532,
+        "lineage_correct": 427,
+        "correct_when_committed": 39.5004625346901
+      }
+    },
+    "PBMC240": {
+      "parse": "notebook",
+      "cells": 238,
+      "figures": [
+        {
+          "figure": "committed",
+          "kind": "share",
+          "nb2": 73.94957983193278,
+          "v31": 73.94957983193277,
+          "within": true
+        },
+        {
+          "figure": "fine",
+          "kind": "share",
+          "nb2": 1.680672268907563,
+          "v31": 1.680672268907563,
+          "within": true
+        },
+        {
+          "figure": "abstain_ood",
+          "kind": "share",
+          "nb2": 1.680672268907563,
+          "v31": 1.680672268907563,
+          "within": true
+        },
+        {
+          "figure": "abstain_ambiguous",
+          "kind": "share",
+          "nb2": 23.949579831932773,
+          "v31": 23.949579831932773,
+          "within": true
+        },
+        {
+          "figure": "abstain_empty",
+          "kind": "share",
+          "nb2": 0.0,
+          "v31": 0.0,
+          "within": true
+        },
+        {
+          "figure": "lineage:lymphoid",
+          "kind": "composition",
+          "nb2": 39.9,
+          "v31": 39.91596638655462,
+          "within": true
+        },
+        {
+          "figure": "abstain",
+          "kind": "composition",
+          "nb2": 26.1,
+          "v31": 26.050420168067227,
+          "within": true
+        },
+        {
+          "figure": "T cell",
+          "kind": "composition",
+          "nb2": 21.0,
+          "v31": 21.008403361344538,
+          "within": true
+        },
+        {
+          "figure": "lineage:myeloid",
+          "kind": "composition",
+          "nb2": 9.7,
+          "v31": 9.663865546218487,
+          "within": true
+        },
+        {
+          "figure": "monocyte/macrophage",
+          "kind": "composition",
+          "nb2": 1.7,
+          "v31": 1.680672268907563,
+          "within": true
+        },
+        {
+          "figure": "B cell",
+          "kind": "composition",
+          "nb2": 1.3,
+          "v31": 1.2605042016806722,
+          "within": true
+        },
+        {
+          "figure": "progenitor",
+          "kind": "composition",
+          "nb2": 0.4,
+          "v31": 0.42016806722689076,
+          "within": true
+        }
+      ]
+    }
+  },
+  "pbmc240_service_parser": {
+    "parse": "service",
+    "cells": 238,
+    "figures": [
+      {
+        "figure": "committed",
+        "kind": "share",
+        "nb2": 73.94957983193278,
+        "v31": 73.94957983193277,
+        "within": true
+      },
+      {
+        "figure": "fine",
+        "kind": "share",
+        "nb2": 1.680672268907563,
+        "v31": 2.100840336134454,
+        "within": true
+      },
+      {
+        "figure": "abstain_ood",
+        "kind": "share",
+        "nb2": 1.680672268907563,
+        "v31": 1.680672268907563,
+        "within": true
+      },
+      {
+        "figure": "abstain_ambiguous",
+        "kind": "share",
+        "nb2": 23.949579831932773,
+        "v31": 23.949579831932773,
+        "within": true
+      },
+      {
+        "figure": "abstain_empty",
+        "kind": "share",
+        "nb2": 0.0,
+        "v31": 0.0,
+        "within": true
+      },
+      {
+        "figure": "lineage:lymphoid",
+        "kind": "composition",
+        "nb2": 39.9,
+        "v31": 39.075630252100844,
+        "within": false
+      },
+      {
+        "figure": "abstain",
+        "kind": "composition",
+        "nb2": 26.1,
+        "v31": 26.050420168067227,
+        "within": true
+      },
+      {
+        "figure": "T cell",
+        "kind": "composition",
+        "nb2": 21.0,
+        "v31": 21.84873949579832,
+        "within": false
+      },
+      {
+        "figure": "lineage:myeloid",
+        "kind": "composition",
+        "nb2": 9.7,
+        "v31": 9.663865546218487,
+        "within": true
+      },
+      {
+        "figure": "monocyte/macrophage",
+        "kind": "composition",
+        "nb2": 1.7,
+        "v31": 1.2605042016806722,
+        "within": true
+      },
+      {
+        "figure": "B cell",
+        "kind": "composition",
+        "nb2": 1.3,
+        "v31": 1.680672268907563,
+        "within": true
+      },
+      {
+        "figure": "progenitor",
+        "kind": "composition",
+        "nb2": 0.4,
+        "v31": 0.42016806722689076,
+        "within": true
+      }
+    ]
+  },
+  "misses": [],
+  "passed": true
+}
