@@ -17,6 +17,7 @@ that reads their labels. Writes research/benchmark/baselines/:
   (evaluate.paired_bootstrap_diff, 2,000 stratified resamples, seed 0), on
   SCoPE2 (both regimes) and Fulcher.
 
+The correlation baseline is deterministic, so it has one run (seed 0).
 v3.1 is scored on its best guess, since the baselines give fine labels only.
 Fulcher rows are baselines added after the held-out scoring; Seurat on
 Fulcher is biased in its favour (its labels came from Seurat transfer).
@@ -39,9 +40,10 @@ from benchmark.evaluate import paired_bootstrap_diff, score
 
 RUNS = baselines_inputs.D / "baselines_ext"
 OUT = datasets.REPO / "research" / "benchmark" / "baselines"
-TOOLS = ("maxfuse", "scglue", "harmony", "seurat")
+TOOLS = ("maxfuse", "scglue", "harmony", "seurat", "correlation")
 RULES = {"knn": "shared kNN", "nc": "nearest centroid", "native": "Seurat native transfer",
-         "best_guess": "best guess (served)"}
+         "corr": "correlation to class mean", "best_guess": "best guess (served)"}
+BASELINE_RULES = ("knn", "nc", "native", "corr")  # a run is scored on the ones its table has
 V31 = "v3.1 (served)"
 
 
@@ -76,7 +78,7 @@ def scope2(paired: list) -> tuple[pd.DataFrame, dict]:
     truth = pd.read_csv(baselines_inputs.D / "prot_meta.csv")["class_name"].to_numpy()
     rows, preds = [], {}
     for tool, seed, pred in runs("scope2"):
-        for rule in ("knn", "nc", "native"):
+        for rule in BASELINE_RULES:
             for regime in ("unrestricted", "restricted"):
                 column = f"{rule}_{regime}"
                 if column in pred:
@@ -119,7 +121,7 @@ def pbmc240() -> tuple[pd.DataFrame, dict]:
     rows = []
     for tool, seed, pred in runs("pbmc240"):
         assert pred["cell_id"].tolist() == meta["cell_id"].tolist()
-        for rule in ("knn", "nc", "native"):
+        for rule in BASELINE_RULES:
             if f"{rule}_unrestricted" in pred:
                 rows.append({"tool": tool, "seed": seed, "rule": RULES[rule], **row(pred[f"{rule}_unrestricted"])})
     v31 = read_v31("pbmc240")
@@ -143,7 +145,7 @@ def fulcher(paired: list) -> tuple[pd.DataFrame, dict]:
         warnings.simplefilter("ignore", UserWarning)  # "other" is never a true class
         for tool, seed, pred in runs("fulcher2026"):
             assert pred["cell_id"].tolist() == labels["cell_id"].tolist()
-            for rule in ("knn", "nc", "native"):
+            for rule in BASELINE_RULES:
                 if f"{rule}_unrestricted" in pred:
                     fine = pred[f"{rule}_unrestricted"].to_numpy()[scored]
                     metrics, composition, _ = protocol.score(fine, truth, lineage)

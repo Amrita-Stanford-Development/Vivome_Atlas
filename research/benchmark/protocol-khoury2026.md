@@ -423,3 +423,108 @@ label transfer, so Seurat transfer is biased in its favour there. Khoury's
 labels came from protein-only Seurat clustering, with no RNA reference
 (amendment 1). Seurat CCA transfer from RNA is a different procedure. It
 shares only the toolkit, and no bias correction is applied.
+
+## Amendment 3, 2026-10-01, before unsealing: the baseline scripts, their settings, and a fifth baseline
+
+Khoury 2026 is still sealed. Nothing was embedded or scored for this
+amendment, and no label was read. It fixes what amendment 2 left to "a
+further dated amendment". The scripts named here are committed together
+with this amendment, and that commit is the reference. Any change to them
+before unsealing needs another amendment.
+
+### The scripts
+
+| Script | Role on Khoury |
+|---|---|
+| `benchmark/baselines_inputs.py` | What every baseline receives: `load("khoury2026")`. |
+| `benchmark/datasets.py` | `load_khoury2026_benchmark_matrix()`: the column-normalised matrix as provided (log2, ComBat-corrected by its authors). Genes match the benchmark gene space by exact symbol. A symbol listed twice takes the per-cell median. |
+| `benchmark/baselines_run.py` | One tool, one seed: `python -m benchmark.baselines_run TOOL khoury2026 SEED --unseal`. It writes the predictions and a JSON record of the settings and the environment. |
+| `benchmark/seurat_cca_transfer.R` | Seurat's half, called by `baselines_run.py`. |
+
+The inputs, as amendment 2 states them:
+
+- the benchmark's 85,232-cell RNA reference and the query, restricted to the
+  benchmark genes Khoury measures in at least one cell;
+- each gene z-scored over its observed values, RNA and query separately;
+- unobserved query entries set to 0 after scaling.
+
+The settings are `SETTINGS` in `baselines_run.py`, quoted here:
+
+| Tool | Settings |
+|---|---|
+| MaxFuse | Fusor on z-scored shared = active arrays; `split_into_batches(max_outward_size=8000, matching_ratio=3, metacell_size=2, method='random', seed=SEED)`; `construct_graphs(15, 15)`; `refine_pivots(n_iters=1, cca_components=10)`; `filter_bad_matches(pivot, 0.3)`; propagate; `get_embedding` |
+| scGLUE | `fit_SCGLUE`, Normal likelihood on z-scored values, one self-loop per gene as the guidance graph, scGLUE's own epoch heuristic, `random_seed=SEED` |
+| Harmony | `PCA(50, random_state=SEED)` on RNA and query stacked; `harmonypy.run_harmony` on modality, `max_iter_harmony=30`, `random_state=SEED` |
+| Seurat CCA | `FindTransferAnchors(reduction='cca', dims=1:30, features=all genes)`, with the z-scored values as data and scale.data, then `TransferData(dims=1:30)`; `set.seed(SEED)` |
+| Correlation | Per RNA class, the mean of its cells' z-scored profiles. Each query cell takes the class with the highest Pearson correlation over all genes (unobserved entries 0, as for every tool). |
+
+### A fifth baseline: correlation to the class mean
+
+A deliberately simple baseline joins the four. It has no embedding, no
+training and no parameters: each cell takes the RNA class whose mean
+profile it correlates with best. It shows how much the learned models add
+over the simplest use of the same reference. It is deterministic, so it
+runs once (seed 0).
+
+### Seeds and decision rules on Khoury
+
+- **Seeds.** MaxFuse, scGLUE and Harmony run seeds 0–2. Seurat CCA turned
+  out deterministic given its inputs: on SCoPE2, PBMC240 and Fulcher its
+  seeds 0, 1 and 2 gave identical predictions. So it runs once (seed 0),
+  as amendment 2 allows. The correlation baseline runs once (seed 0).
+- **Rules scored.** Khoury has no restricted regime, so only the
+  `_unrestricted` columns are scored:
+  - MaxFuse, scGLUE and Harmony: `knn_unrestricted` (the shared kNN rule);
+  - Seurat CCA: `native_unrestricted`;
+  - correlation: `corr_unrestricted`.
+
+  The other columns the script writes (nearest centroid, restricted) are
+  not reported for Khoury.
+- **Metrics.** As in amendment 2, plus the correlation baseline. Its rule is
+  paired with v3.1's product rule in the paired bootstrap, as Seurat
+  CCA's native transfer is.
+- **Scorer.** The scorer that reads Khoury's labels is written and
+  committed before unsealing. It computes only the metrics this protocol
+  fixes. `benchmark/baselines_score.py` scores the development datasets,
+  and its metric code is the reference.
+
+### Environment
+
+The baselines on Khoury run on the Windows PC that took over the work on
+2026-10-01 (`docs/setup-windows.md`):
+
+- Windows 11, Python 3.11.16;
+- numpy 2.4.6, scipy 1.17.1, scikit-learn 1.9.1, pandas 2.3.3;
+- torch 2.11.0 with CUDA 12.8 on an RTX 4000 Ada;
+- maxfuse 0.0.2, scglue 0.4.0, harmonypy 2.0.2 (built against OpenBLAS),
+  scanpy 1.11.5, anndata 0.12.19;
+- R 4.6.1, Seurat 5.5.1, SeuratObject 5.4.0, Matrix 1.7.5.
+
+The Mac ran Harmony and Seurat on the development datasets with Seurat
+5.5.1 and harmonypy 2.0.2 (linked to Apple Accelerate). Each new run's JSON
+records its own environment.
+
+**Reproduction check, SCoPE2 seed 0, PC against Mac:**
+
+- **Seurat CCA.**
+  - Same anchor count (7,449).
+  - Restricted accuracy 71.7 against 71.8, balanced 50.5 against 50.2.
+  - 95.4% of restricted and 85.4% of unrestricted predictions identical.
+  - The cells that changed are near-ties: median top-two score margin 0.047,
+    against 0.188 for the rest.
+- **Harmony with kNN.**
+  - Restricted balanced accuracy 40.9, inside the Mac's own seed range
+    (35.4 to 64.0).
+  - 64.4% of unrestricted predictions identical to the Mac's seed 0, more
+    than the Mac's seeds agree with each other (51.1% to 53.0%).
+
+The platform difference is smaller than the methods' own seed-to-seed
+variation, so it is not corrected for.
+
+### At unsealing
+
+Each tool and seed runs one at a time:
+`python -m benchmark.baselines_run TOOL khoury2026 SEED --unseal`. That is
+3 seeds each for MaxFuse, scGLUE and Harmony, and 1 run each for Seurat CCA
+and the correlation baseline. The committed scorer then runs once. Nothing
+about the baselines is changed after a Khoury label has been read.

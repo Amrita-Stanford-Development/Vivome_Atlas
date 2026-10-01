@@ -102,6 +102,14 @@ parts are still unfetched LFS pointers — if you have run `git lfs pull`
 locally it will fail, which is expected and is not a reason to change the
 test.
 
+Development runs on a Windows PC (`docs/setup-windows.md`); some fixtures
+were frozen on the Mac before it. A float that differs only at float32
+rounding level between the two (a different BLAS summation order) may get
+a tolerance. Measure the largest difference first, set the bound a small
+multiple above it, and say why in a comment. Labels, levels and every
+non-float field must still match exactly. A real behaviour change still
+fails the test.
+
 ## Working agreements
 
 - **List what you intend to delete, and get approval, before deleting it.**

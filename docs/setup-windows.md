@@ -18,7 +18,6 @@ D:\Project\Vivome\Project_structure.md   map of everything below
 D:\Project\Vivome\Vivome_Atlas\          the repository
 D:\Project\Vivome\notebooks\             the Colab notebooks, with outputs
 D:\Project\Vivome\drive\Data\            the project Drive's Data\ folder (Results\, scProteomics\)
-D:\Project\Vivome\_archive\              transfer zips and copies already merged, until deleted
 ```
 
 No code depends on this location; another drive or folder works the same.
@@ -31,10 +30,23 @@ No code depends on this location; another drive or folder works the same.
 - **Miniforge** (winget `CondaForge.Miniforge3`), installed to
   `%USERPROFILE%\miniforge3`.
 - **Node.js LTS** (winget `OpenJS.NodeJS.LTS`), for the web tests.
-- **R for Windows** (winget `RProject.R`), only to rerun the Seurat baseline.
-  In R, run `install.packages("Seurat")`; the finished runs used Seurat 5.5.1.
-  Then add R's `bin` folder (for example `C:\Program Files\R\R-4.5.1\bin`)
-  to the user `PATH`, so `Rscript` runs from Git Bash.
+- **R for Windows**, for the Seurat baseline. Per user, no administrator
+  needed (PowerShell):
+  ```powershell
+  winget install --id RProject.R -e --override "/VERYSILENT /NORESTART /SUPPRESSMSGBOXES /CURRENTUSER"
+  ```
+  It installs to `%LOCALAPPDATA%\Programs\R\R-4.6.1`. Add its `bin` folder
+  to the user `PATH`, so `Rscript` runs from Git Bash. Then install Seurat
+  from CRAN's Windows binaries into the user library (5.5.1, the version
+  every Seurat run used):
+  ```bash
+  Rscript -e 'lib <- Sys.getenv("R_LIBS_USER"); dir.create(lib, recursive=TRUE); install.packages("Seurat", lib=lib, repos="https://cloud.r-project.org", type="win.binary")'
+  ```
+- **Visual Studio Build Tools 2022**, workload "Desktop development with
+  C++", for harmonypy (step 4):
+  ```powershell
+  winget install --id Microsoft.VisualStudio.2022.BuildTools -e --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+  ```
 - **Long paths.** In PowerShell **run as administrator**:
   ```powershell
   New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
@@ -153,7 +165,7 @@ The CUDA check should print `True NVIDIA RTX 4000 Ada Generation`.
 `conda init bash` lets Git Bash, and so Claude Code, use the environment. If
 pip fails on `faiss-cpu`, run `conda install -c conda-forge faiss-cpu`.
 
-Two packages have no Windows build:
+Two packages need extra steps on Windows:
 
 - **pybedtools** (and its dependency pysam), which scglue requires. scglue
   imports it only for `scglue.genomics`, the genomic-interval guidance
@@ -164,11 +176,15 @@ Two packages have no Windows build:
   ever called: `__init__.py` defines `BedTool` and `cleanup`,
   `cbedtools.py` defines `Interval`, `helpers.py` defines
   `set_bedtools_path`. Check with `python -c "import scglue"`.
-- **harmonypy 2.0.2** compiles a C++ extension, which needs Visual Studio
-  Build Tools (workload "Desktop development with C++"); conda-forge has no
-  2.x build. Only the Harmony baseline uses it, and its runs are finished.
-  To rerun them, install the Build Tools, then
-  `pip install harmonypy==2.0.2`.
+- **harmonypy 2.0.2** compiles a C++ extension against BLAS. It has no
+  Windows wheel, and conda-forge has no 2.x build. On the Mac it links Apple
+  Accelerate; here it links OpenBLAS from conda-forge, built with the Build
+  Tools from step 1 (Git Bash, `vivome` active):
+  ```bash
+  conda install -n vivome -c conda-forge openblas -y
+  CMAKE_ARGS="-DOPENBLAS_LIB=$(cygpath -m "$CONDA_PREFIX")/Library/lib/openblas.lib" pip install --no-cache-dir harmonypy==2.0.2
+  ```
+  Check with `python -c "import harmonypy"`.
 
 ## 5. Restore and verify (Miniforge Prompt, in the repository)
 
@@ -188,11 +204,11 @@ python -m benchmark.v31_dev_gate
 - `node --test` has 2 expected failures in `web/tests/lfs.test.js` after
   `git lfs pull`. Don't change that test.
 - The dev gate must end with `GATE PASSED`.
-- On this PC, 6 service tests fail by about 5e-7, against a tolerance of
-  1e-6: `test_pipeline_versions` (v3 coordinates frozen on the Mac) and
-  `test_ensemble.FullPathAgainstNb2CoreTests`. That is float32 summation
-  order in the CPU math library, not a code change. Don't loosen the
-  tolerance or refreeze the fixtures without the owner's decision.
+- The service suite passes in full. `test_pipeline_versions` (v3 responses
+  frozen on the Mac) and `test_ensemble.FullPathAgainstNb2CoreTests` allow
+  for float32 summation order, which differs between the Mac's and this
+  PC's math libraries by up to 2.1e-6. Labels and levels must match
+  exactly ([CLAUDE.md](../CLAUDE.md), Tests).
 
 A test may fail for a Windows-only reason, such as a path separator. Fix the
 code, not the test.

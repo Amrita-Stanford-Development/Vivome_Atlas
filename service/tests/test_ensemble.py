@@ -231,20 +231,22 @@ class FullPathAgainstNb2CoreTests(unittest.TestCase):
         reason = {3: "no_confident_label", 4: "ambiguous_between_classes", 5: "outside_supported_region",
                   6: "coverage_too_low"}
         seen = set()
+        # Probabilities to 5 places: float32 sums differ by ~5e-7 between the
+        # Mac's and the Windows PC's BLAS. Labels and levels stay exact.
         for i, cell in enumerate(response["cells"]):
             k = int(kind[i])
             seen.add(k)
             if k <= 2:
                 level = ("class", "group", "lineage")[k]
                 self.assertEqual((cell["label"], cell["label_level"]), (self.levels[level][val[i]], level), f"cell {i}")
-                self.assertAlmostEqual(cell["confidence"], float(self.P[i, S[i]].sum()), places=6)
+                self.assertAlmostEqual(cell["confidence"], float(self.P[i, S[i]].sum()), places=5)
             else:
                 self.assertEqual(cell.get("abstain_reason"), reason[k], f"cell {i}")
             if k == 6:
                 self.assertNotIn("best_guess", cell)
             else:
                 self.assertEqual(cell["best_guess"]["label"], b.class_names[int(self.P[i].argmax())])
-                self.assertAlmostEqual(cell["best_guess"]["probability"], float(self.P[i].max()), places=6)
+                self.assertAlmostEqual(cell["best_guess"]["probability"], float(self.P[i].max()), places=5)
             self.assertAlmostEqual(cell["reference_similarity"], float(self.ood[i]), places=5)
         return seen
 

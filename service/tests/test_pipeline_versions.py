@@ -36,7 +36,10 @@ def assert_same(test, fresh, frozen, where="response"):
         for i, (a, b) in enumerate(zip(fresh, frozen)):
             assert_same(test, a, b, f"{where}[{i}]")
     elif isinstance(frozen, float):
-        test.assertTrue(math.isclose(fresh, frozen, rel_tol=1e-6, abs_tol=1e-7), f"{where}: {fresh} != {frozen}")
+        # Frozen on the Mac. The Windows PC's BLAS sums float32 in another order,
+        # which moves values by up to 2.1e-6 (the coordinates); every label and
+        # non-float field stays identical. A real change is far larger.
+        test.assertTrue(math.isclose(fresh, frozen, rel_tol=1e-5, abs_tol=5e-6), f"{where}: {fresh} != {frozen}")
     else:
         test.assertEqual(fresh, frozen, where)
 

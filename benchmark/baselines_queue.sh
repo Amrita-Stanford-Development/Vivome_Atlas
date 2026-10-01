@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Track D extension: run every remaining baseline run, one at a time.
-#   benchmark/baselines_queue.sh TOOL [TOOL...]      e.g. maxfuse scglue
+#   benchmark/baselines_queue.sh TOOL [TOOL...]      e.g. correlation maxfuse scglue
+# The deterministic correlation baseline runs once per dataset, as seed 0.
 # Skips any run that already has its .json record, records each run's exit
 # status in results/baselines_ext/logs/queue.txt, and continues past a failure
 # (rerun the same command to retry). Run one queue at a time: the runs load the
@@ -12,6 +13,7 @@ mkdir -p benchmark/results/baselines_ext/logs
 for tool in "$@"; do
   for dataset in scope2 pbmc240 fulcher2026; do
     for seed in 0 1 2; do
+      [ "$tool" = correlation ] && [ "$seed" != 0 ] && continue
       [ -f "benchmark/results/baselines_ext/$dataset/${tool}_seed${seed}.json" ] && continue
       echo "$(date +%H:%M:%S) start $tool $dataset $seed" | tee -a benchmark/results/baselines_ext/logs/queue.txt
       "$PYTHON" -m benchmark.baselines_run "$tool" "$dataset" "$seed" \
