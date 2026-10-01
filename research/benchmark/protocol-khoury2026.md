@@ -528,3 +528,25 @@ Each tool and seed runs one at a time:
 3 seeds each for MaxFuse, scGLUE and Harmony, and 1 run each for Seurat CCA
 and the correlation baseline. The committed scorer then runs once. Nothing
 about the baselines is changed after a Khoury label has been read.
+
+## Amendment 4, 2026-10-02, before unsealing: a baseline run that diverges
+
+Khoury 2026 is still sealed. Nothing was embedded or scored for this
+amendment, and no label was read.
+
+**Why now.** In the Track D extension, scGLUE diverged on Fulcher, seed 0.
+Its fine-tune stage produced NaN from the first epoch, and encoding then
+failed (`benchmark/results/baselines_ext/logs/scglue_fulcher2026_0.log`).
+This protocol had no rule for a diverged run. Fulcher's protocol does
+(`protocol-fulcher2026.md`, scANVI).
+
+**The rule, for every baseline on Khoury:**
+
+- A run is diverged when its embedding has a non-finite value, or when
+  training produces NaN.
+- `baselines_run.py` records such a run with `"diverged": true` and no
+  predictions. The scorer skips it.
+- A diverged run is reported as diverged, with its count per tool. It is not
+  rerun, with the same seed or another, and not replaced.
+- The tool's summary is over the runs that completed, and says how many
+  that is.

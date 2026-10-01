@@ -263,6 +263,27 @@ benchmark genes in every cell, so nothing there was zero-filled.
 above: scANVI trains on the query cells (transductive); this encoder is
 fixed and zero-shot on the query.**
 
+**v3.1 as served against four more baselines and a simple one (Track D
+extension, development data).** MaxFuse, scGLUE and Harmony with kNN (3
+seeds each), Seurat CCA label transfer, and correlation to the RNA class
+mean ran on the same gene-fair inputs. v3.1 is scored on its best guess.
+
+- **Fulcher 2026** (added after the held-out scoring): v3.1 at 57.9% balanced
+  is ahead in all 16 seed pairings.
+  - The correlation baseline is next at 46.9% (v3.1 +11.1, CI excludes
+    zero).
+  - Seurat CCA, biased in its favour here, scores 1.8%.
+  - scGLUE diverged on all three seeds.
+- **PBMC240:** lymphoid recall is 92.3% for v3.1 and 59.8% for the
+  correlation baseline. Every integration tool is at 38.8% or below.
+- **SCoPE2 restricted:** 61.3%, ahead of every new tool's mean. It is
+  indistinguishable from the correlation baseline (+1.7, CI includes zero)
+  and below scANVI.
+- **SCoPE2 unrestricted:** every method averages under 10%, v3.1 at 1.1%.
+
+Tables: `research/benchmark/baselines/`. Narrative:
+`research/benchmark/results.md`, "Baselines beyond scANVI".
+
 ### Known failure modes
 
 1. **The two-class label space, now opt-in.**

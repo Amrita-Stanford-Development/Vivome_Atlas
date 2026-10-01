@@ -95,7 +95,15 @@ def run_scglue(inp, seed, workdir):
         warnings.simplefilter("ignore")
         glue = scglue.models.fit_SCGLUE(adatas, graph, init_kws={"random_seed": seed},
                                         fit_kws={"directory": str(workdir)})
-    return glue.encode_data("rna", adatas["rna"]), glue.encode_data("query", adatas["query"])
+    try:
+        return glue.encode_data("rna", adatas["rna"]), glue.encode_data("query", adatas["query"])
+    except ValueError as err:
+        # Training went NaN, and torch refuses to build the latent distribution.
+        # Returned as NaN embeddings, so the run is recorded as diverged.
+        if "invalid values" not in str(err):
+            raise
+        nan = lambda n: np.full((n, 50), np.nan, dtype=np.float32)  # scGLUE's default latent_dim
+        return nan(len(inp.rna_z)), nan(len(inp.query_z))
 
 
 def run_harmony(inp, seed):

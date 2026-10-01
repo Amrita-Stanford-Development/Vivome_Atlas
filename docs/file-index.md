@@ -251,6 +251,15 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/fulcher2026/exploratory_5type_per_seed.csv` — Fulcher 2026, exploratory (added after results): 5-type score with CD4T and CD8T merged into T, per model-seed and rule
 - `research/benchmark/fulcher2026/exploratory_5type_summary.csv` — Fulcher 2026, exploratory (added after results): the 5-type score's mean, SD, min and max per family and rule
 - `research/benchmark/fulcher2026/v31_development.json` — Fulcher 2026 through v3.1 (development data): shares, composition, per author type correctness at the stated level, best guess
+- `research/benchmark/baselines/inputs.csv` — Track D extension: what every baseline received per dataset (cells, genes, scaling, missing values, settings)
+- `research/benchmark/baselines/scope2_per_seed.csv` — Track D extension, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
+- `research/benchmark/baselines/scope2_summary.csv` — Track D extension, SCoPE2: mean, SD, min, max and count per tool, rule and regime
+- `research/benchmark/baselines/pbmc240_per_seed.csv` — Track D extension, PBMC240: lymphoid and myeloid recall and lineage composition per tool, seed and rule
+- `research/benchmark/baselines/pbmc240_summary.csv` — Track D extension, PBMC240: mean, SD, min, max and count per tool and rule
+- `research/benchmark/baselines/fulcher2026_per_seed.csv` — Track D extension, Fulcher 2026: six-type balanced accuracy, recall per type and lineage, composition per tool, seed and rule
+- `research/benchmark/baselines/fulcher2026_summary.csv` — Track D extension, Fulcher 2026: mean, SD, min, max and count per tool and rule
+- `research/benchmark/baselines/v31_confident.csv` — Track D extension: v3.1's confident answers per dataset (committed share, correct at the stated level)
+- `research/benchmark/baselines/paired_bootstrap.csv` — Track D extension: v3.1's best guess minus each baseline seed and rule, with 95% CI, on SCoPE2 (both regimes) and Fulcher
 - `research/benchmark/v31_dev_gate.json` — the Track F gate's record: every NB2 and v3.1 figure compared, SCoPE2 correctness, PBMC240 through the service parser
 - `research/benchmark/v31_service_flags.json` — v3.1's service flags off and on: shares, composition, correctness and one-class answers per dataset
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores

@@ -61,8 +61,9 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
 | 2026-09-29 | **Track D rescore over 5 seeds (T1 NB1d).** "Ours beats scANVI" held only for the shipped seed, `v3_seed0`, not the architecture. PBMC240 became a development dataset | `62aefe8` |
 | 2026-09-30 | **Repository reorganised** into the current layout. **Track E:** Fulcher 2026 held-out evaluation, where V2 beats v3 in 50 of 50 seed pairings. Fulcher then became a development dataset. Khoury 2026 registered as the sealed final test. V2 chosen as the v3.1 encoder. **Web redesign** foundation | `629d2cf`, `6d67d32`, `1f486f0` |
 | 2026-10-01 | **v3.1:**<br>• Track C scaffold, `167f138`;<br>• the Project page projecting through a local service;<br>• Track F: T1 NB2's five-seed V2 ensemble becomes the default pipeline, `9567ffd`;<br>• a deep review, whose follow-up fixed duplicate gene rows, `af07dac`;<br>• **release 0.3.0**, `a5b31dc`.<br>**After the release:**<br>• docs update;<br>• Khoury amendment 2, `491053b`;<br>• Track D extension started, `7963031`;<br>• Windows-safe clone, `c698188` | see each bullet |
+| 2026-10-01 to 02 | **The Windows PC takes over:** Mac-isms replaced, tests fitted to the PC's float differences, R/Seurat and harmonypy installed. **Track D extension finished:** four baselines plus a correlation baseline against v3.1 as served; Khoury amendments 3 and 4 | `d9a3cfe`, `65bfc10`, and the results commit |
 
-## Where things stand (2026-10-01)
+## Where things stand (2026-10-02)
 
 - **Release.** Atlas 0.3.0; model v3.1.
   - Tag `atlas-v0.3.0` is at `eae50af`, which is `main`.
@@ -71,8 +72,8 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
   `main` by the post-release commits:
   - the docs corrections;
   - Khoury amendment 2;
-  - the Track D runners;
-  - the Windows fixes.
+  - the Track D extension and Khoury amendments 3 and 4;
+  - the move to the Windows PC.
 - **v3.1** (`service/pipeline/ensemble.py`):
   - five V2 encoders, each a tempered softmax over cosine to the class
     centroids, averaged;
@@ -90,87 +91,60 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
   `scripts/fetch_v31_members.py` restores them from `data/incoming/NB1b/ckpt/`
   and checks their sha256.
 
-## In progress: the Track D extension
+## Done: the Track D extension (2026-10-02)
 
-The owner's brief (2026-10-01), steps 2 to 5, verbatim:
+The owner's brief of 2026-10-01 (gene fairness for every tool; MaxFuse,
+scGLUE, Harmony + kNN and Seurat CCA on SCoPE2, PBMC240 and Fulcher, seeds
+0-2 where stochastic; Fulcher rows labelled; v3.1 as served on its best
+guess; paired bootstrap; a Khoury amendment before unsealing) is done, plus
+a fifth, deliberately simple baseline the owner added: correlation to the
+RNA class mean.
 
-> 2. Gene fairness for every tool: train and query only on genes the dataset
->    measures, as done for scANVI. Record exactly what each tool received
->    (genes, scale, normalisation, how missing values were handled) in a
->    table.
-> 3. Run MaxFuse, scGLUE, Harmony + kNN and Seurat CCA label transfer on
->    SCoPE2, PBMC240 and Fulcher, seeds 0-2 where stochastic. Same cells and
->    metrics as the existing tables. Replace the old single-run SCoPE2 rows.
-> 4. Fulcher: label its rows "baselines added after the held-out scoring";
->    Seurat on Fulcher is circular: report it, marked "biased in its favour".
-> 5. Comparison: "ours" is v3.1 as served (release 0.3.0, both flags on).
->    Score it with best_guess for balanced accuracy, and report its
->    confident-label metrics alongside. Keep the V2 and v3 five-seed rows.
->    Paired bootstrap of v3.1 against each baseline seed. Cache every
->    prediction under benchmark/results/. Commit the tables, update
->    results.md, the model card and the TODO, then add the further Khoury
->    amendment naming the scripts and settings, while it is still sealed.
-
-**Gene fairness, as implemented** (`benchmark/baselines_inputs.py`):
-
-- Every tool gets the query's measured genes only:
-
-  | Dataset | Genes measured |
-  |---|---|
-  | SCoPE2 | 2,907 (the matrix is complete) |
-  | PBMC240 | 1,111 (the processed file) |
-  | Fulcher | 932 (log2) |
-
-- Each gene is z-scored over its observed values, RNA and query
-  separately.
-- Unobserved query values are set to 0 after scaling.
-
-**Run status:**
-
-| Run | SCoPE2 | PBMC240 | Fulcher | Ran on |
-|---|---|---|---|---|
-| Harmony + kNN, seeds 0-2 | done | done | done | Mac |
-| Seurat CCA, seeds 0-2 | done | done | done | Mac |
-| v3.1 as served | done, unrestricted and restricted | done (NB1d's 237 cells) | done | Mac |
-| MaxFuse, seeds 0-2 | to run | to run | to run | PC |
-| scGLUE, seeds 0-2 | to run | to run | to run | PC (GPU) |
-
-Harmony seed 0 on SCoPE2 reproduced the old single-run row exactly.
+- **Write-up:** `research/benchmark/results.md`, "Baselines beyond scANVI";
+  tables in `research/benchmark/baselines/`; model card and TODO updated.
+- **Khoury:** amendment 3 (`65bfc10`) fixes the scripts, settings, rules
+  scored, the PC environment and the PC-vs-Mac reproduction check;
+  amendment 4 adds the divergence rule. Still sealed.
+- **Runs:** Harmony, Seurat CCA and v3.1 on the Mac; MaxFuse, scGLUE (GPU)
+  and the correlation baseline on the PC. Seurat CCA is deterministic (its
+  three seeds are identical). scGLUE diverged on all three Fulcher seeds,
+  reported, not rerun.
+- **Headline:**
+  - Fulcher: v3.1 57.9% balanced, ahead in all 16 pairings; correlation
+    baseline 46.9%.
+  - PBMC240 lymphoid recall: v3.1 92.3%, correlation 59.8%, integration
+    tools 38.8% or below.
+  - SCoPE2 restricted: v3.1 61.3%, level with the correlation baseline,
+    below scANVI.
+  - SCoPE2 unrestricted: every mean under 10%.
 
 **The scripts:**
 
 - `benchmark/baselines_inputs.py`: what every tool receives.
-- `benchmark/baselines_run.py`: one tool, one dataset, one seed.
+- `benchmark/baselines_run.py`: one tool, one dataset, one seed (`--out` for
+  check runs; each JSON records its environment).
 - `benchmark/seurat_cca_transfer.R`: Seurat's half.
 - `benchmark/baselines_queue.sh`: sequential runs that resume where they
   stopped.
 - `benchmark/baselines_v31.py`: v3.1 through the service's own parser.
-- `benchmark/baselines_score.py`: the tables. It writes
+- `benchmark/baselines_score.py`: the tables in
   `research/benchmark/baselines/`.
 
 Predictions and embeddings are cached in
-`benchmark/results/baselines_ext/<dataset>/`.
+`benchmark/results/baselines_ext/<dataset>/`; `pc_check/` holds the
+reproduction runs.
 
-**To finish:**
+## Next
 
-1. In a Git Bash window, run
-   `PYTHON=python benchmark/baselines_queue.sh maxfuse scglue`. Then run
-   `python -m benchmark.baselines_score`.
-2. Update `research/benchmark/results.md`:
-   - replace the old single-run MaxFuse, scGLUE and Harmony SCoPE2 rows
-     with the 3-seed rows;
-   - add Seurat CCA, and v3.1 scored on its best guess with its
-     confident-answer metrics alongside;
-   - label the Fulcher baseline rows and mark Seurat on Fulcher as in
-     step 4;
-   - keep the V2 and v3 five-seed rows;
-   - report the paired bootstrap counts in each direction;
-   - note which runs used the Mac and which the PC.
-3. Update `service/model/MODEL_CARD.md` and `research/todo.md`: tick the
-   items with commit hashes, and add a changelog line.
-4. Add Khoury amendment 3 to `research/benchmark/protocol-khoury2026.md`,
-   naming these scripts and their settings, before unsealing.
-5. Run the three test suites, then commit and push.
+Following the publication plan below:
+
+1. **Write the Khoury scorer** and commit it before unsealing (amendment 3
+   requires it). It computes only the metrics the protocol fixes, with
+   `benchmark/baselines_score.py`'s metric code as the reference.
+2. **Unseal Khoury once,** following the protocol and its four amendments:
+   the v3.1 gates, then v3.1, v3, scANVI's headline arm and the five
+   baselines, then the scorer.
+3. Post the bioRxiv preprint, and choose the journal from the Khoury result.
 
 ## Owner decisions and standing instructions
 
@@ -220,7 +194,7 @@ Predictions and embeddings are cached in
   Research. Genome Biology is a stretch, only if v3.1 is clearly ahead on
   Khoury. Nature Methods is not realistic on current results.
 - **Sequence:**
-  1. finish Track D;
+  1. finish Track D (done, 2026-10-02);
   2. unseal Khoury once;
   3. post a bioRxiv preprint;
   4. choose the journal from the Khoury result.
@@ -238,6 +212,9 @@ Predictions and embeddings are cached in
 
 ## Open after Track D
 
+- **scGLUE on Fulcher:** why it diverges is not investigated. A CPU run or
+  other settings are untested, and either would need a Khoury amendment
+  before unsealing.
 - **T1 NB3 / NB3b:**
   - recalibrated abstention: the OOD filter passes 99% of scrambled cells,
     and B cell coverage is 69%;

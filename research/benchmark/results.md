@@ -91,20 +91,28 @@ monocyte.
 | 4 | scANVI (3-seed mean) | native nearest-centroid | 62.37 (±15.64) | 64.18 (±27.37) |
 | 5 | **Ours (v3, 5-seed)** | native nearest-centroid | 79.38 ± 4.71 (73.76–86.17) | 63.32 ± 10.84 (50.79–79.79) |
 | 6 | **Ours (v3, 5-seed)** | pool-first restricted (real) | 78.11 ± 4.69 (74.23–83.29) | 61.64 ± 11.80 (51.35–77.50) |
-| 7 | **Ours (V2, 5-seed)** | native nearest-centroid | 69.64 ± 7.62 (57.18–76.17) | 60.96 ± 10.03 (51.43–73.23) |
-| 8 | **Ours (V2, 5-seed)** | shared kNN rule | 74.81 ± 4.83 (66.64–79.33) | 58.26 ± 6.40 (48.23–63.11) |
-| 9 | PCA floor | native nearest-centroid | 55.97 [53.42, 58.52]\* | 58.21 [55.42, 60.96]\* |
-| 10 | PCA floor | shared kNN rule | 67.25 [65.17, 69.40]\* | 57.66 [55.04, 60.37]\* |
-| 11 | **Ours (V2, 5-seed)** | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
-| 12 | Harmony (batch-correction floor) | native nearest-centroid | 50.20 [47.65, 52.68]\* | 54.20 [51.42, 57.02]\* |
-| 13 | MaxFuse | native nearest-centroid | 51.95 [49.53, 54.50]\* | 52.38 [49.45, 55.29]\* |
-| 14 | Harmony (batch-correction floor) | shared kNN rule | 46.78 [44.36, 49.40]\* | 50.49 [47.70, 53.38]\* |
-| 15 | MaxFuse | shared kNN rule | 69.80 [68.39, 71.21]\* | 50.05 [48.49, 51.63]\* |
+| 7 | **v3.1 as served** (release 0.3.0) | best guess (served) | 74.63† | 61.30† |
+| 8 | **Ours (V2, 5-seed)** | native nearest-centroid | 69.64 ± 7.62 (57.18–76.17) | 60.96 ± 10.03 (51.43–73.23) |
+| 9 | Correlation to class mean | its own rule | 57.05† | 59.59† |
+| 10 | **Ours (V2, 5-seed)** | shared kNN rule | 74.81 ± 4.83 (66.64–79.33) | 58.26 ± 6.40 (48.23–63.11) |
+| 11 | PCA floor | native nearest-centroid | 55.97 [53.42, 58.52]\* | 58.21 [55.42, 60.96]\* |
+| 12 | PCA floor | shared kNN rule | 67.25 [65.17, 69.40]\* | 57.66 [55.04, 60.37]\* |
+| 13 | **Ours (V2, 5-seed)** | pool-first restricted (real) | 76.60 ± 4.24 (73.42–83.69) | 57.63 ± 10.87 (49.91–76.15) |
+| 14 | MaxFuse (3-seed) | native nearest-centroid | 54.90 ± 5.44 (48.66–58.66) | 56.66 ± 6.83 (48.84–61.49) |
+| 15 | Harmony (3-seed) | native nearest-centroid | 47.02 ± 10.96 (34.83–56.04) | 54.56 ± 12.54 (42.21–67.27) |
+| 16 | scGLUE (3-seed) | native nearest-centroid | 48.43 ± 6.55 (43.42–55.84) | 53.60 ± 3.49 (49.76–56.57) |
+| 17 | MaxFuse (3-seed) | shared kNN rule | 70.76 ± 0.70 (70.20–71.54) | 50.51 ± 0.57 (50.08–51.15) |
+| 18 | Seurat CCA label transfer | native transfer | 71.81‡ | 50.20‡ |
 | — | **Majority class ("monocyte", the protein query's own)** | trivial floor | 73.56 [71.34, 75.77]\* | 50.00 [50.00, 50.00]\* |
-| 16 | scGLUE | shared kNN rule | 28.59 [27.32, 29.93]\* | 48.21 [46.52, 49.78]\* |
-| 17 | scGLUE | native nearest-centroid | 47.92 [45.37, 50.54]\* | 47.20 [44.22, 50.20]\* |
+| 19 | Harmony (3-seed) | shared kNN rule | 43.76 ± 13.84 (28.66–55.84) | 49.98 ± 14.33 (35.41–64.05) |
+| 20 | scGLUE (3-seed) | shared kNN rule | 32.68 ± 11.62 (24.09–45.91) | 38.09 ± 14.73 (21.09–46.87) |
 
-\* 95% bootstrap CI (single run, that method's only seed). scANVI rows show
+\* 95% bootstrap CI (single run). MaxFuse, scGLUE and Harmony rows are
+3-seed mean ± SD (min–max) under the gene-fair inputs of
+[Baselines beyond scANVI](#baselines-beyond-scanvi-track-d-extension); they
+replace the earlier single-run rows. † One run: v3.1 as served is
+deterministic, and so is the correlation baseline. ‡ Seeds 0, 1 and 2 gave
+identical predictions: Seurat CCA is deterministic given its inputs. scANVI rows show
 3-seed mean (±spread — **range, max−min**, across seeds 0/1/2, not
 standard deviation) — see [scANVI across seeds](#scanvi-across-seeds) for
 the per-seed breakdown. "Ours" rows show 5-seed mean ± SD (min–max) —
@@ -129,10 +137,12 @@ native-centroid mean (64.18%, statistically indistinguishable from v3's
 protocol. The **only** regime and seed where "ours" clearly, robustly beats
 scANVI is `v3_seed0` — the one seed that happened to ship — which is why
 the paired-bootstrap section below reports the comparison per seed, not as
-a single family-level verdict. The three genuinely unsupervised methods
-(MaxFuse, Harmony, scGLUE) remain in the high-40s to low-50s% — still
-indistinguishable from each other and from the 50.00% trivial floor,
-regardless of anything above.
+a single family-level verdict. The unsupervised integration methods
+(MaxFuse, Harmony, scGLUE) stay near the 50.00% trivial floor over three
+seeds: 53.6 to 56.7 under nearest centroid and 38.1 to 50.5 under the
+shared kNN rule, with seed ranges up to 28.6 points (Harmony, shared kNN). Seurat CCA transfer
+calls almost every cell monocyte (50.20). v3.1 as served (61.30) and the
+correlation baseline (59.59) sit just above them, below scANVI.
 
 ### Ours across five seeds (v3 and V2)
 
@@ -183,18 +193,23 @@ have any real protein ground truth. Much harder for every method.
 | 3 | scANVI (3-seed mean) | native scANVI classifier | 17.70 (±19.26) | 12.76 (±15.04) |
 | 4 | PCA floor | shared kNN rule | 15.84 [14.09, 17.72]\* | 11.01 [9.79, 12.37]\* |
 | 5 | scANVI (3-seed mean) | shared kNN rule | 16.04 (±7.38) | 10.93 (±5.02) |
-| 6 | **Ours (V2, 5-seed)** | shared kNN rule | 12.17 ± 8.12 (2.89–22.48) | 8.63 ± 5.40 (1.96–15.28) |
-| 7 | scANVI (3-seed mean) | native nearest-centroid | 11.72 (±5.17) | 8.24 (±4.33) |
-| 8 | MaxFuse | native nearest-centroid | 5.91 [4.76, 7.11]\* | 4.91 [3.84, 5.99]\* |
-| 9 | Harmony | shared kNN rule | 7.11 [5.84, 8.32]\* | 4.84 [3.97, 5.66]\* |
-| 10 | **Ours (V2, 5-seed)** | native nearest-centroid | 4.05 ± 5.12 (0.34–13.09) | 3.08 ± 3.40 (0.23–8.98) |
-| 11 | PCA floor | native nearest-centroid | 3.69 [2.82, 4.70]\* | 2.59 [1.96, 3.31]\* |
-| 12 | Harmony | native nearest-centroid | 3.76 [2.89, 4.77]\* | 2.55 [1.96, 3.24]\* |
-| 13 | MaxFuse | shared kNN rule | 1.07 [0.60, 1.61]\* | 0.81 [0.41, 1.25]\* |
-| 14 | scGLUE | shared kNN rule | 0.47 [0.20, 0.87]\* | 0.40 [0.14, 0.76]\* |
-| 15 | scGLUE | native nearest-centroid | 0.20 [0.00, 0.47]\* | 0.30 [0.00, 0.73]\* |
+| 6 | scGLUE (3-seed) | shared kNN rule | 8.66 ± 1.69 (6.71–9.66) | 9.57 ± 6.94 (4.56–17.50) |
+| 7 | **Ours (V2, 5-seed)** | shared kNN rule | 12.17 ± 8.12 (2.89–22.48) | 8.63 ± 5.40 (1.96–15.28) |
+| 8 | scANVI (3-seed mean) | native nearest-centroid | 11.72 (±5.17) | 8.24 (±4.33) |
+| 9 | Harmony (3-seed) | shared kNN rule | 6.02 ± 2.56 (3.09–7.85) | 4.14 ± 1.73 (2.18–5.42) |
+| 10 | MaxFuse (3-seed) | native nearest-centroid | 4.36 ± 0.94 (3.69–5.44) | 3.67 ± 0.80 (3.16–4.59) |
+| 11 | **Ours (V2, 5-seed)** | native nearest-centroid | 4.05 ± 5.12 (0.34–13.09) | 3.08 ± 3.40 (0.23–8.98) |
+| 12 | PCA floor | native nearest-centroid | 3.69 [2.82, 4.70]\* | 2.59 [1.96, 3.31]\* |
+| 13 | Correlation to class mean | its own rule | 3.56† | 2.58† |
+| 14 | Harmony (3-seed) | native nearest-centroid | 3.09 ± 1.52 (1.34–4.16) | 2.10 ± 1.04 (0.91–2.83) |
+| 15 | Seurat CCA label transfer | native transfer | 2.48‡ | 1.69‡ |
+| 16 | scGLUE (3-seed) | native nearest-centroid | 0.96 ± 0.84 (0.00–1.54) | 1.30 ± 1.24 (0.00–2.46) |
+| 17 | **v3.1 as served** (release 0.3.0) | best guess (served) | 1.48† | 1.08† |
+| 18 | MaxFuse (3-seed) | shared kNN rule | 0.98 ± 0.34 (0.67–1.34) | 0.70 ± 0.27 (0.46–0.99) |
 
-\* 95% bootstrap CI (single run). scANVI rows show 3-seed mean (±spread,
+\* 95% bootstrap CI (single run). MaxFuse, scGLUE and Harmony: 3-seed
+mean ± SD (min–max), replacing the earlier single-run rows. † One run
+(deterministic). ‡ Three identical seeds (deterministic). scANVI rows show 3-seed mean (±spread,
 max−min across seeds 0/1/2) — see
 [scANVI across seeds](#scanvi-across-seeds). "Ours" rows show 5-seed mean
 ± SD (min–max) — see [Ours across seeds](#ours-across-five-seeds-v3-and-v2).
@@ -217,6 +232,10 @@ clearly beat scANVI here (8.63% mean vs. scANVI's 10.93–12.76%) — only 4 of
 15 V2-seed × scANVI-seed pairings favor V2 significantly, 8 favor scANVI.
 The unrestricted regime is the one place in this document where v3 and
 scANVI are not close: v3 wins decisively, and V2 does not inherit that win.
+v3.1 as served, a V2 ensemble, scores 1.08% here. Its best guess sends
+SCoPE2's macrophages and monocytes to other classes, as NB1d and NB2
+found for V2. All four new baselines and the correlation baseline average
+below 10% as well.
 
 **Correcting an earlier claim in this document:** a previous version of
 this table, using the (now-removed) reconstruction, observed that its
@@ -936,6 +955,196 @@ measure both on NB1's evaluation suite (coverage, correct when committed,
 answer levels) before they are trusted beyond these development datasets
 (`research/todo.md`, Track F).
 
+## Baselines beyond scANVI (Track D extension)
+
+Four established tools, plus a deliberately simple baseline, on SCoPE2,
+PBMC240 and Fulcher 2026. They are compared with **v3.1 as served**
+(release 0.3.0, both service flags on), scored on its best guess, on the
+same cells as the tables above. The settings are the ones fixed for the
+sealed Khoury test in protocol amendments 3 (`65bfc10`) and 4.
+
+| Tool | What it is | Rule scored |
+|---|---|---|
+| MaxFuse | matches cells across modalities that share few features | shared kNN, nearest centroid |
+| scGLUE | graph-linked deep integration (one self-loop per gene) | shared kNN, nearest centroid |
+| Harmony + kNN | batch correction of RNA and query PCs | shared kNN, nearest centroid |
+| Seurat CCA | `FindTransferAnchors` (CCA) then `TransferData` | its native transfer |
+| Correlation to class mean | each cell takes the RNA class whose mean profile it correlates with best | its own argmax |
+
+Scripts: `benchmark/baselines_inputs.py` (inputs),
+`benchmark/baselines_run.py` and `benchmark/seurat_cca_transfer.R` (runs),
+`benchmark/baselines_v31.py` (v3.1 through the service's own parser),
+`benchmark/baselines_score.py` (every table in
+[baselines/](baselines/)). Predictions are cached in
+`benchmark/results/baselines_ext/`.
+
+### What every tool received
+
+The same inputs for every tool, the ones scANVI's measured-genes arm got
+([baselines/inputs.csv](baselines/inputs.csv)):
+
+- the benchmark's 85,232-cell RNA reference and the query, restricted to the
+  benchmark genes the query measures;
+- each gene z-scored over its observed values, RNA and query separately;
+- unobserved query entries set to 0 after scaling.
+
+| Dataset | Query cells | Genes measured | Query entries unobserved |
+|---|---|---|---|
+| SCoPE2 | 1,490 | 2,907 | 0.0% |
+| PBMC240 (processed file) | 237 | 1,111 | 0.0% |
+| Fulcher 2026 (log2) | 1,275 | 932 | 39.3% |
+
+### Runs
+
+- **Seeds.** MaxFuse, scGLUE and Harmony ran seeds 0–2. Seurat CCA ran
+  seeds 0–2 and gave identical predictions on all three datasets: it is
+  deterministic given its inputs. The correlation baseline and v3.1 ran
+  once.
+- **Where.**
+  - On the Mac (2026-10-01): Harmony, Seurat CCA and v3.1.
+  - On the Windows PC (2026-10-01/02): MaxFuse, scGLUE (on the GPU) and the
+    correlation baseline.
+  - The PC reproduces the Mac's Harmony and Seurat within the methods' own
+    seed variation (protocol amendment 3).
+- **Divergence.** scGLUE diverged on all three Fulcher seeds. Its fine-tune
+  stage produced NaN from the first epoch (logs in
+  `benchmark/results/baselines_ext/logs/`). The runs are reported as
+  diverged and not rerun, as Fulcher's protocol and Khoury amendment 4 say.
+  scGLUE completed every SCoPE2 and PBMC240 run.
+
+### SCoPE2
+
+The rows are in the [restricted](#restricted-regime-candidates--macrophage-monocyte)
+and [unrestricted](#unrestricted-regime-all-22-rna-classes-as-candidates)
+tables above.
+
+- **Restricted.** v3.1's best guess, at 61.30% balanced, is ahead of every
+  new baseline's mean and below scANVI's three rules. The correlation
+  baseline is close behind at 59.59%.
+- **Unrestricted.** Every method in this extension averages under 10%
+  balanced, v3.1 included (1.08%). The best single seed is scGLUE's at
+  17.50% (shared kNN).
+
+### PBMC240 (development dataset)
+
+Lineage recall over the 122 weakly labelled cells (117 lymphoid, 5
+myeloid), and the share of all 237 cells predicted myeloid. Myeloid
+recall rests on 5 cells and is anecdotal.
+
+| Method | Rule | Lymphoid recall % | Myeloid recall % | Predicted myeloid % |
+|---|---|---|---|---|
+| **v3.1 as served** | best guess | **92.31** | 80.00 | 16.0 |
+| Correlation to class mean | its own rule | 59.83 | 100.00 | 35.4 |
+| Harmony (3-seed) | shared kNN | 38.75 ± 0.49 | 100.00 | 27.7 |
+| MaxFuse (3-seed) | nearest centroid | 37.89 ± 3.24 | 86.67 ± 11.55 | 48.4 |
+| Harmony (3-seed) | nearest centroid | 34.76 ± 2.15 | 100.00 | 29.8 |
+| scGLUE (3-seed) | shared kNN | 30.20 ± 6.42 | 100.00 | 72.4 |
+| scGLUE (3-seed) | nearest centroid | 28.77 ± 1.78 | 93.33 ± 11.55 | 45.3 |
+| MaxFuse (3-seed) | shared kNN | 2.28 ± 1.31 | 100.00 | 82.4 |
+| Seurat CCA | native transfer | 0.85 | 100.00 | 94.1 |
+
+A method that calls nearly everything myeloid scores 100% myeloid recall
+and almost no lymphoid recall, so the two recalls are read as a pair. For
+comparison, scANVI's best PBMC240 arm reached 38.75% lymphoid recall
+(above).
+
+### Fulcher 2026: baselines added after the held-out scoring
+
+Fulcher's held-out result is its first scoring
+([above](#fulcher-2026--the-first-held-out-evaluation)). These rows were
+added after it, on what is now a development dataset. Balanced accuracy is
+over the six types, scored with `fulcher2026_score.py`'s mapping.
+
+| Method | Rule | Balanced accuracy % | Lymphoid recall % | Myeloid recall % | Predicted "other" % |
+|---|---|---|---|---|---|
+| **v3.1 as served** | best guess | **57.94** | 98.8 | 92.7 | 2.4 |
+| Correlation to class mean | its own rule | 46.86 | 77.3 | 96.9 | 31.9 |
+| Harmony (3-seed) | shared kNN | 31.98 ± 6.09 | 61.8 | 94.8 | 42.0 |
+| Harmony (3-seed) | nearest centroid | 30.43 ± 5.60 | 60.7 | 85.6 | 36.3 |
+| MaxFuse (3-seed) | nearest centroid | 11.06 ± 1.23 | 35.8 | 61.0 | 42.3 |
+| Seurat CCA, **biased in its favour**§ | native transfer | 1.81 | 2.0 | 91.8 | 90.2 |
+| MaxFuse (3-seed) | shared kNN | 1.36 ± 0.45 | 1.0 | 93.9 | 92.4 |
+| scGLUE | both | diverged (3 of 3 seeds) | | | |
+
+§ Fulcher's labels came from a Seurat label transfer, so Seurat transfer
+is biased in its favour here. It still scores 1.81%, second lowest of the
+rows that completed.
+
+"Other" is any class outside the six types: neutrophil, erythroid,
+progenitor and the like. MaxFuse's kNN rule and Seurat send over 90% of
+Fulcher cells there. For comparison, from the held-out scoring above: V2
+5-seed 57.3, v3 5-seed 42.3, scANVI's best arm 47.8 (shared kNN).
+
+### v3.1's confident answers
+
+The best guess is what the baselines are compared with. The answer v3.1
+commits to is a separate one, which may sit at group or lineage level
+([baselines/v31_confident.csv](baselines/v31_confident.csv)):
+
+| Dataset | Cells | Committed | Correct at the stated level, when committed |
+|---|---|---|---|
+| SCoPE2 | 1,490 | 53.0% | 58.9% |
+| PBMC240 | 237 | 73.4% | 96.9% of labelled cells |
+| Fulcher 2026 | 1,275 | 89.2% | 97.3% |
+
+### Paired bootstrap: v3.1's best guess minus each baseline seed
+
+`evaluate.paired_bootstrap_diff`, 2,000 stratified resamples, seed 0, on
+balanced accuracy ([baselines/paired_bootstrap.csv](baselines/paired_bootstrap.csv)).
+Each count is the number of baseline seeds whose 95% CI excludes zero in
+that direction. Seurat's three seeds are one result counted three times.
+
+| Dataset | Baseline | Rule | Favours v3.1 | Neither | Favours baseline | Difference, points |
+|---|---|---|---|---|---|---|
+| SCoPE2 restricted | MaxFuse | shared kNN | 3 | 0 | 0 | +10.1 to +11.2 |
+| | MaxFuse | nearest centroid | 1 | 2 | 0 | −0.2 to +12.5 |
+| | scGLUE | shared kNN | 3 | 0 | 0 | +14.4 to +40.2 |
+| | scGLUE | nearest centroid | 3 | 0 | 0 | +4.7 to +11.5 |
+| | Harmony | shared kNN | 2 | 1 | 0 | −2.8 to +25.9 |
+| | Harmony | nearest centroid | 2 | 0 | 1 | −6.0 to +19.1 |
+| | Seurat CCA | native | 3 | 0 | 0 | +11.1 |
+| | Correlation | its own rule | 0 | 1 | 0 | +1.7 [−1.7, +5.0] |
+| SCoPE2 unrestricted | MaxFuse | shared kNN | 1 | 2 | 0 | +0.1 to +0.6 |
+| | MaxFuse | nearest centroid | 0 | 0 | 3 | −3.5 to −2.1 |
+| | scGLUE | shared kNN | 0 | 0 | 3 | −16.4 to −3.5 |
+| | scGLUE | nearest centroid | 1 | 1 | 1 | −1.4 to +1.1 |
+| | Harmony | shared kNN | 0 | 0 | 3 | −4.3 to −1.1 |
+| | Harmony | nearest centroid | 0 | 1 | 2 | −1.7 to +0.2 |
+| | Seurat CCA | native | 0 | 3 | 0 | −0.6 |
+| | Correlation | its own rule | 0 | 0 | 1 | −1.5 [−2.4, −0.6] |
+| Fulcher 2026 | MaxFuse | shared kNN | 3 | 0 | 0 | +56.1 to +56.9 |
+| | MaxFuse | nearest centroid | 3 | 0 | 0 | +46.1 to +48.3 |
+| | Harmony | shared kNN | 3 | 0 | 0 | +21.0 to +32.8 |
+| | Harmony | nearest centroid | 3 | 0 | 0 | +23.2 to +33.8 |
+| | Seurat CCA | native | 3 | 0 | 0 | +56.1 |
+| | Correlation | its own rule | 1 | 0 | 0 | +11.1 [+7.3, +14.7] |
+
+The scorer runs no paired bootstrap on PBMC240. There, the comparison is
+the pair of recalls in the table above.
+
+### What the numbers show
+
+- **On the two PBMC datasets, v3.1 is ahead of every new baseline.** On
+  Fulcher, every pairing favours v3.1, by 11 to 57 points. On PBMC240 it
+  keeps 92.3% lymphoid recall. The tools that call most cells myeloid
+  (Seurat, MaxFuse's kNN rule) keep almost none.
+- **The simple baseline is the strongest of the new comparators.** On
+  Fulcher, correlation to the class mean scores 46.86%, against 57.94%
+  for v3.1 (+11.1, CI excludes zero) and 47.8% for scANVI's best arm. On
+  SCoPE2 restricted, v3.1 is not distinguishable from it (+1.7, CI
+  includes zero). So the learned model adds about 11 points over the
+  simplest use of the same reference on Fulcher, and nothing measurable on
+  SCoPE2.
+- **SCoPE2 unrestricted is a failure for every method here.** Every mean is
+  under 10% balanced. The baselines' leads over v3.1 (up to 16.4 points,
+  one scGLUE seed under the kNN rule) are differences between scores near
+  the floor.
+- **The integration methods are unstable.** Seed ranges reach 28.6 points
+  (Harmony on SCoPE2 restricted), and scGLUE diverged on every Fulcher
+  seed. A single run of any of them was never a safe stand-in.
+- **scANVI stays ahead of v3.1 on SCoPE2 restricted** (77–78% against
+  61.3%), as above.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the
@@ -953,10 +1162,12 @@ discipline applies to the pool-first-vs-post-hoc-masking kNN choice above.
   measured. `v3_seed0` shipping was not a principled choice among the five;
   it is simply the seed that was trained first. Not addressed by Track D;
   a real open question for whichever notebook takes it up next.
-- No baseline besides scANVI has been run more than once; MaxFuse's random
-  batching and scGLUE's minibatch shuffling both have their own
-  un-quantified run-to-run variance (see
-  [known-limitations.md](known-limitations.md)).
+- MaxFuse, scGLUE and Harmony now have three seeds each
+  ([Baselines beyond scANVI](#baselines-beyond-scanvi-track-d-extension)),
+  and their seed-to-seed spread is large. Why scGLUE diverges on Fulcher is
+  not investigated. Whether it would converge on the CPU, or under other
+  settings, is untested. Changing either for Khoury would need an
+  amendment before unsealing.
 - **scANVI training on this hardware (Apple MPS) is not fully
   reproducible even with an explicit seed** — seed 0's re-run this round
   landed meaningfully differently from its original run (see the

@@ -185,7 +185,8 @@ def _as_response(pred: pd.DataFrame) -> dict:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    records = [json.loads(p.read_text()) for p in sorted(RUNS.glob("*/*_seed0.json")) if p.parent.name != "smoke"]
+    records = [json.loads(p.read_text()) for p in sorted(RUNS.glob("*/*_seed0.json"))
+               if p.parent.name in baselines_inputs.DATASETS]  # not smoke/ or pc_check/
     pd.DataFrame([{k: r[k] for k in ("dataset", "tool", "n_rna_cells", "n_query_cells", "n_genes", "gene_set",
                                      "rna_input", "query_input", "scaling", "missing_values", "settings")}
                   for r in records]).to_csv(OUT / "inputs.csv", index=False)
