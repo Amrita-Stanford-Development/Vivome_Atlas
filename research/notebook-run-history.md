@@ -122,7 +122,8 @@ three results that reshaped the plan:
 
 Bundled with the v3 export into a verified zip on Drive (24 files, sha256
 manifest). Its `app_export/` was later lost locally before being committed and
-recovered from Drive; it is now committed with LFS.
+recovered from Drive; it is now committed at `service/model/source/app_export/`, the
+SCoPE2 matrix with LFS.
 
 ### 13. `T1_NB1_Simulation_Bench.ipynb`
 Twelve cells, Tier 1 notebook 1. Built the label free test bed: simulated uploads
@@ -166,7 +167,7 @@ A synthetic check had shown why both channels matter: gene wise z scoring within
 single population erases its identity, per cell z keeps it.
 
 **Verdict: NO GO on the pre set criteria.** Every simulation gate passed, but the
-confirmatory real data gate failed. From `tables/real_data_confirmatory.csv`, the
+confirmatory real data gate failed. From `research/notebook-outputs/nb1b/real_data_confirmatory.csv`, the
 dual encoder scored 0.0 to 2.4 unrestricted and 49.9 to 64.6 restricted on real
 SCoPE2 across its three seeds, against 31.1 and 79.8 for v3 shipped. The retrained
 v3 recipe, the implementation control, scored only 9.1 unrestricted, although it
@@ -245,14 +246,90 @@ Centring alone does not explain it, since V2 scores 67.6 on SCoPE2 like RNA
 uploads. Carrier channel ratios, batch correction, imputation and per cell
 centring are the remaining suspects. PBMC240 has now been used to choose an
 encoder, so it is a development dataset. Confirmation needs a fresh MS dataset.
-Per seed embeddings are exported in `NB1d/embeddings/` for the Track D rerun
-against scANVI.
+Per seed embeddings are exported in `data/incoming/NB1d/embeddings/` (local, not
+in git) for the Track D rerun against scANVI.
+
+**Later correction (Track D, 2026-09-29).** Plain lineage accuracy was the wrong
+measure for PBMC240: 117 of its 122 labelled cells are lymphoid and only 5 are
+myeloid, so calling every cell lymphoid would score 95.9 percent. The paired
+difference between V2 and v3 above still holds, because both models were scored on
+the same cells. The informative numbers are lymphoid recall: V2 92.8, v3 52.8, and
+scANVI 38.8 at its best (trained only on the genes PBMC240 measures). Myeloid
+recall rests on 5 cells and is anecdotal.
+
+**Held out check (Track E, 2026-09-30).** On Fulcher 2026, a TMT PBMC dataset no
+model had seen, V2 scored 57.3 ± 2.2 balanced accuracy over six cell types against
+42.3 ± 3.4 for v3, and won all 50 seed pairings. scANVI at its fairest scored 47.8.
+That was the first held out evidence for V2. Fulcher has since become a
+development dataset, and Khoury 2026 is the sealed final test.
+
+### 17. `T1_NB2_Label_Space_and_Abstention.ipynb`
+Sixteen cells, 12.9 minutes. The first attempt lost its Drive connection while
+reading the RNA file, so the notebook now copies that file to local disk first.
+This notebook merged the planned NB2 and NB3: it designed everything after the
+encoder, for V2, so that the product could replace its interim fix. All choices
+were fitted on half of the calibration suite and made on the other half, under
+rules written before the run. The evaluation suite was scored once.
+
+It first rebuilt today's service on RNA simulations to see why it abstains so
+often. The probabilities were nearly flat (top probability 0.10 on average), the
+conformal sets were calibrated against the model's own guesses, and the out of
+distribution rule removed 5 percent of every upload by design. v3 abstained on 41
+percent of simulated cells and V2 on 60 percent.
+
+| Choice | Result |
+|---|---|
+| Temperature | V2 about 0.15, v3 0.31; calibration error fell from 0.52 to 0.07 |
+| Encoder | Five seed V2 ensemble, smoothing on, nearest centroid (58.3; seed 4 alone 57.4; v3 36.5) |
+| Label space estimation | None. It helped single cell type uploads by 11 points but cost mixed uploads 12 |
+| Conformal sets | One threshold per class (Mondrian) |
+| Out of distribution | Fixed threshold, 1st percentile of in distribution max cosine (0.779) |
+
+| Evaluation suite | Service today (v3) | v3.1 candidate |
+|---|---|---|
+| Correct when a label is given | 35.0% | 94.9% |
+| Abstained | 45.5% | 19.2% |
+| Answers at type / group / lineage level | 54.5 / 0 / 0% | 19.1 / 17.7 / 44.0% |
+| Top guess, balanced accuracy | | 56.1 |
+| Conformal coverage (target 90%) | | 87.1% |
+
+The candidate is far more trustworthy, but most of its answers are broad (a group
+such as "T cell", or a lineage). That is honest: at about 56 percent top guess
+accuracy, a 90 percent confident answer often has to be broad. It led to a product
+change: each cell now also gets a best guess label alongside the confident one.
+
+Three weak points remained. The out of distribution filter passed 99 percent of
+cells whose values had been scrambled, so a better score is needed. B cell
+coverage was 69 percent and single cell type uploads 67 percent. SCoPE2 still
+failed, with 31 percent of its cells called T cell. On PBMC240 (development) the
+candidate labelled 79.5 percent of lymphoid cells correctly at the stated level,
+against 12.8 percent for the service today.
+
+The output is `research/notebook-outputs/nb2/nb2_spec_v31.json`, which Track F built into
+the service (`service/model/v3_1/`). Track F
+reproduced NB2's SCoPE2 results from raw input (one cell apart in composition). On
+PBMC240 it first came within 1.3 points (72.7 against 73.9 committed). A full code
+review then traced the gap to a service bug: when several upload rows mapped to
+the same gene, only the last row was kept. With duplicates merged by per cell
+median, as every notebook already did, the service reproduces NB2's committed, out
+of distribution and ambiguous figures exactly. The research numbers were never
+affected.
+
+The same review found a weakness in NB2's rule. A few classes have a very low bar
+for entering a conformal set, so on unfamiliar data a cell could be answered with a
+class at about 1 percent probability (on SCoPE2, "mature NK T cell" at 0.011). Two
+conservative flags were added to the service: every non empty set also contains
+the best guess, so a class level answer is always the best guess; and restricted
+mode rescales probabilities over the allowed classes. Both still need evaluating on
+RNA, in the next notebook (T1 NB3b), together with a better out of distribution
+score and a measured false abstention rate. v3.1 shipped as release 0.3.0 on
+2026-10-01, with v3 kept as the previous release.
 
 ---
 
 ## The throughline
 
-Sixteen notebooks built end to end, three existing ones worked inside of. None of
+Seventeen notebooks built end to end, three existing ones worked inside of. None of
 this was planned as a sequence in advance, each notebook answered a question the
 previous one's actual results raised. The diagnostics notebooks exist because v2
 produced numbers that didn't add up on inspection. The masking notebooks exist
@@ -270,4 +347,8 @@ remove that cause, and succeeded on RNA while leaving one real protein question
 open. NB1c exists because NB1b's two real datasets disagreed. It found that
 the shipped SCoPE2 numbers were a lucky seed and that SCoPE2 cannot test a real
 upload. NB1d exists to check that V2's result on raw data was not luck too. It
-held across all five seeds, and V2 became the encoder going into NB2.
+held across all five seeds, and V2 became the encoder going into NB2. A held
+out dataset then confirmed it. NB2 exists because the product, once unrestricted,
+abstained on half of a real PBMC upload. It found the causes in the service's own
+calibration, replaced them with rules fitted on labelled RNA, and turned the result
+into a specification the service now builds from.

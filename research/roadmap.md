@@ -13,6 +13,105 @@ service code (`pipeline.py`, `assignment.py`, `alignment.py`, `smoothing.py`,
 
 ---
 
+## Revision, 2026-10-01
+
+### What changed
+
+1. **The encoder for v3.1 is V2**, the mini upload gene z variant from T1 NB1b. It has
+   the same architecture and input shape as v3; only its training differs.
+   - NB1d, five seeds each: PBMC240 lymphoid recall 92.8 against 52.8 for v3; RNA
+     simulations 55.3 against 36.1.
+   - Fulcher 2026, held out: 57.3 ± 2.2 against 42.3 ± 3.4 balanced accuracy over six
+     types, V2 ahead in all 50 seed pairings.
+   - v3's shipped SCoPE2 numbers (79.8 restricted) were the best of its five seeds;
+     the five seed mean is 63.3 ± 10.8.
+2. **SCoPE2 cannot test a real upload.** Its published matrix is centred per protein
+   and per cell, so absolute abundance is gone. It stays in the benchmark as a fair
+   comparison between methods, but it is never used to choose.
+3. **The scANVI comparison was redone fairly.** scANVI had been given zeros for genes a
+   dataset does not measure. Trained on the measured genes only, it reaches 47.8 on
+   Fulcher and 38.8 lymphoid recall on PBMC240. V2 beats it on both. The earlier
+   "+9.1 to +14.4 over scANVI" held only for v3 seed 0 and is withdrawn; on SCoPE2
+   restricted, scANVI leads v3 in 12 of 15 pairings.
+4. **Dataset roles.** PBMC240 and Fulcher are development datasets (Fulcher's first,
+   protocol frozen scoring remains a held out result). Khoury 2026 (plexDIA PBMC,
+   protein only labels) is the sealed final test, enforced in code, scored once at the
+   v3.1 final evaluation. O'Connor 2026 (sorted PBMC) has to be requested from the
+   authors.
+5. **The planned NB2 and NB3 were merged and run** as
+   `T1_NB2_Label_Space_and_Abstention.ipynb` (run history, entry 17). Outcomes:
+   temperature scaling, five seed V2 ensemble, no label space restriction by default,
+   Mondrian conformal sets, a fixed out of distribution threshold, and answers at the
+   finest level the evidence supports (type, group or lineage). On the RNA evaluation
+   suite, labels are correct 94.9 percent of the time when given (35.0 for the old
+   service), and abstention falls from 45.5 to 19.2 percent. Its specification is
+   `research/notebook-outputs/nb2/nb2_spec_v31.json`.
+6. **v3.1 is released and is the default (Track F, release 0.3.0).** It is built from
+   the NB2 specification and the per seed reference files exported by NB1d, so NB4 is
+   no longer needed to serve it. What remains of NB4 becomes the **v3.1 final
+   evaluation**: Khoury unsealed once, Fulcher rescored once. v3 stays selectable as
+   the previous release.
+   - Tags: `atlas-v0.3.0` (v3.1) and `atlas-v0.2.0` (the last v3 state, archived).
+   - The five member checkpoints are not in git. A fresh clone runs
+     `scripts/fetch_v31_members.py`; until then v3.1 answers 503 and its tests skip.
+   - Two release steps are open: a DOI (needs a Zenodo account linked to the
+     repository) and a label stability measure, which first needs a definition
+     because v3.1 answers at type, group or lineage level and v3 at type level only.
+   - Served with both conservative flags, SCoPE2 commits on 53.0 percent of cells
+     (NB2's rule: 72.6) and is right at the stated level 58.9 percent of the time;
+     PBMC240 commits on 73.1 percent and Fulcher on 89.2 percent (97.3 percent right
+     at the stated level, development data).
+7. **A full code review (2026-10-01)** confirmed the data and every primary number,
+   and found:
+   - a duplicate gene bug in the service (last row kept), now fixed; it explained the
+     whole PBMC240 gap between the service and NB2;
+   - robustness bugs (infinite values, shared accessions, empty column names, app
+     errors), all fixed with tests;
+   - write-up numbers that did not match committed tables, all corrected;
+   - a weakness in NB2's rule: a class could be answered at about 1 percent
+     probability. Two conservative flags now apply: the best guess is added to every
+     non empty set, and restricted mode rescales probabilities over the allowed
+     classes.
+8. **Product behaviour already changed.** The macrophage and monocyte restriction is
+   opt in; identical uploads give identical answers; every cell gets a best guess
+   label beside the confident one.
+9. **A finding the paper must handle.** In v3.1's latent space, protein and RNA are
+   further apart than in v3's: the macrophage and monocyte centroid cosines are 0.08
+   and 0.40 (v3: 0.19 and 0.83), and a probe tells protein from RNA 99.93 percent of
+   the time (v3: 98.99). Yet v3.1 transfers labels better. So the paper should claim
+   label transfer, not a shared space where the two modalities mix, and should not
+   use modality mixing scores as evidence of success.
+
+### New and changed work
+
+- **T1 NB3b (next notebook).** Out of distribution detection on the encoder's 512
+  dimensional hidden features (kNN distance, Mahalanobis distance, energy), against
+  scrambled cells, repeated copies of one cell, and cell types outside the reference
+  (for example CD34+ progenitors from Furtwängler 2025, or OCI-AML in scpdata). It also
+  evaluates the two new flags and restricted mode on the RNA evaluation suite, and
+  measures the false abstention rate.
+- **Track D extension, baselines beyond scANVI.** MaxFuse, scGLUE, Harmony with kNN and
+  Seurat CCA transfer, three seeds where stochastic, measured genes only, on SCoPE2,
+  PBMC240 and Fulcher. Before anything runs, they are added to the Khoury protocol as a
+  dated amendment while it is still sealed. Seurat on Fulcher is circular (its labels
+  came from Seurat transfer) and is reported as biased in its favour.
+
+### Track status
+
+A2 done. B done. C done. D: scANVI multi seed and gene fairness done; other baselines
+open. E: Fulcher and Khoury registered. F: done, released as 0.3.0 (DOI and label
+stability open).
+
+### Order from here
+
+1. v3.1 release: done (0.3.0). Open: DOI, label stability definition.
+2. Amend the Khoury protocol with all baselines (quick, while sealed).
+3. In parallel: Track D baselines (compute heavy) and T1 NB3b.
+4. v3.1 final evaluation: Khoury unsealed once, Fulcher rescored once.
+5. Tier 2 (NB6 to NB8): wider reference, retraining.
+
+---
+
 ## Revision, 2026-09-25
 
 T1 NB1 and the latest Claude Code round changed the order of work:

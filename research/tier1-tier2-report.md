@@ -3,28 +3,41 @@
 Research report, 2026-09-24. Source for the Tier 1 and Tier 2 items in
 `research/roadmap.md`.
 
-> **Status note, added 2026-09-25.** Three findings from after this report change how
-> it should be read. None of them contradicts it, but they reorder the work.
+> **Status note, updated 2026-10-01.** This replaces the earlier status notes at the
+> top of `research/tier1-tier2-report.md`. Later work changed how this report should
+> be read. It is still the source for the Tier 1 and Tier 2 ideas, but several are now
+> tested.
 >
-> 1. **Per upload z scoring is a root cause the report does not cover.** T1 NB1 showed
->    that on RNA alone, a SCoPE2 like upload loses 15.6 points of unrestricted balanced
->    accuracy from preprocessing, and single cell type uploads score 11.2 percent.
->    About half of the "54.2 percent distractor contamination" below is this artifact,
->    not biology. T1 NB1b addresses it before T1-1 is built.
-> 2. **The live service had preprocessing defects** (a ReLU where the model uses GELU,
->    now fixed; a smoothing graph on raw values; no log transform of linear
->    intensities; a coverage floor refusing 79 to 100 percent of real MS cells). These
->    come before any accuracy work.
-> 3. ~~**The lead over scANVI is now established on SCoPE2**: paired bootstrap CIs exclude
->    zero on every seed (+9.1 to +14.4 points restricted, +21.7 to +32.7 unrestricted,
->    shared kNN rule).~~ **Corrected 2026-09-29 (Track D, T1 NB1d):** that lead holds for
->    the shipped checkpoint `v3_seed0` only. Across five v3 seeds, scANVI is ahead under
->    the restricted shared kNN rule in 12 of 15 seed pairings; v3 reliably leads only
->    unrestricted (12 of 15). See `research/todo.md` §5. Any claimed lead still needs at
->    least two more MS datasets, as the report says.
+> 1. **Per upload z scoring is a root cause the report does not cover.** T1 NB1 showed a
+>    SCoPE2 like RNA upload losing 15.6 points from preprocessing alone. The fix was a
+>    new encoder, V2, trained on narrow "mini uploads" (T1 NB1b, NB1d). V2 is the v3.1
+>    encoder, and v3.1 is now the served default (release 0.3.0). In its latent space
+>    protein and RNA are further apart than in v3's, yet labels transfer better, so
+>    success should be judged by label transfer, not by how well the modalities mix.
+> 2. **The live service had preprocessing defects** (GELU, the smoothing graph, the log
+>    transform, the coverage floor, and later duplicate genes). All are fixed.
+> 3. **The scANVI lead claimed here earlier does not hold.** It was measured on v3
+>    seed 0 only. Across five seeds, and with scANVI trained on measured genes only,
+>    scANVI leads v3 on SCoPE2 restricted, while V2 beats scANVI on Fulcher and PBMC240.
+>    MaxFuse, scGLUE, Harmony and Seurat have not yet been run fairly; that is the
+>    Track D extension.
+> 4. **T1-1, label space estimation,** was tested in T1 NB2. Neither EM prior estimation
+>    nor cluster support beat "no restriction" on average. EM helped single cell type
+>    uploads by 11 points but cost mixed uploads 12.
+> 5. **T1-3, conformal prediction,** was rebuilt as split conformal on labelled RNA,
+>    with one threshold per class. Coverage was 87.1 percent against a 90 percent
+>    target, and answers fall back to a group or lineage when a type cannot be named.
+>    A later review found that a class could be answered at about 1 percent
+>    probability; the best guess is now added to every non empty set.
+> 6. **T1-2, the out of distribution score,** remains open. Maximum cosine to the
+>    reference passes 99 percent of scrambled cells. Scores on the 512 dimensional
+>    hidden features are next (T1 NB3b).
+> 7. **Datasets.** Fulcher 2026 (TMT PBMC) is now a development dataset; Khoury 2026 is
+>    the sealed final test.
 >
 > Published v3 RNA to RNA numbers (95.5 / 74.8) included training cells; the honest
-> test cell numbers are 93.2 / 65.7. See `research/todo.md` for current verified numbers.
+> test cell numbers are 93.2 / 65.7. Current verified numbers are in
+> `research/todo.md`, section 5.
 
 ---
 

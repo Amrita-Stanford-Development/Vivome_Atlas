@@ -218,10 +218,10 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `research/README.md` — index of plans, progress records and notebook outputs
 - `research/implementation-plan.md` — the Nature Communications plan: the phases (0–6) the manifest's pending records refer to
-- `research/roadmap.md` — the v3.1 / v4 plan: notebook tracks (T1, T2), code tracks (A2–F), go/no-go gates, file ownership, track prompts
+- `research/roadmap.md` — the v3.1 / v4 plan: dated revisions (latest 2026-10-01), notebook tracks (T1, T2), code tracks (A2–F), go/no-go gates, file ownership, track prompts
 - `research/todo.md` — progress against the roadmap, current verified numbers, open decisions, changelog
-- `research/notebook-run-history.md` — every notebook run, in order, and what each one found
-- `research/tier1-tier2-report.md` — the research report the roadmap's Tier 1 and Tier 2 work draws on
+- `research/notebook-run-history.md` — every notebook run, in order, and what each one found (17 entries, through T1 NB2)
+- `research/tier1-tier2-report.md` — the research report the roadmap's Tier 1 and Tier 2 work draws on, with a 2026-10-01 status note on which of its ideas are now tested
 - `research/archive/2026-08-29-resource-layer-plan.md` — the finished resource-layer build plan, frozen (its paths are from that time)
 - `research/benchmark/README.md` — reading order for the benchmark write-up
 - `research/benchmark/methodology.md` — the fairness rules and how the shared evaluation protocol implements them
