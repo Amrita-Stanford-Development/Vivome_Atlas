@@ -74,7 +74,9 @@ metric into HTML. See [docs/web/manifest.md](docs/web/manifest.md).
 - `atlas.html` is a classic script and cannot import `web/js/manifest.js`, so the
   Git LFS magic string is duplicated there. `web/tests/lfs.test.js` pins the two
   copies byte-for-byte. If you touch either, the test must stay green.
-- Nav and back links point to `index.html`.
+- Every page carries the same static site header: the wordmark links to
+  `index.html`, the Dashboard link to `home.html`. `web/tests/chrome.test.js`
+  pins the copies together; see [docs/web/design.md](docs/web/design.md).
 
 ## After changing data
 

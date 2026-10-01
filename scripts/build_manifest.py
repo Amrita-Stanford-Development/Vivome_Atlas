@@ -13,6 +13,7 @@ from __future__ import annotations
 import csv
 import json
 import math
+import random
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
@@ -20,8 +21,11 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ATLAS_DIR = REPO_ROOT / "web" / "data"
 OUTPUT_PATH = ATLAS_DIR / "atlas_manifest.json"
+STORY_PATH = ATLAS_DIR / "story_cells.json"
 SERVICE_MODEL_DIR = REPO_ROOT / "service" / "model"
 V3_TABLES_DIR = SERVICE_MODEL_DIR / "evidence" / "v3_tables"
+NB1_DIR = REPO_ROOT / "research" / "notebook-outputs" / "nb1"
+NB1D_DIR = REPO_ROOT / "research" / "notebook-outputs" / "nb1d"
 
 # decisive_summary.json's winner_config.enc -> a readable label for the manifest.
 # Keep this in sync with service/pipeline/encoder.py's _ENCODER_FAMILIES table;
@@ -31,14 +35,16 @@ ENCODER_FAMILY_LABELS = {"module": "module pooling"}
 SCHEMA_VERSION = "1.0"
 ATLAS_VERSION = "0.2.0"
 
+# The arms benchmark/ scores (research/benchmark/results.md). Their rows stay
+# pending here until the owner signs them off (research/roadmap.md, Track D).
 BENCHMARK_METHODS = [
-    "CrossModalNet (ours)",
-    "Seurat bridge integration",
-    "GLUE",
+    "VivOME v3 reference (ours)",
+    "VivOME V2 candidate (ours)",
+    "scANVI (scArches)",
     "MaxFuse",
-    "scArches",
-    "Harmony (shared features)",
-    "PCA + nearest neighbour (floor)",
+    "scGLUE",
+    "Harmony",
+    "Majority-class floor",
 ]
 
 
@@ -180,7 +186,7 @@ def build_previous_release_facts(legacy_provenance: dict) -> dict:
         "shipped_properties": legacy_provenance["shipped_properties"],
         "note": (
             "CrossModalNet was jointly trained on RNA and proteomics together, so it had "
-            "implicitly seen SCoPE2 during training — part of why these numbers read higher "
+            "implicitly seen SCoPE2 during training, part of why these numbers read higher "
             "than an honestly separated architecture's would. Kept here as the documented "
             "prior baseline, not erased, now that the frozen RNA-only v3 reference (see the "
             "model card above) has superseded it."
@@ -193,6 +199,7 @@ def build_manifest(
     model_seeds: dict, deployed_architecture: dict,
     latent_centroid_cosine_by_idx: dict[int, dict], modality_probe_accuracy: dict,
     previous_release: dict | None = None,
+    model_card: dict | None = None,
 ) -> dict:
     rna = class_stats(rna_rows)
     prot = class_stats(prot_rows)
@@ -228,7 +235,7 @@ def build_manifest(
             ),
             "transfer_accuracy": pending(
                 "N/A",
-                "Measured per dataset at realistic coverage, not per class — see "
+                "Measured per dataset at realistic coverage, not per class; see "
                 "docs/service/context-brief.md §1 and service/model/evidence/v3_tables/"
                 "rna_to_rna_real_masks.csv for the real numbers.",
             ),
@@ -247,7 +254,7 @@ def build_manifest(
         "training_regime": "supervised",
         "seeds": model_seeds,
         "notes": (
-            "A frozen, RNA-only reference encoder — proteomics queries are projected at "
+            "A frozen, RNA-only reference encoder: proteomics queries are projected at "
             "inference and never used to retrain it. Coordinates shown in the viewer are a "
             "3-component PCA projection of the 128-d latent space; the latent coordinates "
             "themselves are not distributed with this build."
@@ -283,10 +290,12 @@ def build_manifest(
         # for whenever the next one starts.
         "next_reference": None,
         "previous_release": previous_release,
+        "model_card": model_card,
         "benchmark": {
             "status": "pending",
             "phase": "Phase 4",
-            "note": "No comparison against established methods has been run yet.",
+            "note": "The comparison has been run and is written up in research/benchmark/results.md. "
+                    "Its rows are published here once the owner signs them off.",
             "methods": BENCHMARK_METHODS,
             "rows": [],
         },
@@ -302,6 +311,127 @@ def build_manifest(
                 "note": "Only the 3-component PCA projection ships with this build.",
             },
         },
+    }
+
+
+# The model card's accuracy table (web/versions.html). Each row names the
+# decision rule it was scored with, because the two rules in use differ:
+# nearest centroid is what the service runs; shared kNN is the rule every
+# benchmark method is scored with. A shipped-checkpoint number and a 5-seed
+# mean are only comparable under the same rule.
+MODEL_CARD_RULES = {
+    "restricted_native_centroid": ("restricted", "nearest centroid (the service's rule)"),
+    "restricted_shared_knn": ("restricted", "shared kNN (the benchmark's rule)"),
+    "unrestricted_native_centroid": ("unrestricted", "nearest centroid (the service's rule)"),
+    "unrestricted": ("unrestricted", "shared kNN (the benchmark's rule)"),
+}
+RNA_TO_RNA_SOURCE = "research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv"
+SEED_SCORES_SOURCE = "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
+FAMILY_SOURCE = "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv"
+PAIRED_SOURCE = "research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv"
+
+
+def _fraction(percent) -> float:
+    """The notebooks write percentages; the manifest stores fractions, as
+    web/js/manifest.js:formatPercent expects."""
+    return round(float(percent) / 100, 6)
+
+
+def read_family_summary(lines: list[list[str]]) -> dict[tuple[str, str], dict]:
+    """ours_scope2_5seed_family_summary.csv is a pandas describe() export
+    with three header rows; returns {(family, regime): {acc_mean, ...}}."""
+    keys = ("acc_mean", "acc_std", "acc_min", "acc_max", "bal_mean", "bal_std", "bal_min", "bal_max")
+    out = {}
+    for row in lines[3:]:
+        if len(row) == 10 and row[0]:
+            out[(row[0], row[1])] = dict(zip(keys, (float(v) for v in row[2:])))
+    return out
+
+
+def build_model_card(rna_rows: list[dict], score_rows: list[dict], family: dict, paired_rows: list[dict]) -> dict:
+    test = next(r for r in rna_rows if r["mask"] == "scope2" and "test cells only" in r["cells"])
+    published = next(r for r in rna_rows if r["mask"] == "scope2" and r["cells"].startswith("published"))
+    rows = [{
+        "key": "rna_to_rna_test",
+        "measure": "RNA to RNA, SCoPE2 mask, test cells only",
+        "rule": "optimal transport",
+        "accuracy": measured(_fraction(test["acc_ot"]), RNA_TO_RNA_SOURCE),
+        "balanced_accuracy": measured(_fraction(test["bal_ot"]), RNA_TO_RNA_SOURCE),
+    }]
+    seed0 = {r["regime"]: r for r in score_rows if r["model"] == "v3_seed0"}
+    n_seeds = len({r["model"] for r in score_rows if r.get("family", "v3") == "v3"})
+    for regime, (scope, rule) in MODEL_CARD_RULES.items():
+        s = seed0[regime]
+        f = family[("v3", regime)]
+        rows.append({
+            "key": f"{regime}:seed0",
+            "measure": f"Protein (SCoPE2), {scope}, shipped checkpoint (v3_seed0)",
+            "rule": rule,
+            "accuracy": measured(_fraction(s["accuracy_pct"]), SEED_SCORES_SOURCE),
+            "balanced_accuracy": measured(_fraction(s["balanced_accuracy_pct"]), SEED_SCORES_SOURCE),
+        })
+        rows.append({
+            "key": f"{regime}:mean",
+            "measure": f"Protein (SCoPE2), {scope}, {n_seeds}-seed mean of the architecture",
+            "rule": rule,
+            "accuracy": {**measured(_fraction(f["acc_mean"]), FAMILY_SOURCE), "sd": _fraction(f["acc_std"])},
+            "balanced_accuracy": {
+                **measured(_fraction(f["bal_mean"]), FAMILY_SOURCE),
+                "sd": _fraction(f["bal_std"]), "min": _fraction(f["bal_min"]), "max": _fraction(f["bal_max"]),
+            },
+        })
+
+    # v3 against scANVI, seed pairing by seed pairing, balanced accuracy.
+    vs_scanvi = {}
+    for regime in ("restricted_shared_knn", "unrestricted"):
+        diffs = [float(r["diff_point_pct"]) for r in paired_rows if r["family"] == "v3" and r["regime"] == regime]
+        vs_scanvi[regime] = {
+            "pairings": len(diffs),
+            "v3_ahead": sum(d > 0 for d in diffs),
+            "mean_difference": measured(_fraction(sum(diffs) / len(diffs)), PAIRED_SOURCE),
+        }
+    # The figure first published, superseded: its test split included cells
+    # the model had trained on.
+    superseded = {
+        "measure": "RNA to RNA, SCoPE2 mask, published sample (included training cells)",
+        "accuracy": measured(_fraction(published["acc_ot"]), RNA_TO_RNA_SOURCE),
+        "balanced_accuracy": measured(_fraction(published["bal_ot"]), RNA_TO_RNA_SOURCE),
+    }
+    return {"rows": rows, "vs_scanvi": vs_scanvi, "rna_to_rna_superseded": superseded}
+
+
+# The landing story's field (web/js/field.js) draws real atlas points, but the
+# full RNA metadata is 6 MB: too much for a landing page. It gets every
+# protein cell and a class-stratified, fixed-seed sample of RNA cells.
+STORY_RNA_SAMPLE = 2000
+STORY_MIN_PER_CLASS = 12
+STORY_SEED = 0
+
+
+def build_story_cells(rna_rows: list[dict], prot_rows: list[dict], *,
+                      sample: int = STORY_RNA_SAMPLE, min_per_class: int = STORY_MIN_PER_CLASS,
+                      seed: int = STORY_SEED) -> dict:
+    """Select, never compute: the same 3-PC coordinates the atlas viewer plots,
+    rounded to 3 places. Each class keeps its share of `sample`, with at least
+    `min_per_class` cells so small classes stay visible. Protein rows carry
+    the reference's own abstention flag (1 = abstained)."""
+    rng = random.Random(seed)
+    by_class: dict[str, list[dict]] = defaultdict(list)
+    for r in rna_rows:
+        by_class[r["class_name"]].append(r)
+    picked: list[dict] = []
+    for name in sorted(by_class):
+        rows = by_class[name]
+        k = min(len(rows), max(min_per_class, round(sample * len(rows) / len(rna_rows))))
+        picked.extend(rng.sample(rows, k))
+
+    def pcs(r: dict) -> list[float]:
+        return [round(float(r[c]), 3) for c in PC_COLUMNS]
+
+    return {
+        "source": "web/data/metadata_RNA_lat128.csv (sampled), web/data/metadata_PROT_lat128.csv (all rows)",
+        "rna": [pcs(r) for r in picked],
+        "prot": [pcs(r) + [1 if r.get("abstained") == "True" else 0] for r in prot_rows],
     }
 
 
@@ -326,19 +456,34 @@ def main() -> None:
     latent_centroid_cosine_by_idx = read_latent_centroid_cosine(latent_centroid_cosine_rows)
     modality_probe_accuracy = read_modality_probe_accuracy(modality_probe)
     previous_release = build_previous_release_facts(legacy_provenance)
+    with (NB1_DIR / "rna_to_rna_membership_corrected.csv").open(newline="", encoding="utf-8") as handle:
+        rna_to_rna_rows = list(csv.DictReader(handle))
+    with (NB1D_DIR / "ours_scope2_5seed_scores.csv").open(newline="", encoding="utf-8") as handle:
+        seed_score_rows = list(csv.DictReader(handle))
+    with (NB1D_DIR / "ours_scope2_5seed_family_summary.csv").open(newline="", encoding="utf-8") as handle:
+        family = read_family_summary(list(csv.reader(handle)))
+    with (NB1D_DIR / "paired_bootstrap_ours_vs_scanvi.csv").open(newline="", encoding="utf-8") as handle:
+        paired_rows = list(csv.DictReader(handle))
+    model_card = build_model_card(rna_to_rna_rows, seed_score_rows, family, paired_rows)
 
+    rna_rows = read_metadata(ATLAS_DIR / "metadata_RNA_lat128.csv")
+    prot_rows = read_metadata(ATLAS_DIR / "metadata_PROT_lat128.csv")
     manifest = build_manifest(
-        read_metadata(ATLAS_DIR / "metadata_RNA_lat128.csv"),
-        read_metadata(ATLAS_DIR / "metadata_PROT_lat128.csv"),
+        rna_rows,
+        prot_rows,
         model_seeds=model_seeds,
         deployed_architecture=deployed_architecture,
         latent_centroid_cosine_by_idx=latent_centroid_cosine_by_idx,
         modality_probe_accuracy=modality_probe_accuracy,
         previous_release=previous_release,
+        model_card=model_card,
     )
     OUTPUT_PATH.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    story = build_story_cells(rna_rows, prot_rows)
+    STORY_PATH.write_text(json.dumps(story, separators=(",", ":")) + "\n", encoding="utf-8")
     s = manifest["summary"]
     print(f"Wrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")
+    print(f"Wrote {STORY_PATH.relative_to(REPO_ROOT)}: {len(story['rna'])} RNA, {len(story['prot'])} protein cells")
     print(f"  {s['total']} cell types: {s['cross_modal']} cross-modal, {s['rna_only']} RNA-only")
     print(f"  model.seeds={model_seeds['value']}, feature_space_size={deployed_architecture['feature_space_size']}, "
           f"encoder_family={deployed_architecture['encoder_family']!r}")

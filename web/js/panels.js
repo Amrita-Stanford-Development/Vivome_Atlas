@@ -67,7 +67,7 @@ export function buildSupportTable(manifest) {
     <tr>
       <td class="support-name">${escapeHtml(c.name)}</td>
       <td class="support-num">${formatCount(c.rna_cells)}</td>
-      <td class="support-num">${c.prot_cells > 0 ? formatCount(c.prot_cells) : '&mdash;'}</td>
+      <td class="support-num">${c.prot_cells > 0 ? formatCount(c.prot_cells) : 'none'}</td>
       <td><span class="support-badge badge-${escapeHtml(c.support)}">${
         escapeHtml(SUPPORT_LABEL[c.support] ?? c.support)
       }</span></td>
@@ -87,8 +87,7 @@ export function buildDiagnosticsTable(manifest) {
   return table(['Cell type', 'Centroid cosine', 'Latent cosine', 'Modality probe'], rows) + `
     <p class="panel-note">
       Centroid cosine is computed on the 3-component PCA projection that this build ships.
-      It is not a latent-space alignment measurement — that is what the latent cosine column
-      is. The modality probe column is one global score (how well a linear classifier tells
+      It is not a latent-space alignment measurement; the latent cosine column is. The modality probe column is one global score (how well a linear classifier tells
       RNA from protein in the shared latent space), repeated on every cross-modal row rather
       than measured per class.
     </p>`;
@@ -101,13 +100,13 @@ export function buildBenchmarkTable(manifest) {
   if (b.status !== 'measured' || b.rows.length === 0) {
     const planned = b.methods.map((m) => `
       <tr>
-        <td>${escapeHtml(m)}</td><td>&mdash;</td>
+        <td>${escapeHtml(m)}</td><td class="pending">Not run</td>
         <td class="support-num pending">${PENDING_LABEL}</td>
         <td class="support-num pending">${PENDING_LABEL}</td>
       </tr>`).join('');
     return `
       <div class="pending-banner">
-        <strong>${escapeHtml(b.phase)} &mdash; not yet run.</strong> ${escapeHtml(b.note)}
+        <strong>${escapeHtml(b.phase)}: pending sign-off.</strong> ${escapeHtml(b.note)}
       </div>` + table(BENCHMARK_HEADERS, planned);
   }
   const rows = b.rows.map((r) => `
@@ -218,3 +217,241 @@ export function buildSupportedLabelSpace(manifest) {
     a request can set <code>restrict_to_supported_classes</code> to limit labels to the
     cross-modal types.</p>`;
 }
+
+// A missing string field renders as Pending, never as the literal "undefined"
+// that escapeHtml(undefined) would produce.
+const textOrPending = (value) => (value === null || value === undefined || value === ''
+  ? `<span class="pending">${PENDING_LABEL}</span>`
+  : escapeHtml(value));
+
+// The dashboard's compact view of the release in manifest.model. The full
+// card, with architecture and seeds, stays on versions.html (buildModelCard).
+export function buildReleaseStatus(manifest) {
+  return `
+    <dl class="model-card">
+      ${cardField('Atlas version', textOrPending(manifest.atlas_version))}
+      ${cardField('Model', textOrPending(manifest.model?.name))}
+      ${cardField('Generated', textOrPending(manifest.generated))}
+      ${cardField('RNA cells', formatCount(manifest.modalities?.rna?.cells))}
+      ${cardField('Protein cells', formatCount(manifest.modalities?.prot?.cells))}
+      ${cardField('Cell types', formatCount(manifest.summary?.total))}
+    </dl>`;
+}
+
+const NEWS_DATE = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' });
+
+// Links in web/data/whats_new.json may only point at pages of this site, so
+// a bad entry can't smuggle in a javascript: or off-site URL.
+const SITE_PAGE = /^[a-z0-9_-]+\.html(#[a-z0-9_-]+)?$/i;
+
+function newsDate(iso) {
+  const date = new Date(`${iso}T00:00:00Z`);
+  return Number.isNaN(date.getTime()) ? escapeHtml(iso) : NEWS_DATE.format(date);
+}
+
+// Entries are text only (web/data/whats_new.json). Numbers belong in the
+// manifest, so an announcement links to the page that shows them.
+export function buildWhatsNew(entries) {
+  if (!Array.isArray(entries) || entries.length === 0) {
+    return '<p class="panel-note">No announcements yet.</p>';
+  }
+  const items = entries.map((e) => {
+    const link = SITE_PAGE.test(e.link ?? '')
+      ? `<a href="${escapeHtml(e.link)}">${escapeHtml(e.link_text ?? 'Read more')}</a>`
+      : '';
+    return `
+      <li>
+        <time datetime="${escapeHtml(e.date)}">${newsDate(e.date)}</time>
+        <h3>${escapeHtml(e.title)}</h3>
+        <p>${escapeHtml(e.text)}</p>
+        ${link}
+      </li>`;
+  }).join('');
+  return `<ol class="news">${items}</ol>`;
+}
+
+// The landing finale's proof points: plain facts from the manifest, each
+// through the same guards as every other panel, so a missing count reads
+// Pending instead of a number nobody measured.
+export function buildProofPoints(manifest) {
+  const point = (value, label) =>
+    `<div class="proof-point"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
+  return `
+    <dl class="proof-points">
+      ${point(formatCount(manifest.modalities?.rna?.cells), 'RNA cells in the reference')}
+      ${point(formatCount(manifest.modalities?.prot?.cells), 'protein cells, projected zero-shot')}
+      ${point(formatCount(manifest.summary?.total), 'cell types')}
+      ${point(textOrPending(manifest.atlas_version), 'atlas version')}
+    </dl>`;
+}
+
+// Numbers and names inside the landing's prose (<span data-fact="...">),
+// looked up in the manifest and guarded like every panel: an unknown key or
+// a missing value reads Pending, never a number nobody measured.
+const FACTS = {
+  rna_cells: (m) => formatCount(m.modalities?.rna?.cells),
+  prot_cells: (m) => formatCount(m.modalities?.prot?.cells),
+  cell_types: (m) => formatCount(m.summary?.total),
+  cross_modal_types: (m) => formatCount(m.summary?.cross_modal),
+  feature_space: (m) => formatCount(m.model?.feature_space_size),
+  latent_dim: (m) => formatCount(m.model?.latent_dim),
+  atlas_version: (m) => textOrPending(m.atlas_version),
+  model_name: (m) => textOrPending(m.model?.name),
+  previous_model: (m) => textOrPending(m.previous_release?.model_name),
+};
+
+export function factText(manifest, key) {
+  const fact = FACTS[key];
+  return fact ? fact(manifest ?? {}) : `<span class="pending">${PENDING_LABEL}</span>`;
+}
+
+// ---- Projection results (project.html) ----
+// A response from the projection service (docs/service/projection-api.md).
+// Its numbers are computed by the service from the visitor's own upload, not
+// read from the manifest; cell ids come from the visitor's file, so every
+// value is escaped like any other data.
+
+const ABSTAIN_TEXT = {
+  coverage_too_low: 'Too few observed genes',
+  outside_supported_region: 'Outside the region the atlas has evidence for',
+  no_confident_label: 'No class met the confidence bar',
+  ambiguous_between_classes: 'Ambiguous between classes',
+};
+
+const abstainText = (reason) => ABSTAIN_TEXT[reason] ?? reason ?? 'Abstained';
+const cellsOf = (result) => (Array.isArray(result?.cells) ? result.cells : []);
+const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(1)}%` : '');
+
+export function buildProjectionSummary(result) {
+  const cells = cellsOf(result);
+  const abstained = cells.filter((c) => c.abstained).length;
+  const space = result?.label_space;
+  const candidates = space?.candidate_classes ?? [];
+  const spaceText = space?.restricted_to_supported_classes
+    ? `Restricted to ${candidates.map(escapeHtml).join(', ')}`
+    : `All ${formatCount(candidates.length)} reference classes`;
+  const scale = result?.value_scale;
+  const scaleText = scale?.transformed ? 'Linear intensities, log2-transformed' : 'Already on a log scale';
+  return `
+    <dl class="model-card">
+      ${cardField('Cells', formatCount(result?.n_cells))}
+      ${cardField('Features matched', `${formatCount(result?.n_features_matched)} of ${formatCount(
+        (result?.n_features_matched ?? 0) + (result?.n_features_unmatched ?? 0))}`)}
+      ${cardField('Labelled', `${formatCount(cells.length - abstained)} (${share(cells.length - abstained, cells.length)})`)}
+      ${cardField('Abstained', `${formatCount(abstained)} (${share(abstained, cells.length)})`)}
+      ${cardField('Label space', spaceText)}
+      ${cardField('Values', scaleText)}
+      ${cardField('Model', textOrPending(result?.model_version))}
+      ${cardField('Atlas version', textOrPending(result?.atlas_version))}
+    </dl>`;
+}
+
+// How many cells got each label, and how many abstained for each reason.
+export function buildProjectionLabels(result) {
+  const cells = cellsOf(result);
+  const counts = new Map();
+  for (const c of cells) {
+    const key = c.abstained ? `\u0000${c.abstain_reason}` : c.label;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  const rows = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([key, count]) => {
+      const name = key.startsWith('\u0000')
+        ? `<span class="pending">Abstained: ${escapeHtml(abstainText(key.slice(1)))}</span>`
+        : escapeHtml(key);
+      return `<tr><td class="support-name">${name}</td><td class="support-num">${formatCount(count)}</td>`
+        + `<td class="support-num">${share(count, cells.length)}</td></tr>`;
+    }).join('');
+  return table(['Label', 'Cells', 'Share'], rows);
+}
+
+// One row per cell, the first `limit` of them.
+export function buildProjectionCells(result, limit = 200) {
+  const cells = cellsOf(result);
+  const rows = cells.slice(0, limit).map((c) => {
+    const labelSet = (c.label_set ?? []).map(escapeHtml).join(', ');
+    const confidence = Number.isFinite(c.confidence) ? c.confidence.toFixed(3) : '';
+    const label = c.abstained
+      ? `<span class="pending">${escapeHtml(abstainText(c.abstain_reason))}</span>`
+      : escapeHtml(c.label);
+    return `<tr><td><code>${escapeHtml(c.cell_id)}</code></td><td>${label}</td><td>${labelSet}</td>`
+      + `<td class="support-num">${confidence}</td><td class="support-num">${formatCount(c.observed_genes)}</td></tr>`;
+  }).join('');
+  const note = cells.length > limit
+    ? `<p class="panel-note">Showing the first ${formatCount(limit)} of ${formatCount(cells.length)} cells. Download the response for all of them.</p>`
+    : '';
+  return table(['Cell', 'Label', 'Label set', 'Confidence', 'Observed genes'], rows) + note;
+}
+
+// ---- The model card's accuracy table (versions.html) ----
+// manifest.model_card: each row names its decision rule, because a
+// shipped-checkpoint number and a 5-seed mean compare only under one rule.
+
+const pct1 = (x) => `${(x * 100).toFixed(1)}`;
+
+function cardValue(metric) {
+  if (!isMeasured(metric)) return `<span class="pending">${PENDING_LABEL}</span>`;
+  const sd = Number.isFinite(metric.sd) ? ` &plusmn; ${pct1(metric.sd)}` : '';
+  const range = Number.isFinite(metric.min) && Number.isFinite(metric.max)
+    ? `<span class="metric-basis">range ${pct1(metric.min)} to ${pct1(metric.max)}%</span>` : '';
+  return `${escapeHtml(formatPercent(metric))}${sd}${range}`;
+}
+
+export function buildModelCardTable(manifest) {
+  const rows = manifest.model_card?.rows ?? [];
+  if (rows.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
+  const body = rows.map((r) => `
+    <tr>
+      <td>${escapeHtml(r.measure)}<span class="metric-basis"><code>${escapeHtml(metricBasis(r.accuracy))}</code></span></td>
+      <td>${escapeHtml(r.rule)}</td>
+      <td class="support-num">${cardValue(r.accuracy)}</td>
+      <td class="support-num">${cardValue(r.balanced_accuracy)}</td>
+    </tr>`).join('');
+  return table(['Measure', 'Decision rule', 'Accuracy', 'Balanced accuracy'], body);
+}
+
+const cardRow = (m, key) => (m.model_card?.rows ?? []).find((r) => r.key === key);
+const balanced = (m, key) => cardRow(m, key)?.balanced_accuracy;
+const withSd = (metric) => (isMeasured(metric) && Number.isFinite(metric.sd)
+  ? `${escapeHtml(formatPercent(metric))} &plusmn; ${pct1(metric.sd)}` : textOrPending(null));
+const rangeOf = (metric) => (isMeasured(metric) && Number.isFinite(metric.min) && Number.isFinite(metric.max)
+  ? `${pct1(metric.min)} to ${pct1(metric.max)}%` : textOrPending(null));
+const spreadOf = (metric) => (isMeasured(metric) && Number.isFinite(metric.min) && Number.isFinite(metric.max)
+  ? `${pct1(metric.max - metric.min)} points` : textOrPending(null));
+const pairings = (m, regime) => {
+  const v = m.model_card?.vs_scanvi?.[regime];
+  return Number.isFinite(v?.v3_ahead) && Number.isFinite(v?.pairings)
+    ? `${formatCount(v.v3_ahead)} of ${formatCount(v.pairings)}` : textOrPending(null);
+};
+const latentCosine = (m, name) => {
+  const c = (m.cell_types ?? []).find((t) => t.name === name);
+  return escapeHtml(formatMetric(c?.latent_centroid_cosine, 2));
+};
+
+Object.assign(FACTS, {
+  restricted_centroid_seed0: (m) => escapeHtml(formatPercent(balanced(m, 'restricted_native_centroid:seed0'))),
+  restricted_centroid_mean: (m) => withSd(balanced(m, 'restricted_native_centroid:mean')),
+  restricted_centroid_range: (m) => rangeOf(balanced(m, 'restricted_native_centroid:mean')),
+  restricted_knn_mean: (m) => withSd(balanced(m, 'restricted_shared_knn:mean')),
+  restricted_knn_range: (m) => rangeOf(balanced(m, 'restricted_shared_knn:mean')),
+  restricted_knn_spread: (m) => spreadOf(balanced(m, 'restricted_shared_knn:mean')),
+  scanvi_restricted_pairings: (m) => pairings(m, 'restricted_shared_knn'),
+  scanvi_unrestricted_pairings: (m) => pairings(m, 'unrestricted'),
+  scanvi_unrestricted_margin: (m) => {
+    const d = m.model_card?.vs_scanvi?.unrestricted?.mean_difference;
+    return isMeasured(d) ? `${pct1(Number(d.value))} points` : textOrPending(null);
+  },
+  latent_cosine_macrophage: (m) => latentCosine(m, 'macrophage'),
+  latent_cosine_monocyte: (m) => latentCosine(m, 'monocyte'),
+});
+
+const pair = (row) => (row && isMeasured(row.accuracy) && isMeasured(row.balanced_accuracy)
+  ? `${escapeHtml(formatPercent(row.accuracy))} / ${escapeHtml(formatPercent(row.balanced_accuracy))}`
+  : textOrPending(null));
+
+Object.assign(FACTS, {
+  rna_to_rna_test: (m) => pair(cardRow(m, 'rna_to_rna_test')),
+  rna_to_rna_superseded: (m) => pair(m.model_card?.rna_to_rna_superseded),
+  seeds: (m) => escapeHtml(formatMetric(m.model?.seeds, 0)),
+});

@@ -3,19 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VivOME Atlas — Benchmark</title>
+    <title>Benchmark · VivOME</title>
+    <meta name="description" content="The VivOME standing benchmark: fixed datasets, fixed metrics, every method scored the same way.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/page.css">
     <style>
-        .wrap { max-width: 940px; }
+        .page { max-width: 980px; }
+        .sheet p { font-size: 15px; }
     </style>
 </head>
 <body>
-    <div class="wrap">
-        <a href="index.html" class="back-button">Back</a>
-        <h1>Standing Benchmark</h1>
-        <p class="subtitle">Fixed datasets, fixed metrics, every method scored the same way.</p>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="project.html">Project</a>
+                <a href="benchmark.html" aria-current="page">Benchmark</a>
+                <a href="versions.html">Versions</a>
+                <a class="site-nav-home" href="home.html">Dashboard</a>
+            </nav>
+        </div>
+    </header>
 
-        <section>
+    <main id="main" class="page">
+        <h1 class="page-title">Standing benchmark</h1>
+        <p class="lede">Fixed datasets, fixed metrics, and every method scored the same way.</p>
+
+        <section class="sheet">
             <h2>Cross-modal integration comparison</h2>
             <div class="table-scroll" id="benchmark-mount"></div>
             <p class="panel-note">
@@ -27,17 +45,31 @@
             </p>
         </section>
 
-        <section>
+        <section class="sheet">
             <h2>Why both columns</h2>
-            <p style="font-size: 13px;">
+            <p>
                 A method can score well on mixing and transfer while a probe still recovers the
                 source modality almost perfectly. Reporting transfer accuracy alone hides that.
                 Running the probe across every method is what turns the observation into a
                 property of the field rather than a quirk of one model.
             </p>
         </section>
-    </div>
+    </main>
 
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="home.html">Dashboard</a>
+                <a href="versions.html">Model card and releases</a>
+                <a href="benchmark.html">Benchmark</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
     <script type="module" async>
         import { loadManifest } from './js/manifest.js';
         import { buildBenchmarkTable, errorPanel } from './js/panels.js';

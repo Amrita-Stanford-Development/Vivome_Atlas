@@ -2,7 +2,8 @@ import unittest
 
 from build_manifest import (
     build_deployed_architecture_facts, build_manifest, build_model_seeds,
-    build_previous_release_facts, class_stats, cosine, measured, pending,
+    build_model_card, build_previous_release_facts, build_story_cells, class_stats, cosine, measured, pending,
+    read_family_summary,
     read_latent_centroid_cosine, read_modality_probe_accuracy,
 )
 
@@ -270,3 +271,80 @@ class TestReadModalityProbeAccuracy(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestBuildStoryCells(unittest.TestCase):
+    def setUp(self):
+        self.rna = [row("RNA", 1, "big", i / 1000, 0.1, 0.2) for i in range(900)] + \
+                   [row("RNA", 2, "small", 0.5, 0.5, 0.5) for _ in range(5)]
+        self.prot = [dict(row("PROT", 1, "big", 0.123456, 0.2, 0.3), abstained="True"),
+                     dict(row("PROT", 1, "big", 0.1, 0.2, 0.3), abstained="False")]
+
+    def test_is_deterministic(self):
+        self.assertEqual(build_story_cells(self.rna, self.prot, sample=100),
+                         build_story_cells(self.rna, self.prot, sample=100))
+
+    def test_keeps_small_classes_and_every_protein_cell(self):
+        story = build_story_cells(self.rna, self.prot, sample=100, min_per_class=12)
+        # "small" has only 5 cells: all of them, never more than exist.
+        self.assertEqual(sum(1 for p in story["rna"] if p == [0.5, 0.5, 0.5]), 5)
+        # "big" keeps its share of the sample: round(100 * 900 / 905) = 99.
+        self.assertEqual(len(story["rna"]), round(100 * 900 / 905) + 5)
+        self.assertEqual(len(story["prot"]), 2)
+
+    def test_rounds_coordinates_and_carries_the_abstention_flag(self):
+        story = build_story_cells(self.rna, self.prot, sample=10)
+        self.assertEqual(story["prot"][0], [0.123, 0.2, 0.3, 1])
+        self.assertEqual(story["prot"][1][3], 0)
+
+
+class TestBuildModelCard(unittest.TestCase):
+    def setUp(self):
+        self.rna = [{"mask": "scope2", "cells": "published sample (as v3)", "acc_ot": "95.53", "bal_ot": "74.7594"},
+                    {"mask": "scope2", "cells": "  of which test cells only", "acc_ot": "93.18978", "bal_ot": "65.70553"}]
+        regimes = ("restricted_native_centroid", "restricted_shared_knn", "unrestricted_native_centroid", "unrestricted")
+        self.scores = [{"model": "v3_seed0", "regime": r, "accuracy_pct": "86.17", "balanced_accuracy_pct": "79.79"} for r in regimes]
+        header = [["", "", "accuracy_pct"] * 1, ["", "", "mean"], ["family", "regime"]]
+        self.family = read_family_summary(header + [
+            ["v3", r, "79.38", "4.71", "73.76", "86.17", "63.32", "10.84", "50.79", "79.79"] for r in regimes
+        ])
+        self.paired = [{"family": "v3", "regime": "unrestricted", "diff_point_pct": str(d)} for d in (10, 20, -5)] + \
+                      [{"family": "v3", "regime": "restricted_shared_knn", "diff_point_pct": str(d)} for d in (-1, 2)] + \
+                      [{"family": "V2", "regime": "unrestricted", "diff_point_pct": "99"}]
+
+    def test_every_protein_row_names_its_decision_rule(self):
+        card = build_model_card(self.rna, self.scores, self.family, self.paired)
+        protein = [r for r in card["rows"] if r["measure"].startswith("Protein")]
+        self.assertEqual(len(protein), 8)
+        for row in protein:
+            self.assertIn(row["rule"], ("nearest centroid (the service's rule)", "shared kNN (the benchmark's rule)"))
+        self.assertEqual(len({r["key"] for r in card["rows"]}), 9, "every row has its own key")
+
+    def test_values_are_fractions_with_their_source_as_basis(self):
+        card = build_model_card(self.rna, self.scores, self.family, self.paired)
+        rna_row = card["rows"][0]
+        self.assertEqual(rna_row["accuracy"]["value"], 0.931898)
+        self.assertIn("rna_to_rna_membership_corrected.csv", rna_row["accuracy"]["basis"])
+        mean_row = card["rows"][2]
+        self.assertEqual(mean_row["balanced_accuracy"]["value"], 0.6332)
+        self.assertEqual(mean_row["balanced_accuracy"]["sd"], 0.1084)
+        self.assertEqual((mean_row["balanced_accuracy"]["min"], mean_row["balanced_accuracy"]["max"]), (0.5079, 0.7979))
+
+    def test_the_superseded_published_figure_is_kept_and_labelled(self):
+        card = build_model_card(self.rna, self.scores, self.family, self.paired)
+        self.assertEqual(card["rna_to_rna_superseded"]["accuracy"]["value"], 0.9553)
+        self.assertIn("included training cells", card["rna_to_rna_superseded"]["measure"])
+
+    def test_scanvi_pairings_are_counted_from_the_v3_rows_only(self):
+        vs = build_model_card(self.rna, self.scores, self.family, self.paired)["vs_scanvi"]
+        self.assertEqual((vs["unrestricted"]["pairings"], vs["unrestricted"]["v3_ahead"]), (3, 2))
+        self.assertAlmostEqual(vs["unrestricted"]["mean_difference"]["value"], 0.083333, places=6)
+        self.assertEqual((vs["restricted_shared_knn"]["pairings"], vs["restricted_shared_knn"]["v3_ahead"]), (2, 1))
+
+    def test_the_real_family_summary_parses(self):
+        import csv
+        from build_manifest import NB1D_DIR
+        with (NB1D_DIR / "ours_scope2_5seed_family_summary.csv").open(newline="") as handle:
+            family = read_family_summary(list(csv.reader(handle)))
+        self.assertIn(("v3", "restricted_native_centroid"), family)
+        self.assertAlmostEqual(family[("v3", "restricted_native_centroid")]["bal_max"], 79.7915354403646)

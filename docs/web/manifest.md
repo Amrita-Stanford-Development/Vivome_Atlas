@@ -8,7 +8,8 @@ python3 scripts/build_manifest.py
 ```
 
 The builder reads `web/data/metadata_RNA_lat128.csv` and
-`web/data/metadata_PROT_lat128.csv` and writes the manifest. It prints the cell
+`web/data/metadata_PROT_lat128.csv` and writes the manifest, plus
+`web/data/story_cells.json`, the landing scene's sample of the same cells. It prints the cell
 type summary so you can sanity-check the result.
 
 ## The measured/pending contract
@@ -68,13 +69,26 @@ Computed from repository data:
   rows — not a per-class measurement, hence the "global metric, not
   per-class" wording in its `basis`.
 
+- `model_card` — the model card's accuracy table on `web/versions.html`:
+  - RNA to RNA on test cells, from `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv`;
+  - SCoPE2 protein, restricted and unrestricted, shipped checkpoint and
+    5-seed mean, each under both decision rules, from the nb1d seed scores
+    and family summary.
+
+  Every row names its rule (`nearest centroid (the service's rule)` or
+  `shared kNN (the benchmark's rule)`), because a seed and a mean compare
+  only under the same one. `vs_scanvi` counts the seed pairings v3 wins
+  against scANVI, from `paired_bootstrap_ours_vs_scanvi.csv`. The page's
+  prose reads these through `factText` data-fact slots, so no model-card
+  number is typed into HTML.
+
 Emitted as pending, with the phase that will produce each:
 
 | Metric | Phase | Blocked on |
 |---|---|---|
 | `latent_centroid_cosine`, `modality_probe_accuracy` for RNA-only/protein-only classes | N/A | No cross-modal coverage for those classes — a correct record, not a gap to fill |
 | `transfer_accuracy` (any class) | N/A | A real measurement exists, but only per *dataset* (`service/model/evidence/v3_tables/rna_to_rna_real_masks.csv`), not per class — no per-class version has been computed |
-| `benchmark.rows` | Phase 4 | No comparison against established methods has been run |
+| `benchmark.rows` | Phase 4 | Run and written up (`research/benchmark/results.md`); published only on the owner's sign-off |
 
 A class present in only one modality gets a Phase 2 pending record for
 `pca_centroid_cosine` — there is no paired coverage to compute it from. A
@@ -117,6 +131,9 @@ in the browser.
 | `buildBenchmarkTable` | `benchmark.html` |
 | `buildModelCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace` | `project.html` |
+| `buildModelCardTable` | `versions.html` |
+| `buildReleaseStatus`, `buildNextReferenceCard` | `home.html` |
+| `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html` |
 
 Every interpolated value goes through `escapeHtml()`. Cell-type names come
 from data, and `web/tests/fixtures.js` deliberately names one class

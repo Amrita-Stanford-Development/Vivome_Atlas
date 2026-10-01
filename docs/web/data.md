@@ -12,6 +12,7 @@ Latent embeddings and metadata, latent dim 128.
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
 | `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows — from the v3 reference (`scripts/archive/promote_v3_atlas.py`) |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
+| `story_cells.json` | Generated with the manifest: every protein cell and a class-stratified, fixed-seed sample of about 2,000 RNA cells, at the viewer's 3-PC coordinates, for the landing story's scene |
 
 RNA metadata columns: `latent_dim, modality, orig_index, class_idx,
 class_name, lineage, PC1, PC2, PC3`.
@@ -72,10 +73,3 @@ side while the suite stayed green.
 That suite also asserts the shipped part files are *still* unfetched pointers.
 If you have run `git lfs pull` locally the test fails by design; do not
 "fix" it by weakening the assertion.
-
-## `web/plots/`
-
-30 precomputed interactive 3D plots, standalone HTML.
-
-- `supervised/` — 5 plots, `interactive_latent{32,64,128,256,512}_to3d_PCA_mm.html`, one per latent dimension.
-- `semi-supervised/` — 25 plots, `PCA3D_semi_r{5,10,25,50,75}_p{5,10,25,50,75}.html`, a sweep over RNA (`r`) and protein (`p`) label percentages.

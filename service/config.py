@@ -220,3 +220,13 @@ FALLBACK_CONFIDENCE = {
 
 MASK_OBSERVED = 1.0
 MASK_MISSING = 0.0
+
+# The site's projection page (web/project.html) calls this service from the
+# browser, so the service says which origins may read its responses (CORS).
+# The default is the site served locally, as web/README.md documents; a
+# deployment lists its own origins, comma separated.
+ALLOWED_ORIGINS = tuple(
+    origin.strip()
+    for origin in os.environ.get("VIVOME_ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",")
+    if origin.strip()
+)

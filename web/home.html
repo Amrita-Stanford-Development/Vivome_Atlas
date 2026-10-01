@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · VivOME</title>
+    <meta name="description" content="The VivOME dashboard: open the atlas, the projection service and the evidence behind them.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <style>
+        .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 56px; }
+        .tool { display: flex; flex-direction: column; gap: 6px; color: inherit; text-decoration: none; padding: 22px 24px; }
+        .tool h3 { font-size: 18px; margin: 0; }
+        .tool p { font-size: 14px; flex: 1; }
+        .tool .bead { align-self: flex-start; margin-top: 8px; }
+        .tool:hover { border-color: rgba(0, 102, 163, 0.35); }
+        .tool:hover h3 { color: var(--accent); }
+        .columns { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: start; }
+        .sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+        .sheet-head a { font-size: 14px; }
+        .news { list-style: none; }
+        .news li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+        .news li:first-child { padding-top: 0; }
+        .news li:last-child { border-bottom: 0; padding-bottom: 0; }
+        .news time { font-size: 12px; color: var(--ink-faint); }
+        .news h3 { margin: 2px 0 4px; }
+        .news p { font-size: 14px; }
+        .news a { font-size: 14px; }
+        #next-release:empty { display: none; }
+        @media (max-width: 900px) { .columns { grid-template-columns: 1fr; } }
+        @media (max-width: 560px) { .tools { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="project.html">Project</a>
+                <a href="benchmark.html">Benchmark</a>
+                <a href="versions.html">Versions</a>
+                <a class="site-nav-home" href="home.html" aria-current="page">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="page">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="lede">The atlas, the projection service, and the evidence behind them.</p>
+
+        <h2>Open a tool</h2>
+        <div class="tools">
+            <a class="tool sheet" href="atlas.html">
+                <h3>Atlas</h3>
+                <p>Explore RNA and protein cells in one 3D space. Filter by cell type and open any cell's gene profile.</p>
+                <span class="bead bead-both">RNA and protein</span>
+            </a>
+            <a class="tool sheet" href="project.html">
+                <h3>Project your data</h3>
+                <p>Send an RNA or protein matrix to a projection service you run, and get a label or an abstention for every cell.</p>
+                <span class="bead bead-open">Preview: runs on your machine</span>
+            </a>
+            <a class="tool sheet" href="benchmark.html">
+                <h3>Benchmark</h3>
+                <p>Fixed datasets and fixed metrics, with every method scored the same way.</p>
+                <span class="bead bead-open" id="benchmark-status">Results pending</span>
+            </a>
+            <a class="tool sheet" href="versions.html">
+                <h3>Versions</h3>
+                <p>The model card, known failure modes, data availability and the release protocol.</p>
+                <span class="bead">Model card</span>
+            </a>
+        </div>
+
+        <div class="columns">
+            <div class="stack">
+                <section class="sheet">
+                    <div class="sheet-head"><h2>Current release</h2><a href="versions.html">Full model card</a></div>
+                    <div id="release-status"></div>
+                </section>
+                <section class="sheet" id="next-release"></section>
+            </div>
+            <section class="sheet">
+                <h2>What's new</h2>
+                <div id="whats-new"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="home.html">Dashboard</a>
+                <a href="versions.html">Model card and releases</a>
+                <a href="benchmark.html">Benchmark</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module" async>
+        import { loadManifest } from './js/manifest.js';
+        import {
+            buildReleaseStatus, buildNextReferenceCard, buildWhatsNew, errorPanel,
+        } from './js/panels.js';
+
+        loadManifest().then((manifest) => {
+            document.getElementById('release-status').innerHTML = buildReleaseStatus(manifest);
+            const next = buildNextReferenceCard(manifest);
+            if (next) document.getElementById('next-release').innerHTML = `<h2>Next release</h2>${next}`;
+            if (manifest.benchmark?.status === 'measured') {
+                document.getElementById('benchmark-status').textContent = 'Results published';
+            }
+        }).catch((err) => {
+            document.getElementById('release-status').innerHTML = errorPanel(err);
+        });
+
+        fetch('./data/whats_new.json').then((response) => {
+            if (!response.ok) throw new Error(`What's new failed to load: ${response.status} ${response.statusText}`);
+            return response.json();
+        }).then((entries) => {
+            document.getElementById('whats-new').innerHTML = buildWhatsNew(entries);
+        }).catch((err) => {
+            document.getElementById('whats-new').innerHTML = errorPanel(err);
+        });
+    </script>
+</body>
+</html>

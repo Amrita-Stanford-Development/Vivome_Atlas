@@ -37,7 +37,7 @@ REPO = Path(__file__).resolve().parents[1]
 RETIRED_TOP_LEVEL = {"Atlas", "Plots", "Documentation", "tools", "tests", "css", "js", "New_Files"}
 
 TEXT_SUFFIXES = {".md", ".html", ".js", ".py", ".json", ".txt", ".yml", ".yaml"}
-MAX_BYTES = 1_000_000  # skips the generated Plotly exports under web/plots/
+MAX_BYTES = 1_000_000  # skips large generated files (data tables, exports)
 
 # Paths cited on purpose that don't exist in a checkout: gitignored local
 # caches and staging areas, files removed by design and named only in the
@@ -53,6 +53,7 @@ ALLOWED_MISSING = (
     "Atlas/shared_genes_lat128.txt",
     "Atlas/Data/",
     "benchmark/PROTOCOL.md",
+    "web/plots/",  # the original-model plots, removed 2026-09-30
 )
 
 # Frozen historical records: their code samples use paths relative to files

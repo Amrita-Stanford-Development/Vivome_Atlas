@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
   buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
-  buildAvailabilityTable, buildSupportedLabelSpace,
+  buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew, buildProofPoints, factText,
+  buildProjectionSummary, buildProjectionLabels, buildProjectionCells, buildModelCardTable,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
 
@@ -229,4 +230,200 @@ test('supported label space lists cross-modal types and the RNA-only count', () 
   assert.match(html, /monocyte/);
   assert.match(html, /macrophage/);
   assert.match(html, /RNA-only \(1\)/);
+});
+
+test('release status shows the manifest release facts', () => {
+  const html = buildReleaseStatus(manifestFixture());
+  assert.match(html, /Atlas version<\/dt><dd>0\.2\.0/);
+  assert.match(html, /VivOME v3 reference/);
+  assert.match(html, /RNA cells<\/dt><dd>85,233/);
+  assert.match(html, /Protein cells<\/dt><dd>1,490/);
+});
+
+test('release status renders Pending, never undefined, for missing fields', () => {
+  const m = manifestFixture();
+  delete m.atlas_version;
+  delete m.model.name;
+  m.modalities = {};
+  const html = buildReleaseStatus(m);
+  assert.ok(!html.includes('undefined'), html);
+  assert.ok(!html.includes('NaN'), html);
+  assert.match(html, /Pending/);
+});
+
+test('release status escapes model names', () => {
+  const m = manifestFixture();
+  m.model.name = '<script>alert(1)</script>';
+  assert.ok(!buildReleaseStatus(m).includes('<script>'));
+});
+
+test("what's new formats dates and escapes every field", () => {
+  const html = buildWhatsNew([{
+    date: '2026-09-30', title: '<b>t</b>', text: '<img src=x>', link: 'atlas.html', link_text: '<i>go</i>',
+  }]);
+  assert.match(html, /30 September 2026/);
+  assert.match(html, /datetime="2026-09-30"/);
+  assert.ok(!html.includes('<b>') && !html.includes('<img') && !html.includes('<i>'), html);
+  assert.match(html, /href="atlas\.html"/);
+});
+
+test("what's new drops links that are not pages of this site", () => {
+  for (const link of ['javascript:alert(1)', 'https://example.com', '../secret.html', '//x.html']) {
+    const html = buildWhatsNew([{ date: '2026-09-30', title: 't', text: 'x', link }]);
+    assert.ok(!html.includes('href='), `${link} should not render: ${html}`);
+  }
+  const anchored = buildWhatsNew([{ date: '2026-09-30', title: 't', text: 'x', link: 'project.html#labels' }]);
+  assert.match(anchored, /href="project\.html#labels"/);
+});
+
+test("what's new says so when there is nothing to announce", () => {
+  assert.match(buildWhatsNew([]), /No announcements yet/);
+  assert.match(buildWhatsNew(null), /No announcements yet/);
+});
+
+test("the shipped what's new entries render with no metrics in them", async () => {
+  const { readFileSync } = await import('node:fs');
+  const entries = JSON.parse(readFileSync(new URL('../data/whats_new.json', import.meta.url), 'utf8'));
+  assert.ok(entries.length > 0);
+  for (const e of entries) {
+    assert.match(e.date, /^\d{4}-\d{2}-\d{2}$/, e.title);
+    // Numbers belong in the manifest; an announcement links to them instead.
+    // Version names (v3.1) are names, not measurements.
+    assert.ok(!/\d%|(?<![v\d.])\d+\.\d/.test(`${e.title} ${e.text}`), `metric-like text in: ${e.title}`);
+  }
+});
+
+test('proof points come from the manifest', () => {
+  const html = buildProofPoints(manifestFixture());
+  assert.match(html, /RNA cells in the reference<\/dt><dd>85,233/);
+  assert.match(html, /protein cells, projected zero-shot<\/dt><dd>1,490/);
+  assert.match(html, /cell types<\/dt><dd>3</);
+  assert.match(html, /atlas version<\/dt><dd>0\.2\.0/);
+});
+
+test('proof points read Pending, never NaN or undefined, when the manifest is short', () => {
+  const html = buildProofPoints({ modalities: {}, summary: {} });
+  assert.ok(!html.includes('NaN') && !html.includes('undefined'), html);
+  assert.equal(html.match(/Pending/g).length, 4);
+});
+
+test('facts read the manifest for the landing prose', () => {
+  const m = manifestFixture();
+  assert.equal(factText(m, 'rna_cells'), '85,233');
+  assert.equal(factText(m, 'feature_space'), '9,002');
+  assert.equal(factText(m, 'atlas_version'), '0.2.0');
+  assert.equal(factText(m, 'model_name'), 'VivOME v3 reference');
+  assert.equal(factText(m, 'previous_model'), 'CrossModalNet');
+});
+
+test('an unknown or missing fact reads Pending, and names are escaped', () => {
+  assert.match(factText(manifestFixture(), 'no_such_fact'), /Pending/);
+  assert.match(factText({}, 'rna_cells'), /Pending/);
+  assert.match(factText(null, 'model_name'), /Pending/);
+  const m = manifestFixture();
+  m.model.name = '<b>x</b>';
+  assert.ok(!factText(m, 'model_name').includes('<b>'));
+});
+
+const projection = () => ({
+  atlas_version: '0.2.0',
+  model_version: 'production',
+  n_cells: 3,
+  n_features_matched: 900,
+  n_features_unmatched: 100,
+  value_scale: { detected: 'linear', transformed: true },
+  label_space: { restricted_to_supported_classes: false, candidate_classes: ['a', 'b', 'c'] },
+  cells: [
+    { cell_id: '<img src=x onerror=alert(1)>', label: 'monocyte', label_set: ['monocyte'], confidence: 0.91234, abstained: false, observed_genes: 1200 },
+    { cell_id: 'c2', label: 'monocyte', label_set: ['monocyte', 'macrophage'], confidence: 0.5, abstained: false, observed_genes: 800 },
+    { cell_id: 'c3', label: null, label_set: [], confidence: null, abstained: true, abstain_reason: 'coverage_too_low', observed_genes: 12 },
+  ],
+});
+
+test('projection summary reports the upload, the label space and the abstention share', () => {
+  const html = buildProjectionSummary(projection());
+  assert.match(html, /Cells<\/dt><dd>3/);
+  assert.match(html, /900 of 1,000/);
+  assert.match(html, /Labelled<\/dt><dd>2 \(66\.7%\)/);
+  assert.match(html, /Abstained<\/dt><dd>1 \(33\.3%\)/);
+  assert.match(html, /All 3 reference classes/);
+  assert.match(html, /log2-transformed/);
+  const restricted = projection();
+  restricted.label_space = { restricted_to_supported_classes: true, candidate_classes: ['macrophage', 'monocyte'] };
+  assert.match(buildProjectionSummary(restricted), /Restricted to macrophage, monocyte/);
+});
+
+test('projection labels count each label and each abstain reason, most first', () => {
+  const html = buildProjectionLabels(projection());
+  assert.ok(html.indexOf('monocyte') < html.indexOf('Abstained'), html);
+  assert.match(html, /monocyte<\/td><td class="support-num">2<\/td><td class="support-num">66\.7%/);
+  assert.match(html, /Abstained: Too few observed genes/);
+});
+
+test('projection cells escape ids from the upload and show abstentions plainly', () => {
+  const html = buildProjectionCells(projection());
+  assert.ok(!html.includes('<img'), 'a cell id from the upload must not become markup');
+  assert.match(html, /&lt;img/);
+  assert.match(html, /0\.912/);
+  assert.match(html, /Too few observed genes/);
+});
+
+test('projection cells show the first rows and say how many there are', () => {
+  const html = buildProjectionCells(projection(), 2);
+  assert.equal((html.match(/<tr>/g) ?? []).length, 3, 'header row plus two cells');
+  assert.match(html, /first 2 of 3 cells/);
+});
+
+test('projection builders survive a malformed response', () => {
+  for (const build of [buildProjectionSummary, buildProjectionLabels, buildProjectionCells]) {
+    const html = build({});
+    assert.ok(!html.includes('undefined') && !html.includes('NaN'), `${build.name}: ${html}`);
+  }
+});
+
+const withModelCard = () => {
+  const m = manifestFixture();
+  const rec = (value, extra = {}) => ({ ...measured(value, 'research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv'), ...extra });
+  m.model_card = {
+    rows: [
+      { key: 'restricted_native_centroid:seed0', measure: 'Protein, restricted, shipped', rule: "nearest centroid (the service's rule)",
+        accuracy: rec(0.861745), balanced_accuracy: rec(0.797915) },
+      { key: 'restricted_native_centroid:mean', measure: 'Protein, restricted, 5-seed mean', rule: "nearest centroid (the service's rule)",
+        accuracy: rec(0.793826, { sd: 0.047084 }), balanced_accuracy: rec(0.633237, { sd: 0.108427, min: 0.507871, max: 0.797915 }) },
+      { key: 'restricted_shared_knn:mean', measure: '<b>x</b>', rule: "shared kNN (the benchmark's rule)",
+        accuracy: rec(0.753154, { sd: 0.117906 }), balanced_accuracy: rec(0.714998, { sd: 0.106004, min: 0.590433, max: 0.883992 }) },
+    ],
+    vs_scanvi: {
+      restricted_shared_knn: { pairings: 15, v3_ahead: 3, mean_difference: measured(-0.05654, 'x') },
+      unrestricted: { pairings: 15, v3_ahead: 12, mean_difference: measured(0.181375, 'x') },
+    },
+  };
+  return m;
+};
+
+test("the model card table names each row's rule and shows mean, spread and range", () => {
+  const html = buildModelCardTable(withModelCard());
+  assert.match(html, /nearest centroid \(the service&#39;s rule\)/);
+  assert.match(html, /79\.8%/);
+  assert.match(html, /63\.3% &plusmn; 10\.8/);
+  assert.match(html, /range 50\.8 to 79\.8%/);
+  assert.ok(!html.includes('<b>x</b>'), 'measure names are escaped');
+});
+
+test('the model card table reads Pending when the manifest has none', () => {
+  assert.match(buildModelCardTable(manifestFixture()), /Pending/);
+});
+
+test('model card facts compare like with like and come from the manifest', () => {
+  const m = withModelCard();
+  assert.equal(factText(m, 'restricted_centroid_seed0'), '79.8%');
+  assert.equal(factText(m, 'restricted_centroid_mean'), '63.3% &plusmn; 10.8');
+  assert.equal(factText(m, 'restricted_centroid_range'), '50.8 to 79.8%');
+  assert.equal(factText(m, 'restricted_knn_spread'), '29.4 points');
+  assert.equal(factText(m, 'scanvi_restricted_pairings'), '3 of 15');
+  assert.equal(factText(m, 'scanvi_unrestricted_pairings'), '12 of 15');
+  assert.equal(factText(m, 'scanvi_unrestricted_margin'), '18.1 points');
+  for (const key of ['restricted_centroid_mean', 'scanvi_unrestricted_margin', 'restricted_knn_range']) {
+    assert.match(factText(manifestFixture(), key), /Pending/, `${key} without a model card`);
+  }
 });
