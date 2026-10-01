@@ -160,6 +160,21 @@ def load_khoury2026_upload() -> alignment.RawMatrix:
     return raw
 
 
+def load_khoury2026_benchmark_matrix() -> tuple[np.ndarray, list[str], list[str]]:
+    """The Khoury upload as the Track D baselines receive it: (cells x
+    benchmark_gene_space()), the matrix values as provided (already log2),
+    NaN wherever Khoury has no value. Genes match by exact symbol, so the 65
+    multi-gene protein groups match nothing; a symbol listed twice takes the
+    per-cell median. Label-free; the embedding steps that use it run only at
+    the final v3.1 evaluation (protocol-khoury2026.md, amendment 3)."""
+    raw = load_khoury2026_upload()
+    df = pd.DataFrame(raw.values.T, index=raw.cell_ids, columns=[g.upper() for g in raw.gene_names])
+    if df.columns.duplicated().any():
+        df = df.T.groupby(level=0).median().T
+    genes = benchmark_gene_space()
+    return df.reindex(columns=genes).to_numpy(dtype=np.float32), raw.cell_ids, genes
+
+
 def khoury2026_type_counts() -> dict[str, int]:
     """Aggregate label counts over the upload's cells: the only label
     information readable while the dataset is sealed."""

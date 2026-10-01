@@ -187,6 +187,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/v31_dev_gate.py` — Track F gate: the served v3.1 pipeline, under NB2's rule, must reproduce NB2's development table within 0.5 points; writes its record
 - `benchmark/v31_service_flags.py` — v3.1's two service flags off (NB2's rule) and on (served), on SCoPE2, PBMC240 and Fulcher
 - `benchmark/scope2_5seed_paired.py` — Track D's paired bootstrap, ten ours-seeds × three scANVI seeds × three regimes, on SCoPE2
+- `benchmark/baselines_inputs.py` — Track D extension: what every baseline receives per dataset, gene-fair (measured genes only, z-scored over observed values); Khoury only when unsealed
+- `benchmark/baselines_run.py` — Track D extension: one baseline (MaxFuse, scGLUE, Harmony + kNN, Seurat CCA), one dataset, one seed; saves embeddings and per-cell predictions
+- `benchmark/seurat_cca_transfer.R` — Seurat CCA label transfer, called by `baselines_run.py`
+- `benchmark/baselines_queue.sh` — runs the remaining baseline runs one at a time, skipping finished ones
+- `benchmark/baselines_v31.py` — Track D extension: v3.1 as served on SCoPE2, PBMC240 and Fulcher (best guess and confident answer per cell)
+- `benchmark/baselines_score.py` — Track D extension scoring, the only step that reads these labels: per-seed tables, summaries, v3.1's confident answers, paired bootstrap
 
 ## scripts/ — build and repository checks
 
