@@ -6,6 +6,51 @@ notebook built and run over the course of it.
 
 ---
 
+## Where the notebooks are
+
+The notebooks are not in git. They live in the project Drive's
+`Colab Notebooks/`, and run against the Drive root
+`/content/drive/My Drive/Vivome - Live Atlas` (inputs in `Data/scProteomics`,
+`Data/scRNA-seq` and `Data/Results/`; outputs in `Data/Results/<notebook
+folder>`). On the Windows PC, 15 of them are in `D:\Project\Vivome\notebooks\`
+with their saved outputs, and `Data/Results/` is in
+`D:\Project\Vivome\drive\Data\Results\` ([setup](../docs/setup-windows.md)).
+
+| Entry | File on the PC | Cells | Run time printed |
+|---|---|---|---|
+| 1, 2 | `Reference_Projection_Diagnostics.ipynb` | 13 (Q1 to Q5, summary, Q7 to Q9) | |
+| 3 | `Unsupervised_PBMC240.ipynb` | 9 | |
+| 4 | `Masking_Coverage_Baseline.ipynb` | 11 | |
+| 5 | `Build_Feature_Space.ipynb` | 8 | |
+| 6 | `Masking_Techniques_Experiment.ipynb` | 16 (three follow up cells after the twelve: a modality probe shortcut check, rebuilt modules, balanced module pooling) | training log to 8,068 s |
+| 7 | `Masking_Decisive_Test.ipynb` | 11 | training log to 7,691 s |
+| 9 | `Reference_Projection_v3.ipynb` | 21 | |
+| 10 | `SelfTraining_Pilot_SCoPE2.ipynb` | 13 | |
+| 11 | `CellLine_vs_Primary_Comparison.ipynb` | 12 | |
+| 12 | `VivOME_Prototype_Export.ipynb` | 13 | |
+| 13 | `T1_NB1_Simulation_Bench.ipynb` | 12 | 11.3 min |
+| 14 | `T1_NB1b_Composition_Robust.ipynb` | 14 | 24.3 min |
+| 15 | `T1_NB1c_Real_Data_Diagnostics.ipynb` | 10 | 3.4 min |
+| 16 | `T1_NB1d_V2_Seed_Check.ipynb` | 13 | 30.6 min |
+| 17 | `T1_NB2_Label_Space_and_Abstention.ipynb` | 16 | 12.9 min |
+
+Cell counts include markdown and the empty last cell Colab leaves; the
+entries below count the cells that ran. NB1b's real data cell (section 9)
+has no saved output; its figures come from
+`research/notebook-outputs/nb1b/real_data_confirmatory.csv`. The copy of the
+export notebook in `service/model/source/` is the same run with Colab's
+per cell execution metadata removed.
+
+Not on the PC: `Reference_Projection_v2.ipynb` (entry 8),
+`SelfTraining_Pilot_SCoPE2_v2_mass_based.ipynb` (entry 10),
+`Deep_Learning_SCoPE2_Fully_Supervised_All.ipynb`, and a separate Q6 to Q9
+file (entry 2). The two other existing notebooks,
+`Deep_Learning_SCoPE2_Unsupervised.ipynb` and
+`Deep_Learning_SCoPE2_Unsupervised_Continued.ipynb`, are in
+`D:\Project\Vivome\notebooks\existing\`.
+
+---
+
 ## Existing notebooks, read, diagnosed, or extended
 
 | Notebook | What we did with it |
@@ -33,10 +78,19 @@ found to actively hurt cross modal transfer. Optimal transport found to beat
 k nearest neighbour by 14.46 points on a controlled RNA to RNA test, directly
 contradicting an earlier assumption that kNN was a safe default.
 
+No separate file survives. Q7 to Q9 are cells 9 to 11 of
+`Reference_Projection_Diagnostics.ipynb` (Q9 prints the kNN upper bound
+72.67 percent, OT relaxed 87.14 percent, a gap of 14.46 points). No copy of
+the Q6 cell survives.
+
 ### 3. `Unsupervised_PBMC240.ipynb`
-Nine cells. Preprocessing for the second proteomics dataset, marker derived
-weak labels recovered for three lineages, T cell, NK cell, monocyte. Real
-coverage against the reference gene space measured at 34.8 percent.
+Nine cells. Preprocessing for the second proteomics dataset. Marker derived
+weak labels were assigned to 140 of 237 cells (59.1 percent) across five
+lineages: T cell 61, NK cell 56, dendritic 11, platelet 7, monocyte 5. Real
+coverage against the reference gene space at the time, the old 2,903 gene
+space, was 38.3 percent (1,111 genes). Against the later 9,002 gene space it
+is 34.8 percent (3,136 genes), as measured in `Build_Feature_Space.ipynb`
+and the notebooks after it.
 
 ### 4. `Masking_Coverage_Baseline.ipynb`
 Ten cells. Established that a dataset's real, non random gene coverage costs
@@ -97,6 +151,12 @@ adapted embedding gave kNN 40.4, nearest centroid 38.3, OT 33.8. Query encoder n
 saved. Later work showed every attempt ran in the unrestricted 22 class regime,
 where label shift collapse is a documented failure mode, so these results do not
 bound self training inside a restricted label space.
+
+The surviving `SelfTraining_Pilot_SCoPE2.ipynb` holds only the peak confidence
+attempt: 2 of 22 classes estimated, best 51.61 accuracy / 35.08 balanced in round
+1, label assignment nearest centroid 33.85, OT 33.53, kNN 33.81. The other three
+rows and the kNN 40.4 / nearest centroid 38.3 figures come from the v2 notebook,
+which is not among the files on the PC.
 
 ### 11. `CellLine_vs_Primary_Comparison.ipynb`
 Eleven cells. Asked whether the gap was a cell line artefact, since SCoPE2's

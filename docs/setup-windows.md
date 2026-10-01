@@ -14,9 +14,11 @@ Each command block names the shell it runs in:
 The layout used throughout:
 
 ```
-D:\Project\Vivome\Vivome_Atlas\   the repository
-D:\Project\Vivome\notebooks\      the Colab notebooks
-D:\Project\Vivome\drive\Data\     the project Drive's Data\ folder (Results\, scProteomics\)
+D:\Project\Vivome\Project_structure.md   map of everything below
+D:\Project\Vivome\Vivome_Atlas\          the repository
+D:\Project\Vivome\notebooks\             the Colab notebooks, with outputs
+D:\Project\Vivome\drive\Data\            the project Drive's Data\ folder (Results\, scProteomics\)
+D:\Project\Vivome\_archive\              transfer zips and copies already merged, until deleted
 ```
 
 No code depends on this location; another drive or folder works the same.
@@ -43,12 +45,11 @@ No code depends on this location; another drive or folder works the same.
 ```bash
 git config --global user.name "Amarnath K R"
 git config --global user.email "aiamrita.stanford@gmail.com"
-git config --global credential.https://github.com.username AiAmrita
 git config --global core.autocrlf false
 git config --global core.longpaths true
 git lfs install
 mkdir -p /d/Project/Vivome && cd /d/Project/Vivome
-git clone https://github.com/Amrita-Stanford-Development/Vivome_Atlas.git
+git clone git@github.com:Amrita-Stanford-Development/Vivome_Atlas.git     # needs the SSH key below
 cd Vivome_Atlas && git checkout integration/v31
 git lfs pull                                                                 # about 3.5 GB
 ```
@@ -56,19 +57,26 @@ git lfs pull                                                                 # a
 Later updates, from the repository: `git pull && git lfs pull`.
 
 **Push access.** The repository belongs to the personal account
-Amrita-Stanford-Development and is public, so anyone can clone it, but only
-the owner and collaborators can push. To push as AiAmrita:
+**Amrita-Stanford-Development** and is public, so anyone can clone it, but
+only the owner and collaborators can push. The PC pushes as the owner
+account over SSH:
 
-1. Signed in to GitHub as **Amrita-Stanford-Development**, open the
-   repository's Settings → Collaborators
-   (github.com/Amrita-Stanford-Development/Vivome_Atlas/settings/access),
-   choose **Add people** and invite **AiAmrita**.
-2. Signed in as **AiAmrita**, accept the invitation from the email or from
-   github.com/Amrita-Stanford-Development/Vivome_Atlas/invitations.
-3. In the repository, run `git push --dry-run`. The first time, Git
-   Credential Manager opens the browser to sign in; choose AiAmrita.
-   "Everything up-to-date" means push access works; a 403 error means the
-   invitation hasn't been accepted yet.
+1. In Git Bash, make a key for this PC and point GitHub at it:
+   ```bash
+   mkdir -p ~/.ssh && ssh-keygen -t ed25519 -C "aiamrita.stanford@gmail.com (VivOME PC)" -f ~/.ssh/id_ed25519_github
+   printf 'Host github.com\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_ed25519_github\n  IdentitiesOnly yes\n' > ~/.ssh/config
+   cat ~/.ssh/id_ed25519_github.pub
+   ```
+2. Signed in to GitHub as **Amrita-Stanford-Development**, add the printed
+   public key at github.com/settings/ssh/new (type: Authentication Key).
+3. Run `ssh -T git@github.com`. The first time, accept GitHub's host key
+   after checking its fingerprint against GitHub's published one
+   (ED25519 `SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU`). The reply
+   "Hi Amrita-Stanford-Development!" means pushing works.
+
+A clone made over HTTPS switches with
+`git remote set-url origin git@github.com:Amrita-Stanford-Development/Vivome_Atlas.git`.
+Commits keep the author name and email above, whichever account pushes.
 
 **Line endings.** `core.autocrlf false` leaves files as they are on disk;
 `.gitattributes` does the rest:
