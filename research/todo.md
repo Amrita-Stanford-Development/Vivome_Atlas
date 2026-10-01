@@ -6,7 +6,7 @@ notebook output path, and log it in the changelog at the bottom.
 
 Status markers: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked.
 
-Last updated: 2026-10-01 (Track F: v3.1, T1 NB2's ensemble, is the default pipeline)
+Last updated: 2026-10-01 (review follow-up: duplicate genes, robustness, write-up numbers, v3.1 service flags)
 
 ---
 
@@ -143,7 +143,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 - [x] v3.1 implemented from T1 NB2's spec, not NB4's export (owner, 2026-10-01): five V2 members' tempered softmax averaged, Mondrian sets, out-of-distribution mean below NB2's threshold, hierarchical answers, best guess (`service/pipeline/ensemble.py`) (`9567ffd`)
 - [x] Unit tests against NB2's own `nb2_core.py` on synthetic inputs: probabilities to 1e-6, sets and per-cell outputs exact (`service/tests/test_ensemble.py`) (`9567ffd`)
-- [x] Development gate: v3.1 under NB2's parse reproduces `dev_datasets.csv` for SCoPE2 and PBMC240, with nothing tuned (`benchmark/v31_dev_gate.py`). The service parser commits 72.7 vs 74.0 on PBMC240: gene identifier resolution and the graph input, not the pipeline (`9567ffd`)
+- [x] Development gate: v3.1 under NB2's parse reproduces `dev_datasets.csv` for SCoPE2 and PBMC240, with nothing tuned (`benchmark/v31_dev_gate.py`): every share to two decimals, PBMC240's composition entry for entry, SCoPE2's composition within one cell (`9567ffd`). The service parser's PBMC240 gap (72.7 vs 74.0 committed) was a duplicate-gene bug, fixed in the review follow-up below
 - [x] Response: `label`, `label_level`, `label_set`, plus `best_guess` and `reference_similarity`; documented in `docs/service/projection-api.md` (`9567ffd`)
 - [x] Coordinates from member seed 4; the site's atlas regenerated from the served model (`scripts/export_atlas_coordinates.py`) and pinned by a test (`9567ffd`)
 - [x] Fulcher 2026 (development data) through v3.1: 89.4% committed, 97.2% correct at the stated level, best guess 57.9% balanced over six types (`research/benchmark/results.md`) (`9567ffd`)
@@ -151,6 +151,11 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 - [x] `PIPELINE_VERSION` default `v3.1`; v3 selectable, its frozen responses unchanged; Khoury still sealed (`9567ffd`)
 - [x] Storage: the five checkpoints (491 MB) live outside git, since the LFS quota could not be read; `scripts/fetch_v31_members.py` puts them in place with sha256 checks (`9567ffd`)
 - [ ] T1 NB3's recalibrated abstention: the out-of-distribution filter passes 99% of scrambled cells, and B cell coverage is 69%
+- [x] Review follow-up, service fixes: rows resolving to one gene collapse by per-cell median after log2 (PBMC240 lost 1,338 observed values; now the service reproduces NB2's committed, out-of-distribution and ambiguous shares exactly); +/-inf read as missing before scale detection; an accession shared by several genes is ambiguous; empty-named columns dropped; load errors answer 500 with the reason, a missing artifact is rechecked on every request, and the v3.1 spec is read and validated once at load (`af07dac`)
+- [x] Review follow-up, tests: the full `project_prepared` path against `nb2_core` on real cells, a lineage-level answer, the gate as a test (`service/tests/test_v31_gate.py`, record `research/benchmark/v31_dev_gate.json`), a non-alphabetical qhat order (`af07dac`)
+- [x] Review follow-up, two service flags on by default: `set_includes_best_guess` and `restricted_renormalise`; before and after on SCoPE2, PBMC240 and Fulcher in `research/benchmark/v31_service_flags.json` (`af07dac`)
+- [ ] **Evaluate both service flags on RNA** (the next notebook): coverage, correct when committed and answer levels on NB1's evaluation suite, with and without each flag. Until then NB2's evaluation figures describe the rule without them
+- [ ] **Evaluate restricted mode under v3.1** (the next notebook), or retire it: on SCoPE2 with the flags on it answers "monocyte/macrophage", the two allowed classes, for 97.9% of cells
 
 ---
 
@@ -211,6 +216,12 @@ what the product delivers today, not properties of the architecture. The
 first measured in T1 NB1c (`research/notebook-outputs/nb1c/`), then rescored by Track D on
 T1 NB1d's per-seed embeddings (`research/notebook-outputs/nb1d/`).
 
+v3.1, the default since `9567ffd`, is in its own rows at the end of this
+table: NB2's evaluation suite (`research/notebook-outputs/nb2/nb2_summary.json`)
+and the development datasets through the service
+(`research/benchmark/v31_service_flags.json`,
+`research/benchmark/fulcher2026/v31_development.json`).
+
 | Measure | Value |
 |---|---|
 | `v3_seed0`, unrestricted, native centroid | 45.37 acc / 31.08 bal |
@@ -244,6 +255,9 @@ T1 NB1d's per-seed embeddings (`research/notebook-outputs/nb1d/`).
 | Latent centroid cosine | monocyte 0.830, macrophage 0.190 |
 | Abstention at 0.9779 | 80.2 percent |
 | Conformal empirical coverage | 33.7 percent (target 90) |
+| v3.1, NB2's evaluation suite (NB2's rule, no service flags) | 94.9 correct when committed, 19.2 abstention, 87.1 coverage; answers 19.1 class / 17.7 group / 44.0 lineage |
+| v3.1 served, SCoPE2 / PBMC240 / Fulcher committed | 56.0 / 73.1 / 89.2 percent |
+| v3.1 served, correct when committed at the stated level | SCoPE2 55.8 (all "myeloid"); Fulcher 97.3; PBMC240 92 of 117 lymphoid, 3 of 5 myeloid |
 
 Sources for the Fulcher 2026 rows: `research/benchmark/fulcher2026/family_summary.csv` and `paired_bootstrap.csv`.
 Sources for the 5-seed, paired-bootstrap and PBMC240 rows:
@@ -293,3 +307,4 @@ because the held out classes were in training.
 | 2026-10-01 | Track C, the v3.1 scaffold (`167f138`, branch `integration/v31-scaffold`). `PIPELINE_VERSION` switch with v3 as default and unchanged (four frozen full responses reproduced byte for byte); label space, abstention and conformal interfaces with v3 implementations; v3.1 loaders for NB2 and NB3's export files, refusing with 503 until Track F; `encode_with_hidden` (512-d) and the classifier head kept for NB2; temperature and per-class bias in Stage 4; per-method Stage 7 confidence rule (choice still open); additive v3.1 response schema, documented. Left open: the real label-space rule, which needs NB2's results. |
 | 2026-10-01 | Tools (branch `web/redesign`). The Project page projects through a locally run service: `GET /api/status`, CORS for allowed origins only, results rendered and downloadable, verified end to end on the real PBMC240 DIA-NN report (`a0fe554`). The model card's numbers move into the manifest (`model_card`); `versions.html` types no metric into HTML any more. **Correction:** the model card and `versions.html` compared the shipped seed under nearest centroid (79.8% bal) with the 5-seed mean under shared kNN (71.5%); under one rule it is 79.8% vs. 63.3% ± 10.8 (nearest centroid) or 88.4% vs. 71.5% ± 10.6 (shared kNN). The claim (best of five by a wide margin) holds under both. `MODEL_CARD.md`'s table now names each row's rule and adds the missing nearest-centroid rows. |
 | 2026-10-01 | Track F, v3.1 (branch `integration/v31`). T1 NB2's ensemble (five V2 seeds, tempered softmax averaged, Mondrian sets, OOD mean below 0.779, hierarchical answers, best guess) is the default pipeline; v3 stays selectable and its frozen responses are unchanged. Checked against `nb2_core.py` to 1e-6. Gate: under NB2's parse the service reproduces `dev_datasets.csv` for SCoPE2 and PBMC240 exactly, with nothing tuned; through the service parser PBMC240 commits 72.7 vs 74.0 (gene identifier resolution and the graph input). The site's atlas coordinates now come from the served model's seed 4 member, with a fixed PCA sign. Previously v3's served PCA had PC1 mirrored against the atlas file. Fulcher (development) through v3.1: 89.4% committed, 97.2% correct at the stated level, best guess 57.9% balanced. SCoPE2 still fails: 39.5% correct when committed, all of it lineage answers. The five checkpoints (491 MB) are outside git: the LFS quota could not be read (`gh` not logged in), and LFS uploads cannot be undone. Khoury untouched | `9567ffd` |
+| 2026-10-01 | Review follow-up to Track F, after a five-part read-only review. Service: duplicate gene rows collapse by per-cell median after log2 (the last row used to win; PBMC240 lost 1,338 observed values, and the fix closes the whole 72.7 vs 74.0 committed gap to NB2); +/-inf is missing; shared accessions are ambiguous; empty columns dropped; load errors answer 500, missing artifacts are rechecked, the v3.1 spec is validated once. Two v3.1 service flags, on by default and not yet evaluated on RNA: sets include the best guess (SCoPE2 committed 72.6 to 56.0, correct when committed 39.5 to 55.8; PBMC240 and Fulcher move under a point) and restricted mode renormalises (it then answers the two allowed classes' group for 97.9% of SCoPE2). Write-ups: the SCoPE2 tables used the superseded scANVI run (77.15 / 78.35, not 76.89 / 73.15) and were not sorted; the model card's macrophage recall 0.76% was the unrestricted figure (restricted 66.2%); 46.6% PBMC240 lymphoid recall had no table (NB1c's gives 43.6%); Track D's ci_excludes_zero was False for intervals below zero (57 rows), now rebuilt by a script. Earlier "reproduces exactly" claims narrowed: SCoPE2's composition differs from NB2 by one cell | `af07dac` |
