@@ -83,7 +83,7 @@ metric into HTML. See [docs/web/manifest.md](docs/web/manifest.md).
 Regenerate the manifest and commit it:
 
 ```bash
-python3 scripts/build_manifest.py
+python scripts/build_manifest.py
 ```
 
 Bump `ATLAS_VERSION` in `scripts/build_manifest.py` for a real release; the full
@@ -93,8 +93,8 @@ protocol is on `web/versions.html` and in [docs/web/manifest.md](docs/web/manife
 
 ```bash
 node --test                                          # from the repo root
-python3 -m unittest discover -s scripts              # manifest builder + path/index check
-python3 -m unittest discover -s service/tests -t .   # projection service, from the repo root
+python -m unittest discover -s scripts              # manifest builder + path/index check
+python -m unittest discover -s service/tests -t .   # projection service, from the repo root
 ```
 
 Run all three before committing. `web/tests/lfs.test.js` asserts the shipped RNA

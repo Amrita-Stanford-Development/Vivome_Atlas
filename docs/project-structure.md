@@ -86,7 +86,7 @@ Any new tracked file also needs a line in [file-index.md](file-index.md).
 - `README.md`, `CLAUDE.md` and `MODEL_CARD.md` keep their conventional
   uppercase names.
 - Python modules use snake_case. `service` is the import name
-  (`python3 -m service.app`).
+  (`python -m service.app`).
 - Data and model files keep the names they were exported with, because
   URLs, checksums, LFS rules and the notebooks all refer to them by name.
 
@@ -112,6 +112,6 @@ Run all three from the repository root before committing:
 
 ```bash
 node --test                                          # web/js
-python3 -m unittest discover -s scripts              # manifest builder + path/index check
-python3 -m unittest discover -s service/tests -t .   # projection service
+python -m unittest discover -s scripts              # manifest builder + path/index check
+python -m unittest discover -s service/tests -t .   # projection service
 ```

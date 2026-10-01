@@ -9,7 +9,7 @@ scanvi_run_fulcher2026.py). Writes CSV tables and summary.json to
 research/benchmark/fulcher2026. Deterministic, so a rerun reproduces the
 tables byte for byte.
 
-    python3 benchmark/fulcher2026_score.py
+    python benchmark/fulcher2026_score.py
 """
 import json
 import sys

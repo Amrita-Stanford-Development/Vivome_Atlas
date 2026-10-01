@@ -17,7 +17,7 @@ latents (to 1e-6), or the script stops.
 
 Writes service/model/evidence/v3_1_tables/. Then run build_manifest.py.
 
-    python3 scripts/v31_evidence.py      # from the repository root
+    python scripts/v31_evidence.py      # from the repository root
 """
 from __future__ import annotations
 

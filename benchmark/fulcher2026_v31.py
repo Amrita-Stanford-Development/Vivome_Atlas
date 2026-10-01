@@ -10,7 +10,7 @@ belong to in NB2's hierarchy. The best guess is scored as balanced accuracy
 over the six types, mapped the same way. Writes
 research/benchmark/fulcher2026/v31_development.json.
 
-    python3 -m benchmark.fulcher2026_v31        # from the repository root
+    python -m benchmark.fulcher2026_v31        # from the repository root
 """
 from __future__ import annotations
 

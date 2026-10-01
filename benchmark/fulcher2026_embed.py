@@ -12,7 +12,7 @@ Embeddings: the 1,275-cell Fulcher upload, one embed_query call per model,
 saved to results/fulcher2026/<model>_latent.npy (rows in upload order,
 cell_ids.txt). This script never reads a label.
 
-    python3 benchmark/fulcher2026_embed.py
+    python benchmark/fulcher2026_embed.py
 """
 import dataclasses
 import hashlib

@@ -15,7 +15,7 @@ rebuilt the table Track D first committed without a script: every
 estimate and interval end within 1e-13, every verdict the same, and the
 ci_excludes_zero flag corrected in the 57 rows whose interval lies below zero.
 
-    python3 benchmark/scope2_5seed_paired.py
+    python benchmark/scope2_5seed_paired.py
 """
 import sys
 from pathlib import Path

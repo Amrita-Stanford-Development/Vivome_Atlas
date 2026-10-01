@@ -19,11 +19,14 @@ separate Python backend with its own dependencies. See
 git clone git@github.com:Amrita-Stanford-Development/Vivome_Atlas.git
 cd Vivome_Atlas
 git lfs install && git lfs pull     # required for the RNA view and the model (see below)
-cd web && python3 -m http.server 8000
+cd web && python -m http.server 8000
 # open http://localhost:8000/index.html
 ```
 
-On Windows, follow [docs/setup-windows.md](docs/setup-windows.md) instead.
+Development runs on a Windows PC with an NVIDIA GPU: the full setup (conda
+environment with CUDA, checkpoints, local-only files, long runs) is in
+[docs/setup-windows.md](docs/setup-windows.md). The commands here run in Git
+Bash.
 
 The atlas fetches data from `web/data/` over HTTP, so opening `index.html` from
 `file://` will not load. Serve the `web/` folder.
@@ -32,7 +35,7 @@ To run the projection service locally, see `service/README.md`:
 
 ```bash
 pip install -r service/requirements.txt
-python3 -m service.app              # from the repository root
+python -m service.app              # from the repository root
 ```
 
 **Git LFS is not optional.** Six files are LFS objects. Without
@@ -88,7 +91,7 @@ repository.** This is enforced in code, not by convention — see
 Regenerate after any change to the metadata CSVs:
 
 ```bash
-python3 scripts/build_manifest.py
+python scripts/build_manifest.py
 ```
 
 ## Tests
@@ -97,8 +100,8 @@ Nothing to install.
 
 ```bash
 node --test                                          # JS modules under web/js/
-python3 -m unittest discover -s scripts             # manifest builder + repo path check
-python3 -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
+python -m unittest discover -s scripts             # manifest builder + repo path check
+python -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
 ```
 
 ## Current state

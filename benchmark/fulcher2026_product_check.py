@@ -7,8 +7,8 @@ annotation columns, reference channels, and the original channel names
 (including "_rerun"). It is filtered to the 1,275 QC-passed cells. The record
 goes to product_check.json in research/benchmark/fulcher2026.
 
-    python3 -m service.app &                       # from the repo root, default settings
-    python3 benchmark/fulcher2026_product_check.py [URL]   # default http://127.0.0.1:8001/api/project
+    python -m service.app &                       # from the repo root, default settings
+    python benchmark/fulcher2026_product_check.py [URL]   # default http://127.0.0.1:8001/api/project
 """
 import csv
 import io

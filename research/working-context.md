@@ -45,6 +45,12 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
 - **From 2026-10-01:** a Windows PC with an NVIDIA RTX 4000 Ada. Files that
   git doesn't carry came over in two zips on the project Drive
   ([setup, step 3](../docs/setup-windows.md#3-the-files-git-does-not-carry)).
+  Setup is done: the `vivome` conda env with CUDA, the five v3.1 checkpoints
+  restored, `GATE PASSED`. Two known differences from the Mac:
+  - 6 service tests miss their 1e-6 tolerance by about 5e-7 (float32
+    summation order); waiting on the owner's decision;
+  - harmonypy isn't installed (it needs a C++ compiler on Windows); only
+    a Harmony rerun needs it.
 
 ## How we got here
 

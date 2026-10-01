@@ -39,12 +39,12 @@ results/rna_meta.csv (load.py), to already exist.
 
 Explicit seeding, like scanvi_run.py -- run once per seed per variant:
 
-    python3 scanvi_run_pbmc240.py 0 raw
-    python3 scanvi_run_pbmc240.py 1 raw
-    python3 scanvi_run_pbmc240.py 2 raw
-    python3 scanvi_run_pbmc240.py 0 processed
-    python3 scanvi_run_pbmc240.py 1 processed
-    python3 scanvi_run_pbmc240.py 2 processed
+    python scanvi_run_pbmc240.py 0 raw
+    python scanvi_run_pbmc240.py 1 raw
+    python scanvi_run_pbmc240.py 2 raw
+    python scanvi_run_pbmc240.py 0 processed
+    python scanvi_run_pbmc240.py 1 processed
+    python scanvi_run_pbmc240.py 2 processed
 
 Optional third argument, the gene set (Track D gene-space follow-up):
 "all" (default) is the 2,907-gene space above. "measured" restricts both the
@@ -52,7 +52,7 @@ RNA reference and the query to the genes this variant measures in at least
 one PBMC240 cell: 1,215 for raw, 1,111 for processed. The rest of the space
 would otherwise be zero for every query cell. For example:
 
-    python3 scanvi_run_pbmc240.py 0 processed measured
+    python scanvi_run_pbmc240.py 0 processed measured
 
 This is a development-dataset comparison point (PBMC240 raw was used to
 choose V2 over v3 -- see research/notebook-outputs/nb1d/nb1d_summary.json's "note"), not a

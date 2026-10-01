@@ -5,8 +5,8 @@ They are T1 NB1b's V2 checkpoints, ~98 MB each, kept outside git
 Data/Results/Tier1_v31/NB1b/ckpt/. Download that folder (to
 data/incoming/NB1b/ckpt/ by default), then:
 
-    python3 scripts/fetch_v31_members.py                 # from the repository root
-    python3 scripts/fetch_v31_members.py --from DIR      # a copy somewhere else
+    python scripts/fetch_v31_members.py                 # from the repository root
+    python scripts/fetch_v31_members.py --from DIR      # a copy somewhere else
 
 Each file is copied only if its sha256 matches service/model/v3_1/MANIFEST.json;
 a file already in place and matching is left alone. Exit 1 on any miss.

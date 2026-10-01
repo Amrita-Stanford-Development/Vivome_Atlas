@@ -11,12 +11,12 @@ pending until the owner signs off on the results.
 ## Run order
 
 ```
-python3 benchmark/load.py              # 1. shared, label-free inputs → results/ (must run first)
-python3 benchmark/maxfuse_run.py       # 2. embeddings per method (heavy; any order)
-python3 benchmark/scglue_run.py
-python3 benchmark/scanvi_run.py
-python3 benchmark/recompute_v2.py      # 3. scores every cached arm under the current protocol
-python3 benchmark/ours_run.py          #    and ours, through the same evaluate.py
+python benchmark/load.py              # 1. shared, label-free inputs → results/ (must run first)
+python benchmark/maxfuse_run.py       # 2. embeddings per method (heavy; any order)
+python benchmark/scglue_run.py
+python benchmark/scanvi_run.py
+python benchmark/recompute_v2.py      # 3. scores every cached arm under the current protocol
+python benchmark/ours_run.py          #    and ours, through the same evaluate.py
 ```
 
 PBMC240 arm: `pbmc240_lineage_prep.py`, then `scanvi_run_pbmc240.py`.
@@ -32,12 +32,12 @@ Follow-ups: `paired_and_pool_first.py` and `pbmc240_convention_check.py`.
 
 v3.1 (Track F), from the repository root; both need the v3.1 checkpoints
 (`scripts/fetch_v31_members.py`):
-- `python3 -m benchmark.v31_dev_gate` is the gate. The served v3.1 pipeline
+- `python -m benchmark.v31_dev_gate` is the gate. The served v3.1 pipeline
   must reproduce NB2's development table on SCoPE2 and PBMC240, read with
   NB2's own parse (`notebook_convention.py`).
-- `python3 -m benchmark.fulcher2026_v31` scores Fulcher 2026, as
+- `python -m benchmark.fulcher2026_v31` scores Fulcher 2026, as
   development data, through v3.1.
-- `python3 -m benchmark.v31_service_flags` runs SCoPE2, PBMC240 and Fulcher
+- `python -m benchmark.v31_service_flags` runs SCoPE2, PBMC240 and Fulcher
   with v3.1's two service flags off and on.
 
 Track D's SCoPE2 paired bootstrap (ten ours-seeds against three scANVI

@@ -14,7 +14,7 @@ Labels are read after each projection, for scoring only: SCoPE2's own
 labels (research/notebook-outputs/nb1d/pbmc240_raw_cell_ids.csv), Fulcher's
 authors' types. Writes research/benchmark/v31_service_flags.json.
 
-    python3 -m benchmark.v31_service_flags      # from the repository root
+    python -m benchmark.v31_service_flags      # from the repository root
 """
 from __future__ import annotations
 

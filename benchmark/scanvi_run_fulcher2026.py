@@ -28,7 +28,7 @@ This script never reads a label. It saves embeddings and predicted reference
 classes, from scANVI's native classifier and from the shared kNN rule, to
 results/fulcher2026/. All scoring happens in fulcher2026_score.py.
 
-    python3 benchmark/scanvi_run_fulcher2026.py SEED VARIANT [GENES]
+    python benchmark/scanvi_run_fulcher2026.py SEED VARIANT [GENES]
     # SEED 0-2; VARIANT log2 | log2_cellmedian; GENES all (default) | measured
 
 Each run is roughly an hour of CPU training. The outputs are gitignored but

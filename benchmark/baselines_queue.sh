@@ -4,10 +4,10 @@
 # Skips any run that already has its .json record, records each run's exit
 # status in results/baselines_ext/logs/queue.txt, and continues past a failure
 # (rerun the same command to retry). Run one queue at a time: the runs load the
-# full 85,232-cell reference. PYTHON picks the interpreter (default python3;
-# on Windows in a conda env: PYTHON=python benchmark/baselines_queue.sh ...).
+# full 85,232-cell reference. PYTHON picks the interpreter (default python,
+# the activated conda env's).
 cd "$(dirname "$0")/.." || exit 1
-PYTHON=${PYTHON:-python3}
+PYTHON=${PYTHON:-python}
 mkdir -p benchmark/results/baselines_ext/logs
 for tool in "$@"; do
   for dataset in scope2 pbmc240 fulcher2026; do

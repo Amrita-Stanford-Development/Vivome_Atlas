@@ -21,7 +21,7 @@ v3.1 is scored on its best guess, since the baselines give fine labels only.
 Fulcher rows are baselines added after the held-out scoring; Seurat on
 Fulcher is biased in its favour (its labels came from Seurat transfer).
 
-    python3 -m benchmark.baselines_score      # from the repository root
+    python -m benchmark.baselines_score      # from the repository root
 """
 from __future__ import annotations
 

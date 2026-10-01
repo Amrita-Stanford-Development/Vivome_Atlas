@@ -120,7 +120,7 @@ space, conformal and abstention components (`pipeline.components_for`).
 - **`v3.1`, the default,** is T1 NB2's five-encoder ensemble
   (`pipeline/ensemble.py`), with its files in `model/v3_1/`.
   - Its five checkpoints live outside git. Fetch them with
-    `python3 scripts/fetch_v31_members.py`; until then the service answers
+    `python scripts/fetch_v31_members.py`; until then the service answers
     503 and names the missing file.
   - `service/tests/test_ensemble.py` checks it against NB2's own code.
   - `benchmark/v31_dev_gate.py` checks it against NB2's development-data
@@ -136,11 +136,11 @@ Both response schemas are in
 
 ```bash
 pip install -r service/requirements.txt
-python3 -m service.app        # from the repository root
+python -m service.app        # from the repository root
 ```
 
 ## Tests
 
 ```bash
-python3 -m unittest discover -s service/tests -t .   # from the repository root
+python -m unittest discover -s service/tests -t .   # from the repository root
 ```

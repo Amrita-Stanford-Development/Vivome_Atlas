@@ -11,7 +11,7 @@ the baselines give fine labels only) and the confident answer (label,
 label_level, label_set, abstained, abstain_reason) to
 results/baselines_ext/<dataset>/v31[_restricted]_pred.csv. Never reads a label.
 
-    python3 -m benchmark.baselines_v31      # from the repository root
+    python -m benchmark.baselines_v31      # from the repository root
 """
 from __future__ import annotations
 

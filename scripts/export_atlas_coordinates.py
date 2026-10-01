@@ -11,8 +11,8 @@ the service projects lands on the atlas the site displays.
 
 Then rebuild the manifest (story_cells.json reads these files):
 
-    python3 scripts/export_atlas_coordinates.py     # from the repository root
-    python3 scripts/build_manifest.py
+    python scripts/export_atlas_coordinates.py     # from the repository root
+    python scripts/build_manifest.py
 """
 from __future__ import annotations
 

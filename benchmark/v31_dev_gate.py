@@ -11,7 +11,7 @@ is compared too, for the record, not gated.
 Every figure it prints is also written to research/benchmark/v31_dev_gate.json.
 service/tests/test_v31_gate.py runs the same gate as a test.
 
-    python3 -m benchmark.v31_dev_gate        # from the repository root; exit 1 on a miss
+    python -m benchmark.v31_dev_gate        # from the repository root; exit 1 on a miss
 """
 from __future__ import annotations
 

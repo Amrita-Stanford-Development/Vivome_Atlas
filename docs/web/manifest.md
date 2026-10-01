@@ -4,7 +4,7 @@
 web pages display. It is generated, never hand-edited.
 
 ```bash
-python3 scripts/build_manifest.py
+python scripts/build_manifest.py
 ```
 
 The builder reads `web/data/metadata_RNA_lat128.csv` and
@@ -164,7 +164,7 @@ that has a predecessor to compare against.
 
 ```bash
 node --test                                  # web/tests/manifest.test.js, panels.test.js, lfs.test.js
-python3 -m unittest discover -s scripts     # test_build_manifest.py + repo path check
+python -m unittest discover -s scripts     # test_build_manifest.py + repo path check
 ```
 
 The JS suites share `web/tests/fixtures.js`, one manifest shaped like the real

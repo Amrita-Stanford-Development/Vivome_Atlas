@@ -261,23 +261,23 @@ git lfs pull   # fetches the RNA expression matrix AND
                # (large; flips web/tests/lfs.test.js red by design, see that
                # test's comment, and is required for ours_run.py and
                # service/tests/test_e2e_real_export.py)
-python3 -m pip install -r service/requirements.txt   # includes scikit-learn,
+python -m pip install -r service/requirements.txt   # includes scikit-learn,
                                                        # needed by both the
                                                        # real service and this
                                                        # benchmark's PCA/kNN
-python3 -m pip install harmonypy maxfuse scarches scvi-tools scglue \
+python -m pip install harmonypy maxfuse scarches scvi-tools scglue \
     anndata networkx   # one-off benchmark-only dependencies, not shipped
                         # with the real service
 cd benchmark
-python3 load.py
-python3 maxfuse_run.py      # ~21 min
-python3 scglue_run.py       # ~29 min
-python3 scanvi_run.py 0     # ~35 min -- repeat with 1 and 2 for the 3-seed table
-python3 scanvi_run.py 1
-python3 scanvi_run.py 2
-python3 recompute_v2.py     # seconds -- scores PCA/Harmony/MaxFuse/scGLUE/majority
-python3 ours_run.py         # ~1 min -- scores "ours" through the same harness
-python3 paired_and_pool_first.py   # seconds -- needs all 3 scANVI seeds' embeddings cached
+python load.py
+python maxfuse_run.py      # ~21 min
+python scglue_run.py       # ~29 min
+python scanvi_run.py 0     # ~35 min -- repeat with 1 and 2 for the 3-seed table
+python scanvi_run.py 1
+python scanvi_run.py 2
+python recompute_v2.py     # seconds -- scores PCA/Harmony/MaxFuse/scGLUE/majority
+python ours_run.py         # ~1 min -- scores "ours" through the same harness
+python paired_and_pool_first.py   # seconds -- needs all 3 scANVI seeds' embeddings cached
 ```
 
 The three heavy scripts (`maxfuse_run.py`, `scglue_run.py`, `scanvi_run.py`)

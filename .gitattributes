@@ -1,3 +1,17 @@
+# Text is stored with LF. On Windows, Python's write_text/open("w") and
+# pandas' to_csv write CRLF; this keeps regenerated outputs from showing as
+# whole-file changes. The rules below override it for specific files.
+* text=auto eol=lf
+
+# Committed with CRLF as delivered; kept byte-exact.
+research/notebook-outputs/nb1d/scanvi_pbmc240_lineage_per_seed.csv -text
+research/notebook-outputs/nb1d/scanvi_pbmc240_lineage_recall_and_composition.csv -text
+service/examples/pbmc240_proteins_raw.tsv -text
+service/examples/pbmc240_zscored_all_genes.csv -text
+service/model/evidence/v3_1_tables/latent_centroid_cosine.csv -text
+web/data/metadata_PROT_lat128.csv -text
+web/data/metadata_RNA_lat128.csv -text
+
 web/data/atlas_RNA_lat128.parquet filter=lfs diff=lfs merge=lfs -text
 web/data/atlas_RNA_lat128-001-part1.csv filter=lfs diff=lfs merge=lfs -text
 web/data/atlas_RNA_lat128-001-part2.csv filter=lfs diff=lfs merge=lfs -text

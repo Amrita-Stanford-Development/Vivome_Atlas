@@ -56,7 +56,7 @@ files are below, each listed with its sha256, size and origin in
 |---|---|
 | `nb2_spec_v31.json` | **Real.** NB2's export, as delivered: members, per-member temperature, per-class qhat, out-of-distribution threshold, output rule, hierarchy, caveats. Also kept at `research/notebook-outputs/nb2/`. |
 | `MANIFEST.json` | **Real.** sha256, size and origin of every file here. |
-| `members/V2_batchgene_aug_seed{0..4}.pt` | **Real, outside git.** T1 NB1b's V2 checkpoints (~98 MB each). Their home is the project Drive, `Data/Results/Tier1_v31/NB1b/ckpt/`. Download that folder to `data/incoming/NB1b/ckpt/` and run `python3 scripts/fetch_v31_members.py`, which copies each file only if its sha256 matches. Until then v3.1 answers 503 and names the missing file. |
+| `members/V2_batchgene_aug_seed{0..4}.pt` | **Real, outside git.** T1 NB1b's V2 checkpoints (~98 MB each). Their home is the project Drive, `Data/Results/Tier1_v31/NB1b/ckpt/`. Download that folder to `data/incoming/NB1b/ckpt/` and run `python scripts/fetch_v31_members.py`, which copies each file only if its sha256 matches. Until then v3.1 answers 503 and names the missing file. |
 | `members/V2_seed{0..4}_reference_latent_f16.npy` | **Real.** T1 NB1d: every reference cell through that member, float16, `reference_metadata.csv` row order. The out-of-distribution score's reference, and for seed 4, the coordinate space. |
 | `members/V2_seed{0..4}_centroids.npy` | **Real.** T1 NB1d: the class means of those latents, L2 normalised, in class position order. |
 

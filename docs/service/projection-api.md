@@ -8,7 +8,7 @@ can *send data to*, not only look at.
 > end to end against the real reference (`service/model/README.md`), as v3.1
 > by default with v3 selectable ([Pipeline versions](#pipeline-versions)), and
 > is covered by `service/tests/`. `web/project.html` sends an upload to a
-> service the visitor runs locally (`python3 -m service.app`) and renders
+> service the visitor runs locally (`python -m service.app`) and renders
 > the response; there is no hosted service yet. Every value in the schemas
 > below is a placeholder showing the response shape, not a measurement.
 

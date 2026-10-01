@@ -4,7 +4,7 @@ The public website: static HTML, CSS and ES modules, with no build step and
 no dependencies. Serve this folder as-is:
 
 ```bash
-cd web && python3 -m http.server 8000     # open http://localhost:8000/
+cd web && python -m http.server 8000     # open http://localhost:8000/
 ```
 
 Pages fetch `data/` over HTTP, so opening them from `file://` won't load

@@ -1,6 +1,6 @@
 """Track D extension: one baseline, one dataset, one seed.
 
-    python3 -m benchmark.baselines_run TOOL DATASET SEED     # from the repository root
+    python -m benchmark.baselines_run TOOL DATASET SEED     # from the repository root
     # TOOL maxfuse | scglue | harmony | seurat; DATASET scope2 | pbmc240 | fulcher2026; SEED 0-2
     # khoury2026 is sealed: it runs only at the final v3.1 evaluation, with --unseal
 

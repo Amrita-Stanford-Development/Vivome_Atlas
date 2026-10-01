@@ -14,7 +14,7 @@ everything that isn't lymphoid, myeloid or erythroid, so every row sums to
 lymphoid, 5 myeloid; myeloid recall is anecdotal). Composition is over all
 237 cells.
 
-    python3 benchmark/pbmc240_scanvi_table.py
+    python benchmark/pbmc240_scanvi_table.py
 """
 import re
 from pathlib import Path

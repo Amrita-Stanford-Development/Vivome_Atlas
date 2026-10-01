@@ -5,9 +5,9 @@ predictions to disk, so a bootstrap CI never requires retraining scANVI a
 second time. Takes an optional seed argument (default 0); run it once per
 seed (0, 1, 2) to build the 3-seed table in research/benchmark/results.md.
 
-    python3 scanvi_run.py 0
-    python3 scanvi_run.py 1
-    python3 scanvi_run.py 2
+    python scanvi_run.py 0
+    python scanvi_run.py 1
+    python scanvi_run.py 2
 """
 import sys, time, json, warnings
 from pathlib import Path

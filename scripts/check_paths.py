@@ -20,7 +20,7 @@ trailing `/`), so prose like "data/metadata split" is left alone. Lines of a
 directory-tree drawing (├ └ │) are skipped: their names are relative to the
 branch they hang from.
 
-    python3 scripts/check_paths.py        # exit 1 and a list if anything is broken
+    python scripts/check_paths.py        # exit 1 and a list if anything is broken
 """
 from __future__ import annotations
 

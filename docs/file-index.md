@@ -55,7 +55,7 @@ When you add, move or delete a file, update its line in the same commit.
 ## service/ — the projection API (Python, its own dependencies)
 
 - `service/README.md` — what the service does, how each pipeline stage works and why, how to run and test it
-- `service/__init__.py` — makes `service` a package (`python3 -m service.app`)
+- `service/__init__.py` — makes `service` a package (`python -m service.app`)
 - `service/app.py` — the HTTP app: `POST /api/project`, which runs the pipeline on an uploaded matrix
 - `service/config.py` — every model path (each can be overridden with a `VIVOME_*` environment variable) and every tuned constant
 - `service/requirements.txt` — the service's Python dependencies: torch, NumPy, SciPy, scikit-learn, POT (optimal transport), faiss-cpu
