@@ -11,6 +11,7 @@ Nothing here ships. The products are `web/` and `service/`, documented in
 | [implementation-plan.md](implementation-plan.md) | The governing Nature Communications plan; its phases (0–6) are referenced across the repo |
 | [roadmap.md](roadmap.md) | The v3.1 / v4 plan: Colab notebooks (T1, T2), code tracks (A2–F), go/no-go gates, file ownership, track prompts |
 | [todo.md](todo.md) | Progress against the roadmap, current verified numbers, open decisions, changelog |
+| [working-context.md](working-context.md) | Hand-off for a new session: how the work got here, owner decisions, where it stands, what's next |
 | [notebook-run-history.md](notebook-run-history.md) | Every notebook run, in order, and what each one found |
 | [tier1-tier2-report.md](tier1-tier2-report.md) | The research report the roadmap's Tier 1 and Tier 2 work draws on |
 

@@ -10,6 +10,7 @@ and read [CLAUDE.md](../CLAUDE.md) before changing anything.
 |---|---|
 | [project-structure.md](project-structure.md) | The folder layout, where new files go, naming rules, deliberate oddities |
 | [file-index.md](file-index.md) | One line for every tracked file |
+| [setup-windows.md](setup-windows.md) | Setting up on a Windows GPU workstation, including the files git doesn't carry |
 
 ## The website
 

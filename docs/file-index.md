@@ -211,6 +211,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `docs/README.md` — index of `docs/` and `research/`
 - `docs/project-structure.md` — the folder layout, what goes where, and naming rules
 - `docs/file-index.md` — this page
+- `docs/setup-windows.md` — setting up the repository, the local-only files, Python, R and Claude Code on a Windows GPU workstation
 - `docs/web/manifest.md` — the manifest: schema, the measured/pending contract, regeneration, release protocol
 - `docs/web/data.md` — the site's data files, Git LFS, what ships and what doesn't
 - `docs/web/design.md` — the design system: the world, the four UI objects, colour meanings, type, motif, copy rules, where new results land
@@ -226,6 +227,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/implementation-plan.md` — the Nature Communications plan: the phases (0–6) the manifest's pending records refer to
 - `research/roadmap.md` — the v3.1 / v4 plan: dated revisions (latest 2026-10-01), notebook tracks (T1, T2), code tracks (A2–F), go/no-go gates, file ownership, track prompts
 - `research/todo.md` — progress against the roadmap, current verified numbers, open decisions, changelog
+- `research/working-context.md` — hand-off for a new session: how the work got here, owner decisions and standing instructions, the Track D extension's status, what's next
 - `research/notebook-run-history.md` — every notebook run, in order, and what each one found (17 entries, through T1 NB2)
 - `research/tier1-tier2-report.md` — the research report the roadmap's Tier 1 and Tier 2 work draws on, with a 2026-10-01 status note on which of its ideas are now tested
 - `research/archive/2026-08-29-resource-layer-plan.md` — the finished resource-layer build plan, frozen (its paths are from that time)

@@ -23,6 +23,8 @@ cd web && python3 -m http.server 8000
 # open http://localhost:8000/index.html
 ```
 
+On Windows, follow [docs/setup-windows.md](docs/setup-windows.md) instead.
+
 The atlas fetches data from `web/data/` over HTTP, so opening `index.html` from
 `file://` will not load. Serve the `web/` folder.
 
