@@ -319,3 +319,107 @@ matrix we score, with the donor regressed and only PCs 1–4 used. Caveat 2
 also stands and is extended. The scored matrix carries ComBat on the mTRAQ
 plex in every batch, limma run-order correction in three batches, and a
 cross-batch ComBat. These are all the authors' corrections; we add none.
+
+## Amendment 2, 2026-10-01, before unsealing: the v3.1 candidate and four more baselines
+
+Khoury 2026 is still sealed. Nothing was embedded or scored for this
+amendment, and no label was read.
+
+### The candidate: v3.1 as served
+
+The v3.1 candidate is the served v3.1 pipeline of release 0.3.0 (tag
+`atlas-v0.3.0`, commit `eae50af`): T1 NB2's five-encoder ensemble
+(`service/pipeline/ensemble.py`), loaded by `pipeline.load_bundle("v3.1")`,
+with both service flags on (`set_includes_best_guess`,
+`restricted_renormalise`). Its files are checked against
+`service/model/v3_1/MANIFEST.json` on load:
+
+| File | sha256 |
+|---|---|
+| `nb2_spec_v31.json` | `af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd` |
+| `members/V2_batchgene_aug_seed0.pt` | `c08c0cf8d4ade284bb18570bfd315905c57f271a0d374732c917dd54f6101063` |
+| `members/V2_batchgene_aug_seed1.pt` | `42cdea2a558068d92d23519846da39c691dfcb324dbb6f486e08d8d67044fbd2` |
+| `members/V2_batchgene_aug_seed2.pt` | `a2c7424626fdb30960c1e30b4def45e0fe5e6a755197627abc5fe292f54400e7` |
+| `members/V2_batchgene_aug_seed3.pt` | `6d5ddefc2155f3fd2f7942464039378f8882e51d71d84a3a889fa2ce009a7724` |
+| `members/V2_batchgene_aug_seed4.pt` | `5950061279cb1f6a5e469159effa5de76a3ca7d016a30c68608097980240a1e5` |
+
+Each member's reference latents and centroids are
+`service/model/v3_1/members/V2_seed{0..4}_reference_latent_f16.npy` and
+`V2_seed{0..4}_centroids.npy`, in `reference_metadata.csv` row order.
+
+**How the protocol's rules apply to it.** The upload goes through
+`pipeline.run_projection` unrestricted, on all 1,651 cells.
+- **Product rule.** The served `best_guess`, mapped to the five types by the
+  class mapping above. It is the ensemble's argmax over all 22 classes, and
+  every Khoury cell has one, since all pass the 200-gene floor. It is one
+  prediction, scored once.
+- **Shared kNN rule.** `evaluate.knn_classifier_predict` on each member's
+  query latents against that member's reference latents. That gives five
+  member scores, summarised per family as for a multi-seed candidate.
+- **Secondary, v3.1 only: the confident answer.** The served `label` at its
+  `label_level`, scored exactly as `benchmark/fulcher2026_v31.py` scores
+  Fulcher, with the hierarchy in `nb2_spec_v31.json`:
+  - committed share, overall and per type;
+  - correct at the stated level, overall and per type;
+  - answers per level (class, group, lineage);
+  - the composition.
+
+  A class answer counts as correct through the class mapping above. A group
+  or lineage answer counts as correct against the one the true type's
+  classes share.
+
+**Gate.** Before any Khoury embedding, each of the five members must
+reproduce its own NB1d latents on PBMC240 raw, as the Fulcher gate did
+(`benchmark/fulcher2026_embed.py`): NB1d's 237 cells and first-symbol gene
+convention, through `pipeline.embed_query`, with a median cosine of at least
+0.999 against `data/incoming/NB1d/embeddings/V2_seed{0..4}/pbmc240_raw_latent.npy`.
+The served pipeline must also pass `benchmark/v31_dev_gate.py`, NB2's
+development table. If either gate fails, v3.1 is not scored.
+
+V2's single seeds (NB1b `V2_batchgene_aug` checkpoints) are no longer a
+separate candidate. They are scored only as the ensemble's members, under
+the shared kNN rule above.
+
+### Four more baselines
+
+MaxFuse, scGLUE, Harmony with kNN, and Seurat CCA label transfer join
+scANVI. Their settings are the ones the Track D extension fixes on SCoPE2,
+PBMC240 and Fulcher. A further dated amendment, committed before
+unsealing, names the scripts and their settings. Nothing about them is
+chosen on Khoury labels.
+
+- **Gene space: measured genes only.** The RNA reference (the benchmark's
+  85,232-cell reference) and the query are restricted to the 2,907-gene
+  benchmark genes Khoury measures (1,252 by exact symbol). This is the
+  space of scANVI's `measuredgenes` arm.
+- **Scaling.** As for scANVI: each gene is z-scored over its observed
+  values, and unobserved query entries are set to 0. The matrix is already
+  log2 and is not transformed again.
+- **Seeds.** Seeds 0–2 for every stochastic method: MaxFuse, scGLUE, and
+  Harmony's initialisation. A method that is deterministic given its inputs
+  runs once, and the write-up says so.
+- **Decision rules.**
+  - MaxFuse, scGLUE and Harmony: the shared kNN rule on their joint
+    embedding.
+  - Seurat CCA: its native label transfer (`FindTransferAnchors` with
+    `reduction = "cca"`, then `TransferData`).
+  - The baselines have no abstention.
+- **One fixed configuration each.** Unlike scANVI's headline-arm exception,
+  no arm is chosen on Khoury labels.
+- **Same metrics** as above, on all 1,651 cells:
+  - five-type balanced accuracy (primary);
+  - recall per type;
+  - lineage recall;
+  - composition;
+  - confusion;
+  - summaries over seeds.
+- **Paired bootstrap, added.** Each candidate is compared with each new
+  baseline. Under the shared kNN rule, kNN is paired with kNN. The product
+  rule is paired with Seurat CCA's native transfer. The number of pairings
+  whose CI excludes zero is reported in each direction, as for scANVI.
+
+**Seurat on Khoury is not circular.** Fulcher's labels came from a Seurat
+label transfer, so Seurat transfer is biased in its favour there. Khoury's
+labels came from protein-only Seurat clustering, with no RNA reference
+(amendment 1). Seurat CCA transfer from RNA is a different procedure. It
+shares only the toolkit, and no bias correction is applied.
