@@ -5,21 +5,17 @@ Stage 4 only ever scores classes inside the label space. v3 has no
 estimate of its own: every class is a candidate, or, when a request opts in,
 only config.CROSS_MODAL_SUPPORTED_CLASSES (assignment.py's module docstring
 has the evidence for that restriction, and pipeline.run_projection's for why
-it is no longer the default). v3.1 replaces this with a per-upload estimate
-of which classes are actually present, with a support score for each; its
-implementation lands in Track F from NB2's `label_space_config.json` and
-`bcts_params.json`.
+it is no longer the default). T1 NB2 evaluated per-upload estimates (EM label
+shift with a prior floor) and chose none for v3.1: every class a candidate.
 """
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from typing import Protocol
 
 import numpy as np
 
 from service import config
-from service.pipeline import reference
 
 
 @dataclass(frozen=True)
@@ -45,12 +41,12 @@ class V3LabelSpace:
         return LabelSpace(positions=positions, support=None, method="cross_modal_supported")
 
 
-def load_v31_artifacts() -> dict:
-    """T1 NB2's label space estimator and calibration parameters, parsed.
-    PendingArtifactError until the export lands."""
-    out = {}
-    for key, path in (("label_space_config", config.V31_LABEL_SPACE_CONFIG_PATH),
-                      ("bcts_params", config.V31_BCTS_PARAMS_PATH)):
-        with open(reference.require_v31_artifact(path, "T1 NB2"), encoding="utf-8") as handle:
-            out[key] = json.load(handle)
-    return out
+class V31LabelSpace:
+    """v3.1 (T1 NB2 chose method "none"): no per-upload estimate, every class
+    a candidate. A request may still opt in to the cross-modal supported
+    classes, as in v3; NB2 did not evaluate that option."""
+
+    def estimate(self, query_embeddings, class_names, restrict):
+        if restrict:
+            return V3LabelSpace().estimate(query_embeddings, class_names, True)
+        return LabelSpace(positions=None, support=None, method="none")

@@ -67,6 +67,7 @@ Vivome_Atlas/
 | A number the site displays | `scripts/build_manifest.py`, which writes `web/data/atlas_manifest.json` | never hard-code it in HTML — see [web/manifest.md](web/manifest.md) |
 | A pipeline stage or service behaviour | `service/pipeline/` | a test in `service/tests/`; a constant in `service/config.py` |
 | A file the server loads | `service/model/runtime/` | a path constant in `service/config.py` |
+| A file only the v3.1 pipeline loads | `service/model/v3_1/` | its sha256 in `service/model/v3_1/MANIFEST.json`, which the service checks on load |
 | A table that backs a model claim | `service/model/evidence/` | cite it from `MODEL_CARD.md` |
 | A new benchmark arm | `benchmark/` | results in `research/benchmark/results.md` |
 | Output tables from a notebook run | `research/notebook-outputs/<run>/` | an entry in `research/notebook-run-history.md` |

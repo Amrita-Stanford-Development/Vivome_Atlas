@@ -1,0 +1,121 @@
+{
+  "created": "2026-09-30 17:08:18",
+  "gates": {
+    "reference_reproduced": true
+  },
+  "choices": {
+    "C1_encoder": "V2_ens",
+    "C2_smoothing": true,
+    "C3_rule": "centroid",
+    "C4_label_space": [
+      "none",
+      0.0
+    ],
+    "C5_mondrian": true,
+    "C6_ood_threshold": 0.7789892554283142
+  },
+  "eval_candidate": {
+    "bal_fine_strict": 17.52,
+    "fine_rate": 19.13,
+    "group_rate": 17.71,
+    "lineage_rate": 43.97,
+    "abstain_rate": 19.18,
+    "abstain_ood": 2.97,
+    "abstain_ambiguous": 15.82,
+    "abstain_empty": 0.36,
+    "correct_when_committed": 94.9,
+    "coverage": 87.06,
+    "mean_set_size": 2.8,
+    "bal_top1": 56.13,
+    "ls_recall": 100.0,
+    "ls_precision": 17.86
+  },
+  "eval_service_today_v3": {
+    "bal_fine_strict": 23.22,
+    "fine_rate": 54.49,
+    "group_rate": 0.0,
+    "lineage_rate": 0.0,
+    "abstain_rate": 45.51,
+    "abstain_ood": 6.86,
+    "abstain_ambiguous": 35.84,
+    "abstain_empty": 2.78,
+    "correct_when_committed": 34.98,
+    "coverage": NaN,
+    "mean_set_size": 1.35,
+    "bal_top1": NaN,
+    "ls_recall": NaN,
+    "ls_precision": NaN
+  },
+  "ood_negative_control": {
+    "auc_real_vs_shuffled": 0.8454124814523283,
+    "real_rejected_pct": 5.487704241624031,
+    "shuffled_rejected_pct": 0.9572536722231391,
+    "threshold": 0.7789892554283142
+  },
+  "dev": [
+    {
+      "dataset": "SCoPE2",
+      "config": "candidate",
+      "cells": 1490,
+      "committed": 72.5503355704698,
+      "fine": 10.201342281879194,
+      "abstain_ood": 0.0,
+      "abstain_ambiguous": 24.496644295302016,
+      "abstain_empty": 2.953020134228188,
+      "composition": "T cell 30.9; lineage:myeloid 28.7; abstain 27.4; lineage:lymphoid 7.1; dendritic cell 4.2; granulocyte 0.8; erythroid 0.8",
+      "label_space": "b cell, basophil, cd4-positive, alpha-beta t cell, cd8-positive, alpha-beta t cell, classical monocyte, common myeloid progenitor, erythrocyte, hematopoietic precursor cell, hematopoietic stem cell, intermediate monocyte, macrophage, mature nk t cell, monocyte, myeloid dendritic cell, naive thymus-derived cd4-positive, alpha-beta t cell, natural killer cell, neutrophil, non-classical monocyte, plasma cell, plasmacytoid dendritic cell, platelet, regulatory t cell",
+      "fine_bal_strict": 0.0,
+      "group_correct_pct": 0.0,
+      "lymphoid_correct_pct": NaN,
+      "myeloid_correct_pct_n5": NaN
+    },
+    {
+      "dataset": "SCoPE2",
+      "config": "service today (v3)",
+      "cells": 1490,
+      "committed": 26.644295302013422,
+      "fine": 26.644295302013422,
+      "abstain_ood": 4.630872483221476,
+      "abstain_ambiguous": 63.35570469798658,
+      "abstain_empty": 5.369127516778524,
+      "composition": "abstain 73.4; T cell 19.5; granulocyte 4.8; dendritic cell 1.7; monocyte/macrophage 0.5; NK cell 0.1",
+      "label_space": NaN,
+      "fine_bal_strict": 0.3093853051243099,
+      "group_correct_pct": 0.5369127516778524,
+      "lymphoid_correct_pct": NaN,
+      "myeloid_correct_pct_n5": NaN
+    },
+    {
+      "dataset": "PBMC240",
+      "config": "candidate",
+      "cells": 238,
+      "committed": 73.94957983193278,
+      "fine": 1.680672268907563,
+      "abstain_ood": 1.680672268907563,
+      "abstain_ambiguous": 23.949579831932773,
+      "abstain_empty": 0.0,
+      "composition": "lineage:lymphoid 39.9; abstain 26.1; T cell 21.0; lineage:myeloid 9.7; monocyte/macrophage 1.7; B cell 1.3; progenitor 0.4",
+      "label_space": "b cell, basophil, cd4-positive, alpha-beta t cell, cd8-positive, alpha-beta t cell, classical monocyte, common myeloid progenitor, erythrocyte, hematopoietic precursor cell, hematopoietic stem cell, intermediate monocyte, macrophage, mature nk t cell, monocyte, myeloid dendritic cell, naive thymus-derived cd4-positive, alpha-beta t cell, natural killer cell, neutrophil, non-classical monocyte, plasma cell, plasmacytoid dendritic cell, platelet, regulatory t cell",
+      "fine_bal_strict": NaN,
+      "group_correct_pct": NaN,
+      "lymphoid_correct_pct": 79.48717948717949,
+      "myeloid_correct_pct_n5": 60.0
+    },
+    {
+      "dataset": "PBMC240",
+      "config": "service today (v3)",
+      "cells": 238,
+      "committed": 40.33613445378151,
+      "fine": 40.33613445378151,
+      "abstain_ood": 8.823529411764707,
+      "abstain_ambiguous": 50.0,
+      "abstain_empty": 0.42016806722689076,
+      "composition": "abstain 59.7; granulocyte 23.9; T cell 11.8; erythroid 2.5; monocyte/macrophage 1.3; NK cell 0.4; B cell 0.4",
+      "label_space": NaN,
+      "fine_bal_strict": NaN,
+      "group_correct_pct": NaN,
+      "lymphoid_correct_pct": 12.82051282051282,
+      "myeloid_correct_pct_n5": 20.0
+    }
+  ]
+}

@@ -5,7 +5,7 @@ own data (`web/data/`) and the model's files (`service/model/`).
 
 - `incoming/` — local staging for notebook deliveries and datasets, all
   gitignored as large inputs:
-  - `NB1b/`, `NB1d/`: T1 notebook deliveries (checkpoints, embeddings, tables);
+  - `NB1b/`, `NB1d/`, `NB2/`: T1 notebook deliveries (checkpoints, embeddings, tables). `NB1b/ckpt/` is where `scripts/fetch_v31_members.py` looks for the v3.1 checkpoints;
   - `Reference_Projection_V3_ckpt/`: the five v3 reference seeds;
   - `Fulcher2026/`: the held-out Fulcher 2026 dataset (see
     `benchmark/datasets.py`).

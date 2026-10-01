@@ -8,3 +8,8 @@ node_modules/
 # cites are copied to research/notebook-outputs/ and committed there. See
 # data/README.md.
 data/incoming/
+
+# The v3.1 ensemble's five NB1b checkpoints (~98 MB each) live outside git:
+# fetch them with scripts/fetch_v31_members.py, which checks each against
+# service/model/v3_1/MANIFEST.json.
+service/model/v3_1/members/*.pt

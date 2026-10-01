@@ -5,10 +5,11 @@ the shared latent space. It is the core of the resource claim: an atlas you
 can *send data to*, not only look at.
 
 > **Status: implemented, not hosted.** The pipeline in `service/` runs
-> end to end against the real v3 reference (`service/model/README.md`) and
+> end to end against the real reference (`service/model/README.md`), as v3.1
+> by default with v3 selectable ([Pipeline versions](#pipeline-versions)), and
 > is covered by `service/tests/`. `web/project.html` sends an upload to a
 > service the visitor runs locally (`python3 -m service.app`) and renders
-> the response; there is no hosted service yet. Every value in the schema
+> the response; there is no hosted service yet. Every value in the schemas
 > below is a placeholder showing the response shape, not a measurement.
 
 ## Contract
@@ -78,7 +79,7 @@ cleaned to its basename without `.raw`.
 }
 ```
 
-`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version"}`,
+`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version", "pipeline_version"}`,
 or 503 with `{"status": "unavailable", "reason"}` while an artifact is
 missing. `project.html` calls it before offering an upload.
 
@@ -119,45 +120,96 @@ mass-spec-proteomics cells outright (a fixed gene count travels across
 datasets with very different native panel sizes better than a fraction of
 one fixed 9,002-gene denominator does).
 
-## v3.1 (in development)
+## Pipeline versions
 
-The service answers with the v3 pipeline unless `VIVOME_PIPELINE_VERSION=v3.1`
-is set (`config.PIPELINE_VERSION`). v3.1 replaces three stages with the
-versions fitted in T1 NB2 and NB3 (`research/roadmap.md`):
+The service runs v3.1 unless `VIVOME_PIPELINE_VERSION=v3` is set
+(`config.PIPELINE_VERSION`). The schema above is v3's. A v3.1 response
+keeps every v3 field with the same meaning, and adds the fields below.
 
-- a label space estimated for each upload;
-- abstention with a defined false-abstention rate;
-- class-conditional conformal sets.
+### v3.1
 
-Track F lands their artifacts under `service/model/v3_1/`, together with the
-code that reads them. Until then a v3.1 service answers 503 and names what
-is missing.
+v3.1 is T1 NB2's specification (`service/model/v3_1/nb2_spec_v31.json`),
+implemented in `service/pipeline/ensemble.py`:
 
-A v3.1 response is additive: every v3 field above stays, with the same
-meaning. It adds:
+- **Ensemble.** Five V2 encoders (NB1b, seeds 0 to 4) each score
+  softmax(cosine to their class centroids / T), with T fitted per member.
+  The ensemble probability is the mean of the five.
+- **No per-upload label space.** Every class is a candidate unless
+  `restrict_to_supported_classes` is set.
+- **Mondrian conformal sets.** Class c is in a cell's set when its
+  probability is at least 1 − qhat[c], with one qhat per class.
+- **Out of distribution.** A cell is out of distribution when the mean over
+  members of its max cosine to any reference cell is below the fixed
+  `reference_abstain_threshold`.
+- **Coordinates and property transfer** use member seed 4. The site's atlas
+  coordinates come from the same member and the same PCA
+  (`scripts/export_atlas_coordinates.py`), so a projected cell lands on the
+  displayed atlas.
+
+Every v3.1 file is checked against `service/model/v3_1/MANIFEST.json` when
+the service loads. The five checkpoints live outside git
+(`scripts/fetch_v31_members.py`). Until they are in place, the service
+answers 503 and names the missing file.
 
 ```
 {
   "pipeline_version"  : "v3.1",
-  "supported_classes" : {
-    "names"   : [<string>, ...],               the classes this upload may be labelled with
-    "method"  : <string>,                      how they were chosen
-    "support" : {<class name>: <float>} | null per-class support score
-  },
+  "supported_classes" : {"names": [<string>, ...], "method": "none" | "cross_modal_supported", "support": null},
   "calibration" : {
     "method"              : <string>,
-    "target_coverage"     : <float>,
-    "applies_to"          : <string>,          what the coverage target is a guarantee about
-    "n_calibration_cells" : <int>
+    "target_coverage"     : 0.9,
+    "applies_to"          : <string>,       what the coverage target is a guarantee about
+    "n_calibration_cells" : 0               nothing is drawn from the upload
   },
+  "reference_abstain_threshold" : <float>,  the out-of-distribution threshold itself
   "cells": [
-    { ..., "abstained": true, "abstain_reason": <v3 reason>,
-      "abstain_category": "no_reference_support" | "low_coverage" | "ambiguous" }
+    { ..., "label": "T cell", "label_level": "group",
+      "label_set": ["cd4-positive, alpha-beta t cell", "regulatory t cell"],
+      "confidence": <float>, "abstained": false,
+      "reference_similarity": <float>,
+      "best_guess": {"label": "cd4-positive, alpha-beta t cell", "probability": <float>} },
+    { ..., "label": null, "label_level": null, "label_set": [], "confidence": null,
+      "abstained": true, "abstain_reason": <reason>,
+      "abstain_category": "no_reference_support" | "low_coverage" | "ambiguous",
+      "reference_similarity": <float>,
+      "best_guess": {...} }                 absent when abstain_reason is coverage_too_low
   ]
 }
 ```
 
-`abstain_category` groups the v3 reasons:
+**The confident label** is stated at the level its conformal set supports.
+`label_set` is the cell's set.
+- **One class:** `label` is that class, and `label_level` is `"class"`.
+- **Several classes in one group:** `label` is the group (for example
+  `"T cell"`), and `label_level` is `"group"`.
+- **Several groups in one lineage:** `label` is the lineage (for example
+  `"lymphoid"`), and `label_level` is `"lineage"`.
+- **Anything else:** the cell abstains with `ambiguous_between_classes`.
+
+Groups and lineages are NB2's hierarchy (the spec's `hierarchy`, also
+`research/notebook-outputs/nb2/tables/class_hierarchy.csv`). `confidence`
+is the ensemble probability summed over `label_set`: the probability that
+the cell is one of the classes it names.
+
+Cells are checked in order:
+1. fewer than 200 observed genes: `coverage_too_low`;
+2. out of distribution: `outside_supported_region`;
+3. an empty set: `no_confident_label`;
+4. the hierarchy above.
+
+**`best_guess`** is the class with the highest ensemble probability among
+the candidate classes, with that probability. Each member's temperature
+was fitted in NB2 on labelled RNA, so the probability is calibrated there.
+Every cell not refused for coverage has one, including cells that
+abstained. It is not a confident answer: no coverage target covers it.
+- Read `label` for an answer that holds at its stated level.
+- Read `best_guess` and its probability to see where the model leans.
+
+**`reference_similarity`** is the cell's out-of-distribution score. The
+cell abstains with `outside_supported_region` when its score is below
+`reference_abstain_threshold`, unless it was already refused for coverage.
+
+`abstain_category` groups the reasons:
 
 | `abstain_reason` | `abstain_category` |
 |---|---|
@@ -166,22 +218,28 @@ meaning. It adds:
 | `no_confident_label` | `ambiguous` |
 | `ambiguous_between_classes` | `ambiguous` |
 
-`calibration.applies_to` states what the coverage target covers.
-
-- v3.1's conformal sets are calibrated on masked RNA donors, so the guarantee
-  is stated for masked RNA, not for protein.
+`calibration.applies_to` states what the coverage target covers:
+- v3.1's qhats were fitted on labelled RNA simulated uploads, so on protein
+  the coverage is approximate (`service/model/MODEL_CARD.md`, v3.1).
 - v3's sets are calibrated on the upload's own top predictions, with no
   ground truth, so their target is nominal.
 
-The components are swappable in code (`pipeline.components_for`):
-- `label_space.LabelSpaceEstimator`;
-- `abstention.AbstentionScorer`, which can ask for the encoder's
-  512-dimensional pre-projection features (`encode_with_hidden`);
-- `calibration.ConformalCalibrator`.
+### Components
 
-Stage 4's nearest-centroid softmax takes a fitted temperature and per-class
-bias (`assignment.assign_labels`). Stage 7 chooses its confidence rule per
-label-space method (`config.FALLBACK_CONFIDENCE`).
+`pipeline.components_for(version)` builds the three swappable stages:
+
+| Stage | v3 | v3.1 |
+|---|---|---|
+| label space | `label_space.V3LabelSpace` | `label_space.V31LabelSpace` |
+| conformal sets | `calibration.V3ConformalCalibrator` | `calibration.MondrianCalibrator` |
+| abstention | `abstention.V3AbstentionScorer` | `abstention.V31AbstentionScorer` |
+
+An abstention scorer can also ask for the encoder's 512-dimensional
+pre-projection features (`encode_with_hidden`). In v3:
+- Stage 4's nearest-centroid softmax takes a fitted temperature and
+  per-class bias (`assignment.assign_labels`);
+- Stage 7 chooses its confidence rule per label-space method
+  (`config.FALLBACK_CONFIDENCE`).
 
 ## Two design commitments
 

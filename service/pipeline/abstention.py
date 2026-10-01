@@ -26,7 +26,6 @@ curve calibrates it) — see alignment.py's `per_cell_observed_genes`.
 """
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from enum import Enum
 from typing import Protocol
@@ -34,7 +33,6 @@ from typing import Protocol
 import numpy as np
 
 from service import config
-from service.pipeline import reference
 
 
 class AbstainReason(str, Enum):
@@ -84,6 +82,7 @@ def score_abstention(
     calibration_indices: np.ndarray,
     similarity_quantile: float = 0.05,
     min_observed_genes: int = config.MIN_OBSERVED_GENES,
+    threshold: "float | None" = None,
 ) -> AbstentionResult:
     """Priority, per cell: coverage floor, then out-of-distribution, then
     an empty or genuinely ambiguous conformal set. Stage 7 (fallback) should
@@ -92,7 +91,10 @@ def score_abstention(
     is not ambiguous, it is a resolvable partial identification.
     """
     n_cells = max_similarity.shape[0]
-    threshold = _ood_threshold(max_similarity[calibration_indices], similarity_quantile)
+    # v3 derives the out-of-distribution threshold from this upload's own
+    # calibration slice; v3.1 passes the fixed threshold T1 NB2 fitted.
+    if threshold is None:
+        threshold = _ood_threshold(max_similarity[calibration_indices], similarity_quantile)
 
     abstained = np.zeros(n_cells, dtype=bool)
     reasons: list[AbstainReason] = [AbstainReason.NONE] * n_cells
@@ -158,10 +160,21 @@ class V3AbstentionScorer:
         )
 
 
-def load_v31_artifacts() -> dict:
-    """T1 NB3's out-of-distribution config and 512-dimensional reference
-    index. PendingArtifactError until the export lands."""
-    with open(reference.require_v31_artifact(config.V31_OOD_CONFIG_PATH, "T1 NB3"), encoding="utf-8") as handle:
-        ood_config = json.load(handle)
-    index = np.load(reference.require_v31_artifact(config.V31_OOD_REFERENCE_INDEX_PATH, "T1 NB3"))
-    return {"ood_config": ood_config, "ood_reference_index": index}
+class V31AbstentionScorer:
+    """v3.1 (T1 NB2): the same priority as v3, but the out-of-distribution
+    score is the mean over the ensemble's members of the max cosine to any
+    reference cell, against NB2's fixed threshold. A set of several classes
+    is passed on as AMBIGUOUS; ensemble.project then answers it at the
+    group or lineage it shares, if any."""
+    needs_hidden = False
+
+    def __init__(self, threshold: float, min_observed_genes: int):
+        self.threshold = threshold
+        self.min_observed_genes = min_observed_genes
+
+    def score(self, *, max_similarity, hidden_features, per_cell_observed_genes, label_sets, calibration_indices):
+        return score_abstention(
+            max_similarity=max_similarity, per_cell_observed_genes=per_cell_observed_genes,
+            label_sets=label_sets, calibration_indices=calibration_indices,
+            min_observed_genes=self.min_observed_genes, threshold=self.threshold,
+        )

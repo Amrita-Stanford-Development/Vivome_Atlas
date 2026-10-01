@@ -1,0 +1,17 @@
+,n,coverage
+b cell,8685,64.46747265400116
+"cd4-positive, alpha-beta t cell",6600,87.27272727272727
+"cd8-positive, alpha-beta t cell",4151,89.47241628523247
+classical monocyte,6291,84.69241773962804
+erythrocyte,4302,76.31334263133425
+hematopoietic precursor cell,910,95.27472527472527
+intermediate monocyte,3425,81.1970802919708
+macrophage,5973,90.22266867570735
+mature nk t cell,1501,95.40306462358427
+monocyte,14035,84.153900961881
+"naive thymus-derived cd4-positive, alpha-beta t cell",3333,88.74887488748875
+natural killer cell,5700,80.03508771929825
+neutrophil,8968,81.478590544157
+non-classical monocyte,3181,93.02106255894373
+plasma cell,2080,90.1923076923077
+platelet,1490,87.38255033557047

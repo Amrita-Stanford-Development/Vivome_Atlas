@@ -1,0 +1,1369 @@
+encoder,smooth,rule,scenario,bal_unres
+V2_s4,True,centroid,random_1,49.45652173913043
+V2_s4,True,centroid,random_2,42.549019607843135
+V2_s4,True,centroid,random_3,79.76607109965003
+V2_s4,True,centroid,random_5,56.94580284944166
+V2_s4,True,centroid,random_8,71.02522124410406
+V2_s4,True,centroid,random_1,6.0606060606060606
+V2_s4,True,centroid,random_2,25.51282051282051
+V2_s4,True,centroid,random_3,55.57858885622117
+V2_s4,True,centroid,random_5,63.9047619047619
+V2_s4,True,centroid,random_8,62.63608801532248
+V2_s4,True,centroid,myeloid,43.710691823899374
+V2_s4,True,centroid,lymphoid,65.75545666454758
+V2_s4,True,centroid,pbmc_like,63.81465122241002
+V2_s4,True,centroid,scope2_like,75.12835322808368
+V2_s4,True,centroid,random_1,40.54054054054054
+V2_s4,True,centroid,random_2,57.47126436781609
+V2_s4,True,centroid,random_3,66.20102001765115
+V2_s4,True,centroid,random_5,58.474376884052646
+V2_s4,True,centroid,random_8,63.34128100896393
+V2_s4,True,centroid,random_1,45.33333333333333
+V2_s4,True,centroid,random_2,21.355685131195333
+V2_s4,True,centroid,random_3,51.34753605061134
+V2_s4,True,centroid,random_5,58.83333333333333
+V2_s4,True,centroid,random_8,48.39362026862027
+V2_s4,True,centroid,myeloid,58.1592644537946
+V2_s4,True,centroid,lymphoid,56.196196615490436
+V2_s4,True,centroid,pbmc_like,54.87557444515985
+V2_s4,True,centroid,scope2_like,55.44538570145039
+V2_s4,True,centroid,random_1,89.5
+V2_s4,True,centroid,random_2,66.80327868852459
+V2_s4,True,centroid,random_3,77.9377990430622
+V2_s4,True,centroid,random_5,63.18754578754579
+V2_s4,True,centroid,random_8,47.30263157894737
+V2_s4,True,centroid,random_1,48.66666666666667
+V2_s4,True,centroid,random_2,57.92517006802721
+V2_s4,True,centroid,random_3,27.656778558417905
+V2_s4,True,centroid,random_5,75.54838709677419
+V2_s4,True,centroid,random_8,56.359126984126995
+V2_s4,True,centroid,myeloid,70.75471698113208
+V2_s4,True,centroid,lymphoid,74.76190476190476
+V2_s4,True,centroid,pbmc_like,55.020727106910414
+V2_s4,True,centroid,scope2_like,74.63485054347827
+V2_s4,True,centroid,random_1,39.62264150943396
+V2_s4,True,centroid,random_2,72.14480874316939
+V2_s4,True,centroid,random_3,62.60504201680672
+V2_s4,True,centroid,random_5,96.4814814814815
+V2_s4,True,centroid,random_8,42.265096661648386
+V2_s4,True,centroid,random_1,5.75
+V2_s4,True,centroid,random_2,58.28980401684484
+V2_s4,True,centroid,random_3,81.95466369379415
+V2_s4,True,centroid,random_5,57.56417223398355
+V2_s4,True,centroid,random_8,70.43040049618998
+V2_s4,True,centroid,myeloid,56.60638644509612
+V2_s4,True,centroid,lymphoid,45.833333333333336
+V2_s4,True,centroid,pbmc_like,55.242612140449296
+V2_s4,True,centroid,scope2_like,57.09918478260869
+V2_s4,True,centroid,random_1,86.66666666666667
+V2_s4,True,centroid,random_2,87.14285714285714
+V2_s4,True,centroid,random_3,68.97889509621353
+V2_s4,True,centroid,random_5,77.91666666666666
+V2_s4,True,centroid,random_8,78.33693551318875
+V2_s4,True,centroid,random_1,43.39622641509434
+V2_s4,True,centroid,random_2,49.7010666485495
+V2_s4,True,centroid,random_3,33.29318530931434
+V2_s4,True,centroid,random_5,44.534291704103026
+V2_s4,True,centroid,random_8,61.799242424242415
+V2_s4,True,centroid,myeloid,62.57743104254324
+V2_s4,True,centroid,lymphoid,70.85907174756876
+V2_s4,True,centroid,pbmc_like,59.434430512016725
+V2_s4,True,centroid,scope2_like,48.06818181818182
+V2_s4,True,centroid,random_1,26.41509433962264
+V2_s4,True,centroid,random_2,43.6
+V2_s4,True,centroid,random_3,65.44317822095599
+V2_s4,True,centroid,random_5,64.66666666666667
+V2_s4,True,centroid,random_8,63.301492521441375
+V2_s4,True,centroid,random_1,53.333333333333336
+V2_s4,True,centroid,random_2,22.413793103448278
+V2_s4,True,centroid,random_3,83.70547581073896
+V2_s4,True,centroid,random_5,70.49527996896417
+V2_s4,True,centroid,random_8,59.576210826210826
+V2_s4,True,centroid,myeloid,3.9473684210526314
+V2_s4,True,centroid,lymphoid,78.03413529902097
+V2_s4,True,centroid,pbmc_like,63.86697160282067
+V2_s4,True,centroid,scope2_like,51.47727272727273
+V2_s4,True,centroid,random_1,13.200000000000001
+V2_s4,True,centroid,random_2,67.5
+V2_s4,True,centroid,random_3,70.65795839380745
+V2_s4,True,centroid,random_5,52.87268108235851
+V2_s4,True,centroid,random_8,77.12173315141548
+V2_s4,True,centroid,random_1,9.333333333333334
+V2_s4,True,centroid,random_2,74.42401417811254
+V2_s4,True,centroid,random_3,57.085507828181456
+V2_s4,True,centroid,random_5,66.03229762927796
+V2_s4,True,centroid,random_8,37.739751920017575
+V2_s4,True,centroid,myeloid,56.734234234234236
+V2_s4,True,centroid,lymphoid,68.88888888888887
+V2_s4,True,centroid,pbmc_like,66.51205470224211
+V2_s4,True,centroid,scope2_like,48.63636363636363
+V2_s4,True,centroid,random_1,3.485838779956427
+V2_s4,True,centroid,random_2,77.58620689655173
+V2_s4,True,centroid,random_3,63.16911250873515
+V2_s4,True,centroid,random_5,69.0
+V2_s4,True,centroid,random_8,66.91844919786097
+V2_s4,True,centroid,random_1,1.7500000000000002
+V2_s4,True,centroid,random_2,20.0
+V2_s4,True,centroid,random_3,82.6086956521739
+V2_s4,True,centroid,random_5,77.6115604818461
+V2_s4,True,centroid,random_8,79.22564011379801
+V2_s4,True,centroid,myeloid,54.0356394129979
+V2_s4,True,centroid,lymphoid,89.42168942168944
+V2_s4,True,centroid,pbmc_like,55.91250670960816
+V2_s4,True,centroid,scope2_like,71.82404891304348
+V2_s4,True,centroid,random_1,89.9
+V2_s4,True,centroid,random_2,69.04972942713192
+V2_s4,True,knn,random_1,37.5
+V2_s4,True,knn,random_2,38.92156862745098
+V2_s4,True,knn,random_3,76.68385829188922
+V2_s4,True,knn,random_5,57.37061994609164
+V2_s4,True,knn,random_8,54.63593186623659
+V2_s4,True,knn,random_1,4.545454545454546
+V2_s4,True,knn,random_2,11.666666666666666
+V2_s4,True,knn,random_3,69.95754195485452
+V2_s4,True,knn,random_5,49.73076923076923
+V2_s4,True,knn,random_8,55.923359461447184
+V2_s4,True,knn,myeloid,48.867924528301884
+V2_s4,True,knn,lymphoid,68.467895740623
+V2_s4,True,knn,pbmc_like,64.02569062541654
+V2_s4,True,knn,scope2_like,76.02361699396741
+V2_s4,True,knn,random_1,1.3513513513513513
+V2_s4,True,knn,random_2,55.804597701149426
+V2_s4,True,knn,random_3,66.82505838156159
+V2_s4,True,knn,random_5,45.80545548121462
+V2_s4,True,knn,random_8,52.75672667440959
+V2_s4,True,knn,random_1,30.0
+V2_s4,True,knn,random_2,41.90962099125365
+V2_s4,True,knn,random_3,48.092104666866064
+V2_s4,True,knn,random_5,59.647435897435905
+V2_s4,True,knn,random_8,43.55921855921856
+V2_s4,True,knn,myeloid,69.67928938756428
+V2_s4,True,knn,lymphoid,62.8283465168711
+V2_s4,True,knn,pbmc_like,64.34194308873654
+V2_s4,True,knn,scope2_like,68.2839173405211
+V2_s4,True,knn,random_1,93.0
+V2_s4,True,knn,random_2,48.08743169398907
+V2_s4,True,knn,random_3,62.230196703880914
+V2_s4,True,knn,random_5,45.12893772893772
+V2_s4,True,knn,random_8,31.25
+V2_s4,True,knn,random_1,44.666666666666664
+V2_s4,True,knn,random_2,67.78911564625851
+V2_s4,True,knn,random_3,32.950819672131146
+V2_s4,True,knn,random_5,81.09677419354838
+V2_s4,True,knn,random_8,62.93650793650794
+V2_s4,True,knn,myeloid,61.32075471698113
+V2_s4,True,knn,lymphoid,65.87301587301587
+V2_s4,True,knn,pbmc_like,44.22040415884465
+V2_s4,True,knn,scope2_like,77.56878396739131
+V2_s4,True,knn,random_1,26.41509433962264
+V2_s4,True,knn,random_2,60.068306010928964
+V2_s4,True,knn,random_3,57.04948646125118
+V2_s4,True,knn,random_5,87.03703703703705
+V2_s4,True,knn,random_8,38.23356513011685
+V2_s4,True,knn,random_1,26.75
+V2_s4,True,knn,random_2,84.15026724975705
+V2_s4,True,knn,random_3,78.5358602749907
+V2_s4,True,knn,random_5,38.4769289014572
+V2_s4,True,knn,random_8,66.46249462038935
+V2_s4,True,knn,myeloid,58.66161616161616
+V2_s4,True,knn,lymphoid,56.666666666666664
+V2_s4,True,knn,pbmc_like,58.43265000052481
+V2_s4,True,knn,scope2_like,68.89860733695652
+V2_s4,True,knn,random_1,84.0
+V2_s4,True,knn,random_2,46.42857142857143
+V2_s4,True,knn,random_3,71.90708112495821
+V2_s4,True,knn,random_5,51.66666666666666
+V2_s4,True,knn,random_8,61.9124100649205
+V2_s4,True,knn,random_1,20.754716981132077
+V2_s4,True,knn,random_2,87.53312045655275
+V2_s4,True,knn,random_3,38.11443932411674
+V2_s4,True,knn,random_5,53.99520814615154
+V2_s4,True,knn,random_8,57.34848484848485
+V2_s4,True,knn,myeloid,69.46941995592066
+V2_s4,True,knn,lymphoid,70.29160927695925
+V2_s4,True,knn,pbmc_like,51.87784885198678
+V2_s4,True,knn,scope2_like,53.86363636363636
+V2_s4,True,knn,random_1,0.0
+V2_s4,True,knn,random_2,16.875675675675677
+V2_s4,True,knn,random_3,66.53597431375209
+V2_s4,True,knn,random_5,32.46153846153847
+V2_s4,True,knn,random_8,67.05034353461355
+V2_s4,True,knn,random_1,64.66666666666666
+V2_s4,True,knn,random_2,44.827586206896555
+V2_s4,True,knn,random_3,87.21424774056352
+V2_s4,True,knn,random_5,46.26923574291995
+V2_s4,True,knn,random_8,61.11823361823362
+V2_s4,True,knn,myeloid,7.894736842105263
+V2_s4,True,knn,lymphoid,65.12553965737449
+V2_s4,True,knn,pbmc_like,68.4387904199225
+V2_s4,True,knn,scope2_like,62.27272727272728
+V2_s4,True,knn,random_1,48.9
+V2_s4,True,knn,random_2,67.5
+V2_s4,True,knn,random_3,56.64216150270293
+V2_s4,True,knn,random_5,58.83032021741699
+V2_s4,True,knn,random_8,63.89059800055688
+V2_s4,True,knn,random_1,26.0
+V2_s4,True,knn,random_2,69.69428444838282
+V2_s4,True,knn,random_3,50.56871403720059
+V2_s4,True,knn,random_5,66.11420116459897
+V2_s4,True,knn,random_8,38.83855118105593
+V2_s4,True,knn,myeloid,50.695382882882875
+V2_s4,True,knn,lymphoid,54.44444444444444
+V2_s4,True,knn,pbmc_like,70.10608225120016
+V2_s4,True,knn,scope2_like,55.79545454545455
+V2_s4,True,knn,random_1,0.6535947712418301
+V2_s4,True,knn,random_2,87.93103448275862
+V2_s4,True,knn,random_3,67.04886308659894
+V2_s4,True,knn,random_5,63.33333333333333
+V2_s4,True,knn,random_8,68.7662735548765
+V2_s4,True,knn,random_1,0.25
+V2_s4,True,knn,random_2,20.0
+V2_s4,True,knn,random_3,80.97826086956522
+V2_s4,True,knn,random_5,82.15115498254096
+V2_s4,True,knn,random_8,70.93172119487909
+V2_s4,True,knn,myeloid,53.432914046121596
+V2_s4,True,knn,lymphoid,73.3960483960484
+V2_s4,True,knn,pbmc_like,52.85292538915728
+V2_s4,True,knn,scope2_like,74.57540760869566
+V2_s4,True,knn,random_1,92.4
+V2_s4,True,knn,random_2,57.96557193506251
+V2_s4,False,centroid,random_1,44.02173913043478
+V2_s4,False,centroid,random_2,43.627450980392155
+V2_s4,False,centroid,random_3,79.56281594727902
+V2_s4,False,centroid,random_5,64.15970350404312
+V2_s4,False,centroid,random_8,71.4885271851185
+V2_s4,False,centroid,random_1,15.151515151515152
+V2_s4,False,centroid,random_2,36.53846153846154
+V2_s4,False,centroid,random_3,57.88396755355135
+V2_s4,False,centroid,random_5,61.36630036630037
+V2_s4,False,centroid,random_8,72.79302820414257
+V2_s4,False,centroid,myeloid,36.60377358490566
+V2_s4,False,centroid,lymphoid,62.831108285653734
+V2_s4,False,centroid,pbmc_like,66.0012184558885
+V2_s4,False,centroid,scope2_like,70.31189834424336
+V2_s4,False,centroid,random_1,24.324324324324326
+V2_s4,False,centroid,random_2,59.08045977011495
+V2_s4,False,centroid,random_3,64.79994064215813
+V2_s4,False,centroid,random_5,62.084944734455796
+V2_s4,False,centroid,random_8,82.24167262277018
+V2_s4,False,centroid,random_1,39.33333333333333
+V2_s4,False,centroid,random_2,24.65986394557823
+V2_s4,False,centroid,random_3,46.43277954518676
+V2_s4,False,centroid,random_5,62.698717948717956
+V2_s4,False,centroid,random_8,54.42536630036629
+V2_s4,False,centroid,myeloid,65.46111890291414
+V2_s4,False,centroid,lymphoid,57.65391082225887
+V2_s4,False,centroid,pbmc_like,69.79035703856638
+V2_s4,False,centroid,scope2_like,58.150429983314076
+V2_s4,False,centroid,random_1,67.0
+V2_s4,False,centroid,random_2,63.52459016393443
+V2_s4,False,centroid,random_3,73.18660287081339
+V2_s4,False,centroid,random_5,81.88351648351649
+V2_s4,False,centroid,random_8,60.66885964912281
+V2_s4,False,centroid,random_1,42.66666666666667
+V2_s4,False,centroid,random_2,57.7891156462585
+V2_s4,False,centroid,random_3,25.61150143117356
+V2_s4,False,centroid,random_5,84.96774193548387
+V2_s4,False,centroid,random_8,61.49801587301587
+V2_s4,False,centroid,myeloid,68.42243186582809
+V2_s4,False,centroid,lymphoid,74.28571428571429
+V2_s4,False,centroid,pbmc_like,66.58745457309068
+V2_s4,False,centroid,scope2_like,68.98777173913044
+V2_s4,False,centroid,random_1,16.9811320754717
+V2_s4,False,centroid,random_2,65.08196721311475
+V2_s4,False,centroid,random_3,49.53314659197012
+V2_s4,False,centroid,random_5,93.5185185185185
+V2_s4,False,centroid,random_8,41.24032188687361
+V2_s4,False,centroid,random_1,9.25
+V2_s4,False,centroid,random_2,55.18201328150308
+V2_s4,False,centroid,random_3,80.31215161649943
+V2_s4,False,centroid,random_5,55.1857560819825
+V2_s4,False,centroid,random_8,76.23832308042834
+V2_s4,False,centroid,myeloid,58.10931899641577
+V2_s4,False,centroid,lymphoid,37.5
+V2_s4,False,centroid,pbmc_like,62.94848358601711
+V2_s4,False,centroid,scope2_like,57.956861413043484
+V2_s4,False,centroid,random_1,66.0
+V2_s4,False,centroid,random_2,63.92857142857142
+V2_s4,False,centroid,random_3,63.681580162027096
+V2_s4,False,centroid,random_5,81.43410852713177
+V2_s4,False,centroid,random_8,78.19329862152529
+V2_s4,False,centroid,random_1,30.18867924528302
+V2_s4,False,centroid,random_2,47.29940892723691
+V2_s4,False,centroid,random_3,38.9926918959177
+V2_s4,False,centroid,random_5,42.82719377058999
+V2_s4,False,centroid,random_8,69.9810606060606
+V2_s4,False,centroid,myeloid,66.32626227208976
+V2_s4,False,centroid,lymphoid,78.0921458417389
+V2_s4,False,centroid,pbmc_like,64.9100534703983
+V2_s4,False,centroid,scope2_like,54.20454545454545
+V2_s4,False,centroid,random_1,18.867924528301888
+V2_s4,False,centroid,random_2,30.74054054054054
+V2_s4,False,centroid,random_3,67.18152218152218
+V2_s4,False,centroid,random_5,66.12820512820512
+V2_s4,False,centroid,random_8,73.29029434014235
+V2_s4,False,centroid,random_1,30.0
+V2_s4,False,centroid,random_2,24.46051167964405
+V2_s4,False,centroid,random_3,82.42955874534822
+V2_s4,False,centroid,random_5,81.09853873011768
+V2_s4,False,centroid,random_8,54.32527402354989
+V2_s4,False,centroid,myeloid,5.263157894736842
+V2_s4,False,centroid,lymphoid,81.20658516254515
+V2_s4,False,centroid,pbmc_like,63.7158270334371
+V2_s4,False,centroid,scope2_like,53.97727272727273
+V2_s4,False,centroid,random_1,12.4
+V2_s4,False,centroid,random_2,70.0
+V2_s4,False,centroid,random_3,67.90349382638144
+V2_s4,False,centroid,random_5,61.52262790972468
+V2_s4,False,centroid,random_8,71.9108552872018
+V2_s4,False,centroid,random_1,18.0
+V2_s4,False,centroid,random_2,75.58152414709791
+V2_s4,False,centroid,random_3,60.95276328114546
+V2_s4,False,centroid,random_5,61.91976494848718
+V2_s4,False,centroid,random_8,49.840649230592305
+V2_s4,False,centroid,myeloid,76.26407657657658
+V2_s4,False,centroid,lymphoid,70.0
+V2_s4,False,centroid,pbmc_like,68.12146612886816
+V2_s4,False,centroid,scope2_like,57.04545454545455
+V2_s4,False,centroid,random_1,9.586056644880173
+V2_s4,False,centroid,random_2,69.05922038980509
+V2_s4,False,centroid,random_3,68.74751384185346
+V2_s4,False,centroid,random_5,78.66666666666666
+V2_s4,False,centroid,random_8,73.2616341991342
+V2_s4,False,centroid,random_1,7.5
+V2_s4,False,centroid,random_2,46.666666666666664
+V2_s4,False,centroid,random_3,81.70289855072464
+V2_s4,False,centroid,random_5,76.53030004437748
+V2_s4,False,centroid,random_8,81.97724039829303
+V2_s4,False,centroid,myeloid,56.20955245647616
+V2_s4,False,centroid,lymphoid,82.14563214563213
+V2_s4,False,centroid,pbmc_like,62.156468062265155
+V2_s4,False,centroid,scope2_like,60.593580163043484
+V2_s4,False,centroid,random_1,72.5
+V2_s4,False,centroid,random_2,61.969350625116626
+V2_s4,False,knn,random_1,34.78260869565217
+V2_s4,False,knn,random_2,37.94117647058823
+V2_s4,False,knn,random_3,76.94109310083707
+V2_s4,False,knn,random_5,58.09453215248364
+V2_s4,False,knn,random_8,57.06185488083027
+V2_s4,False,knn,random_1,7.575757575757576
+V2_s4,False,knn,random_2,27.692307692307693
+V2_s4,False,knn,random_3,66.0030861898282
+V2_s4,False,knn,random_5,56.315018315018314
+V2_s4,False,knn,random_8,66.1021579440872
+V2_s4,False,knn,myeloid,36.57232704402516
+V2_s4,False,knn,lymphoid,66.28522992159355
+V2_s4,False,knn,pbmc_like,64.09711012177807
+V2_s4,False,knn,scope2_like,75.94660505711718
+V2_s4,False,knn,random_1,8.108108108108109
+V2_s4,False,knn,random_2,57.41379310344827
+V2_s4,False,knn,random_3,72.62314799628233
+V2_s4,False,knn,random_5,50.22027792074113
+V2_s4,False,knn,random_8,68.28333928943685
+V2_s4,False,knn,random_1,28.666666666666668
+V2_s4,False,knn,random_2,31.924198250728864
+V2_s4,False,knn,random_3,43.66723767572123
+V2_s4,False,knn,random_5,60.23076923076923
+V2_s4,False,knn,random_8,53.92055860805861
+V2_s4,False,knn,myeloid,67.93049711703289
+V2_s4,False,knn,lymphoid,65.0596566107285
+V2_s4,False,knn,pbmc_like,65.18826056528312
+V2_s4,False,knn,scope2_like,66.86882300089847
+V2_s4,False,knn,random_1,75.0
+V2_s4,False,knn,random_2,54.78142076502732
+V2_s4,False,knn,random_3,65.32695374800637
+V2_s4,False,knn,random_5,64.74798534798533
+V2_s4,False,knn,random_8,47.5328947368421
+V2_s4,False,knn,random_1,34.0
+V2_s4,False,knn,random_2,65.10204081632654
+V2_s4,False,knn,random_3,29.107468123861562
+V2_s4,False,knn,random_5,81.09677419354838
+V2_s4,False,knn,random_8,72.2420634920635
+V2_s4,False,knn,myeloid,61.818658280922435
+V2_s4,False,knn,lymphoid,65.0
+V2_s4,False,knn,pbmc_like,53.33639304911535
+V2_s4,False,knn,scope2_like,75.47129755434783
+V2_s4,False,knn,random_1,13.20754716981132
+V2_s4,False,knn,random_2,56.748633879781416
+V2_s4,False,knn,random_3,47.945845004668534
+V2_s4,False,knn,random_5,82.4074074074074
+V2_s4,False,knn,random_8,39.56239395894568
+V2_s4,False,knn,random_1,21.25
+V2_s4,False,knn,random_2,75.22473275024295
+V2_s4,False,knn,random_3,79.08584169453734
+V2_s4,False,knn,random_5,41.09487274581614
+V2_s4,False,knn,random_8,67.80647958279538
+V2_s4,False,knn,myeloid,57.525252525252526
+V2_s4,False,knn,lymphoid,50.83333333333333
+V2_s4,False,knn,pbmc_like,61.02513180058023
+V2_s4,False,knn,scope2_like,67.16202445652173
+V2_s4,False,knn,random_1,72.0
+V2_s4,False,knn,random_2,43.214285714285715
+V2_s4,False,knn,random_3,68.36890607840328
+V2_s4,False,knn,random_5,67.08333333333333
+V2_s4,False,knn,random_8,65.74138192616516
+V2_s4,False,knn,random_1,20.754716981132077
+V2_s4,False,knn,random_2,76.83945920239145
+V2_s4,False,knn,random_3,42.106270074012
+V2_s4,False,knn,random_5,55.046421084156925
+V2_s4,False,knn,random_8,72.10227272727273
+V2_s4,False,knn,myeloid,65.43215287517532
+V2_s4,False,knn,lymphoid,74.45450793253289
+V2_s4,False,knn,pbmc_like,65.27211537556364
+V2_s4,False,knn,scope2_like,55.90909090909091
+V2_s4,False,knn,random_1,7.547169811320755
+V2_s4,False,knn,random_2,15.62702702702703
+V2_s4,False,knn,random_3,67.74510468954912
+V2_s4,False,knn,random_5,62.82051282051281
+V2_s4,False,knn,random_8,69.24570618619748
+V2_s4,False,knn,random_1,43.333333333333336
+V2_s4,False,knn,random_2,32.758620689655174
+V2_s4,False,knn,random_3,81.92450824029773
+V2_s4,False,knn,random_5,57.58502521660416
+V2_s4,False,knn,random_8,60.12655607483194
+V2_s4,False,knn,myeloid,7.894736842105263
+V2_s4,False,knn,lymphoid,65.78464255944112
+V2_s4,False,knn,pbmc_like,65.22769624970883
+V2_s4,False,knn,scope2_like,72.8409090909091
+V2_s4,False,knn,random_1,31.2
+V2_s4,False,knn,random_2,70.0
+V2_s4,False,knn,random_3,64.67627942197261
+V2_s4,False,knn,random_5,61.09771948481626
+V2_s4,False,knn,random_8,69.08320378107864
+V2_s4,False,knn,random_1,26.666666666666668
+V2_s4,False,knn,random_2,69.83828090385467
+V2_s4,False,knn,random_3,54.90432222668272
+V2_s4,False,knn,random_5,68.21568870404131
+V2_s4,False,knn,random_8,47.598170435931344
+V2_s4,False,knn,myeloid,68.9161036036036
+V2_s4,False,knn,lymphoid,34.44444444444445
+V2_s4,False,knn,pbmc_like,73.14642059359576
+V2_s4,False,knn,scope2_like,64.31818181818181
+V2_s4,False,knn,random_1,4.793028322440087
+V2_s4,False,knn,random_2,79.404047976012
+V2_s4,False,knn,random_3,68.4427242917809
+V2_s4,False,knn,random_5,78.66666666666667
+V2_s4,False,knn,random_8,72.13171632289279
+V2_s4,False,knn,random_1,5.5
+V2_s4,False,knn,random_2,30.0
+V2_s4,False,knn,random_3,79.34782608695653
+V2_s4,False,knn,random_5,80.18605992128836
+V2_s4,False,knn,random_8,76.20110241820768
+V2_s4,False,knn,myeloid,50.90408805031446
+V2_s4,False,knn,lymphoid,71.45632145632145
+V2_s4,False,knn,pbmc_like,54.03784219001611
+V2_s4,False,knn,scope2_like,68.72452445652173
+V2_s4,False,knn,random_1,81.39999999999999
+V2_s4,False,knn,random_2,53.54543758163837
+V2_ens,True,centroid,random_1,54.891304347826086
+V2_ens,True,centroid,random_2,45.490196078431374
+V2_ens,True,centroid,random_3,80.41382697857186
+V2_ens,True,centroid,random_5,59.46621101270697
+V2_ens,True,centroid,random_8,68.92064980533364
+V2_ens,True,centroid,random_1,12.121212121212121
+V2_ens,True,centroid,random_2,30.0
+V2_ens,True,centroid,random_3,64.25921511368038
+V2_ens,True,centroid,random_5,64.26190476190476
+V2_ens,True,centroid,random_8,61.22412139102072
+V2_ens,True,centroid,myeloid,36.58947970268725
+V2_ens,True,centroid,lymphoid,62.53443526170799
+V2_ens,True,centroid,pbmc_like,65.7238620205097
+V2_ens,True,centroid,scope2_like,73.21909896033884
+V2_ens,True,centroid,random_1,22.972972972972975
+V2_ens,True,centroid,random_2,60.80459770114942
+V2_ens,True,centroid,random_3,60.49274818997633
+V2_ens,True,centroid,random_5,64.77391368281744
+V2_ens,True,centroid,random_8,69.3234238661068
+V2_ens,True,centroid,random_1,50.0
+V2_ens,True,centroid,random_2,30.32069970845481
+V2_ens,True,centroid,random_3,45.805915835078075
+V2_ens,True,centroid,random_5,65.1025641025641
+V2_ens,True,centroid,random_8,54.95612026862027
+V2_ens,True,centroid,myeloid,55.89964157706093
+V2_ens,True,centroid,lymphoid,67.72536206962437
+V2_ens,True,centroid,pbmc_like,58.59424959059448
+V2_ens,True,centroid,scope2_like,60.91965087921961
+V2_ens,True,centroid,random_1,85.0
+V2_ens,True,centroid,random_2,66.39344262295081
+V2_ens,True,centroid,random_3,72.17171717171716
+V2_ens,True,centroid,random_5,71.4879120879121
+V2_ens,True,centroid,random_8,47.14912280701755
+V2_ens,True,centroid,random_1,54.666666666666664
+V2_ens,True,centroid,random_2,77.85714285714286
+V2_ens,True,centroid,random_3,32.0160031225605
+V2_ens,True,centroid,random_5,73.61290322580645
+V2_ens,True,centroid,random_8,60.753968253968246
+V2_ens,True,centroid,myeloid,71.69811320754718
+V2_ens,True,centroid,lymphoid,79.2063492063492
+V2_ens,True,centroid,pbmc_like,55.26939810455542
+V2_ens,True,centroid,scope2_like,75.7897418478261
+V2_ens,True,centroid,random_1,45.28301886792453
+V2_ens,True,centroid,random_2,62.56147540983606
+V2_ens,True,centroid,random_3,58.96358543417367
+V2_ens,True,centroid,random_5,97.03703703703704
+V2_ens,True,centroid,random_8,36.49308791550171
+V2_ens,True,centroid,random_1,0.75
+V2_ens,True,centroid,random_2,67.13941528992548
+V2_ens,True,centroid,random_3,81.27833519137867
+V2_ens,True,centroid,random_5,56.4532242362431
+V2_ens,True,centroid,random_8,68.16327434748487
+V2_ens,True,centroid,myeloid,45.40892798957315
+V2_ens,True,centroid,lymphoid,48.333333333333336
+V2_ens,True,centroid,pbmc_like,56.78539965430053
+V2_ens,True,centroid,scope2_like,62.003226902173914
+V2_ens,True,centroid,random_1,80.0
+V2_ens,True,centroid,random_2,52.5
+V2_ens,True,centroid,random_3,72.80714319820464
+V2_ens,True,centroid,random_5,73.75
+V2_ens,True,centroid,random_8,77.95710684086853
+V2_ens,True,centroid,random_1,43.39622641509434
+V2_ens,True,centroid,random_2,48.62083021944426
+V2_ens,True,centroid,random_3,37.05246008471815
+V2_ens,True,centroid,random_5,49.931117100928425
+V2_ens,True,centroid,random_8,62.935606060606055
+V2_ens,True,centroid,myeloid,55.318531690376005
+V2_ens,True,centroid,lymphoid,74.49670965677477
+V2_ens,True,centroid,pbmc_like,61.02314148003802
+V2_ens,True,centroid,scope2_like,51.47727272727273
+V2_ens,True,centroid,random_1,30.18867924528302
+V2_ens,True,centroid,random_2,27.432432432432435
+V2_ens,True,centroid,random_3,80.02747252747253
+V2_ens,True,centroid,random_5,67.61538461538463
+V2_ens,True,centroid,random_8,71.12565169522016
+V2_ens,True,centroid,random_1,44.0
+V2_ens,True,centroid,random_2,33.08120133481646
+V2_ens,True,centroid,random_3,78.44231791600214
+V2_ens,True,centroid,random_5,74.88102935471356
+V2_ens,True,centroid,random_8,57.539173789173795
+V2_ens,True,centroid,myeloid,0.0
+V2_ens,True,centroid,lymphoid,85.7671861464786
+V2_ens,True,centroid,pbmc_like,64.21404823920548
+V2_ens,True,centroid,scope2_like,49.20454545454545
+V2_ens,True,centroid,random_1,2.1
+V2_ens,True,centroid,random_2,67.5
+V2_ens,True,centroid,random_3,61.866599356345056
+V2_ens,True,centroid,random_5,54.544605931702705
+V2_ens,True,centroid,random_8,74.62951522476004
+V2_ens,True,centroid,random_1,62.66666666666667
+V2_ens,True,centroid,random_2,74.0861763402747
+V2_ens,True,centroid,random_3,68.981667335742
+V2_ens,True,centroid,random_5,70.95871401153052
+V2_ens,True,centroid,random_8,36.82544721776221
+V2_ens,True,centroid,myeloid,62.097409909909906
+V2_ens,True,centroid,lymphoid,68.88888888888887
+V2_ens,True,centroid,pbmc_like,66.44491019363055
+V2_ens,True,centroid,scope2_like,53.97727272727273
+V2_ens,True,centroid,random_1,0.0
+V2_ens,True,centroid,random_2,77.58620689655173
+V2_ens,True,centroid,random_3,59.4831478793743
+V2_ens,True,centroid,random_5,70.0
+V2_ens,True,centroid,random_8,68.02636395467277
+V2_ens,True,centroid,random_1,1.5
+V2_ens,True,centroid,random_2,17.5
+V2_ens,True,centroid,random_3,82.78985507246377
+V2_ens,True,centroid,random_5,89.72510773219354
+V2_ens,True,centroid,random_8,76.72986308677098
+V2_ens,True,centroid,myeloid,50.26148482362592
+V2_ens,True,centroid,lymphoid,81.52125652125652
+V2_ens,True,centroid,pbmc_like,58.16290928609769
+V2_ens,True,centroid,scope2_like,70.04500679347827
+V2_ens,True,centroid,random_1,84.8
+V2_ens,True,centroid,random_2,69.26432170181003
+V2_ens,True,knn,random_1,47.28260869565217
+V2_ens,True,knn,random_2,40.88235294117647
+V2_ens,True,knn,random_3,77.97937004973292
+V2_ens,True,knn,random_5,58.15103966114747
+V2_ens,True,knn,random_8,53.50661259729963
+V2_ens,True,knn,random_1,6.0606060606060606
+V2_ens,True,knn,random_2,11.666666666666666
+V2_ens,True,knn,random_3,71.99614857415298
+V2_ens,True,knn,random_5,54.78205128205127
+V2_ens,True,knn,random_8,58.494944679352436
+V2_ens,True,knn,myeloid,53.270440251572325
+V2_ens,True,knn,lymphoid,67.15405806314898
+V2_ens,True,knn,pbmc_like,61.13274331227103
+V2_ens,True,knn,scope2_like,77.15312540110384
+V2_ens,True,knn,random_1,0.0
+V2_ens,True,knn,random_2,52.4712643678161
+V2_ens,True,knn,random_3,67.36958847833048
+V2_ens,True,knn,random_5,46.17361468519472
+V2_ens,True,knn,random_8,53.38172667440959
+V2_ens,True,knn,random_1,42.0
+V2_ens,True,knn,random_2,45.481049562682216
+V2_ens,True,knn,random_3,40.19042698788193
+V2_ens,True,knn,random_5,52.44871794871795
+V2_ens,True,knn,random_8,52.93421855921856
+V2_ens,True,knn,myeloid,73.3535920211937
+V2_ens,True,knn,lymphoid,73.2326857673642
+V2_ens,True,knn,pbmc_like,60.511352578125454
+V2_ens,True,knn,scope2_like,73.5656526761648
+V2_ens,True,knn,random_1,92.75
+V2_ens,True,knn,random_2,47.6775956284153
+V2_ens,True,knn,random_3,63.06060606060605
+V2_ens,True,knn,random_5,54.367032967032955
+V2_ens,True,knn,random_8,35.416666666666664
+V2_ens,True,knn,random_1,52.666666666666664
+V2_ens,True,knn,random_2,72.2108843537415
+V2_ens,True,knn,random_3,34.60837887067395
+V2_ens,True,knn,random_5,84.45161290322581
+V2_ens,True,knn,random_8,62.797619047619044
+V2_ens,True,knn,myeloid,65.09433962264151
+V2_ens,True,knn,lymphoid,65.47619047619048
+V2_ens,True,knn,pbmc_like,39.816703284555544
+V2_ens,True,knn,scope2_like,80.39656929347827
+V2_ens,True,knn,random_1,35.84905660377358
+V2_ens,True,knn,random_2,52.984972677595636
+V2_ens,True,knn,random_3,57.84313725490197
+V2_ens,True,knn,random_5,80.74074074074075
+V2_ens,True,knn,random_8,33.980273376825096
+V2_ens,True,knn,random_1,38.25
+V2_ens,True,knn,random_2,82.26939585357952
+V2_ens,True,knn,random_3,84.22891118543293
+V2_ens,True,knn,random_5,38.08751719129077
+V2_ens,True,knn,random_8,58.811422495633025
+V2_ens,True,knn,myeloid,59.49494949494949
+V2_ens,True,knn,lymphoid,56.666666666666664
+V2_ens,True,knn,pbmc_like,62.01311508968802
+V2_ens,True,knn,scope2_like,72.98743206521738
+V2_ens,True,knn,random_1,82.66666666666667
+V2_ens,True,knn,random_2,47.14285714285714
+V2_ens,True,knn,random_3,73.03474510178421
+V2_ens,True,knn,random_5,55.41666666666667
+V2_ens,True,knn,random_8,61.360869672048835
+V2_ens,True,knn,random_1,32.075471698113205
+V2_ens,True,knn,random_2,79.62497452272572
+V2_ens,True,knn,random_3,39.996159754224266
+V2_ens,True,knn,random_5,57.60706798442647
+V2_ens,True,knn,random_8,56.25
+V2_ens,True,knn,myeloid,73.90552995391705
+V2_ens,True,knn,lymphoid,71.15146940838748
+V2_ens,True,knn,pbmc_like,46.139150121908735
+V2_ens,True,knn,scope2_like,55.22727272727273
+V2_ens,True,knn,random_1,11.320754716981133
+V2_ens,True,knn,random_2,16.400000000000002
+V2_ens,True,knn,random_3,73.42796092796092
+V2_ens,True,knn,random_5,31.999999999999996
+V2_ens,True,knn,random_8,60.372776597743005
+V2_ens,True,knn,random_1,57.99999999999999
+V2_ens,True,knn,random_2,50.0
+V2_ens,True,knn,random_3,78.44231791600214
+V2_ens,True,knn,random_5,51.5231259968102
+V2_ens,True,knn,random_8,55.870980870980866
+V2_ens,True,knn,myeloid,9.210526315789473
+V2_ens,True,knn,lymphoid,60.230578755536676
+V2_ens,True,knn,pbmc_like,60.496632996633004
+V2_ens,True,knn,scope2_like,66.70454545454545
+V2_ens,True,knn,random_1,55.50000000000001
+V2_ens,True,knn,random_2,67.5
+V2_ens,True,knn,random_3,69.87126900990724
+V2_ens,True,knn,random_5,61.235082122178895
+V2_ens,True,knn,random_8,68.90736580636971
+V2_ens,True,knn,random_1,27.333333333333332
+V2_ens,True,knn,random_2,69.69428444838282
+V2_ens,True,knn,random_3,72.70172621437175
+V2_ens,True,knn,random_5,67.9193141789592
+V2_ens,True,knn,random_8,38.91780378592523
+V2_ens,True,knn,myeloid,52.722409909909906
+V2_ens,True,knn,lymphoid,54.44444444444444
+V2_ens,True,knn,pbmc_like,68.24291665200086
+V2_ens,True,knn,scope2_like,63.52272727272727
+V2_ens,True,knn,random_1,0.0
+V2_ens,True,knn,random_2,88.79310344827587
+V2_ens,True,knn,random_3,72.20421437402568
+V2_ens,True,knn,random_5,63.33333333333333
+V2_ens,True,knn,random_8,73.73794404125287
+V2_ens,True,knn,random_1,0.25
+V2_ens,True,knn,random_2,17.5
+V2_ens,True,knn,random_3,82.06521739130434
+V2_ens,True,knn,random_5,85.848358178888
+V2_ens,True,knn,random_8,64.1327347083926
+V2_ens,True,knn,myeloid,55.79140461215933
+V2_ens,True,knn,lymphoid,66.34476634476634
+V2_ens,True,knn,pbmc_like,48.788244766505635
+V2_ens,True,knn,scope2_like,75.5647078804348
+V2_ens,True,knn,random_1,92.0
+V2_ens,True,knn,random_2,60.84040865833178
+V2_ens,False,centroid,random_1,48.91304347826087
+V2_ens,False,centroid,random_2,43.627450980392155
+V2_ens,False,centroid,random_3,80.02330590859786
+V2_ens,False,centroid,random_5,63.39420485175202
+V2_ens,False,centroid,random_8,72.32363386647171
+V2_ens,False,centroid,random_1,25.757575757575758
+V2_ens,False,centroid,random_2,32.43589743589744
+V2_ens,False,centroid,random_3,61.83434502584172
+V2_ens,False,centroid,random_5,66.64468864468864
+V2_ens,False,centroid,random_8,75.447418721587
+V2_ens,False,centroid,myeloid,34.119496855345915
+V2_ens,False,centroid,lymphoid,61.85632549268912
+V2_ens,False,centroid,pbmc_like,66.12040514054009
+V2_ens,False,centroid,scope2_like,72.76344500064177
+V2_ens,False,centroid,random_1,20.27027027027027
+V2_ens,False,centroid,random_2,60.747126436781606
+V2_ens,False,centroid,random_3,61.29431336254364
+V2_ens,False,centroid,random_5,63.762762541969956
+V2_ens,False,centroid,random_8,84.95726495726495
+V2_ens,False,centroid,random_1,46.666666666666664
+V2_ens,False,centroid,random_2,40.136054421768705
+V2_ens,False,centroid,random_3,43.0591810098703
+V2_ens,False,centroid,random_5,64.52564102564102
+V2_ens,False,centroid,random_8,58.730921855921856
+V2_ens,False,centroid,myeloid,65.54246532647655
+V2_ens,False,centroid,lymphoid,66.34170789277978
+V2_ens,False,centroid,pbmc_like,71.17293440015344
+V2_ens,False,centroid,scope2_like,60.849056603773576
+V2_ens,False,centroid,random_1,64.25
+V2_ens,False,centroid,random_2,59.83606557377049
+V2_ens,False,centroid,random_3,71.51408825093036
+V2_ens,False,centroid,random_5,83.01684981684983
+V2_ens,False,centroid,random_8,55.46052631578948
+V2_ens,False,centroid,random_1,49.333333333333336
+V2_ens,False,centroid,random_2,71.29251700680273
+V2_ens,False,centroid,random_3,26.59445745511319
+V2_ens,False,centroid,random_5,82.3225806451613
+V2_ens,False,centroid,random_8,66.28968253968253
+V2_ens,False,centroid,myeloid,69.36582809224319
+V2_ens,False,centroid,lymphoid,77.22222222222221
+V2_ens,False,centroid,pbmc_like,66.38790188379792
+V2_ens,False,centroid,scope2_like,70.84748641304348
+V2_ens,False,centroid,random_1,24.528301886792452
+V2_ens,False,centroid,random_2,60.49180327868853
+V2_ens,False,centroid,random_3,49.85994397759104
+V2_ens,False,centroid,random_5,92.03703703703702
+V2_ens,False,centroid,random_8,40.99568069395655
+V2_ens,False,centroid,random_1,4.25
+V2_ens,False,centroid,random_2,60.700113378684804
+V2_ens,False,centroid,random_3,78.87774061687104
+V2_ens,False,centroid,random_5,54.264998274432244
+V2_ens,False,centroid,random_8,71.79709849117744
+V2_ens,False,centroid,myeloid,49.35809710003258
+V2_ens,False,centroid,lymphoid,46.666666666666664
+V2_ens,False,centroid,pbmc_like,64.2064676827601
+V2_ens,False,centroid,scope2_like,60.72944972826087
+V2_ens,False,centroid,random_1,64.66666666666666
+V2_ens,False,centroid,random_2,60.0
+V2_ens,False,centroid,random_3,61.138964490919804
+V2_ens,False,centroid,random_5,79.76744186046511
+V2_ens,False,centroid,random_8,76.96404281754002
+V2_ens,False,centroid,random_1,35.84905660377358
+V2_ens,False,centroid,random_2,48.413615055370606
+V2_ens,False,centroid,random_3,38.86740678676162
+V2_ens,False,centroid,random_5,50.604971548367786
+V2_ens,False,centroid,random_8,74.86742424242424
+V2_ens,False,centroid,myeloid,67.45892606692045
+V2_ens,False,centroid,lymphoid,80.04241041408703
+V2_ens,False,centroid,pbmc_like,65.65916621951105
+V2_ens,False,centroid,scope2_like,55.56818181818181
+V2_ens,False,centroid,random_1,24.528301886792452
+V2_ens,False,centroid,random_2,24.85945945945946
+V2_ens,False,centroid,random_3,76.72636005969339
+V2_ens,False,centroid,random_5,63.71794871794872
+V2_ens,False,centroid,random_8,73.12304828229573
+V2_ens,False,centroid,random_1,31.333333333333336
+V2_ens,False,centroid,random_2,29.632925472747495
+V2_ens,False,centroid,random_3,78.17650186071239
+V2_ens,False,centroid,random_5,82.28479675848097
+V2_ens,False,centroid,random_8,60.35956380783966
+V2_ens,False,centroid,myeloid,4.393796992481203
+V2_ens,False,centroid,lymphoid,85.8222025959592
+V2_ens,False,centroid,pbmc_like,62.033119454503115
+V2_ens,False,centroid,scope2_like,54.31818181818182
+V2_ens,False,centroid,random_1,5.800000000000001
+V2_ens,False,centroid,random_2,70.0
+V2_ens,False,centroid,random_3,62.324625060474126
+V2_ens,False,centroid,random_5,67.57024695734374
+V2_ens,False,centroid,random_8,70.70973457330085
+V2_ens,False,centroid,random_1,46.666666666666664
+V2_ens,False,centroid,random_2,76.66703588834736
+V2_ens,False,centroid,random_3,67.96467282215977
+V2_ens,False,centroid,random_5,65.42699400380305
+V2_ens,False,centroid,random_8,48.00289053135353
+V2_ens,False,centroid,myeloid,72.4070945945946
+V2_ens,False,centroid,lymphoid,71.11111111111111
+V2_ens,False,centroid,pbmc_like,69.47680051796804
+V2_ens,False,centroid,scope2_like,55.90909090909091
+V2_ens,False,centroid,random_1,1.9607843137254901
+V2_ens,False,centroid,random_2,66.47301349325338
+V2_ens,False,centroid,random_3,64.89840348330914
+V2_ens,False,centroid,random_5,77.66666666666666
+V2_ens,False,centroid,random_8,70.39235580595874
+V2_ens,False,centroid,random_1,8.5
+V2_ens,False,centroid,random_2,46.666666666666664
+V2_ens,False,centroid,random_3,82.78985507246377
+V2_ens,False,centroid,random_5,83.00662523794509
+V2_ens,False,centroid,random_8,82.12504445234708
+V2_ens,False,centroid,myeloid,53.60154042475618
+V2_ens,False,centroid,lymphoid,77.22555222555222
+V2_ens,False,centroid,pbmc_like,61.87734836285562
+V2_ens,False,centroid,scope2_like,59.84629755434783
+V2_ens,False,centroid,random_1,70.8
+V2_ens,False,centroid,random_2,65.48796417242023
+V2_ens,False,knn,random_1,39.67391304347826
+V2_ens,False,knn,random_2,36.96078431372549
+V2_ens,False,knn,random_3,77.87742268885204
+V2_ens,False,knn,random_5,61.5739314593762
+V2_ens,False,knn,random_8,58.559782239653536
+V2_ens,False,knn,random_1,12.121212121212121
+V2_ens,False,knn,random_2,21.923076923076923
+V2_ens,False,knn,random_3,69.7198990611339
+V2_ens,False,knn,random_5,57.794871794871796
+V2_ens,False,knn,random_8,66.75812548049362
+V2_ens,False,knn,myeloid,43.67924528301887
+V2_ens,False,knn,lymphoid,65.58592922229286
+V2_ens,False,knn,pbmc_like,60.378631696363094
+V2_ens,False,knn,scope2_like,77.62482351431139
+V2_ens,False,knn,random_1,5.405405405405405
+V2_ens,False,knn,random_2,55.74712643678161
+V2_ens,False,knn,random_3,58.58056655498021
+V2_ens,False,knn,random_5,51.89809572825528
+V2_ens,False,knn,random_8,70.02097665207421
+V2_ens,False,knn,random_1,32.666666666666664
+V2_ens,False,knn,random_2,38.11953352769679
+V2_ens,False,knn,random_3,39.232513980658204
+V2_ens,False,knn,random_5,62.641025641025635
+V2_ens,False,knn,random_8,57.41681929181929
+V2_ens,False,knn,myeloid,72.68692535452703
+V2_ens,False,knn,lymphoid,72.66724133369785
+V2_ens,False,knn,pbmc_like,65.01667314762305
+V2_ens,False,knn,scope2_like,70.47233987934796
+V2_ens,False,knn,random_1,76.0
+V2_ens,False,knn,random_2,51.09289617486339
+V2_ens,False,knn,random_3,61.06964380648591
+V2_ens,False,knn,random_5,65.58095238095237
+V2_ens,False,knn,random_8,51.45833333333334
+V2_ens,False,knn,random_1,40.666666666666664
+V2_ens,False,knn,random_2,72.72108843537414
+V2_ens,False,knn,random_3,32.40437158469945
+V2_ens,False,knn,random_5,80.45161290322582
+V2_ens,False,knn,random_8,72.8670634920635
+V2_ens,False,knn,myeloid,64.64884696016772
+V2_ens,False,knn,lymphoid,64.60317460317461
+V2_ens,False,knn,pbmc_like,53.00999046553082
+V2_ens,False,knn,scope2_like,77.6579483695652
+V2_ens,False,knn,random_1,16.9811320754717
+V2_ens,False,knn,random_2,54.665300546448094
+V2_ens,False,knn,random_3,47.47899159663865
+V2_ens,False,knn,random_5,80.55555555555556
+V2_ens,False,knn,random_8,39.8248679714197
+V2_ens,False,knn,random_1,23.75
+V2_ens,False,knn,random_2,74.07677356656947
+V2_ens,False,knn,random_3,77.94128576737272
+V2_ens,False,knn,random_5,39.64771375148734
+V2_ens,False,knn,random_8,64.60359389635705
+V2_ens,False,knn,myeloid,58.66161616161616
+V2_ens,False,knn,lymphoid,50.0
+V2_ens,False,knn,pbmc_like,61.23490808562535
+V2_ens,False,knn,scope2_like,71.45465353260869
+V2_ens,False,knn,random_1,77.33333333333333
+V2_ens,False,knn,random_2,43.92857142857143
+V2_ens,False,knn,random_3,69.94620318642664
+V2_ens,False,knn,random_5,70.83333333333333
+V2_ens,False,knn,random_8,64.64629590134369
+V2_ens,False,knn,random_1,26.41509433962264
+V2_ens,False,knn,random_2,69.38311026564305
+V2_ens,False,knn,random_3,41.60743378485314
+V2_ens,False,knn,random_5,56.912249176400124
+V2_ens,False,knn,random_8,66.89393939393939
+V2_ens,False,knn,myeloid,72.33332498497296
+V2_ens,False,knn,lymphoid,74.34065602812213
+V2_ens,False,knn,pbmc_like,59.24317734662562
+V2_ens,False,knn,scope2_like,60.79545454545454
+V2_ens,False,knn,random_1,13.20754716981132
+V2_ens,False,knn,random_2,14.399999999999999
+V2_ens,False,knn,random_3,78.17629900963233
+V2_ens,False,knn,random_5,45.0
+V2_ens,False,knn,random_8,66.97500258089923
+V2_ens,False,knn,random_1,46.666666666666664
+V2_ens,False,knn,random_2,39.6551724137931
+V2_ens,False,knn,random_3,81.68527379053695
+V2_ens,False,knn,random_5,54.876934350618555
+V2_ens,False,knn,random_8,61.87513157340744
+V2_ens,False,knn,myeloid,7.894736842105263
+V2_ens,False,knn,lymphoid,62.50893105227643
+V2_ens,False,knn,pbmc_like,64.8168265463863
+V2_ens,False,knn,scope2_like,64.6590909090909
+V2_ens,False,knn,random_1,33.300000000000004
+V2_ens,False,knn,random_2,70.0
+V2_ens,False,knn,random_3,69.48844155570981
+V2_ens,False,knn,random_5,63.44936783646461
+V2_ens,False,knn,random_8,69.61476886307108
+V2_ens,False,knn,random_1,36.0
+V2_ens,False,knn,random_2,69.09060700044307
+V2_ens,False,knn,random_3,67.18854543021546
+V2_ens,False,knn,random_5,71.68637194185443
+V2_ens,False,knn,random_8,44.177612499244375
+V2_ens,False,knn,myeloid,72.76604729729729
+V2_ens,False,knn,lymphoid,47.777777777777786
+V2_ens,False,knn,pbmc_like,68.23051845785903
+V2_ens,False,knn,scope2_like,64.31818181818181
+V2_ens,False,knn,random_1,0.2178649237472767
+V2_ens,False,knn,random_2,73.36956521739131
+V2_ens,False,knn,random_3,73.29247970757406
+V2_ens,False,knn,random_5,65.33333333333333
+V2_ens,False,knn,random_8,70.32069646040235
+V2_ens,False,knn,random_1,5.0
+V2_ens,False,knn,random_2,30.0
+V2_ens,False,knn,random_3,80.43478260869566
+V2_ens,False,knn,random_5,84.5307839633769
+V2_ens,False,knn,random_8,72.48488620199147
+V2_ens,False,knn,myeloid,57.927148846960165
+V2_ens,False,knn,lymphoid,68.89221889221888
+V2_ens,False,knn,pbmc_like,55.106011808910374
+V2_ens,False,knn,scope2_like,68.70329483695652
+V2_ens,False,knn,random_1,81.89999999999999
+V2_ens,False,knn,random_2,55.490763202089944
+v3_s0 (control),True,centroid,random_1,29.347826086956523
+v3_s0 (control),True,centroid,random_2,0.9803921568627451
+v3_s0 (control),True,centroid,random_3,67.46484926628598
+v3_s0 (control),True,centroid,random_5,34.13804389680401
+v3_s0 (control),True,centroid,random_8,55.07477893706208
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,0.0
+v3_s0 (control),True,centroid,random_3,41.883421458945165
+v3_s0 (control),True,centroid,random_5,37.65384615384615
+v3_s0 (control),True,centroid,random_8,29.251403893127847
+v3_s0 (control),True,centroid,myeloid,27.9874213836478
+v3_s0 (control),True,centroid,lymphoid,58.74125874125874
+v3_s0 (control),True,centroid,pbmc_like,39.94418607638089
+v3_s0 (control),True,centroid,scope2_like,43.01437556154537
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,5.172413793103448
+v3_s0 (control),True,centroid,random_3,46.20047330068651
+v3_s0 (control),True,centroid,random_5,31.216675244467318
+v3_s0 (control),True,centroid,random_8,37.287757973733584
+v3_s0 (control),True,centroid,random_1,2.666666666666667
+v3_s0 (control),True,centroid,random_2,9.620991253644315
+v3_s0 (control),True,centroid,random_3,39.02631626650715
+v3_s0 (control),True,centroid,random_5,42.5
+v3_s0 (control),True,centroid,random_8,37.84722222222222
+v3_s0 (control),True,centroid,myeloid,49.145083372292355
+v3_s0 (control),True,centroid,lymphoid,53.463831250716495
+v3_s0 (control),True,centroid,pbmc_like,50.0904907115035
+v3_s0 (control),True,centroid,scope2_like,44.35245796431781
+v3_s0 (control),True,centroid,random_1,29.5
+v3_s0 (control),True,centroid,random_2,0.4098360655737705
+v3_s0 (control),True,centroid,random_3,60.79957469431153
+v3_s0 (control),True,centroid,random_5,59.70549450549451
+v3_s0 (control),True,centroid,random_8,29.166666666666664
+v3_s0 (control),True,centroid,random_1,20.0
+v3_s0 (control),True,centroid,random_2,55.23809523809524
+v3_s0 (control),True,centroid,random_3,18.178506375227688
+v3_s0 (control),True,centroid,random_5,61.33333333333333
+v3_s0 (control),True,centroid,random_8,39.375
+v3_s0 (control),True,centroid,myeloid,62.264150943396224
+v3_s0 (control),True,centroid,lymphoid,1.984126984126984
+v3_s0 (control),True,centroid,pbmc_like,30.36722511414714
+v3_s0 (control),True,centroid,scope2_like,48.305876358695656
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,29.55601092896175
+v3_s0 (control),True,centroid,random_3,55.18207282913165
+v3_s0 (control),True,centroid,random_5,79.0
+v3_s0 (control),True,centroid,random_8,25.68144499178982
+v3_s0 (control),True,centroid,random_1,13.750000000000002
+v3_s0 (control),True,centroid,random_2,73.59997570456754
+v3_s0 (control),True,centroid,random_3,48.81642512077295
+v3_s0 (control),True,centroid,random_5,39.84442847650394
+v3_s0 (control),True,centroid,random_8,41.59736462368041
+v3_s0 (control),True,centroid,myeloid,45.03502769631802
+v3_s0 (control),True,centroid,lymphoid,10.0
+v3_s0 (control),True,centroid,pbmc_like,46.408394445598255
+v3_s0 (control),True,centroid,scope2_like,52.26732336956521
+v3_s0 (control),True,centroid,random_1,46.666666666666664
+v3_s0 (control),True,centroid,random_2,41.07142857142857
+v3_s0 (control),True,centroid,random_3,53.292269493386804
+v3_s0 (control),True,centroid,random_5,71.49929527836505
+v3_s0 (control),True,centroid,random_8,53.51064196568303
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,62.23928255995652
+v3_s0 (control),True,centroid,random_3,54.02003910068426
+v3_s0 (control),True,centroid,random_5,44.60317460317461
+v3_s0 (control),True,centroid,random_8,51.515151515151516
+v3_s0 (control),True,centroid,myeloid,64.39466038869966
+v3_s0 (control),True,centroid,lymphoid,43.92156044353548
+v3_s0 (control),True,centroid,pbmc_like,43.31848183955464
+v3_s0 (control),True,centroid,scope2_like,53.06818181818181
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,0.0
+v3_s0 (control),True,centroid,random_3,65.0
+v3_s0 (control),True,centroid,random_5,16.025641025641026
+v3_s0 (control),True,centroid,random_8,53.083300486967474
+v3_s0 (control),True,centroid,random_1,54.666666666666664
+v3_s0 (control),True,centroid,random_2,27.586206896551722
+v3_s0 (control),True,centroid,random_3,0.0
+v3_s0 (control),True,centroid,random_5,20.747877063666536
+v3_s0 (control),True,centroid,random_8,31.76282051282051
+v3_s0 (control),True,centroid,myeloid,5.263157894736842
+v3_s0 (control),True,centroid,lymphoid,40.05295296779451
+v3_s0 (control),True,centroid,pbmc_like,43.65363032029699
+v3_s0 (control),True,centroid,scope2_like,33.18181818181819
+v3_s0 (control),True,centroid,random_1,16.1
+v3_s0 (control),True,centroid,random_2,0.0
+v3_s0 (control),True,centroid,random_3,49.19595717380787
+v3_s0 (control),True,centroid,random_5,40.82104454685099
+v3_s0 (control),True,centroid,random_8,74.32277318975046
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,38.912272928666376
+v3_s0 (control),True,centroid,random_3,27.127659574468083
+v3_s0 (control),True,centroid,random_5,50.21309612049536
+v3_s0 (control),True,centroid,random_8,31.385412658183053
+v3_s0 (control),True,centroid,myeloid,46.00225225225225
+v3_s0 (control),True,centroid,lymphoid,4.166666666666666
+v3_s0 (control),True,centroid,pbmc_like,54.31233856938928
+v3_s0 (control),True,centroid,scope2_like,41.25
+v3_s0 (control),True,centroid,random_1,0.2178649237472767
+v3_s0 (control),True,centroid,random_2,83.39580209895053
+v3_s0 (control),True,centroid,random_3,47.98903402676988
+v3_s0 (control),True,centroid,random_5,26.666666666666668
+v3_s0 (control),True,centroid,random_8,51.36077158135981
+v3_s0 (control),True,centroid,random_1,0.0
+v3_s0 (control),True,centroid,random_2,0.0
+v3_s0 (control),True,centroid,random_3,81.70289855072464
+v3_s0 (control),True,centroid,random_5,55.18455342232187
+v3_s0 (control),True,centroid,random_8,46.74342105263158
+v3_s0 (control),True,centroid,myeloid,39.91090146750524
+v3_s0 (control),True,centroid,lymphoid,43.96159396159396
+v3_s0 (control),True,centroid,pbmc_like,36.28324305860537
+v3_s0 (control),True,centroid,scope2_like,41.77564538043478
+v3_s0 (control),True,centroid,random_1,41.699999999999996
+v3_s0 (control),True,centroid,random_2,29.027103937301735
+v3_s0 (control),True,knn,random_1,32.065217391304344
+v3_s0 (control),True,knn,random_2,0.9803921568627451
+v3_s0 (control),True,knn,random_3,67.92533922760484
+v3_s0 (control),True,knn,random_5,38.59703504043127
+v3_s0 (control),True,knn,random_8,53.103614009321866
+v3_s0 (control),True,knn,random_1,0.0
+v3_s0 (control),True,knn,random_2,0.0
+v3_s0 (control),True,knn,random_3,55.24216160758333
+v3_s0 (control),True,knn,random_5,37.65384615384615
+v3_s0 (control),True,knn,random_8,38.105845987257936
+v3_s0 (control),True,knn,myeloid,27.9874213836478
+v3_s0 (control),True,knn,lymphoid,59.20745920745921
+v3_s0 (control),True,knn,pbmc_like,47.789675612783356
+v3_s0 (control),True,knn,scope2_like,44.506481838018225
+v3_s0 (control),True,knn,random_1,0.0
+v3_s0 (control),True,knn,random_2,5.172413793103448
+v3_s0 (control),True,knn,random_3,48.22004576802018
+v3_s0 (control),True,knn,random_5,36.067249957110995
+v3_s0 (control),True,knn,random_8,39.073472259447875
+v3_s0 (control),True,knn,random_1,2.666666666666667
+v3_s0 (control),True,knn,random_2,13.92128279883382
+v3_s0 (control),True,knn,random_3,35.24915934778077
+v3_s0 (control),True,knn,random_5,46.25
+v3_s0 (control),True,knn,random_8,43.40277777777778
+v3_s0 (control),True,knn,myeloid,51.295621006700955
+v3_s0 (control),True,knn,lymphoid,55.052498993230394
+v3_s0 (control),True,knn,pbmc_like,54.10936303735073
+v3_s0 (control),True,knn,scope2_like,51.60441535104607
+v3_s0 (control),True,knn,random_1,38.25
+v3_s0 (control),True,knn,random_2,1.639344262295082
+v3_s0 (control),True,knn,random_3,60.88144603934077
+v3_s0 (control),True,knn,random_5,58.16703296703297
+v3_s0 (control),True,knn,random_8,29.166666666666664
+v3_s0 (control),True,knn,random_1,20.0
+v3_s0 (control),True,knn,random_2,64.62585034013605
+v3_s0 (control),True,knn,random_3,22.550091074681237
+v3_s0 (control),True,knn,random_5,62.33333333333333
+v3_s0 (control),True,knn,random_8,48.68055555555556
+v3_s0 (control),True,knn,myeloid,62.264150943396224
+v3_s0 (control),True,knn,lymphoid,3.968253968253968
+v3_s0 (control),True,knn,pbmc_like,29.96117121972115
+v3_s0 (control),True,knn,scope2_like,49.82591711956522
+v3_s0 (control),True,knn,random_1,0.0
+v3_s0 (control),True,knn,random_2,30.368852459016395
+v3_s0 (control),True,knn,random_3,51.21381886087768
+v3_s0 (control),True,knn,random_5,79.74074074074075
+v3_s0 (control),True,knn,random_8,23.744452580659477
+v3_s0 (control),True,knn,random_1,18.0
+v3_s0 (control),True,knn,random_2,71.16537091026886
+v3_s0 (control),True,knn,random_3,54.23448532144185
+v3_s0 (control),True,knn,random_5,36.13659542904826
+v3_s0 (control),True,knn,random_8,39.77858155489734
+v3_s0 (control),True,knn,myeloid,45.782828282828284
+v3_s0 (control),True,knn,lymphoid,10.0
+v3_s0 (control),True,knn,pbmc_like,48.981100080482484
+v3_s0 (control),True,knn,scope2_like,54.08033288043479
+v3_s0 (control),True,knn,random_1,56.666666666666664
+v3_s0 (control),True,knn,random_2,40.714285714285715
+v3_s0 (control),True,knn,random_3,55.44453994174664
+v3_s0 (control),True,knn,random_5,64.41596194503173
+v3_s0 (control),True,knn,random_8,53.62029108849005
+v3_s0 (control),True,knn,random_1,0.0
+v3_s0 (control),True,knn,random_2,83.07629594401793
+v3_s0 (control),True,knn,random_3,51.600684261974585
+v3_s0 (control),True,knn,random_5,47.460317460317455
+v3_s0 (control),True,knn,random_8,51.515151515151516
+v3_s0 (control),True,knn,myeloid,66.32876678020436
+v3_s0 (control),True,knn,lymphoid,45.091151086810335
+v3_s0 (control),True,knn,pbmc_like,44.50970441008756
+v3_s0 (control),True,knn,scope2_like,54.43181818181818
+v3_s0 (control),True,knn,random_1,0.0
+v3_s0 (control),True,knn,random_2,0.0
+v3_s0 (control),True,knn,random_3,65.97374847374847
+v3_s0 (control),True,knn,random_5,9.35897435897436
+v3_s0 (control),True,knn,random_8,62.13467896024329
+v3_s0 (control),True,knn,random_1,56.00000000000001
+v3_s0 (control),True,knn,random_2,32.758620689655174
+v3_s0 (control),True,knn,random_3,0.0
+v3_s0 (control),True,knn,random_5,22.0078451657399
+v3_s0 (control),True,knn,random_8,35.36324786324786
+v3_s0 (control),True,knn,myeloid,7.894736842105263
+v3_s0 (control),True,knn,lymphoid,41.53600381525214
+v3_s0 (control),True,knn,pbmc_like,41.936458603125274
+v3_s0 (control),True,knn,scope2_like,35.340909090909086
+v3_s0 (control),True,knn,random_1,20.3
+v3_s0 (control),True,knn,random_2,0.0
+v3_s0 (control),True,knn,random_3,49.65398287793694
+v3_s0 (control),True,knn,random_5,41.53533026113671
+v3_s0 (control),True,knn,random_8,72.90684103322234
+v3_s0 (control),True,knn,random_1,0.6666666666666667
+v3_s0 (control),True,knn,random_2,39.25011076650421
+v3_s0 (control),True,knn,random_3,41.31205673758865
+v3_s0 (control),True,knn,random_5,60.59070704199707
+v3_s0 (control),True,knn,random_8,42.24954957545091
+v3_s0 (control),True,knn,myeloid,41.73704954954955
+v3_s0 (control),True,knn,lymphoid,4.166666666666666
+v3_s0 (control),True,knn,pbmc_like,55.562130694114806
+v3_s0 (control),True,knn,scope2_like,45.22727272727273
+v3_s0 (control),True,knn,random_1,0.2178649237472767
+v3_s0 (control),True,knn,random_2,85.98200899550226
+v3_s0 (control),True,knn,random_3,51.36940278449712
+v3_s0 (control),True,knn,random_5,40.0
+v3_s0 (control),True,knn,random_8,52.53529252610135
+v3_s0 (control),True,knn,random_1,0.0
+v3_s0 (control),True,knn,random_2,0.0
+v3_s0 (control),True,knn,random_3,82.42753623188405
+v3_s0 (control),True,knn,random_5,56.21337762323512
+v3_s0 (control),True,knn,random_8,47.401315789473685
+v3_s0 (control),True,knn,myeloid,39.91090146750524
+v3_s0 (control),True,knn,lymphoid,46.12609612609613
+v3_s0 (control),True,knn,pbmc_like,42.90294246815986
+v3_s0 (control),True,knn,scope2_like,43.134341032608695
+v3_s0 (control),True,knn,random_1,44.3
+v3_s0 (control),True,knn,random_2,29.24169621197985
+v3_s0 (control),False,centroid,random_1,24.456521739130434
+v3_s0 (control),False,centroid,random_2,5.88235294117647
+v3_s0 (control),False,centroid,random_3,56.72558379893985
+v3_s0 (control),False,centroid,random_5,38.37783981517135
+v3_s0 (control),False,centroid,random_8,59.74751889629836
+v3_s0 (control),False,centroid,random_1,0.0
+v3_s0 (control),False,centroid,random_2,0.0
+v3_s0 (control),False,centroid,random_3,43.466452601995606
+v3_s0 (control),False,centroid,random_5,36.128205128205124
+v3_s0 (control),False,centroid,random_8,42.16884811271049
+v3_s0 (control),False,centroid,myeloid,18.5620354488279
+v3_s0 (control),False,centroid,lymphoid,48.6543759271032
+v3_s0 (control),False,centroid,pbmc_like,43.832095174599914
+v3_s0 (control),False,centroid,scope2_like,42.91490180978052
+v3_s0 (control),False,centroid,random_1,0.0
+v3_s0 (control),False,centroid,random_2,8.620689655172415
+v3_s0 (control),False,centroid,random_3,41.799714145129926
+v3_s0 (control),False,centroid,random_5,39.26784795235644
+v3_s0 (control),False,centroid,random_8,40.48676255993329
+v3_s0 (control),False,centroid,random_1,6.0
+v3_s0 (control),False,centroid,random_2,9.475218658892128
+v3_s0 (control),False,centroid,random_3,38.140345868341626
+v3_s0 (control),False,centroid,random_5,57.775641025641036
+v3_s0 (control),False,centroid,random_8,42.107371794871796
+v3_s0 (control),False,centroid,myeloid,51.19339255103631
+v3_s0 (control),False,centroid,lymphoid,50.33907559443499
+v3_s0 (control),False,centroid,pbmc_like,50.839378101109666
+v3_s0 (control),False,centroid,scope2_like,40.627005519188806
+v3_s0 (control),False,centroid,random_1,27.0
+v3_s0 (control),False,centroid,random_2,9.972677595628415
+v3_s0 (control),False,centroid,random_3,55.50558213716109
+v3_s0 (control),False,centroid,random_5,72.7970695970696
+v3_s0 (control),False,centroid,random_8,39.58333333333333
+v3_s0 (control),False,centroid,random_1,17.333333333333336
+v3_s0 (control),False,centroid,random_2,56.49659863945578
+v3_s0 (control),False,centroid,random_3,17.595628415300546
+v3_s0 (control),False,centroid,random_5,56.978494623655905
+v3_s0 (control),False,centroid,random_8,63.74999999999999
+v3_s0 (control),False,centroid,myeloid,61.818658280922435
+v3_s0 (control),False,centroid,lymphoid,18.88422035480859
+v3_s0 (control),False,centroid,pbmc_like,45.94732748631517
+v3_s0 (control),False,centroid,scope2_like,45.028023097826086
+v3_s0 (control),False,centroid,random_1,5.660377358490567
+v3_s0 (control),False,centroid,random_2,27.94398907103825
+v3_s0 (control),False,centroid,random_3,42.623716153127916
+v3_s0 (control),False,centroid,random_5,75.12250712250712
+v3_s0 (control),False,centroid,random_8,24.450306217547595
+v3_s0 (control),False,centroid,random_1,17.25
+v3_s0 (control),False,centroid,random_2,60.03502591512796
+v3_s0 (control),False,centroid,random_3,58.60878855444073
+v3_s0 (control),False,centroid,random_5,35.6394773847604
+v3_s0 (control),False,centroid,random_8,46.58935849725323
+v3_s0 (control),False,centroid,myeloid,48.898664059954385
+v3_s0 (control),False,centroid,lymphoid,12.5
+v3_s0 (control),False,centroid,pbmc_like,49.97041447325643
+v3_s0 (control),False,centroid,scope2_like,45.39317255434783
+v3_s0 (control),False,centroid,random_1,40.666666666666664
+v3_s0 (control),False,centroid,random_2,35.714285714285715
+v3_s0 (control),False,centroid,random_3,50.00039790542584
+v3_s0 (control),False,centroid,random_5,69.53488372093022
+v3_s0 (control),False,centroid,random_8,54.31008929401511
+v3_s0 (control),False,centroid,random_1,3.7735849056603774
+v3_s0 (control),False,centroid,random_2,57.46993681635981
+v3_s0 (control),False,centroid,random_3,51.73267234557557
+v3_s0 (control),False,centroid,random_5,42.857142857142854
+v3_s0 (control),False,centroid,random_8,47.51893939393939
+v3_s0 (control),False,centroid,myeloid,60.251577840112205
+v3_s0 (control),False,centroid,lymphoid,37.54324517346764
+v3_s0 (control),False,centroid,pbmc_like,43.2231529683637
+v3_s0 (control),False,centroid,scope2_like,39.88636363636363
+v3_s0 (control),False,centroid,random_1,0.0
+v3_s0 (control),False,centroid,random_2,0.6
+v3_s0 (control),False,centroid,random_3,66.16718672274227
+v3_s0 (control),False,centroid,random_5,24.743589743589745
+v3_s0 (control),False,centroid,random_8,57.27247991886257
+v3_s0 (control),False,centroid,random_1,36.666666666666664
+v3_s0 (control),False,centroid,random_2,15.839822024471637
+v3_s0 (control),False,centroid,random_3,4.848484848484849
+v3_s0 (control),False,centroid,random_5,29.525195051510845
+v3_s0 (control),False,centroid,random_8,47.34483109483109
+v3_s0 (control),False,centroid,myeloid,7.025375939849623
+v3_s0 (control),False,centroid,lymphoid,39.34461253242614
+v3_s0 (control),False,centroid,pbmc_like,42.97619803909112
+v3_s0 (control),False,centroid,scope2_like,38.74999999999999
+v3_s0 (control),False,centroid,random_1,18.3
+v3_s0 (control),False,centroid,random_2,33.33333333333333
+v3_s0 (control),False,centroid,random_3,37.443995708967
+v3_s0 (control),False,centroid,random_5,40.132104454685106
+v3_s0 (control),False,centroid,random_8,65.69854969541527
+v3_s0 (control),False,centroid,random_1,2.0
+v3_s0 (control),False,centroid,random_2,31.103234381922906
+v3_s0 (control),False,centroid,random_3,39.00709219858156
+v3_s0 (control),False,centroid,random_5,45.44249369551814
+v3_s0 (control),False,centroid,random_8,33.81108339267732
+v3_s0 (control),False,centroid,myeloid,52.67032657657658
+v3_s0 (control),False,centroid,lymphoid,17.083333333333332
+v3_s0 (control),False,centroid,pbmc_like,57.90146927633334
+v3_s0 (control),False,centroid,scope2_like,41.590909090909086
+v3_s0 (control),False,centroid,random_1,1.7429193899782136
+v3_s0 (control),False,centroid,random_2,70.78335832083957
+v3_s0 (control),False,centroid,random_3,50.28678170187604
+v3_s0 (control),False,centroid,random_5,34.333333333333336
+v3_s0 (control),False,centroid,random_8,58.35605264833206
+v3_s0 (control),False,centroid,random_1,0.0
+v3_s0 (control),False,centroid,random_2,16.666666666666664
+v3_s0 (control),False,centroid,random_3,80.61594202898551
+v3_s0 (control),False,centroid,random_5,50.11062037977787
+v3_s0 (control),False,centroid,random_8,54.62578532479848
+v3_s0 (control),False,centroid,myeloid,41.52253668763103
+v3_s0 (control),False,centroid,lymphoid,42.77389277389277
+v3_s0 (control),False,centroid,pbmc_like,42.6914068218416
+v3_s0 (control),False,centroid,scope2_like,41.860563858695656
+v3_s0 (control),False,centroid,random_1,34.699999999999996
+v3_s0 (control),False,centroid,random_2,22.37474342228028
+v3_s0 (control),False,knn,random_1,27.173913043478258
+v3_s0 (control),False,knn,random_2,5.88235294117647
+v3_s0 (control),False,knn,random_3,58.48158551810238
+v3_s0 (control),False,knn,random_5,40.44946091644205
+v3_s0 (control),False,knn,random_8,56.38591958719887
+v3_s0 (control),False,knn,random_1,0.0
+v3_s0 (control),False,knn,random_2,0.0
+v3_s0 (control),False,knn,random_3,53.500804760107414
+v3_s0 (control),False,knn,random_5,36.128205128205124
+v3_s0 (control),False,knn,random_8,50.02563896750174
+v3_s0 (control),False,knn,myeloid,20.228702115494567
+v3_s0 (control),False,knn,lymphoid,49.014621741894466
+v3_s0 (control),False,knn,pbmc_like,49.923632632361276
+v3_s0 (control),False,knn,scope2_like,46.672442561930424
+v3_s0 (control),False,knn,random_1,0.0
+v3_s0 (control),False,knn,random_2,7.758620689655173
+v3_s0 (control),False,knn,random_3,44.47831486211016
+v3_s0 (control),False,knn,random_5,42.73911232017254
+v3_s0 (control),False,knn,random_8,48.89603621310938
+v3_s0 (control),False,knn,random_1,7.333333333333333
+v3_s0 (control),False,knn,random_2,11.661807580174926
+v3_s0 (control),False,knn,random_3,37.57250908629488
+v3_s0 (control),False,knn,random_5,63.92948717948719
+v3_s0 (control),False,knn,random_8,50.61431623931624
+v3_s0 (control),False,knn,myeloid,51.37696743026336
+v3_s0 (control),False,knn,lymphoid,53.07414527464969
+v3_s0 (control),False,knn,pbmc_like,53.09383831642657
+v3_s0 (control),False,knn,scope2_like,45.82210242587601
+v3_s0 (control),False,knn,random_1,30.5
+v3_s0 (control),False,knn,random_2,10.792349726775956
+v3_s0 (control),False,knn,random_3,55.85114300903774
+v3_s0 (control),False,knn,random_5,67.17802197802197
+v3_s0 (control),False,knn,random_8,37.5
+v3_s0 (control),False,knn,random_1,18.666666666666668
+v3_s0 (control),False,knn,random_2,63.911564625850346
+v3_s0 (control),False,knn,random_3,20.87431693989071
+v3_s0 (control),False,knn,random_5,58.978494623655905
+v3_s0 (control),False,knn,random_8,68.26388888888889
+v3_s0 (control),False,knn,myeloid,61.818658280922435
+v3_s0 (control),False,knn,lymphoid,18.88422035480859
+v3_s0 (control),False,knn,pbmc_like,47.69393169529968
+v3_s0 (control),False,knn,scope2_like,46.62449048913043
+v3_s0 (control),False,knn,random_1,5.660377358490567
+v3_s0 (control),False,knn,random_2,28.35382513661202
+v3_s0 (control),False,knn,random_3,46.12511671335201
+v3_s0 (control),False,knn,random_5,74.73789173789174
+v3_s0 (control),False,knn,random_8,33.2003062175476
+v3_s0 (control),False,knn,random_1,21.25
+v3_s0 (control),False,knn,random_2,58.82227891156463
+v3_s0 (control),False,knn,random_3,63.46200297287253
+v3_s0 (control),False,knn,random_5,32.91506343393136
+v3_s0 (control),False,knn,random_8,47.24725323409534
+v3_s0 (control),False,knn,myeloid,48.898664059954385
+v3_s0 (control),False,knn,lymphoid,12.5
+v3_s0 (control),False,knn,pbmc_like,50.88598765390675
+v3_s0 (control),False,knn,scope2_like,48.46722146739131
+v3_s0 (control),False,knn,random_1,46.666666666666664
+v3_s0 (control),False,knn,random_2,35.714285714285715
+v3_s0 (control),False,knn,random_3,51.59400913590858
+v3_s0 (control),False,knn,random_5,69.23185341789993
+v3_s0 (control),False,knn,random_8,53.41186387112283
+v3_s0 (control),False,knn,random_1,3.7735849056603774
+v3_s0 (control),False,knn,random_2,70.60601943066784
+v3_s0 (control),False,knn,random_3,50.52299492622073
+v3_s0 (control),False,knn,random_5,48.57142857142858
+v3_s0 (control),False,knn,random_8,47.10227272727273
+v3_s0 (control),False,knn,myeloid,61.737377279102375
+v3_s0 (control),False,knn,lymphoid,39.78590740663448
+v3_s0 (control),False,knn,pbmc_like,44.058221404964705
+v3_s0 (control),False,knn,scope2_like,47.61363636363637
+v3_s0 (control),False,knn,random_1,0.0
+v3_s0 (control),False,knn,random_2,0.6
+v3_s0 (control),False,knn,random_3,66.16718672274227
+v3_s0 (control),False,knn,random_5,24.743589743589745
+v3_s0 (control),False,knn,random_8,63.64502893847042
+v3_s0 (control),False,knn,random_1,38.666666666666664
+v3_s0 (control),False,knn,random_2,18.96551724137931
+v3_s0 (control),False,knn,random_3,6.602870813397129
+v3_s0 (control),False,knn,random_5,27.802707013233324
+v3_s0 (control),False,knn,random_8,47.80779405779406
+v3_s0 (control),False,knn,myeloid,7.894736842105263
+v3_s0 (control),False,knn,lymphoid,41.562242429619815
+v3_s0 (control),False,knn,pbmc_like,48.34095673718315
+v3_s0 (control),False,knn,scope2_like,39.20454545454546
+v3_s0 (control),False,knn,random_1,22.0
+v3_s0 (control),False,knn,random_2,33.33333333333333
+v3_s0 (control),False,knn,random_3,38.79756420773648
+v3_s0 (control),False,knn,random_5,41.134408602150536
+v3_s0 (control),False,knn,random_8,67.63171264940927
+v3_s0 (control),False,knn,random_1,2.0
+v3_s0 (control),False,knn,random_2,32.11674789543642
+v3_s0 (control),False,knn,random_3,45.39007092198582
+v3_s0 (control),False,knn,random_5,53.59018639949136
+v3_s0 (control),False,knn,random_8,39.56444720154398
+v3_s0 (control),False,knn,myeloid,58.405123873873876
+v3_s0 (control),False,knn,lymphoid,17.083333333333332
+v3_s0 (control),False,knn,pbmc_like,60.2497521507191
+v3_s0 (control),False,knn,scope2_like,43.29545454545455
+v3_s0 (control),False,knn,random_1,1.5250544662309369
+v3_s0 (control),False,knn,random_2,72.50749625187406
+v3_s0 (control),False,knn,random_3,53.455625436757515
+v3_s0 (control),False,knn,random_5,48.66666666666667
+v3_s0 (control),False,knn,random_8,60.34568372803667
+v3_s0 (control),False,knn,random_1,0.0
+v3_s0 (control),False,knn,random_2,16.666666666666664
+v3_s0 (control),False,knn,random_3,81.34057971014492
+v3_s0 (control),False,knn,random_5,53.71169813964896
+v3_s0 (control),False,knn,random_8,56.657035324798485
+v3_s0 (control),False,knn,myeloid,42.21698113207547
+v3_s0 (control),False,knn,lymphoid,42.56576756576756
+v3_s0 (control),False,knn,pbmc_like,49.333918899136286
+v3_s0 (control),False,knn,scope2_like,42.24269701086957
+v3_s0 (control),False,knn,random_1,37.7
+v3_s0 (control),False,knn,random_2,22.58933569695839

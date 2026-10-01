@@ -8,9 +8,9 @@ Latent embeddings and metadata, latent dim 128.
 |---|---|
 | `atlas_RNA_lat128.parquet` | RNA coordinates — **Git LFS**, ~1.43 GB |
 | `atlas_RNA_lat128-001-part1.csv`, `-part2.csv` | Split CSV form of the same — **Git LFS** |
-| `metadata_RNA_lat128.csv` | RNA metadata, 85,233 rows — from the v3 reference (`scripts/archive/promote_v3_atlas.py`) |
+| `metadata_RNA_lat128.csv` | RNA metadata, 85,233 rows; PCs in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`) |
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
-| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows — from the v3 reference (`scripts/archive/promote_v3_atlas.py`) |
+| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows; the served v3.1 model's projection of SCoPE2 (`scripts/export_atlas_coordinates.py`) |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
 | `story_cells.json` | Generated with the manifest: every protein cell and a class-stratified, fixed-seed sample of about 2,000 RNA cells, at the viewer's 3-PC coordinates, for the landing story's scene |
 
@@ -20,11 +20,18 @@ class_name, lineage, PC1, PC2, PC3`.
 Protein metadata columns: `latent_dim, modality, orig_index, class_idx,
 class_name, pred_class_name, max_cos_ref, abstained, PC1, PC2, PC3`.
 `class_name` is the cell's **true** label (SCoPE2 ground truth, matching
-what this column has always meant); `pred_class_name`, `max_cos_ref`, and
-`abstained` are extra columns beyond the RNA schema — the v3 reference's own
-prediction, its similarity to the reference, and whether it would abstain.
+what this column has always meant). The other columns go beyond the RNA
+schema, and all come from the served v3.1 model with default settings:
+- `pred_class_name` is its best guess;
+- `max_cos_ref` is its out-of-distribution score (`reference_similarity`);
+- `abstained` says whether it abstains.
 Both `atlas.html` and `scripts/build_manifest.py` read columns by name and
 ignore the ones they don't recognise.
+
+**Coordinates.** The PCs are the service's own PCA of v3.1's coordinate
+member (seed 4), with a fixed sign. A cell the service projects therefore
+lands on the atlas the site displays; `service/tests/test_pipeline_versions.py`
+pins the RNA file to it.
 
 Class names are quoted CSV fields and **some contain commas** (`class_idx` 2,
 3, and 14). Parse with `csv.DictReader` or equivalent — a naive `split(',')`

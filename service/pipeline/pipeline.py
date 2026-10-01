@@ -35,6 +35,8 @@ class ReferenceBundle:
     property_values: np.ndarray  # (n_ref, n_properties)
     provenance: dict  # service/model/runtime/provenance.json — recorded, see pipeline.py's abstain-threshold note
 
+    pipeline_version = "v3"
+
     @property
     def model_version(self) -> str:
         return encoder.model_version_label(self.encoder_handle)
@@ -79,23 +81,40 @@ class Components:
 
 
 def components_for(version: str) -> Components:
-    """v3: today's components. v3.1: loads T1 NB2 to NB4's artifacts, which
-    raises PendingArtifactError while they are missing. With the artifacts in
-    place it still refuses until Track F implements the components that read
-    them, rather than silently serving v3 under a v3.1 label."""
+    """v3: the single-encoder components. v3.1: T1 NB2's, built from its spec
+    (service/model/v3_1/nb2_spec_v31.json); PendingArtifactError if the spec
+    is missing."""
     if version == "v3":
         return Components(
             version="v3", label_space=label_space.V3LabelSpace(),
             calibrator=calibration.V3ConformalCalibrator(), abstention=abstention.V3AbstentionScorer(),
         )
     if version == "v3.1":
-        label_space.load_v31_artifacts()
-        abstention.load_v31_artifacts()
-        calibration.load_v31_artifacts()
-        raise NotImplementedError(
-            "The v3.1 artifacts are present, but the components that read them are built in "
-            "Track F from T1 NB4's service_change_spec.md (research/roadmap.md)."
+        from service.pipeline import ensemble  # imports this module
+        spec = ensemble.load_spec()
+        qhat = np.array([spec["conformal"]["qhat_by_class"][name] for name in spec["class_order"]])
+        return Components(
+            version="v3.1", label_space=label_space.V31LabelSpace(),
+            calibrator=calibration.MondrianCalibrator(
+                qhat, spec["conformal"]["marginal_qhat"], spec["conformal"]["alpha"],
+                spec["conformal"]["calibrated_on"],
+            ),
+            abstention=abstention.V31AbstentionScorer(
+                float(spec["ood"]["threshold"]), int(spec["preprocessing"]["min_observed_genes"]),
+            ),
         )
+    raise ValueError(f"Unknown pipeline version {version!r}; expected one of {config.PIPELINE_VERSIONS}.")
+
+
+def load_bundle(version: str):
+    """The reference side for a pipeline version: v3's ReferenceBundle, or
+    v3.1's ensemble (ensemble.V31Bundle). Raises PendingArtifactError naming
+    whichever file is missing."""
+    if version == "v3":
+        return ReferenceBundle.load()
+    if version == "v3.1":
+        from service.pipeline import ensemble  # imports this module
+        return ensemble.V31Bundle.load()
     raise ValueError(f"Unknown pipeline version {version!r}; expected one of {config.PIPELINE_VERSIONS}.")
 
 
@@ -186,12 +205,17 @@ def run_projection(
     Without an explicit `rng`, the calibration slice is seeded from the
     upload (upload_seed), so identical uploads give identical responses.
 
-    `components` defaults to config.PIPELINE_VERSION's (components_for). A v3
-    response is exactly today's; any other version adds `pipeline_version`,
-    `supported_classes`, `calibration` and a per-cell `abstain_category`
-    (docs/service/projection-api.md, "v3.1").
+    The bundle decides the pipeline: a ReferenceBundle runs v3, an
+    ensemble.V31Bundle runs v3.1 (ensemble.project). `components` default to
+    the bundle's version. A v3 response is exactly as before the version
+    switch existed; v3.1 adds `pipeline_version`, `supported_classes`,
+    `calibration`, and per cell `label_level`, `best_guess` and
+    `abstain_category` (docs/service/projection-api.md, "v3.1").
     """
-    components = components or components_for(config.PIPELINE_VERSION)
+    components = components or components_for(bundle.pipeline_version)
+    if bundle.pipeline_version == "v3.1":
+        from service.pipeline import ensemble  # imports this module
+        return ensemble.project(bundle, raw, restrict_to_supported_classes, components)
     rng = rng or np.random.default_rng(upload_seed(raw))
 
     # assign_labels/top_label/calibrate_and_build_sets all work in centroid

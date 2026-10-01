@@ -1,0 +1,23 @@
+class,group,lineage
+b cell,B cell,lymphoid
+basophil,granulocyte,myeloid
+"cd4-positive, alpha-beta t cell",T cell,lymphoid
+"cd8-positive, alpha-beta t cell",T cell,lymphoid
+classical monocyte,monocyte/macrophage,myeloid
+common myeloid progenitor,progenitor,myeloid
+erythrocyte,erythroid,erythroid
+hematopoietic precursor cell,progenitor,progenitor
+hematopoietic stem cell,progenitor,progenitor
+intermediate monocyte,monocyte/macrophage,myeloid
+macrophage,monocyte/macrophage,myeloid
+mature nk t cell,T cell,lymphoid
+monocyte,monocyte/macrophage,myeloid
+myeloid dendritic cell,dendritic cell,myeloid
+"naive thymus-derived cd4-positive, alpha-beta t cell",T cell,lymphoid
+natural killer cell,NK cell,lymphoid
+neutrophil,granulocyte,myeloid
+non-classical monocyte,monocyte/macrophage,myeloid
+plasma cell,B cell,lymphoid
+plasmacytoid dendritic cell,dendritic cell,myeloid
+platelet,platelet/megakaryocyte,other
+regulatory t cell,T cell,lymphoid

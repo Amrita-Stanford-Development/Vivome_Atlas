@@ -30,6 +30,14 @@ Fulcher 2026, the held-out arm, fixed by
 4. `fulcher2026_score.py` scores; it is the only step that reads labels.
 Follow-ups: `paired_and_pool_first.py` and `pbmc240_convention_check.py`.
 
+v3.1 (Track F), from the repository root; both need the v3.1 checkpoints
+(`scripts/fetch_v31_members.py`):
+- `python3 -m benchmark.v31_dev_gate` is the gate. The served v3.1 pipeline
+  must reproduce NB2's development table on SCoPE2 and PBMC240, read with
+  NB2's own parse (`notebook_convention.py`).
+- `python3 -m benchmark.fulcher2026_v31` scores Fulcher 2026, as
+  development data, through v3.1.
+
 Outputs go to `results/`. It is gitignored and ~1 GB. Some of it is scANVI
 training output that took about an hour per seed, so regenerate before
 deleting anything. The benchmark's dependencies (scvi-tools, MaxFuse,

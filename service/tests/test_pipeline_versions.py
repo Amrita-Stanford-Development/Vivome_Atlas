@@ -1,5 +1,5 @@
-"""Track C (research/roadmap.md): the pipeline version switch and the
-label space, abstention and conformal sockets.
+"""Tracks C and F (research/roadmap.md): the pipeline version switch, the
+label space, abstention and conformal components, and the v3.1 response.
 
 The v3 guard compares against full responses frozen from the code as it was
 before the switch existed (base bf315f7; service/tests/fixtures/v3_full_*.json),
@@ -16,12 +16,14 @@ from pathlib import Path
 from unittest import mock
 
 import numpy as np
+import pandas as pd
 
 from service import config
-from service.pipeline import abstention, calibration, label_space, pipeline, reference
+from service.pipeline import abstention, calibration, ensemble, label_space, pipeline, reference
 from service.tests.test_golden_fixtures import _load_pbmc240_50, _load_scope2_50
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
+REPO = Path(__file__).resolve().parents[2]
 
 
 def assert_same(test, fresh, frozen, where="response"):
@@ -45,8 +47,10 @@ class V3IsUnchangedTests(unittest.TestCase):
         cls.bundle = pipeline.ReferenceBundle.load()
         cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
 
-    def test_the_default_version_is_v3(self):
-        self.assertEqual(config.PIPELINE_VERSION, "v3")
+    def test_the_default_version_is_v31_and_v3_stays_selectable(self):
+        self.assertEqual(config.PIPELINE_VERSION, "v3.1")
+        self.assertIn("v3", config.PIPELINE_VERSIONS)
+        self.assertIsInstance(pipeline.load_bundle("v3"), pipeline.ReferenceBundle)
 
     def test_v3_reproduces_the_responses_frozen_before_the_switch(self):
         for name, raw in self.raws.items():
@@ -123,46 +127,93 @@ class ComponentSelectionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             pipeline.components_for("v4")
 
-    def test_v31_without_its_artifacts_is_pending_and_names_the_notebook(self):
-        with tempfile.TemporaryDirectory() as empty, _v31_paths(Path(empty)):
-            with self.assertRaises(reference.PendingArtifactError) as caught:
-                pipeline.components_for("v3.1")
-        self.assertIn("T1 NB2", str(caught.exception))
+    def test_v31_components_carry_nb2s_settings(self):
+        spec = ensemble.load_spec()
+        c = pipeline.components_for("v3.1")
+        self.assertIsInstance(c.label_space, label_space.V31LabelSpace)
+        self.assertIsInstance(c.calibrator, calibration.MondrianCalibrator)
+        self.assertIsInstance(c.abstention, abstention.V31AbstentionScorer)
+        self.assertEqual(c.calibrator.qhat.tolist(), [spec["conformal"]["qhat_by_class"][n] for n in spec["class_order"]])
+        self.assertEqual(c.abstention.threshold, spec["ood"]["threshold"])
+        self.assertEqual(c.abstention.min_observed_genes, spec["preprocessing"]["min_observed_genes"])
 
-    def test_v31_with_its_artifacts_still_refuses_until_track_f(self):
-        with tempfile.TemporaryDirectory() as tmp, _v31_paths(Path(tmp)) as paths:
-            for key in ("label_space_config", "bcts_params", "ood_config"):
-                paths[key].write_text("{}")
-            np.save(paths["ood_reference_index"], np.zeros((2, 512), np.float16))
-            np.savez(paths["conformal_calibration"], qhat=np.zeros(22))
-            with self.assertRaises(NotImplementedError) as caught:
-                pipeline.components_for("v3.1")
-        self.assertIn("Track F", str(caught.exception))
+    def test_v31_without_its_manifest_is_pending(self):
+        with tempfile.TemporaryDirectory() as empty, \
+                mock.patch.object(config, "V31_MANIFEST_PATH", Path(empty) / "MANIFEST.json"):
+            with self.assertRaises(reference.PendingArtifactError):
+                pipeline.load_bundle("v3.1")
+
+    def test_a_v31_file_missing_or_changed_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "a.npy").write_bytes(b"what NB2 exported")
+            manifest = tmp / "MANIFEST.json"
+            with mock.patch.object(config, "V31_DIR", tmp), mock.patch.object(config, "V31_MANIFEST_PATH", manifest):
+                manifest.write_text(json.dumps({"files": {"b.pt": {"sha256": "0" * 64}}}))
+                with self.assertRaises(reference.PendingArtifactError):
+                    pipeline.load_bundle("v3.1")
+                manifest.write_text(json.dumps({"files": {"a.npy": {"sha256": "0" * 64}}}))
+                with self.assertRaisesRegex(reference.PendingArtifactError, "sha256"):
+                    pipeline.load_bundle("v3.1")
 
 
-class _v31_paths:
-    """Points every v3.1 artifact path into one directory for a test."""
+class V31ResponseTests(unittest.TestCase):
+    """The v3.1 response on real cells: every v3 field kept, plus the
+    hierarchical label and the best guess (docs/service/projection-api.md)."""
 
-    NAMES = {
-        "label_space_config": ("V31_LABEL_SPACE_CONFIG_PATH", "label_space_config.json"),
-        "bcts_params": ("V31_BCTS_PARAMS_PATH", "bcts_params.json"),
-        "ood_config": ("V31_OOD_CONFIG_PATH", "ood_config.json"),
-        "ood_reference_index": ("V31_OOD_REFERENCE_INDEX_PATH", "ood_reference_index.npy"),
-        "conformal_calibration": ("V31_CONFORMAL_CALIBRATION_PATH", "conformal_calibration.npz"),
-    }
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.bundle = pipeline.load_bundle("v3.1")
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/fetch_v31_members.py.")
+        cls.v3_bundle = pipeline.ReferenceBundle.load()
+        cls.raw = _load_pbmc240_50()
 
-    def __init__(self, directory: Path):
-        self.paths = {key: directory / name for key, (_, name) in self.NAMES.items()}
-        self.patches = [mock.patch.object(config, attr, self.paths[key]) for key, (attr, _) in self.NAMES.items()]
+    def test_every_v3_field_is_kept_and_the_v31_ones_added(self):
+        v3 = pipeline.run_projection(self.v3_bundle, self.raw)
+        v31 = pipeline.run_projection(self.bundle, self.raw)
+        self.assertTrue(set(v3) <= set(v31), "a v3 field was dropped")
+        self.assertEqual(v31["pipeline_version"], "v3.1")
+        self.assertEqual(v31["supported_classes"]["method"], "none")
+        self.assertEqual(v31["calibration"]["n_calibration_cells"], 0)
+        v3_cell_keys = set(v3["cells"][0]) - {"abstain_reason"}
+        for cell in v31["cells"]:
+            self.assertTrue(v3_cell_keys <= set(cell))
+            self.assertEqual(len(cell["coordinates"]), 3)
+            self.assertIsInstance(cell["reference_similarity"], float)
+            if cell["abstained"]:
+                self.assertIsNone(cell["label_level"])
+                self.assertIn(cell["abstain_category"], {"no_reference_support", "low_coverage", "ambiguous"})
+            else:
+                self.assertIn(cell["label_level"], {"class", "group", "lineage"})
+                self.assertTrue(cell["label_set"])
+            if cell.get("abstain_reason") == "coverage_too_low":
+                self.assertNotIn("best_guess", cell)
+            else:
+                self.assertIn(cell["best_guess"]["label"], self.bundle.class_names)
+                self.assertTrue(0 < cell["best_guess"]["probability"] <= 1)
 
-    def __enter__(self):
-        for p in self.patches:
-            p.start()
-        return self.paths
+    def test_the_sites_atlas_is_the_services_coordinate_space(self):
+        """A projected cell lands on the displayed atlas: web/data's RNA PCs are
+        this bundle's PCA of the coordinate member's latents
+        (scripts/export_atlas_coordinates.py), with a fixed sign."""
+        anchor = self.bundle.members[self.bundle.coordinate_member]
+        rows = pd.read_csv(REPO / "web" / "data" / "metadata_RNA_lat128.csv", usecols=["PC1", "PC2", "PC3"])
+        sample = np.arange(0, len(rows), 997)
+        expected = self.bundle.pca.project(anchor.reference_latents[sample])
+        np.testing.assert_allclose(rows.to_numpy()[sample], expected, atol=1e-5)
+        components = self.bundle.pca.components
+        self.assertTrue((components[np.arange(3), np.abs(components).argmax(axis=1)] > 0).all())
 
-    def __exit__(self, *exc):
-        for p in self.patches:
-            p.stop()
+    def test_a_restricted_request_keeps_every_answer_inside_the_supported_classes(self):
+        v31 = pipeline.run_projection(self.bundle, self.raw, restrict_to_supported_classes=True)
+        supported = set(v31["supported_classes"]["names"])
+        self.assertLess(len(supported), len(self.bundle.class_names))
+        for cell in v31["cells"]:
+            self.assertTrue(set(cell["label_set"]) <= supported)
+            if "best_guess" in cell:
+                self.assertIn(cell["best_guess"]["label"], supported)
 
 
 class V3LabelSpaceTests(unittest.TestCase):

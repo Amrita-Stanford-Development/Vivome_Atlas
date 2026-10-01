@@ -565,6 +565,17 @@ the transductive-vs.-zero-shot caveat near the top of this document — it
 applies here too, and if anything makes scANVI's near-collapse into
 predicting one dominant lineage more notable, not less.)
 
+### v3.1 on PBMC240
+
+`benchmark/v31_dev_gate.py` runs the served v3.1 pipeline on PBMC240 and
+SCoPE2, read with NB2's own parse (`benchmark/notebook_convention.py`). It
+reproduces NB2's development table
+(`research/notebook-outputs/nb2/tables/dev_datasets.csv`) exactly. For
+PBMC240 that is 73.95% committed, 23.95% ambiguous and 1.68% out of
+distribution.
+
+v3.1 on PBMC240 through the service parser: committed 72.7 vs 74.0 under the notebook parse; the difference is gene identifier resolution (HGNC map, ambiguous groups unmatched) and the graph input, not the pipeline.
+
 ## Fulcher 2026 — the first held-out evaluation
 
 **What this is.** Fulcher 2026 is TMT32-multiplexed single-cell proteomics
@@ -787,11 +798,51 @@ and conformal, and the v3.1 encoder are the planned fixes. This check
 reports composition only. It is not scored, and Fulcher is development data
 now.
 
+### v3.1 on Fulcher (development data)
+
+Fulcher is development data now, so this is not a second held-out score.
+`benchmark/fulcher2026_v31.py` sends the 1,275-cell upload through the
+service parser to the served v3.1 pipeline, with default settings. It reads
+the authors' labels afterwards, for scoring only
+([v31_development.json](fulcher2026/v31_development.json)).
+
+A committed answer is judged at the level it is stated:
+- **A class** is judged through the protocol's fixed mapping, so
+  "macrophage" for a monocyte is wrong.
+- **A group or lineage** is judged against the one the author type's
+  classes share, so "T cell" is right for CD4T and CD8T.
+
+| Author type | Cells | Committed | Correct at the stated level | Class / group / lineage answers |
+|---|---|---|---|---|
+| CD4T | 308 | 88.3% | 91.2% | 25 / 180 / 67 |
+| CD8T | 181 | 93.4% | 98.8% | 1 / 100 / 68 |
+| NK | 150 | 92.0% | 99.3% | 0 / 1 / 137 |
+| B | 102 | 85.3% | 98.8% | 82 / 4 / 1 |
+| monocyte | 456 | 92.5% | 99.8% | 0 / 1 / 421 |
+| DC | 54 | 53.7% | 93.1% | 1 / 1 / 27 |
+| **All 1,251** | 1,251 | 89.3% | **97.2%** | 109 / 287 / 721 |
+
+- **All 1,275 cells:** 89.4% committed, 8.6% at class level;
+  10.2% abstain ambiguous, 0.39% out of distribution.
+- **Composition**, with a class counted under its group: lineage:myeloid 35.1%; lineage:lymphoid 23.1%; T cell 22.4%; abstain 10.6%; B cell 8.6%; monocyte/macrophage 0.2%.
+- **Best guess:** 57.9% balanced accuracy over the six
+  types, mapped by the same table. Every scored cell has one. For
+  comparison, single V2 seeds under nearest centroid score 57.3 ± 2.2.
+
+**What this shows.** v3.1 commits on nine cells in ten, and its committed
+answers almost always hold at the level stated. The cost is resolution:
+- **Most answers are a lineage.** "Myeloid" covers nearly every monocyte,
+  and "lymphoid" nearly every NK cell.
+- **T cells mostly stop at "T cell".** CD4T and CD8T are rarely separated.
+- **DC is committed on only about half its cells.**
+
+The best guess, which carries no coverage guarantee, is no better than one
+V2 seed.
+
 ### Decision taken
 
-V2 is selected as the v3.1 candidate encoder. v3 stays served until three
-things are in place: the NB2 decision rule, recalibrated abstention and
-conformal calibration, and the NB4 export.
+V2 is v3.1's encoder, as NB2's five-seed ensemble, and v3.1 is the
+service's default pipeline. v3 stays selectable.
 
 ### Still open from this evaluation
 

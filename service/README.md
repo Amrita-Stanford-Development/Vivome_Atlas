@@ -114,14 +114,22 @@ subset is drawn from a generator seeded with a hash of the upload
 (`pipeline.upload_seed`). Before this, it was unseeded, and the same file
 could return different abstentions.
 
-**Two pipeline versions, one live.** `config.PIPELINE_VERSION` (env
-`VIVOME_PIPELINE_VERSION`) chooses the label space, conformal and abstention
-components (`pipeline.components_for`). `v3`, the default, is today's
-pipeline. `service/tests/test_pipeline_versions.py` pins it against full
-responses frozen before the switch existed, in both label-space modes.
-`v3.1` is the socket for T1 NB2 and NB3's fitted components. Until Track F
-brings their artifacts into `service/model/v3_1/` and implements them, it
-answers 503 and names what is missing. The v3.1 response schema is in
+**Two pipeline versions.** `config.PIPELINE_VERSION` (env
+`VIVOME_PIPELINE_VERSION`) chooses which bundle loads, and with it the label
+space, conformal and abstention components (`pipeline.components_for`).
+- **`v3.1`, the default,** is T1 NB2's five-encoder ensemble
+  (`pipeline/ensemble.py`), with its files in `model/v3_1/`.
+  - Its five checkpoints live outside git. Fetch them with
+    `python3 scripts/fetch_v31_members.py`; until then the service answers
+    503 and names the missing file.
+  - `service/tests/test_ensemble.py` checks it against NB2's own code.
+  - `benchmark/v31_dev_gate.py` checks it against NB2's development-data
+    table.
+- **`v3`** is the single-encoder pipeline.
+  `service/tests/test_pipeline_versions.py` pins it against full responses
+  frozen before the switch existed, in both label-space modes.
+
+Both response schemas are in
 [`../docs/service/projection-api.md`](../docs/service/projection-api.md).
 
 ## Running it

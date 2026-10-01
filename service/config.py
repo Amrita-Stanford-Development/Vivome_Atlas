@@ -100,26 +100,30 @@ DECISIVE_SUMMARY_PATH = _env_path(
 
 ATLAS_VERSION = "0.2.0"
 
-# --- Track C: which pipeline answers a request ---
-# "v3" is today's behaviour, byte for byte (service/tests/test_pipeline_versions.py
-# pins it against responses frozen before this flag existed). "v3.1" swaps in the
-# label space, abstention and conformal components fitted by T1 NB2 to NB4. Their
-# artifacts land under V31_DIR in Track F; until then asking for v3.1 raises
-# PendingArtifactError, the same honest "not yet available" as any missing file.
-# Stays "v3" until the owner signs off (research/roadmap.md, Track F).
+# --- Which pipeline answers a request ---
+# "v3" is the single-encoder pipeline, byte for byte as before the switch
+# existed (service/tests/test_pipeline_versions.py pins it against frozen
+# responses). "v3.1" is T1 NB2's ensemble (service/pipeline/ensemble.py):
+# five V2 encoders, per-class conformal sets, a fixed out-of-distribution
+# threshold and hierarchical answers. v3.1 is the default (owner sign-off,
+# Track F); v3 stays selectable. The bundle the service loads decides which
+# pipeline runs.
 PIPELINE_VERSIONS = ("v3", "v3.1")
-PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3")
+PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
 
-# Where T1 NB4's export lands (Track F), one file per component. Names follow
-# research/roadmap.md's NB2 and NB3 "Outputs".
+# v3.1's files (service/model/README.md, "v3_1/"). The spec is T1 NB2's own
+# export; MANIFEST.json holds the sha256 of every file, checked at load.
 V31_DIR = _env_path("VIVOME_V31_DIR", MODEL_DIR / "v3_1")
-V31_LABEL_SPACE_CONFIG_PATH = V31_DIR / "label_space_config.json"   # T1 NB2
-V31_BCTS_PARAMS_PATH = V31_DIR / "bcts_params.json"                 # T1 NB2
-V31_OOD_CONFIG_PATH = V31_DIR / "ood_config.json"                   # T1 NB3
-V31_OOD_REFERENCE_INDEX_PATH = V31_DIR / "ood_reference_index.npy"  # T1 NB3
-V31_CONFORMAL_CALIBRATION_PATH = V31_DIR / "conformal_calibration.npz"  # T1 NB3
+V31_SPEC_PATH = V31_DIR / "nb2_spec_v31.json"
+V31_MANIFEST_PATH = V31_DIR / "MANIFEST.json"
+V31_MEMBERS_DIR = V31_DIR / "members"
+# Coordinates and property transfer use one member's latent space, so a
+# projected cell lands on the atlas the site displays: web/data/
+# metadata_*_lat128.csv are generated from this same member
+# (scripts/export_atlas_coordinates.py).
+V31_COORDINATE_MEMBER = "V2_batchgene_aug_seed4.pt"
 
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration
 # slice. Brief Stage 5: must be a random subset, never confidence-filtered.

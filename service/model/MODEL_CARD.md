@@ -1,6 +1,125 @@
-# VivOME v3 reference — model card
+# VivOME model card
 
-## The claim, precisely
+The service runs **v3.1** by default. **v3** stays selectable
+(`VIVOME_PIPELINE_VERSION=v3`) and is described after it. Both are trained
+on RNA only and applied zero-shot to protein.
+
+## v3.1: the T1 NB2 ensemble
+
+### What it is
+
+- **Encoders.** Five V2 encoders from T1 NB1b
+  (`service/model/v3_1/members/V2_batchgene_aug_seed{0..4}.pt`). They have
+  v3's architecture and input shape, trained on mini uploads with
+  per-upload gene z-scoring.
+- **Ensemble probability.** Each member scores softmax(cosine to its class
+  centroids / T). T is fitted per member: 0.141 for seed 0, 0.153 for the
+  others. The ensemble probability is the mean of the five.
+- **Conformal sets.** Mondrian, at α = 0.1, with one qhat per class. There
+  is no per-upload label space estimate.
+- **Out of distribution.** The mean over members of the max cosine to any
+  reference cell, below 0.779 (the 1st percentile of in-distribution
+  simulated cells).
+- **Answers** come at the level the set supports: one class, the group the
+  set's classes share, the lineage they share, or abstain. Every cell not
+  refused for coverage also gets a best guess.
+
+Spec: `service/model/v3_1/nb2_spec_v31.json`. Code:
+`service/pipeline/ensemble.py`. Response:
+`docs/service/projection-api.md`, v3.1.
+
+### Evaluation suite
+
+The suite is T1 NB1's 240 simulated RNA uploads from test-split cells,
+masked like real mass-spectrometry data. "v3 as served" is NB2's replica of
+the v3 service: Stages 4 to 6, without the Stage 7 fallback. Source:
+`research/notebook-outputs/nb2/nb2_summary.json` and
+`research/notebook-outputs/nb2/tables/eval_summary.csv`.
+
+| Measure | v3.1 | v3 as served (seed 0) |
+|---|---|---|
+| Correct when committed, at the stated level | **94.9%** | 35.0% |
+| Abstention | **19.2%** | 45.5% |
+| Conformal coverage (target 90%) | 87.1% | not measured |
+| Committed at class level | 19.1% | 54.5% |
+| Committed at group level | 17.7% | 0% |
+| Committed at lineage level | 44.0% | 0% |
+| Mean set size | 2.8 | 1.35 |
+| Strict fine balanced accuracy (only a correct single class counts) | 17.5% | 23.2% |
+| Best guess balanced accuracy | 56.1% | not reported |
+
+**Most answers are group or lineage answers.** v3.1 trades fine labels for
+answers that hold: 61.7% of cells get a group or lineage label, and 19.1%
+get one class.
+
+Under NB2's missing-not-at-random masking, v3.1 scores:
+- 93.8% correct when committed;
+- 22.4% abstention;
+- 85.0% coverage.
+
+### Development data
+
+- **The gate.** NB2 scored SCoPE2 and PBMC240 with its own parse.
+  `benchmark/v31_dev_gate.py` runs the served pipeline on the same parse
+  and reproduces every figure in
+  `research/notebook-outputs/nb2/tables/dev_datasets.csv`: committed share,
+  each abstention reason, and composition within 0.1 point.
+- **SCoPE2.** 1,490 cells, all macrophage or monocyte.
+  - 72.6% committed.
+  - Of the committed answers, 39.5% are correct at the stated level, and
+    all of those are "myeloid" lineage answers. None of its 152 class
+    answers or 397 group answers is correct. "T cell" alone is 31.0% of
+    all cells.
+- **PBMC240.** 238 cells with weak lineage labels.
+  - 74.0% committed, 1.7% of cells at class level.
+  - NB2 reports 79.5% lymphoid correct and 60% myeloid correct; the myeloid
+    figure covers 5 cells and is anecdotal.
+
+v3.1 on PBMC240 through the service parser: committed 72.7 vs 74.0 under the notebook parse; the difference is gene identifier resolution (HGNC map, ambiguous groups unmatched) and the graph input, not the pipeline.
+
+**Fulcher 2026** is development data since 2026-09-30. Its numbers below
+come from 1,275 cells through the service parser with default settings,
+1,251 of them scored against the authors' six types
+(`research/benchmark/fulcher2026/v31_development.json`):
+- **Committed:** 89.4%, and 97.2% of committed answers are correct at the
+  stated level.
+- **Mostly group or lineage answers.**
+  - CD4T and CD8T are mostly answered at group level ("T cell").
+  - NK and monocyte are almost all answered at lineage level.
+  - B is mostly answered at class level.
+- **DC** is committed on only 53.7% of cells.
+- **Best guess:** 57.9% balanced accuracy over the six types. Single V2
+  seeds under nearest centroid score 57.3 ± 2.2.
+
+### Known limits
+
+1. **The out-of-distribution filter passes 99% of scrambled cells.** In
+   NB2's negative control it rejects 0.96% of gene-shuffled cells and 5.5%
+   of real ones (AUC 0.845; `research/notebook-outputs/nb2/tables/ood_negative_control.csv`).
+   The max-cosine score barely separates a scrambled profile from a real
+   one. A better score is an open problem.
+2. **B cell coverage is 69%,** against the 90% target, and 64% under
+   missing-not-at-random masking. It is the lowest class; the others range
+   from 84% to 96% (`eval_per_class_coverage.csv`,
+   `eval_mnar_per_class_coverage.csv`).
+3. **SCoPE2 still fails.** See Development data above: no class or group
+   answer is right, and the best guess is right for 1.1% balanced. In
+   v3.1's coordinate space the SCoPE2 macrophage and monocyte centroids sit
+   far from their RNA classes. The 3-PC centroid cosine for each is in
+   `web/data/atlas_manifest.json`.
+4. **Coverage is guaranteed on RNA simulations only.** On protein it is
+   approximate, which is why `calibration.applies_to` says so in every
+   response.
+5. **The threshold was fitted with training-split references; the service
+   uses every reference cell.** That raises max cosine slightly, so the
+   service abstains as out of distribution a little less often than NB2
+   measured (the spec's `caveats`).
+6. **The calibration suite comes from the validation split,** which also
+   set the encoders' early stopping.
+
+## v3 reference
+
+### The claim, precisely
 
 The reference encoder (`ModulePoolingEncoder`, `reference_model.pt`) is
 **trained, supervised, on RNA only** — 85,233 cells across 22 immune/blood
@@ -11,7 +130,7 @@ below cites the committed file that measured it —
 `research/todo.md` §5 ("Current verified numbers") is the running
 index of those files, not a source in its own right.
 
-## Architecture
+### Architecture
 
 - Module-pooling encoder: a fixed gene→module assignment (`A`, row-normalised),
   concatenated masked values + mask + module-level value + module-level mask
@@ -28,7 +147,7 @@ index of those files, not a source in its own right.
   proven numerically identical to <1e-5 max absolute difference on 1,000
   cells (`service/tests/test_encoder.py`).
 
-## Performance
+### Performance
 
 | Measure | Value | Source |
 |---|---|---|
@@ -103,7 +222,7 @@ benchmark genes in every cell, so nothing there was zero-filled.
 above: scANVI trains on the query cells (transductive); this encoder is
 fixed and zero-shot on the query.**
 
-## Known failure modes
+### Known failure modes
 
 1. **The two-class label space, now opt-in.**
    `config.CROSS_MODAL_SUPPORTED_CLASSES = ("macrophage", "monocyte")`.
@@ -165,11 +284,12 @@ fixed and zero-shot on the query.**
    38.75% (shared kNN) and 39.60% (native) lymphoid recall. That is below
    both architectures. V2 does not carry its PBMC240 margin onto SCoPE2 (see
    `research/benchmark/results.md`). On the held-out Fulcher 2026 data it
-   beats v3 in all 50 seed pairings. V2 is now the selected v3.1 candidate
-   encoder. v3 stays served until the NB2 decision rule, recalibrated
-   abstention and conformal, and the NB4 export are in place.
+   beats v3 in all 50 seed pairings. V2 is v3.1's encoder, as a five-seed
+   ensemble.
 
 ## Versioning
+
+- v3.1 files: `service/model/v3_1/MANIFEST.json` (sha256, size and origin of each).
 
 - Model artifact provenance: `service/model/runtime/provenance.json` (`created`,
   `gene_list_hash`, training config).

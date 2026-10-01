@@ -94,7 +94,7 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertIn("model_version", payload)
 
     def test_status_answers_503_with_the_reason_when_an_artifact_is_missing(self):
-        with patch("service.pipeline.reference.load_reference_embedding",
+        with patch("service.pipeline.pipeline.load_bundle",
                    side_effect=reference.PendingArtifactError("forced for this test")):
             status, _, payload = self._get("/api/status")
         self.assertEqual(status, 503)
@@ -130,13 +130,12 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertIn("modality", payload["error"])
 
     def test_missing_bundle_artifacts_answer_503_not_500(self):
-        """Real reference_embedding.npy/centroids.npy exist now
-        (service/model/README.md), so this no longer happens by ambient
-        accident — force it deliberately. The guarantee this test protects
-        (a genuinely missing artifact answers 503, never a 500 crash) still
-        matters, e.g. for a bad VIVOME_REFERENCE_EMBEDDING override."""
+        """The real artifacts exist (service/model/README.md), so force a
+        missing one. The guarantee this test protects (a genuinely missing
+        artifact answers 503, never a 500 crash) matters for a bad path
+        override, or v3.1's checkpoints not yet fetched."""
         with patch(
-            "service.pipeline.reference.load_reference_embedding",
+            "service.pipeline.pipeline.load_bundle",
             side_effect=reference.PendingArtifactError("forced for this test"),
         ):
             status, payload = _post_multipart(f"{self.base_url}/api/project", b"rna", b"gene,c1\nA1BG,1.0\n")

@@ -1,0 +1,204 @@
+{
+  "created": "2026-09-30 17:08:18",
+  "source": "T1 NB2",
+  "encoder": {
+    "members": [
+      "V2_batchgene_aug_seed0.pt",
+      "V2_batchgene_aug_seed1.pt",
+      "V2_batchgene_aug_seed2.pt",
+      "V2_batchgene_aug_seed3.pt",
+      "V2_batchgene_aug_seed4.pt"
+    ],
+    "combine": "mean of per member probabilities",
+    "family": "V2 (mini upload gene z, same architecture and input shape as v3)"
+  },
+  "preprocessing": {
+    "convention": "service",
+    "graph_input": "zscored",
+    "smoothing": true,
+    "min_observed_genes": 200
+  },
+  "assignment": {
+    "rule": "centroid",
+    "knn_k": 15,
+    "logits": "cosine to class centroid",
+    "temperature": {
+      "V2_batchgene_aug_seed0.pt": 0.14060712576942577,
+      "V2_batchgene_aug_seed1.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed2.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed3.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed4.pt": 0.15345534297879426
+    }
+  },
+  "label_space": {
+    "method": "none",
+    "tau": 0.0,
+    "source_prior": "uniform",
+    "notes": "EM = Saerens et al. maximum likelihood label shift; restrict keeps classes with estimated prior >= tau"
+  },
+  "conformal": {
+    "alpha": 0.1,
+    "type": "mondrian",
+    "score": "1 - p(class)",
+    "qhat_by_class": {
+      "b cell": 0.9481203612907573,
+      "basophil": 0.9105286168771374,
+      "cd4-positive, alpha-beta t cell": 0.716216313473473,
+      "cd8-positive, alpha-beta t cell": 0.9426727261465637,
+      "classical monocyte": 0.9343060345811685,
+      "common myeloid progenitor": 0.9105286168771374,
+      "erythrocyte": 0.5840019581593434,
+      "hematopoietic precursor cell": 0.993108633994516,
+      "hematopoietic stem cell": 0.9105286168771374,
+      "intermediate monocyte": 0.9409442301312948,
+      "macrophage": 0.9499537829393504,
+      "mature nk t cell": 0.9893268918754026,
+      "monocyte": 0.908348592431679,
+      "myeloid dendritic cell": 0.9105286168771374,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 0.640085612242603,
+      "natural killer cell": 0.8932242667349687,
+      "neutrophil": 0.5972403112492696,
+      "non-classical monocyte": 0.9827419856745978,
+      "plasma cell": 0.6691172976532652,
+      "plasmacytoid dendritic cell": 0.9105286168771374,
+      "platelet": 0.0467184251870123,
+      "regulatory t cell": 0.9105286168771374
+    },
+    "marginal_qhat": 0.9105286168771374,
+    "set_rule": "class c is in the set if p(c) >= 1 - qhat[c] and c is in the estimated label space",
+    "calibrated_on": "labelled RNA simulated uploads (NB1 calibration suite, validation split cells)"
+  },
+  "ood": {
+    "score": "max cosine to any reference cell, mean over members",
+    "threshold": 0.7789892554283142,
+    "fit": "1st percentile of in distribution simulated cells (training split references)"
+  },
+  "output_rule": [
+    "coverage below min_observed_genes -> abstain coverage_too_low",
+    "max cosine below threshold -> abstain outside_supported_region",
+    "empty set -> abstain no_confident_label",
+    "one class -> that class",
+    "several classes in one group -> the group label (e.g. 'T cell')",
+    "several groups in one lineage -> the lineage label",
+    "otherwise -> abstain ambiguous_between_classes"
+  ],
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "basophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "common myeloid progenitor": {
+      "group": "progenitor",
+      "lineage": "myeloid"
+    },
+    "erythrocyte": {
+      "group": "erythroid",
+      "lineage": "erythroid"
+    },
+    "hematopoietic precursor cell": {
+      "group": "progenitor",
+      "lineage": "progenitor"
+    },
+    "hematopoietic stem cell": {
+      "group": "progenitor",
+      "lineage": "progenitor"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "mature nk t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "myeloid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "natural killer cell": {
+      "group": "NK cell",
+      "lineage": "lymphoid"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "plasmacytoid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "platelet": {
+      "group": "platelet/megakaryocyte",
+      "lineage": "other"
+    },
+    "regulatory t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    }
+  },
+  "class_order": [
+    "b cell",
+    "basophil",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "common myeloid progenitor",
+    "erythrocyte",
+    "hematopoietic precursor cell",
+    "hematopoietic stem cell",
+    "intermediate monocyte",
+    "macrophage",
+    "mature nk t cell",
+    "monocyte",
+    "myeloid dendritic cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "plasma cell",
+    "plasmacytoid dendritic cell",
+    "platelet",
+    "regulatory t cell"
+  ],
+  "caveats": [
+    "Thresholds were fitted with training split references; the service uses all reference cells, which raises max cosine slightly (fewer OOD abstentions). Track C may serve training split references or refit the threshold.",
+    "Conformal coverage is guaranteed on RNA simulations only; on protein it is approximate.",
+    "Calibration suite cells come from the validation split, which also set early stopping."
+  ]
+}

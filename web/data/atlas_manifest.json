@@ -357,7 +357,7 @@
       "prot_cells": 394,
       "support": "cross_modal",
       "pca_centroid_cosine": {
-        "value": 0.563158,
+        "value": 0.017951,
         "status": "measured",
         "basis": "3-PC projection"
       },
@@ -416,7 +416,7 @@
       "prot_cells": 1096,
       "support": "cross_modal",
       "pca_centroid_cosine": {
-        "value": 0.820639,
+        "value": 0.600997,
         "status": "measured",
         "basis": "3-PC projection"
       },

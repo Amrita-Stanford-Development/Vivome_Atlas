@@ -1,0 +1,85 @@
+{
+  "source": "T1 NB2 spec plus the NB1b V2 checkpoints and NB1d reference embeddings it names",
+  "files": {
+    "nb2_spec_v31.json": {
+      "sha256": "af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd",
+      "bytes": 6410,
+      "from": "T1 NB2 (data/incoming/NB2/nb2_spec_v31.json)"
+    },
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "c08c0cf8d4ade284bb18570bfd315905c57f271a0d374732c917dd54f6101063",
+      "bytes": 98277965,
+      "from": "T1 NB1b checkpoint (Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed0.pt)"
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "ed40acf25e40ea420a4a834fc19ee6f3cb72ed38fea99632b63e71ac8f5726ff",
+      "bytes": 21819776,
+      "from": "T1 NB1d, all reference cells as served, reference_metadata.csv row order"
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "fdee9803de16f95141997bbd724480328f5e82943a19f0411cb3873efd39db07",
+      "bytes": 11392,
+      "from": "T1 NB1d, class means of the reference latents, class_idx order"
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "42cdea2a558068d92d23519846da39c691dfcb324dbb6f486e08d8d67044fbd2",
+      "bytes": 98277965,
+      "from": "T1 NB1b checkpoint (Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed1.pt)"
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "2de83a74e6949221ad23169ac2091cde518f4b123e56792ddcd978cec4ac463f",
+      "bytes": 21819776,
+      "from": "T1 NB1d, all reference cells as served, reference_metadata.csv row order"
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "ae9a7d5c7dca66cc502ce275575d045b6837fa33b989d8373ef6471f726ccb74",
+      "bytes": 11392,
+      "from": "T1 NB1d, class means of the reference latents, class_idx order"
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "a2c7424626fdb30960c1e30b4def45e0fe5e6a755197627abc5fe292f54400e7",
+      "bytes": 98277965,
+      "from": "T1 NB1b checkpoint (Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed2.pt)"
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "2e7067390929fc83cfe192548fcc2a10c24efeb365e4276e7a8c6eea32bc28b7",
+      "bytes": 21819776,
+      "from": "T1 NB1d, all reference cells as served, reference_metadata.csv row order"
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "0f43a8fe830857cc61d92ec8befde602c4a76ee3ccde83649f645501b074b22a",
+      "bytes": 11392,
+      "from": "T1 NB1d, class means of the reference latents, class_idx order"
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "6d5ddefc2155f3fd2f7942464039378f8882e51d71d84a3a889fa2ce009a7724",
+      "bytes": 98277965,
+      "from": "T1 NB1b checkpoint (Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed3.pt)"
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "e35d142cb36f5b5983344d4e883f1e3926364975b493c9fd516fed1cfd95c709",
+      "bytes": 21819776,
+      "from": "T1 NB1d, all reference cells as served, reference_metadata.csv row order"
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "d80e0aaa96727c0a77926a4e03719600a3c4e23078124cf785a816ca1e88f7c3",
+      "bytes": 11392,
+      "from": "T1 NB1d, class means of the reference latents, class_idx order"
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "5950061279cb1f6a5e469159effa5de76a3ca7d016a30c68608097980240a1e5",
+      "bytes": 98277965,
+      "from": "T1 NB1b checkpoint (Data/Results/Tier1_v31/NB1b/ckpt/V2_batchgene_aug_seed4.pt)"
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "57319e8720c42cccf39f21065567066e359de91b2c12841b809539df5d84e192",
+      "bytes": 21819776,
+      "from": "T1 NB1d, all reference cells as served, reference_metadata.csv row order"
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "69f92304b9cc5b93c460f826a6344b08a862f4b885d1f17141c1e52a63af28b7",
+      "bytes": 11392,
+      "from": "T1 NB1d, class means of the reference latents, class_idx order"
+    }
+  }
+}

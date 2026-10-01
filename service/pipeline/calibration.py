@@ -22,7 +22,6 @@ from typing import Protocol
 import numpy as np
 
 from service import config
-from service.pipeline import reference
 
 
 @dataclass(frozen=True)
@@ -99,9 +98,33 @@ class V3ConformalCalibrator:
         }
 
 
-def load_v31_artifacts() -> dict:
-    """T1 NB3's class-conditional calibration, calibrated on masked RNA
-    donors. PendingArtifactError until the export lands."""
-    path = reference.require_v31_artifact(config.V31_CONFORMAL_CALIBRATION_PATH, "T1 NB3")
-    with np.load(path) as data:
-        return {key: data[key] for key in data.files}
+class MondrianCalibrator:
+    """v3.1 (T1 NB2): class-conditional conformal sets with a fixed qhat per
+    class, fitted on labelled RNA simulated uploads. A class is in a cell's
+    set when p(class) >= 1 - qhat[class] and the class is in the label
+    space. Nothing is drawn from the upload, so there is no calibration slice."""
+
+    def __init__(self, qhat_by_position: np.ndarray, marginal_qhat: float, alpha: float, calibrated_on: str):
+        self.qhat = np.asarray(qhat_by_position, dtype=np.float64)
+        self.marginal_qhat = float(marginal_qhat)
+        self.alpha = float(alpha)
+        self.calibrated_on = calibrated_on
+
+    def calibrate(self, probs, rng, label_space):
+        threshold = 1.0 - self.qhat
+        member = probs >= threshold
+        if label_space.positions is not None:
+            allowed = np.zeros(probs.shape[1], dtype=bool)
+            allowed[sorted(label_space.positions)] = True
+            member &= allowed
+        label_sets = [np.flatnonzero(row).tolist() for row in member]
+        return CalibrationResult(qhat=self.marginal_qhat, calibration_indices=np.zeros(0, dtype=np.int64),
+                                 label_sets=label_sets)
+
+    def describe(self, result):
+        return {
+            "method": "Mondrian (class-conditional) split conformal, fitted in T1 NB2",
+            "target_coverage": 1 - self.alpha,
+            "applies_to": f"{self.calibrated_on}; approximate on protein",
+            "n_calibration_cells": 0,
+        }

@@ -3,7 +3,8 @@
 Grouped by role, so what a deployment needs is one folder:
 
 ```
-runtime/     everything service/config.py loads — ship this folder
+runtime/     everything the v3 pipeline loads, and the reference files v3.1 shares with it
+v3_1/        v3.1, the default pipeline: T1 NB2's spec and its five ensemble members
 evidence/    measured tables behind the model's claims (read by scripts/build_manifest.py and the docs)
 source/      how runtime/ was produced: the export notebook, its inputs and checksums
 legacy/      v2/ — the previous model's audit trail; dev/ — the development placeholder checkpoint
@@ -43,6 +44,25 @@ missing.**
 | `reference_centroids.npy` | **Real.** (22, 128) float32, L2 normalised, ordered by class_idx. |
 | `provenance.json` | **Real.** Serving constants and headline measurements (gene list hash, module count, the calibrated abstain threshold, seed statistics) — see `pipeline/reference.py:load_provenance`. Recorded in every response for comparison; not yet the abstain decision itself (see `pipeline/abstention.py`'s module docstring). |
 | `reference_properties.npy` + `property_names.json` | **Real.** (85233, 8) float32 per-cell continuous property scores, with `property_names.json` giving column names and order (a `.npy`, not the `.csv` the contract table above names — see `pipeline/reference.py:load_reference_properties`). |
+
+## v3_1/
+
+v3.1 is T1 NB2's ensemble (`service/pipeline/ensemble.py`). It reads the
+reference metadata, feature space and properties from `runtime/`. Its own
+files are below, each listed with its sha256, size and origin in
+`MANIFEST.json`, which the service checks on load.
+
+| File | Status |
+|---|---|
+| `nb2_spec_v31.json` | **Real.** NB2's export, as delivered: members, per-member temperature, per-class qhat, out-of-distribution threshold, output rule, hierarchy, caveats. Also kept at `research/notebook-outputs/nb2/`. |
+| `MANIFEST.json` | **Real.** sha256, size and origin of every file here. |
+| `members/V2_batchgene_aug_seed{0..4}.pt` | **Real, outside git.** T1 NB1b's V2 checkpoints (~98 MB each). Their home is the project Drive, `Data/Results/Tier1_v31/NB1b/ckpt/`. Download that folder to `data/incoming/NB1b/ckpt/` and run `python3 scripts/fetch_v31_members.py`, which copies each file only if its sha256 matches. Until then v3.1 answers 503 and names the missing file. |
+| `members/V2_seed{0..4}_reference_latent_f16.npy` | **Real.** T1 NB1d: every reference cell through that member, float16, `reference_metadata.csv` row order. The out-of-distribution score's reference, and for seed 4, the coordinate space. |
+| `members/V2_seed{0..4}_centroids.npy` | **Real.** T1 NB1d: the class means of those latents, L2 normalised, in class position order. |
+
+Coordinates and property transfer use member seed 4
+(`config.V31_COORDINATE_MEMBER`). The site's atlas coordinates are written
+from it (`scripts/export_atlas_coordinates.py`).
 
 ## evidence/
 

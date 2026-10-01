@@ -54,7 +54,7 @@ def _get_bundle() -> pipeline.ReferenceBundle:
         if _bundle_error is not None:
             raise reference.PendingArtifactError(_bundle_error)
         try:
-            _bundle = pipeline.ReferenceBundle.load()
+            _bundle = pipeline.load_bundle(config.PIPELINE_VERSION)
             logger.info("Reference bundle loaded. model_version=%s", _bundle.model_version)
             return _bundle
         except reference.PendingArtifactError as exc:
@@ -170,6 +170,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             "status": "ready",
             "atlas_version": config.ATLAS_VERSION,
             "model_version": bundle.model_version,
+            "pipeline_version": bundle.pipeline_version,
         })
 
     def do_POST(self) -> None:  # noqa: N802 (stdlib naming)
@@ -202,10 +203,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
 
         try:
             bundle = _get_bundle()
-            # config.PIPELINE_VERSION's components. v3.1 answers 503, naming
-            # what is missing, until Track F lands its artifacts and code.
-            components = pipeline.components_for(config.PIPELINE_VERSION)
-        except (reference.PendingArtifactError, NotImplementedError) as exc:
+        except reference.PendingArtifactError as exc:
             self._send_json(503, {
                 "error": "projection service not yet available",
                 "reason": str(exc),
@@ -225,8 +223,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             return
 
         try:
-            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict,
-                                             components=components)
+            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict)
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})
