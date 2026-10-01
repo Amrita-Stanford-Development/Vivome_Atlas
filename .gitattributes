@@ -16,3 +16,13 @@ service/model/runtime/reference_model.pt filter=lfs diff=lfs merge=lfs -text
 # Close enough to the 100 MB limit, and too important to lose again, to
 # track via LFS despite being below the ~94 MB class above.
 service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv filter=lfs diff=lfs merge=lfs -text
+
+# Byte-exact on every platform: these files' sha256 is checked
+# (service/model/v3_1/MANIFEST.json, runtime/gene_id_map_v1_provenance.json),
+# so line-ending conversion (Windows core.autocrlf) must never touch them.
+service/model/v3_1/** -text
+service/model/runtime/** -text
+
+# Scripts keep LF so they run under Git Bash and Rscript on Windows too.
+*.sh text eol=lf
+*.R text eol=lf
