@@ -19,8 +19,8 @@ notebook built and run over the course of it.
 ## Notebooks built and run, in order
 
 ### 1. `Reference_Projection_Diagnostics.ipynb`
-Nine cells, Q1 through Q5. Macrophage's apparent negative silhouette turned
-out to be a sampling artefact, the real value is positive. Conformal
+Nine cells, Q1 through Q5. Macrophage's apparent negative silhouette (in the v2
+reference) turned out to be a sampling artefact, the real value is positive. Conformal
 miscalibration traced to calibrating on a confidence filtered subset rather
 than a random one. `max_cos_cell` established as the out of distribution
 score, AUC 1.000 across five held out classes against a scorer that had
@@ -59,7 +59,8 @@ emerged as a contender worth a proper comparison.
 ### 7. `Masking_Decisive_Test.ipynb`
 Eleven cells, three arms, five seeds, paired by construction since the split
 depends only on the seed. Module pooling won against mask channel alone,
-paired mean difference around −1.4 points, p between 0.05 and 0.07. Selected
+paired mean difference −1.5 points (p = 0.067), averaged over the realistic
+coverages (`service/model/evidence/masking_test_tables/rna_sweep.csv`). Selected
 as the production architecture.
 
 ### 8. `Reference_Projection_v2.ipynb`
@@ -159,7 +160,9 @@ recipe within 0.9 points of the shipped model).
 | All 240 uploads | 35.2 | 72.1 (+36.9, 95% CI 33.7 to 40.2) |
 | Single cell type | 11.3 | 80.6 |
 | SCoPE2 like | 49.7 | 55.6 |
-| Oracle restricted, all uploads | 75.5 | 86.5 |
+| Oracle restricted, all uploads | 74.3 | 86.3 |
+
+Source: `research/notebook-outputs/nb1b/eval_winner_vs_v0.csv` (evaluation suite).
 
 The dual channel variant (per upload gene wise z plus per cell z, trained on mini
 uploads) won; per cell z alone was close and better on the SCoPE2 like scenario.
@@ -168,7 +171,7 @@ single population erases its identity, per cell z keeps it.
 
 **Verdict: NO GO on the pre set criteria.** Every simulation gate passed, but the
 confirmatory real data gate failed. From `research/notebook-outputs/nb1b/real_data_confirmatory.csv`, the
-dual encoder scored 0.0 to 2.4 unrestricted and 49.9 to 64.6 restricted on real
+dual encoder scored 0.1 to 2.4 unrestricted and 49.9 to 64.6 restricted on real
 SCoPE2 across its three seeds, against 31.1 and 79.8 for v3 shipped. The retrained
 v3 recipe, the implementation control, scored only 9.1 unrestricted, although it
 matched v3 on RNA. That gap raised the seed variance question NB1c answered.
@@ -195,8 +198,9 @@ byte identical to the shipped export. Three findings:
 - **The published SCoPE2 matrix is centred per protein and per cell.** All genes
   have mean zero and half the values are negative. Absolute abundance was removed
   upstream, so SCoPE2 cannot test how the pipeline handles a real upload. Raw
-  PBMC240 keeps its abundance (no centred genes, no negative values, 63 percent
-  missing).
+  PBMC240 keeps its abundance: no centred genes, almost no negative values
+  (0.0001 percent), 63 percent missing
+  (`research/notebook-outputs/nb1c/matrix_structure.csv`).
 - **On raw PBMC240 through the fixed service path, V2 stands out.** The mini
   upload gene z encoder scored 91.8 lineage accuracy, against 45.9 for v3 shipped
   and 45.9 to 64.8 across v3's seeds. Its predicted composition, 77 percent
@@ -281,7 +285,7 @@ percent of simulated cells and V2 on 60 percent.
 |---|---|
 | Temperature | V2 about 0.15, v3 0.31; calibration error fell from 0.52 to 0.07 |
 | Encoder | Five seed V2 ensemble, smoothing on, nearest centroid (58.3; seed 4 alone 57.4; v3 36.5) |
-| Label space estimation | None. It helped single cell type uploads by 11 points but cost mixed uploads 12 |
+| Label space estimation | None. It helped single cell type uploads by 11 points but cost broad uploads (eight cell types and PBMC-like, pooled) 12 points, and about 5 averaged over all other scenarios (`research/notebook-outputs/nb2/tables/label_space_grid_calsel.csv`) |
 | Conformal sets | One threshold per class (Mondrian) |
 | Out of distribution | Fixed threshold, 1st percentile of in distribution max cosine (0.779) |
 

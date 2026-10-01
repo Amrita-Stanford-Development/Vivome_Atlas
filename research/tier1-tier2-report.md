@@ -23,7 +23,9 @@ Research report, 2026-09-24. Source for the Tier 1 and Tier 2 items in
 >    Track D extension.
 > 4. **T1-1, label space estimation,** was tested in T1 NB2. Neither EM prior estimation
 >    nor cluster support beat "no restriction" on average. EM helped single cell type
->    uploads by 11 points but cost mixed uploads 12.
+>    uploads by 11 points but cost broad uploads (eight cell types and PBMC-like,
+>    pooled) 12 points, and about 5 averaged over all other scenarios
+>    (`research/notebook-outputs/nb2/tables/label_space_grid_calsel.csv`).
 > 5. **T1-3, conformal prediction,** was rebuilt as split conformal on labelled RNA,
 >    with one threshold per class. Coverage was 87.1 percent against a 90 percent
 >    target, and answers fall back to a group or lineage when a type cannot be named.

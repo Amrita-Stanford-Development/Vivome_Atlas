@@ -15,6 +15,8 @@ service code (`pipeline.py`, `assignment.py`, `alignment.py`, `smoothing.py`,
 
 ## Revision, 2026-10-01
 
+Where it conflicts with older sections below, this section wins.
+
 ### What changed
 
 1. **The encoder for v3.1 is V2**, the mini upload gene z variant from T1 NB1b. It has
