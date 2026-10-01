@@ -149,13 +149,17 @@
                         <h3 data-fact="previous_model">&nbsp;</h3>
                         <p>The first model, trained on RNA and protein together. It's kept as the documented baseline, not erased.</p>
                     </li>
+                    <li class="release">
+                        <h3><span data-fact="v3_model_name">&nbsp;</span>, atlas <span data-fact="v3_atlas_version">&nbsp;</span></h3>
+                        <p>A frozen, RNA-only reference, with a model card and its known failure modes written down. Still selectable.</p>
+                    </li>
                     <li class="release release-current">
                         <h3><span data-fact="model_name">&nbsp;</span>, atlas <span data-fact="atlas_version">&nbsp;</span></h3>
-                        <p>The current release. A frozen, RNA-only reference, with a model card and its known failure modes written down.</p>
+                        <p>The current release. Five encoders, trained only on labelled blood scRNA-seq, answer together; no protein labels are used. Each answer is given at the level the evidence supports: one of the reference's <span data-fact="cell_types">&nbsp;</span> blood cell types, its group, or its lineage. Where the evidence runs out, it abstains and says why.</p>
                     </li>
                     <li class="release release-testing">
-                        <h3>v3.1, in testing</h3>
-                        <p>A label space estimated for each upload, abstention with a defined false-abstention rate, and conformal calibration. It ships only if it passes.</p>
+                        <h3>Next, in testing</h3>
+                        <p>A sharper test for cells unlike any in the reference, and a measured false-abstention rate. It ships only if it passes.</p>
                     </li>
                 </ol>
                 <p class="aside">Every release follows one protocol: frozen inputs, a regenerated manifest, a new version number.</p>

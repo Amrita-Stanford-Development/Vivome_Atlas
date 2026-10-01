@@ -4,7 +4,8 @@ inputs (probabilities to 1e-6, conformal sets and per-cell outputs exactly),
 and on real cells through the whole project_prepared path. Every setting
 comes from NB2's spec (service/model/v3_1/nb2_spec_v31.json). The two
 service flags NB2 did not have are tested against nb2_core too: the set flag
-as NB2's set plus its argmax, renormalisation as estimate_label_space does it.
+as NB2's non-empty sets plus their argmax, renormalisation as
+estimate_label_space does it.
 """
 import importlib.util
 import json
@@ -122,15 +123,20 @@ class AgainstNb2CoreTests(unittest.TestCase):
             seen.add(ours[0])
         self.assertTrue({0, 1, 2, 3, 5, 6} <= seen, f"synthetic cells should reach every output kind, got {seen}")
 
-    def test_the_set_flag_adds_the_argmax_to_nb2s_sets_and_nothing_else(self):
+    def test_the_set_flag_adds_the_argmax_to_nb2s_non_empty_sets_and_nothing_else(self):
         probs = self._theirs()
         theirs = self.n2.prediction_sets(probs, self.qhat, np.ones(len(self.classes), bool))
-        theirs[np.arange(len(probs)), probs.argmax(1)] = True
+        empty = ~theirs.any(1)
+        self.assertTrue(empty.any(), "synthetic sets should include empty ones")
+        nonempty = np.flatnonzero(~empty)
+        theirs[nonempty, probs[nonempty].argmax(1)] = True
         calibrator = calibration.MondrianCalibrator(self.qhat, 0.9, 0.1, "RNA", include_best_guess=True)
         ours = calibrator.calibrate(probs, None, label_space.V31LabelSpace().estimate(None, self.classes, False))
         self.assertEqual(ours.label_sets, [np.flatnonzero(row).tolist() for row in theirs])
         top, _ = ensemble.best_guess(probs, None)
-        for s, t in zip(ours.label_sets, top):
+        for s, t, was_empty in zip(ours.label_sets, top, empty):
+            if was_empty:
+                self.assertEqual(s, [], "an empty set stays empty: the cell abstains")
             if len(s) == 1:
                 self.assertEqual(s, [t], "a one-class set is always the best guess")
 
@@ -185,7 +191,7 @@ class FullPathAgainstNb2CoreTests(unittest.TestCase):
     against nb2_core computed independently from the members' embeddings:
     label, level, abstain reason, confidence, best guess. NB2's rule (flags
     off) must match exactly; the served rule (flags on) must match NB2's sets
-    plus the argmax."""
+    with the argmax added to every non-empty one."""
 
     @classmethod
     def setUpClass(cls):
@@ -218,7 +224,8 @@ class FullPathAgainstNb2CoreTests(unittest.TestCase):
         response = ensemble.project_prepared(b, smoothed, aligned, scale, self.resolution, False, components)
         S = self.n2.prediction_sets(self.P, self.qhat, np.ones(len(b.class_names), bool))
         if flags_on:
-            S[np.arange(len(S)), self.P.argmax(1)] = True
+            nonempty = np.flatnonzero(S.any(1))
+            S[nonempty, self.P[nonempty].argmax(1)] = True
         kind, val = self.n2.resolve(S, self.grp, self.lin, self.ood < b.ood_threshold,
                                     aligned.per_cell_observed_genes < b.min_observed_genes)
         reason = {3: "no_confident_label", 4: "ambiguous_between_classes", 5: "outside_supported_region",
@@ -244,7 +251,7 @@ class FullPathAgainstNb2CoreTests(unittest.TestCase):
     def test_nb2s_rule_matches_nb2_core_cell_for_cell(self):
         self.assertTrue({1, 2, 4, 6} <= self._check(flags_on=False))
 
-    def test_the_served_rule_matches_nb2s_sets_plus_the_argmax(self):
+    def test_the_served_rule_matches_nb2s_non_empty_sets_plus_the_argmax(self):
         self._check(flags_on=True)
 
 

@@ -18,6 +18,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from service import config
 from service.pipeline import pipeline, alignment
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
@@ -74,9 +75,10 @@ class GoldenFixtureTestsBase:
                                             restrict_to_supported_classes=True)
 
     def test_dataset_level_fields_match(self):
-        for key in ("atlas_version", "model_version", "n_cells", "n_features_matched",
-                    "n_features_unmatched", "value_scale"):
+        for key in ("model_version", "n_cells", "n_features_matched", "n_features_unmatched", "value_scale"):
             self.assertEqual(self.fresh[key], self.golden[key], f"field {key!r} changed")
+        # The release number moves with every release; the frozen behaviour does not.
+        self.assertEqual(self.fresh["atlas_version"], config.ATLAS_VERSION)
 
     def test_every_cell_label_and_abstain_state_match(self):
         for i, (fresh_cell, golden_cell) in enumerate(zip(self.fresh["cells"], self.golden["cells"])):

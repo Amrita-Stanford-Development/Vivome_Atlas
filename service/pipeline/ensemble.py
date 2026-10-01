@@ -143,7 +143,7 @@ def load_spec() -> dict:
 # default; a later notebook's spec can set them under "service_flags".
 # Neither has been evaluated on RNA yet (research/todo.md, Track F).
 SERVICE_FLAGS = {
-    "set_includes_best_guess": True,  # calibration.MondrianCalibrator
+    "set_includes_best_guess": True,  # calibration.MondrianCalibrator: non-empty sets only
     "restricted_renormalise": True,  # label_space.V31LabelSpace
 }
 

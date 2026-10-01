@@ -589,7 +589,7 @@ flags" below). Its record is [v31_dev_gate.json](v31_dev_gate.json).
 - **Tolerance.** The gate allows 0.5 point; nothing comes near it.
 
 Through the service, PBMC240 first differed from NB2 by 1.3 points of
-committed cells (72.7 against 74.0). The cause was a service bug: when several
+committed cells (72.7 against 73.9). The cause was a service bug: when several
 upload rows mapped to the same gene, only the last row was kept. With
 duplicates collapsed by per cell median, as NB2 does, the service reproduces
 NB2's committed, out of distribution and ambiguous figures exactly; two
@@ -878,9 +878,9 @@ The review of 2026-10-01 found two behaviours that follow NB2's rule but
 mislead on protein. Two service flags answer them, both on by default
 (`service/pipeline/ensemble.py`, `SERVICE_FLAGS`; a later spec can set them
 under `service_flags`):
-- **`set_includes_best_guess`.** Every conformal set also contains the
-  cell's argmax class. Sets only grow, so coverage is kept, and a one-class
-  answer is always the best guess. Under NB2's rule a class whose qhat is
+- **`set_includes_best_guess`.** Every non-empty conformal set also
+  contains the cell's argmax class; an empty set still abstains. Sets only
+  grow, so coverage is kept, and a one-class answer is always the best guess. Under NB2's rule a class whose qhat is
   near 1 could be named alone at about 1% probability: mature nk t cell's
   bar is 0.011.
 - **`restricted_renormalise`.** A restricted request rescales each cell's
@@ -895,7 +895,7 @@ read after each projection
 | Run | Rule | Committed | Class / group / lineage % | Abstain: ambiguous / empty set / out of distribution % | Correct | One-class answers that are the best guess | Lowest one-class confidence |
 |---|---|---|---|---|---|---|---|
 | SCoPE2 | NB2's rule | 72.6% | 10.2 / 26.6 / 35.7 | 24.5 / 3.0 / 0.0 | 39.5% | 24 of 152 | 0.011 |
-| SCoPE2 | served | 56.0% | 4.6 / 16.6 / 34.8 | 44.0 / 0.0 / 0.0 | 55.8% | 68 of 68 | 0.304 |
+| SCoPE2 | served | 53.0% | 1.6 / 16.6 / 34.8 | 44.0 / 3.0 / 0.0 | 58.9% | 24 of 24 | 0.407 |
 | SCoPE2, restricted | NB2's rule | 31.2% | 28.2 / 3.0 / 0.0 | 0.0 / 68.8 / 0.0 | 92.3% | 396 of 420 | 0.051 |
 | SCoPE2, restricted | served | 100.0% | 2.1 / 97.9 / 0.0 | 0.0 / 0.0 / 0.0 | 100.0% | 32 of 32 | 0.950 |
 | PBMC240 | NB2's rule | 73.9% | 2.1 / 23.1 / 48.7 | 23.9 / 0.0 / 1.7 | lymphoid 93 of 117, myeloid 3 of 5 | 5 of 5 | 0.386 |
@@ -909,21 +909,25 @@ committed answer names their weak lineage only. PBMC240's remaining 0.4%
 is its one cell refused for coverage.
 
 **What changes:**
-- **SCoPE2.** Committed falls from 72.6% to 56.0%. Most of the one-class answers
-  that were not the best guess become multi-class sets the hierarchy
-  cannot resolve. Correct when committed rises from 39.5% to 55.8%. Still,
-  no class or group answer is right: every correct answer is "myeloid".
-- **Empty sets disappear.** A cell whose set was empty now names its best
-  guess alone. On SCoPE2 that removes the 3.0% "no confident label"
-  abstentions.
+- **SCoPE2.**
+  - Committed falls from 72.6% to 53.0%. One-class answers
+    that were not the best guess become multi-class sets, mostly ones the
+    hierarchy cannot resolve.
+  - Correct when committed rises from 39.5% to 58.9%. Still, no
+    class or group answer is right: every correct answer is "myeloid".
+- **Empty sets still abstain.** The 3.0% of SCoPE2 cells with an empty set
+  keep "no confident label" under both rules.
 - **PBMC240 and Fulcher barely move:** under a point of committed cells,
-  one PBMC240 lymphoid cell and 0.1 point of Fulcher's correctness.
+  one PBMC240 lymphoid cell, and 0.1 point of Fulcher's correctness.
 - **Restricted SCoPE2.**
   - Under NB2's rule, 68.8% of cells have an empty set.
-  - With renormalisation, every cell commits, but 97.9% answer "monocyte/macrophage".
-    That group is exactly the two allowed classes, so the answer adds nothing
-    to the restriction itself. The 32 one-class answers are all right.
-  - The best guess, 61.3% balanced accuracy, is the same under both rules.
+  - Renormalised, every set is non-empty and every cell commits.
+  - But 97.9% of cells answer "monocyte/macrophage". That group is exactly
+    the two allowed classes, so the answer adds nothing to the restriction
+    itself.
+  - The 32 one-class answers are all right.
+  - The best guess (61.3% balanced accuracy) is the same under both
+    rules.
   - Restricted mode was never evaluated in NB2 and is not recommended
     under v3.1 (`docs/service/projection-api.md`).
 

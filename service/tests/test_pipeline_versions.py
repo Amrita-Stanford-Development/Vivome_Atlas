@@ -57,7 +57,10 @@ class V3IsUnchangedTests(unittest.TestCase):
             for mode, restrict in (("default", False), ("restricted", True)):
                 with self.subTest(dataset=name, mode=mode):
                     frozen = json.loads((FIXTURES / f"v3_full_{name}_{mode}.json").read_text())
-                    fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
+                    # Compared under the release number they were frozen with:
+                    # the version moves with every release, v3's behaviour must not.
+                    with mock.patch.object(config, "ATLAS_VERSION", frozen["atlas_version"]):
+                        fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
                     assert_same(self, json.loads(json.dumps(fresh)), frozen)
 
     def test_a_v3_response_carries_none_of_the_v31_fields(self):

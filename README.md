@@ -101,24 +101,29 @@ python3 -m unittest discover -s service/tests -t .   # projection service (needs
 
 ## Current state
 
-Atlas version `0.2.0`, manifest schema `1.0`. Model `VivOME v3 reference` —
-a frozen, RNA-only encoder over a 9,002-gene feature space, module pooling
-architecture, 5 production seeds — latent dim 128. 22 cell types: 2
-cross-modal (macrophage, monocyte), 20 RNA-only. RNA 85,233 cells; Protein
-1,490 cells (SCoPE2 mass spectrometry).
+Atlas version `0.3.0`, manifest schema `1.0`.
+- **Model:** `VivOME v3.1`, five RNA-trained encoders (V2, module pooling,
+  9,002-gene feature space, latent dim 128) whose probabilities are averaged.
+  Each answer comes at class, group or lineage level, or as an abstention
+  with its reason.
+- **Previous release:** `VivOME v3 reference` (atlas `0.2.0`) stays
+  selectable in the service.
+- **Data:** 22 cell types, 2 of them cross-modal (macrophage, monocyte) and
+  20 RNA-only. RNA 85,233 cells; protein 1,490 cells (SCoPE2 mass
+  spectrometry).
 
 Latent centroid cosine and the modality probe are measured for the 2
-cross-modal classes. Per-class transfer accuracy and every benchmark row
-are **pending** — the former has no per-class source data yet (a
-per-*dataset* version exists, see `docs/service/context-brief.md`), the
-latter requires running established integration methods for comparison.
+cross-modal classes, in v3.1's coordinate space. Per-class transfer accuracy
+and every benchmark row are **pending**: the former has no per-class source
+data yet (a per-*dataset* version exists, see
+`docs/service/context-brief.md`), and the latter is published only on the
+owner's sign-off.
 
-The prior architecture, `CrossModalNet` (jointly trained on RNA and
-proteomics, 2,903-gene space), is kept as a documented baseline, not
-erased — see `versions.html`'s "Prior baseline" card and
-`service/model/legacy/v2/README.md`. The projection service pipeline (see
-`service/README.md`) runs end to end against the v3 reference but is not
-deployed or reachable from this site yet.
+The first architecture, `CrossModalNet` (jointly trained on RNA and
+proteomics, 2,903-gene space), is kept as a documented baseline, not erased.
+See `versions.html` and `service/model/legacy/v2/README.md`. The projection
+service (see `service/README.md`) runs end to end but is not hosted: the
+Project page sends uploads to a service you run locally.
 
 ## Documentation
 

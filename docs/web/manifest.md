@@ -55,21 +55,31 @@ Computed from repository data:
 - Cross-modal support classification (`cross_modal`, `rna_only`, `prot_only`)
 - `pca_centroid_cosine` — cosine similarity between RNA and protein class
   centroids **in the 3-PC projection**, for classes present in both modalities
-- `model.seeds` — a seed *count* (5), from `service/model/evidence/v3_tables/reference_seeds.csv`;
-  the accuracy and its 95% CI go in the record's `basis`, not `value` — see
-  `web/js/panels.js:buildModelCard`, which renders `value` with 0 decimal places
-- `model.feature_space_size`, `encoder_family`, `mask_sampling`, `detected_by_source` —
-  the settled architecture facts, folded into `model` (see "Architecture"
-  below)
+- `model` is the current release, v3.1:
+  - `model.seeds` — the ensemble's member *count* (5), from the v3.1 spec,
+    rendered with 0 decimal places (`web/js/panels.js:buildModelCard`);
+  - the architecture facts it shares with v3 (`feature_space_size`,
+    `encoder_family`, `detected_by_source`); `mask_sampling` is `null`, since
+    the members' training setting (T1 NB1b) is not recorded here, and renders
+    Pending;
+  - `model.evaluation` — `nb2`: NB2's evaluation-suite figures, each with the
+    basis "NB2 evaluation, before the two conservative flags"; `served`: SCoPE2,
+    PBMC240 and Fulcher measured as served (flags on), from
+    `research/benchmark/v31_service_flags.json`. `buildEvaluationTable` shows both.
+- `previous_release` is v3: its seed count (from `v3_tables/reference_seeds.csv`,
+  accuracy and CI in `basis`), its architecture facts, its latent centroid
+  cosines and modality probe (`v3_tables/`), and its atlas version.
+  `first_release` is CrossModalNet's own numbers, kept as the first baseline.
 - `latent_centroid_cosine`, `modality_probe_accuracy` — measured for the 2
-  cross-modal classes (macrophage, monocyte) from
-  `service/model/evidence/v3_tables/latent_centroid_cosine.csv` and `modality_probe.json`.
-  The probe is one **global** score (a linear classifier's accuracy telling
-  RNA from protein in the shared latent space), repeated on both cross-modal
-  rows — not a per-class measurement, hence the "global metric, not
-  per-class" wording in its `basis`.
+  cross-modal classes (macrophage, monocyte) in v3.1's coordinate member's
+  latent space, from `service/model/evidence/v3_1_tables/latent_centroid_cosine.csv`
+  and `modality_probe.json` (`scripts/v31_evidence.py`, which first reproduces
+  v3's committed tables by the same method). The probe is one **global** score
+  (a linear classifier's accuracy telling RNA from protein in the latent
+  space), repeated on both cross-modal rows — not a per-class measurement,
+  hence the "global metric, not per-class" wording in its `basis`.
 
-- `model_card` — the model card's accuracy table on `web/versions.html`:
+- `model_card` — v3's accuracy table on `web/versions.html` ("v3 model card"):
   - RNA to RNA on test cells, from `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv`;
   - SCoPE2 protein, restricted and unrestricted, shipped checkpoint and
     5-seed mean, each under both decision rules, from the nb1d seed scores
@@ -108,13 +118,13 @@ drop-in source for it: that function now returns only the facts folded into
 `next_reference` again means also supplying `trained` (`false`) and `note`
 (why it isn't trained yet) — `buildNextReferenceCard` reads both and
 `escapeHtml(undefined)` renders the literal string `"undefined"` if `note`
-is missing. Until then, those facts live on `model` directly. `previous_release` is a
-separate, permanent record of `CrossModalNet`'s own numbers — untouched by
-this transition, kept as documented history rather than erased.
+is missing. Until then, those facts live on `model` directly. `first_release` is a
+separate, permanent record of `CrossModalNet`'s own numbers, and
+`previous_release` of v3's, both kept as documented history rather than erased.
 
 ## Current output
 
-Atlas version `0.2.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
+Atlas version `0.3.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 
@@ -129,7 +139,7 @@ in the browser.
 |---|---|
 | `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `atlas.html` |
 | `buildBenchmarkTable` | `benchmark.html` |
-| `buildModelCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
+| `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace` | `project.html` |
 | `buildModelCardTable` | `versions.html` |
 | `buildReleaseStatus`, `buildNextReferenceCard` | `home.html` |

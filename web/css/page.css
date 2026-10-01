@@ -77,6 +77,8 @@
     h2 { font-size: 20px; letter-spacing: -0.015em; margin-bottom: 14px; }
     h3 { font-size: 16px; letter-spacing: -0.01em; margin-bottom: 8px; }
     p, li { max-width: 72ch; }
+    /* The reset above removes list indents; a bullet list in a card lines up with its numbered ones. */
+    .sheet ul { padding-left: 22px; margin-bottom: 12px; }
 
     a { color: var(--accent); text-underline-offset: 0.18em; }
     a:hover { text-decoration-thickness: 2px; }

@@ -98,7 +98,7 @@ DECISIVE_SUMMARY_PATH = _env_path(
     "VIVOME_DECISIVE_SUMMARY", RUNTIME_DIR / "decisive_summary.json"
 )
 
-ATLAS_VERSION = "0.2.0"
+ATLAS_VERSION = "0.3.0"
 
 # --- Which pipeline answers a request ---
 # "v3" is the single-encoder pipeline, byte for byte as before the switch

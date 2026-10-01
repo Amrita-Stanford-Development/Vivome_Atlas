@@ -134,8 +134,8 @@ function architectureFieldsHtml(source) {
     .join(', ');
   return [
     cardField('Feature space', `${formatCount(source.feature_space_size)} genes (was ${formatCount(source.previous_feature_space_size)})`),
-    cardField('Encoder family', escapeHtml(source.encoder_family)),
-    cardField('Mask sampling', escapeHtml(source.mask_sampling)),
+    cardField('Encoder family', textOrPending(source.encoder_family)),
+    cardField('Mask sampling', textOrPending(source.mask_sampling)),
     cardField('Detected by source', sources),
   ].join('');
 }
@@ -178,12 +178,27 @@ export function buildNextReferenceCard(manifest) {
     <p class="panel-note">${escapeHtml(n.note)}</p>`;
 }
 
-// The currently deployed model's own numbers, kept as the documented prior
-// baseline rather than erased when the architecture moves on. Both this and
-// buildNextReferenceCard are additive, independent sections — neither one
-// edits buildModelCard's rendering of manifest.model.
-export function buildPriorBaselineCard(manifest) {
+// The previous release (v3), with its own seeds and architecture, kept as it
+// was measured. Like buildPriorBaselineCard and buildNextReferenceCard, an
+// additive section: it never edits buildModelCard's rendering of manifest.model.
+export function buildPreviousReleaseCard(manifest) {
   const p = manifest.previous_release;
+  if (!p) return '';
+  const architectureFields = p.feature_space_size == null ? '' : architectureFieldsHtml(p);
+  return `
+    <dl class="model-card">
+      ${cardField('Model', textOrPending(p.model_name))}
+      ${cardField('Atlas version', textOrPending(p.atlas_version))}
+      ${cardField('Seeds', metricText(p.seeds, (x) => formatMetric(x, 0)))}
+      ${architectureFields}
+    </dl>
+    <p class="panel-note">${textOrPending(p.note)}</p>`;
+}
+
+// The first model's own numbers, kept as the documented baseline rather than
+// erased when the architecture moved on.
+export function buildPriorBaselineCard(manifest) {
+  const p = manifest.first_release;
   if (!p) return '';
   return `
     <dl class="model-card">
@@ -297,7 +312,9 @@ const FACTS = {
   latent_dim: (m) => formatCount(m.model?.latent_dim),
   atlas_version: (m) => textOrPending(m.atlas_version),
   model_name: (m) => textOrPending(m.model?.name),
-  previous_model: (m) => textOrPending(m.previous_release?.model_name),
+  previous_model: (m) => textOrPending(m.first_release?.model_name),
+  v3_model_name: (m) => textOrPending(m.previous_release?.model_name),
+  v3_atlas_version: (m) => textOrPending(m.previous_release?.atlas_version),
 };
 
 export function factText(manifest, key) {
@@ -411,6 +428,28 @@ export function buildModelCardTable(manifest) {
   return table(['Measure', 'Decision rule', 'Accuracy', 'Balanced accuracy'], body);
 }
 
+// manifest.model.evaluation: the current release's numbers, each with what
+// it describes. NB2's evaluation-suite figures are NB2's rule, before the two
+// service flags; the development datasets are measured as served.
+export function buildEvaluationTable(manifest) {
+  const ev = manifest.model?.evaluation;
+  const nb2 = ev?.nb2 ?? [];
+  const served = ev?.served ?? [];
+  if (nb2.length === 0 && served.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
+  const valueRow = (measure, metric) => `
+    <tr>
+      <td>${escapeHtml(measure)}<span class="metric-basis"><code>${escapeHtml(metricBasis(metric))}</code></span></td>
+      <td class="support-num">${cardValue(metric)}</td>
+    </tr>`;
+  const nb2Rows = nb2.map((r) => valueRow(r.measure, r.value)).join('');
+  const servedRows = served.map((r) => [
+    valueRow(`${r.dataset}: committed`, r.committed),
+    valueRow(`${r.dataset}: ${r.correct_label}`, r.correct),
+  ].join('')).join('');
+  return `<h3>NB2's evaluation suite</h3>${table(['Measure', 'Value'], nb2Rows)}`
+    + `<h3>Development datasets, as served</h3>${table(['Measure', 'Value'], servedRows)}`;
+}
+
 const cardRow = (m, key) => (m.model_card?.rows ?? []).find((r) => r.key === key);
 const balanced = (m, key) => cardRow(m, key)?.balanced_accuracy;
 const withSd = (metric) => (isMeasured(metric) && Number.isFinite(metric.sd)
@@ -444,6 +483,8 @@ Object.assign(FACTS, {
   },
   latent_cosine_macrophage: (m) => latentCosine(m, 'macrophage'),
   latent_cosine_monocyte: (m) => latentCosine(m, 'monocyte'),
+  v3_latent_cosine_macrophage: (m) => escapeHtml(formatMetric(m.previous_release?.latent_centroid_cosine?.macrophage, 2)),
+  v3_latent_cosine_monocyte: (m) => escapeHtml(formatMetric(m.previous_release?.latent_centroid_cosine?.monocyte, 2)),
 });
 
 const pair = (row) => (row && isMeasured(row.accuracy) && isMeasured(row.balanced_accuracy)
@@ -454,4 +495,5 @@ Object.assign(FACTS, {
   rna_to_rna_test: (m) => pair(cardRow(m, 'rna_to_rna_test')),
   rna_to_rna_superseded: (m) => pair(m.model_card?.rna_to_rna_superseded),
   seeds: (m) => escapeHtml(formatMetric(m.model?.seeds, 0)),
+  v3_seeds: (m) => escapeHtml(formatMetric(m.previous_release?.seeds, 0)),
 });

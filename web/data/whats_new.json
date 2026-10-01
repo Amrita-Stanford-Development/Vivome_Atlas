@@ -1,6 +1,18 @@
 [
   {
     "date": "2026-10-01",
+    "title": "v3.1 is the default",
+    "text": "The service now answers with v3.1: five RNA-trained encoders together. Each answer is a cell type, its group or its lineage, or an abstention with its reason. The atlas coordinates come from the same model. v3 stays selectable.",
+    "link": "versions.html",
+    "link_text": "Read the model card"
+  },
+  {
+    "date": "2026-10-01",
+    "title": "Fixes from a full review",
+    "text": "When an upload had several rows for one gene, only the last was kept. That is fixed, and every result that used it was rerun. The research notebooks were not affected; they always merged duplicate genes."
+  },
+  {
+    "date": "2026-10-01",
     "title": "The Project page projects",
     "text": "Run the projection service on your own machine and the Project page sends it your matrix. It shows every cell's label or abstention with its reason, and you can download the full response.",
     "link": "project.html",

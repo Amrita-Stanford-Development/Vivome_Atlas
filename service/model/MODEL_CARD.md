@@ -25,8 +25,8 @@ on RNA only and applied zero-shot to protein.
   refused for coverage also gets a best guess.
 - **Two service flags, on by default** (`ensemble.SERVICE_FLAGS`; NB2's
   spec has neither):
-  - every set also contains the best guess, so a one-class answer is always
-    the best guess;
+  - every non-empty set also contains the best guess, so a one-class answer
+    is always the best guess (an empty set still abstains);
   - a restricted request renormalises probabilities over the allowed
     classes before its sets are built.
 
@@ -85,8 +85,8 @@ Under NB2's missing-not-at-random masking, v3.1 scores:
     - None of its 152 class answers or 397 group answers is correct.
     - "T cell" alone is 462 cells, 31.0%.
   - **As served (flags on):**
-    - 56.0% of cells are committed.
-    - 55.8% of committed answers are correct, still all "myeloid".
+    - 53.0% of cells are committed.
+    - 58.9% of committed answers are correct, still all "myeloid".
   - Source: `research/benchmark/v31_service_flags.json`.
 - **PBMC240.** 238 cells, 122 of them with weak lineage labels (117
   lymphoid, 5 myeloid).
@@ -97,7 +97,7 @@ Under NB2's missing-not-at-random masking, v3.1 scores:
   - As served: 73.1% committed; 92 of 117 lymphoid cells.
 
 Through the service, PBMC240 first differed from NB2 by 1.3 points of
-committed cells (72.7 against 74.0). The cause was a service bug: when several
+committed cells (72.7 against 73.9). The cause was a service bug: when several
 upload rows mapped to the same gene, only the last row was kept. With
 duplicates collapsed by per cell median, as NB2 does, the service reproduces
 NB2's committed, out of distribution and ambiguous figures exactly; two
@@ -132,9 +132,13 @@ below come from 1,275 cells through the service parser with default settings
 3. **SCoPE2 still fails.** See Development data above: under either rule no
    class or group answer is right, and the best guess is right for 1.1%
    balanced (`research/benchmark/v31_service_flags.json`). In
-   v3.1's coordinate space the SCoPE2 macrophage and monocyte centroids sit
-   far from their RNA classes. The 3-PC centroid cosine for each is in
-   `web/data/atlas_manifest.json`.
+   v3.1's coordinate member's latent space, the SCoPE2 macrophage and
+   monocyte centroids sit far from their RNA classes: latent centroid cosine
+   0.08 and 0.40, against v3's 0.19 and 0.83
+   (`service/model/evidence/v3_1_tables/latent_centroid_cosine.csv`, by the
+   same method as v3's). RNA and protein are also more separable there:
+   the modality probe reads 99.93%, against v3's 98.99%
+   (`service/model/evidence/v3_1_tables/modality_probe.json`).
 4. **Coverage is guaranteed on RNA simulations only.** On protein it is
    approximate, which is why `calibration.applies_to` says so in every
    response.

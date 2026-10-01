@@ -43,10 +43,22 @@
         <section class="sheet">
             <h2>Current release</h2>
             <div id="model-card-mount"></div>
+            <p>
+                Each answer is given at the level the evidence supports: one of the reference's
+                <span data-fact="cell_types">&nbsp;</span> blood cell types, its group, or its lineage. Where
+                the evidence runs out, it abstains and says why. Full detail and sources:
+                <code>service/model/MODEL_CARD.md</code>.
+            </p>
+            <div class="table-scroll" id="evaluation-mount"></div>
+            <p class="panel-note">
+                NB2's evaluation describes its rule before the two conservative flags the service adds
+                (a non-empty set always contains the best guess; a restricted request is renormalised),
+                which are not yet evaluated on RNA. The development datasets are measured as served.
+            </p>
         </section>
 
         <section class="sheet">
-            <h2>Architecture change: complete</h2>
+            <h2>Releases</h2>
             <p>
                 The reference moved from <code>CrossModalNet</code>, a single model jointly
                 trained on RNA and proteomics together, to a <strong>frozen RNA-only reference
@@ -55,30 +67,34 @@
                 training, which is part of why its zero-shot numbers below read higher than the
                 honestly separated architecture's do. Both sets of numbers are real; they answer
                 different questions, and the lower number is the trustworthy one, not a
-                regression. The same argument explains the drop in the <code>pca_centroid_cosine</code>
-                column of the <a href="atlas.html">diagnostics table</a> for both cross-modal
-                classes: the old jointly trained model's centroids trivially coincided across
-                modalities, and the new frozen RNA-only reference never saw protein data during
-                training, so its centroids no longer do. Read the current values in that table;
-                this page does not copy manifest numbers into static text.
+                regression.
+            </p>
+            <p>
+                The <code>pca_centroid_cosine</code> column in the <a href="atlas.html">diagnostics
+                table</a> has dropped twice, for one reason. The first model was trained on both
+                modalities, so its RNA and protein centroids coincided. The RNA-only references never
+                saw protein, so theirs don't. The column now measures v3.1's space. Read the current
+                values in that table; this page does not copy manifest numbers into static text.
             </p>
             <p>
                 The architecture was <em>decided</em> by a five-seed comparison over the widened
-                <span data-fact="feature_space">&nbsp;</span>-gene feature space (module-pooling encoder, uniform masking; see the model
-                card above for the settled details), and the reference is now trained with it:
+                <span data-fact="feature_space">&nbsp;</span>-gene feature space (module-pooling encoder, uniform masking; see the v3
+                card below for the settled details), and the reference is trained with it:
                 <code>reference_model.pt</code>, <code>reference_embedding.npy</code>, and
                 <code>reference_centroids.npy</code> are real, live artifacts. The projection
                 pipeline runs against them end to end. It is not yet hosted:
                 <a href="project.html">the projection page</a> sends an upload to a service you run locally.
             </p>
-            <h3>Prior baseline, kept rather than erased</h3>
+            <h3>v3, the previous release</h3>
+            <div id="previous-release-mount"></div>
+            <h3>The first model, kept rather than erased</h3>
             <div id="prior-baseline-mount"></div>
         </section>
 
         <section class="sheet">
-            <h2>Projection service model card</h2>
+            <h2>v3 model card</h2>
             <p>
-                The reference encoder is <strong>trained, supervised, on RNA only</strong>:
+                The v3 reference encoder is <strong>trained, supervised, on RNA only</strong>:
                 <span data-fact="rna_cells">&nbsp;</span> cells across
                 <span data-fact="cell_types">&nbsp;</span> immune and blood cell classes. It is applied
                 <strong>zero-shot to proteomics uploads</strong>: no protein labels and no
@@ -103,39 +119,47 @@
                 cells are only ever macrophage or monocyte, so restricting to exactly those two
                 classes matches its true label set on this one dataset. On other data with other
                 cell types present, the same restriction is wrong (see the first failure mode).
-                Second: <code>v3_seed0</code>, the checkpoint actually running in production,
+                Second: <code>v3_seed0</code>, the checkpoint v3 serves when selected,
                 is the best of the independently trained seeds of the same architecture by a
                 wide margin: <span data-fact="restricted_centroid_seed0">&nbsp;</span> against a
                 5-seed mean of <span data-fact="restricted_centroid_mean">&nbsp;</span> under the same
                 rule (range <span data-fact="restricted_centroid_range">&nbsp;</span>).
             </p>
             <p>
-                Against scArches/scANVI, the strongest available cross-modal baseline, the
-                shipped checkpoint's restricted-regime lead is real (it beats every scANVI seed
-                under every protocol tested) but does not generalize. Averaged across the
-                seeds, the architecture's shared-kNN restricted mean
-                (<span data-fact="restricted_knn_mean">&nbsp;</span>) trails scANVI's: only
-                <span data-fact="scanvi_restricted_pairings">&nbsp;</span> seed pairings favour this
-                architecture there. The one regime it reliably wins is unrestricted
-                (<span data-fact="scanvi_unrestricted_pairings">&nbsp;</span> pairings, mean margin
-                <span data-fact="scanvi_unrestricted_margin">&nbsp;</span>). Full breakdown:
-                <code>research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, narrative in
-                <code>research/benchmark/results.md</code>. A methodological asymmetry in scANVI's
-                favour throughout this comparison: scANVI trains on the query cells
-                (transductive); this encoder is fixed and zero-shot on the query.
+                Against scArches/scANVI, the strongest available cross-modal baseline, on SCoPE2
+                under the shared kNN rule:
+            </p>
+            <ul>
+                <li><strong>Restricted to macrophage and monocyte, scANVI leads v3.</strong> v3's
+                    five-seed mean balanced accuracy is <span data-fact="restricted_knn_mean">&nbsp;</span>
+                    (<code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code>), and only
+                    <span data-fact="scanvi_restricted_pairings">&nbsp;</span> v3-seed and scANVI-seed
+                    pairings favour v3.</li>
+                <li><strong>Across all classes, v3 leads.</strong>
+                    <span data-fact="scanvi_unrestricted_pairings">&nbsp;</span> pairings favour v3, by a
+                    mean of <span data-fact="scanvi_unrestricted_margin">&nbsp;</span>.</li>
+                <li><strong>The shipped checkpoint, <code>v3_seed0</code>,</strong> is ahead of each of
+                    the three scANVI seeds in both regimes.</li>
+            </ul>
+            <p>
+                The pairings come from
+                <code>research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv</code>, with the
+                narrative in <code>research/benchmark/results.md</code>. One methodological asymmetry
+                favours scANVI throughout: scANVI trains on the query cells (transductive), while this
+                encoder is fixed and zero-shot on the query.
             </p>
             <p><strong>Known failure modes:</strong></p>
             <ol>
                 <li>Two-class label space, now opt-in: when a request restricts labels to the
                     supported classes, a non-myeloid protein upload (T cell, NK cell, B cell,
                     and so on) can only ever be labelled macrophage, monocyte, or abstain, never
-                    its true label. The default now assigns among every reference class; that is
-                    an interim fix, not a solution (see the model card).</li>
+                    its true label. Under v3.1, the default, lymphoid uploads get lymphoid answers
+                    (see the model card).</li>
                 <li>Macrophage placement: cross-modal alignment is weak for macrophage
-                    specifically (latent centroid cosine <span data-fact="latent_cosine_macrophage">&nbsp;</span>
-                    against <span data-fact="latent_cosine_monocyte">&nbsp;</span> for monocyte), and most
-                    macrophage protein cells are assigned to another class, even though the
-                    macrophage-versus-monocyte ranking points the right way (see the model card).</li>
+                    specifically (latent centroid cosine <span data-fact="v3_latent_cosine_macrophage">&nbsp;</span>
+                    against <span data-fact="v3_latent_cosine_monocyte">&nbsp;</span> for monocyte), and across
+                    all classes most macrophage protein cells are assigned to another class (see the
+                    model card).</li>
                 <li>Only <span data-fact="cross_modal_types">&nbsp;</span> of
                     <span data-fact="cell_types">&nbsp;</span> reference classes (macrophage, monocyte)
                     have ever been validated against real protein data.</li>
@@ -145,7 +169,7 @@
                     retraining the same architecture moves SCoPE2 restricted balanced accuracy
                     by up to <span data-fact="restricted_knn_spread">&nbsp;</span>
                     (<span data-fact="restricted_knn_range">&nbsp;</span> across
-                    <span data-fact="seeds">&nbsp;</span> seeds, shared kNN); the shipped seed happens
+                    <span data-fact="v3_seeds">&nbsp;</span> seeds, shared kNN); the shipped seed happens
                     to be the best of them, not a principled choice. A separate development-only
                     check on real PBMC240 data (lineage level) shows the same pattern; see
                     <code>service/model/MODEL_CARD.md</code> for the full detail.</li>
@@ -167,8 +191,10 @@
                 <li>Record label stability against the previous version and add it to this page.</li>
             </ol>
             <p class="panel-note">
-                Label stability across versions is not yet measured. It is reported here from the
-                first release that has a predecessor to compare against.
+                This is the first release with a predecessor, and its label stability against
+                <span data-fact="v3_atlas_version">&nbsp;</span> is not yet measured. v3.1 gives its answers
+                at class, group or lineage level, and v3 at class level only, so the measure needs a
+                definition first.
             </p>
         </section>
     </main>
@@ -190,13 +216,15 @@
     <script type="module" async>
         import { loadManifest, PENDING_LABEL } from './js/manifest.js';
         import {
-            buildModelCard, buildPriorBaselineCard,
+            buildModelCard, buildPriorBaselineCard, buildPreviousReleaseCard, buildEvaluationTable,
             buildAvailabilityTable, buildModelCardTable, factText, errorPanel,
         } from './js/panels.js';
 
         loadManifest().then((manifest) => {
             document.getElementById('model-card-mount').innerHTML = buildModelCard(manifest);
             document.getElementById('prior-baseline-mount').innerHTML = buildPriorBaselineCard(manifest);
+            document.getElementById('previous-release-mount').innerHTML = buildPreviousReleaseCard(manifest);
+            document.getElementById('evaluation-mount').innerHTML = buildEvaluationTable(manifest);
             document.getElementById('availability-mount').innerHTML = buildAvailabilityTable(manifest);
             document.getElementById('model-card-table').innerHTML = buildModelCardTable(manifest);
             for (const el of document.querySelectorAll('[data-fact]')) el.innerHTML = factText(manifest, el.dataset.fact);

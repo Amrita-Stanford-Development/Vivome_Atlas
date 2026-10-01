@@ -145,6 +145,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/evidence/v3_tables/scope2_hierarchical_calls.csv` — hierarchical fallback calls on SCoPE2
 - `service/model/evidence/v3_tables/support_restricted_assignment.csv` — accuracy with the candidate classes restricted vs. unrestricted
 - `service/model/evidence/v3_tables/zero_shot_all_datasets.csv` — zero-shot results on each proteomics dataset
+- `service/model/evidence/v3_1_tables/latent_centroid_cosine.csv` — v3.1: per cross-modal class, RNA/protein latent centroid cosine in the coordinate member's space, with the range over members
+- `service/model/evidence/v3_1_tables/modality_probe.json` — v3.1: how separable RNA and protein are in the coordinate member's latent space (balanced accuracy), with every member's value
 - `service/model/source/VivOME_Prototype_Export.ipynb` — the Colab notebook that trained and exported the v3 reference
 - `service/model/source/v3_export_manifest.json` — sha256 manifest of the v3 bundle, verified before promotion
 - `service/model/source/pca3_projection.npz` — the 3-component PCA basis over the latent space (components, mean, variance ratio)
@@ -192,6 +194,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/build_manifest.py` — generates `web/data/atlas_manifest.json` from the metadata and model evidence
 - `scripts/export_atlas_coordinates.py` — writes the site's atlas coordinates from the served v3.1 model, so projected cells land on the displayed atlas
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
+- `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index
 - `scripts/test_repo_paths.py` — runs `check_paths.py` as part of the normal test suite

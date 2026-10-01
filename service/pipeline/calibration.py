@@ -105,11 +105,12 @@ class MondrianCalibrator:
     space. Nothing is drawn from the upload, so there is no calibration slice.
 
     With `include_best_guess` (the spec's service flag
-    `set_includes_best_guess`), every set also contains the cell's argmax
-    class within the label space. Sets only grow, so coverage is kept, and a
-    one-class answer is always the best guess: without it, a class whose qhat
-    is near 1 (mature nk t cell: bar 0.011) could be named alone at about 1%
-    probability while another class held far more."""
+    `set_includes_best_guess`), every non-empty set also contains the cell's
+    argmax class within the label space; an empty set stays empty, and the
+    cell still abstains as no_confident_label. Sets only grow, so coverage is
+    kept, and a one-class answer is always the best guess: without it, a class
+    whose qhat is near 1 (mature nk t cell: bar 0.011) could be named alone at
+    about 1% probability while another class held far more."""
 
     def __init__(self, qhat_by_position: np.ndarray, marginal_qhat: float, alpha: float, calibrated_on: str,
                  include_best_guess: bool = True):
@@ -128,7 +129,8 @@ class MondrianCalibrator:
             allowed[sorted(label_space.positions)] = True
             member &= allowed
         if self.include_best_guess:
-            member[np.arange(len(probs)), np.where(allowed, probs, -1.0).argmax(axis=1)] = True
+            nonempty = np.flatnonzero(member.any(axis=1))
+            member[nonempty, np.where(allowed, probs, -1.0)[nonempty].argmax(axis=1)] = True
         label_sets = [np.flatnonzero(row).tolist() for row in member]
         return CalibrationResult(qhat=self.marginal_qhat, calibration_indices=np.zeros(0, dtype=np.int64),
                                  label_sets=label_sets)

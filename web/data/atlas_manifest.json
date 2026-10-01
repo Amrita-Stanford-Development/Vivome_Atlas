@@ -1,17 +1,17 @@
 {
   "schema_version": "1.0",
-  "atlas_version": "0.2.0",
+  "atlas_version": "0.3.0",
   "generated": "2026-10-01",
   "model": {
-    "name": "VivOME v3 reference",
+    "name": "VivOME v3.1",
     "latent_dim": 128,
     "training_regime": "supervised",
     "seeds": {
       "value": 5,
       "status": "measured",
-      "basis": "balanced accuracy 0.7143, 95% CI [0.6851, 0.7435]"
+      "basis": "ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"
     },
-    "notes": "A frozen, RNA-only reference encoder: proteomics queries are projected at inference and never used to retrain it. Coordinates shown in the viewer are a 3-component PCA projection of the 128-d latent space; the latent coordinates themselves are not distributed with this build.",
+    "notes": "Five encoders trained only on labelled blood scRNA-seq answer together; no protein labels are used. Proteomics queries are projected at inference and never used to retrain them. Coordinates shown in the viewer are a 3-component PCA projection of the coordinate member's (V2 seed 4) 128-d latent space; the latent coordinates themselves are not distributed with this build.",
     "feature_space_size": 9002,
     "previous_feature_space_size": 2903,
     "detected_by_source": {
@@ -23,7 +23,109 @@
       "fulcher": 1654
     },
     "encoder_family": "module pooling",
-    "mask_sampling": "uniform"
+    "mask_sampling": null,
+    "evaluation": {
+      "nb2": [
+        {
+          "key": "correct_when_committed",
+          "measure": "Correct when committed, at the stated level",
+          "value": {
+            "value": 0.949,
+            "status": "measured",
+            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+          }
+        },
+        {
+          "key": "abstention",
+          "measure": "Abstention",
+          "value": {
+            "value": 0.1918,
+            "status": "measured",
+            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+          }
+        },
+        {
+          "key": "coverage",
+          "measure": "Conformal coverage (target 90%)",
+          "value": {
+            "value": 0.8706,
+            "status": "measured",
+            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+          }
+        },
+        {
+          "key": "class_level",
+          "measure": "Answered at class level",
+          "value": {
+            "value": 0.1913,
+            "status": "measured",
+            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+          }
+        },
+        {
+          "key": "group_level",
+          "measure": "Answered at group level",
+          "value": {
+            "value": 0.1771,
+            "status": "measured",
+            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+          }
+        },
+        {
+          "key": "lineage_level",
+          "measure": "Answered at lineage level",
+          "value": {
+            "value": 0.4397,
+            "status": "measured",
+            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+          }
+        }
+      ],
+      "served": [
+        {
+          "dataset": "SCoPE2",
+          "committed": {
+            "value": 0.530201,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct": {
+            "value": 0.5886,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct_label": "correct when committed, at the stated level"
+        },
+        {
+          "dataset": "PBMC240",
+          "committed": {
+            "value": 0.731092,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct": {
+            "value": 0.786325,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct_label": "lymphoid cells given their lineage"
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "committed": {
+            "value": 0.891765,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct": {
+            "value": 0.9731,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct_label": "correct when committed, at the stated level"
+        }
+      ]
+    }
   },
   "modalities": {
     "rna": {
@@ -362,14 +464,14 @@
         "basis": "3-PC projection"
       },
       "latent_centroid_cosine": {
-        "value": 0.189762,
+        "value": 0.080971,
         "status": "measured",
-        "basis": "128-d latent centroid cosine, 394 protein cells"
+        "basis": "128-d latent centroid cosine (V2_batchgene_aug_seed4, the coordinate member), 394 protein cells"
       },
       "modality_probe_accuracy": {
-        "value": 0.989933,
+        "value": 0.999329,
         "status": "measured",
-        "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; global metric, not per-class"
+        "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; latent of V2_batchgene_aug_seed4.pt, the coordinate member; global metric, not per-class"
       },
       "transfer_accuracy": {
         "value": null,
@@ -421,14 +523,14 @@
         "basis": "3-PC projection"
       },
       "latent_centroid_cosine": {
-        "value": 0.830313,
+        "value": 0.395917,
         "status": "measured",
-        "basis": "128-d latent centroid cosine, 1096 protein cells"
+        "basis": "128-d latent centroid cosine (V2_batchgene_aug_seed4, the coordinate member), 1096 protein cells"
       },
       "modality_probe_accuracy": {
-        "value": 0.989933,
+        "value": 0.999329,
         "status": "measured",
-        "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; global metric, not per-class"
+        "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; latent of V2_batchgene_aug_seed4.pt, the coordinate member; global metric, not per-class"
       },
       "transfer_accuracy": {
         "value": null,
@@ -725,6 +827,45 @@
   },
   "next_reference": null,
   "previous_release": {
+    "model_name": "VivOME v3 reference",
+    "atlas_version": "0.2.0",
+    "seeds": {
+      "value": 5,
+      "status": "measured",
+      "basis": "balanced accuracy 0.7143, 95% CI [0.6851, 0.7435]"
+    },
+    "feature_space_size": 9002,
+    "previous_feature_space_size": 2903,
+    "detected_by_source": {
+      "bubis_hela": 5774,
+      "bubis_lung": 5785,
+      "bubis_candidates": 6023,
+      "pbmc240": 3136,
+      "scope2": 2907,
+      "fulcher": 1654
+    },
+    "encoder_family": "module pooling",
+    "mask_sampling": "uniform",
+    "latent_centroid_cosine": {
+      "macrophage": {
+        "value": 0.189762,
+        "status": "measured",
+        "basis": "v3 128-d latent centroid cosine, 394 protein cells"
+      },
+      "monocyte": {
+        "value": 0.830313,
+        "status": "measured",
+        "basis": "v3 128-d latent centroid cosine, 1096 protein cells"
+      }
+    },
+    "modality_probe_accuracy": {
+      "value": 0.989933,
+      "status": "measured",
+      "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; global metric, not per-class"
+    },
+    "note": "The single-encoder release before v3.1: a frozen, RNA-only reference. It stays selectable in the service (VIVOME_PIPELINE_VERSION=v3), and its model card below is kept as it was measured."
+  },
+  "first_release": {
     "model_name": "CrossModalNet",
     "n_shared_genes": 2903,
     "zero_shot_auc_raw": {
@@ -743,7 +884,7 @@
       "oxphos",
       "glycolysis"
     ],
-    "note": "CrossModalNet was jointly trained on RNA and proteomics together, so it had implicitly seen SCoPE2 during training, part of why these numbers read higher than an honestly separated architecture's would. Kept here as the documented prior baseline, not erased, now that the frozen RNA-only v3 reference (see the model card above) has superseded it."
+    "note": "CrossModalNet was jointly trained on RNA and proteomics together, so it had implicitly seen SCoPE2 during training, part of why these numbers read higher than an honestly separated architecture's would. Kept here as the documented first baseline, not erased, now that RNA-only references (v3, then v3.1) have superseded it."
   },
   "model_card": {
     "rows": [

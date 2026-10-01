@@ -153,9 +153,9 @@ implemented in `service/pipeline/ensemble.py`:
   probability is at least 1 − qhat[c], with one qhat per class.
 - **Two service flags, on by default** (`ensemble.SERVICE_FLAGS`; NB2's
   spec has neither, and neither has been evaluated on RNA):
-  - `set_includes_best_guess`: every set also contains the cell's best
-    guess. Sets only grow, so coverage is kept, and a one-class answer is
-    always the best guess.
+  - `set_includes_best_guess`: every non-empty set also contains the cell's
+    best guess. Sets only grow, so coverage is kept, and a one-class answer
+    is always the best guess. An empty set stays empty: the cell abstains.
   - `restricted_renormalise`: a restricted request rescales each cell's
     probabilities over the allowed classes before its set is built.
 
@@ -222,8 +222,7 @@ the best guess's.
 Cells are checked in order:
 1. fewer than 200 observed genes: `coverage_too_low`;
 2. out of distribution: `outside_supported_region`;
-3. an empty set: `no_confident_label`. With `set_includes_best_guess` no
-   set is empty, so this reason does not occur;
+3. an empty set: `no_confident_label`;
 4. the hierarchy above.
 
 **`best_guess`** is the class with the highest ensemble probability among

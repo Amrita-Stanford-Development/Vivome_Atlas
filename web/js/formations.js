@@ -94,11 +94,13 @@ export function plate(n) {
   return f;
 }
 
-// Growth rings, one per release. The outermost, the release in testing, is
-// still forming: only part of its circle is drawn.
+// Growth rings, one per release in index.html's timeline (formations.test.js
+// pins the count). The outermost, the release in testing, is still forming:
+// only part of its circle is drawn.
 export const RINGS = [
-  { r: 0.34, arc: 1 },
-  { r: 0.64, arc: 1 },
+  { r: 0.28, arc: 1 },
+  { r: 0.5, arc: 1 },
+  { r: 0.72, arc: 1 },
   { r: 0.94, arc: 0.62 },
 ];
 

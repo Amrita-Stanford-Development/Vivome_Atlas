@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -56,6 +57,11 @@ test('growth rings end with the release still forming, drawn pale and partial', 
   assert.equal(RINGS[RINGS.length - 1].arc < 1, true);
   assert.ok([...f.role].includes(ROLE.pale));
   assert.equal([...f.role].filter((r) => r === ROLE.pale).length > 0, true);
+});
+
+test('there is one growth ring per release in the landing timeline', () => {
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  assert.equal(RINGS.length, (html.match(/<li class="release[ "]/g) ?? []).length);
 });
 
 test('helix alternates the RNA and protein strands', () => {

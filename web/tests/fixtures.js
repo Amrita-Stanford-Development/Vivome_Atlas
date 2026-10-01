@@ -6,23 +6,28 @@ export const pending = (phase) => ({ value: null, status: 'pending', phase, note
 // One manifest shaped like the real generated file. Both suites read from it;
 // panels.test.js relies on the metric records, manifest.test.js on the key set.
 //
-// next_reference is null here, matching the real manifest — the v3
-// architecture change this field described is complete, folded into
-// `model` instead (feature_space_size etc. below). previous_release is
-// untouched by that migration and still describes CrossModalNet — a good
-// canary that a fixture edit hasn't overreached into that block.
+// next_reference is null here, matching the real manifest. `model` is the
+// current release (v3.1), previous_release is v3, first_release is
+// CrossModalNet, each with its own numbers.
 export function manifestFixture() {
   return {
     schema_version: '1.0',
-    atlas_version: '0.2.0',
-    generated: '2026-09-23',
+    atlas_version: '0.3.0',
+    generated: '2026-10-01',
     model: {
-      name: 'VivOME v3 reference', latent_dim: 128, training_regime: 'supervised',
-      seeds: measured(5, 'balanced accuracy 0.7143, 95% CI [0.6851, 0.7435]'),
-      notes: 'A frozen, RNA-only reference encoder. PCA projection of the latent space.',
+      name: 'VivOME v3.1', latent_dim: 128, training_regime: 'supervised',
+      seeds: measured(5, 'ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged'),
+      notes: 'Five encoders trained only on labelled blood scRNA-seq answer together.',
       feature_space_size: 9002, previous_feature_space_size: 2903,
       detected_by_source: { scope2: 2907, fulcher: 1654 },
-      encoder_family: 'module pooling', mask_sampling: 'uniform',
+      encoder_family: 'module pooling', mask_sampling: null,
+      evaluation: {
+        nb2: [{ key: 'correct_when_committed', measure: 'Correct when committed, at the stated level',
+                value: measured(0.949, 'NB2 evaluation, before the two conservative flags') }],
+        served: [{ dataset: 'Fulcher 2026', correct_label: 'correct when committed, at the stated level',
+                   committed: measured(0.891765, 'served settings (both service flags on)'),
+                   correct: measured(0.973118, 'served settings (both service flags on)') }],
+      },
     },
     modalities: {
       rna: { label: 'RNA', cells: 85233, classes: 22, source: 'scRNA-seq' },
@@ -44,13 +49,26 @@ export function manifestFixture() {
       { class_idx: 10, name: 'macrophage', rna_cells: 1228, prot_cells: 394,
         support: 'cross_modal',
         pca_centroid_cosine: measured(0.563158, '3-PC projection'),
-        latent_centroid_cosine: measured(0.189762, '128-d latent centroid cosine, 394 protein cells'),
+        latent_centroid_cosine: measured(0.080971, '128-d latent centroid cosine (V2 seed 4), 394 protein cells'),
         modality_probe_accuracy: measured(0.989933, 'global metric, not per-class'),
         transfer_accuracy: pending('N/A') },
     ],
     summary: { total: 3, cross_modal: 2, rna_only: 1, prot_only: 0 },
     next_reference: null,
     previous_release: {
+      model_name: 'VivOME v3 reference', atlas_version: '0.2.0',
+      seeds: measured(5, 'balanced accuracy 0.7143, 95% CI [0.6851, 0.7435]'),
+      feature_space_size: 9002, previous_feature_space_size: 2903,
+      detected_by_source: { scope2: 2907, fulcher: 1654 },
+      encoder_family: 'module pooling', mask_sampling: 'uniform',
+      latent_centroid_cosine: {
+        macrophage: measured(0.189762, 'v3 128-d latent centroid cosine, 394 protein cells'),
+        monocyte: measured(0.830313, 'v3 128-d latent centroid cosine, 1096 protein cells'),
+      },
+      modality_probe_accuracy: measured(0.989933, 'global metric, not per-class'),
+      note: 'The single-encoder release before v3.1, still selectable.',
+    },
+    first_release: {
       model_name: 'CrossModalNet', n_shared_genes: 2903,
       zero_shot_auc_raw: measured(0.6416827225906852, 'jointly trained, had seen SCoPE2'),
       zero_shot_auc_smoothed: measured(0.6679295268442699, 'jointly trained, had seen SCoPE2, query-time smoothing'),

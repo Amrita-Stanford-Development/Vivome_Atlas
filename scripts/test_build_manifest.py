@@ -2,7 +2,8 @@ import unittest
 
 from build_manifest import (
     build_deployed_architecture_facts, build_manifest, build_model_seeds,
-    build_model_card, build_previous_release_facts, build_story_cells, class_stats, cosine, measured, pending,
+    build_model_card, build_first_release_facts, build_story_cells, build_v3_release, build_v31_evaluation,
+    build_v31_model, class_stats, cosine, measured, pending,
     read_family_summary,
     read_latent_centroid_cosine, read_modality_probe_accuracy,
 )
@@ -79,8 +80,7 @@ class TestBuildManifest(unittest.TestCase):
         self.modality_probe_accuracy = measured(0.99, "test probe")
         self.manifest = build_manifest(
             self.rna, self.prot,
-            model_seeds=self.model_seeds,
-            deployed_architecture=self.deployed_architecture,
+            model=build_v31_model(5, self.deployed_architecture, {"nb2": [], "served": []}),
             latent_centroid_cosine_by_idx=self.latent_centroid_cosine_by_idx,
             modality_probe_accuracy=self.modality_probe_accuracy,
         )
@@ -149,11 +149,12 @@ class TestBuildManifest(unittest.TestCase):
         # carry).
         self.assertIsNone(self.manifest["next_reference"])
 
-    def test_previous_release_defaults_to_none_when_not_supplied(self):
+    def test_previous_and_first_release_default_to_none_when_not_supplied(self):
         self.assertIsNone(self.manifest["previous_release"])
+        self.assertIsNone(self.manifest["first_release"])
 
 
-class TestBuildPreviousReleaseFacts(unittest.TestCase):
+class TestBuildFirstReleaseFacts(unittest.TestCase):
     def setUp(self):
         self.legacy_provenance = {
             "n_shared_genes": 2903,
@@ -163,14 +164,14 @@ class TestBuildPreviousReleaseFacts(unittest.TestCase):
         }
 
     def test_carries_the_real_prior_numbers_forward_not_erased(self):
-        facts = build_previous_release_facts(self.legacy_provenance)
+        facts = build_first_release_facts(self.legacy_provenance)
         self.assertEqual(facts["n_shared_genes"], 2903)
         self.assertEqual(facts["zero_shot_auc_raw"]["value"], 0.64)
         self.assertEqual(facts["zero_shot_auc_raw"]["status"], "measured")
         self.assertEqual(facts["shipped_properties"], ["ribosome", "antigen_presentation"])
 
     def test_note_explains_why_the_prior_number_reads_higher(self):
-        facts = build_previous_release_facts(self.legacy_provenance)
+        facts = build_first_release_facts(self.legacy_provenance)
         self.assertIn("jointly trained", facts["note"])
         self.assertIn("superseded", facts["note"])
 
@@ -216,7 +217,7 @@ class TestBuildDeployedArchitectureFacts(unittest.TestCase):
         facts = build_deployed_architecture_facts(self.decisive_summary, self.detail_rows)
         manifest = build_manifest(
             [row("RNA", 12, "monocyte", 0.0, 0.0, 0.0)], [],
-            model_seeds=measured(5, "test"), deployed_architecture=facts,
+            model=build_v31_model(5, facts, {"nb2": [], "served": []}),
             latent_centroid_cosine_by_idx={}, modality_probe_accuracy=pending("N/A", "test"),
         )
         self.assertEqual(manifest["model"]["feature_space_size"], 2)
@@ -225,6 +226,45 @@ class TestBuildDeployedArchitectureFacts(unittest.TestCase):
         # TestBuildManifest.test_next_reference_is_always_none.
         self.assertIsNone(manifest["next_reference"])
         self.assertEqual(manifest["benchmark"]["rows"], [])
+
+
+class TestReleaseBlocks(unittest.TestCase):
+    """`model` is v3.1, previous_release v3, each with its own numbers; every
+    v3.1 figure says whether it is NB2's rule or the served configuration."""
+
+    nb2_summary = {"eval_candidate": {"correct_when_committed": 94.9, "abstain_rate": 19.18, "coverage": 87.06,
+                                      "fine_rate": 19.13, "group_rate": 17.71, "lineage_rate": 43.97}}
+    flags = {"runs": {
+        "SCoPE2": {"served": {"cells": 1490, "share_pct": {"committed": 53.02},
+                              "correct_at_stated_level": {"correct_when_committed": 58.86}}},
+        "PBMC240": {"served": {"cells": 238, "share_pct": {"committed": 73.11},
+                               "weak_lineage": {"lymphoid_correct": 92, "lymphoid_n": 117}}},
+        "Fulcher 2026": {"served": {"cells": 1275, "share_pct": {"committed": 89.18}, "correct_when_committed_pct": 97.31}},
+    }}
+
+    def test_nb2_figures_say_they_are_before_the_flags_and_dev_figures_say_served(self):
+        ev = build_v31_evaluation(self.nb2_summary, self.flags)
+        self.assertTrue(all("before the two conservative flags" in r["value"]["basis"] for r in ev["nb2"]))
+        self.assertTrue(all("served settings (both service flags on)" in r["committed"]["basis"] for r in ev["served"]))
+        self.assertEqual(ev["nb2"][0]["value"]["value"], 0.949)
+        self.assertEqual(ev["served"][0]["committed"]["value"], round(790 / 1490, 6), "from the cell count, not the rounded share")
+        self.assertEqual(ev["served"][1]["correct"]["value"], round(92 / 117, 6))
+
+    def test_v31_model_marks_unrecorded_mask_sampling_as_missing(self):
+        model = build_v31_model(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, {"nb2": [], "served": []})
+        self.assertEqual(model["name"], "VivOME v3.1")
+        self.assertIsNone(model["mask_sampling"], "v3's mask sampling must not be presented as the members'")
+        self.assertIn("no protein labels are used", model["notes"])
+
+    def test_v3_release_keeps_its_own_evidence(self):
+        rows = [{"class_name": "macrophage", "n_prot_cells": "394", "latent_centroid_cosine": "0.189762", "status": "measured"},
+                {"class_name": "b cell", "n_prot_cells": "0", "latent_centroid_cosine": "", "status": "pending"}]
+        v3 = build_v3_release(measured(5, "seeds"), {"mask_sampling": "uniform"}, rows,
+                              {"modality_probe_balanced_accuracy_pct": 98.99, "basis": "probe"})
+        self.assertEqual(v3["model_name"], "VivOME v3 reference")
+        self.assertEqual(set(v3["latent_centroid_cosine"]), {"macrophage"})
+        self.assertEqual(v3["modality_probe_accuracy"]["value"], 0.9899)
+        self.assertEqual(v3["mask_sampling"], "uniform")
 
 
 class TestBuildModelSeeds(unittest.TestCase):

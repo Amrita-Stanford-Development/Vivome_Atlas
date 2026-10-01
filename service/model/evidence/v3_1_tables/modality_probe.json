@@ -1,0 +1,21 @@
+{
+  "modality_probe_balanced_accuracy_pct": 99.93288590604027,
+  "std_pct": 0.0821976423752735,
+  "folds": [
+    99.83221476510067,
+    100.0,
+    100.0,
+    100.0,
+    99.83221476510067
+  ],
+  "n_per_class": 1490,
+  "member": "V2_batchgene_aug_seed4.pt",
+  "members_pct": {
+    "V2_batchgene_aug_seed0.pt": 99.96644295302013,
+    "V2_batchgene_aug_seed1.pt": 99.8993288590604,
+    "V2_batchgene_aug_seed2.pt": 99.8993288590604,
+    "V2_batchgene_aug_seed3.pt": 99.83221476510067,
+    "V2_batchgene_aug_seed4.pt": 99.93288590604027
+  },
+  "basis": "5-fold CV, logistic regression on 128-d latent, RNA subsampled to protein n; latent of V2_batchgene_aug_seed4.pt, the coordinate member"
+}
