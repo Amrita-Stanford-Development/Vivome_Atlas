@@ -91,19 +91,23 @@ def run_scglue(inp, seed, workdir):
     graph = nx.Graph()
     for g in inp.genes:
         graph.add_edge(g, g, weight=1.0, sign=1)
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        glue = scglue.models.fit_SCGLUE(adatas, graph, init_kws={"random_seed": seed},
-                                        fit_kws={"directory": str(workdir)})
-    try:
+    try:  # fit_SCGLUE itself encodes after pretraining, so a NaN can surface inside it too
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            glue = scglue.models.fit_SCGLUE(adatas, graph, init_kws={"random_seed": seed},
+                                            fit_kws={"directory": str(workdir)})
         return glue.encode_data("rna", adatas["rna"]), glue.encode_data("query", adatas["query"])
     except ValueError as err:
-        # Training went NaN, and torch refuses to build the latent distribution.
-        # Returned as NaN embeddings, so the run is recorded as diverged.
-        if "invalid values" not in str(err):
+        if not went_nan(err):
             raise
         nan = lambda n: np.full((n, 50), np.nan, dtype=np.float32)  # scGLUE's default latent_dim
         return nan(len(inp.rna_z)), nan(len(inp.query_z))
+
+
+def went_nan(err: Exception) -> bool:
+    """Training went NaN: torch refuses to build a distribution from invalid
+    parameters. The run is then recorded as diverged (Khoury amendment 4)."""
+    return "invalid values" in str(err)
 
 
 def run_harmony(inp, seed):

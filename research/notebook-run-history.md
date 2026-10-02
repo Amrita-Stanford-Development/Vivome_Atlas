@@ -474,6 +474,11 @@ hold. Two causes, and they affect every score, today's included:
 
 These are the RNA evaluations release 0.3.0 left open.
 
+*Review note (2026-10-02).* The script says a missed NB2 reproduction stops
+the run. In fact the check was computed after the evaluation suite was
+scored, and only logged. All four figures reproduced, so no result is
+affected, but the gate was not enforced as written.
+
 ### 19. T1 NB3c: `research/notebooks/t1_nb3c_ood_calibration.py`
 
 Five minutes on the PC (2026-10-02), with its rules committed before the run
@@ -537,6 +542,25 @@ false abstention, with 16.4 percent on single-type uploads.
 - SCoPE2 18.3 percent.
 
 Max cosine still does not see the progenitors as unfamiliar.
+
+*Review notes (2026-10-02).* A code review found four things that change no
+verdict; NB3c stays NO GO on three criteria.
+
+- **The "beats max cosine" flag.** `summary.json` records it as true
+  because the script passes it automatically when max cosine is chosen.
+  Under NB3b's rule, which needs a strictly higher AUROC than max cosine,
+  it is false.
+- **Held-out AUROC.** NB3c pools all held-out classes into one AUROC over
+  cells with at least 200 observed genes. NB3b averaged per-class AUROCs
+  over all cells. So that column is not directly comparable between the
+  two runs.
+- **Diversity of the held-out controls.** They reuse their parent upload's
+  diversity, which biases the two diversity schemes' held-out rejection.
+- **Real data, in both NB3b and NB3c.** It is scored against every
+  reference cell, while the thresholds were fitted on scores against the
+  training split, as NB2 also did. A larger reference can only raise max
+  cosine and kNN scores, so the reported real-data rejection rates are
+  biased low.
 
 ---
 

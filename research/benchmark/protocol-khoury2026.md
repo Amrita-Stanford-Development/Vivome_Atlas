@@ -632,3 +632,40 @@ development dataset, scoring its cells of the five types. Results:
 - **Divergence.** scGLUE's diverged runs are listed and not scored.
 - **scANVI script.** A smoke rehearsal (3,000 RNA cells, few epochs) ran
   all three arms.
+
+## Amendment 6, 2026-10-02, before unsealing: fixes from a code review
+
+Khoury 2026 is still sealed. No label was read and nothing was embedded or
+trained. A review of every script the final evaluation runs found two ways
+amendment 4's divergence rule could fail, and one ordering problem. The
+fixes are committed with this amendment.
+
+1. **scGLUE.** `fit_SCGLUE` encodes the data itself after pretraining, so a
+   NaN there escaped the divergence handling in `baselines_run.py` and
+   crashed the run with no record. The handling now wraps the whole fit.
+2. **scANVI.** A NaN during training made torch raise, so
+   `scanvi_run_khoury2026.py` died with no record. Training, encoding and
+   prediction are now wrapped, and such a run is recorded as diverged.
+3. **The scorer.** `khoury2026_score.py` read Khoury's labels before
+   opening its inputs, so a missing record surfaced only after unsealing.
+   It now checks every input first and exits with the list, labels unread.
+   A run that crashed for any other reason can then be rerun, and a
+   diverged one is recorded, all before any label is read.
+4. **Every scANVI run diverging.** If that happens, there is no headline
+   arm, and the scANVI comparisons are omitted instead of failing.
+5. **Two smaller changes, with no effect on any number:**
+   - the scorer reads `v31_pred.csv` directly;
+   - it takes the class hierarchy from `nb2_spec_v31.json`, the same file
+     `baselines_score.py` reads, instead of loading the whole bundle.
+
+**Checked after the fixes:**
+
+- The Fulcher rehearsal reproduces amendment 5's results: 34 runs, largest
+  per-type recall difference 0.000049 points, and identical confident
+  answers.
+- With a NaN injected inside `fit_SCGLUE`, the run returns NaN embeddings
+  and so a diverged record.
+- With a NaN injected into scANVI's training, a record is written with
+  `"diverged": true`.
+- With its inputs missing, the scorer exits listing the 28 missing files,
+  without calling the label loader.

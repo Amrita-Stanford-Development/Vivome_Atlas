@@ -40,6 +40,7 @@ from scvi.model import SCANVI, SCVI
 from sklearn.neighbors import KNeighborsClassifier
 
 from benchmark import datasets
+from benchmark.baselines_run import went_nan
 from benchmark.evaluate import KNN_K
 from benchmark.khoury2026_embed import out_dir
 
@@ -106,17 +107,24 @@ def main() -> None:
     adata.obs["size_factor"] = 1.0
     epochs = (5, 3) if args.smoke else (200, 100)
 
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        SCVI.setup_anndata(adata, batch_key="modality", labels_key="cell_type", size_factor_key="size_factor")
-        scvi_model = SCVI(adata, n_latent=30, n_layers=2, n_hidden=128, gene_likelihood="normal", log_variational=False)
-        scvi_model.train(max_epochs=epochs[0], early_stopping=True, early_stopping_patience=15)
-        print(f"SCVI pretrain done. {time.time()-t0:.1f}s", flush=True)
-        scanvi_model = SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown", labels_key="cell_type")
-        scanvi_model.train(max_epochs=epochs[1], early_stopping=True, early_stopping_patience=15)
-        print(f"SCANVI train done. {time.time()-t0:.1f}s", flush=True)
+    try:  # a NaN during training makes torch raise; the run is then recorded as diverged (amendment 4)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            SCVI.setup_anndata(adata, batch_key="modality", labels_key="cell_type", size_factor_key="size_factor")
+            scvi_model = SCVI(adata, n_latent=30, n_layers=2, n_hidden=128, gene_likelihood="normal", log_variational=False)
+            scvi_model.train(max_epochs=epochs[0], early_stopping=True, early_stopping_patience=15)
+            print(f"SCVI pretrain done. {time.time()-t0:.1f}s", flush=True)
+            scanvi_model = SCANVI.from_scvi_model(scvi_model, unlabeled_category="Unknown", labels_key="cell_type")
+            scanvi_model.train(max_epochs=epochs[1], early_stopping=True, early_stopping_patience=15)
+            print(f"SCANVI train done. {time.time()-t0:.1f}s", flush=True)
+        emb = scanvi_model.get_latent_representation()
+        native = np.asarray(scanvi_model.predict())[len(rna_Z):]
+    except ValueError as err:
+        if not went_nan(err):
+            raise
+        print(f"diverged during training: {str(err)[:200]}", flush=True)
+        emb, native = np.full((len(rna_Z) + len(query_Z), 30), np.nan, dtype=np.float32), None
 
-    emb = scanvi_model.get_latent_representation()
     diverged = not bool(np.isfinite(emb).all())
     rna_emb, query_emb = emb[:len(rna_Z)], emb[len(rna_Z):]
     stem = out / f"scanvi_{args.arm}_seed{args.seed}"
@@ -124,7 +132,8 @@ def main() -> None:
     np.save(f"{stem}_query_emb.npy", query_emb)
 
     pred = pd.DataFrame({"cell_id": cell_ids})
-    pred["native"] = np.asarray(scanvi_model.predict())[len(rna_Z):]
+    if native is not None:
+        pred["native"] = native
     if not diverged:
         clf = KNeighborsClassifier(n_neighbors=KNN_K, metric="cosine", weights="distance").fit(rna_emb, rna_labels)
         pred["shared_knn"] = clf.predict(query_emb)

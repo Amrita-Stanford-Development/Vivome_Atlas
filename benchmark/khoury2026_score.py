@@ -37,6 +37,7 @@ from __future__ import annotations
 import argparse
 import collections
 import json
+import sys
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
@@ -47,10 +48,9 @@ from sklearn.metrics import balanced_accuracy_score
 
 from benchmark import datasets, v31_dev_gate
 from benchmark import fulcher2026_score as fulcher
-from benchmark.baselines_score import _as_response, read_v31
+from benchmark.baselines_score import _as_response, hierarchy
 from benchmark.evaluate import knn_classifier_predict, paired_bootstrap_diff
 from benchmark.khoury2026_embed import MEMBERS, out_dir, tables_dir
-from service.pipeline import pipeline
 
 REPO = datasets.REPO
 RESULTS = REPO / "benchmark" / "results"
@@ -73,7 +73,7 @@ BASELINES = {"maxfuse": ("knn", "shared_knn", (0, 1, 2)), "scglue": ("knn", "sha
 @dataclass
 class Sources:
     dataset: str
-    labels: pd.DataFrame  # cell_id, label (one of TYPES, or another label in the rehearsal)
+    load_labels: callable  # -> cell_id, label; called only after every input is verified
     out: Path  # khoury2026_embed.py's outputs
     scanvi_stem: callable  # (arm, seed) -> path stem
     baselines: Path
@@ -82,15 +82,40 @@ class Sources:
 
 def sources(rehearse: bool) -> Sources:
     if rehearse:
-        return Sources("Fulcher 2026 (rehearsal, five Khoury types)", datasets.load_fulcher2026_labels(), out_dir(True),
+        return Sources("Fulcher 2026 (rehearsal, five Khoury types)", datasets.load_fulcher2026_labels, out_dir(True),
                        lambda arm, seed: RESULTS / "fulcher2026" / f"scanvi_{REHEARSAL_SCANVI[arm]}_seed{seed}",
                        RESULTS / "baselines_ext" / "fulcher2026", tables_dir(True))
-    labels = datasets.load_khoury2026_labels(unseal=True)
-    if not labels["label"].isin(TYPES).all():
-        raise ValueError("a Khoury cell has no type; the protocol scores all 1,651")
-    return Sources("Khoury 2026", labels, out_dir(False),
+
+    def khoury_labels() -> pd.DataFrame:
+        labels = datasets.load_khoury2026_labels(unseal=True)
+        if not labels["label"].isin(TYPES).all():
+            raise ValueError("a Khoury cell has no type; the protocol scores all 1,651")
+        return labels
+    return Sources("Khoury 2026", khoury_labels, out_dir(False),
                    lambda arm, seed: out_dir(False) / f"scanvi_{arm}_seed{seed}",
                    RESULTS / "baselines_ext" / "khoury2026", tables_dir(False))
+
+
+def missing_inputs(src: Sources) -> list[str]:
+    """Every file the scoring reads, checked before any label is: a run that
+    crashed without its record must be found while the labels are still unread."""
+    need = [src.out / "cell_ids.txt", src.out / "v31_pred.csv", src.out / "v3_served_latent.npy"]
+    need += [src.out / f"{m}_latent.npy" for m in MEMBERS]
+    stems = [src.scanvi_stem(a, s) for a in SCANVI_ARMS for s in SCANVI_SEEDS]
+    stems += [src.baselines / f"{tool}_seed{s}" for tool, (_, _, seeds) in BASELINES.items() for s in seeds]
+    for stem in stems:
+        record = Path(f"{stem}.json")
+        need.append(record)
+        if record.exists() and not json.loads(record.read_text())["diverged"]:
+            need.append(Path(f"{stem}_pred.csv"))
+    return [str(p) for p in need if not p.exists()]
+
+
+def read_v31_table(path: Path) -> pd.DataFrame:
+    """baselines_v31.table's CSV, as baselines_score.read_v31 reads it: empty strings kept."""
+    df = pd.read_csv(path, keep_default_na=False, dtype={"cell_id": str})
+    df["abstained"] = df["abstained"].astype(str).eq("True")
+    return df
 
 
 def reference_classes() -> tuple[np.ndarray, list[str], dict]:
@@ -125,7 +150,7 @@ def collect_predictions(src: Sources, scored: np.ndarray, cell_ids: list[str]) -
     unit = lambda x: x / np.clip(np.linalg.norm(x, axis=1, keepdims=True), 1e-8, None)  # noqa: E731
     predictions, diverged = {}, []
 
-    v31 = read_v31(src.out, "v31")  # <out>/v31_pred.csv
+    v31 = read_v31_table(src.out / "v31_pred.csv")
     assert v31["cell_id"].tolist() == cell_ids
     predictions[("v3.1", "v3.1", 0, "best_guess")] = v31["best_guess"].to_numpy()[scored]
     for seed, model in enumerate(MEMBERS):
@@ -167,15 +192,18 @@ def collect_predictions(src: Sources, scored: np.ndarray, cell_ids: list[str]) -
 
 def comparisons(predictions: dict, headline_arm: str) -> list[tuple]:
     """(name, rules, family_a, rule_a, family_b, rule_b): the protocol's paired bootstraps."""
-    scanvi = f"scANVI_{headline_arm}"
     pairs = [
         ("v3.1 vs v3", "product rules", "v3.1", "best_guess", "v3", "nearest_centroid"),
         ("v3.1 vs v3", "shared_knn", "v3.1 members", "shared_knn", "v3", "shared_knn"),
-        (f"v3.1 vs {scanvi}", "product rule vs native", "v3.1", "best_guess", scanvi, "native"),
-        (f"v3.1 vs {scanvi}", "shared_knn", "v3.1 members", "shared_knn", scanvi, "shared_knn"),
-        (f"v3 vs {scanvi}", "product rule vs native", "v3", "nearest_centroid", scanvi, "native"),
-        (f"v3 vs {scanvi}", "shared_knn", "v3", "shared_knn", scanvi, "shared_knn"),
     ]
+    if headline_arm is not None:  # None only if every scANVI run diverged (amendment 4)
+        scanvi = f"scANVI_{headline_arm}"
+        pairs += [
+            (f"v3.1 vs {scanvi}", "product rule vs native", "v3.1", "best_guess", scanvi, "native"),
+            (f"v3.1 vs {scanvi}", "shared_knn", "v3.1 members", "shared_knn", scanvi, "shared_knn"),
+            (f"v3 vs {scanvi}", "product rule vs native", "v3", "nearest_centroid", scanvi, "native"),
+            (f"v3 vs {scanvi}", "shared_knn", "v3", "shared_knn", scanvi, "shared_knn"),
+        ]
     for tool, (_, rule, _) in BASELINES.items():  # amendments 2 and 3
         if rule == "shared_knn":
             pairs.append((f"v3.1 vs {tool}", "shared_knn", "v3.1 members", "shared_knn", tool, "shared_knn"))
@@ -207,14 +235,14 @@ def confident(src: Sources, scored: np.ndarray, true_type: np.ndarray) -> dict:
     level, a class through the class mapping, a group or lineage against the
     one the true type's classes share in NB2's hierarchy. Counts beside every
     percentage."""
-    hierarchy = pipeline.load_bundle("v3.1").hierarchy
-    response = _as_response(read_v31(src.out, "v31"))
-    share, composition = v31_dev_gate.summarise(response, hierarchy)  # over all upload cells
+    hier = hierarchy()  # nb2_spec_v31.json's, as baselines_score reads it
+    response = _as_response(read_v31_table(src.out / "v31_pred.csv"))
+    share, composition = v31_dev_gate.summarise(response, hier)  # over all upload cells
     expected = {}
     for level in ("group", "lineage"):
         found = collections.defaultdict(set)
         for name, t in COARSE.items():
-            found[t].add(hierarchy[name][level])
+            found[t].add(hier[name][level])
         if any(len(v) != 1 for v in found.values()):
             raise ValueError(f"a type spans several {level}s: {dict(found)}")
         expected[level] = {t: v.pop() for t, v in found.items()}
@@ -282,11 +310,15 @@ def main() -> None:
     mode.add_argument("--rehearse", action="store_true", help="the same code on Fulcher 2026, a development dataset")
     args = parser.parse_args()
     src = sources(args.rehearse)
+    missing = missing_inputs(src)
+    if missing:  # before any label is read: a crashed run can still be rerun, a diverged one recorded
+        sys.exit("inputs missing, labels not read:\n  " + "\n  ".join(missing))
+    labels = src.load_labels()
     cell_ids = (src.out / "cell_ids.txt").read_text().split()
-    if src.labels["cell_id"].tolist() != cell_ids:
+    if labels["cell_id"].tolist() != cell_ids:
         raise ValueError("embedding rows are not in label order")
-    scored = src.labels["label"].isin(TYPES).to_numpy()
-    true_type = src.labels["label"].to_numpy()[scored]
+    scored = labels["label"].isin(TYPES).to_numpy()
+    true_type = labels["label"].to_numpy()[scored]
     _, class_names, lineage = reference_classes()
     predictions, diverged = collect_predictions(src, scored, cell_ids)
 
@@ -310,7 +342,8 @@ def main() -> None:
 
     knn = per_seed[per_seed["rule"] == "shared_knn"]
     knn_means = {arm: knn.loc[knn["family"] == f"scANVI_{arm}", "balanced_accuracy_pct"].mean() for arm in SCANVI_ARMS}
-    headline = max((a for a in SCANVI_ARMS if not np.isnan(knn_means[a])), key=lambda a: knn_means[a])
+    scored_arms = [a for a in SCANVI_ARMS if not np.isnan(knn_means[a])]
+    headline = max(scored_arms, key=lambda a: knn_means[a]) if scored_arms else None  # None: every run diverged
     boot = bootstrap(predictions, true_type, headline)
     counts = {f"{c} [{r}]": {"pairings": len(g), **g["favours"].str.split("_seed").str[0].value_counts().to_dict()}
               for (c, r), g in boot.groupby(["comparison", "rules"], sort=False)}
