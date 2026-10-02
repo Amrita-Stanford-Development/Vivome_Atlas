@@ -149,12 +149,14 @@ Following the publication plan below:
      - calibration on validation cells under-covers test cells about 2x;
      - per-upload gene z makes the score depend on upload composition
        (single-type uploads abstain 34%).
-   - **Owner decision pending:**
-     - keep 0.3.0's rule and unseal Khoury with the weakness stated;
-     - a follow-up (NB3c) with new pre-fixed rules: calibration on
-       held-out cells, an upload-composition-aware threshold, and a fresh
-       evaluation suite, since NB3b's has now been used;
-     - adopt energy and accept about 10% false abstention.
+   - **The owner chose a follow-up, NB3c (entry 19): also NO GO.**
+     - **What it fixed:** calibrating on never-seen test cells puts false
+       abstention near target.
+     - **What remains:** separation is the binding limit, since no score
+       reaches 90% scrambled rejection at about 5% false abstention.
+       Narrow uploads still abstain more, and the upload-diversity measure
+       cannot see them.
+   - **Owner decision pending** on how to proceed.
 3. **Unseal Khoury once,** in amendment 5's order. If v3.1 changes after
    NB3b, an amendment fixes the new candidate first.
 4. Post the bioRxiv preprint, and choose the journal from the Khoury result.

@@ -1,0 +1,13 @@
+dataset,score,scheme,upload_diversity,cells,rejected
+Furtwängler 2025 CD34+ HSPCs (out of reference),maxcos,band,13.50680,2506,0.01995
+Furtwängler 2025 CD34+ HSPCs (out of reference),maxcos,band,13.50680,2506,0.01995
+Furtwängler 2025 CD34+ HSPCs (out of reference),"maxcos (NB2 rule, 0.779)",fixed,13.50680,2506,0.01277
+Fulcher 2026 PBMCs,maxcos,band,11.02221,1275,0.00392
+Fulcher 2026 PBMCs,maxcos,band,11.02221,1275,0.00392
+Fulcher 2026 PBMCs,"maxcos (NB2 rule, 0.779)",fixed,11.02221,1275,0.00392
+PBMC240 raw,maxcos,band,10.98913,237,0.03376
+PBMC240 raw,maxcos,band,10.98913,237,0.03376
+PBMC240 raw,"maxcos (NB2 rule, 0.779)",fixed,10.98913,237,0.01688
+SCoPE2 (macrophage/monocyte),maxcos,band,12.47719,1490,0.18322
+SCoPE2 (macrophage/monocyte),maxcos,band,12.47719,1490,0.18322
+SCoPE2 (macrophage/monocyte),"maxcos (NB2 rule, 0.779)",fixed,12.47719,1490,0.00000

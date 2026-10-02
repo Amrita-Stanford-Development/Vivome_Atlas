@@ -474,6 +474,70 @@ hold. Two causes, and they affect every score, today's included:
 
 These are the RNA evaluations release 0.3.0 left open.
 
+### 19. T1 NB3c: `research/notebooks/t1_nb3c_ood_calibration.py`
+
+Five minutes on the PC (2026-10-02), with its rules committed before the run
+(`04aa884`). It attacked NB3b's two causes. Tables are in
+`research/notebook-outputs/nb3c/`.
+
+**The fixes it tried:**
+
+- **Calibration on cells the encoders never saw.** The test split was halved
+  by class (8,520 and 8,526 cells). A new calibration suite came from one
+  half and a new evaluation suite from the other, with NB1's generator and
+  new seeds.
+  - Declared: the evaluation cells were scored once by NB3b, in other
+    uploads.
+- **Thresholds that may depend on the predicted class or on upload
+  diversity.** Four schemes were tried against four scores: max cosine,
+  energy, kNN 50 and relative Mahalanobis.
+
+**What it found:**
+
+- **The calibration shift is fixed.** On the fresh evaluation suite, false
+  abstention is close to target: 4.9 to 6.6 percent for max cosine, energy
+  and kNN, and 5.8 to 8.5 for relative Mahalanobis. NB3b's was about 10,
+  and NB2's rule gives 2.0 here.
+- **The choice fell to max cosine.** On the calibration SELECT half, every
+  energy, kNN and Mahalanobis pair exceeded the 15 percent bound on
+  single-cell-type uploads (19 to 35 percent). Only max cosine met it, so
+  the pre-fixed rule chose max cosine with per-band thresholds.
+
+**Evaluation suite: NO GO.**
+
+| Criterion | Rule | Max cosine, per band |
+|---|---|---|
+| False abstention, all cells | at most 6% | 6.6% |
+| Worst scenario | at most 10% | 14.3% (single cell type) |
+| Scrambled cells rejected | at least 90% | 46.1% |
+
+**What the schemes did:**
+
+- **Per predicted class:** brought the single-type worst case down to 9.5
+  to 12.9 percent. But rejection of the controls dropped too: energy's
+  scrambled rejection fell from 74.9 to 47.3 percent.
+- **Per upload diversity:** did not work as intended. The measure (the
+  effective number of types in the upload's mean predicted probabilities)
+  reads 11 to 13.5 on single-tissue real uploads, because v3.1's
+  probabilities are diffuse, so it cannot see a narrow upload.
+- **B cells:** still abstain on 37.5 percent under max cosine, a weakness of
+  that score for one class.
+
+**The binding limit is separation, not calibration.** No score reaches 90
+percent scrambled rejection at about 5 percent false abstention. The best
+AUROC is 0.94 (energy), and that operating point needs about 0.97. The best
+achieved is energy, rejecting 74.9 percent of scrambled cells at 5.7 percent
+false abstention, with 16.4 percent on single-type uploads.
+
+**Real data under the chosen rule** (reported only):
+
+- the CD34+ progenitors are flagged at 2.0 percent (NB2's rule: 1.3);
+- Fulcher 0.4 percent;
+- PBMC240 3.4 percent;
+- SCoPE2 18.3 percent.
+
+Max cosine still does not see the progenitors as unfamiliar.
+
 ---
 
 ## The throughline

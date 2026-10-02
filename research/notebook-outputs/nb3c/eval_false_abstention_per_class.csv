@@ -1,0 +1,16 @@
+class,mean,size
+b cell,0.37521,5842
+"cd4-positive, alpha-beta t cell",0.04172,4746
+"cd8-positive, alpha-beta t cell",0.04432,4355
+classical monocyte,0.02995,6812
+erythrocyte,0.08127,3236
+intermediate monocyte,0.01314,2511
+macrophage,0.01211,4708
+mature nk t cell,0.04843,826
+monocyte,0.01879,11121
+"naive thymus-derived cd4-positive, alpha-beta t cell",0.05034,2483
+natural killer cell,0.04436,3269
+neutrophil,0.01818,7864
+non-classical monocyte,0.04831,1656
+plasma cell,0.07401,2243
+platelet,0.06127,1273

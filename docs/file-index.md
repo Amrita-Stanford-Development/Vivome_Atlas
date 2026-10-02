@@ -311,6 +311,13 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb3b/eval_flags_by_upload.csv` — T1 NB3b: NB2's rule and `set_includes_best_guess`, under today's and the chosen OOD rule, per evaluation upload
 - `research/notebook-outputs/nb3b/eval_flags_summary.csv` — T1 NB3b: the same, averaged: coverage, answer levels, abstention by reason, correct when committed
 - `research/notebook-outputs/nb3b/eval_restricted_summary.csv` — T1 NB3b: restricted mode on macrophage/monocyte uploads: NB2's rule, renormalised, and as served
+- `research/notebook-outputs/nb3c/summary.json` — T1 NB3c's rules, the split, the chosen score and scheme, thresholds, the go / no go result, real data
+- `research/notebook-outputs/nb3c/candidates_calsel.csv` — T1 NB3c: 4 scores x 4 threshold schemes on the new calibration SELECT half: false abstention, worst scenario, control rejection and AUROC (the choice)
+- `research/notebook-outputs/nb3c/eval_candidates.csv` — T1 NB3c: the same on the fresh evaluation suite, scored once
+- `research/notebook-outputs/nb3c/eval_false_abstention_by_scenario.csv` — T1 NB3c: the chosen rule's false abstention per scenario
+- `research/notebook-outputs/nb3c/eval_false_abstention_per_class.csv` — T1 NB3c: the chosen rule's false abstention per reference class
+- `research/notebook-outputs/nb3c/real_data_rejection.csv` — T1 NB3c: OOD rejection on the CD34+ progenitors, Fulcher, PBMC240 and SCoPE2 under the chosen rule (reported only)
+- `research/notebook-outputs/nb3c/furtwangler_rejection_by_cluster.csv` — T1 NB3c: the chosen rule's rejection of the CD34+ progenitors per author cluster
 - `research/notebooks/t1_nb3c_ood_calibration.py` — T1 NB3c as a script: the OOD threshold recalibrated on test-split cells the encoders never saw, with class- and upload-diversity-aware schemes, judged on a fresh evaluation suite; reuses NB3b's code
 - `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)

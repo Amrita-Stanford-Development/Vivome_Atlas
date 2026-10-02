@@ -1,0 +1,197 @@
+{
+  "rules": {
+    "target": 0.05,
+    "select_max_false": 0.075,
+    "select_max_scenario": 0.15,
+    "min_key_cells": 300,
+    "div_edges": [
+      1.5,
+      3.0
+    ],
+    "scores": [
+      "maxcos",
+      "energy",
+      "knn50_ref",
+      "relmaha_cal"
+    ],
+    "schemes": [
+      "band",
+      "class",
+      "div",
+      "class_div"
+    ],
+    "seeds": {
+      "split": 3,
+      "calib": 31,
+      "eval": 47
+    },
+    "go": {
+      "false_overall": 0.06,
+      "false_scenario": 0.1,
+      "scrambled_rejected": 0.9
+    }
+  },
+  "smoke": false,
+  "te_cal_cells": 8520,
+  "te_eval_cells": 8526,
+  "chosen": {
+    "score": "maxcos",
+    "scheme": "band",
+    "note": null
+  },
+  "thresholds": {
+    "pooled": 0.8165038824081421,
+    "keys": {
+      "1": 0.7835986614227295,
+      "2": 0.804394543170929,
+      "3": 0.84228515625
+    },
+    "class": {}
+  },
+  "eval_chosen": {
+    "score": "maxcos",
+    "scheme": "band",
+    "false_abstention": 0.06554928906187941,
+    "worst_scenario": 0.14284672597345777,
+    "worst_scenario_name": "random_1",
+    "rejected_scrambled": 0.460544920168401,
+    "rejected_repeated": 0.44181768633328794,
+    "rejected_held_out": 0.19979726305119108,
+    "rejected_mean": 0.3673866231842933,
+    "auc_scrambled": 0.8891897766069063,
+    "auc_repeated": 0.8905215004517789,
+    "auc_held_out": 0.6273918320487295
+  },
+  "eval_maxcos_same_scheme": {
+    "score": "maxcos",
+    "scheme": "band",
+    "false_abstention": 0.06554928906187941,
+    "worst_scenario": 0.14284672597345777,
+    "worst_scenario_name": "random_1",
+    "rejected_scrambled": 0.460544920168401,
+    "rejected_repeated": 0.44181768633328794,
+    "rejected_held_out": 0.19979726305119108,
+    "rejected_mean": 0.3673866231842933,
+    "auc_scrambled": 0.8891897766069063,
+    "auc_repeated": 0.8905215004517789,
+    "auc_held_out": 0.6273918320487295
+  },
+  "eval_nb2_rule_false_abstention": 0.01974739852251966,
+  "eval_false_by_scenario": {
+    "lymphoid": 0.08820441022051102,
+    "myeloid": 0.03746465598491989,
+    "pbmc_like": 0.006498470948012232,
+    "random_1": 0.14284672597345777,
+    "random_2": 0.06871546961325967,
+    "random_3": 0.10273972602739725,
+    "random_5": 0.013477088948787063,
+    "random_8": 0.008222132362852136,
+    "scope2_like": 0.01170886075949367
+  },
+  "go": {
+    "false_overall": false,
+    "false_every_scenario": false,
+    "scrambled_rejected": false,
+    "beats_maxcos_every_control": true
+  },
+  "GO": false,
+  "real_data": [
+    {
+      "dataset": "Furtwängler 2025 CD34+ HSPCs (out of reference)",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 13.506804651645316,
+      "cells": 2506,
+      "rejected": 0.019952114924181964
+    },
+    {
+      "dataset": "Furtwängler 2025 CD34+ HSPCs (out of reference)",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 13.506804651645316,
+      "cells": 2506,
+      "rejected": 0.019952114924181964
+    },
+    {
+      "dataset": "Furtwängler 2025 CD34+ HSPCs (out of reference)",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "scheme": "fixed",
+      "upload_diversity": 13.506804651645316,
+      "cells": 2506,
+      "rejected": 0.012769353551476457
+    },
+    {
+      "dataset": "Fulcher 2026 PBMCs",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 11.022209908274398,
+      "cells": 1275,
+      "rejected": 0.00392156862745098
+    },
+    {
+      "dataset": "Fulcher 2026 PBMCs",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 11.022209908274398,
+      "cells": 1275,
+      "rejected": 0.00392156862745098
+    },
+    {
+      "dataset": "Fulcher 2026 PBMCs",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "scheme": "fixed",
+      "upload_diversity": 11.022209908274398,
+      "cells": 1275,
+      "rejected": 0.00392156862745098
+    },
+    {
+      "dataset": "PBMC240 raw",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 10.98913125971697,
+      "cells": 237,
+      "rejected": 0.03375527426160337
+    },
+    {
+      "dataset": "PBMC240 raw",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 10.98913125971697,
+      "cells": 237,
+      "rejected": 0.03375527426160337
+    },
+    {
+      "dataset": "PBMC240 raw",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "scheme": "fixed",
+      "upload_diversity": 10.98913125971697,
+      "cells": 237,
+      "rejected": 0.016877637130801686
+    },
+    {
+      "dataset": "SCoPE2 (macrophage/monocyte)",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 12.477190309530824,
+      "cells": 1490,
+      "rejected": 0.18322147651006712
+    },
+    {
+      "dataset": "SCoPE2 (macrophage/monocyte)",
+      "score": "maxcos",
+      "scheme": "band",
+      "upload_diversity": 12.477190309530824,
+      "cells": 1490,
+      "rejected": 0.18322147651006712
+    },
+    {
+      "dataset": "SCoPE2 (macrophage/monocyte)",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "scheme": "fixed",
+      "upload_diversity": 12.477190309530824,
+      "cells": 1490,
+      "rejected": 0.0
+    }
+  ],
+  "minutes": 5.1
+}
