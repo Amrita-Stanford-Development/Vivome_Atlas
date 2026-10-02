@@ -160,15 +160,24 @@ def load_khoury2026_upload() -> alignment.RawMatrix:
     return raw
 
 
-def load_khoury2026_benchmark_matrix() -> tuple[np.ndarray, list[str], list[str]]:
+def load_khoury2026_benchmark_matrix(variant: str = "as_provided") -> tuple[np.ndarray, list[str], list[str]]:
     """The Khoury upload as the Track D baselines receive it: (cells x
     benchmark_gene_space()), the matrix values as provided (already log2),
     NaN wherever Khoury has no value. Genes match by exact symbol, so the 65
     multi-gene protein groups match nothing; a symbol listed twice takes the
     per-cell median. Label-free; the embedding steps that use it run only at
-    the final v3.1 evaluation (protocol-khoury2026.md, amendment 3)."""
+    the final v3.1 evaluation (protocol-khoury2026.md, amendment 3).
+    variant "cellmedian" (scANVI's second arm): the same values minus each
+    cell's median over its observed proteins in the full 3,732-row table, as
+    Fulcher's "log2_cellmedian"."""
     raw = load_khoury2026_upload()
-    df = pd.DataFrame(raw.values.T, index=raw.cell_ids, columns=[g.upper() for g in raw.gene_names])
+    values = raw.values  # "as_provided" is untouched, exactly as amendment 3 fixes it
+    if variant == "cellmedian":
+        values = values.astype(np.float64)
+        values = values - np.nanmedian(values, axis=0, keepdims=True)
+    elif variant != "as_provided":
+        raise ValueError(f"unknown variant {variant!r}")
+    df = pd.DataFrame(values.T, index=raw.cell_ids, columns=[g.upper() for g in raw.gene_names])
     if df.columns.duplicated().any():
         df = df.T.groupby(level=0).median().T
     genes = benchmark_gene_space()

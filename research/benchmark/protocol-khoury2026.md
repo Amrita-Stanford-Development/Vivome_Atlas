@@ -550,3 +550,85 @@ This protocol had no rule for a diverged run. Fulcher's protocol does
   rerun, with the same seed or another, and not replaced.
 - The tool's summary is over the runs that completed, and says how many
   that is.
+
+## Amendment 5, 2026-10-02, before unsealing: the final-evaluation scripts, rehearsed on Fulcher
+
+Khoury 2026 is still sealed. No label was read and nothing was embedded or
+trained. The only Khoury check was label-free, and the protocol allows it:
+the scANVI matrix loads, with 1,252 measured genes, as recorded at sealing.
+
+The scripts below are committed with this amendment, and that commit is the
+reference. Each one refuses to touch Khoury without `--unseal`.
+
+| Step | Command | Reads labels |
+|---|---|---|
+| 1. Gates, embeddings, v3.1 as served | `python -m benchmark.khoury2026_embed --unseal` | no |
+| 2. scANVI, 3 arms × 3 seeds | `python -m benchmark.scanvi_run_khoury2026 SEED ARM --unseal` | no |
+| 3. Baselines (amendment 3) | `python -m benchmark.baselines_run TOOL khoury2026 SEED --unseal` | no |
+| 4. Scoring, once | `python -m benchmark.khoury2026_score --unseal` | yes |
+
+Heavy steps run one at a time, in this order.
+
+**What the scripts fix, where the protocol left a choice:**
+
+- **Gates** (step 1, as amendment 2):
+  - each member against its own NB1d PBMC240 latents;
+  - `v31_dev_gate.run_gate`;
+  - the bundle's MANIFEST sha256s and both service flags on.
+
+  The record goes to `research/benchmark/khoury2026/gate.json`. If a gate
+  fails, nothing is embedded.
+- **v3 as served** is scored on the served files:
+  - `service/model/runtime/reference_model.pt`;
+  - nearest centroid on `reference_centroids.npy`;
+  - shared kNN on `reference_embedding.npy`.
+
+  Fulcher used NB1d's `v3_seed0` exports. The rehearsal below shows the two
+  give the same per-type recalls.
+- **v3.1's members** use the shared kNN rule on their own reference latents,
+  `service/model/v3_1/members/V2_seed{0..4}_reference_latent_f16.npy`.
+  These are byte-identical to NB1d's exports.
+- **scANVI's `cellmedian` arm** subtracts each cell's median over the full
+  3,732-row table, as Fulcher's did
+  (`datasets.load_khoury2026_benchmark_matrix("cellmedian")`).
+- **Metric code.** `khoury2026_score.score` is `fulcher2026_score.score`
+  with this protocol's five types and class mapping. Lineage comes from
+  `reference_metadata.csv`.
+- **Paired bootstraps,** on five-type balanced accuracy:
+  - v3.1 against v3 as served:
+    - best guess against nearest centroid;
+    - each member's shared kNN against v3's shared kNN.
+  - v3.1 against scANVI's headline arm:
+    - best guess against native;
+    - members' kNN against each seed's kNN.
+  - v3 against scANVI's headline arm: both rules.
+  - v3.1 against each baseline:
+    - members' kNN against MaxFuse's, scGLUE's and Harmony's kNN;
+    - best guess against Seurat CCA's native transfer;
+    - best guess against the correlation baseline.
+- **Outputs** go to `research/benchmark/khoury2026/`:
+  - `gate.json`;
+  - `per_seed_scores.csv`;
+  - `family_summary.csv`;
+  - `predicted_composition.csv`;
+  - `confusion.csv`;
+  - `paired_bootstrap.csv`;
+  - `v31_confident.json`;
+  - `summary.json` (headline arm, diverged runs, CI counts).
+
+**Rehearsal.** `--rehearse` runs the same code on Fulcher 2026, a
+development dataset, scoring its cells of the five types. Results:
+
+- **Gates.** All passed. Every member's median cosine is 1.0, and the dev
+  gate passed.
+- **Embeddings.** The latents match `fulcher2026_embed.py`'s to within
+  7.6e-7. That is the Mac-to-PC float32 difference.
+- **Scores.** Across 34 runs (v3.1, its members, v3, nine scANVI runs,
+  MaxFuse, Harmony, Seurat, correlation), every per-type recall matches
+  Fulcher's committed tables to within 0.0001 points. That is the
+  4-decimal rounding in the CSVs.
+- **Confident answers.** v3.1's confident-answer counts per type are
+  identical to `fulcher2026/v31_development.json`.
+- **Divergence.** scGLUE's diverged runs are listed and not scored.
+- **scANVI script.** A smoke rehearsal (3,000 RNA cells, few epochs) ran
+  all three arms.

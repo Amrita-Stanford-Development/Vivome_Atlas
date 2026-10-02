@@ -181,6 +181,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
 - `benchmark/fulcher2026_score.py` — Fulcher 2026 scoring, the only step that reads its labels: both rules, all metrics, the paired bootstrap
+- `benchmark/khoury2026_embed.py` — Khoury 2026 final evaluation, step 1 (`--unseal` only): the member and dev gates, then v3.1's members' and v3's embeddings and v3.1's served answers; `--rehearse` runs it on Fulcher
+- `benchmark/scanvi_run_khoury2026.py` — Khoury 2026 final evaluation, step 2 (`--unseal` only): scANVI, one arm and seed, Fulcher's setup; `--rehearse --smoke` checks the plumbing on Fulcher
+- `benchmark/khoury2026_score.py` — Khoury 2026 final evaluation, step 4: the scoring, the only step that reads Khoury's labels, run once; `--rehearse` scores Fulcher and checks against its tables
 - `benchmark/fulcher2026_product_check.py` — Fulcher 2026 product check: POSTs the upload to a running service with default settings and records the returned composition (label-free)
 - `benchmark/fulcher2026_v31.py` — Fulcher 2026 (development data) through v3.1: committed share, correctness at the stated level per author type, composition, best guess
 - `benchmark/notebook_convention.py` — NB2's own query parse (the "notebook convention"), to reproduce its development numbers; not the product parser

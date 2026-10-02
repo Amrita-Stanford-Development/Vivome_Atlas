@@ -138,12 +138,17 @@ reproduction runs.
 
 Following the publication plan below:
 
-1. **Write the Khoury scorer** and commit it before unsealing (amendment 3
-   requires it). It computes only the metrics the protocol fixes, with
-   `benchmark/baselines_score.py`'s metric code as the reference.
-2. **Unseal Khoury once,** following the protocol and its four amendments:
-   the v3.1 gates, then v3.1, v3, scANVI's headline arm and the five
-   baselines, then the scorer.
+1. **The Khoury final-evaluation scripts: done** (amendment 5).
+   `khoury2026_embed.py`, `scanvi_run_khoury2026.py` and
+   `khoury2026_score.py` were rehearsed on Fulcher. They reproduce
+   Fulcher's committed per-type recalls across 34 runs.
+2. **T1 NB3b before unsealing** (roadmap, "Order from here"). It covers the
+   out-of-distribution score, the two flags and restricted mode on RNA, and
+   the false-abstention rate. The paper's claim is honest abstention, and
+   Khoury is scored once. It can run on this PC's GPU. It needs the Drive's
+   RNA `.h5ad` and an out-of-reference dataset.
+3. **Unseal Khoury once,** in amendment 5's order. If v3.1 changes after
+   NB3b, an amendment fixes the new candidate first.
 3. Post the bioRxiv preprint, and choose the journal from the Khoury result.
 
 ## Owner decisions and standing instructions
