@@ -311,6 +311,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb3b/eval_flags_by_upload.csv` — T1 NB3b: NB2's rule and `set_includes_best_guess`, under today's and the chosen OOD rule, per evaluation upload
 - `research/notebook-outputs/nb3b/eval_flags_summary.csv` — T1 NB3b: the same, averaged: coverage, answer levels, abstention by reason, correct when committed
 - `research/notebook-outputs/nb3b/eval_restricted_summary.csv` — T1 NB3b: restricted mode on macrophage/monocyte uploads: NB2's rule, renormalised, and as served
+- `research/notebooks/t1_nb3c_ood_calibration.py` — T1 NB3c as a script: the OOD threshold recalibrated on test-split cells the encoders never saw, with class- and upload-diversity-aware schemes, judged on a fresh evaluation suite; reuses NB3b's code
 - `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)
 - `research/notebook-outputs/nb2/nb2_summary.json` — NB2: gates, the six choices, the evaluation-suite figures for v3.1 and v3, the negative control, the development datasets
