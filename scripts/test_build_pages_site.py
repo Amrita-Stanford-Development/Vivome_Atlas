@@ -18,8 +18,8 @@ class PlanTests(unittest.TestCase):
             with open(web / "data" / "big.csv", "wb") as handle:
                 handle.truncate(bps.MAX_BYTES + 1)
             static, large = bps.plan(web)
-        self.assertEqual(static, ["data/small.csv", "index.html"])
-        self.assertEqual(large, ["data/big.csv"])
+        self.assertEqual(static, [Path("data", "small.csv").as_posix(), "index.html"])
+        self.assertEqual(large, [Path("data", "big.csv").as_posix()])
 
     def test_the_real_site_fits_pages_once_the_large_files_go_to_r2(self):
         static, large = bps.plan()

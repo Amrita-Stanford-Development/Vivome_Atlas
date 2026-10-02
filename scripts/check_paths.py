@@ -55,6 +55,7 @@ ALLOWED_MISSING = (
     "benchmark/PROTOCOL.md",
     "web/plots/",  # the original-model plots, removed 2026-09-30
     "research/benchmark/khoury2026/",  # Khoury's tables, written once, at the final evaluation
+    "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
 )
 
 # Frozen historical records: their code samples use paths relative to files

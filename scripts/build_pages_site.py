@@ -24,7 +24,7 @@ WEB = REPO / "web"
 DIST = REPO / "dist"
 PROJECT = "vivome-atlas"
 MAX_BYTES = 25 * 1024 * 1024  # Cloudflare Pages' per-file limit
-SKIP = ("tests/", "README.md")  # repository material, not the site
+SKIP_DIRS, SKIP_FILES = ("tests",), ("README.md",)  # repository material, not the site
 UNUSED = ("data/atlas_RNA_lat128.parquet",)  # no page loads it
 
 NOT_FOUND = """<!doctype html>
@@ -54,7 +54,7 @@ def plan(web: Path = WEB) -> tuple[list[str], list[str]]:
     static, large = [], []
     for path in sorted(p for p in web.rglob("*") if p.is_file()):
         rel = path.relative_to(web).as_posix()
-        if rel.startswith(SKIP) or rel in UNUSED:
+        if rel.split("/")[0] in SKIP_DIRS or rel in SKIP_FILES or rel in UNUSED:
             continue
         (large if path.stat().st_size > MAX_BYTES else static).append(rel)
     return static, large
