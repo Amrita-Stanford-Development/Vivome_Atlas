@@ -207,6 +207,52 @@ def load_khoury2026_labels(*, unseal: bool = False) -> pd.DataFrame:
     return pd.DataFrame({"cell_id": raw.cell_ids, "label": meta[entry["label_column"]].map(entry["type_names"]).to_numpy()})
 
 
+_FURTWANGLER = REPO / "data" / "incoming" / "Furtwangler2025"
+
+# Out-of-reference test cells for T1 NB3b: healthy human bone marrow CD34+
+# stem and progenitor cells. The 85,233-cell reference holds only 198 such
+# cells (64 HSC, 131 hematopoietic precursor, 3 common myeloid progenitor),
+# so a projection should mostly abstain. A development dataset: NB3b may
+# choose an out-of-distribution score with it.
+FURTWANGLER2025 = {
+    "name": "Furtwängler 2025 (Science): scp-MS of human bone marrow CD34+ HSPCs, TMTpro (Zenodo 15554000)",
+    "role": "development: out-of-reference test cells for T1 NB3b's out-of-distribution score",
+    "source": "Zenodo 10.5281/zenodo.15554000, CC BY 4.0; hBM_scpMS_scRNAseq.zip, member "
+              "results/2_4_hBM_analysis/hBM_celltype.h5ad (the authors' processed, annotated cells)",
+    "files": {"h5ad": _FURTWANGLER / "hBM_celltype.h5ad"},
+    "sha256": {"h5ad": "cf88fe32cc45eb086c362b1e16d0e282fed37f673848626ad6e64342f9b612a0"},
+    # log2 of the normalised, batch-corrected TMT S/N, missing values kept missing (68% of entries).
+    "layer": "batchcorr_norm_log2_nan",
+    "gene_column": "Gene Symbol Protein",
+    "label_columns": {"cluster": "Cluster Label", "facs_gate": "Gated Population", "facs_sort": "Sorted Population"},
+}
+
+
+def _furtwangler2025_adata():
+    import anndata as ad
+    entry = FURTWANGLER2025
+    _check_hashes(entry)
+    return ad.read_h5ad(entry["files"]["h5ad"])
+
+
+def load_furtwangler2025_upload() -> alignment.RawMatrix:
+    """The 2,506 cells as an upload: genes x cells, log2, NaN where missing.
+    Cannot return labels."""
+    entry = FURTWANGLER2025
+    adata = _furtwangler2025_adata()
+    values = np.asarray(adata.layers[entry["layer"]], dtype=np.float32).T
+    return alignment.RawMatrix(gene_names=adata.var[entry["gene_column"]].astype(str).tolist(),
+                               cell_ids=adata.obs_names.astype(str).tolist(), values=values)
+
+
+def load_furtwangler2025_labels() -> pd.DataFrame:
+    """cell_id plus the authors' cluster label and FACS gate and sort, in upload order."""
+    entry = FURTWANGLER2025
+    obs = _furtwangler2025_adata().obs
+    return pd.DataFrame({"cell_id": obs.index.astype(str),
+                         **{k: obs[c].astype(str).to_numpy() for k, c in entry["label_columns"].items()}})
+
+
 if __name__ == "__main__":
     raw = load_fulcher2026_upload()
     print(f"Fulcher 2026 upload: {len(raw.gene_names)} genes x {len(raw.cell_ids)} cells (hashes verified)")

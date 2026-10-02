@@ -145,8 +145,12 @@ Following the publication plan below:
 2. **T1 NB3b before unsealing** (roadmap, "Order from here"). It covers the
    out-of-distribution score, the two flags and restricted mode on RNA, and
    the false-abstention rate. The paper's claim is honest abstention, and
-   Khoury is scored once. It can run on this PC's GPU. It needs the Drive's
-   RNA `.h5ad` and an out-of-reference dataset.
+   Khoury is scored once. It can run on this PC's GPU.
+   - **Ready:** the out-of-reference set. Furtwängler 2025's 2,506 CD34+
+     progenitors are registered. v3.1 as served flags only 1.3% of them as
+     out of distribution, and commits 40.6%, mostly as "T cell" or
+     "lymphoid" (results.md).
+   - **Waiting:** the Drive's RNA `.h5ad`, which the owner is downloading.
 3. **Unseal Khoury once,** in amendment 5's order. If v3.1 changes after
    NB3b, an amendment fixes the new candidate first.
 3. Post the bioRxiv preprint, and choose the journal from the Khoury result.

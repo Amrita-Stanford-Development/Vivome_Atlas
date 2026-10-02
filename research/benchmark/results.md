@@ -957,6 +957,44 @@ measure both on NB1's evaluation suite (coverage, correct when committed,
 answer levels) before they are trusted beyond these development datasets
 (`research/todo.md`, Track F).
 
+## v3.1 on out-of-reference cells: CD34+ progenitors (development data)
+
+**The test.**
+- **Cells:** 2,506 healthy human bone-marrow CD34+ stem and progenitor
+  cells (Furtwängler et al. 2025, *Science*; Zenodo 15554000, CC BY 4.0),
+  registered in `benchmark/datasets.py`.
+- **Why they are out of reference:** the 85,233-cell reference holds only
+  198 such cells (64 HSC, 131 hematopoietic precursor, 3 common myeloid
+  progenitor).
+- **Input:** the authors' log2 values, with missing values kept missing
+  (68%). 2,734 of the 9,002 feature genes match, and every cell passes the
+  200-gene floor.
+- **Run:** `benchmark/furtwangler2025_v31.py` projects them through v3.1 as
+  served ([furtwangler2025/v31_ood_check.json](furtwangler2025/v31_ood_check.json)).
+- **What honest behaviour looks like:** mostly abstention, ideally as
+  "outside supported region".
+
+| Answer | Cells | Share |
+|---|---|---|
+| Abstain: ambiguous between classes | 1,454 | 58.0% |
+| Group: T cell | 392 | 15.6% |
+| Lineage: lymphoid | 341 | 13.6% |
+| Lineage: myeloid | 208 | 8.3% |
+| Group: monocyte/macrophage | 37 | 1.5% |
+| **Abstain: outside supported region** | **32** | **1.3%** |
+| Other answers | 42 | 1.7% |
+
+- **The out-of-distribution filter barely fires.** It flags 32 of 2,506
+  cells. Of the 85 cells the authors' FACS gates call HSCs, it flags none,
+  and 22 get a committed answer.
+- **The committed answers are wrong in kind.** Stem and progenitor cells
+  are called "T cell" or "lymphoid". Their best guesses are mostly T cell
+  classes and plasma cells.
+- **This matches NB2's warning** that the filter passes 99% of scrambled
+  cells. It is the clearest case yet for T1 NB3b's better
+  out-of-distribution score. These cells are now that notebook's
+  out-of-reference test set, which makes them development data.
+
 ## Baselines beyond scANVI (Track D extension)
 
 Four established tools, plus a deliberately simple baseline, on SCoPE2,

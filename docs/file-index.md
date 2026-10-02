@@ -181,6 +181,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
 - `benchmark/fulcher2026_score.py` — Fulcher 2026 scoring, the only step that reads its labels: both rules, all metrics, the paired bootstrap
+- `benchmark/furtwangler2025_v31.py` — out-of-reference check: v3.1 as served on Furtwängler 2025's CD34+ progenitors (development data), counts by answer, cluster and FACS gate
 - `benchmark/khoury2026_embed.py` — Khoury 2026 final evaluation, step 1 (`--unseal` only): the member and dev gates, then v3.1's members' and v3's embeddings and v3.1's served answers; `--rehearse` runs it on Fulcher
 - `benchmark/scanvi_run_khoury2026.py` — Khoury 2026 final evaluation, step 2 (`--unseal` only): scANVI, one arm and seed, Fulcher's setup; `--rehearse --smoke` checks the plumbing on Fulcher
 - `benchmark/khoury2026_score.py` — Khoury 2026 final evaluation, step 4: the scoring, the only step that reads Khoury's labels, run once; `--rehearse` scores Fulcher and checks against its tables
@@ -254,6 +255,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/fulcher2026/exploratory_5type_per_seed.csv` — Fulcher 2026, exploratory (added after results): 5-type score with CD4T and CD8T merged into T, per model-seed and rule
 - `research/benchmark/fulcher2026/exploratory_5type_summary.csv` — Fulcher 2026, exploratory (added after results): the 5-type score's mean, SD, min and max per family and rule
 - `research/benchmark/fulcher2026/v31_development.json` — Fulcher 2026 through v3.1 (development data): shares, composition, per author type correctness at the stated level, best guess
+- `research/benchmark/furtwangler2025/v31_ood_check.json` — v3.1 as served on 2,506 CD34+ progenitors: answers, best guesses, and out-of-distribution and committed counts per cluster and FACS gate
 - `research/benchmark/baselines/inputs.csv` — Track D extension: what every baseline received per dataset (cells, genes, scaling, missing values, settings)
 - `research/benchmark/baselines/scope2_per_seed.csv` — Track D extension, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
 - `research/benchmark/baselines/scope2_summary.csv` — Track D extension, SCoPE2: mean, SD, min, max and count per tool, rule and regime
