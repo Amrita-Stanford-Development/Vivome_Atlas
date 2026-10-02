@@ -300,6 +300,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb1d/scanvi_pbmc240_lineage_recall_and_composition.csv` — Track D: scANVI lineage recall and predicted composition on PBMC240
 - `research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv` — Track D: scANVI on PBMC240 with raw vs. processed input
 - `research/notebook-outputs/nb2/nb2_core.py` — NB2's reference implementation of the label space, decision rule, abstention and conformal sets; the v3.1 tests compare against it
+- `research/notebook-outputs/nb2/nb1b_core.py` — NB1b's model, standardisation, encoding and query-preprocessing code, extracted verbatim from NB2's cell 2 (NB2 wrote it with `%%writefile`); T1 NB3b reuses it
+- `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)
 - `research/notebook-outputs/nb2/nb2_summary.json` — NB2: gates, the six choices, the evaluation-suite figures for v3.1 and v3, the negative control, the development datasets
 - `research/notebook-outputs/nb2/tables/*.csv` — NB2's tables: screening, label space grid, temperatures, conformal choice, evaluation (summary, by upload, per-class coverage), negative control, class hierarchy, development datasets

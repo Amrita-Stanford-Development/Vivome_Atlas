@@ -52,7 +52,8 @@ Vivome_Atlas/
 ├── research/                 THE R&D RECORD
 │   ├── roadmap.md  todo.md   the current plan, and progress against it
 │   ├── benchmark/            the benchmark write-up: methodology, harness, results, limitations
-│   ├── notebook-outputs/     committed tables from Colab notebook runs (nb1, nb1c, nb1d)
+│   ├── notebooks/            notebook-style research scripts run on the PC (from T1 NB3b on)
+│   ├── notebook-outputs/     committed tables from notebook runs (nb1, nb1c, nb1d, nb2, nb3b)
 │   └── archive/              finished plans, frozen as written
 │
 └── data/                     EXTERNAL DATASETS
@@ -71,6 +72,7 @@ Vivome_Atlas/
 | A table that backs a model claim | `service/model/evidence/` | cite it from `MODEL_CARD.md` |
 | A new benchmark arm | `benchmark/` | results in `research/benchmark/results.md` |
 | Output tables from a notebook run | `research/notebook-outputs/<run>/` | an entry in `research/notebook-run-history.md` |
+| A notebook-style research script run on the PC | `research/notebooks/` | its outputs in `research/notebook-outputs/<run>/` |
 | A plan, decision, or finding | `research/` | a changelog line in `research/todo.md` |
 | Documentation of how something works | `docs/web/` or `docs/service/` | a line in `docs/README.md` |
 | A downloaded or delivered dataset | `data/incoming/` (local only) | commit only the small tables that numbers cite |
