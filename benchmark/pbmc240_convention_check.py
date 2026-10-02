@@ -1,13 +1,19 @@
-"""Measures the divergence between the SERVICE convention (per-cell/dataset
+"""Historical record, kept as written: this measures the service convention
+as it was before commit 2334e48 (Track A2), not today's. The service now
+log-transforms linear input, collapses duplicate genes and z-scores the
+smoothing graph's input (pipeline._prepare_query); the reproduction gates
+measure today's agreement with the notebooks (research/benchmark/
+known-limitations.md, the convention gap section, now resolved).
+
+Measures the divergence between the SERVICE convention as it was (per-cell/dataset
 nan_to_num on raw values for Stage 2's smoothing graph, z-scoring only
-inside align_to_feature_space -- service/pipeline/pipeline.py's actual,
-unchanged code) and the NOTEBOOK convention (dataset-level median fill then
+inside align_to_feature_space) and the NOTEBOOK convention (dataset-level median fill then
 z-score, reused for both alignment and the smoothing graph) on a real
 dataset that actually has missing values. The SCoPE2 export
 (service/model/source/app_export/) has none, so it can't reveal this gap --
 service/tests/test_e2e_real_export.py's ~0.9985 median cosine is as close
 as that dataset can show. Does NOT change either convention -- measurement
-only. See research/benchmark/known-limitations.md#the-full_query_values-convention-gap-service-vs-notebook.
+only. See research/benchmark/known-limitations.md#the-full_query_values-convention-gap--service-vs-notebook--resolved.
 
 Input: a minimal, disclosed gene-level reduction of the raw DIA-NN search
 output (service/examples/pbmc240_proteins_raw.tsv) -- not the undocumented

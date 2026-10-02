@@ -64,9 +64,27 @@ approximately reconstruct. `service/model/source/app_export/README.md` documents
 why these specific files are now committed (with the raw TSV under Git
 LFS) for exactly this reason.
 
-## The `full_query_values` convention gap — service vs. notebook (open, not fixed)
+## The `full_query_values` convention gap — service vs. notebook — RESOLVED
 
-**Status: found, measured, deliberately not fixed yet** — this is a
+**Resolution (`2334e48`, Track A2, 2026-09-25).** The service now:
+
+- log-transforms linear-scale input first (Stage 0);
+- collapses duplicate gene rows;
+- builds Stage 2's smoothing graph on per-gene z-scored values
+  (`alignment.zscore_per_gene`), not raw values with zeros.
+
+The measured check is the reproduction gate on this same high-missingness
+input, PBMC240 raw (63% missing). Through the current `pipeline.embed_query`,
+the median cosine against NB1d's notebook latents is:
+
+- 0.99965 for V2 and 0.99954 for v3 (`research/benchmark/fulcher2026/gate.json`);
+- 1.0 for each of v3.1's five members (Khoury amendment 5's rehearsal).
+
+`benchmark/pbmc240_convention_check.py` still measures the old convention
+described below, as the record of the gap. The rest of this section is kept
+as written.
+
+**Status as first written: found, measured, deliberately not fixed yet** — this is a
 different, standing gap from the two resolved bugs above, and should not be
 confused with either.
 

@@ -63,12 +63,14 @@ document:** "ours" here is scored directly against
 `prot_embedding_scope2.npy` (the notebook's own saved embedding), never
 re-derived through `service/pipeline`. Whether a live user uploading a
 similar file to the real API would get an embedding this close to the
-notebook's depends on a currently-unresolved convention gap between
+notebook's depended on a convention gap between
 `service/pipeline/pipeline.py` and the notebook — see
-[known-limitations.md](known-limitations.md#the-full_query_values-convention-gap-service-vs-notebook).
-On dense data like SCoPE2 the gap is small (~0.9985 median cosine); on data
+[known-limitations.md](known-limitations.md#the-full_query_values-convention-gap--service-vs-notebook--resolved).
+On dense data like SCoPE2 the gap was small (~0.9985 median cosine); on data
 with substantial missing values (typical for real single-cell proteomics)
-it can be severe (~0.78 median, some cells anti-correlated). This is about
+it was severe (~0.78 median, some cells anti-correlated). It was resolved in
+`2334e48`. On PBMC240 raw (63% missing) the service now reproduces the
+notebooks' latents at a median cosine of 0.9995 or higher. This is about
 the *live service's* fidelity, not about anything reported below.
 
 **A methodological asymmetry that applies to every scANVI comparison in

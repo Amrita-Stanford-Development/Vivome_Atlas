@@ -14,19 +14,23 @@ Every pipeline decision below came from a specific measured failure in this
 project, documented in full in [`../docs/service/context-brief.md`](../docs/service/context-brief.md)
 and [`../docs/service/download-checklist.md`](../docs/service/download-checklist.md) — relocated
 here verbatim from the staging area they were written in, so the original
-rationale stays in the repo, not just this document's paraphrase of it. The
-short version, stage by stage:
+rationale stays in the repo, not just this document's paraphrase of it.
 
-| Stage | File | Decision that looks wrong at first glance |
+Two pipeline versions share stages 1, 2 and 8. **v3.1** (the default, T1
+NB2's specification in `model/v3_1/nb2_spec_v31.json`, built in
+`pipeline/ensemble.py`) replaces stages 3 to 7. **v3** (the previous
+release) keeps them. Stage by stage:
+
+| Stage | v3.1 (default) | v3 (previous release): file, and the decision that looks wrong at first glance |
 |---|---|---|
-| 1. Query alignment | `pipeline/alignment.py` | Zero-fill the full 9,002-gene space; never restrict to well-covered genes |
-| 2. Fuzzy smoothing | `pipeline/smoothing.py` | Build the neighbour graph from the query's own full feature set, not the shared space |
-| 3. Reference encoder | `pipeline/encoder.py` | Module pooling + explicit mask channel; uniform random masking beat detection-mimicking masking twice |
-| 4. Label assignment | `pipeline/assignment.py` | Restricted to classes with real cross-modal support (2 of 22) — a 48.7-point balanced-accuracy swing; nearest-centroid beat OT on real protein data, inverting an RNA-only-derived recommendation; unbalanced OT (still implemented) needs a **relaxed** marginal (tau ~0.1) — tightening it once collapsed accuracy 72%→47% |
-| 5. Conformal calibration | `pipeline/calibration.py` | Calibrate on a **random** query slice, never confidence-filtered |
-| 6. Abstention | `pipeline/abstention.py` | Max cosine similarity to any single reference cell, never neighbour vote share |
-| 7. Hierarchical fallback | `pipeline/fallback.py` | Five distinct confusable pairs implemented (the brief names six phrases, but two name the same pair) — only one is currently reachable, see "Known sharp edges" |
-| 8. Property transfer | `pipeline/transfer.py` | Only 6 of 8 candidate properties passed validation; ship those with an uncertainty, not all with a caveat |
+| 1. Query alignment | shared | `pipeline/alignment.py`: zero-fill the full 9,002-gene space; never restrict to well-covered genes |
+| 2. Fuzzy smoothing | shared | `pipeline/smoothing.py`: build the neighbour graph from the query's own full feature set, not the shared space |
+| 3. Reference encoder | Five V2 encoders (NB1b's mini-upload gene z variant, v3's architecture and input shape) | `pipeline/encoder.py`: module pooling + explicit mask channel; uniform random masking beat detection-mimicking masking twice |
+| 4. Label assignment | Each member: softmax of cosine to its class centroids over its fitted temperature; the ensemble averages the probabilities. All 22 classes; no per-upload label space | `pipeline/assignment.py`: nearest-centroid beat OT on real protein data, inverting an RNA-only-derived recommendation; unbalanced OT (still implemented) needs a **relaxed** marginal (tau ~0.1), and tightening it once collapsed accuracy from 72% to 47%. Restricting to the 2 classes with cross-modal support swings balanced accuracy by 48.7 points on SCoPE2 and is opt-in (below) |
+| 5. Conformal calibration | Mondrian: one threshold per class, from NB2 (`calibration.MondrianCalibrator`) | `pipeline/calibration.py`: calibrate on a **random** query slice, never confidence-filtered |
+| 6. Abstention | Out of distribution when the members' mean max cosine to any reference cell is below NB2's fixed 0.779 (`abstention.V31AbstentionScorer`) | `pipeline/abstention.py`: max cosine similarity to any single reference cell, never neighbour vote share |
+| 7. The answer | One class; or the group or lineage the conformal set shares; or abstain with a reason (`ensemble.resolve`). Every cell not refused for coverage also gets a best guess | `pipeline/fallback.py`: five distinct confusable pairs implemented (the brief names six phrases, but two name the same pair); only one is reachable under restriction, see "Known sharp edges" |
+| 8. Property transfer | shared, through one member (`config.V31_COORDINATE_MEMBER`, seed 4), the one the site's atlas coordinates come from | `pipeline/transfer.py`: only 6 of 8 candidate properties passed validation; ship those with an uncertainty, not all with a caveat |
 
 Read the module docstrings for the numbers behind each of these — they are
 not defaults, they are validated findings, several of them counter to what
@@ -34,14 +38,20 @@ looks like the safer or more obvious choice.
 
 ## What exists today
 
-Every contract artifact is real: `reference_model.pt` (the trained v3
-checkpoint, `config.ENCODER_WEIGHTS_PATH`'s default now), `reference_
-embedding.npy`, `reference_centroids.npy`, `provenance.json`, and per-cell
-property values. See `model/README.md` for the complete list and `model/
-README.md`'s "Known gaps" for the two things that are real but not yet
-fully wired in (the assignment-method comparison hasn't been re-run inside
-the restricted candidate set, and the abstain threshold is still computed
-live rather than from `provenance.json`'s calibrated value).
+Every contract artifact is real.
+
+- **v3.1:** `model/v3_1/` holds NB2's specification, a `MANIFEST.json` of
+  sha256s checked on load, and each member's reference latents and class
+  centroids. The five member checkpoints live outside git (below).
+- **v3:** `model/runtime/` holds `reference_model.pt` (the trained v3
+  checkpoint), `reference_embedding.npy`, `reference_centroids.npy`,
+  `provenance.json`, and per-cell property values.
+
+See `model/README.md` for the complete list, and its "Known gaps" for v3's
+two items that are real but not fully wired in. The assignment-method
+comparison hasn't been re-run inside the restricted candidate set. The
+abstain threshold is still computed live, not taken from `provenance.json`'s
+calibrated value.
 
 Every pipeline stage is implemented, tested (`tests/`, against synthetic
 reference fixtures at the real 85,233-cell scale, deliberately kept

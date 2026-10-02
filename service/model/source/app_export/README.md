@@ -1,5 +1,9 @@
 # app_export — real notebook artifacts
 
+These are v3's artifacts. Since release 0.3.0 the served default is v3.1
+(`service/model/v3_1/`). v3 stays selectable, and these files still validate
+its pipeline.
+
 Four files from `VivOME_Prototype_Export.ipynb`'s v3 export bundle, added
 here specifically because this exact set was lost once before: an earlier
 version of this project had them staged (unpromoted) at

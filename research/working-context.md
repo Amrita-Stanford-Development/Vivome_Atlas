@@ -228,11 +228,6 @@ Following the publication plan below:
 - **Release protocol:**
   - label stability from 0.2.0 to 0.3.0 needs a definition first;
   - a DOI needs the owner's archive account.
-- **Docs that still describe v3:**
-  - the stage table in `service/README.md`;
-  - `service/examples/README.md`;
-  - `service/model/source/app_export/README.md`;
-  - `benchmark/pbmc240_convention_check.py`.
 - **Not started:**
   - the rest of Track E: registry, download scripts, leakage guard,
     further MS datasets;

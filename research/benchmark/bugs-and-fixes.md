@@ -43,7 +43,7 @@ activation function was the entire remaining gap once that exact
 preprocessing is used. Running the real *production* pipeline
 (`service/pipeline/pipeline.py`'s actual, un-changed Stage 2 convention,
 which differs from the notebook's — see
-[known-limitations.md](known-limitations.md#the-full_query_values-convention-gap-service-vs-notebook))
+[known-limitations.md](known-limitations.md#the-full_query_values-convention-gap--service-vs-notebook--resolved))
 with the same GELU fix reaches ~0.9985 median cosine on this same input,
 not exactly 1.0 — still an enormous improvement over the ~0.75 the ReLU
 bug produced, but a second, smaller, separate, and currently unfixed
