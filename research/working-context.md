@@ -142,18 +142,22 @@ Following the publication plan below:
    `khoury2026_embed.py`, `scanvi_run_khoury2026.py` and
    `khoury2026_score.py` were rehearsed on Fulcher. They reproduce
    Fulcher's committed per-type recalls across 34 runs.
-2. **T1 NB3b before unsealing** (roadmap, "Order from here"). It covers the
-   out-of-distribution score, the two flags and restricted mode on RNA, and
-   the false-abstention rate. The paper's claim is honest abstention, and
-   Khoury is scored once. It can run on this PC's GPU.
-   - **Ready:** the out-of-reference set. Furtwängler 2025's 2,506 CD34+
-     progenitors are registered. v3.1 as served flags only 1.3% of them as
-     out of distribution, and commits 40.6%, mostly as "T cell" or
-     "lymphoid" (results.md).
-   - **Waiting:** the Drive's RNA `.h5ad`, which the owner is downloading.
+2. **T1 NB3b: run 2026-10-02, NO GO** (`research/notebook-run-history.md`
+   entry 18).
+   - **What it found:** energy separates out-of-distribution cells far
+     better than today's max cosine. But no score's threshold holds:
+     - calibration on validation cells under-covers test cells about 2x;
+     - per-upload gene z makes the score depend on upload composition
+       (single-type uploads abstain 34%).
+   - **Owner decision pending:**
+     - keep 0.3.0's rule and unseal Khoury with the weakness stated;
+     - a follow-up (NB3c) with new pre-fixed rules: calibration on
+       held-out cells, an upload-composition-aware threshold, and a fresh
+       evaluation suite, since NB3b's has now been used;
+     - adopt energy and accept about 10% false abstention.
 3. **Unseal Khoury once,** in amendment 5's order. If v3.1 changes after
    NB3b, an amendment fixes the new candidate first.
-3. Post the bioRxiv preprint, and choose the journal from the Khoury result.
+4. Post the bioRxiv preprint, and choose the journal from the Khoury result.
 
 ## Owner decisions and standing instructions
 

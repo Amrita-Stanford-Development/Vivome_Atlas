@@ -301,6 +301,16 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb1d/scanvi_pbmc240_input_variants.csv` — Track D: scANVI on PBMC240 with raw vs. processed input
 - `research/notebook-outputs/nb2/nb2_core.py` — NB2's reference implementation of the label space, decision rule, abstention and conformal sets; the v3.1 tests compare against it
 - `research/notebook-outputs/nb2/nb1b_core.py` — NB1b's model, standardisation, encoding and query-preprocessing code, extracted verbatim from NB2's cell 2 (NB2 wrote it with `%%writefile`); T1 NB3b reuses it
+- `research/notebook-outputs/nb3b/summary.json` — T1 NB3b's gate against NB2, the chosen score, its thresholds, the go / no go criteria and result, real-data rejection, flags
+- `research/notebook-outputs/nb3b/candidates_calsel.csv` — T1 NB3b: every candidate OOD score on the calibration SELECT half: false abstention, control AUROCs and rejection rates (the choice)
+- `research/notebook-outputs/nb3b/eval_candidates.csv` — T1 NB3b: the same for every candidate on the evaluation suite, scored once
+- `research/notebook-outputs/nb3b/eval_false_abstention_by_upload.csv` — T1 NB3b: false abstention per evaluation upload (chosen score, max cosine, NB2's rule), with scenario and profile
+- `research/notebook-outputs/nb3b/eval_false_abstention_per_class.csv` — T1 NB3b: the chosen score's false abstention per reference class
+- `research/notebook-outputs/nb3b/real_data_rejection.csv` — T1 NB3b: OOD rejection on the CD34+ progenitors, Fulcher, PBMC240 and SCoPE2 (reported only)
+- `research/notebook-outputs/nb3b/furtwangler_rejection_by_cluster.csv` — T1 NB3b: rejection of the CD34+ progenitors per author cluster, chosen score and NB2's rule
+- `research/notebook-outputs/nb3b/eval_flags_by_upload.csv` — T1 NB3b: NB2's rule and `set_includes_best_guess`, under today's and the chosen OOD rule, per evaluation upload
+- `research/notebook-outputs/nb3b/eval_flags_summary.csv` — T1 NB3b: the same, averaged: coverage, answer levels, abstention by reason, correct when committed
+- `research/notebook-outputs/nb3b/eval_restricted_summary.csv` — T1 NB3b: restricted mode on macrophage/monocyte uploads: NB2's rule, renormalised, and as served
 - `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)
 - `research/notebook-outputs/nb2/nb2_summary.json` — NB2: gates, the six choices, the evaluation-suite figures for v3.1 and v3, the negative control, the development datasets

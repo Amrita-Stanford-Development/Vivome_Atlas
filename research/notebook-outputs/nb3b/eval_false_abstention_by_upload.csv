@@ -1,0 +1,721 @@
+score,id,scenario,profile,cells,rejected,false_abstention
+energy,eval_0000,random_1,random_0.15,400,214,0.53500
+maxcos,eval_0000,random_1,random_0.15,400,57,0.14250
+"maxcos (NB2 rule, 0.779)",eval_0000,random_1,random_0.15,400,2,0.00500
+energy,eval_0001,random_2,pbmc240,29,3,0.10345
+maxcos,eval_0001,random_2,pbmc240,29,12,0.41379
+"maxcos (NB2 rule, 0.779)",eval_0001,random_2,pbmc240,29,7,0.24138
+energy,eval_0002,random_3,fulcher,400,86,0.21500
+maxcos,eval_0002,random_3,fulcher,400,97,0.24250
+"maxcos (NB2 rule, 0.779)",eval_0002,random_3,fulcher,400,77,0.19250
+energy,eval_0003,random_5,random_0.25,144,0,0.00000
+maxcos,eval_0003,random_5,random_0.25,144,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0003,random_5,random_0.25,144,0,0.00000
+energy,eval_0004,random_8,pbmc240,95,0,0.00000
+maxcos,eval_0004,random_8,pbmc240,95,2,0.02105
+"maxcos (NB2 rule, 0.779)",eval_0004,random_8,pbmc240,95,1,0.01053
+energy,eval_0005,random_1,random_0.25,207,62,0.29952
+maxcos,eval_0005,random_1,random_0.25,207,42,0.20290
+"maxcos (NB2 rule, 0.779)",eval_0005,random_1,random_0.25,207,0,0.00000
+energy,eval_0006,random_2,scope2,68,8,0.11765
+maxcos,eval_0006,random_2,scope2,68,11,0.16176
+"maxcos (NB2 rule, 0.779)",eval_0006,random_2,scope2,68,8,0.11765
+energy,eval_0007,random_3,fulcher,92,3,0.03261
+maxcos,eval_0007,random_3,fulcher,92,1,0.01087
+"maxcos (NB2 rule, 0.779)",eval_0007,random_3,fulcher,92,0,0.00000
+energy,eval_0008,random_5,pbmc240,58,10,0.17241
+maxcos,eval_0008,random_5,pbmc240,58,20,0.34483
+"maxcos (NB2 rule, 0.779)",eval_0008,random_5,pbmc240,58,8,0.13793
+energy,eval_0009,random_8,pbmc240,83,2,0.02410
+maxcos,eval_0009,random_8,pbmc240,83,9,0.10843
+"maxcos (NB2 rule, 0.779)",eval_0009,random_8,pbmc240,83,1,0.01205
+energy,eval_0010,myeloid,random_0.15,343,15,0.04373
+maxcos,eval_0010,myeloid,random_0.15,343,7,0.02041
+"maxcos (NB2 rule, 0.779)",eval_0010,myeloid,random_0.15,343,0,0.00000
+energy,eval_0011,lymphoid,scope2,72,0,0.00000
+maxcos,eval_0011,lymphoid,scope2,72,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0011,lymphoid,scope2,72,0,0.00000
+energy,eval_0012,pbmc_like,pbmc240,1000,1,0.00100
+maxcos,eval_0012,pbmc_like,pbmc240,1000,8,0.00800
+"maxcos (NB2 rule, 0.779)",eval_0012,pbmc_like,pbmc240,1000,4,0.00400
+energy,eval_0013,scope2_like,random_0.25,400,13,0.03250
+maxcos,eval_0013,scope2_like,random_0.25,400,3,0.00750
+"maxcos (NB2 rule, 0.779)",eval_0013,scope2_like,random_0.25,400,0,0.00000
+energy,eval_0014,random_1,pbmc240,71,10,0.14085
+maxcos,eval_0014,random_1,pbmc240,71,20,0.28169
+"maxcos (NB2 rule, 0.779)",eval_0014,random_1,pbmc240,71,2,0.02817
+energy,eval_0015,random_2,random_0.25,669,1,0.00149
+maxcos,eval_0015,random_2,random_0.25,669,2,0.00299
+"maxcos (NB2 rule, 0.779)",eval_0015,random_2,random_0.25,669,0,0.00000
+energy,eval_0016,random_3,random_0.35,385,0,0.00000
+maxcos,eval_0016,random_3,random_0.35,385,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0016,random_3,random_0.35,385,0,0.00000
+energy,eval_0017,random_5,random_0.35,128,1,0.00781
+maxcos,eval_0017,random_5,random_0.35,128,3,0.02344
+"maxcos (NB2 rule, 0.779)",eval_0017,random_5,random_0.35,128,1,0.00781
+energy,eval_0018,random_8,random_0.25,220,0,0.00000
+maxcos,eval_0018,random_8,random_0.25,220,1,0.00455
+"maxcos (NB2 rule, 0.779)",eval_0018,random_8,random_0.25,220,0,0.00000
+energy,eval_0019,random_1,random_0.25,40,34,0.85000
+maxcos,eval_0019,random_1,random_0.25,40,33,0.82500
+"maxcos (NB2 rule, 0.779)",eval_0019,random_1,random_0.25,40,3,0.07500
+energy,eval_0020,random_2,random_0.35,400,24,0.06000
+maxcos,eval_0020,random_2,random_0.35,400,15,0.03750
+"maxcos (NB2 rule, 0.779)",eval_0020,random_2,random_0.35,400,0,0.00000
+energy,eval_0021,random_3,random_0.15,298,1,0.00336
+maxcos,eval_0021,random_3,random_0.15,298,2,0.00671
+"maxcos (NB2 rule, 0.779)",eval_0021,random_3,random_0.15,298,0,0.00000
+energy,eval_0022,random_5,pbmc240,249,1,0.00402
+maxcos,eval_0022,random_5,pbmc240,249,1,0.00402
+"maxcos (NB2 rule, 0.779)",eval_0022,random_5,pbmc240,249,0,0.00000
+energy,eval_0023,random_8,scope2,768,3,0.00391
+maxcos,eval_0023,random_8,scope2,768,6,0.00781
+"maxcos (NB2 rule, 0.779)",eval_0023,random_8,scope2,768,0,0.00000
+energy,eval_0024,myeloid,pbmc240,92,6,0.06522
+maxcos,eval_0024,myeloid,pbmc240,92,23,0.25000
+"maxcos (NB2 rule, 0.779)",eval_0024,myeloid,pbmc240,92,4,0.04348
+energy,eval_0025,lymphoid,fulcher,223,2,0.00897
+maxcos,eval_0025,lymphoid,fulcher,223,10,0.04484
+"maxcos (NB2 rule, 0.779)",eval_0025,lymphoid,fulcher,223,4,0.01794
+energy,eval_0026,pbmc_like,random_0.35,400,0,0.00000
+maxcos,eval_0026,pbmc_like,random_0.35,400,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0026,pbmc_like,random_0.35,400,0,0.00000
+energy,eval_0027,scope2_like,scope2,400,1,0.00250
+maxcos,eval_0027,scope2_like,scope2,400,2,0.00500
+"maxcos (NB2 rule, 0.779)",eval_0027,scope2_like,scope2,400,1,0.00250
+energy,eval_0028,random_1,random_0.35,150,27,0.18000
+maxcos,eval_0028,random_1,random_0.35,150,12,0.08000
+"maxcos (NB2 rule, 0.779)",eval_0028,random_1,random_0.35,150,1,0.00667
+energy,eval_0029,random_2,random_0.35,62,46,0.74194
+maxcos,eval_0029,random_2,random_0.35,62,32,0.51613
+"maxcos (NB2 rule, 0.779)",eval_0029,random_2,random_0.35,62,1,0.01613
+energy,eval_0030,random_3,pbmc240,151,0,0.00000
+maxcos,eval_0030,random_3,pbmc240,151,6,0.03974
+"maxcos (NB2 rule, 0.779)",eval_0030,random_3,pbmc240,151,0,0.00000
+energy,eval_0031,random_5,pbmc240,74,0,0.00000
+maxcos,eval_0031,random_5,pbmc240,74,1,0.01351
+"maxcos (NB2 rule, 0.779)",eval_0031,random_5,pbmc240,74,0,0.00000
+energy,eval_0032,random_8,random_0.25,158,1,0.00633
+maxcos,eval_0032,random_8,random_0.25,158,3,0.01899
+"maxcos (NB2 rule, 0.779)",eval_0032,random_8,random_0.25,158,2,0.01266
+energy,eval_0033,random_1,pbmc240,150,51,0.34000
+maxcos,eval_0033,random_1,pbmc240,150,44,0.29333
+"maxcos (NB2 rule, 0.779)",eval_0033,random_1,pbmc240,150,2,0.01333
+energy,eval_0034,random_2,random_0.25,382,172,0.45026
+maxcos,eval_0034,random_2,random_0.25,382,270,0.70681
+"maxcos (NB2 rule, 0.779)",eval_0034,random_2,random_0.25,382,171,0.44764
+energy,eval_0035,random_3,scope2,111,0,0.00000
+maxcos,eval_0035,random_3,scope2,111,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0035,random_3,scope2,111,0,0.00000
+energy,eval_0036,random_5,fulcher,150,5,0.03333
+maxcos,eval_0036,random_5,fulcher,150,7,0.04667
+"maxcos (NB2 rule, 0.779)",eval_0036,random_5,fulcher,150,6,0.04000
+energy,eval_0037,random_8,random_0.15,158,2,0.01266
+maxcos,eval_0037,random_8,random_0.15,158,1,0.00633
+"maxcos (NB2 rule, 0.779)",eval_0037,random_8,random_0.15,158,0,0.00000
+energy,eval_0038,myeloid,random_0.25,2000,64,0.03200
+maxcos,eval_0038,myeloid,random_0.25,2000,49,0.02450
+"maxcos (NB2 rule, 0.779)",eval_0038,myeloid,random_0.25,2000,1,0.00050
+energy,eval_0039,lymphoid,random_0.25,837,628,0.75030
+maxcos,eval_0039,lymphoid,random_0.25,837,716,0.85544
+"maxcos (NB2 rule, 0.779)",eval_0039,lymphoid,random_0.25,837,355,0.42413
+energy,eval_0040,pbmc_like,random_0.15,154,0,0.00000
+maxcos,eval_0040,pbmc_like,random_0.15,154,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0040,pbmc_like,random_0.15,154,0,0.00000
+energy,eval_0041,scope2_like,random_0.35,930,16,0.01720
+maxcos,eval_0041,scope2_like,random_0.35,930,12,0.01290
+"maxcos (NB2 rule, 0.779)",eval_0041,scope2_like,random_0.35,930,1,0.00108
+energy,eval_0042,random_1,fulcher,26,2,0.07692
+maxcos,eval_0042,random_1,fulcher,26,4,0.15385
+"maxcos (NB2 rule, 0.779)",eval_0042,random_1,fulcher,26,2,0.07692
+energy,eval_0043,random_2,random_0.25,400,6,0.01500
+maxcos,eval_0043,random_2,random_0.25,400,3,0.00750
+"maxcos (NB2 rule, 0.779)",eval_0043,random_2,random_0.25,400,0,0.00000
+energy,eval_0044,random_3,fulcher,150,33,0.22000
+maxcos,eval_0044,random_3,fulcher,150,68,0.45333
+"maxcos (NB2 rule, 0.779)",eval_0044,random_3,fulcher,150,34,0.22667
+energy,eval_0045,random_5,fulcher,58,1,0.01724
+maxcos,eval_0045,random_5,fulcher,58,2,0.03448
+"maxcos (NB2 rule, 0.779)",eval_0045,random_5,fulcher,58,0,0.00000
+energy,eval_0046,random_8,random_0.15,568,3,0.00528
+maxcos,eval_0046,random_8,random_0.15,568,4,0.00704
+"maxcos (NB2 rule, 0.779)",eval_0046,random_8,random_0.15,568,0,0.00000
+energy,eval_0047,random_1,random_0.15,71,39,0.54930
+maxcos,eval_0047,random_1,random_0.15,71,25,0.35211
+"maxcos (NB2 rule, 0.779)",eval_0047,random_1,random_0.15,71,4,0.05634
+energy,eval_0048,random_2,pbmc240,653,108,0.16539
+maxcos,eval_0048,random_2,pbmc240,653,105,0.16080
+"maxcos (NB2 rule, 0.779)",eval_0048,random_2,pbmc240,653,40,0.06126
+energy,eval_0049,random_3,random_0.15,116,7,0.06034
+maxcos,eval_0049,random_3,random_0.15,116,7,0.06034
+"maxcos (NB2 rule, 0.779)",eval_0049,random_3,random_0.15,116,3,0.02586
+energy,eval_0050,random_5,random_0.25,141,0,0.00000
+maxcos,eval_0050,random_5,random_0.25,141,1,0.00709
+"maxcos (NB2 rule, 0.779)",eval_0050,random_5,random_0.25,141,1,0.00709
+energy,eval_0051,random_8,scope2,211,2,0.00948
+maxcos,eval_0051,random_8,scope2,211,4,0.01896
+"maxcos (NB2 rule, 0.779)",eval_0051,random_8,scope2,211,2,0.00948
+energy,eval_0052,myeloid,random_0.25,150,35,0.23333
+maxcos,eval_0052,myeloid,random_0.25,150,12,0.08000
+"maxcos (NB2 rule, 0.779)",eval_0052,myeloid,random_0.25,150,0,0.00000
+energy,eval_0053,lymphoid,random_0.15,400,9,0.02250
+maxcos,eval_0053,lymphoid,random_0.15,400,12,0.03000
+"maxcos (NB2 rule, 0.779)",eval_0053,lymphoid,random_0.15,400,5,0.01250
+energy,eval_0054,pbmc_like,fulcher,454,1,0.00220
+maxcos,eval_0054,pbmc_like,fulcher,454,1,0.00220
+"maxcos (NB2 rule, 0.779)",eval_0054,pbmc_like,fulcher,454,0,0.00000
+energy,eval_0055,scope2_like,scope2,931,6,0.00644
+maxcos,eval_0055,scope2_like,scope2,931,8,0.00859
+"maxcos (NB2 rule, 0.779)",eval_0055,scope2_like,scope2,931,0,0.00000
+energy,eval_0056,random_1,scope2,2000,243,0.12150
+maxcos,eval_0056,random_1,scope2,2000,148,0.07400
+"maxcos (NB2 rule, 0.779)",eval_0056,random_1,scope2,2000,4,0.00200
+energy,eval_0057,random_2,pbmc240,473,32,0.06765
+maxcos,eval_0057,random_2,pbmc240,473,32,0.06765
+"maxcos (NB2 rule, 0.779)",eval_0057,random_2,pbmc240,473,11,0.02326
+energy,eval_0058,random_3,random_0.25,75,0,0.00000
+maxcos,eval_0058,random_3,random_0.25,75,6,0.08000
+"maxcos (NB2 rule, 0.779)",eval_0058,random_3,random_0.25,75,3,0.04000
+energy,eval_0059,random_5,pbmc240,78,23,0.29487
+maxcos,eval_0059,random_5,pbmc240,78,37,0.47436
+"maxcos (NB2 rule, 0.779)",eval_0059,random_5,pbmc240,78,28,0.35897
+energy,eval_0060,random_8,pbmc240,151,6,0.03974
+maxcos,eval_0060,random_8,pbmc240,151,7,0.04636
+"maxcos (NB2 rule, 0.779)",eval_0060,random_8,pbmc240,151,1,0.00662
+energy,eval_0061,random_1,random_0.15,150,20,0.13333
+maxcos,eval_0061,random_1,random_0.15,150,5,0.03333
+"maxcos (NB2 rule, 0.779)",eval_0061,random_1,random_0.15,150,1,0.00667
+energy,eval_0062,random_2,random_0.25,337,64,0.18991
+maxcos,eval_0062,random_2,random_0.25,337,135,0.40059
+"maxcos (NB2 rule, 0.779)",eval_0062,random_2,random_0.25,337,63,0.18694
+energy,eval_0063,random_3,random_0.25,1000,0,0.00000
+maxcos,eval_0063,random_3,random_0.25,1000,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0063,random_3,random_0.25,1000,0,0.00000
+energy,eval_0064,random_5,random_0.15,462,8,0.01732
+maxcos,eval_0064,random_5,random_0.15,462,12,0.02597
+"maxcos (NB2 rule, 0.779)",eval_0064,random_5,random_0.15,462,5,0.01082
+energy,eval_0065,random_8,random_0.15,614,1,0.00163
+maxcos,eval_0065,random_8,random_0.15,614,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0065,random_8,random_0.15,614,0,0.00000
+energy,eval_0066,myeloid,random_0.25,149,12,0.08054
+maxcos,eval_0066,myeloid,random_0.25,149,10,0.06711
+"maxcos (NB2 rule, 0.779)",eval_0066,myeloid,random_0.25,149,0,0.00000
+energy,eval_0067,lymphoid,scope2,1352,8,0.00592
+maxcos,eval_0067,lymphoid,scope2,1352,84,0.06213
+"maxcos (NB2 rule, 0.779)",eval_0067,lymphoid,scope2,1352,22,0.01627
+energy,eval_0068,pbmc_like,random_0.15,399,0,0.00000
+maxcos,eval_0068,pbmc_like,random_0.15,399,1,0.00251
+"maxcos (NB2 rule, 0.779)",eval_0068,pbmc_like,random_0.15,399,1,0.00251
+energy,eval_0069,scope2_like,random_0.15,931,37,0.03974
+maxcos,eval_0069,scope2_like,random_0.15,931,13,0.01396
+"maxcos (NB2 rule, 0.779)",eval_0069,scope2_like,random_0.15,931,1,0.00107
+energy,eval_0070,random_1,random_0.15,150,56,0.37333
+maxcos,eval_0070,random_1,random_0.15,150,47,0.31333
+"maxcos (NB2 rule, 0.779)",eval_0070,random_1,random_0.15,150,9,0.06000
+energy,eval_0071,random_2,scope2,43,21,0.48837
+maxcos,eval_0071,random_2,scope2,43,18,0.41860
+"maxcos (NB2 rule, 0.779)",eval_0071,random_2,scope2,43,0,0.00000
+energy,eval_0072,random_3,fulcher,162,0,0.00000
+maxcos,eval_0072,random_3,fulcher,162,3,0.01852
+"maxcos (NB2 rule, 0.779)",eval_0072,random_3,fulcher,162,3,0.01852
+energy,eval_0073,random_5,pbmc240,633,9,0.01422
+maxcos,eval_0073,random_5,pbmc240,633,13,0.02054
+"maxcos (NB2 rule, 0.779)",eval_0073,random_5,pbmc240,633,3,0.00474
+energy,eval_0074,random_8,random_0.35,160,0,0.00000
+maxcos,eval_0074,random_8,random_0.35,160,1,0.00625
+"maxcos (NB2 rule, 0.779)",eval_0074,random_8,random_0.35,160,1,0.00625
+energy,eval_0075,random_1,random_0.35,400,334,0.83500
+maxcos,eval_0075,random_1,random_0.35,400,351,0.87750
+"maxcos (NB2 rule, 0.779)",eval_0075,random_1,random_0.35,400,61,0.15250
+energy,eval_0076,random_2,scope2,1000,3,0.00300
+maxcos,eval_0076,random_2,scope2,1000,20,0.02000
+"maxcos (NB2 rule, 0.779)",eval_0076,random_2,scope2,1000,5,0.00500
+energy,eval_0077,random_3,scope2,1000,1,0.00100
+maxcos,eval_0077,random_3,scope2,1000,6,0.00600
+"maxcos (NB2 rule, 0.779)",eval_0077,random_3,scope2,1000,0,0.00000
+energy,eval_0078,random_5,random_0.15,1794,1,0.00056
+maxcos,eval_0078,random_5,random_0.15,1794,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0078,random_5,random_0.15,1794,0,0.00000
+energy,eval_0079,random_8,random_0.15,155,2,0.01290
+maxcos,eval_0079,random_8,random_0.15,155,4,0.02581
+"maxcos (NB2 rule, 0.779)",eval_0079,random_8,random_0.15,155,0,0.00000
+energy,eval_0080,myeloid,random_0.25,142,2,0.01408
+maxcos,eval_0080,myeloid,random_0.25,142,8,0.05634
+"maxcos (NB2 rule, 0.779)",eval_0080,myeloid,random_0.25,142,0,0.00000
+energy,eval_0081,lymphoid,pbmc240,995,2,0.00201
+maxcos,eval_0081,lymphoid,pbmc240,995,18,0.01809
+"maxcos (NB2 rule, 0.779)",eval_0081,lymphoid,pbmc240,995,1,0.00101
+energy,eval_0082,pbmc_like,random_0.35,901,2,0.00222
+maxcos,eval_0082,pbmc_like,random_0.35,901,4,0.00444
+"maxcos (NB2 rule, 0.779)",eval_0082,pbmc_like,random_0.35,901,3,0.00333
+energy,eval_0083,scope2_like,random_0.25,150,4,0.02667
+maxcos,eval_0083,scope2_like,random_0.25,150,1,0.00667
+"maxcos (NB2 rule, 0.779)",eval_0083,scope2_like,random_0.25,150,0,0.00000
+energy,eval_0084,random_1,random_0.15,246,28,0.11382
+maxcos,eval_0084,random_1,random_0.15,246,6,0.02439
+"maxcos (NB2 rule, 0.779)",eval_0084,random_1,random_0.15,246,1,0.00407
+energy,eval_0085,random_2,fulcher,125,3,0.02400
+maxcos,eval_0085,random_2,fulcher,125,3,0.02400
+"maxcos (NB2 rule, 0.779)",eval_0085,random_2,fulcher,125,2,0.01600
+energy,eval_0086,random_3,fulcher,150,47,0.31333
+maxcos,eval_0086,random_3,fulcher,150,47,0.31333
+"maxcos (NB2 rule, 0.779)",eval_0086,random_3,fulcher,150,33,0.22000
+energy,eval_0087,random_5,scope2,106,0,0.00000
+maxcos,eval_0087,random_5,scope2,106,1,0.00943
+"maxcos (NB2 rule, 0.779)",eval_0087,random_5,scope2,106,1,0.00943
+energy,eval_0088,random_8,scope2,217,3,0.01382
+maxcos,eval_0088,random_8,scope2,217,5,0.02304
+"maxcos (NB2 rule, 0.779)",eval_0088,random_8,scope2,217,1,0.00461
+energy,eval_0089,random_1,random_0.15,71,30,0.42254
+maxcos,eval_0089,random_1,random_0.15,71,27,0.38028
+"maxcos (NB2 rule, 0.779)",eval_0089,random_1,random_0.15,71,4,0.05634
+energy,eval_0090,random_2,random_0.15,151,2,0.01325
+maxcos,eval_0090,random_2,random_0.15,151,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0090,random_2,random_0.15,151,0,0.00000
+energy,eval_0091,random_3,random_0.15,389,49,0.12596
+maxcos,eval_0091,random_3,random_0.15,389,7,0.01799
+"maxcos (NB2 rule, 0.779)",eval_0091,random_3,random_0.15,389,0,0.00000
+energy,eval_0092,random_5,random_0.25,156,0,0.00000
+maxcos,eval_0092,random_5,random_0.25,156,2,0.01282
+"maxcos (NB2 rule, 0.779)",eval_0092,random_5,random_0.25,156,0,0.00000
+energy,eval_0093,random_8,pbmc240,223,0,0.00000
+maxcos,eval_0093,random_8,pbmc240,223,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0093,random_8,pbmc240,223,0,0.00000
+energy,eval_0094,myeloid,pbmc240,156,0,0.00000
+maxcos,eval_0094,myeloid,pbmc240,156,3,0.01923
+"maxcos (NB2 rule, 0.779)",eval_0094,myeloid,pbmc240,156,0,0.00000
+energy,eval_0095,lymphoid,random_0.15,91,1,0.01099
+maxcos,eval_0095,lymphoid,random_0.15,91,2,0.02198
+"maxcos (NB2 rule, 0.779)",eval_0095,lymphoid,random_0.15,91,0,0.00000
+energy,eval_0096,pbmc_like,scope2,155,0,0.00000
+maxcos,eval_0096,pbmc_like,scope2,155,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0096,pbmc_like,scope2,155,0,0.00000
+energy,eval_0097,scope2_like,random_0.25,930,34,0.03656
+maxcos,eval_0097,scope2_like,random_0.25,930,20,0.02151
+"maxcos (NB2 rule, 0.779)",eval_0097,scope2_like,random_0.25,930,1,0.00108
+energy,eval_0098,random_1,scope2,779,364,0.46727
+maxcos,eval_0098,random_1,scope2,779,448,0.57510
+"maxcos (NB2 rule, 0.779)",eval_0098,random_1,scope2,779,61,0.07831
+energy,eval_0099,random_2,fulcher,150,3,0.02000
+maxcos,eval_0099,random_2,fulcher,150,1,0.00667
+"maxcos (NB2 rule, 0.779)",eval_0099,random_2,fulcher,150,0,0.00000
+energy,eval_0100,random_3,random_0.15,56,7,0.12500
+maxcos,eval_0100,random_3,random_0.15,56,11,0.19643
+"maxcos (NB2 rule, 0.779)",eval_0100,random_3,random_0.15,56,5,0.08929
+energy,eval_0101,random_5,random_0.15,101,0,0.00000
+maxcos,eval_0101,random_5,random_0.15,101,8,0.07921
+"maxcos (NB2 rule, 0.779)",eval_0101,random_5,random_0.15,101,3,0.02970
+energy,eval_0102,random_8,scope2,91,1,0.01099
+maxcos,eval_0102,random_8,scope2,91,4,0.04396
+"maxcos (NB2 rule, 0.779)",eval_0102,random_8,scope2,91,1,0.01099
+energy,eval_0103,random_1,scope2,150,24,0.16000
+maxcos,eval_0103,random_1,scope2,150,65,0.43333
+"maxcos (NB2 rule, 0.779)",eval_0103,random_1,scope2,150,13,0.08667
+energy,eval_0104,random_2,scope2,440,15,0.03409
+maxcos,eval_0104,random_2,scope2,440,21,0.04773
+"maxcos (NB2 rule, 0.779)",eval_0104,random_2,scope2,440,2,0.00455
+energy,eval_0105,random_3,fulcher,129,0,0.00000
+maxcos,eval_0105,random_3,fulcher,129,1,0.00775
+"maxcos (NB2 rule, 0.779)",eval_0105,random_3,fulcher,129,0,0.00000
+energy,eval_0106,random_5,random_0.15,150,3,0.02000
+maxcos,eval_0106,random_5,random_0.15,150,3,0.02000
+"maxcos (NB2 rule, 0.779)",eval_0106,random_5,random_0.15,150,3,0.02000
+energy,eval_0107,random_8,pbmc240,609,8,0.01314
+maxcos,eval_0107,random_8,pbmc240,609,14,0.02299
+"maxcos (NB2 rule, 0.779)",eval_0107,random_8,pbmc240,609,1,0.00164
+energy,eval_0108,myeloid,pbmc240,81,9,0.11111
+maxcos,eval_0108,myeloid,pbmc240,81,19,0.23457
+"maxcos (NB2 rule, 0.779)",eval_0108,myeloid,pbmc240,81,4,0.04938
+energy,eval_0109,lymphoid,random_0.35,223,0,0.00000
+maxcos,eval_0109,lymphoid,random_0.35,223,1,0.00448
+"maxcos (NB2 rule, 0.779)",eval_0109,lymphoid,random_0.35,223,0,0.00000
+energy,eval_0110,pbmc_like,scope2,360,0,0.00000
+maxcos,eval_0110,pbmc_like,scope2,360,1,0.00278
+"maxcos (NB2 rule, 0.779)",eval_0110,pbmc_like,scope2,360,1,0.00278
+energy,eval_0111,scope2_like,fulcher,931,13,0.01396
+maxcos,eval_0111,scope2_like,fulcher,931,21,0.02256
+"maxcos (NB2 rule, 0.779)",eval_0111,scope2_like,fulcher,931,7,0.00752
+energy,eval_0112,random_1,pbmc240,150,56,0.37333
+maxcos,eval_0112,random_1,pbmc240,150,39,0.26000
+"maxcos (NB2 rule, 0.779)",eval_0112,random_1,pbmc240,150,2,0.01333
+energy,eval_0113,random_2,random_0.35,150,7,0.04667
+maxcos,eval_0113,random_2,random_0.35,150,13,0.08667
+"maxcos (NB2 rule, 0.779)",eval_0113,random_2,random_0.35,150,7,0.04667
+energy,eval_0114,random_3,scope2,185,2,0.01081
+maxcos,eval_0114,random_3,scope2,185,3,0.01622
+"maxcos (NB2 rule, 0.779)",eval_0114,random_3,scope2,185,2,0.01081
+energy,eval_0115,random_5,random_0.25,401,0,0.00000
+maxcos,eval_0115,random_5,random_0.25,401,3,0.00748
+"maxcos (NB2 rule, 0.779)",eval_0115,random_5,random_0.25,401,0,0.00000
+energy,eval_0116,random_8,scope2,335,1,0.00299
+maxcos,eval_0116,random_8,scope2,335,2,0.00597
+"maxcos (NB2 rule, 0.779)",eval_0116,random_8,scope2,335,0,0.00000
+energy,eval_0117,random_1,random_0.15,914,170,0.18600
+maxcos,eval_0117,random_1,random_0.15,914,122,0.13348
+"maxcos (NB2 rule, 0.779)",eval_0117,random_1,random_0.15,914,12,0.01313
+energy,eval_0118,random_2,random_0.35,29,8,0.27586
+maxcos,eval_0118,random_2,random_0.35,29,15,0.51724
+"maxcos (NB2 rule, 0.779)",eval_0118,random_2,random_0.35,29,8,0.27586
+energy,eval_0119,random_3,pbmc240,36,1,0.02778
+maxcos,eval_0119,random_3,pbmc240,36,8,0.22222
+"maxcos (NB2 rule, 0.779)",eval_0119,random_3,pbmc240,36,3,0.08333
+energy,eval_0120,random_5,scope2,186,0,0.00000
+maxcos,eval_0120,random_5,scope2,186,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0120,random_5,scope2,186,0,0.00000
+energy,eval_0121,random_8,scope2,155,3,0.01935
+maxcos,eval_0121,random_8,scope2,155,5,0.03226
+"maxcos (NB2 rule, 0.779)",eval_0121,random_8,scope2,155,1,0.00645
+energy,eval_0122,myeloid,fulcher,2000,34,0.01700
+maxcos,eval_0122,myeloid,fulcher,2000,16,0.00800
+"maxcos (NB2 rule, 0.779)",eval_0122,myeloid,fulcher,2000,2,0.00100
+energy,eval_0123,lymphoid,random_0.15,150,25,0.16667
+maxcos,eval_0123,lymphoid,random_0.15,150,19,0.12667
+"maxcos (NB2 rule, 0.779)",eval_0123,lymphoid,random_0.15,150,4,0.02667
+energy,eval_0124,pbmc_like,random_0.25,398,1,0.00251
+maxcos,eval_0124,pbmc_like,random_0.25,398,2,0.00503
+"maxcos (NB2 rule, 0.779)",eval_0124,pbmc_like,random_0.25,398,1,0.00251
+energy,eval_0125,scope2_like,fulcher,400,7,0.01750
+maxcos,eval_0125,scope2_like,fulcher,400,3,0.00750
+"maxcos (NB2 rule, 0.779)",eval_0125,scope2_like,fulcher,400,2,0.00500
+energy,eval_0126,random_1,random_0.25,150,37,0.24667
+maxcos,eval_0126,random_1,random_0.25,150,21,0.14000
+"maxcos (NB2 rule, 0.779)",eval_0126,random_1,random_0.25,150,0,0.00000
+energy,eval_0127,random_2,scope2,272,3,0.01103
+maxcos,eval_0127,random_2,scope2,272,6,0.02206
+"maxcos (NB2 rule, 0.779)",eval_0127,random_2,scope2,272,1,0.00368
+energy,eval_0128,random_3,fulcher,217,46,0.21198
+maxcos,eval_0128,random_3,fulcher,217,51,0.23502
+"maxcos (NB2 rule, 0.779)",eval_0128,random_3,fulcher,217,39,0.17972
+energy,eval_0129,random_5,random_0.35,335,1,0.00299
+maxcos,eval_0129,random_5,random_0.35,335,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0129,random_5,random_0.35,335,0,0.00000
+energy,eval_0130,random_8,random_0.15,155,0,0.00000
+maxcos,eval_0130,random_8,random_0.15,155,4,0.02581
+"maxcos (NB2 rule, 0.779)",eval_0130,random_8,random_0.15,155,2,0.01290
+energy,eval_0131,random_1,random_0.15,400,234,0.58500
+maxcos,eval_0131,random_1,random_0.15,400,96,0.24000
+"maxcos (NB2 rule, 0.779)",eval_0131,random_1,random_0.15,400,6,0.01500
+energy,eval_0132,random_2,random_0.35,146,1,0.00685
+maxcos,eval_0132,random_2,random_0.35,146,1,0.00685
+"maxcos (NB2 rule, 0.779)",eval_0132,random_2,random_0.35,146,1,0.00685
+energy,eval_0133,random_3,random_0.25,307,14,0.04560
+maxcos,eval_0133,random_3,random_0.25,307,15,0.04886
+"maxcos (NB2 rule, 0.779)",eval_0133,random_3,random_0.25,307,2,0.00651
+energy,eval_0134,random_5,pbmc240,88,1,0.01136
+maxcos,eval_0134,random_5,pbmc240,88,4,0.04545
+"maxcos (NB2 rule, 0.779)",eval_0134,random_5,pbmc240,88,2,0.02273
+energy,eval_0135,random_8,scope2,278,1,0.00360
+maxcos,eval_0135,random_8,scope2,278,7,0.02518
+"maxcos (NB2 rule, 0.779)",eval_0135,random_8,scope2,278,3,0.01079
+energy,eval_0136,myeloid,pbmc240,98,2,0.02041
+maxcos,eval_0136,myeloid,pbmc240,98,24,0.24490
+"maxcos (NB2 rule, 0.779)",eval_0136,myeloid,pbmc240,98,10,0.10204
+energy,eval_0137,lymphoid,random_0.15,295,17,0.05763
+maxcos,eval_0137,lymphoid,random_0.15,295,10,0.03390
+"maxcos (NB2 rule, 0.779)",eval_0137,lymphoid,random_0.15,295,3,0.01017
+energy,eval_0138,pbmc_like,random_0.25,371,0,0.00000
+maxcos,eval_0138,pbmc_like,random_0.25,371,1,0.00270
+"maxcos (NB2 rule, 0.779)",eval_0138,pbmc_like,random_0.25,371,0,0.00000
+energy,eval_0139,scope2_like,random_0.15,930,29,0.03118
+maxcos,eval_0139,scope2_like,random_0.15,930,13,0.01398
+"maxcos (NB2 rule, 0.779)",eval_0139,scope2_like,random_0.15,930,3,0.00323
+energy,eval_0140,random_1,random_0.25,207,78,0.37681
+maxcos,eval_0140,random_1,random_0.25,207,67,0.32367
+"maxcos (NB2 rule, 0.779)",eval_0140,random_1,random_0.25,207,0,0.00000
+energy,eval_0141,random_2,pbmc240,149,2,0.01342
+maxcos,eval_0141,random_2,pbmc240,149,7,0.04698
+"maxcos (NB2 rule, 0.779)",eval_0141,random_2,pbmc240,149,2,0.01342
+energy,eval_0142,random_3,pbmc240,150,2,0.01333
+maxcos,eval_0142,random_3,pbmc240,150,14,0.09333
+"maxcos (NB2 rule, 0.779)",eval_0142,random_3,pbmc240,150,1,0.00667
+energy,eval_0143,random_5,random_0.35,152,2,0.01316
+maxcos,eval_0143,random_5,random_0.35,152,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0143,random_5,random_0.35,152,0,0.00000
+energy,eval_0144,random_8,fulcher,156,25,0.16026
+maxcos,eval_0144,random_8,fulcher,156,9,0.05769
+"maxcos (NB2 rule, 0.779)",eval_0144,random_8,fulcher,156,1,0.00641
+energy,eval_0145,random_1,random_0.25,246,21,0.08537
+maxcos,eval_0145,random_1,random_0.25,246,14,0.05691
+"maxcos (NB2 rule, 0.779)",eval_0145,random_1,random_0.25,246,0,0.00000
+energy,eval_0146,random_2,fulcher,354,0,0.00000
+maxcos,eval_0146,random_2,fulcher,354,4,0.01130
+"maxcos (NB2 rule, 0.779)",eval_0146,random_2,fulcher,354,0,0.00000
+energy,eval_0147,random_3,fulcher,203,1,0.00493
+maxcos,eval_0147,random_3,fulcher,203,2,0.00985
+"maxcos (NB2 rule, 0.779)",eval_0147,random_3,fulcher,203,0,0.00000
+energy,eval_0148,random_5,random_0.35,135,13,0.09630
+maxcos,eval_0148,random_5,random_0.35,135,26,0.19259
+"maxcos (NB2 rule, 0.779)",eval_0148,random_5,random_0.35,135,5,0.03704
+energy,eval_0149,random_8,random_0.15,406,2,0.00493
+maxcos,eval_0149,random_8,random_0.15,406,3,0.00739
+"maxcos (NB2 rule, 0.779)",eval_0149,random_8,random_0.15,406,1,0.00246
+energy,eval_0150,myeloid,fulcher,400,6,0.01500
+maxcos,eval_0150,myeloid,fulcher,400,2,0.00500
+"maxcos (NB2 rule, 0.779)",eval_0150,myeloid,fulcher,400,0,0.00000
+energy,eval_0151,lymphoid,random_0.15,112,13,0.11607
+maxcos,eval_0151,lymphoid,random_0.15,112,11,0.09821
+"maxcos (NB2 rule, 0.779)",eval_0151,lymphoid,random_0.15,112,1,0.00893
+energy,eval_0152,pbmc_like,fulcher,299,1,0.00334
+maxcos,eval_0152,pbmc_like,fulcher,299,4,0.01338
+"maxcos (NB2 rule, 0.779)",eval_0152,pbmc_like,fulcher,299,1,0.00334
+energy,eval_0153,scope2_like,fulcher,400,5,0.01250
+maxcos,eval_0153,scope2_like,fulcher,400,6,0.01500
+"maxcos (NB2 rule, 0.779)",eval_0153,scope2_like,fulcher,400,3,0.00750
+energy,eval_0154,random_1,random_0.15,98,86,0.87755
+maxcos,eval_0154,random_1,random_0.15,98,63,0.64286
+"maxcos (NB2 rule, 0.779)",eval_0154,random_1,random_0.15,98,10,0.10204
+energy,eval_0155,random_2,random_0.15,808,635,0.78589
+maxcos,eval_0155,random_2,random_0.15,808,403,0.49876
+"maxcos (NB2 rule, 0.779)",eval_0155,random_2,random_0.15,808,103,0.12748
+energy,eval_0156,random_3,fulcher,1083,9,0.00831
+maxcos,eval_0156,random_3,fulcher,1083,2,0.00185
+"maxcos (NB2 rule, 0.779)",eval_0156,random_3,fulcher,1083,0,0.00000
+energy,eval_0157,random_5,fulcher,414,4,0.00966
+maxcos,eval_0157,random_5,fulcher,414,13,0.03140
+"maxcos (NB2 rule, 0.779)",eval_0157,random_5,fulcher,414,2,0.00483
+energy,eval_0158,random_8,scope2,87,1,0.01149
+maxcos,eval_0158,random_8,scope2,87,2,0.02299
+"maxcos (NB2 rule, 0.779)",eval_0158,random_8,scope2,87,1,0.01149
+energy,eval_0159,random_1,random_0.25,88,43,0.48864
+maxcos,eval_0159,random_1,random_0.25,88,54,0.61364
+"maxcos (NB2 rule, 0.779)",eval_0159,random_1,random_0.25,88,2,0.02273
+energy,eval_0160,random_2,random_0.25,151,29,0.19205
+maxcos,eval_0160,random_2,random_0.25,151,18,0.11921
+"maxcos (NB2 rule, 0.779)",eval_0160,random_2,random_0.25,151,0,0.00000
+energy,eval_0161,random_3,random_0.35,150,3,0.02000
+maxcos,eval_0161,random_3,random_0.35,150,9,0.06000
+"maxcos (NB2 rule, 0.779)",eval_0161,random_3,random_0.35,150,2,0.01333
+energy,eval_0162,random_5,pbmc240,101,2,0.01980
+maxcos,eval_0162,random_5,pbmc240,101,5,0.04950
+"maxcos (NB2 rule, 0.779)",eval_0162,random_5,pbmc240,101,0,0.00000
+energy,eval_0163,random_8,scope2,170,0,0.00000
+maxcos,eval_0163,random_8,scope2,170,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0163,random_8,scope2,170,0,0.00000
+energy,eval_0164,myeloid,random_0.15,686,92,0.13411
+maxcos,eval_0164,myeloid,random_0.15,686,33,0.04810
+"maxcos (NB2 rule, 0.779)",eval_0164,myeloid,random_0.15,686,4,0.00583
+energy,eval_0165,lymphoid,scope2,268,4,0.01493
+maxcos,eval_0165,lymphoid,scope2,268,9,0.03358
+"maxcos (NB2 rule, 0.779)",eval_0165,lymphoid,scope2,268,3,0.01119
+energy,eval_0166,pbmc_like,random_0.25,157,0,0.00000
+maxcos,eval_0166,pbmc_like,random_0.25,157,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0166,pbmc_like,random_0.25,157,0,0.00000
+energy,eval_0167,scope2_like,fulcher,400,7,0.01750
+maxcos,eval_0167,scope2_like,fulcher,400,6,0.01500
+"maxcos (NB2 rule, 0.779)",eval_0167,scope2_like,fulcher,400,3,0.00750
+energy,eval_0168,random_1,random_0.15,779,625,0.80231
+maxcos,eval_0168,random_1,random_0.15,779,457,0.58665
+"maxcos (NB2 rule, 0.779)",eval_0168,random_1,random_0.15,779,136,0.17458
+energy,eval_0169,random_2,random_0.25,78,31,0.39744
+maxcos,eval_0169,random_2,random_0.25,78,33,0.42308
+"maxcos (NB2 rule, 0.779)",eval_0169,random_2,random_0.25,78,4,0.05128
+energy,eval_0170,random_3,fulcher,152,26,0.17105
+maxcos,eval_0170,random_3,fulcher,152,11,0.07237
+"maxcos (NB2 rule, 0.779)",eval_0170,random_3,fulcher,152,2,0.01316
+energy,eval_0171,random_5,random_0.15,154,0,0.00000
+maxcos,eval_0171,random_5,random_0.15,154,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0171,random_5,random_0.15,154,0,0.00000
+energy,eval_0172,random_8,random_0.35,269,0,0.00000
+maxcos,eval_0172,random_8,random_0.35,269,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0172,random_8,random_0.35,269,0,0.00000
+energy,eval_0173,random_1,pbmc240,150,58,0.38667
+maxcos,eval_0173,random_1,pbmc240,150,27,0.18000
+"maxcos (NB2 rule, 0.779)",eval_0173,random_1,pbmc240,150,12,0.08000
+energy,eval_0174,random_2,random_0.25,400,2,0.00500
+maxcos,eval_0174,random_2,random_0.25,400,3,0.00750
+"maxcos (NB2 rule, 0.779)",eval_0174,random_2,random_0.25,400,0,0.00000
+energy,eval_0175,random_3,random_0.35,34,6,0.17647
+maxcos,eval_0175,random_3,random_0.35,34,11,0.32353
+"maxcos (NB2 rule, 0.779)",eval_0175,random_3,random_0.35,34,5,0.14706
+energy,eval_0176,random_5,scope2,120,1,0.00833
+maxcos,eval_0176,random_5,scope2,120,1,0.00833
+"maxcos (NB2 rule, 0.779)",eval_0176,random_5,scope2,120,1,0.00833
+energy,eval_0177,random_8,random_0.25,155,1,0.00645
+maxcos,eval_0177,random_8,random_0.25,155,1,0.00645
+"maxcos (NB2 rule, 0.779)",eval_0177,random_8,random_0.25,155,1,0.00645
+energy,eval_0178,myeloid,scope2,150,13,0.08667
+maxcos,eval_0178,myeloid,scope2,150,16,0.10667
+"maxcos (NB2 rule, 0.779)",eval_0178,myeloid,scope2,150,1,0.00667
+energy,eval_0179,lymphoid,fulcher,169,2,0.01183
+maxcos,eval_0179,lymphoid,fulcher,169,4,0.02367
+"maxcos (NB2 rule, 0.779)",eval_0179,lymphoid,fulcher,169,2,0.01183
+energy,eval_0180,pbmc_like,random_0.25,438,0,0.00000
+maxcos,eval_0180,pbmc_like,random_0.25,438,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0180,pbmc_like,random_0.25,438,0,0.00000
+energy,eval_0181,scope2_like,scope2,150,2,0.01333
+maxcos,eval_0181,scope2_like,scope2,150,3,0.02000
+"maxcos (NB2 rule, 0.779)",eval_0181,scope2_like,scope2,150,0,0.00000
+energy,eval_0182,random_1,scope2,71,16,0.22535
+maxcos,eval_0182,random_1,scope2,71,41,0.57746
+"maxcos (NB2 rule, 0.779)",eval_0182,random_1,scope2,71,2,0.02817
+energy,eval_0183,random_2,random_0.35,400,12,0.03000
+maxcos,eval_0183,random_2,random_0.35,400,25,0.06250
+"maxcos (NB2 rule, 0.779)",eval_0183,random_2,random_0.35,400,4,0.01000
+energy,eval_0184,random_3,random_0.15,400,13,0.03250
+maxcos,eval_0184,random_3,random_0.15,400,7,0.01750
+"maxcos (NB2 rule, 0.779)",eval_0184,random_3,random_0.15,400,0,0.00000
+energy,eval_0185,random_5,pbmc240,108,3,0.02778
+maxcos,eval_0185,random_5,pbmc240,108,2,0.01852
+"maxcos (NB2 rule, 0.779)",eval_0185,random_5,pbmc240,108,1,0.00926
+energy,eval_0186,random_8,fulcher,296,1,0.00338
+maxcos,eval_0186,random_8,fulcher,296,2,0.00676
+"maxcos (NB2 rule, 0.779)",eval_0186,random_8,fulcher,296,0,0.00000
+energy,eval_0187,random_1,random_0.25,1000,162,0.16200
+maxcos,eval_0187,random_1,random_0.25,1000,110,0.11000
+"maxcos (NB2 rule, 0.779)",eval_0187,random_1,random_0.25,1000,9,0.00900
+energy,eval_0188,random_2,scope2,260,2,0.00769
+maxcos,eval_0188,random_2,scope2,260,2,0.00769
+"maxcos (NB2 rule, 0.779)",eval_0188,random_2,scope2,260,0,0.00000
+energy,eval_0189,random_3,pbmc240,149,0,0.00000
+maxcos,eval_0189,random_3,pbmc240,149,2,0.01342
+"maxcos (NB2 rule, 0.779)",eval_0189,random_3,pbmc240,149,0,0.00000
+energy,eval_0190,random_5,scope2,150,0,0.00000
+maxcos,eval_0190,random_5,scope2,150,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0190,random_5,scope2,150,0,0.00000
+energy,eval_0191,random_8,scope2,154,0,0.00000
+maxcos,eval_0191,random_8,scope2,154,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0191,random_8,scope2,154,0,0.00000
+energy,eval_0192,myeloid,fulcher,400,18,0.04500
+maxcos,eval_0192,myeloid,fulcher,400,19,0.04750
+"maxcos (NB2 rule, 0.779)",eval_0192,myeloid,fulcher,400,8,0.02000
+energy,eval_0193,lymphoid,random_0.25,733,504,0.68759
+maxcos,eval_0193,lymphoid,random_0.25,733,582,0.79400
+"maxcos (NB2 rule, 0.779)",eval_0193,lymphoid,random_0.25,733,381,0.51978
+energy,eval_0194,pbmc_like,random_0.35,149,0,0.00000
+maxcos,eval_0194,pbmc_like,random_0.35,149,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0194,pbmc_like,random_0.35,149,0,0.00000
+energy,eval_0195,scope2_like,random_0.25,400,34,0.08500
+maxcos,eval_0195,scope2_like,random_0.25,400,21,0.05250
+"maxcos (NB2 rule, 0.779)",eval_0195,scope2_like,random_0.25,400,1,0.00250
+energy,eval_0196,random_1,pbmc240,98,56,0.57143
+maxcos,eval_0196,random_1,pbmc240,98,62,0.63265
+"maxcos (NB2 rule, 0.779)",eval_0196,random_1,pbmc240,98,1,0.01020
+energy,eval_0197,random_2,random_0.15,994,121,0.12173
+maxcos,eval_0197,random_2,random_0.15,994,151,0.15191
+"maxcos (NB2 rule, 0.779)",eval_0197,random_2,random_0.15,994,22,0.02213
+energy,eval_0198,random_3,random_0.25,74,1,0.01351
+maxcos,eval_0198,random_3,random_0.25,74,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0198,random_3,random_0.25,74,0,0.00000
+energy,eval_0199,random_5,pbmc240,468,5,0.01068
+maxcos,eval_0199,random_5,pbmc240,468,5,0.01068
+"maxcos (NB2 rule, 0.779)",eval_0199,random_5,pbmc240,468,2,0.00427
+energy,eval_0200,random_8,random_0.15,127,1,0.00787
+maxcos,eval_0200,random_8,random_0.15,127,2,0.01575
+"maxcos (NB2 rule, 0.779)",eval_0200,random_8,random_0.15,127,1,0.00787
+energy,eval_0201,random_1,random_0.35,150,31,0.20667
+maxcos,eval_0201,random_1,random_0.35,150,17,0.11333
+"maxcos (NB2 rule, 0.779)",eval_0201,random_1,random_0.35,150,0,0.00000
+energy,eval_0202,random_2,fulcher,400,8,0.02000
+maxcos,eval_0202,random_2,fulcher,400,8,0.02000
+"maxcos (NB2 rule, 0.779)",eval_0202,random_2,fulcher,400,2,0.00500
+energy,eval_0203,random_3,random_0.25,149,2,0.01342
+maxcos,eval_0203,random_3,random_0.25,149,1,0.00671
+"maxcos (NB2 rule, 0.779)",eval_0203,random_3,random_0.25,149,0,0.00000
+energy,eval_0204,random_5,fulcher,198,0,0.00000
+maxcos,eval_0204,random_5,fulcher,198,4,0.02020
+"maxcos (NB2 rule, 0.779)",eval_0204,random_5,fulcher,198,0,0.00000
+energy,eval_0205,random_8,scope2,113,0,0.00000
+maxcos,eval_0205,random_8,scope2,113,2,0.01770
+"maxcos (NB2 rule, 0.779)",eval_0205,random_8,scope2,113,1,0.00885
+energy,eval_0206,myeloid,random_0.15,548,37,0.06752
+maxcos,eval_0206,myeloid,random_0.15,548,18,0.03285
+"maxcos (NB2 rule, 0.779)",eval_0206,myeloid,random_0.15,548,3,0.00547
+energy,eval_0207,lymphoid,fulcher,189,3,0.01587
+maxcos,eval_0207,lymphoid,fulcher,189,8,0.04233
+"maxcos (NB2 rule, 0.779)",eval_0207,lymphoid,fulcher,189,2,0.01058
+energy,eval_0208,pbmc_like,random_0.25,1001,0,0.00000
+maxcos,eval_0208,pbmc_like,random_0.25,1001,2,0.00200
+"maxcos (NB2 rule, 0.779)",eval_0208,pbmc_like,random_0.25,1001,1,0.00100
+energy,eval_0209,scope2_like,pbmc240,928,63,0.06789
+maxcos,eval_0209,scope2_like,pbmc240,928,62,0.06681
+"maxcos (NB2 rule, 0.779)",eval_0209,scope2_like,pbmc240,928,15,0.01616
+energy,eval_0210,random_1,fulcher,400,12,0.03000
+maxcos,eval_0210,random_1,fulcher,400,55,0.13750
+"maxcos (NB2 rule, 0.779)",eval_0210,random_1,fulcher,400,24,0.06000
+energy,eval_0211,random_2,pbmc240,992,11,0.01109
+maxcos,eval_0211,random_2,pbmc240,992,43,0.04335
+"maxcos (NB2 rule, 0.779)",eval_0211,random_2,pbmc240,992,8,0.00806
+energy,eval_0212,random_3,random_0.35,87,33,0.37931
+maxcos,eval_0212,random_3,random_0.35,87,37,0.42529
+"maxcos (NB2 rule, 0.779)",eval_0212,random_3,random_0.35,87,5,0.05747
+energy,eval_0213,random_5,pbmc240,274,2,0.00730
+maxcos,eval_0213,random_5,pbmc240,274,7,0.02555
+"maxcos (NB2 rule, 0.779)",eval_0213,random_5,pbmc240,274,2,0.00730
+energy,eval_0214,random_8,fulcher,151,5,0.03311
+maxcos,eval_0214,random_8,fulcher,151,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0214,random_8,fulcher,151,0,0.00000
+energy,eval_0215,random_1,random_0.25,611,380,0.62193
+maxcos,eval_0215,random_1,random_0.25,611,313,0.51227
+"maxcos (NB2 rule, 0.779)",eval_0215,random_1,random_0.25,611,8,0.01309
+energy,eval_0216,random_2,random_0.35,107,35,0.32710
+maxcos,eval_0216,random_2,random_0.35,107,61,0.57009
+"maxcos (NB2 rule, 0.779)",eval_0216,random_2,random_0.35,107,3,0.02804
+energy,eval_0217,random_3,random_0.15,198,45,0.22727
+maxcos,eval_0217,random_3,random_0.15,198,57,0.28788
+"maxcos (NB2 rule, 0.779)",eval_0217,random_3,random_0.15,198,33,0.16667
+energy,eval_0218,random_5,random_0.35,51,4,0.07843
+maxcos,eval_0218,random_5,random_0.35,51,9,0.17647
+"maxcos (NB2 rule, 0.779)",eval_0218,random_5,random_0.35,51,5,0.09804
+energy,eval_0219,random_8,fulcher,158,1,0.00633
+maxcos,eval_0219,random_8,fulcher,158,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0219,random_8,fulcher,158,0,0.00000
+energy,eval_0220,myeloid,scope2,127,0,0.00000
+maxcos,eval_0220,myeloid,scope2,127,4,0.03150
+"maxcos (NB2 rule, 0.779)",eval_0220,myeloid,scope2,127,1,0.00787
+energy,eval_0221,lymphoid,random_0.15,150,4,0.02667
+maxcos,eval_0221,lymphoid,random_0.15,150,1,0.00667
+"maxcos (NB2 rule, 0.779)",eval_0221,lymphoid,random_0.15,150,0,0.00000
+energy,eval_0222,pbmc_like,scope2,155,0,0.00000
+maxcos,eval_0222,pbmc_like,scope2,155,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0222,pbmc_like,scope2,155,0,0.00000
+energy,eval_0223,scope2_like,pbmc240,397,20,0.05038
+maxcos,eval_0223,scope2_like,pbmc240,397,28,0.07053
+"maxcos (NB2 rule, 0.779)",eval_0223,scope2_like,pbmc240,397,5,0.01259
+energy,eval_0224,random_1,scope2,40,23,0.57500
+maxcos,eval_0224,random_1,scope2,40,19,0.47500
+"maxcos (NB2 rule, 0.779)",eval_0224,random_1,scope2,40,2,0.05000
+energy,eval_0225,random_2,fulcher,2000,508,0.25400
+maxcos,eval_0225,random_2,fulcher,2000,492,0.24600
+"maxcos (NB2 rule, 0.779)",eval_0225,random_2,fulcher,2000,293,0.14650
+energy,eval_0226,random_3,random_0.35,76,3,0.03947
+maxcos,eval_0226,random_3,random_0.35,76,6,0.07895
+"maxcos (NB2 rule, 0.779)",eval_0226,random_3,random_0.35,76,3,0.03947
+energy,eval_0227,random_5,scope2,406,0,0.00000
+maxcos,eval_0227,random_5,scope2,406,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0227,random_5,scope2,406,0,0.00000
+energy,eval_0228,random_8,fulcher,152,13,0.08553
+maxcos,eval_0228,random_8,fulcher,152,2,0.01316
+"maxcos (NB2 rule, 0.779)",eval_0228,random_8,fulcher,152,2,0.01316
+energy,eval_0229,random_1,fulcher,150,12,0.08000
+maxcos,eval_0229,random_1,fulcher,150,7,0.04667
+"maxcos (NB2 rule, 0.779)",eval_0229,random_1,fulcher,150,3,0.02000
+energy,eval_0230,random_2,scope2,49,1,0.02041
+maxcos,eval_0230,random_2,scope2,49,1,0.02041
+"maxcos (NB2 rule, 0.779)",eval_0230,random_2,scope2,49,0,0.00000
+energy,eval_0231,random_3,random_0.35,191,1,0.00524
+maxcos,eval_0231,random_3,random_0.35,191,5,0.02618
+"maxcos (NB2 rule, 0.779)",eval_0231,random_3,random_0.35,191,1,0.00524
+energy,eval_0232,random_5,random_0.35,207,0,0.00000
+maxcos,eval_0232,random_5,random_0.35,207,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0232,random_5,random_0.35,207,0,0.00000
+energy,eval_0233,random_8,scope2,155,0,0.00000
+maxcos,eval_0233,random_8,scope2,155,0,0.00000
+"maxcos (NB2 rule, 0.779)",eval_0233,random_8,scope2,155,0,0.00000
+energy,eval_0234,myeloid,scope2,447,1,0.00224
+maxcos,eval_0234,myeloid,scope2,447,2,0.00447
+"maxcos (NB2 rule, 0.779)",eval_0234,myeloid,scope2,447,0,0.00000
+energy,eval_0235,lymphoid,random_0.25,84,13,0.15476
+maxcos,eval_0235,lymphoid,random_0.25,84,14,0.16667
+"maxcos (NB2 rule, 0.779)",eval_0235,lymphoid,random_0.25,84,0,0.00000
+energy,eval_0236,pbmc_like,random_0.25,158,0,0.00000
+maxcos,eval_0236,pbmc_like,random_0.25,158,1,0.00633
+"maxcos (NB2 rule, 0.779)",eval_0236,pbmc_like,random_0.25,158,0,0.00000
+energy,eval_0237,scope2_like,scope2,400,1,0.00250
+maxcos,eval_0237,scope2_like,scope2,400,6,0.01500
+"maxcos (NB2 rule, 0.779)",eval_0237,scope2_like,scope2,400,0,0.00000
+energy,eval_0238,random_1,random_0.15,150,31,0.20667
+maxcos,eval_0238,random_1,random_0.15,150,5,0.03333
+"maxcos (NB2 rule, 0.779)",eval_0238,random_1,random_0.15,150,0,0.00000
+energy,eval_0239,random_2,random_0.15,400,78,0.19500
+maxcos,eval_0239,random_2,random_0.15,400,7,0.01750
+"maxcos (NB2 rule, 0.779)",eval_0239,random_2,random_0.15,400,0,0.00000

@@ -1,0 +1,4 @@
+rule,bal_fine_strict,fine_rate,group_rate,lineage_rate,committed_rate,abstain_rate,abstain_ood,abstain_empty,abstain_ambiguous,abstain_coverage,correct_when_committed,best_guess_bal_acc
+"restricted, NB2 rule",60.2166,56.6874,39.6805,0.0000,96.3679,3.6321,0.3976,3.1777,0.0000,0.0568,91.8097,88.1164
+"restricted, as served (renormalised + best guess)",37.2893,28.6330,70.9126,0.0000,99.5456,0.4544,0.3976,0.0000,0.0000,0.0568,96.1688,88.1164
+"restricted, renormalised",37.2893,28.6330,70.9126,0.0000,99.5456,0.4544,0.3976,0.0000,0.0000,0.0568,96.1688,88.1164

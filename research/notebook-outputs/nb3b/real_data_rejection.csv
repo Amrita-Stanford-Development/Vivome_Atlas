@@ -1,0 +1,13 @@
+dataset,score,cells,rejected
+Furtwängler 2025 CD34+ HSPCs (out of reference),energy,2506,0.23304
+Furtwängler 2025 CD34+ HSPCs (out of reference),maxcos,2506,0.05267
+Furtwängler 2025 CD34+ HSPCs (out of reference),"maxcos (NB2 rule, 0.779)",2506,0.01277
+Fulcher 2026 PBMCs,energy,1275,0.01804
+Fulcher 2026 PBMCs,maxcos,1275,0.00784
+Fulcher 2026 PBMCs,"maxcos (NB2 rule, 0.779)",1275,0.00392
+PBMC240 raw,energy,237,0.08861
+PBMC240 raw,maxcos,237,0.05907
+PBMC240 raw,"maxcos (NB2 rule, 0.779)",237,0.01688
+SCoPE2 (macrophage/monocyte),energy,1490,0.64295
+SCoPE2 (macrophage/monocyte),maxcos,1490,0.23826
+SCoPE2 (macrophage/monocyte),"maxcos (NB2 rule, 0.779)",1490,0.00000

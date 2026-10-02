@@ -389,6 +389,91 @@ RNA, in the next notebook (T1 NB3b), together with a better out of distribution
 score and a measured false abstention rate. v3.1 shipped as release 0.3.0 on
 2026-10-01, with v3 kept as the previous release.
 
+### 18. T1 NB3b: `research/notebooks/t1_nb3b_ood_and_flags.py`
+
+The first notebook run on the Windows PC, as a script in the repository, 6
+minutes on its GPU (2026-10-02). It searched for an out of distribution score
+better than v3.1's max cosine, and evaluated the two service flags on RNA. Its
+rules were committed before the run (`53f61a8`):
+
+- a 5 percent false abstention target;
+- scores chosen on RNA controls only;
+- the CD34+ progenitors and the real protein sets reported, never used to
+  choose;
+- go / no go criteria fixed in advance.
+
+Tables are in `research/notebook-outputs/nb3b/`.
+
+**Gate.** It reproduced NB2 before anything new:
+
+- every member's reference latents (median cosine above 0.9999);
+- the 0.77899 threshold;
+- 2.96 percent false abstention on the evaluation suite (NB2: 2.97);
+- 5.47 percent of real cells and 0.96 percent of scrambled ones rejected
+  (NB2: 5.49 and 0.96).
+
+**Choice.** Eleven scores were tried, each a mean over the five members:
+
+- max cosine;
+- maximum probability;
+- energy;
+- kNN on the 512-d hidden features, k 1, 10 and 50;
+- relative Mahalanobis.
+
+The last two were each built against the training reference and against a
+masked index of training cells. Thresholds were set per band of observed
+genes, at the 5th percentile of the calibration FIT half. On the SELECT half,
+energy had the best mean AUROC over the three controls (0.866) among the
+scores within 1.5 times the target. Relative Mahalanobis on the masked index
+scored 0.867 but abstained on 8.8 percent, so it was not eligible.
+
+**Evaluation suite, scored once: NO GO.**
+
+| Criterion | Rule | Energy |
+|---|---|---|
+| False abstention, all cells | at most 6% | 10.2% |
+| Worst scenario | at most 10% | 33.6% (single cell type) |
+| Scrambled cells rejected | at least 90% | 76.4% |
+| AUROC above max cosine on every control | yes | yes (scrambled 0.915 vs 0.868, repeated cell 0.903 vs 0.864, held out class 0.713 vs 0.590) |
+
+**Real data** (`real_data_rejection.csv`; reported, not used to choose):
+
+| Dataset | Energy rejects | Served rule rejects |
+|---|---|---|
+| CD34+ progenitors | 23.3% (HSCs 47.3%) | 1.3% (HSCs 0%) |
+| Fulcher | 1.8% | 0.4% |
+| PBMC240 | 8.9% | 1.7% |
+| SCoPE2 | 64.3% | 0% |
+
+So energy separates far better than today's rule, but its threshold does not
+hold. Two causes, and they affect every score, today's included:
+
+- **Calibration cells are not exchangeable with test cells.** The thresholds
+  were fitted on validation split cells, which the encoders saw during early
+  stopping, and every score abstains on about twice the target on test split
+  cells. NB2's 1 percent threshold already gave 2.96 percent.
+- **The score depends on what else is in the upload.**
+  - Per upload gene z scoring distorts narrow uploads: single cell type
+    uploads abstain on 33.6 percent, lymphoid ones on 19.5, broad ones
+    (pbmc like, eight types) on 0.1 to 1.1.
+  - By class, B cells abstain on 39.4 percent and erythrocytes on 22.4.
+  - A threshold per cell cannot separate a narrow upload from unfamiliar
+    cells.
+
+**The flags on RNA** (evaluation suite, today's OOD rule):
+
+- **`set_includes_best_guess`:**
+  - coverage 87.1 to 88.3 percent, still under the 90 target;
+  - correct when committed 94.9 to 95.5;
+  - ambiguous abstentions 15.9 to 17.8.
+- **Restricted mode, renormalised** (macrophage/monocyte uploads):
+  - committed 96.4 to 99.6 percent;
+  - correct when committed 91.8 to 96.2.
+  - But class answers fall from 56.7 to 28.6 percent, because the two
+    allowed classes share a group, and the best guess is unchanged (88.1).
+
+These are the RNA evaluations release 0.3.0 left open.
+
 ---
 
 ## The throughline

@@ -1,0 +1,218 @@
+{
+  "rules": {
+    "target": 0.05,
+    "select_max_false": 0.07500000000000001,
+    "bands": [
+      200,
+      500,
+      1000,
+      2000
+    ],
+    "k_grid": [
+      1,
+      10,
+      50
+    ],
+    "go": {
+      "false_overall": 0.06,
+      "false_scenario": 0.1,
+      "scrambled_rejected": 0.9
+    }
+  },
+  "device": "cuda",
+  "gate": {
+    "V2_s0_reference_median_cos": 0.9999996423721313,
+    "V2_s1_reference_median_cos": 1.0,
+    "V2_s2_reference_median_cos": 1.0,
+    "V2_s3_reference_median_cos": 0.9999998211860657,
+    "V2_s4_reference_median_cos": 0.9999998807907104,
+    "reference_reproduced": true,
+    "ood_threshold": 0.7789892554283142,
+    "eval_false_pct": 2.9598698741416447,
+    "real_rejected_pct": 5.4711998679650105,
+    "shuffled_rejected_pct": 0.9572536722231391,
+    "nb2_reproduced": {
+      "ood_threshold": true,
+      "eval_false_pct": true,
+      "real_rejected_pct": true,
+      "shuffled_rejected_pct": true
+    }
+  },
+  "chosen": "energy",
+  "thresholds": {
+    "pooled": 0.7363266348838806,
+    "bands": [
+      0.7363266348838806,
+      0.7490382194519043,
+      0.7543994188308716,
+      0.7285279035568237
+    ]
+  },
+  "go": {
+    "false_overall": false,
+    "false_every_scenario": false,
+    "scrambled_rejected": false,
+    "beats_maxcos_every_control": true
+  },
+  "GO": false,
+  "eval_chosen": {
+    "false_abstention": 0.10154980084624834,
+    "false_abstention_upload_mean": 0.10530064729599156,
+    "auc_scrambled": 0.9144901942472567,
+    "rejected_scrambled": 0.763857006365475,
+    "auc_repeated": 0.9029578641496012,
+    "rejected_repeated": 0.6615464668539911,
+    "auc_held_out": 0.7124740122823288,
+    "auc_mean": 0.8433073568930624
+  },
+  "eval_today": {
+    "false_abstention": 0.09571788413098237,
+    "false_abstention_upload_mean": 0.11038235835110553,
+    "auc_scrambled": 0.867536315554582,
+    "rejected_scrambled": 0.5479768212331402,
+    "auc_repeated": 0.8636326300192061,
+    "rejected_repeated": 0.5006348215214903,
+    "auc_held_out": 0.5896822503386155,
+    "auc_mean": 0.7736170653041344
+  },
+  "eval_false_by_scenario": {
+    "lymphoid": 0.19470282200851333,
+    "myeloid": 0.04341824570209562,
+    "pbmc_like": 0.0008634335875665563,
+    "random_1": 0.3362045267112618,
+    "random_2": 0.14828784853191332,
+    "random_3": 0.05196942974720752,
+    "random_5": 0.011862396204033215,
+    "random_8": 0.011190745630579655,
+    "scope2_like": 0.029176658673061552
+  },
+  "real_data": [
+    {
+      "dataset": "Furtw\u00e4ngler 2025 CD34+ HSPCs (out of reference)",
+      "score": "energy",
+      "cells": 2506,
+      "rejected": 0.23304070231444532
+    },
+    {
+      "dataset": "Furtw\u00e4ngler 2025 CD34+ HSPCs (out of reference)",
+      "score": "maxcos",
+      "cells": 2506,
+      "rejected": 0.052673583399840386
+    },
+    {
+      "dataset": "Furtw\u00e4ngler 2025 CD34+ HSPCs (out of reference)",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "cells": 2506,
+      "rejected": 0.012769353551476457
+    },
+    {
+      "dataset": "Fulcher 2026 PBMCs",
+      "score": "energy",
+      "cells": 1275,
+      "rejected": 0.01803921568627451
+    },
+    {
+      "dataset": "Fulcher 2026 PBMCs",
+      "score": "maxcos",
+      "cells": 1275,
+      "rejected": 0.00784313725490196
+    },
+    {
+      "dataset": "Fulcher 2026 PBMCs",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "cells": 1275,
+      "rejected": 0.00392156862745098
+    },
+    {
+      "dataset": "PBMC240 raw",
+      "score": "energy",
+      "cells": 237,
+      "rejected": 0.08860759493670886
+    },
+    {
+      "dataset": "PBMC240 raw",
+      "score": "maxcos",
+      "cells": 237,
+      "rejected": 0.05907172995780591
+    },
+    {
+      "dataset": "PBMC240 raw",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "cells": 237,
+      "rejected": 0.016877637130801686
+    },
+    {
+      "dataset": "SCoPE2 (macrophage/monocyte)",
+      "score": "energy",
+      "cells": 1490,
+      "rejected": 0.6429530201342282
+    },
+    {
+      "dataset": "SCoPE2 (macrophage/monocyte)",
+      "score": "maxcos",
+      "cells": 1490,
+      "rejected": 0.23825503355704697
+    },
+    {
+      "dataset": "SCoPE2 (macrophage/monocyte)",
+      "score": "maxcos (NB2 rule, 0.779)",
+      "cells": 1490,
+      "rejected": 0.0
+    }
+  ],
+  "flags": [
+    {
+      "rule": "NB2 rule",
+      "ood": "OOD energy",
+      "coverage": 87.06387051693828,
+      "fine_rate": 18.386930881110576,
+      "group_rate": 16.717384748711027,
+      "lineage_rate": 41.826136087009054,
+      "abstain_rate": 23.069548283169347,
+      "abstain_ood": 10.528043858209431,
+      "abstain_ambiguous": 12.268458997704318,
+      "abstain_empty": 0.241736324966248,
+      "correct_when_committed": 95.66833624517488
+    },
+    {
+      "rule": "NB2 rule",
+      "ood": "OOD today",
+      "coverage": 87.06387051693828,
+      "fine_rate": 19.129869728469277,
+      "group_rate": 17.6999969162623,
+      "lineage_rate": 43.975908791453854,
+      "abstain_rate": 19.194224563814576,
+      "abstain_ood": 2.9598698741416447,
+      "abstain_ambiguous": 15.846265986974569,
+      "abstain_empty": 0.3567796004090115,
+      "correct_when_committed": 94.90021946443753
+    },
+    {
+      "rule": "set_includes_best_guess",
+      "ood": "OOD energy",
+      "coverage": 88.30898599325549,
+      "fine_rate": 17.571574712316657,
+      "group_rate": 16.713829428680185,
+      "lineage_rate": 41.76060795865093,
+      "abstain_rate": 23.953987900352224,
+      "abstain_ood": 10.528043858209431,
+      "abstain_ambiguous": 13.152898614887194,
+      "abstain_empty": 0.241736324966248,
+      "correct_when_committed": 95.77620967846539
+    },
+    {
+      "rule": "set_includes_best_guess",
+      "ood": "OOD today",
+      "coverage": 88.30898599325549,
+      "fine_rate": 17.98740861074352,
+      "group_rate": 17.184936545336527,
+      "lineage_rate": 43.657726063606134,
+      "abstain_rate": 21.16992878031382,
+      "abstain_ood": 2.9598698741416447,
+      "abstain_ambiguous": 17.821970203473818,
+      "abstain_empty": 0.3567796004090115,
+      "correct_when_committed": 95.5320933267081
+    }
+  ],
+  "minutes": 6.0
+}

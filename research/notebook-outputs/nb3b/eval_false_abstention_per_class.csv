@@ -1,0 +1,23 @@
+class,n,false_abstention
+b cell,8675,0.39435
+basophil,0,
+"cd4-positive, alpha-beta t cell",6598,0.03622
+"cd8-positive, alpha-beta t cell",4149,0.04796
+classical monocyte,6288,0.05996
+common myeloid progenitor,0,
+erythrocyte,4302,0.22408
+hematopoietic precursor cell,909,0.05061
+hematopoietic stem cell,0,
+intermediate monocyte,3425,0.05723
+macrophage,5972,0.02395
+mature nk t cell,1500,0.09400
+monocyte,14028,0.02459
+myeloid dendritic cell,0,
+"naive thymus-derived cd4-positive, alpha-beta t cell",3332,0.06002
+natural killer cell,5697,0.16131
+neutrophil,8968,0.07895
+non-classical monocyte,3179,0.05631
+plasma cell,2079,0.02597
+plasmacytoid dendritic cell,0,
+platelet,1490,0.03557
+regulatory t cell,0,

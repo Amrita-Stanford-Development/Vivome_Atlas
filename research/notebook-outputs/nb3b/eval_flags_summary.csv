@@ -1,0 +1,5 @@
+rule,ood,coverage,fine_rate,group_rate,lineage_rate,abstain_rate,abstain_ood,abstain_ambiguous,abstain_empty,correct_when_committed
+NB2 rule,OOD energy,87.0639,18.3869,16.7174,41.8261,23.0695,10.5280,12.2685,0.2417,95.6683
+NB2 rule,OOD today,87.0639,19.1299,17.7000,43.9759,19.1942,2.9599,15.8463,0.3568,94.9002
+set_includes_best_guess,OOD energy,88.3090,17.5716,16.7138,41.7606,23.9540,10.5280,13.1529,0.2417,95.7762
+set_includes_best_guess,OOD today,88.3090,17.9874,17.1849,43.6577,21.1699,2.9599,17.8220,0.3568,95.5321
