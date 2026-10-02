@@ -13,3 +13,12 @@ data/incoming/
 # fetch them with scripts/fetch_v31_members.py, which checks each against
 # service/model/v3_1/MANIFEST.json.
 service/model/v3_1/members/*.pt
+
+# Cloudflare Pages build output and wrangler cache (scripts/build_pages_site.py)
+/dist/
+.wrangler/
+
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

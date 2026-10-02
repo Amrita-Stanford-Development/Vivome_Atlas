@@ -206,6 +206,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
+- `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, and optionally the R2-backed large files)
+- `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index
 - `scripts/test_repo_paths.py` — runs `check_paths.py` as part of the normal test suite
 - `scripts/archive/promote_v3_atlas.py` — one-off (already run) that promoted the v3 viewer metadata; its inputs no longer exist
@@ -217,6 +219,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `docs/file-index.md` — this page
 - `docs/setup-windows.md` — setting up the repository, the local-only files, Python, R and Claude Code on a Windows GPU workstation
 - `docs/web/manifest.md` — the manifest: schema, the measured/pending contract, regeneration, release protocol
+- `docs/web/hosting.md` — how the public site is hosted on Cloudflare Pages and published, and the R2 step for the large atlas files
 - `docs/web/data.md` — the site's data files, Git LFS, what ships and what doesn't
 - `docs/web/design.md` — the design system: the world, the four UI objects, colour meanings, type, motif, copy rules, where new results land
 - `docs/webpage_concept.md` — the site concept the redesign follows: intro, landing, scroll story, dashboard, tools

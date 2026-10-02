@@ -17,6 +17,7 @@ and read [CLAUDE.md](../CLAUDE.md) before changing anything.
 | Document | Covers |
 |---|---|
 | [web/manifest.md](web/manifest.md) | The manifest: schema, the measured/pending contract, regeneration, release protocol |
+| [web/hosting.md](web/hosting.md) | Hosting on Cloudflare Pages: what is deployed, how to publish, the R2 step for the large files |
 | [web/data.md](web/data.md) | The site's data files, Git LFS, what ships and what doesn't |
 | [web/design.md](web/design.md) | The design system: the world, the four UI objects, colour meanings, copy rules |
 | [webpage_concept.md](webpage_concept.md) | The site concept the redesign follows: intro, landing, scroll story, dashboard, tools |
