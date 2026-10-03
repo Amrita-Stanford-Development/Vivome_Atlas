@@ -52,7 +52,8 @@ def runs(dataset: str):
     for tool in TOOLS:
         for seed in (0, 1, 2):
             stem = RUNS / dataset / f"{tool}_seed{seed}"
-            if Path(f"{stem}.json").exists() and not json.loads(Path(f"{stem}.json").read_text())["diverged"]:
+            record = json.loads(Path(f"{stem}.json").read_text()) if Path(f"{stem}.json").exists() else None
+            if record and not record["diverged"] and record.get("status", "completed") == "completed":
                 yield tool, seed, pd.read_csv(f"{stem}_pred.csv", dtype={"cell_id": str})
 
 

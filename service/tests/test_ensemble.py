@@ -231,15 +231,17 @@ class FullPathAgainstNb2CoreTests(unittest.TestCase):
         reason = {3: "no_confident_label", 4: "ambiguous_between_classes", 5: "outside_supported_region",
                   6: "coverage_too_low"}
         seen = set()
-        # Probabilities to 5 places: float32 sums differ by ~5e-7 between the
-        # Mac's and the Windows PC's BLAS. Labels and levels stay exact.
+        # The best-guess probability to 5 places: this test sums float32
+        # probabilities while the service computes in float64 (ensemble.py), and
+        # on the Windows PC one of 237 cells differs by 5.1e-7. Labels, levels and
+        # the confidence (max difference 2.1e-7) stay at their original precision.
         for i, cell in enumerate(response["cells"]):
             k = int(kind[i])
             seen.add(k)
             if k <= 2:
                 level = ("class", "group", "lineage")[k]
                 self.assertEqual((cell["label"], cell["label_level"]), (self.levels[level][val[i]], level), f"cell {i}")
-                self.assertAlmostEqual(cell["confidence"], float(self.P[i, S[i]].sum()), places=5)
+                self.assertAlmostEqual(cell["confidence"], float(self.P[i, S[i]].sum()), places=6)
             else:
                 self.assertEqual(cell.get("abstain_reason"), reason[k], f"cell {i}")
             if k == 6:

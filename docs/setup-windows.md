@@ -102,7 +102,10 @@ Commits keep the author name and email above, whichever account pushes.
 
 `benchmark/results/` and `data/incoming/` are gitignored, and some of their
 contents took hours of compute. Two zips on the project Google Drive hold
-every local-only file:
+every local-only file as it was on the Mac on 2026-10-01. Runs made on the PC
+since then (the Track D MaxFuse, scGLUE, Seurat and correlation runs, the
+Khoury rehearsal) are in neither zip, so a new machine reruns them
+(`benchmark/baselines_queue.sh`):
 
 | Zip | Holds | sha256 |
 |---|---|---|
@@ -141,8 +144,9 @@ Notes on the zips' contents:
 - `lane.sh` and `retry.sh` in `benchmark/results/baselines_ext/` are
   superseded. Use `benchmark/baselines_queue.sh`.
 - `research/benchmark/baselines/` arrives with partial tables from a test of
-  the scorer. The full scoring run overwrites them; don't commit them as
-  they are.
+  the scorer, which overwrite the committed full tables. Restore them
+  straight after unzipping with `git checkout -- research/benchmark/baselines/`,
+  and never commit the zip's versions.
 - Khoury 2026 in `data/incoming/` is **sealed**: nothing embeds or scores it
   before the final v3.1 evaluation
   ([protocol](../research/benchmark/protocol-khoury2026.md)).

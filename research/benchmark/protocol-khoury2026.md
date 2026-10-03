@@ -669,3 +669,133 @@ fixes are committed with this amendment.
   `"diverged": true`.
 - With its inputs missing, the scorer exits listing the 28 missing files,
   without calling the label loader.
+
+## Amendment 7, 2026-10-03, before unsealing: fixes from a second code review
+
+Khoury 2026 is still sealed. No label was read and nothing was embedded or
+trained. A second, deeper review of the whole unsealing path found one
+critical bug and several gaps. The fixes are committed with this amendment.
+
+### Seurat CCA saw scrambled matrices; every Seurat result before this amendment is void
+
+`baselines_run.py` wrote Seurat's inputs with
+`np.asfortranarray(x.T).tofile(...)`. `tofile` always writes in C order, so
+the bytes ran gene by gene. `seurat_cca_transfer.R` fills its genes × cells
+matrix column by column, and expects them to run cell by cell. Every
+"cell" Seurat saw was one gene's values across consecutive real cells, with
+the RNA labels on the wrong columns.
+
+- **What is now written:** the cells × genes array in C order. A three-cell
+  toy example and the R script's own reader confirm the layout.
+- **What is void:** every earlier Seurat run, the Mac's and the PC's, and
+  everything built on them:
+  - the Track D Seurat rows;
+  - amendment 3's "Seurat is deterministic" (three identical scrambled
+    runs);
+  - its PC-against-Mac Seurat check (scrambled against scrambled).
+- **The reruns:** all nine development runs were redone on the PC with the
+  fix (SCoPE2, PBMC240 and Fulcher; seeds 0–2). On each dataset the three
+  seeds again give identical predictions, so Seurat CCA is deterministic
+  given its inputs, and runs once on Khoury, as amendment 3 says.
+- **The corrected numbers:** in `research/benchmark/results.md`.
+
+### scGLUE: balancing off (owner's decision, 2026-10-02)
+
+scGLUE's default cluster balancing (`estimate_balancing_weight`) sets every
+RNA × query cluster similarity below 0.5 to zero, then divides by the sum.
+On Fulcher, no pair reached 0.5 (highest 0.41 to 0.47 across seeds), every
+weight was 0/0, and fine-tuning went NaN at the first step. That is a
+deterministic failure, not a random divergence, and Khoury's similarly
+sparse query would most likely hit it too.
+
+- **On every dataset:** scGLUE now runs with `skip_balance=True` (equal
+  weights). Its nine development runs were redone that way.
+- **Divergence detection:** a NaN that stops training now counts as
+  divergence even when scGLUE then restores an earlier checkpoint and ends
+  with finite latents. Ignite's `TerminateOnNan` is watched for this.
+- **Matching rule:** a torch "invalid values" error counts as divergence
+  only when the values are NaN.
+
+### Every run leaves a record, and sealed runs are protected
+
+- **Records:** `baselines_run.py` and `scanvi_run_khoury2026.py` write a
+  record on every exit, with one of three statuses:
+  - `completed`;
+  - `diverged`;
+  - `failed`, with the error text.
+- **A failed run:** may be rerun before any label is read. If it fails
+  again, it is reported as failed and not scored, like a diverged run.
+- **Sealed-dataset guards:** for a sealed dataset, both scripts refuse:
+  - `--smoke`;
+  - `--out`;
+  - replacing a `completed` or `diverged` record.
+
+### The scorer checks everything it can before reading a label
+
+`khoury2026_score.py` now runs these checks before the label loader is
+called:
+
+- **The gate:** it reads `gate.json`. If v3.1's gate failed, v3.1 is not
+  scored (amendment 2). v3, scANVI and the baselines are, since step 1 now
+  embeds v3 whether or not v3.1's gate passes.
+- **Model files:** it checks the sha256 of every model file it reads
+  against the values step 1 recorded in `gate.json`. That covers 21 files:
+  - v3.1's MANIFEST and spec;
+  - the five checkpoints and the members' reference latents and centroids;
+  - v3's model, centroids, embedding and metadata.
+- **Run records:** every record must be present, from the right dataset,
+  and not a smoke run.
+- **Predictions:** every prediction file is read, its rows checked against
+  `cell_ids.txt` (read line by line, since a cell id may contain a space)
+  and its columns checked. Each check raises an error, not an `assert`, so
+  `python -O` cannot remove it.
+- **Overrides:** both `khoury2026_embed.py` and the scorer refuse to run
+  with any `VIVOME_*` variable set, so the service and the scripts cannot
+  read different model files.
+- **No NaN in the JSON:** `summary.json` writes `null` for a scANVI arm
+  with no completed run, and lists failed runs beside diverged ones.
+
+### A change this protocol had not recorded
+
+Commit `0235556` added the Furtwängler 2025 loaders to `benchmark/datasets.py`
+after amendment 5. The Khoury functions in that file are byte-identical to
+amendment 5's, so no number is affected.
+
+### Checked after the fixes
+
+On the PC, after the fixes, on 2026-10-02 and 03:
+
+- **The reruns.**
+  - Seurat CCA: nine runs, 2026-10-02. On each dataset the three seeds'
+    prediction files are identical.
+  - scGLUE: nine runs with `skip_balance=True`, 2026-10-03. Every record
+    says `completed`; none diverged.
+  - `python -m benchmark.baselines_score` then regenerated every table in
+    `research/benchmark/baselines/`. The corrected numbers are in
+    `research/benchmark/results.md`.
+- **Rehearsal, step 1** (`python -m benchmark.khoury2026_embed --rehearse`,
+  2026-10-03):
+  - every member's gate passed (median cosine 1.0), the dev gate passed,
+    and both service flags were on;
+  - `gate.json` records the sha256 of all 21 model files;
+  - the latents match `fulcher2026_embed.py`'s to within 7.6e-7.
+- **Rehearsal, scoring** (`python -m benchmark.khoury2026_score --rehearse`):
+  - every check before the label loader passed: the gate, the 21
+    model-file sha256s, the run records, and every prediction file's rows
+    and columns;
+  - 37 runs were scored: amendment 5's 34, plus scGLUE's three, which now
+    complete;
+  - every per-type recall matches Fulcher's tables to within 0.000049
+    points, and v3.1's confident answers per type are identical;
+  - no run is diverged or failed.
+- **scANVI smoke**
+  (`python -m benchmark.scanvi_run_khoury2026 0 ARM --rehearse --smoke 3000`):
+  all three arms completed, each writing a `completed` record.
+- **The sealed guard:** `python -m benchmark.baselines_run seurat khoury2026 0`
+  refuses without `--unseal` before loading anything.
+- **Tests:** the node suite (112 pass; the two LFS-pointer checks fail, as
+  expected after `git lfs pull`), the scripts suite (45) and the service
+  suite (199) pass.
+
+No command used `--unseal`, and nothing of Khoury 2026's was read,
+embedded or scored.

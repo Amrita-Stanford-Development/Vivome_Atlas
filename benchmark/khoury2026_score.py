@@ -96,19 +96,48 @@ def sources(rehearse: bool) -> Sources:
                    RESULTS / "baselines_ext" / "khoury2026", tables_dir(False))
 
 
-def missing_inputs(src: Sources) -> list[str]:
-    """Every file the scoring reads, checked before any label is: a run that
-    crashed without its record must be found while the labels are still unread."""
-    need = [src.out / "cell_ids.txt", src.out / "v31_pred.csv", src.out / "v3_served_latent.npy"]
-    need += [src.out / f"{m}_latent.npy" for m in MEMBERS]
-    stems = [src.scanvi_stem(a, s) for a in SCANVI_ARMS for s in SCANVI_SEEDS]
-    stems += [src.baselines / f"{tool}_seed{s}" for tool, (_, _, seeds) in BASELINES.items() for s in seeds]
-    for stem in stems:
-        record = Path(f"{stem}.json")
-        need.append(record)
-        if record.exists() and not json.loads(record.read_text())["diverged"]:
+def run_status(record: dict) -> str:
+    """completed, diverged or failed (amendment 7); records written before amendment 7 carry only "diverged"."""
+    return "diverged" if record["diverged"] else record.get("status", "completed")
+
+
+def preflight(src: Sources, rehearse: bool) -> tuple[list[str], dict]:
+    """Every check that needs no label, before any label is read (amendments 6 and 7):
+    the gate, the model files' sha256s against step 1's, every input present, every
+    run record complete and from the right dataset, not a smoke run. Returns
+    (problems, gate)."""
+    from benchmark.fulcher2026_embed import sha256
+    from benchmark.khoury2026_embed import model_files
+    problems = []
+    gate_path = src.tables / "gate.json"
+    if not gate_path.exists():
+        return [f"missing: {gate_path}"], {}
+    gate = json.loads(gate_path.read_text())
+    for rel, path in model_files().items():
+        if not path.exists() or sha256(path) != gate.get("model_files", {}).get(rel):
+            problems.append(f"model file differs from step 1 (gate.json): {rel}")
+    need = [src.out / "cell_ids.txt", src.out / "v3_served_latent.npy"]
+    if gate.get("passed"):
+        need += [src.out / "v31_pred.csv"] + [src.out / f"{m}_latent.npy" for m in MEMBERS]
+    expected_dataset = "fulcher2026" if rehearse else "khoury2026"
+    stems = [(src.scanvi_stem(a, s), "scanvi") for a in SCANVI_ARMS for s in SCANVI_SEEDS]
+    stems += [(src.baselines / f"{tool}_seed{s}", "baseline") for tool, (_, _, seeds) in BASELINES.items() for s in seeds]
+    for stem, kind in stems:
+        path = Path(f"{stem}.json")
+        if not path.exists():
+            need.append(path)
+            continue
+        record = json.loads(path.read_text())
+        if record.get("smoke_rna_cells"):
+            problems.append(f"a smoke run, not a real one: {path}")
+        if kind == "baseline" and record.get("dataset") != expected_dataset:
+            problems.append(f"record is for {record.get('dataset')!r}, not {expected_dataset!r}: {path}")
+        if kind == "scanvi" and ("Fulcher" if rehearse else "Khoury") not in str(record.get("dataset")):
+            problems.append(f"record is for {record.get('dataset')!r}: {path}")
+        if run_status(record) == "completed":
             need.append(Path(f"{stem}_pred.csv"))
-    return [str(p) for p in need if not p.exists()]
+    problems += [f"missing: {p}" for p in need if not p.exists()]
+    return problems, gate
 
 
 def read_v31_table(path: Path) -> pd.DataFrame:
@@ -122,8 +151,14 @@ def reference_classes() -> tuple[np.ndarray, list[str], dict]:
     meta = pd.read_csv(RUNTIME / "reference_metadata.csv")
     class_names = meta.drop_duplicates("class_idx").sort_values("class_idx")["class_name"].tolist()
     lineage = meta.groupby("class_name")["lineage"].first().to_dict()
-    assert len(class_names) == 22 and set(COARSE) <= set(class_names)
+    if len(class_names) != 22 or not set(COARSE) <= set(class_names):
+        raise ValueError("reference classes do not match the protocol's class mapping")
     return meta["class_name"].to_numpy(), class_names, lineage
+
+
+def same_rows(ids: list[str], cell_ids: list[str], what: str) -> None:
+    if list(ids) != list(cell_ids):  # an explicit check: asserts vanish under python -O
+        raise ValueError(f"{what}: rows are not in cell_ids.txt order")
 
 
 def to_type(pred_fine: np.ndarray) -> np.ndarray:
@@ -144,50 +179,54 @@ def score(pred_fine: np.ndarray, true_type: np.ndarray, lineage: dict) -> tuple[
     return row, composition, confusion
 
 
-def collect_predictions(src: Sources, scored: np.ndarray, cell_ids: list[str]) -> tuple[dict, list[str]]:
-    """(family, model, seed, rule) -> predicted reference class per scored cell; and the diverged runs."""
+def collect_predictions(src: Sources, cell_ids: list[str], with_v31: bool) -> tuple[dict, dict]:
+    """(family, model, seed, rule) -> predicted reference class for every upload
+    cell, and {"diverged": [...], "failed": [...]}. Label-free: it runs before the
+    labels are read, so every row-order and column check happens while a fix is
+    still allowed."""
     cell_names, class_names, _ = reference_classes()
     unit = lambda x: x / np.clip(np.linalg.norm(x, axis=1, keepdims=True), 1e-8, None)  # noqa: E731
-    predictions, diverged = {}, []
+    predictions, excluded = {}, {"diverged": [], "failed": []}
+    n = len(cell_ids)
 
-    v31 = read_v31_table(src.out / "v31_pred.csv")
-    assert v31["cell_id"].tolist() == cell_ids
-    predictions[("v3.1", "v3.1", 0, "best_guess")] = v31["best_guess"].to_numpy()[scored]
-    for seed, model in enumerate(MEMBERS):
-        z = np.load(src.out / f"{model}_latent.npy").astype(np.float32)
-        reference_z = np.load(MEMBERS_DIR / f"{model}_reference_latent_f16.npy").astype(np.float32)
-        predictions[("v3.1 members", model, seed, "shared_knn")] = np.asarray(
-            knn_classifier_predict(reference_z, cell_names, z)["unrestricted"])[scored]
+    def latent(path: Path) -> np.ndarray:
+        z = np.load(path).astype(np.float32)
+        if z.shape[0] != n:
+            raise ValueError(f"{path}: {z.shape[0]} rows, cell_ids.txt has {n}")
+        return z
 
-    z = np.load(src.out / "v3_served_latent.npy").astype(np.float32)
+    if with_v31:  # only when v3.1's gate passed (amendment 2)
+        v31 = read_v31_table(src.out / "v31_pred.csv")
+        same_rows(v31["cell_id"].tolist(), cell_ids, "v31_pred.csv")
+        predictions[("v3.1", "v3.1", 0, "best_guess")] = v31["best_guess"].to_numpy()
+        for seed, model in enumerate(MEMBERS):
+            z = latent(src.out / f"{model}_latent.npy")
+            reference_z = np.load(MEMBERS_DIR / f"{model}_reference_latent_f16.npy").astype(np.float32)
+            predictions[("v3.1 members", model, seed, "shared_knn")] = np.asarray(
+                knn_classifier_predict(reference_z, cell_names, z)["unrestricted"])
+
+    z = latent(src.out / "v3_served_latent.npy")
     centroids = np.load(RUNTIME / "reference_centroids.npy").astype(np.float32)
-    predictions[("v3", "v3_served", 0, "nearest_centroid")] = np.array(class_names)[
-        (unit(z) @ unit(centroids).T).argmax(axis=1)][scored]
+    predictions[("v3", "v3_served", 0, "nearest_centroid")] = np.array(class_names)[(unit(z) @ unit(centroids).T).argmax(axis=1)]
     reference_z = np.load(RUNTIME / "reference_embedding.npy").astype(np.float32)
-    predictions[("v3", "v3_served", 0, "shared_knn")] = np.asarray(
-        knn_classifier_predict(reference_z, cell_names, z)["unrestricted"])[scored]
+    predictions[("v3", "v3_served", 0, "shared_knn")] = np.asarray(knn_classifier_predict(reference_z, cell_names, z)["unrestricted"])
 
-    for arm in SCANVI_ARMS:
-        for seed in SCANVI_SEEDS:
-            stem = src.scanvi_stem(arm, seed)
-            if json.loads(Path(f"{stem}.json").read_text())["diverged"]:
-                diverged.append(f"scanvi_{arm}_seed{seed}")
-                continue
-            pred = pd.read_csv(f"{stem}_pred.csv", dtype={"cell_id": str})
-            assert pred["cell_id"].tolist() == cell_ids
-            for rule in ("native", "shared_knn"):
-                predictions[(f"scANVI_{arm}", f"scanvi_{arm}_seed{seed}", seed, rule)] = pred[rule].to_numpy()[scored]
-
-    for tool, (column, rule, seeds) in BASELINES.items():
-        for seed in seeds:
-            stem = src.baselines / f"{tool}_seed{seed}"
-            if json.loads(Path(f"{stem}.json").read_text())["diverged"]:
-                diverged.append(f"{tool}_seed{seed}")
-                continue
-            pred = pd.read_csv(f"{stem}_pred.csv", dtype={"cell_id": str})
-            assert pred["cell_id"].tolist() == cell_ids
-            predictions[(tool, f"{tool}_seed{seed}", seed, rule)] = pred[f"{column}_unrestricted"].to_numpy()[scored]
-    return predictions, diverged
+    runs = [(src.scanvi_stem(a, s), f"scANVI_{a}", f"scanvi_{a}_seed{s}", s, {"native": "native", "shared_knn": "shared_knn"})
+            for a in SCANVI_ARMS for s in SCANVI_SEEDS]
+    runs += [(src.baselines / f"{tool}_seed{s}", tool, f"{tool}_seed{s}", s, {rule: f"{column}_unrestricted"})
+             for tool, (column, rule, seeds) in BASELINES.items() for s in seeds]
+    for stem, family, model, seed, columns in runs:
+        status = run_status(json.loads(Path(f"{stem}.json").read_text()))
+        if status != "completed":
+            excluded[status].append(model)
+            continue
+        pred = pd.read_csv(f"{stem}_pred.csv", dtype={"cell_id": str})
+        same_rows(pred["cell_id"].tolist(), cell_ids, f"{stem}_pred.csv")
+        for rule, column in columns.items():
+            if column not in pred:
+                raise ValueError(f"{stem}_pred.csv has no column {column!r}")
+            predictions[(family, model, seed, rule)] = pred[column].to_numpy()
+    return predictions, excluded
 
 
 def comparisons(predictions: dict, headline_arm: str) -> list[tuple]:
@@ -310,17 +349,22 @@ def main() -> None:
     mode.add_argument("--rehearse", action="store_true", help="the same code on Fulcher 2026, a development dataset")
     args = parser.parse_args()
     src = sources(args.rehearse)
-    missing = missing_inputs(src)
-    if missing:  # before any label is read: a crashed run can still be rerun, a diverged one recorded
-        sys.exit("inputs missing, labels not read:\n  " + "\n  ".join(missing))
+    from benchmark.khoury2026_embed import refuse_overrides
+    refuse_overrides()
+    problems, gate = preflight(src, args.rehearse)
+    if problems:  # before any label is read: a failed run can still be rerun, a fix still made
+        sys.exit("not ready, labels not read:\n  " + "\n  ".join(problems))
+    cell_ids = (src.out / "cell_ids.txt").read_text().splitlines()  # cell ids may contain spaces
+    with_v31 = bool(gate["passed"])
+    predictions, excluded = collect_predictions(src, cell_ids, with_v31)  # every label-free check, done
+
     labels = src.load_labels()
-    cell_ids = (src.out / "cell_ids.txt").read_text().split()
-    if labels["cell_id"].tolist() != cell_ids:
-        raise ValueError("embedding rows are not in label order")
+    same_rows(labels["cell_id"].tolist(), cell_ids, "labels")
     scored = labels["label"].isin(TYPES).to_numpy()
     true_type = labels["label"].to_numpy()[scored]
     _, class_names, lineage = reference_classes()
-    predictions, diverged = collect_predictions(src, scored, cell_ids)
+    predictions = {key: pred[scored] for key, pred in predictions.items()}
+    diverged = excluded["diverged"]
 
     rows, compositions, confusions = [], [], []
     with warnings.catch_warnings():
@@ -347,7 +391,7 @@ def main() -> None:
     boot = bootstrap(predictions, true_type, headline)
     counts = {f"{c} [{r}]": {"pairings": len(g), **g["favours"].str.split("_seed").str[0].value_counts().to_dict()}
               for (c, r), g in boot.groupby(["comparison", "rules"], sort=False)}
-    conf = confident(src, scored, true_type)
+    conf = confident(src, scored, true_type) if with_v31 else {"not_scored": "v3.1's gate failed (amendment 2)"}
 
     src.tables.mkdir(parents=True, exist_ok=True)
     fmt = {"index": False, "float_format": "%.4f"}
@@ -359,15 +403,17 @@ def main() -> None:
     (src.tables / "v31_confident.json").write_text(json.dumps(conf, indent=2) + "\n")
     (src.tables / "summary.json").write_text(json.dumps({
         "dataset": src.dataset, "n_scored": int(scored.sum()),
+        "v31_gate_passed": with_v31,
         "scanvi_headline_arm": headline,
-        "scanvi_shared_knn_mean_bal_acc_pct": {a: round(m, 4) for a, m in knn_means.items()},
+        "scanvi_shared_knn_mean_bal_acc_pct": {a: None if np.isnan(m) else round(m, 4) for a, m in knn_means.items()},
         "diverged_runs": diverged,
+        "failed_runs": excluded["failed"],
         "ci_excludes_zero_counts": counts,
-    }, indent=2) + "\n")
+    }, indent=2, allow_nan=False) + "\n")
     print(summary.query("metric == 'balanced_accuracy_pct'")[["family", "rule", "mean", "std", "min", "max", "count"]]
           .to_string(index=False))
-    print(json.dumps({"scanvi_headline_arm": headline, "diverged_runs": diverged, "counts": counts}, indent=2))
-    if args.rehearse:
+    print(json.dumps({"scanvi_headline_arm": headline, "excluded_runs": excluded, "counts": counts}, indent=2))
+    if args.rehearse and with_v31:
         check_rehearsal(per_seed, conf)
 
 

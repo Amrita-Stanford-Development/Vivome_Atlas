@@ -177,7 +177,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/pbmc240_lineage_prep.py` — builds the PBMC240 inputs in the shared gene space, row order pinned to NB1d
 - `benchmark/pbmc240_convention_check.py` — measures how far the service and benchmark preprocessing conventions diverge on PBMC240
 - `benchmark/pbmc240_scanvi_table.py` — rebuilds the PBMC240 scANVI table (every input variant × gene set × seed × rule) from the cached per-cell predictions
-- `benchmark/datasets.py` — registry of held-out datasets: Fulcher 2026, and Khoury 2026 (sealed: its labels load only at the final v3.1 evaluation); hashed inputs, separate upload and label loaders
+- `benchmark/datasets.py` — registry of external datasets: Fulcher 2026, Khoury 2026 (sealed: its labels load only at the final v3.1 evaluation) and Furtwängler 2025 (development, T1 NB3b's out-of-reference cells); hashed inputs, separate upload and label loaders
 - `benchmark/fulcher2026_embed.py` — Fulcher 2026: the checkpoint gate on PBMC240, then all ten models' embeddings through the service's own query path
 - `benchmark/scanvi_run_fulcher2026.py` — scANVI arm on Fulcher 2026, two input variants; saves predictions only, never reads labels
 - `benchmark/fulcher2026_score.py` — Fulcher 2026 scoring, the only step that reads its labels: both rules, all metrics, the paired bootstrap
@@ -192,7 +192,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/v31_service_flags.py` — v3.1's two service flags off (NB2's rule) and on (served), on SCoPE2, PBMC240 and Fulcher
 - `benchmark/scope2_5seed_paired.py` — Track D's paired bootstrap, ten ours-seeds × three scANVI seeds × three regimes, on SCoPE2
 - `benchmark/baselines_inputs.py` — Track D extension: what every baseline receives per dataset, gene-fair (measured genes only, z-scored over observed values); Khoury only when unsealed
-- `benchmark/baselines_run.py` — Track D extension: one baseline (MaxFuse, scGLUE, Harmony + kNN, Seurat CCA), one dataset, one seed; saves embeddings and per-cell predictions
+- `benchmark/baselines_run.py` — Track D extension: one baseline (MaxFuse, scGLUE, Harmony + kNN, Seurat CCA, correlation to class mean), one dataset, one seed; saves embeddings, per-cell predictions and a record (completed, diverged or failed)
 - `benchmark/seurat_cca_transfer.R` — Seurat CCA label transfer, called by `baselines_run.py`
 - `benchmark/baselines_queue.sh` — runs the remaining baseline runs one at a time, skipping finished ones
 - `benchmark/baselines_v31.py` — Track D extension: v3.1 as served on SCoPE2, PBMC240 and Fulcher (best guess and confident answer per cell)

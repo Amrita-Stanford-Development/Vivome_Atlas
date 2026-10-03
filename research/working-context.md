@@ -62,8 +62,9 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
 | 2026-09-30 | **Repository reorganised** into the current layout. **Track E:** Fulcher 2026 held-out evaluation, where V2 beats v3 in 50 of 50 seed pairings. Fulcher then became a development dataset. Khoury 2026 registered as the sealed final test. V2 chosen as the v3.1 encoder. **Web redesign** foundation | `629d2cf`, `6d67d32`, `1f486f0` |
 | 2026-10-01 | **v3.1:**<br>• Track C scaffold, `167f138`;<br>• the Project page projecting through a local service;<br>• Track F: T1 NB2's five-seed V2 ensemble becomes the default pipeline, `9567ffd`;<br>• a deep review, whose follow-up fixed duplicate gene rows, `af07dac`;<br>• **release 0.3.0**, `a5b31dc`.<br>**After the release:**<br>• docs update;<br>• Khoury amendment 2, `491053b`;<br>• Track D extension started, `7963031`;<br>• Windows-safe clone, `c698188` | see each bullet |
 | 2026-10-01 to 02 | **The Windows PC takes over:** Mac-isms replaced, tests fitted to the PC's float differences, R/Seurat and harmonypy installed. **Track D extension finished:** four baselines plus a correlation baseline against v3.1 as served; Khoury amendments 3 and 4 | `d9a3cfe`, `65bfc10`, and the results commit |
+| 2026-10-02 to 03 | **Before unsealing:** the Khoury final-evaluation scripts, rehearsed on Fulcher (amendment 5); T1 NB3b and NB3c, both NO GO; two code reviews (amendments 6 and 7). The second found that every Seurat run had seen scrambled inputs, and that scGLUE's cluster balancing divides by zero on Fulcher: Seurat rerun with the fix, scGLUE rerun with balancing off, every table rescored. The public site on Cloudflare Pages | `73cac67`, `379c53c`, `a52570e`, `4d217f1`, `35532a5`; amendment 7 not yet committed |
 
-## Where things stand (2026-10-02)
+## Where things stand (2026-10-03)
 
 - **Release.** Atlas 0.3.0; model v3.1.
   - Tag `atlas-v0.3.0` is at `eae50af`, which is `main`.
@@ -73,7 +74,11 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
   - the docs corrections;
   - Khoury amendment 2;
   - the Track D extension and Khoury amendments 3 and 4;
-  - the move to the Windows PC.
+  - the move to the Windows PC;
+  - Khoury amendments 5 and 6, T1 NB3b and NB3c, and the Pages site.
+
+  Amendment 7's fixes, the Seurat and scGLUE reruns and the rescored
+  tables are in the working tree, not yet committed.
 - **v3.1** (`service/pipeline/ensemble.py`):
   - five V2 encoders, each a tempered softmax over cosine to the class
     centroids, averaged;
@@ -105,18 +110,21 @@ RNA class mean.
 - **Khoury:** amendment 3 (`65bfc10`) fixes the scripts, settings, rules
   scored, the PC environment and the PC-vs-Mac reproduction check;
   amendment 4 adds the divergence rule. Still sealed.
-- **Runs:** Harmony, Seurat CCA and v3.1 on the Mac; MaxFuse, scGLUE (GPU)
-  and the correlation baseline on the PC. Seurat CCA is deterministic (its
-  three seeds are identical). scGLUE diverged on all three Fulcher seeds,
-  reported, not rerun.
-- **Headline:**
-  - Fulcher: v3.1 57.9% balanced, ahead in all 16 pairings; correlation
-    baseline 46.9%.
+- **Runs:** Harmony and v3.1 on the Mac; MaxFuse, Seurat CCA, scGLUE (GPU)
+  and the correlation baseline on the PC.
+  - Seurat CCA was rerun on 2026-10-02 after its inputs were found
+    scrambled (amendment 7); every earlier Seurat number is void. It is
+    deterministic: its three seeds are identical.
+  - scGLUE was rerun on 2026-10-03 with its cluster balancing off (the
+    owner's decision, amendment 7). All nine runs completed.
+- **Headline** (rescored 2026-10-03):
+  - Fulcher: v3.1 57.9% balanced, ahead in all 22 pairings; correlation
+    baseline 46.9%; scGLUE 24.2% at best; Seurat 18.9%.
   - PBMC240 lymphoid recall: v3.1 92.3%, correlation 59.8%, integration
     tools 38.8% or below.
   - SCoPE2 restricted: v3.1 61.3%, level with the correlation baseline,
     below scANVI.
-  - SCoPE2 unrestricted: every mean under 10%.
+  - SCoPE2 unrestricted: every mean under 5%.
 
 **The scripts:**
 
@@ -138,10 +146,14 @@ reproduction runs.
 
 Following the publication plan below:
 
-1. **The Khoury final-evaluation scripts: done** (amendment 5).
-   `khoury2026_embed.py`, `scanvi_run_khoury2026.py` and
-   `khoury2026_score.py` were rehearsed on Fulcher. They reproduce
-   Fulcher's committed per-type recalls across 34 runs.
+1. **The Khoury final-evaluation scripts: done** (amendment 5), reviewed
+   twice (amendments 6 and 7). `khoury2026_embed.py`,
+   `scanvi_run_khoury2026.py` and `khoury2026_score.py` were rehearsed
+   again on Fulcher on 2026-10-03 with amendment 7's checks: they
+   reproduce Fulcher's per-type recalls across 37 runs.
+   - **Waiting on the owner:** commit and push amendment 7 with its fixes,
+     reruns and rescored tables, then fill its commit hash into
+     `research/todo.md` (`AMENDMENT7_COMMIT`).
 2. **T1 NB3b: run 2026-10-02, NO GO** (`research/notebook-run-history.md`
    entry 18).
    - **What it found:** energy separates out-of-distribution cells far
@@ -227,9 +239,10 @@ Following the publication plan below:
 
 ## Open after Track D
 
-- **scGLUE on Fulcher:** why it diverges is not investigated. A CPU run or
-  other settings are untested, and either would need a Khoury amendment
-  before unsealing.
+- **scGLUE's balancing:** it divides by zero when no RNA and query cluster
+  pair reaches its 0.5 similarity cutoff, as on Fulcher, so every run now
+  has it off (amendment 7). How much it changes scGLUE's scores where it
+  can run is not measured.
 - **T1 NB3 / NB3b:**
   - recalibrated abstention: the OOD filter passes 99% of scrambled cells,
     and B cell coverage is 69%;

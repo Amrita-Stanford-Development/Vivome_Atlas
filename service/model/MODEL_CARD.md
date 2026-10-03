@@ -269,17 +269,22 @@ seeds each), Seurat CCA label transfer, and correlation to the RNA class
 mean ran on the same gene-fair inputs. v3.1 is scored on its best guess.
 
 - **Fulcher 2026** (added after the held-out scoring): v3.1 at 57.9% balanced
-  is ahead in all 16 seed pairings.
+  is ahead in all 22 seed pairings.
   - The correlation baseline is next at 46.9% (v3.1 +11.1, CI excludes
     zero).
-  - Seurat CCA, biased in its favour here, scores 1.8%.
-  - scGLUE diverged on all three seeds.
+  - Seurat CCA, biased in its favour here, scores 18.9%.
+  - scGLUE, run with its cluster balancing off (protocol amendment 7),
+    scores 24.2% at best.
 - **PBMC240:** lymphoid recall is 92.3% for v3.1 and 59.8% for the
   correlation baseline. Every integration tool is at 38.8% or below.
 - **SCoPE2 restricted:** 61.3%, ahead of every new tool's mean. It is
   indistinguishable from the correlation baseline (+1.7, CI includes zero)
   and below scANVI.
-- **SCoPE2 unrestricted:** every method averages under 10%, v3.1 at 1.1%.
+- **SCoPE2 unrestricted:** every method averages under 5%, v3.1 at 1.1%.
+
+Every Seurat CCA number from before 2026-10-02 is void: its inputs were
+written in the wrong byte order (protocol amendment 7). The numbers above
+are from the corrected runs.
 
 Tables: `research/benchmark/baselines/`. Narrative:
 `research/benchmark/results.md`, "Baselines beyond scANVI".

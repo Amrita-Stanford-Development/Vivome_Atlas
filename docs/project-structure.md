@@ -53,7 +53,7 @@ Vivome_Atlas/
 │   ├── roadmap.md  todo.md   the current plan, and progress against it
 │   ├── benchmark/            the benchmark write-up: methodology, harness, results, limitations
 │   ├── notebooks/            notebook-style research scripts run on the PC (from T1 NB3b on)
-│   ├── notebook-outputs/     committed tables from notebook runs (nb1, nb1c, nb1d, nb2, nb3b)
+│   ├── notebook-outputs/     committed tables from notebook runs (nb1, nb1b, nb1c, nb1d, nb2, nb3b, nb3c)
 │   └── archive/              finished plans, frozen as written
 │
 └── data/                     EXTERNAL DATASETS

@@ -48,7 +48,8 @@ SETTINGS = {
                "metacell_size=2, method='random', seed=SEED); construct_graphs(15, 15); refine_pivots(n_iters=1, "
                "cca_components=10); filter_bad_matches(pivot, 0.3); propagate; get_embedding",
     "scglue": "fit_SCGLUE, Normal likelihood on z-scored values, one self-loop per gene as the guidance graph, "
-              "scGLUE's own epoch heuristic, random_seed=SEED",
+              "scGLUE's own epoch heuristic, skip_balance=True (its cluster balancing divides by zero when no "
+              "RNA/query cluster pair reaches its 0.5 cosine cutoff, as on Fulcher), random_seed=SEED",
     "harmony": "PCA(50, random_state=SEED) on RNA and query stacked; harmonypy.run_harmony on modality, "
                "max_iter_harmony=30, random_state=SEED",
     "seurat": "Seurat FindTransferAnchors(reduction='cca', dims=1:30, features=all genes, z-scored values as data "
@@ -91,23 +92,39 @@ def run_scglue(inp, seed, workdir):
     graph = nx.Graph()
     for g in inp.genes:
         graph.add_edge(g, g, weight=1.0, sign=1)
+    import ignite.handlers
+    nan_stop = {"hit": False}
+    original = ignite.handlers.TerminateOnNan.__call__
+
+    def watched(self, engine):  # ignite stops training on a NaN loss; scGLUE may then restore a checkpoint
+        before = engine.should_terminate
+        original(self, engine)
+        nan_stop["hit"] |= engine.should_terminate and not before
+
+    nan = lambda n: np.full((n, 50), np.nan, dtype=np.float32)  # noqa: E731  (scGLUE's default latent_dim)
+    ignite.handlers.TerminateOnNan.__call__ = watched
     try:  # fit_SCGLUE itself encodes after pretraining, so a NaN can surface inside it too
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            glue = scglue.models.fit_SCGLUE(adatas, graph, init_kws={"random_seed": seed},
+            glue = scglue.models.fit_SCGLUE(adatas, graph, skip_balance=True, init_kws={"random_seed": seed},
                                             fit_kws={"directory": str(workdir)})
-        return glue.encode_data("rna", adatas["rna"]), glue.encode_data("query", adatas["query"])
+        out = glue.encode_data("rna", adatas["rna"]), glue.encode_data("query", adatas["query"])
     except ValueError as err:
         if not went_nan(err):
             raise
-        nan = lambda n: np.full((n, 50), np.nan, dtype=np.float32)  # scGLUE's default latent_dim
         return nan(len(inp.rna_z)), nan(len(inp.query_z))
+    finally:
+        ignite.handlers.TerminateOnNan.__call__ = original
+    if nan_stop["hit"]:  # training produced NaN, even if a restored checkpoint left finite latents
+        return nan(len(inp.rna_z)), nan(len(inp.query_z))
+    return out
 
 
 def went_nan(err: Exception) -> bool:
-    """Training went NaN: torch refuses to build a distribution from invalid
-    parameters. The run is then recorded as diverged (Khoury amendment 4)."""
-    return "invalid values" in str(err)
+    """Training went NaN: torch refuses to build a distribution from parameters
+    that are NaN. The run is then recorded as diverged (Khoury amendment 4)."""
+    text = str(err)
+    return "invalid values" in text and "nan" in text.lower()
 
 
 def run_harmony(inp, seed):
@@ -124,11 +141,14 @@ def run_harmony(inp, seed):
 
 
 def run_seurat(inp, seed, workdir):
-    """Writes the inputs as raw float32 (genes x cells, column-major) for R,
-    runs seurat_cca_transfer.R, and reads its predictions back."""
+    """Writes the inputs as raw float32 for R, runs seurat_cca_transfer.R, and
+    reads its predictions back. R fills its genes x cells matrix column by
+    column, so the bytes must run cell by cell: the (cells x genes) array in C
+    order. (ndarray.tofile always writes C order; until 2026-10-02 this wrote
+    the transpose, so every earlier Seurat run saw scrambled matrices.)"""
     workdir.mkdir(parents=True, exist_ok=True)
-    np.asfortranarray(inp.rna_z.T).tofile(workdir / "rna.f32")
-    np.asfortranarray(inp.query_z.T).tofile(workdir / "query.f32")
+    np.ascontiguousarray(inp.rna_z, dtype="<f4").tofile(workdir / "rna.f32")
+    np.ascontiguousarray(inp.query_z, dtype="<f4").tofile(workdir / "query.f32")
     (workdir / "genes.txt").write_text("\n".join(inp.genes) + "\n")
     pd.Series(inp.rna_labels).to_csv(workdir / "rna_labels.csv", index=False, header=["label"])
     pd.Series(inp.query_ids).to_csv(workdir / "query_ids.csv", index=False, header=["cell_id"])
@@ -173,20 +193,41 @@ def main() -> None:
     parser.add_argument("--unseal", action="store_true", help="required for a sealed dataset, at its final evaluation only")
     parser.add_argument("--out", type=Path, help="write here instead of results/baselines_ext/<dataset>/")
     args = parser.parse_args()
-    if args.dataset in baselines_inputs.SEALED and not args.unseal:
+    sealed = args.dataset in baselines_inputs.SEALED
+    if sealed and not args.unseal:
         raise SystemExit(f"{args.dataset} is sealed; it runs only at the final v3.1 evaluation, with --unseal "
                          "(research/benchmark/protocol-khoury2026.md)")
+    if sealed and (args.smoke or args.out):
+        raise SystemExit("--smoke and --out are refused for a sealed dataset: only the real runs touch it")
     if args.tool in DETERMINISTIC and args.seed != 0:
         raise SystemExit(f"{args.tool} is deterministic; it runs once, as seed 0")
+    out_dir = args.out or (OUT / ("smoke" if args.smoke else args.dataset))
+    stem = out_dir / f"{args.tool}_seed{args.seed}"
+    if sealed and Path(f"{stem}.json").exists():
+        status = json.loads(Path(f"{stem}.json").read_text()).get("status", "completed")
+        if status != "failed":  # amendment 4: a diverged run is not rerun; a completed one is final
+            raise SystemExit(f"{stem}.json exists ({status}); a sealed run is not rerun or replaced")
     t0 = time.time()
     inp = baselines_inputs.load(args.dataset)
-    out_dir = args.out or (OUT / ("smoke" if args.smoke else args.dataset))
     if args.smoke:
         keep = np.random.default_rng(0).choice(len(inp.rna_z), args.smoke, replace=False)
         inp.rna_z, inp.rna_labels = inp.rna_z[keep], inp.rna_labels[keep]
     out_dir.mkdir(parents=True, exist_ok=True)
-    stem = out_dir / f"{args.tool}_seed{args.seed}"
+    base = {"tool": args.tool, "seed": args.seed, "deterministic": args.tool in DETERMINISTIC,
+            "settings": SETTINGS[args.tool], "smoke_rna_cells": args.smoke or None, **inp.record}
+    try:
+        record = run(args, inp, stem, base)
+    except Exception as err:  # every exit leaves a record (amendment 7): a failed run is not a missing one
+        record = {**base, "status": "failed", "diverged": False, "error": f"{type(err).__name__}: {err}"[:2000],
+                  "elapsed_s": round(time.time() - t0, 1)}
+        Path(f"{stem}.json").write_text(json.dumps(record, indent=2) + "\n")
+        raise
+    record["elapsed_s"] = round(time.time() - t0, 1)
+    Path(f"{stem}.json").write_text(json.dumps(record, indent=2) + "\n")
+    print(json.dumps(record))
 
+
+def run(args, inp, stem: Path, base: dict) -> dict:
     pred = pd.DataFrame({"cell_id": inp.query_ids})
     diverged = False
     if args.tool == "seurat":
@@ -207,12 +248,8 @@ def main() -> None:
             pred["knn_unrestricted"], pred["knn_restricted"] = knn["unrestricted"], knn["restricted"]
             pred["nc_unrestricted"], pred["nc_restricted"] = nc["unrestricted"], nc["restricted"]
     pred.to_csv(f"{stem}_pred.csv", index=False)
-    record = {"tool": args.tool, "seed": args.seed, "deterministic": args.tool in DETERMINISTIC,
-              "settings": SETTINGS[args.tool], "diverged": diverged,
-              "smoke_rna_cells": args.smoke or None, **inp.record, "environment": environment(args.tool),
-              "elapsed_s": round(time.time() - t0, 1)}
-    Path(f"{stem}.json").write_text(json.dumps(record, indent=2) + "\n")
-    print(json.dumps(record))
+    return {**base, "status": "diverged" if diverged else "completed", "diverged": diverged,
+            "environment": environment(args.tool)}
 
 
 if __name__ == "__main__":

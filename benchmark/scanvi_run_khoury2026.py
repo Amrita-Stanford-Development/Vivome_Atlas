@@ -30,6 +30,7 @@ import argparse
 import json
 import time
 import warnings
+from pathlib import Path
 
 import anndata as ad
 import numpy as np
@@ -78,8 +79,26 @@ def main() -> None:
     np.random.seed(args.seed)
     out = out_dir(args.rehearse) / ("smoke" if args.smoke else "")
     out.mkdir(parents=True, exist_ok=True)
+    stem = out / f"scanvi_{args.arm}_seed{args.seed}"
+    if args.unseal and Path(f"{stem}.json").exists():
+        status = json.loads(Path(f"{stem}.json").read_text()).get("status", "completed")
+        if status != "failed":  # amendment 4: a diverged run is not rerun; a completed one is final
+            raise SystemExit(f"{stem}.json exists ({status}); a sealed run is not rerun or replaced")
     t0 = time.time()
+    base = {"method": "scANVI", "dataset": "Fulcher 2026 (rehearsal)" if args.rehearse else "Khoury 2026 (final evaluation)",
+            "arm": args.arm, "seed": args.seed, "smoke_rna_cells": args.smoke or None}
+    try:
+        meta = {**base, **train(args, stem, t0)}
+    except Exception as err:  # every exit leaves a record (amendment 7): a failed run is not a missing one
+        meta = {**base, "status": "failed", "diverged": False, "error": f"{type(err).__name__}: {err}"[:2000],
+                "elapsed_s": round(time.time() - t0, 1)}
+        Path(f"{stem}.json").write_text(json.dumps(meta, indent=2) + "\n")
+        raise
+    Path(f"{stem}.json").write_text(json.dumps(meta, indent=2) + "\n")
+    print(json.dumps(meta), flush=True)
 
+
+def train(args, stem: Path, t0: float) -> dict:
     rna_X = np.load(D / "rna_X.npy")
     rna_labels = pd.read_csv(D / "rna_meta.csv")["class_name"].to_numpy()
     if args.rehearse:
@@ -127,7 +146,6 @@ def main() -> None:
 
     diverged = not bool(np.isfinite(emb).all())
     rna_emb, query_emb = emb[:len(rna_Z)], emb[len(rna_Z):]
-    stem = out / f"scanvi_{args.arm}_seed{args.seed}"
     np.save(f"{stem}_rna_emb.npy", rna_emb)
     np.save(f"{stem}_query_emb.npy", query_emb)
 
@@ -139,13 +157,8 @@ def main() -> None:
         pred["shared_knn"] = clf.predict(query_emb)
     pred.to_csv(f"{stem}_pred.csv", index=False)
 
-    meta = {"method": "scANVI", "dataset": "Fulcher 2026 (rehearsal)" if args.rehearse else "Khoury 2026 (final evaluation)",
-            "arm": args.arm, "n_genes": int(query_X.shape[1]), "seed": args.seed, "smoke_rna_cells": args.smoke or None,
-            "n_rna_cells": int(len(rna_Z)), "n_query_cells": int(len(query_Z)), "diverged": diverged,
-            "elapsed_s": round(time.time() - t0, 1)}
-    with open(f"{stem}.json", "w") as handle:
-        json.dump(meta, handle, indent=2)
-    print(json.dumps(meta), flush=True)
+    return {"status": "diverged" if diverged else "completed", "diverged": diverged, "n_genes": int(query_X.shape[1]),
+            "n_rna_cells": int(len(rna_Z)), "n_query_cells": int(len(query_Z)), "elapsed_s": round(time.time() - t0, 1)}
 
 
 if __name__ == "__main__":

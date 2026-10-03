@@ -40,11 +40,34 @@ from benchmark.fulcher2026_embed import cosine_stats, pbmc240_upload, sha256
 from service.pipeline import encoder, pipeline, reference
 
 RESULTS = datasets.REPO / "benchmark" / "results"
-MEMBERS_DIR = datasets.REPO / "service" / "model" / "v3_1" / "members"
+V31_DIR = datasets.REPO / "service" / "model" / "v3_1"
+MEMBERS_DIR = V31_DIR / "members"
+RUNTIME = datasets.REPO / "service" / "model" / "runtime"
 NB1D = datasets.REPO / "data" / "incoming" / "NB1d" / "embeddings"
 MEMBERS = {f"V2_seed{s}": MEMBERS_DIR / f"V2_batchgene_aug_seed{s}.pt" for s in range(5)}
-V3_SERVED = datasets.REPO / "service" / "model" / "runtime" / "reference_model.pt"
+V3_SERVED = RUNTIME / "reference_model.pt"
 GATE_MIN_MEDIAN_COSINE = 0.999
+
+
+def model_files() -> dict:
+    """Every model file the final evaluation reads, by path from the repository
+    root. Their sha256s go into gate.json at step 1, and the scorer checks
+    them again before it reads a label (amendment 7)."""
+    files = [V31_DIR / "MANIFEST.json", V31_DIR / "nb2_spec_v31.json", *MEMBERS.values(),
+             *(MEMBERS_DIR / f"{m}_reference_latent_f16.npy" for m in MEMBERS),
+             *(MEMBERS_DIR / f"{m}_centroids.npy" for m in MEMBERS),
+             V3_SERVED, RUNTIME / "reference_centroids.npy", RUNTIME / "reference_embedding.npy",
+             RUNTIME / "reference_metadata.csv"]
+    return {p.relative_to(datasets.REPO).as_posix(): p for p in files}
+
+
+def refuse_overrides() -> None:
+    """The scripts read the repository's model files; the service can be pointed
+    elsewhere by VIVOME_* variables. Mixing the two would score two exports."""
+    import os
+    set_ = sorted(k for k in os.environ if k.startswith("VIVOME_"))
+    if set_:
+        sys.exit(f"refusing to run with {', '.join(set_)} set: the final evaluation uses the repository's model files")
 
 
 def out_dir(rehearse: bool):
@@ -71,6 +94,7 @@ def main() -> None:
     mode.add_argument("--unseal", action="store_true", help="the final v3.1 evaluation (protocol-khoury2026.md)")
     mode.add_argument("--rehearse", action="store_true", help="the same steps on Fulcher 2026, a development dataset")
     args = parser.parse_args()
+    refuse_overrides()
     out, tables = out_dir(args.rehearse), tables_dir(args.rehearse)
     out.mkdir(parents=True, exist_ok=True)
     tables.mkdir(parents=True, exist_ok=True)
@@ -85,23 +109,24 @@ def main() -> None:
         "members": member_gate(genes),
         "dev_gate_passed": bool(v31_dev_gate.run_gate(bundle)["passed"]),
         "service_flags": flags,
-        "checkpoints": {name: {"file": path.name, "sha256": sha256(path)}
-                        for name, path in {**MEMBERS, "v3_served": V3_SERVED}.items()},
+        "model_files": {rel: sha256(path) for rel, path in model_files().items()},
     }
     gate["passed"] = (all(m["passed"] for m in gate["members"].values()) and gate["dev_gate_passed"]
                       and all(flags.values()))
     (tables / "gate.json").write_text(json.dumps(gate, indent=2) + "\n")
     print(json.dumps({k: gate[k] for k in ("members", "dev_gate_passed", "service_flags", "passed")}, indent=2))
-    if not gate["passed"]:
-        sys.exit("GATE FAILED. Nothing embedded.")
 
+    # v3 as served has no gate, so it is embedded either way; v3.1 only if its gate passed (amendment 2)
     upload = datasets.load_fulcher2026_upload() if args.rehearse else datasets.load_khoury2026_upload()
     (out / "cell_ids.txt").write_text("\n".join(upload.cell_ids) + "\n")
-    for name, path in {**MEMBERS, "v3_served": V3_SERVED}.items():
+    models = {**MEMBERS, "v3_served": V3_SERVED} if gate["passed"] else {"v3_served": V3_SERVED}
+    for name, path in models.items():
         z, aligned, value_scale = pipeline.embed_query(encoder.load_encoder(path), genes, upload)
         np.save(out / f"{name}_latent.npy", z)
         print(f"{name}: {z.shape}, value scale {value_scale.detected}, {aligned.n_features_matched} genes matched, "
               f"observed per cell min {aligned.per_cell_observed_genes.min()}")
+    if not gate["passed"]:
+        sys.exit("v3.1 GATE FAILED: v3.1 is not embedded or scored; v3 is embedded (the scorer reads gate.json)")
 
     response = pipeline.run_projection(bundle, upload)
     baselines_v31.table(response).to_csv(out / "v31_pred.csv", index=False)
