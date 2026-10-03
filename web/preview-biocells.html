@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" data-intro="seen">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivOME · Bio objects preview</title>
+    <meta name="robots" content="noindex">
+    <!-- A preview of web/js/biocells.js before it joins the landing. Not
+         linked from the site. -->
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="css/story.css">
+    <style>
+        .bio-canvas, .tile-canvas, .gel { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+        /* The gel: the water and its objects are softened and frosted over, so
+           they read as submerged. The close-ups sit on their own canvas above it. */
+        .gel {
+            background: linear-gradient(180deg,
+                rgba(var(--gel-tint), calc(var(--gel-top) * var(--gel-k))),
+                rgba(var(--gel-tint), calc(var(--gel-mid) * var(--gel-k))) 55%,
+                rgba(var(--gel-tint), calc(var(--gel-low) * var(--gel-k))));
+            transition: opacity 0.4s ease;
+        }
+        /* The frost's fine grain. */
+        .gel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+            opacity: var(--grain);
+        }
+        html[data-gel="soft"] { --gel-blur: 1.6px; --gel-top: 0.42; --gel-mid: 0.16; --gel-low: 0.24; }
+        html[data-gel="deep"] { --gel-blur: 3.2px; --gel-top: 0.58; --gel-mid: 0.3; --gel-low: 0.4; }
+        html[data-gel] .bio-canvas, html[data-gel] .story-field { filter: blur(var(--gel-blur)) saturate(0.92); }
+        html[data-gel="none"] .bio-canvas, html[data-gel="none"] .story-field { filter: none; }
+        html[data-gel="none"] .gel { opacity: 0; }
+
+        :root { --gel-tint: 244, 248, 252; --gel-k: 1; --grain: 1; }
+
+        .preview-bar {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 18px;
+            padding: 8px 12px 8px 16px;
+            width: max-content;
+            max-width: calc(100% - 32px);
+            font-size: 14px;
+        }
+        .preview-bar strong { margin-right: 4px; }
+        .preview-bar a { font-size: 13px; }
+        .control { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-faint); font-size: 13px; }
+        .seg { display: inline-flex; gap: 2px; padding: 3px; }
+        .seg button, .preview-bar .plain {
+            font: inherit;
+            font-size: 13px;
+            border: 0;
+            background: transparent;
+            color: var(--ink-soft);
+            padding: 3px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 1px 2px 4px rgba(var(--shade), 0.14); }
+        .preview-bar .plain { border: 1px solid var(--line); background: var(--paper); }
+
+        .specimens { position: relative; max-width: var(--page-max); margin: 0 auto; padding: 24px var(--gutter) 120px; }
+        .specimens-head { max-width: 760px; margin-bottom: 32px; }
+        .specimens-head h2 { font-size: clamp(26px, 3vw, 34px); letter-spacing: -0.03em; margin-bottom: 12px; }
+        .specimens-head p + p { margin-top: 10px; }
+        .spec-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+        .spec {
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--r-sheet);
+            border: 1px solid rgba(0, 142, 204, 0.10);
+            box-shadow: var(--halo);
+        }
+        /* Transparent on purpose: the specimen is drawn on the canvas behind. */
+        .spec-view { position: relative; aspect-ratio: 1; border-radius: var(--r-sheet) var(--r-sheet) 0 0; cursor: grab; touch-action: pan-y; }
+        .spec-view:active { cursor: grabbing; }
+        .spec-text {
+            flex: 1;
+            padding: 16px 22px 22px;
+            background: rgba(250, 250, 249, 0.97);
+            border-top: 1px solid var(--line);
+            border-radius: 0 0 var(--r-sheet) var(--r-sheet);
+        }
+        .spec-text h3 { font-size: 17px; margin-bottom: 2px; }
+        .spec-size { font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 8px; }
+        .spec-text p:not(.spec-size) { font-size: 14.5px; line-height: 1.55; }
+        .spec-full { grid-column: 1 / -1; }
+        .spec-full .spec-view { aspect-ratio: 3 / 1; }
+        .scale-labels span {
+            position: absolute;
+            bottom: 12px;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: var(--ink-faint);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .no-webgl { margin-top: 18px; color: var(--error); }
+
+        @media (max-width: 820px) {
+            .preview-bar { top: 8px; }
+            .spec-grid { grid-template-columns: minmax(0, 1fr); }
+            .spec-full { grid-column: auto; }
+            .spec-full .spec-view { aspect-ratio: 4 / 3; }
+            .scale-labels { display: none; }
+        }
+    </style>
+</head>
+<body class="story-page" data-field="still">
+    <div class="preview-bar glass" role="toolbar" aria-label="Preview controls">
+        <strong>Bio objects preview</strong>
+        <span class="control">Colours
+            <span class="seg well" data-control="palette">
+                <button type="button" data-value="vivid" aria-pressed="true">Colour</button>
+                <button type="button" data-value="site" aria-pressed="false">Site blue</button>
+                <button type="button" data-value="stained" aria-pressed="false">Smear stain</button>
+            </span>
+        </span>
+        <span class="control">Amount
+            <span class="seg well" data-control="density">
+                <button type="button" data-value="calm" aria-pressed="true">Calm</button>
+                <button type="button" data-value="rich" aria-pressed="false">Rich</button>
+            </span>
+        </span>
+        <span class="control">Effect
+            <span class="seg well" data-control="effect">
+                <button type="button" data-value="still" aria-pressed="false">Still</button>
+                <button type="button" data-value="flow" aria-pressed="true">Flowing gel</button>
+                <button type="button" data-value="rain" aria-pressed="false">Rain</button>
+                <button type="button" data-value="touch" aria-pressed="false">Touch</button>
+                <button type="button" data-value="wake" aria-pressed="false">Wake</button>
+                <button type="button" data-value="ink" aria-pressed="false">Ink</button>
+            </span>
+        </span>
+        <span class="control">Gel
+            <span class="seg well" data-control="gel">
+                <button type="button" data-value="none" aria-pressed="false">None</button>
+                <button type="button" data-value="soft" aria-pressed="true">Soft</button>
+                <button type="button" data-value="deep" aria-pressed="false">Deep</button>
+            </span>
+        </span>
+        <span class="control">
+            <span class="seg well" data-control="water">
+                <button type="button" data-value="on" aria-pressed="true">Water particles</button>
+            </span>
+            <button type="button" class="plain" data-control="pause">Pause</button>
+        </span>
+        <a href="preview-water.html">All effects side by side</a>
+    </div>
+
+    <canvas class="story-field" aria-hidden="true"></canvas>
+    <canvas class="bio-canvas" aria-hidden="true"></canvas>
+    <div class="gel" aria-hidden="true"></div>
+    <canvas class="tile-canvas" aria-hidden="true"></canvas>
+
+    <main id="main" class="story">
+        <section class="landing" aria-labelledby="landing-title">
+            <div class="landing-card sheet breathe">
+                <h1 id="landing-title" class="landing-wordmark">Viv<span class="cut">OME</span></h1>
+                <p class="landing-catch landing-in">Two <span class="cut">omes.</span> One living space.</p>
+                <p class="landing-line landing-in">A versioned atlas that places RNA and protein measurements of single cells in one shared space, and says so when it can't.</p>
+            </div>
+            <p class="scroll-hint landing-in">The landing's first screen, with the objects in the water. Scroll to see each one up close.</p>
+        </section>
+
+        <section class="specimens" id="specimens" aria-labelledby="specimens-title">
+            <div class="specimens-head sheet">
+                <h2 id="specimens-title">The <span class="cut">specimens.</span></h2>
+                <p>Every object here is built in code. The cells and molecules follow their measured shapes; the threads are simple drawn shapes. Nothing is downloaded. Drag one to turn it.</p>
+                <p>In the water above, platelets are drawn 1.5 times larger so they stay visible, and the molecules are drawn hundreds to thousands of times larger than they would be beside the cells. The mix keeps the order of real blood, red cells most and white cells fewest, but not its ratio.</p>
+                <p class="no-webgl" hidden>This preview needs WebGL, which this browser has turned off.</p>
+            </div>
+
+            <div class="spec-grid">
+                <article class="spec">
+                    <div class="spec-view" data-specimen="dna"></div>
+                    <div class="spec-text">
+                        <h3>DNA double helix</h3>
+                        <p class="spec-size">2 nm across, 10.5 base pairs a turn</p>
+                        <p>B-form and right-handed. The two backbones sit 144° apart, not 180°, which opens the wide major groove and the narrow minor groove. The pairs, A-T and G-C, are coloured by base.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="chromatin"></div>
+                    <div class="spec-text">
+                        <h3>Chromatin</h3>
+                        <p class="spec-size">Nucleosomes about 10 nm across</p>
+                        <p>How DNA rolls up in a nucleus. It winds about 1.65 turns, left-handed, round each core of eight histone proteins, then runs on as linker DNA to the next: beads on a string. The double helix runs all the way round.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="coil"></div>
+                    <div class="spec-text">
+                        <h3>Coiled thread</h3>
+                        <p class="spec-size">A simple shape, not a measured one</p>
+                        <p>A thread wound into a loose coil along a gently bending line, unwinding to a free end at each side.</p>
+                    </div>
+                </article>
+                <article class="spec spec-full">
+                    <div class="spec-view" data-specimen="thread"></div>
+                    <div class="spec-text">
+                        <h3>Long thread</h3>
+                        <p class="spec-size">A simple shape, not a measured one</p>
+                        <p>A long, thin thread drifting in gentle curves, thinning at its tips.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="longCell"></div>
+                    <div class="spec-text">
+                        <h3>Long cell</h3>
+                        <p class="spec-size">Spindle-shaped</p>
+                        <p>A long, thin cell, tapering to each end and gently bent, with a long nucleus. Fibroblasts and smooth muscle cells have this shape.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="rbc"></div>
+                    <div class="spec-text">
+                        <h3>Red blood cell</h3>
+                        <p class="spec-size">7.8 µm across, 2.6 µm at the rim, 0.8 µm at the centre</p>
+                        <p>The biconcave disc is the Evans and Fung equation for a resting red cell, spun into 3D: thick at the rim, thin at the centre.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="platelet"></div>
+                    <div class="spec-text">
+                        <h3>Platelet</h3>
+                        <p class="spec-size">About 2.5 µm across, under 1 µm thick</p>
+                        <p>A small, slightly lumpy disc. Its granules show through the membrane.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="lymphocyte"></div>
+                    <div class="spec-text">
+                        <h3>Lymphocyte</h3>
+                        <p class="spec-size">About 8 µm across</p>
+                        <p>A large round nucleus of clumped chromatin fills most of the cell, inside a thin rim of cytoplasm. The surface is covered in short microvilli.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="monocyte"></div>
+                    <div class="spec-text">
+                        <h3>Monocyte</h3>
+                        <p class="spec-size">About 17 µm across, the largest white cell</p>
+                        <p>A kidney-shaped nucleus, a ruffled membrane, and a wide cytoplasm with a few clear vacuoles.</p>
+                    </div>
+                </article>
+                <article class="spec">
+                    <div class="spec-view" data-specimen="neutrophil"></div>
+                    <div class="spec-text">
+                        <h3>Neutrophil</h3>
+                        <p class="spec-size">About 13 µm across</p>
+                        <p>A nucleus of 3 to 5 lobes joined by thin strands, in a cytoplasm full of fine granules. This one has 4.</p>
+                    </div>
+                </article>
+                <article class="spec spec-full">
+                    <div class="spec-view" data-specimen="scale"><div class="scale-labels"></div></div>
+                    <div class="spec-text">
+                        <h3>To scale</h3>
+                        <p class="spec-size">All on one micrometre scale</p>
+                        <p>Left to right: red blood cell, platelet, lymphocyte, neutrophil, monocyte. The molecules are left out: at this scale they would be far thinner than a pixel.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module">
+        import { PALETTES, createBioLayer, specimen, sharedUniforms } from './js/biocells.js';
+        import { EFFECTS, createEffect, createSceneTarget, supported } from './js/water.js';
+        import { createField } from './js/field.js';
+
+        // The same three.js build as the landing and the atlas viewer.
+        const THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const compact = window.matchMedia('(max-width: 820px)').matches;
+        const params = new URLSearchParams(window.location.search);
+        const state = { palette: params.get('palette') || 'vivid', density: params.get('density') || 'calm', gel: params.get('gel') || 'soft', effect: params.get('effect') || 'flow', water: true, paused: reduced };
+        document.documentElement.dataset.gel = state.gel;
+        for (const [name, value] of [['palette', state.palette], ['density', state.density], ['gel', state.gel], ['effect', state.effect]]) {
+            for (const b of document.querySelectorAll(`.seg[data-control="${name}"] button`)) b.setAttribute('aria-pressed', String(b.dataset.value === value));
+        }
+        // ?specimens opens on the close-ups alone (for screenshots).
+        if (params.has('specimens')) document.querySelector('.landing').style.display = 'none';
+
+        // How each specimen sits: a tilt (about x, about z) so its shape reads,
+        // and whether it spins about its own axis (DNA; `along` for a thread
+        // lying along x), rocks (the discs, which
+        // would hide their shape edge-on) or turns on the spot.
+        const POSE = {
+            dna: { tilt: [0.2, 0.55], own: true },
+            chromatin: { tilt: [0.35, 0.2] },
+            coil: { tilt: [0.35, 0.3] },
+            thread: { tilt: [0, 0], own: true, along: true },
+            longCell: { tilt: [0.3, 0.15] },
+            rbc: { tilt: [0.55, 0.2], rock: true },
+            platelet: { tilt: [0.95, 0.2], rock: true },
+            lymphocyte: { tilt: [0.25, 0] },
+            monocyte: { tilt: [0.35, 0.1] },
+            neutrophil: { tilt: [0.4, 0.1] },
+        };
+        const SCALE_ROW = [
+            ['rbc', 'Red cell'], ['platelet', 'Platelet'],
+            ['lymphocyte', 'Lymphocyte'], ['neutrophil', 'Neutrophil'], ['monocyte', 'Monocyte'],
+        ];
+
+        function loadThree() {
+            if (window.THREE) return Promise.resolve(window.THREE);
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = THREE_URL;
+                script.onload = () => resolve(window.THREE);
+                script.onerror = () => reject(new Error('three.js failed to load'));
+                document.head.append(script);
+            });
+        }
+
+        const cells = fetch('./data/story_cells.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+
+        Promise.all([loadThree(), cells]).then(([THREE, storyCells]) => start(THREE, storyCells)).catch((err) => {
+            console.warn('Preview unavailable:', err);
+            document.querySelector('.no-webgl').hidden = false;
+        });
+
+        // A light box behind each specimen, with the card's rounded top corners.
+        const BACKDROP_VERTEX = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+        const BACKDROP_FRAGMENT = `
+            uniform vec2 uSize;
+            uniform float uRadius;
+            varying vec2 vUv;
+            void main() {
+                vec2 p = vUv * uSize;
+                vec2 c = vec2(clamp(p.x, uRadius, uSize.x - uRadius), min(p.y, uSize.y - uRadius));
+                float edge = 1.0 - smoothstep(uRadius - 1.0, uRadius, length(p - c));
+                float g = length(vUv - vec2(0.5, 0.56));
+                vec3 col = mix(vec3(0.988, 0.994, 0.999), vec3(0.905, 0.937, 0.965), smoothstep(0.05, 0.85, g));
+                gl_FragColor = vec4(col, edge);
+            }`;
+
+        function start(THREE, storyCells) {
+            // The water's objects are drawn under the gel, the close-ups above it.
+            const renderers = ['.bio-canvas', '.tile-canvas'].map((selector) => {
+                const r = new THREE.WebGLRenderer({ canvas: document.querySelector(selector), antialias: true, alpha: true });
+                r.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+                r.autoClear = false;
+                return r;
+            });
+            const [renderer, tileRenderer] = renderers;
+            // The objects are drawn to a texture, then shown through the chosen
+            // water effect. The ripples and the ink need half-float targets.
+            const sceneTarget = createSceneTarget(THREE);
+            const canSimulate = supported(renderer);
+            let effect = null;
+            function setEffect() {
+                effect?.dispose();
+                const wanted = EFFECTS.find((e) => e.name === state.effect) || EFFECTS[1];
+                const name = canSimulate || wanted.name === 'still' || wanted.name === 'flow' ? wanted.name : 'flow';
+                effect = createEffect(THREE, name);
+                effect.pointer = EFFECTS.find((e) => e.name === name).pointer;
+                effect.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+            let layer = null;
+            function buildLayer() {
+                if (layer) { scene.remove(layer.group); layer.dispose(); }
+                layer = createBioLayer(THREE, { palette: PALETTES[state.palette], density: state.density, compact });
+                scene.add(layer.group);
+            }
+
+            const waterCanvas = document.querySelector('.story-field');
+            const water = storyCells ? createField(THREE, waterCanvas, storyCells, { compact }) : null;
+
+            const tiles = [...document.querySelectorAll('[data-specimen]')].map((view) => makeTile(THREE, view));
+            function buildAll() {
+                buildLayer();
+                for (const tile of tiles) buildTile(THREE, tile, PALETTES[state.palette]);
+            }
+            buildAll();
+            setEffect();
+
+            function resize() {
+                for (const r of renderers) r.setSize(window.innerWidth, window.innerHeight, false);
+                sceneTarget.setSize(window.innerWidth, window.innerHeight, renderer.getPixelRatio());
+                effect?.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                water?.resize();
+                for (const tile of tiles) tile.aspect = 0;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Controls.
+            for (const seg of document.querySelectorAll('.seg[data-control]')) {
+                seg.addEventListener('click', (e) => {
+                    const button = e.target.closest('button');
+                    if (!button) return;
+                    const name = seg.dataset.control;
+                    if (name === 'water') {
+                        state.water = !state.water;
+                        button.setAttribute('aria-pressed', String(state.water));
+                        waterCanvas.style.visibility = state.water ? 'visible' : 'hidden';
+                        return;
+                    }
+                    if (state[name] === button.dataset.value) return;
+                    state[name] = button.dataset.value;
+                    for (const b of seg.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b === button));
+                    if (name === 'gel') document.documentElement.dataset.gel = state.gel;
+                    else if (name === 'effect') setEffect();
+                    else if (name === 'palette') buildAll();
+                    else buildLayer();
+                });
+            }
+            const pauseButton = document.querySelector('[data-control="pause"]');
+            const showPause = () => { pauseButton.textContent = state.paused ? 'Play' : 'Pause'; };
+            pauseButton.addEventListener('click', () => { state.paused = !state.paused; showPause(); });
+            showPause();
+
+            // Touch drops a ripple where you click; Wake follows the pointer.
+            // Not over the toolbar or the close-ups, which have their own use.
+            const onWater = (e) => !e.target.closest('.preview-bar, .spec-view, a, button');
+            const at = (e) => [e.clientX / window.innerWidth, 1 - e.clientY / window.innerHeight];
+            window.addEventListener('pointerdown', (e) => {
+                if (effect.pointer === 'click' && onWater(e)) effect.drop(...at(e), 1.2, 0.04);
+            });
+            let lastWake = null;
+            window.addEventListener('pointermove', (e) => {
+                if (effect.pointer !== 'move' || !onWater(e)) return;
+                if (lastWake && Math.hypot(e.clientX - lastWake[0], e.clientY - lastWake[1]) < 6) return;
+                lastWake = [e.clientX, e.clientY];
+                effect.drop(...at(e), 0.22, 0.018);
+            });
+
+            const born = performance.now();
+            let last = born;
+            let sim = 0;
+            function frame(now) {
+                const dt = Math.min(0.1, (now - last) / 1000);
+                last = now;
+                if (!state.paused) sim += dt;
+
+                const step = state.paused ? 0 : dt;
+                const t = Math.min(1, (now - born) / 2600);
+                layer.setFade(t * t * (3 - 2 * t));
+                layer.update(sim, { aspect: camera.aspect });
+                if (water && state.water) water.render({ flight: 0, time: sim, introMs: null });
+
+                const W = window.innerWidth;
+                const H = window.innerHeight;
+                renderer.setScissorTest(false);
+                sceneTarget.capture(renderer, scene, camera);
+                effect.step(renderer, sim, step);
+                renderer.setViewport(0, 0, W, H);
+                renderer.setClearColor(0x000000, 0);
+                renderer.clear();
+                effect.draw(renderer, sceneTarget.texture);
+                tileRenderer.setScissorTest(false);
+                tileRenderer.setViewport(0, 0, W, H);
+                tileRenderer.setClearColor(0x000000, 0);
+                tileRenderer.clear();
+                for (const tile of tiles) drawTile(THREE, tileRenderer, tile, dt, sim, H);
+                requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function makeTile(THREE, view) {
+            const kind = view.dataset.specimen;
+            const scene = new THREE.Scene();
+            const shared = sharedUniforms(THREE);
+            const backdrop = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+                vertexShader: BACKDROP_VERTEX,
+                fragmentShader: BACKDROP_FRAGMENT,
+                uniforms: { uSize: { value: new THREE.Vector2(1, 1) }, uRadius: { value: 20 } },
+                transparent: true,
+                depthTest: false,
+                depthWrite: false,
+            }));
+            backdrop.frustumCulled = false;
+            backdrop.renderOrder = -10;
+            scene.add(backdrop);
+            const pivot = new THREE.Group();
+            scene.add(pivot);
+            const tile = {
+                view, kind, scene, shared, backdrop, pivot, spinners: [],
+                camera: new THREE.PerspectiveCamera(28, 1, 0.1, 1000),
+                yaw: 0.4, pitch: 0, drag: null, aspect: 0, fit: null,
+                labels: view.querySelector('.scale-labels'),
+            };
+            view.addEventListener('pointerdown', (e) => {
+                tile.drag = { x: e.clientX, y: e.clientY };
+                view.setPointerCapture(e.pointerId);
+            });
+            view.addEventListener('pointermove', (e) => {
+                if (!tile.drag) return;
+                tile.yaw += (e.clientX - tile.drag.x) * 0.01;
+                tile.pitch = Math.max(-1.3, Math.min(1.3, tile.pitch + (e.clientY - tile.drag.y) * 0.01));
+                tile.drag = { x: e.clientX, y: e.clientY };
+            });
+            const release = () => { tile.drag = null; };
+            view.addEventListener('pointerup', release);
+            view.addEventListener('pointercancel', release);
+            return tile;
+        }
+
+        // A specimen in a tilt, inside a spinner, inside the tile's pivot.
+        function posed(THREE, kind, palette, shared) {
+            const object = specimen(THREE, kind, palette, shared);
+            const box = new THREE.Box3().setFromObject(object);
+            const centre = box.getCenter(new THREE.Vector3());
+            object.position.sub(centre);
+            const radius = box.getBoundingSphere(new THREE.Sphere()).radius;
+            const spinner = new THREE.Group();
+            spinner.add(object);
+            const tilt = new THREE.Group();
+            tilt.rotation.set(POSE[kind].tilt[0], 0, POSE[kind].tilt[1]);
+            tilt.add(spinner);
+            return { node: tilt, spinner, radius, size: box.getSize(new THREE.Vector3()) };
+        }
+
+        function buildTile(THREE, tile, palette) {
+            for (const child of [...tile.pivot.children]) {
+                tile.pivot.remove(child);
+                child.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
+            }
+            tile.spinners = [];
+            if (tile.kind === 'scale') {
+                const gap = 1.6;
+                const items = SCALE_ROW.map(([kind]) => posed(THREE, kind, palette, tile.shared));
+                let x = 0;
+                items.forEach((item, i) => {
+                    if (i > 0) x += items[i - 1].radius + gap + item.radius;
+                    item.node.position.x = x;
+                });
+                const width = x + items[0].radius + items[items.length - 1].radius;
+                for (const item of items) {
+                    item.node.position.x += items[0].radius - width / 2;
+                    item.node.position.y = 1.2;
+                    tile.pivot.add(item.node);
+                    tile.spinners.push(item.spinner);
+                }
+                tile.fit = { width, height: 2 * Math.max(...items.map((i) => i.radius)) + 4, items };
+                tile.labels.innerHTML = SCALE_ROW.map(([, label]) => `<span>${label}</span>`).join('');
+            } else {
+                const item = posed(THREE, tile.kind, palette, tile.shared);
+                tile.pivot.add(item.node);
+                tile.spinners.push(item.spinner);
+                // A long thread turns about its own length, so fit its length and
+                // the circle its cross-section sweeps.
+                tile.fit = POSE[tile.kind].along
+                    ? { width: item.size.x, height: Math.hypot(item.size.y, item.size.z) }
+                    : { radius: item.radius };
+            }
+            tile.aspect = 0;
+        }
+
+        function fitCamera(tile, aspect) {
+            const cam = tile.camera;
+            const vfov = (cam.fov * Math.PI) / 180;
+            const hfov = 2 * Math.atan(Math.tan(vfov / 2) * aspect);
+            let dist;
+            if (tile.fit.radius) {
+                dist = (tile.fit.radius / Math.sin(Math.min(vfov, hfov) / 2)) * 1.04;
+            } else {
+                dist = Math.max((tile.fit.width / 2) / Math.tan(hfov / 2), (tile.fit.height / 2) / Math.tan(vfov / 2)) * 1.1;
+            }
+            cam.aspect = aspect;
+            cam.near = dist / 30;
+            cam.far = dist * 4;
+            cam.position.set(0, 0, dist);
+            cam.lookAt(0, 0, 0);
+            cam.updateProjectionMatrix();
+            if (tile.labels) {
+                const spans = tile.labels.children;
+                tile.fit.items.forEach((item, i) => {
+                    const p = item.node.getWorldPosition(item.node.position.clone()).project(cam);
+                    spans[i].style.left = `${((p.x + 1) / 2) * 100}%`;
+                });
+            }
+            tile.aspect = aspect;
+        }
+
+        function drawTile(THREE, renderer, tile, dt, sim, H) {
+            const r = tile.view.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > H || r.width < 2 || r.height < 2) return;
+            const aspect = r.width / r.height;
+            if (Math.abs(aspect - tile.aspect) > 1e-3) fitCamera(tile, aspect);
+            const pose = POSE[tile.kind] || {};
+            if (!state.paused) {
+                const own = pose.own;
+                if (!tile.drag && !own && !pose.rock && tile.kind !== 'scale') tile.yaw += dt * 0.22;
+                for (const s of tile.spinners) {
+                    if (pose.along) s.rotation.x += dt * 0.3;
+                    else s.rotation.y += dt * (own ? 0.35 : tile.kind === 'scale' ? 0.25 : 0);
+                }
+            }
+            const rock = pose.rock ? 0.6 * Math.sin(sim * 0.35) : 0;
+            tile.pivot.rotation.set(tile.pitch, tile.kind === 'scale' || pose.rock || pose.along ? tile.yaw - 0.4 + rock : tile.yaw, 0);
+            tile.shared.uTime.value = sim;
+            tile.backdrop.material.uniforms.uSize.value.set(r.width, r.height);
+            const bottom = H - r.bottom;
+            renderer.setViewport(r.left, bottom, r.width, r.height);
+            renderer.setScissor(r.left, bottom, r.width, r.height);
+            renderer.setScissorTest(true);
+            renderer.clearDepth();
+            renderer.render(tile.scene, tile.camera);
+        }
+    </script>
+</body>
+</html>

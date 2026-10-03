@@ -12,7 +12,7 @@
 //
 // Needs the global THREE (three.js r128, loaded by web/js/story.js from the
 // same cdnjs URL as the atlas viewer). It sits above background.js's
-// breathing gradient, which runs in still-water mode on this page.
+// breathing field and the living water of web/js/biofield.js.
 
 import { smooth, between, stagger, formationState, introWeight, CHAPTERS } from './motion.js';
 import {

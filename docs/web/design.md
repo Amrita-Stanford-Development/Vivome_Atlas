@@ -17,6 +17,25 @@ The atlas covers two omes, RNA and protein, and the copy never claims more.
   and Visuals animation, kept as the site's signature. Under reduced motion it
   draws one still frame. Every page loads it with a one-line module script
   tag, and it mounts itself.
+- **The living water:** `web/js/biofield.js` lies over the field and behind
+  the page, on every page but the atlas, whose viewer covers the window. 3D
+  objects drift and tumble in it: DNA, chromatin, red cells, platelets,
+  lymphocytes, monocytes, neutrophils, coiled and long threads, and a long
+  cell (`web/js/biocells.js`). They sit in a soft gel: slightly blurred,
+  frosted over, and a wake follows the pointer (`web/js/water.js`). It loads
+  after `background.js` with its own one-line tag, stays in place as the page
+  scrolls, draws one still frame under reduced motion, and removes itself
+  without WebGL.
+  - The cells and molecules follow their measured shapes; the threads and
+    the long cell are drawn shapes. Platelets are drawn 1.5 times larger
+    and the molecules far larger than beside the cells, and the mix keeps
+    blood's order (red cells most, white cells fewest), not its ratio.
+  - Each kind of object has its own colour family. The field is the one
+    decorative layer, so red cells and pink threads may sit near the
+    reserved hues there; the UI never uses those hues for anything else.
+  - `web/preview-biocells.html` and `web/preview-water.html` show the
+    objects close up and the water effects side by side. Neither is linked
+    from the site.
 - **Cards:** the white card with the blue halo from the original landing
   (`.sheet`). The halo is the accent's glow, so shadows are blue-tinted, never
   plain black.
@@ -102,9 +121,7 @@ chapters of `CHAPTERS` (`web/js/motion.js`): the landing card, then eight
 chapters that each say one thing about the product, ending in the finale.
 
 - **The field.** `web/js/field.js` draws soft glowing points on one WebGL
-  canvas. `background.js` runs in still-water mode underneath it
-  (`body[data-field="still"]`) and brings its own particles back if WebGL
-  is missing.
+  canvas, above the field and the living water that lie behind every page.
   - Scrolling flies the camera forward, so the ambient water streams past.
   - In each chapter, a pool of particles leaves the water and gathers into
     that chapter's structure, from `web/js/formations.js`. In order: the

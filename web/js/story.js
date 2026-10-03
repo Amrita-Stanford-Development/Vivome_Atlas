@@ -68,7 +68,6 @@ function drawStill() {
 // Without WebGL the page falls back to the site's usual living background.
 function fallBack(err) {
   console.warn('Landing field unavailable, using the plain background:', err);
-  delete document.body.dataset.field;
   root.classList.add('no-field');
 }
 

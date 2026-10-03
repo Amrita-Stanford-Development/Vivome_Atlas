@@ -5,10 +5,8 @@
 // Ported from the original visual.html animation (docs/web/design.md). Loaded
 // as <script type="module" src="js/background.js"></script>; it mounts itself.
 // Under prefers-reduced-motion it draws a single still frame and stops.
-// With <body data-field="still"> (the landing, whose 3D field in
-// web/js/field.js carries the particles) it draws the water alone; removing
-// the attribute brings the particles back, which is the landing's fallback
-// when WebGL is unavailable.
+// With <body data-field="still"> it draws the water alone, without its
+// particles (the preview pages use this to compare the water effects).
 
 const canvas = document.createElement('canvas');
 canvas.className = 'site-bg';

@@ -40,11 +40,28 @@ test('each page marks exactly its own nav link as current', () => {
   }
 });
 
-// The landing story loads three.js itself; it must be the build the atlas
-// viewer uses, so the site never ships two versions and the cache is shared.
-test('the story and the atlas load the same three.js', () => {
+// The landing story and the living water behind every page load three.js
+// themselves; both must load the build the atlas viewer uses, so the site
+// never ships two versions and the cache is shared.
+test('the story, the living water and the atlas load the same three.js', () => {
   const fromAtlas = read('atlas.html').match(/<script src="(https:[^"]*three[^"]*)"/);
-  const fromStory = readFileSync(new URL('../js/story.js', import.meta.url), 'utf8').match(/THREE_URL = '([^']+)'/);
-  assert.ok(fromAtlas && fromStory, 'three.js URL not found in atlas.html or js/story.js');
-  assert.equal(fromStory[1], fromAtlas[1]);
+  assert.ok(fromAtlas, 'three.js URL not found in atlas.html');
+  for (const module of ['story.js', 'biofield.js']) {
+    const url = readFileSync(new URL(`../js/${module}`, import.meta.url), 'utf8').match(/THREE_URL = '([^']+)'/);
+    assert.ok(url, `three.js URL not found in js/${module}`);
+    assert.equal(url[1], fromAtlas[1], `js/${module} loads a different three.js`);
+  }
+});
+
+// Every page but the atlas (whose viewer covers the window) carries the
+// living water, after the field it lies on.
+test('the living water is behind every page but the atlas', () => {
+  for (const page of PAGES) {
+    const html = read(page);
+    const field = html.indexOf('src="js/background.js"');
+    const water = html.indexOf('src="js/biofield.js"');
+    assert.ok(field > 0, `${page} has no background.js`);
+    if (page === 'atlas.html') assert.equal(water, -1, 'atlas.html should not load the living water');
+    else assert.ok(water > field, `${page} should load js/biofield.js after js/background.js`);
+  }
 });

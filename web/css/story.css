@@ -1,8 +1,8 @@
 /* The landing story (index.html). Everything else is css/page.css.
 
-   Layers, back to front: the breathing water (web/js/background.js, in
-   still-water mode here), the particle field (.story-field, web/js/field.js),
-   then the page. Each chapter's text arrives its own way (web/js/reveal.js);
+   Layers, back to front: the breathing field and its particles
+   (web/js/background.js), the living water (web/js/biofield.js), the particle
+   field (.story-field, web/js/field.js), then the page. Each chapter's text arrives its own way (web/js/reveal.js);
    the hidden start states apply only once JS is running (html.js), so the
    text is never lost without it.
 

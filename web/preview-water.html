@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivOME · Water effects preview</title>
+    <meta name="robots" content="noindex">
+    <!-- Every water effect in web/js/water.js side by side, over the same
+         objects (web/js/biocells.js), to choose one. Not linked from the
+         site. -->
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <style>
+        /* The panels are windows onto one canvas behind the page; the soft gel
+           (a slight blur, and a frost over each window) is the one chosen. */
+        .water-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(1.6px) saturate(0.92);
+        }
+        .water-page { position: relative; z-index: 1; max-width: var(--page-max); margin: 0 auto; padding: 88px var(--gutter) 120px; }
+        .water-bar {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 20px;
+            padding: 10px 18px;
+            width: max-content;
+            max-width: calc(100% - 32px);
+            font-size: 14px;
+        }
+        .water-bar a { font-size: 13px; }
+        .water-head { max-width: 760px; margin-bottom: 32px; }
+        .water-head h1 { margin-bottom: 12px; }
+        .water-head p + p { margin-top: 10px; }
+        .water-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+        .water-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--r-sheet);
+            border: 1px solid rgba(0, 142, 204, 0.10);
+            box-shadow: var(--halo);
+        }
+        /* Transparent: the water is drawn on the canvas behind. */
+        .water-view { position: relative; aspect-ratio: 16 / 10; border-radius: var(--r-sheet) var(--r-sheet) 0 0; overflow: hidden; touch-action: pan-y; }
+        .water-view[data-pointer="click"] { cursor: pointer; }
+        .water-view[data-pointer="move"] { cursor: crosshair; }
+        .frost {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(244, 248, 252, 0.42), rgba(244, 248, 252, 0.16) 55%, rgba(244, 248, 252, 0.24));
+        }
+        .frost::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+        }
+        .water-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px 22px 20px;
+            background: rgba(250, 250, 249, 0.97);
+            border-top: 1px solid var(--line);
+            border-radius: 0 0 var(--r-sheet) var(--r-sheet);
+        }
+        .water-text h2 { font-size: 18px; margin: 0; }
+        .water-text p { font-size: 14.5px; line-height: 1.55; }
+        .water-text .try { font-size: 13px; font-weight: 500; color: var(--accent); }
+        .water-text .open { margin-top: auto; font-size: 14px; }
+        .needs { font-size: 13px; color: var(--error); }
+
+        @media (max-width: 980px) { .water-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 640px) { .water-grid { grid-template-columns: minmax(0, 1fr); } }
+    </style>
+</head>
+<body data-field="still">
+    <nav class="water-bar glass" aria-label="Previews">
+        <strong>Water effects preview</strong>
+        <a href="preview-biocells.html">The full preview</a>
+        <a href="index.html">Back to the site</a>
+    </nav>
+
+    <canvas class="water-canvas" aria-hidden="true"></canvas>
+
+    <main class="water-page">
+        <div class="water-head sheet">
+            <h1>Choose the <span class="cut">water.</span></h1>
+            <p>Six ways the water could move, all on the light field and in the soft gel, over the same objects. Each panel is a small copy of the landing's first screen.</p>
+            <p>Where an effect reacts to you, its panel says how. Open any one full screen to see it behind the landing card.</p>
+            <p class="needs" hidden>This browser can't run the ripples or the ink (they need WebGL2 with half-float render targets); those panels show the still gel instead.</p>
+        </div>
+        <div class="water-grid"></div>
+    </main>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module">
+        import { PALETTES, createBioLayer } from './js/biocells.js';
+        import { EFFECTS, createEffect, createSceneTarget, supported } from './js/water.js';
+        import { escapeHtml } from './js/panels.js';
+
+        const THREE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const TRY = { click: 'Try it: click the water.', move: 'Try it: move the pointer across the water.' };
+
+        // The cards, from the effects' own descriptions.
+        document.querySelector('.water-grid').innerHTML = EFFECTS.map((e) => `
+            <article class="water-card">
+                <div class="water-view" data-effect="${e.name}" data-pointer="${e.pointer || ''}"><div class="frost"></div></div>
+                <div class="water-text">
+                    <h2>${escapeHtml(e.label)}</h2>
+                    <p>${escapeHtml(e.about)}</p>
+                    ${e.pointer ? `<p class="try">${TRY[e.pointer]}</p>` : ''}
+                    <a class="open" href="preview-biocells.html?effect=${e.name}">Open full screen</a>
+                </div>
+            </article>`).join('');
+
+        function loadThree() {
+            if (window.THREE) return Promise.resolve(window.THREE);
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = THREE_URL;
+                script.onload = () => resolve(window.THREE);
+                script.onerror = () => reject(new Error('three.js failed to load'));
+                document.head.append(script);
+            });
+        }
+
+        // Clears a panel's rounded top corners, so the page shows there.
+        const CORNERS = `
+            uniform vec2 uSize;
+            uniform float uRadius;
+            varying vec2 vUv;
+            void main() {
+                vec2 p = vUv * uSize;
+                vec2 c = vec2(clamp(p.x, uRadius, uSize.x - uRadius), min(p.y, uSize.y - uRadius));
+                if (length(p - c) <= uRadius) discard;
+                gl_FragColor = vec4(0.0);
+            }`;
+
+        loadThree().then(start).catch((err) => console.warn('Preview unavailable:', err));
+
+        function start(THREE) {
+            const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('.water-canvas'), antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+            renderer.autoClear = false;
+            const canSimulate = supported(renderer);
+            if (!canSimulate) document.querySelector('.needs').hidden = false;
+
+            // One water, seen by every panel: the landing's objects, Colour and Calm.
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, 16 / 10, 0.1, 200);
+            const layer = createBioLayer(THREE, { palette: PALETTES.vivid, density: 'calm' });
+            scene.add(layer.group);
+            const sceneTarget = createSceneTarget(THREE);
+
+            const corners = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+                vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+                fragmentShader: CORNERS,
+                uniforms: { uSize: { value: new THREE.Vector2(1, 1) }, uRadius: { value: 20 } },
+                depthTest: false,
+                depthWrite: false,
+                blending: THREE.NoBlending,
+            }));
+            corners.frustumCulled = false;
+            const cornerScene = new THREE.Scene();
+            cornerScene.add(corners);
+            const flat = new THREE.Camera();
+
+            const panels = [...document.querySelectorAll('.water-view')].map((view) => {
+                const meta = EFFECTS.find((e) => e.name === view.dataset.effect);
+                const runs = canSimulate || meta.name === 'still' || meta.name === 'flow';
+                const panel = { view, meta, effect: createEffect(THREE, runs ? meta.name : 'still'), w: 0, h: 0, lastWake: null };
+                const at = (e) => {
+                    const r = view.getBoundingClientRect();
+                    return [(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height];
+                };
+                view.addEventListener('pointerdown', (e) => {
+                    if (meta.pointer === 'click') panel.effect.drop(...at(e), 1.2, 0.05);
+                });
+                view.addEventListener('pointermove', (e) => {
+                    if (meta.pointer !== 'move') return;
+                    if (panel.lastWake && Math.hypot(e.clientX - panel.lastWake[0], e.clientY - panel.lastWake[1]) < 5) return;
+                    panel.lastWake = [e.clientX, e.clientY];
+                    panel.effect.drop(...at(e), 0.25, 0.025);
+                });
+                return panel;
+            });
+
+            let sceneSize = '';
+            function resize() {
+                renderer.setSize(window.innerWidth, window.innerHeight, false);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const born = performance.now();
+            let last = born;
+            let sim = 0;
+            function frame(now) {
+                const dt = Math.min(0.1, (now - last) / 1000);
+                last = now;
+                const step = reduced ? 0 : dt;
+                sim += step;
+                const W = window.innerWidth;
+                const H = window.innerHeight;
+
+                // Every panel is the same size: draw the water once at that size.
+                const first = panels[0].view.getBoundingClientRect();
+                const size = `${Math.round(first.width)}x${Math.round(first.height)}`;
+                if (size !== sceneSize && first.width > 1) {
+                    sceneSize = size;
+                    sceneTarget.setSize(first.width, first.height, renderer.getPixelRatio());
+                    camera.aspect = first.width / first.height;
+                    camera.updateProjectionMatrix();
+                }
+                const t = Math.min(1, (now - born) / 2600);
+                layer.setFade(t * t * (3 - 2 * t));
+                layer.update(sim, { aspect: camera.aspect });
+                renderer.setScissorTest(false);
+                sceneTarget.capture(renderer, scene, camera);
+
+                renderer.setViewport(0, 0, W, H);
+                renderer.setClearColor(0x000000, 0);
+                renderer.clear();
+                for (const panel of panels) {
+                    const r = panel.view.getBoundingClientRect();
+                    if (r.bottom < 0 || r.top > H || r.width < 2) continue;
+                    if (r.width !== panel.w || r.height !== panel.h) {
+                        panel.w = r.width;
+                        panel.h = r.height;
+                        panel.effect.setSize(r.width, r.height);
+                    }
+                    panel.effect.step(renderer, sim, step);
+                    const bottom = H - r.bottom;
+                    renderer.setViewport(r.left, bottom, r.width, r.height);
+                    renderer.setScissor(r.left, bottom, r.width, r.height);
+                    renderer.setScissorTest(true);
+                    panel.effect.draw(renderer, sceneTarget.texture);
+                    corners.material.uniforms.uSize.value.set(r.width, r.height);
+                    renderer.render(cornerScene, flat);
+                    renderer.setScissorTest(false);
+                }
+                requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+        }
+    </script>
+</body>
+</html>
