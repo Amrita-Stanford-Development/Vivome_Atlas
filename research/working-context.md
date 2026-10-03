@@ -151,9 +151,8 @@ Following the publication plan below:
    `scanvi_run_khoury2026.py` and `khoury2026_score.py` were rehearsed
    again on Fulcher on 2026-10-03 with amendment 7's checks: they
    reproduce Fulcher's per-type recalls across 37 runs.
-   - **Waiting on the owner:** commit and push amendment 7 with its fixes,
-     reruns and rescored tables, then fill its commit hash into
-     `research/todo.md` (`AMENDMENT7_COMMIT`).
+   - Amendment 7, its fixes, reruns and rescored tables: committed in
+     `c516d98` (2026-10-03).
 2. **T1 NB3b: run 2026-10-02, NO GO** (`research/notebook-run-history.md`
    entry 18).
    - **What it found:** energy separates out-of-distribution cells far
@@ -168,9 +167,11 @@ Following the publication plan below:
        reaches 90% scrambled rejection at about 5% false abstention.
        Narrow uploads still abstain more, and the upload-diversity measure
        cannot see them.
-   - **Owner decision pending** on how to proceed.
-3. **Unseal Khoury once,** in amendment 5's order. If v3.1 changes after
-   NB3b, an amendment fixes the new candidate first.
+   - **The owner's decision (2026-10-03):** go to the final evaluation with
+     v3.1 as released. v3.1 did not change after NB3b or NB3c, so no
+     amendment for a new candidate is needed.
+3. **Unseal Khoury once,** in amendment 5's order: approved by the owner
+   on 2026-10-03, after amendment 7 was committed.
 4. Post the bioRxiv preprint, and choose the journal from the Khoury result.
 
 ## Owner decisions and standing instructions
