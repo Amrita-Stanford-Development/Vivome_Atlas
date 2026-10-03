@@ -204,6 +204,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/baselines_queue.sh` — runs the remaining baseline runs one at a time, skipping finished ones
 - `benchmark/baselines_v31.py` — Track D extension: v3.1 as served on SCoPE2, PBMC240 and Fulcher (best guess and confident answer per cell)
 - `benchmark/baselines_score.py` — Track D extension scoring, the only step that reads these labels: per-seed tables, summaries, v3.1's confident answers, paired bootstrap
+- `benchmark/baselines_corrected.py` — corrected baselines after the 2026-10-03 review: class-balanced RNA scaling, MaxFuse with its tutorial settings and native matching, scANVI on non-negative inputs, a plain PCA arm, setup checks; Khoury only with `--posthoc`
+- `benchmark/baselines_corrected_score.py` — scores the corrected baselines on SCoPE2, PBMC240 and Fulcher with `baselines_score.py`'s functions; adds the setup-check table
+- `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
 
 ## scripts/ — build and repository checks
 
@@ -249,6 +252,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/methodology.md` — the fairness rules and how the shared evaluation protocol implements them
 - `research/benchmark/harness.md` — what each file in `benchmark/` reads and writes, and how to run the pipeline end to end
 - `research/benchmark/results.md` — every benchmark result, with its source table
+- `research/benchmark/baseline-corrections.md` — the 2026-10-03 review of the baselines: what was wrong, the corrections fixed before any corrected run, and their results
 - `research/benchmark/bugs-and-fixes.md` — every real bug hit while building the benchmark, including one in the production service
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics

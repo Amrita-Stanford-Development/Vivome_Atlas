@@ -55,6 +55,8 @@ ALLOWED_MISSING = (
     "benchmark/PROTOCOL.md",
     "web/plots/",  # the original-model plots, removed 2026-09-30
     "research/benchmark/khoury2026/",  # Khoury's tables, written once, at the final evaluation
+    "research/benchmark/baselines_corrected/",  # written by the corrected-baselines queue
+    "research/benchmark/khoury2026_posthoc/",  # (research/benchmark/baseline-corrections.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
 )
 
