@@ -63,26 +63,32 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
 | 2026-10-01 | **v3.1:**<br>• Track C scaffold, `167f138`;<br>• the Project page projecting through a local service;<br>• Track F: T1 NB2's five-seed V2 ensemble becomes the default pipeline, `9567ffd`;<br>• a deep review, whose follow-up fixed duplicate gene rows, `af07dac`;<br>• **release 0.3.0**, `a5b31dc`.<br>**After the release:**<br>• docs update;<br>• Khoury amendment 2, `491053b`;<br>• Track D extension started, `7963031`;<br>• Windows-safe clone, `c698188` | see each bullet |
 | 2026-10-01 to 02 | **The Windows PC takes over:** Mac-isms replaced, tests fitted to the PC's float differences, R/Seurat and harmonypy installed. **Track D extension finished:** four baselines plus a correlation baseline against v3.1 as served; Khoury amendments 3 and 4 | `d9a3cfe`, `65bfc10`, and the results commit |
 | 2026-10-02 to 03 | **Before unsealing:** the Khoury final-evaluation scripts, rehearsed on Fulcher (amendment 5); T1 NB3b and NB3c, both NO GO; two code reviews (amendments 6 and 7). The second found that every Seurat run had seen scrambled inputs, and that scGLUE's cluster balancing divides by zero on Fulcher: Seurat rerun with the fix, scGLUE rerun with balancing off, every table rescored. The public site on Cloudflare Pages | `73cac67`, `379c53c`, `a52570e`, `4d217f1`, `35532a5`, `c516d98` |
-| 2026-10-04 | **Baseline corrections** run (`d8522cd`). **Track G (v4.0):** pre-test, bundle, fusion pipeline and gate; Phase 3 calibration NO GO. **SCoPE2's labels found swapped** on every cell (`research/benchmark/bugs-and-fixes.md`, 8), corrected in every copy and every SCoPE2 table rescored: v3 restricted 79.8 → 20.2, v3.1 61.3 → 38.7, scANVI 77.7 → 22.3. Every local copy, the Drive source included, now carries the curated labels | `d8522cd`; the rest not yet committed |
-| 2026-10-05 | **Track G, Phase 3b: NO GO** (run-history entry 23). v3.1's answers with v4's fused best guess. Fixed: the set width (committed 86.0% against v3.1's 86.7%). Best guess 64.7 against 59.6. Failed: coverage 87.6% (v3.1 88.3%) and single-type uploads 5.4 points below v3.1. Both come from single-type uploads. **Phase 3c: GO** (entry 24): the guess joined beside v3.1's, and the correlation term gated by upload agreement. Best guess 64.7 against 59.3, every scenario at or above v3.1, coverage 89.2% against 89.0%. Spec frozen; v4 servable on request, v3.1 still the default | not yet committed |
-| 2026-10-03 | **Khoury 2026 unsealed and scored once,** the final v3.1 evaluation. As run, v3.1 is ahead of every comparator in all 77 paired bootstraps, but a review then found the comparators handicapped by our setup (item 4 under Next) (best guess 56.9% balanced over five types; scGLUE 42.8, v3 40.9, scANVI's best arm 36.1). Its weakness is CD8T (2.7% recall) and NK (29.0%). **Web:** the living water behind every page; the landing redesigned around a 3D hero | `74942f2`, `0a8de8f`; the results not yet committed |
+| 2026-10-04 | **Baseline corrections** run (`d8522cd`). **Track G (v4.0):** pre-test, bundle, fusion pipeline and gate; Phase 3 calibration NO GO. **SCoPE2's labels found swapped** on every cell (`research/benchmark/bugs-and-fixes.md`, 8), corrected in every copy and every SCoPE2 table rescored: v3 restricted 79.8 → 20.2, v3.1 61.3 → 38.7, scANVI 77.7 → 22.3. Every local copy, the Drive source included, now carries the curated labels | `d8522cd`, `578fe99` |
+| 2026-10-05 | **Track G, Phase 3b: NO GO** (run-history entry 23). v3.1's answers with v4's fused best guess. Fixed: the set width (committed 86.0% against v3.1's 86.7%). Best guess 64.7 against 59.6. Failed: coverage 87.6% (v3.1 88.3%) and single-type uploads 5.4 points below v3.1. Both come from single-type uploads. **Phase 3c: GO** (entry 24): the guess joined beside v3.1's, and the correlation term gated by upload agreement. Best guess 64.7 against 59.3, every scenario at or above v3.1, coverage 89.2% against 89.0%. Spec frozen; v4 servable on request, v3.1 still the default | `578fe99` |
+| 2026-10-03 | **Khoury 2026 unsealed and scored once,** the final v3.1 evaluation. As run, v3.1 is ahead of every comparator in all 77 paired bootstraps, but a review then found the comparators handicapped by our setup (item 4 under Next) (best guess 56.9% balanced over five types; scGLUE 42.8, v3 40.9, scANVI's best arm 36.1). Its weakness is CD8T (2.7% recall) and NK (29.0%). **Web:** the living water behind every page; the landing redesigned around a 3D hero | `74942f2`, `0a8de8f`, `c84ee02`, `578fe99` |
 
-## Where things stand (2026-10-03)
+## Where things stand (2026-10-05)
 
 - **Release.** Atlas 0.3.0; model v3.1.
   - Tag `atlas-v0.3.0` is at `eae50af`, which is `main`.
   - v3's release is archived as tag `atlas-v0.2.0` (`bf315f7`).
-- **Branches.** `integration/v31` is the working branch. It is ahead of
-  `main` by the post-release commits:
+- **Branches.** `integration/v4` is the working branch, made from
+  `integration/v31` on 2026-10-05. `integration/v31` is ahead of `main` by
+  the post-release commits:
   - the docs corrections;
   - Khoury amendment 2;
   - the Track D extension and Khoury amendments 3 and 4;
   - the move to the Windows PC;
   - Khoury amendments 5 and 6, T1 NB3b and NB3c, and the Pages site.
 
-  Then amendment 7 (`c516d98`), the living water (`0a8de8f`) and the
-  go-ahead to unseal (`74942f2`). The Khoury results and the landing
-  redesign are in the working tree, not yet committed.
+  Then amendment 7 (`c516d98`), the living water (`0a8de8f`), the
+  go-ahead to unseal (`74942f2`) and the baseline corrections (`d8522cd`).
+  `integration/v4` adds the landing redesign (`c84ee02`), then the Khoury
+  results, the corrected baselines' results, the SCoPE2 label correction
+  and Track G to Phase 3c (`578fe99`).
+- **Public site.** Redeployed from `578fe99` on 2026-10-05
+  (`docs/web/hosting.md`): the redesigned landing and the corrected SCoPE2
+  labels.
 - **v3.1** (`service/pipeline/ensemble.py`):
   - five V2 encoders, each a tempered softmax over cosine to the class
     centroids, averaged;
