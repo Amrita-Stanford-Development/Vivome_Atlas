@@ -355,6 +355,20 @@ test('facts read the manifest for the landing prose', () => {
   assert.equal(factText(m, 'previous_model'), 'CrossModalNet');
 });
 
+test('the landing reads the release results from the manifest, and only measured ones', () => {
+  const m = manifestFixture();
+  assert.equal(factText(m, 'eval_rna_correct'), '94.9%');
+  assert.equal(factText(m, 'eval_fulcher_answered'), '89.2%');
+  assert.equal(factText(m, 'eval_fulcher_correct'), '97.3%');
+  // Absent from the manifest: no abstention record in the fixture.
+  assert.equal(factText(m, 'eval_rna_abstained'), 'Pending');
+  // Present but pending.
+  m.model.evaluation.served[0].correct = { value: null, status: 'pending', phase: 'later' };
+  assert.equal(factText(m, 'eval_fulcher_correct'), 'Pending');
+  // No evaluation block at all.
+  assert.equal(factText({ model: {} }, 'eval_rna_correct'), 'Pending');
+});
+
 test('an unknown or missing fact reads Pending, and names are escaped', () => {
   assert.match(factText(manifestFixture(), 'no_such_fact'), /Pending/);
   assert.match(factText({}, 'rna_cells'), /Pending/);

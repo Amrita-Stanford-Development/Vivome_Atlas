@@ -2,7 +2,7 @@ import unittest
 
 from build_manifest import (
     build_deployed_architecture_facts, build_manifest, build_model_seeds,
-    build_model_card, build_first_release_facts, build_story_cells, build_v3_release, build_v31_evaluation,
+    build_model_card, build_first_release_facts, build_v3_release, build_v31_evaluation,
     build_v31_model, class_stats, cosine, measured, pending,
     read_family_summary,
     read_latent_centroid_cosine, read_modality_probe_accuracy,
@@ -309,35 +309,6 @@ class TestReadModalityProbeAccuracy(unittest.TestCase):
         self.assertLess(metric["value"], 1.0)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
-class TestBuildStoryCells(unittest.TestCase):
-    def setUp(self):
-        self.rna = [row("RNA", 1, "big", i / 1000, 0.1, 0.2) for i in range(900)] + \
-                   [row("RNA", 2, "small", 0.5, 0.5, 0.5) for _ in range(5)]
-        self.prot = [dict(row("PROT", 1, "big", 0.123456, 0.2, 0.3), abstained="True"),
-                     dict(row("PROT", 1, "big", 0.1, 0.2, 0.3), abstained="False")]
-
-    def test_is_deterministic(self):
-        self.assertEqual(build_story_cells(self.rna, self.prot, sample=100),
-                         build_story_cells(self.rna, self.prot, sample=100))
-
-    def test_keeps_small_classes_and_every_protein_cell(self):
-        story = build_story_cells(self.rna, self.prot, sample=100, min_per_class=12)
-        # "small" has only 5 cells: all of them, never more than exist.
-        self.assertEqual(sum(1 for p in story["rna"] if p == [0.5, 0.5, 0.5]), 5)
-        # "big" keeps its share of the sample: round(100 * 900 / 905) = 99.
-        self.assertEqual(len(story["rna"]), round(100 * 900 / 905) + 5)
-        self.assertEqual(len(story["prot"]), 2)
-
-    def test_rounds_coordinates_and_carries_the_abstention_flag(self):
-        story = build_story_cells(self.rna, self.prot, sample=10)
-        self.assertEqual(story["prot"][0], [0.123, 0.2, 0.3, 1])
-        self.assertEqual(story["prot"][1][3], 0)
-
-
 class TestBuildModelCard(unittest.TestCase):
     def setUp(self):
         self.rna = [{"mask": "scope2", "cells": "published sample (as v3)", "acc_ot": "95.53", "bal_ot": "74.7594"},
@@ -388,3 +359,7 @@ class TestBuildModelCard(unittest.TestCase):
             family = read_family_summary(list(csv.reader(handle)))
         self.assertIn(("v3", "restricted_native_centroid"), family)
         self.assertAlmostEqual(family[("v3", "restricted_native_centroid")]["bal_max"], 79.7915354403646)
+
+
+if __name__ == "__main__":
+    unittest.main()

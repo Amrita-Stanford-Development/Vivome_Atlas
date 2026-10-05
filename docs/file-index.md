@@ -17,7 +17,7 @@ When you add, move or delete a file, update its line in the same commit.
 ## web/ — the public website (static, no build step)
 
 - `web/README.md` — how to serve the site and what each folder under `web/` holds
-- `web/index.html` — landing page: the intro, then a camera flight through the water in nine chapters, ending in the finale
+- `web/index.html` — landing page: a 3D hero whose objects fly out as you scroll, then seven sections of white and liquid-glass cards, and the finale
 - `web/home.html` — the dashboard: a way in to every tool, the current release, what's new
 - `web/atlas.html` — interactive 3D cell viewer (RNA + protein), with the cross-modal support map and alignment diagnostics
 - `web/project.html` — the projection tool: sends a matrix to a locally run service and shows each cell's label or abstention, with a downloadable response
@@ -26,30 +26,29 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/miscellaneous.html` — intentionally blank (the former roadmap page); kept on purpose
 - `web/preview-biocells.html` — preview, not linked from the site: the living water's objects close up, with switches for colours, amount, gel and water effect
 - `web/preview-water.html` — preview, not linked from the site: every water effect side by side over the same objects
-- `web/css/story.css` — the landing story's styles: the intro overlay, each chapter's text reveal, pinned chapters, phones and reduced motion
+- `web/css/story.css` — the landing's layout: the sticky hero, the sections and card grids, the scroll reveals, phones and reduced motion
 - `web/css/page.css` — the design system: tokens, the glass/well/sheet/bead components, site header and footer, the panel styling contract
 - `web/js/background.js` — the living background: the animated cell and strand canvas behind every page
 - `web/js/biofield.js` — the living water above it, behind every page but the atlas: the 3D objects in a soft gel, with a wake that follows the pointer
 - `web/js/biocells.js` — the 3D objects, built in code: DNA and chromatin, red cell, platelet, white cells, threads and a long cell; the shape maths is pure
 - `web/js/water.js` — the water effects over those objects (still, flowing gel, rain, touch, wake, ink): GPU ripples and ink
-- `web/js/motion.js` — pure scroll maths and the `CHAPTERS` table (which structure each chapter shows), shared by the field, reveals and page
-- `web/js/formations.js` — pure, seeded generators for the structures the particles form: cell, readouts, plate, growth rings, helix, atlas, text
-- `web/js/field.js` — the landing's WebGL particle field: the camera flies through the water and the particles gather into each chapter's structure
-- `web/js/reveal.js` — the landing's text reveals, one kind per chapter (highlight, mask, split, steps, strike, underline, timeline, letters)
-- `web/js/story.js` — the landing's one scroll listener and render loop: intro flag, reveals, manifest facts, finale proof points
+- `web/js/motion.js` — pure motion maths for the landing: the hero's entrance and exit, and numbers counting up
+- `web/js/hero.js` — the landing's 3D hero: large objects from `biocells.js` in front of the title, easing in and flying out as the hero scrolls
+- `web/js/random.js` — the seeded random numbers behind the procedural visuals
+- `web/js/story.js` — the landing's controller: manifest facts and proof points, the hero's render loop, scroll reveals and count-ups
 - `web/js/manifest.js` — loads, validates and formats the manifest; `isMeasured()` is the one guard on displaying a number
 - `web/js/panels.js` — pure builders that turn manifest records into HTML strings for each page's panels
 - `web/tests/fixtures.js` — shared manifest fixture for the JS tests, including a `<script>` class name that proves escaping
 - `web/tests/manifest.test.js` — tests for `manifest.js`: validation, formatting, the measured/pending guard
 - `web/tests/panels.test.js` — tests for `panels.js`: every panel builder, and HTML escaping
 - `web/tests/chrome.test.js` — pins the shared site header and footer byte-identical across pages, one three.js build, and the living water on every page but the atlas
-- `web/tests/motion.test.js` — tests for `motion.js`; pins `index.html`'s chapters and `story.css`'s intro length to it
-- `web/tests/formations.test.js` — tests for `formations.js`: point counts, determinism, bounds, and the atlas keeping the data's placement
+- `web/tests/motion.test.js` — tests for `motion.js`: the hero's entrance and exit, and counting up in the final number's format
+- `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and the hero casts only real objects
+- `web/tests/random.test.js` — tests for `random.js`, with its first draws pinned
 - `web/tests/lfs.test.js` — pins the Git LFS pointer check, and asserts the shipped RNA files are still pointers
 - `web/tests/biocells.test.js` — tests for `biocells.js`: the red cell's Evans and Fung profile, DNA and nucleosome geometry, noise, palettes
 - `web/tests/water.test.js` — tests for `water.js`'s list of effects and its copy
 - `web/data/whats_new.json` — the dashboard's announcements: dated text entries, no metrics
-- `web/data/story_cells.json` — generated by `scripts/build_manifest.py`: every protein cell and a class-stratified RNA sample, drawn by the landing's atlas chapters
 - `web/data/atlas_manifest.json` — generated by `scripts/build_manifest.py`; the only source of every number the pages show
 - `web/data/metadata_RNA_lat128.csv` — RNA cell metadata (85,233 rows): class, lineage, 3-PC coordinates in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`)
 - `web/data/metadata_PROT_lat128.csv` — protein cell metadata (1,490 SCoPE2 rows): true class, v3.1's best guess, out-of-distribution score and abstention, 3-PC coordinates (`scripts/export_atlas_coordinates.py`)

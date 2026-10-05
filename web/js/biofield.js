@@ -36,6 +36,7 @@ const compact = window.matchMedia('(max-width: 820px)').matches;
 
 function giveUp(err) {
   console.warn('Living water unavailable, keeping the plain field:', err);
+  document.documentElement.classList.remove('has-water');
   canvas.remove();
   frost.remove();
 }
@@ -129,6 +130,8 @@ function start(THREE) {
   reduced.addEventListener('change', play);
   resize();
   play();
+  // The field's particles join the gel (css/page.css).
+  document.documentElement.classList.add('has-water');
 }
 
 loadThree().then((THREE) => {

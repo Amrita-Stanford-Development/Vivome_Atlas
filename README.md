@@ -70,7 +70,7 @@ line for every file.
 
 | Page | What it does |
 |------|--------------|
-| `index.html` | Landing page: the intro, a camera flight through the water in nine chapters, the finale |
+| `index.html` | Landing page: a 3D hero whose objects fly out as you scroll, seven sections of cards, the finale |
 | `home.html` | Dashboard: a way in to every tool, the current release, what's new |
 | `atlas.html` | Interactive 3D cell viewer with cross-modal support map and alignment diagnostics |
 | `project.html` | The projection tool: sends a matrix to a locally run service and shows the result |

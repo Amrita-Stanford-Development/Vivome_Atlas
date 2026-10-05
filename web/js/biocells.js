@@ -11,7 +11,7 @@
 // first argument. Cells are built in micrometres and DNA in nanometres;
 // createBioLayer scales both into the scene.
 
-import { rng } from './formations.js';
+import { rng } from './random.js';
 
 // ---- the measured shapes (pure) ----
 

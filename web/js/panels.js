@@ -497,3 +497,17 @@ Object.assign(FACTS, {
   seeds: (m) => escapeHtml(formatMetric(m.model?.seeds, 0)),
   v3_seeds: (m) => escapeHtml(formatMetric(m.previous_release?.seeds, 0)),
 });
+
+// The current release's results, for the landing's prose. Each number only
+// makes sense with what it measured, so index.html says that in the same
+// sentence: NB2's simulated RNA uploads, and Fulcher 2026 as served, which
+// is development data.
+const nb2Value = (m, key) => (m.model?.evaluation?.nb2 ?? []).find((r) => r.key === key)?.value;
+const served = (m, dataset) => (m.model?.evaluation?.served ?? []).find((r) => r.dataset === dataset);
+
+Object.assign(FACTS, {
+  eval_rna_correct: (m) => escapeHtml(formatPercent(nb2Value(m, 'correct_when_committed'))),
+  eval_rna_abstained: (m) => escapeHtml(formatPercent(nb2Value(m, 'abstention'))),
+  eval_fulcher_answered: (m) => escapeHtml(formatPercent(served(m, 'Fulcher 2026')?.committed)),
+  eval_fulcher_correct: (m) => escapeHtml(formatPercent(served(m, 'Fulcher 2026')?.correct)),
+});

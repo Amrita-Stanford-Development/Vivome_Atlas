@@ -15,7 +15,7 @@
 // half-float textures, which the ripples and the ink need; `supported`
 // says whether they can run.
 
-import { rng } from './formations.js';
+import { rng } from './random.js';
 
 // The effects, in the order a chooser lists them. `pointer` says what the
 // pointer does: nothing, a drop on click, or a wake as it moves.

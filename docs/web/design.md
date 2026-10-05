@@ -2,8 +2,8 @@
 
 Every page in `web/` is built from one imagined world, so the landing page,
 the dashboard and the tools read as one product. This page is the reference;
-the tokens and component classes live in `web/css/page.css`. The concept this
-follows (intro, landing, scroll story, dashboard, tools) is
+the tokens and component classes live in `web/css/page.css`. The original
+concept (intro, landing, scroll story, dashboard, tools) is
 [docs/webpage_concept.md](../webpage_concept.md).
 
 ## The world
@@ -37,25 +37,24 @@ The atlas covers two omes, RNA and protein, and the copy never claims more.
     objects close up and the water effects side by side. Neither is linked
     from the site.
 - **Cards:** the white card with the blue halo from the original landing
-  (`.sheet`). The halo is the accent's glow, so shadows are blue-tinted, never
-  plain black.
-- **Thread:** two strands, RNA and protein, that start apart and braid into
-  one shared space. Used in the landing story and, later, the logo.
+  (`.sheet`), and liquid glass (`.liquid`) for what floats over the water.
+  Shadows are blue-tinted, never plain black.
 
-## Objects: every UI role is one of four
+## Objects: every UI role is one of five
 
 | Class | Object | Use it for |
 |---|---|---|
 | `.glass` | frosted glass | chrome: the header, toolbars, sidebars |
 | `.well` | pressed in | inputs, the active nav item, empty values |
-| `.sheet` | the white card with the blue halo | anything you read: tables, cards, prose sections |
+| `.sheet` | the white card with the blue halo | anything you read at length: tables, prose, explanations |
+| `.liquid` | liquid glass: frosted, a bright rim and a soft sheen | short things that float over the water: stats, steps, callouts |
 | `.bead` | a small cell | badges and status (`bead-rna`, `bead-prot`, `bead-both`, `bead-open`) |
 
 `.breathe` makes a sheet's halo pulse slowly, as on the original landing.
 Use it on one card per page at most.
 
 A new element starts with the question "which object is this?" Reuse one of
-the four, or add one class to `@layer components` in `page.css`. No one-off
+the five, or add one class to `@layer components` in `page.css`. No one-off
 styles. Page-specific layout (grids, spacing) may live in the page's own
 `<style>`; it is unlayered, so it overrides the components when it must.
 
@@ -90,15 +89,26 @@ data encoding rather than UI.
 
 ## Type
 
-Poppins throughout: 600 for headings, with tight tracking (`-0.03em` at
-display sizes), 400/500 for body and UI. Body lines stay under about 72
-characters. Labels are sentence case, never all caps.
+Poppins throughout: 600 to 700 for headings, with tight tracking, 400/500 for
+body and UI. Body lines stay under about 72 characters. Labels are sentence
+case, never all caps.
+
+A block of content uses several levels, from `page.css`:
+
+| Class | Level | Size |
+|---|---|---|
+| `.eyebrow` | what the block is about, in the accent | 14px, 600 |
+| `.display` (`.display-xl` in the hero) | the one headline, with its `.cut` word | up to 96px (124px) |
+| `.subhead` | the headline's sentence | up to 28px, 500 |
+| body (`.card p`) | the explanation | 16.5px |
+| `.caption` | context for a number, or a note | 13.5px, faint |
+| `.stat` and `.stat-label` | one big number and what it counts | up to 68px |
 
 ## The motif
 
 One key word set in a solid accent block: `Viv<span class="cut">OME</span>`,
-"Two <span class="cut">omes.</span> One living space." Use it once per
-heading at most, always on the word that carries the meaning.
+"Cell-type labels for single-cell <span class="cut">proteomics.</span>" Use it
+once per heading at most, always on the word that carries the meaning.
 
 ## Copy
 
@@ -114,46 +124,52 @@ heading at most, always on the word that carries the meaning.
   - "state of the art": needs the sealed Khoury test;
   - "deployed" or "hosted": the projection service runs locally.
 
-## The landing story
+## The landing
 
-`web/index.html` is one camera flight through the water, in the nine
-chapters of `CHAPTERS` (`web/js/motion.js`): the landing card, then eight
-chapters that each say one thing about the product, ending in the finale.
+`web/index.html` says plainly what VivOME is and what a visitor can do with
+it.
 
-- **The field.** `web/js/field.js` draws soft glowing points on one WebGL
-  canvas, above the field and the living water that lie behind every page.
-  - Scrolling flies the camera forward, so the ambient water streams past.
-  - In each chapter, a pool of particles leaves the water and gathers into
-    that chapter's structure, from `web/js/formations.js`. In order: the
-    intro question spelt out, a cell, the cell unwinding into an RNA strand
-    and a protein chain, the atlas, a 96-well plate, growth rings, and the
-    wordmark with the living dot.
-  - The atlas chapters use the real cells in `web/data/story_cells.json`:
-    - the RNA reference first;
-    - then the protein sample streaming into its real places;
-    - then the abstained cells lifting out as hollow rings.
-- **The text** is real HTML that reads without JS. Each chapter reveals it
-  its own way (`data-reveal`, `web/js/reveal.js`):
-  - words inking in;
-  - a masked headline with a row of facts;
-  - RNA and protein columns;
-  - a pinned 1 to 4 stepper;
-  - a strike-through;
-  - drawn underlines;
-  - a timeline;
-  - a letter-by-letter finale.
+- **The hero.** A large liquid-glass title panel, with large 3D objects
+  from `web/js/biocells.js` in front of it (`web/js/hero.js`): a
+  neutrophil, a monocyte, a lymphocyte, red cells, DNA, chromatin, a coiled
+  thread, a long cell and platelets, framing the edges.
+  - When the page opens they ease in from beyond the edges, one after
+    another, over about three seconds, while the panel's lines rise in.
+  - The hero is a sticky stage. As it scrolls away, each object flies
+    outward along the line from the centre through its place, until all
+    have left; then the hero stops drawing.
+  - No mouse parallax. The panel works without WebGL.
+- **Seven sections**, each a header (eyebrow, display headline, subhead) over
+  a grid of cards: white sheets for reading, liquid glass for stats, steps
+  and callouts.
+  1. **The problem:** protein data rarely comes labelled; RNA references do.
+  2. **How it works:** trained on RNA, read on protein, zero-shot.
+  3. **Explore:** the reference, open in the browser now, with its counts.
+  4. **Your data:** five steps from file to download, and that the service
+     runs on your own computer while in preview.
+  5. **Honest answers:** the answer ladder (cell type, group, lineage, none
+     with its reason), and how often, on simulated RNA uploads.
+  6. **Evidence:** Fulcher 2026 as development data, the benchmark and the
+     sealed test once signed off, and the limits.
+  7. **Releases:** frozen, numbered releases, so results can be traced.
+- **The finale:** "No cell placed without evidence", the proof points and
+  the links.
 
-  Hidden start states apply only under `html.js`. A soft pool of clearer
-  water sits behind each block so it reads over the particles.
-- **Numbers.** Every number in the prose is a `data-fact` slot, filled from
-  the manifest by `factText` in `web/js/panels.js`. The finale's proof
-  points come from `buildProofPoints`.
-- **Timing.** One scroll listener and one render loop (`web/js/story.js`).
-  Every progress value comes from a chapter's own rect.
-  `web/tests/motion.test.js` fails if the page's chapters drift from
-  `CHAPTERS`.
-- **Phones** get the same flight with fewer particles and a quieter field.
-  **Reduced motion** gets still water, no pinning, and all the text.
+Each number names what it measured in the same sentence or caption. The copy
+follows the model card: label transfer with honest abstention, never a shared
+space where the two modalities mix.
+
+- **Numbers.** Every number is a `data-fact` slot, filled from the manifest
+  by `factText` in `web/js/panels.js`; the finale's proof points come from
+  `buildProofPoints`. Big numbers count up when they come into view.
+  `web/tests/landing.test.js` fails if a slot names a fact that doesn't
+  exist.
+- **Motion.** `web/js/story.js` runs it: an `IntersectionObserver` lets each
+  block rise in once, and the hero's progress comes from its own rect. The
+  maths is pure, in `web/js/motion.js`. The text is real HTML; its hidden
+  start states apply only under `html.js`.
+- **Phones** get fewer, smaller hero objects and one column of cards.
+  **Reduced motion** gets a still hero and all the text at once.
 
 ## Shared chrome
 
@@ -172,6 +188,6 @@ when a release does.
 |---|---|---|
 | The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | dashboard release card, versions model card |
 | The next release while it is in progress | `manifest.next_reference` | dashboard "Next release" card (hidden while null) |
-| Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer, and the landing scene via `story_cells.json`; regenerate the manifest |
+| Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest |
 | Benchmark rows | `manifest.benchmark` | benchmark page, dashboard status bead |
 | Announcements | `web/data/whats_new.json` (text only, no metrics) | dashboard "What's new" |
