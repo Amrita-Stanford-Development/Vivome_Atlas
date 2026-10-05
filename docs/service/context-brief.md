@@ -58,40 +58,42 @@ coverage. It will not accept values alone.
 **Constrain label assignment to the classes that have cross modal support.**
 
 Only 2 of the 22 reference classes have any proteomics cells anywhere in the
-project, macrophage with 394 and monocyte with 1,096. The other 20 are RNA
-only. Letting all 22 compete for the argmax means 20 classes with zero protein
-evidence can win, and they frequently do.
+project, macrophage with 1,096 and monocyte with 394 (SCoPE2). The other 20
+are RNA only. Letting all 22 compete for the argmax means 20 classes with
+zero protein evidence can win, and they frequently do.
 
 Measured on real SCoPE2 data, same frozen encoder, same embeddings, the only
 change being which classes are candidates:
 
 | Regime | Accuracy | Balanced accuracy | Candidates |
 |---|---|---|---|
-| Unrestricted, all 22 classes | 45.37 | 31.08 | 22 |
-| Restricted to supported classes | 86.17 | 79.79 | 2 |
-| Restricted, threshold tuned on the margin | not applicable | 85.97 | 2 |
+| Unrestricted, all 22 classes | 0.40 | 0.68 | 22 |
+| Restricted to supported classes | 13.83 | 20.21 | 2 |
+| Restricted, threshold tuned on the margin | not applicable | 49.32 | 2 |
 
-Macrophage versus monocyte AUC is 0.9278, and the best margin threshold sits
-at −0.1586.
+Macrophage versus monocyte AUC is 0.072. v3 ranks the two classes almost
+perfectly, but the wrong way round: it places SCoPE2's PMA-differentiated
+macrophages next to the RNA monocytes.
 
 Three caveats, all of which must survive into whatever the site says:
 
 The restricted regime is a two class problem, so its chance level is 50
 percent, not the 4.5 percent that applies across 22 classes. The two rows are
-not directly comparable, and 79.79 percent balanced accuracy is the honest
-reading against a 50 percent baseline.
+not directly comparable, and 20.21 percent balanced accuracy is below the 50
+percent baseline.
 
 The tuned threshold row picked its threshold using true labels. It is an upper
 bound on what a perfectly calibrated service could reach, not something
-achievable on an unlabelled upload. The label free number is 79.79.
+achievable on an unlabelled upload. The label free number is 20.21.
 
 Both restricted rows describe performance on cells that genuinely are
 macrophages or monocytes. They say nothing about a cell of some other type
 arriving, which is what abstention handles.
 
-With those caveats stated, the conclusion holds. A change in the candidate set
-alone moves balanced accuracy by 48.7 points. Most of what the unrestricted
-number reads as a modality gap is distractor contamination.
+The labels are the curated ones (`research/benchmark/bugs-and-fixes.md`, 8).
+Restriction removes the 20 distractor classes, but what it leaves is below
+chance. The restriction is opt-in per request, and the default assigns
+among all 22 classes.
 
 One consequence for the model card. The four failed self adaptation
 experiments, and the cell line versus primary comparison, were all measured
@@ -186,7 +188,11 @@ Make the assignment method a configuration value with all three implemented.
 Nearest centroid over the supported set is the reasonable default on current
 evidence. Note that both rows above were measured unrestricted, so the
 comparison should be rerun inside the restricted regime before it is treated
-as settled.
+as settled. Both rows were also scored against swapped SCoPE2 labels
+(`research/benchmark/bugs-and-fixes.md`, 8). With the curated labels, v3's
+nearest-centroid figure is 0.4; the OT and self-training figures came from
+notebooks outside this repository and are not recomputed, so the ordering
+above is not established.
 
 ---
 
@@ -227,8 +233,8 @@ coverage, explicitly pending for the other 20.
 
 | Class | Protein cells | Cosine |
 |---|---|---|
-| monocyte | 1,096 | 0.830 |
-| macrophage | 394 | 0.190 |
+| macrophage | 1,096 | 0.368 |
+| monocyte | 394 | 0.140 |
 
 A trap worth naming. The site already has a metric called
 `pca_centroid_cosine`, computed in the 3 component projection, and the older
@@ -238,8 +244,9 @@ RNA only reference. The flattering number is the less meaningful one. Label
 the two distinctly in any panel, and do not let a reader assume the 0.98 style
 figure describes latent space alignment.
 
-Macrophage at 0.190 is also the quantitative form of the problem section 3
-describes. Monocyte sits near its RNA centroid, macrophage does not.
+Neither class sits near its own RNA centroid, which is the quantitative
+form of the problem section 3 describes. SCoPE2's macrophages sit nearer
+the RNA monocyte centroid (0.830) than their own.
 
 ---
 

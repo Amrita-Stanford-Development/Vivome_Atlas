@@ -21,7 +21,7 @@ tracked via Git LFS — see `.gitattributes`) means this can't happen again.
 | File | Bytes | sha256 (verified against `BUNDLE_MANIFEST.json`) |
 |---|---|---|
 | `prot_embedding_scope2.npy` | 763,008 | `c27c0830343babec6bd9ad0a3eaac19e42176c9efa2d4e791fa2b45094780167` |
-| `atlas_PROT_v3_meta.csv` | 145,026 | `1c5234d279803b0fe91a7323c2f9f18693c968acc370b5c226bee0da34430cb1` |
+| `atlas_PROT_v3_meta.csv` | 146,430 | `5e097daf861177fd5f068f26b1b10c1e00a9c5dcec3fdc342a76223a8f3199d8` |
 | `blood_joint_cells_by_proteins_GENELEVEL.tsv` | 81,821,166 | not sha256-checked (not in `BUNDLE_MANIFEST.json`'s `app_export/` list — it's a Tier-4 raw input file the notebook reads, not an app-export output) |
 | `BUNDLE_MANIFEST.json` | 4,340 | the manifest itself; only 3 of its 24 listed files (the ones above, plus this one) actually live here — the rest of the v3 bundle is already promoted to its own live paths elsewhere in `service/model/` |
 

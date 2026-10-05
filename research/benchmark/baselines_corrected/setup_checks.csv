@@ -1,0 +1,46 @@
+dataset,tool,seed,status,rna_holdout_balanced_accuracy_pct,rna_holdout_chance_pct,matched_query_cells_pct,input_shift,epochs_trained,elapsed_s,rna_holdout_knn_balanced_accuracy_pct,rna_holdout_knn_chance_pct,query_neighbour_share_median_pct,query_neighbour_share_if_mixed_pct
+scope2,correlation,0,completed,74.64,4.55,,,,6.9,,,,
+scope2,pca,0,completed,,,,,,20.8,61.19,4.55,100.0,1.72
+scope2,harmony,0,completed,,,,,,46.7,61.18,4.55,80.0,1.72
+scope2,harmony,1,completed,,,,,,49.3,61.84,4.55,86.67,1.72
+scope2,harmony,2,completed,,,,,,48.4,61.58,4.55,76.67,1.72
+scope2,seurat,0,completed,,,,,,287.9,,,,
+scope2,maxfuse,0,completed,,,100.0,,,336.4,64.44,4.55,23.33,1.72
+scope2,maxfuse,1,completed,,,100.0,,,331.4,62.85,4.55,26.67,1.72
+scope2,maxfuse,2,completed,,,100.0,,,332.1,62.75,4.55,23.33,1.72
+scope2,scglue,0,completed,,,,,,506.4,59.43,4.55,6.67,1.72
+scope2,scglue,1,completed,,,,,,451.4,59.97,4.55,10.0,1.72
+scope2,scglue,2,completed,,,,,,658.1,60.16,4.55,3.33,1.72
+scope2,scanvi,0,completed,,,,5.444189548492432,"{""scvi"": 56, ""scanvi"": 62}",1123.4,87.35,4.55,100.0,1.72
+scope2,scanvi,1,completed,,,,5.444189548492432,"{""scvi"": 162, ""scanvi"": 100}",2161.4,87.66,4.55,93.33,1.72
+scope2,scanvi,2,completed,,,,5.444189548492432,"{""scvi"": 149, ""scanvi"": 100}",2154.0,88.53,4.55,96.67,1.72
+pbmc240,correlation,0,completed,73.8,4.55,,,,2.8,,,,
+pbmc240,pca,0,completed,,,,,,14.5,62.14,4.55,30.0,0.28
+pbmc240,harmony,0,completed,,,,,,26.7,62.2,4.55,6.67,0.28
+pbmc240,harmony,1,completed,,,,,,26.5,62.91,4.55,6.67,0.28
+pbmc240,harmony,2,completed,,,,,,26.5,62.73,4.55,6.67,0.28
+pbmc240,seurat,0,completed,,,,,,57.3,,,,
+pbmc240,maxfuse,0,completed,,,100.0,,,917.9,58.71,4.55,0.0,0.28
+pbmc240,maxfuse,1,completed,,,100.0,,,913.7,60.11,4.55,3.33,0.28
+pbmc240,maxfuse,2,completed,,,100.0,,,913.2,60.13,4.55,3.33,0.28
+pbmc240,scglue,0,completed,,,,,,341.8,62.36,4.55,26.67,0.28
+pbmc240,scglue,1,completed,,,,,,355.7,63.0,4.55,23.33,0.28
+pbmc240,scglue,2,completed,,,,,,333.2,60.79,4.55,26.67,0.28
+pbmc240,scanvi,0,completed,,,,12.478925704956055,"{""scvi"": 107, ""scanvi"": 68}",1439.3,73.82,4.55,33.33,0.28
+pbmc240,scanvi,1,completed,,,,12.478925704956055,"{""scvi"": 84, ""scanvi"": 92}",1628.6,76.05,4.55,33.33,0.28
+pbmc240,scanvi,2,completed,,,,12.478925704956055,"{""scvi"": 48, ""scanvi"": 73}",1194.3,73.35,4.55,56.67,0.28
+fulcher2026,correlation,0,completed,73.83,4.55,,,,3.3,,,,
+fulcher2026,pca,0,completed,,,,,,16.1,63.07,4.55,100.0,1.47
+fulcher2026,harmony,0,completed,,,,,,45.6,63.1,4.55,53.33,1.47
+fulcher2026,harmony,1,completed,,,,,,41.5,63.1,4.55,53.33,1.47
+fulcher2026,harmony,2,completed,,,,,,42.1,63.11,4.55,50.0,1.47
+fulcher2026,seurat,0,completed,,,,,,102.5,,,,
+fulcher2026,maxfuse,0,completed,,,100.0,,,300.2,60.09,4.55,30.0,1.47
+fulcher2026,maxfuse,1,completed,,,100.0,,,299.4,59.64,4.55,36.67,1.47
+fulcher2026,maxfuse,2,completed,,,100.0,,,297.4,59.44,4.55,33.33,1.47
+fulcher2026,scglue,0,completed,,,,,,491.6,58.64,4.55,76.67,1.47
+fulcher2026,scglue,1,completed,,,,,,563.6,57.46,4.55,80.0,1.47
+fulcher2026,scglue,2,completed,,,,,,664.3,57.0,4.55,80.0,1.47
+fulcher2026,scanvi,0,completed,,,,9.101065635681152,"{""scvi"": 71, ""scanvi"": 100}",1701.1,72.43,4.55,93.33,1.47
+fulcher2026,scanvi,1,completed,,,,9.101065635681152,"{""scvi"": 111, ""scanvi"": 100}",1911.7,72.81,4.55,90.0,1.47
+fulcher2026,scanvi,2,failed,,,,,,933.7,,,,

@@ -1,0 +1,238 @@
+{
+  "rule": {
+    "smoothed_share": 0.5,
+    "agreement_threshold": 0.4,
+    "fusion_weight": 0.7,
+    "correlation_temperature": 0.05
+  },
+  "result": {
+    "v4": {
+      "cells": 62082,
+      "committed": 88.51,
+      "correct_when_committed": 97.49,
+      "false_abstention": 0.26,
+      "levels": {
+        "lineage": 49.05,
+        "class": 23.24,
+        "group": 16.22,
+        "abstain": 11.49
+      },
+      "best_guess_per_upload_balanced": 64.73,
+      "coverage": 89.23
+    },
+    "v3.1": {
+      "cells": 62082,
+      "committed": 88.97,
+      "correct_when_committed": 97.41,
+      "false_abstention": 0.26,
+      "levels": {
+        "lineage": 49.26,
+        "class": 23.42,
+        "group": 16.29,
+        "abstain": 11.03
+      },
+      "best_guess_per_upload_balanced": 59.26,
+      "coverage": 88.98
+    }
+  },
+  "by_scenario": {
+    "v4": {
+      "lineage": {
+        "cells": 6779,
+        "committed": 87.52,
+        "correct_when_committed": 97.69,
+        "false_abstention": 0.22,
+        "levels": {
+          "lineage": 47.15,
+          "class": 21.96,
+          "group": 18.41,
+          "abstain": 12.48
+        },
+        "best_guess_per_upload_balanced": 62.98,
+        "coverage": 93.17
+      },
+      "mixed": {
+        "cells": 14962,
+        "committed": 93.41,
+        "correct_when_committed": 99.06,
+        "false_abstention": 0.26,
+        "levels": {
+          "lineage": 43.75,
+          "class": 29.41,
+          "group": 20.25,
+          "abstain": 6.59
+        },
+        "best_guess_per_upload_balanced": 77.4,
+        "coverage": 94.56
+      },
+      "narrow": {
+        "cells": 18592,
+        "committed": 90.21,
+        "correct_when_committed": 97.22,
+        "false_abstention": 0.33,
+        "levels": {
+          "lineage": 45.5,
+          "class": 29.42,
+          "group": 15.3,
+          "abstain": 9.79
+        },
+        "best_guess_per_upload_balanced": 61.34,
+        "coverage": 88.4
+      },
+      "pbmc": {
+        "cells": 3753,
+        "committed": 96.3,
+        "correct_when_committed": 99.58,
+        "false_abstention": 0.05,
+        "levels": {
+          "lineage": 58.19,
+          "group": 24.3,
+          "class": 13.8,
+          "abstain": 3.7
+        },
+        "best_guess_per_upload_balanced": 71.61,
+        "coverage": 95.76
+      },
+      "scope2": {
+        "cells": 6320,
+        "committed": 87.61,
+        "correct_when_committed": 98.65,
+        "false_abstention": 0.13,
+        "levels": {
+          "lineage": 70.63,
+          "group": 16.19,
+          "abstain": 12.39,
+          "class": 0.79
+        },
+        "best_guess_per_upload_balanced": 71.0,
+        "coverage": 89.95
+      },
+      "single": {
+        "cells": 11676,
+        "committed": 78.08,
+        "correct_when_committed": 93.9,
+        "false_abstention": 0.29,
+        "levels": {
+          "lineage": 47.97,
+          "abstain": 21.92,
+          "class": 21.42,
+          "group": 8.69
+        },
+        "best_guess_per_upload_balanced": 42.08,
+        "coverage": 78.97
+      }
+    },
+    "v3.1": {
+      "lineage": {
+        "cells": 6779,
+        "committed": 88.17,
+        "correct_when_committed": 97.61,
+        "false_abstention": 0.22,
+        "levels": {
+          "lineage": 47.5,
+          "class": 22.07,
+          "group": 18.6,
+          "abstain": 11.83
+        },
+        "best_guess_per_upload_balanced": 60.53,
+        "coverage": 92.93
+      },
+      "mixed": {
+        "cells": 14962,
+        "committed": 93.79,
+        "correct_when_committed": 98.91,
+        "false_abstention": 0.26,
+        "levels": {
+          "lineage": 43.95,
+          "class": 29.53,
+          "group": 20.3,
+          "abstain": 6.21
+        },
+        "best_guess_per_upload_balanced": 68.33,
+        "coverage": 94.1
+      },
+      "narrow": {
+        "cells": 18592,
+        "committed": 90.6,
+        "correct_when_committed": 97.17,
+        "false_abstention": 0.33,
+        "levels": {
+          "lineage": 45.69,
+          "class": 29.51,
+          "group": 15.4,
+          "abstain": 9.4
+        },
+        "best_guess_per_upload_balanced": 57.24,
+        "coverage": 88.27
+      },
+      "pbmc": {
+        "cells": 3753,
+        "committed": 96.86,
+        "correct_when_committed": 99.5,
+        "false_abstention": 0.05,
+        "levels": {
+          "lineage": 58.65,
+          "group": 24.38,
+          "class": 13.83,
+          "abstain": 3.14
+        },
+        "best_guess_per_upload_balanced": 57.85,
+        "coverage": 95.55
+      },
+      "scope2": {
+        "cells": 6320,
+        "committed": 87.64,
+        "correct_when_committed": 98.61,
+        "false_abstention": 0.13,
+        "levels": {
+          "lineage": 70.63,
+          "group": 16.19,
+          "abstain": 12.36,
+          "class": 0.82
+        },
+        "best_guess_per_upload_balanced": 65.89,
+        "coverage": 89.95
+      },
+      "single": {
+        "cells": 11676,
+        "committed": 78.85,
+        "correct_when_committed": 93.85,
+        "false_abstention": 0.29,
+        "levels": {
+          "lineage": 48.17,
+          "class": 21.98,
+          "abstain": 21.15,
+          "group": 8.7
+        },
+        "best_guess_per_upload_balanced": 41.84,
+        "coverage": 78.64
+      }
+    }
+  },
+  "scenario_drop_vs_v31": {
+    "lineage": -2.45,
+    "mixed": -9.07,
+    "narrow": -4.1,
+    "pbmc": -13.76,
+    "scope2": -5.11,
+    "single": -0.24
+  },
+  "correlation_term_used_pct_of_uploads": {
+    "lineage": 55.9,
+    "mixed": 98.5,
+    "narrow": 58.0,
+    "pbmc": 100.0,
+    "scope2": 0.0,
+    "single": 8.6
+  },
+  "checks": {
+    "coverage": true,
+    "false_abstention": true,
+    "correct_when_committed": true,
+    "committed": true,
+    "best_guess_gain": true,
+    "no_scenario_drop": true
+  },
+  "go": true,
+  "seconds": 1478
+}

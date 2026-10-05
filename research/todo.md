@@ -140,6 +140,8 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
   - [x] scANVI fairness. The 2,907-gene space is reported per gene; 1,975 of those genes were zero-filled for every Fulcher cell. A new arm on the 932 measured genes (3 seeds) is scANVI's best arm at 47.8 shared kNN; the headline is now its best arm, with both rules reported (amendment 2: `21d9f1f`; results: `794fad5`).
   - [x] End-to-end product check. The output is restricted to macrophage/monocyte, logged in §1 as critical (`794fad5`).
   - [x] Exploratory 5-type score (T = CD4T + CD8T), labelled "added after results" (`794fad5`).
+- [x] **Khoury 2026 unsealed and scored once, the final v3.1 evaluation (2026-10-03, owner's go-ahead `74942f2`).** Steps 1–4 of amendment 5 on the PC; all 20 training runs completed, none diverged; MaxFuse seed 0 failed once (SVD did not converge) and its one rerun under amendment 7 completed. Five-type balanced accuracy: v3.1 best guess 56.9; its members alone 60.0 ± 3.3 (shared kNN); scGLUE 42.8; v3 40.9 / 39.8; correlation 38.7; scANVI's best arm (`measuredgenes`) 30.9 native / 36.1 kNN; Seurat 30.4; Harmony 27.6; MaxFuse 0.8. All 77 bootstrap CIs exclude zero, every one for v3.1 (or for v3 against scANVI), **but a review after scoring found the baselines and scANVI handicapped by our setup** (RNA z-scored over whole blood vs queries over PBMCs; MaxFuse without its SVD settings; scANVI's non-negative Normal mean on z-scores), so those margins overstate v3.1's lead; corrected reruns in `research/benchmark/baseline-corrections.md`. v3.1 commits on 93.8%, correct at the stated level 96.7%. Weakness: CD8T recall 2.7% (94% called CD4T), NK 29.0%. The tables reproduce byte for byte on the allowed rerun. Tables in `research/benchmark/khoury2026/`; write-up in `research/benchmark/results.md`
+- [x] **Baseline review and corrected reruns (owner's request, 2026-10-03/04).** Four-part review: scoring correct; comparators handicapped (RNA z-scored over whole blood vs queries over PBMCs; MaxFuse without its SVD settings; scANVI's non-negative Normal mean on z-scores; Harmony's shared-population assumption; Seurat rescales its inputs). Corrections committed before any corrected result was scored (`d8522cd`); 60 runs on SCoPE2, PBMC240, Fulcher and Khoury (post-hoc), 59 completed, scANVI Fulcher seed 2 failed twice identically. Corrected: Khoury PCA + kNN 62.8, scANVI 61.5, v3.1 best guess 56.9 (members 60.0), Harmony 56.9; Fulcher Harmony 60.8–63.0 and correlation 62.1 vs v3.1 57.9. **v3.1's best guess is level with the best simple baselines, not ahead**; still ahead of MaxFuse, scGLUE and Seurat. Write-up: `research/benchmark/baseline-corrections.md`
 - [x] **Khoury 2026: kept whole and sealed; no donor split (owner, 2026-09-30).** Provenance is confirmed from the authors' code, with file and line citations, in protocol amendment 1 (`b71e0c6`). Labels: protein-only Seurat clusters (row-centred matrix, PCs 1–4, resolution 0.3, donor regressed), renamed by hand; no RNA reference. Matrix chain as described, plus a limma run-order step in 3 of 5 batches and a column renormalisation after every step
 - [x] **Khoury 2026 final-evaluation scripts, before unsealing (amendment 5):** `khoury2026_embed.py` (gates, embeddings, v3.1 as served), `scanvi_run_khoury2026.py`, `khoury2026_score.py`. Each refuses Khoury without `--unseal`. Rehearsed on Fulcher: the 34 runs' per-type recalls match Fulcher's committed tables within 0.0001 points, and v3.1's confident answers match per type (`73cac67`)
 - [x] **Khoury 2026 registered as a SEALED final test set** (timsTOF, mTRAQ 2-plex, 1,651 PBMCs, 2 donors, 5 types; protein-only Seurat labels). Scored exactly once, at the final v3.1 evaluation, under `research/benchmark/protocol-khoury2026.md`. Until then: no embeddings, no scores, and no per-cell labels (the loader refuses). Only label-free facts are recorded.
@@ -175,6 +177,63 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 - [ ] **Evaluate both service flags on RNA** (the next notebook): coverage, correct when committed and answer levels on NB1's evaluation suite, with and without each flag. Until then NB2's evaluation figures describe the rule without them
 - [ ] **Evaluate restricted mode under v3.1** (the next notebook), or retire it: on SCoPE2 with the flags on it answers "monocyte/macrophage", the two allowed classes, for 97.9% of cells
 
+### Track G, v4.0: fusion, class-balanced reference, reprocessed SCoPE2 (branch `integration/v4`)
+
+Plan approved 2026-10-04. In-memory pre-tests on development data only; Khoury not touched (`research/notebook-run-history.md`, entry 20).
+
+- [ ] **Step 0, the data.**
+  - [x] SCoPE2 design labels from MassIVE MSV000084660: `metadata/annotation.csv` and `batch.csv`, in `data/incoming/SCoPE2_raw/`. The lab's Google Drive links return 404.
+  - [ ] The 1.19 GB evidence table `quant/ev_SCoPE2_runs.csv`, from `ftp://massive-ftp.ucsd.edu/v02/MSV000084660/`. MassIVE's FTP server requires TLS (plain FTP gets `421 TLS is required`), so it comes with `curl --ssl-reqd`. The PC reaches it; downloading 2026-10-04.
+  - [ ] A fresh sealed test set, from the owner's Gemini Deep Research survey (fallback: request O'Connor 2026's data).
+- [ ] **Phase 0, record and register.**
+  - [x] v3.1's full responses frozen (`service/tests/fixtures/v31_full_*.json`, `V31IsUnchangedTests`).
+  - [x] The pre-test fixed in `research/notebooks/v4_pretest.py`, with the fusion setting re-chosen on NB1's calibration suite: **w 0.7, τ 0.05**.
+    - Evaluation suite, scored once: 60.3 vs v3.1's 56.1.
+    - Development data: Fulcher 65.5, PBMC240 93.2, SCoPE2 32.6 / 0.7 (v3.1 39.7 / 0.0; before SCoPE2's labels were corrected it read 67.4 / 6.8), AUROC 0.804.
+    - Run history, entry 20. Not yet committed.
+  - [x] The roadmap's retraining tier renamed v5.
+- [ ] **Phase 1:** SCoPE2 reprocessed from the evidence table, missing values kept missing.
+  - [x] `benchmark/scope2_reprocess.py`: 1,128 cells (814 macrophage, 314 monocyte, labels from the experimental design), median 618 genes, 83.1% missing. Not yet committed.
+  - [ ] Loaders wired into the scorers (Phase 4).
+- [x] **SCoPE2's labels corrected** (found by Phase 1; `research/benchmark/bugs-and-fixes.md`, 8). VivOME's copy had macrophage and monocyte swapped on all 1,490 cells; the authors' curated object, the counts and the markers agree. Not yet committed.
+  - `benchmark/scope2_labels.py` (`--apply` fixes every copy and v3's evidence tables), pinned by `service/tests/test_scope2_labels.py`.
+  - Rescored: Track D and corrected baselines, NB1d (`benchmark/scope2_5seed_scores.py`), the paired bootstraps, v3.1's flags and evidence, the v4 pre-test and gate, the manifest. Restricted figures became 100 minus the old ones.
+  - Every local copy is corrected, the Drive source and its `.xlsx` included; the original is kept as `data/incoming/SCoPE2_raw/blood_joint_cells_by_proteins.swapped_labels_original.tsv`. NB1b's and NB1c's tables are corrected in place.
+  - Not recomputed: NB1d's smoothing-off unrestricted figures (latents not saved; left empty); figures printed in notebooks (marked superseded); outputs of models trained on SCoPE2's labels (`drive/Data/Results/SCOPE2_LABELS.md`). The Parquet copies are corrected too (pyarrow installed for it, pinned by the same test).
+  - **Pre-test calls re-examined** (restricted figures convert exactly; run history, entry 20):
+    - query smoothing off: SCoPE2 restricted goes from 38.7 to 35.1, a loss, so the case now rests on Fulcher (+3.8) against the RNA simulation;
+    - class-balanced statistics: SCoPE2 about −1 rather than +1; PBMC240 +3.4 stands;
+    - whole-tissue reference expansion: SCoPE2 restricted rises to 44 rather than falling to 56, and Fulcher rises too, so its rejection no longer stands. Reopened;
+    - retraining on blood plus tissues: SCoPE2 55.9 against the blood-only 37.0, a reversal; Fulcher (59.1 vs 61.4) and the simulation (55.8 vs 57.8) still favour blood only;
+    - the v4 candidate on SCoPE2: 32.6 restricted against v3.1's 39.7 in the same run.
+- [x] **Phase 2:** the v4 bundle, the code and the gate. Not yet committed.
+  - **Bundle,** built by `scripts/build_v4_bundle.py` into `service/model/v4/`. Its self-check reproduces v3.1's served latents at median cosine 1.0000000.
+  - **Size:** only v4's own files, about 0.9 MB; the members and latents stay v3.1's.
+  - **Code:** `service/pipeline/fusion.py`, and `"v4"` added to `PIPELINE_VERSIONS` (selectable, refused until calibrated).
+  - **Gate** (`benchmark/v4_dev_gate.py`, `service/tests/test_v4_gate.py`): reproduces the pre-test cell by cell on SCoPE2, PBMC240, Fulcher and Furtwängler (100% agreement; AUROC 0.8043). Passed again after the SCoPE2 label correction.
+  - **Tests:** `service/tests/test_fusion.py`. The service suite has 217 tests, all passing.
+- [x] **Phase 3:** calibration, then the spec freeze. The design that passed (Phase 3c) keeps v3.1's conformal sets and out-of-distribution threshold.
+  - [x] **Run 2026-10-04 (`research/notebooks/v4_calibration.py`; run-history entry 21): NO GO.**
+    - **Passed:** coverage 89.7% (v3.1 87.1%), false abstention 0.7%, correct when committed 97.4%, best guess 64.0 vs 60.6.
+    - **Failed:** single-type uploads, 8.6 points below v3.1 (the bound is 3).
+    - **Also:** committed share 56.7% against v3.1's 88.6%; the fused probabilities give wider sets.
+    - The spec is not frozen.
+  - [x] Owner decision (2026-10-04): fix both failures, with the rules fixed first and a fresh evaluation suite.
+  - [x] **Phase 3b, run 2026-10-04 to 05 (`research/notebooks/v4_phase3b.py`; run-history entry 23): NO GO.** Answers stay v3.1's; the best guess mixes smoothed and unsmoothed encoder probabilities (share chosen on the calibration suite: 0.5) before fusion. Not yet committed.
+    - **Passed:** committed share 86.0% (v3.1 86.7%, so the set width is fixed), false abstention 0.4%, correct when committed 97.6%, best guess 64.7 vs 59.6.
+    - **Failed:** coverage 87.6% (v3.1 88.3%; the bound is ≥ 88 and ≥ v3.1); single-type uploads 5.4 points below v3.1 (the bound is 3).
+    - **Both misses come from single-type uploads.** Elsewhere, coverage is 91.5% against 91.1%. The coverage loss is a design slip: the fused guess replaces v3.1's top label in the set instead of joining it. The single-type loss is CD8T and neutrophil uploads, where per-upload z-scoring leaves the correlation term no contrast.
+  - [x] Owner decision (2026-10-05): explore a fix on calibration data first; then design B (the agreement gate) and a coverage check of "not below v3.1".
+  - [x] **Phase 3c, run 2026-10-05 (`research/notebooks/v4_phase3c.py`; run-history entry 24): GO.** Not yet committed.
+    - **The rule:** v3.1's answers, with v4's guess joined beside v3.1's. The correlation term is used only in uploads where its top class agrees with v3.1's on at least 40% of cells (0.5 smoothed share, w 0.7, τ 0.05); elsewhere the class-balanced smoothed encoder decides. Fixed from an exploration on calibration cells and development data (`research/notebook-outputs/v4_phase3c/exploration.json`).
+    - **Implementation check:** the service reproduced the exploration's calibration-suite figures exactly.
+    - **Fresh suite** (third use of `te_eval`'s cells, declared): best guess 64.7 vs 59.3; coverage 89.2% vs 89.0%; committed 88.5% vs 89.0%; correct when committed 97.5%; false abstention 0.3%; every scenario at or above v3.1 (single type +0.2, PBMC-like +13.8). Per cell 61.5% vs 58.3%.
+    - **Development:** Fulcher 65.0 vs 57.9; PBMC240 and SCoPE2 unchanged; AUROC 0.829 vs 0.744.
+  - [x] **Spec freeze:** `spec_v4.json` records the passed evaluation (v4 servable on request; v3.1 stays the default); `benchmark.v4_dev_gate` passed (100% per-cell agreement); v4's responses frozen (`service/tests/fixtures/v4_full_*.json`, `V4IsUnchangedTests`). Not yet committed.
+- [ ] **Phase 4:** the development benchmark against the corrected baselines.
+- [ ] **Phase 5:** the sealed test, scored once.
+- [ ] **Phase 6:** release 0.4.0, after owner sign-off.
+
 ---
 
 ## 3. Colab notebooks
@@ -201,7 +260,7 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 - [ ] **T2 NB6, external data build**
 - [ ] **T2 NB7, wider reference with the Cell Ontology hierarchy**
-- [ ] **T2 NB8, v4 training.** Should also train with a donor held out, since v3 never had one
+- [ ] **T2 NB8, v5 training.** Should also train with a donor held out, since v3 never had one
 
 ---
 
@@ -226,10 +285,12 @@ Ordered by severity. None of them can be fixed with protein labels, and none nee
 
 ## 5. Current verified numbers
 
-SCoPE2, 1,490 cells, real embedding, unless marked RNA. **Every "ours" row
-without "5 seeds" is the shipped checkpoint, `v3_seed0`** (`provenance.json`'s
-`production_seed: 0`) — the best of five v3 seeds on SCoPE2, so those rows are
-what the product delivers today, not properties of the architecture. The
+SCoPE2, 1,490 cells, real embedding, unless marked RNA, scored against the
+curated labels (corrected 2026-10-04; `research/benchmark/bugs-and-fixes.md`, 8:
+until then every restricted figure here was 100 minus the true one). **Every
+"ours" row without "5 seeds" is the shipped checkpoint, `v3_seed0`**
+(`provenance.json`'s `production_seed: 0`) — the lowest of five v3 seeds on
+SCoPE2, so those rows are what v3 delivers, not properties of the architecture. The
 "5 seeds" rows are the architecture-level numbers: v3's seed variance was
 first measured in T1 NB1c (`research/notebook-outputs/nb1c/`), then rescored by Track D on
 T1 NB1d's per-seed embeddings (`research/notebook-outputs/nb1d/`).
@@ -242,35 +303,40 @@ and the development datasets through the service
 
 | Measure | Value |
 |---|---|
-| `v3_seed0`, unrestricted, native centroid | 45.37 acc / 31.08 bal |
-| `v3_seed0`, restricted, native centroid (what the product delivers today) | 86.17 / 79.79 |
-| `v3_seed0`, unrestricted, shared kNN (benchmark rule) | 55.37 / 38.69 |
-| `v3_seed0`, restricted, shared kNN, post hoc masking (benchmark only) | 88.40 bal |
-| `v3_seed0`, restricted, pool first kNN (what the service would give with kNN) | 77.50 bal |
-| v3, 5 seeds, restricted, native centroid | 79.38 ± 4.71 acc / 63.32 ± 10.84 bal (bal range 50.79–79.79) |
-| v3, 5 seeds, restricted, shared kNN | 75.32 ± 11.79 / 71.50 ± 10.60 (bal range 59.04–88.40) |
-| v3, 5 seeds, restricted, pool first kNN | 78.11 ± 4.69 / 61.64 ± 11.80 (bal range 51.35–77.50) |
-| v3, 5 seeds, unrestricted, shared kNN | 38.36 ± 25.71 / 29.07 ± 18.34 (bal range 1.28–49.84) |
-| v3, 5 seeds, unrestricted, native centroid | 34.09 ± 25.25 / 25.60 ± 17.35 (bal range 0.14–48.20) |
-| `v3_seed0` minus scANVI, restricted, shared kNN, paired bootstrap | CI +8.2 to +14.4, excludes 0 against all 3 scANVI seeds (was +9.1 to +14.4 before scANVI seed 0 was retrained in Track D) |
-| `v3_seed0` minus scANVI, unrestricted, shared kNN, paired bootstrap | CI +24.2 to +32.7, excludes 0 against all 3 scANVI seeds (was +21.7 to +32.7, same reason) |
-| v3 (5 seeds) minus scANVI (3 seeds), restricted, shared kNN, 15 paired bootstraps | ours ahead 3, scANVI ahead 12; mean Δ −5.65 ± 9.84. **The `v3_seed0` lead does not generalize** |
-| v3 (5 seeds) minus scANVI (3 seeds), restricted, pool first kNN | ours ahead 5, scANVI ahead 8, not significant 2; mean Δ −0.03 ± 12.10 |
-| v3 (5 seeds) minus scANVI (3 seeds), unrestricted, shared kNN | ours ahead 12, scANVI ahead 3; mean Δ +18.14 ± 17.14 |
-| V2 (5 seeds) minus scANVI (3 seeds) | never reliably ahead: restricted shared kNN 0 ahead / 15 behind; pool first 4 / 11; unrestricted 4 / 8 (3 not significant) |
+| `v3_seed0`, unrestricted, native centroid | 0.40 acc / 0.68 bal |
+| `v3_seed0`, restricted, native centroid (what v3 delivers) | 13.83 / 20.21 |
+| `v3_seed0`, unrestricted, shared kNN (benchmark rule) | 2.28 / 2.20 |
+| `v3_seed0`, restricted, shared kNN, post hoc masking (benchmark only) | 11.60 bal |
+| `v3_seed0`, restricted, pool first kNN (what the service would give with kNN) | 22.50 bal |
+| v3, 5 seeds, restricted, native centroid | 20.62 ± 4.71 acc / 36.68 ± 10.84 bal (bal range 20.21–49.21) |
+| v3, 5 seeds, restricted, shared kNN | 24.68 ± 11.79 / 28.50 ± 10.60 (bal range 11.60–40.96) |
+| v3, 5 seeds, restricted, pool first kNN | 21.89 ± 4.69 / 38.36 ± 11.80 (bal range 22.50–48.65) |
+| v3, 5 seeds, unrestricted, shared kNN | 4.94 ± 5.53 / 8.32 ± 9.93 (bal range 0.00–20.36) |
+| v3, 5 seeds, unrestricted, native centroid | 3.13 ± 4.23 / 5.38 ± 7.57 (bal range 0.00–17.92) |
+| `v3_seed0` minus scANVI, restricted, shared kNN, paired bootstrap | CI −14.5 to −8.2, excludes 0 against all 3 scANVI seeds, in scANVI's favour |
+| `v3_seed0` minus scANVI, unrestricted, shared kNN, paired bootstrap | CI +1.0 to +3.0, excludes 0 against all 3 scANVI seeds |
+| v3 (5 seeds) minus scANVI (3 seeds), restricted, shared kNN, 15 paired bootstraps | ours ahead 12, scANVI ahead 3; mean Δ +5.65 ± 9.84. Both below chance (v3 28.5, scANVI 22.8) |
+| v3 (5 seeds) minus scANVI (3 seeds), restricted, pool first kNN | ours ahead 8, scANVI ahead 5, not significant 2; mean Δ +0.03 ± 12.10 |
+| v3 (5 seeds) minus scANVI (3 seeds), unrestricted, shared kNN | ours ahead 12, not significant 3; mean Δ +8.10 ± 9.19 |
+| V2 (5 seeds) minus scANVI (3 seeds) | restricted shared kNN 15 ahead / 0 behind (mean +18.9); pool first 10 / 4 (1 not significant); unrestricted 10 / 0 (5 not significant) |
 | PBMC240 raw, lineage (development dataset, used to choose V2), lymphoid recall n=117 / myeloid recall n=5 (anecdotal), 5 seeds | v3 52.82 ± 7.73 / 100.0; V2 92.82 ± 0.76 / 80.0; scANVI, best arm (processed input, RNA and query restricted to the 1,111 genes PBMC240 measures), 3 seeds: 38.75 ± 2.75 shared kNN / 39.60 ± 5.56 native, myeloid 100.0 with 51–59% of all cells called myeloid. On the 2,907-gene space it was 17.95 / 21.37 |
 | **Fulcher 2026 (the held-out scoring, now a development dataset; TMT, 1,251 cells, 6 types, chance 16.7), bal. acc., nearest centroid / shared kNN** | V2 57.32 ± 2.20 / 55.47 ± 2.64; v3 42.34 ± 3.42 / 42.05 ± 2.93 (`v3_seed0` 44.1 / 41.8); scANVI best arm (932 measured genes) 37.65 ± 2.12 native / 47.83 ± 0.87 kNN; scANVI on the 2,907-gene space (1,975 zero-filled) 18.98 / 21.36 |
 | Fulcher 2026 paired bootstrap vs scANVI's best arm | V2 > v3 in 50 of 50; V2 > scANVI in 30 of 30 (+7.6 kNN, +19.7 product rule vs native); **v3 vs scANVI: behind in 12 of 15 under shared kNN (mean −5.8), ahead in 9 of 15 product rule vs native (6 not significant)**. Against the zero-filled 2,907-gene arm, which the first write-up used, v3 led in 30 of 30 |
 | Fulcher 2026 lineage recall, nearest centroid, lymphoid / myeloid | V2 98.5 / 93.1; v3 78.3 / 98.9. DC recall ≤ 8.9 for every method |
-| Unsupervised methods (MaxFuse, Harmony, scGLUE), restricted, 3-seed means (Track D extension) | 49.4 to 58.2 bal, near chance |
+| **Khoury 2026, the sealed final test (scored once, 2026-10-03; timsTOF mTRAQ, 1,651 cells, 5 types, chance 20), bal. acc.** | v3.1 best guess 56.9; V2 members alone, shared kNN 60.0 ± 3.3; scGLUE 42.8 ± 1.7; v3 40.9 (nearest centroid) / 39.8 (kNN); correlation 38.7; scANVI best arm (`measuredgenes`) 30.9 ± 3.0 native / 36.1 ± 0.8 kNN; Seurat 30.4; Harmony 27.6 ± 1.3; MaxFuse 0.8 ± 0.3 |
+| Khoury 2026 paired bootstrap | all 77 CIs exclude zero: v3.1 > v3 6 of 6 (+16 to +25); v3.1 > scANVI best arm 18 of 18 (+20 to +30); v3 > scANVI 6 of 6 (+2.8 to +13.5); v3.1 > every baseline, 47 of 47 |
+| Khoury 2026, v3.1 best guess: lymphoid / myeloid recall; CD8T / NK recall | 98.1 / 97.2; 2.7 (94% called CD4T) / 29.0. Committed 93.8%, correct at the stated level 96.7% |
+| **Corrected baselines (2026-10-04; Khoury post-hoc), bal. acc.** | Khoury: PCA + kNN 62.8; scANVI kNN 61.5 ± 2.1 / native 51.6; v3.1 members 60.0, best guess 56.9; Harmony 56.9; correlation 49.8; scGLUE 38.9; MaxFuse 31.6 / matching 30.4; Seurat 29.7. Fulcher (6 types): Harmony 63.0 (nearest centroid) / 60.8 (kNN); correlation 62.1; v3.1 57.9; PCA 55.5; scANVI 51.9 |
+| Corrected baselines, SCoPE2 restricted (chance 50) / PBMC240 lymphoid recall | Harmony nearest centroid 63.0; scGLUE kNN 50.8; MaxFuse nearest centroid 49.2; Seurat 46.7; PCA nearest centroid 45.4; v3.1 38.7; correlation 35.4; PCA kNN 34.8; Harmony kNN 29.7; scANVI 22.3–33.1 / v3.1 92.3, PCA 88.9, Harmony 82.1, scANVI 80.1 |
+| Unsupervised methods (MaxFuse, Harmony, scGLUE), restricted, 3-seed means (Track D extension) | 41.7 to 50.6 bal, at or below chance |
 | Majority class floor, restricted | 73.56 / 50.00 |
 | RNA to RNA, SCoPE2 mask, **test cells only** (replaces the published 95.5 / 74.8) | 93.19 / 65.71 (OT), centroid 67.29 bal |
 | RNA to RNA, full coverage, **test cells only** (replaces the published 97.6 / 85.7) | 94.64 / 80.01 (OT) |
 | RNA, SCoPE2 like upload, global z vs per upload z plus smoothing, unrestricted bal | 64.7 vs 49.1 |
-| RNA, SCoPE2 like upload, per upload z, oracle restricted bal | 87.9 (protein restricted: 79.8) |
+| RNA, SCoPE2 like upload, per upload z, oracle restricted bal | 87.9 (protein restricted: 20.2) |
 | RNA, single cell type uploads, unrestricted bal (simulation) | 11.2 |
 | Modality probe | 98.99 ± 0.28 |
-| Latent centroid cosine | monocyte 0.830, macrophage 0.190 |
+| Latent centroid cosine (v3) | macrophage 0.368, monocyte 0.140 |
 | Abstention at 0.9779 | 80.2 percent |
 | Conformal empirical coverage | 33.7 percent (target 90) |
 | v3.1, NB2's evaluation suite (NB2's rule, no service flags) | 94.9 correct when committed, 19.2 abstention, 87.1 coverage; answers 19.1 class / 17.7 group / 44.0 lineage |
@@ -283,7 +349,7 @@ Sources for the 5-seed, paired-bootstrap and PBMC240 rows:
 `paired_bootstrap_ours_vs_scanvi.csv`, `real_data_per_seed.csv`,
 `scanvi_pbmc240_input_variants.csv`. Full writeup: `research/benchmark/results.md`.
 
-Still needed before claiming state of the art: the sealed Khoury 2026 final test, scored once at the final v3.1 evaluation. It is the only sealed test; Fulcher 2026 is now development data.
+The sealed Khoury 2026 final test was scored once, on 2026-10-03: as run, v3.1 is ahead of every comparator in every pairing there (rows above), but the baselines and scANVI were handicapped by our setup. Corrected (post-hoc), v3.1's best guess is level with the best simple baselines, not ahead (`research/benchmark/baseline-corrections.md`). A "state of the art" or "beats scANVI" claim is not supported. It is one dataset of two donors and five types, with labels clustered from the same protein matrix. Whether that supports a "state of the art" claim, and in what words, is the owner's decision; the site keeps the word off until then.
 The published held out cell type AUC of 1.000 is not a valid unseen type test,
 because the held out classes were in training.
 
@@ -339,3 +405,6 @@ because the held out classes were in training.
 | 2026-10-02 | The public site on Cloudflare Pages (https://vivome-atlas.pages.dev), built by `scripts/build_pages_site.py`; the large atlas files wait for R2 | `35532a5`, `e732aa3` |
 | 2026-10-02 | Second pre-unsealing review. **Every Seurat CCA run so far saw scrambled matrices** (`tofile` writes C order; R read it column-major): fixed and rerun on the PC, tables and write-up corrected. scGLUE's balancing divided by zero on sparse queries (Fulcher's "divergence"): balancing off, owner's decision, rerun. Every run now leaves a completed / diverged / failed record; sealed runs refuse --smoke, --out and replacement; the scorer runs every label-free check (gate, model-file sha256s, records, row order) before reading a label, and skips v3.1 if its gate failed. Khoury amendment 7 | `c516d98` |
 | 2026-10-03 | scGLUE rerun with balancing off (9 runs, PC GPU, all completed, none diverged) and every Track D table rescored with the corrected Seurat runs. Fulcher: v3.1 57.9 balanced, ahead in all 22 pairings; correlation 46.9; scGLUE 24.2 / 18.3 (nearest centroid / kNN); Seurat 18.9 (biased in its favour). PBMC240 lymphoid recall: Seurat 21.4, scGLUE 29.9 / 24.5; v3.1 92.3. SCoPE2 restricted: Seurat 53.5, scGLUE 58.2 / 49.4, v3.1 61.3; unrestricted: every mean under 5%, scGLUE's kNN rule 0.0. Khoury rehearsal rerun with amendment 7's checks: gates passed, 21 model-file sha256s recorded and checked, 37 runs reproduce Fulcher's per-type recalls to within 0.000049 points, confident answers identical, no diverged or failed run; scANVI smoke completed all three arms | `c516d98` |
+| 2026-10-03 | **Khoury 2026 unsealed and scored once** (owner's go-ahead `74942f2`). Gates passed; 9 scANVI and 11 baseline runs completed, none diverged. False start under the system Python (every step stopped at import, no data loaded); MaxFuse seed 0 failed with "SVD did not converge" and its one amendment 7 rerun completed. Five-type balanced accuracy: v3.1 56.9 (best guess), V2 members 60.0 (kNN), scGLUE 42.8, v3 40.9, correlation 38.7, scANVI best arm 36.1 (kNN), Seurat 30.4, Harmony 27.6, MaxFuse 0.8; all 77 bootstrap CIs exclude zero for v3.1 (or v3 over scANVI). v3.1 commits 93.8%, 96.7% correct at the stated level; CD8T recall 2.7%, NK 29.0%. Scorer's allowed rerun reproduces all seven tables byte for byte | not yet committed |
+| 2026-10-03 to 04 | **Baseline review (owner's request) and corrected reruns.** Scoring correct; comparators handicapped by our setup (RNA z-scored over whole blood vs queries over PBMCs; MaxFuse without its SVD settings; scANVI's non-negative Normal mean on z-scores). Corrections committed before any corrected result was scored; 60 runs, 59 completed (scANVI Fulcher seed 2 failed twice identically). Corrected Khoury (post-hoc): PCA + kNN 62.8, scANVI 61.5, v3.1 56.9 (members 60.0), Harmony 56.9, correlation 49.8, scGLUE 38.9, MaxFuse 31.6, Seurat 29.7. Fulcher: Harmony 60.8-63.0 and correlation 62.1 ahead of v3.1's 57.9. v3.1's best guess is level with the best simple baselines, not ahead | `d8522cd`; results not yet committed |
+| 2026-10-04 | **SCoPE2's labels corrected.** VivOME's copy had macrophage and monocyte swapped on all 1,490 cells (found by Track G's reprocessing; the authors' curated object, the counts and the markers agree; `research/benchmark/bugs-and-fixes.md`, 8). Every copy fixed by `benchmark/scope2_labels.py --apply` and pinned by a test; every SCoPE2 table rescored. Restricted figures are 100 minus the old ones: v3 79.8 → 20.2, v3.1 61.3 → 38.7, scANVI 77.7 → 22.3; only Harmony with nearest centroid (63.0) is above chance. Group- and lineage-level figures unchanged. Pre-test calls that leaned on SCoPE2 re-examined (Track G). Not yet committed. |

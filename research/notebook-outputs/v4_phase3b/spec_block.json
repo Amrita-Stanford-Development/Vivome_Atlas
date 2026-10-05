@@ -1,0 +1,9 @@
+{
+  "smoothed_share": 0.5,
+  "evaluation": {
+    "status": "failed",
+    "record": "research/notebook-outputs/v4_phase3b/summary.json",
+    "suite": "eval_v4b: 240 new uploads from T1 NB3c's te_eval cells, seed 20261004",
+    "date": "2026-10-05"
+  }
+}

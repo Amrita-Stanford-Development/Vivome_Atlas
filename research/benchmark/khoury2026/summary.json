@@ -1,0 +1,59 @@
+{
+  "dataset": "Khoury 2026",
+  "n_scored": 1651,
+  "v31_gate_passed": true,
+  "scanvi_headline_arm": "measuredgenes",
+  "scanvi_shared_knn_mean_bal_acc_pct": {
+    "as_provided": 26.4045,
+    "cellmedian": 30.377,
+    "measuredgenes": 36.0779
+  },
+  "diverged_runs": [],
+  "failed_runs": [],
+  "ci_excludes_zero_counts": {
+    "v3.1 vs v3 [product rules]": {
+      "pairings": 1,
+      "v3.1": 1
+    },
+    "v3.1 vs v3 [shared_knn]": {
+      "pairings": 5,
+      "V2": 5
+    },
+    "v3.1 vs scANVI_measuredgenes [product rule vs native]": {
+      "pairings": 3,
+      "v3.1": 3
+    },
+    "v3.1 vs scANVI_measuredgenes [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "v3 vs scANVI_measuredgenes [product rule vs native]": {
+      "pairings": 3,
+      "v3_served": 3
+    },
+    "v3 vs scANVI_measuredgenes [shared_knn]": {
+      "pairings": 3,
+      "v3_served": 3
+    },
+    "v3.1 vs maxfuse [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "v3.1 vs scglue [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "v3.1 vs harmony [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "v3.1 vs seurat [product rule vs native]": {
+      "pairings": 1,
+      "v3.1": 1
+    },
+    "v3.1 vs correlation [product rule vs correlation]": {
+      "pairings": 1,
+      "v3.1": 1
+    }
+  }
+}

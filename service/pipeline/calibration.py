@@ -120,7 +120,12 @@ class MondrianCalibrator:
         self.calibrated_on = calibrated_on
         self.include_best_guess = include_best_guess
 
-    def calibrate(self, probs, rng, label_space):
+    def calibrate(self, probs, rng, label_space, guess_positions=None):
+        """guess_positions: a second best guess, one class position per cell,
+        from another probability than `probs` (v4's fused best guess,
+        service/pipeline/fusion.py). It joins non-empty sets beside the argmax
+        of `probs`, which is always added, so these sets contain the ones
+        built without it."""
         threshold = 1.0 - self.qhat
         member = probs >= threshold
         allowed = np.ones(probs.shape[1], dtype=bool)
@@ -130,7 +135,9 @@ class MondrianCalibrator:
             member &= allowed
         if self.include_best_guess:
             nonempty = np.flatnonzero(member.any(axis=1))
-            member[nonempty, np.where(allowed, probs, -1.0)[nonempty].argmax(axis=1)] = True
+            member[nonempty, np.where(allowed, probs, -1.0).argmax(axis=1)[nonempty]] = True
+            if guess_positions is not None:
+                member[nonempty, np.asarray(guess_positions)[nonempty]] = True
         label_sets = [np.flatnonzero(row).tolist() for row in member]
         return CalibrationResult(qhat=self.marginal_qhat, calibration_indices=np.zeros(0, dtype=np.int64),
                                  label_sets=label_sets)

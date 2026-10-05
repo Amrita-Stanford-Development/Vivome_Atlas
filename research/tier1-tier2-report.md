@@ -19,6 +19,8 @@ Research report, 2026-09-24. Source for the Tier 1 and Tier 2 items in
 > 3. **The scANVI lead claimed here earlier does not hold.** It was measured on v3
 >    seed 0 only. Across five seeds, and with scANVI trained on measured genes only,
 >    scANVI leads v3 on SCoPE2 restricted, while V2 beats scANVI on Fulcher and PBMC240.
+>    (SCoPE2's labels were swapped until 2026-10-04; corrected, both are below chance
+>    there and v3 is ahead of scANVI. `research/benchmark/bugs-and-fixes.md`, 8.)
 >    MaxFuse, scGLUE, Harmony and Seurat have not yet been run fairly; that is the
 >    Track D extension.
 > 4. **T1-1, label space estimation,** was tested in T1 NB2. Neither EM prior estimation

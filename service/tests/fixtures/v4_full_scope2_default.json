@@ -1,0 +1,2551 @@
+{
+ "atlas_version": "0.3.0",
+ "best_guess_rule": {
+  "agreement": 0.22,
+  "agreement_threshold": 0.4,
+  "correlation_term": "flat",
+  "rule": "fusion"
+ },
+ "calibration": {
+  "applies_to": "labelled RNA simulated uploads (NB1 calibration suite, validation split cells); approximate on protein",
+  "method": "Mondrian (class-conditional) split conformal, fitted in T1 NB2",
+  "n_calibration_cells": 0,
+  "set_includes_best_guess": true,
+  "target_coverage": 0.9
+ },
+ "cells": [
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.16657533976620828
+   },
+   "cell_id": "0",
+   "confidence": 0.5844184094286314,
+   "coordinates": [
+    0.27354681491851807,
+    -0.33211296796798706,
+    0.09892230480909348
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "b cell",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.46887701749801636,
+     "value": -0.05394097417593002
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07674252241849899,
+     "value": -0.003876159433275461
+    },
+    "glycolysis": {
+     "uncertainty": 0.4515482187271118,
+     "value": 0.23125800490379333
+    },
+    "inflammatory": {
+     "uncertainty": 0.2726880609989166,
+     "value": 0.04457426443696022
+    },
+    "oxphos": {
+     "uncertainty": 0.42782261967658997,
+     "value": 0.5029538869857788
+    },
+    "ribosome": {
+     "uncertainty": 1.3133354187011719,
+     "value": 1.4714102745056152
+    }
+   },
+   "reference_similarity": 0.8586870431900024
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.27310326678714847
+   },
+   "cell_id": "1",
+   "confidence": 0.4587694365154438,
+   "coordinates": [
+    -0.004637143108993769,
+    0.21976721286773682,
+    -0.2186398059129715
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "macrophage",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2825380563735962,
+     "value": -0.11369165778160095
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.014348693192005157,
+     "value": -0.012336360290646553
+    },
+    "glycolysis": {
+     "uncertainty": 0.4172547161579132,
+     "value": 0.2808340787887573
+    },
+    "inflammatory": {
+     "uncertainty": 0.33266615867614746,
+     "value": 0.38185322284698486
+    },
+    "oxphos": {
+     "uncertainty": 0.2250494658946991,
+     "value": 0.21616898477077484
+    },
+    "ribosome": {
+     "uncertainty": 0.6227203011512756,
+     "value": 0.5159873962402344
+    }
+   },
+   "reference_similarity": 0.8930730819702148
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3013609848340344
+   },
+   "cell_id": "2",
+   "confidence": 0.8254591793279249,
+   "coordinates": [
+    0.1163540929555893,
+    0.3511650860309601,
+    -0.14553150534629822
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.35938408970832825,
+     "value": -0.06840156763792038
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.015532312914729118,
+     "value": -0.01886003091931343
+    },
+    "glycolysis": {
+     "uncertainty": 0.39966151118278503,
+     "value": 0.49015676975250244
+    },
+    "inflammatory": {
+     "uncertainty": 0.36459603905677795,
+     "value": 0.3906634747982025
+    },
+    "oxphos": {
+     "uncertainty": 0.285307377576828,
+     "value": 0.30234336853027344
+    },
+    "ribosome": {
+     "uncertainty": 0.8040987253189087,
+     "value": 0.5070628523826599
+    }
+   },
+   "reference_similarity": 0.9150756001472473
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.21474657850790696
+   },
+   "cell_id": "3",
+   "confidence": 0.44793943212117127,
+   "coordinates": [
+    0.33154532313346863,
+    -0.2756049633026123,
+    0.17168672382831573
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.48549723625183105,
+     "value": -0.07760228216648102
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.08929844200611115,
+     "value": 0.009253036230802536
+    },
+    "glycolysis": {
+     "uncertainty": 0.4560307264328003,
+     "value": 0.263817697763443
+    },
+    "inflammatory": {
+     "uncertainty": 0.27514657378196716,
+     "value": 0.04707513004541397
+    },
+    "oxphos": {
+     "uncertainty": 0.4368728697299957,
+     "value": 0.4911545217037201
+    },
+    "ribosome": {
+     "uncertainty": 1.319838047027588,
+     "value": 1.4486197233200073
+    }
+   },
+   "reference_similarity": 0.8831321597099304
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "neutrophil",
+    "probability": 0.312576261542114
+   },
+   "cell_id": "4",
+   "confidence": 0.4975074021364657,
+   "coordinates": [
+    -0.23332594335079193,
+    -0.0736275464296341,
+    -0.2014462649822235
+   ],
+   "label": "neutrophil",
+   "label_level": "class",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4037148058414459,
+     "value": -0.1528971940279007
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07221575826406479,
+     "value": 0.0029370244592428207
+    },
+    "glycolysis": {
+     "uncertainty": 0.38717254996299744,
+     "value": 0.3199276030063629
+    },
+    "inflammatory": {
+     "uncertainty": 0.35299214720726013,
+     "value": 0.25963523983955383
+    },
+    "oxphos": {
+     "uncertainty": 0.3560311496257782,
+     "value": 0.23338474333286285
+    },
+    "ribosome": {
+     "uncertainty": 0.6478400230407715,
+     "value": 0.186488077044487
+    }
+   },
+   "reference_similarity": 0.8737966418266296
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.18281691988210697
+   },
+   "cell_id": "5",
+   "confidence": 0.556628061307139,
+   "coordinates": [
+    0.2566550374031067,
+    -0.3569308817386627,
+    -0.0325353778898716
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5119439959526062,
+     "value": -0.025796985253691673
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07865363359451294,
+     "value": -0.0024163995403796434
+    },
+    "glycolysis": {
+     "uncertainty": 0.4334809184074402,
+     "value": 0.1974552571773529
+    },
+    "inflammatory": {
+     "uncertainty": 0.2796565592288971,
+     "value": 0.04302240163087845
+    },
+    "oxphos": {
+     "uncertainty": 0.41600868105888367,
+     "value": 0.44664233922958374
+    },
+    "ribosome": {
+     "uncertainty": 1.0606205463409424,
+     "value": 1.1250367164611816
+    }
+   },
+   "reference_similarity": 0.863613486289978
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.19310094022177202
+   },
+   "cell_id": "6",
+   "confidence": 0.6718288822409932,
+   "coordinates": [
+    0.2873154878616333,
+    -0.3179205060005188,
+    0.1208563819527626
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4920245110988617,
+     "value": -0.12027295678853989
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.09019289910793304,
+     "value": 0.007182146422564983
+    },
+    "glycolysis": {
+     "uncertainty": 0.43694373965263367,
+     "value": 0.21723365783691406
+    },
+    "inflammatory": {
+     "uncertainty": 0.2785825729370117,
+     "value": 0.012203304097056389
+    },
+    "oxphos": {
+     "uncertainty": 0.39410367608070374,
+     "value": 0.4480770230293274
+    },
+    "ribosome": {
+     "uncertainty": 1.3705214262008667,
+     "value": 1.3738093376159668
+    }
+   },
+   "reference_similarity": 0.8603093028068542
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "neutrophil",
+    "probability": 0.13354187712919263
+   },
+   "cell_id": "7",
+   "confidence": null,
+   "coordinates": [
+    -0.011714455671608448,
+    -0.15453337132930756,
+    -0.1603313833475113
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6246444582939148,
+     "value": 0.043896451592445374
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0759197399020195,
+     "value": 0.011397249065339565
+    },
+    "glycolysis": {
+     "uncertainty": 0.3916068375110626,
+     "value": 0.29886478185653687
+    },
+    "inflammatory": {
+     "uncertainty": 0.33776795864105225,
+     "value": 0.21394619345664978
+    },
+    "oxphos": {
+     "uncertainty": 0.28061622381210327,
+     "value": 0.3828064799308777
+    },
+    "ribosome": {
+     "uncertainty": 0.6840910315513611,
+     "value": 0.277192622423172
+    }
+   },
+   "reference_similarity": 0.8606239557266235
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.1541740062848174
+   },
+   "cell_id": "8",
+   "confidence": null,
+   "coordinates": [
+    0.030299078673124313,
+    -0.16595657169818878,
+    -0.17889262735843658
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5950024724006653,
+     "value": 0.003189327195286751
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07646926492452621,
+     "value": 0.01090218871831894
+    },
+    "glycolysis": {
+     "uncertainty": 0.35776957869529724,
+     "value": 0.3607882559299469
+    },
+    "inflammatory": {
+     "uncertainty": 0.25589460134506226,
+     "value": 0.12003333121538162
+    },
+    "oxphos": {
+     "uncertainty": 0.2749343514442444,
+     "value": 0.3456880450248718
+    },
+    "ribosome": {
+     "uncertainty": 0.7397055625915527,
+     "value": 0.2448507398366928
+    }
+   },
+   "reference_similarity": 0.8528867959976196
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "no_confident_label",
+   "abstained": true,
+   "best_guess": {
+    "label": "neutrophil",
+    "probability": 0.20762361335420565
+   },
+   "cell_id": "9",
+   "confidence": null,
+   "coordinates": [
+    -0.05342602729797363,
+    -0.19712139666080475,
+    -0.1883089691400528
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5723551511764526,
+     "value": 0.08534448593854904
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07489428669214249,
+     "value": 0.007964379154145718
+    },
+    "glycolysis": {
+     "uncertainty": 0.5366923213005066,
+     "value": 0.36865296959877014
+    },
+    "inflammatory": {
+     "uncertainty": 0.20354846119880676,
+     "value": 0.0465194508433342
+    },
+    "oxphos": {
+     "uncertainty": 0.360512912273407,
+     "value": 0.3956356346607208
+    },
+    "ribosome": {
+     "uncertainty": 0.7986375093460083,
+     "value": 0.318327933549881
+    }
+   },
+   "reference_similarity": 0.8583347201347351
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.2361827736864604
+   },
+   "cell_id": "10",
+   "confidence": 0.46783123302047114,
+   "coordinates": [
+    0.33666351437568665,
+    -0.26241105794906616,
+    0.19022853672504425
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.48807379603385925,
+     "value": -0.12087925523519516
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05943289026618004,
+     "value": -0.010900016874074936
+    },
+    "glycolysis": {
+     "uncertainty": 0.44578295946121216,
+     "value": 0.25184231996536255
+    },
+    "inflammatory": {
+     "uncertainty": 0.27416229248046875,
+     "value": 0.05770451948046684
+    },
+    "oxphos": {
+     "uncertainty": 0.43830606341362,
+     "value": 0.4976643919944763
+    },
+    "ribosome": {
+     "uncertainty": 1.3269877433776855,
+     "value": 1.4763234853744507
+    }
+   },
+   "reference_similarity": 0.8766449093818665
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "neutrophil",
+    "probability": 0.1729012176283536
+   },
+   "cell_id": "11",
+   "confidence": null,
+   "coordinates": [
+    -0.06406663358211517,
+    -0.09946215152740479,
+    -0.19827784597873688
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4093489646911621,
+     "value": -0.03338669240474701
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07417530566453934,
+     "value": 0.006215584464371204
+    },
+    "glycolysis": {
+     "uncertainty": 0.5095123052597046,
+     "value": 0.37705305218696594
+    },
+    "inflammatory": {
+     "uncertainty": 0.2535408139228821,
+     "value": 0.13929766416549683
+    },
+    "oxphos": {
+     "uncertainty": 0.3864136338233948,
+     "value": 0.42112746834754944
+    },
+    "ribosome": {
+     "uncertainty": 0.8507556319236755,
+     "value": 0.6623639464378357
+    }
+   },
+   "reference_similarity": 0.8479715585708618
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.21326416879389987
+   },
+   "cell_id": "12",
+   "confidence": null,
+   "coordinates": [
+    -0.04159789904952049,
+    -0.1861066371202469,
+    -0.21417981386184692
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4694279432296753,
+     "value": 0.00017099641263484955
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0758335143327713,
+     "value": 0.006563981529325247
+    },
+    "glycolysis": {
+     "uncertainty": 0.3423961102962494,
+     "value": 0.20115594565868378
+    },
+    "inflammatory": {
+     "uncertainty": 0.22656294703483582,
+     "value": 0.08735620975494385
+    },
+    "oxphos": {
+     "uncertainty": 0.24075283110141754,
+     "value": 0.34787917137145996
+    },
+    "ribosome": {
+     "uncertainty": 0.7337006330490112,
+     "value": 0.15925848484039307
+    }
+   },
+   "reference_similarity": 0.8484287261962891
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.20936051437778752
+   },
+   "cell_id": "13",
+   "confidence": 0.6404498579220017,
+   "coordinates": [
+    0.3289859890937805,
+    -0.25480106472969055,
+    0.15593180060386658
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.49988898634910583,
+     "value": -0.06436430662870407
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.10996071249246597,
+     "value": 0.01583392359316349
+    },
+    "glycolysis": {
+     "uncertainty": 0.42592912912368774,
+     "value": 0.2032526433467865
+    },
+    "inflammatory": {
+     "uncertainty": 0.2978470027446747,
+     "value": 0.09093368798494339
+    },
+    "oxphos": {
+     "uncertainty": 0.4094446003437042,
+     "value": 0.4087282419204712
+    },
+    "ribosome": {
+     "uncertainty": 1.2928519248962402,
+     "value": 1.392136573791504
+    }
+   },
+   "reference_similarity": 0.8685529828071594
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.17153993740667087
+   },
+   "cell_id": "14",
+   "confidence": null,
+   "coordinates": [
+    0.14913047850131989,
+    -0.259613037109375,
+    -0.17495222389698029
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5257669687271118,
+     "value": 0.04679376259446144
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0760846734046936,
+     "value": 0.013312231749296188
+    },
+    "glycolysis": {
+     "uncertainty": 0.42224112153053284,
+     "value": 0.21229685842990875
+    },
+    "inflammatory": {
+     "uncertainty": 0.26513755321502686,
+     "value": 0.14011886715888977
+    },
+    "oxphos": {
+     "uncertainty": 0.28770607709884644,
+     "value": 0.4001424014568329
+    },
+    "ribosome": {
+     "uncertainty": 0.8790146708488464,
+     "value": 0.6483654379844666
+    }
+   },
+   "reference_similarity": 0.8409202694892883
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.16825191747310844
+   },
+   "cell_id": "15",
+   "confidence": 0.8047150190952023,
+   "coordinates": [
+    0.2954208552837372,
+    -0.3286921977996826,
+    0.1435045748949051
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "b cell",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.47905203700065613,
+     "value": -0.11915940791368484
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07535455375909805,
+     "value": -0.006272026337683201
+    },
+    "glycolysis": {
+     "uncertainty": 0.4689374566078186,
+     "value": 0.23629650473594666
+    },
+    "inflammatory": {
+     "uncertainty": 0.3579065501689911,
+     "value": 0.11157481372356415
+    },
+    "oxphos": {
+     "uncertainty": 0.3925045430660248,
+     "value": 0.4470721185207367
+    },
+    "ribosome": {
+     "uncertainty": 1.1468236446380615,
+     "value": 0.9403185844421387
+    }
+   },
+   "reference_similarity": 0.8517279624938965
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.17924855296951142
+   },
+   "cell_id": "16",
+   "confidence": 0.74203337929065,
+   "coordinates": [
+    0.2847941219806671,
+    -0.3066122233867645,
+    0.07499229162931442
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4897821843624115,
+     "value": -0.10761416703462601
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07705297321081161,
+     "value": -0.004919942934066057
+    },
+    "glycolysis": {
+     "uncertainty": 0.471195250749588,
+     "value": 0.2394469976425171
+    },
+    "inflammatory": {
+     "uncertainty": 0.35591962933540344,
+     "value": 0.10956422984600067
+    },
+    "oxphos": {
+     "uncertainty": 0.3937201499938965,
+     "value": 0.4510015845298767
+    },
+    "ribosome": {
+     "uncertainty": 1.140836238861084,
+     "value": 0.9496678113937378
+    }
+   },
+   "reference_similarity": 0.8608875274658203
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.11325719207158495
+   },
+   "cell_id": "17",
+   "confidence": null,
+   "coordinates": [
+    0.075016088783741,
+    -0.27402323484420776,
+    -0.10799919068813324
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5056528449058533,
+     "value": -0.07260039448738098
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07718437165021896,
+     "value": 0.005184377543628216
+    },
+    "glycolysis": {
+     "uncertainty": 0.4132905602455139,
+     "value": 0.3425646722316742
+    },
+    "inflammatory": {
+     "uncertainty": 0.2632867097854614,
+     "value": 0.12931157648563385
+    },
+    "oxphos": {
+     "uncertainty": 0.2554844617843628,
+     "value": 0.3250824809074402
+    },
+    "ribosome": {
+     "uncertainty": 0.8944269418716431,
+     "value": 0.6626091003417969
+    }
+   },
+   "reference_similarity": 0.8346196413040161
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "neutrophil",
+    "probability": 0.25028139887298056
+   },
+   "cell_id": "18",
+   "confidence": 0.47860894952616806,
+   "coordinates": [
+    -0.12802834808826447,
+    -0.047313813120126724,
+    -0.27377909421920776
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "myeloid dendritic cell",
+    "neutrophil"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.40490689873695374,
+     "value": 0.0031652001198381186
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07088340073823929,
+     "value": 0.01055008266121149
+    },
+    "glycolysis": {
+     "uncertainty": 0.3609788119792938,
+     "value": 0.2759116291999817
+    },
+    "inflammatory": {
+     "uncertainty": 0.2902369797229767,
+     "value": 0.2849385142326355
+    },
+    "oxphos": {
+     "uncertainty": 0.3169253170490265,
+     "value": 0.29202789068222046
+    },
+    "ribosome": {
+     "uncertainty": 0.6648755669593811,
+     "value": 0.47937607765197754
+    }
+   },
+   "reference_similarity": 0.8675836324691772
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.27737676442519593
+   },
+   "cell_id": "19",
+   "confidence": 0.5073395307312778,
+   "coordinates": [
+    -0.009438004344701767,
+    0.19957216084003448,
+    -0.2066236138343811
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.26919814944267273,
+     "value": -0.09249918162822723
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.013056752271950245,
+     "value": -0.005233368370682001
+    },
+    "glycolysis": {
+     "uncertainty": 0.4690197706222534,
+     "value": 0.3960164189338684
+    },
+    "inflammatory": {
+     "uncertainty": 0.28639402985572815,
+     "value": 0.28641340136528015
+    },
+    "oxphos": {
+     "uncertainty": 0.253944993019104,
+     "value": 0.17395497858524323
+    },
+    "ribosome": {
+     "uncertainty": 0.5788894295692444,
+     "value": 0.43010494112968445
+    }
+   },
+   "reference_similarity": 0.8871056437492371
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.335784748288203
+   },
+   "cell_id": "20",
+   "confidence": 0.8390123330158555,
+   "coordinates": [
+    0.17444828152656555,
+    0.3773443102836609,
+    -0.16267605125904083
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.36987999081611633,
+     "value": 0.0003217952325940132
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.1344858855009079,
+     "value": 0.014877252280712128
+    },
+    "glycolysis": {
+     "uncertainty": 0.3592674136161804,
+     "value": 0.4735674560070038
+    },
+    "inflammatory": {
+     "uncertainty": 0.34842196106910706,
+     "value": 0.4133242666721344
+    },
+    "oxphos": {
+     "uncertainty": 0.35336852073669434,
+     "value": 0.41025644540786743
+    },
+    "ribosome": {
+     "uncertainty": 0.8429273962974548,
+     "value": 0.5874359607696533
+    }
+   },
+   "reference_similarity": 0.9270421862602234
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3037094930144114
+   },
+   "cell_id": "21",
+   "confidence": 0.7445925410248935,
+   "coordinates": [
+    0.07355731725692749,
+    0.315125435590744,
+    -0.14421328902244568
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "macrophage",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3464900851249695,
+     "value": -0.08754397183656693
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.13088460266590118,
+     "value": 0.018496397882699966
+    },
+    "glycolysis": {
+     "uncertainty": 0.43530845642089844,
+     "value": 0.33137473464012146
+    },
+    "inflammatory": {
+     "uncertainty": 0.351032018661499,
+     "value": 0.3697834312915802
+    },
+    "oxphos": {
+     "uncertainty": 0.34073662757873535,
+     "value": 0.2160763442516327
+    },
+    "ribosome": {
+     "uncertainty": 0.6899228096008301,
+     "value": 0.4449952244758606
+    }
+   },
+   "reference_similarity": 0.9177756309509277
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.1140446942089847
+   },
+   "cell_id": "22",
+   "confidence": null,
+   "coordinates": [
+    0.3592020273208618,
+    -0.12899532914161682,
+    0.05581798031926155
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6407080292701721,
+     "value": 0.0631059855222702
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11430046707391739,
+     "value": 0.024045124650001526
+    },
+    "glycolysis": {
+     "uncertainty": 0.42754846811294556,
+     "value": 0.20607492327690125
+    },
+    "inflammatory": {
+     "uncertainty": 0.33255767822265625,
+     "value": 0.2167666107416153
+    },
+    "oxphos": {
+     "uncertainty": 0.3313310742378235,
+     "value": 0.3691774010658264
+    },
+    "ribosome": {
+     "uncertainty": 0.8555078506469727,
+     "value": 0.6686394810676575
+    }
+   },
+   "reference_similarity": 0.8206108808517456
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3080201396889464
+   },
+   "cell_id": "23",
+   "confidence": 0.5423943436312336,
+   "coordinates": [
+    -0.0289312731474638,
+    0.2485801875591278,
+    -0.23958609998226166
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.18981559574604034,
+     "value": -0.1744271069765091
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.014082075096666813,
+     "value": -0.012686343863606453
+    },
+    "glycolysis": {
+     "uncertainty": 0.40570369362831116,
+     "value": 0.323343425989151
+    },
+    "inflammatory": {
+     "uncertainty": 0.32274767756462097,
+     "value": 0.39221227169036865
+    },
+    "oxphos": {
+     "uncertainty": 0.3183026611804962,
+     "value": 0.2561963200569153
+    },
+    "ribosome": {
+     "uncertainty": 0.6235567331314087,
+     "value": 0.5119466185569763
+    }
+   },
+   "reference_similarity": 0.9099375009536743
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.34761188727040016
+   },
+   "cell_id": "24",
+   "confidence": 0.7589285493751458,
+   "coordinates": [
+    0.06144489347934723,
+    0.34421998262405396,
+    -0.20106077194213867
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3606886565685272,
+     "value": -0.1112322211265564
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.13256259262561798,
+     "value": 0.017254024744033813
+    },
+    "glycolysis": {
+     "uncertainty": 0.42348453402519226,
+     "value": 0.36624231934547424
+    },
+    "inflammatory": {
+     "uncertainty": 0.33556321263313293,
+     "value": 0.3900582492351532
+    },
+    "oxphos": {
+     "uncertainty": 0.34031057357788086,
+     "value": 0.25564271211624146
+    },
+    "ribosome": {
+     "uncertainty": 0.7439369559288025,
+     "value": 0.399946928024292
+    }
+   },
+   "reference_similarity": 0.9271538853645325
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.24961363084191185
+   },
+   "cell_id": "25",
+   "confidence": null,
+   "coordinates": [
+    0.06233085319399834,
+    -0.28999432921409607,
+    -0.2650735378265381
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.27151376008987427,
+     "value": -0.20844805240631104
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07405148446559906,
+     "value": 0.004541813395917416
+    },
+    "glycolysis": {
+     "uncertainty": 0.21959710121154785,
+     "value": 0.2697046995162964
+    },
+    "inflammatory": {
+     "uncertainty": 0.23073658347129822,
+     "value": 0.1999158412218094
+    },
+    "oxphos": {
+     "uncertainty": 0.22190895676612854,
+     "value": 0.21596334874629974
+    },
+    "ribosome": {
+     "uncertainty": 0.8268952369689941,
+     "value": 0.047668226063251495
+    }
+   },
+   "reference_similarity": 0.8312116861343384
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3081905970409129
+   },
+   "cell_id": "26",
+   "confidence": 0.7279416443099413,
+   "coordinates": [
+    -0.016415920108556747,
+    0.27931493520736694,
+    -0.1341194361448288
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "macrophage",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.21543915569782257,
+     "value": -0.15752571821212769
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.014390872791409492,
+     "value": -0.01527300477027893
+    },
+    "glycolysis": {
+     "uncertainty": 0.41806986927986145,
+     "value": 0.3286898732185364
+    },
+    "inflammatory": {
+     "uncertainty": 0.3347969651222229,
+     "value": 0.37952959537506104
+    },
+    "oxphos": {
+     "uncertainty": 0.33268308639526367,
+     "value": 0.23232170939445496
+    },
+    "ribosome": {
+     "uncertainty": 0.5514594316482544,
+     "value": 0.385155588388443
+    }
+   },
+   "reference_similarity": 0.9002475738525391
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.33415879764720624
+   },
+   "cell_id": "27",
+   "confidence": 0.6606377041838872,
+   "coordinates": [
+    -0.12101535499095917,
+    0.39676952362060547,
+    -0.18546122312545776
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "macrophage",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.20787790417671204,
+     "value": -0.18199166655540466
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.020665638148784637,
+     "value": -0.01763375848531723
+    },
+    "glycolysis": {
+     "uncertainty": 0.4235440492630005,
+     "value": 0.317524790763855
+    },
+    "inflammatory": {
+     "uncertainty": 0.36079221963882446,
+     "value": 0.37129780650138855
+    },
+    "oxphos": {
+     "uncertainty": 0.3545007109642029,
+     "value": 0.2676568031311035
+    },
+    "ribosome": {
+     "uncertainty": 0.5765292048454285,
+     "value": 0.33733293414115906
+    }
+   },
+   "reference_similarity": 0.9424797892570496
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.29405283878884536
+   },
+   "cell_id": "28",
+   "confidence": 0.7244008426928492,
+   "coordinates": [
+    -0.08629102259874344,
+    0.2090950310230255,
+    -0.19783517718315125
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "myeloid dendritic cell",
+    "neutrophil"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.21561089158058167,
+     "value": -0.14515477418899536
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.015248448587954044,
+     "value": -0.015088112093508244
+    },
+    "glycolysis": {
+     "uncertainty": 0.39407986402511597,
+     "value": 0.3583691418170929
+    },
+    "inflammatory": {
+     "uncertainty": 0.341692179441452,
+     "value": 0.3152846395969391
+    },
+    "oxphos": {
+     "uncertainty": 0.34007859230041504,
+     "value": 0.33688491582870483
+    },
+    "ribosome": {
+     "uncertainty": 0.6159830689430237,
+     "value": 0.41150587797164917
+    }
+   },
+   "reference_similarity": 0.9161348342895508
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.23369218386335142
+   },
+   "cell_id": "29",
+   "confidence": null,
+   "coordinates": [
+    -0.06088029593229294,
+    -0.20760098099708557,
+    -0.296375572681427
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3990587890148163,
+     "value": -0.13947314023971558
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07416797429323196,
+     "value": 0.00565809290856123
+    },
+    "glycolysis": {
+     "uncertainty": 0.26619264483451843,
+     "value": 0.2899737060070038
+    },
+    "inflammatory": {
+     "uncertainty": 0.21145014464855194,
+     "value": 0.16938374936580658
+    },
+    "oxphos": {
+     "uncertainty": 0.19641685485839844,
+     "value": 0.23371097445487976
+    },
+    "ribosome": {
+     "uncertainty": 0.6741687655448914,
+     "value": -0.10857637226581573
+    }
+   },
+   "reference_similarity": 0.850088894367218
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.12863436423684635
+   },
+   "cell_id": "30",
+   "confidence": 0.4012462888771831,
+   "coordinates": [
+    0.24134522676467896,
+    -0.25753626227378845,
+    0.03203726187348366
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5281775593757629,
+     "value": -0.11366558820009232
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11107480525970459,
+     "value": 0.024302871897816658
+    },
+    "glycolysis": {
+     "uncertainty": 0.45628321170806885,
+     "value": 0.2561672031879425
+    },
+    "inflammatory": {
+     "uncertainty": 0.3108449876308441,
+     "value": 0.14845596253871918
+    },
+    "oxphos": {
+     "uncertainty": 0.3288510739803314,
+     "value": 0.2793232202529907
+    },
+    "ribosome": {
+     "uncertainty": 0.9196486473083496,
+     "value": 0.7058789134025574
+    }
+   },
+   "reference_similarity": 0.855587363243103
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.13745769109231656
+   },
+   "cell_id": "31",
+   "confidence": 0.4827681349358589,
+   "coordinates": [
+    0.22727999091148376,
+    -0.25271713733673096,
+    0.0384768508374691
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.526535153388977,
+     "value": -0.12218291312456131
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11100994795560837,
+     "value": 0.022997258231043816
+    },
+    "glycolysis": {
+     "uncertainty": 0.46184760332107544,
+     "value": 0.2325199842453003
+    },
+    "inflammatory": {
+     "uncertainty": 0.3173447549343109,
+     "value": 0.15767788887023926
+    },
+    "oxphos": {
+     "uncertainty": 0.3040981888771057,
+     "value": 0.3284715414047241
+    },
+    "ribosome": {
+     "uncertainty": 0.9628419280052185,
+     "value": 0.7483570575714111
+    }
+   },
+   "reference_similarity": 0.8575582504272461
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.10910097418012403
+   },
+   "cell_id": "32",
+   "confidence": null,
+   "coordinates": [
+    0.19361759722232819,
+    -0.19793784618377686,
+    -0.10050171613693237
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5589789748191833,
+     "value": 0.022404294461011887
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.10905411094427109,
+     "value": 0.030200427398085594
+    },
+    "glycolysis": {
+     "uncertainty": 0.429303914308548,
+     "value": 0.18236127495765686
+    },
+    "inflammatory": {
+     "uncertainty": 0.2568713128566742,
+     "value": 0.06306269019842148
+    },
+    "oxphos": {
+     "uncertainty": 0.33895745873451233,
+     "value": 0.3619527518749237
+    },
+    "ribosome": {
+     "uncertainty": 0.8382993936538696,
+     "value": 0.891592264175415
+    }
+   },
+   "reference_similarity": 0.8523771166801453
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.30766964512746453
+   },
+   "cell_id": "33",
+   "confidence": 0.8389444819724371,
+   "coordinates": [
+    0.18550343811511993,
+    0.32596179842948914,
+    -0.19250650703907013
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3313775658607483,
+     "value": 0.022461973130702972
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.015224223025143147,
+     "value": -0.010778439231216908
+    },
+    "glycolysis": {
+     "uncertainty": 0.45009493827819824,
+     "value": 0.6007190346717834
+    },
+    "inflammatory": {
+     "uncertainty": 0.38156238198280334,
+     "value": 0.3354388475418091
+    },
+    "oxphos": {
+     "uncertainty": 0.303426593542099,
+     "value": 0.30341094732284546
+    },
+    "ribosome": {
+     "uncertainty": 0.7279127240180969,
+     "value": 0.5576739311218262
+    }
+   },
+   "reference_similarity": 0.9242746233940125
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "neutrophil",
+    "probability": 0.30553925759839146
+   },
+   "cell_id": "34",
+   "confidence": 0.4705565843045544,
+   "coordinates": [
+    -0.1943703591823578,
+    -0.04240415245294571,
+    -0.2317737489938736
+   ],
+   "label": "neutrophil",
+   "label_level": "class",
+   "label_set": [
+    "neutrophil"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3918726444244385,
+     "value": -0.06425214558839798
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0725887343287468,
+     "value": 0.004846055060625076
+    },
+    "glycolysis": {
+     "uncertainty": 0.3256928324699402,
+     "value": 0.33454662561416626
+    },
+    "inflammatory": {
+     "uncertainty": 0.3171256184577942,
+     "value": 0.3393697738647461
+    },
+    "oxphos": {
+     "uncertainty": 0.30428215861320496,
+     "value": 0.352541983127594
+    },
+    "ribosome": {
+     "uncertainty": 0.570487916469574,
+     "value": 0.29520028829574585
+    }
+   },
+   "reference_similarity": 0.8667705655097961
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.25847480716038357
+   },
+   "cell_id": "35",
+   "confidence": 0.4774718918641817,
+   "coordinates": [
+    0.00896312016993761,
+    -0.22138047218322754,
+    -0.32903623580932617
+   ],
+   "label": "erythrocyte",
+   "label_level": "class",
+   "label_set": [
+    "erythrocyte"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.27216485142707825,
+     "value": -0.11602983623743057
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07494687288999557,
+     "value": 0.005788533482700586
+    },
+    "glycolysis": {
+     "uncertainty": 0.26963335275650024,
+     "value": 0.2327800989151001
+    },
+    "inflammatory": {
+     "uncertainty": 0.2539730370044708,
+     "value": 0.15686973929405212
+    },
+    "oxphos": {
+     "uncertainty": 0.2865193784236908,
+     "value": 0.21249571442604065
+    },
+    "ribosome": {
+     "uncertainty": 0.839841365814209,
+     "value": 0.18436862528324127
+    }
+   },
+   "reference_similarity": 0.8625043034553528
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.31079581396926936
+   },
+   "cell_id": "36",
+   "confidence": 0.7519545885884877,
+   "coordinates": [
+    0.017210034653544426,
+    0.3340491056442261,
+    -0.15284454822540283
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "macrophage",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.20320509374141693,
+     "value": -0.21447345614433289
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.015790358185768127,
+     "value": -0.017264850437641144
+    },
+    "glycolysis": {
+     "uncertainty": 0.4046158492565155,
+     "value": 0.310253381729126
+    },
+    "inflammatory": {
+     "uncertainty": 0.3334828317165375,
+     "value": 0.4408257305622101
+    },
+    "oxphos": {
+     "uncertainty": 0.2185782790184021,
+     "value": 0.20757220685482025
+    },
+    "ribosome": {
+     "uncertainty": 0.6832301616668701,
+     "value": 0.34989267587661743
+    }
+   },
+   "reference_similarity": 0.9084457159042358
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.29865800132471215
+   },
+   "cell_id": "37",
+   "confidence": null,
+   "coordinates": [
+    0.006143819075077772,
+    -0.3197438716888428,
+    -0.2910504639148712
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2125982791185379,
+     "value": -0.2520653009414673
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07355869561433792,
+     "value": 0.002266302704811096
+    },
+    "glycolysis": {
+     "uncertainty": 0.24389231204986572,
+     "value": 0.2845500409603119
+    },
+    "inflammatory": {
+     "uncertainty": 0.26154372096061707,
+     "value": 0.23273113369941711
+    },
+    "oxphos": {
+     "uncertainty": 0.22108963131904602,
+     "value": 0.177694171667099
+    },
+    "ribosome": {
+     "uncertainty": 0.7864611744880676,
+     "value": -0.08974933624267578
+    }
+   },
+   "reference_similarity": 0.8531959652900696
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3346078215161441
+   },
+   "cell_id": "38",
+   "confidence": 0.7328101396380655,
+   "coordinates": [
+    0.055035900324583054,
+    0.23540689051151276,
+    -0.20280781388282776
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.20564492046833038,
+     "value": -0.1694168746471405
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.022105377167463303,
+     "value": -0.009061800315976143
+    },
+    "glycolysis": {
+     "uncertainty": 0.3722592890262604,
+     "value": 0.33615171909332275
+    },
+    "inflammatory": {
+     "uncertainty": 0.3012605607509613,
+     "value": 0.33636632561683655
+    },
+    "oxphos": {
+     "uncertainty": 0.20038184523582458,
+     "value": 0.24328073859214783
+    },
+    "ribosome": {
+     "uncertainty": 0.6526252627372742,
+     "value": 0.34541353583335876
+    }
+   },
+   "reference_similarity": 0.9158626794815063
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.12695492633136016
+   },
+   "cell_id": "39",
+   "confidence": null,
+   "coordinates": [
+    0.21185940504074097,
+    -0.28962457180023193,
+    0.07194940000772476
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5033145546913147,
+     "value": -0.1655970811843872
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11215790361166,
+     "value": 0.02097886987030506
+    },
+    "glycolysis": {
+     "uncertainty": 0.46083322167396545,
+     "value": 0.30730050802230835
+    },
+    "inflammatory": {
+     "uncertainty": 0.3095061182975769,
+     "value": 0.10742717981338501
+    },
+    "oxphos": {
+     "uncertainty": 0.33995819091796875,
+     "value": 0.3225007653236389
+    },
+    "ribosome": {
+     "uncertainty": 1.0286171436309814,
+     "value": 0.7911996841430664
+    }
+   },
+   "reference_similarity": 0.8556222915649414
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3151469214612291
+   },
+   "cell_id": "40",
+   "confidence": 0.8751055231551308,
+   "coordinates": [
+    0.17082388699054718,
+    0.40062931180000305,
+    -0.2299633026123047
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.31112203001976013,
+     "value": 0.027635134756565094
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.1333228200674057,
+     "value": 0.01969214528799057
+    },
+    "glycolysis": {
+     "uncertainty": 0.3861839473247528,
+     "value": 0.5400461554527283
+    },
+    "inflammatory": {
+     "uncertainty": 0.36254972219467163,
+     "value": 0.37665849924087524
+    },
+    "oxphos": {
+     "uncertainty": 0.38150346279144287,
+     "value": 0.3732694089412689
+    },
+    "ribosome": {
+     "uncertainty": 0.7262988090515137,
+     "value": 0.5959951877593994
+    }
+   },
+   "reference_similarity": 0.940024733543396
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.21856431919457486
+   },
+   "cell_id": "41",
+   "confidence": 0.6075136282238807,
+   "coordinates": [
+    -0.12231871485710144,
+    0.11778627336025238,
+    -0.09156468510627747
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "myeloid dendritic cell",
+    "neutrophil"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5465937852859497,
+     "value": 0.04255295917391777
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07238100469112396,
+     "value": 0.0022531922440975904
+    },
+    "glycolysis": {
+     "uncertainty": 0.49338245391845703,
+     "value": 0.5584907531738281
+    },
+    "inflammatory": {
+     "uncertainty": 0.3647395372390747,
+     "value": 0.2932012677192688
+    },
+    "oxphos": {
+     "uncertainty": 0.44131678342819214,
+     "value": 0.3939405083656311
+    },
+    "ribosome": {
+     "uncertainty": 0.6906077265739441,
+     "value": 0.5213006734848022
+    }
+   },
+   "reference_similarity": 0.8809521794319153
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.20179663962921698
+   },
+   "cell_id": "42",
+   "confidence": 0.8871239124223842,
+   "coordinates": [
+    0.34722965955734253,
+    -0.3014865219593048,
+    0.34770482778549194
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.19641534984111786,
+     "value": -0.35785043239593506
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07154232263565063,
+     "value": 3.638118505477905e-05
+    },
+    "glycolysis": {
+     "uncertainty": 0.33236533403396606,
+     "value": 0.251483291387558
+    },
+    "inflammatory": {
+     "uncertainty": 0.32587888836860657,
+     "value": 0.14102625846862793
+    },
+    "oxphos": {
+     "uncertainty": 0.37985870242118835,
+     "value": 0.4452168345451355
+    },
+    "ribosome": {
+     "uncertainty": 1.4681075811386108,
+     "value": 1.6134958267211914
+    }
+   },
+   "reference_similarity": 0.8959330320358276
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.15495507905415865
+   },
+   "cell_id": "43",
+   "confidence": 0.7132532480849784,
+   "coordinates": [
+    0.3145931363105774,
+    -0.23600824177265167,
+    0.12483333796262741
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5132373571395874,
+     "value": -0.0832689106464386
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.1113998219370842,
+     "value": 0.015670377761125565
+    },
+    "glycolysis": {
+     "uncertainty": 0.4317931830883026,
+     "value": 0.1981441080570221
+    },
+    "inflammatory": {
+     "uncertainty": 0.3050864636898041,
+     "value": 0.08472795784473419
+    },
+    "oxphos": {
+     "uncertainty": 0.40330106019973755,
+     "value": 0.4343128502368927
+    },
+    "ribosome": {
+     "uncertainty": 1.0652344226837158,
+     "value": 1.0769683122634888
+    }
+   },
+   "reference_similarity": 0.8581513166427612
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.2123715742686595
+   },
+   "cell_id": "44",
+   "confidence": null,
+   "coordinates": [
+    -0.05000552162528038,
+    -0.21556611359119415,
+    -0.24317501485347748
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.40657153725624084,
+     "value": -0.14229953289031982
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07549292594194412,
+     "value": 0.0055238245986402035
+    },
+    "glycolysis": {
+     "uncertainty": 0.28780320286750793,
+     "value": 0.26346462965011597
+    },
+    "inflammatory": {
+     "uncertainty": 0.2305591106414795,
+     "value": 0.14494045078754425
+    },
+    "oxphos": {
+     "uncertainty": 0.21578702330589294,
+     "value": 0.2606464922428131
+    },
+    "ribosome": {
+     "uncertainty": 0.6786676049232483,
+     "value": -0.10131527483463287
+    }
+   },
+   "reference_similarity": 0.8474170565605164
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.299925130258455
+   },
+   "cell_id": "45",
+   "confidence": 0.6499982179701282,
+   "coordinates": [
+    -0.054725900292396545,
+    0.2575511038303375,
+    -0.199077770113945
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.21859851479530334,
+     "value": -0.1522722691297531
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.014863112941384315,
+     "value": -0.014279828406870365
+    },
+    "glycolysis": {
+     "uncertainty": 0.4056475758552551,
+     "value": 0.36259058117866516
+    },
+    "inflammatory": {
+     "uncertainty": 0.3169533312320709,
+     "value": 0.40334296226501465
+    },
+    "oxphos": {
+     "uncertainty": 0.3271990418434143,
+     "value": 0.26885080337524414
+    },
+    "ribosome": {
+     "uncertainty": 0.5428766012191772,
+     "value": 0.414935827255249
+    }
+   },
+   "reference_similarity": 0.9131110310554504
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.18565026216455435
+   },
+   "cell_id": "46",
+   "confidence": null,
+   "coordinates": [
+    0.0749237909913063,
+    -0.20483139157295227,
+    -0.2257395088672638
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5975944399833679,
+     "value": 0.09951432794332504
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07525783032178879,
+     "value": 0.008642373606562614
+    },
+    "glycolysis": {
+     "uncertainty": 0.3570421636104584,
+     "value": 0.30772480368614197
+    },
+    "inflammatory": {
+     "uncertainty": 0.24296125769615173,
+     "value": 0.13133850693702698
+    },
+    "oxphos": {
+     "uncertainty": 0.3060987889766693,
+     "value": 0.35292455554008484
+    },
+    "ribosome": {
+     "uncertainty": 0.835235059261322,
+     "value": 0.2600308060646057
+    }
+   },
+   "reference_similarity": 0.8556593656539917
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.16033045230729237
+   },
+   "cell_id": "47",
+   "confidence": 0.5198918460511963,
+   "coordinates": [
+    0.31501826643943787,
+    -0.17635563015937805,
+    0.1906530112028122
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5167500376701355,
+     "value": -0.09898731857538223
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11275197565555573,
+     "value": 0.01750233955681324
+    },
+    "glycolysis": {
+     "uncertainty": 0.46591949462890625,
+     "value": 0.25463563203811646
+    },
+    "inflammatory": {
+     "uncertainty": 0.30469244718551636,
+     "value": 0.12033994495868683
+    },
+    "oxphos": {
+     "uncertainty": 0.41244328022003174,
+     "value": 0.41491878032684326
+    },
+    "ribosome": {
+     "uncertainty": 1.093153715133667,
+     "value": 0.9153993129730225
+    }
+   },
+   "reference_similarity": 0.8550834655761719
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.20270518889681113
+   },
+   "cell_id": "48",
+   "confidence": null,
+   "coordinates": [
+    0.08414886146783829,
+    -0.2304537445306778,
+    -0.21132288873195648
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5819818377494812,
+     "value": 0.1380387544631958
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07621899247169495,
+     "value": 0.008553784340620041
+    },
+    "glycolysis": {
+     "uncertainty": 0.3928864300251007,
+     "value": 0.209617018699646
+    },
+    "inflammatory": {
+     "uncertainty": 0.23187316954135895,
+     "value": 0.14223887026309967
+    },
+    "oxphos": {
+     "uncertainty": 0.32432159781455994,
+     "value": 0.3296559751033783
+    },
+    "ribosome": {
+     "uncertainty": 0.848355233669281,
+     "value": 0.34492817521095276
+    }
+   },
+   "reference_similarity": 0.8461105227470398
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.33441271152952623
+   },
+   "cell_id": "49",
+   "confidence": 0.6666036066262063,
+   "coordinates": [
+    -0.015183523297309875,
+    0.2585813105106354,
+    -0.19165657460689545
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 2907,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1771143227815628,
+     "value": -0.19997015595436096
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.01347194891422987,
+     "value": -0.013431460596621037
+    },
+    "glycolysis": {
+     "uncertainty": 0.413851797580719,
+     "value": 0.27360066771507263
+    },
+    "inflammatory": {
+     "uncertainty": 0.351250559091568,
+     "value": 0.41407310962677
+    },
+    "oxphos": {
+     "uncertainty": 0.2148241251707077,
+     "value": 0.16992948949337006
+    },
+    "ribosome": {
+     "uncertainty": 0.642534077167511,
+     "value": 0.3639906942844391
+    }
+   },
+   "reference_similarity": 0.923244833946228
+  }
+ ],
+ "gene_id_resolution": {
+  "ambiguous": 0,
+  "ambiguous_identifiers": [],
+  "matched": 2907,
+  "unmapped": 28,
+  "unmapped_identifiers": [
+   "ADISSP",
+   "CIROZ",
+   "CSNK2A2IP",
+   "DRC10",
+   "DRC2",
+   "ENTREP1",
+   "FERRY3",
+   "H2BC26",
+   "H4C16",
+   "LOC102724428",
+   "LRTM3",
+   "MTCL2",
+   "MTCL3",
+   "NHERF1",
+   "NHSL3",
+   "NUCLEOLIN",
+   "PGCKA1",
+   "POFUT4",
+   "PRP4K",
+   "RIGI",
+   "SACK1D",
+   "SACK1F",
+   "SKIC8",
+   "SLC9D1",
+   "TEKTL1",
+   "TOP6BL",
+   "TSLIG3C",
+   "WHR1"
+  ]
+ },
+ "label_space": {
+  "candidate_classes": [
+   "b cell",
+   "basophil",
+   "cd4-positive, alpha-beta t cell",
+   "cd8-positive, alpha-beta t cell",
+   "classical monocyte",
+   "common myeloid progenitor",
+   "erythrocyte",
+   "hematopoietic precursor cell",
+   "hematopoietic stem cell",
+   "intermediate monocyte",
+   "macrophage",
+   "mature nk t cell",
+   "monocyte",
+   "myeloid dendritic cell",
+   "naive thymus-derived cd4-positive, alpha-beta t cell",
+   "natural killer cell",
+   "neutrophil",
+   "non-classical monocyte",
+   "plasma cell",
+   "plasmacytoid dendritic cell",
+   "platelet",
+   "regulatory t cell"
+  ],
+  "restricted_to_supported_classes": false
+ },
+ "model_version": "v4 (v3.1's answers; best guess fused from its V2 members on a class-balanced reference and correlation)",
+ "n_cells": 50,
+ "n_features_matched": 2907,
+ "n_features_unmatched": 28,
+ "pipeline_version": "v4",
+ "reference_abstain_threshold": 0.7789892554283142,
+ "supported_classes": {
+  "method": "none",
+  "names": [
+   "b cell",
+   "basophil",
+   "cd4-positive, alpha-beta t cell",
+   "cd8-positive, alpha-beta t cell",
+   "classical monocyte",
+   "common myeloid progenitor",
+   "erythrocyte",
+   "hematopoietic precursor cell",
+   "hematopoietic stem cell",
+   "intermediate monocyte",
+   "macrophage",
+   "mature nk t cell",
+   "monocyte",
+   "myeloid dendritic cell",
+   "naive thymus-derived cd4-positive, alpha-beta t cell",
+   "natural killer cell",
+   "neutrophil",
+   "non-classical monocyte",
+   "plasma cell",
+   "plasmacytoid dendritic cell",
+   "platelet",
+   "regulatory t cell"
+  ],
+  "renormalised": false,
+  "support": null
+ },
+ "value_scale": {
+  "detected": "log",
+  "transformed": false
+ }
+}

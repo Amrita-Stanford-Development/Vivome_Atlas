@@ -62,7 +62,10 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
 | 2026-09-30 | **Repository reorganised** into the current layout. **Track E:** Fulcher 2026 held-out evaluation, where V2 beats v3 in 50 of 50 seed pairings. Fulcher then became a development dataset. Khoury 2026 registered as the sealed final test. V2 chosen as the v3.1 encoder. **Web redesign** foundation | `629d2cf`, `6d67d32`, `1f486f0` |
 | 2026-10-01 | **v3.1:**<br>• Track C scaffold, `167f138`;<br>• the Project page projecting through a local service;<br>• Track F: T1 NB2's five-seed V2 ensemble becomes the default pipeline, `9567ffd`;<br>• a deep review, whose follow-up fixed duplicate gene rows, `af07dac`;<br>• **release 0.3.0**, `a5b31dc`.<br>**After the release:**<br>• docs update;<br>• Khoury amendment 2, `491053b`;<br>• Track D extension started, `7963031`;<br>• Windows-safe clone, `c698188` | see each bullet |
 | 2026-10-01 to 02 | **The Windows PC takes over:** Mac-isms replaced, tests fitted to the PC's float differences, R/Seurat and harmonypy installed. **Track D extension finished:** four baselines plus a correlation baseline against v3.1 as served; Khoury amendments 3 and 4 | `d9a3cfe`, `65bfc10`, and the results commit |
-| 2026-10-02 to 03 | **Before unsealing:** the Khoury final-evaluation scripts, rehearsed on Fulcher (amendment 5); T1 NB3b and NB3c, both NO GO; two code reviews (amendments 6 and 7). The second found that every Seurat run had seen scrambled inputs, and that scGLUE's cluster balancing divides by zero on Fulcher: Seurat rerun with the fix, scGLUE rerun with balancing off, every table rescored. The public site on Cloudflare Pages | `73cac67`, `379c53c`, `a52570e`, `4d217f1`, `35532a5`; amendment 7 not yet committed |
+| 2026-10-02 to 03 | **Before unsealing:** the Khoury final-evaluation scripts, rehearsed on Fulcher (amendment 5); T1 NB3b and NB3c, both NO GO; two code reviews (amendments 6 and 7). The second found that every Seurat run had seen scrambled inputs, and that scGLUE's cluster balancing divides by zero on Fulcher: Seurat rerun with the fix, scGLUE rerun with balancing off, every table rescored. The public site on Cloudflare Pages | `73cac67`, `379c53c`, `a52570e`, `4d217f1`, `35532a5`, `c516d98` |
+| 2026-10-04 | **Baseline corrections** run (`d8522cd`). **Track G (v4.0):** pre-test, bundle, fusion pipeline and gate; Phase 3 calibration NO GO. **SCoPE2's labels found swapped** on every cell (`research/benchmark/bugs-and-fixes.md`, 8), corrected in every copy and every SCoPE2 table rescored: v3 restricted 79.8 → 20.2, v3.1 61.3 → 38.7, scANVI 77.7 → 22.3. Every local copy, the Drive source included, now carries the curated labels | `d8522cd`; the rest not yet committed |
+| 2026-10-05 | **Track G, Phase 3b: NO GO** (run-history entry 23). v3.1's answers with v4's fused best guess. Fixed: the set width (committed 86.0% against v3.1's 86.7%). Best guess 64.7 against 59.6. Failed: coverage 87.6% (v3.1 88.3%) and single-type uploads 5.4 points below v3.1. Both come from single-type uploads. **Phase 3c: GO** (entry 24): the guess joined beside v3.1's, and the correlation term gated by upload agreement. Best guess 64.7 against 59.3, every scenario at or above v3.1, coverage 89.2% against 89.0%. Spec frozen; v4 servable on request, v3.1 still the default | not yet committed |
+| 2026-10-03 | **Khoury 2026 unsealed and scored once,** the final v3.1 evaluation. As run, v3.1 is ahead of every comparator in all 77 paired bootstraps, but a review then found the comparators handicapped by our setup (item 4 under Next) (best guess 56.9% balanced over five types; scGLUE 42.8, v3 40.9, scANVI's best arm 36.1). Its weakness is CD8T (2.7% recall) and NK (29.0%). **Web:** the living water behind every page; the landing redesigned around a 3D hero | `74942f2`, `0a8de8f`; the results not yet committed |
 
 ## Where things stand (2026-10-03)
 
@@ -77,8 +80,9 @@ NB6 to NB8). Claude Code tracks (A2 to F) carry the results into the code.
   - the move to the Windows PC;
   - Khoury amendments 5 and 6, T1 NB3b and NB3c, and the Pages site.
 
-  Amendment 7's fixes, the Seurat and scGLUE reruns and the rescored
-  tables are in the working tree, not yet committed.
+  Then amendment 7 (`c516d98`), the living water (`0a8de8f`) and the
+  go-ahead to unseal (`74942f2`). The Khoury results and the landing
+  redesign are in the working tree, not yet committed.
 - **v3.1** (`service/pipeline/ensemble.py`):
   - five V2 encoders, each a tempered softmax over cosine to the class
     centroids, averaged;
@@ -122,8 +126,8 @@ RNA class mean.
     baseline 46.9%; scGLUE 24.2% at best; Seurat 18.9%.
   - PBMC240 lymphoid recall: v3.1 92.3%, correlation 59.8%, integration
     tools 38.8% or below.
-  - SCoPE2 restricted: v3.1 61.3%, level with the correlation baseline,
-    below scANVI.
+  - SCoPE2 restricted (labels corrected 2026-10-04, `bugs-and-fixes.md`, 8):
+    v3.1 38.7%, below every new tool (40.4 to 50.6), all at or below chance.
   - SCoPE2 unrestricted: every mean under 5%.
 
 **The scripts:**
@@ -170,20 +174,51 @@ Following the publication plan below:
    - **The owner's decision (2026-10-03):** go to the final evaluation with
      v3.1 as released. v3.1 did not change after NB3b or NB3c, so no
      amendment for a new candidate is needed.
-3. **Unseal Khoury once,** in amendment 5's order: approved by the owner
-   on 2026-10-03, after amendment 7 was committed.
-4. Post the bioRxiv preprint, and choose the journal from the Khoury result.
+3. **Khoury unsealed and scored once: done, 2026-10-03,** in amendment 5's
+   order, on the PC. Write-up: `research/benchmark/results.md`, "Khoury
+   2026: the sealed final evaluation"; tables in
+   `research/benchmark/khoury2026/`.
+   - All 20 training runs completed. MaxFuse seed 0 failed once ("SVD did
+     not converge") and its one rerun under amendment 7 completed.
+   - v3.1's best guess 56.9% balanced over five types; as run, every one
+     of the 77 paired bootstraps excludes zero in its favour (or v3's,
+     against scANVI). See item 4: the comparators were handicapped. Committed answers: 93.8% of cells, 96.7% correct at the
+     stated level.
+   - Its weakness: CD8T recall 2.7% (94% called CD4T), NK 29.0%.
+   - The scorer's one allowed rerun reproduced all seven tables byte for
+     byte.
+4. **Baseline review (2026-10-03, owner's request): the comparators were
+   handicapped by our setup.** Scoring is correct. But the RNA reference is
+   z-scored over whole blood while queries are z-scored over PBMCs;
+   MaxFuse ran without its SVD settings (no class signal); scANVI's Normal
+   mean cannot go negative yet was fitted to z-scores; Harmony is worse than
+   plain PCA here; Seurat rescales its inputs. **Owner's decision:** fix
+   from each tool's documentation, nothing tuned; rerun SCoPE2, PBMC240 and
+   Fulcher; then rerun Khoury as a labelled post-hoc analysis beside the
+   sealed result; everything in one queue. Plan and results:
+   `research/benchmark/baseline-corrections.md`.
+   - **Done, 2026-10-04:** fixes committed first (`d8522cd`), then 60
+     runs (59 completed; scANVI Fulcher seed 2 failed twice identically).
+   - **Outcome: v3.1's best guess is level with the best simple baselines,
+     not ahead.** Khoury (post-hoc): PCA + kNN 62.8, scANVI 61.5, v3.1 56.9
+     (members 60.0), Harmony 56.9. Fulcher: Harmony 60.8–63.0 and the
+     correlation baseline 62.1 ahead of v3.1's 57.9. v3.1 stays ahead of
+     MaxFuse, scGLUE and Seurat CCA. Its distinct value is its committed
+     answers (93.8% committed, 96.7% correct at the stated level on Khoury).
+5. **Owner decisions after the reruns:** whether the result supports "state
+   of the art" or "beats scANVI" in the site's copy, and what goes in the
+   landing's "Evidence" section.
+6. Post the bioRxiv preprint, and choose the journal from the Khoury result.
 
 ## Owner decisions and standing instructions
 
 **Science:**
 
-- **Khoury 2026 stays sealed.**
-  - Never read or score its labels; the loader refuses without
-    `unseal=True`.
-  - Nothing embeds it before the final v3.1 evaluation, which scores it
-    once.
-  - Changes to its protocol are amendments made before unsealing.
+- **Khoury 2026 has been scored, once (2026-10-03).**
+  - Its result is final. Nothing about it is rescored after a change, and
+    its protocol is not amended after unsealing.
+  - The loader still refuses without `unseal=True`. Any further use of
+    Khoury, for example as development data, is the owner's decision.
 - **Don't tune anything to make a gate or a comparison pass.**
 - **Development datasets.** Fulcher 2026 and PBMC240 are development
   datasets. Fulcher's first scoring stays the held-out result.
@@ -219,11 +254,12 @@ Following the publication plan below:
 ## Publication plan (discussed 2026-10-01)
 
 - **Target.** Molecular & Cellular Proteomics or the Journal of Proteome
-  Research. Genome Biology is a stretch, only if v3.1 is clearly ahead on
-  Khoury. Nature Methods is not realistic on current results.
+  Research. Genome Biology was a stretch, only if v3.1 is clearly ahead on
+  Khoury; with fair baselines it is not (2026-10-04). Nature Methods is not
+  realistic on current results.
 - **Sequence:**
   1. finish Track D (done, 2026-10-02);
-  2. unseal Khoury once;
+  2. unseal Khoury once (done, 2026-10-03);
   3. post a bioRxiv preprint;
   4. choose the journal from the Khoury result.
 - **Framing.** Label transfer with honest abstention, not a shared latent

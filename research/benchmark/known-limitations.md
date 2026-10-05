@@ -24,7 +24,9 @@ its gene profile" feature, a legacy artifact of the *original* (pre-v2,
 pre-v3) atlas viewer, not the protein assay's true native gene panel.
 
 The export notebook that produced the shipped 45.37%/31.08% (unrestricted)
-and 86.17%/79.79% (restricted) figures instead reads
+and 86.17%/79.79% (restricted) figures (scored against swapped labels;
+0.40%/0.68% and 13.83%/20.21% corrected, [bugs-and-fixes.md](bugs-and-fixes.md),
+8) instead reads
 `blood_joint_cells_by_proteins_GENELEVEL.tsv` — the protein assay's own
 full native panel (2,935 genes, confirmed once obtained) — and uses *that*
 full panel to build Stage 2's fuzzy-smoothing kNN graph. At the time, this
@@ -151,6 +153,12 @@ RNA reference, seeds 0/1/2) produced a very different spread depending on
   (57.89%) is barely above the trivial majority-class floor (50.00%).
 - **Native nearest-centroid, restricted:** also unstable — 50.70% to
   77.36%, a spread of 26.7 points.
+
+These figures were scored against SCoPE2's labels when they were swapped
+([bugs-and-fixes.md](bugs-and-fixes.md), 8). Each restricted figure is 100
+minus the true one, so the spreads stand, but the levels do not. For
+example, the native classifier's true range is 13.63% to 42.11%, against
+v3's corrected native-centroid 20.21%.
 
 See [results.md](results.md#scanvi-across-seeds) for the complete
 per-seed, per-protocol table.

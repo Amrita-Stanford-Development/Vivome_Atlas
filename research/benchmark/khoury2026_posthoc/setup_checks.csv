@@ -1,0 +1,16 @@
+dataset,tool,seed,status,rna_holdout_balanced_accuracy_pct,rna_holdout_chance_pct,matched_query_cells_pct,input_shift,epochs_trained,elapsed_s,rna_holdout_knn_balanced_accuracy_pct,rna_holdout_knn_chance_pct,query_neighbour_share_median_pct,query_neighbour_share_if_mixed_pct
+khoury2026,correlation,0,completed,73.8,4.55,,,,4.0,,,,
+khoury2026,pca,0,completed,,,,,,18.4,62.15,4.55,100.0,1.9
+khoury2026,harmony,0,completed,,,,,,53.7,62.29,4.55,33.33,1.9
+khoury2026,harmony,1,completed,,,,,,51.4,62.49,4.55,36.67,1.9
+khoury2026,harmony,2,completed,,,,,,63.7,62.71,4.55,36.67,1.9
+khoury2026,seurat,0,completed,,,,,,150.8,,,,
+khoury2026,maxfuse,0,completed,,,100.0,,,283.1,61.53,4.55,10.0,1.9
+khoury2026,maxfuse,1,completed,,,100.0,,,283.1,59.84,4.55,13.33,1.9
+khoury2026,maxfuse,2,completed,,,100.0,,,286.9,60.99,4.55,13.33,1.9
+khoury2026,scglue,0,completed,,,,,,598.2,58.92,4.55,40.0,1.9
+khoury2026,scglue,1,completed,,,,,,737.1,58.91,4.55,20.0,1.9
+khoury2026,scglue,2,completed,,,,,,856.5,60.89,4.55,10.0,1.9
+khoury2026,scanvi,0,completed,,,,9.510631561279297,"{""scvi"": 158, ""scanvi"": 100}",2144.6,75.8,4.55,66.67,1.9
+khoury2026,scanvi,1,completed,,,,9.510631561279297,"{""scvi"": 96, ""scanvi"": 11}",678.2,73.92,4.55,93.33,1.9
+khoury2026,scanvi,2,completed,,,,9.510631561279297,"{""scvi"": 119, ""scanvi"": 29}",1029.5,71.76,4.55,93.33,1.9

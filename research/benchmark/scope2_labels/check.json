@@ -1,0 +1,65 @@
+{
+  "cells": 1490,
+  "curated_counts": {
+    "Macrophage": 1096,
+    "Monocyte": 394
+  },
+  "previous_counts": {
+    "monocyte": 1096,
+    "macrophage": 394
+  },
+  "previous_agrees_with_curated": 0,
+  "markers": {
+    "published matrix, previous labels": {
+      "proliferation": {
+        "genes": 12,
+        "mean_macrophage_minus_monocyte": 0.055,
+        "higher_in_macrophages": 10
+      },
+      "macrophage": {
+        "genes": 12,
+        "mean_macrophage_minus_monocyte": -0.24,
+        "higher_in_macrophages": 1
+      }
+    },
+    "published matrix, corrected labels": {
+      "proliferation": {
+        "genes": 12,
+        "mean_macrophage_minus_monocyte": -0.055,
+        "higher_in_macrophages": 2
+      },
+      "macrophage": {
+        "genes": 12,
+        "mean_macrophage_minus_monocyte": 0.24,
+        "higher_in_macrophages": 11
+      }
+    },
+    "reprocessed evidence, design labels": {
+      "proliferation": {
+        "genes": 14,
+        "mean_macrophage_minus_monocyte": -0.0582,
+        "higher_in_macrophages": 2
+      },
+      "macrophage": {
+        "genes": 12,
+        "mean_macrophage_minus_monocyte": 0.3412,
+        "higher_in_macrophages": 12
+      }
+    }
+  },
+  "sources": {
+    "curated": {
+      "file": "macrophage_protein.Rda",
+      "sha256": "0b445058e0e429bd26efd1d4e11dc1cbea9afc4c2f5f9abc0f04658d7059dd19"
+    },
+    "id_map": {
+      "file": "blood_cellid_mapping.tsv",
+      "sha256": "c4f4ffa2497ae1d7e51111748aa7789d4a3c718b07c23213837ae2503e3d14bd"
+    },
+    "previous": {
+      "file": "blood_joint_cells_by_proteins.swapped_labels_original.tsv",
+      "sha256": "59e00cbddaf9824c7e24f24ad573331984906fe07932b6ede04cf93ce8aa39b3"
+    }
+  },
+  "curated_source": "Bioconductor SingleCellMultiModal, macrophage_protein (ExperimentHub EH4694)"
+}

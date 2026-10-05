@@ -113,33 +113,38 @@
                 the published number's test split included cells the model had trained on.
             </p>
             <p>
-                The restricted <span data-fact="restricted_centroid_seed0">&nbsp;</span> is
-                <code>v3_seed0</code>'s own number under the service's rule, and is exact for
-                SCoPE2 <em>by construction</em>, on two separate counts. First: SCoPE2's protein
-                cells are only ever macrophage or monocyte, so restricting to exactly those two
-                classes matches its true label set on this one dataset. On other data with other
-                cell types present, the same restriction is wrong (see the first failure mode).
-                Second: <code>v3_seed0</code>, the checkpoint v3 serves when selected,
-                is the best of the independently trained seeds of the same architecture by a
-                wide margin: <span data-fact="restricted_centroid_seed0">&nbsp;</span> against a
-                5-seed mean of <span data-fact="restricted_centroid_mean">&nbsp;</span> under the same
-                rule (range <span data-fact="restricted_centroid_range">&nbsp;</span>).
+                On SCoPE2, restricted to its two classes, chance is 50%. There
+                <code>v3_seed0</code>, the checkpoint v3 serves when selected, scores
+                <span data-fact="restricted_centroid_seed0">&nbsp;</span> balanced accuracy under the
+                service's rule, the lowest of the independently trained seeds of the same
+                architecture: their mean is <span data-fact="restricted_centroid_mean">&nbsp;</span>
+                (range <span data-fact="restricted_centroid_range">&nbsp;</span>). Every seed is below
+                chance. v3 separates the two cell states, but it places SCoPE2's differentiated
+                macrophages next to the reference's monocytes. Restricting to exactly those two
+                classes matches SCoPE2's true label set on this one dataset. On other data with
+                other cell types present, the same restriction is wrong (see the first failure mode).
             </p>
             <p>
-                Against scArches/scANVI, the strongest available cross-modal baseline, on SCoPE2
-                under the shared kNN rule:
+                These figures use the authors' curated SCoPE2 labels. VivOME's copy had the two
+                labels swapped until 2026-10-04, so the restricted figures published before then
+                were 100 minus the true ones (<code>research/benchmark/bugs-and-fixes.md</code>, entry 8).
+            </p>
+            <p>
+                Against scArches/scANVI on SCoPE2, under the shared kNN rule, both methods are
+                below chance on the two classes:
             </p>
             <ul>
-                <li><strong>Restricted to macrophage and monocyte, scANVI leads v3.</strong> v3's
-                    five-seed mean balanced accuracy is <span data-fact="restricted_knn_mean">&nbsp;</span>
-                    (<code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code>), and only
+                <li><strong>Restricted to macrophage and monocyte.</strong> v3's five-seed mean
+                    balanced accuracy is <span data-fact="restricted_knn_mean">&nbsp;</span>
+                    (<code>research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv</code>), and
                     <span data-fact="scanvi_restricted_pairings">&nbsp;</span> v3-seed and scANVI-seed
                     pairings favour v3.</li>
-                <li><strong>Across all classes, v3 leads.</strong>
+                <li><strong>Across all classes.</strong>
                     <span data-fact="scanvi_unrestricted_pairings">&nbsp;</span> pairings favour v3, by a
-                    mean of <span data-fact="scanvi_unrestricted_margin">&nbsp;</span>.</li>
-                <li><strong>The shipped checkpoint, <code>v3_seed0</code>,</strong> is ahead of each of
-                    the three scANVI seeds in both regimes.</li>
+                    mean of <span data-fact="scanvi_unrestricted_margin">&nbsp;</span>, with every
+                    score low.</li>
+                <li><strong>The shipped checkpoint, <code>v3_seed0</code>,</strong> is behind each of
+                    the three scANVI seeds when restricted, and ahead of each across all classes.</li>
             </ul>
             <p>
                 The pairings come from
@@ -155,11 +160,11 @@
                     and so on) can only ever be labelled macrophage, monocyte, or abstain, never
                     its true label. Under v3.1, the default, lymphoid uploads get lymphoid answers
                     (see the model card).</li>
-                <li>Macrophage placement: cross-modal alignment is weak for macrophage
-                    specifically (latent centroid cosine <span data-fact="v3_latent_cosine_macrophage">&nbsp;</span>
-                    against <span data-fact="v3_latent_cosine_monocyte">&nbsp;</span> for monocyte), and across
-                    all classes most macrophage protein cells are assigned to another class (see the
-                    model card).</li>
+                <li>Macrophage and monocyte placement: cross-modal alignment is weak for both
+                    SCoPE2 classes (latent centroid cosine <span data-fact="v3_latent_cosine_macrophage">&nbsp;</span>
+                    for macrophage, <span data-fact="v3_latent_cosine_monocyte">&nbsp;</span> for monocyte),
+                    and across all classes most macrophage protein cells are assigned to monocyte
+                    (see the model card).</li>
                 <li>Only <span data-fact="cross_modal_types">&nbsp;</span> of
                     <span data-fact="cell_types">&nbsp;</span> reference classes (macrophage, monocyte)
                     have ever been validated against real protein data.</li>
@@ -170,7 +175,7 @@
                     by up to <span data-fact="restricted_knn_spread">&nbsp;</span>
                     (<span data-fact="restricted_knn_range">&nbsp;</span> across
                     <span data-fact="v3_seeds">&nbsp;</span> seeds, shared kNN); the shipped seed happens
-                    to be the best of them, not a principled choice. A separate development-only
+                    to be the lowest of them, not a principled choice. A separate development-only
                     check on real PBMC240 data (lineage level) shows the same pattern; see
                     <code>service/model/MODEL_CARD.md</code> for the full detail.</li>
             </ol>

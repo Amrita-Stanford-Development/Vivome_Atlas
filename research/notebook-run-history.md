@@ -4,6 +4,20 @@ In order, with what each one established. The existing notebooks come first,
 since they predate everything built during this project, followed by every
 notebook built and run over the course of it.
 
+**SCoPE2's labels were swapped until 2026-10-04**
+([bugs-and-fixes.md](benchmark/bugs-and-fixes.md), 8). Every SCoPE2
+figure at class level in the entries before 22 was scored against them, and
+each entry records what was printed at the time:
+
+- **Restricted figures** (macrophage or monocyte only): the true value is
+  100 minus the one shown.
+- **Unrestricted balanced accuracy and recalls** changed in no simple way.
+  The corrected values are in the rescored tables (entry 22).
+- **Unaffected:**
+  - group- and lineage-level correctness;
+  - committed and abstention shares;
+  - the "SCoPE2-like" RNA simulations, which carry their own RNA labels.
+
 ---
 
 ## Where the notebooks are
@@ -562,6 +576,457 @@ verdict; NB3c stays NO GO on three criteria.
   cosine and kNN scores, so the reported real-data rejection rates are
   biased low.
 
+### 20. v4 pre-tests: `research/notebooks/v4_pretest.py`
+
+**When and why.** On the PC, 2026-10-04, after the fair re-benchmark
+(`research/benchmark/baseline-corrections.md`) put v3.1's best guess level
+with simple, correctly scaled baselines. The owner asked for intensive
+pre-testing before any plan.
+
+**How.**
+- Seven exploratory rounds ran in memory, writing nothing.
+- They used development data only: SCoPE2, PBMC240, Fulcher 2026,
+  Furtwängler 2025, and NB1's RNA simulation suites.
+- **Khoury 2026 was not read.**
+- A control reproduced v3.1's served best guesses exactly (Fulcher 57.94,
+  every cell).
+- The adopted design was then fixed in the committed script. Its outputs are
+  in `research/notebook-outputs/v4_pretest/`.
+
+**What the exploratory rounds found (in-memory figures):**
+
+- **Query smoothing off** helps all three protein datasets:
+  - Fulcher 57.9 → 61.7;
+  - SCoPE2 restricted 61.3 → 64.9;
+  - PBMC240 lymphoid recall 92.3 → 90.6, the one small loss.
+
+  The RNA simulation prefers smoothing on, through single-type uploads
+  (33.0 vs 26.8). Real protein was given priority, and the disagreement is
+  recorded.
+- **Class-balanced reference statistics** for re-encoding the reference
+  (re-encoding with the stored statistics reproduces the served latents,
+  median cosine 1.000000):
+  - PBMC240 90.6 → 94.0;
+  - Fulcher and SCoPE2 about +1.
+- **Correlation to class means over each cell's observed genes** (9,002-gene
+  space, class-balanced) is strong on Fulcher (69.6) but fails narrow
+  uploads (13% on single-type) and PBMC240 (75). Fused with the encoder, it
+  is the main gain.
+- **No gain:**
+  - kNN rules instead of centroids, and class-balanced kNN;
+  - EM prior re-estimation (it collapses Fulcher to 51 and SCoPE2 to 50);
+  - a reference matched to each upload's predicted composition.
+- **Rejected:**
+  - Whole-tissue reference expansion (Tabula Sapiens Lymph Node, Lung and
+    Large Intestine). The frozen encoder rises on Fulcher, but SCoPE2
+    restricted falls to 56.
+  - Retraining V2 on blood plus tissues, one seed: Fulcher 59.1, SCoPE2 44.1,
+    simulation 55.8, against a blood-only retrain at 61.4 / 63.0 / 57.8.
+- **Training collapsed:** retraining with naive protein-like augmentation
+  (RNA zeros masked, gene-wise power distortions, cell offsets) stopped at
+  epoch 18, with the simulation at 17% and 90% of cells called progenitor.
+- **Gated for later:** tissue cells for the rarest classes (mDC, pDC,
+  basophil, Treg). Fulcher rises to 71.0 (DC 30%), but the simulation falls
+  4 points.
+
+**The committed run.** The fusion weight and temperature had been picked on
+NB1's evaluation suite in memory. The script picks them on the calibration
+suite instead:
+- the grid is w ∈ {0.3, 0.5, 0.7} and τ ∈ {0.03, 0.05, 0.10};
+- it chose **w 0.7, τ 0.05**, with 62.99 on the calibration suite;
+- it then scored the evaluation suite once.
+
+| Evaluation suite, per-upload balanced accuracy | v3.1 as served | Encoder, smoothing off, class-balanced | v4 candidate |
+|---|---|---|---|
+| All 240 uploads | 56.1 | 58.7 | **60.3** |
+| PBMC-like | 61.9 | 72.2 | **74.3** |
+| Mixed (5–8 types) | 62.7 | 70.1 | **72.5** |
+| Single type | **33.0** | 26.8 | 26.9 |
+| SCoPE2-like | **68.9** | 65.4 | 65.5 |
+
+| Development data, all 85,233 reference cells (as v4 will serve) | v4 candidate |
+|---|---|
+| Fulcher, six types | 65.5 (NK 86, DC 4, CD8T 24) |
+| PBMC240 lymphoid / myeloid recall | 93.2 / 100 |
+| SCoPE2 restricted / unrestricted | 67.4 / 6.8 |
+| Fulcher vs Furtwängler, max-probability AUROC | 0.804 (v3.1 0.748) |
+
+These are Phase 2's gate figures (research/todo.md, Track G).
+
+**Declared.**
+- The development datasets were looked at throughout the exploration, so
+  their figures are development numbers, not tests. Only the selection is
+  clean, made on the calibration suite.
+- The exploratory rounds' code was not kept; only the adopted design is in
+  the script.
+- Unsolved:
+  - CD8T, under 30% for every method: Fulcher measures neither CD4 nor
+    CD8A, and CD8B, GNLY, NKG7, KLRD1 and CD79A are outside the gene space;
+  - single-type uploads;
+  - out-of-reference cells: 43% of Furtwängler's CD34+ cells are still
+    called T cells.
+
+**Addendum, 2026-10-04: SCoPE2's labels.** Every SCoPE2 figure above was
+scored against swapped labels (entry 22). Restricted figures convert
+exactly (100 minus the figure shown), so the in-memory calls can be read
+again:
+
+- **Query smoothing off:** SCoPE2 restricted goes from 38.7 to 35.1, a loss
+  rather than a gain. Its case now rests on Fulcher (+3.8), against the RNA
+  simulation, which prefers smoothing on.
+- **Class-balanced statistics:** SCoPE2 about −1 rather than +1. PBMC240's
+  +3.4 stands.
+- **Whole-tissue reference expansion:** SCoPE2 restricted rises to 44 rather
+  than falling to 56, and Fulcher rises too. The reason it was rejected no
+  longer holds, and it is reopened.
+- **Retraining on blood plus tissues:** SCoPE2 is 55.9 against the
+  blood-only retrain's 37.0, a reversal. Fulcher (59.1 against 61.4) and the
+  simulation (55.8 against 57.8) still favour blood only.
+- **EM prior re-estimation:** SCoPE2 at 50 is chance either way.
+- **The committed run, rerun:** the selection, the evaluation suite and the
+  per-cell predictions are byte for byte the same. SCoPE2 restricted /
+  unrestricted is 32.6 / 0.7 for the v4 candidate, against v3.1's 39.7 / 0.0
+  in the same run.
+
+### 21. v4 calibration (Track G, Phase 3): `research/notebooks/v4_calibration.py`
+
+**When and how.** On the PC, 2026-10-04. The rules were fixed in the
+script's docstring before the run; it writes its sha256 and start time
+to `rules.json` before computing anything.
+- **Cells:** NB3c's split, which the encoders never saw: 240 calibration
+  uploads from `te_cal`, 240 evaluation uploads from `te_eval`.
+- **References:** train and validation cells only, for v4 and for the
+  v3.1 comparator alike.
+- **Code path:** the service's own, from `_prepare_query` through
+  `fusion.project_prepared` (v4) and `ensemble.project_prepared` (v3.1).
+- **Run 1** completed the evaluation, then crashed while writing its
+  summary (a numpy boolean is not JSON-serialisable), before any number
+  was shown. The one-line fix casts the checks to `bool`. **Run 2**
+  reproduced run 1's 125,890 per-cell rows exactly. Outputs are in
+  `research/notebook-outputs/v4_calibration/`.
+
+**Fitted on the calibration suite:**
+- Mondrian qhat: marginal 0.964, from 66,881 cells with at least 200
+  observed genes;
+- out-of-distribution threshold 0.772;
+- refitting with the served all-cells bundle moves a qhat by at most 0.007.
+
+**Evaluation suite, scored once: NO GO.**
+
+| Cells with at least 200 genes (62,945) | v3.1 | v4 | Pre-set check |
+|---|---|---|---|
+| Coverage | 87.1% | 89.7% | pass (≥ 88, ≥ v3.1) |
+| False abstention | 0.4% | 0.7% | pass (≤ 3) |
+| Correct when committed | 97.0% | 97.4% | pass (≥ 94) |
+| Best guess, per-upload balanced | 60.6 | 64.0 | pass (≥ v3.1 + 2) |
+| Largest scenario drop | | single type: 8.6 points below v3.1 | **fail** (≤ 3) |
+
+Best guess against v3.1, by scenario:
+
+| Scenario | v4 against v3.1, points |
+|---|---|
+| PBMC-like | +12.3 |
+| Mixed | +10.6 |
+| Narrow | +2.1 |
+| Lineage | +1.3 |
+| SCoPE2-like | +0.3 |
+| Single type | **−8.6** |
+
+**Not a pre-set check, but a regression:** v4 commits on 56.7% of cells
+against v3.1's 88.6%, and abstains on 43.3%, almost all as ambiguous.
+- **The cause:** the fused probability is flatter than the encoder's, so
+  the conformal sets grow and often span lineages.
+- **Answer levels,** v4 against v3.1:
+  - class 8.6% against 20.8%;
+  - group 8.1% against 17.9%;
+  - lineage 40.0% against 49.9%.
+
+**Consequence.**
+- The v4 spec is not frozen, and v4 stays unserved.
+- Two causes to address in a follow-up, with its rules fixed before it
+  runs and a fresh evaluation suite, since this one has been scored:
+  - **single-type uploads:** v4 has smoothing off and fuses in a
+    correlation term, and per-upload z-scoring removes a single type's
+    signal;
+  - **set width under fusion:** for example, conformal sets from the
+    encoder's probability with the fused best guess, or a sharpened fused
+    probability.
+
+### 22. SCoPE2's labels corrected, every SCoPE2 table rescored (scripts, 2026-10-04)
+
+**Why.** Track G's reprocessing of SCoPE2 took labels from the experimental
+design and found 814 macrophages to 314 monocytes. VivOME's copy had a
+monocyte majority. The authors' curated object (SingleCellMultiModal,
+EH4694) disagrees with VivOME's label on all 1,490 cells, and the markers
+side with the curated labels
+([bugs-and-fixes.md](benchmark/bugs-and-fixes.md), 8).
+
+**What ran,** one job at a time on the PC:
+
+1. `python -m benchmark.scope2_labels --apply`. It fixed every copy of the
+   labels, changing only the label fields. It then recomputed v3's three
+   SCoPE2 evidence tables from v3's saved latents, after reproducing their
+   old values with the old labels.
+2. `benchmark.baselines_score` and `benchmark.baselines_corrected_score`.
+   Only the SCoPE2 tables and paired bootstraps changed; the Fulcher and
+   PBMC240 tables regenerated byte for byte.
+3. `benchmark/scope2_5seed_scores.py` (new). It rebuilds Track D's per-seed
+   table and NB1d's own SCoPE2 figures from the saved latents, after first
+   reproducing each with the old labels to 1e-9.
+4. `benchmark/scope2_5seed_paired.py`.
+5. `benchmark.v31_service_flags` and `benchmark.v31_dev_gate`. The gate
+   passed and its record is unchanged.
+6. `research/notebooks/v4_pretest.py` and `benchmark.v4_dev_gate`. The gate
+   passed, with 100% per-cell agreement.
+7. `scripts/v31_evidence.py`, then `scripts/build_manifest.py`.
+
+**What changed.**
+
+- **Restricted figures** became 100 minus the old ones:
+  - v3 (`v3_seed0`) 79.8 → 20.2, and its 5-seed mean 63.3 → 36.7;
+  - v3.1 61.3 → 38.7;
+  - scANVI 77.7 → 22.3;
+  - only Harmony with nearest centroid, 63.0, is above chance.
+- **Unrestricted figures** fell for nearly every method: v3 31.1 → 0.7, and
+  v3.1 1.1 → 0.0.
+- **v3's macrophage-vs-monocyte AUROC** is 0.072.
+- **Unchanged:** group- and lineage-level correctness, committed and
+  abstention shares, everything on other datasets.
+
+**Not recomputed:**
+
+- NB1d's smoothing-off unrestricted figures, left empty, since NB1d did not
+  save those latents;
+- figures printed in the notebooks of entries before this one (see the
+  note at the top). NB1b's and NB1c's tables were corrected in place:
+  restricted figures exactly, unrestricted ones where the same model's
+  corrected value is known.
+
+### 23. v4 Phase 3b (Track G): `research/notebooks/v4_phase3b.py`
+
+**Why.** Phase 3 (entry 21) failed on single-type uploads, and its sets
+were too wide. The owner chose to fix both. An exploration on the
+calibration suite and the development data (never the evaluation pool)
+traced the wide sets to conformal sets fitted on the fused probability, and
+the single-type loss to smoothing off. Hence the design:
+- **Answers:** v3.1's conformal sets, abstention and answer levels;
+- **Best guess:** v4's fused guess, which joins non-empty sets;
+- **The guess's encoder probability:** a mix of the smoothed and
+  unsmoothed query's, with a smoothed share s;
+- **Fusion:** w 0.7 and τ 0.05, as before.
+
+**When and how.** On the PC, 2026-10-04 23:53 to 2026-10-05 00:18. The
+rules were fixed in the script's docstring before the run; `rules.json`
+records the script's sha256 (`9ccc2c26…`, which matches the file) and the
+start time.
+- **Candidates:** s in {0, 0.5, 1}.
+- **Selection:** on NB3c's calibration suite (240 uploads, 66,881 cells
+  with at least 200 observed genes).
+- **Evaluation:** a fresh suite of 240 new uploads from NB3c's `te_eval`
+  cells (seed 20261004; 60,509 cells with at least 200 genes). It was
+  written before it was scored. Phase 3 had scored the same cells once, in
+  other uploads.
+- **Code path:** the service's own, as in Phase 3.
+
+Outputs are in `research/notebook-outputs/v4_phase3b/`.
+
+**Selection, calibration suite:**
+
+| | Best guess, per-upload balanced | Committed | Largest scenario drop | Eligible |
+|---|---|---|---|---|
+| v3.1 | 58.57 | 87.69% | | |
+| v4, s = 0 | 62.37 | 85.00% | 6.35 | no |
+| v4, s = 0.5 | 64.10 | 86.90% | 2.09 | yes |
+| v4, s = 1 | 64.19 | 87.48% | 0.52 | yes |
+
+s = 0.5 and s = 1 tied within 0.5 points. The tie went to Fulcher (65.0
+against 63.5), so **s = 0.5**.
+
+**Evaluation suite, scored once: NO GO.**
+
+| Cells with at least 200 genes (60,509) | v3.1 | v4 | Pre-set check |
+|---|---|---|---|
+| Coverage | 88.28% | 87.59% | **fail** (≥ 88, ≥ v3.1) |
+| False abstention | 0.37% | 0.37% | pass (≤ 3) |
+| Correct when committed | 97.62% | 97.55% | pass (≥ 94) |
+| Committed | 86.74% | 86.00% | pass (≥ v3.1 − 2) |
+| Best guess, per-upload balanced | 59.60 | 64.69 | pass (≥ v3.1 + 2) |
+| Largest scenario drop | | single type: 5.41 points below v3.1 | **fail** (≤ 3) |
+
+Best guess against v3.1, by scenario:
+
+| Scenario | v4 against v3.1, points |
+|---|---|
+| PBMC-like | +13.0 |
+| Mixed | +10.6 |
+| Lineage | +6.7 |
+| Narrow | +3.3 |
+| SCoPE2-like | +1.0 |
+| Single type | **−5.4** |
+
+**Development data,** s = 0.5 against v3.1:
+- Fulcher, six types: 65.0 against 57.9;
+- PBMC240 lymphoid recall: 90.6 against 92.3;
+- SCoPE2 unrestricted: 0.3 against 0.0;
+- out-of-reference AUROC: 0.813 against 0.744.
+
+**Diagnosis,** from the saved per-cell rows (nothing refitted or rescored):
+
+- **Both misses come from single-type uploads.**
+  - Coverage there is 72.2% against v3.1's 77.4%.
+  - Elsewhere, v4's coverage is higher: 91.5% against 91.1%.
+- **Coverage.** v4's set is v3.1's conformal set with the fused guess
+  added *in place of* v3.1's top label, not beside it. So the answers were
+  not exactly v3.1's, as the design stated. The gate built its comparison
+  the same way, so it did not catch this.
+  - **Cells that lost coverage:** 807. In every one, v3.1's top label was
+    the true class, outside the conformal set, and v4's guess was another
+    class. 690 of them are in single-type uploads, and 645 of those are
+    neutrophils.
+  - **Cells that gained coverage:** 386.
+- **Single type.** 35 uploads. CD8 T cells (5 uploads, 20.9 points lower
+  each) and neutrophils (4 uploads, 15.0 lower) make up 164 of the 189
+  points lost.
+  - **The cause:** z-scoring each gene within an upload removes a single
+    type's contrast, and the correlation term needs that contrast.
+  - **The selection's estimate was optimistic:** 2.1 points on the
+    calibration suite. Single-type figures vary widely between suites;
+    v3.1 itself scores 33.7 on the calibration suite and 47.1 here.
+- **Per cell, the best guess is level:** 60.6% correct against v3.1's
+  60.7%. The per-upload balanced gain comes from better recall of each
+  upload's minority types.
+
+**Consequence.**
+- The v4 spec is not frozen, and v4 stays unserved.
+- `spec_v4.json` keeps its smoothed share unset and its evaluation pending.
+  `spec_block.json` records the failed evaluation.
+- `te_eval`'s cells have now been scored in two suites. A further
+  evaluation drawn from them is weaker evidence than this one.
+
+### 24. v4 Phase 3c (Track G): `research/notebooks/v4_phase3c.py`
+
+**Why.** Phase 3b's two misses both came from single-type uploads (entry
+23). The owner chose to explore a fix on calibration data first, then fix
+one rule and score it once.
+
+**The exploration** (2026-10-05, outside the repository; its record is
+`research/notebook-outputs/v4_phase3c/exploration.json`):
+- **Data:** NB3c's calibration cells and the development data only.
+  - the 240-upload calibration suite;
+  - 60 extra single-type uploads drawn from `te_cal`, 4 per class with at
+    least 20 cells (`exploration_single_type_suite.json`).
+- **Method:** every cell's ingredients were cached once through the
+  service's code. The cache reproduced Phase 3b's best guesses on all 66,881
+  calibration cells and its development figures exactly.
+- **Single-type losses on calibration cells:** the same types as Phase 3b's
+  evaluation. CD8 T −22.3 points, neutrophil −14.2, erythrocyte −9.7.
+- **Why they lose:** in a single-type upload, the correlation term's top
+  class is scattered. It named neutrophils for 25% of real neutrophils,
+  against 83% when other types are present. Confident-looking correlation
+  was wrong there too, so per-cell gates on its strength did not help.
+- **The signal that worked: upload agreement,** the share of an upload's
+  cells whose top class under the correlation term is v3.1's top class.
+  - Median by scenario: single type 0.20, against mixed 0.68 and PBMC-like
+    0.57.
+  - On the development data: Fulcher 0.42, PBMC240 0.37, SCoPE2 0.17,
+    Furtwängler 0.18.
+- **Robustness:** the share of resampled 35-upload single-type suites more
+  than 3 points below v3.1. Phase 3b's rule fails 29% of them. That fits its
+  evaluation, which drew CD8 T and neutrophil uploads often.
+- **Finalists:**
+  - A, smoothed only, correlation everywhere: 0.6% fail;
+  - B, the rule below: 0.1% fail;
+  - C, smoothed with the gate;
+  - D, gated on the share of v3.1's commonest guess.
+- **Rejected:** a lower fusion weight, and per-cell gates on the
+  correlation's strength.
+- **Choice:** the owner chose B (2026-10-05). The comparison shown then did
+  not include D, which had first been set aside without its full figures. D
+  was measured afterwards and B kept: D has a worse worst type, PBMC240 and
+  AUROC.
+
+**The rule,** fixed before the run (in the script's docstring; `rules.json`
+records the script's sha256 `2ae56060…` and the exploration record's
+`e2ea79d2…`, both matching the files):
+- **Answers:** v3.1's. v4's best guess joins every non-empty set *beside*
+  v3.1's own, so v4's sets contain v3.1's.
+- **At or above an upload agreement of 0.4:** 0.7 × (0.5 smoothed + 0.5
+  unsmoothed class-balanced encoder) + 0.3 × softmax(r / 0.05).
+- **Below 0.4:** the correlation term is flat and the encoder is the
+  smoothed query's alone.
+- **Coverage check:** coverage must not fall below v3.1's (the owner's
+  decision, 2026-10-05). v4's sets contain v3.1's, so an absolute floor would
+  test v3.1's calibrator. That calibrator covered 85.7%, 87.1% and 88.3% on
+  the last three suites.
+- **The other GO checks:** as in Phase 3b.
+
+**When and how.** On the PC, 2026-10-05 10:50 to 11:15.
+1. **Implementation check:** on the calibration suite, the service
+   reproduced the exploration's figures for both methods exactly (every
+   difference 0.00).
+2. **Development figures.**
+3. **A fresh evaluation suite,** `eval_v4c`: 240 new uploads from NB3c's
+   `te_eval` cells (seed 20261005; 62,082 cells with at least 200 genes),
+   written before it was scored.
+   - **Declared:** Phases 3 and 3b scored these cells in other uploads, and
+     Phase 3b's diagnosis of them prompted this design. So this is weaker
+     evidence than a first look.
+   - **The SCoPE2-like mix is reversed:** those uploads keep NB1's 26%
+     macrophage share, taken from SCoPE2's swapped labels. Their labels are
+     right.
+
+**Evaluation suite, scored once: GO.**
+
+| Cells with at least 200 genes (62,082) | v3.1 | v4 | Pre-set check |
+|---|---|---|---|
+| Coverage | 88.98% | 89.23% | pass (≥ v3.1) |
+| False abstention | 0.26% | 0.26% | pass (≤ 3) |
+| Correct when committed | 97.41% | 97.49% | pass (≥ 94) |
+| Committed | 88.97% | 88.51% | pass (≥ v3.1 − 2) |
+| Best guess, per-upload balanced | 59.26 | 64.73 | pass (≥ v3.1 + 2) |
+| Largest scenario drop | | none: every scenario at or above v3.1 | pass (≤ 3) |
+
+Best guess by scenario, and how often the correlation term was used:
+
+| Scenario | v3.1 | v4 | Correlation term used |
+|---|---|---|---|
+| PBMC-like | 57.9 | 71.6 | 100% of uploads |
+| Mixed | 68.3 | 77.4 | 98.5% |
+| SCoPE2-like | 65.9 | 71.0 | 0% |
+| Narrow | 57.2 | 61.3 | 58.0% |
+| Lineage | 60.5 | 63.0 | 55.9% |
+| Single type | 41.8 | 42.1 | 8.6% |
+
+- **Per cell,** the best guess is right on 61.5% of cells against v3.1's
+  58.3%.
+- **Single-type uploads still losing:** neutrophil (3 uploads, −8.8 points)
+  and erythrocyte (3, −7.0).
+
+**Development data,** v4 against v3.1, through the served all-cells bundle:
+- **Fulcher, six types:** 65.0 against 57.9. The correlation term was used
+  (agreement 0.42).
+- **PBMC240 lymphoid recall:** 92.3, the same. The term was flat (0.37).
+- **SCoPE2 unrestricted:** 0.0, the same. The term was flat (0.17).
+- **Out-of-reference AUROC:** 0.829 against 0.744.
+
+**Then:**
+- `scripts/build_v4_bundle.py --spec-only` recorded the passed evaluation in
+  `spec_v4.json`, so the service now serves v4 on request. v3.1 stays the
+  default.
+- `benchmark.v4_dev_gate` passed:
+  - 100% per-cell agreement with an independent recomputation on all four
+    development datasets;
+  - the gate's decision the same as the service's on each;
+  - every answer v3.1's with the guess joined;
+  - every figure exact.
+- v4's responses were frozen (`service/tests/fixtures/v4_full_*.json`).
+
+**What this does not show.** v4 against the corrected baselines. On Fulcher
+it is ahead of the best of them (Harmony with nearest centroid, 63.0;
+correlation, 62.1). But Fulcher is development data that shaped v4's design,
+and no paired bootstrap has been run. That is Phase 4; the claim needs the
+sealed test (Phase 5).
+
 ---
 
 ## The throughline
@@ -588,4 +1053,6 @@ held across all five seeds, and V2 became the encoder going into NB2. A held
 out dataset then confirmed it. NB2 exists because the product, once unrestricted,
 abstained on half of a real PBMC upload. It found the causes in the service's own
 calibration, replaced them with rules fitted on labelled RNA, and turned the result
-into a specification the service now builds from.
+into a specification the service now builds from. Correcting SCoPE2's swapped
+labels (entry 22) then reversed several of the SCoPE2 readings above,
+among them the prototype export's finding about the restricted label space.

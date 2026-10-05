@@ -1,0 +1,47 @@
+{
+  "found": {
+    "v3.1": {
+      "best_guess_per_upload_balanced": 58.57,
+      "coverage": 85.69,
+      "committed": 87.69,
+      "correct_when_committed": 97.11
+    },
+    "v4": {
+      "best_guess_per_upload_balanced": 64.0,
+      "coverage": 86.14,
+      "committed": 87.35,
+      "correct_when_committed": 97.27
+    }
+  },
+  "expected": {
+    "v3.1": {
+      "best_guess_per_upload_balanced": 58.57,
+      "coverage": 85.69,
+      "committed": 87.69,
+      "correct_when_committed": 97.11
+    },
+    "v4": {
+      "best_guess_per_upload_balanced": 64.0,
+      "coverage": 86.14,
+      "committed": 87.35,
+      "correct_when_committed": 97.27
+    }
+  },
+  "differences": {
+    "v3.1": {
+      "best_guess_per_upload_balanced": 0.0,
+      "coverage": 0.0,
+      "committed": 0.0,
+      "correct_when_committed": 0.0
+    },
+    "v4": {
+      "best_guess_per_upload_balanced": 0.0,
+      "coverage": 0.0,
+      "committed": 0.0,
+      "correct_when_committed": 0.0
+    }
+  },
+  "tolerance": 0.01,
+  "passed": true,
+  "enforced": true
+}

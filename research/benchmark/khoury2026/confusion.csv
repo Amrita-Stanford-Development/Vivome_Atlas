@@ -1,0 +1,1111 @@
+family,model,seed,rule,true,predicted,count
+v3.1,v3.1,0,best_guess,CD4T,CD4T,344
+v3.1,v3.1,0,best_guess,CD4T,CD8T,52
+v3.1,v3.1,0,best_guess,CD4T,NK,4
+v3.1,v3.1,0,best_guess,CD4T,B,0
+v3.1,v3.1,0,best_guess,CD4T,monocyte,1
+v3.1,v3.1,0,best_guess,CD4T,other,6
+v3.1,v3.1,0,best_guess,CD8T,CD4T,313
+v3.1,v3.1,0,best_guess,CD8T,CD8T,9
+v3.1,v3.1,0,best_guess,CD8T,NK,0
+v3.1,v3.1,0,best_guess,CD8T,B,7
+v3.1,v3.1,0,best_guess,CD8T,monocyte,2
+v3.1,v3.1,0,best_guess,CD8T,other,2
+v3.1,v3.1,0,best_guess,NK,CD4T,39
+v3.1,v3.1,0,best_guess,NK,CD8T,117
+v3.1,v3.1,0,best_guess,NK,NK,67
+v3.1,v3.1,0,best_guess,NK,B,0
+v3.1,v3.1,0,best_guess,NK,monocyte,3
+v3.1,v3.1,0,best_guess,NK,other,5
+v3.1,v3.1,0,best_guess,B,CD4T,29
+v3.1,v3.1,0,best_guess,B,CD8T,3
+v3.1,v3.1,0,best_guess,B,NK,1
+v3.1,v3.1,0,best_guess,B,B,200
+v3.1,v3.1,0,best_guess,B,monocyte,1
+v3.1,v3.1,0,best_guess,B,other,12
+v3.1,v3.1,0,best_guess,monocyte,CD4T,0
+v3.1,v3.1,0,best_guess,monocyte,CD8T,0
+v3.1,v3.1,0,best_guess,monocyte,NK,0
+v3.1,v3.1,0,best_guess,monocyte,B,12
+v3.1,v3.1,0,best_guess,monocyte,monocyte,378
+v3.1,v3.1,0,best_guess,monocyte,other,44
+v3.1 members,V2_seed0,0,shared_knn,CD4T,CD4T,321
+v3.1 members,V2_seed0,0,shared_knn,CD4T,CD8T,79
+v3.1 members,V2_seed0,0,shared_knn,CD4T,NK,0
+v3.1 members,V2_seed0,0,shared_knn,CD4T,B,0
+v3.1 members,V2_seed0,0,shared_knn,CD4T,monocyte,2
+v3.1 members,V2_seed0,0,shared_knn,CD4T,other,5
+v3.1 members,V2_seed0,0,shared_knn,CD8T,CD4T,278
+v3.1 members,V2_seed0,0,shared_knn,CD8T,CD8T,41
+v3.1 members,V2_seed0,0,shared_knn,CD8T,NK,0
+v3.1 members,V2_seed0,0,shared_knn,CD8T,B,6
+v3.1 members,V2_seed0,0,shared_knn,CD8T,monocyte,2
+v3.1 members,V2_seed0,0,shared_knn,CD8T,other,6
+v3.1 members,V2_seed0,0,shared_knn,NK,CD4T,40
+v3.1 members,V2_seed0,0,shared_knn,NK,CD8T,47
+v3.1 members,V2_seed0,0,shared_knn,NK,NK,134
+v3.1 members,V2_seed0,0,shared_knn,NK,B,0
+v3.1 members,V2_seed0,0,shared_knn,NK,monocyte,4
+v3.1 members,V2_seed0,0,shared_knn,NK,other,6
+v3.1 members,V2_seed0,0,shared_knn,B,CD4T,22
+v3.1 members,V2_seed0,0,shared_knn,B,CD8T,9
+v3.1 members,V2_seed0,0,shared_knn,B,NK,0
+v3.1 members,V2_seed0,0,shared_knn,B,B,197
+v3.1 members,V2_seed0,0,shared_knn,B,monocyte,1
+v3.1 members,V2_seed0,0,shared_knn,B,other,17
+v3.1 members,V2_seed0,0,shared_knn,monocyte,CD4T,0
+v3.1 members,V2_seed0,0,shared_knn,monocyte,CD8T,0
+v3.1 members,V2_seed0,0,shared_knn,monocyte,NK,0
+v3.1 members,V2_seed0,0,shared_knn,monocyte,B,12
+v3.1 members,V2_seed0,0,shared_knn,monocyte,monocyte,420
+v3.1 members,V2_seed0,0,shared_knn,monocyte,other,2
+v3.1 members,V2_seed1,1,shared_knn,CD4T,CD4T,219
+v3.1 members,V2_seed1,1,shared_knn,CD4T,CD8T,180
+v3.1 members,V2_seed1,1,shared_knn,CD4T,NK,1
+v3.1 members,V2_seed1,1,shared_knn,CD4T,B,0
+v3.1 members,V2_seed1,1,shared_knn,CD4T,monocyte,2
+v3.1 members,V2_seed1,1,shared_knn,CD4T,other,5
+v3.1 members,V2_seed1,1,shared_knn,CD8T,CD4T,137
+v3.1 members,V2_seed1,1,shared_knn,CD8T,CD8T,187
+v3.1 members,V2_seed1,1,shared_knn,CD8T,NK,0
+v3.1 members,V2_seed1,1,shared_knn,CD8T,B,5
+v3.1 members,V2_seed1,1,shared_knn,CD8T,monocyte,2
+v3.1 members,V2_seed1,1,shared_knn,CD8T,other,2
+v3.1 members,V2_seed1,1,shared_knn,NK,CD4T,21
+v3.1 members,V2_seed1,1,shared_knn,NK,CD8T,177
+v3.1 members,V2_seed1,1,shared_knn,NK,NK,24
+v3.1 members,V2_seed1,1,shared_knn,NK,B,0
+v3.1 members,V2_seed1,1,shared_knn,NK,monocyte,4
+v3.1 members,V2_seed1,1,shared_knn,NK,other,5
+v3.1 members,V2_seed1,1,shared_knn,B,CD4T,14
+v3.1 members,V2_seed1,1,shared_knn,B,CD8T,16
+v3.1 members,V2_seed1,1,shared_knn,B,NK,1
+v3.1 members,V2_seed1,1,shared_knn,B,B,193
+v3.1 members,V2_seed1,1,shared_knn,B,monocyte,3
+v3.1 members,V2_seed1,1,shared_knn,B,other,19
+v3.1 members,V2_seed1,1,shared_knn,monocyte,CD4T,0
+v3.1 members,V2_seed1,1,shared_knn,monocyte,CD8T,0
+v3.1 members,V2_seed1,1,shared_knn,monocyte,NK,0
+v3.1 members,V2_seed1,1,shared_knn,monocyte,B,11
+v3.1 members,V2_seed1,1,shared_knn,monocyte,monocyte,422
+v3.1 members,V2_seed1,1,shared_knn,monocyte,other,1
+v3.1 members,V2_seed2,2,shared_knn,CD4T,CD4T,286
+v3.1 members,V2_seed2,2,shared_knn,CD4T,CD8T,110
+v3.1 members,V2_seed2,2,shared_knn,CD4T,NK,0
+v3.1 members,V2_seed2,2,shared_knn,CD4T,B,0
+v3.1 members,V2_seed2,2,shared_knn,CD4T,monocyte,8
+v3.1 members,V2_seed2,2,shared_knn,CD4T,other,3
+v3.1 members,V2_seed2,2,shared_knn,CD8T,CD4T,197
+v3.1 members,V2_seed2,2,shared_knn,CD8T,CD8T,113
+v3.1 members,V2_seed2,2,shared_knn,CD8T,NK,0
+v3.1 members,V2_seed2,2,shared_knn,CD8T,B,5
+v3.1 members,V2_seed2,2,shared_knn,CD8T,monocyte,17
+v3.1 members,V2_seed2,2,shared_knn,CD8T,other,1
+v3.1 members,V2_seed2,2,shared_knn,NK,CD4T,27
+v3.1 members,V2_seed2,2,shared_knn,NK,CD8T,179
+v3.1 members,V2_seed2,2,shared_knn,NK,NK,10
+v3.1 members,V2_seed2,2,shared_knn,NK,B,0
+v3.1 members,V2_seed2,2,shared_knn,NK,monocyte,12
+v3.1 members,V2_seed2,2,shared_knn,NK,other,3
+v3.1 members,V2_seed2,2,shared_knn,B,CD4T,19
+v3.1 members,V2_seed2,2,shared_knn,B,CD8T,13
+v3.1 members,V2_seed2,2,shared_knn,B,NK,1
+v3.1 members,V2_seed2,2,shared_knn,B,B,196
+v3.1 members,V2_seed2,2,shared_knn,B,monocyte,3
+v3.1 members,V2_seed2,2,shared_knn,B,other,14
+v3.1 members,V2_seed2,2,shared_knn,monocyte,CD4T,0
+v3.1 members,V2_seed2,2,shared_knn,monocyte,CD8T,0
+v3.1 members,V2_seed2,2,shared_knn,monocyte,NK,0
+v3.1 members,V2_seed2,2,shared_knn,monocyte,B,12
+v3.1 members,V2_seed2,2,shared_knn,monocyte,monocyte,422
+v3.1 members,V2_seed2,2,shared_knn,monocyte,other,0
+v3.1 members,V2_seed3,3,shared_knn,CD4T,CD4T,222
+v3.1 members,V2_seed3,3,shared_knn,CD4T,CD8T,165
+v3.1 members,V2_seed3,3,shared_knn,CD4T,NK,2
+v3.1 members,V2_seed3,3,shared_knn,CD4T,B,0
+v3.1 members,V2_seed3,3,shared_knn,CD4T,monocyte,3
+v3.1 members,V2_seed3,3,shared_knn,CD4T,other,15
+v3.1 members,V2_seed3,3,shared_knn,CD8T,CD4T,163
+v3.1 members,V2_seed3,3,shared_knn,CD8T,CD8T,153
+v3.1 members,V2_seed3,3,shared_knn,CD8T,NK,0
+v3.1 members,V2_seed3,3,shared_knn,CD8T,B,6
+v3.1 members,V2_seed3,3,shared_knn,CD8T,monocyte,5
+v3.1 members,V2_seed3,3,shared_knn,CD8T,other,6
+v3.1 members,V2_seed3,3,shared_knn,NK,CD4T,21
+v3.1 members,V2_seed3,3,shared_knn,NK,CD8T,172
+v3.1 members,V2_seed3,3,shared_knn,NK,NK,24
+v3.1 members,V2_seed3,3,shared_knn,NK,B,0
+v3.1 members,V2_seed3,3,shared_knn,NK,monocyte,5
+v3.1 members,V2_seed3,3,shared_knn,NK,other,9
+v3.1 members,V2_seed3,3,shared_knn,B,CD4T,16
+v3.1 members,V2_seed3,3,shared_knn,B,CD8T,14
+v3.1 members,V2_seed3,3,shared_knn,B,NK,1
+v3.1 members,V2_seed3,3,shared_knn,B,B,199
+v3.1 members,V2_seed3,3,shared_knn,B,monocyte,3
+v3.1 members,V2_seed3,3,shared_knn,B,other,13
+v3.1 members,V2_seed3,3,shared_knn,monocyte,CD4T,0
+v3.1 members,V2_seed3,3,shared_knn,monocyte,CD8T,0
+v3.1 members,V2_seed3,3,shared_knn,monocyte,NK,0
+v3.1 members,V2_seed3,3,shared_knn,monocyte,B,11
+v3.1 members,V2_seed3,3,shared_knn,monocyte,monocyte,418
+v3.1 members,V2_seed3,3,shared_knn,monocyte,other,5
+v3.1 members,V2_seed4,4,shared_knn,CD4T,CD4T,242
+v3.1 members,V2_seed4,4,shared_knn,CD4T,CD8T,150
+v3.1 members,V2_seed4,4,shared_knn,CD4T,NK,4
+v3.1 members,V2_seed4,4,shared_knn,CD4T,B,0
+v3.1 members,V2_seed4,4,shared_knn,CD4T,monocyte,4
+v3.1 members,V2_seed4,4,shared_knn,CD4T,other,7
+v3.1 members,V2_seed4,4,shared_knn,CD8T,CD4T,182
+v3.1 members,V2_seed4,4,shared_knn,CD8T,CD8T,130
+v3.1 members,V2_seed4,4,shared_knn,CD8T,NK,1
+v3.1 members,V2_seed4,4,shared_knn,CD8T,B,7
+v3.1 members,V2_seed4,4,shared_knn,CD8T,monocyte,6
+v3.1 members,V2_seed4,4,shared_knn,CD8T,other,7
+v3.1 members,V2_seed4,4,shared_knn,NK,CD4T,18
+v3.1 members,V2_seed4,4,shared_knn,NK,CD8T,133
+v3.1 members,V2_seed4,4,shared_knn,NK,NK,69
+v3.1 members,V2_seed4,4,shared_knn,NK,B,0
+v3.1 members,V2_seed4,4,shared_knn,NK,monocyte,6
+v3.1 members,V2_seed4,4,shared_knn,NK,other,5
+v3.1 members,V2_seed4,4,shared_knn,B,CD4T,15
+v3.1 members,V2_seed4,4,shared_knn,B,CD8T,15
+v3.1 members,V2_seed4,4,shared_knn,B,NK,4
+v3.1 members,V2_seed4,4,shared_knn,B,B,196
+v3.1 members,V2_seed4,4,shared_knn,B,monocyte,4
+v3.1 members,V2_seed4,4,shared_knn,B,other,12
+v3.1 members,V2_seed4,4,shared_knn,monocyte,CD4T,0
+v3.1 members,V2_seed4,4,shared_knn,monocyte,CD8T,0
+v3.1 members,V2_seed4,4,shared_knn,monocyte,NK,0
+v3.1 members,V2_seed4,4,shared_knn,monocyte,B,11
+v3.1 members,V2_seed4,4,shared_knn,monocyte,monocyte,422
+v3.1 members,V2_seed4,4,shared_knn,monocyte,other,1
+v3,v3_served,0,nearest_centroid,CD4T,CD4T,37
+v3,v3_served,0,nearest_centroid,CD4T,CD8T,301
+v3,v3_served,0,nearest_centroid,CD4T,NK,37
+v3,v3_served,0,nearest_centroid,CD4T,B,0
+v3,v3_served,0,nearest_centroid,CD4T,monocyte,11
+v3,v3_served,0,nearest_centroid,CD4T,other,21
+v3,v3_served,0,nearest_centroid,CD8T,CD4T,47
+v3,v3_served,0,nearest_centroid,CD8T,CD8T,203
+v3,v3_served,0,nearest_centroid,CD8T,NK,29
+v3,v3_served,0,nearest_centroid,CD8T,B,2
+v3,v3_served,0,nearest_centroid,CD8T,monocyte,2
+v3,v3_served,0,nearest_centroid,CD8T,other,50
+v3,v3_served,0,nearest_centroid,NK,CD4T,13
+v3,v3_served,0,nearest_centroid,NK,CD8T,57
+v3,v3_served,0,nearest_centroid,NK,NK,8
+v3,v3_served,0,nearest_centroid,NK,B,0
+v3,v3_served,0,nearest_centroid,NK,monocyte,0
+v3,v3_served,0,nearest_centroid,NK,other,153
+v3,v3_served,0,nearest_centroid,B,CD4T,0
+v3,v3_served,0,nearest_centroid,B,CD8T,17
+v3,v3_served,0,nearest_centroid,B,NK,4
+v3,v3_served,0,nearest_centroid,B,B,100
+v3,v3_served,0,nearest_centroid,B,monocyte,4
+v3,v3_served,0,nearest_centroid,B,other,121
+v3,v3_served,0,nearest_centroid,monocyte,CD4T,0
+v3,v3_served,0,nearest_centroid,monocyte,CD8T,0
+v3,v3_served,0,nearest_centroid,monocyte,NK,0
+v3,v3_served,0,nearest_centroid,monocyte,B,8
+v3,v3_served,0,nearest_centroid,monocyte,monocyte,392
+v3,v3_served,0,nearest_centroid,monocyte,other,34
+v3,v3_served,0,shared_knn,CD4T,CD4T,34
+v3,v3_served,0,shared_knn,CD4T,CD8T,303
+v3,v3_served,0,shared_knn,CD4T,NK,44
+v3,v3_served,0,shared_knn,CD4T,B,0
+v3,v3_served,0,shared_knn,CD4T,monocyte,11
+v3,v3_served,0,shared_knn,CD4T,other,15
+v3,v3_served,0,shared_knn,CD8T,CD4T,38
+v3,v3_served,0,shared_knn,CD8T,CD8T,213
+v3,v3_served,0,shared_knn,CD8T,NK,34
+v3,v3_served,0,shared_knn,CD8T,B,2
+v3,v3_served,0,shared_knn,CD8T,monocyte,2
+v3,v3_served,0,shared_knn,CD8T,other,44
+v3,v3_served,0,shared_knn,NK,CD4T,18
+v3,v3_served,0,shared_knn,NK,CD8T,60
+v3,v3_served,0,shared_knn,NK,NK,5
+v3,v3_served,0,shared_knn,NK,B,0
+v3,v3_served,0,shared_knn,NK,monocyte,0
+v3,v3_served,0,shared_knn,NK,other,148
+v3,v3_served,0,shared_knn,B,CD4T,0
+v3,v3_served,0,shared_knn,B,CD8T,17
+v3,v3_served,0,shared_knn,B,NK,5
+v3,v3_served,0,shared_knn,B,B,82
+v3,v3_served,0,shared_knn,B,monocyte,5
+v3,v3_served,0,shared_knn,B,other,137
+v3,v3_served,0,shared_knn,monocyte,CD4T,0
+v3,v3_served,0,shared_knn,monocyte,CD8T,0
+v3,v3_served,0,shared_knn,monocyte,NK,0
+v3,v3_served,0,shared_knn,monocyte,B,7
+v3,v3_served,0,shared_knn,monocyte,monocyte,395
+v3,v3_served,0,shared_knn,monocyte,other,32
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD4T,CD4T,5
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD4T,CD8T,9
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD4T,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD4T,B,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD4T,monocyte,6
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD4T,other,387
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD8T,CD4T,20
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD8T,CD8T,11
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD8T,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD8T,B,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD8T,monocyte,1
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,CD8T,other,301
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,NK,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,NK,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,NK,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,NK,B,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,NK,monocyte,3
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,NK,other,228
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,B,CD4T,12
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,B,CD8T,11
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,B,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,B,B,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,B,monocyte,17
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,B,other,206
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,monocyte,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,monocyte,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,monocyte,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,monocyte,B,2
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,monocyte,monocyte,420
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,monocyte,other,12
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD4T,CD4T,47
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD4T,CD8T,2
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD4T,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD4T,B,9
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD4T,monocyte,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD4T,other,349
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD8T,CD4T,51
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD8T,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD8T,NK,1
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD8T,B,18
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD8T,monocyte,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,CD8T,other,263
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,NK,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,NK,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,NK,NK,5
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,NK,B,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,NK,monocyte,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,NK,other,226
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,B,CD4T,16
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,B,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,B,NK,3
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,B,B,28
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,B,monocyte,12
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,B,other,187
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,monocyte,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,monocyte,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,monocyte,NK,0
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,monocyte,B,7
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,monocyte,monocyte,412
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,monocyte,other,15
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD4T,CD4T,7
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD4T,CD8T,27
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD4T,NK,2
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD4T,B,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD4T,monocyte,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD4T,other,371
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD8T,CD4T,22
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD8T,CD8T,12
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD8T,NK,19
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD8T,B,2
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD8T,monocyte,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,CD8T,other,278
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,NK,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,NK,CD8T,15
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,NK,NK,3
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,NK,B,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,NK,monocyte,1
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,NK,other,212
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,B,CD4T,4
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,B,CD8T,4
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,B,NK,6
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,B,B,14
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,B,monocyte,14
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,B,other,204
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,monocyte,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,monocyte,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,monocyte,NK,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,monocyte,B,4
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,monocyte,monocyte,407
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,monocyte,other,23
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD4T,CD4T,28
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD4T,CD8T,72
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD4T,NK,13
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD4T,B,11
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD4T,monocyte,3
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD4T,other,280
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD8T,CD4T,57
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD8T,CD8T,35
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD8T,NK,44
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD8T,B,30
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD8T,monocyte,1
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,CD8T,other,166
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,NK,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,NK,CD8T,27
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,NK,NK,9
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,NK,B,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,NK,monocyte,1
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,NK,other,194
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,B,CD4T,7
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,B,CD8T,8
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,B,NK,16
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,B,B,56
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,B,monocyte,18
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,B,other,141
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,monocyte,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,monocyte,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,monocyte,NK,0
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,monocyte,B,8
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,monocyte,monocyte,405
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,monocyte,other,21
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD4T,CD4T,5
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD4T,CD8T,114
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD4T,NK,3
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD4T,B,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD4T,monocyte,27
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD4T,other,258
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD8T,CD4T,18
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD8T,CD8T,118
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD8T,NK,16
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD8T,B,2
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD8T,monocyte,2
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,CD8T,other,177
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,NK,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,NK,CD8T,50
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,NK,NK,36
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,NK,B,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,NK,monocyte,11
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,NK,other,134
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,B,CD4T,2
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,B,CD8T,27
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,B,NK,8
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,B,B,10
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,B,monocyte,11
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,B,other,188
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,monocyte,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,monocyte,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,monocyte,NK,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,monocyte,B,4
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,monocyte,monocyte,423
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,monocyte,other,7
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD4T,CD4T,23
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD4T,CD8T,25
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD4T,NK,8
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD4T,B,28
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD4T,monocyte,109
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD4T,other,214
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD8T,CD4T,30
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD8T,CD8T,18
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD8T,NK,16
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD8T,B,43
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD8T,monocyte,26
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,CD8T,other,200
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,NK,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,NK,CD8T,8
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,NK,NK,16
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,NK,B,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,NK,monocyte,24
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,NK,other,183
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,B,CD4T,3
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,B,CD8T,11
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,B,NK,11
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,B,B,56
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,B,monocyte,26
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,B,other,139
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,monocyte,CD4T,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,monocyte,CD8T,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,monocyte,NK,0
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,monocyte,B,8
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,monocyte,monocyte,425
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,monocyte,other,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD4T,CD4T,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD4T,CD8T,301
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD4T,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD4T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD4T,monocyte,24
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD4T,other,81
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD8T,CD4T,4
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD8T,CD8T,256
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD8T,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD8T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD8T,monocyte,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,CD8T,other,72
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,NK,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,NK,CD8T,114
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,NK,NK,4
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,NK,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,NK,monocyte,5
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,NK,other,108
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,B,CD4T,5
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,B,CD8T,115
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,B,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,B,B,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,B,monocyte,20
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,B,other,105
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,monocyte,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,monocyte,CD8T,2
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,monocyte,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,monocyte,B,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,monocyte,monocyte,408
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,monocyte,other,23
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD4T,CD4T,30
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD4T,CD8T,178
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD4T,NK,8
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD4T,B,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD4T,monocyte,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD4T,other,190
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD8T,CD4T,27
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD8T,CD8T,145
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD8T,NK,12
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD8T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD8T,monocyte,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,CD8T,other,149
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,NK,CD4T,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,NK,CD8T,64
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,NK,NK,25
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,NK,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,NK,monocyte,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,NK,other,141
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,B,CD4T,19
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,B,CD8T,53
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,B,NK,7
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,B,B,15
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,B,monocyte,11
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,B,other,141
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,monocyte,CD4T,1
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,monocyte,CD8T,2
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,monocyte,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,monocyte,B,8
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,monocyte,monocyte,390
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,monocyte,other,33
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD4T,CD4T,2
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD4T,CD8T,350
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD4T,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD4T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD4T,monocyte,15
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD4T,other,40
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD8T,CD4T,11
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD8T,CD8T,276
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD8T,NK,2
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD8T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD8T,monocyte,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,CD8T,other,44
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,NK,CD4T,1
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,NK,CD8T,160
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,NK,NK,3
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,NK,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,NK,monocyte,2
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,NK,other,65
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,B,CD4T,6
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,B,CD8T,153
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,B,NK,1
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,B,B,3
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,B,monocyte,28
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,B,other,55
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,monocyte,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,monocyte,CD8T,1
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,monocyte,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,monocyte,B,5
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,monocyte,monocyte,384
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,monocyte,other,44
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD4T,CD4T,139
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD4T,CD8T,132
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD4T,NK,66
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD4T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD4T,monocyte,4
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD4T,other,66
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD8T,CD4T,137
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD8T,CD8T,50
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD8T,NK,76
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD8T,B,8
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD8T,monocyte,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,CD8T,other,62
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,NK,CD4T,18
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,NK,CD8T,35
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,NK,NK,97
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,NK,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,NK,monocyte,1
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,NK,other,80
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,B,CD4T,39
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,B,CD8T,32
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,B,NK,47
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,B,B,45
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,B,monocyte,12
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,B,other,71
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,monocyte,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,monocyte,CD8T,1
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,monocyte,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,monocyte,B,8
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,monocyte,monocyte,331
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,monocyte,other,94
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD4T,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD4T,CD8T,141
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD4T,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD4T,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD4T,monocyte,50
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD4T,other,216
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD8T,CD4T,2
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD8T,CD8T,178
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD8T,NK,6
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD8T,B,1
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD8T,monocyte,5
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,CD8T,other,141
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,NK,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,NK,CD8T,52
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,NK,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,NK,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,NK,monocyte,8
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,NK,other,171
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,B,CD4T,2
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,B,CD8T,58
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,B,NK,1
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,B,B,5
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,B,monocyte,32
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,B,other,148
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,monocyte,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,monocyte,CD8T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,monocyte,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,monocyte,B,1
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,monocyte,monocyte,419
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,monocyte,other,14
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD4T,CD4T,19
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD4T,CD8T,27
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD4T,NK,10
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD4T,B,3
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD4T,monocyte,34
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD4T,other,314
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD8T,CD4T,42
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD8T,CD8T,32
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD8T,NK,30
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD8T,B,9
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD8T,monocyte,3
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,CD8T,other,217
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,NK,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,NK,CD8T,2
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,NK,NK,3
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,NK,B,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,NK,monocyte,1
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,NK,other,225
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,B,CD4T,8
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,B,CD8T,17
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,B,NK,10
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,B,B,19
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,B,monocyte,26
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,B,other,166
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,monocyte,CD4T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,monocyte,CD8T,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,monocyte,NK,0
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,monocyte,B,1
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,monocyte,monocyte,386
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,monocyte,other,47
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD4T,CD4T,53
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD4T,CD8T,67
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD4T,NK,4
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD4T,B,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD4T,monocyte,53
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD4T,other,225
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD8T,CD4T,83
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD8T,CD8T,54
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD8T,NK,21
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD8T,B,19
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD8T,monocyte,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,CD8T,other,146
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,NK,CD4T,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,NK,CD8T,40
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,NK,NK,14
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,NK,B,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,NK,monocyte,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,NK,other,169
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,B,CD4T,4
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,B,CD8T,11
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,B,NK,4
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,B,B,23
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,B,monocyte,34
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,B,other,170
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,monocyte,CD4T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,monocyte,CD8T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,monocyte,NK,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,monocyte,B,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,monocyte,monocyte,401
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,monocyte,other,26
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD4T,CD4T,110
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD4T,CD8T,16
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD4T,NK,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD4T,B,33
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD4T,monocyte,23
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD4T,other,223
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD8T,CD4T,146
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD8T,CD8T,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD8T,NK,6
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD8T,B,61
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD8T,monocyte,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,CD8T,other,114
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,NK,CD4T,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,NK,CD8T,18
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,NK,NK,19
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,NK,B,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,NK,monocyte,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,NK,other,184
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,B,CD4T,14
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,B,CD8T,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,B,NK,3
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,B,B,133
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,B,monocyte,17
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,B,other,78
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,monocyte,CD4T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,monocyte,CD8T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,monocyte,NK,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,monocyte,B,14
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,monocyte,monocyte,382
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,monocyte,other,38
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD4T,CD4T,96
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD4T,CD8T,88
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD4T,NK,21
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD4T,B,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD4T,monocyte,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD4T,other,190
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD8T,CD4T,140
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD8T,CD8T,57
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD8T,NK,47
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD8T,B,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD8T,monocyte,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,CD8T,other,78
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,NK,CD4T,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,NK,CD8T,66
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,NK,NK,20
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,NK,B,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,NK,monocyte,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,NK,other,141
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,B,CD4T,20
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,B,CD8T,28
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,B,NK,15
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,B,B,44
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,B,monocyte,26
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,B,other,113
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,monocyte,CD4T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,monocyte,CD8T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,monocyte,NK,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,monocyte,B,3
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,monocyte,monocyte,415
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,monocyte,other,16
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD4T,CD4T,95
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD4T,CD8T,31
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD4T,NK,22
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD4T,B,32
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD4T,monocyte,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD4T,other,222
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD8T,CD4T,108
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD8T,CD8T,15
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD8T,NK,36
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD8T,B,36
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD8T,monocyte,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,CD8T,other,138
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,NK,CD4T,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,NK,CD8T,21
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,NK,NK,40
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,NK,B,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,NK,monocyte,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,NK,other,164
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,B,CD4T,25
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,B,CD8T,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,B,NK,11
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,B,B,92
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,B,monocyte,17
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,B,other,91
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,monocyte,CD4T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,monocyte,CD8T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,monocyte,NK,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,monocyte,B,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,monocyte,monocyte,412
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,monocyte,other,15
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD4T,CD4T,57
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD4T,CD8T,184
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD4T,NK,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD4T,B,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD4T,monocyte,70
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD4T,other,90
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD8T,CD4T,86
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD8T,CD8T,146
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD8T,NK,20
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD8T,B,2
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD8T,monocyte,12
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,CD8T,other,67
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,NK,CD4T,3
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,NK,CD8T,106
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,NK,NK,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,NK,B,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,NK,monocyte,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,NK,other,102
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,B,CD4T,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,B,CD8T,29
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,B,NK,12
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,B,B,13
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,B,monocyte,33
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,B,other,154
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,monocyte,CD4T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,monocyte,CD8T,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,monocyte,NK,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,monocyte,B,4
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,monocyte,monocyte,419
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,monocyte,other,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD4T,CD4T,130
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD4T,CD8T,16
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD4T,NK,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD4T,B,23
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD4T,monocyte,14
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD4T,other,217
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD8T,CD4T,144
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD8T,CD8T,10
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD8T,NK,9
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD8T,B,48
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD8T,monocyte,3
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,CD8T,other,119
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,NK,CD4T,7
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,NK,CD8T,26
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,NK,NK,29
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,NK,B,3
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,NK,monocyte,5
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,NK,other,161
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,B,CD4T,18
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,B,CD8T,3
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,B,NK,9
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,B,B,110
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,B,monocyte,29
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,B,other,77
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,monocyte,CD4T,1
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,monocyte,CD8T,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,monocyte,NK,0
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,monocyte,B,4
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,monocyte,monocyte,402
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,monocyte,other,27
+maxfuse,maxfuse_seed0,0,shared_knn,CD4T,CD4T,0
+maxfuse,maxfuse_seed0,0,shared_knn,CD4T,CD8T,1
+maxfuse,maxfuse_seed0,0,shared_knn,CD4T,NK,0
+maxfuse,maxfuse_seed0,0,shared_knn,CD4T,B,1
+maxfuse,maxfuse_seed0,0,shared_knn,CD4T,monocyte,7
+maxfuse,maxfuse_seed0,0,shared_knn,CD4T,other,398
+maxfuse,maxfuse_seed0,0,shared_knn,CD8T,CD4T,1
+maxfuse,maxfuse_seed0,0,shared_knn,CD8T,CD8T,0
+maxfuse,maxfuse_seed0,0,shared_knn,CD8T,NK,0
+maxfuse,maxfuse_seed0,0,shared_knn,CD8T,B,0
+maxfuse,maxfuse_seed0,0,shared_knn,CD8T,monocyte,7
+maxfuse,maxfuse_seed0,0,shared_knn,CD8T,other,325
+maxfuse,maxfuse_seed0,0,shared_knn,NK,CD4T,1
+maxfuse,maxfuse_seed0,0,shared_knn,NK,CD8T,0
+maxfuse,maxfuse_seed0,0,shared_knn,NK,NK,0
+maxfuse,maxfuse_seed0,0,shared_knn,NK,B,0
+maxfuse,maxfuse_seed0,0,shared_knn,NK,monocyte,8
+maxfuse,maxfuse_seed0,0,shared_knn,NK,other,222
+maxfuse,maxfuse_seed0,0,shared_knn,B,CD4T,0
+maxfuse,maxfuse_seed0,0,shared_knn,B,CD8T,0
+maxfuse,maxfuse_seed0,0,shared_knn,B,NK,0
+maxfuse,maxfuse_seed0,0,shared_knn,B,B,0
+maxfuse,maxfuse_seed0,0,shared_knn,B,monocyte,8
+maxfuse,maxfuse_seed0,0,shared_knn,B,other,238
+maxfuse,maxfuse_seed0,0,shared_knn,monocyte,CD4T,1
+maxfuse,maxfuse_seed0,0,shared_knn,monocyte,CD8T,0
+maxfuse,maxfuse_seed0,0,shared_knn,monocyte,NK,0
+maxfuse,maxfuse_seed0,0,shared_knn,monocyte,B,1
+maxfuse,maxfuse_seed0,0,shared_knn,monocyte,monocyte,12
+maxfuse,maxfuse_seed0,0,shared_knn,monocyte,other,420
+maxfuse,maxfuse_seed1,1,shared_knn,CD4T,CD4T,2
+maxfuse,maxfuse_seed1,1,shared_knn,CD4T,CD8T,1
+maxfuse,maxfuse_seed1,1,shared_knn,CD4T,NK,0
+maxfuse,maxfuse_seed1,1,shared_knn,CD4T,B,0
+maxfuse,maxfuse_seed1,1,shared_knn,CD4T,monocyte,17
+maxfuse,maxfuse_seed1,1,shared_knn,CD4T,other,387
+maxfuse,maxfuse_seed1,1,shared_knn,CD8T,CD4T,0
+maxfuse,maxfuse_seed1,1,shared_knn,CD8T,CD8T,0
+maxfuse,maxfuse_seed1,1,shared_knn,CD8T,NK,0
+maxfuse,maxfuse_seed1,1,shared_knn,CD8T,B,0
+maxfuse,maxfuse_seed1,1,shared_knn,CD8T,monocyte,19
+maxfuse,maxfuse_seed1,1,shared_knn,CD8T,other,314
+maxfuse,maxfuse_seed1,1,shared_knn,NK,CD4T,1
+maxfuse,maxfuse_seed1,1,shared_knn,NK,CD8T,0
+maxfuse,maxfuse_seed1,1,shared_knn,NK,NK,0
+maxfuse,maxfuse_seed1,1,shared_knn,NK,B,0
+maxfuse,maxfuse_seed1,1,shared_knn,NK,monocyte,9
+maxfuse,maxfuse_seed1,1,shared_knn,NK,other,221
+maxfuse,maxfuse_seed1,1,shared_knn,B,CD4T,1
+maxfuse,maxfuse_seed1,1,shared_knn,B,CD8T,0
+maxfuse,maxfuse_seed1,1,shared_knn,B,NK,0
+maxfuse,maxfuse_seed1,1,shared_knn,B,B,0
+maxfuse,maxfuse_seed1,1,shared_knn,B,monocyte,10
+maxfuse,maxfuse_seed1,1,shared_knn,B,other,235
+maxfuse,maxfuse_seed1,1,shared_knn,monocyte,CD4T,1
+maxfuse,maxfuse_seed1,1,shared_knn,monocyte,CD8T,1
+maxfuse,maxfuse_seed1,1,shared_knn,monocyte,NK,0
+maxfuse,maxfuse_seed1,1,shared_knn,monocyte,B,0
+maxfuse,maxfuse_seed1,1,shared_knn,monocyte,monocyte,14
+maxfuse,maxfuse_seed1,1,shared_knn,monocyte,other,418
+maxfuse,maxfuse_seed2,2,shared_knn,CD4T,CD4T,0
+maxfuse,maxfuse_seed2,2,shared_knn,CD4T,CD8T,0
+maxfuse,maxfuse_seed2,2,shared_knn,CD4T,NK,0
+maxfuse,maxfuse_seed2,2,shared_knn,CD4T,B,1
+maxfuse,maxfuse_seed2,2,shared_knn,CD4T,monocyte,15
+maxfuse,maxfuse_seed2,2,shared_knn,CD4T,other,391
+maxfuse,maxfuse_seed2,2,shared_knn,CD8T,CD4T,1
+maxfuse,maxfuse_seed2,2,shared_knn,CD8T,CD8T,1
+maxfuse,maxfuse_seed2,2,shared_knn,CD8T,NK,0
+maxfuse,maxfuse_seed2,2,shared_knn,CD8T,B,0
+maxfuse,maxfuse_seed2,2,shared_knn,CD8T,monocyte,13
+maxfuse,maxfuse_seed2,2,shared_knn,CD8T,other,318
+maxfuse,maxfuse_seed2,2,shared_knn,NK,CD4T,1
+maxfuse,maxfuse_seed2,2,shared_knn,NK,CD8T,0
+maxfuse,maxfuse_seed2,2,shared_knn,NK,NK,0
+maxfuse,maxfuse_seed2,2,shared_knn,NK,B,0
+maxfuse,maxfuse_seed2,2,shared_knn,NK,monocyte,9
+maxfuse,maxfuse_seed2,2,shared_knn,NK,other,221
+maxfuse,maxfuse_seed2,2,shared_knn,B,CD4T,0
+maxfuse,maxfuse_seed2,2,shared_knn,B,CD8T,0
+maxfuse,maxfuse_seed2,2,shared_knn,B,NK,0
+maxfuse,maxfuse_seed2,2,shared_knn,B,B,0
+maxfuse,maxfuse_seed2,2,shared_knn,B,monocyte,9
+maxfuse,maxfuse_seed2,2,shared_knn,B,other,237
+maxfuse,maxfuse_seed2,2,shared_knn,monocyte,CD4T,1
+maxfuse,maxfuse_seed2,2,shared_knn,monocyte,CD8T,2
+maxfuse,maxfuse_seed2,2,shared_knn,monocyte,NK,0
+maxfuse,maxfuse_seed2,2,shared_knn,monocyte,B,1
+maxfuse,maxfuse_seed2,2,shared_knn,monocyte,monocyte,25
+maxfuse,maxfuse_seed2,2,shared_knn,monocyte,other,405
+scglue,scglue_seed0,0,shared_knn,CD4T,CD4T,74
+scglue,scglue_seed0,0,shared_knn,CD4T,CD8T,82
+scglue,scglue_seed0,0,shared_knn,CD4T,NK,23
+scglue,scglue_seed0,0,shared_knn,CD4T,B,3
+scglue,scglue_seed0,0,shared_knn,CD4T,monocyte,213
+scglue,scglue_seed0,0,shared_knn,CD4T,other,12
+scglue,scglue_seed0,0,shared_knn,CD8T,CD4T,208
+scglue,scglue_seed0,0,shared_knn,CD8T,CD8T,26
+scglue,scglue_seed0,0,shared_knn,CD8T,NK,8
+scglue,scglue_seed0,0,shared_knn,CD8T,B,42
+scglue,scglue_seed0,0,shared_knn,CD8T,monocyte,10
+scglue,scglue_seed0,0,shared_knn,CD8T,other,39
+scglue,scglue_seed0,0,shared_knn,NK,CD4T,4
+scglue,scglue_seed0,0,shared_knn,NK,CD8T,32
+scglue,scglue_seed0,0,shared_knn,NK,NK,130
+scglue,scglue_seed0,0,shared_knn,NK,B,1
+scglue,scglue_seed0,0,shared_knn,NK,monocyte,45
+scglue,scglue_seed0,0,shared_knn,NK,other,19
+scglue,scglue_seed0,0,shared_knn,B,CD4T,13
+scglue,scglue_seed0,0,shared_knn,B,CD8T,5
+scglue,scglue_seed0,0,shared_knn,B,NK,4
+scglue,scglue_seed0,0,shared_knn,B,B,195
+scglue,scglue_seed0,0,shared_knn,B,monocyte,24
+scglue,scglue_seed0,0,shared_knn,B,other,5
+scglue,scglue_seed0,0,shared_knn,monocyte,CD4T,25
+scglue,scglue_seed0,0,shared_knn,monocyte,CD8T,13
+scglue,scglue_seed0,0,shared_knn,monocyte,NK,1
+scglue,scglue_seed0,0,shared_knn,monocyte,B,25
+scglue,scglue_seed0,0,shared_knn,monocyte,monocyte,260
+scglue,scglue_seed0,0,shared_knn,monocyte,other,110
+scglue,scglue_seed1,1,shared_knn,CD4T,CD4T,55
+scglue,scglue_seed1,1,shared_knn,CD4T,CD8T,53
+scglue,scglue_seed1,1,shared_knn,CD4T,NK,33
+scglue,scglue_seed1,1,shared_knn,CD4T,B,5
+scglue,scglue_seed1,1,shared_knn,CD4T,monocyte,208
+scglue,scglue_seed1,1,shared_knn,CD4T,other,53
+scglue,scglue_seed1,1,shared_knn,CD8T,CD4T,164
+scglue,scglue_seed1,1,shared_knn,CD8T,CD8T,17
+scglue,scglue_seed1,1,shared_knn,CD8T,NK,6
+scglue,scglue_seed1,1,shared_knn,CD8T,B,58
+scglue,scglue_seed1,1,shared_knn,CD8T,monocyte,17
+scglue,scglue_seed1,1,shared_knn,CD8T,other,71
+scglue,scglue_seed1,1,shared_knn,NK,CD4T,10
+scglue,scglue_seed1,1,shared_knn,NK,CD8T,33
+scglue,scglue_seed1,1,shared_knn,NK,NK,113
+scglue,scglue_seed1,1,shared_knn,NK,B,0
+scglue,scglue_seed1,1,shared_knn,NK,monocyte,24
+scglue,scglue_seed1,1,shared_knn,NK,other,51
+scglue,scglue_seed1,1,shared_knn,B,CD4T,10
+scglue,scglue_seed1,1,shared_knn,B,CD8T,7
+scglue,scglue_seed1,1,shared_knn,B,NK,2
+scglue,scglue_seed1,1,shared_knn,B,B,192
+scglue,scglue_seed1,1,shared_knn,B,monocyte,29
+scglue,scglue_seed1,1,shared_knn,B,other,6
+scglue,scglue_seed1,1,shared_knn,monocyte,CD4T,14
+scglue,scglue_seed1,1,shared_knn,monocyte,CD8T,4
+scglue,scglue_seed1,1,shared_knn,monocyte,NK,1
+scglue,scglue_seed1,1,shared_knn,monocyte,B,24
+scglue,scglue_seed1,1,shared_knn,monocyte,monocyte,258
+scglue,scglue_seed1,1,shared_knn,monocyte,other,133
+scglue,scglue_seed2,2,shared_knn,CD4T,CD4T,74
+scglue,scglue_seed2,2,shared_knn,CD4T,CD8T,87
+scglue,scglue_seed2,2,shared_knn,CD4T,NK,27
+scglue,scglue_seed2,2,shared_knn,CD4T,B,9
+scglue,scglue_seed2,2,shared_knn,CD4T,monocyte,186
+scglue,scglue_seed2,2,shared_knn,CD4T,other,24
+scglue,scglue_seed2,2,shared_knn,CD8T,CD4T,198
+scglue,scglue_seed2,2,shared_knn,CD8T,CD8T,15
+scglue,scglue_seed2,2,shared_knn,CD8T,NK,5
+scglue,scglue_seed2,2,shared_knn,CD8T,B,63
+scglue,scglue_seed2,2,shared_knn,CD8T,monocyte,11
+scglue,scglue_seed2,2,shared_knn,CD8T,other,41
+scglue,scglue_seed2,2,shared_knn,NK,CD4T,6
+scglue,scglue_seed2,2,shared_knn,NK,CD8T,24
+scglue,scglue_seed2,2,shared_knn,NK,NK,129
+scglue,scglue_seed2,2,shared_knn,NK,B,1
+scglue,scglue_seed2,2,shared_knn,NK,monocyte,36
+scglue,scglue_seed2,2,shared_knn,NK,other,35
+scglue,scglue_seed2,2,shared_knn,B,CD4T,13
+scglue,scglue_seed2,2,shared_knn,B,CD8T,3
+scglue,scglue_seed2,2,shared_knn,B,NK,2
+scglue,scglue_seed2,2,shared_knn,B,B,198
+scglue,scglue_seed2,2,shared_knn,B,monocyte,25
+scglue,scglue_seed2,2,shared_knn,B,other,5
+scglue,scglue_seed2,2,shared_knn,monocyte,CD4T,23
+scglue,scglue_seed2,2,shared_knn,monocyte,CD8T,7
+scglue,scglue_seed2,2,shared_knn,monocyte,NK,3
+scglue,scglue_seed2,2,shared_knn,monocyte,B,27
+scglue,scglue_seed2,2,shared_knn,monocyte,monocyte,246
+scglue,scglue_seed2,2,shared_knn,monocyte,other,128
+harmony,harmony_seed0,0,shared_knn,CD4T,CD4T,65
+harmony,harmony_seed0,0,shared_knn,CD4T,CD8T,59
+harmony,harmony_seed0,0,shared_knn,CD4T,NK,8
+harmony,harmony_seed0,0,shared_knn,CD4T,B,4
+harmony,harmony_seed0,0,shared_knn,CD4T,monocyte,9
+harmony,harmony_seed0,0,shared_knn,CD4T,other,262
+harmony,harmony_seed0,0,shared_knn,CD8T,CD4T,114
+harmony,harmony_seed0,0,shared_knn,CD8T,CD8T,19
+harmony,harmony_seed0,0,shared_knn,CD8T,NK,2
+harmony,harmony_seed0,0,shared_knn,CD8T,B,2
+harmony,harmony_seed0,0,shared_knn,CD8T,monocyte,2
+harmony,harmony_seed0,0,shared_knn,CD8T,other,194
+harmony,harmony_seed0,0,shared_knn,NK,CD4T,6
+harmony,harmony_seed0,0,shared_knn,NK,CD8T,1
+harmony,harmony_seed0,0,shared_knn,NK,NK,5
+harmony,harmony_seed0,0,shared_knn,NK,B,0
+harmony,harmony_seed0,0,shared_knn,NK,monocyte,7
+harmony,harmony_seed0,0,shared_knn,NK,other,212
+harmony,harmony_seed0,0,shared_knn,B,CD4T,20
+harmony,harmony_seed0,0,shared_knn,B,CD8T,10
+harmony,harmony_seed0,0,shared_knn,B,NK,9
+harmony,harmony_seed0,0,shared_knn,B,B,69
+harmony,harmony_seed0,0,shared_knn,B,monocyte,3
+harmony,harmony_seed0,0,shared_knn,B,other,135
+harmony,harmony_seed0,0,shared_knn,monocyte,CD4T,1
+harmony,harmony_seed0,0,shared_knn,monocyte,CD8T,0
+harmony,harmony_seed0,0,shared_knn,monocyte,NK,0
+harmony,harmony_seed0,0,shared_knn,monocyte,B,10
+harmony,harmony_seed0,0,shared_knn,monocyte,monocyte,347
+harmony,harmony_seed0,0,shared_knn,monocyte,other,76
+harmony,harmony_seed1,1,shared_knn,CD4T,CD4T,87
+harmony,harmony_seed1,1,shared_knn,CD4T,CD8T,51
+harmony,harmony_seed1,1,shared_knn,CD4T,NK,18
+harmony,harmony_seed1,1,shared_knn,CD4T,B,4
+harmony,harmony_seed1,1,shared_knn,CD4T,monocyte,11
+harmony,harmony_seed1,1,shared_knn,CD4T,other,236
+harmony,harmony_seed1,1,shared_knn,CD8T,CD4T,136
+harmony,harmony_seed1,1,shared_knn,CD8T,CD8T,15
+harmony,harmony_seed1,1,shared_knn,CD8T,NK,6
+harmony,harmony_seed1,1,shared_knn,CD8T,B,7
+harmony,harmony_seed1,1,shared_knn,CD8T,monocyte,2
+harmony,harmony_seed1,1,shared_knn,CD8T,other,167
+harmony,harmony_seed1,1,shared_knn,NK,CD4T,6
+harmony,harmony_seed1,1,shared_knn,NK,CD8T,2
+harmony,harmony_seed1,1,shared_knn,NK,NK,5
+harmony,harmony_seed1,1,shared_knn,NK,B,0
+harmony,harmony_seed1,1,shared_knn,NK,monocyte,0
+harmony,harmony_seed1,1,shared_knn,NK,other,218
+harmony,harmony_seed1,1,shared_knn,B,CD4T,25
+harmony,harmony_seed1,1,shared_knn,B,CD8T,7
+harmony,harmony_seed1,1,shared_knn,B,NK,9
+harmony,harmony_seed1,1,shared_knn,B,B,73
+harmony,harmony_seed1,1,shared_knn,B,monocyte,2
+harmony,harmony_seed1,1,shared_knn,B,other,130
+harmony,harmony_seed1,1,shared_knn,monocyte,CD4T,3
+harmony,harmony_seed1,1,shared_knn,monocyte,CD8T,0
+harmony,harmony_seed1,1,shared_knn,monocyte,NK,0
+harmony,harmony_seed1,1,shared_knn,monocyte,B,11
+harmony,harmony_seed1,1,shared_knn,monocyte,monocyte,346
+harmony,harmony_seed1,1,shared_knn,monocyte,other,74
+harmony,harmony_seed2,2,shared_knn,CD4T,CD4T,99
+harmony,harmony_seed2,2,shared_knn,CD4T,CD8T,58
+harmony,harmony_seed2,2,shared_knn,CD4T,NK,22
+harmony,harmony_seed2,2,shared_knn,CD4T,B,5
+harmony,harmony_seed2,2,shared_knn,CD4T,monocyte,9
+harmony,harmony_seed2,2,shared_knn,CD4T,other,214
+harmony,harmony_seed2,2,shared_knn,CD8T,CD4T,184
+harmony,harmony_seed2,2,shared_knn,CD8T,CD8T,18
+harmony,harmony_seed2,2,shared_knn,CD8T,NK,8
+harmony,harmony_seed2,2,shared_knn,CD8T,B,14
+harmony,harmony_seed2,2,shared_knn,CD8T,monocyte,2
+harmony,harmony_seed2,2,shared_knn,CD8T,other,107
+harmony,harmony_seed2,2,shared_knn,NK,CD4T,7
+harmony,harmony_seed2,2,shared_knn,NK,CD8T,2
+harmony,harmony_seed2,2,shared_knn,NK,NK,5
+harmony,harmony_seed2,2,shared_knn,NK,B,0
+harmony,harmony_seed2,2,shared_knn,NK,monocyte,1
+harmony,harmony_seed2,2,shared_knn,NK,other,216
+harmony,harmony_seed2,2,shared_knn,B,CD4T,14
+harmony,harmony_seed2,2,shared_knn,B,CD8T,7
+harmony,harmony_seed2,2,shared_knn,B,NK,9
+harmony,harmony_seed2,2,shared_knn,B,B,82
+harmony,harmony_seed2,2,shared_knn,B,monocyte,3
+harmony,harmony_seed2,2,shared_knn,B,other,131
+harmony,harmony_seed2,2,shared_knn,monocyte,CD4T,3
+harmony,harmony_seed2,2,shared_knn,monocyte,CD8T,0
+harmony,harmony_seed2,2,shared_knn,monocyte,NK,0
+harmony,harmony_seed2,2,shared_knn,monocyte,B,10
+harmony,harmony_seed2,2,shared_knn,monocyte,monocyte,347
+harmony,harmony_seed2,2,shared_knn,monocyte,other,74
+seurat,seurat_seed0,0,native,CD4T,CD4T,99
+seurat,seurat_seed0,0,native,CD4T,CD8T,62
+seurat,seurat_seed0,0,native,CD4T,NK,6
+seurat,seurat_seed0,0,native,CD4T,B,2
+seurat,seurat_seed0,0,native,CD4T,monocyte,54
+seurat,seurat_seed0,0,native,CD4T,other,184
+seurat,seurat_seed0,0,native,CD8T,CD4T,74
+seurat,seurat_seed0,0,native,CD8T,CD8T,9
+seurat,seurat_seed0,0,native,CD8T,NK,4
+seurat,seurat_seed0,0,native,CD8T,B,6
+seurat,seurat_seed0,0,native,CD8T,monocyte,31
+seurat,seurat_seed0,0,native,CD8T,other,209
+seurat,seurat_seed0,0,native,NK,CD4T,10
+seurat,seurat_seed0,0,native,NK,CD8T,44
+seurat,seurat_seed0,0,native,NK,NK,45
+seurat,seurat_seed0,0,native,NK,B,0
+seurat,seurat_seed0,0,native,NK,monocyte,5
+seurat,seurat_seed0,0,native,NK,other,127
+seurat,seurat_seed0,0,native,B,CD4T,5
+seurat,seurat_seed0,0,native,B,CD8T,8
+seurat,seurat_seed0,0,native,B,NK,4
+seurat,seurat_seed0,0,native,B,B,121
+seurat,seurat_seed0,0,native,B,monocyte,17
+seurat,seurat_seed0,0,native,B,other,91
+seurat,seurat_seed0,0,native,monocyte,CD4T,0
+seurat,seurat_seed0,0,native,monocyte,CD8T,0
+seurat,seurat_seed0,0,native,monocyte,NK,0
+seurat,seurat_seed0,0,native,monocyte,B,10
+seurat,seurat_seed0,0,native,monocyte,monocyte,244
+seurat,seurat_seed0,0,native,monocyte,other,180
+correlation,correlation_seed0,0,correlation,CD4T,CD4T,245
+correlation,correlation_seed0,0,correlation,CD4T,CD8T,23
+correlation,correlation_seed0,0,correlation,CD4T,NK,11
+correlation,correlation_seed0,0,correlation,CD4T,B,8
+correlation,correlation_seed0,0,correlation,CD4T,monocyte,5
+correlation,correlation_seed0,0,correlation,CD4T,other,115
+correlation,correlation_seed0,0,correlation,CD8T,CD4T,193
+correlation,correlation_seed0,0,correlation,CD8T,CD8T,4
+correlation,correlation_seed0,0,correlation,CD8T,NK,1
+correlation,correlation_seed0,0,correlation,CD8T,B,24
+correlation,correlation_seed0,0,correlation,CD8T,monocyte,0
+correlation,correlation_seed0,0,correlation,CD8T,other,111
+correlation,correlation_seed0,0,correlation,NK,CD4T,4
+correlation,correlation_seed0,0,correlation,NK,CD8T,3
+correlation,correlation_seed0,0,correlation,NK,NK,37
+correlation,correlation_seed0,0,correlation,NK,B,1
+correlation,correlation_seed0,0,correlation,NK,monocyte,0
+correlation,correlation_seed0,0,correlation,NK,other,186
+correlation,correlation_seed0,0,correlation,B,CD4T,23
+correlation,correlation_seed0,0,correlation,B,CD8T,1
+correlation,correlation_seed0,0,correlation,B,NK,0
+correlation,correlation_seed0,0,correlation,B,B,119
+correlation,correlation_seed0,0,correlation,B,monocyte,0
+correlation,correlation_seed0,0,correlation,B,other,103
+correlation,correlation_seed0,0,correlation,monocyte,CD4T,1
+correlation,correlation_seed0,0,correlation,monocyte,CD8T,0
+correlation,correlation_seed0,0,correlation,monocyte,NK,0
+correlation,correlation_seed0,0,correlation,monocyte,B,8
+correlation,correlation_seed0,0,correlation,monocyte,monocyte,293
+correlation,correlation_seed0,0,correlation,monocyte,other,132

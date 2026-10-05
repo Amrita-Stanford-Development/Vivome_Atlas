@@ -1,0 +1,223 @@
+{
+  "chosen": {
+    "w": 0.7,
+    "tau": 0.05,
+    "on": "sim_suite_calib_v1.json (NB1 calibration suite)"
+  },
+  "grid": [
+    [
+      0.3,
+      0.03
+    ],
+    [
+      0.3,
+      0.05
+    ],
+    [
+      0.3,
+      0.1
+    ],
+    [
+      0.5,
+      0.03
+    ],
+    [
+      0.5,
+      0.05
+    ],
+    [
+      0.5,
+      0.1
+    ],
+    [
+      0.7,
+      0.03
+    ],
+    [
+      0.7,
+      0.05
+    ],
+    [
+      0.7,
+      0.1
+    ]
+  ],
+  "evaluation_suite": {
+    "encoder (smoothing off, class-balanced)": {
+      "lineage": 56.84,
+      "mixed": 70.07,
+      "narrow": 59.76,
+      "pbmc": 72.17,
+      "scope2": 65.35,
+      "single": 26.81,
+      "ALL": 58.74
+    },
+    "v3.1 as served (smoothing on, whole-blood stats)": {
+      "lineage": 55.24,
+      "mixed": 62.69,
+      "narrow": 57.25,
+      "pbmc": 61.93,
+      "scope2": 68.86,
+      "single": 32.98,
+      "ALL": 56.12
+    },
+    "v4 candidate (fusion)": {
+      "lineage": 58.04,
+      "mixed": 72.45,
+      "narrow": 61.72,
+      "pbmc": 74.32,
+      "scope2": 65.49,
+      "single": 26.85,
+      "ALL": 60.31
+    }
+  },
+  "development": {
+    "pbmc240": {
+      "pool-free": {
+        "v3.1 as served": {
+          "lymphoid_recall": 92.31,
+          "myeloid_recall": 80.0
+        },
+        "encoder, smoothing off, class-balanced": {
+          "lymphoid_recall": 94.02,
+          "myeloid_recall": 80.0
+        },
+        "v4 candidate (fusion)": {
+          "lymphoid_recall": 92.31,
+          "myeloid_recall": 100.0
+        }
+      },
+      "all cells": {
+        "encoder, smoothing off, class-balanced": {
+          "lymphoid_recall": 94.02,
+          "myeloid_recall": 80.0
+        },
+        "v4 candidate (fusion)": {
+          "lymphoid_recall": 93.16,
+          "myeloid_recall": 100.0
+        }
+      }
+    },
+    "scope2": {
+      "pool-free": {
+        "v3.1 as served": {
+          "balanced_accuracy_unrestricted": 0.0,
+          "balanced_accuracy_restricted": 39.68
+        },
+        "encoder, smoothing off, class-balanced": {
+          "balanced_accuracy_unrestricted": 0.64,
+          "balanced_accuracy_restricted": 34.56
+        },
+        "v4 candidate (fusion)": {
+          "balanced_accuracy_unrestricted": 0.68,
+          "balanced_accuracy_restricted": 32.3
+        }
+      },
+      "all cells": {
+        "encoder, smoothing off, class-balanced": {
+          "balanced_accuracy_unrestricted": 0.64,
+          "balanced_accuracy_restricted": 34.37
+        },
+        "v4 candidate (fusion)": {
+          "balanced_accuracy_unrestricted": 0.68,
+          "balanced_accuracy_restricted": 32.56
+        }
+      }
+    },
+    "fulcher2026": {
+      "pool-free": {
+        "v3.1 as served": {
+          "balanced_accuracy_6_types": 58.28,
+          "recall_CD4T": 72.4,
+          "recall_CD8T": 26.52,
+          "recall_NK": 58.67,
+          "recall_B": 97.06,
+          "recall_monocyte": 85.75,
+          "recall_DC": 9.26
+        },
+        "encoder, smoothing off, class-balanced": {
+          "balanced_accuracy_6_types": 62.61,
+          "recall_CD4T": 83.12,
+          "recall_CD8T": 22.65,
+          "recall_NK": 77.33,
+          "recall_B": 100.0,
+          "recall_monocyte": 92.54,
+          "recall_DC": 0.0
+        },
+        "v4 candidate (fusion)": {
+          "balanced_accuracy_6_types": 65.86,
+          "recall_CD4T": 83.44,
+          "recall_CD8T": 24.86,
+          "recall_NK": 86.67,
+          "recall_B": 100.0,
+          "recall_monocyte": 96.49,
+          "recall_DC": 3.7
+        }
+      },
+      "all cells": {
+        "encoder, smoothing off, class-balanced": {
+          "balanced_accuracy_6_types": 62.61,
+          "recall_CD4T": 83.12,
+          "recall_CD8T": 22.65,
+          "recall_NK": 77.33,
+          "recall_B": 100.0,
+          "recall_monocyte": 92.54,
+          "recall_DC": 0.0
+        },
+        "v4 candidate (fusion)": {
+          "balanced_accuracy_6_types": 65.51,
+          "recall_CD4T": 83.12,
+          "recall_CD8T": 23.76,
+          "recall_NK": 86.0,
+          "recall_B": 100.0,
+          "recall_monocyte": 96.49,
+          "recall_DC": 3.7
+        }
+      }
+    },
+    "furtwangler2025": {
+      "pool-free": {
+        "v3.1 as served": {
+          "progenitor_share": 0.24,
+          "t_cell_share": 54.43,
+          "median_max_probability": 0.3768
+        },
+        "encoder, smoothing off, class-balanced": {
+          "progenitor_share": 2.27,
+          "t_cell_share": 44.57,
+          "median_max_probability": 0.3797
+        },
+        "v4 candidate (fusion)": {
+          "progenitor_share": 2.55,
+          "t_cell_share": 43.06,
+          "median_max_probability": 0.2952
+        }
+      },
+      "all cells": {
+        "encoder, smoothing off, class-balanced": {
+          "progenitor_share": 2.27,
+          "t_cell_share": 44.25,
+          "median_max_probability": 0.3719
+        },
+        "v4 candidate (fusion)": {
+          "progenitor_share": 2.67,
+          "t_cell_share": 42.62,
+          "median_max_probability": 0.2896
+        }
+      }
+    },
+    "out_of_reference_auroc": {
+      "pool-free": {
+        "v3.1 as served": 0.7483,
+        "encoder, smoothing off, class-balanced": 0.7631,
+        "v4 candidate (fusion)": 0.8088
+      },
+      "all cells": {
+        "encoder, smoothing off, class-balanced": 0.7579,
+        "v4 candidate (fusion)": 0.8043
+      }
+    }
+  },
+  "khoury2026": "not read",
+  "seconds": 237
+}

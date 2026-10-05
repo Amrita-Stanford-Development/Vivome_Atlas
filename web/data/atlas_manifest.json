@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "atlas_version": "0.3.0",
-  "generated": "2026-10-01",
+  "generated": "2026-10-04",
   "model": {
     "name": "VivOME v3.1",
     "latent_dim": 128,
@@ -456,17 +456,17 @@
       "class_idx": 10,
       "name": "macrophage",
       "rna_cells": 1228,
-      "prot_cells": 394,
+      "prot_cells": 1096,
       "support": "cross_modal",
       "pca_centroid_cosine": {
-        "value": 0.017951,
+        "value": 0.413193,
         "status": "measured",
         "basis": "3-PC projection"
       },
       "latent_centroid_cosine": {
-        "value": 0.080971,
+        "value": 0.13523,
         "status": "measured",
-        "basis": "128-d latent centroid cosine (V2_batchgene_aug_seed4, the coordinate member), 394 protein cells"
+        "basis": "128-d latent centroid cosine (V2_batchgene_aug_seed4, the coordinate member), 1096 protein cells"
       },
       "modality_probe_accuracy": {
         "value": 0.999329,
@@ -515,17 +515,17 @@
       "class_idx": 12,
       "name": "monocyte",
       "rna_cells": 9602,
-      "prot_cells": 1096,
+      "prot_cells": 394,
       "support": "cross_modal",
       "pca_centroid_cosine": {
-        "value": 0.600997,
+        "value": 0.201681,
         "status": "measured",
         "basis": "3-PC projection"
       },
       "latent_centroid_cosine": {
-        "value": 0.395917,
+        "value": 0.252101,
         "status": "measured",
-        "basis": "128-d latent centroid cosine (V2_batchgene_aug_seed4, the coordinate member), 1096 protein cells"
+        "basis": "128-d latent centroid cosine (V2_batchgene_aug_seed4, the coordinate member), 394 protein cells"
       },
       "modality_probe_accuracy": {
         "value": 0.999329,
@@ -848,14 +848,14 @@
     "mask_sampling": "uniform",
     "latent_centroid_cosine": {
       "macrophage": {
-        "value": 0.189762,
-        "status": "measured",
-        "basis": "v3 128-d latent centroid cosine, 394 protein cells"
-      },
-      "monocyte": {
-        "value": 0.830313,
+        "value": 0.36811,
         "status": "measured",
         "basis": "v3 128-d latent centroid cosine, 1096 protein cells"
+      },
+      "monocyte": {
+        "value": 0.140094,
+        "status": "measured",
+        "basis": "v3 128-d latent centroid cosine, 394 protein cells"
       }
     },
     "modality_probe_accuracy": {
@@ -908,12 +908,12 @@
         "measure": "Protein (SCoPE2), restricted, shipped checkpoint (v3_seed0)",
         "rule": "nearest centroid (the service's rule)",
         "accuracy": {
-          "value": 0.861745,
+          "value": 0.138255,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         },
         "balanced_accuracy": {
-          "value": 0.797915,
+          "value": 0.202085,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         }
@@ -923,18 +923,18 @@
         "measure": "Protein (SCoPE2), restricted, 5-seed mean of the architecture",
         "rule": "nearest centroid (the service's rule)",
         "accuracy": {
-          "value": 0.793826,
+          "value": 0.206174,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
           "sd": 0.047084
         },
         "balanced_accuracy": {
-          "value": 0.633237,
+          "value": 0.366763,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
           "sd": 0.108427,
-          "min": 0.507871,
-          "max": 0.797915
+          "min": 0.202085,
+          "max": 0.492129
         }
       },
       {
@@ -942,12 +942,12 @@
         "measure": "Protein (SCoPE2), restricted, shipped checkpoint (v3_seed0)",
         "rule": "shared kNN (the benchmark's rule)",
         "accuracy": {
-          "value": 0.849664,
+          "value": 0.150336,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         },
         "balanced_accuracy": {
-          "value": 0.883992,
+          "value": 0.116008,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         }
@@ -957,18 +957,18 @@
         "measure": "Protein (SCoPE2), restricted, 5-seed mean of the architecture",
         "rule": "shared kNN (the benchmark's rule)",
         "accuracy": {
-          "value": 0.753154,
+          "value": 0.246846,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
           "sd": 0.117906
         },
         "balanced_accuracy": {
-          "value": 0.714998,
+          "value": 0.285002,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
           "sd": 0.106004,
-          "min": 0.590433,
-          "max": 0.883992
+          "min": 0.116008,
+          "max": 0.409567
         }
       },
       {
@@ -976,12 +976,12 @@
         "measure": "Protein (SCoPE2), unrestricted, shipped checkpoint (v3_seed0)",
         "rule": "nearest centroid (the service's rule)",
         "accuracy": {
-          "value": 0.453691,
+          "value": 0.004027,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         },
         "balanced_accuracy": {
-          "value": 0.310833,
+          "value": 0.006801,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         }
@@ -991,18 +991,18 @@
         "measure": "Protein (SCoPE2), unrestricted, 5-seed mean of the architecture",
         "rule": "nearest centroid (the service's rule)",
         "accuracy": {
-          "value": 0.34094,
+          "value": 0.031275,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
-          "sd": 0.252457
+          "sd": 0.042326
         },
         "balanced_accuracy": {
-          "value": 0.255974,
+          "value": 0.053772,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
-          "sd": 0.173469,
-          "min": 0.001369,
-          "max": 0.481974
+          "sd": 0.075734,
+          "min": 0.0,
+          "max": 0.179233
         }
       },
       {
@@ -1010,12 +1010,12 @@
         "measure": "Protein (SCoPE2), unrestricted, shipped checkpoint (v3_seed0)",
         "rule": "shared kNN (the benchmark's rule)",
         "accuracy": {
-          "value": 0.553691,
+          "value": 0.022819,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         },
         "balanced_accuracy": {
-          "value": 0.386935,
+          "value": 0.022014,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv"
         }
@@ -1025,27 +1025,27 @@
         "measure": "Protein (SCoPE2), unrestricted, 5-seed mean of the architecture",
         "rule": "shared kNN (the benchmark's rule)",
         "accuracy": {
-          "value": 0.383624,
+          "value": 0.049396,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
-          "sd": 0.257052
+          "sd": 0.055288
         },
         "balanced_accuracy": {
-          "value": 0.290679,
+          "value": 0.083159,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv",
-          "sd": 0.183406,
-          "min": 0.012774,
-          "max": 0.498439
+          "sd": 0.099308,
+          "min": 0.0,
+          "max": 0.203643
         }
       }
     ],
     "vs_scanvi": {
       "restricted_shared_knn": {
         "pairings": 15,
-        "v3_ahead": 3,
+        "v3_ahead": 12,
         "mean_difference": {
-          "value": -0.05654,
+          "value": 0.05654,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv"
         }
@@ -1054,7 +1054,7 @@
         "pairings": 15,
         "v3_ahead": 12,
         "mean_difference": {
-          "value": 0.181375,
+          "value": 0.081011,
           "status": "measured",
           "basis": "research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv"
         }

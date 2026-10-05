@@ -100,6 +100,71 @@ class V3IsUnchangedTests(unittest.TestCase):
                 self.assertIn(cell["label"], {"macrophage", "monocyte", "monocyte/macrophage lineage"})
 
 
+class V31IsUnchangedTests(unittest.TestCase):
+    """v3.1 frozen the same way before v4 work began (2026-10-04;
+    service/tests/fixtures/v31_full_*.json), so a later pipeline version cannot
+    move a v3.1 answer unnoticed."""
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.bundle = pipeline.load_bundle("v3.1")
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/fetch_v31_members.py.")
+        cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
+
+    def test_v31_reproduces_its_frozen_responses(self):
+        for name, raw in self.raws.items():
+            for mode, restrict in (("default", False), ("restricted", True)):
+                with self.subTest(dataset=name, mode=mode):
+                    frozen = json.loads((FIXTURES / f"v31_full_{name}_{mode}.json").read_text())
+                    with mock.patch.object(config, "ATLAS_VERSION", frozen["atlas_version"]):
+                        fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
+                    assert_same(self, json.loads(json.dumps(fresh)), frozen)
+
+
+class V4IsUnchangedTests(unittest.TestCase):
+    """v4 frozen the same way when its evaluation passed (2026-10-05, Track G
+    Phase 3c; service/tests/fixtures/v4_full_*.json). Both 50-cell uploads fall
+    below the agreement threshold, so these pin the flat-correlation branch;
+    test_v4_gate.py pins the fused one, on Fulcher."""
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.bundle = pipeline.load_bundle("v4")
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/fetch_v31_members.py and scripts/build_v4_bundle.py.")
+        cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
+
+    def test_v4_is_selectable_and_v31_stays_the_default(self):
+        self.assertIn("v4", config.PIPELINE_VERSIONS)
+        self.assertEqual(config.PIPELINE_VERSION, "v3.1")
+
+    def test_v4_reproduces_its_frozen_responses(self):
+        for name, raw in self.raws.items():
+            for mode, restrict in (("default", False), ("restricted", True)):
+                with self.subTest(dataset=name, mode=mode):
+                    frozen = json.loads((FIXTURES / f"v4_full_{name}_{mode}.json").read_text())
+                    with mock.patch.object(config, "ATLAS_VERSION", frozen["atlas_version"]):
+                        fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
+                    assert_same(self, json.loads(json.dumps(fresh)), frozen)
+
+    def test_v4s_answers_are_v31s_with_its_guess_joined(self):
+        v31 = pipeline.load_bundle("v3.1")
+        for name, raw in self.raws.items():
+            ours, theirs = pipeline.run_projection(self.bundle, raw), pipeline.run_projection(v31, raw)
+            for a, b in zip(ours["cells"], theirs["cells"]):
+                with self.subTest(dataset=name, cell=a["cell_id"]):
+                    self.assertEqual(a.get("abstain_reason") == "outside_supported_region",
+                                     b.get("abstain_reason") == "outside_supported_region")
+                    self.assertEqual(a["coordinates"], b["coordinates"])
+                    if not a["abstained"]:
+                        self.assertIn(a["best_guess"]["label"], a["label_set"])
+                    if not b["abstained"] and not a["abstained"]:
+                        self.assertTrue(set(b["label_set"]) <= set(a["label_set"]))
+
+
 class _EstimatedLabelSpace:
     """Stands in for NB2's estimator: two classes, each with a support score."""
 
@@ -132,7 +197,7 @@ class ComponentSelectionTests(unittest.TestCase):
 
     def test_an_unknown_version_is_refused(self):
         with self.assertRaises(ValueError):
-            pipeline.components_for("v4")
+            pipeline.components_for("v5")
 
     def test_v31_components_carry_nb2s_settings(self):
         spec = ensemble.load_spec()

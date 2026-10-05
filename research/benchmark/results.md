@@ -28,7 +28,10 @@ specifically, and `v3_seed0` turns out to be the best-performing of the
 five v3 seeds by a wide margin on SCoPE2 restricted (79.79% balanced vs.
 a 5-seed mean of 63.32% ± 10.84 — see the table below) — the original
 number was real, but not representative of the architecture, only of the
-one seed that happened to ship.
+one seed that happened to ship. (Those SCoPE2 figures were scored against
+swapped labels. Corrected, `v3_seed0` is the *lowest* of the five, 20.21%
+against 36.68% ± 10.84; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).)
 
 An earlier version of this table (before the corrections above existed)
 scored a from-scratch *reconstruction* of the protein embedding instead of
@@ -53,7 +56,9 @@ protein embedding, scored by cosine-argmax against
 `service/model/runtime/reference_centroids.npy` (the trained centroids, not
 recomputed class means), reproduces the historical figures to 4 decimal
 places: 45.3691%/31.0833% unrestricted, 86.1745%/79.7915% restricted
-(targets: 45.37/31.08, 86.17/79.79). The trained centroids and
+(targets: 45.37/31.08, 86.17/79.79), with the labels the export used, which
+were swapped (`benchmark/scope2_labels.py` reproduces them the same way
+before correcting them). The trained centroids and
 harness-computed RNA class-mean centroids are cosine-identical (1.0000) for
 all 22 classes — there is no meaningful difference between "the trained
 centroids" and "class means of the real RNA embedding" in this model.
@@ -79,7 +84,135 @@ encoder is fixed and zero-shot on the query. This should, if anything,
 favor scANVI, which makes scANVI's weaker showings elsewhere in this
 document (e.g. the PBMC240 lineage arm) more notable, not less.
 
+## SCoPE2 with its labels corrected (2026-10-04)
+
+VivOME's copy of SCoPE2 had macrophage and monocyte swapped on every cell
+([bugs-and-fixes.md](bugs-and-fixes.md), 8). The authors' curated object
+has 1,096 macrophages and 394 monocytes, and every copy now carries those
+labels (`service/tests/test_scope2_labels.py`). Every SCoPE2 table was
+rescored from saved predictions. Restricted figures became exactly 100
+minus the old ones; unrestricted figures changed in no simple way.
+
+**The SCoPE2 sections below**, from "Restricted regime" to "Pool-first
+kNN" and the SCoPE2 parts of "Baselines beyond scANVI", were scored
+against the swapped labels. They are superseded, and kept as written as the
+record. This section replaces them.
+
+### Restricted (macrophage or monocyte; chance 50%)
+
+The baselines are the corrected runs
+([baseline-corrections.md](baseline-corrections.md)), which replace Track
+D's first runs. "Ours" is NB1d's five seeds per family under each rule.
+Seeded rows show mean ± SD (min–max).
+
+| Rank | Method | Rule | Accuracy % | Balanced accuracy % |
+|---|---|---|---|---|
+| 1 | Harmony (3 seeds) | nearest centroid | 52.98 ± 0.95 (51.95–53.83) | 62.97 ± 0.40 (62.52–63.28) |
+| 2 | scGLUE (3 seeds) | shared kNN | 73.76 ± 0.29 (73.56–74.09) | 50.76 ± 1.01 (50.00–51.91) |
+| 3 | MaxFuse (3 seeds) | nearest centroid | 50.36 ± 1.20 (49.33–51.68) | 49.19 ± 1.60 (47.92–50.98) |
+| 4 | Seurat CCA | native transfer | 28.93 | 46.73 |
+| 5 | PCA | nearest centroid | 25.57 | 45.42 |
+| 6 | MaxFuse (3 seeds) | shared kNN | 50.16 ± 1.21 (48.93–51.34) | 42.38 ± 1.61 (40.65–43.84) |
+| 7 | **Ours (V2, 5 seeds)** | pool-first kNN | 23.40 ± 4.24 (16.31–26.58) | 42.37 ± 10.87 (23.85–50.09) |
+| 8 | **Ours (V2, 5 seeds)** | shared kNN | 25.19 ± 4.83 (20.67–33.36) | 41.74 ± 6.40 (36.89–51.77) |
+| 9 | scGLUE (3 seeds) | nearest centroid | 48.75 ± 2.98 (45.57–51.48) | 40.13 ± 4.19 (35.45–43.53) |
+| 10 | **Ours (V2, 5 seeds)** | nearest centroid | 30.36 ± 7.62 (23.83–42.82) | 39.04 ± 10.03 (26.77–48.57) |
+| 11 | **v3.1 as served** | best guess | 25.37 | 38.70 |
+| 12 | **Ours (v3, 5 seeds)** | pool-first kNN | 21.89 ± 4.69 (16.71–25.77) | 38.36 ± 11.80 (22.50–48.65) |
+| 13 | **Ours (v3, 5 seeds)** | nearest centroid | 20.62 ± 4.71 (13.83–26.24) | 36.68 ± 10.84 (20.21–49.21) |
+| 14 | Correlation to class mean | its own rule | 39.33 | 35.35 |
+| 15 | PCA | shared kNN | 51.14 | 34.76 |
+| 16 | scANVI (3 seeds) | nearest centroid | 35.21 ± 10.03 (25.10–45.17) | 33.09 ± 9.64 (24.54–43.55) |
+| 17 | Harmony (3 seeds) | shared kNN | 43.56 ± 0.84 (42.68–44.36) | 29.69 ± 0.57 (29.10–30.24) |
+| 18 | **Ours (v3, 5 seeds)** | shared kNN | 24.68 ± 11.79 (15.03–44.97) | 28.50 ± 10.60 (11.60–40.96) |
+| 19 | scANVI (3 seeds) | scANVI classifier | 34.12 ± 2.25 (31.68–36.11) | 27.39 ± 3.03 (23.89–29.26) |
+| 20 | scANVI (3 seeds) | shared kNN | 32.13 ± 6.05 (27.58–38.99) | 22.32 ± 4.28 (18.99–27.16) |
+| — | `v3_seed0` (shipped as v3) | nearest centroid | 13.83 | 20.21 |
+| — | `v3_seed0` (shipped as v3) | shared kNN | 15.03 | 11.60 |
+| — | Majority class ("macrophage") | trivial floor | 73.56 | 50.00 |
+
+Sources: `research/benchmark/baselines_corrected/scope2_summary.csv`,
+`research/notebook-outputs/nb1d/ours_scope2_5seed_scores.csv`.
+
+### Unrestricted (all 22 classes)
+
+| Rank | Method | Rule | Accuracy % | Balanced accuracy % |
+|---|---|---|---|---|
+| 1 | **Ours (v3, 5 seeds)** | shared kNN | 4.94 ± 5.53 (0.00–11.54) | 8.32 ± 9.93 (0.00–20.36) |
+| 2 | scANVI (3 seeds) | nearest centroid | 8.86 ± 3.21 (5.91–12.28) | 6.05 ± 2.18 (4.01–8.35) |
+| 3 | scANVI (3 seeds) | scANVI classifier | 8.12 ± 4.77 (4.36–13.49) | 5.55 ± 3.23 (2.97–9.17) |
+| 4 | **Ours (v3, 5 seeds)** | nearest centroid | 3.13 ± 4.23 (0.00–9.87) | 5.38 ± 7.57 (0.00–17.92) |
+| 5 | MaxFuse (3 seeds) | nearest centroid | 5.79 ± 0.44 (5.37–6.24) | 3.99 ± 0.30 (3.73–4.32) |
+| 6 | Seurat CCA | native transfer | 2.01 | 3.73 |
+| 7 | Correlation to class mean | its own rule | 4.09 | 2.78 |
+| 8 | scANVI (3 seeds) | shared kNN | 3.04 ± 1.41 (1.48–4.23) | 2.12 ± 1.01 (1.00–2.96) |
+| 9 | MaxFuse (3 seeds) | MaxFuse matching | 1.83 ± 0.34 (1.48–2.15) | 2.06 ± 0.76 (1.25–2.76) |
+| 10 | MaxFuse (3 seeds) | shared kNN | 1.23 ± 0.14 (1.07–1.34) | 1.70 ± 0.23 (1.54–1.97) |
+| 11 | **Ours (V2, 5 seeds)** | shared kNN | 0.87 ± 0.64 (0.00–1.68) | 1.57 ± 1.24 (0.00–3.17) |
+| 12 | scGLUE (3 seeds) | nearest centroid | 0.69 ± 0.88 (0.00–1.68) | 0.50 ± 0.64 (0.00–1.22) |
+| 13 | **Ours (V2, 5 seeds)** | nearest centroid | 0.27 ± 0.18 (0.00–0.47) | 0.35 ± 0.27 (0.00–0.76) |
+| 14 | Harmony (3 seeds) | shared kNN | 0.02 ± 0.04 (0.00–0.07) | 0.04 ± 0.07 (0.00–0.13) |
+| 15 | PCA, Harmony (nearest centroid), scGLUE (shared kNN), **v3.1 as served** | | 0.00 | 0.00 |
+| — | `v3_seed0` (shipped as v3) | shared kNN | 2.28 | 2.20 |
+| — | `v3_seed0` (shipped as v3) | nearest centroid | 0.40 | 0.68 |
+
+### Paired bootstraps
+
+- **v3.1's best guess against each corrected baseline**
+  (`research/benchmark/baselines_corrected/paired_bootstrap.csv`):
+  - restricted, behind (CI excluding zero):
+    - Harmony with nearest centroid (−24 points);
+    - scGLUE with shared kNN (−11 to −13);
+    - MaxFuse with nearest centroid (−9 to −12), and with shared kNN in 2
+      of 3 seeds;
+    - Seurat (−8.0);
+    - PCA with nearest centroid (−6.7);
+  - restricted, ahead:
+    - scANVI in 8 of 9 runs (+7.5 to +19.7; one nearest-centroid seed is
+      ahead of v3.1 by 4.8);
+    - Harmony with shared kNN (+8.5 to +9.6);
+    - PCA with shared kNN (+3.9);
+    - the correlation baseline (+3.4);
+  - unrestricted: behind or level with every baseline, by up to 9 points.
+- **NB1d's seeds against Track D's three scANVI seeds**
+  (`research/notebook-outputs/nb1d/paired_bootstrap_ours_vs_scanvi.csv`):
+  - restricted, shared kNN: 12 of 15 v3 pairings favour v3 (mean +5.7),
+    and all 15 V2 pairings favour V2 (+18.9);
+  - unrestricted: 12 of 15 favour v3 (+8.1);
+  - `v3_seed0` is behind every scANVI seed when restricted, under both
+    kNN rules.
+
+  Both sides are below chance when restricted.
+
+### What the corrected numbers show
+
+1. **SCoPE2's two classes defeat almost every method.** Only Harmony with
+   nearest centroid is clearly above chance (63.0). Most methods, VivOME's
+   among them, place SCoPE2's PMA-differentiated U-937 macrophages nearest
+   the RNA reference's blood monocytes. v3's macrophage-vs-monocyte AUROC
+   is 0.072: the separation is there, the wrong way round.
+2. **The class-level SCoPE2 results no longer support any ranking claim.**
+   That covers the old "v3 beats scANVI", the "scANVI leads v3" that
+   replaced it, and the "79.8% restricted" headline. With the labels right,
+   no VivOME seed exceeds 51.8 on the two classes (chance 50), and no
+   scANVI run exceeds 43.6.
+3. **SCoPE2's group- and lineage-level figures are unchanged.** For example,
+   v3.1's "myeloid" answers stand. So do its committed share and abstention.
+4. **A U-937 cell line's differentiation states need not match primary
+   blood cells' RNA classes.** SCoPE2 stays a development set for coverage
+   and lineage, not for macrophage against monocyte. The reprocessed
+   SCoPE2 (`benchmark/scope2_reprocess.py`, design labels) will test the
+   same question without the published matrix's imputation and centring.
+5. **The v4 candidate (development only) is behind v3.1 here.** On SCoPE2
+   restricted / unrestricted it scores 32.6 / 0.7, against v3.1's 39.7 /
+   0.0 in the same run (`research/notebook-outputs/v4_pretest/summary.json`).
+   With the swapped labels it had looked 7 points ahead.
+
 ## Restricted regime (candidates = {macrophage, monocyte})
+
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
+Every restricted figure below is 100 minus the true one.
 
 The only regime with real cross-modal ground truth for every candidate
 class — every one of the 1,490 protein query cells is either macrophage or
@@ -149,6 +282,9 @@ correlation baseline (59.59) sit just above them, below scANVI.
 
 ### Ours across five seeds (v3 and V2)
 
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
+
 | Family | Protocol | Accuracy % (mean ± SD, min–max) | Balanced accuracy % (mean ± SD, min–max) |
 |---|---|---|---|
 | v3 | shared kNN rule | 75.32 ± 11.79 (55.03–84.97) | 71.50 ± 10.60 (59.04–88.40) |
@@ -185,6 +321,9 @@ nearest-centroid (79.79%) and pool-first (77.50%) results. And per the
 the v3 architecture in general.
 
 ## Unrestricted regime (all 22 RNA classes as candidates)
+
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
 
 Every RNA class competes for every prediction, even though only two classes
 have any real protein ground truth. Much harder for every method.
@@ -268,6 +407,9 @@ of the five seeds on SCoPE2.)
 
 ## scANVI across seeds
 
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
+
 All 3 seeds (0, 1, 2) complete, same architecture and training budget
 (200 pretrain epochs + 100 fine-tune epochs, early stopping) each time.
 
@@ -349,6 +491,9 @@ step, not the RNA-side training itself.
 
 ## Paired bootstrap: ours minus scANVI
 
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
+
 The tables above compare two *independent* 95% CIs and note whether they
 overlap. A **paired** bootstrap is the statistically correct way to compare
 two methods scored on the identical query set: the same resampled cell
@@ -416,6 +561,9 @@ seeds per family, where SD is a more meaningful summary; both tables above
 use it directly.)
 
 ## Pool-first kNN: what the product would actually deliver
+
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
 
 Every kNN number elsewhere in this document uses **post-hoc masking**: fit
 one kNN classifier on all 22 RNA classes, then restrict the *output*
@@ -919,8 +1067,8 @@ read after each projection
 |---|---|---|---|---|---|---|---|
 | SCoPE2 | NB2's rule | 72.6% | 10.2 / 26.6 / 35.7 | 24.5 / 3.0 / 0.0 | 39.5% | 24 of 152 | 0.011 |
 | SCoPE2 | served | 53.0% | 1.6 / 16.6 / 34.8 | 44.0 / 3.0 / 0.0 | 58.9% | 24 of 24 | 0.407 |
-| SCoPE2, restricted | NB2's rule | 31.2% | 28.2 / 3.0 / 0.0 | 0.0 / 68.8 / 0.0 | 92.3% | 396 of 420 | 0.051 |
-| SCoPE2, restricted | served | 100.0% | 2.1 / 97.9 / 0.0 | 0.0 / 0.0 / 0.0 | 100.0% | 32 of 32 | 0.950 |
+| SCoPE2, restricted | NB2's rule | 31.2% | 28.2 / 3.0 / 0.0 | 0.0 / 68.8 / 0.0 | 17.4% | 396 of 420 | 0.051 |
+| SCoPE2, restricted | served | 100.0% | 2.1 / 97.9 / 0.0 | 0.0 / 0.0 / 0.0 | 97.9% | 32 of 32 | 0.950 |
 | PBMC240 | NB2's rule | 73.9% | 2.1 / 23.1 / 48.7 | 23.9 / 0.0 / 1.7 | lymphoid 93 of 117, myeloid 3 of 5 | 5 of 5 | 0.386 |
 | PBMC240 | served | 73.1% | 2.1 / 22.7 / 48.3 | 24.8 / 0.0 / 1.7 | lymphoid 92 of 117, myeloid 3 of 5 | 5 of 5 | 0.386 |
 | Fulcher 2026 | NB2's rule | 89.4% | 8.5 / 22.7 / 58.2 | 10.2 / 0.0 / 0.4 | 97.2% | 108 of 109 | 0.163 |
@@ -948,9 +1096,11 @@ is its one cell refused for coverage.
   - But 97.9% of cells answer "monocyte/macrophage". That group is exactly
     the two allowed classes, so the answer adds nothing to the restriction
     itself.
-  - The 32 one-class answers are all right.
-  - The best guess (61.3% balanced accuracy) is the same under both
-    rules.
+  - None of the 32 one-class answers is right; every group answer is.
+    Under NB2's rule, 36 of its 420 class answers are right.
+  - The best guess (38.7% balanced accuracy, below the two classes' 50%
+    chance) is the same under both rules.
+  - These use the corrected labels ([bugs-and-fixes.md](bugs-and-fixes.md), 8).
   - Restricted mode was never evaluated in NB2 and is not recommended
     under v3.1 (`docs/service/projection-api.md`).
 
@@ -1063,6 +1213,9 @@ The same inputs for every tool, the ones scANVI's measured-genes arm got
 
 ### SCoPE2
 
+**Superseded:** scored against swapped SCoPE2 labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04).
+
 The rows are in the [restricted](#restricted-regime-candidates--macrophage-monocyte)
 and [unrestricted](#unrestricted-regime-all-22-rna-classes-as-candidates)
 tables above.
@@ -1140,6 +1293,10 @@ commits to is a separate one, which may sit at group or lineage level
 
 ### Paired bootstrap: v3.1's best guess minus each baseline seed
 
+**Its SCoPE2 rows are superseded** (swapped labels; see
+[SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04)).
+Its Fulcher rows stand.
+
 `evaluate.paired_bootstrap_diff`, 2,000 stratified resamples, seed 0, on
 balanced accuracy ([baselines/paired_bootstrap.csv](baselines/paired_bootstrap.csv)).
 Each count is the number of baseline seeds whose 95% CI excludes zero in
@@ -1177,7 +1334,16 @@ the pair of recalls in the table above.
 
 ### What the numbers show
 
-- **On the two PBMC datasets, v3.1 is ahead of every new baseline.** On
+- **These comparisons are superseded.** The baselines here were run with
+  a scaling mismatch, MaxFuse without its dimension-reduction settings and
+  scANVI with a likelihood that cannot fit its inputs (see the correction
+  in "Khoury 2026" below). The corrected reruns are in
+  [baseline-corrections.md](baseline-corrections.md): on Fulcher, Harmony
+  (60.8–63.0) and the correlation baseline (62.1) are ahead of v3.1's 57.9;
+  on SCoPE2 restricted, with its labels corrected, only Harmony with
+  nearest centroid is above chance; on PBMC240, v3.1's lymphoid recall (92.3) is still the
+  highest, with PCA at 88.9.
+- **As run, on the two PBMC datasets, v3.1 is ahead of every new baseline.** On
   Fulcher, every pairing favours v3.1, by 11 to 57 points. On PBMC240 it
   keeps 92.3% lymphoid recall. The tools that call most cells myeloid
   (MaxFuse's and scGLUE's kNN rules, Seurat) keep 2 to 25%.
@@ -1188,6 +1354,8 @@ the pair of recalls in the table above.
   includes zero). So the learned model adds about 11 points over the
   simplest use of the same reference on Fulcher, and nothing measurable on
   SCoPE2.
+- **The SCoPE2 points below used swapped labels** (see
+  [SCoPE2 with its labels corrected](#scope2-with-its-labels-corrected-2026-10-04)).
 - **SCoPE2 unrestricted is a failure for every method here.** Every mean is
   under 5% balanced. The baselines' leads over v3.1 (up to 4.3 points,
   Harmony under the kNN rule) are differences between scores near the
@@ -1198,6 +1366,255 @@ the pair of recalls in the table above.
   safe stand-in.
 - **scANVI stays ahead of v3.1 on SCoPE2 restricted** (77–78% against
   61.3%), as above.
+
+## Khoury 2026: the sealed final evaluation
+
+**What this is.** Khoury 2026 is single-cell proteomics of human PBMCs on
+timsTOF instruments with mTRAQ 2-plex: 1,651 cells from two donors. It was
+sealed on 2026-09-30, so no decision in this project could see it, and it
+was scored once, on 2026-10-03, at the final v3.1 evaluation.
+
+- **Protocol.** [protocol-khoury2026.md](protocol-khoury2026.md), frozen at
+  `6d67d32`, with seven amendments, all committed before unsealing (the
+  last, amendment 7, at `c516d98`; the owner's go-ahead at `74942f2`).
+  Nothing was changed after a label was read.
+- **Scored cells.** All 1,651, in five types: monocyte 434, CD4T 407, CD8T
+  333, B 246, NK 231. Chance balanced accuracy is 20%.
+- **Scoring.** Every model classifies against all 22 reference classes,
+  mapped to the five types or "other" by the protocol's fixed table. "Other"
+  is wrong for every type.
+- **Tables** are in [`khoury2026`](khoury2026/per_seed_scores.csv), written
+  by `benchmark/khoury2026_score.py`.
+
+**Correction, 2026-10-03, after scoring: the baseline comparisons below are
+not fair to the baselines.** A review after the scoring found that the
+scoring code is right, but the baselines and scANVI were run in ways that
+handicap them, on every dataset in this document:
+
+1. **Scaling mismatch.** The RNA reference is z-scored over all its cells, a
+   whole-blood mix (38% neutrophil, 14% erythrocyte); each protein query
+   over its own PBMCs. Zero means a different cell on each side, which pulls
+   PBMCs towards neutrophil and erythrocyte.
+   - Positive control: held-out RNA cells in a PBMC mix lose about 15
+     points of balanced accuracy under this recipe.
+   - With the RNA side z-scored class-balanced (RNA labels only), the
+     correlation baseline scores 62.1 on Fulcher (six types; v3.1 57.9) and
+     49.8 on Khoury (v3.1 56.9). This is a post-hoc diagnostic, not a
+     result.
+2. **MaxFuse was configured without its dimension-reduction settings.** Its
+   CCA was fitted on fewer cell pairs than features, so its embedding
+   carries no cell-type signal. Every MaxFuse number is void.
+3. **scANVI's likelihood mean cannot go below zero, but it was fitted to
+   z-scores,** which are mostly negative. Every scANVI number in this
+   document is affected.
+4. Harmony assumes both sides share cell populations, and does worse here
+   than plain PCA. Seurat CCA rescales the inputs it receives. scGLUE runs
+   without its cluster balancing.
+
+So the claim that v3.1 is ahead of every comparator rests on handicapped
+comparators. The comparisons with v3, and v3.1's own numbers, are
+unaffected. Khoury's rows below stay as scored, under the protocol.
+
+**The corrected reruns (2026-10-04),** with the fixes committed before any
+result was scored ([baseline-corrections.md](baseline-corrections.md)):
+
+- **On Khoury (post-hoc),** PCA with the shared kNN rule scores 62.8 and
+  scANVI 61.5 ± 2.1, against v3.1's best guess at 56.9 and its members
+  alone at 60.0 ± 3.3. Their bootstraps against the members mostly favour
+  the baseline or are inconclusive. Harmony (56.9) is level; the
+  correlation baseline (49.8), scGLUE (38.9), MaxFuse (31.6) and Seurat CCA
+  (29.7) stay behind v3.1.
+- **On Fulcher (development),** Harmony (60.8–63.0) and the correlation
+  baseline (62.1) are ahead of v3.1's 57.9, with CIs favouring them.
+- **So v3.1's best guess is level with the best simple baselines, not
+  ahead.** It stays ahead of MaxFuse, scGLUE and Seurat CCA. What it adds
+  is its committed answers (93.8% committed, 96.7% correct at the stated
+  level), which no baseline here offers.
+
+**Three caveats, stated plainly.**
+
+1. **The labels are not independent ground truth.** The authors clustered
+   this same protein matrix and named the clusters by marker proteins. No
+   RNA reference was involved. A method that recovers the matrix's dominant
+   structure agrees with these labels partly by construction. Fulcher's
+   labels, by contrast, came from an RNA reference.
+2. **The input was already batch-corrected.** The authors applied ComBat
+   before the matrix reached us. We added no correction of our own, as with
+   Fulcher, but unlike Fulcher this input arrived corrected.
+3. **This is a different technology.** Khoury 2026 is timsTOF with mTRAQ
+   2-plex. Fulcher is TMT (Orbitrap, FragPipe), PBMC240 is label-free DIA
+   (DIA-NN), and SCoPE2 is different again.
+
+As everywhere in this document, scANVI is transductive: it trains on the
+Khoury cells themselves, while our encoders are fixed and zero-shot.
+
+**What ran.**
+
+- **v3.1 as served** (release 0.3.0, both service flags on), through
+  `pipeline.embed_query` with no batch correction. Its gate passed before
+  anything was embedded: each of the five V2 members reproduces its NB1d
+  PBMC240 latents at a median cosine of 1.0, and the dev gate passed
+  ([gate.json](khoury2026/gate.json)). It is scored on its best guess, and
+  each member alone under the shared kNN rule.
+- **v3 as served**, under nearest centroid and the shared kNN rule.
+- **scANVI**, three arms, three seeds each. Its headline is
+  `measuredgenes`, the arm with the highest 3-seed mean shared-kNN
+  balanced accuracy. That choice used Khoury's labels, as the protocol
+  allows, and can only favour scANVI.
+- **Baselines** (amendment 3): MaxFuse, scGLUE and Harmony with seeds 0–2
+  under the shared kNN rule; Seurat CCA's native transfer and the
+  correlation baseline once each.
+
+All 20 training runs completed; none diverged and none failed. Two things
+went wrong along the way, both before any label was read:
+
+- **A false start (13:00).** The first launch ran under the system Python,
+  not the project's environment. Every step stopped at import within
+  seconds, before loading any data or writing any record. The queue was
+  restarted in the right environment at 13:05.
+- **MaxFuse seed 0 failed once.** At 17:24 it stopped with "SVD did not
+  converge", inside scikit-learn's CCA during MaxFuse's pivot refinement.
+  Amendment 7 allows a failed run one rerun before any label is read. The
+  rerun, with the same seed and settings, completed at 22:52. MaxFuse's
+  matching is not deterministic (its record says so), which fits one run
+  failing where the next did not. A first launch of the rerun script
+  stopped before Python started, because a path in the script was garbled;
+  nothing ran. Both attempts' logs are kept in
+  `benchmark/results/khoury2026_logs/` (gitignored).
+
+The scorer ran once, from 22:53 to 23:00. Before reading a label it
+checked the gate, the sha256 of all 21 model files, all 20 run records and
+every prediction file's rows and columns. The one rerun the protocol allows,
+to check reproduction only, followed at 23:02. All seven tables matched
+the first run's byte for byte (sha256), and so did the printed summary.
+
+### Balanced accuracy over the five types
+
+Mean ± SD (min–max) over seeds, where a family has more than one run.
+
+| Model | Product rule / native / own rule | Shared kNN rule |
+|---|---|---|
+| **v3.1 as served** | **56.9** (best guess) | |
+| v3.1's members (V2), each alone | | **60.0 ± 3.3** (57.1–65.2) |
+| v3 as served | 40.9 (nearest centroid) | 39.8 |
+| scGLUE | | 42.8 ± 1.7 (41.0–44.3) |
+| Correlation to class mean | 38.7 | |
+| scANVI, `measuredgenes` (**best arm, headline**) | 30.9 ± 3.0 (27.4–32.8) | 36.1 ± 0.8 (35.5–37.0) |
+| scANVI, `cellmedian` | 33.3 ± 2.5 (30.4–34.9) | 30.4 ± 7.4 (22.4–37.1) |
+| scANVI, `as_provided` | 24.1 ± 5.8 (20.3–30.8) | 26.4 ± 2.1 (24.0–27.7) |
+| Seurat CCA | 30.4 (native transfer) | |
+| Harmony | | 27.6 ± 1.3 (26.4–29.0) |
+| MaxFuse | | 0.8 ± 0.3 (0.6–1.2) |
+
+Source: [family_summary.csv](khoury2026/family_summary.csv) and
+[per_seed_scores.csv](khoury2026/per_seed_scores.csv).
+
+### Recall per type
+
+Mean over seeds, %. Lineage recall is the share of lymphoid (CD4T, CD8T,
+NK, B; 1,217 cells) or myeloid (monocyte; 434) cells whose predicted class
+is in the right lineage.
+
+| Model, rule | CD4T | CD8T | NK | B | Monocyte | Lymphoid | Myeloid |
+|---|---|---|---|---|---|---|---|
+| v3.1, best guess | 84.5 | 2.7 | 29.0 | 81.3 | 87.1 | 98.1 | 97.2 |
+| v3.1's members, shared kNN | 63.4 | 37.5 | 22.6 | 79.8 | 97.0 | 96.3 | 97.4 |
+| v3, nearest centroid | 9.1 | 61.0 | 3.5 | 40.7 | 90.3 | 70.3 | 98.2 |
+| scGLUE, shared kNN | 16.6 | 5.8 | 53.7 | 79.3 | 58.7 | 67.5 | 84.8 |
+| Correlation to class mean | 60.2 | 1.2 | 16.0 | 48.4 | 67.5 | 59.0 | 96.5 |
+| scANVI best arm, shared kNN | 27.4 | 3.0 | 12.7 | 45.4 | 91.9 | 47.8 | 97.2 |
+
+### Paired bootstrap
+
+Balanced accuracy difference, 2,000 stratified resamples, seed 0
+([paired_bootstrap.csv](khoury2026/paired_bootstrap.csv)). Every one of the
+77 pairings has a 95% CI that excludes zero, and every one favours the
+first-named model.
+
+| Comparison | Rules | Pairings with CI excluding 0 | Mean difference (range) |
+|---|---|---|---|
+| v3.1 − v3 | best guess vs nearest centroid | 1 of 1, favours v3.1 | +16.0 [+13.6, +18.5] |
+| v3.1 − v3 | shared kNN, each member vs v3 | 5 of 5, favour v3.1 | +20.3 (+17.3 to +25.4) |
+| v3.1 − scANVI best arm | best guess vs native | 3 of 3, favour v3.1 | +26.0 (+24.1 to +29.5) |
+| v3.1 − scANVI best arm | shared kNN | 15 of 15, favour v3.1 | +24.0 (+20.1 to +29.7) |
+| v3 − scANVI best arm | nearest centroid vs native | 3 of 3, favour v3 | +10.0 (+8.1 to +13.5) |
+| v3 − scANVI best arm | shared kNN | 3 of 3, favour v3 | +3.7 (+2.8 to +4.3); lowest CI bound +0.5 |
+| v3.1 − scGLUE | shared kNN | 15 of 15, favour v3.1 | +17.2 (+12.8 to +24.2) |
+| v3.1 − correlation | best guess vs its own rule | 1 of 1, favours v3.1 | +18.3 [+15.9, +20.5] |
+| v3.1 − Seurat CCA | best guess vs native | 1 of 1, favours v3.1 | +26.5 [+24.2, +28.8] |
+| v3.1 − Harmony | shared kNN | 15 of 15, favour v3.1 | +32.4 (+28.1 to +38.8) |
+| v3.1 − MaxFuse | shared kNN | 15 of 15, favour v3.1 | +59.2 (+55.9 to +64.7) |
+
+### v3.1's confident answers
+
+The best guess is what the comparators are scored against. The answer
+v3.1 commits to may sit at group or lineage level, and is judged at the
+level it states, as on Fulcher
+([v31_confident.json](khoury2026/v31_confident.json)).
+
+| Author type | Cells | Committed | Correct at the stated level | Class / group / lineage answers |
+|---|---|---|---|---|
+| CD4T | 407 | 97.8% | 99.7% | 1 / 312 / 85 |
+| CD8T | 333 | 92.8% | 98.7% | 4 / 286 / 19 |
+| NK | 231 | 90.5% | 87.1% | 0 / 26 / 183 |
+| B | 246 | 86.6% | 91.5% | 183 / 18 / 12 |
+| monocyte | 434 | 96.5% | 99.8% | 1 / 5 / 413 |
+| **All 1,651** | 1,651 | 93.8% | **96.7%** | 189 / 647 / 712 |
+
+- **Abstentions:** 5.9% ambiguous between classes, 0.2% out of
+  distribution, 0.2% empty.
+- **Composition:** T cell 38.8%; lineage:myeloid 25.1%; lineage:lymphoid
+  18.0%; B cell 11.4%; abstain 6.2%; monocyte/macrophage 0.4%.
+- **Class-level answers** are 11.5% of all cells, nearly all of them B cells.
+
+### What the numbers show
+
+1. **As run, v3.1 is ahead of every comparator, in every pairing.** The
+   comparators were handicapped (see the correction above), so this
+   overstates its lead over the baselines and scANVI. Its best guess
+   scores 56.9%. The strongest comparators are scGLUE (42.8%), v3 (40.9%),
+   the correlation baseline (38.7%) and scANVI's best arm (36.1%, shared
+   kNN). All 77 bootstrap CIs exclude zero in v3.1's favour, or in v3's
+   against scANVI.
+2. **V2 beats v3 again, now on the sealed test.** Each V2 member alone
+   beats v3 by 17 to 25 points under the shared kNN rule, 5 of 5, as all 50
+   pairings did on Fulcher.
+3. **v3.1 separates lineages almost perfectly, but not T and NK subsets.**
+   Its best guess has lymphoid recall 98.1% and myeloid 97.2%. It calls
+   94% of CD8T cells CD4T, so CD8T recall is 2.7%, and half of NK cells
+   CD8T, so NK recall is 29.0%. The members alone split CD8T somewhat
+   better (37.5%), at CD4T's cost (63.4%). This is Fulcher's weakness
+   again, where V2 called 63% of CD8T cells CD4T. CD4T, B and monocyte are
+   the three types it mostly gets right (81–87%).
+4. **Its committed answers hold, mostly at a coarse level.** v3.1 commits
+   on 93.8% of cells, and 96.7% of those answers are right at the level
+   stated. But T cells mostly stop at "T cell", and monocytes and NK cells
+   at their lineage. NK is the weak type: 87.1% correct when committed.
+5. **v3 is ahead of scANVI here under both rules,** by 10.0 points (product
+   rule vs native) and 3.7 points (shared kNN, the narrowest margin in the
+   table). On Fulcher, scANVI's best arm beat v3 under the shared kNN rule.
+   v3's errors: it calls 74% of CD4T cells CD8T, and sends 66% of NK and
+   49% of B cells to "other". Across all cells, 23% go to "other", mostly
+   neutrophil (10.6%) and macrophage (9.6%).
+6. **scANVI is weak on Khoury in every arm.** Its best is 36.1%, sending
+   38% of cells to "other", mostly neutrophil.
+7. **The integration tools spread widely.** scGLUE is the strongest
+   baseline (42.8%), and the only comparator with real NK recall (53.7%),
+   but it calls half of CD4T cells monocyte. Seurat CCA (30.4%) and Harmony
+   (27.6%) send about half of all cells to "other". **MaxFuse scores
+   0.8%:** its kNN rule calls 91% of cells neutrophil, whatever their type.
+   That is what the same script and settings did on Fulcher (1.36%, over
+   90% "other"), so it is how MaxFuse behaves under the protocol's fixed
+   settings on these sparse queries, not a Khoury-only fault. Nothing was
+   tuned, then or since.
+8. **The simple baseline is again competitive with the learned tools.**
+   Correlation to the class mean (38.7%) beats every scANVI arm, Seurat,
+   Harmony and MaxFuse, and trails v3.1 by 18.3 points.
+
+**What this result does not show.** It is one dataset, two donors and five
+common types, with labels that come from the same protein measurements
+(caveat 1). It says nothing about rare types, other tissues, or how well
+v3.1 separates CD4T from CD8T, which it does not.
 
 ## Two protocols, not a chosen one
 

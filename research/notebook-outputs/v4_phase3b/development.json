@@ -1,0 +1,116 @@
+{
+  "fulcher2026": {
+    "v3.1": {
+      "balanced_accuracy_6_types": 57.94,
+      "recall_CD4T": 72.4,
+      "recall_CD8T": 25.97,
+      "recall_NK": 60.67,
+      "recall_B": 97.06,
+      "recall_monocyte": 85.96,
+      "recall_DC": 5.56,
+      "committed": 89.18
+    },
+    "v4 s=0.0": {
+      "balanced_accuracy_6_types": 65.51,
+      "recall_CD4T": 83.12,
+      "recall_CD8T": 23.76,
+      "recall_NK": 86.0,
+      "recall_B": 100.0,
+      "recall_monocyte": 96.49,
+      "recall_DC": 3.7,
+      "committed": 88.39
+    },
+    "v4 s=0.5": {
+      "balanced_accuracy_6_types": 65.0,
+      "recall_CD4T": 81.82,
+      "recall_CD8T": 24.31,
+      "recall_NK": 84.0,
+      "recall_B": 99.02,
+      "recall_monocyte": 97.15,
+      "recall_DC": 3.7,
+      "committed": 88.31
+    },
+    "v4 s=1.0": {
+      "balanced_accuracy_6_types": 63.49,
+      "recall_CD4T": 74.68,
+      "recall_CD8T": 23.2,
+      "recall_NK": 82.67,
+      "recall_B": 98.04,
+      "recall_monocyte": 94.96,
+      "recall_DC": 7.41,
+      "committed": 88.71
+    }
+  },
+  "pbmc240": {
+    "v3.1": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 73.42
+    },
+    "v4 s=0.0": {
+      "lymphoid_recall": 93.16,
+      "myeloid_recall": 100.0,
+      "committed": 71.31
+    },
+    "v4 s=0.5": {
+      "lymphoid_recall": 90.6,
+      "myeloid_recall": 80.0,
+      "committed": 73.0
+    },
+    "v4 s=1.0": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 74.26
+    }
+  },
+  "scope2": {
+    "v3.1": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "committed": 53.02
+    },
+    "v4 s=0.0": {
+      "balanced_accuracy_unrestricted": 0.68,
+      "committed": 60.4
+    },
+    "v4 s=0.5": {
+      "balanced_accuracy_unrestricted": 0.32,
+      "committed": 60.13
+    },
+    "v4 s=1.0": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "committed": 57.45
+    }
+  },
+  "furtwangler2025": {
+    "v3.1": {
+      "progenitor_share": 0.28,
+      "t_cell_share": 54.51,
+      "median_max_probability": 0.369,
+      "committed": 40.62
+    },
+    "v4 s=0.0": {
+      "progenitor_share": 2.67,
+      "t_cell_share": 42.62,
+      "median_max_probability": 0.2896,
+      "committed": 38.11
+    },
+    "v4 s=0.5": {
+      "progenitor_share": 1.64,
+      "t_cell_share": 49.44,
+      "median_max_probability": 0.2646,
+      "committed": 39.94
+    },
+    "v4 s=1.0": {
+      "progenitor_share": 0.4,
+      "t_cell_share": 55.75,
+      "median_max_probability": 0.2748,
+      "committed": 40.7
+    }
+  },
+  "out_of_reference_auroc": {
+    "v3.1": 0.7443,
+    "v4 s=0.0": 0.8043,
+    "v4 s=0.5": 0.8132,
+    "v4 s=1.0": 0.7846
+  }
+}

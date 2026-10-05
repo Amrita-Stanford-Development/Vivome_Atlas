@@ -1,0 +1,71 @@
+{
+  "dataset": "Khoury 2026",
+  "posthoc": true,
+  "note": "Post-hoc: Khoury's labels were read at its one scoring (2026-10-03). Corrected baselines per research/benchmark/baseline-corrections.md. The protocol's result is research/benchmark/khoury2026/.",
+  "n_scored": 1651,
+  "excluded_runs": {
+    "diverged": [],
+    "failed": [],
+    "missing": []
+  },
+  "ci_excludes_zero_counts": {
+    "v3.1 vs v3 [product rules]": {
+      "pairings": 1,
+      "v3.1": 1
+    },
+    "v3.1 vs v3 [shared_knn]": {
+      "pairings": 5,
+      "V2": 5
+    },
+    "v3.1 vs scANVI_corrected [product rule vs native]": {
+      "pairings": 3,
+      "neither": 2,
+      "v3.1": 1
+    },
+    "v3.1 vs scANVI_corrected [shared_knn]": {
+      "pairings": 15,
+      "scanvi": 7,
+      "neither": 6,
+      "V2": 2
+    },
+    "v3 vs scANVI_corrected [product rule vs native]": {
+      "pairings": 3,
+      "scanvi": 3
+    },
+    "v3 vs scANVI_corrected [shared_knn]": {
+      "pairings": 3,
+      "scanvi": 3
+    },
+    "v3.1 vs correlation [product rule vs correlation]": {
+      "pairings": 1,
+      "v3.1": 1
+    },
+    "v3.1 vs pca [shared_knn]": {
+      "pairings": 5,
+      "pca": 3,
+      "V2": 1,
+      "neither": 1
+    },
+    "v3.1 vs harmony [shared_knn]": {
+      "pairings": 15,
+      "V2": 8,
+      "neither": 7
+    },
+    "v3.1 vs seurat [product rule vs native]": {
+      "pairings": 1,
+      "v3.1": 1
+    },
+    "v3.1 vs maxfuse [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    },
+    "v3.1 vs maxfuse_matching [product rule vs matching]": {
+      "pairings": 3,
+      "v3.1": 3
+    },
+    "v3.1 vs scglue [shared_knn]": {
+      "pairings": 15,
+      "V2": 15
+    }
+  }
+}

@@ -86,7 +86,11 @@ the query dataset using its own complete feature set, not just the 9,002
 shared genes, then smooth the shared feature values along that graph. This
 is the MaxFuse idea, denoise the weakly linked shared features using the
 richer within modality structure. It gave a measured plus 0.026 AUC on
-SCoPE2, and the improvement was monotone across every setting tried.
+SCoPE2 for the first model, and the improvement was monotone across every
+setting tried. That AUC was scored against SCoPE2's labels when they were
+swapped (`research/benchmark/bugs-and-fixes.md`, 8). If it measured
+macrophage against monocyte, the corrected labels reverse its sign, and
+the evidence for this stage needs measuring again.
 
 This step is independent of which encoder architecture won the masking
 comparison. Keep it regardless.

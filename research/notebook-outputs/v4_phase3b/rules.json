@@ -1,0 +1,23 @@
+{
+  "script_sha256": "9ccc2c269607bd8be24209ea26f7e010add06f111941efb94083457791f6d917",
+  "started": "2026-10-04T23:53:43",
+  "candidates": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "select": {
+    "scenario_drop_max": 3.0,
+    "committed_drop_max": 2.0,
+    "tie": 0.5
+  },
+  "go": {
+    "coverage_min": 88.0,
+    "false_abstention_max": 3.0,
+    "correct_min": 94.0,
+    "committed_drop_max": 2.0,
+    "best_guess_gain": 2.0,
+    "scenario_drop_max": 3.0
+  },
+  "eval_seed": 20261004
+}

@@ -5,15 +5,21 @@ the query dataset using its own complete feature set — not just the 9,002
 shared genes — then smooth the shared feature values along that graph. This
 is the MaxFuse idea: denoise the weakly linked shared features using the
 richer within-modality structure the query has but the reference doesn't
-need. Measured +0.026 AUC on SCoPE2, monotone across every setting tried.
+need. The evidence for it: +0.026 zero-shot AUC on SCoPE2 for the first
+model, CrossModalNet (Reference_Projection_v2.ipynb; 0.642 raw, 0.668
+smoothed, service/model/legacy/v2/provenance.json), monotone across every
+setting tried. That AUC was scored against SCoPE2's labels as VivOME then
+had them, swapped (research/benchmark/bugs-and-fixes.md, 8). If it was
+macrophage against monocyte, as v3's was, the corrected labels reverse its
+sign; the notebook is not in this repository, so that is not checked.
 
 The graph is a 50-component PCA of the query's own full feature set
 (L2-normalized), with a per-cell Gaussian kernel over cosine distance to the
 k nearest neighbours (bandwidth = that cell's own k-th neighbour distance).
-This matches VivOME_Prototype_Export.ipynb, the notebook that actually
-measured the +0.026 AUC above and produced the shipped
-support_restricted_assignment.csv numbers (45.37%/31.08% unrestricted,
-86.17%/79.79% restricted). An earlier version of this file built the graph
+This matches VivOME_Prototype_Export.ipynb, the notebook that produced the
+shipped support_restricted_assignment.csv (v3 on SCoPE2, corrected labels:
+0.40%/0.68% unrestricted, 13.83%/20.21% restricted, accuracy/balanced
+accuracy). An earlier version of this file built the graph
 on the raw un-reduced feature set with a softmax kernel, and blended
 `alpha` as the *original*-value weight instead of the *neighbour*-value
 weight — same constants, silently different math, diverging from the

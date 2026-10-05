@@ -358,7 +358,8 @@ class TestBuildModelCard(unittest.TestCase):
         with (NB1D_DIR / "ours_scope2_5seed_family_summary.csv").open(newline="") as handle:
             family = read_family_summary(list(csv.reader(handle)))
         self.assertIn(("v3", "restricted_native_centroid"), family)
-        self.assertAlmostEqual(family[("v3", "restricted_native_centroid")]["bal_max"], 79.7915354403646)
+        # SCoPE2's curated labels (research/benchmark/bugs-and-fixes.md, 8).
+        self.assertAlmostEqual(family[("v3", "restricted_native_centroid")]["bal_max"], 49.21287376338508)
 
 
 if __name__ == "__main__":

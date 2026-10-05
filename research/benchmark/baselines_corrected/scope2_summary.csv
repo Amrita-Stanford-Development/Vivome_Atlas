@@ -1,0 +1,59 @@
+tool,rule,regime,metric,mean,std,min,max,count
+correlation,correlation to class mean,unrestricted,accuracy_pct,4.093959731543624,,4.093959731543624,4.093959731543624,1
+correlation,correlation to class mean,unrestricted,balanced_accuracy_pct,2.7828467153284673,,2.7828467153284673,2.7828467153284673,1
+correlation,correlation to class mean,restricted,accuracy_pct,39.328859060402685,,39.328859060402685,39.328859060402685,1
+correlation,correlation to class mean,restricted,balanced_accuracy_pct,35.349586868724295,,35.349586868724295,35.349586868724295,1
+pca,shared kNN,unrestricted,accuracy_pct,0.0,,0.0,0.0,1
+pca,shared kNN,unrestricted,balanced_accuracy_pct,0.0,,0.0,0.0,1
+pca,shared kNN,restricted,accuracy_pct,51.14093959731544,,51.14093959731544,51.14093959731544,1
+pca,shared kNN,restricted,balanced_accuracy_pct,34.762773722627735,,34.762773722627735,34.762773722627735,1
+pca,nearest centroid,unrestricted,accuracy_pct,0.0,,0.0,0.0,1
+pca,nearest centroid,unrestricted,balanced_accuracy_pct,0.0,,0.0,0.0,1
+pca,nearest centroid,restricted,accuracy_pct,25.57046979865772,,25.57046979865772,25.57046979865772,1
+pca,nearest centroid,restricted,balanced_accuracy_pct,45.42406165474823,,45.42406165474823,45.42406165474823,1
+harmony,shared kNN,unrestricted,accuracy_pct,0.02237136465324385,0.038748340214068845,0.0,0.06711409395973154,3
+harmony,shared kNN,unrestricted,balanced_accuracy_pct,0.04230118443316413,0.07326780065858195,0.0,0.12690355329949238,3
+harmony,shared kNN,restricted,accuracy_pct,43.55704697986577,0.8409371869893729,42.68456375838926,44.36241610738255,3
+harmony,shared kNN,restricted,balanced_accuracy_pct,29.688947348919925,0.5716224491852948,29.09588165548927,30.23639260439438,3
+harmony,nearest centroid,unrestricted,accuracy_pct,0.0,0.0,0.0,0.0,3
+harmony,nearest centroid,unrestricted,balanced_accuracy_pct,0.0,0.0,0.0,0.0,3
+harmony,nearest centroid,restricted,accuracy_pct,52.975391498881436,0.9522951522949803,51.946308724832214,53.8255033557047,3
+harmony,nearest centroid,restricted,balanced_accuracy_pct,62.96863228228784,0.40043112350306115,62.51690503538478,63.279947385972065,3
+seurat,Seurat native transfer,unrestricted,accuracy_pct,2.013422818791946,,2.013422818791946,2.013422818791946,1
+seurat,Seurat native transfer,unrestricted,balanced_accuracy_pct,3.7258234836414834,,3.7258234836414834,3.7258234836414834,1
+seurat,Seurat native transfer,restricted,accuracy_pct,28.926174496644297,,28.926174496644297,28.926174496644297,1
+seurat,Seurat native transfer,restricted,balanced_accuracy_pct,46.729686168438995,,46.729686168438995,46.729686168438995,1
+maxfuse,shared kNN,unrestricted,accuracy_pct,1.2304250559284116,0.13970912748094852,1.0738255033557047,1.342281879194631,3
+maxfuse,shared kNN,unrestricted,balanced_accuracy_pct,1.7033945928588192,0.23177030781588578,1.54275816073215,1.9690892585868318,3
+maxfuse,shared kNN,restricted,accuracy_pct,50.15659955257271,1.2086749583212584,48.9261744966443,51.34228187919463,3
+maxfuse,shared kNN,restricted,balanced_accuracy_pct,42.38455173095212,1.6109634349924404,40.6540627663122,43.84077772425803,3
+maxfuse,nearest centroid,unrestricted,accuracy_pct,5.794183445190157,0.4366716173589065,5.369127516778524,6.241610738255034,3
+maxfuse,nearest centroid,unrestricted,balanced_accuracy_pct,3.9927532204478364,0.3025616244632018,3.7309181518396377,4.323983845270295,3
+maxfuse,nearest centroid,restricted,accuracy_pct,50.3579418344519,1.2011985466361388,49.328859060402685,51.67785234899329,3
+maxfuse,nearest centroid,restricted,balanced_accuracy_pct,49.186628502970336,1.595499240615331,47.9181333135722,50.977944718218524,3
+maxfuse,MaxFuse matching,unrestricted,accuracy_pct,1.8344519015659955,0.33780019844611864,1.476510067114094,2.1476510067114094,3
+maxfuse,MaxFuse matching,unrestricted,balanced_accuracy_pct,2.059789790902466,0.76260231162704,1.2474989810663604,2.7603838600911477,3
+scglue,shared kNN,unrestricted,accuracy_pct,0.0,0.0,0.0,0.0,3
+scglue,shared kNN,unrestricted,balanced_accuracy_pct,0.0,0.0,0.0,0.0,3
+scglue,shared kNN,restricted,accuracy_pct,73.75838926174497,0.29254355325776,73.55704697986577,74.09395973154362,3
+scglue,shared kNN,restricted,balanced_accuracy_pct,50.76003186483382,1.0124480068823043,50.0,51.909342695172114,3
+scglue,nearest centroid,unrestricted,accuracy_pct,0.6935123042505594,0.8759182080739103,0.0,1.6778523489932886,3
+scglue,nearest centroid,unrestricted,balanced_accuracy_pct,0.4985055639952079,0.6411635596185455,0.0,1.2217940642483975,3
+scglue,nearest centroid,restricted,accuracy_pct,48.74720357941834,2.9783336448577367,45.57046979865772,51.47651006711409,3
+scglue,nearest centroid,restricted,balanced_accuracy_pct,40.12599268837921,4.18861224463915,35.44684871614361,43.525603023453996,3
+scanvi,shared kNN,unrestricted,accuracy_pct,3.042505592841163,1.4147124611867896,1.476510067114094,4.228187919463087,3
+scanvi,shared kNN,unrestricted,balanced_accuracy_pct,2.1223152642434573,1.0067192604753952,1.0036496350364963,2.955370706584164,3
+scanvi,shared kNN,restricted,accuracy_pct,32.12527964205817,6.050079032605047,27.583892617449663,38.993288590604024,3
+scanvi,shared kNN,restricted,balanced_accuracy_pct,22.324681660429558,4.282770061729283,18.993849346029865,27.155739375301046,3
+scanvi,nearest centroid,unrestricted,accuracy_pct,8.859060402684564,3.213777152701443,5.906040268456376,12.281879194630871,3
+scanvi,nearest centroid,unrestricted,balanced_accuracy_pct,6.048992182000074,2.179103616539411,4.014598540145985,8.348540145985401,3
+scanvi,nearest centroid,restricted,accuracy_pct,35.21252796420581,10.034473557685963,25.100671140939596,45.16778523489933,3
+scanvi,nearest centroid,restricted,balanced_accuracy_pct,33.09342077636568,9.643790893107738,24.540090407202936,43.545286968765055,3
+scanvi,scANVI classifier,unrestricted,accuracy_pct,8.120805369127517,4.772184922048638,4.3624161073825505,13.48993288590604,3
+scanvi,scANVI classifier,unrestricted,balanced_accuracy_pct,5.547167364481826,3.2304607355543054,2.9653284671532845,9.16970802919708,3
+scanvi,scANVI classifier,restricted,accuracy_pct,34.116331096196866,2.248405621342682,31.67785234899329,36.10738255033557,3
+scanvi,scANVI classifier,restricted,balanced_accuracy_pct,27.390016920473773,3.033358717309299,23.89005706028382,29.25821631034866,3
+v3.1 (served),best guess (served),unrestricted,accuracy_pct,0.0,,0.0,0.0,1
+v3.1 (served),best guess (served),unrestricted,balanced_accuracy_pct,0.0,,0.0,0.0,1
+v3.1 (served),best guess (served),restricted,accuracy_pct,25.369127516778523,,25.369127516778523,25.369127516778523,1
+v3.1 (served),best guess (served),restricted,balanced_accuracy_pct,38.70326799807329,,38.70326799807329,38.70326799807329,1

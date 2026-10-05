@@ -68,6 +68,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/pipeline/__init__.py` — package marker
 - `service/pipeline/pipeline.py` — orchestrator: runs Stages 1–8 and builds the response; the v3 / v3.1 component switch (`components_for`)
 - `service/pipeline/ensemble.py` — v3.1, T1 NB2's ensemble: five members' tempered softmax averaged, Mondrian sets, the out-of-distribution mean, hierarchical answers and the best guess
+- `service/pipeline/fusion.py` — v4: v3.1's answers unchanged (sets, abstention, levels, coordinates), with a best guess fused from the V2 members on a class-balanced reference (smoothed and unsmoothed query mixed) and a correlation-to-class-mean term over each cell's observed genes, used only in uploads where it agrees with v3.1 often enough; the guess joins v3.1's sets beside v3.1's own; served on request since its evaluation passed (v3.1 stays the default)
 - `service/pipeline/alignment.py` — Stage 1: map the upload onto the 9,002-gene feature space; value-scale and mask conventions
 - `service/pipeline/smoothing.py` — Stage 2: fuzzy neighbourhood smoothing of sparse proteomics profiles
 - `service/pipeline/encoder.py` — Stage 3: the module-pooling reference encoder and loading it; `encode_with_hidden` and the classifier head, for v3.1
@@ -93,14 +94,19 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/fixtures/golden_scope2_50.json` — frozen full response for 50 SCoPE2 cells (golden regression)
 - `service/tests/fixtures/golden_pbmc240_50.json` — frozen full response for 50 PBMC240 cells (golden regression)
 - `service/tests/fixtures/v3_full_*.json` — four full v3 responses frozen before the pipeline version switch (Track C), in both label-space modes
+- `service/tests/fixtures/v31_full_*.json` — four full v3.1 responses frozen before v4 work began (2026-10-04), in both label-space modes
+- `service/tests/fixtures/v4_full_*.json` — four full v4 responses frozen when its evaluation passed (2026-10-05), in both label-space modes
 - `service/tests/test_app.py` — HTTP endpoint: request parsing, error responses, response schema
 - `service/tests/test_pipeline.py` — end-to-end wiring on the real production checkpoint and reference
 - `service/tests/test_e2e_real_export.py` — regression guard: the real SCoPE2 export still reproduces the notebook's own outputs
 - `service/tests/test_golden_fixtures.py` — full responses must match the frozen golden fixtures
-- `service/tests/test_pipeline_versions.py` — Tracks C and F: v3 unchanged against the frozen responses, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space
+- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1 and v4 unchanged against their frozen responses, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
 - `service/tests/test_ensemble.py` — v3.1 against NB2's own `nb2_core.py`: synthetic inputs, the full path on real PBMC240 cells, both service flags, spec validation
 - `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
+- `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
+- `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
+- `service/tests/test_scope2_labels.py` — every copy of SCoPE2's labels must match the curated source (`research/benchmark/scope2_labels/corrected_labels.csv`)
 - `service/tests/test_alignment.py` — Stage 1 tests
 - `service/tests/test_smoothing.py` — Stage 2 tests
 - `service/tests/test_encoder.py` — Stage 3 tests, including the TorchScript-vs-eager equivalence check
@@ -125,6 +131,11 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v3_1/MANIFEST.json` — sha256, size and origin of every v3.1 file, checked when the service loads
 - `service/model/v3_1/members/V2_seed*_reference_latent_f16.npy` — each member's latent for every reference cell (85,233 × 128, float16), `reference_metadata.csv` row order
 - `service/model/v3_1/members/V2_seed*_centroids.npy` — each member's class centroids (22 × 128), class position order
+- `service/model/v4/spec_v4.json` — v4's settings: members and temperatures (v3.1's), answers from v3.1, the best guess's fusion weight, correlation temperature, smoothed share and agreement threshold, the evaluation's status
+- `service/model/v4/MANIFEST.json` — sha256, size and description of every v4 file, checked when v4 loads (its members and latents are checked by v3.1's)
+- `service/model/v4/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA (9,002 genes)
+- `service/model/v4/class_means_cb.npy` — class-balanced z-scored RNA class means (22 × 9,002), the correlation term's reference
+- `service/model/v4/members/V2_seed*_centroids_cb.npy` — each member's class centroids from the reference encoded under class-balanced statistics (22 × 128)
 - `service/model/runtime/reference_model.pt` — the production v3 encoder checkpoint (Git LFS, ~94 MB)
 - `service/model/runtime/reference_embedding.npy` — every RNA reference cell in the 128-d latent space (85,233 × 128)
 - `service/model/runtime/reference_centroids.npy` — one latent centroid per class (22 × 128), in `class_idx` order
@@ -195,8 +206,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/fulcher2026_v31.py` — Fulcher 2026 (development data) through v3.1: committed share, correctness at the stated level per author type, composition, best guess
 - `benchmark/notebook_convention.py` — NB2's own query parse (the "notebook convention"), to reproduce its development numbers; not the product parser
 - `benchmark/v31_dev_gate.py` — Track F gate: the served v3.1 pipeline, under NB2's rule, must reproduce NB2's development table within 0.5 points; writes its record
+- `benchmark/v4_dev_gate.py` — Track G's gate for v4: on the development datasets, the served best guess must equal an independent recomputation cell by cell, the agreement gate must decide as the service does, the answers must be v3.1's with the guess joined, and the figures must match Phase 3c's record; writes its record
 - `benchmark/v31_service_flags.py` — v3.1's two service flags off (NB2's rule) and on (served), on SCoPE2, PBMC240 and Fulcher
 - `benchmark/scope2_5seed_paired.py` — Track D's paired bootstrap, ten ours-seeds × three scANVI seeds × three regimes, on SCoPE2
+- `benchmark/scope2_5seed_scores.py` — SCoPE2 under NB1d's ten model-seeds with the corrected labels: Track D's per-seed table and NB1d's own SCoPE2 figures, each reproduced with the previous labels first
+- `benchmark/scope2_labels.py` — SCoPE2's corrected cell labels, from the authors' curated object, with the evidence; `--apply` puts them into every copy and recomputes v3's SCoPE2 evidence tables
+- `benchmark/scope2_reprocess.py` — SCoPE2 rebuilt from its peptide-level evidence by SCoPE2's own filters, missing values kept missing (Track G, Phase 1)
 - `benchmark/baselines_inputs.py` — Track D extension: what every baseline receives per dataset, gene-fair (measured genes only, z-scored over observed values); Khoury only when unsealed
 - `benchmark/baselines_run.py` — Track D extension: one baseline (MaxFuse, scGLUE, Harmony + kNN, Seurat CCA, correlation to class mean), one dataset, one seed; saves embeddings, per-cell predictions and a record (completed, diverged or failed)
 - `benchmark/seurat_cca_transfer.R` — Seurat CCA label transfer, called by `baselines_run.py`
@@ -213,6 +228,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/build_manifest.py` — generates `web/data/atlas_manifest.json` from the metadata and model evidence
 - `scripts/export_atlas_coordinates.py` — writes the site's atlas coordinates from the served v3.1 model, so projected cells land on the displayed atlas
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
+- `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, and optionally the R2-backed large files)
@@ -241,7 +257,7 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `research/README.md` — index of plans, progress records and notebook outputs
 - `research/implementation-plan.md` — the Nature Communications plan: the phases (0–6) the manifest's pending records refer to
-- `research/roadmap.md` — the v3.1 / v4 plan: dated revisions (latest 2026-10-01), notebook tracks (T1, T2), code tracks (A2–F), go/no-go gates, file ownership, track prompts
+- `research/roadmap.md` — the v3.1 / v4 / v5 plan: dated revisions (latest 2026-10-04), notebook tracks (T1, T2), code tracks (A2–F), go/no-go gates, file ownership, track prompts
 - `research/todo.md` — progress against the roadmap, current verified numbers, open decisions, changelog
 - `research/working-context.md` — hand-off for a new session: how the work got here, owner decisions and standing instructions, the Track D extension's status, what's next
 - `research/notebook-run-history.md` — every notebook run, in order, and what each one found (17 entries, through T1 NB2)
@@ -255,7 +271,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/bugs-and-fixes.md` — every real bug hit while building the benchmark, including one in the production service
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
-- `research/benchmark/protocol-khoury2026.md` — the SEALED Khoury 2026 final test set: label-free facts recorded at sealing, and the protocol for its one scoring at the final v3.1 evaluation
+- `research/benchmark/protocol-khoury2026.md` — the Khoury 2026 final test set, sealed until its one scoring at the final v3.1 evaluation (2026-10-03): label-free facts recorded at sealing, the protocol and its seven amendments
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
 - `research/benchmark/fulcher2026/family_summary.csv` — Fulcher 2026: mean, SD, min and max of every metric per family and rule
@@ -268,6 +284,31 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/fulcher2026/exploratory_5type_per_seed.csv` — Fulcher 2026, exploratory (added after results): 5-type score with CD4T and CD8T merged into T, per model-seed and rule
 - `research/benchmark/fulcher2026/exploratory_5type_summary.csv` — Fulcher 2026, exploratory (added after results): the 5-type score's mean, SD, min and max per family and rule
 - `research/benchmark/fulcher2026/v31_development.json` — Fulcher 2026 through v3.1 (development data): shares, composition, per author type correctness at the stated level, best guess
+- `research/benchmark/khoury2026/gate.json` — Khoury 2026 step 1 gate record: each v3.1 member's PBMC240 reproduction cosines, the dev gate, both service flags, and the sha256 of the 21 model files the scorer checks
+- `research/benchmark/khoury2026/per_seed_scores.csv` — Khoury 2026 final evaluation: each model-seed and rule: balanced accuracy over five types, per-type and lineage recall
+- `research/benchmark/khoury2026/family_summary.csv` — Khoury 2026 final evaluation: mean, SD, min and max of every metric per family and rule
+- `research/benchmark/khoury2026/predicted_composition.csv` — Khoury 2026 final evaluation: predicted share of each type and each reference class, per model-seed and rule
+- `research/benchmark/khoury2026/confusion.csv` — Khoury 2026 final evaluation: 5 true × 6 predicted type counts, per model-seed and rule
+- `research/benchmark/khoury2026/paired_bootstrap.csv` — Khoury 2026 final evaluation: paired bootstrap CI for every pairing the protocol names (v3.1, v3, scANVI's headline arm, the five baselines)
+- `research/benchmark/khoury2026/v31_confident.json` — Khoury 2026 final evaluation: v3.1's committed answers, their correctness at the stated level per type, abstentions and composition
+- `research/benchmark/khoury2026/summary.json` — Khoury 2026 final evaluation: scANVI headline arm, diverged and failed runs (none), count of CIs excluding zero per comparison
+- `research/benchmark/khoury2026_posthoc/per_seed_scores.csv` — Khoury 2026, post-hoc: the corrected baselines beside v3.1 and v3, each run and rule: balanced accuracy, per-type and lineage recall
+- `research/benchmark/khoury2026_posthoc/family_summary.csv` — Khoury 2026, post-hoc: mean, SD, min and max of every metric per family and rule
+- `research/benchmark/khoury2026_posthoc/predicted_composition.csv` — Khoury 2026, post-hoc: predicted share of each type and reference class, per run and rule
+- `research/benchmark/khoury2026_posthoc/confusion.csv` — Khoury 2026, post-hoc: 5 true × 6 predicted type counts, per run and rule
+- `research/benchmark/khoury2026_posthoc/paired_bootstrap.csv` — Khoury 2026, post-hoc: paired bootstrap CI for v3.1 and v3 against every corrected baseline
+- `research/benchmark/khoury2026_posthoc/setup_checks.csv` — Khoury 2026, post-hoc: each corrected run's RNA-side checks (held-out RNA kNN, query mixing)
+- `research/benchmark/khoury2026_posthoc/summary.json` — Khoury 2026, post-hoc: excluded runs and count of CIs excluding zero per comparison
+- `research/benchmark/baselines_corrected/inputs.csv` — corrected baselines: what every tool received per dataset, and its settings
+- `research/benchmark/baselines_corrected/setup_checks.csv` — corrected baselines: each run's status and RNA-side checks (held-out RNA kNN, query mixing, MaxFuse matched share, scANVI input shift and epochs)
+- `research/benchmark/baselines_corrected/scope2_per_seed.csv` — corrected baselines, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
+- `research/benchmark/baselines_corrected/scope2_summary.csv` — corrected baselines, SCoPE2: mean, SD, min and max per tool, rule and regime
+- `research/benchmark/baselines_corrected/pbmc240_per_seed.csv` — corrected baselines, PBMC240: lymphoid and myeloid recall and lineage composition per tool, seed and rule
+- `research/benchmark/baselines_corrected/pbmc240_summary.csv` — corrected baselines, PBMC240: mean, SD, min and max per tool and rule
+- `research/benchmark/baselines_corrected/fulcher2026_per_seed.csv` — corrected baselines, Fulcher 2026: balanced accuracy over six types, recall per type and lineage, composition
+- `research/benchmark/baselines_corrected/fulcher2026_summary.csv` — corrected baselines, Fulcher 2026: mean, SD, min and max per tool and rule
+- `research/benchmark/baselines_corrected/v31_confident.csv` — v3.1's confident answers per development dataset (unchanged from the Track D tables)
+- `research/benchmark/baselines_corrected/paired_bootstrap.csv` — corrected baselines: v3.1's best guess against each baseline run and rule, SCoPE2 and Fulcher
 - `research/benchmark/furtwangler2025/v31_ood_check.json` — v3.1 as served on 2,506 CD34+ progenitors: answers, best guesses, and out-of-distribution and committed counts per cluster and FACS gate
 - `research/benchmark/baselines/inputs.csv` — Track D extension: what every baseline received per dataset (cells, genes, scaling, missing values, settings)
 - `research/benchmark/baselines/scope2_per_seed.csv` — Track D extension, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
@@ -279,6 +320,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/baselines/v31_confident.csv` — Track D extension: v3.1's confident answers per dataset (committed share, correct at the stated level)
 - `research/benchmark/baselines/paired_bootstrap.csv` — Track D extension: v3.1's best guess minus each baseline seed and rule, with 95% CI, on SCoPE2 (both regimes) and Fulcher
 - `research/benchmark/v31_dev_gate.json` — the Track F gate's record: every NB2 and v3.1 figure compared, SCoPE2 correctness, PBMC240 through the service parser
+- `research/benchmark/v4_dev_gate.json` — the v4 gate's record: per-cell agreement, the agreement gate's decisions, the answers check and every figure against Phase 3c
+- `research/benchmark/scope2_labels/corrected_labels.csv` — SCoPE2's 1,490 cells: VivOME and SCoPE2 ids, the curated cell type, the previous (swapped) label and the corrected one
+- `research/benchmark/scope2_labels/check.json` — the evidence for the correction: curated and previous counts, agreement, marker shifts under each labelling, source sha256s
 - `research/benchmark/v31_service_flags.json` — v3.1's service flags off and on: shares, composition, correctness and one-class answers per dataset
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
@@ -332,6 +376,43 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb3c/real_data_rejection.csv` — T1 NB3c: OOD rejection on the CD34+ progenitors, Fulcher, PBMC240 and SCoPE2 under the chosen rule (reported only)
 - `research/notebook-outputs/nb3c/furtwangler_rejection_by_cluster.csv` — T1 NB3c: the chosen rule's rejection of the CD34+ progenitors per author cluster
 - `research/notebooks/t1_nb3c_ood_calibration.py` — T1 NB3c as a script: the OOD threshold recalibrated on test-split cells the encoders never saw, with class- and upload-diversity-aware schemes, judged on a fresh evaluation suite; reuses NB3b's code
+- `research/notebooks/v4_pretest.py` — v4 pre-test: the adopted inference-only design (smoothing off, class-balanced reference, encoder + correlation fusion), its fusion setting chosen on NB1's calibration suite, the evaluation suite scored once, development data reported
+- `research/notebooks/v4_calibration.py` — v4 Phase 3: conformal sets and the out-of-distribution threshold refitted on the fused probability, on NB3c's never-seen cells, judged once against pre-set go criteria (NO GO, 2026-10-04); the record of the first v4 design, which Phase 3b replaced
+- `research/notebooks/v4_phase3b.py` — v4 Phase 3b: v3.1's answers with the fused best guess; its smoothed share chosen on NB3c's calibration suite, then scored once on a fresh evaluation suite against pre-set go criteria (NO GO, 2026-10-05); the record of the second v4 design, run against `fusion.py` before Phase 3c
+- `research/notebooks/v4_phase3c.py` — v4 Phase 3c: v3.1's answers with the fused best guess gated by upload agreement, one rule fixed from its exploration; checks the service reproduces the explored rule on NB3c's calibration suite, then scores a fresh evaluation suite once against pre-set go criteria
+- `research/notebook-outputs/v4_calibration/summary.json` — v4 Phase 3: v4 and v3.1 on the evaluation suite, per scenario, the checks and the verdict
+- `research/notebook-outputs/v4_calibration/rules.json` — v4 Phase 3: the script's sha256 and start time, written before anything was computed
+- `research/notebook-outputs/v4_calibration/spec_block.json` — v4 Phase 3: the fitted conformal and out-of-distribution blocks (not applied: NO GO)
+- `research/notebook-outputs/v4_calibration/eval_by_scenario.csv` — v4 Phase 3: every evaluation metric per method and scenario group
+- `research/notebook-outputs/v4_calibration/eval_per_class_coverage.csv` — v4 Phase 3: conformal coverage per true class, v4 and v3.1
+- `research/notebook-outputs/v4_calibration/eval_cells.csv.gz` — v4 Phase 3: per evaluation cell, coverage, abstention, answer level, correctness and best guess, v4 and v3.1
+- `research/notebook-outputs/v4_phase3b/rules.json` — v4 Phase 3b: the script's sha256 and start time, written before anything was computed
+- `research/notebook-outputs/v4_phase3b/selection.json` — v4 Phase 3b: each candidate on the calibration suite, eligibility, the tie and the choice
+- `research/notebook-outputs/v4_phase3b/selection_cells.csv.gz` — v4 Phase 3b: per calibration-suite cell, answer, correctness and best guess for v3.1 and each candidate
+- `research/notebook-outputs/v4_phase3b/development.json` — v4 Phase 3b: v3.1 and each candidate on SCoPE2, PBMC240, Fulcher and Furtwängler, and the out-of-reference AUROC
+- `research/notebook-outputs/v4_phase3b/development_predictions.csv.gz` — v4 Phase 3b: every development cell's best guess, v3.1 and each candidate
+- `research/notebook-outputs/v4_phase3b/eval_suite.json` — v4 Phase 3b: the fresh evaluation suite (240 uploads from NB3c's te_eval cells), written before it was scored
+- `research/notebook-outputs/v4_phase3b/summary.json` — v4 Phase 3b: v4 and v3.1 on the fresh evaluation suite, per scenario, the checks and the verdict
+- `research/notebook-outputs/v4_phase3b/eval_by_scenario.csv` — v4 Phase 3b: every evaluation metric per method and scenario group
+- `research/notebook-outputs/v4_phase3b/eval_cells.csv.gz` — v4 Phase 3b: per evaluation cell, coverage, abstention, answer level, correctness and best guess, v4 and v3.1
+- `research/notebook-outputs/v4_phase3b/spec_block.json` — v4 Phase 3b: the chosen smoothed share and the verdict (failed)
+- `research/notebook-outputs/v4_phase3c/exploration.json` — v4 Phase 3c's exploration on NB3c's calibration cells and the development data: the finalists, the rejected remedies, upload agreement by scenario, the chosen rule and the figures the run must reproduce
+- `research/notebook-outputs/v4_phase3c/exploration_single_type_suite.json` — v4 Phase 3c's exploration: the 60 extra single-type uploads drawn from NB3c's calibration cells
+- `research/notebook-outputs/v4_phase3c/rules.json` — v4 Phase 3c: the script's and the exploration record's sha256 and the start time, written before anything was computed
+- `research/notebook-outputs/v4_phase3c/calibration_check.json` — v4 Phase 3c: the implementation check, the service's figures on the calibration suite against the exploration's
+- `research/notebook-outputs/v4_phase3c/calibration_uploads.csv` — v4 Phase 3c: each calibration upload's agreement and whether the correlation term was used
+- `research/notebook-outputs/v4_phase3c/development.json` — v4 Phase 3c: v3.1 and v4 on SCoPE2, PBMC240, Fulcher and Furtwängler, each upload's agreement, and the out-of-reference AUROC
+- `research/notebook-outputs/v4_phase3c/development_predictions.csv.gz` — v4 Phase 3c: every development cell's best guess, v3.1 and v4
+- `research/notebook-outputs/v4_phase3c/eval_suite.json` — v4 Phase 3c: the fresh evaluation suite (240 uploads from NB3c's te_eval cells), written before it was scored
+- `research/notebook-outputs/v4_phase3c/eval_uploads.csv` — v4 Phase 3c: each evaluation upload's agreement and whether the correlation term was used
+- `research/notebook-outputs/v4_phase3c/eval_cells.csv.gz` — v4 Phase 3c: per evaluation cell, coverage, abstention, answer level, correctness and best guess, v4 and v3.1
+- `research/notebook-outputs/v4_phase3c/eval_by_scenario.csv` — v4 Phase 3c: every evaluation metric per method and scenario group
+- `research/notebook-outputs/v4_phase3c/summary.json` — v4 Phase 3c: v4 and v3.1 on the fresh evaluation suite, per scenario, the checks and the verdict
+- `research/notebook-outputs/v4_phase3c/spec_block.json` — v4 Phase 3c: the verdict, for `scripts/build_v4_bundle.py --spec-only`
+- `research/notebook-outputs/v4_pretest/summary.json` — v4 pre-test: the chosen fusion setting, evaluation-suite results, development results under both references, out-of-reference AUROC
+- `research/notebook-outputs/v4_pretest/selection_calibration_suite.csv` — v4 pre-test: the fusion grid on NB1's calibration suite, per scenario (the choice)
+- `research/notebook-outputs/v4_pretest/evaluation_suite.csv` — v4 pre-test: v3.1, the encoder alone and the v4 candidate on NB1's evaluation suite, scored once
+- `research/notebook-outputs/v4_pretest/development_predictions_v4_candidate.csv` — v4 pre-test: the candidate's best guess per cell on SCoPE2, PBMC240, Fulcher and Furtwängler (Phase 2's gate reference)
 - `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)
 - `research/notebook-outputs/nb2/nb2_summary.json` — NB2: gates, the six choices, the evaluation-suite figures for v3.1 and v3, the negative control, the development datasets

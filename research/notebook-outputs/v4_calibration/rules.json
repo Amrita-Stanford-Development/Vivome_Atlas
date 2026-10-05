@@ -1,0 +1,13 @@
+{
+  "script_sha256": "8ae467a211a26b3d9c25f1824df1295139d7f38a3b4d1641c998e4bcc0375dad",
+  "started": "2026-10-04T14:46:33",
+  "go": {
+    "coverage_min": 88.0,
+    "false_abstention_max": 3.0,
+    "correct_min": 94.0,
+    "best_guess_gain": 2.0,
+    "scenario_drop_max": 3.0
+  },
+  "alpha": 0.1,
+  "min_n": 50
+}

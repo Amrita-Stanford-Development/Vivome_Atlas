@@ -268,6 +268,134 @@ cell out of 85,233, in the single largest RNA class (32,197 neutrophils
 originally), has no material effect on any result — but every arm should
 still see the identical set, and now they do.
 
+## 8. SCoPE2's labels were swapped: every macrophage was called a monocyte, and every monocyte a macrophage (fixed 2026-10-04)
+
+**The most consequential data bug found so far.** Every SCoPE2 figure at
+class level that VivOME reported before 2026-10-04 was scored against
+swapped labels. That includes the headline "79.8% restricted balanced
+accuracy" and Track D's ranking against scANVI.
+
+**How it was found.** Track G, Phase 1 rebuilt SCoPE2 from its
+peptide-level evidence (`benchmark/scope2_reprocess.py`), taking labels
+from the experimental design. The design gave a majority of macrophages,
+814 to 314. VivOME's copy had a majority of monocytes, 1,096 to 394.
+
+**The evidence**, recorded by `benchmark/scope2_labels.py` in
+`research/benchmark/scope2_labels/check.json`:
+
+1. **The authors' curated object.** Bioconductor SingleCellMultiModal's
+   `macrophage_protein` (ExperimentHub EH4694) has 1,096 macrophages and
+   394 monocytes. Matched cell by cell through SCoPE2's own ids
+   (`blood_cellid_mapping.tsv`, `i…` to `Prot_Blood_N`), VivOME's label
+   agrees on 0 of 1,490 cells: every label is the other class.
+2. **Biology, on the matrix VivOME used.** Under the old labels, 1 of 12
+   macrophage markers (lysosomal and adhesion proteins: CTSB, CTSD,
+   LAMP1, LGALS3 and others) was higher in "macrophages". Under the
+   corrected labels it is 11 of 12, and 12 of 12 on the reprocessed
+   evidence with design labels. Proliferation proteins (MCM2–7, PCNA and
+   others) were higher in "macrophages" in 10 of 12; corrected, they are
+   higher in monocytes in 10 of 12. U-937 monocytes divide;
+   PMA-differentiated macrophages do not.
+3. **The counts**, as above.
+
+**Where the swap came from** is not known. The Drive file
+`Data/scProteomics/blood_joint_cells_by_proteins.tsv` already had it, and
+it predates this repository. Every VivOME copy descends from it. The
+original is kept, by its sha256, as
+`data/incoming/SCoPE2_raw/blood_joint_cells_by_proteins.swapped_labels_original.tsv`,
+the evidence `benchmark/scope2_labels.py` reads. Every working copy on the
+PC is corrected, the Drive file included.
+
+**What the swap does to each figure.**
+
+- **Restricted (macrophage or monocyte only).** Every label is swapped and
+  every answer is one of the two classes, so accuracy and balanced accuracy
+  become exactly 100 minus the old value. Each class's recall becomes 100
+  minus the other class's. The rescored tables confirm this to the last
+  digit.
+- **Unrestricted (22 classes), centroid cosines, the macrophage-vs-monocyte
+  AUROC.** These change in no simple way, and were recomputed.
+- **Unchanged:**
+  - correctness at group level, since both classes sit in "monocyte/macrophage";
+  - correctness at lineage level;
+  - the shares of committed, abstained and out-of-distribution cells;
+  - everything on other datasets.
+
+**What changes in the story.** On SCoPE2's two-class task, nearly every
+method is at or below chance once the labels are right:
+
+- **v3** (served until v3.1): restricted balanced accuracy 79.8 → 20.2;
+  accuracy 86.2 → 13.8. Unrestricted 45.4 / 31.1 → 0.4 / 0.7. AUROC 0.928
+  → 0.072.
+- **v3.1 as served:** restricted balanced accuracy 61.3 → 38.7.
+- **scANVI** (corrected setup, shared kNN): 77.7 → 22.3.
+- **The best method:** Harmony with nearest centroid, 37.0 → 63.0.
+
+With the old labels, a method that sent U-937 macrophages towards the
+RNA "monocyte" class looked right. In fact it was wrong.
+
+Read correctly, VivOME's encoders do separate the two U-937 states. v3's
+AUROC is 0.072, so ranked the other way round it would be 0.928. But the
+encoders place PMA-differentiated U-937 cells nearer the reference's blood
+monocytes than its macrophages. A cell line's differentiation axis need
+not match primary cells' RNA classes, so SCoPE2's class-level task says
+little about real blood. Its group- and lineage-level figures stand.
+
+**The fix.**
+
+- `python -m benchmark.scope2_labels --apply` puts the curated labels into
+  every copy. It changes only the label fields, so every other byte stays
+  as it was. The copies:
+  - `web/data/metadata_PROT_lat128.csv`;
+  - `web/data/atlas_PROT_lat128.csv` and its Parquet copy (with pyarrow,
+    installed for this; the other columns read back identical);
+  - `service/model/source/app_export/atlas_PROT_v3_meta.csv`, whose sha256
+    the app_export README now records;
+  - `research/notebook-outputs/nb1d/scope2_cell_ids.csv`;
+  - the local `benchmark/results/prot_meta.csv` and
+    `data/incoming/NB1d/embeddings/scope2_cell_ids.csv`.
+- The same command recomputes v3's three SCoPE2 evidence tables in
+  `service/model/evidence/v3_tables/` from v3's saved latents, after
+  reproducing their old values with the old labels.
+- `service/tests/test_scope2_labels.py` pins every copy to
+  `research/benchmark/scope2_labels/corrected_labels.csv`.
+- **Rescored:**
+  - the Track D and corrected baseline tables (`benchmark.baselines_score`,
+    `benchmark.baselines_corrected_score`);
+  - NB1d's SCoPE2 tables (`benchmark/scope2_5seed_scores.py`, which first
+    reproduces each with the old labels) and the paired bootstrap;
+  - the v3.1 and v4 records (`v31_service_flags`, `v31_dev_gate`,
+    `v4_pretest`, `v4_dev_gate`, `v31_evidence`);
+  - the manifest.
+- **Not recomputed:**
+  - **NB1d's smoothing-off rows.** NB1d did not save those latents, so
+    their unrestricted figure is left empty. Their restricted figures
+    follow from the swap.
+  - **NB1b's and NB1c's tables** (Colab runs) are corrected in place.
+    Their restricted figures follow from the swap, and so does the
+    macrophage recall (100 minus the monocyte recall, which is twice the
+    balanced accuracy minus the macrophage recall). Unrestricted figures
+    are filled only where the same model's corrected value is known, and
+    left empty otherwise.
+  - **Figures printed in notebooks, and NB2's**, are marked as superseded.
+  - **The local result folders on Drive** were treated the same way:
+    copies of corrected tables replaced, and ReferenceProjection_v2's truth
+    columns corrected. The outputs of models trained on SCoPE2's labels
+    (CrossModalNet's `RNA - Prot/`, `RNA - Meta/`, `ReferenceProjection_v2/`)
+    learned the swapped labels and cannot be corrected.
+    `drive/Data/Results/SCOPE2_LABELS.md` and `notebooks/SCOPE2_LABELS.md`
+    say so.
+- **Simulation suites.** NB1's "SCoPE2-like" simulated uploads copied the
+  swapped composition (394 macrophages to 1,096 monocytes, NB1's
+  `sim_generator.py` on Drive). Those uploads carry correct RNA labels of their
+  own, so their scores stand. They model the composition the other way
+  round from SCoPE2.
+
+**Lesson.** When a dataset is first added, check its labels against an
+independent source: the authors' own object, or a handful of markers. It
+takes minutes. Here it happened only because a reprocessing step took
+labels from the experimental design and the counts came out reversed.
+
 ## A benign, session-long red herring: Apple Accelerate BLAS warnings
 
 Nearly every matrix multiplication run this session — PCA, Harmony,

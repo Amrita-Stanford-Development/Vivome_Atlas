@@ -38,7 +38,7 @@
           "lineage_correct": 427,
           "correct_when_committed": 39.5
         },
-        "best_guess_balanced_accuracy_pct": 1.08
+        "best_guess_balanced_accuracy_pct": 0.0
       },
       "served": {
         "cells": 1490,
@@ -71,7 +71,7 @@
           "class_correct": 0,
           "correct_when_committed": 58.86
         },
-        "best_guess_balanced_accuracy_pct": 1.08
+        "best_guess_balanced_accuracy_pct": 0.0
       }
     },
     "SCoPE2, restricted": {
@@ -95,12 +95,12 @@
         "class_answer_min_confidence": 0.051,
         "correct_at_stated_level": {
           "class": 420,
-          "class_correct": 384,
+          "class_correct": 36,
           "group": 45,
           "group_correct": 45,
-          "correct_when_committed": 92.26
+          "correct_when_committed": 17.42
         },
-        "best_guess_balanced_accuracy_pct": 61.3
+        "best_guess_balanced_accuracy_pct": 38.7
       },
       "served": {
         "cells": 1490,
@@ -123,10 +123,10 @@
           "group": 1458,
           "group_correct": 1458,
           "class": 32,
-          "class_correct": 32,
-          "correct_when_committed": 100.0
+          "class_correct": 0,
+          "correct_when_committed": 97.85
         },
-        "best_guess_balanced_accuracy_pct": 61.3
+        "best_guess_balanced_accuracy_pct": 38.7
       }
     },
     "PBMC240": {

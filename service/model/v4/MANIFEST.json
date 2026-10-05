@@ -1,0 +1,46 @@
+{
+  "source": "scripts/build_v4_bundle.py; members and reference latents are v3.1's (service/model/v3_1/MANIFEST.json)",
+  "self_check_median_cosine": 1.0,
+  "files": {
+    "class_balanced_stats.npz": {
+      "sha256": "56a9e19b4d1e87ea385d7bdcb6179cee5f7aed0b7e78239f84ae5969be696390",
+      "bytes": 72510,
+      "what": "per-gene class-balanced mean and SD over all reference cells"
+    },
+    "class_means_cb.npy": {
+      "sha256": "b2dfc9cbf97181d47289443980facd53a964a1ab61a75852e8debfb285e1620f",
+      "bytes": 792304,
+      "what": "class-balanced z-scored RNA class means, class position order (22 x 9,002)"
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "5c9e4c018ce270fb4883be5e92740d4ce98214877837652b4ad9fd8f2a3d49ee",
+      "bytes": 11392,
+      "what": "V2_batchgene_aug_seed0.pt centroids under class-balanced statistics"
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "9b2537aa72f2ff61df62444383c618e955537f795cc8be65317453f00fe8a0d8",
+      "bytes": 11392,
+      "what": "V2_batchgene_aug_seed1.pt centroids under class-balanced statistics"
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "7cff91d72462402272dd017d63b3a71028db037c804f48a25405b4bc677ee486",
+      "bytes": 11392,
+      "what": "V2_batchgene_aug_seed2.pt centroids under class-balanced statistics"
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "a068ea28b6c2b52380f4a15ede650b9496caf6b0bb18d53ea061e14402c549c8",
+      "bytes": 11392,
+      "what": "V2_batchgene_aug_seed3.pt centroids under class-balanced statistics"
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "9fd79fe934e2d7a6f9d95a0b89e102d9040a649e8ada8019a78e066c312713d7",
+      "bytes": 11392,
+      "what": "V2_batchgene_aug_seed4.pt centroids under class-balanced statistics"
+    },
+    "spec_v4.json": {
+      "sha256": "70034bfd6d852ec31977d8648c03c834d4bfdbf9f3122b1bb45d189863075b3b",
+      "bytes": 4784,
+      "what": "v4's settings; its answers are v3.1's"
+    }
+  }
+}

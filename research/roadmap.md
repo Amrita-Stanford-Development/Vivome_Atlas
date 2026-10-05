@@ -1,7 +1,8 @@
 # VivOME Improvement Roadmap: Notebooks and Claude Code Tracks
 
 Plan for taking VivOME v3 to a deployable, state of the art v3.1 (Tier 1,
-reference frozen) and then v4 (Tier 2, retrained). Notebooks run on Colab Pro
+reference frozen) and then v5 (Tier 2, retrained; called v4 until 2026-10-04).
+Notebooks run on Colab Pro
 because they need the RNA h5ad and a GPU. Claude Code tracks run in the repo in
 parallel, on separate branches, and never wait on each other except where a
 dependency is stated.
@@ -12,6 +13,29 @@ service code (`pipeline.py`, `assignment.py`, `alignment.py`, `smoothing.py`,
 `config.py`, `app.py`, `evaluate.py`).
 
 ---
+
+## Revision, 2026-10-04
+
+Where it conflicts with older sections below, this section wins.
+
+- **The fair re-benchmark** (`research/benchmark/baseline-corrections.md`) put
+  v3.1's best guess level with simple, correctly scaled baselines, not ahead.
+- **v4 now names an inference-only release (Track G, `integration/v4`):**
+  - the frozen V2 members, with query smoothing off;
+  - a reference re-encoded with class-balanced statistics;
+  - fusion with a correlation-to-class-mean term over each cell's observed
+    genes;
+  - recalibrated abstention.
+
+  In-memory pre-tests on development data: Fulcher 57.9 → 67.3 and the RNA
+  simulation 56.1 → 60.5 (`research/notebook-run-history.md`, entry 20).
+- **The Tier 2 retraining below is renamed v5.** Retraining on blood plus
+  tissue atlases, and with naive protein-like augmentation, both failed in the
+  pre-tests. v5 should start from paired RNA–protein bridge data.
+- **SCoPE2 is reprocessed from its peptide-level evidence** as part of v4.0,
+  with missing values kept missing.
+- **A fresh sealed external test is needed before any "beats the baselines"
+  claim,** because Khoury's labels have now been read.
 
 ## Revision, 2026-10-01
 
@@ -26,7 +50,9 @@ Where it conflicts with older sections below, this section wins.
    - Fulcher 2026, held out: 57.3 ± 2.2 against 42.3 ± 3.4 balanced accuracy over six
      types, V2 ahead in all 50 seed pairings.
    - v3's shipped SCoPE2 numbers (79.8 restricted) were the best of its five seeds;
-     the five seed mean is 63.3 ± 10.8.
+     the five seed mean is 63.3 ± 10.8. (Scored against swapped labels: corrected,
+     the shipped seed is the lowest, 20.2 against 36.7 ± 10.8;
+     `research/benchmark/bugs-and-fixes.md`, 8.)
 2. **SCoPE2 cannot test a real upload.** Its published matrix is centred per protein
    and per cell, so absolute abundance is gone. It stays in the benchmark as a fair
    comparison between methods, but it is never used to choose.
@@ -100,16 +126,20 @@ Where it conflicts with older sections below, this section wins.
 
 ### Track status
 
-A2 done. B done. C done. D: scANVI multi seed and gene fairness done; other baselines
-open. E: Fulcher and Khoury registered. F: done, released as 0.3.0 (DOI and label
-stability open).
+A2 done. B done. C done. D: done, scANVI and five more baselines on every dataset.
+E: Fulcher and Khoury registered; Khoury scored once (2026-10-03). F: done, released
+as 0.3.0 (DOI and label stability open).
 
 ### Order from here
 
 1. v3.1 release: done (0.3.0). Open: DOI, label stability definition.
-2. Amend the Khoury protocol with all baselines (quick, while sealed).
-3. In parallel: Track D baselines (compute heavy) and T1 NB3b.
-4. v3.1 final evaluation: Khoury unsealed once, Fulcher rescored once.
+2. Amend the Khoury protocol with all baselines (quick, while sealed): done,
+   amendments 3 to 7.
+3. In parallel: Track D baselines (compute heavy) and T1 NB3b: done (NB3b and
+   NB3c NO GO).
+4. v3.1 final evaluation: done, 2026-10-03. Khoury unsealed and scored once
+   (`research/benchmark/results.md`). Fulcher was not rescored: it has been a
+   development dataset since 2026-09-30.
 5. Tier 2 (NB6 to NB8): wider reference, retraining.
 
 ---
@@ -199,7 +229,7 @@ E   Tier 2 data ingestion  ─────────►  T2 NB6  external data
                                        T2 NB7  wider reference, Cell Ontology hierarchy
                                           │
                                           ▼
-                                       T2 NB8  v4 training (partial DA + SSL + bridge)
+                                       T2 NB8  v5 training (partial DA + SSL + bridge)
                                           │
                                           ▼
                                    D   final multi dataset benchmark for the paper
@@ -283,7 +313,9 @@ SCoPE2 and PBMC240 as confirmation, including the modality probe; export.
 
 **Go / no go.** Single cell type uploads up at least 15 points, SCoPE2 like up at
 least 5, oracle restricted and broad compositions not down more than 1, real
-SCoPE2 restricted not below 77.8, V0 reproducing 31.08 / 79.79 exactly. On GO,
+SCoPE2 restricted not below 77.8, V0 reproducing 31.08 / 79.79 exactly (figures
+against SCoPE2's swapped labels, `research/benchmark/bugs-and-fixes.md`, 8; the
+reproduction checks stand, the 77.8 floor does not). On GO,
 the new encoder is exported with `variant_config.json`; on NO GO, v3 stays.
 
 ---
@@ -411,7 +443,7 @@ leave one dataset out without touching evaluation labels.
 
 ---
 
-## 6. Tier 2 notebooks (retraining, v4)
+## 6. Tier 2 notebooks (retraining, v5)
 
 ### T2 NB6, `T2_NB6_External_Data_Build.ipynb`
 
@@ -518,7 +550,9 @@ after, never to choose.
    notebook preprocessed file (their upstream preprocessing differs, it included
    imputation, so 1.0 is not expected; the point is no anti correlated cells).
    Report lineage accuracy on weak labels before and after, as a score only.
-   SCoPE2 must still reproduce 45.37 / 31.08 and 86.17 / 79.79 exactly.
+   SCoPE2 must still reproduce 45.37 / 31.08 and 86.17 / 79.79 exactly, with the
+   export's labels (swapped; 0.40 / 0.68 and 13.83 / 20.21 with the curated ones,
+   `research/benchmark/bugs-and-fixes.md`, 8).
 
 6. Golden fixtures on 50 PBMC240 cells (with missing values), alongside SCoPE2.
 
@@ -693,6 +727,6 @@ the owner signs off.
 | Canonical mask and value convention | A2 with T1 NB1b ablation | Per cell mask, graph on z scored values, log2 for linear input |
 | Were TSP14, TSP21, TSP25 in production training | T1 NB1 | Assume yes, use v3 test split |
 | Per request calibration vs coverage binned parameters | T1 NB2 | Per request if latency allows |
-| Flat vs hierarchical label space | T1 NB2 (v3.1), T2 NB7 (v4) | Flat with the six pair fallback |
+| Flat vs hierarchical label space | T1 NB2 (v3.1), T2 NB7 (v5) | Flat with the six pair fallback |
 | Whether the service ships RNA calibration cells | T1 NB2 / NB3 | Yes, float16, a few thousand cells |
 | Adapt mode offered publicly | T1 NB5 | No |

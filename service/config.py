@@ -108,7 +108,11 @@ ATLAS_VERSION = "0.3.0"
 # threshold and hierarchical answers. v3.1 is the default (owner sign-off,
 # Track F); v3 stays selectable. The bundle the service loads decides which
 # pipeline runs.
-PIPELINE_VERSIONS = ("v3", "v3.1")
+# "v4" (Track G, service/pipeline/fusion.py): v3.1's answers with a better best
+# guess. Its evaluation passed (Phase 3c), so it is served when selected with
+# VIVOME_PIPELINE_VERSION=v4; v3.1 stays the default until the owner signs off
+# a release. A spec whose evaluation has not passed answers 503.
+PIPELINE_VERSIONS = ("v3", "v3.1", "v4")
 PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
@@ -124,6 +128,12 @@ V31_MEMBERS_DIR = V31_DIR / "members"
 # metadata_*_lat128.csv are generated from this same member
 # (scripts/export_atlas_coordinates.py).
 V31_COORDINATE_MEMBER = "V2_batchgene_aug_seed4.pt"
+
+# v4's files: only what v4 changes (scripts/build_v4_bundle.py). Its members and
+# reference latents are v3.1's, checked by v3.1's MANIFEST.
+V4_DIR = _env_path("VIVOME_V4_DIR", MODEL_DIR / "v4")
+V4_SPEC_PATH = V4_DIR / "spec_v4.json"
+V4_MANIFEST_PATH = V4_DIR / "MANIFEST.json"
 
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration
 # slice. Brief Stage 5: must be a random subset, never confidence-filtered.
@@ -168,7 +178,7 @@ LINEAR_SCALE_MEDIAN_THRESHOLD = 50.0
 # Stage 2 — fuzzy smoothing neighbourhood size within the query's own full
 # feature set (brief Stage 2, the MaxFuse idea). k, alpha, and the PCA
 # dimension match VivOME_Prototype_Export.ipynb exactly — that notebook is
-# what measured the +0.026 AUC on SCoPE2 cited in smoothing.py, and what
+# what smoothing.py's SCoPE2 evidence refers to, and what
 # produced service/model/evidence/v3_tables/support_restricted_assignment.csv.
 SMOOTHING_K = 15
 SMOOTHING_ALPHA = 0.6
@@ -195,8 +205,11 @@ SHIPPED_PROPERTIES = (
 #
 # Only these classes have any protein cells anywhere in the reference
 # (service/model/evidence/v3_tables/support_restricted_assignment.csv): restricting
-# assignment to them moves balanced accuracy from 31.08% (all 22 classes
-# candidate) to 79.79% (these 2 candidate) on real SCoPE2 data.
+# assignment to them moves v3's balanced accuracy on real SCoPE2 data from
+# 0.68% (all 22 classes candidate) to 20.21% (these 2 candidate), still far
+# below the two classes' 50% chance: v3 calls most SCoPE2 macrophages
+# monocytes. (31.08% and 79.79% until 2026-10-04, against swapped labels;
+# research/benchmark/bugs-and-fixes.md, 8.)
 # Opt-in per request since 2026-09-30 (restrict_to_supported_classes), not
 # the default: a SCoPE2 upload is only ever macrophage/monocyte, but a PBMC
 # upload restricted this way has no correct label for its lymphoid cells.

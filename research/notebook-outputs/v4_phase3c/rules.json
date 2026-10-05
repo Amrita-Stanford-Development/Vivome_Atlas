@@ -1,0 +1,21 @@
+{
+  "script_sha256": "2ae56060c9fc85754e3bb7242c87de3079b90fdcd71a0119ec2c245a79752ebc",
+  "exploration_sha256": "e2ea79d20517b63a1c4944f312889816a39bf20b256127d0db6b9dbfd6c7fe8d",
+  "started": "2026-10-05T10:50:40",
+  "rule": {
+    "smoothed_share": 0.5,
+    "agreement_threshold": 0.4,
+    "fusion_weight": 0.7,
+    "correlation_temperature": 0.05
+  },
+  "check_tolerance": 0.01,
+  "go": {
+    "coverage": "not below v3.1",
+    "false_abstention_max": 3.0,
+    "correct_min": 94.0,
+    "committed_drop_max": 2.0,
+    "best_guess_gain": 2.0,
+    "scenario_drop_max": 3.0
+  },
+  "eval_seed": 20261005
+}

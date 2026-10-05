@@ -1,0 +1,74 @@
+{
+  "smoothed_share": 0.5,
+  "agreement_threshold": 0.4,
+  "datasets": {
+    "pbmc240": {
+      "cells": 237,
+      "upload_agreement": 0.3671,
+      "correlation_term": "flat",
+      "best_guess_agreement_pct": 100.0,
+      "committed_sets_not_v31_with_the_guess": 0,
+      "v31_abstentions_differing": 0,
+      "figures": [
+        {
+          "figure": "lymphoid_recall",
+          "v4": 92.31,
+          "phase3c": 92.31,
+          "ok": true
+        }
+      ]
+    },
+    "scope2": {
+      "cells": 1490,
+      "upload_agreement": 0.1711,
+      "correlation_term": "flat",
+      "best_guess_agreement_pct": 100.0,
+      "committed_sets_not_v31_with_the_guess": 0,
+      "v31_abstentions_differing": 0,
+      "figures": [
+        {
+          "figure": "balanced_accuracy_unrestricted",
+          "v4": 0.0,
+          "phase3c": 0.0,
+          "ok": true
+        }
+      ]
+    },
+    "fulcher2026": {
+      "cells": 1275,
+      "upload_agreement": 0.4227,
+      "correlation_term": "used",
+      "best_guess_agreement_pct": 100.0,
+      "committed_sets_not_v31_with_the_guess": 0,
+      "v31_abstentions_differing": 0,
+      "figures": [
+        {
+          "figure": "balanced_accuracy_6_types",
+          "v4": 65.0,
+          "phase3c": 65.0,
+          "ok": true
+        }
+      ]
+    },
+    "furtwangler2025": {
+      "cells": 2506,
+      "upload_agreement": 0.178,
+      "correlation_term": "flat",
+      "best_guess_agreement_pct": 100.0,
+      "committed_sets_not_v31_with_the_guess": 0,
+      "v31_abstentions_differing": 0,
+      "figures": []
+    }
+  },
+  "out_of_reference_auroc": {
+    "v4": 0.8289,
+    "phase3c": 0.8289,
+    "ok": true
+  },
+  "misses": [],
+  "passed": true,
+  "tolerance": 0.5,
+  "auroc_tolerance": 0.01,
+  "min_agreement_pct": 99.5,
+  "khoury2026": "not read"
+}

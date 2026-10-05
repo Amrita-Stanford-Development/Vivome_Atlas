@@ -1,0 +1,41 @@
+{
+  "conformal": {
+    "type": "mondrian",
+    "alpha": 0.1,
+    "score": "1 - fused probability of the class (LAC)",
+    "qhat_by_class": {
+      "b cell": 0.9799013648550776,
+      "basophil": 0.9642693269491015,
+      "cd4-positive, alpha-beta t cell": 0.8572697540841219,
+      "cd8-positive, alpha-beta t cell": 0.9750044336785143,
+      "classical monocyte": 0.9802030679230764,
+      "common myeloid progenitor": 0.9642693269491015,
+      "erythrocyte": 0.6922029006261634,
+      "hematopoietic precursor cell": 0.9642693269491015,
+      "hematopoietic stem cell": 0.9642693269491015,
+      "intermediate monocyte": 0.9532023514395421,
+      "macrophage": 0.9320648104532429,
+      "mature nk t cell": 0.9634424367949597,
+      "monocyte": 0.952971846495543,
+      "myeloid dendritic cell": 0.9642693269491015,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 0.6564208568793064,
+      "natural killer cell": 0.9556783667385459,
+      "neutrophil": 0.9818360668603784,
+      "non-classical monocyte": 0.9664186594440795,
+      "plasma cell": 0.6830249741384196,
+      "plasmacytoid dendritic cell": 0.9642693269491015,
+      "platelet": 0.2751293435265225,
+      "regulatory t cell": 0.9642693269491015
+    },
+    "marginal_qhat": 0.9642693269491015,
+    "set_rule": "p >= 1 - qhat; the best guess joins non-empty sets (service flag)",
+    "calibrated_on": "simulated RNA uploads (T1 NB3c calibration suite, test-split cells the encoders never saw)",
+    "min_n": 50,
+    "n_calibration_cells": 66881
+  },
+  "ood": {
+    "score": "max cosine to any reference cell, mean over members",
+    "threshold": 0.77228182554245,
+    "fit": "1st percentile of in-distribution calibration-suite cells (NB3c te_cal), train and validation reference index"
+  }
+}

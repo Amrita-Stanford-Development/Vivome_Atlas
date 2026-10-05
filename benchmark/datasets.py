@@ -116,6 +116,55 @@ def load_fulcher2026_benchmark_matrix(variant: str) -> tuple[np.ndarray, list[st
     return df.reindex(columns=genes).to_numpy(dtype=np.float32), raw.cell_ids, genes
 
 
+_SCOPE2_RAW = REPO / "data" / "incoming" / "SCoPE2_raw"
+
+# Development data: SCoPE2 rebuilt from its peptide-level evidence with missing
+# values kept missing (benchmark/scope2_reprocess.py). Labels come from the
+# experimental design (U-937 monocytes, sc_u; macrophages, sc_m0).
+SCOPE2_REPROCESSED = {
+    "name": "SCoPE2 (reprocessed): Specht et al. 2021, from MassIVE MSV000084660's evidence",
+    "role": "development data (Track G)",
+    "files": {
+        "evidence": _SCOPE2_RAW / "ev_SCoPE2_runs.csv",
+        "annotation": _SCOPE2_RAW / "annotation.csv",
+        "batch": _SCOPE2_RAW / "batch.csv",
+        "matrix": _SCOPE2_RAW / "derived" / "scope2_reprocessed.csv",
+        "cells": _SCOPE2_RAW / "derived" / "scope2_reprocessed_cells.csv",
+    },
+    "sha256": {
+        "evidence": "25440b00a3ed3fd25ef7e5119152f6f2cb7f6afb51dda832a614234a64e8e939",
+        "annotation": "165fa85b7c7e26f2e0b28bca5281218837e6d038d30a52a314049c7bc52963ec",
+        "batch": "e0996e2762263da66fbcc485c7cb6a3a9690a87d6485fce47d931dd484d9d0e9",
+        # benchmark/scope2_reprocess.py's outputs, as first built on 2026-10-04
+        "matrix": "113dadcab3b6908aa8ac16c9e002075857aacc4f6a9a258d8c7252ccfedf5c31",
+        "cells": "b9aa439d9126caede16128f7b31589c82fb04f09f24c8a5dd2514bcd8be2e21a",
+    },
+    "label_source": "the experimental design (annotation.csv): sc_m0 macrophage, sc_u monocyte",
+    "types": ("macrophage", "monocyte"),
+}
+
+
+def load_scope2_reprocessed_upload() -> alignment.RawMatrix:
+    """The reprocessed SCoPE2 cells as the service would receive them (its own parser)."""
+    _check_hashes(SCOPE2_REPROCESSED)
+    return alignment.parse_matrix_csv(SCOPE2_REPROCESSED["files"]["matrix"].read_text())
+
+
+def load_scope2_reprocessed_labels() -> pd.DataFrame:
+    """cell_id, label (macrophage or monocyte), in upload order. Scoring only."""
+    _check_hashes(SCOPE2_REPROCESSED)
+    cells = pd.read_csv(SCOPE2_REPROCESSED["files"]["cells"], dtype={"cell_id": str})
+    return cells[["cell_id", "label"]]
+
+
+def load_scope2_reprocessed_benchmark_matrix() -> tuple[np.ndarray, list[str], list[str]]:
+    """(cells x benchmark_gene_space()), NaN where unobserved, for the baselines."""
+    raw = load_scope2_reprocessed_upload()
+    genes = benchmark_gene_space()
+    df = pd.DataFrame(raw.values.T, index=raw.cell_ids, columns=[g.upper() for g in raw.gene_names])
+    return df.reindex(columns=genes).to_numpy(dtype=np.float32), raw.cell_ids, genes
+
+
 _KHOURY = REPO / "data" / "incoming" / "Khoury2026"
 
 # SEALED: the final test set. Scored exactly once, at the final v3.1

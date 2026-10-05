@@ -1,0 +1,4 @@
+method,lineage,mixed,narrow,pbmc,scope2,single,ALL
+"encoder (smoothing off, class-balanced)",56.84,70.07,59.76,72.17,65.35,26.81,58.74
+"v3.1 as served (smoothing on, whole-blood stats)",55.24,62.69,57.25,61.93,68.86,32.98,56.12
+v4 candidate (fusion),58.04,72.45,61.72,74.32,65.49,26.85,60.31

@@ -147,8 +147,8 @@ Notes on the zips' contents:
   the scorer, which overwrite the committed full tables. Restore them
   straight after unzipping with `git checkout -- research/benchmark/baselines/`,
   and never commit the zip's versions.
-- Khoury 2026 in `data/incoming/` is **sealed**: nothing embeds or scores it
-  before the final v3.1 evaluation
+- Khoury 2026 in `data/incoming/` was scored once, at the final v3.1
+  evaluation (2026-10-03). Its result is final: don't rerun its scoring
   ([protocol](../research/benchmark/protocol-khoury2026.md)).
 
 ## 4. Python environment (Miniforge Prompt)
@@ -189,6 +189,10 @@ Two packages need extra steps on Windows:
   CMAKE_ARGS="-DOPENBLAS_LIB=$(cygpath -m "$CONDA_PREFIX")/Library/lib/openblas.lib" pip install --no-cache-dir harmonypy==2.0.2
   ```
   Check with `python -c "import harmonypy"`.
+- **pyarrow**, for the Parquet copy of the protein atlas
+  (`benchmark/scope2_labels.py --apply`, `service/tests/test_scope2_labels.py`,
+  which skips its Parquet check without it):
+  `python -m pip install pyarrow` (25.0.1 here).
 
 ## 5. Restore and verify (Miniforge Prompt, in the repository)
 

@@ -1,0 +1,462 @@
+{
+  "what": "Phase 3c's exploration, after Phase 3b's NO GO (research/notebook-run-history.md, entries 23 and 24). NB3c's calibration cells (its 240-upload calibration suite, plus 60 single-type uploads drawn from te_cal, 4 per class with at least 20 cells, seed 20261005) and the development data (SCoPE2, PBMC240, Fulcher 2026, Furtwangler 2025) only; te_eval and Khoury 2026 not read. Per-cell ingredients were cached once through the service's own code and reproduced Phase 3b's recorded best guesses on all 66,881 calibration cells and its development figures exactly.",
+  "metrics": "calibration_suite: mean per-upload best-guess balanced accuracy (overall) and its difference from v3.1 (gain, per scenario group); extra_single_type_uploads: the same difference on the 60 extra uploads, and over all 95 single-type uploads its mean per class, worst class, and p_fail, the share of 4,000 resampled 35-upload single-type suites more than 3 points below v3.1; answers: cells with at least 200 observed genes, the guess joined beside v3.1's in v3.1's sets",
+  "v31": {
+    "answers_calibration_suite": {
+      "coverage": 85.69,
+      "committed": 87.69,
+      "correct_when_committed": 97.11
+    },
+    "development": {
+      "fulcher": 57.94,
+      "fulcher_cells": 68.35,
+      "pbmc_lymphoid": 92.31,
+      "scope2_dev": 0.0,
+      "auroc": 0.744
+    }
+  },
+  "finalists": {
+    "A: s=1, correlation in every upload": {
+      "calibration_suite": {
+        "overall": 64.19,
+        "gain": 5.61,
+        "lineage": 4.17,
+        "mixed": 7.91,
+        "narrow": 6.37,
+        "pbmc": 10.69,
+        "scope2": 3.79,
+        "single": -0.53
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": -0.44,
+        "class_mean": -0.26,
+        "worst_class": -14.1,
+        "p_fail": 0.006
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.3,
+        "committed": 87.26,
+        "correct_when_committed": 97.26
+      },
+      "development": {
+        "fulcher": 63.49,
+        "fulcher_cells": 74.58,
+        "pbmc_lymphoid": 92.31,
+        "scope2_dev": 0.0,
+        "auroc": 0.785
+      }
+    },
+    "Phase 3b: s=0.5, correlation in every upload": {
+      "calibration_suite": {
+        "overall": 64.1,
+        "gain": 5.53,
+        "lineage": 4.28,
+        "mixed": 9.76,
+        "narrow": 5.03,
+        "pbmc": 12.38,
+        "scope2": 1.99,
+        "single": -2.1
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": -2.08,
+        "class_mean": -2.13,
+        "worst_class": -22.3,
+        "p_fail": 0.287
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.36,
+        "committed": 86.46,
+        "correct_when_committed": 97.37
+      },
+      "development": {
+        "fulcher": 65.0,
+        "fulcher_cells": 77.38,
+        "pbmc_lymphoid": 90.6,
+        "scope2_dev": 0.32,
+        "auroc": 0.813
+      }
+    },
+    "B: s=0.5, agreement gate 0.35": {
+      "calibration_suite": {
+        "overall": 63.94,
+        "gain": 5.36,
+        "lineage": 2.48,
+        "mixed": 9.76,
+        "narrow": 3.99,
+        "pbmc": 12.38,
+        "scope2": 4.39,
+        "single": -0.61
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": 0.14,
+        "class_mean": 0.26,
+        "worst_class": -8.9,
+        "p_fail": 0.001
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.14,
+        "committed": 87.31,
+        "correct_when_committed": 97.28
+      },
+      "development": {
+        "fulcher": 65.0,
+        "fulcher_cells": 77.38,
+        "pbmc_lymphoid": 90.6,
+        "scope2_dev": 0.0,
+        "auroc": 0.829
+      }
+    },
+    "B: s=0.5, agreement gate 0.4 (chosen)": {
+      "calibration_suite": {
+        "overall": 64.0,
+        "gain": 5.42,
+        "lineage": 2.48,
+        "mixed": 9.7,
+        "narrow": 4.25,
+        "pbmc": 12.38,
+        "scope2": 4.39,
+        "single": -0.61
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": 0.3,
+        "class_mean": 0.37,
+        "worst_class": -8.9,
+        "p_fail": 0.001
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.14,
+        "committed": 87.35,
+        "correct_when_committed": 97.27
+      },
+      "development": {
+        "fulcher": 65.0,
+        "fulcher_cells": 77.38,
+        "pbmc_lymphoid": 92.31,
+        "scope2_dev": 0.0,
+        "auroc": 0.829
+      }
+    },
+    "C: s=1, agreement gate 0.35": {
+      "calibration_suite": {
+        "overall": 63.75,
+        "gain": 5.18,
+        "lineage": 2.49,
+        "mixed": 7.91,
+        "narrow": 5.3,
+        "pbmc": 10.69,
+        "scope2": 4.39,
+        "single": -0.05
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": 0.59,
+        "class_mean": 0.73,
+        "worst_class": -6.7,
+        "p_fail": 0.0
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.09,
+        "committed": 87.48,
+        "correct_when_committed": 97.23
+      },
+      "development": {
+        "fulcher": 63.49,
+        "fulcher_cells": 74.58,
+        "pbmc_lymphoid": 92.31,
+        "scope2_dev": 0.0,
+        "auroc": 0.817
+      }
+    },
+    "class-balanced encoder only, s=1": {
+      "calibration_suite": {
+        "overall": 61.95,
+        "gain": 3.38,
+        "lineage": 1.46,
+        "mixed": 3.4,
+        "narrow": 4.7,
+        "pbmc": 7.71,
+        "scope2": 4.39,
+        "single": -0.02
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": 0.65,
+        "class_mean": 0.78,
+        "worst_class": -6.7,
+        "p_fail": 0.0
+      },
+      "answers_calibration_suite": {
+        "coverage": 85.9,
+        "committed": 87.62,
+        "correct_when_committed": 97.17
+      },
+      "development": {
+        "fulcher": 57.88,
+        "fulcher_cells": 69.7,
+        "pbmc_lymphoid": 92.31,
+        "scope2_dev": 0.0,
+        "auroc": 0.732
+      }
+    },
+    "D: s=0.5, composition gate (v3.1's commonest guess under 50% of the upload)": {
+      "calibration_suite": {
+        "overall": 63.44,
+        "gain": 4.87,
+        "lineage": 2.56,
+        "mixed": 8.74,
+        "narrow": 3.47,
+        "pbmc": 12.38,
+        "scope2": 2.16,
+        "single": 0.01
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": 0.8,
+        "class_mean": 0.56,
+        "worst_class": -3.2,
+        "p_fail": 0.0
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.25,
+        "committed": 86.95,
+        "correct_when_committed": 97.29
+      },
+      "development": {
+        "fulcher": 65.0,
+        "fulcher_cells": 77.38,
+        "pbmc_lymphoid": 90.6,
+        "scope2_dev": 0.32,
+        "auroc": 0.813
+      }
+    },
+    "D: s=0.5, composition gate (v3.1's commonest guess under 60% of the upload)": {
+      "calibration_suite": {
+        "overall": 64.19,
+        "gain": 5.62,
+        "lineage": 4.58,
+        "mixed": 9.44,
+        "narrow": 4.84,
+        "pbmc": 12.38,
+        "scope2": 1.99,
+        "single": -0.79
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": 0.86,
+        "class_mean": 0.34,
+        "worst_class": -10.4,
+        "p_fail": 0.003
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.3,
+        "committed": 86.81,
+        "correct_when_committed": 97.32
+      },
+      "development": {
+        "fulcher": 65.0,
+        "fulcher_cells": 77.38,
+        "pbmc_lymphoid": 90.6,
+        "scope2_dev": 0.32,
+        "auroc": 0.813
+      }
+    }
+  },
+  "rejected": {
+    "s=0.5, fusion weight 0.8": {
+      "calibration_suite": {
+        "overall": 63.67,
+        "gain": 5.1,
+        "lineage": 3.25,
+        "mixed": 9.09,
+        "narrow": 4.57,
+        "pbmc": 11.64,
+        "scope2": 2.41,
+        "single": -1.69
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": -1.18,
+        "class_mean": -1.26,
+        "worst_class": -15.9,
+        "p_fail": 0.126
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.23,
+        "committed": 86.79,
+        "correct_when_committed": 97.3
+      },
+      "development": {
+        "fulcher": 63.99,
+        "fulcher_cells": 76.5,
+        "pbmc_lymphoid": 91.45,
+        "scope2_dev": 0.32,
+        "auroc": 0.797
+      }
+    },
+    "s=0.5, fusion weight 0.9": {
+      "calibration_suite": {
+        "overall": 63.07,
+        "gain": 4.5,
+        "lineage": 2.68,
+        "mixed": 8.07,
+        "narrow": 3.81,
+        "pbmc": 11.32,
+        "scope2": 2.5,
+        "single": -1.65
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": -0.69,
+        "class_mean": -0.84,
+        "worst_class": -14.3,
+        "p_fail": 0.07
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.04,
+        "committed": 86.86,
+        "correct_when_committed": 97.29
+      },
+      "development": {
+        "fulcher": 62.91,
+        "fulcher_cells": 75.46,
+        "pbmc_lymphoid": 91.45,
+        "scope2_dev": 0.27,
+        "auroc": 0.783
+      }
+    },
+    "s=0.5, per-cell gate: max r >= 0.1332": {
+      "calibration_suite": {
+        "overall": 63.76,
+        "gain": 5.19,
+        "lineage": 2.74,
+        "mixed": 9.64,
+        "narrow": 4.93,
+        "pbmc": 12.32,
+        "scope2": 1.16,
+        "single": -2.09
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": -1.19,
+        "class_mean": -1.36,
+        "worst_class": -14.3,
+        "p_fail": 0.127
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.38,
+        "committed": 86.5,
+        "correct_when_committed": 97.38
+      },
+      "development": {
+        "fulcher": 64.58,
+        "fulcher_cells": 77.22,
+        "pbmc_lymphoid": 90.6,
+        "scope2_dev": 0.27,
+        "auroc": 0.752
+      }
+    },
+    "s=0.5, per-cell gate: max r >= 0.0915": {
+      "calibration_suite": {
+        "overall": 63.88,
+        "gain": 5.31,
+        "lineage": 3.28,
+        "mixed": 9.69,
+        "narrow": 4.99,
+        "pbmc": 12.37,
+        "scope2": 1.37,
+        "single": -2.13
+      },
+      "extra_single_type_uploads": {
+        "mean_difference": -1.55,
+        "class_mean": -1.7,
+        "worst_class": -15.0,
+        "p_fail": 0.187
+      },
+      "answers_calibration_suite": {
+        "coverage": 86.37,
+        "committed": 86.47,
+        "correct_when_committed": 97.38
+      },
+      "development": {
+        "fulcher": 65.0,
+        "fulcher_cells": 77.38,
+        "pbmc_lymphoid": 90.6,
+        "scope2_dev": 0.27,
+        "auroc": 0.782
+      }
+    }
+  },
+  "upload_agreement": {
+    "calibration_suite_by_scenario": {
+      "lineage": {
+        "min": 0.088,
+        "25%": 0.233,
+        "50%": 0.322,
+        "75%": 0.495,
+        "max": 0.667
+      },
+      "mixed": {
+        "min": 0.365,
+        "25%": 0.598,
+        "50%": 0.677,
+        "75%": 0.738,
+        "max": 0.925
+      },
+      "narrow": {
+        "min": 0.123,
+        "25%": 0.381,
+        "50%": 0.474,
+        "75%": 0.6,
+        "max": 0.81
+      },
+      "pbmc": {
+        "min": 0.426,
+        "25%": 0.528,
+        "50%": 0.57,
+        "75%": 0.624,
+        "max": 0.688
+      },
+      "scope2": {
+        "min": 0.22,
+        "25%": 0.249,
+        "50%": 0.292,
+        "75%": 0.305,
+        "max": 0.33
+      },
+      "single": {
+        "min": 0.05,
+        "25%": 0.163,
+        "50%": 0.204,
+        "75%": 0.248,
+        "max": 0.52
+      }
+    },
+    "development": {
+      "fulcher2026": 0.4227,
+      "furtwangler2025": 0.178,
+      "pbmc240": 0.3655,
+      "scope2": 0.1711
+    }
+  },
+  "chosen": {
+    "smoothed_share": 0.5,
+    "fusion_weight": 0.7,
+    "correlation_temperature": 0.05,
+    "agreement_threshold": 0.4,
+    "below_the_threshold": "correlation term flat, encoder the smoothed query's alone"
+  },
+  "calibration_check": {
+    "v3.1": {
+      "best_guess_per_upload_balanced": 58.57,
+      "coverage": 85.69,
+      "committed": 87.69,
+      "correct_when_committed": 97.11
+    },
+    "v4": {
+      "best_guess_per_upload_balanced": 64.0,
+      "coverage": 86.14,
+      "committed": 87.35,
+      "correct_when_committed": 97.27
+    }
+  },
+  "upload_top_class_share_development": {
+    "fulcher2026": 0.3161,
+    "furtwangler2025": 0.2067,
+    "pbmc240": 0.2269,
+    "scope2": 0.2987
+  },
+  "why_B": "Of the finalists with p_fail at most 1%, B keeps Fulcher at 65.0 with the highest out-of-reference AUROC (0.829) and PBMC240 at v3.1's 92.31; D (60%) has a slightly higher calibration gain but a worse worst class, PBMC240 and AUROC. The owner chose B (2026-10-05) from a comparison that did not yet include D; B was kept after D was measured."
+}

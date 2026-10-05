@@ -1,0 +1,64 @@
+{
+  "criterion": "every v3.1 member's median cosine >= 0.999 against its NB1d PBMC240 raw latents (NB1d's cells and first-symbol genes); v31_dev_gate passes; both service flags on",
+  "members": {
+    "V2_seed0": {
+      "median": 1.0,
+      "p05": 0.9999999403953552,
+      "min": 0.9999998807907104,
+      "passed": true
+    },
+    "V2_seed1": {
+      "median": 1.0,
+      "p05": 0.9999999403953552,
+      "min": 0.9999998807907104,
+      "passed": true
+    },
+    "V2_seed2": {
+      "median": 1.0,
+      "p05": 0.9999999403953552,
+      "min": 0.9999998807907104,
+      "passed": true
+    },
+    "V2_seed3": {
+      "median": 1.0,
+      "p05": 0.9999999403953552,
+      "min": 0.9999998807907104,
+      "passed": true
+    },
+    "V2_seed4": {
+      "median": 1.0,
+      "p05": 0.9999999403953552,
+      "min": 0.9999998807907104,
+      "passed": true
+    }
+  },
+  "dev_gate_passed": true,
+  "service_flags": {
+    "set_includes_best_guess": true,
+    "restricted_renormalise": true
+  },
+  "model_files": {
+    "service/model/v3_1/MANIFEST.json": "f7e13adc6fde17bafcd61265d470ee2aad2edc09f16f20e772d6d583ebc14b8d",
+    "service/model/v3_1/nb2_spec_v31.json": "af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd",
+    "service/model/v3_1/members/V2_batchgene_aug_seed0.pt": "c08c0cf8d4ade284bb18570bfd315905c57f271a0d374732c917dd54f6101063",
+    "service/model/v3_1/members/V2_batchgene_aug_seed1.pt": "42cdea2a558068d92d23519846da39c691dfcb324dbb6f486e08d8d67044fbd2",
+    "service/model/v3_1/members/V2_batchgene_aug_seed2.pt": "a2c7424626fdb30960c1e30b4def45e0fe5e6a755197627abc5fe292f54400e7",
+    "service/model/v3_1/members/V2_batchgene_aug_seed3.pt": "6d5ddefc2155f3fd2f7942464039378f8882e51d71d84a3a889fa2ce009a7724",
+    "service/model/v3_1/members/V2_batchgene_aug_seed4.pt": "5950061279cb1f6a5e469159effa5de76a3ca7d016a30c68608097980240a1e5",
+    "service/model/v3_1/members/V2_seed0_reference_latent_f16.npy": "ed40acf25e40ea420a4a834fc19ee6f3cb72ed38fea99632b63e71ac8f5726ff",
+    "service/model/v3_1/members/V2_seed1_reference_latent_f16.npy": "2de83a74e6949221ad23169ac2091cde518f4b123e56792ddcd978cec4ac463f",
+    "service/model/v3_1/members/V2_seed2_reference_latent_f16.npy": "2e7067390929fc83cfe192548fcc2a10c24efeb365e4276e7a8c6eea32bc28b7",
+    "service/model/v3_1/members/V2_seed3_reference_latent_f16.npy": "e35d142cb36f5b5983344d4e883f1e3926364975b493c9fd516fed1cfd95c709",
+    "service/model/v3_1/members/V2_seed4_reference_latent_f16.npy": "57319e8720c42cccf39f21065567066e359de91b2c12841b809539df5d84e192",
+    "service/model/v3_1/members/V2_seed0_centroids.npy": "fdee9803de16f95141997bbd724480328f5e82943a19f0411cb3873efd39db07",
+    "service/model/v3_1/members/V2_seed1_centroids.npy": "ae9a7d5c7dca66cc502ce275575d045b6837fa33b989d8373ef6471f726ccb74",
+    "service/model/v3_1/members/V2_seed2_centroids.npy": "0f43a8fe830857cc61d92ec8befde602c4a76ee3ccde83649f645501b074b22a",
+    "service/model/v3_1/members/V2_seed3_centroids.npy": "d80e0aaa96727c0a77926a4e03719600a3c4e23078124cf785a816ca1e88f7c3",
+    "service/model/v3_1/members/V2_seed4_centroids.npy": "69f92304b9cc5b93c460f826a6344b08a862f4b885d1f17141c1e52a63af28b7",
+    "service/model/runtime/reference_model.pt": "08b1a0b86ab9679f2d76b66c76f977314f2222713d92e0775770d3cf569f8e39",
+    "service/model/runtime/reference_centroids.npy": "df34a4a262712135f0c1480384c13ca50cb08e7823346e4acef173b1f4bfefe8",
+    "service/model/runtime/reference_embedding.npy": "202c38e78752bec1fb760bbe31c79a16687f7353202a2fb06d7d5afaed9df90b",
+    "service/model/runtime/reference_metadata.csv": "b0d5d1e761d6969e401fa605f74e4367e7d65d5c9fdea444471bbccee65d4054"
+  },
+  "passed": true
+}

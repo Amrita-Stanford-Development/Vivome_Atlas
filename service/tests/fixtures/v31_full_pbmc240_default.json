@@ -1,0 +1,2540 @@
+{
+ "atlas_version": "0.3.0",
+ "calibration": {
+  "applies_to": "labelled RNA simulated uploads (NB1 calibration suite, validation split cells); approximate on protein",
+  "method": "Mondrian (class-conditional) split conformal, fitted in T1 NB2",
+  "n_calibration_cells": 0,
+  "set_includes_best_guess": true,
+  "target_coverage": 0.9
+ },
+ "cells": [
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "platelet",
+    "probability": 0.31054496286299377
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_1.raw",
+   "confidence": null,
+   "coordinates": [
+    0.276080459356308,
+    0.0008323942311108112,
+    -0.04993815720081329
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 1089,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.24013955891132355,
+     "value": -0.05489693209528923
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.049820661544799805,
+     "value": -0.04461808502674103
+    },
+    "glycolysis": {
+     "uncertainty": 0.4411020576953888,
+     "value": 0.7721050381660461
+    },
+    "inflammatory": {
+     "uncertainty": 0.23468831181526184,
+     "value": 0.217542827129364
+    },
+    "oxphos": {
+     "uncertainty": 0.3676505386829376,
+     "value": 0.34216368198394775
+    },
+    "ribosome": {
+     "uncertainty": 0.5897435545921326,
+     "value": 0.12652488052845
+    }
+   },
+   "reference_similarity": 0.7912822961807251
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "hematopoietic precursor cell",
+    "probability": 0.7412956482731299
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_2.raw",
+   "confidence": 0.8313923264811638,
+   "coordinates": [
+    0.38332873582839966,
+    -0.016129212453961372,
+    0.18661127984523773
+   ],
+   "label": "progenitor",
+   "label_level": "group",
+   "label_set": [
+    "common myeloid progenitor",
+    "hematopoietic precursor cell"
+   ],
+   "observed_genes": 290,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.66023850440979,
+     "value": 0.2246546745300293
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.2497631013393402,
+     "value": 0.11961088329553604
+    },
+    "glycolysis": {
+     "uncertainty": 0.7557199001312256,
+     "value": 1.1973679065704346
+    },
+    "inflammatory": {
+     "uncertainty": 0.1586911976337433,
+     "value": 0.0045065730810165405
+    },
+    "oxphos": {
+     "uncertainty": 0.49197086691856384,
+     "value": 0.949675440788269
+    },
+    "ribosome": {
+     "uncertainty": 1.0782676935195923,
+     "value": 2.3801767826080322
+    }
+   },
+   "reference_similarity": 0.980207622051239
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.2145350947694134
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_3.raw",
+   "confidence": null,
+   "coordinates": [
+    0.39210742712020874,
+    0.10275734215974808,
+    0.28208082914352417
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 1157,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5010504126548767,
+     "value": 0.051764197647571564
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.14764539897441864,
+     "value": 0.05727720260620117
+    },
+    "glycolysis": {
+     "uncertainty": 0.6939409375190735,
+     "value": 0.5579158067703247
+    },
+    "inflammatory": {
+     "uncertainty": 0.32435962557792664,
+     "value": 0.09699170291423798
+    },
+    "oxphos": {
+     "uncertainty": 0.5385748744010925,
+     "value": 0.6570273637771606
+    },
+    "ribosome": {
+     "uncertainty": 1.0710936784744263,
+     "value": 1.2663767337799072
+    }
+   },
+   "reference_similarity": 0.8228511810302734
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "platelet",
+    "probability": 0.2148950376733711
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_4.raw",
+   "confidence": null,
+   "coordinates": [
+    0.4438095986843109,
+    0.040202073752880096,
+    0.12494383752346039
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 859,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3085290193557739,
+     "value": 0.05800144374370575
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0528586283326149,
+     "value": -0.03119642101228237
+    },
+    "glycolysis": {
+     "uncertainty": 0.43480780720710754,
+     "value": 1.0057668685913086
+    },
+    "inflammatory": {
+     "uncertainty": 0.21491913497447968,
+     "value": 0.17480818927288055
+    },
+    "oxphos": {
+     "uncertainty": 0.421652227640152,
+     "value": 0.5736916065216064
+    },
+    "ribosome": {
+     "uncertainty": 0.8981876969337463,
+     "value": 0.8124169111251831
+    }
+   },
+   "reference_similarity": 0.7795206308364868
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "platelet",
+    "probability": 0.2873172614740151
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_5.raw",
+   "confidence": null,
+   "coordinates": [
+    0.19845141470432281,
+    -0.07998088747262955,
+    -0.03228828310966492
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 1060,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5001137256622314,
+     "value": 0.11673305183649063
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04654039070010185,
+     "value": -0.007869093678891659
+    },
+    "glycolysis": {
+     "uncertainty": 0.5633438229560852,
+     "value": 0.5994097590446472
+    },
+    "inflammatory": {
+     "uncertainty": 0.29039594531059265,
+     "value": 0.23426997661590576
+    },
+    "oxphos": {
+     "uncertainty": 0.37545284628868103,
+     "value": 0.34671303629875183
+    },
+    "ribosome": {
+     "uncertainty": 0.816933274269104,
+     "value": 0.34157541394233704
+    }
+   },
+   "reference_similarity": 0.8446792364120483
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "b cell",
+    "probability": 0.7746846281266611
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_6.raw",
+   "confidence": null,
+   "coordinates": [
+    0.23961025476455688,
+    -0.3099372982978821,
+    0.3159412145614624
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 1121,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.8305200934410095,
+     "value": 1.9224623441696167
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.11057601869106293,
+     "value": 0.041112929582595825
+    },
+    "glycolysis": {
+     "uncertainty": 0.4896053969860077,
+     "value": 0.42240601778030396
+    },
+    "inflammatory": {
+     "uncertainty": 0.17313045263290405,
+     "value": -0.04723893105983734
+    },
+    "oxphos": {
+     "uncertainty": 0.45739710330963135,
+     "value": 0.5397130846977234
+    },
+    "ribosome": {
+     "uncertainty": 1.0158251523971558,
+     "value": 2.535676956176758
+    }
+   },
+   "reference_similarity": 0.9231681823730469
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "probability": 0.515419828810402
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_7.raw",
+   "confidence": 0.9659491443656885,
+   "coordinates": [
+    0.45135682821273804,
+    -0.3814363479614258,
+    0.5348213911056519
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1173,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2012808620929718,
+     "value": -0.22816701233386993
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07930506020784378,
+     "value": 0.035675641149282455
+    },
+    "glycolysis": {
+     "uncertainty": 0.38844558596611023,
+     "value": 0.43838486075401306
+    },
+    "inflammatory": {
+     "uncertainty": 0.20837843418121338,
+     "value": 0.10113667696714401
+    },
+    "oxphos": {
+     "uncertainty": 0.3519304394721985,
+     "value": 0.7549108266830444
+    },
+    "ribosome": {
+     "uncertainty": 1.036845088005066,
+     "value": 3.169686794281006
+    }
+   },
+   "reference_similarity": 0.9712381362915039
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.35649454429765665
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_8.raw",
+   "confidence": 0.5733234833014512,
+   "coordinates": [
+    0.4520409107208252,
+    -0.2531892955303192,
+    0.4314107596874237
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "regulatory t cell"
+   ],
+   "observed_genes": 1147,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.17405647039413452,
+     "value": -0.155709370970726
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0353257954120636,
+     "value": -0.013457139953970909
+    },
+    "glycolysis": {
+     "uncertainty": 0.27173519134521484,
+     "value": 0.10838395357131958
+    },
+    "inflammatory": {
+     "uncertainty": 0.16858041286468506,
+     "value": 0.07298910617828369
+    },
+    "oxphos": {
+     "uncertainty": 0.43082740902900696,
+     "value": 0.42137056589126587
+    },
+    "ribosome": {
+     "uncertainty": 1.5374547243118286,
+     "value": 1.4550886154174805
+    }
+   },
+   "reference_similarity": 0.8572050333023071
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.20166800977953442
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_9.raw",
+   "confidence": 0.4035619569069674,
+   "coordinates": [
+    0.20130591094493866,
+    -0.1384495347738266,
+    0.22686117887496948
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell"
+   ],
+   "observed_genes": 930,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5046509504318237,
+     "value": -0.05848563835024834
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.017900070175528526,
+     "value": -0.02475314401090145
+    },
+    "glycolysis": {
+     "uncertainty": 0.4719076156616211,
+     "value": 0.1720217615365982
+    },
+    "inflammatory": {
+     "uncertainty": 0.2922259271144867,
+     "value": 0.07095127552747726
+    },
+    "oxphos": {
+     "uncertainty": 0.467567503452301,
+     "value": 0.3723653256893158
+    },
+    "ribosome": {
+     "uncertainty": 1.160061001777649,
+     "value": 0.9103574156761169
+    }
+   },
+   "reference_similarity": 0.8711196780204773
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.37614584721643396
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_10.raw",
+   "confidence": 0.6894546956127259,
+   "coordinates": [
+    0.07483712583780289,
+    -0.3398151099681854,
+    0.3915672302246094
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1443,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2573058307170868,
+     "value": -0.3572959303855896
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06855187565088272,
+     "value": -0.007483495865017176
+    },
+    "glycolysis": {
+     "uncertainty": 0.4066101014614105,
+     "value": 0.47989439964294434
+    },
+    "inflammatory": {
+     "uncertainty": 0.34369972348213196,
+     "value": 0.17678870260715485
+    },
+    "oxphos": {
+     "uncertainty": 0.33683598041534424,
+     "value": 0.29844406247138977
+    },
+    "ribosome": {
+     "uncertainty": 1.030258059501648,
+     "value": 0.8467005491256714
+    }
+   },
+   "reference_similarity": 0.9244939684867859
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.329617746779892
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_11.raw",
+   "confidence": 0.4540781021214488,
+   "coordinates": [
+    0.42773711681365967,
+    -0.0761871412396431,
+    0.3105468153953552
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "regulatory t cell"
+   ],
+   "observed_genes": 1095,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.24863694608211517,
+     "value": -0.06636008620262146
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03836356848478317,
+     "value": -0.013170845806598663
+    },
+    "glycolysis": {
+     "uncertainty": 0.5578543543815613,
+     "value": 0.3303506672382355
+    },
+    "inflammatory": {
+     "uncertainty": 0.20507769286632538,
+     "value": 0.053642939776182175
+    },
+    "oxphos": {
+     "uncertainty": 0.5300571918487549,
+     "value": 0.5624256134033203
+    },
+    "ribosome": {
+     "uncertainty": 1.3069431781768799,
+     "value": 1.4291473627090454
+    }
+   },
+   "reference_similarity": 0.8484416007995605
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "monocyte",
+    "probability": 0.6251837275059752
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_12.raw",
+   "confidence": 0.8500188694480731,
+   "coordinates": [
+    0.5662849545478821,
+    0.3123546242713928,
+    -0.13981658220291138
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "macrophage",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 1782,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.7100360989570618,
+     "value": 0.7158859968185425
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.1625392735004425,
+     "value": 0.02312232367694378
+    },
+    "glycolysis": {
+     "uncertainty": 0.6138842105865479,
+     "value": 1.2649290561676025
+    },
+    "inflammatory": {
+     "uncertainty": 0.18879762291908264,
+     "value": -0.05868259072303772
+    },
+    "oxphos": {
+     "uncertainty": 0.5213080644607544,
+     "value": 0.826782763004303
+    },
+    "ribosome": {
+     "uncertainty": 0.8456833958625793,
+     "value": 1.7227208614349365
+    }
+   },
+   "reference_similarity": 0.9425727128982544
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "classical monocyte",
+    "probability": 0.16729074093299798
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_13.raw",
+   "confidence": 0.3646136002625758,
+   "coordinates": [
+    0.19145196676254272,
+    0.2902657687664032,
+    0.06189470738172531
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "macrophage",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 1071,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3357958197593689,
+     "value": -0.1243930235505104
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03254477307200432,
+     "value": -0.014593567699193954
+    },
+    "glycolysis": {
+     "uncertainty": 0.4319102466106415,
+     "value": 0.7351160049438477
+    },
+    "inflammatory": {
+     "uncertainty": 0.30018553137779236,
+     "value": 0.37771981954574585
+    },
+    "oxphos": {
+     "uncertainty": 0.3216700553894043,
+     "value": 0.5113230347633362
+    },
+    "ribosome": {
+     "uncertainty": 0.40699657797813416,
+     "value": 0.7399930953979492
+    }
+   },
+   "reference_similarity": 0.8342944979667664
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "erythrocyte",
+    "probability": 0.3930067339219804
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_15.raw",
+   "confidence": null,
+   "coordinates": [
+    0.16020287573337555,
+    -0.49618762731552124,
+    -0.25516051054000854
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 728,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.3262500762939453,
+     "value": -0.0036915673408657312
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.18087168037891388,
+     "value": 0.08118682354688644
+    },
+    "glycolysis": {
+     "uncertainty": 0.4289288818836212,
+     "value": 0.3967529237270355
+    },
+    "inflammatory": {
+     "uncertainty": 0.23319442570209503,
+     "value": 0.09026724100112915
+    },
+    "oxphos": {
+     "uncertainty": 0.44782084226608276,
+     "value": 0.722845196723938
+    },
+    "ribosome": {
+     "uncertainty": 0.9249271750450134,
+     "value": 1.7962138652801514
+    }
+   },
+   "reference_similarity": 0.7797278165817261
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.3536986540226311
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_16.raw",
+   "confidence": 0.6365872478386989,
+   "coordinates": [
+    0.34850889444351196,
+    -0.24463707208633423,
+    0.46480482816696167
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "regulatory t cell"
+   ],
+   "observed_genes": 758,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.21746370196342468,
+     "value": -0.21160946786403656
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03234441578388214,
+     "value": -0.022644249722361565
+    },
+    "glycolysis": {
+     "uncertainty": 0.3584427237510681,
+     "value": 0.2044791430234909
+    },
+    "inflammatory": {
+     "uncertainty": 0.23188957571983337,
+     "value": 0.05327276885509491
+    },
+    "oxphos": {
+     "uncertainty": 0.4523657560348511,
+     "value": 0.5357828140258789
+    },
+    "ribosome": {
+     "uncertainty": 1.4463063478469849,
+     "value": 1.7491989135742188
+    }
+   },
+   "reference_similarity": 0.8796957731246948
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "monocyte",
+    "probability": 0.6739699847638004
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_17.raw",
+   "confidence": 0.8331407402971222,
+   "coordinates": [
+    0.614190399646759,
+    0.2540954053401947,
+    -0.12521886825561523
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 1622,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6316155791282654,
+     "value": 0.6937866806983948
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.051799990236759186,
+     "value": -0.029268771409988403
+    },
+    "glycolysis": {
+     "uncertainty": 0.66944420337677,
+     "value": 1.010653018951416
+    },
+    "inflammatory": {
+     "uncertainty": 0.16603820025920868,
+     "value": -0.05573353171348572
+    },
+    "oxphos": {
+     "uncertainty": 0.5671381950378418,
+     "value": 0.7607057094573975
+    },
+    "ribosome": {
+     "uncertainty": 0.9238294363021851,
+     "value": 1.4151599407196045
+    }
+   },
+   "reference_similarity": 0.9645079374313354
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "macrophage",
+    "probability": 0.7704815745586323
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_18.raw",
+   "confidence": 0.868379689133021,
+   "coordinates": [
+    0.19523794949054718,
+    0.08605118840932846,
+    0.05823619291186333
+   ],
+   "label": "monocyte/macrophage",
+   "label_level": "group",
+   "label_set": [
+    "intermediate monocyte",
+    "macrophage",
+    "non-classical monocyte"
+   ],
+   "observed_genes": 992,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.22118230164051056,
+     "value": -0.28576579689979553
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0411982499063015,
+     "value": -0.020613985136151314
+    },
+    "glycolysis": {
+     "uncertainty": 0.16997143626213074,
+     "value": -0.20535437762737274
+    },
+    "inflammatory": {
+     "uncertainty": 0.27876174449920654,
+     "value": 0.05524866282939911
+    },
+    "oxphos": {
+     "uncertainty": 0.15001769363880157,
+     "value": -0.40827277302742004
+    },
+    "ribosome": {
+     "uncertainty": 0.3075302839279175,
+     "value": -0.5651644468307495
+    }
+   },
+   "reference_similarity": 0.955371081829071
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "probability": 0.5274827564441156
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_19.raw",
+   "confidence": 0.9673045514962176,
+   "coordinates": [
+    0.41156744956970215,
+    -0.48397475481033325,
+    0.5620006918907166
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1109,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.10186222940683365,
+     "value": -0.32080158591270447
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07440152764320374,
+     "value": -0.0035568505991250277
+    },
+    "glycolysis": {
+     "uncertainty": 0.2580726146697998,
+     "value": 0.25264137983322144
+    },
+    "inflammatory": {
+     "uncertainty": 0.14155445992946625,
+     "value": 0.035179972648620605
+    },
+    "oxphos": {
+     "uncertainty": 0.22080166637897491,
+     "value": 0.5652925968170166
+    },
+    "ribosome": {
+     "uncertainty": 0.19715054333209991,
+     "value": 3.2028210163116455
+    }
+   },
+   "reference_similarity": 0.9875764846801758
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.48146835937970955
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_20.raw",
+   "confidence": 0.9388369963219259,
+   "coordinates": [
+    0.15446336567401886,
+    -0.4488832950592041,
+    0.29843956232070923
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1541,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.09118661284446716,
+     "value": -0.17978999018669128
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.026448490098118782,
+     "value": -0.0017674152040854096
+    },
+    "glycolysis": {
+     "uncertainty": 0.11818219721317291,
+     "value": 0.021829728037118912
+    },
+    "inflammatory": {
+     "uncertainty": 0.2142581343650818,
+     "value": 0.18753616511821747
+    },
+    "oxphos": {
+     "uncertainty": 0.16462036967277527,
+     "value": 0.2665262222290039
+    },
+    "ribosome": {
+     "uncertainty": 0.5018488764762878,
+     "value": 1.1904963254928589
+    }
+   },
+   "reference_similarity": 0.9125120043754578
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.4664087609154626
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_21.raw",
+   "confidence": 0.869090922113184,
+   "coordinates": [
+    0.266185998916626,
+    -0.47976160049438477,
+    0.6470332145690918
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1086,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.48991817235946655,
+     "value": -0.04035954177379608
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.059804972261190414,
+     "value": 0.010082910768687725
+    },
+    "glycolysis": {
+     "uncertainty": 0.4204038679599762,
+     "value": 0.4299237132072449
+    },
+    "inflammatory": {
+     "uncertainty": 0.252530038356781,
+     "value": 0.2151556760072708
+    },
+    "oxphos": {
+     "uncertainty": 0.30659499764442444,
+     "value": 0.4237194359302521
+    },
+    "ribosome": {
+     "uncertainty": 0.7463284730911255,
+     "value": 1.9124765396118164
+    }
+   },
+   "reference_similarity": 0.9522193670272827
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.26149441276267843
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_22.raw",
+   "confidence": null,
+   "coordinates": [
+    0.21514086425304413,
+    -0.20173944532871246,
+    0.19806088507175446
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 941,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5182947516441345,
+     "value": -0.08594439178705215
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.020197775214910507,
+     "value": -0.019058790057897568
+    },
+    "glycolysis": {
+     "uncertainty": 0.5855218172073364,
+     "value": 0.27751147747039795
+    },
+    "inflammatory": {
+     "uncertainty": 0.3445528745651245,
+     "value": 0.16412454843521118
+    },
+    "oxphos": {
+     "uncertainty": 0.4161927103996277,
+     "value": 0.30275386571884155
+    },
+    "ribosome": {
+     "uncertainty": 0.875206708908081,
+     "value": 0.6715527176856995
+    }
+   },
+   "reference_similarity": 0.8820072412490845
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "monocyte",
+    "probability": 0.6899443923476392
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_23.raw",
+   "confidence": 0.9085273991849993,
+   "coordinates": [
+    0.6063805222511292,
+    0.34843909740448,
+    -0.17214110493659973
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 1606,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.693855881690979,
+     "value": 0.6386578679084778
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.029247082769870758,
+     "value": -0.0173278097063303
+    },
+    "glycolysis": {
+     "uncertainty": 0.5051510334014893,
+     "value": 1.253726840019226
+    },
+    "inflammatory": {
+     "uncertainty": 0.16767488420009613,
+     "value": 0.14163532853126526
+    },
+    "oxphos": {
+     "uncertainty": 0.36954841017723083,
+     "value": 1.0281440019607544
+    },
+    "ribosome": {
+     "uncertainty": 0.31012845039367676,
+     "value": 2.043616771697998
+    }
+   },
+   "reference_similarity": 0.9804950952529907
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.3281446306209133
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_24.raw",
+   "confidence": 0.5479897376182161,
+   "coordinates": [
+    0.3201347887516022,
+    -0.536486804485321,
+    0.6683516502380371
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1013,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.4759826958179474,
+     "value": -0.004645809531211853
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05440998077392578,
+     "value": -0.006636126432567835
+    },
+    "glycolysis": {
+     "uncertainty": 0.3772604465484619,
+     "value": 0.34291404485702515
+    },
+    "inflammatory": {
+     "uncertainty": 0.29117926955223083,
+     "value": 0.1740463525056839
+    },
+    "oxphos": {
+     "uncertainty": 0.43984144926071167,
+     "value": 0.39288854598999023
+    },
+    "ribosome": {
+     "uncertainty": 1.1408005952835083,
+     "value": 2.339470386505127
+    }
+   },
+   "reference_similarity": 0.9524954557418823
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.3383560155573715
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_25.raw",
+   "confidence": 0.5720249259165139,
+   "coordinates": [
+    0.37743139266967773,
+    -0.5137490630149841,
+    0.6814478039741516
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1027,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.39176619052886963,
+     "value": -0.1589968502521515
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07800871878862381,
+     "value": 0.008440203033387661
+    },
+    "glycolysis": {
+     "uncertainty": 0.33244070410728455,
+     "value": 0.2651454508304596
+    },
+    "inflammatory": {
+     "uncertainty": 0.26955103874206543,
+     "value": 0.2626815140247345
+    },
+    "oxphos": {
+     "uncertainty": 0.36184823513031006,
+     "value": 0.5217012763023376
+    },
+    "ribosome": {
+     "uncertainty": 1.0784624814987183,
+     "value": 2.1382522583007812
+    }
+   },
+   "reference_similarity": 0.9622697830200195
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.523505781079139
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_26.raw",
+   "confidence": 0.9860020272628744,
+   "coordinates": [
+    0.23799169063568115,
+    -0.5897928476333618,
+    0.322282612323761
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1328,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.08158904314041138,
+     "value": -0.17419129610061646
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02126236818730831,
+     "value": -0.013190576806664467
+    },
+    "glycolysis": {
+     "uncertainty": 0.08602265268564224,
+     "value": 0.06897204369306564
+    },
+    "inflammatory": {
+     "uncertainty": 0.1621706336736679,
+     "value": 0.14252997934818268
+    },
+    "oxphos": {
+     "uncertainty": 0.1703115850687027,
+     "value": 0.2661246359348297
+    },
+    "ribosome": {
+     "uncertainty": 0.4732499122619629,
+     "value": 1.2182258367538452
+    }
+   },
+   "reference_similarity": 0.9902545809745789
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.2745937378215925
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_27.raw",
+   "confidence": 0.46837106229529885,
+   "coordinates": [
+    0.254083514213562,
+    -0.49583375453948975,
+    0.5319204926490784
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 991,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5231480598449707,
+     "value": -0.2832311987876892
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07371041178703308,
+     "value": 0.01267917174845934
+    },
+    "glycolysis": {
+     "uncertainty": 0.3136226236820221,
+     "value": 0.28856465220451355
+    },
+    "inflammatory": {
+     "uncertainty": 0.27829793095588684,
+     "value": 0.21283018589019775
+    },
+    "oxphos": {
+     "uncertainty": 0.27498695254325867,
+     "value": 0.47642573714256287
+    },
+    "ribosome": {
+     "uncertainty": 1.1000008583068848,
+     "value": 1.8178035020828247
+    }
+   },
+   "reference_similarity": 0.9456729888916016
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.49706440468461704
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_28.raw",
+   "confidence": 0.985246082679035,
+   "coordinates": [
+    0.2787838876247406,
+    -0.5799044370651245,
+    0.4386896789073944
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1052,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.12898407876491547,
+     "value": -0.4049343168735504
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.08882850408554077,
+     "value": 0.022901825606822968
+    },
+    "glycolysis": {
+     "uncertainty": 0.2819022834300995,
+     "value": 0.23399601876735687
+    },
+    "inflammatory": {
+     "uncertainty": 0.4400060474872589,
+     "value": 0.49488991498947144
+    },
+    "oxphos": {
+     "uncertainty": 0.16957126557826996,
+     "value": 0.29240453243255615
+    },
+    "ribosome": {
+     "uncertainty": 0.5576809048652649,
+     "value": 0.9835852980613708
+    }
+   },
+   "reference_similarity": 0.9927113652229309
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "monocyte",
+    "probability": 0.3119326109012904
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_29.raw",
+   "confidence": 0.557963615140192,
+   "coordinates": [
+    0.4854259788990021,
+    0.24783122539520264,
+    -0.1004469245672226
+   ],
+   "label": "monocyte/macrophage",
+   "label_level": "group",
+   "label_set": [
+    "macrophage",
+    "monocyte",
+    "non-classical monocyte"
+   ],
+   "observed_genes": 1738,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.7195104956626892,
+     "value": 0.6173139214515686
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.15895363688468933,
+     "value": 0.011999339796602726
+    },
+    "glycolysis": {
+     "uncertainty": 0.7555726170539856,
+     "value": 0.8668412566184998
+    },
+    "inflammatory": {
+     "uncertainty": 0.18318457901477814,
+     "value": 0.03242219612002373
+    },
+    "oxphos": {
+     "uncertainty": 0.5512560606002808,
+     "value": 0.6388114094734192
+    },
+    "ribosome": {
+     "uncertainty": 0.9813369512557983,
+     "value": 1.532583236694336
+    }
+   },
+   "reference_similarity": 0.9053247570991516
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.2300884837774028
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_30.raw",
+   "confidence": null,
+   "coordinates": [
+    0.46559327840805054,
+    -0.1519596129655838,
+    0.32273024320602417
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 859,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5241869688034058,
+     "value": 0.017418894916772842
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.09054727107286453,
+     "value": 0.005725055932998657
+    },
+    "glycolysis": {
+     "uncertainty": 0.5250786542892456,
+     "value": 0.17779062688350677
+    },
+    "inflammatory": {
+     "uncertainty": 0.32936131954193115,
+     "value": 0.18309754133224487
+    },
+    "oxphos": {
+     "uncertainty": 0.43036729097366333,
+     "value": 0.34224340319633484
+    },
+    "ribosome": {
+     "uncertainty": 0.9503048062324524,
+     "value": 0.6533288359642029
+    }
+   },
+   "reference_similarity": 0.8566734194755554
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.45858279805823515
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_31.raw",
+   "confidence": 0.900516874230267,
+   "coordinates": [
+    0.42188760638237,
+    -0.49839621782302856,
+    0.6730219721794128
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1217,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.11003512889146805,
+     "value": -0.3905012607574463
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.05458967387676239,
+     "value": 0.020305365324020386
+    },
+    "glycolysis": {
+     "uncertainty": 0.24000124633312225,
+     "value": 0.3548436760902405
+    },
+    "inflammatory": {
+     "uncertainty": 0.23542852699756622,
+     "value": 0.25860530138015747
+    },
+    "oxphos": {
+     "uncertainty": 0.2757684588432312,
+     "value": 0.5794693231582642
+    },
+    "ribosome": {
+     "uncertainty": 0.381526917219162,
+     "value": 2.7333242893218994
+    }
+   },
+   "reference_similarity": 0.988509476184845
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "myeloid dendritic cell",
+    "probability": 0.3876228778496609
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_32.raw",
+   "confidence": 0.826307965160054,
+   "coordinates": [
+    0.2382703423500061,
+    0.2425854653120041,
+    -0.08444707840681076
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 1178,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5473528504371643,
+     "value": 0.13455802202224731
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.1291552633047104,
+     "value": 0.017311163246631622
+    },
+    "glycolysis": {
+     "uncertainty": 0.4340849220752716,
+     "value": 0.32098710536956787
+    },
+    "inflammatory": {
+     "uncertainty": 0.2611966133117676,
+     "value": 0.21840523183345795
+    },
+    "oxphos": {
+     "uncertainty": 0.4024043083190918,
+     "value": 0.43531185388565063
+    },
+    "ribosome": {
+     "uncertainty": 0.6718871593475342,
+     "value": 0.8158034682273865
+    }
+   },
+   "reference_similarity": 0.9277669787406921
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.4862737915133734
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_33.raw",
+   "confidence": 0.8886692826136058,
+   "coordinates": [
+    0.30142393708229065,
+    -0.5169323682785034,
+    0.4632883071899414
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1046,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.2594298720359802,
+     "value": -0.3211691677570343
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.04348958283662796,
+     "value": -0.016330089420080185
+    },
+    "glycolysis": {
+     "uncertainty": 0.44650664925575256,
+     "value": 0.5125210881233215
+    },
+    "inflammatory": {
+     "uncertainty": 0.3297901153564453,
+     "value": 0.267865926027298
+    },
+    "oxphos": {
+     "uncertainty": 0.37241044640541077,
+     "value": 0.32365119457244873
+    },
+    "ribosome": {
+     "uncertainty": 0.7029425501823425,
+     "value": 1.123087763786316
+    }
+   },
+   "reference_similarity": 0.9562109112739563
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.371915258402047
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_34.raw",
+   "confidence": 0.6184890539739398,
+   "coordinates": [
+    0.33652934432029724,
+    -0.5469740033149719,
+    0.5787343382835388
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 946,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.34074264764785767,
+     "value": -0.1680658757686615
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.08331458270549774,
+     "value": 0.05323895439505577
+    },
+    "glycolysis": {
+     "uncertainty": 0.43983280658721924,
+     "value": 0.15766851603984833
+    },
+    "inflammatory": {
+     "uncertainty": 0.31087005138397217,
+     "value": 0.18713103234767914
+    },
+    "oxphos": {
+     "uncertainty": 0.46484026312828064,
+     "value": 0.20786915719509125
+    },
+    "ribosome": {
+     "uncertainty": 1.2974414825439453,
+     "value": 1.5027128458023071
+    }
+   },
+   "reference_similarity": 0.9629610776901245
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.38927062377325555
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_35.raw",
+   "confidence": 0.9171219914383266,
+   "coordinates": [
+    0.4251907467842102,
+    -0.4141829013824463,
+    0.564428448677063
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell"
+   ],
+   "observed_genes": 1018,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.11468731611967087,
+     "value": -0.3716312050819397
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07183726131916046,
+     "value": 0.025095010176301003
+    },
+    "glycolysis": {
+     "uncertainty": 0.2276100069284439,
+     "value": 0.3528587222099304
+    },
+    "inflammatory": {
+     "uncertainty": 0.21521486341953278,
+     "value": 0.2523258328437805
+    },
+    "oxphos": {
+     "uncertainty": 0.2590916156768799,
+     "value": 0.635646641254425
+    },
+    "ribosome": {
+     "uncertainty": 0.430903822183609,
+     "value": 2.7519516944885254
+    }
+   },
+   "reference_similarity": 0.9516664743423462
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.47555583119614575
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_36.raw",
+   "confidence": 0.9112190662021553,
+   "coordinates": [
+    0.20266206562519073,
+    -0.5568599700927734,
+    0.4191651940345764
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1132,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.22155307233333588,
+     "value": -0.373089462518692
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.06409534066915512,
+     "value": -0.004976509138941765
+    },
+    "glycolysis": {
+     "uncertainty": 0.2955208718776703,
+     "value": 0.5242034792900085
+    },
+    "inflammatory": {
+     "uncertainty": 0.29407888650894165,
+     "value": 0.3130728602409363
+    },
+    "oxphos": {
+     "uncertainty": 0.2792091965675354,
+     "value": 0.36666998267173767
+    },
+    "ribosome": {
+     "uncertainty": 0.7200896739959717,
+     "value": 1.0238522291183472
+    }
+   },
+   "reference_similarity": 0.9397653341293335
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.5013022128215454
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_37.raw",
+   "confidence": 0.9479869380994063,
+   "coordinates": [
+    0.3121795952320099,
+    -0.5614166855812073,
+    0.5300217270851135
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 975,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.16806727647781372,
+     "value": -0.43109285831451416
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.054676637053489685,
+     "value": -0.014841882511973381
+    },
+    "glycolysis": {
+     "uncertainty": 0.3652516305446625,
+     "value": 0.3538685142993927
+    },
+    "inflammatory": {
+     "uncertainty": 0.27190718054771423,
+     "value": 0.3088311553001404
+    },
+    "oxphos": {
+     "uncertainty": 0.28784045577049255,
+     "value": 0.22324322164058685
+    },
+    "ribosome": {
+     "uncertainty": 0.6025046110153198,
+     "value": 0.7680016756057739
+    }
+   },
+   "reference_similarity": 0.9647763967514038
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.5194087062525575
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_38.raw",
+   "confidence": 0.9800005125670199,
+   "coordinates": [
+    0.24554860591888428,
+    -0.5381099581718445,
+    0.30368879437446594
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1340,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.09318685531616211,
+     "value": -0.15324117243289948
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.0213763490319252,
+     "value": -0.00993542280048132
+    },
+    "glycolysis": {
+     "uncertainty": 0.1225467249751091,
+     "value": 0.0886327400803566
+    },
+    "inflammatory": {
+     "uncertainty": 0.16030503809452057,
+     "value": 0.16074766218662262
+    },
+    "oxphos": {
+     "uncertainty": 0.15656977891921997,
+     "value": 0.25694742798805237
+    },
+    "ribosome": {
+     "uncertainty": 0.45528051257133484,
+     "value": 1.20304536819458
+    }
+   },
+   "reference_similarity": 0.9810463190078735
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.4986410859069064
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_39.raw",
+   "confidence": 0.9827867057965223,
+   "coordinates": [
+    0.24521946907043457,
+    -0.5520874261856079,
+    0.39302581548690796
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1131,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1861465722322464,
+     "value": -0.2552889585494995
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02920856513082981,
+     "value": -0.0210542231798172
+    },
+    "glycolysis": {
+     "uncertainty": 0.2445273995399475,
+     "value": 0.07811343669891357
+    },
+    "inflammatory": {
+     "uncertainty": 0.2705693542957306,
+     "value": 0.31577685475349426
+    },
+    "oxphos": {
+     "uncertainty": 0.18817900121212006,
+     "value": 0.3675604462623596
+    },
+    "ribosome": {
+     "uncertainty": 0.6317057609558105,
+     "value": 1.0871690511703491
+    }
+   },
+   "reference_similarity": 0.9853560328483582
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "macrophage",
+    "probability": 0.29574844689600055
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041025_SP_40.raw",
+   "confidence": null,
+   "coordinates": [
+    0.08613893389701843,
+    -0.14415356516838074,
+    -0.23324532806873322
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 1149,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.314726322889328,
+     "value": 0.07600715756416321
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.027074160054326057,
+     "value": -0.0039012061897665262
+    },
+    "glycolysis": {
+     "uncertainty": 0.26645997166633606,
+     "value": 0.2641163766384125
+    },
+    "inflammatory": {
+     "uncertainty": 0.23586691915988922,
+     "value": 0.10325335711240768
+    },
+    "oxphos": {
+     "uncertainty": 0.27633875608444214,
+     "value": 0.340163916349411
+    },
+    "ribosome": {
+     "uncertainty": 0.5874902009963989,
+     "value": 0.7693885564804077
+    }
+   },
+   "reference_similarity": 0.8084235191345215
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "b cell",
+    "probability": 0.4543848787602992
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_41.raw",
+   "confidence": 0.47082173238994096,
+   "coordinates": [
+    0.37401172518730164,
+    -0.42168307304382324,
+    -0.05355076119303703
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "b cell",
+    "mature nk t cell"
+   ],
+   "observed_genes": 1380,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.9176439046859741,
+     "value": 2.3761892318725586
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03150363638997078,
+     "value": -0.02583431452512741
+    },
+    "glycolysis": {
+     "uncertainty": 0.3148287534713745,
+     "value": 0.29273179173469543
+    },
+    "inflammatory": {
+     "uncertainty": 0.24046319723129272,
+     "value": 0.043409932404756546
+    },
+    "oxphos": {
+     "uncertainty": 0.39393481612205505,
+     "value": 0.16927459836006165
+    },
+    "ribosome": {
+     "uncertainty": 0.8506404161453247,
+     "value": 2.4932265281677246
+    }
+   },
+   "reference_similarity": 0.7984227538108826
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.5104248223155505
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_42.raw",
+   "confidence": 0.9794570283655573,
+   "coordinates": [
+    0.2021535485982895,
+    -0.5184351801872253,
+    0.326082706451416
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1116,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.12015802413225174,
+     "value": -0.16715994477272034
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.024992262944579124,
+     "value": -0.007521213032305241
+    },
+    "glycolysis": {
+     "uncertainty": 0.18326042592525482,
+     "value": 0.11844737827777863
+    },
+    "inflammatory": {
+     "uncertainty": 0.21773381531238556,
+     "value": 0.2028845250606537
+    },
+    "oxphos": {
+     "uncertainty": 0.18130117654800415,
+     "value": 0.2503511905670166
+    },
+    "ribosome": {
+     "uncertainty": 0.4539991021156311,
+     "value": 1.1615747213363647
+    }
+   },
+   "reference_similarity": 0.9807442426681519
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.27551637699595133
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_43.raw",
+   "confidence": null,
+   "coordinates": [
+    0.2983079254627228,
+    -0.4099947512149811,
+    0.6612749695777893
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 1101,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.12093332409858704,
+     "value": -0.4373731017112732
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.08802954107522964,
+     "value": 0.027416978031396866
+    },
+    "glycolysis": {
+     "uncertainty": 0.27400892972946167,
+     "value": 0.3662194311618805
+    },
+    "inflammatory": {
+     "uncertainty": 0.30692335963249207,
+     "value": 0.13170817494392395
+    },
+    "oxphos": {
+     "uncertainty": 0.29802030324935913,
+     "value": 0.5028629899024963
+    },
+    "ribosome": {
+     "uncertainty": 0.9568323493003845,
+     "value": 2.0832207202911377
+    }
+   },
+   "reference_similarity": 0.8518648147583008
+  },
+  {
+   "abstain_category": "ambiguous",
+   "abstain_reason": "ambiguous_between_classes",
+   "abstained": true,
+   "best_guess": {
+    "label": "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "probability": 0.5207188969219617
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_44.raw",
+   "confidence": null,
+   "coordinates": [
+    0.3755180537700653,
+    -0.4812633991241455,
+    0.4950130581855774
+   ],
+   "label": null,
+   "label_level": null,
+   "label_set": [],
+   "observed_genes": 939,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.14380255341529846,
+     "value": -0.30529338121414185
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.07322252541780472,
+     "value": -0.012760231271386147
+    },
+    "glycolysis": {
+     "uncertainty": 0.5083622336387634,
+     "value": 0.37115299701690674
+    },
+    "inflammatory": {
+     "uncertainty": 0.14671601355075836,
+     "value": 0.05600031465291977
+    },
+    "oxphos": {
+     "uncertainty": 0.2597256302833557,
+     "value": 0.5883352160453796
+    },
+    "ribosome": {
+     "uncertainty": 0.22402256727218628,
+     "value": 3.2772884368896484
+    }
+   },
+   "reference_similarity": 0.9236932992935181
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.5072104411090399
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_45.raw",
+   "confidence": 0.9832113043868926,
+   "coordinates": [
+    0.25868460536003113,
+    -0.5795573592185974,
+    0.3322419822216034
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1260,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.10362639278173447,
+     "value": -0.14264549314975739
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.022311290726065636,
+     "value": -0.008730915375053883
+    },
+    "glycolysis": {
+     "uncertainty": 0.12192676961421967,
+     "value": 0.08826194703578949
+    },
+    "inflammatory": {
+     "uncertainty": 0.156446173787117,
+     "value": 0.1590370237827301
+    },
+    "oxphos": {
+     "uncertainty": 0.15900783240795135,
+     "value": 0.2372487634420395
+    },
+    "ribosome": {
+     "uncertainty": 0.45464441180229187,
+     "value": 1.2064833641052246
+    }
+   },
+   "reference_similarity": 0.984017014503479
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.47812701111464984
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_46.raw",
+   "confidence": 0.9671607908075724,
+   "coordinates": [
+    0.28667721152305603,
+    -0.5864876508712769,
+    0.2674967646598816
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 743,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1198345497250557,
+     "value": -0.16221000254154205
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.031160490587353706,
+     "value": -0.0031946476083248854
+    },
+    "glycolysis": {
+     "uncertainty": 0.19256693124771118,
+     "value": 0.11038092523813248
+    },
+    "inflammatory": {
+     "uncertainty": 0.2293715476989746,
+     "value": 0.17182230949401855
+    },
+    "oxphos": {
+     "uncertainty": 0.17606115341186523,
+     "value": 0.29815831780433655
+    },
+    "ribosome": {
+     "uncertainty": 0.4474102854728699,
+     "value": 1.0986343622207642
+    }
+   },
+   "reference_similarity": 0.9707678556442261
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd4-positive, alpha-beta t cell",
+    "probability": 0.34737866353899854
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_47.raw",
+   "confidence": 0.5637518053751861,
+   "coordinates": [
+    0.35493144392967224,
+    -0.5185379981994629,
+    0.6310585737228394
+   ],
+   "label": "T cell",
+   "label_level": "group",
+   "label_set": [
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell"
+   ],
+   "observed_genes": 1090,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.1909193992614746,
+     "value": -0.3634703457355499
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.30132487416267395,
+     "value": 0.11542624235153198
+    },
+    "glycolysis": {
+     "uncertainty": 0.6053938269615173,
+     "value": 0.5045672655105591
+    },
+    "inflammatory": {
+     "uncertainty": 0.28471553325653076,
+     "value": 0.18611624836921692
+    },
+    "oxphos": {
+     "uncertainty": 0.3095633089542389,
+     "value": 0.48272594809532166
+    },
+    "ribosome": {
+     "uncertainty": 1.2264372110366821,
+     "value": 2.31624174118042
+    }
+   },
+   "reference_similarity": 0.9357593655586243
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.510465432009678
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_48.raw",
+   "confidence": 0.9398165656128291,
+   "coordinates": [
+    0.36507701873779297,
+    -0.6294627785682678,
+    0.6181192994117737
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1046,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6864508986473083,
+     "value": 0.015989072620868683
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.33683186769485474,
+     "value": 0.11480040103197098
+    },
+    "glycolysis": {
+     "uncertainty": 0.4381967782974243,
+     "value": 0.6758449673652649
+    },
+    "inflammatory": {
+     "uncertainty": 0.1772775501012802,
+     "value": 0.3777083158493042
+    },
+    "oxphos": {
+     "uncertainty": 0.30961793661117554,
+     "value": 0.2980188727378845
+    },
+    "ribosome": {
+     "uncertainty": 0.8594585061073303,
+     "value": 1.9714313745498657
+    }
+   },
+   "reference_similarity": 0.9832717180252075
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "natural killer cell",
+    "probability": 0.49545616402391107
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_49.raw",
+   "confidence": 0.9781327111561109,
+   "coordinates": [
+    0.263003945350647,
+    -0.5774222016334534,
+    0.3329465389251709
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "mature nk t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 968,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.09812067449092865,
+     "value": -0.18347322940826416
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.02173040248453617,
+     "value": -0.0055876197293400764
+    },
+    "glycolysis": {
+     "uncertainty": 0.10694959759712219,
+     "value": 0.052777327597141266
+    },
+    "inflammatory": {
+     "uncertainty": 0.1842222362756729,
+     "value": 0.1977015733718872
+    },
+    "oxphos": {
+     "uncertainty": 0.15227694809436798,
+     "value": 0.2421153485774994
+    },
+    "ribosome": {
+     "uncertainty": 0.48865944147109985,
+     "value": 1.1743804216384888
+    }
+   },
+   "reference_similarity": 0.9772750735282898
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "cd8-positive, alpha-beta t cell",
+    "probability": 0.4511737405209555
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_50.raw",
+   "confidence": 0.7493253520410886,
+   "coordinates": [
+    0.39564162492752075,
+    -0.5565767288208008,
+    0.6140985488891602
+   ],
+   "label": "lymphoid",
+   "label_level": "lineage",
+   "label_set": [
+    "cd8-positive, alpha-beta t cell",
+    "natural killer cell"
+   ],
+   "observed_genes": 1014,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.5181580185890198,
+     "value": 0.13962838053703308
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.37102970480918884,
+     "value": 0.15939943492412567
+    },
+    "glycolysis": {
+     "uncertainty": 0.4348670244216919,
+     "value": 0.37102073431015015
+    },
+    "inflammatory": {
+     "uncertainty": 0.23380327224731445,
+     "value": 0.1084669753909111
+    },
+    "oxphos": {
+     "uncertainty": 0.4812990128993988,
+     "value": 0.34435951709747314
+    },
+    "ribosome": {
+     "uncertainty": 1.0701066255569458,
+     "value": 1.6430599689483643
+    }
+   },
+   "reference_similarity": 0.9824470281600952
+  },
+  {
+   "abstained": false,
+   "best_guess": {
+    "label": "monocyte",
+    "probability": 0.42304605013823926
+   },
+   "cell_id": "E:\\Proteomics_Astral\\raw\\TopMedPBMC1\\Astral_TopMedPBMC1_041225_SP_51.raw",
+   "confidence": 0.7899231457714813,
+   "coordinates": [
+    0.43158015608787537,
+    0.16511227190494537,
+    0.10474230349063873
+   ],
+   "label": "myeloid",
+   "label_level": "lineage",
+   "label_set": [
+    "classical monocyte",
+    "monocyte",
+    "myeloid dendritic cell"
+   ],
+   "observed_genes": 939,
+   "properties": {
+    "antigen_presentation": {
+     "uncertainty": 0.6174745559692383,
+     "value": 0.3306366503238678
+    },
+    "cell_cycle_S": {
+     "uncertainty": 0.03517911210656166,
+     "value": -0.006630584131926298
+    },
+    "glycolysis": {
+     "uncertainty": 0.5539370179176331,
+     "value": 0.3681400418281555
+    },
+    "inflammatory": {
+     "uncertainty": 0.3820941150188446,
+     "value": 0.18082267045974731
+    },
+    "oxphos": {
+     "uncertainty": 0.4454634487628937,
+     "value": 0.3270835876464844
+    },
+    "ribosome": {
+     "uncertainty": 0.8418883681297302,
+     "value": 0.8910694718360901
+    }
+   },
+   "reference_similarity": 0.9099861979484558
+  }
+ ],
+ "gene_id_resolution": {
+  "ambiguous": 0,
+  "ambiguous_identifiers": [],
+  "matched": 3054,
+  "unmapped": 33,
+  "unmapped_identifiers": [
+   "BACC1",
+   "GBA1",
+   "H2AC25",
+   "H2BC26",
+   "IGHV1-3",
+   "IGHV3-15",
+   "IGHV3-23",
+   "IGHV3-49",
+   "IGHV3-7",
+   "IGHV4-30-4",
+   "IGHV5-10-1",
+   "IGKV2-24",
+   "IGKV2-28",
+   "IGKV3-11",
+   "IGKV3-15",
+   "IGKV4-1",
+   "IGLV1-47",
+   "IGLV3-16",
+   "IGLV3-19",
+   "KPLCE",
+   "MTCL3",
+   "MYL11",
+   "NHERF1",
+   "OCC1",
+   "SKIC2",
+   "SKIC8",
+   "TMT1A",
+   "TRA",
+   "TRAV19",
+   "TRAV22",
+   "TRBJ2-4",
+   "TRBV6-2",
+   "TRBV7-2"
+  ]
+ },
+ "label_space": {
+  "candidate_classes": [
+   "b cell",
+   "basophil",
+   "cd4-positive, alpha-beta t cell",
+   "cd8-positive, alpha-beta t cell",
+   "classical monocyte",
+   "common myeloid progenitor",
+   "erythrocyte",
+   "hematopoietic precursor cell",
+   "hematopoietic stem cell",
+   "intermediate monocyte",
+   "macrophage",
+   "mature nk t cell",
+   "monocyte",
+   "myeloid dendritic cell",
+   "naive thymus-derived cd4-positive, alpha-beta t cell",
+   "natural killer cell",
+   "neutrophil",
+   "non-classical monocyte",
+   "plasma cell",
+   "plasmacytoid dendritic cell",
+   "platelet",
+   "regulatory t cell"
+  ],
+  "restricted_to_supported_classes": false
+ },
+ "model_version": "v3.1 ensemble (T1 NB2: V2 seeds 0 to 4)",
+ "n_cells": 50,
+ "n_features_matched": 3054,
+ "n_features_unmatched": 33,
+ "pipeline_version": "v3.1",
+ "reference_abstain_threshold": 0.7789892554283142,
+ "supported_classes": {
+  "method": "none",
+  "names": [
+   "b cell",
+   "basophil",
+   "cd4-positive, alpha-beta t cell",
+   "cd8-positive, alpha-beta t cell",
+   "classical monocyte",
+   "common myeloid progenitor",
+   "erythrocyte",
+   "hematopoietic precursor cell",
+   "hematopoietic stem cell",
+   "intermediate monocyte",
+   "macrophage",
+   "mature nk t cell",
+   "monocyte",
+   "myeloid dendritic cell",
+   "naive thymus-derived cd4-positive, alpha-beta t cell",
+   "natural killer cell",
+   "neutrophil",
+   "non-classical monocyte",
+   "plasma cell",
+   "plasmacytoid dendritic cell",
+   "platelet",
+   "regulatory t cell"
+  ],
+  "renormalised": false,
+  "support": null
+ },
+ "value_scale": {
+  "detected": "linear",
+  "transformed": true
+ }
+}

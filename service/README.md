@@ -111,9 +111,12 @@ measured.
 **The macrophage/monocyte restriction is opt-in per request** (form field
 `restrict_to_supported_classes`, default false; see
 [`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
-Restricting Stage 4 to `config.CROSS_MODAL_SUPPORTED_CLASSES` lifts SCoPE2's
-balanced accuracy from 31.08% to 79.79%, because SCoPE2 only contains those
-two types. It is wrong for anything else. Given a Fulcher 2026 PBMC upload,
+Restricting Stage 4 to `config.CROSS_MODAL_SUPPORTED_CLASSES` lifts v3's
+balanced accuracy on SCoPE2 from 0.68% to 20.21%, because SCoPE2 only
+contains those two types. That is still below the two classes' 50% chance:
+v3 calls most SCoPE2 macrophages monocytes
+([bugs-and-fixes](../research/benchmark/bugs-and-fixes.md), 8). It is wrong
+for anything else. Given a Fulcher 2026 PBMC upload,
 the restricted service labelled every cell it didn't abstain on as
 macrophage or monocyte. Restricted, `resolve_fallback` can match only that
 one pair. Unrestricted, the default, all five `CONFUSABLE_PAIRS` are

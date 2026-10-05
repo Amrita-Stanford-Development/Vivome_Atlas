@@ -9,9 +9,9 @@ own data (`web/data/`) and the model's files (`service/model/`).
   - `Reference_Projection_V3_ckpt/`: the five v3 reference seeds;
   - `Fulcher2026/`: the held-out Fulcher 2026 dataset (see
     `benchmark/datasets.py`).
-  - `Khoury2026/`: the SEALED Khoury 2026 final test set. Don't embed or
-    score it before the final v3.1 evaluation (see
-    `research/benchmark/protocol-khoury2026.md`). The small tables any reported number
+  - `Khoury2026/`: the Khoury 2026 final test set, scored once at the
+    final v3.1 evaluation (2026-10-03). Its result is final: nothing
+    rescores it (see `research/benchmark/protocol-khoury2026.md`). The small tables any reported number
   cites are copied into `research/notebook-outputs/` and committed there.
 
 Track E (held-out mass-spectrometry data; see `research/roadmap.md`) will

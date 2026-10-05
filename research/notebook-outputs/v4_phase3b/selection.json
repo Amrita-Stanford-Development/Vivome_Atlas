@@ -1,0 +1,115 @@
+{
+  "calibration_suite": {
+    "v3.1": {
+      "all": {
+        "cells": 66881,
+        "committed": 87.69,
+        "correct_when_committed": 97.11,
+        "false_abstention": 0.73,
+        "levels": {
+          "lineage": 48.7,
+          "class": 21.78,
+          "group": 17.21,
+          "abstain": 12.31
+        },
+        "best_guess_per_upload_balanced": 58.57
+      },
+      "by_group": {
+        "lineage": 57.68,
+        "mixed": 66.92,
+        "narrow": 60.72,
+        "pbmc": 60.1,
+        "scope2": 67.84,
+        "single": 33.74
+      }
+    },
+    "v4 s=0.0": {
+      "all": {
+        "cells": 66881,
+        "committed": 85.0,
+        "correct_when_committed": 97.39,
+        "false_abstention": 0.73,
+        "levels": {
+          "lineage": 47.7,
+          "class": 20.51,
+          "group": 16.8,
+          "abstain": 15.0
+        },
+        "best_guess_per_upload_balanced": 62.37
+      },
+      "by_group": {
+        "lineage": 60.05,
+        "mixed": 76.66,
+        "narrow": 63.66,
+        "pbmc": 72.84,
+        "scope2": 66.12,
+        "single": 27.39
+      },
+      "largest_scenario_drop": 6.35,
+      "eligible": false
+    },
+    "v4 s=0.5": {
+      "all": {
+        "cells": 66881,
+        "committed": 86.9,
+        "correct_when_committed": 97.1,
+        "false_abstention": 0.73,
+        "levels": {
+          "lineage": 48.13,
+          "class": 21.62,
+          "group": 17.15,
+          "abstain": 13.1
+        },
+        "best_guess_per_upload_balanced": 64.1
+      },
+      "by_group": {
+        "lineage": 61.96,
+        "mixed": 76.67,
+        "narrow": 65.76,
+        "pbmc": 72.48,
+        "scope2": 69.83,
+        "single": 31.65
+      },
+      "largest_scenario_drop": 2.09,
+      "eligible": true
+    },
+    "v4 s=1.0": {
+      "all": {
+        "cells": 66881,
+        "committed": 87.48,
+        "correct_when_committed": 97.18,
+        "false_abstention": 0.73,
+        "levels": {
+          "lineage": 48.54,
+          "class": 21.73,
+          "group": 17.21,
+          "abstain": 12.52
+        },
+        "best_guess_per_upload_balanced": 64.19
+      },
+      "by_group": {
+        "lineage": 61.85,
+        "mixed": 74.83,
+        "narrow": 67.1,
+        "pbmc": 70.78,
+        "scope2": 71.63,
+        "single": 33.22
+      },
+      "largest_scenario_drop": 0.52,
+      "eligible": true
+    }
+  },
+  "eligible": [
+    0.5,
+    1.0
+  ],
+  "tied": [
+    0.5,
+    1.0
+  ],
+  "chosen": 0.5,
+  "fulcher_for_the_tie": {
+    "v4 s=0.5": 65.0,
+    "v4 s=1.0": 63.49
+  }
+}

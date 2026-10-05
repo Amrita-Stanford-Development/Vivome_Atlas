@@ -1,0 +1,85 @@
+{
+  "n_cells": 1651,
+  "n_scored": 1651,
+  "share_of_all_cells_pct": {
+    "committed": 93.76,
+    "fine": 11.45,
+    "abstain_ood": 0.18,
+    "abstain_ambiguous": 5.88,
+    "abstain_empty": 0.18
+  },
+  "composition_pct": {
+    "T cell": 38.82,
+    "lineage:myeloid": 25.14,
+    "lineage:lymphoid": 17.99,
+    "B cell": 11.39,
+    "abstain": 6.24,
+    "monocyte/macrophage": 0.42
+  },
+  "committed_scored": 1548,
+  "correct_scored": 1497,
+  "committed_pct": 93.76,
+  "correct_when_committed_pct": 96.71,
+  "by_type": {
+    "CD4T": {
+      "n": 407,
+      "committed": 398,
+      "correct": 397,
+      "committed_pct": 97.79,
+      "correct_at_stated_level_pct": 99.75,
+      "stated_level_counts": {
+        "class": 1,
+        "group": 312,
+        "lineage": 85
+      }
+    },
+    "CD8T": {
+      "n": 333,
+      "committed": 309,
+      "correct": 305,
+      "committed_pct": 92.79,
+      "correct_at_stated_level_pct": 98.71,
+      "stated_level_counts": {
+        "class": 4,
+        "group": 286,
+        "lineage": 19
+      }
+    },
+    "NK": {
+      "n": 231,
+      "committed": 209,
+      "correct": 182,
+      "committed_pct": 90.48,
+      "correct_at_stated_level_pct": 87.08,
+      "stated_level_counts": {
+        "class": 0,
+        "group": 26,
+        "lineage": 183
+      }
+    },
+    "B": {
+      "n": 246,
+      "committed": 213,
+      "correct": 195,
+      "committed_pct": 86.59,
+      "correct_at_stated_level_pct": 91.55,
+      "stated_level_counts": {
+        "class": 183,
+        "group": 18,
+        "lineage": 12
+      }
+    },
+    "monocyte": {
+      "n": 434,
+      "committed": 419,
+      "correct": 418,
+      "committed_pct": 96.54,
+      "correct_at_stated_level_pct": 99.76,
+      "stated_level_counts": {
+        "class": 1,
+        "group": 5,
+        "lineage": 413
+      }
+    }
+  }
+}

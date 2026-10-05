@@ -113,6 +113,149 @@ not adjusted.
   `research/benchmark/khoury2026_posthoc/`. v3.1's and v3's predictions are
   reused unchanged.
 
-## Results
+## Results (2026-10-04)
 
-Pending: the queue has not run yet.
+The corrections above were committed at `d8522cd`, before any corrected
+result was scored. Tables: [baselines_corrected/](baselines_corrected/fulcher2026_summary.csv)
+(development data) and [khoury2026_posthoc/](khoury2026_posthoc/family_summary.csv)
+(Khoury, post-hoc).
+
+### Runs
+
+- **60 runs,** one at a time on the PC, 2026-10-03 23:56 to 2026-10-04 08:57.
+  59 completed and none diverged.
+- **scANVI seed 2 on Fulcher failed.** At epoch 28 of its scANVI stage,
+  torch refused a Normal scale that was NaN or zero. The error text does
+  not show which, so the runner records the run as failed, not diverged.
+  Its one rerun failed identically, at the same epoch. It is reported as
+  failed, and scANVI's Fulcher rows are over seeds 0 and 1.
+- **Seurat's rerun is not byte-identical to its earlier runs,** as section
+  1 predicts it should be in principle: Fulcher 18.9 → 19.4, SCoPE2
+  restricted 53.5 → 53.3. Seurat re-standardises its inputs, so only
+  float-level differences reach it, and they move a few anchors.
+
+### Setup checks (RNA labels only)
+
+Every completed embedding run now carries cell types on the RNA side:
+held-out kNN balanced accuracy over 22 classes (chance 4.5%) is
+
+- 61–63% for PCA and Harmony;
+- 59–64% for MaxFuse (5.5–6.3% before the correction);
+- 57–63% for scGLUE;
+- 72–89% for scANVI;
+- 74–75% for the correlation rule (held-out cells against class means).
+
+How much query cells mix with RNA cells differs by tool and dataset. This
+is the median share of a query cell's 30 nearest neighbours that are query
+cells (under full mixing: 1.7%, 0.3%, 1.5% and 1.9%):
+
+| Tool | SCoPE2 | PBMC240 | Fulcher | Khoury |
+|---|---|---|---|---|
+| PCA (no correction) | 100% | 30% | 100% | 100% |
+| Harmony | 77–87% | 7% | 50–53% | 33–37% |
+| MaxFuse | 23–27% | 0–3% | 30–37% | 10–13% |
+| scGLUE | 3–10% | 23–27% | 77–80% | 10–40% |
+| scANVI | 93–100% | 33–57% | 90–93% | 67–93% |
+
+MaxFuse's matching gives every query cell an answer on every dataset.
+
+### Development data
+
+Balanced accuracy, mean ± SD over seeds; v3.1 as served is unchanged.
+
+**Fulcher 2026** (six types, chance 16.7%):
+
+| Method, rule | Before | Corrected | v3.1 best guess minus it (CI excludes 0) |
+|---|---|---|---|
+| **v3.1 as served, best guess** | 57.9 | 57.9 | |
+| Harmony, nearest centroid | 30.4 ± 5.6 | **63.0 ± 0.5** | −4.6 to −5.6; 3 of 3 favour Harmony |
+| Correlation to class mean | 46.9 | **62.1** | −4.2; favours correlation |
+| Harmony, shared kNN | 32.0 ± 6.1 | **60.8 ± 0.6** | −2.3 to −3.6; 1 favours Harmony, 2 neither |
+| PCA, shared kNN | | 55.5 | +2.5; neither |
+| scANVI, shared kNN | 47.8 (best arm) | 51.9 ± 0.6 | +5.6 to +6.4; v3.1 |
+| scANVI, its classifier | 37.7 (best arm) | 47.1 ± 4.5 | +7.7 to +14.0; v3.1 |
+| PCA, nearest centroid | | 39.2 | +18.8; v3.1 |
+| MaxFuse, nearest centroid / shared kNN / matching | 11.1 / 1.4 | 31.1 / 27.6 / 27.0 | +25 to +35; v3.1 |
+| scGLUE, nearest centroid / shared kNN | 24.2 / 18.3 | 24.0 / 17.4 | +34 to +43; v3.1 |
+| Seurat CCA | 18.9 | 19.4 | +38.5; v3.1 |
+
+**SCoPE2 restricted** (macrophage or monocyte; chance 50; v3.1 38.7),
+scored with the corrected labels (`bugs-and-fixes.md`, 8; until
+2026-10-04 this paragraph used swapped labels, and every restricted figure
+in it was 100 minus the true one).
+
+- **Above chance:** only Harmony with nearest centroid, 63.0 ± 0.4.
+- **Ahead of v3.1 but at or below chance** (CI excluding zero): scGLUE with
+  shared kNN (50.8), MaxFuse with nearest centroid (49.2), Seurat (46.7),
+  PCA with nearest centroid (45.4). MaxFuse with shared kNN (42.4) is ahead
+  in 2 of 3 seeds.
+- **Behind v3.1:** the correlation baseline (35.4), PCA with shared kNN
+  (34.8), Harmony with shared kNN (29.7) and scANVI under every rule
+  (22.3 to 33.1).
+- **Unrestricted,** every method's mean stays under 7%; v3.1 scores 0.0.
+
+Most methods place PMA-differentiated U-937 cells nearer the RNA
+monocytes, so SCoPE2's class-level task no longer ranks the methods in any
+useful way.
+
+**PBMC240 lymphoid recall** (117 weakly labelled cells; v3.1 92.3): PCA
+88.9, Harmony 82.1 ± 0.9, scANVI 80.1 ± 25.7 and the correlation baseline
+75.2, against 38.7 at best before the correction. MaxFuse 28.8, scGLUE
+25.4 and Seurat 22.2 stay low.
+
+### Khoury 2026, post-hoc
+
+**Post-hoc:** Khoury's labels were read at its one scoring. These are the
+corrected baselines scored beside the sealed result, which stays as scored
+([khoury2026/](khoury2026/per_seed_scores.csv)). v3.1's and v3's rows were
+rebuilt by the sealed scorer's own code and match the sealed tables.
+
+Balanced accuracy over five types (chance 20%), with the paired bootstrap
+against v3.1 (its members' shared kNN against each shared-kNN baseline; its
+best guess against every other rule):
+
+| Method, rule | Balanced accuracy | Bootstrap pairings |
+|---|---|---|
+| PCA, shared kNN | **62.8** | 3 favour PCA, 1 V2, 1 neither; mean −2.8 |
+| scANVI, shared kNN | **61.5 ± 2.1** | 7 favour scANVI, 6 neither, 2 V2; mean −1.5 |
+| v3.1's members (V2) alone, shared kNN | 60.0 ± 3.3 | |
+| **v3.1 as served, best guess** | **56.9** | |
+| Harmony, shared kNN | 56.9 ± 1.7 | 8 favour V2, 7 neither; mean +3.2 |
+| scANVI, its classifier | 51.6 ± 6.5 | 1 favours v3.1, 2 neither; mean +5.3 |
+| Correlation to class mean | 49.8 | favours v3.1, +7.1 |
+| scGLUE, shared kNN | 38.9 ± 8.7 | 15 of 15 favour V2 |
+| MaxFuse, shared kNN / matching | 31.6 ± 0.3 / 30.4 ± 1.1 | all favour v3.1 |
+| Seurat CCA | 29.7 | favours v3.1, +27.2 |
+| v3 as served (nearest centroid / shared kNN) | 40.9 / 39.8 | scANVI ahead in 6 of 6 |
+
+Per type, CD8T fails for every method except v3 (which calls most T cells
+CD8T): v3.1's best guess 2.7%, PCA 0.9%, scANVI 14.2%, correlation 0.9%.
+The fair baselines find NK better than v3.1's best guess (PCA 52.8%, scANVI
+47.5%, against 29.0%). Lineage recall is high for the better methods alike:
+v3.1 98.1 / 97.2, Harmony 98.7 / 96.2, scANVI 97.1 / 97.9.
+
+### What the corrected numbers show
+
+1. **The handicaps were real and large.** With the corrections, Harmony
+   rose from 32 to 61 on Fulcher, the correlation baseline from 47 to 62,
+   MaxFuse from 1 to 28, and PBMC240 lymphoid recall from at most 39 to
+   82–89. Seurat (which rescales its own inputs) and scGLUE on Fulcher
+   barely moved.
+2. **v3.1's best guess is level with the best simple baselines, not ahead
+   of them.** On Fulcher, Harmony and the correlation baseline score 61–63
+   against 57.9, with CIs favouring them. On Khoury (post-hoc), PCA with
+   kNN and scANVI score 62.8 and 61.5 against v3.1's 56.9 (its members
+   alone, 60.0). On SCoPE2 restricted, with its labels corrected, every
+   method but one is at or below chance; Harmony with nearest centroid
+   (63.0) is the exception.
+3. **v3.1 stays ahead of the integration tools that ran here,** MaxFuse,
+   scGLUE and Seurat CCA, on every dataset, and has the best PBMC240
+   lymphoid recall.
+4. **v3 does not beat corrected scANVI** on Khoury (6 of 6 pairings favour
+   scANVI).
+5. **What v3.1 adds is not best-guess accuracy but its answers:** on Khoury
+   it commits on 93.8% of cells and 96.7% of those answers hold at the level
+   stated; on Fulcher 89.2% and 97.3%. No baseline here abstains or answers
+   at a coarser level, so that part is not compared.
+
+So the claim that v3.1 beats the baselines does not survive fair inputs.

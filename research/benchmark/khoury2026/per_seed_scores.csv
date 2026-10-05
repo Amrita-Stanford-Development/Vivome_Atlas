@@ -1,0 +1,38 @@
+family,model,seed,rule,n_scored,balanced_accuracy_pct,recall_CD4T_pct,recall_CD8T_pct,recall_NK_pct,recall_B_pct,recall_monocyte_pct,lymphoid_recall_pct,myeloid_recall_pct
+v3.1,v3.1,0,best_guess,1651,56.9251,84.5209,2.7027,29.0043,81.3008,87.0968,98.1101,97.2350
+v3.1 members,V2_seed0,0,shared_knn,1651,65.2092,78.8698,12.3123,58.0087,80.0813,96.7742,97.2884,97.2350
+v3.1 members,V2_seed1,1,shared_knn,1651,59.2089,53.8084,56.1562,10.3896,78.4553,97.2350,96.9597,97.4654
+v3.1 members,V2_seed2,2,shared_knn,1651,57.0886,70.2703,33.9339,4.3290,79.6748,97.2350,95.3164,97.2350
+v3.1 members,V2_seed3,3,shared_knn,1651,57.6177,54.5455,45.9459,10.3896,80.8943,96.3134,95.7272,97.4654
+v3.1 members,V2_seed4,4,shared_knn,1651,61.0557,59.4595,39.0390,29.8701,79.6748,97.2350,96.1380,97.4654
+v3,v3_served,0,nearest_centroid,1651,40.8976,9.0909,60.9610,3.4632,40.6504,90.3226,70.3369,98.1567
+v3,v3_served,0,shared_knn,1651,39.7659,8.3538,63.9640,2.1645,33.3333,91.0138,70.3369,98.3871
+scANVI_as_provided,scanvi_as_provided_seed0,0,native,1651,20.2612,1.2285,3.3033,0.0000,0.0000,96.7742,5.5875,99.5392
+scANVI_as_provided,scanvi_as_provided_seed0,0,shared_knn,1651,24.0051,11.5479,0.0000,2.1645,11.3821,94.9309,14.7905,98.1567
+scANVI_as_provided,scanvi_as_provided_seed1,1,native,1651,21.2184,1.7199,3.6036,1.2987,5.6911,93.7788,11.2572,99.0783
+scANVI_as_provided,scanvi_as_provided_seed1,1,shared_knn,1651,27.4737,6.8796,10.5105,3.8961,22.7642,93.3180,33.9359,98.1567
+scANVI_as_provided,scanvi_as_provided_seed2,2,native,1651,30.7558,1.2285,35.4354,15.5844,4.0650,97.4654,33.6072,99.0783
+scANVI_as_provided,scanvi_as_provided_seed2,2,shared_knn,1651,27.7347,5.6511,5.4054,6.9264,22.7642,97.9263,25.8012,98.1567
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,native,1651,34.6540,0.2457,76.8769,1.7316,0.4065,94.0092,65.8176,99.3088
+scANVI_cellmedian,scanvi_cellmedian_seed0,0,shared_knn,1651,31.5393,7.3710,43.5435,10.8225,6.0976,89.8618,48.0690,97.0046
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,native,1651,34.8744,0.4914,82.8829,1.2987,1.2195,88.4793,79.5399,98.6175
+scANVI_cellmedian,scanvi_cellmedian_seed1,1,shared_knn,1651,37.1437,34.1523,15.0150,41.9913,18.2927,76.2673,75.6779,97.9263
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,native,1651,30.4060,0.0000,53.4535,0.0000,2.0325,96.5438,37.0583,99.7696
+scANVI_cellmedian,scanvi_cellmedian_seed2,2,shared_knn,1651,22.4481,4.6683,9.6096,1.2987,7.7236,88.9401,19.8028,99.7696
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,native,1651,27.4090,13.0221,16.2162,6.0606,9.3496,92.3963,33.8537,98.3871
+scANVI_measuredgenes,scanvi_measuredgenes_seed0,0,shared_knn,1651,35.7674,27.0270,1.5015,8.2251,54.0650,88.0184,47.3295,94.7005
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,native,1651,32.5741,23.5872,17.1171,8.6580,17.8862,95.6221,54.6426,99.3088
+scANVI_measuredgenes,scanvi_measuredgenes_seed1,1,shared_knn,1651,35.4983,23.3415,4.5045,17.3160,37.3984,94.9309,47.4938,98.1567
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,native,1651,32.8012,14.0049,43.8438,4.3290,5.2846,96.5438,55.8751,98.8479
+scANVI_measuredgenes,scanvi_measuredgenes_seed2,2,shared_knn,1651,36.9681,31.9410,3.0030,12.5541,44.7154,92.6267,48.6442,98.8479
+maxfuse,maxfuse_seed0,0,shared_knn,1651,0.5530,0.0000,0.0000,0.0000,0.0000,2.7650,0.3287,97.2350
+maxfuse,maxfuse_seed1,1,shared_knn,1651,0.7434,0.4914,0.0000,0.0000,0.0000,3.2258,0.4108,95.3917
+maxfuse,maxfuse_seed2,2,shared_knn,1651,1.2121,0.0000,0.3003,0.0000,0.0000,5.7604,0.3287,95.8525
+scglue,scglue_seed0,0,shared_knn,1651,44.2886,18.1818,7.8078,56.2771,79.2683,59.9078,69.9260,83.1797
+scglue,scglue_seed1,1,shared_knn,1651,41.0064,13.5135,5.1051,48.9177,78.0488,59.4470,62.2843,88.0184
+scglue,scglue_seed2,2,shared_knn,1651,43.1401,18.1818,4.5045,55.8442,80.4878,56.6820,70.2547,83.1797
+harmony,harmony_seed0,0,shared_knn,1651,26.3687,15.9705,5.7057,2.1645,28.0488,79.9539,32.2925,97.4654
+harmony,harmony_seed1,1,shared_knn,1651,27.4886,21.3759,4.5045,2.1645,29.6748,79.7235,37.0583,96.7742
+harmony,harmony_seed2,2,shared_knn,1651,29.0363,24.3243,5.4054,2.1645,33.3333,79.9539,43.8784,97.0046
+seurat,seurat_seed0,0,native,1651,30.3831,24.3243,2.7027,19.4805,49.1870,56.2212,41.0025,95.6221
+correlation,correlation_seed0,0,correlation,1651,38.6601,60.1966,1.2012,16.0173,48.3740,67.5115,58.9975,96.5438

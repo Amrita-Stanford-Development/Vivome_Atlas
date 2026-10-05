@@ -1,0 +1,78 @@
+comparison,rules,model_a,model_b,diff_bal_acc_pct,ci_lo,ci_hi,ci_excludes_zero,favours
+v3.1 vs v3,product rules,v3.1,v3_served,16.0275,13.5560,18.4777,True,v3.1
+v3.1 vs v3,shared_knn,V2_seed0,v3_served,25.4434,22.9664,27.7834,True,V2_seed0
+v3.1 vs v3,shared_knn,V2_seed1,v3_served,19.4430,17.0904,21.8686,True,V2_seed1
+v3.1 vs v3,shared_knn,V2_seed2,v3_served,17.3227,15.0143,19.6379,True,V2_seed2
+v3.1 vs v3,shared_knn,V2_seed3,v3_served,17.8519,15.5413,20.2629,True,V2_seed3
+v3.1 vs v3,shared_knn,V2_seed4,v3_served,21.2898,18.8304,23.9494,True,V2_seed4
+v3.1 vs scANVI_measuredgenes,product rule vs native,v3.1,scanvi_measuredgenes_seed0,29.5161,27.2089,31.8826,True,v3.1
+v3.1 vs scANVI_measuredgenes,product rule vs native,v3.1,scanvi_measuredgenes_seed1,24.3510,21.9668,26.7752,True,v3.1
+v3.1 vs scANVI_measuredgenes,product rule vs native,v3.1,scanvi_measuredgenes_seed2,24.1239,21.9010,26.3762,True,v3.1
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed0,scanvi_measuredgenes_seed0,29.4418,26.8445,31.9877,True,V2_seed0
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed0,scanvi_measuredgenes_seed1,29.7110,27.2211,32.1706,True,V2_seed0
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed0,scanvi_measuredgenes_seed2,28.2412,25.7755,30.7012,True,V2_seed0
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed1,scanvi_measuredgenes_seed0,23.4415,20.9965,26.0049,True,V2_seed1
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed1,scanvi_measuredgenes_seed1,23.7106,21.2312,26.2135,True,V2_seed1
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed1,scanvi_measuredgenes_seed2,22.2408,19.6887,24.6529,True,V2_seed1
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed2,scanvi_measuredgenes_seed0,21.3212,18.8658,23.8267,True,V2_seed2
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed2,scanvi_measuredgenes_seed1,21.5903,19.1569,23.9497,True,V2_seed2
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed2,scanvi_measuredgenes_seed2,20.1205,17.7354,22.5246,True,V2_seed2
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed3,scanvi_measuredgenes_seed0,21.8503,19.3300,24.4685,True,V2_seed3
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed3,scanvi_measuredgenes_seed1,22.1195,19.5371,24.6701,True,V2_seed3
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed3,scanvi_measuredgenes_seed2,20.6497,18.1464,23.1315,True,V2_seed3
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed4,scanvi_measuredgenes_seed0,25.2883,22.6355,27.9032,True,V2_seed4
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed4,scanvi_measuredgenes_seed1,25.5574,23.0374,28.1061,True,V2_seed4
+v3.1 vs scANVI_measuredgenes,shared_knn,V2_seed4,scanvi_measuredgenes_seed2,24.0876,21.6018,26.5886,True,V2_seed4
+v3 vs scANVI_measuredgenes,product rule vs native,v3_served,scanvi_measuredgenes_seed0,13.4886,11.3012,15.7024,True,v3_served
+v3 vs scANVI_measuredgenes,product rule vs native,v3_served,scanvi_measuredgenes_seed1,8.3235,6.1592,10.5669,True,v3_served
+v3 vs scANVI_measuredgenes,product rule vs native,v3_served,scanvi_measuredgenes_seed2,8.0964,5.9336,10.3020,True,v3_served
+v3 vs scANVI_measuredgenes,shared_knn,v3_served,scanvi_measuredgenes_seed0,3.9985,1.7462,6.3641,True,v3_served
+v3 vs scANVI_measuredgenes,shared_knn,v3_served,scanvi_measuredgenes_seed1,4.2676,2.0132,6.4310,True,v3_served
+v3 vs scANVI_measuredgenes,shared_knn,v3_served,scanvi_measuredgenes_seed2,2.7978,0.5032,5.1865,True,v3_served
+v3.1 vs maxfuse,shared_knn,V2_seed0,maxfuse_seed0,64.6563,62.5207,66.5897,True,V2_seed0
+v3.1 vs maxfuse,shared_knn,V2_seed0,maxfuse_seed1,64.4658,62.4178,66.3944,True,V2_seed0
+v3.1 vs maxfuse,shared_knn,V2_seed0,maxfuse_seed2,63.9971,61.8541,65.9735,True,V2_seed0
+v3.1 vs maxfuse,shared_knn,V2_seed1,maxfuse_seed0,58.6559,56.7753,60.5947,True,V2_seed1
+v3.1 vs maxfuse,shared_knn,V2_seed1,maxfuse_seed1,58.4654,56.5690,60.4011,True,V2_seed1
+v3.1 vs maxfuse,shared_knn,V2_seed1,maxfuse_seed2,57.9968,56.0455,59.9644,True,V2_seed1
+v3.1 vs maxfuse,shared_knn,V2_seed2,maxfuse_seed0,56.5356,54.6855,58.3465,True,V2_seed2
+v3.1 vs maxfuse,shared_knn,V2_seed2,maxfuse_seed1,56.3452,54.5374,58.0742,True,V2_seed2
+v3.1 vs maxfuse,shared_knn,V2_seed2,maxfuse_seed2,55.8765,53.9602,57.6382,True,V2_seed2
+v3.1 vs maxfuse,shared_knn,V2_seed3,maxfuse_seed0,57.0647,55.1421,59.0258,True,V2_seed3
+v3.1 vs maxfuse,shared_knn,V2_seed3,maxfuse_seed1,56.8743,54.9644,58.7794,True,V2_seed3
+v3.1 vs maxfuse,shared_knn,V2_seed3,maxfuse_seed2,56.4056,54.4415,58.4063,True,V2_seed3
+v3.1 vs maxfuse,shared_knn,V2_seed4,maxfuse_seed0,60.5027,58.4608,62.7197,True,V2_seed4
+v3.1 vs maxfuse,shared_knn,V2_seed4,maxfuse_seed1,60.3122,58.2562,62.4743,True,V2_seed4
+v3.1 vs maxfuse,shared_knn,V2_seed4,maxfuse_seed2,59.8436,57.7115,62.0265,True,V2_seed4
+v3.1 vs scglue,shared_knn,V2_seed0,scglue_seed0,20.9207,18.7000,22.9609,True,V2_seed0
+v3.1 vs scglue,shared_knn,V2_seed0,scglue_seed1,24.2028,21.9799,26.3161,True,V2_seed0
+v3.1 vs scglue,shared_knn,V2_seed0,scglue_seed2,22.0692,19.8875,24.0725,True,V2_seed0
+v3.1 vs scglue,shared_knn,V2_seed1,scglue_seed0,14.9203,12.5128,17.3967,True,V2_seed1
+v3.1 vs scglue,shared_knn,V2_seed1,scglue_seed1,18.2025,15.7055,20.7555,True,V2_seed1
+v3.1 vs scglue,shared_knn,V2_seed1,scglue_seed2,16.0688,13.6199,18.4935,True,V2_seed1
+v3.1 vs scglue,shared_knn,V2_seed2,scglue_seed0,12.8000,10.3495,15.0993,True,V2_seed2
+v3.1 vs scglue,shared_knn,V2_seed2,scglue_seed1,16.0822,13.6253,18.4981,True,V2_seed2
+v3.1 vs scglue,shared_knn,V2_seed2,scglue_seed2,13.9485,11.5345,16.2796,True,V2_seed2
+v3.1 vs scglue,shared_knn,V2_seed3,scglue_seed0,13.3292,10.9680,15.7437,True,V2_seed3
+v3.1 vs scglue,shared_knn,V2_seed3,scglue_seed1,16.6113,14.1884,19.2335,True,V2_seed3
+v3.1 vs scglue,shared_knn,V2_seed3,scglue_seed2,14.4777,12.1603,16.9161,True,V2_seed3
+v3.1 vs scglue,shared_knn,V2_seed4,scglue_seed0,16.7671,14.3009,19.1156,True,V2_seed4
+v3.1 vs scglue,shared_knn,V2_seed4,scglue_seed1,20.0493,17.5485,22.4226,True,V2_seed4
+v3.1 vs scglue,shared_knn,V2_seed4,scglue_seed2,17.9156,15.5892,20.2108,True,V2_seed4
+v3.1 vs harmony,shared_knn,V2_seed0,harmony_seed0,38.8406,36.3389,41.2005,True,V2_seed0
+v3.1 vs harmony,shared_knn,V2_seed0,harmony_seed1,37.7206,35.2169,40.0818,True,V2_seed0
+v3.1 vs harmony,shared_knn,V2_seed0,harmony_seed2,36.1730,33.6156,38.6550,True,V2_seed0
+v3.1 vs harmony,shared_knn,V2_seed1,harmony_seed0,32.8402,30.3814,35.2679,True,V2_seed1
+v3.1 vs harmony,shared_knn,V2_seed1,harmony_seed1,31.7202,29.1950,34.1689,True,V2_seed1
+v3.1 vs harmony,shared_knn,V2_seed1,harmony_seed2,30.1726,27.6915,32.7118,True,V2_seed1
+v3.1 vs harmony,shared_knn,V2_seed2,harmony_seed0,30.7199,28.3129,32.9622,True,V2_seed2
+v3.1 vs harmony,shared_knn,V2_seed2,harmony_seed1,29.6000,27.1798,31.9108,True,V2_seed2
+v3.1 vs harmony,shared_knn,V2_seed2,harmony_seed2,28.0523,25.6487,30.4826,True,V2_seed2
+v3.1 vs harmony,shared_knn,V2_seed3,harmony_seed0,31.2491,28.8528,33.6422,True,V2_seed3
+v3.1 vs harmony,shared_knn,V2_seed3,harmony_seed1,30.1291,27.7587,32.4658,True,V2_seed3
+v3.1 vs harmony,shared_knn,V2_seed3,harmony_seed2,28.5814,26.1491,31.1008,True,V2_seed3
+v3.1 vs harmony,shared_knn,V2_seed4,harmony_seed0,34.6870,32.1299,37.2892,True,V2_seed4
+v3.1 vs harmony,shared_knn,V2_seed4,harmony_seed1,33.5670,31.0230,36.1281,True,V2_seed4
+v3.1 vs harmony,shared_knn,V2_seed4,harmony_seed2,32.0194,29.3701,34.6531,True,V2_seed4
+v3.1 vs seurat,product rule vs native,v3.1,seurat_seed0,26.5420,24.2399,28.8135,True,v3.1
+v3.1 vs correlation,product rule vs correlation,v3.1,correlation_seed0,18.2650,15.9002,20.4979,True,v3.1

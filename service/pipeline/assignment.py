@@ -11,8 +11,11 @@ rather than here — this module reads them, it doesn't restate them:
 restriction leaves every lymphoid cell without a correct label. The SCoPE2
 evidence below is why the option exists. Letting all 22 reference classes
 compete lets the 20 with zero protein evidence win, and on real SCoPE2 data
-they frequently do — restricting the candidate set alone moves balanced
-accuracy from 31.08% to 79.79%. This restriction is a hard mask: an
+they frequently do — restricting the candidate set alone moves v3's
+balanced accuracy from 0.68% to 20.21%, though that is still below the two
+classes' 50% chance, since v3 calls most SCoPE2 macrophages monocytes
+(31.08% to 79.79% until 2026-10-04, against swapped labels;
+research/benchmark/bugs-and-fixes.md, 8). This restriction is a hard mask: an
 unsupported class is never a candidate, not merely disfavoured. It is
 applied here (`assign_labels`) rather than upstream in `pipeline.py`, so
 `top_label`, `calibrate_and_build_sets`, and the caller's own centroid-

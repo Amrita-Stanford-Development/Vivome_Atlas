@@ -18,8 +18,9 @@ class_name, lineage, PC1, PC2, PC3`.
 
 Protein metadata columns: `latent_dim, modality, orig_index, class_idx,
 class_name, pred_class_name, max_cos_ref, abstained, PC1, PC2, PC3`.
-`class_name` is the cell's **true** label (SCoPE2 ground truth, matching
-what this column has always meant). The other columns go beyond the RNA
+`class_name` is the cell's **true** label: SCoPE2's curated cell type, from
+the authors' SingleCellMultiModal object (`benchmark/scope2_labels.py`;
+`service/tests/test_scope2_labels.py` pins every copy). The other columns go beyond the RNA
 schema, and all come from the served v3.1 model with default settings:
 - `pred_class_name` is its best guess;
 - `max_cos_ref` is its out-of-distribution score (`reference_similarity`);
