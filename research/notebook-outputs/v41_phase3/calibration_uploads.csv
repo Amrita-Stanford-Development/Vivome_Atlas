@@ -1,0 +1,241 @@
+upload,group,scenario,classes,cells,agreement,agreement_threshold,correlation_term
+calib_v3c_0000,single,random_1,monocyte,960,0.174,0.4,flat
+calib_v3c_0001,narrow,random_2,non-classical monocyte|plasma cell,64,0.6094,0.4,used
+calib_v3c_0002,narrow,random_3,"cd4-positive, alpha-beta t cell|natural killer cell|plasma cell",400,0.4625,0.4,used
+calib_v3c_0003,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|erythrocyte|neutrophil|plasma cell",220,0.7834,0.4,used
+calib_v3c_0004,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|macrophage|mature nk t cell|monocyte|neutrophil|plasma cell",159,0.7736,0.4,used
+calib_v3c_0005,single,random_1,erythrocyte,150,0.52,0.4,used
+calib_v3c_0006,narrow,random_2,b cell|macrophage,437,0.3043,0.4,flat
+calib_v3c_0007,narrow,random_3,b cell|classical monocyte|intermediate monocyte,688,0.6352,0.4,used
+calib_v3c_0008,mixed,random_5,intermediate monocyte|macrophage|mature nk t cell|monocyte|plasma cell,229,0.69,0.4,used
+calib_v3c_0009,mixed,random_8,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte|platelet",103,0.6408,0.4,used
+calib_v3c_0010,lineage,myeloid,intermediate monocyte|neutrophil,150,0.6667,0.4,used
+calib_v3c_0011,lineage,lymphoid,"naive thymus-derived cd4-positive, alpha-beta t cell|plasma cell",52,0.2308,0.4,flat
+calib_v3c_0012,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",228,0.4518,0.4,used
+calib_v3c_0013,scope2,scope2_like,macrophage|monocyte,150,0.2933,0.4,flat
+calib_v3c_0014,single,random_1,intermediate monocyte,103,0.1165,0.4,flat
+calib_v3c_0015,narrow,random_2,"cd8-positive, alpha-beta t cell|platelet",47,0.5745,0.4,used
+calib_v3c_0016,narrow,random_3,b cell|intermediate monocyte|platelet,172,0.6686,0.4,used
+calib_v3c_0017,mixed,random_5,"b cell|cd4-positive, alpha-beta t cell|classical monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|non-classical monocyte",74,0.5811,0.4,used
+calib_v3c_0018,mixed,random_8,"b cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|macrophage|monocyte|neutrophil|platelet",303,0.6832,0.4,used
+calib_v3c_0019,single,random_1,non-classical monocyte,35,0.2571,0.4,flat
+calib_v3c_0020,narrow,random_2,intermediate monocyte|natural killer cell,150,0.22,0.4,flat
+calib_v3c_0021,narrow,random_3,intermediate monocyte|neutrophil|non-classical monocyte,133,0.218,0.4,flat
+calib_v3c_0022,mixed,random_5,"cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|mature nk t cell|plasma cell",170,0.3647,0.4,flat
+calib_v3c_0023,mixed,random_8,"cd4-positive, alpha-beta t cell|erythrocyte|mature nk t cell|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|neutrophil|platelet",222,0.8288,0.4,used
+calib_v3c_0024,lineage,myeloid,macrophage|non-classical monocyte,135,0.3481,0.4,flat
+calib_v3c_0025,lineage,lymphoid,mature nk t cell|natural killer cell|plasma cell,27,0.4444,0.4,used
+calib_v3c_0026,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",160,0.6875,0.4,used
+calib_v3c_0027,scope2,scope2_like,macrophage|monocyte,465,0.3089,0.4,flat
+calib_v3c_0028,single,random_1,plasma cell,81,0.2346,0.4,flat
+calib_v3c_0029,narrow,random_2,non-classical monocyte|plasma cell,85,0.2706,0.4,flat
+calib_v3c_0030,narrow,random_3,b cell|monocyte|plasma cell,130,0.6,0.4,used
+calib_v3c_0031,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|intermediate monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|plasma cell",148,0.5541,0.4,used
+calib_v3c_0032,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|mature nk t cell|natural killer cell|neutrophil|non-classical monocyte",69,0.6667,0.4,used
+calib_v3c_0033,single,random_1,intermediate monocyte,103,0.2427,0.4,flat
+calib_v3c_0034,narrow,random_2,"monocyte|naive thymus-derived cd4-positive, alpha-beta t cell",218,0.4771,0.4,used
+calib_v3c_0035,narrow,random_3,"cd4-positive, alpha-beta t cell|erythrocyte|naive thymus-derived cd4-positive, alpha-beta t cell",78,0.1558,0.4,flat
+calib_v3c_0036,mixed,random_5,b cell|erythrocyte|natural killer cell|neutrophil|platelet,860,0.7535,0.4,used
+calib_v3c_0037,mixed,random_8,"cd4-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|non-classical monocyte|platelet",232,0.6293,0.4,used
+calib_v3c_0038,lineage,myeloid,macrophage|monocyte|neutrophil|non-classical monocyte,55,0.4364,0.4,used
+calib_v3c_0039,lineage,lymphoid,b cell|mature nk t cell|natural killer cell|plasma cell,119,0.5798,0.4,used
+calib_v3c_0040,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",155,0.5355,0.4,used
+calib_v3c_0041,scope2,scope2_like,macrophage|monocyte,400,0.33,0.4,flat
+calib_v3c_0042,single,random_1,intermediate monocyte,103,0.2233,0.4,flat
+calib_v3c_0043,narrow,random_2,non-classical monocyte|plasma cell,47,0.6809,0.4,used
+calib_v3c_0044,narrow,random_3,erythrocyte|monocyte|natural killer cell,1651,0.4785,0.4,used
+calib_v3c_0045,mixed,random_5,intermediate monocyte|macrophage|monocyte|non-classical monocyte|platelet,66,0.4545,0.4,used
+calib_v3c_0046,mixed,random_8,"b cell|erythrocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte|plasma cell|platelet",155,0.6774,0.4,used
+calib_v3c_0047,single,random_1,plasma cell,81,0.2346,0.4,flat
+calib_v3c_0048,narrow,random_2,"cd4-positive, alpha-beta t cell|plasma cell",561,0.4189,0.4,used
+calib_v3c_0049,narrow,random_3,"cd8-positive, alpha-beta t cell|classical monocyte|naive thymus-derived cd4-positive, alpha-beta t cell",123,0.4065,0.4,used
+calib_v3c_0050,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|macrophage|natural killer cell|neutrophil",838,0.6766,0.4,used
+calib_v3c_0051,mixed,random_8,"cd4-positive, alpha-beta t cell|erythrocyte|mature nk t cell|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte|platelet",88,0.8068,0.4,used
+calib_v3c_0052,lineage,myeloid,intermediate monocyte|monocyte,286,0.2727,0.4,flat
+calib_v3c_0053,lineage,lymphoid,"b cell|cd8-positive, alpha-beta t cell|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell",91,0.6264,0.4,used
+calib_v3c_0054,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",403,0.5633,0.4,used
+calib_v3c_0055,scope2,scope2_like,macrophage|monocyte,400,0.2425,0.4,flat
+calib_v3c_0056,single,random_1,non-classical monocyte,35,0.3143,0.4,flat
+calib_v3c_0057,narrow,random_2,classical monocyte|platelet,87,0.5402,0.4,used
+calib_v3c_0058,narrow,random_3,"b cell|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell",413,0.4745,0.4,used
+calib_v3c_0059,mixed,random_5,"b cell|erythrocyte|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell",116,0.7069,0.4,used
+calib_v3c_0060,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|intermediate monocyte|macrophage|mature nk t cell|monocyte|non-classical monocyte|plasma cell",205,0.722,0.4,used
+calib_v3c_0061,single,random_1,mature nk t cell,20,0.15,0.4,flat
+calib_v3c_0062,narrow,random_2,monocyte|neutrophil,1325,0.3796,0.4,flat
+calib_v3c_0063,narrow,random_3,b cell|erythrocyte|intermediate monocyte,401,0.5636,0.4,used
+calib_v3c_0064,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|platelet",154,0.4935,0.4,used
+calib_v3c_0065,mixed,random_8,"b cell|cd8-positive, alpha-beta t cell|intermediate monocyte|macrophage|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|plasma cell",394,0.6726,0.4,used
+calib_v3c_0066,lineage,myeloid,macrophage|non-classical monocyte,62,0.4516,0.4,used
+calib_v3c_0067,lineage,lymphoid,"cd4-positive, alpha-beta t cell|natural killer cell",400,0.2625,0.4,flat
+calib_v3c_0068,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",108,0.5278,0.4,used
+calib_v3c_0069,scope2,scope2_like,macrophage|monocyte,150,0.22,0.4,flat
+calib_v3c_0070,single,random_1,"cd8-positive, alpha-beta t cell",457,0.1466,0.4,flat
+calib_v3c_0071,narrow,random_2,classical monocyte|natural killer cell,563,0.2895,0.4,flat
+calib_v3c_0072,narrow,random_3,classical monocyte|neutrophil|plasma cell,150,0.4133,0.4,used
+calib_v3c_0073,mixed,random_5,"b cell|erythrocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil",215,0.6,0.4,used
+calib_v3c_0074,mixed,random_8,b cell|classical monocyte|erythrocyte|monocyte|natural killer cell|neutrophil|plasma cell|platelet,967,0.7601,0.4,used
+calib_v3c_0075,single,random_1,mature nk t cell,20,0.05,0.4,flat
+calib_v3c_0076,narrow,random_2,macrophage|neutrophil,1000,0.535,0.4,used
+calib_v3c_0077,narrow,random_3,"erythrocyte|naive thymus-derived cd4-positive, alpha-beta t cell|plasma cell",177,0.6158,0.4,used
+calib_v3c_0078,mixed,random_5,intermediate monocyte|macrophage|neutrophil|plasma cell|platelet,150,0.8733,0.4,used
+calib_v3c_0079,mixed,random_8,"b cell|cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|monocyte|natural killer cell|plasma cell|platelet",193,0.7098,0.4,used
+calib_v3c_0080,lineage,myeloid,classical monocyte|non-classical monocyte,88,0.2386,0.4,flat
+calib_v3c_0081,lineage,lymphoid,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|naive thymus-derived cd4-positive, alpha-beta t cell|plasma cell",201,0.4577,0.4,used
+calib_v3c_0082,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",108,0.6296,0.4,used
+calib_v3c_0083,scope2,scope2_like,macrophage|monocyte,465,0.3054,0.4,flat
+calib_v3c_0084,single,random_1,mature nk t cell,20,0.15,0.4,flat
+calib_v3c_0085,narrow,random_2,intermediate monocyte|monocyte,150,0.26,0.4,flat
+calib_v3c_0086,narrow,random_3,intermediate monocyte|neutrophil|platelet,150,0.5333,0.4,used
+calib_v3c_0087,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|intermediate monocyte|macrophage|monocyte",206,0.4223,0.4,used
+calib_v3c_0088,mixed,random_8,"cd8-positive, alpha-beta t cell|erythrocyte|macrophage|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|non-classical monocyte|platelet",195,0.8308,0.4,used
+calib_v3c_0089,single,random_1,non-classical monocyte,35,0.2,0.4,flat
+calib_v3c_0090,narrow,random_2,b cell|intermediate monocyte,215,0.4038,0.4,used
+calib_v3c_0091,narrow,random_3,classical monocyte|intermediate monocyte|natural killer cell,138,0.1232,0.4,flat
+calib_v3c_0092,mixed,random_5,"cd8-positive, alpha-beta t cell|erythrocyte|mature nk t cell|plasma cell|platelet",93,0.7204,0.4,used
+calib_v3c_0093,mixed,random_8,"cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|non-classical monocyte|plasma cell",182,0.5934,0.4,used
+calib_v3c_0094,lineage,myeloid,classical monocyte|intermediate monocyte|macrophage,228,0.2061,0.4,flat
+calib_v3c_0095,lineage,lymphoid,"mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell",46,0.413,0.4,used
+calib_v3c_0096,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",403,0.6328,0.4,used
+calib_v3c_0097,scope2,scope2_like,macrophage|monocyte,465,0.2645,0.4,flat
+calib_v3c_0098,single,random_1,erythrocyte,150,0.4467,0.4,used
+calib_v3c_0099,narrow,random_2,macrophage|plasma cell,186,0.6739,0.4,used
+calib_v3c_0100,narrow,random_3,mature nk t cell|natural killer cell|non-classical monocyte,52,0.5962,0.4,used
+calib_v3c_0101,mixed,random_5,"cd8-positive, alpha-beta t cell|erythrocyte|macrophage|natural killer cell|plasma cell",221,0.6833,0.4,used
+calib_v3c_0102,mixed,random_8,"cd4-positive, alpha-beta t cell|intermediate monocyte|macrophage|mature nk t cell|natural killer cell|neutrophil|non-classical monocyte|plasma cell",83,0.6988,0.4,used
+calib_v3c_0103,single,random_1,natural killer cell,150,0.2133,0.4,flat
+calib_v3c_0104,narrow,random_2,monocyte|natural killer cell,400,0.3925,0.4,flat
+calib_v3c_0105,narrow,random_3,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|neutrophil",400,0.515,0.4,used
+calib_v3c_0106,mixed,random_5,"cd8-positive, alpha-beta t cell|erythrocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil",131,0.6489,0.4,used
+calib_v3c_0107,mixed,random_8,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte|plasma cell",157,0.7197,0.4,used
+calib_v3c_0108,lineage,myeloid,classical monocyte|neutrophil|non-classical monocyte,662,0.213,0.4,flat
+calib_v3c_0109,lineage,lymphoid,mature nk t cell|natural killer cell|plasma cell,151,0.298,0.4,flat
+calib_v3c_0110,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",151,0.5695,0.4,used
+calib_v3c_0111,scope2,scope2_like,macrophage|monocyte,465,0.2495,0.4,flat
+calib_v3c_0112,single,random_1,classical monocyte,150,0.1946,0.4,flat
+calib_v3c_0113,narrow,random_2,classical monocyte|macrophage,151,0.2318,0.4,flat
+calib_v3c_0114,narrow,random_3,intermediate monocyte|macrophage|platelet,210,0.2619,0.4,flat
+calib_v3c_0115,mixed,random_5,"cd4-positive, alpha-beta t cell|erythrocyte|macrophage|monocyte|non-classical monocyte",202,0.7079,0.4,used
+calib_v3c_0116,mixed,random_8,"b cell|cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|macrophage|monocyte|neutrophil|non-classical monocyte",257,0.7588,0.4,used
+calib_v3c_0117,single,random_1,"cd8-positive, alpha-beta t cell",457,0.2013,0.4,flat
+calib_v3c_0118,narrow,random_2,natural killer cell|neutrophil,150,0.6,0.4,used
+calib_v3c_0119,narrow,random_3,b cell|classical monocyte|monocyte,150,0.3267,0.4,flat
+calib_v3c_0120,mixed,random_5,"cd8-positive, alpha-beta t cell|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|non-classical monocyte|platelet",114,0.7105,0.4,used
+calib_v3c_0121,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|intermediate monocyte|monocyte|natural killer cell|neutrophil|platelet",282,0.625,0.4,used
+calib_v3c_0122,lineage,myeloid,monocyte|non-classical monocyte,401,0.1521,0.4,flat
+calib_v3c_0123,lineage,lymphoid,"cd8-positive, alpha-beta t cell|mature nk t cell|natural killer cell",133,0.1278,0.4,flat
+calib_v3c_0124,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",153,0.5163,0.4,used
+calib_v3c_0125,scope2,scope2_like,macrophage|monocyte,150,0.3,0.4,flat
+calib_v3c_0126,single,random_1,natural killer cell,305,0.2039,0.4,flat
+calib_v3c_0127,narrow,random_2,"cd4-positive, alpha-beta t cell|erythrocyte",603,0.4561,0.4,used
+calib_v3c_0128,narrow,random_3,"cd4-positive, alpha-beta t cell|intermediate monocyte|platelet",220,0.4583,0.4,used
+calib_v3c_0129,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|non-classical monocyte",90,0.6556,0.4,used
+calib_v3c_0130,mixed,random_8,"b cell|intermediate monocyte|macrophage|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|non-classical monocyte|plasma cell",618,0.8172,0.4,used
+calib_v3c_0131,single,random_1,macrophage,122,0.2893,0.4,flat
+calib_v3c_0132,narrow,random_2,"mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell",38,0.3947,0.4,flat
+calib_v3c_0133,narrow,random_3,macrophage|mature nk t cell|natural killer cell,150,0.4,0.4,used
+calib_v3c_0134,mixed,random_5,"b cell|cd8-positive, alpha-beta t cell|intermediate monocyte|non-classical monocyte|plasma cell",114,0.5263,0.4,used
+calib_v3c_0135,mixed,random_8,b cell|classical monocyte|erythrocyte|mature nk t cell|monocyte|natural killer cell|neutrophil|non-classical monocyte,58,0.6897,0.4,used
+calib_v3c_0136,lineage,myeloid,classical monocyte|macrophage,198,0.2273,0.4,flat
+calib_v3c_0137,lineage,lymphoid,"b cell|cd4-positive, alpha-beta t cell|plasma cell",312,0.5994,0.4,used
+calib_v3c_0138,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",197,0.6244,0.4,used
+calib_v3c_0139,scope2,scope2_like,macrophage|monocyte,465,0.2925,0.4,flat
+calib_v3c_0140,single,random_1,neutrophil,2000,0.2825,0.4,flat
+calib_v3c_0141,narrow,random_2,"cd4-positive, alpha-beta t cell|natural killer cell",400,0.4525,0.4,used
+calib_v3c_0142,narrow,random_3,"b cell|cd4-positive, alpha-beta t cell|erythrocyte",401,0.4763,0.4,used
+calib_v3c_0143,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|intermediate monocyte|macrophage|platelet",264,0.4015,0.4,used
+calib_v3c_0144,mixed,random_8,"cd4-positive, alpha-beta t cell|classical monocyte|erythrocyte|intermediate monocyte|mature nk t cell|monocyte|neutrophil|plasma cell",82,0.7073,0.4,used
+calib_v3c_0145,single,random_1,classical monocyte,1059,0.1983,0.4,flat
+calib_v3c_0146,narrow,random_2,"cd4-positive, alpha-beta t cell|non-classical monocyte",71,0.5775,0.4,used
+calib_v3c_0147,narrow,random_3,"cd4-positive, alpha-beta t cell|classical monocyte|natural killer cell",436,0.3807,0.4,flat
+calib_v3c_0148,mixed,random_5,"erythrocyte|intermediate monocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|plasma cell",431,0.7448,0.4,used
+calib_v3c_0149,mixed,random_8,"b cell|erythrocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|neutrophil|non-classical monocyte|plasma cell",204,0.652,0.4,used
+calib_v3c_0150,lineage,myeloid,macrophage|monocyte,372,0.3253,0.4,flat
+calib_v3c_0151,lineage,lymphoid,mature nk t cell|natural killer cell,78,0.1026,0.4,flat
+calib_v3c_0152,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",400,0.5825,0.4,used
+calib_v3c_0153,scope2,scope2_like,macrophage|monocyte,150,0.3067,0.4,flat
+calib_v3c_0154,single,random_1,b cell,150,0.12,0.4,flat
+calib_v3c_0155,narrow,random_2,"cd8-positive, alpha-beta t cell|platelet",171,0.6082,0.4,used
+calib_v3c_0156,narrow,random_3,"cd4-positive, alpha-beta t cell|macrophage|mature nk t cell",83,0.4096,0.4,used
+calib_v3c_0157,mixed,random_5,"cd8-positive, alpha-beta t cell|classical monocyte|natural killer cell|non-classical monocyte|plasma cell",56,0.625,0.4,used
+calib_v3c_0158,mixed,random_8,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|macrophage|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|neutrophil|non-classical monocyte",400,0.5925,0.4,used
+calib_v3c_0159,single,random_1,classical monocyte,150,0.2067,0.4,flat
+calib_v3c_0160,narrow,random_2,plasma cell|platelet,51,0.7647,0.4,used
+calib_v3c_0161,narrow,random_3,classical monocyte|natural killer cell|neutrophil,151,0.5298,0.4,used
+calib_v3c_0162,mixed,random_5,"classical monocyte|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|platelet",89,0.7416,0.4,used
+calib_v3c_0163,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|macrophage|monocyte|plasma cell",746,0.6662,0.4,used
+calib_v3c_0164,lineage,myeloid,intermediate monocyte|neutrophil,150,0.5667,0.4,used
+calib_v3c_0165,lineage,lymphoid,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|naive thymus-derived cd4-positive, alpha-beta t cell",429,0.4802,0.4,used
+calib_v3c_0166,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",155,0.4387,0.4,used
+calib_v3c_0167,scope2,scope2_like,macrophage|monocyte,150,0.3154,0.4,flat
+calib_v3c_0168,single,random_1,neutrophil,2000,0.2885,0.4,flat
+calib_v3c_0169,narrow,random_2,"classical monocyte|naive thymus-derived cd4-positive, alpha-beta t cell",99,0.4242,0.4,used
+calib_v3c_0170,narrow,random_3,macrophage|monocyte|plasma cell,242,0.6818,0.4,used
+calib_v3c_0171,mixed,random_5,"b cell|cd4-positive, alpha-beta t cell|intermediate monocyte|macrophage|plasma cell",263,0.6008,0.4,used
+calib_v3c_0172,mixed,random_8,b cell|classical monocyte|erythrocyte|mature nk t cell|monocyte|natural killer cell|plasma cell|platelet,74,0.7838,0.4,used
+calib_v3c_0173,single,random_1,neutrophil,150,0.4,0.4,used
+calib_v3c_0174,narrow,random_2,mature nk t cell|neutrophil,42,0.6905,0.4,used
+calib_v3c_0175,narrow,random_3,b cell|macrophage|neutrophil,386,0.53,0.4,used
+calib_v3c_0176,mixed,random_5,"mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|plasma cell|platelet",67,0.9254,0.4,used
+calib_v3c_0177,mixed,random_8,"b cell|erythrocyte|intermediate monocyte|macrophage|mature nk t cell|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell",100,0.71,0.4,used
+calib_v3c_0178,lineage,myeloid,intermediate monocyte|macrophage|non-classical monocyte,135,0.1111,0.4,flat
+calib_v3c_0179,lineage,lymphoid,"cd4-positive, alpha-beta t cell|mature nk t cell|natural killer cell",31,0.2581,0.4,flat
+calib_v3c_0180,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",379,0.5356,0.4,used
+calib_v3c_0181,scope2,scope2_like,macrophage|monocyte,150,0.26,0.4,flat
+calib_v3c_0182,single,random_1,classical monocyte,1059,0.1851,0.4,flat
+calib_v3c_0183,narrow,random_2,"cd8-positive, alpha-beta t cell|erythrocyte",635,0.2472,0.4,flat
+calib_v3c_0184,narrow,random_3,"b cell|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell",333,0.6246,0.4,used
+calib_v3c_0185,mixed,random_5,erythrocyte|macrophage|neutrophil|plasma cell|platelet,106,0.9151,0.4,used
+calib_v3c_0186,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|classical monocyte|erythrocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|plasma cell|platelet",434,0.8065,0.4,used
+calib_v3c_0187,single,random_1,non-classical monocyte,35,0.1714,0.4,flat
+calib_v3c_0188,narrow,random_2,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell",400,0.3975,0.4,flat
+calib_v3c_0189,narrow,random_3,intermediate monocyte|natural killer cell|platelet,85,0.7294,0.4,used
+calib_v3c_0190,mixed,random_5,"cd4-positive, alpha-beta t cell|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|non-classical monocyte|plasma cell",64,0.5156,0.4,used
+calib_v3c_0191,mixed,random_8,"cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|macrophage|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil|plasma cell",445,0.6292,0.4,used
+calib_v3c_0192,lineage,myeloid,classical monocyte|non-classical monocyte,47,0.2979,0.4,flat
+calib_v3c_0193,lineage,lymphoid,"cd8-positive, alpha-beta t cell|naive thymus-derived cd4-positive, alpha-beta t cell|plasma cell",91,0.3187,0.4,flat
+calib_v3c_0194,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",300,0.62,0.4,used
+calib_v3c_0195,scope2,scope2_like,macrophage|monocyte,465,0.3054,0.4,flat
+calib_v3c_0196,single,random_1,neutrophil,2000,0.2525,0.4,flat
+calib_v3c_0197,narrow,random_2,b cell|mature nk t cell,29,0.2759,0.4,flat
+calib_v3c_0198,narrow,random_3,classical monocyte|macrophage|mature nk t cell,26,0.2308,0.4,flat
+calib_v3c_0199,mixed,random_5,"b cell|cd8-positive, alpha-beta t cell|classical monocyte|plasma cell|platelet",381,0.5197,0.4,used
+calib_v3c_0200,mixed,random_8,"b cell|classical monocyte|intermediate monocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|neutrophil|non-classical monocyte",156,0.7372,0.4,used
+calib_v3c_0201,single,random_1,non-classical monocyte,35,0.2286,0.4,flat
+calib_v3c_0202,narrow,random_2,"cd4-positive, alpha-beta t cell|platelet",150,0.52,0.4,used
+calib_v3c_0203,narrow,random_3,"b cell|cd8-positive, alpha-beta t cell|plasma cell",792,0.6402,0.4,used
+calib_v3c_0204,mixed,random_5,"b cell|cd8-positive, alpha-beta t cell|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|neutrophil",968,0.7004,0.4,used
+calib_v3c_0205,mixed,random_8,b cell|classical monocyte|erythrocyte|intermediate monocyte|macrophage|mature nk t cell|neutrophil|non-classical monocyte,106,0.6415,0.4,used
+calib_v3c_0206,lineage,myeloid,macrophage|monocyte,293,0.3072,0.4,flat
+calib_v3c_0207,lineage,lymphoid,"cd8-positive, alpha-beta t cell|plasma cell",135,0.5556,0.4,used
+calib_v3c_0208,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",1246,0.5819,0.4,used
+calib_v3c_0209,scope2,scope2_like,macrophage|monocyte,465,0.2495,0.4,flat
+calib_v3c_0210,single,random_1,b cell,389,0.1337,0.4,flat
+calib_v3c_0211,narrow,random_2,neutrophil|platelet,382,0.5774,0.4,used
+calib_v3c_0212,narrow,random_3,"mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil",66,0.7576,0.4,used
+calib_v3c_0213,mixed,random_5,"erythrocyte|intermediate monocyte|macrophage|naive thymus-derived cd4-positive, alpha-beta t cell|neutrophil",151,0.5629,0.4,used
+calib_v3c_0214,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|monocyte|neutrophil|platelet",153,0.6013,0.4,used
+calib_v3c_0215,single,random_1,b cell,389,0.1054,0.4,flat
+calib_v3c_0216,narrow,random_2,intermediate monocyte|macrophage,206,0.165,0.4,flat
+calib_v3c_0217,narrow,random_3,classical monocyte|mature nk t cell|plasma cell,29,0.4483,0.4,used
+calib_v3c_0218,mixed,random_5,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|natural killer cell|non-classical monocyte|platelet",112,0.5893,0.4,used
+calib_v3c_0219,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|classical monocyte|erythrocyte|macrophage|natural killer cell|neutrophil|non-classical monocyte",968,0.8357,0.4,used
+calib_v3c_0220,lineage,myeloid,macrophage|neutrophil|non-classical monocyte,105,0.5524,0.4,used
+calib_v3c_0221,lineage,lymphoid,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|plasma cell",131,0.5496,0.4,used
+calib_v3c_0222,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",223,0.426,0.4,used
+calib_v3c_0223,scope2,scope2_like,macrophage|monocyte,465,0.2495,0.4,flat
+calib_v3c_0224,single,random_1,intermediate monocyte,103,0.1553,0.4,flat
+calib_v3c_0225,narrow,random_2,classical monocyte|non-classical monocyte,358,0.1872,0.4,flat
+calib_v3c_0226,narrow,random_3,"cd8-positive, alpha-beta t cell|neutrophil|platelet",79,0.8101,0.4,used
+calib_v3c_0227,mixed,random_5,"cd4-positive, alpha-beta t cell|intermediate monocyte|macrophage|natural killer cell|non-classical monocyte",114,0.4386,0.4,used
+calib_v3c_0228,mixed,random_8,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|intermediate monocyte|macrophage|monocyte|natural killer cell|neutrophil",213,0.4507,0.4,used
+calib_v3c_0229,single,random_1,monocyte,400,0.1875,0.4,flat
+calib_v3c_0230,narrow,random_2,b cell|erythrocyte,400,0.4484,0.4,used
+calib_v3c_0231,narrow,random_3,macrophage|mature nk t cell|natural killer cell,139,0.5396,0.4,used
+calib_v3c_0232,mixed,random_5,"b cell|intermediate monocyte|mature nk t cell|naive thymus-derived cd4-positive, alpha-beta t cell|non-classical monocyte",34,0.6176,0.4,used
+calib_v3c_0233,mixed,random_8,"cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|erythrocyte|intermediate monocyte|macrophage|non-classical monocyte|plasma cell",152,0.5461,0.4,used
+calib_v3c_0234,lineage,myeloid,macrophage|neutrophil,162,0.5,0.4,used
+calib_v3c_0235,lineage,lymphoid,"b cell|cd4-positive, alpha-beta t cell",400,0.0875,0.4,flat
+calib_v3c_0236,pbmc,pbmc_like,"b cell|cd4-positive, alpha-beta t cell|cd8-positive, alpha-beta t cell|classical monocyte|intermediate monocyte|monocyte|naive thymus-derived cd4-positive, alpha-beta t cell|natural killer cell|non-classical monocyte",151,0.6424,0.4,used
+calib_v3c_0237,scope2,scope2_like,macrophage|monocyte,465,0.2925,0.4,flat
+calib_v3c_0238,single,random_1,macrophage,122,0.2131,0.4,flat
+calib_v3c_0239,narrow,random_2,"cd4-positive, alpha-beta t cell|neutrophil",400,0.72,0.4,used

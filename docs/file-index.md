@@ -96,11 +96,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/fixtures/v3_full_*.json` — four full v3 responses frozen before the pipeline version switch (Track C), in both label-space modes
 - `service/tests/fixtures/v31_full_*.json` — four full v3.1 responses frozen before v4 work began (2026-10-04), in both label-space modes
 - `service/tests/fixtures/v4_full_*.json` — four full v4 responses frozen when its evaluation passed (2026-10-05), in both label-space modes
+- `service/tests/fixtures/v41_full_*.json` — four full v4.1 responses frozen when its evaluation passed (2026-10-07), in both label-space modes
 - `service/tests/test_app.py` — HTTP endpoint: request parsing, error responses, response schema
 - `service/tests/test_pipeline.py` — end-to-end wiring on the real production checkpoint and reference
 - `service/tests/test_e2e_real_export.py` — regression guard: the real SCoPE2 export still reproduces the notebook's own outputs
 - `service/tests/test_golden_fixtures.py` — full responses must match the frozen golden fixtures
-- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1 and v4 unchanged against their frozen responses, v4.1 equal to v4 where its correlation term is flat, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
+- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1, v4 and v4.1 unchanged against their frozen responses, v4.1 equal to v4 where its correlation term is flat, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
 - `service/tests/test_ensemble.py` — v3.1 against NB2's own `nb2_core.py`: synthetic inputs, the full path on real PBMC240 cells, both service flags, spec validation
 - `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
@@ -407,12 +408,23 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/v41_core.py` — v4.1: the pre-test's shared helpers (the parametrised best-guess rule, upload agreement, suite, single-type, answer and development scores over the per-cell cache)
 - `research/notebooks/v41_cache.py` — v4.1, Phase A: caches every calibration and development cell's best-guess ingredients through the service's code, self-checked against Phase 3c's records; arrays on Drive
 - `research/notebooks/v41_pretest.py` — v4.1, Phase A: chooses the gate-on encoder weight and correlation temperature on Fulcher under fixed guardrails and a stability rule; the baseline-stacking research arm
+- `research/notebooks/v41_phase3.py` — v4.1, Phase C: the pre-registered evaluation; checks the service reproduces Phase A's locked rule on NB3c's calibration suite, then scores v3.1, v4 and v4.1 once on a fresh evaluation suite against pre-set go criteria
 - `research/notebook-outputs/v41_pretest/cache_record.json` — v4.1, Phase A: the cache's sha256s, counts and self-check against Phase 3c
 - `research/notebook-outputs/v41_pretest/rules.json` — v4.1, Phase A: the pre-test's sha256s, start time and rules, written before anything was computed
 - `research/notebook-outputs/v41_pretest/candidates.csv` — v4.1, Phase A: every candidate's suite, scenario, single-type, answer and development figures, guardrails and plateau share
 - `research/notebook-outputs/v41_pretest/selection.json` — v4.1, Phase A: the eligible and stable candidates, the choice and its figures
 - `research/notebook-outputs/v41_pretest/locked_rule.json` — v4.1, Phase A: the locked gate-on encoder weight and correlation temperature, read by Phase B
 - `research/notebook-outputs/v41_pretest/research_arm.csv` — v4.1, Phase A: the locked rule blended with Harmony NC or PCA kNN class scores (the stacking research arm)
+- `research/notebook-outputs/v41_phase3/rules.json` — v4.1, Phase C: the script's, the locked rule's and v4.1's spec's sha256s and the start time, written before anything was computed
+- `research/notebook-outputs/v41_phase3/calibration_check.json` — v4.1, Phase C: the implementation check, the service's figures on the calibration suite against Phase A's
+- `research/notebook-outputs/v41_phase3/calibration_uploads.csv` — v4.1, Phase C: each calibration upload's agreement and whether the correlation term was used
+- `research/notebook-outputs/v41_phase3/development.json` — v4.1, Phase C: v3.1, v4 and v4.1 on Fulcher, PBMC240, both SCoPE2 versions and Furtwängler, and the out-of-reference AUROC
+- `research/notebook-outputs/v41_phase3/eval_suite.json` — v4.1, Phase C: the fresh evaluation suite (240 uploads from NB3c's te_eval cells, their fourth use), written before it was scored
+- `research/notebook-outputs/v41_phase3/eval_uploads.csv` — v4.1, Phase C: each evaluation upload's agreement and whether v4.1's correlation term was used
+- `research/notebook-outputs/v41_phase3/eval_cells.csv.gz` — v4.1, Phase C: per evaluation cell, coverage, abstention, answer level, correctness and best guess, v3.1, v4 and v4.1
+- `research/notebook-outputs/v41_phase3/eval_by_scenario.csv` — v4.1, Phase C: every evaluation metric per method and scenario group
+- `research/notebook-outputs/v41_phase3/summary.json` — v4.1, Phase C: v3.1, v4 and v4.1 on the fresh suite, per scenario, the checks and the verdict
+- `research/notebook-outputs/v41_phase3/spec_block.json` — v4.1, Phase C: the verdict, for `scripts/build_v41_spec.py`
 - `research/notebooks/v4_phase3c.py` — v4 Phase 3c: v3.1's answers with the fused best guess gated by upload agreement, one rule fixed from its exploration; checks the service reproduces the explored rule on NB3c's calibration suite, then scores a fresh evaluation suite once against pre-set go criteria
 - `research/notebook-outputs/v4_calibration/summary.json` — v4 Phase 3: v4 and v3.1 on the evaluation suite, per scenario, the checks and the verdict
 - `research/notebook-outputs/v4_calibration/rules.json` — v4 Phase 3: the script's sha256 and start time, written before anything was computed

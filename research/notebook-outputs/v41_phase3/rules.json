@@ -1,0 +1,28 @@
+{
+  "script_sha256": "56249d4f0c8426f580e3fde665fcbb7aaee2b7b14a265c8af0fdf474d29b0eb5",
+  "locked_rule_sha256": "bba8c2436f95e64b85255a5014a30e33ba8c953fc9129621d1f1bd5b0dae73cc",
+  "spec_v41_sha256": "0a5b1f0f18be841cf7134b0575c8760298f467b1bfafcb22d424b497148394e6",
+  "started": "2026-10-07T16:34:30",
+  "locked_rule": {
+    "w_on": 0.5,
+    "tau": 0.05,
+    "smoothed_share": 0.5,
+    "agreement_threshold": 0.4,
+    "w_off": 0.7,
+    "is_v4": false,
+    "chosen_on": "Fulcher 2026 under research/notebooks/v41_pretest.py's rules (rules.json)",
+    "date": "2026-10-07"
+  },
+  "check_tolerance": 0.01,
+  "go": {
+    "coverage": "not below v3.1",
+    "false_abstention_max": 3.0,
+    "correct_min": 94.0,
+    "committed_drop_max": 2.0,
+    "best_guess_gain": 2.0,
+    "scenario_drop_max": 3.0,
+    "v4_best_guess_drop_max": 1.0,
+    "v4_scenario_drop_max": 2.0
+  },
+  "eval_seed": 20261007
+}

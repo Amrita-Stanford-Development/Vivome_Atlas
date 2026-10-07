@@ -1,0 +1,352 @@
+{
+  "rule": {
+    "w_on": 0.5,
+    "tau": 0.05,
+    "smoothed_share": 0.5,
+    "agreement_threshold": 0.4,
+    "w_off": 0.7,
+    "is_v4": false,
+    "chosen_on": "Fulcher 2026 under research/notebooks/v41_pretest.py's rules (rules.json)",
+    "date": "2026-10-07"
+  },
+  "result": {
+    "v4.1": {
+      "cells": 64779,
+      "committed": 85.83,
+      "correct_when_committed": 96.28,
+      "false_abstention": 0.48,
+      "levels": {
+        "lineage": 51.77,
+        "class": 18.17,
+        "group": 15.89,
+        "abstain": 14.17
+      },
+      "best_guess_per_upload_balanced": 64.97,
+      "coverage": 87.21
+    },
+    "v4": {
+      "cells": 64779,
+      "committed": 86.42,
+      "correct_when_committed": 96.18,
+      "false_abstention": 0.48,
+      "levels": {
+        "lineage": 52.06,
+        "class": 18.3,
+        "group": 16.07,
+        "abstain": 13.58
+      },
+      "best_guess_per_upload_balanced": 65.43,
+      "coverage": 87.15
+    },
+    "v3.1": {
+      "cells": 64779,
+      "committed": 86.9,
+      "correct_when_committed": 95.98,
+      "false_abstention": 0.48,
+      "levels": {
+        "lineage": 52.19,
+        "class": 18.52,
+        "group": 16.19,
+        "abstain": 13.1
+      },
+      "best_guess_per_upload_balanced": 60.57,
+      "coverage": 86.69
+    }
+  },
+  "by_scenario": {
+    "v4.1": {
+      "lineage": {
+        "cells": 8487,
+        "committed": 88.03,
+        "correct_when_committed": 97.99,
+        "false_abstention": 0.19,
+        "levels": {
+          "lineage": 58.09,
+          "group": 16.87,
+          "class": 13.07,
+          "abstain": 11.97
+        },
+        "best_guess_per_upload_balanced": 59.88,
+        "coverage": 92.08
+      },
+      "mixed": {
+        "cells": 13912,
+        "committed": 91.74,
+        "correct_when_committed": 98.84,
+        "false_abstention": 0.33,
+        "levels": {
+          "lineage": 47.64,
+          "class": 28.27,
+          "group": 15.83,
+          "abstain": 8.26
+        },
+        "best_guess_per_upload_balanced": 77.46,
+        "coverage": 95.68
+      },
+      "narrow": {
+        "cells": 16240,
+        "committed": 87.12,
+        "correct_when_committed": 96.81,
+        "false_abstention": 0.78,
+        "levels": {
+          "lineage": 52.15,
+          "class": 21.78,
+          "group": 13.19,
+          "abstain": 12.88
+        },
+        "best_guess_per_upload_balanced": 64.25,
+        "coverage": 87.73
+      },
+      "pbmc": {
+        "cells": 6680,
+        "committed": 94.82,
+        "correct_when_committed": 99.54,
+        "false_abstention": 0.07,
+        "levels": {
+          "lineage": 60.93,
+          "group": 20.1,
+          "class": 13.79,
+          "abstain": 5.18
+        },
+        "best_guess_per_upload_balanced": 72.58,
+        "coverage": 94.31
+      },
+      "scope2": {
+        "cells": 6446,
+        "committed": 85.59,
+        "correct_when_committed": 98.55,
+        "false_abstention": 0.42,
+        "levels": {
+          "lineage": 67.72,
+          "group": 17.27,
+          "abstain": 14.41,
+          "class": 0.61
+        },
+        "best_guess_per_upload_balanced": 69.79,
+        "coverage": 88.63
+      },
+      "single": {
+        "cells": 13014,
+        "committed": 71.96,
+        "correct_when_committed": 87.1,
+        "false_abstention": 0.69,
+        "levels": {
+          "lineage": 38.97,
+          "abstain": 28.04,
+          "class": 17.14,
+          "group": 15.84
+        },
+        "best_guess_per_upload_balanced": 41.07,
+        "coverage": 69.96
+      }
+    },
+    "v4": {
+      "lineage": {
+        "cells": 8487,
+        "committed": 88.57,
+        "correct_when_committed": 97.98,
+        "false_abstention": 0.19,
+        "levels": {
+          "lineage": 58.37,
+          "group": 17.08,
+          "class": 13.11,
+          "abstain": 11.43
+        },
+        "best_guess_per_upload_balanced": 60.57,
+        "coverage": 92.12
+      },
+      "mixed": {
+        "cells": 13912,
+        "committed": 92.5,
+        "correct_when_committed": 98.75,
+        "false_abstention": 0.33,
+        "levels": {
+          "lineage": 48.08,
+          "class": 28.49,
+          "group": 15.94,
+          "abstain": 7.5
+        },
+        "best_guess_per_upload_balanced": 77.72,
+        "coverage": 95.69
+      },
+      "narrow": {
+        "cells": 16240,
+        "committed": 87.84,
+        "correct_when_committed": 96.53,
+        "false_abstention": 0.78,
+        "levels": {
+          "lineage": 52.47,
+          "class": 22.0,
+          "group": 13.38,
+          "abstain": 12.16
+        },
+        "best_guess_per_upload_balanced": 65.0,
+        "coverage": 87.59
+      },
+      "pbmc": {
+        "cells": 6680,
+        "committed": 96.24,
+        "correct_when_committed": 99.46,
+        "false_abstention": 0.07,
+        "levels": {
+          "lineage": 61.62,
+          "group": 20.84,
+          "class": 13.79,
+          "abstain": 3.76
+        },
+        "best_guess_per_upload_balanced": 73.18,
+        "coverage": 94.22
+      },
+      "scope2": {
+        "cells": 6446,
+        "committed": 85.59,
+        "correct_when_committed": 98.55,
+        "false_abstention": 0.42,
+        "levels": {
+          "lineage": 67.72,
+          "group": 17.27,
+          "abstain": 14.41,
+          "class": 0.61
+        },
+        "best_guess_per_upload_balanced": 69.79,
+        "coverage": 88.63
+      },
+      "single": {
+        "cells": 13014,
+        "committed": 72.11,
+        "correct_when_committed": 87.02,
+        "false_abstention": 0.69,
+        "levels": {
+          "lineage": 39.0,
+          "abstain": 27.89,
+          "class": 17.25,
+          "group": 15.85
+        },
+        "best_guess_per_upload_balanced": 41.21,
+        "coverage": 69.89
+      }
+    },
+    "v3.1": {
+      "lineage": {
+        "cells": 8487,
+        "committed": 88.74,
+        "correct_when_committed": 97.97,
+        "false_abstention": 0.19,
+        "levels": {
+          "lineage": 58.43,
+          "group": 17.16,
+          "class": 13.15,
+          "abstain": 11.26
+        },
+        "best_guess_per_upload_balanced": 58.16,
+        "coverage": 92.01
+      },
+      "mixed": {
+        "cells": 13912,
+        "committed": 92.98,
+        "correct_when_committed": 98.56,
+        "false_abstention": 0.33,
+        "levels": {
+          "lineage": 48.3,
+          "class": 28.7,
+          "group": 15.99,
+          "abstain": 7.02
+        },
+        "best_guess_per_upload_balanced": 70.34,
+        "coverage": 95.06
+      },
+      "narrow": {
+        "cells": 16240,
+        "committed": 88.62,
+        "correct_when_committed": 95.98,
+        "false_abstention": 0.78,
+        "levels": {
+          "lineage": 52.64,
+          "class": 22.24,
+          "group": 13.74,
+          "abstain": 11.38
+        },
+        "best_guess_per_upload_balanced": 61.66,
+        "coverage": 86.87
+      },
+      "pbmc": {
+        "cells": 6680,
+        "committed": 96.63,
+        "correct_when_committed": 99.38,
+        "false_abstention": 0.07,
+        "levels": {
+          "lineage": 61.87,
+          "group": 20.9,
+          "class": 13.86,
+          "abstain": 3.37
+        },
+        "best_guess_per_upload_balanced": 57.74,
+        "coverage": 93.97
+      },
+      "scope2": {
+        "cells": 6446,
+        "committed": 85.65,
+        "correct_when_committed": 98.55,
+        "false_abstention": 0.42,
+        "levels": {
+          "lineage": 67.78,
+          "group": 17.27,
+          "abstain": 14.35,
+          "class": 0.61
+        },
+        "best_guess_per_upload_balanced": 66.28,
+        "coverage": 88.63
+      },
+      "single": {
+        "cells": 13014,
+        "committed": 72.67,
+        "correct_when_committed": 87.05,
+        "false_abstention": 0.69,
+        "levels": {
+          "lineage": 39.01,
+          "abstain": 27.33,
+          "class": 17.79,
+          "group": 15.87
+        },
+        "best_guess_per_upload_balanced": 40.37,
+        "coverage": 69.33
+      }
+    }
+  },
+  "scenario_drop_vs_v31": {
+    "lineage": -1.72,
+    "mixed": -7.12,
+    "narrow": -2.59,
+    "pbmc": -14.84,
+    "scope2": -3.51,
+    "single": -0.7
+  },
+  "scenario_drop_vs_v4": {
+    "lineage": 0.69,
+    "mixed": 0.26,
+    "narrow": 0.75,
+    "pbmc": 0.6,
+    "scope2": 0.0,
+    "single": 0.14
+  },
+  "correlation_term_used_pct_of_uploads": {
+    "lineage": 38.2,
+    "mixed": 97.1,
+    "narrow": 59.4,
+    "pbmc": 94.1,
+    "scope2": 0.0,
+    "single": 11.4
+  },
+  "checks": {
+    "coverage": true,
+    "false_abstention": true,
+    "correct_when_committed": true,
+    "committed": true,
+    "best_guess_gain": true,
+    "no_scenario_drop_vs_v31": true,
+    "best_guess_vs_v4": true,
+    "no_scenario_drop_vs_v4": true
+  },
+  "go": true,
+  "seconds": 1316
+}

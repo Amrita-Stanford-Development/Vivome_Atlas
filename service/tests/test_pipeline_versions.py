@@ -183,6 +183,34 @@ class V4IsUnchangedTests(unittest.TestCase):
                         self.assertTrue(set(b["label_set"]) <= set(a["label_set"]))
 
 
+class V41IsUnchangedTests(unittest.TestCase):
+    """v4.1 frozen when its evaluation passed (2026-10-07, Track G v4.1 Phase C;
+    service/tests/fixtures/v41_full_*.json). Both 50-cell uploads fall below
+    the agreement threshold, so these pin the branch v4.1 shares with v4;
+    test_v41_gate.py pins the branch where its weight differs, on Fulcher."""
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.bundle = pipeline.load_bundle("v4.1")
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/build_v41_spec.py.")
+        cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
+
+    def test_v41_is_selectable_and_v31_stays_the_default(self):
+        self.assertIn("v4.1", config.PIPELINE_VERSIONS)
+        self.assertEqual(config.PIPELINE_VERSION, "v3.1")
+
+    def test_v41_reproduces_its_frozen_responses(self):
+        for name, raw in self.raws.items():
+            for mode, restrict in (("default", False), ("restricted", True)):
+                with self.subTest(dataset=name, mode=mode):
+                    frozen = json.loads((FIXTURES / f"v41_full_{name}_{mode}.json").read_text())
+                    with mock.patch.object(config, "ATLAS_VERSION", frozen["atlas_version"]):
+                        fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
+                    assert_same(self, json.loads(json.dumps(fresh)), frozen)
+
+
 class _EstimatedLabelSpace:
     """Stands in for NB2's estimator: two classes, each with a support score."""
 

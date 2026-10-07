@@ -1,0 +1,134 @@
+{
+  "fulcher2026": {
+    "v3.1": {
+      "balanced_accuracy_6_types": 57.94,
+      "recall_CD4T": 72.4,
+      "recall_CD8T": 25.97,
+      "recall_NK": 60.67,
+      "recall_B": 97.06,
+      "recall_monocyte": 85.96,
+      "recall_DC": 5.56,
+      "committed": 89.18
+    },
+    "v4": {
+      "balanced_accuracy_6_types": 65.0,
+      "recall_CD4T": 81.82,
+      "recall_CD8T": 24.31,
+      "recall_NK": 84.0,
+      "recall_B": 99.02,
+      "recall_monocyte": 97.15,
+      "recall_DC": 3.7,
+      "committed": 88.24,
+      "agreement": 0.4227,
+      "agreement_threshold": 0.4,
+      "correlation_term": "used"
+    },
+    "v4.1": {
+      "balanced_accuracy_6_types": 69.05,
+      "recall_CD4T": 82.47,
+      "recall_CD8T": 23.76,
+      "recall_NK": 90.0,
+      "recall_B": 98.04,
+      "recall_monocyte": 97.81,
+      "recall_DC": 22.22,
+      "committed": 86.98,
+      "agreement": 0.4227,
+      "agreement_threshold": 0.4,
+      "correlation_term": "used"
+    }
+  },
+  "pbmc240": {
+    "v3.1": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 73.42
+    },
+    "v4": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 73.42,
+      "agreement": 0.3671,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    },
+    "v4.1": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 73.42,
+      "agreement": 0.3671,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    }
+  },
+  "scope2": {
+    "v3.1": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "committed": 53.02
+    },
+    "v4": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "committed": 52.95,
+      "agreement": 0.1711,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    },
+    "v4.1": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "committed": 52.95,
+      "agreement": 0.1711,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    }
+  },
+  "scope2_reprocessed": {
+    "v3.1": {
+      "balanced_accuracy_unrestricted": 5.46,
+      "committed": 31.03
+    },
+    "v4": {
+      "balanced_accuracy_unrestricted": 5.52,
+      "committed": 31.03,
+      "agreement": 0.1649,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    },
+    "v4.1": {
+      "balanced_accuracy_unrestricted": 5.52,
+      "committed": 31.03,
+      "agreement": 0.1649,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    }
+  },
+  "furtwangler2025": {
+    "v3.1": {
+      "progenitor_share": 0.28,
+      "t_cell_share": 54.51,
+      "median_max_probability": 0.369,
+      "committed": 40.62
+    },
+    "v4": {
+      "progenitor_share": 0.32,
+      "t_cell_share": 56.94,
+      "median_max_probability": 0.2669,
+      "committed": 40.58,
+      "agreement": 0.178,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    },
+    "v4.1": {
+      "progenitor_share": 0.32,
+      "t_cell_share": 56.94,
+      "median_max_probability": 0.2669,
+      "committed": 40.58,
+      "agreement": 0.178,
+      "agreement_threshold": 0.4,
+      "correlation_term": "flat"
+    }
+  },
+  "out_of_reference_auroc": {
+    "v3.1": 0.7443,
+    "v4": 0.8289,
+    "v4.1": 0.7898
+  }
+}

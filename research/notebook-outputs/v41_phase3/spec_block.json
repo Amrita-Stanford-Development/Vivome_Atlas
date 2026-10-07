@@ -1,0 +1,8 @@
+{
+  "evaluation": {
+    "status": "passed",
+    "record": "research/notebook-outputs/v41_phase3/summary.json",
+    "suite": "eval_v41: 240 new uploads from T1 NB3c's te_eval cells, seed 20261007 (their fourth use)",
+    "date": "2026-10-07"
+  }
+}

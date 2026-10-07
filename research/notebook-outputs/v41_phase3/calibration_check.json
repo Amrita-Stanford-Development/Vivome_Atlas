@@ -1,0 +1,23 @@
+{
+  "found": {
+    "best_guess_per_upload_balanced": 63.61,
+    "coverage": 86.22,
+    "committed": 86.55,
+    "correct_when_committed": 97.37
+  },
+  "expected": {
+    "best_guess_per_upload_balanced": 63.61,
+    "coverage": 86.22,
+    "committed": 86.55,
+    "correct_when_committed": 97.37
+  },
+  "differences": {
+    "best_guess_per_upload_balanced": 0.0,
+    "coverage": 0.0,
+    "committed": 0.0,
+    "correct_when_committed": 0.0
+  },
+  "tolerance": 0.01,
+  "passed": true,
+  "enforced": true
+}

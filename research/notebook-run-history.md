@@ -1080,6 +1080,91 @@ them (v4.1, below).
   (Phase A, `research/notebooks/v41_pretest.py`), then check it once on
   Khoury (Phase B).
 
+### 26. v4.1 (Track G): Phases A to D, 2026-10-07
+
+**Why.** v4 matched the best simple baselines but did not beat them
+(entry 25). The owner asked for a clear win and decided:
+- choose v4's encoder weight where the correlation term is used, on
+  Fulcher, under fixed rules;
+- check that weight once on Khoury;
+- keep a baseline pre-layer as a research arm only.
+
+**Phase A, the pre-test.**
+- **`research/notebooks/v41_cache.py`** caches every calibration and
+  development cell's four ingredients through the service's code. It
+  reproduced Phase 3c's records exactly before writing anything.
+- **`research/notebooks/v41_pretest.py`** recorded its rules and sha256
+  first. It tried 15 candidates: gate-on weight 0.2 to 0.7 × correlation
+  temperature 0.05 to 0.1.
+- **Guardrails:**
+  - the calibration suite within 1 point of v4;
+  - every scenario within 2 points of v4 and 3 of v3.1;
+  - single-type p_fail at most 1%;
+  - committed share within 2 points of v3.1;
+  - PBMC240 and both SCoPE2 versions within 2 points of v4.
+- **Objective:** Fulcher, with a stability rule over 200 halvings of its
+  runs.
+- **Result:**
+  - The ~71.5 options (weights 0.2 to 0.4 at τ 0.05) failed the guardrails:
+    committed share and the PBMC-like scenario.
+  - Three candidates were stable, all at about 69.1 on Fulcher.
+  - **Locked: weight 0.5, τ 0.05**, the stable one closest to v4. Fulcher
+    69.05 (in-sample).
+  - **Research arm:** Harmony NC or PCA kNN blended on top does not help.
+    Harmony at β 0.33 lifts Fulcher to 70.3 but drops PBMC240 from 92.3 to
+    77.8.
+
+**Phase B, the cross-lab check** (`benchmark/khoury2026_posthoc_v41_check.py`;
+its verdict was written before Phase A ran):
+- **Verdict: carries over.**
+- Khoury, post-hoc: v4.1 62.5 against v4's 61.8, +0.7 (CI −0.04 to 1.5).
+- NK recall 45.9 → 50.7.
+- Still level with PCA kNN (62.8).
+
+**Phase D, the service.**
+- **The code:** `"v4.1"` is v4's code and data with its own spec
+  (`service/model/v4_1/`, `scripts/build_v41_spec.py`). Its MANIFEST pins
+  v4's data files.
+- **The gate:** `benchmark/v41_dev_gate.py` passes, with 100% per-cell
+  agreement and Fulcher 69.05 as Phase A.
+- **v4 is unchanged,** and v4.1 answers exactly as v4 wherever its
+  correlation term is flat.
+- **The cost:** the out-of-reference AUROC of the best guess's probability
+  is 0.790, against v4's 0.829 and v3.1's 0.744. Out-of-distribution
+  abstention is v3.1's and unchanged.
+
+**Phase C, the pre-registered evaluation** (`research/notebooks/v41_phase3.py`;
+rules and sha256 recorded first).
+- **Implementation check:** the service reproduced Phase A on the
+  calibration suite exactly.
+- **The suite:** fresh, from `te_eval` cells (seed 20261007; 64,779 cells
+  with at least 200 genes), written before it was scored.
+  - **Declared:** this is those cells' fourth use, so it is a safety check
+    on simulated RNA uploads, not evidence of the protein gain.
+
+**Verdict: GO; all eight checks pass.**
+
+| | v3.1 | v4 | v4.1 |
+|---|---|---|---|
+| Best guess, per-upload balanced | 60.6 | 65.4 | 65.0 |
+| Coverage | 86.7% | 87.2% | 87.2% |
+| Committed; correct when committed | 86.9%; 96.0% | 86.4%; 96.2% | 85.8%; 96.3% |
+| False abstention | 0.5% | 0.5% | 0.5% |
+
+- Against v4, v4.1 is at most 0.75 points lower in any scenario.
+- Its correlation term was used in 97% of mixed and 94% of PBMC-like
+  uploads, and 11% of single-type ones.
+
+**Then:**
+- `scripts/build_v41_spec.py` recorded the pass, so v4.1 serves on request.
+  v3.1 stays the default.
+- The v4.1 gate passed again.
+- v4.1's responses were frozen (`service/tests/fixtures/v41_full_*.json`).
+
+**What this does not show.** Fulcher chose the weight, so its 69.05 is
+in-sample. Khoury's +0.7 is post-hoc. The simulated suite is a safety check.
+"v4.1 beats the corrected baselines" needs the sealed test.
+
 ---
 
 ## The throughline

@@ -2,8 +2,8 @@
   "source": "scripts/build_v41_spec.py; data files are v4's (service/model/v4/MANIFEST.json), pinned here by sha256",
   "files": {
     "spec_v41.json": {
-      "sha256": "0a5b1f0f18be841cf7134b0575c8760298f467b1bfafcb22d424b497148394e6",
-      "bytes": 5006,
+      "sha256": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
+      "bytes": 5183,
       "what": "v4.1's settings: v4's with its gate-on encoder weight and correlation temperature"
     },
     "../v4/class_balanced_stats.npz": {
