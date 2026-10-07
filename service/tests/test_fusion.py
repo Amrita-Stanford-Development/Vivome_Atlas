@@ -163,7 +163,7 @@ class AgreementGateTests(unittest.TestCase):
         self.assertAlmostEqual(fusion.upload_agreement(r, p, np.array([True, True, False, False])), 0.5)
         self.assertEqual(fusion.upload_agreement(r, p, np.zeros(4, bool)), 0.0)
 
-    def bundle(self, threshold):
+    def bundle(self, threshold, gate_on=None):
         rng = np.random.default_rng(6)
         centroids = rng.normal(size=(3, 5))
         smoothed_z, unsmoothed_z = rng.normal(size=(8, 5)), rng.normal(size=(8, 5))
@@ -171,7 +171,8 @@ class AgreementGateTests(unittest.TestCase):
         handle.encode.return_value = unsmoothed_z
         member = SimpleNamespace(encoder_handle=handle, centroids=centroids, temperature=0.15)
         return SimpleNamespace(members=(member,), class_means=rng.normal(size=(3, 40)), fusion_weight=0.7,
-                               correlation_temperature=0.05, smoothed_share=0.5, agreement_threshold=threshold), smoothed_z
+                               correlation_temperature=0.05, smoothed_share=0.5, agreement_threshold=threshold,
+                               gate_on_fusion_weight=gate_on), smoothed_z
 
     def inputs(self, b):
         rng = np.random.default_rng(7)
@@ -201,10 +202,37 @@ class AgreementGateTests(unittest.TestCase):
         self.assertAlmostEqual(out.agreement, fusion.upload_agreement(
             fusion.masked_pearson(values, mask, b.class_means), answers, counted))
 
+    def test_v41s_gate_on_weight_sets_only_the_branch_where_the_term_is_used(self):
+        used, z = self.bundle(threshold=0.0, gate_on=0.5)
+        values, mask, answers, counted = self.inputs(used)
+        m = used.members[0]
+        on = fusion.ensemble.member_probabilities(z, m.centroids, 0.15)
+        off = fusion.ensemble.member_probabilities(m.encoder_handle.encode.return_value, m.centroids, 0.15)
+        corr = fusion.correlation_probabilities(fusion.masked_pearson(values, mask, used.class_means), 0.05)
+        np.testing.assert_allclose(fusion.best_guess_probabilities(used, [z], values, mask, answers, counted).probabilities,
+                                   0.5 * (0.5 * on + 0.5 * off) + 0.5 * corr)
+        flat, z = self.bundle(threshold=1.01, gate_on=0.5)
+        np.testing.assert_allclose(fusion.best_guess_probabilities(flat, [z], values, mask, answers, counted).probabilities,
+                                   0.7 * on + 0.3 / 3)
+
+    def test_without_the_field_the_used_branch_keeps_fusion_weight(self):
+        self.assertEqual(fusion.encoder_weight_where_used(SimpleNamespace(fusion_weight=0.7)), 0.7)
+        self.assertEqual(fusion.encoder_weight_where_used(SimpleNamespace(fusion_weight=0.7, gate_on_fusion_weight=None)), 0.7)
+        self.assertEqual(fusion.encoder_weight_where_used(SimpleNamespace(fusion_weight=0.7, gate_on_fusion_weight=0.5)), 0.5)
+
 
 class SpecTests(unittest.TestCase):
     def test_a_complete_spec_passes(self):
         fusion.validate_spec(spec(), CLASSES)
+
+    def test_a_v41_spec_passes_as_v41_only(self):
+        v41 = spec(**{"version": "v4.1", "best_guess.gate_on_fusion_weight": 0.5})
+        fusion.validate_spec(v41, CLASSES, version="v4.1")
+        for wrong, version in ((v41, "v4"), (spec(), "v4.1")):
+            with self.subTest(version=version), self.assertRaises(ValueError):
+                fusion.validate_spec(wrong, CLASSES, version=version)
+        with self.assertRaises(ValueError):
+            fusion.validate_spec(spec(**{"version": "v4.1", "best_guess.gate_on_fusion_weight": 1.5}), CLASSES, version="v4.1")
 
     def test_refusals(self):
         for path, value in (("preprocessing.smoothing", False), ("best_guess.fusion_weight", 1.5),
@@ -249,6 +277,26 @@ class LoadingTests(unittest.TestCase):
             raise unittest.SkipTest("v4's evaluation has passed")
         with self.assertRaises(reference.PendingArtifactError):
             fusion.V4Bundle.load()
+
+    def test_v41s_manifest_pins_v4s_data_files(self):
+        if not config.V41_MANIFEST_PATH.exists():
+            raise unittest.SkipTest("no v4.1 spec on this machine (scripts/build_v41_spec.py)")
+        pinned = json.loads(config.V41_MANIFEST_PATH.read_text())["files"]
+        v4 = json.loads(config.V4_MANIFEST_PATH.read_text())["files"]
+        self.assertEqual({rel.removeprefix("../v4/") for rel in pinned if rel.startswith("../v4/")}, set(v4) - {"spec_v4.json"})
+        for rel, entry in pinned.items():
+            if rel.startswith("../v4/"):
+                self.assertEqual(entry["sha256"], v4[rel.removeprefix("../v4/")]["sha256"], rel)
+        fusion._verify_manifest("v4.1")
+
+    def test_v41_is_pending_until_evaluated(self):
+        if not config.V41_SPEC_PATH.exists():
+            raise unittest.SkipTest("no v4.1 spec on this machine (scripts/build_v41_spec.py)")
+        if json.loads(config.V41_SPEC_PATH.read_text()).get("evaluation", {}).get("status") == "passed":
+            raise unittest.SkipTest("v4.1's evaluation has passed")
+        with self.assertRaises(reference.PendingArtifactError):
+            fusion.V4Bundle.load(version="v4.1")
+        self.assertEqual(fusion.V4Bundle.load(require_evaluation=False, version="v4.1").pipeline_version, "v4.1")
 
 
 if __name__ == "__main__":

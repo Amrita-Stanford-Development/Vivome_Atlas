@@ -1,0 +1,11 @@
+{
+  "no_interval_favours_v31": true,
+  "correct_when_committed_drop_at_most_2": true,
+  "correct_when_committed_drop": {
+    "SCoPE2": 0.052,
+    "PBMC240": 0.0,
+    "Fulcher 2026": -0.53,
+    "SCoPE2 reprocessed": 0.0
+  },
+  "passed": true
+}

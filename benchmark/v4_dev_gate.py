@@ -67,6 +67,8 @@ def independent_guess(bundle: "fusion.V4Bundle", smoothed: np.ndarray, values: n
             out.append(e / e.sum(1, keepdims=True))
         return np.mean(out, axis=0)
     s, w = bundle.smoothed_share, bundle.fusion_weight
+    # the encoder's weight where the correlation term is used, read from the spec itself (v4.1's own field)
+    w_on = float(bundle.spec["best_guess"].get("gate_on_fusion_weight", bundle.spec["best_guess"]["fusion_weight"]))
     on = mean_softmax(bundle.members, smoothed)
     v31_top = mean_softmax(bundle.answers.members, smoothed).argmax(1)
     pearson = np.array([[np.corrcoef(values[i, mask[i] > 0], bundle.class_means[k, mask[i] > 0])[0, 1]
@@ -77,7 +79,7 @@ def independent_guess(bundle: "fusion.V4Bundle", smoothed: np.ndarray, values: n
         return w * on + (1 - w) / on.shape[1], False
     r = pearson / bundle.correlation_temperature
     e = np.exp(r - r.max(1, keepdims=True))
-    return w * (s * on + (1 - s) * mean_softmax(bundle.members, values)) + (1 - w) * e / e.sum(1, keepdims=True), True
+    return w_on * (s * on + (1 - s) * mean_softmax(bundle.members, values)) + (1 - w_on) * e / e.sum(1, keepdims=True), True
 
 
 def figures(name: str, pred: np.ndarray, info, lineage) -> dict:
@@ -95,14 +97,20 @@ def figures(name: str, pred: np.ndarray, info, lineage) -> dict:
     return {}
 
 
-def run_gate(bundle: "fusion.V4Bundle") -> dict:
-    development = json.loads((PHASE3C / "development.json").read_text())
+def run_gate(bundle: "fusion.V4Bundle", development: "dict | None" = None, label: str = "phase3c") -> dict:
+    """development: the figures to reproduce, {dataset: {version: {figure:
+    value}}, "out_of_reference_auroc": {version: value}}; by default Phase
+    3c's record (v4). label names that record in the output."""
+    key = bundle.pipeline_version
+    development = development or json.loads((PHASE3C / "development.json").read_text())
     meta = pd.read_csv(REPO / "service" / "model" / "runtime" / "reference_metadata.csv")
     lineage = meta.groupby("class_name")["lineage"].first().to_dict()
     names = bundle.class_names
     v31 = bundle.answers
     floor = int(bundle.spec["preprocessing"]["min_observed_genes"])
     record = {"smoothed_share": bundle.smoothed_share, "agreement_threshold": bundle.agreement_threshold, "datasets": {}}
+    if bundle.gate_on_fusion_weight is not None:
+        record = {"version": key, "gate_on_fusion_weight": bundle.gate_on_fusion_weight, **record}
     misses, max_prob = [], {}
     for name, raw, info, keep in uploads():
         smoothed, aligned, scale = pipeline._prepare_query(bundle.feature_genes, raw)
@@ -141,17 +149,17 @@ def run_gate(bundle: "fusion.V4Bundle") -> dict:
         if set_mismatch or reason_mismatch:
             misses.append(f"{name}: {set_mismatch} committed sets and {reason_mismatch} abstentions are not v3.1's")
         max_prob[name] = np.array([c.get("best_guess", {}).get("probability", np.nan) for c in cells])
-        target = development[name]["v4"]
+        target = development.get(name, {}).get(key, {})
         for figure, value in figures(name, pred, info, lineage).items():
             ok = abs(value - target[figure]) <= TOLERANCE
-            entry["figures"].append({"figure": figure, "v4": round(value, 2), "phase3c": target[figure], "ok": ok})
+            entry["figures"].append({"figure": figure, key: round(value, 2), label: target[figure], "ok": ok})
             if not ok:
                 misses.append(f"{name} {figure}: {value:.2f} vs {target[figure]} (tolerance {TOLERANCE})")
         record["datasets"][name] = entry
     a, b = max_prob["fulcher2026"], max_prob["furtwangler2025"]
     auroc = float(roc_auc_score(np.r_[np.ones(len(a)), np.zeros(len(b))], np.r_[a, b]))
-    target = development["out_of_reference_auroc"]["v4"]
-    record["out_of_reference_auroc"] = {"v4": round(auroc, 4), "phase3c": target, "ok": abs(auroc - target) <= AUROC_TOLERANCE}
+    target = development["out_of_reference_auroc"][key]
+    record["out_of_reference_auroc"] = {key: round(auroc, 4), label: target, "ok": abs(auroc - target) <= AUROC_TOLERANCE}
     if not record["out_of_reference_auroc"]["ok"]:
         misses.append(f"AUROC {auroc:.4f} vs {target} (tolerance {AUROC_TOLERANCE})")
     record.update(misses=misses, passed=not misses, tolerance=TOLERANCE, auroc_tolerance=AUROC_TOLERANCE,

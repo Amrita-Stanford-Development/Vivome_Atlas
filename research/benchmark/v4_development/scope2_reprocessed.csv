@@ -1,0 +1,5 @@
+tool,seed,rule,regime,accuracy_pct,balanced_accuracy_pct,n_candidate_classes,n_query_cells
+v3.1 (served),0,best guess (served),unrestricted,6.471631205673758,5.462135557676959,22,1128
+v3.1 (served),0,best guess (served),restricted,38.20921985815603,32.92970156027481,2,1128
+v4 (served),0,best guess (served),unrestricted,6.560283687943262,5.523560619102021,22,1128
+v4 (served),0,best guess (served),restricted,39.45035460992908,33.30059938340193,2,1128

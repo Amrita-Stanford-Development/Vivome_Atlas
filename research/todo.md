@@ -194,7 +194,7 @@ Plan approved 2026-10-04. In-memory pre-tests on development data only; Khoury n
   - [x] The roadmap's retraining tier renamed v5.
 - [ ] **Phase 1:** SCoPE2 reprocessed from the evidence table, missing values kept missing.
   - [x] `benchmark/scope2_reprocess.py`: 1,128 cells (814 macrophage, 314 monocyte, labels from the experimental design), median 618 genes, 83.1% missing. (`578fe99`)
-  - [ ] Loaders wired into the scorers (Phase 4).
+  - [x] Loaders wired into the scorers (Phase 4): `benchmark/baselines_v4.py` runs v3.1 and v4 on it, and the corrected runner takes `scope2_reprocessed` (`benchmark/baselines_corrected_queue.sh`). Not yet committed.
 - [x] **SCoPE2's labels corrected** (found by Phase 1; `research/benchmark/bugs-and-fixes.md`, 8). VivOME's copy had macrophage and monocyte swapped on all 1,490 cells; the authors' curated object, the counts and the markers agree. (`578fe99`)
   - `benchmark/scope2_labels.py` (`--apply` fixes every copy and v3's evidence tables), pinned by `service/tests/test_scope2_labels.py`.
   - Rescored: Track D and corrected baselines, NB1d (`benchmark/scope2_5seed_scores.py`), the paired bootstraps, v3.1's flags and evidence, the v4 pre-test and gate, the manifest. Restricted figures became 100 minus the old ones.
@@ -230,8 +230,20 @@ Plan approved 2026-10-04. In-memory pre-tests on development data only; Khoury n
     - **Fresh suite** (third use of `te_eval`'s cells, declared): best guess 64.7 vs 59.3; coverage 89.2% vs 89.0%; committed 88.5% vs 89.0%; correct when committed 97.5%; false abstention 0.3%; every scenario at or above v3.1 (single type +0.2, PBMC-like +13.8). Per cell 61.5% vs 58.3%.
     - **Development:** Fulcher 65.0 vs 57.9; PBMC240 and SCoPE2 unchanged; AUROC 0.829 vs 0.744.
   - [x] **Spec freeze:** `spec_v4.json` records the passed evaluation (v4 servable on request; v3.1 stays the default); `benchmark.v4_dev_gate` passed (100% per-cell agreement); v4's responses frozen (`service/tests/fixtures/v4_full_*.json`, `V4IsUnchangedTests`). (`578fe99`)
-- [ ] **Phase 4:** the development benchmark against the corrected baselines.
-- [ ] **Phase 5:** the sealed test, scored once.
+- [ ] **Phase 4:** the development benchmark against the corrected baselines (run-history entry 25; `research/benchmark/results.md`, "v4 against the corrected baselines"). Not yet committed.
+  - [x] `benchmark/baselines_v4.py`, `benchmark/baselines_v4_score.py` (`research/benchmark/v4_development/`), `benchmark/khoury2026_posthoc_v4.py` (`research/benchmark/khoury2026_posthoc_v4/`).
+  - [x] **Checks pass:** no paired CI favours v3.1; correct-when-committed drops at most 0.05.
+  - [x] **Results:** Fulcher 65.0 vs v3.1 57.9 (+7.1), level with Harmony NC 63.0 and correlation 62.1. Khoury post-hoc 61.8 vs 56.9 (+4.9), level with PCA kNN 62.8 and scANVI kNN, ahead of the rest. PBMC240 unchanged (92.3). SCoPE2: only Harmony NC above chance.
+  - [ ] The corrected baselines on the reprocessed SCoPE2 (the owner's terminal, 2026-10-07), then rescore.
+- [ ] **v4.1: beat the baselines, not match them** (the owner's request and plan, 2026-10-07; run-history entry 25).
+  - **Diagnosis** (Fulcher; Khoury not read): v4 and Harmony share their errors; stacking Harmony adds about 1.5. v4's own correlation term alone scores 69.6 against the encoder's 61.0, and v4's 0.7 encoder weight was chosen on simulated RNA uploads.
+  - **Owner decisions:** choose the gate-on weight on Fulcher under fixed rules; check it once on Khoury (it chooses nothing); a baseline pre-layer is a research arm only.
+  - [x] **Phase A, run 2026-10-07:** `research/notebooks/v41_cache.py` (per-cell cache; reproduces Phase 3c exactly) and `research/notebooks/v41_pretest.py` (rules fixed first). **Locked: gate-on encoder weight 0.5, correlation temperature 0.05.** Fulcher 69.05 (in-sample; v4 65.0, Harmony NC 63.0). Weights 0.2–0.4 at τ 0.05 (Fulcher ~71.5) failed the guardrails (committed share, PBMC-like scenario). Calibration suite 63.6 vs v4 64.0; PBMC240 and SCoPE2 unchanged. Research arm: stacking Harmony NC or PCA kNN on v4.1 does not help (best 70.3 on Fulcher at the cost of PBMC240 92.3 → 77.8). Not yet committed.
+  - [x] **Phase B, run 2026-10-07:** `benchmark/khoury2026_posthoc_v41_check.py`. **Verdict: carries over.** Khoury (post-hoc) v4.1 62.5 vs v4 61.8 (+0.7, CI −0.04 to 1.5), v3.1 56.9; NK 45.9 → 50.7; still level with PCA kNN (62.8; −0.3, CI −2.1 to 1.4) and two of three scANVI kNN seeds, ahead of everything else. Not yet committed.
+  - [ ] **Phase C:** pre-registered evaluation, a script modelled on `research/notebooks/v4_phase3c.py`.
+  - [x] **Phase D, 2026-10-07:** `"v4.1"` in the service: `service/pipeline/fusion.py` reads the spec's gate-on encoder weight (0.5; v4 keeps 0.7 everywhere), `service/model/v4_1/` holds its spec and a MANIFEST pinning v4's data files (`scripts/build_v41_spec.py`); selectable, refused until its evaluation passes. `benchmark/v41_dev_gate.py` passes (100% per-cell agreement; Fulcher 69.05 as Phase A). v4's frozen responses unchanged; v4.1 equals v4 where its correlation term is flat. Note: v4.1's out-of-reference AUROC is 0.790 (v4 0.829, v3.1 0.744). Not yet committed.
+  - [ ] **Phase E:** development benchmark and the research arm.
+- [ ] **Phase 5:** the sealed test, scored once (for v4.1 if it passes; the claim needs a lead of at least 3 points over every corrected arm, each CI above 0).
 - [ ] **Phase 6:** release 0.4.0, after owner sign-off.
 
 ---

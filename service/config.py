@@ -112,7 +112,10 @@ ATLAS_VERSION = "0.3.0"
 # guess. Its evaluation passed (Phase 3c), so it is served when selected with
 # VIVOME_PIPELINE_VERSION=v4; v3.1 stays the default until the owner signs off
 # a release. A spec whose evaluation has not passed answers 503.
-PIPELINE_VERSIONS = ("v3", "v3.1", "v4")
+# "v4.1" (Track G, v4.1): v4 with the encoder weighted 0.5 instead of 0.7 where
+# the correlation term is used, chosen on Fulcher 2026; selectable, refused
+# (503) until its evaluation passes.
+PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1")
 PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
@@ -134,6 +137,12 @@ V31_COORDINATE_MEMBER = "V2_batchgene_aug_seed4.pt"
 V4_DIR = _env_path("VIVOME_V4_DIR", MODEL_DIR / "v4")
 V4_SPEC_PATH = V4_DIR / "spec_v4.json"
 V4_MANIFEST_PATH = V4_DIR / "MANIFEST.json"
+
+# v4.1's files: its own spec only (scripts/build_v41_spec.py). Its MANIFEST also
+# lists v4's data files, as ../v4/..., which it loads from V4_DIR.
+V41_DIR = _env_path("VIVOME_V41_DIR", MODEL_DIR / "v4_1")
+V41_SPEC_PATH = V41_DIR / "spec_v41.json"
+V41_MANIFEST_PATH = V41_DIR / "MANIFEST.json"
 
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration
 # slice. Brief Stage 5: must be a random subset, never confidence-filtered.

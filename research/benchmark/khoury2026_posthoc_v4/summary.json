@@ -1,0 +1,44 @@
+{
+  "dataset": "Khoury 2026",
+  "posthoc": true,
+  "note": "Post-hoc: Khoury's labels were read at its one scoring (2026-10-03), before v4 was designed. v4's spec was frozen (Phase 3c, 2026-10-05) before this run; Khoury played no part in it. The protocol's result is research/benchmark/khoury2026/.",
+  "best_guess_balanced_accuracy_pct": {
+    "v3.1": 56.93,
+    "v4": 61.82
+  },
+  "excluded_runs": {
+    "diverged": [],
+    "failed": [],
+    "missing": []
+  },
+  "ci_excludes_zero_counts": {
+    "v4 vs v3.1": {
+      "v4": 1
+    },
+    "v4 vs scANVI_corrected": {
+      "v4": 3,
+      "neither": 3
+    },
+    "v4 vs correlation": {
+      "v4": 1
+    },
+    "v4 vs pca": {
+      "neither": 1
+    },
+    "v4 vs harmony": {
+      "v4": 3
+    },
+    "v4 vs seurat": {
+      "v4": 1
+    },
+    "v4 vs maxfuse": {
+      "v4": 3
+    },
+    "v4 vs maxfuse_matching": {
+      "v4": 3
+    },
+    "v4 vs scglue": {
+      "v4": 3
+    }
+  }
+}

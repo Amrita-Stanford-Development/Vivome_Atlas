@@ -33,10 +33,11 @@ service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv filt
 
 # Byte-exact on every platform: these files' sha256 is checked
 # (service/model/v3_1/MANIFEST.json, service/model/v4/MANIFEST.json,
-# runtime/gene_id_map_v1_provenance.json), so line-ending conversion
-# (Windows core.autocrlf) must never touch them.
+# service/model/v4_1/MANIFEST.json, runtime/gene_id_map_v1_provenance.json),
+# so line-ending conversion (Windows core.autocrlf) must never touch them.
 service/model/v3_1/** -text
 service/model/v4/** -text
+service/model/v4_1/** -text
 service/model/runtime/** -text
 
 # Scripts keep LF so they run under Git Bash and Rscript on Windows too.

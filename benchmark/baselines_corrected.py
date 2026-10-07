@@ -4,7 +4,8 @@ before any corrected run; nothing here is tuned on a query label.
 
     python -m benchmark.baselines_corrected TOOL DATASET SEED              # from the repository root
     # TOOL correlation | pca | harmony | seurat | maxfuse | scglue | scanvi
-    # DATASET scope2 | pbmc240 | fulcher2026; SEED 0-2
+    # DATASET scope2 | pbmc240 | fulcher2026 | scope2_reprocessed (Track G, Phase 4); SEED 0-2
+    # benchmark/baselines_corrected_queue.sh DATASET runs every tool and seed on one dataset
     python -m benchmark.baselines_corrected TOOL khoury2026 SEED --posthoc
     # Khoury 2026's labels were read at its one scoring; runs on it are post-hoc
     # --smoke N (development datasets only) subsamples N RNA cells, few epochs: plumbing only
@@ -243,7 +244,7 @@ def run(args, inp, stem: Path) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("tool", choices=TOOLS)
-    parser.add_argument("dataset", choices=baselines_inputs.DATASETS + POSTHOC)
+    parser.add_argument("dataset", choices=baselines_inputs.DATASETS + baselines_inputs.ADDED + POSTHOC)
     parser.add_argument("seed", type=int, choices=(0, 1, 2))
     parser.add_argument("--smoke", type=int, default=0, help="development datasets only: subsample N RNA cells")
     parser.add_argument("--posthoc", action="store_true", help="required for Khoury 2026: its runs are post-hoc")

@@ -1,0 +1,111 @@
+{
+  "eligible": [
+    [
+      0.3,
+      0.1
+    ],
+    [
+      0.4,
+      0.07
+    ],
+    [
+      0.4,
+      0.1
+    ],
+    [
+      0.5,
+      0.05
+    ],
+    [
+      0.5,
+      0.07
+    ],
+    [
+      0.5,
+      0.1
+    ],
+    [
+      0.7,
+      0.05
+    ],
+    [
+      0.7,
+      0.07
+    ],
+    [
+      0.7,
+      0.1
+    ]
+  ],
+  "stable": [
+    [
+      0.3,
+      0.1
+    ],
+    [
+      0.4,
+      0.07
+    ],
+    [
+      0.5,
+      0.05
+    ]
+  ],
+  "chosen": {
+    "w_on": 0.5,
+    "tau": 0.05
+  },
+  "reason": "the stable eligible candidate closest to v4",
+  "v31": {
+    "suite": {
+      "overall": 58.57314189538657,
+      "lineage": 57.68288640936438,
+      "mixed": 66.91786633677087,
+      "narrow": 60.722809218772404,
+      "pbmc": 60.0985597206423,
+      "scope2": 67.8442049610094,
+      "single": 33.743433439731255
+    },
+    "committed": 87.69456198322393,
+    "coverage": 85.69399380990117
+  },
+  "v4": {
+    "suite_overall": 63.99504284828234,
+    "fulcher": 65.00000140620563,
+    "pbmc240_lymphoid": 92.3076923076923,
+    "auroc": 0.8289300971785363
+  },
+  "chosen_figures": {
+    "w_on": 0.5,
+    "tau": 0.05,
+    "is_v4": false,
+    "suite_overall": 63.61450725255972,
+    "suite_lineage": 60.13432333045649,
+    "suite_mixed": 76.26954905427948,
+    "suite_narrow": 64.48477576578155,
+    "suite_pbmc": 70.66561069247201,
+    "suite_scope2": 72.23838079180462,
+    "suite_single": 33.079086531890766,
+    "single_class_mean": 0.3084792826788985,
+    "single_worst_class": -8.879166666666663,
+    "single_p_fail": 0.0005,
+    "answers_coverage": 86.22030172993826,
+    "answers_committed": 86.54774898700678,
+    "answers_correct_when_committed": 97.37233086863381,
+    "fulcher": 69.04881566620614,
+    "fulcher_CD4T": 82.46753246753246,
+    "fulcher_CD8T": 23.756906077348066,
+    "fulcher_NK": 90.0,
+    "fulcher_B": 98.0392156862745,
+    "fulcher_monocyte": 97.80701754385966,
+    "fulcher_DC": 22.22222222222222,
+    "pbmc240_lymphoid": 92.3076923076923,
+    "scope2_unrestricted": 0.0,
+    "scope2_restricted": 37.972646263292454,
+    "scope2_reprocessed_unrestricted": 5.523560619102021,
+    "scope2_reprocessed_restricted": 33.30059938340193,
+    "auroc": 0.7897766928000249,
+    "eligible": true,
+    "plateau_share": 1.0
+  }
+}

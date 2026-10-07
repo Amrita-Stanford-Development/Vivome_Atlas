@@ -15,6 +15,10 @@ Query inputs:
   PBMC240 input; it measures 1,111 of the genes.
 - Fulcher 2026: log2 of the TMT intensities
   (datasets.load_fulcher2026_benchmark_matrix("log2")); it measures 932.
+- SCoPE2 (reprocessed; Track G, Phase 4, with the corrected runner only):
+  log2 reporter ratios from its peptide evidence, each cell's median
+  subtracted, missing values kept missing
+  (datasets.load_scope2_reprocessed_benchmark_matrix).
 
 Nothing here reads a query label.
 """
@@ -31,11 +35,14 @@ from benchmark import datasets
 
 D = Path(__file__).resolve().parent / "results"
 DATASETS = ("scope2", "pbmc240", "fulcher2026")
+ADDED = ("scope2_reprocessed",)  # development data added in Track G, Phase 4; corrected runs only
 SEALED = ("khoury2026",)  # built only at the final v3.1 evaluation (protocol-khoury2026.md)
 QUERY_INPUT = {
     "scope2": "SCoPE2 published gene-level matrix, as provided (gene- and cell-centred by its authors, complete)",
     "pbmc240": "PBMC240 processed file: log2(x+1), per-cell median normalised, left-censored imputed, z-scored within its own panel",
     "fulcher2026": "Fulcher 2026: log2 of the TMT-Integrator intensities, missing values kept missing",
+    "scope2_reprocessed": "SCoPE2 reprocessed from its peptide evidence (benchmark/scope2_reprocess.py): log2 "
+                          "reporter ratios, each cell's median subtracted, missing values kept missing",
     "khoury2026": "Khoury 2026: the column-normalised matrix as provided (log2, ComBat-corrected by its authors), "
                   "missing values kept missing",
 }
@@ -73,10 +80,13 @@ def query_matrix(dataset: str) -> tuple[np.ndarray, list[str]]:
     if dataset == "fulcher2026":
         x, ids, _ = datasets.load_fulcher2026_benchmark_matrix("log2")
         return x, list(ids)
+    if dataset == "scope2_reprocessed":
+        x, ids, _ = datasets.load_scope2_reprocessed_benchmark_matrix()
+        return x, list(ids)
     if dataset == "khoury2026":
         x, ids, _ = datasets.load_khoury2026_benchmark_matrix()
         return x, list(ids)
-    raise ValueError(f"unknown dataset {dataset!r}; expected one of {DATASETS}")
+    raise ValueError(f"unknown dataset {dataset!r}; expected one of {DATASETS + ADDED}")
 
 
 def load(dataset: str) -> Inputs:

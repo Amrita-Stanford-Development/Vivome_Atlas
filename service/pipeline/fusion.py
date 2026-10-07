@@ -32,6 +32,15 @@ set, and used the correlation term in every upload: NO GO (entry 23). Phase 3c
 evaluation suite: GO (entry 24). The service refuses a v4 spec whose
 evaluation has not passed; such a bundle loads only for the scripts that
 evaluate it (require_evaluation=False).
+
+v4.1 is the same code and v4's data files with its own spec
+(service/model/v4_1/spec_v41.json, scripts/build_v41_spec.py): where the
+correlation term is used, the encoder's weight is the spec's
+gate_on_fusion_weight (0.5) instead of fusion_weight (0.7, still the weight
+where the term is flat). The weight was chosen on Fulcher 2026 under fixed
+rules (research/notebooks/v41_pretest.py) and checked once on Khoury 2026
+(benchmark/khoury2026_posthoc_v41_check.py). It is refused like v4 until
+its own evaluation passes.
 """
 from __future__ import annotations
 
@@ -46,6 +55,21 @@ from service import config
 from service.pipeline import abstention, ensemble, gene_ids, pipeline, reference, search, transfer
 
 MODEL_VERSION_LABEL = "v4 (v3.1's answers; best guess fused from its V2 members on a class-balanced reference and correlation)"
+MODEL_VERSION_LABELS = {
+    "v4": MODEL_VERSION_LABEL,
+    "v4.1": "v4.1 (v4 with the correlation term weighted more where it is used; chosen on Fulcher 2026)",
+}
+
+
+def version_files(version: str) -> tuple:
+    """(spec, MANIFEST, the directory its paths are relative to, the script
+    that builds it) for a version of this module. v4.1 is v4's data with its
+    own spec (scripts/build_v41_spec.py)."""
+    if version == "v4":
+        return config.V4_SPEC_PATH, config.V4_MANIFEST_PATH, config.V4_DIR, "scripts/build_v4_bundle.py"
+    if version == "v4.1":
+        return config.V41_SPEC_PATH, config.V41_MANIFEST_PATH, config.V41_DIR, "scripts/build_v41_spec.py"
+    raise ValueError(f"{version!r} is not a version of service/pipeline/fusion.py")
 
 
 # ---- the math, pure ----
@@ -120,11 +144,11 @@ def upload_agreement(r: np.ndarray, answer_probs: np.ndarray, counted: np.ndarra
 
 # ---- the spec and the bundle ----
 
-def validate_spec(spec: dict, class_names: list[str], require_evaluation: bool = True) -> None:
+def validate_spec(spec: dict, class_names: list[str], require_evaluation: bool = True, version: str = "v4") -> None:
     problems = []
     try:
-        if spec.get("version") != "v4":
-            problems.append("not a v4 spec")
+        if spec.get("version") != version:
+            problems.append(f"not a {version} spec")
         if spec["class_order"] != class_names:
             problems.append("class_order is not the reference's class order")
         if spec["preprocessing"]["convention"] != "service" or spec["preprocessing"]["smoothing"] is not True:
@@ -136,6 +160,8 @@ def validate_spec(spec: dict, class_names: list[str], require_evaluation: bool =
             problems.append("best-guess rule or label space is not one this module implements")
         if not 0 <= float(b["fusion_weight"]) <= 1:
             problems.append("fusion_weight must be within [0, 1]")
+        if "gate_on_fusion_weight" in b and not 0 <= float(b["gate_on_fusion_weight"]) <= 1:
+            problems.append("gate_on_fusion_weight must be within [0, 1]")
         if not float(b["correlation_temperature"]) > 0:
             problems.append("correlation_temperature must be positive")
         if not 0 <= float(b["smoothed_share"]) <= 1:
@@ -149,29 +175,31 @@ def validate_spec(spec: dict, class_names: list[str], require_evaluation: bool =
         if config.V31_COORDINATE_MEMBER not in spec["encoder"]["members"]:
             problems.append(f"the coordinate member {config.V31_COORDINATE_MEMBER} is not a member")
         if require_evaluation and spec["evaluation"]["status"] != "passed":
-            problems.append("the evaluation has not passed (Track G, Phase 3c)")
+            problems.append("the evaluation has not passed (Track G)")
     except (KeyError, TypeError, ValueError) as exc:
         problems.append(f"missing or malformed field: {exc!r}")
     if problems:
-        raise ValueError(f"{config.V4_SPEC_PATH} is not a usable v4 spec: " + "; ".join(problems))
+        raise ValueError(f"{version_files(version)[0]} is not a usable {version} spec: " + "; ".join(problems))
 
 
-def _verify_manifest() -> None:
-    path = config.V4_MANIFEST_PATH
+def _verify_manifest(version: str = "v4") -> None:
+    """Every file the version's MANIFEST lists (v4.1's include v4's data
+    files, as ../v4/...) must exist and match its sha256."""
+    _, path, base, builder = version_files(version)
     if not path.exists():
-        raise reference.PendingArtifactError(f"{path} does not exist. Build it with scripts/build_v4_bundle.py.")
+        raise reference.PendingArtifactError(f"{path} does not exist. Build it with {builder}.")
     manifest = json.loads(path.read_text(encoding="utf-8"))
     for rel, entry in manifest["files"].items():
-        file = config.V4_DIR / rel
+        file = base / rel
         if not file.exists():
             raise reference.PendingArtifactError(f"{file} does not exist (listed in {path}).")
         if hashlib.sha256(file.read_bytes()).hexdigest() != entry["sha256"]:
-            raise reference.PendingArtifactError(f"{file} does not match its sha256 in {path}. Rebuild with scripts/build_v4_bundle.py.")
+            raise reference.PendingArtifactError(f"{file} does not match its sha256 in {path}. Rebuild with {builder}.")
 
 
-def build_components(answers_spec: dict) -> "pipeline.Components":
+def build_components(answers_spec: dict, version: str = "v4") -> "pipeline.Components":
     """v3.1's label space, conformal sets and abstention, from v3.1's spec."""
-    return dataclasses.replace(ensemble.build_components(answers_spec), version="v4")
+    return dataclasses.replace(ensemble.build_components(answers_spec), version=version)
 
 
 @dataclass(frozen=True)
@@ -179,18 +207,25 @@ class V4Bundle:
     answers: "ensemble.V31Bundle"  # every answer, coordinate and property is v3.1's
     members: "tuple[ensemble.Member, ...]"  # v3.1's encoders and latents; v4's class-balanced centroids
     class_means: np.ndarray
-    fusion_weight: float
+    fusion_weight: float  # the encoder's weight where the correlation term is flat (and, in v4, where it is used)
     correlation_temperature: float
     smoothed_share: float
     agreement_threshold: float
     spec: dict
     components: "pipeline.Components"
+    gate_on_fusion_weight: "float | None" = None  # the encoder's weight where the correlation term is used (v4.1)
 
-    pipeline_version = "v4"
+    @property
+    def pipeline_version(self) -> str:
+        return self.spec["version"]
 
     @property
     def model_version(self) -> str:
-        return MODEL_VERSION_LABEL
+        return MODEL_VERSION_LABELS[self.pipeline_version]
+
+    @property
+    def encoder_weight_where_used(self) -> float:
+        return encoder_weight_where_used(self)
 
     @property
     def class_names(self) -> list[str]:
@@ -205,16 +240,17 @@ class V4Bundle:
         return self.answers.feature_genes
 
     @classmethod
-    def load(cls, require_evaluation: bool = True) -> "V4Bundle":
-        _verify_manifest()
-        spec = json.loads(config.V4_SPEC_PATH.read_text(encoding="utf-8"))
+    def load(cls, require_evaluation: bool = True, version: str = "v4") -> "V4Bundle":
+        spec_path = version_files(version)[0]
+        _verify_manifest(version)
+        spec = json.loads(spec_path.read_text(encoding="utf-8"))
         if require_evaluation and spec.get("evaluation", {}).get("status") != "passed":
             raise reference.PendingArtifactError(
-                f"{config.V4_SPEC_PATH}: v4's evaluation has not passed (research/todo.md, Track G, Phase 3c).")
+                f"{spec_path}: {version}'s evaluation has not passed (research/todo.md, Track G).")
         answers = ensemble.V31Bundle.load()
-        validate_spec(spec, answers.class_names, require_evaluation)
+        validate_spec(spec, answers.class_names, require_evaluation, version)
         if spec["encoder"]["members"] != [m.name for m in answers.members]:
-            raise ValueError(f"{config.V4_SPEC_PATH}: its members are not v3.1's")
+            raise ValueError(f"{spec_path}: its members are not v3.1's")
         b = spec["best_guess"]
         members = []
         for m in answers.members:
@@ -227,11 +263,19 @@ class V4Bundle:
             class_means=np.load(config.V4_DIR / "class_means_cb.npy").astype(np.float32),
             fusion_weight=float(b["fusion_weight"]), correlation_temperature=float(b["correlation_temperature"]),
             smoothed_share=float(b["smoothed_share"]), agreement_threshold=float(b["agreement_threshold"]),
-            spec=spec, components=build_components(answers.spec),
+            spec=spec, components=build_components(answers.spec, version),
+            gate_on_fusion_weight=float(b["gate_on_fusion_weight"]) if "gate_on_fusion_weight" in b else None,
         )
 
 
 # ---- the request ----
+
+def encoder_weight_where_used(bundle) -> float:
+    """The encoder's weight in uploads where the correlation term is used:
+    the spec's gate_on_fusion_weight (v4.1), else fusion_weight (v4)."""
+    w = getattr(bundle, "gate_on_fusion_weight", None)
+    return bundle.fusion_weight if w is None else w
+
 
 @dataclass(frozen=True)
 class BestGuess:
@@ -259,7 +303,7 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
         unsmoothed = [m.encoder_handle.encode(values, mask) for m in bundle.members]
         encoder_probs = mixed_encoder_probabilities(on, probs(unsmoothed), bundle.smoothed_share)
     correlation = correlation_probabilities(r, bundle.correlation_temperature)
-    return BestGuess(fused_probabilities(encoder_probs, correlation, bundle.fusion_weight), agreement, True)
+    return BestGuess(fused_probabilities(encoder_probs, correlation, encoder_weight_where_used(bundle)), agreement, True)
 
 
 def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None") -> dict:
@@ -326,7 +370,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
     return {
         "atlas_version": config.ATLAS_VERSION,
         "model_version": bundle.model_version,
-        "pipeline_version": "v4",
+        "pipeline_version": bundle.pipeline_version,
         "n_cells": len(aligned.cell_ids),
         "n_features_matched": aligned.n_features_matched,
         "n_features_unmatched": aligned.n_features_unmatched,

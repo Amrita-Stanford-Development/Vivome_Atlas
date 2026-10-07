@@ -68,7 +68,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/pipeline/__init__.py` — package marker
 - `service/pipeline/pipeline.py` — orchestrator: runs Stages 1–8 and builds the response; the v3 / v3.1 component switch (`components_for`)
 - `service/pipeline/ensemble.py` — v3.1, T1 NB2's ensemble: five members' tempered softmax averaged, Mondrian sets, the out-of-distribution mean, hierarchical answers and the best guess
-- `service/pipeline/fusion.py` — v4: v3.1's answers unchanged (sets, abstention, levels, coordinates), with a best guess fused from the V2 members on a class-balanced reference (smoothed and unsmoothed query mixed) and a correlation-to-class-mean term over each cell's observed genes, used only in uploads where it agrees with v3.1 often enough; the guess joins v3.1's sets beside v3.1's own; served on request since its evaluation passed (v3.1 stays the default)
+- `service/pipeline/fusion.py` — v4: v3.1's answers unchanged (sets, abstention, levels, coordinates), with a best guess fused from the V2 members on a class-balanced reference (smoothed and unsmoothed query mixed) and a correlation-to-class-mean term over each cell's observed genes, used only in uploads where it agrees with v3.1 often enough; the guess joins v3.1's sets beside v3.1's own; served on request since its evaluation passed (v3.1 stays the default); v4.1 is the same code with its own spec (`service/model/v4_1/`)
 - `service/pipeline/alignment.py` — Stage 1: map the upload onto the 9,002-gene feature space; value-scale and mask conventions
 - `service/pipeline/smoothing.py` — Stage 2: fuzzy neighbourhood smoothing of sparse proteomics profiles
 - `service/pipeline/encoder.py` — Stage 3: the module-pooling reference encoder and loading it; `encode_with_hidden` and the classifier head, for v3.1
@@ -100,11 +100,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_pipeline.py` — end-to-end wiring on the real production checkpoint and reference
 - `service/tests/test_e2e_real_export.py` — regression guard: the real SCoPE2 export still reproduces the notebook's own outputs
 - `service/tests/test_golden_fixtures.py` — full responses must match the frozen golden fixtures
-- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1 and v4 unchanged against their frozen responses, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
+- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1 and v4 unchanged against their frozen responses, v4.1 equal to v4 where its correlation term is flat, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
 - `service/tests/test_ensemble.py` — v3.1 against NB2's own `nb2_core.py`: synthetic inputs, the full path on real PBMC240 cells, both service flags, spec validation
 - `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
-- `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals
+- `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
+- `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
 - `service/tests/test_scope2_labels.py` — every copy of SCoPE2's labels must match the curated source (`research/benchmark/scope2_labels/corrected_labels.csv`)
 - `service/tests/test_alignment.py` — Stage 1 tests
@@ -136,6 +137,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v4/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA (9,002 genes)
 - `service/model/v4/class_means_cb.npy` — class-balanced z-scored RNA class means (22 × 9,002), the correlation term's reference
 - `service/model/v4/members/V2_seed*_centroids_cb.npy` — each member's class centroids from the reference encoded under class-balanced statistics (22 × 128)
+- `service/model/v4_1/spec_v41.json` — v4.1's settings: v4's, with the encoder's weight where the correlation term is used (gate-on) and the correlation temperature from v4.1's Phase A, and its evaluation's status
+- `service/model/v4_1/MANIFEST.json` — sha256 of v4.1's spec and of every v4 data file it uses (as `../v4/...`), checked when v4.1 loads
 - `service/model/runtime/reference_model.pt` — the production v3 encoder checkpoint (Git LFS, ~94 MB)
 - `service/model/runtime/reference_embedding.npy` — every RNA reference cell in the 128-d latent space (85,233 × 128)
 - `service/model/runtime/reference_centroids.npy` — one latent centroid per class (22 × 128), in `class_idx` order
@@ -207,6 +210,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/notebook_convention.py` — NB2's own query parse (the "notebook convention"), to reproduce its development numbers; not the product parser
 - `benchmark/v31_dev_gate.py` — Track F gate: the served v3.1 pipeline, under NB2's rule, must reproduce NB2's development table within 0.5 points; writes its record
 - `benchmark/v4_dev_gate.py` — Track G's gate for v4: on the development datasets, the served best guess must equal an independent recomputation cell by cell, the agreement gate must decide as the service does, the answers must be v3.1's with the guess joined, and the figures must match Phase 3c's record; writes its record
+- `benchmark/v41_dev_gate.py` — v4.1's gate: the v4 gate run on v4.1 as served, against v4.1's Phase A record; writes its record
 - `benchmark/v31_service_flags.py` — v3.1's two service flags off (NB2's rule) and on (served), on SCoPE2, PBMC240 and Fulcher
 - `benchmark/scope2_5seed_paired.py` — Track D's paired bootstrap, ten ours-seeds × three scANVI seeds × three regimes, on SCoPE2
 - `benchmark/scope2_5seed_scores.py` — SCoPE2 under NB1d's ten model-seeds with the corrected labels: Track D's per-seed table and NB1d's own SCoPE2 figures, each reproduced with the previous labels first
@@ -220,6 +224,11 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/baselines_score.py` — Track D extension scoring, the only step that reads these labels: per-seed tables, summaries, v3.1's confident answers, paired bootstrap
 - `benchmark/baselines_corrected.py` — corrected baselines after the 2026-10-03 review: class-balanced RNA scaling, MaxFuse with its tutorial settings and native matching, scANVI on non-negative inputs, a plain PCA arm, setup checks; Khoury only with `--posthoc`
 - `benchmark/baselines_corrected_score.py` — scores the corrected baselines on SCoPE2, PBMC240 and Fulcher with `baselines_score.py`'s functions; adds the setup-check table
+- `benchmark/baselines_corrected_queue.sh` — every corrected tool and seed on one development dataset, one run at a time, skipping finished ones
+- `benchmark/baselines_v4.py` — Track G, Phase 4: v4 as served on the development uploads (best guess and confident answer per cell), and v3.1 on the reprocessed SCoPE2
+- `benchmark/baselines_v4_score.py` — Track G, Phase 4: v4 against every corrected baseline and against v3.1 on the development datasets, with `baselines_score.py`'s functions, and the plan's Phase 4 checks
+- `benchmark/khoury2026_posthoc_v4.py` — Khoury 2026 post-hoc: v4 as served, scored beside v3.1 and the corrected baselines with the sealed scorer's code
+- `benchmark/khoury2026_posthoc_v41_check.py` — v4.1, Phase B: the rule locked on Fulcher, checked once on Khoury 2026 (post-hoc) against v4, v3.1 and the corrected baselines, with a verdict fixed before Phase A
 - `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
 
 ## scripts/ — build and repository checks
@@ -229,6 +238,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/export_atlas_coordinates.py` — writes the site's atlas coordinates from the served v3.1 model, so projected cells land on the displayed atlas
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict
+- `scripts/build_v41_spec.py` — writes v4.1's spec (v4's with Phase A's locked rule and Phase C's verdict) and a MANIFEST pinning v4's data files
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, and optionally the R2-backed large files)
@@ -299,6 +309,20 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/khoury2026_posthoc/paired_bootstrap.csv` — Khoury 2026, post-hoc: paired bootstrap CI for v3.1 and v3 against every corrected baseline
 - `research/benchmark/khoury2026_posthoc/setup_checks.csv` — Khoury 2026, post-hoc: each corrected run's RNA-side checks (held-out RNA kNN, query mixing)
 - `research/benchmark/khoury2026_posthoc/summary.json` — Khoury 2026, post-hoc: excluded runs and count of CIs excluding zero per comparison
+- `research/benchmark/khoury2026_posthoc_v41_check/summary.json` — v4.1, Phase B: the locked rule on Khoury 2026 (post-hoc), its sha256, scores beside v4 and v3.1, and the verdict
+- `research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv` — v4.1, Phase B: v4.1's best guess against v4, v3.1 and every corrected baseline run and rule
+- `research/benchmark/khoury2026_posthoc_v4/per_model_scores.csv` — Khoury 2026, post-hoc: v4's and v3.1's best guess, balanced accuracy, per-type and lineage recall
+- `research/benchmark/khoury2026_posthoc_v4/paired_bootstrap.csv` — Khoury 2026, post-hoc: v4's best guess against v3.1 and every corrected baseline run and rule
+- `research/benchmark/khoury2026_posthoc_v4/confident.json` — Khoury 2026, post-hoc: v4's and v3.1's confident answers, overall and per type
+- `research/benchmark/khoury2026_posthoc_v4/summary.json` — Khoury 2026, post-hoc: v4's run, its best guess against v3.1's, and the count of CIs excluding zero per comparison
+- `research/benchmark/v4_development/scope2.csv` — v4 on the development data: SCoPE2's published matrix, v3.1's and v4's rows, as the corrected baseline table's metrics
+- `research/benchmark/v4_development/pbmc240.csv` — v4 on the development data: PBMC240, v3.1's and v4's rows
+- `research/benchmark/v4_development/fulcher2026.csv` — v4 on the development data: Fulcher 2026, v3.1's and v4's rows
+- `research/benchmark/v4_development/scope2_reprocessed.csv` — v4 on the development data: SCoPE2 reprocessed, every completed corrected run, v3.1 and v4, both regimes
+- `research/benchmark/v4_development/confident.csv` — v4 on the development data: committed share and correct when committed, v3.1 and v4, per dataset
+- `research/benchmark/v4_development/paired_bootstrap_v4.csv` — v4 on the development data: its best guess against every corrected baseline run and rule
+- `research/benchmark/v4_development/paired_bootstrap_v4_vs_v31.csv` — v4 on the development data: its best guess against v3.1's, per dataset
+- `research/benchmark/v4_development/checks.json` — v4 on the development data: the plan's Phase 4 checks
 - `research/benchmark/baselines_corrected/inputs.csv` — corrected baselines: what every tool received per dataset, and its settings
 - `research/benchmark/baselines_corrected/setup_checks.csv` — corrected baselines: each run's status and RNA-side checks (held-out RNA kNN, query mixing, MaxFuse matched share, scANVI input shift and epochs)
 - `research/benchmark/baselines_corrected/scope2_per_seed.csv` — corrected baselines, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
@@ -321,6 +345,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/baselines/paired_bootstrap.csv` — Track D extension: v3.1's best guess minus each baseline seed and rule, with 95% CI, on SCoPE2 (both regimes) and Fulcher
 - `research/benchmark/v31_dev_gate.json` — the Track F gate's record: every NB2 and v3.1 figure compared, SCoPE2 correctness, PBMC240 through the service parser
 - `research/benchmark/v4_dev_gate.json` — the v4 gate's record: per-cell agreement, the agreement gate's decisions, the answers check and every figure against Phase 3c
+- `research/benchmark/v41_dev_gate.json` — the v4.1 gate's record: per-cell agreement, the agreement gate's decisions, the answers check and every figure against Phase A
 - `research/benchmark/scope2_labels/corrected_labels.csv` — SCoPE2's 1,490 cells: VivOME and SCoPE2 ids, the curated cell type, the previous (swapped) label and the corrected one
 - `research/benchmark/scope2_labels/check.json` — the evidence for the correction: curated and previous counts, agreement, marker shifts under each labelling, source sha256s
 - `research/benchmark/v31_service_flags.json` — v3.1's service flags off and on: shares, composition, correctness and one-class answers per dataset
@@ -379,6 +404,15 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/v4_pretest.py` — v4 pre-test: the adopted inference-only design (smoothing off, class-balanced reference, encoder + correlation fusion), its fusion setting chosen on NB1's calibration suite, the evaluation suite scored once, development data reported
 - `research/notebooks/v4_calibration.py` — v4 Phase 3: conformal sets and the out-of-distribution threshold refitted on the fused probability, on NB3c's never-seen cells, judged once against pre-set go criteria (NO GO, 2026-10-04); the record of the first v4 design, which Phase 3b replaced
 - `research/notebooks/v4_phase3b.py` — v4 Phase 3b: v3.1's answers with the fused best guess; its smoothed share chosen on NB3c's calibration suite, then scored once on a fresh evaluation suite against pre-set go criteria (NO GO, 2026-10-05); the record of the second v4 design, run against `fusion.py` before Phase 3c
+- `research/notebooks/v41_core.py` — v4.1: the pre-test's shared helpers (the parametrised best-guess rule, upload agreement, suite, single-type, answer and development scores over the per-cell cache)
+- `research/notebooks/v41_cache.py` — v4.1, Phase A: caches every calibration and development cell's best-guess ingredients through the service's code, self-checked against Phase 3c's records; arrays on Drive
+- `research/notebooks/v41_pretest.py` — v4.1, Phase A: chooses the gate-on encoder weight and correlation temperature on Fulcher under fixed guardrails and a stability rule; the baseline-stacking research arm
+- `research/notebook-outputs/v41_pretest/cache_record.json` — v4.1, Phase A: the cache's sha256s, counts and self-check against Phase 3c
+- `research/notebook-outputs/v41_pretest/rules.json` — v4.1, Phase A: the pre-test's sha256s, start time and rules, written before anything was computed
+- `research/notebook-outputs/v41_pretest/candidates.csv` — v4.1, Phase A: every candidate's suite, scenario, single-type, answer and development figures, guardrails and plateau share
+- `research/notebook-outputs/v41_pretest/selection.json` — v4.1, Phase A: the eligible and stable candidates, the choice and its figures
+- `research/notebook-outputs/v41_pretest/locked_rule.json` — v4.1, Phase A: the locked gate-on encoder weight and correlation temperature, read by Phase B
+- `research/notebook-outputs/v41_pretest/research_arm.csv` — v4.1, Phase A: the locked rule blended with Harmony NC or PCA kNN class scores (the stacking research arm)
 - `research/notebooks/v4_phase3c.py` — v4 Phase 3c: v3.1's answers with the fused best guess gated by upload agreement, one rule fixed from its exploration; checks the service reproduces the explored rule on NB3c's calibration suite, then scores a fresh evaluation suite once against pre-set go criteria
 - `research/notebook-outputs/v4_calibration/summary.json` — v4 Phase 3: v4 and v3.1 on the evaluation suite, per scenario, the checks and the verdict
 - `research/notebook-outputs/v4_calibration/rules.json` — v4 Phase 3: the script's sha256 and start time, written before anything was computed

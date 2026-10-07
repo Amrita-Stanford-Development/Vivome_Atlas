@@ -1,0 +1,10 @@
+{
+  "w_on": 0.5,
+  "tau": 0.05,
+  "smoothed_share": 0.5,
+  "agreement_threshold": 0.4,
+  "w_off": 0.7,
+  "is_v4": false,
+  "chosen_on": "Fulcher 2026 under research/notebooks/v41_pretest.py's rules (rules.json)",
+  "date": "2026-10-07"
+}

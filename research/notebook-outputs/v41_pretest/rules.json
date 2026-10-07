@@ -1,0 +1,45 @@
+{
+  "script_sha256": "70ec728413ca3fe8a223f0ffbd3b6cc6c56d93c610e565e283232ae7f0c262a6",
+  "core_sha256": "a4b73f6901a11aded4278ec07f9b5f04548299ec052c0a2b94f2638171ca5293",
+  "cache_record_sha256": "76fc4626f079d110a82cad08ea078e54f0e58e054407873fe53f173a8768c6e2",
+  "started": "2026-10-07T12:47:06",
+  "candidates": {
+    "w_on": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.7
+    ],
+    "tau": [
+      0.05,
+      0.07,
+      0.1
+    ]
+  },
+  "v4": {
+    "w_on": 0.7,
+    "tau": 0.05,
+    "smoothed_share": 0.5,
+    "agreement_threshold": 0.4,
+    "w_off": 0.7
+  },
+  "guardrails": {
+    "suite_drop_max": 1.0,
+    "group_drop_vs_v4_max": 2.0,
+    "group_drop_vs_v31_max": 3.0,
+    "p_fail_max": 0.01,
+    "committed_drop_vs_v31_max": 2.0,
+    "development_drop_max": 2.0
+  },
+  "stability": {
+    "splits": 200,
+    "within": 1.0,
+    "plateau_min": 0.8,
+    "seed": 0
+  },
+  "research_arm_betas": [
+    0.2,
+    0.33
+  ]
+}

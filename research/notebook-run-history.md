@@ -1027,6 +1027,56 @@ correlation, 62.1). But Fulcher is development data that shaped v4's design,
 and no paired bootstrap has been run. That is Phase 4; the claim needs the
 sealed test (Phase 5).
 
+### 25. v4 Phase 4 (Track G): v4 against the corrected baselines (scripts, 2026-10-05 to 07)
+
+**What ran,** one job at a time on the PC:
+1. `benchmark/baselines_v4.py`: v4 as served on every development upload,
+   and v3.1 on the reprocessed SCoPE2.
+2. `benchmark/baselines_v4_score.py`: v4 against every corrected baseline
+   run and against v3.1. It uses `baselines_score.py`'s functions and
+   bootstrap, and writes to `research/benchmark/v4_development/`. The
+   existing tables are not rewritten.
+3. `benchmark/khoury2026_posthoc_v4.py`: Khoury 2026, post-hoc.
+   - **Step 1, label-free:** v4 on the upload.
+   - **Step 2:** scoring with the sealed scorer's code, after checking
+     v3.1's row against the sealed tables.
+4. The corrected baselines on the reprocessed SCoPE2:
+   - **The run:** `benchmark/baselines_corrected_queue.sh scope2_reprocessed`,
+     in the owner's terminal.
+   - **The setup:** the dataset was added to the corrected runner as its
+     own tuple, so the existing tables are unchanged.
+
+**Results** (research/benchmark/results.md, "v4 against the corrected
+baselines"):
+- **The Phase 4 checks pass.** No paired CI favours v3.1 on any development
+  dataset, and correct-when-committed drops by at most 0.05 points.
+- **Fulcher (development):** v4 65.0 against v3.1's 57.9, +7.1 (CI 5.2 to
+  9.1).
+  - Level with Harmony NC (63.0) and the correlation baseline (62.1): CIs
+    include zero.
+  - Ahead of every other baseline.
+- **Khoury (post-hoc):** v4 61.8 against v3.1's 56.9, +4.9 (CI 3.4 to 6.3).
+  - Level with PCA kNN (62.8) and scANVI kNN.
+  - Ahead of the rest.
+- **PBMC240:** unchanged at 92.3, still the best.
+- **SCoPE2:** Harmony NC is the only method above chance.
+- **SCoPE2 reprocessed** (1,128 cells): v3.1 and v4 both at about 33%
+  restricted and 5.5% unrestricted. Its baselines are pending.
+
+**What followed.** The owner asked for v4 to beat the baselines, not match
+them (v4.1, below).
+- **Diagnosis on Fulcher** (development data; Khoury not read):
+  - v4 and Harmony share their errors: both are wrong on 17.5% of cells,
+    and each is uniquely right on only 5–6%.
+  - Stacking Harmony's scores adds about 1.5.
+  - v4's own correlation term scores 69.6 alone, against the encoder's
+    61.0.
+  - Its 0.7 encoder weight was chosen on simulated RNA uploads, where the
+    encoder never crosses the modality gap.
+- **The plan:** choose the gate-on weight on Fulcher under fixed rules
+  (Phase A, `research/notebooks/v41_pretest.py`), then check it once on
+  Khoury (Phase B).
+
 ---
 
 ## The throughline

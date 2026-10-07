@@ -1,0 +1,68 @@
+{
+  "script_sha256": "ff10f0be4c5cf65fcc8d90e42397fddf187f0caa7835e7b3f5e2b34c0bc8da30",
+  "core_sha256": "a4b73f6901a11aded4278ec07f9b5f04548299ec052c0a2b94f2638171ca5293",
+  "cache_dir": "Drive Data/Results/Tier1_v31/V41/cache",
+  "sha256": {
+    "calib_arrays.npz": "cd946e03a1e058b9bc0b02d636d3e0a50aa99aeaf76a45a4bedbe8e31cfbee63",
+    "dev_arrays.npz": "10e7140e4f68511e658c7f4dbfa006657ae3d1b6a827172aa01e9d7128622f8a",
+    "calib_cells.csv.gz": "9d732598776a91bbef4fd0e2d374f725c83921747d17a9b5040f562012a32f6c",
+    "dev_cells.csv.gz": "860095da43a9772414f858a880a4fa9e41d07749124830b40747eaa819aa4b23"
+  },
+  "calibration": {
+    "uploads": 300,
+    "cells": 84844,
+    "cells_with_200_genes": 84813
+  },
+  "development": {
+    "furtwangler2025": 2506,
+    "scope2": 1490,
+    "fulcher2026": 1275,
+    "scope2_reprocessed": 1128,
+    "pbmc240": 238
+  },
+  "self_check": {
+    "calibration_found": {
+      "v3.1": {
+        "best_guess_per_upload_balanced": 58.5731,
+        "coverage": 85.694,
+        "committed": 87.6946,
+        "correct_when_committed": 97.1066
+      },
+      "v4": {
+        "best_guess_per_upload_balanced": 63.995,
+        "coverage": 86.1396,
+        "committed": 87.3492,
+        "correct_when_committed": 97.2749
+      }
+    },
+    "calibration_expected": {
+      "v3.1": {
+        "best_guess_per_upload_balanced": 58.57,
+        "coverage": 85.69,
+        "committed": 87.69,
+        "correct_when_committed": 97.11
+      },
+      "v4": {
+        "best_guess_per_upload_balanced": 64.0,
+        "coverage": 86.14,
+        "committed": 87.35,
+        "correct_when_committed": 97.27
+      }
+    },
+    "development_found": {
+      "fulcher": 65.0,
+      "pbmc240_lymphoid": 92.3077,
+      "scope2_unrestricted": 0.0,
+      "auroc": 0.8289
+    },
+    "development_expected": {
+      "fulcher": 65.0,
+      "pbmc240_lymphoid": 92.31,
+      "scope2_unrestricted": 0.0,
+      "auroc": 0.8289
+    },
+    "misses": [],
+    "passed": true
+  },
+  "seconds": 615
+}

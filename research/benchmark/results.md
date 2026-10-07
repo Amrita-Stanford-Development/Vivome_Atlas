@@ -1616,6 +1616,88 @@ common types, with labels that come from the same protein measurements
 (caveat 1). It says nothing about rare types, other tissues, or how well
 v3.1 separates CD4T from CD8T, which it does not.
 
+## v4 against the corrected baselines (Track G, Phase 4)
+
+v4 is v3.1's answers with a better best guess (`service/pipeline/fusion.py`;
+`research/notebook-run-history.md`, entry 24). It is scored here exactly as
+v3.1 was scored against the corrected baselines
+([baseline-corrections.md](baseline-corrections.md)), with the same
+functions and the same paired bootstrap: 2,000 resamples stratified by true
+type, seed 0, 95% CI.
+
+- **Development data:** SCoPE2 (both versions), PBMC240 and Fulcher.
+  - Script: `benchmark/baselines_v4_score.py`.
+  - Tables: [v4_development/](v4_development/).
+  - Fulcher shaped v4's design, so its rows are not evidence of a held-out
+    gain.
+- **Khoury 2026, post-hoc:** its labels were read at its one scoring, before
+  v4 existed. v4 was frozen before this run and played no part in Khoury.
+  - Script: `benchmark/khoury2026_posthoc_v4.py`.
+  - Tables: [khoury2026_posthoc_v4/](khoury2026_posthoc_v4/).
+
+### Development data
+
+| Dataset | v3.1 | v4 | v4 − v3.1 (95% CI) | Best corrected baseline, v4 minus it |
+|---|---|---|---|---|
+| Fulcher 2026, six types | 57.9 | 65.0 | **+7.1 (5.2 to 9.1)** | Harmony NC 63.0: +2.0 (CI −1.5 to 5.3); correlation 62.1: +2.9 (−0.2 to 5.8) |
+| PBMC240, lymphoid recall | 92.3 | 92.3 | 0 | PCA 88.9 |
+| SCoPE2 published, restricted | 38.7 | 38.0 | −0.7 (−2.3 to 0.8) | Harmony NC 63.0: −25.0, CI favours Harmony |
+| SCoPE2 reprocessed, restricted | 32.9 | 33.3 | +0.4 (−0.8 to 1.5) | pending (runs in progress) |
+
+**The Phase 4 checks pass.** They were set in the v4 plan:
+- no paired CI favours v3.1 on any development dataset;
+- correct-when-committed falls by at most 2 points. The changes are SCoPE2
+  −0.05, PBMC240 0, Fulcher +0.53 and SCoPE2 reprocessed 0.
+
+**v4's confident answers are v3.1's sets, with v4's guess joined.**
+- Fulcher: 88.2% of cells committed, 97.8% of those correct, against v3.1's
+  89.2% and 97.3%.
+- PBMC240: 73.4% and 96.9% for both.
+
+### Khoury 2026, post-hoc
+
+| Five types | v3.1 | v4 |
+|---|---|---|
+| Best guess, balanced accuracy | 56.9 | **61.8** |
+| v4 − v3.1 (95% CI) | | +4.9 (3.4 to 6.3) |
+| Recall CD4T / CD8T / NK / B / monocyte | 84.5 / 2.7 / 29.0 / 81.3 / 87.1 | 83.8 / 2.4 / 45.9 / 82.1 / 94.9 |
+| Committed; correct when committed | 93.8%; 96.7% | 93.7%; 96.7% |
+
+v4's correlation term was used on Khoury: its upload agreement was 0.497.
+
+Against the corrected baselines:
+- **The CI includes zero:**
+  - PCA with shared kNN (62.8): −1.0 (−2.8 to 0.7);
+  - scANVI with shared kNN, seeds 0–2: +1.3, −2.2 and +1.8.
+- **v4 is ahead, with every CI excluding zero:** Harmony (3 seeds), the
+  correlation baseline (+12.0), scANVI's classifier (3 seeds), Seurat CCA
+  (+32.1), MaxFuse (6 runs) and scGLUE (3 seeds).
+
+### What the numbers show
+
+1. **v4 closes v3.1's gap to the best simple baselines, but does not open
+   one.**
+   - Before: those baselines were ahead of v3.1 with CIs favouring them,
+     Harmony and correlation on Fulcher, and PCA with kNN and scANVI on
+     Khoury.
+   - Now: v4 is level with them on both datasets, and ahead of every other
+     comparator.
+2. **SCoPE2 is the exception.** Restricted to macrophage or monocyte, only
+   Harmony with nearest centroid beats chance (63.0).
+   - v4 leans the wrong way: it recalls 17% of macrophages and 59% of
+     monocytes.
+   - v4's correlation term is not used on either SCoPE2 version (agreement
+     0.17), so v4 there is v3.1's encoder with class-balanced centroids.
+3. **The gains are in NK and monocyte** on Khoury, and in NK, monocyte and
+   CD4T on Fulcher.
+4. **CD8T stays unsolved for every method.** On Khoury v4's CD8T recall is
+   2.4%; on Fulcher it is 24%. Fulcher measures neither CD8A, CD8B nor CD4.
+5. **The reprocessed SCoPE2 is harder still.** Its missing values are kept
+   missing.
+   - Both models commit on 31% of cells, and 49.4% of those answers are
+     right at the level stated.
+   - Unrestricted balanced accuracy is 5.5%.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the

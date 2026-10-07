@@ -150,6 +150,24 @@ class V4IsUnchangedTests(unittest.TestCase):
                         fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
                     assert_same(self, json.loads(json.dumps(fresh)), frozen)
 
+    def test_v41_where_its_correlation_term_is_flat_answers_exactly_as_v4(self):
+        """v4.1 changes only the encoder's weight where the correlation term is
+        used; both 50-cell uploads fall below the gate, so every field but the
+        two version labels must be v4's."""
+        from service.pipeline import fusion
+        try:
+            v41 = fusion.V4Bundle.load(require_evaluation=False, version="v4.1")
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/build_v41_spec.py.")
+        self.assertIn("v4.1", config.PIPELINE_VERSIONS)
+        for name, raw in self.raws.items():
+            with self.subTest(dataset=name):
+                ours, theirs = (json.loads(json.dumps(pipeline.run_projection(b, raw))) for b in (v41, self.bundle))
+                self.assertEqual(ours["best_guess_rule"]["correlation_term"], "flat")
+                self.assertEqual((ours.pop("pipeline_version"), theirs.pop("pipeline_version")), ("v4.1", "v4"))
+                self.assertNotEqual(ours.pop("model_version"), theirs.pop("model_version"))
+                assert_same(self, ours, theirs)
+
     def test_v4s_answers_are_v31s_with_its_guess_joined(self):
         v31 = pipeline.load_bundle("v3.1")
         for name, raw in self.raws.items():

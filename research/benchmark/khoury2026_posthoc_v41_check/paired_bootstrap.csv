@@ -1,0 +1,24 @@
+comparison,model_b,rule_b,diff_bal_acc_pct,ci_lo,ci_hi,favours
+v4.1 vs v4,v4,best_guess,0.6885,-0.0371,1.5256,neither
+v4.1 vs v3.1,v3.1,best_guess,5.5871,3.9922,7.0697,v4.1
+v4.1 vs scANVI_corrected,scanvi_seed0,native,6.8209,4.2860,9.2350,v4.1
+v4.1 vs scANVI_corrected,scanvi_seed0,shared_knn,2.0007,-0.2451,4.1904,neither
+v4.1 vs scANVI_corrected,scanvi_seed1,native,7.4417,5.3018,9.4708,v4.1
+v4.1 vs scANVI_corrected,scanvi_seed1,shared_knn,-1.4573,-3.6369,0.6646,neither
+v4.1 vs scANVI_corrected,scanvi_seed2,native,18.4096,16.3101,20.4244,v4.1
+v4.1 vs scANVI_corrected,scanvi_seed2,shared_knn,2.4376,0.3455,4.3074,v4.1
+v4.1 vs correlation,correlation_seed0,correlation,12.6952,10.6117,14.7144,v4.1
+v4.1 vs pca,pca_seed0,shared_knn,-0.3298,-2.0545,1.3912,neither
+v4.1 vs harmony,harmony_seed0,shared_knn,7.1616,5.0244,9.3592,v4.1
+v4.1 vs harmony,harmony_seed1,shared_knn,5.9601,3.9379,7.9478,v4.1
+v4.1 vs harmony,harmony_seed2,shared_knn,3.8356,1.9853,5.7940,v4.1
+v4.1 vs seurat,seurat_seed0,native,32.7717,30.4751,35.1352,v4.1
+v4.1 vs maxfuse,maxfuse_seed0,shared_knn,30.9635,28.6433,33.2546,v4.1
+v4.1 vs maxfuse,maxfuse_seed1,shared_knn,31.1931,28.8772,33.4007,v4.1
+v4.1 vs maxfuse,maxfuse_seed2,shared_knn,30.5692,28.1684,32.8721,v4.1
+v4.1 vs maxfuse_matching,maxfuse_seed0,matching,32.4133,30.0262,34.6585,v4.1
+v4.1 vs maxfuse_matching,maxfuse_seed1,matching,32.9753,30.5536,35.2200,v4.1
+v4.1 vs maxfuse_matching,maxfuse_seed2,matching,30.8817,28.4756,33.1394,v4.1
+v4.1 vs scglue,scglue_seed0,shared_knn,29.7063,27.6578,31.6266,v4.1
+v4.1 vs scglue,scglue_seed1,shared_knn,27.3834,25.0620,29.5956,v4.1
+v4.1 vs scglue,scglue_seed2,shared_knn,13.6164,11.5867,15.6025,v4.1
