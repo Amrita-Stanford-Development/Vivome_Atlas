@@ -1061,7 +1061,10 @@ baselines"):
 - **PBMC240:** unchanged at 92.3, still the best.
 - **SCoPE2:** Harmony NC is the only method above chance.
 - **SCoPE2 reprocessed** (1,128 cells): v3.1 and v4 both at about 33%
-  restricted and 5.5% unrestricted. Its baselines are pending.
+  restricted and 5.5% unrestricted.
+  - Every corrected baseline is at or below chance restricted (41.8 to 51.8).
+  - Harmony NC falls from 63.0 on the published matrix to 48.9.
+  - Run in the owner's terminal, 2026-10-07: 15 runs, all completed.
 
 **What followed.** The owner asked for v4 to beat the baselines, not match
 them (v4.1, below).

@@ -95,3 +95,68 @@ Fulcher 2026,scanvi,0,scANVI classifier,21.032829176876128,18.22533760424032,23.
 Fulcher 2026,scanvi,1,shared kNN,12.691273937572166,9.688494261193975,15.573708958682431,v4
 Fulcher 2026,scanvi,1,nearest centroid,22.38383358244496,19.358234129898005,25.39054939436267,v4
 Fulcher 2026,scanvi,1,scANVI classifier,14.735297425761207,11.894971120468702,17.56528497928515,v4
+SCoPE2 reprocessed unrestricted,correlation,0,correlation to class mean,1.4581605345936561,-0.06377251600181434,3.0921649791076504,neither
+SCoPE2 reprocessed restricted,correlation,0,correlation to class mean,-9.897650980453532,-14.006713720089524,-5.588731826789153,baseline
+SCoPE2 reprocessed unrestricted,pca,0,shared kNN,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,pca,0,shared kNN,-14.91807383527129,-17.541305419490133,-12.21887275231225,baseline
+SCoPE2 reprocessed unrestricted,pca,0,nearest centroid,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,pca,0,nearest centroid,-17.215840623483935,-19.80503411633985,-14.39241028811092,baseline
+SCoPE2 reprocessed unrestricted,harmony,0,shared kNN,5.364324950312212,4.137828839261959,6.763407878057559,v4
+SCoPE2 reprocessed restricted,harmony,0,shared kNN,-12.533842470148205,-15.243254980516125,-9.749086448927214,baseline
+SCoPE2 reprocessed unrestricted,harmony,0,nearest centroid,5.364324950312212,4.137828839261959,6.763407878057559,v4
+SCoPE2 reprocessed restricted,harmony,0,nearest centroid,-13.422745269879027,-17.458410929748503,-9.148304355310726,baseline
+SCoPE2 reprocessed unrestricted,harmony,1,shared kNN,5.364324950312212,4.137828839261959,6.763407878057559,v4
+SCoPE2 reprocessed restricted,harmony,1,shared kNN,-10.138265074570807,-12.786819825036387,-7.2946564108984475,baseline
+SCoPE2 reprocessed unrestricted,harmony,1,nearest centroid,5.364324950312212,4.137828839261959,6.763407878057559,v4
+SCoPE2 reprocessed restricted,harmony,1,nearest centroid,-17.105510258376498,-21.04170253055603,-12.915303838870717,baseline
+SCoPE2 reprocessed unrestricted,harmony,2,shared kNN,5.364324950312212,4.137828839261959,6.763407878057559,v4
+SCoPE2 reprocessed restricted,harmony,2,shared kNN,-12.497456924208517,-15.097712796757385,-9.721816851593918,baseline
+SCoPE2 reprocessed unrestricted,harmony,2,nearest centroid,5.364324950312212,4.137828839261959,6.763407878057559,v4
+SCoPE2 reprocessed restricted,harmony,2,nearest centroid,-16.188829246154086,-20.188334324480824,-12.104639743970955,baseline
+SCoPE2 reprocessed unrestricted,seurat,0,Seurat native transfer,0.26878354903832613,-1.9354762985336227,2.439288956008699,neither
+SCoPE2 reprocessed restricted,seurat,0,Seurat native transfer,-18.54723861093288,-21.67321671700652,-15.086806914036222,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,0,shared kNN,0.5986009170722555,-1.3512437596832512,2.5234060783423833,neither
+SCoPE2 reprocessed restricted,maxfuse,0,shared kNN,-11.169971361054165,-15.055683578772744,-7.307176168641132,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,0,nearest centroid,0.4937479459772451,-1.3330216435311972,2.2257879622529253,neither
+SCoPE2 reprocessed restricted,maxfuse,0,nearest centroid,-8.737617177107627,-12.347787132818985,-4.910072927588856,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,0,MaxFuse matching,1.0512684079563066,-0.823174071581715,2.9167123116167697,neither
+SCoPE2 reprocessed unrestricted,maxfuse,1,shared kNN,1.5176293838714223,-0.26134994287860536,3.2721364966587867,neither
+SCoPE2 reprocessed restricted,maxfuse,1,shared kNN,-13.308502480477003,-16.917048780106107,-9.60014045603218,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,1,nearest centroid,-0.0453841218172428,-1.8109536142975629,1.761549476517626,neither
+SCoPE2 reprocessed restricted,maxfuse,1,nearest centroid,-10.18677913582372,-13.769826210112837,-6.4329743031972315,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,1,MaxFuse matching,0.14358597161144987,-1.719510477472261,2.0069660714565156,neither
+SCoPE2 reprocessed unrestricted,maxfuse,2,shared kNN,1.8724862673907265,0.031856914818697304,3.713457957088527,v4
+SCoPE2 reprocessed restricted,maxfuse,2,shared kNN,-12.730637412166079,-16.60477863503341,-8.731191020203761,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,2,nearest centroid,0.8736443449819248,-0.8555396015587102,2.591482261068247,neither
+SCoPE2 reprocessed restricted,maxfuse,2,nearest centroid,-6.715285059234105,-10.403087294010861,-2.997865772547299,baseline
+SCoPE2 reprocessed unrestricted,maxfuse,2,MaxFuse matching,0.6713720089516275,-1.3009397643155611,2.634685206341257,neither
+SCoPE2 reprocessed unrestricted,scglue,0,shared kNN,4.8866179439427855,3.4283987229847095,6.33343244808213,v4
+SCoPE2 reprocessed restricted,scglue,0,shared kNN,-15.359004053271569,-18.289018607489943,-12.085361273259359,baseline
+SCoPE2 reprocessed unrestricted,scglue,0,nearest centroid,5.277860373401775,3.976304402259816,6.677226951908479,v4
+SCoPE2 reprocessed restricted,scglue,0,nearest centroid,-0.8939889513137955,-4.363644188484956,2.8322039468536286,neither
+SCoPE2 reprocessed unrestricted,scglue,1,shared kNN,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,scglue,1,shared kNN,-15.25454232460602,-18.346140002190957,-12.080206654251242,baseline
+SCoPE2 reprocessed unrestricted,scglue,1,nearest centroid,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,scglue,1,nearest centroid,-1.3353104117435344,-4.959281444154058,2.589477143617268,neither
+SCoPE2 reprocessed unrestricted,scglue,2,shared kNN,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,scglue,2,shared kNN,-15.486549085275204,-18.38974397095416,-12.330953927291507,baseline
+SCoPE2 reprocessed unrestricted,scglue,2,nearest centroid,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,scglue,2,nearest centroid,3.012175464404765,-0.6073158421884536,7.007386657068181,neither
+SCoPE2 reprocessed unrestricted,scanvi,0,shared kNN,-8.489178234401164,-11.001414341382493,-5.913736912940736,baseline
+SCoPE2 reprocessed restricted,scanvi,0,shared kNN,-9.110471212382043,-12.602652232429302,-5.484094039030346,baseline
+SCoPE2 reprocessed unrestricted,scanvi,0,nearest centroid,1.7425937808103413,0.24804770027699874,3.326235543592231,v4
+SCoPE2 reprocessed restricted,scanvi,0,nearest centroid,-16.412619915804626,-20.611570603608826,-11.996891578897941,baseline
+SCoPE2 reprocessed unrestricted,scanvi,0,scANVI classifier,2.6573185808854602,0.9417694330114715,4.447927588851155,v4
+SCoPE2 reprocessed restricted,scanvi,0,scANVI classifier,-7.77437831577959,-11.329989514702888,-4.061135542027261,baseline
+SCoPE2 reprocessed unrestricted,scanvi,1,shared kNN,-5.525125588819857,-8.097994491306594,-2.997474530117845,baseline
+SCoPE2 reprocessed restricted,scanvi,1,shared kNN,-15.489679024710867,-18.936417236576474,-11.944445531228965,baseline
+SCoPE2 reprocessed unrestricted,scanvi,1,nearest centroid,-3.1002050110330357,-5.416252601762157,-0.7343620400945244,baseline
+SCoPE2 reprocessed restricted,scanvi,1,nearest centroid,-14.535438739260398,-18.510530289988885,-10.314588256467236,baseline
+SCoPE2 reprocessed unrestricted,scanvi,1,scANVI classifier,-6.021220989373856,-8.460177389317517,-3.4960836632811154,baseline
+SCoPE2 reprocessed restricted,scanvi,1,scANVI classifier,-13.342540571839933,-16.69175182710215,-9.797991752609592,baseline
+SCoPE2 reprocessed unrestricted,scanvi,2,shared kNN,5.523560619102021,4.27236732969217,6.861844473309438,v4
+SCoPE2 reprocessed restricted,scanvi,2,shared kNN,-8.798259753673765,-11.719618069140365,-5.683285340928657,baseline
+SCoPE2 reprocessed unrestricted,scanvi,2,nearest centroid,4.540759636301038,3.228141285466126,5.962593311319426,v4
+SCoPE2 reprocessed restricted,scanvi,2,nearest centroid,0.9843659525188175,-2.1573694424012864,4.269863378143628,neither
+SCoPE2 reprocessed unrestricted,scanvi,2,scANVI classifier,5.277860373401775,4.001001580619414,6.651903785661747,v4
+SCoPE2 reprocessed restricted,scanvi,2,scANVI classifier,-4.2911469663062025,-7.455515735770513,-0.9029190597661959,baseline

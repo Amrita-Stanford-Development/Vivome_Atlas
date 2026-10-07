@@ -1642,7 +1642,7 @@ type, seed 0, 95% CI.
 | Fulcher 2026, six types | 57.9 | 65.0 | **+7.1 (5.2 to 9.1)** | Harmony NC 63.0: +2.0 (CI −1.5 to 5.3); correlation 62.1: +2.9 (−0.2 to 5.8) |
 | PBMC240, lymphoid recall | 92.3 | 92.3 | 0 | PCA 88.9 |
 | SCoPE2 published, restricted | 38.7 | 38.0 | −0.7 (−2.3 to 0.8) | Harmony NC 63.0: −25.0, CI favours Harmony |
-| SCoPE2 reprocessed, restricted | 32.9 | 33.3 | +0.4 (−0.8 to 1.5) | pending (runs in progress) |
+| SCoPE2 reprocessed, restricted | 32.9 | 33.3 | +0.4 (−0.8 to 1.5) | Seurat 51.8, PCA NC 50.5, Harmony NC 48.9 ± 1.9: all at chance; 27 of 31 CIs favour the baseline |
 
 **The Phase 4 checks pass.** They were set in the v4 plan:
 - no paired CI favours v3.1 on any development dataset;
@@ -1682,12 +1682,24 @@ Against the corrected baselines:
      Khoury.
    - Now: v4 is level with them on both datasets, and ahead of every other
      comparator.
-2. **SCoPE2 is the exception.** Restricted to macrophage or monocyte, only
-   Harmony with nearest centroid beats chance (63.0).
-   - v4 leans the wrong way: it recalls 17% of macrophages and 59% of
-     monocytes.
-   - v4's correlation term is not used on either SCoPE2 version (agreement
-     0.17), so v4 there is v3.1's encoder with class-balanced centroids.
+2. **No method separates SCoPE2's macrophages from its monocytes.**
+   - **The published matrix:** restricted to macrophage or monocyte, only
+     Harmony with nearest centroid beats chance (63.0).
+   - **The reprocessed matrix,** with missing values kept missing and no
+     centring or batch correction: Harmony falls to 48.9 ± 1.9. Every
+     baseline lands between 41.8 and 51.8, at or below chance. Harmony's
+     63.0 came from the published matrix's preprocessing, not from the
+     cells.
+   - **v4 is below chance on both versions** (38.0 and 33.3), so its errors
+     are systematic. It calls PMA-treated U-937 macrophages monocytes more
+     often than the reverse: on the published matrix it recalls 17% of
+     macrophages and 59% of monocytes. The baselines' CIs favour them over
+     v4 because they are coin flips where v4 is reliably inverted.
+   - **v4 is v3.1's encoder here.** Its correlation term is not used on
+     either SCoPE2 version (agreement 0.17), so v4 is v3.1's encoder with
+     class-balanced centroids.
+   - **Across all 22 types,** every method stays under 9% on the reprocessed
+     matrix.
 3. **The gains are in NK and monocyte** on Khoury, and in NK, monocyte and
    CD4T on Fulcher.
 4. **CD8T stays unsolved for every method.** On Khoury v4's CD8T recall is

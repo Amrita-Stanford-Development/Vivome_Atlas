@@ -234,7 +234,7 @@ Plan approved 2026-10-04. In-memory pre-tests on development data only; Khoury n
   - [x] `benchmark/baselines_v4.py`, `benchmark/baselines_v4_score.py` (`research/benchmark/v4_development/`), `benchmark/khoury2026_posthoc_v4.py` (`research/benchmark/khoury2026_posthoc_v4/`).
   - [x] **Checks pass:** no paired CI favours v3.1; correct-when-committed drops at most 0.05.
   - [x] **Results:** Fulcher 65.0 vs v3.1 57.9 (+7.1), level with Harmony NC 63.0 and correlation 62.1. Khoury post-hoc 61.8 vs 56.9 (+4.9), level with PCA kNN 62.8 and scANVI kNN, ahead of the rest. PBMC240 unchanged (92.3). SCoPE2: only Harmony NC above chance.
-  - [ ] The corrected baselines on the reprocessed SCoPE2 (the owner's terminal, 2026-10-07), then rescore.
+  - [x] The corrected baselines on the reprocessed SCoPE2 (the owner's terminal, 2026-10-07; 15 runs, all completed), rescored: every baseline at or below chance restricted (41.8–51.8); Harmony NC 48.9, not the 63.0 it scored on the published matrix; v4 33.3, below chance (systematically inverted).
 - [ ] **v4.1: beat the baselines, not match them** (the owner's request and plan, 2026-10-07; run-history entry 25).
   - **Diagnosis** (Fulcher; Khoury not read): v4 and Harmony share their errors; stacking Harmony adds about 1.5. v4's own correlation term alone scores 69.6 against the encoder's 61.0, and v4's 0.7 encoder weight was chosen on simulated RNA uploads.
   - **Owner decisions:** choose the gate-on weight on Fulcher under fixed rules; check it once on Khoury (it chooses nothing); a baseline pre-layer is a research arm only.

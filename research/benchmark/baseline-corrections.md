@@ -198,6 +198,11 @@ Most methods place PMA-differentiated U-937 cells nearer the RNA
 monocytes, so SCoPE2's class-level task no longer ranks the methods in any
 useful way.
 
+On the reprocessed SCoPE2 (no centring or batch correction, missing values
+kept missing; Track G), Harmony with nearest centroid falls to 48.9 ± 1.9.
+Every corrected baseline then lands between 41.8 and 51.8 restricted
+([results.md](results.md), "v4 against the corrected baselines").
+
 **PBMC240 lymphoid recall** (117 weakly labelled cells; v3.1 92.3): PCA
 88.9, Harmony 82.1 ± 0.9, scANVI 80.1 ± 25.7 and the correlation baseline
 75.2, against 38.7 at best before the correction. MaxFuse 28.8, scGLUE
