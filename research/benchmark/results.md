@@ -1710,6 +1710,45 @@ Against the corrected baselines:
      right at the level stated.
    - Unrestricted balanced accuracy is 5.5%.
 
+## v4.1 against the corrected baselines (Track G, v4.1)
+
+v4.1 is v4 with the encoder weighted 0.5 instead of 0.7 in uploads where its
+correlation term is used (`research/notebook-run-history.md`, entry 26).
+
+- **How it was chosen:** on Fulcher 2026, under fixed rules
+  (`research/notebooks/v41_pretest.py`). It was then checked once on
+  Khoury 2026 (`benchmark/khoury2026_posthoc_v41_check.py`), with a verdict
+  set beforehand: it carries over.
+- **How it was scored here:** exactly as v4 above
+  (`benchmark/baselines_v4_score.py --version v4.1`; tables in
+  [v41_development/](v41_development/)).
+- **Fulcher is in-sample for v4.1.** It chose the weight, so v4.1's Fulcher
+  margins are not evidence of a held-out gain.
+
+| Dataset | v4.1 | v4.1 − v3.1 (95% CI) | v4.1 − v4 (95% CI) | Best corrected baseline, v4.1 minus it |
+|---|---|---|---|---|
+| Fulcher 2026, six types (in-sample) | 69.05 | +11.1 (8.5 to 14.0) | +4.1 (2.3 to 6.1) | Harmony NC 63.0: +6.0 (2.3 to 9.8), 3 of 3 seeds; correlation 62.1: +6.9 (4.2 to 9.6) |
+| PBMC240, SCoPE2 (both versions) | as v4 | as v4 | 0 | as v4 above |
+
+- **Ahead of every baseline on Fulcher:** v4.1's best guess beats every
+  corrected baseline run and rule there, every CI excluding zero.
+- **The same as v4 everywhere else.** Its correlation term is not used on
+  PBMC240 (agreement 0.367) or SCoPE2 (0.17), so it answers exactly as v4.
+- **Khoury 2026 (post-hoc):** 62.5, against v4's 61.8 (+0.7, CI −0.04 to
+  1.5). It is still level with PCA and kNN (62.8; −0.3, CI −2.1 to 1.4).
+- **Answers:** correct-when-committed on Fulcher rises to 97.9%, and the
+  committed share falls from v3.1's 89.2% to 87.0%.
+- **The confidence trade-off:** the out-of-reference AUROC of the best
+  guess's probability falls from v4's 0.829 to 0.790. Out-of-distribution
+  abstention itself is v3.1's and unchanged.
+- **Every check passes, against v3.1 and against v4.** No paired CI favours
+  either, and correct-when-committed drops at most 0.05 points.
+
+The claim "v4.1 beats the corrected baselines" waits for a sealed test.
+None is public yet: two searches and an outside deep-research run found no
+public PBMC proteomics set with labels independent of the protein data, so
+the strongest designs need a data request.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the

@@ -1,0 +1,7 @@
+dataset,metric,point_estimate_pct,ci_lo,ci_hi,favours
+SCoPE2 unrestricted,balanced accuracy,0.0,0.0,0.0,neither
+SCoPE2 restricted,balanced accuracy,-0.7306217347808341,-2.2535685834969823,0.7467046759791014,neither
+PBMC240,lymphoid recall,0.0,0.0,0.0,neither
+Fulcher 2026,"balanced accuracy, six types",11.112914622262416,8.479327976311117,14.044168498892258,v4.1
+SCoPE2 reprocessed unrestricted,balanced accuracy,0.06142506142506193,-0.42997542997542937,0.5528255528255532,neither
+SCoPE2 reprocessed restricted,balanced accuracy,0.37089782312711983,-0.7824848589179757,1.535968872752308,neither

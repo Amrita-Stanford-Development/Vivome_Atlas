@@ -226,8 +226,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/baselines_corrected.py` — corrected baselines after the 2026-10-03 review: class-balanced RNA scaling, MaxFuse with its tutorial settings and native matching, scANVI on non-negative inputs, a plain PCA arm, setup checks; Khoury only with `--posthoc`
 - `benchmark/baselines_corrected_score.py` — scores the corrected baselines on SCoPE2, PBMC240 and Fulcher with `baselines_score.py`'s functions; adds the setup-check table
 - `benchmark/baselines_corrected_queue.sh` — every corrected tool and seed on one development dataset, one run at a time, skipping finished ones
-- `benchmark/baselines_v4.py` — Track G, Phase 4: v4 as served on the development uploads (best guess and confident answer per cell), and v3.1 on the reprocessed SCoPE2
-- `benchmark/baselines_v4_score.py` — Track G, Phase 4: v4 against every corrected baseline and against v3.1 on the development datasets, with `baselines_score.py`'s functions, and the plan's Phase 4 checks
+- `benchmark/baselines_v4.py` — Track G: v4 (Phase 4) or v4.1 (`--version v4.1`, Phase E) as served on the development uploads (best guess and confident answer per cell), and v3.1 on the reprocessed SCoPE2
+- `benchmark/baselines_v4_score.py` — Track G: v4 (Phase 4) or v4.1 (`--version v4.1`, Phase E) against every corrected baseline, v3.1 (and v4, for v4.1) on the development datasets, with `baselines_score.py`'s functions, and the plan's checks
 - `benchmark/khoury2026_posthoc_v4.py` — Khoury 2026 post-hoc: v4 as served, scored beside v3.1 and the corrected baselines with the sealed scorer's code
 - `benchmark/khoury2026_posthoc_v41_check.py` — v4.1, Phase B: the rule locked on Fulcher, checked once on Khoury 2026 (post-hoc) against v4, v3.1 and the corrected baselines, with a verdict fixed before Phase A
 - `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
@@ -324,6 +324,15 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/v4_development/paired_bootstrap_v4.csv` — v4 on the development data: its best guess against every corrected baseline run and rule
 - `research/benchmark/v4_development/paired_bootstrap_v4_vs_v31.csv` — v4 on the development data: its best guess against v3.1's, per dataset
 - `research/benchmark/v4_development/checks.json` — v4 on the development data: the plan's Phase 4 checks
+- `research/benchmark/v41_development/scope2.csv` — v4.1 on the development data: SCoPE2's published matrix, v3.1's, v4's and v4.1's rows
+- `research/benchmark/v41_development/pbmc240.csv` — v4.1 on the development data: PBMC240, v3.1's, v4's and v4.1's rows
+- `research/benchmark/v41_development/fulcher2026.csv` — v4.1 on the development data: Fulcher 2026, v3.1's, v4's and v4.1's rows
+- `research/benchmark/v41_development/scope2_reprocessed.csv` — v4.1 on the development data: SCoPE2 reprocessed, every completed corrected run, v3.1, v4 and v4.1
+- `research/benchmark/v41_development/confident.csv` — v4.1 on the development data: committed share and correct when committed, v3.1, v4 and v4.1
+- `research/benchmark/v41_development/paired_bootstrap_v41.csv` — v4.1 on the development data: its best guess against every corrected baseline run and rule
+- `research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv` — v4.1 on the development data: its best guess against v3.1's
+- `research/benchmark/v41_development/paired_bootstrap_v41_vs_v4.csv` — v4.1 on the development data: its best guess against v4's
+- `research/benchmark/v41_development/checks.json` — v4.1 on the development data: the plan's checks against v3.1 and against v4
 - `research/benchmark/baselines_corrected/inputs.csv` — corrected baselines: what every tool received per dataset, and its settings
 - `research/benchmark/baselines_corrected/setup_checks.csv` — corrected baselines: each run's status and RNA-side checks (held-out RNA kNN, query mixing, MaxFuse matched share, scANVI input shift and epochs)
 - `research/benchmark/baselines_corrected/scope2_per_seed.csv` — corrected baselines, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
