@@ -50,6 +50,10 @@ ALLOWED_MISSING = (
     "data/registry.yaml",
     "service/model/v3_pending/",
     "service/model/v3_1/",
+    "service/model/v5/members/",  # gitignored; rebuilt by research/notebooks/v5_build.py
+    "service/model/v5/class_",
+    "service/model/v5_1/members/",
+    "service/model/v5_1/class_",
     "Atlas/shared_genes_lat128.txt",
     "Atlas/Data/",
     "benchmark/PROTOCOL.md",
@@ -57,6 +61,8 @@ ALLOWED_MISSING = (
     "research/benchmark/khoury2026/",  # Khoury's tables, written once, at the final evaluation
     "research/benchmark/baselines_corrected/",  # written by the corrected-baselines queue
     "research/benchmark/khoury2026_posthoc/",  # (research/benchmark/baseline-corrections.md)
+    "research/notebook-outputs/v5_phase4/",  # written by research/notebooks/v5_phase4.py when it runs
+    "research/notebook-outputs/v51_phase4/",  # likewise, with --version v5.1
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
 )
 

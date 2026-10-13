@@ -80,6 +80,11 @@ class Components:
     abstention: "abstention.AbstentionScorer"
 
 
+# The versions service/pipeline/fusion.py serves: v3.1's answers (v5: its own)
+# with the fused best guess.
+FUSION_VERSIONS = ("v4", "v4.1", "v5", "v5.1")
+
+
 def components_for(version: str) -> Components:
     """v3: the single-encoder components. v3.1: T1 NB2's, built from its spec
     (service/model/v3_1/nb2_spec_v31.json); PendingArtifactError if the spec
@@ -94,7 +99,7 @@ def components_for(version: str) -> Components:
         # the spec it validated at load); this reads the spec afresh, for tools.
         from service.pipeline import ensemble  # imports this module
         return ensemble.build_components(ensemble.load_spec())
-    if version in ("v4", "v4.1"):
+    if version in FUSION_VERSIONS:
         from service.pipeline import fusion  # imports this module
         return fusion.V4Bundle.load(version=version).components  # PendingArtifactError until its evaluation passes
     raise ValueError(f"Unknown pipeline version {version!r}; expected one of {config.PIPELINE_VERSIONS}.")
@@ -109,7 +114,7 @@ def load_bundle(version: str):
     if version == "v3.1":
         from service.pipeline import ensemble  # imports this module
         return ensemble.V31Bundle.load()
-    if version in ("v4", "v4.1"):
+    if version in FUSION_VERSIONS:
         from service.pipeline import fusion  # imports this module
         return fusion.V4Bundle.load(version=version)
     raise ValueError(f"Unknown pipeline version {version!r}; expected one of {config.PIPELINE_VERSIONS}.")
@@ -213,7 +218,7 @@ def run_projection(
     if bundle.pipeline_version == "v3.1":
         from service.pipeline import ensemble  # imports this module
         return ensemble.project(bundle, raw, restrict_to_supported_classes, components or bundle.components)
-    if bundle.pipeline_version in ("v4", "v4.1"):
+    if bundle.pipeline_version in FUSION_VERSIONS:
         from service.pipeline import fusion  # imports this module
         return fusion.project(bundle, raw, restrict_to_supported_classes, components)
     components = components or components_for(bundle.pipeline_version)

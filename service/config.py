@@ -115,7 +115,11 @@ ATLAS_VERSION = "0.3.0"
 # "v4.1" (Track G, v4.1): v4 with the encoder weighted 0.5 instead of 0.7 where
 # the correlation term is used, chosen on Fulcher 2026; selectable, refused
 # (503) until its evaluation passes.
-PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1")
+# "v5" (Track H): v4.1's rule on five V2 members retrained on cleaned reference
+# labels, with its own calibration; selectable, refused (503) until its
+# evaluation passes. "v5.1": v5 with the NK T class folded into NK in training;
+# likewise refused until its evaluation passes.
+PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v5", "v5.1")
 PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
@@ -143,6 +147,22 @@ V4_MANIFEST_PATH = V4_DIR / "MANIFEST.json"
 V41_DIR = _env_path("VIVOME_V41_DIR", MODEL_DIR / "v4_1")
 V41_SPEC_PATH = V41_DIR / "spec_v41.json"
 V41_MANIFEST_PATH = V41_DIR / "MANIFEST.json"
+
+# v5's files, all its own (research/notebooks/v5_build.py): members, latents and
+# centroids, the answers' spec (NB2's layout), the best guess's spec (v4.1's
+# layout) and one MANIFEST over them. The checkpoints are kept outside git.
+V5_DIR = _env_path("VIVOME_V5_DIR", MODEL_DIR / "v5")
+V5_ANSWERS_SPEC_PATH = V5_DIR / "nb2_spec_v5.json"
+V5_SPEC_PATH = V5_DIR / "spec_v5.json"
+V5_MANIFEST_PATH = V5_DIR / "MANIFEST.json"
+V5_MEMBERS_DIR = V5_DIR / "members"
+
+# v5.1's files, laid out as v5's (research/notebooks/v5_build.py --variant v5.1).
+V51_DIR = _env_path("VIVOME_V51_DIR", MODEL_DIR / "v5_1")
+V51_ANSWERS_SPEC_PATH = V51_DIR / "nb2_spec_v51.json"
+V51_SPEC_PATH = V51_DIR / "spec_v51.json"
+V51_MANIFEST_PATH = V51_DIR / "MANIFEST.json"
+V51_MEMBERS_DIR = V51_DIR / "members"
 
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration
 # slice. Brief Stage 5: must be a random subset, never confidence-filtered.

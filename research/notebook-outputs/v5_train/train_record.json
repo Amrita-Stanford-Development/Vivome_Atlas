@@ -1,0 +1,81 @@
+{
+  "script_sha256": "4c73f0878cf95311b36c7c7784de5e1c68cbd83f722fc353dbf27bd1fc908c20",
+  "run": "2026-10-12T13:32:13",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "torch": "2.11.0+cu128",
+  "labels_sha256": "7c717a876279346509a9530c986e9a2bee44ca99169c748a29f79f164f89c808",
+  "checkpoint_dir": "Drive Data/Results/Tier1_v31/V5/ckpt",
+  "members": {
+    "V2_batchgene_aug_seed0.pt": {
+      "sha256": "4521f6cff42550d4245781a9844a3e6526a2ac360d4a4210348211466cdd74c9",
+      "best_val_loss": 0.4438992440700531,
+      "balanced": 68.43,
+      "epochs_run": 60,
+      "seconds": 520,
+      "centroid_cosine_cd8_nk": 0.6624,
+      "nearest_centroid_recall": {
+        "cd8-positive, alpha-beta t cell": 76.66,
+        "natural killer cell": 76.49,
+        "mature nk t cell": 75.33,
+        "cd4-positive, alpha-beta t cell": 64.69
+      }
+    },
+    "V2_batchgene_aug_seed1.pt": {
+      "sha256": "1834a9be5c50ef8ae1c3c8b4437131121404e5883ed697ed47c8da3f9bbc32e3",
+      "best_val_loss": 0.46986836194992065,
+      "balanced": 64.72,
+      "epochs_run": 60,
+      "seconds": 515,
+      "centroid_cosine_cd8_nk": 0.706,
+      "nearest_centroid_recall": {
+        "cd8-positive, alpha-beta t cell": 79.88,
+        "natural killer cell": 71.69,
+        "mature nk t cell": 66.4,
+        "cd4-positive, alpha-beta t cell": 67.18
+      }
+    },
+    "V2_batchgene_aug_seed2.pt": {
+      "sha256": "42b248f4f3051a5232f9eb81cc2ef31d13fbc096bb2fcb847148808ec6c5d662",
+      "best_val_loss": 0.4661772549152374,
+      "balanced": 64.9,
+      "epochs_run": 60,
+      "seconds": 511,
+      "centroid_cosine_cd8_nk": 0.7071,
+      "nearest_centroid_recall": {
+        "cd8-positive, alpha-beta t cell": 77.87,
+        "natural killer cell": 72.67,
+        "mature nk t cell": 65.62,
+        "cd4-positive, alpha-beta t cell": 70.29
+      }
+    },
+    "V2_batchgene_aug_seed3.pt": {
+      "sha256": "d5d4a04880425714796ba9ab08a174e6cece2cfcd3178ca114a1e116dc6390c1",
+      "best_val_loss": 0.43230095505714417,
+      "balanced": 66.8,
+      "epochs_run": 60,
+      "seconds": 474,
+      "centroid_cosine_cd8_nk": 0.6902,
+      "nearest_centroid_recall": {
+        "cd8-positive, alpha-beta t cell": 77.47,
+        "natural killer cell": 75.93,
+        "mature nk t cell": 76.12,
+        "cd4-positive, alpha-beta t cell": 78.78
+      }
+    },
+    "V2_batchgene_aug_seed4.pt": {
+      "sha256": "3ff0609fef56a08589c699e17a59e9863df9e4fc01e70b1840e1319c06d3d696",
+      "best_val_loss": 0.46031516790390015,
+      "balanced": 68.88,
+      "epochs_run": 60,
+      "seconds": 474,
+      "centroid_cosine_cd8_nk": 0.6694,
+      "nearest_centroid_recall": {
+        "cd8-positive, alpha-beta t cell": 78.82,
+        "natural killer cell": 68.15,
+        "mature nk t cell": 69.55,
+        "cd4-positive, alpha-beta t cell": 68.08
+      }
+    }
+  },
+  "seconds": 2507
+}

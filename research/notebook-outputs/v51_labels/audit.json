@@ -1,0 +1,29 @@
+{
+  "script_sha256": "10f29e53f7a95b6d9756536582fc097221c2681906aa71c8bea8a24a2bb0aa65",
+  "run": "2026-10-12T21:38:22",
+  "from": {
+    "labels": "research/notebook-outputs/v5_labels/reference_labels_clean.csv.gz",
+    "sha256": "7c717a876279346509a9530c986e9a2bee44ca99169c748a29f79f164f89c808"
+  },
+  "labels_sha256": "ed8152c7534e5b4339ad0f86c4026a1dfb1156149aa19f856f8b68d12f2400ce",
+  "folded": 381,
+  "folded_by_original_label": {
+    "cd8-positive, alpha-beta t cell": 193,
+    "mature nk t cell": 119,
+    "natural killer cell": 69
+  },
+  "class_counts": {
+    "mature nk t cell": {
+      "v5": 381,
+      "v5.1": 0
+    },
+    "natural killer cell": {
+      "v5": 4712,
+      "v5.1": 5093
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "v5": 2738,
+      "v5.1": 2738
+    }
+  }
+}

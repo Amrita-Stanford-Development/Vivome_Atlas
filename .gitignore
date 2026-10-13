@@ -13,6 +13,16 @@ data/incoming/
 # fetch them with scripts/fetch_v31_members.py, which checks each against
 # service/model/v3_1/MANIFEST.json.
 service/model/v3_1/members/*.pt
+# v5's and v5.1's data stay outside git (~110 MB of latents per version, plus
+# checkpoints): research/notebooks/v5_build.py rebuilds them from the members on
+# the project Drive (Data/Results/Tier1_v31/V5/ckpt/ and ckpt_v51/). Their specs
+# and MANIFEST.json, which hold every file's sha256, are tracked.
+service/model/v5/members/
+service/model/v5/*.npy
+service/model/v5/*.npz
+service/model/v5_1/members/
+service/model/v5_1/*.npy
+service/model/v5_1/*.npz
 
 # Cloudflare Pages build output and wrangler cache (scripts/build_pages_site.py)
 /dist/

@@ -1167,6 +1167,104 @@ in-sample. Khoury's +0.7 is post-hoc. The simulated suite is a safety check.
 
 ---
 
+### 27. v5 and v5.1 (Track H): cleaned reference labels, retrained members, 2026-10-12
+
+**Why.** Every method fails CD8 T: v4.1 recalls 2.7% on Khoury and 24% on
+Fulcher. Read on the reference only (no protein label):
+- **The labels:** 1,657 of the 4,572 cells Tabula Sapiens labels CD8 T are NK
+  by its own `free_annotation`, and the markers agree.
+- **The encoder:** V2, trained with those labels, merges CD8 T and NK
+  (centroid cosine 0.99; 49% recall of the reference's own CD8 T).
+
+**Phase 0, the labels** (`research/notebooks/v5_labels.py`). 2,011 cells in
+the T and NK block were relabelled by `free_annotation`. The cleaned CD8 T
+class expresses CD3D in 66% of cells (41% before).
+- A planned move of 930 "dendritic cells" and "macrophages" out of
+  "monocyte" was dropped: their markers are monocyte's (CD1C 0.6%).
+
+**Phase 1, the current encoder with cleaned centroids**
+(`research/notebooks/v5_checkpoint.py`).
+- **Result:** no CD8 T gain (41.5 → 39.8 in simulated multi-type uploads).
+- **So the encoder is the bottleneck.**
+
+**Phase 2, retraining** (`research/notebooks/v5_train.py`, NB1d's recipe on
+this PC's GPU).
+- **The reproduction passed:** NB1d's seed 1 validation loss was matched
+  exactly, then retrained within tolerance.
+- **The five cleaned members:** CD8 T–NK cosine 0.66–0.71; reference CD8 T
+  recall 77–80%.
+
+**Phase 3, the build** (`research/notebooks/v5_build.py`, NB2's recipe).
+- **Its self-test reproduces v3.1's spec from v3.1's members:**
+  - the temperatures and the out-of-distribution threshold exactly;
+  - the conformal thresholds within one rank. Plasma cell is one rank off
+    from GPU rounding; the check was amended to be rank-based, and the
+    amendment is recorded in the docstring.
+
+**v5: not evaluated.** The smoke run's development figures, which are the
+same as the real run's, fail both guardrails:
+- Fulcher 58.5 against v4.1's 69.05;
+- PBMC240 89.7 against 92.3.
+
+**The diagnosis** (`research/notebooks/v5_diagnose.py`):
+- **Fulcher:** the drop is the agreement gate alone. v5's agreement is 0.383,
+  under the 0.4 bar; with the correlation term forced on, v5 scores 69.4.
+- **Simulation:** v5 moves NK errors into "mature NK T" (34% of NK cells).
+- **That class is NK by markers:** CD3D 7%, TRAC 13%, KLRF1 92%.
+
+**v5.1** (`research/notebooks/v51_labels.py`): NK T folded into NK. The
+class stays, with no cells, so it is never chosen.
+- **The members:** reference CD8 T recall 81–84%, NK 98–99%.
+
+**v5.1's pre-registered evaluation** (`v5_phase4.py --version v5.1`).
+- **The terms:** truth is v5.1's labels; the rules are unchanged; the suite
+  is a fresh eval_v51 (te_eval's fifth use).
+- **Two risks were declared before the run:** the scope2-like scenario and
+  the CD8 T margin.
+- **The implementation check:** exact.
+
+**Verdict: NO GO.** Nine of ten checks pass. The scope2-like scenario is 2.94
+points below v4.1, against a bound of 2.
+
+| | v3.1 | v4.1 | v5.1 |
+|---|---|---|---|
+| Best guess, per-upload balanced | 60.8 | 66.2 | 67.0 |
+| CD8 T recall, multi-type uploads | 59.8 | 47.9 | 60.8 |
+| NK recall, multi-type uploads | 28.6 | 35.3 | 41.3 |
+| Coverage; false abstention | 89.0%; 0.55% | 89.8%; 0.55% | 90.4%; 0.17% |
+| Fulcher; PBMC240 lymphoid | 57.9; 92.3 | 69.05; 92.3 | 69.09; 91.5 |
+
+**What this shows.**
+- **On the reference,** cleaning the labels fixes the CD8 T and NK merge.
+- **In simulated uploads,** v5.1 restores the CD8 T recall that v4.1's
+  correlation term costs, and raises NK.
+- **Under the original labels** it trails (61.0 vs 64.2), so the gain rests
+  on the marker-based relabelling.
+- **Fulcher cannot show a CD8 T gain:** it measures no CD8A.
+- **v5.1 is not served:** its spec records the failed evaluation.
+
+**Khoury 2026, post-hoc, once** (`benchmark/khoury2026_posthoc_v51_check.py`,
+the owner's choice, 2026-10-13).
+- **Its reproductions passed exactly:** v4's saved guesses, the service's
+  v5.1 guesses, and v4.1's recorded Khoury scores.
+- **Verdict, fixed in the plan: carries over,** barely. Balanced accuracy
+  62.7 vs v4.1's 62.5 (+0.2, CI −0.9 to 1.4).
+- **Per type, v5.1 against v4.1:** CD8 T 7.8 vs 2.7; NK 56.7 vs 50.7; CD4 T
+  71.3 vs 82.8.
+- **The confusion shows the real limit:** 262 of Khoury's 333 CD8 T cells are
+  called CD4 T. Of v5.1's 192 CD8 T calls, only 26 are right; 104 are CD4 T.
+  On protein data CD8 T fails against CD4 T, not against NK. Cleaning the
+  reference's CD8 T and NK labels does not reach that.
+
+**Provenance.** v5's records were written before the scripts gained their
+v5.1 options (`--variant`, `--version`), whose defaults keep v5's
+behaviour, so they carry those earlier versions' sha256s. The records are
+`research/notebook-outputs/v5_train/`, `v5_build/` and
+`v5_diagnose/diagnosis.json`. Every v5.1 record matches the committed
+scripts.
+
+---
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

@@ -1,0 +1,1049 @@
+{
+  "script_sha256": "6665ad0320b7b0db3212b1b373cc399e597f35dc33671761f5e60ce1bacf2471",
+  "run": "2026-10-12T22:07:52",
+  "spec_sha256": "9322c5c253247be71354b4a9e0e76fba2f9ada165edba094109954e9d595d123",
+  "cache_dir": "Drive Data/Results/Tier1_v31/V5/diagnose_cache_v51",
+  "sha256": {
+    "calib_v5_arrays.npz": "bec927619b2680a11977cd2c51704ee8f6f19a626108d8fd4ac12f4c5a53d30d",
+    "dev_v5_arrays.npz": "44d232353a4abdd85e6a639488311f5231f76afcf0d449d18588c9dea1e99c01",
+    "calib_v5_cells.csv.gz": "a7d97e722e9c3eacf8dc13e8a57211256841d91ce87808391bc652bb7c3f6663",
+    "dev_v5_cells.csv.gz": "ab7e3fca877555e01ec28d476e66cc6987cf21de60be40e44a1cddca27bcc039"
+  },
+  "version": "v5.1",
+  "calibration": {
+    "v5_truth": {
+      "v3.1_own": {
+        "per_upload_balanced": {
+          "overall": 55.21,
+          "lineage": 55.22,
+          "mixed": 62.34,
+          "narrow": 56.68,
+          "pbmc": 56.62,
+          "scope2": 67.84,
+          "single": 31.65
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 53.3,
+          "natural killer cell": 41.42,
+          "mature nk t cell": 35.1,
+          "cd4-positive, alpha-beta t cell": 53.7,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 81.15,
+          "b cell": 79.88,
+          "classical monocyte": 37.94,
+          "erythrocyte": 87.68,
+          "intermediate monocyte": 16.3,
+          "macrophage": 60.08,
+          "monocyte": 51.84,
+          "neutrophil": 96.88,
+          "non-classical monocyte": 66.35,
+          "plasma cell": 96.37,
+          "platelet": 99.2
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 53.3,
+            "natural killer cell": 16.7,
+            "mature nk t cell": 1.2,
+            "cd4-positive, alpha-beta t cell": 20.4,
+            "other": 8.4
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 47.0,
+            "natural killer cell": 41.4,
+            "mature nk t cell": 4.2,
+            "cd4-positive, alpha-beta t cell": 1.8,
+            "other": 5.5
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": 33.4,
+            "natural killer cell": 25.3,
+            "mature nk t cell": 35.1,
+            "cd4-positive, alpha-beta t cell": 1.2,
+            "other": 5.0
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 4.0,
+            "natural killer cell": 0.1,
+            "mature nk t cell": 0.2,
+            "cd4-positive, alpha-beta t cell": 53.7,
+            "other": 42.1
+          }
+        },
+        "coverage": 85.47,
+        "committed": 87.69,
+        "correct_when_committed": 96.96
+      },
+      "v4.1_rule": {
+        "per_upload_balanced": {
+          "overall": 60.79,
+          "lineage": 57.99,
+          "mixed": 72.86,
+          "narrow": 60.77,
+          "pbmc": 67.94,
+          "scope2": 72.24,
+          "single": 31.04
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 41.47,
+          "natural killer cell": 49.9,
+          "mature nk t cell": 43.49,
+          "cd4-positive, alpha-beta t cell": 52.28,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 78.06,
+          "b cell": 78.23,
+          "classical monocyte": 42.02,
+          "erythrocyte": 91.53,
+          "intermediate monocyte": 42.22,
+          "macrophage": 66.76,
+          "monocyte": 59.93,
+          "neutrophil": 95.34,
+          "non-classical monocyte": 74.41,
+          "plasma cell": 95.37,
+          "platelet": 98.19
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 41.5,
+            "natural killer cell": 20.4,
+            "mature nk t cell": 3.1,
+            "cd4-positive, alpha-beta t cell": 21.4,
+            "other": 13.6
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 33.2,
+            "natural killer cell": 49.9,
+            "mature nk t cell": 6.9,
+            "cd4-positive, alpha-beta t cell": 1.8,
+            "other": 8.3
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": 18.5,
+            "natural killer cell": 32.0,
+            "mature nk t cell": 43.5,
+            "cd4-positive, alpha-beta t cell": 1.4,
+            "other": 4.6
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 3.2,
+            "natural killer cell": 0.8,
+            "mature nk t cell": 0.5,
+            "cd4-positive, alpha-beta t cell": 52.3,
+            "other": 43.2
+          }
+        },
+        "coverage": 86.0,
+        "committed": 86.55,
+        "correct_when_committed": 97.24
+      },
+      "v5.1_own": {
+        "per_upload_balanced": {
+          "overall": 54.4,
+          "lineage": 50.73,
+          "mixed": 61.28,
+          "narrow": 56.31,
+          "pbmc": 60.11,
+          "scope2": 67.21,
+          "single": 31.86
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 61.17,
+          "natural killer cell": 52.75,
+          "mature nk t cell": 0.0,
+          "cd4-positive, alpha-beta t cell": 68.82,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 51.6,
+          "b cell": 79.54,
+          "classical monocyte": 41.02,
+          "erythrocyte": 85.9,
+          "intermediate monocyte": 25.39,
+          "macrophage": 63.98,
+          "monocyte": 49.45,
+          "neutrophil": 96.0,
+          "non-classical monocyte": 63.98,
+          "plasma cell": 97.06,
+          "platelet": 99.2
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 61.2,
+            "natural killer cell": 15.9,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 17.7,
+            "other": 5.2
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 41.0,
+            "natural killer cell": 52.7,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 1.0,
+            "other": 5.3
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": 57.5,
+            "natural killer cell": 36.1,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 2.7,
+            "other": 3.6
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 11.9,
+            "natural killer cell": 0.2,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 68.8,
+            "other": 19.1
+          }
+        },
+        "coverage": 84.69,
+        "committed": 88.27,
+        "correct_when_committed": 96.74
+      },
+      "v5.1_rule": {
+        "per_upload_balanced": {
+          "overall": 58.61,
+          "lineage": 52.52,
+          "mixed": 69.38,
+          "narrow": 60.49,
+          "pbmc": 69.7,
+          "scope2": 68.65,
+          "single": 29.66
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 53.01,
+          "natural killer cell": 60.83,
+          "mature nk t cell": 0.0,
+          "cd4-positive, alpha-beta t cell": 62.11,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 67.09,
+          "b cell": 76.22,
+          "classical monocyte": 41.34,
+          "erythrocyte": 89.6,
+          "intermediate monocyte": 45.41,
+          "macrophage": 67.53,
+          "monocyte": 54.26,
+          "neutrophil": 94.49,
+          "non-classical monocyte": 72.78,
+          "plasma cell": 95.52,
+          "platelet": 98.59
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 53.0,
+            "natural killer cell": 20.0,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 18.2,
+            "other": 8.8
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 31.4,
+            "natural killer cell": 60.8,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 1.0,
+            "other": 6.8
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": 42.6,
+            "natural killer cell": 50.0,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 2.2,
+            "other": 5.1
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 7.5,
+            "natural killer cell": 0.8,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 62.1,
+            "other": 29.7
+          }
+        },
+        "coverage": 85.11,
+        "committed": 87.24,
+        "correct_when_committed": 97.08
+      },
+      "v5_own": {
+        "per_upload_balanced": {
+          "overall": 54.31,
+          "lineage": 52.09,
+          "mixed": 62.62,
+          "narrow": 55.35,
+          "pbmc": 57.51,
+          "scope2": 63.65,
+          "single": 32.19
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 55.7,
+          "natural killer cell": 11.96,
+          "mature nk t cell": 58.73,
+          "cd4-positive, alpha-beta t cell": 37.42,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 85.41,
+          "b cell": 76.77,
+          "classical monocyte": 40.08,
+          "erythrocyte": 88.39,
+          "intermediate monocyte": 19.05,
+          "macrophage": 62.61,
+          "monocyte": 44.82,
+          "neutrophil": 95.96,
+          "non-classical monocyte": 67.5,
+          "plasma cell": 96.57,
+          "platelet": 98.09
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 55.7,
+            "natural killer cell": 1.1,
+            "mature nk t cell": 19.4,
+            "cd4-positive, alpha-beta t cell": 13.6,
+            "other": 10.1
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 29.2,
+            "natural killer cell": 12.0,
+            "mature nk t cell": 52.8,
+            "cd4-positive, alpha-beta t cell": 0.5,
+            "other": 5.5
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": 32.7,
+            "natural killer cell": 2.9,
+            "mature nk t cell": 58.7,
+            "cd4-positive, alpha-beta t cell": 0.2,
+            "other": 5.5
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 10.4,
+            "natural killer cell": 0.0,
+            "mature nk t cell": 0.3,
+            "cd4-positive, alpha-beta t cell": 37.4,
+            "other": 51.9
+          }
+        },
+        "coverage": 85.69,
+        "committed": 87.28,
+        "correct_when_committed": 96.63
+      },
+      "v5_rule": {
+        "per_upload_balanced": {
+          "overall": 61.33,
+          "lineage": 57.09,
+          "mixed": 74.28,
+          "narrow": 61.34,
+          "pbmc": 71.2,
+          "scope2": 69.26,
+          "single": 31.65
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 48.61,
+          "natural killer cell": 35.96,
+          "mature nk t cell": 60.79,
+          "cd4-positive, alpha-beta t cell": 48.56,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 79.18,
+          "b cell": 75.69,
+          "classical monocyte": 41.02,
+          "erythrocyte": 91.6,
+          "intermediate monocyte": 41.99,
+          "macrophage": 68.27,
+          "monocyte": 55.75,
+          "neutrophil": 94.92,
+          "non-classical monocyte": 75.29,
+          "plasma cell": 95.32,
+          "platelet": 97.99
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 48.6,
+            "natural killer cell": 6.8,
+            "mature nk t cell": 16.8,
+            "cd4-positive, alpha-beta t cell": 15.9,
+            "other": 11.8
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 21.5,
+            "natural killer cell": 36.0,
+            "mature nk t cell": 33.9,
+            "cd4-positive, alpha-beta t cell": 0.7,
+            "other": 7.9
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": 22.3,
+            "natural killer cell": 11.1,
+            "mature nk t cell": 60.8,
+            "cd4-positive, alpha-beta t cell": 0.3,
+            "other": 5.5
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 7.3,
+            "natural killer cell": 0.5,
+            "mature nk t cell": 0.4,
+            "cd4-positive, alpha-beta t cell": 48.6,
+            "other": 43.2
+          }
+        },
+        "coverage": 86.19,
+        "committed": 85.9,
+        "correct_when_committed": 97.14
+      }
+    },
+    "v51_truth": {
+      "v3.1_own": {
+        "per_upload_balanced": {
+          "overall": 57.19,
+          "lineage": 56.21,
+          "mixed": 65.47,
+          "narrow": 58.85,
+          "pbmc": 60.75,
+          "scope2": 67.84,
+          "single": 31.88
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 53.3,
+          "natural killer cell": 39.8,
+          "cd4-positive, alpha-beta t cell": 53.7,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 81.15,
+          "b cell": 79.88,
+          "classical monocyte": 37.94,
+          "erythrocyte": 87.68,
+          "intermediate monocyte": 16.3,
+          "macrophage": 60.08,
+          "monocyte": 51.84,
+          "neutrophil": 96.88,
+          "non-classical monocyte": 66.35,
+          "plasma cell": 96.37,
+          "platelet": 99.2
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 53.3,
+            "natural killer cell": 16.7,
+            "mature nk t cell": 1.2,
+            "cd4-positive, alpha-beta t cell": 20.4,
+            "other": 8.4
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 45.7,
+            "natural killer cell": 39.8,
+            "mature nk t cell": 7.3,
+            "cd4-positive, alpha-beta t cell": 1.8,
+            "other": 5.5
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": NaN,
+            "natural killer cell": NaN,
+            "mature nk t cell": NaN,
+            "cd4-positive, alpha-beta t cell": NaN,
+            "other": NaN
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 4.0,
+            "natural killer cell": 0.1,
+            "mature nk t cell": 0.2,
+            "cd4-positive, alpha-beta t cell": 53.7,
+            "other": 42.1
+          }
+        },
+        "coverage": 85.31,
+        "committed": 87.69,
+        "correct_when_committed": 96.85
+      },
+      "v4.1_rule": {
+        "per_upload_balanced": {
+          "overall": 62.49,
+          "lineage": 58.86,
+          "mixed": 75.24,
+          "narrow": 62.67,
+          "pbmc": 72.92,
+          "scope2": 72.24,
+          "single": 31.07
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 41.47,
+          "natural killer cell": 48.1,
+          "cd4-positive, alpha-beta t cell": 52.28,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 78.06,
+          "b cell": 78.23,
+          "classical monocyte": 42.02,
+          "erythrocyte": 91.53,
+          "intermediate monocyte": 42.22,
+          "macrophage": 66.76,
+          "monocyte": 59.93,
+          "neutrophil": 95.34,
+          "non-classical monocyte": 74.41,
+          "plasma cell": 95.37,
+          "platelet": 98.19
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 41.5,
+            "natural killer cell": 20.4,
+            "mature nk t cell": 3.1,
+            "cd4-positive, alpha-beta t cell": 21.4,
+            "other": 13.6
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 31.7,
+            "natural killer cell": 48.1,
+            "mature nk t cell": 10.6,
+            "cd4-positive, alpha-beta t cell": 1.7,
+            "other": 7.9
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": NaN,
+            "natural killer cell": NaN,
+            "mature nk t cell": NaN,
+            "cd4-positive, alpha-beta t cell": NaN,
+            "other": NaN
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 3.2,
+            "natural killer cell": 0.8,
+            "mature nk t cell": 0.5,
+            "cd4-positive, alpha-beta t cell": 52.3,
+            "other": 43.2
+          }
+        },
+        "coverage": 85.84,
+        "committed": 86.55,
+        "correct_when_committed": 97.12
+      },
+      "v5.1_own": {
+        "per_upload_balanced": {
+          "overall": 58.53,
+          "lineage": 55.85,
+          "mixed": 67.17,
+          "narrow": 60.93,
+          "pbmc": 64.65,
+          "scope2": 67.21,
+          "single": 32.45
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 61.17,
+          "natural killer cell": 51.07,
+          "cd4-positive, alpha-beta t cell": 68.82,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 51.6,
+          "b cell": 79.54,
+          "classical monocyte": 41.02,
+          "erythrocyte": 85.9,
+          "intermediate monocyte": 25.39,
+          "macrophage": 63.98,
+          "monocyte": 49.45,
+          "neutrophil": 96.0,
+          "non-classical monocyte": 63.98,
+          "plasma cell": 97.06,
+          "platelet": 99.2
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 61.2,
+            "natural killer cell": 15.9,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 17.7,
+            "other": 5.2
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 42.7,
+            "natural killer cell": 51.1,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 1.1,
+            "other": 5.1
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": NaN,
+            "natural killer cell": NaN,
+            "mature nk t cell": NaN,
+            "cd4-positive, alpha-beta t cell": NaN,
+            "other": NaN
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 11.9,
+            "natural killer cell": 0.2,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 68.8,
+            "other": 19.1
+          }
+        },
+        "coverage": 85.58,
+        "committed": 88.27,
+        "correct_when_committed": 96.7
+      },
+      "v5.1_rule": {
+        "per_upload_balanced": {
+          "overall": 63.3,
+          "lineage": 57.58,
+          "mixed": 76.24,
+          "narrow": 65.95,
+          "pbmc": 75.02,
+          "scope2": 68.65,
+          "single": 30.23
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 53.01,
+          "natural killer cell": 59.74,
+          "cd4-positive, alpha-beta t cell": 62.11,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 67.09,
+          "b cell": 76.22,
+          "classical monocyte": 41.34,
+          "erythrocyte": 89.6,
+          "intermediate monocyte": 45.41,
+          "macrophage": 67.53,
+          "monocyte": 54.26,
+          "neutrophil": 94.49,
+          "non-classical monocyte": 72.78,
+          "plasma cell": 95.52,
+          "platelet": 98.59
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 53.0,
+            "natural killer cell": 20.0,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 18.2,
+            "other": 8.8
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 32.5,
+            "natural killer cell": 59.7,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 1.1,
+            "other": 6.6
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": NaN,
+            "natural killer cell": NaN,
+            "mature nk t cell": NaN,
+            "cd4-positive, alpha-beta t cell": NaN,
+            "other": NaN
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 7.5,
+            "natural killer cell": 0.8,
+            "mature nk t cell": 0.0,
+            "cd4-positive, alpha-beta t cell": 62.1,
+            "other": 29.7
+          }
+        },
+        "coverage": 86.0,
+        "committed": 87.24,
+        "correct_when_committed": 97.03
+      },
+      "v5_own": {
+        "per_upload_balanced": {
+          "overall": 53.33,
+          "lineage": 52.37,
+          "mixed": 61.3,
+          "narrow": 53.62,
+          "pbmc": 55.51,
+          "scope2": 63.65,
+          "single": 32.17
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 55.7,
+          "natural killer cell": 11.05,
+          "cd4-positive, alpha-beta t cell": 37.42,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 85.41,
+          "b cell": 76.77,
+          "classical monocyte": 40.08,
+          "erythrocyte": 88.39,
+          "intermediate monocyte": 19.05,
+          "macrophage": 62.61,
+          "monocyte": 44.82,
+          "neutrophil": 95.96,
+          "non-classical monocyte": 67.5,
+          "plasma cell": 96.57,
+          "platelet": 98.09
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 55.7,
+            "natural killer cell": 1.1,
+            "mature nk t cell": 19.4,
+            "cd4-positive, alpha-beta t cell": 13.6,
+            "other": 10.1
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 29.5,
+            "natural killer cell": 11.0,
+            "mature nk t cell": 53.4,
+            "cd4-positive, alpha-beta t cell": 0.5,
+            "other": 5.5
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": NaN,
+            "natural killer cell": NaN,
+            "mature nk t cell": NaN,
+            "cd4-positive, alpha-beta t cell": NaN,
+            "other": NaN
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 10.4,
+            "natural killer cell": 0.0,
+            "mature nk t cell": 0.3,
+            "cd4-positive, alpha-beta t cell": 37.4,
+            "other": 51.9
+          }
+        },
+        "coverage": 85.63,
+        "committed": 87.28,
+        "correct_when_committed": 96.57
+      },
+      "v5_rule": {
+        "per_upload_balanced": {
+          "overall": 60.6,
+          "lineage": 57.6,
+          "mixed": 73.41,
+          "narrow": 59.37,
+          "pbmc": 71.71,
+          "scope2": 69.26,
+          "single": 31.48
+        },
+        "recall_multi_type": {
+          "cd8-positive, alpha-beta t cell": 48.61,
+          "natural killer cell": 33.46,
+          "cd4-positive, alpha-beta t cell": 48.56,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 79.18,
+          "b cell": 75.69,
+          "classical monocyte": 41.02,
+          "erythrocyte": 91.6,
+          "intermediate monocyte": 41.99,
+          "macrophage": 68.27,
+          "monocyte": 55.75,
+          "neutrophil": 94.92,
+          "non-classical monocyte": 75.29,
+          "plasma cell": 95.32,
+          "platelet": 97.99
+        },
+        "tnk_confusion_multi_type": {
+          "cd8-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 48.6,
+            "natural killer cell": 6.8,
+            "mature nk t cell": 16.8,
+            "cd4-positive, alpha-beta t cell": 15.9,
+            "other": 11.8
+          },
+          "natural killer cell": {
+            "cd8-positive, alpha-beta t cell": 21.6,
+            "natural killer cell": 33.5,
+            "mature nk t cell": 36.6,
+            "cd4-positive, alpha-beta t cell": 0.7,
+            "other": 7.6
+          },
+          "mature nk t cell": {
+            "cd8-positive, alpha-beta t cell": NaN,
+            "natural killer cell": NaN,
+            "mature nk t cell": NaN,
+            "cd4-positive, alpha-beta t cell": NaN,
+            "other": NaN
+          },
+          "cd4-positive, alpha-beta t cell": {
+            "cd8-positive, alpha-beta t cell": 7.3,
+            "natural killer cell": 0.5,
+            "mature nk t cell": 0.4,
+            "cd4-positive, alpha-beta t cell": 48.6,
+            "other": 43.2
+          }
+        },
+        "coverage": 86.13,
+        "committed": 85.9,
+        "correct_when_committed": 97.07
+      }
+    }
+  },
+  "calibration_cells": {
+    "all": 84813,
+    "multi_type": 53306
+  },
+  "development": {
+    "v4.1": {
+      "as_served": {
+        "fulcher": 69.049,
+        "fulcher_CD4T": 82.468,
+        "fulcher_CD8T": 23.757,
+        "fulcher_NK": 90.0,
+        "fulcher_B": 98.039,
+        "fulcher_monocyte": 97.807,
+        "fulcher_DC": 22.222,
+        "pbmc240_lymphoid": 92.308,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 37.973,
+        "scope2_reprocessed_unrestricted": 5.524,
+        "scope2_reprocessed_restricted": 33.301,
+        "auroc": 0.79
+      },
+      "correlation_forced_on": {
+        "fulcher": 69.049,
+        "fulcher_CD4T": 82.468,
+        "fulcher_CD8T": 23.757,
+        "fulcher_NK": 90.0,
+        "fulcher_B": 98.039,
+        "fulcher_monocyte": 97.807,
+        "fulcher_DC": 22.222,
+        "pbmc240_lymphoid": 90.598,
+        "scope2_unrestricted": 0.365,
+        "scope2_restricted": 31.921,
+        "scope2_reprocessed_unrestricted": 5.881,
+        "scope2_reprocessed_restricted": 31.431,
+        "auroc": 0.851
+      },
+      "correlation_forced_flat": {
+        "fulcher": 57.877,
+        "fulcher_CD4T": 74.026,
+        "fulcher_CD8T": 20.994,
+        "fulcher_NK": 62.0,
+        "fulcher_B": 98.039,
+        "fulcher_monocyte": 90.351,
+        "fulcher_DC": 1.852,
+        "pbmc240_lymphoid": 92.308,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 37.973,
+        "scope2_reprocessed_unrestricted": 5.524,
+        "scope2_reprocessed_restricted": 33.301,
+        "auroc": 0.732
+      },
+      "encoder_alone": {
+        "fulcher": 61.011,
+        "fulcher_CD4T": 80.195,
+        "fulcher_CD8T": 23.204,
+        "fulcher_NK": 70.667,
+        "fulcher_B": 99.02,
+        "fulcher_monocyte": 92.982,
+        "fulcher_DC": 0.0,
+        "pbmc240_lymphoid": 91.453,
+        "scope2_unrestricted": 0.274,
+        "scope2_restricted": 34.041,
+        "scope2_reprocessed_unrestricted": 4.063,
+        "scope2_reprocessed_restricted": 31.938,
+        "auroc": 0.769
+      },
+      "correlation_alone": {
+        "fulcher": 69.627,
+        "fulcher_CD4T": 84.74,
+        "fulcher_CD8T": 18.785,
+        "fulcher_NK": 88.0,
+        "fulcher_B": 86.275,
+        "fulcher_monocyte": 97.368,
+        "fulcher_DC": 42.593,
+        "pbmc240_lymphoid": 72.65,
+        "scope2_unrestricted": 2.6,
+        "scope2_restricted": 35.603,
+        "scope2_reprocessed_unrestricted": 5.221,
+        "scope2_reprocessed_restricted": 44.306,
+        "auroc": 0.783
+      },
+      "answers_own": {
+        "fulcher": 57.936,
+        "fulcher_CD4T": 72.403,
+        "fulcher_CD8T": 25.967,
+        "fulcher_NK": 60.667,
+        "fulcher_B": 97.059,
+        "fulcher_monocyte": 85.965,
+        "fulcher_DC": 5.556,
+        "pbmc240_lymphoid": 92.308,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 38.703,
+        "scope2_reprocessed_unrestricted": 5.462,
+        "scope2_reprocessed_restricted": 32.93,
+        "auroc": 0.744
+      },
+      "agreement": {
+        "fulcher2026": 0.4227,
+        "pbmc240": 0.3671,
+        "scope2": 0.1711,
+        "scope2_reprocessed": 0.1649,
+        "furtwangler2025": 0.178
+      }
+    },
+    "v5.1": {
+      "as_served": {
+        "fulcher": 69.089,
+        "fulcher_CD4T": 74.675,
+        "fulcher_CD8T": 27.624,
+        "fulcher_NK": 91.333,
+        "fulcher_B": 99.02,
+        "fulcher_monocyte": 97.807,
+        "fulcher_DC": 24.074,
+        "pbmc240_lymphoid": 91.453,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 21.676,
+        "scope2_reprocessed_unrestricted": 6.654,
+        "scope2_reprocessed_restricted": 34.261,
+        "auroc": 0.776
+      },
+      "correlation_forced_on": {
+        "fulcher": 69.089,
+        "fulcher_CD4T": 74.675,
+        "fulcher_CD8T": 27.624,
+        "fulcher_NK": 91.333,
+        "fulcher_B": 99.02,
+        "fulcher_monocyte": 97.807,
+        "fulcher_DC": 24.074,
+        "pbmc240_lymphoid": 93.162,
+        "scope2_unrestricted": 0.593,
+        "scope2_restricted": 27.138,
+        "scope2_reprocessed_unrestricted": 6.704,
+        "scope2_reprocessed_restricted": 33.865,
+        "auroc": 0.845
+      },
+      "correlation_forced_flat": {
+        "fulcher": 59.623,
+        "fulcher_CD4T": 60.39,
+        "fulcher_CD8T": 33.702,
+        "fulcher_NK": 78.0,
+        "fulcher_B": 96.078,
+        "fulcher_monocyte": 87.719,
+        "fulcher_DC": 1.852,
+        "pbmc240_lymphoid": 91.453,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 21.676,
+        "scope2_reprocessed_unrestricted": 6.654,
+        "scope2_reprocessed_restricted": 34.261,
+        "auroc": 0.734
+      },
+      "encoder_alone": {
+        "fulcher": 63.329,
+        "fulcher_CD4T": 68.506,
+        "fulcher_CD8T": 30.387,
+        "fulcher_NK": 88.0,
+        "fulcher_B": 100.0,
+        "fulcher_monocyte": 91.228,
+        "fulcher_DC": 1.852,
+        "pbmc240_lymphoid": 94.017,
+        "scope2_unrestricted": 0.365,
+        "scope2_restricted": 24.705,
+        "scope2_reprocessed_unrestricted": 5.819,
+        "scope2_reprocessed_restricted": 33.695,
+        "auroc": 0.753
+      },
+      "correlation_alone": {
+        "fulcher": 70.358,
+        "fulcher_CD4T": 84.74,
+        "fulcher_CD8T": 23.204,
+        "fulcher_NK": 92.0,
+        "fulcher_B": 84.314,
+        "fulcher_monocyte": 97.149,
+        "fulcher_DC": 40.741,
+        "pbmc240_lymphoid": 71.795,
+        "scope2_unrestricted": 2.646,
+        "scope2_restricted": 35.131,
+        "scope2_reprocessed_unrestricted": 4.975,
+        "scope2_reprocessed_restricted": 43.926,
+        "auroc": 0.792
+      },
+      "answers_own": {
+        "fulcher": 59.809,
+        "fulcher_CD4T": 58.442,
+        "fulcher_CD8T": 41.436,
+        "fulcher_NK": 74.667,
+        "fulcher_B": 96.078,
+        "fulcher_monocyte": 82.675,
+        "fulcher_DC": 5.556,
+        "pbmc240_lymphoid": 92.308,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 21.13,
+        "scope2_reprocessed_unrestricted": 7.648,
+        "scope2_reprocessed_restricted": 33.019,
+        "auroc": 0.722
+      },
+      "agreement": {
+        "fulcher2026": 0.4518,
+        "pbmc240": 0.3502,
+        "scope2": 0.0711,
+        "scope2_reprocessed": 0.1684,
+        "furtwangler2025": 0.1572
+      }
+    },
+    "v5": {
+      "as_served": {
+        "fulcher": 58.519,
+        "fulcher_CD4T": 66.883,
+        "fulcher_CD8T": 28.729,
+        "fulcher_NK": 66.0,
+        "fulcher_B": 96.078,
+        "fulcher_monocyte": 93.421,
+        "fulcher_DC": 0.0,
+        "pbmc240_lymphoid": 89.744,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 22.086,
+        "scope2_reprocessed_unrestricted": 3.927,
+        "scope2_reprocessed_restricted": 32.584,
+        "auroc": 0.729
+      },
+      "correlation_forced_on": {
+        "fulcher": 69.386,
+        "fulcher_CD4T": 78.896,
+        "fulcher_CD8T": 26.519,
+        "fulcher_NK": 90.0,
+        "fulcher_B": 99.02,
+        "fulcher_monocyte": 97.807,
+        "fulcher_DC": 24.074,
+        "pbmc240_lymphoid": 90.598,
+        "scope2_unrestricted": 0.593,
+        "scope2_restricted": 26.329,
+        "scope2_reprocessed_unrestricted": 4.825,
+        "scope2_reprocessed_restricted": 32.882,
+        "auroc": 0.847
+      },
+      "correlation_forced_flat": {
+        "fulcher": 58.519,
+        "fulcher_CD4T": 66.883,
+        "fulcher_CD8T": 28.729,
+        "fulcher_NK": 66.0,
+        "fulcher_B": 96.078,
+        "fulcher_monocyte": 93.421,
+        "fulcher_DC": 0.0,
+        "pbmc240_lymphoid": 89.744,
+        "scope2_unrestricted": 0.0,
+        "scope2_restricted": 22.086,
+        "scope2_reprocessed_unrestricted": 3.927,
+        "scope2_reprocessed_restricted": 32.584,
+        "auroc": 0.729
+      },
+      "encoder_alone": {
+        "fulcher": 63.005,
+        "fulcher_CD4T": 74.351,
+        "fulcher_CD8T": 28.729,
+        "fulcher_NK": 79.333,
+        "fulcher_B": 100.0,
+        "fulcher_monocyte": 95.614,
+        "fulcher_DC": 0.0,
+        "pbmc240_lymphoid": 91.453,
+        "scope2_unrestricted": 0.365,
+        "scope2_restricted": 21.935,
+        "scope2_reprocessed_unrestricted": 3.669,
+        "scope2_reprocessed_restricted": 31.076,
+        "auroc": 0.76
+      },
+      "correlation_alone": {
+        "fulcher": 70.295,
+        "fulcher_CD4T": 84.091,
+        "fulcher_CD8T": 22.099,
+        "fulcher_NK": 90.0,
+        "fulcher_B": 86.275,
+        "fulcher_monocyte": 96.711,
+        "fulcher_DC": 42.593,
+        "pbmc240_lymphoid": 73.504,
+        "scope2_unrestricted": 2.646,
+        "scope2_restricted": 35.649,
+        "scope2_reprocessed_unrestricted": 5.221,
+        "scope2_reprocessed_restricted": 44.368,
+        "auroc": 0.782
+      },
+      "answers_own": {
+        "fulcher": 56.048,
+        "fulcher_CD4T": 64.61,
+        "fulcher_CD8T": 34.254,
+        "fulcher_NK": 52.0,
+        "fulcher_B": 95.098,
+        "fulcher_monocyte": 86.623,
+        "fulcher_DC": 3.704,
+        "pbmc240_lymphoid": 89.744,
+        "scope2_unrestricted": 0.046,
+        "scope2_restricted": 20.338,
+        "scope2_reprocessed_unrestricted": 4.736,
+        "scope2_reprocessed_restricted": 32.018,
+        "auroc": 0.712
+      },
+      "agreement": {
+        "fulcher2026": 0.3827,
+        "pbmc240": 0.2743,
+        "scope2": 0.1275,
+        "scope2_reprocessed": 0.1507,
+        "furtwangler2025": 0.1752
+      }
+    }
+  },
+  "seconds": 736
+}

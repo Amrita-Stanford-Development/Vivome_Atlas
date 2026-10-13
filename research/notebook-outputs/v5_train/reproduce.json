@@ -1,0 +1,48 @@
+{
+  "script_sha256": "4c73f0878cf95311b36c7c7784de5e1c68cbd83f722fc353dbf27bd1fc908c20",
+  "run": "2026-10-12T12:50:03",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "torch": "2.11.0+cu128",
+  "seed": 1,
+  "tolerances": {
+    "data": 0.002,
+    "loss": 0.02,
+    "balanced": 2.0,
+    "recall": 5.0,
+    "cosine": 0.01
+  },
+  "recorded_best_val_loss": 0.4551708400249481,
+  "served": {
+    "loss": 0.4551708400249481,
+    "balanced": 65.95701575870957,
+    "centroid_cosine_cd8_nk": 0.9876,
+    "nearest_centroid_recall": {
+      "cd8-positive, alpha-beta t cell": 48.88,
+      "natural killer cell": 92.21,
+      "mature nk t cell": 92.08,
+      "cd4-positive, alpha-beta t cell": 66.2
+    }
+  },
+  "data_check_passed": true,
+  "retrained": {
+    "best_val_loss": 0.4490061402320862,
+    "balanced": 66.14544286637492,
+    "epochs_run": 60,
+    "seconds": 505,
+    "centroid_cosine_cd8_nk": 0.9872,
+    "nearest_centroid_recall": {
+      "cd8-positive, alpha-beta t cell": 49.1,
+      "natural killer cell": 92.51,
+      "mature nk t cell": 92.57,
+      "cd4-positive, alpha-beta t cell": 67.14
+    }
+  },
+  "checks": {
+    "best_val_loss": true,
+    "balanced": true,
+    "cd8_recall": true,
+    "cd8_nk_cosine": true
+  },
+  "passed": true,
+  "seconds": 510
+}

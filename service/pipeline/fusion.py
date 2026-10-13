@@ -41,6 +41,17 @@ where the term is flat). The weight was chosen on Fulcher 2026 under fixed
 rules (research/notebooks/v41_pretest.py) and checked once on Khoury 2026
 (benchmark/khoury2026_posthoc_v41_check.py). It is refused like v4 until
 its own evaluation passes.
+
+v5 (research/todo.md, Track H) is v4.1's rule with everything underneath
+rebuilt from cleaned reference labels (research/notebooks/v5_labels.py):
+- five V2 members retrained with NB1d's recipe
+  (research/notebooks/v5_train.py);
+- their own calibration by NB2's recipe, so v5's answers are v5's, from
+  the same code as v3.1's (ensemble.V31Bundle with service/model/v5/'s
+  files);
+- class-balanced centroids and class means (research/notebooks/v5_build.py).
+Every v5 file is listed in service/model/v5/MANIFEST.json. It is refused
+until its evaluation passes.
 """
 from __future__ import annotations
 
@@ -58,7 +69,11 @@ MODEL_VERSION_LABEL = "v4 (v3.1's answers; best guess fused from its V2 members 
 MODEL_VERSION_LABELS = {
     "v4": MODEL_VERSION_LABEL,
     "v4.1": "v4.1 (v4 with the correlation term weighted more where it is used; chosen on Fulcher 2026)",
+    "v5": "v5 (v4.1's rule on V2 members retrained on cleaned reference labels, with its own calibration)",
+    "v5.1": "v5.1 (v5 with the NK T class folded into NK in training)",
 }
+ANSWERS_FROM = {"v4": "v3.1", "v4.1": "v3.1", "v5": "v5", "v5.1": "v5.1"}
+TRACK = {"v4": "Track G", "v4.1": "Track G", "v5": "Track H", "v5.1": "Track H"}
 
 
 def version_files(version: str) -> tuple:
@@ -69,7 +84,27 @@ def version_files(version: str) -> tuple:
         return config.V4_SPEC_PATH, config.V4_MANIFEST_PATH, config.V4_DIR, "scripts/build_v4_bundle.py"
     if version == "v4.1":
         return config.V41_SPEC_PATH, config.V41_MANIFEST_PATH, config.V41_DIR, "scripts/build_v41_spec.py"
+    if version == "v5":
+        return config.V5_SPEC_PATH, config.V5_MANIFEST_PATH, config.V5_DIR, "research/notebooks/v5_build.py"
+    if version == "v5.1":
+        return config.V51_SPEC_PATH, config.V51_MANIFEST_PATH, config.V51_DIR, "research/notebooks/v5_build.py --variant v5.1"
     raise ValueError(f"{version!r} is not a version of service/pipeline/fusion.py")
+
+
+def data_dir(version: str):
+    """Where a version's class-balanced centroids and class means live: v4's
+    directory for v4 and v4.1, each v5 version's own."""
+    return {"v5": config.V5_DIR, "v5.1": config.V51_DIR}.get(version, config.V4_DIR)
+
+
+def load_answers(version: str) -> "ensemble.V31Bundle":
+    """The bundle behind a version's answers: v3.1's for v4 and v4.1; for a
+    v5 version, its own (the same code, its own files)."""
+    if ANSWERS_FROM[version] == "v3.1":
+        return ensemble.V31Bundle.load()
+    if version == "v5.1":
+        return ensemble.V31Bundle.load(spec_path=config.V51_ANSWERS_SPEC_PATH, members_dir=config.V51_MEMBERS_DIR)
+    return ensemble.V31Bundle.load(spec_path=config.V5_ANSWERS_SPEC_PATH, members_dir=config.V5_MEMBERS_DIR)
 
 
 # ---- the math, pure ----
@@ -153,8 +188,8 @@ def validate_spec(spec: dict, class_names: list[str], require_evaluation: bool =
             problems.append("class_order is not the reference's class order")
         if spec["preprocessing"]["convention"] != "service" or spec["preprocessing"]["smoothing"] is not True:
             problems.append("v4 uses the service convention with smoothing (its answers are v3.1's)")
-        if spec["answers"]["from"] != "v3.1":
-            problems.append("v4's answers come from v3.1")
+        if spec["answers"]["from"] != ANSWERS_FROM[version]:
+            problems.append(f"{version}'s answers come from {ANSWERS_FROM[version]}")
         b = spec["best_guess"]
         if b["rule"] != "fusion" or spec["label_space"]["method"] != "none":
             problems.append("best-guess rule or label space is not one this module implements")
@@ -175,7 +210,7 @@ def validate_spec(spec: dict, class_names: list[str], require_evaluation: bool =
         if config.V31_COORDINATE_MEMBER not in spec["encoder"]["members"]:
             problems.append(f"the coordinate member {config.V31_COORDINATE_MEMBER} is not a member")
         if require_evaluation and spec["evaluation"]["status"] != "passed":
-            problems.append("the evaluation has not passed (Track G)")
+            problems.append(f"the evaluation has not passed ({TRACK[version]})")
     except (KeyError, TypeError, ValueError) as exc:
         problems.append(f"missing or malformed field: {exc!r}")
     if problems:
@@ -204,8 +239,8 @@ def build_components(answers_spec: dict, version: str = "v4") -> "pipeline.Compo
 
 @dataclass(frozen=True)
 class V4Bundle:
-    answers: "ensemble.V31Bundle"  # every answer, coordinate and property is v3.1's
-    members: "tuple[ensemble.Member, ...]"  # v3.1's encoders and latents; v4's class-balanced centroids
+    answers: "ensemble.V31Bundle"  # every answer, coordinate and property (v3.1's; v5's own for v5)
+    members: "tuple[ensemble.Member, ...]"  # the answers' encoders and latents; class-balanced centroids
     class_means: np.ndarray
     fusion_weight: float  # the encoder's weight where the correlation term is flat (and, in v4, where it is used)
     correlation_temperature: float
@@ -246,21 +281,22 @@ class V4Bundle:
         spec = json.loads(spec_path.read_text(encoding="utf-8"))
         if require_evaluation and spec.get("evaluation", {}).get("status") != "passed":
             raise reference.PendingArtifactError(
-                f"{spec_path}: {version}'s evaluation has not passed (research/todo.md, Track G).")
-        answers = ensemble.V31Bundle.load()
+                f"{spec_path}: {version}'s evaluation has not passed (research/todo.md, {TRACK[version]}).")
+        answers = load_answers(version)
         validate_spec(spec, answers.class_names, require_evaluation, version)
         if spec["encoder"]["members"] != [m.name for m in answers.members]:
-            raise ValueError(f"{spec_path}: its members are not v3.1's")
+            raise ValueError(f"{spec_path}: its members are not its answers' ({ANSWERS_FROM[version]})")
         b = spec["best_guess"]
+        data = data_dir(version)
         members = []
         for m in answers.members:
             seed = m.name.split("seed")[1].split(".")[0]
             members.append(dataclasses.replace(
-                m, centroids=np.load(config.V4_DIR / "members" / f"V2_seed{seed}_centroids_cb.npy").astype(np.float32),
+                m, centroids=np.load(data / "members" / f"V2_seed{seed}_centroids_cb.npy").astype(np.float32),
                 temperature=float(b["temperature"][m.name])))
         return cls(
             answers=answers, members=tuple(members),
-            class_means=np.load(config.V4_DIR / "class_means_cb.npy").astype(np.float32),
+            class_means=np.load(data / "class_means_cb.npy").astype(np.float32),
             fusion_weight=float(b["fusion_weight"]), correlation_temperature=float(b["correlation_temperature"]),
             smoothed_share=float(b["smoothed_share"]), agreement_threshold=float(b["agreement_threshold"]),
             spec=spec, components=build_components(answers.spec, version),

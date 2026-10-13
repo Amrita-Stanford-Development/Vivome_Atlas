@@ -236,9 +236,16 @@ class V31Bundle:
         return MODEL_VERSION_LABEL
 
     @classmethod
-    def load(cls) -> "V31Bundle":
-        _verify_manifest()
-        spec = load_spec()  # the one read; components and thresholds below all come from it
+    def load(cls, spec_path=None, members_dir=None) -> "V31Bundle":
+        """v3.1's bundle. Another version built the same way (v5, whose
+        members were retrained) passes its own answers' spec and members
+        directory; its own loader (fusion.V4Bundle.load) checks its MANIFEST."""
+        if spec_path is None:
+            _verify_manifest()
+            spec = load_spec()  # the one read; components and thresholds below all come from it
+        else:
+            spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        members_dir = config.V31_MEMBERS_DIR if members_dir is None else members_dir
         metadata = reference.load_reference_metadata()
         class_names = [c.class_name for c in metadata.classes]
         validate_spec(spec, class_names)
@@ -248,9 +255,9 @@ class V31Bundle:
             seed = int(re.search(r"seed(\d+)", name).group(1))
             members.append(Member(
                 name=name,
-                encoder_handle=encoder.load_encoder(config.V31_MEMBERS_DIR / name),
-                reference_latents=np.load(config.V31_MEMBERS_DIR / f"V2_seed{seed}_reference_latent_f16.npy").astype(np.float32),
-                centroids=np.load(config.V31_MEMBERS_DIR / f"V2_seed{seed}_centroids.npy").astype(np.float32),
+                encoder_handle=encoder.load_encoder(members_dir / name),
+                reference_latents=np.load(members_dir / f"V2_seed{seed}_reference_latent_f16.npy").astype(np.float32),
+                centroids=np.load(members_dir / f"V2_seed{seed}_centroids.npy").astype(np.float32),
                 temperature=float(spec["assignment"]["temperature"][name]),
             ))
         coordinate_member = spec["encoder"]["members"].index(config.V31_COORDINATE_MEMBER)

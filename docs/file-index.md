@@ -140,6 +140,22 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v4/members/V2_seed*_centroids_cb.npy` — each member's class centroids from the reference encoded under class-balanced statistics (22 × 128)
 - `service/model/v4_1/spec_v41.json` — v4.1's settings: v4's, with the encoder's weight where the correlation term is used (gate-on) and the correlation temperature from v4.1's Phase A, and its evaluation's status
 - `service/model/v4_1/MANIFEST.json` — sha256 of v4.1's spec and of every v4 data file it uses (as `../v4/...`), checked when v4.1 loads
+- `service/model/v5/nb2_spec_v5.json` — v5's answers: its members' temperatures, Mondrian conformal thresholds and out-of-distribution threshold, fitted by NB2's recipe on the cleaned labels (NB2's layout)
+- `service/model/v5/spec_v5.json` — v5's best guess: v4.1's settings on v5's members and the cleaned labels, and its evaluation's status
+- `service/model/v5/MANIFEST.json` — sha256, size and description of every v5 file, checked when v5 loads
+- `service/model/v5/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA under the cleaned labels
+- `service/model/v5/class_means_cb.npy` — class-balanced z-scored RNA class means under the cleaned labels (22 × 9,002)
+- `service/model/v5/members/V2_seed*_reference_latent_f16.npy` — each retrained member's latents of every reference cell (85,233 × 128, float16)
+- `service/model/v5/members/V2_seed*_centroids.npy` — each retrained member's class centroids under the cleaned labels (22 × 128)
+- `service/model/v5/members/V2_seed*_centroids_cb.npy` — each retrained member's centroids from the reference encoded under class-balanced statistics (22 × 128)
+- `service/model/v5_1/nb2_spec_v51.json` — v5.1's answers (NK T folded into NK in training): temperatures, conformal and out-of-distribution thresholds (NB2's layout)
+- `service/model/v5_1/spec_v51.json` — v5.1's best guess: v4.1's settings on v5.1's members and labels, and its evaluation's status
+- `service/model/v5_1/MANIFEST.json` — sha256, size and description of every v5.1 file, checked when v5.1 loads
+- `service/model/v5_1/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA under v5.1's labels
+- `service/model/v5_1/class_means_cb.npy` — class-balanced z-scored RNA class means under v5.1's labels (22 × 9,002; NK T's row is zero)
+- `service/model/v5_1/members/V2_seed*_reference_latent_f16.npy` — each v5.1 member's latents of every reference cell (85,233 × 128, float16)
+- `service/model/v5_1/members/V2_seed*_centroids.npy` — each v5.1 member's class centroids (22 × 128; NK T's is zero)
+- `service/model/v5_1/members/V2_seed*_centroids_cb.npy` — each v5.1 member's centroids under class-balanced statistics (22 × 128)
 - `service/model/runtime/reference_model.pt` — the production v3 encoder checkpoint (Git LFS, ~94 MB)
 - `service/model/runtime/reference_embedding.npy` — every RNA reference cell in the 128-d latent space (85,233 × 128)
 - `service/model/runtime/reference_centroids.npy` — one latent centroid per class (22 × 128), in `class_idx` order
@@ -230,6 +246,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/baselines_v4_score.py` — Track G: v4 (Phase 4) or v4.1 (`--version v4.1`, Phase E) against every corrected baseline, v3.1 (and v4, for v4.1) on the development datasets, with `baselines_score.py`'s functions, and the plan's checks
 - `benchmark/khoury2026_posthoc_v4.py` — Khoury 2026 post-hoc: v4 as served, scored beside v3.1 and the corrected baselines with the sealed scorer's code
 - `benchmark/khoury2026_posthoc_v41_check.py` — v4.1, Phase B: the rule locked on Fulcher, checked once on Khoury 2026 (post-hoc) against v4, v3.1 and the corrected baselines, with a verdict fixed before Phase A
+- `benchmark/khoury2026_posthoc_v51_check.py` — v5.1 (Track H): checked once on Khoury 2026 (post-hoc) against v4.1, v4, v3.1 and the corrected baselines, with the plan's verdict; label-free reproductions first
 - `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
 
 ## scripts/ — build and repository checks
@@ -312,6 +329,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/khoury2026_posthoc/summary.json` — Khoury 2026, post-hoc: excluded runs and count of CIs excluding zero per comparison
 - `research/benchmark/khoury2026_posthoc_v41_check/summary.json` — v4.1, Phase B: the locked rule on Khoury 2026 (post-hoc), its sha256, scores beside v4 and v3.1, and the verdict
 - `research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv` — v4.1, Phase B: v4.1's best guess against v4, v3.1 and every corrected baseline run and rule
+- `research/benchmark/khoury2026_posthoc_v51_check/summary.json` — v5.1 on Khoury 2026 (post-hoc): scores and confusion beside v4.1, v4 and v3.1, the reproduction of v4.1's check, and the verdict
+- `research/benchmark/khoury2026_posthoc_v51_check/paired_bootstrap.csv` — v5.1 on Khoury 2026: its best guess against v4.1, v4, v3.1 and every corrected baseline run and rule
 - `research/benchmark/khoury2026_posthoc_v4/per_model_scores.csv` — Khoury 2026, post-hoc: v4's and v3.1's best guess, balanced accuracy, per-type and lineage recall
 - `research/benchmark/khoury2026_posthoc_v4/paired_bootstrap.csv` — Khoury 2026, post-hoc: v4's best guess against v3.1 and every corrected baseline run and rule
 - `research/benchmark/khoury2026_posthoc_v4/confident.json` — Khoury 2026, post-hoc: v4's and v3.1's confident answers, overall and per type
@@ -434,6 +453,35 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/v41_phase3/eval_by_scenario.csv` — v4.1, Phase C: every evaluation metric per method and scenario group
 - `research/notebook-outputs/v41_phase3/summary.json` — v4.1, Phase C: v3.1, v4 and v4.1 on the fresh suite, per scenario, the checks and the verdict
 - `research/notebook-outputs/v41_phase3/spec_block.json` — v4.1, Phase C: the verdict, for `scripts/build_v41_spec.py`
+- `research/notebooks/v5_labels.py` — v5, Phase 0: cleans the reference's CD8 T, NK and NK T labels by the atlas's own `free_annotation`, with a marker audit; the dropped dendritic-cell rule and its evidence in the docstring
+- `research/notebooks/v5_checkpoint.py` — v5, Phase 1: v4.1 against v4.1 with centroids and class means from the cleaned labels (current encoder), on the v4.1 cache's cells, cleaned truth
+- `research/notebooks/v5_train.py` — v5, Phase 2: NB1d's training recipe on this PC's GPU; a reproduction stage against NB1d's seed 1, then five members on the cleaned labels (`--variant v5.1`: on v5.1's labels)
+- `research/notebooks/v5_build.py` — v5, Phase 3: v5's latents, centroids, temperatures, conformal and out-of-distribution thresholds by NB2's recipe, and v4.1's class-balanced layer, into `service/model/v5/` (`--variant v5.1`: into `service/model/v5_1/`); a reproduction mode against v3.1's spec
+- `research/notebooks/v5_phase4.py` — v5, Phase 4: the pre-registered evaluation against v4.1 and v3.1 on cleaned truth, with development guardrails (not yet run)
+- `research/notebooks/v5_diagnose.py` — v5 and v5.1: why they differ from v4.1 on Fulcher and what they do to CD8 T and NK, on calibration cells and development data, under both label versions; chooses nothing
+- `research/notebooks/v51_labels.py` — v5.1: v5's cleaned labels with the NK T class folded into NK (its cells are NK by markers)
+- `research/notebook-outputs/v51_labels/reference_labels_v51.csv.gz` — v5.1: every reference cell's original and v5.1 label, class index and reason
+- `research/notebook-outputs/v51_labels/audit.json` — v5.1: the folded cells by original label and the class counts
+- `research/notebook-outputs/v51_train/train_record.json` — v5.1: each member's checkpoint sha256, training figures and reference diagnostics
+- `research/notebook-outputs/v51_build/build_record.json` — v5.1: the fitted temperatures, thresholds, calibration counts and the files written
+- `research/notebook-outputs/v51_diagnose/diagnosis.json` — v5.1 against v4.1 and v5 on calibration cells under both label versions, and on the development data
+- `research/notebook-outputs/v51_phase4/rules.json` — v5.1, Phase 4: the script's, specs' and labels' sha256s, the suite and the start time, written before anything was computed
+- `research/notebook-outputs/v51_phase4/calibration_check.json` — v5.1, Phase 4: the implementation check against v4.1's Phase C, the settings check and the sanity stop
+- `research/notebook-outputs/v51_phase4/development.json` — v5.1, Phase 4: v3.1, v4.1 and v5.1 on Fulcher, PBMC240, both SCoPE2 versions and Furtwängler, and the out-of-reference AUROC
+- `research/notebook-outputs/v51_phase4/eval_suite.json` — v5.1, Phase 4: the fresh evaluation suite (240 uploads from NB3c's te_eval cells by v5.1's labels, their fifth use), written before it was scored
+- `research/notebook-outputs/v51_phase4/eval_uploads.csv` — v5.1, Phase 4: each evaluation upload's agreement and whether v5.1's correlation term was used
+- `research/notebook-outputs/v51_phase4/eval_cells.csv.gz` — v5.1, Phase 4: per evaluation cell and method, abstention, answer level, best guess, and correctness and coverage under both label versions
+- `research/notebook-outputs/v51_phase4/eval_by_scenario.csv` — v5.1, Phase 4: every evaluation metric per method and scenario group
+- `research/notebook-outputs/v51_phase4/summary.json` — v5.1, Phase 4: v3.1, v4.1 and v5.1 on the fresh suite under both label versions, per scenario, the checks and the verdict (NO GO)
+- `research/notebook-outputs/v51_phase4/spec_block.json` — v5.1, Phase 4: the verdict, for `research/notebooks/v5_build.py spec --variant v5.1`
+- `research/notebook-outputs/v5_labels/reference_labels_clean.csv.gz` — v5, Phase 0: every reference cell's original and cleaned label, the cleaned class index, and the reason for each change
+- `research/notebook-outputs/v5_labels/audit.json` — v5, Phase 0: the relabelling counts, marker detection rates before and after, scVI-cluster composition, and the dropped rule's evidence
+- `research/notebook-outputs/v5_checkpoint/checkpoint.json` — v5, Phase 1: the self-check against the v4.1 cache and both rules' calibration and development figures
+- `research/notebook-outputs/v5_train/reproduce.json` — v5, Phase 2: the data check and seed 1 retrained against NB1d's, with tolerances and verdict
+- `research/notebook-outputs/v5_train/train_record.json` — v5, Phase 2: each cleaned-label member's checkpoint sha256, training figures and reference diagnostics
+- `research/notebook-outputs/v5_build/reproduce.json` — v5, Phase 3: NB2's recipe on v3.1's members against `nb2_spec_v31.json`, the checks and verdict
+- `research/notebook-outputs/v5_build/build_record.json` — v5, Phase 3: the fitted temperatures, thresholds, calibration counts and the files written
+- `research/notebook-outputs/v5_diagnose/diagnosis.json` — v5: v3.1's, v4.1's and v5's guesses on calibration cells (cleaned truth) and v5's and v4.1's variants on the development data
 - `research/notebooks/v4_phase3c.py` — v4 Phase 3c: v3.1's answers with the fused best guess gated by upload agreement, one rule fixed from its exploration; checks the service reproduces the explored rule on NB3c's calibration suite, then scores a fresh evaluation suite once against pre-set go criteria
 - `research/notebook-outputs/v4_calibration/summary.json` — v4 Phase 3: v4 and v3.1 on the evaluation suite, per scenario, the checks and the verdict
 - `research/notebook-outputs/v4_calibration/rules.json` — v4 Phase 3: the script's sha256 and start time, written before anything was computed

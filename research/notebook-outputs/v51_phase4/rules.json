@@ -1,0 +1,25 @@
+{
+  "script_sha256": "782e976caf861b99196d95acdb7b11b4baa6def343932ac9e9f8e3854cd00828",
+  "version": "v5.1",
+  "spec_sha256": "9322c5c253247be71354b4a9e0e76fba2f9ada165edba094109954e9d595d123",
+  "answers_spec_sha256": "4ac5d875882ecd9a67ce6c1743d4ea21e7491127fa3101bc23846ce52121b96c",
+  "spec_v41_sha256": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
+  "labels": "research/notebook-outputs/v51_labels/reference_labels_v51.csv.gz",
+  "labels_sha256": "ed8152c7534e5b4339ad0f86c4026a1dfb1156149aa19f856f8b68d12f2400ce",
+  "started": "2026-10-12T22:14:09",
+  "suite": "eval_v51",
+  "check_tolerance": 0.01,
+  "sanity_coverage": 85.0,
+  "go": {
+    "cd8_recall_gain": 10.0,
+    "nk_recall_drop_max": 2.0,
+    "best_guess_drop_max": 1.0,
+    "scenario_drop_max": 2.0,
+    "coverage": "not below v3.1",
+    "false_abstention_max": 3.0,
+    "correct_min": 94.0,
+    "committed_drop_max": 2.0,
+    "development_drop_max": 2.0
+  },
+  "eval_seed": 20261013
+}

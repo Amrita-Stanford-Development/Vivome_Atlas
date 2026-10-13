@@ -1,0 +1,8 @@
+{
+  "evaluation": {
+    "status": "failed",
+    "record": "research/notebook-outputs/v51_phase4/summary.json",
+    "suite": "eval_v51: 240 new uploads from T1 NB3c's te_eval cells by v5.1's labels, seed 20261013 (their fifth use)",
+    "date": "2026-10-12"
+  }
+}

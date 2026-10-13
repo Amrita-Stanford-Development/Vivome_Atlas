@@ -26,6 +26,11 @@ exists); until the evaluation has passed, the service refuses to serve v4.
     # the calibration bundle: NB1's train and validation cells only (its test
     # split held out), written outside the repository
     python scripts/build_v4_bundle.py --spec-only        # rewrite the spec and MANIFEST only
+    python scripts/build_v4_bundle.py --labels research/notebook-outputs/v5_labels/reference_labels_clean.csv.gz \\
+        --version v4.2-clean --out DIR [--rows trainval]
+    # the same files from other reference labels (a table with cell and
+    # class_clean, in reference_metadata.csv's order), written outside v4's
+    # directory, with the evaluation pending
 """
 from __future__ import annotations
 
@@ -102,11 +107,14 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def make_spec(v31: dict, class_names: list[str], rows_name: str, n_cells: int, rna_name: str) -> dict:
-    """v4's spec. The served bundle (all rows) takes Phase 3c's verdict when recorded."""
-    block = json.loads(PHASE3C.read_text(encoding="utf-8")) if rows_name == "all" and PHASE3C.exists() else {}
-    return {
-        "version": "v4",
+def make_spec(v31: dict, class_names: list[str], rows_name: str, n_cells: int, rna_name: str,
+              version: str = "v4", labels: str | None = None) -> dict:
+    """v4's spec. The served bundle (all rows, v3.1's labels) takes Phase 3c's
+    verdict when recorded; any other build's evaluation is pending."""
+    served = version == "v4" and labels is None and rows_name == "all"
+    block = json.loads(PHASE3C.read_text(encoding="utf-8")) if served and PHASE3C.exists() else {}
+    spec = {
+        "version": version,
         "created": str(date.today()),
         "source": ("research/notebooks/v4_pretest.py and v4_phase3c.py (research/notebook-run-history.md, "
                    "entries 20, 23 and 24); built by scripts/build_v4_bundle.py"),
@@ -130,6 +138,9 @@ def make_spec(v31: dict, class_names: list[str], rows_name: str, n_cells: int, r
         "hierarchy": v31["hierarchy"],
         "class_order": class_names,
     }
+    if labels is not None:
+        spec["reference"]["labels"] = labels
+    return spec
 
 
 def write_spec_and_manifest(out: Path, spec: dict, written: dict, check: float) -> None:
@@ -150,9 +161,13 @@ def main() -> None:
     parser.add_argument("--rna", type=Path, default=RNA)
     parser.add_argument("--out", type=Path, default=OUT)
     parser.add_argument("--spec-only", action="store_true", help="rewrite the spec and MANIFEST; keep the data files")
+    parser.add_argument("--labels", type=Path, help="other reference labels: a table with cell and class_clean")
+    parser.add_argument("--version", default="v4", help="the spec's version (with --labels, not v4)")
     args = parser.parse_args()
     if args.rows == "trainval" and args.out.resolve() == OUT.resolve():
         raise SystemExit("the calibration bundle is written outside the repository: pass --out")
+    if args.labels is not None and (args.out.resolve() == OUT.resolve() or args.version == "v4" or args.spec_only):
+        raise SystemExit("--labels builds a variant: pass --out outside service/model/v4 and a --version other than v4")
 
     ensemble._verify_manifest()  # the members and latents v4 builds on are v3.1's exact files
     v31 = ensemble.load_spec()
@@ -171,7 +186,14 @@ def main() -> None:
               f"agreement_threshold {spec['best_guess']['agreement_threshold']}, evaluation {spec['evaluation']['status']}")
         return
     table = pd.read_csv(config.MODEL_DIR / "runtime" / "reference_metadata.csv")
-    y = np.array([class_names.index(c) for c in table["class_name"]])
+    labels = table["class_name"]
+    if args.labels is not None:
+        other = pd.read_csv(args.labels)
+        if other["cell"].astype(str).tolist() != table["cell"].astype(str).tolist():
+            raise SystemExit(f"{args.labels} is not in reference_metadata.csv's cell order")
+        labels = other["class_clean"]
+        print(f"labels from {args.labels.name}: {int((labels != table['class_name']).sum())} cells differ")
+    y = np.array([class_names.index(c) for c in labels])
     feature_genes = reference.load_feature_space_genes()
     X = load_rna(args.rna, feature_genes, table["cell"].astype(str).tolist())
     print(f"RNA {X.shape}")
@@ -205,7 +227,11 @@ def main() -> None:
         written[f"members/V2_seed{seed}_centroids_cb.npy"] = f"{name} centroids under class-balanced statistics"
         print(f"{name}: centroids written")
 
-    spec = make_spec(v31, class_names, args.rows, int(len(rows)), args.rna.name)
+    labels_name = None
+    if args.labels is not None:
+        labels_name = (args.labels.resolve().relative_to(REPO).as_posix() if args.labels.resolve().is_relative_to(REPO)
+                       else args.labels.name) + f" (sha256 {sha256(args.labels)})"
+    spec = make_spec(v31, class_names, args.rows, int(len(rows)), args.rna.name, args.version, labels_name)
     write_spec_and_manifest(args.out, spec, written, check)
     print(f"wrote {len(written)} files and MANIFEST.json to {args.out}")
 

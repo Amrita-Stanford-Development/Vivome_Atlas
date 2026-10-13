@@ -1749,6 +1749,38 @@ None is public yet: two searches and an outside deep-research run found no
 public PBMC proteomics set with labels independent of the protein data, so
 the strongest designs need a data request.
 
+## v5.1: cleaned reference labels, retrained members (Track H)
+
+v5.1 is v4.1's rule on five V2 members retrained on reference labels
+cleaned with Tabula Sapiens's own `free_annotation`, with NK T folded into
+NK (`research/notebook-run-history.md`, entry 27).
+
+- **Its pre-registered evaluation was a NO GO,** so it is not served. On a
+  fresh simulated suite it beat v4.1 on best guess (67.0 vs 66.2), CD8 T
+  (60.8 vs 47.9) and NK (41.3 vs 35.3), but its scope2-like scenario was 2.94
+  points below v4.1 (the bound is 2).
+- **Khoury 2026, post-hoc** (`benchmark/khoury2026_posthoc_v51_check.py`;
+  [khoury2026_posthoc_v51_check/](khoury2026_posthoc_v51_check/)):
+
+| | v3.1 | v4.1 | v5.1 |
+|---|---|---|---|
+| Balanced accuracy, five types | 56.9 | 62.5 | 62.7 |
+| CD8 T recall | 2.7 | 2.7 | 7.8 |
+| NK recall | 29.0 | 50.7 | 56.7 |
+| CD4 T recall | 84.5 | 82.8 | 71.3 |
+
+- **Against v4.1:** +0.2 (CI −0.9 to 1.4). The verdict fixed in the plan,
+  "carries over", holds: balanced accuracy and CD8 T recall both at or above
+  v4.1's.
+- **Against the baselines,** level with PCA and kNN (−0.1, CI −1.9 to 1.8)
+  and one scANVI kNN seed, and ahead of every other run.
+- **Khoury's CD8 T failure is CD8 against CD4, not against NK.** 262 of its
+  333 CD8 T cells are called CD4 T. Of v5.1's 192 CD8 T calls, 26 are right;
+  104 are CD4 T. Cleaning the reference fixed CD8 against NK, which is not
+  what limits Khoury.
+- **These corrected baselines were run with the original reference
+  labels.** Their rerun on the cleaned labels is still open.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the

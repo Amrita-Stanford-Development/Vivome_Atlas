@@ -243,7 +243,21 @@ class ComponentSelectionTests(unittest.TestCase):
 
     def test_an_unknown_version_is_refused(self):
         with self.assertRaises(ValueError):
-            pipeline.components_for("v5")
+            pipeline.components_for("v9")
+
+    def test_v5_is_refused_until_its_evaluation_passes(self):
+        """v5 (Track H) is selectable, but the service serves it only once
+        its spec records a passed evaluation; until then it answers 503."""
+        from service.pipeline import fusion
+        self.assertIn("v5", config.PIPELINE_VERSIONS)
+        if not config.V5_SPEC_PATH.exists():
+            raise unittest.SkipTest(f"{config.V5_SPEC_PATH} does not exist. Run research/notebooks/v5_build.py build.")
+        spec = json.loads(config.V5_SPEC_PATH.read_text(encoding="utf-8"))
+        if spec["evaluation"]["status"] == "passed":
+            raise unittest.SkipTest("v5's evaluation has passed")
+        with self.assertRaises(reference.PendingArtifactError):
+            pipeline.load_bundle("v5")
+        self.assertEqual(fusion.V4Bundle.load(require_evaluation=False, version="v5").pipeline_version, "v5")
 
     def test_v31_components_carry_nb2s_settings(self):
         spec = ensemble.load_spec()
