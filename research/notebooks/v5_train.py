@@ -47,8 +47,10 @@ to research/notebook-outputs/v5_train/. The diagnostics are:
 Variant v5.1 (--variant v5.1) trains the same way on v5.1's labels, which
 are v5's with NK T folded into NK (research/notebooks/v51_labels.py). Its
 checkpoints go to Drive Tier1_v31/V5/ckpt_v51/ and its record to
-research/notebook-outputs/v51_train/. It rests on the same reproduction
-(same code, same machine).
+research/notebook-outputs/v51_train/. Variant v5.2 uses v5.2's labels, which
+are v5.1's with CD4/CD8 lineage relabelled by a classifier trained on Hao
+et al. 2021 (research/notebooks/v52_labels.py); its checkpoints go to
+ckpt_v52/. Both rest on the same reproduction (same code, same machine).
 
     python research/notebooks/v5_train.py reproduce      # from the repository root
     python research/notebooks/v5_train.py clean
@@ -91,6 +93,9 @@ VARIANTS = {
     "v5.1": {"labels": REPO / "research" / "notebook-outputs" / "v51_labels" / "reference_labels_v51.csv.gz",
              "ckpt": DRIVE / "Tier1_v31" / "V5" / "ckpt_v51", "out": REPO / "research" / "notebook-outputs" / "v51_train",
              "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt_v51"},
+    "v5.2": {"labels": REPO / "research" / "notebook-outputs" / "v52_labels" / "reference_labels_v52.csv.gz",
+             "ckpt": DRIVE / "Tier1_v31" / "V5" / "ckpt_v52", "out": REPO / "research" / "notebook-outputs" / "v52_train",
+             "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt_v52"},
 }
 SEEDS, REPRO_SEED = (0, 1, 2, 3, 4), 1
 ARCH = {"hidden": (1024, 512), "dropout": 0.1, "latent": 128}

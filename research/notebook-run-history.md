@@ -1265,6 +1265,105 @@ scripts.
 
 ---
 
+### 28. Why CD8 T fails on protein data (Track H), 2026-10-13
+
+`research/notebooks/cd8_cd4_diagnosis.py` →
+`research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json`. A diagnosis
+that chooses nothing. Khoury's labels are read post-hoc; the reference part
+reads no protein label.
+
+**Every method fails Khoury's CD8 T cells:** PCA kNN recalls 0.9%,
+correlation 0.9%, Harmony 3–6%, scANVI kNN 1.8–34%, v4.1 2.7%
+(`research/benchmark/khoury2026_posthoc/per_seed_scores.csv`).
+
+**1. Khoury's CD8 and CD4 clusters split on T-cell state, not lineage.**
+The protocol names its CD8 T cluster by CD8A and GZMA. In its own data:
+
+| Separating Khoury's CD8 cluster from its CD4 cluster | AUC |
+|---|---|
+| CD8A, in the 248 cells where it is measured | 0.61 |
+| S100A4, lower in the CD8 cluster | 0.93 |
+| ANXA1, lower in the CD8 cluster | 0.91 |
+
+- **No separation on the naming markers:** GZMA is detected in 34% vs 38%;
+  CD4 in 4% of both.
+- **High S100A4 and ANXA1 mark memory and effector T cells.** The "CD8"
+  cluster looks largely naive, the "CD4" cluster largely memory.
+
+**2. Every model calls Khoury's CD8 cluster naive CD4 T:** v3.1 79%, v4.1
+54%, v5.1 41%. The rest is mostly CD4 T.
+
+**3. The reference has almost no naive CD8 T cells under a CD8 label.**
+- **The annotation:** `free_annotation` names 6. The CD8 T class is
+  effector and memory: CCR7 4%, GZMA 92%, CCL5 92%.
+- **Where they sit instead:** 356 cells look naive CD8 by RNA (CD8A or CD8B,
+  CCR7, LEF1 or SELL, no cytotoxic genes, no CD4). Of these, 320 are
+  labelled CD4 T and 26 naive CD4 T.
+- **More loosely,** the CD4 T class holds 922 CD8A/B-positive, CD4-negative
+  cells, 518 of them naive-like.
+
+**So CD8 T on Khoury fails twice over.**
+- **Khoury's labels:** they mostly encode naive against memory. Its CD8 T
+  recall is a weak target and should not be tuned toward.
+- **Our reference:** it gives naive CD8 T cells no home but CD4 T.
+
+v5's CD8/NK cleanup did not touch either.
+
+---
+
+### 29. v5.2 (Track H): CD4/CD8 T labels corrected with Hao et al. 2021, 2026-10-13
+
+**Why:** entry 28 found that the reference files naive CD8 T cells under
+CD4 T.
+- **The owner's dataset search** found no new public proteomics test set,
+  but verified Hao et al. 2021 (GEO GSE164378): 161,764 PBMCs with RNA and a
+  228-antibody surface panel, whose `celltype.l2` includes CD8 Naive (10,768
+  cells).
+- **The owner chose** to relabel Tabula Sapiens with a classifier trained
+  on Hao.
+
+**Labels** (`research/notebooks/v52_labels.py`).
+- **The classifier:** logistic regression on 2,012 genes (24 markers),
+  trained on 84,387 of Hao's T and NK cells.
+- **The gate,** on held-out donors P7 and P8, at P ≥ 0.9: CD4-lineage cells
+  called CD8 T 1.004%, against a 1% bound, so it failed and nothing was
+  relabelled.
+- **The amendment** (owner, stricter): threshold 0.95. The gate then passed
+  (0.79%, 0.83%).
+- **Moves, only between the CD4 and CD8 lineages:**
+  - 932 cells CD4 → CD8 T: CD8A 82%, CD8B 88%, CD4 1.5%, mostly naive;
+  - 407 CD8 T → CD4: CD4 41%, CD8B 4%, granzymes high, so cytotoxic CD4 T.
+  - The CD4 T class's CD8A/B detection falls from 19.7% to 2%.
+
+**Members:** five, as v5.1; reference CD8 T recall 82–85%, NK 98%.
+
+**Diagnosis** (`v5_diagnose.py --version v5.2`). Calibration suite, v5.2's
+truth, multi-type uploads:
+
+| | v4.1 | v5.1 | v5.2 |
+|---|---|---|---|
+| Overall, per-upload balanced | 59.3 | 59.3 | 61.8 |
+| CD8 T recall | 26.1 | 34.5 | 47.9 |
+| NK recall | 48.1 | 59.7 | 61.7 |
+| CD4 T recall | 52.1 | 60.7 | 60.0 |
+| Naive CD4 T recall | 78.4 | 67.5 | 63.7 |
+| Scope2-like scenario | 72.2 | 68.7 | 73.6 |
+
+- **Every scenario group** is at or above v4.1, or within 0.3 points.
+- **Answers:** coverage 85.8% (v3.1 84.0%); committed 89.7%; correct when
+  committed 96.1%.
+- **Naive CD4 is what it gives up:** naive CD8 and naive CD4 T cells now
+  differ mainly in CD8 and CD4 themselves.
+
+**Development (in-sample):**
+- **Fulcher:** 69.6 (v4.1 69.05). CD8 T 29.3, NK 94.0, DC 25.9, but CD4 T
+  71.8 against 82.5.
+- **PBMC240 lymphoid recall:** 89.7 against 92.3, below the pre-registered
+  guardrail (at most 2 points of loss) by about one cell.
+- **So its Phase 4 would be a certain NO GO.** It was not run.
+
+---
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

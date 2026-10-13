@@ -93,6 +93,7 @@ class mean, so it is never chosen.
     python research/notebooks/v5_build.py build
     python research/notebooks/v5_build.py spec
     python research/notebooks/v5_build.py build --variant v5.1
+    python research/notebooks/v5_build.py build --variant v5.2      # into service/model/v5_2/, likewise
 """
 from __future__ import annotations
 
@@ -133,6 +134,9 @@ VARIANTS = {
     "v5.1": {"dir": REPO / "service" / "model" / "v5_1", "out": REPO / "research" / "notebook-outputs" / "v51_build",
              "phase4": REPO / "research" / "notebook-outputs" / "v51_phase4" / "spec_block.json",
              "answers": "nb2_spec_v51.json", "spec": "spec_v51.json"},
+    "v5.2": {"dir": REPO / "service" / "model" / "v5_2", "out": REPO / "research" / "notebook-outputs" / "v52_build",
+             "phase4": REPO / "research" / "notebook-outputs" / "v52_phase4" / "spec_block.json",
+             "answers": "nb2_spec_v52.json", "spec": "spec_v52.json"},
 }
 K_NN, ALPHA, MIN_N = 15, 0.10, 50
 TOL_Q, TOL_COS = 1e-3, 0.9999

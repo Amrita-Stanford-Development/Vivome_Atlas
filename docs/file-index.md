@@ -156,6 +156,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v5_1/members/V2_seed*_reference_latent_f16.npy` — each v5.1 member's latents of every reference cell (85,233 × 128, float16)
 - `service/model/v5_1/members/V2_seed*_centroids.npy` — each v5.1 member's class centroids (22 × 128; NK T's is zero)
 - `service/model/v5_1/members/V2_seed*_centroids_cb.npy` — each v5.1 member's centroids under class-balanced statistics (22 × 128)
+- `service/model/v5_2/nb2_spec_v52.json` — v5.2's answers (CD4/CD8 T labels corrected with Hao et al. 2021): temperatures, conformal and out-of-distribution thresholds (NB2's layout)
+- `service/model/v5_2/spec_v52.json` — v5.2's best guess: v4.1's settings on v5.2's members and labels, and its evaluation's status
+- `service/model/v5_2/MANIFEST.json` — sha256, size and description of every v5.2 file, checked when v5.2 loads
+- `service/model/v5_2/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA under v5.2's labels (gitignored; rebuilt by `research/notebooks/v5_build.py`)
+- `service/model/v5_2/class_means_cb.npy` — class-balanced z-scored RNA class means under v5.2's labels (gitignored, likewise)
+- `service/model/v5_2/members/V2_seed*_*.npy` — each v5.2 member's latents, centroids and class-balanced centroids (gitignored, likewise)
 - `service/model/runtime/reference_model.pt` — the production v3 encoder checkpoint (Git LFS, ~94 MB)
 - `service/model/runtime/reference_embedding.npy` — every RNA reference cell in the 128-d latent space (85,233 × 128)
 - `service/model/runtime/reference_centroids.npy` — one latent centroid per class (22 × 128), in `class_idx` order
@@ -300,6 +306,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/known-limitations.md` — open issues with the comparison, including a data-provenance gap
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
 - `research/benchmark/protocol-khoury2026.md` — the Khoury 2026 final test set, sealed until its one scoring at the final v3.1 evaluation (2026-10-03): label-free facts recorded at sealing, the protocol and its seven amendments
+- `research/benchmark/protocol-sorted-cd4cd8.md` — the sorted CD4/CD8 test, written before any data: what qualifies, the sealing and intake rules, v4.1 and v5.2 frozen by sha256, the baselines (on each candidate's own reference labels), metrics and decision rules
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
 - `research/benchmark/fulcher2026/family_summary.csv` — Fulcher 2026: mean, SD, min and max of every metric per family and rule
@@ -458,8 +465,16 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/v5_train.py` — v5, Phase 2: NB1d's training recipe on this PC's GPU; a reproduction stage against NB1d's seed 1, then five members on the cleaned labels (`--variant v5.1`: on v5.1's labels)
 - `research/notebooks/v5_build.py` — v5, Phase 3: v5's latents, centroids, temperatures, conformal and out-of-distribution thresholds by NB2's recipe, and v4.1's class-balanced layer, into `service/model/v5/` (`--variant v5.1`: into `service/model/v5_1/`); a reproduction mode against v3.1's spec
 - `research/notebooks/v5_phase4.py` — v5, Phase 4: the pre-registered evaluation against v4.1 and v3.1 on cleaned truth, with development guardrails (not yet run)
-- `research/notebooks/v5_diagnose.py` — v5 and v5.1: why they differ from v4.1 on Fulcher and what they do to CD8 T and NK, on calibration cells and development data, under both label versions; chooses nothing
+- `research/notebooks/v5_diagnose.py` — v5, v5.1 and v5.2: how each differs from v4.1 and from the version before it on Fulcher and on CD8 T and NK, on calibration cells and development data, under each label version; chooses nothing
 - `research/notebooks/v51_labels.py` — v5.1: v5's cleaned labels with the NK T class folded into NK (its cells are NK by markers)
+- `research/notebooks/cd8_cd4_diagnosis.py` — why CD8 T fails on protein data: Khoury's CD8/CD4 clusters on marker proteins (post-hoc), the fine classes our models call them, and where the reference keeps naive CD8 T cells; chooses nothing
+- `research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json` — that diagnosis: Khoury marker detection, effect sizes and AUCs, the models' fine classes, and the reference's markers and naive-CD8-like cells per class
+- `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
+- `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
+- `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell
+- `research/notebook-outputs/v52_train/train_record.json` — v5.2: each member's checkpoint sha256, training figures and reference diagnostics
+- `research/notebook-outputs/v52_build/build_record.json` — v5.2: the fitted temperatures, thresholds, calibration counts and the files written
+- `research/notebook-outputs/v52_diagnose/diagnosis.json` — v5.2 against v4.1 and v5.1 on calibration cells under each label version, and on the development data
 - `research/notebook-outputs/v51_labels/reference_labels_v51.csv.gz` — v5.1: every reference cell's original and v5.1 label, class index and reason
 - `research/notebook-outputs/v51_labels/audit.json` — v5.1: the folded cells by original label and the class counts
 - `research/notebook-outputs/v51_train/train_record.json` — v5.1: each member's checkpoint sha256, training figures and reference diagnostics

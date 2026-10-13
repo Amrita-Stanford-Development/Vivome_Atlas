@@ -1780,6 +1780,35 @@ NK (`research/notebook-run-history.md`, entry 27).
   what limits Khoury.
 - **These corrected baselines were run with the original reference
   labels.** Their rerun on the cleaned labels is still open.
+- **Why every method fails CD8 T on Khoury**
+  (`research/notebooks/cd8_cd4_diagnosis.py`):
+  - **Khoury's labels:** its CD8 and CD4 clusters are separated by S100A4
+    and ANXA1 (AUC 0.93, 0.91), not by CD8A (0.61), so they largely encode
+    naive against memory T cells;
+  - **The reference:** it files naive CD8 T cells under CD4 T (320 of 356
+    naive-CD8-like cells).
+  - **So** Khoury's CD8 T recall is a weak target.
+
+## v5.2: CD4/CD8 T labels corrected with Hao et al. 2021 (Track H)
+
+v5.2 relabels the reference between the CD4 and CD8 T lineages with a
+classifier trained on Hao et al. 2021's labels, which used RNA and surface
+protein (`research/notebooks/v52_labels.py`; run history, entry 29). It moves
+932 cells to CD8 T, mostly naive, and 407 cytotoxic CD4 T cells out of CD8 T.
+
+- **Calibration suite** (simulated RNA uploads, v5.2's truth, multi-type
+  uploads), against v4.1:
+  - overall 61.8 vs 59.3;
+  - CD8 T recall 47.9 vs 26.1;
+  - NK 61.7 vs 48.1;
+  - naive CD4 T 63.7 vs 78.4;
+  - every scenario group at or above v4.1, or within 0.3 points.
+- **Development (in-sample):** Fulcher 69.6 (v4.1 69.05). PBMC240 lymphoid
+  recall is 89.7 against 92.3, below its pre-registered guardrail, so v5.2's
+  simulated evaluation was not run.
+- **It waits for sorted CD4/CD8 data,** scored under
+  [protocol-sorted-cd4cd8.md](protocol-sorted-cd4cd8.md). Nothing public can
+  test it now.
 
 ## Two protocols, not a chosen one
 

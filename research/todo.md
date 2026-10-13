@@ -338,6 +338,36 @@ Plan approved 2026-10-12. Every method fails CD8 T: v4.1 recalls 2.7% on Khoury 
     - CD4 T 71.3 vs 82.8.
   - **Khoury's CD8 T failure is CD8 against CD4:** 262 of 333 CD8 T cells are called CD4 T, and only 26 of v5.1's 192 CD8 T calls are right. Label cleaning fixed CD8 against NK, which is not Khoury's limit.
   - **Against the baselines,** level with PCA kNN (−0.1) and one scANVI kNN seed, and ahead of the rest.
+- [x] **Why CD8 T fails on protein data, 2026-10-13** (`research/notebooks/cd8_cd4_diagnosis.py`; run-history entry 28).
+  - **Every method fails Khoury's CD8 T cells** (PCA kNN 0.9%, Harmony 3–6%, v4.1 2.7%).
+  - **Khoury's CD8 and CD4 clusters split on S100A4 and ANXA1** (AUC 0.93 and 0.91; CD8A 0.61), largely naive against memory.
+  - **Every model calls the CD8 cluster naive CD4 T** (v3.1 79%, v4.1 54%).
+  - **The reference files naive CD8 T cells under CD4 T:** 320 of the 356 naive-CD8-like cells; only 6 are annotated naive CD8.
+- [x] **The owner's second dataset search, checked 2026-10-13** (the Gemini report sits outside the repository, at the project root).
+  - **No new public proteomics test set:**
+    - its "CD8 T PTM atlas" has no verifiable accession, and the last run said it had none;
+    - its Khoury details are wrong (cell count; labels said to come from RNA, but Amendment 1 shows protein-only clustering);
+    - PXD080728 is HeLa;
+    - O'Connor is still behind the data request.
+  - **Hao et al. 2021 is verified** (GEO GSE164378; 161,764 PBMCs, 8 donors, RNA plus a 228-antibody panel). Its `celltype.l2` holds CD8 Naive 10,768, TCM 2,883 and TEM 11,727; CD4 Naive 17,479. The report's 14,205 was wrong. Its Stephenson and Triana entries are unverified.
+- [ ] **v5.2: give naive CD8 T cells a home in the reference** (owner's choice, 2026-10-13: relabel Tabula Sapiens with a classifier trained on Hao 2021). `research/notebooks/v52_labels.py` fixes the rules first, including a donor-held-out gate on Hao. Only CD4 ↔ CD8 lineage moves are made, keeping the 22 classes. Then train, build and diagnose as for v5.1.
+  - **It can't be properly tested yet:** Fulcher has no CD8A; Khoury was used to diagnose; te_eval would be on its sixth use. Only sorted CD4/CD8 data can.
+  - [x] **Labels, run 2026-10-13.**
+    - **The gate:** at P ≥ 0.9 it failed by 0.004 points (1.004% vs 1%). The owner's amendment raised the threshold to 0.95 (stricter); it then passed (0.79% and 0.83%), with naive CD8 T confidently called in 96.9% of cases.
+    - **Moves:** 932 cells CD4 → CD8 T (CD8A 82%, CD8B 88%, CD4 1.5%, mostly naive) and 407 CD8 T → CD4 (CD4 41%, CD8B 4%, granzymes high: cytotoxic CD4 T). The CD4 T class's CD8A/B detection falls from 19.7% to 2%.
+  - [x] **Train, build, diagnose** (`v5_train.py`, `v5_build.py --variant v5.2`, `v5_diagnose.py --version v5.2`). Calibration suite, v5.2's truth, multi-type uploads (v5.2 vs v4.1):
+    - overall 61.8 vs 59.3;
+    - CD8 T 47.9 vs 26.1;
+    - NK 61.7 vs 48.1;
+    - CD4 T 60.0 vs 52.1;
+    - naive CD4 T 63.7 vs 78.4;
+    - scope2-like 73.6 vs 72.2; every group at or above v4.1, or within 0.3.
+    - Development (in-sample): Fulcher 69.6 (CD8 T 29.3, NK 94.0, CD4 T 71.8); PBMC240 lymphoid 89.7 vs v4.1's 92.3, below the pre-registered guardrail (at most 2 points of loss) by about one cell.
+    - So its Phase 4 would be a certain NO GO; it waits for the owner.
+  - [x] **Owner's decision (2026-10-13): keep v5.2 for the sorted test.** Phase 4 was not run (no sixth use of te_eval).
+    - `research/benchmark/protocol-sorted-cd4cd8.md` pre-registers the sorted CD4/CD8 test before any data: v4.1 and v5.2 frozen by sha256; the corrected baselines on each candidate's own reference labels; balanced accuracy primary; CD8 T and CD4 T recall secondary; the decision rules.
+    - v4.1 stays the version served on request; v5.2 is selectable and refused until evaluated.
+- [ ] **Before the sorted data is unsealed:** the corrected baselines rerun with v5.2's labels (protocol rule 4), and the intake and scoring scripts written and rehearsed on Fulcher.
 - [ ] The corrected baselines on the cleaned labels (planned for fairness; open).
 - [ ] **Phase 5:** the service (`"v5"`, selectable), its gate and frozen fixtures; release only after owner sign-off.
 

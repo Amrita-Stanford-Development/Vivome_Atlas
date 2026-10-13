@@ -1,0 +1,208 @@
+{
+  "script_sha256": "1799e927fc264c0a616e27f2ffb3a62a14281a58035f912f9f28c8c33bca1e9b",
+  "run": "2026-10-13T13:40:40",
+  "hao": {
+    "cells": 84387,
+    "by_target": {
+      "cd8-positive, alpha-beta t cell": 25378,
+      "cd4-positive, alpha-beta t cell": 20907,
+      "natural killer cell": 18116,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 17479,
+      "regulatory t cell": 2507
+    },
+    "features": 2012,
+    "markers_used": [
+      "CD8A",
+      "CD8B",
+      "CD4",
+      "CD3D",
+      "CD3E",
+      "CCR7",
+      "SELL",
+      "LEF1",
+      "TCF7",
+      "IL7R",
+      "GZMA",
+      "GZMB",
+      "GZMH",
+      "GZMK",
+      "CCL5",
+      "NKG7",
+      "GNLY",
+      "KLRB1",
+      "FOXP3",
+      "IL2RA",
+      "CD27",
+      "CD28",
+      "S100A4",
+      "ANXA1"
+    ]
+  },
+  "gate": {
+    "held_out_donors": [
+      "P7",
+      "P8"
+    ],
+    "cells": 26575,
+    "cd4_lineage_to_cd8_pct": 0.788,
+    "cd8_to_cd4_lineage_pct": 0.83,
+    "bound_pct": 1.0,
+    "recall_argmax": {
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 93.96,
+      "cd4-positive, alpha-beta t cell": 90.68,
+      "regulatory t cell": 69.85,
+      "cd8-positive, alpha-beta t cell": 97.33,
+      "natural killer cell": 98.74
+    },
+    "naive_cd8_confident_pct": 96.85,
+    "passed": true
+  },
+  "first_run_gate": {
+    "threshold": 0.9,
+    "cd4_lineage_to_cd8_pct": 1.004,
+    "cd8_to_cd4_lineage_pct": 0.998,
+    "passed": false
+  },
+  "labels_sha256": "123c05eb84d6ff502ba121a97b3a123eaddd08ac01c46647381ce7aa78160280",
+  "moved": {
+    "cd4_to_cd8": 932,
+    "cd8_to_cd4_lineage": 407,
+    "cd4_to_cd8_from": {
+      "cd4-positive, alpha-beta t cell": 878,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 54
+    },
+    "cd8_to": {
+      "cd4-positive, alpha-beta t cell": 384,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 23
+    },
+    "by_method": {
+      "10X": 1220,
+      "smartseq": 119
+    },
+    "by_donor": {
+      "TSP2": 543,
+      "TSP1": 261,
+      "TSP7": 198,
+      "TSP10": 144,
+      "TSP21": 91,
+      "TSP25": 66,
+      "TSP14": 27,
+      "TSP8": 9
+    }
+  },
+  "class_counts": {
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "v5.1": 490,
+      "v5.2": 459
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "v5.1": 4900,
+      "v5.2": 4406
+    },
+    "regulatory t cell": {
+      "v5.1": 40,
+      "v5.2": 40
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "v5.1": 2738,
+      "v5.2": 3263
+    },
+    "natural killer cell": {
+      "v5.1": 5093,
+      "v5.2": 5093
+    }
+  },
+  "naive_cd8_like_moved": {
+    "cells": 458,
+    "moved_to_cd8": 407,
+    "already_cd8": 9
+  },
+  "marker_detection_pct": {
+    "moved_to_cd8": {
+      "CD8A": 81.7,
+      "CD8B": 88.3,
+      "CD4": 1.5,
+      "CCR7": 60.4,
+      "SELL": 82.1,
+      "LEF1": 77.3,
+      "GZMA": 26.5,
+      "CCL5": 39.9,
+      "S100A4": 85.2,
+      "ANXA1": 59.4
+    },
+    "moved_to_cd4": {
+      "CD8A": 11.1,
+      "CD8B": 3.9,
+      "CD4": 40.8,
+      "CCR7": 8.6,
+      "SELL": 51.4,
+      "LEF1": 31.7,
+      "GZMA": 80.1,
+      "CCL5": 84.3,
+      "S100A4": 97.8,
+      "ANXA1": 83.8
+    },
+    "kept_cd4": {
+      "CD8A": 2.1,
+      "CD8B": 2.1,
+      "CD4": 51.8,
+      "CCR7": 55.4,
+      "SELL": 68.8,
+      "LEF1": 79.5,
+      "GZMA": 10.4,
+      "CCL5": 15.0,
+      "S100A4": 80.7,
+      "ANXA1": 55.0
+    },
+    "kept_cd8": {
+      "CD8A": 55.9,
+      "CD8B": 44.2,
+      "CD4": 3.0,
+      "CCR7": 3.2,
+      "SELL": 33.6,
+      "LEF1": 22.4,
+      "GZMA": 94.2,
+      "CCL5": 92.8,
+      "S100A4": 95.8,
+      "ANXA1": 82.0
+    }
+  },
+  "full_call_tnk": {
+    "cd4-positive, alpha-beta t cell": {
+      "cd4-positive, alpha-beta t cell": 2180,
+      "cd8-positive, alpha-beta t cell": 930,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 1245,
+      "natural killer cell": 69,
+      "regulatory t cell": 476
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "cd4-positive, alpha-beta t cell": 453,
+      "cd8-positive, alpha-beta t cell": 1289,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 21,
+      "natural killer cell": 958,
+      "regulatory t cell": 17
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "cd4-positive, alpha-beta t cell": 198,
+      "cd8-positive, alpha-beta t cell": 54,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 217,
+      "natural killer cell": 0,
+      "regulatory t cell": 21
+    },
+    "natural killer cell": {
+      "cd4-positive, alpha-beta t cell": 6,
+      "cd8-positive, alpha-beta t cell": 20,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 5,
+      "natural killer cell": 5055,
+      "regulatory t cell": 7
+    },
+    "regulatory t cell": {
+      "cd4-positive, alpha-beta t cell": 11,
+      "cd8-positive, alpha-beta t cell": 1,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 0,
+      "natural killer cell": 0,
+      "regulatory t cell": 28
+    }
+  },
+  "seconds": 23
+}

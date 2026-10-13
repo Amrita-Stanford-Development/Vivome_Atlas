@@ -1,0 +1,125 @@
+{
+  "source": "research/notebooks/v5_build.py (members from research/notebooks/v5_train.py, labels from research/notebooks/v5_labels.py)",
+  "files": {
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "ea91d570a37203450ed1ebb254b9d5f6fa3ae5cf4b2e86304ff4ef839414bcfd",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v52/V2_batchgene_aug_seed0.pt)"
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "23af35f28518ca5e5797e8297d68bc5b36b8ed207c10da09dcc340e91d576108",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "d6d471514c5ab40179996b6d986d506935006905f3d4203374f2192f58db26bb",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the cleaned labels, class_idx order"
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "dbf256e76f5c5863ca893905ea4fbc65acd8eb02524a7d2fbee709ec1a944aaf",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed0.pt centroids under class-balanced statistics (cleaned labels)"
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "b8f28a7bdf8a05c71e0f9e03f37d17e3801d3cc5ad2ef608fbd0256f7423b5cc",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v52/V2_batchgene_aug_seed1.pt)"
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "01d8a4afa78ded9f502a63c981609f0f6b7330be9c003c3163463ee3558fde13",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "49c0af562982979d9d43a8695b013c5914aa6fcc39c55d91adf988efb2d4ed71",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the cleaned labels, class_idx order"
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "a77835c6190f159a0327a5daa62acd2acf8da19eb17f17322fe2586bdce37b65",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed1.pt centroids under class-balanced statistics (cleaned labels)"
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "5d9d3fe9dd6eba3ad56a451b5f71c6d35a4d75225a468bdd097201f7a57b890a",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v52/V2_batchgene_aug_seed2.pt)"
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "bc1b65d4646c1fb63a63a974b6d6bb85cf7ac0d71ca9ed9d04a7200db407a1b0",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "71f9840692bf68698d7575721809eeaa5a72b207b7707f545b2a561b3213b6f8",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the cleaned labels, class_idx order"
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "319cfa0481235a7a3b2d717ad0f42f5626d8b2d4ef2088fc30b509e3bd52d451",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed2.pt centroids under class-balanced statistics (cleaned labels)"
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "bc4205e881a5344aa51414135d95a20a7075c9e84df4b63a9711743e819b55a2",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v52/V2_batchgene_aug_seed3.pt)"
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "3ff10e43c585a011bd839c234561226a05d8667f6b9199858597269bbe88ac7c",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "d40e31f152387447011ad9f81ec3eac13dccf5e83c652b6a86eeec25ebbdf58f",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the cleaned labels, class_idx order"
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "6a7efe74984afe3c0f0b14d673871ca5f84e41b0cb21c47edb876100fcf5dc34",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed3.pt centroids under class-balanced statistics (cleaned labels)"
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "e7327364d525965688fa2a26338fd923efd89b00a48f488beb2f6a06c767617e",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v52/V2_batchgene_aug_seed4.pt)"
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "3640422977c0f655fbb83c19fc5c45c3f8c2492de51ba02a275f0d06150fa99e",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "85e1da81a51e9e9a20c11378bc2a4e7add8ee6d764f2bccda33401652365cce3",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the cleaned labels, class_idx order"
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "3b4bcc75dc2f04e6b175b36337f613b7aa626f6574e20149a914e46443ec09e9",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed4.pt centroids under class-balanced statistics (cleaned labels)"
+    },
+    "class_balanced_stats.npz": {
+      "sha256": "11019f5448f532eb455869c0379985b949d4010b94409cfb3af6fe6e85b99c80",
+      "bytes": 72510,
+      "from": "per-gene class-balanced mean and SD over all reference cells, cleaned labels"
+    },
+    "class_means_cb.npy": {
+      "sha256": "d4656f756504de3240692d433becfa44ca049e1be5bb549844cb6e62adf6459f",
+      "bytes": 792304,
+      "from": "class-balanced z-scored RNA class means under the cleaned labels, class position order (22 x 9,002)"
+    },
+    "nb2_spec_v52.json": {
+      "sha256": "6596bb188ce6420ccf53646ee64fdc3606bb59d30ccbbef1e65e0e62bb04674a",
+      "bytes": 6838,
+      "from": "v5.2's answers: temperatures, conformal thresholds, out-of-distribution threshold (NB2's layout)"
+    },
+    "spec_v52.json": {
+      "sha256": "61d76d2815b4bd534691fd3f64fa559296afd52e78cd843b9aa3d23fd4f4e2c1",
+      "bytes": 5150,
+      "from": "v5.2's best guess (v4.1's layout and settings)"
+    }
+  }
+}

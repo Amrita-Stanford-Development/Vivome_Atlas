@@ -245,19 +245,26 @@ class ComponentSelectionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             pipeline.components_for("v9")
 
-    def test_v5_is_refused_until_its_evaluation_passes(self):
-        """v5 (Track H) is selectable, but the service serves it only once
-        its spec records a passed evaluation; until then it answers 503."""
+    def test_v5_versions_are_refused_until_their_evaluation_passes(self):
+        """v5, v5.1 and v5.2 (Track H) are selectable, but the service serves
+        one only once its spec records a passed evaluation; until then it
+        answers 503. A version whose data files are not built here is skipped."""
         from service.pipeline import fusion
-        self.assertIn("v5", config.PIPELINE_VERSIONS)
-        if not config.V5_SPEC_PATH.exists():
-            raise unittest.SkipTest(f"{config.V5_SPEC_PATH} does not exist. Run research/notebooks/v5_build.py build.")
-        spec = json.loads(config.V5_SPEC_PATH.read_text(encoding="utf-8"))
-        if spec["evaluation"]["status"] == "passed":
-            raise unittest.SkipTest("v5's evaluation has passed")
-        with self.assertRaises(reference.PendingArtifactError):
-            pipeline.load_bundle("v5")
-        self.assertEqual(fusion.V4Bundle.load(require_evaluation=False, version="v5").pipeline_version, "v5")
+        checked = 0
+        for version, (base, _, spec_name) in config.V5_FAMILY.items():
+            with self.subTest(version=version):
+                self.assertIn(version, config.PIPELINE_VERSIONS)
+                if not (base / "members").exists():
+                    continue  # gitignored data, rebuilt by research/notebooks/v5_build.py
+                spec = json.loads((base / spec_name).read_text(encoding="utf-8"))
+                if spec["evaluation"]["status"] == "passed":
+                    continue
+                with self.assertRaises(reference.PendingArtifactError):
+                    pipeline.load_bundle(version)
+                self.assertEqual(fusion.V4Bundle.load(require_evaluation=False, version=version).pipeline_version, version)
+                checked += 1
+        if not checked:
+            raise unittest.SkipTest("no v5 version's data files are built here; run research/notebooks/v5_build.py")
 
     def test_v31_components_carry_nb2s_settings(self):
         spec = ensemble.load_spec()

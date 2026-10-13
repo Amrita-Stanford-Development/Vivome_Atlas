@@ -71,9 +71,10 @@ MODEL_VERSION_LABELS = {
     "v4.1": "v4.1 (v4 with the correlation term weighted more where it is used; chosen on Fulcher 2026)",
     "v5": "v5 (v4.1's rule on V2 members retrained on cleaned reference labels, with its own calibration)",
     "v5.1": "v5.1 (v5 with the NK T class folded into NK in training)",
+    "v5.2": "v5.2 (v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et al. 2021)",
 }
-ANSWERS_FROM = {"v4": "v3.1", "v4.1": "v3.1", "v5": "v5", "v5.1": "v5.1"}
-TRACK = {"v4": "Track G", "v4.1": "Track G", "v5": "Track H", "v5.1": "Track H"}
+ANSWERS_FROM = {"v4": "v3.1", "v4.1": "v3.1", **{v: v for v in config.V5_FAMILY}}
+TRACK = {"v4": "Track G", "v4.1": "Track G", **{v: "Track H" for v in config.V5_FAMILY}}
 
 
 def version_files(version: str) -> tuple:
@@ -84,17 +85,17 @@ def version_files(version: str) -> tuple:
         return config.V4_SPEC_PATH, config.V4_MANIFEST_PATH, config.V4_DIR, "scripts/build_v4_bundle.py"
     if version == "v4.1":
         return config.V41_SPEC_PATH, config.V41_MANIFEST_PATH, config.V41_DIR, "scripts/build_v41_spec.py"
-    if version == "v5":
-        return config.V5_SPEC_PATH, config.V5_MANIFEST_PATH, config.V5_DIR, "research/notebooks/v5_build.py"
-    if version == "v5.1":
-        return config.V51_SPEC_PATH, config.V51_MANIFEST_PATH, config.V51_DIR, "research/notebooks/v5_build.py --variant v5.1"
+    if version in config.V5_FAMILY:
+        base, _, spec = config.V5_FAMILY[version]
+        builder = "research/notebooks/v5_build.py" + ("" if version == "v5" else f" --variant {version}")
+        return base / spec, base / "MANIFEST.json", base, builder
     raise ValueError(f"{version!r} is not a version of service/pipeline/fusion.py")
 
 
 def data_dir(version: str):
     """Where a version's class-balanced centroids and class means live: v4's
     directory for v4 and v4.1, each v5 version's own."""
-    return {"v5": config.V5_DIR, "v5.1": config.V51_DIR}.get(version, config.V4_DIR)
+    return config.V5_FAMILY[version][0] if version in config.V5_FAMILY else config.V4_DIR
 
 
 def load_answers(version: str) -> "ensemble.V31Bundle":
@@ -102,9 +103,8 @@ def load_answers(version: str) -> "ensemble.V31Bundle":
     v5 version, its own (the same code, its own files)."""
     if ANSWERS_FROM[version] == "v3.1":
         return ensemble.V31Bundle.load()
-    if version == "v5.1":
-        return ensemble.V31Bundle.load(spec_path=config.V51_ANSWERS_SPEC_PATH, members_dir=config.V51_MEMBERS_DIR)
-    return ensemble.V31Bundle.load(spec_path=config.V5_ANSWERS_SPEC_PATH, members_dir=config.V5_MEMBERS_DIR)
+    base, answers, _ = config.V5_FAMILY[version]
+    return ensemble.V31Bundle.load(spec_path=base / answers, members_dir=base / "members")
 
 
 # ---- the math, pure ----

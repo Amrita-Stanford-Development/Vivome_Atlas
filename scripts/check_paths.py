@@ -54,6 +54,8 @@ ALLOWED_MISSING = (
     "service/model/v5/class_",
     "service/model/v5_1/members/",
     "service/model/v5_1/class_",
+    "service/model/v5_2/members/",
+    "service/model/v5_2/class_",
     "Atlas/shared_genes_lat128.txt",
     "Atlas/Data/",
     "benchmark/PROTOCOL.md",
@@ -63,6 +65,8 @@ ALLOWED_MISSING = (
     "research/benchmark/khoury2026_posthoc/",  # (research/benchmark/baseline-corrections.md)
     "research/notebook-outputs/v5_phase4/",  # written by research/notebooks/v5_phase4.py when it runs
     "research/notebook-outputs/v51_phase4/",  # likewise, with --version v5.1
+    "research/notebook-outputs/v52_phase4/",  # likewise, for v5.2
+    "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
 )
 

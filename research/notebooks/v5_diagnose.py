@@ -85,7 +85,12 @@ VERSIONS = {
     "v5.1": {"labels": REPO / "research" / "notebook-outputs" / "v51_labels" / "reference_labels_v51.csv.gz",
              "out": REPO / "research" / "notebook-outputs" / "v51_diagnose", "cache": phase3.T1 / "V5" / "diagnose_cache_v51",
              "members": config.V51_MEMBERS_DIR},
+    "v5.2": {"labels": REPO / "research" / "notebook-outputs" / "v52_labels" / "reference_labels_v52.csv.gz",
+             "out": REPO / "research" / "notebook-outputs" / "v52_diagnose", "cache": phase3.T1 / "V5" / "diagnose_cache_v52",
+             "members": config.V52_DIR / "members"},
 }
+PREVIOUS = {"v5.1": "v5", "v5.2": "v5.1"}  # each version is compared with the one before it
+TRUTH_TAG = {"v5": "v5_truth", "v5.1": "v51_truth", "v5.2": "v52_truth"}
 CACHE_FILES = ("calib_v5_arrays.npz", "dev_v5_arrays.npz", "calib_v5_cells.csv.gz", "dev_v5_cells.csv.gz")
 V41 = {"w_on": 0.5, "tau": 0.05}
 TNK = ("cd8-positive, alpha-beta t cell", "natural killer cell", "mature nk t cell", "cd4-positive, alpha-beta t cell",
@@ -224,12 +229,16 @@ def main() -> None:
     nm = np.array(names)
     table = pd.read_csv(config.MODEL_DIR / "runtime" / "reference_metadata.csv")
     truths = {}
-    for tag, path in (("v5_truth", VERSIONS["v5"]["labels"]), ("v51_truth", VERSIONS["v5.1"]["labels"])):
+    wanted = {"v5", version, PREVIOUS.get(version)}  # v5's truth, this version's, and its predecessor's
+    for v, tag in TRUTH_TAG.items():
+        path = VERSIONS[v]["labels"]
+        if v not in wanted:
+            continue
         lab = pd.read_csv(path)
         if lab["cell"].tolist() != table["cell"].tolist():
             raise SystemExit(f"{path} is not in reference_metadata.csv's order")
         truths[tag] = lab["class_idx_clean"].to_numpy()
-    own = truths["v5_truth" if version == "v5" else "v51_truth"]
+    own = truths[TRUTH_TAG[version]]
     (calib, a_new, held_answers), (dev, d_new) = build(bundle, own, t0, V["members"])
     V["cache"].mkdir(parents=True, exist_ok=True)
     np.savez_compressed(V["cache"] / CACHE_FILES[0], **a_new)
@@ -262,21 +271,23 @@ def main() -> None:
     s_new = held_answers.components.calibrator.calibrate(A["P31"].astype(np.float64), None, space).label_sets
     sets = {"v3.1_own": s31, "v4.1_rule": s31, f"{version}_own": s_new, f"{version}_rule": s_new}
     dev_sets = {"v4.1": (d41, dev41), version: (d_new, dev)}
-    if version != "v5":
-        record = json.loads((OUT / "diagnosis.json").read_text())
+    if version in PREVIOUS:
+        prev = PREVIOUS[version]
+        P_ = VERSIONS[prev]
+        record = json.loads((P_["out"] / "diagnosis.json").read_text())
         for f in CACHE_FILES:
-            if hashlib.sha256((CACHE / f).read_bytes()).hexdigest() != record["sha256"][f]:
-                raise SystemExit(f"{CACHE / f} does not match {OUT / 'diagnosis.json'}")
-        c5 = pd.read_csv(CACHE / CACHE_FILES[2], keep_default_na=False)[keep].reset_index(drop=True)
-        A5 = {k: v[keep] for k, v in dict(np.load(CACHE / CACHE_FILES[0])).items()}
-        frames.update({"v5_own": c5, "v5_rule": c5})
-        guesses.update({"v5_own": A5["P31"].argmax(1),
-                        "v5_rule": core.rule(A5, core.agreement(c5, A5, "upload"), V41["w_on"], V41["tau"]).argmax(1)})
-        v5_components = fusion.V4Bundle.load(require_evaluation=False, version="v5").answers.components
-        s5 = v5_components.calibrator.calibrate(A5["P31"].astype(np.float64), None, space).label_sets
-        sets.update({"v5_own": s5, "v5_rule": s5})
-        dev_sets["v5"] = (dict(np.load(CACHE / CACHE_FILES[1])),
-                          pd.read_csv(CACHE / CACHE_FILES[3], keep_default_na=False, dtype={"cell_id": str}))
+            if hashlib.sha256((P_["cache"] / f).read_bytes()).hexdigest() != record["sha256"][f]:
+                raise SystemExit(f"{P_['cache'] / f} does not match {P_['out'] / 'diagnosis.json'}")
+        c5 = pd.read_csv(P_["cache"] / CACHE_FILES[2], keep_default_na=False)[keep].reset_index(drop=True)
+        A5 = {k: v[keep] for k, v in dict(np.load(P_["cache"] / CACHE_FILES[0])).items()}
+        frames.update({f"{prev}_own": c5, f"{prev}_rule": c5})
+        guesses.update({f"{prev}_own": A5["P31"].argmax(1),
+                        f"{prev}_rule": core.rule(A5, core.agreement(c5, A5, "upload"), V41["w_on"], V41["tau"]).argmax(1)})
+        prev_components = fusion.V4Bundle.load(require_evaluation=False, version=prev).answers.components
+        s5 = prev_components.calibrator.calibrate(A5["P31"].astype(np.float64), None, space).label_sets
+        sets.update({f"{prev}_own": s5, f"{prev}_rule": s5})
+        dev_sets[prev] = (dict(np.load(P_["cache"] / CACHE_FILES[1])),
+                          pd.read_csv(P_["cache"] / CACHE_FILES[3], keep_default_na=False, dtype={"cell_id": str}))
     report = {"version": version,
               "calibration": calibration_report(frames, guesses, sets, truths, rows, multi, cal, names, bundle.hierarchy),
               "calibration_cells": {"all": int(len(c)), "multi_type": int(multi.sum())}}

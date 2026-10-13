@@ -1,0 +1,178 @@
+{
+  "version": "v5.2",
+  "created": "2026-10-13",
+  "source": "v4.1's spec (service/model/v4_1/spec_v41.json) on v5.2's members and labels; built by research/notebooks/v5_build.py",
+  "reference_rows": "all",
+  "encoder": {
+    "members": [
+      "V2_batchgene_aug_seed0.pt",
+      "V2_batchgene_aug_seed1.pt",
+      "V2_batchgene_aug_seed2.pt",
+      "V2_batchgene_aug_seed3.pt",
+      "V2_batchgene_aug_seed4.pt"
+    ],
+    "files": "service/model/v5_2 (its MANIFEST)"
+  },
+  "preprocessing": {
+    "convention": "service",
+    "smoothing": true,
+    "min_observed_genes": 200
+  },
+  "reference": {
+    "statistics": "class_balanced",
+    "rna": "Blood_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+    "n_cells": 85233,
+    "ood_and_coordinates": "v5.2's reference latents",
+    "labels": "research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz (sha256 123c05eb84d6ff502ba121a97b3a123eaddd08ac01c46647381ce7aa78160280)"
+  },
+  "answers": {
+    "from": "v5.2",
+    "spec": "service/model/v5_2/nb2_spec_v52.json",
+    "what": "conformal sets, abstention, answer levels, coordinates and properties from v5.2's members; the fused best guess joins non-empty sets beside v5.2's"
+  },
+  "best_guess": {
+    "rule": "fusion",
+    "temperature": {
+      "V2_batchgene_aug_seed0.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed1.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed2.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed3.pt": 0.15345534297879426,
+      "V2_batchgene_aug_seed4.pt": 0.14060712576942577
+    },
+    "fusion_weight": 0.7,
+    "correlation_temperature": 0.05,
+    "smoothed_share": 0.5,
+    "agreement_threshold": 0.4,
+    "chosen_on": {
+      "fusion_weight and correlation_temperature": "NB1 sim_suite_calib_v1.json (v4_pretest.py)",
+      "smoothed_share and agreement_threshold": "NB3c calibration cells and the development data (Phase 3c's exploration, entry 24)",
+      "gate_on_fusion_weight and correlation_temperature": "Fulcher 2026 under fixed rules (research/notebooks/v41_pretest.py), checked once on Khoury 2026 (benchmark/khoury2026_posthoc_v41_check.py)"
+    },
+    "gate_on_fusion_weight": 0.5
+  },
+  "label_space": {
+    "method": "none"
+  },
+  "evaluation": {
+    "status": "pending",
+    "record": null
+  },
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "basophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "common myeloid progenitor": {
+      "group": "progenitor",
+      "lineage": "myeloid"
+    },
+    "erythrocyte": {
+      "group": "erythroid",
+      "lineage": "erythroid"
+    },
+    "hematopoietic precursor cell": {
+      "group": "progenitor",
+      "lineage": "progenitor"
+    },
+    "hematopoietic stem cell": {
+      "group": "progenitor",
+      "lineage": "progenitor"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "mature nk t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "myeloid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "natural killer cell": {
+      "group": "NK cell",
+      "lineage": "lymphoid"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "plasmacytoid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "platelet": {
+      "group": "platelet/megakaryocyte",
+      "lineage": "other"
+    },
+    "regulatory t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    }
+  },
+  "class_order": [
+    "b cell",
+    "basophil",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "common myeloid progenitor",
+    "erythrocyte",
+    "hematopoietic precursor cell",
+    "hematopoietic stem cell",
+    "intermediate monocyte",
+    "macrophage",
+    "mature nk t cell",
+    "monocyte",
+    "myeloid dendritic cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "plasma cell",
+    "plasmacytoid dendritic cell",
+    "platelet",
+    "regulatory t cell"
+  ],
+  "based_on": {
+    "spec": "service/model/v4_1/spec_v41.json",
+    "sha256": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de"
+  }
+}

@@ -1,0 +1,769 @@
+{
+  "script_sha256": "8f92c3334703959f4d9d5720afa3ffcdb7489b60ba40e4de43a04267046dff25",
+  "run": "2026-10-13T11:39:55",
+  "khoury_posthoc": {
+    "cells": {
+      "CD4T": 407,
+      "CD8T": 333,
+      "NK": 231
+    },
+    "markers": {
+      "CD8A": {
+        "CD4T": {
+          "detected_pct": 29.5,
+          "mean_log2": 10.56
+        },
+        "CD8T": {
+          "detected_pct": 38.4,
+          "mean_log2": 10.91
+        },
+        "NK": {
+          "detected_pct": 45.5,
+          "mean_log2": 10.96
+        },
+        "cohens_d_cd8_vs_cd4": 0.33
+      },
+      "CD8B": "not in the matrix",
+      "CD4": {
+        "CD4T": {
+          "detected_pct": 4.4,
+          "mean_log2": 8.15
+        },
+        "CD8T": {
+          "detected_pct": 4.2,
+          "mean_log2": 7.71
+        },
+        "NK": {
+          "detected_pct": 4.8,
+          "mean_log2": 7.8
+        },
+        "cohens_d_cd8_vs_cd4": -0.43
+      },
+      "CD3D": {
+        "CD4T": {
+          "detected_pct": 10.3,
+          "mean_log2": 10.38
+        },
+        "CD8T": {
+          "detected_pct": 9.3,
+          "mean_log2": 10.35
+        },
+        "NK": {
+          "detected_pct": 6.1,
+          "mean_log2": 10.23
+        },
+        "cohens_d_cd8_vs_cd4": -0.04
+      },
+      "CD3E": {
+        "CD4T": {
+          "detected_pct": 45.9,
+          "mean_log2": 11.49
+        },
+        "CD8T": {
+          "detected_pct": 36.9,
+          "mean_log2": 11.54
+        },
+        "NK": {
+          "detected_pct": 33.8,
+          "mean_log2": 11.32
+        },
+        "cohens_d_cd8_vs_cd4": 0.06
+      },
+      "CD3G": {
+        "CD4T": {
+          "detected_pct": 7.9,
+          "mean_log2": 9.04
+        },
+        "CD8T": {
+          "detected_pct": 6.0,
+          "mean_log2": 9.22
+        },
+        "NK": {
+          "detected_pct": 4.3,
+          "mean_log2": 9.19
+        },
+        "cohens_d_cd8_vs_cd4": 0.22
+      },
+      "CD247": {
+        "CD4T": {
+          "detected_pct": 61.7,
+          "mean_log2": 10.38
+        },
+        "CD8T": {
+          "detected_pct": 60.1,
+          "mean_log2": 10.34
+        },
+        "NK": {
+          "detected_pct": 63.6,
+          "mean_log2": 10.63
+        },
+        "cohens_d_cd8_vs_cd4": -0.06
+      },
+      "ZAP70": {
+        "CD4T": {
+          "detected_pct": 77.4,
+          "mean_log2": 10.33
+        },
+        "CD8T": {
+          "detected_pct": 78.1,
+          "mean_log2": 10.2
+        },
+        "NK": {
+          "detected_pct": 84.0,
+          "mean_log2": 10.75
+        },
+        "cohens_d_cd8_vs_cd4": -0.2
+      },
+      "CD2": {
+        "CD4T": {
+          "detected_pct": 9.3,
+          "mean_log2": 9.87
+        },
+        "CD8T": {
+          "detected_pct": 9.3,
+          "mean_log2": 10.17
+        },
+        "NK": {
+          "detected_pct": 6.1,
+          "mean_log2": 9.26
+        },
+        "cohens_d_cd8_vs_cd4": 0.24
+      },
+      "CD5": {
+        "CD4T": {
+          "detected_pct": 86.2,
+          "mean_log2": 10.43
+        },
+        "CD8T": {
+          "detected_pct": 83.5,
+          "mean_log2": 10.39
+        },
+        "NK": {
+          "detected_pct": 81.4,
+          "mean_log2": 10.14
+        },
+        "cohens_d_cd8_vs_cd4": -0.04
+      },
+      "CD6": {
+        "CD4T": {
+          "detected_pct": 9.8,
+          "mean_log2": 11.62
+        },
+        "CD8T": {
+          "detected_pct": 6.3,
+          "mean_log2": 11.42
+        },
+        "NK": {
+          "detected_pct": 6.9,
+          "mean_log2": 11.3
+        },
+        "cohens_d_cd8_vs_cd4": -0.19
+      },
+      "GZMA": {
+        "CD4T": {
+          "detected_pct": 37.8,
+          "mean_log2": 9.48
+        },
+        "CD8T": {
+          "detected_pct": 34.2,
+          "mean_log2": 9.37
+        },
+        "NK": {
+          "detected_pct": 51.9,
+          "mean_log2": 10.21
+        },
+        "cohens_d_cd8_vs_cd4": -0.13
+      },
+      "GZMB": "not in the matrix",
+      "GZMH": {
+        "CD4T": {
+          "detected_pct": 44.2,
+          "mean_log2": 9.35
+        },
+        "CD8T": {
+          "detected_pct": 44.1,
+          "mean_log2": 9.39
+        },
+        "NK": {
+          "detected_pct": 39.8,
+          "mean_log2": 9.89
+        },
+        "cohens_d_cd8_vs_cd4": 0.05
+      },
+      "GZMK": {
+        "CD4T": {
+          "detected_pct": 80.1,
+          "mean_log2": 9.22
+        },
+        "CD8T": {
+          "detected_pct": 81.7,
+          "mean_log2": 9.24
+        },
+        "NK": {
+          "detected_pct": 81.4,
+          "mean_log2": 10.05
+        },
+        "cohens_d_cd8_vs_cd4": 0.02
+      },
+      "GZMM": {
+        "CD4T": {
+          "detected_pct": 24.3,
+          "mean_log2": 8.37
+        },
+        "CD8T": {
+          "detected_pct": 31.8,
+          "mean_log2": 8.5
+        },
+        "NK": {
+          "detected_pct": 33.3,
+          "mean_log2": 8.67
+        },
+        "cohens_d_cd8_vs_cd4": 0.19
+      },
+      "PRF1": {
+        "CD4T": {
+          "detected_pct": 99.3,
+          "mean_log2": 10.19
+        },
+        "CD8T": {
+          "detected_pct": 99.1,
+          "mean_log2": 10.24
+        },
+        "NK": {
+          "detected_pct": 100.0,
+          "mean_log2": 11.09
+        },
+        "cohens_d_cd8_vs_cd4": 0.1
+      },
+      "NKG7": "not in the matrix",
+      "GNLY": {
+        "CD4T": {
+          "detected_pct": 31.2,
+          "mean_log2": 9.93
+        },
+        "CD8T": {
+          "detected_pct": 30.9,
+          "mean_log2": 9.94
+        },
+        "NK": {
+          "detected_pct": 43.3,
+          "mean_log2": 12.12
+        },
+        "cohens_d_cd8_vs_cd4": 0.02
+      },
+      "CCL5": {
+        "CD4T": {
+          "detected_pct": 2.9,
+          "mean_log2": 7.71
+        },
+        "CD8T": {
+          "detected_pct": 2.7,
+          "mean_log2": 8.73
+        },
+        "NK": {
+          "detected_pct": 1.3,
+          "mean_log2": 8.38
+        },
+        "cohens_d_cd8_vs_cd4": 1.22
+      },
+      "CST7": {
+        "CD4T": {
+          "detected_pct": 2.2,
+          "mean_log2": 8.14
+        },
+        "CD8T": {
+          "detected_pct": 3.6,
+          "mean_log2": 9.0
+        },
+        "NK": {
+          "detected_pct": 4.3,
+          "mean_log2": 9.58
+        },
+        "cohens_d_cd8_vs_cd4": 1.32
+      },
+      "FCGR3A": {
+        "CD4T": {
+          "detected_pct": 4.4,
+          "mean_log2": 8.31
+        },
+        "CD8T": {
+          "detected_pct": 8.1,
+          "mean_log2": 8.74
+        },
+        "NK": {
+          "detected_pct": 5.6,
+          "mean_log2": 8.51
+        },
+        "cohens_d_cd8_vs_cd4": 0.58
+      },
+      "IL7R": "not in the matrix",
+      "CCR7": "not in the matrix",
+      "SELL": "not in the matrix",
+      "LEF1": "not in the matrix",
+      "TCF7": {
+        "CD4T": {
+          "detected_pct": 0.2,
+          "mean_log2": 7.81
+        },
+        "CD8T": {
+          "detected_pct": 0.3,
+          "mean_log2": 7.01
+        },
+        "NK": {
+          "detected_pct": 0.4,
+          "mean_log2": 7.51
+        }
+      },
+      "CD27": "not in the matrix",
+      "CD28": "not in the matrix",
+      "LTB": {
+        "CD4T": {
+          "detected_pct": 62.4,
+          "mean_log2": 10.12
+        },
+        "CD8T": {
+          "detected_pct": 64.9,
+          "mean_log2": 10.24
+        },
+        "NK": {
+          "detected_pct": 71.9,
+          "mean_log2": 10.23
+        },
+        "cohens_d_cd8_vs_cd4": 0.26
+      },
+      "S100A4": {
+        "CD4T": {
+          "detected_pct": 100.0,
+          "mean_log2": 15.06
+        },
+        "CD8T": {
+          "detected_pct": 100.0,
+          "mean_log2": 13.96
+        },
+        "NK": {
+          "detected_pct": 100.0,
+          "mean_log2": 14.66
+        },
+        "cohens_d_cd8_vs_cd4": -2.09
+      },
+      "ANXA1": {
+        "CD4T": {
+          "detected_pct": 100.0,
+          "mean_log2": 14.03
+        },
+        "CD8T": {
+          "detected_pct": 100.0,
+          "mean_log2": 13.09
+        },
+        "NK": {
+          "detected_pct": 100.0,
+          "mean_log2": 13.48
+        },
+        "cohens_d_cd8_vs_cd4": -1.93
+      },
+      "LCK": {
+        "CD4T": {
+          "detected_pct": 66.3,
+          "mean_log2": 9.63
+        },
+        "CD8T": {
+          "detected_pct": 68.2,
+          "mean_log2": 9.87
+        },
+        "NK": {
+          "detected_pct": 68.8,
+          "mean_log2": 9.84
+        },
+        "cohens_d_cd8_vs_cd4": 0.33
+      },
+      "IL32": {
+        "CD4T": {
+          "detected_pct": 62.4,
+          "mean_log2": 10.38
+        },
+        "CD8T": {
+          "detected_pct": 64.9,
+          "mean_log2": 10.54
+        },
+        "NK": {
+          "detected_pct": 71.9,
+          "mean_log2": 10.44
+        },
+        "cohens_d_cd8_vs_cd4": 0.25
+      }
+    },
+    "auc_cd8_cluster_vs_cd4_cluster": {
+      "CD8A": {
+        "auc_cd8_cluster": 0.611,
+        "cells": 248
+      },
+      "S100A4": {
+        "auc_cd8_cluster": 0.073,
+        "cells": 740
+      },
+      "ANXA1": {
+        "auc_cd8_cluster": 0.087,
+        "cells": 740
+      }
+    },
+    "fine_classes_called": {
+      "v3.1": {
+        "CD4T": {
+          "CD4 T": 72.0,
+          "CD8 T": 12.8,
+          "naive CD4 T": 11.3,
+          "Treg": 1.2,
+          "platelet": 1.0,
+          "NK": 1.0
+        },
+        "CD8T": {
+          "naive CD4 T": 78.7,
+          "CD4 T": 15.3,
+          "CD8 T": 2.7,
+          "B": 1.8,
+          "monocyte": 0.6,
+          "mature nk t cell": 0.3
+        }
+      },
+      "v4.1": {
+        "CD4T": {
+          "CD4 T": 68.1,
+          "CD8 T": 13.0,
+          "naive CD4 T": 9.3,
+          "Treg": 5.4,
+          "platelet": 2.2,
+          "mature nk t cell": 1.2
+        },
+        "CD8T": {
+          "naive CD4 T": 53.5,
+          "CD4 T": 35.4,
+          "B": 3.6,
+          "CD8 T": 2.7,
+          "erythrocyte": 2.7,
+          "mature nk t cell": 0.9
+        }
+      },
+      "v5.1": {
+        "CD4T": {
+          "CD4 T": 60.7,
+          "CD8 T": 25.6,
+          "naive CD4 T": 6.6,
+          "Treg": 3.9,
+          "platelet": 2.0,
+          "monocyte": 0.5
+        },
+        "CD8T": {
+          "naive CD4 T": 41.1,
+          "CD4 T": 37.5,
+          "CD8 T": 7.8,
+          "B": 6.9,
+          "erythrocyte": 3.3,
+          "NK": 1.8
+        }
+      }
+    }
+  },
+  "reference": {
+    "expression_by_class": {
+      "naive CD4 T": {
+        "S100A4": {
+          "mean": 1.67,
+          "detected_pct": 93.3
+        },
+        "ANXA1": {
+          "mean": 0.67,
+          "detected_pct": 53.1
+        },
+        "CD8A": {
+          "mean": 0.05,
+          "detected_pct": 4.9
+        },
+        "CD8B": {
+          "mean": 0.17,
+          "detected_pct": 10.8
+        },
+        "CD4": {
+          "mean": 0.17,
+          "detected_pct": 19.6
+        },
+        "GZMA": {
+          "mean": 0.08,
+          "detected_pct": 7.6
+        },
+        "GZMK": {
+          "mean": 0.07,
+          "detected_pct": 3.7
+        },
+        "CCL5": {
+          "mean": 0.18,
+          "detected_pct": 18.0
+        },
+        "CCR7": {
+          "mean": 1.13,
+          "detected_pct": 87.8
+        },
+        "SELL": {
+          "mean": 1.0,
+          "detected_pct": 78.0
+        },
+        "LEF1": {
+          "mean": 1.82,
+          "detected_pct": 91.2
+        },
+        "IL7R": {
+          "mean": 2.46,
+          "detected_pct": 97.6
+        }
+      },
+      "CD4 T": {
+        "S100A4": {
+          "mean": 1.73,
+          "detected_pct": 81.4
+        },
+        "ANXA1": {
+          "mean": 0.83,
+          "detected_pct": 55.9
+        },
+        "CD8A": {
+          "mean": 0.23,
+          "detected_pct": 16.8
+        },
+        "CD8B": {
+          "mean": 0.26,
+          "detected_pct": 17.5
+        },
+        "CD4": {
+          "mean": 0.44,
+          "detected_pct": 42.8
+        },
+        "GZMA": {
+          "mean": 0.21,
+          "detected_pct": 13.5
+        },
+        "GZMK": {
+          "mean": 0.16,
+          "detected_pct": 8.2
+        },
+        "CCL5": {
+          "mean": 0.35,
+          "detected_pct": 19.6
+        },
+        "CCR7": {
+          "mean": 0.79,
+          "detected_pct": 56.0
+        },
+        "SELL": {
+          "mean": 1.09,
+          "detected_pct": 71.2
+        },
+        "LEF1": {
+          "mean": 1.51,
+          "detected_pct": 79.0
+        },
+        "IL7R": {
+          "mean": 2.18,
+          "detected_pct": 89.2
+        }
+      },
+      "Treg": {
+        "S100A4": {
+          "mean": 3.39,
+          "detected_pct": 100.0
+        },
+        "ANXA1": {
+          "mean": 0.19,
+          "detected_pct": 15.0
+        },
+        "CD8A": {
+          "mean": 0.0,
+          "detected_pct": 0.0
+        },
+        "CD8B": {
+          "mean": 0.0,
+          "detected_pct": 0.0
+        },
+        "CD4": {
+          "mean": 0.72,
+          "detected_pct": 52.5
+        },
+        "GZMA": {
+          "mean": 0.25,
+          "detected_pct": 17.5
+        },
+        "GZMK": {
+          "mean": 0.16,
+          "detected_pct": 5.0
+        },
+        "CCL5": {
+          "mean": 0.03,
+          "detected_pct": 2.5
+        },
+        "CCR7": {
+          "mean": 0.41,
+          "detected_pct": 32.5
+        },
+        "SELL": {
+          "mean": 1.52,
+          "detected_pct": 77.5
+        },
+        "LEF1": {
+          "mean": 1.33,
+          "detected_pct": 65.0
+        },
+        "IL7R": {
+          "mean": 0.83,
+          "detected_pct": 52.5
+        }
+      },
+      "CD8 T": {
+        "S100A4": {
+          "mean": 2.24,
+          "detected_pct": 96.1
+        },
+        "ANXA1": {
+          "mean": 1.35,
+          "detected_pct": 82.3
+        },
+        "CD8A": {
+          "mean": 0.77,
+          "detected_pct": 49.2
+        },
+        "CD8B": {
+          "mean": 0.61,
+          "detected_pct": 38.2
+        },
+        "CD4": {
+          "mean": 0.09,
+          "detected_pct": 8.6
+        },
+        "GZMA": {
+          "mean": 1.95,
+          "detected_pct": 92.1
+        },
+        "GZMK": {
+          "mean": 0.54,
+          "detected_pct": 29.7
+        },
+        "CCL5": {
+          "mean": 2.53,
+          "detected_pct": 91.6
+        },
+        "CCR7": {
+          "mean": 0.04,
+          "detected_pct": 4.0
+        },
+        "SELL": {
+          "mean": 0.49,
+          "detected_pct": 36.2
+        },
+        "LEF1": {
+          "mean": 0.3,
+          "detected_pct": 23.7
+        },
+        "IL7R": {
+          "mean": 1.45,
+          "detected_pct": 60.8
+        }
+      },
+      "NK": {
+        "S100A4": {
+          "mean": 1.99,
+          "detected_pct": 95.6
+        },
+        "ANXA1": {
+          "mean": 1.18,
+          "detected_pct": 77.6
+        },
+        "CD8A": {
+          "mean": 0.18,
+          "detected_pct": 16.8
+        },
+        "CD8B": {
+          "mean": 0.02,
+          "detected_pct": 1.7
+        },
+        "CD4": {
+          "mean": 0.0,
+          "detected_pct": 0.5
+        },
+        "GZMA": {
+          "mean": 2.13,
+          "detected_pct": 96.6
+        },
+        "GZMK": {
+          "mean": 0.13,
+          "detected_pct": 10.3
+        },
+        "CCL5": {
+          "mean": 2.16,
+          "detected_pct": 83.3
+        },
+        "CCR7": {
+          "mean": 0.01,
+          "detected_pct": 1.3
+        },
+        "SELL": {
+          "mean": 0.38,
+          "detected_pct": 30.1
+        },
+        "LEF1": {
+          "mean": 0.13,
+          "detected_pct": 12.5
+        },
+        "IL7R": {
+          "mean": 0.29,
+          "detected_pct": 16.4
+        }
+      }
+    },
+    "naive_cd8_like_cells": 356,
+    "naive_cd8_like_by_class": {
+      "CD4 T": 320,
+      "naive CD4 T": 26,
+      "CD8 T": 5,
+      "B": 5
+    },
+    "per_class": {
+      "naive CD4 T": {
+        "cells": 490,
+        "cd8ab_detected_pct": 11.2,
+        "naive_cd8_like": 26,
+        "cd8ab_detected_cd4_not": 55,
+        "cd8ab_detected_cd4_not_naive_like": 48
+      },
+      "CD4 T": {
+        "cells": 4900,
+        "cd8ab_detected_pct": 19.7,
+        "naive_cd8_like": 320,
+        "cd8ab_detected_cd4_not": 922,
+        "cd8ab_detected_cd4_not_naive_like": 518
+      },
+      "Treg": {
+        "cells": 40,
+        "cd8ab_detected_pct": 0.0,
+        "naive_cd8_like": 0,
+        "cd8ab_detected_cd4_not": 0,
+        "cd8ab_detected_cd4_not_naive_like": 0
+      },
+      "CD8 T": {
+        "cells": 2738,
+        "cd8ab_detected_pct": 53.1,
+        "naive_cd8_like": 5,
+        "cd8ab_detected_cd4_not": 1415,
+        "cd8ab_detected_cd4_not_naive_like": 46
+      },
+      "NK": {
+        "cells": 5093,
+        "cd8ab_detected_pct": 17.6,
+        "naive_cd8_like": 0,
+        "cd8ab_detected_cd4_not": 891,
+        "cd8ab_detected_cd4_not_naive_like": 14
+      }
+    },
+    "free_annotation_naive": {
+      "naive b cell": 2234,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 490,
+      "naive cd8-positive t cell": 6
+    }
+  }
+}
