@@ -264,3 +264,25 @@ v3.1 98.1 / 97.2, Harmony 98.7 / 96.2, scANVI 97.1 / 97.9.
    at a coarser level, so that part is not compared.
 
 So the claim that v3.1 beats the baselines does not survive fair inputs.
+
+## Runs on a candidate's own reference labels (2026-10-15)
+
+A model trained on relabelled reference cells is compared with baselines that
+used the same labels, so a gain from better labels is not credited to the
+model (`research/benchmark/protocol-sorted-cd4cd8.md`, rule 4).
+
+- `benchmark/baselines_corrected.py --labels clean|v51|v52` replaces the RNA
+  side's classes with a label table from `research/notebook-outputs/`
+  (`v5_labels/`, `v51_labels/`, `v52_labels/`), joined by cell and checked
+  against each cell's original class. The class-balanced scaling follows the
+  new labels. Nothing else changes.
+- Runs go to `benchmark/results/baselines_corrected_labels_<set>/`, never over
+  the original runs; each record names the label file and its sha256.
+- The queue takes the set as its second argument
+  (`benchmark/baselines_corrected_queue.sh fulcher2026 v52`), and
+  `benchmark/baselines_corrected_score.py --labels <set>` tables its runs apart.
+- First runs, Fulcher 2026 with v5.2's labels (the sha256 the sorted protocol
+  froze, 3,400 cells relabelled, 21 classes): correlation and PCA completed;
+  RNA-side checks 74.5% (correlation) and 65.8% (PCA kNN), chance 4.8%. The
+  slow tools run in the owner's terminal.
+

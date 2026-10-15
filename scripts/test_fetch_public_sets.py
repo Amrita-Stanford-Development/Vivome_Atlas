@@ -62,7 +62,7 @@ class TableTests(unittest.TestCase):
                 algorithm, value = e["check"]
                 self.assertEqual(len(value), {"sha1": 40, "md5": 32}[algorithm], key)
 
-    def test_side_tests_are_never_mixed_into_the_free_groups(self):
+    def test_held_out_sets_are_never_mixed_into_the_free_groups(self):
         roles = {}
         for e in f.ENTRIES:
             roles.setdefault(e["group"], set()).add(e["role"])
@@ -96,7 +96,7 @@ class DownloaderTests(unittest.TestCase):
         self.tmp.cleanup()
 
     def item(self, **kw):
-        base = f.entry("g", "side_test", "file.bin", self.url, len(PAYLOAD))
+        base = f.entry("g", "held_out", "file.bin", self.url, len(PAYLOAD))
         return {**base, **kw}
 
     def test_a_file_is_fetched_in_ranges_and_recorded(self):

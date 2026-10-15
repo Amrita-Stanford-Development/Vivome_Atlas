@@ -10,9 +10,13 @@ v31_confident.csv, paired_bootstrap.csv), plus setup_checks.csv: every run's
 RNA-side checks, which use RNA labels only.
 
     python -m benchmark.baselines_corrected_score      # from the repository root
+    python -m benchmark.baselines_corrected_score --labels v52
+    # the runs made on another reference label set (baselines_corrected.py --labels),
+    # tabled in research/benchmark/baselines_corrected_labels_<set>/
 """
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -23,6 +27,7 @@ from benchmark import baselines_corrected, baselines_inputs, datasets
 from benchmark import baselines_score as original
 
 OUT = datasets.REPO / "research" / "benchmark" / "baselines_corrected"
+RUNS = baselines_corrected.OUT  # main() points both at another label set's
 RULES = {**original.RULES, "clf": "scANVI classifier", "match": "MaxFuse matching"}
 BASELINE_RULES = ("knn", "nc", "native", "corr", "clf", "match")
 
@@ -30,7 +35,7 @@ BASELINE_RULES = ("knn", "nc", "native", "corr", "clf", "match")
 def records(dataset: str):
     for tool in baselines_corrected.TOOLS:
         for seed in (0, 1, 2):
-            path = baselines_corrected.OUT / dataset / f"{tool}_seed{seed}.json"
+            path = RUNS / dataset / f"{tool}_seed{seed}.json"
             if path.exists():
                 yield tool, seed, path.with_name(path.stem), json.loads(path.read_text())
 
@@ -56,6 +61,13 @@ def setup_table(names) -> pd.DataFrame:
 
 
 def main() -> None:
+    global OUT, RUNS
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--labels", choices=tuple(baselines_corrected.LABEL_SETS), default="original")
+    labels = parser.parse_args().labels
+    if labels != "original":
+        RUNS = baselines_corrected.out_dir(labels)
+        OUT = OUT.with_name(f"baselines_corrected_labels_{labels}")
     # baselines_score's functions read these module names when they run
     original.runs, original.RULES, original.BASELINE_RULES = runs, RULES, BASELINE_RULES
     OUT.mkdir(parents=True, exist_ok=True)

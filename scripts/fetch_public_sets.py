@@ -2,12 +2,17 @@
 (research/benchmark/side-tests.md lists what each one is for and why).
 
 Each entry has a role:
-- reference: sorted bulk proteomes, free to use for development and diagnosis;
-- development: unsorted PBMC single cells (their labels come from clustering),
-  free to use for development;
-- side_test: single-cell or pooled data with independent labels. These stay
-  sealed: they are downloaded and checksummed here, nothing opens their label
-  tables until the side test's own protocol is written and committed.
+- reference: sorted bulk proteomes (Rieckmann; Khoury's), free to use for development and
+  diagnosis, except Khoury's, which belongs to a post-hoc-only study: diagnosis only, never
+  used to build or tune a model;
+- development: free to use for development (since 2026-10-15, the owner's
+  decision, this includes some sets first chosen as side tests);
+- held_out: the internal test, locked on 2026-10-15 before any development:
+  nothing opens these files until the end, when each is scored once on the
+  final candidates under its own committed protocol;
+- reserve: not downloaded, kept as a future test or future development data
+  (tier B's single HeLa and HEK293T). research/benchmark/side-tests.md lists
+  the other alternatives.
 
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
@@ -46,7 +51,7 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "data" / "incoming" / "public_sets"
 RECORD = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 CHUNK = 8 << 20
-ROLES, TIERS = ("reference", "development", "side_test"), ("A", "B")
+ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B")
 RAW_SUFFIXES = (".raw", ".d.zip", ".wiff", ".mzml", ".mzml.zip", ".mzml.gz")
 HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu")
 PRIDE = "https://ftp.pride.ebi.ac.uk/pride/data/archive"
@@ -69,44 +74,45 @@ ENTRIES = (
     pride("Rieckmann2017_PXD004352", "reference", "PXD004352", "2017/03", "PXD004352_community_annotated.sdrf.tsv", 468141),
     entry("Khoury2026_bulk_sorted", "reference", "Bulk_R1_LibGen_Global.zip", f"{ZENODO}/22649483/files/Bulk_R1_LibGen_Global.zip/content",
           577290773, ("md5", "ef370a6b9ff84b72f5543b38f641495f")),
-    entry("Tian_MSV000087462", "reference", "proteinGroupsCD3CD4CD8.xlsx",
-          f"{MASSIVE}/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsCD3CD4CD8.xlsx", 10796475),
-    entry("Tian_MSV000087462", "reference", "proteinGroupsMMsample.xlsx",
-          f"{MASSIVE}/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsMMsample.xlsx", 18004656),
     # development: unsorted PBMC single cells (Hendriks, Olsen; labels from clustering)
     pride("PXD070599_PBMC", "development", "PXD070599", "2026/08", "DS18_DIANN.tar.gz", 673262730),
     pride("PXD070599_PBMC", "development", "PXD070599", "2026/08", "DS19_DIANN.tar.gz", 881944156),
     pride("PXD070599_PBMC", "development", "PXD070599", "2026/08", "DataSet_to_rawfile_mapping_methods.txt", 992774),
     pride("PXD070599_PBMC", "development", "PXD070599", "2026/08", "DataSet_to_figure_mapping.txt", 2867),
-    # side tests, sealed
-    pride("PXD073250", "side_test", "PXD073250", "2026/06", "report.pg_matrix.tsv", 6073326),
-    pride("PXD073250", "side_test", "PXD073250", "2026/06", "report.pr_matrix.tsv", 49988348),
-    pride("PXD073250", "side_test", "PXD073250", "2026/06", "report.stats.tsv", 132629),
-    pride("PXD073250", "side_test", "PXD073250", "2026/06", "report.log.txt", 877815),
-    pride("PXD061065", "side_test", "PXD061065", "2025/11", "20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv", 31598500),
-    pride("PXD061065", "side_test", "PXD061065", "2025/11", "PXD061065_community_annotated.sdrf.tsv", 329881),
-    pride("PXD061052", "side_test", "PXD061052", "2025/11", "20241206_144402_gbm_minibulk_full_fasta_19.4_Report.tsv", 4995983),
-    pride("PXD043355", "side_test", "PXD043355", "2023/10", "HeLa_VS_Jurkat_Proteins.txt", 9757952, "76723d5ad8649d5dab3188dff89a6d0691149664"),
-    pride("PXD043355", "side_test", "PXD043355", "2023/10", "HeLa_VS_Jurkat_InputFiles.txt", 11731, "1aebd5319e8de86de82677ae31de19dc1efeb9f2"),
-    pride("PXD043355", "side_test", "PXD043355", "2023/10", "PXD043355_community_annotated.sdrf.tsv", 130591),
-    pride("PXD077946", "side_test", "PXD077946", "2026/09", "diann_singlecell.zip", 16952702),
-    pride("PXD020586", "side_test", "PXD020586", "2021/05", "SCeptre_FINAL.zip", 980777917, "bdc7daffe7ad9108adb2b2973d2cf7407dd1ec45"),
-    pride("PXD020586", "side_test", "PXD020586", "2021/05", "PXD020586_community_annotated.sdrf.tsv", 3820932),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "quant.cbio.tsv", 293233038, "a600d1be2b7c5a65e398a52354e069871b69c2a6"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sample_to_data.sdrf.tsv", 199010, "584f2e7e98fa1ceed4f0f66dc61576ff555b8f96"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotations.csv", 35750, "f55be751ecda8d36560549ae90a6b6abc31f8aa4"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_cbio681.csv", 2948, "b340f68f74c1a5ac6612a626d5c87bddd9086a1a"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_cbio703.csv", 2948, "9cff714e17062b156e2c9e981f2c68e858e99c2b"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_cbio715.csv", 3926, "ed7913ea58f5960a039b1877aa8dd16d82728e0e"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_cbio725.csv", 5899, "4a7319bd620399d32ce4f9de3e1baa4e7c500ba6"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_cbio733.csv", 6027, "fa5a5db488fddbabac87d7b0ed7dcd24998c7f58"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_cbio754bis.csv", 5963, "23775f41af6a5ec9661b42fedaf48a7c6154c5ba"),
-    pride("PXD046211", "side_test", "PXD046211", "2024/02", "sampleAnnotation_GIGA.csv", 3107, "dd361d805e1100d91b96213cf991adac63c2c978"),
-    entry("PXD046211", "side_test", "sample_annotation.zip", f"{ZENODO}/8417228/files/sample_annotation.zip/content", 5838,
+    # first chosen as side tests; since 2026-10-15 (research/benchmark/side-tests.md,
+    # amendment 1) each is either development or held out as the internal test
+    entry("Tian_MSV000087462", "held_out", "proteinGroupsCD3CD4CD8.xlsx",
+          f"{MASSIVE}/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsCD3CD4CD8.xlsx", 10796475),
+    entry("Tian_MSV000087462", "held_out", "proteinGroupsMMsample.xlsx",
+          f"{MASSIVE}/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsMMsample.xlsx", 18004656),
+    pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.pg_matrix.tsv", 6073326),
+    pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.pr_matrix.tsv", 49988348),
+    pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.stats.tsv", 132629),
+    pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.log.txt", 877815),
+    pride("PXD061065", "held_out", "PXD061065", "2025/11", "20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv", 31598500),
+    pride("PXD061065", "held_out", "PXD061065", "2025/11", "PXD061065_community_annotated.sdrf.tsv", 329881),
+    pride("PXD061052", "development", "PXD061052", "2025/11", "20241206_144402_gbm_minibulk_full_fasta_19.4_Report.tsv", 4995983),
+    pride("PXD043355", "held_out", "PXD043355", "2023/10", "HeLa_VS_Jurkat_Proteins.txt", 9757952, "76723d5ad8649d5dab3188dff89a6d0691149664"),
+    pride("PXD043355", "held_out", "PXD043355", "2023/10", "HeLa_VS_Jurkat_InputFiles.txt", 11731, "1aebd5319e8de86de82677ae31de19dc1efeb9f2"),
+    pride("PXD043355", "held_out", "PXD043355", "2023/10", "PXD043355_community_annotated.sdrf.tsv", 130591),
+    pride("PXD077946", "development", "PXD077946", "2026/09", "diann_singlecell.zip", 16952702),
+    pride("PXD020586", "development", "PXD020586", "2021/05", "SCeptre_FINAL.zip", 980777917, "bdc7daffe7ad9108adb2b2973d2cf7407dd1ec45"),
+    pride("PXD020586", "development", "PXD020586", "2021/05", "PXD020586_community_annotated.sdrf.tsv", 3820932),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "quant.cbio.tsv", 293233038, "a600d1be2b7c5a65e398a52354e069871b69c2a6"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sample_to_data.sdrf.tsv", 199010, "584f2e7e98fa1ceed4f0f66dc61576ff555b8f96"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotations.csv", 35750, "f55be751ecda8d36560549ae90a6b6abc31f8aa4"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio681.csv", 2948, "b340f68f74c1a5ac6612a626d5c87bddd9086a1a"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio703.csv", 2948, "9cff714e17062b156e2c9e981f2c68e858e99c2b"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio715.csv", 3926, "ed7913ea58f5960a039b1877aa8dd16d82728e0e"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio725.csv", 5899, "4a7319bd620399d32ce4f9de3e1baa4e7c500ba6"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio733.csv", 6027, "fa5a5db488fddbabac87d7b0ed7dcd24998c7f58"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio754bis.csv", 5963, "23775f41af6a5ec9661b42fedaf48a7c6154c5ba"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_GIGA.csv", 3107, "dd361d805e1100d91b96213cf991adac63c2c978"),
+    entry("PXD046211", "held_out", "sample_annotation.zip", f"{ZENODO}/8417228/files/sample_annotation.zip/content", 5838,
           ("md5", "47b33c0f6e4a6b326035dfd51cf24313")),
-    pride("PXD021882", "side_test", "PXD021882", "2020/12", "proteinGroups.txt", 6946011, "bfeec099e680b4036c6941088dfa04379a1ef777"),
-    pride("PXD021882", "side_test", "PXD021882", "2020/12", "tables.pdf", 54650, "eff128344b41e58a253e5fbc147903a719879ec2"),
-    *[entry("MSV000099294", "side_test", n, f"{MASSIVE}/v11/MSV000099294/quant/Spectronaut/{d}/{n}", s)
+    pride("PXD021882", "held_out", "PXD021882", "2020/12", "proteinGroups.txt", 6946011, "bfeec099e680b4036c6941088dfa04379a1ef777"),
+    pride("PXD021882", "held_out", "PXD021882", "2020/12", "tables.pdf", 54650, "eff128344b41e58a253e5fbc147903a719879ec2"),
+    *[entry("MSV000099294", "development", n, f"{MASSIVE}/v11/MSV000099294/quant/Spectronaut/{d}/{n}", s)
       for d, n, s in (
           ("DirectDIA_Microglia_1cell_Reports", "DirectDIA_Microglia_1cell_Protein_Quant_Pivot_Report.tsv", 1285592),
           ("DirectDIA_Microglia_1cell_Reports", "DirectDIA_Microglia_1cell_ExperimentAnalysis.txt", 1376),
@@ -115,7 +121,7 @@ ENTRIES = (
           ("DirectDIA_HMC3_1cell_Reports", "DirectDIA_HMC3_1cell_ExperimentAnalysis.txt", 1399),
           ("DirectDIA_HMC3_1cell_Reports", "DirectDIA_HMC3_1cell_IdentificationsOverview.tsv", 3802))],
     # tier B: PXD070599's single HeLa and HEK293T cells (abstention), DIA-NN outputs
-    *[pride("PXD070599_HeLa_HEK", "side_test", "PXD070599", "2026/08", f"DS{n}_DIANN.tar.gz", s, tier="B")
+    *[pride("PXD070599_HeLa_HEK", "reserve", "PXD070599", "2026/08", f"DS{n}_DIANN.tar.gz", s, tier="B")
       for n, s in ((12, 1676819567), (15, 1276924248), (14, 4290218537), (25, 4528065652), (16, 5086300411), (13, 7217998803))],
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
@@ -255,7 +261,7 @@ def main() -> int:
             for name in names:
                 path = ROOT / group / name
                 if path.exists():
-                    record[f"{group}/{name}"] = {"role": "side_test", "tier": "A", "url": "saved by hand from the paper's supplementary files (PMC13315484)",
+                    record[f"{group}/{name}"] = {"role": "held_out", "tier": "A", "url": "saved by hand from the paper's supplementary files (PMC13315484)",
                                                  "bytes": path.stat().st_size, "sha256": digest(path, "sha256"), "published_check": None,
                                                  "fetched": str(date.today())}
                 else:

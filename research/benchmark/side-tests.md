@@ -1,9 +1,73 @@
-# Side tests: narrower checks on public data with independent labels
+# Public data: the internal held-out test, development sets and alternatives
 
 Written 2026-10-14, from a five-agent search followed by spot checks of the
 key facts against the repositories. No public dataset can replace the main
 test (`research/benchmark/protocol-sorted-cd4cd8.md`: CD4 T and CD8 T sorted
 separately, single cells). These can each answer one narrower question.
+
+**Roles changed on 2026-10-15** (amendment 1, below): most of what is on disk
+is development data, a fixed part is held out as the internal test, and
+external testing waits for the requested sorted cells.
+
+## Amendment 1, 2026-10-15: roles, before any development (owner's decision)
+
+The owner chose to develop on most of the data we have and to hold out a fixed
+part as an internal test, so that a paper can say the model works on data set
+aside before development and scored once. External testing waits for the
+sorted cells requested by email.
+
+| Weak spot | Development (free to use) | Held out (internal test) |
+|---|---|---|
+| Dendritic cells, B, monocytes | Hao 2021 donors P1–P4; every donor's T/NK cells | Hao 2021 donors P5–P8, non-T/NK cells, as simulated uploads |
+| CD8 vs CD4 T, NK | Rieckmann 2017 (PXD004352), sorted proteomes | Tian (MSV000087462), sorted T-cell bulk |
+| Macrophage vs monocyte | SCoPE2 | PXD046211 (THP-1 and U-937, with and without PMA) |
+| Refusing foreign cells | MSV000099294 (microglia, HMC3), PXD077946, Furtwängler 2025 | PXD043355 (Jurkat and HeLa) |
+| Neutrophils | PXD061052 (pools) | PXD061065 (single cells; the same study, so reported with that caveat) |
+| Immune vs non-immune | | PXD073250 (whole) |
+| B vs T lineage | | PXD021882 (whole) |
+| General | Fulcher 2026, PBMC240, PXD070599 PBMC runs DS18 and DS19, PXD020586 | |
+
+- **Hao 2021's split is by donor, and so by batch** (P1–P4 are its Batch1,
+  P5–P8 its Batch2). Its T/NK cells built v5.2's labels
+  (`research/notebooks/v52_labels.py`, all 8 donors), so they are development
+  everywhere and may appear in held-out uploads only as unscored context. The
+  held-out suite is RNA: it tests transfer across donors and atlases, never
+  protein.
+- **Locked means:** no label table, sort gate, per-cell annotation or protein
+  list of a held-out set is opened before its scoring. Each gets a committed
+  protocol with one primary comparison and a committed intake script before
+  then; the intake is written from the deposit's documentation and
+  rehearsed on a development set of the same format.
+- **Scored once, at the end,** on the final candidates and the frozen v4.1 and
+  v5.2, and reported as an internal held-out test, never as external
+  validation.
+- **Khoury 2026 stays post-hoc only;** its bulk file stays diagnosis only.
+- **The sorted CD4/CD8 cells, if they arrive mid-plan,** are scored at once
+  under their protocol with v4.1 and v5.2.
+
+### Alternatives kept unused, for future tests or future development
+
+Nothing below has been downloaded or opened, so each can still serve as a
+future test; once a test is used, it becomes development and the next one
+comes from here. Keep this list current.
+
+- **Requested by email:** Krisp et al. (sorted CD4, CD8, CD19, CD14 single
+  cells; the main test) and O'Connor et al. (sorted T, B, NK, monocytes).
+- **Data requests not yet made:** Brenes et al. (sorted blood neutrophils) and
+  Lange et al. (CD19-sorted B cells).
+- **Embargoed or restricted, to re-check:** PXD084266, PXD080834, PXD076177,
+  the HUPO inter-lab benchmark (Zenodo 21181080).
+- **Public, not downloaded:**
+  - PXD070599's single HeLa and HEK293T (tier B, 24 GB; role `reserve` in
+    `scripts/fetch_public_sets.py`);
+  - MSV000093867 (HEK293T and THP-1 ± LPS, raw only);
+  - PXD026604 (sorted monocyte subsets, 31 GB `.msf`);
+  - MSV000097303 (CD14+/CD19+/CD3+ pools, surfaceome), PXD076140 (PBMC
+    subsets by CD14), MSV000093644 (CD4, CD8, NK, B library);
+  - cell-line sets MSV000097281, MSV000090792, MSV000102108, PXD070341,
+    PXD054944, PXD070012, PXD036211;
+  - Hao 2021's ADT matrix and its 5' dataset (GEO GSE164378);
+  - the unverified Peking University iProX leads PXD064083 and PXD049099.
 
 ## What counts as a side test
 
@@ -64,17 +128,23 @@ fetched. Each group has one role, fixed in the script's table:
 
 | Role | Groups | Size | Use |
 |---|---|---|---|
-| reference | Rieckmann 2017 (PXD004352: 28 sorted primary immune populations, MaxQuant output); Khoury's sorted bulk populations; Tian's sorted T-cell subtypes (MSV000087462) | 1.29 GB | Free for development and diagnosis |
-| development | PXD070599 PBMC runs DS18 and DS19 (unsorted, labels from clustering) with their mapping files | 1.56 GB | Free for development |
-| side_test | PXD073250, PXD061065, PXD061052, PXD043355, PXD077946, PXD020586, PXD046211, PXD021882, MSV000099294 | 1.43 GB | Sealed |
+| Role (since amendment 1) | Groups | Use |
+|---|---|---|
+| reference | Rieckmann 2017 (PXD004352: 28 sorted primary immune populations, MaxQuant output); Khoury's sorted bulk populations | Rieckmann: free for development. Khoury's: diagnosis only (see below) |
+| development | PXD070599 PBMC runs DS18 and DS19, MSV000099294, PXD077946, PXD061052, PXD020586 | Free for development |
+| held_out | Tian (MSV000087462), PXD046211, PXD043355, PXD061065, PXD073250, PXD021882 | The internal test: locked until the end (amendment 1) |
+| reserve | PXD070599 single HeLa and HEK293T (tier B, not downloaded) | A future test or future development |
 
-- **Sealed means:** downloaded and checksummed, nothing else. No label table,
-  sort gate or per-cell annotation of a side-test set is opened until that
-  side test's own protocol is committed. Listing file names and checking zip
-  sizes are allowed.
+- **Locked means:** downloaded and checksummed, nothing else, until scoring.
+  Listing file names and checking file sizes are allowed.
+- **Khoury's bulk file is diagnosis only.** Khoury 2026 is a post-hoc study
+  and its single cells are already used up for the CD8 diagnosis. The bulk
+  file may be used to ask what Khoury's own "CD8" cluster is. It is never
+  used to build a reference, a class mean or any setting of a model, and a
+  result from it is not a test of the model.
 - **A set changes role only by amendment,** dated and committed before the
   change takes effect. A set once used to develop or diagnose cannot become a
-  side test afterwards.
+  test afterwards.
 - **Not downloaded:** PXD070599's single HeLa and HEK293T search outputs
   (tier B, 24 GB; they repeat what the smaller abstention sets give);
   PXD026604 (31 GB `.msf` only); MSV000093867 (raw only); Zenodo 8417228's

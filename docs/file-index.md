@@ -107,6 +107,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
 - `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
 - `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
+- `service/tests/test_baselines_labels.py` — the corrected baselines' `--labels`: the join of a label set onto the benchmark's RNA cells by cell, refusing a misaligned or short table, and runs kept apart from the original ones
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
 - `service/tests/test_scope2_labels.py` — every copy of SCoPE2's labels must match the curated source (`research/benchmark/scope2_labels/corrected_labels.csv`)
 - `service/tests/test_alignment.py` — Stage 1 tests
@@ -245,9 +246,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/baselines_queue.sh` — runs the remaining baseline runs one at a time, skipping finished ones
 - `benchmark/baselines_v31.py` — Track D extension: v3.1 as served on SCoPE2, PBMC240 and Fulcher (best guess and confident answer per cell)
 - `benchmark/baselines_score.py` — Track D extension scoring, the only step that reads these labels: per-seed tables, summaries, v3.1's confident answers, paired bootstrap
-- `benchmark/baselines_corrected.py` — corrected baselines after the 2026-10-03 review: class-balanced RNA scaling, MaxFuse with its tutorial settings and native matching, scANVI on non-negative inputs, a plain PCA arm, setup checks; Khoury only with `--posthoc`
-- `benchmark/baselines_corrected_score.py` — scores the corrected baselines on SCoPE2, PBMC240 and Fulcher with `baselines_score.py`'s functions; adds the setup-check table
-- `benchmark/baselines_corrected_queue.sh` — every corrected tool and seed on one development dataset, one run at a time, skipping finished ones
+- `benchmark/baselines_corrected.py` — corrected baselines after the 2026-10-03 review: class-balanced RNA scaling, MaxFuse with its tutorial settings and native matching, scANVI on non-negative inputs, a plain PCA arm, setup checks; Khoury only with `--posthoc`; `--labels` reruns them on a candidate's own reference labels (clean, v51, v52) into their own directory
+- `benchmark/baselines_corrected_score.py` — scores the corrected baselines on SCoPE2, PBMC240 and Fulcher with `baselines_score.py`'s functions; adds the setup-check table; `--labels` tables a label set's runs apart
+- `benchmark/baselines_corrected_queue.sh` — every corrected tool and seed on one development dataset, one run at a time, skipping finished ones; an optional second argument picks the reference label set
 - `benchmark/baselines_v4.py` — Track G: v4 (Phase 4) or v4.1 (`--version v4.1`, Phase E) as served on the development uploads (best guess and confident answer per cell), and v3.1 on the reprocessed SCoPE2
 - `benchmark/baselines_v4_score.py` — Track G: v4 (Phase 4) or v4.1 (`--version v4.1`, Phase E) against every corrected baseline, v3.1 (and v4, for v4.1) on the development datasets, with `baselines_score.py`'s functions, and the plan's checks
 - `benchmark/khoury2026_posthoc_v4.py` — Khoury 2026 post-hoc: v4 as served, scored beside v3.1 and the corrected baselines with the sealed scorer's code
@@ -263,7 +264,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict
 - `scripts/build_v41_spec.py` — writes v4.1's spec (v4's with Phase A's locked rule and Phase C's verdict) and a MANIFEST pinning v4's data files
-- `scripts/fetch_public_sets.py` — fetches the public datasets of `research/benchmark/side-tests.md` (sorted bulk proteomes, unsorted PBMC single cells, sealed side tests) into `data/incoming/public_sets/`: processed outputs only, parallel resumable ranges, size and checksum verified, sha256 recorded
+- `scripts/fetch_public_sets.py` — fetches the public datasets of `research/benchmark/side-tests.md` (each group's role: reference, development, held out as the internal test, or reserve) into `data/incoming/public_sets/`: processed outputs only, parallel resumable ranges, size and checksum verified, sha256 recorded
 - `scripts/test_fetch_public_sets.py` — tests the table (roles, hosts, no raw files) and the downloader against a local range server: ranges, resume, size and checksum refusals
 - `research/benchmark/public-sets-downloads.json` — what `scripts/fetch_public_sets.py` fetched: each file's role, URL, size, sha256 and date
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
@@ -310,7 +311,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
 - `research/benchmark/protocol-khoury2026.md` — the Khoury 2026 final test set, sealed until its one scoring at the final v3.1 evaluation (2026-10-03): label-free facts recorded at sealing, the protocol and its seven amendments
 - `research/benchmark/protocol-sorted-cd4cd8.md` — the sorted CD4/CD8 test, written before any data: what qualifies, the sealing and intake rules, v4.1 and v5.2 frozen by sha256, the baselines (on each candidate's own reference labels), metrics and decision rules
-- `research/benchmark/side-tests.md` — the side tests: public datasets with independent labels for one narrower question (abstention, immune against keratinocyte, neutrophil, stem-like against blast, sorted bulk populations), verified from the 2026-10-14 search, with their caveats, the not-yet-public leads and the search's gaps
+- `research/benchmark/side-tests.md` — the public datasets found on 2026-10-14 and their roles since amendment 1 (2026-10-15): development sets, the internal held-out test (locked until the end), and the alternatives kept unused for future tests
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
 - `research/benchmark/fulcher2026/family_summary.csv` — Fulcher 2026: mean, SD, min and max of every metric per family and rule

@@ -9,6 +9,10 @@ before any corrected run; nothing here is tuned on a query label.
     python -m benchmark.baselines_corrected TOOL khoury2026 SEED --posthoc
     # Khoury 2026's labels were read at its one scoring; runs on it are post-hoc
     # --smoke N (development datasets only) subsamples N RNA cells, few epochs: plumbing only
+    python -m benchmark.baselines_corrected TOOL DATASET SEED --labels v52
+    # the reference cells relabelled as a candidate model's were (clean | v51 | v52), so
+    # each candidate is compared with baselines that used its own reference labels
+    # (protocol-sorted-cd4cd8.md, rule 4); written beside the original runs, never over them
 
 What changed from baselines_run.py (which stays as it was, the reference for
 the earlier tables and for Khoury's sealed result):
@@ -41,10 +45,38 @@ import pandas as pd
 from sklearn.metrics import balanced_accuracy_score
 from sklearn.neighbors import NearestNeighbors
 
-from benchmark import baselines_inputs, baselines_run
+from benchmark import baselines_inputs, baselines_run, datasets
 from benchmark.evaluate import KNN_K, SUPPORTED, knn_classifier_predict, nearest_centroid_predict
 
 OUT = baselines_inputs.D / "baselines_corrected"
+# Reference label sets a run can use instead of the atlas's own: each table has
+# one row per reference cell, in service/model/runtime/reference_metadata.csv's
+# order, with the original and the new class.
+LABEL_SETS = {
+    "original": None,
+    "clean": datasets.REPO / "research" / "notebook-outputs" / "v5_labels" / "reference_labels_clean.csv.gz",
+    "v51": datasets.REPO / "research" / "notebook-outputs" / "v51_labels" / "reference_labels_v51.csv.gz",
+    "v52": datasets.REPO / "research" / "notebook-outputs" / "v52_labels" / "reference_labels_v52.csv.gz",
+}
+
+
+def out_dir(labels: str = "original") -> Path:
+    """Where a label set's runs go: the original runs stay where they were."""
+    return OUT if labels == "original" else baselines_inputs.D / f"baselines_corrected_labels_{labels}"
+
+
+def relabel(rna_meta: pd.DataFrame, table: pd.DataFrame) -> np.ndarray:
+    """The benchmark's RNA cells (rna_meta.csv: orig_index, class_name) with
+    another label set's class (columns class_original, class_clean). orig_index
+    is the cell's row in the label table; every cell's original class must
+    match, so a misaligned join cannot pass."""
+    index = rna_meta["orig_index"].to_numpy()
+    if index.min() < 0 or index.max() >= len(table):
+        raise ValueError(f"orig_index runs to {index.max()}, but the label table has {len(table)} rows")
+    mismatched = table["class_original"].to_numpy()[index] != rna_meta["class_name"].to_numpy()
+    if mismatched.any():
+        raise ValueError(f"{int(mismatched.sum())} cells' original class differs: not the reference's cell order")
+    return table["class_clean"].to_numpy()[index]
 TOOLS = ("correlation", "pca", "harmony", "seurat", "maxfuse", "scglue", "scanvi")
 SINGLE_RUN = ("correlation", "pca", "seurat")  # deterministic, or deterministic given its inputs: seed 0 only
 POSTHOC = ("khoury2026",)
@@ -85,11 +117,29 @@ def class_balanced_z(x: np.ndarray, labels: np.ndarray, eps: float = 1e-8, block
     return out
 
 
-def load(dataset: str):
+def load(dataset: str, labels: str = "original"):
+    """The tool's inputs; with another label set, the RNA side is relabelled
+    before its class-balanced scaling, which the labels also decide."""
     inp = baselines_inputs.load(dataset)
+    reference_labels = {"set": "original", "file": "benchmark/results/rna_meta.csv"}
+    if labels != "original":
+        path = LABEL_SETS[labels]
+        new = relabel(pd.read_csv(baselines_inputs.D / "rna_meta.csv"), pd.read_csv(path))
+        reference_labels = {"set": labels, "file": path.relative_to(datasets.REPO).as_posix(),
+                            "sha256": _sha256(path), "cells_relabelled": int((new != inp.rna_labels).sum())}
+        inp.rna_labels = new
     inp.rna_z = class_balanced_z(inp.rna_z, inp.rna_labels)
-    inp.record = {**inp.record, "rna_input": RNA_INPUT, "scaling": SCALING}
+    inp.record = {**inp.record, "rna_input": RNA_INPUT, "scaling": SCALING, "reference_labels": reference_labels}
     return inp
+
+
+def _sha256(path: Path) -> str:
+    import hashlib
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def run_pca(inp, seed):
@@ -249,6 +299,8 @@ def main() -> None:
     parser.add_argument("--smoke", type=int, default=0, help="development datasets only: subsample N RNA cells")
     parser.add_argument("--posthoc", action="store_true", help="required for Khoury 2026: its runs are post-hoc")
     args = parser.parse_args()
+    parser.add_argument("--labels", choices=tuple(LABEL_SETS), default="original",
+                        help="the reference label set (a candidate model's own); runs go to their own directory")
     posthoc = args.dataset in POSTHOC
     if posthoc and not args.posthoc:
         raise SystemExit("Khoury 2026's labels were read at its one scoring: corrected runs on it are post-hoc. "
@@ -257,18 +309,18 @@ def main() -> None:
         raise SystemExit("--smoke is for the development datasets only")
     if args.tool in SINGLE_RUN and args.seed != 0:
         raise SystemExit(f"{args.tool} runs once, as seed 0")
-    out_dir = OUT / ("smoke" if args.smoke else args.dataset)
-    stem = out_dir / f"{args.tool}_seed{args.seed}"
+    run_dir = out_dir(args.labels) / ("smoke" if args.smoke else args.dataset)
+    stem = run_dir / f"{args.tool}_seed{args.seed}"
     if not args.smoke and Path(f"{stem}.json").exists():
         status = json.loads(Path(f"{stem}.json").read_text()).get("status")
         if status != "failed":  # a completed or diverged run is final; a failed one may run again
             raise SystemExit(f"{stem}.json exists ({status}); not rerun")
     t0 = time.time()
-    inp = load(args.dataset)
+    inp = load(args.dataset, args.labels)
     if args.smoke:
         keep = np.random.default_rng(0).choice(len(inp.rna_z), args.smoke, replace=False)
         inp.rna_z, inp.rna_labels = inp.rna_z[keep], inp.rna_labels[keep]
-    out_dir.mkdir(parents=True, exist_ok=True)
+    run_dir.mkdir(parents=True, exist_ok=True)
     base = {"tool": args.tool, "seed": args.seed, "settings": SETTINGS[args.tool], "posthoc": posthoc,
             "corrections": "research/benchmark/baseline-corrections.md", "smoke_rna_cells": args.smoke or None,
             **inp.record}
