@@ -98,30 +98,30 @@ DECISIVE_SUMMARY_PATH = _env_path(
     "VIVOME_DECISIVE_SUMMARY", RUNTIME_DIR / "decisive_summary.json"
 )
 
-ATLAS_VERSION = "0.3.0"
+ATLAS_VERSION = "0.4.0"
 
 # --- Which pipeline answers a request ---
 # "v3" is the single-encoder pipeline, byte for byte as before the switch
 # existed (service/tests/test_pipeline_versions.py pins it against frozen
 # responses). "v3.1" is T1 NB2's ensemble (service/pipeline/ensemble.py):
 # five V2 encoders, per-class conformal sets, a fixed out-of-distribution
-# threshold and hierarchical answers. v3.1 is the default (owner sign-off,
-# Track F); v3 stays selectable. The bundle the service loads decides which
-# pipeline runs.
+# threshold and hierarchical answers. It was the default from release 0.3.0
+# (owner sign-off, Track F) and stays selectable, as does v3. The bundle the
+# service loads decides which pipeline runs.
 # "v4" (Track G, service/pipeline/fusion.py): v3.1's answers with a better best
 # guess. Its evaluation passed (Phase 3c), so it is served when selected with
-# VIVOME_PIPELINE_VERSION=v4; v3.1 stays the default until the owner signs off
-# a release. A spec whose evaluation has not passed answers 503.
+# VIVOME_PIPELINE_VERSION=v4. A spec whose evaluation has not passed answers 503.
 # "v4.1" (Track G, v4.1): v4 with the encoder weighted 0.5 instead of 0.7 where
-# the correlation term is used, chosen on Fulcher 2026; selectable, refused
-# (503) until its evaluation passes.
+# the correlation term is used, chosen on Fulcher 2026. Its evaluation passed
+# (Phase C), and it is the default since release 0.4.0 (owner sign-off,
+# 2026-10-15).
 # "v5" (Track H): v4.1's rule on five V2 members retrained on cleaned reference
 # labels, with its own calibration; selectable, refused (503) until its
 # evaluation passes. "v5.1": v5 with the NK T class folded into NK in training.
 # "v5.2": v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et
 # al. 2021. Both are likewise refused until their evaluation passes.
 PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v5", "v5.1", "v5.2")
-PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v3.1")
+PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v4.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
 

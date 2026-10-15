@@ -1,17 +1,17 @@
 {
   "schema_version": "1.0",
-  "atlas_version": "0.3.0",
-  "generated": "2026-10-04",
+  "atlas_version": "0.4.0",
+  "generated": "2026-10-15",
   "model": {
-    "name": "VivOME v3.1",
+    "name": "VivOME v4.1",
     "latent_dim": 128,
     "training_regime": "supervised",
     "seeds": {
       "value": 5,
       "status": "measured",
-      "basis": "ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"
+      "basis": "v3.1's ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"
     },
-    "notes": "Five encoders trained only on labelled blood scRNA-seq answer together; no protein labels are used. Proteomics queries are projected at inference and never used to retrain them. Coordinates shown in the viewer are a 3-component PCA projection of the coordinate member's (V2 seed 4) 128-d latent space; the latent coordinates themselves are not distributed with this build.",
+    "notes": "v3.1's answers, from five encoders trained only on labelled blood scRNA-seq, with a better best guess: the encoders' probability joined with each cell's correlation to the reference's class means, where that correlation carries signal. Its one tuned weight was chosen on Fulcher 2026, and no protein labels are used: proteomics queries are projected at inference and never used to retrain anything. Coordinates shown in the viewer are a 3-component PCA projection of the coordinate member's (V2 seed 4) 128-d latent space, as in v3.1; the latent coordinates themselves are not distributed with this build.",
     "feature_space_size": 9002,
     "previous_feature_space_size": 2903,
     "detected_by_source": {
@@ -25,104 +25,217 @@
     "encoder_family": "module pooling",
     "mask_sampling": null,
     "evaluation": {
-      "nb2": [
-        {
-          "key": "correct_when_committed",
-          "measure": "Correct when committed, at the stated level",
-          "value": {
-            "value": 0.949,
-            "status": "measured",
-            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+      "suite": {
+        "title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation)",
+        "rows": [
+          {
+            "key": "correct_when_committed",
+            "measure": "Correct when committed, at the stated level",
+            "value": {
+              "value": 0.9628,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
+          },
+          {
+            "key": "abstention",
+            "measure": "Abstention",
+            "value": {
+              "value": 0.1417,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
+          },
+          {
+            "key": "coverage",
+            "measure": "Conformal coverage (target 90%)",
+            "value": {
+              "value": 0.8721,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
+          },
+          {
+            "key": "class_level",
+            "measure": "Answered at class level",
+            "value": {
+              "value": 0.1817,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
+          },
+          {
+            "key": "group_level",
+            "measure": "Answered at group level",
+            "value": {
+              "value": 0.1589,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
+          },
+          {
+            "key": "lineage_level",
+            "measure": "Answered at lineage level",
+            "value": {
+              "value": 0.5177,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
+          },
+          {
+            "key": "best_guess",
+            "measure": "Best guess, balanced accuracy per upload",
+            "value": {
+              "value": 0.6497,
+              "status": "measured",
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+            }
           }
-        },
-        {
-          "key": "abstention",
-          "measure": "Abstention",
-          "value": {
-            "value": 0.1918,
-            "status": "measured",
-            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
-          }
-        },
-        {
-          "key": "coverage",
-          "measure": "Conformal coverage (target 90%)",
-          "value": {
-            "value": 0.8706,
-            "status": "measured",
-            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
-          }
-        },
-        {
-          "key": "class_level",
-          "measure": "Answered at class level",
-          "value": {
-            "value": 0.1913,
-            "status": "measured",
-            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
-          }
-        },
-        {
-          "key": "group_level",
-          "measure": "Answered at group level",
-          "value": {
-            "value": 0.1771,
-            "status": "measured",
-            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
-          }
-        },
-        {
-          "key": "lineage_level",
-          "measure": "Answered at lineage level",
-          "value": {
-            "value": 0.4397,
-            "status": "measured",
-            "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
-          }
-        }
-      ],
+        ]
+      },
       "served": [
         {
           "dataset": "SCoPE2",
           "committed": {
-            "value": 0.530201,
+            "value": 0.52953,
             "status": "measured",
-            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct": {
-            "value": 0.5886,
+            "value": 0.588086,
             "status": "measured",
-            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct_label": "correct when committed, at the stated level"
         },
         {
           "dataset": "PBMC240",
           "committed": {
-            "value": 0.731092,
+            "value": 0.734177,
             "status": "measured",
-            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct": {
-            "value": 0.786325,
+            "value": 0.969388,
             "status": "measured",
-            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
-          "correct_label": "lymphoid cells given their lineage"
+          "correct_label": "labelled cells whose answer names their lineage"
         },
         {
           "dataset": "Fulcher 2026",
           "committed": {
-            "value": 0.891765,
+            "value": 0.8698,
             "status": "measured",
-            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct": {
-            "value": 0.9731,
+            "value": 0.9792,
             "status": "measured",
-            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct_label": "correct when committed, at the stated level"
+        }
+      ],
+      "recall": [
+        {
+          "dataset": "Fulcher 2026",
+          "type": "CD4T",
+          "value": {
+            "value": 0.824675,
+            "status": "measured",
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+          }
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "type": "CD8T",
+          "value": {
+            "value": 0.237569,
+            "status": "measured",
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+          }
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "type": "NK",
+          "value": {
+            "value": 0.9,
+            "status": "measured",
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+          }
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "type": "B",
+          "value": {
+            "value": 0.980392,
+            "status": "measured",
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+          }
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "type": "monocyte",
+          "value": {
+            "value": 0.97807,
+            "status": "measured",
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+          }
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "type": "DC",
+          "value": {
+            "value": 0.222222,
+            "status": "measured",
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+          }
+        },
+        {
+          "dataset": "Khoury 2026",
+          "type": "CD4T",
+          "value": {
+            "value": 0.828,
+            "status": "measured",
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+          }
+        },
+        {
+          "dataset": "Khoury 2026",
+          "type": "CD8T",
+          "value": {
+            "value": 0.027,
+            "status": "measured",
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+          }
+        },
+        {
+          "dataset": "Khoury 2026",
+          "type": "NK",
+          "value": {
+            "value": 0.5065,
+            "status": "measured",
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+          }
+        },
+        {
+          "dataset": "Khoury 2026",
+          "type": "B",
+          "value": {
+            "value": 0.8171,
+            "status": "measured",
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+          }
+        },
+        {
+          "dataset": "Khoury 2026",
+          "type": "monocyte",
+          "value": {
+            "value": 0.947,
+            "status": "measured",
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+          }
         }
       ]
     }
@@ -827,6 +940,133 @@
   },
   "next_reference": null,
   "previous_release": {
+    "model_name": "VivOME v3.1",
+    "atlas_version": "0.3.0",
+    "seeds": {
+      "value": 5,
+      "status": "measured",
+      "basis": "ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"
+    },
+    "feature_space_size": 9002,
+    "previous_feature_space_size": 2903,
+    "detected_by_source": {
+      "bubis_hela": 5774,
+      "bubis_lung": 5785,
+      "bubis_candidates": 6023,
+      "pbmc240": 3136,
+      "scope2": 2907,
+      "fulcher": 1654
+    },
+    "encoder_family": "module pooling",
+    "mask_sampling": null,
+    "evaluation": {
+      "suite": {
+        "title": "NB2's evaluation suite: simulated uploads of held-out RNA cells",
+        "rows": [
+          {
+            "key": "correct_when_committed",
+            "measure": "Correct when committed, at the stated level",
+            "value": {
+              "value": 0.949,
+              "status": "measured",
+              "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+            }
+          },
+          {
+            "key": "abstention",
+            "measure": "Abstention",
+            "value": {
+              "value": 0.1918,
+              "status": "measured",
+              "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+            }
+          },
+          {
+            "key": "coverage",
+            "measure": "Conformal coverage (target 90%)",
+            "value": {
+              "value": 0.8706,
+              "status": "measured",
+              "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+            }
+          },
+          {
+            "key": "class_level",
+            "measure": "Answered at class level",
+            "value": {
+              "value": 0.1913,
+              "status": "measured",
+              "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+            }
+          },
+          {
+            "key": "group_level",
+            "measure": "Answered at group level",
+            "value": {
+              "value": 0.1771,
+              "status": "measured",
+              "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+            }
+          },
+          {
+            "key": "lineage_level",
+            "measure": "Answered at lineage level",
+            "value": {
+              "value": 0.4397,
+              "status": "measured",
+              "basis": "NB2 evaluation, before the two conservative flags; research/notebook-outputs/nb2/nb2_summary.json"
+            }
+          }
+        ]
+      },
+      "served": [
+        {
+          "dataset": "SCoPE2",
+          "committed": {
+            "value": 0.530201,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct": {
+            "value": 0.5886,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct_label": "correct when committed, at the stated level"
+        },
+        {
+          "dataset": "PBMC240",
+          "committed": {
+            "value": 0.731092,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct": {
+            "value": 0.786325,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct_label": "lymphoid cells given their lineage"
+        },
+        {
+          "dataset": "Fulcher 2026",
+          "committed": {
+            "value": 0.891765,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct": {
+            "value": 0.9731,
+            "status": "measured",
+            "basis": "served settings (both service flags on), development data; research/benchmark/v31_service_flags.json"
+          },
+          "correct_label": "correct when committed, at the stated level"
+        }
+      ]
+    },
+    "note": "Five encoders trained only on labelled blood scRNA-seq answer together, at class, group or lineage level, or abstain; no protein labels are used. v4.1 keeps these answers and changes the best guess. It stays selectable in the service (VIVOME_PIPELINE_VERSION=v3.1)."
+  },
+  "earlier_release": {
     "model_name": "VivOME v3 reference",
     "atlas_version": "0.2.0",
     "seeds": {
@@ -1075,19 +1315,1728 @@
     }
   },
   "benchmark": {
-    "status": "pending",
-    "phase": "Phase 4",
-    "note": "The comparison has been run and is written up in research/benchmark/results.md. Its rows are published here once the owner signs them off.",
-    "methods": [
-      "VivOME v3 reference (ours)",
-      "VivOME V2 candidate (ours)",
-      "scANVI (scArches)",
-      "MaxFuse",
-      "scGLUE",
-      "Harmony",
-      "Majority-class floor"
-    ],
-    "rows": []
+    "status": "measured",
+    "current": "VivOME v4.1",
+    "note": "Every method gets the same reference, the same genes and the same scoring. Each score is a method's one answer per cell (for VivOME, its best guess), with the mean and SD over seeds where a method has several.",
+    "datasets": [
+      {
+        "key": "khoury2026",
+        "name": "Khoury 2026",
+        "measure": "Balanced accuracy over 5 types",
+        "chance": {
+          "value": 0.2,
+          "status": "measured",
+          "basis": "one of 5 types at random"
+        },
+        "role": "Held out from development: no method was developed or tuned on it. Post-hoc for v4.1 and for the corrected baselines, since its labels were read at its one scoring (2026-10-03). The labels are the authors' clusters of the protein data, and its CD8 T label largely separates naive from memory T cells.",
+        "rows": [
+          {
+            "method": "VivOME v4.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.6251,
+              "status": "measured",
+              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v3.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.5693,
+              "status": "measured",
+              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.055871,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.039922,
+                "ci_high": 0.070697
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.62842,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 0,
+              "neither": 1,
+              "difference": {
+                "value": -0.003298,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.020545,
+                "ci_high": 0.013912
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.615185,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv",
+              "sd": 0.021338,
+              "min": 0.600745,
+              "max": 0.639695
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 2,
+              "difference": {
+                "value": 0.009937,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.014573,
+                "max": 0.024376
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.568597,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv",
+              "sd": 0.016842,
+              "min": 0.553506,
+              "max": 0.586766
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.056524,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.038356,
+                "max": 0.071616
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "scANVI classifier",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.516214,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv",
+              "sd": 0.06519,
+              "min": 0.441025,
+              "max": 0.556913
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.108907,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.068209,
+                "max": 0.184096
+              }
+            }
+          },
+          {
+            "method": "Correlation to class mean",
+            "rule": "correlation to class mean",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.49817,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.126952,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.106117,
+                "ci_high": 0.147144
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.389435,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv",
+              "sd": 0.086968,
+              "min": 0.328059,
+              "max": 0.488958
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.235687,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.136164,
+                "max": 0.297063
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.316035,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv",
+              "sd": 0.003156,
+              "min": 0.31319,
+              "max": 0.31943
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.309086,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.305692,
+                "max": 0.311931
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "MaxFuse matching",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.304221,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv",
+              "sd": 0.010835,
+              "min": 0.295369,
+              "max": 0.316304
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.320901,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.308817,
+                "max": 0.329753
+              }
+            }
+          },
+          {
+            "method": "Seurat CCA",
+            "rule": "Seurat native transfer",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.297405,
+              "status": "measured",
+              "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.327717,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.304751,
+                "ci_high": 0.351352
+              }
+            }
+          }
+        ]
+      },
+      {
+        "key": "fulcher2026",
+        "name": "Fulcher 2026",
+        "measure": "Balanced accuracy over 6 types",
+        "chance": {
+          "value": 0.166667,
+          "status": "measured",
+          "basis": "one of 6 types at random"
+        },
+        "role": "Development data. In-sample for v4.1: its one tuned weight was chosen here, so its lead here is not evidence of a held-out gain. Fulcher measures neither CD8A, CD8B nor CD4.",
+        "rows": [
+          {
+            "method": "VivOME v4.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.690488,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/fulcher2026.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v3.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.579359,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/fulcher2026.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.111129,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.084793,
+                "ci_high": 0.140442
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.630454,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.004704,
+              "min": 0.625527,
+              "max": 0.634899
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.060035,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.055589,
+                "max": 0.064961
+              }
+            }
+          },
+          {
+            "method": "Correlation to class mean",
+            "rule": "correlation to class mean",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.62124,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.069248,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.04154,
+                "ci_high": 0.096245
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.607983,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.006312,
+              "min": 0.602776,
+              "max": 0.615004
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.082506,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.075485,
+                "max": 0.087712
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.554515,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.135973,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.102795,
+                "ci_high": 0.168416
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 2,
+            "score": {
+              "value": 0.518988,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.005797,
+              "min": 0.514889,
+              "max": 0.523087
+            },
+            "vs_current": {
+              "pairings": 2,
+              "favour_current": 2,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.1715,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.167401,
+                "max": 0.175599
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "scANVI classifier",
+            "ours": false,
+            "runs": 2,
+            "score": {
+              "value": 0.471159,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.04453,
+              "min": 0.439672,
+              "max": 0.502647
+            },
+            "vs_current": {
+              "pairings": 2,
+              "favour_current": 2,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.219329,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.187841,
+                "max": 0.250816
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 2,
+            "score": {
+              "value": 0.426755,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.000838,
+              "min": 0.426162,
+              "max": 0.427347
+            },
+            "vs_current": {
+              "pairings": 2,
+              "favour_current": 2,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.263734,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.263141,
+                "max": 0.264326
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.391839,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.298649,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.262153,
+                "ci_high": 0.33662
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.310946,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.01485,
+              "min": 0.295741,
+              "max": 0.325414
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.379543,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.365074,
+                "max": 0.394747
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.275644,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.025239,
+              "min": 0.246914,
+              "max": 0.294247
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.414844,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.396241,
+                "max": 0.443574
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "MaxFuse matching",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.269678,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.033581,
+              "min": 0.230902,
+              "max": 0.28914
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.42081,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.401348,
+                "max": 0.459586
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.240147,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.004674,
+              "min": 0.234758,
+              "max": 0.243099
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.450341,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.447389,
+                "max": 0.45573
+              }
+            }
+          },
+          {
+            "method": "Seurat CCA",
+            "rule": "Seurat native transfer",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.194107,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.496381,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.464051,
+                "ci_high": 0.52867
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.173923,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/fulcher2026_summary.csv",
+              "sd": 0.022597,
+              "min": 0.152414,
+              "max": 0.197469
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.516565,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.493019,
+                "max": 0.538075
+              }
+            }
+          }
+        ]
+      },
+      {
+        "key": "pbmc240",
+        "name": "PBMC240",
+        "measure": "Lymphoid recall",
+        "chance": null,
+        "role": "Development data with lineage labels only, for some of its cells: the share of lymphoid-labelled cells whose single answer is lymphoid.",
+        "rows": [
+          {
+            "method": "VivOME v4.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.923077,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/pbmc240.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v3.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.923077,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/pbmc240.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 0,
+              "neither": 1,
+              "difference": {
+                "value": 0.0,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.0,
+                "ci_high": 0.0
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.888889,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "Harmony",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.820513,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.008547,
+              "min": 0.811966,
+              "max": 0.82906
+            },
+            "vs_current": null
+          },
+          {
+            "method": "scANVI",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.80057,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.2566,
+              "min": 0.504274,
+              "max": 0.948718
+            },
+            "vs_current": null
+          },
+          {
+            "method": "Correlation to class mean",
+            "rule": "correlation to class mean",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.752137,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "Harmony",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.752137,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.008547,
+              "min": 0.74359,
+              "max": 0.760684
+            },
+            "vs_current": null
+          },
+          {
+            "method": "scANVI",
+            "rule": "scANVI classifier",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.723647,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.382648,
+              "min": 0.282051,
+              "max": 0.957265
+            },
+            "vs_current": null
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.598291,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "scANVI",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.54416,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.210113,
+              "min": 0.410256,
+              "max": 0.786325
+            },
+            "vs_current": null
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.45584,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.027475,
+              "min": 0.435897,
+              "max": 0.487179
+            },
+            "vs_current": null
+          },
+          {
+            "method": "scGLUE",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.307692,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.025641,
+              "min": 0.282051,
+              "max": 0.333333
+            },
+            "vs_current": null
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "MaxFuse matching",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.304843,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.004935,
+              "min": 0.299145,
+              "max": 0.307692
+            },
+            "vs_current": null
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.287749,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.027475,
+              "min": 0.25641,
+              "max": 0.307692
+            },
+            "vs_current": null
+          },
+          {
+            "method": "scGLUE",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.253561,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv",
+              "sd": 0.030016,
+              "min": 0.222222,
+              "max": 0.282051
+            },
+            "vs_current": null
+          },
+          {
+            "method": "Seurat CCA",
+            "rule": "Seurat native transfer",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.222222,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/pbmc240_summary.csv"
+            },
+            "vs_current": null
+          }
+        ]
+      },
+      {
+        "key": "scope2",
+        "name": "SCoPE2, published matrix",
+        "measure": "Balanced accuracy, restricted to macrophage or monocyte",
+        "chance": {
+          "value": 0.5,
+          "status": "measured",
+          "basis": "one of 2 types at random"
+        },
+        "role": "Development data: PMA-differentiated U-937 macrophages and undifferentiated monocytes, two states of one cell line. The published matrix arrives centred and batch-corrected.",
+        "rows": [
+          {
+            "method": "VivOME v4.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.379726,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/scope2.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v3.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.387033,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/scope2.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 0,
+              "neither": 1,
+              "difference": {
+                "value": -0.007306,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.022536,
+                "ci_high": 0.007467
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.629686,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.004004,
+              "min": 0.625169,
+              "max": 0.632799
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.24996,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.253073,
+                "max": -0.245443
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.5076,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.010124,
+              "min": 0.5,
+              "max": 0.519093
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.127874,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.139367,
+                "max": -0.120274
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.491866,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.015955,
+              "min": 0.479181,
+              "max": 0.509779
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.11214,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.130053,
+                "max": -0.099455
+              }
+            }
+          },
+          {
+            "method": "Seurat CCA",
+            "rule": "Seurat native transfer",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.467297,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.08757,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.120628,
+                "ci_high": -0.05246
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.454241,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.074514,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.103803,
+                "ci_high": -0.045376
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.423846,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.01611,
+              "min": 0.406541,
+              "max": 0.438408
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 2,
+              "neither": 1,
+              "difference": {
+                "value": -0.044119,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.058681,
+                "max": -0.026814
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.40126,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.041886,
+              "min": 0.354468,
+              "max": 0.435256
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 2,
+              "difference": {
+                "value": -0.021533,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.05553,
+                "max": 0.025258
+              }
+            }
+          },
+          {
+            "method": "Correlation to class mean",
+            "rule": "correlation to class mean",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.353496,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 0,
+              "neither": 1,
+              "difference": {
+                "value": 0.026231,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.006865,
+                "ci_high": 0.058828
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.347628,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.032099,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.004138,
+                "ci_high": 0.059546
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.330934,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.096438,
+              "min": 0.245401,
+              "max": 0.435453
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 2,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": 0.048792,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.055726,
+                "max": 0.134326
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.296889,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.005716,
+              "min": 0.290959,
+              "max": 0.302364
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.082837,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.077363,
+                "max": 0.088768
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "scANVI classifier",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.2739,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.030334,
+              "min": 0.238901,
+              "max": 0.292582
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.105826,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.087144,
+                "max": 0.140826
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.223247,
+              "status": "measured",
+              "basis": "corrected baselines; research/benchmark/baselines_corrected/scope2_summary.csv",
+              "sd": 0.042828,
+              "min": 0.189938,
+              "max": 0.271557
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.15648,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.108169,
+                "max": 0.189788
+              }
+            }
+          }
+        ]
+      },
+      {
+        "key": "scope2_reprocessed",
+        "name": "SCoPE2, reprocessed",
+        "measure": "Balanced accuracy, restricted to macrophage or monocyte",
+        "chance": {
+          "value": 0.5,
+          "status": "measured",
+          "basis": "one of 2 types at random"
+        },
+        "role": "The same cells from the authors' search output, with missing values kept missing and no centring or batch correction.",
+        "rows": [
+          {
+            "method": "VivOME v4.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.333006,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v3.1 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.329297,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 0,
+              "neither": 1,
+              "difference": {
+                "value": 0.003709,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.007825,
+                "ci_high": 0.01536
+              }
+            }
+          },
+          {
+            "method": "Seurat CCA",
+            "rule": "Seurat native transfer",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.518478,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.185472,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.216732,
+                "ci_high": -0.150868
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.505164,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.172158,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.19805,
+                "ci_high": -0.143924
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.48873,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.019172,
+              "min": 0.467233,
+              "max": 0.504061
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.155724,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.171055,
+                "max": -0.134227
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.486673,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.001162,
+              "min": 0.485551,
+              "max": 0.487871
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.153667,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.154865,
+                "max": -0.152545
+              }
+            }
+          },
+          {
+            "method": "PCA, no correction",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.482187,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.149181,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.175413,
+                "ci_high": -0.122189
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.457036,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.011063,
+              "min": 0.444706,
+              "max": 0.466091
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.12403,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.133085,
+                "max": -0.1117
+              }
+            }
+          },
+          {
+            "method": "Harmony",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.450238,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.013727,
+              "min": 0.434389,
+              "max": 0.458344
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.117232,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.125338,
+                "max": -0.101383
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "shared kNN",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.444334,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.037764,
+              "min": 0.420989,
+              "max": 0.487903
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.111328,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.154897,
+                "max": -0.087983
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.432885,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.095485,
+              "min": 0.323162,
+              "max": 0.497132
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 2,
+              "neither": 1,
+              "difference": {
+                "value": -0.099879,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.164126,
+                "max": 0.009844
+              }
+            }
+          },
+          {
+            "method": "Correlation to class mean",
+            "rule": "correlation to class mean",
+            "ours": false,
+            "runs": 1,
+            "score": {
+              "value": 0.431983,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv"
+            },
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.098977,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.140067,
+                "ci_high": -0.055887
+              }
+            }
+          },
+          {
+            "method": "MaxFuse",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.418472,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.017436,
+              "min": 0.400159,
+              "max": 0.434874
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.085466,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.101868,
+                "max": -0.067153
+              }
+            }
+          },
+          {
+            "method": "scANVI",
+            "rule": "scANVI classifier",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.4177,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.045655,
+              "min": 0.375917,
+              "max": 0.466431
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 3,
+              "neither": 0,
+              "difference": {
+                "value": -0.084694,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.133425,
+                "max": -0.042911
+              }
+            }
+          },
+          {
+            "method": "scGLUE",
+            "rule": "nearest centroid",
+            "ours": false,
+            "runs": 3,
+            "score": {
+              "value": 0.330396,
+              "status": "measured",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v41_development/scope2_reprocessed.csv",
+              "sd": 0.023928,
+              "min": 0.302884,
+              "max": 0.346359
+            },
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 0,
+              "neither": 3,
+              "difference": {
+                "value": 0.00261,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.013353,
+                "max": 0.030122
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   "data_availability": {
     "rna_expression": {

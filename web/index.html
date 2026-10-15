@@ -116,7 +116,7 @@
                 </article>
                 <article class="card liquid span-3" data-in style="--i: 4">
                     <span class="stat" data-fact="cross_modal_types" data-count>&nbsp;</span>
-                    <span class="stat-label">types with protein evidence so far</span>
+                    <span class="stat-label">cell types among the protein cells shown</span>
                 </article>
             </div>
         </section>
@@ -205,15 +205,15 @@
                 </article>
                 <article class="card sheet span-7" data-in style="--i: 1">
                     <h3>Against established methods</h3>
-                    <p>scANVI, MaxFuse, scGLUE, Harmony and Seurat, and a simple correlation to each class mean, under one protocol with the same reference and the same genes.</p>
-                    <span class="bead bead-open">Published once signed off</span>
+                    <p>scANVI, MaxFuse, scGLUE, Harmony and Seurat, plain PCA, and a simple correlation to each class mean, under one protocol with the same reference and the same genes. On data no method was developed on, VivOME's best guess is level with the best of them and ahead of the rest.</p>
+                    <span class="bead">Published</span>
                     <h3 style="margin-top: 12px">On a sealed test</h3>
-                    <p>A dataset kept sealed until the final test, and scored once.</p>
-                    <span class="bead bead-open">Published once signed off</span>
+                    <p>Cells sorted by type, with the test written down before any data arrives, and scored once. No public dataset has such cells yet.</p>
+                    <span class="bead bead-open">Waiting for data</span>
                 </article>
                 <article class="card sheet span-12" data-in style="--i: 2">
                     <h3>Within its limits</h3>
-                    <p>Human blood and immune cells only, and <span data-fact="cross_modal_types">&nbsp;</span> of the <span data-fact="cell_types">&nbsp;</span> cell types checked against real protein so far.</p>
+                    <p>Human blood and immune cells only. CD8 T cells and dendritic cells are still weak, for every method tested.</p>
                     <p class="chapter-links"><a class="chapter-link" href="benchmark.html">See the benchmark</a> <a class="chapter-link" href="versions.html">Read the model card</a></p>
                 </article>
             </div>
@@ -233,13 +233,13 @@
                 </li>
                 <li class="card liquid release-card span-3" data-in style="--i: 1">
                     <span class="eyebrow">Previous</span>
-                    <h3><span data-fact="v3_model_name">&nbsp;</span>, atlas <span data-fact="v3_atlas_version">&nbsp;</span></h3>
-                    <p>An RNA-only reference, with a model card and its known failure modes written down. Still available.</p>
+                    <h3><span data-fact="previous_release_name">&nbsp;</span>, atlas <span data-fact="previous_release_version">&nbsp;</span></h3>
+                    <p>Encoders trained only on labelled blood RNA, answering together at the level the evidence supports. Still available.</p>
                 </li>
                 <li class="card sheet release-card span-3" data-in style="--i: 2">
                     <span class="eyebrow">Current</span>
                     <h3><span data-fact="model_name">&nbsp;</span>, atlas <span data-fact="atlas_version">&nbsp;</span></h3>
-                    <p><span data-fact="seeds">&nbsp;</span> encoders, trained only on labelled blood RNA, answer together, at the level the evidence supports.</p>
+                    <p>The same answers, with a better best guess: each cell is also compared with the reference's average profile of every cell type.</p>
                 </li>
                 <li class="card liquid release-card release-next span-3" data-in style="--i: 3">
                     <span class="eyebrow">Next, in development</span>

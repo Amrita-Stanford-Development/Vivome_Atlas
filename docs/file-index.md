@@ -21,8 +21,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/home.html` — the dashboard: a way in to every tool, the current release, what's new
 - `web/atlas.html` — interactive 3D cell viewer (RNA + protein), with the cross-modal support map and alignment diagnostics
 - `web/project.html` — the projection tool: sends a matrix to a locally run service and shows each cell's label or abstention, with a downloadable response
-- `web/benchmark.html` — standing comparison against established integration methods (rows stay pending until sign-off)
-- `web/versions.html` — model card, data availability, prior baseline, release protocol
+- `web/benchmark.html` — the standing benchmark: VivOME against the corrected baselines, one table per dataset, what the results show and how they are scored
+- `web/versions.html` — model card, known limits, earlier releases, prior baseline, data availability, release protocol
 - `web/miscellaneous.html` — intentionally blank (the former roadmap page); kept on purpose
 - `web/preview-biocells.html` — preview, not linked from the site: the living water's objects close up, with switches for colours, amount, gel and water effect
 - `web/preview-water.html` — preview, not linked from the site: every water effect side by side over the same objects
@@ -68,7 +68,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/pipeline/__init__.py` — package marker
 - `service/pipeline/pipeline.py` — orchestrator: runs Stages 1–8 and builds the response; the v3 / v3.1 component switch (`components_for`)
 - `service/pipeline/ensemble.py` — v3.1, T1 NB2's ensemble: five members' tempered softmax averaged, Mondrian sets, the out-of-distribution mean, hierarchical answers and the best guess
-- `service/pipeline/fusion.py` — v4: v3.1's answers unchanged (sets, abstention, levels, coordinates), with a best guess fused from the V2 members on a class-balanced reference (smoothed and unsmoothed query mixed) and a correlation-to-class-mean term over each cell's observed genes, used only in uploads where it agrees with v3.1 often enough; the guess joins v3.1's sets beside v3.1's own; served on request since its evaluation passed (v3.1 stays the default); v4.1 is the same code with its own spec (`service/model/v4_1/`)
+- `service/pipeline/fusion.py` — v4: v3.1's answers unchanged (sets, abstention, levels, coordinates), with a best guess fused from the V2 members on a class-balanced reference (smoothed and unsmoothed query mixed) and a correlation-to-class-mean term over each cell's observed genes, used only in uploads where it agrees with v3.1 often enough; the guess joins v3.1's sets beside v3.1's own; served on request since its evaluation passed; v4.1, the default since release 0.4.0, is the same code with its own spec (`service/model/v4_1/`)
 - `service/pipeline/alignment.py` — Stage 1: map the upload onto the 9,002-gene feature space; value-scale and mask conventions
 - `service/pipeline/smoothing.py` — Stage 2: fuzzy neighbourhood smoothing of sparse proteomics profiles
 - `service/pipeline/encoder.py` — Stage 3: the module-pooling reference encoder and loading it; `encode_with_hidden` and the classifier head, for v3.1
@@ -101,7 +101,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_pipeline.py` — end-to-end wiring on the real production checkpoint and reference
 - `service/tests/test_e2e_real_export.py` — regression guard: the real SCoPE2 export still reproduces the notebook's own outputs
 - `service/tests/test_golden_fixtures.py` — full responses must match the frozen golden fixtures
-- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1, v4 and v4.1 unchanged against their frozen responses, v4.1 equal to v4 where its correlation term is flat, v3.1 the default, its components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
+- `service/tests/test_pipeline_versions.py` — Tracks C, F and G: v3, v3.1, v4 and v4.1 unchanged against their frozen responses, v4.1 equal to v4 where its correlation term is flat, v4.1 the default (release 0.4.0), v3.1's components and file checks, its response, the site's atlas in its coordinate space, v4's answers v3.1's with its guess joined
 - `service/tests/test_ensemble.py` — v3.1 against NB2's own `nb2_core.py`: synthetic inputs, the full path on real PBMC240 cells, both service flags, spec validation
 - `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
@@ -258,7 +258,7 @@ When you add, move or delete a file, update its line in the same commit.
 ## scripts/ — build and repository checks
 
 - `scripts/README.md` — what each script does and when to run it
-- `scripts/build_manifest.py` — generates `web/data/atlas_manifest.json` from the metadata and model evidence
+- `scripts/build_manifest.py` — generates `web/data/atlas_manifest.json` from the metadata, the model evidence and the committed evaluation and benchmark tables
 - `scripts/export_atlas_coordinates.py` — writes the site's atlas coordinates from the served v3.1 model, so projected cells land on the displayed atlas
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict

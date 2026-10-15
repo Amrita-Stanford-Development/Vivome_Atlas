@@ -16,12 +16,14 @@ and [`../docs/service/download-checklist.md`](../docs/service/download-checklist
 here verbatim from the staging area they were written in, so the original
 rationale stays in the repo, not just this document's paraphrase of it.
 
-Two pipeline versions share stages 1, 2 and 8. **v3.1** (the default, T1
-NB2's specification in `model/v3_1/nb2_spec_v31.json`, built in
-`pipeline/ensemble.py`) replaces stages 3 to 7. **v3** (the previous
-release) keeps them. Stage by stage:
+Two pipeline designs share stages 1, 2 and 8. **v3.1** (T1 NB2's
+specification in `model/v3_1/nb2_spec_v31.json`, built in
+`pipeline/ensemble.py`) replaces stages 3 to 7. **v3** (an earlier
+release) keeps them. **v4.1**, the default since release 0.4.0, is v3.1
+with a different best guess (`pipeline/fusion.py`, below); every stage in
+this table is v3.1's in it. Stage by stage:
 
-| Stage | v3.1 (default) | v3 (previous release): file, and the decision that looks wrong at first glance |
+| Stage | v3.1 (and v4.1, the default) | v3 (an earlier release): file, and the decision that looks wrong at first glance |
 |---|---|---|
 | 1. Query alignment | shared | `pipeline/alignment.py`: zero-fill the full 9,002-gene space; never restrict to well-covered genes |
 | 2. Fuzzy smoothing | shared | `pipeline/smoothing.py`: build the neighbour graph from the query's own full feature set, not the shared space |
@@ -127,10 +129,18 @@ subset is drawn from a generator seeded with a hash of the upload
 (`pipeline.upload_seed`). Before this, it was unseeded, and the same file
 could return different abstentions.
 
-**Two pipeline versions.** `config.PIPELINE_VERSION` (env
+**Pipeline versions.** `config.PIPELINE_VERSION` (env
 `VIVOME_PIPELINE_VERSION`) chooses which bundle loads, and with it the label
 space, conformal and abstention components (`pipeline.components_for`).
-- **`v3.1`, the default,** is T1 NB2's five-encoder ensemble
+- **`v4.1`, the default since release 0.4.0,** is v3.1's answers with a
+  fused best guess (`pipeline/fusion.py`): the encoder's probability joined
+  with each cell's correlation to the reference's class means, where that
+  term carries signal. Its spec is `model/v4_1/spec_v41.json`; it reads v4's
+  data files from `model/v4/` (`scripts/build_v4_bundle.py`) and v3.1's
+  members. `benchmark/v41_dev_gate.py` and `service/tests/test_v41_gate.py`
+  check it per cell. `v4` is the same code with the encoder weighted 0.7
+  instead of 0.5.
+- **`v3.1`** is T1 NB2's five-encoder ensemble
   (`pipeline/ensemble.py`), with its files in `model/v3_1/`.
   - Its five checkpoints live outside git. Fetch them with
     `python scripts/fetch_v31_members.py`; until then the service answers
@@ -142,7 +152,7 @@ space, conformal and abstention components (`pipeline.components_for`).
   `service/tests/test_pipeline_versions.py` pins it against full responses
   frozen before the switch existed, in both label-space modes.
 
-Both response schemas are in
+The response schemas are in
 [`../docs/service/projection-api.md`](../docs/service/projection-api.md).
 
 ## Running it

@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-10-15",
+    "title": "v4.1 is the default",
+    "text": "The service now answers with v4.1. It keeps v3.1's answers and gives a better best guess, which also compares each cell with the reference's average profile of every cell type. Its known limits, CD8 T cells and dendritic cells first, are on the Versions page. v3.1 and v3 stay selectable.",
+    "link": "versions.html",
+    "link_text": "Read the model card"
+  },
+  {
+    "date": "2026-10-15",
+    "title": "The benchmark is published",
+    "text": "Every method's scores, dataset by dataset, are now on the Benchmark page, with how they were scored. On data no method was developed on, VivOME's best guess is level with the best simple baselines, not ahead of them. The claim that it beats them waits for a sealed test.",
+    "link": "benchmark.html",
+    "link_text": "See the benchmark"
+  },
+  {
     "date": "2026-10-01",
     "title": "v3.1 is the default",
     "text": "The service now answers with v3.1: five RNA-trained encoders together. Each answer is a cell type, its group or its lineage, or an abstention with its reason. The atlas coordinates come from the same model. v3 stays selectable.",

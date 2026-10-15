@@ -93,30 +93,57 @@ export function buildDiagnosticsTable(manifest) {
     </p>`;
 }
 
-const BENCHMARK_HEADERS = ['Method', 'Dataset', 'Transfer accuracy', 'Modality probe'];
+// ---- The benchmark (benchmark.html) ----
+// manifest.benchmark.datasets: one table per dataset, every method's score
+// with its spread over seeds, and the current model minus each method by
+// paired bootstrap. Every number goes through isMeasured.
+
+const points = (x) => `${x >= 0 ? '+' : '−'}${Math.abs(x * 100).toFixed(1)}`;
+
+function versusText(v, current) {
+  const d = v?.difference;
+  if (!v || !isMeasured(d)) return '';
+  const spread = Number.isFinite(d.ci_low) && Number.isFinite(d.ci_high)
+    ? `${points(d.value)} (${points(d.ci_low)} to ${points(d.ci_high)})`
+    : Number.isFinite(d.min) && Number.isFinite(d.max)
+      ? `${points(d.min)} to ${points(d.max)}` : points(d.value);
+  const verdicts = [
+    [v.favour_current, `favour${v.pairings === 1 ? 's' : ''} ${current}`],
+    [v.neither, 'neither'],
+    [v.favour_other, `favour${v.pairings === 1 ? 's' : ''} this method`],
+  ].filter(([n]) => n > 0)
+    .map(([n, text]) => (v.pairings === 1 ? text : `${formatCount(n)} of ${formatCount(v.pairings)} ${text}`));
+  return `${escapeHtml(spread)}<span class="metric-basis">${escapeHtml(verdicts.join(', '))}</span>`;
+}
+
+function benchmarkDataset(d, current) {
+  const chance = isMeasured(d.chance) ? `; chance ${escapeHtml(formatPercent(d.chance))}` : '';
+  const rows = (d.rows ?? []).map((r) => `
+    <tr>
+      <td>${r.ours ? `<strong>${escapeHtml(r.method)}</strong>` : escapeHtml(r.method)}</td>
+      <td>${escapeHtml(r.rule)}</td>
+      <td class="support-num">${cardValue(r.score)}</td>
+      <td class="support-num">${formatCount(r.runs)}</td>
+      <td class="support-num">${versusText(r.vs_current, current)}</td>
+    </tr>`).join('');
+  return `
+    <h3>${escapeHtml(d.name)}</h3>
+    <p class="panel-note"><strong>${escapeHtml(d.measure)}${chance}.</strong> ${escapeHtml(d.role)}</p>
+    <div class="table-scroll">${table(['Method', 'Rule', 'Score', 'Runs', `${current} minus it`], rows)}</div>`;
+}
 
 export function buildBenchmarkTable(manifest) {
-  const b = manifest.benchmark;
-  if (b.status !== 'measured' || b.rows.length === 0) {
-    const planned = b.methods.map((m) => `
-      <tr>
-        <td>${escapeHtml(m)}</td><td class="pending">Not run</td>
-        <td class="support-num pending">${PENDING_LABEL}</td>
-        <td class="support-num pending">${PENDING_LABEL}</td>
-      </tr>`).join('');
+  const b = manifest.benchmark ?? {};
+  const datasets = Array.isArray(b.datasets) ? b.datasets : [];
+  if (b.status !== 'measured' || datasets.length === 0) {
     return `
       <div class="pending-banner">
-        <strong>${escapeHtml(b.phase)}: pending sign-off.</strong> ${escapeHtml(b.note)}
-      </div>` + table(BENCHMARK_HEADERS, planned);
+        <strong>${escapeHtml(b.phase ?? PENDING_LABEL)}: pending sign-off.</strong> ${escapeHtml(b.note ?? '')}
+      </div>`;
   }
-  const rows = b.rows.map((r) => `
-    <tr>
-      <td>${escapeHtml(r.method)}</td>
-      <td>${escapeHtml(r.dataset)}</td>
-      <td class="support-num">${metricText(r.transfer_accuracy, formatPercent)}</td>
-      <td class="support-num">${metricText(r.modality_probe_accuracy, formatPercent)}</td>
-    </tr>`).join('');
-  return table(BENCHMARK_HEADERS, rows);
+  const current = b.current ?? manifest.model?.name ?? 'the current model';
+  return datasets.map((d) => benchmarkDataset(d, current)).join('')
+    + `<p class="panel-note">${escapeHtml(b.note ?? '')}</p>`;
 }
 
 const cardField = (label, value) =>
@@ -178,11 +205,19 @@ export function buildNextReferenceCard(manifest) {
     <p class="panel-note">${escapeHtml(n.note)}</p>`;
 }
 
-// The previous release (v3), with its own seeds and architecture, kept as it
-// was measured. Like buildPriorBaselineCard and buildNextReferenceCard, an
-// additive section: it never edits buildModelCard's rendering of manifest.model.
+// An earlier release, with its own seeds and architecture, kept as it was
+// measured: the previous one (v3.1) and the one before it (v3). Like
+// buildPriorBaselineCard and buildNextReferenceCard, an additive section: it
+// never edits buildModelCard's rendering of manifest.model.
 export function buildPreviousReleaseCard(manifest) {
-  const p = manifest.previous_release;
+  return releaseCard(manifest.previous_release);
+}
+
+export function buildEarlierReleaseCard(manifest) {
+  return releaseCard(manifest.earlier_release);
+}
+
+function releaseCard(p) {
   if (!p) return '';
   const architectureFields = p.feature_space_size == null ? '' : architectureFieldsHtml(p);
   return `
@@ -228,8 +263,9 @@ export function buildSupportedLabelSpace(manifest) {
   return `
     <p><strong>Cross-modal support (${formatCount(supported.length)}):</strong> ${supported.join(', ')}</p>
     <p><strong>RNA-only (${formatCount(manifest.summary?.rna_only)}):</strong> these types have no
-    proteomics evidence yet. By default the service can still assign them to protein queries;
-    a request can set <code>restrict_to_supported_classes</code> to limit labels to the
+    protein cells in the atlas. Real protein data has since tested several of them (see
+    <a href="benchmark.html">the benchmark</a>). By default the service assigns them to protein
+    queries; a request can set <code>restrict_to_supported_classes</code> to limit labels to the
     cross-modal types.</p>`;
 }
 
@@ -313,8 +349,10 @@ const FACTS = {
   atlas_version: (m) => textOrPending(m.atlas_version),
   model_name: (m) => textOrPending(m.model?.name),
   previous_model: (m) => textOrPending(m.first_release?.model_name),
-  v3_model_name: (m) => textOrPending(m.previous_release?.model_name),
-  v3_atlas_version: (m) => textOrPending(m.previous_release?.atlas_version),
+  previous_release_name: (m) => textOrPending(m.previous_release?.model_name),
+  previous_release_version: (m) => textOrPending(m.previous_release?.atlas_version),
+  v3_model_name: (m) => textOrPending(m.earlier_release?.model_name),
+  v3_atlas_version: (m) => textOrPending(m.earlier_release?.atlas_version),
 };
 
 export function factText(manifest, key) {
@@ -428,26 +466,34 @@ export function buildModelCardTable(manifest) {
   return table(['Measure', 'Decision rule', 'Accuracy', 'Balanced accuracy'], body);
 }
 
-// manifest.model.evaluation: the current release's numbers, each with what
-// it describes. NB2's evaluation-suite figures are NB2's rule, before the two
-// service flags; the development datasets are measured as served.
-export function buildEvaluationTable(manifest) {
-  const ev = manifest.model?.evaluation;
-  const nb2 = ev?.nb2 ?? [];
+// A release's evaluation (manifest.model.evaluation for the current release,
+// previous_release.evaluation for the one before): each number with what it
+// describes. The suite is simulated uploads of held-out RNA cells, and its
+// title says whose; the development datasets are measured as served.
+function evaluationHtml(ev) {
+  const suite = ev?.suite?.rows ?? [];
   const served = ev?.served ?? [];
-  if (nb2.length === 0 && served.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
+  if (suite.length === 0 && served.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
   const valueRow = (measure, metric) => `
     <tr>
       <td>${escapeHtml(measure)}<span class="metric-basis"><code>${escapeHtml(metricBasis(metric))}</code></span></td>
       <td class="support-num">${cardValue(metric)}</td>
     </tr>`;
-  const nb2Rows = nb2.map((r) => valueRow(r.measure, r.value)).join('');
+  const suiteRows = suite.map((r) => valueRow(r.measure, r.value)).join('');
   const servedRows = served.map((r) => [
     valueRow(`${r.dataset}: committed`, r.committed),
     valueRow(`${r.dataset}: ${r.correct_label}`, r.correct),
   ].join('')).join('');
-  return `<h3>NB2's evaluation suite</h3>${table(['Measure', 'Value'], nb2Rows)}`
+  return `<h3>${textOrPending(ev?.suite?.title)}</h3>${table(['Measure', 'Value'], suiteRows)}`
     + `<h3>Development datasets, as served</h3>${table(['Measure', 'Value'], servedRows)}`;
+}
+
+export function buildEvaluationTable(manifest) {
+  return evaluationHtml(manifest.model?.evaluation);
+}
+
+export function buildPreviousEvaluationTable(manifest) {
+  return evaluationHtml(manifest.previous_release?.evaluation);
 }
 
 const cardRow = (m, key) => (m.model_card?.rows ?? []).find((r) => r.key === key);
@@ -483,8 +529,8 @@ Object.assign(FACTS, {
   },
   latent_cosine_macrophage: (m) => latentCosine(m, 'macrophage'),
   latent_cosine_monocyte: (m) => latentCosine(m, 'monocyte'),
-  v3_latent_cosine_macrophage: (m) => escapeHtml(formatMetric(m.previous_release?.latent_centroid_cosine?.macrophage, 2)),
-  v3_latent_cosine_monocyte: (m) => escapeHtml(formatMetric(m.previous_release?.latent_centroid_cosine?.monocyte, 2)),
+  v3_latent_cosine_macrophage: (m) => escapeHtml(formatMetric(m.earlier_release?.latent_centroid_cosine?.macrophage, 2)),
+  v3_latent_cosine_monocyte: (m) => escapeHtml(formatMetric(m.earlier_release?.latent_centroid_cosine?.monocyte, 2)),
 });
 
 const pair = (row) => (row && isMeasured(row.accuracy) && isMeasured(row.balanced_accuracy)
@@ -495,19 +541,33 @@ Object.assign(FACTS, {
   rna_to_rna_test: (m) => pair(cardRow(m, 'rna_to_rna_test')),
   rna_to_rna_superseded: (m) => pair(m.model_card?.rna_to_rna_superseded),
   seeds: (m) => escapeHtml(formatMetric(m.model?.seeds, 0)),
-  v3_seeds: (m) => escapeHtml(formatMetric(m.previous_release?.seeds, 0)),
+  v3_seeds: (m) => escapeHtml(formatMetric(m.earlier_release?.seeds, 0)),
 });
 
-// The current release's results, for the landing's prose. Each number only
-// makes sense with what it measured, so index.html says that in the same
-// sentence: NB2's simulated RNA uploads, and Fulcher 2026 as served, which
-// is development data.
-const nb2Value = (m, key) => (m.model?.evaluation?.nb2 ?? []).find((r) => r.key === key)?.value;
+// The current release's results, for the prose of index.html and
+// versions.html. Each number only makes sense with what it measured, so the
+// page says that in the same sentence: simulated RNA uploads, a dataset as
+// served (Fulcher 2026 is development data, Khoury 2026 post-hoc), or a
+// benchmark table.
+const suiteValue = (m, key) => (m.model?.evaluation?.suite?.rows ?? []).find((r) => r.key === key)?.value;
 const served = (m, dataset) => (m.model?.evaluation?.served ?? []).find((r) => r.dataset === dataset);
+const recall = (m, dataset, type) => (m.model?.evaluation?.recall ?? [])
+  .find((r) => r.dataset === dataset && r.type === type)?.value;
+const benchmarkSet = (m, key) => (m.benchmark?.datasets ?? []).find((d) => d.key === key);
+// The current model's own row: the first of a table, marked as ours.
+const currentScore = (m, key) => {
+  const row = benchmarkSet(m, key)?.rows?.[0];
+  return row?.ours ? row.score : undefined;
+};
 
 Object.assign(FACTS, {
-  eval_rna_correct: (m) => escapeHtml(formatPercent(nb2Value(m, 'correct_when_committed'))),
-  eval_rna_abstained: (m) => escapeHtml(formatPercent(nb2Value(m, 'abstention'))),
+  eval_rna_correct: (m) => escapeHtml(formatPercent(suiteValue(m, 'correct_when_committed'))),
+  eval_rna_abstained: (m) => escapeHtml(formatPercent(suiteValue(m, 'abstention'))),
   eval_fulcher_answered: (m) => escapeHtml(formatPercent(served(m, 'Fulcher 2026')?.committed)),
   eval_fulcher_correct: (m) => escapeHtml(formatPercent(served(m, 'Fulcher 2026')?.correct)),
+  recall_khoury_cd8t: (m) => escapeHtml(formatPercent(recall(m, 'Khoury 2026', 'CD8T'))),
+  recall_fulcher_cd8t: (m) => escapeHtml(formatPercent(recall(m, 'Fulcher 2026', 'CD8T'))),
+  recall_fulcher_dc: (m) => escapeHtml(formatPercent(recall(m, 'Fulcher 2026', 'DC'))),
+  scope2_current: (m) => escapeHtml(formatPercent(currentScore(m, 'scope2'))),
+  scope2_chance: (m) => escapeHtml(formatPercent(benchmarkSet(m, 'scope2')?.chance)),
 });

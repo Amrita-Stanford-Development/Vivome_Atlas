@@ -4,7 +4,10 @@ Grouped by role, so what a deployment needs is one folder:
 
 ```
 runtime/     everything the v3 pipeline loads, and the reference files v3.1 shares with it
-v3_1/        v3.1, the default pipeline: T1 NB2's spec and its five ensemble members
+v3_1/        v3.1: T1 NB2's spec and its five ensemble members (v4 and v4.1 answer with them)
+v4/          v4's best guess: its spec, class-balanced statistics and class means (scripts/build_v4_bundle.py)
+v4_1/        v4.1, the default pipeline: its spec, which reads v4's files and v3.1's members
+v5/, v5_1/, v5_2/  candidates on cleaned reference labels; selectable, refused until evaluated
 evidence/    measured tables behind the model's claims (read by scripts/build_manifest.py and the docs)
 source/      how runtime/ was produced: the export notebook, its inputs and checksums
 legacy/      v2/ — the previous model's audit trail; dev/ — the development placeholder checkpoint

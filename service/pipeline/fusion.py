@@ -39,8 +39,8 @@ correlation term is used, the encoder's weight is the spec's
 gate_on_fusion_weight (0.5) instead of fusion_weight (0.7, still the weight
 where the term is flat). The weight was chosen on Fulcher 2026 under fixed
 rules (research/notebooks/v41_pretest.py) and checked once on Khoury 2026
-(benchmark/khoury2026_posthoc_v41_check.py). It is refused like v4 until
-its own evaluation passes.
+(benchmark/khoury2026_posthoc_v41_check.py). Its own evaluation passed
+(Phase C), and it is the service's default since release 0.4.0.
 
 v5 (research/todo.md, Track H) is v4.1's rule with everything underneath
 rebuilt from cleaned reference labels (research/notebooks/v5_labels.py):

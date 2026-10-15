@@ -17,8 +17,10 @@ keeps no build step, and the deploy only copies it.
   out of the static copy. These are the two RNA atlas parts (1.4 GB each)
   and `atlas_PROT_lat128.csv` (45 MB).
 
-Until those three files are served from R2 (below), the atlas page's 3D view
-has no data. Every other page works.
+The 3D view does not need them: its positions come from the small
+`metadata_*_lat128.csv` files, which are deployed. The three large files hold
+each cell's gene profile, so until they are served from R2 (below), clicking
+a cell cannot show its profile. Every other page works.
 
 Pages serves `/home.html` at `/home`. The `.html` addresses redirect with a
 308, so the site's own links keep working.

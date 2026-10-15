@@ -1,8 +1,108 @@
 # VivOME model card
 
-The service runs **v3.1** by default. **v3** stays selectable
-(`VIVOME_PIPELINE_VERSION=v3`) and is described after it. Both are trained
-on RNA only and applied zero-shot to protein.
+The service runs **v4.1** by default, release 0.4.0. It gives v3.1's
+answers with a better best guess. **v3.1** (release 0.3.0) and **v3**
+(release 0.2.0) stay selectable (`VIVOME_PIPELINE_VERSION=v3.1` or `v3`)
+and are described after it. All are trained on RNA only and applied
+zero-shot to protein; no protein labels are used.
+
+## v4.1: v3.1's answers, a fused best guess
+
+### What it is
+
+- **The answers are v3.1's** (below): its five members, conformal sets,
+  out-of-distribution threshold, hierarchy, coordinates and properties.
+- **The best guess is fused** (`service/pipeline/fusion.py`):
+  best guess probability = w × encoder + (1 − w) × softmax(r / 0.05).
+  - The encoder term is the mean over v3.1's members of softmax(cosine to
+    class-balanced centroids / T), half from the smoothed query and half
+    from the unsmoothed one.
+  - r is each cell's Pearson correlation, over the genes it measured, with
+    the reference's class means, z-scored class-balanced.
+- **The correlation term is used only where it carries signal.** When at
+  least 40% of an upload's cells have the same top class under r as under
+  v3.1, w is 0.5. Otherwise the term is flat, w is 0.7, and the guess is the
+  encoder's. An upload of one cell type usually falls below 40%: per-upload
+  z-scoring removes the contrast r needs.
+- **The fused guess joins every non-empty set** beside v3.1's own guess, so
+  v4.1's sets contain v3.1's.
+- **How each setting was chosen:**
+  - the 0.7 weight and the correlation temperature on NB1's calibration
+    suite (v4);
+  - the smoothed share and the 40% threshold on NB3c's calibration cells
+    and the development data;
+  - the 0.5 weight on Fulcher 2026, under rules fixed beforehand
+    (`research/notebooks/v41_pretest.py`), with the temperature confirmed
+    there at 0.05; then checked once on Khoury 2026.
+
+Spec: `service/model/v4_1/spec_v41.json`, on v4's
+`service/model/v4/spec_v4.json` and data files. Record:
+`research/notebook-run-history.md`, entries 20 to 26.
+
+### Evaluation suite (simulated uploads)
+
+240 fresh simulated RNA uploads from `te_eval` cells, scored once
+(`research/notebook-outputs/v41_phase3/summary.json`). It was that suite's
+fourth use, so it is a safety check, not a fresh test. All eight
+pre-registered checks passed.
+
+| Measure | v4.1 | v3.1 |
+|---|---|---|
+| Best guess, balanced accuracy per upload | **64.97%** | 60.57% |
+| Committed | 85.83% | 86.90% |
+| Correct when committed, at the stated level | 96.28% | 95.98% |
+| Conformal coverage (target 90%) | 87.21% | 86.69% |
+| False abstention | 0.48% | 0.48% |
+
+### Development data, as served
+
+`research/benchmark/v41_development/` (`benchmark/baselines_v4_score.py
+--version v4.1`). Fulcher 2026 chose v4.1's weight, so its Fulcher
+figures are in-sample.
+
+- **Fulcher 2026, six types:** best guess 69.05% balanced accuracy against
+  v3.1's 57.9% (+11.1, CI 8.5 to 14.0). Recall: CD4 T 82.5%, CD8 T 23.8%,
+  NK 90.0%, B 98.0%, monocyte 97.8%, DC 22.2%. 87.0% of cells committed,
+  97.9% of those correct at the stated level (v3.1: 89.2% and 97.3%).
+- **PBMC240 and both SCoPE2 versions:** the correlation term is flat there,
+  so v4.1 answers exactly as v4. PBMC240 lymphoid recall stays 92.3%.
+  SCoPE2 restricted to macrophage or monocyte is 38.0% balanced accuracy,
+  below chance (50%), as for v3.1.
+
+### Khoury 2026, post-hoc
+
+Khoury's labels were read at its one scoring (2026-10-03), before v4.1
+existed, and nothing was chosen on it afterwards
+(`research/benchmark/khoury2026_posthoc_v41_check/`).
+
+- **Best guess:** 62.5% balanced accuracy over five types, against v3.1's
+  56.9% (+5.6, CI 4.0 to 7.1).
+- **Recall:** CD4 T 82.8%, CD8 T 2.7%, NK 50.7%, B 81.7%, monocyte 94.7%.
+- **Against the corrected baselines:** level with PCA and kNN (62.8%; −0.3,
+  CI −2.1 to 1.4) and with scANVI and kNN on two of three seeds; ahead of
+  every other run, each CI above zero
+  (`research/benchmark/results.md`, "v4.1 against the corrected baselines").
+
+### Known limits
+
+1. **CD8 T cells.** Recall is 2.7% on Khoury and 23.8% on Fulcher, and every
+   method fails them. Khoury's CD8 and CD4 clusters largely separate naive
+   from memory T cells, and the reference files naive CD8 T cells under
+   CD4 T (`research/notebooks/cd8_cd4_diagnosis.py`). Fulcher measures
+   neither CD8A, CD8B nor CD4.
+2. **Dendritic cells.** Recall is 22.2% on Fulcher (v3.1: 5.6%). The
+   reference has 1 myeloid dendritic cell and 29 plasmacytoid ones.
+3. **SCoPE2's macrophages and monocytes** are not separated. v4.1 is below
+   chance there, and on the reprocessed matrix every method is at or below
+   chance.
+4. **No sealed test yet.** Fulcher chose v4.1's weight, Khoury is
+   post-hoc, and the simulated suite was on its fourth use. The claim that
+   v4.1 beats the corrected baselines waits for sorted cells
+   (`research/benchmark/protocol-sorted-cd4cd8.md`).
+5. **The guess's probability.** Its out-of-reference AUROC is 0.790, against
+   v4's 0.829 and v3.1's 0.744. Out-of-distribution abstention is v3.1's,
+   unchanged.
+6. **v3.1's known limits apply to the answers** (below).
 
 ## v3.1: the T1 NB2 ensemble
 
@@ -365,7 +465,8 @@ Tables: `research/benchmark/baselines/`. Narrative:
      classes. Under v3 that default abstains on 48% of Fulcher cells and
      labels only 2.1% monocyte, against 36% in the annotation
      (`research/benchmark/fulcher2026/product_check.json`).
-   - **Under v3.1, the default,** lymphoid cells get lymphoid answers: on
+   - **Under v3.1, and v4.1 (the default), which keeps its answers,**
+     lymphoid cells get lymphoid answers: on
      Fulcher, 89% of cells are committed and 97% of committed answers are
      correct at the stated level (v3.1, Development data above).
 2. **Macrophage and monocyte placement.** Cross-modal alignment is weak for
@@ -424,6 +525,8 @@ Tables: `research/benchmark/baselines/`. Narrative:
 
 ## Versioning
 
+- v4.1 files: `service/model/v4_1/MANIFEST.json`, which also pins v4's data
+  files (`service/model/v4/MANIFEST.json`).
 - v3.1 files: `service/model/v3_1/MANIFEST.json` (sha256, size and origin of each).
 
 - Model artifact provenance: `service/model/runtime/provenance.json` (`created`,

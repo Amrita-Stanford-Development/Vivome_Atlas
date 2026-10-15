@@ -135,9 +135,11 @@ one fixed 9,002-gene denominator does).
 
 ## Pipeline versions
 
-The service runs v3.1 unless `VIVOME_PIPELINE_VERSION=v3` is set
-(`config.PIPELINE_VERSION`). The schema above is v3's. A v3.1 response
-keeps every v3 field with the same meaning, and adds the fields below.
+The service runs v4.1 unless `VIVOME_PIPELINE_VERSION` names another
+version (`config.PIPELINE_VERSION`): `v3`, `v3.1` and `v4` stay selectable.
+The schema above is v3's. A v3.1 response keeps every v3 field with the same
+meaning, and adds the fields below. A v4 or v4.1 response is a v3.1
+response with a different best guess and one more field (see "v4.1").
 
 ### v3.1
 
@@ -251,6 +253,40 @@ cell abstains with `outside_supported_region` when its score is below
   the coverage is approximate (`service/model/MODEL_CARD.md`, v3.1).
 - v3's sets are calibrated on the upload's own top predictions, with no
   ground truth, so their target is nominal.
+
+### v4.1, the default
+
+v4.1 keeps v3.1's answers and changes the best guess
+(`service/pipeline/fusion.py`; spec `service/model/v4_1/spec_v41.json`,
+built on v4's `service/model/v4/spec_v4.json`):
+
+- **The answers are v3.1's:** the same members, conformal sets,
+  out-of-distribution threshold, hierarchy, coordinates and properties.
+- **The best guess is fused** from v3.1's members, with class-balanced
+  centroids, and each cell's correlation with the reference's class means
+  over the genes it measured.
+- **The correlation term is used only where it carries signal:** when at
+  least `agreement_threshold` of the upload's cells have the same top class
+  under the correlation as under v3.1. Below it, the term is flat and the
+  guess is the encoder's alone. An upload of one cell type usually falls
+  below it.
+- **The fused guess joins every non-empty set** beside v3.1's own guess
+  (`set_includes_best_guess`), so v4.1's sets contain v3.1's.
+
+The response is v3.1's, with `pipeline_version` `"v4.1"`, its own
+`model_version`, and:
+
+```
+"best_guess_rule": {
+  "rule"                : "fusion",
+  "agreement"           : <float>,   the upload's agreement
+  "agreement_threshold" : <float>,
+  "correlation_term"    : "used" | "flat"
+}
+```
+
+v4 is the same code with v4's spec: the encoder's weight is 0.7 wherever
+the correlation term is used, against v4.1's 0.5.
 
 ### Components
 

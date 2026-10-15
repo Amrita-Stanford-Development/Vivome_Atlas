@@ -8,8 +8,10 @@ python scripts/build_manifest.py
 ```
 
 The builder reads `web/data/metadata_RNA_lat128.csv` and
-`web/data/metadata_PROT_lat128.csv` and writes the manifest. It prints the cell
-type summary so you can sanity-check the result.
+`web/data/metadata_PROT_lat128.csv`, the model's evidence tables, and the
+committed evaluation and benchmark tables, and writes the manifest. It prints
+the cell type summary, the releases and the benchmark's tables so you can
+sanity-check the result.
 
 ## The measured/pending contract
 
@@ -54,21 +56,40 @@ Computed from repository data:
 - Cross-modal support classification (`cross_modal`, `rna_only`, `prot_only`)
 - `pca_centroid_cosine` — cosine similarity between RNA and protein class
   centroids **in the 3-PC projection**, for classes present in both modalities
-- `model` is the current release, v3.1:
+- `model` is the current release, v4.1 (v3.1's answers, a fused best guess):
   - `model.seeds` — the ensemble's member *count* (5), from the v3.1 spec,
     rendered with 0 decimal places (`web/js/panels.js:buildModelCard`);
   - the architecture facts it shares with v3 (`feature_space_size`,
     `encoder_family`, `detected_by_source`); `mask_sampling` is `null`, since
     the members' training setting (T1 NB1b) is not recorded here, and renders
     Pending;
-  - `model.evaluation` — `nb2`: NB2's evaluation-suite figures, each with the
-    basis "NB2 evaluation, before the two conservative flags"; `served`: SCoPE2,
-    PBMC240 and Fulcher measured as served (flags on), from
-    `research/benchmark/v31_service_flags.json`. `buildEvaluationTable` shows both.
-- `previous_release` is v3: its seed count (from `v3_tables/reference_seeds.csv`,
+  - `model.evaluation`:
+    - `suite`: a title and v4.1's pre-registered evaluation on simulated
+      uploads (`research/notebook-outputs/v41_phase3/summary.json`);
+    - `served`: SCoPE2, PBMC240 and Fulcher as served
+      (`research/benchmark/v41_development/confident.csv`);
+    - `recall`: the best guess's recall per type on Fulcher (in-sample) and
+      Khoury (post-hoc), which the known limits on `versions.html` read.
+- `previous_release` is v3.1: its member count, architecture facts and atlas
+  version, and its own `evaluation` (`suite`: NB2's evaluation-suite figures,
+  each with the basis "NB2 evaluation, before the two conservative flags";
+  `served`: from `research/benchmark/v31_service_flags.json`).
+- `earlier_release` is v3: its seed count (from `v3_tables/reference_seeds.csv`,
   accuracy and CI in `basis`), its architecture facts, its latent centroid
   cosines and modality probe (`v3_tables/`), and its atlas version.
   `first_release` is CrossModalNet's own numbers, kept as the first baseline.
+- `benchmark` — signed off by the owner for release 0.4.0. `datasets`, one per
+  table on `benchmark.html`: Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
+  both SCoPE2 versions. Each has its `measure`, `chance` (one over the number
+  of types scored, or `null`), its `role` (what kind of evidence it is) and
+  `rows`: VivOME's two releases first, then every corrected baseline arm by
+  score. A row's `score` is a measured record, with `sd`, `min` and `max` over
+  seeds; `vs_current` is the current model minus that arm by paired bootstrap
+  (the counts favouring each side, and the difference with its CI or its
+  range). Sources: `research/benchmark/v41_development/`,
+  `research/benchmark/baselines_corrected/`,
+  `research/benchmark/khoury2026_posthoc/` and
+  `research/benchmark/khoury2026_posthoc_v41_check/`.
 - `latent_centroid_cosine`, `modality_probe_accuracy` — measured for the 2
   cross-modal classes (macrophage, monocyte) in v3.1's coordinate member's
   latent space, from `service/model/evidence/v3_1_tables/latent_centroid_cosine.csv`
@@ -97,7 +118,6 @@ Emitted as pending, with the phase that will produce each:
 |---|---|---|
 | `latent_centroid_cosine`, `modality_probe_accuracy` for RNA-only/protein-only classes | N/A | No cross-modal coverage for those classes — a correct record, not a gap to fill |
 | `transfer_accuracy` (any class) | N/A | A real measurement exists, but only per *dataset* (`service/model/evidence/v3_tables/rna_to_rna_real_masks.csv`), not per class — no per-class version has been computed |
-| `benchmark.rows` | Phase 4 | Run and written up (`research/benchmark/results.md`); published only on the owner's sign-off |
 
 A class present in only one modality gets a Phase 2 pending record for
 `pca_centroid_cosine` — there is no paired coverage to compute it from. A
@@ -119,11 +139,12 @@ drop-in source for it: that function now returns only the facts folded into
 `escapeHtml(undefined)` renders the literal string `"undefined"` if `note`
 is missing. Until then, those facts live on `model` directly. `first_release` is a
 separate, permanent record of `CrossModalNet`'s own numbers, and
-`previous_release` of v3's, both kept as documented history rather than erased.
+`previous_release` and `earlier_release` of v3.1's and v3's, all kept as
+documented history rather than erased.
 
 ## Current output
 
-Atlas version `0.3.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
+Atlas version `0.4.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 
@@ -138,11 +159,11 @@ in the browser.
 |---|---|
 | `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `atlas.html` |
 | `buildBenchmarkTable` | `benchmark.html` |
-| `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
+| `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace` | `project.html` |
 | `buildModelCardTable` | `versions.html` |
 | `buildReleaseStatus`, `buildNextReferenceCard` | `home.html` |
-| `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html` |
+| `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html`, `benchmark.html` |
 
 Every interpolated value goes through `escapeHtml()`. Cell-type names come
 from data, and `web/tests/fixtures.js` deliberately names one class
@@ -156,8 +177,10 @@ from data, and `web/tests/fixtures.js` deliberately names one class
 4. Tag the release and archive it for a persistent identifier.
 5. Record label stability against the previous version and add it to `versions.html`.
 
-Label stability is not yet measured — it is reported from the first release
-that has a predecessor to compare against.
+Label stability is not yet measured for any release. 0.4.0 keeps 0.3.0's
+answers but joins its new best guess to each set, so the share of answers
+that changes still needs computing; v3 answers at class level only, so
+comparing it with the later releases needs a definition first.
 
 ## Tests
 

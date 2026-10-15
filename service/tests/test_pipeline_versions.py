@@ -51,8 +51,8 @@ class V3IsUnchangedTests(unittest.TestCase):
         cls.bundle = pipeline.ReferenceBundle.load()
         cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
 
-    def test_the_default_version_is_v31_and_v3_stays_selectable(self):
-        self.assertEqual(config.PIPELINE_VERSION, "v3.1")
+    def test_the_default_version_is_v41_and_v3_stays_selectable(self):
+        self.assertEqual(config.PIPELINE_VERSION, "v4.1")
         self.assertIn("v3", config.PIPELINE_VERSIONS)
         self.assertIsInstance(pipeline.load_bundle("v3"), pipeline.ReferenceBundle)
 
@@ -137,9 +137,9 @@ class V4IsUnchangedTests(unittest.TestCase):
             raise unittest.SkipTest(f"{exc} Run scripts/fetch_v31_members.py and scripts/build_v4_bundle.py.")
         cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
 
-    def test_v4_is_selectable_and_v31_stays_the_default(self):
+    def test_v4_is_selectable_and_not_the_default(self):
         self.assertIn("v4", config.PIPELINE_VERSIONS)
-        self.assertEqual(config.PIPELINE_VERSION, "v3.1")
+        self.assertEqual(config.PIPELINE_VERSION, "v4.1")
 
     def test_v4_reproduces_its_frozen_responses(self):
         for name, raw in self.raws.items():
@@ -197,9 +197,11 @@ class V41IsUnchangedTests(unittest.TestCase):
             raise unittest.SkipTest(f"{exc} Run scripts/build_v41_spec.py.")
         cls.raws = {"scope2": _load_scope2_50(), "pbmc240": _load_pbmc240_50()}
 
-    def test_v41_is_selectable_and_v31_stays_the_default(self):
+    def test_v41_is_the_default_since_release_040(self):
         self.assertIn("v4.1", config.PIPELINE_VERSIONS)
-        self.assertEqual(config.PIPELINE_VERSION, "v3.1")
+        self.assertEqual(config.PIPELINE_VERSION, "v4.1")
+        self.assertEqual(config.ATLAS_VERSION, "0.4.0")
+        self.assertEqual(pipeline.load_bundle(config.PIPELINE_VERSION).pipeline_version, "v4.1")
 
     def test_v41_reproduces_its_frozen_responses(self):
         for name, raw in self.raws.items():

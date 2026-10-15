@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="css/page.css">
     <style>
         .page { max-width: 980px; }
-        .sheet p { font-size: 15px; }
+        .sheet > p, .sheet ul { font-size: 15px; }
+        .sheet ul { padding-left: 22px; }
+        .sheet ul li { margin-bottom: 8px; }
+        .sheet h3 { margin: 28px 0 8px; }
+        #benchmark-mount .panel-note { margin-top: 0; }
     </style>
 </head>
 <body>
@@ -34,25 +38,54 @@
         <p class="lede">Fixed datasets, fixed metrics, and every method scored the same way.</p>
 
         <section class="sheet">
-            <h2>Cross-modal integration comparison</h2>
-            <div class="table-scroll" id="benchmark-mount"></div>
-            <p class="panel-note">
-                Transfer accuracy is the headline number most integration papers report.
-                The modality probe column is the diagnostic: a linear classifier trained to
-                recover the source modality from the integrated representation. High transfer
-                accuracy together with high probe accuracy means the modalities point in the
-                same direction without sharing a representation.
-            </p>
+            <h2>What it shows</h2>
+            <ul>
+                <li><strong>On data no method was developed on, VivOME is level with the best simple
+                    baselines, not ahead of them.</strong> On Khoury 2026, its best guess ties PCA and
+                    scANVI with nearest-neighbour transfer, and is ahead of every other method and
+                    rule.</li>
+                <li><strong>Its lead on Fulcher 2026 is in-sample.</strong> The one setting
+                    <span data-fact="model_name">&nbsp;</span> tuned was chosen on these data.</li>
+                <li><strong>No method separates SCoPE2's macrophages from its monocytes.</strong>
+                    VivOME is below chance there, and on the reprocessed matrix every method is at or
+                    below chance.</li>
+                <li><strong>What VivOME adds is its answers.</strong> Beside its best guess, each cell
+                    gets an answer at the level the evidence supports, or an abstention with its
+                    reason. No baseline does this, so that part is not compared here; it is on
+                    <a href="versions.html">the model card</a>.</li>
+                <li><strong>The claim that VivOME beats these methods waits for a sealed test</strong>
+                    on cells sorted by type. No public dataset has such cells yet.</li>
+            </ul>
         </section>
 
         <section class="sheet">
-            <h2>Why both columns</h2>
-            <p>
-                A method can score well on mixing and transfer while a probe still recovers the
-                source modality almost perfectly. Reporting transfer accuracy alone hides that.
-                Running the probe across every method is what turns the observation into a
-                property of the field rather than a quirk of one model.
-            </p>
+            <h2>Results by dataset</h2>
+            <div id="benchmark-mount"></div>
+        </section>
+
+        <section class="sheet">
+            <h2>How it is scored</h2>
+            <ul>
+                <li><strong>Same inputs.</strong> Every method gets the same RNA reference, the same
+                    genes and the same query cells. VivOME and the correlation baseline are fixed
+                    before they see the query; PCA, Harmony, scANVI, MaxFuse, scGLUE and Seurat embed
+                    the query together with the reference.</li>
+                <li><strong>Fair settings.</strong> A review found our first setup handicapped several
+                    baselines, so they were rerun with corrections fixed before any result: the RNA
+                    side scaled with every cell type weighted equally, MaxFuse with the settings of its
+                    own tutorial, and scANVI given inputs its likelihood can fit
+                    (<code>research/benchmark/baseline-corrections.md</code>).</li>
+                <li><strong>Each method's own rules.</strong> Embeddings are scored with a shared
+                    nearest-neighbour rule, on the development data also with nearest centroid, and
+                    each tool with its own transfer where it has one.</li>
+                <li><strong>Scores</strong> are balanced accuracy, or lymphoid recall on PBMC240: the
+                    mean over a method's seeds, with the SD and range below it.</li>
+                <li><strong>The last column</strong> is VivOME's score minus each run's, from a paired
+                    bootstrap: 2,000 resamples stratified by true type, with a 95% interval. A run is
+                    counted as favouring one side only when the interval excludes zero.</li>
+                <li><strong>Sources:</strong> <code>research/benchmark/results.md</code> and the tables
+                    beside it; the code is in <code>benchmark/</code>.</li>
+            </ul>
         </section>
     </main>
 
@@ -72,13 +105,15 @@
     <script type="module" src="js/background.js"></script>
     <script type="module" src="js/biofield.js"></script>
     <script type="module" async>
-        import { loadManifest } from './js/manifest.js';
-        import { buildBenchmarkTable, errorPanel } from './js/panels.js';
+        import { loadManifest, PENDING_LABEL } from './js/manifest.js';
+        import { buildBenchmarkTable, factText, errorPanel } from './js/panels.js';
 
         loadManifest().then((manifest) => {
             document.getElementById('benchmark-mount').innerHTML = buildBenchmarkTable(manifest);
+            for (const el of document.querySelectorAll('[data-fact]')) el.innerHTML = factText(manifest, el.dataset.fact);
         }).catch((err) => {
             document.getElementById('benchmark-mount').innerHTML = errorPanel(err);
+            for (const el of document.querySelectorAll('[data-fact]')) el.textContent = PENDING_LABEL;
         });
     </script>
 </body>

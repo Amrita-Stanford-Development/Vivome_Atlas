@@ -1,12 +1,14 @@
 import unittest
 
 from build_manifest import (
-    build_deployed_architecture_facts, build_manifest, build_model_seeds,
+    build_benchmark, build_deployed_architecture_facts, build_manifest, build_model_seeds,
     build_model_card, build_first_release_facts, build_v3_release, build_v31_evaluation,
-    build_v31_model, class_stats, cosine, measured, pending,
+    build_v31_release, build_v41_evaluation, build_v41_model, class_stats, cosine, measured, pending,
     read_family_summary,
     read_latent_centroid_cosine, read_modality_probe_accuracy,
 )
+
+NO_EVALUATION = {"suite": {"title": "none", "rows": []}, "served": []}
 
 
 def row(modality, class_idx, class_name, pc1, pc2, pc3):
@@ -80,7 +82,7 @@ class TestBuildManifest(unittest.TestCase):
         self.modality_probe_accuracy = measured(0.99, "test probe")
         self.manifest = build_manifest(
             self.rna, self.prot,
-            model=build_v31_model(5, self.deployed_architecture, {"nb2": [], "served": []}),
+            model=build_v41_model(5, self.deployed_architecture, NO_EVALUATION),
             latent_centroid_cosine_by_idx=self.latent_centroid_cosine_by_idx,
             modality_probe_accuracy=self.modality_probe_accuracy,
         )
@@ -132,9 +134,9 @@ class TestBuildManifest(unittest.TestCase):
         self.assertEqual(self.manifest["summary"]["rna_only"], 1)
         self.assertEqual(self.manifest["summary"]["total"], 2)
 
-    def test_benchmark_block_is_pending_with_no_rows(self):
+    def test_benchmark_block_is_pending_with_no_datasets_unless_supplied(self):
         self.assertEqual(self.manifest["benchmark"]["status"], "pending")
-        self.assertEqual(self.manifest["benchmark"]["rows"], [])
+        self.assertEqual(self.manifest["benchmark"]["datasets"], [])
 
     def test_required_top_level_keys(self):
         for key in ("schema_version", "atlas_version", "generated", "model",
@@ -149,8 +151,9 @@ class TestBuildManifest(unittest.TestCase):
         # carry).
         self.assertIsNone(self.manifest["next_reference"])
 
-    def test_previous_and_first_release_default_to_none_when_not_supplied(self):
+    def test_previous_earlier_and_first_release_default_to_none_when_not_supplied(self):
         self.assertIsNone(self.manifest["previous_release"])
+        self.assertIsNone(self.manifest["earlier_release"])
         self.assertIsNone(self.manifest["first_release"])
 
 
@@ -217,7 +220,7 @@ class TestBuildDeployedArchitectureFacts(unittest.TestCase):
         facts = build_deployed_architecture_facts(self.decisive_summary, self.detail_rows)
         manifest = build_manifest(
             [row("RNA", 12, "monocyte", 0.0, 0.0, 0.0)], [],
-            model=build_v31_model(5, facts, {"nb2": [], "served": []}),
+            model=build_v41_model(5, facts, NO_EVALUATION),
             latent_centroid_cosine_by_idx={}, modality_probe_accuracy=pending("N/A", "test"),
         )
         self.assertEqual(manifest["model"]["feature_space_size"], 2)
@@ -225,12 +228,13 @@ class TestBuildDeployedArchitectureFacts(unittest.TestCase):
         # There is no separate next_reference block any more — see
         # TestBuildManifest.test_next_reference_is_always_none.
         self.assertIsNone(manifest["next_reference"])
-        self.assertEqual(manifest["benchmark"]["rows"], [])
+        self.assertEqual(manifest["benchmark"]["datasets"], [])
 
 
 class TestReleaseBlocks(unittest.TestCase):
-    """`model` is v3.1, previous_release v3, each with its own numbers; every
-    v3.1 figure says whether it is NB2's rule or the served configuration."""
+    """`model` is v4.1, previous_release v3.1, earlier_release v3, each with
+    its own numbers; every v3.1 figure says whether it is NB2's rule or the
+    served configuration."""
 
     nb2_summary = {"eval_candidate": {"correct_when_committed": 94.9, "abstain_rate": 19.18, "coverage": 87.06,
                                       "fine_rate": 19.13, "group_rate": 17.71, "lineage_rate": 43.97}}
@@ -244,27 +248,142 @@ class TestReleaseBlocks(unittest.TestCase):
 
     def test_nb2_figures_say_they_are_before_the_flags_and_dev_figures_say_served(self):
         ev = build_v31_evaluation(self.nb2_summary, self.flags)
-        self.assertTrue(all("before the two conservative flags" in r["value"]["basis"] for r in ev["nb2"]))
+        self.assertIn("NB2", ev["suite"]["title"])
+        self.assertTrue(all("before the two conservative flags" in r["value"]["basis"] for r in ev["suite"]["rows"]))
         self.assertTrue(all("served settings (both service flags on)" in r["committed"]["basis"] for r in ev["served"]))
-        self.assertEqual(ev["nb2"][0]["value"]["value"], 0.949)
+        self.assertEqual(ev["suite"]["rows"][0]["value"]["value"], 0.949)
         self.assertEqual(ev["served"][0]["committed"]["value"], round(790 / 1490, 6), "from the cell count, not the rounded share")
         self.assertEqual(ev["served"][1]["correct"]["value"], round(92 / 117, 6))
 
-    def test_v31_model_marks_unrecorded_mask_sampling_as_missing(self):
-        model = build_v31_model(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, {"nb2": [], "served": []})
-        self.assertEqual(model["name"], "VivOME v3.1")
+    def test_v41_model_marks_unrecorded_mask_sampling_as_missing(self):
+        model = build_v41_model(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, NO_EVALUATION)
+        self.assertEqual(model["name"], "VivOME v4.1")
         self.assertIsNone(model["mask_sampling"], "v3's mask sampling must not be presented as the members'")
         self.assertIn("no protein labels are used", model["notes"])
+        self.assertIn("Fulcher 2026", model["notes"], "the setting chosen on development data is named")
+
+    def test_v31_is_the_previous_release_with_its_own_evaluation(self):
+        ev = build_v31_evaluation(self.nb2_summary, self.flags)
+        v31 = build_v31_release(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, ev)
+        self.assertEqual((v31["model_name"], v31["atlas_version"]), ("VivOME v3.1", "0.3.0"))
+        self.assertIsNone(v31["mask_sampling"])
+        self.assertIs(v31["evaluation"], ev)
+        self.assertIn("VIVOME_PIPELINE_VERSION=v3.1", v31["note"])
 
     def test_v3_release_keeps_its_own_evidence(self):
         rows = [{"class_name": "macrophage", "n_prot_cells": "394", "latent_centroid_cosine": "0.189762", "status": "measured"},
                 {"class_name": "b cell", "n_prot_cells": "0", "latent_centroid_cosine": "", "status": "pending"}]
         v3 = build_v3_release(measured(5, "seeds"), {"mask_sampling": "uniform"}, rows,
                               {"modality_probe_balanced_accuracy_pct": 98.99, "basis": "probe"})
-        self.assertEqual(v3["model_name"], "VivOME v3 reference")
+        self.assertEqual((v3["model_name"], v3["atlas_version"]), ("VivOME v3 reference", "0.2.0"))
         self.assertEqual(set(v3["latent_centroid_cosine"]), {"macrophage"})
         self.assertEqual(v3["modality_probe_accuracy"]["value"], 0.9899)
         self.assertEqual(v3["mask_sampling"], "uniform")
+
+
+class TestV41Evaluation(unittest.TestCase):
+    phase3 = {"result": {"v4.1": {"committed": 85.83, "correct_when_committed": 96.28, "coverage": 87.21,
+                                  "best_guess_per_upload_balanced": 64.97,
+                                  "levels": {"lineage": 51.77, "class": 18.17, "group": 15.89, "abstain": 14.17}}}}
+    confident = [{"model": m, "dataset": d, "committed_pct": c, "correct_when_committed_pct": k}
+                 for m in ("v31", "v41") for d, c, k in (("SCoPE2", "52.9", "58.8"), ("PBMC240", "73.4", "96.9"),
+                                                          ("Fulcher 2026", "86.98", "97.92"))]
+    fulcher = [{"tool": "v4.1 (served)", "balanced_accuracy_pct": "69.0", "recall_CD8T_pct": "23.75",
+                "recall_DC_pct": "22.2", "lymphoid_recall_pct": "98.9"}]
+    khoury = {"scores": {"v4.1": {"balanced_accuracy_pct": 62.51, "recall_CD8T_pct": 2.7, "lymphoid_recall_pct": 95.97}}}
+
+    def test_every_figure_is_a_fraction_with_what_it_describes(self):
+        ev = build_v41_evaluation(self.phase3, self.confident, self.fulcher, self.khoury)
+        suite = {r["key"]: r["value"] for r in ev["suite"]["rows"]}
+        self.assertEqual(suite["correct_when_committed"]["value"], 0.9628)
+        self.assertEqual(suite["abstention"]["value"], 0.1417)
+        self.assertTrue(all("fourth use" in v["basis"] for v in suite.values()))
+        fulcher = next(s for s in ev["served"] if s["dataset"] == "Fulcher 2026")
+        self.assertEqual((fulcher["committed"]["value"], fulcher["correct"]["value"]), (0.8698, 0.9792))
+        self.assertIn("lineage", next(s for s in ev["served"] if s["dataset"] == "PBMC240")["correct_label"])
+
+    def test_recall_covers_the_fine_types_only_and_names_each_dataset_s_status(self):
+        ev = build_v41_evaluation(self.phase3, self.confident, self.fulcher, self.khoury)
+        found = {(r["dataset"], r["type"]): r["value"] for r in ev["recall"]}
+        self.assertEqual(set(found), {("Fulcher 2026", "CD8T"), ("Fulcher 2026", "DC"), ("Khoury 2026", "CD8T")})
+        self.assertEqual(found[("Khoury 2026", "CD8T")]["value"], 0.027)
+        self.assertIn("in-sample", found[("Fulcher 2026", "DC")]["basis"])
+        self.assertIn("post-hoc", found[("Khoury 2026", "CD8T")]["basis"])
+
+
+class TestBenchmark(unittest.TestCase):
+    """build_benchmark on the committed tables: every number traces to one of
+    them (research/benchmark/results.md quotes the same)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import json
+        import build_manifest as bm
+        cls.b = build_benchmark({
+            "v41_fulcher": bm.read_csv(bm.V41_DEV_DIR / "fulcher2026.csv"),
+            "v41_pbmc240": bm.read_csv(bm.V41_DEV_DIR / "pbmc240.csv"),
+            "v41_scope2": bm.read_csv(bm.V41_DEV_DIR / "scope2.csv"),
+            "v41_scope2_reprocessed": bm.read_csv(bm.V41_DEV_DIR / "scope2_reprocessed.csv"),
+            "paired_v41": bm.read_csv(bm.V41_DEV_DIR / "paired_bootstrap_v41.csv"),
+            "paired_v41_vs_v31": bm.read_csv(bm.V41_DEV_DIR / "paired_bootstrap_v41_vs_v31.csv"),
+            "corrected_fulcher": bm.read_csv(bm.CORRECTED_DIR / "fulcher2026_summary.csv"),
+            "corrected_pbmc240": bm.read_csv(bm.CORRECTED_DIR / "pbmc240_summary.csv"),
+            "corrected_scope2": bm.read_csv(bm.CORRECTED_DIR / "scope2_summary.csv"),
+            "khoury_family": bm.read_csv(bm.KHOURY_POSTHOC_DIR / "family_summary.csv"),
+            "khoury_v41": json.loads((bm.KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
+            "khoury_v41_paired": bm.read_csv(bm.KHOURY_V41_DIR / "paired_bootstrap.csv"),
+        })
+        cls.sets = {d["key"]: d for d in cls.b["datasets"]}
+
+    def row(self, key, method, rule):
+        return next(r for r in self.sets[key]["rows"] if r["method"] == method and r["rule"] == rule)
+
+    def test_held_out_data_comes_first_and_every_table_starts_with_ours(self):
+        self.assertEqual(self.b["status"], "measured")
+        self.assertEqual(list(self.sets), ["khoury2026", "fulcher2026", "pbmc240", "scope2", "scope2_reprocessed"])
+        for d in self.b["datasets"]:
+            self.assertEqual([r["method"] for r in d["rows"][:2]], ["VivOME v4.1 (ours)", "VivOME v3.1 (ours)"], d["key"])
+            others = [r["score"]["value"] for r in d["rows"][2:]]
+            self.assertEqual(others, sorted(others, reverse=True), d["key"])
+
+    def test_khoury_scores_and_pairings_match_the_committed_tables(self):
+        k = self.sets["khoury2026"]
+        self.assertEqual(k["rows"][0]["score"]["value"], 0.6251)
+        self.assertEqual(k["chance"]["value"], 0.2)
+        self.assertIn("Post-hoc", k["role"])
+        pca = self.row("khoury2026", "PCA, no correction", "shared kNN")
+        self.assertAlmostEqual(pca["score"]["value"], 0.628, places=3)
+        self.assertEqual((pca["vs_current"]["pairings"], pca["vs_current"]["neither"]), (1, 1))
+        scanvi = self.row("khoury2026", "scANVI", "shared kNN")
+        self.assertEqual((scanvi["runs"], scanvi["vs_current"]["favour_current"], scanvi["vs_current"]["neither"]), (3, 1, 2))
+        self.assertIn("sd", scanvi["score"])
+        v31 = self.row("khoury2026", "VivOME v3.1 (ours)", "best guess, as served")
+        self.assertEqual(v31["vs_current"]["difference"]["ci_low"], 0.039922)
+
+    def test_fulcher_says_it_is_in_sample_and_scanvi_keeps_its_two_completed_runs(self):
+        f = self.sets["fulcher2026"]
+        self.assertIn("In-sample", f["role"])
+        self.assertAlmostEqual(f["chance"]["value"], 1 / 6, places=6)
+        self.assertEqual(self.row("fulcher2026", "scANVI", "shared kNN")["runs"], 2)
+        harmony = self.row("fulcher2026", "Harmony", "nearest centroid")
+        self.assertEqual(harmony["vs_current"]["favour_current"], 3)
+
+    def test_scope2_tables_show_ours_below_chance(self):
+        for key in ("scope2", "scope2_reprocessed"):
+            d = self.sets[key]
+            self.assertEqual(d["chance"]["value"], 0.5)
+            self.assertLess(d["rows"][0]["score"]["value"], d["chance"]["value"], key)
+
+    def test_pbmc240_has_no_chance_and_no_baseline_pairings(self):
+        p = self.sets["pbmc240"]
+        self.assertIsNone(p["chance"])
+        self.assertTrue(all(r["vs_current"] is None for r in p["rows"] if not r["ours"]))
+
+    def test_the_committed_manifest_is_this_builder_s_output(self):
+        import json
+        import build_manifest as bm
+        committed = json.loads(bm.OUTPUT_PATH.read_text(encoding="utf-8"))["benchmark"]
+        self.assertEqual(committed, json.loads(json.dumps(self.b)))
 
 
 class TestBuildModelSeeds(unittest.TestCase):
