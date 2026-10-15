@@ -121,3 +121,26 @@ the question. Two candidates are frozen now:
 
 `research/benchmark/sorted_cd4cd8/`: the scores, the per-type recall, the
 CD4/CD8 confusion, the paired bootstraps and the verdicts.
+
+## Amendment 1, 2026-10-14, before any data
+
+A five-agent search of the repositories and the literature
+(`research/benchmark/side-tests.md`) found what the two requested datasets
+contain. The models, metrics and decision rules do not change.
+
+- **O'Connor et al. (TGen) does not qualify.** Its cells were sorted by
+  negative-selection magnetic sorting into T, B, NK and monocytes, and the T
+  cells are pan-T, with no CD4/CD8 split. If it is received, it is scored as
+  a lineage-level side test under its own protocol, not here.
+- **Krisp et al. (Bruker, Cellenion) is the one known qualifying design.**
+  Abstracts describe FACS-presorted CD4+ T cells, CD8+ T cells, CD19+ B cells
+  and CD14+ monocytes, as single cells and as 10-cell bulks, plus 48 unsorted
+  PBMCs. For it:
+  - only single-cell runs count towards the 50-cell minimum and the
+    metrics, and balanced accuracy is over CD4T, CD8T, B and monocyte;
+  - the 10-cell bulks are scored apart, as a population-level check, and
+    never mixed into the single-cell figures;
+  - the unsorted PBMCs have no independent label and are not scored.
+- **Neither deposit exists yet**, and none is public. If another qualifying
+  dataset appears, it goes in a further amendment, before its labels are
+  opened.

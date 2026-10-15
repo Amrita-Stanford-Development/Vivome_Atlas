@@ -1,0 +1,389 @@
+{
+  "Khoury2026_bulk_sorted/Bulk_R1_LibGen_Global.zip": {
+    "bytes": 577290773,
+    "fetched": "2026-10-14",
+    "published_check": "md5",
+    "role": "reference",
+    "sha256": "46c5dddcf7359eedee6ac55fc10625c291124a0c6ccd8a47d9080ec36fafaf33",
+    "tier": "A",
+    "url": "https://zenodo.org/api/records/22649483/files/Bulk_R1_LibGen_Global.zip/content"
+  },
+  "MSV000099294/DirectDIA_HMC3_1cell_ExperimentAnalysis.txt": {
+    "bytes": 1399,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "107d1b64b01beebf7fd6613462b120b1789f635a57a21bc040456bb6252feec0",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_HMC3_1cell_Reports/DirectDIA_HMC3_1cell_ExperimentAnalysis.txt"
+  },
+  "MSV000099294/DirectDIA_HMC3_1cell_IdentificationsOverview.tsv": {
+    "bytes": 3802,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "205d2386d93e677b56818498924ff7bbed93cb071726366b1d20730bf0e73843",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_HMC3_1cell_Reports/DirectDIA_HMC3_1cell_IdentificationsOverview.tsv"
+  },
+  "MSV000099294/DirectDIA_HMC3_1cell_Protein_Quant_Pivot_Report.tsv": {
+    "bytes": 2094536,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "7c5af41e68436bca9470111656c16d2dc18f59f4b9d1881df542f691d34d53a9",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_HMC3_1cell_Reports/DirectDIA_HMC3_1cell_Protein_Quant_Pivot_Report.tsv"
+  },
+  "MSV000099294/DirectDIA_Microglia_1cell_ExperimentAnalysis.txt": {
+    "bytes": 1376,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "2fc1112aef7934761b9cd60ad6fe649e06d2d26244671708b9deb7daf9a4d4a3",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_Microglia_1cell_Reports/DirectDIA_Microglia_1cell_ExperimentAnalysis.txt"
+  },
+  "MSV000099294/DirectDIA_Microglia_1cell_IdentificationsOverview.tsv": {
+    "bytes": 5052,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "c5350c998835897dea836eb7cb8eababd9667d44df3579a1ec642a262c7b373f",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_Microglia_1cell_Reports/DirectDIA_Microglia_1cell_IdentificationsOverview.tsv"
+  },
+  "MSV000099294/DirectDIA_Microglia_1cell_Protein_Quant_Pivot_Report.tsv": {
+    "bytes": 1285592,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "5694cf9e420f601a0c2a7140e2d65006ba73967627676e954f23e6bc1be467ba",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_Microglia_1cell_Reports/DirectDIA_Microglia_1cell_Protein_Quant_Pivot_Report.tsv"
+  },
+  "PXD020586/PXD020586_community_annotated.sdrf.tsv": {
+    "bytes": 3820932,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "38f9b1ab3f9c95d3c4657ea62de2123f486a9f167cc4f922d0f78a60a5d19810",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2021/05/PXD020586/PXD020586_community_annotated.sdrf.tsv"
+  },
+  "PXD020586/SCeptre_FINAL.zip": {
+    "bytes": 980777917,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "701f5372c7133ca866f42fd0572498810dade3559054cf4def49d10b1d3e683b",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2021/05/PXD020586/SCeptre_FINAL.zip"
+  },
+  "PXD021882/proteinGroups.txt": {
+    "bytes": 6946011,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "b361db6bb8359f97795aa76280bf6839bfb3b60c11f756dd4b3f9967b4ed8aca",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2020/12/PXD021882/proteinGroups.txt"
+  },
+  "PXD021882/tables.pdf": {
+    "bytes": 54650,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "0e780cb41f84f2194b721a05d314db1225d7fad119d7605318ad8c17d5f55ed8",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2020/12/PXD021882/tables.pdf"
+  },
+  "PXD043355/HeLa_VS_Jurkat_InputFiles.txt": {
+    "bytes": 11731,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "204f178cba4dc83d241f553bbdbed9e797f6454756dea97fb569e47d07f848a5",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2023/10/PXD043355/HeLa_VS_Jurkat_InputFiles.txt"
+  },
+  "PXD043355/HeLa_VS_Jurkat_Proteins.txt": {
+    "bytes": 9757952,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "d92ee9a8afea6059a4b3c7365a6c94479b9c762bbc79bff1e2b6cbb9290e7598",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2023/10/PXD043355/HeLa_VS_Jurkat_Proteins.txt"
+  },
+  "PXD043355/PXD043355_community_annotated.sdrf.tsv": {
+    "bytes": 130591,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "2a295df9993e9717192878f5de1f04c86bbedb9222ceff308161233399b06d95",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2023/10/PXD043355/PXD043355_community_annotated.sdrf.tsv"
+  },
+  "PXD046211/quant.cbio.tsv": {
+    "bytes": 293233038,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "45ebb2270c8f5c949e4e751ed09c6d7d17d722093339b3647bed9813bce745ee",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/quant.cbio.tsv"
+  },
+  "PXD046211/sampleAnnotation_GIGA.csv": {
+    "bytes": 3107,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "e6ef6af3f591d742bfe07f01924a1e76b72a8bade419cba950770b49c5dc8de9",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_GIGA.csv"
+  },
+  "PXD046211/sampleAnnotation_cbio681.csv": {
+    "bytes": 2948,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "90c02742bf5bb9a2f825c7b926f8a70b0efc8a6ee9864ef1e12cfe4ab251f79c",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_cbio681.csv"
+  },
+  "PXD046211/sampleAnnotation_cbio703.csv": {
+    "bytes": 2948,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "ee275caccb563490024c67cf93bb7fe56ca648323e6649f141df73804064302a",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_cbio703.csv"
+  },
+  "PXD046211/sampleAnnotation_cbio715.csv": {
+    "bytes": 3926,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "f5fb7af1dc909067cbc76636a1aee25415ea2be9a71a45cc44ab171b51812ecb",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_cbio715.csv"
+  },
+  "PXD046211/sampleAnnotation_cbio725.csv": {
+    "bytes": 5899,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "6296839dbd734258d9d2e10ab80b1b1a22665875218acae7fe0f361a9bed10eb",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_cbio725.csv"
+  },
+  "PXD046211/sampleAnnotation_cbio733.csv": {
+    "bytes": 6027,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "d575508fe29a59a09ffe49846db471d2e8ed4b6b69f2bdc32a232f68b0c028a9",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_cbio733.csv"
+  },
+  "PXD046211/sampleAnnotation_cbio754bis.csv": {
+    "bytes": 5963,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "72b04cabd085ce30019917122abc14b058085cc8304ce51b240d763f33b370ab",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotation_cbio754bis.csv"
+  },
+  "PXD046211/sampleAnnotations.csv": {
+    "bytes": 35750,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "75b2f2ea12e963efa1e0ae6861115d8351b3d72b1fd457be23c9db0946a4be83",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sampleAnnotations.csv"
+  },
+  "PXD046211/sample_annotation.zip": {
+    "bytes": 5838,
+    "fetched": "2026-10-14",
+    "published_check": "md5",
+    "role": "side_test",
+    "sha256": "6395f5f4015a173771557082c9fcf724b7ed070dcf206fb3d96ca8eb6d31331a",
+    "tier": "A",
+    "url": "https://zenodo.org/api/records/8417228/files/sample_annotation.zip/content"
+  },
+  "PXD046211/sample_to_data.sdrf.tsv": {
+    "bytes": 199010,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "side_test",
+    "sha256": "446025c30ffc5734c49476d3070817b62b27cd95951d5ec24d0d9f59b707129f",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/sample_to_data.sdrf.tsv"
+  },
+  "PXD061052/20241206_144402_gbm_minibulk_full_fasta_19.4_Report.tsv": {
+    "bytes": 4995983,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "c0b3ca1ffcd781f4417224800693ed38da12fd85698ccf6686b842b37f29b973",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/11/PXD061052/20241206_144402_gbm_minibulk_full_fasta_19.4_Report.tsv"
+  },
+  "PXD061065/20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv": {
+    "bytes": 31598500,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "b8a1d6203c2d2feae5024ae3f6d35c950f498880496747f35ca89df348a48e8c",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/11/PXD061065/20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv"
+  },
+  "PXD061065/PXD061065_community_annotated.sdrf.tsv": {
+    "bytes": 329881,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "99fd0a7d55cea7b79f80c0034158df49c68c09c86259db005854fdfa46e8a5a6",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/11/PXD061065/PXD061065_community_annotated.sdrf.tsv"
+  },
+  "PXD070599_PBMC/DS18_DIANN.tar.gz": {
+    "bytes": 673262730,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "development",
+    "sha256": "ead66ca3178f885b7e26a5e38e8abcad09b182e3d16fca3da8d5e7d9101ca4c8",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/08/PXD070599/DS18_DIANN.tar.gz"
+  },
+  "PXD070599_PBMC/DS19_DIANN.tar.gz": {
+    "bytes": 881944156,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "development",
+    "sha256": "4eef87a087febe504f93495d501222db79a04874d96b66b21796e78cf559d5d5",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/08/PXD070599/DS19_DIANN.tar.gz"
+  },
+  "PXD070599_PBMC/DataSet_to_figure_mapping.txt": {
+    "bytes": 2867,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "development",
+    "sha256": "3597c4a7455dbac542ef17414250ea1b51552228863dfb1acae4f74d5f9dc51c",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/08/PXD070599/DataSet_to_figure_mapping.txt"
+  },
+  "PXD070599_PBMC/DataSet_to_rawfile_mapping_methods.txt": {
+    "bytes": 992774,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "development",
+    "sha256": "b184e8b26a1f6c85be70813b86207821246c9a3324eeed5c4624fbeac05cf168",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/08/PXD070599/DataSet_to_rawfile_mapping_methods.txt"
+  },
+  "PXD073250/LSA-2026-03759_Supplemental_Data_1.xlsx": {
+    "bytes": 12220176,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "0851cb3fd020ed02d24d74b83cc5a397a64b00d1c2aeb9bfb410d01744365f3a",
+    "tier": "A",
+    "url": "saved by hand from the paper's supplementary files (PMC13315484)"
+  },
+  "PXD073250/LSA-2026-03759_Supplemental_Data_2.zip": {
+    "bytes": 11408213,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "dc215cbcb23c571ecc0022a5f15dc7949367a59287d3a2e6e74b462202406883",
+    "tier": "A",
+    "url": "saved by hand from the paper's supplementary files (PMC13315484)"
+  },
+  "PXD073250/report.log.txt": {
+    "bytes": 877815,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "ad01c337a10447f0ecdbc4c204e965c4e6305130c8339ddcf80a1f54563c2577",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/06/PXD073250/report.log.txt"
+  },
+  "PXD073250/report.pg_matrix.tsv": {
+    "bytes": 6073326,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "337f8b79d7a64d64128ea5b0504afe220a6e9aabbcd0cbb33471ac8f37e267b1",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/06/PXD073250/report.pg_matrix.tsv"
+  },
+  "PXD073250/report.pr_matrix.tsv": {
+    "bytes": 49988348,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "671f8bd082c1437a71c44d5436b1a43036c46c5f3305c9d41a38f856339e6e47",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/06/PXD073250/report.pr_matrix.tsv"
+  },
+  "PXD073250/report.stats.tsv": {
+    "bytes": 132629,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "f1f261535e8979200ba0877654411be79ff830adb22b619419e0abc8d412fc35",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/06/PXD073250/report.stats.tsv"
+  },
+  "PXD077946/diann_singlecell.zip": {
+    "bytes": 16952702,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "side_test",
+    "sha256": "0bd4c3b9bbd3ad8e94acf7e3ef9dba4330dd1c25667630f177539b5bc5714a05",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/09/PXD077946/diann_singlecell.zip"
+  },
+  "Rieckmann2017_PXD004352/PXD004352_community_annotated.sdrf.tsv": {
+    "bytes": 468141,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "0c74ed532f258297a52f55da30cf953bc671558b04cf6f2337421a2e85c914ea",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2017/03/PXD004352/PXD004352_community_annotated.sdrf.tsv"
+  },
+  "Rieckmann2017_PXD004352/total.proteomes.single.shot.zip": {
+    "bytes": 680721621,
+    "fetched": "2026-10-14",
+    "published_check": "sha1",
+    "role": "reference",
+    "sha256": "b7c489a34855c0bc1e63ce52c118d1acb84b382ec568a13f8eec9e6cb6bec47a",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2017/03/PXD004352/total.proteomes.single.shot.zip"
+  },
+  "Tian_MSV000087462/proteinGroupsCD3CD4CD8.xlsx": {
+    "bytes": 10796475,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "e6bf06d275269a6ddd1dc372384ed284c684d82478d55f939b65231af000ed9e",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsCD3CD4CD8.xlsx"
+  },
+  "Tian_MSV000087462/proteinGroupsMMsample.xlsx": {
+    "bytes": 18004656,
+    "fetched": "2026-10-14",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "1ae01a63bdd61e5f533a1bf00fce8ac3404c43f613f53a60e7f3322927278d92",
+    "tier": "A",
+    "url": "ftp://massive-ftp.ucsd.edu/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsMMsample.xlsx"
+  }
+}

@@ -368,6 +368,25 @@ Plan approved 2026-10-12. Every method fails CD8 T: v4.1 recalls 2.7% on Khoury 
     - `research/benchmark/protocol-sorted-cd4cd8.md` pre-registers the sorted CD4/CD8 test before any data: v4.1 and v5.2 frozen by sha256; the corrected baselines on each candidate's own reference labels; balanced accuracy primary; CD8 T and CD4 T recall secondary; the decision rules.
     - v4.1 stays the version served on request; v5.2 is selectable and refused until evaluated.
 - [ ] **Before the sorted data is unsealed:** the corrected baselines rerun with v5.2's labels (protocol rule 4), and the intake and scoring scripts written and rehearsed on Fulcher.
+- [x] **Five-agent dataset search, 2026-10-14** (owner's request; details in `research/benchmark/side-tests.md`). PRIDE's whole list, MassIVE's whole list, the other ProteomeXchange members, Zenodo and the other repositories, the literature and the labs were searched; key facts were checked against the sources.
+  - **No public main-test dataset exists.** Nothing public has single cells with sorted CD4 and CD8 labels.
+  - **The only such design is Krisp's** (Bruker/Cellenion): FACS-presorted CD4+, CD8+, CD19+, CD14+ single cells and 10-cell bulks, shown since February 2024, never deposited. Dr Krisp is now at the MDC-Bruker Center in Berlin; the verified public contact is Fabian Coscia, corresponding author of a paper they co-authored.
+  - **O'Connor cannot test CD4 against CD8:** MACS negative selection into pan-T, B, NK and monocytes; the preprint has no data statement.
+  - **Side tests found** (the question each can answer): abstention (PXD070599's single HeLa and HEK293T cells), immune against keratinocyte (PXD073250), stem-like against blast (PXD020586), neutrophil recall (PXD061065), monocyte against macrophage-like (cell lines), a macrophage-like type absent from the reference (MSV000099294 microglia). No set has independent DC-against-macrophage labels. PXD073250 was first misjudged as one.
+  - **Population-level data exists:** Khoury's bulk FACS-sorted populations (Zenodo 22649483) and a bulk set of sorted CD4/CD8 naive and memory T cells (MSV000087462). Not downloaded.
+  - **Corrections:** Fulcher is PXD073881 = MSV000100684 (the Gemini report had MSV000100682); the Gemini report was also wrong about O'Connor sorting CD4 and CD8.
+  - **Gaps:** Mendeley Data, iProX files, and some conference books were unreachable.
+- [x] **Public sets downloaded, 2026-10-14** (owner: "all datasets that can strengthen our tool"). `scripts/fetch_public_sets.py` (11 tests) fetched 4.28 GB of processed outputs into `data/incoming/public_sets/` (gitignored); sizes, published checksums and sha256 are in `research/benchmark/public-sets-downloads.json`; roles and the sealing rule are in `research/benchmark/side-tests.md` ("Local copies").
+  - **Reference (free to use):** Rieckmann 2017 (PXD004352, 28 sorted primary immune populations), Khoury's sorted bulk populations, Tian's sorted T-cell subtypes.
+  - **Development (free to use):** PXD070599 PBMC runs DS18 and DS19.
+  - **Sealed side tests:** nine groups; nothing opened, no label table read.
+  - **Bug found and fixed on the way:** an `IncompleteRead` (a dropped connection) escaped the retry and killed the run; a test now reproduces it.
+- [ ] **Owner's decisions pending:**
+  - tier B (24 GB of single HeLa and HEK293T outputs)?
+  - which downloaded sets stay sealed (default above);
+  - use Rieckmann as a protein-space reference for the correlation term, and Hao 2021's DCs to fix the DC weakness (model work);
+  - where Email 2 goes (Dr Coscia, as drafted, or MDC's industry manager);
+  - then a pre-registered protocol for each side test used, and, before opening Khoury's sorted bulk, a note of what that check is (a diagnosis, not a clean test).
 - [ ] The corrected baselines on the cleaned labels (planned for fairness; open).
 - [ ] **Phase 5:** the service (`"v5"`, selectable), its gate and frozen fixtures; release only after owner sign-off.
 
