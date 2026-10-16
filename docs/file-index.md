@@ -105,7 +105,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/examples/pbmc240_zscored_all_genes.csv` — PBMC240 protein matrix (237 cells) in the upload format; can be posted to `/api/project` as-is
 - `service/examples/pbmc240_cell_metadata.csv` — weak, marker-derived lineage labels for the PBMC240 cells
 - `service/examples/pbmc240_provenance.json` — how the PBMC240 matrix and its labels were derived
-- `service/examples/pbmc240_proteins_raw.tsv` — raw DIA-NN protein-group output behind the PBMC240 matrix (audit trail only)
+- `service/examples/pbmc240_proteins_raw.tsv` — the raw DIA-NN protein-group report behind the PBMC240 matrix; uploadable as it is, posted by the live check and traced by the Workflow page
 - `service/tests/__init__.py` — package marker
 - `service/tests/fixtures.py` — shared synthetic fixtures; uses the real reference files where they are small enough
 - `service/tests/fixtures/golden_scope2_50.json` — frozen full response for 50 SCoPE2 cells (golden regression)
