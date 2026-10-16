@@ -551,8 +551,11 @@ Object.assign(FACTS, {
 // benchmark table.
 const suiteValue = (m, key) => (m.model?.evaluation?.suite?.rows ?? []).find((r) => r.key === key)?.value;
 const served = (m, dataset) => (m.model?.evaluation?.served ?? []).find((r) => r.dataset === dataset);
-const recall = (m, dataset, type) => (m.model?.evaluation?.recall ?? [])
-  .find((r) => r.dataset === dataset && r.type === type)?.value;
+const recallIn = (ev, dataset, type) => (ev?.recall ?? []).find((r) => r.dataset === dataset && r.type === type)?.value;
+const recall = (m, dataset, type) => recallIn(m.model?.evaluation, dataset, type);
+// The previous release's, where the current one is not scored (Khoury 2026
+// needs the owner's decision for each use) or to show what changed.
+const previousRecall = (m, dataset, type) => recallIn(m.previous_release?.evaluation, dataset, type);
 const benchmarkSet = (m, key) => (m.benchmark?.datasets ?? []).find((d) => d.key === key);
 // The current model's own row: the first of a table, marked as ours.
 const currentScore = (m, key) => {
@@ -568,6 +571,8 @@ Object.assign(FACTS, {
   recall_khoury_cd8t: (m) => escapeHtml(formatPercent(recall(m, 'Khoury 2026', 'CD8T'))),
   recall_fulcher_cd8t: (m) => escapeHtml(formatPercent(recall(m, 'Fulcher 2026', 'CD8T'))),
   recall_fulcher_dc: (m) => escapeHtml(formatPercent(recall(m, 'Fulcher 2026', 'DC'))),
+  previous_recall_khoury_cd8t: (m) => escapeHtml(formatPercent(previousRecall(m, 'Khoury 2026', 'CD8T'))),
+  previous_recall_fulcher_dc: (m) => escapeHtml(formatPercent(previousRecall(m, 'Fulcher 2026', 'DC'))),
   scope2_current: (m) => escapeHtml(formatPercent(currentScore(m, 'scope2'))),
   scope2_chance: (m) => escapeHtml(formatPercent(benchmarkSet(m, 'scope2')?.chance)),
 });

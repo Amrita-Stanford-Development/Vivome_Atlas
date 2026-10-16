@@ -1,0 +1,7 @@
+tool,rule,metric,mean,std,min,max,count
+v3.1 (served),best guess (served),lymphoid_recall_pct,92.3076923076923,,92.3076923076923,92.3076923076923,1
+v3.1 (served),best guess (served),myeloid_recall_pct,80.0,,80.0,80.0,1
+v3.1 (served),best guess (served),pred_lymphoid_pct,78.90295358649789,,78.90295358649789,78.90295358649789,1
+v3.1 (served),best guess (served),pred_myeloid_pct,16.033755274261605,,16.033755274261605,16.033755274261605,1
+v3.1 (served),best guess (served),pred_erythroid_pct,0.8438818565400843,,0.8438818565400843,0.8438818565400843,1
+v3.1 (served),best guess (served),pred_other_pct,4.219409282700422,,4.219409282700422,4.219409282700422,1

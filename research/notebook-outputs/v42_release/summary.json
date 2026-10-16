@@ -1,0 +1,134 @@
+{
+  "question": "which model to serve: v4.1 (release 0.4.0) or v4.2",
+  "heldout": {
+    "hao2021": {
+      "v4.1": {
+        "minus_correlation": 4.73,
+        "lower_95": 2.82
+      },
+      "v4.2 as served then (its protein term on RNA)": {
+        "minus_correlation": 1.88,
+        "lower_95": -0.95
+      },
+      "v4.2 now": "v4.1's, exactly: RNA uploads take v4.1's path"
+    },
+    "pxd021882": {
+      "void": true,
+      "reason": "The deposited MaxQuant table holds only HeLa runs of 0 to 500 cells; the B and T pools were searched with FragPipe and are not in it. The automatic label map read three empty wells in plate row B (0ce"
+    },
+    "pxd043355": {
+      "v4.1": {
+        "auroc": 0.6739,
+        "p": 0.014699,
+        "pass": true,
+        "void": false
+      },
+      "v4.2": {
+        "auroc": 0.6739,
+        "p": 0.014699,
+        "pass": true,
+        "void": false
+      }
+    },
+    "pxd046211": {
+      "v4.1": {
+        "auroc": 0.5167,
+        "p": 0.29507,
+        "pass": false,
+        "void": false
+      },
+      "v4.2": {
+        "auroc": 0.5167,
+        "p": 0.29507,
+        "pass": false,
+        "void": false
+      }
+    },
+    "pxd073250": {
+      "v4.1": {
+        "auroc": 0.4423,
+        "p": 0.975002,
+        "pass": false,
+        "void": false
+      },
+      "v4.2": {
+        "auroc": 0.4423,
+        "p": 0.975002,
+        "pass": false,
+        "void": false
+      }
+    },
+    "tian": {
+      "v4.1": {
+        "pass": false,
+        "void": true,
+        "pairs": 1,
+        "won": 1
+      },
+      "v4.2": {
+        "pass": false,
+        "void": true,
+        "pairs": 1,
+        "won": 1
+      }
+    }
+  },
+  "development": {
+    "fulcher2026": {
+      "cells": 1251,
+      "balanced_accuracy": {
+        "v41": 69.05,
+        "v42": 75.79
+      },
+      "v42_minus_v41": 6.74,
+      "ci95": [
+        4.26,
+        9.23
+      ],
+      "recall": {
+        "CD4T": {
+          "v41": 82.5,
+          "v42": 83.1
+        },
+        "CD8T": {
+          "v41": 23.8,
+          "v42": 23.2
+        },
+        "NK": {
+          "v41": 90.0,
+          "v42": 92.0
+        },
+        "B": {
+          "v41": 98.0,
+          "v42": 98.0
+        },
+        "monocyte": {
+          "v41": 97.8,
+          "v42": 95.4
+        },
+        "DC": {
+          "v41": 22.2,
+          "v42": 63.0
+        }
+      }
+    },
+    "pbmc240": {
+      "cells": 238,
+      "guesses_that_differ": 0
+    },
+    "scope2": {
+      "cells": 1490,
+      "guesses_that_differ": 0
+    },
+    "scope2_reprocessed": {
+      "cells": 1128,
+      "guesses_that_differ": 0
+    },
+    "furtwangler2025": {
+      "cells": 2506,
+      "guesses_that_differ": 0
+    }
+  },
+  "rna_uploads": "v4.2 answers exactly as v4.1 (service/tests/test_v42.py, test_an_rna_upload_answers_exactly_as_v41)",
+  "licence": "Rieckmann 2017 (PXD004352) is in PRIDE under the EMBL-EBI terms of use, which add no restriction beyond the data owner's and ask for attribution; v4.2 credits it"
+}

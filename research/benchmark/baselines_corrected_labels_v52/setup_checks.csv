@@ -1,0 +1,16 @@
+dataset,tool,seed,status,rna_holdout_balanced_accuracy_pct,rna_holdout_chance_pct,matched_query_cells_pct,input_shift,epochs_trained,elapsed_s,rna_holdout_knn_balanced_accuracy_pct,rna_holdout_knn_chance_pct,query_neighbour_share_median_pct,query_neighbour_share_if_mixed_pct
+fulcher2026,correlation,0,completed,74.52,4.76,,,,3.1,,,,
+fulcher2026,pca,0,completed,,,,,,15.3,65.83,4.76,100.0,1.47
+fulcher2026,harmony,0,completed,,,,,,66.2,65.8,4.76,53.33,1.47
+fulcher2026,harmony,1,completed,,,,,,54.0,65.79,4.76,50.0,1.47
+fulcher2026,harmony,2,completed,,,,,,52.0,65.8,4.76,50.0,1.47
+fulcher2026,seurat,0,completed,,,,,,153.4,,,,
+fulcher2026,maxfuse,0,completed,,,100.0,,,494.6,63.72,4.76,33.33,1.47
+fulcher2026,maxfuse,1,completed,,,100.0,,,498.9,62.69,4.76,33.33,1.47
+fulcher2026,maxfuse,2,completed,,,100.0,,,461.7,64.57,4.76,33.33,1.47
+fulcher2026,scglue,0,completed,,,,,,1185.6,59.91,4.76,80.0,1.47
+fulcher2026,scglue,1,completed,,,,,,1100.9,60.23,4.76,80.0,1.47
+fulcher2026,scglue,2,completed,,,,,,1214.0,60.23,4.76,83.33,1.47
+fulcher2026,scanvi,0,completed,,,,9.101065635681152,"{""scvi"": 88, ""scanvi"": 88}",2954.6,73.79,4.76,86.67,1.47
+fulcher2026,scanvi,1,completed,,,,9.101065635681152,"{""scvi"": 157, ""scanvi"": 86}",3482.1,75.69,4.76,86.67,1.47
+fulcher2026,scanvi,2,failed,,,,,,1342.1,,,,

@@ -106,7 +106,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
 - `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
-- `service/tests/test_v42.py` — v4.2: its protein query, refused until evaluated, its protein means as its spec says, equal to v4.1 where its correlation term is flat, and its served best guess equal to its notebook's on every development dataset
+- `service/tests/test_v42.py` — v4.2, the default since 0.5.0: its protein query, its protein means as its spec says, equal to v4.1 where its correlation term is flat and on every RNA upload, and its served best guess equal to its notebook's on every development dataset
 - `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
 - `service/tests/test_baselines_labels.py` — the corrected baselines' `--labels`: the join of a label set onto the benchmark's RNA cells by cell, refusing a misaligned or short table, and runs kept apart from the original ones
 - `service/tests/test_sorted_cd4cd8.py` — the sorted CD4/CD8 test's scripts: frozen sha256s equal the protocol's and still hold, rule 5's mapping, scoring over the sorted types only, refusal of a labels file with another sha256 and of a second scoring
@@ -143,7 +143,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v4/members/V2_seed*_centroids_cb.npy` — each member's class centroids from the reference encoded under class-balanced statistics (22 × 128)
 - `service/model/v4_1/spec_v41.json` — v4.1's settings: v4's, with the encoder's weight where the correlation term is used (gate-on) and the correlation temperature from v4.1's Phase A, and its evaluation's status
 - `service/model/v4_1/MANIFEST.json` — sha256 of v4.1's spec and of every v4 data file it uses (as `../v4/...`), checked when v4.1 loads
-- `service/model/v4_2/spec_v42.json` — v4.2's settings: v4.1's with protein class means in the correlation term; evaluation pending
+- `service/model/v4_2/spec_v42.json` — v4.2's settings: v4.1's with protein class means in the correlation term for protein uploads; evaluation passed (release 0.5.0)
 - `service/model/v4_2/protein_class_means.npz` — v4.2's protein class means (classes x 15,314 proteins), their gene symbols and the 16 classes covered
 - `service/model/v4_2/MANIFEST.json` — sha256 of v4.2's files and the v4 data files it reads
 - `service/model/v5/nb2_spec_v5.json` — v5's answers: its members' temperatures, Mondrian conformal thresholds and out-of-distribution threshold, fitted by NB2's recipe on the cleaned labels (NB2's layout)
@@ -276,7 +276,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict
 - `scripts/build_v41_spec.py` — writes v4.1's spec (v4's with Phase A's locked rule and Phase C's verdict) and a MANIFEST pinning v4's data files
-- `scripts/build_v42_spec.py` — writes v4.2's protein class means (from Rieckmann's sorted proteomes, via `research/notebooks/rieckmann_feasibility.py`), its spec (evaluation pending) and its MANIFEST, which also pins v4's data files
+- `scripts/build_v42_spec.py` — writes v4.2's protein class means (from Rieckmann's sorted proteomes, via `research/notebooks/rieckmann_feasibility.py`), its spec (evaluation pending, or passed with `--passed RECORD`) and its MANIFEST, which also pins v4's data files
 - `scripts/fetch_public_sets.py` — fetches the public datasets of `research/benchmark/side-tests.md` (each group's role: reference, development, held out as the internal test, or reserve) into `data/incoming/public_sets/`: processed outputs only, parallel resumable ranges, size and checksum verified, sha256 recorded
 - `scripts/test_fetch_public_sets.py` — tests the table (roles, hosts, no raw files) and the downloader against a local range server: ranges, resume, size and checksum refusals
 - `research/benchmark/public-sets-downloads.json` — what `scripts/fetch_public_sets.py` fetched: each file's role, URL, size, sha256 and date
@@ -385,6 +385,15 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv` — v4.1 on the development data: its best guess against v3.1's
 - `research/benchmark/v41_development/paired_bootstrap_v41_vs_v4.csv` — v4.1 on the development data: its best guess against v4's
 - `research/benchmark/v41_development/checks.json` — v4.1 on the development data: the plan's checks against v3.1 and against v4
+- `research/benchmark/v42_development/scope2.csv` — v4.2 on the development data: SCoPE2's published matrix, v3.1's, v4.1's and v4.2's rows
+- `research/benchmark/v42_development/pbmc240.csv` — v4.2 on the development data: PBMC240, v3.1's, v4.1's and v4.2's rows
+- `research/benchmark/v42_development/fulcher2026.csv` — v4.2 on the development data: Fulcher 2026, v3.1's, v4.1's and v4.2's rows
+- `research/benchmark/v42_development/scope2_reprocessed.csv` — v4.2 on the development data: SCoPE2 reprocessed, every completed corrected run, v3.1, v4.1 and v4.2
+- `research/benchmark/v42_development/confident.csv` — v4.2 on the development data: committed share and correct when committed, v3.1, v4.1 and v4.2
+- `research/benchmark/v42_development/paired_bootstrap_v42.csv` — v4.2 on the development data: its best guess against every corrected baseline run and rule (the benchmark page's differences)
+- `research/benchmark/v42_development/paired_bootstrap_v42_vs_v31.csv` — v4.2 on the development data: its best guess against v3.1's
+- `research/benchmark/v42_development/paired_bootstrap_v42_vs_v41.csv` — v4.2 on the development data: its best guess against v4.1's
+- `research/benchmark/v42_development/checks.json` — v4.2 on the development data: the plan's checks against v3.1 and against v4.1
 - `research/benchmark/baselines_corrected/inputs.csv` — corrected baselines: what every tool received per dataset, and its settings
 - `research/benchmark/baselines_corrected/setup_checks.csv` — corrected baselines: each run's status and RNA-side checks (held-out RNA kNN, query mixing, MaxFuse matched share, scANVI input shift and epochs)
 - `research/benchmark/baselines_corrected/scope2_per_seed.csv` — corrected baselines, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
@@ -395,6 +404,16 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/baselines_corrected/fulcher2026_summary.csv` — corrected baselines, Fulcher 2026: mean, SD, min and max per tool and rule
 - `research/benchmark/baselines_corrected/v31_confident.csv` — v3.1's confident answers per development dataset (unchanged from the Track D tables)
 - `research/benchmark/baselines_corrected/paired_bootstrap.csv` — corrected baselines: v3.1's best guess against each baseline run and rule, SCoPE2 and Fulcher
+- `research/benchmark/baselines_corrected_labels_v52/inputs.csv` — corrected baselines on v5.2's reference labels: what every tool received per dataset, and its settings
+- `research/benchmark/baselines_corrected_labels_v52/setup_checks.csv` — corrected baselines on v5.2's labels: each run's status and RNA-side checks (scANVI seed 2 failed)
+- `research/benchmark/baselines_corrected_labels_v52/scope2_per_seed.csv` — corrected baselines on v5.2's labels, SCoPE2: per tool, seed, rule and regime, plus v3.1's best guess
+- `research/benchmark/baselines_corrected_labels_v52/scope2_summary.csv` — corrected baselines on v5.2's labels, SCoPE2: mean, SD, min and max per tool, rule and regime
+- `research/benchmark/baselines_corrected_labels_v52/pbmc240_per_seed.csv` — corrected baselines on v5.2's labels, PBMC240: lymphoid and myeloid recall per tool, seed and rule
+- `research/benchmark/baselines_corrected_labels_v52/pbmc240_summary.csv` — corrected baselines on v5.2's labels, PBMC240: mean, SD, min and max per tool and rule
+- `research/benchmark/baselines_corrected_labels_v52/fulcher2026_per_seed.csv` — corrected baselines on v5.2's labels, Fulcher 2026: balanced accuracy, recall per type and lineage, composition
+- `research/benchmark/baselines_corrected_labels_v52/fulcher2026_summary.csv` — corrected baselines on v5.2's labels, Fulcher 2026: mean, SD, min and max per tool and rule
+- `research/benchmark/baselines_corrected_labels_v52/v31_confident.csv` — v3.1's confident answers per development dataset, beside the v5.2-label baselines
+- `research/benchmark/baselines_corrected_labels_v52/paired_bootstrap.csv` — corrected baselines on v5.2's labels: v3.1's best guess against each run and rule, SCoPE2 and Fulcher
 - `research/benchmark/furtwangler2025/v31_ood_check.json` — v3.1 as served on 2,506 CD34+ progenitors: answers, best guesses, and out-of-distribution and committed counts per cluster and FACS gate
 - `research/benchmark/baselines/inputs.csv` — Track D extension: what every baseline received per dataset (cells, genes, scaling, missing values, settings)
 - `research/benchmark/baselines/scope2_per_seed.csv` — Track D extension, SCoPE2: accuracy and balanced accuracy per tool, seed, rule and regime, plus v3.1's best guess
@@ -509,6 +528,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/v42_protein_means.py` — Goal 2, Phase 2a: candidate v4.2, v4.1's rule with Rieckmann's protein class means in the correlation term, scored on development data from v4.1's cache with gates fixed in its docstring
 - `research/notebook-outputs/v42_protein_means/summary.json` — v4.2 against v4.1: development figures, Fulcher answers, upload agreement, the five gates
 - `research/notebook-outputs/v42_protein_means/guesses.csv.gz` — each development cell's best guess under v4.1 and v4.2, which the service's v4.2 gate must reproduce
+- `research/notebooks/v42_release.py` — the record behind serving v4.2 (release 0.5.0): both candidates' held-out primaries, Fulcher balanced accuracy and recall with a bootstrap, and whether any other development guess differs
+- `research/notebook-outputs/v42_release/summary.json` — that record: held-out primaries, Fulcher figures, unchanged datasets, licence note
 - `research/notebooks/mac_mono_diagnosis.py` — Goal 2, Phase 1.3: what the reference's macrophage class is, which proteins separate SCoPE2's macrophages from its monocytes, and whether the reference RNA differs the same way
 - `research/notebook-outputs/mac_mono_diagnosis/diagnosis.json` — that diagnosis: the reference macrophage class's donors, annotation and markers; SCoPE2's strongest protein differences on both matrices; their agreement with the reference RNA; the correlation term's lean
 - `research/notebook-outputs/mac_mono_diagnosis/protein_vs_rna.csv` — every SCoPE2 protein's macrophage AUC beside the reference's RNA difference, both matrices

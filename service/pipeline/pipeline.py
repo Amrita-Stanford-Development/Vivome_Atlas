@@ -192,6 +192,7 @@ def run_projection(
     rng: np.random.Generator | None = None,
     restrict_to_supported_classes: bool = False,
     components: "Components | None" = None,
+    modality: str = "prot",
 ) -> dict:
     """Runs Stages 1-8 and returns the response dict. `cells` entries match
     docs/service/projection-api.md exactly; `properties` and `model_version` are
@@ -214,13 +215,17 @@ def run_projection(
     switch existed; v3.1 adds `pipeline_version`, `supported_classes`,
     `calibration`, and per cell `label_level`, `best_guess` and
     `abstain_category` (docs/service/projection-api.md, "v3.1").
+
+    `modality` is the upload's ("prot" or "rna", the request's form field).
+    Only v4.2 reads it: its protein class means apply to protein uploads, and
+    an RNA upload takes v4.1's RNA class means instead.
     """
     if bundle.pipeline_version == "v3.1":
         from service.pipeline import ensemble  # imports this module
         return ensemble.project(bundle, raw, restrict_to_supported_classes, components or bundle.components)
     if bundle.pipeline_version in FUSION_VERSIONS:
         from service.pipeline import fusion  # imports this module
-        return fusion.project(bundle, raw, restrict_to_supported_classes, components)
+        return fusion.project(bundle, raw, restrict_to_supported_classes, components, modality=modality)
     components = components or components_for(bundle.pipeline_version)
     rng = rng or np.random.default_rng(upload_seed(raw))
 

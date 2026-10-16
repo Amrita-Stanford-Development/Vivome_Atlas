@@ -1,0 +1,24 @@
+{
+  "against_v31": {
+    "no_interval_favours_v31": true,
+    "correct_when_committed_drop_at_most_2": true,
+    "correct_when_committed_drop": {
+      "SCoPE2": 0.052,
+      "PBMC240": 0.0,
+      "Fulcher 2026": -0.98,
+      "SCoPE2 reprocessed": 0.0
+    },
+    "passed": true
+  },
+  "against_v41": {
+    "no_interval_favours_v41": true,
+    "correct_when_committed_drop_at_most_2": true,
+    "correct_when_committed_drop": {
+      "SCoPE2": 0.0,
+      "PBMC240": 0.0,
+      "Fulcher 2026": -0.37,
+      "SCoPE2 reprocessed": 0.0
+    },
+    "passed": true
+  }
+}

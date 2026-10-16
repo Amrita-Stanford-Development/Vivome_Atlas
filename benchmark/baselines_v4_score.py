@@ -34,6 +34,7 @@ Writes research/benchmark/v4_development/ (v4) or v41_development/ (v4.1):
 
     python -m benchmark.baselines_v4_score                    # v4, from the repository root
     python -m benchmark.baselines_v4_score --version v4.1     # v4.1
+    python -m benchmark.baselines_v4_score --version v4.2     # v4.2, beside v4.1 (release 0.5.0)
 """
 from __future__ import annotations
 
@@ -65,7 +66,8 @@ class Model:
 
 V4 = "v4 (served)"
 MODELS = {"v4": Model("v4", "v4", V4, "v4_development"),
-          "v4.1": Model("v41", "v4.1", "v4.1 (served)", "v41_development", beside=(("v4", "v4", V4),))}
+          "v4.1": Model("v41", "v4.1", "v4.1 (served)", "v41_development", beside=(("v4", "v4", V4),)),
+          "v4.2": Model("v42", "v4.2", "v4.2 (served)", "v42_development", beside=(("v41", "v4.1", "v4.1 (served)"),))}
 BUILDERS = (("scope2", lambda paired: original.scope2(paired)), ("pbmc240", lambda paired: original.pbmc240()),
             ("fulcher2026", lambda paired: original.fulcher(paired)))
 

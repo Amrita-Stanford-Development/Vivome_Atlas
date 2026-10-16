@@ -1,6 +1,6 @@
 """v4.2 (Goal 2, Phase 2a; service/pipeline/fusion.py): v4.1 with protein
-class means from sorted cells in its correlation term. Refused until its
-evaluation passes; when loaded for evaluation, its served best guess must equal
+class means from sorted cells in its correlation term, the default since
+release 0.5.0 (its evaluation passed). Its served best guess must equal
 research/notebooks/v42_protein_means.py's, cell by cell, on every development
 dataset, and where its correlation term is flat it answers exactly as v4.1."""
 import json
@@ -44,12 +44,12 @@ class V42ServiceTests(unittest.TestCase):
         except reference.PendingArtifactError as exc:
             raise unittest.SkipTest(f"{exc} Run scripts/build_v42_spec.py.")
 
-    def test_v42_is_selectable_and_refused_until_evaluated(self):
+    def test_v42_is_the_default_since_release_050(self):
         self.assertIn("v4.2", config.PIPELINE_VERSIONS)
+        self.assertEqual(config.PIPELINE_VERSION, "v4.2")
         spec = json.loads(config.V42_SPEC_PATH.read_text(encoding="utf-8"))
-        self.assertEqual(spec["evaluation"]["status"], "pending")
-        with self.assertRaises(reference.PendingArtifactError):
-            pipeline.load_bundle("v4.2")
+        self.assertEqual(spec["evaluation"]["status"], "passed")
+        self.assertEqual(pipeline.load_bundle("v4.2").pipeline_version, "v4.2")
 
     def test_its_best_guess_refuses_to_run_without_the_protein_query(self):
         rng = np.random.default_rng(0)
@@ -75,6 +75,25 @@ class V42ServiceTests(unittest.TestCase):
         self.assertEqual((ours.pop("pipeline_version"), theirs.pop("pipeline_version")), ("v4.2", "v4.1"))
         self.assertNotEqual(ours.pop("model_version"), theirs.pop("model_version"))
         ours["best_guess_rule"].pop("agreement"), theirs["best_guess_rule"].pop("agreement")
+        assert_same(self, ours, theirs)
+
+    def test_an_rna_upload_answers_exactly_as_v41(self):
+        """Its protein class means are for protein uploads; an RNA upload takes
+        v4.1's RNA class means. Fulcher's upload, where the protein term is used
+        and changes the guess, shows both halves."""
+        from benchmark import datasets
+        try:
+            raw = datasets.load_fulcher2026_upload()
+        except FileNotFoundError as exc:
+            raise unittest.SkipTest(f"Fulcher 2026 is not on this machine: {exc}")
+        v41 = pipeline.load_bundle("v4.1")
+        theirs = json.loads(json.dumps(pipeline.run_projection(v41, raw, modality="rna")))
+        as_protein = json.loads(json.dumps(pipeline.run_projection(self.bundle, raw, modality="prot")))
+        self.assertNotEqual([c.get("best_guess") for c in as_protein["cells"]],
+                            [c.get("best_guess") for c in theirs["cells"]])
+        ours = json.loads(json.dumps(pipeline.run_projection(self.bundle, raw, modality="rna")))
+        self.assertEqual((ours.pop("pipeline_version"), theirs.pop("pipeline_version")), ("v4.2", "v4.1"))
+        self.assertNotEqual(ours.pop("model_version"), theirs.pop("model_version"))
         assert_same(self, ours, theirs)
 
     def test_the_served_guess_is_the_notebooks_on_every_development_dataset(self):

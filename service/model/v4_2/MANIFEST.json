@@ -2,8 +2,8 @@
   "source": "scripts/build_v42_spec.py; v4's data files pinned as v4.1 pins them",
   "files": {
     "spec_v42.json": {
-      "sha256": "654a612b5d38220222d77ededf97791c58295126b5c8801b2500663380abe303",
-      "bytes": 6450,
+      "sha256": "c58912c6b0eaf2673b05138a9213dbb43dccbbd065cf860152e443bb5f6e8ae0",
+      "bytes": 6943,
       "what": "v4.2's settings: v4.1's with protein class means in the correlation term"
     },
     "protein_class_means.npz": {

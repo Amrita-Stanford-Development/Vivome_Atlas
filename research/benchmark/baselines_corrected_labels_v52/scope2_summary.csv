@@ -1,0 +1,5 @@
+tool,rule,regime,metric,mean,std,min,max,count
+v3.1 (served),best guess (served),unrestricted,accuracy_pct,0.0,,0.0,0.0,1
+v3.1 (served),best guess (served),unrestricted,balanced_accuracy_pct,0.0,,0.0,0.0,1
+v3.1 (served),best guess (served),restricted,accuracy_pct,25.369127516778523,,25.369127516778523,25.369127516778523,1
+v3.1 (served),best guess (served),restricted,balanced_accuracy_pct,38.70326799807329,,38.70326799807329,38.70326799807329,1

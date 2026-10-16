@@ -275,7 +275,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             }, headers={"Retry-After": str(config.BUSY_RETRY_AFTER_SECONDS)})
             return
         try:
-            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict)
+            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality)
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})

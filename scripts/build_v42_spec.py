@@ -17,6 +17,10 @@ means for the rest. Three files:
 - MANIFEST.json: both, and every v4 data file v4.1 pins (as ../v4/...).
 
     python scripts/build_v42_spec.py      # from the repository root
+    python scripts/build_v42_spec.py --passed RECORD
+    # records the evaluation as passed (RECORD: its evidence), changing only the
+    # spec's evaluation block and the MANIFEST's entry for the spec; the protein
+    # means are left byte for byte as built
 """
 from __future__ import annotations
 
@@ -48,7 +52,41 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+EVALUATION = {
+    "status": "passed",
+    "date": "2026-10-16",
+    "basis": ("the internal held-out test (research/notebook-run-history.md, entry 44): on protein its primaries equal "
+              "v4.1's (PXD043355 pass; PXD073250 and PXD046211 fail; Tian and PXD021882 void); RNA uploads take "
+              "v4.1's path, so the Hao 2021 suite is v4.1's pass; on development protein data (Fulcher 2026, which also "
+              "chose v4.1's weight) six-type balanced accuracy is 6.74 points above v4.1's (95% CI 4.26 to 9.23), with "
+              "PBMC240, SCoPE2 and Furtwangler 2025 unchanged (entry 45)"),
+    "pending": "the sorted CD4/CD8 test (research/benchmark/protocol-sorted-cd4cd8.md)",
+}
+
+
+def record_passed(record: str) -> None:
+    spec_path = V42_DIR / "spec_v42.json"
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    spec["evaluation"] = {**EVALUATION, "record": record}
+    spec_path.write_text(json.dumps(spec, indent=2) + "\n", encoding="utf-8", newline="\n")
+    manifest_path = V42_DIR / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["files"]["spec_v42.json"].update(sha256=sha256(spec_path), bytes=spec_path.stat().st_size)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
+    print(f"v4.2's evaluation recorded as passed ({record}); spec sha256 {sha256(spec_path)}, "
+          f"MANIFEST sha256 {sha256(manifest_path)}")
+
+
 def main() -> None:
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--passed", metavar="RECORD", help="record the evaluation as passed, with its evidence")
+    args = parser.parse_args()
+    if args.passed:
+        if not (REPO / args.passed).exists():
+            raise SystemExit(f"{args.passed} does not exist")
+        record_passed(args.passed)
+        return
     meta = pd.read_csv(config.RUNTIME_DIR / "reference_metadata.csv")
     class_names = meta.drop_duplicates("class_idx").sort_values("class_idx")["class_name"].tolist()
     means, proteins, covered = feas.protein_means(class_names)

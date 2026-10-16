@@ -1998,6 +1998,60 @@ suite's in `hao2021/`).
   passed primary. v4.2 ties it, and v5.2 does not beat it on protein.
   - v5.2 stays frozen for the sorted CD4/CD8 test, its own question.
   - v4.2 stays selectable and refused, as before.
+  - Superseded by entry 45: v4.2 is served from release 0.5.0.
+
+### 45. v4.2 served, release 0.5.0 (Goal 2, after Phase 3), 2026-10-16
+
+**Why:** the owner asked that the site and service carry the best model we
+have. Entry 44 kept v4.1 because v4.2 lost on Hao's RNA suite. That loss
+came from a routing fault, not from v4.2's idea: the service ran v4.2's
+protein class means on RNA uploads, where they do not belong.
+
+**What changed:**
+- **The fault is fixed.** The service passes the upload's modality to the
+  best guess; an RNA upload takes v4.1's RNA class means
+  (`service/pipeline/fusion.py`). `service/tests/test_v42.py` checks that an
+  RNA upload is answered exactly as by v4.1, and that the same Fulcher upload
+  sent as protein is not. The fix came after the held-out scoring, so v4.2's
+  Hao result is now v4.1's by construction, not a fresh held-out result.
+- **The choice, from `research/notebooks/v42_release.py`**
+  (`research/notebook-outputs/v42_release/summary.json`):
+  - **Held-out, protein:** v4.2's primaries equal v4.1's on every set, since
+    two read reference similarity, which v4.2 does not change, and the third
+    found its term flat.
+  - **Held-out, RNA:** v4.1's pass, by the fix.
+  - **Fulcher 2026 (development, in-sample):** six-type balanced accuracy
+    75.79 against 69.05, +6.74 (95% CI 4.26 to 9.23, cell-level bootstrap;
+    the stratified paired bootstrap in
+    `research/benchmark/v42_development/` gives 4.41 to 9.16). Dendritic
+    cells 22.2 to 63.0, NK 90.0 to 92.0, monocytes 97.8 to 95.4.
+  - **PBMC240, both SCoPE2 versions, Furtwängler 2025:** no best guess
+    differs.
+  - **Licence:** PXD004352 is in PRIDE under the EMBL-EBI terms; the model
+    card and site credit Rieckmann et al. 2017.
+- **The rule applied:** serve a candidate that loses nothing held-out and
+  gains on development data with an interval above zero. Entry 44's stricter
+  rule (beat v4.1 on held-out protein data) cannot be met by a change that
+  only acts where the correlation term is used, which none of the held-out
+  protein primaries read. The gain is development evidence, and the site
+  says so.
+- **Its spec's evaluation is "passed"** (`scripts/build_v42_spec.py
+  --passed`), which lets the service serve it. `service/config.py` makes it
+  the default, atlas version 0.5.0. `benchmark/baselines_v4_score.py
+  --version v4.2` built `research/benchmark/v42_development/`, and its
+  checks pass against v3.1 and v4.1.
+- **Khoury 2026 is not scored for v4.2.** Each use needs the owner's
+  decision; the manifest marks v4.2's Khoury row pending and keeps v4.1's
+  post-hoc figure as the previous release's.
+- **Also recorded:** the corrected baselines rerun on v5.2's labels
+  (`research/benchmark/baselines_corrected_labels_v52/`, from
+  `python -m benchmark.baselines_corrected_score --labels v52`). scANVI's
+  seed 2 failed as it did on the original labels.
+
+**What it means:** the served model now uses protein evidence from sorted
+cells where an upload's correlation carries signal, and RNA uploads are
+untouched. CD8 T cells are still unsolved (23.2% recall on Fulcher), and the
+sorted CD4/CD8 cells remain the decisive test.
 
 ---
 

@@ -19,11 +19,12 @@ rationale stays in the repo, not just this document's paraphrase of it.
 Two pipeline designs share stages 1, 2 and 8. **v3.1** (T1 NB2's
 specification in `model/v3_1/nb2_spec_v31.json`, built in
 `pipeline/ensemble.py`) replaces stages 3 to 7. **v3** (an earlier
-release) keeps them. **v4.1**, the default since release 0.4.0, is v3.1
-with a different best guess (`pipeline/fusion.py`, below); every stage in
-this table is v3.1's in it. Stage by stage:
+release) keeps them. **v4.1** is v3.1 with a different best guess
+(`pipeline/fusion.py`, below), and **v4.2**, the default since release
+0.5.0, is v4.1 with protein class means for protein uploads; every stage in
+this table is v3.1's in both. Stage by stage:
 
-| Stage | v3.1 (and v4.1, the default) | v3 (an earlier release): file, and the decision that looks wrong at first glance |
+| Stage | v3.1 (and v4.1, v4.2 the default) | v3 (an earlier release): file, and the decision that looks wrong at first glance |
 |---|---|---|
 | 1. Query alignment | shared | `pipeline/alignment.py`: zero-fill the full 9,002-gene space; never restrict to well-covered genes |
 | 2. Fuzzy smoothing | shared | `pipeline/smoothing.py`: build the neighbour graph from the query's own full feature set, not the shared space |
@@ -60,7 +61,7 @@ reference fixtures at the real 85,233-cell scale, deliberately kept
 synthetic for speed and determinism rather than loading the real ~130MB of
 arrays), and running against the real artifacts above. `POST /api/project`
 serves real predictions end to end. It is hosted on Google Cloud Run
-(v4.1; `deploy/huggingface/PUBLISH.md`): `web/project.html` sends uploads
+(v4.2; `deploy/huggingface/PUBLISH.md`): `web/project.html` sends uploads
 there by default, or to a copy the visitor runs locally, checking
 `GET /api/status` first, and the service answers only allowed origins
 (`config.ALLOWED_ORIGINS`).
@@ -133,17 +134,20 @@ could return different abstentions.
 **Pipeline versions.** `config.PIPELINE_VERSION` (env
 `VIVOME_PIPELINE_VERSION`) chooses which bundle loads, and with it the label
 space, conformal and abstention components (`pipeline.components_for`).
-- **`v4.1`, the default since release 0.4.0,** is v3.1's answers with a
+- **`v4.2`, the default since release 0.5.0,** is v4.1 with protein class
+  means from sorted cells (Rieckmann et al. 2017) in the correlation term,
+  for protein uploads and the classes they cover (`model/v4_2/`,
+  `scripts/build_v42_spec.py`); an RNA upload is answered exactly as by
+  v4.1. `service/tests/test_v42.py` checks it against its notebook cell by
+  cell.
+- **`v4.1`** is v3.1's answers with a
   fused best guess (`pipeline/fusion.py`): the encoder's probability joined
   with each cell's correlation to the reference's class means, where that
   term carries signal. Its spec is `model/v4_1/spec_v41.json`; it reads v4's
   data files from `model/v4/` (`scripts/build_v4_bundle.py`) and v3.1's
   members. `benchmark/v41_dev_gate.py` and `service/tests/test_v41_gate.py`
   check it per cell. `v4` is the same code with the encoder weighted 0.7
-  instead of 0.5. `v4.2`, a candidate, refused until its evaluation passes,
-  is v4.1 with protein class means from sorted cells (Rieckmann 2017) in the
-  correlation term (`model/v4_2/`, `scripts/build_v42_spec.py`;
-  `service/tests/test_v42.py` checks it against its notebook cell by cell).
+  instead of 0.5.
 - **`v3.1`** is T1 NB2's five-encoder ensemble
   (`pipeline/ensemble.py`), with its files in `model/v3_1/`.
   - Its five checkpoints live outside git. Fetch them with

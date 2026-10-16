@@ -1,10 +1,73 @@
 # VivOME model card
 
-The service runs **v4.1** by default, release 0.4.0. It gives v3.1's
-answers with a better best guess. **v3.1** (release 0.3.0) and **v3**
-(release 0.2.0) stay selectable (`VIVOME_PIPELINE_VERSION=v3.1` or `v3`)
-and are described after it. All are trained on RNA only and applied
-zero-shot to protein; no protein labels are used.
+The service runs **v4.2** by default, release 0.5.0. It is v4.1 with
+protein class means in its best guess, for protein uploads. **v4.1**
+(release 0.4.0), **v3.1** (release 0.3.0) and **v3** (release 0.2.0) stay
+selectable (`VIVOME_PIPELINE_VERSION=v4.1`, `v3.1` or `v3`) and are
+described after it. All are trained on RNA only and applied zero-shot to
+protein; no protein labels are used.
+
+## v4.2: v4.1 with protein class means
+
+### What it is
+
+- **Everything is v4.1's** (below) except one input to the best guess, for
+  protein uploads (`modality` `"prot"`): each cell's correlation r is taken
+  with protein class means instead of the reference's RNA class means, for
+  the 16 reference classes those means cover. The other classes, macrophage
+  among them, keep their RNA class means.
+- **The protein class means** come from sorted immune cell populations:
+  Rieckmann et al. 2017, *Nature Immunology* 18:583, PRIDE PXD004352,
+  steady-state LFQ intensities, mean log2 over donors per population, each
+  population mapped to a reference class
+  (`research/notebooks/rieckmann_feasibility.py`). They cover 15,314
+  proteins. PRIDE's terms ask for attribution and add no other restriction.
+- **On the upload's side,** each protein row is matched by its first listed
+  gene symbol, rows of one gene are merged by per-cell median, and each gene
+  is z-scored over its observed values within the upload.
+- **An RNA upload is answered exactly as by v4.1**
+  (`service/tests/test_v42.py`, `test_an_rna_upload_answers_exactly_as_v41`).
+- **Nothing was tuned for it:** v4.1's weight, temperature and agreement
+  threshold, unchanged.
+- **Each answer's set holds the best guess,** so a protein cell's answer
+  can change with its guess.
+
+Spec: `service/model/v4_2/spec_v42.json` (`scripts/build_v42_spec.py`), with
+its data file `protein_class_means.npz`, on v4.1's spec. Record:
+`research/notebook-run-history.md`, entries 36, 44 and 45;
+`research/notebook-outputs/v42_release/summary.json`.
+
+### Evidence
+
+- **The internal held-out test** (entry 44): on protein, its primaries equal
+  v4.1's on every set (PXD043355 pass; PXD073250 and PXD046211 fail; Tian
+  and PXD021882 void). On RNA it takes v4.1's path, so Hao 2021's result is
+  v4.1's pass. That routing was fixed after the test was scored: as scored,
+  v4.2 ran its protein term on RNA and lost there (+1.88, lower bound
+  -0.95), a path an RNA upload should never take.
+- **Fulcher 2026, six types** (development data; it also chose v4.1's
+  weight, so these figures are in-sample): best guess 75.8% balanced
+  accuracy against v4.1's 69.0% (+6.7; 95% CI 4.4 to 9.2, stratified paired
+  bootstrap, `research/benchmark/v42_development/`). Recall: CD4 T 83.1%,
+  CD8 T 23.2%, NK 92.0%, B 98.0%, monocyte 95.4%, DC 63.0% (v4.1: 82.5,
+  23.8, 90.0, 98.0, 97.8 and 22.2). 87.3% of cells committed, 98.3% of
+  those correct at the stated level (v4.1: 87.0% and 97.9%).
+- **PBMC240, both SCoPE2 versions and Furtwängler 2025:** not one best
+  guess differs from v4.1's (the correlation term is flat there).
+- **The simulated suite** is v4.1's, since RNA uploads are answered as by
+  v4.1.
+- **Khoury 2026 is not scored for v4.2:** each use of it needs the owner's
+  decision. v4.1's post-hoc figures are below.
+
+### Known limits
+
+v4.1's known limits apply (below), with two changes:
+1. **Dendritic cells** improve on Fulcher (63.0% recall, from 22.2%), on
+   development data. On held-out RNA (Hao 2021) they stay at v4.1's 10.4%.
+2. **The protein class means come from one study,** of sorted cells from
+   healthy donors measured with one instrument. Where an upload's protein
+   profiles differ from those populations, the correlation term can mislead,
+   and the agreement gate is the only guard.
 
 ## v4.1: v3.1's answers, a fused best guess
 
@@ -561,6 +624,7 @@ Tables: `research/benchmark/baselines/`. Narrative:
 
 ## Versioning
 
+- v4.2 files: `service/model/v4_2/MANIFEST.json`.
 - v4.1 files: `service/model/v4_1/MANIFEST.json`, which also pins v4's data
   files (`service/model/v4/MANIFEST.json`).
 - v3.1 files: `service/model/v3_1/MANIFEST.json` (sha256, size and origin of each).

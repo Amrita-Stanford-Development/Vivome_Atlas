@@ -5,10 +5,10 @@ the shared latent space. It is the core of the resource claim: an atlas you
 can *send data to*, not only look at.
 
 > **Status: implemented and hosted.** The pipeline in `service/` runs
-> end to end against the real reference (`service/model/README.md`), as v4.1
-> by default with v3.1, v4 and v3 selectable ([Pipeline versions](#pipeline-versions)),
+> end to end against the real reference (`service/model/README.md`), as v4.2
+> by default with v4.1, v3.1, v4 and v3 selectable ([Pipeline versions](#pipeline-versions)),
 > and is covered by `service/tests/`. It is hosted on Google Cloud Run at
-> `https://vivome-atlas-577083340913.us-central1.run.app` (v4.1 only; `deploy/huggingface/PUBLISH.md`).
+> `https://vivome-atlas-577083340913.us-central1.run.app` (v4.2 only; `deploy/huggingface/PUBLISH.md`).
 > `web/project.html` sends an upload there by default, or to a service the
 > visitor runs locally (`python -m service.app`), and renders the response.
 > Every value in the schemas below is a placeholder showing the response
@@ -114,7 +114,7 @@ The service reads these settings from the environment (`service/config.py`):
 | Variable | Default | What it sets |
 |---|---|---|
 | `VIVOME_HOST`, `VIVOME_PORT` | `127.0.0.1`, `8001` | Where the server listens |
-| `VIVOME_PIPELINE_VERSION` | `v4.1` | The model served (one per process) |
+| `VIVOME_PIPELINE_VERSION` | `v4.2` | The model served (one per process) |
 | `VIVOME_ALLOWED_ORIGINS` | the site served locally | Origins that may read the answers |
 | `VIVOME_MAX_UPLOAD_CELLS` | `2000` | Cells per upload |
 | `VIVOME_MAX_UPLOAD_MB` | `200` | Request size |
@@ -159,11 +159,12 @@ one fixed 9,002-gene denominator does).
 
 ## Pipeline versions
 
-The service runs v4.1 unless `VIVOME_PIPELINE_VERSION` names another
-version (`config.PIPELINE_VERSION`): `v3`, `v3.1` and `v4` stay selectable.
-The schema above is v3's. A v3.1 response keeps every v3 field with the same
-meaning, and adds the fields below. A v4 or v4.1 response is a v3.1
-response with a different best guess and one more field (see "v4.1").
+The service runs v4.2 unless `VIVOME_PIPELINE_VERSION` names another
+version (`config.PIPELINE_VERSION`): `v3`, `v3.1`, `v4` and `v4.1` stay
+selectable. The schema above is v3's. A v3.1 response keeps every v3 field
+with the same meaning, and adds the fields below. A v4, v4.1 or v4.2
+response is a v3.1 response with a different best guess and one more field
+(see "v4.1").
 
 ### v3.1
 
@@ -279,7 +280,7 @@ cell abstains with `outside_supported_region` when its score is below
 - v3's sets are calibrated on the upload's own top predictions, with no
   ground truth, so their target is nominal.
 
-### v4.1, the default
+### v4.1
 
 v4.1 keeps v3.1's answers and changes the best guess
 (`service/pipeline/fusion.py`; spec `service/model/v4_1/spec_v41.json`,
@@ -311,10 +312,19 @@ The response is v3.1's, with `pipeline_version` `"v4.1"`, its own
 ```
 
 v4 is the same code with v4's spec: the encoder's weight is 0.7 wherever
-the correlation term is used, against v4.1's 0.5. v4.2 is selectable but
-refused (503) until its evaluation passes: v4.1 with protein class means from
-sorted cells in the correlation term, for the classes they cover; its response
-is v4.1's, with its own `pipeline_version` and `model_version`.
+the correlation term is used, against v4.1's 0.5.
+
+### v4.2, the default
+
+v4.2 is v4.1 with one change for protein uploads (`modality` `"prot"`;
+spec `service/model/v4_2/spec_v42.json`, its evaluation passed for release
+0.5.0): each cell's correlation is taken with protein class means from
+sorted immune cells (Rieckmann et al. 2017, PRIDE PXD004352) for the
+reference classes they cover, and with the reference's RNA class means for
+the rest. An RNA upload is answered exactly as by v4.1
+(`service/tests/test_v42.py`). Since each set holds the best guess, a
+protein cell's answer can change with it. The response is v4.1's, with its
+own `pipeline_version` and `model_version`.
 
 ### Components
 

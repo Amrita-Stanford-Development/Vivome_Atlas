@@ -106,23 +106,26 @@ python -m unittest discover -s service/tests -t .   # projection service (needs 
 
 ## Current state
 
-Atlas version `0.4.0`, manifest schema `1.0`.
-- **Model:** `VivOME v4.1`. Its answers are v3.1's: five RNA-trained encoders
-  (V2, module pooling, 9,002-gene feature space, latent dim 128) whose
-  probabilities are averaged, answering at class, group or lineage level, or
-  abstaining with a reason. Its best guess also uses each cell's correlation
-  to the reference's class means, where that carries signal.
-- **Earlier releases:** `VivOME v3.1` (atlas `0.3.0`) and `VivOME v3
-  reference` (atlas `0.2.0`) stay selectable in the service.
+Atlas version `0.5.0`, manifest schema `1.0`.
+- **Model:** `VivOME v4.2`. Five RNA-trained encoders (V2, module pooling,
+  9,002-gene feature space, latent dim 128) whose probabilities are averaged,
+  answering at class, group or lineage level, or abstaining with a reason.
+  Its best guess also uses each cell's correlation to class means, where that
+  carries signal: for protein uploads, protein class means from sorted immune
+  cells (Rieckmann et al. 2017, PRIDE PXD004352) for the classes they cover;
+  for RNA uploads, the reference's RNA class means, exactly as v4.1.
+- **Earlier releases:** `VivOME v4.1` (atlas `0.4.0`), `VivOME v3.1` (atlas
+  `0.3.0`) and `VivOME v3 reference` (atlas `0.2.0`) stay selectable in the
+  service.
 - **Data:** 22 cell types, 2 of them cross-modal in the atlas (macrophage,
   monocyte) and 20 RNA-only. RNA 85,233 cells; protein 1,490 cells (SCoPE2
   mass spectrometry).
 - **Benchmark:** published on `web/benchmark.html`: VivOME against the
-  corrected baselines on Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
-  SCoPE2 (`research/benchmark/results.md`).
+  corrected baselines on Khoury 2026 (post-hoc, v4.1 only), Fulcher 2026,
+  PBMC240 and SCoPE2 (`research/benchmark/results.md`).
 
 Latent centroid cosine and the modality probe are measured for the 2
-cross-modal classes, in v3.1's coordinate space, which v4.1 shares.
+cross-modal classes, in v3.1's coordinate space, which v4.1 and v4.2 share.
 Per-class transfer accuracy is **pending**: it has no per-class source data
 yet (a per-*dataset* version exists, see `docs/service/context-brief.md`).
 

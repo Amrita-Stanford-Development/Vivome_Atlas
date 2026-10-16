@@ -384,16 +384,19 @@ class BestGuess:
 
 def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndarray], values: np.ndarray,
                              mask: np.ndarray, answer_probs: np.ndarray, counted: np.ndarray,
-                             protein: "tuple[np.ndarray, np.ndarray] | None" = None) -> BestGuess:
+                             protein: "tuple[np.ndarray, np.ndarray] | None" = None,
+                             rna_upload: bool = False) -> BestGuess:
     """v4's best-guess probability. smoothed_embeddings are the members'
     embeddings of the smoothed query (v3.1's, shared with the answers);
     answer_probs is v3.1's probability over all classes, and counted marks
-    the cells with at least the coverage floor's observed genes."""
+    the cells with at least the coverage floor's observed genes. v4.2's
+    protein class means need the upload's protein query; an RNA upload
+    (rna_upload) keeps the RNA class means for every class, as v4.1."""
     probs = lambda embeddings: ensemble.ensemble_probabilities([  # noqa: E731
         ensemble.member_probabilities(z, m.centroids, m.temperature) for z, m in zip(embeddings, bundle.members)])
     on = probs(smoothed_embeddings)
     r = masked_pearson(values, mask, bundle.class_means)
-    if getattr(bundle, "protein_means", None) is not None:  # v4.2: protein means for the classes they cover
+    if getattr(bundle, "protein_means", None) is not None and not rna_upload:  # v4.2: protein means, covered classes
         if protein is None:
             raise ValueError("v4.2's best guess needs the upload's protein query (fusion.protein_query)")
         covered = bundle.protein_covered
@@ -410,15 +413,19 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
     return BestGuess(fused_probabilities(encoder_probs, correlation, encoder_weight_where_used(bundle)), agreement, True)
 
 
-def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None") -> dict:
+def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None",
+            modality: str = "prot") -> dict:
     smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw)
-    protein = protein_query(raw, bundle.protein_genes) if getattr(bundle, "protein_means", None) is not None else None
+    rna_upload = modality == "rna"
+    uses_protein = getattr(bundle, "protein_means", None) is not None and not rna_upload
+    protein = protein_query(raw, bundle.protein_genes) if uses_protein else None
     return project_prepared(bundle, smoothed, aligned, value_scale, gene_ids.resolve_identifiers(raw.gene_names),
-                            restrict_to_supported_classes, components or bundle.components, protein=protein)
+                            restrict_to_supported_classes, components or bundle.components, protein=protein,
+                            rna_upload=rna_upload)
 
 
 def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_resolution,
-                     restrict_to_supported_classes, components, protein=None) -> dict:
+                     restrict_to_supported_classes, components, protein=None, rna_upload: bool = False) -> dict:
     """v3.1's Stages 3-8 (ensemble.project_prepared), with v4's fused best guess."""
     answers = bundle.answers
     names = answers.class_names
@@ -430,7 +437,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
     probs = components.label_space.probabilities(all_class_probs, space)
     counted = aligned.per_cell_observed_genes >= int(bundle.spec["preprocessing"]["min_observed_genes"])
     guess = best_guess_probabilities(bundle, embeddings, aligned.values, aligned.mask, all_class_probs, counted,
-                                     protein)
+                                     protein, rna_upload=rna_upload)
     guess_probs = components.label_space.probabilities(guess.probabilities, space)
     guess_position, guess_probability = ensemble.best_guess(guess_probs, space.positions)
     calibrated = components.calibrator.calibrate(probs, None, space, guess_positions=guess_position)

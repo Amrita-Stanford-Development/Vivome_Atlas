@@ -3,7 +3,7 @@ the gitignored folder deploy/huggingface/space, ready to publish (PUBLISH.md
 beside this file).
 
 The Space serves one pipeline version, the one its Dockerfile names
-(VIVOME_PIPELINE_VERSION, v4.1), so it ships only that version's files. They
+(VIVOME_PIPELINE_VERSION, v4.2), so it ships only that version's files. They
 are found, not listed by hand: this script loads that version's bundle and
 projects the PBMC240 example, unrestricted and restricted, with an audit hook
 recording every file opened under the model folder, then copies exactly those.

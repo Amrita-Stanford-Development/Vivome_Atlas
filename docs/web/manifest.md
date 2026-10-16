@@ -56,7 +56,8 @@ Computed from repository data:
 - Cross-modal support classification (`cross_modal`, `rna_only`, `prot_only`)
 - `pca_centroid_cosine` — cosine similarity between RNA and protein class
   centroids **in the 3-PC projection**, for classes present in both modalities
-- `model` is the current release, v4.1 (v3.1's answers, a fused best guess):
+- `model` is the current release, v4.2 (v4.1 with protein class means for
+  protein uploads):
   - `model.seeds` — the ensemble's member *count* (5), from the v3.1 spec,
     rendered with 0 decimal places (`web/js/panels.js:buildModelCard`);
   - the architecture facts it shares with v3 (`feature_space_size`,
@@ -65,28 +66,33 @@ Computed from repository data:
     Pending;
   - `model.evaluation`:
     - `suite`: a title and v4.1's pre-registered evaluation on simulated
-      uploads (`research/notebook-outputs/v41_phase3/summary.json`);
+      uploads (`research/notebook-outputs/v41_phase3/summary.json`), since
+      v4.2 answers RNA uploads exactly as v4.1; each basis says so;
     - `served`: SCoPE2, PBMC240 and Fulcher as served
-      (`research/benchmark/v41_development/confident.csv`);
-    - `recall`: the best guess's recall per type on Fulcher (in-sample) and
-      Khoury (post-hoc), which the known limits on `versions.html` read.
-- `previous_release` is v3.1: its member count, architecture facts and atlas
-  version, and its own `evaluation` (`suite`: NB2's evaluation-suite figures,
-  each with the basis "NB2 evaluation, before the two conservative flags";
-  `served`: from `research/benchmark/v31_service_flags.json`).
+      (`research/benchmark/v42_development/confident.csv`);
+    - `recall`: the best guess's recall per type on Fulcher (in-sample) and,
+      pending, on Khoury: each use of Khoury needs the owner's decision.
+- `previous_release` is v4.1, with the same fields and its own `evaluation`
+  (`research/benchmark/v41_development/`; its Khoury recall is post-hoc).
+  The known limits on `versions.html` read its Khoury figure where the
+  current release has none. v3.1's builders stay in
+  `scripts/build_manifest.py` without a release card.
 - `earlier_release` is v3: its seed count (from `v3_tables/reference_seeds.csv`,
   accuracy and CI in `basis`), its architecture facts, its latent centroid
   cosines and modality probe (`v3_tables/`), and its atlas version.
   `first_release` is CrossModalNet's own numbers, kept as the first baseline.
-- `benchmark` — signed off by the owner for release 0.4.0. `datasets`, one per
-  table on `benchmark.html`: Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
+- `benchmark` — signed off by the owner for release 0.4.0, with the current
+  model's rows moved to v4.2 for 0.5.0 at the owner's request. `datasets`, one
+  per table on `benchmark.html`: Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
   both SCoPE2 versions. Each has its `measure`, `chance` (one over the number
   of types scored, or `null`), its `role` (what kind of evidence it is) and
-  `rows`: VivOME's two releases first, then every corrected baseline arm by
-  score. A row's `score` is a measured record, with `sd`, `min` and `max` over
-  seeds; `vs_current` is the current model minus that arm by paired bootstrap
-  (the counts favouring each side, and the difference with its CI or its
-  range). Sources: `research/benchmark/v41_development/`,
+  `rows`: VivOME's two releases first (v4.2, then v4.1), then every corrected
+  baseline arm by score. A row's `score` is a measured record, with `sd`, `min`
+  and `max` over seeds; `vs_current` is the current model minus that arm by
+  paired bootstrap (the counts favouring each side, and the difference with
+  its CI or its range). On Khoury 2026, v4.2's score is pending (each use of
+  Khoury needs the owner's decision), so that table has scores and no
+  `vs_current`. Sources: `research/benchmark/v42_development/`,
   `research/benchmark/baselines_corrected/`,
   `research/benchmark/khoury2026_posthoc/` and
   `research/benchmark/khoury2026_posthoc_v41_check/`.
@@ -139,12 +145,12 @@ drop-in source for it: that function now returns only the facts folded into
 `escapeHtml(undefined)` renders the literal string `"undefined"` if `note`
 is missing. Until then, those facts live on `model` directly. `first_release` is a
 separate, permanent record of `CrossModalNet`'s own numbers, and
-`previous_release` and `earlier_release` of v3.1's and v3's, all kept as
+`previous_release` and `earlier_release` of v4.1's and v3's, all kept as
 documented history rather than erased.
 
 ## Current output
 
-Atlas version `0.4.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
+Atlas version `0.5.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 

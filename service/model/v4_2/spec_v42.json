@@ -79,9 +79,11 @@
     "method": "none"
   },
   "evaluation": {
-    "status": "pending",
-    "record": null,
-    "tests": "the internal held-out test (research/benchmark/side-tests.md) and the sorted CD4/CD8 test (research/benchmark/protocol-sorted-cd4cd8.md)"
+    "status": "passed",
+    "date": "2026-10-16",
+    "basis": "the internal held-out test (research/notebook-run-history.md, entry 44): on protein its primaries equal v4.1's (PXD043355 pass; PXD073250 and PXD046211 fail; Tian and PXD021882 void); RNA uploads take v4.1's path, so the Hao 2021 suite is v4.1's pass; on development protein data (Fulcher 2026, which also chose v4.1's weight) six-type balanced accuracy is 6.74 points above v4.1's (95% CI 4.26 to 9.23), with PBMC240, SCoPE2 and Furtwangler 2025 unchanged (entry 45)",
+    "pending": "the sorted CD4/CD8 test (research/benchmark/protocol-sorted-cd4cd8.md)",
+    "record": "research/notebook-outputs/v42_release/summary.json"
   },
   "hierarchy": {
     "b cell": {

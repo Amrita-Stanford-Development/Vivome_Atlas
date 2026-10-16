@@ -30,6 +30,7 @@ NB2_SUMMARY = REPO_ROOT / "research" / "notebook-outputs" / "nb2" / "nb2_summary
 FLAGS_RECORD = REPO_ROOT / "research" / "benchmark" / "v31_service_flags.json"
 V41_PHASE3 = REPO_ROOT / "research" / "notebook-outputs" / "v41_phase3" / "summary.json"
 V41_DEV_DIR = REPO_ROOT / "research" / "benchmark" / "v41_development"
+V42_DEV_DIR = REPO_ROOT / "research" / "benchmark" / "v42_development"
 CORRECTED_DIR = REPO_ROOT / "research" / "benchmark" / "baselines_corrected"
 KHOURY_POSTHOC_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc"
 KHOURY_V41_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc_v41_check"
@@ -40,8 +41,9 @@ KHOURY_V41_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc_v41_
 ENCODER_FAMILY_LABELS = {"module": "module pooling"}
 
 SCHEMA_VERSION = "1.0"
-ATLAS_VERSION = "0.4.0"
-PREVIOUS_ATLAS_VERSION = "0.3.0"  # v3.1's release, now previous_release
+ATLAS_VERSION = "0.5.0"
+PREVIOUS_ATLAS_VERSION = "0.4.0"  # v4.1's release, now previous_release
+V31_ATLAS_VERSION = "0.3.0"  # v3.1's release; its builders stay, with no release card since 0.5.0
 EARLIER_ATLAS_VERSION = "0.2.0"  # v3's release, now earlier_release
 
 
@@ -289,6 +291,96 @@ def build_v41_evaluation(phase3: dict, confident_rows: list[dict], fulcher_rows:
     return {"suite": suite, "served": served, "recall": recall}
 
 
+V42_SUITE_BASIS = ("v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth "
+                   "use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as "
+                   "v4.1 (service/tests/test_v42.py), so these are its numbers too")
+V42_SERVED_BASIS = "served settings, development data; research/benchmark/v42_development/confident.csv"
+KHOURY_NOT_SCORED = ("not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; "
+                     "v4.1's post-hoc figure is in the previous release")
+
+
+def _served(confident_rows: list[dict], model_key: str, basis: str) -> list[dict]:
+    served = []
+    for dataset in ("SCoPE2", "PBMC240", "Fulcher 2026"):
+        r = next(x for x in confident_rows if x["model"] == model_key and x["dataset"] == dataset)
+        served.append({
+            "dataset": dataset,
+            "committed": measured(_fraction(r["committed_pct"]), basis),
+            "correct": measured(_fraction(r["correct_when_committed_pct"]), basis),
+            "correct_label": ("labelled cells whose answer names their lineage" if dataset == "PBMC240"
+                              else "correct when committed, at the stated level"),
+        })
+    return served
+
+
+def build_v42_evaluation(phase3: dict, confident_rows: list[dict], fulcher_rows: list[dict],
+                         khoury_check: dict) -> dict:
+    """v4.2's numbers. It answers an RNA upload exactly as v4.1, so its suite
+    is v4.1's and the basis says why; the development datasets are measured
+    as served. Khoury 2026 has not been used for v4.2, so its recall there
+    is pending (the previous release carries v4.1's post-hoc figure)."""
+    result = phase3["result"]["v4.1"]
+    suite = {"title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation; v4.2 answers "
+                      "RNA uploads exactly as v4.1)", "rows": [
+        {"key": key, "measure": measure, "value": measured(_fraction(_field(result, path)), V42_SUITE_BASIS)}
+        for key, measure, path in V41_SUITE_MEASURES]}
+    fulcher = next(r for r in fulcher_rows if r["tool"] == "v4.2 (served)")
+    recall = [{"dataset": "Fulcher 2026", "type": key[len("recall_"):-len("_pct")],
+               "value": measured(_fraction(fulcher[key]), "best guess as served, in-sample (v4.1's weight was "
+                                 "chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv")}
+              for key in fulcher if key.startswith("recall_")]
+    recall += [{"dataset": "Khoury 2026", "type": key[len("recall_"):-len("_pct")],
+                "value": pending("post-hoc", KHOURY_NOT_SCORED)}
+               for key in khoury_check["scores"]["v4.1"] if key.startswith("recall_")]
+    return {"suite": suite, "served": _served(confident_rows, "v42", V42_SERVED_BASIS), "recall": recall}
+
+
+def build_v42_model(n_members: int, deployed_architecture: dict, evaluation: dict) -> dict:
+    """The current release (0.5.0). v4.2 is v4.1 with protein class means in
+    the best guess's correlation term, for protein uploads; its encoders,
+    coordinates and latent cosines are v3.1's, as v4.1's are. The mask
+    sampling the members were trained with (T1 NB1b) is not recorded in this
+    repository, so it reads Pending."""
+    return {
+        "name": "VivOME v4.2",
+        "latent_dim": 128,
+        "training_regime": "supervised",
+        "seeds": measured(n_members, "v3.1's ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"),
+        "notes": (
+            "v4.1's answers and best guess, with one change for protein uploads: each cell's correlation is "
+            "taken with protein class means from sorted immune cells (Rieckmann et al. 2017, PXD004352) for the "
+            "reference classes they cover, and with the reference's RNA class means for the rest. Each answer's "
+            "set holds the best guess, so a protein cell's answer can change with it. An RNA upload is answered "
+            "exactly as by v4.1. The five encoders are trained only on labelled blood "
+            "scRNA-seq and no protein labels are used: proteomics queries are projected at inference and never "
+            "used to retrain anything. v4.1's one tuned weight was chosen on Fulcher 2026. Coordinates shown in "
+            "the viewer are a 3-component PCA projection of the coordinate member's (V2 seed 4) 128-d latent "
+            "space, as in v3.1; the latent coordinates themselves are not distributed with this build."
+        ),
+        **deployed_architecture,
+        "mask_sampling": None,
+        "evaluation": evaluation,
+    }
+
+
+def build_v41_release(n_members: int, deployed_architecture: dict, evaluation: dict) -> dict:
+    """v4.1, the previous release (0.4.0), with its own numbers."""
+    return {
+        "model_name": "VivOME v4.1",
+        "atlas_version": PREVIOUS_ATLAS_VERSION,
+        "seeds": measured(n_members, "v3.1's ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"),
+        **deployed_architecture,
+        "mask_sampling": None,
+        "evaluation": evaluation,
+        "note": (
+            "v3.1's answers with a fused best guess: the encoders' probability joined with each cell's "
+            "correlation to the reference's RNA class means, where that correlation carries signal. Its one "
+            "tuned weight was chosen on Fulcher 2026. v4.2 keeps all of it and adds protein class means for "
+            "protein uploads. It stays selectable in the service (VIVOME_PIPELINE_VERSION=v4.1)."
+        ),
+    }
+
+
 def build_v41_model(n_members: int, deployed_architecture: dict, evaluation: dict) -> dict:
     """The current release (0.4.0). v4.1's answers are v3.1's, from the same
     five members, so the architecture facts, the atlas coordinates and the
@@ -320,7 +412,7 @@ def build_v31_release(n_members: int, deployed_architecture: dict, evaluation: d
     best guess and its own numbers. Its mask sampling reads Pending, as v4.1's."""
     return {
         "model_name": "VivOME v3.1",
-        "atlas_version": PREVIOUS_ATLAS_VERSION,
+        "atlas_version": V31_ATLAS_VERSION,
         "seeds": measured(n_members, "ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"),
         **deployed_architecture,
         "mask_sampling": None,
@@ -358,7 +450,8 @@ def build_v3_release(model_seeds: dict, deployed_architecture: dict,
 # ---- The benchmark (benchmark.html) ----
 # Every method scored under one protocol, the baselines with the corrections
 # in research/benchmark/baseline-corrections.md. Signed off by the owner for
-# release 0.4.0 (2026-10-15). A score is each method's one answer per cell
+# release 0.4.0 (2026-10-15); the current model's rows moved to v4.2 for
+# 0.5.0 at the owner's request (2026-10-16). A score is each method's one answer per cell
 # (VivOME's best guess), over seeds where a method has several; the
 # comparison is the current model minus each run, by paired bootstrap.
 
@@ -378,7 +471,9 @@ KHOURY_ARMS = {
     ("scglue", "shared_knn"): ("scglue", "shared kNN"),
     ("seurat", "native"): ("seurat", "Seurat native transfer"),
 }
-CURRENT = "VivOME v4.1"
+CURRENT = "VivOME v4.2"
+CURRENT_SHORT, CURRENT_TOOL = "v4.2", "v4.2 (served)"
+PREVIOUS, PREVIOUS_TOOL = "VivOME v4.1", "v4.1 (served)"
 OUR_RULE = "best guess, as served"
 PAIRED_BASIS = "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI"
 
@@ -390,7 +485,7 @@ def read_csv(path: Path) -> list[dict]:
 
 def _favours(text: str) -> str:
     """A bootstrap table's verdict, from the current model's side."""
-    return "current" if text == "v4.1" else "neither" if text == "neither" else "other"
+    return "current" if text == CURRENT_SHORT else "neither" if text == "neither" else "other"
 
 
 def _score(mean_pct: float, basis: str, sd=None, low=None, high=None, runs: int = 1) -> dict:
@@ -435,10 +530,11 @@ def _per_seed_arms(rows: list[dict], metric: str, regime: str):
 
 
 def _rows(ours: list[tuple], arms, pairs: dict, ours_basis: str, arms_basis: str) -> list[dict]:
-    """ours: (name, score, pairs); arms as _summary_arms yields. Ours first,
-    then every other arm by score."""
+    """ours: (name, score in points or a pending record, pairs); arms as
+    _summary_arms yields. Ours first, then every other arm by score."""
     rows = [{"method": f"{name} (ours)", "rule": OUR_RULE, "ours": True, "runs": 1,
-             "score": _score(value, ours_basis), "vs_current": _versus(p)} for name, value, p in ours]
+             "score": value if isinstance(value, dict) else _score(value, ours_basis), "vs_current": _versus(p)}
+            for name, value, p in ours]
     others = [{"method": TOOL_NAMES[tool], "rule": rule, "ours": False, "runs": runs,
                "score": _score(mean, arms_basis, sd, low, high, runs), "vs_current": _versus(pairs.get((tool, rule), []))}
               for tool, rule, mean, sd, low, high, runs in arms]
@@ -452,37 +548,31 @@ def _dataset(key: str, name: str, measure: str, types: int | None, role: str, ro
 
 
 def build_benchmark(t: dict) -> dict:
-    """t: the committed tables, by name (read in main)."""
+    """t: the committed tables, by name (read in main). The current model is
+    v4.2, with v4.1 beside it. On Khoury 2026 only v4.1 and the baselines are
+    scored (post-hoc), so that table gives scores without differences."""
     def dev_pairs(dataset):
         out = defaultdict(list)
-        for r in t["paired_v41"]:
+        for r in t["paired_current"]:
             if r["dataset"] == dataset:
                 out[(r["baseline"], r["baseline_rule"])].append(
                     (float(r["point_estimate_pct"]), float(r["ci_lo"]), float(r["ci_hi"]), _favours(r["favours"])))
         return out
 
-    def vs_v31(dataset):
+    def vs_previous(dataset):
         return [(float(r["point_estimate_pct"]), float(r["ci_lo"]), float(r["ci_hi"]), _favours(r["favours"]))
-                for r in t["paired_v41_vs_v31"] if r["dataset"] == dataset]
+                for r in t["paired_current_vs_previous"] if r["dataset"] == dataset]
 
     def ours(table, metric, pairs_name, regime=None):
         by_tool = {r["tool"]: r for r in table if regime is None or r["regime"] == regime}
-        return [(CURRENT, float(by_tool["v4.1 (served)"][metric]), []),
-                ("VivOME v3.1", float(by_tool["v3.1 (served)"][metric]), vs_v31(pairs_name))]
+        return [(CURRENT, float(by_tool[CURRENT_TOOL][metric]), []),
+                (PREVIOUS, float(by_tool[PREVIOUS_TOOL][metric]), vs_previous(pairs_name))]
 
-    dev_basis = "development data, as served; research/benchmark/v41_development/"
+    dev_basis = "development data, as served; research/benchmark/v42_development/"
     corrected_basis = "corrected baselines; research/benchmark/baselines_corrected/"
 
-    # Khoury 2026, post-hoc.
-    k_scores = t["khoury_v41"]["scores"]
-    k_pairs, k_vs31 = defaultdict(list), []
-    for r in t["khoury_v41_paired"]:
-        pair = (float(r["diff_bal_acc_pct"]), float(r["ci_lo"]), float(r["ci_hi"]), _favours(r["favours"]))
-        family = r["comparison"].removeprefix("v4.1 vs ")
-        if family == "v3.1":
-            k_vs31.append(pair)
-        elif (family, r["rule_b"]) in KHOURY_ARMS:
-            k_pairs[KHOURY_ARMS[(family, r["rule_b"])]].append(pair)
+    # Khoury 2026, post-hoc: scores only.
+    k_scores = t["khoury_previous"]["scores"]
     k_arms = []
     for r in t["khoury_family"]:
         arm = KHOURY_ARMS.get((r["family"], r["rule"]))
@@ -495,21 +585,23 @@ def build_benchmark(t: dict) -> dict:
         "khoury2026", "Khoury 2026", f"Balanced accuracy over {k_types} types",
         k_types,
         "Held out from development: no method was developed or tuned on it. Post-hoc for v4.1 and for "
-        "the corrected baselines, since its labels were read at its one scoring (2026-10-03). The labels "
-        "are the authors' clusters of the protein data, and its CD8 T label largely separates naive "
-        "from memory T cells.",
-        _rows([(CURRENT, k_scores["v4.1"]["balanced_accuracy_pct"], []),
-               ("VivOME v3.1", k_scores["v3.1"]["balanced_accuracy_pct"], k_vs31)],
-              k_arms, k_pairs,
+        "the corrected baselines, since its labels were read at its one scoring (2026-10-03). v4.2 is not "
+        "scored here, because each use of it needs the owner's decision, so this table gives scores "
+        "without differences. The labels are the authors' clusters of the protein data, and its CD8 T "
+        "label largely separates naive from memory T cells.",
+        _rows([(CURRENT, pending("post-hoc", KHOURY_NOT_SCORED), []),
+               (PREVIOUS, k_scores["v4.1"]["balanced_accuracy_pct"], [])],
+              k_arms, {},
               "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json",
               "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"))
 
-    f_types = sum(1 for key in t["v41_fulcher"][0] if key.startswith("recall_"))
+    f_types = sum(1 for key in t["dev_fulcher"][0] if key.startswith("recall_"))
     fulcher = _dataset(
         "fulcher2026", "Fulcher 2026", f"Balanced accuracy over {f_types} types", f_types,
-        "Development data. In-sample for v4.1: its one tuned weight was chosen here, so its lead here "
-        "is not evidence of a held-out gain. Fulcher measures neither CD8A, CD8B nor CD4.",
-        _rows(ours(t["v41_fulcher"], "balanced_accuracy_pct", "Fulcher 2026"),
+        "Development data. In-sample for v4.2 and v4.1: v4.1's one tuned weight was chosen here and v4.2 "
+        "was checked here, so a lead here is not evidence of a held-out gain. Fulcher measures neither "
+        "CD8A, CD8B nor CD4.",
+        _rows(ours(t["dev_fulcher"], "balanced_accuracy_pct", "Fulcher 2026"),
               _summary_arms(t["corrected_fulcher"], "balanced_accuracy_pct"), dev_pairs("Fulcher 2026"),
               dev_basis + "fulcher2026.csv", corrected_basis + "fulcher2026_summary.csv"))
 
@@ -517,17 +609,17 @@ def build_benchmark(t: dict) -> dict:
         "pbmc240", "PBMC240", "Lymphoid recall", None,
         "Development data with lineage labels only, for some of its cells: the share of lymphoid-labelled "
         "cells whose single answer is lymphoid.",
-        _rows(ours(t["v41_pbmc240"], "lymphoid_recall_pct", "PBMC240"),
+        _rows(ours(t["dev_pbmc240"], "lymphoid_recall_pct", "PBMC240"),
               _summary_arms(t["corrected_pbmc240"], "lymphoid_recall_pct"), {},
               dev_basis + "pbmc240.csv", corrected_basis + "pbmc240_summary.csv"))
 
-    s_types = int(next(r for r in t["v41_scope2"] if r["regime"] == "restricted")["n_candidate_classes"])
+    s_types = int(next(r for r in t["dev_scope2"] if r["regime"] == "restricted")["n_candidate_classes"])
     scope2 = _dataset(
         "scope2", "SCoPE2, published matrix", "Balanced accuracy, restricted to macrophage or monocyte",
         s_types,
         "Development data: PMA-differentiated U-937 macrophages and undifferentiated monocytes, two "
         "states of one cell line. The published matrix arrives centred and batch-corrected.",
-        _rows(ours(t["v41_scope2"], "balanced_accuracy_pct", "SCoPE2 restricted", "restricted"),
+        _rows(ours(t["dev_scope2"], "balanced_accuracy_pct", "SCoPE2 restricted", "restricted"),
               _summary_arms(t["corrected_scope2"], "balanced_accuracy_pct", "restricted"),
               dev_pairs("SCoPE2 restricted"),
               dev_basis + "scope2.csv", corrected_basis + "scope2_summary.csv"))
@@ -537,9 +629,9 @@ def build_benchmark(t: dict) -> dict:
         s_types,
         "The same cells from the authors' search output, with missing values kept missing and no "
         "centring or batch correction.",
-        _rows(ours(t["v41_scope2_reprocessed"], "balanced_accuracy_pct", "SCoPE2 reprocessed restricted",
+        _rows(ours(t["dev_scope2_reprocessed"], "balanced_accuracy_pct", "SCoPE2 reprocessed restricted",
                    "restricted"),
-              _per_seed_arms(t["v41_scope2_reprocessed"], "balanced_accuracy_pct", "restricted"),
+              _per_seed_arms(t["dev_scope2_reprocessed"], "balanced_accuracy_pct", "restricted"),
               dev_pairs("SCoPE2 reprocessed restricted"),
               dev_basis + "scope2_reprocessed.csv", "corrected baselines; " + dev_basis + "scope2_reprocessed.csv"))
 
@@ -768,35 +860,32 @@ def main() -> None:
         v31_modality_probe = json.load(handle)
     with (SERVICE_MODEL_DIR / "v3_1" / "nb2_spec_v31.json").open(encoding="utf-8") as handle:
         v31_members = json.load(handle)["encoder"]["members"]
-    nb2_summary = json.loads(NB2_SUMMARY.read_text(encoding="utf-8"))
-    flags_record = json.loads(FLAGS_RECORD.read_text(encoding="utf-8"))
-
     tables = {
-        "v41_fulcher": read_csv(V41_DEV_DIR / "fulcher2026.csv"),
-        "v41_pbmc240": read_csv(V41_DEV_DIR / "pbmc240.csv"),
-        "v41_scope2": read_csv(V41_DEV_DIR / "scope2.csv"),
-        "v41_scope2_reprocessed": read_csv(V41_DEV_DIR / "scope2_reprocessed.csv"),
-        "paired_v41": read_csv(V41_DEV_DIR / "paired_bootstrap_v41.csv"),
-        "paired_v41_vs_v31": read_csv(V41_DEV_DIR / "paired_bootstrap_v41_vs_v31.csv"),
+        "dev_fulcher": read_csv(V42_DEV_DIR / "fulcher2026.csv"),
+        "dev_pbmc240": read_csv(V42_DEV_DIR / "pbmc240.csv"),
+        "dev_scope2": read_csv(V42_DEV_DIR / "scope2.csv"),
+        "dev_scope2_reprocessed": read_csv(V42_DEV_DIR / "scope2_reprocessed.csv"),
+        "paired_current": read_csv(V42_DEV_DIR / "paired_bootstrap_v42.csv"),
+        "paired_current_vs_previous": read_csv(V42_DEV_DIR / "paired_bootstrap_v42_vs_v41.csv"),
         "corrected_fulcher": read_csv(CORRECTED_DIR / "fulcher2026_summary.csv"),
         "corrected_pbmc240": read_csv(CORRECTED_DIR / "pbmc240_summary.csv"),
         "corrected_scope2": read_csv(CORRECTED_DIR / "scope2_summary.csv"),
         "khoury_family": read_csv(KHOURY_POSTHOC_DIR / "family_summary.csv"),
-        "khoury_v41": json.loads((KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
-        "khoury_v41_paired": read_csv(KHOURY_V41_DIR / "paired_bootstrap.csv"),
+        "khoury_previous": json.loads((KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
     }
-    v41_evaluation = build_v41_evaluation(
-        json.loads(V41_PHASE3.read_text(encoding="utf-8")), read_csv(V41_DEV_DIR / "confident.csv"),
-        tables["v41_fulcher"], tables["khoury_v41"])
+    phase3 = json.loads(V41_PHASE3.read_text(encoding="utf-8"))
+    v42_evaluation = build_v42_evaluation(phase3, read_csv(V42_DEV_DIR / "confident.csv"),
+                                          tables["dev_fulcher"], tables["khoury_previous"])
+    v41_evaluation = build_v41_evaluation(phase3, read_csv(V41_DEV_DIR / "confident.csv"),
+                                          read_csv(V41_DEV_DIR / "fulcher2026.csv"), tables["khoury_previous"])
 
     deployed_architecture = build_deployed_architecture_facts(decisive_summary, feature_space_detail_rows)
     model_seeds = build_model_seeds(reference_seeds_rows, provenance)
-    model = build_v41_model(len(v31_members), deployed_architecture, v41_evaluation)
+    model = build_v42_model(len(v31_members), deployed_architecture, v42_evaluation)
     member = v31_modality_probe["member"].removesuffix(".pt")
     latent_centroid_cosine_by_idx = read_latent_centroid_cosine(v31_latent_rows, f" ({member}, the coordinate member)")
     modality_probe_accuracy = read_modality_probe_accuracy(v31_modality_probe)
-    previous_release = build_v31_release(len(v31_members), deployed_architecture,
-                                         build_v31_evaluation(nb2_summary, flags_record))
+    previous_release = build_v41_release(len(v31_members), deployed_architecture, v41_evaluation)
     earlier_release = build_v3_release(model_seeds, deployed_architecture, latent_centroid_cosine_rows, modality_probe)
     first_release = build_first_release_facts(legacy_provenance)
     with (NB1_DIR / "rna_to_rna_membership_corrected.csv").open(newline="", encoding="utf-8") as handle:

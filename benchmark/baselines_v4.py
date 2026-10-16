@@ -17,6 +17,7 @@ label.
 
     python -m benchmark.baselines_v4                    # v4, from the repository root
     python -m benchmark.baselines_v4 --version v4.1     # v4.1
+    python -m benchmark.baselines_v4 --version v4.2     # v4.2 (release 0.5.0; protein uploads)
 """
 from __future__ import annotations
 
@@ -29,12 +30,12 @@ from benchmark import baselines_inputs, datasets
 from benchmark.baselines_v31 import OUT, PBMC240, scope2_raw, table
 from service.pipeline import alignment, pipeline
 
-KEYS = {"v4": "v4", "v4.1": "v41", "v3.1": "v31"}  # pipeline version -> table name
+KEYS = {"v4": "v4", "v4.1": "v41", "v4.2": "v42", "v3.1": "v31"}  # pipeline version -> table name
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--version", choices=("v4", "v4.1"), default="v4")
+    parser.add_argument("--version", choices=("v4", "v4.1", "v4.2"), default="v4")
     version = parser.parse_args().version
     key = KEYS[version]
     bundles = {key: pipeline.load_bundle(version)}

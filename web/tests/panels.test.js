@@ -106,9 +106,11 @@ test('benchmark renders one table per dataset, ours first and bold, with chance 
   assert.equal((html.match(/<table/g) ?? []).length, 2);
   assert.match(html, /<h3>Khoury 2026<\/h3>/);
   assert.match(html, /Balanced accuracy over 5 types; chance 20\.0%\./);
+  assert.match(html, /<strong>VivOME v4\.2 \(ours\)<\/strong>/);
   assert.match(html, /<strong>VivOME v4\.1 \(ours\)<\/strong>/);
+  assert.ok(html.indexOf('VivOME v4.2 (ours)') < html.indexOf('VivOME v4.1 (ours)'));
   assert.ok(html.indexOf('VivOME v4.1 (ours)') < html.indexOf('PCA, no correction'));
-  assert.match(html, /<th>VivOME v4\.1 minus it<\/th>/);
+  assert.match(html, /<th>VivOME v4\.2 minus it<\/th>/);
   assert.match(html, /62\.5%/);
 });
 
@@ -125,7 +127,7 @@ test('benchmark shows the spread over seeds and the paired difference in points'
   // One pairing: the difference with its interval and verdict.
   assert.match(html, /−0\.3 \(−2\.1 to \+1\.4\)<span class="metric-basis">neither<\/span>/);
   // Several: the range over runs and how many favour each side.
-  assert.match(html, /\+3\.8 to \+7\.2<span class="metric-basis">3 of 3 favour VivOME v4\.1<\/span>/);
+  assert.match(html, /\+3\.8 to \+7\.2<span class="metric-basis">3 of 3 favour VivOME v4\.2<\/span>/);
 });
 
 test('benchmark renders a pending score as Pending, never a number', () => {
@@ -147,7 +149,7 @@ test('benchmark that is not signed off shows a pending banner and no table', () 
 
 test('model card shows version, dims, and a measured seed count', () => {
   const html = buildModelCard(manifestFixture());
-  assert.match(html, /0\.4\.0/);
+  assert.match(html, /0\.5\.0/);
   assert.match(html, /128/);
   assert.match(html, /<dd>5<\/dd>/);
   assert.ok(!/<span class="pending">5/.test(html),
@@ -228,10 +230,10 @@ test('prior baseline card renders nothing when the manifest has no first_release
   assert.equal(buildPriorBaselineCard(m), '');
 });
 
-test('previous release card shows v3.1, and the earlier one v3, each with its own facts', () => {
+test('previous release card shows v4.1, and the earlier one v3, each with its own facts', () => {
   const previous = buildPreviousReleaseCard(manifestFixture());
-  assert.match(previous, /VivOME v3\.1/);
-  assert.match(previous, /0\.3\.0/);
+  assert.match(previous, /VivOME v4\.1/);
+  assert.match(previous, /0\.4\.0/);
   assert.match(previous, /Seeds<\/dt><dd>5/);
   assert.match(previous, /Mask sampling<\/dt><dd><span class="pending">/);
   const earlier = buildEarlierReleaseCard(manifestFixture());
@@ -250,16 +252,15 @@ test('a missing mask sampling reads Pending, never undefined', () => {
 
 test('evaluation tables title their suite and label each basis, for this release and the previous', () => {
   const html = buildEvaluationTable(manifestFixture());
-  assert.match(html, /<h3>Simulated uploads of held-out RNA cells \(v4\.1&#39;s pre-registered evaluation\)<\/h3>/);
+  assert.match(html, /<h3>Simulated uploads of held-out RNA cells \(v4\.1&#39;s pre-registered evaluation; v4\.2 answers RNA uploads exactly as v4\.1\)<\/h3>/);
   assert.match(html, /the suite&#39;s fourth use/);
   assert.match(html, /96\.3%/);
   assert.match(html, /Fulcher 2026: committed/);
-  assert.match(html, /97\.9%/);
+  assert.match(html, /98\.3%/);
   const previous = buildPreviousEvaluationTable(manifestFixture());
-  assert.match(previous, /NB2&#39;s evaluation suite/);
-  assert.match(previous, /NB2 evaluation, before the two conservative flags/);
-  assert.match(previous, /served settings \(both service flags on\)/);
-  assert.match(previous, /94\.9%/);
+  assert.match(previous, /<h3>Simulated uploads of held-out RNA cells \(v4\.1&#39;s pre-registered evaluation\)<\/h3>/);
+  assert.match(previous, /served settings, development data/);
+  assert.match(previous, /97\.9%/);
 });
 
 test('evaluation table reads Pending when a release has no evaluation', () => {
@@ -272,9 +273,9 @@ test('evaluation table reads Pending when a release has no evaluation', () => {
 
 test('release facts name each release from its own block', () => {
   const m = manifestFixture();
-  assert.equal(factText(m, 'model_name'), 'VivOME v4.1');
-  assert.equal(factText(m, 'previous_release_name'), 'VivOME v3.1');
-  assert.equal(factText(m, 'previous_release_version'), '0.3.0');
+  assert.equal(factText(m, 'model_name'), 'VivOME v4.2');
+  assert.equal(factText(m, 'previous_release_name'), 'VivOME v4.1');
+  assert.equal(factText(m, 'previous_release_version'), '0.4.0');
   assert.equal(factText(m, 'v3_model_name'), 'VivOME v3 reference');
   assert.equal(factText(m, 'v3_atlas_version'), '0.2.0');
   assert.equal(factText(m, 'previous_model'), 'CrossModalNet');
@@ -284,15 +285,18 @@ test('release facts name each release from its own block', () => {
 
 test('the known limits read their numbers from the manifest, and only measured ones', () => {
   const m = manifestFixture();
-  assert.equal(factText(m, 'recall_khoury_cd8t'), '2.7%');
+  assert.equal(factText(m, 'recall_khoury_cd8t'), 'Pending', 'the current release is not scored on Khoury');
+  assert.equal(factText(m, 'previous_recall_khoury_cd8t'), '2.7%');
   assert.equal(factText(m, 'recall_fulcher_cd8t'), '23.8%');
   assert.equal(factText(m, 'recall_fulcher_dc'), 'Pending');
+  assert.equal(factText(m, 'previous_recall_fulcher_dc'), '22.2%');
   assert.equal(factText(m, 'scope2_current'), '38.0%');
   assert.equal(factText(m, 'scope2_chance'), '50.0%');
   // A table whose first row is not ours has no current score to read.
   m.benchmark.datasets[1].rows[0].ours = false;
   assert.equal(factText(m, 'scope2_current'), 'Pending');
   assert.equal(factText({}, 'recall_khoury_cd8t'), 'Pending');
+  assert.equal(factText({}, 'previous_recall_khoury_cd8t'), 'Pending');
 });
 
 test('every fact the versions and benchmark pages ask for exists in the real manifest', async () => {
@@ -329,8 +333,8 @@ test('supported label space lists cross-modal types and the RNA-only count', () 
 
 test('release status shows the manifest release facts', () => {
   const html = buildReleaseStatus(manifestFixture());
-  assert.match(html, /Atlas version<\/dt><dd>0\.4\.0/);
-  assert.match(html, /VivOME v4\.1/);
+  assert.match(html, /Atlas version<\/dt><dd>0\.5\.0/);
+  assert.match(html, /VivOME v4\.2/);
   assert.match(html, /RNA cells<\/dt><dd>85,233/);
   assert.match(html, /Protein cells<\/dt><dd>1,490/);
 });
@@ -393,7 +397,7 @@ test('proof points come from the manifest', () => {
   assert.match(html, /RNA cells in the reference<\/dt><dd>85,233/);
   assert.match(html, /protein cells, projected zero-shot<\/dt><dd>1,490/);
   assert.match(html, /cell types<\/dt><dd>3</);
-  assert.match(html, /atlas version<\/dt><dd>0\.4\.0/);
+  assert.match(html, /atlas version<\/dt><dd>0\.5\.0/);
 });
 
 test('proof points read Pending, never NaN or undefined, when the manifest is short', () => {
@@ -406,16 +410,16 @@ test('facts read the manifest for the landing prose', () => {
   const m = manifestFixture();
   assert.equal(factText(m, 'rna_cells'), '85,233');
   assert.equal(factText(m, 'feature_space'), '9,002');
-  assert.equal(factText(m, 'atlas_version'), '0.4.0');
-  assert.equal(factText(m, 'model_name'), 'VivOME v4.1');
+  assert.equal(factText(m, 'atlas_version'), '0.5.0');
+  assert.equal(factText(m, 'model_name'), 'VivOME v4.2');
   assert.equal(factText(m, 'previous_model'), 'CrossModalNet');
 });
 
 test('the landing reads the release results from the manifest, and only measured ones', () => {
   const m = manifestFixture();
   assert.equal(factText(m, 'eval_rna_correct'), '96.3%');
-  assert.equal(factText(m, 'eval_fulcher_answered'), '87.0%');
-  assert.equal(factText(m, 'eval_fulcher_correct'), '97.9%');
+  assert.equal(factText(m, 'eval_fulcher_answered'), '87.3%');
+  assert.equal(factText(m, 'eval_fulcher_correct'), '98.3%');
   // Absent from the manifest: no abstention record in the fixture.
   assert.equal(factText(m, 'eval_rna_abstained'), 'Pending');
   // Present but pending.

@@ -214,3 +214,20 @@ changes for v3.1, v4.1 or v5.2.
   adds it to every table. Both were rehearsed again on Fulcher; the scorer
   reproduces v4.2's development figure there (75.79, from
   `research/notebook-outputs/v42_protein_means/summary.json`).
+
+## Amendment 4, 2026-10-16, before any data: v4.2 served
+
+v4.2 became the served model (release 0.5.0; run history, entry 45). Two of
+its frozen files changed, and nothing it does to a protein upload:
+- **`spec_v42.json`** records its evaluation as passed; no other field
+  changed. sha256 now `c58912c6b0eaf2673b05138a9213dbb43dccbbd065cf860152e443bb5f6e8ae0`.
+- **`MANIFEST.json`** holds the spec's new sha256. sha256 now `89af5192c1e8dc4f5fa0bca6b0d1a34770f26b91c22ee84684401cf7bc426144`.
+- **The protein class means** are unchanged
+  (`3afacd88777433488087d433ee8cb2e22bbce92011bcd6f36db01b1d527bec1b`).
+- **The service now passes an upload's modality to v4.2:** an RNA upload
+  takes v4.1's RNA class means, as v4.2's design said. The sorted cells are
+  protein, so they take v4.2's protein path as before
+  (`service/tests/test_v42.py`).
+
+v4.2 is still scored as amendment 3 says: as served, a candidate, reported
+against v4.1. The intake checks the new sha256s.

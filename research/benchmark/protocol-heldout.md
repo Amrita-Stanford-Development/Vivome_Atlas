@@ -288,3 +288,13 @@ and before PXD046211 was.
     match.
   - This sage version names its q-values spectrum_fdr, peptide_fdr and
     protein_fdr.
+
+### 3, 2026-10-16, after scoring: v4.2's files for its release
+
+v4.2 was scored here with the files of rule 1. After the scoring it became
+the served model (run history, entry 45), and two of its files changed:
+- `spec_v42.json`, which records its evaluation (sha256 `c58912c6b0eaf2673b05138a9213dbb43dccbbd065cf860152e443bb5f6e8ae0`);
+- `MANIFEST.json` (sha256 `89af5192c1e8dc4f5fa0bca6b0d1a34770f26b91c22ee84684401cf7bc426144`).
+
+Its protein class means and everything it does to a protein upload are
+unchanged. The results above stand as scored.

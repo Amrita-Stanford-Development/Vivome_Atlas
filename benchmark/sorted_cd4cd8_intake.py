@@ -47,12 +47,12 @@ from service.pipeline import alignment, fusion, gene_ids, pipeline
 REPO = datasets.REPO
 RESULTS = REPO / "benchmark" / "results"
 MODEL = REPO / "service" / "model"
-# Rule 3's table, verbatim: the files that freeze each model.
+# Rule 3's table, verbatim: the files that freeze each model (v4.2's spec and MANIFEST since amendment 4).
 FROZEN = {
     "v4.1": {"service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
              "service/model/v4_1/MANIFEST.json": "5e9cdc71496af5238b4ad5a4bc9ccfb7fce90a0a43d63b1948d14a0f3054382b"},
-    "v4.2": {"service/model/v4_2/spec_v42.json": "654a612b5d38220222d77ededf97791c58295126b5c8801b2500663380abe303",
-             "service/model/v4_2/MANIFEST.json": "8fa42d4437523e89d2d5b033b535439f59e71fa63f91d00300d197b06771d565",
+    "v4.2": {"service/model/v4_2/spec_v42.json": "c58912c6b0eaf2673b05138a9213dbb43dccbbd065cf860152e443bb5f6e8ae0",
+             "service/model/v4_2/MANIFEST.json": "89af5192c1e8dc4f5fa0bca6b0d1a34770f26b91c22ee84684401cf7bc426144",
              "service/model/v4_2/protein_class_means.npz":
                  "3afacd88777433488087d433ee8cb2e22bbce92011bcd6f36db01b1d527bec1b"},
     "v5.2": {"service/model/v5_2/spec_v52.json": "61d76d2815b4bd534691fd3f64fa559296afd52e78cd843b9aa3d23fd4f4e2c1",
