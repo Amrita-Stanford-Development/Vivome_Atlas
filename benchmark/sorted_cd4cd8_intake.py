@@ -10,8 +10,9 @@ Without reading any label, it:
 3. records the label-free facts the protocol allows (rule 2): cells, proteins,
    missingness, and whether CD8A, CD8B and CD4 are measured and in what share
    of cells;
-4. runs v3.1, v4.1 and v5.2 as served (pipeline.run_projection; v5.2 loads
-   with require_evaluation=False, since this test is its evaluation) and saves
+4. runs v3.1, v4.1, v4.2 and v5.2 as served (pipeline.run_projection; v4.2
+   and v5.2 load with require_evaluation=False, since this test is part of
+   their evaluation; v4.2 added by amendment 3) and saves
    each model's per-cell table (the table of benchmark/baselines_v31.py);
 5. writes the baselines' query matrix over the benchmark gene space.
 
@@ -25,7 +26,7 @@ never pass through here: they are stored apart (rule 1) and only
 benchmark/sorted_cd4cd8_score.py reads them.
 
 Writes results/sorted_cd4cd8/ (or results/sorted_cd4cd8_rehearsal/): intake.json,
-cell_ids.txt, v31_pred.csv, v41_pred.csv, v52_pred.csv, query_benchmark.npz.
+cell_ids.txt, v31_pred.csv, v41_pred.csv, v42_pred.csv, v52_pred.csv, query_benchmark.npz.
 """
 from __future__ import annotations
 
@@ -50,13 +51,17 @@ MODEL = REPO / "service" / "model"
 FROZEN = {
     "v4.1": {"service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
              "service/model/v4_1/MANIFEST.json": "5e9cdc71496af5238b4ad5a4bc9ccfb7fce90a0a43d63b1948d14a0f3054382b"},
+    "v4.2": {"service/model/v4_2/spec_v42.json": "654a612b5d38220222d77ededf97791c58295126b5c8801b2500663380abe303",
+             "service/model/v4_2/MANIFEST.json": "8fa42d4437523e89d2d5b033b535439f59e71fa63f91d00300d197b06771d565",
+             "service/model/v4_2/protein_class_means.npz":
+                 "3afacd88777433488087d433ee8cb2e22bbce92011bcd6f36db01b1d527bec1b"},
     "v5.2": {"service/model/v5_2/spec_v52.json": "61d76d2815b4bd534691fd3f64fa559296afd52e78cd843b9aa3d23fd4f4e2c1",
              "service/model/v5_2/nb2_spec_v52.json": "6596bb188ce6420ccf53646ee64fdc3606bb59d30ccbbef1e65e0e62bb04674a",
              "service/model/v5_2/MANIFEST.json": "72f419d4c1098fc492a274e758894a9bc704853f4c6b9d43d68a7d836a656e8c",
              "research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz":
                  "123c05eb84d6ff502ba121a97b3a123eaddd08ac01c46647381ce7aa78160280"},
 }
-MODELS = {"v31": "v3.1", "v41": "v4.1", "v52": "v5.2"}  # table name -> pipeline version
+MODELS = {"v31": "v3.1", "v41": "v4.1", "v42": "v4.2", "v52": "v5.2"}  # table name -> pipeline version
 MARKERS = ("CD8A", "CD8B", "CD4")
 
 
@@ -88,8 +93,8 @@ def check_frozen() -> dict:
 
 
 def load_bundle(version: str):
-    """As served; v5.2 is refused until evaluated, and this is its evaluation."""
-    if version == "v5.2":
+    """As served; v4.2 and v5.2 are refused until evaluated, and this is part of it."""
+    if version in ("v4.2", "v5.2"):
         return fusion.V4Bundle.load(require_evaluation=False, version=version)
     return pipeline.load_bundle(version)
 

@@ -139,7 +139,10 @@ space, conformal and abstention components (`pipeline.components_for`).
   data files from `model/v4/` (`scripts/build_v4_bundle.py`) and v3.1's
   members. `benchmark/v41_dev_gate.py` and `service/tests/test_v41_gate.py`
   check it per cell. `v4` is the same code with the encoder weighted 0.7
-  instead of 0.5.
+  instead of 0.5. `v4.2`, a candidate, refused until its evaluation passes,
+  is v4.1 with protein class means from sorted cells (Rieckmann 2017) in the
+  correlation term (`model/v4_2/`, `scripts/build_v42_spec.py`;
+  `service/tests/test_v42.py` checks it against its notebook cell by cell).
 - **`v3.1`** is T1 NB2's five-encoder ensemble
   (`pipeline/ensemble.py`), with its files in `model/v3_1/`.
   - Its five checkpoints live outside git. Fetch them with

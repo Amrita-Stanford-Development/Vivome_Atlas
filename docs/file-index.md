@@ -106,6 +106,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_v31_gate.py` — the Track F gate as a test (`benchmark/v31_dev_gate.py`)
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
 - `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
+- `service/tests/test_v42.py` — v4.2: its protein query, refused until evaluated, its protein means as its spec says, equal to v4.1 where its correlation term is flat, and its served best guess equal to its notebook's on every development dataset
 - `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
 - `service/tests/test_baselines_labels.py` — the corrected baselines' `--labels`: the join of a label set onto the benchmark's RNA cells by cell, refusing a misaligned or short table, and runs kept apart from the original ones
 - `service/tests/test_sorted_cd4cd8.py` — the sorted CD4/CD8 test's scripts: frozen sha256s equal the protocol's and still hold, rule 5's mapping, scoring over the sorted types only, refusal of a labels file with another sha256 and of a second scoring
@@ -142,6 +143,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v4/members/V2_seed*_centroids_cb.npy` — each member's class centroids from the reference encoded under class-balanced statistics (22 × 128)
 - `service/model/v4_1/spec_v41.json` — v4.1's settings: v4's, with the encoder's weight where the correlation term is used (gate-on) and the correlation temperature from v4.1's Phase A, and its evaluation's status
 - `service/model/v4_1/MANIFEST.json` — sha256 of v4.1's spec and of every v4 data file it uses (as `../v4/...`), checked when v4.1 loads
+- `service/model/v4_2/spec_v42.json` — v4.2's settings: v4.1's with protein class means in the correlation term; evaluation pending
+- `service/model/v4_2/protein_class_means.npz` — v4.2's protein class means (classes x 15,314 proteins), their gene symbols and the 16 classes covered
+- `service/model/v4_2/MANIFEST.json` — sha256 of v4.2's files and the v4 data files it reads
 - `service/model/v5/nb2_spec_v5.json` — v5's answers: its members' temperatures, Mondrian conformal thresholds and out-of-distribution threshold, fitted by NB2's recipe on the cleaned labels (NB2's layout)
 - `service/model/v5/spec_v5.json` — v5's best guess: v4.1's settings on v5's members and the cleaned labels, and its evaluation's status
 - `service/model/v5/MANIFEST.json` — sha256, size and description of every v5 file, checked when v5 loads
@@ -267,6 +271,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict
 - `scripts/build_v41_spec.py` — writes v4.1's spec (v4's with Phase A's locked rule and Phase C's verdict) and a MANIFEST pinning v4's data files
+- `scripts/build_v42_spec.py` — writes v4.2's protein class means (from Rieckmann's sorted proteomes, via `research/notebooks/rieckmann_feasibility.py`), its spec (evaluation pending) and its MANIFEST, which also pins v4's data files
 - `scripts/fetch_public_sets.py` — fetches the public datasets of `research/benchmark/side-tests.md` (each group's role: reference, development, held out as the internal test, or reserve) into `data/incoming/public_sets/`: processed outputs only, parallel resumable ranges, size and checksum verified, sha256 recorded
 - `scripts/test_fetch_public_sets.py` — tests the table (roles, hosts, no raw files) and the downloader against a local range server: ranges, resume, size and checksum refusals
 - `research/benchmark/public-sets-downloads.json` — what `scripts/fetch_public_sets.py` fetched: each file's role, URL, size, sha256 and date

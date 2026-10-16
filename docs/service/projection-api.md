@@ -287,7 +287,10 @@ The response is v3.1's, with `pipeline_version` `"v4.1"`, its own
 ```
 
 v4 is the same code with v4's spec: the encoder's weight is 0.7 wherever
-the correlation term is used, against v4.1's 0.5.
+the correlation term is used, against v4.1's 0.5. v4.2 is selectable but
+refused (503) until its evaluation passes: v4.1 with protein class means from
+sorted cells in the correlation term, for the classes they cover; its response
+is v4.1's, with its own `pipeline_version` and `model_version`.
 
 ### Components
 

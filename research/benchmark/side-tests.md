@@ -45,6 +45,14 @@ sorted cells requested by email.
 - **The sorted CD4/CD8 cells, if they arrive mid-plan,** are scored at once
   under their protocol with v4.1 and v5.2.
 
+### Amendment 2, 2026-10-16: the candidates for the internal held-out test
+
+The held-out sets are scored once, at the end, on the candidates frozen by
+then. So far: v4.1 (the served default), v5.2, and v4.2, frozen on
+2026-10-16 with the sha256s in `research/benchmark/protocol-sorted-cd4cd8.md`,
+amendment 3. A later Phase 2 candidate joins only if it is frozen the same way
+before any held-out file is opened.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

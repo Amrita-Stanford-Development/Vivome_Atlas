@@ -115,12 +115,15 @@ ATLAS_VERSION = "0.4.0"
 # the correlation term is used, chosen on Fulcher 2026. Its evaluation passed
 # (Phase C), and it is the default since release 0.4.0 (owner sign-off,
 # 2026-10-15).
+# "v4.2" (Goal 2, Phase 2a): v4.1 with protein class means from sorted cells
+# (Rieckmann 2017) in its correlation term, for the classes they cover;
+# selectable, refused (503) until its evaluation passes.
 # "v5" (Track H): v4.1's rule on five V2 members retrained on cleaned reference
 # labels, with its own calibration; selectable, refused (503) until its
 # evaluation passes. "v5.1": v5 with the NK T class folded into NK in training.
 # "v5.2": v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et
 # al. 2021. Both are likewise refused until their evaluation passes.
-PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v5", "v5.1", "v5.2")
+PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v4.2", "v5", "v5.1", "v5.2")
 PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v4.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
@@ -148,6 +151,12 @@ V4_MANIFEST_PATH = V4_DIR / "MANIFEST.json"
 V41_DIR = _env_path("VIVOME_V41_DIR", MODEL_DIR / "v4_1")
 V41_SPEC_PATH = V41_DIR / "spec_v41.json"
 V41_MANIFEST_PATH = V41_DIR / "MANIFEST.json"
+
+# v4.2's files: its spec and protein class means (scripts/build_v42_spec.py);
+# its MANIFEST also pins v4's data files, as ../v4/..., which it loads from V4_DIR.
+V42_DIR = _env_path("VIVOME_V42_DIR", MODEL_DIR / "v4_2")
+V42_SPEC_PATH = V42_DIR / "spec_v42.json"
+V42_MANIFEST_PATH = V42_DIR / "MANIFEST.json"
 
 # v5's files, all its own (research/notebooks/v5_build.py): members, latents and
 # centroids, the answers' spec (NB2's layout), the best guess's spec (v4.1's

@@ -1464,6 +1464,11 @@ figures to 5e-5 points.
   The hybrid term agrees less often with v3.1 than the RNA term did.
 - **Fulcher chose v4.1's weight,** so this is development evidence. The held-out
   protein sets and the sorted cells are the tests.
+- **Frozen as a candidate** (owner, 2026-10-16): `"v4.2"` in the service,
+  refused until evaluated (`scripts/build_v42_spec.py`, `service/model/v4_2/`);
+  the served guess equals this script's on every development dataset
+  (`service/tests/test_v42.py`); added to the sorted test (protocol amendment
+  3) and to the internal held-out test (`side-tests.md`, amendment 2).
 
 ---
 

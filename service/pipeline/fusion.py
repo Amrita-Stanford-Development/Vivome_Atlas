@@ -42,6 +42,16 @@ rules (research/notebooks/v41_pretest.py) and checked once on Khoury 2026
 (benchmark/khoury2026_posthoc_v41_check.py). Its own evaluation passed
 (Phase C), and it is the service's default since release 0.4.0.
 
+v4.2 (Goal 2, Phase 2a) is v4.1 with protein class means from sorted cells
+(Rieckmann 2017; service/model/v4_2/, scripts/build_v42_spec.py) in its
+correlation term: for each class those cells cover, the cell's correlation is
+with the protein class mean over its observed proteins, matched by gene
+symbol; for the rest, v4.1's RNA class means. The agreement gate reads that
+hybrid term. Single-cell proteomics measures abundant proteins only (research/
+notebook-run-history.md, entry 30), and sorted cells' protein means separate
+them better than RNA means do on the development data (entries 31 and 32). It
+is refused until its evaluation passes.
+
 v5 (research/todo.md, Track H) is v4.1's rule with everything underneath
 rebuilt from cleaned reference labels (research/notebooks/v5_labels.py):
 - five V2 members retrained with NB1d's recipe
@@ -58,6 +68,7 @@ from __future__ import annotations
 import dataclasses
 import hashlib
 import json
+import warnings
 from dataclasses import dataclass
 
 import numpy as np
@@ -69,12 +80,13 @@ MODEL_VERSION_LABEL = "v4 (v3.1's answers; best guess fused from its V2 members 
 MODEL_VERSION_LABELS = {
     "v4": MODEL_VERSION_LABEL,
     "v4.1": "v4.1 (v4 with the correlation term weighted more where it is used; chosen on Fulcher 2026)",
+    "v4.2": "v4.2 (v4.1 with protein class means from sorted cells, Rieckmann 2017, in its correlation term)",
     "v5": "v5 (v4.1's rule on V2 members retrained on cleaned reference labels, with its own calibration)",
     "v5.1": "v5.1 (v5 with the NK T class folded into NK in training)",
     "v5.2": "v5.2 (v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et al. 2021)",
 }
-ANSWERS_FROM = {"v4": "v3.1", "v4.1": "v3.1", **{v: v for v in config.V5_FAMILY}}
-TRACK = {"v4": "Track G", "v4.1": "Track G", **{v: "Track H" for v in config.V5_FAMILY}}
+ANSWERS_FROM = {"v4": "v3.1", "v4.1": "v3.1", "v4.2": "v3.1", **{v: v for v in config.V5_FAMILY}}
+TRACK = {"v4": "Track G", "v4.1": "Track G", "v4.2": "Goal 2", **{v: "Track H" for v in config.V5_FAMILY}}
 
 
 def version_files(version: str) -> tuple:
@@ -85,6 +97,8 @@ def version_files(version: str) -> tuple:
         return config.V4_SPEC_PATH, config.V4_MANIFEST_PATH, config.V4_DIR, "scripts/build_v4_bundle.py"
     if version == "v4.1":
         return config.V41_SPEC_PATH, config.V41_MANIFEST_PATH, config.V41_DIR, "scripts/build_v41_spec.py"
+    if version == "v4.2":
+        return config.V42_SPEC_PATH, config.V42_MANIFEST_PATH, config.V42_DIR, "scripts/build_v42_spec.py"
     if version in config.V5_FAMILY:
         base, _, spec = config.V5_FAMILY[version]
         builder = "research/notebooks/v5_build.py" + ("" if version == "v5" else f" --variant {version}")
@@ -94,7 +108,7 @@ def version_files(version: str) -> tuple:
 
 def data_dir(version: str):
     """Where a version's class-balanced centroids and class means live: v4's
-    directory for v4 and v4.1, each v5 version's own."""
+    directory for v4, v4.1 and v4.2, each v5 version's own."""
     return config.V5_FAMILY[version][0] if version in config.V5_FAMILY else config.V4_DIR
 
 
@@ -151,6 +165,35 @@ def masked_pearson(values: np.ndarray, mask: np.ndarray, means: np.ndarray) -> n
         r = cov / np.sqrt(var)
     r = np.where((n >= 2) & (var > 1e-12), r, 0.0)
     return np.nan_to_num(r, nan=0.0)
+
+
+def first_symbol(name: str) -> str:
+    """A protein row's gene symbol, as v4.2's protein means are keyed: its
+    first listed gene, upper case."""
+    return str(name).split(";")[0].strip().upper()
+
+
+def protein_query(raw, genes) -> tuple[np.ndarray, np.ndarray]:
+    """(values, mask), cells x genes: the upload over v4.2's protein means'
+    genes, matched by first_symbol, on the log scale the service detects, a
+    gene's rows merged by per-cell median, each gene z-scored over its observed
+    values within the upload; unobserved entries 0 with mask 0."""
+    from service.pipeline import alignment
+    values, _ = alignment.detect_and_transform_value_scale(raw.values)
+    index = {g: i for i, g in enumerate(genes)}
+    x = np.full((len(raw.cell_ids), len(genes)), np.nan, np.float64)
+    rows: dict[int, list[int]] = {}
+    for r, name in enumerate(raw.gene_names):
+        col = index.get(first_symbol(name))
+        if col is not None:
+            rows.setdefault(col, []).append(r)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)  # a gene with no observed value in this upload
+        for col, rs in rows.items():
+            x[:, col] = np.nanmedian(values[rs], axis=0) if len(rs) > 1 else values[rs[0]]
+        z = (x - np.nanmean(x, axis=0)) / (np.nanstd(x, axis=0) + 1e-8)
+    mask = np.isfinite(z)
+    return np.where(mask, z, 0.0), mask.astype(np.float32)
 
 
 def correlation_probabilities(r: np.ndarray, temperature: float) -> np.ndarray:
@@ -249,6 +292,9 @@ class V4Bundle:
     spec: dict
     components: "pipeline.Components"
     gate_on_fusion_weight: "float | None" = None  # the encoder's weight where the correlation term is used (v4.1)
+    protein_means: "np.ndarray | None" = None  # v4.2: classes x proteins, z-scored; zero rows where not covered
+    protein_genes: "tuple[str, ...] | None" = None
+    protein_covered: "np.ndarray | None" = None  # v4.2: which classes take the protein correlation
 
     @property
     def pipeline_version(self) -> str:
@@ -301,7 +347,23 @@ class V4Bundle:
             smoothed_share=float(b["smoothed_share"]), agreement_threshold=float(b["agreement_threshold"]),
             spec=spec, components=build_components(answers.spec, version),
             gate_on_fusion_weight=float(b["gate_on_fusion_weight"]) if "gate_on_fusion_weight" in b else None,
+            **load_protein_means(b, version_files(version)[2], answers.class_names),
         )
+
+
+def load_protein_means(best_guess: dict, base, class_names: list[str]) -> dict:
+    """v4.2's protein class means, checked against its spec; nothing for the
+    versions without them."""
+    entry = best_guess.get("protein_class_means")
+    if entry is None:
+        return {}
+    saved = np.load(base / entry["file"])
+    covered = saved["covered"].astype(bool)
+    shape_ok = saved["means"].shape == (len(class_names), len(saved["proteins"]))
+    if not shape_ok or [c for c, ok in zip(class_names, covered) if ok] != entry["classes_covered"]:
+        raise ValueError(f"{base / entry['file']} does not match its spec's classes")
+    return {"protein_means": saved["means"].astype(np.float32), "protein_genes": tuple(str(g) for g in saved["proteins"]),
+            "protein_covered": covered}
 
 
 # ---- the request ----
@@ -321,7 +383,8 @@ class BestGuess:
 
 
 def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndarray], values: np.ndarray,
-                             mask: np.ndarray, answer_probs: np.ndarray, counted: np.ndarray) -> BestGuess:
+                             mask: np.ndarray, answer_probs: np.ndarray, counted: np.ndarray,
+                             protein: "tuple[np.ndarray, np.ndarray] | None" = None) -> BestGuess:
     """v4's best-guess probability. smoothed_embeddings are the members'
     embeddings of the smoothed query (v3.1's, shared with the answers);
     answer_probs is v3.1's probability over all classes, and counted marks
@@ -330,6 +393,11 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
         ensemble.member_probabilities(z, m.centroids, m.temperature) for z, m in zip(embeddings, bundle.members)])
     on = probs(smoothed_embeddings)
     r = masked_pearson(values, mask, bundle.class_means)
+    if getattr(bundle, "protein_means", None) is not None:  # v4.2: protein means for the classes they cover
+        if protein is None:
+            raise ValueError("v4.2's best guess needs the upload's protein query (fusion.protein_query)")
+        covered = bundle.protein_covered
+        r[:, covered] = masked_pearson(protein[0], protein[1], bundle.protein_means)[:, covered]
     agreement = upload_agreement(r, answer_probs, counted)
     if agreement < bundle.agreement_threshold:
         flat = np.full_like(on, 1.0 / on.shape[1])
@@ -344,12 +412,13 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
 
 def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None") -> dict:
     smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw)
+    protein = protein_query(raw, bundle.protein_genes) if getattr(bundle, "protein_means", None) is not None else None
     return project_prepared(bundle, smoothed, aligned, value_scale, gene_ids.resolve_identifiers(raw.gene_names),
-                            restrict_to_supported_classes, components or bundle.components)
+                            restrict_to_supported_classes, components or bundle.components, protein=protein)
 
 
 def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_resolution,
-                     restrict_to_supported_classes, components) -> dict:
+                     restrict_to_supported_classes, components, protein=None) -> dict:
     """v3.1's Stages 3-8 (ensemble.project_prepared), with v4's fused best guess."""
     answers = bundle.answers
     names = answers.class_names
@@ -360,7 +429,8 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
     space = components.label_space.estimate(None, names, restrict_to_supported_classes)
     probs = components.label_space.probabilities(all_class_probs, space)
     counted = aligned.per_cell_observed_genes >= int(bundle.spec["preprocessing"]["min_observed_genes"])
-    guess = best_guess_probabilities(bundle, embeddings, aligned.values, aligned.mask, all_class_probs, counted)
+    guess = best_guess_probabilities(bundle, embeddings, aligned.values, aligned.mask, all_class_probs, counted,
+                                     protein)
     guess_probs = components.label_space.probabilities(guess.probabilities, space)
     guess_position, guess_probability = ensemble.best_guess(guess_probs, space.positions)
     calibrated = components.calibrator.calibrate(probs, None, space, guess_positions=guess_position)

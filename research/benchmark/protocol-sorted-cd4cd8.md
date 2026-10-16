@@ -189,3 +189,28 @@ rule 1 requires. Nothing above changes; this records how the scripts read it.
   matrix equals the benchmark loader's (932 genes, values within 2e-6), and
   the scorer reproduces 21 committed Fulcher runs to 0.000000 points (v3.1
   57.94, v4.1 69.05, every original-label baseline run).
+
+## Amendment 3, 2026-10-16, before any data: v4.2 added as a candidate
+
+v4.2 passed its development gates (`research/notebook-run-history.md`, entry
+32): v4.1 with protein class means from sorted cells (Rieckmann 2017) in its
+correlation term. The owner chose to freeze it as a candidate. Nothing above
+changes for v3.1, v4.1 or v5.2.
+
+- **Frozen files** (rule 3), scored as served with every reference cell,
+  loaded with its evaluation pending, since this test is part of it:
+
+  | Model | Files, sha256 |
+  |---|---|
+  | v4.2 | `service/model/v4_2/spec_v42.json` `654a612b5d38220222d77ededf97791c58295126b5c8801b2500663380abe303`; MANIFEST `8fa42d4437523e89d2d5b033b535439f59e71fa63f91d00300d197b06771d565`; protein class means `3afacd88777433488087d433ee8cb2e22bbce92011bcd6f36db01b1d527bec1b` |
+
+- **Its baselines** (rule 4) are those on the original reference labels,
+  which v4.2's encoders and RNA class means use, as v4.1's do.
+- **Decision rules:** "beats the corrected baselines" applies to v4.2 as to
+  v4.1. v4.2 against v4.1 is reported with its paired bootstrap (balanced
+  accuracy, and CD8 T recall on the sorted CD8 T cells); there is no
+  decision rule for it here.
+- **The scripts:** the intake checks v4.2's files and runs it; the scorer
+  adds it to every table. Both were rehearsed again on Fulcher; the scorer
+  reproduces v4.2's development figure there (75.79, from
+  `research/notebook-outputs/v42_protein_means/summary.json`).

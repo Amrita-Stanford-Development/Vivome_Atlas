@@ -5,7 +5,7 @@ before any sorted data exists; it reuses benchmark/evaluate.py unchanged.
 
 Inputs:
 - benchmark/sorted_cd4cd8_intake.py's outputs: intake.json, cell_ids.txt,
-  v31_pred.csv, v41_pred.csv, v52_pred.csv;
+  v31_pred.csv, v41_pred.csv, v42_pred.csv, v52_pred.csv;
 - the corrected baselines on this dataset (benchmark/baselines_corrected.py),
   with the original reference labels and with v5.2's (--labels v52), the arms
   scored on Khoury post-hoc: correlation; PCA, Harmony, scANVI, MaxFuse and
@@ -21,12 +21,12 @@ sorted types only (amendment 1); bulk units apart; unsorted cells never:
   rule 5 (fulcher2026_score.COARSE; anything else, or a type not sorted, is
   "other" and wrong);
 - secondary: per-type recall, and the CD4/CD8 confusion among sorted T cells;
-- answers, for v3.1, v4.1 and v5.2: coverage (the set holds a class of the
+- answers, for v3.1, v4.1, v4.2 and v5.2: coverage (the set holds a class of the
   cell's type), committed share, and correct when committed at the stated
   level (NB2's hierarchy, as Khoury's scorer judges it);
 - paired bootstraps (rule 7): each model against every baseline run on its own
-  reference labels, and v5.2 against v4.1 (balanced accuracy, and CD8 T recall
-  on the CD8 T cells).
+  reference labels, and v5.2 and v4.2 against v4.1 (balanced accuracy, and CD8 T
+  recall on the CD8 T cells; v4.2's are reported, with no decision rule).
 
 Decision rules, read here as written, with every run of every arm:
 - "beats the corrected baselines": a lead of at least 3 points and a 95% CI
@@ -66,8 +66,8 @@ from benchmark.sorted_cd4cd8_intake import MODELS, out_dir, sha256
 REPO = datasets.REPO
 COARSE = fulcher.COARSE  # rule 5
 ALL_TYPES = ("CD4T", "CD8T", "NK", "B", "monocyte", "DC")
-OURS = {"v31": "v3.1", "v41": "v4.1", "v52": "v5.2"}
-OWN_LABELS = {"v4.1": "original", "v5.2": "v52"}  # rule 4: each model against baselines on its own labels
+OURS = {"v31": "v3.1", "v41": "v4.1", "v42": "v4.2", "v52": "v5.2"}
+OWN_LABELS = {"v4.1": "original", "v4.2": "original", "v5.2": "v52"}  # rule 4: baselines on each model's own labels
 # (tool, rule) -> (prediction column, seeds): Khoury's post-hoc arms
 ARMS = {("correlation", "correlation"): ("corr", (0,)), ("pca", "shared_knn"): ("knn", (0,)),
         ("harmony", "shared_knn"): ("knn", (0, 1, 2)), ("scanvi", "native"): ("clf", (0, 1, 2)),
@@ -255,15 +255,20 @@ def main(argv: list[str] | None = None) -> None:
         verdicts[f"{version} beats the corrected baselines"] = (
             None if gaps[own]["missing"] or not mine
             else all(b["diff_pct"] >= LEAD_POINTS and b["ci_lo"] > 0 for b in mine))
-    v41, v52 = (predictions[(v, "own", 0, "best_guess")][single] for v in ("v4.1", "v5.2"))
-    ba = bootstrap(v52, v41, true_type, sorted_types)
-    boot.append({"comparison": "v5.2 vs v4.1", "rule_b": "best_guess", "seed_b": 0, "reference_labels": "own", **ba})
-    if "CD8T" in sorted_types:
-        cd8 = true_type == "CD8T"
-        recall = bootstrap(v52[cd8], v41[cd8], true_type[cd8], ("CD8T",))  # balanced accuracy on one class = recall
-        boot.append({"comparison": "v5.2 vs v4.1, CD8 T recall", "rule_b": "best_guess", "seed_b": 0,
-                     "reference_labels": "own", **recall})
-        verdicts["v5.2 improves CD4/CD8 over v4.1"] = bool(recall["ci_lo"] > 0 and ba["diff_pct"] >= -BA_SLACK_POINTS)
+    v41 = predictions[("v4.1", "own", 0, "best_guess")][single]
+    for version in ("v5.2", "v4.2"):
+        ours = predictions[(version, "own", 0, "best_guess")][single]
+        ba = bootstrap(ours, v41, true_type, sorted_types)
+        boot.append({"comparison": f"{version} vs v4.1", "rule_b": "best_guess", "seed_b": 0, "reference_labels": "own",
+                     **ba})
+        if "CD8T" in sorted_types:
+            cd8 = true_type == "CD8T"
+            recall = bootstrap(ours[cd8], v41[cd8], true_type[cd8], ("CD8T",))  # balanced accuracy on one class = recall
+            boot.append({"comparison": f"{version} vs v4.1, CD8 T recall", "rule_b": "best_guess", "seed_b": 0,
+                         "reference_labels": "own", **recall})
+            if version == "v5.2":  # the protocol's one rule between our models
+                verdicts["v5.2 improves CD4/CD8 over v4.1"] = bool(recall["ci_lo"] > 0
+                                                                   and ba["diff_pct"] >= -BA_SLACK_POINTS)
 
     tables.mkdir(parents=True, exist_ok=True)
     fmt = {"index": False, "float_format": "%.4f", "lineterminator": "\n"}
@@ -296,6 +301,9 @@ def check_rehearsal(per_run: pd.DataFrame) -> None:
         mine = per_run.query("model == @version and unit == 'single'")["balanced_accuracy_pct"].iloc[0]
         theirs = ours.query("tool == @tool")["balanced_accuracy_pct"].iloc[0]
         worst, compared = max(worst, abs(mine - theirs)), compared + 1
+    v42 = json.loads((REPO / "research" / "notebook-outputs" / "v42_protein_means" / "summary.json").read_text())
+    mine = per_run.query("model == 'v4.2' and unit == 'single'")["balanced_accuracy_pct"].iloc[0]
+    worst, compared = max(worst, abs(mine - v42["figures"]["v4.2"]["fulcher"])), compared + 1
     committed = pd.read_csv(REPO / "research" / "benchmark" / "baselines_corrected" / "fulcher2026_per_seed.csv")
     for _, r in per_run.query("reference_labels == 'original' and unit == 'single'").iterrows():
         name = rule_names[r["rule"]]
