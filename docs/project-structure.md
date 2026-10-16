@@ -45,6 +45,9 @@ Vivome_Atlas/
 ├── scripts/                  BUILD AND CHECKS: manifest builder, repo path checker
 │   └── archive/              one-off scripts kept as a record, no longer runnable
 │
+├── deploy/                   HOSTING THE SERVICE
+│   └── huggingface/          the Space's Dockerfile, page, build and check scripts
+│
 ├── docs/                     HOW THE PRODUCTS WORK
 │   ├── web/                  the manifest contract; the site's data files and Git LFS
 │   └── service/              the API contract; the pipeline build brief

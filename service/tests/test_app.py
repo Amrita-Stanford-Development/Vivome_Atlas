@@ -1,4 +1,7 @@
+import http.client
+import importlib
 import json
+import os
 import threading
 import unittest
 import urllib.error
@@ -34,6 +37,12 @@ class ParseMultipartTests(unittest.TestCase):
 
 
 def _post_multipart(url: str, modality: bytes, matrix: bytes, extra: dict[str, bytes] | None = None) -> tuple[int, dict]:
+    status, _, payload = _post_multipart_with_headers(url, modality, matrix, extra)
+    return status, payload
+
+
+def _post_multipart_with_headers(url: str, modality: bytes, matrix: bytes,
+                                 extra: dict[str, bytes] | None = None) -> tuple[int, dict, dict]:
     boundary = "TESTBOUNDARY"
     body = (
         f'--{boundary}\r\nContent-Disposition: form-data; name="modality"\r\n\r\n'.encode()
@@ -50,9 +59,9 @@ def _post_multipart(url: str, modality: bytes, matrix: bytes, extra: dict[str, b
     )
     try:
         with urllib.request.urlopen(request) as response:
-            return response.status, json.loads(response.read())
+            return response.status, dict(response.headers), json.loads(response.read())
     except urllib.error.HTTPError as exc:
-        return exc.code, json.loads(exc.read())
+        return exc.code, dict(exc.headers), json.loads(exc.read())
 
 
 class ProjectionHandlerHttpTests(unittest.TestCase):
@@ -243,6 +252,71 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertIn("restrict_to_supported_classes", payload["error"])
 
+    def test_status_reports_the_upload_limits(self):
+        self._install_synthetic_bundle()
+        status, _, payload = self._get("/api/status")
+        self.assertEqual(status, 200)
+        self.assertEqual(payload["limits"]["max_cells"], config.MAX_UPLOAD_CELLS)
+        self.assertEqual(payload["limits"]["max_upload_mb"], round(config.MAX_UPLOAD_BYTES / 2**20, 1))
+        self.assertGreaterEqual(payload["limits"]["concurrent_projections"], 1)
+
+    def test_an_upload_over_the_byte_cap_is_413_with_the_reason(self):
+        """The body is read and dropped before the answer, so the client gets
+        the 413 rather than a reset connection."""
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        with patch.object(config, "MAX_UPLOAD_BYTES", 1024):
+            status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+        self.assertEqual(status, 413)
+        self.assertIn("at most", payload["error"])
+        self.assertIn("VIVOME_MAX_UPLOAD_MB", payload["reason"])
+
+    def test_an_upload_over_the_cell_cap_is_413_with_the_reason(self):
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        with patch.object(config, "MAX_UPLOAD_CELLS", 24):
+            status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+        self.assertEqual(status, 413)
+        self.assertIn("25 cells", payload["error"])
+        self.assertIn("at most 24", payload["error"])
+
+    def test_a_request_finding_every_slot_taken_is_503_with_retry_after(self):
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        url = f"{self.base_url}/api/project"
+        with patch.object(app, "_projection_slots", threading.BoundedSemaphore(1)) as slots:
+            slots.acquire()  # another upload is projecting
+            status, headers, payload = _post_multipart_with_headers(url, b"prot", matrix)
+            self.assertEqual(status, 503)
+            self.assertEqual(headers.get("Retry-After"), str(config.BUSY_RETRY_AFTER_SECONDS))
+            self.assertIn("busy", payload["error"])
+            slots.release()  # that upload is done
+            status, _, _ = _post_multipart_with_headers(url, b"prot", matrix)
+            self.assertEqual(status, 200)
+
+    def test_a_failed_projection_gives_its_slot_back(self):
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        with patch.object(app, "_projection_slots", threading.BoundedSemaphore(1)) as slots, \
+                patch("service.pipeline.pipeline.run_projection", side_effect=RuntimeError("forced")):
+            status, _ = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+            self.assertEqual(status, 400)
+            self.assertTrue(slots.acquire(blocking=False))
+            slots.release()
+
+    def test_a_malformed_content_length_is_400(self):
+        connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=30)
+        try:
+            connection.putrequest("POST", "/api/project")
+            connection.putheader("Content-Type", "multipart/form-data; boundary=X")
+            connection.putheader("Content-Length", "many")
+            connection.endheaders()
+            response = connection.getresponse()
+            self.assertEqual(response.status, 400)
+            self.assertIn("Content-Length", json.loads(response.read())["error"])
+        finally:
+            connection.close()
+
     def test_real_dia_nn_pbmc240_upload_runs_end_to_end(self):
         """Track B follow-up: the actual PBMC_240cells_proteins.tsv DIA-NN
         report (service/examples/pbmc240_proteins_raw.tsv -- the same file
@@ -276,6 +350,51 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
 def _load_encoder_only():
     from service.pipeline import encoder
     return encoder.load_encoder()
+
+
+class HostingSettingsTests(unittest.TestCase):
+    """What a deployment sets through the environment (deploy/huggingface/)."""
+
+    def tearDown(self):
+        importlib.reload(config)  # back to this process's own environment
+
+    def test_the_environment_sets_where_to_listen_and_the_upload_limits(self):
+        with patch.dict(os.environ, {"VIVOME_HOST": "0.0.0.0", "VIVOME_PORT": "7860",
+                                     "VIVOME_MAX_UPLOAD_CELLS": "50", "VIVOME_MAX_UPLOAD_MB": "1.5",
+                                     "VIVOME_MAX_CONCURRENT_PROJECTIONS": "2",
+                                     "VIVOME_ALLOWED_ORIGINS": "https://vivome-atlas.pages.dev"}):
+            importlib.reload(config)
+            self.assertEqual((config.HOST, config.PORT), ("0.0.0.0", 7860))
+            self.assertEqual(config.MAX_UPLOAD_CELLS, 50)
+            self.assertEqual(config.MAX_UPLOAD_BYTES, int(1.5 * 1024 * 1024))
+            self.assertEqual(config.MAX_CONCURRENT_PROJECTIONS, 2)
+            self.assertEqual(config.ALLOWED_ORIGINS, ("https://vivome-atlas.pages.dev",))
+
+    def test_without_settings_the_service_listens_on_this_machine_only(self):
+        unset = ("VIVOME_HOST", "VIVOME_PORT")
+        with patch.dict(os.environ, {k: v for k, v in os.environ.items() if k not in unset}, clear=True):
+            importlib.reload(config)
+            self.assertEqual((config.HOST, config.PORT), ("127.0.0.1", 8001))
+
+    def test_main_listens_where_the_settings_say(self):
+        bound = []
+
+        class FakeServer:
+            def __init__(self, address, handler):
+                bound.append(address)
+
+            def serve_forever(self):
+                raise KeyboardInterrupt
+
+            def shutdown(self):
+                pass
+
+        with patch.object(config, "HOST", "0.0.0.0"), patch.object(config, "PORT", 7860), \
+                patch.object(app, "ThreadingHTTPServer", FakeServer), \
+                patch.object(app.logging, "basicConfig"), \
+                patch.object(app, "_bundle_or_error", return_value=(None, 200, "")):
+            app.main()
+        self.assertEqual(bound, [("0.0.0.0", 7860)])
 
 
 if __name__ == "__main__":

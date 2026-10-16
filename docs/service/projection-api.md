@@ -5,12 +5,13 @@ the shared latent space. It is the core of the resource claim: an atlas you
 can *send data to*, not only look at.
 
 > **Status: implemented, not hosted.** The pipeline in `service/` runs
-> end to end against the real reference (`service/model/README.md`), as v3.1
-> by default with v3 selectable ([Pipeline versions](#pipeline-versions)), and
-> is covered by `service/tests/`. `web/project.html` sends an upload to a
+> end to end against the real reference (`service/model/README.md`), as v4.1
+> by default with v3.1, v4 and v3 selectable ([Pipeline versions](#pipeline-versions)),
+> and is covered by `service/tests/`. `web/project.html` sends an upload to a
 > service the visitor runs locally (`python -m service.app`) and renders
-> the response; there is no hosted service yet. Every value in the schemas
-> below is a placeholder showing the response shape, not a measurement.
+> the response; there is no hosted service yet (`deploy/huggingface/` packages
+> one). Every value in the schemas below is a placeholder showing the
+> response shape, not a measurement.
 
 ## Contract
 
@@ -86,7 +87,8 @@ cleaned to its basename without `.raw`.
 }
 ```
 
-`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version", "pipeline_version"}`,
+`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version", "pipeline_version", "limits"}`,
+where `limits` is `{"max_cells", "max_upload_mb", "concurrent_projections"}`,
 or `{"status": "unavailable", "reason"}`:
 - **503** while an artifact is missing or not yet fetched;
 - **500** for any other load error.
@@ -96,8 +98,29 @@ Nothing is remembered from a failed load: every request checks again, so
 files fetched while the service runs are picked up without a restart.
 `project.html` calls `/api/status` before offering an upload.
 
+`POST /api/project` also answers, each with `{"error", "reason"}`:
+- **413** when the request is larger than `max_upload_mb`, or the matrix
+  has more cells than `max_cells`;
+- **503** with a `Retry-After` header (seconds) when every projection slot
+  is taken by other uploads;
+- **400** for a malformed request or matrix.
+
 A browser may read the service's responses only from an allowed origin
 (`config.ALLOWED_ORIGINS`, env `VIVOME_ALLOWED_ORIGINS`, comma separated).
+
+The service reads these settings from the environment (`service/config.py`):
+
+| Variable | Default | What it sets |
+|---|---|---|
+| `VIVOME_HOST`, `VIVOME_PORT` | `127.0.0.1`, `8001` | Where the server listens |
+| `VIVOME_PIPELINE_VERSION` | `v4.1` | The model served (one per process) |
+| `VIVOME_ALLOWED_ORIGINS` | the site served locally | Origins that may read the answers |
+| `VIVOME_MAX_UPLOAD_CELLS` | `2000` | Cells per upload |
+| `VIVOME_MAX_UPLOAD_MB` | `200` | Request size |
+| `VIVOME_MAX_CONCURRENT_PROJECTIONS` | `1` | Projections running at once |
+| `VIVOME_BUSY_RETRY_AFTER_SECONDS` | `30` | The `Retry-After` of a busy answer |
+
+The hosted copy's values are in `deploy/huggingface/Dockerfile`.
 The default allows the site served locally on port 8000. The service also
 answers CORS preflights, including Chrome's Private Network Access check.
 

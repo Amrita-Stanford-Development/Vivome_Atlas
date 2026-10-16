@@ -165,6 +165,20 @@ pip install -r service/requirements.txt
 python -m service.app        # from the repository root
 ```
 
+It listens on `127.0.0.1:8001`, projects one upload at a time, and accepts
+at most 2,000 cells and 200 MB per upload. Every setting comes from the
+environment (`VIVOME_HOST`, `VIVOME_PORT`, `VIVOME_MAX_UPLOAD_CELLS`, and the
+rest listed in [`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
+The 2,000-cell default comes from timing: one projection's time grows faster
+than its cell count (`config.py` has the measurements).
+
+## Hosting
+
+`deploy/huggingface/` packages the service as a Hugging Face Space (Docker,
+CPU): `build_space.py` stages the service and only the served version's
+model files, `check_space.py` compares a running copy with this repository's
+own run, and `PUBLISH.md` has the steps.
+
 ## Tests
 
 ```bash

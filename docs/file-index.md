@@ -283,6 +283,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/test_repo_paths.py` — runs `check_paths.py` as part of the normal test suite
 - `scripts/archive/promote_v3_atlas.py` — one-off (already run) that promoted the v3 viewer metadata; its inputs no longer exist
 
+## deploy/ — hosting the projection service
+
+- `deploy/huggingface/Dockerfile` — the projection service's image for a Hugging Face Space (Python 3.11, CPU torch) and its hosted settings: 0.0.0.0:7860, v4.1, the site's origin, 2,000 cells and 200 MB per upload, one projection at a time
+- `deploy/huggingface/space_card.md` — the Space's public page, written to the Space as README.md: what the service does, its model, limits and endpoints
+- `deploy/huggingface/build_space.py` — stages the Space in the gitignored folder deploy/huggingface/space: the service package, only the served version's model files (traced by loading the bundle and projecting the PBMC240 example), pinned requirements, Git LFS attributes and a sha256 manifest
+- `deploy/huggingface/check_space.py` — posts the PBMC240 example to a running service as the site does and compares every cell with this repository's own run
+- `deploy/huggingface/PUBLISH.md` — how to publish the Space and point the site at it
+
 ## docs/ — how the product works
 
 - `docs/README.md` — index of `docs/` and `research/`

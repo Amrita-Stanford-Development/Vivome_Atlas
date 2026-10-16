@@ -31,6 +31,10 @@ service/model/v5_2/*.npz
 /dist/
 .wrangler/
 
+# The Hugging Face Space as staged for publishing (deploy/huggingface/build_space.py):
+# copies of service/ and of the served version's model files.
+/deploy/huggingface/space/
+
 .dev.vars*
 !.dev.vars.example
 .env*

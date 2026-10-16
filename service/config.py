@@ -296,3 +296,25 @@ ALLOWED_ORIGINS = tuple(
     for origin in os.environ.get("VIVOME_ALLOWED_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",")
     if origin.strip()
 )
+
+# --- Hosting: where the server listens and how much one request may ask ---
+# The defaults serve this machine only; the hosted copy (deploy/huggingface/)
+# sets VIVOME_HOST=0.0.0.0 and VIVOME_PORT=7860.
+HOST = os.environ.get("VIVOME_HOST", "127.0.0.1")
+PORT = int(os.environ.get("VIVOME_PORT", "8001"))
+# One projection's time grows faster than its cell count: measured on this
+# project's Windows PC (24 cores, PBMC240's cells tiled, 2026-10-16, with
+# another heavy job running, so upper bounds) 1.7 s for 238 cells, 6.7 s for
+# 1,000, 21 s for 2,000, 45 s for 3,000 and 119 s for 5,000, with a peak of
+# 3.6 GB at 3,000 against 1.5 GB idle. The hosted copy
+# runs on 2 CPU cores, so 2,000 cells keeps one request within a couple of
+# minutes; a larger dataset goes in several mixed uploads, or to a service run
+# locally with these raised.
+MAX_UPLOAD_CELLS = int(os.environ.get("VIVOME_MAX_UPLOAD_CELLS", "2000"))
+# A DIA-NN report of 2,000 cells over about 8,000 proteins is near 200 MB of text.
+MAX_UPLOAD_BYTES = int(float(os.environ.get("VIVOME_MAX_UPLOAD_MB", "200")) * 1024 * 1024)
+# Projections running at once. Each takes every core it can and up to about
+# 3.6 GB, so the hosted copy runs one at a time and answers 503 to the next
+# request, with a Retry-After, until it is done.
+MAX_CONCURRENT_PROJECTIONS = int(os.environ.get("VIVOME_MAX_CONCURRENT_PROJECTIONS", "1"))
+BUSY_RETRY_AFTER_SECONDS = int(os.environ.get("VIVOME_BUSY_RETRY_AFTER_SECONDS", "30"))

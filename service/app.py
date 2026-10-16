@@ -34,6 +34,11 @@ _bundle: pipeline.ReferenceBundle | None = None
 # call the expensive ReferenceBundle.load() (torch.load plus a full PCA fit)
 # at once.
 _bundle_lock = threading.Lock()
+# How many projections may run at once (config.MAX_CONCURRENT_PROJECTIONS).
+# A request that finds every slot taken is answered 503 at once, with a
+# Retry-After, rather than queued behind a projection that may take minutes.
+_projection_slots = threading.BoundedSemaphore(max(1, config.MAX_CONCURRENT_PROJECTIONS))
+_DISCARD_CHUNK = 1024 * 1024
 
 
 def _get_bundle() -> pipeline.ReferenceBundle:
@@ -133,14 +138,26 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             self.send_header("Access-Control-Allow-Origin", origin)
             self.send_header("Vary", "Origin")
 
-    def _send_json(self, status: int, payload: dict) -> None:
+    def _send_json(self, status: int, payload: dict, headers: dict[str, str] | None = None) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
+        for name, value in (headers or {}).items():
+            self.send_header(name, value)
         self._send_cors_headers()
         self.end_headers()
         self.wfile.write(body)
+
+    def _discard_body(self, length: int) -> None:
+        """Reads and drops a body the service will not use, in small chunks,
+        so the client is still sending when it gets the answer rather than
+        finding the connection reset."""
+        while length > 0:
+            chunk = self.rfile.read(min(length, _DISCARD_CHUNK))
+            if not chunk:
+                break
+            length -= len(chunk)
 
     def do_OPTIONS(self) -> None:  # noqa: N802 (stdlib naming)
         """CORS preflight. A plain FormData POST needs none, but a browser
@@ -172,6 +189,9 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             "atlas_version": config.ATLAS_VERSION,
             "model_version": bundle.model_version,
             "pipeline_version": bundle.pipeline_version,
+            "limits": {"max_cells": config.MAX_UPLOAD_CELLS,
+                       "max_upload_mb": round(config.MAX_UPLOAD_BYTES / 2**20, 1),
+                       "concurrent_projections": max(1, config.MAX_CONCURRENT_PROJECTIONS)},
         })
 
     def do_POST(self) -> None:  # noqa: N802 (stdlib naming)
@@ -184,7 +204,23 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "Content-Type must be multipart/form-data"})
             return
 
-        length = int(self.headers.get("Content-Length", 0))
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            if length < 0:
+                raise ValueError(length)
+        except ValueError:
+            self.close_connection = True
+            self._send_json(400, {"error": "Content-Length must be a whole number of bytes"})
+            return
+        if length > config.MAX_UPLOAD_BYTES:
+            self._discard_body(length)
+            self._send_json(413, {
+                "error": f"the upload is {length / 2**20:.1f} MB; this service accepts at most "
+                         f"{config.MAX_UPLOAD_BYTES / 2**20:.0f} MB per request",
+                "reason": "Split the cells at random into smaller files, so each is still a mix of cell types, "
+                          "or run the service yourself with VIVOME_MAX_UPLOAD_MB raised.",
+            })
+            return
         body = self.rfile.read(length)
 
         try:
@@ -222,12 +258,30 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "could not process the submitted matrix"})
             return
 
+        if len(raw.cell_ids) > config.MAX_UPLOAD_CELLS:
+            self._send_json(413, {
+                "error": f"the matrix has {len(raw.cell_ids):,} cells; this service projects at most "
+                         f"{config.MAX_UPLOAD_CELLS:,} per upload",
+                "reason": "Split the cells at random into uploads of at most that many, so each is still a mix of "
+                          "cell types, or run the service yourself with VIVOME_MAX_UPLOAD_CELLS raised.",
+            })
+            return
+
+        if not _projection_slots.acquire(blocking=False):
+            self._send_json(503, {
+                "error": "the service is busy with another upload",
+                "reason": f"It projects {max(1, config.MAX_CONCURRENT_PROJECTIONS)} at a time. "
+                          f"Try again in about {config.BUSY_RETRY_AFTER_SECONDS} seconds.",
+            }, headers={"Retry-After": str(config.BUSY_RETRY_AFTER_SECONDS)})
+            return
         try:
             result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict)
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
             logger.exception("projection failed")
             self._send_json(400, {"error": "could not process the submitted matrix"})
             return
+        finally:
+            _projection_slots.release()
 
         _log_upload(matrix_text, result)
 
@@ -242,7 +296,11 @@ class ProjectionHandler(BaseHTTPRequestHandler):
         logger.info("%s - %s", self.address_string(), format % args)
 
 
-def main(host: str = "127.0.0.1", port: int = 8001) -> None:
+def main(host: str | None = None, port: int | None = None) -> None:
+    """Serves on config.HOST and config.PORT (VIVOME_HOST, VIVOME_PORT) unless
+    given others."""
+    host = config.HOST if host is None else host
+    port = config.PORT if port is None else port
     logging.basicConfig(level=logging.INFO)
     server = ThreadingHTTPServer((host, port), ProjectionHandler)
     # Load now, so the spec is read and checked at startup. A failure is
@@ -250,7 +308,10 @@ def main(host: str = "127.0.0.1", port: int = 8001) -> None:
     _, status, reason = _bundle_or_error()
     if status != 200:
         logger.warning("Reference bundle not loaded yet (%d): %s", status, reason)
-    logger.info("Projection service listening on http://%s:%d/api/project", host, port)
+    logger.info("Projection service listening on http://%s:%d/api/project (at most %d cells and %.0f MB per "
+                "upload, %d projection(s) at once; origins %s)", host, port, config.MAX_UPLOAD_CELLS,
+                config.MAX_UPLOAD_BYTES / 2**20, max(1, config.MAX_CONCURRENT_PROJECTIONS),
+                ",".join(config.ALLOWED_ORIGINS))
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -72,7 +72,7 @@
 python -m service.app</pre>
             <label for="service-url">Service address</label>
             <div class="row">
-                <input type="url" id="service-url" class="well" value="http://127.0.0.1:8001" spellcheck="false">
+                <input type="url" id="service-url" class="well" spellcheck="false">
                 <button type="button" id="check-service" class="btn btn-quiet">Check</button>
             </div>
             <p class="service-status" id="service-status" role="status">Not checked yet.</p>
@@ -210,9 +210,15 @@ Content-Type: multipart/form-data
         let serviceReady = false;
         let lastResponse = null;
 
-        // The address is a per-visitor convenience; the page works without storage.
-        const SERVICE_KEY = 'vivome-service-url';
-        try { serviceInput.value = localStorage.getItem(SERVICE_KEY) || serviceInput.value; } catch { /* no storage */ }
+        // The service this page calls unless the visitor sets another: the one
+        // place to change when a hosted service goes live (deploy/huggingface/).
+        const DEFAULT_SERVICE_URL = 'http://127.0.0.1:8001';
+        // An address the visitor typed is remembered, as a per-visitor
+        // convenience; the default is not, so changing it reaches every visitor
+        // who never typed one. The page works without storage.
+        const SERVICE_KEY = 'vivome-service-address';
+        serviceInput.value = DEFAULT_SERVICE_URL;
+        try { serviceInput.value = localStorage.getItem(SERVICE_KEY) || DEFAULT_SERVICE_URL; } catch { /* no storage */ }
         const serviceUrl = () => serviceInput.value.trim().replace(/\/+$/, '');
 
         function setStatus(text, state) {
@@ -228,7 +234,11 @@ Content-Type: multipart/form-data
         }
 
         async function checkService() {
-            try { localStorage.setItem(SERVICE_KEY, serviceInput.value.trim()); } catch { /* no storage */ }
+            try {
+                const typed = serviceInput.value.trim();
+                if (typed && typed !== DEFAULT_SERVICE_URL) localStorage.setItem(SERVICE_KEY, typed);
+                else localStorage.removeItem(SERVICE_KEY);
+            } catch { /* no storage */ }
             setStatus('Checking...', null);
             serviceReady = false;
             try {
