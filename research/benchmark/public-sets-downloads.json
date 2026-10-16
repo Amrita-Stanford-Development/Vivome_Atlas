@@ -237,7 +237,7 @@
     "bytes": 31598500,
     "fetched": "2026-10-14",
     "published_check": null,
-    "role": "held_out",
+    "role": "reserve",
     "sha256": "b8a1d6203c2d2feae5024ae3f6d35c950f498880496747f35ca89df348a48e8c",
     "tier": "A",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/11/PXD061065/20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv"
@@ -246,7 +246,7 @@
     "bytes": 329881,
     "fetched": "2026-10-14",
     "published_check": null,
-    "role": "held_out",
+    "role": "reserve",
     "sha256": "99fd0a7d55cea7b79f80c0034158df49c68c09c86259db005854fdfa46e8a5a6",
     "tier": "A",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/11/PXD061065/PXD061065_community_annotated.sdrf.tsv"

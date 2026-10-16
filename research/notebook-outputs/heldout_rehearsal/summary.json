@@ -1,0 +1,1498 @@
+{
+  "seeds": 20,
+  "bars": {
+    "tian_pairs": 9,
+    "mono_macrophage_auroc": 0.65,
+    "t_line_vs_foreign_auroc": 0.65,
+    "neutrophil_recall_pct": 50.0,
+    "immune_vs_keratinocyte_auroc": 0.65,
+    "b_vs_t_pools_auroc": 0.8
+  },
+  "designs": {
+    "tian_pairs": {
+      "median": 10.0,
+      "min": 10,
+      "max": 10,
+      "viable": true,
+      "runs": [
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 45.0,
+            "CD8T": 5.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        },
+        {
+          "stat": 10,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "CD4T": 50.0,
+            "NK": 50.0
+          }
+        }
+      ]
+    },
+    "mono_macrophage_auroc": {
+      "median": 0.9411499999999999,
+      "min": 0.923,
+      "max": 0.9594,
+      "viable": true,
+      "runs": [
+        {
+          "stat": 0.9359,
+          "committed_pct": 97.1,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 48.3,
+            "monocyte": 43.3,
+            "DC": 6.2,
+            "B": 1.7,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9492,
+          "committed_pct": 93.8,
+          "correct_when_committed_pct": 98.7,
+          "best_guess_coarse_pct": {
+            "other": 46.7,
+            "monocyte": 45.4,
+            "DC": 5.0,
+            "B": 2.1,
+            "NK": 0.4,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9557,
+          "committed_pct": 96.2,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 47.9,
+            "monocyte": 42.5,
+            "DC": 7.1,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9404,
+          "committed_pct": 95.4,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 47.9,
+            "monocyte": 44.2,
+            "DC": 5.0,
+            "B": 2.1,
+            "CD8T": 0.4,
+            "CD4T": 0.4
+          }
+        },
+        {
+          "stat": 0.9253,
+          "committed_pct": 95.8,
+          "correct_when_committed_pct": 98.7,
+          "best_guess_coarse_pct": {
+            "other": 49.6,
+            "monocyte": 42.5,
+            "DC": 5.0,
+            "B": 2.1,
+            "CD8T": 0.4,
+            "CD4T": 0.4
+          }
+        },
+        {
+          "stat": 0.9417,
+          "committed_pct": 95.0,
+          "correct_when_committed_pct": 98.2,
+          "best_guess_coarse_pct": {
+            "other": 48.8,
+            "monocyte": 42.1,
+            "DC": 5.8,
+            "B": 2.1,
+            "CD4T": 0.8,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.928,
+          "committed_pct": 95.4,
+          "correct_when_committed_pct": 98.3,
+          "best_guess_coarse_pct": {
+            "other": 51.2,
+            "monocyte": 42.9,
+            "DC": 3.3,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9427,
+          "committed_pct": 96.7,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 49.2,
+            "monocyte": 44.2,
+            "DC": 4.2,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9329,
+          "committed_pct": 95.8,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 50.4,
+            "monocyte": 40.8,
+            "DC": 6.7,
+            "B": 1.2,
+            "CD8T": 0.8
+          }
+        },
+        {
+          "stat": 0.9433,
+          "committed_pct": 94.6,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 48.3,
+            "monocyte": 43.8,
+            "DC": 5.4,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9406,
+          "committed_pct": 96.7,
+          "correct_when_committed_pct": 98.7,
+          "best_guess_coarse_pct": {
+            "other": 47.5,
+            "monocyte": 44.6,
+            "DC": 5.4,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9594,
+          "committed_pct": 96.2,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 47.1,
+            "monocyte": 46.2,
+            "DC": 3.8,
+            "B": 2.1,
+            "CD8T": 0.8
+          }
+        },
+        {
+          "stat": 0.9477,
+          "committed_pct": 93.3,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 48.8,
+            "monocyte": 44.2,
+            "DC": 4.2,
+            "B": 1.7,
+            "NK": 0.4,
+            "CD4T": 0.4,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.923,
+          "committed_pct": 96.7,
+          "correct_when_committed_pct": 98.7,
+          "best_guess_coarse_pct": {
+            "other": 48.8,
+            "monocyte": 44.6,
+            "DC": 4.2,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9325,
+          "committed_pct": 92.9,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 50.8,
+            "monocyte": 42.1,
+            "DC": 3.8,
+            "B": 2.1,
+            "NK": 0.4,
+            "CD4T": 0.4,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9417,
+          "committed_pct": 96.2,
+          "correct_when_committed_pct": 98.3,
+          "best_guess_coarse_pct": {
+            "other": 50.0,
+            "monocyte": 41.7,
+            "DC": 5.8,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9321,
+          "committed_pct": 97.1,
+          "correct_when_committed_pct": 98.7,
+          "best_guess_coarse_pct": {
+            "other": 50.8,
+            "monocyte": 40.4,
+            "DC": 6.2,
+            "B": 1.7,
+            "CD8T": 0.4,
+            "CD4T": 0.4
+          }
+        },
+        {
+          "stat": 0.9594,
+          "committed_pct": 95.4,
+          "correct_when_committed_pct": 98.7,
+          "best_guess_coarse_pct": {
+            "other": 49.2,
+            "monocyte": 44.2,
+            "DC": 4.2,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        },
+        {
+          "stat": 0.9461,
+          "committed_pct": 95.0,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 47.5,
+            "monocyte": 45.0,
+            "DC": 4.6,
+            "B": 2.1,
+            "CD8T": 0.4,
+            "CD4T": 0.4
+          }
+        },
+        {
+          "stat": 0.9353,
+          "committed_pct": 95.0,
+          "correct_when_committed_pct": 99.1,
+          "best_guess_coarse_pct": {
+            "other": 48.3,
+            "monocyte": 45.0,
+            "DC": 4.2,
+            "B": 2.1,
+            "CD8T": 0.4
+          }
+        }
+      ]
+    },
+    "t_line_vs_foreign_auroc": {
+      "median": 0.97845,
+      "min": 0.9111,
+      "max": 1.0,
+      "viable": true,
+      "runs": [
+        {
+          "stat": 0.9236,
+          "abstained_pct_t": 6.7,
+          "abstained_pct_scrambled": 83.3
+        },
+        {
+          "stat": 1.0,
+          "abstained_pct_t": 0.0,
+          "abstained_pct_scrambled": 100.0
+        },
+        {
+          "stat": 0.9847,
+          "abstained_pct_t": 6.7,
+          "abstained_pct_scrambled": 75.0
+        },
+        {
+          "stat": 0.9819,
+          "abstained_pct_t": 3.3,
+          "abstained_pct_scrambled": 83.3
+        },
+        {
+          "stat": 0.9597,
+          "abstained_pct_t": 6.7,
+          "abstained_pct_scrambled": 79.2
+        },
+        {
+          "stat": 0.9875,
+          "abstained_pct_t": 3.3,
+          "abstained_pct_scrambled": 83.3
+        },
+        {
+          "stat": 0.9903,
+          "abstained_pct_t": 3.3,
+          "abstained_pct_scrambled": 87.5
+        },
+        {
+          "stat": 0.9111,
+          "abstained_pct_t": 16.7,
+          "abstained_pct_scrambled": 75.0
+        },
+        {
+          "stat": 0.9986,
+          "abstained_pct_t": 0.0,
+          "abstained_pct_scrambled": 79.2
+        },
+        {
+          "stat": 0.9583,
+          "abstained_pct_t": 10.0,
+          "abstained_pct_scrambled": 91.7
+        },
+        {
+          "stat": 1.0,
+          "abstained_pct_t": 0.0,
+          "abstained_pct_scrambled": 87.5
+        },
+        {
+          "stat": 0.9681,
+          "abstained_pct_t": 6.7,
+          "abstained_pct_scrambled": 79.2
+        },
+        {
+          "stat": 0.9736,
+          "abstained_pct_t": 10.0,
+          "abstained_pct_scrambled": 87.5
+        },
+        {
+          "stat": 0.9278,
+          "abstained_pct_t": 10.0,
+          "abstained_pct_scrambled": 100.0
+        },
+        {
+          "stat": 0.9889,
+          "abstained_pct_t": 0.0,
+          "abstained_pct_scrambled": 83.3
+        },
+        {
+          "stat": 0.9458,
+          "abstained_pct_t": 10.0,
+          "abstained_pct_scrambled": 83.3
+        },
+        {
+          "stat": 0.9986,
+          "abstained_pct_t": 3.3,
+          "abstained_pct_scrambled": 87.5
+        },
+        {
+          "stat": 0.9569,
+          "abstained_pct_t": 10.0,
+          "abstained_pct_scrambled": 83.3
+        },
+        {
+          "stat": 1.0,
+          "abstained_pct_t": 0.0,
+          "abstained_pct_scrambled": 91.7
+        },
+        {
+          "stat": 0.975,
+          "abstained_pct_t": 6.7,
+          "abstained_pct_scrambled": 79.2
+        }
+      ]
+    },
+    "neutrophil_recall_pct": {
+      "median": 34.65,
+      "min": 27.8,
+      "max": 45.1,
+      "viable": false,
+      "runs": [
+        {
+          "fulcher": {
+            "recall_pct": 45.1,
+            "committed_pct": 73.3,
+            "correct_when_committed_pct": 80.3,
+            "best_guess_coarse_pct": {
+              "other": 69.3,
+              "DC": 14.1,
+              "monocyte": 10.5,
+              "CD8T": 3.6,
+              "B": 1.4,
+              "CD4T": 1.1
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 60.5,
+            "committed_pct": 85.2,
+            "correct_when_committed_pct": 87.3,
+            "best_guess_coarse_pct": {
+              "other": 79.8,
+              "DC": 15.5,
+              "monocyte": 2.9,
+              "CD8T": 0.7,
+              "B": 0.4,
+              "CD4T": 0.4,
+              "none": 0.4
+            }
+          },
+          "stat": 45.1
+        },
+        {
+          "fulcher": {
+            "recall_pct": 29.6,
+            "committed_pct": 78.7,
+            "correct_when_committed_pct": 76.6,
+            "best_guess_coarse_pct": {
+              "other": 61.7,
+              "DC": 23.1,
+              "monocyte": 10.8,
+              "B": 1.8,
+              "CD8T": 1.4,
+              "CD4T": 1.1
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 45.1,
+            "committed_pct": 83.8,
+            "correct_when_committed_pct": 83.2,
+            "best_guess_coarse_pct": {
+              "other": 71.1,
+              "DC": 21.7,
+              "monocyte": 4.7,
+              "CD4T": 1.1,
+              "CD8T": 0.7,
+              "B": 0.7
+            }
+          },
+          "stat": 29.6
+        },
+        {
+          "fulcher": {
+            "recall_pct": 36.1,
+            "committed_pct": 74.4,
+            "correct_when_committed_pct": 79.1,
+            "best_guess_coarse_pct": {
+              "other": 65.0,
+              "DC": 16.6,
+              "monocyte": 12.6,
+              "CD8T": 2.5,
+              "B": 2.5,
+              "CD4T": 0.7
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 51.8,
+            "committed_pct": 81.6,
+            "correct_when_committed_pct": 88.5,
+            "best_guess_coarse_pct": {
+              "other": 74.0,
+              "DC": 19.1,
+              "monocyte": 4.0,
+              "B": 1.1,
+              "CD4T": 0.7,
+              "CD8T": 0.7,
+              "none": 0.4
+            }
+          },
+          "stat": 36.1
+        },
+        {
+          "fulcher": {
+            "recall_pct": 33.9,
+            "committed_pct": 76.5,
+            "correct_when_committed_pct": 75.9,
+            "best_guess_coarse_pct": {
+              "other": 65.3,
+              "DC": 21.3,
+              "monocyte": 8.7,
+              "CD8T": 3.2,
+              "CD4T": 0.7,
+              "B": 0.7
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 50.7,
+            "committed_pct": 76.2,
+            "correct_when_committed_pct": 87.7,
+            "best_guess_coarse_pct": {
+              "other": 71.5,
+              "DC": 22.4,
+              "monocyte": 2.5,
+              "CD8T": 1.8,
+              "CD4T": 1.1,
+              "none": 0.4,
+              "B": 0.4
+            }
+          },
+          "stat": 33.9
+        },
+        {
+          "fulcher": {
+            "recall_pct": 33.9,
+            "committed_pct": 78.3,
+            "correct_when_committed_pct": 75.6,
+            "best_guess_coarse_pct": {
+              "other": 67.1,
+              "DC": 18.8,
+              "monocyte": 9.7,
+              "B": 2.5,
+              "CD8T": 1.8
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 48.7,
+            "committed_pct": 77.6,
+            "correct_when_committed_pct": 88.8,
+            "best_guess_coarse_pct": {
+              "other": 75.1,
+              "DC": 19.1,
+              "monocyte": 3.2,
+              "B": 1.1,
+              "none": 0.7,
+              "CD8T": 0.7
+            }
+          },
+          "stat": 33.9
+        },
+        {
+          "fulcher": {
+            "recall_pct": 33.2,
+            "committed_pct": 78.7,
+            "correct_when_committed_pct": 77.1,
+            "best_guess_coarse_pct": {
+              "other": 69.7,
+              "DC": 15.9,
+              "monocyte": 10.5,
+              "CD8T": 1.8,
+              "B": 0.7,
+              "CD4T": 0.7,
+              "NK": 0.7
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 54.9,
+            "committed_pct": 76.5,
+            "correct_when_committed_pct": 89.2,
+            "best_guess_coarse_pct": {
+              "other": 75.8,
+              "DC": 18.1,
+              "B": 1.8,
+              "CD8T": 1.8,
+              "monocyte": 1.4,
+              "CD4T": 1.1
+            }
+          },
+          "stat": 33.2
+        },
+        {
+          "fulcher": {
+            "recall_pct": 33.2,
+            "committed_pct": 75.1,
+            "correct_when_committed_pct": 76.0,
+            "best_guess_coarse_pct": {
+              "other": 68.2,
+              "DC": 19.5,
+              "monocyte": 6.5,
+              "CD8T": 2.5,
+              "B": 2.2,
+              "CD4T": 0.7,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 52.2,
+            "committed_pct": 81.6,
+            "correct_when_committed_pct": 88.5,
+            "best_guess_coarse_pct": {
+              "other": 72.9,
+              "DC": 20.6,
+              "CD8T": 2.5,
+              "monocyte": 2.2,
+              "CD4T": 0.7,
+              "B": 0.7,
+              "none": 0.4
+            }
+          },
+          "stat": 33.2
+        },
+        {
+          "fulcher": {
+            "recall_pct": 33.9,
+            "committed_pct": 72.2,
+            "correct_when_committed_pct": 76.0,
+            "best_guess_coarse_pct": {
+              "other": 64.3,
+              "DC": 19.1,
+              "monocyte": 11.2,
+              "B": 3.2,
+              "CD8T": 1.1,
+              "CD4T": 0.7,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 50.5,
+            "committed_pct": 78.3,
+            "correct_when_committed_pct": 87.1,
+            "best_guess_coarse_pct": {
+              "other": 73.3,
+              "DC": 23.1,
+              "B": 1.8,
+              "monocyte": 1.4,
+              "CD4T": 0.4
+            }
+          },
+          "stat": 33.9
+        },
+        {
+          "fulcher": {
+            "recall_pct": 35.4,
+            "committed_pct": 75.5,
+            "correct_when_committed_pct": 81.3,
+            "best_guess_coarse_pct": {
+              "other": 63.5,
+              "DC": 18.1,
+              "monocyte": 9.0,
+              "B": 6.5,
+              "CD8T": 2.9
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 49.5,
+            "committed_pct": 83.0,
+            "correct_when_committed_pct": 86.5,
+            "best_guess_coarse_pct": {
+              "other": 74.4,
+              "DC": 18.4,
+              "monocyte": 2.5,
+              "B": 2.5,
+              "CD4T": 1.4,
+              "CD8T": 0.7
+            }
+          },
+          "stat": 35.4
+        },
+        {
+          "fulcher": {
+            "recall_pct": 41.9,
+            "committed_pct": 79.1,
+            "correct_when_committed_pct": 76.7,
+            "best_guess_coarse_pct": {
+              "other": 70.0,
+              "DC": 13.0,
+              "monocyte": 8.3,
+              "B": 5.1,
+              "CD8T": 2.5,
+              "CD4T": 0.7,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 56.9,
+            "committed_pct": 80.9,
+            "correct_when_committed_pct": 86.6,
+            "best_guess_coarse_pct": {
+              "other": 76.5,
+              "DC": 17.0,
+              "monocyte": 2.9,
+              "CD4T": 1.4,
+              "CD8T": 1.1,
+              "B": 0.7,
+              "none": 0.4
+            }
+          },
+          "stat": 41.9
+        },
+        {
+          "fulcher": {
+            "recall_pct": 39.4,
+            "committed_pct": 76.9,
+            "correct_when_committed_pct": 81.7,
+            "best_guess_coarse_pct": {
+              "other": 63.5,
+              "DC": 16.2,
+              "monocyte": 12.6,
+              "B": 3.6,
+              "CD4T": 2.5,
+              "CD8T": 1.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 53.6,
+            "committed_pct": 80.5,
+            "correct_when_committed_pct": 86.1,
+            "best_guess_coarse_pct": {
+              "other": 74.0,
+              "DC": 19.5,
+              "B": 2.5,
+              "monocyte": 2.5,
+              "CD8T": 0.7,
+              "CD4T": 0.4,
+              "none": 0.4
+            }
+          },
+          "stat": 39.4
+        },
+        {
+          "fulcher": {
+            "recall_pct": 37.5,
+            "committed_pct": 77.3,
+            "correct_when_committed_pct": 79.0,
+            "best_guess_coarse_pct": {
+              "other": 65.3,
+              "DC": 18.8,
+              "monocyte": 9.4,
+              "B": 2.5,
+              "CD8T": 2.2,
+              "NK": 1.4,
+              "CD4T": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 54.0,
+            "committed_pct": 79.4,
+            "correct_when_committed_pct": 89.1,
+            "best_guess_coarse_pct": {
+              "other": 75.5,
+              "DC": 19.1,
+              "monocyte": 3.2,
+              "B": 0.7,
+              "CD8T": 0.7,
+              "none": 0.4,
+              "CD4T": 0.4
+            }
+          },
+          "stat": 37.5
+        },
+        {
+          "fulcher": {
+            "recall_pct": 42.6,
+            "committed_pct": 79.8,
+            "correct_when_committed_pct": 79.2,
+            "best_guess_coarse_pct": {
+              "other": 68.6,
+              "DC": 18.4,
+              "monocyte": 5.8,
+              "CD8T": 4.0,
+              "B": 1.8,
+              "CD4T": 1.1,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 61.2,
+            "committed_pct": 81.9,
+            "correct_when_committed_pct": 90.7,
+            "best_guess_coarse_pct": {
+              "other": 79.1,
+              "DC": 13.7,
+              "monocyte": 3.2,
+              "B": 2.2,
+              "CD4T": 0.7,
+              "CD8T": 0.7,
+              "none": 0.4
+            }
+          },
+          "stat": 42.6
+        },
+        {
+          "fulcher": {
+            "recall_pct": 33.9,
+            "committed_pct": 75.1,
+            "correct_when_committed_pct": 78.8,
+            "best_guess_coarse_pct": {
+              "other": 65.3,
+              "DC": 21.7,
+              "monocyte": 7.2,
+              "CD8T": 2.5,
+              "B": 2.2,
+              "CD4T": 0.7,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 56.7,
+            "committed_pct": 82.7,
+            "correct_when_committed_pct": 88.6,
+            "best_guess_coarse_pct": {
+              "other": 78.7,
+              "DC": 16.6,
+              "CD8T": 1.8,
+              "B": 1.4,
+              "none": 0.7,
+              "CD4T": 0.4,
+              "monocyte": 0.4
+            }
+          },
+          "stat": 33.9
+        },
+        {
+          "fulcher": {
+            "recall_pct": 27.8,
+            "committed_pct": 72.2,
+            "correct_when_committed_pct": 74.0,
+            "best_guess_coarse_pct": {
+              "other": 61.0,
+              "DC": 17.3,
+              "monocyte": 12.3,
+              "CD8T": 4.3,
+              "B": 4.0,
+              "CD4T": 0.7,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 43.5,
+            "committed_pct": 71.8,
+            "correct_when_committed_pct": 83.4,
+            "best_guess_coarse_pct": {
+              "other": 69.7,
+              "DC": 24.2,
+              "monocyte": 2.9,
+              "CD4T": 1.1,
+              "B": 1.1,
+              "CD8T": 0.7,
+              "none": 0.4
+            }
+          },
+          "stat": 27.8
+        },
+        {
+          "fulcher": {
+            "recall_pct": 35.4,
+            "committed_pct": 76.9,
+            "correct_when_committed_pct": 77.0,
+            "best_guess_coarse_pct": {
+              "other": 65.0,
+              "DC": 17.0,
+              "monocyte": 9.0,
+              "B": 4.0,
+              "CD8T": 3.2,
+              "CD4T": 1.1,
+              "NK": 0.7
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 53.3,
+            "committed_pct": 82.3,
+            "correct_when_committed_pct": 90.4,
+            "best_guess_coarse_pct": {
+              "other": 70.8,
+              "DC": 20.9,
+              "monocyte": 4.0,
+              "CD8T": 1.8,
+              "B": 1.4,
+              "CD4T": 0.7,
+              "none": 0.4
+            }
+          },
+          "stat": 35.4
+        },
+        {
+          "fulcher": {
+            "recall_pct": 41.9,
+            "committed_pct": 83.0,
+            "correct_when_committed_pct": 82.6,
+            "best_guess_coarse_pct": {
+              "other": 68.6,
+              "DC": 16.6,
+              "monocyte": 11.6,
+              "CD8T": 1.8,
+              "B": 1.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 58.0,
+            "committed_pct": 84.8,
+            "correct_when_committed_pct": 88.9,
+            "best_guess_coarse_pct": {
+              "other": 78.7,
+              "DC": 13.4,
+              "monocyte": 4.7,
+              "B": 1.4,
+              "CD8T": 1.1,
+              "none": 0.4,
+              "CD4T": 0.4
+            }
+          },
+          "stat": 41.9
+        },
+        {
+          "fulcher": {
+            "recall_pct": 32.5,
+            "committed_pct": 75.5,
+            "correct_when_committed_pct": 76.6,
+            "best_guess_coarse_pct": {
+              "other": 63.2,
+              "DC": 18.1,
+              "monocyte": 11.2,
+              "CD8T": 4.3,
+              "B": 2.9,
+              "NK": 0.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 51.6,
+            "committed_pct": 81.9,
+            "correct_when_committed_pct": 87.2,
+            "best_guess_coarse_pct": {
+              "other": 74.4,
+              "DC": 18.4,
+              "monocyte": 4.3,
+              "B": 1.1,
+              "CD8T": 0.7,
+              "CD4T": 0.7,
+              "NK": 0.4
+            }
+          },
+          "stat": 32.5
+        },
+        {
+          "fulcher": {
+            "recall_pct": 35.7,
+            "committed_pct": 79.1,
+            "correct_when_committed_pct": 74.4,
+            "best_guess_coarse_pct": {
+              "other": 66.1,
+              "DC": 17.7,
+              "monocyte": 9.7,
+              "CD8T": 2.9,
+              "B": 2.2,
+              "CD4T": 1.4
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 50.5,
+            "committed_pct": 79.8,
+            "correct_when_committed_pct": 86.0,
+            "best_guess_coarse_pct": {
+              "other": 72.6,
+              "DC": 20.9,
+              "monocyte": 4.0,
+              "CD8T": 1.8,
+              "B": 0.7
+            }
+          },
+          "stat": 35.7
+        },
+        {
+          "fulcher": {
+            "recall_pct": 31.4,
+            "committed_pct": 69.0,
+            "correct_when_committed_pct": 75.9,
+            "best_guess_coarse_pct": {
+              "other": 59.6,
+              "DC": 17.3,
+              "monocyte": 12.3,
+              "CD8T": 4.3,
+              "CD4T": 3.6,
+              "B": 2.9
+            }
+          },
+          "pbmc240": {
+            "recall_pct": 50.7,
+            "committed_pct": 77.6,
+            "correct_when_committed_pct": 87.4,
+            "best_guess_coarse_pct": {
+              "other": 70.0,
+              "DC": 18.8,
+              "monocyte": 4.0,
+              "CD8T": 2.9,
+              "CD4T": 2.5,
+              "B": 1.4,
+              "none": 0.4
+            }
+          },
+          "stat": 31.4
+        }
+      ]
+    },
+    "immune_vs_keratinocyte_auroc": {
+      "median": 0.9934000000000001,
+      "min": 0.9818,
+      "max": 0.9987,
+      "viable": true,
+      "runs": [
+        {
+          "stat": 0.9931,
+          "abstained_pct_immune": 2.9,
+          "abstained_pct_scrambled": 86.4
+        },
+        {
+          "stat": 0.9963,
+          "abstained_pct_immune": 2.5,
+          "abstained_pct_scrambled": 89.2
+        },
+        {
+          "stat": 0.9936,
+          "abstained_pct_immune": 2.5,
+          "abstained_pct_scrambled": 91.5
+        },
+        {
+          "stat": 0.9818,
+          "abstained_pct_immune": 2.0,
+          "abstained_pct_scrambled": 88.6
+        },
+        {
+          "stat": 0.9881,
+          "abstained_pct_immune": 2.0,
+          "abstained_pct_scrambled": 81.8
+        },
+        {
+          "stat": 0.9987,
+          "abstained_pct_immune": 2.5,
+          "abstained_pct_scrambled": 89.2
+        },
+        {
+          "stat": 0.9975,
+          "abstained_pct_immune": 1.5,
+          "abstained_pct_scrambled": 90.3
+        },
+        {
+          "stat": 0.9932,
+          "abstained_pct_immune": 3.4,
+          "abstained_pct_scrambled": 95.5
+        },
+        {
+          "stat": 0.9944,
+          "abstained_pct_immune": 1.5,
+          "abstained_pct_scrambled": 92.0
+        },
+        {
+          "stat": 0.9895,
+          "abstained_pct_immune": 2.0,
+          "abstained_pct_scrambled": 89.8
+        },
+        {
+          "stat": 0.9922,
+          "abstained_pct_immune": 2.0,
+          "abstained_pct_scrambled": 89.2
+        },
+        {
+          "stat": 0.9915,
+          "abstained_pct_immune": 3.4,
+          "abstained_pct_scrambled": 89.2
+        },
+        {
+          "stat": 0.9959,
+          "abstained_pct_immune": 0.5,
+          "abstained_pct_scrambled": 88.1
+        },
+        {
+          "stat": 0.9939,
+          "abstained_pct_immune": 1.5,
+          "abstained_pct_scrambled": 92.0
+        },
+        {
+          "stat": 0.9847,
+          "abstained_pct_immune": 2.0,
+          "abstained_pct_scrambled": 87.5
+        },
+        {
+          "stat": 0.9951,
+          "abstained_pct_immune": 1.0,
+          "abstained_pct_scrambled": 88.1
+        },
+        {
+          "stat": 0.9912,
+          "abstained_pct_immune": 3.4,
+          "abstained_pct_scrambled": 89.8
+        },
+        {
+          "stat": 0.9968,
+          "abstained_pct_immune": 1.5,
+          "abstained_pct_scrambled": 90.9
+        },
+        {
+          "stat": 0.9978,
+          "abstained_pct_immune": 1.5,
+          "abstained_pct_scrambled": 90.3
+        },
+        {
+          "stat": 0.9874,
+          "abstained_pct_immune": 1.5,
+          "abstained_pct_scrambled": 90.3
+        }
+      ]
+    },
+    "b_vs_t_pools_auroc": {
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "viable": true,
+      "runs": [
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 25.0,
+            "CD4T": 16.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "CD4T": 8.3,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 25.0,
+            "CD4T": 16.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 50.0
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 50.0
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 41.7,
+            "NK": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        },
+        {
+          "stat": 1.0,
+          "committed_pct": 100.0,
+          "correct_when_committed_pct": 100.0,
+          "best_guess_coarse_pct": {
+            "B": 50.0,
+            "CD8T": 33.3,
+            "NK": 8.3,
+            "CD4T": 8.3
+          }
+        }
+      ]
+    }
+  }
+}

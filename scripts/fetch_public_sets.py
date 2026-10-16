@@ -80,7 +80,8 @@ ENTRIES = (
     pride("PXD070599_PBMC", "development", "PXD070599", "2026/08", "DataSet_to_rawfile_mapping_methods.txt", 992774),
     pride("PXD070599_PBMC", "development", "PXD070599", "2026/08", "DataSet_to_figure_mapping.txt", 2867),
     # first chosen as side tests; since 2026-10-15 (research/benchmark/side-tests.md,
-    # amendment 1) each is either development or held out as the internal test
+    # amendment 1) each is development, held out as the internal test, or in reserve
+    # (PXD061065 since amendment 3)
     entry("Tian_MSV000087462", "held_out", "proteinGroupsCD3CD4CD8.xlsx",
           f"{MASSIVE}/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsCD3CD4CD8.xlsx", 10796475),
     entry("Tian_MSV000087462", "held_out", "proteinGroupsMMsample.xlsx",
@@ -89,8 +90,8 @@ ENTRIES = (
     pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.pr_matrix.tsv", 49988348),
     pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.stats.tsv", 132629),
     pride("PXD073250", "held_out", "PXD073250", "2026/06", "report.log.txt", 877815),
-    pride("PXD061065", "held_out", "PXD061065", "2025/11", "20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv", 31598500),
-    pride("PXD061065", "held_out", "PXD061065", "2025/11", "PXD061065_community_annotated.sdrf.tsv", 329881),
+    pride("PXD061065", "reserve", "PXD061065", "2025/11", "20250204_112949_gbm_sc_full_fasta_19.4_Report.tsv", 31598500),
+    pride("PXD061065", "reserve", "PXD061065", "2025/11", "PXD061065_community_annotated.sdrf.tsv", 329881),
     pride("PXD061052", "development", "PXD061052", "2025/11", "20241206_144402_gbm_minibulk_full_fasta_19.4_Report.tsv", 4995983),
     pride("PXD043355", "held_out", "PXD043355", "2023/10", "HeLa_VS_Jurkat_Proteins.txt", 9757952, "76723d5ad8649d5dab3188dff89a6d0691149664"),
     pride("PXD043355", "held_out", "PXD043355", "2023/10", "HeLa_VS_Jurkat_InputFiles.txt", 11731, "1aebd5319e8de86de82677ae31de19dc1efeb9f2"),

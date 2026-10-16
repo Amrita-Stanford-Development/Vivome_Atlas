@@ -1712,6 +1712,44 @@ deposited matrix.
   PBMC upload". Treat them as an unfamiliar-dataset case. Entry 37's second
   design fails without them too: it also flagged PBMC240.
 
+### 39. The held-out test's designs, rehearsed on RNA (Goal 2, Phase 0.3), 2026-10-16
+
+**Why:** most held-out sets are narrow uploads (one or two cell types, or
+pools), the weakness entry 35 found. A design that cannot pass even on RNA
+would waste a held-out set, so each was rehearsed before its protocol.
+
+**How** (`research/notebooks/heldout_rehearsal.py`): RNA calibration cells
+(te_cal) with real protein mask profiles, through v4.1's served code against
+references without those cells; 20 seeds per design. Bulks and pools are
+pseudo-bulks. Scrambled cells (a cell's observed values shuffled among its
+genes) stand in for non-immune cells, which the blood reference lacks. Each
+bar is what the design's protocol would need to pass, fixed before the run.
+
+| Design (held-out set) | Statistic | Median (range) | Bar | Viable |
+|---|---|---|---|---|
+| T-cell bulk pairs (Tian) | CD8 bulk above its CD4 pair, of 10 | 10 (10-10) | 9 | yes |
+| Monocyte vs macrophage-like cells (PXD046211) | AUROC | 0.941 (0.923-0.959) | 0.65 | yes |
+| T-cell line beside foreign cells (PXD043355) | AUROC, reference similarity | 0.978 (0.911-1.0) | 0.65 | yes |
+| Neutrophils alone (PXD061065) | best-guess recall, worse of two masks | 34.7% (27.8-45.1) | 50% | **no** |
+| Immune beside foreign cells (PXD073250) | AUROC, reference similarity | 0.993 (0.982-0.999) | 0.65 | yes |
+| B vs T pools (PXD021882) | AUROC | 1.0 (1.0-1.0) | 0.8 | yes |
+
+**Results:** `research/notebook-outputs/heldout_rehearsal/summary.json`.
+
+**What it means:**
+- **Neutrophils uploaded alone fail:** recall 34.7% with Fulcher's mask and
+  52.0% with PBMC240's. PXD061065 leaves the internal test unopened and joins
+  the reserve (`research/benchmark/side-tests.md`, amendment 3).
+- **The other five designs go to protocols.** Two cautions carry over:
+  - In the T-cell bulks, the pairs are won but half the CD8 bulks' best guess
+    is NK. The protocol's primary is the within-pair score; the best guess
+    is secondary.
+  - Scrambled cells are a low bar. A real HeLa cell or keratinocyte may sit
+    closer to the reference, so the two foreign-cell tests are harder than
+    their rehearsal.
+- The Hao 2021 suite is rehearsed on its development donors by its own
+  intake.
+
 ---
 
 ## The throughline

@@ -22,7 +22,7 @@ sorted cells requested by email.
 | CD8 vs CD4 T, NK | Rieckmann 2017 (PXD004352), sorted proteomes | Tian (MSV000087462), sorted T-cell bulk |
 | Macrophage vs monocyte | SCoPE2 | PXD046211 (THP-1 and U-937, with and without PMA) |
 | Refusing foreign cells | MSV000099294 (microglia, HMC3), PXD077946, Furtwängler 2025 | PXD043355 (Jurkat and HeLa) |
-| Neutrophils | PXD061052 (pools) | PXD061065 (single cells; the same study, so reported with that caveat) |
+| Neutrophils | PXD061052 (pools) | none: PXD061065 moved to reserve (amendment 3) |
 | Immune vs non-immune | | PXD073250 (whole) |
 | B vs T lineage | | PXD021882 (whole) |
 | General | Fulcher 2026, PBMC240, PXD070599 PBMC runs DS18 and DS19, PXD020586 | |
@@ -53,12 +53,27 @@ then. So far: v4.1 (the served default), v5.2, and v4.2, frozen on
 amendment 3. A later Phase 2 candidate joins only if it is frozen the same way
 before any held-out file is opened.
 
+### Amendment 3, 2026-10-16: the designs rehearsed on RNA; PXD061065 moved to reserve
+
+Each held-out design was run through v4.1 on RNA calibration cells, with real
+protein mask profiles, before its protocol was written
+(`research/notebooks/heldout_rehearsal.py`; run history, entry 39). Five
+designs pass the bar their protocol would need. Neutrophils uploaded alone
+(PXD061065's design) do not: median best-guess recall was 34.7% with
+Fulcher's mask and 52.0% with PBMC240's, against 50% under both. So
+PXD061065 leaves the internal test unopened and joins the reserve: it can
+serve a future test once an upload of one cell type no longer depends on the
+upload's own scaling (run history, entries 35 to 37). Its role is `reserve`
+in `scripts/fetch_public_sets.py` and in the download record.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
 future test; once a test is used, it becomes development and the next one
 comes from here. Keep this list current.
 
+- **Downloaded, sealed, in reserve:** PXD061065 (277 single glioblastoma
+  neutrophils after QC; amendment 3).
 - **Requested by email:** Krisp et al. (sorted CD4, CD8, CD19, CD14 single
   cells; the main test) and O'Connor et al. (sorted T, B, NK, monocytes).
 - **Data requests not yet made:** Brenes et al. (sorted blood neutrophils) and
@@ -145,8 +160,8 @@ fetched. Each group has one role, fixed in the script's table:
 |---|---|---|
 | reference | Rieckmann 2017 (PXD004352: 28 sorted primary immune populations, MaxQuant output); Khoury's sorted bulk populations | Rieckmann: free for development. Khoury's: diagnosis only (see below) |
 | development | PXD070599 PBMC runs DS18 and DS19, MSV000099294, PXD077946, PXD061052, PXD020586 | Free for development |
-| held_out | Tian (MSV000087462), PXD046211, PXD043355, PXD061065, PXD073250, PXD021882 | The internal test: locked until the end (amendment 1) |
-| reserve | PXD070599 single HeLa and HEK293T (tier B, not downloaded) | A future test or future development |
+| held_out | Tian (MSV000087462), PXD046211, PXD043355, PXD073250, PXD021882 | The internal test: locked until the end (amendment 1) |
+| reserve | PXD061065 (sealed, amendment 3); PXD070599 single HeLa and HEK293T (tier B, not downloaded) | A future test or future development |
 
 - **Locked means:** downloaded and checksummed, nothing else, until scoring.
   Listing file names and checking file sizes are allowed.
