@@ -141,7 +141,7 @@ def load_spec() -> dict:
 
 # Service-side behaviour flags. NB2's export carries none, so each takes its
 # default; a later notebook's spec can set them under "service_flags".
-# Neither has been evaluated on RNA yet (research/todo.md, Track F).
+# NB3b measured both on RNA (research/notebook-run-history.md, entry 18).
 SERVICE_FLAGS = {
     "set_includes_best_guess": True,  # calibration.MondrianCalibrator: non-empty sets only
     "restricted_renormalise": True,  # label_space.V31LabelSpace

@@ -175,11 +175,11 @@ method's own preferred evaluation protocol can be much noisier than a
 neutral one applied to its embedding, and that noise can point in whichever
 direction makes for a good headline if only one seed is ever reported.
 
-No baseline besides scANVI has been run more than once — MaxFuse's random
-batching and scGLUE's minibatch shuffling both have their own
-un-quantified run-to-run variance, plausibly smaller than scANVI's given
-neither uses a comparably deep stochastic training loop, but this has not
-been measured. For scale, the production reference's own 5-seed training
+Since the Track D extension, MaxFuse, scGLUE and Harmony have three seeds
+each too, and their seed-to-seed spread is reported beside their scores
+([results.md](results.md), "Baselines beyond scANVI"; for the corrected runs,
+[baseline-corrections.md](baseline-corrections.md)); it is large for some of
+them, as for scANVI. For scale, the production reference's own 5-seed training
 run (`service/model/evidence/v3_tables/reference_seeds.csv`) measured mean balanced
 accuracy 0.7143 on its own (different) validation task — that task's own
 spread is far smaller than scANVI's native-classifier spread found here.

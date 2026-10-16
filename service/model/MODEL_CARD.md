@@ -130,7 +130,7 @@ existed, and nothing was chosen on it afterwards
   - a restricted request renormalises probabilities over the allowed
     classes before its sets are built.
 
-  Neither has been evaluated on RNA (Known limits, 7).
+  NB3b measured both on RNA (Known limits, 7).
 
 Spec: `service/model/v3_1/nb2_spec_v31.json`. Code:
 `service/pipeline/ensemble.py`. Response:
@@ -286,10 +286,16 @@ every other dataset here.
    measured (the spec's `caveats`).
 6. **The calibration suite comes from the validation split,** which also
    set the encoders' early stopping.
-7. **The two service flags have not been evaluated on RNA.** They change
-   development-data results (`research/benchmark/results.md`, "v3.1's two
-   service flags"), but the evaluation-suite figures above are NB2's rule
-   without them. The next notebook should measure both on NB1's suite.
+7. **The two service flags were measured on RNA after NB2** (NB3b,
+   `research/notebook-run-history.md`, entry 18;
+   `research/notebook-outputs/nb3b/eval_flags_summary.csv` and
+   `eval_restricted_summary.csv`), so the evaluation-suite figures above are
+   NB2's rule without them.
+   - `set_includes_best_guess` raises coverage from 87.1% to 88.3% (target
+     90%) and correct when committed from 94.9% to 95.5%.
+   - Restricted mode, renormalised, on macrophage and monocyte uploads:
+     99.5% of cells committed, 96.2% of those correct, but class answers fall
+     from 56.7% to 28.6%, because the two allowed classes share a group.
 8. **Restricted mode was not evaluated under v3.1.**
    - On SCoPE2 with the flags on, every cell commits.
    - But 97.9% of answers are "monocyte/macrophage", the group made of

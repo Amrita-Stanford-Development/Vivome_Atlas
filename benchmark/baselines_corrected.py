@@ -294,13 +294,14 @@ def run(args, inp, stem: Path) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("tool", choices=TOOLS)
-    parser.add_argument("dataset", choices=baselines_inputs.DATASETS + baselines_inputs.ADDED + POSTHOC)
+    parser.add_argument("dataset", choices=baselines_inputs.DATASETS + baselines_inputs.ADDED + POSTHOC
+                        + baselines_inputs.SORTED)
     parser.add_argument("seed", type=int, choices=(0, 1, 2))
     parser.add_argument("--smoke", type=int, default=0, help="development datasets only: subsample N RNA cells")
     parser.add_argument("--posthoc", action="store_true", help="required for Khoury 2026: its runs are post-hoc")
-    args = parser.parse_args()
     parser.add_argument("--labels", choices=tuple(LABEL_SETS), default="original",
                         help="the reference label set (a candidate model's own); runs go to their own directory")
+    args = parser.parse_args()
     posthoc = args.dataset in POSTHOC
     if posthoc and not args.posthoc:
         raise SystemExit("Khoury 2026's labels were read at its one scoring: corrected runs on it are post-hoc. "

@@ -108,6 +108,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
 - `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
 - `service/tests/test_baselines_labels.py` — the corrected baselines' `--labels`: the join of a label set onto the benchmark's RNA cells by cell, refusing a misaligned or short table, and runs kept apart from the original ones
+- `service/tests/test_sorted_cd4cd8.py` — the sorted CD4/CD8 test's scripts: frozen sha256s equal the protocol's and still hold, rule 5's mapping, scoring over the sorted types only, refusal of a labels file with another sha256 and of a second scoring
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
 - `service/tests/test_scope2_labels.py` — every copy of SCoPE2's labels must match the curated source (`research/benchmark/scope2_labels/corrected_labels.csv`)
 - `service/tests/test_alignment.py` — Stage 1 tests
@@ -229,6 +230,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/khoury2026_embed.py` — Khoury 2026 final evaluation, step 1 (`--unseal` only): the member and dev gates, then v3.1's members' and v3's embeddings and v3.1's served answers; `--rehearse` runs it on Fulcher
 - `benchmark/scanvi_run_khoury2026.py` — Khoury 2026 final evaluation, step 2 (`--unseal` only): scANVI, one arm and seed, Fulcher's setup; `--rehearse --smoke` checks the plumbing on Fulcher
 - `benchmark/khoury2026_score.py` — Khoury 2026 final evaluation, step 4: the scoring, the only step that reads Khoury's labels, run once; `--rehearse` scores Fulcher and checks against its tables
+- `benchmark/sorted_cd4cd8_intake.py` — the sorted CD4/CD8 test, step 1, label-free: frozen models checked, every QC-passed cell in one upload through the service, the protocol's label-free facts, v3.1, v4.1 and v5.2 as served, the baselines' query matrix; `--rehearse` on Fulcher 2026
+- `benchmark/sorted_cd4cd8_score.py` — the sorted CD4/CD8 test, step 3, the only step that reads the sorting labels (checked by sha256): balanced accuracy over the sorted types, recall, CD4/CD8 confusion, answers, paired bootstraps against baselines on each model's own labels, the protocol's verdicts; once; `--rehearse` reproduces Fulcher's committed figures
 - `benchmark/fulcher2026_product_check.py` — Fulcher 2026 product check: POSTs the upload to a running service with default settings and records the returned composition (label-free)
 - `benchmark/fulcher2026_v31.py` — Fulcher 2026 (development data) through v3.1: committed share, correctness at the stated level per author type, composition, best guess
 - `benchmark/notebook_convention.py` — NB2's own query parse (the "notebook convention"), to reproduce its development numbers; not the product parser
@@ -240,7 +243,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/scope2_5seed_scores.py` — SCoPE2 under NB1d's ten model-seeds with the corrected labels: Track D's per-seed table and NB1d's own SCoPE2 figures, each reproduced with the previous labels first
 - `benchmark/scope2_labels.py` — SCoPE2's corrected cell labels, from the authors' curated object, with the evidence; `--apply` puts them into every copy and recomputes v3's SCoPE2 evidence tables
 - `benchmark/scope2_reprocess.py` — SCoPE2 rebuilt from its peptide-level evidence by SCoPE2's own filters, missing values kept missing (Track G, Phase 1)
-- `benchmark/baselines_inputs.py` — Track D extension: what every baseline receives per dataset, gene-fair (measured genes only, z-scored over observed values); Khoury only when unsealed
+- `benchmark/baselines_inputs.py` — Track D extension: what every baseline receives per dataset, gene-fair (measured genes only, z-scored over observed values); Khoury only when unsealed; dataset `sorted_cd4cd8` reads the sorted test's intake matrix
 - `benchmark/baselines_run.py` — Track D extension: one baseline (MaxFuse, scGLUE, Harmony + kNN, Seurat CCA, correlation to class mean), one dataset, one seed; saves embeddings, per-cell predictions and a record (completed, diverged or failed)
 - `benchmark/seurat_cca_transfer.R` — Seurat CCA label transfer, called by `baselines_run.py`
 - `benchmark/baselines_queue.sh` — runs the remaining baseline runs one at a time, skipping finished ones
@@ -393,6 +396,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/nb1/composition_experiment.csv` — NB1: how upload composition moves restricted and unrestricted scores
 - `research/notebook-outputs/nb1/mask_profiles_summary.csv` — NB1: coverage and missingness profiles of the real proteomics masks
 - `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv` — NB1: corrected RNA→RNA accuracy, scored on test cells only
+- `research/notebook-outputs/nb1/sim_generator.py` — NB1's simulation generator (scenarios, uploads, masks), copied from the project Drive with its sha256 and one amendment: the scope2_like scenario uses SCoPE2's corrected macrophage and monocyte shares; for suites built from now on
 - `research/notebook-outputs/nb1/v3_baseline_eval_suite.csv` — NB1: the v3 baseline across every simulation-bench scenario
 - `research/notebook-outputs/nb1b/nb1b_summary.json` — NB1b: the winning recipe (V3_dual_aug), gate results, the go/no-go, the A2 ablation, and the suggested gene floor (200)
 - `research/notebook-outputs/nb1b/coverage_curve_v0.csv` — NB1b: v3 accuracy by observed-gene bin; the evidence for `MIN_OBSERVED_GENES = 200`

@@ -1,8 +1,8 @@
 """v3.1's two service flags (service/pipeline/ensemble.py, SERVICE_FLAGS),
 before and after, on the three development datasets through the service
 parser: NB2's rule as specified (both off) against the served default (both
-on). Neither flag has been evaluated on RNA; that is an open item for the
-next notebook (research/todo.md, Track F).
+on). NB3b later measured both flags on RNA (research/notebook-run-history.md,
+entry 18).
 
 - set_includes_best_guess: every conformal set also contains the argmax.
 - restricted_renormalise: a restricted request rescales probabilities over

@@ -144,3 +144,48 @@ contain. The models, metrics and decision rules do not change.
 - **Neither deposit exists yet**, and none is public. If another qualifying
   dataset appears, it goes in a further amendment, before its labels are
   opened.
+
+## Amendment 2, 2026-10-15, before any data: the scripts
+
+The intake and scoring scripts are written and rehearsed on Fulcher 2026, as
+rule 1 requires. Nothing above changes; this records how the scripts read it.
+
+- **Intake** (`benchmark/sorted_cd4cd8_intake.py`), label-free:
+  - checks every frozen file of rule 3 against its sha256 and refuses to run on
+    a mismatch, or with any `VIVOME_*` override set;
+  - parses the authors' search output with the service's own parser and uploads
+    every QC-passed cell in one upload, so no sorted population is projected
+    alone. If the data warrant another grouping (for instance the 10-cell bulks
+    apart), it is set by a further amendment at intake;
+  - records rule 2's label-free facts, including whether CD8A, CD8B and CD4
+    are measured and in what share of cells;
+  - runs v3.1, v4.1 and v5.2 as served and saves each model's per-cell table,
+    and writes the baselines' query matrix
+    (`benchmark/baselines_inputs.py`, dataset `sorted_cd4cd8`), so rule 4's
+    runs are `benchmark/baselines_corrected.py TOOL sorted_cd4cd8 SEED`, with
+    and without `--labels v52`.
+- **The labels, stored apart on receipt:** a CSV with `cell_id`, `type`
+  (CD4T, CD8T, NK, B, monocyte, DC, or empty) and `unit` (single, bulk or
+  unsorted), its sha256 recorded in the intake amendment. The scorer refuses a
+  file with another sha256.
+- **Scoring** (`benchmark/sorted_cd4cd8_score.py --unseal LABELS --sha256 HEX`),
+  once; it refuses to run again:
+  - the arms of rule 4 are those scored on Khoury post-hoc: correlation; PCA,
+    Harmony, scANVI, MaxFuse and scGLUE with the shared kNN rule; scANVI's
+    classifier, MaxFuse's matching and Seurat's transfer; three seeds where
+    the tool has them;
+  - "beats the corrected baselines" is read run by run: at least 3 points and
+    a CI above zero against every run of every arm. A run that failed or
+    diverged is listed and not scored, as on Khoury; if any run was never
+    made, that verdict is not judged, and v5.2 is compared with v4.1 only;
+  - CD8 T recall's paired bootstrap runs on the sorted CD8 T cells, where
+    balanced accuracy is recall;
+  - coverage is the share of scored cells whose set holds a class of their
+    sorted type; correct when committed is judged at the stated level against
+    NB2's hierarchy, as Khoury's scorer judges it.
+- **The rehearsal** (`--rehearse` on both scripts, Fulcher's six types as if
+  sorted): the intake's per-cell tables equal the committed served tables
+  (labels, sets and guesses identical; probabilities within 3e-6), its query
+  matrix equals the benchmark loader's (932 genes, values within 2e-6), and
+  the scorer reproduces 21 committed Fulcher runs to 0.000000 points (v3.1
+  57.94, v4.1 69.05, every original-label baseline run).

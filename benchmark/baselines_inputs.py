@@ -37,6 +37,7 @@ D = Path(__file__).resolve().parent / "results"
 DATASETS = ("scope2", "pbmc240", "fulcher2026")
 ADDED = ("scope2_reprocessed",)  # development data added in Track G, Phase 4; corrected runs only
 SEALED = ("khoury2026",)  # built only at the final v3.1 evaluation (protocol-khoury2026.md)
+SORTED = ("sorted_cd4cd8",)  # the sorted CD4/CD8 test: its intake's matrix (protocol-sorted-cd4cd8.md)
 QUERY_INPUT = {
     "scope2": "SCoPE2 published gene-level matrix, as provided (gene- and cell-centred by its authors, complete)",
     "pbmc240": "PBMC240 processed file: log2(x+1), per-cell median normalised, left-censored imputed, z-scored within its own panel",
@@ -45,6 +46,8 @@ QUERY_INPUT = {
                           "reporter ratios, each cell's median subtracted, missing values kept missing",
     "khoury2026": "Khoury 2026: the column-normalised matrix as provided (log2, ComBat-corrected by its authors), "
                   "missing values kept missing",
+    "sorted_cd4cd8": "the sorted CD4/CD8 test: the authors' search output on the service's log scale, a gene's rows "
+                     "merged by per-cell median, missing values kept missing (benchmark/sorted_cd4cd8_intake.py)",
 }
 
 
@@ -86,6 +89,9 @@ def query_matrix(dataset: str) -> tuple[np.ndarray, list[str]]:
     if dataset == "khoury2026":
         x, ids, _ = datasets.load_khoury2026_benchmark_matrix()
         return x, list(ids)
+    if dataset == "sorted_cd4cd8":  # written by benchmark/sorted_cd4cd8_intake.py; label-free
+        saved = np.load(D / "sorted_cd4cd8" / "query_benchmark.npz", allow_pickle=True)
+        return saved["x"], [str(c) for c in saved["cell_ids"]]
     raise ValueError(f"unknown dataset {dataset!r}; expected one of {DATASETS + ADDED}")
 
 

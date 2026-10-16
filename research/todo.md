@@ -372,7 +372,10 @@ Plan approved 2026-10-12. Every method fails CD8 T: v4.1 recalls 2.7% on Khoury 
   - [x] **Owner's decision (2026-10-13): keep v5.2 for the sorted test.** Phase 4 was not run (no sixth use of te_eval).
     - `research/benchmark/protocol-sorted-cd4cd8.md` pre-registers the sorted CD4/CD8 test before any data: v4.1 and v5.2 frozen by sha256; the corrected baselines on each candidate's own reference labels; balanced accuracy primary; CD8 T and CD4 T recall secondary; the decision rules.
     - v4.1 stays the version served on request; v5.2 is selectable and refused until evaluated.
-- [ ] **Before the sorted data is unsealed:** the corrected baselines rerun with v5.2's labels (protocol rule 4), and the intake and scoring scripts written and rehearsed on Fulcher.
+- [~] **Before the sorted data is unsealed:**
+  - [x] Intake and scoring scripts written and rehearsed on Fulcher (`benchmark/sorted_cd4cd8_intake.py`, `benchmark/sorted_cd4cd8_score.py`; protocol amendment 2): the intake reproduces the committed served tables and the benchmark matrix; the scorer reproduces 21 committed Fulcher runs to 0.000000 points.
+  - [x] `benchmark/baselines_corrected.py --labels v52` (and clean, v51), so rule 4's runs can be made on the sorted data before its labels are read (`ebffbde`).
+  - [ ] On receipt: the intake, then the corrected baselines on `sorted_cd4cd8` with the original and v5.2's labels (slow tools in the owner's terminal), then `--unseal`.
 - [x] **Five-agent dataset search, 2026-10-14** (owner's request; details in `research/benchmark/side-tests.md`). PRIDE's whole list, MassIVE's whole list, the other ProteomeXchange members, Zenodo and the other repositories, the literature and the labs were searched; key facts were checked against the sources.
   - **No public main-test dataset exists.** Nothing public has single cells with sorted CD4 and CD8 labels.
   - **The only such design is Krisp's** (Bruker/Cellenion): FACS-presorted CD4+, CD8+, CD19+, CD14+ single cells and 10-cell bulks, shown since February 2024, never deposited. Dr Krisp is now at the MDC-Bruker Center in Berlin; the verified public contact is Fabian Coscia, corresponding author of a paper they co-authored.

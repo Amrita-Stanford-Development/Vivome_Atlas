@@ -154,7 +154,8 @@ implemented in `service/pipeline/ensemble.py`:
 - **Mondrian conformal sets.** Class c is in a cell's set when its
   probability is at least 1 − qhat[c], with one qhat per class.
 - **Two service flags, on by default** (`ensemble.SERVICE_FLAGS`; NB2's
-  spec has neither, and neither has been evaluated on RNA):
+  spec has neither; NB3b measured both on RNA, `service/model/MODEL_CARD.md`,
+  v3.1, Known limits 7):
   - `set_includes_best_guess`: every non-empty set also contains the cell's
     best guess. Sets only grow, so coverage is kept, and a one-class answer
     is always the best guess. An empty set stays empty: the cell abstains.

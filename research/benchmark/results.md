@@ -1104,10 +1104,12 @@ is its one cell refused for coverage.
   - Restricted mode was never evaluated in NB2 and is not recommended
     under v3.1 (`docs/service/projection-api.md`).
 
-**Open:** neither flag has been evaluated on RNA. The next notebook should
-measure both on NB1's evaluation suite (coverage, correct when committed,
-answer levels) before they are trusted beyond these development datasets
-(`research/todo.md`, Track F).
+**Measured since on RNA** (NB3b, `research/notebook-run-history.md`, entry
+18; `research/notebook-outputs/nb3b/eval_flags_summary.csv` and
+`eval_restricted_summary.csv`): `set_includes_best_guess` raises coverage
+from 87.1% to 88.3% and correct when committed from 94.9% to 95.5%; restricted
+mode, renormalised, commits on 99.5% of macrophage and monocyte cells with
+96.2% correct, while class answers fall from 56.7% to 28.6%.
 
 ## v3.1 on out-of-reference cells: CD34+ progenitors (development data)
 
@@ -1823,7 +1825,9 @@ discipline applies to the pool-first-vs-post-hoc-masking kNN choice above.
 ## What's still open
 
 - **Why v3's SCoPE2 restricted-regime performance varies so much by seed
-  (59.04–88.40% balanced, shared kNN rule) is not explained here** — only
+  (11.6–41.0% balanced with the corrected labels, shared kNN rule;
+  `research/notebook-outputs/nb1d/ours_scope2_5seed_family_summary.csv`) is not
+  explained here** — only
   measured. `v3_seed0` shipping was not a principled choice among the five;
   it is simply the seed that was trained first. Not addressed by Track D;
   a real open question for whichever notebook takes it up next.
@@ -1839,6 +1843,6 @@ discipline applies to the pool-first-vs-post-hoc-masking kNN choice above.
   scANVI-across-seeds section). Seeds 1 and 2 reproduced closely. Not
   investigated further here; worth knowing before treating any single
   scANVI seed's number as fixed.
-- `web/data/atlas_manifest.json`'s `benchmark.rows` is untouched — still `[]`,
-  `status: "pending"` — regardless of everything above. Nothing here is
-  wired into the live site.
+- The site's benchmark (`web/benchmark.html`) shows the corrected baselines
+  against v3.1 and v4.1, computed by `scripts/build_manifest.py` from the
+  committed tables, since release 0.4.0 (`6aa6dc3`).
