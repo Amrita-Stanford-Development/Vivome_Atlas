@@ -1,0 +1,19 @@
+dataset,arm,type,recall_pct
+Fulcher 2026,RNA,CD4T,88.96
+Fulcher 2026,RNA,CD8T,19.34
+Fulcher 2026,RNA,NK,91.33
+Fulcher 2026,RNA,B,92.16
+Fulcher 2026,RNA,monocyte,98.03
+Fulcher 2026,RNA,DC,61.11
+Fulcher 2026,"RNA, shared genes",CD4T,89.61
+Fulcher 2026,"RNA, shared genes",CD8T,18.78
+Fulcher 2026,"RNA, shared genes",NK,93.33
+Fulcher 2026,"RNA, shared genes",B,92.16
+Fulcher 2026,"RNA, shared genes",monocyte,96.93
+Fulcher 2026,"RNA, shared genes",DC,61.11
+Fulcher 2026,protein,CD4T,89.94
+Fulcher 2026,protein,CD8T,21.55
+Fulcher 2026,protein,NK,94.0
+Fulcher 2026,protein,B,96.08
+Fulcher 2026,protein,monocyte,88.82
+Fulcher 2026,protein,DC,87.04

@@ -1,0 +1,54 @@
+pair,marker,measured,log2fc_by_donor,donors_2fold
+CD8 T vs CD4 T,CD8A,True,"[11.29, 11.76, 11.13, 10.61]",4
+CD8 T vs CD4 T,CD8B,True,"[5.0, 2.23, 2.63, null]",3
+CD8 T vs CD4 T,CD4,True,"[-9.34, -11.99, -7.54, -7.74]",0
+CD8 T vs CD4 T,CD40LG,True,"[-0.11, null, 0.34, null]",0
+CD8 T vs CD4 T,GZMK,True,"[2.98, 2.53, 4.19, 1.43]",4
+CD8 T vs CD4 T,GZMH,True,"[0.64, 0.22, 0.22, -1.05]",0
+CD8 T vs CD4 T,CCL5,True,"[2.67, 1.36, 0.61, 2.09]",3
+CD8 T vs CD4 T,KLRG1,True,"[0.09, 2.42, 1.35, 0.72]",2
+naive vs memory T,CCR7,True,"[3.18, 0.83, 5.13, 1.63]",3
+naive vs memory T,SELL,True,"[2.83, 4.03, 2.79, 2.26]",4
+naive vs memory T,LEF1,True,"[3.91, 4.5, 4.48, 4.44]",4
+naive vs memory T,TCF7,True,"[2.64, 2.91, 3.05, 2.86]",4
+naive vs memory T,S100A4,True,"[-1.66, -1.64, -1.63, -2.01]",0
+naive vs memory T,ANXA1,True,"[-1.3, -1.71, -1.49, -1.56]",0
+naive vs memory T,IL7R,True,"[0.56, 0.47, 0.39, 0.16]",0
+naive vs memory T,CD27,True,"[2.89, 0.54, 2.15, 2.57]",3
+naive vs memory T,CD28,True,"[0.55, 0.33, 1.09, -0.59]",1
+NK vs CD8 T,GNLY,True,"[1.72, 2.6, 4.25, 3.01]",4
+NK vs CD8 T,NKG7,False,"[null, null, null, null]",0
+NK vs CD8 T,KLRD1,True,"[1.87, 1.67, 2.85, 2.56]",4
+NK vs CD8 T,KLRF1,True,"[0.47, 1.02, 1.02, 1.44]",3
+NK vs CD8 T,NCAM1,True,"[4.42, 8.39, 6.8, 6.67]",4
+NK vs CD8 T,FCGR3A,True,"[1.13, 3.22, 4.93, 3.45]",4
+NK vs CD8 T,PRF1,True,"[2.25, 2.45, 1.3, 1.85]",4
+NK vs CD8 T,GZMB,True,"[5.58, 3.87, 2.68, 2.97]",4
+NK vs CD8 T,CD3D,True,"[null, null, null, null]",0
+NK vs CD8 T,CD3E,True,"[-5.27, -5.6, -5.89, -3.7]",0
+NK vs CD8 T,CD247,True,"[0.03, 0.43, 0.39, -0.09]",0
+myeloid DC vs monocyte,CD1C,True,"[8.29, 7.86, 7.51, 7.74]",4
+myeloid DC vs monocyte,CLEC10A,True,"[2.46, 4.44, 2.94, 4.07]",4
+myeloid DC vs monocyte,FCER1A,True,"[null, null, null, 2.03]",1
+myeloid DC vs monocyte,CLEC9A,False,"[null, null, null, null]",0
+myeloid DC vs monocyte,IRF8,True,"[0.52, 1.51, 1.61, 1.25]",3
+myeloid DC vs monocyte,HLA-DQA1,True,"[4.17, 5.95, 0.5, 3.96]",3
+myeloid DC vs monocyte,CD74,True,"[2.06, 2.2, 1.36, 1.17]",4
+myeloid DC vs monocyte,CD14,True,"[-5.46, -4.71, -5.07, -6.67]",0
+myeloid DC vs monocyte,LYZ,True,"[-1.81, -3.01, -3.08, -3.81]",0
+myeloid DC vs monocyte,S100A8,True,"[-5.26, -6.02, -4.97, -5.53]",0
+myeloid DC vs monocyte,FCN1,True,"[-5.15, -6.22, -4.32, -7.39]",0
+plasmacytoid DC vs others,LILRA4,True,"[null, 4.89, 5.54, null]",2
+plasmacytoid DC vs others,CLEC4C,True,"[null, 3.54, null, null]",1
+plasmacytoid DC vs others,IL3RA,True,"[10.89, 9.87, 9.64, 9.87]",4
+plasmacytoid DC vs others,TCF4,True,"[6.73, 5.77, 8.03, 7.77]",4
+plasmacytoid DC vs others,PLD4,True,"[5.5, 6.39, 5.48, 6.0]",4
+plasmacytoid DC vs others,IRF7,True,"[null, 6.97, 8.32, 8.33]",3
+plasmacytoid DC vs others,IRF8,True,"[4.66, 5.22, 4.17, 5.16]",4
+B vs T,CD79A,True,"[11.22, 10.32, 13.1, 10.89]",4
+B vs T,CD79B,True,"[null, null, 7.51, 7.66]",2
+B vs T,MS4A1,True,"[13.35, 12.69, 12.81, 13.3]",4
+B vs T,CD19,True,"[10.11, null, 10.36, null]",2
+B vs T,PAX5,True,"[10.81, 11.49, null, 12.03]",3
+B vs T,CD22,True,"[8.17, 7.73, 12.38, 16.07]",4
+B vs T,BLK,True,"[7.26, null, 8.63, 7.19]",3

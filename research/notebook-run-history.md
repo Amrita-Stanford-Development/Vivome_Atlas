@@ -1362,6 +1362,109 @@ truth, multi-type uploads:
   guardrail (at most 2 points of loss) by about one cell.
 - **So its Phase 4 would be a certain NO GO.** It was not run.
 
+### 30. The marker audit (Goal 2, Phase 1.1), 2026-10-16
+
+**Why:** the 9,002-gene input space lacks most canonical markers (CD8B, CCR7,
+SELL; GNLY, NKG7, KLRD1, KLRF1; CD79A; CD1C, CLEC4C, LILRA4, IL3RA, CLEC9A,
+FCER1A; CD68, CD163). If single-cell proteomics measures them, adding them to
+the best guess's correlation term (Phase 2a) could help the weak classes.
+
+**How** (`research/notebooks/marker_audit.py`; rules in its docstring before
+the run; development data only, no Khoury, no held-out set):
+- detection in Fulcher 2026, PBMC240, PXD070599 DS18 (three searches) and
+  DS19, and Furtwängler 2025;
+- Rieckmann 2017's sorted bulk proteomes: the donors with a two-fold
+  difference between the confused populations;
+- the reference RNA's AUROC for each pair, under v5.2's labels.
+
+**Result** (`research/notebook-outputs/marker_audit/`):
+- **The missing markers do separate the confused populations in deep bulk
+  proteomes:** in Rieckmann, CD8B (CD8 vs CD4), GNLY and KLRD1 (NK vs CD8),
+  CD1C and CLEC10A (myeloid DC vs monocyte), IL3RA and TCF4 (pDC), CD79A (B)
+  each differ at least two-fold in 3 or 4 of 4 donors.
+- **Single-cell proteomics does not measure them.** None of the 16 is
+  detected in any of the seven single-cell datasets, except CD1C (2.2% of
+  one search's cells), GNLY (3.4%) and SELL (0.6%). They are missing from
+  the input space because single cells do not yield them.
+- **The present markers are rarely seen too:** CD8A in 2–19% of cells, CD4
+  in 3–12%.
+- **Two markers pass all three criteria,** CCL5 (CD8 vs CD4) and PRF1 (NK vs
+  CD8), and both are already in the input space.
+
+**What it means:**
+- Widening the gene space, for the encoder or the correlation term, would
+  add nothing for current single-cell data; Phase 2a's wider panel is
+  dropped.
+- Telling the weak classes apart has to come from patterns across the
+  abundant proteins single cells do yield. Rieckmann's class means over
+  those proteins (the other half of Phase 2a) are the next test.
+
+### 31. Protein class means from sorted cells (Goal 2, Phase 2a feasibility), 2026-10-16
+
+**Why:** entry 30 found that single cells yield only abundant proteins. Do
+class means built from sorted cells' proteomes (Rieckmann 2017, 27
+steady-state populations x 4 donors, mapped to 16 of the reference's classes)
+separate single cells better than v4.1's RNA class means?
+
+**How** (`research/notebooks/rieckmann_feasibility.py`; decision rule in its
+docstring before the run): the correlation term alone (`fusion.masked_pearson`),
+each cell against each class mean over its observed genes, three sets of
+means choosing from the same 16 classes: RNA (v4.1's), RNA over the genes both
+share, protein. Development data: Fulcher 2026 (six author types) and PBMC240
+(lymphoid recall).
+
+**Result** (`research/notebook-outputs/rieckmann_feasibility/`):
+
+| | RNA | RNA, shared genes | Protein |
+|---|---|---|---|
+| Fulcher, balanced accuracy | 75.2 | 75.3 | **79.6** |
+| Fulcher, DC recall | 61.1 | 61.1 | **87.0** |
+| Fulcher, CD8 T recall | 19.3 | 18.8 | 21.6 |
+| Fulcher, monocyte recall | 98.0 | 96.9 | 88.8 |
+| PBMC240, lymphoid recall | 73.5 | 75.2 | **78.6** |
+
+- **The rule set before the run is met** (at least 3 points on Fulcher over
+  both RNA variants, no loss on PBMC240), so a Phase 2a candidate is built.
+- **The gain is the dendritic cells,** the class the RNA reference barely
+  has; CD8 T barely moves, and monocytes lose some cells to DC.
+- **Restricting the choice to 16 classes helps every arm:** the RNA means
+  alone reach 75.2 here, against v4.1's 69.05 for the full fused guess over
+  22 classes. The candidate must keep the classes Rieckmann lacks
+  (macrophage, the progenitors, NK T) without losing this.
+- **Protein means fit protein uploads only,** so the candidate's gates are
+  protein development data, not the RNA simulation suites.
+
+### 32. v4.2: v4.1 with protein class means (Goal 2, Phase 2a), 2026-10-16
+
+**The rule** (`research/notebooks/v42_protein_means.py`; rule and gates in its
+docstring before the run): v4.1's answers and weights, with a hybrid
+correlation term: Rieckmann's protein class means for the 16 classes it has a
+sorted population for, v4.1's RNA means for the other 6 (macrophage, the
+three progenitor classes, mature NK T, the generic monocyte class); the
+upload's agreement gate computed on the hybrid term. Nothing tuned. Scored
+from v4.1's development cache; the self-check reproduces v4.1's committed
+figures to 5e-5 points.
+
+| Development | v4.1 | v4.2 |
+|---|---|---|
+| Fulcher, balanced accuracy (six types) | 69.05 | **75.79** |
+| Fulcher, DC recall | 22.2 | **63.0** |
+| Fulcher, NK / monocyte / CD8 T recall | 90.0 / 97.8 / 23.8 | 92.0 / 95.4 / 23.2 |
+| PBMC240, lymphoid recall | 92.3 | 92.3 |
+| SCoPE2 restricted, published / reprocessed | 38.0 / 33.3 | 38.0 / 33.3 |
+| Fulcher answers, committed / correct | 88.6% / 97.9% | 88.8% / 98.3% |
+| Out-of-reference AUROC | 0.79 | 0.80 |
+
+- **GO on all five gates** set before the run.
+- **The gain is Fulcher's dendritic cells,** where the RNA reference has one
+  myeloid DC. CD8 T does not move.
+- **Only Fulcher's upload uses the term:** its agreement is 0.43 under the
+  hybrid term; PBMC240 (0.27), both SCoPE2 versions (0.08, 0.13) and
+  Furtwangler (0.09) fall below 0.4, so v4.2 answers there exactly as v4.1.
+  The hybrid term agrees less often with v3.1 than the RNA term did.
+- **Fulcher chose v4.1's weight,** so this is development evidence. The held-out
+  protein sets and the sorted cells are the tests.
+
 ---
 
 ## The throughline

@@ -478,6 +478,19 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/v51_labels.py` — v5.1: v5's cleaned labels with the NK T class folded into NK (its cells are NK by markers)
 - `research/notebooks/cd8_cd4_diagnosis.py` — why CD8 T fails on protein data: Khoury's CD8/CD4 clusters on marker proteins (post-hoc), the fine classes our models call them, and where the reference keeps naive CD8 T cells; chooses nothing
 - `research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json` — that diagnosis: Khoury marker detection, effect sizes and AUCs, the models' fine classes, and the reference's markers and naive-CD8-like cells per class
+- `research/notebooks/marker_audit.py` — Goal 2, Phase 1.1: whether single-cell proteomics measures the canonical markers missing from the input space (development data, Rieckmann's sorted bulk, the reference RNA under v5.2's labels); rules fixed in its docstring
+- `research/notebook-outputs/marker_audit/audit.json` — the marker audit's rules, datasets and qualifying markers
+- `research/notebook-outputs/marker_audit/detection.csv` — share of cells with a value, per marker and single-cell dataset
+- `research/notebook-outputs/marker_audit/fulcher_by_type.csv` — the same within each of Fulcher's author types
+- `research/notebook-outputs/marker_audit/rieckmann_pairs.csv` — Rieckmann's log2 fold change per donor for each confused pair, and the donors at two-fold
+- `research/notebook-outputs/marker_audit/reference_auroc.csv` — each marker's AUROC for its pair in the reference RNA, with class sizes and detection
+- `research/notebook-outputs/marker_audit/verdicts.csv` — the three criteria per marker and whether it qualifies
+- `research/notebooks/rieckmann_feasibility.py` — Goal 2, Phase 2a feasibility: the correlation term with Rieckmann's sorted-population protein means against the reference's RNA class means, on Fulcher and PBMC240; decision rule fixed in its docstring
+- `research/notebook-outputs/rieckmann_feasibility/summary.json` — that check's scores, classes covered, proteins and decision
+- `research/notebook-outputs/rieckmann_feasibility/per_type.csv` — its per-type recall on Fulcher for each set of means
+- `research/notebooks/v42_protein_means.py` — Goal 2, Phase 2a: candidate v4.2, v4.1's rule with Rieckmann's protein class means in the correlation term, scored on development data from v4.1's cache with gates fixed in its docstring
+- `research/notebook-outputs/v42_protein_means/summary.json` — v4.2 against v4.1: development figures, Fulcher answers, upload agreement, the five gates
+- `research/notebook-outputs/v42_protein_means/guesses.csv.gz` — each development cell's best guess under v4.1 and v4.2, which the service's v4.2 gate must reproduce
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell

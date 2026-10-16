@@ -1,0 +1,84 @@
+{
+  "rule": "v4.1 with hybrid R: protein class means (Rieckmann) for the classes it covers, RNA otherwise",
+  "rna_correlation_classes": [
+    "common myeloid progenitor",
+    "hematopoietic precursor cell",
+    "hematopoietic stem cell",
+    "macrophage",
+    "mature nk t cell",
+    "monocyte"
+  ],
+  "self_check_max_gap": 4.626329245382976e-05,
+  "figures": {
+    "v4.1": {
+      "fulcher": 69.04881566620614,
+      "fulcher_CD4T": 82.46753246753246,
+      "fulcher_CD8T": 23.756906077348066,
+      "fulcher_NK": 90.0,
+      "fulcher_B": 98.0392156862745,
+      "fulcher_monocyte": 97.80701754385966,
+      "fulcher_DC": 22.22222222222222,
+      "pbmc240_lymphoid": 92.3076923076923,
+      "scope2_unrestricted": 0.0,
+      "scope2_restricted": 37.972646263292454,
+      "scope2_reprocessed_unrestricted": 5.523560619102021,
+      "scope2_reprocessed_restricted": 33.30059938340193,
+      "auroc": 0.7897766928000249
+    },
+    "v4.2": {
+      "fulcher": 75.78636974962144,
+      "fulcher_CD4T": 83.11688311688312,
+      "fulcher_CD8T": 23.204419889502763,
+      "fulcher_NK": 92.0,
+      "fulcher_B": 98.0392156862745,
+      "fulcher_monocyte": 95.39473684210526,
+      "fulcher_DC": 62.96296296296296,
+      "pbmc240_lymphoid": 92.3076923076923,
+      "scope2_unrestricted": 0.0,
+      "scope2_restricted": 37.972646263292454,
+      "scope2_reprocessed_unrestricted": 5.523560619102021,
+      "scope2_reprocessed_restricted": 33.30059938340193,
+      "auroc": 0.7963447725458899
+    }
+  },
+  "fulcher_answers": {
+    "v4.1": {
+      "committed": 88.56914468425259,
+      "correct_when_committed": 97.92418772563177
+    },
+    "v4.2": {
+      "committed": 88.80895283772982,
+      "correct_when_committed": 98.28982898289829
+    }
+  },
+  "upload_agreement": {
+    "fulcher2026": {
+      "v4.1": 0.42274509803921567,
+      "v4.2": 0.4345098039215686
+    },
+    "pbmc240": {
+      "v4.1": 0.3670886075949367,
+      "v4.2": 0.2742616033755274
+    },
+    "scope2": {
+      "v4.1": 0.17114093959731544,
+      "v4.2": 0.07785234899328859
+    },
+    "scope2_reprocessed": {
+      "v4.1": 0.16489361702127658,
+      "v4.2": 0.13386524822695037
+    },
+    "furtwangler2025": {
+      "v4.1": 0.1779728651237031,
+      "v4.2": 0.09377494014365523
+    }
+  },
+  "checks": {
+    "1_fulcher_plus_2": true,
+    "2_pbmc240_minus_1": true,
+    "3_scope2_minus_2": true,
+    "4_answers": true,
+    "5_auroc_minus_0.03": true
+  },
+  "go": true
+}

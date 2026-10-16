@@ -1,0 +1,55 @@
+{
+  "classes_with_a_population": [
+    "b cell",
+    "basophil",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "erythrocyte",
+    "intermediate monocyte",
+    "myeloid dendritic cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "plasma cell",
+    "plasmacytoid dendritic cell",
+    "platelet",
+    "regulatory t cell"
+  ],
+  "proteins": 15314,
+  "shared_with_feature_space": 7996,
+  "results": {
+    "Fulcher 2026": {
+      "metric": "balanced accuracy, six types",
+      "scores": {
+        "RNA": 75.15,
+        "RNA, shared genes": 75.32,
+        "protein": 79.57
+      },
+      "median_genes_observed": {
+        "RNA": 773,
+        "RNA, shared genes": 725,
+        "protein": 725
+      }
+    },
+    "PBMC240": {
+      "metric": "lymphoid recall",
+      "n": 117,
+      "scores": {
+        "RNA": 73.5,
+        "RNA, shared genes": 75.21,
+        "protein": 78.63
+      },
+      "median_genes_observed": {
+        "RNA": 1069,
+        "RNA, shared genes": 1005,
+        "protein": 1005
+      }
+    }
+  },
+  "decision": {
+    "rule": "protein beats both RNA variants by >= 3.0 points on Fulcher and loses <= 2.0 on PBMC240",
+    "build_candidate": true
+  }
+}

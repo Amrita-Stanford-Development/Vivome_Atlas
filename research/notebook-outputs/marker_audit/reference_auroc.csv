@@ -1,0 +1,63 @@
+pair,marker,in_reference,n_high,n_low,auroc,detected_high_pct,detected_low_pct
+CD8 T vs CD4 T,CD8A,True,3263,4905,0.807,63.2,2.7
+CD8 T vs CD4 T,CD8B,True,3263,4905,0.777,56.8,2.1
+CD8 T vs CD4 T,CD4,True,3263,4905,0.271,2.5,48.3
+CD8 T vs CD4 T,CD40LG,True,3263,4905,0.387,3.7,26.3
+CD8 T vs CD4 T,GZMK,True,3263,4905,0.608,27.9,6.6
+CD8 T vs CD4 T,GZMH,True,3263,4905,0.701,45.0,5.1
+CD8 T vs CD4 T,CCL5,True,3263,4905,0.831,77.7,20.8
+CD8 T vs CD4 T,KLRG1,True,3263,4905,0.652,50.2,24.4
+naive vs memory T,CCR7,True,459,4406,0.675,86.3,51.1
+naive vs memory T,SELL,True,459,4406,0.504,78.0,67.1
+naive vs memory T,LEF1,True,459,4406,0.605,90.6,75.1
+naive vs memory T,TCF7,True,459,4406,0.587,88.0,71.7
+naive vs memory T,S100A4,True,459,4406,0.463,93.5,82.2
+naive vs memory T,ANXA1,True,459,4406,0.45,53.4,57.6
+naive vs memory T,IL7R,True,459,4406,0.526,97.2,89.9
+naive vs memory T,CD27,True,459,4406,0.477,49.7,49.5
+naive vs memory T,CD28,True,459,4406,0.581,74.3,61.5
+NK vs CD8 T,GNLY,True,5093,3263,0.777,99.0,64.3
+NK vs CD8 T,NKG7,True,5093,3263,0.789,99.6,79.1
+NK vs CD8 T,KLRD1,True,5093,3263,0.729,98.8,70.1
+NK vs CD8 T,KLRF1,True,5093,3263,0.84,94.1,37.1
+NK vs CD8 T,NCAM1,True,5093,3263,0.689,61.4,25.4
+NK vs CD8 T,FCGR3A,True,5093,3263,0.784,84.4,37.2
+NK vs CD8 T,PRF1,True,5093,3263,0.765,96.2,67.1
+NK vs CD8 T,GZMB,True,5093,3263,0.766,93.7,55.8
+NK vs CD8 T,CD3D,True,5093,3263,0.17,4.6,69.4
+NK vs CD8 T,CD3E,True,5093,3263,0.167,31.6,88.5
+NK vs CD8 T,CD247,True,5093,3263,0.819,98.6,90.8
+myeloid DC vs monocyte,CD1C,True,1,21229,0.483,0.0,3.5
+myeloid DC vs monocyte,CLEC10A,True,1,21229,0.472,0.0,5.6
+myeloid DC vs monocyte,FCER1A,True,1,21229,0.498,0.0,0.4
+myeloid DC vs monocyte,CLEC9A,True,1,21229,0.498,0.0,0.3
+myeloid DC vs monocyte,IRF8,True,1,21229,0.219,0.0,56.3
+myeloid DC vs monocyte,HLA-DQA1,True,1,21229,0.477,0.0,4.7
+myeloid DC vs monocyte,CD74,True,1,21229,0.031,0.0,93.7
+myeloid DC vs monocyte,CD14,True,1,21229,0.133,100.0,89.3
+myeloid DC vs monocyte,LYZ,True,1,21229,0.013,100.0,99.5
+myeloid DC vs monocyte,S100A8,True,1,21229,0.148,100.0,99.5
+myeloid DC vs monocyte,FCN1,True,1,21229,0.012,0.0,97.6
+plasmacytoid DC vs others,LILRA4,True,29,24086,0.774,55.2,0.7
+plasmacytoid DC vs others,CLEC4C,True,29,24086,0.758,51.7,0.4
+plasmacytoid DC vs others,IL3RA,True,29,24086,0.5,0.0,0.0
+plasmacytoid DC vs others,TCF4,True,29,24086,0.804,93.1,61.9
+plasmacytoid DC vs others,PLD4,True,29,24086,0.893,79.3,1.8
+plasmacytoid DC vs others,IRF7,True,29,24086,0.813,75.9,21.5
+plasmacytoid DC vs others,IRF8,True,29,24086,0.814,86.2,60.1
+B vs T,CD79A,True,3893,7669,0.988,97.7,2.8
+B vs T,CD79B,True,3893,7669,0.924,88.5,12.8
+B vs T,MS4A1,True,3893,7669,0.975,95.2,1.2
+B vs T,CD19,True,3893,7669,0.671,34.3,0.2
+B vs T,PAX5,True,3893,7669,0.927,85.5,0.7
+B vs T,CD22,True,3893,7669,0.857,71.5,0.4
+B vs T,BLK,True,3893,7669,0.935,87.7,2.3
+macrophage vs monocyte,CD68,True,1228,20193,0.452,25.6,37.2
+macrophage vs monocyte,CD163,True,1228,20193,0.452,87.1,95.4
+macrophage vs monocyte,MRC1,True,1228,20193,0.536,17.1,10.2
+macrophage vs monocyte,APOE,True,1228,20193,0.501,0.2,0.1
+macrophage vs monocyte,C1QA,True,1228,20193,0.562,20.6,8.8
+macrophage vs monocyte,MARCO,True,1228,20193,0.475,24.5,31.2
+macrophage vs monocyte,CD14,True,1228,20193,0.339,60.4,88.9
+macrophage vs monocyte,VCAN,True,1228,20193,0.398,92.0,99.4
+macrophage vs monocyte,FCN1,True,1228,20193,0.299,84.5,97.5

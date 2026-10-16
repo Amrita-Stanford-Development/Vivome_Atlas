@@ -1,0 +1,54 @@
+{
+  "run": "2026-10-16T10:16:19",
+  "rules": {
+    "min_detected_pct": 30.0,
+    "min_donors_2fold": 3,
+    "min_auroc": 0.75
+  },
+  "datasets": {
+    "Fulcher 2026": {
+      "cells": 1275,
+      "proteins": 1661
+    },
+    "PBMC240": {
+      "cells": 238,
+      "proteins": 3098
+    },
+    "Furtwangler 2025": {
+      "cells": 2506,
+      "proteins": 2934
+    },
+    "DS18 FAIMS Astral-Zoom": {
+      "cells": 91,
+      "proteins": 3075
+    },
+    "DS18 FAIMS Astral": {
+      "cells": 89,
+      "proteins": 2505
+    },
+    "DS18 Standard Astral": {
+      "cells": 88,
+      "proteins": 1801
+    },
+    "DS19": {
+      "cells": 81,
+      "proteins": 4277
+    }
+  },
+  "reference_labels": {
+    "file": "research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz",
+    "sha256": "123c05eb84d6ff502ba121a97b3a123eaddd08ac01c46647381ce7aa78160280"
+  },
+  "qualifying": [
+    {
+      "pair": "CD8 T vs CD4 T",
+      "marker": "CCL5",
+      "in_feature_space": true
+    },
+    {
+      "pair": "NK vs CD8 T",
+      "marker": "PRF1",
+      "in_feature_space": true
+    }
+  ]
+}
