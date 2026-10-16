@@ -389,7 +389,7 @@ export function answer(el, ctx) {
       for (const [list, kind] of [[names, 'class'], [groups, 'group'], [lineages, 'lineage']]) {
         list.forEach((k) => text(g, kind === 'class' ? short(k) : k, pos[k][0], pos[k][1] + 4, { size: kind === 'class' ? 9.5 : 11, colour: hot(kind, k) ? ACCENT : INK, weight: hot(kind, k) ? 600 : 400, max: kind === 'class' ? 98 : 110 }));
       }
-      if (!cell.level) chip(g, `no answer: ${OUTCOME_LABELS[cell.outcome]}`, width - 8, height - 18, { size: 11.5, align: 'right', border: INK });
+      if (!cell.level) chip(g, ctx.answerShort(cell), width - 8, height - 18, { size: 11.5, align: 'right', border: INK });
       g.restore();
     }
     const four = phase(p, 0.76, 0.82);
@@ -483,7 +483,7 @@ export function landing(el, ctx) {
         });
       }
       dot(g, me.x, me.y - (1 - fly) * 120, 7, PROT, 1, INK);
-      chip(g, ctx.answerText(ctx.cell(state)), me.x + 12, me.y - (1 - fly) * 120 - 14, { size: 11, opacity: fly, border: ACCENT });
+      chip(g, ctx.answerShort(ctx.cell(state)), me.x + 12, me.y - (1 - fly) * 120 - 14, { size: 11, opacity: fly, border: ACCENT });
       if (own && fly > 0.9) {
         const props = Object.entries(detail.response.properties ?? {});
         props.forEach(([name, v], k) => text(g, `${name.replace(/_/g, ' ')}: ${v.value.toFixed(2)} ± ${v.uncertainty.toFixed(2)}`, 8, height - 8 - (props.length - 1 - k) * 15, { size: 10.5, colour: SOFT }));

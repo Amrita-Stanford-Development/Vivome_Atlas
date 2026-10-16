@@ -179,3 +179,27 @@ export function fitSphere(points) {
   const radius = Math.max(1e-9, ...points.map((p) => Math.hypot(p[0] - centre[0], p[1] - centre[1], p[2] - centre[2])));
   return { centre, radius };
 }
+
+// The area two circles share: radii r1 and r2, centres d apart.
+export function lensArea(r1, r2, d) {
+  if (d >= r1 + r2) return 0;
+  if (d <= Math.abs(r1 - r2)) return Math.PI * Math.min(r1, r2) ** 2;
+  const a = r1 * r1 * Math.acos((d * d + r1 * r1 - r2 * r2) / (2 * d * r1));
+  const b = r2 * r2 * Math.acos((d * d + r2 * r2 - r1 * r1) / (2 * d * r2));
+  const c = 0.5 * Math.sqrt((-d + r1 + r2) * (d + r1 - r2) * (d - r1 + r2) * (d + r1 + r2));
+  return a + b - c;
+}
+
+// The centre distance at which two circles share `area` (bisection; the
+// shared area shrinks as the circles move apart).
+export function distanceForOverlap(r1, r2, area) {
+  let lo = Math.abs(r1 - r2);
+  let hi = r1 + r2;
+  if (area >= lensArea(r1, r2, lo)) return lo;
+  if (area <= 0) return hi;
+  for (let k = 0; k < 60; k += 1) {
+    const mid = (lo + hi) / 2;
+    if (lensArea(r1, r2, mid) > area) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}

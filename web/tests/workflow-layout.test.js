@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  RESERVED, colourDistance, depthOrder, diverging, histogramBars, linear, pickNearest, project, radialAngles, rocSnap,
-  rotate, sankey, sequential, ticks,
+  RESERVED, colourDistance, depthOrder, distanceForOverlap, diverging, histogramBars, lensArea, linear, pickNearest, project,
+  radialAngles, rocSnap, rotate, sankey, sequential, ticks,
 } from '../js/workflow-layout.js';
 import { heatmapSvg, HATCH_ID, rocSvg, upsetSvg } from '../js/workflow-svg.js';
 
@@ -83,4 +83,14 @@ test('the static figures hatch missing values and escape their labels', () => {
   assert.match(rocSvg([[0, 0], [1, 1]], { auroc: '0.67' }), /AUROC 0\.67/);
   const upset = upsetSvg([{ sources: '101', genes: 5 }], ['<i>a</i>', 'b', 'c']);
   assert.ok(upset.includes('&lt;i&gt;a&lt;/i&gt;'));
+});
+
+test('two circles are placed so they share the area asked for', () => {
+  assert.ok(Math.abs(lensArea(1, 1, 0) - Math.PI) < 1e-12);
+  assert.equal(lensArea(1, 1, 2), 0);
+  for (const [r1, r2, share] of [[3, 1, 0.97], [2, 2, 0.5], [5, 1.5, 0.1]]) {
+    const area = share * Math.PI * Math.min(r1, r2) ** 2;
+    const d = distanceForOverlap(r1, r2, area);
+    assert.ok(Math.abs(lensArea(r1, r2, d) - area) < 1e-6, `${r1}, ${r2}, ${share}`);
+  }
 });

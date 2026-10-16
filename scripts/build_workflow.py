@@ -65,6 +65,7 @@ SERVICE_CONFIG = REPO / "service" / "config.py"
 PROJECT_PAGE = REPO / "web" / "project.html"
 
 SCHEMA_VERSION = "1"
+READING_STAGES = ("parse", "scale", "collapse", "ids", "align")
 SIZE_BUDGET = 900_000  # bytes; scripts/test_build_workflow.py enforces it
 SAMPLE_POINTS, SAMPLE_FLOOR, SAMPLE_SEED = 6000, 60, 0
 GENE_SOURCES = (  # feature_space_detail.csv's columns, as the page names them
@@ -454,10 +455,12 @@ def build(manifest: dict | None = None) -> dict:
         "reference": reference(trace["class_order"], trace["hierarchy"]),
         "class_order": trace["class_order"],
         "gene_space": gene_space(trace),
-        "raw": {"pbmc240": {k: trace["stages"][k] for k in ("parse", "scale", "collapse", "ids", "align")},
+        "raw": {"pbmc240": {k: trace["stages"][k] for k in READING_STAGES},
                 "snippets": snippets},
         "training": training(trace),
-        "trace": {k: trace[k] for k in ("stages", "outcomes", "cells", "story", "detail", "heatmap")},
+        # The file-reading stages are under raw.pbmc240; the rest of the trace here.
+        "trace": {"stages": {k: v for k, v in trace["stages"].items() if k not in READING_STAGES},
+                  **{k: trace[k] for k in ("outcomes", "cells", "story", "detail", "heatmap")}},
         "evaluation": evaluation(),
         "service": service(),
     }

@@ -256,6 +256,7 @@ def main() -> None:
             "xyz": [r4(x) for x in cell["coordinates"]],
             "top": [[int(c), r4(all_class_probs[i, c])] for c in top],
             "counted": bool(counted[i]), "agrees": bool(agreeing[i]) if counted[i] else None,
+            "observed_raw": int(observed_raw[:, i].sum()),
             "layout": [r4(projected[i, 0]), r4(projected[i, 1])],
         })
     outcomes = Counter(row["outcome"] for row in rows)
@@ -282,6 +283,8 @@ def main() -> None:
         detail.append({
             "cell": i, "id": cells[i]["cell_id"],
             "raw_row": raw_row,
+            # Every amount the file holds for this cell, as written (before log2), rounded, smallest first.
+            "observed_values": sorted(int(round(float(v))) for v in raw.values[:, i] if not np.isnan(v)),
             "members": [{"name": m.name, "temperature": r4(m.temperature),
                          "cosine": [r4(x) for x in smoothed_z[j][i] @ m.centroids.T],
                          "probability": [r4(x) for x in answer_member_p[j][i]]}
@@ -354,6 +357,11 @@ def main() -> None:
                       "annotation_columns": annotation, "identifier_column": "Genes",
                       "header_examples": [[h, alignment._clean_dia_nn_cell_id(h)] for h in run_headers[:4]],
                       "missing_share": r4(1 - observed_raw.mean()),
+                      # The whole file's seen-or-not pattern, for drawing it: rows sorted
+                      # by how many cells see them, most first (ties in file order).
+                      "presence": {"rows": int(observed_raw.shape[0]), "cols": int(observed_raw.shape[1]),
+                                   "order": "rows by the number of cells that see them, most first; columns in file order",
+                                   "bits": bits(observed_raw[np.argsort(-observed_raw.sum(axis=1), kind="stable")].ravel())},
                       "proteins_per_run": histogram(observed_per_cell, np.arange(0, observed_per_cell.max() + 200, 200)),
                       "runs_per_protein": histogram(observed_per_protein, np.linspace(0, 1, 11))},
             "scale": {"detected": value_scale.detected, "transformed": value_scale.transformed,

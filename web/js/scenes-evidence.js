@@ -39,127 +39,192 @@ const box = (g, x, y, w, h, label, { colour = INK, fill = '#FFFFFF', opacity = 1
   text(g, label, x + w / 2, y + h / 2 + 4, { size, colour, align: 'center', opacity, max: w - 10 });
 };
 
-// ---- 4: trained on RNA only ----
+// ---- 4: how VivOME learns ----
+// Beat 1: the example cells, scattered at first, pull together by type over
+// the training rounds; the end is the real map (the start and the path are
+// drawn, and say so). Beat 2: practising with gaps, and mixes like real
+// files. Beat 3: five learners, averaged. Beat 4: the three designs compared,
+// and the training repeated here.
+
+const DESIGNS = { // the designs' names, in plain words
+  'H module, uniform': 'Groups of genes, random gaps',
+  'F2 module, profile': 'Groups of genes, gaps like real files',
+  'C mask channel, uniform': 'Genes one by one, random gaps',
+};
 
 export function training(el, ctx) {
   const w = ctx.workflow;
   const t = w.training;
   const classes = w.reference.classes;
   const counts = classes.map((c) => c.cells.value);
+  const epochs = t.recipe.epochs.value;
+  const pts = w.reference.sample.slice(0, 900);
+  const xs = pts.map((q) => q[0]);
+  const ys = pts.map((q) => q[1]);
+  const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const r0 = rng(31);
+  const start = pts.map(() => [r0(), r0()]);
+  const fit = (bw, bh, ox, oy) => {
+    const s = Math.min(bw / (x1 - x0), bh / (y1 - y0));
+    return (q) => [ox + (bw - (x1 - x0) * s) / 2 + (q[0] - x0) * s, oy + (bh - (y1 - y0) * s) / 2 + (y1 - q[1]) * s];
+  };
   return scene(el, ({ g, width, height }, p) => {
+    // Beat 1: learning by example.
     const one = 1 - phase(p, 0.23, 0.28);
     if (one > 0) {
       g.save();
       g.globalAlpha = one;
-      const appear = phase(p, 0, 0.18);
-      box(g, 12, height * 0.3, width * 0.26, 56, 'RNA reference, labelled', { colour: RNA });
-      box(g, 12, height * 0.62, width * 0.26, 56, 'protein labels: not used', { colour: '#9AA6AF', fill: BENCH });
-      const members = t.members;
-      members.forEach((m, k) => {
-        const y = 30 + k * ((height - 60) / members.length);
-        const x = width * 0.62;
-        const a = clamp(appear * members.length - k, 0, 1);
-        line(g, 12 + width * 0.26, height * 0.3 + 28, lerp(12 + width * 0.26, x, a), y + 20, { colour: RNA, opacity: 0.5 });
-        box(g, x, y, width * 0.34, 40, `encoder, seed ${k}`, { colour: ACCENT, opacity: a });
+      const learn = phase(p, 0.03, 0.21);
+      const round = Math.max(1, Math.round(epochs * learn));
+      text(g, 'Learning by example', 12, 22, { size: 12, weight: 600, colour: INK });
+      chip(g, `round ${round} of up to ${epochs}`, width - 12, 20, { size: 11, align: 'right', border: ACCENT, colour: ACCENT });
+      const map = fit(width - 24, height - 92, 12, 40);
+      pts.forEach((q, i) => {
+        const [mx, my] = map(q);
+        const sx = 12 + start[i][0] * (width - 24);
+        const sy = 40 + start[i][1] * (height - 92);
+        const e = learn * learn * (3 - 2 * learn);
+        dot(g, lerp(sx, mx, e), lerp(sy, my, e), 2.2, ctx.classColour(q[3]), 0.8);
       });
+      text(g, 'Each dot is an example cell, coloured by its type. The end is the real map from step 1;', 12, height - 44, { size: 10, colour: FAINT, max: width - 24 });
+      text(g, 'the scattered start and the path in between are drawn to show the idea.', 12, height - 30, { size: 10, colour: FAINT, max: width - 24 });
+      text(g, 'No protein labels: only the named RNA examples.', 12, height - 14, { size: 10, colour: RNA, max: width - 24 });
       g.restore();
     }
+
+    // Beat 2: practising with gaps, in mixes like real files.
     const two = phase(p, 0.23, 0.28) * (1 - phase(p, 0.48, 0.53));
     if (two > 0) {
       g.save();
       g.globalAlpha = two;
-      const kSel = Number(ctx.options('training').classes ?? 0);
-      const r = rng(7 + kSel);
-      const total = counts.reduce((s, v) => s + v, 0);
+      const r = rng(7);
+      const genes = 64;
       const bw = width - 24;
-      text(g, 'The reference’s natural mix', 12, 18, { size: 11, colour: INK, weight: 600 });
-      let x = 12;
-      counts.forEach((v, i) => { bar(g, x, 26, (v / total) * bw, 18, ctx.classColour(i), 0); x += (v / total) * bw; });
-      const label = kSel === 0 ? 'A batch kept natural' : `A batch of ${kSel} type${kSel === 1 ? '' : 's'}, random proportions`;
-      text(g, `${label} (illustration)`, 12, 70, { size: 11, colour: INK, weight: 600 });
-      let parts;
-      if (kSel === 0) parts = counts.map((v, i) => [i, v / total]);
-      else {
-        const order = [...classes.keys()];
-        for (let k = order.length - 1; k > 0; k -= 1) { const j = Math.floor(r() * (k + 1)); [order[k], order[j]] = [order[j], order[k]]; }
-        const picked = order.slice(0, kSel);
-        const weights = picked.map(() => -Math.log(1 - r() * 0.999));
-        const sum = weights.reduce((s, v) => s + v, 0);
-        parts = picked.map((i, k) => [i, weights[k] / sum]);
-      }
-      x = 12;
-      parts.forEach(([i, share]) => { bar(g, x, 78, share * bw * phase(p, 0.28, 0.36), 18, ctx.classColour(i), 0); x += share * bw * phase(p, 0.28, 0.36); });
-      // Two masked views of one cell's genes.
-      const genes = 96;
+      const gw = bw / genes;
       const lo = t.recipe.coverage_low.value;
       const hi = t.recipe.coverage_high.value;
-      const views = [lo + (hi - lo) * r(), lo + (hi - lo) * r()];
-      const gw = bw / genes;
-      text(g, `Two masked views: each keeps a random ${formatRecord(t.recipe.coverage_low)} to ${formatRecord(t.recipe.coverage_high)} of genes (illustration)`, 12, 128, { size: 11, colour: INK, weight: 600, max: bw });
-      const mask = phase(p, 0.36, 0.46);
-      views.forEach((keep, v) => {
-        const y = 148 + v * 64;
-        text(g, `view ${v + 1}: about ${Math.round(keep * 100)}% kept`, 12, y - 4, { size: 10, colour: FAINT });
+      text(g, 'Practising with gaps', 12, 22, { size: 12, weight: 600, colour: INK });
+      text(g, 'One example cell\u2019s genes, as the learner sees them in practice:', 12, 46, { size: 10.5, colour: SOFT, max: bw });
+      const hide = phase(p, 0.28, 0.38);
+      [lo, (lo + hi) / 2, hi].forEach((keep, v) => {
+        const y = 58 + v * 46;
         for (let k = 0; k < genes; k += 1) {
-          const kept = r() < keep || mask === 0;
-          bar(g, 12 + k * gw, y + 2, gw - 1, 36, kept ? alpha(ACCENT, 0.45 + 0.45 * ((k * 13) % 7) / 7) : '#E3E7EB', 1);
+          const shown = hide === 0 || r() < keep;
+          bar(g, 12 + k * gw, y, gw - 1, 26, shown ? alpha(ACCENT, 0.5 + 0.4 * ((k * 13) % 7) / 7) : '#E3E7EB', 1);
         }
+        text(g, `${Math.round(keep * 100)}% shown`, 12 + bw, y + 40, { size: 10, colour: FAINT, align: 'right', opacity: hide });
       });
+      const mixY = 58 + 3 * 46 + 22;
+      const kSel = Number(ctx.options('training').classes ?? 0);
+      const rm = rng(7 + kSel);
+      const total = counts.reduce((s, v) => s + v, 0);
+      text(g, 'Cells come in mixes like real files:', 12, mixY, { size: 10.5, colour: SOFT });
+      text(g, 'the natural mix', 12, mixY + 22, { size: 10, colour: INK });
+      let x = 110;
+      counts.forEach((v, i) => { bar(g, x, mixY + 10, (v / total) * (bw - 98), 16, ctx.classColour(i), 0); x += (v / total) * (bw - 98); });
+      text(g, kSel === 0 ? 'or one mix of 1 to 8 kinds' : `or ${kSel} kind${kSel === 1 ? '' : 's'} only`, 12, mixY + 52, { size: 10, colour: INK });
+      const mix = phase(p, 0.36, 0.46);
+      if (kSel > 0) {
+        const order = [...classes.keys()];
+        for (let k = order.length - 1; k > 0; k -= 1) { const j = Math.floor(rm() * (k + 1)); [order[k], order[j]] = [order[j], order[k]]; }
+        const picked = order.slice(0, kSel);
+        const weights = picked.map(() => -Math.log(1 - rm() * 0.999));
+        const sum = weights.reduce((s, v) => s + v, 0);
+        x = 110;
+        picked.forEach((i, k) => { const wd = (weights[k] / sum) * (bw - 98) * mix; bar(g, x, mixY + 40, wd, 16, ctx.classColour(i), 0); x += wd; });
+      } else {
+        text(g, '(pick a mix with the buttons below)', 12, mixY + 68, { size: 10, colour: FAINT, opacity: mix });
+      }
+      text(g, 'Gaps and mixes are drawn at random, as in training.', 12, height - 12, { size: 10, colour: FAINT, max: bw });
       g.restore();
     }
+
+    // Beat 3: five learners, averaged.
     const three = phase(p, 0.48, 0.53) * (1 - phase(p, 0.73, 0.78));
     if (three > 0) {
       g.save();
       g.globalAlpha = three;
-      const s = phase(p, 0.52, 0.72);
-      const cx = width / 2;
-      const cy = height / 2 + 6;
-      const R = Math.min(width, height) * 0.32;
-      const r = rng(11);
-      const groups = [[0, ctx.classColour(2)], [2.1, ctx.classColour(15)], [4.2, ctx.classColour(12)]];
-      groups.forEach(([angle, colour]) => {
-        const tx = cx + Math.cos(angle) * R * 0.7;
-        const ty = cy + Math.sin(angle) * R * 0.7;
-        for (let k = 0; k < 14; k += 1) {
-          const sx = cx + (r() - 0.5) * R * 1.8;
-          const sy = cy + (r() - 0.5) * R * 1.8;
-          const jx = (r() - 0.5) * 22;
-          const jy = (r() - 0.5) * 22;
-          dot(g, lerp(sx, tx + jx, s), lerp(sy, ty + jy, s), 4, colour, 0.85);
-        }
+      text(g, `${t.members.length} learners instead of one`, 12, 22, { size: 12, weight: 600, colour: INK });
+      const n = t.members.length;
+      const gap = 10;
+      const cw = (width - 24 - gap * (n - 1)) / n;
+      const ch = Math.min(cw * 1.7, height * 0.52);
+      t.members.forEach((m, k) => {
+        const x = 12 + k * (cw + gap);
+        const y = 42;
+        const appear = clamp(phase(p, 0.52, 0.62) * n - k, 0, 1);
+        g.globalAlpha = three * appear;
+        g.fillStyle = '#FFFFFF';
+        roundRect(g, x, y, cw, ch, 10);
+        g.fill();
+        g.strokeStyle = LINE;
+        g.stroke();
+        // Each learner's map differs a little: drawn here as a small turn of the same map.
+        const turn = (k - (n - 1) / 2) * 0.12;
+        const map = fit(cw - 16, ch - 34, x + 8, y + 8);
+        const [mx, my] = [x + cw / 2, y + (ch - 26) / 2 + 8];
+        pts.slice(0, 300).forEach((q) => {
+          const [px, py] = map(q);
+          const [dx, dy] = [px - mx, py - my];
+          dot(g, mx + dx * Math.cos(turn) - dy * Math.sin(turn), my + dx * Math.sin(turn) + dy * Math.cos(turn), 1.3, ctx.classColour(q[3]), 0.75);
+        });
+        text(g, `learner ${k + 1}`, x + cw / 2, y + ch - 10, { size: 10.5, colour: INK, align: 'center' });
+        g.globalAlpha = three;
       });
-      text(g, 'Four forces (illustration, no data)', 12, 18, { size: 11.5, colour: INK, weight: 600 });
-      ['each cell toward its type', 'cells of a type together', 'no point everyone’s neighbour', 'a cell’s two views together']
-        .forEach((f, k) => chip(g, f, 12, 44 + k * 28, { size: 10.5, opacity: clamp(s * 4 - k, 0, 1) }));
+      const avg = phase(p, 0.62, 0.7);
+      const ay = 42 + ch + 50;
+      t.members.forEach((m, k) => {
+        const x = 12 + k * (cw + gap) + cw / 2;
+        line(g, x, 42 + ch + 4, lerp(x, width / 2, avg), lerp(42 + ch + 4, ay - 8, avg), { colour: ACCENT, width: 1.4, opacity: avg });
+      });
+      if (avg > 0) {
+        chip(g, 'their views are averaged into one (step 9)', width / 2, ay + 6, { size: 12, align: 'center', border: ACCENT, colour: ACCENT, opacity: avg });
+        text(g, 'Same training, different random starts; the small differences between the maps are drawn to show the idea.', width / 2, ay + 44,
+          { size: 10, colour: FAINT, align: 'center', opacity: avg, max: width - 24 });
+      }
       g.restore();
     }
+
+    // Beat 4: the designs compared, and the training repeated.
     const four = phase(p, 0.76, 0.82);
     if (four > 0) {
       g.save();
       g.globalAlpha = four;
       const cands = t.encoder_choice.candidates;
-      const bw = width - 230;
-      const vals = cands.map((c) => c.balanced_accuracy.value);
-      const lo = Math.min(...vals.map((v, k) => v - cands[k].seed_sd.value)) - 0.02;
-      const hi = Math.max(...vals.map((v, k) => v + cands[k].seed_sd.value)) + 0.02;
-      const x = (v) => 220 + ((v - lo) / (hi - lo)) * bw;
-      text(g, `The encoder choice: balanced accuracy over ${formatRecord(t.encoder_choice.seeds)} seeds, ± 1 SD`, 12, 18, { size: 11.5, colour: INK, weight: 600, max: width - 24 });
+      text(g, `Three designs, each trained ${formatRecord(t.encoder_choice.seeds)} times: test cells named correctly`, 12, 22, { size: 12, weight: 600, colour: INK, max: width - 24 });
+      text(g, 'with most genes hidden; every type counted equally; the line shows the spread over the repeats', 12, 40, { size: 10, colour: FAINT, max: width - 24 });
+      const labelW = Math.min(250, width * 0.42);
+      const bw = width - labelW - 70;
+      const grow = phase(p, 0.8, 0.9);
       cands.forEach((c, k) => {
-        const y = 50 + k * 40;
-        text(g, c.name, 210, y + 4, { size: 11, align: 'right', colour: INK, max: 200 });
-        line(g, x(c.balanced_accuracy.value - c.seed_sd.value), y, x(c.balanced_accuracy.value + c.seed_sd.value), y, { colour: INK, width: 1.5 });
-        dot(g, x(c.balanced_accuracy.value), y, 6, k === 0 ? ACCENT : '#9AA6AF');
-        text(g, formatRecord(c.balanced_accuracy), x(c.balanced_accuracy.value), y - 10, { size: 10, colour: FAINT, align: 'center' });
+        const y = 66 + k * 46;
+        const v = c.balanced_accuracy.value;
+        const sd = c.seed_sd.value;
+        const chosen = k === 0;
+        text(g, DESIGNS[c.name] ?? c.name, labelW, y + 14, { size: 11, align: 'right', colour: chosen ? ACCENT : INK, weight: chosen ? 600 : 400, max: labelW - 8 });
+        bar(g, labelW + 10, y, bw * v * grow, 22, chosen ? ACCENT : '#AEB9C2', 3);
+        line(g, labelW + 10 + bw * (v - sd) * grow, y + 11, labelW + 10 + bw * (v + sd) * grow, y + 11, { colour: INK, width: 1.4, opacity: grow });
+        text(g, formatRecord(c.balanced_accuracy), labelW + 16 + bw * (v + sd) * grow, y + 15, { size: 11, colour: INK, opacity: grow });
       });
-      const y = 50 + cands.length * 40 + 20;
-      text(g, `Reproduced: seed ${t.reproduction.seed} retrained here, validation loss ${formatRecord(t.reproduction.retrained_loss)} against the served ${formatRecord(t.reproduction.recorded_loss)}`, 12, y, { size: 11, colour: INK, max: width - 24 });
-      text(g, `Training curves: ${isMeasured(t.history) ? '' : 'Pending, not in this repository'}`, 12, y + 20, { size: 10.5, colour: FAINT });
-      text(g, 'The five members and their softmax temperatures (answers / best guess)', 12, y + 56, { size: 11, colour: INK, weight: 600 });
-      t.members.forEach((m, k) => chip(g, `seed ${k}: ${formatRecord(m.answer_temperature)} / ${formatRecord(m.guess_temperature)}`, 12 + (k % 3) * ((width - 24) / 3), y + 84 + Math.floor(k / 3) * 30, { size: 10.5 }));
+      if (cands[0]) text(g, 'chosen', labelW + 12, 66 + 34, { size: 9.5, colour: ACCENT });
+      const yR = 66 + cands.length * 46 + 34;
+      const again = phase(p, 0.88, 0.96);
+      text(g, `The training repeated on this PC (learner ${t.reproduction.seed + 1} of ${t.members.length}):`, 12, yR, { size: 11.5, weight: 600, colour: INK, opacity: again });
+      const rec = t.reproduction.recorded_loss.value;
+      const ret = t.reproduction.retrained_loss.value;
+      const maxE = Math.max(rec, ret) * 1.15;
+      [['original', rec, '#AEB9C2'], ['trained again here', ret, ACCENT]].forEach(([label, v, colour], k) => {
+        const y = yR + 14 + k * 30;
+        text(g, label, labelW, y + 14, { size: 11, align: 'right', colour: INK, opacity: again });
+        bar(g, labelW + 10, y, bw * (v / maxE) * again, 20, colour, 3);
+        text(g, `error ${v.toFixed(3)}`, labelW + 16 + bw * (v / maxE) * again, y + 14, { size: 10.5, colour: INK, opacity: again });
+      });
+      text(g, t.reproduction.passed ? 'Within the limit set before the run: the training can be repeated.' : 'Outside the limit set before the run.',
+        12, yR + 88, { size: 10.5, colour: SOFT, opacity: again, max: width - 24 });
       g.restore();
     }
   }, {
-    describe: () => `Five encoders trained on RNA only, ${formatRecord(t.recipe.epochs)} epochs at most, batches of ${formatRecord(t.recipe.batch)}.`,
+    describe: () => `${t.members.length} learners, each trained on the named RNA examples alone, up to ${epochs} rounds, with most genes hidden in practice.`,
   });
 }
 

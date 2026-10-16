@@ -50,21 +50,27 @@
 
         <section class="sheet wf-follow" aria-labelledby="follow-title">
             <div class="wf-follow-head">
-                <h2 id="follow-title">The cell this page follows</h2>
-                <p class="caption">
-                    By default, the file's first run. Pick a cell by its outcome, or search for any of the
-                    <span data-wf="runs">&nbsp;</span> runs; every figure below follows it. Its label from
-                    markers is weak, a sanity check rather than the truth.
+                <span class="eyebrow">Your guide through this page</span>
+                <h2 id="follow-title">Meet the cell we follow</h2>
+                <p>
+                    In a real experiment called PBMC240, <span data-wf="runs">&nbsp;</span> cells from a blood
+                    sample were measured one at a time, to find out which proteins each one contains. This page
+                    follows one of those cells through every step, so you can watch what happens to it. You can
+                    switch to a different cell at any time.
                 </p>
             </div>
-            <div class="wf-chips" id="outcome-chips" role="group" aria-label="Pick a cell by its outcome"></div>
-            <div class="wf-search">
-                <label for="cell-search">Find a run</label>
-                <input class="well" id="cell-search" type="search" autocomplete="off" placeholder="SP_17, or a number from 0" aria-describedby="cell-search-hint">
-                <span class="visually-hidden" id="cell-search-hint">Matching runs appear below the field.</span>
-                <ul class="wf-results" id="cell-results" role="listbox" aria-label="Matching runs"></ul>
+            <div id="cell-card" class="wf-cell" aria-live="polite"></div>
+            <div class="wf-pick">
+                <h3>Try a different cell</h3>
+                <p class="caption">Each button picks a cell that ended up with a different result, so you can compare them.</p>
+                <div class="wf-chips" id="outcome-chips" role="group" aria-label="Pick a cell by its result"></div>
+                <div class="wf-search">
+                    <label for="cell-search">Or pick a cell by its number</label>
+                    <input class="well" id="cell-search" type="search" inputmode="numeric" autocomplete="off" aria-describedby="cell-search-hint">
+                    <span class="visually-hidden" id="cell-search-hint">Matching cells appear below the field.</span>
+                    <ul class="wf-results" id="cell-results" role="listbox" aria-label="Matching cells"></ul>
+                </div>
             </div>
-            <div id="cell-card"></div>
         </section>
 
         <!-- 0: the cold open -->
@@ -99,62 +105,91 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 1</span>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 1</span>
                         <h2 id="h-data">Two kinds of data</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                VivOME learns cell types from RNA. Its reference is
-                                <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula Sapiens, each labelled
-                                as one of <span data-wf="classes">&nbsp;</span> types.
+                                To learn what each kind of blood cell looks like, VivOME studies examples whose kind
+                                is already known: <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula
+                                Sapiens, a free public collection of human cells. Experts named each cell's type,
+                                <span data-wf="classes">&nbsp;</span> types in all. On the map, each dot is a cell,
+                                and cells of one type sit together.
                             </p>
                             <p data-beat>
-                                The types nest: each belongs to a group, such as T cell, and each group to a lineage,
-                                such as lymphoid. When the evidence is thin, an answer can stop at the group or the
-                                lineage instead of guessing a type.
+                                The types are arranged like a family tree: each type belongs to a family, such as
+                                T cells, and each family to a broad branch, such as lymphoid. When VivOME is unsure
+                                of the exact type, it can still name the family or the branch. Lit up: the branch of
+                                our cell's best guess.
                             </p>
                             <p data-beat>
-                                Proteomics is the other side. Single-cell mass spectrometry measures a few thousand
-                                proteins per cell, with many blanks, and no protein label trains anything. The protein
-                                datasets decide which genes the model reads, and the development sets test it.
+                                Those examples were measured by reading their RNA. The cells VivOME is used on are
+                                measured differently, by their proteins: a few thousand per cell, with many blanks
+                                and no name. The two are joined through genes, since each protein is made from a
+                                gene. Six lists of proteins from earlier experiments decide which genes are used.
                             </p>
                         </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="data">
                         <div class="wf-canvas" aria-hidden="true"></div>
                         <figcaption class="caption" data-describe></figcaption>
-                        <div class="wf-controls" role="group" aria-label="Chart options">
-                            <button type="button" class="wf-toggle" data-option="scale" aria-pressed="false">Log scale</button>
-                            <button type="button" class="wf-toggle" data-option="lineage" aria-pressed="false">Group by lineage</button>
-                        </div>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
                     </figure>
                 </div>
             </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    Every cell in the body carries the same genes, but each kind of cell switches on a different
+                    set. A switched-on gene is copied into <strong class="wf-rna">RNA</strong>, a working message,
+                    and the RNA is used to build <strong class="wf-prot">proteins</strong>, the molecules that do
+                    the cell's work. So reading a cell's RNA shows which genes are on, and reading its proteins
+                    shows what it has built. Both carry the gene's name, which is how VivOME lines them up.
+                </p>
+                <p>
+                    The cell types fall into a few broad branches. In the lymphoid branch, T cells direct the
+                    immune response or kill infected cells, NK cells kill infected or abnormal cells, and B cells
+                    and plasma cells make antibodies. In the myeloid branch, monocytes patrol the blood and become
+                    macrophages that swallow germs, dendritic cells show pieces of germs to T cells, and
+                    neutrophils are first to arrive at an infection. Red blood cells carry oxygen, stem and
+                    precursor cells make new blood cells, and platelets help blood clot.
+                </p>
+            </div>
         </section>
+
+        <p class="wf-bridge">
+            Step 1 showed the two kinds of data. Next, we open a real protein file, the kind a researcher
+            would upload, and look inside.
+        </p>
 
         <!-- 2 -->
         <section class="wf-chapter" id="files" data-chapter="files" aria-labelledby="h-files">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 2</span>
-                        <h2 id="h-files">What the files look like</h2>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 2</span>
+                        <h2 id="h-files">What a protein file looks like</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                A DIA-NN report, like PBMC240's, has one row per protein group and one column per run.
-                                It has <span data-wf="rows">&nbsp;</span> rows and <span data-wf="runs">&nbsp;</span>
-                                runs, and <span data-wf="missing_share">&nbsp;</span> of its values are blank: that
-                                protein was not seen in that cell.
+                                Here is a real protein file, the one our cell comes from. It is a big table, with
+                                one row per protein and one column per cell: <span data-wf="rows">&nbsp;</span>
+                                rows by <span data-wf="runs">&nbsp;</span> columns. In the picture, each tiny
+                                square is one protein in one cell: green where it was seen, pale where it was not.
+                                The rows run from the protein seen in most cells down to the rarest.
                             </p>
                             <p data-beat>
-                                The column headers are the instrument's file paths. The service keeps the run's name,
-                                so each column becomes one cell.
+                                Each number in the table says how strongly the instrument detected that protein in
+                                that cell: the bigger, the more of it. A blank means it was not detected, which often
+                                means there was too little of it to catch, not none. In all,
+                                <span data-wf="missing_share">&nbsp;</span> of this table is blank. Our cell has values
+                                for <span data-cell="observed_raw">&nbsp;</span> of the
+                                <span data-wf="rows">&nbsp;</span> proteins.
                             </p>
                             <p data-beat>
-                                Other files arrive the other way round, or already transformed. SCoPE2's published
-                                matrix has cells in rows and is centred and batch-corrected; Fulcher 2026's protein
-                                table holds abundances on a linear scale. The service reads each as it comes.
+                                Every lab writes its files a little differently: some put cells in rows instead of
+                                columns, some adjust the numbers first, and each uses its own software. Before
+                                anything else, VivOME reads every kind of file into the same shape: one row per
+                                cell, one column per gene.
                             </p>
                         </div>
                     </div>
@@ -167,46 +202,72 @@
                 </div>
             </div>
             <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    <strong>Where the file comes from.</strong> A <strong>mass spectrometer</strong> is an instrument
+                    that breaks a cell's proteins into small pieces and weighs them very precisely; what it writes out
+                    is a raw file of signal readings, one per sample, and here each sample is one cell.
+                    <strong>DIA-NN</strong> is free software that reads those raw files and works out which proteins
+                    were there and how much of each. (Its name comes from the way the instrument is run, called
+                    data-independent acquisition or DIA, and the neural networks, NN, it uses.) Its
+                    <strong>report</strong> is the table above: a few columns describing each protein
+                    (<span data-wftext="annotation_columns">&nbsp;</span>), then one column per raw file, holding that
+                    protein's amount in that cell, or a blank.
+                </p>
+                <p>
+                    <strong>Why so many blanks.</strong> The instrument catches the most plentiful proteins in each
+                    cell and misses rarer ones, so most of the table is empty. Sometimes it cannot tell very similar
+                    proteins apart and reports them together as one <strong>protein group</strong>, which is why some
+                    names are joined with ";". Each column is named after its raw file, such as
+                    <code data-wftext="header_example">&nbsp;</code>; VivOME keeps just the cell's name.
+                </p>
                 <details class="wf-more">
-                    <summary>The other files, as they look</summary>
+                    <summary>See a corner of each file</summary>
                     <div id="format-cards"></div>
-                    <h3>SCoPE2, published matrix</h3>
+                    <h3>SCoPE2</h3>
                     <div id="snippet-scope2"></div>
-                    <h3>Fulcher 2026, protein table</h3>
+                    <h3>Fulcher 2026</h3>
                     <div id="snippet-fulcher"></div>
-                    <h3>The RNA reference's first cells</h3>
+                    <h3>The RNA examples from step 1</h3>
                     <div id="snippet-reference"></div>
                 </details>
             </div>
         </section>
+
+        <p class="wf-bridge">
+            Step 2 showed that every protein file lists its own few thousand proteins. To compare a cell's
+            proteins with the RNA examples, both have to be read in the same terms: the same list of genes, in
+            the same order.
+        </p>
 
         <!-- 3 -->
         <section class="wf-chapter" id="genes" data-chapter="genes" aria-labelledby="h-genes">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 3</span>
-                        <h2 id="h-genes">One vocabulary of genes</h2>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 3</span>
+                        <h2 id="h-genes">One shared list of genes</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                Six protein lists decide which genes the model can read. Together they name
-                                <span data-wf="gene_space.funnel.union">&nbsp;</span> genes; the
-                                <span data-wf="gene_space.funnel.ig_tcr_excluded">&nbsp;</span> immunoglobulin and
-                                T-cell receptor segments among them are left out, leaving
+                                First, the protein side. Six lists of proteins, from earlier experiments that
+                                measured many cells, are pooled into one. A gene named in several lists counts once,
+                                so together they name <span data-wf="gene_space.funnel.union">&nbsp;</span> genes.
+                                <span data-wf="gene_space.funnel.ig_tcr_excluded">&nbsp;</span> of them are pieces of
+                                antibody and T-cell receptor genes, which each B or T cell rearranges in its own way;
+                                they are left out, leaving
                                 <span data-wf="gene_space.funnel.union_without_ig_tcr">&nbsp;</span>.
                             </p>
                             <p data-beat>
-                                Of those, <span data-wf="gene_space.funnel.feature_space">&nbsp;</span> are also among
-                                the RNA reference's <span data-wf="gene_space.funnel.rna_genes">&nbsp;</span> genes.
-                                That is the shared vocabulary: every upload is read through these genes, in one fixed
-                                order, and the rest is set aside.
+                                The RNA examples cover far more genes:
+                                <span data-wf="gene_space.funnel.rna_genes">&nbsp;</span>. Only genes on both sides can
+                                be compared, so VivOME keeps just the overlap:
+                                <span data-wf="gene_space.funnel.feature_space">&nbsp;</span> genes. This is its shared
+                                list.
                             </p>
                             <p data-beat>
-                                The encoders also pool the genes into <span data-wf="modules">&nbsp;</span> fixed
-                                modules, so a module can carry signal when some of its genes are missing. Each name is
-                                matched to an HGNC symbol: <span data-wf="gene_space.id_matching.symbol">&nbsp;</span>
-                                directly, <span data-wf="gene_space.id_matching.alias_or_prev_symbol">&nbsp;</span>
-                                through an alias or a previous symbol.
+                                Each gene on the shared list gets its own seat, always in the same order. Every file
+                                is read into these same seats, so a seat always means the same gene. A seat stays
+                                empty when a cell's protein was not seen; step 6 shows that for our cell.
                             </p>
                         </div>
                     </div>
@@ -219,103 +280,151 @@
                 </div>
             </div>
             <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    A gene's name, such as CD3E, is shared by the gene, its RNA and its protein, which is how the two
+                    sides can be lined up. The protein side is much shorter because the instrument sees only the most
+                    plentiful proteins in a cell, so VivOME can compare only the genes both sides know. Names come in
+                    versions too: most files use a gene's official name, but some use an older name or a nickname, so
+                    VivOME translates them first. On the shared list,
+                    <span data-wf="gene_space.id_matching.symbol">&nbsp;</span> genes matched by their official name
+                    and <span data-wf="gene_space.id_matching.alias_or_prev_symbol">&nbsp;</span> through an older one.
+                </p>
                 <div class="wf-lookup">
-                    <label for="gene-search">Is a gene in the space?</label>
-                    <input class="well" id="gene-search" type="search" autocomplete="off" placeholder="CD3E" spellcheck="false">
+                    <label for="gene-search">Look up a gene: is it on the shared list?</label>
+                    <input class="well" id="gene-search" type="search" autocomplete="off" placeholder="For example CD3E" spellcheck="false">
                     <div id="gene-result" aria-live="polite"></div>
                 </div>
             </div>
         </section>
+
+        <p class="wf-bridge">
+            Steps 1 to 3 gave VivOME its examples and its shared list of genes. Now it learns from them. This is
+            where the model itself is made.
+        </p>
 
         <!-- 4 -->
         <section class="wf-chapter" id="training" data-chapter="training" aria-labelledby="h-training">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 4</span>
-                        <h2 id="h-training">Trained on RNA only</h2>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 4</span>
+                        <h2 id="h-training">How VivOME learns</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                The model never sees a protein label. <span data-wf="members">&nbsp;</span> encoders
-                                were trained on the RNA reference alone, the same way, each from its own random seed.
+                                VivOME learns by example. It is shown the example cells, with their names, over and
+                                over: up to <span data-wf="training.recipe.epochs">&nbsp;</span> rounds. After each
+                                round it adjusts itself a little, until cells of the same type land close together on
+                                its map. No protein label is used at any point.
                             </p>
                             <p data-beat>
-                                Each training batch is drawn as an upload would be:
-                                <span data-wf="training.recipe.natural_share">&nbsp;</span> of batches keep the
-                                reference's natural mix, the rest hold one to eight types in random proportions. Then
-                                most genes are hidden: two views of each cell keep a random
+                                It practises with gaps. Protein files leave most genes blank, so during training most
+                                of each cell's genes are hidden on purpose: it sees only
                                 <span data-wf="training.recipe.coverage_low">&nbsp;</span> to
-                                <span data-wf="training.recipe.coverage_high">&nbsp;</span> of its genes, so the
-                                encoders learn to read the partial profiles proteomics gives.
+                                <span data-wf="training.recipe.coverage_high">&nbsp;</span> of them, and must still
+                                recognise the cell. The cells come in mixes like real files:
+                                <span data-wf="training.recipe.natural_share">&nbsp;</span> of the time the natural
+                                mix, otherwise only one to eight kinds of cell.
                             </p>
                             <p data-beat>
-                                Four forces shape the training: one pulls each cell toward its type, one pulls cells
-                                of a type together, one stops a few points becoming everyone's nearest neighbour, and
-                                one makes a cell's two views land in the same place.
+                                Several learners instead of one. The same training is run
+                                <span data-wf="members">&nbsp;</span> times, each from a different random start, so
+                                each learner ends up slightly different. When a new cell arrives, all of them give
+                                their view and VivOME averages them (step 9): a group that agrees is steadier than one.
                             </p>
                             <p data-beat>
-                                The architecture was chosen in a five-seed comparison: module pooling scored
-                                <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span>
-                                balanced accuracy at realistic coverage, ahead but not decisively. Retraining seed 1
-                                here reproduced the served member's validation loss within its preset tolerance.
+                                How we know it learned well. Three designs were each trained
+                                <span data-wf="training.encoder_choice.seeds">&nbsp;</span> times and compared; this
+                                one named <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span>
+                                of test cells correctly, counting every type equally: the best, though not by a wide
+                                margin. And one learner, trained again from scratch on this PC, matched the original
+                                closely.
                             </p>
                         </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="training">
                         <div class="wf-canvas" aria-hidden="true"></div>
                         <figcaption class="caption" data-describe></figcaption>
-                        <div class="wf-controls" role="group" aria-label="Batch to draw">
+                        <div class="wf-controls" role="group" aria-label="Mix of cells to draw">
                             <button type="button" class="wf-toggle" data-option="classes" data-value="0" aria-pressed="true">Natural mix</button>
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="1" aria-pressed="false">1 type</button>
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="3" aria-pressed="false">3 types</button>
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="8" aria-pressed="false">8 types</button>
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="1" aria-pressed="false">1 kind</button>
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="3" aria-pressed="false">3 kinds</button>
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="8" aria-pressed="false">8 kinds</button>
                         </div>
                     </figure>
                 </div>
             </div>
             <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    Learning here works like learning faces from labelled photos: after seeing enough named examples,
+                    you can name a face you have never seen. VivOME does the same with cells, learning what each type
+                    tends to look like. Its map is how it holds that knowledge: each cell becomes a point, and similar
+                    cells sit close together.
+                </p>
+                <p>
+                    Hiding genes on purpose is like practising to recognise a song from a few notes: it prepares
+                    VivOME for protein files, where most genes are missing. A random start is simply where a learner
+                    begins before it has learned anything; different starts end in slightly different learners,
+                    which is why several are averaged.
+                </p>
                 <details class="wf-more">
-                    <summary>The recipe, the members and the choice</summary>
+                    <summary>For the curious: the full training recipe</summary>
+                    <p class="panel-note">
+                        Under the hood, four rules guide each adjustment: pull each cell toward its type, pull cells of
+                        one type together, stop any single point becoming everyone's nearest neighbour, and make the
+                        two gapped views of one cell land in the same place.
+                    </p>
                     <div id="recipe"></div>
-                    <h3>The five members</h3>
+                    <h3>The learners</h3>
                     <div id="members"></div>
-                    <h3>The encoder choice</h3>
+                    <h3>The three designs compared</h3>
                     <div id="encoder-choice"></div>
                     <p class="panel-note">
-                        Training curves: <span data-wf="training.history">&nbsp;</span>. Validation loss of
-                        the served seed 1, <span data-wf="training.reproduction.recorded_loss">&nbsp;</span>;
-                        retrained here, <span data-wf="training.reproduction.retrained_loss">&nbsp;</span>.
+                        Training curves: <span data-wf="training.history">&nbsp;</span>. Error score of the original
+                        learner (seed 1), <span data-wf="training.reproduction.recorded_loss">&nbsp;</span>; trained
+                        again here, <span data-wf="training.reproduction.retrained_loss">&nbsp;</span>.
                     </p>
                 </details>
             </div>
         </section>
+
+        <div class="wf-part" id="part-2">
+            <span class="eyebrow">Part 2</span>
+            <h2 class="wf-part-title">Reading a new file</h2>
+            <p>
+                The model is built. From here on, a researcher sends a file and VivOME reads it. The file below is
+                PBMC240, our cell's file, uploaded just as anyone would.
+            </p>
+        </div>
 
         <!-- 5 -->
         <section class="wf-chapter" id="upload" data-chapter="upload" aria-labelledby="h-upload">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 5</span>
-                        <h2 id="h-upload">An upload arrives</h2>
+                        <span class="eyebrow">Part 2 · Reading a new file · Step 5</span>
+                        <h2 id="h-upload">Tidying up a new file</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                First, the scale. PBMC240's observed values have a median of
-                                <span data-wf="median_linear">&nbsp;</span>, above the
-                                <span data-wf="scale_threshold">&nbsp;</span> a log scale would stay under, and none is
-                                negative, so the service reads them as linear intensities and takes log2. A file
-                                already on a log scale is left as it is.
+                                First, one scale. The amounts in a raw file run from small to hundreds of times larger,
+                                so most of them crowd near zero. VivOME switches to a scale that counts doublings, where
+                                each step means twice as much, and they spread out evenly. It checks first: here every
+                                value is positive and the typical one is <span data-wf="median_linear">&nbsp;</span>,
+                                well above <span data-wf="scale_threshold">&nbsp;</span>, so these are raw amounts. A
+                                file that is already converted is left as it is.
                             </p>
                             <p data-beat>
-                                Rows for the same gene are merged, each cell taking the median:
-                                <span data-wf="genes_merged">&nbsp;</span> genes had more than one row, so
-                                <span data-wf="rows">&nbsp;</span> rows become
+                                Next, one row per gene. A few genes appear on more than one row:
+                                <span data-wf="genes_merged">&nbsp;</span> here. Their rows are joined, each cell
+                                keeping the middle of its values, so <span data-wf="rows">&nbsp;</span> rows become
                                 <span data-wf="rows_after_collapse">&nbsp;</span>.
                             </p>
                             <p data-beat>
-                                Each row's name is matched to the gene space: <span data-wf="ids_matched">&nbsp;</span>
-                                rows match one gene, <span data-wf="ids_unmapped">&nbsp;</span> match none, and
-                                <span data-wf="ids_ambiguous">&nbsp;</span> name several genes of the space and are set
-                                aside rather than guessed.
+                                Last, the names. Each row's name is looked up on the shared list:
+                                <span data-wf="ids_matched">&nbsp;</span> are found. <span data-wf="ids_ambiguous">&nbsp;</span>
+                                name several genes at once, so VivOME sets them aside rather than guess, and
+                                <span data-wf="ids_unmapped">&nbsp;</span> are not on the list at all.
                             </p>
                         </div>
                     </div>
@@ -326,6 +435,20 @@
                         <div class="wf-table" hidden></div>
                     </figure>
                 </div>
+            </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    Counting doublings is like a ruler marked 1, 2, 4, 8, 16: each mark is twice the one before, so a
+                    protein with a thousand times more is only about ten marks further along, not off the end of the
+                    page. It lets VivOME compare small and large amounts on an equal footing.
+                </p>
+                <p>
+                    Each gene needs exactly one row, because the model gives each gene one seat (step 3). And some
+                    names cannot be matched: a name that covers several genes could be any of them, and a few rows
+                    are for genes the shared list does not include. These tidy-ups happen to every file, before
+                    VivOME looks at a single cell.
+                </p>
             </div>
         </section>
 

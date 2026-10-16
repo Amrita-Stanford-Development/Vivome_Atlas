@@ -15,7 +15,8 @@ import { loadManifest, PENDING_LABEL } from './manifest.js';
 import { errorPanel, escapeHtml, factText } from './panels.js';
 import { CHAPTERS, beatAt, parseHash, stepTarget } from './timeline.js';
 import {
-  OUTCOME_LABELS, OUTCOME_ORDER, answerText, checkSync, classColour, detailFor, geneLookup, loadWorkflow, outcomeCounts,
+  OUTCOME_CHIPS, OUTCOME_ORDER, answerShort, answerText, checkSync, classColour, detailFor, geneLookup, guessText,
+  loadWorkflow, outcomeCounts, wfText,
   searchCells, storyFor, wfFact,
 } from './workflow-data.js';
 import {
@@ -52,6 +53,7 @@ let film = null;
 function setSlots(manifest, workflow) {
   for (const el of $$('[data-fact]')) el.innerHTML = manifest ? factText(manifest, el.dataset.fact) : PENDING_LABEL;
   for (const el of $$('[data-wf]')) el.innerHTML = workflow ? wfFact(workflow, el.dataset.wf) : PENDING_LABEL;
+  for (const el of $$('[data-wftext]')) el.textContent = workflow ? wfText(workflow, el.dataset.wftext) : PENDING_LABEL;
 }
 
 function buildContext(manifest, workflow) {
@@ -69,8 +71,9 @@ function buildContext(manifest, workflow) {
       return { detail: own ?? storyFor(workflow, s.cell), own: !!own };
     },
     options: (id) => state.options[id] ?? {},
-    answerText: (cell) => answerText(cell).replace(/ \((one class|a group|a lineage)\)$/, (_, l) => ` (${l.replace(/^(one|a) /, '')})`),
-    guessText: (cell) => (cell.guess === null ? 'none (too few genes)' : `${workflow.class_order[cell.guess]} (${(cell.guess_probability * 100).toFixed(1)}%)`),
+    answerText,
+    answerShort,
+    guessText: (cell) => guessText(cell, workflow.class_order),
     pick: (i) => setCell(i),
   };
 }
@@ -85,11 +88,13 @@ function setCell(i) {
   for (const el of $$('[data-cell]')) {
     const kind = el.dataset.cell;
     el.textContent = kind === 'id' ? cell.id
-      : kind === 'answer' ? ctx.answerText(cell)
+      : kind === 'answer' ? ctx.answerShort(cell).replace(/^No answer/, 'no answer')
         : kind === 'guess' ? ctx.guessText(cell)
-          : kind === 'observed' ? cell.observed.toLocaleString('en-US') : '';
+          : kind === 'observed' ? cell.observed.toLocaleString('en-US')
+            : kind === 'observed_raw' ? cell.observed_raw.toLocaleString('en-US') : '';
   }
-  $('#cell-card').innerHTML = buildCellCard(cell, ctx.workflow.class_order);
+  $('#cell-card').innerHTML = buildCellCard(cell, ctx.workflow.class_order,
+    { index: i, total: cells.length, featureSpace: ctx.workflow.raw.pbmc240.align.feature_space });
   $('#ladder').innerHTML = buildLadderTrace(cell, ctx.workflow);
   const { detail, own } = ctx.detail(state);
   $('#guess-table').innerHTML = (own ? '' : `<p class="caption">The full arrays are recorded for the story runs; this is ${escapeHtml(detail.id)}, a run with the same outcome.</p>`)
@@ -106,10 +111,10 @@ function buildPicker() {
   const w = ctx.workflow;
   const cells = w.trace.cells;
   const counts = outcomeCounts(cells);
-  const chips = [['the first run', 0], ...OUTCOME_ORDER.filter((k) => counts[k] > 0).map((k) => [OUTCOME_LABELS[k], cells.findIndex((c) => c.outcome === k)])];
-  $('#outcome-chips').innerHTML = chips.map(([label, i]) => {
-    const kind = cells[i].outcome;
-    const n = label === 'the first run' ? '' : `<span class="wf-count">${counts[kind]}</span>`;
+  const chips = [['The first cell', 0, null],
+    ...OUTCOME_ORDER.filter((k) => counts[k] > 0).map((k) => [OUTCOME_CHIPS[k], cells.findIndex((c) => c.outcome === k), k])];
+  $('#outcome-chips').innerHTML = chips.map(([label, i, kind]) => {
+    const n = kind ? `<span class="wf-count">${counts[kind]} cell${counts[kind] === 1 ? '' : 's'}</span>` : '';
     return `<button type="button" class="wf-chip" data-pick="${i}" aria-pressed="false">${escapeHtml(label)}${n}</button>`;
   }).join('');
   $('#outcome-chips').addEventListener('click', (e) => {
@@ -118,8 +123,9 @@ function buildPicker() {
   });
   const input = $('#cell-search');
   const results = $('#cell-results');
+  input.placeholder = `A number from 1 to ${cells.length}`;
   input.addEventListener('input', () => {
-    results.innerHTML = searchCells(w, input.value).map((i) => `<li><button type="button" role="option" data-pick="${i}">${escapeHtml(cells[i].id.replace('Astral_TopMedPBMC1_', ''))}</button></li>`).join('');
+    results.innerHTML = searchCells(w, input.value).map((i) => `<li><button type="button" role="option" data-pick="${i}">Cell ${i + 1}</button></li>`).join('');
   });
   results.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-pick]');

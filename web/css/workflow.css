@@ -26,35 +26,64 @@
 
 /* ---- the followed cell ---- */
 
-.wf-follow { margin: 0 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 32px; }
+.wf-follow { margin: 0 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 36px; }
 .wf-follow-head { grid-column: 1 / -1; }
-.wf-follow-head h2 { margin-bottom: 4px; }
-.wf-chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.wf-follow-head h2 { margin-bottom: 8px; }
+.wf-follow-head p { font-size: 16px; }
+.wf-cell { align-self: start; }
+.wf-cell-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.wf-cell-icon { width: 46px; height: 46px; flex: none; }
+.wf-cell-name { font-size: 22px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+.wf-cell-name span { font-size: 15px; font-weight: 400; color: var(--ink-faint); }
+.wf-cell-head .caption code { font-size: 11px; }
+.wf-cellcard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 22px; margin: 0; }
+.wf-cellcard > div { background: var(--bench); border-radius: var(--r-well); padding: 10px 14px; }
+.wf-cellcard dt { font-size: 12.5px; color: var(--ink-faint); margin-bottom: 2px; }
+.wf-cellcard dd { font-size: 16px; color: var(--ink); overflow-wrap: anywhere; }
+.wf-cellcard-wide { grid-column: 1 / -1; }
+.wf-cellcard-wide dd { font-size: 16.5px; line-height: 1.5; }
+.wf-sub { display: block; font-size: 12.5px; color: var(--ink-faint); margin-top: 2px; }
+.wf-abstain { color: var(--ink) !important; }
+.wf-pick h3 { margin-bottom: 2px; }
+.wf-pick .caption { margin-bottom: 12px; }
+.wf-chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; margin-bottom: 18px; }
 .wf-chip {
     font: inherit;
-    font-size: 13px;
+    font-size: 13.5px;
     border: 0;
     cursor: pointer;
-    padding: 5px 12px;
+    padding: 6px 13px;
     border-radius: 999px;
     background: linear-gradient(145deg, #FFFFFF, #F1F0EC);
     box-shadow: 1px 2px 4px rgba(var(--shade), 0.14), inset 0 1px 0 #FFFFFF;
-    color: var(--ink-soft);
+    color: var(--ink);
+    text-align: left;
 }
-.wf-chip[aria-pressed="true"] { background: var(--well); color: var(--ink); box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.16); font-weight: 500; }
-.wf-chip .wf-count { color: var(--ink-faint); margin-left: 4px; }
-.wf-search { position: relative; display: grid; gap: 6px; align-content: start; }
+.wf-chip[aria-pressed="true"] { background: var(--well); box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.16); font-weight: 500; }
+.wf-chip .wf-count { color: var(--ink-faint); margin-left: 6px; font-weight: 400; font-size: 12.5px; }
+.wf-search { position: relative; display: grid; gap: 6px; align-content: start; max-width: 320px; }
 .wf-search label, .wf-lookup label { font-size: 13px; color: var(--ink-faint); }
 .wf-search input, .wf-lookup input { font: inherit; font-size: 14px; border: 0; padding: 9px 12px; color: var(--ink); width: 100%; }
 .wf-results { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .wf-results li { max-width: none; }
-.wf-results button { font: inherit; font-size: 12.5px; border: 0; cursor: pointer; padding: 3px 9px; border-radius: 8px; background: var(--bench); color: var(--ink); }
+.wf-results button { font: inherit; font-size: 13px; border: 0; cursor: pointer; padding: 3px 10px; border-radius: 8px; background: var(--bench); color: var(--ink); }
 .wf-results button:hover, .wf-results button:focus-visible { background: var(--accent-tint); }
-#cell-card { grid-column: 1 / -1; }
-.wf-cellcard { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 20px; margin: 4px 0 0; }
-.wf-cellcard dt { font-size: 12px; color: var(--ink-faint); }
-.wf-cellcard dd { font-size: 15px; color: var(--ink); overflow-wrap: anywhere; }
-.wf-abstain { color: var(--ink-soft) !important; font-style: italic; }
+
+/* The opener of a part of the journey. */
+.wf-part { max-width: 720px; margin: 40px auto 36px; text-align: center; }
+.wf-part .eyebrow { margin-bottom: 6px; }
+.wf-part-title { font-size: clamp(30px, 3.6vw, 46px); letter-spacing: -0.03em; margin-bottom: 12px; }
+.wf-part p { margin: 0 auto; font-size: 17px; line-height: 1.6; color: var(--ink); }
+
+/* A sentence between two steps, saying how they connect. */
+.wf-bridge { max-width: 640px; margin: 8px auto 32px; text-align: center; font-size: 17px; line-height: 1.6; color: var(--ink); }
+
+/* Plain-words sections after a chapter's stage. */
+.wf-after h3 { margin: 18px 0 6px; font-size: 17px; }
+.wf-after > p { font-size: 15.5px; margin-bottom: 10px; }
+.wf-rna { color: var(--rna); }
+.wf-prot { color: var(--prot); }
+.wf-plain { font-size: 14.5px; line-height: 1.6; }
 
 /* ---- a chapter: a pinned stage on a scroll runway ----
    The stage (the heading, the beats and the figure) holds still in the
@@ -96,7 +125,7 @@
 .js .wf-runway.is-measured .wf-compact .wf-beats > [data-beat]:not(.is-active) { opacity: 0; pointer-events: none; }
 
 /* What follows a chapter's stage: its details, lookups and readouts. */
-.wf-after { max-width: 780px; margin-top: 22px; }
+.wf-after { max-width: 820px; margin-top: 22px; padding: 18px 22px; border-radius: var(--r-sheet); background: rgba(250, 250, 249, 0.92); box-shadow: 0 10px 30px -18px rgba(var(--shade), 0.35); }
 .wf-more { margin: 10px 0 18px; }
 .wf-more summary { cursor: pointer; font-weight: 500; color: var(--accent); font-size: 14.5px; }
 .wf-more[open] summary { margin-bottom: 12px; }
@@ -253,6 +282,7 @@ body.wf-film-open { overflow: hidden; }
 }
 @media (max-width: 720px) {
     .wf-follow { grid-template-columns: minmax(0, 1fr); }
+    .wf-cellcard { grid-template-columns: minmax(0, 1fr); }
     .wf-filmbar { flex-wrap: wrap; bottom: 8px; }
     .wf-rail { display: none; }
     .wf-scrub { order: 10; flex-basis: 100%; }

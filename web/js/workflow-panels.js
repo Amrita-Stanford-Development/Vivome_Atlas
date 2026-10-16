@@ -5,7 +5,8 @@
 import { PENDING_LABEL, formatCount, isMeasured } from './manifest.js';
 import { escapeHtml } from './panels.js';
 import {
-  OUTCOME_LABELS, OUTCOME_ORDER, answerText, formatRecord, isAnswered, outcomeCounts, snippetRows, topK,
+  OUTCOME_LABELS, OUTCOME_ORDER, answerSentence, answerText, formatRecord, guessText, isAnswered, outcomeCounts, plainName,
+  snippetRows, topK,
 } from './workflow-data.js';
 import { rocSvg } from './workflow-svg.js';
 
@@ -40,13 +41,13 @@ export function buildRawSnippet(snippet, { caption = '' } = {}) {
 export function buildPbmcTable(workflow, rows = 10) {
   const details = workflow?.trace?.detail ?? [];
   if (!details.length) return `<p class="pending">${PENDING_LABEL}</p>`;
-  const ids = details.map((d) => d.id);
+  const ids = details.map((d) => `Cell ${d.cell + 1}`);
   const body = snippetRows(details, rows).map((g) => `<tr><td class="wf-key">${e(details[0].raw_row[g][0])}</td>${details
     .map((d) => {
       const v = d.raw_row[g]?.[1];
       return `<td class="support-num">${v === null || v === undefined ? missing : e(v.toLocaleString('en-US'))}</td>`;
     }).join('')}</tr>`).join('');
-  return `<div class="table-scroll">${table(['Genes', ...ids], body, 'support-table wf-snippet')}</div>`;
+  return `<div class="table-scroll">${table(['Protein', ...ids], body, 'support-table wf-snippet')}</div>`;
 }
 
 export function buildHeaderMorph(workflow) {
@@ -75,10 +76,11 @@ export function buildFormatCards(workflow) {
 export function buildGeneLookup(result, query) {
   if (!String(query ?? '').trim()) return '';
   if (!result) {
-    return `<p class="wf-lookup-result"><strong>${e(String(query).trim().toUpperCase())}</strong> is not in the gene space.</p>`;
+    return `<p class="wf-lookup-result"><strong>${e(String(query).trim().toUpperCase())}</strong> is not on the shared list. `
+      + 'Check the spelling; otherwise none of the protein lists named it, or the RNA examples do not cover it.</p>';
   }
-  return `<p class="wf-lookup-result"><strong>${e(result.gene)}</strong> is in the space. `
-    + `Found in ${result.sources.length ? e(result.sources.join(', ')) : 'no listed source'}.</p>`;
+  return `<p class="wf-lookup-result"><strong>${e(result.gene)}</strong> is on the shared list, seat `
+    + `${e(formatCount(result.index + 1))}. Named by ${result.sources.length ? e(result.sources.join(', ')) : 'no listed source'}.</p>`;
 }
 
 // ---- training ----
@@ -114,16 +116,24 @@ export function buildEncoderChoice(workflow) {
 
 // ---- one cell ----
 
-export function buildCellCard(cell, classOrder) {
+// The followed cell, for a reader new to all of it: which cell, how much
+// was measured, a rough hint, what VivOME says, and its single best guess.
+export function buildCellCard(cell, classOrder, { index = 0, total = null, featureSpace = null } = {}) {
   if (!cell) return `<p class="pending">${PENDING_LABEL}</p>`;
-  const guess = cell.guess === null || cell.guess === undefined ? 'none (too few genes)'
-    : `${classOrder[cell.guess]} (${pct(cell.guess_probability)})`;
-  return `<dl class="wf-cellcard">`
-    + `<div><dt>Run</dt><dd><code>${e(cell.id)}</code></dd></div>`
-    + `<div><dt>Marker-based label (weak)</dt><dd>${e(cell.weak_label ?? 'none')}</dd></div>`
-    + `<div><dt>Genes observed</dt><dd>${e(formatCount(cell.observed))}</dd></div>`
-    + `<div><dt>Answer</dt><dd class="${isAnswered(cell) ? '' : 'wf-abstain'}">${e(answerText(cell))}</dd></div>`
-    + `<div><dt>Best guess</dt><dd>${e(guess)}</dd></div>`
+  const guess = cell.guess === null || cell.guess === undefined ? null : classOrder[cell.guess];
+  const icon = '<svg class="wf-cell-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="#EAF3FA" stroke="#0066A3" stroke-width="2"/>'
+    + '<circle cx="27" cy="21" r="7" fill="#C9DDEE"/><circle cx="16" cy="31" r="2.5" fill="#0066A3" opacity="0.5"/><circle cx="31" cy="33" r="2" fill="#0066A3" opacity="0.5"/></svg>';
+  return `<div class="wf-cell-head">${icon}<div><p class="wf-cell-name">Cell ${e(formatCount(index + 1))}`
+    + `${total ? ` <span>of ${e(formatCount(total))}</span>` : ''}</p>`
+    + `<p class="caption">File name: <code>${e(cell.id)}</code></p></div></div>`
+    + `<dl class="wf-cellcard">`
+    + `<div><dt>Proteins measured</dt><dd>${e(formatCount(cell.observed))}`
+    + `${featureSpace ? `<span class="wf-sub">of the ${e(formatCount(featureSpace))} genes VivOME reads</span>` : ''}</dd></div>`
+    + `<div><dt>A rough first look</dt><dd>${e(cell.weak_label && cell.weak_label !== 'unassigned' ? cell.weak_label : 'no hint')}`
+    + `<span class="wf-sub">from a few telltale proteins: a hint, not proof</span></dd></div>`
+    + `<div class="wf-cellcard-wide"><dt>What VivOME says</dt><dd class="${isAnswered(cell) ? '' : 'wf-abstain'}">${e(answerSentence(cell))}</dd></div>`
+    + `<div><dt>If it had to pick one</dt><dd>${guess ? e(plainName(guess)) : 'none'}`
+    + `<span class="wf-sub">${guess ? `the model gives it ${e(pct(cell.guess_probability))}` : 'too little was measured'}</span></dd></div>`
     + `</dl>`;
 }
 

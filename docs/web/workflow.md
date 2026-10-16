@@ -19,14 +19,25 @@ Where the sentences do not all fit beside the figure, and on narrow screens,
 they share one place and cross-fade, with dots for the chapter's progress.
 A chapter's details, lookups and readouts follow its stage, unpinned.
 
+The page is written for a complete beginner. Plain words replace the
+project's own terms (an outcome is "no answer: too little measured", not
+`coverage_too_low`; the labels are in `OUTCOME_LABELS` and `OUTCOME_CHIPS`
+in `web/js/workflow-data.js`). The chapters are being reworked one at a
+time for this; each reworked chapter has a part label in its eyebrow
+("Part 1 · What the model learns", "Part 2 · Reading a new file"), a short
+bridge sentence before it, and one "In plain words" card after it
+(`.wf-after`). Before step 1, "Meet the cell we follow" introduces the
+followed cell as a card: its number, how many proteins it measured, a
+rough first look and what VivOME says about it.
+
 | Chapter | Figure | Data |
 |---|---|---|
 | One cell, start to end | the cell's raw column, then its path to an answer | `trace.detail` |
-| Two kinds of data | cells per reference type, grouped by lineage; the protein lists | `reference.classes`, `gene_space.sources` |
-| What the files look like | PBMC240's report, its headers, detection histograms | `trace.detail[].raw_row`, `raw.pbmc240.parse`, `raw.snippets` |
-| One vocabulary of genes | the funnel to the shared genes, the source combinations, module sizes; a gene lookup | `gene_space` |
-| Trained on RNA only | the encoders, a batch, masked views, the training forces, the encoder choice | `training` |
-| An upload arrives | the scale, merged rows, identifier matching | `raw.pbmc240` |
+| Two kinds of data | sample cells as a map, then the family tree of types; the RNA and protein sides; the six protein lists | `reference.sample`, `reference.classes`, `gene_space.sources`, `trace.detail[].raw_row` |
+| What a protein file looks like | the whole file as one image (a pixel per value), its corner with our cell, three file layouts turned into VivOME's shape | `raw.pbmc240.parse` (with `presence`), `trace.detail[].raw_row`, `trace.cells[].observed_raw`, `raw.snippets` |
+| One shared list of genes | the six lists pooled and the antibody pieces taken out; RNA and protein as circles to scale; the 9,002 seats; a gene lookup | `gene_space` |
+| How VivOME learns | learning by example, the masked views and the mixes, several learners, the three designs, the repeated run | `training` |
+| Tidying up a new file | one cell's amounts on an ordinary ruler and a doubling ruler; rows joined; names sorted into found, set aside and not on the list | `raw.pbmc240.{scale,collapse,ids,align}`, `trace.detail[].observed_values` |
 | Matching and the mask | the 9,002-gene mask, observed genes per cell, a heatmap from log2 to scaled | `raw.pbmc240.align`, `trace.heatmap` |
 | Smoothing | the upload's neighbour graph, own and smoothed values, the mask | `trace.stages.smoothing`, `trace.heatmap` |
 | The encoder pass | the layers, the cell's 128 numbers, module coverage | `trace.stages.encoder`, `trace.detail[].embedding` |
@@ -38,9 +49,10 @@ A chapter's details, lookups and readouts follow its stage, unpinned.
 
 **The followed cell.** Every figure follows one PBMC240 run: by default the
 file's first, or any other picked by outcome or searched for. The trace
-records the full arrays (raw column, every encoder's probabilities, the
-best guess's three views, the neighbours, the JSON response) for the story
-runs only: the first run and the first run of each outcome. For another run
+records the full arrays (raw column, every protein amount the cell
+measured, every encoder's probabilities, the best guess's three views, the
+neighbours, the JSON response) for the story runs only: the first run and
+the first run of each outcome. For another run
 the figures that need them show the story run with the same outcome, and
 say so. PBMC240's labels from markers are weak; the page calls them that.
 

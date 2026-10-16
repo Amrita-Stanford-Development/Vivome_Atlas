@@ -73,28 +73,137 @@ export function wfFact(workflow, key) {
   return isMeasured(record) ? escapeHtml(formatRecord(record)) : `<span class="pending">${PENDING_LABEL}</span>`;
 }
 
+// Words a sentence quotes from the data files (not numbers): a file's
+// column names, an example of a raw column header.
+const TEXTS = {
+  annotation_columns: (w) => (w?.raw?.pbmc240?.parse?.annotation_columns ?? []).join(', '),
+  header_example: (w) => w?.raw?.pbmc240?.parse?.header_examples?.[0]?.[0] ?? '',
+};
+export function wfText(workflow, key) {
+  const text = TEXTS[key]?.(workflow);
+  return text ? text : PENDING_LABEL;
+}
+
 // ---- the traced cells ----
 
+// Outcomes in plain words, for readers new to the field: short labels for
+// buttons and charts, and the full reason a cell gets no answer.
 export const OUTCOME_LABELS = {
-  class: 'one class',
-  group: 'a group',
-  lineage: 'a lineage',
-  ambiguous_between_classes: 'ambiguous',
-  no_confident_label: 'no confident label',
-  outside_supported_region: 'outside the reference',
-  coverage_too_low: 'too few genes',
+  class: 'named one cell type',
+  group: 'narrowed to a family',
+  lineage: 'narrowed to a branch',
+  ambiguous_between_classes: 'no answer: looks like several kinds',
+  no_confident_label: 'no answer: no type stands out',
+  outside_supported_region: 'no answer: unlike any known cell',
+  coverage_too_low: 'no answer: too little measured',
 };
 export const OUTCOME_ORDER = Object.keys(OUTCOME_LABELS);
 export const ANSWERED = new Set(['class', 'group', 'lineage']);
 
+export const NO_ANSWER_REASONS = {
+  ambiguous_between_classes: 'the cell looks like several different kinds of cell, so the model does not pick one',
+  no_confident_label: 'no cell type stands out clearly enough',
+  outside_supported_region: 'the cell looks unlike any blood cell the model has learned',
+  coverage_too_low: 'too little was measured in this cell to judge',
+};
+
+// What a family or a branch holds, in plain words.
+export const LINEAGE_PLAIN = {
+  lymphoid: 'the branch of T, B and NK cells',
+  myeloid: 'the branch of monocytes, neutrophils and their relatives',
+  erythroid: 'the branch of red blood cells',
+  progenitor: 'the branch of stem and precursor cells',
+  other: 'the branch of platelets',
+};
+export const GROUP_PLAIN = {
+  'T cell': 'one of the T cell types',
+  'B cell': 'a B cell or a plasma cell',
+  'NK cell': 'a natural killer cell',
+  'monocyte/macrophage': 'one of the monocyte or macrophage types',
+  granulocyte: 'a neutrophil or a basophil',
+  'dendritic cell': 'one of the dendritic cell types',
+  progenitor: 'a stem or precursor cell',
+  erythroid: 'a red blood cell',
+  'platelet/megakaryocyte': 'a platelet',
+};
+
+// The reference's type names, as a reader would say them.
+export const PLAIN_NAMES = {
+  'b cell': 'B cell',
+  basophil: 'basophil',
+  'cd4-positive, alpha-beta t cell': 'CD4 T cell (helper)',
+  'cd8-positive, alpha-beta t cell': 'CD8 T cell (killer)',
+  'classical monocyte': 'classical monocyte',
+  'common myeloid progenitor': 'myeloid progenitor',
+  erythrocyte: 'red blood cell',
+  'hematopoietic precursor cell': 'blood precursor cell',
+  'hematopoietic stem cell': 'blood stem cell',
+  'intermediate monocyte': 'intermediate monocyte',
+  macrophage: 'macrophage',
+  'mature nk t cell': 'NK T cell',
+  monocyte: 'monocyte',
+  'myeloid dendritic cell': 'myeloid dendritic cell',
+  'naive thymus-derived cd4-positive, alpha-beta t cell': 'naive CD4 T cell',
+  'natural killer cell': 'natural killer (NK) cell',
+  neutrophil: 'neutrophil',
+  'non-classical monocyte': 'non-classical monocyte',
+  'plasma cell': 'plasma cell',
+  'plasmacytoid dendritic cell': 'plasmacytoid dendritic cell',
+  platelet: 'platelet',
+  'regulatory t cell': 'regulatory T cell',
+};
+export const plainName = (name) => PLAIN_NAMES[name] ?? name;
+
 export const outcomeOf = (cell) => cell?.outcome;
 export const isAnswered = (cell) => ANSWERED.has(cell?.outcome);
 
-// A cell's answer in words: the label it names, or why it has none.
+// A cell's answer in a sentence: what it names, and how far; or why it has none.
 export function answerText(cell) {
   if (!cell) return PENDING_LABEL;
-  if (isAnswered(cell)) return `${cell.label} (${OUTCOME_LABELS[cell.outcome]})`;
-  return `no answer: ${OUTCOME_LABELS[cell.outcome] ?? cell.outcome}`;
+  if (cell.outcome === 'class') return `${plainName(cell.label)}, one cell type`;
+  if (cell.outcome === 'group') return `${cell.label}: ${GROUP_PLAIN[cell.label] ?? 'a family of types'}, not narrowed to one type`;
+  if (cell.outcome === 'lineage') return `${cell.label}: ${LINEAGE_PLAIN[cell.label] ?? 'a broad branch'}, not narrowed further`;
+  return `no answer, because ${NO_ANSWER_REASONS[cell.outcome] ?? cell.outcome}`;
+}
+
+// The buttons that pick a cell by its result.
+export const OUTCOME_CHIPS = {
+  class: 'Named as one type',
+  group: 'Narrowed to a family',
+  lineage: 'Narrowed to a branch',
+  ambiguous_between_classes: 'Looks like several kinds',
+  no_confident_label: 'No type stands out',
+  outside_supported_region: 'Unlike any known cell',
+  coverage_too_low: 'Too little measured',
+};
+
+// What VivOME says about a cell, as whole sentences for a reader new to it.
+export function answerSentence(cell) {
+  if (!cell) return PENDING_LABEL;
+  if (cell.outcome === 'class') return `It names one type: ${plainName(cell.label)}.`;
+  if (cell.outcome === 'group') {
+    return `It narrows the cell to a family, ${cell.label}: ${GROUP_PLAIN[cell.label] ?? 'one of a few related types'}. It cannot tell which one.`;
+  }
+  if (cell.outcome === 'lineage') {
+    return `It narrows the cell to a broad branch, ${cell.label}: ${LINEAGE_PLAIN[cell.label] ?? 'a branch of related types'}. It cannot narrow it further.`;
+  }
+  const reason = NO_ANSWER_REASONS[cell.outcome] ?? cell.outcome;
+  return `No answer. ${reason.charAt(0).toUpperCase()}${reason.slice(1)}.`;
+}
+
+// The same, short enough for a label in a figure.
+export function answerShort(cell) {
+  if (!cell) return PENDING_LABEL;
+  if (cell.outcome === 'class') return plainName(cell.label);
+  if (isAnswered(cell)) return `${cell.label} (${cell.outcome === 'group' ? 'a family' : 'a branch'})`;
+  const text = OUTCOME_LABELS[cell.outcome] ?? cell.outcome;
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// The best guess in words, with its probability.
+export function guessText(cell, classOrder) {
+  if (!cell || cell.guess === null || cell.guess === undefined) return 'none, too little was measured';
+  return `${plainName(classOrder[cell.guess])} (probability ${(cell.guess_probability * 100).toFixed(1)}%)`;
 }
 
 export function storyCells(workflow) {
@@ -122,7 +231,8 @@ export function searchCells(workflow, query, limit = 8) {
   if (!q) return [];
   const out = [];
   (workflow?.trace?.cells ?? []).forEach((c, i) => {
-    if (out.length < limit && (c.id.toLowerCase().includes(q) || String(i) === q)) out.push(i);
+    // Cells are numbered from 1 for readers; the file's run name also matches.
+    if (out.length < limit && (String(i + 1) === q || (q.length > 2 && c.id.toLowerCase().includes(q)))) out.push(i);
   });
   return out;
 }
