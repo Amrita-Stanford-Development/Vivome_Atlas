@@ -510,6 +510,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/narrow_upload/calibration.json` — the first design's settings, threshold, flag rates and protein check
 - `research/notebook-outputs/narrow_upload/scores.csv` — the first design's score for every simulated upload
 - `research/notebook-outputs/narrow_upload/committed.json` — the second design's threshold, flag rates and protein check
+- `research/notebooks/astral_abstention.py` — why v4.1 abstains on most cells of the Astral PBMC runs (PXD070599 DS18, DS19): abstention reasons, coverage, upload size, depth, match-between-runs, lineage markers, and a platelet and red-cell signature dropped; label-free
+- `research/notebook-outputs/astral_abstention/summary.json` — that diagnosis, per dataset and check
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell

@@ -1,0 +1,1229 @@
+{
+  "Fulcher 2026": {
+    "cells": 1275,
+    "features_matched": 1654,
+    "features_unmatched": 7,
+    "proteins_per_cell_median": 776,
+    "observed_in_space_per_cell_median": 773,
+    "reasons_pct": {
+      "committed": 87.0,
+      "ambiguous_between_classes": 12.6,
+      "outside_supported_region": 0.4
+    },
+    "reference_similarity": {
+      "median": 0.9821,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 0.4
+    },
+    "committed_answers": {
+      "myeloid": 39.9,
+      "lymphoid": 34.4,
+      "T cell": 25.4,
+      "B cell": 0.3,
+      "monocyte/macrophage": 0.1
+    },
+    "best_guess_lineage": {
+      "lymphoid": 59.6,
+      "myeloid": 38.6,
+      "erythroid": 1.6,
+      "progenitor": 0.2
+    },
+    "best_guess_classes": {
+      "monocyte": 32.0,
+      "cd4-positive, alpha-beta t cell": 17.3,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 11.5,
+      "natural killer cell": 11.2,
+      "b cell": 10.0,
+      "cd8-positive, alpha-beta t cell": 4.4
+    }
+  },
+  "PBMC240": {
+    "cells": 238,
+    "features_matched": 2996,
+    "features_unmatched": 91,
+    "proteins_per_cell_median": 1074,
+    "observed_in_space_per_cell_median": 1044,
+    "reasons_pct": {
+      "committed": 73.1,
+      "ambiguous_between_classes": 24.8,
+      "outside_supported_region": 1.7,
+      "coverage_too_low": 0.4
+    },
+    "reference_similarity": {
+      "median": 0.96,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 2.1
+    },
+    "committed_answers": {
+      "lymphoid": 55.7,
+      "T cell": 29.3,
+      "myeloid": 12.6,
+      "monocyte/macrophage": 1.7,
+      "progenitor": 0.6
+    },
+    "best_guess_lineage": {
+      "lymphoid": 78.6,
+      "myeloid": 16.4,
+      "other": 3.4,
+      "progenitor": 0.8,
+      "erythroid": 0.4,
+      "none": 0.4
+    },
+    "best_guess_classes": {
+      "cd8-positive, alpha-beta t cell": 21.8,
+      "cd4-positive, alpha-beta t cell": 19.3,
+      "natural killer cell": 16.0,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 13.0,
+      "monocyte": 12.2,
+      "plasma cell": 4.2
+    }
+  },
+  "DS18 Standard Astral": {
+    "cells": 88,
+    "features_matched": 1694,
+    "features_unmatched": 101,
+    "proteins_per_cell_median": 1024,
+    "observed_in_space_per_cell_median": 959,
+    "reasons_pct": {
+      "ambiguous_between_classes": 48.9,
+      "committed": 31.8,
+      "outside_supported_region": 12.5,
+      "no_confident_label": 6.8
+    },
+    "reference_similarity": {
+      "median": 0.847,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 12.5
+    },
+    "committed_answers": {
+      "myeloid": 46.4,
+      "monocyte/macrophage": 32.1,
+      "lymphoid": 14.3,
+      "T cell": 7.1
+    },
+    "best_guess_lineage": {
+      "myeloid": 54.5,
+      "lymphoid": 23.9,
+      "other": 21.6
+    },
+    "best_guess_classes": {
+      "macrophage": 29.5,
+      "platelet": 21.6,
+      "plasma cell": 14.8,
+      "non-classical monocyte": 10.2,
+      "intermediate monocyte": 6.8,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 5.7
+    }
+  },
+  "DS18 FAIMS Astral": {
+    "cells": 89,
+    "features_matched": 2323,
+    "features_unmatched": 163,
+    "proteins_per_cell_median": 1261,
+    "observed_in_space_per_cell_median": 1188,
+    "reasons_pct": {
+      "ambiguous_between_classes": 50.6,
+      "committed": 27.0,
+      "no_confident_label": 14.6,
+      "outside_supported_region": 7.9
+    },
+    "reference_similarity": {
+      "median": 0.8425,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 7.9
+    },
+    "committed_answers": {
+      "other": 58.3,
+      "myeloid": 25.0,
+      "progenitor": 8.3,
+      "T cell": 4.2,
+      "lymphoid": 4.2
+    },
+    "best_guess_lineage": {
+      "other": 49.4,
+      "lymphoid": 21.3,
+      "myeloid": 19.1,
+      "erythroid": 6.7,
+      "progenitor": 3.4
+    },
+    "best_guess_classes": {
+      "platelet": 49.4,
+      "b cell": 6.7,
+      "erythrocyte": 6.7,
+      "macrophage": 5.6,
+      "plasma cell": 4.5,
+      "non-classical monocyte": 4.5
+    }
+  },
+  "DS18 FAIMS Astral-Zoom": {
+    "cells": 91,
+    "features_matched": 2799,
+    "features_unmatched": 246,
+    "proteins_per_cell_median": 1550,
+    "observed_in_space_per_cell_median": 1441,
+    "reasons_pct": {
+      "ambiguous_between_classes": 48.4,
+      "committed": 37.4,
+      "no_confident_label": 12.1,
+      "outside_supported_region": 2.2
+    },
+    "reference_similarity": {
+      "median": 0.8796,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 2.2
+    },
+    "committed_answers": {
+      "myeloid": 61.8,
+      "T cell": 20.6,
+      "lymphoid": 14.7,
+      "erythroid": 2.9
+    },
+    "best_guess_lineage": {
+      "myeloid": 41.8,
+      "lymphoid": 30.8,
+      "other": 18.7,
+      "erythroid": 5.5,
+      "progenitor": 3.3
+    },
+    "best_guess_classes": {
+      "platelet": 18.7,
+      "macrophage": 14.3,
+      "myeloid dendritic cell": 13.2,
+      "cd4-positive, alpha-beta t cell": 12.1,
+      "mature nk t cell": 9.9,
+      "monocyte": 6.6
+    }
+  },
+  "DS19": {
+    "cells": 81,
+    "features_matched": 3853,
+    "features_unmatched": 383,
+    "proteins_per_cell_median": 3570,
+    "observed_in_space_per_cell_median": 3270,
+    "reasons_pct": {
+      "ambiguous_between_classes": 58.0,
+      "committed": 40.7,
+      "no_confident_label": 1.2
+    },
+    "reference_similarity": {
+      "median": 0.8737,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 0.0
+    },
+    "committed_answers": {
+      "myeloid": 48.5,
+      "lymphoid": 42.4,
+      "T cell": 9.1
+    },
+    "best_guess_lineage": {
+      "myeloid": 55.6,
+      "lymphoid": 35.8,
+      "erythroid": 4.9,
+      "other": 3.7
+    },
+    "best_guess_classes": {
+      "neutrophil": 25.9,
+      "monocyte": 14.8,
+      "myeloid dendritic cell": 12.3,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": 9.9,
+      "cd8-positive, alpha-beta t cell": 8.6,
+      "cd4-positive, alpha-beta t cell": 7.4
+    }
+  },
+  "Fulcher 2026, 90-cell subsamples": {
+    "seeds": 20,
+    "committed_pct": {
+      "median": 95.6,
+      "min": 91.1,
+      "max": 98.9
+    }
+  },
+  "DS18 Standard Astral, observed in half its cells": {
+    "proteins_per_cell_median": 879,
+    "reasons_pct": {
+      "ambiguous_between_classes": 60.2,
+      "committed": 23.9,
+      "outside_supported_region": 11.4,
+      "no_confident_label": 4.5
+    },
+    "reference_similarity": {
+      "median": 0.8522,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 11.4
+    },
+    "best_guess_lineage": {
+      "myeloid": 52.3,
+      "lymphoid": 27.3,
+      "other": 20.5
+    }
+  },
+  "DS18 Standard Astral, Fulcher's proteins": {
+    "proteins_per_cell_median": 674,
+    "reasons_pct": {
+      "ambiguous_between_classes": 67.0,
+      "committed": 20.5,
+      "outside_supported_region": 8.0,
+      "no_confident_label": 4.5
+    },
+    "reference_similarity": {
+      "median": 0.844,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 8.0
+    },
+    "best_guess_lineage": {
+      "myeloid": 47.7,
+      "lymphoid": 36.4,
+      "other": 15.9
+    }
+  },
+  "DS18 FAIMS Astral, observed in half its cells": {
+    "proteins_per_cell_median": 1054,
+    "reasons_pct": {
+      "ambiguous_between_classes": 50.6,
+      "committed": 25.8,
+      "no_confident_label": 14.6,
+      "outside_supported_region": 9.0
+    },
+    "reference_similarity": {
+      "median": 0.8517,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 9.0
+    },
+    "best_guess_lineage": {
+      "other": 44.9,
+      "lymphoid": 23.6,
+      "myeloid": 20.2,
+      "erythroid": 7.9,
+      "progenitor": 3.4
+    }
+  },
+  "DS18 FAIMS Astral, Fulcher's proteins": {
+    "proteins_per_cell_median": 811,
+    "reasons_pct": {
+      "ambiguous_between_classes": 46.1,
+      "committed": 25.8,
+      "no_confident_label": 21.3,
+      "outside_supported_region": 6.7
+    },
+    "reference_similarity": {
+      "median": 0.8663,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 6.7
+    },
+    "best_guess_lineage": {
+      "other": 41.6,
+      "lymphoid": 25.8,
+      "myeloid": 22.5,
+      "erythroid": 7.9,
+      "progenitor": 2.2
+    }
+  },
+  "DS18 FAIMS Astral-Zoom, observed in half its cells": {
+    "proteins_per_cell_median": 1343,
+    "reasons_pct": {
+      "ambiguous_between_classes": 42.9,
+      "committed": 40.7,
+      "no_confident_label": 11.0,
+      "outside_supported_region": 5.5
+    },
+    "reference_similarity": {
+      "median": 0.8799,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 5.5
+    },
+    "best_guess_lineage": {
+      "myeloid": 44.0,
+      "lymphoid": 31.9,
+      "other": 19.8,
+      "progenitor": 3.3,
+      "erythroid": 1.1
+    }
+  },
+  "DS18 FAIMS Astral-Zoom, Fulcher's proteins": {
+    "proteins_per_cell_median": 869,
+    "reasons_pct": {
+      "committed": 47.3,
+      "ambiguous_between_classes": 41.8,
+      "outside_supported_region": 6.6,
+      "no_confident_label": 4.4
+    },
+    "reference_similarity": {
+      "median": 0.8822,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 6.6
+    },
+    "best_guess_lineage": {
+      "myeloid": 51.6,
+      "lymphoid": 29.7,
+      "other": 18.7
+    }
+  },
+  "DS19, observed in half its cells": {
+    "proteins_per_cell_median": 3432,
+    "reasons_pct": {
+      "ambiguous_between_classes": 58.0,
+      "committed": 40.7,
+      "no_confident_label": 1.2
+    },
+    "reference_similarity": {
+      "median": 0.8735,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 0.0
+    },
+    "best_guess_lineage": {
+      "myeloid": 45.7,
+      "lymphoid": 35.8,
+      "other": 12.3,
+      "erythroid": 6.2
+    }
+  },
+  "DS19, Fulcher's proteins": {
+    "proteins_per_cell_median": 1380,
+    "reasons_pct": {
+      "committed": 54.3,
+      "ambiguous_between_classes": 44.4,
+      "no_confident_label": 1.2
+    },
+    "reference_similarity": {
+      "median": 0.8931,
+      "threshold": 0.7789892554283142,
+      "below_threshold_pct": 0.0
+    },
+    "best_guess_lineage": {
+      "lymphoid": 50.6,
+      "myeloid": 45.7,
+      "other": 3.7
+    }
+  },
+  "match-between-runs": {
+    "DS18 Standard Astral": {
+      "precursors_per_cell_median": {
+        "final": 3071,
+        "first_pass": 1652
+      },
+      "final_values_not_identified_in_first_pass_pct": {
+        "median": 45.7,
+        "p10": 37.5,
+        "p90": 50.3
+      },
+      "both_passes_median_abs_log2_difference": 0.061,
+      "served protein matrix": {
+        "genes_per_cell_median": 1024,
+        "committed_pct": 31.8,
+        "reference_similarity_median": 0.847,
+        "best_guess_lineage": {
+          "myeloid": 54.5,
+          "lymphoid": 23.9,
+          "other": 21.6
+        }
+      },
+      "final precursors, rolled up": {
+        "genes_per_cell_median": 905,
+        "committed_pct": 25.0,
+        "reference_similarity_median": 0.8413,
+        "best_guess_lineage": {
+          "myeloid": 53.4,
+          "lymphoid": 28.4,
+          "other": 17.0,
+          "erythroid": 1.1
+        }
+      },
+      "final precursors, first-pass identifications only": {
+        "genes_per_cell_median": 490,
+        "committed_pct": 20.5,
+        "reference_similarity_median": 0.8597,
+        "best_guess_lineage": {
+          "lymphoid": 47.7,
+          "myeloid": 33.0,
+          "other": 15.9,
+          "erythroid": 3.4
+        }
+      },
+      "first-pass precursors": {
+        "genes_per_cell_median": 497,
+        "committed_pct": 20.5,
+        "reference_similarity_median": 0.8367,
+        "best_guess_lineage": {
+          "myeloid": 44.3,
+          "lymphoid": 38.6,
+          "other": 13.6,
+          "erythroid": 3.4
+        }
+      }
+    },
+    "DS18 FAIMS Astral": {
+      "precursors_per_cell_median": {
+        "final": 4231,
+        "first_pass": 2505
+      },
+      "final_values_not_identified_in_first_pass_pct": {
+        "median": 42.6,
+        "p10": 38.1,
+        "p90": 48.4
+      },
+      "both_passes_median_abs_log2_difference": 0.078,
+      "served protein matrix": {
+        "genes_per_cell_median": 1261,
+        "committed_pct": 27.0,
+        "reference_similarity_median": 0.8425,
+        "best_guess_lineage": {
+          "other": 49.4,
+          "lymphoid": 21.3,
+          "myeloid": 19.1,
+          "erythroid": 6.7,
+          "progenitor": 3.4
+        }
+      },
+      "final precursors, rolled up": {
+        "genes_per_cell_median": 1157,
+        "committed_pct": 22.5,
+        "reference_similarity_median": 0.8405,
+        "best_guess_lineage": {
+          "other": 43.8,
+          "lymphoid": 25.8,
+          "myeloid": 18.0,
+          "erythroid": 7.9,
+          "progenitor": 4.5
+        }
+      },
+      "final precursors, first-pass identifications only": {
+        "genes_per_cell_median": 666,
+        "committed_pct": 21.3,
+        "reference_similarity_median": 0.8574,
+        "best_guess_lineage": {
+          "other": 37.1,
+          "myeloid": 30.3,
+          "lymphoid": 22.5,
+          "progenitor": 9.0,
+          "erythroid": 1.1
+        }
+      },
+      "first-pass precursors": {
+        "genes_per_cell_median": 687,
+        "committed_pct": 24.7,
+        "reference_similarity_median": 0.856,
+        "best_guess_lineage": {
+          "other": 36.0,
+          "myeloid": 28.1,
+          "lymphoid": 22.5,
+          "progenitor": 11.2,
+          "erythroid": 2.2
+        }
+      }
+    },
+    "DS18 FAIMS Astral-Zoom": {
+      "precursors_per_cell_median": {
+        "final": 4421,
+        "first_pass": 2522
+      },
+      "final_values_not_identified_in_first_pass_pct": {
+        "median": 43.6,
+        "p10": 30.4,
+        "p90": 48.9
+      },
+      "both_passes_median_abs_log2_difference": 0.161,
+      "served protein matrix": {
+        "genes_per_cell_median": 1550,
+        "committed_pct": 37.4,
+        "reference_similarity_median": 0.8796,
+        "best_guess_lineage": {
+          "myeloid": 41.8,
+          "lymphoid": 30.8,
+          "other": 18.7,
+          "erythroid": 5.5,
+          "progenitor": 3.3
+        }
+      },
+      "final precursors, rolled up": {
+        "genes_per_cell_median": 1413,
+        "committed_pct": 29.7,
+        "reference_similarity_median": 0.8766,
+        "best_guess_lineage": {
+          "myeloid": 48.4,
+          "other": 17.6,
+          "erythroid": 16.5,
+          "lymphoid": 15.4,
+          "progenitor": 2.2
+        }
+      },
+      "final precursors, first-pass identifications only": {
+        "genes_per_cell_median": 869,
+        "committed_pct": 26.4,
+        "reference_similarity_median": 0.8667,
+        "best_guess_lineage": {
+          "lymphoid": 42.9,
+          "myeloid": 35.2,
+          "other": 14.3,
+          "progenitor": 6.6,
+          "erythroid": 1.1
+        }
+      },
+      "first-pass precursors": {
+        "genes_per_cell_median": 902,
+        "committed_pct": 28.6,
+        "reference_similarity_median": 0.8696,
+        "best_guess_lineage": {
+          "lymphoid": 40.7,
+          "myeloid": 29.7,
+          "other": 16.5,
+          "progenitor": 6.6,
+          "erythroid": 6.6
+        }
+      }
+    },
+    "DS19": {
+      "precursors_per_cell_median": {
+        "final": 16920,
+        "first_pass": 12274
+      },
+      "final_values_not_identified_in_first_pass_pct": {
+        "median": 28.3,
+        "p10": 24.0,
+        "p90": 30.3
+      },
+      "both_passes_median_abs_log2_difference": 0.05,
+      "served protein matrix": {
+        "genes_per_cell_median": 3570,
+        "committed_pct": 40.7,
+        "reference_similarity_median": 0.8737,
+        "best_guess_lineage": {
+          "myeloid": 55.6,
+          "lymphoid": 35.8,
+          "erythroid": 4.9,
+          "other": 3.7
+        }
+      },
+      "final precursors, rolled up": {
+        "genes_per_cell_median": 3386,
+        "committed_pct": 42.0,
+        "reference_similarity_median": 0.8736,
+        "best_guess_lineage": {
+          "myeloid": 60.5,
+          "lymphoid": 29.6,
+          "erythroid": 4.9,
+          "other": 4.9
+        }
+      },
+      "final precursors, first-pass identifications only": {
+        "genes_per_cell_median": 2753,
+        "committed_pct": 44.4,
+        "reference_similarity_median": 0.875,
+        "best_guess_lineage": {
+          "myeloid": 46.9,
+          "lymphoid": 45.7,
+          "erythroid": 4.9,
+          "other": 2.5
+        }
+      },
+      "first-pass precursors": {
+        "genes_per_cell_median": 2807,
+        "committed_pct": 43.2,
+        "reference_similarity_median": 0.8722,
+        "best_guess_lineage": {
+          "myeloid": 48.1,
+          "lymphoid": 42.0,
+          "erythroid": 4.9,
+          "other": 4.9
+        }
+      }
+    }
+  },
+  "lineage markers": {
+    "Fulcher 2026": {
+      "T": {
+        "CD3E": {
+          "cells_pct": 3.6,
+          "median_rank": 0.02
+        },
+        "CD3D": {
+          "cells_pct": 39.1,
+          "median_rank": 0.07
+        },
+        "LCK": {
+          "cells_pct": 39.4,
+          "median_rank": 0.18
+        },
+        "CD247": {
+          "cells_pct": 21.9,
+          "median_rank": 0.31
+        },
+        "ZAP70": {
+          "cells_pct": 37.3,
+          "median_rank": 0.11
+        }
+      },
+      "NK": {
+        "PRF1": {
+          "cells_pct": 63.9,
+          "median_rank": 0.17
+        },
+        "GZMB": {
+          "cells_pct": 1.1,
+          "median_rank": 0.0
+        }
+      },
+      "B": {},
+      "monocyte": {
+        "LYZ": {
+          "cells_pct": 100.0,
+          "median_rank": 0.99
+        },
+        "S100A8": {
+          "cells_pct": 100.0,
+          "median_rank": 0.82
+        },
+        "S100A9": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        },
+        "CSTA": {
+          "cells_pct": 26.0,
+          "median_rank": 0.34
+        },
+        "MNDA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.82
+        },
+        "CD14": {
+          "cells_pct": 69.8,
+          "median_rank": 0.22
+        }
+      },
+      "platelet": {
+        "PPBP": {
+          "cells_pct": 5.3,
+          "median_rank": 0.01
+        },
+        "ITGA2B": {
+          "cells_pct": 1.0,
+          "median_rank": 0.01
+        }
+      },
+      "red cell": {
+        "HBB": {
+          "cells_pct": 58.7,
+          "median_rank": 0.18
+        }
+      }
+    },
+    "PBMC240": {
+      "T": {
+        "CD3E": {
+          "cells_pct": 45.0,
+          "median_rank": 0.4
+        },
+        "CD3D": {
+          "cells_pct": 60.1,
+          "median_rank": 0.23
+        },
+        "CD2": {
+          "cells_pct": 41.2,
+          "median_rank": 0.13
+        },
+        "LCK": {
+          "cells_pct": 35.7,
+          "median_rank": 0.24
+        },
+        "CD247": {
+          "cells_pct": 55.0,
+          "median_rank": 0.46
+        },
+        "ZAP70": {
+          "cells_pct": 88.2,
+          "median_rank": 0.54
+        }
+      },
+      "NK": {
+        "PRF1": {
+          "cells_pct": 50.8,
+          "median_rank": 0.82
+        },
+        "GZMB": {
+          "cells_pct": 39.1,
+          "median_rank": 0.38
+        }
+      },
+      "B": {
+        "MS4A1": {
+          "cells_pct": 1.3,
+          "median_rank": 0.61
+        }
+      },
+      "monocyte": {
+        "LYZ": {
+          "cells_pct": 99.2,
+          "median_rank": 0.89
+        },
+        "S100A8": {
+          "cells_pct": 99.2,
+          "median_rank": 0.86
+        },
+        "S100A9": {
+          "cells_pct": 99.2,
+          "median_rank": 0.88
+        },
+        "CSTA": {
+          "cells_pct": 99.2,
+          "median_rank": 0.96
+        },
+        "MNDA": {
+          "cells_pct": 17.6,
+          "median_rank": 0.95
+        },
+        "CD14": {
+          "cells_pct": 10.9,
+          "median_rank": 0.73
+        }
+      },
+      "platelet": {
+        "PPBP": {
+          "cells_pct": 16.0,
+          "median_rank": 0.92
+        },
+        "PF4": {
+          "cells_pct": 13.9,
+          "median_rank": 0.94
+        },
+        "ITGA2B": {
+          "cells_pct": 21.0,
+          "median_rank": 0.79
+        },
+        "TUBB1": {
+          "cells_pct": 39.5,
+          "median_rank": 0.88
+        }
+      },
+      "red cell": {
+        "HBB": {
+          "cells_pct": 98.7,
+          "median_rank": 0.63
+        },
+        "HBA1": {
+          "cells_pct": 96.6,
+          "median_rank": 0.93
+        }
+      }
+    },
+    "DS18 Standard Astral": {
+      "T": {
+        "CD3E": {
+          "cells_pct": 8.0,
+          "median_rank": 0.59
+        },
+        "LCK": {
+          "cells_pct": 11.4,
+          "median_rank": 0.34
+        },
+        "CD247": {
+          "cells_pct": 9.1,
+          "median_rank": 0.32
+        },
+        "ZAP70": {
+          "cells_pct": 6.8,
+          "median_rank": 0.31
+        }
+      },
+      "NK": {
+        "GNLY": {
+          "cells_pct": 3.4,
+          "median_rank": 0.72
+        },
+        "PRF1": {
+          "cells_pct": 6.8,
+          "median_rank": 0.63
+        },
+        "GZMB": {
+          "cells_pct": 3.4,
+          "median_rank": 0.5
+        }
+      },
+      "B": {},
+      "monocyte": {
+        "LYZ": {
+          "cells_pct": 100.0,
+          "median_rank": 0.88
+        },
+        "S100A8": {
+          "cells_pct": 100.0,
+          "median_rank": 0.97
+        },
+        "S100A9": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        },
+        "CSTA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.97
+        },
+        "MNDA": {
+          "cells_pct": 69.3,
+          "median_rank": 0.32
+        },
+        "CD14": {
+          "cells_pct": 9.1,
+          "median_rank": 0.68
+        }
+      },
+      "platelet": {
+        "PPBP": {
+          "cells_pct": 97.7,
+          "median_rank": 0.81
+        },
+        "ITGA2B": {
+          "cells_pct": 83.0,
+          "median_rank": 0.78
+        },
+        "TUBB1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.96
+        }
+      },
+      "red cell": {
+        "HBB": {
+          "cells_pct": 98.9,
+          "median_rank": 0.44
+        },
+        "HBA1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.6
+        }
+      }
+    },
+    "DS18 FAIMS Astral": {
+      "T": {
+        "CD3E": {
+          "cells_pct": 12.4,
+          "median_rank": 0.06
+        },
+        "CD3D": {
+          "cells_pct": 4.5,
+          "median_rank": 0.21
+        },
+        "CD247": {
+          "cells_pct": 13.5,
+          "median_rank": 0.19
+        },
+        "ZAP70": {
+          "cells_pct": 20.2,
+          "median_rank": 0.63
+        }
+      },
+      "NK": {
+        "PRF1": {
+          "cells_pct": 11.2,
+          "median_rank": 0.14
+        },
+        "GZMB": {
+          "cells_pct": 4.5,
+          "median_rank": 0.21
+        }
+      },
+      "B": {},
+      "monocyte": {
+        "LYZ": {
+          "cells_pct": 100.0,
+          "median_rank": 0.93
+        },
+        "S100A8": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        },
+        "S100A9": {
+          "cells_pct": 100.0,
+          "median_rank": 0.99
+        },
+        "CSTA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.97
+        },
+        "MNDA": {
+          "cells_pct": 97.8,
+          "median_rank": 0.86
+        },
+        "CD14": {
+          "cells_pct": 20.2,
+          "median_rank": 0.09
+        }
+      },
+      "platelet": {
+        "PPBP": {
+          "cells_pct": 100.0,
+          "median_rank": 0.9
+        },
+        "ITGA2B": {
+          "cells_pct": 100.0,
+          "median_rank": 0.95
+        },
+        "TUBB1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        }
+      },
+      "red cell": {
+        "HBB": {
+          "cells_pct": 100.0,
+          "median_rank": 0.86
+        },
+        "HBA1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.73
+        }
+      }
+    },
+    "DS18 FAIMS Astral-Zoom": {
+      "T": {
+        "CD3E": {
+          "cells_pct": 9.9,
+          "median_rank": 0.72
+        },
+        "CD3D": {
+          "cells_pct": 11.0,
+          "median_rank": 0.23
+        },
+        "CD2": {
+          "cells_pct": 11.0,
+          "median_rank": 0.29
+        },
+        "LCK": {
+          "cells_pct": 13.2,
+          "median_rank": 0.55
+        },
+        "CD247": {
+          "cells_pct": 9.9,
+          "median_rank": 0.53
+        },
+        "ZAP70": {
+          "cells_pct": 91.2,
+          "median_rank": 0.34
+        }
+      },
+      "NK": {
+        "PRF1": {
+          "cells_pct": 13.2,
+          "median_rank": 0.24
+        },
+        "GZMB": {
+          "cells_pct": 4.4,
+          "median_rank": 0.1
+        }
+      },
+      "B": {},
+      "monocyte": {
+        "LYZ": {
+          "cells_pct": 100.0,
+          "median_rank": 0.99
+        },
+        "S100A8": {
+          "cells_pct": 100.0,
+          "median_rank": 1.0
+        },
+        "S100A9": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        },
+        "CSTA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.9
+        },
+        "MNDA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.97
+        },
+        "CD14": {
+          "cells_pct": 6.6,
+          "median_rank": 0.13
+        }
+      },
+      "platelet": {
+        "PPBP": {
+          "cells_pct": 100.0,
+          "median_rank": 0.96
+        },
+        "ITGA2B": {
+          "cells_pct": 100.0,
+          "median_rank": 0.88
+        },
+        "TUBB1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        }
+      },
+      "red cell": {
+        "HBB": {
+          "cells_pct": 100.0,
+          "median_rank": 0.97
+        },
+        "HBA1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.97
+        },
+        "CA1": {
+          "cells_pct": 14.3,
+          "median_rank": 0.16
+        }
+      }
+    },
+    "DS19": {
+      "T": {
+        "CD3E": {
+          "cells_pct": 71.6,
+          "median_rank": 0.36
+        },
+        "CD2": {
+          "cells_pct": 71.6,
+          "median_rank": 0.08
+        },
+        "LCK": {
+          "cells_pct": 39.5,
+          "median_rank": 0.29
+        },
+        "CD247": {
+          "cells_pct": 74.1,
+          "median_rank": 0.48
+        },
+        "ZAP70": {
+          "cells_pct": 100.0,
+          "median_rank": 0.69
+        }
+      },
+      "NK": {
+        "PRF1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.46
+        },
+        "GZMB": {
+          "cells_pct": 23.5,
+          "median_rank": 0.12
+        }
+      },
+      "B": {
+        "MS4A1": {
+          "cells_pct": 9.9,
+          "median_rank": 0.33
+        }
+      },
+      "monocyte": {
+        "LYZ": {
+          "cells_pct": 100.0,
+          "median_rank": 0.99
+        },
+        "S100A8": {
+          "cells_pct": 100.0,
+          "median_rank": 1.0
+        },
+        "S100A9": {
+          "cells_pct": 100.0,
+          "median_rank": 1.0
+        },
+        "CSTA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.96
+        },
+        "MNDA": {
+          "cells_pct": 100.0,
+          "median_rank": 0.99
+        },
+        "CD14": {
+          "cells_pct": 96.3,
+          "median_rank": 0.08
+        }
+      },
+      "platelet": {
+        "PPBP": {
+          "cells_pct": 100.0,
+          "median_rank": 0.95
+        },
+        "ITGA2B": {
+          "cells_pct": 100.0,
+          "median_rank": 0.85
+        },
+        "TUBB1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.98
+        }
+      },
+      "red cell": {
+        "HBB": {
+          "cells_pct": 100.0,
+          "median_rank": 1.0
+        },
+        "HBA1": {
+          "cells_pct": 100.0,
+          "median_rank": 0.99
+        },
+        "CA1": {
+          "cells_pct": 74.1,
+          "median_rank": 0.07
+        }
+      }
+    }
+  },
+  "platelet and red-cell signature dropped": {
+    "classes": [
+      "platelet",
+      "erythrocyte"
+    ],
+    "genes_per_class": 100,
+    "signature_genes": 196,
+    "Fulcher 2026": {
+      "rows_dropped": 37,
+      "committed_pct": 87.0,
+      "committed_pct_signature_dropped": 86.4,
+      "committed_pct_random_drops": {
+        "median": 86.80000000000001,
+        "min": 86.0,
+        "max": 87.6
+      }
+    },
+    "PBMC240": {
+      "rows_dropped": 99,
+      "committed_pct": 73.1,
+      "committed_pct_signature_dropped": 72.3,
+      "committed_pct_random_drops": {
+        "median": 73.7,
+        "min": 71.0,
+        "max": 75.6
+      }
+    },
+    "DS18 Standard Astral": {
+      "rows_dropped": 67,
+      "committed_pct": 31.8,
+      "committed_pct_signature_dropped": 34.1,
+      "committed_pct_random_drops": {
+        "median": 28.95,
+        "min": 25.0,
+        "max": 34.1
+      }
+    },
+    "DS18 FAIMS Astral": {
+      "rows_dropped": 90,
+      "committed_pct": 27.0,
+      "committed_pct_signature_dropped": 19.1,
+      "committed_pct_random_drops": {
+        "median": 25.85,
+        "min": 21.3,
+        "max": 28.1
+      }
+    },
+    "DS18 FAIMS Astral-Zoom": {
+      "rows_dropped": 102,
+      "committed_pct": 37.4,
+      "committed_pct_signature_dropped": 41.8,
+      "committed_pct_random_drops": {
+        "median": 35.2,
+        "min": 33.0,
+        "max": 38.5
+      }
+    },
+    "DS19": {
+      "rows_dropped": 111,
+      "committed_pct": 40.7,
+      "committed_pct_signature_dropped": 39.5,
+      "committed_pct_random_drops": {
+        "median": 44.4,
+        "min": 40.7,
+        "max": 48.1
+      }
+    }
+  }
+}

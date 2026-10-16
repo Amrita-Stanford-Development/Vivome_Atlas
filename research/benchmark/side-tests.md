@@ -68,6 +68,11 @@ comes from here. Keep this list current.
 - **Public, not downloaded:**
   - PXD070599's single HeLa and HEK293T (tier B, 24 GB; role `reserve` in
     `scripts/fetch_public_sets.py`);
+  - PXD070599's empty-well runs beside DS18 and DS19, 8 per run set, 32 in
+    all (raw files only, searched into none of the deposited matrices; they
+    need a DIA-NN search). Development, not a test: they would settle
+    whether the platelet and red-cell proteins in every Astral well are
+    shared material (run history, entry 38);
   - MSV000093867 (HEK293T and THP-1 ± LPS, raw only);
   - PXD026604 (sorted monocyte subsets, 31 GB `.msf`);
   - MSV000097303 (CD14+/CD19+/CD3+ pools, surfaceome), PXD076140 (PBMC

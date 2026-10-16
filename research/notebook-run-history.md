@@ -1641,6 +1641,77 @@ scores.csv, committed.json).
   unfamiliar instrument is not known; a newer instrument is worth a closer
   look.
 
+### 38. Why v4.1 abstains on the Astral PBMC runs (Goal 2), 2026-10-16
+
+**Why:** entry 37 found that v4.1 commits on only 27-41% of the cells in
+PXD070599's Astral PBMC runs, against 87% on Fulcher 2026. A diagnosis on
+development data, label-free; it changes nothing.
+
+**The data:** frozen PBMCs sorted one per well. DS18 is three run sets:
+Standard Astral (88 cells, DIA range 425-625 m/z), FAIMS Astral (89), and
+FAIMS 20-40 on a second instrument, "Astral-Zoom" (91, plate B3). DS19 is a
+second plate on that instrument (81 cells, plate B2). Every search used
+match-between-runs. Eight empty-well runs were acquired beside each run set
+(the deposit's raw-file mapping lists 32), but none was searched into a
+deposited matrix.
+
+**What it is not** (`research/notebooks/astral_abstention.py`):
+- **Upload size.** Fulcher's mixed upload cut to 90 cells commits on a
+  median 95.6% (91.1-98.9, 20 seeds).
+- **Depth.** The Astral cells show 1,024-3,570 proteins each, against
+  Fulcher's 776. Keeping only the proteins seen in half the cells, or only
+  Fulcher's proteins, leaves 20.5-54.3% committed.
+- **Match-between-runs.** A median 28-46% of each cell's precursor values
+  were not identified in that cell's first pass. With the precursors rolled
+  up to genes the same way in every arm, keeping only the first pass's
+  identifications, or using the first-pass precursors, gives 20.5-44.4%
+  committed, against 22.5-42.0% with every value. Reference similarity moves
+  by under 0.02.
+- **A removable platelet or red-cell signal.** Dropping the reference's 100
+  most platelet-specific and 100 most erythrocyte-specific genes (196 genes;
+  67-111 rows per Astral upload) moves the committed share from -7.9 to +4.4
+  points. That is within, or just outside, the range of ten random drops of
+  as many genes, in both directions. Fulcher and PBMC240 move by under one
+  point.
+
+**What is different:**
+- **The cells sit farther from the reference.** Median similarity is
+  0.84-0.88, against 0.96-0.98 on Fulcher and PBMC240. Ambiguity between
+  classes is the main abstention reason (48-58% of cells).
+- **The best guesses fall on classes rare in PBMCs.** Platelet is the best
+  guess for 49.4% of DS18 FAIMS cells, 21.6% of Standard and 18.7% of
+  Astral-Zoom. Macrophage takes 29.5% of Standard, neutrophil 25.9% of DS19,
+  and myeloid DC 12-13% of Astral-Zoom and DS19. On Fulcher and PBMC240 the
+  six commonest guesses are all monocyte, T, NK, B or plasma cells.
+- **Every well carries platelet and red-cell proteins.** PPBP, ITGA2B and
+  TUBB1 are seen in 83-100% of the Astral cells, at a median rank of
+  0.78-0.98 among each cell's own proteins (1 is the most abundant). In
+  Fulcher, PPBP and ITGA2B are seen in 5% and 1% of cells; in PBMC240, the
+  platelet markers in 14-40%. HBB and HBA1 are seen in 99-100% of the Astral
+  cells (median rank 0.44-1.0), against HBB in 59% of Fulcher's (rank 0.18).
+- **DS18 shows few T-cell markers,** although PBMCs are mostly T cells.
+  CD3E, CD3D, LCK and CD247 are each seen in 4.5-13.5% of DS18's cells,
+  against 22-39% for CD3D, LCK and CD247 in Fulcher, which measures fewer
+  proteins per cell. DS19 sees CD3E, CD2 and CD247 in 72-74% of its cells.
+
+**Results:** `research/notebook-outputs/astral_abstention/summary.json`.
+
+**What it means:**
+- **Abstaining is the right answer here.** These cells do not look like the
+  reference's blood cells, and v4.1 declines rather than guesses. No change
+  to the service.
+- **Why they differ is not settled.** Platelet and red-cell proteins in
+  every well and weak T-cell signals in DS18 fit material shared across
+  wells (ambient protein, platelets bound to cells), or a sorting or lysis
+  difference. Two things would settle it, and the deposit has neither in
+  usable form: the empty-well runs searched beside the cells (raw files
+  only; they need DIA-NN, which is not installed here), or the paper's cell
+  labels. The empty-well runs are now on the alternatives list
+  (`research/benchmark/side-tests.md`).
+- **For development:** DS18 and DS19 are poor controls for "a normal mixed
+  PBMC upload". Treat them as an unfamiliar-dataset case. Entry 37's second
+  design fails without them too: it also flagged PBMC240.
+
 ---
 
 ## The throughline
