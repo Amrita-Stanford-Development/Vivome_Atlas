@@ -34,6 +34,7 @@ V42_DEV_DIR = REPO_ROOT / "research" / "benchmark" / "v42_development"
 CORRECTED_DIR = REPO_ROOT / "research" / "benchmark" / "baselines_corrected"
 KHOURY_POSTHOC_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc"
 KHOURY_V41_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc_v41_check"
+KHOURY_V42_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc_v42_check"
 
 # decisive_summary.json's winner_config.enc -> a readable label for the manifest.
 # Keep this in sync with service/pipeline/encoder.py's _ENCODER_FAMILIES table;
@@ -295,8 +296,8 @@ V42_SUITE_BASIS = ("v4.1's pre-registered evaluation (240 simulated uploads of t
                    "use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as "
                    "v4.1 (service/tests/test_v42.py), so these are its numbers too")
 V42_SERVED_BASIS = "served settings, development data; research/benchmark/v42_development/confident.csv"
-KHOURY_NOT_SCORED = ("not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; "
-                     "v4.1's post-hoc figure is in the previous release")
+KHOURY_V42_BASIS = ("best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); "
+                    "research/benchmark/khoury2026_posthoc_v42_check/summary.json")
 
 
 def _served(confident_rows: list[dict], model_key: str, basis: str) -> list[dict]:
@@ -314,11 +315,11 @@ def _served(confident_rows: list[dict], model_key: str, basis: str) -> list[dict
 
 
 def build_v42_evaluation(phase3: dict, confident_rows: list[dict], fulcher_rows: list[dict],
-                         khoury_check: dict) -> dict:
+                         khoury_current: dict) -> dict:
     """v4.2's numbers. It answers an RNA upload exactly as v4.1, so its suite
     is v4.1's and the basis says why; the development datasets are measured
-    as served. Khoury 2026 has not been used for v4.2, so its recall there
-    is pending (the previous release carries v4.1's post-hoc figure)."""
+    as served. Its Khoury 2026 recall is post-hoc, from the one check after
+    its release (khoury_current: that check's summary)."""
     result = phase3["result"]["v4.1"]
     suite = {"title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation; v4.2 answers "
                       "RNA uploads exactly as v4.1)", "rows": [
@@ -329,9 +330,10 @@ def build_v42_evaluation(phase3: dict, confident_rows: list[dict], fulcher_rows:
                "value": measured(_fraction(fulcher[key]), "best guess as served, in-sample (v4.1's weight was "
                                  "chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv")}
               for key in fulcher if key.startswith("recall_")]
+    khoury = khoury_current["scores"]["v4.2"]
     recall += [{"dataset": "Khoury 2026", "type": key[len("recall_"):-len("_pct")],
-                "value": pending("post-hoc", KHOURY_NOT_SCORED)}
-               for key in khoury_check["scores"]["v4.1"] if key.startswith("recall_")]
+                "value": measured(_fraction(khoury[key]), KHOURY_V42_BASIS)}
+               for key in khoury if key.startswith("recall_")]
     return {"suite": suite, "served": _served(confident_rows, "v42", V42_SERVED_BASIS), "recall": recall}
 
 
@@ -549,8 +551,9 @@ def _dataset(key: str, name: str, measure: str, types: int | None, role: str, ro
 
 def build_benchmark(t: dict) -> dict:
     """t: the committed tables, by name (read in main). The current model is
-    v4.2, with v4.1 beside it. On Khoury 2026 only v4.1 and the baselines are
-    scored (post-hoc), so that table gives scores without differences."""
+    v4.2, with v4.1 beside it. Khoury 2026 is post-hoc for every method;
+    v4.2 was scored there once after its release, with its paired bootstrap
+    against v4.1 and every corrected baseline run."""
     def dev_pairs(dataset):
         out = defaultdict(list)
         for r in t["paired_current"]:
@@ -571,8 +574,18 @@ def build_benchmark(t: dict) -> dict:
     dev_basis = "development data, as served; research/benchmark/v42_development/"
     corrected_basis = "corrected baselines; research/benchmark/baselines_corrected/"
 
-    # Khoury 2026, post-hoc: scores only.
+    # Khoury 2026, post-hoc.
     k_scores = t["khoury_previous"]["scores"]
+    k_current = t["khoury_current"]["scores"]["v4.2"]
+    k_pairs, k_previous = defaultdict(list), []
+    for r in t["khoury_current_pairs"]:
+        family = r["comparison"][len("v4.2 vs "):]
+        pair = (float(r["diff_bal_acc_pct"]), float(r["ci_lo"]), float(r["ci_hi"]), _favours(r["favours"]))
+        if family == "v4.1":
+            k_previous.append(pair)
+        arm = KHOURY_ARMS.get((family, r["rule_b"]))
+        if arm:
+            k_pairs[arm].append(pair)
     k_arms = []
     for r in t["khoury_family"]:
         arm = KHOURY_ARMS.get((r["family"], r["rule"]))
@@ -584,15 +597,16 @@ def build_benchmark(t: dict) -> dict:
     khoury = _dataset(
         "khoury2026", "Khoury 2026", f"Balanced accuracy over {k_types} types",
         k_types,
-        "Held out from development: no method was developed or tuned on it. Post-hoc for v4.1 and for "
-        "the corrected baselines, since its labels were read at its one scoring (2026-10-03). v4.2 is not "
-        "scored here, because each use of it needs the owner's decision, so this table gives scores "
-        "without differences. The labels are the authors' clusters of the protein data, and its CD8 T "
-        "label largely separates naive from memory T cells.",
-        _rows([(CURRENT, pending("post-hoc", KHOURY_NOT_SCORED), []),
-               (PREVIOUS, k_scores["v4.1"]["balanced_accuracy_pct"], [])],
-              k_arms, {},
-              "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json",
+        "Held out from development: no method was developed or tuned on it. Post-hoc for every method, "
+        "since its labels were read at its one scoring (2026-10-03). v4.2 was scored here once, after its "
+        "release, on the owner's decision (2026-10-17): it is below v4.1 here, so its gain on Fulcher 2026 "
+        "does not carry over to this lab's data. The labels are the authors' clusters of the protein data, "
+        "and its CD8 T label largely separates naive from memory T cells.",
+        _rows([(CURRENT, k_current["balanced_accuracy_pct"], []),
+               (PREVIOUS, k_scores["v4.1"]["balanced_accuracy_pct"], k_previous)],
+              k_arms, k_pairs,
+              "post-hoc; research/benchmark/khoury2026_posthoc_v42_check/summary.json and "
+              "research/benchmark/khoury2026_posthoc_v41_check/summary.json",
               "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"))
 
     f_types = sum(1 for key in t["dev_fulcher"][0] if key.startswith("recall_"))
@@ -872,10 +886,12 @@ def main() -> None:
         "corrected_scope2": read_csv(CORRECTED_DIR / "scope2_summary.csv"),
         "khoury_family": read_csv(KHOURY_POSTHOC_DIR / "family_summary.csv"),
         "khoury_previous": json.loads((KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
+        "khoury_current": json.loads((KHOURY_V42_DIR / "summary.json").read_text(encoding="utf-8")),
+        "khoury_current_pairs": read_csv(KHOURY_V42_DIR / "paired_bootstrap.csv"),
     }
     phase3 = json.loads(V41_PHASE3.read_text(encoding="utf-8"))
     v42_evaluation = build_v42_evaluation(phase3, read_csv(V42_DEV_DIR / "confident.csv"),
-                                          tables["dev_fulcher"], tables["khoury_previous"])
+                                          tables["dev_fulcher"], tables["khoury_current"])
     v41_evaluation = build_v41_evaluation(phase3, read_csv(V41_DEV_DIR / "confident.csv"),
                                           read_csv(V41_DEV_DIR / "fulcher2026.csv"), tables["khoury_previous"])
 

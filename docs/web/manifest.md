@@ -90,9 +90,8 @@ Computed from repository data:
   baseline arm by score. A row's `score` is a measured record, with `sd`, `min`
   and `max` over seeds; `vs_current` is the current model minus that arm by
   paired bootstrap (the counts favouring each side, and the difference with
-  its CI or its range). On Khoury 2026, v4.2's score is pending (each use of
-  Khoury needs the owner's decision), so that table has scores and no
-  `vs_current`. Sources: `research/benchmark/v42_development/`,
+  its CI or its range). On Khoury 2026, every row is post-hoc; v4.2 was
+  scored there once after its release. Sources: `research/benchmark/v42_development/`,
   `research/benchmark/baselines_corrected/`,
   `research/benchmark/khoury2026_posthoc/` and
   `research/benchmark/khoury2026_posthoc_v41_check/`.

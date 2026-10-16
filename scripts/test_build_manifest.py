@@ -303,6 +303,7 @@ class TestV41Evaluation(unittest.TestCase):
                {"tool": "v4.2 (served)", "balanced_accuracy_pct": "75.8", "recall_CD8T_pct": "24.0",
                 "recall_DC_pct": "63.0", "lymphoid_recall_pct": "98.9"}]
     khoury = {"scores": {"v4.1": {"balanced_accuracy_pct": 62.51, "recall_CD8T_pct": 2.7, "lymphoid_recall_pct": 95.97}}}
+    khoury42 = {"scores": {"v4.2": {"balanced_accuracy_pct": 60.12, "recall_CD8T_pct": 1.8, "lymphoid_recall_pct": 94.66}}}
 
     def test_every_figure_is_a_fraction_with_what_it_describes(self):
         ev = build_v41_evaluation(self.phase3, self.confident, self.fulcher, self.khoury)
@@ -322,16 +323,16 @@ class TestV41Evaluation(unittest.TestCase):
         self.assertIn("in-sample", found[("Fulcher 2026", "DC")]["basis"])
         self.assertIn("post-hoc", found[("Khoury 2026", "CD8T")]["basis"])
 
-    def test_v42_takes_v41_s_suite_its_own_served_figures_and_leaves_khoury_unscored(self):
-        ev = build_v42_evaluation(self.phase3, self.confident, self.fulcher, self.khoury)
+    def test_v42_takes_v41_s_suite_its_own_served_figures_and_its_post_hoc_khoury_check(self):
+        ev = build_v42_evaluation(self.phase3, self.confident, self.fulcher, self.khoury42)
         suite = {r["key"]: r["value"] for r in ev["suite"]["rows"]}
         self.assertEqual(suite["correct_when_committed"]["value"], 0.9628)
         self.assertTrue(all("exactly as v4.1" in v["basis"] for v in suite.values()))
         self.assertTrue(all("v42_development" in s["committed"]["basis"] for s in ev["served"]))
         found = {(r["dataset"], r["type"]): r["value"] for r in ev["recall"]}
         self.assertEqual(found[("Fulcher 2026", "DC")]["value"], 0.63)
-        self.assertEqual(found[("Khoury 2026", "CD8T")]["status"], "pending")
-        self.assertIn("owner's decision", found[("Khoury 2026", "CD8T")]["note"])
+        self.assertEqual(found[("Khoury 2026", "CD8T")]["value"], 0.018)
+        self.assertIn("post-hoc", found[("Khoury 2026", "CD8T")]["basis"])
 
 
 class TestBenchmark(unittest.TestCase):
@@ -354,6 +355,8 @@ class TestBenchmark(unittest.TestCase):
             "corrected_scope2": bm.read_csv(bm.CORRECTED_DIR / "scope2_summary.csv"),
             "khoury_family": bm.read_csv(bm.KHOURY_POSTHOC_DIR / "family_summary.csv"),
             "khoury_previous": json.loads((bm.KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
+            "khoury_current": json.loads((bm.KHOURY_V42_DIR / "summary.json").read_text(encoding="utf-8")),
+            "khoury_current_pairs": bm.read_csv(bm.KHOURY_V42_DIR / "paired_bootstrap.csv"),
         })
         cls.sets = {d["key"]: d for d in cls.b["datasets"]}
 
@@ -368,14 +371,17 @@ class TestBenchmark(unittest.TestCase):
             others = [r["score"]["value"] for r in d["rows"][2:]]
             self.assertEqual(others, sorted(others, reverse=True), d["key"])
 
-    def test_khoury_gives_scores_only_and_leaves_v42_unscored(self):
+    def test_khoury_scores_v42_post_hoc_below_v41_with_its_comparisons(self):
         k = self.sets["khoury2026"]
-        self.assertEqual(k["rows"][0]["score"]["status"], "pending", "Khoury needs the owner's decision for v4.2")
+        self.assertEqual(k["rows"][0]["score"]["value"], 0.6012)
         self.assertEqual(k["rows"][1]["score"]["value"], 0.6251)
+        d = k["rows"][1]["vs_current"]["difference"]
+        self.assertAlmostEqual(d["value"], -0.02388, places=4)
+        self.assertLess(d["ci_high"], 0, "v4.2 is below v4.1 on Khoury")
         self.assertEqual(k["chance"]["value"], 0.2)
         self.assertIn("Post-hoc", k["role"])
-        self.assertIn("v4.2 is not scored", k["role"])
-        self.assertTrue(all(r["vs_current"] is None for r in k["rows"]))
+        self.assertIn("below v4.1", k["role"])
+        self.assertTrue(all(r["vs_current"] for r in k["rows"][1:]), "every other row has its paired comparison")
         pca = self.row("khoury2026", "PCA, no correction", "shared kNN")
         self.assertAlmostEqual(pca["score"]["value"], 0.628, places=3)
         scanvi = self.row("khoury2026", "scANVI", "shared kNN")

@@ -2081,6 +2081,25 @@ scored check is PBMC240's marker-based labels, mapped to families.
   answers with no evidence that the changes are right. The service is
   unchanged.
 
+### 47. v4.2 on Khoury 2026, post-hoc, after its release: falls short (2026-10-17)
+
+**Why:** v4.2 was released (entry 45) on development evidence and the
+internal held-out test, none of whose protein primaries read its new term.
+The owner gave the go-ahead to score it once on Khoury 2026.
+
+**What ran:** `benchmark/khoury2026_posthoc_v42_check.py`, committed with
+its verdict before it read a label (`2fe8228`). v4 and v4.1 from their
+ingredients (v4's saved Khoury guesses and v4.1's recorded scores both
+reproduce exactly); v4.2's best guesses from the service's own response.
+
+**Result** (`research/benchmark/khoury2026_posthoc_v42_check/`): balanced
+accuracy 60.12 against v4.1's 62.51, −2.39 (95% CI −3.56 to −1.26). NK
+44.2 (v4.1 50.7), monocyte 91.7 (94.7), CD8 T 1.8 (2.7). Below PCA with kNN
+(−2.72, CI −4.47 to −0.99). The upload's agreement under v4.2's protein
+means is 0.43, so the term is used. **Verdict: falls short.** The release
+stands, as the script states; the benchmark page, the model card and the
+what's-new list now report it.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

@@ -285,7 +285,8 @@ test('release facts name each release from its own block', () => {
 
 test('the known limits read their numbers from the manifest, and only measured ones', () => {
   const m = manifestFixture();
-  assert.equal(factText(m, 'recall_khoury_cd8t'), 'Pending', 'the current release is not scored on Khoury');
+  assert.equal(factText(m, 'recall_khoury_cd8t'), 'Pending', 'a pending recall reads Pending');
+  assert.match(factText(m, 'khoury_vs_previous'), /Pending/, 'no comparison recorded, none shown');
   assert.equal(factText(m, 'previous_recall_khoury_cd8t'), '2.7%');
   assert.equal(factText(m, 'recall_fulcher_cd8t'), '23.8%');
   assert.equal(factText(m, 'recall_fulcher_dc'), 'Pending');

@@ -56,8 +56,16 @@ its data file `protein_class_means.npz`, on v4.1's spec. Record:
   guess differs from v4.1's (the correlation term is flat there).
 - **The simulated suite** is v4.1's, since RNA uploads are answered as by
   v4.1.
-- **Khoury 2026 is not scored for v4.2:** each use of it needs the owner's
-  decision. v4.1's post-hoc figures are below.
+- **Khoury 2026, post-hoc, scored once after release** (the owner's
+  decision, 2026-10-17; `research/benchmark/khoury2026_posthoc_v42_check/`,
+  its verdict fixed before the labels were read): best guess 60.1% balanced
+  accuracy over five types, against v4.1's 62.5% (-2.4; 95% CI -3.6 to
+  -1.3, stratified paired bootstrap). **The verdict is "falls short":** the
+  gain on Fulcher 2026 does not carry over to this lab's data. Recall: CD4 T
+  82.1%, CD8 T 1.8%, NK 44.2%, B 80.9%, monocyte 91.7% (v4.1: 82.8, 2.7,
+  50.7, 81.7, 94.7). It is also below PCA with kNN there (-2.7, CI -4.5 to
+  -1.0). This check cannot change release 0.5.0; whether to keep serving
+  v4.2 is the owner's decision.
 
 ### Known limits
 

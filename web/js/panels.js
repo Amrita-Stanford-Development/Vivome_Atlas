@@ -553,10 +553,19 @@ const suiteValue = (m, key) => (m.model?.evaluation?.suite?.rows ?? []).find((r)
 const served = (m, dataset) => (m.model?.evaluation?.served ?? []).find((r) => r.dataset === dataset);
 const recallIn = (ev, dataset, type) => (ev?.recall ?? []).find((r) => r.dataset === dataset && r.type === type)?.value;
 const recall = (m, dataset, type) => recallIn(m.model?.evaluation, dataset, type);
-// The previous release's, where the current one is not scored (Khoury 2026
-// needs the owner's decision for each use) or to show what changed.
+// The previous release's, to show what changed.
 const previousRecall = (m, dataset, type) => recallIn(m.previous_release?.evaluation, dataset, type);
 const benchmarkSet = (m, key) => (m.benchmark?.datasets ?? []).find((d) => d.key === key);
+// The current model minus the previous release on a benchmark table, with
+// its interval: "+6.7 points (95% CI 4.4 to 9.2)".
+const versusPrevious = (m, key) => {
+  const name = m.previous_release?.model_name;
+  const row = (benchmarkSet(m, key)?.rows ?? []).find((r) => r.ours && name && r.method.startsWith(name));
+  const d = row?.vs_current?.difference;
+  if (!isMeasured(d)) return textOrPending(null);
+  const ci = Number.isFinite(d.ci_low) && Number.isFinite(d.ci_high) ? ` (95% CI ${points(d.ci_low)} to ${points(d.ci_high)})` : '';
+  return escapeHtml(`${points(d.value)} points${ci}`);
+};
 // The current model's own row: the first of a table, marked as ours.
 const currentScore = (m, key) => {
   const row = benchmarkSet(m, key)?.rows?.[0];
@@ -575,13 +584,8 @@ Object.assign(FACTS, {
   previous_recall_fulcher_dc: (m) => escapeHtml(formatPercent(previousRecall(m, 'Fulcher 2026', 'DC'))),
   scope2_current: (m) => escapeHtml(formatPercent(currentScore(m, 'scope2'))),
   fulcher_current: (m) => escapeHtml(formatPercent(currentScore(m, 'fulcher2026'))),
-  fulcher_vs_previous: (m) => {
-    const name = m.previous_release?.model_name;
-    const row = (benchmarkSet(m, 'fulcher2026')?.rows ?? []).find((r) => r.ours && name && r.method.startsWith(name));
-    const d = row?.vs_current?.difference;
-    if (!isMeasured(d)) return textOrPending(null);
-    const ci = Number.isFinite(d.ci_low) && Number.isFinite(d.ci_high) ? ` (95% CI ${points(d.ci_low)} to ${points(d.ci_high)})` : '';
-    return escapeHtml(`${points(d.value)} points${ci}`);
-  },
+  fulcher_vs_previous: (m) => versusPrevious(m, 'fulcher2026'),
+  khoury_current: (m) => escapeHtml(formatPercent(currentScore(m, 'khoury2026'))),
+  khoury_vs_previous: (m) => versusPrevious(m, 'khoury2026'),
   scope2_chance: (m) => escapeHtml(formatPercent(benchmarkSet(m, 'scope2')?.chance)),
 });

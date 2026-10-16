@@ -1,0 +1,25 @@
+comparison,model_b,rule_b,diff_bal_acc_pct,ci_lo,ci_hi,favours
+v4.2 vs v4.1,v4.1,best_guess,-2.3880,-3.5574,-1.2611,v4.1
+v4.2 vs v4,v4,best_guess,-1.6995,-2.7750,-0.5752,v4
+v4.2 vs v3.1,v3.1,best_guess,3.1991,1.5415,4.8062,v4.2
+v4.2 vs scANVI_corrected,scanvi_seed0,native,4.4329,1.8958,6.7981,v4.2
+v4.2 vs scANVI_corrected,scanvi_seed0,shared_knn,-0.3873,-2.6868,1.8013,neither
+v4.2 vs scANVI_corrected,scanvi_seed1,native,5.0537,2.7767,7.2667,v4.2
+v4.2 vs scANVI_corrected,scanvi_seed1,shared_knn,-3.8453,-6.0595,-1.7180,scanvi_seed1
+v4.2 vs scANVI_corrected,scanvi_seed2,native,16.0216,13.9547,18.0111,v4.2
+v4.2 vs scANVI_corrected,scanvi_seed2,shared_knn,0.0496,-2.0665,2.0530,neither
+v4.2 vs correlation,correlation_seed0,correlation,10.3072,8.2440,12.2919,v4.2
+v4.2 vs pca,pca_seed0,shared_knn,-2.7178,-4.4707,-0.9934,pca_seed0
+v4.2 vs harmony,harmony_seed0,shared_knn,4.7736,2.6632,6.9302,v4.2
+v4.2 vs harmony,harmony_seed1,shared_knn,3.5721,1.4673,5.6644,v4.2
+v4.2 vs harmony,harmony_seed2,shared_knn,1.4476,-0.4527,3.4663,neither
+v4.2 vs seurat,seurat_seed0,native,30.3837,28.0393,32.6977,v4.2
+v4.2 vs maxfuse,maxfuse_seed0,shared_knn,28.5756,26.2116,30.8485,v4.2
+v4.2 vs maxfuse,maxfuse_seed1,shared_knn,28.8052,26.5050,30.9340,v4.2
+v4.2 vs maxfuse,maxfuse_seed2,shared_knn,28.1812,25.8114,30.4402,v4.2
+v4.2 vs maxfuse_matching,maxfuse_seed0,matching,30.0253,27.5638,32.3240,v4.2
+v4.2 vs maxfuse_matching,maxfuse_seed1,matching,30.5873,28.1708,32.8394,v4.2
+v4.2 vs maxfuse_matching,maxfuse_seed2,matching,28.4938,25.9953,30.7760,v4.2
+v4.2 vs scglue,scglue_seed0,shared_knn,27.3183,25.2851,29.2248,v4.2
+v4.2 vs scglue,scglue_seed1,shared_knn,24.9954,22.7049,27.2174,v4.2
+v4.2 vs scglue,scglue_seed2,shared_knn,11.2284,9.0841,13.3325,v4.2

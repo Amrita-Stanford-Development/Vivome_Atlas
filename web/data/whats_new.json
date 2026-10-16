@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-10-17",
+    "title": "v4.2 checked on Khoury 2026",
+    "text": "The served model was scored once on Khoury 2026, a second lab's single-cell proteomics, after its release. It is below v4.1 there, so its gain on Fulcher 2026 does not carry over to this lab's data. The Benchmark page and the model card now say so.",
+    "link": "benchmark.html",
+    "link_text": "See the benchmark"
+  },
+  {
     "date": "2026-10-16",
     "title": "A Workflow page",
     "text": "Follow one cell from an uploaded file to its answer: the data, the shared genes, the training, every step the service runs, and how the results were calculated. Each figure shows what the served model computes for the PBMC240 example, and a film mode plays the whole story.",

@@ -1,0 +1,252 @@
+{
+  "dataset": "Khoury 2026",
+  "posthoc": true,
+  "note": "Post-hoc check of v4.2, the served model (protein class means in the best guess's correlation term). Khoury's labels were read at its one scoring (2026-10-03); it chose nothing here, and this check does not change release 0.5.0.",
+  "script_sha256": "c3a602e03f1f470e77853d8a854b603bf371199e7225d1f40e75c4fa07f41def",
+  "spec_v42_sha256": "c58912c6b0eaf2673b05138a9213dbb43dccbbd065cf860152e443bb5f6e8ae0",
+  "upload_agreement": {
+    "v4": 0.4967,
+    "v4.1": 0.4967,
+    "v4.2": 0.4319
+  },
+  "correlation_term": {
+    "v4": "used",
+    "v4.1": "used",
+    "v4.2": "used"
+  },
+  "scores": {
+    "v4.2": {
+      "balanced_accuracy_pct": 60.12,
+      "recall_CD4T_pct": 82.06,
+      "recall_CD8T_pct": 1.8,
+      "recall_NK_pct": 44.16,
+      "recall_B_pct": 80.89,
+      "recall_monocyte_pct": 91.71,
+      "lymphoid_recall_pct": 94.66,
+      "myeloid_recall_pct": 97.7
+    },
+    "v4.1": {
+      "balanced_accuracy_pct": 62.51,
+      "recall_CD4T_pct": 82.8,
+      "recall_CD8T_pct": 2.7,
+      "recall_NK_pct": 50.65,
+      "recall_B_pct": 81.71,
+      "recall_monocyte_pct": 94.7,
+      "lymphoid_recall_pct": 95.97,
+      "myeloid_recall_pct": 96.77
+    },
+    "v4": {
+      "balanced_accuracy_pct": 61.82,
+      "recall_CD4T_pct": 83.78,
+      "recall_CD8T_pct": 2.4,
+      "recall_NK_pct": 45.89,
+      "recall_B_pct": 82.11,
+      "recall_monocyte_pct": 94.93,
+      "lymphoid_recall_pct": 97.29,
+      "myeloid_recall_pct": 96.54
+    },
+    "v3.1": {
+      "balanced_accuracy_pct": 56.93,
+      "recall_CD4T_pct": 84.52,
+      "recall_CD8T_pct": 2.7,
+      "recall_NK_pct": 29.0,
+      "recall_B_pct": 81.3,
+      "recall_monocyte_pct": 87.1,
+      "lymphoid_recall_pct": 98.11,
+      "myeloid_recall_pct": 97.24
+    }
+  },
+  "confusion_type_by_predicted": {
+    "v4.2": {
+      "CD4T": {
+        "CD4T": 334,
+        "CD8T": 53,
+        "NK": 1,
+        "B": 1,
+        "monocyte": 1,
+        "other": 17
+      },
+      "CD8T": {
+        "CD4T": 295,
+        "CD8T": 6,
+        "NK": 1,
+        "B": 13,
+        "monocyte": 1,
+        "other": 17
+      },
+      "NK": {
+        "CD4T": 35,
+        "CD8T": 62,
+        "NK": 102,
+        "B": 0,
+        "monocyte": 3,
+        "other": 29
+      },
+      "B": {
+        "CD4T": 20,
+        "CD8T": 1,
+        "NK": 0,
+        "B": 199,
+        "monocyte": 1,
+        "other": 25
+      },
+      "monocyte": {
+        "CD4T": 0,
+        "CD8T": 0,
+        "NK": 0,
+        "B": 9,
+        "monocyte": 398,
+        "other": 27
+      }
+    },
+    "v4.1": {
+      "CD4T": {
+        "CD4T": 337,
+        "CD8T": 53,
+        "NK": 0,
+        "B": 1,
+        "monocyte": 1,
+        "other": 15
+      },
+      "CD8T": {
+        "CD4T": 296,
+        "CD8T": 9,
+        "NK": 0,
+        "B": 14,
+        "monocyte": 0,
+        "other": 14
+      },
+      "NK": {
+        "CD4T": 35,
+        "CD8T": 54,
+        "NK": 117,
+        "B": 0,
+        "monocyte": 3,
+        "other": 22
+      },
+      "B": {
+        "CD4T": 27,
+        "CD8T": 0,
+        "NK": 1,
+        "B": 201,
+        "monocyte": 1,
+        "other": 16
+      },
+      "monocyte": {
+        "CD4T": 0,
+        "CD8T": 0,
+        "NK": 0,
+        "B": 11,
+        "monocyte": 411,
+        "other": 12
+      }
+    },
+    "v4": {
+      "CD4T": {
+        "CD4T": 341,
+        "CD8T": 54,
+        "NK": 0,
+        "B": 1,
+        "monocyte": 1,
+        "other": 10
+      },
+      "CD8T": {
+        "CD4T": 298,
+        "CD8T": 8,
+        "NK": 0,
+        "B": 14,
+        "monocyte": 1,
+        "other": 12
+      },
+      "NK": {
+        "CD4T": 38,
+        "CD8T": 69,
+        "NK": 106,
+        "B": 0,
+        "monocyte": 4,
+        "other": 14
+      },
+      "B": {
+        "CD4T": 27,
+        "CD8T": 2,
+        "NK": 0,
+        "B": 202,
+        "monocyte": 1,
+        "other": 14
+      },
+      "monocyte": {
+        "CD4T": 0,
+        "CD8T": 0,
+        "NK": 0,
+        "B": 14,
+        "monocyte": 412,
+        "other": 8
+      }
+    },
+    "v3.1": {
+      "CD4T": {
+        "CD4T": 344,
+        "CD8T": 52,
+        "NK": 4,
+        "B": 0,
+        "monocyte": 1,
+        "other": 6
+      },
+      "CD8T": {
+        "CD4T": 313,
+        "CD8T": 9,
+        "NK": 0,
+        "B": 7,
+        "monocyte": 2,
+        "other": 2
+      },
+      "NK": {
+        "CD4T": 39,
+        "CD8T": 117,
+        "NK": 67,
+        "B": 0,
+        "monocyte": 3,
+        "other": 5
+      },
+      "B": {
+        "CD4T": 29,
+        "CD8T": 3,
+        "NK": 1,
+        "B": 200,
+        "monocyte": 1,
+        "other": 12
+      },
+      "monocyte": {
+        "CD4T": 0,
+        "CD8T": 0,
+        "NK": 0,
+        "B": 12,
+        "monocyte": 378,
+        "other": 44
+      }
+    }
+  },
+  "v41_reproduced": {
+    "balanced_accuracy_pct": 0.0,
+    "recall_CD4T_pct": 0.0,
+    "recall_CD8T_pct": 0.0,
+    "recall_NK_pct": 0.0,
+    "recall_B_pct": 0.0,
+    "recall_monocyte_pct": 0.0,
+    "lymphoid_recall_pct": 0.0,
+    "myeloid_recall_pct": 0.0
+  },
+  "v42_minus_v41": {
+    "point": -2.39,
+    "ci_95": [
+      -3.56,
+      -1.26
+    ]
+  },
+  "verdict": "falls short",
+  "excluded_runs": {
+    "diverged": [],
+    "failed": [],
+    "missing": []
+  }
+}

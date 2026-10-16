@@ -1812,6 +1812,39 @@ protein (`research/notebooks/v52_labels.py`; run history, entry 29). It moves
   [protocol-sorted-cd4cd8.md](protocol-sorted-cd4cd8.md). Nothing public can
   test it now.
 
+## v4.2 on Khoury 2026, post-hoc, after its release
+
+v4.2, served since release 0.5.0, is v4.1 with protein class means from
+sorted immune cells (Rieckmann et al. 2017) in its best guess's correlation
+term. The owner decided (2026-10-17) to use Khoury once more, for it
+(`benchmark/khoury2026_posthoc_v42_check.py`, committed with its verdict
+before it read a label, `2fe8228`;
+[khoury2026_posthoc_v42_check/](khoury2026_posthoc_v42_check/)). Its best
+guesses are the service's own response. v4.1's recorded scores reproduce to
+0.00.
+
+| | v4.1 | v4.2 |
+|---|---|---|
+| Balanced accuracy, five types | 62.5 | 60.1 |
+| CD4 T recall | 82.8 | 82.1 |
+| CD8 T recall | 2.7 | 1.8 |
+| NK recall | 50.7 | 44.2 |
+| B recall | 81.7 | 80.9 |
+| Monocyte recall | 94.7 | 91.7 |
+
+- **Against v4.1:** −2.4 (95% CI −3.6 to −1.3). **The verdict fixed before
+  scoring is "falls short":** v4.2's gain on Fulcher 2026 (+6.7, development
+  and in-sample) does not carry over to this lab's data.
+- **Against the baselines:** below PCA with kNN (−2.7, CI −4.5 to −1.0) and
+  one scANVI kNN seed (−3.8); level with the other two scANVI kNN seeds and
+  one Harmony seed; ahead of every other run.
+- **The upload's agreement** with v4.2's protein means is 0.43, above the
+  0.40 gate, so its protein correlation term is used here (v4.1's RNA term:
+  0.50).
+- **This check does not change release 0.5.0.** The site and the model card
+  say so beside v4.2's development gain; whether to keep serving v4.2 is the
+  owner's decision.
+
 ## Two protocols, not a chosen one
 
 Per the repository owner's explicit instruction: the choice between the

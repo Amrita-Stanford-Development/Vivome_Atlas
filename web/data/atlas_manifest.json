@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "atlas_version": "0.5.0",
-  "generated": "2026-10-16",
+  "generated": "2026-10-17",
   "model": {
     "name": "VivOME v4.2",
     "latent_dim": 128,
@@ -196,50 +196,45 @@
           "dataset": "Khoury 2026",
           "type": "CD4T",
           "value": {
-            "value": null,
-            "status": "pending",
-            "phase": "post-hoc",
-            "note": "not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; v4.1's post-hoc figure is in the previous release"
+            "value": 0.8206,
+            "status": "measured",
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "CD8T",
           "value": {
-            "value": null,
-            "status": "pending",
-            "phase": "post-hoc",
-            "note": "not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; v4.1's post-hoc figure is in the previous release"
+            "value": 0.018,
+            "status": "measured",
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "NK",
           "value": {
-            "value": null,
-            "status": "pending",
-            "phase": "post-hoc",
-            "note": "not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; v4.1's post-hoc figure is in the previous release"
+            "value": 0.4416,
+            "status": "measured",
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "B",
           "value": {
-            "value": null,
-            "status": "pending",
-            "phase": "post-hoc",
-            "note": "not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; v4.1's post-hoc figure is in the previous release"
+            "value": 0.8089,
+            "status": "measured",
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "monocyte",
           "value": {
-            "value": null,
-            "status": "pending",
-            "phase": "post-hoc",
-            "note": "not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; v4.1's post-hoc figure is in the previous release"
+            "value": 0.9171,
+            "status": "measured",
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         }
       ]
@@ -1443,7 +1438,7 @@
           "status": "measured",
           "basis": "one of 5 types at random"
         },
-        "role": "Held out from development: no method was developed or tuned on it. Post-hoc for v4.1 and for the corrected baselines, since its labels were read at its one scoring (2026-10-03). v4.2 is not scored here, because each use of it needs the owner's decision, so this table gives scores without differences. The labels are the authors' clusters of the protein data, and its CD8 T label largely separates naive from memory T cells.",
+        "role": "Held out from development: no method was developed or tuned on it. Post-hoc for every method, since its labels were read at its one scoring (2026-10-03). v4.2 was scored here once, after its release, on the owner's decision (2026-10-17): it is below v4.1 here, so its gain on Fulcher 2026 does not carry over to this lab's data. The labels are the authors' clusters of the protein data, and its CD8 T label largely separates naive from memory T cells.",
         "rows": [
           {
             "method": "VivOME v4.2 (ours)",
@@ -1451,10 +1446,9 @@
             "ours": true,
             "runs": 1,
             "score": {
-              "value": null,
-              "status": "pending",
-              "phase": "post-hoc",
-              "note": "not scored: Khoury 2026 is post-hoc only and each use of it needs the owner's decision; v4.1's post-hoc figure is in the previous release"
+              "value": 0.6012,
+              "status": "measured",
+              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v42_check/summary.json and research/benchmark/khoury2026_posthoc_v41_check/summary.json"
             },
             "vs_current": null
           },
@@ -1466,9 +1460,21 @@
             "score": {
               "value": 0.6251,
               "status": "measured",
-              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v42_check/summary.json and research/benchmark/khoury2026_posthoc_v41_check/summary.json"
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.02388,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.035574,
+                "ci_high": -0.012611
+              }
+            }
           },
           {
             "method": "PCA, no correction",
@@ -1480,7 +1486,19 @@
               "status": "measured",
               "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 0,
+              "difference": {
+                "value": -0.027178,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": -0.044707,
+                "ci_high": -0.009934
+              }
+            }
           },
           {
             "method": "scANVI",
@@ -1495,7 +1513,19 @@
               "min": 0.600745,
               "max": 0.639695
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 0,
+              "favour_other": 1,
+              "neither": 2,
+              "difference": {
+                "value": -0.013943,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": -0.038453,
+                "max": 0.000496
+              }
+            }
           },
           {
             "method": "Harmony",
@@ -1510,7 +1540,19 @@
               "min": 0.553506,
               "max": 0.586766
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 2,
+              "favour_other": 0,
+              "neither": 1,
+              "difference": {
+                "value": 0.032644,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.014476,
+                "max": 0.047736
+              }
+            }
           },
           {
             "method": "scANVI",
@@ -1525,7 +1567,19 @@
               "min": 0.441025,
               "max": 0.556913
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.085027,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.044329,
+                "max": 0.160216
+              }
+            }
           },
           {
             "method": "Correlation to class mean",
@@ -1537,7 +1591,19 @@
               "status": "measured",
               "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.103072,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.08244,
+                "ci_high": 0.122919
+              }
+            }
           },
           {
             "method": "scGLUE",
@@ -1552,7 +1618,19 @@
               "min": 0.328059,
               "max": 0.488958
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.211807,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.112284,
+                "max": 0.273183
+              }
+            }
           },
           {
             "method": "MaxFuse",
@@ -1567,7 +1645,19 @@
               "min": 0.31319,
               "max": 0.31943
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.285207,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.281812,
+                "max": 0.288052
+              }
+            }
           },
           {
             "method": "MaxFuse",
@@ -1582,7 +1672,19 @@
               "min": 0.295369,
               "max": 0.316304
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 3,
+              "favour_current": 3,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.297021,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "min": 0.284938,
+                "max": 0.305873
+              }
+            }
           },
           {
             "method": "Seurat CCA",
@@ -1594,7 +1696,19 @@
               "status": "measured",
               "basis": "corrected baselines, post-hoc; research/benchmark/khoury2026_posthoc/family_summary.csv"
             },
-            "vs_current": null
+            "vs_current": {
+              "pairings": 1,
+              "favour_current": 1,
+              "favour_other": 0,
+              "neither": 0,
+              "difference": {
+                "value": 0.303837,
+                "status": "measured",
+                "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
+                "ci_low": 0.280393,
+                "ci_high": 0.326977
+              }
+            }
           }
         ]
       },

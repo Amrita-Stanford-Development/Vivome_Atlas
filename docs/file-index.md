@@ -387,6 +387,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/khoury2026_posthoc/summary.json` — Khoury 2026, post-hoc: excluded runs and count of CIs excluding zero per comparison
 - `research/benchmark/khoury2026_posthoc_v41_check/summary.json` — v4.1, Phase B: the locked rule on Khoury 2026 (post-hoc), its sha256, scores beside v4 and v3.1, and the verdict
 - `research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv` — v4.1, Phase B: v4.1's best guess against v4, v3.1 and every corrected baseline run and rule
+- `research/benchmark/khoury2026_posthoc_v42_check/summary.json` — v4.2, the served model, on Khoury 2026 (post-hoc, after release): scores and confusion beside v4.1, v4 and v3.1, v4.1's reproduction, and the verdict (falls short)
+- `research/benchmark/khoury2026_posthoc_v42_check/paired_bootstrap.csv` — v4.2 on Khoury 2026: its best guess against v4.1, v4, v3.1 and every corrected baseline run and rule
 - `research/benchmark/khoury2026_posthoc_v51_check/summary.json` — v5.1 on Khoury 2026 (post-hoc): scores and confusion beside v4.1, v4 and v3.1, the reproduction of v4.1's check, and the verdict
 - `research/benchmark/khoury2026_posthoc_v51_check/paired_bootstrap.csv` — v5.1 on Khoury 2026: its best guess against v4.1, v4, v3.1 and every corrected baseline run and rule
 - `research/benchmark/khoury2026_posthoc_v4/per_model_scores.csv` — Khoury 2026, post-hoc: v4's and v3.1's best guess, balanced accuracy, per-type and lineage recall
