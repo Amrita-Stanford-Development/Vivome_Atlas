@@ -505,6 +505,11 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/single_type_uploads/summary.json` — that measurement, per model, upload and type
 - `research/notebooks/upload_independent_probe.py` — Goal 2, Phase 2d probe: typing Fulcher's cells against Rieckmann's means without scaling genes within the upload (raw and reference-centred profiles), against the within-upload rule
 - `research/notebook-outputs/upload_independent_probe/summary.json` — that probe's balanced accuracy and per-type recall for each rule
+- `research/notebooks/narrow_upload_calibration.py` — a narrow-upload check, first design (principal-component structure over a permutation null): calibrated on simulated RNA uploads, checked on protein development data; NO GO
+- `research/notebooks/narrow_upload_committed.py` — the second design (the share of cells the answers commit on), same rule; NO GO
+- `research/notebook-outputs/narrow_upload/calibration.json` — the first design's settings, threshold, flag rates and protein check
+- `research/notebook-outputs/narrow_upload/scores.csv` — the first design's score for every simulated upload
+- `research/notebook-outputs/narrow_upload/committed.json` — the second design's threshold, flag rates and protein check
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell

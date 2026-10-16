@@ -1,0 +1,149 @@
+{
+  "settings": {
+    "components": 5,
+    "min_observed": 0.5,
+    "permutations": 3,
+    "min_cells": 20,
+    "min_proteins": 50,
+    "threshold": 2.2416
+  },
+  "threshold_rule": "5th percentile of broad uploads",
+  "simulated_flagged_pct_by_group": {
+    "lineage": 44.1,
+    "mixed": 7.4,
+    "narrow": 18.8,
+    "pbmc": 0.0,
+    "scope2": 5.9,
+    "single": 42.1
+  },
+  "simulated_median_score_by_group": {
+    "lineage": 2.662,
+    "mixed": 4.244,
+    "narrow": 3.378,
+    "pbmc": 3.354,
+    "scope2": 3.413,
+    "single": 2.449
+  },
+  "protein": [
+    {
+      "upload": "Fulcher 2026, full",
+      "cells": 1275,
+      "score": 11.252783412348021,
+      "expected": "not flagged",
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, CD4T alone",
+      "cells": 308,
+      "score": 4.637829304389881,
+      "expected": "flagged",
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, CD8T alone",
+      "cells": 181,
+      "score": 3.1362023301195023,
+      "expected": "flagged",
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, NK alone",
+      "cells": 150,
+      "score": 3.1168569551478016,
+      "expected": "flagged",
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, B alone",
+      "cells": 102,
+      "score": 2.4192120043570116,
+      "expected": "flagged",
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, monocyte alone",
+      "cells": 456,
+      "score": 5.948450343067871,
+      "expected": "flagged",
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, DC alone",
+      "cells": 54,
+      "score": 2.0751173368011258,
+      "expected": "flagged",
+      "flagged": true
+    },
+    {
+      "upload": "Fulcher 2026, CD4T with CD8T",
+      "cells": 489,
+      "score": 5.705976584942882,
+      "expected": null,
+      "flagged": false
+    },
+    {
+      "upload": "Fulcher 2026, B with monocyte",
+      "cells": 558,
+      "score": 7.725323463093568,
+      "expected": null,
+      "flagged": false
+    },
+    {
+      "upload": "PBMC240",
+      "cells": 238,
+      "score": 7.545546416067635,
+      "expected": "not flagged",
+      "flagged": false
+    },
+    {
+      "upload": "DS18 FAIMS Astral-Zoom",
+      "cells": 91,
+      "score": 5.963992876790921,
+      "expected": "not flagged",
+      "flagged": false
+    },
+    {
+      "upload": "DS18 FAIMS Astral",
+      "cells": 89,
+      "score": 5.328146810505546,
+      "expected": "not flagged",
+      "flagged": false
+    },
+    {
+      "upload": "DS18 Standard Astral",
+      "cells": 88,
+      "score": 4.853494667262018,
+      "expected": "not flagged",
+      "flagged": false
+    },
+    {
+      "upload": "DS19",
+      "cells": 81,
+      "score": 5.358518951941667,
+      "expected": "not flagged",
+      "flagged": false
+    },
+    {
+      "upload": "SCoPE2, published",
+      "cells": 1490,
+      "score": 17.539164871570392,
+      "expected": null,
+      "flagged": false
+    },
+    {
+      "upload": "SCoPE2, reprocessed",
+      "cells": 1128,
+      "score": 7.847191316716562,
+      "expected": null,
+      "flagged": false
+    },
+    {
+      "upload": "Furtwangler 2025",
+      "cells": 2506,
+      "score": 9.302371722553943,
+      "expected": null,
+      "flagged": false
+    }
+  ],
+  "pass_rule_met": false
+}

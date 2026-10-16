@@ -1,0 +1,145 @@
+{
+  "score": "share of cells committed, among those above the coverage floor (v3.1's answers)",
+  "min_observed_genes": 200,
+  "threshold": 0.784,
+  "threshold_rule": "5th percentile of broad simulated uploads",
+  "simulated_flagged_pct_by_group": {
+    "lineage": 32.4,
+    "mixed": 7.4,
+    "narrow": 20.3,
+    "pbmc": 0.0,
+    "scope2": 17.6,
+    "single": 62.1
+  },
+  "simulated_median_by_group": {
+    "lineage": 0.883,
+    "mixed": 0.947,
+    "narrow": 0.931,
+    "pbmc": 0.987,
+    "scope2": 0.912,
+    "single": 0.66
+  },
+  "protein": [
+    {
+      "upload": "Fulcher 2026, full",
+      "cells": 1275,
+      "committed": 0.8698,
+      "flagged": false,
+      "expected": "not flagged"
+    },
+    {
+      "upload": "Fulcher 2026, CD4T alone",
+      "cells": 308,
+      "committed": 0.3766,
+      "flagged": true,
+      "expected": "flagged"
+    },
+    {
+      "upload": "Fulcher 2026, CD8T alone",
+      "cells": 181,
+      "committed": 0.4641,
+      "flagged": true,
+      "expected": "flagged"
+    },
+    {
+      "upload": "Fulcher 2026, NK alone",
+      "cells": 150,
+      "committed": 0.44,
+      "flagged": true,
+      "expected": "flagged"
+    },
+    {
+      "upload": "Fulcher 2026, B alone",
+      "cells": 102,
+      "committed": 0.3137,
+      "flagged": true,
+      "expected": "flagged"
+    },
+    {
+      "upload": "Fulcher 2026, monocyte alone",
+      "cells": 456,
+      "committed": 0.2961,
+      "flagged": true,
+      "expected": "flagged"
+    },
+    {
+      "upload": "Fulcher 2026, DC alone",
+      "cells": 54,
+      "committed": 0.4259,
+      "flagged": true,
+      "expected": "flagged"
+    },
+    {
+      "upload": "Fulcher 2026, CD4T with CD8T",
+      "cells": 489,
+      "committed": 0.4192,
+      "flagged": true,
+      "expected": null
+    },
+    {
+      "upload": "Fulcher 2026, B with monocyte",
+      "cells": 558,
+      "committed": 0.5556,
+      "flagged": true,
+      "expected": null
+    },
+    {
+      "upload": "PBMC240",
+      "cells": 238,
+      "committed": 0.7342,
+      "flagged": true,
+      "expected": "not flagged"
+    },
+    {
+      "upload": "DS18 FAIMS Astral-Zoom",
+      "cells": 91,
+      "committed": 0.3736,
+      "flagged": true,
+      "expected": "not flagged"
+    },
+    {
+      "upload": "DS18 FAIMS Astral",
+      "cells": 89,
+      "committed": 0.2697,
+      "flagged": true,
+      "expected": "not flagged"
+    },
+    {
+      "upload": "DS18 Standard Astral",
+      "cells": 88,
+      "committed": 0.3182,
+      "flagged": true,
+      "expected": "not flagged"
+    },
+    {
+      "upload": "DS19",
+      "cells": 81,
+      "committed": 0.4074,
+      "flagged": true,
+      "expected": "not flagged"
+    },
+    {
+      "upload": "SCoPE2, published",
+      "cells": 1490,
+      "committed": 0.5295,
+      "flagged": true,
+      "expected": null
+    },
+    {
+      "upload": "SCoPE2, reprocessed",
+      "cells": 1128,
+      "committed": 0.3103,
+      "flagged": true,
+      "expected": null
+    },
+    {
+      "upload": "Furtwangler 2025",
+      "cells": 2506,
+      "committed": 0.4058,
+      "flagged": true,
+      "expected": null
+    }
+  ],
+  "pass_rule_met": false,
+  "second_look": true
+}

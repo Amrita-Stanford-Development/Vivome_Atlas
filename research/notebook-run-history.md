@@ -1600,6 +1600,47 @@ every lymphocyte is called a monocyte or a DC.
   user's own PBMCs beside the sorted cells), or to detect a narrow upload and
   say so instead of answering. Neither is built yet.
 
+### 37. A check for narrow uploads: two designs, both NO GO (Goal 2), 2026-10-16
+
+**Why:** entry 35 found that one cell type uploaded alone gets confident,
+wrong answers, and entry 36 that it cannot be typed without a mixed upload.
+The owner asked for a label-free check that says when an upload looks narrow.
+
+**The pass rule, fixed before each run:** calibrate a threshold on simulated
+RNA uploads (NB3c's calibration suite and 60 single-type uploads, te_cal
+cells only), at the 5th percentile of uploads with five or more types; then,
+on protein development data, flag none of Fulcher's full upload, PBMC240,
+DS18 (three searches) and DS19, and at least 5 of Fulcher's 6 single-type
+uploads. Otherwise nothing is served.
+
+**Design 1, structure** (`research/notebooks/narrow_upload_calibration.py`):
+the variance in an upload's top five principal components over a
+per-protein permutation null. Threshold 2.24; simulated single-type uploads
+flagged 42%, broad ones 6% (mixed 7%, PBMC-like 0%). On protein it flagged **1 of 6** single-type uploads
+(the DCs): single-type uploads scored 2.1-5.9 and mixed ones 4.9-11.3, so
+they overlap. The score reads technical structure (plexes, loading) as well as
+cell types.
+
+**Design 2, commitment** (`research/notebooks/narrow_upload_committed.py`; a
+second look at the same protein data): the share of cells the answers commit
+on. Threshold 0.784; simulated single-type uploads flagged 62%. On protein it
+flagged **all 6** single-type uploads (29.6-46.4% committed) but also every
+mixed PBMC set except Fulcher's: PBMC240 73.4%, DS18 27.0-37.4%, DS19 40.7%.
+
+**Results:** `research/notebook-outputs/narrow_upload/` (calibration.json,
+scores.csv, committed.json).
+
+**What it means:**
+- **No check is served.** Neither signal tells a narrow upload from an
+  unfamiliar dataset: commitment falls on both.
+- **The guidance stays:** the site and the model card tell users to send
+  mixed cells, never one sorted population alone.
+- **New finding:** on the Astral PBMC runs (PXD070599 DS18 and DS19, Olsen
+  lab), v4.1 commits on only 27-41% of cells, against 87% on Fulcher. Their
+  labels come from clustering, so whether the rest are hard cells or an
+  unfamiliar instrument is not known; a newer instrument is worth a closer
+  look.
+
 ---
 
 ## The throughline
