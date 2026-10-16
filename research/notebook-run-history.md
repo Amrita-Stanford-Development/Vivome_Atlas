@@ -2055,6 +2055,32 @@ sorted CD4/CD8 cells remain the decisive test.
 
 ---
 
+### 46. Protein groups that name several genes: left out, as served (2026-10-17)
+
+**Why:** the Workflow page shows that 59 of PBMC240's 3,098 rows are left
+out because each names several genes on the shared list (FCGR3A;FCGR3B,
+HSPA1A;HSPA1B, CALM1;CALM2;CALM3). The owner asked why VivOME does not use
+them, and later gave the go-ahead to test it.
+
+**What ran:** `research/notebooks/twin_genes.py`, committed with its decision
+rule before it ran (`b9c626a`). The served v4.2, as a protein upload, on
+every development DIA-NN file with such rows (PBMC240, DS18's three run sets,
+DS19), three ways: leave the rows out (served), give each to the first of its
+genes on the list, or copy it to each. No labelled development file has such
+rows (Fulcher 2026 and both SCoPE2 versions are one row per gene), so the
+scored check is PBMC240's marker-based labels, mapped to families.
+
+**Result** (`research/notebook-outputs/twin_genes/summary.json`):
+- 56 to 63 rows per file are affected. Giving them to the first gene changes
+  4 to 15 answers per file; copying them changes 10 to 24.
+- Agreement with PBMC240's marker labels (140 labelled cells): leave out
+  58.57%, first 58.57% (difference 0.00, 95% CI -2.14 to 2.14), each 60.00%
+  (+1.43, -1.43 to 4.29).
+- **Decision: leave out**, by the rule fixed before running (switch only on a
+  gain whose interval lies wholly above 0). Either alternative would change
+  answers with no evidence that the changes are right. The service is
+  unchanged.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
