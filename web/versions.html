@@ -84,8 +84,13 @@
                     2026 is post-hoc, and the simulated suite had been used before. A test on cells sorted
                     by type is written down and waits for data
                     (<code>research/benchmark/protocol-sorted-cd4cd8.md</code>).</li>
+                <li><strong>Uploads of one sorted cell type.</strong> Each gene is scaled within its upload,
+                    so a single sorted population, or two close types such as CD4 and CD8 T cells, loses
+                    the contrast the model needs: its answers stay confident but are often wrong. Upload
+                    mixed cells, never one sorted population alone.</li>
                 <li><strong>Coverage on protein is approximate.</strong> The conformal sets were calibrated
-                    on simulated RNA uploads, and every response says so.</li>
+                    on simulated RNA uploads, and on real blood protein they hold the true type less often
+                    than they promise, least for CD8 T cells and dendritic cells.</li>
                 <li><strong>The out-of-distribution filter is weak.</strong> It passes most scrambled
                     profiles, so a cell unlike any in the reference is not reliably refused.</li>
                 <li><strong>Human blood and immune cells only.</strong> Other tissues and cell lines are

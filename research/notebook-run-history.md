@@ -1470,6 +1470,136 @@ figures to 5e-5 points.
   (`service/tests/test_v42.py`); added to the sorted test (protocol amendment
   3) and to the internal held-out test (`side-tests.md`, amendment 2).
 
+### 33. Why SCoPE2's macrophages are called monocytes (Goal 2, Phase 1.3), 2026-10-16
+
+**Why:** on SCoPE2 (PMA-differentiated U-937 macrophages against
+undifferentiated monocytes; development data) v4.1 is below chance restricted
+to the two classes, and every corrected baseline is at or below chance on the
+reprocessed matrix.
+
+**How** (`research/notebooks/mac_mono_diagnosis.py`; questions fixed in its
+docstring): the reference's macrophage class (donors, assay, the atlas's
+free annotation, marker RNA); each SCoPE2 protein's AUC, macrophage against
+monocyte, on both matrices; the reference's class-balanced RNA difference,
+macrophage minus monocyte, for the same genes; the correlation term's lean.
+
+**Result** (`research/notebook-outputs/mac_mono_diagnosis/`):
+- **The reference's "macrophage" class is monocyte-like.** 1,228 cells, all
+  10x, 77% from two donors (TSP21 559, TSP2 385), annotated "macrophage"
+  throughout. Against the monocyte classes it carries less of the monocyte
+  genes (CD14 60% of cells against 88-90%; LYZ, S100A8/9, VCAN, FCN1 lower)
+  and a little more C1QA/C1QB and MRC1, with no macrophage program.
+- **SCoPE2's differentiation is a different signal.** Its strongest protein
+  differences (VIM, ANXA2, LMNA up in macrophages, AUC 0.93-0.98) are
+  cytoskeletal and adhesion changes from PMA.
+- **The two differences are unrelated:** Spearman between SCoPE2's protein
+  AUC and the reference's RNA difference is -0.009 (published) and -0.015
+  (reprocessed); among the 50 strongest proteins the direction agrees for 40%
+  and 46%. VIM and ANXA2, the top two, are lower in the reference's
+  macrophage class (RNA difference -1.08 and -0.57).
+- **The correlation term leans the wrong way:** median r(macrophage) -
+  r(monocyte) is lower for SCoPE2's macrophages than for its monocytes on
+  both matrices.
+
+**What it means:**
+- Nothing in this reference tells a PMA-differentiated macrophage from a
+  monocyte, so no reweighting or retraining on it can fix SCoPE2; the
+  macrophage/monocyte group answer is the most it supports.
+- A fix needs a reference with real differentiated macrophages (for
+  instance an RNA atlas of monocyte-derived or tissue macrophages), which is
+  new model work, not a correction.
+- The held-out PXD046211 (THP-1 and U-937, with and without PMA) will test
+  the same question once, at the end.
+
+### 34. Conformal coverage on real protein (Goal 2, Phase 1.4), 2026-10-16
+
+**Why:** v3.1's sets were calibrated to hold the true class 90% of the time
+on simulated RNA uploads; on protein the guarantee is stated as approximate.
+How approximate?
+
+**How** (`research/notebooks/protein_coverage.py`): from the served per-cell
+tables of v3.1 and v4.1 (v4.1's sets are v3.1's with its guess joined), the
+share of labelled cells whose set holds their type (Fulcher, via COARSE),
+their class (SCoPE2) or their lineage (PBMC240).
+
+**Result** (`research/notebook-outputs/protein_coverage/coverage.json`),
+v4.1 (v3.1 within two points):
+
+| Dataset | Coverage | Among cells given a set | Lowest classes |
+|---|---|---|---|
+| Fulcher 2026 | 78.3% | 88.5% | CD8 T 44.2%, DC 46.3%, CD4 T 76.3% |
+| PBMC240 (lineage) | 77.9% | 96.9% | myeloid 60.0% (5 cells) |
+| SCoPE2 published / reprocessed | 2.5% / 6.4% | 4.7% / 20.6% | both classes |
+
+- **On blood protein the sets fall short of 90% by about 12 points,** and the
+  shortfall sits in the classes the model confuses: CD8 T and DCs near 45%,
+  NK, B and monocytes 84-91%.
+- **On SCoPE2 the sets rarely hold the right class** (macrophage appears in 36
+  of 1,490 sets), as entry 33 explains.
+- **Recalibrating on real protein** would need labelled protein calibration
+  cells; Fulcher is the only candidate, and using it would make it in-sample
+  for the answers too. Not done; the limit is stated.
+
+### 35. Uploads of one cell type, on real protein (Goal 2, Phase 1.5), 2026-10-16
+
+**Why:** every gene is z-scored within its upload, so an upload of one cell
+type loses the contrast between types; simulated RNA showed the cost. Users
+who upload a sorted population meet it on real data.
+
+**How** (`research/notebooks/single_type_uploads.py`): Fulcher 2026's cells
+(development data) through the served service three ways: the full mixed
+upload; each author type alone; CD4 T with CD8 T, and B with monocytes. Best
+guess recall, committed share and correct when committed at the stated level.
+
+**Result** (`research/notebook-outputs/single_type_uploads/summary.json`),
+v4.1 (v3.1 and v4.2 alike):
+
+| Type | Mixed: recall / committed / correct | Alone: recall / committed / correct |
+|---|---|---|
+| B | 98.0 / 85.3 / 98.9 | 11.8 / 31.4 / **6.3** |
+| NK | 90.0 / 92.0 / 99.3 | 6.7 / 44.0 / **43.9** |
+| monocyte | 97.8 / 91.5 / 100.0 | 22.4 / 29.6 / **37.0** |
+| CD4 T | 82.5 / 88.0 / 93.4 | 23.4 / 37.7 / 54.3 |
+| CD8 T | 23.8 / 93.4 / 98.8 | 11.1 / 46.4 / 72.6 |
+| DC | 22.2 / 48.1 / 96.2 | 16.7 / 42.6 / 65.2 |
+
+- **One type alone breaks the model, answers included.** The answers that
+  are right 93-100% of the time in a mixed upload are right 6-73% of the
+  time alone: they stay committed but become wrong.
+- **Two close types together break it too:** CD4 T with CD8 T, 28% and 22%
+  recall; B with monocytes holds for B (100%) but monocytes fall to 49%.
+- **For users:** a sorted population uploaded on its own gets confident,
+  wrong answers. Stated as a known limit on the site and in the model card;
+  the sorted CD4/CD8 test already uploads every cell together.
+- **The candidate fix** is Phase 2d, scaling each gene against the reference
+  instead of within the upload; NB1b's version helped simulated single-type
+  uploads but failed its real-data gate, so it is re-tested here first.
+
+### 36. Typing a cell without scaling within its upload (Goal 2, Phase 2d probe), 2026-10-16
+
+**Why:** entry 35 traced the single-type collapse to scaling each gene within
+the upload. Can a cell be typed from its own profile alone?
+
+**How** (`research/notebooks/upload_independent_probe.py`; exploratory):
+Fulcher's mixed upload against Rieckmann's protein class means three ways:
+genes scaled within the upload (Phase 2a's rule); each cell's raw log
+profile, centred within the cell only; the same minus each protein's mean
+across Rieckmann's classes. The last two depend on nothing else in the upload.
+
+**Result** (`research/notebook-outputs/upload_independent_probe/summary.json`):
+balanced accuracy over the six types 79.6 within the upload, **27.9** from the
+raw profile and **20.9** reference-centred (chance 16.7), on the 674 proteins
+every Rieckmann class shows (231 observed per cell). Without scaling, almost
+every lymphocyte is called a monocyte or a DC.
+
+**What it means:**
+- Each dataset measures each protein at its own offset (detectability,
+  instrument, normalisation), and scaling within a mixed upload is what
+  cancels it. A single sorted population cannot be typed from its own file.
+- The workable answers are to keep a mixed reference in the same upload (a
+  user's own PBMCs beside the sorted cells), or to detect a narrow upload and
+  say so instead of answering. Neither is built yet.
+
 ---
 
 ## The throughline

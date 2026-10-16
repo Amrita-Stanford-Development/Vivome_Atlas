@@ -1,0 +1,344 @@
+{
+  "v3.1": {
+    "mixed": {
+      "B": {
+        "n": 102,
+        "recall_pct": 97.06,
+        "committed_pct": 85.29,
+        "correct_when_committed_pct": 98.85
+      },
+      "CD4T": {
+        "n": 308,
+        "recall_pct": 72.4,
+        "committed_pct": 88.31,
+        "correct_when_committed_pct": 91.18
+      },
+      "CD8T": {
+        "n": 181,
+        "recall_pct": 25.97,
+        "committed_pct": 93.37,
+        "correct_when_committed_pct": 98.82
+      },
+      "DC": {
+        "n": 54,
+        "recall_pct": 5.56,
+        "committed_pct": 51.85,
+        "correct_when_committed_pct": 96.43
+      },
+      "NK": {
+        "n": 150,
+        "recall_pct": 60.67,
+        "committed_pct": 92.0,
+        "correct_when_committed_pct": 99.28
+      },
+      "monocyte": {
+        "n": 456,
+        "recall_pct": 85.96,
+        "committed_pct": 92.11,
+        "correct_when_committed_pct": 99.76
+      }
+    },
+    "alone": {
+      "CD4T": {
+        "n": 308,
+        "recall_pct": 22.08,
+        "committed_pct": 37.99,
+        "correct_when_committed_pct": 53.85,
+        "correlation_term": null
+      },
+      "CD8T": {
+        "n": 181,
+        "recall_pct": 12.15,
+        "committed_pct": 46.41,
+        "correct_when_committed_pct": 72.62,
+        "correlation_term": null
+      },
+      "NK": {
+        "n": 150,
+        "recall_pct": 8.0,
+        "committed_pct": 44.0,
+        "correct_when_committed_pct": 43.94,
+        "correlation_term": null
+      },
+      "B": {
+        "n": 102,
+        "recall_pct": 10.78,
+        "committed_pct": 31.37,
+        "correct_when_committed_pct": 6.25,
+        "correlation_term": null
+      },
+      "monocyte": {
+        "n": 456,
+        "recall_pct": 21.49,
+        "committed_pct": 29.61,
+        "correct_when_committed_pct": 37.04,
+        "correlation_term": null
+      },
+      "DC": {
+        "n": 54,
+        "recall_pct": 16.67,
+        "committed_pct": 42.59,
+        "correct_when_committed_pct": 65.22,
+        "correlation_term": null
+      }
+    },
+    "paired": {
+      "CD4T+CD8T": {
+        "CD4T": {
+          "n": 308,
+          "recall_pct": 27.27,
+          "committed_pct": 33.44,
+          "correct_when_committed_pct": 56.31
+        },
+        "CD8T": {
+          "n": 181,
+          "recall_pct": 22.65,
+          "committed_pct": 56.91,
+          "correct_when_committed_pct": 74.76
+        }
+      },
+      "B+monocyte": {
+        "B": {
+          "n": 102,
+          "recall_pct": 100.0,
+          "committed_pct": 99.02,
+          "correct_when_committed_pct": 100.0
+        },
+        "monocyte": {
+          "n": 456,
+          "recall_pct": 48.25,
+          "committed_pct": 46.93,
+          "correct_when_committed_pct": 93.93
+        }
+      }
+    }
+  },
+  "v4.1": {
+    "mixed": {
+      "B": {
+        "n": 102,
+        "recall_pct": 98.04,
+        "committed_pct": 85.29,
+        "correct_when_committed_pct": 98.85
+      },
+      "CD4T": {
+        "n": 308,
+        "recall_pct": 82.47,
+        "committed_pct": 87.99,
+        "correct_when_committed_pct": 93.36
+      },
+      "CD8T": {
+        "n": 181,
+        "recall_pct": 23.76,
+        "committed_pct": 93.37,
+        "correct_when_committed_pct": 98.82
+      },
+      "DC": {
+        "n": 54,
+        "recall_pct": 22.22,
+        "committed_pct": 48.15,
+        "correct_when_committed_pct": 96.15
+      },
+      "NK": {
+        "n": 150,
+        "recall_pct": 90.0,
+        "committed_pct": 92.0,
+        "correct_when_committed_pct": 99.28
+      },
+      "monocyte": {
+        "n": 456,
+        "recall_pct": 97.81,
+        "committed_pct": 91.45,
+        "correct_when_committed_pct": 100.0
+      }
+    },
+    "alone": {
+      "CD4T": {
+        "n": 308,
+        "recall_pct": 23.38,
+        "committed_pct": 37.66,
+        "correct_when_committed_pct": 54.31,
+        "correlation_term": "flat"
+      },
+      "CD8T": {
+        "n": 181,
+        "recall_pct": 11.05,
+        "committed_pct": 46.41,
+        "correct_when_committed_pct": 72.62,
+        "correlation_term": "flat"
+      },
+      "NK": {
+        "n": 150,
+        "recall_pct": 6.67,
+        "committed_pct": 44.0,
+        "correct_when_committed_pct": 43.94,
+        "correlation_term": "flat"
+      },
+      "B": {
+        "n": 102,
+        "recall_pct": 11.76,
+        "committed_pct": 31.37,
+        "correct_when_committed_pct": 6.25,
+        "correlation_term": "flat"
+      },
+      "monocyte": {
+        "n": 456,
+        "recall_pct": 22.37,
+        "committed_pct": 29.61,
+        "correct_when_committed_pct": 37.04,
+        "correlation_term": "flat"
+      },
+      "DC": {
+        "n": 54,
+        "recall_pct": 16.67,
+        "committed_pct": 42.59,
+        "correct_when_committed_pct": 65.22,
+        "correlation_term": "flat"
+      }
+    },
+    "paired": {
+      "CD4T+CD8T": {
+        "CD4T": {
+          "n": 308,
+          "recall_pct": 28.25,
+          "committed_pct": 33.44,
+          "correct_when_committed_pct": 56.31
+        },
+        "CD8T": {
+          "n": 181,
+          "recall_pct": 21.55,
+          "committed_pct": 56.35,
+          "correct_when_committed_pct": 75.49
+        }
+      },
+      "B+monocyte": {
+        "B": {
+          "n": 102,
+          "recall_pct": 100.0,
+          "committed_pct": 99.02,
+          "correct_when_committed_pct": 100.0
+        },
+        "monocyte": {
+          "n": 456,
+          "recall_pct": 49.34,
+          "committed_pct": 45.83,
+          "correct_when_committed_pct": 93.78
+        }
+      }
+    }
+  },
+  "v4.2": {
+    "mixed": {
+      "B": {
+        "n": 102,
+        "recall_pct": 98.04,
+        "committed_pct": 85.29,
+        "correct_when_committed_pct": 98.85
+      },
+      "CD4T": {
+        "n": 308,
+        "recall_pct": 83.12,
+        "committed_pct": 88.31,
+        "correct_when_committed_pct": 94.49
+      },
+      "CD8T": {
+        "n": 181,
+        "recall_pct": 23.2,
+        "committed_pct": 93.37,
+        "correct_when_committed_pct": 99.41
+      },
+      "DC": {
+        "n": 54,
+        "recall_pct": 62.96,
+        "committed_pct": 50.0,
+        "correct_when_committed_pct": 96.3
+      },
+      "NK": {
+        "n": 150,
+        "recall_pct": 92.0,
+        "committed_pct": 92.0,
+        "correct_when_committed_pct": 99.28
+      },
+      "monocyte": {
+        "n": 456,
+        "recall_pct": 95.39,
+        "committed_pct": 91.67,
+        "correct_when_committed_pct": 100.0
+      }
+    },
+    "alone": {
+      "CD4T": {
+        "n": 308,
+        "recall_pct": 23.38,
+        "committed_pct": 37.66,
+        "correct_when_committed_pct": 54.31,
+        "correlation_term": "flat"
+      },
+      "CD8T": {
+        "n": 181,
+        "recall_pct": 11.05,
+        "committed_pct": 46.41,
+        "correct_when_committed_pct": 72.62,
+        "correlation_term": "flat"
+      },
+      "NK": {
+        "n": 150,
+        "recall_pct": 6.67,
+        "committed_pct": 44.0,
+        "correct_when_committed_pct": 43.94,
+        "correlation_term": "flat"
+      },
+      "B": {
+        "n": 102,
+        "recall_pct": 11.76,
+        "committed_pct": 31.37,
+        "correct_when_committed_pct": 6.25,
+        "correlation_term": "flat"
+      },
+      "monocyte": {
+        "n": 456,
+        "recall_pct": 22.37,
+        "committed_pct": 29.61,
+        "correct_when_committed_pct": 37.04,
+        "correlation_term": "flat"
+      },
+      "DC": {
+        "n": 54,
+        "recall_pct": 16.67,
+        "committed_pct": 42.59,
+        "correct_when_committed_pct": 65.22,
+        "correlation_term": "flat"
+      }
+    },
+    "paired": {
+      "CD4T+CD8T": {
+        "CD4T": {
+          "n": 308,
+          "recall_pct": 28.25,
+          "committed_pct": 33.44,
+          "correct_when_committed_pct": 56.31
+        },
+        "CD8T": {
+          "n": 181,
+          "recall_pct": 21.55,
+          "committed_pct": 56.35,
+          "correct_when_committed_pct": 75.49
+        }
+      },
+      "B+monocyte": {
+        "B": {
+          "n": 102,
+          "recall_pct": 100.0,
+          "committed_pct": 99.02,
+          "correct_when_committed_pct": 100.0
+        },
+        "monocyte": {
+          "n": 456,
+          "recall_pct": 49.34,
+          "committed_pct": 45.83,
+          "correct_when_committed_pct": 93.78
+        }
+      }
+    }
+  }
+}

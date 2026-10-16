@@ -80,6 +80,12 @@ python -m service.app</pre>
 
         <section class="sheet">
             <h2>Send a matrix</h2>
+            <p>
+                Send mixed cells, such as PBMCs, in one file. Each gene is scaled within the file you send, so a
+                single sorted population, or two close types such as CD4 and CD8 T cells, loses the contrast
+                the model needs and gets confident but often wrong answers
+                (<a href="versions.html">known limits</a>).
+            </p>
             <label for="modality">Modality</label>
             <select id="modality" class="well">
                 <option value="prot">Protein: proteins &times; cells</option>

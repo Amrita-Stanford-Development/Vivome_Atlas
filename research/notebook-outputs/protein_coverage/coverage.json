@@ -1,0 +1,215 @@
+{
+  "target_pct": 90.0,
+  "v31": {
+    "fulcher2026": {
+      "n": 1251,
+      "coverage_pct": 76.66,
+      "with_a_set_pct": 89.05,
+      "coverage_among_sets_pct": 86.09,
+      "by_class": {
+        "B": {
+          "n": 102,
+          "coverage_pct": 84.31,
+          "with_a_set_pct": 85.29,
+          "coverage_among_sets_pct": 98.85
+        },
+        "CD4T": {
+          "n": 308,
+          "coverage_pct": 68.83,
+          "with_a_set_pct": 88.31,
+          "coverage_among_sets_pct": 77.94
+        },
+        "CD8T": {
+          "n": 181,
+          "coverage_pct": 43.65,
+          "with_a_set_pct": 93.37,
+          "coverage_among_sets_pct": 46.75
+        },
+        "DC": {
+          "n": 54,
+          "coverage_pct": 50.0,
+          "with_a_set_pct": 51.85,
+          "coverage_among_sets_pct": 96.43
+        },
+        "NK": {
+          "n": 150,
+          "coverage_pct": 91.33,
+          "with_a_set_pct": 92.0,
+          "coverage_among_sets_pct": 99.28
+        },
+        "monocyte": {
+          "n": 456,
+          "coverage_pct": 91.67,
+          "with_a_set_pct": 92.11,
+          "coverage_among_sets_pct": 99.52
+        }
+      }
+    },
+    "scope2": {
+      "n": 1490,
+      "coverage_pct": 2.48,
+      "with_a_set_pct": 53.02,
+      "coverage_among_sets_pct": 4.68,
+      "by_class": {
+        "macrophage": {
+          "n": 1096,
+          "coverage_pct": 3.28,
+          "with_a_set_pct": 53.56,
+          "coverage_among_sets_pct": 6.13
+        },
+        "monocyte": {
+          "n": 394,
+          "coverage_pct": 0.25,
+          "with_a_set_pct": 51.52,
+          "coverage_among_sets_pct": 0.49
+        }
+      }
+    },
+    "scope2_reprocessed": {
+      "n": 1128,
+      "coverage_pct": 6.38,
+      "with_a_set_pct": 31.03,
+      "coverage_among_sets_pct": 20.57,
+      "by_class": {
+        "macrophage": {
+          "n": 814,
+          "coverage_pct": 7.74,
+          "with_a_set_pct": 35.5,
+          "coverage_among_sets_pct": 21.8
+        },
+        "monocyte": {
+          "n": 314,
+          "coverage_pct": 2.87,
+          "with_a_set_pct": 19.43,
+          "coverage_among_sets_pct": 14.75
+        }
+      }
+    },
+    "pbmc240": {
+      "n": 122,
+      "coverage_pct": 77.87,
+      "with_a_set_pct": 80.33,
+      "coverage_among_sets_pct": 96.94,
+      "by_class": {
+        "lymphoid": {
+          "n": 117,
+          "coverage_pct": 78.63,
+          "with_a_set_pct": 80.34,
+          "coverage_among_sets_pct": 97.87
+        },
+        "myeloid": {
+          "n": 5,
+          "coverage_pct": 60.0,
+          "with_a_set_pct": 80.0,
+          "coverage_among_sets_pct": 75.0
+        }
+      }
+    }
+  },
+  "v41": {
+    "fulcher2026": {
+      "n": 1251,
+      "coverage_pct": 78.34,
+      "with_a_set_pct": 88.57,
+      "coverage_among_sets_pct": 88.45,
+      "by_class": {
+        "B": {
+          "n": 102,
+          "coverage_pct": 84.31,
+          "with_a_set_pct": 85.29,
+          "coverage_among_sets_pct": 98.85
+        },
+        "CD4T": {
+          "n": 308,
+          "coverage_pct": 76.3,
+          "with_a_set_pct": 87.99,
+          "coverage_among_sets_pct": 86.72
+        },
+        "CD8T": {
+          "n": 181,
+          "coverage_pct": 44.2,
+          "with_a_set_pct": 93.37,
+          "coverage_among_sets_pct": 47.34
+        },
+        "DC": {
+          "n": 54,
+          "coverage_pct": 46.3,
+          "with_a_set_pct": 48.15,
+          "coverage_among_sets_pct": 96.15
+        },
+        "NK": {
+          "n": 150,
+          "coverage_pct": 91.33,
+          "with_a_set_pct": 92.0,
+          "coverage_among_sets_pct": 99.28
+        },
+        "monocyte": {
+          "n": 456,
+          "coverage_pct": 91.45,
+          "with_a_set_pct": 91.45,
+          "coverage_among_sets_pct": 100.0
+        }
+      }
+    },
+    "scope2": {
+      "n": 1490,
+      "coverage_pct": 2.48,
+      "with_a_set_pct": 52.95,
+      "coverage_among_sets_pct": 4.69,
+      "by_class": {
+        "macrophage": {
+          "n": 1096,
+          "coverage_pct": 3.28,
+          "with_a_set_pct": 53.47,
+          "coverage_among_sets_pct": 6.14
+        },
+        "monocyte": {
+          "n": 394,
+          "coverage_pct": 0.25,
+          "with_a_set_pct": 51.52,
+          "coverage_among_sets_pct": 0.49
+        }
+      }
+    },
+    "scope2_reprocessed": {
+      "n": 1128,
+      "coverage_pct": 6.38,
+      "with_a_set_pct": 31.03,
+      "coverage_among_sets_pct": 20.57,
+      "by_class": {
+        "macrophage": {
+          "n": 814,
+          "coverage_pct": 7.74,
+          "with_a_set_pct": 35.5,
+          "coverage_among_sets_pct": 21.8
+        },
+        "monocyte": {
+          "n": 314,
+          "coverage_pct": 2.87,
+          "with_a_set_pct": 19.43,
+          "coverage_among_sets_pct": 14.75
+        }
+      }
+    },
+    "pbmc240": {
+      "n": 122,
+      "coverage_pct": 77.87,
+      "with_a_set_pct": 80.33,
+      "coverage_among_sets_pct": 96.94,
+      "by_class": {
+        "lymphoid": {
+          "n": 117,
+          "coverage_pct": 78.63,
+          "with_a_set_pct": 80.34,
+          "coverage_among_sets_pct": 97.87
+        },
+        "myeloid": {
+          "n": 5,
+          "coverage_pct": 60.0,
+          "with_a_set_pct": 80.0,
+          "coverage_among_sets_pct": 75.0
+        }
+      }
+    }
+  }
+}

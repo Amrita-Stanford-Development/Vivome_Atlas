@@ -99,10 +99,17 @@ existed, and nothing was chosen on it afterwards
    post-hoc, and the simulated suite was on its fourth use. The claim that
    v4.1 beats the corrected baselines waits for sorted cells
    (`research/benchmark/protocol-sorted-cd4cd8.md`).
-5. **The guess's probability.** Its out-of-reference AUROC is 0.790, against
+5. **Uploads of one cell type.** Every gene is z-scored within its upload,
+   so an upload of a single sorted population loses the contrast the model
+   needs. On Fulcher, each type uploaded alone: answers correct when
+   committed fall from 93-100% (mixed) to 6-73% (B cells 6%, monocytes 37%,
+   NK 44%), and CD4 T with CD8 T together collapses too
+   (`research/notebook-outputs/single_type_uploads/summary.json`). Upload
+   mixed cells, never one sorted population alone.
+6. **The guess's probability.** Its out-of-reference AUROC is 0.790, against
    v4's 0.829 and v3.1's 0.744. Out-of-distribution abstention is v3.1's,
    unchanged.
-6. **v3.1's known limits apply to the answers** (below).
+7. **v3.1's known limits apply to the answers** (below).
 
 ## v3.1: the T1 NB2 ensemble
 

@@ -496,6 +496,15 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/v42_protein_means.py` — Goal 2, Phase 2a: candidate v4.2, v4.1's rule with Rieckmann's protein class means in the correlation term, scored on development data from v4.1's cache with gates fixed in its docstring
 - `research/notebook-outputs/v42_protein_means/summary.json` — v4.2 against v4.1: development figures, Fulcher answers, upload agreement, the five gates
 - `research/notebook-outputs/v42_protein_means/guesses.csv.gz` — each development cell's best guess under v4.1 and v4.2, which the service's v4.2 gate must reproduce
+- `research/notebooks/mac_mono_diagnosis.py` — Goal 2, Phase 1.3: what the reference's macrophage class is, which proteins separate SCoPE2's macrophages from its monocytes, and whether the reference RNA differs the same way
+- `research/notebook-outputs/mac_mono_diagnosis/diagnosis.json` — that diagnosis: the reference macrophage class's donors, annotation and markers; SCoPE2's strongest protein differences on both matrices; their agreement with the reference RNA; the correlation term's lean
+- `research/notebook-outputs/mac_mono_diagnosis/protein_vs_rna.csv` — every SCoPE2 protein's macrophage AUC beside the reference's RNA difference, both matrices
+- `research/notebooks/protein_coverage.py` — Goal 2, Phase 1.4: how often v3.1's and v4.1's conformal sets hold the true type on the development protein data, overall and per class
+- `research/notebook-outputs/protein_coverage/coverage.json` — that measurement, per dataset, model and class
+- `research/notebooks/single_type_uploads.py` — Goal 2, Phase 1.5: Fulcher's cells uploaded mixed, one type alone, and in pairs, through v3.1, v4.1 and v4.2: best guess recall and the answers' committed share and correctness
+- `research/notebook-outputs/single_type_uploads/summary.json` — that measurement, per model, upload and type
+- `research/notebooks/upload_independent_probe.py` — Goal 2, Phase 2d probe: typing Fulcher's cells against Rieckmann's means without scaling genes within the upload (raw and reference-centred profiles), against the within-upload rule
+- `research/notebook-outputs/upload_independent_probe/summary.json` — that probe's balanced accuracy and per-type recall for each rule
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell
