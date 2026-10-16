@@ -1,0 +1,261 @@
+/* The Workflow page (web/workflow.html). Layout only: the objects (.sheet,
+   .liquid, .glass, .well, .bead), the type scale and the reveal and ladder
+   styles come from css/page.css and css/story.css.
+
+   Wide screens: each chapter is a two-column scroll story, the text on the
+   left and its figure held in view on the right while the beats scroll by.
+   Narrow screens: the figure sits above the text. Film mode adds a bar at
+   the foot of the window and a theatre over the page (web/js/film.js). */
+
+.wf-page { max-width: 1240px; }
+.wf-intro { max-width: 860px; margin-bottom: 28px; }
+.wf-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 4px 0 22px; }
+.wf-toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; }
+.wf-toc li { max-width: none; }
+.wf-toc a {
+    display: inline-block;
+    font-size: 13px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 1px 2px 4px rgba(var(--shade), 0.1);
+    color: var(--ink-soft);
+    text-decoration: none;
+}
+.wf-toc a:hover, .wf-toc a.is-current { background: var(--well); color: var(--ink); }
+
+/* ---- the followed cell ---- */
+
+.wf-follow { margin: 0 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 32px; }
+.wf-follow-head { grid-column: 1 / -1; }
+.wf-follow-head h2 { margin-bottom: 4px; }
+.wf-chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.wf-chip {
+    font: inherit;
+    font-size: 13px;
+    border: 0;
+    cursor: pointer;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: linear-gradient(145deg, #FFFFFF, #F1F0EC);
+    box-shadow: 1px 2px 4px rgba(var(--shade), 0.14), inset 0 1px 0 #FFFFFF;
+    color: var(--ink-soft);
+}
+.wf-chip[aria-pressed="true"] { background: var(--well); color: var(--ink); box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.16); font-weight: 500; }
+.wf-chip .wf-count { color: var(--ink-faint); margin-left: 4px; }
+.wf-search { position: relative; display: grid; gap: 6px; align-content: start; }
+.wf-search label, .wf-lookup label { font-size: 13px; color: var(--ink-faint); }
+.wf-search input, .wf-lookup input { font: inherit; font-size: 14px; border: 0; padding: 9px 12px; color: var(--ink); width: 100%; }
+.wf-results { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.wf-results li { max-width: none; }
+.wf-results button { font: inherit; font-size: 12.5px; border: 0; cursor: pointer; padding: 3px 9px; border-radius: 8px; background: var(--bench); color: var(--ink); }
+.wf-results button:hover, .wf-results button:focus-visible { background: var(--accent-tint); }
+#cell-card { grid-column: 1 / -1; }
+.wf-cellcard { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 20px; margin: 4px 0 0; }
+.wf-cellcard dt { font-size: 12px; color: var(--ink-faint); }
+.wf-cellcard dd { font-size: 15px; color: var(--ink); overflow-wrap: anywhere; }
+.wf-abstain { color: var(--ink-soft) !important; font-style: italic; }
+
+/* ---- a chapter: the text and its held figure ---- */
+
+.wf-chapter {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 40px;
+    align-items: start;
+    padding: 28px 0 96px;
+    scroll-margin-top: 72px;
+}
+.wf-text { padding-top: 12px; }
+.wf-text h2 { font-size: clamp(24px, 2.6vw, 34px); letter-spacing: -0.025em; margin-bottom: 18px; }
+.wf-text [data-beat] {
+    font-size: 16.5px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    padding-left: 14px;
+    border-left: 3px solid transparent;
+    transition: border-color 0.4s ease, color 0.4s ease;
+}
+.wf-text [data-beat].is-active { border-left-color: var(--accent); color: var(--ink); }
+.wf-more { margin: 10px 0 18px; }
+.wf-more summary { cursor: pointer; font-weight: 500; color: var(--accent); font-size: 14.5px; }
+.wf-more[open] summary { margin-bottom: 12px; }
+.wf-more h3 { margin-top: 18px; }
+
+.wf-stage {
+    position: sticky;
+    top: 78px;
+    padding: 18px 18px 14px;
+    margin: 0;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.wf-canvas { position: relative; width: 100%; height: clamp(320px, 52vh, 560px); }
+.wf-canvas canvas, .wf-canvas > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.wf-canvas .wf-layer { position: absolute; inset: 0; pointer-events: none; }
+.wf-canvas .wf-layer.wf-interactive { pointer-events: auto; }
+.wf-drag { cursor: grab; touch-action: none; }
+.wf-drag:active { cursor: grabbing; }
+.wf-stage figcaption { min-height: 2.6em; }
+.wf-controls { display: flex; flex-wrap: wrap; gap: 6px; }
+.wf-toggle {
+    font: inherit;
+    font-size: 12.5px;
+    border: 0;
+    cursor: pointer;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: var(--bench);
+    color: var(--ink-soft);
+}
+.wf-toggle[aria-pressed="true"] { background: var(--well); color: var(--ink); box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.16); font-weight: 500; }
+.wf-table-toggle { align-self: flex-start; font: inherit; font-size: 12.5px; border: 0; background: none; color: var(--accent); cursor: pointer; padding: 2px 0; text-decoration: underline; text-underline-offset: 0.18em; }
+.wf-table { max-height: 360px; overflow: auto; font-size: 13px; }
+.wf-svg { width: 100%; height: auto; display: block; }
+
+/* HTML drawn inside a scene (labels, chips, readouts) */
+.wf-hud { position: absolute; font-size: 12px; color: var(--ink-soft); line-height: 1.35; pointer-events: none; }
+.wf-hud strong { font-size: 13px; }
+.wf-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.88); box-shadow: 1px 2px 4px rgba(var(--shade), 0.12); font-size: 12px; color: var(--ink); white-space: nowrap; }
+
+/* ---- panels inside chapters ---- */
+
+.wf-key { color: var(--ink); white-space: nowrap; }
+.wf-snippet td, .wf-snippet th { white-space: nowrap; }
+.wf-missing { display: inline-block; width: 38px; height: 14px; vertical-align: middle; border-radius: 3px;
+    background: repeating-linear-gradient(45deg, #F5F5F3 0 3px, #C9D0D6 3px 4.6px); color: transparent; overflow: hidden; }
+.wf-morph { list-style: none; padding: 0; display: grid; gap: 8px; }
+.wf-morph li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; max-width: none; font-size: 13px; }
+.wf-arrow { color: var(--accent); }
+.wf-cards { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 6px 0 12px; }
+.wf-card { max-width: none; padding: 16px 18px; }
+.wf-card h3 { margin-bottom: 6px; }
+.wf-card p { font-size: 14px; }
+.wf-lookup { display: grid; gap: 6px; max-width: 360px; margin: 6px 0 12px; }
+.wf-lookup-result { font-size: 14px; }
+.wf-json { max-height: 380px; overflow: auto; padding: 14px 16px; font-size: 12px; line-height: 1.45; }
+.wf-json code { background: none; padding: 0; font-size: inherit; }
+.wf-ladder { margin: 10px 0 16px; }
+.wf-ladder li { grid-template-columns: 11.5em 1fr; }
+.wf-rung.wf-pass { box-shadow: inset 4px 0 0 var(--accent) !important; }
+.wf-rung.wf-stop { box-shadow: inset 4px 0 0 var(--ink) !important; background: var(--well); }
+.wf-rung.wf-skipped { opacity: 0.55; box-shadow: inset 4px 0 0 var(--line) !important; }
+.wf-heldout { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.wf-heldout .wf-svg { max-width: 200px; margin-top: 8px; }
+.wf-heldout-sheet { margin-top: 8px; }
+.bead.wf-pass { --c: var(--accent); }
+.bead.wf-fail { --c: var(--ink); }
+.bead.wf-void { --c: var(--line); }
+.wf-service { margin-top: 18px; display: grid; gap: 10px; justify-items: start; }
+.wf-service .model-card { width: 100%; }
+.wf-live { font-size: 13.5px; }
+
+/* ---- film mode ---- */
+
+.wf-filmbar {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    z-index: 30;
+    width: min(1120px, calc(100% - 24px));
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 14px;
+}
+.wf-filmbar[hidden] { display: none; }
+.wf-fbtn { font: inherit; font-size: 12.5px; border: 0; cursor: pointer; padding: 6px 10px; border-radius: 9px; background: rgba(255, 255, 255, 0.7); color: var(--ink); white-space: nowrap; }
+.wf-fbtn:hover { background: var(--accent-tint); }
+.wf-fbtn[aria-pressed="false"] { color: var(--ink-faint); }
+.wf-fplay { min-width: 40px; }
+.wf-clock { font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--ink-soft); min-width: 86px; text-align: center; }
+.wf-scrub { flex: 1 1 160px; accent-color: var(--accent); }
+.wf-rail { list-style: none; padding: 0; display: flex; gap: 3px; }
+.wf-rail li { max-width: none; }
+.wf-rail button { width: 12px; height: 12px; padding: 0; border: 0; border-radius: 50%; background: var(--line); cursor: pointer; }
+.wf-rail button.is-done { background: rgba(0, 102, 163, 0.45); }
+.wf-rail button.is-current { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.wf-speed select { font: inherit; font-size: 12.5px; border: 0; padding: 5px 6px; border-radius: 9px; background: rgba(255, 255, 255, 0.7); color: var(--ink); }
+
+.wf-theatre {
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    display: grid;
+    place-items: center;
+    padding: 72px 24px 96px;
+    background: rgba(234, 240, 246, 0.86);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+.wf-theatre[hidden] { display: none; }
+.wf-theatre-frame {
+    width: min(1180px, 100%);
+    max-height: 100%;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    gap: 6px;
+    background: rgba(250, 250, 249, 0.96);
+    border-radius: var(--r-sheet);
+    box-shadow: var(--halo);
+    padding: 22px 26px;
+}
+.wf-theatre-frame h2 { font-size: clamp(22px, 2.4vw, 32px); margin: 0; }
+.wf-theatre-frame .eyebrow { margin-bottom: 0; }
+.wf-theatre-stage { position: relative; min-height: 0; height: min(62vh, 640px); }
+.wf-theatre-stage .wf-canvas { height: 100%; }
+.wf-caption { font-size: clamp(16px, 1.6vw, 21px); line-height: 1.5; color: var(--ink); max-width: 80ch; min-height: 3em; }
+.wf-theatre.no-captions .wf-caption { visibility: hidden; }
+body.wf-film-open { overflow: hidden; }
+
+/* Presentation: a 16:9 frame for screen recording, the bar out of the way. */
+.wf-present .wf-theatre { padding: 0; background: #EAF0F6; }
+.wf-present .wf-theatre-frame { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); border-radius: 0; padding: 3vh 4vw; }
+.wf-present .wf-theatre-stage { height: auto; }
+.wf-present .wf-caption { font-size: clamp(18px, 2.2vw, 30px); }
+.wf-present .wf-filmbar { opacity: 0; transition: opacity 0.4s ease; }
+.wf-present .wf-filmbar:hover, .wf-present .wf-filmbar:focus-within, .wf-present.wf-awake .wf-filmbar { opacity: 1; }
+
+/* ---- narrower screens ---- */
+
+@media (max-width: 1023px) {
+    .wf-chapter { grid-template-columns: minmax(0, 1fr); gap: 18px; padding-bottom: 64px; }
+    .wf-stage { position: relative; top: 0; order: -1; min-height: 0; }
+    .wf-canvas { height: clamp(280px, 60vw, 460px); }
+}
+@media (max-width: 720px) {
+    .wf-follow { grid-template-columns: minmax(0, 1fr); }
+    .wf-filmbar { flex-wrap: wrap; bottom: 8px; }
+    .wf-rail { display: none; }
+    .wf-scrub { order: 10; flex-basis: 100%; }
+    .wf-theatre { padding: 12px 8px 128px; }
+    .wf-theatre-frame { padding: 14px; }
+    .wf-ladder li { grid-template-columns: 1fr; }
+}
+
+/* ---- reduced motion: nothing animates; every figure shows its last frame ---- */
+
+@media (prefers-reduced-motion: reduce) {
+    .wf-text [data-beat] { transition: none; }
+}
+
+/* ---- print: the text and the finished figures, no chrome ---- */
+
+@media print {
+    .site-header, .site-footer, .wf-filmbar, .wf-theatre, .wf-actions, .wf-toc, .wf-controls, .wf-table-toggle,
+    .wf-search, .wf-lookup, #ask-service, .bio-field, .bio-frost, .site-bg { display: none !important; }
+    body { background: #FFFFFF; }
+    .sheet, .liquid { box-shadow: none; border: 1px solid #DDDDDD; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .wf-chapter { display: block; break-inside: avoid; padding: 12px 0 24px; }
+    .wf-stage { position: static; }
+    .wf-canvas { height: auto; }
+    .wf-canvas canvas { display: none; }
+    .wf-canvas .wf-print { position: static; display: block; }
+    .wf-more { display: block; }
+    .wf-more > * { display: block; }
+}
+.wf-print { display: none; }

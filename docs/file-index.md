@@ -23,10 +23,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/project.html` — the projection tool: sends a matrix to a locally run service and shows each cell's label or abstention, with a downloadable response
 - `web/benchmark.html` — the standing benchmark: VivOME against the corrected baselines, one table per dataset, what the results show and how they are scored
 - `web/versions.html` — model card, known limits, earlier releases, prior baseline, data availability, release protocol
+- `web/workflow.html` — the Workflow page: how VivOME works start to end, 13 chapters following one PBMC240 run, a film mode
 - `web/miscellaneous.html` — intentionally blank (the former roadmap page); kept on purpose
 - `web/preview-biocells.html` — preview, not linked from the site: the living water's objects close up, with switches for colours, amount, gel and water effect
 - `web/preview-water.html` — preview, not linked from the site: every water effect side by side over the same objects
 - `web/css/story.css` — the landing's layout: the sticky hero, the sections and card grids, the scroll reveals, phones and reduced motion
+- `web/css/workflow.css` — the Workflow page's layout: the two-column scroll story, the followed-cell picker, the film bar and theatre, reduced motion and print
 - `web/css/page.css` — the design system: tokens, the glass/well/sheet/bead components, site header and footer, the panel styling contract
 - `web/js/background.js` — the living background: the animated cell and strand canvas behind every page
 - `web/js/biofield.js` — the living water above it, behind every page but the atlas: the 3D objects in a soft gel, with a wake that follows the pointer
@@ -36,6 +38,17 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/hero.js` — the landing's 3D hero: large objects from `biocells.js` in front of the title, easing in and flying out as the hero scrolls
 - `web/js/random.js` — the seeded random numbers behind the procedural visuals
 - `web/js/story.js` — the landing's controller: manifest facts and proof points, the hero's render loop, scroll reveals and count-ups
+- `web/js/workflow.js` — the Workflow page's controller: loads the manifest and workflow.json, fills slots, the followed cell, scroll progress, lazy scenes, the live-service check
+- `web/js/film.js` — the Workflow page's film mode: play, pause, scrub, skip, speed, captions, the address and the 16:9 present view
+- `web/js/timeline.js` — the film's chapters, lengths and beats, its clock and its address (pure)
+- `web/js/workflow-data.js` — loading, checking and reading web/data/workflow.json: records, the followed cell, the gene lookup, the class colours (pure)
+- `web/js/workflow-panels.js` — the Workflow page's HTML builders: snippets, recipe, cell card, probability and guess tables, the ladder, held-out cards, the service card (pure)
+- `web/js/workflow-svg.js` — static SVG figures for the Workflow page: histogram, heatmap, bars, Sankey, tree, UpSet, graph, ROC (pure)
+- `web/js/workflow-layout.js` — layout maths for the Workflow page: scales, histogram bars, Sankey, the class compass, colour ramps, the 3D view (pure)
+- `web/js/scene-kit.js` — canvas helpers shared by the Workflow page's scenes
+- `web/js/scenes-input.js` — the Workflow page's figures for the cold open, the data, the files, the gene space, the upload, matching and smoothing
+- `web/js/scenes-model.js` — the Workflow page's figures for the encoder, probabilities, the best guess, the answer and the 3D landing
+- `web/js/scenes-evidence.js` — the Workflow page's figures for the training and for how the results were calculated, with the live service
 - `web/js/manifest.js` — loads, validates and formats the manifest; `isMeasured()` is the one guard on displaying a number
 - `web/js/panels.js` — pure builders that turn manifest records into HTML strings for each page's panels
 - `web/tests/fixtures.js` — shared manifest fixture for the JS tests, including a `<script>` class name that proves escaping
@@ -44,12 +57,16 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/chrome.test.js` — pins the shared site header and footer byte-identical across pages, one three.js build, and the living water on every page but the atlas
 - `web/tests/motion.test.js` — tests for `motion.js`: the hero's entrance and exit, and counting up in the final number's format
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and the hero casts only real objects
+- `web/tests/workflow.test.js` — the Workflow page against the real files: every number slot measured, copy rules, chapters, escaping, palette, service address, no model maths in the browser
+- `web/tests/timeline.test.js` — the film's clock: chapter lengths, locate, beats, reduced-motion steps, the address
+- `web/tests/workflow-layout.test.js` — the Workflow page's layout maths and static figures: rotation, Sankey conservation, colour ramps, ROC snapping, hatching, escaping
 - `web/tests/random.test.js` — tests for `random.js`, with its first draws pinned
 - `web/tests/lfs.test.js` — pins the Git LFS pointer check, and asserts the shipped RNA files are still pointers
 - `web/tests/biocells.test.js` — tests for `biocells.js`: the red cell's Evans and Fung profile, DNA and nucleosome geometry, noise, palettes
 - `web/tests/water.test.js` — tests for `water.js`'s list of effects and its copy
 - `web/data/whats_new.json` — the dashboard's announcements: dated text entries, no metrics
 - `web/data/atlas_manifest.json` — generated by `scripts/build_manifest.py`; the only source of every number the pages show
+- `web/data/workflow.json` — generated by `scripts/build_workflow.py` (run by `scripts/build_manifest.py`); the Workflow page's data, built for the manifest's release
 - `web/data/metadata_RNA_lat128.csv` — RNA cell metadata (85,233 rows): class, lineage, 3-PC coordinates in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`)
 - `web/data/metadata_PROT_lat128.csv` — protein cell metadata (1,490 SCoPE2 rows): true class, v3.1's best guess, out-of-distribution score and abstention, 3-PC coordinates (`scripts/export_atlas_coordinates.py`)
 - `web/data/atlas_PROT_lat128.csv` — protein cells with 3-PC coordinates and per-gene values (~45 MB)
@@ -107,6 +124,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
 - `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
 - `service/tests/test_v42.py` — v4.2, the default since 0.5.0: its protein query, its protein means as its spec says, equal to v4.1 where its correlation term is flat and on every RNA upload, and its served best guess equal to its notebook's on every development dataset
+- `service/tests/test_workflow_trace.py` — the Workflow page's trace against a fresh run of the served model on the PBMC240 example
 - `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
 - `service/tests/test_baselines_labels.py` — the corrected baselines' `--labels`: the join of a label set onto the benchmark's RNA cells by cell, refusing a misaligned or short table, and runs kept apart from the original ones
 - `service/tests/test_sorted_cd4cd8.py` — the sorted CD4/CD8 test's scripts: frozen sha256s equal the protocol's and still hold, rule 5's mapping, scoring over the sorted types only, refusal of a labels file with another sha256 and of a second scoring
@@ -181,6 +199,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/runtime/decisive_summary.json` — the architecture decision (module pooling, uniform masking) that the encoder loader reads
 - `service/model/evidence/feature_space_detail.csv` — for each gene, which of the six proteomics sources detected it
 - `service/model/evidence/feature_space_provenance.json` — the union arithmetic behind the 9,002-gene figure
+- `service/model/evidence/workflow/pbmc240_trace_v42.json.gz` — the PBMC240 example through the served v4.2 model, stage by stage, every cell checked against the service (`scripts/trace_workflow.py`)
+- `service/model/evidence/workflow/input_snippets.json` — a corner of SCoPE2's matrix, Fulcher 2026's protein table and the reference's first cells, for the Workflow page
 - `service/model/evidence/masking_test_tables/rna_sweep.csv` — architecture comparison: balanced accuracy vs. coverage, per arm and seed
 - `service/model/evidence/masking_test_tables/scope2_projection.csv` — architecture comparison on SCoPE2: AUC, balanced accuracy, in-support rate
 - `service/model/evidence/v3_tables/app_export_summary.json` — summary of the v3 export: gene hash, class counts, supported classes
@@ -272,6 +292,8 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `scripts/README.md` — what each script does and when to run it
 - `scripts/build_manifest.py` — generates `web/data/atlas_manifest.json` from the metadata, the model evidence and the committed evaluation and benchmark tables
+- `scripts/build_workflow.py` — builds `web/data/workflow.json` from the trace and committed records, standard library only; run by `scripts/build_manifest.py`
+- `scripts/trace_workflow.py` — traces the PBMC240 example through the served model's own functions for the Workflow page, checking every cell against `run_projection`
 - `scripts/export_atlas_coordinates.py` — writes the site's atlas coordinates from the served v3.1 model, so projected cells land on the displayed atlas
 - `scripts/fetch_v31_members.py` — puts the five v3.1 checkpoints (kept outside git) in place, checking each sha256
 - `scripts/build_v4_bundle.py` — builds v4's reference files from the Tabula Sapiens blood RNA and v3.1's members, after checking it reproduces v3.1's served latents; `--rows trainval` builds the calibration bundle outside the repository; `--spec-only` rewrites the spec and MANIFEST with Phase 3c's verdict
@@ -282,6 +304,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/public-sets-downloads.json` — what `scripts/fetch_public_sets.py` fetched: each file's role, URL, size, sha256 and date
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
+- `scripts/test_build_workflow.py` — `web/data/workflow.json` is the builder's output, within its budget, built for the manifest's release; its records and cross-checks
 - `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, and optionally the R2-backed large files)
 - `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index
@@ -304,6 +327,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `docs/setup-windows.md` — setting up the repository, the local-only files, Python, R and Claude Code on a Windows GPU workstation
 - `docs/web/manifest.md` — the manifest: schema, the measured/pending contract, regeneration, release protocol
 - `docs/web/hosting.md` — how the public site is hosted on Cloudflare Pages and published, and the R2 step for the large atlas files
+- `docs/web/workflow.md` — the Workflow page: its chapters and their data, the film, where its numbers come from, rebuilding them
 - `docs/web/data.md` — the site's data files, Git LFS, what ships and what doesn't
 - `docs/web/design.md` — the design system: the world, the four UI objects, colour meanings, type, motif, copy rules, where new results land
 - `docs/webpage_concept.md` — the site concept the redesign follows: intro, landing, scroll story, dashboard, tools

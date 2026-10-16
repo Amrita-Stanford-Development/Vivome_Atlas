@@ -574,5 +574,14 @@ Object.assign(FACTS, {
   previous_recall_khoury_cd8t: (m) => escapeHtml(formatPercent(previousRecall(m, 'Khoury 2026', 'CD8T'))),
   previous_recall_fulcher_dc: (m) => escapeHtml(formatPercent(previousRecall(m, 'Fulcher 2026', 'DC'))),
   scope2_current: (m) => escapeHtml(formatPercent(currentScore(m, 'scope2'))),
+  fulcher_current: (m) => escapeHtml(formatPercent(currentScore(m, 'fulcher2026'))),
+  fulcher_vs_previous: (m) => {
+    const name = m.previous_release?.model_name;
+    const row = (benchmarkSet(m, 'fulcher2026')?.rows ?? []).find((r) => r.ours && name && r.method.startsWith(name));
+    const d = row?.vs_current?.difference;
+    if (!isMeasured(d)) return textOrPending(null);
+    const ci = Number.isFinite(d.ci_low) && Number.isFinite(d.ci_high) ? ` (95% CI ${points(d.ci_low)} to ${points(d.ci_high)})` : '';
+    return escapeHtml(`${points(d.value)} points${ci}`);
+  },
   scope2_chance: (m) => escapeHtml(formatPercent(benchmarkSet(m, 'scope2')?.chance)),
 });

@@ -86,6 +86,10 @@ Regenerate the manifest and commit it:
 python scripts/build_manifest.py
 ```
 
+It also rebuilds `web/data/workflow.json`, the Workflow page's data. When
+the served model changes, run `python scripts/trace_workflow.py` first
+([docs/web/workflow.md](docs/web/workflow.md)).
+
 Bump `ATLAS_VERSION` in `scripts/build_manifest.py` for a real release; the full
 protocol is on `web/versions.html` and in [docs/web/manifest.md](docs/web/manifest.md).
 

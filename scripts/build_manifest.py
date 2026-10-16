@@ -919,6 +919,10 @@ def main() -> None:
     print(f"  model={model['name']!r} ({model['seeds']['value']} members), previous={previous_release['model_name']!r}, "
           f"earlier={earlier_release['model_name']!r}, feature_space_size={deployed_architecture['feature_space_size']}")
     print(f"  benchmark: {', '.join(f'''{d['name']} ({len(d['rows'])} rows)''' for d in manifest['benchmark']['datasets'])}")
+    # The Workflow page's companion file, built for this same release.
+    import build_workflow
+    size = build_workflow.write(build_workflow.build(manifest))
+    print(f"Wrote {build_workflow.rel(build_workflow.OUTPUT)} ({size:,} bytes)")
 
 
 if __name__ == "__main__":

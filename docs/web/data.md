@@ -12,6 +12,7 @@ Latent embeddings and metadata, latent dim 128.
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
 | `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows; the served v3.1 model's projection of SCoPE2 (`scripts/export_atlas_coordinates.py`) |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
+| `workflow.json` | Generated with the manifest, for the Workflow page: a trace of the PBMC240 example through the served model, an atlas sample, the gene space, the training recipe, the evaluation records; see [workflow.md](workflow.md) |
 
 RNA metadata columns: `latent_dim, modality, orig_index, class_idx,
 class_name, lineage, PC1, PC2, PC3`.

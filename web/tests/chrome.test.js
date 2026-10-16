@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 // injection, so no layout shift and they work without JS). This pins the
 // copies together: after removing the one aria-current marker, every page's
 // header and footer must be byte-identical to home.html's.
-const PAGES = ['index.html', 'home.html', 'atlas.html', 'benchmark.html', 'project.html', 'versions.html'];
+const PAGES = ['index.html', 'home.html', 'atlas.html', 'benchmark.html', 'project.html', 'versions.html', 'workflow.html'];
 // The atlas is a full-window app view, so it carries the header but no footer.
 const WITHOUT_FOOTER = new Set(['atlas.html']);
 

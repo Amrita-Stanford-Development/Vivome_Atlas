@@ -154,6 +154,16 @@ Atlas version `0.5.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 
+## The Workflow page's companion file
+
+`web/data/workflow.json` holds what only the Workflow page needs: the trace
+of the PBMC240 example through the served model, a sample of the atlas, the
+gene space, the training recipe and the evaluation records. It is built by
+`scripts/build_workflow.py`, which `main()` here runs after writing the
+manifest, so the two are always built together; its `built_for` must equal
+this manifest's release. Its numbers are records in the same measured or
+pending shape. See [workflow.md](workflow.md).
+
 ## Consumers
 
 `web/js/manifest.js` loads, validates, and formats. `web/js/panels.js` turns the
@@ -178,14 +188,18 @@ from data, and `web/tests/fixtures.js` deliberately names one class
 ## Release protocol
 
 1. Freeze inputs — record accession numbers, download dates, and checksums for every dataset.
-2. Train and export, then regenerate the manifest.
+2. Train and export. If the served model changed, re-run
+   `python scripts/trace_workflow.py` (the Workflow page's trace,
+   [workflow.md](workflow.md)). Then regenerate the manifest, which also
+   rebuilds `web/data/workflow.json`.
 3. Bump `ATLAS_VERSION` in `scripts/build_manifest.py` and commit the regenerated manifest.
 4. Tag the release and archive it for a persistent identifier.
 5. Record label stability against the previous version and add it to `versions.html`.
 
-Label stability is not yet measured for any release. 0.4.0 keeps 0.3.0's
-answers but joins its new best guess to each set, so the share of answers
-that changes still needs computing; v3 answers at class level only, so
+Label stability is not yet measured for any release. 0.5.0 answers RNA
+uploads exactly as 0.4.0; on protein uploads its best guess changes, and
+with it some answers, since each set holds the best guess, so the share
+that changes still needs computing. v3 answers at class level only, so
 comparing it with the later releases needs a definition first.
 
 ## Tests

@@ -1,0 +1,198 @@
+{
+ "scope2": {
+  "path": "service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+  "orientation": "cells in rows, genes in columns",
+  "values": "as published: centred and batch-corrected",
+  "header": [
+   "",
+   "AADAC",
+   "AARS1",
+   "ABCA12",
+   "ABCA13",
+   "ABCA3",
+   "ABCA5"
+  ],
+  "rows": [
+   [
+    "0",
+    -0.08,
+    0.19,
+    -0.34,
+    -0.19,
+    -0.25,
+    -0.31
+   ],
+   [
+    "1",
+    -0.04,
+    -0.17,
+    0.51,
+    -0.28,
+    0.81,
+    0.26
+   ],
+   [
+    "2",
+    1.35,
+    -0.23,
+    -0.18,
+    -0.08,
+    -0.84,
+    0.25
+   ],
+   [
+    "3",
+    -0.56,
+    -0.04,
+    -0.17,
+    0.28,
+    0.56,
+    0.1
+   ],
+   [
+    "4",
+    0.38,
+    -0.12,
+    -0.15,
+    0.26,
+    0.4,
+    0.22
+   ],
+   [
+    "5",
+    -0.41,
+    0.02,
+    0.36,
+    0.18,
+    -0.22,
+    0.01
+   ]
+  ]
+ },
+ "fulcher2026": {
+  "path": "data/incoming/Fulcher2026/RTLS-and-TMT32-scProteomics-of-PBMCs-main/Single_PBMCs_Fig4/Data/abundance_protein_MD.tsv",
+  "sha256": "85bce484c75c5510d3725093fb690d157d2c85a4cc5b7b51eae6b0a0cada4467",
+  "orientation": "proteins in rows, TMT channels (cells) in columns",
+  "values": "FragPipe TMT-Integrator abundances on a linear scale; the service takes log2",
+  "annotation_columns": [
+   "Index",
+   "NumberPSM",
+   "Gene",
+   "MaxPepProb",
+   "Protein",
+   "Protein ID",
+   "Entry Name",
+   "Protein Description",
+   "Organism",
+   "Indistinguishable Proteins",
+   "ReferenceIntensity"
+  ],
+  "channels": 2343,
+  "header": [
+   "Gene",
+   "60708_TMT32_PBMCs_Target3_A11_127N",
+   "60708_TMT32_PBMCs_Target3_A11_127C",
+   "60708_TMT32_PBMCs_Target3_A11_128N",
+   "60708_TMT32_PBMCs_Target3_A11_128C",
+   "60708_TMT32_PBMCs_Target3_A11_129N"
+  ],
+  "rows": [
+   [
+    "GATD3B",
+    223518.18,
+    495980.26,
+    317092.66,
+    629302.61,
+    558321.59
+   ],
+   [
+    "UBE2L5",
+    11320.07,
+    39375.7,
+    5960.31,
+    null,
+    null
+   ],
+   [
+    "NCF1B",
+    44073.37,
+    72858.88,
+    34588.07,
+    39041.45,
+    80270.3
+   ],
+   [
+    "MYO1G",
+    580752.96,
+    433145.02,
+    423253.15,
+    631564.31,
+    1038255.07
+   ],
+   [
+    "EIF3CL",
+    23151.89,
+    23771.56,
+    25247.41,
+    null,
+    null
+   ],
+   [
+    "AGPS",
+    14130.62,
+    21089.94,
+    9192.41,
+    11494.69,
+    19202.99
+   ]
+  ]
+ },
+ "reference": {
+  "path": "service/model/runtime/reference_metadata.csv",
+  "note": "the reference's expression matrix is not in this repository; its cells, labels and latent coordinates are",
+  "header": [
+   "cell",
+   "class_idx",
+   "class_name",
+   "lineage"
+  ],
+  "rows": [
+   [
+    "TSP2_Blood_NA_SS2_B113459_B133094_LinNeg_G15",
+    "12",
+    "monocyte",
+    "myeloid"
+   ],
+   [
+    "TSP2_Blood_NA_SS2_B113459_B133094_LinNeg_L11",
+    "11",
+    "mature nk t cell",
+    "lymphoid"
+   ],
+   [
+    "TSP2_Blood_NA_SS2_B113459_B133094_LinNeg_J16",
+    "20",
+    "platelet",
+    "other"
+   ],
+   [
+    "TSP2_Blood_NA_SS2_B113459_B133094_LinNeg_F5",
+    "20",
+    "platelet",
+    "other"
+   ],
+   [
+    "TSP2_Blood_NA_SS2_B113459_B133094_LinNeg_N22",
+    "20",
+    "platelet",
+    "other"
+   ],
+   [
+    "TSP2_Blood_NA_SS2_B113459_B133094_LinNeg_P22",
+    "18",
+    "plasma cell",
+    "lymphoid"
+   ]
+  ]
+ }
+}

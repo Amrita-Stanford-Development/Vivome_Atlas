@@ -171,6 +171,16 @@ space where the two modalities mix.
 - **Phones** get fewer, smaller hero objects and one column of cards.
   **Reduced motion** gets a still hero and all the text at once.
 
+## The Workflow page
+
+`web/workflow.html` explains the product start to end, one chapter per step,
+following one cell of the PBMC240 example ([workflow.md](workflow.md)). It
+uses the same objects: each chapter's figure is a sheet held in view while
+its sentences scroll by, and the film's bar is glass. Its figures are data
+encodings: cell types take the atlas viewer's palette, RNA and protein their
+reserved colours, z-scores a blue to ochre ramp that avoids every reserved
+colour. Mechanism pictures with no data say "illustration".
+
 ## Shared chrome
 
 The header (wordmark, the tool links, Dashboard) and the footer are static
@@ -191,3 +201,4 @@ when a release does.
 | Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest |
 | Benchmark rows | `manifest.benchmark` | benchmark page, dashboard status bead |
 | Announcements | `web/data/whats_new.json` (text only, no metrics) | dashboard "What's new" |
+| A served model's trace, the gene space, the training recipe, the evaluation records | `web/data/workflow.json` (`scripts/build_workflow.py`, built with the manifest) | the Workflow page ([workflow.md](workflow.md)) |

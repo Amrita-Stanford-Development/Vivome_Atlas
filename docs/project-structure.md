@@ -22,9 +22,9 @@ Vivome_Atlas/
 ├── package.json              runs the JS tests (node --test); no dependencies
 │
 ├── web/                      THE WEBSITE: serve this folder as-is
-│   ├── *.html                one file per page (index, home, atlas, project, benchmark, versions)
+│   ├── *.html                one file per page (index, home, atlas, project, workflow, benchmark, versions)
 │   ├── css/  js/             shared styling; pure ES modules (manifest.js, panels.js)
-│   ├── data/                 what the pages load: atlas_manifest.json, cell metadata, embeddings
+│   ├── data/                 what the pages load: atlas_manifest.json, workflow.json, cell metadata, embeddings
 │   └── tests/                node --test suites for js/
 │
 ├── service/                  THE PROJECTION API: Python, POST /api/project

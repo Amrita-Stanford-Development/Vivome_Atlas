@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-10-16",
+    "title": "A Workflow page",
+    "text": "Follow one cell from an uploaded file to its answer: the data, the shared genes, the training, every step the service runs, and how the results were calculated. Each figure shows what the served model computes for the PBMC240 example, and a film mode plays the whole story.",
+    "link": "workflow.html",
+    "link_text": "Open the Workflow page"
+  },
+  {
+    "date": "2026-10-16",
+    "title": "v4.2 is the default",
+    "text": "The service now answers with v4.2. For protein uploads its best guess also compares each cell with protein profiles of sorted immune cells (Rieckmann et al. 2017); RNA uploads are answered as before. What changed, and the evidence for it, is on the Versions page.",
+    "link": "versions.html",
+    "link_text": "Read the model card"
+  },
+  {
     "date": "2026-10-15",
     "title": "v4.1 is the default",
     "text": "The service now answers with v4.1. It keeps v3.1's answers and gives a better best guess, which also compares each cell with the reference's average profile of every cell type. Its known limits, CD8 T cells and dendritic cells first, are on the Versions page. v3.1 and v3 stay selectable.",
