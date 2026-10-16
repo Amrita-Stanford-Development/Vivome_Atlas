@@ -122,7 +122,7 @@ once per heading at most, always on the word that carries the meaning.
   - "beats scANVI": true only for the shipped seed;
   - "99%": the modality probe is a diagnostic, not a score;
   - "state of the art": needs the sealed Khoury test;
-  - "deployed" or "hosted": the projection service runs locally.
+  - "deployed" or "hosted" for any model but v4.1: the hosted service runs v4.1 only.
 
 ## The landing
 

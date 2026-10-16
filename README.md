@@ -129,8 +129,9 @@ yet (a per-*dataset* version exists, see `docs/service/context-brief.md`).
 The first architecture, `CrossModalNet` (jointly trained on RNA and
 proteomics, 2,903-gene space), is kept as a documented baseline, not erased.
 See `versions.html` and `service/model/legacy/v2/README.md`. The projection
-service (see `service/README.md`) runs end to end but is not hosted: the
-Project page sends uploads to a service you run locally.
+service (see `service/README.md`) runs end to end and is hosted on Google
+Cloud Run: the Project page sends uploads there, or to a copy you run
+locally (`deploy/huggingface/PUBLISH.md`).
 
 ## Documentation
 

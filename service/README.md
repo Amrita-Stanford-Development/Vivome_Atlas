@@ -59,8 +59,9 @@ Every pipeline stage is implemented, tested (`tests/`, against synthetic
 reference fixtures at the real 85,233-cell scale, deliberately kept
 synthetic for speed and determinism rather than loading the real ~130MB of
 arrays), and running against the real artifacts above. `POST /api/project`
-serves real predictions end to end. It is not hosted: `web/project.html`
-sends uploads to a service the visitor runs locally, checking
+serves real predictions end to end. It is hosted on Google Cloud Run
+(v4.1; `deploy/huggingface/PUBLISH.md`): `web/project.html` sends uploads
+there by default, or to a copy the visitor runs locally, checking
 `GET /api/status` first, and the service answers only allowed origins
 (`config.ALLOWED_ORIGINS`).
 
