@@ -49,12 +49,15 @@ eyebrow names its part, and each step ends with one "In plain words" card
 | 3 | 11. Where the cell lands on the map | the map in 3D, the file's cells, our cell and its neighbours, the neighbours' clues; the results file | `reference.sample`, `trace.cells[].xyz`, `trace.detail[].neighbours`, `.response` |
 | 4 | 12. Testing VivOME, and using it today | practice files by kind, the Fulcher 2026 contest, the six sets kept back, the live service | `evaluation`, the manifest's `benchmark`, `service` |
 
-**The followed cell.** Every figure follows one PBMC240 run: by default the
-file's first, or any other picked by outcome or searched for. The trace
-records the full arrays (raw column, every protein amount the cell
-measured, every encoder's probabilities, the best guess's three views, the
-neighbours, the JSON response) for the story runs only: the first run and
-the first run of each outcome. For another run
+**The followed cell.** Every figure follows one PBMC240 run, by default
+the first run named to one type or a family that its marker-based label
+names (`default_cell` in `scripts/trace_workflow.py`; `trace.story.default`).
+A beginner first sees an answer the markers back, and the page says how the
+cell was chosen; any other run can be picked by outcome or searched for.
+The trace records the full arrays (raw column, every protein amount the
+cell measured, every encoder's probabilities, the best guess's three views,
+the neighbours, the JSON response) for the story runs only: the default
+run, the file's first run and the first run of each outcome. For another run
 the figures that need them show the story run with the same outcome, and
 say so. PBMC240's labels from markers are weak; the page calls them that.
 

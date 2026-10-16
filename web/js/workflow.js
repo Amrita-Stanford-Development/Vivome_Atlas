@@ -128,7 +128,7 @@ function buildPicker() {
     return `<p class="wf-outcome-group">${escapeHtml(title)} <span class="wf-count">${plural(total)}</span></p>`
       + `<div class="wf-chips">${shown.map((k) => chip(OUTCOME_CHIPS[k], cells.findIndex((c) => c.outcome === k), OUTCOME_NOTES[k], k)).join('')}</div>`;
   };
-  $('#outcome-chips').innerHTML = `<div class="wf-chips">${chip('The first cell', 0, 'Where the page starts: the first cell in the file.', null)}</div>`
+  $('#outcome-chips').innerHTML = `<div class="wf-chips">${chip('The cell we start with', w.trace.story.default ?? 0, 'The first cell in the file that VivOME names and whose telltale proteins agree, so the page opens on a full answer. Cells with no answer are one click away.', null)}</div>`
     + group('Got an answer', OUTCOME_ORDER.filter((k) => ANSWERED.has(k)))
     + group('No answer', OUTCOME_ORDER.filter((k) => !ANSWERED.has(k)));
   const pick = $('.wf-pick');
@@ -419,7 +419,7 @@ Promise.all([loadManifest(), loadWorkflow()]).then(([manifest, workflow]) => {
   buildPanels();
   buildPicker();
   wireFigures();
-  setCell(0);
+  setCell(workflow.trace.story.default ?? 0);
   watchChapters();
   wireFilm();
 }).catch((err) => {

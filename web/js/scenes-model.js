@@ -239,7 +239,8 @@ export function guess(el, ctx) {
       text(g, `Our cell\u2019s best guess: ${plainName(names[top[0]])}`, 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
       text(g, 'its five likeliest types, with their chances', 12, 38, { size: 10.5, colour: SOFT });
       const labelW = narrow ? 120 : 200;
-      const bw = width - labelW - 80;
+      // Room after the top bar for its value and the "best guess" tag.
+      const bw = width - labelW - (narrow ? 80 : 170);
       const rowH = Math.min(46, (height - 110) / top.length);
       const grow = phase(p, 0.02, 0.14);
       top.forEach((c, r) => {

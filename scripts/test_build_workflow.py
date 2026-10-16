@@ -60,8 +60,19 @@ class TestWorkflow(unittest.TestCase):
 
     def test_the_story_cells_follow_their_rule(self):
         cells, story = self.w["trace"]["cells"], self.w["trace"]["story"]["cells"]
-        self.assertEqual(story[0], 0, "the file's first run")
-        for i in story[1:]:
+        families = self.w["trace"]["story"]["weak_family"]
+        group = {c["name"]: c["group"] for c in self.w["reference"]["classes"]}
+
+        def backed(c):
+            if c["level"] not in ("class", "group"):
+                return False
+            family = group[c["label"]] if c["level"] == "class" else c["label"]
+            return families.get(c["weak_label"]) == family
+
+        first = next((i for i, c in enumerate(cells) if backed(c)), 0)
+        self.assertEqual(self.w["trace"]["story"]["default"], first, "the first answer its markers back")
+        self.assertEqual(story[:2] if first else story[:1], [first, 0] if first else [0])
+        for i in story[2 if first else 1:]:
             kind = cells[i]["outcome"]
             self.assertEqual(i, next(j for j, c in enumerate(cells) if c["outcome"] == kind), kind)
         self.assertEqual([d["cell"] for d in self.w["trace"]["detail"]], story)

@@ -98,9 +98,30 @@ def weak_labels() -> dict:
         return {row["cell"]: row["label"] for row in csv.DictReader(handle)}
 
 
-def story_cells(cells: list[dict]) -> list[int]:
-    """The file's first run, then the first run of each outcome, in OUTCOMES order."""
-    picked = [0]
+# The family each marker-based label (weak, service/examples) names, in the
+# reference hierarchy's terms; "unassigned" names none.
+WEAK_FAMILY = {"T cell": "T cell", "NK cell": "NK cell", "Monocyte": "monocyte/macrophage",
+               "Dendritic": "dendritic cell", "Platelet": "platelet/megakaryocyte"}
+
+
+def default_cell(cells: list[dict], weak: dict, hierarchy: dict) -> int:
+    """The cell the Workflow page starts with: the first run named to one
+    type or to a family, where that family is the one its marker-based label
+    names. A reader new to the page first sees an answer the markers back;
+    the runs with no answer are one click away. The file's first run if none."""
+    for i, c in enumerate(cells):
+        if c["abstained"] or c["label_level"] not in ("class", "group"):
+            continue
+        family = hierarchy[c["label"]]["group"] if c["label_level"] == "class" else c["label"]
+        if WEAK_FAMILY.get(weak.get(c["cell_id"])) == family:
+            return i
+    return 0
+
+
+def story_cells(cells: list[dict], first: int = 0) -> list[int]:
+    """The default cell, the file's first run, then the first run of each
+    outcome, in OUTCOMES order."""
+    picked = list(dict.fromkeys([first, 0]))
     for kind in OUTCOMES:
         i = next((i for i, c in enumerate(cells) if outcome(c) == kind), None)
         if i is not None and i not in picked:
@@ -280,7 +301,8 @@ def main() -> None:
     assert sum(outcomes.values()) == len(cells)
 
     # ---- the story cells, in full ----
-    story = story_cells(cells)
+    first = default_cell(cells, weak, answers.hierarchy)
+    story = story_cells(cells, first)
     anchor = answers.members[anchor_i]
     ref_idx, ref_sim = chunked_topk(smoothed_z[anchor_i][story], anchor.reference_latents, config.TRANSFER_K)
     ref_positions = answers.metadata.class_positions_by_cell()
@@ -420,9 +442,10 @@ def main() -> None:
         },
         "outcomes": {kind: outcomes.get(kind, 0) for kind in OUTCOMES},
         "cells": rows,
-        "story": {"rule": "the file's first run, then the first run of each outcome (class, group, lineage, "
-                          "ambiguous, no confident label, outside the supported region, too few genes)",
-                  "cells": story},
+        "story": {"rule": "the default cell (the first run named to one type or a family that its marker-based "
+                          "label names), the file's first run, then the first run of each outcome (class, group, "
+                          "lineage, ambiguous, no confident label, outside the supported region, too few genes)",
+                  "default": first, "weak_family": WEAK_FAMILY, "cells": story},
         "detail": detail,
         "heatmap": heatmap,
     }
