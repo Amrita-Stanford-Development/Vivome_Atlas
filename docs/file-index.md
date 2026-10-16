@@ -555,6 +555,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/v42_protein_means/guesses.csv.gz` — each development cell's best guess under v4.1 and v4.2, which the service's v4.2 gate must reproduce
 - `research/notebooks/v42_release.py` — the record behind serving v4.2 (release 0.5.0): both candidates' held-out primaries, Fulcher balanced accuracy and recall with a bootstrap, and whether any other development guess differs
 - `research/notebook-outputs/v42_release/summary.json` — that record: held-out primaries, Fulcher figures, unchanged datasets, licence note
+- `research/notebooks/twin_genes.py` — protein groups naming several shared-list genes: leave them out (served), give them to the first gene, or copy them to each; the served v4.2 on PBMC240, DS18 and DS19, with PBMC240's marker labels and a decision rule fixed before running
 - `research/notebooks/mac_mono_diagnosis.py` — Goal 2, Phase 1.3: what the reference's macrophage class is, which proteins separate SCoPE2's macrophages from its monocytes, and whether the reference RNA differs the same way
 - `research/notebook-outputs/mac_mono_diagnosis/diagnosis.json` — that diagnosis: the reference macrophage class's donors, annotation and markers; SCoPE2's strongest protein differences on both matrices; their agreement with the reference RNA; the correlation term's lean
 - `research/notebook-outputs/mac_mono_diagnosis/protein_vs_rna.csv` — every SCoPE2 protein's macrophage AUC beside the reference's RNA difference, both matrices
