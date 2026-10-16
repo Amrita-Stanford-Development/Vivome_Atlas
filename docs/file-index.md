@@ -281,6 +281,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/baselines_v4_score.py` — Track G: v4 (Phase 4) or v4.1 (`--version v4.1`, Phase E) against every corrected baseline, v3.1 (and v4, for v4.1) on the development datasets, with `baselines_score.py`'s functions, and the plan's checks
 - `benchmark/khoury2026_posthoc_v4.py` — Khoury 2026 post-hoc: v4 as served, scored beside v3.1 and the corrected baselines with the sealed scorer's code
 - `benchmark/khoury2026_posthoc_v41_check.py` — v4.1, Phase B: the rule locked on Fulcher, checked once on Khoury 2026 (post-hoc) against v4, v3.1 and the corrected baselines, with a verdict fixed before Phase A
+- `benchmark/khoury2026_posthoc_v42_check.py` — v4.2, the served model: checked once on Khoury 2026 (post-hoc) against v4.1, v4, v3.1 and the corrected baselines, with a verdict fixed before the labels are read; v4.2 as the service answers
 - `benchmark/khoury2026_posthoc_v51_check.py` — v5.1 (Track H): checked once on Khoury 2026 (post-hoc) against v4.1, v4, v3.1 and the corrected baselines, with the plan's verdict; label-free reproductions first
 - `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
 - `benchmark/heldout_formats.py` — the internal held-out test's readers (MaxQuant, Proteome Discoverer, sage TMT, DIA-NN), written from each deposit's documentation; each format's column names in one place
