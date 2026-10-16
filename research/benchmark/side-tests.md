@@ -75,6 +75,13 @@ were committed before any of their files or cells was read, and their intake
 and scoring scripts were rehearsed on development data or synthetic files
 (run history, entry 42).
 
+### Amendment 5, 2026-10-16: the candidates for the held-out test are final
+
+Phase 2 froze no new candidate (run history, entries 36, 40 and 41), so the
+internal held-out test scores v4.1, v4.2 and v5.2 (amendment 2), with v3.1 for
+reference. Both protocols carry this as their amendment 1. Unsealing may
+begin, each set once, in the protocols' order.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

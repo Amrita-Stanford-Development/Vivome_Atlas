@@ -225,3 +225,14 @@ closer to the reference.
 `research/benchmark/heldout/<set>/`: `summary.json` (every candidate's
 primary and secondary measures, the baselines' and the statement above) and
 `scores.csv` (per sample).
+
+## Amendments
+
+### 1, 2026-10-16: the candidates are final
+
+Phase 2 of the Goal 2 plan froze no new candidate: Hao's dendritic cells in
+the class centres and the out-of-distribution scores were NO GO (run history,
+entries 40 and 41), and the single-type-upload candidate was dropped after
+its probe (entry 36). The candidates are those of rule 1 as written: v4.1
+(the headline), v4.2 and v5.2, with v3.1 for reference. Unsealing may begin
+(`side-tests.md`, amendment 5).
