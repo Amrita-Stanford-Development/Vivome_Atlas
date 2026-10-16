@@ -59,6 +59,12 @@ test('the chapters are the film’s, in order, each with its beats', () => {
     const beats = (m[0].match(/data-beat/g) ?? []).length;
     assert.equal(beats, CHAPTERS[i].beats, `${m[2]} has ${beats} beats`);
     assert.match(m[0], new RegExp(`data-scene="${m[2]}"`), `${m[2]} has its figure`);
+    // The pinned stage holds the heading, every beat and the figure; the rest follows it.
+    const pin = m[0].match(/<div class="wf-runway">\s*<div class="wf-pin">([\s\S]*?)<\/figure>/);
+    assert.ok(pin, `${m[2]} has a runway and a pinned stage`);
+    assert.equal((pin[1].match(/data-beat/g) ?? []).length, CHAPTERS[i].beats, `${m[2]}'s beats are pinned`);
+    assert.match(pin[1], /<h2 /, `${m[2]}'s heading is pinned`);
+    assert.ok(!/class="wf-more"|class="wf-lookup"|class="wf-service"/.test(pin[1]), `${m[2]} pins only its story`);
   });
 });
 

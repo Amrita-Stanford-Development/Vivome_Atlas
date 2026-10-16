@@ -56,17 +56,23 @@
 .wf-cellcard dd { font-size: 15px; color: var(--ink); overflow-wrap: anywhere; }
 .wf-abstain { color: var(--ink-soft) !important; font-style: italic; }
 
-/* ---- a chapter: the text and its held figure ---- */
+/* ---- a chapter: a pinned stage on a scroll runway ----
+   The stage (the heading, the beats and the figure) holds still in the
+   middle of the window while the chapter's runway scrolls under it; the
+   scrolled share of the runway is the animation's progress. When it ends
+   the stage lets go and the page moves on (web/js/workflow.js sets the
+   runway's length and the stage's top). Without JS nothing pins. */
 
-.wf-chapter {
+.wf-chapter { padding: 8px 0 64px; scroll-margin-top: 72px; }
+.wf-runway { position: relative; }
+.wf-pin {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: 40px;
-    align-items: start;
-    padding: 28px 0 96px;
-    scroll-margin-top: 72px;
+    align-items: center;
 }
-.wf-text { padding-top: 12px; }
+.js .wf-runway.is-measured { height: var(--runway); }
+.js .wf-runway.is-measured > .wf-pin { position: sticky; top: var(--pin-top); }
 .wf-text h2 { font-size: clamp(24px, 2.6vw, 34px); letter-spacing: -0.025em; margin-bottom: 18px; }
 .wf-text [data-beat] {
     font-size: 16.5px;
@@ -74,31 +80,43 @@
     margin-bottom: 18px;
     padding-left: 14px;
     border-left: 3px solid transparent;
-    transition: border-color 0.4s ease, color 0.4s ease;
+    transition: border-color 0.4s ease, color 0.4s ease, opacity 0.45s ease;
 }
 .wf-text [data-beat].is-active { border-left-color: var(--accent); color: var(--ink); }
+.js .wf-runway.is-measured .wf-text [data-beat]:not(.is-active) { opacity: 0.5; }
+
+/* Compact: when every beat does not fit beside the figure, the beats share
+   one place and cross-fade, with dots for where the chapter is. */
+.wf-beat-dots { display: none; list-style: none; padding: 0; gap: 6px; margin: 4px 0 0 14px; }
+.wf-beat-dots li { width: 8px; height: 8px; border-radius: 50%; background: var(--line); max-width: none; }
+.wf-beat-dots li.is-on { background: var(--accent); }
+.wf-compact .wf-beat-dots { display: flex; }
+.wf-compact .wf-beats { display: grid; }
+.wf-compact .wf-beats > [data-beat] { grid-area: 1 / 1; margin-bottom: 0; }
+.js .wf-runway.is-measured .wf-compact .wf-beats > [data-beat]:not(.is-active) { opacity: 0; pointer-events: none; }
+
+/* What follows a chapter's stage: its details, lookups and readouts. */
+.wf-after { max-width: 780px; margin-top: 22px; }
 .wf-more { margin: 10px 0 18px; }
 .wf-more summary { cursor: pointer; font-weight: 500; color: var(--accent); font-size: 14.5px; }
 .wf-more[open] summary { margin-bottom: 12px; }
 .wf-more h3 { margin-top: 18px; }
 
 .wf-stage {
-    position: sticky;
-    top: 78px;
     padding: 18px 18px 14px;
     margin: 0;
-    min-height: 420px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.wf-canvas { position: relative; width: 100%; height: clamp(320px, 52vh, 560px); }
+/* The figure fits the window with its caption and controls. */
+.wf-canvas { position: relative; width: 100%; height: clamp(260px, calc(100svh - 240px), 560px); }
 .wf-canvas canvas, .wf-canvas > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .wf-canvas .wf-layer { position: absolute; inset: 0; pointer-events: none; }
 .wf-canvas .wf-layer.wf-interactive { pointer-events: auto; }
 .wf-drag { cursor: grab; touch-action: none; }
 .wf-drag:active { cursor: grabbing; }
-.wf-stage figcaption { min-height: 2.6em; }
+.wf-stage figcaption { min-height: 3.2em; }
 .wf-controls { display: flex; flex-wrap: wrap; gap: 6px; }
 .wf-toggle {
     font: inherit;
@@ -113,6 +131,10 @@
 .wf-toggle[aria-pressed="true"] { background: var(--well); color: var(--ink); box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.16); font-weight: 500; }
 .wf-table-toggle { align-self: flex-start; font: inherit; font-size: 12.5px; border: 0; background: none; color: var(--accent); cursor: pointer; padding: 2px 0; text-decoration: underline; text-underline-offset: 0.18em; }
 .wf-table { max-height: 360px; overflow: auto; font-size: 13px; }
+/* "Show as table" swaps the figure for its table in the same place, so the
+   pinned stage keeps its size. */
+.wf-stage.show-table .wf-canvas { display: none; }
+.wf-stage.show-table .wf-table { height: clamp(260px, calc(100svh - 240px), 560px); max-height: none; }
 .wf-svg { width: 100%; height: auto; display: block; }
 
 /* HTML drawn inside a scene (labels, chips, readouts) */
@@ -223,9 +245,11 @@ body.wf-film-open { overflow: hidden; }
 /* ---- narrower screens ---- */
 
 @media (max-width: 1023px) {
-    .wf-chapter { grid-template-columns: minmax(0, 1fr); gap: 18px; padding-bottom: 64px; }
-    .wf-stage { position: relative; top: 0; order: -1; min-height: 0; }
-    .wf-canvas { height: clamp(280px, 60vw, 460px); }
+    .wf-pin { grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
+    .wf-stage { order: -1; padding: 12px 12px 10px; }
+    .wf-canvas, .wf-stage.show-table .wf-table { height: clamp(220px, min(56vw, calc(100svh - 430px)), 420px); }
+    .wf-text h2 { margin-bottom: 8px; }
+    .wf-text [data-beat] { font-size: 15.5px; line-height: 1.6; }
 }
 @media (max-width: 720px) {
     .wf-follow { grid-template-columns: minmax(0, 1fr); }
@@ -251,7 +275,11 @@ body.wf-film-open { overflow: hidden; }
     body { background: #FFFFFF; }
     .sheet, .liquid { box-shadow: none; border: 1px solid #DDDDDD; -webkit-backdrop-filter: none; backdrop-filter: none; }
     .wf-chapter { display: block; break-inside: avoid; padding: 12px 0 24px; }
-    .wf-stage { position: static; }
+    .js .wf-runway.is-measured { height: auto; }
+    .js .wf-runway.is-measured > .wf-pin { position: static; display: block; }
+    .wf-text [data-beat], .js .wf-compact .wf-beats > [data-beat]:not(.is-active) { opacity: 1 !important; grid-area: auto; }
+    .wf-compact .wf-beats { display: block; }
+    .wf-beat-dots { display: none !important; }
     .wf-canvas { height: auto; }
     .wf-canvas canvas { display: none; }
     .wf-canvas .wf-print { position: static; display: block; }

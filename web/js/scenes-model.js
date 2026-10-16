@@ -274,7 +274,7 @@ export function guess(el, ctx) {
       bar(g, 16, by, bw, 14, BENCH, 7);
       bar(g, 16, by, bw * fusion.agreement * fill, 14, ACCENT, 7, 0.85);
       line(g, 16 + bw * fusion.threshold, by - 6, 16 + bw * fusion.threshold, by + 20, { colour: INK, width: 2 });
-      text(g, `gate ${pct(fusion.threshold)}`, 16 + bw * fusion.threshold + 4, by + 30, { size: 10.5, colour: INK });
+      text(g, `gate ${pct(fusion.threshold)}`, 16 + bw * fusion.threshold + 4, by - 8, { size: 10.5, colour: INK });
       text(g, `${pct(fusion.agreement)}: the term is ${fusion.correlation_term} here`, 16, by + 30, { size: 10.5, colour: SOFT });
       // Where it opens: the simulated uploads.
       const four = phase(p, 0.76, 0.9);

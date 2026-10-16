@@ -1,9 +1,12 @@
 // The Workflow page (web/workflow.html; docs/web/workflow.md). It loads the
 // manifest and web/data/workflow.json together, fills every [data-fact] and
 // [data-wf] slot through the isMeasured guard, keeps the followed cell, and
-// drives each chapter's scene by scroll: a chapter's progress runs 0 to 1 as
-// it passes, split evenly into its beats (web/js/timeline.js). Scenes load
-// when their chapter comes near (web/js/scenes-*.js). The film
+// drives each chapter's scene by scroll. A chapter's stage (its heading,
+// beats and figure) pins in the middle of the window, and the scrolled share
+// of the chapter's runway is the animation's progress, 0 to 1, split evenly
+// into its beats (web/js/timeline.js); when it reaches 1 the stage lets go
+// and the page moves on. Scenes load when their chapter comes near
+// (web/js/scenes-*.js). The film
 // (web/js/film.js) loads on "Play the whole story" or a #film link.
 // Under reduced motion nothing animates: each figure shows the finished
 // frame of the beat being read.
@@ -39,6 +42,9 @@ const MODULE_OF = {
 };
 
 const state = { cell: 0, options: {} };
+// Scroll per beat while a stage is pinned, as a share of the window's height.
+const RUNWAY_PER_BEAT = 0.8;
+const pins = new Map(); // chapter id -> {runway, pin, top, height}
 const scenes = new Map(); // chapter id -> {scene, section, progress}
 let ctx = null;
 let film = null;
@@ -91,6 +97,7 @@ function setCell(i) {
   $('#response-json').innerHTML = (own ? '' : `<p class="caption">Recorded for the story runs; this is ${escapeHtml(detail.id)}'s.</p>`)
     + buildResponseJson(detail);
   for (const chip of $$('.wf-chip')) chip.setAttribute('aria-pressed', String(Number(chip.dataset.pick) === i));
+  if (pins.size) layoutPins();
   renderAll();
   film?.onCell?.(i);
 }
@@ -199,9 +206,11 @@ function wireFigures() {
         const box = $('.wf-table', figure);
         const open = box.hidden;
         box.hidden = !open;
+        figure.classList.toggle('show-table', open);
         tableToggle.setAttribute('aria-expanded', String(open));
-        tableToggle.textContent = open ? 'Hide the table' : 'Show as table';
+        tableToggle.textContent = open ? 'Show the figure' : 'Show as table';
         if (open) box.innerHTML = scenes.get(id)?.scene.table?.(state) || '<p class="caption">This figure has no table.</p>';
+        else { scenes.get(id)?.scene?.resize(); renderChapter(id); }
       }
     });
   }
@@ -217,7 +226,7 @@ async function mountScene(id) {
   if (scenes.has(id)) return scenes.get(id);
   const section = document.getElementById(id);
   const holder = $('.wf-canvas', section);
-  const entry = { scene: null, section, progress: reduced ? 1 : 0, loading: true };
+  const entry = { scene: null, section, progress: progressOf(id), loading: true };
   scenes.set(id, entry);
   try {
     const module = await MODULES[MODULE_OF[id]]();
@@ -244,19 +253,65 @@ function renderAll() {
   for (const id of scenes.keys()) renderChapter(id);
 }
 
-// Each chapter's progress from its place on screen.
+// Pinning: each stage is centred in the window below the header and held
+// there for its chapter's runway. Where every beat does not fit beside the
+// figure (and on narrow screens), the beats share one place and cross-fade.
+function headerHeight() {
+  const header = $('.site-header');
+  return header && getComputedStyle(header).position === 'sticky' ? header.offsetHeight : 0;
+}
+
+function layoutPins() {
+  const vh = window.innerHeight;
+  const head = headerHeight();
+  const room = vh - head - 16;
+  const narrow = window.matchMedia('(max-width: 1023px)').matches;
+  for (const c of CHAPTERS) {
+    const section = document.getElementById(c.id);
+    const runway = $('.wf-runway', section);
+    const pin = $('.wf-pin', section);
+    const text = $('.wf-text', section);
+    if (!runway || !pin) continue;
+    if (!$('.wf-beat-dots', text)) {
+      const dots = document.createElement('ol');
+      dots.className = 'wf-beat-dots';
+      dots.setAttribute('aria-hidden', 'true');
+      dots.innerHTML = '<li></li>'.repeat(c.beats);
+      text.appendChild(dots);
+    }
+    text.classList.toggle('wf-compact', narrow);
+    if (!narrow && pin.offsetHeight > room) text.classList.add('wf-compact');
+    const height = pin.offsetHeight;
+    const top = head + Math.max(8, (room - height) / 2);
+    runway.style.setProperty('--runway', `${Math.round(height + c.beats * RUNWAY_PER_BEAT * vh)}px`);
+    runway.style.setProperty('--pin-top', `${Math.round(top)}px`);
+    runway.classList.add('is-measured');
+    pins.set(c.id, { runway, pin, text, top, height });
+  }
+}
+
+function progressOf(id) {
+  const p = pins.get(id);
+  if (!p) return 0;
+  const box = p.runway.getBoundingClientRect();
+  return Math.min(1, Math.max(0, (p.top - box.top) / Math.max(1, box.height - p.height)));
+}
+
 function onScroll() {
   const vh = window.innerHeight;
-  for (const [id, entry] of scenes) {
-    const box = entry.section.getBoundingClientRect();
+  for (const c of CHAPTERS) {
+    const pin = pins.get(c.id);
+    if (!pin) continue;
+    const box = pin.runway.getBoundingClientRect();
     if (box.bottom < -vh || box.top > vh * 2) continue;
-    const p = Math.min(1, Math.max(0, (vh * 0.62 - box.top) / Math.max(1, box.height - vh * 0.35)));
-    if (Math.abs(p - entry.progress) > 0.002 || p === 1 || p === 0) {
+    const p = progressOf(c.id);
+    const beat = beatAt(c, p);
+    $$('[data-beat]', pin.text).forEach((el, k) => el.classList.toggle('is-active', k === beat));
+    $$('.wf-beat-dots li', pin.text).forEach((el, k) => el.classList.toggle('is-on', k <= beat));
+    const entry = scenes.get(c.id);
+    if (entry && (Math.abs(p - entry.progress) > 0.002 || p === 1 || p === 0)) {
       entry.progress = p;
-      const chapter = CHAPTERS[chapterIndex(id)];
-      const beat = beatAt(chapter, p);
-      $$('[data-beat]', entry.section).forEach((el, k) => el.classList.toggle('is-active', k === beat && box.top < vh * 0.7 && box.bottom > vh * 0.3));
-      renderChapter(id);
+      renderChapter(c.id);
     }
   }
   const current = CHAPTERS.find((c) => {
@@ -271,13 +326,15 @@ function watchChapters() {
     for (const e of entries) if (e.isIntersecting) mountScene(e.target.id).then(onScroll);
   }, { rootMargin: '600px 0px' });
   for (const c of CHAPTERS) near.observe(document.getElementById(c.id));
+  layoutPins();
+  document.fonts?.ready.then(() => { layoutPins(); onScroll(); });
   let queued = false;
   const tick = () => { queued = false; onScroll(); };
   window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(tick); } }, { passive: true });
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { for (const { scene } of scenes.values()) scene?.resize(); onScroll(); }, 120);
+    resizeTimer = setTimeout(() => { layoutPins(); for (const { scene } of scenes.values()) scene?.resize(); onScroll(); }, 120);
   });
 }
 

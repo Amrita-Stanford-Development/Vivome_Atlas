@@ -69,78 +69,104 @@
 
         <!-- 0: the cold open -->
         <section class="wf-chapter" id="open" data-chapter="open" aria-labelledby="h-open">
-            <div class="wf-text">
-                <span class="eyebrow">The journey</span>
-                <h2 id="h-open">One cell, start to end</h2>
-                <p data-beat>
-                    Run <code data-cell="id">&nbsp;</code> arrives as one column of a protein report: a
-                    few thousand intensities, many of them blank.
-                </p>
-                <p data-beat>
-                    It leaves with an answer, <strong data-cell="answer">&nbsp;</strong>,
-                    and a best guess, <strong data-cell="guess">&nbsp;</strong>. The chapters below show
-                    each step, and what the model computed for this cell at it.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">The journey</span>
+                        <h2 id="h-open">One cell, start to end</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Run <code data-cell="id">&nbsp;</code> arrives as one column of a protein report: a
+                                few thousand intensities, many of them blank.
+                            </p>
+                            <p data-beat>
+                                It leaves with an answer, <strong data-cell="answer">&nbsp;</strong>,
+                                and a best guess, <strong data-cell="guess">&nbsp;</strong>. The chapters below show
+                                each step, and what the model computed for this cell at it.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="open">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                    </figure>
+                </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="open">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-            </figure>
         </section>
 
         <!-- 1 -->
         <section class="wf-chapter" id="data" data-chapter="data" aria-labelledby="h-data">
-            <div class="wf-text">
-                <span class="eyebrow">Step 1</span>
-                <h2 id="h-data">Two kinds of data</h2>
-                <p data-beat>
-                    VivOME learns cell types from RNA. Its reference is
-                    <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula Sapiens, each labelled
-                    as one of <span data-wf="classes">&nbsp;</span> types.
-                </p>
-                <p data-beat>
-                    The types nest: each belongs to a group, such as T cell, and each group to a lineage,
-                    such as lymphoid. When the evidence is thin, an answer can stop at the group or the
-                    lineage instead of guessing a type.
-                </p>
-                <p data-beat>
-                    Proteomics is the other side. Single-cell mass spectrometry measures a few thousand
-                    proteins per cell, with many blanks, and no protein label trains anything. The protein
-                    datasets decide which genes the model reads, and the development sets test it.
-                </p>
-            </div>
-            <figure class="wf-stage sheet" data-scene="data">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <div class="wf-controls" role="group" aria-label="Chart options">
-                    <button type="button" class="wf-toggle" data-option="scale" aria-pressed="false">Log scale</button>
-                    <button type="button" class="wf-toggle" data-option="lineage" aria-pressed="false">Group by lineage</button>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 1</span>
+                        <h2 id="h-data">Two kinds of data</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                VivOME learns cell types from RNA. Its reference is
+                                <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula Sapiens, each labelled
+                                as one of <span data-wf="classes">&nbsp;</span> types.
+                            </p>
+                            <p data-beat>
+                                The types nest: each belongs to a group, such as T cell, and each group to a lineage,
+                                such as lymphoid. When the evidence is thin, an answer can stop at the group or the
+                                lineage instead of guessing a type.
+                            </p>
+                            <p data-beat>
+                                Proteomics is the other side. Single-cell mass spectrometry measures a few thousand
+                                proteins per cell, with many blanks, and no protein label trains anything. The protein
+                                datasets decide which genes the model reads, and the development sets test it.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="data">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <div class="wf-controls" role="group" aria-label="Chart options">
+                            <button type="button" class="wf-toggle" data-option="scale" aria-pressed="false">Log scale</button>
+                            <button type="button" class="wf-toggle" data-option="lineage" aria-pressed="false">Group by lineage</button>
+                        </div>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
                 </div>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
+            </div>
         </section>
 
         <!-- 2 -->
         <section class="wf-chapter" id="files" data-chapter="files" aria-labelledby="h-files">
-            <div class="wf-text">
-                <span class="eyebrow">Step 2</span>
-                <h2 id="h-files">What the files look like</h2>
-                <p data-beat>
-                    A DIA-NN report, like PBMC240's, has one row per protein group and one column per run.
-                    It has <span data-wf="rows">&nbsp;</span> rows and <span data-wf="runs">&nbsp;</span>
-                    runs, and <span data-wf="missing_share">&nbsp;</span> of its values are blank: that
-                    protein was not seen in that cell.
-                </p>
-                <p data-beat>
-                    The column headers are the instrument's file paths. The service keeps the run's name,
-                    so each column becomes one cell.
-                </p>
-                <p data-beat>
-                    Other files arrive the other way round, or already transformed. SCoPE2's published
-                    matrix has cells in rows and is centred and batch-corrected; Fulcher 2026's protein
-                    table holds abundances on a linear scale. The service reads each as it comes.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 2</span>
+                        <h2 id="h-files">What the files look like</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                A DIA-NN report, like PBMC240's, has one row per protein group and one column per run.
+                                It has <span data-wf="rows">&nbsp;</span> rows and <span data-wf="runs">&nbsp;</span>
+                                runs, and <span data-wf="missing_share">&nbsp;</span> of its values are blank: that
+                                protein was not seen in that cell.
+                            </p>
+                            <p data-beat>
+                                The column headers are the instrument's file paths. The service keeps the run's name,
+                                so each column becomes one cell.
+                            </p>
+                            <p data-beat>
+                                Other files arrive the other way round, or already transformed. SCoPE2's published
+                                matrix has cells in rows and is centred and batch-corrected; Fulcher 2026's protein
+                                table holds abundances on a linear scale. The service reads each as it comes.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="files">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <details class="wf-more">
                     <summary>The other files, as they look</summary>
                     <div id="format-cards"></div>
@@ -152,82 +178,102 @@
                     <div id="snippet-reference"></div>
                 </details>
             </div>
-            <figure class="wf-stage sheet" data-scene="files">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 3 -->
         <section class="wf-chapter" id="genes" data-chapter="genes" aria-labelledby="h-genes">
-            <div class="wf-text">
-                <span class="eyebrow">Step 3</span>
-                <h2 id="h-genes">One vocabulary of genes</h2>
-                <p data-beat>
-                    Six protein lists decide which genes the model can read. Together they name
-                    <span data-wf="gene_space.funnel.union">&nbsp;</span> genes; the
-                    <span data-wf="gene_space.funnel.ig_tcr_excluded">&nbsp;</span> immunoglobulin and
-                    T-cell receptor segments among them are left out, leaving
-                    <span data-wf="gene_space.funnel.union_without_ig_tcr">&nbsp;</span>.
-                </p>
-                <p data-beat>
-                    Of those, <span data-wf="gene_space.funnel.feature_space">&nbsp;</span> are also among
-                    the RNA reference's <span data-wf="gene_space.funnel.rna_genes">&nbsp;</span> genes.
-                    That is the shared vocabulary: every upload is read through these genes, in one fixed
-                    order, and the rest is set aside.
-                </p>
-                <p data-beat>
-                    The encoders also pool the genes into <span data-wf="modules">&nbsp;</span> fixed
-                    modules, so a module can carry signal when some of its genes are missing. Each name is
-                    matched to an HGNC symbol: <span data-wf="gene_space.id_matching.symbol">&nbsp;</span>
-                    directly, <span data-wf="gene_space.id_matching.alias_or_prev_symbol">&nbsp;</span>
-                    through an alias or a previous symbol.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 3</span>
+                        <h2 id="h-genes">One vocabulary of genes</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Six protein lists decide which genes the model can read. Together they name
+                                <span data-wf="gene_space.funnel.union">&nbsp;</span> genes; the
+                                <span data-wf="gene_space.funnel.ig_tcr_excluded">&nbsp;</span> immunoglobulin and
+                                T-cell receptor segments among them are left out, leaving
+                                <span data-wf="gene_space.funnel.union_without_ig_tcr">&nbsp;</span>.
+                            </p>
+                            <p data-beat>
+                                Of those, <span data-wf="gene_space.funnel.feature_space">&nbsp;</span> are also among
+                                the RNA reference's <span data-wf="gene_space.funnel.rna_genes">&nbsp;</span> genes.
+                                That is the shared vocabulary: every upload is read through these genes, in one fixed
+                                order, and the rest is set aside.
+                            </p>
+                            <p data-beat>
+                                The encoders also pool the genes into <span data-wf="modules">&nbsp;</span> fixed
+                                modules, so a module can carry signal when some of its genes are missing. Each name is
+                                matched to an HGNC symbol: <span data-wf="gene_space.id_matching.symbol">&nbsp;</span>
+                                directly, <span data-wf="gene_space.id_matching.alias_or_prev_symbol">&nbsp;</span>
+                                through an alias or a previous symbol.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="genes">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <div class="wf-lookup">
                     <label for="gene-search">Is a gene in the space?</label>
                     <input class="well" id="gene-search" type="search" autocomplete="off" placeholder="CD3E" spellcheck="false">
                     <div id="gene-result" aria-live="polite"></div>
                 </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="genes">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 4 -->
         <section class="wf-chapter" id="training" data-chapter="training" aria-labelledby="h-training">
-            <div class="wf-text">
-                <span class="eyebrow">Step 4</span>
-                <h2 id="h-training">Trained on RNA only</h2>
-                <p data-beat>
-                    The model never sees a protein label. <span data-wf="members">&nbsp;</span> encoders
-                    were trained on the RNA reference alone, the same way, each from its own random seed.
-                </p>
-                <p data-beat>
-                    Each training batch is drawn as an upload would be:
-                    <span data-wf="training.recipe.natural_share">&nbsp;</span> of batches keep the
-                    reference's natural mix, the rest hold one to eight types in random proportions. Then
-                    most genes are hidden: two views of each cell keep a random
-                    <span data-wf="training.recipe.coverage_low">&nbsp;</span> to
-                    <span data-wf="training.recipe.coverage_high">&nbsp;</span> of its genes, so the
-                    encoders learn to read the partial profiles proteomics gives.
-                </p>
-                <p data-beat>
-                    Four forces shape the training: one pulls each cell toward its type, one pulls cells
-                    of a type together, one stops a few points becoming everyone's nearest neighbour, and
-                    one makes a cell's two views land in the same place.
-                </p>
-                <p data-beat>
-                    The architecture was chosen in a five-seed comparison: module pooling scored
-                    <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span>
-                    balanced accuracy at realistic coverage, ahead but not decisively. Retraining seed 1
-                    here reproduced the served member's validation loss within its preset tolerance.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 4</span>
+                        <h2 id="h-training">Trained on RNA only</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                The model never sees a protein label. <span data-wf="members">&nbsp;</span> encoders
+                                were trained on the RNA reference alone, the same way, each from its own random seed.
+                            </p>
+                            <p data-beat>
+                                Each training batch is drawn as an upload would be:
+                                <span data-wf="training.recipe.natural_share">&nbsp;</span> of batches keep the
+                                reference's natural mix, the rest hold one to eight types in random proportions. Then
+                                most genes are hidden: two views of each cell keep a random
+                                <span data-wf="training.recipe.coverage_low">&nbsp;</span> to
+                                <span data-wf="training.recipe.coverage_high">&nbsp;</span> of its genes, so the
+                                encoders learn to read the partial profiles proteomics gives.
+                            </p>
+                            <p data-beat>
+                                Four forces shape the training: one pulls each cell toward its type, one pulls cells
+                                of a type together, one stops a few points becoming everyone's nearest neighbour, and
+                                one makes a cell's two views land in the same place.
+                            </p>
+                            <p data-beat>
+                                The architecture was chosen in a five-seed comparison: module pooling scored
+                                <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span>
+                                balanced accuracy at realistic coverage, ahead but not decisively. Retraining seed 1
+                                here reproduced the served member's validation loss within its preset tolerance.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="training">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <div class="wf-controls" role="group" aria-label="Batch to draw">
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="0" aria-pressed="true">Natural mix</button>
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="1" aria-pressed="false">1 type</button>
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="3" aria-pressed="false">3 types</button>
+                            <button type="button" class="wf-toggle" data-option="classes" data-value="8" aria-pressed="false">8 types</button>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <details class="wf-more">
                     <summary>The recipe, the members and the choice</summary>
                     <div id="recipe"></div>
@@ -242,248 +288,290 @@
                     </p>
                 </details>
             </div>
-            <figure class="wf-stage sheet" data-scene="training">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <div class="wf-controls" role="group" aria-label="Batch to draw">
-                    <button type="button" class="wf-toggle" data-option="classes" data-value="0" aria-pressed="true">Natural mix</button>
-                    <button type="button" class="wf-toggle" data-option="classes" data-value="1" aria-pressed="false">1 type</button>
-                    <button type="button" class="wf-toggle" data-option="classes" data-value="3" aria-pressed="false">3 types</button>
-                    <button type="button" class="wf-toggle" data-option="classes" data-value="8" aria-pressed="false">8 types</button>
-                </div>
-            </figure>
         </section>
 
         <!-- 5 -->
         <section class="wf-chapter" id="upload" data-chapter="upload" aria-labelledby="h-upload">
-            <div class="wf-text">
-                <span class="eyebrow">Step 5</span>
-                <h2 id="h-upload">An upload arrives</h2>
-                <p data-beat>
-                    First, the scale. PBMC240's observed values have a median of
-                    <span data-wf="median_linear">&nbsp;</span>, above the
-                    <span data-wf="scale_threshold">&nbsp;</span> a log scale would stay under, and none is
-                    negative, so the service reads them as linear intensities and takes log2. A file
-                    already on a log scale is left as it is.
-                </p>
-                <p data-beat>
-                    Rows for the same gene are merged, each cell taking the median:
-                    <span data-wf="genes_merged">&nbsp;</span> genes had more than one row, so
-                    <span data-wf="rows">&nbsp;</span> rows become
-                    <span data-wf="rows_after_collapse">&nbsp;</span>.
-                </p>
-                <p data-beat>
-                    Each row's name is matched to the gene space: <span data-wf="ids_matched">&nbsp;</span>
-                    rows match one gene, <span data-wf="ids_unmapped">&nbsp;</span> match none, and
-                    <span data-wf="ids_ambiguous">&nbsp;</span> name several genes of the space and are set
-                    aside rather than guessed.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 5</span>
+                        <h2 id="h-upload">An upload arrives</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                First, the scale. PBMC240's observed values have a median of
+                                <span data-wf="median_linear">&nbsp;</span>, above the
+                                <span data-wf="scale_threshold">&nbsp;</span> a log scale would stay under, and none is
+                                negative, so the service reads them as linear intensities and takes log2. A file
+                                already on a log scale is left as it is.
+                            </p>
+                            <p data-beat>
+                                Rows for the same gene are merged, each cell taking the median:
+                                <span data-wf="genes_merged">&nbsp;</span> genes had more than one row, so
+                                <span data-wf="rows">&nbsp;</span> rows become
+                                <span data-wf="rows_after_collapse">&nbsp;</span>.
+                            </p>
+                            <p data-beat>
+                                Each row's name is matched to the gene space: <span data-wf="ids_matched">&nbsp;</span>
+                                rows match one gene, <span data-wf="ids_unmapped">&nbsp;</span> match none, and
+                                <span data-wf="ids_ambiguous">&nbsp;</span> name several genes of the space and are set
+                                aside rather than guessed.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="upload">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="upload">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 6 -->
         <section class="wf-chapter" id="matching" data-chapter="matching" aria-labelledby="h-matching">
-            <div class="wf-text">
-                <span class="eyebrow">Step 6</span>
-                <h2 id="h-matching">Matching and the mask</h2>
-                <p data-beat>
-                    The upload is laid onto the vocabulary. PBMC240 measures
-                    <span data-wf="matched">&nbsp;</span> of its <span data-wf="feature_space">&nbsp;</span>
-                    genes. Each cell keeps a mask: 1 where it observed a gene, 0 where it did not. This cell
-                    observed <span data-cell="observed">&nbsp;</span>.
-                </p>
-                <p data-beat>
-                    A cell with fewer than <span data-wf="floor">&nbsp;</span> observed genes is refused:
-                    too little is left to read. The median cell here observes
-                    <span data-wf="observed_median">&nbsp;</span>, and
-                    <span data-wf="below_floor">&nbsp;</span> falls below the floor.
-                </p>
-                <p data-beat>
-                    Each gene is then scaled within the upload: its mean over the upload's cells becomes 0
-                    and its spread 1. A missing value stays 0 with its mask 0, so the model can tell a
-                    missing gene from an average one.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 6</span>
+                        <h2 id="h-matching">Matching and the mask</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                The upload is laid onto the vocabulary. PBMC240 measures
+                                <span data-wf="matched">&nbsp;</span> of its <span data-wf="feature_space">&nbsp;</span>
+                                genes. Each cell keeps a mask: 1 where it observed a gene, 0 where it did not. This cell
+                                observed <span data-cell="observed">&nbsp;</span>.
+                            </p>
+                            <p data-beat>
+                                A cell with fewer than <span data-wf="floor">&nbsp;</span> observed genes is refused:
+                                too little is left to read. The median cell here observes
+                                <span data-wf="observed_median">&nbsp;</span>, and
+                                <span data-wf="below_floor">&nbsp;</span> falls below the floor.
+                            </p>
+                            <p data-beat>
+                                Each gene is then scaled within the upload: its mean over the upload's cells becomes 0
+                                and its spread 1. A missing value stays 0 with its mask 0, so the model can tell a
+                                missing gene from an average one.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="matching">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="matching">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 7 -->
         <section class="wf-chapter" id="smoothing" data-chapter="smoothing" aria-labelledby="h-smoothing">
-            <div class="wf-text">
-                <span class="eyebrow">Step 7</span>
-                <h2 id="h-smoothing">Smoothing on the upload's own neighbours</h2>
-                <p data-beat>
-                    Single-cell proteomics is noisy, so each cell borrows from cells like it in the same
-                    upload. The service finds each cell's <span data-wf="smoothing_k">&nbsp;</span> nearest
-                    neighbours from all of the upload's proteins, not only the shared genes, in a
-                    <span data-wf="smoothing_pca">&nbsp;</span>-component summary.
-                </p>
-                <p data-beat>
-                    Closer neighbours count more. Each value becomes
-                    <span data-wf="smoothing_own">&nbsp;</span> its own and
-                    <span data-wf="smoothing_alpha">&nbsp;</span> its neighbours' weighted average.
-                </p>
-                <p data-beat>
-                    Only the values are smoothed. The mask still records what this cell itself observed:
-                    borrowing signal does not invent a measurement.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 7</span>
+                        <h2 id="h-smoothing">Smoothing on the upload's own neighbours</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Single-cell proteomics is noisy, so each cell borrows from cells like it in the same
+                                upload. The service finds each cell's <span data-wf="smoothing_k">&nbsp;</span> nearest
+                                neighbours from all of the upload's proteins, not only the shared genes, in a
+                                <span data-wf="smoothing_pca">&nbsp;</span>-component summary.
+                            </p>
+                            <p data-beat>
+                                Closer neighbours count more. Each value becomes
+                                <span data-wf="smoothing_own">&nbsp;</span> its own and
+                                <span data-wf="smoothing_alpha">&nbsp;</span> its neighbours' weighted average.
+                            </p>
+                            <p data-beat>
+                                Only the values are smoothed. The mask still records what this cell itself observed:
+                                borrowing signal does not invent a measurement.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="smoothing">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="smoothing">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 8 -->
         <section class="wf-chapter" id="encoder" data-chapter="encoder" aria-labelledby="h-encoder">
-            <div class="wf-text">
-                <span class="eyebrow">Step 8</span>
-                <h2 id="h-encoder">The encoder pass</h2>
-                <p data-beat>
-                    Each encoder reads <span data-wf="input_width">&nbsp;</span> numbers per cell: the
-                    <span data-wf="genes">&nbsp;</span> smoothed values, the <span data-wf="genes">&nbsp;</span>
-                    mask flags, and for each of the <span data-wf="modules">&nbsp;</span> modules the mean of
-                    its observed genes and the share observed.
-                </p>
-                <p data-beat>
-                    Two layers of <span data-wf="hidden1">&nbsp;</span> and <span data-wf="hidden2">&nbsp;</span>
-                    units narrow this to <span data-wf="latent">&nbsp;</span> numbers, scaled to length 1:
-                    the cell becomes a point on a sphere. One encoder has
-                    <span data-wf="parameters">&nbsp;</span> weights.
-                </p>
-                <p data-beat>
-                    <span data-wf="members">&nbsp;</span> encoders do this side by side. One of them, seed
-                    4, also places the cell in the atlas.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 8</span>
+                        <h2 id="h-encoder">The encoder pass</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Each encoder reads <span data-wf="input_width">&nbsp;</span> numbers per cell: the
+                                <span data-wf="genes">&nbsp;</span> smoothed values, the <span data-wf="genes">&nbsp;</span>
+                                mask flags, and for each of the <span data-wf="modules">&nbsp;</span> modules the mean of
+                                its observed genes and the share observed.
+                            </p>
+                            <p data-beat>
+                                Two layers of <span data-wf="hidden1">&nbsp;</span> and <span data-wf="hidden2">&nbsp;</span>
+                                units narrow this to <span data-wf="latent">&nbsp;</span> numbers, scaled to length 1:
+                                the cell becomes a point on a sphere. One encoder has
+                                <span data-wf="parameters">&nbsp;</span> weights.
+                            </p>
+                            <p data-beat>
+                                <span data-wf="members">&nbsp;</span> encoders do this side by side. One of them, seed
+                                4, also places the cell in the atlas.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="encoder">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                    </figure>
+                </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="encoder">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-            </figure>
         </section>
 
         <!-- 9 -->
         <section class="wf-chapter" id="probabilities" data-chapter="probabilities" aria-labelledby="h-probabilities">
-            <div class="wf-text">
-                <span class="eyebrow">Step 9</span>
-                <h2 id="h-probabilities">From a point to probabilities</h2>
-                <p data-beat>
-                    Each type has a centre on the same sphere, the average point of its reference cells.
-                    The closer the cell's point is to a centre, the higher its cosine with it.
-                </p>
-                <p data-beat>
-                    Each encoder turns its cosines into probabilities with a softmax at its own
-                    temperature, fitted on held-out RNA cells. A lower temperature makes them sharper.
-                </p>
-                <p data-beat>
-                    The five encoders' probabilities are averaged. The answer is built from this mean.
-                </p>
-            </div>
-            <figure class="wf-stage sheet" data-scene="probabilities">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <div class="wf-controls" role="group" aria-label="Encoder to show">
-                    <button type="button" class="wf-toggle" data-option="member" data-value="-1" aria-pressed="true">Mean</button>
-                    <button type="button" class="wf-toggle" data-option="member" data-value="0" aria-pressed="false">Seed 0</button>
-                    <button type="button" class="wf-toggle" data-option="member" data-value="1" aria-pressed="false">Seed 1</button>
-                    <button type="button" class="wf-toggle" data-option="member" data-value="2" aria-pressed="false">Seed 2</button>
-                    <button type="button" class="wf-toggle" data-option="member" data-value="3" aria-pressed="false">Seed 3</button>
-                    <button type="button" class="wf-toggle" data-option="member" data-value="4" aria-pressed="false">Seed 4</button>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 9</span>
+                        <h2 id="h-probabilities">From a point to probabilities</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Each type has a centre on the same sphere, the average point of its reference cells.
+                                The closer the cell's point is to a centre, the higher its cosine with it.
+                            </p>
+                            <p data-beat>
+                                Each encoder turns its cosines into probabilities with a softmax at its own
+                                temperature, fitted on held-out RNA cells. A lower temperature makes them sharper.
+                            </p>
+                            <p data-beat>
+                                The five encoders' probabilities are averaged. The answer is built from this mean.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="probabilities">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <div class="wf-controls" role="group" aria-label="Encoder to show">
+                            <button type="button" class="wf-toggle" data-option="member" data-value="-1" aria-pressed="true">Mean</button>
+                            <button type="button" class="wf-toggle" data-option="member" data-value="0" aria-pressed="false">Seed 0</button>
+                            <button type="button" class="wf-toggle" data-option="member" data-value="1" aria-pressed="false">Seed 1</button>
+                            <button type="button" class="wf-toggle" data-option="member" data-value="2" aria-pressed="false">Seed 2</button>
+                            <button type="button" class="wf-toggle" data-option="member" data-value="3" aria-pressed="false">Seed 3</button>
+                            <button type="button" class="wf-toggle" data-option="member" data-value="4" aria-pressed="false">Seed 4</button>
+                        </div>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
                 </div>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
+            </div>
         </section>
 
         <!-- 10 -->
         <section class="wf-chapter" id="guess" data-chapter="guess" aria-labelledby="h-guess">
-            <div class="wf-text">
-                <span class="eyebrow">Step 10</span>
-                <h2 id="h-guess">The best guess</h2>
-                <p data-beat>
-                    Every cell with enough genes also gets a best guess, even when its answer stops short.
-                    It joins two views: the encoders' probability, and the cell's correlation with each
-                    type's average profile over the genes it measured.
-                </p>
-                <p data-beat>
-                    For protein uploads, <span data-fact="model_name">&nbsp;</span> takes that correlation
-                    with protein averages from sorted immune cells (Rieckmann et al. 2017) for the
-                    <span data-wf="protein_classes">&nbsp;</span> types they cover, and with the RNA averages
-                    for the rest.
-                </p>
-                <p data-beat>
-                    The correlation counts only when it carries signal: when at least
-                    <span data-wf="agreement_threshold">&nbsp;</span> of an upload's cells have the same top
-                    type under it as under the encoders. In PBMC240, <span data-wf="agreeing">&nbsp;</span>
-                    of <span data-wf="counted">&nbsp;</span> cells agree (<span data-wf="agreement">&nbsp;</span>),
-                    so here the term is flat and the guess is the encoders'.
-                </p>
-                <p data-beat>
-                    Where the term is used, the encoders weigh <span data-wf="weight_used">&nbsp;</span>;
-                    where it is flat, <span data-wf="weight_flat">&nbsp;</span> against a flat term. In 240
-                    simulated uploads it was used in <span data-wf="evaluation.uploads.used">&nbsp;</span>.
-                    On Fulcher 2026, development data, the protein averages changed balanced accuracy by
-                    <span data-fact="fulcher_vs_previous">&nbsp;</span> against the previous release.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 10</span>
+                        <h2 id="h-guess">The best guess</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Every cell with enough genes also gets a best guess, even when its answer stops short.
+                                It joins two views: the encoders' probability, and the cell's correlation with each
+                                type's average profile over the genes it measured.
+                            </p>
+                            <p data-beat>
+                                For protein uploads, <span data-fact="model_name">&nbsp;</span> takes that correlation
+                                with protein averages from sorted immune cells (Rieckmann et al. 2017) for the
+                                <span data-wf="protein_classes">&nbsp;</span> types they cover, and with the RNA averages
+                                for the rest.
+                            </p>
+                            <p data-beat>
+                                The correlation counts only when it carries signal: when at least
+                                <span data-wf="agreement_threshold">&nbsp;</span> of an upload's cells have the same top
+                                type under it as under the encoders. In PBMC240, <span data-wf="agreeing">&nbsp;</span>
+                                of <span data-wf="counted">&nbsp;</span> cells agree (<span data-wf="agreement">&nbsp;</span>),
+                                so here the term is flat and the guess is the encoders'.
+                            </p>
+                            <p data-beat>
+                                Where the term is used, the encoders weigh <span data-wf="weight_used">&nbsp;</span>;
+                                where it is flat, <span data-wf="weight_flat">&nbsp;</span> against a flat term. In 240
+                                simulated uploads it was used in <span data-wf="evaluation.uploads.used">&nbsp;</span>.
+                                On Fulcher 2026, development data, the protein averages changed balanced accuracy by
+                                <span data-fact="fulcher_vs_previous">&nbsp;</span> against the previous release.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="guess">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <div class="wf-controls" role="group" aria-label="Correlation to show">
+                            <button type="button" class="wf-toggle" data-option="means" data-value="protein" aria-pressed="true">Protein averages</button>
+                            <button type="button" class="wf-toggle" data-option="means" data-value="rna" aria-pressed="false">RNA averages</button>
+                        </div>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <details class="wf-more">
                     <summary>This cell's three views</summary>
                     <div id="guess-table"></div>
                 </details>
             </div>
-            <figure class="wf-stage sheet" data-scene="guess">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <div class="wf-controls" role="group" aria-label="Correlation to show">
-                    <button type="button" class="wf-toggle" data-option="means" data-value="protein" aria-pressed="true">Protein averages</button>
-                    <button type="button" class="wf-toggle" data-option="means" data-value="rna" aria-pressed="false">RNA averages</button>
-                </div>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 11 -->
         <section class="wf-chapter" id="answer" data-chapter="answer" aria-labelledby="h-answer">
-            <div class="wf-text">
-                <span class="eyebrow">Step 11</span>
-                <h2 id="h-answer">The answer, or the reason</h2>
-                <p data-beat>
-                    The answer starts from a set: every type whose probability clears its own bar. Each bar
-                    was fitted on simulated RNA uploads to hold the true type
-                    <span data-wf="target_coverage">&nbsp;</span> of the time; on protein that holds only
-                    roughly. The best guess joins any set that is not empty.
-                </p>
-                <p data-beat>
-                    Then a ladder. A cell with too few genes is refused first. Next, a cell unlike any
-                    reference cell: when its similarity to the nearest one, averaged over the encoders,
-                    falls below <span data-wf="ood_threshold">&nbsp;</span>, it is outside the reference.
-                </p>
-                <p data-beat>
-                    A set of one type is the answer. A set of several gives the group they share, or the
-                    lineage, and a set that shares neither is ambiguous: the cell is not given a type.
-                </p>
-                <p data-beat>
-                    In PBMC240, <span data-wf="committed">&nbsp;</span> of <span data-wf="runs">&nbsp;</span>
-                    cells get an answer (<span data-wf="committed_share">&nbsp;</span>):
-                    <span data-wf="outcome_class">&nbsp;</span> a type, <span data-wf="outcome_group">&nbsp;</span>
-                    a group and <span data-wf="outcome_lineage">&nbsp;</span> a lineage.
-                    <span data-wf="outcome_ambiguous_between_classes">&nbsp;</span> are ambiguous,
-                    <span data-wf="outcome_outside_supported_region">&nbsp;</span> are outside the reference,
-                    and <span data-wf="outcome_coverage_too_low">&nbsp;</span> has too few genes.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 11</span>
+                        <h2 id="h-answer">The answer, or the reason</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                The answer starts from a set: every type whose probability clears its own bar. Each bar
+                                was fitted on simulated RNA uploads to hold the true type
+                                <span data-wf="target_coverage">&nbsp;</span> of the time; on protein that holds only
+                                roughly. The best guess joins any set that is not empty.
+                            </p>
+                            <p data-beat>
+                                Then a ladder. A cell with too few genes is refused first. Next, a cell unlike any
+                                reference cell: when its similarity to the nearest one, averaged over the encoders,
+                                falls below <span data-wf="ood_threshold">&nbsp;</span>, it is outside the reference.
+                            </p>
+                            <p data-beat>
+                                A set of one type is the answer. A set of several gives the group they share, or the
+                                lineage, and a set that shares neither is ambiguous: the cell is not given a type.
+                            </p>
+                            <p data-beat>
+                                In PBMC240, <span data-wf="committed">&nbsp;</span> of <span data-wf="runs">&nbsp;</span>
+                                cells get an answer (<span data-wf="committed_share">&nbsp;</span>):
+                                <span data-wf="outcome_class">&nbsp;</span> a type, <span data-wf="outcome_group">&nbsp;</span>
+                                a group and <span data-wf="outcome_lineage">&nbsp;</span> a lineage.
+                                <span data-wf="outcome_ambiguous_between_classes">&nbsp;</span> are ambiguous,
+                                <span data-wf="outcome_outside_supported_region">&nbsp;</span> are outside the reference,
+                                and <span data-wf="outcome_coverage_too_low">&nbsp;</span> has too few genes.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="answer">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <div id="ladder"></div>
                 <details class="wf-more">
                     <summary>Every outcome, and the hierarchy</summary>
@@ -491,74 +579,90 @@
                     <div id="tree"></div>
                 </details>
             </div>
-            <figure class="wf-stage sheet" data-scene="answer">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <!-- 12 -->
         <section class="wf-chapter" id="landing" data-chapter="landing" aria-labelledby="h-landing">
-            <div class="wf-text">
-                <span class="eyebrow">Step 12</span>
-                <h2 id="h-landing">Where the cell lands</h2>
-                <p data-beat>
-                    The point from encoder seed 4 is projected onto the atlas's three axes, the projection
-                    that draws the reference, so the cell lands among the reference cells it resembles.
-                </p>
-                <p data-beat>
-                    Its <span data-wf="transfer_k">&nbsp;</span> nearest reference cells lend it continuous
-                    properties, such as ribosome content: an average weighted by similarity, reported with
-                    its spread.
-                </p>
-                <p data-beat>
-                    Everything the cell gets comes back as JSON. Below is the response the service sends
-                    for this run, exactly.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 12</span>
+                        <h2 id="h-landing">Where the cell lands</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                The point from encoder seed 4 is projected onto the atlas's three axes, the projection
+                                that draws the reference, so the cell lands among the reference cells it resembles.
+                            </p>
+                            <p data-beat>
+                                Its <span data-wf="transfer_k">&nbsp;</span> nearest reference cells lend it continuous
+                                properties, such as ribosome content: an average weighted by similarity, reported with
+                                its spread.
+                            </p>
+                            <p data-beat>
+                                Everything the cell gets comes back as JSON. Below is the response the service sends
+                                for this run, exactly.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="landing">
+                        <div class="wf-canvas wf-drag" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <div class="wf-controls" role="group" aria-label="Colour points by">
+                            <button type="button" class="wf-toggle" data-option="colour" data-value="class" aria-pressed="true">Type</button>
+                            <button type="button" class="wf-toggle" data-option="colour" data-value="modality" aria-pressed="false">RNA or protein</button>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <details class="wf-more" open>
                     <summary>This cell's response</summary>
                     <div id="response-json"></div>
                 </details>
             </div>
-            <figure class="wf-stage sheet" data-scene="landing">
-                <div class="wf-canvas wf-drag" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <div class="wf-controls" role="group" aria-label="Colour points by">
-                    <button type="button" class="wf-toggle" data-option="colour" data-value="class" aria-pressed="true">Type</button>
-                    <button type="button" class="wf-toggle" data-option="colour" data-value="modality" aria-pressed="false">RNA or protein</button>
-                </div>
-            </figure>
         </section>
 
         <!-- 13 -->
         <section class="wf-chapter" id="results" data-chapter="results" aria-labelledby="h-results">
-            <div class="wf-text">
-                <span class="eyebrow">Step 13</span>
-                <h2 id="h-results">How the results were calculated, and new data today</h2>
-                <p data-beat>
-                    First, simulated uploads: reference cells held out from training, masked like real
-                    proteomics and mixed into uploads of known make-up. Answers were right
-                    <span data-fact="eval_rna_correct">&nbsp;</span> of the time when given, and
-                    <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
-                </p>
-                <p data-beat>
-                    Second, the benchmark: every method gets the same reference, genes and scoring, and
-                    each gap is tested by a paired bootstrap that resamples cells and rescores both
-                    methods. On Fulcher 2026 the best guess scores
-                    <span data-fact="fulcher_current">&nbsp;</span> balanced accuracy, in-sample.
-                </p>
-                <p data-beat>
-                    Third, an internal held-out test: six sets put aside before development and scored
-                    once. It passed on held-out donors of another blood atlas and on a T-cell line beside
-                    HeLa, failed on two sets, and two were void. It is internal, never external validation.
-                </p>
-                <p data-beat>
-                    And new data today: the <a href="project.html">project page</a> sends a file to the
-                    live service on Google Cloud Run. It wakes from zero, runs every step above on up to
-                    <span data-wf="service.max_cells">&nbsp;</span> cells, and returns JSON.
-                </p>
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Step 13</span>
+                        <h2 id="h-results">How the results were calculated, and new data today</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                First, simulated uploads: reference cells held out from training, masked like real
+                                proteomics and mixed into uploads of known make-up. Answers were right
+                                <span data-fact="eval_rna_correct">&nbsp;</span> of the time when given, and
+                                <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
+                            </p>
+                            <p data-beat>
+                                Second, the benchmark: every method gets the same reference, genes and scoring, and
+                                each gap is tested by a paired bootstrap that resamples cells and rescores both
+                                methods. On Fulcher 2026 the best guess scores
+                                <span data-fact="fulcher_current">&nbsp;</span> balanced accuracy, in-sample.
+                            </p>
+                            <p data-beat>
+                                Third, an internal held-out test: six sets put aside before development and scored
+                                once. It passed on held-out donors of another blood atlas and on a T-cell line beside
+                                HeLa, failed on two sets, and two were void. It is internal, never external validation.
+                            </p>
+                            <p data-beat>
+                                And new data today: the <a href="project.html">project page</a> sends a file to the
+                                live service on Google Cloud Run. It wakes from zero, runs every step above on up to
+                                <span data-wf="service.max_cells">&nbsp;</span> cells, and returns JSON.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="results">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
                 <details class="wf-more">
                     <summary>The simulated uploads, by kind</summary>
                     <div id="scenario-table"></div>
@@ -570,12 +674,6 @@
                     <p class="caption" id="service-status" aria-live="polite"></p>
                 </div>
             </div>
-            <figure class="wf-stage sheet" data-scene="results">
-                <div class="wf-canvas" aria-hidden="true"></div>
-                <figcaption class="caption" data-describe></figcaption>
-                <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                <div class="wf-table" hidden></div>
-            </figure>
         </section>
 
         <section class="sheet wf-heldout-sheet" aria-labelledby="h-heldout">

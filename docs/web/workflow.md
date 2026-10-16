@@ -7,10 +7,17 @@ project: a guide, a collaborator, a reviewer.
 
 ## What it shows
 
-A cold open and 13 chapters, each a scroll story: the text on the left, a
-figure held in view on the right, and the figure's frame set by how far the
-chapter has scrolled. Each chapter's sentences are its beats
-(`<p data-beat>`); its progress, 0 to 1, is split evenly between them.
+A cold open and 13 chapters, each a pinned scroll story. When a chapter's
+stage (its heading, its sentences and its figure) reaches the middle of the
+window it holds still, and scrolling plays the figure's animation instead
+of moving the page; when the animation ends, the stage lets go and the page
+moves on. The scroll it takes is the chapter's runway, 0.8 of the window's
+height per sentence (`RUNWAY_PER_BEAT` in `web/js/workflow.js`). Each
+chapter's sentences are its beats (`<p data-beat>`); its progress, 0 to 1,
+is split evenly between them, and the sentence being played is highlighted.
+Where the sentences do not all fit beside the figure, and on narrow screens,
+they share one place and cross-fade, with dots for the chapter's progress.
+A chapter's details, lookups and readouts follow its stage, unpinned.
 
 | Chapter | Figure | Data |
 |---|---|---|
