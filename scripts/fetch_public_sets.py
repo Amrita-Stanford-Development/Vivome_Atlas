@@ -100,6 +100,7 @@ ENTRIES = (
     pride("PXD020586", "development", "PXD020586", "2021/05", "SCeptre_FINAL.zip", 980777917, "bdc7daffe7ad9108adb2b2973d2cf7407dd1ec45"),
     pride("PXD020586", "development", "PXD020586", "2021/05", "PXD020586_community_annotated.sdrf.tsv", 3820932),
     pride("PXD046211", "held_out", "PXD046211", "2024/02", "quant.cbio.tsv", 293233038, "a600d1be2b7c5a65e398a52354e069871b69c2a6"),
+    pride("PXD046211", "held_out", "PXD046211", "2024/02", "results.sage.cbio.tsv", 547837792, "154ebf71d66ade15413c1f0e6b90add018e18b5d"),
     pride("PXD046211", "held_out", "PXD046211", "2024/02", "sample_to_data.sdrf.tsv", 199010, "584f2e7e98fa1ceed4f0f66dc61576ff555b8f96"),
     pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotations.csv", 35750, "f55be751ecda8d36560549ae90a6b6abc31f8aa4"),
     pride("PXD046211", "held_out", "PXD046211", "2024/02", "sampleAnnotation_cbio681.csv", 2948, "b340f68f74c1a5ac6612a626d5c87bddd9086a1a"),

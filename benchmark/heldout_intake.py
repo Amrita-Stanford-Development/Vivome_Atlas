@@ -57,7 +57,7 @@ INPUTS = {  # the deposit's files each set reads at unsealing, relative to PUBLI
     "pxd021882": ("PXD021882/proteinGroups.txt",),
     "pxd043355": ("PXD043355/HeLa_VS_Jurkat_Proteins.txt", "PXD043355/HeLa_VS_Jurkat_InputFiles.txt"),
     "pxd073250": ("PXD073250/report.pg_matrix.tsv", "PXD073250/LSA-2026-03759_Supplemental_Data_1.xlsx"),
-    "pxd046211": ("PXD046211/quant.cbio.tsv", "PXD046211/sampleAnnotations.csv"),
+    "pxd046211": ("PXD046211/quant.cbio.tsv", "PXD046211/sampleAnnotations.csv", "PXD046211/results.sage.cbio.tsv"),
 }
 SEALED_DIRS = ("Tian_MSV000087462", "PXD046211", "PXD043355", "PXD073250", "PXD021882")
 RIECKMANN = PUBLIC / "Rieckmann2017_PXD004352" / "extracted" / "proteinGroups.txt"
@@ -283,7 +283,7 @@ def build_uploads(name: str, labels: pd.DataFrame, sources: dict) -> tuple[dict,
     uploads, records = {}, {}
     if name == "pxd046211":
         channels = {(formats.run_name(r.file), int(r.channel)): r.cell_id for r in labels.itertuples()}
-        table_ = formats.read_sage_tmt(sources["quant"], channels)
+        table_ = formats.read_sage_tmt(sources["quant"], channels, sources.get("results"))
         records["all"] = table_.record
         uploads["all"] = table_.raw(labels["cell_id"].tolist())
         return uploads, records
@@ -306,8 +306,8 @@ def real_sources(name: str, labels: pd.DataFrame) -> dict:
         return {"tables": {"all": formats.read_proteome_discoverer(paths[0], paths[1])}}
     if name == "pxd073250":
         return {"tables": {"all": formats.read_dia_nn(paths[0])}}
-    if name == "pxd046211":
-        return {"quant": paths[0]}
+    if name == "pxd046211":  # the identifications sit apart from the reporter table (amendment 2)
+        return {"quant": paths[0], "results": paths[2]}
     raise ValueError(name)
 
 

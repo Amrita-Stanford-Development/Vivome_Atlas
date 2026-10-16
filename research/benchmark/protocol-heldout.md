@@ -236,3 +236,55 @@ entries 40 and 41), and the single-type-upload candidate was dropped after
 its probe (entry 36). The candidates are those of rule 1 as written: v4.1
 (the headline), v4.2 and v5.2, with v3.1 for reference. Unsealing may begin
 (`side-tests.md`, amendment 5).
+
+### 2, 2026-10-16: format fixes found at unsealing
+
+Each fix was needed to read a deposit as its documentation describes. No
+rule, group, statistic or threshold changed. The hand-written label maps
+(Tian, PXD073250, PXD046211) follow the protocol's rules, and each one's
+reason was recorded with it (`labels.json`) before its intake ran. This
+amendment was committed after Tian, PXD043355 and PXD073250 were scored,
+and before PXD046211 was.
+
+- **Tian.**
+  - Sample names use T-cell shorthand: T8 for CD8 (naive, central memory,
+    effector memory, TEMRA); Th1, Th2, Th17 and Treg for CD4.
+  - One patient's "Tnaive" carries no CD4 or CD8 mark, so it is CD3,
+    unscored.
+  - Quality-control runs are excluded.
+  - The CD3CD4CD8 file names no patient, so its samples are one source.
+  - The CD4 samples are functional subsets with no naive or memory state, so
+    the MM file yields no (patient, state) pair. The set has one pair: void,
+    by the rule as written.
+- **PXD021882.**
+  - The deposited MaxQuant table holds only HeLa runs of 0 to 500 cells. The
+    B and T pools were searched with FragPipe and are not in it.
+  - The reader took three empty wells in plate row B ("0cell_B16") for B
+    pools. Without that misreading the table has no B or T pool: void, by
+    the rule as written. Nothing was scored.
+- **PXD073250.**
+  - The supplement names cells by plate and well, the matrix names runs by
+    plate, population and injection, and no column links the two.
+  - Each supplement cell was linked to the run whose log intensities
+    correlate best with its own, over proteins observed in both:
+    - 419 cells to 419 distinct runs, each on its own plate;
+    - median r 0.995, against 0.915 for the next run;
+    - smallest margin 0.017.
+  - The 110 single-cell runs absent from the supplement have no gate and
+    are excluded.
+- **PXD046211.**
+  - The annotation is separated by semicolons. It spells PMA-treated cells
+    "THP1_dif" and "U937_dif".
+  - "Single-cell channels" are those of sample type SC holding one cell.
+    Excluded:
+    - single-cell equivalents (diluted bulk lysate);
+    - 2- and 4-cell channels;
+    - the GIGA batch, which is not in `quant.cbio.tsv`.
+    That leaves 336 cells.
+  - The deposit holds sage's two outputs apart. So `quant.cbio.tsv`
+    (reporter intensities per scan) is joined to `results.sage.cbio.tsv`
+    (identifications, fetched now and checked against the deposit's
+    published SHA-1) on run and scan. Each scan keeps its rank-1 target
+    match.
+  - This sage version names its q-values spectrum_fdr, peptide_fdr and
+    protein_fdr.

@@ -139,6 +139,26 @@ class SageReaderTests(unittest.TestCase):
         want = [1 - np.log2((2 + 8) / 2), 3 - np.log2((2 + 8) / 2), 0.0, 0.0]
         np.testing.assert_allclose(t.values[0], want, atol=1e-9)
 
+    def test_separate_outputs_join_on_run_and_scan_rank_one_targets_only(self):
+        quant = pd.DataFrame({"file": ["run1.mzML", "run1.mzML", "run1.mzML"], "scannr": ["s1", "s2", "s3"],
+                              "tmt_1": [1e6] * 3, "tmt_2": [2.0, 8.0, 64.0], "tmt_3": [4.0, 8.0, 1.0]})
+        ids = pd.DataFrame({"filename": ["run1.mzML"] * 4, "scannr": ["s1", "s1", "s2", "s3"],
+                            "proteins": ["sp|P60709|ACTB_HUMAN", "sp|P04406|G3P_HUMAN", "sp|P60709|ACTB_HUMAN",
+                                         "rev_sp|P60709|ACTB_HUMAN"],
+                            "rank": [1, 2, 1, 1], "label": [1, 1, 1, -1],
+                            "spectrum_fdr": [0.001] * 4, "peptide_fdr": [0.001] * 4, "protein_fdr": [0.001] * 4})
+        with tempfile.TemporaryDirectory() as tmp:
+            quant.to_csv(Path(tmp) / "q.tsv", sep="\t", index=False)
+            ids.to_csv(Path(tmp) / "r.tsv", sep="\t", index=False)
+            t = formats.read_sage_tmt(Path(tmp) / "q.tsv", {("run1", 2): "a", ("run1", 3): "b"}, Path(tmp) / "r.tsv")
+        self.assertEqual(t.genes, ["ACTB"])  # the rank-2 match and the decoy are gone
+        self.assertEqual(t.record["psms_kept"], 2)
+        self.assertEqual(t.record["q_values_filtered"], ["spectrum_fdr", "peptide_fdr", "protein_fdr"])
+        # scans s1 (2 vs 4) and s2 (8 vs 8): log2 over the run's channel mean, median over the two PSMs
+        a = np.median([np.log2(2 / 3), np.log2(8 / 8)])
+        b = np.median([np.log2(4 / 3), np.log2(8 / 8)])
+        np.testing.assert_allclose(t.values[0], [a, b], atol=1e-9)
+
     def test_symbols_come_from_the_service_map_else_the_entry_name(self):
         self.assertEqual(formats.protein_symbols(pd.Series(["sp|P60709|ACTB_HUMAN", "sp|Q00000|MADEUP_HUMAN"])),
                          ["ACTB", "MADEUP"])

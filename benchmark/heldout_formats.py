@@ -195,9 +195,14 @@ def read_proteome_discoverer(proteins: Path, input_files: Path) -> Table:
 SAGE = {
     "file": "filename",
     "proteins": "proteins",
-    "q_values": ("spectrum_q", "peptide_q", "protein_q"),
+    # sage's q-values: spectrum_q etc. in newer versions, spectrum_fdr etc. in older ones
+    # (protocol-heldout.md, amendment 2: PXD046211's search uses the older names)
+    "q_values": ("spectrum_q", "peptide_q", "protein_q", "spectrum_fdr", "peptide_fdr", "protein_fdr"),
     "channel": re.compile(r"^tmt_(\d+)$"),
     "max_q": 0.01,
+    # a deposit with sage's two outputs apart (quant.tsv beside results.sage.tsv): joined on run and scan,
+    # each scan's rank-1 target match only (label -1 marks a decoy)
+    "quant_file": "file", "scan": "scannr", "rank": "rank", "label": "label",
 }
 
 
@@ -227,11 +232,27 @@ def run_name(path_text: str) -> str:
     return re.sub(r"\.(raw|mzml|d)$", "", PureWindowsPath(str(path_text)).name, flags=re.IGNORECASE)
 
 
-def read_sage_tmt(path: Path, channels: dict) -> Table:
+def join_sage(quant: pd.DataFrame, results: pd.DataFrame) -> pd.DataFrame:
+    """sage's reporter table (one row per scan) joined to its identifications
+    (rank-1 target matches), on run name and scan."""
+    if SAGE["rank"] in results:
+        results = results[pd.to_numeric(results[SAGE["rank"]], errors="coerce").eq(1)]
+    if SAGE["label"] in results:
+        results = results[pd.to_numeric(results[SAGE["label"]], errors="coerce").eq(1)]
+    q = quant.assign(_run=quant[SAGE["quant_file"]].astype(str).map(run_name), _scan=quant[SAGE["scan"]].astype(str))
+    r = results.assign(_run=results[SAGE["file"]].astype(str).map(run_name), _scan=results[SAGE["scan"]].astype(str))
+    tmt = [c for c in q.columns if SAGE["channel"].match(str(c))]
+    return r.merge(q[["_run", "_scan"] + tmt], on=["_run", "_scan"], how="inner").drop(columns=["_run", "_scan"])
+
+
+def read_sage_tmt(path: Path, channels: dict, results: "Path | None" = None) -> Table:
     """channels: {(run name, channel number): cell id} for the included
     single-cell channels only (carrier, reference, empty, blank and mixed
-    channels are left out by the label map)."""
+    channels are left out by the label map). results: sage's identification
+    table when path holds the reporter intensities alone."""
     df = pd.read_csv(path, sep="\t", low_memory=False)
+    if results is not None:
+        df = join_sage(df, pd.read_csv(results, sep="\t", low_memory=False))
     channel_cols = {int(m.group(1)): c for c in df.columns if (m := SAGE["channel"].match(str(c)))}
     needed = [SAGE["file"], SAGE["proteins"]]
     missing = [c for c in needed if c not in df] + ([] if channel_cols else ["tmt_<n>"])

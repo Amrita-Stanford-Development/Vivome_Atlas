@@ -127,16 +127,25 @@
   },
   "PXD046211/quant.cbio.tsv": {
     "bytes": 293233038,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "45ebb2270c8f5c949e4e751ed09c6d7d17d722093339b3647bed9813bce745ee",
     "tier": "A",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/quant.cbio.tsv"
   },
+  "PXD046211/results.sage.cbio.tsv": {
+    "bytes": 547837792,
+    "fetched": "2026-10-16",
+    "published_check": "sha1",
+    "role": "held_out",
+    "sha256": "b13611fae71cced94f8aadbeb1dc511215fbdfa05a9ad10d66165a3a7103958a",
+    "tier": "A",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/02/PXD046211/results.sage.cbio.tsv"
+  },
   "PXD046211/sampleAnnotation_GIGA.csv": {
     "bytes": 3107,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "e6ef6af3f591d742bfe07f01924a1e76b72a8bade419cba950770b49c5dc8de9",
@@ -145,7 +154,7 @@
   },
   "PXD046211/sampleAnnotation_cbio681.csv": {
     "bytes": 2948,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "90c02742bf5bb9a2f825c7b926f8a70b0efc8a6ee9864ef1e12cfe4ab251f79c",
@@ -154,7 +163,7 @@
   },
   "PXD046211/sampleAnnotation_cbio703.csv": {
     "bytes": 2948,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "ee275caccb563490024c67cf93bb7fe56ca648323e6649f141df73804064302a",
@@ -163,7 +172,7 @@
   },
   "PXD046211/sampleAnnotation_cbio715.csv": {
     "bytes": 3926,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "f5fb7af1dc909067cbc76636a1aee25415ea2be9a71a45cc44ab171b51812ecb",
@@ -172,7 +181,7 @@
   },
   "PXD046211/sampleAnnotation_cbio725.csv": {
     "bytes": 5899,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "6296839dbd734258d9d2e10ab80b1b1a22665875218acae7fe0f361a9bed10eb",
@@ -181,7 +190,7 @@
   },
   "PXD046211/sampleAnnotation_cbio733.csv": {
     "bytes": 6027,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "d575508fe29a59a09ffe49846db471d2e8ed4b6b69f2bdc32a232f68b0c028a9",
@@ -190,7 +199,7 @@
   },
   "PXD046211/sampleAnnotation_cbio754bis.csv": {
     "bytes": 5963,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "72b04cabd085ce30019917122abc14b058085cc8304ce51b240d763f33b370ab",
@@ -199,7 +208,7 @@
   },
   "PXD046211/sampleAnnotations.csv": {
     "bytes": 35750,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "75b2f2ea12e963efa1e0ae6861115d8351b3d72b1fd457be23c9db0946a4be83",
@@ -208,7 +217,7 @@
   },
   "PXD046211/sample_annotation.zip": {
     "bytes": 5838,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "md5",
     "role": "held_out",
     "sha256": "6395f5f4015a173771557082c9fcf724b7ed070dcf206fb3d96ca8eb6d31331a",
@@ -217,7 +226,7 @@
   },
   "PXD046211/sample_to_data.sdrf.tsv": {
     "bytes": 199010,
-    "fetched": "2026-10-14",
+    "fetched": "2026-10-16",
     "published_check": "sha1",
     "role": "held_out",
     "sha256": "446025c30ffc5734c49476d3070817b62b27cd95951d5ec24d0d9f59b707129f",
