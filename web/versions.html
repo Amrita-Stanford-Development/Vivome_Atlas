@@ -92,7 +92,10 @@
                     on simulated RNA uploads, and on real blood protein they hold the true type less often
                     than they promise, least for CD8 T cells and dendritic cells.</li>
                 <li><strong>The out-of-distribution filter is weak.</strong> It passes most scrambled
-                    profiles, so a cell unlike any in the reference is not reliably refused.</li>
+                    profiles, and in development tests it refused none of the cells of three cell lines
+                    (HEK293T, HCT116 and K562). Most of those cells still abstained as ambiguous, but some
+                    got a confident blood-cell answer. A cell unlike any in the reference is not reliably
+                    refused.</li>
                 <li><strong>Human blood and immune cells only.</strong> Other tissues and cell lines are
                     outside the reference.</li>
             </ol>

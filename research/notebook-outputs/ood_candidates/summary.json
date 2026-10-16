@@ -1,0 +1,159 @@
+{
+  "tuning_auroc": {
+    "scrambled in fulcher2026": {
+      "S0": 0.9515186466743559,
+      "S1": 0.8959438677431757,
+      "S2": 0.973521722414456,
+      "S3": 0.9529334871203382
+    },
+    "scrambled in pbmc240": {
+      "S0": 0.7695175438596491,
+      "S1": 0.8240131578947368,
+      "S2": 0.7841008771929825,
+      "S3": 0.7650219298245614
+    },
+    "PBMC240 over Furtwangler": {
+      "S0": 0.7474892191513478,
+      "S1": 0.7181923048549028,
+      "S2": 0.8319679827238158,
+      "S3": 0.7502246708739362
+    }
+  },
+  "tuning_mean": {
+    "S0": 0.8228418032284509,
+    "S1": 0.8127164434976052,
+    "S2": 0.8631968607770847,
+    "S3": 0.822726695939612
+  },
+  "chosen": "S2",
+  "thresholds": {
+    "S0": 0.7880383729934692,
+    "S1": 0.03899676196904702,
+    "S2": 0.0253106299801867,
+    "S3": 0.4155774414539337
+  },
+  "false_abstention_pct_fulcher_pbmc240": {
+    "S0": 0.7270323859881032,
+    "S1": 0.06609385327164573,
+    "S2": 0.06609385327164573,
+    "S3": 0.39656311962987445
+  },
+  "foreign_development": {
+    "PXD077946 293T": {
+      "cells": 13,
+      "below_threshold_pct": {
+        "S0": 0.0,
+        "S1": 0.0,
+        "S2": 0.0,
+        "S3": 23.076923076923077
+      },
+      "auroc_pbmc240_over_set": {
+        "S0": 0.8584356819650937,
+        "S1": 0.8493859082094376,
+        "S2": 0.9699418228829995,
+        "S3": 0.9489334195216548
+      },
+      "v41_served": {
+        "ambiguous_between_classes": 10,
+        "answer: erythrocyte": 2,
+        "answer: neutrophil": 1
+      }
+    },
+    "PXD077946 HCT116": {
+      "cells": 13,
+      "below_threshold_pct": {
+        "S0": 0.0,
+        "S1": 0.0,
+        "S2": 0.0,
+        "S3": 23.076923076923077
+      },
+      "auroc_pbmc240_over_set": {
+        "S0": 0.8480930833872011,
+        "S1": 0.7798965740142211,
+        "S2": 0.8390433096315448,
+        "S3": 0.9246929541047189
+      },
+      "v41_served": {
+        "ambiguous_between_classes": 8,
+        "answer: T cell": 2,
+        "answer: lymphoid": 2,
+        "no_confident_label": 1
+      }
+    },
+    "PXD077946 K562": {
+      "cells": 14,
+      "below_threshold_pct": {
+        "S0": 0.0,
+        "S1": 0.0,
+        "S2": 0.0,
+        "S3": 21.428571428571427
+      },
+      "auroc_pbmc240_over_set": {
+        "S0": 0.8664465786314526,
+        "S1": 0.8289315726290517,
+        "S2": 0.8820528211284514,
+        "S3": 0.9273709483793517
+      },
+      "v41_served": {
+        "ambiguous_between_classes": 9,
+        "answer: T cell": 2,
+        "answer: erythrocyte": 1,
+        "answer: myeloid": 1,
+        "no_confident_label": 1
+      }
+    },
+    "MSV000099294 HMC3": {
+      "cells": 47,
+      "below_threshold_pct": {
+        "S0": 6.382978723404255,
+        "S1": 4.25531914893617,
+        "S2": 100.0,
+        "S3": 10.638297872340425
+      },
+      "auroc_pbmc240_over_set": {
+        "S0": 0.8545056320400501,
+        "S1": 0.733640264616485,
+        "S2": 0.9978991596638656,
+        "S3": 0.8367155372787413
+      },
+      "v41_served": {
+        "ambiguous_between_classes": 25,
+        "answer: T cell": 8,
+        "answer: lymphoid": 5,
+        "answer: myeloid": 4,
+        "answer: neutrophil": 2,
+        "outside_supported_region": 2,
+        "coverage_too_low": 1
+      }
+    },
+    "MSV000099294 Microglia": {
+      "cells": 57,
+      "below_threshold_pct": {
+        "S0": 12.280701754385964,
+        "S1": 1.7543859649122806,
+        "S2": 100.0,
+        "S3": 8.771929824561402
+      },
+      "auroc_pbmc240_over_set": {
+        "S0": 0.7783060592658116,
+        "S1": 0.6266032728881026,
+        "S2": 0.9978991596638656,
+        "S3": 0.7573713696004717
+      },
+      "v41_served": {
+        "ambiguous_between_classes": 26,
+        "answer: erythrocyte": 13,
+        "coverage_too_low": 10,
+        "answer: myeloid": 3,
+        "answer: lymphoid": 3,
+        "outside_supported_region": 2
+      }
+    }
+  },
+  "rules": {
+    "1_auroc": false,
+    "2_false_abstention": true,
+    "3_foreign": true
+  },
+  "GO": false
+}

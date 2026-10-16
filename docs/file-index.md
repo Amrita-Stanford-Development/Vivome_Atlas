@@ -514,6 +514,13 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/astral_abstention/summary.json` — that diagnosis, per dataset and check
 - `research/notebooks/heldout_rehearsal.py` — Goal 2, Phase 0.3: each design of the internal held-out test rehearsed on RNA calibration cells through v4.1, with a bar fixed before the run
 - `research/notebook-outputs/heldout_rehearsal/summary.json` — that rehearsal, per design and seed
+- `research/notebooks/hao2021.py` — Hao et al. 2021's 3' data in the 9,002-gene input space for a chosen set of donors (gene map, log-normalisation, the label map); caches each donor set's counts in `data/incoming/Hao2021/`
+- `research/notebooks/hao_dc_centres.py` — Goal 2, Phases 1.2 and 2b: Hao's Batch1 dendritic cells in v4.1's and v4.2's DC centroids and class means, with batch checks and development gates; NO GO
+- `research/notebooks/hao_dc_offset.py` — the same with a per-gene offset learned from the classes both atlases share (the plan's fallback, a second look); its checks fail
+- `research/notebook-outputs/hao_dc_centres/summary.json` — the first design's checks, Hao suite, development figures, calibration suite and verdicts
+- `research/notebook-outputs/hao_dc_centres/offset.json` — the offset design's probe and swap checks
+- `research/notebooks/ood_candidates.py` — Goal 2, Phase 2c: three out-of-distribution scores against the served one, tuned on scrambled cells and Furtwangler 2025, reported on development cell lines; NO GO
+- `research/notebook-outputs/ood_candidates/summary.json` — those scores' AUROCs, thresholds, false abstention and the foreign development sets, with v4.1's served answers for them
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell

@@ -1,0 +1,29 @@
+{
+  "offset_abs_median": 0.12399017810821533,
+  "offset_abs_p95": 0.6987483501434326,
+  "C1_probe": {
+    "fulcher": {
+      "auc": {
+        "classical monocyte": 0.8305,
+        "non-classical monocyte": 0.9558888888888889,
+        "plasmacytoid dendritic cell": 0.8222929292929294
+      },
+      "mean": 0.869560606060606
+    },
+    "pbmc240": {
+      "auc": {
+        "classical monocyte": 0.903888888888889,
+        "non-classical monocyte": 0.9531666666666666,
+        "plasmacytoid dendritic cell": 0.8182121212121212
+      },
+      "mean": 0.8917558922558922
+    }
+  },
+  "C2_swap": {
+    "pdc_recall_swapped": 0.0,
+    "pdc_recall_served_in_sample": 65.17241379310344,
+    "ts_pdc_cells": 29
+  },
+  "checks_pass": false,
+  "second_look": true
+}

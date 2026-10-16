@@ -1750,6 +1750,107 @@ bar is what the design's protocol would need to pass, fixed before the run.
 - The Hao 2021 suite is rehearsed on its development donors by its own
   intake.
 
+### 40. Dendritic cells from Hao 2021 in the class centres: NO GO (Goal 2, Phases 1.2 and 2b), 2026-10-16
+
+**Why:** the reference has one myeloid DC and 29 pDCs, so the best guess's
+DC centroids and class means rest on almost nothing. Hao et al. 2021's
+Batch1 (donors P1 to P4, development) has 945 cDC1 and cDC2 cells and 221
+pDCs.
+
+**Design 1** (`research/notebooks/hao_dc_centres.py`; rules, checks and gates
+fixed before the run): v4.1 and v4.2 with every member's DC centroids and
+the two DC class means recomputed over Tabula Sapiens's cells plus Hao's,
+embedded the reference's way. Self-checks passed: the recombined best guess
+equals the served one, and both bases reproduce their committed development
+figures.
+
+| Check or gate | v4.1 | v4.1+DC | v4.2 | v4.2+DC |
+|---|---|---|---|---|
+| C1 atlas probe, mean AUC (Fulcher, PBMC240 masks) | | 0.923, 0.934 (bar 0.9) | | same |
+| C2 swap: Tabula Sapiens pDC recall, Hao-built pDC centre | 65.2 (in-sample) | **0.0** (bar 70) | | |
+| Hao suite DC recall, donors held out (G1) | 7.8 | 2.3 | 4.5 | 0.0 |
+| Hao suite coarse balanced accuracy (G2) | 62.5 | 63.2 | 57.4 | 59.1 |
+| Fulcher balanced accuracy; DC recall (G3) | 69.05; 22.2 | 65.53; **0.0** | 75.79; 63.0 | 75.68; 59.3 |
+| Calibration suite, best guess (G6) | 63.6 | 65.3 | 61.1 | 63.0 |
+
+Both fail C1, C2, C3 (leakage: Fulcher DC precision undefined for v4.1+DC;
+DS18 Standard's DC share up 5.7 points for both), G1 and G3. **NO GO.**
+
+**Design 2, a per-gene offset** (`research/notebooks/hao_dc_offset.py`; the
+plan's fallback, a second look, recorded as such): Hao cells corrected by
+their mean difference from Tabula Sapiens over B, NK, CD4, naive CD4 and
+CD8 T cells (z-scale), checked on classes the offset never saw. The atlas
+probe then passes narrowly (mean AUC 0.870 and 0.892), but the swap still
+recalls **0%** of Tabula Sapiens's pDCs. Checks fail, so no candidate.
+
+**Why it fails:** the swap code rebuilds the served pDC centre exactly from
+Tabula Sapiens cells (cosine 1.0, identical calls), so this is not a bug.
+Hao's pDC centre is nearly orthogonal to Tabula Sapiens's (cosine -0.19 to
+0.19 across the five members): the encoder's reference-side space is
+specific to the atlas it was trained on, and a per-gene offset does not
+remove that.
+
+**Results:** `research/notebook-outputs/hao_dc_centres/` (summary.json,
+offset.json).
+
+**What it means:**
+- **No Hao DC candidate.** The plan's chain (the cells as they are, then a
+  per-gene offset, else no Hao DCs) ends here. Dendritic cells stay with
+  v4.2's protein class means (Fulcher DC recall 63.0 against v4.1's 22.2).
+- **On RNA from another atlas, v4.1 finds few DCs:** 7.8% recall on Hao's
+  held-out donors (myeloid DC 1.7%, pDC 34.3%), coarse balanced accuracy
+  62.5. The Hao held-out suite will measure this on Batch2.
+- **Open, outside this plan:** building DC centres from query-side
+  embeddings (cells processed the way uploads are), or retraining the
+  encoder with Hao cells.
+
+### 41. Out-of-distribution scores beyond the served one: NO GO (Goal 2, Phase 2c), 2026-10-16
+
+**Why:** does a cell's distance to the reference say "not a blood cell"
+better than the served score (the members' mean maximum cosine to the
+reference latents)?
+
+**Scores** (`research/notebooks/ood_candidates.py`; rules fixed before the
+run): S0 served; S1 the best correlation with v4.1's RNA class means; S2 the
+best correlation with v4.2's protein class means; S3 the members' best
+cosine to a class centroid. Tuned, as the plan fixed, on scrambled cells and
+Furtwangler 2025 only.
+
+| AUROC (in-reference over foreign) | S0 served | S1 | S2 | S3 |
+|---|---|---|---|---|
+| scrambled cells in Fulcher's upload | 0.952 | 0.896 | **0.974** | 0.953 |
+| scrambled cells in PBMC240's upload | 0.770 | **0.824** | 0.784 | 0.765 |
+| PBMC240 over Furtwangler's CD34+ cells | 0.747 | 0.718 | **0.832** | 0.750 |
+| mean | 0.823 | 0.813 | **0.863** | 0.823 |
+
+**Verdict:** S2 is best, but by 0.040 against the 0.05 required (rule 1);
+rules 2 and 3 pass. **NO GO:** the served score stays.
+
+**The real foreign cells** (development, reported): at each score's
+threshold (the 1st percentile of RNA calibration cells, NB2's rule), the
+served score flags **0%** of PXD077946's HEK293T (13 cells), HCT116 (13) and
+K562 (14), 6.4% of MSV000099294's HMC3 (47) and 12.3% of its microglia
+(57). Its AUROC against PBMC240's cells is 0.85-0.87 for the three lines.
+S2 flags every HMC3 and microglia cell but none of the three lines; S3
+flags 21-23% of the lines.
+
+**Results:** `research/notebook-outputs/ood_candidates/summary.json`.
+
+**What it means:**
+- **The served check does not refuse whole foreign cell lines.** It ranks
+  them below blood cells (AUROC about 0.86), but its threshold, set on RNA
+  calibration cells, lets them through, so none is refused as outside the
+  reference. v4.1 as served (checked after the run): most still abstain as
+  ambiguous between classes, but some get a confident blood-cell answer:
+  HEK293T 3 of 13 (erythrocyte, neutrophil), HCT116 4 of 13 (T cell,
+  lymphoid), K562 4 of 14, HMC3 19 of 47. This is a known limit to state on
+  the site and in the model card.
+- The held-out foreign-cell tests (PXD043355, PXD073250) use the score's
+  ranking as their primary, which this result predicts will separate; their
+  abstention rates are secondary and are predicted to be low.
+- **Open:** a threshold set on protein data (it would need labelled
+  in-reference protein cells to calibrate), or S2 with its own threshold.
+
 ---
 
 ## The throughline

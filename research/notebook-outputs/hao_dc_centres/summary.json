@@ -1,0 +1,300 @@
+{
+  "checks": {
+    "atlas_probe": {
+      "fulcher": {
+        "auc": {
+          "b cell": 0.9355,
+          "classical monocyte": 0.9234444444444445,
+          "natural killer cell": 0.96,
+          "plasmacytoid dendritic cell": 0.8719696969696971
+        },
+        "mean": 0.9227285353535354
+      },
+      "pbmc240": {
+        "auc": {
+          "b cell": 0.9357222222222221,
+          "classical monocyte": 0.940111111111111,
+          "natural killer cell": 0.9666111111111111,
+          "plasmacytoid dendritic cell": 0.8923434343434342
+        },
+        "mean": 0.9336969696969697
+      }
+    },
+    "swap": {
+      "pdc_recall_swapped": 0.0,
+      "pdc_recall_served_in_sample": 65.17241379310344,
+      "ts_pdc_cells": 29
+    }
+  },
+  "hao_suite": {
+    "v4.1": {
+      "A": {
+        "dc_recall": 8.212180746561886,
+        "mdc_recall": 2.3856858846918487,
+        "pdc_recall": 30.206378986866795,
+        "coarse_ba": 63.251803167057986,
+        "b_mono_called_dc_pct": 7.327194916353262,
+        "cells": 16500,
+        "uploads": 45
+      },
+      "B": {
+        "dc_recall": 7.414750198255353,
+        "mdc_recall": 1.097852028639618,
+        "pdc_recall": 38.40749414519906,
+        "coarse_ba": 61.717823392244576,
+        "b_mono_called_dc_pct": 8.135640524699973,
+        "cells": 16500,
+        "uploads": 45
+      }
+    },
+    "v4.1+DC": {
+      "A": {
+        "dc_recall": 2.43614931237721,
+        "mdc_recall": 2.0874751491053676,
+        "pdc_recall": 3.75234521575985,
+        "coarse_ba": 63.59925743726614,
+        "b_mono_called_dc_pct": 0.4798340033718065,
+        "cells": 16500,
+        "uploads": 45
+      },
+      "B": {
+        "dc_recall": 2.1808088818398095,
+        "mdc_recall": 1.9570405727923628,
+        "pdc_recall": 3.278688524590164,
+        "coarse_ba": 62.84077031147356,
+        "b_mono_called_dc_pct": 0.44655316773653364,
+        "cells": 16500,
+        "uploads": 45
+      }
+    },
+    "v4.2": {
+      "A": {
+        "dc_recall": 4.6365422396856575,
+        "mdc_recall": 2.8330019880715707,
+        "pdc_recall": 11.44465290806754,
+        "coarse_ba": 57.554236224163255,
+        "b_mono_called_dc_pct": 9.428089741927117,
+        "cells": 16500,
+        "uploads": 45
+      },
+      "B": {
+        "dc_recall": 4.401268834258525,
+        "mdc_recall": 2.052505966587112,
+        "pdc_recall": 15.92505854800937,
+        "coarse_ba": 57.23721373787058,
+        "b_mono_called_dc_pct": 9.182249511582473,
+        "cells": 16500,
+        "uploads": 45
+      }
+    },
+    "v4.2+DC": {
+      "A": {
+        "dc_recall": 0.03929273084479371,
+        "mdc_recall": 0.0,
+        "pdc_recall": 0.18761726078799248,
+        "coarse_ba": 59.24541736202032,
+        "b_mono_called_dc_pct": 0.5835818959927377,
+        "cells": 16500,
+        "uploads": 45
+      },
+      "B": {
+        "dc_recall": 0.0,
+        "mdc_recall": 0.0,
+        "pdc_recall": 0.0,
+        "coarse_ba": 58.87134613931645,
+        "b_mono_called_dc_pct": 0.47446274072006694,
+        "cells": 16500,
+        "uploads": 45
+      }
+    }
+  },
+  "hao_suite_mean": {
+    "v4.1": {
+      "dc_recall": 7.81346547240862,
+      "mdc_recall": 1.7417689566657333,
+      "pdc_recall": 34.30693656603293,
+      "coarse_ba": 62.48481327965128,
+      "b_mono_called_dc_pct": 7.7314177205266175,
+      "cells": 16500.0,
+      "uploads": 45.0
+    },
+    "v4.1+DC": {
+      "dc_recall": 2.30847909710851,
+      "mdc_recall": 2.0222578609488653,
+      "pdc_recall": 3.515516870175007,
+      "coarse_ba": 63.220013874369855,
+      "b_mono_called_dc_pct": 0.46319358555417006,
+      "cells": 16500.0,
+      "uploads": 45.0
+    },
+    "v4.2": {
+      "dc_recall": 4.518905536972092,
+      "mdc_recall": 2.4427539773293416,
+      "pdc_recall": 13.684855728038455,
+      "coarse_ba": 57.39572498101692,
+      "b_mono_called_dc_pct": 9.305169626754795,
+      "cells": 16500.0,
+      "uploads": 45.0
+    },
+    "v4.2+DC": {
+      "dc_recall": 0.019646365422396856,
+      "mdc_recall": 0.0,
+      "pdc_recall": 0.09380863039399624,
+      "coarse_ba": 59.05838175066839,
+      "b_mono_called_dc_pct": 0.5290223183564023,
+      "cells": 16500.0,
+      "uploads": 45.0
+    }
+  },
+  "development": {
+    "v4.1": {
+      "fulcher": 69.04881566620614,
+      "fulcher_CD4T": 82.46753246753246,
+      "fulcher_CD8T": 23.756906077348066,
+      "fulcher_NK": 90.0,
+      "fulcher_B": 98.0392156862745,
+      "fulcher_monocyte": 97.80701754385966,
+      "fulcher_DC": 22.22222222222222,
+      "pbmc240_lymphoid": 92.3076923076923,
+      "scope2_unrestricted": 0.0,
+      "scope2_restricted": 37.972646263292454,
+      "scope2_reprocessed_unrestricted": 5.523560619102021,
+      "scope2_reprocessed_restricted": 33.30059938340193,
+      "auroc": 0.7897766928000249,
+      "fulcher_dc_precision": 92.3076923076923,
+      "pbmc240_dc_share": 0.42016806722689076,
+      "ds18_standard_dc_share": 1.1363636363636365,
+      "ds18_faims_dc_share": 0.0,
+      "ds18_zoom_dc_share": 13.186813186813188,
+      "ds19_dc_share": 12.345679012345679
+    },
+    "v4.2": {
+      "fulcher": 75.78636974962144,
+      "fulcher_CD4T": 83.11688311688312,
+      "fulcher_CD8T": 23.204419889502763,
+      "fulcher_NK": 92.0,
+      "fulcher_B": 98.0392156862745,
+      "fulcher_monocyte": 95.39473684210526,
+      "fulcher_DC": 62.96296296296296,
+      "pbmc240_lymphoid": 92.3076923076923,
+      "scope2_unrestricted": 0.0,
+      "scope2_restricted": 37.972646263292454,
+      "scope2_reprocessed_unrestricted": 5.523560619102021,
+      "scope2_reprocessed_restricted": 33.30059938340193,
+      "auroc": 0.7963444595715381,
+      "fulcher_dc_precision": 75.55555555555556,
+      "pbmc240_dc_share": 0.42016806722689076,
+      "ds18_standard_dc_share": 1.1363636363636365,
+      "ds18_faims_dc_share": 0.0,
+      "ds18_zoom_dc_share": 13.186813186813188,
+      "ds19_dc_share": 12.345679012345679
+    },
+    "v4.1+DC": {
+      "fulcher": 65.52891628599768,
+      "fulcher_CD4T": 81.81818181818183,
+      "fulcher_CD8T": 24.30939226519337,
+      "fulcher_NK": 90.0,
+      "fulcher_B": 99.01960784313727,
+      "fulcher_monocyte": 98.02631578947368,
+      "fulcher_DC": 0.0,
+      "pbmc240_lymphoid": 92.3076923076923,
+      "scope2_unrestricted": 0.0,
+      "scope2_restricted": 37.54214680054837,
+      "scope2_reprocessed_unrestricted": 5.4871750731623345,
+      "scope2_reprocessed_restricted": 33.018513591762,
+      "auroc": 0.8202134485078948,
+      "fulcher_dc_precision": NaN,
+      "pbmc240_dc_share": 0.0,
+      "ds18_standard_dc_share": 6.8181818181818175,
+      "ds18_faims_dc_share": 0.0,
+      "ds18_zoom_dc_share": 0.0,
+      "ds19_dc_share": 0.0
+    },
+    "v4.2+DC": {
+      "fulcher": 75.6818322459312,
+      "fulcher_CD4T": 82.79220779220779,
+      "fulcher_CD8T": 24.30939226519337,
+      "fulcher_NK": 92.0,
+      "fulcher_B": 99.01960784313727,
+      "fulcher_monocyte": 96.71052631578947,
+      "fulcher_DC": 59.25925925925925,
+      "pbmc240_lymphoid": 92.3076923076923,
+      "scope2_unrestricted": 0.0,
+      "scope2_restricted": 37.54214680054837,
+      "scope2_reprocessed_unrestricted": 5.4871750731623345,
+      "scope2_reprocessed_restricted": 33.018513591762,
+      "auroc": 0.8278324961269424,
+      "fulcher_dc_precision": 86.48648648648648,
+      "pbmc240_dc_share": 0.0,
+      "ds18_standard_dc_share": 6.8181818181818175,
+      "ds18_faims_dc_share": 0.0,
+      "ds18_zoom_dc_share": 0.0,
+      "ds19_dc_share": 0.0
+    }
+  },
+  "calibration_suite": {
+    "v4.1": {
+      "overall": 63.61450725255972,
+      "lineage": 60.13432333045649,
+      "mixed": 76.26954905427948,
+      "narrow": 64.48477576578155,
+      "pbmc": 70.66561069247201,
+      "scope2": 72.23838079180462,
+      "single": 33.079086531890766
+    },
+    "v4.1+DC": {
+      "overall": 65.25257180039542,
+      "lineage": 63.88774086712516,
+      "mixed": 76.21653628153275,
+      "narrow": 65.66113916604051,
+      "pbmc": 70.35369473872083,
+      "scope2": 77.62989957006822,
+      "single": 35.981996278920334
+    },
+    "v4.2": {
+      "overall": 61.090453259270426,
+      "lineage": 59.361961870480854,
+      "mixed": 69.4791595809797,
+      "narrow": 63.8364077942118,
+      "pbmc": 66.82215109723293,
+      "scope2": 70.45269561091271,
+      "single": 33.72670557950982
+    },
+    "v4.2+DC": {
+      "overall": 62.987866686246896,
+      "lineage": 63.29229253054253,
+      "mixed": 69.71229929025415,
+      "narrow": 65.13718518388895,
+      "pbmc": 67.71831477212484,
+      "scope2": 75.98039460863863,
+      "single": 36.78199627892033
+    }
+  },
+  "verdicts": {
+    "v4.1+DC": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "G1": false,
+      "G2": true,
+      "G3": false,
+      "G4": true,
+      "G5": true,
+      "G6": true,
+      "GO": false
+    },
+    "v4.2+DC": {
+      "C1": false,
+      "C2": false,
+      "C3": false,
+      "G1": false,
+      "G2": true,
+      "G3": false,
+      "G4": true,
+      "G5": true,
+      "G6": true,
+      "GO": false
+    }
+  },
+  "seconds": 647
+}

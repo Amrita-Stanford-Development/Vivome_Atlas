@@ -108,7 +108,10 @@ existed, and nothing was chosen on it afterwards
    mixed cells, never one sorted population alone.
 6. **The guess's probability.** Its out-of-reference AUROC is 0.790, against
    v4's 0.829 and v3.1's 0.744. Out-of-distribution abstention is v3.1's,
-   unchanged.
+   unchanged. On PXD077946's cell lines (development data) its threshold
+   flags none of the HEK293T, HCT116 or K562 cells; most abstain as
+   ambiguous, but some get a committed blood-cell answer
+   (`research/notebook-run-history.md`, entry 41).
 7. **v3.1's known limits apply to the answers** (below).
 
 ## v3.1: the T1 NB2 ensemble
