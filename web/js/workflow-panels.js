@@ -5,7 +5,7 @@
 import { PENDING_LABEL, formatCount, isMeasured } from './manifest.js';
 import { escapeHtml } from './panels.js';
 import {
-  OUTCOME_LABELS, OUTCOME_ORDER, answerSentence, answerText, formatRecord, guessText, isAnswered, outcomeCounts, plainName,
+  DESIGN_NAMES, OUTCOME_LABELS, PRACTICE_KINDS, OUTCOME_ORDER, answerSentence, answerText, formatRecord, guessText, isAnswered, outcomeCounts, plainName,
   snippetRows, topK,
 } from './workflow-data.js';
 import { rocSvg } from './workflow-svg.js';
@@ -109,9 +109,9 @@ export function buildMembers(workflow) {
 export function buildEncoderChoice(workflow) {
   const c = workflow?.training?.encoder_choice;
   if (!c) return `<p class="pending">${PENDING_LABEL}</p>`;
-  return table(['Encoder', 'Balanced accuracy, realistic coverage', 'Seed SD'],
-    c.candidates.map((x) => `<tr><td>${e(x.name)}</td><td class="support-num">${rec(x.balanced_accuracy)}</td>`
-      + `<td class="support-num">${rec(x.seed_sd)}</td></tr>`).join(''));
+  return table(['Way of practising', 'Test cells named correctly, every type counted equally', 'Spread over its training runs'],
+    c.candidates.map((x, k) => `<tr><td>${e(DESIGN_NAMES[x.name] ?? x.name)}${k === 0 ? ' (kept)' : ''}</td>`
+      + `<td class="support-num">${rec(x.balanced_accuracy)}</td><td class="support-num">${rec(x.seed_sd)}</td></tr>`).join(''));
 }
 
 // ---- one cell ----
@@ -166,10 +166,10 @@ export function buildLadderTrace(cell, workflow) {
   const floor = f.floor?.value;
   const threshold = f.ood_threshold?.value;
   const rungs = [
-    ['Enough genes?', `${formatCount(cell.observed)} observed, floor ${formatCount(floor)}`, cell.observed >= floor, 'coverage_too_low'],
-    ['Like the reference?', `similarity ${num(cell.similarity, 3)}, threshold ${num(threshold, 3)}`, cell.similarity >= threshold, 'outside_supported_region'],
-    ['Any class confident?', `${cell.candidate_set.length} class${cell.candidate_set.length === 1 ? '' : 'es'} in the set`, cell.candidate_set.length > 0, 'no_confident_label'],
-    ['One level they share?', isAnswered(cell) ? `${cell.label} (${OUTCOME_LABELS[cell.outcome]})` : 'no shared group or lineage', isAnswered(cell), 'ambiguous_between_classes'],
+    ['Enough measured?', `values in ${formatCount(cell.observed)} genes; at least ${formatCount(floor)} needed`, cell.observed >= floor, 'coverage_too_low'],
+    ['Like the example cells?', `likeness ${num(cell.similarity, 3)}; at least ${num(threshold, 3)} needed`, cell.similarity >= threshold, 'outside_supported_region'],
+    ['Any type on the shortlist?', `${cell.candidate_set.length} type${cell.candidate_set.length === 1 ? '' : 's'} on it`, cell.candidate_set.length > 0, 'no_confident_label'],
+    ['One type, family or branch they share?', isAnswered(cell) ? `${plainName(cell.label)} (${OUTCOME_LABELS[cell.outcome]})` : 'they share no family or branch', isAnswered(cell), 'ambiguous_between_classes'],
   ];
   let stopped = false;
   const items = rungs.map(([q, detailText, pass, reason]) => {
@@ -197,10 +197,10 @@ export function buildOutcomeTable(workflow) {
 // ---- results ----
 
 export function buildScenarioTable(workflow) {
-  const rows = (workflow?.evaluation?.scenarios ?? []).map((s) => `<tr><td>${e(s.group)}</td><td class="support-num">${rec(s.cells)}</td>`
+  const rows = (workflow?.evaluation?.scenarios ?? []).map((s) => `<tr><td>${e(PRACTICE_KINDS[s.group] ?? s.group)}</td><td class="support-num">${rec(s.cells)}</td>`
     + `<td class="support-num">${rec(s.committed)}</td><td class="support-num">${rec(s.correct_when_committed)}</td>`
     + `<td class="support-num">${rec(s.best_guess_per_upload_balanced)}</td><td class="support-num">${rec(s.coverage)}</td></tr>`).join('');
-  return `<div class="table-scroll">${table(['Uploads of', 'Cells', 'Answered', 'Correct when answered', 'Best guess, balanced', 'Set coverage'], rows)}</div>`;
+  return `<div class="table-scroll">${table(['Practice files with', 'Cells', 'Got an answer', 'Right, when answered', 'Best guess right, every type equal', 'True type on the shortlist'], rows)}</div>`;
 }
 
 const RESULT_BEAD = { pass: 'wf-pass', fail: 'wf-fail', void: 'wf-void' };

@@ -177,6 +177,31 @@ export const OUTCOME_CHIPS = {
   coverage_too_low: 'Too little measured',
 };
 
+// The three ways of practising that were compared (step 4), in plain words.
+export const DESIGN_NAMES = {
+  'H module, uniform': 'Groups of genes, random gaps',
+  'F2 module, profile': 'Groups of genes, gaps like real files',
+  'C mask channel, uniform': 'Genes one by one, random gaps',
+};
+
+// The kinds of practice file in the simulated tests (step 12), in plain words.
+export const PRACTICE_KINDS = {
+  single: 'one type only', narrow: '2 or 3 types', mixed: '5 or 8 types', lineage: 'one branch',
+  pbmc: 'like a blood sample', scope2: 'like the SCoPE2 study',
+};
+
+// What each result means, in a sentence under its button. VivOME answers as
+// precisely as it can be sure of, like reading the address on a letter.
+export const OUTCOME_NOTES = {
+  class: 'It could tell the exact type, like reading the full street address. For example: B cell.',
+  group: 'It knew the family but not the exact member, like knowing the street but not the house. For example: a T cell, without saying which kind of T cell.',
+  lineage: 'It only knew the broad branch, like knowing the city. For example: lymphoid, the branch that holds T cells, B cells and NK cells.',
+  ambiguous_between_classes: 'Two or more types fit about equally well, so it did not guess.',
+  no_confident_label: 'No single type fit well enough to name.',
+  outside_supported_region: 'The cell did not resemble anything VivOME learned from.',
+  coverage_too_low: 'Too few proteins were measured in the cell to judge.',
+};
+
 // What VivOME says about a cell, as whole sentences for a reader new to it.
 export function answerSentence(cell) {
   if (!cell) return PENDING_LABEL;

@@ -181,6 +181,23 @@ def main() -> None:
     merged_examples = [{"gene": g, "rows": len(rows),
                         "best_single_row_cells": int(observed_raw[rows].sum(axis=1).max()),
                         "merged_cells": int(observed_raw[rows].any(axis=0).sum())} for g, rows in merged[:6]]
+    # One gene's two rows joined, for a few cells: three where both rows have
+    # a value (the joined value is their middle on the doubling scale) and two
+    # where one row is blank (it is skipped). Values in the file's own units.
+    join_example = None
+    collapsed_genes = gene_ids.resolve_to_feature_symbols(collapsed.gene_names)
+    for g, rows in merged:
+        obs = observed_raw[rows]
+        both, one = np.flatnonzero(obs.all(axis=0)), np.flatnonzero(obs.sum(axis=0) == 1)
+        if len(rows) != 2 or len(both) < 3 or len(one) < 2:
+            continue
+        cols = sorted(both[:3].tolist() + one[:2].tolist())
+        row = collapsed_genes.index(g)
+        amount = lambda v: None if np.isnan(v) else int(round(float(v)))
+        join_example = {"gene": g, "cells": cols,
+                        "rows": [[amount(raw.values[r, c]) for c in cols] for r in rows],
+                        "joined": [amount(2.0 ** collapsed.values[row, c]) for c in cols]}
+        break
 
     # ---- Stage 3: the encoders ----
     smoothed_z = [m.encoder_handle.encode(smoothed, aligned.mask) for m in answers.members]
@@ -370,7 +387,7 @@ def main() -> None:
                       "linear_log10": histogram(np.log10(linear_observed[linear_observed > 0]), np.arange(0, 9.5, 0.5)),
                       "log2": histogram(scaled_values[~np.isnan(scaled_values)], np.arange(0, 31, 1))},
             "collapse": {"rows_before": len(scaled.gene_names), "rows_after": len(collapsed.gene_names),
-                         "genes_merged": len(merged), "examples": merged_examples},
+                         "genes_merged": len(merged), "examples": merged_examples, "join_example": join_example},
             "ids": {"matched": resolution.matched, "unmapped": resolution.unmapped, "ambiguous": resolution.ambiguous,
                     "unmapped_examples": resolution.unmapped_identifiers[:40],
                     "ambiguous_examples": resolution.ambiguous_identifiers[:20]},

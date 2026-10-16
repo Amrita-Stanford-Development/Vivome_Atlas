@@ -11,11 +11,11 @@
 // Under reduced motion nothing animates: each figure shows the finished
 // frame of the beat being read.
 
-import { loadManifest, PENDING_LABEL } from './manifest.js';
+import { formatCount, loadManifest, PENDING_LABEL } from './manifest.js';
 import { errorPanel, escapeHtml, factText } from './panels.js';
 import { CHAPTERS, beatAt, parseHash, stepTarget } from './timeline.js';
 import {
-  OUTCOME_CHIPS, OUTCOME_ORDER, answerShort, answerText, checkSync, classColour, detailFor, geneLookup, guessText,
+  ANSWERED, OUTCOME_CHIPS, OUTCOME_NOTES, OUTCOME_ORDER, answerShort, answerText, checkSync, classColour, detailFor, geneLookup, guessText,
   loadWorkflow, outcomeCounts, wfText,
   searchCells, storyFor, wfFact,
 } from './workflow-data.js';
@@ -37,7 +37,7 @@ const MODULES = {
   evidence: () => import('./scenes-evidence.js'),
 };
 const MODULE_OF = {
-  open: 'input', data: 'input', files: 'input', genes: 'input', upload: 'input', matching: 'input', smoothing: 'input',
+  open: 'input', data: 'input', files: 'input', genes: 'input', matching: 'input', smoothing: 'input',
   encoder: 'model', probabilities: 'model', guess: 'model', answer: 'model', landing: 'model',
   training: 'evidence', results: 'evidence',
 };
@@ -88,7 +88,8 @@ function setCell(i) {
   for (const el of $$('[data-cell]')) {
     const kind = el.dataset.cell;
     el.textContent = kind === 'id' ? cell.id
-      : kind === 'answer' ? ctx.answerShort(cell).replace(/^No answer/, 'no answer')
+      : kind === 'number' ? (i + 1).toLocaleString('en-US')
+      : kind === 'answer' ? ctx.answerShort(cell).replace(/^No answer: (.*)$/, 'no answer ($1)')
         : kind === 'guess' ? ctx.guessText(cell)
           : kind === 'observed' ? cell.observed.toLocaleString('en-US')
             : kind === 'observed_raw' ? cell.observed_raw.toLocaleString('en-US') : '';
@@ -111,12 +112,50 @@ function buildPicker() {
   const w = ctx.workflow;
   const cells = w.trace.cells;
   const counts = outcomeCounts(cells);
-  const chips = [['The first cell', 0, null],
-    ...OUTCOME_ORDER.filter((k) => counts[k] > 0).map((k) => [OUTCOME_CHIPS[k], cells.findIndex((c) => c.outcome === k), k])];
-  $('#outcome-chips').innerHTML = chips.map(([label, i, kind]) => {
-    const n = kind ? `<span class="wf-count">${counts[kind]} cell${counts[kind] === 1 ? '' : 's'}</span>` : '';
-    return `<button type="button" class="wf-chip" data-pick="${i}" aria-pressed="false">${escapeHtml(label)}${n}</button>`;
-  }).join('');
+  const plural = (n) => `${formatCount(n)} cell${n === 1 ? '' : 's'}`;
+  // Each button's meaning is read out with it (a hidden note) and shown in
+  // an overlay while the button is pointed at or focused.
+  const chip = (label, i, note, kind) => {
+    const n = kind ? `<span class="wf-count">${plural(counts[kind])}</span>` : '';
+    const id = `outcome-note-${kind ?? 'first'}`;
+    return `<button type="button" class="wf-chip" data-pick="${i}" data-label="${escapeHtml(label)}" data-note="${escapeHtml(note)}"`
+      + ` aria-pressed="false" aria-describedby="${id}">${escapeHtml(label)}${n}</button>`
+      + `<span class="visually-hidden" id="${id}">${escapeHtml(note)}</span>`;
+  };
+  const group = (title, kinds) => {
+    const shown = kinds.filter((k) => counts[k] > 0);
+    const total = shown.reduce((s, k) => s + counts[k], 0);
+    return `<p class="wf-outcome-group">${escapeHtml(title)} <span class="wf-count">${plural(total)}</span></p>`
+      + `<div class="wf-chips">${shown.map((k) => chip(OUTCOME_CHIPS[k], cells.findIndex((c) => c.outcome === k), OUTCOME_NOTES[k], k)).join('')}</div>`;
+  };
+  $('#outcome-chips').innerHTML = `<div class="wf-chips">${chip('The first cell', 0, 'Where the page starts: the first cell in the file.', null)}</div>`
+    + group('Got an answer', OUTCOME_ORDER.filter((k) => ANSWERED.has(k)))
+    + group('No answer', OUTCOME_ORDER.filter((k) => !ANSWERED.has(k)));
+  const pick = $('.wf-pick');
+  const tip = $('#outcome-tip');
+  const showTip = (b) => {
+    tip.innerHTML = `<strong>${escapeHtml(b.dataset.label)}</strong>${escapeHtml(b.dataset.note)}`;
+    tip.hidden = false;
+    const p = pick.getBoundingClientRect();
+    const r = b.getBoundingClientRect();
+    const left = Math.max(0, Math.min(r.left - p.left, pick.clientWidth - tip.offsetWidth));
+    let top = r.top - p.top - tip.offsetHeight - 8;
+    if (top < 0) top = r.bottom - p.top + 8;
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
+    tip.classList.add('is-on');
+  };
+  const hideTip = () => tip.classList.remove('is-on');
+  const chips = $('#outcome-chips');
+  chips.addEventListener('pointerover', (e) => { const b = e.target.closest('.wf-chip'); if (b) showTip(b); });
+  // A tap leaves the overlay open until the next tap elsewhere.
+  chips.addEventListener('pointerout', (e) => {
+    const b = e.target.closest('.wf-chip');
+    if (b && e.pointerType !== 'touch' && !b.contains(e.relatedTarget)) hideTip();
+  });
+  document.addEventListener('pointerdown', (e) => { if (!e.target.closest?.('.wf-chip')) hideTip(); });
+  chips.addEventListener('focusin', (e) => { const b = e.target.closest('.wf-chip'); if (b) showTip(b); });
+  chips.addEventListener('focusout', hideTip);
   $('#outcome-chips').addEventListener('click', (e) => {
     const b = e.target.closest('.wf-chip');
     if (b) setCell(Number(b.dataset.pick));

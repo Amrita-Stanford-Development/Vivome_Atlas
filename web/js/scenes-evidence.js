@@ -5,12 +5,12 @@
 // with no numbers and say so; every number drawn is a recorded one.
 
 import { isMeasured } from './manifest.js';
-import { formatRecord } from './workflow-data.js';
+import { PRACTICE_KINDS, formatRecord, plainName } from './workflow-data.js';
 import { buildScenarioTable } from './workflow-panels.js';
 import { clamp, lerp, phase } from './workflow-layout.js';
 import { rng } from './random.js';
 import {
-  ACCENT, BENCH, FAINT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, line, mountCanvas, roundRect, text,
+  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, line, mountCanvas, roundRect, text,
 } from './scene-kit.js';
 
 function scene(el, draw, { describe = () => '', table = () => '' } = {}) {
@@ -42,21 +42,14 @@ const box = (g, x, y, w, h, label, { colour = INK, fill = '#FFFFFF', opacity = 1
 // ---- 4: how VivOME learns ----
 // Beat 1: the example cells, scattered at first, pull together by type over
 // the training rounds; the end is the real map (the start and the path are
-// drawn, and say so). Beat 2: practising with gaps, and mixes like real
-// files. Beat 3: five learners, averaged. Beat 4: the three designs compared,
-// and the training repeated here.
-
-const DESIGNS = { // the designs' names, in plain words
-  'H module, uniform': 'Groups of genes, random gaps',
-  'F2 module, profile': 'Groups of genes, gaps like real files',
-  'C mask channel, uniform': 'Genes one by one, random gaps',
-};
+// drawn, and say so). Beat 2: practising with most genes hidden, beside the
+// share a real file has. Beat 3: several learners, averaged. Beat 4: the
+// test: test cells named correctly, against guessing.
 
 export function training(el, ctx) {
   const w = ctx.workflow;
   const t = w.training;
   const classes = w.reference.classes;
-  const counts = classes.map((c) => c.cells.value);
   const epochs = t.recipe.epochs.value;
   const pts = w.reference.sample.slice(0, 900);
   const xs = pts.map((q) => q[0]);
@@ -68,7 +61,13 @@ export function training(el, ctx) {
     const s = Math.min(bw / (x1 - x0), bh / (y1 - y0));
     return (q) => [ox + (bw - (x1 - x0) * s) / 2 + (q[0] - x0) * s, oy + (bh - (y1 - y0) * s) / 2 + (y1 - q[1]) * s];
   };
-  return scene(el, ({ g, width, height }, p) => {
+  // The example cell in beat 2: the sample's first, by its type's name.
+  const exampleType = plainName(w.class_order[pts[0][3]]);
+  const fs = w.raw.pbmc240.align.feature_space;
+  const chance = 1 / classes.length;
+  return scene(el, ({ g, width, height }, p, state) => {
+    const narrow = width < 560;
+    const short = height < 340;
     // Beat 1: learning by example.
     const one = 1 - phase(p, 0.23, 0.28);
     if (one > 0) {
@@ -92,7 +91,7 @@ export function training(el, ctx) {
       g.restore();
     }
 
-    // Beat 2: practising with gaps, in mixes like real files.
+    // Beat 2: practising with most genes hidden, beside a real file's share.
     const two = phase(p, 0.23, 0.28) * (1 - phase(p, 0.48, 0.53));
     if (two > 0) {
       g.save();
@@ -103,39 +102,41 @@ export function training(el, ctx) {
       const gw = bw / genes;
       const lo = t.recipe.coverage_low.value;
       const hi = t.recipe.coverage_high.value;
-      text(g, 'Practising with gaps', 12, 22, { size: 12, weight: 600, colour: INK });
-      text(g, 'One example cell\u2019s genes, as the learner sees them in practice:', 12, 46, { size: 10.5, colour: SOFT, max: bw });
-      const hide = phase(p, 0.28, 0.38);
-      [lo, (lo + hi) / 2, hi].forEach((keep, v) => {
-        const y = 58 + v * 46;
-        for (let k = 0; k < genes; k += 1) {
-          const shown = hide === 0 || r() < keep;
-          bar(g, 12 + k * gw, y, gw - 1, 26, shown ? alpha(ACCENT, 0.5 + 0.4 * ((k * 13) % 7) / 7) : '#E3E7EB', 1);
-        }
-        text(g, `${Math.round(keep * 100)}% shown`, 12 + bw, y + 40, { size: 10, colour: FAINT, align: 'right', opacity: hide });
-      });
-      const mixY = 58 + 3 * 46 + 22;
-      const kSel = Number(ctx.options('training').classes ?? 0);
-      const rm = rng(7 + kSel);
-      const total = counts.reduce((s, v) => s + v, 0);
-      text(g, 'Cells come in mixes like real files:', 12, mixY, { size: 10.5, colour: SOFT });
-      text(g, 'the natural mix', 12, mixY + 22, { size: 10, colour: INK });
-      let x = 110;
-      counts.forEach((v, i) => { bar(g, x, mixY + 10, (v / total) * (bw - 98), 16, ctx.classColour(i), 0); x += (v / total) * (bw - 98); });
-      text(g, kSel === 0 ? 'or one mix of 1 to 8 kinds' : `or ${kSel} kind${kSel === 1 ? '' : 's'} only`, 12, mixY + 52, { size: 10, colour: INK });
-      const mix = phase(p, 0.36, 0.46);
-      if (kSel > 0) {
-        const order = [...classes.keys()];
-        for (let k = order.length - 1; k > 0; k -= 1) { const j = Math.floor(rm() * (k + 1)); [order[k], order[j]] = [order[j], order[k]]; }
-        const picked = order.slice(0, kSel);
-        const weights = picked.map(() => -Math.log(1 - rm() * 0.999));
-        const sum = weights.reduce((s, v) => s + v, 0);
-        x = 110;
-        picked.forEach((i, k) => { const wd = (weights[k] / sum) * (bw - 98) * mix; bar(g, x, mixY + 40, wd, 16, ctx.classColour(i), 0); x += wd; });
+      const top = narrow ? 70 : 58;
+      const stripH = clamp((height - top - 30) / 4 - 22, 8, 32);
+      const gap = stripH + 22;
+      text(g, 'Practising with most genes hidden', 12, 22, { size: 12, weight: 600, colour: INK, max: bw });
+      if (narrow) {
+        text(g, 'One example cell, as the learner sees it.', 12, 40, { size: 10.5, colour: SOFT, max: bw });
+        text(g, `The name it must learn to give: ${exampleType}`, 12, 55, { size: 10.5, colour: SOFT, max: bw });
       } else {
-        text(g, '(pick a mix with the buttons below)', 12, mixY + 68, { size: 10, colour: FAINT, opacity: mix });
+        text(g, `One example cell, as the learner sees it in practice. The name it must learn to give: ${exampleType}`, 12, 42,
+          { size: 10.5, colour: SOFT, max: bw });
       }
-      text(g, 'Gaps and mixes are drawn at random, as in training.', 12, height - 12, { size: 10, colour: FAINT, max: bw });
+      const hide = phase(p, 0.28, 0.38);
+      const strip = (y, keep, colour, label, opacity = 1) => {
+        for (let k = 0; k < genes; k += 1) {
+          const shown = r() < keep;
+          bar(g, 12 + k * gw, y, gw - 1, stripH, shown ? alpha(colour, 0.5 + 0.4 * ((k * 13) % 7) / 7) : '#E3E7EB', 1, opacity);
+        }
+        text(g, label, 12, y + stripH + 14, { size: 10, colour: INK, opacity, max: bw });
+      };
+      [lo, (lo + hi) / 2, hi].forEach((keep, v) => {
+        strip(top + v * gap, hide === 0 ? 1 : keep, ACCENT, `practice: ${Math.round(keep * 100)}% of its genes shown`, hide > 0 ? 1 : 0.4);
+      });
+      // A real protein file, for comparison: our cell's share.
+      const real = phase(p, 0.38, 0.46);
+      const cell = ctx.cell(state);
+      if (real > 0 && cell) {
+        const share = cell.observed / fs;
+        strip(top + 3 * gap + 6, share, PROT, narrow
+          ? `real file: our cell has ${Math.round(share * 100)}% of its genes`
+          : `a real protein file: our cell (cell ${state.cell + 1}) has ${cell.observed.toLocaleString('en-US')} of ${fs.toLocaleString('en-US')} genes, ${Math.round(share * 100)}%`, real);
+      }
+      if (!short) {
+        text(g, narrow ? 'Each bar is one gene; grey means hidden.' : 'Each bar is one gene; grey means hidden. Which genes are hidden is drawn at random, as in training.',
+          12, height - 12, { size: 10, colour: FAINT, max: bw });
+      }
       g.restore();
     }
 
@@ -178,57 +179,73 @@ export function training(el, ctx) {
         line(g, x, 42 + ch + 4, lerp(x, width / 2, avg), lerp(42 + ch + 4, ay - 8, avg), { colour: ACCENT, width: 1.4, opacity: avg });
       });
       if (avg > 0) {
-        chip(g, 'their views are averaged into one (step 9)', width / 2, ay + 6, { size: 12, align: 'center', border: ACCENT, colour: ACCENT, opacity: avg });
+        chip(g, 'their views are averaged into one (step 8)', width / 2, ay + 6, { size: 12, align: 'center', border: ACCENT, colour: ACCENT, opacity: avg });
         text(g, 'Same training, different random starts; the small differences between the maps are drawn to show the idea.', width / 2, ay + 44,
           { size: 10, colour: FAINT, align: 'center', opacity: avg, max: width - 24 });
       }
       g.restore();
     }
 
-    // Beat 4: the designs compared, and the training repeated.
+    // Beat 4: the test. Ten cells stand for the score; then the score
+    // against guessing at random.
     const four = phase(p, 0.76, 0.82);
-    if (four > 0) {
+    const chosen = t.encoder_choice.candidates[0];
+    if (four > 0 && chosen && isMeasured(chosen.balanced_accuracy)) {
       g.save();
       g.globalAlpha = four;
-      const cands = t.encoder_choice.candidates;
-      text(g, `Three designs, each trained ${formatRecord(t.encoder_choice.seeds)} times: test cells named correctly`, 12, 22, { size: 12, weight: 600, colour: INK, max: width - 24 });
-      text(g, 'with most genes hidden; every type counted equally; the line shows the spread over the repeats', 12, 40, { size: 10, colour: FAINT, max: width - 24 });
-      const labelW = Math.min(250, width * 0.42);
+      const v = chosen.balanced_accuracy.value;
+      text(g, 'Did it learn? A test on cells it never practised on', 12, 22, { size: 12, weight: 600, colour: INK, max: width - 24 });
+      text(g, 'with most of their genes hidden, as in a protein file', 12, 40, { size: 10.5, colour: SOFT, max: width - 24 });
+      const n = 10;
+      const right = Math.round(v * n);
+      const size = Math.min(26, (width - 24) / (n * 2.6));
+      const step = size * 2.6;
+      const x0 = (width - step * (n - 1)) / 2;
+      const yI = 64 + size;
+      const fill = phase(p, 0.8, 0.88);
+      for (let k = 0; k < n; k += 1) {
+        const x = x0 + k * step;
+        const ok = k < right && fill > k / n;
+        dot(g, x, yI, size, ok ? ACCENT : '#E9ECEF', 1, ok ? null : '#C9D1D7');
+        if (ok) {
+          line(g, x - size * 0.42, yI + size * 0.02, x - size * 0.1, yI + size * 0.34, { colour: '#FFFFFF', width: 3 });
+          line(g, x - size * 0.1, yI + size * 0.34, x + size * 0.45, yI - size * 0.3, { colour: '#FFFFFF', width: 3 });
+        }
+      }
+      const yT = yI + size + (short ? 22 : 30);
+      text(g, `${formatRecord(chosen.balanced_accuracy)} named correctly: about ${right} in ${n}`, width / 2, yT,
+        { size: short ? 14 : 16, weight: 700, colour: INK, align: 'center', opacity: fill, max: width - 24 });
+      text(g, `every one of the ${classes.length} types counted equally`, width / 2, yT + (short ? 16 : 20),
+        { size: 10.5, colour: SOFT, align: 'center', opacity: fill });
+      // Against guessing at random.
+      const vs = phase(p, 0.88, 0.95);
+      const labelW = Math.min(170, width * 0.32);
       const bw = width - labelW - 70;
-      const grow = phase(p, 0.8, 0.9);
-      cands.forEach((c, k) => {
-        const y = 66 + k * 46;
-        const v = c.balanced_accuracy.value;
-        const sd = c.seed_sd.value;
-        const chosen = k === 0;
-        text(g, DESIGNS[c.name] ?? c.name, labelW, y + 14, { size: 11, align: 'right', colour: chosen ? ACCENT : INK, weight: chosen ? 600 : 400, max: labelW - 8 });
-        bar(g, labelW + 10, y, bw * v * grow, 22, chosen ? ACCENT : '#AEB9C2', 3);
-        line(g, labelW + 10 + bw * (v - sd) * grow, y + 11, labelW + 10 + bw * (v + sd) * grow, y + 11, { colour: INK, width: 1.4, opacity: grow });
-        text(g, formatRecord(c.balanced_accuracy), labelW + 16 + bw * (v + sd) * grow, y + 15, { size: 11, colour: INK, opacity: grow });
+      const yB = yT + (short ? 30 : 50);
+      [[narrow ? 'guessing' : 'guessing at random', chance, '#AEB9C2'], ['VivOME', v, ACCENT]].forEach(([label, value, colour], k) => {
+        const y = yB + k * (short ? 28 : 34);
+        text(g, label, labelW, y + 15, { size: 11, align: 'right', colour: INK, opacity: vs, max: labelW - 8 });
+        bar(g, labelW + 10, y, bw * value * vs, 22, colour, 3);
+        text(g, `${(value * 100).toFixed(1)}%`, labelW + 16 + bw * value * vs, y + 15, { size: 11, colour: INK, opacity: vs });
       });
-      if (cands[0]) text(g, 'chosen', labelW + 12, 66 + 34, { size: 9.5, colour: ACCENT });
-      const yR = 66 + cands.length * 46 + 34;
-      const again = phase(p, 0.88, 0.96);
-      text(g, `The training repeated on this PC (learner ${t.reproduction.seed + 1} of ${t.members.length}):`, 12, yR, { size: 11.5, weight: 600, colour: INK, opacity: again });
-      const rec = t.reproduction.recorded_loss.value;
-      const ret = t.reproduction.retrained_loss.value;
-      const maxE = Math.max(rec, ret) * 1.15;
-      [['original', rec, '#AEB9C2'], ['trained again here', ret, ACCENT]].forEach(([label, v, colour], k) => {
-        const y = yR + 14 + k * 30;
-        text(g, label, labelW, y + 14, { size: 11, align: 'right', colour: INK, opacity: again });
-        bar(g, labelW + 10, y, bw * (v / maxE) * again, 20, colour, 3);
-        text(g, `error ${v.toFixed(3)}`, labelW + 16 + bw * (v / maxE) * again, y + 14, { size: 10.5, colour: INK, opacity: again });
-      });
-      text(g, t.reproduction.passed ? 'Within the limit set before the run: the training can be repeated.' : 'Outside the limit set before the run.',
-        12, yR + 88, { size: 10.5, colour: SOFT, opacity: again, max: width - 24 });
+      if (!short) {
+        text(g, `Guessing picks one of the ${classes.length} types, so it is right about once in ${classes.length} tries.`,
+          12, height - 28, { size: 10, colour: FAINT, opacity: vs, max: width - 24 });
+        text(g, `The score is the chosen design\u2019s average over its ${formatRecord(t.encoder_choice.seeds)} training runs.`,
+          12, height - 14, { size: 10, colour: FAINT, opacity: vs, max: width - 24 });
+      }
       g.restore();
     }
   }, {
-    describe: () => `${t.members.length} learners, each trained on the named RNA examples alone, up to ${epochs} rounds, with most genes hidden in practice.`,
+    describe: () => `${t.members.length} learners, each trained on the named RNA examples alone, up to ${epochs} rounds, with most genes hidden in practice; tested on cells they never practised on, ${formatRecord(t.encoder_choice.candidates[0].balanced_accuracy)} named correctly.`,
   });
 }
 
-// ---- 13: how the results were calculated, and new data today ----
+// ---- 12: testing VivOME, and using it today ----
+// Beat 1: the practice files, by kind. Beat 2: the Fulcher 2026 contest.
+// Beat 3: the six locked-away sets. Beat 4: a file sent to the live service.
+
+const RESULT_WORDS = { pass: 'passed', fail: 'failed', void: 'could not be scored' };
 
 export function results(el, ctx) {
   const w = ctx.workflow;
@@ -238,133 +255,153 @@ export function results(el, ctx) {
   const fulcher = (m?.benchmark?.datasets ?? []).find((d) => d.key === 'fulcher2026');
   const svc = w.service;
   return scene(el, ({ g, width, height }, p) => {
+    const narrow = width < 560;
+    // Beat 1: the practice files.
     const one = 1 - phase(p, 0.23, 0.28);
     if (one > 0) {
       g.save();
       g.globalAlpha = one;
-      text(g, 'Simulated uploads of held-out RNA cells, by kind', 12, 18, { size: 11.5, colour: INK, weight: 600 });
-      const rowH = (height - 60) / scenarios.length;
-      const bw = width - 150;
+      text(g, narrow ? 'Practice files, by kind' : 'Practice files, by kind: how many cells got an answer, and how many answers were right', 12, 20,
+        { size: 12, colour: INK, weight: 600, max: width - 24 });
+      bar(g, 12, 32, 11, 11, '#B9C9D6', 2);
+      text(g, 'got an answer', 28, 42, { size: 10.5, colour: SOFT });
+      bar(g, 122, 32, 11, 11, ACCENT, 2);
+      text(g, 'answer was right', 138, 42, { size: 10.5, colour: SOFT });
+      const labelW = narrow ? 104 : 160;
+      const rowH = (height - 76) / scenarios.length;
+      const bw = width - labelW - 60;
       const grow = phase(p, 0, 0.18);
       scenarios.forEach((s, k) => {
-        const y = 34 + k * rowH;
-        text(g, s.group, 120, y + rowH * 0.45, { size: 11, align: 'right', colour: INK });
-        bar(g, 128, y + 4, bw * s.committed.value * grow, rowH * 0.3, '#B9C9D6', 2);
-        bar(g, 128, y + 6 + rowH * 0.3, bw * s.correct_when_committed.value * grow, rowH * 0.3, ACCENT, 2);
-        text(g, `${formatRecord(s.committed)} answered, ${formatRecord(s.correct_when_committed)} right`, 132 + bw * s.committed.value * grow, y + 4 + rowH * 0.25, { size: 9.5, colour: FAINT, opacity: grow });
+        const y = 56 + k * rowH;
+        text(g, PRACTICE_KINDS[s.group] ?? s.group, labelW - 8, y + rowH * 0.45, { size: narrow ? 10 : 11, align: 'right', colour: INK, max: labelW - 10 });
+        bar(g, labelW, y + 4, bw * s.committed.value * grow, rowH * 0.3, '#B9C9D6', 2);
+        bar(g, labelW, y + 6 + rowH * 0.3, bw * s.correct_when_committed.value * grow, rowH * 0.3, ACCENT, 2);
+        text(g, formatRecord(s.committed), labelW + bw * s.committed.value * grow + 4, y + 4 + rowH * 0.25, { size: 9.5, colour: FAINT, opacity: grow });
+        text(g, formatRecord(s.correct_when_committed), labelW + bw * s.correct_when_committed.value * grow + 4, y + 6 + rowH * 0.55, { size: 9.5, colour: INK, opacity: grow });
       });
       g.restore();
     }
+    // Beat 2: the Fulcher 2026 contest.
     const two = phase(p, 0.23, 0.28) * (1 - phase(p, 0.48, 0.53));
     if (two > 0 && fulcher) {
       g.save();
       g.globalAlpha = two;
-      const rows = fulcher.rows.filter((r) => isMeasured(r.score)).slice(0, 12);
-      const lo = 0;
-      const hi = 1;
-      const left = Math.min(260, width * 0.44);
-      const x = (v) => left + ((v - lo) / (hi - lo)) * (width - left - 16);
-      const rowH = Math.min(24, (height - 70) / rows.length);
-      text(g, `Fulcher 2026, balanced accuracy over its types (in-sample for VivOME)`, 12, 18, { size: 11.5, colour: INK, weight: 600, max: width - 24 });
+      const rows = fulcher.rows.filter((r) => isMeasured(r.score)).slice(0, narrow ? 6 : 12);
+      const left = narrow ? 130 : Math.min(300, width * 0.46);
+      const x = (v) => left + v * (width - left - 24);
+      const rowH = Math.min(24, (height - 92) / rows.length);
+      text(g, narrow ? 'Fulcher 2026: types named correctly' : 'Fulcher 2026: share of cells named correctly, every type counted equally', 12, 20,
+        { size: 12, colour: INK, weight: 600, max: width - 24 });
+      text(g, narrow ? 'one dot per method; blue: VivOME' : 'one dot per method; blue: VivOME; grey: other published methods', 12, 38, { size: 10.5, colour: SOFT, max: width - 24 });
       const show = phase(p, 0.28, 0.42);
       rows.forEach((r, k) => {
         if (k / rows.length > show) return;
-        const y = 40 + k * rowH;
-        text(g, `${r.method}, ${r.rule}`, left - 8, y + 4, { size: 10, align: 'right', colour: r.ours ? INK : SOFT, weight: r.ours ? 600 : 400, max: left - 12 });
-        if (Number.isFinite(r.score.sd)) line(g, x(r.score.value - r.score.sd), y, x(r.score.value + r.score.sd), y, { colour: INK });
+        const y = 60 + k * rowH;
+        const vivome = r.ours ? (String(r.method).startsWith(m?.model?.name ?? '\u0000') ? 'VivOME, this version' : 'VivOME, the previous version') : null;
+        const label = vivome ?? (narrow || r.rule === r.method.toLowerCase() || r.rule.toLowerCase() === r.method.toLowerCase() ? r.method : `${r.method}, ${r.rule}`);
+        text(g, label, left - 8, y + 4, { size: 10, align: 'right', colour: r.ours ? INK : SOFT, weight: r.ours ? 600 : 400, max: left - 12 });
         dot(g, x(r.score.value), y, r.ours ? 6 : 4, r.ours ? ACCENT : '#9AA6AF');
       });
-      [0, 0.25, 0.5, 0.75, 1].forEach((v) => text(g, `${v * 100}%`, x(v), 48 + rows.length * rowH, { size: 9.5, colour: FAINT, align: 'center' }));
+      const axisY = 60 + rows.length * rowH + 6;
+      [0, 0.25, 0.5, 0.75, 1].forEach((v) => text(g, `${v * 100}%`, x(v), axisY + 8, { size: 9.5, colour: FAINT, align: 'center' }));
       if (isMeasured(fulcher.chance)) {
-        line(g, x(fulcher.chance.value), 30, x(fulcher.chance.value), 40 + rows.length * rowH, { colour: FAINT, dash: [3, 3] });
-        text(g, 'chance', x(fulcher.chance.value) + 4, 34, { size: 9.5, colour: FAINT });
+        line(g, x(fulcher.chance.value), 50, x(fulcher.chance.value), axisY - 4, { colour: FAINT, dash: [3, 3] });
+        text(g, 'guessing', x(fulcher.chance.value) + 4, 54, { size: 9.5, colour: FAINT });
       }
-      // A paired bootstrap, in miniature: resample cells, rescore both.
-      const boot = phase(p, 0.42, 0.5);
-      if (boot > 0) {
-        const r = rng(Math.floor(p * 40));
-        const y = height - 26;
-        text(g, 'Paired bootstrap: draw cells with replacement, score both methods on the same draw (illustration)', 12, y - 14, { size: 10, colour: FAINT, max: width - 24 });
-        for (let k = 0; k < 40; k += 1) dot(g, 16 + k * ((width - 32) / 40), y, 3.5, r() < 0.5 ? ACCENT : '#9AA6AF', boot);
+      if (!narrow) {
+        text(g, 'This file was also used while building VivOME: a fair contest, not a fully independent test.', 12, height - 12,
+          { size: 10, colour: SOFT, max: width - 24, opacity: phase(p, 0.4, 0.46) });
       }
       g.restore();
     }
+    // Beat 3: the six locked-away sets.
     const three = phase(p, 0.48, 0.53) * (1 - phase(p, 0.73, 0.78));
     if (three > 0) {
       g.save();
       g.globalAlpha = three;
-      text(g, 'The internal held-out test: six sets, scored once', 12, 18, { size: 11.5, colour: INK, weight: 600 });
-      const cols = width > 640 ? 3 : 2;
+      text(g, narrow ? 'Six sets kept back, opened once' : 'Six test sets, locked away before building started and opened once', 12, 20,
+        { size: 12, colour: INK, weight: 600, max: width - 24 });
+      const cols = narrow ? 2 : 3;
       const cw = (width - 24) / cols;
-      const ch = (height - 40) / Math.ceil(heldout.length / cols);
+      const ch = narrow ? 44 : Math.min(112, (height - 100) / Math.ceil(heldout.length / cols));
       heldout.forEach((c, k) => {
         const x = 12 + (k % cols) * cw;
-        const y = 30 + Math.floor(k / cols) * ch;
+        const y = 34 + Math.floor(k / cols) * ch;
         const a = clamp(phase(p, 0.5, 0.7) * heldout.length - k, 0, 1);
-        g.globalAlpha = three * a;
+        g.save();
+        g.globalAlpha *= a;
         g.fillStyle = '#FFFFFF';
         roundRect(g, x + 4, y + 4, cw - 8, ch - 8, 12);
         g.fill();
-        g.globalAlpha = three;
-        chip(g, c.result, x + 12, y + 20, { size: 10.5, opacity: a, border: c.result === 'pass' ? ACCENT : c.result === 'fail' ? INK : LINE });
-        text(g, c.key.toUpperCase().replace('HAO2021', 'Hao 2021').replace('TIAN', 'Tian'), x + 70, y + 24, { size: 11, colour: INK, weight: 600, opacity: a });
-        text(g, c.question, x + 12, y + 44, { size: 9.5, colour: SOFT, opacity: a, max: cw - 24 });
-        if (c.curve) {
-          const s = Math.min(ch - 70, cw - 30);
-          const ox = x + 12;
-          const oy = y + 56;
-          line(g, ox, oy + s, ox + s, oy, { colour: LINE, dash: [3, 3], opacity: a });
-          g.strokeStyle = ACCENT;
-          g.lineWidth = 2;
-          g.globalAlpha = three * a;
-          g.beginPath();
-          c.curve.forEach(([fx, ty], i) => { const px = ox + fx * s; const py = oy + s - ty * s; if (i === 0) g.moveTo(px, py); else g.lineTo(px, py); });
-          g.stroke();
-          g.globalAlpha = three;
-          text(g, `AUROC ${formatRecord(c.value)}`, ox + s + 8, oy + s - 4, { size: 10.5, colour: INK, opacity: a });
-        } else if (c.value) {
-          text(g, `${formatRecord(c.value)} points over correlation`, x + 12, y + 72, { size: 11, colour: INK, opacity: a });
-          text(g, `lower bound ${formatRecord(c.lower)}`, x + 12, y + 90, { size: 10, colour: FAINT, opacity: a });
-        } else {
-          text(g, c.reason, x + 12, y + 72, { size: 10, colour: FAINT, opacity: a, max: cw - 24 });
+        g.restore();
+        const colour = c.result === 'pass' ? ACCENT : c.result === 'fail' ? INK : FAINT;
+        chip(g, RESULT_WORDS[c.result] ?? c.result, x + 14, y + (narrow ? 18 : 24), { size: narrow ? 9.5 : 10.5, colour, border: colour, opacity: a });
+        // The question, wrapped onto a few lines.
+        const words = String(c.question).split(' ');
+        const lines = [];
+        let cur = '';
+        g.save();
+        g.font = `400 ${narrow ? 9.5 : 10.5}px ${FONT}`;
+        for (const word of words) {
+          const next = cur ? `${cur} ${word}` : word;
+          if (g.measureText(next).width > cw - 32 && cur) { lines.push(cur); cur = word; } else cur = next;
         }
+        if (cur) lines.push(cur);
+        g.restore();
+        const maxLines = narrow ? 1 : Math.max(1, Math.floor((ch - 46) / 14));
+        lines.slice(0, maxLines).forEach((ln, j) => text(g, j === maxLines - 1 && lines.length > maxLines ? `${ln}\u2026` : ln, x + 14, y + (narrow ? 35 : 50) + j * 14,
+          { size: narrow ? 9.5 : 10.5, colour: SOFT, opacity: a }));
       });
+      const legend = phase(p, 0.66, 0.72);
+      const yL = 34 + Math.ceil(heldout.length / cols) * ch + (narrow ? 12 : 18);
+      const notes = narrow
+        ? ['passed: it did what the test asked', 'failed: it did not', 'could not be scored: the data could not settle it']
+        : ['passed: VivOME did what the test asked of it', 'failed: it did not, and the page says so', 'could not be scored: the data turned out unable to settle the question'];
+      notes.forEach((s, k) => text(g, s, 16, yL + k * (narrow ? 14 : 16), { size: narrow ? 9.5 : 10.5, colour: SOFT, opacity: legend, max: width - 32 }));
       g.restore();
     }
+    // Beat 4: a file sent to the live service.
     const four = phase(p, 0.76, 0.82);
     if (four > 0) {
       g.save();
       g.globalAlpha = four;
-      const y = height * 0.42;
-      const bw = Math.min(170, width * 0.26);
-      box(g, 12, y, bw, 64, 'your browser', { colour: INK });
-      box(g, width - bw - 12, y, bw, 64, `${svc.platform}`, { colour: ACCENT });
-      text(g, `${formatRecord(svc.cpu)} vCPU, ${svc.memory}, ${formatRecord(svc.min_instances)} to ${formatRecord(svc.max_instances)} instance`, width - bw / 2 - 12, y + 84, { size: 10, colour: FAINT, align: 'center', max: bw + 20 });
+      text(g, narrow ? 'Using VivOME today' : 'Using VivOME today: a file goes to the service and answers come back', 12, 20,
+        { size: 12, colour: INK, weight: 600, max: width - 24 });
+      const y = narrow ? 44 : Math.min(height * 0.3, 90);
+      const bw = Math.min(170, width * 0.3);
+      box(g, 12, y, bw, 64, 'your browser', { colour: INK, size: narrow ? 10 : 11.5 });
+      box(g, width - bw - 12, y, bw, 64, narrow ? 'Cloud Run' : `${svc.platform}`, { colour: ACCENT, size: narrow ? 10 : 11.5 });
       const x0 = 12 + bw;
       const x1 = width - bw - 12;
       line(g, x0, y + 20, x1, y + 20, { colour: INK, width: 1.5 });
       line(g, x1, y + 44, x0, y + 44, { colour: ACCENT, width: 1.5 });
-      text(g, 'POST /api/project: the file', (x0 + x1) / 2, y + 12, { size: 10.5, colour: INK, align: 'center' });
-      text(g, 'JSON: one answer per cell', (x0 + x1) / 2, y + 62, { size: 10.5, colour: ACCENT, align: 'center' });
+      text(g, 'your file', (x0 + x1) / 2, y + 12, { size: 10.5, colour: INK, align: 'center' });
+      text(g, 'answers', (x0 + x1) / 2, y + 62, { size: 10.5, colour: ACCENT, align: 'center' });
       const t = phase(p, 0.8, 1);
       if (t < 0.5) dot(g, lerp(x0, x1, t * 2), y + 20, 6, PROT);
       else dot(g, lerp(x1, x0, (t - 0.5) * 2), y + 44, 6, ACCENT);
-      const steps = ['read', 'scale', 'merge', 'match', 'smooth', 'encode', 'probabilities', 'best guess', 'set', 'ladder', 'atlas'];
+      const steps = ['fit to the list', 'borrow from similar cells', 'turn into a point', 'closeness to types', 'best guess', 'answer or reason', 'place on the map'];
       let sx = 12;
-      let sy = y + 112;
-      text(g, 'Inside the service, every step on this page:', 12, sy - 18, { size: 10.5, colour: FAINT });
+      let sy = y + (narrow ? 88 : 112);
+      text(g, 'Inside the service, the steps on this page:', 12, sy - 20, { size: 10.5, colour: SOFT });
       steps.forEach((s, k) => {
         const on = t > 0.15 + (k / steps.length) * 0.35;
-        const wChip = s.length * 6.4 + 18;
-        if (sx + wChip > width - 12) { sx = 12; sy += 28; }
-        chip(g, s, sx, sy, { size: 10.5, opacity: on ? 1 : 0.35, colour: on ? INK : FAINT, border: on ? ACCENT : null });
-        sx += wChip + 6;
+        g.save();
+        g.font = `500 ${narrow ? 10 : 10.5}px ${FONT}`;
+        const wChip = g.measureText(s).width + 16;
+        g.restore();
+        if (sx + wChip > width - 12) { sx = 12; sy += narrow ? 24 : 28; }
+        chip(g, s, sx, sy, { size: narrow ? 10 : 10.5, opacity: on ? 1 : 0.35, colour: on ? INK : FAINT, border: on ? ACCENT : null });
+        sx += wChip + 8;
       });
-      text(g, `Up to ${formatRecord(svc.max_cells)} cells per upload; it sleeps when idle and wakes for the next file`, 12, height - 10, { size: 10.5, colour: SOFT, max: width - 24 });
+      if (!narrow) {
+        text(g, `Up to ${formatRecord(svc.max_cells)} cells per file. The service sleeps when nobody is using it and wakes for the next file.`,
+          12, height - 12, { size: 10.5, colour: SOFT, max: width - 24 });
+      }
       g.restore();
     }
   }, {
-    describe: () => `Six kinds of simulated upload, the Fulcher 2026 benchmark, the six held-out sets, and the live service on ${svc.platform}.`,
+    describe: () => `Practice files by kind, the Fulcher 2026 contest, the six locked-away sets, and the live service on ${svc.platform}.`,
     table: () => buildScenarioTable(w),
   });
 }

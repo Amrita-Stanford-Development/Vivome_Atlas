@@ -13,7 +13,7 @@ import { buildPbmcTable, buildHeaderMorph } from './workflow-panels.js';
 import { clamp, distanceForOverlap, diverging, histogramBars, lerp, phase, sequential, ticks } from './workflow-layout.js';
 import { rng } from './random.js';
 import {
-  ACCENT, BENCH, FAINT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, hatch, line, mountCanvas, short, text,
+  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, hatch, line, mountCanvas, short, text,
 } from './scene-kit.js';
 
 const fc = (x) => formatCount(x);
@@ -38,11 +38,14 @@ function scene(el, draw, { describe = () => '', table = () => '', dispose = () =
 }
 
 // ---- 0: one cell, start to end ----
+// Beat 1: the cell's raw column, protein by protein. Beat 2: it travels a
+// line with one stop per step on the page, to its answer and best guess.
 
-const STOPS = ['file', 'scale', 'merge', 'match', 'mask', 'smooth', 'encode', 'probabilities', 'best guess', 'set', 'ladder', 'atlas'];
+const STOPS = ['the file', 'fit to the list', 'borrow', 'squeeze', 'closeness', 'best guess', 'shortlist', 'answer', 'map'];
 
 export function open(el, ctx) {
   return scene(el, ({ g, width, height }, p, state) => {
+    const narrow = width < 560;
     const cell = ctx.cell(state);
     const { detail, own } = ctx.detail(state);
     const rows = own ? detail.raw_row : [];
@@ -51,24 +54,25 @@ export function open(el, ctx) {
     const shown = Math.floor(phase(p, 0, 0.3) * rows.length + 0.0001);
     const squeeze = phase(p, 0.3, 0.45);
     const target = [colW + 40, height * 0.62];
-    text(g, own ? `Run ${cell.id}: the first protein groups of its column` : `Run ${cell.id}`, 8, 16, { size: 12, colour: FAINT, max: width - 16 });
+    text(g, own ? `Cell ${state.cell + 1}: the first proteins in its column` : `Cell ${state.cell + 1}`, 8, 16, { size: 12, colour: INK, weight: 600, max: width - 16 });
     rows.forEach((r, i) => {
       if (i >= shown) return;
       const col = i < 20 ? 0 : 1;
       const x0 = 8 + col * (colW / 2 + 4);
       const y0 = 30 + (i % 20) * tileH;
-      const x = x0;
-      const y = y0;
       const w = colW / 2;
       const h = tileH - 2;
       const fade = 1 - squeeze * 0.55;
       if (squeeze > 0 && squeeze < 1) dot(g, lerp(x0 + w / 2, target[0], squeeze), lerp(y0 + h / 2, target[1], squeeze), 2.5, ACCENT, 1 - squeeze * 0.5);
-      if (r[1] === null) hatch(g, x, y, w, h, fade);
-      else bar(g, x, y, w, h, alpha(ACCENT, 0.12 + 0.55 * clamp(((r[2] ?? 0) - 8) / 14, 0, 1)), 2, fade);
-      if (tileH > 11) text(g, `${r[0].split(';')[0]}`, x + 4, y + h - 4, { size: 9.5, colour: INK, max: w - 6, opacity: fade });
+      if (r[1] === null) hatch(g, x0, y0, w, h, fade);
+      else bar(g, x0, y0, w, h, alpha(ACCENT, 0.12 + 0.55 * clamp(((r[2] ?? 0) - 8) / 14, 0, 1)), 2, fade);
+      if (tileH > 11) text(g, `${r[0].split(';')[0]}`, x0 + 4, y0 + h - 4, { size: 9.5, colour: INK, max: w - 6, opacity: fade });
     });
-    if (!own) text(g, 'Its raw column is recorded for the story runs only; pick one above to see it.', 8, 40, { size: 12, colour: SOFT, max: width * 0.5 });
-    // The rail: the steps the cell passes through.
+    if (own && shown > 0) {
+      text(g, 'darker: more of it; striped: not seen', 8, 30 + 20 * tileH + 14, { size: 10, colour: SOFT, opacity: 1 - squeeze, max: colW + 20 });
+    }
+    if (!own) text(g, 'This cell\u2019s raw column is kept for a few cells only; its journey is shown here.', 8, 40, { size: 11, colour: SOFT, max: width * 0.5 });
+    // The line: one stop per step on the page.
     const railY = height * 0.62;
     const x0 = colW + 40;
     const x1 = width - 24;
@@ -78,20 +82,19 @@ export function open(el, ctx) {
       const x = lerp(x0, x1, i / (STOPS.length - 1));
       const reached = travel * (STOPS.length - 1) >= i - 0.001;
       dot(g, x, railY, reached ? 6 : 4.5, reached ? ACCENT : '#FFFFFF', 1, reached ? null : LINE);
-      text(g, name, x, railY + (i % 2 ? 24 : -14), { size: 10.5, colour: reached ? INK : FAINT, align: 'center' });
+      // A phone has room for the first and last stop's names only.
+      const label = !narrow || i === 0 || i === STOPS.length - 1;
+      if (label) text(g, name, x, railY + (i % 2 ? 24 : -14), { size: narrow ? 9.5 : 10.5, colour: reached ? INK : FAINT, align: i === 0 && narrow ? 'left' : i === STOPS.length - 1 && narrow ? 'right' : 'center' });
     });
     if (squeeze > 0.95) dot(g, lerp(x0, x1, travel), railY, 9, ACCENT, 1, '#FFFFFF');
     const end = phase(p, 0.88, 1);
     if (end > 0) {
       const answer = ctx.answerShort(cell);
-      chip(g, cell.level ? `Answer: ${answer}` : answer, x1, railY + 64, { size: 13, align: 'right', opacity: end, border: ACCENT });
-      chip(g, `Best guess: ${ctx.guessText(cell)}`, x1, railY + 98, { size: 12, align: 'right', opacity: end, colour: SOFT });
+      chip(g, cell.level ? `Answer: ${answer}` : answer, x1, railY + (narrow ? 34 : 64), { size: narrow ? 10.5 : 13, align: 'right', opacity: end, border: ACCENT });
+      chip(g, `Best guess: ${ctx.guessText(cell)}`, x1, railY + (narrow ? 60 : 98), { size: narrow ? 10 : 12, align: 'right', opacity: end, colour: SOFT });
     }
   }, {
-    describe: (state) => {
-      const cell = ctx.cell(state);
-      return `Run ${cell.id} passes through ${STOPS.length} steps, from its raw column to ${ctx.answerText(cell)}.`;
-    },
+    describe: (state) => `Cell ${state.cell + 1} passes through every step on this page, from its raw column to ${ctx.answerText(ctx.cell(state))}.`,
   });
 }
 
@@ -190,7 +193,19 @@ export function data(el, ctx) {
     if (treeOp > 0) {
       g.save();
       g.globalAlpha = treeOp;
-      text(g, 'The types as a family tree', 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
+      text(g, 'The types as a family tree', 12, 20, { size: 12, weight: 600, colour: INK, max: hot ? width * 0.4 : width - 24 });
+      if (hot) {
+        // The blue path is our cell's best guess; say so in the header row,
+        // where it covers no label.
+        const key = width < 520 ? 'blue: our cell\u2019s best guess' : 'blue: our cell\u2019s best guess, its family and its branch';
+        const keyOp = phase(p, 0.6, 0.66);
+        g.save();
+        g.font = `400 10.5px ${FONT}`;
+        const kw = g.measureText(key).width;
+        g.restore();
+        line(g, width - 12 - kw - 26, 16, width - 12 - kw - 6, 16, { colour: ACCENT, width: 2.4, opacity: keyOp });
+        text(g, key, width - 12, 20, { size: 10.5, colour: ACCENT, align: 'right', opacity: keyOp });
+      }
       text(g, 'type', treeX - 6, 38, { size: 10.5, colour: FAINT, align: 'right' });
       text(g, 'family', gx, 38, { size: 10.5, colour: FAINT, align: 'center' });
       text(g, 'branch', lx, 38, { size: 10.5, colour: FAINT, align: 'center' });
@@ -215,7 +230,6 @@ export function data(el, ctx) {
         const lit = hot && hot.lineage === l;
         text(g, l, lx, lineageY[l] + 4, { size: 12, align: 'center', colour: lit ? ACCENT : INK, weight: 600, opacity: groupLinks });
       });
-      if (hot && links > 0.95) chip(g, 'our cell\u2019s best guess', treeX + 52, rowY(guess) - rowH * 0.9, { size: 10, colour: ACCENT, border: ACCENT, opacity: phase(p, 0.6, 0.66) });
       g.restore();
     }
 
@@ -339,16 +353,17 @@ export function files(el, ctx) {
   return scene(el, ({ g, width, height }, p, state) => {
     const i = state.cell;
     const cell = cells[i];
+    const narrow = width < 560;
     const shrink = phase(p, 0.34, 0.44);
     const toLayouts = phase(p, 0.67, 0.74);
     // The picture: full size in beat 1, a thumbnail in beat 2, gone in beat 3.
-    const full = { x: 64, y: 46, w: width - 84, h: height - 96 };
+    const full = { x: 40, y: 66, w: width - 52, h: height - 102 };
     const thumb = { x: 12, y: 46, w: Math.min(150, width * 0.24), h: height - 120 };
     const box = {
       x: lerp(full.x, thumb.x, shrink), y: lerp(full.y, thumb.y, shrink),
       w: lerp(full.w, thumb.w, shrink), h: lerp(full.h, thumb.h, shrink),
     };
-    const pictureOp = 1 - toLayouts;
+    const pictureOp = (1 - toLayouts) * (narrow ? 1 - shrink : 1);
     if (pictureOp > 0) {
       g.save();
       g.globalAlpha = pictureOp;
@@ -365,19 +380,78 @@ export function files(el, ctx) {
       g.strokeRect(cx - 1, box.y - 2, colW + 2, box.h * Math.max(reveal, 0.02) + 4);
       const labels = 1 - shrink;
       if (labels > 0) {
-        text(g, `\u2190 ${fc(pres.cols)} cells, one column each \u2192`, box.x + box.w / 2, 30, { size: 11.5, colour: INK, align: 'center', weight: 600, opacity: labels });
+        // What the picture is: a title, then what one square means, with its two colours.
+        text(g, narrow ? 'One square = one protein in one cell' : 'The whole file as one picture', 12, 20,
+          { size: 12, colour: INK, weight: 600, opacity: labels, max: width - 24 });
+        const words = narrow ? ['', 'found', 'not found']
+          : ['Each tiny square is one protein in one cell:', 'the machine found it', 'it did not'];
         g.save();
-        g.translate(box.x - 14, box.y + box.h / 2);
+        g.font = `400 11px ${FONT}`;
+        const [w0, w1] = [words[0] ? g.measureText(words[0]).width + 8 : 0, g.measureText(words[1]).width];
+        g.restore();
+        if (words[0]) text(g, words[0], 12, 40, { size: 11, colour: SOFT, opacity: labels });
+        bar(g, 12 + w0, 30, 12, 12, PROT, 2, labels);
+        text(g, words[1], 29 + w0, 40, { size: 11, colour: SOFT, opacity: labels });
+        bar(g, 41 + w0 + w1, 30, 12, 12, '#E9ECEF', 2, labels);
+        text(g, words[2], 58 + w0 + w1, 40, { size: 11, colour: SOFT, opacity: labels });
+        // The two directions.
+        text(g, narrow ? `${fc(pres.cols)} cells, one per column \u2192` : `${fc(pres.cols)} cells, one column per cell, in the file\u2019s order \u2192`,
+          box.x, box.y + box.h + 18, { size: 11, colour: INK, weight: 600, opacity: labels, max: box.w });
+        g.save();
+        g.translate(box.x - 12, box.y + box.h);
         g.rotate(-Math.PI / 2);
-        text(g, `${fc(pres.rows)} proteins, most often seen at the top`, 0, 0, { size: 11.5, colour: INK, align: 'center', weight: 600, opacity: labels });
+        text(g, narrow ? `${fc(pres.rows)} proteins` : `${fc(pres.rows)} proteins, one row per protein`, 0, 0,
+          { size: 11, colour: INK, weight: 600, opacity: labels, max: box.h });
         g.restore();
         chip(g, `our cell (cell ${i + 1})`, Math.min(cx + 6, box.x + box.w - 120), box.y + 14, { size: 10.5, colour: ACCENT, border: ACCENT, opacity: labels * phase(p, 0.1, 0.18) });
-        const ly = box.y + box.h + 18;
-        bar(g, box.x, ly - 9, 12, 12, PROT, 2, labels);
-        text(g, 'seen', box.x + 18, ly + 1, { size: 10.5, colour: SOFT, opacity: labels });
-        bar(g, box.x + 64, ly - 9, 12, 12, '#E9ECEF', 2, labels);
-        text(g, 'not seen', box.x + 82, ly + 1, { size: 10.5, colour: SOFT, opacity: labels });
-      } else {
+        // How to read the rows.
+        const hints = labels * phase(p, 0.14, 0.2);
+        chip(g, narrow ? 'top: found in most cells' : 'top rows: proteins found in almost every cell', box.x + box.w - 8, box.y + box.h * 0.14,
+          { size: 10, colour: INK, align: 'right', border: LINE, opacity: hints });
+        chip(g, narrow ? 'bottom: found in few cells' : 'bottom rows: proteins found in only a few cells', box.x + 8, box.y + box.h * 0.9,
+          { size: 10, colour: INK, border: LINE, opacity: hints });
+        // A cell where nothing was found shows as an empty column.
+        const empty = cells.findIndex((c) => c.observed_raw === 0);
+        if (empty >= 0 && empty !== i) {
+          const ex = box.x + ((empty + 0.5) / pres.cols) * box.w;
+          const right = ex < box.x + box.w * 0.6;
+          chip(g, `cell ${empty + 1}: nothing found`, right ? ex + 8 : ex - 8, box.y + box.h * 0.42,
+            { size: 10, colour: INK, align: right ? 'left' : 'right', border: LINE, opacity: labels * phase(p, 0.24, 0.3) });
+        }
+        // A corner zoomed in, so a square can be seen.
+        const zoom = labels * phase(p, 0.2, 0.27);
+        if (zoom > 0 && !narrow) {
+          const n = 10;
+          const c0 = clamp(i - 2, 0, pres.cols - n);
+          const r0 = Math.round(pres.rows * 0.2);
+          const s = Math.min(150, box.h * 0.42);
+          const zx = box.x + box.w - s - 10;
+          const zy = box.y + box.h - s - 30;
+          const sq = s / n;
+          const src = { x: box.x + (c0 / pres.cols) * box.w, y: box.y + (r0 / pres.rows) * box.h, w: (n / pres.cols) * box.w, h: (n / pres.rows) * box.h };
+          g.save();
+          g.globalAlpha *= zoom;
+          g.strokeStyle = INK;
+          g.lineWidth = 1;
+          g.strokeRect(src.x - 1, src.y - 1, Math.max(3, src.w) + 2, Math.max(3, src.h) + 2);
+          line(g, src.x + src.w + 1, src.y, zx, zy, { colour: INK, opacity: 0.5 });
+          line(g, src.x + src.w + 1, src.y + src.h + 1, zx, zy + s, { colour: INK, opacity: 0.5 });
+          bar(g, zx - 4, zy - 4, s + 8, s + 8, '#FFFFFF', 4);
+          for (let rr = 0; rr < n; rr += 1) {
+            for (let cc = 0; cc < n; cc += 1) {
+              const on = seen[(r0 + rr) * pres.cols + c0 + cc];
+              bar(g, zx + cc * sq + 1, zy + rr * sq + 1, sq - 2, sq - 2, on ? PROT : '#E9ECEF', 1.5);
+            }
+          }
+          if (i >= c0 && i < c0 + n) {
+            g.strokeStyle = ACCENT;
+            g.lineWidth = 2;
+            g.strokeRect(zx + (i - c0) * sq, zy, sq, s);
+          }
+          g.restore();
+          text(g, 'zoomed in: one square is one protein in one cell', zx + s, zy + s + 20, { size: 10, colour: INK, align: 'right', opacity: zoom });
+        }
+      } else if (!narrow) {
         text(g, 'the whole file', box.x + box.w / 2, box.y + box.h + 16, { size: 10.5, colour: FAINT, align: 'center' });
       }
       g.restore();
@@ -388,23 +462,38 @@ export function files(el, ctx) {
     if (corner > 0) {
       g.save();
       g.globalAlpha = corner;
-      const tx = thumb.x + thumb.w + 28;
+      const short = height < 340;
+      const tx = narrow ? 12 : thumb.x + thumb.w + 28;
       const tw = width - tx - 10;
       const nameW = Math.min(86, tw * 0.2);
       const cw = (tw - nameW) / details.length;
-      const rh = Math.min(26, (height * 0.5) / (rowsShown.length + 1));
+      // Room below the table: the callout (about 84px, 16 more when it
+      // borrows a story cell) and our cell's count (about 46px); on a short
+      // figure, the callout's first lines only.
       const top = 46;
+      const below = short ? 18 + 56 : 18 + 84 + 24 + 46;
+      const { detail, own } = ctx.detail(state);
+      const has = (g0) => detail && detail.raw_row[g0]?.[1] !== null && detail.raw_row[g0]?.[1] !== undefined;
+      let rowsHere = rowsShown.slice(0, clamp(Math.floor((height - top - below) / 16) - 1, 3, rowsShown.length));
+      // Keep at least one row where our cell has a value, for the callout.
+      if (detail && !rowsHere.some(has)) {
+        const extra = rowsShown.find(has);
+        if (extra !== undefined) rowsHere = [...rowsHere.slice(0, -1), extra];
+      }
+      const rh = clamp((height - top - below) / (rowsHere.length + 1), 14, 26);
       text(g, 'A corner of the table, up close', tx, 30, { size: 11.5, colour: INK, weight: 600 });
+      if (narrow) text(g, 'cell', tx + nameW - 6, top + rh * 0.6, { size: 9.5, colour: FAINT, align: 'right' });
       details.forEach((d, c) => {
         const mine = d.cell === i;
-        text(g, `cell ${d.cell + 1}`, tx + nameW + c * cw + cw / 2, top + rh * 0.6, { size: 10.5, colour: mine ? ACCENT : INK, weight: mine ? 600 : 400, align: 'center' });
+        text(g, narrow ? String(d.cell + 1) : `cell ${d.cell + 1}`, tx + nameW + c * cw + cw / 2, top + rh * 0.6,
+          { size: narrow ? 9.5 : 10.5, colour: mine ? ACCENT : INK, weight: mine ? 600 : 400, align: 'center' });
         if (mine) {
           g.strokeStyle = ACCENT;
           g.lineWidth = 2;
-          g.strokeRect(tx + nameW + c * cw + 1, top + 2, cw - 2, rh * (rowsShown.length + 1) - 2);
+          g.strokeRect(tx + nameW + c * cw + 1, top + 2, cw - 2, rh * (rowsHere.length + 1) - 2);
         }
       });
-      rowsShown.forEach((g0, r) => {
+      rowsHere.forEach((g0, r) => {
         const y = top + rh * (r + 1);
         text(g, details[0].raw_row[g0][0].split(';')[0], tx + nameW - 6, y + rh * 0.66, { size: 10, colour: INK, align: 'right', max: nameW - 8 });
         details.forEach((d, c) => {
@@ -418,25 +507,27 @@ export function files(el, ctx) {
         });
       });
       // One of our cell's numbers, and one blank, explained.
-      const { detail, own } = ctx.detail(state);
       const callout = phase(p, 0.46, 0.56);
-      const yC = top + rh * (rowsShown.length + 1) + 18;
+      const yC = top + rh * (rowsHere.length + 1) + 18;
       if (callout > 0 && detail) {
-        const values = rowsShown.map((g0) => detail.raw_row[g0]?.[1]).filter((v) => v !== null && v !== undefined);
-        const maxV = Math.max(...rowsShown.flatMap((g0) => details.map((d) => d.raw_row[g0]?.[1] ?? 0)), 1);
+        const values = rowsHere.map((g0) => detail.raw_row[g0]?.[1]).filter((v) => v !== null && v !== undefined);
+        const maxV = Math.max(...rowsHere.flatMap((g0) => details.map((d) => d.raw_row[g0]?.[1] ?? 0)), 1);
         // The largest of our cell's shown values, so its meter reads clearly.
-        const pick = rowsShown.filter((g0) => detail.raw_row[g0]?.[1] !== null && detail.raw_row[g0]?.[1] !== undefined)
+        const pick = rowsHere.filter((g0) => detail.raw_row[g0]?.[1] !== null && detail.raw_row[g0]?.[1] !== undefined)
           .sort((a, b) => detail.raw_row[b][1] - detail.raw_row[a][1])[0];
         if (pick !== undefined) {
           const v = detail.raw_row[pick][1];
           const name = detail.raw_row[pick][0].split(';')[0];
-          text(g, `${name} in cell ${detail.cell + 1}:`, tx, yC + 4, { size: 11, colour: SOFT, opacity: callout });
+          text(g, short && !own ? `${name} in cell ${detail.cell + 1} (like ours):` : `${name} in cell ${detail.cell + 1}:`, tx, yC + 4,
+            { size: 11, colour: SOFT, opacity: callout, max: tw * 0.5 });
           text(g, Math.round(v).toLocaleString('en-US'), tx, yC + 32, { size: 24, colour: INK, weight: 700, opacity: callout });
           const mw = Math.min(220, tw * 0.45);
           bar(g, tx, yC + 42, mw, 8, BENCH, 4, callout);
           bar(g, tx, yC + 42, mw * (v / maxV) * callout, 8, PROT, 4, callout);
-          text(g, 'how strongly it was detected:', tx, yC + 64, { size: 10.5, colour: SOFT, opacity: callout });
-          text(g, 'bigger means more of it', tx, yC + 79, { size: 10.5, colour: SOFT, opacity: callout });
+          if (!short) {
+            text(g, 'how strongly it was detected:', tx, yC + 64, { size: 10.5, colour: SOFT, opacity: callout });
+            text(g, 'bigger means more of it', tx, yC + 79, { size: 10.5, colour: SOFT, opacity: callout });
+          }
         }
         const blank = phase(p, 0.52, 0.6);
         const bx = tx + tw * 0.55;
@@ -446,11 +537,11 @@ export function files(el, ctx) {
           text(g, 'Often just too little', bx + 42, yC + 22, { size: 10.5, colour: SOFT, opacity: blank });
           text(g, 'to catch, not none.', bx + 42, yC + 37, { size: 10.5, colour: SOFT, opacity: blank });
         }
-        if (!own) text(g, `(the numbers shown are for cell ${detail.cell + 1}, a cell like ours)`, tx, yC + 98, { size: 9.5, colour: FAINT, opacity: callout });
+        if (!own && !short) text(g, `(the numbers shown are for cell ${detail.cell + 1}, a cell like ours)`, tx, yC + 98, { size: 9.5, colour: FAINT, opacity: callout });
         void values;
       }
       const count = phase(p, 0.58, 0.65);
-      if (count > 0) {
+      if (count > 0 && !short) {
         const yN = height - 34;
         const nw = width - tx - 20;
         text(g, `Our cell: ${fc(cell.observed_raw)} of ${fc(pres.rows)} proteins seen`, tx, yN - 8, { size: 12, colour: INK, weight: 600, opacity: count });
@@ -663,168 +754,11 @@ export function genes(el, ctx) {
 
 // ---- 4 is in web/js/scenes-evidence.js ----
 
-// ---- 5: tidying up a new file ----
-// Beat 1: our cell's amounts on an ordinary ruler (crowded near zero), then
-// on a ruler that counts doublings (spread out). Beat 2: a gene's two rows
-// joined into one. Beat 3: the rows' names sorted into found, several genes,
-// and not on the list.
-
-export function upload(el, ctx) {
-  const w = ctx.workflow;
-  const raw = w.raw.pbmc240;
-  const r = rng(5);
-  // Found examples: well-known genes, shown only where this file matched
-  // them on the shared list and measured them.
-  const inFile = decodeBits(raw.align.matched_bits, raw.align.feature_space);
-  const found = ['CD3E', 'LYZ', 'HBB', 'CD14', 'MS4A1', 'PKM']
-    .filter((n) => { const hit = geneLookup(w, n); return hit && inFile[hit.index]; }).slice(0, 4);
-  const starts = Array.from({ length: 12 }, () => [r(), r()]);
-  return scene(el, ({ g, width, height }, p, state) => {
-    const narrow = width < 500;
-    const { detail, own } = ctx.detail(state);
-    const values = detail?.observed_values ?? [];
-    const cellNo = (own ? state.cell : detail?.cell ?? 0) + 1;
-
-    // Beat 1: one scale.
-    const one = 1 - phase(p, 0.31, 0.37);
-    if (one > 0 && values.length) {
-      g.save();
-      g.globalAlpha = one;
-      const toLog = phase(p, 0.12, 0.26);
-      text(g, narrow ? `Cell ${cellNo}: ${fc(values.length)} amounts, one dot each` : `Cell ${cellNo}: each dot is one protein amount (${fc(values.length)} of them)`,
-        12, 22, { size: 12, weight: 600, colour: INK, max: width - 24 });
-      const x0 = 24;
-      const x1 = width - 24;
-      const vmax = values[values.length - 1];
-      const lmin = Math.floor(Math.log2(Math.max(1, values[0])));
-      const lmax = Math.ceil(Math.log2(vmax));
-      const lin = (v) => x0 + (v / vmax) * (x1 - x0);
-      const lg = (v) => x0 + ((Math.log2(Math.max(1, v)) - lmin) / (lmax - lmin)) * (x1 - x0);
-      const axisY = height - 110;
-      line(g, x0, axisY, x1, axisY, { colour: INK, width: 1.5 });
-      values.forEach((v, k) => {
-        const jitter = (((k * 37) % 41) / 41) * (axisY - 70);
-        dot(g, lerp(lin(v), lg(v), toLog), axisY - 10 - jitter, 2.2, PROT, 0.55);
-      });
-      // The ruler's marks: ordinary round steps, then doublings (every
-      // other one labelled, every fourth on a narrow screen).
-      ticks(0, vmax, narrow ? 2 : 4).filter((v) => v <= vmax).forEach((v) => {
-        line(g, lin(v), axisY, lin(v), axisY + 6, { colour: INK, opacity: 1 - toLog });
-        text(g, v.toLocaleString('en-US'), lin(v), axisY + 20, { size: 10, colour: SOFT, align: 'center', opacity: 1 - toLog });
-      });
-      const every = narrow ? 4 : 2;
-      for (let k = lmin; k <= lmax; k += 1) {
-        const v = 2 ** k;
-        line(g, lg(v), axisY, lg(v), axisY + 6, { colour: INK, opacity: toLog });
-        if ((k - lmin) % every === 0) text(g, v.toLocaleString('en-US'), lg(v), axisY + 20, { size: 10, colour: SOFT, align: 'center', opacity: toLog });
-      }
-      text(g, toLog < 0.5 ? 'an ordinary ruler: most amounts crowd near zero' : 'counting doublings: each mark is twice the one before',
-        width / 2, axisY + 44, { size: 11.5, colour: INK, align: 'center', weight: 600 });
-      const typical = `typical amount ${raw.scale.median_observed.toLocaleString('en-US')}, all positive`;
-      if (narrow) {
-        text(g, `${typical}:`, width / 2, axisY + 62, { size: 10.5, colour: SOFT, align: 'center', max: width - 24 });
-        text(g, 'raw amounts, so VivOME converts them', width / 2, axisY + 77, { size: 10.5, colour: SOFT, align: 'center', max: width - 24 });
-      } else {
-        text(g, `${typical}: raw amounts, so VivOME converts them`, width / 2, axisY + 64, { size: 10.5, colour: SOFT, align: 'center', max: width - 24 });
-      }
-      if (!own) text(g, `(amounts shown for cell ${cellNo}, a cell like ours)`, width / 2, axisY + (narrow ? 94 : 82), { size: 9.5, colour: FAINT, align: 'center' });
-      g.restore();
-    }
-
-    // Beat 2: one row per gene.
-    const two = phase(p, 0.31, 0.37) * (1 - phase(p, 0.64, 0.7));
-    if (two > 0) {
-      g.save();
-      g.globalAlpha = two;
-      const ex = raw.collapse.examples.slice(0, clamp(Math.floor((height - 84) / 64), 1, 4));
-      text(g, narrow ? 'Genes on two rows, joined into one' : 'Genes that appear on more than one row, joined into one', 12, 22,
-        { size: 12, weight: 600, colour: INK, max: width - 24 });
-      const join = phase(p, 0.4, 0.55);
-      const rowH = Math.min(96, (height - 84) / ex.length);
-      const bx = narrow ? 70 : 100;
-      const bw = width - bx - 12;
-      ex.forEach((e, k) => {
-        const y = 48 + k * rowH;
-        text(g, e.gene, 12, y + 20, { size: 13, weight: 600, colour: INK });
-        text(g, `${e.rows} rows`, 12, y + 36, { size: 10, colour: FAINT, opacity: 1 - join });
-        text(g, '1 row', 12, y + 36, { size: 10, colour: ACCENT, opacity: join });
-        for (let rr = 0; rr < e.rows; rr += 1) {
-          const yy = lerp(y + 4 + rr * 22, y + 15, join);
-          bar(g, bx, yy, bw, 16, rr === 0 ? alpha(PROT, 0.6) : alpha(PROT, 0.35), 3, rr === 0 ? 1 : 1 - join * 0.9);
-          text(g, `row ${rr + 1}`, bx + 8, yy + 12, { size: 9.5, colour: INK, opacity: clamp(1 - join * 2.5, 0, 1) });
-        }
-        text(g, 'one row', bx + 8, y + 27, { size: 9.5, colour: INK, opacity: clamp((join - 0.7) / 0.3, 0, 1) });
-        text(g, narrow ? `cells with a value: ${e.best_single_row_cells}, then ${e.merged_cells}` : `cells with a value: ${e.best_single_row_cells} on its fuller row, ${e.merged_cells} once joined`, bx, y + 54,
-          { size: 10, colour: SOFT, opacity: join, max: bw });
-      });
-      const count = phase(p, 0.55, 0.63);
-      text(g, `${fc(raw.collapse.rows_before)} rows \u2192 ${fc(raw.collapse.rows_after)} rows`, width / 2, height - 14,
-        { size: 15, weight: 700, colour: INK, align: 'center', opacity: count });
-      g.restore();
-    }
-
-    // Beat 3: the names, sorted into three bins.
-    const three = phase(p, 0.64, 0.7);
-    if (three > 0) {
-      g.save();
-      g.globalAlpha = three;
-      const ids = raw.ids;
-      text(g, 'Each row\u2019s name, looked up on the shared list', 12, 22, { size: 12, weight: 600, colour: INK, max: width - 24 });
-      // A two-gene name explains the middle bin: it could be either gene.
-      const pair = ids.ambiguous_examples.find((n) => n.split(';').length === 2);
-      if (pair) {
-        const [a, b2] = pair.split(';');
-        text(g, narrow ? `${pair}: ${a} or ${b2}? No way to tell` : `A name like ${pair} stands for ${a} or ${b2}: VivOME cannot tell which`, 12, 42,
-          { size: 10.5, colour: SOFT, max: width - 24 });
-      }
-      const bins = [
-        { label: 'found on the list', n: ids.matched, colour: ACCENT, names: found },
-        { label: narrow ? 'set aside' : 'names several genes: set aside', n: ids.ambiguous, colour: INK, names: ids.ambiguous_examples.slice(0, 4) },
-        { label: 'not on the list', n: ids.unmapped, colour: '#7C8A95', names: ids.unmapped_examples.slice(0, 4) },
-      ];
-      const bwid = (width - 48) / 3;
-      const binTop = height < 360 ? 56 : 116;
-      const binBottom = height - 36;
-      const countSize = height < 360 ? 16 : 22;
-      const fits = clamp(Math.floor((binBottom - countSize - 30 - (binTop + 22)) / 30) + 1, 0, 4);
-      const maxChars = Math.max(5, Math.floor((bwid - 34) / 5.8));
-      const drop = phase(p, 0.72, 0.9);
-      bins.forEach((b, k) => {
-        const x = 12 + k * (bwid + 12);
-        g.strokeStyle = b.colour;
-        g.lineWidth = 2;
-        g.beginPath();
-        g.moveTo(x, binTop);
-        g.lineTo(x + 8, binBottom);
-        g.lineTo(x + bwid - 8, binBottom);
-        g.lineTo(x + bwid, binTop);
-        g.stroke();
-        text(g, fc(b.n), x + bwid / 2, binBottom - 12, { size: countSize, weight: 700, colour: b.colour, align: 'center', opacity: drop });
-        text(g, b.label, x + bwid / 2, binBottom + 20, { size: 10.5, colour: INK, align: 'center', max: bwid });
-        b.names.slice(0, fits).forEach((name, j) => {
-          const [sx, sy] = starts[k * 4 + j];
-          const startX = 12 + sx * (width - 140);
-          const startY = binTop - 52 + sy * 36;
-          const t2 = clamp(drop * 1.6 - j * 0.15 - k * 0.1, 0, 1);
-          const tx = x + 14;
-          const ty = binTop + 22 + j * 30;
-          const label = name.length > maxChars ? `${name.slice(0, maxChars - 1)}\u2026` : name;
-          chip(g, label, lerp(startX, tx, t2), lerp(startY, ty, t2), { size: 9.5, colour: b.colour, border: b.colour, opacity: clamp(drop * 4, 0, 1) });
-        });
-      });
-      g.restore();
-    }
-  }, {
-    describe: () => `Raw amounts converted to a scale that counts doublings; ${raw.collapse.genes_merged} genes on more than one row joined; ${fc(raw.ids.matched)} names found, ${fc(raw.ids.ambiguous)} set aside, ${fc(raw.ids.unmapped)} not on the list.`,
-    table: () => `<table class="support-table"><tbody>`
-      + `<tr><td>Typical amount in the file</td><td>${escapeHtml(raw.scale.median_observed.toLocaleString('en-US'))}: raw amounts, converted</td></tr>`
-      + `<tr><td>Rows before and after joining</td><td>${fc(raw.collapse.rows_before)}, ${fc(raw.collapse.rows_after)}</td></tr>`
-      + `<tr><td>Names found, set aside, not on the list</td><td>${fc(raw.ids.matched)}, ${fc(raw.ids.ambiguous)}, ${fc(raw.ids.unmapped)}</td></tr>`
-      + `</tbody></table>`,
-  });
-}
-
-// ---- 6: matching and the mask ----
+// ---- 5: fitting the file to the shared list ----
+// Beat 1: the seats, one square per gene: the file's, then our cell's.
+// Beat 2: an empty seat is not a zero: our cell's amounts beside its mask.
+// Beat 3: the minimum, with every cell of the file. Beat 4: each gene
+// compared within the file, from amounts to above or below the average.
 
 export function matching(el, ctx) {
   const w = ctx.workflow;
@@ -842,84 +776,206 @@ export function matching(el, ctx) {
     const vals = hm.log2.flat().filter((v) => v !== null);
     return [Math.min(...vals), Math.max(...vals)];
   })();
+  const fewGenes = cells.map((c, i) => [c, i]).filter(([c]) => c.observed < align.floor);
   return scene(el, ({ g, width, height }, p, state) => {
+    const narrow = width < 560;
     const cell = ctx.cell(state);
     const { detail, own } = ctx.detail(state);
-    const one = 1 - phase(p, 0.31, 0.37);
+    // Our cell's column in the heatmap sample, or the story cell standing in for it.
+    const hmAt = hm.cells.indexOf(state.cell) >= 0 ? hm.cells.indexOf(state.cell) : hm.cells.indexOf(detail?.cell ?? -1);
+    const hmOwn = hm.cells.indexOf(state.cell) >= 0;
+    const swatch = (x, y, colour, label, opacity = 1) => {
+      bar(g, x, y - 9, 11, 11, colour, 2, opacity);
+      g.save();
+      g.globalAlpha *= opacity;
+      g.strokeStyle = LINE;
+      g.strokeRect(x + 0.5, y - 8.5, 10, 10);
+      g.restore();
+      text(g, label, x + 16, y, { size: 10.5, colour: SOFT, opacity });
+      g.save();
+      g.font = `400 10.5px ${FONT}`;
+      const wd = g.measureText(label).width;
+      g.restore();
+      return x + 16 + wd + 14;
+    };
+
+    // Beat 1: the seats.
+    const one = 1 - phase(p, 0.22, 0.27);
     if (one > 0) {
       g.save();
       g.globalAlpha = one;
-      const cols = Math.ceil(Math.sqrt(n * (width / (height - 40))));
-      const size = Math.min((width - 8) / cols, (height - 44) / Math.ceil(n / cols));
-      const fillM = phase(p, 0, 0.16);
-      const fillC = phase(p, 0.14, 0.3);
-      const obs = own ? observedOf(detail) : null;
+      text(g, `VivOME\u2019s ${fc(n)} seats, one square per gene`, 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
+      const fillM = phase(p, 0.02, 0.1);
+      const fillC = phase(p, 0.1, 0.19);
+      let lx = 12;
+      lx = swatch(lx, 40, '#E6E9EC', 'empty');
+      lx = swatch(lx, 40, '#BFD5E6', narrow ? 'in the file' : 'the file has a value', fillM);
+      swatch(lx, 40, ACCENT, narrow ? 'our cell' : 'our cell has a value', fillC);
+      const top = 54;
+      const bottom = height - 30;
+      const cols = Math.ceil(Math.sqrt(n * ((width - 24) / (bottom - top))));
+      const size = Math.min((width - 24) / cols, (bottom - top) / Math.ceil(n / cols));
+      const obs = detail ? observedOf(detail) : null;
       for (let i = 0; i < n; i += 1) {
-        const x = 4 + (i % cols) * size;
-        const y = 36 + Math.floor(i / cols) * size;
-        let colour = '#EEF0F2';
+        const x = 12 + (i % cols) * size;
+        const y = top + Math.floor(i / cols) * size;
+        let colour = '#E6E9EC';
         if (matched[i] && i / n <= fillM) colour = '#BFD5E6';
         if (obs && obs[i] && i / n <= fillC) colour = ACCENT;
         g.fillStyle = colour;
         g.fillRect(x, y, Math.max(0.6, size - 0.6), Math.max(0.6, size - 0.6));
       }
-      text(g, `${fc(n)} genes: grey not in the file, pale blue in the file, blue observed in this cell${own ? '' : ' (recorded for the story runs)'}`, 4, 14, { size: 11, colour: INK, max: width - 8 });
-      text(g, `this cell: ${fc(cell.observed)} observed`, 4, 28, { size: 10.5, colour: FAINT });
+      const counts = narrow
+        ? `file: ${fc(align.matched)} seats; our cell: ${fc(cell.observed)}`
+        : `This file fills ${fc(align.matched)} of the ${fc(n)} seats; our cell (cell ${state.cell + 1}) has a value in ${fc(cell.observed)}.`;
+      text(g, counts, 12, height - 10, { size: 11, colour: INK, opacity: fillC, max: width - 24 });
+      if (!own && detail) text(g, `(seat by seat, shown for cell ${detail.cell + 1}, a cell like ours)`, width - 12, 20, { size: 9.5, colour: FAINT, align: 'right', opacity: fillC });
       g.restore();
     }
-    const two = phase(p, 0.31, 0.37) * (1 - phase(p, 0.64, 0.7));
-    if (two > 0) {
+
+    // Beat 2: an empty seat is not a zero.
+    const two = phase(p, 0.22, 0.27) * (1 - phase(p, 0.47, 0.52));
+    if (two > 0 && hmAt >= 0) {
       g.save();
       g.globalAlpha = two;
-      const max = Math.max(...cells.map((c) => c.observed));
-      const x = (v) => 24 + (v / max) * (width - 48);
-      const mid = height / 2;
-      text(g, 'Observed genes per cell, all runs', 8, 18, { size: 11.5, weight: 600, colour: INK });
-      line(g, 24, mid + 40, width - 24, mid + 40, { colour: LINE });
-      cells.forEach((c, i) => {
-        const jitter = ((i * 37) % 23) - 11;
-        const below = c.observed < align.floor;
-        dot(g, x(c.observed), mid + jitter * 2.4, i === state.cell ? 6 : 3, below ? INK : alpha(ACCENT, 0.6), 1, i === state.cell ? INK : null);
+      text(g, narrow ? 'Our cell: amounts and mask' : 'Our cell, gene by gene: its amounts, and its mask', 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
+      // A mix of measured and empty genes from the marker list.
+      const count = narrow ? 6 : 10;
+      const genesIdx = hm.genes.map((_, r) => r);
+      const filled = genesIdx.filter((r) => hm.mask[hmAt][r]);
+      const empty = genesIdx.filter((r) => !hm.mask[hmAt][r]);
+      const pick = [];
+      while (pick.length < count && (filled.length || empty.length)) {
+        if (filled.length) pick.push(filled.shift());
+        if (pick.length < count && empty.length && pick.length % 3 === 1) pick.push(empty.shift());
+      }
+      pick.sort((a, b) => a - b);
+      const nameW = narrow ? 58 : 86;
+      const cw = Math.min(64, (width - 24 - nameW) / pick.length);
+      const x0 = 12 + nameW;
+      const rh = clamp((height - 190) / 3, 30, 72);
+      const yG = 58;
+      const yA = yG + 14;
+      const yM = yA + rh + 18;
+      const showMask = phase(p, 0.31, 0.38);
+      text(g, 'gene', x0 - 8, yG + 4, { size: 10, colour: FAINT, align: 'right' });
+      text(g, 'amount', x0 - 8, yA + rh * 0.6, { size: 11, colour: INK, align: 'right', weight: 600 });
+      text(g, 'mask', x0 - 8, yM + rh * 0.6, { size: 11, colour: INK, align: 'right', weight: 600, opacity: showMask });
+      pick.forEach((r, k) => {
+        const x = x0 + k * cw;
+        const on = hm.mask[hmAt][r] && hm.log2[hmAt][r] !== null;
+        text(g, hm.genes[r], x + cw / 2, yG + 4, { size: 10, colour: INK, align: 'center', max: cw - 2 });
+        if (on) {
+          const t = (hm.log2[hmAt][r] - log2Range[0]) / (log2Range[1] - log2Range[0] || 1);
+          bar(g, x + 2, yA, cw - 4, rh, sequential(0.2 + 0.8 * t), 4);
+        } else {
+          bar(g, x + 2, yA, cw - 4, rh, '#FFFFFF', 4);
+          g.strokeStyle = LINE;
+          g.strokeRect(x + 2.5, yA + 0.5, cw - 5, rh - 1);
+          text(g, 'empty', x + cw / 2, yA + rh * 0.6, { size: 9.5, colour: FAINT, align: 'center' });
+        }
+        bar(g, x + 2, yM, cw - 4, rh, on ? alpha(ACCENT, 0.15) : BENCH, 4, showMask);
+        text(g, on ? '1' : '0', x + cw / 2, yM + rh * 0.66, { size: 16, weight: 700, colour: on ? ACCENT : INK, align: 'center', opacity: showMask });
       });
-      line(g, x(align.floor), mid - 50, x(align.floor), mid + 46, { colour: INK, dash: [4, 3] });
-      text(g, `floor ${align.floor}`, x(align.floor) + 4, mid - 40, { size: 10.5, colour: INK });
-      for (const v of [0, 500, 1000, 1500, 2000].filter((t) => t <= max)) text(g, String(v), x(v), mid + 56, { size: 9.5, colour: FAINT, align: 'center' });
+      const notes = phase(p, 0.38, 0.45);
+      const yN = yM + rh + 26;
+      text(g, 'Darker means more of that protein.', 12, yN, { size: 11, colour: SOFT, opacity: notes, max: width - 24 });
+      text(g, narrow ? 'Mask 1: measured. Mask 0: not measured.' : 'Mask 1: measured. Mask 0: not measured, so the empty amount is not read as "none".', 12, yN + 20,
+        { size: 11, colour: SOFT, opacity: notes, max: width - 24 });
+      if (!hmOwn) text(g, `(shown for cell ${hm.cells[hmAt] + 1}, a cell like ours)`, 12, yN + 36, { size: 9.5, colour: FAINT, opacity: notes });
       g.restore();
     }
-    const three = phase(p, 0.64, 0.72);
+
+    // Beat 3: the minimum, every cell of the file.
+    const three = phase(p, 0.47, 0.52) * (1 - phase(p, 0.72, 0.77));
     if (three > 0) {
       g.save();
       g.globalAlpha = three;
-      const z = phase(p, 0.74, 0.94);
-      const left = 64;
-      const cw = (width - left - 6) / hm.cells.length;
-      const rh = (height - 52) / hm.genes.length;
-      text(g, z < 0.5 ? 'Log2 values, as merged' : 'Scaled within the upload (mean 0, spread 1)', left, 14, { size: 11.5, weight: 600, colour: INK });
-      hm.genes.forEach((gene, r) => text(g, gene, left - 4, 30 + r * rh + rh * 0.75, { size: Math.min(10, rh * 0.85), align: 'right', colour: INK }));
+      text(g, narrow ? 'Genes with a value, one dot per cell' : `How many genes each cell has values for: one dot per cell, all ${fc(cells.length)}`, 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
+      const max = Math.max(...cells.map((c) => c.observed));
+      const x = (v) => 24 + (v / max) * (width - 48);
+      const mid = height * 0.5;
+      const spread = Math.min(70, height * 0.18);
+      const axisY = mid + spread + 16;
+      line(g, 24, axisY, width - 24, axisY, { colour: INK });
+      ticks(0, max, narrow ? 3 : 5).filter((v) => v <= max).forEach((v) => {
+        line(g, x(v), axisY, x(v), axisY + 5, { colour: INK });
+        text(g, fc(v), x(v), axisY + 18, { size: 10, colour: SOFT, align: 'center' });
+      });
+      text(g, 'genes with a value \u2192', width - 24, axisY + 34, { size: 10.5, colour: INK, align: 'right' });
+      const appear = phase(p, 0.5, 0.6);
+      cells.forEach((c, i) => {
+        if (i / cells.length > appear) return;
+        const jitter = ((((i * 37) % 23) / 22) - 0.5) * 2 * spread;
+        const below = c.observed < align.floor;
+        dot(g, x(c.observed), mid + jitter, i === state.cell ? 6 : 3, below ? INK : alpha(ACCENT, 0.55), 1, i === state.cell ? INK : null);
+      });
+      const floorOp = phase(p, 0.58, 0.64);
+      line(g, x(align.floor), mid - spread - 18, x(align.floor), axisY, { colour: INK, dash: [4, 3], width: 1.5, opacity: floorOp });
+      text(g, `minimum: ${fc(align.floor)}`, x(align.floor) + 6, mid - spread - 8, { size: 11, colour: INK, weight: 600, opacity: floorOp });
+      const me = cells[state.cell];
+      chip(g, `our cell: ${fc(me.observed)}`, Math.min(x(me.observed) + 10, width - 130), mid - spread - 30, { size: 10.5, colour: ACCENT, border: ACCENT, opacity: floorOp });
+      fewGenes.slice(0, 2).forEach(([c, i], k) => {
+        if (i === state.cell) return;
+        chip(g, `cell ${i + 1}: ${fc(c.observed)}, no answer`, x(c.observed) + 8, mid + spread - 6 + k * 24, { size: 10, border: INK, opacity: floorOp });
+      });
+      g.restore();
+    }
+
+    // Beat 4: each gene compared within the file.
+    const four = phase(p, 0.72, 0.77);
+    if (four > 0) {
+      g.save();
+      g.globalAlpha = four;
+      const z = phase(p, 0.8, 0.92);
+      const left = narrow ? 46 : 62;
+      const rows = narrow ? hm.genes.length / 2 : hm.genes.length;
+      const top = 52;
+      const cw = (width - left - 12) / hm.cells.length;
+      const rh = (height - top - 46) / rows;
+      text(g, z < 0.5 ? 'Amounts: rows are genes, columns are cells' : 'Each gene compared with the file\u2019s average cell', 12, 20,
+        { size: 12, weight: 600, colour: INK, max: width - 24 });
+      let lx = 12;
+      if (z < 0.5) {
+        lx = swatch(lx, 40, sequential(0.25), 'less');
+        lx = swatch(lx, 40, sequential(0.95), 'more');
+      } else {
+        lx = swatch(lx, 40, diverging(-2), narrow ? 'below' : 'below average');
+        lx = swatch(lx, 40, diverging(0), 'average');
+        lx = swatch(lx, 40, diverging(2), narrow ? 'above' : 'above average');
+      }
+      g.save();
+      g.globalAlpha *= 1;
+      hatch(g, lx, 31, 11, 11);
+      g.restore();
+      text(g, 'not measured', lx + 16, 40, { size: 10.5, colour: SOFT });
+      hm.genes.slice(0, rows).forEach((gene, r) => text(g, gene, left - 4, top + r * rh + rh * 0.72, { size: Math.min(10, rh * 0.8), align: 'right', colour: INK }));
       hm.cells.forEach((ci, c) => {
-        hm.genes.forEach((_, r) => {
+        for (let r = 0; r < rows; r += 1) {
           const x = left + c * cw;
-          const y = 22 + r * rh;
+          const y = top + r * rh;
           const raw = hm.log2[c][r];
-          if (!hm.mask[c][r] || raw === null) { hatch(g, x, y, cw - 0.8, rh - 0.8); return; }
-          const a = sequential((raw - log2Range[0]) / (log2Range[1] - log2Range[0] || 1));
+          if (!hm.mask[c][r] || raw === null) { hatch(g, x, y, cw - 0.8, rh - 0.8); continue; }
+          const a = sequential(0.2 + 0.8 * (raw - log2Range[0]) / (log2Range[1] - log2Range[0] || 1));
           const b = diverging(hm.z[c][r]);
           g.fillStyle = z < 1 ? (z > 0 ? mixHex(a, b, z) : a) : b;
           g.fillRect(x, y, cw - 0.8, rh - 0.8);
-        });
-        if (ci === state.cell) {
-          g.strokeStyle = INK;
-          g.lineWidth = 2;
-          g.strokeRect(left + c * cw - 1, 21, cw + 1, hm.genes.length * rh + 1);
         }
       });
-      text(g, 'cells (the story runs first); hatched: missing', left, height - 8, { size: 10, colour: FAINT });
+      if (hmAt >= 0) {
+        g.strokeStyle = INK;
+        g.lineWidth = 2;
+        g.strokeRect(left + hmAt * cw - 1, top - 1, cw + 1, rows * rh + 1);
+        text(g, hmOwn ? 'our cell' : `cell ${hm.cells[hmAt] + 1}`, left + hmAt * cw + cw / 2, top + rows * rh + 14, { size: 10, colour: INK, weight: 600, align: hmAt < 3 ? 'left' : 'center' });
+      }
+      text(g, `${hm.cells.length} of the file\u2019s ${fc(cells.length)} cells, and ${rows} marker genes`, width - 12, height - 10,
+        { size: 10, colour: FAINT, align: 'right', max: width - 24 });
       g.restore();
     }
   }, {
-    describe: (state) => `This cell observed ${fc(ctx.cell(state).observed)} of ${fc(n)} genes; the upload measures ${fc(align.matched)}; floor ${align.floor}.`,
-    table: () => `<table class="support-table"><thead><tr><th>Run</th><th>Observed genes</th></tr></thead><tbody>${cells
-      .map((c) => `<tr><td><code>${escapeHtml(c.id)}</code></td><td class="support-num">${fc(c.observed)}</td></tr>`).join('')}</tbody></table>`,
+    describe: (state) => `The file fills ${fc(align.matched)} of ${fc(n)} seats; this cell has values in ${fc(ctx.cell(state).observed)}; cells need at least ${align.floor}; each gene is then compared within the file.`,
+    table: () => `<table class="support-table"><thead><tr><th>Cell</th><th>Genes with a value</th></tr></thead><tbody>${cells
+      .map((c, i) => `<tr><td>Cell ${i + 1}</td><td class="support-num">${fc(c.observed)}</td></tr>`).join('')}</tbody></table>`,
   });
 }
 
@@ -929,9 +985,11 @@ function mixHex(a, b, t) {
   return `rgb(${pa.map((v, i) => Math.round(lerp(v, pb[i], t))).join(',')})`;
 }
 
-// ---- 7: smoothing on the upload's own neighbours ----
-
-const WEAK_CLASS = { 'T cell': 2, 'NK cell': 15, Monocyte: 12, Dendritic: 13, Platelet: 20 };
+// ---- 6: borrowing from similar cells ----
+// Beat 1: the file's cells placed by likeness; our cell linked to its
+// closest matches. Beat 2: before and after the blend, gene by gene.
+// Beat 3: the mask under them, unchanged: an empty seat filled from the
+// matches is still marked not measured.
 
 export function smoothing(el, ctx) {
   const w = ctx.workflow;
@@ -942,59 +1000,92 @@ export function smoothing(el, ctx) {
   const ys = cells.map((c) => c.layout[1]);
   const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
   return scene(el, ({ g, width, height }, p, state) => {
+    const narrow = width < 560;
     const i = state.cell;
-    const rowsShown = phase(p, 0.33, 0.45);
-    const graphH = height * lerp(0.95, 0.6, rowsShown);
-    const sx = (v) => 14 + ((v - x0) / (x1 - x0 || 1)) * (width - 28);
-    const sy = (v) => 14 + (1 - (v - y0) / (y1 - y0 || 1)) * (graphH - 28);
-    const grow = phase(p, 0.06, 0.3);
+    const rows = phase(p, 0.33, 0.43);
+    const graphTop = 44;
+    const graphH = lerp(height - graphTop - 30, (height - graphTop) * (narrow ? 0.26 : 0.42), rows);
+    const sx = (v) => 20 + ((v - x0) / (x1 - x0 || 1)) * (width - 40);
+    const sy = (v) => graphTop + 8 + (1 - (v - y0) / (y1 - y0 || 1)) * (graphH - 16);
+    text(g, narrow ? 'The file\u2019s cells; similar cells sit close' : `The file\u2019s ${fc(cells.length)} cells, placed so that similar cells sit close together`, 12, 20,
+      { size: 12, weight: 600, colour: INK, max: width - 24 });
+    // A key: our cell and its matches.
+    dot(g, 18, 36, 5, PROT, 1, INK);
+    text(g, 'our cell', 28, 40, { size: 10.5, colour: SOFT });
+    dot(g, 96, 36, 4, ACCENT);
+    text(g, `its ${sm.k} closest matches`, 106, 40, { size: 10.5, colour: SOFT });
+    const grow = phase(p, 0.06, 0.26);
     sm.neighbours[i].forEach((j, k) => {
-      const t = clamp(grow * 1.5 - k / sm.neighbours[i].length * 0.5, 0, 1);
+      const t = clamp(grow * 1.5 - (k / sm.neighbours[i].length) * 0.5, 0, 1);
       if (t <= 0) return;
       const ax = sx(cells[i].layout[0]);
       const ay = sy(cells[i].layout[1]);
       line(g, ax, ay, lerp(ax, sx(cells[j].layout[0]), t), lerp(ay, sy(cells[j].layout[1]), t), { colour: ACCENT, width: 0.6 + 7 * sm.weights[i][k], opacity: 0.55 });
     });
     cells.forEach((c, k) => {
-      const cls = WEAK_CLASS[c.weak_label];
-      const colour = cls === undefined ? '#AEB6BD' : ctx.classColour(cls);
-      const isN = sm.neighbours[i].includes(k);
-      dot(g, sx(c.layout[0]), sy(c.layout[1]), k === i ? 7 : isN ? 4 : 2.6, colour, k === i || isN ? 1 : 0.7, k === i ? INK : null);
+      if (k === i) return;
+      const isN = sm.neighbours[i].includes(k) && grow > 0.5;
+      dot(g, sx(c.layout[0]), sy(c.layout[1]), isN ? 4 : 2.6, isN ? ACCENT : '#B7C0C7', isN ? 1 : 0.8);
     });
-    text(g, 'Each dot a run, placed by its proteins; colour: marker-based label (weak)', 8, 12, { size: 10.5, colour: FAINT, max: width - 16 });
-    if (rowsShown > 0) {
-      const at = hm.cells.indexOf(i);
-      const c = at >= 0 ? at : 0;
-      const y = graphH + 8;
-      const left = 124;
-      const cw = (width - left - 8) / hm.genes.length;
-      const rh = Math.min(22, (height - y - 30) / 3.6);
+    dot(g, sx(cells[i].layout[0]), sy(cells[i].layout[1]), 7, PROT, 1, INK);
+    if (rows === 0) text(g, 'Thicker lines: closer matches, which count more.', 12, height - 10, { size: 10.5, colour: SOFT, opacity: grow, max: width - 24 });
+
+    // Beats 2 and 3: before and after the blend, then the mask.
+    if (rows > 0) {
+      const own = hm.cells.indexOf(i) >= 0;
+      const c = own ? hm.cells.indexOf(i) : 0;
+      const r = [...hm.genes.keys()];
+      // A mix: genes our cell measured, and empty ones its matches fill in.
+      const empty = r.filter((k) => !hm.mask[c][k]).sort((a, b) => Math.abs(hm.smoothed[c][b]) - Math.abs(hm.smoothed[c][a]));
+      const count = narrow ? 6 : 12;
+      const pick = [...empty.slice(0, Math.max(2, Math.floor(count / 4))), ...r.filter((k) => hm.mask[c][k])].slice(0, count).sort((a, b) => a - b);
+      const nameW = narrow ? 64 : 96;
+      const cw = Math.min(54, (width - 24 - nameW) / pick.length);
+      const bx = 12 + nameW;
+      const y = graphTop + graphH + 22;
+      const rh = clamp((height - y - 92) / 3, 14, 34);
+      const after = phase(p, 0.45, 0.58);
+      const maskOp = phase(p, 0.7, 0.8);
       g.save();
-      g.globalAlpha = rowsShown;
-      const blend = phase(p, 0.45, 0.62);
-      const rows = [['own value', hm.z[c], 1], ['smoothed', hm.smoothed[c], blend]];
-      rows.forEach(([label, vals, op], r) => {
-        text(g, label, left - 6, y + r * (rh + 6) + rh * 0.7, { size: 10.5, align: 'right', colour: INK, opacity: op });
-        vals.forEach((v, k) => {
-          g.globalAlpha = rowsShown * op;
-          g.fillStyle = diverging(v) ?? BENCH;
-          g.fillRect(left + k * cw, y + r * (rh + 6), cw - 1, rh);
-        });
-        g.globalAlpha = rowsShown;
+      g.globalAlpha = rows;
+      text(g, narrow ? 'our cell, gene by gene' : 'Our cell, gene by gene (colour: above or below the file\u2019s average)', 12, y - 6,
+        { size: 10.5, colour: INK, weight: 600, max: width - 24 });
+      const rowY = [y + 14, y + 14 + rh + 8, y + 14 + 2 * (rh + 8)];
+      text(g, 'before', bx - 8, rowY[0] + rh * 0.66, { size: 10.5, colour: INK, align: 'right' });
+      text(g, 'after', bx - 8, rowY[1] + rh * 0.66, { size: 10.5, colour: INK, align: 'right', opacity: after });
+      text(g, 'mask', bx - 8, rowY[2] + rh * 0.66, { size: 10.5, colour: INK, align: 'right', opacity: maskOp });
+      pick.forEach((k, n) => {
+        const x = bx + n * cw;
+        const on = !!hm.mask[c][k];
+        text(g, hm.genes[k], x + cw / 2, rowY[0] - 4, { size: 9, colour: FAINT, align: 'center', max: cw - 2 });
+        if (on) bar(g, x + 1, rowY[0], cw - 2, rh, diverging(hm.z[c][k]) ?? BENCH, 3);
+        else hatch(g, x + 1, rowY[0], cw - 2, rh);
+        bar(g, x + 1, rowY[1], cw - 2, rh, diverging(hm.smoothed[c][k]) ?? BENCH, 3, after);
+        bar(g, x + 1, rowY[2], cw - 2, rh, on ? alpha(ACCENT, 0.15) : BENCH, 3, maskOp);
+        text(g, on ? '1' : '0', x + cw / 2, rowY[2] + rh * 0.68, { size: 13, weight: 700, colour: on ? ACCENT : INK, align: 'center', opacity: maskOp });
+        if (!on && maskOp > 0) {
+          g.save();
+          g.globalAlpha *= maskOp;
+          g.strokeStyle = PROT;
+          g.lineWidth = 2;
+          g.strokeRect(x, rowY[0] - 1, cw, rowY[2] + rh - rowY[0] + 2);
+          g.restore();
+        }
       });
-      const maskOp = phase(p, 0.7, 0.85);
+      const yN = rowY[2] + rh + 20;
       if (maskOp > 0) {
-        const r = 2;
-        text(g, 'mask (unchanged)', left - 6, y + r * (rh + 6) + rh * 0.7, { size: 10.5, align: 'right', colour: INK, opacity: maskOp });
-        hm.mask[c].forEach((m, k) => bar(g, left + k * cw, y + r * (rh + 6), cw - 1, rh, m ? INK : BENCH, 1, maskOp));
+        text(g, narrow ? 'Green: empty before, now filled; mask still 0.'
+          : 'Green outline: a gene our cell did not measure. It gets a value from its matches, but its mask stays 0.', 12, yN,
+        { size: 10.5, colour: SOFT, opacity: maskOp, max: width - 24 });
+      } else {
+        text(g, 'Hatched: empty before. After: a blend of its own value and its matches\u2019.', 12, yN, { size: 10.5, colour: SOFT, opacity: after, max: width - 24 });
       }
-      hm.genes.forEach((gene, k) => text(g, gene, left + k * cw + cw / 2, y + 3 * (rh + 6) + 10, { size: Math.min(9, cw * 0.32), align: 'center', colour: FAINT, max: cw }));
-      if (at < 0) text(g, `(this run is not in the heatmap sample; showing ${cells[hm.cells[0]].id})`, 8, height - 4, { size: 9.5, colour: FAINT, max: width - 16 });
+      if (!own) text(g, `(gene by gene, shown for cell ${hm.cells[0] + 1}, a cell like ours)`, 12, yN + 16, { size: 9.5, colour: FAINT });
       g.restore();
     }
   }, {
-    describe: (state) => `Run ${ctx.cell(state).id} and its ${sm.k} nearest runs; lines are as thick as their weights.`,
-    table: (state) => `<table class="support-table"><thead><tr><th>Neighbour</th><th>Weight</th></tr></thead><tbody>${sm.neighbours[state.cell]
-      .map((j, k) => `<tr><td><code>${escapeHtml(cells[j].id)}</code></td><td class="support-num">${sm.weights[state.cell][k].toFixed(3)}</td></tr>`).join('')}</tbody></table>`,
+    describe: (state) => `Cell ${state.cell + 1} and its ${sm.k} closest matches in the file; each value becomes ${Math.round((1 - sm.alpha) * 100)}% its own and ${Math.round(sm.alpha * 100)}% its matches'; the mask is unchanged.`,
+    table: (state) => `<table class="support-table"><thead><tr><th>Match</th><th>Weight</th></tr></thead><tbody>${sm.neighbours[state.cell]
+      .map((j, k) => `<tr><td>Cell ${j + 1}</td><td class="support-num">${sm.weights[state.cell][k].toFixed(3)}</td></tr>`).join('')}</tbody></table>`,
   });
 }

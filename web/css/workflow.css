@@ -24,6 +24,30 @@
 }
 .wf-toc a:hover, .wf-toc a.is-current { background: var(--well); color: var(--ink); }
 
+/* ---- the opening: the primer, the map of the parts, how to read ---- */
+
+.wf-primer, .wf-map, .wf-howto { margin: 0 0 32px; }
+.wf-primer h2, .wf-map h2, .wf-howto h2 { margin-bottom: 14px; }
+.wf-primer-grid, .wf-parts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px;
+}
+.wf-primer-card, .wf-part-card { max-width: none; background: var(--bench); border-radius: var(--r-well); padding: 16px 18px; }
+.wf-primer-card h3, .wf-part-card h3 { font-size: 17px; margin: 8px 0 6px; }
+.wf-primer-card p, .wf-part-card p { font-size: 14.5px; line-height: 1.6; margin-bottom: 8px; }
+.wf-icon { width: 44px; height: 44px; display: block; }
+.wf-part-num { font-size: 12.5px; font-weight: 600; color: var(--accent); }
+.wf-map .wf-toc { margin-top: 18px; }
+.wf-howto-list { padding-left: 20px; display: grid; gap: 8px; margin-bottom: 14px; }
+.wf-howto-list li { font-size: 15px; line-height: 1.6; max-width: 72ch; }
+.wf-glossary dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px 24px; margin-top: 12px; }
+.wf-glossary dt { font-weight: 600; font-size: 14.5px; }
+.wf-glossary dd { margin: 2px 0 0; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
 /* ---- the followed cell ---- */
 
 .wf-follow { margin: 0 0 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 36px; }
@@ -46,7 +70,32 @@
 .wf-abstain { color: var(--ink) !important; }
 .wf-pick h3 { margin-bottom: 2px; }
 .wf-pick .caption { margin-bottom: 12px; }
-.wf-chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; margin-bottom: 18px; }
+.wf-pick { position: relative; }
+.wf-outcomes { display: grid; gap: 8px; margin-bottom: 20px; }
+.wf-chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.wf-outcome-group { font-size: 13px; font-weight: 600; color: var(--accent); margin: 6px 0 0; }
+.wf-outcome-group .wf-count { color: var(--ink-faint); font-weight: 400; margin-left: 4px; }
+/* The overlay that says what a result means, above the button pointed at. */
+.wf-tip {
+    position: absolute;
+    z-index: 5;
+    width: max-content;
+    max-width: min(320px, 100%);
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 10px 28px rgba(var(--shade), 0.18), 0 1px 3px rgba(var(--shade), 0.12);
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.wf-tip.is-on { opacity: 1; transform: none; }
+.wf-tip strong { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+@media (prefers-reduced-motion: reduce) { .wf-tip { transition: none; transform: none; } }
 .wf-chip {
     font: inherit;
     font-size: 13.5px;

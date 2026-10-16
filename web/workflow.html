@@ -34,19 +34,133 @@
             <span class="eyebrow">Workflow</span>
             <h1 class="page-title">How VivOME works, start to end</h1>
             <p class="lede">
-                The data, the shared genes, the training, and one cell's path from an uploaded file to its
-                answer. Every number comes from this repository: the cell's numbers are the ones
-                <span data-fact="model_name">&nbsp;</span> computes for the PBMC240 example file.
+                VivOME looks at the proteins measured in a single cell and says what kind of blood cell it is, or says
+                plainly that it cannot tell, and why. This page shows how, one step at a time, following one real
+                cell. You do not need a background in biology or computing: every term is explained as it comes.
             </p>
             <div class="wf-actions">
                 <button class="btn" type="button" data-film="play">Play the whole story</button>
-                <span class="caption">About eight minutes. Space pauses, the arrow keys skip, C turns captions off.</span>
+                <span class="caption">About seven minutes, with captions. Space pauses, the arrow keys skip.</span>
             </div>
             <div id="sync-banner"></div>
-            <nav class="wf-toc" aria-label="Chapters">
+        </div>
+
+        <section class="sheet wf-primer" aria-labelledby="primer-title">
+            <span class="eyebrow">Start here</span>
+            <h2 id="primer-title">The question VivOME answers</h2>
+            <ol class="wf-primer-grid">
+                <li class="wf-primer-card">
+                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="24" fill="#EAF3FA" stroke="#0066A3" stroke-width="2"/><circle cx="36" cy="28" r="9" fill="#C9DDEE"/><circle cx="22" cy="40" r="3" fill="#0066A3" opacity="0.5"/><circle cx="42" cy="44" r="2.5" fill="#0066A3" opacity="0.5"/></svg>
+                    <h3>Every cell has a type</h3>
+                    <p>
+                        Blood holds many kinds of cells: T cells and B cells that fight infection, red cells that carry
+                        oxygen, platelets that help it clot, and more. Knowing which kind a cell is comes first in almost
+                        any study of it.
+                    </p>
+                </li>
+                <li class="wf-primer-card">
+                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 22c6-6 10 6 16 0" fill="none" stroke="#C8641E" stroke-width="3"/><path d="M28 22h8" stroke="#9AA6AF" stroke-width="2"/><path d="M33 18l4 4-4 4" fill="none" stroke="#9AA6AF" stroke-width="2"/><circle cx="48" cy="22" r="7" fill="#2F8F6A"/><circle cx="42" cy="40" r="5" fill="#2F8F6A" opacity="0.7"/><circle cx="54" cy="44" r="4" fill="#2F8F6A" opacity="0.5"/></svg>
+                    <h3>Two ways to read a cell</h3>
+                    <p>
+                        Every cell carries the same genes but switches different ones on. A switched-on gene is copied
+                        into <strong class="wf-rna">RNA</strong>, a working message, which is used to build
+                        <strong class="wf-prot">proteins</strong>, the molecules that do the cell's work.
+                    </p>
+                </li>
+                <li class="wf-primer-card">
+                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="14" width="22" height="16" rx="4" fill="#C8641E"/><text x="17" y="26" font-size="10" text-anchor="middle" fill="#FFFFFF" font-family="Poppins, sans-serif">T</text><rect x="36" y="14" width="22" height="16" rx="4" fill="none" stroke="#2F8F6A" stroke-width="2" stroke-dasharray="3 2"/><text x="47" y="26" font-size="11" text-anchor="middle" fill="#2F8F6A" font-family="Poppins, sans-serif">?</text><circle cx="17" cy="44" r="6" fill="#C8641E" opacity="0.6"/><circle cx="47" cy="44" r="6" fill="#2F8F6A" opacity="0.6"/></svg>
+                    <h3>One side comes with names, the other does not</h3>
+                    <p>
+                        Experts have named the type of tens of thousands of cells measured by their RNA. Protein
+                        measurements of single cells are newer: they catch only the more plentiful proteins, and they
+                        rarely come with names for the cells.
+                    </p>
+                </li>
+                <li class="wf-primer-card">
+                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="14" cy="32" r="8" fill="#2F8F6A" opacity="0.8"/><path d="M24 32h14" stroke="#0066A3" stroke-width="2.5"/><path d="M34 26l6 6-6 6" fill="none" stroke="#0066A3" stroke-width="2.5"/><rect x="42" y="22" width="18" height="20" rx="5" fill="#FFFFFF" stroke="#0066A3" stroke-width="2"/><path d="M46 32l3 3 6-7" fill="none" stroke="#0066A3" stroke-width="2.5"/></svg>
+                    <h3>VivOME's idea</h3>
+                    <p>
+                        Learn what each type looks like from the named RNA cells, then read a protein measurement
+                        through the genes both sides share. When the evidence is too weak to name a type, say so, and
+                        say why.
+                    </p>
+                </li>
+            </ol>
+        </section>
+
+        <section class="sheet wf-map" aria-labelledby="map-title">
+            <span class="eyebrow">The journey at a glance</span>
+            <h2 id="map-title">Four parts, twelve steps</h2>
+            <ol class="wf-parts">
+                <li class="wf-part-card">
+                    <span class="wf-part-num">Part 1 · steps 1 to 4</span>
+                    <h3>What the model learns</h3>
+                    <p>Done once, before anyone sends a file: the data VivOME learns from, what a protein file looks
+                        like, the genes both sides share, and the training.</p>
+                    <a class="chapter-link" href="#part-1">Go to part 1</a>
+                </li>
+                <li class="wf-part-card">
+                    <span class="wf-part-num">Part 2 · steps 5 and 6</span>
+                    <h3>Reading a new file</h3>
+                    <p>A file arrives: its genes are fitted to the shared list, and each cell borrows a little from
+                        similar cells in the same file.</p>
+                    <a class="chapter-link" href="#part-2">Go to part 2</a>
+                </li>
+                <li class="wf-part-card">
+                    <span class="wf-part-num">Part 3 · steps 7 to 11</span>
+                    <h3>The model's judgement</h3>
+                    <p>Each cell becomes a point on a map, then chances for each type, then a best guess and an
+                        answer, or a reason for none.</p>
+                    <a class="chapter-link" href="#part-3">Go to part 3</a>
+                </li>
+                <li class="wf-part-card">
+                    <span class="wf-part-num">Part 4 · step 12</span>
+                    <h3>How we know it works</h3>
+                    <p>Tests on cells whose types are known, a fair contest with other methods, sets kept back until
+                        the end, and the live service.</p>
+                    <a class="chapter-link" href="#part-4">Go to part 4</a>
+                </li>
+            </ol>
+            <nav class="wf-toc" aria-label="Every step">
                 <ol id="toc"></ol>
             </nav>
-        </div>
+        </section>
+
+        <section class="sheet wf-howto" aria-labelledby="howto-title">
+            <span class="eyebrow">How to read this page</span>
+            <h2 id="howto-title">Follow one cell, scroll to play</h2>
+            <ul class="wf-howto-list">
+                <li><strong>One real cell.</strong> Everything below follows one cell from a real file, PBMC240:
+                    <span data-wf="runs">&nbsp;</span> blood cells, each measured on its own. You can switch to
+                    another cell just below.</li>
+                <li><strong>Scroll to play.</strong> When a step reaches the middle of the screen it holds still.
+                    Keep scrolling and its picture plays, one sentence at a time; then the page moves on.</li>
+                <li><strong>Real numbers.</strong> Every number is computed from this project's data, not typed in.
+                    The cell's numbers are the ones <span data-fact="model_name">&nbsp;</span> computes for it.</li>
+                <li><strong>Plain words first.</strong> After each step, a short "In plain words" card sums it up;
+                    "For the curious" boxes hold the technical details.</li>
+            </ul>
+            <details class="wf-more wf-glossary">
+                <summary>Words used on this page</summary>
+                <dl>
+                    <div><dt>Cell type</dt><dd>The kind of cell, such as a B cell or a monocyte.</dd></div>
+                    <div><dt>Gene</dt><dd>An instruction in the DNA. A gene's name also names the RNA and the protein
+                        made from it, so RNA and protein can be lined up gene by gene.</dd></div>
+                    <div><dt>RNA</dt><dd>The working copy of a switched-on gene.</dd></div>
+                    <div><dt>Protein</dt><dd>What a cell builds from RNA: the molecules that do its work.</dd></div>
+                    <div><dt>Mass spectrometer</dt><dd>The machine that measures proteins: it weighs protein
+                        fragments to tell which proteins are there, and how much.</dd></div>
+                    <div><dt>Example cells</dt><dd>The RNA cells with known types that VivOME learned from.</dd></div>
+                    <div><dt>Learner</dt><dd>One trained copy of VivOME's model. Several are trained, and their
+                        views are averaged.</dd></div>
+                    <div><dt>The map</dt><dd>VivOME's picture of cells, where similar cells sit close together.</dd></div>
+                    <div><dt>Mask</dt><dd>A cell's record of which genes were measured (1) and which were not (0).</dd></div>
+                    <div><dt>Best guess</dt><dd>The single likeliest type, given for every cell with enough measured.</dd></div>
+                    <div><dt>Answer</dt><dd>A type, a family or a branch, given only when VivOME is sure enough;
+                        otherwise no answer, with the reason.</dd></div>
+                </dl>
+            </details>
+        </section>
 
         <section class="sheet wf-follow" aria-labelledby="follow-title">
             <div class="wf-follow-head">
@@ -62,8 +176,13 @@
             <div id="cell-card" class="wf-cell" aria-live="polite"></div>
             <div class="wf-pick">
                 <h3>Try a different cell</h3>
-                <p class="caption">Each button picks a cell that ended up with a different result, so you can compare them.</p>
-                <div class="wf-chips" id="outcome-chips" role="group" aria-label="Pick a cell by its result"></div>
+                <p class="caption">
+                    VivOME answers as precisely as it can be sure of, a bit like reading the address on a letter.
+                    Each button picks the first cell with that result, and the number says how many cells got it.
+                    Hover over or tap a button to see what its result means.
+                </p>
+                <div class="wf-outcomes" id="outcome-chips" role="group" aria-label="Pick a cell by its result"></div>
+                <div class="wf-tip" id="outcome-tip" aria-hidden="true" hidden></div>
                 <div class="wf-search">
                     <label for="cell-search">Or pick a cell by its number</label>
                     <input class="well" id="cell-search" type="search" inputmode="numeric" autocomplete="off" aria-describedby="cell-search-hint">
@@ -78,17 +197,19 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">The journey</span>
+                        <span class="eyebrow">The journey in one picture</span>
                         <h2 id="h-open">One cell, start to end</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                Run <code data-cell="id">&nbsp;</code> arrives as one column of a protein report: a
-                                few thousand intensities, many of them blank.
+                                Our cell, cell <span data-cell="number">&nbsp;</span>, arrives as one column of a
+                                protein file: the amounts of a few thousand proteins measured in that one cell, with
+                                blanks where a protein was not seen.
                             </p>
                             <p data-beat>
-                                It leaves with an answer, <strong data-cell="answer">&nbsp;</strong>,
-                                and a best guess, <strong data-cell="guess">&nbsp;</strong>. The chapters below show
-                                each step, and what the model computed for this cell at it.
+                                Step by step, VivOME turns that column into a result. Its answer:
+                                <strong data-cell="answer">&nbsp;</strong>. Its best guess:
+                                <strong data-cell="guess">&nbsp;</strong>. Each stop on the line is a step on this
+                                page.
                             </p>
                         </div>
                     </div>
@@ -99,6 +220,15 @@
                 </div>
             </div>
         </section>
+
+        <div class="wf-part" id="part-1">
+            <span class="eyebrow">Part 1</span>
+            <h2 class="wf-part-title">What the model learns</h2>
+            <p>
+                Before anyone sends a file, VivOME is built once: it gets its examples, a shared list of genes, and its
+                training. These four steps show how.
+            </p>
+        </div>
 
         <!-- 1 -->
         <section class="wf-chapter" id="data" data-chapter="data" aria-labelledby="h-data">
@@ -267,7 +397,7 @@
                             <p data-beat>
                                 Each gene on the shared list gets its own seat, always in the same order. Every file
                                 is read into these same seats, so a seat always means the same gene. A seat stays
-                                empty when a cell's protein was not seen; step 6 shows that for our cell.
+                                empty when a cell's protein was not seen; step 5 shows that for our cell.
                             </p>
                         </div>
                     </div>
@@ -318,39 +448,32 @@
                                 its map. No protein label is used at any point.
                             </p>
                             <p data-beat>
-                                It practises with gaps. Protein files leave most genes blank, so during training most
-                                of each cell's genes are hidden on purpose: it sees only
+                                It practises with most genes hidden. A real protein file has values for only a small
+                                share of the genes: our cell has <span data-cell="observed">&nbsp;</span> of the
+                                <span data-wf="feature_space">&nbsp;</span>. So in practice, most of each example's
+                                genes are hidden on purpose. It sees only
                                 <span data-wf="training.recipe.coverage_low">&nbsp;</span> to
                                 <span data-wf="training.recipe.coverage_high">&nbsp;</span> of them, and must still
-                                recognise the cell. The cells come in mixes like real files:
-                                <span data-wf="training.recipe.natural_share">&nbsp;</span> of the time the natural
-                                mix, otherwise only one to eight kinds of cell.
+                                name the cell.
                             </p>
                             <p data-beat>
                                 Several learners instead of one. The same training is run
                                 <span data-wf="members">&nbsp;</span> times, each from a different random start, so
                                 each learner ends up slightly different. When a new cell arrives, all of them give
-                                their view and VivOME averages them (step 9): a group that agrees is steadier than one.
+                                their view and VivOME averages them (step 8): a group that agrees is steadier than one.
                             </p>
                             <p data-beat>
-                                How we know it learned well. Three designs were each trained
-                                <span data-wf="training.encoder_choice.seeds">&nbsp;</span> times and compared; this
-                                one named <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span>
-                                of test cells correctly, counting every type equally: the best, though not by a wide
-                                margin. And one learner, trained again from scratch on this PC, matched the original
-                                closely.
+                                Did it learn? It was tested on example cells it had never practised on, with most of
+                                their genes hidden. It named
+                                <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span> of
+                                them correctly, counting every type equally. Guessing at random would be right about
+                                once in <span data-wf="classes">&nbsp;</span> tries.
                             </p>
                         </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="training">
                         <div class="wf-canvas" aria-hidden="true"></div>
                         <figcaption class="caption" data-describe></figcaption>
-                        <div class="wf-controls" role="group" aria-label="Mix of cells to draw">
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="0" aria-pressed="true">Natural mix</button>
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="1" aria-pressed="false">1 kind</button>
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="3" aria-pressed="false">3 kinds</button>
-                            <button type="button" class="wf-toggle" data-option="classes" data-value="8" aria-pressed="false">8 kinds</button>
-                        </div>
                     </figure>
                 </div>
             </div>
@@ -364,9 +487,10 @@
                 </p>
                 <p>
                     Hiding genes on purpose is like practising to recognise a song from a few notes: it prepares
-                    VivOME for protein files, where most genes are missing. A random start is simply where a learner
-                    begins before it has learned anything; different starts end in slightly different learners,
-                    which is why several are averaged.
+                    VivOME for protein files, where most genes are missing. Practice batches also come in different
+                    mixes, from a natural blood sample to a single sorted kind of cell, because real files come both
+                    ways. A random start is simply where a learner begins before it has learned anything; different
+                    starts end in slightly different learners, which is why several are averaged.
                 </p>
                 <details class="wf-more">
                     <summary>For the curious: the full training recipe</summary>
@@ -378,12 +502,20 @@
                     <div id="recipe"></div>
                     <h3>The learners</h3>
                     <div id="members"></div>
-                    <h3>The three designs compared</h3>
-                    <div id="encoder-choice"></div>
+                    <h3>Three ways of practising, compared</h3>
                     <p class="panel-note">
-                        Training curves: <span data-wf="training.history">&nbsp;</span>. Error score of the original
-                        learner (seed 1), <span data-wf="training.reproduction.recorded_loss">&nbsp;</span>; trained
-                        again here, <span data-wf="training.reproduction.retrained_loss">&nbsp;</span>.
+                        Before settling on this design, three ways of hiding genes during practice were tried. Each was
+                        trained <span data-wf="training.encoder_choice.seeds">&nbsp;</span> times and tested the same
+                        way. All three scored about the same, so the choice mattered little; the first was kept.
+                    </p>
+                    <div id="encoder-choice"></div>
+                    <h3>The training, repeated</h3>
+                    <p class="panel-note">
+                        To check that the training can be repeated, one learner was trained again from scratch on this
+                        PC. Its error score (how far off it was on practice cells; lower is better) came out nearly the
+                        same: <span data-wf="training.reproduction.recorded_loss">&nbsp;</span> originally,
+                        <span data-wf="training.reproduction.retrained_loss">&nbsp;</span> here. Training curves:
+                        <span data-wf="training.history">&nbsp;</span>.
                     </p>
                 </details>
             </div>
@@ -399,83 +531,36 @@
         </div>
 
         <!-- 5 -->
-        <section class="wf-chapter" id="upload" data-chapter="upload" aria-labelledby="h-upload">
-            <div class="wf-runway">
-                <div class="wf-pin">
-                    <div class="wf-text">
-                        <span class="eyebrow">Part 2 · Reading a new file · Step 5</span>
-                        <h2 id="h-upload">Tidying up a new file</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                First, one scale. The amounts in a raw file run from small to hundreds of times larger,
-                                so most of them crowd near zero. VivOME switches to a scale that counts doublings, where
-                                each step means twice as much, and they spread out evenly. It checks first: here every
-                                value is positive and the typical one is <span data-wf="median_linear">&nbsp;</span>,
-                                well above <span data-wf="scale_threshold">&nbsp;</span>, so these are raw amounts. A
-                                file that is already converted is left as it is.
-                            </p>
-                            <p data-beat>
-                                Next, one row per gene. A few genes appear on more than one row:
-                                <span data-wf="genes_merged">&nbsp;</span> here. Their rows are joined, each cell
-                                keeping the middle of its values, so <span data-wf="rows">&nbsp;</span> rows become
-                                <span data-wf="rows_after_collapse">&nbsp;</span>.
-                            </p>
-                            <p data-beat>
-                                Last, the names. Each row's name is looked up on the shared list:
-                                <span data-wf="ids_matched">&nbsp;</span> are found. <span data-wf="ids_ambiguous">&nbsp;</span>
-                                name several genes at once, so VivOME sets them aside rather than guess, and
-                                <span data-wf="ids_unmapped">&nbsp;</span> are not on the list at all.
-                            </p>
-                        </div>
-                    </div>
-                    <figure class="wf-stage sheet" data-scene="upload">
-                        <div class="wf-canvas" aria-hidden="true"></div>
-                        <figcaption class="caption" data-describe></figcaption>
-                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                        <div class="wf-table" hidden></div>
-                    </figure>
-                </div>
-            </div>
-            <div class="wf-after">
-                <h3>In plain words</h3>
-                <p>
-                    Counting doublings is like a ruler marked 1, 2, 4, 8, 16: each mark is twice the one before, so a
-                    protein with a thousand times more is only about ten marks further along, not off the end of the
-                    page. It lets VivOME compare small and large amounts on an equal footing.
-                </p>
-                <p>
-                    Each gene needs exactly one row, because the model gives each gene one seat (step 3). And some
-                    names cannot be matched: a name that covers several genes could be any of them, and a few rows
-                    are for genes the shared list does not include. These tidy-ups happen to every file, before
-                    VivOME looks at a single cell.
-                </p>
-            </div>
-        </section>
-
-        <!-- 6 -->
         <section class="wf-chapter" id="matching" data-chapter="matching" aria-labelledby="h-matching">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 6</span>
-                        <h2 id="h-matching">Matching and the mask</h2>
+                        <span class="eyebrow">Part 2 · Reading a new file · Step 5</span>
+                        <h2 id="h-matching">Fitting the file to the shared list</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                The upload is laid onto the vocabulary. PBMC240 measures
-                                <span data-wf="matched">&nbsp;</span> of its <span data-wf="feature_space">&nbsp;</span>
-                                genes. Each cell keeps a mask: 1 where it observed a gene, 0 where it did not. This cell
-                                observed <span data-cell="observed">&nbsp;</span>.
+                                VivOME has one seat for each of the <span data-wf="feature_space">&nbsp;</span> genes on
+                                its shared list (step 3). It seats the file's proteins by their gene: this file fills
+                                <span data-wf="matched">&nbsp;</span> seats, and our cell has a value in
+                                <span data-cell="observed">&nbsp;</span> of them. The rest of our cell's seats stay
+                                empty.
                             </p>
                             <p data-beat>
-                                A cell with fewer than <span data-wf="floor">&nbsp;</span> observed genes is refused:
-                                too little is left to read. The median cell here observes
-                                <span data-wf="observed_median">&nbsp;</span>, and
-                                <span data-wf="below_floor">&nbsp;</span> falls below the floor.
+                                An empty seat is not a zero: it means "not measured", not "none there". So beside the
+                                amounts, VivOME keeps a second row for each cell, called a mask: 1 where the cell was
+                                measured, 0 where it was not.
                             </p>
                             <p data-beat>
-                                Each gene is then scaled within the upload: its mean over the upload's cells becomes 0
-                                and its spread 1. A missing value stays 0 with its mask 0, so the model can tell a
-                                missing gene from an average one.
+                                Too little to judge. A cell needs values in at least
+                                <span data-wf="floor">&nbsp;</span> genes to be read. In this file a typical cell has
+                                <span data-wf="observed_median">&nbsp;</span>. Cells that fall short get no answer:
+                                <span data-wf="below_floor">&nbsp;</span> here.
+                            </p>
+                            <p data-beat>
+                                Last, VivOME compares each gene within the file. Machines differ: one may read every
+                                protein brighter than another. So for each gene it asks whether a cell has more or less
+                                than the file's average cell, which gives the same picture whichever machine made the
+                                file.
                             </p>
                         </div>
                     </div>
@@ -487,30 +572,53 @@
                     </figure>
                 </div>
             </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    An empty seat is not a zero. Think of a form where a blank box is marked "not answered" instead of
+                    being filled in with 0: the mask is that mark, so VivOME never mistakes "not measured" for "none".
+                </p>
+                <p>
+                    Comparing within the file works like grading on a curve. Each cell's amount of a gene is read as
+                    above or below the file's typical cell, so a machine that reads everything brighter gives the same
+                    picture as one that reads dimmer.
+                </p>
+                <details class="wf-more">
+                    <summary>For the curious: the numbers behind it</summary>
+                    <p class="panel-note">
+                        For each gene, the file's values are shifted and stretched so that their average is 0 and their
+                        spread is 1 (a z-score). An empty seat is set to 0 with its mask 0, so the model can tell an
+                        empty seat from an average one. The minimum of <span data-wf="floor">&nbsp;</span> genes is
+                        provisional.
+                    </p>
+                </details>
+            </div>
         </section>
 
-        <!-- 7 -->
+        <!-- 6 -->
         <section class="wf-chapter" id="smoothing" data-chapter="smoothing" aria-labelledby="h-smoothing">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 7</span>
-                        <h2 id="h-smoothing">Smoothing on the upload's own neighbours</h2>
+                        <span class="eyebrow">Part 2 · Reading a new file · Step 6</span>
+                        <h2 id="h-smoothing">Borrowing from similar cells</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                Single-cell proteomics is noisy, so each cell borrows from cells like it in the same
-                                upload. The service finds each cell's <span data-wf="smoothing_k">&nbsp;</span> nearest
-                                neighbours from all of the upload's proteins, not only the shared genes, in a
-                                <span data-wf="smoothing_pca">&nbsp;</span>-component summary.
+                                Measuring single cells is noisy: a protein can be missed or misread by chance. So VivOME
+                                lets each cell borrow a little from the cells in the same file that look most like it.
+                                Our cell's <span data-wf="smoothing_k">&nbsp;</span> closest matches are linked to it
+                                here.
                             </p>
                             <p data-beat>
-                                Closer neighbours count more. Each value becomes
-                                <span data-wf="smoothing_own">&nbsp;</span> its own and
-                                <span data-wf="smoothing_alpha">&nbsp;</span> its neighbours' weighted average.
+                                Closer matches count more. Each of our cell's values becomes a blend:
+                                <span data-wf="smoothing_own">&nbsp;</span> its own value and
+                                <span data-wf="smoothing_alpha">&nbsp;</span> the average of its matches, with the
+                                closest matches weighing the most.
                             </p>
                             <p data-beat>
-                                Only the values are smoothed. The mask still records what this cell itself observed:
-                                borrowing signal does not invent a measurement.
+                                Borrowing does not invent a measurement. A seat that was empty for our cell can now get
+                                a value from its matches, but its mask still says 0: VivOME still knows our cell did
+                                not measure that gene.
                             </p>
                         </div>
                     </div>
@@ -522,31 +630,58 @@
                     </figure>
                 </div>
             </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    It is like asking a few people who saw the same thing: one may misremember a detail, but several
+                    similar accounts steady the story. VivOME borrows only from cells in the same file, and only from
+                    the ones most like our cell, so a cell is never blended with cells of a different kind.
+                </p>
+                <details class="wf-more">
+                    <summary>For the curious: how the matches are found</summary>
+                    <p class="panel-note">
+                        The matches are found from all of the file's proteins, not only the shared genes, in a summary
+                        of <span data-wf="smoothing_pca">&nbsp;</span> numbers per cell. Each blended value is
+                        <span data-wf="smoothing_own">&nbsp;</span> the cell's own and
+                        <span data-wf="smoothing_alpha">&nbsp;</span> its matches' weighted average; the weights favour
+                        the closest matches. The table under the figure lists our cell's matches and their weights.
+                    </p>
+                </details>
+            </div>
         </section>
 
-        <!-- 8 -->
+        <div class="wf-part" id="part-3">
+            <span class="eyebrow">Part 3</span>
+            <h2 class="wf-part-title">The model's judgement</h2>
+            <p>
+                The file is ready. Now the learners read our cell and decide what it is, or explain why they will not
+                say.
+            </p>
+        </div>
+
+        <!-- 7 -->
         <section class="wf-chapter" id="encoder" data-chapter="encoder" aria-labelledby="h-encoder">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 8</span>
-                        <h2 id="h-encoder">The encoder pass</h2>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 7</span>
+                        <h2 id="h-encoder">Turning the cell into a point on the map</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                Each encoder reads <span data-wf="input_width">&nbsp;</span> numbers per cell: the
-                                <span data-wf="genes">&nbsp;</span> smoothed values, the <span data-wf="genes">&nbsp;</span>
-                                mask flags, and for each of the <span data-wf="modules">&nbsp;</span> modules the mean of
-                                its observed genes and the share observed.
+                                The learners from step 4 now read our cell. Each one takes in
+                                <span data-wf="input_width">&nbsp;</span> numbers: the cell's
+                                <span data-wf="genes">&nbsp;</span> values, its <span data-wf="genes">&nbsp;</span>
+                                mask marks, and two summaries for each of <span data-wf="modules">&nbsp;</span> groups
+                                of genes that tend to work together.
                             </p>
                             <p data-beat>
-                                Two layers of <span data-wf="hidden1">&nbsp;</span> and <span data-wf="hidden2">&nbsp;</span>
-                                units narrow this to <span data-wf="latent">&nbsp;</span> numbers, scaled to length 1:
-                                the cell becomes a point on a sphere. One encoder has
-                                <span data-wf="parameters">&nbsp;</span> weights.
+                                Step by step, each learner squeezes those numbers down to just
+                                <span data-wf="latent">&nbsp;</span>. Those numbers are the cell's position on VivOME's
+                                map, a bit like an address: cells of the same type get nearby addresses.
                             </p>
                             <p data-beat>
-                                <span data-wf="members">&nbsp;</span> encoders do this side by side. One of them, seed
-                                4, also places the cell in the atlas.
+                                All <span data-wf="members">&nbsp;</span> learners do this side by side, so our cell gets
+                                one position from each. One of them also draws the shared map you will see in step 11.
                             </p>
                         </div>
                     </div>
@@ -556,133 +691,168 @@
                     </figure>
                 </div>
             </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    Squeezing thousands of numbers into a short address is like describing a person by a few telling
+                    features instead of every detail: the learners kept only what helps tell cell types apart, which
+                    is what they practised in step 4.
+                </p>
+                <details class="wf-more">
+                    <summary>For the curious: inside a learner</summary>
+                    <p class="panel-note">
+                        Each learner is a neural network: its layers narrow the
+                        <span data-wf="input_width">&nbsp;</span> inputs to <span data-wf="hidden1">&nbsp;</span>, then
+                        <span data-wf="hidden2">&nbsp;</span>, then <span data-wf="latent">&nbsp;</span> numbers, which
+                        are scaled to length 1, so every cell becomes a point on the surface of a sphere. A learner has
+                        <span data-wf="parameters">&nbsp;</span> adjustable numbers, all set during training.
+                    </p>
+                </details>
+            </div>
         </section>
 
-        <!-- 9 -->
+        <!-- 8 -->
         <section class="wf-chapter" id="probabilities" data-chapter="probabilities" aria-labelledby="h-probabilities">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 9</span>
-                        <h2 id="h-probabilities">From a point to probabilities</h2>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 8</span>
+                        <h2 id="h-probabilities">Which types is our cell close to?</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                Each type has a centre on the same sphere, the average point of its reference cells.
-                                The closer the cell's point is to a centre, the higher its cosine with it.
+                                Each of the <span data-wf="classes">&nbsp;</span> types has a home on the map: the
+                                middle of its example cells. Each learner measures how close our cell sits to every
+                                home.
                             </p>
                             <p data-beat>
-                                Each encoder turns its cosines into probabilities with a softmax at its own
-                                temperature, fitted on held-out RNA cells. A lower temperature makes them sharper.
+                                Each learner then turns closeness into chances that add up to 100%, giving most of the
+                                chance to the nearest homes.
                             </p>
                             <p data-beat>
-                                The five encoders' probabilities are averaged. The answer is built from this mean.
+                                The <span data-wf="members">&nbsp;</span> learners' chances are averaged into one. The
+                                rest of the answer is built on this average.
                             </p>
                         </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="probabilities">
                         <div class="wf-canvas" aria-hidden="true"></div>
                         <figcaption class="caption" data-describe></figcaption>
-                        <div class="wf-controls" role="group" aria-label="Encoder to show">
-                            <button type="button" class="wf-toggle" data-option="member" data-value="-1" aria-pressed="true">Mean</button>
-                            <button type="button" class="wf-toggle" data-option="member" data-value="0" aria-pressed="false">Seed 0</button>
-                            <button type="button" class="wf-toggle" data-option="member" data-value="1" aria-pressed="false">Seed 1</button>
-                            <button type="button" class="wf-toggle" data-option="member" data-value="2" aria-pressed="false">Seed 2</button>
-                            <button type="button" class="wf-toggle" data-option="member" data-value="3" aria-pressed="false">Seed 3</button>
-                            <button type="button" class="wf-toggle" data-option="member" data-value="4" aria-pressed="false">Seed 4</button>
-                        </div>
-                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
-                        <div class="wf-table" hidden></div>
-                    </figure>
-                </div>
-            </div>
-        </section>
-
-        <!-- 10 -->
-        <section class="wf-chapter" id="guess" data-chapter="guess" aria-labelledby="h-guess">
-            <div class="wf-runway">
-                <div class="wf-pin">
-                    <div class="wf-text">
-                        <span class="eyebrow">Step 10</span>
-                        <h2 id="h-guess">The best guess</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                Every cell with enough genes also gets a best guess, even when its answer stops short.
-                                It joins two views: the encoders' probability, and the cell's correlation with each
-                                type's average profile over the genes it measured.
-                            </p>
-                            <p data-beat>
-                                For protein uploads, <span data-fact="model_name">&nbsp;</span> takes that correlation
-                                with protein averages from sorted immune cells (Rieckmann et al. 2017) for the
-                                <span data-wf="protein_classes">&nbsp;</span> types they cover, and with the RNA averages
-                                for the rest.
-                            </p>
-                            <p data-beat>
-                                The correlation counts only when it carries signal: when at least
-                                <span data-wf="agreement_threshold">&nbsp;</span> of an upload's cells have the same top
-                                type under it as under the encoders. In PBMC240, <span data-wf="agreeing">&nbsp;</span>
-                                of <span data-wf="counted">&nbsp;</span> cells agree (<span data-wf="agreement">&nbsp;</span>),
-                                so here the term is flat and the guess is the encoders'.
-                            </p>
-                            <p data-beat>
-                                Where the term is used, the encoders weigh <span data-wf="weight_used">&nbsp;</span>;
-                                where it is flat, <span data-wf="weight_flat">&nbsp;</span> against a flat term. In 240
-                                simulated uploads it was used in <span data-wf="evaluation.uploads.used">&nbsp;</span>.
-                                On Fulcher 2026, development data, the protein averages changed balanced accuracy by
-                                <span data-fact="fulcher_vs_previous">&nbsp;</span> against the previous release.
-                            </p>
-                        </div>
-                    </div>
-                    <figure class="wf-stage sheet" data-scene="guess">
-                        <div class="wf-canvas" aria-hidden="true"></div>
-                        <figcaption class="caption" data-describe></figcaption>
-                        <div class="wf-controls" role="group" aria-label="Correlation to show">
-                            <button type="button" class="wf-toggle" data-option="means" data-value="protein" aria-pressed="true">Protein averages</button>
-                            <button type="button" class="wf-toggle" data-option="means" data-value="rna" aria-pressed="false">RNA averages</button>
-                        </div>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
                     </figure>
                 </div>
             </div>
             <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    It is like asking five people to point to where a stranger is from: each points a little
+                    differently, and the average of their answers is steadier than any single one.
+                </p>
                 <details class="wf-more">
-                    <summary>This cell's three views</summary>
+                    <summary>For the curious: closeness and chances</summary>
+                    <p class="panel-note">
+                        Closeness is the cosine between the cell's point and each type's centre. Each learner turns its
+                        cosines into chances with a softmax at its own sharpness (its temperature), fitted on RNA cells
+                        it had not trained on. The table under the figure lists the average chance for every type.
+                    </p>
+                </details>
+            </div>
+        </section>
+
+        <!-- 9 -->
+        <section class="wf-chapter" id="guess" data-chapter="guess" aria-labelledby="h-guess">
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 9</span>
+                        <h2 id="h-guess">The best guess</h2>
+                        <div class="wf-beats">
+                            <p data-beat>
+                                Even when VivOME will not give an answer (step 10), it still names the single most
+                                likely type: its best guess. For our cell that is
+                                <span data-cell="guess">&nbsp;</span>.
+                            </p>
+                            <p data-beat>
+                                It also asks for a second opinion: it compares the proteins our cell measured with the
+                                typical protein levels of known cell types, measured in sorted immune cells (Rieckmann
+                                et al. 2017). The more our cell's pattern rises and falls with a type's, the better
+                                they match.
+                            </p>
+                            <p data-beat>
+                                The second opinion only counts when it can be trusted: when it agrees with the learners
+                                on at least <span data-wf="agreement_threshold">&nbsp;</span> of the file's cells. Here
+                                it agrees on <span data-wf="agreeing">&nbsp;</span> of
+                                <span data-wf="counted">&nbsp;</span> (<span data-wf="agreement">&nbsp;</span>), so for
+                                this file VivOME goes with the learners.
+                            </p>
+                        </div>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="guess">
+                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    The best guess is what VivOME would say if it had to pick one type. It is always given, but it is
+                    only a guess: step 10 decides whether VivOME is sure enough to give a real answer. The second
+                    opinion is like checking a hunch against a reference book, and only trusting the book when it
+                    mostly agrees with what you already know.
+                </p>
+                <details class="wf-more">
+                    <summary>For the curious: how the guess is made</summary>
+                    <p class="panel-note">
+                        The best guess comes from a newer set of learners than the answer in step 10, so its chances
+                        differ a little from step 8's. Their chances are mixed with the second opinion when it is
+                        trusted (the learners weigh <span data-wf="weight_used">&nbsp;</span>), and otherwise with an
+                        even split over the types (the learners weigh <span data-wf="weight_flat">&nbsp;</span>), which
+                        leaves the learners' top type on top. The protein levels cover
+                        <span data-wf="protein_classes">&nbsp;</span> of the types; for the others the second opinion
+                        uses RNA averages. In practice files the second opinion was trusted in
+                        <span data-wf="evaluation.uploads.used">&nbsp;</span>. On Fulcher 2026, development data, the
+                        protein levels changed the score by <span data-fact="fulcher_vs_previous">&nbsp;</span> against
+                        the previous release.
+                    </p>
                     <div id="guess-table"></div>
                 </details>
             </div>
         </section>
 
-        <!-- 11 -->
+        <!-- 10 -->
         <section class="wf-chapter" id="answer" data-chapter="answer" aria-labelledby="h-answer">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 11</span>
-                        <h2 id="h-answer">The answer, or the reason</h2>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 10</span>
+                        <h2 id="h-answer">The answer, or the reason for none</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                The answer starts from a set: every type whose probability clears its own bar. Each bar
-                                was fitted on simulated RNA uploads to hold the true type
-                                <span data-wf="target_coverage">&nbsp;</span> of the time; on protein that holds only
-                                roughly. The best guess joins any set that is not empty.
+                                VivOME only names a type when it is sure enough. Each type has its own bar to clear,
+                                set so that the true type clears it <span data-wf="target_coverage">&nbsp;</span> of
+                                the time in tests on RNA cells. The types that clear their bars make a shortlist, and
+                                the likeliest type joins any shortlist that is not empty.
                             </p>
                             <p data-beat>
-                                Then a ladder. A cell with too few genes is refused first. Next, a cell unlike any
-                                reference cell: when its similarity to the nearest one, averaged over the encoders,
-                                falls below <span data-wf="ood_threshold">&nbsp;</span>, it is outside the reference.
+                                Two checks come first. Was enough measured (at least
+                                <span data-wf="floor">&nbsp;</span> genes, step 5)? And does the cell resemble anything
+                                VivOME learned from? A cell too unlike every example cell gets no answer rather than a
+                                forced one.
                             </p>
                             <p data-beat>
-                                A set of one type is the answer. A set of several gives the group they share, or the
-                                lineage, and a set that shares neither is ambiguous: the cell is not given a type.
+                                Then the shortlist decides. One type: VivOME names it. Several types in one family: it
+                                names the family. Several families in one branch: the branch. Types from different
+                                branches, or an empty shortlist: no answer.
                             </p>
                             <p data-beat>
-                                In PBMC240, <span data-wf="committed">&nbsp;</span> of <span data-wf="runs">&nbsp;</span>
-                                cells get an answer (<span data-wf="committed_share">&nbsp;</span>):
-                                <span data-wf="outcome_class">&nbsp;</span> a type, <span data-wf="outcome_group">&nbsp;</span>
-                                a group and <span data-wf="outcome_lineage">&nbsp;</span> a lineage.
-                                <span data-wf="outcome_ambiguous_between_classes">&nbsp;</span> are ambiguous,
-                                <span data-wf="outcome_outside_supported_region">&nbsp;</span> are outside the reference,
-                                and <span data-wf="outcome_coverage_too_low">&nbsp;</span> has too few genes.
+                                Across the whole file, <span data-wf="committed">&nbsp;</span> of
+                                <span data-wf="runs">&nbsp;</span> cells got an answer: <span data-wf="outcome_class">&nbsp;</span>
+                                named as one type, <span data-wf="outcome_group">&nbsp;</span> narrowed to a family and
+                                <span data-wf="outcome_lineage">&nbsp;</span> to a branch. The rest got none, each with
+                                its reason.
                             </p>
                         </div>
                     </div>
@@ -695,85 +865,115 @@
                 </div>
             </div>
             <div class="wf-after">
-                <div id="ladder"></div>
+                <h3>In plain words</h3>
+                <p>
+                    VivOME would rather say less than say something wrong. When it is not sure of the exact type, it
+                    steps back to the family or the branch, like saying "a bird" when you cannot tell which bird. And
+                    when it cannot say even that, it says why, so you know whether to measure more or look closer.
+                </p>
                 <details class="wf-more">
-                    <summary>Every outcome, and the hierarchy</summary>
+                    <summary>For the curious: the full decision, step by step</summary>
+                    <div id="ladder"></div>
                     <div id="outcome-table"></div>
                     <div id="tree"></div>
                 </details>
             </div>
         </section>
 
-        <!-- 12 -->
+        <!-- 11 -->
         <section class="wf-chapter" id="landing" data-chapter="landing" aria-labelledby="h-landing">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 12</span>
-                        <h2 id="h-landing">Where the cell lands</h2>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 11</span>
+                        <h2 id="h-landing">Where the cell lands on the map</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                The point from encoder seed 4 is projected onto the atlas's three axes, the projection
-                                that draws the reference, so the cell lands among the reference cells it resembles.
+                                This is VivOME's map. Each small dot is one of the example cells it learned from,
+                                coloured by its type; cells of the same type sit together. You can drag the map to
+                                turn it.
                             </p>
                             <p data-beat>
-                                Its <span data-wf="transfer_k">&nbsp;</span> nearest reference cells lend it continuous
-                                properties, such as ribosome content: an average weighted by similarity, reported with
-                                its spread.
+                                The file's cells now drop onto the map, each at the position step 7 gave it. Our cell
+                                lands among the example cells it most resembles, and is linked to its
+                                <span data-wf="transfer_k">&nbsp;</span> nearest ones.
                             </p>
                             <p data-beat>
-                                Everything the cell gets comes back as JSON. Below is the response the service sends
-                                for this run, exactly.
+                                Those neighbours also tell VivOME what our cell is likely doing, such as how hard it is
+                                making new proteins, each with a plus-or-minus spread. All of it goes back to the
+                                researcher as a small results file, shown below.
                             </p>
                         </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="landing">
                         <div class="wf-canvas wf-drag" aria-hidden="true"></div>
                         <figcaption class="caption" data-describe></figcaption>
-                        <div class="wf-controls" role="group" aria-label="Colour points by">
-                            <button type="button" class="wf-toggle" data-option="colour" data-value="class" aria-pressed="true">Type</button>
-                            <button type="button" class="wf-toggle" data-option="colour" data-value="modality" aria-pressed="false">RNA or protein</button>
+                        <div class="wf-controls" role="group" aria-label="Colour the dots by">
+                            <button type="button" class="wf-toggle" data-option="colour" data-value="class" aria-pressed="true">Colour by type</button>
+                            <button type="button" class="wf-toggle" data-option="colour" data-value="modality" aria-pressed="false">Examples or file</button>
                         </div>
                     </figure>
                 </div>
             </div>
             <div class="wf-after">
-                <details class="wf-more" open>
-                    <summary>This cell's response</summary>
+                <h3>In plain words</h3>
+                <p>
+                    The map is where everything comes together: example cells, the file's cells and our cell, in one
+                    place. Where a cell lands shows what it resembles, and its neighbours lend it a few more clues
+                    about its state. The answer, the reason for no answer, the best guess, the position and these clues
+                    all go back in the results file.
+                </p>
+                <details class="wf-more">
+                    <summary>For the curious: our cell's results file</summary>
+                    <p class="panel-note">
+                        This is exactly what the service sends back for our cell, in a format called JSON. The
+                        clues are averages over the nearest example cells, weighted by how alike they are, with their
+                        spread.
+                    </p>
                     <div id="response-json"></div>
                 </details>
             </div>
         </section>
 
-        <!-- 13 -->
+        <div class="wf-part" id="part-4">
+            <span class="eyebrow">Part 4</span>
+            <h2 class="wf-part-title">How we know it works</h2>
+            <p>
+                That is the whole journey of one cell. The last step shows how VivOME was tested, and how anyone can
+                send it a file today.
+            </p>
+        </div>
+
+        <!-- 12 -->
         <section class="wf-chapter" id="results" data-chapter="results" aria-labelledby="h-results">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Step 13</span>
-                        <h2 id="h-results">How the results were calculated, and new data today</h2>
+                        <span class="eyebrow">Part 4 · How we know it works · Step 12</span>
+                        <h2 id="h-results">Testing VivOME, and using it today</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                First, simulated uploads: reference cells held out from training, masked like real
-                                proteomics and mixed into uploads of known make-up. Answers were right
-                                <span data-fact="eval_rna_correct">&nbsp;</span> of the time when given, and
-                                <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
+                                First, practice files. We built test files from RNA example cells VivOME had never
+                                trained on, hid most genes as in a protein file, and checked every answer. When VivOME
+                                gave an answer it was right <span data-fact="eval_rna_correct">&nbsp;</span> of the
+                                time; <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
                             </p>
                             <p data-beat>
-                                Second, the benchmark: every method gets the same reference, genes and scoring, and
-                                each gap is tested by a paired bootstrap that resamples cells and rescores both
-                                methods. On Fulcher 2026 the best guess scores
-                                <span data-fact="fulcher_current">&nbsp;</span> balanced accuracy, in-sample.
+                                Second, a real protein file with known types, Fulcher 2026. Every method got the same
+                                examples, the same genes and the same scoring. VivOME's best guess named
+                                <span data-fact="fulcher_current">&nbsp;</span> correctly, counting every type equally.
+                                This file was also used while building VivOME, so it is not a fully independent test.
                             </p>
                             <p data-beat>
-                                Third, an internal held-out test: six sets put aside before development and scored
-                                once. It passed on held-out donors of another blood atlas and on a T-cell line beside
-                                HeLa, failed on two sets, and two were void. It is internal, never external validation.
+                                Third, six test sets were locked away before building started and opened once, at the
+                                end. Two passed, two failed, and two could not be scored. This is our own test, not a
+                                check by an outside group.
                             </p>
                             <p data-beat>
-                                And new data today: the <a href="project.html">project page</a> sends a file to the
-                                live service on Google Cloud Run. It wakes from zero, runs every step above on up to
-                                <span data-wf="service.max_cells">&nbsp;</span> cells, and returns JSON.
+                                And today, anyone can send a file from the <a href="project.html">project page</a>. It
+                                goes to VivOME's service on Google Cloud Run, which wakes up, runs every step on this
+                                page on up to <span data-wf="service.max_cells">&nbsp;</span> cells, and sends the
+                                answers back.
                             </p>
                         </div>
                     </div>
@@ -786,14 +986,20 @@
                 </div>
             </div>
             <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    Three kinds of test, from easiest to hardest: practice files where we know every answer, a real
+                    file where the types are known, and sets kept aside until the very end. VivOME does well on the
+                    first two and is mixed on the third, and the page shows all of it, including the failures.
+                </p>
                 <details class="wf-more">
-                    <summary>The simulated uploads, by kind</summary>
+                    <summary>For the curious: the practice files, by kind</summary>
                     <div id="scenario-table"></div>
                 </details>
                 <div class="wf-service">
                     <h3>The live service</h3>
                     <div id="service-card"></div>
-                    <button class="btn" type="button" id="ask-service">Ask the live service</button>
+                    <button class="btn" type="button" id="ask-service">Ask the live service if it is awake</button>
                     <p class="caption" id="service-status" aria-live="polite"></p>
                 </div>
             </div>

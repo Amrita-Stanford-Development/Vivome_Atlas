@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { factText } from '../js/panels.js';
 import { CHAPTERS } from '../js/timeline.js';
 import {
-  CLASS_COLOURS, checkSync, decodeBits, formatRecord, geneLookup, recordAt, storyFor, validateWorkflow, wfFact,
+  CLASS_COLOURS, OUTCOME_CHIPS, OUTCOME_LABELS, OUTCOME_NOTES, checkSync, decodeBits, formatRecord, geneLookup, recordAt, storyFor, validateWorkflow, wfFact,
 } from '../js/workflow-data.js';
 import {
   buildCellCard, buildGeneLookup, buildHeldoutCards, buildLadderTrace, buildPbmcTable, buildRawSnippet,
@@ -40,6 +40,13 @@ test('every number slot on the page has a measured value in the real files', () 
     const text = wfFact(workflow, key);
     if (PENDING_ON_PURPOSE.has(key)) assert.match(text, /Pending/, key);
     else assert.ok(!/Pending/.test(text), `data-wf="${key}" reads Pending`);
+  }
+});
+
+test('every result has a button label and a note in plain words', () => {
+  for (const kind of Object.keys(OUTCOME_LABELS)) {
+    assert.ok(OUTCOME_CHIPS[kind], kind);
+    assert.ok(OUTCOME_NOTES[kind] && !OUTCOME_NOTES[kind].includes('\u2014'), kind);
   }
 });
 
