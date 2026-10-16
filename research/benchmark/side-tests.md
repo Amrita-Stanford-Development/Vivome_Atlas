@@ -66,6 +66,15 @@ serve a future test once an upload of one cell type no longer depends on the
 upload's own scaling (run history, entries 35 to 37). Its role is `reserve`
 in `scripts/fetch_public_sets.py` and in the download record.
 
+### Amendment 4, 2026-10-16: the held-out test's protocols
+
+The five protein sets (Tian, PXD021882, PXD043355, PXD073250, PXD046211) are
+scored under `research/benchmark/protocol-heldout.md`, and Hao 2021's
+held-out donors under `research/benchmark/protocol-heldout-hao2021.md`. Both
+were committed before any of their files or cells was read, and their intake
+and scoring scripts were rehearsed on development data or synthetic files
+(run history, entry 42).
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

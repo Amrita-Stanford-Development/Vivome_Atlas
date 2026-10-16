@@ -209,6 +209,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/legacy/v2/README.md` — the previous model (CrossModalNet), kept as a baseline and audit trail
 - `service/model/legacy/v2/provenance.json` — CrossModalNet's training config and headline numbers
 - `service/model/legacy/v2/shared_genes.csv` — CrossModalNet's 2,903-gene feature space
+- `service/tests/test_heldout.py` — the held-out readers, label rules, statistics and guards agree with protocol-heldout.md
 
 ## benchmark/ — fair comparison harness
 
@@ -262,6 +263,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/khoury2026_posthoc_v41_check.py` — v4.1, Phase B: the rule locked on Fulcher, checked once on Khoury 2026 (post-hoc) against v4, v3.1 and the corrected baselines, with a verdict fixed before Phase A
 - `benchmark/khoury2026_posthoc_v51_check.py` — v5.1 (Track H): checked once on Khoury 2026 (post-hoc) against v4.1, v4, v3.1 and the corrected baselines, with the plan's verdict; label-free reproductions first
 - `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
+- `benchmark/heldout_formats.py` — the internal held-out test's readers (MaxQuant, Proteome Discoverer, sage TMT, DIA-NN), written from each deposit's documentation; each format's column names in one place
+- `benchmark/heldout_intake.py` — the internal held-out test's label maps and intake for the five protein sets: uploads, every candidate as served, per-class best-guess probabilities, the baselines' matrix; --rehearse on development or synthetic data
+- `benchmark/heldout_score.py` — the internal held-out test's scoring, once per protein set: each candidate's primary and secondary measures, and the baselines'
+- `benchmark/heldout_hao2021.py` — the internal held-out test's Hao 2021 suite: simulated protein-like uploads of held-out donors, every candidate as served and two baselines, scored once; --rehearse on the development donors
 
 ## scripts/ — build and repository checks
 
@@ -529,6 +534,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/hao_dc_centres/offset.json` — the offset design's probe and swap checks
 - `research/notebooks/ood_candidates.py` — Goal 2, Phase 2c: three out-of-distribution scores against the served one, tuned on scrambled cells and Furtwangler 2025, reported on development cell lines; NO GO
 - `research/notebook-outputs/ood_candidates/summary.json` — those scores' AUROCs, thresholds, false abstention and the foreign development sets, with v4.1's served answers for them
+- `research/benchmark/protocol-heldout.md` — the internal held-out test's protocol for Tian, PXD021882, PXD043355, PXD073250 and PXD046211, written before any of their files was opened, with its rehearsals
+- `research/benchmark/protocol-heldout-hao2021.md` — the internal held-out test's protocol for Hao 2021's held-out donors, written before any of their cells was read, with its rehearsal
+- `research/benchmark/heldout/rehearsals/*.json` — each protein set's rehearsal on development or synthetic data (benchmark/heldout_score.py --rehearse)
+- `research/benchmark/heldout/rehearsals/hao2021.json` — the Hao suite's rehearsal on donors P1 to P4 (benchmark/heldout_hao2021.py --rehearse)
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell

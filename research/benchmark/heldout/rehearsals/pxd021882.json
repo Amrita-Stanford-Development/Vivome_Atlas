@@ -1,0 +1,138 @@
+{
+  "set": "pxd021882",
+  "protocol": "research/benchmark/protocol-heldout.md",
+  "rehearsal": true,
+  "statement": "An internal held-out test, never external validation. Cell lines and tissue cells are outside the blood reference, and the acquisition differs from the reference's protein data.",
+  "headline": "v4.1",
+  "label_map_sha256": "8313f8f6c346440d06628fa0ebd8a3d6e7fb8f55f71eaee6e8e6eed2ea9db5e7",
+  "intake_source": {
+    "dataset": "Rieckmann 2017 (development): B and conventional T populations as pools",
+    "file": "proteinGroups.txt"
+  },
+  "groups": {
+    "T": 32,
+    "B": 8
+  },
+  "candidates": {
+    "v3.1": {
+      "primary": {
+        "statistic": "AUROC of S, B over T",
+        "auroc": 1.0,
+        "p": 0.0001,
+        "n_positive": 8,
+        "n_negative": 32,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "B": {
+            "B": 100.0
+          },
+          "T": {
+            "CD4T": 56.2,
+            "CD8T": 25.0,
+            "B": 9.4,
+            "NK": 6.2,
+            "other": 3.1
+          }
+        },
+        "abstained_pct_by_group": {
+          "B": 0.0,
+          "T": 12.5
+        }
+      }
+    },
+    "v4.1": {
+      "primary": {
+        "statistic": "AUROC of S, B over T",
+        "auroc": 1.0,
+        "p": 0.0001,
+        "n_positive": 8,
+        "n_negative": 32,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "B": {
+            "B": 100.0
+          },
+          "T": {
+            "CD4T": 62.5,
+            "NK": 15.6,
+            "B": 9.4,
+            "CD8T": 9.4,
+            "other": 3.1
+          }
+        },
+        "abstained_pct_by_group": {
+          "B": 0.0,
+          "T": 12.5
+        }
+      }
+    },
+    "v4.2": {
+      "primary": {
+        "statistic": "AUROC of S, B over T",
+        "auroc": 1.0,
+        "p": 0.0001,
+        "n_positive": 8,
+        "n_negative": 32,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "B": {
+            "B": 100.0
+          },
+          "T": {
+            "CD4T": 46.9,
+            "CD8T": 31.2,
+            "B": 9.4,
+            "NK": 9.4,
+            "other": 3.1
+          }
+        },
+        "abstained_pct_by_group": {
+          "B": 0.0,
+          "T": 12.5
+        }
+      }
+    },
+    "v5.2": {
+      "primary": {
+        "statistic": "AUROC of S, B over T",
+        "auroc": 0.9688,
+        "p": 0.0001,
+        "n_positive": 8,
+        "n_negative": 32,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "B": {
+            "B": 100.0
+          },
+          "T": {
+            "CD4T": 43.8,
+            "CD8T": 40.6,
+            "B": 9.4,
+            "other": 3.1,
+            "NK": 3.1
+          }
+        },
+        "abstained_pct_by_group": {
+          "B": 0.0,
+          "T": 15.6
+        }
+      }
+    }
+  },
+  "baselines_secondary": {
+    "correlation": "missing",
+    "pca": "missing"
+  }
+}

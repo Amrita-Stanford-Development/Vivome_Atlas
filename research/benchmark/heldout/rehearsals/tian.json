@@ -1,0 +1,692 @@
+{
+  "set": "tian",
+  "protocol": "research/benchmark/protocol-heldout.md",
+  "rehearsal": true,
+  "statement": "An internal held-out test, never external validation. Cell lines and tissue cells are outside the blood reference, and the acquisition differs from the reference's protein data.",
+  "headline": "v4.1",
+  "label_map_sha256": "82e9f131fb6e4aa4eb6fc61998158d881429758810e53912654f1e36c3933a6e",
+  "intake_source": {
+    "dataset": "Rieckmann 2017 (development)",
+    "file": "proteinGroups.txt"
+  },
+  "groups": {
+    "CD4": 36,
+    "CD8": 16
+  },
+  "candidates": {
+    "v3.1": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 16,
+        "won": 16,
+        "p": 1.5e-05,
+        "void": false,
+        "pass": true,
+        "pair_table": [
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "CM",
+            "cd8_score": -0.607218,
+            "cd4_score": -0.912756,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EM",
+            "cd8_score": 0.44946,
+            "cd4_score": -0.582073,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EMRA",
+            "cd8_score": 0.450294,
+            "cd4_score": -0.019823,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "naive",
+            "cd8_score": -0.906071,
+            "cd4_score": -0.963979,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "CM",
+            "cd8_score": 0.200251,
+            "cd4_score": -0.880284,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EM",
+            "cd8_score": 0.471883,
+            "cd4_score": -0.637377,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EMRA",
+            "cd8_score": 0.452425,
+            "cd4_score": -0.004231,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "naive",
+            "cd8_score": -0.922947,
+            "cd4_score": -0.974119,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "CM",
+            "cd8_score": 0.397739,
+            "cd4_score": -0.919697,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EM",
+            "cd8_score": 0.457218,
+            "cd4_score": -0.747927,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EMRA",
+            "cd8_score": 0.45258,
+            "cd4_score": -0.008521,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "naive",
+            "cd8_score": -0.402943,
+            "cd4_score": -0.807447,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "CM",
+            "cd8_score": -0.021715,
+            "cd4_score": -0.864087,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EM",
+            "cd8_score": 0.459481,
+            "cd4_score": -0.744666,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EMRA",
+            "cd8_score": 0.421147,
+            "cd4_score": -0.009278,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "naive",
+            "cd8_score": -0.926276,
+            "cd4_score": -0.964759,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD4": {
+            "CD4T": 52.8,
+            "B": 25.0,
+            "other": 19.4,
+            "monocyte": 2.8
+          },
+          "CD8": {
+            "NK": 37.5,
+            "CD4T": 25.0,
+            "CD8T": 25.0,
+            "other": 6.2,
+            "B": 6.2
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD4": 27.8,
+          "CD8": 18.8
+        }
+      }
+    },
+    "v4.1": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 16,
+        "won": 16,
+        "p": 1.5e-05,
+        "void": false,
+        "pass": true,
+        "pair_table": [
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "CM",
+            "cd8_score": -0.457422,
+            "cd4_score": -0.67059,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EM",
+            "cd8_score": 0.267581,
+            "cd4_score": -0.462424,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EMRA",
+            "cd8_score": 0.282892,
+            "cd4_score": -0.041201,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "naive",
+            "cd8_score": -0.655747,
+            "cd4_score": -0.700318,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "CM",
+            "cd8_score": 0.089079,
+            "cd4_score": -0.648965,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EM",
+            "cd8_score": 0.291404,
+            "cd4_score": -0.494317,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EMRA",
+            "cd8_score": 0.283655,
+            "cd4_score": -0.030145,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "naive",
+            "cd8_score": -0.666057,
+            "cd4_score": -0.708144,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "CM",
+            "cd8_score": 0.220878,
+            "cd4_score": -0.672762,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EM",
+            "cd8_score": 0.285491,
+            "cd4_score": -0.563104,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EMRA",
+            "cd8_score": 0.284906,
+            "cd4_score": -0.033076,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "naive",
+            "cd8_score": -0.288256,
+            "cd4_score": -0.580811,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "CM",
+            "cd8_score": -0.05546,
+            "cd4_score": -0.639426,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EM",
+            "cd8_score": 0.286572,
+            "cd4_score": -0.563322,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EMRA",
+            "cd8_score": 0.259482,
+            "cd4_score": -0.033411,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "naive",
+            "cd8_score": -0.665469,
+            "cd4_score": -0.700927,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD4": {
+            "CD4T": 52.8,
+            "B": 25.0,
+            "other": 19.4,
+            "DC": 2.8
+          },
+          "CD8": {
+            "NK": 37.5,
+            "CD4T": 25.0,
+            "CD8T": 25.0,
+            "other": 6.2,
+            "B": 6.2
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD4": 27.8,
+          "CD8": 18.8
+        }
+      }
+    },
+    "v4.2": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 16,
+        "won": 16,
+        "p": 1.5e-05,
+        "void": false,
+        "pass": true,
+        "pair_table": [
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "CM",
+            "cd8_score": -0.074464,
+            "cd4_score": -0.883377,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EM",
+            "cd8_score": 0.566666,
+            "cd4_score": -0.58543,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EMRA",
+            "cd8_score": 0.264841,
+            "cd4_score": -0.014972,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "naive",
+            "cd8_score": -0.174438,
+            "cd4_score": -0.98124,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "CM",
+            "cd8_score": 0.384671,
+            "cd4_score": -0.869773,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EM",
+            "cd8_score": 0.393709,
+            "cd4_score": -0.434663,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EMRA",
+            "cd8_score": 0.355972,
+            "cd4_score": -0.002437,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "naive",
+            "cd8_score": -0.566183,
+            "cd4_score": -0.986321,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "CM",
+            "cd8_score": 0.397828,
+            "cd4_score": -0.699391,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EM",
+            "cd8_score": 0.423033,
+            "cd4_score": -0.547866,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EMRA",
+            "cd8_score": 0.268112,
+            "cd4_score": -0.011189,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "naive",
+            "cd8_score": 0.292617,
+            "cd4_score": -0.763104,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "CM",
+            "cd8_score": 0.131482,
+            "cd4_score": -0.822742,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EM",
+            "cd8_score": 0.334316,
+            "cd4_score": -0.546815,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EMRA",
+            "cd8_score": 0.207395,
+            "cd4_score": -0.005172,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "naive",
+            "cd8_score": -0.415515,
+            "cd4_score": -0.980939,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD4": {
+            "CD4T": 72.2,
+            "B": 16.7,
+            "other": 8.3,
+            "monocyte": 2.8
+          },
+          "CD8": {
+            "CD8T": 56.2,
+            "NK": 25.0,
+            "CD4T": 18.8
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD4": 30.6,
+          "CD8": 18.8
+        }
+      }
+    },
+    "v5.2": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 16,
+        "won": 16,
+        "p": 1.5e-05,
+        "void": false,
+        "pass": true,
+        "pair_table": [
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "CM",
+            "cd8_score": -0.087667,
+            "cd4_score": -0.545932,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EM",
+            "cd8_score": 0.339923,
+            "cd4_score": -0.236444,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "EMRA",
+            "cd8_score": 0.217126,
+            "cd4_score": -0.032742,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D01",
+            "state": "naive",
+            "cd8_score": 0.125062,
+            "cd4_score": -0.387477,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "CM",
+            "cd8_score": 0.230482,
+            "cd4_score": -0.518924,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EM",
+            "cd8_score": 0.330838,
+            "cd4_score": -0.28188,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "EMRA",
+            "cd8_score": 0.279338,
+            "cd4_score": -0.029803,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D02",
+            "state": "naive",
+            "cd8_score": 0.165535,
+            "cd4_score": -0.418154,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "CM",
+            "cd8_score": 0.313817,
+            "cd4_score": -0.324538,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EM",
+            "cd8_score": 0.317804,
+            "cd4_score": -0.178083,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "EMRA",
+            "cd8_score": 0.185225,
+            "cd4_score": -0.030447,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D03",
+            "state": "naive",
+            "cd8_score": -0.013637,
+            "cd4_score": -0.299284,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "CM",
+            "cd8_score": 0.000624,
+            "cd4_score": -0.46691,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EM",
+            "cd8_score": 0.296699,
+            "cd4_score": -0.233497,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "EMRA",
+            "cd8_score": 0.233203,
+            "cd4_score": -0.030707,
+            "won": true
+          },
+          {
+            "upload": "rieckmann",
+            "patient": "D04",
+            "state": "naive",
+            "cd8_score": 0.174733,
+            "cd4_score": -0.425393,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD4": {
+            "CD4T": 47.2,
+            "B": 30.6,
+            "other": 11.1,
+            "CD8T": 8.3,
+            "DC": 2.8
+          },
+          "CD8": {
+            "CD8T": 62.5,
+            "NK": 25.0,
+            "B": 12.5
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD4": 52.8,
+          "CD8": 31.2
+        }
+      }
+    }
+  },
+  "baselines_secondary": {
+    "correlation": {
+      "CD4": {
+        "CD4T": 33.3,
+        "other": 33.3,
+        "B": 22.2,
+        "monocyte": 8.3,
+        "DC": 2.8
+      },
+      "CD8": {
+        "other": 50.0,
+        "NK": 31.2,
+        "monocyte": 12.5,
+        "CD4T": 6.2
+      }
+    },
+    "pca": {
+      "CD4": {
+        "CD4T": 47.2,
+        "other": 22.2,
+        "B": 19.4,
+        "monocyte": 8.3,
+        "DC": 2.8
+      },
+      "CD8": {
+        "NK": 43.8,
+        "CD4T": 37.5,
+        "DC": 6.2,
+        "other": 6.2,
+        "B": 6.2
+      }
+    }
+  }
+}

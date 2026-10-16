@@ -1851,6 +1851,50 @@ flags 21-23% of the lines.
 - **Open:** a threshold set on protein data (it would need labelled
   in-reference protein cells to calibrate), or S2 with its own threshold.
 
+### 42. The held-out test's protocols (Goal 2, Phase 0.4), 2026-10-16
+
+**Why:** every part of the internal held-out test needs a committed
+protocol and intake before any of its files is opened (`side-tests.md`,
+amendments 1 and 4).
+
+**What:** one primary comparison per set, pass at p < 0.05 (or a bootstrap
+bound above 0), every candidate scored, v4.1 the headline:
+- **Protein sets** (`research/benchmark/protocol-heldout.md`;
+  `benchmark/heldout_formats.py`, `heldout_intake.py`, `heldout_score.py`),
+  written from the PRIDE and MassIVE records only:
+  - Tian: the CD8 bulk above its CD4 pair on P(CD8T) - P(CD4T), sign test;
+  - PXD021882: AUROC of P(B) - P(T), B pools over T pools;
+  - PXD043355 and PXD073250: AUROC of reference similarity, immune over
+    foreign;
+  - PXD046211: AUROC of P(macrophage) - P(monocytes), PMA over untreated,
+    with failure predicted (entry 33).
+  The per-class probabilities are recomputed with the service's functions
+  and must agree with the served best guess. After unsealing only format
+  fixes are allowed.
+- **Hao 2021's held-out donors** (`research/benchmark/protocol-heldout-hao2021.md`;
+  `benchmark/heldout_hao2021.py`): 108 protein-like uploads; v4.1's
+  per-upload coarse balanced accuracy minus the correlation baseline's,
+  donor-blocked bootstrap, passing if the one-sided 95% lower bound is
+  above 0.
+
+**Rehearsals** (development or synthetic data; records in
+`research/benchmark/heldout/rehearsals/`), v4.1:
+- Tian on Rieckmann's T populations: 16 of 16 pairs won (p 1.5e-05). CD8
+  bulks were guessed CD8 T 25.0% of the time (v5.2 62.5%, baselines 0%).
+- B against T on Rieckmann: AUROC 1.0.
+- Synthetic Proteome Discoverer files from PBMC240 against shuffled cells:
+  0.901.
+- DS18 against shuffled cells: 0.769.
+- SCoPE2 through a synthetic sage file: 0.338, failing as predicted.
+- Hao on donors P1 to P4: v4.1 60.7 against correlation 57.6 (+3.08, lower
+  bound +1.19), v5.2 62.3, v4.2 54.9 (its protein term applied to RNA),
+  PCA kNN 48.0; dendritic-cell recall 7.3 for v4.1.
+
+**What it means:** the readers, label rules, scoring and guards work end to
+end. The sets stay sealed until Phase 3, scored once on the candidates
+frozen by then: v4.1, v4.2 and v5.2, since Phase 2 froze no new one
+(entries 40 and 41).
+
 ---
 
 ## The throughline

@@ -295,7 +295,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("tool", choices=TOOLS)
     parser.add_argument("dataset", choices=baselines_inputs.DATASETS + baselines_inputs.ADDED + POSTHOC
-                        + baselines_inputs.SORTED)
+                        + baselines_inputs.SORTED + baselines_inputs.HELDOUT)
     parser.add_argument("seed", type=int, choices=(0, 1, 2))
     parser.add_argument("--smoke", type=int, default=0, help="development datasets only: subsample N RNA cells")
     parser.add_argument("--posthoc", action="store_true", help="required for Khoury 2026: its runs are post-hoc")
