@@ -1895,6 +1895,47 @@ end. The sets stay sealed until Phase 3, scored once on the candidates
 frozen by then: v4.1, v4.2 and v5.2, since Phase 2 froze no new one
 (entries 40 and 41).
 
+### 43. How much the encoder leans on its training donors (Goal 2, Phase 1.6), 2026-10-16
+
+**Why:** every protein dataset comes from donors the encoder never saw. A
+diagnosis on the reference RNA only; it decides nothing.
+
+**How** (`research/notebooks/donor_heldout.py`; folds fixed before the run):
+Tabula Sapiens's 9 blood donors in three folds of about equal cell counts
+(F1 TSP7, TSP1, TSP25; F2 TSP14, TSP8, TSP27; F3 TSP21, TSP2, TSP10). Per
+fold, one member was retrained with the served recipe on the other donors.
+It was scored on test cells under Fulcher's mask, in 500-cell uploads, by
+nearest class centroid, over the classes with at least 20 test cells on
+both sides.
+
+| Fold | Classes | Unseen donors | Seen donors | Gap |
+|---|---|---|---|---|
+| F1 | 11 | 58.7 | 65.2 | 6.5 |
+| F2 | 6 | 35.6 | 57.7 | 22.2 |
+| F3 | 13 | 63.0 | 63.6 | 0.6 |
+
+Mean gap 9.8 points of balanced accuracy.
+
+**Where the gap is:**
+- **F1:** the generic "monocyte" class falls from 89.7% recall on seen
+  donors to 3.7% on unseen ones, and "classical monocyte" from 50.9 to
+  23.8.
+- **F2** (without its largest donor, TSP14): plasma cells 100 to 60.5,
+  neutrophils 96.0 to 61.4, CD8 T 45.4 to 20.0.
+- **F3** is nearly level.
+
+**Results:** `research/notebook-outputs/donor_heldout/summary.json`.
+
+**What it means:**
+- **Part of what the encoder learned is the donors.** A new donor costs about
+  10 points on RNA before any change of technology, and up to 22 in one
+  fold.
+- **Some classes are a donor's annotation more than a cell type.** "Monocyte"
+  against "classical monocyte" is one example: which one a monocyte gets
+  depends on who annotated its donor. Merging such classes, or training
+  with donors held out, are options for a future model; this plan does not
+  test them.
+
 ---
 
 ## The throughline

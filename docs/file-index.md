@@ -534,6 +534,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/hao_dc_centres/offset.json` — the offset design's probe and swap checks
 - `research/notebooks/ood_candidates.py` — Goal 2, Phase 2c: three out-of-distribution scores against the served one, tuned on scrambled cells and Furtwangler 2025, reported on development cell lines; NO GO
 - `research/notebook-outputs/ood_candidates/summary.json` — those scores' AUROCs, thresholds, false abstention and the foreign development sets, with v4.1's served answers for them
+- `research/notebooks/donor_heldout.py` — Goal 2, Phase 1.6: one member retrained with each third of the reference's donors held out, scored on unseen against seen donors' test cells (a diagnosis)
+- `research/notebook-outputs/donor_heldout/summary.json` — that diagnosis: per fold, balanced accuracy and per-class recall on unseen and seen donors
 - `research/benchmark/protocol-heldout.md` — the internal held-out test's protocol for Tian, PXD021882, PXD043355, PXD073250 and PXD046211, written before any of their files was opened, with its rehearsals
 - `research/benchmark/protocol-heldout-hao2021.md` — the internal held-out test's protocol for Hao 2021's held-out donors, written before any of their cells was read, with its rehearsal
 - `research/benchmark/heldout/rehearsals/*.json` — each protein set's rehearsal on development or synthetic data (benchmark/heldout_score.py --rehearse)

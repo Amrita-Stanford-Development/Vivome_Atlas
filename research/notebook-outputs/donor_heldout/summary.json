@@ -1,0 +1,267 @@
+{
+  "folds": {
+    "F1": {
+      "held_out_donors": [
+        "TSP7",
+        "TSP1",
+        "TSP25"
+      ],
+      "train_cells": 37247,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "erythrocyte",
+        "monocyte",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "neutrophil",
+        "non-classical monocyte",
+        "plasma cell"
+      ],
+      "best_val_loss": 0.5178194046020508,
+      "epochs_run": 60,
+      "fold_unseen": {
+        "balanced_accuracy": 58.72657687800099,
+        "recall": {
+          "b cell": 98.7,
+          "cd4-positive, alpha-beta t cell": 25.2,
+          "cd8-positive, alpha-beta t cell": 36.8,
+          "classical monocyte": 23.8,
+          "erythrocyte": 97.4,
+          "monocyte": 3.7,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 97.9,
+          "natural killer cell": 63.2,
+          "neutrophil": 96.4,
+          "non-classical monocyte": 3.0,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "served_unseen": {
+        "balanced_accuracy": 62.977871442739996,
+        "recall": {
+          "b cell": 98.4,
+          "cd4-positive, alpha-beta t cell": 47.2,
+          "cd8-positive, alpha-beta t cell": 46.8,
+          "classical monocyte": 71.2,
+          "erythrocyte": 35.0,
+          "monocyte": 34.1,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 97.9,
+          "natural killer cell": 50.6,
+          "neutrophil": 96.4,
+          "non-classical monocyte": 15.2,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "fold_seen": {
+        "balanced_accuracy": 65.21528165833298,
+        "recall": {
+          "b cell": 98.2,
+          "cd4-positive, alpha-beta t cell": 6.8,
+          "cd8-positive, alpha-beta t cell": 36.5,
+          "classical monocyte": 50.9,
+          "erythrocyte": 100.0,
+          "monocyte": 89.7,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 81.2,
+          "natural killer cell": 60.0,
+          "neutrophil": 90.9,
+          "non-classical monocyte": 9.1,
+          "plasma cell": 94.0
+        },
+        "cells": 5000
+      },
+      "served_seen": {
+        "balanced_accuracy": 63.803156461529056,
+        "recall": {
+          "b cell": 100.0,
+          "cd4-positive, alpha-beta t cell": 19.2,
+          "cd8-positive, alpha-beta t cell": 46.6,
+          "classical monocyte": 54.5,
+          "erythrocyte": 60.4,
+          "monocyte": 85.1,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 93.8,
+          "natural killer cell": 60.0,
+          "neutrophil": 84.3,
+          "non-classical monocyte": 0.0,
+          "plasma cell": 98.0
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": 6.488704780331993
+    },
+    "F2": {
+      "held_out_donors": [
+        "TSP14",
+        "TSP8",
+        "TSP27"
+      ],
+      "train_cells": 38704,
+      "classes": [
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "erythrocyte",
+        "neutrophil",
+        "plasma cell"
+      ],
+      "best_val_loss": 0.7652603387832642,
+      "epochs_run": 60,
+      "fold_unseen": {
+        "balanced_accuracy": 35.558408695876004,
+        "recall": {
+          "cd4-positive, alpha-beta t cell": 15.3,
+          "cd8-positive, alpha-beta t cell": 20.0,
+          "classical monocyte": 21.6,
+          "erythrocyte": 34.5,
+          "neutrophil": 61.4,
+          "plasma cell": 60.5
+        },
+        "cells": 5000
+      },
+      "served_unseen": {
+        "balanced_accuracy": 51.092090979462846,
+        "recall": {
+          "cd4-positive, alpha-beta t cell": 23.7,
+          "cd8-positive, alpha-beta t cell": 20.0,
+          "classical monocyte": 14.7,
+          "erythrocyte": 80.8,
+          "neutrophil": 70.0,
+          "plasma cell": 97.4
+        },
+        "cells": 5000
+      },
+      "fold_seen": {
+        "balanced_accuracy": 57.737891124533526,
+        "recall": {
+          "cd4-positive, alpha-beta t cell": 8.6,
+          "cd8-positive, alpha-beta t cell": 45.4,
+          "classical monocyte": 42.5,
+          "erythrocyte": 53.9,
+          "neutrophil": 96.0,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "served_seen": {
+        "balanced_accuracy": 63.95683422763321,
+        "recall": {
+          "cd4-positive, alpha-beta t cell": 25.3,
+          "cd8-positive, alpha-beta t cell": 44.0,
+          "classical monocyte": 64.2,
+          "erythrocyte": 53.5,
+          "neutrophil": 96.7,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": 22.179482428657522
+    },
+    "F3": {
+      "held_out_donors": [
+        "TSP21",
+        "TSP2",
+        "TSP10"
+      ],
+      "train_cells": 34853,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "erythrocyte",
+        "macrophage",
+        "monocyte",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "neutrophil",
+        "non-classical monocyte",
+        "plasma cell",
+        "platelet"
+      ],
+      "best_val_loss": 0.40392231941223145,
+      "epochs_run": 60,
+      "fold_unseen": {
+        "balanced_accuracy": 63.022532302901254,
+        "recall": {
+          "b cell": 99.3,
+          "cd4-positive, alpha-beta t cell": 12.5,
+          "cd8-positive, alpha-beta t cell": 51.8,
+          "classical monocyte": 92.4,
+          "erythrocyte": 48.9,
+          "macrophage": 53.2,
+          "monocyte": 5.6,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 83.3,
+          "natural killer cell": 75.6,
+          "neutrophil": 93.5,
+          "non-classical monocyte": 9.7,
+          "plasma cell": 96.2,
+          "platelet": 97.4
+        },
+        "cells": 5000
+      },
+      "served_unseen": {
+        "balanced_accuracy": 67.35003908616763,
+        "recall": {
+          "b cell": 98.6,
+          "cd4-positive, alpha-beta t cell": 25.8,
+          "cd8-positive, alpha-beta t cell": 39.5,
+          "classical monocyte": 60.0,
+          "erythrocyte": 30.8,
+          "macrophage": 57.7,
+          "monocyte": 80.4,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 90.0,
+          "natural killer cell": 83.2,
+          "neutrophil": 89.6,
+          "non-classical monocyte": 22.6,
+          "plasma cell": 100.0,
+          "platelet": 97.4
+        },
+        "cells": 5000
+      },
+      "fold_seen": {
+        "balanced_accuracy": 63.61529851372948,
+        "recall": {
+          "b cell": 96.6,
+          "cd4-positive, alpha-beta t cell": 28.3,
+          "cd8-positive, alpha-beta t cell": 64.6,
+          "classical monocyte": 96.6,
+          "erythrocyte": 86.3,
+          "macrophage": 17.6,
+          "monocyte": 9.7,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 92.3,
+          "natural killer cell": 28.8,
+          "neutrophil": 92.8,
+          "non-classical monocyte": 13.3,
+          "plasma cell": 100.0,
+          "platelet": 100.0
+        },
+        "cells": 5000
+      },
+      "served_seen": {
+        "balanced_accuracy": 60.01513767097241,
+        "recall": {
+          "b cell": 97.5,
+          "cd4-positive, alpha-beta t cell": 21.9,
+          "cd8-positive, alpha-beta t cell": 52.2,
+          "classical monocyte": 54.6,
+          "erythrocyte": 68.5,
+          "macrophage": 5.9,
+          "monocyte": 53.2,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 100.0,
+          "natural killer cell": 35.1,
+          "neutrophil": 91.2,
+          "non-classical monocyte": 0.0,
+          "plasma cell": 100.0,
+          "platelet": 100.0
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": 0.5927662108282234
+    }
+  },
+  "mean_gap": 9.753651139939246,
+  "seconds": 728
+}
