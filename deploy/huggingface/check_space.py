@@ -29,15 +29,16 @@ FIELDS = ("label", "label_level", "abstained", "abstain_reason")
 
 
 def request(url: str, body: bytes | None = None, content_type: str | None = None) -> tuple[int, dict, dict]:
+    """(status, the answer's headers with lower-case names, as HTTP/2 hosts send them, the JSON body)."""
     headers = {"Origin": ORIGIN}
     if content_type:
         headers["Content-Type"] = content_type
     req = urllib.request.Request(url, data=body, method="POST" if body is not None else "GET", headers=headers)
     try:
         with urllib.request.urlopen(req, timeout=900) as response:
-            return response.status, dict(response.headers), json.loads(response.read())
+            return response.status, {k.lower(): v for k, v in response.headers.items()}, json.loads(response.read())
     except urllib.error.HTTPError as exc:
-        return exc.code, dict(exc.headers), json.loads(exc.read())
+        return exc.code, {k.lower(): v for k, v in exc.headers.items()}, json.loads(exc.read())
 
 
 def post_example(base: str) -> tuple[int, dict, dict, float]:
@@ -56,12 +57,12 @@ def main() -> None:
     print(f"status {status}: {json.dumps(info)}")
     if status != 200:
         raise SystemExit(1)
-    if headers.get("Access-Control-Allow-Origin") != ORIGIN:
+    if headers.get("access-control-allow-origin") != ORIGIN:
         print(f"CORS: {ORIGIN} may not read the answers (Access-Control-Allow-Origin "
-              f"{headers.get('Access-Control-Allow-Origin')!r})")
+              f"{headers.get('access-control-allow-origin')!r})")
     status, headers, remote, seconds = post_example(base)
     print(f"project {status} in {seconds:.1f} s; {remote.get('n_cells')} cells; CORS "
-          f"{headers.get('Access-Control-Allow-Origin') == ORIGIN}")
+          f"{headers.get('access-control-allow-origin') == ORIGIN}")
     if status != 200:
         print(json.dumps(remote))
         raise SystemExit(1)

@@ -65,8 +65,11 @@
         <section class="sheet">
             <h2>Connect to a projection service</h2>
             <p>
-                There is no hosted service yet. This page sends your matrix to a projection
-                service you run yourself, from a clone of the repository, and to nothing else:
+                This page sends your matrix to the hosted projection service, and to nothing else.
+                It runs v4.1 and takes up to 2,000 cells per upload. After a quiet spell the first check
+                can take up to a minute while the service starts. To keep your data on your own machine,
+                run your own copy from a clone of the repository and enter its address below
+                (http://127.0.0.1:8001):
             </p>
             <pre class="well">pip install -r service/requirements.txt
 python -m service.app</pre>
@@ -210,9 +213,9 @@ Content-Type: multipart/form-data
         let serviceReady = false;
         let lastResponse = null;
 
-        // The service this page calls unless the visitor sets another: the one
-        // place to change when a hosted service goes live (deploy/huggingface/).
-        const DEFAULT_SERVICE_URL = 'http://127.0.0.1:8001';
+        // The service this page calls unless the visitor sets another: the hosted
+        // one on Google Cloud Run (deploy/huggingface/PUBLISH.md).
+        const DEFAULT_SERVICE_URL = 'https://vivome-atlas-577083340913.us-central1.run.app';
         // An address the visitor typed is remembered, as a per-visitor
         // convenience; the default is not, so changing it reaches every visitor
         // who never typed one. The page works without storage.

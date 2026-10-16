@@ -4,14 +4,15 @@ The projection service accepts an expression matrix and places its cells into
 the shared latent space. It is the core of the resource claim: an atlas you
 can *send data to*, not only look at.
 
-> **Status: implemented, not hosted.** The pipeline in `service/` runs
+> **Status: implemented and hosted.** The pipeline in `service/` runs
 > end to end against the real reference (`service/model/README.md`), as v4.1
 > by default with v3.1, v4 and v3 selectable ([Pipeline versions](#pipeline-versions)),
-> and is covered by `service/tests/`. `web/project.html` sends an upload to a
-> service the visitor runs locally (`python -m service.app`) and renders
-> the response; there is no hosted service yet (`deploy/huggingface/` packages
-> one). Every value in the schemas below is a placeholder showing the
-> response shape, not a measurement.
+> and is covered by `service/tests/`. It is hosted on Google Cloud Run at
+> `https://vivome-atlas-577083340913.us-central1.run.app` (v4.1 only; `deploy/huggingface/PUBLISH.md`).
+> `web/project.html` sends an upload there by default, or to a service the
+> visitor runs locally (`python -m service.app`), and renders the response.
+> Every value in the schemas below is a placeholder showing the response
+> shape, not a measurement.
 
 ## Contract
 

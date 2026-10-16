@@ -1,4 +1,30 @@
-# Publishing the projection service as a Hugging Face Space
+# Publishing the projection service
+
+The live service runs on **Google Cloud Run** (project `vivome-atlas`, region
+`us-central1`), built from the same staged folder and `Dockerfile` as a
+Hugging Face Space would be. Hugging Face hosts Docker Spaces on its free CPU
+tier only with a PRO subscription, so the Space route below is kept for
+reference.
+
+## Google Cloud Run (live)
+
+Settings: 2 vCPU, 4 GiB, at most 1 instance, scaled to zero when idle (the
+first request after a quiet spell waits while the container starts),
+4 requests per instance, a 300 s timeout, port 7860, public. A budget alert
+(about $5, in the billing account's currency) watches the project.
+
+Each release, from the repository root, with the `gcloud` CLI logged in to
+the project owner's account:
+
+```bash
+python deploy/huggingface/build_space.py
+gcloud run deploy vivome-atlas --source deploy/huggingface/space --region us-central1   --memory 4Gi --cpu 2 --max-instances 1 --min-instances 0 --concurrency 4 --timeout 300   --port 7860 --allow-unauthenticated --cpu-boost --execution-environment gen2
+python deploy/huggingface/check_space.py https://vivome-atlas-577083340913.us-central1.run.app
+```
+
+The check must report `0 differ` before the site points at a new revision.
+
+## Hugging Face Space (reference)
 
 The Space runs `service/` in Docker on Hugging Face's free CPU tier (2 cores,
 16 GB). It serves v4.1, accepts at most 2,000 cells and 200 MB per upload, and

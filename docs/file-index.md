@@ -294,7 +294,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `deploy/huggingface/space_card.md` — the Space's public page, written to the Space as README.md: what the service does, its model, limits and endpoints
 - `deploy/huggingface/build_space.py` — stages the Space in the gitignored folder deploy/huggingface/space: the service package, only the served version's model files (traced by loading the bundle and projecting the PBMC240 example), pinned requirements, Git LFS attributes and a sha256 manifest
 - `deploy/huggingface/check_space.py` — posts the PBMC240 example to a running service as the site does and compares every cell with this repository's own run
-- `deploy/huggingface/PUBLISH.md` — how to publish the Space and point the site at it
+- `deploy/huggingface/PUBLISH.md` — how to publish the service (Google Cloud Run, live; a Hugging Face Space, for reference) and point the site at it
 
 ## docs/ — how the product works
 
