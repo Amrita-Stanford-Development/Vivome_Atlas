@@ -1,0 +1,194 @@
+{
+  "set": "pxd043355",
+  "protocol": "research/benchmark/protocol-heldout.md",
+  "rehearsal": false,
+  "statement": "An internal held-out test, never external validation. Cell lines and tissue cells are outside the blood reference, and the acquisition differs from the reference's protein data.",
+  "headline": "v4.1",
+  "label_map_sha256": "cd08bd1c0433e6a95875481ffd64ca3d35c14d4d3f45ea9040e087733e4d5606",
+  "intake_source": {
+    "inputs_sha256": {
+      "PXD043355/HeLa_VS_Jurkat_Proteins.txt": "d92ee9a8afea6059a4b3c7365a6c94479b9c762bbc79bff1e2b6cbb9290e7598",
+      "PXD043355/HeLa_VS_Jurkat_InputFiles.txt": "204f178cba4dc83d241f553bbdbed9e797f6454756dea97fb569e47d07f848a5"
+    },
+    "label_map_sha256": "cd08bd1c0433e6a95875481ffd64ca3d35c14d4d3f45ea9040e087733e4d5606"
+  },
+  "groups": {
+    "Jurkat": 29,
+    "HeLa": 24
+  },
+  "candidates": {
+    "v3.1": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, Jurkat over HeLa",
+        "auroc": 0.6739,
+        "p": 0.014699,
+        "n_positive": 29,
+        "n_negative": 24,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "Jurkat": {
+            "B": 75.9,
+            "other": 17.2,
+            "CD8T": 3.4,
+            "CD4T": 3.4
+          },
+          "HeLa": {
+            "monocyte": 41.7,
+            "B": 41.7,
+            "CD8T": 4.2,
+            "other": 4.2,
+            "NK": 4.2,
+            "CD4T": 4.2
+          }
+        },
+        "abstained_pct_by_group": {
+          "Jurkat": 96.6,
+          "HeLa": 66.7
+        },
+        "cell_line_rule_right_pct": {
+          "Jurkat": 100.0,
+          "HeLa": 66.7
+        }
+      }
+    },
+    "v4.1": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, Jurkat over HeLa",
+        "auroc": 0.6739,
+        "p": 0.014699,
+        "n_positive": 29,
+        "n_negative": 24,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "Jurkat": {
+            "B": 79.3,
+            "other": 17.2,
+            "CD4T": 3.4
+          },
+          "HeLa": {
+            "B": 50.0,
+            "monocyte": 33.3,
+            "CD8T": 4.2,
+            "other": 4.2,
+            "NK": 4.2,
+            "CD4T": 4.2
+          }
+        },
+        "abstained_pct_by_group": {
+          "Jurkat": 96.6,
+          "HeLa": 66.7
+        },
+        "cell_line_rule_right_pct": {
+          "Jurkat": 100.0,
+          "HeLa": 66.7
+        }
+      }
+    },
+    "v4.2": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, Jurkat over HeLa",
+        "auroc": 0.6739,
+        "p": 0.014699,
+        "n_positive": 29,
+        "n_negative": 24,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "Jurkat": {
+            "B": 79.3,
+            "other": 17.2,
+            "CD4T": 3.4
+          },
+          "HeLa": {
+            "B": 50.0,
+            "monocyte": 33.3,
+            "CD8T": 4.2,
+            "other": 4.2,
+            "NK": 4.2,
+            "CD4T": 4.2
+          }
+        },
+        "abstained_pct_by_group": {
+          "Jurkat": 96.6,
+          "HeLa": 66.7
+        },
+        "cell_line_rule_right_pct": {
+          "Jurkat": 100.0,
+          "HeLa": 66.7
+        }
+      }
+    },
+    "v5.2": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, Jurkat over HeLa",
+        "auroc": 0.6307,
+        "p": 0.048895,
+        "n_positive": 29,
+        "n_negative": 24,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "Jurkat": {
+            "B": 69.0,
+            "other": 24.1,
+            "CD8T": 6.9
+          },
+          "HeLa": {
+            "B": 58.3,
+            "monocyte": 33.3,
+            "other": 8.3
+          }
+        },
+        "abstained_pct_by_group": {
+          "Jurkat": 89.7,
+          "HeLa": 66.7
+        },
+        "cell_line_rule_right_pct": {
+          "Jurkat": 89.7,
+          "HeLa": 66.7
+        }
+      }
+    }
+  },
+  "baselines_secondary": {
+    "correlation": {
+      "Jurkat": {
+        "other": 48.3,
+        "B": 24.1,
+        "CD4T": 24.1,
+        "CD8T": 3.4
+      },
+      "HeLa": {
+        "other": 83.3,
+        "B": 16.7
+      }
+    },
+    "pca": {
+      "Jurkat": {
+        "CD4T": 44.8,
+        "B": 34.5,
+        "other": 13.8,
+        "monocyte": 3.4,
+        "CD8T": 3.4
+      },
+      "HeLa": {
+        "other": 33.3,
+        "monocyte": 25.0,
+        "CD4T": 16.7,
+        "B": 12.5,
+        "DC": 8.3,
+        "NK": 4.2
+      }
+    }
+  }
+}

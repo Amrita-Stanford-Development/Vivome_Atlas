@@ -1,0 +1,52 @@
+{
+  "set": "pxd021882",
+  "protocol": "research/benchmark/protocol-heldout.md",
+  "void": true,
+  "reason": "The deposited MaxQuant table holds only HeLa runs of 0 to 500 cells; the B and T pools were searched with FragPipe and are not in it. The automatic label map read three empty wells in plate row B (0cell_B*) as B pools; without that misreading there is no B or T pool, so the test is void (protocol, PXD021882: 'If the table holds no B or no T pool, the test is void'; amendment 2).",
+  "samples_in_table": [
+    "0cell_B16",
+    "0cell_B18",
+    "0cell_B4",
+    "10cell_G4",
+    "10cell_G8",
+    "10cell_H2",
+    "150cell_I12",
+    "150cell_I16",
+    "150cell_I18",
+    "1cell_E12",
+    "1cell_E14",
+    "1cell_F8",
+    "500cell_J5",
+    "500cell_K16",
+    "500cell_K8"
+  ],
+  "misread_as_b_pools": [
+    "0cell_B16",
+    "0cell_B18",
+    "0cell_B4"
+  ],
+  "automatic_label_map_sha256": "7e85787f07148e0839a70deb5d6f873787de9a0356b06ac9496c6353222cd2e1",
+  "inputs_sha256": {
+    "PXD021882/proteinGroups.txt": "b361db6bb8359f97795aa76280bf6839bfb3b60c11f756dd4b3f9967b4ed8aca"
+  },
+  "scored": false,
+  "candidates": {
+    "v3.1": {
+      "void": true,
+      "pass": false
+    },
+    "v4.1": {
+      "void": true,
+      "pass": false
+    },
+    "v4.2": {
+      "void": true,
+      "pass": false
+    },
+    "v5.2": {
+      "void": true,
+      "pass": false
+    }
+  },
+  "statement": "An internal held-out test, never external validation. Cell lines and tissue cells are outside the blood reference, and every set's acquisition differs from the reference's protein data."
+}

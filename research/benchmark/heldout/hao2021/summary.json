@@ -1,0 +1,120 @@
+{
+  "protocol": "research/benchmark/protocol-heldout-hao2021.md",
+  "rehearsal": false,
+  "donors": [
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "uploads": 108,
+  "frozen_files": {
+    "service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
+    "service/model/v4_1/MANIFEST.json": "5e9cdc71496af5238b4ad5a4bc9ccfb7fce90a0a43d63b1948d14a0f3054382b",
+    "service/model/v4_2/spec_v42.json": "654a612b5d38220222d77ededf97791c58295126b5c8801b2500663380abe303",
+    "service/model/v4_2/MANIFEST.json": "8fa42d4437523e89d2d5b033b535439f59e71fa63f91d00300d197b06771d565",
+    "service/model/v4_2/protein_class_means.npz": "3afacd88777433488087d433ee8cb2e22bbce92011bcd6f36db01b1d527bec1b",
+    "service/model/v5_2/spec_v52.json": "61d76d2815b4bd534691fd3f64fa559296afd52e78cd843b9aa3d23fd4f4e2c1",
+    "service/model/v5_2/nb2_spec_v52.json": "6596bb188ce6420ccf53646ee64fdc3606bb59d30ccbbef1e65e0e62bb04674a",
+    "service/model/v5_2/MANIFEST.json": "72f419d4c1098fc492a274e758894a9bc704853f4c6b9d43d68a7d836a656e8c",
+    "research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz": "123c05eb84d6ff502ba121a97b3a123eaddd08ac01c46647381ce7aa78160280",
+    "service/model/v3_1/MANIFEST.json": "f7e13adc6fde17bafcd61265d470ee2aad2edc09f16f20e772d6d583ebc14b8d"
+  },
+  "by_model": {
+    "correlation": {
+      "coarse_ba_mean": 57.48795099187737,
+      "dc_recall": 21.929966112635146,
+      "b_recall": 93.63636363636364,
+      "mono_recall": 63.43983164339009
+    },
+    "pca_knn": {
+      "coarse_ba_mean": 49.14481442364141,
+      "dc_recall": 2.5657576246570923,
+      "b_recall": 93.39066339066339,
+      "mono_recall": 57.77055034755436
+    },
+    "v31": {
+      "coarse_ba_mean": 57.82669518946881,
+      "dc_recall": 20.429239954816847,
+      "b_recall": 98.62407862407862,
+      "mono_recall": 57.64300746125885
+    },
+    "v41": {
+      "coarse_ba_mean": 62.215625834607046,
+      "dc_recall": 10.408262062288204,
+      "b_recall": 98.57493857493857,
+      "mono_recall": 83.43855621452714
+    },
+    "v42": {
+      "coarse_ba_mean": 59.36416267006029,
+      "dc_recall": 5.712441503953526,
+      "b_recall": 98.77149877149877,
+      "mono_recall": 82.9985332568076
+    },
+    "v52": {
+      "coarse_ba_mean": 63.37064585252095,
+      "dc_recall": 13.571082781991286,
+      "b_recall": 98.62407862407862,
+      "mono_recall": 82.55213315477329
+    }
+  },
+  "stronger_baseline_here": "correlation",
+  "comparisons": {
+    "v31 - correlation": {
+      "mean": 0.3387441975914402,
+      "lower_95_one_sided": -4.4041262576633295,
+      "upper_95_one_sided": 4.923657582037588
+    },
+    "v31 - pca_knn": {
+      "mean": 8.681880765827398,
+      "lower_95_one_sided": 5.263492805446376,
+      "upper_95_one_sided": 12.061815979740476
+    },
+    "v41 - correlation": {
+      "mean": 4.72767484272969,
+      "lower_95_one_sided": 2.81523529452719,
+      "upper_95_one_sided": 6.542480809843497
+    },
+    "v41 - pca_knn": {
+      "mean": 13.070811410965646,
+      "lower_95_one_sided": 10.785034703240017,
+      "upper_95_one_sided": 15.475665522438705
+    },
+    "v42 - correlation": {
+      "mean": 1.8762116781829106,
+      "lower_95_one_sided": -0.9537260719292228,
+      "upper_95_one_sided": 4.509395705637944
+    },
+    "v42 - pca_knn": {
+      "mean": 10.219348246418864,
+      "lower_95_one_sided": 7.717465872347257,
+      "upper_95_one_sided": 12.789106695508448
+    },
+    "v52 - correlation": {
+      "mean": 5.882694860643569,
+      "lower_95_one_sided": 4.541600410000778,
+      "upper_95_one_sided": 7.122446830775431
+    },
+    "v52 - pca_knn": {
+      "mean": 14.225831428879527,
+      "lower_95_one_sided": 11.428778245538709,
+      "upper_95_one_sided": 17.15128920503204
+    },
+    "v31 - v41": {
+      "mean": -4.38893064513825,
+      "lower_95_one_sided": -7.40254806128213,
+      "upper_95_one_sided": -1.4741275789449242
+    },
+    "v42 - v41": {
+      "mean": -2.8514631645467783,
+      "lower_95_one_sided": -3.985578730334481,
+      "upper_95_one_sided": -1.8389250814375284
+    },
+    "v52 - v41": {
+      "mean": 1.1550200179138792,
+      "lower_95_one_sided": 0.2519746489512623,
+      "upper_95_one_sided": 2.1364599010780014
+    }
+  },
+  "seconds": 1515
+}

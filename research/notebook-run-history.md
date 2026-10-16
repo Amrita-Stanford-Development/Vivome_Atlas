@@ -1936,6 +1936,69 @@ Mean gap 9.8 points of balanced accuracy.
   with donors held out, are options for a future model; this plan does not
   test them.
 
+### 44. The internal held-out test, scored once (Goal 2, Phase 3), 2026-10-16
+
+**Why:** the plan's milestone. Six sets were set aside before development
+(`side-tests.md`, amendment 1), and each is scored once under its committed
+protocol (`protocol-heldout.md`, `protocol-heldout-hao2021.md`). The
+candidates were final before any file was opened (amendment 1 of both
+protocols): v4.1 (served, the headline), v4.2 and v5.2, with v3.1 for
+reference. The format fixes found at unsealing are protocol amendment 2,
+committed before the last set was scored.
+
+| Set (question) | Primary | v4.1 | v4.2 | v5.2 | v3.1 |
+|---|---|---|---|---|---|
+| Hao 2021 donors P5-P8, RNA (B, monocytes, DCs on another atlas) | coarse BA minus correlation's, one-sided 95% lower bound | **+4.73 (+2.82) pass** | +1.88 (-0.95) fail | **+5.88 (+4.54) pass** | +0.34 (-4.40) fail |
+| PXD043355 (T-cell line over HeLa) | AUROC of reference similarity | **0.674, p 0.015 pass** | 0.674 pass | 0.631, p 0.049 pass | 0.674 pass |
+| PXD073250 (immune over keratinocytes) | AUROC of reference similarity | 0.442, p 0.975 fail | 0.442 fail | 0.446 fail | 0.442 fail |
+| PXD046211 (PMA over untreated monocyte lines) | AUROC of P(macrophage) - P(monocytes) | 0.517, p 0.30 fail (predicted) | 0.517 fail | 0.525 fail | 0.520 fail |
+| Tian (CD8 over CD4 sorted bulks) | pairs won, sign test | void: 1 pair | void | void | void |
+| PXD021882 (B over T pools) | AUROC | void: no pools in the deposited table | void | void | void |
+
+**Secondary, v4.1:**
+- **Hao:** coarse balanced accuracy 62.2 (correlation 57.5, PCA kNN 49.1).
+  B recall 98.6, monocytes 83.4, dendritic cells 10.4 (correlation 21.9).
+  v5.2 beats v4.1 by 1.16 points (lower bound +0.25).
+- **PXD043355:** 96.6% of Jurkat cells and 66.7% of HeLa cells abstain, so
+  a third of the HeLa cells get a confident blood-cell answer.
+- **PXD073250:** the keratinocytes abstain less often than the immune cells
+  (56.8% against 67.6%).
+- **Tian's one pair** (CD8 against CD4 bulks) is won by every model. Only
+  19% of its CD8 bulks are best-guessed CD8 T.
+
+**Results:** `research/benchmark/heldout/` (one summary per set; the Hao
+suite's in `hao2021/`).
+
+**What it means:**
+- **Typing transfers to held-out donors of another atlas.** On RNA made
+  protein-like, v4.1 beats the stronger simple baseline by about 5 points.
+  It is never protein evidence.
+- **Refusing foreign cells is the weak point.** The reference-similarity
+  score ranks a T-cell line above HeLa (AUROC 0.67), but not immune cells
+  above keratinocytes from the same tumour (0.44), and a third of HeLa cells
+  get an answer. With entry 41 (cell lines pass the threshold), this is now
+  a held-out finding, not only a development one.
+- **Macrophage-like cell lines are not separated from monocyte lines,** as
+  entry 33 predicted.
+- **Dendritic cells stay weak** on held-out RNA (10.4% for v4.1).
+- **The CD4/CD8 question is untested here:** Tian's deposit has no matched
+  CD4 and CD8 samples, so the sorted single cells (requested by email)
+  remain the only test of it.
+- **Between the candidates:**
+  - **v4.2** ties v4.1 on every protein set (the same answers and similarity)
+    and loses on RNA, where its protein term does not belong.
+  - **v5.2** is slightly ahead on RNA (+1.16 points). On protein it is
+    behind on the one set that passes (0.631 against 0.674) and level, within
+    noise, on the two that fail. It still fails a development guardrail by
+    one cell.
+  - **No candidate beats v4.1 on held-out protein data.**
+- **Decision on the served model (this plan's end): keep v4.1.** The rule
+  applied, stated here because the plan left the choice open: switch only to
+  a candidate that beats v4.1 on held-out protein data without losing a
+  passed primary. v4.2 ties it, and v5.2 does not beat it on protein.
+  - v5.2 stays frozen for the sorted CD4/CD8 test, its own question.
+  - v4.2 stays selectable and refused, as before.
+
 ---
 
 ## The throughline

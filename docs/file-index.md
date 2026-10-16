@@ -540,6 +540,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/protocol-heldout-hao2021.md` — the internal held-out test's protocol for Hao 2021's held-out donors, written before any of their cells was read, with its rehearsal
 - `research/benchmark/heldout/rehearsals/*.json` — each protein set's rehearsal on development or synthetic data (benchmark/heldout_score.py --rehearse)
 - `research/benchmark/heldout/rehearsals/hao2021.json` — the Hao suite's rehearsal on donors P1 to P4 (benchmark/heldout_hao2021.py --rehearse)
+- `research/benchmark/heldout/*/summary.json` — the internal held-out test's results, one per set (tian, pxd021882, pxd043355, pxd073250, pxd046211, hao2021): every candidate's primary and secondary measures, the baselines', void reasons
+- `research/benchmark/heldout/*/scores.csv` — each scored protein set's per-sample scores and labels
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring
 - `research/notebook-outputs/v52_labels/reference_labels_v52.csv.gz` — v5.2: every reference cell's original and v5.2 label, class index, reason, and the classifier's P(CD8 T) and P(CD4 lineage)
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell

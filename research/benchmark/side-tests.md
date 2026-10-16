@@ -82,6 +82,24 @@ internal held-out test scores v4.1, v4.2 and v5.2 (amendment 2), with v3.1 for
 reference. Both protocols carry this as their amendment 1. Unsealing may
 begin, each set once, in the protocols' order.
 
+### Amendment 6, 2026-10-16: the internal held-out test is scored and spent
+
+Each set was scored once under its protocol (run history, entry 44). v4.1:
+- **Passed:**
+  - Hao 2021's held-out donors: +4.73 points over the correlation baseline;
+  - PXD043355: AUROC 0.674 of reference similarity, T-cell line over HeLa.
+- **Failed:**
+  - PXD073250, immune cells over keratinocytes: 0.442;
+  - PXD046211, PMA over untreated: 0.517, as predicted.
+- **Void:**
+  - Tian: one matched pair;
+  - PXD021882: no B or T pools in the deposited table.
+
+The sets are now spent. From here on they are development data, and any new
+test comes from the alternatives below. Their role in
+`scripts/fetch_public_sets.py` stays `held_out` as the record of how they
+were assigned and scored.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

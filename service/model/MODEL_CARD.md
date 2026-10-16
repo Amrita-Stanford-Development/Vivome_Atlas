@@ -83,6 +83,25 @@ existed, and nothing was chosen on it afterwards
   every other run, each CI above zero
   (`research/benchmark/results.md`, "v4.1 against the corrected baselines").
 
+### The internal held-out test
+
+Six sets were set aside before Goal 2's development and scored once, each
+under a protocol committed before its files were opened
+(`research/benchmark/protocol-heldout.md`, `protocol-heldout-hao2021.md`;
+results in `research/benchmark/heldout/`). It is an internal test, not
+external validation.
+- **Hao 2021's held-out donors** (RNA made protein-like, another atlas):
+  - coarse balanced accuracy 62.2%, 4.73 points above the correlation
+    baseline (one-sided 95% lower bound +2.82): pass;
+  - B cells 98.6%, monocytes 83.4%, dendritic cells 10.4%.
+- **Jurkat over HeLa** (PXD043355): reference similarity AUROC 0.674 (p
+  0.015), a pass. A third of the HeLa cells still get a committed answer.
+- **Immune cells over keratinocytes** (PXD073250): AUROC 0.442, a fail.
+- **PMA-treated over untreated monocyte lines** (PXD046211): 0.517, a fail,
+  as predicted.
+- **Tian and PXD021882** were void: their deposits hold no matched CD4/CD8
+  pairs and no B or T pools.
+
 ### Known limits
 
 1. **CD8 T cells.** Recall is 2.7% on Khoury and 23.8% on Fulcher, and every
@@ -95,9 +114,10 @@ existed, and nothing was chosen on it afterwards
 3. **SCoPE2's macrophages and monocytes** are not separated. v4.1 is below
    chance there, and on the reprocessed matrix every method is at or below
    chance.
-4. **No sealed test yet.** Fulcher chose v4.1's weight, Khoury is
-   post-hoc, and the simulated suite was on its fourth use. The claim that
-   v4.1 beats the corrected baselines waits for sorted cells
+4. **No external test yet.** Fulcher chose v4.1's weight, Khoury is
+   post-hoc, and the internal held-out test (above) used data set aside by
+   us, not by an independent group. Its one test of CD4 against CD8 was
+   void, so that question waits for the sorted cells
    (`research/benchmark/protocol-sorted-cd4cd8.md`).
 5. **Uploads of one cell type.** Every gene is z-scored within its upload,
    so an upload of a single sorted population loses the contrast the model

@@ -80,9 +80,12 @@
                     accuracy, below chance (<span data-fact="scope2_chance">&nbsp;</span>): it calls most of
                     the differentiated macrophages monocytes. No method separates them once the matrix is
                     reprocessed (<a href="benchmark.html">the benchmark</a>).</li>
-                <li><strong>No sealed test yet.</strong> Fulcher 2026 chose the one tuned setting, Khoury
-                    2026 is post-hoc, and the simulated suite had been used before. A test on cells sorted
-                    by type is written down and waits for data
+                <li><strong>No external test yet.</strong> Fulcher 2026 chose the one tuned setting and
+                    Khoury 2026 is post-hoc. An internal test on data we set aside before development, scored
+                    once, passed on held-out donors of another blood atlas and on a T-cell line beside HeLa,
+                    and failed to tell immune cells from keratinocytes and macrophage-like cell lines from
+                    monocyte lines (<code>research/benchmark/heldout/</code>). It could not test CD4 against
+                    CD8 T cells; a test on cells sorted by type is written down and waits for data
                     (<code>research/benchmark/protocol-sorted-cd4cd8.md</code>).</li>
                 <li><strong>Uploads of one sorted cell type.</strong> Each gene is scaled within its upload,
                     so a single sorted population, or two close types such as CD4 and CD8 T cells, loses

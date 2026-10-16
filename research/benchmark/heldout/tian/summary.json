@@ -1,0 +1,249 @@
+{
+  "set": "tian",
+  "protocol": "research/benchmark/protocol-heldout.md",
+  "rehearsal": false,
+  "statement": "An internal held-out test, never external validation. Cell lines and tissue cells are outside the blood reference, and the acquisition differs from the reference's protein data.",
+  "headline": "v4.1",
+  "label_map_sha256": "bc5b0ee56a46e1b6a78e2ad69c1ac2f3f80608dd104b273834df589073a51c9b",
+  "intake_source": {
+    "inputs_sha256": {
+      "Tian_MSV000087462/proteinGroupsCD3CD4CD8.xlsx": "e6bf06d275269a6ddd1dc372384ed284c684d82478d55f939b65231af000ed9e",
+      "Tian_MSV000087462/proteinGroupsMMsample.xlsx": "1ae01a63bdd61e5f533a1bf00fce8ac3404c43f613f53a60e7f3322927278d92"
+    },
+    "label_map_sha256": "bc5b0ee56a46e1b6a78e2ad69c1ac2f3f80608dd104b273834df589073a51c9b"
+  },
+  "groups": {
+    "CD4": 22,
+    "CD8": 21,
+    "CD3": 3
+  },
+  "candidates": {
+    "v3.1": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 1,
+        "won": 1,
+        "void": true,
+        "reason": "fewer than 5 pairs",
+        "pass": false,
+        "pair_table": [
+          {
+            "upload": "proteinGroupsCD3CD4CD8",
+            "patient": "unnamed",
+            "state": "none",
+            "cd8_score": -0.087953,
+            "cd4_score": -0.309667,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD3": {
+            "monocyte": 66.7,
+            "CD4T": 33.3
+          },
+          "CD4": {
+            "CD4T": 54.5,
+            "B": 31.8,
+            "DC": 4.5,
+            "monocyte": 4.5,
+            "other": 4.5
+          },
+          "CD8": {
+            "CD4T": 28.6,
+            "B": 28.6,
+            "other": 23.8,
+            "CD8T": 19.0
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD3": 66.7,
+          "CD4": 22.7,
+          "CD8": 42.9
+        }
+      }
+    },
+    "v4.1": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 1,
+        "won": 1,
+        "void": true,
+        "reason": "fewer than 5 pairs",
+        "pass": false,
+        "pair_table": [
+          {
+            "upload": "proteinGroupsCD3CD4CD8",
+            "patient": "unnamed",
+            "state": "none",
+            "cd8_score": -0.101107,
+            "cd4_score": -0.264681,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD3": {
+            "monocyte": 66.7,
+            "CD4T": 33.3
+          },
+          "CD4": {
+            "CD4T": 54.5,
+            "B": 31.8,
+            "DC": 4.5,
+            "monocyte": 4.5,
+            "other": 4.5
+          },
+          "CD8": {
+            "CD4T": 28.6,
+            "B": 28.6,
+            "other": 19.0,
+            "CD8T": 19.0,
+            "DC": 4.8
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD3": 66.7,
+          "CD4": 22.7,
+          "CD8": 42.9
+        }
+      }
+    },
+    "v4.2": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 1,
+        "won": 1,
+        "void": true,
+        "reason": "fewer than 5 pairs",
+        "pass": false,
+        "pair_table": [
+          {
+            "upload": "proteinGroupsCD3CD4CD8",
+            "patient": "unnamed",
+            "state": "none",
+            "cd8_score": -0.101107,
+            "cd4_score": -0.264681,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD3": {
+            "monocyte": 66.7,
+            "CD4T": 33.3
+          },
+          "CD4": {
+            "CD4T": 54.5,
+            "B": 31.8,
+            "DC": 4.5,
+            "monocyte": 4.5,
+            "other": 4.5
+          },
+          "CD8": {
+            "CD4T": 28.6,
+            "B": 28.6,
+            "other": 19.0,
+            "CD8T": 19.0,
+            "DC": 4.8
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD3": 66.7,
+          "CD4": 22.7,
+          "CD8": 42.9
+        }
+      }
+    },
+    "v5.2": {
+      "primary": {
+        "statistic": "pairs won",
+        "pairs": 1,
+        "won": 1,
+        "void": true,
+        "reason": "fewer than 5 pairs",
+        "pass": false,
+        "pair_table": [
+          {
+            "upload": "proteinGroupsCD3CD4CD8",
+            "patient": "unnamed",
+            "state": "none",
+            "cd8_score": -0.031307,
+            "cd4_score": -0.056877,
+            "won": true
+          }
+        ]
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "CD3": {
+            "other": 66.7,
+            "CD4T": 33.3
+          },
+          "CD4": {
+            "B": 36.4,
+            "CD4T": 36.4,
+            "other": 9.1,
+            "DC": 9.1,
+            "CD8T": 4.5,
+            "monocyte": 4.5
+          },
+          "CD8": {
+            "B": 42.9,
+            "CD8T": 38.1,
+            "other": 9.5,
+            "DC": 4.8,
+            "CD4T": 4.8
+          }
+        },
+        "abstained_pct_by_group": {
+          "CD3": 0.0,
+          "CD4": 22.7,
+          "CD8": 33.3
+        }
+      }
+    }
+  },
+  "baselines_secondary": {
+    "correlation": {
+      "CD3": {
+        "other": 100.0
+      },
+      "CD4": {
+        "other": 72.7,
+        "CD4T": 9.1,
+        "monocyte": 9.1,
+        "NK": 4.5,
+        "B": 4.5
+      },
+      "CD8": {
+        "other": 71.4,
+        "NK": 19.0,
+        "CD4T": 9.5
+      }
+    },
+    "pca": {
+      "CD3": {
+        "CD4T": 100.0
+      },
+      "CD4": {
+        "B": 54.5,
+        "CD4T": 18.2,
+        "monocyte": 13.6,
+        "other": 9.1,
+        "NK": 4.5
+      },
+      "CD8": {
+        "CD4T": 23.8,
+        "CD8T": 23.8,
+        "B": 19.0,
+        "NK": 14.3,
+        "monocyte": 9.5,
+        "other": 9.5
+      }
+    }
+  }
+}

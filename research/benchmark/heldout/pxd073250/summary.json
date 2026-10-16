@@ -1,0 +1,287 @@
+{
+  "set": "pxd073250",
+  "protocol": "research/benchmark/protocol-heldout.md",
+  "rehearsal": false,
+  "statement": "An internal held-out test, never external validation. Cell lines and tissue cells are outside the blood reference, and the acquisition differs from the reference's protein data.",
+  "headline": "v4.1",
+  "label_map_sha256": "e1535f5b934ca0803847b257e2083c02e211c1829e2826a79a8c1002b170d600",
+  "intake_source": {
+    "inputs_sha256": {
+      "PXD073250/report.pg_matrix.tsv": "337f8b79d7a64d64128ea5b0504afe220a6e9aabbcd0cbb33471ac8f37e267b1",
+      "PXD073250/LSA-2026-03759_Supplemental_Data_1.xlsx": "0851cb3fd020ed02d24d74b83cc5a397a64b00d1c2aeb9bfb410d01744365f3a"
+    },
+    "label_map_sha256": "e1535f5b934ca0803847b257e2083c02e211c1829e2826a79a8c1002b170d600"
+  },
+  "groups": {
+    "immune": 204,
+    "keratinocyte": 176,
+    "double": 39
+  },
+  "candidates": {
+    "v3.1": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, immune over keratinocyte",
+        "auroc": 0.4423,
+        "p": 0.975002,
+        "n_positive": 204,
+        "n_negative": 176,
+        "void": false,
+        "pass": false
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "immune": {
+            "other": 38.7,
+            "DC": 17.6,
+            "none": 12.7,
+            "monocyte": 10.3,
+            "CD4T": 10.3,
+            "B": 8.3,
+            "CD8T": 1.5,
+            "NK": 0.5
+          },
+          "keratinocyte": {
+            "other": 33.0,
+            "monocyte": 17.6,
+            "DC": 15.3,
+            "B": 13.6,
+            "none": 11.9,
+            "CD4T": 7.4,
+            "CD8T": 0.6,
+            "NK": 0.6
+          },
+          "double": {
+            "other": 35.9,
+            "monocyte": 33.3,
+            "none": 23.1,
+            "B": 2.6,
+            "CD4T": 2.6,
+            "DC": 2.6
+          }
+        },
+        "abstained_pct_by_group": {
+          "immune": 67.6,
+          "keratinocyte": 56.8,
+          "double": 35.9
+        },
+        "immune_best_guess_lineage_pct": {
+          "myeloid": 50.0,
+          "lymphoid": 27.0,
+          "none": 12.7,
+          "progenitor": 9.8,
+          "erythroid": 0.5
+        }
+      }
+    },
+    "v4.1": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, immune over keratinocyte",
+        "auroc": 0.4423,
+        "p": 0.975002,
+        "n_positive": 204,
+        "n_negative": 176,
+        "void": false,
+        "pass": false
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "immune": {
+            "other": 36.8,
+            "DC": 14.7,
+            "monocyte": 13.7,
+            "none": 12.7,
+            "B": 10.3,
+            "CD4T": 9.8,
+            "CD8T": 1.5,
+            "NK": 0.5
+          },
+          "keratinocyte": {
+            "other": 31.8,
+            "monocyte": 21.6,
+            "B": 14.2,
+            "none": 11.9,
+            "DC": 10.8,
+            "CD4T": 8.5,
+            "CD8T": 0.6,
+            "NK": 0.6
+          },
+          "double": {
+            "monocyte": 38.5,
+            "other": 35.9,
+            "none": 23.1,
+            "B": 2.6
+          }
+        },
+        "abstained_pct_by_group": {
+          "immune": 67.6,
+          "keratinocyte": 56.8,
+          "double": 35.9
+        },
+        "immune_best_guess_lineage_pct": {
+          "myeloid": 48.5,
+          "lymphoid": 28.4,
+          "none": 12.7,
+          "progenitor": 10.3
+        }
+      }
+    },
+    "v4.2": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, immune over keratinocyte",
+        "auroc": 0.4423,
+        "p": 0.975002,
+        "n_positive": 204,
+        "n_negative": 176,
+        "void": false,
+        "pass": false
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "immune": {
+            "other": 36.8,
+            "DC": 14.7,
+            "monocyte": 13.7,
+            "none": 12.7,
+            "B": 10.3,
+            "CD4T": 9.8,
+            "CD8T": 1.5,
+            "NK": 0.5
+          },
+          "keratinocyte": {
+            "other": 31.8,
+            "monocyte": 21.6,
+            "B": 14.2,
+            "none": 11.9,
+            "DC": 10.8,
+            "CD4T": 8.5,
+            "CD8T": 0.6,
+            "NK": 0.6
+          },
+          "double": {
+            "monocyte": 38.5,
+            "other": 35.9,
+            "none": 23.1,
+            "B": 2.6
+          }
+        },
+        "abstained_pct_by_group": {
+          "immune": 67.6,
+          "keratinocyte": 56.8,
+          "double": 35.9
+        },
+        "immune_best_guess_lineage_pct": {
+          "myeloid": 48.5,
+          "lymphoid": 28.4,
+          "none": 12.7,
+          "progenitor": 10.3
+        }
+      }
+    },
+    "v5.2": {
+      "primary": {
+        "statistic": "AUROC of reference similarity, immune over keratinocyte",
+        "auroc": 0.4455,
+        "p": 0.967503,
+        "n_positive": 204,
+        "n_negative": 176,
+        "void": false,
+        "pass": false
+      },
+      "secondary": {
+        "best_guess_coarse_pct_by_group": {
+          "immune": {
+            "other": 33.3,
+            "B": 18.1,
+            "monocyte": 15.7,
+            "DC": 13.2,
+            "none": 12.7,
+            "CD8T": 3.4,
+            "CD4T": 2.9,
+            "NK": 0.5
+          },
+          "keratinocyte": {
+            "other": 29.5,
+            "monocyte": 22.7,
+            "B": 18.8,
+            "DC": 11.9,
+            "none": 11.9,
+            "CD8T": 3.4,
+            "CD4T": 1.1,
+            "NK": 0.6
+          },
+          "double": {
+            "other": 41.0,
+            "monocyte": 30.8,
+            "none": 23.1,
+            "B": 2.6,
+            "CD8T": 2.6
+          }
+        },
+        "abstained_pct_by_group": {
+          "immune": 66.7,
+          "keratinocyte": 57.4,
+          "double": 38.5
+        },
+        "immune_best_guess_lineage_pct": {
+          "myeloid": 49.0,
+          "lymphoid": 25.0,
+          "progenitor": 13.2,
+          "none": 12.7
+        }
+      }
+    }
+  },
+  "baselines_secondary": {
+    "correlation": {
+      "immune": {
+        "other": 47.1,
+        "monocyte": 20.6,
+        "B": 16.7,
+        "CD4T": 13.7,
+        "DC": 1.0,
+        "CD8T": 0.5,
+        "NK": 0.5
+      },
+      "keratinocyte": {
+        "other": 36.9,
+        "monocyte": 31.2,
+        "CD4T": 17.0,
+        "B": 11.9,
+        "DC": 1.7,
+        "CD8T": 1.1
+      },
+      "double": {
+        "other": 46.2,
+        "monocyte": 46.2,
+        "B": 7.7
+      }
+    },
+    "pca": {
+      "immune": {
+        "CD4T": 37.7,
+        "other": 32.8,
+        "DC": 9.8,
+        "monocyte": 6.9,
+        "B": 5.4,
+        "CD8T": 4.9,
+        "NK": 2.5
+      },
+      "keratinocyte": {
+        "CD4T": 39.8,
+        "other": 30.1,
+        "DC": 10.2,
+        "monocyte": 9.1,
+        "B": 5.1,
+        "CD8T": 2.8,
+        "NK": 2.8
+      },
+      "double": {
+        "DC": 35.9,
+        "other": 25.6,
+        "CD4T": 20.5,
+        "CD8T": 12.8,
+        "monocyte": 5.1
+      }
+    }
+  }
+}
