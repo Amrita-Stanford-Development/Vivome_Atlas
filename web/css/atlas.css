@@ -1,0 +1,242 @@
+/* The Atlas page (web/atlas.html): an app view. The header on top; the
+   controls and the viewer fill the rest of the window; a drawer slides over
+   the viewer's right side. Tokens and the sheet, glass, well and bead
+   objects come from css/page.css (docs/web/design.md). PC screens. */
+
+body.atlas-page { height: 100vh; overflow: hidden; }
+.atlas-page .site-header-inner { max-width: none; padding-left: 28px; padding-right: 28px; }
+
+.main-content { flex: 1; display: flex; min-height: 0; position: relative; }
+
+/* ---- the sidebar ---- */
+
+.controls-panel {
+    width: 340px;
+    flex: none;
+    overflow-y: auto;
+    padding: 20px 10px 28px 20px;
+    transition: margin-left 0.4s ease, opacity 0.4s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 102, 163, 0.35) transparent;
+}
+.controls-panel.collapsed { margin-left: -340px; opacity: 0; pointer-events: none; }
+
+/* Compact halo cards, so they don't glow into each other. */
+.controls-panel .sheet {
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 14px 30px rgba(0, 142, 204, 0.16), 0 6px 14px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+.control-section h2 { font-size: 15px; margin-bottom: 12px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.section-head h2 { margin-bottom: 0; }
+
+.atlas-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+.atlas-stats .well { padding: 8px 6px; text-align: center; }
+.stat-value { font-size: 17px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 11px; color: var(--ink-faint); }
+
+.toggle-group { display: flex; flex-direction: column; gap: 10px; }
+.toggle-item { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--ink); }
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--well);
+    box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.22);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.toggle-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(var(--shade), 0.3);
+    transition: transform 0.2s ease;
+}
+.toggle-switch.active { background: var(--on, var(--accent)); }
+.toggle-switch.active::after { transform: translateX(20px); }
+#rna-toggle { --on: var(--rna); }
+#prot-toggle { --on: var(--prot); }
+
+.text-button {
+    font: inherit;
+    font-size: 12.5px;
+    padding: 3px 9px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--well);
+    color: var(--ink);
+    cursor: pointer;
+}
+.text-button:hover { background: var(--accent-tint); }
+
+.cell-type-filters { max-height: 330px; overflow-y: auto; margin: 0 -6px; scrollbar-width: thin; }
+.filter-item {
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    column-gap: 10px;
+    width: 100%;
+    padding: 5px 6px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.35;
+    text-align: left;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+.filter-item:hover { background: var(--accent-tint); }
+.filter-item.deselected { opacity: 0.35; }
+.filter-item.deselected:hover { opacity: 0.55; }
+.filter-name { color: var(--ink); }
+.filter-count { grid-column: 2; font-size: 11.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.color-indicator {
+    width: 12px;
+    height: 12px;
+    margin-top: 3px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #FFFFFF, 0 1px 3px rgba(var(--shade), 0.35);
+}
+
+.controls-panel .support-table { font-size: 12px; }
+.controls-panel .support-tile-value { font-size: 18px; }
+.controls-panel details > summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var(--ink); }
+.controls-panel details[open] > summary { margin-bottom: 12px; }
+
+/* ---- the viewer ---- */
+
+.visualization-area { flex: 1; min-width: 0; display: flex; padding: 20px 20px 20px 10px; }
+
+/* The viewer is one large white halo card. */
+.three-container {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 142, 204, 0.10);
+    border-radius: var(--r-sheet);
+    box-shadow: var(--halo);
+}
+#three-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.95);
+    transition: opacity 0.3s ease;
+}
+.loading-overlay.is-done { opacity: 0; pointer-events: none; }
+.loading-spinner {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-tint);
+    border-top-color: var(--accent);
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 15px; font-weight: 500; color: var(--ink); }
+.error-message { max-width: 460px; margin: 16px; padding: 20px 22px; border-radius: 12px; background: rgba(180, 35, 24, 0.06); color: var(--error); }
+.error-message h2 { color: var(--error); font-size: 17px; margin-bottom: 8px; }
+
+.tooltip {
+    position: absolute;
+    z-index: 6;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    max-width: 320px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: pre-line;
+    color: #FFFFFF;
+    background: rgba(29, 43, 54, 0.92);
+}
+
+.view-tools { position: absolute; top: 14px; right: 14px; z-index: 4; display: flex; gap: 8px; }
+.view-tools button {
+    font: inherit;
+    font-size: 12.5px;
+    padding: 6px 11px;
+    border: 0;
+    border-radius: 999px;
+    color: var(--ink);
+    cursor: pointer;
+}
+.view-tools button:hover { background: var(--accent-tint); }
+.scene-info { position: absolute; bottom: 14px; right: 14px; z-index: 3; padding: 6px 11px; font-size: 12px; color: var(--ink-soft); }
+
+/* ---- the drawer ---- */
+
+.atlas-drawer {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: 380px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    transform: translateX(calc(100% + 40px));
+    transition: transform 0.4s ease;
+}
+.atlas-drawer.open { transform: none; }
+.drawer-head { display: flex; align-items: center; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+.drawer-head h2 { flex: 1; margin: 0; font-size: 15px; }
+.drawer-close {
+    font: inherit;
+    font-size: 15px;
+    line-height: 1;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--well);
+    color: var(--ink);
+    cursor: pointer;
+}
+.drawer-close:hover { background: var(--accent-tint); }
+.drawer-body { flex: 1; overflow-y: auto; padding: 12px 18px 18px; font-size: 14px; }
+
+.gene-profile-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.gene-profile-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px 6px 8px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    background: rgb(250, 250, 249);
+    border-bottom: 1px solid var(--line);
+}
+.gene-profile-table td { padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.gene-profile-table .gene-name { color: var(--ink); }
+.gene-profile-table .gene-value { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+    .atlas-drawer, .controls-panel { transition: none; }
+}

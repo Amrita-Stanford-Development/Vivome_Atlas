@@ -26,13 +26,17 @@ schema, and all come from the served v3.1 model with default settings:
 - `pred_class_name` is its best guess;
 - `max_cos_ref` is its out-of-distribution score (`reference_similarity`);
 - `abstained` says whether it abstains.
-Both `atlas.html` and `scripts/build_manifest.py` read columns by name and
-ignore the ones they don't recognise.
+Both the Atlas page (`web/js/atlas/reference-data.js`) and
+`scripts/build_manifest.py` read columns by name and ignore the ones they
+don't recognise.
 
 **Coordinates.** The PCs are the service's own PCA of v3.1's coordinate
 member (seed 4), with a fixed sign. A cell the service projects therefore
 lands on the atlas the site displays; `service/tests/test_pipeline_versions.py`
-pins the RNA file to it.
+pins the RNA file to it. The Atlas page maps PCs to scene units with one
+frame computed from the reference (`atlasFrame`: the box round every RNA and
+protein cell, 80 units across), and places uploaded cells through the same
+frame.
 
 Class names are quoted CSV fields and **some contain commas** (`class_idx` 2,
 3, and 14). Parse with `csv.DictReader` or equivalent — a naive `split(',')`
@@ -70,13 +74,14 @@ version https://git-lfs.github.com/spec/v1
 ```
 
 The app handles this rather than crashing. `isLfsPointer()` in
-`web/js/manifest.js` detects the magic string, and `atlas.html` checks before
-parsing an RNA profile and shows `git lfs pull` as the remedy.
+`web/js/manifest.js` detects the magic string, and the Atlas page's gene
+profile (`web/js/atlas/gene-profile.js`) checks before parsing a profile and
+shows `git lfs pull` as the remedy. On the public site the large files are
+left out (`scripts/build_pages_site.py`), and a click says the profiles are
+not on that copy.
 
-`atlas.html`'s main script is a classic script and cannot import the module,
-so the magic string exists in two places. `web/tests/lfs.test.js` pins them
-byte-for-byte — a typo in either copy would silently disable the guard on one
-side while the suite stayed green.
+The magic string exists once, in `web/js/manifest.js`; `web/tests/lfs.test.js`
+fails if a copy appears in any other page or module.
 
 That suite also asserts the shipped part files are *still* unfetched pointers.
 If you have run `git lfs pull` locally the test fails by design; do not

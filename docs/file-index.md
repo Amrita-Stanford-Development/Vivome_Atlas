@@ -18,7 +18,7 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `web/README.md` — how to serve the site and what each folder under `web/` holds
 - `web/index.html` — landing page: the title panel on the first screen, then seven sections of white and liquid-glass cards, and the finale
-- `web/atlas.html` — interactive 3D cell viewer (RNA + protein), with the cross-modal support map and alignment diagnostics
+- `web/atlas.html` — the Atlas page's markup: the 3D reference (RNA + protein) with its controls, support panels and drawer; its code is `web/js/atlas/`
 - `web/project.html` — the projection tool: sends a matrix to a locally run service and shows each cell's label or abstention, with a downloadable response
 - `web/manuscript.html` — the Manuscript page: an evidence bank for a journal paper on the served model, in MCP's sections (methods and why each part is there, the benchmark tables, the internal held-out test, failure modes, what was tried and not kept, open items); every number a record
 - `web/versions.html` — model card, known limits, earlier releases, prior baseline, data availability, release protocol
@@ -29,6 +29,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/css/story.css` — the landing's layout: the title panel, the sections and card grids, the scroll reveals, phones and reduced motion
 - `web/css/workflow.css` — the Workflow page's layout: the two-column scroll story, the followed-cell picker, the film bar and theatre, reduced motion and print
 - `web/css/page.css` — the design system: tokens, the glass/well/sheet/bead components, site header and footer, the panel styling contract
+- `web/css/atlas.css` — the Atlas page's app shell: sidebar, viewer card, overlays, drawer, gene-profile table
 - `web/js/background.js` — the living background: the animated cell and strand canvas behind every page
 - `web/js/biofield.js` — the living water above it, behind every page but the atlas: the 3D objects in a soft gel, with a wake that follows the pointer
 - `web/js/biocells.js` — the 3D objects, built in code: DNA and chromatin, red cell, platelet, white cells, threads and a long cell; the shape maths is pure
@@ -50,6 +51,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/scenes-evidence.js` — the Workflow page's figures for the training and for how the results were calculated, with the live service
 - `web/js/atlas/reference-data.js` — the Atlas page's reference cells as typed arrays from the metadata CSVs, the class order, the scene frame kept for placing uploads, class-name anchors (pure)
 - `web/js/atlas/spatial.js` — the Atlas page's geometry: the orbit pose, nearest reference cells on a grid, screen-space picking, the file's sheet, label placement (pure)
+- `web/js/atlas/stage.js` — the Atlas page's renderer, camera, orbit rig (turn, move, zoom, glide, slow turn) and its draw-when-changed loop
+- `web/js/atlas/reference-layer.js` — every reference cell as one point cloud, shaded as small spheres; filters, dimming and focus as uniforms
+- `web/js/atlas/gene-profile.js` — a clicked cell's gene profile from the large CSVs, with the LFS check and the "not on this copy" message
+- `web/js/atlas/explore-tab.js` — the Atlas page's Explore controls: counts, modality switches, the cell-type list, the support panels
+- `web/js/atlas/overlay.js` — the Atlas page's loading screen, error panel and tooltip
+- `web/js/atlas/main.js` — the Atlas page's entry point: loads the reference and wires the modules
 - `web/js/atlas/answers.js` — a service response or the recorded example as one cell shape, each answer's look on the map, which services share the map, the receipt's numbers (pure)
 - `web/js/manifest.js` — loads, validates and formats the manifest; `isMeasured()` is the one guard on displaying a number
 - `web/js/panels.js` — pure builders that turn manifest records into HTML strings for each page's panels
@@ -60,6 +67,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/motion.test.js` — tests for `motion.js`: clamping, and counting up in the final number's format
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and nothing is drawn in front of its title
 - `web/tests/workflow.test.js` — the Workflow page against the real files: every number slot measured, copy rules, chapters, escaping, palette, service address, no model maths in the browser
+- `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser
 - `web/tests/atlas-data.test.js` — the Atlas page's reference cells read from the real files: counts, quoted names, each type keeps its colour, the scene frame, name anchors
 - `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
 - `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
@@ -67,7 +75,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/timeline.test.js` — the film's clock: chapter lengths, locate, beats, reduced-motion steps, the address
 - `web/tests/workflow-layout.test.js` — the Workflow page's layout maths and static figures: rotation, Sankey conservation, colour ramps, ROC snapping, hatching, escaping
 - `web/tests/random.test.js` — tests for `random.js`, with its first draws pinned
-- `web/tests/lfs.test.js` — pins the Git LFS pointer check, and asserts the shipped RNA files are still pointers
+- `web/tests/lfs.test.js` — the Git LFS pointer check exists once and guards the Atlas page's gene profiles, and the shipped RNA files are still pointers
 - `web/tests/biocells.test.js` — tests for `biocells.js`: the red cell's Evans and Fung profile, DNA and nucleosome geometry, noise, palettes
 - `web/tests/water.test.js` — tests for `water.js`'s list of effects and its copy
 - `web/data/atlas_manifest.json` — generated by `scripts/build_manifest.py`; the only source of every number the pages show
@@ -338,6 +346,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `docs/web/manifest.md` — the manifest: schema, the measured/pending contract, regeneration, release protocol
 - `docs/web/hosting.md` — how the public site is hosted on Cloudflare Pages and published, and the R2 step for the large atlas files
 - `docs/web/workflow.md` — the Workflow page: its chapters and their data, the film, where its numbers come from, rebuilding them
+- `docs/web/atlas.md` — the Atlas page: its modules, how it draws and picks, and where its data comes from
 - `docs/web/manuscript.md` — the Manuscript page: its sections, the evidence-line format and caveat tags, where its numbers come from, rebuilding them
 - `docs/web/data.md` — the site's data files, Git LFS, what ships and what doesn't
 - `docs/web/design.md` — the design system: the world, the four UI objects, colour meanings, type, motif, copy rules, where new results land

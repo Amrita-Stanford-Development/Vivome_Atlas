@@ -106,10 +106,14 @@ test('every builder escapes data it is given', () => {
   }
 });
 
-test('the class colours are the atlas viewer’s palette, in the reference’s order', () => {
-  const atlas = read('atlas.html').match(/this\.colorPalette = \[([\s\S]*?)\]/)[1];
-  const palette = [...atlas.matchAll(/'(#[0-9a-f]{6})'/gi)].map((m) => m[1]);
-  assert.deepEqual(CLASS_COLOURS, palette);
+test('the class colours are the atlas’s only palette, in the reference’s order', () => {
+  // The Atlas page draws with CLASS_COLOURS itself; no copy of the palette
+  // lives anywhere else.
+  assert.ok(!read('atlas.html').includes('colorPalette'), 'atlas.html keeps no palette of its own');
+  for (const f of ['js/atlas/reference-layer.js', 'js/atlas/explore-tab.js']) {
+    assert.match(read(f), /import \{[^}]*\bCLASS_COLOURS\b[^}]*\} from '\.\.\/workflow-data\.js'/, f);
+  }
+  assert.equal(CLASS_COLOURS.length, workflow.class_order.length, 'one colour per class');
   assert.deepEqual([...workflow.class_order].sort(), workflow.class_order, 'sorted order, as the atlas assigns colours');
 });
 

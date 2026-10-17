@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { isLfsPointer } from '../js/manifest.js';
 
 const read = (rel) => readFileSync(new URL(rel, import.meta.url), 'utf8');
@@ -11,22 +11,33 @@ test('the shipped RNA part files are still unfetched LFS pointers', () => {
     'If this fails, git lfs pull has been run — the guard should now fall through to real parsing.');
 });
 
-test('atlas.html guards RNA profile loading behind an LFS check', () => {
-  const html = read('../atlas.html');
-  assert.match(html, /isLfsPointer/, 'atlas.html must check for LFS pointers before parsing');
-  assert.match(html, /git lfs pull/, 'the error shown to the user must name the remedy');
+test('the Atlas page guards gene-profile loading behind the LFS check', () => {
+  const src = read('../js/atlas/gene-profile.js');
+  assert.match(src, /import \{[^}]*\bisLfsPointer\b[^}]*\} from '\.\.\/manifest\.js'/,
+    'gene-profile.js must use the one LFS check, in web/js/manifest.js');
+  assert.match(src, /isLfsPointer\(/, 'it must check for LFS pointers before parsing');
+  assert.match(src, /git lfs pull/, 'the error shown to the user must name the remedy');
 });
 
-// atlas.html's main script is a classic script and cannot import web/js/manifest.js,
-// so the magic string exists twice. Pin them together: a typo in either copy
-// would otherwise disable the guard on one side while the suite stayed green.
-test('the LFS magic string is byte-identical in both copies', () => {
-  const fromModule = read('../js/manifest.js').match(/const LFS_MAGIC = '([^']+)'/);
-  const fromAtlas = read('../atlas.html').match(/text\.startsWith\('([^']+)'\)/);
-  assert.ok(fromModule, 'LFS_MAGIC not found in web/js/manifest.js');
-  assert.ok(fromAtlas, 'startsWith literal not found in atlas.html');
-  assert.equal(fromAtlas[1], fromModule[1],
-    'atlas.html and web/js/manifest.js disagree on the Git LFS pointer magic string');
+// The magic string lives in one place, so a typo cannot disable the guard on
+// one page while the suite stays green.
+test('the LFS magic string exists once, in web/js/manifest.js', () => {
+  const magic = read('../js/manifest.js').match(/const LFS_MAGIC = '([^']+)'/)[1];
+  const web = new URL('../', import.meta.url);
+  const files = [];
+  const walk = (rel) => {
+    for (const name of readdirSync(new URL(rel, web))) {
+      const path = `${rel}${name}`;
+      if (statSync(new URL(path, web)).isDirectory()) {
+        if (name !== 'tests' && name !== 'data') walk(`${path}/`);
+      } else if (/\.(html|js)$/.test(name)) {
+        files.push(path);
+      }
+    }
+  };
+  walk('');
+  const holders = files.filter((f) => readFileSync(new URL(f, web), 'utf8').includes(magic));
+  assert.deepEqual(holders, ['js/manifest.js']);
 });
 
 test('both copies agree with a real pointer file', () => {

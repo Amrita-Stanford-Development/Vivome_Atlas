@@ -71,9 +71,11 @@ metric into HTML. See [docs/web/manifest.md](docs/web/manifest.md).
 - Pages mount panels with `<script type="module" async>` and always attach a
   `.catch()` that renders `errorPanel(err)`. A failed manifest load shows an
   error, never a blank panel or a stale number.
-- `atlas.html` is a classic script and cannot import `web/js/manifest.js`, so the
-  Git LFS magic string is duplicated there. `web/tests/lfs.test.js` pins the two
-  copies byte-for-byte. If you touch either, the test must stay green.
+- `atlas.html` is markup; its code is the ES modules in `web/js/atlas/`
+  ([docs/web/atlas.md](docs/web/atlas.md)). The Git LFS check and the class
+  colours each exist once (`isLfsPointer` in `web/js/manifest.js`,
+  `CLASS_COLOURS` in `web/js/workflow-data.js`), and `web/tests/lfs.test.js`
+  and `web/tests/workflow.test.js` fail if a copy appears anywhere else.
 - Every page carries the same static site header: the wordmark links to
   `index.html`, then one link per tool page. `web/tests/chrome.test.js`
   pins the copies together; see [docs/web/design.md](docs/web/design.md).
