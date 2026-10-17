@@ -20,7 +20,7 @@ import {
   searchCells, storyFor, wfFact,
 } from './workflow-data.js';
 import {
-  buildCellCard, buildEncoderChoice, buildFormatCards, buildGeneLookup, buildGuessTable, buildHeldoutCards,
+  buildCellCard, buildEncoderChoice, buildFormatCards, buildGeneLookup, buildGuessTable,
   buildLadderTrace, buildMembers, buildOutcomeTable, buildRawSnippet, buildRecipe, buildResponseJson,
   buildScenarioTable, buildServiceCard, buildSyncBanner,
 } from './workflow-panels.js';
@@ -39,6 +39,7 @@ const MODULES = {
 const MODULE_OF = {
   open: 'input', data: 'input', files: 'input', genes: 'input', matching: 'input', smoothing: 'input',
   encoder: 'model', probabilities: 'model', second: 'model', guess: 'model', answer: 'model', landing: 'model',
+  online: 'evidence', local: 'evidence',
   training: 'evidence', results: 'evidence',
 };
 
@@ -189,7 +190,6 @@ function buildPanels() {
   $('#tree').innerHTML = treeSvg(w.class_order, ctx.hierarchy);
   $('#scenario-table').innerHTML = buildScenarioTable(w);
   $('#service-card').innerHTML = buildServiceCard(w);
-  $('#heldout-cards').innerHTML = buildHeldoutCards(w);
   const gene = $('#gene-search');
   gene.addEventListener('input', () => {
     $('#gene-result').innerHTML = buildGeneLookup(geneLookup(w, gene.value), gene.value);

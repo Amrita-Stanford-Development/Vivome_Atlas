@@ -48,11 +48,47 @@ export function text(g, str, x, y, { size = 12, colour = INK, align = 'left', we
   g.textBaseline = baseline;
   let s = String(str);
   if (max && g.measureText(s).width > max) {
-    while (s.length > 1 && g.measureText(`${s}…`).width > max) s = s.slice(0, -1);
-    s = `${s}…`;
+    // Too wide: first a slightly smaller size (to 80%, never under 8px);
+    // only if that is not enough, shortened with an ellipsis.
+    const floor = Math.max(8, size * 0.8);
+    let sz = size;
+    while (sz > floor && g.measureText(s).width > max) {
+      sz = Math.max(floor, sz - 0.5);
+      g.font = `${weight} ${sz}px ${FONT}`;
+    }
+    if (g.measureText(s).width > max) {
+      while (s.length > 1 && g.measureText(`${s}…`).width > max) s = s.slice(0, -1);
+      s = `${s}…`;
+    }
   }
   g.fillText(s, x, y);
   g.restore();
+}
+
+// A sentence that may take a second line where one line is too narrow even
+// at the smaller size text() allows: it wraps at a space, and `up` stacks
+// the lines upward from y (for a note at a figure's foot). Returns the
+// number of lines drawn.
+export function textLines(g, str, x, y, { size = 12, weight = 400, max, lines = 2, lead = 1.3, up = false, ...rest } = {}) {
+  const s = String(str);
+  g.save();
+  g.font = `${weight} ${Math.max(8, size * 0.8)}px ${FONT}`;
+  const fits = !max || g.measureText(s).width <= max;
+  g.font = `${weight} ${size}px ${FONT}`;
+  const out = [];
+  let cur = '';
+  if (!fits) {
+    for (const word of s.split(' ')) {
+      const next = cur ? `${cur} ${word}` : word;
+      if (cur && out.length < lines - 1 && g.measureText(next).width > max) { out.push(cur); cur = word; } else cur = next;
+    }
+  }
+  g.restore();
+  if (fits) { text(g, s, x, y, { size, weight, max, ...rest }); return 1; }
+  out.push(cur);
+  const step = size * lead;
+  out.forEach((ln, k) => text(g, ln, x, up ? y - (out.length - 1 - k) * step : y + k * step, { size, weight, max, ...rest }));
+  return out.length;
 }
 
 export function roundRect(g, x, y, w, h, r = 3) {

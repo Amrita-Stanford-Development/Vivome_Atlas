@@ -401,7 +401,7 @@ export function files(el, ctx) {
         g.save();
         g.translate(box.x - 12, box.y + box.h);
         g.rotate(-Math.PI / 2);
-        text(g, narrow ? `${fc(pres.rows)} proteins` : `${fc(pres.rows)} proteins, one row per protein`, 0, 0,
+        text(g, narrow ? `${fc(pres.rows)} proteins` : box.h < 260 ? `${fc(pres.rows)} proteins, one per row` : `${fc(pres.rows)} proteins, one row per protein`, 0, 0,
           { size: 11, colour: INK, weight: 600, opacity: labels, max: box.h });
         g.restore();
         chip(g, `our cell (cell ${i + 1})`, Math.min(cx + 6, box.x + box.w - 120), box.y + 14, { size: 10.5, colour: ACCENT, border: ACCENT, opacity: labels * phase(p, 0.1, 0.18) });
@@ -454,6 +454,10 @@ export function files(el, ctx) {
         }
       } else if (!narrow) {
         text(g, 'the whole file', box.x + box.w / 2, box.y + box.h + 16, { size: 10.5, colour: FAINT, align: 'center' });
+      }
+      if (narrow) {
+        text(g, 'one square: one protein in one cell', box.x + box.w / 2, box.y + box.h + 16,
+          { size: 10, colour: INK, align: 'center', opacity: labels * phase(p, 0.2, 0.27), max: width - 24 });
       }
       g.restore();
     }
@@ -528,6 +532,16 @@ export function files(el, ctx) {
           if (!short) {
             text(g, 'how strongly it was detected:', tx, yC + 64, { size: 10.5, colour: SOFT, opacity: callout });
             text(g, 'bigger means more of it', tx, yC + 79, { size: 10.5, colour: SOFT, opacity: callout });
+          } else if (yC + 66 <= height) {
+            text(g, 'detected strength: bigger is more', tx, yC + 62, { size: 10, colour: SOFT, opacity: callout, max: tw * 0.5 });
+          } else {
+            // No room under the bar: the note goes beside the number.
+            g.save();
+            g.font = `700 24px ${FONT}`;
+            const nw = g.measureText(Math.round(v).toLocaleString('en-US')).width;
+            g.restore();
+            text(g, 'detected strength: bigger is more', tx + nw + 12, yC + 30,
+              { size: 10, colour: SOFT, opacity: callout, max: tx + tw * 0.55 - 12 - (tx + nw + 12) });
           }
         }
         const blank = phase(p, 0.52, 0.6);

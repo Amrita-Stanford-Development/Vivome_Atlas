@@ -60,11 +60,11 @@
    Across on wide screens, down on narrow ones. */
 .wf-map-lede { font-size: 16px; color: var(--ink-soft); margin: -4px 0 26px; }
 .wf-journey { position: relative; }
-.wf-journey-track { position: absolute; left: 12.5%; right: 12.5%; top: 34px; width: 75%; height: 20px; overflow: visible; }
+.wf-journey-track { position: absolute; left: 10%; right: 10%; top: 34px; width: 80%; height: 20px; overflow: visible; }
 .wf-journey-rail { stroke: rgba(0, 102, 163, 0.18); stroke-width: 3; }
 .wf-journey-pulse { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 90 910; animation: wf-journey-run 4.5s linear infinite; }
 @keyframes wf-journey-run { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
-.wf-stations { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; position: relative; }
+.wf-stations { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; position: relative; }
 .wf-station { max-width: none; display: grid; grid-template-rows: auto 1fr; gap: 12px; text-align: center; }
 .wf-station-head { display: grid; justify-items: center; gap: 6px; color: var(--ink); text-decoration: none; }
 .wf-station-node {

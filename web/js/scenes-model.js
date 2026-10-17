@@ -39,12 +39,21 @@ function wrapLines(g, str, maxW, size, weight = 400) {
 function paragraphs(g, items, x, y, maxW, bottom, { size = 10.5, colour = SOFT, opacity = 1, lead = 1.5, gap = 8 } = {}) {
   let yy = y;
   for (const item of items) {
-    const { str, weight = 400, tint = colour, sz = size } = typeof item === 'string' ? { str: item } : item;
-    const lines = wrapLines(g, str, maxW, sz, weight);
-    const h = lines.length * sz * lead;
-    if (yy + h - sz * (lead - 1) > bottom) break;
-    lines.forEach((ln, k) => text(g, ln, x, yy + sz + k * sz * lead, { size: sz, colour: tint, weight, opacity }));
-    yy += h + gap;
+    const { str, weight = 400, tint = colour, sz: size0 = size } = typeof item === 'string' ? { str: item } : item;
+    // Smaller and tighter before giving up: the full size, then 90% and 82%.
+    let fit = null;
+    for (const [sz, ld] of [[size0, lead], [size0 * 0.9, lead * 0.95], [Math.max(8, size0 * 0.82), lead * 0.92]]) {
+      const lines = wrapLines(g, str, maxW, sz, weight);
+      const h = lines.length * sz * ld;
+      if (yy + h - sz * (ld - 1) <= bottom) { fit = { sz, ld, lines, h }; break; }
+    }
+    if (!fit) {
+      // Counted on the canvas, so a script can check that no figure drops its explanation.
+      g.canvas.dropped = (g.canvas.dropped ?? 0) + 1;
+      break;
+    }
+    fit.lines.forEach((ln, k) => text(g, ln, x, yy + fit.sz + k * fit.sz * fit.ld, { size: fit.sz, colour: tint, weight, opacity }));
+    yy += fit.h + gap;
   }
   return yy;
 }
@@ -190,7 +199,7 @@ export function encoder(el, ctx) {
         g.restore();
         line(g, fx + (ex - fx) * 0.55, y, lerp(fx + (ex - fx) * 0.55, ex, t), y, { colour: ACCENT, width: 1.5 });
         if (t > 0.95) dot(g, ex, y, 6, PROT, 1, INK);
-        if (k === anchor && t > 0.95 && !narrow) chip(g, 'also draws the map (step 5 of this part)', ex + 12, y, { size: 10, border: ACCENT, colour: ACCENT });
+        if (k === anchor && t > 0.95 && !narrow) chip(g, 'also draws the map (step 6 of this part)', ex + 12, y, { size: 10, border: ACCENT, colour: ACCENT });
       });
       text(g, narrow ? 'The next step compares them with each type\u2019s home.' : 'The next step compares each of these positions with the types\u2019 homes on the map.', 12, height - 12,
         { size: 10.5, colour: SOFT, opacity: phase(p, 0.9, 0.97), max: width - 24 });
@@ -264,12 +273,14 @@ export function probabilities(el, ctx) {
 // own pattern above them. Beat 3: our cell against its best and its worst
 // match, gene by gene. Beat 4: every type's match score, then the chances
 // they become. Beat 5: the best guess with it and without it, in testing.
-// Beat 6: whether it is trusted in this file.
+// Beat 6: whether it is trusted in this file. Beat 7: how that bar was set.
 
 // The fingerprint picture: well-known marker genes and a spread of types (by
 // name, those the trace has), the cell's best match always among the types.
 const PRINT_GENES = ['CD3E', 'CD4', 'CD8A', 'PRF1', 'GZMB', 'LYZ', 'S100A8', 'CD14', 'HLA-DRA', 'PPBP', 'PF4', 'HBB'];
 const PRINT_GENES_NARROW = ['CD3E', 'CD8A', 'GZMB', 'LYZ', 'CD14', 'PPBP', 'HBB'];
+// The practice files' kinds in a phone's few words.
+const KINDS_SHORT = { single: 'one type', lineage: 'one branch', scope2: 'SCoPE2-like', narrow: '2 or 3 types', pbmc: 'blood-like', mixed: '5 or 8 types' };
 const PRINT_TYPES = ['cd4-positive, alpha-beta t cell', 'cd8-positive, alpha-beta t cell', 'natural killer cell', 'b cell',
   'classical monocyte', 'platelet', 'erythrocyte'];
 
@@ -315,11 +326,11 @@ export function second(el, ctx) {
     const worst = gd.scatter_worst;
 
     // Beats 1 and 2: the fingerprints, then our cell's own row above them.
-    const grid = 1 - phase(p, 0.315, 0.355);
+    const grid = 1 - phase(p, 0.268, 0.305);
     if (grid > 0) {
       g.save();
       g.globalAlpha = grid;
-      const mine = phase(p, 0.18, 0.26);
+      const mine = phase(p, 0.155, 0.22);
       const genes = genesOf(narrow ? PRINT_GENES_NARROW : PRINT_GENES);
       let types = PRINT_TYPES.map((name) => names.indexOf(name)).filter((k) => k >= 0);
       if (!types.includes(sc.class)) types = [sc.class, ...types];
@@ -328,7 +339,8 @@ export function second(el, ctx) {
       const labelW = narrow ? 100 : 220;
       const cw = Math.min(58, (width - 24 - labelW) / genes.length);
       const top = 74;
-      const rh = clamp((height - top - 52) / (types.length + 1), 11, 30);
+      // Room under the rows for the key (two rows of it on a phone).
+      const rh = clamp((height - top - (narrow ? 68 : 52)) / (types.length + 1), 11, 30);
       const yTypes = top + rh + 8;
       text(g, narrow ? 'Each type\u2019s fingerprint' : 'Each type\u2019s fingerprint: its average cell, gene by gene', 12, 20, { size: 12, weight: 600, colour: INK, opacity: 1 - mine, max: width - 24 });
       text(g, narrow ? 'Our cell\u2019s own pattern' : 'Our cell\u2019s own pattern, above the fingerprints', 12, 20, { size: 12, weight: 600, colour: INK, opacity: mine, max: width - 24 });
@@ -336,7 +348,7 @@ export function second(el, ctx) {
         : `each against all example cells; ${types.length} of the ${names.length} types and ${genes.length} well-known marker genes shown`, 12, 38,
       { size: 10.5, colour: SOFT, max: width - 24 });
       genes.forEach((k, j) => text(g, hm.genes[k], labelW + j * cw + cw / 2, top - 8, { size: narrow ? 8.5 : 9.5, colour: INK, align: 'center', max: cw - 2 }));
-      const reveal = phase(p, 0.01, 0.1);
+      const reveal = phase(p, 0.01, 0.085);
       types.forEach((c, r) => {
         const y = yTypes + r * rh;
         const a = clamp(reveal * types.length - r, 0, 1);
@@ -365,13 +377,17 @@ export function second(el, ctx) {
       lx = key(g, lx, yL, diverging(-2), narrow ? 'less' : 'less than average', reveal);
       lx = key(g, lx, yL, diverging(0), narrow ? 'average' : 'about average', reveal);
       lx = key(g, lx, yL, diverging(2), narrow ? 'more' : 'more than average', reveal);
-      if (!narrow) key(g, lx, yL, null, 'not measured, left out', mine);
-      if (!hmOwn && mine > 0 && !narrow) text(g, `(shown for cell ${hm.cells[hc] + 1}, a cell like ours)`, width - 12, 38, { size: 9.5, colour: FAINT, align: 'right', opacity: mine });
+      if (narrow) key(g, 12, yL + 17, null, 'not measured, left out', mine);
+      else key(g, lx, yL, null, 'not measured, left out', mine);
+      if (!hmOwn && mine > 0) {
+        text(g, `(shown for cell ${hm.cells[hc] + 1}, a cell like ours)`, narrow ? 12 : width - 12, narrow ? 54 : 38,
+          { size: 9.5, colour: FAINT, align: narrow ? 'left' : 'right', opacity: mine });
+      }
       g.restore();
     }
 
     // Beat 3: our cell against its best match and its worst, gene by gene.
-    const three = phase(p, 0.315, 0.355) * (1 - phase(p, 0.48, 0.52));
+    const three = phase(p, 0.268, 0.305) * (1 - phase(p, 0.41, 0.447));
     if (three > 0) {
       g.save();
       g.globalAlpha = three;
@@ -380,9 +396,10 @@ export function second(el, ctx) {
         { size: 10.5, colour: SOFT, max: width - 24 });
       const panels = narrow || !worst ? [[sc, 'best match', ACCENT]] : [[sc, 'best match', ACCENT], [worst, 'worst match', INK]];
       const pw = (width - 24 - (panels.length - 1) * 12) / panels.length;
-      const boxS = Math.max(60, Math.min(pw - 56, height - 70 - (narrow ? 84 : 66)));
-      const dotsIn = phase(p, 0.35, 0.41);
-      const lines = phase(p, 0.41, 0.45);
+      // Room under the boxes for the score, its verdict and the lines' key.
+      const boxS = Math.max(60, Math.min(pw - 56, height - 70 - (narrow ? 104 : 86)));
+      const dotsIn = phase(p, 0.30, 0.35);
+      const lines = phase(p, 0.35, 0.385);
       panels.forEach(([s, kind, colour], k) => {
         const px = 12 + k * (pw + 12);
         const bx = px + (pw - boxS) / 2;
@@ -393,34 +410,36 @@ export function second(el, ctx) {
         g.save();
         g.translate(bx - 8, by + boxS);
         g.rotate(-Math.PI / 2);
-        text(g, 'the type: less \u2192 more', 0, 0, { size: 9.5, colour: SOFT, max: boxS });
+        text(g, boxS < 120 ? 'type: less \u2192 more' : 'the type: less \u2192 more', 0, 0, { size: 9.5, colour: SOFT, max: boxS });
         g.restore();
         const score = `match score ${s.r.toFixed(2)}`;
         const verdict = `the dots ${s.r >= 0 ? 'climb' : 'fall'} ${Math.abs(s.r) < 0.3 ? 'only slightly' : 'clearly'}; ${kind === 'best match' ? 'still the best' : 'the poorest'} of all ${names.length}`;
         text(g, score, bx + boxS / 2, by + boxS + 32, { size: 13, weight: 700, colour, align: 'center', opacity: lines });
-        if (!narrow) text(g, verdict, bx + boxS / 2, by + boxS + 49, { size: 10, colour: SOFT, align: 'center', opacity: lines, max: pw });
+        text(g, narrow ? `${s.r >= 0 ? 'climbs' : 'falls'} ${Math.abs(s.r) < 0.3 ? 'slightly' : 'clearly'}; ${kind === 'best match' ? 'still the best' : 'the poorest'} of ${names.length}` : verdict,
+          bx + boxS / 2, by + boxS + 49, { size: 10, colour: SOFT, align: 'center', opacity: lines, max: pw });
       });
-      if (narrow && worst) {
-        text(g, `Worst match: ${plainName(names[worst.class])}, score ${worst.r.toFixed(2)}`, 12, height - 10, { size: 10.5, colour: INK, opacity: lines, max: width - 24 });
-      } else if (!narrow && height - 10 > 70 + boxS + 66) {
-        text(g, 'Solid line: the trend of the dots. Dashed: where a perfect match would sit. The score uses every gene our cell measured.', 12, height - 10,
+      if (narrow) {
+        if (worst) text(g, `Worst match: ${plainName(names[worst.class])}, score ${worst.r.toFixed(2)}`, 12, height - 22, { size: 10, colour: INK, opacity: lines, max: width - 24 });
+        text(g, 'Solid line: the dots\u2019 trend. Dashed: a perfect match.', 12, height - 7, { size: 9.5, colour: FAINT, opacity: lines, max: width - 24 });
+      } else {
+        text(g, 'Solid line: the trend of the dots. Dashed: where a perfect match would sit. The score uses every gene our cell measured.', 12, height - 8,
           { size: 10, colour: FAINT, opacity: lines, max: width - 24 });
       }
       g.restore();
     }
 
     // Beat 4: every type's score, then the chances they become.
-    const four = phase(p, 0.48, 0.52) * (1 - phase(p, 0.645, 0.69));
+    const four = phase(p, 0.41, 0.447) * (1 - phase(p, 0.553, 0.59));
     if (four > 0) {
       g.save();
       g.globalAlpha = four;
       const order = topK(gd.r, names.length);
       const last = order[order.length - 1];
       const rowH = narrow ? 17 : clamp((height - 136) / 8, 19, 30);
-      const n = Math.max(3, Math.min(8, Math.floor((height - 112) / rowH)));
+      const n = Math.max(3, Math.min(8, Math.floor((height - 128) / rowH)));
       const shown = order.slice(0, n);
-      const grow = phase(p, 0.52, 0.57);
-      const morph = phase(p, 0.58, 0.63);
+      const grow = phase(p, 0.445, 0.49);
+      const morph = phase(p, 0.495, 0.533);
       const cp = gd.correlation_probability;
       text(g, narrow ? 'Every type scored, then chances' : 'Every type\u2019s match score, then the chances they become', 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
       text(g, `the ${n} best of ${names.length}; the rest score lower, down to ${plainName(names[last])} at ${gd.r[last].toFixed(2)}`, 12, 38,
@@ -465,7 +484,7 @@ export function second(el, ctx) {
     }
 
     // Beat 5: the best guess with the second opinion and without it, in testing.
-    const five = phase(p, 0.645, 0.69) * (1 - phase(p, 0.81, 0.855));
+    const five = phase(p, 0.553, 0.59) * (1 - phase(p, 0.695, 0.733));
     if (five > 0 && so) {
       g.save();
       g.globalAlpha = five;
@@ -481,7 +500,7 @@ export function second(el, ctx) {
       const bw = width - labelW - 64;
       const top = 58;
       const rowH = clamp((height - top - 30) / rows.length, 26, 56);
-      const grow = phase(p, 0.69, 0.78);
+      const grow = phase(p, 0.59, 0.67);
       rows.forEach(([name, without, withIt], k) => {
         const y = top + k * rowH;
         const bh = Math.min(14, rowH * 0.3);
@@ -498,7 +517,7 @@ export function second(el, ctx) {
     }
 
     // Beat 6: can it be trusted in this file?
-    const six = phase(p, 0.81, 0.855);
+    const six = phase(p, 0.695, 0.733) * (1 - phase(p, 0.838, 0.876));
     if (six > 0) {
       g.save();
       g.globalAlpha = six;
@@ -506,7 +525,7 @@ export function second(el, ctx) {
       text(g, 'Can the second opinion be trusted in this file?', 12, 20, { size: 12, weight: 600, colour: INK, max: width - 24 });
       text(g, narrow ? 'one dot per cell; blue: it agrees with the learners' : 'one dot per cell; blue: the second opinion\u2019s top type is the learners\u2019 top type', 12, 38,
         { size: 10.5, colour: SOFT, max: width - 24 });
-      const fill = phase(p, 0.86, 0.93);
+      const fill = phase(p, 0.735, 0.79);
       const bw = width - 24;
       const per = Math.ceil(counted.length / 8);
       const dw = bw / per;
@@ -522,12 +541,67 @@ export function second(el, ctx) {
       text(g, `needed: ${pct(fusion.threshold)}`, 12 + bw * fusion.threshold + 6, by - 2, { size: 11, colour: INK, weight: 600 });
       text(g, `agrees: ${pct(fusion.agreement)} (${fc(fusion.agreeing)} of ${fc(fusion.counted)} cells)`, 12, by + 40, { size: 11, colour: ACCENT, weight: 600, opacity: fill });
       const used = fusion.correlation_term === 'used';
-      const verdict = phase(p, 0.93, 0.96);
+      const verdict = phase(p, 0.79, 0.815);
       paragraphs(g, [
         { str: used ? 'Above the line: in this file the second opinion is trusted and mixed in.'
           : 'Below the line: in this file the second opinion is set aside, and the learners decide alone.', tint: INK },
-        narrow ? '' : 'Why a check: each gene is compared within the file, so in a file of one kind of cell \u201cmore than average\u201d says little, and the second opinion would mislead.',
-      ].filter(Boolean), 12, by + 50, width - 24, height - 4, { opacity: verdict, gap: 4, size: narrow ? 10.5 : 11.5 });
+        narrow ? 'Why: in a file of one kind of cell, \u201cmore than average\u201d says little.'
+          : 'Why a check: each gene is compared within the file, so in a file of one kind of cell \u201cmore than average\u201d says little, and the second opinion would mislead.',
+      ], 12, by + 50, width - 24, height - 4, { opacity: verdict, gap: 4, size: narrow ? 10 : 11.5, lead: narrow ? 1.4 : 1.5 });
+      g.restore();
+    }
+
+    // Beat 7: how the bar was set: the practice files it was chosen on, by kind.
+    const seven = phase(p, 0.838, 0.876);
+    const gate = so?.gate;
+    if (seven > 0 && gate) {
+      g.save();
+      g.globalAlpha = seven;
+      const barText = formatRecord(w.facts.agreement_threshold);
+      text(g, narrow ? 'How the bar was set' : `How the ${barText} bar was set: the practice files it was chosen on, by kind`, 12, 20,
+        { size: 12, weight: 600, colour: INK, max: width - 24 });
+      text(g, narrow ? 'one dot per file: how often its second opinion agreed'
+        : 'one dot per practice file, placed at how often its second opinion agreed with the learners; blue: at or above the bar', 12, 38,
+      { size: 10.5, colour: SOFT, max: width - 24 });
+      const order = ['single', 'lineage', 'scope2', 'narrow', 'pbmc', 'mixed'].filter((k) => gate.rows.some(([grp]) => grp === k));
+      const labelW = narrow ? 104 : 200;
+      const right = narrow ? 44 : 96;
+      const ax = (v) => labelW + v * (width - labelW - right);
+      const top = 60;
+      const rowH = clamp((height - top - (narrow ? 76 : 70)) / (order.length + 1), 15, 34);
+      const appear = phase(p, 0.875, 0.93);
+      const notes = phase(p, 0.93, 0.96);
+      const yEnd = top + (order.length + 1) * rowH;
+      line(g, ax(fusion.threshold), top - 6, ax(fusion.threshold), yEnd + 2, { colour: INK, width: 2 });
+      text(g, `the bar: ${barText}`, ax(fusion.threshold) + 5, top - 2, { size: 10, colour: INK, weight: 600 });
+      order.forEach((grp, r) => {
+        const y = top + 6 + r * rowH + rowH / 2;
+        const files = gate.rows.filter(([k]) => k === grp);
+        const kind = narrow ? (KINDS_SHORT[grp] ?? grp) : (PRACTICE_KINDS[grp] ?? grp);
+        text(g, `${kind} (${fc(files.length)})`, labelW - 10, y + 4, { size: narrow ? 9.5 : 11, colour: INK, align: 'right', max: labelW - 14 });
+        files.forEach(([, a], k) => {
+          if (k / files.length > appear) return;
+          const jitter = ((((k * 37) % 11) / 10) - 0.5) * Math.min(10, rowH * 0.5);
+          dot(g, ax(a), y + jitter, narrow ? 2.4 : 3, a >= fusion.threshold ? ACCENT : '#AEB9C2', 0.85);
+        });
+        const med = gate.median?.[grp];
+        if (isMeasured(med)) {
+          line(g, ax(med.value), y - rowH * 0.42, ax(med.value), y + rowH * 0.42, { colour: INK, width: 1.5, opacity: appear });
+          text(g, narrow ? formatRecord(med) : `typical ${formatRecord(med)}`, width - 12, y + 4, { size: 10, colour: SOFT, align: 'right', opacity: appear });
+        }
+      });
+      // This file, for comparison.
+      const yF = top + 6 + order.length * rowH + rowH / 2;
+      text(g, narrow ? 'this file' : 'this file, PBMC240', labelW - 10, yF + 4, { size: narrow ? 9.5 : 11, colour: ACCENT, weight: 700, align: 'right', max: labelW - 14 });
+      dot(g, ax(fusion.agreement), yF, 5, fusion.agreement >= fusion.threshold ? ACCENT : '#AEB9C2', 1, ACCENT);
+      text(g, pct(fusion.agreement), width - 12, yF + 4, { size: 10, colour: ACCENT, weight: 600, align: 'right' });
+      [0, 0.5, 1].forEach((v) => text(g, `${v * 100}%`, ax(v), yEnd + 16, { size: 9.5, colour: FAINT, align: 'center', opacity: appear }));
+      const tried = (gate.tried ?? []).filter(isMeasured).map(formatRecord);
+      paragraphs(g, [
+        narrow ? 'Short line: each kind\u2019s typical file. Files of one kind sit below the bar; mixed ones above.'
+          : 'The short line in each row is that kind\u2019s typical file. Files of one kind of cell sit below the bar, where the second opinion made guesses worse; files with many kinds sit above it, where it made them better.',
+        tried.length > 1 ? `${tried.join(' and ')} were both tried and gave nearly the same results; ${barText} was kept. Development figures.` : 'Development figures.',
+      ], 12, yEnd + 22, width - 24, height - 2, { size: narrow ? 9.5 : 10.5, opacity: notes, gap: 2, lead: 1.4 });
       g.restore();
     }
   }, {
@@ -593,8 +667,8 @@ export function guess(el, ctx) {
         });
         if (!last) text(g, narrow ? '→' : k === cols.length - 2 ? '=' : '+', x + colW + opGap / 2, top + (order.length * rowH) / 2 + 6, { size: 18, colour: ACCENT, align: 'center', opacity: cols[k + 1][2] });
       });
-      if (!used && !narrow) {
-        text(g, 'An even split adds the same to every type, so the learners\u2019 order stays: their top type is the best guess.', 12, height - 10,
+      if (!used) {
+        text(g, narrow ? 'An even split adds the same to every type: the order stays.' : 'An even split adds the same to every type, so the learners\u2019 order stays: their top type is the best guess.', 12, height - 10,
           { size: 10, colour: FAINT, opacity: phase(p, 0.3, 0.42), max: width - 24 });
       }
       if (!own) text(g, `(shown for cell ${detail.cell + 1}, a cell like ours)`, width - 12, 20, { size: 9.5, colour: FAINT, align: 'right' });
@@ -674,11 +748,14 @@ export function answer(el, ctx) {
       const value = (i) => (probs ? probs[i] : (cell.top.find(([c]) => c === i)?.[1] ?? 0));
       const order = [...names.keys()].sort((a, b) => value(b) - value(a));
       const rowH = narrow ? 18 : 20;
-      const shown = order.slice(0, Math.max(4, Math.min(narrow ? 8 : 14, Math.floor((height - 110) / rowH))));
+      // Without room beside the bars (a phone, a narrow window), how a bar is
+      // set goes under the shortlist, and fewer rows are shown.
+      const explain = !narrow && width >= 760;
+      const below = explain ? 0 : narrow ? 64 : 40;
+      const shown = order.slice(0, Math.max(4, Math.min(narrow ? 8 : 14, Math.floor((height - 110 - below) / rowH))));
       const set = new Set(cell.candidate_set);
       const labelW = narrow ? 110 : 190;
       // On a wide figure the right side explains how each type's bar is set.
-      const explain = !narrow && width >= 760;
       const bw = explain ? (width - labelW) * 0.46 : width - labelW - 30;
       const grow = phase(p, 0, 0.1);
       const ticks = phase(p, 0.08, 0.16);
@@ -719,6 +796,14 @@ export function answer(el, ctx) {
         text(g, list.length ? `Shortlist: ${list.join(', ')}` : 'Shortlist: empty, no type clears its bar', 12, yS, { size: 11.5, colour: INK, weight: 600, opacity: ticks, max: width - 24 });
       }
       if (!own) text(g, `(chances shown for cell ${cell.id ? state.cell + 1 : ''}\u2019s top types only)`, 12, yS + 18, { size: 9.5, colour: FAINT });
+      if (!explain) {
+        const target = w.facts.target_coverage;
+        const share = isMeasured(target) ? `${Math.round(target.value * 10)} in 10` : 'most';
+        paragraphs(g, [narrow
+          ? `How a bar is set: unseen RNA cells of that type, most genes hidden; the bar is where ${share} of them reach it.`
+          : `How a type\u2019s bar is set: example RNA cells of that type that VivOME never trained on, most genes hidden, each get a chance for their own type; the bar sits where ${share} of them reach it.`],
+        12, yS + (narrow && list.length ? 22 : 6) + (own ? 0 : 14), width - 24, height - 2, { size: narrow ? 9.5 : 10.5, opacity: phase(p, 0.1, 0.18), lead: 1.4 });
+      }
       g.restore();
     }
     // Beat 2: the two checks.
@@ -732,34 +817,44 @@ export function answer(el, ctx) {
       const sims = withSim.map(([c]) => c.similarity);
       const lo = Math.min(...sims, ood) - 0.01;
       const x = (v) => 24 + ((v - lo) / (1 - lo)) * (width - 48);
-      // Below the dots, on a wide figure: why the check, and how it is measured.
-      const room = narrow ? 0 : clamp(height - 300, 0, 130);
-      const mid = (height - room) * 0.5;
-      const spread = Math.min(80, (height - room) * 0.2);
+      // Under the dots, at any height: why the check, and how likeness is
+      // measured (shorter on a phone). The dots give up room for it.
+      const f = w.facts;
+      const away = cells.filter((c) => c.outcome === 'outside_supported_region').length;
+      const textH = narrow ? 70 : clamp(height * 0.32, 72, 130);
+      const top = 34;
+      const axisY = height - textH - 26;
+      const rectBottom = axisY - 14;
+      const spread = Math.min(80, (rectBottom - 8 - (top + 26)) / 2);
+      const mid = (top + 26 + rectBottom - 8) / 2;
       g.fillStyle = alpha(INK, 0.06);
-      g.fillRect(24, mid - spread - 30, x(ood) - 24, spread * 2 + 50);
-      text(g, 'too unlike: no answer', 30, mid - spread - 14, { size: 10.5, colour: INK, weight: 600 });
+      g.fillRect(24, top, x(ood) - 24, rectBottom - top);
+      text(g, narrow ? 'too unlike: no answer' : `too unlike: no answer (the ${fc(away)} dark dots)`, 30, top + 16, { size: 10.5, colour: INK, weight: 600, max: x(ood) - 36 });
       withSim.forEach(([c, i]) => {
         const jitter = ((((i * 41) % 37) / 36) - 0.5) * 2 * spread;
         dot(g, x(c.similarity), mid + jitter, i === state.cell ? 6.5 : 3, c.outcome === 'outside_supported_region' ? INK : alpha(ACCENT, 0.55), 1, i === state.cell ? INK : null);
       });
-      line(g, x(ood), mid - spread - 30, x(ood), mid + spread + 20, { colour: INK, dash: [4, 3], width: 1.5 });
-      const axisY = mid + spread + 34;
+      line(g, x(ood), top, x(ood), rectBottom + 6, { colour: INK, dash: [4, 3], width: 1.5 });
       text(g, 'less alike', 24, axisY, { size: 10.5, colour: SOFT });
       text(g, 'more alike \u2192', width - 24, axisY, { size: 10.5, colour: SOFT, align: 'right' });
       if (cell.similarity !== null && cell.similarity !== undefined) {
-        chip(g, 'our cell', Math.min(x(cell.similarity) + 10, width - 90), mid - spread - 14, { size: 10.5, colour: ACCENT, border: ACCENT });
+        // A cell turned away sits in the grey band: its tag goes low, clear of the band's label.
+        chip(g, 'our cell', Math.min(x(cell.similarity) + 10, width - 90), cell.similarity < ood ? rectBottom - 12 : top + 12, { size: 10.5, colour: ACCENT, border: ACCENT });
       }
-      if (room > 0) {
-        const f = w.facts;
+      const show = phase(p, 0.3, 0.38);
+      if (narrow && textH > 0) {
+        paragraphs(g, [
+          'Why: chances always add up to 100%, even for a cell unlike any example. This check stops a forced answer.',
+          `How: likeness to the nearest example cell on the map; the line keeps ${formatRecord(f.ood_share_above)} of ordinary cells.`,
+        ], 12, axisY + 8, width - 24, height - 20, { size: 10, opacity: show, gap: 3, lead: 1.4 });
+      } else if (textH > 0) {
         const colW = (width - 48) / 2;
-        const show = phase(p, 0.3, 0.38);
         paragraphs(g, [{ str: 'Why this check', weight: 600, tint: INK },
           'The learners\u2019 chances always add up to 100%, even for a cell unlike anything they learned from. This check stops such a cell getting a confident-looking answer.'],
-        24, axisY + 12, colW, height - 22, { opacity: show, gap: 2 });
+        24, axisY + 8, colW, height - 20, { opacity: show, gap: 2 });
         paragraphs(g, [{ str: 'How it is measured', weight: 600, tint: INK },
           `Likeness is how near our cell\u2019s point sits to the nearest example cell\u2019s point on the map (1 means the same place), averaged over the ${formatRecord(f.members)} learners. The line, at ${formatRecord(f.ood_threshold)}, is where ${formatRecord(f.ood_share_above)} of ordinary example cells score above it.`],
-        24 + colW + 24, axisY + 12, colW, height - 22, { opacity: show, gap: 2 });
+        24 + colW + 24, axisY + 8, colW, height - 20, { opacity: show, gap: 2 });
       }
       text(g, narrow ? `The other check (${fc(floor)} genes) is in Part 2, step 1.` : `The other check, enough genes measured (at least ${fc(floor)}), was shown in Part 2, step 1.`, 12, height - 8, { size: 10.5, colour: SOFT, max: width - 24 });
       g.restore();

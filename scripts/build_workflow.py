@@ -63,6 +63,8 @@ HELDOUT = REPO / "research" / "benchmark" / "heldout"
 ASTRAL = REPO / "research" / "notebook-outputs" / "astral_abstention" / "summary.json"
 PUBLISH = REPO / "deploy" / "huggingface" / "PUBLISH.md"
 SERVICE_CONFIG = REPO / "service" / "config.py"
+SERVICE_VALIDATION = REPO / "service" / "pipeline" / "validation.py"
+DOCKERFILE = REPO / "deploy" / "huggingface" / "Dockerfile"
 PROJECT_PAGE = REPO / "web" / "project.html"
 
 SCHEMA_VERSION = "1"
@@ -379,7 +381,23 @@ def second_opinion() -> dict:
                      "without": measured(pct(before), f"{without_basis} (v3.1's {key} plus the recorded gain)"
                                          if key != "overall" else without_basis, "percent"),
                      "with": measured(pct(chosen[f"suite_{key}"]), with_basis, "percent")})
+    # The trust bar: chosen on the same 240 practice files, where single-type
+    # files agree little and the second opinion hurt them (entry 24).
+    exploration = json.loads(EXPLORATION.read_text(encoding="utf-8"))
+    medians = exploration["upload_agreement"]["calibration_suite_by_scenario"]
+    tried = sorted({float(m.group(1)) for k in exploration["finalists"]
+                    for m in [re.search(r"agreement gate ([0-9.]+)", k)] if m})
+    gate_rows = read_csv(suite)
+    assert {r["agreement_threshold"] for r in gate_rows} == {"0.4"}
+    gate = {
+        "basis": f"{rel(suite)}: the practice files the bar was chosen on",
+        "rows": [[r["group"], round(float(r["agreement"]), 4)] for r in gate_rows],
+        "median": {g: measured(round(v["50%"], 4), f"{rel(EXPLORATION)}, upload_agreement", "percent")
+                   for g, v in medians.items()},
+        "tried": [measured(v, f"{rel(EXPLORATION)}, the finalists' agreement gates", "percent") for v in tried],
+    }
     return {
+        "gate": gate,
         "fulcher_without": measured(pct(alone["development"]["fulcher"]), without_basis, "percent"),
         "fulcher_with": measured(pct(arm["fulcher"]), f"{rel(PRETEST / 'research_arm.csv')}, v4.1 (chosen rule)", "percent"),
         "practice": rows,
@@ -395,6 +413,8 @@ def service() -> dict:
     config = SERVICE_CONFIG.read_text(encoding="utf-8")
     env = lambda name: re.search(rf'"{name}", "([^"]+)"', config).group(1)  # noqa: E731
     url = re.search(r"DEFAULT_SERVICE_URL = '([^']+)'", PROJECT_PAGE.read_text(encoding="utf-8")).group(1)
+    validation = SERVICE_VALIDATION.read_text(encoding="utf-8")
+    docker = DOCKERFILE.read_text(encoding="utf-8")
     basis = rel(PUBLISH)
     return {
         "url": url, "platform": "Google Cloud Run", "region": flag("region"),
@@ -406,6 +426,10 @@ def service() -> dict:
         "max_cells": measured(int(env("VIVOME_MAX_UPLOAD_CELLS")), rel(SERVICE_CONFIG)),
         "max_mb": measured(int(float(env("VIVOME_MAX_UPLOAD_MB"))), rel(SERVICE_CONFIG)),
         "concurrent_projections": measured(int(env("VIVOME_MAX_CONCURRENT_PROJECTIONS")), rel(SERVICE_CONFIG)),
+        # For running it yourself: the smallest file it takes, its local port, its Python.
+        "min_cells": measured(int(re.search(r"^MIN_CELLS_REFUSE = (\d+)", validation, re.M).group(1)), rel(SERVICE_VALIDATION)),
+        "local_port": measured(int(env("VIVOME_PORT")), rel(SERVICE_CONFIG), "plain"),
+        "python": measured(float(re.search(r"^FROM python:(\d+\.\d+)", docker, re.M).group(1)), rel(DOCKERFILE), "plain"),
         "endpoints": ["GET /api/status", "POST /api/project"],
     }
 
@@ -488,7 +512,8 @@ def build(manifest: dict | None = None) -> dict:
     sources = [TRACE, SNIPPETS, ATLAS_RNA, FEATURE_PROVENANCE, FEATURE_DETAIL, GENE_ID_PROVENANCE, DECISIVE, CORE,
                TRAIN, REPRODUCE, SPEC_V31, SPEC_SERVED, PHASE3 / "eval_by_scenario.csv", PHASE3 / "eval_uploads.csv",
                RNA_COVERAGE, PROTEIN_COVERAGE, ASTRAL, PUBLISH, SERVICE_CONFIG, EXPLORATION,
-               PRETEST / "selection.json", PRETEST / "research_arm.csv", EXPLORATION.parent / "calibration_uploads.csv"]
+               PRETEST / "selection.json", PRETEST / "research_arm.csv", EXPLORATION.parent / "calibration_uploads.csv",
+               SERVICE_VALIDATION, DOCKERFILE]
     sources += sorted(HELDOUT.glob("*/summary.json")) + sorted(HELDOUT.glob("*/scores.csv"))
     workflow = {
         "schema_version": SCHEMA_VERSION,

@@ -7,7 +7,7 @@ project: a guide, a collaborator, a reviewer.
 
 ## What it shows
 
-An opening, a cold open and four parts of 4, 2, 6 and 1 steps, numbered
+An opening, a cold open and five parts of 4, 2, 6, 1 and 2 steps, numbered
 within each part ("Part 3 · Step 2 of 6"), each step a pinned scroll story.
 Each part opens on a screen of its own (`.wf-part`): its number large and
 faint behind it, its title and what it covers, and its steps as a row of
@@ -58,11 +58,13 @@ step ("Part 1, step 3"), or "the next step" within a part.
 | 2 | 2 of 2. Borrowing from similar cells | the file's cells placed by likeness, our cell linked to its matches; its values before and after, and the unchanged mask | `trace.stages.smoothing`, `trace.heatmap` |
 | 3 | 1 of 6. Turning the cell into a point on the map | what a learner reads, the squeeze to 128 numbers, every learner side by side | `trace.stages.encoder`, `trace.detail[].embedding` |
 | 3 | 2 of 6. Which types is our cell close to? | one learner's closeness to each type, then its chances, then every learner's and their average | `trace.detail[].members`, `.ensemble` |
-| 3 | 3 of 6. A second opinion | each type's fingerprint on marker genes, our cell's own pattern above them; our cell against its best and worst match, gene by gene; every type's match score, then the chances; the best guess with it and without it in testing; whether the file trusts it | `trace.heatmap.fingerprints`, `trace.detail[].guess` (`r`, `scatter`, `scatter_worst`), `second_opinion`, `trace.stages.fusion`, `trace.cells` |
+| 3 | 3 of 6. A second opinion | each type's fingerprint on marker genes, our cell's own pattern above them; our cell against its best and worst match, gene by gene; every type's match score, then the chances; the best guess with it and without it in testing; whether the file trusts it; how that bar was set, from the practice files it was chosen on | `trace.heatmap.fingerprints`, `trace.detail[].guess` (`r`, `scatter`, `scatter_worst`), `second_opinion` (with `gate`), `trace.stages.fusion`, `trace.cells` |
 | 3 | 4 of 6. The best guess | the learners' chances and the second opinion's (or an even split where it is set aside) mixed into one; the five likeliest types | `trace.detail[].guess`, `trace.stages.fusion` |
 | 3 | 5 of 6. The answer, or the reason for none | each type's chance against its bar, the shortlist, and how a bar is set; likeness to the example cells, why it is checked and how it is measured; how the shortlist decides; every cell by result | `trace.cells`, `trace.stages.calibration`, `.ood`, `facts.ood_share_above` |
 | 3 | 6 of 6. Where the cell lands on the map | the map in 3D, the file's cells, our cell and its neighbours, the neighbours' clues; the results file | `reference.sample`, `trace.cells[].xyz`, `trace.detail[].neighbours`, `.response` |
-| 4 | 1 of 1. Testing VivOME, and using it today | the learners' own test, against guessing; practice files by kind, the Fulcher 2026 contest, the six sets kept back, the live service | `training`, `evaluation`, the manifest's `benchmark`, `service` |
+| 4 | 1 of 1. Testing VivOME | the learners' own test, against guessing; how often VivOME's answers on practice files are right, by kind; the Fulcher 2026 contest, VivOME as served against the other methods (the highlights only, by the owner's choice) | `training`, `evaluation`, the manifest's `benchmark` |
+| 5 | 1 of 2. Sending a file to VivOME | the browser and the cloud service side by side: the file checked in the browser, sent, the service waking, its checks, every step of the page in turn, the answers back, one log line kept, asleep again; the live service's card and a button that asks it if it is awake | `service` |
+| 5 | 2 of 2. Running VivOME yourself | the two commands and the address it answers at; what it needs; what is ready and what is not yet (the learners' files are not public, no one-click download) | `service` |
 
 **The followed cell.** Every figure follows one PBMC240 run, by default
 the first run named to one type or a family that its marker-based label
