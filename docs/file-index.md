@@ -39,7 +39,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/workflow.js` — the Workflow page's controller: loads the manifest and workflow.json, fills slots, the followed cell, scroll progress, lazy scenes, the live-service check
 - `web/js/film.js` — the Workflow page's film mode: play, pause, scrub, skip, speed, captions, the address and the 16:9 present view
 - `web/js/timeline.js` — the film's chapters, lengths and beats, its clock and its address (pure)
-- `web/js/workflow-data.js` — loading, checking and reading web/data/workflow.json: records, the followed cell, the gene lookup, the class colours (pure)
+- `web/js/workflow-data.js` — loading, checking and reading web/data/workflow.json: records, the followed cell, the gene lookup, the class colours, the service's steps in plain words (pure)
 - `web/js/manuscript-data.js` — loading, checking and reading web/data/manuscript.json: the record formats, the caveat tags, the slots and their basis (pure)
 - `web/js/workflow-panels.js` — the Workflow page's HTML builders: snippets, recipe, cell card, probability and guess tables, the ladder, held-out cards, the service card (pure)
 - `web/js/workflow-svg.js` — static SVG figures for the Workflow page: histogram, heatmap, bars, Sankey, tree, UpSet, graph, ROC (pure)
@@ -48,6 +48,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/scenes-input.js` — the Workflow page's figures for the cold open, the data, the files, the gene space, the upload, matching and smoothing
 - `web/js/scenes-model.js` — the Workflow page's figures for the encoder, probabilities, the best guess, the answer and the 3D landing
 - `web/js/scenes-evidence.js` — the Workflow page's figures for the training and for how the results were calculated, with the live service
+- `web/js/atlas/reference-data.js` — the Atlas page's reference cells as typed arrays from the metadata CSVs, the class order, the scene frame kept for placing uploads, class-name anchors (pure)
+- `web/js/atlas/spatial.js` — the Atlas page's geometry: the orbit pose, nearest reference cells on a grid, screen-space picking, the file's sheet, label placement (pure)
+- `web/js/atlas/answers.js` — a service response or the recorded example as one cell shape, each answer's look on the map, which services share the map, the receipt's numbers (pure)
 - `web/js/manifest.js` — loads, validates and formats the manifest; `isMeasured()` is the one guard on displaying a number
 - `web/js/panels.js` — pure builders that turn manifest records into HTML strings for each page's panels
 - `web/tests/fixtures.js` — shared manifest fixture for the JS tests, including a `<script>` class name that proves escaping
@@ -57,6 +60,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/motion.test.js` — tests for `motion.js`: clamping, and counting up in the final number's format
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and nothing is drawn in front of its title
 - `web/tests/workflow.test.js` — the Workflow page against the real files: every number slot measured, copy rules, chapters, escaping, palette, service address, no model maths in the browser
+- `web/tests/atlas-data.test.js` — the Atlas page's reference cells read from the real files: counts, quoted names, each type keeps its colour, the scene frame, name anchors
+- `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
+- `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
 - `web/tests/manuscript.test.js` — the Manuscript page against the real files: every slot measured but the open items, no typed metric, copy rules, caveat tags, contents links, the current model's benchmark rows only
 - `web/tests/timeline.test.js` — the film's clock: chapter lengths, locate, beats, reduced-motion steps, the address
 - `web/tests/workflow-layout.test.js` — the Workflow page's layout maths and static figures: rotation, Sankey conservation, colour ramps, ROC snapping, hatching, escaping

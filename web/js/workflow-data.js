@@ -202,6 +202,20 @@ export const OUTCOME_NOTES = {
   coverage_too_low: 'Too few proteins were measured in the cell to judge.',
 };
 
+// The steps the service runs on a file, in plain words: the Workflow page's
+// Part 5 lists them, and the Atlas page's waiting illustration plays them.
+// Each has a sentence and the Workflow chapter that explains it.
+export const SERVICE_STEPS = ['fit to the shared list', 'borrow from similar cells', 'the learners', 'the second opinion', 'the answer or reason', 'place on the map'];
+export const SERVICE_STEP_NOTES = [
+  'Each protein is matched to a gene on the shared list, and each gene is scaled within your file.',
+  'Each cell borrows a little from the cells most like it in your file, to steady its gaps.',
+  'The learners each turn the cell into a point on the map and say which types it is near.',
+  'Where your file agrees with the learners, a second opinion compares each cell with every type’s average profile.',
+  'Each cell gets a type, a family or a branch when the evidence is weaker, or no answer and the reason.',
+  'Each cell is placed on the map where the learners put it.',
+];
+export const SERVICE_STEP_CHAPTERS = ['matching', 'smoothing', 'encoder', 'second', 'answer', 'landing'];
+
 // What VivOME says about a cell, as whole sentences for a reader new to it.
 export function answerSentence(cell) {
   if (!cell) return PENDING_LABEL;

@@ -5,7 +5,7 @@
 // with no numbers and say so; every number drawn is a recorded one.
 
 import { isMeasured } from './manifest.js';
-import { PRACTICE_KINDS, formatRecord, plainName } from './workflow-data.js';
+import { PRACTICE_KINDS, SERVICE_STEPS as STEPS, formatRecord, plainName } from './workflow-data.js';
 import { buildScenarioTable, buildServiceCard } from './workflow-panels.js';
 import { clamp, lerp, phase } from './workflow-layout.js';
 import { rng } from './random.js';
@@ -336,8 +336,6 @@ export function results(el, ctx) {
 // the service wakes. Beat 3: the service's checks. Beat 4: every step of
 // this page, lit in turn. Beat 5: the answers travel back, one log line is
 // kept, and the service sleeps again. Numbers are the service's settings.
-
-const STEPS = ['fit to the shared list', 'borrow from similar cells', 'the learners', 'the second opinion', 'the answer or reason', 'place on the map'];
 
 // A small file: a sheet with a folded corner and a grid.
 function fileIcon(g, x, y, s, colour, opacity = 1) {
