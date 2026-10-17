@@ -808,9 +808,9 @@ export function matching(el, ctx) {
       const fillM = phase(p, 0.02, 0.1);
       const fillC = phase(p, 0.1, 0.19);
       let lx = 12;
-      lx = swatch(lx, 40, '#E6E9EC', 'empty');
-      lx = swatch(lx, 40, '#BFD5E6', narrow ? 'in the file' : 'the file has a value', fillM);
-      swatch(lx, 40, ACCENT, narrow ? 'our cell' : 'our cell has a value', fillC);
+      lx = swatch(lx, 40, '#E6E9EC', narrow ? 'none' : 'no cell measured it');
+      lx = swatch(lx, 40, '#BFD5E6', narrow ? 'others only' : 'other cells measured it, ours didn\u2019t', fillM);
+      swatch(lx, 40, ACCENT, narrow ? 'our cell' : 'our cell measured it', fillC);
       const top = 54;
       const bottom = height - 30;
       const cols = Math.ceil(Math.sqrt(n * ((width - 24) / (bottom - top))));
@@ -853,7 +853,8 @@ export function matching(el, ctx) {
       const nameW = narrow ? 58 : 86;
       const cw = Math.min(64, (width - 24 - nameW) / pick.length);
       const x0 = 12 + nameW;
-      const rh = clamp((height - 190) / 3, 30, 72);
+      // Room below the rows for what the mask is for.
+      const rh = clamp((height - (narrow ? 200 : 210)) / 2, 24, 120);
       const yG = 58;
       const yA = yG + 14;
       const yM = yA + rh + 18;
@@ -877,12 +878,32 @@ export function matching(el, ctx) {
         bar(g, x + 2, yM, cw - 4, rh, on ? alpha(ACCENT, 0.15) : BENCH, 4, showMask);
         text(g, on ? '1' : '0', x + cw / 2, yM + rh * 0.66, { size: 16, weight: 700, colour: on ? ACCENT : INK, align: 'center', opacity: showMask });
       });
+      // Why the mask: with it, and without it.
       const notes = phase(p, 0.38, 0.45);
-      const yN = yM + rh + 26;
-      text(g, 'Darker means more of that protein.', 12, yN, { size: 11, colour: SOFT, opacity: notes, max: width - 24 });
-      text(g, narrow ? 'Mask 1: measured. Mask 0: not measured.' : 'Mask 1: measured. Mask 0: not measured, so the empty amount is not read as "none".', 12, yN + 20,
-        { size: 11, colour: SOFT, opacity: notes, max: width - 24 });
-      if (!hmOwn) text(g, `(shown for cell ${hm.cells[hmAt] + 1}, a cell like ours)`, 12, yN + 36, { size: 9.5, colour: FAINT, opacity: notes });
+      const yN = yM + rh + 18;
+      if (narrow) {
+        text(g, 'With the mask: 0 means "skip, not measured".', 12, yN + 12, { size: 10.5, colour: ACCENT, weight: 600, opacity: notes, max: width - 24 });
+        text(g, 'Without it: empty seats would read as "average".', 12, yN + 30, { size: 10.5, colour: INK, opacity: notes, max: width - 24 });
+      } else {
+        const bw = (width - 36) / 2;
+        const bh = Math.min(96, height - yN - 14);
+        const panel = (x, colour, title, lines, mark) => {
+          g.save();
+          g.globalAlpha *= notes;
+          bar(g, x, yN, bw, bh, '#FFFFFF', 10);
+          g.strokeStyle = colour;
+          g.lineWidth = 1.5;
+          g.beginPath();
+          g.roundRect?.(x + 0.75, yN + 0.75, bw - 1.5, bh - 1.5, 10);
+          g.stroke();
+          g.restore();
+          text(g, `${mark}  ${title}`, x + 14, yN + 22, { size: 12, weight: 600, colour, opacity: notes, max: bw - 24 });
+          lines.forEach((s, k) => text(g, s, x + 14, yN + 42 + k * 17, { size: 10.5, colour: SOFT, opacity: notes, max: bw - 24 }));
+        };
+        panel(12, ACCENT, 'With the mask', ['1: read this amount', '0: set it aside, it was not measured'], '\u2713');
+        panel(24 + bw, INK, 'Without it', ['every empty seat would hold a number, say 0,', 'which reads as "exactly average": guesses', 'would pass for measurements'], '\u2717');
+      }
+      if (!hmOwn) text(g, `(shown for cell ${hm.cells[hmAt] + 1}, a cell like ours)`, width - 12, 20, { size: 9.5, colour: FAINT, align: 'right', opacity: notes });
       g.restore();
     }
 

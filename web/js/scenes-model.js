@@ -147,9 +147,9 @@ export function encoder(el, ctx) {
         g.restore();
         line(g, fx + (ex - fx) * 0.55, y, lerp(fx + (ex - fx) * 0.55, ex, t), y, { colour: ACCENT, width: 1.5 });
         if (t > 0.95) dot(g, ex, y, 6, PROT, 1, INK);
-        if (k === anchor && t > 0.95 && !narrow) chip(g, 'also draws the map (step 11)', ex + 12, y, { size: 10, border: ACCENT, colour: ACCENT });
+        if (k === anchor && t > 0.95 && !narrow) chip(g, 'also draws the map (step 5 of this part)', ex + 12, y, { size: 10, border: ACCENT, colour: ACCENT });
       });
-      text(g, narrow ? 'Step 8 compares them with each type\u2019s home.' : 'Step 8 compares each of these positions with the types\u2019 homes on the map.', 12, height - 12,
+      text(g, narrow ? 'The next step compares them with each type\u2019s home.' : 'The next step compares each of these positions with the types\u2019 homes on the map.', 12, height - 12,
         { size: 10.5, colour: SOFT, opacity: phase(p, 0.9, 0.97), max: width - 24 });
       g.restore();
     }
@@ -430,7 +430,7 @@ export function answer(el, ctx) {
       if (cell.similarity !== null && cell.similarity !== undefined) {
         chip(g, 'our cell', Math.min(x(cell.similarity) + 10, width - 90), mid - spread - 14, { size: 10.5, colour: ACCENT, border: ACCENT });
       }
-      text(g, narrow ? `The other check (${fc(floor)} genes) is in step 5.` : `The other check, enough genes measured (at least ${fc(floor)}), was shown in step 5.`, 12, height - 12, { size: 10.5, colour: SOFT, max: width - 24 });
+      text(g, narrow ? `The other check (${fc(floor)} genes) is in Part 2, step 1.` : `The other check, enough genes measured (at least ${fc(floor)}), was shown in Part 2, step 1.`, 12, height - 12, { size: 10.5, colour: SOFT, max: width - 24 });
       g.restore();
     }
     // Beat 3: how the shortlist decides.

@@ -179,7 +179,7 @@ export function training(el, ctx) {
         line(g, x, 42 + ch + 4, lerp(x, width / 2, avg), lerp(42 + ch + 4, ay - 8, avg), { colour: ACCENT, width: 1.4, opacity: avg });
       });
       if (avg > 0) {
-        chip(g, 'their views are averaged into one (step 8)', width / 2, ay + 6, { size: 12, align: 'center', border: ACCENT, colour: ACCENT, opacity: avg });
+        chip(g, 'their views are averaged into one (Part 3, step 2)', width / 2, ay + 6, { size: 12, align: 'center', border: ACCENT, colour: ACCENT, opacity: avg });
         text(g, 'Same training, different random starts; the small differences between the maps are drawn to show the idea.', width / 2, ay + 44,
           { size: 10, colour: FAINT, align: 'center', opacity: avg, max: width - 24 });
       }

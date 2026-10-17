@@ -216,28 +216,28 @@
             <h2 id="map-title">Four parts, twelve steps</h2>
             <ol class="wf-parts">
                 <li class="wf-part-card">
-                    <span class="wf-part-num">Part 1 · steps 1 to 4</span>
+                    <span class="wf-part-num">Part 1 · 4 steps</span>
                     <h3>What the model learns</h3>
                     <p>Done once, before anyone sends a file: the data VivOME learns from, what a protein file looks
                         like, the genes both sides share, and the training.</p>
                     <a class="chapter-link" href="#part-1">Go to part 1</a>
                 </li>
                 <li class="wf-part-card">
-                    <span class="wf-part-num">Part 2 · steps 5 and 6</span>
+                    <span class="wf-part-num">Part 2 · 2 steps</span>
                     <h3>Reading a new file</h3>
                     <p>A file arrives: its genes are fitted to the shared list, and each cell borrows a little from
                         similar cells in the same file.</p>
                     <a class="chapter-link" href="#part-2">Go to part 2</a>
                 </li>
                 <li class="wf-part-card">
-                    <span class="wf-part-num">Part 3 · steps 7 to 11</span>
+                    <span class="wf-part-num">Part 3 · 5 steps</span>
                     <h3>The model's judgement</h3>
                     <p>Each cell becomes a point on a map, then chances for each type, then a best guess and an
                         answer, or a reason for none.</p>
                     <a class="chapter-link" href="#part-3">Go to part 3</a>
                 </li>
                 <li class="wf-part-card">
-                    <span class="wf-part-num">Part 4 · step 12</span>
+                    <span class="wf-part-num">Part 4 · 1 step</span>
                     <h3>How we know it works</h3>
                     <p>Tests on cells whose types are known, a fair contest with other methods, sets kept back until
                         the end, and the live service.</p>
@@ -345,13 +345,26 @@
             </div>
         </section>
 
-        <div class="wf-part" id="part-1">
-            <span class="eyebrow">Part 1</span>
-            <h2 class="wf-part-title">What the model learns</h2>
-            <p>
-                Before anyone sends a file, VivOME is built once: it gets its examples, a shared list of genes, and its
-                training. These four steps show how.
-            </p>
+        <div class="wf-part" id="part-1" data-num="1">
+            <div class="wf-part-inner" data-in>
+                <span class="wf-part-kicker">Part 1 of 4 · 4 steps</span>
+                <h2 class="wf-part-title">What the model learns</h2>
+                <p class="wf-part-sub">Before anyone sends a file, VivOME is built once: it gets its example cells, a shared list of genes, and its training.</p>
+                <ol class="wf-part-steps" aria-label="The steps of part 1">
+                    <li><a href="#data"><span>1</span>Two kinds of data</a></li>
+                    <li><a href="#files"><span>2</span>What a protein file looks like</a></li>
+                    <li><a href="#genes"><span>3</span>One shared list of genes</a></li>
+                    <li><a href="#training"><span>4</span>How VivOME learns</a></li>
+                </ol>
+                <span class="wf-part-cue" aria-hidden="true">scroll to begin</span>
+            </div>
+        </div>
+
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li><li></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 1 · Step 1 of 4</span>
+            <p class="wf-step-title" aria-hidden="true">Two kinds of data</p>
+            <p class="wf-step-sub">Where VivOME's knowledge comes from: cells measured two ways, and only one of them named.</p>
         </div>
 
         <!-- 1 -->
@@ -359,7 +372,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 1 · What the model learns · Step 1</span>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 1 of 4</span>
                         <h2 id="h-data">Two kinds of data</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -411,17 +424,19 @@
             </div>
         </section>
 
-        <p class="wf-bridge">
-            Step 1 showed the two kinds of data. Next, we open a real protein file, the kind a researcher
-            would upload, and look inside.
-        </p>
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-now"></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 1 · Step 2 of 4</span>
+            <p class="wf-step-title" aria-hidden="true">What a protein file looks like</p>
+            <p class="wf-step-sub">We open a real protein file, the kind a researcher would upload, and look inside.</p>
+        </div>
 
         <!-- 2 -->
         <section class="wf-chapter" id="files" data-chapter="files" aria-labelledby="h-files">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 1 · What the model learns · Step 2</span>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 2 of 4</span>
                         <h2 id="h-files">What a protein file looks like</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -488,18 +503,19 @@
             </div>
         </section>
 
-        <p class="wf-bridge">
-            Step 2 showed that every protein file lists its own few thousand proteins. To compare a cell's
-            proteins with the RNA examples, both have to be read in the same terms: the same list of genes, in
-            the same order.
-        </p>
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li></ol>
+            <span class="wf-step-kicker">Part 1 · Step 3 of 4</span>
+            <p class="wf-step-title" aria-hidden="true">One shared list of genes</p>
+            <p class="wf-step-sub">Every protein file lists its own proteins. To compare them with the RNA examples, both must use the same list of genes, in the same order.</p>
+        </div>
 
         <!-- 3 -->
         <section class="wf-chapter" id="genes" data-chapter="genes" aria-labelledby="h-genes">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 1 · What the model learns · Step 3</span>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 3 of 4</span>
                         <h2 id="h-genes">One shared list of genes</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -521,7 +537,7 @@
                             <p data-beat>
                                 Each gene on the shared list gets its own seat, always in the same order. Every file
                                 is read into these same seats, so a seat always means the same gene. A seat stays
-                                empty when a cell's protein was not seen; step 5 shows that for our cell.
+                                empty when a cell's protein was not seen; Part 2, step 1 shows that for our cell.
                             </p>
                         </div>
                     </div>
@@ -552,17 +568,19 @@
             </div>
         </section>
 
-        <p class="wf-bridge">
-            Steps 1 to 3 gave VivOME its examples and its shared list of genes. Now it learns from them. This is
-            where the model itself is made.
-        </p>
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li></ol>
+            <span class="wf-step-kicker">Part 1 · Step 4 of 4</span>
+            <p class="wf-step-title" aria-hidden="true">How VivOME learns</p>
+            <p class="wf-step-sub">With its examples and its shared list in place, VivOME learns. This is where the model itself is made.</p>
+        </div>
 
         <!-- 4 -->
         <section class="wf-chapter" id="training" data-chapter="training" aria-labelledby="h-training">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 1 · What the model learns · Step 4</span>
+                        <span class="eyebrow">Part 1 · What the model learns · Step 4 of 4</span>
                         <h2 id="h-training">How VivOME learns</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -584,7 +602,7 @@
                                 Several learners instead of one. The same training is run
                                 <span data-wf="members">&nbsp;</span> times, each from a different random start, so
                                 each learner ends up slightly different. When a new cell arrives, all of them give
-                                their view and VivOME averages them (step 8): a group that agrees is steadier than one.
+                                their view and VivOME averages them (Part 3, step 2): a group that agrees is steadier than one.
                             </p>
                             <p data-beat>
                                 Did it learn? It was tested on example cells it had never practised on, with most of
@@ -645,13 +663,24 @@
             </div>
         </section>
 
-        <div class="wf-part" id="part-2">
-            <span class="eyebrow">Part 2</span>
-            <h2 class="wf-part-title">Reading a new file</h2>
-            <p>
-                The model is built. From here on, a researcher sends a file and VivOME reads it. The file below is
-                PBMC240, our cell's file, uploaded just as anyone would.
-            </p>
+        <div class="wf-part" id="part-2" data-num="2">
+            <div class="wf-part-inner" data-in>
+                <span class="wf-part-kicker">Part 2 of 4 · 2 steps</span>
+                <h2 class="wf-part-title">Reading a new file</h2>
+                <p class="wf-part-sub">The model is built. Now a researcher sends a file, and VivOME gets it ready to read. The file here is PBMC240, our cell's file, uploaded just as anyone would.</p>
+                <ol class="wf-part-steps" aria-label="The steps of part 2">
+                    <li><a href="#matching"><span>1</span>Fitting the file to the shared list</a></li>
+                    <li><a href="#smoothing"><span>2</span>Borrowing from similar cells</a></li>
+                </ol>
+                <span class="wf-part-cue" aria-hidden="true">scroll to begin</span>
+            </div>
+        </div>
+
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li><li></li></ol>
+            <span class="wf-step-kicker">Part 2 · Step 1 of 2</span>
+            <p class="wf-step-title" aria-hidden="true">Fitting the file to the shared list</p>
+            <p class="wf-step-sub">The file's proteins are seated on VivOME's shared list, with a record of what was and was not measured.</p>
         </div>
 
         <!-- 5 -->
@@ -659,20 +688,22 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 2 · Reading a new file · Step 5</span>
+                        <span class="eyebrow">Part 2 · Reading a new file · Step 1 of 2</span>
                         <h2 id="h-matching">Fitting the file to the shared list</h2>
                         <div class="wf-beats">
                             <p data-beat>
                                 VivOME has one seat for each of the <span data-wf="feature_space">&nbsp;</span> genes on
-                                its shared list (step 3). It seats the file's proteins by their gene: this file fills
+                                its shared list (Part 1, step 3). It seats the file's proteins by their gene: this file fills
                                 <span data-wf="matched">&nbsp;</span> seats, and our cell has a value in
                                 <span data-cell="observed">&nbsp;</span> of them. The rest of our cell's seats stay
                                 empty.
                             </p>
                             <p data-beat>
-                                An empty seat is not a zero: it means "not measured", not "none there". So beside the
-                                amounts, VivOME keeps a second row for each cell, called a mask: 1 where the cell was
-                                measured, 0 where it was not.
+                                Most of our cell's seats are empty: <span data-cell="unmeasured">&nbsp;</span> of the
+                                <span data-wf="feature_space">&nbsp;</span>. An empty seat means "not measured", not
+                                "none there". So beside the amounts, VivOME keeps a second row, called a mask: 1 where
+                                the cell was measured, 0 where it was not. Without it, VivOME would have to put some
+                                number in every empty seat, and could no longer tell a guess from a measurement.
                             </p>
                             <p data-beat>
                                 Too little to judge. A cell needs values in at least
@@ -703,6 +734,13 @@
                     being filled in with 0: the mask is that mark, so VivOME never mistakes "not measured" for "none".
                 </p>
                 <p>
+                    Why it matters: without the mask, every empty seat would have to hold some number, say 0. After
+                    the last step below, 0 means "exactly average", so most of our cell would look perfectly average,
+                    and two very different cells could look alike. With the mask, VivOME reads only the seats that were
+                    measured and sets the rest aside. It learned to do this in Part 1, step 4, where genes were hidden on
+                    purpose and the mask said which.
+                </p>
+                <p>
                     Comparing within the file works like grading on a curve. Each cell's amount of a gene is read as
                     above or below the file's typical cell, so a machine that reads everything brighter gives the same
                     picture as one that reads dimmer.
@@ -719,12 +757,19 @@
             </div>
         </section>
 
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-now"></li></ol>
+            <span class="wf-step-kicker">Part 2 · Step 2 of 2</span>
+            <p class="wf-step-title" aria-hidden="true">Borrowing from similar cells</p>
+            <p class="wf-step-sub">Measuring single cells is noisy, so each cell borrows a little from the cells most like it.</p>
+        </div>
+
         <!-- 6 -->
         <section class="wf-chapter" id="smoothing" data-chapter="smoothing" aria-labelledby="h-smoothing">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 2 · Reading a new file · Step 6</span>
+                        <span class="eyebrow">Part 2 · Reading a new file · Step 2 of 2</span>
                         <h2 id="h-smoothing">Borrowing from similar cells</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -774,13 +819,27 @@
             </div>
         </section>
 
-        <div class="wf-part" id="part-3">
-            <span class="eyebrow">Part 3</span>
-            <h2 class="wf-part-title">The model's judgement</h2>
-            <p>
-                The file is ready. Now the learners read our cell and decide what it is, or explain why they will not
-                say.
-            </p>
+        <div class="wf-part" id="part-3" data-num="3">
+            <div class="wf-part-inner" data-in>
+                <span class="wf-part-kicker">Part 3 of 4 · 5 steps</span>
+                <h2 class="wf-part-title">The model's judgement</h2>
+                <p class="wf-part-sub">The file is ready. Now the learners read our cell and decide what it is, or explain why they will not say.</p>
+                <ol class="wf-part-steps" aria-label="The steps of part 3">
+                    <li><a href="#encoder"><span>1</span>Turning the cell into a point on the map</a></li>
+                    <li><a href="#probabilities"><span>2</span>Which types is our cell close to?</a></li>
+                    <li><a href="#guess"><span>3</span>The best guess</a></li>
+                    <li><a href="#answer"><span>4</span>The answer, or the reason for none</a></li>
+                    <li><a href="#landing"><span>5</span>Where the cell lands on the map</a></li>
+                </ol>
+                <span class="wf-part-cue" aria-hidden="true">scroll to begin</span>
+            </div>
+        </div>
+
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li><li></li><li></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 1 of 5</span>
+            <p class="wf-step-title" aria-hidden="true">Turning the cell into a point on the map</p>
+            <p class="wf-step-sub">Each learner squeezes our cell's thousands of numbers into a short address on VivOME's map.</p>
         </div>
 
         <!-- 7 -->
@@ -788,11 +847,11 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 7</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 1 of 5</span>
                         <h2 id="h-encoder">Turning the cell into a point on the map</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                The learners from step 4 now read our cell. Each one takes in
+                                The learners from Part 1, step 4 now read our cell. Each one takes in
                                 <span data-wf="input_width">&nbsp;</span> numbers: the cell's
                                 <span data-wf="genes">&nbsp;</span> values, its <span data-wf="genes">&nbsp;</span>
                                 mask marks, and two summaries for each of <span data-wf="modules">&nbsp;</span> groups
@@ -805,7 +864,7 @@
                             </p>
                             <p data-beat>
                                 All <span data-wf="members">&nbsp;</span> learners do this side by side, so our cell gets
-                                one position from each. One of them also draws the shared map you will see in step 11.
+                                one position from each. One of them also draws the shared map you will see in step 5 of this part.
                             </p>
                         </div>
                     </div>
@@ -820,7 +879,7 @@
                 <p>
                     Squeezing thousands of numbers into a short address is like describing a person by a few telling
                     features instead of every detail: the learners kept only what helps tell cell types apart, which
-                    is what they practised in step 4.
+                    is what they practised in Part 1, step 4.
                 </p>
                 <details class="wf-more">
                     <summary>For the curious: inside a learner</summary>
@@ -835,12 +894,19 @@
             </div>
         </section>
 
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-now"></li><li></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 2 of 5</span>
+            <p class="wf-step-title" aria-hidden="true">Which types is our cell close to?</p>
+            <p class="wf-step-sub">From that address: how close is our cell to each type's home, and how likely is each type?</p>
+        </div>
+
         <!-- 8 -->
         <section class="wf-chapter" id="probabilities" data-chapter="probabilities" aria-labelledby="h-probabilities">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 8</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 2 of 5</span>
                         <h2 id="h-probabilities">Which types is our cell close to?</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -883,16 +949,23 @@
             </div>
         </section>
 
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 3 of 5</span>
+            <p class="wf-step-title" aria-hidden="true">The best guess</p>
+            <p class="wf-step-sub">The single likeliest type, checked against a second opinion.</p>
+        </div>
+
         <!-- 9 -->
         <section class="wf-chapter" id="guess" data-chapter="guess" aria-labelledby="h-guess">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 9</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 3 of 5</span>
                         <h2 id="h-guess">The best guess</h2>
                         <div class="wf-beats">
                             <p data-beat>
-                                Even when VivOME will not give an answer (step 10), it still names the single most
+                                Even when VivOME will not give an answer (the next step), it still names the single most
                                 likely type: its best guess. For our cell that is
                                 <span data-cell="guess">&nbsp;</span>.
                             </p>
@@ -922,15 +995,15 @@
                 <h3>In plain words</h3>
                 <p>
                     The best guess is what VivOME would say if it had to pick one type. It is always given, but it is
-                    only a guess: step 10 decides whether VivOME is sure enough to give a real answer. The second
+                    only a guess: the next step decides whether VivOME is sure enough to give a real answer. The second
                     opinion is like checking a hunch against a reference book, and only trusting the book when it
                     mostly agrees with what you already know.
                 </p>
                 <details class="wf-more">
                     <summary>For the curious: how the guess is made</summary>
                     <p class="panel-note">
-                        The best guess comes from a newer set of learners than the answer in step 10, so its chances
-                        differ a little from step 8's. Their chances are mixed with the second opinion when it is
+                        The best guess comes from a newer set of learners than the answer in the next step, so its chances
+                        differ a little from those in step 2. Their chances are mixed with the second opinion when it is
                         trusted (the learners weigh <span data-wf="weight_used">&nbsp;</span>), and otherwise with an
                         even split over the types (the learners weigh <span data-wf="weight_flat">&nbsp;</span>), which
                         leaves the learners' top type on top. In practice files the second opinion was trusted in
@@ -942,12 +1015,19 @@
             </div>
         </section>
 
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 4 of 5</span>
+            <p class="wf-step-title" aria-hidden="true">The answer, or the reason for none</p>
+            <p class="wf-step-sub">VivOME names a type only when it is sure enough; otherwise it says why not.</p>
+        </div>
+
         <!-- 10 -->
         <section class="wf-chapter" id="answer" data-chapter="answer" aria-labelledby="h-answer">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 10</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 4 of 5</span>
                         <h2 id="h-answer">The answer, or the reason for none</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -958,7 +1038,7 @@
                             </p>
                             <p data-beat>
                                 Two checks come first. Was enough measured (at least
-                                <span data-wf="floor">&nbsp;</span> genes, step 5)? And does the cell resemble anything
+                                <span data-wf="floor">&nbsp;</span> genes, Part 2, step 1)? And does the cell resemble anything
                                 VivOME learned from? A cell too unlike every example cell gets no answer rather than a
                                 forced one.
                             </p>
@@ -1000,12 +1080,19 @@
             </div>
         </section>
 
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 5 of 5</span>
+            <p class="wf-step-title" aria-hidden="true">Where the cell lands on the map</p>
+            <p class="wf-step-sub">Our cell takes its place among the example cells, and everything goes back to the researcher.</p>
+        </div>
+
         <!-- 11 -->
         <section class="wf-chapter" id="landing" data-chapter="landing" aria-labelledby="h-landing">
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 11</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 5 of 5</span>
                         <h2 id="h-landing">Where the cell lands on the map</h2>
                         <div class="wf-beats">
                             <p data-beat>
@@ -1014,7 +1101,7 @@
                                 turn it.
                             </p>
                             <p data-beat>
-                                The file's cells now drop onto the map, each at the position step 7 gave it. Our cell
+                                The file's cells now drop onto the map, each at the position step 1 of this part gave it. Our cell
                                 lands among the example cells it most resembles, and is linked to its
                                 <span data-wf="transfer_k">&nbsp;</span> nearest ones.
                             </p>
@@ -1055,13 +1142,23 @@
             </div>
         </section>
 
-        <div class="wf-part" id="part-4">
-            <span class="eyebrow">Part 4</span>
-            <h2 class="wf-part-title">How we know it works</h2>
-            <p>
-                That is the whole journey of one cell. The last step shows how VivOME was tested, and how anyone can
-                send it a file today.
-            </p>
+        <div class="wf-part" id="part-4" data-num="4">
+            <div class="wf-part-inner" data-in>
+                <span class="wf-part-kicker">Part 4 of 4 · 1 step</span>
+                <h2 class="wf-part-title">How we know it works</h2>
+                <p class="wf-part-sub">That is the whole journey of one cell. This last part shows how VivOME was tested, and how anyone can send it a file today.</p>
+                <ol class="wf-part-steps" aria-label="The steps of part 4">
+                    <li><a href="#results"><span>1</span>Testing VivOME, and using it today</a></li>
+                </ol>
+                <span class="wf-part-cue" aria-hidden="true">scroll to begin</span>
+            </div>
+        </div>
+
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li></ol>
+            <span class="wf-step-kicker">Part 4 · Step 1 of 1</span>
+            <p class="wf-step-title" aria-hidden="true">Testing VivOME, and using it today</p>
+            <p class="wf-step-sub">Three kinds of test, from easiest to hardest, and the live service anyone can use.</p>
         </div>
 
         <!-- 12 -->
@@ -1069,7 +1166,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 4 · How we know it works · Step 12</span>
+                        <span class="eyebrow">Part 4 · How we know it works · Step 1 of 1</span>
                         <h2 id="h-results">Testing VivOME, and using it today</h2>
                         <div class="wf-beats">
                             <p data-beat>

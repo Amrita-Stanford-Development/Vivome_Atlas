@@ -89,6 +89,7 @@ function setCell(i) {
     const kind = el.dataset.cell;
     el.textContent = kind === 'id' ? cell.id
       : kind === 'number' ? (i + 1).toLocaleString('en-US')
+        : kind === 'unmeasured' ? (ctx.workflow.raw.pbmc240.align.feature_space - cell.observed).toLocaleString('en-US')
       : kind === 'answer' ? ctx.answerShort(cell).replace(/^No answer: (.*)$/, 'no answer ($1)')
         : kind === 'guess' ? ctx.guessText(cell)
           : kind === 'observed' ? cell.observed.toLocaleString('en-US')

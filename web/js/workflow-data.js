@@ -177,14 +177,14 @@ export const OUTCOME_CHIPS = {
   coverage_too_low: 'Too little measured',
 };
 
-// The three ways of practising that were compared (step 4), in plain words.
+// The three ways of practising that were compared (Part 1, step 4), in plain words.
 export const DESIGN_NAMES = {
   'H module, uniform': 'Groups of genes, random gaps',
   'F2 module, profile': 'Groups of genes, gaps like real files',
   'C mask channel, uniform': 'Genes one by one, random gaps',
 };
 
-// The kinds of practice file in the simulated tests (step 12), in plain words.
+// The kinds of practice file in the simulated tests (Part 4), in plain words.
 export const PRACTICE_KINDS = {
   single: 'one type only', narrow: '2 or 3 types', mixed: '5 or 8 types', lineage: 'one branch',
   pbmc: 'like a blood sample', scope2: 'like the SCoPE2 study',
