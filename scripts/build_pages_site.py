@@ -32,6 +32,8 @@ REDIRECTS = (
     ("/benchmark.html", "/manuscript"),
     ("/home", "/"),  # the Dashboard was removed (2026-10-17); its links go to the landing page
     ("/home.html", "/"),
+    ("/project", "/atlas"),  # the Project page became the Atlas page's Your data tab (2026-10-17)
+    ("/project.html", "/atlas"),
 )
 
 NOT_FOUND = """<!doctype html>

@@ -25,8 +25,9 @@ a cell cannot show its profile. Every other page works.
 Pages serves `/versions.html` at `/versions`. The `.html` addresses redirect
 with a 308, so the site's own links keep working. Pages that were removed or
 renamed redirect through `_redirects`, which `scripts/build_pages_site.py`
-writes from its `REDIRECTS`: `/benchmark` to `/manuscript`, and the removed
-Dashboard, `/home`, to the landing page.
+writes from its `REDIRECTS`: `/benchmark` to `/manuscript`, the removed
+Dashboard, `/home`, to the landing page, and `/project` to `/atlas`, whose
+Your data tab sends a file to the service.
 
 ## Publishing
 

@@ -130,7 +130,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
     server_version = "VivOMEProjectionService/0.1"
 
     def _send_cors_headers(self) -> None:
-        """Lets the site's projection page read the response when it is
+        """Lets the site's Atlas page read the response when it is
         served from an allowed origin (config.ALLOWED_ORIGINS); any other
         origin gets no CORS headers, so a browser keeps the response from it."""
         origin = self.headers.get("Origin")
@@ -175,7 +175,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802 (stdlib naming)
         """GET /api/status: whether the service can project, and with which
-        model, so the site's projection page can say so before an upload.
+        model, so the site's Atlas page can say so before an upload.
         Loads the reference on first call, which also warms the service up."""
         if self.path != "/api/status":
             self._send_json(404, {"error": f"no such endpoint: {self.path}"})

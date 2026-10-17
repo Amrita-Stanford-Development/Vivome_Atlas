@@ -20,7 +20,6 @@
             <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
             <nav class="site-nav" aria-label="Main">
                 <a href="atlas.html">Atlas</a>
-                <a href="project.html">Project</a>
                 <a href="workflow.html" aria-current="page">Workflow</a>
                 <a href="manuscript.html">Manuscript</a>
                 <a href="versions.html">Versions</a>
@@ -1382,7 +1381,7 @@
             <div class="wf-part-inner" data-in>
                 <span class="wf-part-kicker">Part 5 of 5 · 2 steps</span>
                 <h2 class="wf-part-title">Using VivOME today</h2>
-                <p class="wf-part-sub">Anyone can send VivOME a file from the project page and get every cell's answer back. The same service can also run on your own computer, though that is not finished yet.</p>
+                <p class="wf-part-sub">Anyone can send VivOME a file from the Atlas page's Your data tab and get every cell's answer back. The same service can also run on your own computer, though that is not finished yet.</p>
                 <ol class="wf-part-steps" aria-label="The steps of part 5">
                     <li><a href="#online"><span>1</span>Sending a file to VivOME</a></li>
                     <li><a href="#local"><span>2</span>Running VivOME yourself</a></li>
@@ -1395,7 +1394,7 @@
             <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li><li></li></ol>
             <span class="wf-step-kicker">Part 5 · Step 1 of 2</span>
             <p class="wf-step-title" aria-hidden="true">Sending a file to VivOME</p>
-            <p class="wf-step-sub">From the project page to Google's cloud and back: what happens to your file, step by step.</p>
+            <p class="wf-step-sub">From the Atlas page to Google's cloud and back: what happens to your file, step by step.</p>
         </div>
 
         <!-- 14 -->
@@ -1411,12 +1410,12 @@
                             <div class="wf-canvas" aria-hidden="true"></div>
                             <div class="wf-beats" aria-live="polite">
                                 <p data-beat>
-                                    It starts on the <a href="project.html">project page</a>. You choose your file: proteins or
+                                    It starts in the <a href="atlas.html#your-data">Atlas page's Your data tab</a>. You choose your file: proteins or
                                     genes in rows, cells in columns, as a CSV or TSV table or a DIA-NN report. A first check
                                     runs in your browser, counting the file's rows and columns, and sends nothing.
                                 </p>
                                 <p data-beat>
-                                    When you press Project, the file goes to VivOME's service on Google Cloud Run: a computer
+                                    When you press Send and project, the file goes to VivOME's service on Google Cloud Run: a computer
                                     in Google's cloud that is switched on only when it is needed. After a quiet spell it is
                                     off, and the first file wakes it, which can take up to a minute.
                                 </p>
@@ -1495,7 +1494,7 @@
                             <div class="wf-beats" aria-live="polite">
                                 <p data-beat>
                                     The same service can run on your own computer, so your file never leaves it. From a copy
-                                    of VivOME's code, two commands install what it needs and start it, and the project page
+                                    of VivOME's code, two commands install what it needs and start it, and the Atlas page
                                     can then send your file there instead of to the cloud.
                                 </p>
                                 <p data-beat>
@@ -1526,10 +1525,11 @@
                     <summary>For the curious: the two commands, and what to change</summary>
                     <p class="panel-note">
                         From the top folder of a copy of the code: <code>pip install -r service/requirements.txt</code>,
-                        then <code>python -m service.app</code>. Enter its address on the project page. Settings are read
+                        then <code>python -m service.app</code>. Enter its address in the Atlas page's Your data tab, under
+                        "Use your own copy of the service". Settings are read
                         from the environment when it starts: <code>VIVOME_MAX_UPLOAD_CELLS</code> and
                         <code>VIVOME_MAX_UPLOAD_MB</code> raise the limits, and <code>VIVOME_ALLOWED_ORIGINS</code> lists
-                        the pages allowed to use it: add the public site's address to use the online project page with
+                        the pages allowed to use it: add the public site's address to use the online Atlas page with
                         your own copy.
                     </p>
                 </details>

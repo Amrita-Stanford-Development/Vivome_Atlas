@@ -9,6 +9,7 @@ research/notebook-outputs/nb1d/scanvi_pbmc240_lineage_recall_and_composition.csv
 service/examples/pbmc240_proteins_raw.tsv -text
 service/examples/pbmc240_zscored_all_genes.csv -text
 service/model/evidence/v3_1_tables/latent_centroid_cosine.csv -text
+web/data/examples/pbmc240_proteins_raw.tsv -text
 web/data/metadata_PROT_lat128.csv -text
 web/data/metadata_RNA_lat128.csv -text
 

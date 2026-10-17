@@ -19,7 +19,6 @@
             <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
             <nav class="site-nav" aria-label="Main">
                 <a href="atlas.html" aria-current="page">Atlas</a>
-                <a href="project.html">Project</a>
                 <a href="workflow.html">Workflow</a>
                 <a href="manuscript.html">Manuscript</a>
                 <a href="versions.html">Versions</a>
@@ -30,6 +29,12 @@
     <main id="main" class="main-content">
         <div class="controls-panel" id="controls-panel">
             <h1 class="visually-hidden">Atlas</h1>
+            <div class="atlas-tabs well" role="tablist" aria-label="Atlas">
+                <button type="button" role="tab" id="tab-explore" aria-controls="panel-explore" aria-selected="true">Explore</button>
+                <button type="button" role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1">Your data</button>
+            </div>
+
+            <div id="panel-explore" role="tabpanel" aria-labelledby="tab-explore">
             <div class="atlas-stats">
                 <div class="well"><div class="stat-value" id="rna-count">-</div><div class="stat-label">RNA cells</div></div>
                 <div class="well"><div class="stat-value" id="prot-count">-</div><div class="stat-label">Protein cells</div></div>
@@ -82,6 +87,89 @@
                     <div id="diagnostics-mount"></div>
                 </details>
             </section>
+            </div>
+
+            <div id="panel-data" role="tabpanel" aria-labelledby="tab-data" hidden>
+                <section class="control-section sheet" id="your-data">
+                    <h2>Label your own cells</h2>
+                    <p class="panel-text">
+                        Send a protein matrix to VivOME's online service. It answers for every cell, and
+                        the cells land on this map where the model places them. The service sees your
+                        file and nothing else.
+                    </p>
+                    <p class="service-line" id="service-status" role="status">Not checked yet.</p>
+                    <details class="own-copy">
+                        <summary>Use your own copy of the service</summary>
+                        <p class="panel-note">Run it from a clone of the repository, then enter its address (http://127.0.0.1:8001):</p>
+                        <pre class="well">pip install -r service/requirements.txt
+python -m service.app</pre>
+                        <label for="service-url">Service address</label>
+                        <div class="field-row">
+                            <input type="url" id="service-url" class="well" spellcheck="false">
+                            <button type="button" id="check-service" class="text-button">Check</button>
+                        </div>
+                    </details>
+                </section>
+
+                <section class="control-section sheet">
+                    <h2>Try the example</h2>
+                    <p class="panel-text" id="example-summary">
+                        PBMC240: blood cells measured one by one by mass spectrometry.
+                    </p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="watch-example">Watch the example</button>
+                        <button type="button" class="btn btn-quiet" id="send-example">Send the example file</button>
+                    </div>
+                </section>
+
+                <section class="control-section sheet">
+                    <h2>Send a matrix</h2>
+                    <p class="panel-text">
+                        Send mixed cells, such as PBMCs, in one file. Each gene is scaled within the file
+                        you send, so a single sorted population loses the contrast the model needs
+                        (<a href="versions.html">known limits</a>).
+                    </p>
+                    <p class="panel-note">
+                        Up to <span data-wf="service.max_cells">&nbsp;</span> cells and
+                        <span data-wf="service.max_mb">&nbsp;</span> MB per file. Or drop a file on the map.
+                    </p>
+                    <label for="modality">Modality</label>
+                    <select id="modality" class="well">
+                        <option value="prot">Protein: proteins &times; cells</option>
+                        <option value="rna">RNA: genes &times; cells</option>
+                    </select>
+                    <label for="matrix">Matrix file: features in rows, cells in columns (CSV or TSV, or a DIA-NN report)</label>
+                    <input type="file" id="matrix" class="well" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values">
+                    <label class="check"><input type="checkbox" id="restrict"> Limit answers to the cell types with protein evidence (see the supported label space below)</label>
+                    <div id="file-result" aria-live="polite"></div>
+                    <div class="actions">
+                        <button type="button" id="project" class="btn" disabled>Send and project</button>
+                        <button type="button" id="cancel" class="btn btn-quiet" hidden>Cancel</button>
+                    </div>
+                </section>
+
+                <section class="control-section sheet" id="results-card" hidden>
+                    <h2>Your cells</h2>
+                    <p class="panel-note" id="results-note"></p>
+                    <div class="outcome-chips" id="outcome-chips"></div>
+                    <div class="actions">
+                        <button type="button" class="text-button" id="open-results">Open the results</button>
+                        <button type="button" class="text-button" id="replay">Replay</button>
+                        <button type="button" class="text-button" id="download">Download the response</button>
+                        <button type="button" class="text-button" id="clear">Clear</button>
+                    </div>
+                </section>
+
+                <section class="control-section sheet" id="labels">
+                    <h2>Supported label space</h2>
+                    <p class="panel-text">
+                        A projection is only meaningful onto cell types the atlas supports. The service
+                        gives no answer when a cell falls outside this space rather than guessing.
+                        A real response, field by field, is on <a href="workflow.html#online">the Workflow page</a>.
+                    </p>
+                    <div class="supported-list" id="supported"></div>
+                </section>
+            </div>
         </div>
 
         <div class="visualization-area">
@@ -96,7 +184,14 @@
                     <button type="button" class="glass" id="sidebar-toggle" aria-expanded="true" aria-controls="controls-panel">Hide controls</button>
                     <button type="button" class="glass" id="reset-view">Reset view</button>
                 </div>
-                <div class="scene-info glass">Drag to turn, right-drag to move, scroll to zoom, click a cell for its gene profile</div>
+                <div class="scene-info glass" id="scene-info">Drag to turn, right-drag to move, scroll to zoom, click a cell for its gene profile</div>
+                <div class="status-card glass" id="status-card" aria-live="polite" hidden></div>
+                <div class="legend-card glass" id="legend-card" hidden></div>
+                <div class="flow-controls">
+                    <button type="button" class="glass" id="skip" hidden>Skip</button>
+                    <button type="button" class="glass" id="replay-view" hidden>Replay</button>
+                </div>
+                <div class="drop-hint" id="drop-hint" hidden>Drop the file to check it here, in your browser</div>
 
                 <aside class="atlas-drawer sheet" id="atlas-drawer" aria-hidden="true" aria-labelledby="drawer-title">
                     <div class="drawer-head">

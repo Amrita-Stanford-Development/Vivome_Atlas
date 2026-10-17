@@ -400,7 +400,7 @@ export function online(el, ctx) {
     g.stroke();
     bar(g, B.x, B.y, B.w, 22, BENCH, 12);
     [0, 1, 2].forEach((k) => dot(g, B.x + 14 + k * 11, B.y + 11, 3.2, '#C9D1D7'));
-    text(g, 'your browser: the project page', B.x + 50, B.y + 15, { size: 10, colour: SOFT, max: B.w - 58 });
+    text(g, 'your browser: the Atlas page', B.x + 50, B.y + 15, { size: 10, colour: SOFT, max: B.w - 58 });
     g.restore();
     const fs = Math.min(34, B.h * 0.26);
     const away = phase(p, 0.2, 0.3);
@@ -541,7 +541,7 @@ export function local(el, ctx) {
         const sx = T.x + T.w + 30;
         const ready = phase(p, 0.2, 0.28);
         fileIcon(g, sx, T.y + 30, 28, ACCENT, ready);
-        text(g, 'the project page sends', sx + 40, T.y + 44, { size: 11, colour: INK, opacity: ready, max: width - sx - 52 });
+        text(g, 'the Atlas page sends', sx + 40, T.y + 44, { size: 11, colour: INK, opacity: ready, max: width - sx - 52 });
         text(g, 'your file here instead', sx + 40, T.y + 60, { size: 11, colour: INK, opacity: ready, max: width - sx - 52 });
         text(g, 'of to the cloud', sx + 40, T.y + 76, { size: 11, colour: INK, opacity: ready, max: width - sx - 52 });
       }
@@ -579,7 +579,7 @@ export function local(el, ctx) {
       const items = [
         [true, 'the code, public for anyone to copy'],
         [true, 'two commands to install and start it'],
-        [true, 'the project page can send files to it'],
+        [true, 'the Atlas page can send files to it'],
         [false, 'the learners\u2019 files in the public copy: not yet'],
         [false, 'a one-click download: not yet'],
       ];

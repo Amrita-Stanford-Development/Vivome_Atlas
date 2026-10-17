@@ -84,11 +84,14 @@ It must report `0 differ`. The Space runs Linux, so the numbers may differ
 from this PC's at float32 rounding; a label that differs is not expected and
 stops the release.
 
-Then point the site at it: set `DEFAULT_SERVICE_URL` in `web/project.html`
-to `https://USER-vivome-atlas.hf.space`, update that page's "Connect to a
-projection service" text and the status lines of
-`docs/service/projection-api.md` and `web/versions.html`, run the three test
-suites, and redeploy the site (`docs/web/hosting.md`).
+Then point the site at it: set `DEFAULT_SERVICE_URL` in
+`web/js/atlas/service-client.js` to `https://USER-vivome-atlas.hf.space`,
+update the service text of the Atlas page's Your data tab
+(`web/atlas.html#your-data`) and the status lines of
+`docs/service/projection-api.md` and `web/versions.html`, run
+`python scripts/build_manifest.py` (it copies the address into
+`web/data/workflow.json`), run the three test suites, and redeploy the site
+(`docs/web/hosting.md`).
 
 A free Space sleeps after about two days without visits; the next request
 wakes it, which takes a minute or two.

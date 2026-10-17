@@ -117,8 +117,8 @@ test('the class colours are the atlas’s only palette, in the reference’s ord
   assert.deepEqual([...workflow.class_order].sort(), workflow.class_order, 'sorted order, as the atlas assigns colours');
 });
 
-test('the live service’s address is the project page’s', () => {
-  const url = read('project.html').match(/DEFAULT_SERVICE_URL = '([^']+)'/)[1];
+test('the live service’s address is the service client’s', () => {
+  const url = read('js/atlas/service-client.js').match(/DEFAULT_SERVICE_URL = '([^']+)'/)[1];
   assert.equal(workflow.service.url, url);
 });
 

@@ -19,7 +19,6 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/README.md` — how to serve the site and what each folder under `web/` holds
 - `web/index.html` — landing page: the title panel on the first screen, then seven sections of white and liquid-glass cards, and the finale
 - `web/atlas.html` — the Atlas page's markup: the 3D reference (RNA + protein) with its controls, support panels and drawer; its code is `web/js/atlas/`
-- `web/project.html` — the projection tool: sends a matrix to a locally run service and shows each cell's label or abstention, with a downloadable response
 - `web/manuscript.html` — the Manuscript page: an evidence bank for a journal paper on the served model, in MCP's sections (methods and why each part is there, the benchmark tables, the internal held-out test, failure modes, what was tried and not kept, open items); every number a record
 - `web/versions.html` — model card, known limits, earlier releases, prior baseline, data availability, release protocol
 - `web/workflow.html` — the Workflow page: how VivOME works start to end, 13 chapters following one PBMC240 run, a film mode
@@ -56,7 +55,16 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/atlas/gene-profile.js` — a clicked cell's gene profile from the large CSVs, with the LFS check and the "not on this copy" message
 - `web/js/atlas/explore-tab.js` — the Atlas page's Explore controls: counts, modality switches, the cell-type list, the support panels
 - `web/js/atlas/overlay.js` — the Atlas page's loading screen, error panel and tooltip
-- `web/js/atlas/main.js` — the Atlas page's entry point: loads the reference and wires the modules
+- `web/js/atlas/main.js` — the Atlas page's entry point: loads the reference, wires the modules and the two tabs
+- `web/js/atlas/landing.js` — the Atlas page's landing: runs the state machine on the stage's clock, from the file's sheet through the waiting illustration and the receipt to the flights, the camera and the results
+- `web/js/atlas/data-tab.js` — the Atlas page's Your data tab: the service line and address, the example, the file controls, the results card, the supported label space
+- `web/js/atlas/choreography.js` — the Atlas page's upload timing: the six waiting steps and their finish, the fly-in schedule level by level, the receipt, fly-in and settle timeline, the camera pose that frames the cells, reduced motion (pure)
+- `web/js/atlas/director.js` — the Atlas page's upload flow as one state machine: checking, sending, busy retries, the recorded example, the guided landing, exploring, failures (pure)
+- `web/js/atlas/file-check.js` — what the browser can tell about an upload before sending it: the header read in slices, rows counted by streaming, the separator and cell count (DIA-NN and FragPipe annotation columns), the service's limits (pure)
+- `web/js/atlas/service-client.js` — the projection service: its address (the one copy of `DEFAULT_SERVICE_URL`), the remembered address, the status and upload requests with timeout and cancel, failures by kind, one plain sentence for each
+- `web/js/atlas/upload-layer.js` — the uploaded cells on the atlas: each flies from the file's sheet along a fanned arc, growing from a sheet-sized radius, and lands in its answer's look, with a landing pop, a ripple and the glow of nearby reference cells; the same path and size on the CPU for picking
+- `web/js/atlas/illustration.js` — the waiting illustration: the service's six steps as a loop of grey and accent dots on the file's sheet, not a progress measure; its layout is pure
+- `web/js/atlas/atlas-panels.js` — the Atlas page's Your data panels: one cell's card, the receipt, the answer key, the outcome buttons, the recorded example's summary (pure)
 - `web/js/atlas/answers.js` — a service response or the recorded example as one cell shape, each answer's look on the map, which services share the map, the receipt's numbers (pure)
 - `web/js/manifest.js` — loads, validates and formats the manifest; `isMeasured()` is the one guard on displaying a number
 - `web/js/panels.js` — pure builders that turn manifest records into HTML strings for each page's panels
@@ -68,6 +76,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and nothing is drawn in front of its title
 - `web/tests/workflow.test.js` — the Workflow page against the real files: every number slot measured, copy rules, chapters, escaping, palette, service address, no model maths in the browser
 - `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser
+- `web/tests/atlas-example.test.js` — the deployed PBMC240 example is byte-identical to the `service/examples/` copy, under Cloudflare Pages' 25 MiB file limit, and a DIA-NN report with a Genes column
+- `web/tests/atlas-choreography.test.js` — the fly-in fits its window for 1 to 2,000 cells in one level or four, level order and gaps, the landing timeline, the waiting loop and its finish, the camera pose, reduced motion
+- `web/tests/atlas-director.test.js` — every rule of the upload state machine, and that no state is changed in place
+- `web/tests/atlas-file-check.test.js` — the file check on Node Blobs: tabs, commas, CRLF, empty and header-only files, headers longer than a slice, the real PBMC240 report (238 cells), the limits
+- `web/tests/atlas-service.test.js` — the service client with a fake transport: ready, busy (Retry-After 30, or hidden from the page), refused (413, 400), unreachable, not ready, timeout, cancel; the remembered address; the default address is the workflow data's
+- `web/tests/atlas-landing.test.js` — the landing run end to end on stand-ins for the page, three.js and the stage: the recorded example to the settled view, Skip and Replay, a file checked, sent and landed, a service on another map, busy, unreachable, refused in the browser
+- `web/tests/atlas-upload.test.js` — the flight path's ends, arc and fan, the shaders on the CPU's constants, uniform arrays in vertex shaders only, the layer's clock and switches on a stand-in for three.js, every illustration step seamless, in two tones, with equal bins
+- `web/tests/atlas-panels.test.js` — the Your data panels: a card for every outcome, escaping, Pending for a missing receipt, chips for every outcome, five looks in the key, the example summary
 - `web/tests/atlas-data.test.js` — the Atlas page's reference cells read from the real files: counts, quoted names, each type keeps its colour, the scene frame, name anchors
 - `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
 - `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
@@ -80,6 +96,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/water.test.js` — tests for `water.js`'s list of effects and its copy
 - `web/data/atlas_manifest.json` — generated by `scripts/build_manifest.py`; the only source of every number the pages show
 - `web/data/workflow.json` — generated by `scripts/build_workflow.py` (run by `scripts/build_manifest.py`); the Workflow page's data, built for the manifest's release
+- `web/data/examples/pbmc240_proteins_raw.tsv` — byte-identical copy of `service/examples/pbmc240_proteins_raw.tsv` (CRLF, kept by `.gitattributes`), the example file the Atlas page's Your data tab sends
 - `web/data/manuscript.json` — generated by `scripts/build_manuscript.py` (run by `scripts/build_manifest.py`); the Manuscript page's records, built for the manifest's release
 - `web/data/metadata_RNA_lat128.csv` — RNA cell metadata (85,233 rows): class, lineage, 3-PC coordinates in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`)
 - `web/data/metadata_PROT_lat128.csv` — protein cell metadata (1,490 SCoPE2 rows): true class, v3.1's best guess, out-of-distribution score and abstention, 3-PC coordinates (`scripts/export_atlas_coordinates.py`)

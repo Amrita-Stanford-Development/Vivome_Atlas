@@ -4,7 +4,10 @@
 
 import { escapeHtml } from '../panels.js';
 import { plainName } from '../workflow-data.js';
+import { createServiceState, mountDataTab } from './data-tab.js';
 import { mountExploreTab } from './explore-tab.js';
+import { createLanding } from './landing.js';
+import { createServiceClient } from './service-client.js';
 import {
   loadProfile, profileErrorHtml, profileLoadingHtml, profileProgressHtml, profileTableHtml,
 } from './gene-profile.js';
@@ -99,11 +102,53 @@ async function start() {
     return pickScreen(screen, ref.n, clientX - rect.left, clientY - rect.top, 8, layer.visible);
   }
 
+  // The Your data tab and the landing.
+  const client = createServiceClient();
+  const service = createServiceState();
+  const landing = createLanding({
+    THREE, stage, ref, reference: layer, drawer, client, reduced,
+    serviceUrl: service.url,
+    limits: service.limits,
+    options: () => ({ modality: $('modality').value, restrict: $('restrict').checked }),
+  });
+  const dataTab = mountDataTab({ landing, client, service });
+  const tabs = { explore: [$('tab-explore'), $('panel-explore')], data: [$('tab-data'), $('panel-data')] };
+  function showTab(which) {
+    for (const [key, [tab, panel]] of Object.entries(tabs)) {
+      const on = key === which;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      panel.hidden = !on;
+    }
+    if (which === 'data') dataTab.open();
+  }
+  dataTab.onShow = () => showTab('data');
+  $('tab-explore').addEventListener('click', () => showTab('explore'));
+  $('tab-data').addEventListener('click', () => showTab('data'));
+  $('controls-panel').querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = $('tab-explore').getAttribute('aria-selected') === 'true' ? 'data' : 'explore';
+    showTab(next);
+    tabs[next][0].focus();
+  });
+  // atlas.html#your-data and #labels open the tab (the other pages link
+  // here this way); #labels scrolls to the supported label space.
+  function fromHash() {
+    if (location.hash === '#your-data' || location.hash === '#labels') {
+      showTab('data');
+      if (location.hash === '#labels') $('labels').scrollIntoView({ block: 'start' });
+    }
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+
   let hoverEvent = null;
   stage.rig.on('hover', (e) => {
     if (!hoverEvent) requestAnimationFrame(() => {
       const ev = hoverEvent;
       hoverEvent = null;
+      const mine = landing.pick(ev.clientX, ev.clientY);
+      if (mine >= 0) return tooltip.show([landing.describe(mine), 'Click for its answer'], ev.clientX, ev.clientY);
       const i = pickAt(ev.clientX, ev.clientY);
       if (i < 0) return tooltip.hide();
       const isProt = i >= ref.nRna;
@@ -118,6 +163,8 @@ async function start() {
   stage.rig.on('leave', () => tooltip.hide());
 
   stage.rig.on('click', async (e) => {
+    const mine = landing.pick(e.clientX, e.clientY);
+    if (mine >= 0) return landing.select(mine);
     const i = pickAt(e.clientX, e.clientY);
     if (i < 0) return;
     const isProt = i >= ref.nRna;
@@ -141,7 +188,7 @@ async function start() {
 
   hideLoading();
   // A handle for checking the page from the browser's console.
-  window.vivomeAtlas = { stage, layer, reference: ref };
+  window.vivomeAtlas = { stage, layer, reference: ref, landing };
 }
 
 start().catch(showFailure);

@@ -9,7 +9,7 @@ short_description: Labels single-cell proteomics cells against a blood atlas
 # VivOME Atlas projection service
 
 The labelling service behind the VivOME Atlas site
-(https://vivome-atlas.pages.dev/project.html). Send a matrix of proteins
+(https://vivome-atlas.pages.dev/atlas#your-data). Send a matrix of proteins
 (or genes) by cells, and every cell comes back with a label or an
 abstention with its reason, a best guess, and coordinates in the atlas's
 shared space.

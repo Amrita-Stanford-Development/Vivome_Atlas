@@ -112,9 +112,9 @@ class TestWorkflow(unittest.TestCase):
         self.assertEqual((recipe["standardisation"], recipe["sampler"]), ("batch_gene", "mini"))
         self.assertEqual(self.w["training"]["history"]["status"], "pending")
 
-    def test_the_service_s_address_is_the_project_page_s(self):
-        page = (bw.REPO / "web" / "project.html").read_text(encoding="utf-8")
-        self.assertIn(f"DEFAULT_SERVICE_URL = '{self.w['service']['url']}'", page)
+    def test_the_service_s_address_is_the_service_client_s(self):
+        client = (bw.REPO / "web" / "js" / "atlas" / "service-client.js").read_text(encoding="utf-8")
+        self.assertIn(f"DEFAULT_SERVICE_URL = '{self.w['service']['url']}'", client)
 
 
 if __name__ == "__main__":

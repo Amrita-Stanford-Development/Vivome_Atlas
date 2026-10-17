@@ -1,0 +1,120 @@
+// The Atlas page's upload flow as one state machine: choosing and checking a
+// file, sending it, waiting (and waiting again when the service is busy),
+// the guided landing of the answer, and exploring it. Pure: transition()
+// returns a new state for an event that applies and the same object for one
+// that does not, so the page redraws only on a real change. No clock: an
+// event that starts a wait carries its own `since`.
+
+// The states the guided landing plays through; SKIP jumps from any of them
+// to exploring.
+export const GUIDED = new Set(['finishing', 'receipt', 'flying', 'settling']);
+
+// A busy service is tried this many times in all before the page gives up.
+export const MAX_ATTEMPTS = 3;
+
+export const initialState = () => ({ name: 'idle' });
+
+// What a state keeps from the one before it: the file and its check, the
+// answer, and whether it is the recorded example.
+function carry(state, name, extra = {}) {
+  const out = { name };
+  if (state.file !== undefined) out.file = state.file;
+  if (state.check !== undefined) out.check = state.check;
+  if (state.example) out.example = true;
+  if (state.response !== undefined && extra.response === undefined) out.response = state.response;
+  return Object.assign(out, extra);
+}
+
+const canSend = (state) => Boolean(state.file) && state.check?.ok === true;
+const since = (event) => (event.since === undefined ? {} : { since: event.since });
+
+export function transition(state, event) {
+  if (!state) return initialState();
+  if (!event || typeof event.type !== 'string') return state;
+  const { name } = state;
+  switch (event.type) {
+    case 'FILE_CHOSEN':
+      if (!['idle', 'chosen', 'failed', 'interactive'].includes(name) || !event.file) return state;
+      return { name: 'checking', file: event.file };
+
+    case 'CHECKED':
+      // A check of a file no longer chosen is stale.
+      if (name !== 'checking' || (event.file !== undefined && event.file !== state.file)) return state;
+      return { name: 'chosen', file: state.file, check: event.check };
+
+    case 'CHECK_FAILED':
+      if (name !== 'checking' || (event.file !== undefined && event.file !== state.file)) return state;
+      return { name: 'failed', file: state.file, error: event.error, stage: 'check' };
+
+    case 'SEND':
+      if (name !== 'chosen' || !canSend(state)) return state;
+      return { name: 'sending', file: state.file, check: state.check, attempt: 1 };
+
+    case 'UPLOADED':
+      if (name !== 'sending') return state;
+      return carry(state, 'working', { attempt: state.attempt, ...since(event) });
+
+    case 'BUSY': {
+      if (!(name === 'sending' || name === 'working') || state.example) return state;
+      const attempt = state.attempt ?? 1;
+      if (attempt >= MAX_ATTEMPTS) {
+        return carry(state, 'failed', { error: event.error ?? null, stage: 'busy', attempt });
+      }
+      return carry(state, 'busy', { attempt, retryAfter: event.retryAfter ?? null });
+    }
+
+    case 'RETRY':
+      if (name === 'busy') return carry(state, 'sending', { attempt: (state.attempt ?? 1) + 1 });
+      if (name !== 'failed') return state;
+      // A failed example runs again; a failed upload is sent again, from the
+      // first attempt, when its file passed the check.
+      if (state.example) return carry(state, 'working', { ...since(event) });
+      if (!canSend(state)) return state;
+      return { name: 'sending', file: state.file, check: state.check, attempt: 1 };
+
+    case 'CANCEL':
+      if (!['sending', 'working', 'busy'].includes(name)) return state;
+      if (!state.file || state.check === undefined) return initialState();
+      return { name: 'chosen', file: state.file, check: state.check };
+
+    case 'EXAMPLE':
+      if (!['idle', 'chosen', 'interactive', 'failed'].includes(name)) return state;
+      return carry({ file: state.file, check: state.check, example: true }, 'working', { ...since(event) });
+
+    case 'RESPONSE':
+      // The answer can arrive before the page heard that the upload ended.
+      if (!(name === 'working' || name === 'sending') || event.response === undefined) return state;
+      return carry(state, 'finishing', { response: event.response });
+
+    case 'FINISHED':
+      return name === 'finishing' ? carry(state, 'receipt') : state;
+
+    case 'RECEIPT_DONE':
+      return name === 'receipt' ? carry(state, 'flying') : state;
+
+    case 'FLIGHT_DONE':
+      return name === 'flying' ? carry(state, 'settling') : state;
+
+    case 'SETTLED':
+      return name === 'settling' ? carry(state, 'interactive') : state;
+
+    case 'SKIP':
+      return GUIDED.has(name) ? carry(state, 'interactive') : state;
+
+    case 'REPLAY':
+      return name === 'interactive' && state.response !== undefined ? carry(state, 'receipt') : state;
+
+    case 'FAILED': {
+      if (name === 'idle') return state;
+      const out = { name: 'failed', file: state.file, check: state.check, error: event.error ?? null, stage: event.stage ?? name };
+      if (state.example) out.example = true;
+      return out;
+    }
+
+    case 'CLEAR':
+      return ['chosen', 'interactive', 'failed'].includes(name) ? initialState() : state;
+
+    default:
+      return state;
+  }
+}

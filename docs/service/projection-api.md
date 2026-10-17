@@ -9,8 +9,10 @@ can *send data to*, not only look at.
 > by default with v4.2, v3.1, v4 and v3 selectable ([Pipeline versions](#pipeline-versions)),
 > and is covered by `service/tests/`. It is hosted on Google Cloud Run at
 > `https://vivome-atlas-577083340913.us-central1.run.app` (v4.1 only; `deploy/huggingface/PUBLISH.md`).
-> `web/project.html` sends an upload there by default, or to a service the
-> visitor runs locally (`python -m service.app`), and renders the response.
+> The Atlas page's Your data tab (`web/atlas.html#your-data`) sends an upload
+> there by default, or to a service the visitor runs locally
+> (`python -m service.app`), shows each cell's answer and places the cells
+> on the atlas map.
 > Every value in the schemas below is a placeholder showing the response
 > shape, not a measurement.
 
@@ -99,7 +101,7 @@ or `{"status": "unavailable", "reason"}`:
 `POST /api/project` answers the same two codes with the same reason.
 Nothing is remembered from a failed load: every request checks again, so
 files fetched while the service runs are picked up without a restart.
-`project.html` calls `/api/status` before offering an upload.
+The Atlas page's Your data tab calls `/api/status` before offering an upload.
 
 `POST /api/project` also answers, each with `{"error", "reason"}`:
 - **413** when the request is larger than `max_upload_mb`, or the matrix
@@ -366,20 +368,26 @@ tell.
 ## Supported label space
 
 A projection is only meaningful onto cell types the atlas supports.
-`project.html` renders the supported set from the manifest via
-`buildSupportedLabelSpace()`, so it tracks the atlas rather than being
-restated. With the current build that is 22 cell types, only 2 of which have
+The Atlas page's Your data tab renders the supported set from the manifest
+via `buildSupportedLabelSpace()`, in its "Supported label space" section
+(`web/atlas.html#labels`), so it tracks the atlas rather than being restated.
+With the current build that is 22 cell types, only 2 of which have
 cross-modal coverage. By default the service assigns among all 22; the
 2 cross-modal ones are the candidate set only when a request sets
 `restrict_to_supported_classes`.
 
 ## Client-side validation
 
-`project.html` validates before anything is sent, and is built to handle real
-inputs: expression matrices are routinely gigabytes.
+The Atlas page's Your data tab validates before anything is sent
+(`web/js/atlas/file-check.js`), and is built to handle real inputs:
+expression matrices are routinely gigabytes.
 
-- The header line is read from the first 64 KB slice only (`readHeaderLine`).
-- Rows are counted by streaming the file through a reader (`countNonEmptyLines`).
+- The header line is read in 64 KB slices, up to 16 MB (a DIA-NN report's
+  header of raw-file paths passes 64 KB at about 900 cells).
+- Rows are counted by streaming the file through a reader.
+- The separator and annotation columns follow the service's own parser, so
+  the cell count matches what the service will see; the count is checked
+  against the service's limits.
 
 Peak memory stays flat regardless of file size: the file is never read into
 memory whole. The upload itself is streamed by the browser as `FormData`.

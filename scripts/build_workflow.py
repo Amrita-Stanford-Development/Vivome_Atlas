@@ -18,7 +18,7 @@ It reads:
   on RNA and protein, and the
   internal held-out test (research/benchmark/heldout/);
 - the hosted service's settings (deploy/huggingface/PUBLISH.md,
-  service/config.py, web/project.html).
+  service/config.py, web/js/atlas/service-client.js).
 
 Every number a page sentence cites is a record in `facts`, measured with its
 basis or pending, so web/js/workflow-data.js shows it through the same
@@ -65,7 +65,7 @@ PUBLISH = REPO / "deploy" / "huggingface" / "PUBLISH.md"
 SERVICE_CONFIG = REPO / "service" / "config.py"
 SERVICE_VALIDATION = REPO / "service" / "pipeline" / "validation.py"
 DOCKERFILE = REPO / "deploy" / "huggingface" / "Dockerfile"
-PROJECT_PAGE = REPO / "web" / "project.html"
+SERVICE_CLIENT = REPO / "web" / "js" / "atlas" / "service-client.js"
 
 SCHEMA_VERSION = "1"
 READING_STAGES = ("parse", "scale", "collapse", "ids", "align")
@@ -412,7 +412,7 @@ def service() -> dict:
     flag = lambda name: re.search(rf"--{name} (\S+)", command).group(1)  # noqa: E731
     config = SERVICE_CONFIG.read_text(encoding="utf-8")
     env = lambda name: re.search(rf'"{name}", "([^"]+)"', config).group(1)  # noqa: E731
-    url = re.search(r"DEFAULT_SERVICE_URL = '([^']+)'", PROJECT_PAGE.read_text(encoding="utf-8")).group(1)
+    url = re.search(r"DEFAULT_SERVICE_URL = '([^']+)'", SERVICE_CLIENT.read_text(encoding="utf-8")).group(1)
     validation = SERVICE_VALIDATION.read_text(encoding="utf-8")
     docker = DOCKERFILE.read_text(encoding="utf-8")
     basis = rel(PUBLISH)

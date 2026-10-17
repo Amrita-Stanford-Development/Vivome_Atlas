@@ -193,8 +193,13 @@ export function createStage(THREE, canvas, container, { reduced = false } = {}) 
     for (const t of tickers) if (t(dt, now / 1000)) moving = true;
     listeners.forEach((f) => f());
     renderer.render(scene, camera);
-    if (moving && !document.hidden) frame = requestAnimationFrame(draw);
-    else last = 0;
+    // A tick may already have asked for the next frame (the rig's change
+    // calls invalidate); never schedule a second one.
+    if (moving && !document.hidden) {
+      if (!frame) frame = requestAnimationFrame(draw);
+    } else if (!frame) {
+      last = 0;
+    }
   }
 
   function invalidate() {

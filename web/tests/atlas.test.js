@@ -33,6 +33,24 @@ test('the page keeps the copy rules', () => {
   }
 });
 
+test('the page has its two tabs, the labels section old links arrive at, and a labelled illustration', () => {
+  for (const id of ['tab-explore', 'tab-data', 'panel-explore', 'panel-data', 'your-data', 'labels', 'status-card', 'legend-card', 'skip', 'atlas-drawer']) {
+    assert.match(html, new RegExp(`id="${id}"`), id);
+  }
+  // The service sends no progress: the waiting animation says it is an illustration.
+  const landing = read('js/atlas/landing.js');
+  assert.match(landing, />Illustration</);
+  assert.match(landing, /It shows the steps the service runs, not its progress\./);
+});
+
+test('every number slot on the Your data tab has a measured record', async () => {
+  const { wfFact } = await import('../js/workflow-data.js');
+  const workflow = JSON.parse(read('data/workflow.json'));
+  const slots = [...html.matchAll(/data-wf="([^"]+)"/g)].map((m) => m[1]);
+  assert.ok(slots.length >= 2);
+  for (const key of slots) assert.ok(!/Pending/.test(wfFact(workflow, key)), key);
+});
+
 test('the browser computes no model output', () => {
   for (const f of modules) {
     const src = read(`js/atlas/${f}`);

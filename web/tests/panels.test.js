@@ -396,8 +396,10 @@ test('projection cells escape ids from the upload and show abstentions plainly',
 
 test('projection cells show the first rows and say how many there are', () => {
   const html = buildProjectionCells(projection(), 2);
-  assert.equal((html.match(/<tr>/g) ?? []).length, 3, 'header row plus two cells');
+  assert.equal((html.match(/<tr[\s>]/g) ?? []).length, 3, 'header row plus two cells');
   assert.match(html, /first 2 of 3 cells/);
+  // Each row names its cell's index in the response, so a click can select it.
+  assert.deepEqual([...html.matchAll(/<tr data-cell="(\d+)">/g)].map((m) => Number(m[1])), [0, 1]);
 });
 
 test('projection builders survive a malformed response', () => {

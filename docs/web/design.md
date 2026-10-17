@@ -139,8 +139,8 @@ it.
   1. **The problem:** protein data rarely comes labelled; RNA references do.
   2. **How it works:** trained on RNA, read on protein, zero-shot.
   3. **Explore:** the reference, open in the browser now, with its counts.
-  4. **Your data:** five steps from file to download, and that the service
-     runs on your own computer while in preview.
+  4. **Your data:** five steps from file to download; the service runs
+     online, and the Atlas page's Your data tab sends the file.
   5. **Honest answers:** the answer ladder (cell type, group, lineage, none
      with its reason), and how often, on simulated RNA uploads.
   6. **Evidence:** Fulcher 2026 as development data, the benchmark and the
@@ -172,6 +172,32 @@ its sentences scroll by, and the film's bar is glass. Its figures are data
 encodings: cell types take the atlas viewer's palette, RNA and protein their
 reserved colours, z-scores a blue to ochre ramp that avoids every reserved
 colour. Mechanism pictures with no data say "illustration".
+
+## The Atlas page
+
+`web/atlas.html` is an app view for PC screens: the header, a sidebar of
+sheets with two tabs (Explore and Your data), the viewer as one
+white halo card, and a drawer that slides over the viewer's right side
+([atlas.md](atlas.md)).
+
+- **Reference cells** are dots shaded as small spheres, in the cell-type
+  palette (`CLASS_COLOURS`, one copy). The type list is the colour key.
+- **Uploaded cells** wear their answer: one type is filled in its colour with
+  a white outline; a family answer is a lighter fill with an ink ring; a
+  branch answer a paler fill with a soft halo; no answer a hollow grey ring;
+  a cell that cannot be placed stays on the file's sheet as a hollow ring.
+  The legend shows each glyph. Hover and selection add an accent ring. No
+  reserved colour is used.
+- **The waiting animation is an illustration.** The service sends no
+  progress, so while it works the six steps loop with an "Illustration"
+  bead and the sentence "It shows the steps the service runs, not its
+  progress." Its answer bins are equal, so it implies no proportions.
+- **The glow** after a landing lights nearby RNA reference cells of the type
+  the cell was given, on this map; the legend says so.
+- **Motion:** the camera is guided for about 8 to 9 seconds while cells land,
+  with Skip (and Esc); any drag or wheel hands it back at once. Under reduced
+  motion nothing flies, the camera moves at once, and the waiting state is a
+  still list of the steps.
 
 ## The Manuscript page
 

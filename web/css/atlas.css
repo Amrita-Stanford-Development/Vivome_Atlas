@@ -114,6 +114,81 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .controls-panel details > summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var(--ink); }
 .controls-panel details[open] > summary { margin-bottom: 12px; }
 
+/* ---- the tabs and the Your data forms ---- */
+
+.atlas-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; margin-bottom: 18px; }
+.atlas-tabs [role="tab"] {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+.atlas-tabs [role="tab"][aria-selected="true"] { background: var(--paper); color: var(--ink); box-shadow: 1px 2px 5px rgba(var(--shade), 0.16); }
+
+.panel-text { font-size: 13.5px; line-height: 1.5; margin-bottom: 10px; }
+.controls-panel label { display: block; font-size: 12.5px; font-weight: 500; color: var(--ink); margin: 10px 0 5px; }
+.controls-panel label.check { display: flex; gap: 8px; align-items: baseline; font-weight: 400; color: var(--ink-soft); }
+.controls-panel select,
+.controls-panel input[type="file"],
+.controls-panel input[type="url"] {
+    display: block;
+    width: 100%;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    padding: 8px 10px;
+    border: 0;
+}
+.controls-panel input[type="file"]::file-selector-button {
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    border: 0;
+    border-radius: 8px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    background: var(--paper);
+    box-shadow: 1px 2px 4px rgba(var(--shade), 0.14);
+}
+.controls-panel pre { font-size: 11.5px; line-height: 1.5; padding: 10px 12px; overflow-x: auto; color: var(--ink); margin: 8px 0; }
+.field-row { display: flex; gap: 8px; align-items: stretch; }
+.field-row input { flex: 1; min-width: 0; }
+.own-copy { margin-top: 8px; font-size: 13px; }
+.own-copy > summary { cursor: pointer; color: var(--accent); }
+.service-line { font-size: 13px; margin: 6px 0 0; }
+.service-line.is-ready { color: var(--prot); }
+.service-line.is-down { color: var(--error); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.actions .btn { font-size: 13px; padding: 8px 14px; }
+.btn-quiet { color: var(--ink); background: var(--paper); box-shadow: 1px 2px 5px rgba(var(--shade), 0.16); }
+.btn-quiet:hover { background: var(--accent-tint); }
+.btn:disabled, .btn-quiet:disabled { color: var(--ink-faint); background: var(--well); box-shadow: none; cursor: default; }
+#file-result { font-size: 13px; margin-top: 10px; }
+#file-result dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; }
+#file-result dt { color: var(--ink-faint); }
+#file-result dd { color: var(--ink); font-variant-numeric: tabular-nums; }
+.outcome-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }
+.outcome-chips button {
+    font: inherit;
+    font-size: 12px;
+    padding: 4px 10px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--well);
+    color: var(--ink);
+    cursor: pointer;
+}
+.outcome-chips button[aria-pressed="false"] { opacity: 0.45; }
+.supported-list { font-size: 13px; }
+.supported-list p + p { margin-top: 8px; }
+
 /* ---- the viewer ---- */
 
 .visualization-area { flex: 1; min-width: 0; display: flex; padding: 20px 20px 20px 10px; }
@@ -185,6 +260,86 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 }
 .view-tools button:hover { background: var(--accent-tint); }
 .scene-info { position: absolute; bottom: 14px; right: 14px; z-index: 3; padding: 6px 11px; font-size: 12px; color: var(--ink-soft); }
+
+/* ---- the landing's overlays ---- */
+
+.status-card {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 4;
+    width: min(360px, calc(100% - 28px));
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+}
+.status-card h3 { font-size: 14px; margin: 6px 0 4px; }
+.status-card .step-list { padding-left: 20px; margin: 6px 0; }
+.status-card .step-list li.is-now { color: var(--ink); font-weight: 600; }
+.status-card .clock { font-variant-numeric: tabular-nums; color: var(--ink-faint); }
+.status-card .bar { height: 6px; border-radius: 3px; background: var(--well); overflow: hidden; margin: 8px 0 4px; }
+.status-card .bar > span { display: block; height: 100%; background: var(--accent); }
+.status-card dl { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; margin-top: 6px; }
+.status-card dt { color: var(--ink-faint); }
+.status-card dd { color: var(--ink); font-variant-numeric: tabular-nums; }
+.status-card .panel-error { margin-top: 6px; }
+
+.legend-card {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    z-index: 3;
+    max-width: 300px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--ink-soft);
+}
+.flow-controls { position: absolute; left: 50%; bottom: 18px; z-index: 4; display: flex; gap: 8px; transform: translateX(-50%); }
+.flow-controls button { font: inherit; font-size: 13px; font-weight: 500; padding: 7px 16px; border: 0; border-radius: 999px; color: var(--ink); cursor: pointer; }
+.flow-controls button:hover { background: var(--accent-tint); }
+.drop-hint {
+    position: absolute;
+    inset: 14px;
+    z-index: 7;
+    display: grid;
+    place-items: center;
+    border: 2px dashed var(--accent);
+    border-radius: var(--r-sheet);
+    background: rgba(0, 142, 204, 0.06);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--accent);
+    pointer-events: none;
+}
+.drawer-body .table-scroll { margin: 8px 0 14px; }
+.drawer-body h3 { font-size: 14px; margin: 16px 0 6px; }
+.drawer-body tr[data-cell] { cursor: pointer; }
+.drawer-body tr[data-cell]:hover td { background: var(--accent-tint); }
+.drawer-back { font: inherit; font-size: 12.5px; border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; margin-bottom: 8px; }
+
+/* ---- the Your data panels (web/js/atlas/atlas-panels.js) ---- */
+
+.atlas-cell-card { font-size: 13.5px; }
+.atlas-cell-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.atlas-glyph { flex: none; }
+.atlas-cell-name { font-size: 12px; color: var(--ink-faint); overflow-wrap: anywhere; }
+.atlas-cell-answer { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 8px; }
+.atlas-cell-answer.is-none { color: var(--ink-soft); }
+.atlas-cell-facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 8px 0; }
+.atlas-cell-facts dt { color: var(--ink-faint); }
+.atlas-cell-facts dd { color: var(--ink); font-variant-numeric: tabular-nums; }
+.atlas-cell-note { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; }
+.atlas-receipt { display: grid; grid-template-columns: max-content 1fr; gap: 3px 12px; margin-top: 6px; }
+.atlas-receipt dt { color: var(--ink-faint); }
+.atlas-receipt dd { color: var(--ink); font-variant-numeric: tabular-nums; }
+.atlas-key { display: grid; gap: 4px; }
+.atlas-key-item { display: flex; align-items: center; gap: 8px; }
+.atlas-chip { display: inline-flex; align-items: center; gap: 6px; }
+.atlas-chip-glyph { flex: none; }
+.atlas-chip-count { color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.atlas-example { font-size: 13.5px; }
+.atlas-example p + p { margin-top: 6px; }
 
 /* ---- the drawer ---- */
 

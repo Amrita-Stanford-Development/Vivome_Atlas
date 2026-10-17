@@ -302,7 +302,7 @@ export function factText(manifest, key) {
   return fact ? fact(manifest ?? {}) : `<span class="pending">${PENDING_LABEL}</span>`;
 }
 
-// ---- Projection results (project.html) ----
+// ---- Projection results (atlas.html, Your data) ----
 // A response from the projection service (docs/service/projection-api.md).
 // Its numbers are computed by the service from the visitor's own upload, not
 // read from the manifest; cell ids come from the visitor's file, so every
@@ -363,16 +363,17 @@ export function buildProjectionLabels(result) {
   return table(['Label', 'Cells', 'Share'], rows);
 }
 
-// One row per cell, the first `limit` of them.
+// One row per cell, the first `limit` of them. Each row carries its cell's
+// index in result.cells (data-cell), so a click on a row can select the cell.
 export function buildProjectionCells(result, limit = 200) {
   const cells = cellsOf(result);
-  const rows = cells.slice(0, limit).map((c) => {
+  const rows = cells.slice(0, limit).map((c, i) => {
     const labelSet = (c.label_set ?? []).map(escapeHtml).join(', ');
     const confidence = Number.isFinite(c.confidence) ? c.confidence.toFixed(3) : '';
     const label = c.abstained
       ? `<span class="pending">${escapeHtml(abstainText(c.abstain_reason))}</span>`
       : escapeHtml(c.label);
-    return `<tr><td><code>${escapeHtml(c.cell_id)}</code></td><td>${label}</td><td>${labelSet}</td>`
+    return `<tr data-cell="${i}"><td><code>${escapeHtml(c.cell_id)}</code></td><td>${label}</td><td>${labelSet}</td>`
       + `<td class="support-num">${confidence}</td><td class="support-num">${formatCount(c.observed_genes)}</td></tr>`;
   }).join('');
   const note = cells.length > limit
