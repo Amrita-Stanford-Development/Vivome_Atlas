@@ -162,6 +162,17 @@ export function buildGuessTable(detail, classOrder, k = 5) {
   return `<div class="table-scroll">${table(heads, rows)}</div>`;
 }
 
+// The second opinion for one cell: every type's match score and the chance
+// it becomes, best match first.
+export function buildSecondOpinionTable(detail, classOrder) {
+  if (!detail) return `<p class="pending">${PENDING_LABEL}</p>`;
+  const g = detail.guess;
+  const rows = topK(g.r, classOrder.length).map((c) => `<tr><td>${e(classOrder[c])}</td>`
+    + `<td class="support-num">${num(g.r[c], 3)}</td>`
+    + `<td class="support-num">${pct(g.correlation_probability[c])}</td></tr>`).join('');
+  return `<div class="table-scroll">${table(['Class', 'Match score (r)', 'Chance, second opinion'], rows)}</div>`;
+}
+
 // The abstention ladder, rung by rung, for one cell.
 export function buildLadderTrace(cell, workflow) {
   if (!cell) return `<p class="pending">${PENDING_LABEL}</p>`;

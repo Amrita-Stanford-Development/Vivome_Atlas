@@ -55,6 +55,8 @@ REPRODUCE = REPO / "research" / "notebook-outputs" / "v5_train" / "reproduce.jso
 SPEC_V31 = REPO / "service" / "model" / "v3_1" / "nb2_spec_v31.json"
 SPEC_SERVED = REPO / "service" / "model" / "v4_1" / "spec_v41.json"  # the served model's spec (v4.1)
 PHASE3 = REPO / "research" / "notebook-outputs" / "v41_phase3"
+EXPLORATION = REPO / "research" / "notebook-outputs" / "v4_phase3c" / "exploration.json"
+PRETEST = REPO / "research" / "notebook-outputs" / "v41_pretest"
 RNA_COVERAGE = REPO / "research" / "notebook-outputs" / "nb2" / "tables" / "eval_per_class_coverage.csv"
 PROTEIN_COVERAGE = REPO / "research" / "notebook-outputs" / "protein_coverage" / "coverage.json"
 HELDOUT = REPO / "research" / "benchmark" / "heldout"
@@ -347,6 +349,43 @@ def evaluation() -> dict:
     }
 
 
+# ---- the second opinion: the best guess with it and without it ----
+
+def second_opinion() -> dict:
+    """The best guess with the second opinion as v4.1 uses it (trusted where
+    it agrees with the learners) and with the learners alone (what v4.1 does
+    where it is set aside: the class-balanced encoder with the smoothed query
+    only), on the same development data: Fulcher 2026, every type counted
+    equally, and the 240 practice files of Phase 3c's calibration suite,
+    the mean per file of the same score. Both rows are development figures
+    (research/notebook-run-history.md, entries 24 and 26)."""
+    alone = json.loads(EXPLORATION.read_text(encoding="utf-8"))["finalists"]["class-balanced encoder only, s=1"]
+    selection = json.loads((PRETEST / "selection.json").read_text(encoding="utf-8"))
+    v31 = selection["v31"]["suite"]
+    chosen = selection["chosen_figures"]
+    arm = next(r for r in read_csv(PRETEST / "research_arm.csv") if r["arm"] == "v4.1 (chosen rule)")
+    assert (chosen["w_on"], chosen["tau"]) == (0.5, 0.05)
+    without_basis = f"{rel(EXPLORATION)}, 'class-balanced encoder only, s=1'"
+    with_basis = f"{rel(PRETEST / 'selection.json')}, v4.1's rule"
+    pct = lambda x: round(float(x) / 100, 4)  # noqa: E731
+    suite = EXPLORATION.parent / "calibration_uploads.csv"
+    files = Counter(r["group"] for r in read_csv(suite))
+    rows = []
+    for key, label in (("overall", "all"), ("mixed", "mixed"), ("single", "single")):
+        # The exploration stores each group as its gain over v3.1, whose figures selection.json holds.
+        before = alone["calibration_suite"]["overall"] if key == "overall" else v31[key] + alone["calibration_suite"][key]
+        rows.append({"files": label,
+                     "count": measured(sum(files.values()) if key == "overall" else files[key], rel(suite)),
+                     "without": measured(pct(before), f"{without_basis} (v3.1's {key} plus the recorded gain)"
+                                         if key != "overall" else without_basis, "percent"),
+                     "with": measured(pct(chosen[f"suite_{key}"]), with_basis, "percent")})
+    return {
+        "fulcher_without": measured(pct(alone["development"]["fulcher"]), without_basis, "percent"),
+        "fulcher_with": measured(pct(arm["fulcher"]), f"{rel(PRETEST / 'research_arm.csv')}, v4.1 (chosen rule)", "percent"),
+        "practice": rows,
+    }
+
+
 # ---- the hosted service ----
 
 def service() -> dict:
@@ -372,6 +411,15 @@ def service() -> dict:
 
 
 # ---- the page's facts ----
+
+def ood_share_above() -> float:
+    """The share of ordinary cells above the likeness line: the spec fits
+    the line at a low percentile of in-distribution cells and says which."""
+    fit = json.loads(SPEC_V31.read_text(encoding="utf-8"))["ood"]["fit"]
+    found = re.match(r"(\d+)(?:st|nd|rd|th) percentile of in.distribution", fit)
+    assert found, f"{rel(SPEC_V31)}'s ood.fit no longer names its percentile: {fit!r}"
+    return round(1 - int(found.group(1)) / 100, 4)
+
 
 def facts(trace: dict, manifest: dict) -> dict:
     s = trace["stages"]
@@ -411,6 +459,7 @@ def facts(trace: dict, manifest: dict) -> dict:
         "smoothed_share": measured(s["fusion"]["smoothed_share"], rel(SPEC_SERVED), "percent"),
         "target_coverage": measured(round(1 - s["calibration"]["alpha"], 4), "service/model/v3_1/nb2_spec_v31.json", "percent"),
         "ood_threshold": measured(round(s["ood"]["threshold"], 4), "service/model/v3_1/nb2_spec_v31.json", "fixed3"),
+        "ood_share_above": measured(ood_share_above(), f"{rel(SPEC_V31)}, ood.fit", "percent"),
         "classes": measured(len(trace["class_order"]), t),
         "rna_cells": measured(manifest["modalities"]["rna"]["cells"], "web/data/atlas_manifest.json"),
     }
@@ -438,7 +487,8 @@ def build(manifest: dict | None = None) -> dict:
         raise SystemExit(f"the trace's gene matching disagrees with {rel(ASTRAL)}")
     sources = [TRACE, SNIPPETS, ATLAS_RNA, FEATURE_PROVENANCE, FEATURE_DETAIL, GENE_ID_PROVENANCE, DECISIVE, CORE,
                TRAIN, REPRODUCE, SPEC_V31, SPEC_SERVED, PHASE3 / "eval_by_scenario.csv", PHASE3 / "eval_uploads.csv",
-               RNA_COVERAGE, PROTEIN_COVERAGE, ASTRAL, PUBLISH, SERVICE_CONFIG]
+               RNA_COVERAGE, PROTEIN_COVERAGE, ASTRAL, PUBLISH, SERVICE_CONFIG, EXPLORATION,
+               PRETEST / "selection.json", PRETEST / "research_arm.csv", EXPLORATION.parent / "calibration_uploads.csv"]
     sources += sorted(HELDOUT.glob("*/summary.json")) + sorted(HELDOUT.glob("*/scores.csv"))
     workflow = {
         "schema_version": SCHEMA_VERSION,
@@ -455,6 +505,7 @@ def build(manifest: dict | None = None) -> dict:
         "trace": {"stages": {k: v for k, v in trace["stages"].items() if k not in READING_STAGES},
                   **{k: trace[k] for k in ("outcomes", "cells", "story", "detail", "heatmap")}},
         "evaluation": evaluation(),
+        "second_opinion": second_opinion(),
         "service": service(),
     }
     return workflow

@@ -73,7 +73,8 @@ export function open(el, ctx) {
     }
     if (!own) text(g, 'This cell\u2019s raw column is kept for a few cells only; its journey is shown here.', 8, 40, { size: 11, colour: SOFT, max: width * 0.5 });
     // The line: one stop per step on the page.
-    const railY = height * 0.62;
+    // The answer and best-guess chips sit under the line; it rises on a short figure to keep them in.
+    const railY = Math.min(height * 0.62, height - (narrow ? 76 : 118));
     const x0 = colW + 40;
     const x1 = width - 24;
     line(g, x0, railY, x1, railY, { colour: LINE, width: 3 });
@@ -556,7 +557,8 @@ export function files(el, ctx) {
       g.save();
       g.globalAlpha = toLayouts;
       text(g, 'Three labs, three layouts', 12, 24, { size: 12, colour: INK, weight: 600 });
-      text(g, 'the dark strip marks where the cells are listed', width - 12, 24, { size: 10.5, colour: FAINT, align: 'right', max: width * 0.5 });
+      // A phone has no room for the note beside the title: it goes under it.
+      text(g, 'the dark strip marks where the cells are listed', narrow ? 12 : width - 12, narrow ? 40 : 24, { size: 10.5, colour: FAINT, align: narrow ? 'left' : 'right', max: narrow ? width - 24 : width * 0.5 });
       const n = LAYOUTS.length;
       const gap = 18;
       const cardW = (width - 24 - gap * (n - 1)) / n;
@@ -567,7 +569,7 @@ export function files(el, ctx) {
       const uy = height - cardH - 40;
       LAYOUTS.forEach((L, k) => {
         const x = 12 + k * (cardW + gap);
-        const y = 40;
+        const y = narrow ? 50 : 40;
         const appear = clamp(phase(p, 0.68, 0.8) * n - k, 0, 1);
         text(g, L.name, x, y + 12, { size: 11.5, colour: INK, weight: 600, opacity: appear });
         miniTable(g, x, y + 20, cardW, cardH - 44, L.cellsIn, PROT, appear);
@@ -853,8 +855,10 @@ export function matching(el, ctx) {
       const nameW = narrow ? 58 : 86;
       const cw = Math.min(64, (width - 24 - nameW) / pick.length);
       const x0 = 12 + nameW;
-      // Room below the rows for what the mask is for.
-      const rh = clamp((height - (narrow ? 200 : 210)) / 2, 24, 120);
+      // Room below the rows for what the mask is for: its two boxes need
+      // about 96px, so a short figure gets the two-line version instead.
+      const compact = narrow || height < 320;
+      const rh = clamp((height - (compact ? 200 : 214)) / 2, 24, 120);
       const yG = 58;
       const yA = yG + 14;
       const yM = yA + rh + 18;
@@ -881,12 +885,12 @@ export function matching(el, ctx) {
       // Why the mask: with it, and without it.
       const notes = phase(p, 0.38, 0.45);
       const yN = yM + rh + 18;
-      if (narrow) {
+      if (compact) {
         text(g, 'With the mask: 0 means "skip, not measured".', 12, yN + 12, { size: 10.5, colour: ACCENT, weight: 600, opacity: notes, max: width - 24 });
         text(g, 'Without it: empty seats would read as "average".', 12, yN + 30, { size: 10.5, colour: INK, opacity: notes, max: width - 24 });
       } else {
         const bw = (width - 36) / 2;
-        const bh = Math.min(96, height - yN - 14);
+        const bh = 92;
         const panel = (x, colour, title, lines, mark) => {
           g.save();
           g.globalAlpha *= notes;
@@ -1025,7 +1029,9 @@ export function smoothing(el, ctx) {
     const i = state.cell;
     const rows = phase(p, 0.33, 0.43);
     const graphTop = 44;
-    const graphH = lerp(height - graphTop - 30, (height - graphTop) * (narrow ? 0.26 : 0.42), rows);
+    // The rows below the graph need about 160px (three rows, their labels
+    // and the note); on a short figure the graph gives way.
+    const graphH = lerp(height - graphTop - 30, Math.max(30, Math.min((height - graphTop) * (narrow ? 0.26 : 0.42), height - graphTop - 160)), rows);
     const sx = (v) => 20 + ((v - x0) / (x1 - x0 || 1)) * (width - 40);
     const sy = (v) => graphTop + 8 + (1 - (v - y0) / (y1 - y0 || 1)) * (graphH - 16);
     text(g, narrow ? 'The file\u2019s cells; similar cells sit close' : `The file\u2019s ${fc(cells.length)} cells, placed so that similar cells sit close together`, 12, 20,

@@ -38,7 +38,7 @@ const MODULES = {
 };
 const MODULE_OF = {
   open: 'input', data: 'input', files: 'input', genes: 'input', matching: 'input', smoothing: 'input',
-  encoder: 'model', probabilities: 'model', guess: 'model', answer: 'model', landing: 'model',
+  encoder: 'model', probabilities: 'model', second: 'model', guess: 'model', answer: 'model', landing: 'model',
   training: 'evidence', results: 'evidence',
 };
 

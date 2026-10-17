@@ -8,15 +8,16 @@ export const CHAPTERS = [
   { id: 'data', title: 'Two kinds of data', seconds: 30, beats: 3 },
   { id: 'files', title: 'What a protein file looks like', seconds: 30, beats: 3 },
   { id: 'genes', title: 'One shared list of genes', seconds: 35, beats: 3 },
-  { id: 'training', title: 'How VivOME learns', seconds: 40, beats: 4 },
+  { id: 'training', title: 'How VivOME learns', seconds: 30, beats: 3 },
   { id: 'matching', title: 'Fitting the file to the shared list', seconds: 40, beats: 4 },
   { id: 'smoothing', title: 'Borrowing from similar cells', seconds: 30, beats: 3 },
   { id: 'encoder', title: 'Turning the cell into a point on the map', seconds: 35, beats: 3 },
   { id: 'probabilities', title: 'Which types is our cell close to?', seconds: 30, beats: 3 },
-  { id: 'guess', title: 'The best guess', seconds: 35, beats: 3 },
+  { id: 'second', title: 'A second opinion', seconds: 60, beats: 6 },
+  { id: 'guess', title: 'The best guess', seconds: 25, beats: 2 },
   { id: 'answer', title: 'The answer, or the reason for none', seconds: 40, beats: 4 },
   { id: 'landing', title: 'Where the cell lands on the map', seconds: 35, beats: 3 },
-  { id: 'results', title: 'Testing VivOME, and using it today', seconds: 45, beats: 4 },
+  { id: 'results', title: 'Testing VivOME, and using it today', seconds: 55, beats: 5 },
 ];
 
 export const STARTS = CHAPTERS.reduce((acc, c, i) => {

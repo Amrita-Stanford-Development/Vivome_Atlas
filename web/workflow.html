@@ -213,7 +213,7 @@
 
         <section class="sheet wf-map" aria-labelledby="map-title">
             <span class="eyebrow">The journey at a glance</span>
-            <h2 id="map-title">Four parts, twelve steps</h2>
+            <h2 id="map-title">Four parts, thirteen steps</h2>
             <p class="wf-map-lede">One cell's file flows through all four, in order. Click any part or step to jump there.</p>
             <div class="wf-journey">
                 <svg class="wf-journey-track" viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true">
@@ -250,13 +250,14 @@
                 <li class="wf-station" data-in style="--i: 2">
                     <a class="wf-station-head" href="#part-3">
                         <span class="wf-station-node"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" fill="#EAF3FA" stroke="#0066A3" stroke-width="2"/><circle cx="24" cy="24" r="8" fill="none" stroke="#0066A3" stroke-width="1.6"/><circle cx="24" cy="24" r="2.8" fill="#0066A3"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6" stroke="#0066A3" stroke-width="1.6" stroke-linecap="round"/></svg></span>
-                        <span class="wf-station-num">Part 3 · 5 steps</span>
+                        <span class="wf-station-num">Part 3 · 6 steps</span>
                         <span class="wf-station-title">The model's judgement</span>
                         <span class="wf-station-sub">The cell becomes a point, then an answer.</span>
                     </a>
                     <ol class="wf-station-steps">
                             <li><a href="#encoder">A point on the map</a></li>
                             <li><a href="#probabilities">Close to which types?</a></li>
+                            <li><a href="#second">A second opinion</a></li>
                             <li><a href="#guess">The best guess</a></li>
                             <li><a href="#answer">The answer, or why not</a></li>
                             <li><a href="#landing">Where the cell lands</a></li>
@@ -267,7 +268,7 @@
                         <span class="wf-station-node"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 7l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V12z" fill="#EAF6F1" stroke="#2F8F6A" stroke-width="2"/><path d="M17 24l5 5 9-10" fill="none" stroke="#2F8F6A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
                         <span class="wf-station-num">Part 4 · 1 step</span>
                         <span class="wf-station-title">How we know it works</span>
-                        <span class="wf-station-sub">Tested three ways, and live today.</span>
+                        <span class="wf-station-sub">Tested four ways, and live today.</span>
                     </a>
                     <ol class="wf-station-steps">
                             <li><a href="#results">Testing VivOME, and using it</a></li>
@@ -644,13 +645,6 @@
                                     each learner ends up slightly different. When a new cell arrives, all of them give
                                     their view and VivOME averages them (Part 3, step 2): a group that agrees is steadier than one.
                                 </p>
-                                <p data-beat>
-                                    Did it learn? It was tested on example cells it had never practised on, with most of
-                                    their genes hidden. It named
-                                    <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span> of
-                                    them correctly, counting every type equally. Guessing at random would be right about
-                                    once in <span data-wf="classes">&nbsp;</span> tries.
-                                </p>
                             </div>
                         </div>
                         <figcaption class="caption" data-describe></figcaption>
@@ -863,23 +857,24 @@
 
         <div class="wf-part" id="part-3" data-num="3">
             <div class="wf-part-inner" data-in>
-                <span class="wf-part-kicker">Part 3 of 4 · 5 steps</span>
+                <span class="wf-part-kicker">Part 3 of 4 · 6 steps</span>
                 <h2 class="wf-part-title">The model's judgement</h2>
                 <p class="wf-part-sub">The file is ready. Now the learners read our cell and decide what it is, or explain why they will not say.</p>
                 <ol class="wf-part-steps" aria-label="The steps of part 3">
                     <li><a href="#encoder"><span>1</span>Turning the cell into a point on the map</a></li>
                     <li><a href="#probabilities"><span>2</span>Which types is our cell close to?</a></li>
-                    <li><a href="#guess"><span>3</span>The best guess</a></li>
-                    <li><a href="#answer"><span>4</span>The answer, or the reason for none</a></li>
-                    <li><a href="#landing"><span>5</span>Where the cell lands on the map</a></li>
+                    <li><a href="#second"><span>3</span>A second opinion</a></li>
+                    <li><a href="#guess"><span>4</span>The best guess</a></li>
+                    <li><a href="#answer"><span>5</span>The answer, or the reason for none</a></li>
+                    <li><a href="#landing"><span>6</span>Where the cell lands on the map</a></li>
                 </ol>
                 <span class="wf-part-cue" aria-hidden="true">scroll to begin</span>
             </div>
         </div>
 
         <div class="wf-step-intro" data-in>
-            <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li><li></li><li></li><li></li><li></li></ol>
-            <span class="wf-step-kicker">Part 3 · Step 1 of 5</span>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li><li></li><li></li><li></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 1 of 6</span>
             <p class="wf-step-title" aria-hidden="true">Turning the cell into a point on the map</p>
             <p class="wf-step-sub">Each learner squeezes our cell's thousands of numbers into a short address on VivOME's map.</p>
         </div>
@@ -889,7 +884,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 1 of 5</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 1 of 6</span>
                         <h2 id="h-encoder">Turning the cell into a point on the map</h2>
                     </div>
                     <figure class="wf-stage sheet" data-scene="encoder">
@@ -910,7 +905,7 @@
                                 </p>
                                 <p data-beat>
                                     All <span data-wf="members">&nbsp;</span> learners do this side by side, so our cell gets
-                                    one position from each. One of them also draws the shared map you will see in step 5 of this part.
+                                    one position from each. One of them also draws the shared map you will see in step 6 of this part.
                                 </p>
                             </div>
                         </div>
@@ -939,8 +934,8 @@
         </section>
 
         <div class="wf-step-intro" data-in>
-            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-now"></li><li></li><li></li><li></li></ol>
-            <span class="wf-step-kicker">Part 3 · Step 2 of 5</span>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-now"></li><li></li><li></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 2 of 6</span>
             <p class="wf-step-title" aria-hidden="true">Which types is our cell close to?</p>
             <p class="wf-step-sub">From that address: how close is our cell to each type's home, and how likely is each type?</p>
         </div>
@@ -950,7 +945,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 2 of 5</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 2 of 6</span>
                         <h2 id="h-probabilities">Which types is our cell close to?</h2>
                     </div>
                     <figure class="wf-stage sheet" data-scene="probabilities">
@@ -996,10 +991,112 @@
         </section>
 
         <div class="wf-step-intro" data-in>
-            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li><li></li></ol>
-            <span class="wf-step-kicker">Part 3 · Step 3 of 5</span>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 3 of 6</span>
+            <p class="wf-step-title" aria-hidden="true">A second opinion</p>
+            <p class="wf-step-sub">The learners judge from the map they learned. A second, simpler check compares our cell's genes with each type's directly.</p>
+        </div>
+
+        <!-- 9 -->
+        <section class="wf-chapter" id="second" data-chapter="second" aria-labelledby="h-second">
+            <div class="wf-runway">
+                <div class="wf-pin">
+                    <div class="wf-text">
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 3 of 6</span>
+                        <h2 id="h-second">A second opinion</h2>
+                    </div>
+                    <figure class="wf-stage sheet" data-scene="second">
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    It starts from the example cells. For each of the <span data-wf="classes">&nbsp;</span>
+                                    types, VivOME knows how much of every gene the type's average cell has, compared with
+                                    all the example cells: more, about the same, or less. Together these make the type's
+                                    fingerprint.
+                                </p>
+                                <p data-beat>
+                                    Our cell has a pattern of its own: for each gene it measured, whether it has more or
+                                    less than the file's average cell (Part 2, step 1). Genes it did not measure are left
+                                    out, so only real measurements are compared.
+                                </p>
+                                <p data-beat>
+                                    Then our cell is lined up against a type's fingerprint, gene by gene, over all
+                                    <span data-cell="observed">&nbsp;</span> genes it measured. When the two rise and fall
+                                    together, the dots climb from bottom left to top right. A match score sums it up: 1 is
+                                    a perfect match, 0 no match, and below 0 opposite patterns.
+                                </p>
+                                <p data-beat>
+                                    VivOME scores all <span data-wf="classes">&nbsp;</span> types this way, then turns the
+                                    scores into chances: the better a type matches compared with the others, the bigger its
+                                    chance. Even when every match is weak, the best ones stand out. These chances are the
+                                    second opinion.
+                                </p>
+                                <p data-beat>
+                                    Why ask? The learners judge from the map they learned; the second opinion compares the
+                                    genes directly, with no learning, so the two tend to go wrong in different places. Mixed
+                                    together they name more cells correctly: on Fulcher 2026,
+                                    <span data-wf="second_opinion.fulcher_with">&nbsp;</span> with the second opinion,
+                                    against <span data-wf="second_opinion.fulcher_without">&nbsp;</span> by the learners
+                                    alone.
+                                </p>
+                                <p data-beat>
+                                    It needs a file with several kinds of cell: "more than the file's average" says little
+                                    in a file of one kind. So VivOME checks how often it agrees with the learners across the
+                                    file, and trusts it only at <span data-wf="agreement_threshold">&nbsp;</span> or more.
+                                    Here it agrees on <span data-wf="agreeing">&nbsp;</span> of
+                                    <span data-wf="counted">&nbsp;</span> cells (<span data-wf="agreement">&nbsp;</span>), so
+                                    for this file it is set aside.
+                                </p>
+                            </div>
+                        </div>
+                        <figcaption class="caption" data-describe></figcaption>
+                        <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
+                        <div class="wf-table" hidden></div>
+                    </figure>
+                </div>
+            </div>
+            <div class="wf-after">
+                <h3>In plain words</h3>
+                <p>
+                    A second opinion is like checking a hunch against a reference book. The learners give the hunch:
+                    they have seen many named example cells and know roughly where ours belongs. The book holds each
+                    type's fingerprint, which genes it has more or less of. VivOME reads our cell against every page
+                    and sees which fits best.
+                </p>
+                <p>
+                    The two help each other because they work differently: the learners judge from what they learned,
+                    the book compares genes directly. But the book only works when the file holds several kinds of
+                    cell, so VivOME first checks whether book and hunch mostly agree across the file, and only then
+                    listens to the book.
+                </p>
+                <details class="wf-more">
+                    <summary>For the curious: how the match score is worked out</summary>
+                    <p class="panel-note">
+                        The match score is a correlation (Pearson's r) over the genes our cell measured. Our cell's side
+                        is each gene compared within the file: how far above or below the file's average cell, in the
+                        file's own spread. The type's side is its fingerprint: the average of its example cells, every
+                        type weighted equally, compared with all example cells the same way. The scores become chances
+                        with a softmax at a temperature of <span data-wf="correlation_temperature">&nbsp;</span>: the
+                        smaller the temperature, the more the best-matching types take.
+                    </p>
+                    <p class="panel-note">
+                        The figures from testing are development figures. On Fulcher 2026 every type is counted equally;
+                        that file also chose how much weight the second opinion gets, so it is not an independent test.
+                        On the <span data-wf="second_opinion.practice.0.count">&nbsp;</span> practice files the best
+                        guess named <span data-wf="second_opinion.practice.0.with">&nbsp;</span> correctly with the
+                        second opinion and <span data-wf="second_opinion.practice.0.without">&nbsp;</span> without it;
+                        on files of one kind of cell it does not help, which is why it is checked first.
+                    </p>
+                </details>
+            </div>
+        </section>
+
+        <div class="wf-step-intro" data-in>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 4 of 6</span>
             <p class="wf-step-title" aria-hidden="true">The best guess</p>
-            <p class="wf-step-sub">The single likeliest type, checked against a second opinion.</p>
+            <p class="wf-step-sub">The learners' chances and the second opinion's, mixed into one best guess.</p>
         </div>
 
         <!-- 9 -->
@@ -1007,7 +1104,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 3 of 5</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 4 of 6</span>
                         <h2 id="h-guess">The best guess</h2>
                     </div>
                     <figure class="wf-stage sheet" data-scene="guess">
@@ -1015,21 +1112,16 @@
                             <div class="wf-canvas" aria-hidden="true"></div>
                             <div class="wf-beats" aria-live="polite">
                                 <p data-beat>
+                                    VivOME now has two sets of chances: the learners' (step 2) and the second opinion's
+                                    (step 3). Where the second opinion is trusted, it mixes them, the learners weighing
+                                    <span data-wf="weight_used">&nbsp;</span> and the second opinion the rest. In this file
+                                    the second opinion is set aside, so an even split over the types takes its place, which
+                                    keeps the learners' order.
+                                </p>
+                                <p data-beat>
                                     Even when VivOME will not give an answer (the next step), it still names the single most
                                     likely type: its best guess. For our cell that is
                                     <span data-cell="guess">&nbsp;</span>.
-                                </p>
-                                <p data-beat>
-                                    It also asks for a second opinion: it compares the genes our cell measured with the
-                                    average profile of each cell type among the example cells. The more our cell's pattern
-                                    rises and falls with a type's, the better they match.
-                                </p>
-                                <p data-beat>
-                                    The second opinion only counts when it can be trusted: when it agrees with the learners
-                                    on at least <span data-wf="agreement_threshold">&nbsp;</span> of the file's cells. Here
-                                    it agrees on <span data-wf="agreeing">&nbsp;</span> of
-                                    <span data-wf="counted">&nbsp;</span> (<span data-wf="agreement">&nbsp;</span>), so for
-                                    this file VivOME goes with the learners.
                                 </p>
                             </div>
                         </div>
@@ -1043,9 +1135,8 @@
                 <h3>In plain words</h3>
                 <p>
                     The best guess is what VivOME would say if it had to pick one type. It is always given, but it is
-                    only a guess: the next step decides whether VivOME is sure enough to give a real answer. The second
-                    opinion is like checking a hunch against a reference book, and only trusting the book when it
-                    mostly agrees with what you already know.
+                    only a guess: the next step decides whether VivOME is sure enough to give a real answer. Mixing in
+                    the second opinion, where the file allows it, makes the guess right more often.
                 </p>
                 <details class="wf-more">
                     <summary>For the curious: how the guess is made</summary>
@@ -1064,8 +1155,8 @@
         </section>
 
         <div class="wf-step-intro" data-in>
-            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li></ol>
-            <span class="wf-step-kicker">Part 3 · Step 4 of 5</span>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li><li></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 5 of 6</span>
             <p class="wf-step-title" aria-hidden="true">The answer, or the reason for none</p>
             <p class="wf-step-sub">VivOME names a type only when it is sure enough; otherwise it says why not.</p>
         </div>
@@ -1075,7 +1166,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 4 of 5</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 5 of 6</span>
                         <h2 id="h-answer">The answer, or the reason for none</h2>
                     </div>
                     <figure class="wf-stage sheet" data-scene="answer">
@@ -1131,8 +1222,8 @@
         </section>
 
         <div class="wf-step-intro" data-in>
-            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li></ol>
-            <span class="wf-step-kicker">Part 3 · Step 5 of 5</span>
+            <ol class="wf-step-dots" aria-hidden="true"><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-done"></li><li class="is-now"></li></ol>
+            <span class="wf-step-kicker">Part 3 · Step 6 of 6</span>
             <p class="wf-step-title" aria-hidden="true">Where the cell lands on the map</p>
             <p class="wf-step-sub">Our cell takes its place among the example cells, and everything goes back to the researcher.</p>
         </div>
@@ -1142,7 +1233,7 @@
             <div class="wf-runway">
                 <div class="wf-pin">
                     <div class="wf-text">
-                        <span class="eyebrow">Part 3 · The model's judgement · Step 5 of 5</span>
+                        <span class="eyebrow">Part 3 · The model's judgement · Step 6 of 6</span>
                         <h2 id="h-landing">Where the cell lands on the map</h2>
                     </div>
                     <figure class="wf-stage sheet" data-scene="landing">
@@ -1210,7 +1301,7 @@
             <ol class="wf-step-dots" aria-hidden="true"><li class="is-now"></li></ol>
             <span class="wf-step-kicker">Part 4 · Step 1 of 1</span>
             <p class="wf-step-title" aria-hidden="true">Testing VivOME, and using it today</p>
-            <p class="wf-step-sub">Three kinds of test, from easiest to hardest, and the live service anyone can use.</p>
+            <p class="wf-step-sub">Four kinds of test, from easiest to hardest, and the live service anyone can use.</p>
         </div>
 
         <!-- 12 -->
@@ -1226,19 +1317,26 @@
                             <div class="wf-canvas" aria-hidden="true"></div>
                             <div class="wf-beats" aria-live="polite">
                                 <p data-beat>
-                                    First, practice files. We built test files from RNA example cells VivOME had never
+                                    First, did it learn? Straight after training, VivOME was tested on example cells it had
+                                    never practised on, with most of their genes hidden. It named
+                                    <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span> of
+                                    them correctly, counting every type equally. Guessing at random would be right about
+                                    once in <span data-wf="classes">&nbsp;</span> tries.
+                                </p>
+                                <p data-beat>
+                                    Second, whole practice files. We built test files from RNA example cells VivOME had never
                                     trained on, hid most genes as in a protein file, and checked every answer. When VivOME
                                     gave an answer it was right <span data-fact="eval_rna_correct">&nbsp;</span> of the
                                     time; <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
                                 </p>
                                 <p data-beat>
-                                    Second, a real protein file with known types, Fulcher 2026. Every method got the same
+                                    Third, a real protein file with known types, Fulcher 2026. Every method got the same
                                     examples, the same genes and the same scoring. VivOME's best guess named
                                     <span data-fact="fulcher_current">&nbsp;</span> correctly, counting every type equally.
                                     This file was also used while building VivOME, so it is not a fully independent test.
                                 </p>
                                 <p data-beat>
-                                    Third, six test sets were locked away before building started and opened once, at the
+                                    Fourth, six test sets were locked away before building started and opened once, at the
                                     end. Two passed, two failed, and two could not be scored. This is our own test, not a
                                     check by an outside group.
                                 </p>
@@ -1259,9 +1357,10 @@
             <div class="wf-after">
                 <h3>In plain words</h3>
                 <p>
-                    Three kinds of test, from easiest to hardest: practice files where we know every answer, a real
-                    file where the types are known, and sets kept aside until the very end. VivOME does well on the
-                    first two and is mixed on the third, and the page shows all of it, including the failures.
+                    Four kinds of test, from easiest to hardest: single cells straight after training, practice files
+                    where we know every answer, a real file where the types are known, and sets kept aside until the
+                    very end. VivOME does well on the first three and is mixed on the last, and the page shows all of
+                    it, including the failures.
                 </p>
                 <details class="wf-more">
                     <summary>For the curious: the practice files, by kind</summary>

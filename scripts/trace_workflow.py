@@ -12,8 +12,9 @@ checks the written trace against a fresh run.
 It writes, under service/model/evidence/workflow/:
 - pbmc240_trace_v41.json.gz: every cell's outcome, the stages' summaries,
   the upload's smoothing graph, a heatmap of 24 genes over 52 cells at each
-  preprocessing step, and the full detail of a few story cells (the file's
-  first run, then the first run of each outcome);
+  preprocessing step with each class's typical level of its genes (the
+  second opinion's class means), and the full detail of a few story cells
+  (the file's first run, then the first run of each outcome);
 - input_snippets.json: a few rows and columns of other development inputs
   (SCoPE2's published matrix, Fulcher 2026's protein table) and the
   reference's first cell ids, for the page's "what the files look like".
@@ -315,12 +316,17 @@ def main() -> None:
     detail = []
     for s, i in enumerate(story):
         # The second opinion's picture: the cell against the class it matches best, over what it measured.
+        # Beside it, the class it matches worst, over the same genes, for contrast.
         if uses_protein:
             best = int(np.flatnonzero(covered)[np.argmax(r_prot[i, covered])])
+            worst = int(np.flatnonzero(covered)[np.argmin(r_prot[i, covered])])
             cell_values, cell_mask, means, best_r = protein_values[i], protein_mask[i], bundle.protein_means[best], r_prot[i, best]
+            worst_means, worst_r = bundle.protein_means[worst], r_prot[i, worst]
         else:
             best = int(np.argmax(r_rna[i]))
+            worst = int(np.argmin(r_rna[i]))
             cell_values, cell_mask, means, best_r = aligned.values[i], aligned.mask[i], bundle.class_means[best], r_rna[i, best]
+            worst_means, worst_r = bundle.class_means[worst], r_rna[i, worst]
         observed_proteins = np.flatnonzero(cell_mask > 0)
         step = max(1, len(observed_proteins) // SCATTER_POINTS)
         points = observed_proteins[::step][:SCATTER_POINTS]
@@ -352,6 +358,8 @@ def main() -> None:
                 "scatter": {"class": best, "r": r4(best_r), "against": "protein" if uses_protein else "rna",
                             "observed_proteins": int(len(observed_proteins)),
                             "points": [[r2(cell_values[j]), r2(means[j])] for j in points]},
+                "scatter_worst": {"class": worst, "r": r4(worst_r),
+                                  "points": [[r2(cell_values[j]), r2(worst_means[j])] for j in points]},
             },
             "embedding": [round(float(x), 3) for x in smoothed_z[anchor_i][i]],
             "observed_bits": bits(aligned.mask[i] > 0),
@@ -376,6 +384,10 @@ def main() -> None:
         "z": [[r2(aligned.values[c, g]) for g in h_genes] for c in h_cells],
         "mask": [[int(aligned.mask[c, g]) for g in h_genes] for c in h_cells],
         "smoothed": [[r2(smoothed[c, g]) for g in h_genes] for c in h_cells],
+        # The second opinion's base: each class's typical level of these genes
+        # (the class-balanced RNA class means, z-scored against the reference),
+        # one row per class in class order.
+        "fingerprints": [[r2(bundle.class_means[k, g]) for g in h_genes] for k in range(bundle.class_means.shape[0])],
     }
 
     # The site's atlas coordinates must be the service's projection of the
