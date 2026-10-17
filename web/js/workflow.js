@@ -25,6 +25,7 @@ import {
   buildScenarioTable, buildServiceCard, buildSyncBanner,
 } from './workflow-panels.js';
 import { treeSvg } from './workflow-svg.js';
+import { siteServiceUrl } from './atlas/service-client.js';
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -207,7 +208,8 @@ async function askService() {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 120000);
-    const response = await fetch(`${ctx.workflow.service.url}/api/status`, { signal: controller.signal });
+    // Through the site's own /api door: the service answers only through it.
+    const response = await fetch(`${siteServiceUrl()}/api/status`, { signal: controller.signal });
     clearTimeout(timer);
     const status = await response.json();
     $('#service-card').innerHTML = buildServiceCard(ctx.workflow, status);

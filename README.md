@@ -74,7 +74,6 @@ line for every file.
 | `atlas.html` | The reference in 3D, with view controls (names on the map, dimming, dot size); its Your data tab sends your own matrix to the service and places each cell on the map with its answer |
 | `manuscript.html` | Evidence bank for a journal paper on the served model, with the atlas's cross-modal support, the alignment diagnostics and the benchmark tables |
 | `workflow.html` | How VivOME works start to end, following one cell of the PBMC240 example |
-| `versions.html` | Model card, data availability, release protocol |
 | `miscellaneous.html` | Intentionally blank (former roadmap page) |
 | `preview-biocells.html`, `preview-water.html` | Close-ups of the background's cells and water effects; not linked from the site |
 
@@ -131,7 +130,7 @@ yet (a per-*dataset* version exists, see `docs/service/context-brief.md`).
 
 The first architecture, `CrossModalNet` (jointly trained on RNA and
 proteomics, 2,903-gene space), is kept as a documented baseline, not erased.
-See `versions.html` and `service/model/legacy/v2/README.md`. The projection
+See `service/model/legacy/v2/README.md`. The projection
 service (see `service/README.md`) runs end to end and is hosted on Google
 Cloud Run: the Atlas page's Your data tab sends uploads there, or to a copy
 you run locally (`deploy/huggingface/PUBLISH.md`).

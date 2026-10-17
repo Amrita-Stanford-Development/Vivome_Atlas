@@ -110,6 +110,15 @@ The Atlas page's Your data tab calls `/api/status` before offering an upload.
   is taken by other uploads;
 - **400** for a malformed request or matrix.
 
+With `VIVOME_PROXY_SECRET` set, both endpoints answer **403** to any request
+without that secret in the `X-VivOME-Proxy-Secret` header, before doing any
+work. The hosted copy sets it: it answers only through its website, whose
+`/api/...` (a Cloudflare Pages Function, `deploy/pages/api-proxy.js`)
+forwards each request with the secret, behind the site's sign-in. Pages
+call their own site's `/api` (`siteServiceUrl` in
+`web/js/atlas/service-client.js`). The site's host takes at most 100 MB in
+one request, which is the upload limit.
+
 A browser may read the service's responses only from an allowed origin
 (`config.ALLOWED_ORIGINS`, env `VIVOME_ALLOWED_ORIGINS`, comma separated).
 
@@ -121,11 +130,14 @@ The service reads these settings from the environment (`service/config.py`):
 | `VIVOME_PIPELINE_VERSION` | `v4.1` | The model served (one per process) |
 | `VIVOME_ALLOWED_ORIGINS` | the site served locally | Origins that may read the answers |
 | `VIVOME_MAX_UPLOAD_CELLS` | `2000` | Cells per upload |
-| `VIVOME_MAX_UPLOAD_MB` | `200` | Request size |
+| `VIVOME_MAX_UPLOAD_MB` | `100` | Request size |
 | `VIVOME_MAX_CONCURRENT_PROJECTIONS` | `1` | Projections running at once |
 | `VIVOME_BUSY_RETRY_AFTER_SECONDS` | `30` | The `Retry-After` of a busy answer |
+| `VIVOME_PROXY_SECRET` | unset | Only requests carrying it are answered |
 
-The hosted copy's values are in `deploy/huggingface/Dockerfile`.
+The hosted copy's values are in `deploy/huggingface/Dockerfile`, except the
+secret, which is set on the Cloud Run service itself and never in a file
+(`deploy/huggingface/PUBLISH.md`).
 The default allows the site served locally on port 8000. The service also
 answers CORS preflights, including Chrome's Private Network Access check.
 

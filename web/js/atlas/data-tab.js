@@ -8,7 +8,7 @@ import { PENDING_LABEL, formatCount, isMeasured, loadManifest } from '../manifes
 import { buildSupportedLabelSpace, errorPanel, escapeHtml } from '../panels.js';
 import { loadWorkflow, wfFact } from '../workflow-data.js';
 import { coordinatesCompatible } from './answers.js';
-import { DEFAULT_SERVICE_URL, explainFailure, rememberServiceUrl, serviceUrlFrom } from './service-client.js';
+import { explainFailure, rememberServiceUrl, serviceUrlFrom } from './service-client.js';
 
 const $ = (id) => document.getElementById(id);
 const storage = () => {
@@ -18,7 +18,7 @@ const storage = () => {
 // The service's address and its limits, shared with the landing.
 export function createServiceState() {
   const input = $('service-url');
-  input.value = serviceUrlFrom(storage()) || DEFAULT_SERVICE_URL;
+  input.value = serviceUrlFrom(storage());
   const state = { ready: false, status: null, limits: null };
   return {
     state,

@@ -7,12 +7,17 @@ same file. Also checks that the site's origin may read the answer (CORS).
 Prints the differences and the largest gaps in the numbers; exit status 1 if
 any label, abstention or best guess differs.
 
+A service that answers only through its website (VIVOME_PROXY_SECRET set on
+it, service/config.py) is checked with the same secret in this script's
+environment: first that a request without it is refused, then the run.
+
     python deploy/huggingface/check_space.py http://127.0.0.1:7860
-    python deploy/huggingface/check_space.py https://USER-vivome-atlas.hf.space
+    VIVOME_PROXY_SECRET=... python deploy/huggingface/check_space.py https://vivome-atlas-577083340913.us-central1.run.app
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -26,11 +31,16 @@ REPO = Path(__file__).resolve().parents[2]
 EXAMPLE = REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv"
 ORIGIN = "https://vivome-atlas.pages.dev"
 FIELDS = ("label", "label_level", "abstained", "abstain_reason")
+SECRET = os.environ.get("VIVOME_PROXY_SECRET") or None
+SECRET_HEADER = "X-VivOME-Proxy-Secret"
 
 
-def request(url: str, body: bytes | None = None, content_type: str | None = None) -> tuple[int, dict, dict]:
+def request(url: str, body: bytes | None = None, content_type: str | None = None,
+            secret: str | None = SECRET) -> tuple[int, dict, dict]:
     """(status, the answer's headers with lower-case names, as HTTP/2 hosts send them, the JSON body)."""
     headers = {"Origin": ORIGIN}
+    if secret:
+        headers[SECRET_HEADER] = secret
     if content_type:
         headers["Content-Type"] = content_type
     req = urllib.request.Request(url, data=body, method="POST" if body is not None else "GET", headers=headers)
@@ -53,6 +63,11 @@ def post_example(base: str) -> tuple[int, dict, dict, float]:
 
 def main() -> None:
     base = sys.argv[1].rstrip("/")
+    if SECRET:
+        refused, _, _ = request(f"{base}/api/status", secret=None)
+        print(f"without the secret: {refused} ({'refused' if refused == 403 else 'NOT refused'})")
+        if refused != 403:
+            raise SystemExit(1)
     status, headers, info = request(f"{base}/api/status")
     print(f"status {status}: {json.dumps(info)}")
     if status != 200:

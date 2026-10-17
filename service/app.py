@@ -16,6 +16,7 @@ for a missing or not-yet-fetched artifact, 500 for any other load error.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
 import logging
 import statistics
@@ -173,10 +174,28 @@ class ProjectionHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Max-Age", "600")
         self.end_headers()
 
+    def _from_the_site(self) -> bool:
+        """With config.PROXY_SECRET set, only a request carrying it (one the
+        website's /api door forwarded) is answered; a refused one gets 403."""
+        if not config.PROXY_SECRET:
+            return True
+        given = self.headers.get(config.PROXY_SECRET_HEADER, "")
+        if hmac.compare_digest(given.encode("utf-8"), config.PROXY_SECRET.encode("utf-8")):
+            return True
+        self.close_connection = True
+        self._send_json(403, {
+            "error": "this service answers only through its website",
+            "reason": "Use the Atlas page's Your data tab, or run your own copy of the service "
+                      "(service/README.md).",
+        })
+        return False
+
     def do_GET(self) -> None:  # noqa: N802 (stdlib naming)
         """GET /api/status: whether the service can project, and with which
         model, so the site's Atlas page can say so before an upload.
         Loads the reference on first call, which also warms the service up."""
+        if not self._from_the_site():
+            return
         if self.path != "/api/status":
             self._send_json(404, {"error": f"no such endpoint: {self.path}"})
             return
@@ -195,6 +214,8 @@ class ProjectionHandler(BaseHTTPRequestHandler):
         })
 
     def do_POST(self) -> None:  # noqa: N802 (stdlib naming)
+        if not self._from_the_site():
+            return
         if self.path != "/api/project":
             self._send_json(404, {"error": f"no such endpoint: {self.path}"})
             return

@@ -59,7 +59,7 @@
   "service/model/runtime/reference_metadata.csv": "b0d5d1e761d6969e401fa605f74e4367e7d65d5c9fdea444471bbccee65d4054",
   "service/model/v3_1/nb2_spec_v31.json": "af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd",
   "service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
-  "web/data/workflow.json": "d679a28a3d2b3b1a62bbab09b494f371505a67232127550054444d104bb0a8c1"
+  "web/data/workflow.json": "de0d342fd869f3a2f742e0cc90fcf08b46498514b2e7023386bae65d656b7019"
  },
  "records": {
   "alpha": {
@@ -2259,7 +2259,7 @@
    "format": "count"
   },
   "wf_service_max_mb": {
-   "value": 200,
+   "value": 100,
    "status": "measured",
    "basis": "service/config.py",
    "format": "count"

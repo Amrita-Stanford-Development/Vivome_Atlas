@@ -252,6 +252,27 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertIn("restrict_to_supported_classes", payload["error"])
 
+    def test_with_a_secret_set_only_requests_from_the_site_are_answered(self):
+        """The hosted copy answers only through its website's /api door, which
+        adds the secret; anything else gets 403, before any work is done."""
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        right = {config.PROXY_SECRET_HEADER: "s3cret"}
+        with patch.object(config, "PROXY_SECRET", "s3cret"):
+            for headers in ({}, {config.PROXY_SECRET_HEADER: "wrong"}, {config.PROXY_SECRET_HEADER: ""}):
+                status, _, payload = self._get("/api/status", headers=headers)
+                self.assertEqual(status, 403, headers)
+                self.assertIn("only through its website", payload["error"])
+            status, _, payload = self._get("/api/status", headers=right)
+            self.assertEqual((status, payload["status"]), (200, "ready"))
+            status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+            self.assertEqual(status, 403)
+            status, _, payload = self._get("/api/nowhere", headers={})
+            self.assertEqual(status, 403, "not even which paths exist")
+        # Unset (a copy run at home): every request is answered.
+        status, _, payload = self._get("/api/status")
+        self.assertEqual(status, 200)
+
     def test_status_reports_the_upload_limits(self):
         self._install_synthetic_bundle()
         status, _, payload = self._get("/api/status")
@@ -369,6 +390,14 @@ class HostingSettingsTests(unittest.TestCase):
             self.assertEqual(config.MAX_UPLOAD_BYTES, int(1.5 * 1024 * 1024))
             self.assertEqual(config.MAX_CONCURRENT_PROJECTIONS, 2)
             self.assertEqual(config.ALLOWED_ORIGINS, ("https://vivome-atlas.pages.dev",))
+            self.assertIsNone(config.PROXY_SECRET, "no secret unless one is set")
+        with patch.dict(os.environ, {"VIVOME_PROXY_SECRET": "s3cret"}):
+            importlib.reload(config)
+            self.assertEqual(config.PROXY_SECRET, "s3cret")
+        with patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("VIVOME_MAX_UPLOAD_MB", None)
+            importlib.reload(config)
+            self.assertEqual(config.MAX_UPLOAD_BYTES, 100 * 1024 * 1024, "100 MB: what the website's host takes in one request")
 
     def test_without_settings_the_service_listens_on_this_machine_only(self):
         unset = ("VIVOME_HOST", "VIVOME_PORT")

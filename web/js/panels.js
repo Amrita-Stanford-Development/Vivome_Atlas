@@ -382,7 +382,7 @@ export function buildProjectionCells(result, limit = 200) {
   return table(['Cell', 'Label', 'Label set', 'Confidence', 'Observed genes'], rows) + note;
 }
 
-// ---- The model card's accuracy table (versions.html) ----
+// ---- The model card's accuracy table (v3's; no page mounts it) ----
 // manifest.model_card: each row names its decision rule, because a
 // shipped-checkpoint number and a 5-seed mean compare only under one rule.
 
@@ -488,7 +488,7 @@ Object.assign(FACTS, {
 });
 
 // The current release's results, for the prose of index.html and
-// versions.html. Each number only makes sense with what it measured, so the
+// workflow.html. Each number only makes sense with what it measured, so the
 // page says that in the same sentence: simulated RNA uploads, a dataset as
 // served (Fulcher 2026 is development data, Khoury 2026 post-hoc), or a
 // benchmark table.

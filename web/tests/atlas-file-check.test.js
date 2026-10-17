@@ -118,7 +118,8 @@ test('the limits, as numbers or as the workflow data records them', () => {
   assert.equal(checkLimits({ cells: 1, size: 10 }, limits).problems[0], 'The file has 1 cell; the service needs at least 20 in one upload.');
 
   const large = checkLimits({ cells: 500, size: 250.4 * 1024 * 1024 }, limits);
-  assert.match(large.problems[0], /^The file is 250\.4 MB; the service takes at most 200 MB per upload\./);
+  assert.equal(s.max_mb.value, 100, 'what the site’s host takes in one request');
+  assert.match(large.problems[0], /^The file is 250\.4 MB; the service takes at most 100 MB per upload\./);
 
   const both = checkLimits({ cells: 3000, size: 300 * 1024 * 1024 }, limits);
   assert.equal(both.problems.length, 2);

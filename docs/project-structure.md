@@ -22,7 +22,7 @@ Vivome_Atlas/
 ├── package.json              runs the JS tests (node --test); no dependencies
 │
 ├── web/                      THE WEBSITE: serve this folder as-is
-│   ├── *.html                one file per page: index, atlas, workflow, manuscript, versions,
+│   ├── *.html                one file per page: index, atlas, workflow, manuscript,
 │   │                         miscellaneous (blank on purpose), and two unlinked previews
 │   ├── css/                  shared styling (page.css) and per-page styles
 │   ├── js/                   ES modules; manifest.js and panels.js are pure
@@ -49,8 +49,9 @@ Vivome_Atlas/
 ├── scripts/                  BUILD AND CHECKS: manifest builder, repo path checker
 │   └── archive/              one-off scripts kept as a record, no longer runnable
 │
-├── deploy/                   HOSTING THE SERVICE
-│   └── huggingface/          the Space's Dockerfile, page, build and check scripts
+├── deploy/                   HOSTING THE SERVICE AND THE SITE'S DOOR TO IT
+│   ├── huggingface/          the Space's Dockerfile, page, build and check scripts
+│   └── pages/                the site's /api Function that forwards to the service (deploy/pages/api-proxy.js)
 │
 ├── docs/                     HOW THE PRODUCTS WORK
 │   ├── web/                  the manifest contract; the site's data files and Git LFS

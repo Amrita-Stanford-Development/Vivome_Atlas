@@ -33,8 +33,8 @@ shared space.
   report), optional `restrict_to_supported_classes` (`true` or `false`).
 
 The contract, the model and its known limits are documented on the site
-(versions page) and in the project repository. Research use only; not for
-diagnosis.
+(the Manuscript page) and in the project repository. Research use only;
+not for diagnosis.
 
 Files: `space_manifest.json` lists every file in this Space with its sha256
 and the repository commit it was built from.

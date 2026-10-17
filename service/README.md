@@ -172,9 +172,13 @@ python -m service.app        # from the repository root
 ```
 
 It listens on `127.0.0.1:8001`, projects one upload at a time, and accepts
-at most 2,000 cells and 200 MB per upload. Every setting comes from the
+at most 2,000 cells and 100 MB per upload. Every setting comes from the
 environment (`VIVOME_HOST`, `VIVOME_PORT`, `VIVOME_MAX_UPLOAD_CELLS`, and the
 rest listed in [`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
+The hosted copy answers only through its website: with `VIVOME_PROXY_SECRET`
+set, a request without that secret in `X-VivOME-Proxy-Secret` gets 403 (the
+site's `/api` door, `deploy/pages/api-proxy.js`, adds it). A copy run at home
+leaves it unset and answers every request.
 The 2,000-cell default comes from timing: one projection's time grows faster
 than its cell count (`config.py` has the measurements).
 

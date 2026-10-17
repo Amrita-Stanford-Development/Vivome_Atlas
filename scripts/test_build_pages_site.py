@@ -1,3 +1,4 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -31,6 +32,30 @@ class PlanTests(unittest.TestCase):
         for old, new in bps.REDIRECTS:
             self.assertFalse((bps.WEB / f"{old.strip('/').removesuffix('.html')}.html").exists(), old)
             self.assertTrue((bps.WEB / f"{new.strip('/') or 'index'}.html").exists(), new)
+
+
+class BuildTests(unittest.TestCase):
+    def test_every_build_carries_the_door_to_the_service(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dist = Path(tmp) / "dist"
+            bps.build(None, dist)
+            proxy = dist / "functions" / "api" / "[[path]].js"
+            self.assertEqual(proxy.read_bytes(), bps.PROXY.read_bytes())
+            routes = json.loads((dist / "site" / "_routes.json").read_text())
+            self.assertEqual(routes["include"], ["/api/*"], "only /api wakes a Function")
+            toml = (dist / "wrangler.toml").read_text()
+            self.assertIn(f'SERVICE_URL = "{bps.service_url()}"', toml)
+            self.assertTrue(bps.service_url().startswith("https://"))
+            self.assertNotIn("SECRET", toml, "the secret is never written to a file")
+
+    def test_with_r2_the_large_files_are_routed_too(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dist = Path(tmp) / "dist"
+            bps.build("bucket", dist)
+            routes = json.loads((dist / "site" / "_routes.json").read_text())["include"]
+            self.assertEqual(routes[0], "/api/*")
+            self.assertTrue(all(r.startswith("/data/") for r in routes[1:]) and len(routes) > 1)
+            self.assertIn('bucket_name = "bucket"', (dist / "wrangler.toml").read_text())
 
 
 if __name__ == "__main__":

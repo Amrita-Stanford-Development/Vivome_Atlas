@@ -252,7 +252,7 @@ when a release does.
 
 | Output | Lands in | Shown by |
 |---|---|---|
-| The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | versions model card |
+| The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | the `data-fact` slots of the landing, the Workflow page and the Manuscript page |
 | Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest for the Manuscript page's cross-modal support and alignment diagnostics |
 | Benchmark rows | `manifest.benchmark` | the Manuscript page's benchmark tables |
 | A served model's trace, the gene space, the training recipe, the evaluation records | `web/data/workflow.json` (`scripts/build_workflow.py`, built with the manifest) | the Workflow page ([workflow.md](workflow.md)) |

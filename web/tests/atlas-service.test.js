@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import {
   BUSY_RETRY_SECONDS, DEFAULT_SERVICE_URL, SERVICE_KEY, ServiceError, browserTransport, createServiceClient,
-  explainFailure, parseRetryAfter, rememberServiceUrl, serviceUrlFrom,
+  explainFailure, isOwnCopy, normaliseServiceUrl, parseRetryAfter, rememberServiceUrl, serviceUrlFrom, siteServiceUrl,
 } from '../js/atlas/service-client.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
@@ -73,6 +73,27 @@ test('the default address is the live service the workflow data records', () => 
   }
   walk('js/');
   assert.deepEqual(copies, [], 'only js/atlas/service-client.js names the address');
+});
+
+test('pages call their own site, whose /api door forwards to the hosted service', () => {
+  const site = { origin: 'https://vivome-atlas.pages.dev' };
+  assert.equal(siteServiceUrl(site), site.origin);
+  assert.equal(siteServiceUrl(undefined), DEFAULT_SERVICE_URL, 'no site outside a browser');
+  assert.equal(siteServiceUrl({ origin: 'null' }), DEFAULT_SERVICE_URL, 'a page opened from a file has no site');
+  const store = new Map();
+  const storage = {
+    getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, v), removeItem: (k) => store.delete(k),
+  };
+  assert.equal(serviceUrlFrom(storage, site), site.origin);
+  for (const typed of [site.origin, `${site.origin}/`, DEFAULT_SERVICE_URL]) {
+    assert.equal(rememberServiceUrl(storage, typed, site), normaliseServiceUrl(typed));
+    assert.equal(store.has(SERVICE_KEY), false, `${typed} is not remembered`);
+  }
+  assert.equal(rememberServiceUrl(storage, OWN, site), OWN);
+  assert.equal(serviceUrlFrom(storage, site), OWN);
+  assert.equal(isOwnCopy(site.origin, site), false);
+  assert.equal(isOwnCopy(DEFAULT_SERVICE_URL, site), false);
+  assert.equal(isOwnCopy(OWN, site), true);
 });
 
 test('a typed address is remembered; the default is not', () => {

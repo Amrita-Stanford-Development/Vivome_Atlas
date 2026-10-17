@@ -4,10 +4,19 @@
 // touches fetch and XMLHttpRequest only when called, and node --test hands
 // the client a fake one.
 
-// The service the site calls unless the visitor sets another: the hosted
-// one on Google Cloud Run (deploy/huggingface/PUBLISH.md).
-// scripts/build_workflow.py reads this line for web/data/workflow.json.
+// The hosted service on Google Cloud Run (deploy/huggingface/PUBLISH.md).
+// It answers only through the website: the site's /api door
+// (deploy/pages/api-proxy.js) forwards there with the secret it checks.
+// scripts/build_workflow.py and scripts/build_pages_site.py read this line.
 export const DEFAULT_SERVICE_URL = 'https://vivome-atlas-577083340913.us-central1.run.app';
+
+// The address pages use unless the visitor sets another: their own site,
+// whose /api/... reaches the hosted service. Outside a browser (node --test)
+// there is no site, so it is the hosted service's own address.
+export function siteServiceUrl(where = globalThis.location) {
+  const origin = where?.origin;
+  return typeof origin === 'string' && /^https?:\/\//.test(origin) ? origin : DEFAULT_SERVICE_URL;
+}
 
 // An address the visitor typed is remembered, as a per-visitor convenience;
 // the default is not, so changing it reaches every visitor who never typed
@@ -15,9 +24,9 @@ export const DEFAULT_SERVICE_URL = 'https://vivome-atlas-577083340913.us-central
 export const SERVICE_KEY = 'vivome-service-address';
 
 // The service's own Retry-After for a busy answer (service/config.py,
-// VIVOME_BUSY_RETRY_AFTER_SECONDS), used when the browser cannot read the
-// header: it is not one a page on another origin may read unless the
-// service exposes it.
+// VIVOME_BUSY_RETRY_AFTER_SECONDS), used when the header cannot be read: a
+// page reads it through its own site, but not from a copy on another origin
+// unless that copy exposes it.
 export const BUSY_RETRY_SECONDS = 30;
 
 // The first status check after a quiet spell waits while the hosted
@@ -29,28 +38,33 @@ export const PROJECT_TIMEOUT_MS = 10 * 60 * 1000;
 
 export const normaliseServiceUrl = (url) => String(url ?? '').trim().replace(/\/+$/, '');
 
-// The address to use: the one the visitor typed before, or the default.
-export function serviceUrlFrom(storage) {
+// The address to use: the one the visitor typed before, or the site's own.
+export function serviceUrlFrom(storage, where = globalThis.location) {
   try {
     const stored = normaliseServiceUrl(storage?.getItem(SERVICE_KEY));
-    return stored || DEFAULT_SERVICE_URL;
+    return stored || siteServiceUrl(where);
   } catch {
-    return DEFAULT_SERVICE_URL;
+    return siteServiceUrl(where);
   }
 }
 
-// Remembers a typed address (forgets it when it is blank or the default)
-// and returns the address to use.
-export function rememberServiceUrl(storage, typed) {
+// Remembers a typed address (forgets it when it is blank or the site's
+// own) and returns the address to use.
+export function rememberServiceUrl(storage, typed, where = globalThis.location) {
   const url = normaliseServiceUrl(typed);
+  const site = siteServiceUrl(where);
   try {
-    if (url && url !== DEFAULT_SERVICE_URL) storage?.setItem(SERVICE_KEY, url);
+    if (url && url !== site && url !== DEFAULT_SERVICE_URL) storage?.setItem(SERVICE_KEY, url);
     else storage?.removeItem(SERVICE_KEY);
   } catch { /* no storage */ }
-  return url || DEFAULT_SERVICE_URL;
+  return url || site;
 }
 
-export const isOwnCopy = (url) => normaliseServiceUrl(url) !== DEFAULT_SERVICE_URL;
+// A copy the visitor runs themselves, not the site's own service.
+export const isOwnCopy = (url, where = globalThis.location) => {
+  const u = normaliseServiceUrl(url);
+  return u !== siteServiceUrl(where) && u !== DEFAULT_SERVICE_URL;
+};
 
 // kind: network (no answer), busy (every slot taken; try again after
 // retryAfter seconds), unavailable (running, but cannot label yet: reason),

@@ -16,18 +16,23 @@ keeps no build step, and the deploy only copies it.
 - `dist/large_files.json`: the files over Pages' 25 MiB per-file limit, left
   out of the static copy. These are the two RNA atlas parts (1.4 GB each)
   and `atlas_PROT_lat128.csv` (45 MB).
+- `dist/functions/api/[[path]].js`: the site's door to the labelling service
+  (below), copied from `deploy/pages/api-proxy.js`, and `dist/site/_routes.json`,
+  so a Function runs for `/api/*` only and every other file is served as it is.
+- `dist/wrangler.toml`: the project's settings, with `SERVICE_URL`, the
+  hosted service's address, read from `web/js/atlas/service-client.js`.
 
 The 3D view does not need them: its positions come from the small
 `metadata_*_lat128.csv` files, which are deployed. The three large files hold
 each cell's gene profile, so until they are served from R2 (below), clicking
 a cell cannot show its profile. Every other page works.
 
-Pages serves `/versions.html` at `/versions`. The `.html` addresses redirect
-with a 308, so the site's own links keep working. Pages that were removed or
+Pages serves `/atlas.html` at `/atlas`. The `.html` addresses redirect with
+a 308, so the site's own links keep working. Pages that were removed or
 renamed redirect through `_redirects`, which `scripts/build_pages_site.py`
-writes from its `REDIRECTS`: `/benchmark` to `/manuscript`, the removed
-Dashboard, `/home`, to the landing page, and `/project` to `/atlas`, whose
-Your data tab sends a file to the service.
+writes from its `REDIRECTS`: `/benchmark` and `/versions` to `/manuscript`,
+the removed Dashboard, `/home`, to the landing page, and `/project` to
+`/atlas`, whose Your data tab sends a file to the service.
 
 ## Publishing
 
@@ -45,6 +50,30 @@ The project was created with `pages project create ... --force`. Without
 `--force`, current Wrangler delegates to Workers, finds `web/` on its own,
 and refuses its 45 MB file. Later commands need no `--force`.
 
+## The labelling service, through the site
+
+The service on Cloud Run answers only through the website. Pages call their
+own site's `/api/status` and `/api/project`; the Function forwards each
+request to `SERVICE_URL` with the secret `SERVICE_SECRET` in the
+`X-VivOME-Proxy-Secret` header, and the service, with the same secret in
+`VIVOME_PROXY_SECRET`, answers 403 to anything without it. Behind the site's
+sign-in, only signed-in visitors reach it. Cloudflare takes at most 100 MB in
+one request, so that is the upload limit.
+
+The secret is set once, never in a file. Make a long random value, then:
+
+```bash
+npx wrangler@4 pages secret put SERVICE_SECRET --project-name vivome-atlas   # paste it when asked
+gcloud run services update vivome-atlas --region us-central1 --update-env-vars VIVOME_PROXY_SECRET=THE_SAME_VALUE
+```
+
+Set the site's secret and deploy the site first, then the service's: the
+other way round, the live site is refused until its new Function is out. A
+Cloud Run deploy keeps the variable. To change the secret, set both again in
+the same order. `deploy/huggingface/check_space.py` reads it from the
+`VIVOME_PROXY_SECRET` in its own environment and first checks that a request
+without it is refused.
+
 ## The large files (R2), not yet active
 
 R2 must first be enabled once in the Cloudflare dashboard (R2 Object
@@ -57,10 +86,9 @@ Storage). Then:
 3. Build with `python scripts/build_pages_site.py --r2 vivome-atlas-data` and
    deploy.
 
-That build adds two things:
-- a Pages Function (`functions/data/[[path]].js`) that serves the three
-  files from the bucket at their usual `/data/...` URLs, so no page changes;
-- `_routes.json`, so the Function runs for those three paths only.
+That build adds a Pages Function (`functions/data/[[path]].js`) that serves
+the three files from the bucket at their usual `/data/...` URLs, so no page
+changes, and adds their three paths to `_routes.json`.
 
 R2's free tier covers 10 GB of storage, and downloads are free. The RNA view
 still downloads 2.7 GB per visitor, so a lighter web copy is a separate,

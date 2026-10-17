@@ -774,7 +774,7 @@ def build_manifest(
         "previous_release": previous_release,
         "earlier_release": earlier_release,
         "first_release": first_release,
-        # v3's accuracy table (versions.html, "v3 model card").
+        # v3's accuracy table ("v3 model card"; no page shows it).
         "model_card": model_card,
         "benchmark": benchmark or pending_benchmark(),
         "data_availability": {
@@ -792,7 +792,7 @@ def build_manifest(
     }
 
 
-# The model card's accuracy table (web/versions.html). Each row names the
+# The model card's accuracy table (v3's; no page shows it). Each row names the
 # decision rule it was scored with, because the two rules in use differ:
 # nearest centroid is what the service runs; shared kNN is the rule every
 # benchmark method is scored with. A shipped-checkpoint number and a 5-seed

@@ -314,10 +314,20 @@ PORT = int(os.environ.get("VIVOME_PORT", "8001"))
 # minutes; a larger dataset goes in several mixed uploads, or to a service run
 # locally with these raised.
 MAX_UPLOAD_CELLS = int(os.environ.get("VIVOME_MAX_UPLOAD_CELLS", "2000"))
-# A DIA-NN report of 2,000 cells over about 8,000 proteins is near 200 MB of text.
-MAX_UPLOAD_BYTES = int(float(os.environ.get("VIVOME_MAX_UPLOAD_MB", "200")) * 1024 * 1024)
+# A DIA-NN report of 2,000 cells over about 8,000 proteins is near 200 MB of
+# text, but the hosted copy is reached through its website, whose host
+# (Cloudflare) takes at most 100 MB in one request: 100 MB is the default, and
+# a copy run at home can raise it.
+MAX_UPLOAD_BYTES = int(float(os.environ.get("VIVOME_MAX_UPLOAD_MB", "100")) * 1024 * 1024)
 # Projections running at once. Each takes every core it can and up to about
 # 3.6 GB, so the hosted copy runs one at a time and answers 503 to the next
 # request, with a Retry-After, until it is done.
 MAX_CONCURRENT_PROJECTIONS = int(os.environ.get("VIVOME_MAX_CONCURRENT_PROJECTIONS", "1"))
 BUSY_RETRY_AFTER_SECONDS = int(os.environ.get("VIVOME_BUSY_RETRY_AFTER_SECONDS", "30"))
+
+# The hosted copy answers only through its website: the site's /api door
+# (deploy/pages/api-proxy.js) adds this secret to every request it forwards,
+# and with VIVOME_PROXY_SECRET set the service refuses any request without it
+# (403). Unset, as for a copy run at home, every request is answered.
+PROXY_SECRET = os.environ.get("VIVOME_PROXY_SECRET") or None
+PROXY_SECRET_HEADER = "X-VivOME-Proxy-Secret"

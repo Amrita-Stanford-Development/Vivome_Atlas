@@ -11,7 +11,10 @@ reference.
 Settings: 2 vCPU, 4 GiB, at most 1 instance, scaled to zero when idle (the
 first request after a quiet spell waits while the container starts),
 4 requests per instance, a 300 s timeout, port 7860, public. A budget alert
-(about $5, in the billing account's currency) watches the project.
+(about $5, in the billing account's currency) watches the project. It
+answers only through the website: `VIVOME_PROXY_SECRET` is set on the
+service itself, never in a file, and a deploy keeps it
+([docs/web/hosting.md](../../docs/web/hosting.md)).
 
 Each release, from the repository root, with the `gcloud` CLI logged in to
 the project owner's account:
@@ -19,15 +22,16 @@ the project owner's account:
 ```bash
 python deploy/huggingface/build_space.py
 gcloud run deploy vivome-atlas --source deploy/huggingface/space --region us-central1   --memory 4Gi --cpu 2 --max-instances 1 --min-instances 0 --concurrency 4 --timeout 300   --port 7860 --allow-unauthenticated --cpu-boost --execution-environment gen2
-python deploy/huggingface/check_space.py https://vivome-atlas-577083340913.us-central1.run.app
+VIVOME_PROXY_SECRET=THE_SECRET python deploy/huggingface/check_space.py https://vivome-atlas-577083340913.us-central1.run.app
 ```
 
-The check must report `0 differ` before the site points at a new revision.
+The check must report that a request without the secret is refused, and
+`0 differ`, before the site points at a new revision.
 
 ## Hugging Face Space (reference)
 
 The Space runs `service/` in Docker on Hugging Face's free CPU tier (2 cores,
-16 GB). It serves v4.1, accepts at most 2,000 cells and 200 MB per upload, and
+16 GB). It serves v4.1, accepts at most 2,000 cells and 100 MB per upload, and
 projects one upload at a time (settings in `Dockerfile`). Its address is
 `https://USER-vivome-atlas.hf.space`, where USER is the Hugging Face account.
 
@@ -87,8 +91,8 @@ stops the release.
 Then point the site at it: set `DEFAULT_SERVICE_URL` in
 `web/js/atlas/service-client.js` to `https://USER-vivome-atlas.hf.space`,
 update the service text of the Atlas page's Your data tab
-(`web/atlas.html#your-data`) and the status lines of
-`docs/service/projection-api.md` and `web/versions.html`, run
+(`web/atlas.html#your-data`) and the status line of
+`docs/service/projection-api.md`, run
 `python scripts/build_manifest.py` (it copies the address into
 `web/data/workflow.json`), run the three test suites, and redeploy the site
 (`docs/web/hosting.md`).

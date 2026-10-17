@@ -59,7 +59,7 @@ Computed from repository data:
 - `model` is the current release, v4.1 (first released in 0.4.0, served
   again from 0.6.0):
   - `model.seeds` — the ensemble's member *count* (5), from the v3.1 spec,
-    rendered with 0 decimal places (`web/js/panels.js:buildModelCard`);
+    rendered with 0 decimal places (the `seeds` fact in `web/js/panels.js`);
   - the architecture facts it shares with v3 (`feature_space_size`,
     `encoder_family`, `detected_by_source`); `mask_sampling` is `null`, since
     the members' training setting (T1 NB1b) is not recorded here, and renders
@@ -103,7 +103,7 @@ Computed from repository data:
   space), repeated on both cross-modal rows — not a per-class measurement,
   hence the "global metric, not per-class" wording in its `basis`.
 
-- `model_card` — v3's accuracy table on `web/versions.html` ("v3 model card"):
+- `model_card` — v3's accuracy table ("v3 model card"), which no page shows:
   - RNA to RNA on test cells, from `research/notebook-outputs/nb1/rna_to_rna_membership_corrected.csv`;
   - SCoPE2 protein, restricted and unrestricted, shipped checkpoint and
     5-seed mean, each under both decision rules, from the nb1d seed scores
@@ -112,9 +112,8 @@ Computed from repository data:
   Every row names its rule (`nearest centroid (the service's rule)` or
   `shared kNN (the benchmark's rule)`), because a seed and a mean compare
   only under the same one. `vs_scanvi` counts the seed pairings v3 wins
-  against scANVI, from `paired_bootstrap_ours_vs_scanvi.csv`. The page's
-  prose reads these through `factText` data-fact slots, so no model-card
-  number is typed into HTML.
+  against scANVI, from `paired_bootstrap_ours_vs_scanvi.csv`.
+  `buildModelCardTable` and the model-card facts of `factText` read it.
 
 Emitted as pending, with the phase that will produce each:
 
@@ -167,10 +166,10 @@ in the browser.
 |---|---|
 | `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `manuscript.html` (Results: cross-modal support, alignment diagnostics) |
 | `buildBenchmarkTable` (with `currentOnly`, `roles` and `note` options) | `manuscript.html` |
-| `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
+| `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable`, `buildModelCardTable` | none: no page mounts them |
 | `buildSupportedLabelSpace`, `buildProjectionSummary`, `buildProjectionLabels`, `buildProjectionCells` | `atlas.html` (`web/js/atlas/data-tab.js`, `web/js/atlas/landing.js`) |
-| `buildModelCardTable` | `versions.html` |
-| `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html`, `manuscript.html` |
+| `buildProofPoints` | `index.html` |
+| `factText` (the `data-fact` slots in prose) | `index.html`, `workflow.html`, `manuscript.html` |
 
 The Manuscript page's other numbers are `data-ms` slots, filled from
 `web/data/manuscript.json` by `msFact` in `web/js/manuscript-data.js`
@@ -189,7 +188,7 @@ from data, and `web/tests/fixtures.js` deliberately names one class
    rebuilds `web/data/workflow.json`.
 3. Bump `ATLAS_VERSION` in `scripts/build_manifest.py` and commit the regenerated manifest.
 4. Tag the release and archive it for a persistent identifier.
-5. Record label stability against the previous version and add it to `versions.html`.
+5. Record label stability against the previous version, below.
 
 Label stability is not yet measured for any release. 0.6.0 answers every
 upload exactly as 0.4.0 (both serve v4.1). 0.5.0 answered RNA uploads as
