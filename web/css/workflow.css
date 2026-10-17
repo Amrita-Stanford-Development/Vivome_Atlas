@@ -354,10 +354,17 @@
     margin: 0;
     max-width: 50ch;
     font-size: clamp(17px, 1.65vw, 22px);
+    font-weight: 500;
     line-height: 1.65;
+    color: var(--accent);
+    text-align: justify;
+    text-align-last: left;
+    hyphens: auto;
+    -webkit-hyphens: auto;
     opacity: 0;
     visibility: hidden;
 }
+.js .wf-runway.is-measured .wf-beats > [data-beat] a { color: inherit; font-weight: 600; }
 .js .wf-runway.is-measured .wf-beats > [data-beat].is-active { opacity: 1; visibility: visible; }
 .wf-beat-dots { display: flex; justify-content: center; list-style: none; padding: 0; gap: 7px; margin: 2px 0 0; }
 .wf-beat-dots li { width: 8px; height: 8px; border-radius: 50%; background: var(--line); max-width: none; transition: background 0.3s ease; }
