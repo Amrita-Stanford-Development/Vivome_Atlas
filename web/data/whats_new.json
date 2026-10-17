@@ -1,10 +1,10 @@
 [
   {
     "date": "2026-10-17",
-    "title": "v4.2 checked on Khoury 2026",
-    "text": "The served model was scored once on Khoury 2026, a second lab's single-cell proteomics, after its release. It is below v4.1 there, so its gain on Fulcher 2026 does not carry over to this lab's data. The Benchmark page and the model card now say so.",
-    "link": "benchmark.html",
-    "link_text": "See the benchmark"
+    "title": "v4.1 is the default again",
+    "text": "The service answers with v4.1 again. On a second lab's single-cell proteomics, which neither model was tuned on, v4.1 named more cells correctly than v4.2, so it is the better choice for new data. v4.2 stays selectable.",
+    "link": "versions.html",
+    "link_text": "Read the model card"
   },
   {
     "date": "2026-10-16",

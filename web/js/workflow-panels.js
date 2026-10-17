@@ -150,13 +150,16 @@ export function buildProbabilityTable(detail, classOrder, k = 5) {
 export function buildGuessTable(detail, classOrder, k = 5) {
   if (!detail) return `<p class="pending">${PENDING_LABEL}</p>`;
   const g = detail.guess;
+  // A model with protein class means (v4.2) records their correlation too.
+  const protein = Array.isArray(g.r_protein);
   const rows = topK(g.fused, k).map((c) => `<tr><td>${e(classOrder[c])}</td>`
     + `<td class="support-num">${pct(g.encoder[c])}</td>`
     + `<td class="support-num">${num(g.r_rna[c], 3)}</td>`
-    + `<td class="support-num">${g.r_protein[c] === null ? '<span class="pending">not covered</span>' : num(g.r_protein[c], 3)}</td>`
+    + (protein ? `<td class="support-num">${g.r_protein[c] === null ? '<span class="pending">not covered</span>' : num(g.r_protein[c], 3)}</td>` : '')
     + `<td class="support-num">${pct(g.correlation_probability[c])}</td>`
     + `<td class="support-num"><strong>${pct(g.fused[c])}</strong></td></tr>`).join('');
-  return `<div class="table-scroll">${table(['Class', 'Encoders', 'r, RNA means', 'r, protein means', 'Correlation', 'Fused'], rows)}</div>`;
+  const heads = ['Class', 'Encoders', 'r, RNA means', ...(protein ? ['r, protein means'] : []), 'Correlation', 'Fused'];
+  return `<div class="table-scroll">${table(heads, rows)}</div>`;
 }
 
 // The abstention ladder, rung by rung, for one cell.

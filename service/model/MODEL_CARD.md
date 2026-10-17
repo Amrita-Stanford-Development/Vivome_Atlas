@@ -1,13 +1,26 @@
 # VivOME model card
 
-The service runs **v4.2** by default, release 0.5.0. It is v4.1 with
-protein class means in its best guess, for protein uploads. **v4.1**
-(release 0.4.0), **v3.1** (release 0.3.0) and **v3** (release 0.2.0) stay
-selectable (`VIVOME_PIPELINE_VERSION=v4.1`, `v3.1` or `v3`) and are
-described after it. All are trained on RNA only and applied zero-shot to
-protein; no protein labels are used.
+The service runs **v4.1** by default, release 0.6.0: v4.1, first released in
+0.4.0, is served again. **v4.2** (release 0.5.0), **v3.1** (release 0.3.0)
+and **v3** (release 0.2.0) stay selectable (`VIVOME_PIPELINE_VERSION=v4.2`,
+`v3.1` or `v3`). All are trained on RNA only and applied zero-shot to
+protein; no protein labels are used. v4.1's own section is after v4.2's.
 
-## v4.2: v4.1 with protein class means
+## Release 0.6.0: v4.1 served again
+
+- **Why** (the owner's decision, 2026-10-17;
+  `research/notebook-run-history.md`, entry 48): scored once on Khoury 2026
+  after its release, v4.2's best guess reached 60.1% balanced accuracy
+  against v4.1's 62.5% (v4.1 ahead by 2.4 points, 95% CI 1.3 to 3.6;
+  `research/benchmark/khoury2026_posthoc_v42_check/`). Khoury is a second
+  lab's data that neither model was tuned on, while v4.2's gain on Fulcher
+  2026 (+6.7) was measured on the data it was checked on. On the internal
+  held-out test the two are equal.
+- **What changes for a user:** protein uploads get v4.1's best guess again
+  (correlation to the reference's RNA class means); RNA uploads were already
+  answered as by v4.1. v4.2 stays selectable.
+
+## v4.2: v4.1 with protein class means (release 0.5.0)
 
 ### What it is
 

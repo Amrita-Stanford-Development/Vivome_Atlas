@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "atlas_version": "0.5.0",
+  "atlas_version": "0.6.0",
   "generated": "2026-10-17",
   "model": {
-    "name": "VivOME v4.2",
+    "name": "VivOME v4.1",
     "latent_dim": 128,
     "training_regime": "supervised",
     "seeds": {
@@ -11,7 +11,7 @@
       "status": "measured",
       "basis": "v3.1's ensemble members: V2 seeds 0 to 4 (T1 NB1b), probabilities averaged"
     },
-    "notes": "v4.1's answers and best guess, with one change for protein uploads: each cell's correlation is taken with protein class means from sorted immune cells (Rieckmann et al. 2017, PXD004352) for the reference classes they cover, and with the reference's RNA class means for the rest. Each answer's set holds the best guess, so a protein cell's answer can change with it. An RNA upload is answered exactly as by v4.1. The five encoders are trained only on labelled blood scRNA-seq and no protein labels are used: proteomics queries are projected at inference and never used to retrain anything. v4.1's one tuned weight was chosen on Fulcher 2026. Coordinates shown in the viewer are a 3-component PCA projection of the coordinate member's (V2 seed 4) 128-d latent space, as in v3.1; the latent coordinates themselves are not distributed with this build.",
+    "notes": "v3.1's answers, from five encoders trained only on labelled blood scRNA-seq, with a better best guess: the encoders' probability joined with each cell's correlation to the reference's class means, where that correlation carries signal. Its one tuned weight was chosen on Fulcher 2026, and no protein labels are used: proteomics queries are projected at inference and never used to retrain anything. Coordinates shown in the viewer are a 3-component PCA projection of the coordinate member's (V2 seed 4) 128-d latent space, as in v3.1; the latent coordinates themselves are not distributed with this build.",
     "feature_space_size": 9002,
     "previous_feature_space_size": 2903,
     "detected_by_source": {
@@ -26,7 +26,7 @@
     "mask_sampling": null,
     "evaluation": {
       "suite": {
-        "title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation; v4.2 answers RNA uploads exactly as v4.1)",
+        "title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation)",
         "rows": [
           {
             "key": "correct_when_committed",
@@ -34,7 +34,7 @@
             "value": {
               "value": 0.9628,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           },
           {
@@ -43,7 +43,7 @@
             "value": {
               "value": 0.1417,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           },
           {
@@ -52,7 +52,7 @@
             "value": {
               "value": 0.8721,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           },
           {
@@ -61,7 +61,7 @@
             "value": {
               "value": 0.1817,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           },
           {
@@ -70,7 +70,7 @@
             "value": {
               "value": 0.1589,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           },
           {
@@ -79,7 +79,7 @@
             "value": {
               "value": 0.5177,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           },
           {
@@ -88,7 +88,7 @@
             "value": {
               "value": 0.6497,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
+              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
             }
           }
         ]
@@ -99,12 +99,12 @@
           "committed": {
             "value": 0.52953,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct": {
             "value": 0.588086,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct_label": "correct when committed, at the stated level"
         },
@@ -113,26 +113,26 @@
           "committed": {
             "value": 0.734177,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct": {
             "value": 0.969388,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct_label": "labelled cells whose answer names their lineage"
         },
         {
           "dataset": "Fulcher 2026",
           "committed": {
-            "value": 0.8729,
+            "value": 0.8698,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct": {
-            "value": 0.9829,
+            "value": 0.9792,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
           },
           "correct_label": "correct when committed, at the stated level"
         }
@@ -142,27 +142,27 @@
           "dataset": "Fulcher 2026",
           "type": "CD4T",
           "value": {
-            "value": 0.831169,
+            "value": 0.824675,
             "status": "measured",
-            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "CD8T",
           "value": {
-            "value": 0.232044,
+            "value": 0.237569,
             "status": "measured",
-            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "NK",
           "value": {
-            "value": 0.92,
+            "value": 0.9,
             "status": "measured",
-            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
           }
         },
         {
@@ -171,70 +171,70 @@
           "value": {
             "value": 0.980392,
             "status": "measured",
-            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "monocyte",
           "value": {
-            "value": 0.953947,
+            "value": 0.97807,
             "status": "measured",
-            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "DC",
           "value": {
-            "value": 0.62963,
+            "value": 0.222222,
             "status": "measured",
-            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "CD4T",
           "value": {
-            "value": 0.8206,
+            "value": 0.828,
             "status": "measured",
-            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "CD8T",
           "value": {
-            "value": 0.018,
+            "value": 0.027,
             "status": "measured",
-            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "NK",
           "value": {
-            "value": 0.4416,
+            "value": 0.5065,
             "status": "measured",
-            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "B",
           "value": {
-            "value": 0.8089,
+            "value": 0.8171,
             "status": "measured",
-            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "monocyte",
           "value": {
-            "value": 0.9171,
+            "value": 0.947,
             "status": "measured",
-            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
+            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
           }
         }
       ]
@@ -940,8 +940,8 @@
   },
   "next_reference": null,
   "previous_release": {
-    "model_name": "VivOME v4.1",
-    "atlas_version": "0.4.0",
+    "model_name": "VivOME v4.2",
+    "atlas_version": "0.5.0",
     "seeds": {
       "value": 5,
       "status": "measured",
@@ -961,7 +961,7 @@
     "mask_sampling": null,
     "evaluation": {
       "suite": {
-        "title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation)",
+        "title": "Simulated uploads of held-out RNA cells (v4.1's pre-registered evaluation; v4.2 answers RNA uploads exactly as v4.1)",
         "rows": [
           {
             "key": "correct_when_committed",
@@ -969,7 +969,7 @@
             "value": {
               "value": 0.9628,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           },
           {
@@ -978,7 +978,7 @@
             "value": {
               "value": 0.1417,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           },
           {
@@ -987,7 +987,7 @@
             "value": {
               "value": 0.8721,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           },
           {
@@ -996,7 +996,7 @@
             "value": {
               "value": 0.1817,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           },
           {
@@ -1005,7 +1005,7 @@
             "value": {
               "value": 0.1589,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           },
           {
@@ -1014,7 +1014,7 @@
             "value": {
               "value": 0.5177,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           },
           {
@@ -1023,7 +1023,7 @@
             "value": {
               "value": 0.6497,
               "status": "measured",
-              "basis": "v4.1's pre-registered evaluation: 240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json"
+              "basis": "v4.1's pre-registered evaluation (240 simulated uploads of te_eval cells, the suite's fourth use; research/notebook-outputs/v41_phase3/summary.json). v4.2 answers an RNA upload exactly as v4.1 (service/tests/test_v42.py), so these are its numbers too"
             }
           }
         ]
@@ -1034,12 +1034,12 @@
           "committed": {
             "value": 0.52953,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
           },
           "correct": {
             "value": 0.588086,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
           },
           "correct_label": "correct when committed, at the stated level"
         },
@@ -1048,26 +1048,26 @@
           "committed": {
             "value": 0.734177,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
           },
           "correct": {
             "value": 0.969388,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
           },
           "correct_label": "labelled cells whose answer names their lineage"
         },
         {
           "dataset": "Fulcher 2026",
           "committed": {
-            "value": 0.8698,
+            "value": 0.8729,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
           },
           "correct": {
-            "value": 0.9792,
+            "value": 0.9829,
             "status": "measured",
-            "basis": "served settings, development data; research/benchmark/v41_development/confident.csv"
+            "basis": "served settings, development data; research/benchmark/v42_development/confident.csv"
           },
           "correct_label": "correct when committed, at the stated level"
         }
@@ -1077,27 +1077,27 @@
           "dataset": "Fulcher 2026",
           "type": "CD4T",
           "value": {
-            "value": 0.824675,
+            "value": 0.831169,
             "status": "measured",
-            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "CD8T",
           "value": {
-            "value": 0.237569,
+            "value": 0.232044,
             "status": "measured",
-            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "NK",
           "value": {
-            "value": 0.9,
+            "value": 0.92,
             "status": "measured",
-            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
           }
         },
         {
@@ -1106,75 +1106,75 @@
           "value": {
             "value": 0.980392,
             "status": "measured",
-            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "monocyte",
           "value": {
-            "value": 0.97807,
+            "value": 0.953947,
             "status": "measured",
-            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Fulcher 2026",
           "type": "DC",
           "value": {
-            "value": 0.222222,
+            "value": 0.62963,
             "status": "measured",
-            "basis": "best guess as served, in-sample for v4.1; research/benchmark/v41_development/fulcher2026.csv"
+            "basis": "best guess as served, in-sample (v4.1's weight was chosen and v4.2 checked here); research/benchmark/v42_development/fulcher2026.csv"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "CD4T",
           "value": {
-            "value": 0.828,
+            "value": 0.8206,
             "status": "measured",
-            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "CD8T",
           "value": {
-            "value": 0.027,
+            "value": 0.018,
             "status": "measured",
-            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "NK",
           "value": {
-            "value": 0.5065,
+            "value": 0.4416,
             "status": "measured",
-            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "B",
           "value": {
-            "value": 0.8171,
+            "value": 0.8089,
             "status": "measured",
-            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         },
         {
           "dataset": "Khoury 2026",
           "type": "monocyte",
           "value": {
-            "value": 0.947,
+            "value": 0.9171,
             "status": "measured",
-            "basis": "best guess, post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+            "basis": "best guess as served, post-hoc, scored once after release on the owner's decision (2026-10-17); research/benchmark/khoury2026_posthoc_v42_check/summary.json"
           }
         }
       ]
     },
-    "note": "v3.1's answers with a fused best guess: the encoders' probability joined with each cell's correlation to the reference's RNA class means, where that correlation carries signal. Its one tuned weight was chosen on Fulcher 2026. v4.2 keeps all of it and adds protein class means for protein uploads. It stays selectable in the service (VIVOME_PIPELINE_VERSION=v4.1)."
+    "note": "v4.1 with protein class means from sorted immune cells (Rieckmann et al. 2017, PXD004352) in the best guess's correlation term, for protein uploads. It gained on Fulcher 2026, where it was checked, and fell short of v4.1 on Khoury 2026 (post-hoc), so release 0.6.0 serves v4.1 again. It stays selectable in the service (VIVOME_PIPELINE_VERSION=v4.2)."
   },
   "earlier_release": {
     "model_name": "VivOME v3 reference",
@@ -1426,7 +1426,7 @@
   },
   "benchmark": {
     "status": "measured",
-    "current": "VivOME v4.2",
+    "current": "VivOME v4.1",
     "note": "Every method gets the same reference, the same genes and the same scoring. Each score is a method's one answer per cell (for VivOME, its best guess), with the mean and SD over seeds where a method has several.",
     "datasets": [
       {
@@ -1438,20 +1438,8 @@
           "status": "measured",
           "basis": "one of 5 types at random"
         },
-        "role": "Held out from development: no method was developed or tuned on it. Post-hoc for every method, since its labels were read at its one scoring (2026-10-03). v4.2 was scored here once, after its release, on the owner's decision (2026-10-17): it is below v4.1 here, so its gain on Fulcher 2026 does not carry over to this lab's data. The labels are the authors' clusters of the protein data, and its CD8 T label largely separates naive from memory T cells.",
+        "role": "Held out from development: no method was developed or tuned on it. Post-hoc for every method, since its labels were read at its one scoring (2026-10-03). The labels are the authors' clusters of the protein data, and its CD8 T label largely separates naive from memory T cells.",
         "rows": [
-          {
-            "method": "VivOME v4.2 (ours)",
-            "rule": "best guess, as served",
-            "ours": true,
-            "runs": 1,
-            "score": {
-              "value": 0.6012,
-              "status": "measured",
-              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v42_check/summary.json and research/benchmark/khoury2026_posthoc_v41_check/summary.json"
-            },
-            "vs_current": null
-          },
           {
             "method": "VivOME v4.1 (ours)",
             "rule": "best guess, as served",
@@ -1460,19 +1448,31 @@
             "score": {
               "value": 0.6251,
               "status": "measured",
-              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v42_check/summary.json and research/benchmark/khoury2026_posthoc_v41_check/summary.json"
+              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json and research/benchmark/khoury2026_posthoc_v42_check/summary.json"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v4.2 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.6012,
+              "status": "measured",
+              "basis": "post-hoc; research/benchmark/khoury2026_posthoc_v41_check/summary.json and research/benchmark/khoury2026_posthoc_v42_check/summary.json"
             },
             "vs_current": {
               "pairings": 1,
-              "favour_current": 0,
-              "favour_other": 1,
+              "favour_current": 1,
+              "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": -0.02388,
+                "value": 0.02388,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": -0.035574,
-                "ci_high": -0.012611
+                "ci_low": 0.012611,
+                "ci_high": 0.035574
               }
             }
           },
@@ -1489,14 +1489,14 @@
             "vs_current": {
               "pairings": 1,
               "favour_current": 0,
-              "favour_other": 1,
-              "neither": 0,
+              "favour_other": 0,
+              "neither": 1,
               "difference": {
-                "value": -0.027178,
+                "value": -0.003298,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": -0.044707,
-                "ci_high": -0.009934
+                "ci_low": -0.020545,
+                "ci_high": 0.013912
               }
             }
           },
@@ -1515,15 +1515,15 @@
             },
             "vs_current": {
               "pairings": 3,
-              "favour_current": 0,
-              "favour_other": 1,
+              "favour_current": 1,
+              "favour_other": 0,
               "neither": 2,
               "difference": {
-                "value": -0.013943,
+                "value": 0.009937,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": -0.038453,
-                "max": 0.000496
+                "min": -0.014573,
+                "max": 0.024376
               }
             }
           },
@@ -1542,15 +1542,15 @@
             },
             "vs_current": {
               "pairings": 3,
-              "favour_current": 2,
+              "favour_current": 3,
               "favour_other": 0,
-              "neither": 1,
+              "neither": 0,
               "difference": {
-                "value": 0.032644,
+                "value": 0.056524,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.014476,
-                "max": 0.047736
+                "min": 0.038356,
+                "max": 0.071616
               }
             }
           },
@@ -1573,11 +1573,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.085027,
+                "value": 0.108907,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.044329,
-                "max": 0.160216
+                "min": 0.068209,
+                "max": 0.184096
               }
             }
           },
@@ -1597,11 +1597,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.103072,
+                "value": 0.126952,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.08244,
-                "ci_high": 0.122919
+                "ci_low": 0.106117,
+                "ci_high": 0.147144
               }
             }
           },
@@ -1624,11 +1624,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.211807,
+                "value": 0.235687,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.112284,
-                "max": 0.273183
+                "min": 0.136164,
+                "max": 0.297063
               }
             }
           },
@@ -1651,11 +1651,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.285207,
+                "value": 0.309086,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.281812,
-                "max": 0.288052
+                "min": 0.305692,
+                "max": 0.311931
               }
             }
           },
@@ -1678,11 +1678,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.297021,
+                "value": 0.320901,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.284938,
-                "max": 0.305873
+                "min": 0.308817,
+                "max": 0.329753
               }
             }
           },
@@ -1702,11 +1702,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.303837,
+                "value": 0.327717,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.280393,
-                "ci_high": 0.326977
+                "ci_low": 0.304751,
+                "ci_high": 0.351352
               }
             }
           }
@@ -1721,20 +1721,8 @@
           "status": "measured",
           "basis": "one of 6 types at random"
         },
-        "role": "Development data. In-sample for v4.2 and v4.1: v4.1's one tuned weight was chosen here and v4.2 was checked here, so a lead here is not evidence of a held-out gain. Fulcher measures neither CD8A, CD8B nor CD4.",
+        "role": "Development data. In-sample for v4.1 and v4.2: v4.1's one tuned weight was chosen here and v4.2 was checked here, so a lead here is not evidence of a held-out gain. Fulcher measures neither CD8A, CD8B nor CD4.",
         "rows": [
-          {
-            "method": "VivOME v4.2 (ours)",
-            "rule": "best guess, as served",
-            "ours": true,
-            "runs": 1,
-            "score": {
-              "value": 0.757864,
-              "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/fulcher2026.csv"
-            },
-            "vs_current": null
-          },
           {
             "method": "VivOME v4.1 (ours)",
             "rule": "best guess, as served",
@@ -1743,19 +1731,31 @@
             "score": {
               "value": 0.690488,
               "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/fulcher2026.csv"
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)fulcher2026.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v4.2 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.757864,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)fulcher2026.csv"
             },
             "vs_current": {
               "pairings": 1,
-              "favour_current": 1,
-              "favour_other": 0,
+              "favour_current": 0,
+              "favour_other": 1,
               "neither": 0,
               "difference": {
-                "value": 0.067376,
+                "value": -0.067376,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.04409,
-                "ci_high": 0.091637
+                "ci_low": -0.091637,
+                "ci_high": -0.04409
               }
             }
           },
@@ -1778,11 +1778,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.12741,
+                "value": 0.060035,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.122964,
-                "max": 0.132336
+                "min": 0.055589,
+                "max": 0.064961
               }
             }
           },
@@ -1802,11 +1802,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.136624,
+                "value": 0.069248,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.102614,
-                "ci_high": 0.169475
+                "ci_low": 0.04154,
+                "ci_high": 0.096245
               }
             }
           },
@@ -1829,11 +1829,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.149881,
+                "value": 0.082506,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.14286,
-                "max": 0.155087
+                "min": 0.075485,
+                "max": 0.087712
               }
             }
           },
@@ -1853,11 +1853,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.203349,
+                "value": 0.135973,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.170334,
-                "ci_high": 0.236129
+                "ci_low": 0.102795,
+                "ci_high": 0.168416
               }
             }
           },
@@ -1880,11 +1880,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.238876,
+                "value": 0.1715,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.234776,
-                "max": 0.242975
+                "min": 0.167401,
+                "max": 0.175599
               }
             }
           },
@@ -1907,11 +1907,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.286704,
+                "value": 0.219329,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.255217,
-                "max": 0.318192
+                "min": 0.187841,
+                "max": 0.250816
               }
             }
           },
@@ -1934,11 +1934,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.331109,
+                "value": 0.263734,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.330516,
-                "max": 0.331702
+                "min": 0.263141,
+                "max": 0.264326
               }
             }
           },
@@ -1958,11 +1958,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.366025,
+                "value": 0.298649,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.327777,
-                "ci_high": 0.404306
+                "ci_low": 0.262153,
+                "ci_high": 0.33662
               }
             }
           },
@@ -1985,11 +1985,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.446918,
+                "value": 0.379543,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.43245,
-                "max": 0.462123
+                "min": 0.365074,
+                "max": 0.394747
               }
             }
           },
@@ -2012,11 +2012,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.48222,
+                "value": 0.414844,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.463617,
-                "max": 0.510949
+                "min": 0.396241,
+                "max": 0.443574
               }
             }
           },
@@ -2039,11 +2039,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.488186,
+                "value": 0.42081,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.468724,
-                "max": 0.526962
+                "min": 0.401348,
+                "max": 0.459586
               }
             }
           },
@@ -2066,11 +2066,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.517716,
+                "value": 0.450341,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.514764,
-                "max": 0.523105
+                "min": 0.447389,
+                "max": 0.45573
               }
             }
           },
@@ -2090,11 +2090,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.563757,
+                "value": 0.496381,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "ci_low": 0.532279,
-                "ci_high": 0.597497
+                "ci_low": 0.464051,
+                "ci_high": 0.52867
               }
             }
           },
@@ -2117,11 +2117,11 @@
               "favour_other": 0,
               "neither": 0,
               "difference": {
-                "value": 0.583941,
+                "value": 0.516565,
                 "status": "measured",
                 "basis": "current model minus this run; paired bootstrap, 2,000 resamples stratified by true type, seed 0, 95% CI",
-                "min": 0.560395,
-                "max": 0.60545
+                "min": 0.493019,
+                "max": 0.538075
               }
             }
           }
@@ -2135,18 +2135,6 @@
         "role": "Development data with lineage labels only, for some of its cells: the share of lymphoid-labelled cells whose single answer is lymphoid.",
         "rows": [
           {
-            "method": "VivOME v4.2 (ours)",
-            "rule": "best guess, as served",
-            "ours": true,
-            "runs": 1,
-            "score": {
-              "value": 0.923077,
-              "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/pbmc240.csv"
-            },
-            "vs_current": null
-          },
-          {
             "method": "VivOME v4.1 (ours)",
             "rule": "best guess, as served",
             "ours": true,
@@ -2154,7 +2142,19 @@
             "score": {
               "value": 0.923077,
               "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/pbmc240.csv"
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)pbmc240.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v4.2 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.923077,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)pbmc240.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -2382,18 +2382,6 @@
         "role": "Development data: PMA-differentiated U-937 macrophages and undifferentiated monocytes, two states of one cell line. The published matrix arrives centred and batch-corrected.",
         "rows": [
           {
-            "method": "VivOME v4.2 (ours)",
-            "rule": "best guess, as served",
-            "ours": true,
-            "runs": 1,
-            "score": {
-              "value": 0.379726,
-              "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/scope2.csv"
-            },
-            "vs_current": null
-          },
-          {
             "method": "VivOME v4.1 (ours)",
             "rule": "best guess, as served",
             "ours": true,
@@ -2401,7 +2389,19 @@
             "score": {
               "value": 0.379726,
               "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/scope2.csv"
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)scope2.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v4.2 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.379726,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)scope2.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -2770,18 +2770,6 @@
         "role": "The same cells from the authors' search output, with missing values kept missing and no centring or batch correction.",
         "rows": [
           {
-            "method": "VivOME v4.2 (ours)",
-            "rule": "best guess, as served",
-            "ours": true,
-            "runs": 1,
-            "score": {
-              "value": 0.333006,
-              "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv"
-            },
-            "vs_current": null
-          },
-          {
             "method": "VivOME v4.1 (ours)",
             "rule": "best guess, as served",
             "ours": true,
@@ -2789,7 +2777,19 @@
             "score": {
               "value": 0.333006,
               "status": "measured",
-              "basis": "development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv"
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv"
+            },
+            "vs_current": null
+          },
+          {
+            "method": "VivOME v4.2 (ours)",
+            "rule": "best guess, as served",
+            "ours": true,
+            "runs": 1,
+            "score": {
+              "value": 0.333006,
+              "status": "measured",
+              "basis": "development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -2813,7 +2813,7 @@
             "score": {
               "value": 0.518478,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv"
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -2837,7 +2837,7 @@
             "score": {
               "value": 0.505164,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv"
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -2861,7 +2861,7 @@
             "score": {
               "value": 0.48873,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.019172,
               "min": 0.467233,
               "max": 0.504061
@@ -2888,7 +2888,7 @@
             "score": {
               "value": 0.486673,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.001162,
               "min": 0.485551,
               "max": 0.487871
@@ -2915,7 +2915,7 @@
             "score": {
               "value": 0.482187,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv"
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -2939,7 +2939,7 @@
             "score": {
               "value": 0.457036,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.011063,
               "min": 0.444706,
               "max": 0.466091
@@ -2966,7 +2966,7 @@
             "score": {
               "value": 0.450238,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.013727,
               "min": 0.434389,
               "max": 0.458344
@@ -2993,7 +2993,7 @@
             "score": {
               "value": 0.444334,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.037764,
               "min": 0.420989,
               "max": 0.487903
@@ -3020,7 +3020,7 @@
             "score": {
               "value": 0.432885,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.095485,
               "min": 0.323162,
               "max": 0.497132
@@ -3047,7 +3047,7 @@
             "score": {
               "value": 0.431983,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv"
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv"
             },
             "vs_current": {
               "pairings": 1,
@@ -3071,7 +3071,7 @@
             "score": {
               "value": 0.418472,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.017436,
               "min": 0.400159,
               "max": 0.434874
@@ -3098,7 +3098,7 @@
             "score": {
               "value": 0.4177,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.045655,
               "min": 0.375917,
               "max": 0.466431
@@ -3125,7 +3125,7 @@
             "score": {
               "value": 0.330396,
               "status": "measured",
-              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/scope2_reprocessed.csv",
+              "basis": "corrected baselines; development data, as served; research/benchmark/v42_development/ (both models)scope2_reprocessed.csv",
               "sd": 0.023928,
               "min": 0.302884,
               "max": 0.346359

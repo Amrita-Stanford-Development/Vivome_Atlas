@@ -1,6 +1,6 @@
 """v4.2 (Goal 2, Phase 2a; service/pipeline/fusion.py): v4.1 with protein
-class means from sorted cells in its correlation term, the default since
-release 0.5.0 (its evaluation passed). Its served best guess must equal
+class means from sorted cells in its correlation term, the default in
+release 0.5.0 (its evaluation passed) and selectable since. Its served best guess must equal
 research/notebooks/v42_protein_means.py's, cell by cell, on every development
 dataset, and where its correlation term is flat it answers exactly as v4.1."""
 import json
@@ -44,9 +44,9 @@ class V42ServiceTests(unittest.TestCase):
         except reference.PendingArtifactError as exc:
             raise unittest.SkipTest(f"{exc} Run scripts/build_v42_spec.py.")
 
-    def test_v42_is_the_default_since_release_050(self):
+    def test_v42_stays_selectable_after_release_060(self):
         self.assertIn("v4.2", config.PIPELINE_VERSIONS)
-        self.assertEqual(config.PIPELINE_VERSION, "v4.2")
+        self.assertEqual(config.PIPELINE_VERSION, "v4.1")
         spec = json.loads(config.V42_SPEC_PATH.read_text(encoding="utf-8"))
         self.assertEqual(spec["evaluation"]["status"], "passed")
         self.assertEqual(pipeline.load_bundle("v4.2").pipeline_version, "v4.2")

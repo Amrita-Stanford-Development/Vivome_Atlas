@@ -11,7 +11,7 @@ from service import config
 from service.pipeline import alignment, pipeline, reference
 
 REPO = Path(__file__).resolve().parents[2]
-TRACE = REPO / "service" / "model" / "evidence" / "workflow" / "pbmc240_trace_v42.json.gz"
+TRACE = REPO / "service" / "model" / "evidence" / "workflow" / "pbmc240_trace_v41.json.gz"
 EXAMPLE = REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv"
 ROUNDED = 5e-5 + 1e-6  # stored to 4 decimals; float32 rounding on top
 

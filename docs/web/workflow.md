@@ -44,7 +44,7 @@ eyebrow names its part, and each step ends with one "In plain words" card
 | 2 | 6. Borrowing from similar cells | the file's cells placed by likeness, our cell linked to its matches; its values before and after, and the unchanged mask | `trace.stages.smoothing`, `trace.heatmap` |
 | 3 | 7. Turning the cell into a point on the map | what a learner reads, the squeeze to 128 numbers, every learner side by side | `trace.stages.encoder`, `trace.detail[].embedding` |
 | 3 | 8. Which types is our cell close to? | one learner's closeness to each type, then its chances, then every learner's and their average | `trace.detail[].members`, `.ensemble` |
-| 3 | 9. The best guess | the five likeliest types; the second opinion (our cell's proteins against a type's typical levels); whether the file trusts it | `trace.detail[].guess`, `trace.stages.fusion`, `trace.cells` |
+| 3 | 9. The best guess | the five likeliest types; the second opinion (our cell's genes against each type's average among the example cells); whether the file trusts it | `trace.detail[].guess`, `trace.stages.fusion`, `trace.cells` |
 | 3 | 10. The answer, or the reason for none | each type's chance against its bar, the shortlist; likeness to the example cells; how the shortlist decides; every cell by result | `trace.cells`, `trace.stages.calibration`, `.ood` |
 | 3 | 11. Where the cell lands on the map | the map in 3D, the file's cells, our cell and its neighbours, the neighbours' clues; the results file | `reference.sample`, `trace.cells[].xyz`, `trace.detail[].neighbours`, `.response` |
 | 4 | 12. Testing VivOME, and using it today | practice files by kind, the Fulcher 2026 contest, the six sets kept back, the live service | `evaluation`, the manifest's `benchmark`, `service` |
@@ -85,7 +85,8 @@ film there: `workflow.html#film&t=95.5&cell=3`. Adding `&present` gives a
   `service/examples/pbmc240_proteins_raw.tsv` through the served model's own
   functions, stage by stage, checks its answers against
   `pipeline.run_projection` on every cell before writing anything, and
-  writes `service/model/evidence/workflow/pbmc240_trace_v42.json.gz` and
+  writes `service/model/evidence/workflow/pbmc240_trace_v41.json.gz` (v4.1, served
+  since 0.6.0; v4.2's trace for 0.5.0 stays beside it) and
   `input_snippets.json`. It needs torch and v3.1's members, so it is run by
   hand, not by `build_manifest.py`.
 - **The browser computes no model output.** Every control chooses among

@@ -259,9 +259,12 @@ export function guess(el, ctx) {
       g.globalAlpha = two;
       const sc = gd.scatter;
       const typeName = plainName(names[sc.class]);
-      text(g, narrow ? `Second opinion: our cell vs a typical ${typeName}` : `Second opinion: our cell\u2019s proteins against a typical ${typeName}`, 12, 20,
+      const protein = sc.against === 'protein';
+      const typical = protein ? `a typical ${typeName}` : `the average ${typeName}`;
+      text(g, narrow ? `Second opinion: our cell vs ${typical}` : `Second opinion: our cell\u2019s ${protein ? 'proteins' : 'genes'} against ${typical}${protein ? '' : ' among the example cells'}`, 12, 20,
         { size: 12, weight: 600, colour: INK, max: width - 24 });
-      text(g, narrow ? 'one dot per protein' : `one dot per protein (${fc(sc.points.length)} of the ${fc(sc.observed_proteins)} it measured)`, 12, 38, { size: 10.5, colour: SOFT, max: width - 24 });
+      const unit = protein ? 'protein' : 'gene';
+      text(g, narrow ? `one dot per ${unit}` : `one dot per ${unit} (${fc(sc.points.length)} of the ${fc(sc.observed_proteins)} it measured)`, 12, 38, { size: 10.5, colour: SOFT, max: width - 24 });
       const box = { x: 56, y: 56, w: Math.min(width - 80, (height - 130) * 1.4), h: height - 140 };
       const xs = sc.points.map((q) => q[0]);
       const ys = sc.points.map((q) => q[1]);
@@ -277,7 +280,7 @@ export function guess(el, ctx) {
       g.save();
       g.translate(box.x - 12, box.y + box.h);
       g.rotate(-Math.PI / 2);
-      text(g, `typical ${typeName}: less \u2192 more`, 0, 0, { size: 10.5, colour: INK, max: box.h });
+      text(g, `${protein ? 'typical' : 'average'} ${typeName}: less \u2192 more`, 0, 0, { size: 10.5, colour: INK, max: box.h });
       g.restore();
       const verdict = phase(p, 0.5, 0.58);
       text(g, narrow ? `Match score ${sc.r.toFixed(2)} (1: perfect, 0: none)` : `Match score ${sc.r.toFixed(2)}: 1 would mean they rise and fall together perfectly, 0 not at all.`, 12, box.y + box.h + 40,

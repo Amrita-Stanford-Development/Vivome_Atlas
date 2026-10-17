@@ -50,22 +50,19 @@
                 Each answer is given at the level the evidence supports: one of the reference's
                 <span data-fact="cell_types">&nbsp;</span> blood cell types, its group, or its lineage. Where
                 the evidence runs out, it abstains and says why. Each cell also gets a best guess: the
-                encoders' probability joined with the cell's correlation to class means, wherever that
-                correlation carries signal in the upload. <span data-fact="model_name">&nbsp;</span> keeps
-                the answers and best guess of <span data-fact="previous_release_name">&nbsp;</span> and
-                changes one thing for protein uploads: the correlation is taken with protein class means
-                from sorted immune cells (Rieckmann et al. 2017, PRIDE PXD004352) for the reference
-                classes they cover. Each answer's set holds the best guess, so a protein cell's answer can
-                change with it. An RNA upload is answered exactly as before. Full detail and sources:
+                encoders' probability joined with the cell's correlation to the reference's class means,
+                wherever that correlation carries signal in the upload. <span data-fact="model_name">&nbsp;</span>
+                was first released in 0.4.0; this release serves it again, because on a second lab's data
+                that neither model was tuned on it named more cells correctly than
+                <span data-fact="previous_release_name">&nbsp;</span>. Full detail and sources:
                 <code>service/model/MODEL_CARD.md</code>; how it compares with other methods:
                 <a href="benchmark.html">the benchmark</a>.
             </p>
             <div class="table-scroll" id="evaluation-mount"></div>
             <p class="panel-note">
-                The simulated suite is the previous release's, because RNA uploads are answered exactly as
-                before; it had been used before, so it is a safety check, not a fresh test. The development
-                datasets are measured as served. The one tuned setting was chosen on Fulcher 2026, and this
-                release was checked there too.
+                The simulated suite had been used before, so it is a safety check, not a fresh test.
+                The development datasets are measured as served, and the one setting this release tuned
+                was chosen on Fulcher 2026.
             </p>
         </section>
 
@@ -73,24 +70,21 @@
             <h2>Known limits</h2>
             <ol>
                 <li><strong>CD8 T cells.</strong> The best guess finds
-                    <span data-fact="recall_fulcher_cd8t">&nbsp;</span> of Fulcher 2026's CD8 T cells, and
-                    it finds <span data-fact="recall_khoury_cd8t">&nbsp;</span> of Khoury 2026's (post-hoc; the
-                    previous release found <span data-fact="previous_recall_khoury_cd8t">&nbsp;</span>). Every method tested fails them
+                    <span data-fact="recall_fulcher_cd8t">&nbsp;</span> of Fulcher 2026's CD8 T cells and
+                    <span data-fact="recall_khoury_cd8t">&nbsp;</span> of Khoury 2026's (post-hoc). Every method tested fails them
                     too. Khoury's CD8 label largely separates naive from memory T cells, the reference files
                     naive CD8 T cells under CD4 T, and Fulcher measures neither CD8A, CD8B nor CD4. The
                     answers stay right because they stop at "T cell" or "lymphoid".</li>
                 <li><strong>Dendritic cells.</strong> The best guess finds
-                    <span data-fact="recall_fulcher_dc">&nbsp;</span> of Fulcher 2026's dendritic cells, up
-                    from the previous release's <span data-fact="previous_recall_fulcher_dc">&nbsp;</span>
-                    with the protein class means. Fulcher is development data, and the reference has almost
-                    no myeloid dendritic cells.</li>
+                    <span data-fact="recall_fulcher_dc">&nbsp;</span> of Fulcher 2026's dendritic cells. The
+                    reference has almost no myeloid dendritic cells.</li>
                 <li><strong>Macrophages against monocytes.</strong> On SCoPE2, restricted to those two
                     classes, the best guess scores <span data-fact="scope2_current">&nbsp;</span> balanced
                     accuracy, below chance (<span data-fact="scope2_chance">&nbsp;</span>): it calls most of
                     the differentiated macrophages monocytes. No method separates them once the matrix is
                     reprocessed (<a href="benchmark.html">the benchmark</a>).</li>
-                <li><strong>No external test yet.</strong> Fulcher 2026 chose the one tuned setting and
-                    checked this release, and Khoury 2026 is post-hoc. An internal test on data we set aside before development, scored
+                <li><strong>No external test yet.</strong> Fulcher 2026 chose the one tuned setting, and
+                    Khoury 2026 is post-hoc. An internal test on data we set aside before development, scored
                     once, passed on held-out donors of another blood atlas and on a T-cell line beside HeLa,
                     and failed to tell immune cells from keratinocytes and macrophage-like cell lines from
                     monocyte lines (<code>research/benchmark/heldout/</code>). It could not test CD4 against
@@ -147,9 +141,11 @@
             <div id="previous-release-mount"></div>
             <div class="table-scroll" id="previous-evaluation-mount"></div>
             <p class="panel-note">
-                Its simulated suite is its pre-registered evaluation, and its development datasets are
-                measured as served. Its Khoury 2026 figures are post-hoc. v3.1, the release before it, is
-                described in <code>service/model/MODEL_CARD.md</code> and stays selectable in the service.
+                It added protein class means from sorted immune cells (Rieckmann et al. 2017) to the best
+                guess, for protein uploads, and answered RNA uploads as the current release does, so its
+                simulated suite is the current release's. Its development datasets are measured as served,
+                and its Khoury 2026 figures are post-hoc. It stays selectable in the service, as do v3.1 and
+                v3 (<code>service/model/MODEL_CARD.md</code>).
             </p>
             <h3>v3, an earlier release</h3>
             <div id="earlier-release-mount"></div>

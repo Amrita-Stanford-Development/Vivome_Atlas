@@ -14,8 +14,8 @@ It reads:
 - the training recipe (research/notebook-outputs/nb2/nb1b_core.py's
   train_variant defaults, research/notebooks/v5_train.py's arguments and its
   reproduction record) and the encoder choice (decisive_summary.json);
-- the evaluation records: v4.1's pre-registered suite (v4.2 answers RNA
-  uploads exactly as v4.1), conformal coverage on RNA and protein, and the
+- the evaluation records: v4.1's pre-registered suite, conformal coverage
+  on RNA and protein, and the
   internal held-out test (research/benchmark/heldout/);
 - the hosted service's settings (deploy/huggingface/PUBLISH.md,
   service/config.py, web/project.html).
@@ -42,7 +42,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 OUTPUT = REPO / "web" / "data" / "workflow.json"
 MANIFEST = REPO / "web" / "data" / "atlas_manifest.json"
-TRACE = REPO / "service" / "model" / "evidence" / "workflow" / "pbmc240_trace_v42.json.gz"
+TRACE = REPO / "service" / "model" / "evidence" / "workflow" / "pbmc240_trace_v41.json.gz"
 SNIPPETS = REPO / "service" / "model" / "evidence" / "workflow" / "input_snippets.json"
 ATLAS_RNA = REPO / "web" / "data" / "metadata_RNA_lat128.csv"
 FEATURE_PROVENANCE = REPO / "service" / "model" / "evidence" / "feature_space_provenance.json"
@@ -53,12 +53,11 @@ CORE = REPO / "research" / "notebook-outputs" / "nb2" / "nb1b_core.py"
 TRAIN = REPO / "research" / "notebooks" / "v5_train.py"
 REPRODUCE = REPO / "research" / "notebook-outputs" / "v5_train" / "reproduce.json"
 SPEC_V31 = REPO / "service" / "model" / "v3_1" / "nb2_spec_v31.json"
-SPEC_V42 = REPO / "service" / "model" / "v4_2" / "spec_v42.json"
+SPEC_SERVED = REPO / "service" / "model" / "v4_1" / "spec_v41.json"  # the served model's spec (v4.1)
 PHASE3 = REPO / "research" / "notebook-outputs" / "v41_phase3"
 RNA_COVERAGE = REPO / "research" / "notebook-outputs" / "nb2" / "tables" / "eval_per_class_coverage.csv"
 PROTEIN_COVERAGE = REPO / "research" / "notebook-outputs" / "protein_coverage" / "coverage.json"
 HELDOUT = REPO / "research" / "benchmark" / "heldout"
-RELEASE = REPO / "research" / "notebook-outputs" / "v42_release" / "summary.json"
 ASTRAL = REPO / "research" / "notebook-outputs" / "astral_abstention" / "summary.json"
 PUBLISH = REPO / "deploy" / "huggingface" / "PUBLISH.md"
 SERVICE_CONFIG = REPO / "service" / "config.py"
@@ -77,11 +76,11 @@ GENE_SOURCES = (  # feature_space_detail.csv's columns, as the page names them
     ("fulcher", "Fulcher 2026", "development; chose v4.1's one tuned weight"),
 )
 HELDOUT_SETS = (  # (folder, the question in words, positive group, negative group, score column)
-    ("pxd043355", "Is a T-cell line (Jurkat) more blood-like than HeLa?", "Jurkat", "HeLa", "v42_similarity"),
+    ("pxd043355", "Is a T-cell line (Jurkat) more blood-like than HeLa?", "Jurkat", "HeLa", "v41_similarity"),
     ("pxd073250", "Are immune cells more blood-like than keratinocytes from the same tumour?", "immune",
-     "keratinocyte", "v42_similarity"),
+     "keratinocyte", "v41_similarity"),
     ("pxd046211", "Do PMA-treated monocyte lines lean to macrophage over untreated ones?", "PMA", "untreated",
-     "v42_score"),
+     "v41_score"),
 )
 
 
@@ -206,7 +205,7 @@ def training(trace: dict) -> dict:
     reproduce = json.loads(REPRODUCE.read_text(encoding="utf-8"))
     decisive = json.loads(DECISIVE.read_text(encoding="utf-8"))
     v31 = json.loads(SPEC_V31.read_text(encoding="utf-8"))
-    v42 = json.loads(SPEC_V42.read_text(encoding="utf-8"))
+    served = json.loads(SPEC_SERVED.read_text(encoding="utf-8"))
     recipe = f"{rel(CORE)}, train_variant's defaults; {rel(TRAIN)}'s arguments"
     return {
         "recipe": {
@@ -243,8 +242,8 @@ def training(trace: dict) -> dict:
         },
         "members": [{"name": name, "answer_temperature": measured(round(v31["assignment"]["temperature"][name], 4),
                                                                    rel(SPEC_V31), "fixed4"),
-                     "guess_temperature": measured(round(v42["best_guess"]["temperature"][name], 4),
-                                                   rel(SPEC_V42), "fixed4")}
+                     "guess_temperature": measured(round(served["best_guess"]["temperature"][name], 4),
+                                                   rel(SPEC_SERVED), "fixed4")}
                     for name in v31["encoder"]["members"]],
         "history": pending("not recorded",
                            "per-epoch curves of the served members are on Drive, not in this repository"),
@@ -274,11 +273,10 @@ def _histogram(values: list[float], lo: float, hi: float, bins: int = 20) -> lis
 
 
 def heldout() -> list[dict]:
-    release = json.loads(RELEASE.read_text(encoding="utf-8"))
     cards = []
     hao = json.loads((HELDOUT / "hao2021" / "summary.json").read_text(encoding="utf-8"))
     comparison = hao["comparisons"]["v41 - correlation"]
-    basis = f"{rel(HELDOUT / 'hao2021' / 'summary.json')}; v4.2 answers RNA uploads as v4.1 ({rel(RELEASE)})"
+    basis = rel(HELDOUT / 'hao2021' / 'summary.json')
     cards.append({
         "key": "hao2021", "question": "Does typing hold on held-out donors of another blood atlas (RNA made protein-like)?",
         "result": "pass", "statistic": "coarse balanced accuracy minus the correlation baseline's, one-sided 95% lower bound",
@@ -287,11 +285,10 @@ def heldout() -> list[dict]:
         "donors": hao["donors"],
         "scores": {k: measured(round(hao["by_model"][m]["coarse_ba_mean"] / 100, 6), basis, "percent")
                    for k, m in (("model", "v41"), ("correlation", "correlation"), ("pca_knn", "pca_knn"))},
-        "note": release["heldout"]["hao2021"]["v4.2 now"],
     })
     for key, question, pos, neg, column in HELDOUT_SETS:
         summary = json.loads((HELDOUT / key / "summary.json").read_text(encoding="utf-8"))
-        primary = summary["candidates"]["v4.2"]["primary"]
+        primary = summary["candidates"]["v4.1"]["primary"]
         rows = [r for r in read_csv(HELDOUT / key / "scores.csv") if r["scored"] == "True" and r[column] != ""]
         p = [float(r[column]) for r in rows if r["group"] == pos]
         n = [float(r[column]) for r in rows if r["group"] == neg]
@@ -309,9 +306,9 @@ def heldout() -> list[dict]:
         })
     tian = json.loads((HELDOUT / "tian" / "summary.json").read_text(encoding="utf-8"))
     cards.append({"key": "tian", "question": "Are sorted CD8 T bulks scored more CD8-like than their CD4 pairs?",
-                  "result": "void", "statistic": tian["candidates"]["v4.2"]["primary"]["statistic"],
-                  "reason": f"{tian['candidates']['v4.2']['primary']['reason']}: the deposit holds "
-                            f"{tian['candidates']['v4.2']['primary']['pairs']} matched pair"})
+                  "result": "void", "statistic": tian["candidates"]["v4.1"]["primary"]["statistic"],
+                  "reason": f"{tian['candidates']['v4.1']['primary']['reason']}: the deposit holds "
+                            f"{tian['candidates']['v4.1']['primary']['pairs']} matched pair"})
     pools = json.loads((HELDOUT / "pxd021882" / "summary.json").read_text(encoding="utf-8"))
     cards.append({"key": "pxd021882", "question": "Are B-cell pools told from T-cell pools?", "result": "void",
                   "reason": "the deposited table holds no B or T pools"})
@@ -320,7 +317,7 @@ def heldout() -> list[dict]:
 
 
 def evaluation() -> dict:
-    basis = f"{rel(PHASE3 / 'eval_by_scenario.csv')}: v4.1's pre-registered evaluation; v4.2 answers RNA as v4.1"
+    basis = f"{rel(PHASE3 / 'eval_by_scenario.csv')}: v4.1's pre-registered evaluation"
     scenarios = [{"group": r["group"], "cells": measured(int(r["cells"]), basis),
                   **{k: measured(round(float(r[k]) / 100, 6), basis, "percent")
                      for k in ("committed", "correct_when_committed", "best_guess_per_upload_balanced", "coverage")}}
@@ -342,8 +339,7 @@ def evaluation() -> dict:
         "coverage": {
             "target": measured(round(protein["target_pct"] / 100, 4), rel(PROTEIN_COVERAGE), "percent"),
             "rna": {"basis": rel(RNA_COVERAGE), "classes": rna},
-            "protein": {"basis": f"{rel(PROTEIN_COVERAGE)}, v4.1's sets (v4.2 measured on Fulcher in "
-                                 "research/benchmark/v42_development/)",
+            "protein": {"basis": f"{rel(PROTEIN_COVERAGE)}, v4.1's sets",
                         "fulcher": measured(round(fulcher["coverage_pct"] / 100, 4), rel(PROTEIN_COVERAGE), "percent"),
                         "classes": {k: round(v["coverage_pct"] / 100, 4) for k, v in fulcher["by_class"].items()}},
         },
@@ -379,7 +375,7 @@ def service() -> dict:
 
 def facts(trace: dict, manifest: dict) -> dict:
     s = trace["stages"]
-    t = "service/model/evidence/workflow/pbmc240_trace_v42.json.gz"
+    t = rel(TRACE)
     f = {
         "rows": measured(s["parse"]["rows"], t), "runs": measured(s["parse"]["runs"], t),
         "missing_share": measured(s["parse"]["missing_share"], t, "percent"),
@@ -407,15 +403,12 @@ def facts(trace: dict, manifest: dict) -> dict:
         "latent": measured(s["encoder"]["layers"][3]["width"], t),
         "parameters": measured(s["encoder"]["parameters"], t),
         "agreement": measured(s["fusion"]["agreement"], t, "percent"),
-        "agreement_threshold": measured(s["fusion"]["threshold"], "service/model/v4_2/spec_v42.json", "percent"),
+        "agreement_threshold": measured(s["fusion"]["threshold"], rel(SPEC_SERVED), "percent"),
         "counted": measured(s["fusion"]["counted"], t), "agreeing": measured(s["fusion"]["agreeing"], t),
-        "weight_flat": measured(s["fusion"]["encoder_weight_flat"], "service/model/v4_2/spec_v42.json", "plain"),
-        "weight_used": measured(s["fusion"]["encoder_weight_used"], "service/model/v4_2/spec_v42.json", "plain"),
-        "correlation_temperature": measured(s["fusion"]["correlation_temperature"], "service/model/v4_2/spec_v42.json", "plain"),
-        "smoothed_share": measured(s["fusion"]["smoothed_share"], "service/model/v4_2/spec_v42.json", "percent"),
-        "protein_classes": measured(len(s["fusion"]["protein_classes"]), "service/model/v4_2/spec_v42.json"),
-        "protein_genes": measured(s["fusion"]["protein_genes"], "service/model/v4_2/spec_v42.json"),
-        "protein_genes_observed": measured(s["fusion"]["protein_genes_observed"], t),
+        "weight_flat": measured(s["fusion"]["encoder_weight_flat"], rel(SPEC_SERVED), "plain"),
+        "weight_used": measured(s["fusion"]["encoder_weight_used"], rel(SPEC_SERVED), "plain"),
+        "correlation_temperature": measured(s["fusion"]["correlation_temperature"], rel(SPEC_SERVED), "plain"),
+        "smoothed_share": measured(s["fusion"]["smoothed_share"], rel(SPEC_SERVED), "percent"),
         "target_coverage": measured(round(1 - s["calibration"]["alpha"], 4), "service/model/v3_1/nb2_spec_v31.json", "percent"),
         "ood_threshold": measured(round(s["ood"]["threshold"], 4), "service/model/v3_1/nb2_spec_v31.json", "fixed3"),
         "classes": measured(len(trace["class_order"]), t),
@@ -444,8 +437,8 @@ def build(manifest: dict | None = None) -> dict:
     if (s["matched"], s["unmatched_rows"]) != (astral["features_matched"], astral["features_unmatched"]):
         raise SystemExit(f"the trace's gene matching disagrees with {rel(ASTRAL)}")
     sources = [TRACE, SNIPPETS, ATLAS_RNA, FEATURE_PROVENANCE, FEATURE_DETAIL, GENE_ID_PROVENANCE, DECISIVE, CORE,
-               TRAIN, REPRODUCE, SPEC_V31, SPEC_V42, PHASE3 / "eval_by_scenario.csv", PHASE3 / "eval_uploads.csv",
-               RNA_COVERAGE, PROTEIN_COVERAGE, RELEASE, ASTRAL, PUBLISH, SERVICE_CONFIG]
+               TRAIN, REPRODUCE, SPEC_V31, SPEC_SERVED, PHASE3 / "eval_by_scenario.csv", PHASE3 / "eval_uploads.csv",
+               RNA_COVERAGE, PROTEIN_COVERAGE, ASTRAL, PUBLISH, SERVICE_CONFIG]
     sources += sorted(HELDOUT.glob("*/summary.json")) + sorted(HELDOUT.glob("*/scores.csv"))
     workflow = {
         "schema_version": SCHEMA_VERSION,

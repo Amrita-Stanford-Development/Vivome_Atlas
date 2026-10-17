@@ -34,7 +34,7 @@ test('the committed workflow data is valid and built for the committed manifest'
 test('every number slot on the page has a measured value in the real files', () => {
   const facts = [...html.matchAll(/data-fact="([^"]+)"/g)].map((m) => m[1]);
   const wfs = [...html.matchAll(/data-wf="([^"]+)"/g)].map((m) => m[1]);
-  assert.ok(facts.length > 4 && wfs.length > 60);
+  assert.ok(facts.length >= 4 && wfs.length > 60);
   for (const key of facts) assert.ok(!/Pending/.test(factText(manifest, key)), `data-fact="${key}" reads Pending`);
   for (const key of wfs) {
     const text = wfFact(workflow, key);

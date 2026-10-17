@@ -199,7 +199,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/runtime/decisive_summary.json` — the architecture decision (module pooling, uniform masking) that the encoder loader reads
 - `service/model/evidence/feature_space_detail.csv` — for each gene, which of the six proteomics sources detected it
 - `service/model/evidence/feature_space_provenance.json` — the union arithmetic behind the 9,002-gene figure
-- `service/model/evidence/workflow/pbmc240_trace_v42.json.gz` — the PBMC240 example through the served v4.2 model, stage by stage, every cell checked against the service (`scripts/trace_workflow.py`)
+- `service/model/evidence/workflow/pbmc240_trace_v41.json.gz` — the PBMC240 example through the served v4.1 model (release 0.6.0), stage by stage, every cell checked against the service (`scripts/trace_workflow.py`)
+- `service/model/evidence/workflow/pbmc240_trace_v42.json.gz` — the PBMC240 example through v4.2, served in release 0.5.0, stage by stage, every cell checked against the service (`scripts/trace_workflow.py`)
 - `service/model/evidence/workflow/input_snippets.json` — a corner of SCoPE2's matrix, Fulcher 2026's protein table and the reference's first cells, for the Workflow page
 - `service/model/evidence/masking_test_tables/rna_sweep.csv` — architecture comparison: balanced accuracy vs. coverage, per arm and seed
 - `service/model/evidence/masking_test_tables/scope2_projection.csv` — architecture comparison on SCoPE2: AUC, balanced accuracy, in-support rate

@@ -56,8 +56,8 @@ Computed from repository data:
 - Cross-modal support classification (`cross_modal`, `rna_only`, `prot_only`)
 - `pca_centroid_cosine` — cosine similarity between RNA and protein class
   centroids **in the 3-PC projection**, for classes present in both modalities
-- `model` is the current release, v4.2 (v4.1 with protein class means for
-  protein uploads):
+- `model` is the current release, v4.1 (first released in 0.4.0, served
+  again from 0.6.0):
   - `model.seeds` — the ensemble's member *count* (5), from the v3.1 spec,
     rendered with 0 decimal places (`web/js/panels.js:buildModelCard`);
   - the architecture facts it shares with v3 (`feature_space_size`,
@@ -66,32 +66,31 @@ Computed from repository data:
     Pending;
   - `model.evaluation`:
     - `suite`: a title and v4.1's pre-registered evaluation on simulated
-      uploads (`research/notebook-outputs/v41_phase3/summary.json`), since
-      v4.2 answers RNA uploads exactly as v4.1; each basis says so;
+      uploads (`research/notebook-outputs/v41_phase3/summary.json`);
     - `served`: SCoPE2, PBMC240 and Fulcher as served
-      (`research/benchmark/v42_development/confident.csv`);
-    - `recall`: the best guess's recall per type on Fulcher (in-sample) and,
-      pending, on Khoury: each use of Khoury needs the owner's decision.
-- `previous_release` is v4.1, with the same fields and its own `evaluation`
-  (`research/benchmark/v41_development/`; its Khoury recall is post-hoc).
-  The known limits on `versions.html` read its Khoury figure where the
-  current release has none. v3.1's builders stay in
-  `scripts/build_manifest.py` without a release card.
+      (`research/benchmark/v41_development/confident.csv`);
+    - `recall`: the best guess's recall per type on Fulcher (in-sample) and
+      on Khoury (post-hoc).
+- `previous_release` is v4.2 (0.5.0), with the same fields and its own
+  `evaluation` (`research/benchmark/v42_development/`; its Khoury recall is
+  post-hoc, from its one check after release). v4.1's and v3.1's release-card
+  builders stay in `scripts/build_manifest.py` without a card.
 - `earlier_release` is v3: its seed count (from `v3_tables/reference_seeds.csv`,
   accuracy and CI in `basis`), its architecture facts, its latent centroid
   cosines and modality probe (`v3_tables/`), and its atlas version.
   `first_release` is CrossModalNet's own numbers, kept as the first baseline.
-- `benchmark` — signed off by the owner for release 0.4.0, with the current
-  model's rows moved to v4.2 for 0.5.0 at the owner's request. `datasets`, one
+- `benchmark` — signed off by the owner for release 0.4.0; the current
+  model's rows were v4.2's in 0.5.0 and are v4.1's again from 0.6.0. `datasets`, one
   per table on `benchmark.html`: Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
   both SCoPE2 versions. Each has its `measure`, `chance` (one over the number
   of types scored, or `null`), its `role` (what kind of evidence it is) and
-  `rows`: VivOME's two releases first (v4.2, then v4.1), then every corrected
+  `rows`: VivOME's two releases first (v4.1, then v4.2), then every corrected
   baseline arm by score. A row's `score` is a measured record, with `sd`, `min`
   and `max` over seeds; `vs_current` is the current model minus that arm by
   paired bootstrap (the counts favouring each side, and the difference with
-  its CI or its range). On Khoury 2026, every row is post-hoc; v4.2 was
-  scored there once after its release. Sources: `research/benchmark/v42_development/`,
+  its CI or its range); the tables comparing v4.2 with v4.1 hold v4.2 minus
+  v4.1, and the builder turns them round. On Khoury 2026, every row is
+  post-hoc. Sources: `research/benchmark/v41_development/`, `research/benchmark/v42_development/`,
   `research/benchmark/baselines_corrected/`,
   `research/benchmark/khoury2026_posthoc/` and
   `research/benchmark/khoury2026_posthoc_v41_check/`.
@@ -149,7 +148,7 @@ documented history rather than erased.
 
 ## Current output
 
-Atlas version `0.5.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
+Atlas version `0.6.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 
@@ -195,10 +194,11 @@ from data, and `web/tests/fixtures.js` deliberately names one class
 4. Tag the release and archive it for a persistent identifier.
 5. Record label stability against the previous version and add it to `versions.html`.
 
-Label stability is not yet measured for any release. 0.5.0 answers RNA
-uploads exactly as 0.4.0; on protein uploads its best guess changes, and
-with it some answers, since each set holds the best guess, so the share
-that changes still needs computing. v3 answers at class level only, so
+Label stability is not yet measured for any release. 0.6.0 answers every
+upload exactly as 0.4.0 (both serve v4.1). 0.5.0 answered RNA uploads as
+0.4.0; on protein uploads its best guess changed, and with it some answers,
+since each set holds the best guess, so the share that changed still needs
+computing. v3 answers at class level only, so
 comparing it with the later releases needs a definition first.
 
 ## Tests

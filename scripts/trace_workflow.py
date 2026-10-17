@@ -10,7 +10,7 @@ level, set, reason and best guess. service/tests/test_workflow_trace.py
 checks the written trace against a fresh run.
 
 It writes, under service/model/evidence/workflow/:
-- pbmc240_trace_v42.json.gz: every cell's outcome, the stages' summaries,
+- pbmc240_trace_v41.json.gz: every cell's outcome, the stages' summaries,
   the upload's smoothing graph, a heatmap of 24 genes over 52 cells at each
   preprocessing step, and the full detail of a few story cells (the file's
   first run, then the first run of each outcome);
@@ -44,12 +44,13 @@ from service import config  # noqa: E402
 from service.pipeline import alignment, ensemble, fusion, gene_ids, pipeline, search, smoothing  # noqa: E402
 from service.pipeline.topk import chunked_topk  # noqa: E402
 
-VERSION = "v4.2"
+VERSION = "v4.1"  # the served model (service/config.py, PIPELINE_VERSION)
 EXAMPLE = REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv"
 WEAK_LABELS = REPO / "service" / "examples" / "pbmc240_cell_metadata.csv"
 ATLAS_RNA = REPO / "web" / "data" / "metadata_RNA_lat128.csv"
 OUT_DIR = REPO / "service" / "model" / "evidence" / "workflow"
-TRACE = OUT_DIR / "pbmc240_trace_v42.json.gz"
+TRACE = OUT_DIR / "pbmc240_trace_v41.json.gz"
+SPEC = fusion.version_files(VERSION)[0]
 SNIPPETS = OUT_DIR / "input_snippets.json"
 
 # The heatmap's genes: the first 24 of these that the upload measures in at
@@ -243,17 +244,20 @@ def main() -> None:
                        for z, m in zip(smoothed_z, answers.members)]
     all_class_probs = ensemble.ensemble_probabilities(answer_member_p)
 
-    # ---- the best guess (v4.2) ----
+    # ---- the best guess (v4.1: the RNA class means; v4.2 adds protein means) ----
     counted = aligned.per_cell_observed_genes >= int(bundle.spec["preprocessing"]["min_observed_genes"])
     guess_member_p = [ensemble.member_probabilities(z, m.centroids, m.temperature)
                       for z, m in zip(smoothed_z, bundle.members)]
     on = ensemble.ensemble_probabilities(guess_member_p)
     r_rna = fusion.masked_pearson(aligned.values, aligned.mask, bundle.class_means)
-    protein_values, protein_mask = fusion.protein_query(raw, bundle.protein_genes)
-    r_prot = fusion.masked_pearson(protein_values, protein_mask, bundle.protein_means)
-    covered = bundle.protein_covered
+    uses_protein = getattr(bundle, "protein_means", None) is not None
     r = r_rna.copy()
-    r[:, covered] = r_prot[:, covered]
+    covered = np.zeros(len(names), bool)
+    if uses_protein:
+        protein_values, protein_mask = fusion.protein_query(raw, bundle.protein_genes)
+        r_prot = fusion.masked_pearson(protein_values, protein_mask, bundle.protein_means)
+        covered = bundle.protein_covered
+        r[:, covered] = r_prot[:, covered]
     agreement = fusion.upload_agreement(r, all_class_probs, counted)
     used = agreement >= bundle.agreement_threshold
     correlation_p = fusion.correlation_probabilities(r, bundle.correlation_temperature)
@@ -310,8 +314,14 @@ def main() -> None:
     module_fraction = (aligned.mask @ a) / np.clip(a.sum(0), 1e-6, None)
     detail = []
     for s, i in enumerate(story):
-        best_covered = int(np.flatnonzero(covered)[np.argmax(r_prot[i, covered])])
-        observed_proteins = np.flatnonzero(protein_mask[i] > 0)
+        # The second opinion's picture: the cell against the class it matches best, over what it measured.
+        if uses_protein:
+            best = int(np.flatnonzero(covered)[np.argmax(r_prot[i, covered])])
+            cell_values, cell_mask, means, best_r = protein_values[i], protein_mask[i], bundle.protein_means[best], r_prot[i, best]
+        else:
+            best = int(np.argmax(r_rna[i]))
+            cell_values, cell_mask, means, best_r = aligned.values[i], aligned.mask[i], bundle.class_means[best], r_rna[i, best]
+        observed_proteins = np.flatnonzero(cell_mask > 0)
         step = max(1, len(observed_proteins) // SCATTER_POINTS)
         points = observed_proteins[::step][:SCATTER_POINTS]
         raw_row = []
@@ -335,14 +345,13 @@ def main() -> None:
                             for j, m in enumerate(bundle.members)],
                 "encoder": [r4(x) for x in on[i]],
                 "r_rna": [r4(x) for x in r_rna[i]],
-                "r_protein": [r4(x) if ok else None for x, ok in zip(r_prot[i], covered)],
+                "r_protein": [r4(x) if ok else None for x, ok in zip(r_prot[i], covered)] if uses_protein else None,
                 "r": [r4(x) for x in r[i]],
                 "correlation_probability": [r4(x) for x in correlation_p[i]],
                 "fused": [r4(x) for x in fused[i]],
-                "scatter": {"class": best_covered, "r": r4(r_prot[i, best_covered]),
+                "scatter": {"class": best, "r": r4(best_r), "against": "protein" if uses_protein else "rna",
                             "observed_proteins": int(len(observed_proteins)),
-                            "points": [[r2(protein_values[i, j]), r2(bundle.protein_means[best_covered, j])]
-                                       for j in points]},
+                            "points": [[r2(cell_values[j]), r2(means[j])] for j in points]},
             },
             "embedding": [round(float(x), 3) for x in smoothed_z[anchor_i][i]],
             "observed_bits": bits(aligned.mask[i] > 0),
@@ -386,8 +395,7 @@ def main() -> None:
         "built_for": {"atlas_version": config.ATLAS_VERSION, "pipeline_version": bundle.pipeline_version,
                       "model_version": bundle.model_version},
         "sources": {"example": {"path": EXAMPLE.relative_to(REPO).as_posix(), "sha256": sha256(EXAMPLE)},
-                    "spec": {"path": config.V42_SPEC_PATH.relative_to(REPO).as_posix(),
-                             "sha256": sha256(config.V42_SPEC_PATH)},
+                    "spec": {"path": SPEC.relative_to(REPO).as_posix(), "sha256": sha256(SPEC)},
                     "weak_labels": {"path": WEAK_LABELS.relative_to(REPO).as_posix(), "sha256": sha256(WEAK_LABELS)}},
         "class_order": names,
         "hierarchy": {n: answers.hierarchy[n] for n in names},
@@ -432,8 +440,8 @@ def main() -> None:
                        "correlation_temperature": bundle.correlation_temperature,
                        "smoothed_share": bundle.smoothed_share,
                        "protein_classes": [int(c) for c in np.flatnonzero(covered)],
-                       "protein_genes": len(bundle.protein_genes),
-                       "protein_genes_observed": int((protein_mask.sum(0) > 0).sum())},
+                       "protein_genes": len(bundle.protein_genes) if uses_protein else 0,
+                       "protein_genes_observed": int((protein_mask.sum(0) > 0).sum()) if uses_protein else 0},
             "calibration": {"alpha": answers.spec["conformal"]["alpha"],
                             "qhat": [r4(answers.spec["conformal"]["qhat_by_class"][n]) for n in names],
                             "calibrated_on": answers.spec["conformal"]["calibrated_on"],

@@ -98,7 +98,7 @@ DECISIVE_SUMMARY_PATH = _env_path(
     "VIVOME_DECISIVE_SUMMARY", RUNTIME_DIR / "decisive_summary.json"
 )
 
-ATLAS_VERSION = "0.5.0"
+ATLAS_VERSION = "0.6.0"
 
 # --- Which pipeline answers a request ---
 # "v3" is the single-encoder pipeline, byte for byte as before the switch
@@ -113,19 +113,21 @@ ATLAS_VERSION = "0.5.0"
 # VIVOME_PIPELINE_VERSION=v4. A spec whose evaluation has not passed answers 503.
 # "v4.1" (Track G, v4.1): v4 with the encoder weighted 0.5 instead of 0.7 where
 # the correlation term is used, chosen on Fulcher 2026. Its evaluation passed
-# (Phase C); it was the default in release 0.4.0 and stays selectable.
+# (Phase C); it was the default in release 0.4.0, and is again since release
+# 0.6.0 (the owner's decision, 2026-10-17, after v4.2 fell short of it on
+# Khoury 2026; research/notebook-run-history.md, entry 47).
 # "v4.2" (Goal 2, Phase 2a): v4.1 with protein class means from sorted cells
 # (Rieckmann 2017) in its correlation term, for the classes they cover, on
 # protein uploads (an RNA upload takes v4.1's path). Its evaluation passed
-# (research/notebook-run-history.md, entries 44 and 45), and it is the default
-# since release 0.5.0 (the owner's request, 2026-10-16).
+# (research/notebook-run-history.md, entries 44 and 45); it was the default in
+# release 0.5.0 and stays selectable.
 # "v5" (Track H): v4.1's rule on five V2 members retrained on cleaned reference
 # labels, with its own calibration; selectable, refused (503) until its
 # evaluation passes. "v5.1": v5 with the NK T class folded into NK in training.
 # "v5.2": v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et
 # al. 2021. Both are likewise refused until their evaluation passes.
 PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v4.2", "v5", "v5.1", "v5.2")
-PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v4.2")
+PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v4.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
 

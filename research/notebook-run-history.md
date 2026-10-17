@@ -2100,6 +2100,28 @@ means is 0.43, so the term is used. **Verdict: falls short.** The release
 stands, as the script states; the benchmark page, the model card and the
 what's-new list now report it.
 
+### 48. Release 0.6.0: v4.1 served again (2026-10-17)
+
+**Why:** entry 47 found v4.2 below v4.1 on Khoury 2026 (v4.1 ahead by 2.39,
+95% CI 1.26 to 3.56), a second lab's data that neither model was tuned on,
+while v4.2's gain was measured on Fulcher 2026, where it was checked, and the
+internal held-out test could not separate them. The owner decided to serve
+v4.1 again.
+
+**What changed:**
+- `service/config.py`: the default is v4.1, atlas 0.6.0; v4.2 stays
+  selectable. The Dockerfile serves v4.1.
+- The manifest's model is v4.1 again (`build_v41_model`), its previous
+  release v4.2 (0.5.0, `build_v42_release`). The benchmark puts v4.1 first,
+  with its own paired comparisons (`research/benchmark/v41_development/`,
+  `research/benchmark/khoury2026_posthoc_v41_check/`); the tables comparing
+  the two models, written as v4.2 minus v4.1, are turned round.
+- The Workflow page is traced with v4.1
+  (`service/model/evidence/workflow/pbmc240_trace_v41.json.gz`). On PBMC240
+  its best guesses equal v4.2's (the correlation term is flat under both);
+  its second opinion is the reference's RNA class means, and Step 9 says so.
+- Pages, model card, READMEs and API doc name v4.1 as served.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

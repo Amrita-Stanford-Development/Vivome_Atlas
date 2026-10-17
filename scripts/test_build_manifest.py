@@ -3,7 +3,7 @@ import unittest
 from build_manifest import (
     build_benchmark, build_deployed_architecture_facts, build_manifest, build_model_seeds,
     build_model_card, build_first_release_facts, build_v3_release, build_v31_evaluation,
-    build_v31_release, build_v41_evaluation, build_v41_release, build_v42_evaluation, build_v42_model,
+    build_v31_release, build_v41_evaluation, build_v41_release, build_v42_release, build_v41_model, build_v42_evaluation, build_v42_model,
     class_stats, cosine, measured, pending,
     read_family_summary,
     read_latent_centroid_cosine, read_modality_probe_accuracy,
@@ -233,10 +233,10 @@ class TestBuildDeployedArchitectureFacts(unittest.TestCase):
 
 
 class TestReleaseBlocks(unittest.TestCase):
-    """`model` is v4.2, previous_release v4.1, earlier_release v3, each with
-    its own numbers. v3.1's builders stay (its release card is gone since
-    0.5.0); every v3.1 figure says whether it is NB2's rule or the served
-    configuration."""
+    """`model` is v4.1 (served again since 0.6.0), previous_release v4.2,
+    earlier_release v3, each with its own numbers. v3.1's builders stay (its
+    release card is gone since 0.5.0); every v3.1 figure says whether it is
+    NB2's rule or the served configuration."""
 
     nb2_summary = {"eval_candidate": {"correct_when_committed": 94.9, "abstain_rate": 19.18, "coverage": 87.06,
                                       "fine_rate": 19.13, "group_rate": 17.71, "lineage_rate": 43.97}}
@@ -265,12 +265,23 @@ class TestReleaseBlocks(unittest.TestCase):
         self.assertIn("Fulcher 2026", model["notes"], "the setting chosen on development data is named")
         self.assertIn("Rieckmann et al. 2017", model["notes"], "the protein class means are credited")
 
-    def test_v41_is_the_previous_release_with_its_own_evaluation(self):
+    def test_v41_is_the_current_model_and_keeps_its_first_release_card(self):
+        model = build_v41_model(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, NO_EVALUATION)
+        self.assertEqual(model["name"], "VivOME v4.1")
+        self.assertIsNone(model["mask_sampling"])
+        self.assertIn("Fulcher 2026", model["notes"])
         v41 = build_v41_release(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, NO_EVALUATION)
         self.assertEqual((v41["model_name"], v41["atlas_version"]), ("VivOME v4.1", "0.4.0"))
-        self.assertIsNone(v41["mask_sampling"])
         self.assertIs(v41["evaluation"], NO_EVALUATION)
         self.assertIn("VIVOME_PIPELINE_VERSION=v4.1", v41["note"])
+
+    def test_v42_is_the_previous_release_with_its_own_evaluation(self):
+        v42 = build_v42_release(5, {"feature_space_size": 2, "mask_sampling": "uniform"}, NO_EVALUATION)
+        self.assertEqual((v42["model_name"], v42["atlas_version"]), ("VivOME v4.2", "0.5.0"))
+        self.assertIsNone(v42["mask_sampling"])
+        self.assertIs(v42["evaluation"], NO_EVALUATION)
+        self.assertIn("VIVOME_PIPELINE_VERSION=v4.2", v42["note"])
+        self.assertIn("Rieckmann et al. 2017", v42["note"])
 
     def test_v31_keeps_its_own_release_and_evaluation(self):
         ev = build_v31_evaluation(self.nb2_summary, self.flags)
@@ -348,15 +359,16 @@ class TestBenchmark(unittest.TestCase):
             "dev_pbmc240": bm.read_csv(bm.V42_DEV_DIR / "pbmc240.csv"),
             "dev_scope2": bm.read_csv(bm.V42_DEV_DIR / "scope2.csv"),
             "dev_scope2_reprocessed": bm.read_csv(bm.V42_DEV_DIR / "scope2_reprocessed.csv"),
-            "paired_current": bm.read_csv(bm.V42_DEV_DIR / "paired_bootstrap_v42.csv"),
-            "paired_current_vs_previous": bm.read_csv(bm.V42_DEV_DIR / "paired_bootstrap_v42_vs_v41.csv"),
+            "paired_current": bm.read_csv(bm.V41_DEV_DIR / "paired_bootstrap_v41.csv"),
+            "paired_previous_vs_current": bm.read_csv(bm.V42_DEV_DIR / "paired_bootstrap_v42_vs_v41.csv"),
             "corrected_fulcher": bm.read_csv(bm.CORRECTED_DIR / "fulcher2026_summary.csv"),
             "corrected_pbmc240": bm.read_csv(bm.CORRECTED_DIR / "pbmc240_summary.csv"),
             "corrected_scope2": bm.read_csv(bm.CORRECTED_DIR / "scope2_summary.csv"),
             "khoury_family": bm.read_csv(bm.KHOURY_POSTHOC_DIR / "family_summary.csv"),
-            "khoury_previous": json.loads((bm.KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
-            "khoury_current": json.loads((bm.KHOURY_V42_DIR / "summary.json").read_text(encoding="utf-8")),
-            "khoury_current_pairs": bm.read_csv(bm.KHOURY_V42_DIR / "paired_bootstrap.csv"),
+            "khoury_current": json.loads((bm.KHOURY_V41_DIR / "summary.json").read_text(encoding="utf-8")),
+            "khoury_current_pairs": bm.read_csv(bm.KHOURY_V41_DIR / "paired_bootstrap.csv"),
+            "khoury_previous": json.loads((bm.KHOURY_V42_DIR / "summary.json").read_text(encoding="utf-8")),
+            "khoury_previous_pairs": bm.read_csv(bm.KHOURY_V42_DIR / "paired_bootstrap.csv"),
         })
         cls.sets = {d["key"]: d for d in cls.b["datasets"]}
 
@@ -367,20 +379,19 @@ class TestBenchmark(unittest.TestCase):
         self.assertEqual(self.b["status"], "measured")
         self.assertEqual(list(self.sets), ["khoury2026", "fulcher2026", "pbmc240", "scope2", "scope2_reprocessed"])
         for d in self.b["datasets"]:
-            self.assertEqual([r["method"] for r in d["rows"][:2]], ["VivOME v4.2 (ours)", "VivOME v4.1 (ours)"], d["key"])
+            self.assertEqual([r["method"] for r in d["rows"][:2]], ["VivOME v4.1 (ours)", "VivOME v4.2 (ours)"], d["key"])
             others = [r["score"]["value"] for r in d["rows"][2:]]
             self.assertEqual(others, sorted(others, reverse=True), d["key"])
 
-    def test_khoury_scores_v42_post_hoc_below_v41_with_its_comparisons(self):
+    def test_khoury_scores_v41_post_hoc_ahead_of_v42_with_its_comparisons(self):
         k = self.sets["khoury2026"]
-        self.assertEqual(k["rows"][0]["score"]["value"], 0.6012)
-        self.assertEqual(k["rows"][1]["score"]["value"], 0.6251)
+        self.assertEqual(k["rows"][0]["score"]["value"], 0.6251)
+        self.assertEqual(k["rows"][1]["score"]["value"], 0.6012)
         d = k["rows"][1]["vs_current"]["difference"]
-        self.assertAlmostEqual(d["value"], -0.02388, places=4)
-        self.assertLess(d["ci_high"], 0, "v4.2 is below v4.1 on Khoury")
+        self.assertAlmostEqual(d["value"], 0.02388, places=4, msg="v4.1 minus v4.2, turned round from v4.2's check")
+        self.assertGreater(d["ci_low"], 0, "v4.1 is ahead of v4.2 on Khoury")
         self.assertEqual(k["chance"]["value"], 0.2)
         self.assertIn("Post-hoc", k["role"])
-        self.assertIn("below v4.1", k["role"])
         self.assertTrue(all(r["vs_current"] for r in k["rows"][1:]), "every other row has its paired comparison")
         pca = self.row("khoury2026", "PCA, no correction", "shared kNN")
         self.assertAlmostEqual(pca["score"]["value"], 0.628, places=3)
@@ -395,9 +406,9 @@ class TestBenchmark(unittest.TestCase):
         self.assertEqual(self.row("fulcher2026", "scANVI", "shared kNN")["runs"], 2)
         harmony = self.row("fulcher2026", "Harmony", "nearest centroid")
         self.assertEqual(harmony["vs_current"]["favour_current"], 3)
-        v41 = self.row("fulcher2026", "VivOME v4.1 (ours)", "best guess, as served")
-        self.assertEqual((v41["vs_current"]["favour_current"], v41["vs_current"]["difference"]["ci_low"]),
-                         (1, 0.04409))
+        v42 = self.row("fulcher2026", "VivOME v4.2 (ours)", "best guess, as served")
+        self.assertEqual((v42["vs_current"]["favour_other"], v42["vs_current"]["difference"]["ci_high"]),
+                         (1, -0.04409))
 
     def test_scope2_tables_show_ours_below_chance(self):
         for key in ("scope2", "scope2_reprocessed"):
