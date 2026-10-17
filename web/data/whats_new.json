@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-10-17",
+    "title": "A Manuscript page",
+    "text": "The Benchmark page is now the Manuscript page: everything a journal paper on the served model can use, sorted under the paper's sections. Each line is one claim with its source and what kind of evidence it is: the methods and why each part is there, the benchmark tables, the internal held-out test, the failure modes, and what was tried and not kept.",
+    "link": "manuscript.html",
+    "link_text": "Open the Manuscript page"
+  },
+  {
+    "date": "2026-10-17",
     "title": "v4.1 is the default again",
     "text": "The service answers with v4.1 again. On a second lab's single-cell proteomics, which neither model was tuned on, v4.1 named more cells correctly than v4.2, so it is the better choice for new data. v4.2 stays selectable.",
     "link": "versions.html",
@@ -31,7 +38,7 @@
     "date": "2026-10-15",
     "title": "The benchmark is published",
     "text": "Every method's scores, dataset by dataset, are now on the Benchmark page, with how they were scored. On data no method was developed on, VivOME's best guess is level with the best simple baselines, not ahead of them. The claim that it beats them waits for a sealed test.",
-    "link": "benchmark.html",
+    "link": "manuscript.html#benchmark",
     "link_text": "See the benchmark"
   },
   {

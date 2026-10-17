@@ -81,7 +81,7 @@ Computed from repository data:
   `first_release` is CrossModalNet's own numbers, kept as the first baseline.
 - `benchmark` — signed off by the owner for release 0.4.0; the current
   model's rows were v4.2's in 0.5.0 and are v4.1's again from 0.6.0. `datasets`, one
-  per table on `benchmark.html`: Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
+  per table on `manuscript.html` (which shows the current model's rows only): Khoury 2026 (post-hoc), Fulcher 2026, PBMC240 and
   both SCoPE2 versions. Each has its `measure`, `chance` (one over the number
   of types scored, or `null`), its `role` (what kind of evidence it is) and
   `rows`: VivOME's two releases first (v4.1, then v4.2), then every corrected
@@ -172,12 +172,16 @@ in the browser.
 | Panel builder | Page |
 |---|---|
 | `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `atlas.html` |
-| `buildBenchmarkTable` | `benchmark.html` |
+| `buildBenchmarkTable` (with `currentOnly`, `roles` and `note` options) | `manuscript.html` |
 | `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace` | `project.html` |
 | `buildModelCardTable` | `versions.html` |
-| `buildReleaseStatus`, `buildNextReferenceCard` | `home.html` |
-| `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html`, `benchmark.html` |
+| `buildReleaseStatus`, `buildNextReferenceCard` | none since the Dashboard was removed |
+| `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html`, `manuscript.html` |
+
+The Manuscript page's other numbers are `data-ms` slots, filled from
+`web/data/manuscript.json` by `msFact` in `web/js/manuscript-data.js`
+through the same `isMeasured` guard ([manuscript.md](manuscript.md)).
 
 Every interpolated value goes through `escapeHtml()`. Cell-type names come
 from data, and `web/tests/fixtures.js` deliberately names one class

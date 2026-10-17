@@ -1876,6 +1876,8 @@ discipline applies to the pool-first-vs-post-hoc-masking kNN choice above.
   scANVI-across-seeds section). Seeds 1 and 2 reproduced closely. Not
   investigated further here; worth knowing before treating any single
   scANVI seed's number as fixed.
-- The site's benchmark (`web/benchmark.html`) shows the corrected baselines
-  against v3.1 and v4.1, computed by `scripts/build_manifest.py` from the
-  committed tables, since release 0.4.0 (`6aa6dc3`).
+- The site's benchmark shows the corrected baselines against the served
+  model, computed by `scripts/build_manifest.py` from the committed tables,
+  since release 0.4.0 (`6aa6dc3`). Since 2026-10-17 its tables are in the
+  Results of the Manuscript page (`web/manuscript.html`), which replaced the
+  Benchmark page.

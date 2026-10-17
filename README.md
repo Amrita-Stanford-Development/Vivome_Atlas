@@ -70,11 +70,11 @@ line for every file.
 
 | Page | What it does |
 |------|--------------|
-| `index.html` | Landing page: a 3D hero whose objects fly out as you scroll, seven sections of cards, the finale |
-| `home.html` | Dashboard: a way in to every tool, the current release, what's new |
+| `index.html` | Landing page: the title panel, seven sections of cards, the finale |
 | `atlas.html` | Interactive 3D cell viewer with cross-modal support map and alignment diagnostics |
 | `project.html` | The projection tool: sends a matrix to a locally run service and shows the result |
-| `benchmark.html` | Standing comparison against established integration methods |
+| `manuscript.html` | Evidence bank for a journal paper on the served model, with the benchmark tables |
+| `workflow.html` | How VivOME works start to end, following one cell of the PBMC240 example |
 | `versions.html` | Model card, data availability, release protocol |
 | `miscellaneous.html` | Intentionally blank (former roadmap page) |
 
@@ -119,9 +119,10 @@ Atlas version `0.6.0`, manifest schema `1.0`.
 - **Data:** 22 cell types, 2 of them cross-modal in the atlas (macrophage,
   monocyte) and 20 RNA-only. RNA 85,233 cells; protein 1,490 cells (SCoPE2
   mass spectrometry).
-- **Benchmark:** published on `web/benchmark.html`: VivOME against the
+- **Benchmark:** published on `web/manuscript.html`: VivOME against the
   corrected baselines on Khoury 2026 (post-hoc), Fulcher 2026,
-  PBMC240 and SCoPE2 (`research/benchmark/results.md`).
+  PBMC240 and SCoPE2 (`research/benchmark/results.md`), beside the rest of
+  the evidence a journal paper would use.
 
 Latent centroid cosine and the modality probe are measured for the 2
 cross-modal classes, in v3.1's coordinate space, which v4.1 and v4.2 share.

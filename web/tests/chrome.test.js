@@ -5,8 +5,9 @@ import { readFileSync } from 'node:fs';
 // The site header and footer are static markup copied into every page (no JS
 // injection, so no layout shift and they work without JS). This pins the
 // copies together: after removing the one aria-current marker, every page's
-// header and footer must be byte-identical to home.html's.
-const PAGES = ['index.html', 'home.html', 'atlas.html', 'benchmark.html', 'project.html', 'versions.html', 'workflow.html'];
+// header and footer must be byte-identical to the landing page's.
+const CANONICAL = 'index.html';
+const PAGES = ['index.html', 'atlas.html', 'manuscript.html', 'project.html', 'versions.html', 'workflow.html'];
 // The atlas is a full-window app view, so it carries the header but no footer.
 const WITHOUT_FOOTER = new Set(['atlas.html']);
 
@@ -19,13 +20,13 @@ const normalise = (html) => html.replace(/ aria-current="page"/g, '');
 
 for (const [tag, cls] of [['header', 'site-header'], ['footer', 'site-footer']]) {
   test(`every page carries the same ${cls}`, () => {
-    const canonical = block(read('home.html'), tag, cls);
-    assert.ok(canonical, `home.html has no ${cls}`);
+    const canonical = block(read(CANONICAL), tag, cls);
+    assert.ok(canonical, `${CANONICAL} has no ${cls}`);
     for (const page of PAGES) {
       if (tag === 'footer' && WITHOUT_FOOTER.has(page)) continue;
       const copy = block(read(page), tag, cls);
       assert.ok(copy, `${page} has no ${cls}`);
-      assert.equal(normalise(copy), normalise(canonical), `${page}'s ${cls} differs from home.html's`);
+      assert.equal(normalise(copy), normalise(canonical), `${page}'s ${cls} differs from ${CANONICAL}'s`);
     }
   });
 }
@@ -40,17 +41,20 @@ test('each page marks exactly its own nav link as current', () => {
   }
 });
 
-// The landing story and the living water behind every page load three.js
-// themselves; both must load the build the atlas viewer uses, so the site
-// never ships two versions and the cache is shared.
-test('the story, the living water and the atlas load the same three.js', () => {
+// The living water behind every page loads three.js itself; it must load the
+// build the atlas viewer uses (and the landing preloads), so the site never
+// ships two versions and the cache is shared.
+test('the living water, the landing and the atlas use the same three.js', () => {
   const fromAtlas = read('atlas.html').match(/<script src="(https:[^"]*three[^"]*)"/);
   assert.ok(fromAtlas, 'three.js URL not found in atlas.html');
-  for (const module of ['story.js', 'biofield.js']) {
+  for (const module of ['biofield.js']) {
     const url = readFileSync(new URL(`../js/${module}`, import.meta.url), 'utf8').match(/THREE_URL = '([^']+)'/);
     assert.ok(url, `three.js URL not found in js/${module}`);
     assert.equal(url[1], fromAtlas[1], `js/${module} loads a different three.js`);
   }
+  const preload = read('index.html').match(/<link rel="preload" as="script" href="([^"]+)"/);
+  assert.ok(preload, 'the landing preloads no script');
+  assert.equal(preload[1], fromAtlas[1], 'the landing preloads a different three.js');
 });
 
 // Every page but the atlas (whose viewer covers the window) carries the

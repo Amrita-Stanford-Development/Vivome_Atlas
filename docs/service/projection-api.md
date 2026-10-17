@@ -41,7 +41,9 @@ service flags on commits every cell, but 97.9% of the answers are
 says nothing the restriction didn't (`research/benchmark/results.md`,
 "v3.1's two service flags").
 
-The same file always returns the same response. The random calibration
+The same file always returns the same response. v3.1, v4.1 and v4.2 draw
+no calibration cells from the upload: their conformal thresholds and
+out-of-distribution threshold are fixed. Under v3, the random calibration
 subset (Stage 5) is seeded from a hash of the uploaded matrix.
 
 The matrix has feature names in the first column and cell IDs in the header

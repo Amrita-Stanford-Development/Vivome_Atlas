@@ -22,8 +22,11 @@ The 3D view does not need them: its positions come from the small
 each cell's gene profile, so until they are served from R2 (below), clicking
 a cell cannot show its profile. Every other page works.
 
-Pages serves `/home.html` at `/home`. The `.html` addresses redirect with a
-308, so the site's own links keep working.
+Pages serves `/versions.html` at `/versions`. The `.html` addresses redirect
+with a 308, so the site's own links keep working. Pages that were removed or
+renamed redirect through `_redirects`, which `scripts/build_pages_site.py`
+writes from its `REDIRECTS`: `/benchmark` to `/manuscript`, and the removed
+Dashboard, `/home`, to the landing page.
 
 ## Publishing
 

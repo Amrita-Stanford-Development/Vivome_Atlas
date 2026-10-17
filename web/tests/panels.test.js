@@ -300,10 +300,10 @@ test('the known limits read their numbers from the manifest, and only measured o
   assert.equal(factText({}, 'previous_recall_khoury_cd8t'), 'Pending');
 });
 
-test('every fact the versions and benchmark pages ask for exists in the real manifest', async () => {
+test('every fact the versions and manuscript pages ask for exists in the real manifest', async () => {
   const { readFileSync } = await import('node:fs');
   const real = JSON.parse(readFileSync(new URL('../data/atlas_manifest.json', import.meta.url), 'utf8'));
-  for (const page of ['versions.html', 'benchmark.html']) {
+  for (const page of ['versions.html', 'manuscript.html']) {
     const html = readFileSync(new URL(`../${page}`, import.meta.url), 'utf8');
     const keys = [...new Set([...html.matchAll(/data-fact="([^"]+)"/g)].map((x) => x[1]))];
     assert.ok(keys.length > 0, page);

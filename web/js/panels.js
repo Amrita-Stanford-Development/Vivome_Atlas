@@ -93,7 +93,7 @@ export function buildDiagnosticsTable(manifest) {
     </p>`;
 }
 
-// ---- The benchmark (benchmark.html) ----
+// ---- The benchmark (manuscript.html, section 3.4) ----
 // manifest.benchmark.datasets: one table per dataset, every method's score
 // with its spread over seeds, and the current model minus each method by
 // paired bootstrap. Every number goes through isMeasured.
@@ -116,9 +116,12 @@ function versusText(v, current) {
   return `${escapeHtml(spread)}<span class="metric-basis">${escapeHtml(verdicts.join(', '))}</span>`;
 }
 
-function benchmarkDataset(d, current) {
+function benchmarkDataset(d, current, { currentOnly = false, roles = true } = {}) {
   const chance = isMeasured(d.chance) ? `; chance ${escapeHtml(formatPercent(d.chance))}` : '';
-  const rows = (d.rows ?? []).map((r) => `
+  // currentOnly keeps the current model's own row and drops the other releases'.
+  const shown = (d.rows ?? []).filter((r) => !currentOnly || !r.ours || r.method.startsWith(current));
+  const role = roles ? ` ${escapeHtml(d.role)}` : '';
+  const rows = shown.map((r) => `
     <tr>
       <td>${r.ours ? `<strong>${escapeHtml(r.method)}</strong>` : escapeHtml(r.method)}</td>
       <td>${escapeHtml(r.rule)}</td>
@@ -128,11 +131,13 @@ function benchmarkDataset(d, current) {
     </tr>`).join('');
   return `
     <h3>${escapeHtml(d.name)}</h3>
-    <p class="panel-note"><strong>${escapeHtml(d.measure)}${chance}.</strong> ${escapeHtml(d.role)}</p>
+    <p class="panel-note"><strong>${escapeHtml(d.measure)}${chance}.</strong>${role}</p>
     <div class="table-scroll">${table(['Method', 'Rule', 'Score', 'Runs', `${current} minus it`], rows)}</div>`;
 }
 
-export function buildBenchmarkTable(manifest) {
+// options { currentOnly, roles, note }: the Manuscript page shows the
+// current model's rows only, and says each dataset's role in its own words.
+export function buildBenchmarkTable(manifest, options = {}) {
   const b = manifest.benchmark ?? {};
   const datasets = Array.isArray(b.datasets) ? b.datasets : [];
   if (b.status !== 'measured' || datasets.length === 0) {
@@ -142,8 +147,9 @@ export function buildBenchmarkTable(manifest) {
       </div>`;
   }
   const current = b.current ?? manifest.model?.name ?? 'the current model';
-  return datasets.map((d) => benchmarkDataset(d, current)).join('')
-    + `<p class="panel-note">${escapeHtml(b.note ?? '')}</p>`;
+  const note = options.note ?? true;
+  return datasets.map((d) => benchmarkDataset(d, current, options)).join('')
+    + (note ? `<p class="panel-note">${escapeHtml(b.note ?? '')}</p>` : '');
 }
 
 const cardField = (label, value) =>
@@ -264,7 +270,7 @@ export function buildSupportedLabelSpace(manifest) {
     <p><strong>Cross-modal support (${formatCount(supported.length)}):</strong> ${supported.join(', ')}</p>
     <p><strong>RNA-only (${formatCount(manifest.summary?.rna_only)}):</strong> these types have no
     protein cells in the atlas. Real protein data has since tested several of them (see
-    <a href="benchmark.html">the benchmark</a>). By default the service assigns them to protein
+    <a href="manuscript.html#benchmark">the benchmark</a>). By default the service assigns them to protein
     queries; a request can set <code>restrict_to_supported_classes</code> to limit labels to the
     cross-modal types.</p>`;
 }

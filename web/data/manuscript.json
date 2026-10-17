@@ -1,0 +1,2322 @@
+{
+ "schema_version": "1",
+ "built_for": {
+  "atlas_version": "0.6.0",
+  "model_name": "VivOME v4.1"
+ },
+ "sources": {
+  "research/benchmark/baselines_corrected/fulcher2026_summary.csv": "83b2bba69081a5583b91fbb0cb862a325b79bf00e88c2144b0302bf2df949639",
+  "research/benchmark/baselines_corrected/inputs.csv": "7982d5926b2b3e666a57bdf4565559129b485f4299910fec8f5ee91443563013",
+  "research/benchmark/fulcher2026/paired_bootstrap.csv": "e441ca0eb641bfa3a0d9c7d598ce023d7f4e6b378aab008721b724acac701daa",
+  "research/benchmark/furtwangler2025/v31_ood_check.json": "39c0374fb6b9598be87e6f18468a99cb893d58d7ce5caa07d4bc7bf6245363cd",
+  "research/benchmark/heldout/hao2021/summary.json": "34f217b77cf0ec832eefd0a96c7859a68f69730215caad300d7e33fd1950985d",
+  "research/benchmark/heldout/pxd021882/summary.json": "843a74299e20906dd001bc54bb70bf89ec5fbd3d1c2290aa376028e50629ce35",
+  "research/benchmark/heldout/pxd043355/summary.json": "0699d914f6906164adf19a165c63364e0f94d3ffffdceabf1b2f0d819712975c",
+  "research/benchmark/heldout/pxd046211/summary.json": "5cbb5dc85e63879faf5b87294d372b519cf5f448080d065ba9350d9b9279b08c",
+  "research/benchmark/heldout/pxd073250/summary.json": "f9745206f5ca3af2130ea8917a0300514724fae41b9677a99c7d7b10ef643a46",
+  "research/benchmark/heldout/tian/summary.json": "f5b51e14e4544dd13be4183b543a249916a0b9a3fd0df72da7f0df68e974674a",
+  "research/benchmark/khoury2026/summary.json": "38c33d3276d21361bbdd4a117cb9e415af94d4d113d6e8222168ecd3c265b71d",
+  "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv": "1aa79d5c5d6ae232ad07b6cc77c5af7ea83ee0d2dd62f9ca804d3b78a9b20c35",
+  "research/benchmark/khoury2026_posthoc_v41_check/summary.json": "3b64825aadb467ade97dacf08ae11a1faf13a420ceea946399bceea3b8c6e29e",
+  "research/benchmark/khoury2026_posthoc_v42_check/summary.json": "27fd33354dd849f9cdc721b64cf47c2acb2a295b905363e1eeadb71545eed0db",
+  "research/benchmark/khoury2026_posthoc_v51_check/summary.json": "a8fdbdc3d26745d59c07babe61d974064e885bec5a9f1cb3881d0ad0cbe7c60f",
+  "research/benchmark/v41_dev_gate.json": "16a87cac462b743e51fd7201a35e32724052c7c0d794784bb031f07285737894",
+  "research/benchmark/v41_development/confident.csv": "fc63ccfa02fe2491ce7db46ec6b840f31a5d740628203f17178286dee13abe4c",
+  "research/benchmark/v41_development/fulcher2026.csv": "246ad289b31eed9b9ba22fe3650f5f927e69b56d254a2e14a388a949a2e14e87",
+  "research/benchmark/v41_development/paired_bootstrap_v41.csv": "ffd937fb0f4bd9bb567df75776379fbe3e8154b60ed761157edb98fd7fc45287",
+  "research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv": "2feb5de276282451ffc13095cd5d27059408f09c8608eaf13d8b05344796cedf",
+  "research/notebook-outputs/astral_abstention/summary.json": "2917d79738783caf859914e3461a7df74f7c879b0dd76408237f8e16b00ffc52",
+  "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json": "a7d47c2c9a693c02bcc2d6175d46ced004dd42dc9b96f04974ba35ff10f8e68c",
+  "research/notebook-outputs/donor_heldout/summary.json": "60f2ed9486c99de5ff7346c7beb7bfaf3f6345c51f56fe60a4621dc0cf734fdc",
+  "research/notebook-outputs/hao_dc_centres/summary.json": "a428710be5d33c371c30629eb577de2b232079156d83cdba287edcb5d701d265",
+  "research/notebook-outputs/marker_audit/detection.csv": "fa91a96dab1b6971981951c490df3e2391e9a11fb5a1f20392736aa299e6ba37",
+  "research/notebook-outputs/narrow_upload/committed.json": "77ce1ebd5c5672f9b9a12354d43f43458ee310f08a4a3a4fb9969ffeea7f8069",
+  "research/notebook-outputs/nb1b/nb1b_summary.json": "e4821b1377be064b00879c9d8337ee7089b3a51d44bebbc5356af51b17072c41",
+  "research/notebook-outputs/nb1d/nb1d_summary.json": "31262ff63e3c451732329d4003bd1ae12511ebfc9368473f6b14321bccf044a6",
+  "research/notebook-outputs/nb2/nb2_summary.json": "5958e975ce63811ed3668e08ca8f16674aaef88166944ef1cb39844a2e2bbccd",
+  "research/notebook-outputs/nb2/tables/conformal_choice_calsel.csv": "a2d226d92623a4e716a801470cc2400f96477e18b9cfcfd81b4fa994c71e0166",
+  "research/notebook-outputs/nb2/tables/temperature.csv": "5871e68cbe99560fdc3996b9c171703d54692aeaf77dd3991162253d13c51b4a",
+  "research/notebook-outputs/nb3b/eval_flags_summary.csv": "2871b07d5574974589a730c099fb52439fea78181e685feec339a8c374c0b65b",
+  "research/notebook-outputs/nb3b/summary.json": "48756d41c54780e6d591709fece99735bc651509339cbff15637b9e40a0930cf",
+  "research/notebook-outputs/nb3c/summary.json": "fbe6474af10cdcdbef0fd108012c8a1a2f257357c533e97d7c3889f490beff1d",
+  "research/notebook-outputs/ood_candidates/summary.json": "73ec982af811e3cbb990a28050defe1d61907997f9838df56638880816ba5a8c",
+  "research/notebook-outputs/protein_coverage/coverage.json": "6ef48fc35371ee34fd3d210620218113e6b5eac73970cbe73ab1edf7d10b9ea8",
+  "research/notebook-outputs/single_type_uploads/summary.json": "2a7dfca0a53b854134ae68111f70fcefe7eb085b9c600ea509dcec63f4d94163",
+  "research/notebook-outputs/upload_independent_probe/summary.json": "986efa3284c2bc35a2bf9a083990bae00bcf19c7f67b0b48e17ea679b151ecf1",
+  "research/notebook-outputs/v41_phase3/development.json": "48e30a4214bc360cf13725ef9442b89fd362fc38627206383386e93a1b177eef",
+  "research/notebook-outputs/v41_phase3/eval_uploads.csv": "a557b1fa8b9928d53e935a9193157cd8446a73f4977672a7af71b26d2fb7bbcf",
+  "research/notebook-outputs/v41_phase3/summary.json": "8a37658ce6bc87f7cb6f206316917c92260584352232acfbbb1124004ecfd6dd",
+  "research/notebook-outputs/v41_pretest/candidates.csv": "0de48b5b718efdd4b2a25901b919e80b7064a2ce148de2a4781752c34831df07",
+  "research/notebook-outputs/v41_pretest/research_arm.csv": "65f15a9d1317df7fd8b62c97414b8ac41169f0c375f3163839d29ea0d1b08f36",
+  "research/notebook-outputs/v41_pretest/selection.json": "ca763270d6157160bb9ae2b77f6e3e293228e583f94d0527b0713eb2454a2d33",
+  "research/notebook-outputs/v4_phase3b/selection.json": "958adf8e3448d571686e4d72c66ec8d37826167f32df115e019e6657986c47b2",
+  "research/notebook-outputs/v4_phase3b/summary.json": "632d5206b7441a05f9910ca3bfa39891f1fc2aa147b34aa5fe0d8cd8c2eb3de0",
+  "research/notebook-outputs/v4_phase3c/exploration.json": "e2ea79d20517b63a1c4944f312889816a39bf20b256127d0db6b9dbfd6c7fe8d",
+  "research/notebook-outputs/v51_phase4/summary.json": "ef4c6e33b44276748b8eb7801bd9c5a6879ac64176caa91dd455b84eb2bc9ddf",
+  "service/model/evidence/feature_space_provenance.json": "af0ad7d088916938cac5486cd471c0fb46fb2f2176a7a4d728817b8497a5a0d8",
+  "service/model/evidence/v3_1_tables/latent_centroid_cosine.csv": "ef78d1e61134b9a3fd140252eb0f00d708c8e8e0637ea2e1a9755cfd21c81426",
+  "service/model/evidence/v3_1_tables/modality_probe.json": "4a319e890ee02b50f7c46dc3a1ab37c8fe4d72dec8fe78f86780b9999a683361",
+  "service/model/runtime/reference_metadata.csv": "b0d5d1e761d6969e401fa605f74e4367e7d65d5c9fdea444471bbccee65d4054",
+  "service/model/v3_1/nb2_spec_v31.json": "af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd",
+  "service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
+  "web/data/workflow.json": "2e695a69276f2a9945d9f1754d763406761c42c34da9a7c102df841f96cf247c"
+ },
+ "records": {
+  "alpha": {
+   "value": 0.1,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json: conformal > alpha",
+   "format": "plain"
+  },
+  "astral_committed_fulcher": {
+   "value": 0.87,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: Fulcher 2026 > reasons_pct > committed",
+   "format": "pct1"
+  },
+  "astral_committed_max": {
+   "value": 0.407,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: DS18 Standard Astral, DS18 FAIMS Astral, DS18 FAIMS Astral-Zoom, DS19, reasons_pct > committed, largest",
+   "format": "pct1"
+  },
+  "astral_committed_min": {
+   "value": 0.27,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: DS18 Standard Astral, DS18 FAIMS Astral, DS18 FAIMS Astral-Zoom, DS19, reasons_pct > committed, smallest",
+   "format": "pct1"
+  },
+  "astral_committed_subsample": {
+   "value": 0.956,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: Fulcher 2026, 90-cell subsamples > committed_pct > median",
+   "format": "pct1"
+  },
+  "astral_runs": {
+   "value": 4,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: DS18 Standard Astral, DS18 FAIMS Astral, DS18 FAIMS Astral-Zoom, DS19",
+   "format": "count"
+  },
+  "bm_baselines": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: dataset Fulcher 2026, distinct baselines",
+   "format": "count"
+  },
+  "bm_fulcher_cd8_harmony_knn": {
+   "value": 0.377532,
+   "status": "measured",
+   "basis": "research/benchmark/baselines_corrected/fulcher2026_summary.csv: mean where tool harmony, rule shared kNN, metric recall_CD8T_pct",
+   "format": "pct1"
+  },
+  "bm_fulcher_dc_correlation": {
+   "value": 0.407407,
+   "status": "measured",
+   "basis": "research/benchmark/baselines_corrected/fulcher2026_summary.csv: mean where tool correlation, rule correlation to class mean, metric recall_DC_pct",
+   "format": "pct1"
+  },
+  "bm_fulcher_dc_pca_nc": {
+   "value": 0.518519,
+   "status": "measured",
+   "basis": "research/benchmark/baselines_corrected/fulcher2026_summary.csv: mean where tool pca, rule nearest centroid, metric recall_DC_pct",
+   "format": "pct1"
+  },
+  "bm_fulcher_favour": {
+   "value": 31,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: dataset Fulcher 2026, favours v4.1",
+   "format": "count"
+  },
+  "bm_fulcher_lowest_ci": {
+   "value": 0.023153,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: dataset Fulcher 2026, smallest ci_lo",
+   "format": "points"
+  },
+  "bm_fulcher_pairings": {
+   "value": 31,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: dataset Fulcher 2026",
+   "format": "count"
+  },
+  "bm_fulcher_vs_correlation": {
+   "value": 0.069248,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: point_estimate_pct where dataset Fulcher 2026, baseline correlation, seed 0, baseline_rule correlation to class mean",
+   "format": "points"
+  },
+  "bm_fulcher_vs_harmony_max": {
+   "value": 0.087712,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: dataset Fulcher 2026, harmony, largest",
+   "format": "points"
+  },
+  "bm_fulcher_vs_harmony_min": {
+   "value": 0.055589,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: dataset Fulcher 2026, harmony, smallest",
+   "format": "points"
+  },
+  "bm_fulcher_vs_pca_knn": {
+   "value": 0.135973,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41.csv: point_estimate_pct where dataset Fulcher 2026, baseline pca, seed 0, baseline_rule shared kNN",
+   "format": "points"
+  },
+  "bm_genes_fulcher2026": {
+   "value": 932,
+   "status": "measured",
+   "basis": "research/benchmark/baselines_corrected/inputs.csv: n_genes where dataset fulcher2026",
+   "format": "count"
+  },
+  "bm_genes_pbmc240": {
+   "value": 1111,
+   "status": "measured",
+   "basis": "research/benchmark/baselines_corrected/inputs.csv: n_genes where dataset pbmc240",
+   "format": "count"
+  },
+  "bm_genes_scope2": {
+   "value": 2907,
+   "status": "measured",
+   "basis": "research/benchmark/baselines_corrected/inputs.csv: n_genes where dataset scope2",
+   "format": "count"
+  },
+  "bm_genes_v41_fulcher": {
+   "value": 1654,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: Fulcher 2026 > features_matched",
+   "format": "count"
+  },
+  "bm_khoury_baseline_favour": {
+   "value": 18,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: favours v4.1",
+   "format": "count"
+  },
+  "bm_khoury_baseline_runs": {
+   "value": 21,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: every baseline run",
+   "format": "count"
+  },
+  "bm_khoury_scanvi_knn_neither": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: scANVI, shared kNN, favours neither",
+   "format": "count"
+  },
+  "bm_khoury_scanvi_knn_runs": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: scANVI, shared kNN",
+   "format": "count"
+  },
+  "bm_khoury_vs_correlation": {
+   "value": 0.126952,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: correlation_seed0, correlation",
+   "format": "points"
+  },
+  "bm_khoury_vs_correlation_hi": {
+   "value": 0.147144,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: correlation_seed0, correlation, ci_hi",
+   "format": "points"
+  },
+  "bm_khoury_vs_correlation_lo": {
+   "value": 0.106117,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: correlation_seed0, correlation, ci_lo",
+   "format": "points"
+  },
+  "bm_khoury_vs_harmony_max": {
+   "value": 0.071616,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: harmony, largest",
+   "format": "points"
+  },
+  "bm_khoury_vs_harmony_min": {
+   "value": 0.038356,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: harmony, smallest",
+   "format": "points"
+  },
+  "bm_khoury_vs_maxfuse_max": {
+   "value": 0.329753,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: maxfuse, largest",
+   "format": "points"
+  },
+  "bm_khoury_vs_maxfuse_min": {
+   "value": 0.305692,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: maxfuse, smallest",
+   "format": "points"
+  },
+  "bm_khoury_vs_pca": {
+   "value": -0.003298,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: pca_seed0, shared_knn",
+   "format": "points"
+  },
+  "bm_khoury_vs_pca_hi": {
+   "value": 0.013912,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: pca_seed0, shared_knn, ci_hi",
+   "format": "points"
+  },
+  "bm_khoury_vs_pca_lo": {
+   "value": -0.020545,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: pca_seed0, shared_knn, ci_lo",
+   "format": "points"
+  },
+  "bm_khoury_vs_scglue_max": {
+   "value": 0.297063,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: scglue, largest",
+   "format": "points"
+  },
+  "bm_khoury_vs_scglue_min": {
+   "value": 0.136164,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: scglue, smallest",
+   "format": "points"
+  },
+  "bm_khoury_vs_seurat": {
+   "value": 0.327717,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: seurat_seed0, native",
+   "format": "points"
+  },
+  "bm_khoury_vs_seurat_hi": {
+   "value": 0.351352,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: seurat_seed0, native, ci_hi",
+   "format": "points"
+  },
+  "bm_khoury_vs_seurat_lo": {
+   "value": 0.304751,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: seurat_seed0, native, ci_lo",
+   "format": "points"
+  },
+  "cd8_auc_anxa1": {
+   "value": 0.913,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: khoury_posthoc > auc_cd8_cluster_vs_cd4_cluster > ANXA1, 1 - auc_cd8_cluster (higher in the CD4 cluster)",
+   "format": "fixed2"
+  },
+  "cd8_auc_cd8a": {
+   "value": 0.611,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: khoury_posthoc > auc_cd8_cluster_vs_cd4_cluster > CD8A > auc_cd8_cluster",
+   "format": "fixed2"
+  },
+  "cd8_auc_s100a4": {
+   "value": 0.927,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: khoury_posthoc > auc_cd8_cluster_vs_cd4_cluster > S100A4, 1 - auc_cd8_cluster (higher in the CD4 cluster)",
+   "format": "fixed2"
+  },
+  "cd8_called_cd4": {
+   "value": 0.354,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: khoury_posthoc > fine_classes_called > v4.1 > CD8T > CD4 T",
+   "format": "pct1"
+  },
+  "cd8_called_cd8": {
+   "value": 0.027,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: khoury_posthoc > fine_classes_called > v4.1 > CD8T > CD8 T",
+   "format": "pct1"
+  },
+  "cd8_called_naive_cd4": {
+   "value": 0.535,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: khoury_posthoc > fine_classes_called > v4.1 > CD8T > naive CD4 T",
+   "format": "pct1"
+  },
+  "cd8_naive_like": {
+   "value": 356,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: reference > naive_cd8_like_cells",
+   "format": "count"
+  },
+  "cd8_naive_like_in_cd4": {
+   "value": 320,
+   "status": "measured",
+   "basis": "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json: reference > naive_cd8_like_by_class > CD4 T",
+   "format": "count"
+  },
+  "committed_fulcher": {
+   "value": 0.8698,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: committed_pct where model v41, dataset Fulcher 2026",
+   "format": "pct2"
+  },
+  "committed_pbmc240": {
+   "value": 0.734177,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: committed_pct where model v41, dataset PBMC240",
+   "format": "pct2"
+  },
+  "committed_scope2": {
+   "value": 0.52953,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: committed_pct where model v41, dataset SCoPE2",
+   "format": "pct2"
+  },
+  "correct_fulcher": {
+   "value": 0.9792,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: correct_when_committed_pct where model v41, dataset Fulcher 2026",
+   "format": "pct2"
+  },
+  "correct_pbmc240": {
+   "value": 0.969388,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: correct_when_committed_pct where model v41, dataset PBMC240",
+   "format": "pct2"
+  },
+  "correct_scope2": {
+   "value": 0.588086,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: correct_when_committed_pct where model v41, dataset SCoPE2",
+   "format": "pct2"
+  },
+  "coverage_fulcher": {
+   "value": 0.7834,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_B": {
+   "value": 0.8431,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > by_class > B > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_CD4T": {
+   "value": 0.763,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > by_class > CD4T > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_CD8T": {
+   "value": 0.442,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > by_class > CD8T > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_DC": {
+   "value": 0.463,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > by_class > DC > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_NK": {
+   "value": 0.9133,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > by_class > NK > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_given_set": {
+   "value": 0.8845,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > coverage_among_sets_pct",
+   "format": "pct1"
+  },
+  "coverage_fulcher_monocyte": {
+   "value": 0.9145,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > by_class > monocyte > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_pbmc240": {
+   "value": 0.7787,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > pbmc240 > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_scope2": {
+   "value": 0.0248,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > scope2 > coverage_pct",
+   "format": "pct1"
+  },
+  "coverage_target": {
+   "value": 0.9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: target_pct",
+   "format": "pct1"
+  },
+  "donor_gap": {
+   "value": 0.097537,
+   "status": "measured",
+   "basis": "research/notebook-outputs/donor_heldout/summary.json: mean_gap",
+   "format": "pp"
+  },
+  "donor_gap_max": {
+   "value": 0.221795,
+   "status": "measured",
+   "basis": "research/notebook-outputs/donor_heldout/summary.json: folds, gap_seen_minus_unseen, largest",
+   "format": "pp"
+  },
+  "donor_gap_min": {
+   "value": 0.005928,
+   "status": "measured",
+   "basis": "research/notebook-outputs/donor_heldout/summary.json: folds, gap_seen_minus_unseen, smallest",
+   "format": "pp"
+  },
+  "ds_fulcher2026_cells": {
+   "value": 1275,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > fulcher2026 > cells",
+   "format": "count"
+  },
+  "ds_fulcher2026_proteins_per_cell": {
+   "value": 776,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: Fulcher 2026 > proteins_per_cell_median",
+   "format": "count"
+  },
+  "ds_fulcher_scored": {
+   "value": 1251,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > fulcher2026 > n",
+   "format": "count"
+  },
+  "ds_furtwangler2025_cells": {
+   "value": 2506,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > furtwangler2025 > cells",
+   "format": "count"
+  },
+  "ds_hao_donors": {
+   "value": 4,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: donors",
+   "format": "count"
+  },
+  "ds_hao_uploads": {
+   "value": 108,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: uploads",
+   "format": "count"
+  },
+  "ds_khoury_cells": {
+   "value": 1651,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026/summary.json: n_scored",
+   "format": "count"
+  },
+  "ds_pbmc240_cells": {
+   "value": 237,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > pbmc240 > cells",
+   "format": "count"
+  },
+  "ds_pbmc240_labelled": {
+   "value": 122,
+   "status": "measured",
+   "basis": "research/notebook-outputs/protein_coverage/coverage.json: v41 > pbmc240 > n",
+   "format": "count"
+  },
+  "ds_pbmc240_proteins_per_cell": {
+   "value": 1074,
+   "status": "measured",
+   "basis": "research/notebook-outputs/astral_abstention/summary.json: PBMC240 > proteins_per_cell_median",
+   "format": "count"
+  },
+  "ds_pxd043355_negative": {
+   "value": 24,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > primary > n_negative",
+   "format": "count"
+  },
+  "ds_pxd043355_positive": {
+   "value": 29,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > primary > n_positive",
+   "format": "count"
+  },
+  "ds_pxd046211_negative": {
+   "value": 180,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd046211/summary.json: candidates > v4.1 > primary > n_negative",
+   "format": "count"
+  },
+  "ds_pxd046211_positive": {
+   "value": 156,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd046211/summary.json: candidates > v4.1 > primary > n_positive",
+   "format": "count"
+  },
+  "ds_pxd073250_negative": {
+   "value": 176,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd073250/summary.json: candidates > v4.1 > primary > n_negative",
+   "format": "count"
+  },
+  "ds_pxd073250_positive": {
+   "value": 204,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd073250/summary.json: candidates > v4.1 > primary > n_positive",
+   "format": "count"
+  },
+  "ds_scope2_cells": {
+   "value": 1490,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > scope2 > cells",
+   "format": "count"
+  },
+  "ds_scope2_reprocessed_cells": {
+   "value": 1128,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/confident.csv: cells where model v41, dataset SCoPE2 reprocessed",
+   "format": "count"
+  },
+  "fulcher_ba": {
+   "value": 0.6905,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > balanced_accuracy_6_types",
+   "format": "pct2"
+  },
+  "fulcher_lymphoid": {
+   "value": 0.989204,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/fulcher2026.csv: lymphoid_recall_pct where tool v4.1 (served)",
+   "format": "pct1"
+  },
+  "fulcher_myeloid": {
+   "value": 0.945098,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/fulcher2026.csv: myeloid_recall_pct where tool v4.1 (served)",
+   "format": "pct1"
+  },
+  "fulcher_recall_B": {
+   "value": 0.9804,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > recall_B",
+   "format": "pct1"
+  },
+  "fulcher_recall_CD4T": {
+   "value": 0.8247,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > recall_CD4T",
+   "format": "pct1"
+  },
+  "fulcher_recall_CD8T": {
+   "value": 0.2376,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > recall_CD8T",
+   "format": "pct1"
+  },
+  "fulcher_recall_DC": {
+   "value": 0.2222,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > recall_DC",
+   "format": "pct1"
+  },
+  "fulcher_recall_NK": {
+   "value": 0.9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > recall_NK",
+   "format": "pct1"
+  },
+  "fulcher_recall_monocyte": {
+   "value": 0.9781,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > recall_monocyte",
+   "format": "pct1"
+  },
+  "gs_ig_tcr": {
+   "value": 61,
+   "status": "measured",
+   "basis": "service/model/evidence/feature_space_provenance.json: ig_tcr_excluded",
+   "format": "count"
+  },
+  "gs_size": {
+   "value": 9002,
+   "status": "measured",
+   "basis": "service/model/evidence/feature_space_provenance.json: feature_space",
+   "format": "count"
+  },
+  "gs_sources": {
+   "value": 6,
+   "status": "measured",
+   "basis": "service/model/evidence/feature_space_provenance.json: sources",
+   "format": "count"
+  },
+  "gs_union": {
+   "value": 9316,
+   "status": "measured",
+   "basis": "service/model/evidence/feature_space_provenance.json: union_raw",
+   "format": "count"
+  },
+  "ho_fail": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/*/summary.json: each set's primary outcome for v4.1",
+   "format": "count"
+  },
+  "ho_hao_correlation": {
+   "value": 0.57488,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: by_model > correlation > coarse_ba_mean",
+   "format": "pct1"
+  },
+  "ho_hao_dc": {
+   "value": 0.104083,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: by_model > v41 > dc_recall",
+   "format": "pct1"
+  },
+  "ho_hao_dc_correlation": {
+   "value": 0.2193,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: by_model > correlation > dc_recall",
+   "format": "pct1"
+  },
+  "ho_hao_gain": {
+   "value": 0.043889,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v31 - v41, negated",
+   "format": "points"
+  },
+  "ho_hao_gain_lower": {
+   "value": 0.014741,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v31 - v41, negated (its one-sided upper bound becomes this lower bound)",
+   "format": "points"
+  },
+  "ho_hao_model": {
+   "value": 0.622156,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: by_model > v41 > coarse_ba_mean",
+   "format": "pct1"
+  },
+  "ho_hao_pca": {
+   "value": 0.491448,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: by_model > pca_knn > coarse_ba_mean",
+   "format": "pct1"
+  },
+  "ho_hao_vs_correlation": {
+   "value": 0.047277,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v41 - correlation > mean",
+   "format": "points"
+  },
+  "ho_hao_vs_correlation_lower": {
+   "value": 0.028152,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v41 - correlation > lower_95_one_sided",
+   "format": "points"
+  },
+  "ho_hao_vs_pca": {
+   "value": 0.130708,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v41 - pca_knn > mean",
+   "format": "points"
+  },
+  "ho_hao_vs_pca_lower": {
+   "value": 0.10785,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v41 - pca_knn > lower_95_one_sided",
+   "format": "points"
+  },
+  "ho_hao_vs_without": {
+   "value": -0.043889,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v31 - v41 > mean",
+   "format": "points"
+  },
+  "ho_hao_vs_without_lower": {
+   "value": -0.074025,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v31 - v41 > lower_95_one_sided",
+   "format": "points"
+  },
+  "ho_pass": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/*/summary.json: each set's primary outcome for v4.1",
+   "format": "count"
+  },
+  "ho_pxd043355_abstained_HeLa": {
+   "value": 0.667,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > secondary > abstained_pct_by_group > HeLa",
+   "format": "pct1"
+  },
+  "ho_pxd043355_abstained_Jurkat": {
+   "value": 0.966,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > secondary > abstained_pct_by_group > Jurkat",
+   "format": "pct1"
+  },
+  "ho_pxd043355_auroc": {
+   "value": 0.6739,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > primary > auroc",
+   "format": "fixed3"
+  },
+  "ho_pxd043355_p": {
+   "value": 0.0147,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > primary > p",
+   "format": "fixed3"
+  },
+  "ho_pxd046211_auroc": {
+   "value": 0.5167,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd046211/summary.json: candidates > v4.1 > primary > auroc",
+   "format": "fixed3"
+  },
+  "ho_pxd046211_p": {
+   "value": 0.2951,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd046211/summary.json: candidates > v4.1 > primary > p",
+   "format": "fixed3"
+  },
+  "ho_pxd073250_auroc": {
+   "value": 0.4423,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd073250/summary.json: candidates > v4.1 > primary > auroc",
+   "format": "fixed3"
+  },
+  "ho_pxd073250_p": {
+   "value": 0.975,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd073250/summary.json: candidates > v4.1 > primary > p",
+   "format": "fixed3"
+  },
+  "ho_sets": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/*/summary.json: each set's primary outcome for v4.1",
+   "format": "count"
+  },
+  "ho_tian_pairs": {
+   "value": 1,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/tian/summary.json: candidates > v4.1 > primary > pairs",
+   "format": "count"
+  },
+  "ho_void": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/*/summary.json: each set's primary outcome for v4.1",
+   "format": "count"
+  },
+  "khoury_ba": {
+   "value": 0.6251,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > balanced_accuracy_pct",
+   "format": "pct2"
+  },
+  "khoury_lymphoid": {
+   "value": 0.9597,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > lymphoid_recall_pct",
+   "format": "pct1"
+  },
+  "khoury_myeloid": {
+   "value": 0.9677,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > myeloid_recall_pct",
+   "format": "pct1"
+  },
+  "khoury_recall_B": {
+   "value": 0.8171,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > recall_B_pct",
+   "format": "pct1"
+  },
+  "khoury_recall_CD4T": {
+   "value": 0.828,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > recall_CD4T_pct",
+   "format": "pct1"
+  },
+  "khoury_recall_CD8T": {
+   "value": 0.027,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > recall_CD8T_pct",
+   "format": "pct1"
+  },
+  "khoury_recall_NK": {
+   "value": 0.5065,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > recall_NK_pct",
+   "format": "pct1"
+  },
+  "khoury_recall_monocyte": {
+   "value": 0.947,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v4.1 > recall_monocyte_pct",
+   "format": "pct1"
+  },
+  "latent_cosine_macrophage": {
+   "value": 0.13523,
+   "status": "measured",
+   "basis": "service/model/evidence/v3_1_tables/latent_centroid_cosine.csv: latent_centroid_cosine where class_name macrophage",
+   "format": "fixed2"
+  },
+  "latent_cosine_monocyte": {
+   "value": 0.252101,
+   "status": "measured",
+   "basis": "service/model/evidence/v3_1_tables/latent_centroid_cosine.csv: latent_centroid_cosine where class_name monocyte",
+   "format": "fixed2"
+  },
+  "markers_absent": {
+   "value": 29,
+   "status": "measured",
+   "basis": "research/notebook-outputs/marker_audit/detection.csv: markers not in the feature space",
+   "format": "count"
+  },
+  "markers_absent_max": {
+   "value": 0.034,
+   "status": "measured",
+   "basis": "research/notebook-outputs/marker_audit/detection.csv: markers not in the feature space, largest share of cells detected",
+   "format": "pct1"
+  },
+  "markers_checked": {
+   "value": 59,
+   "status": "measured",
+   "basis": "research/notebook-outputs/marker_audit/detection.csv: rows",
+   "format": "count"
+  },
+  "markers_datasets": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/marker_audit/detection.csv: dataset columns",
+   "format": "count"
+  },
+  "neg_band_false": {
+   "value": 0.065549,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3c/summary.json: eval_chosen > false_abstention",
+   "format": "pct1"
+  },
+  "neg_band_scrambled": {
+   "value": 0.460545,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3c/summary.json: eval_chosen > rejected_scrambled",
+   "format": "pct1"
+  },
+  "neg_band_worst": {
+   "value": 0.142847,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3c/summary.json: eval_chosen > worst_scenario",
+   "format": "pct1"
+  },
+  "neg_dc_after": {
+   "value": 0.023085,
+   "status": "measured",
+   "basis": "research/notebook-outputs/hao_dc_centres/summary.json: hao_suite_mean > v4.1+DC > dc_recall",
+   "format": "pct1"
+  },
+  "neg_dc_before": {
+   "value": 0.078135,
+   "status": "measured",
+   "basis": "research/notebook-outputs/hao_dc_centres/summary.json: hao_suite_mean > v4.1 > dc_recall",
+   "format": "pct1"
+  },
+  "neg_energy_false": {
+   "value": 0.10155,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/summary.json: eval_chosen > false_abstention",
+   "format": "pct1"
+  },
+  "neg_energy_rule_false": {
+   "value": 0.06,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/summary.json: rules > go > false_overall",
+   "format": "pct1"
+  },
+  "neg_energy_rule_scrambled": {
+   "value": 0.9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/summary.json: rules > go > scrambled_rejected",
+   "format": "pct1"
+  },
+  "neg_energy_scrambled": {
+   "value": 0.763857,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/summary.json: eval_chosen > rejected_scrambled",
+   "format": "pct1"
+  },
+  "neg_narrow_mixed_flagged": {
+   "value": 0.074,
+   "status": "measured",
+   "basis": "research/notebook-outputs/narrow_upload/committed.json: simulated_flagged_pct_by_group > mixed",
+   "format": "pct1"
+  },
+  "neg_narrow_single_flagged": {
+   "value": 0.621,
+   "status": "measured",
+   "basis": "research/notebook-outputs/narrow_upload/committed.json: simulated_flagged_pct_by_group > single",
+   "format": "pct1"
+  },
+  "neg_protein_means_khoury": {
+   "value": -0.0239,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v42_check/summary.json: v42_minus_v41 > point",
+   "format": "points"
+  },
+  "neg_protein_means_khoury_hi": {
+   "value": -0.0126,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v42_check/summary.json: v42_minus_v41 > ci_95 > 1",
+   "format": "points"
+  },
+  "neg_protein_means_khoury_lo": {
+   "value": -0.0356,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v42_check/summary.json: v42_minus_v41 > ci_95 > 0",
+   "format": "points"
+  },
+  "neg_protein_score_gain": {
+   "value": 0.0404,
+   "status": "measured",
+   "basis": "research/notebook-outputs/ood_candidates/summary.json: tuning_mean S2 - S0",
+   "format": "fixed3"
+  },
+  "neg_relabelled_cd8": {
+   "value": 0.0781,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v51_check/summary.json: scores > v5.1 > recall_CD8T_pct",
+   "format": "pct1"
+  },
+  "neg_relabelled_hao": {
+   "value": 0.01155,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v52 - v41 > mean",
+   "format": "points"
+  },
+  "neg_relabelled_hao_lower": {
+   "value": 0.00252,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/hao2021/summary.json: comparisons > v52 - v41 > lower_95_one_sided",
+   "format": "points"
+  },
+  "neg_relabelled_khoury": {
+   "value": 0.0021,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v51_check/summary.json: v51_minus_v41 > point",
+   "format": "points"
+  },
+  "neg_relabelled_khoury_hi": {
+   "value": 0.0138,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v51_check/summary.json: v51_minus_v41 > ci_95 > 1",
+   "format": "points"
+  },
+  "neg_relabelled_khoury_lo": {
+   "value": -0.0088,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v51_check/summary.json: v51_minus_v41 > ci_95 > 0",
+   "format": "points"
+  },
+  "neg_relabelled_scope2_drop": {
+   "value": 0.0294,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v51_phase4/summary.json: scenario_drop_vs_v41 > scope2",
+   "format": "pp"
+  },
+  "neg_stack_fulcher": {
+   "value": 0.70249,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_pretest/research_arm.csv: v4.1 + Harmony NC, beta 0.33",
+   "format": "pct2"
+  },
+  "neg_stack_pbmc": {
+   "value": 0.777778,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_pretest/research_arm.csv: v4.1 + Harmony NC, beta 0.33",
+   "format": "pct1"
+  },
+  "ood_auroc": {
+   "value": 0.7898,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: out_of_reference_auroc > v4.1",
+   "format": "fixed3"
+  },
+  "ood_furtwangler_committed": {
+   "value": 0.4058,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: furtwangler2025 > v4.1 > committed",
+   "format": "pct1"
+  },
+  "ood_furtwangler_flagged": {
+   "value": 0.0128,
+   "status": "measured",
+   "basis": "research/benchmark/furtwangler2025/v31_ood_check.json: answers > abstain: outside_supported_region (v4.1's answers are these: research/benchmark/v41_dev_gate.json, furtwangler2025, v31_abstentions_differing 0)",
+   "format": "pct1"
+  },
+  "ood_furtwangler_progenitor": {
+   "value": 0.0032,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: furtwangler2025 > v4.1 > progenitor_share",
+   "format": "pct1"
+  },
+  "ood_furtwangler_t_cell": {
+   "value": 0.5694,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: furtwangler2025 > v4.1 > t_cell_share",
+   "format": "pct1"
+  },
+  "ood_hmc3_answered": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/ood_candidates/summary.json: MSV000099294 HMC3, v41_served answers",
+   "format": "count"
+  },
+  "ood_hmc3_cells": {
+   "value": 47,
+   "status": "measured",
+   "basis": "research/notebook-outputs/ood_candidates/summary.json: MSV000099294 HMC3, cells",
+   "format": "count"
+  },
+  "ood_lines_answered": {
+   "value": 11,
+   "status": "measured",
+   "basis": "research/notebook-outputs/ood_candidates/summary.json: PXD077946 lines, v41_served answers",
+   "format": "count"
+  },
+  "ood_lines_cells": {
+   "value": 40,
+   "status": "measured",
+   "basis": "research/notebook-outputs/ood_candidates/summary.json: PXD077946 lines, cells",
+   "format": "count"
+  },
+  "ood_lines_flagged_max": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/ood_candidates/summary.json: foreign_development, PXD077946 lines, below_threshold_pct > S0 (served), largest",
+   "format": "pct1"
+  },
+  "open_doi": {
+   "value": null,
+   "status": "pending",
+   "phase": "Release protocol",
+   "note": "a DOI needs the owner's archive account"
+  },
+  "open_khoury_committed": {
+   "value": null,
+   "status": "pending",
+   "phase": "Khoury post-hoc",
+   "note": "v4.1's committed share and correct-when-committed on Khoury are not recorded"
+  },
+  "open_probe_v41": {
+   "value": null,
+   "status": "pending",
+   "phase": "Diagnostics",
+   "note": "the modality probe has not been run on v4.1's fused best guess"
+  },
+  "open_sorted_test": {
+   "value": null,
+   "status": "pending",
+   "phase": "External test",
+   "note": "Sorted CD4/CD8 single cells, requested by email; protocol research/benchmark/protocol-sorted-cd4cd8.md"
+  },
+  "pbmc240_lymphoid": {
+   "value": 0.9231,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: pbmc240 > v4.1 > lymphoid_recall",
+   "format": "pct1"
+  },
+  "pbmc240_myeloid": {
+   "value": 0.8,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: pbmc240 > v4.1 > myeloid_recall",
+   "format": "pct1"
+  },
+  "probe": {
+   "value": 0.999329,
+   "status": "measured",
+   "basis": "service/model/evidence/v3_1_tables/modality_probe.json: modality_probe_balanced_accuracy_pct",
+   "format": "pct2"
+  },
+  "qhat_marginal": {
+   "value": 0.9105,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json: conformal > marginal_qhat",
+   "format": "fixed3"
+  },
+  "qhat_max": {
+   "value": 0.9931,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json: conformal > qhat_by_class",
+   "format": "fixed3"
+  },
+  "qhat_min": {
+   "value": 0.0467,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json: conformal > qhat_by_class",
+   "format": "fixed3"
+  },
+  "ra_abstain_before": {
+   "value": 0.4551,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb2_summary.json: eval_service_today_v3 > abstain_rate",
+   "format": "pct1"
+  },
+  "ra_abstain_now": {
+   "value": 0.1918,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb2_summary.json: eval_candidate > abstain_rate",
+   "format": "pct1"
+  },
+  "ra_cb_fulcher": {
+   "value": 0.5788,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: finalists > class-balanced encoder only, s=1 > development > fulcher",
+   "format": "pct2"
+  },
+  "ra_cb_fulcher_before": {
+   "value": 0.5794,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: v31 > development > fulcher",
+   "format": "pct2"
+  },
+  "ra_cb_suite": {
+   "value": 0.6195,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: finalists > class-balanced encoder only, s=1 > calibration_suite > overall",
+   "format": "pct2"
+  },
+  "ra_cb_suite_before": {
+   "value": 0.585731,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_pretest/selection.json: v31 > suite > overall",
+   "format": "pct2"
+  },
+  "ra_corr_fulcher": {
+   "value": 0.6905,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v4.1 > balanced_accuracy_6_types",
+   "format": "pct2"
+  },
+  "ra_correct_before": {
+   "value": 0.3498,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb2_summary.json: eval_service_today_v3 > correct_when_committed",
+   "format": "pct1"
+  },
+  "ra_correct_now": {
+   "value": 0.949,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb2_summary.json: eval_candidate > correct_when_committed",
+   "format": "pct1"
+  },
+  "ra_ece_after": {
+   "value": 0.0614,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/tables/temperature.csv: the five V2 members, centroid rule, mean",
+   "format": "fixed2"
+  },
+  "ra_ece_before": {
+   "value": 0.5097,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/tables/temperature.csv: the five V2 members, centroid rule, mean",
+   "format": "fixed2"
+  },
+  "ra_flag_correct_before": {
+   "value": 0.949002,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/eval_flags_summary.csv: correct_when_committed where rule NB2 rule, ood OOD today",
+   "format": "pct1"
+  },
+  "ra_flag_correct_now": {
+   "value": 0.955321,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/eval_flags_summary.csv: correct_when_committed where rule set_includes_best_guess, ood OOD today",
+   "format": "pct1"
+  },
+  "ra_flag_coverage_before": {
+   "value": 0.870639,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/eval_flags_summary.csv: coverage where rule NB2 rule, ood OOD today",
+   "format": "pct1"
+  },
+  "ra_flag_coverage_now": {
+   "value": 0.88309,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb3b/eval_flags_summary.csv: coverage where rule set_includes_best_guess, ood OOD today",
+   "format": "pct1"
+  },
+  "ra_fulcher_pairings": {
+   "value": 50,
+   "status": "measured",
+   "basis": "research/benchmark/fulcher2026/paired_bootstrap.csv: comparison V2 vs v3",
+   "format": "count"
+  },
+  "ra_fulcher_pairings_won": {
+   "value": 50,
+   "status": "measured",
+   "basis": "research/benchmark/fulcher2026/paired_bootstrap.csv: comparison V2 vs v3, favours V2",
+   "format": "count"
+  },
+  "ra_gate_fail_gated": {
+   "value": 0.001,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: finalists > B: s=0.5, agreement gate 0.4 (chosen) > extra_single_type_uploads > p_fail",
+   "format": "fixed3"
+  },
+  "ra_gate_fail_per_cell": {
+   "value": 0.127,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: rejected > s=0.5, per-cell gate: max r >= 0.1332 > extra_single_type_uploads > p_fail",
+   "format": "fixed3"
+  },
+  "ra_gate_fail_ungated": {
+   "value": 0.287,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: finalists > Phase 3b: s=0.5, correlation in every upload > extra_single_type_uploads > p_fail",
+   "format": "fixed3"
+  },
+  "ra_gate_fail_w08": {
+   "value": 0.126,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: rejected > s=0.5, fusion weight 0.8 > extra_single_type_uploads > p_fail",
+   "format": "fixed3"
+  },
+  "ra_gate_median_mixed": {
+   "value": 0.677,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: upload_agreement > calibration_suite_by_scenario > mixed > 50%",
+   "format": "fixed2"
+  },
+  "ra_gate_median_pbmc": {
+   "value": 0.57,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: upload_agreement > calibration_suite_by_scenario > pbmc > 50%",
+   "format": "fixed2"
+  },
+  "ra_gate_median_single": {
+   "value": 0.204,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: upload_agreement > calibration_suite_by_scenario > single > 50%",
+   "format": "fixed2"
+  },
+  "ra_gate_pbmc_agreement": {
+   "value": 0.3655,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: upload_agreement > development > pbmc240",
+   "format": "fixed3"
+  },
+  "ra_gate_pbmc_gated": {
+   "value": 0.9231,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: finalists > B: s=0.5, agreement gate 0.4 (chosen) > development > pbmc_lymphoid",
+   "format": "pct1"
+  },
+  "ra_gate_pbmc_looser": {
+   "value": 0.906,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3c/exploration.json: finalists > B: s=0.5, agreement gate 0.35 > development > pbmc_lymphoid",
+   "format": "pct1"
+  },
+  "ra_join_now": {
+   "value": 0.8721,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > coverage",
+   "format": "pct2"
+  },
+  "ra_join_now_before": {
+   "value": 0.8669,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v3.1 > coverage",
+   "format": "pct2"
+  },
+  "ra_join_replace": {
+   "value": 0.8759,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3b/summary.json: result > v4 > coverage",
+   "format": "pct1"
+  },
+  "ra_join_replace_before": {
+   "value": 0.8828,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3b/summary.json: result > v3.1 > coverage",
+   "format": "pct1"
+  },
+  "ra_log_linear": {
+   "value": 0.303206,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1b/nb1b_summary.json: a2_ablation, C_service_lin, bal_unres",
+   "format": "pct1"
+  },
+  "ra_log_log": {
+   "value": 0.333784,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1b/nb1b_summary.json: a2_ablation, B_service_log, bal_unres",
+   "format": "pct1"
+  },
+  "ra_marginal_mean": {
+   "value": 0.850459,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/tables/conformal_choice_calsel.csv: mean_cov where  marginal",
+   "format": "pct1"
+  },
+  "ra_marginal_worst": {
+   "value": 0.627953,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/tables/conformal_choice_calsel.csv: min_class_cov where  marginal",
+   "format": "pct1"
+  },
+  "ra_mondrian_mean": {
+   "value": 0.874334,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/tables/conformal_choice_calsel.csv: mean_cov where  mondrian",
+   "format": "pct1"
+  },
+  "ra_mondrian_worst": {
+   "value": 0.656767,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/tables/conformal_choice_calsel.csv: min_class_cov where  mondrian",
+   "format": "pct1"
+  },
+  "ra_pbmc_lineage_before": {
+   "value": 0.547541,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: real_smooth_on > pbmc_lineage_acc > v3 > mean",
+   "format": "pct1"
+  },
+  "ra_pbmc_lineage_now": {
+   "value": 0.922951,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: real_smooth_on > pbmc_lineage_acc > V2 > mean",
+   "format": "pct1"
+  },
+  "ra_rna_before": {
+   "value": 0.361444,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: rna_eval_slice > bal_unres > v3 > mean",
+   "format": "pct1"
+  },
+  "ra_rna_now": {
+   "value": 0.553108,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: rna_eval_slice > bal_unres > V2 > mean",
+   "format": "pct1"
+  },
+  "ra_scaling_centred": {
+   "value": 0.2088,
+   "status": "measured",
+   "basis": "research/notebook-outputs/upload_independent_probe/summary.json: fulcher_mixed > reference-centred > balanced_accuracy",
+   "format": "pct2"
+  },
+  "ra_scaling_raw": {
+   "value": 0.2789,
+   "status": "measured",
+   "basis": "research/notebook-outputs/upload_independent_probe/summary.json: fulcher_mixed > raw profile > balanced_accuracy",
+   "format": "pct2"
+  },
+  "ra_scaling_within": {
+   "value": 0.7957,
+   "status": "measured",
+   "basis": "research/notebook-outputs/upload_independent_probe/summary.json: fulcher_mixed > within upload > balanced_accuracy",
+   "format": "pct2"
+  },
+  "ra_seed_max": {
+   "value": 0.492129,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: real_smooth_on > scope2_restr > v3 > max",
+   "format": "pct1"
+  },
+  "ra_seed_min": {
+   "value": 0.202085,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: real_smooth_on > scope2_restr > v3 > min",
+   "format": "pct1"
+  },
+  "ra_single_before": {
+   "value": 0.181286,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: rna_eval_slice > single_class > v3 > mean",
+   "format": "pct1"
+  },
+  "ra_single_now": {
+   "value": 0.358335,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb1d/nb1d_summary.json: rna_eval_slice > single_class > V2 > mean",
+   "format": "pct1"
+  },
+  "ra_smooth_drop_off": {
+   "value": 0.0635,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3b/selection.json: calibration_suite > v4 s=0.0 > largest_scenario_drop",
+   "format": "pp"
+  },
+  "ra_smooth_single_before": {
+   "value": 0.3374,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3b/selection.json: calibration_suite > v3.1 > by_group > single",
+   "format": "pct1"
+  },
+  "ra_smooth_single_half": {
+   "value": 0.3165,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3b/selection.json: calibration_suite > v4 s=0.5 > by_group > single",
+   "format": "pct1"
+  },
+  "ra_smooth_single_off": {
+   "value": 0.2739,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v4_phase3b/selection.json: calibration_suite > v4 s=0.0 > by_group > single",
+   "format": "pct1"
+  },
+  "ra_weight_candidates": {
+   "value": 15,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_pretest/candidates.csv: rows",
+   "format": "count"
+  },
+  "ra_weight_eligible": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_pretest/selection.json: eligible",
+   "format": "count"
+  },
+  "ra_weight_stable": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_pretest/selection.json: stable",
+   "format": "count"
+  },
+  "ref_cd8": {
+   "value": 4572,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_cells": {
+   "value": 85233,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_classes": {
+   "value": 22,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_donors": {
+   "value": 9,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells, donors from the cell names",
+   "format": "count"
+  },
+  "ref_groups": {
+   "value": 9,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json: hierarchy",
+   "format": "count"
+  },
+  "ref_lineages": {
+   "value": 5,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json: hierarchy",
+   "format": "count"
+  },
+  "ref_macrophage": {
+   "value": 1228,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_mdc": {
+   "value": 1,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_neutrophil_share": {
+   "value": 0.377764,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "pct1"
+  },
+  "ref_neutrophils": {
+   "value": 32198,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_pdc": {
+   "value": 29,
+   "status": "measured",
+   "basis": "service/model/runtime/reference_metadata.csv: the served reference's cells",
+   "format": "count"
+  },
+  "ref_reference_cells_spec": {
+   "value": 85233,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json: reference > n_cells",
+   "format": "count"
+  },
+  "single_alone_correct_B": {
+   "value": 0.0625,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > alone > B > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_alone_correct_CD4T": {
+   "value": 0.5431,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > alone > CD4T > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_alone_correct_NK": {
+   "value": 0.4394,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > alone > NK > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_alone_correct_monocyte": {
+   "value": 0.3704,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > alone > monocyte > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_mixed_correct_B": {
+   "value": 0.9885,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > mixed > B > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_mixed_correct_CD4T": {
+   "value": 0.9336,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > mixed > CD4T > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_mixed_correct_NK": {
+   "value": 0.9928,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > mixed > NK > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_mixed_correct_monocyte": {
+   "value": 1.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > mixed > monocyte > correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "single_pair_recall_CD4T": {
+   "value": 0.2825,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > paired > CD4T+CD8T > CD4T > recall_pct",
+   "format": "pct1"
+  },
+  "single_pair_recall_CD8T": {
+   "value": 0.2155,
+   "status": "measured",
+   "basis": "research/notebook-outputs/single_type_uploads/summary.json: v4.1 > paired > CD4T+CD8T > CD8T > recall_pct",
+   "format": "pct1"
+  },
+  "so_agreement_fulcher2026": {
+   "value": 0.4227,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > fulcher2026 > upload_agreement",
+   "format": "fixed2"
+  },
+  "so_agreement_furtwangler2025": {
+   "value": 0.178,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > furtwangler2025 > upload_agreement",
+   "format": "fixed2"
+  },
+  "so_agreement_khoury": {
+   "value": 0.4967,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: upload_agreement",
+   "format": "fixed2"
+  },
+  "so_agreement_pbmc240": {
+   "value": 0.3671,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > pbmc240 > upload_agreement",
+   "format": "fixed2"
+  },
+  "so_agreement_scope2": {
+   "value": 0.1711,
+   "status": "measured",
+   "basis": "research/benchmark/v41_dev_gate.json: datasets > scope2 > upload_agreement",
+   "format": "fixed2"
+  },
+  "so_fulcher_gain": {
+   "value": 0.111129,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv: Fulcher 2026",
+   "format": "points"
+  },
+  "so_fulcher_gain_hi": {
+   "value": 0.140442,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv: Fulcher 2026, ci_hi",
+   "format": "points"
+  },
+  "so_fulcher_gain_lo": {
+   "value": 0.084793,
+   "status": "measured",
+   "basis": "research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv: Fulcher 2026, ci_lo",
+   "format": "points"
+  },
+  "so_fulcher_ncv_recall_DC_without": {
+   "value": 0.0556,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v3.1 > recall_DC",
+   "format": "pct1"
+  },
+  "so_fulcher_ncv_recall_NK_without": {
+   "value": 0.6067,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v3.1 > recall_NK",
+   "format": "pct1"
+  },
+  "so_fulcher_without": {
+   "value": 0.5794,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/development.json: fulcher2026 > v3.1 > balanced_accuracy_6_types",
+   "format": "pct2"
+  },
+  "so_khoury_gain": {
+   "value": 0.055871,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: diff_bal_acc_pct where comparison v4.1 vs v3.1",
+   "format": "points"
+  },
+  "so_khoury_gain_hi": {
+   "value": 0.070697,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: ci_hi where comparison v4.1 vs v3.1",
+   "format": "points"
+  },
+  "so_khoury_gain_lo": {
+   "value": 0.039922,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv: ci_lo where comparison v4.1 vs v3.1",
+   "format": "points"
+  },
+  "so_khoury_nk_without": {
+   "value": 0.29,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v3.1 > recall_NK_pct",
+   "format": "pct1"
+  },
+  "so_khoury_without": {
+   "value": 0.5693,
+   "status": "measured",
+   "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v3.1 > balanced_accuracy_pct",
+   "format": "pct2"
+  },
+  "suite_best_guess_per_upload_balanced": {
+   "value": 0.6497,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > best_guess_per_upload_balanced",
+   "format": "pct2"
+  },
+  "suite_cells": {
+   "value": 64779,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > cells",
+   "format": "count"
+  },
+  "suite_checks": {
+   "value": 8,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: checks",
+   "format": "count"
+  },
+  "suite_checks_passed": {
+   "value": 8,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: checks passed",
+   "format": "count"
+  },
+  "suite_committed": {
+   "value": 0.8583,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > committed",
+   "format": "pct2"
+  },
+  "suite_correct_when_committed": {
+   "value": 0.9628,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > correct_when_committed",
+   "format": "pct2"
+  },
+  "suite_coverage": {
+   "value": 0.8721,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > coverage",
+   "format": "pct2"
+  },
+  "suite_false_abstention": {
+   "value": 0.0048,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > false_abstention",
+   "format": "pct2"
+  },
+  "suite_level_abstain": {
+   "value": 0.1417,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > levels > abstain",
+   "format": "pct1"
+  },
+  "suite_level_class": {
+   "value": 0.1817,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > levels > class",
+   "format": "pct1"
+  },
+  "suite_level_group": {
+   "value": 0.1589,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > levels > group",
+   "format": "pct1"
+  },
+  "suite_level_lineage": {
+   "value": 0.5177,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v4.1 > levels > lineage",
+   "format": "pct1"
+  },
+  "suite_lineage_best_guess_per_upload_balanced": {
+   "value": 0.5988,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > lineage > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_lineage_cells": {
+   "value": 8487,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > lineage > cells",
+   "format": "count"
+  },
+  "suite_lineage_committed": {
+   "value": 0.8803,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > lineage > committed",
+   "format": "pct1"
+  },
+  "suite_lineage_correct_when_committed": {
+   "value": 0.9799,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > lineage > correct_when_committed",
+   "format": "pct1"
+  },
+  "suite_lineage_coverage": {
+   "value": 0.9208,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > lineage > coverage",
+   "format": "pct1"
+  },
+  "suite_lineage_term_used": {
+   "value": 0.382,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: correlation_term_used_pct_of_uploads > lineage",
+   "format": "pct1"
+  },
+  "suite_lineage_without": {
+   "value": 0.5816,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v3.1 > lineage > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_mixed_best_guess_per_upload_balanced": {
+   "value": 0.7746,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > mixed > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_mixed_cells": {
+   "value": 13912,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > mixed > cells",
+   "format": "count"
+  },
+  "suite_mixed_committed": {
+   "value": 0.9174,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > mixed > committed",
+   "format": "pct1"
+  },
+  "suite_mixed_correct_when_committed": {
+   "value": 0.9884,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > mixed > correct_when_committed",
+   "format": "pct1"
+  },
+  "suite_mixed_coverage": {
+   "value": 0.9568,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > mixed > coverage",
+   "format": "pct1"
+  },
+  "suite_mixed_term_used": {
+   "value": 0.971,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: correlation_term_used_pct_of_uploads > mixed",
+   "format": "pct1"
+  },
+  "suite_mixed_without": {
+   "value": 0.7034,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v3.1 > mixed > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_narrow_best_guess_per_upload_balanced": {
+   "value": 0.6425,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > narrow > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_narrow_cells": {
+   "value": 16240,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > narrow > cells",
+   "format": "count"
+  },
+  "suite_narrow_committed": {
+   "value": 0.8712,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > narrow > committed",
+   "format": "pct1"
+  },
+  "suite_narrow_correct_when_committed": {
+   "value": 0.9681,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > narrow > correct_when_committed",
+   "format": "pct1"
+  },
+  "suite_narrow_coverage": {
+   "value": 0.8773,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > narrow > coverage",
+   "format": "pct1"
+  },
+  "suite_narrow_term_used": {
+   "value": 0.594,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: correlation_term_used_pct_of_uploads > narrow",
+   "format": "pct1"
+  },
+  "suite_narrow_without": {
+   "value": 0.6166,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v3.1 > narrow > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_pbmc_best_guess_per_upload_balanced": {
+   "value": 0.7258,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > pbmc > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_pbmc_cells": {
+   "value": 6680,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > pbmc > cells",
+   "format": "count"
+  },
+  "suite_pbmc_committed": {
+   "value": 0.9482,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > pbmc > committed",
+   "format": "pct1"
+  },
+  "suite_pbmc_correct_when_committed": {
+   "value": 0.9954,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > pbmc > correct_when_committed",
+   "format": "pct1"
+  },
+  "suite_pbmc_coverage": {
+   "value": 0.9431,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > pbmc > coverage",
+   "format": "pct1"
+  },
+  "suite_pbmc_term_used": {
+   "value": 0.941,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: correlation_term_used_pct_of_uploads > pbmc",
+   "format": "pct1"
+  },
+  "suite_pbmc_without": {
+   "value": 0.5774,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v3.1 > pbmc > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_scope2_best_guess_per_upload_balanced": {
+   "value": 0.6979,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > scope2 > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_scope2_cells": {
+   "value": 6446,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > scope2 > cells",
+   "format": "count"
+  },
+  "suite_scope2_committed": {
+   "value": 0.8559,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > scope2 > committed",
+   "format": "pct1"
+  },
+  "suite_scope2_correct_when_committed": {
+   "value": 0.9855,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > scope2 > correct_when_committed",
+   "format": "pct1"
+  },
+  "suite_scope2_coverage": {
+   "value": 0.8863,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > scope2 > coverage",
+   "format": "pct1"
+  },
+  "suite_scope2_term_used": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: correlation_term_used_pct_of_uploads > scope2",
+   "format": "pct1"
+  },
+  "suite_scope2_without": {
+   "value": 0.6628,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v3.1 > scope2 > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_single_best_guess_per_upload_balanced": {
+   "value": 0.4107,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > single > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_single_cells": {
+   "value": 13014,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > single > cells",
+   "format": "count"
+  },
+  "suite_single_committed": {
+   "value": 0.7196,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > single > committed",
+   "format": "pct1"
+  },
+  "suite_single_correct_when_committed": {
+   "value": 0.871,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > single > correct_when_committed",
+   "format": "pct1"
+  },
+  "suite_single_coverage": {
+   "value": 0.6996,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v4.1 > single > coverage",
+   "format": "pct1"
+  },
+  "suite_single_term_used": {
+   "value": 0.114,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: correlation_term_used_pct_of_uploads > single",
+   "format": "pct1"
+  },
+  "suite_single_without": {
+   "value": 0.4037,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: by_scenario > v3.1 > single > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "suite_uploads": {
+   "value": 240,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/eval_uploads.csv: rows",
+   "format": "count"
+  },
+  "suite_without_best_guess": {
+   "value": 0.6057,
+   "status": "measured",
+   "basis": "research/notebook-outputs/v41_phase3/summary.json: result > v3.1 > best_guess_per_upload_balanced",
+   "format": "pct2"
+  },
+  "temp_max": {
+   "value": 0.1535,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json: assignment > temperature",
+   "format": "fixed3"
+  },
+  "temp_min": {
+   "value": 0.1406,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json: assignment > temperature",
+   "format": "fixed3"
+  },
+  "wf_agreement_threshold": {
+   "value": 0.4,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json",
+   "format": "percent"
+  },
+  "wf_classes": {
+   "value": 22,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_correlation_temperature": {
+   "value": 0.05,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json",
+   "format": "plain"
+  },
+  "wf_floor": {
+   "value": 200,
+   "status": "measured",
+   "basis": "service/config.py, MIN_OBSERVED_GENES (provisional)",
+   "format": "count"
+  },
+  "wf_genes": {
+   "value": 9002,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_hidden1": {
+   "value": 1024,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_hidden2": {
+   "value": 512,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_input_width": {
+   "value": 19006,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_latent": {
+   "value": 128,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_members": {
+   "value": 5,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_missing_share": {
+   "value": 0.6278,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "percent"
+  },
+  "wf_modules": {
+   "value": 501,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_ood_share_above": {
+   "value": 0.99,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json, ood.fit",
+   "format": "percent"
+  },
+  "wf_ood_threshold": {
+   "value": 0.779,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json",
+   "format": "fixed3"
+  },
+  "wf_parameters": {
+   "value": 20055296,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_recipe_batch": {
+   "value": 512,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "count"
+  },
+  "wf_recipe_contrastive_temperature": {
+   "value": 0.1,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "plain"
+  },
+  "wf_recipe_coverage_high": {
+   "value": 0.6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "percent"
+  },
+  "wf_recipe_coverage_low": {
+   "value": 0.15,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "percent"
+  },
+  "wf_recipe_dropout": {
+   "value": 0.1,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "plain"
+  },
+  "wf_recipe_epochs": {
+   "value": 60,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "count"
+  },
+  "wf_recipe_learning_rate": {
+   "value": 0.001,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "plain"
+  },
+  "wf_recipe_margin": {
+   "value": 0.2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "plain"
+  },
+  "wf_recipe_natural_share": {
+   "value": 0.3,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "percent"
+  },
+  "wf_recipe_patience": {
+   "value": 12,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "count"
+  },
+  "wf_recipe_validation_coverage": {
+   "value": 0.35,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "percent"
+  },
+  "wf_recipe_weight_decay": {
+   "value": 0.0001,
+   "status": "measured",
+   "basis": "research/notebook-outputs/nb2/nb1b_core.py, train_variant's defaults; research/notebooks/v5_train.py's arguments",
+   "format": "plain"
+  },
+  "wf_rna_cells": {
+   "value": 85233,
+   "status": "measured",
+   "basis": "web/data/atlas_manifest.json",
+   "format": "count"
+  },
+  "wf_scale_threshold": {
+   "value": 50.0,
+   "status": "measured",
+   "basis": "service/config.py, LINEAR_SCALE_MEDIAN_THRESHOLD",
+   "format": "plain"
+  },
+  "wf_service_cpu": {
+   "value": 2,
+   "status": "measured",
+   "basis": "deploy/huggingface/PUBLISH.md",
+   "format": "count"
+  },
+  "wf_service_max_cells": {
+   "value": 2000,
+   "status": "measured",
+   "basis": "service/config.py",
+   "format": "count"
+  },
+  "wf_service_max_instances": {
+   "value": 1,
+   "status": "measured",
+   "basis": "deploy/huggingface/PUBLISH.md",
+   "format": "count"
+  },
+  "wf_service_max_mb": {
+   "value": 200,
+   "status": "measured",
+   "basis": "service/config.py",
+   "format": "count"
+  },
+  "wf_service_timeout_seconds": {
+   "value": 300,
+   "status": "measured",
+   "basis": "deploy/huggingface/PUBLISH.md",
+   "format": "count"
+  },
+  "wf_smoothed_share": {
+   "value": 0.5,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json",
+   "format": "percent"
+  },
+  "wf_smoothing_alpha": {
+   "value": 0.6,
+   "status": "measured",
+   "basis": "service/config.py, SMOOTHING_ALPHA",
+   "format": "percent"
+  },
+  "wf_smoothing_k": {
+   "value": 15,
+   "status": "measured",
+   "basis": "service/config.py, SMOOTHING_K",
+   "format": "count"
+  },
+  "wf_smoothing_own": {
+   "value": 0.4,
+   "status": "measured",
+   "basis": "service/config.py, 1 - SMOOTHING_ALPHA",
+   "format": "percent"
+  },
+  "wf_smoothing_pca": {
+   "value": 50,
+   "status": "measured",
+   "basis": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+   "format": "count"
+  },
+  "wf_target_coverage": {
+   "value": 0.9,
+   "status": "measured",
+   "basis": "service/model/v3_1/nb2_spec_v31.json",
+   "format": "percent"
+  },
+  "wf_weight_flat": {
+   "value": 0.7,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json",
+   "format": "plain"
+  },
+  "wf_weight_used": {
+   "value": 0.5,
+   "status": "measured",
+   "basis": "service/model/v4_1/spec_v41.json",
+   "format": "plain"
+  }
+ }
+}

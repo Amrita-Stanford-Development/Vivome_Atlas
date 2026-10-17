@@ -1,10 +1,11 @@
 # Design system
 
-Every page in `web/` is built from one imagined world, so the landing page,
-the dashboard and the tools read as one product. This page is the reference;
-the tokens and component classes live in `web/css/page.css`. The original
-concept (intro, landing, scroll story, dashboard, tools) is
-[docs/webpage_concept.md](../webpage_concept.md).
+Every page in `web/` is built from one imagined world, so the landing page
+and the tools read as one product. This page is the reference; the tokens
+and component classes live in `web/css/page.css`. The original concept
+(intro, landing, scroll story, dashboard, tools) is
+[docs/webpage_concept.md](../webpage_concept.md); the site has no dashboard
+page since 2026-10-17, and the landing leads straight to the tools.
 
 ## The world
 
@@ -129,16 +130,9 @@ once per heading at most, always on the word that carries the meaning.
 `web/index.html` says plainly what VivOME is and what a visitor can do with
 it.
 
-- **The hero.** A large liquid-glass title panel, with large 3D objects
-  from `web/js/biocells.js` in front of it (`web/js/hero.js`): a
-  neutrophil, a monocyte, a lymphocyte, red cells, DNA, chromatin, a coiled
-  thread, a long cell and platelets, framing the edges.
-  - When the page opens they ease in from beyond the edges, one after
-    another, over about three seconds, while the panel's lines rise in.
-  - The hero is a sticky stage. As it scrolls away, each object flies
-    outward along the line from the centre through its place, until all
-    have left; then the hero stops drawing.
-  - No mouse parallax. The panel works without WebGL.
+- **The hero.** A large liquid-glass title panel filling the first screen,
+  over the living water; its lines rise in when the page opens. Nothing is
+  drawn in front of it.
 - **Seven sections**, each a header (eyebrow, display headline, subhead) over
   a grid of cards: white sheets for reading, liquid glass for stats, steps
   and callouts.
@@ -165,11 +159,9 @@ space where the two modalities mix.
   `web/tests/landing.test.js` fails if a slot names a fact that doesn't
   exist.
 - **Motion.** `web/js/story.js` runs it: an `IntersectionObserver` lets each
-  block rise in once, and the hero's progress comes from its own rect. The
-  maths is pure, in `web/js/motion.js`. The text is real HTML; its hidden
-  start states apply only under `html.js`.
-- **Phones** get fewer, smaller hero objects and one column of cards.
-  **Reduced motion** gets a still hero and all the text at once.
+  block rise in once. The count-up maths is pure, in `web/js/motion.js`. The
+  text is real HTML; its hidden start states apply only under `html.js`.
+- **Reduced motion** gets all the text at once.
 
 ## The Workflow page
 
@@ -181,12 +173,21 @@ encodings: cell types take the atlas viewer's palette, RNA and protein their
 reserved colours, z-scores a blue to ochre ramp that avoids every reserved
 colour. Mechanism pictures with no data say "illustration".
 
+## The Manuscript page
+
+`web/manuscript.html` is for researchers writing the paper, not for
+beginners: an evidence bank in the journal's sections, one claim per line,
+its numbers as slots, its source in code type and a caveat bead
+(development, in-sample, post-hoc, internal held-out, simulated RNA,
+pending). Earlier designs appear only as the problem a part of the served
+model fixes ([manuscript.md](manuscript.md)).
+
 ## Shared chrome
 
-The header (wordmark, the tool links, Dashboard) and the footer are static
+The header (the wordmark, then the tool links) and the footer are static
 markup copied into each page, so they work without JS and don't shift the
 layout. `web/tests/chrome.test.js` pins every copy byte-identical to
-`web/home.html`'s, apart from the one `aria-current="page"` marker. Change
+`web/index.html`'s, apart from the one `aria-current="page"` marker. Change
 one, change all, and add a new page to the test's `PAGES` list.
 
 ## Where new results land
@@ -196,9 +197,10 @@ when a release does.
 
 | Output | Lands in | Shown by |
 |---|---|---|
-| The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | dashboard release card, versions model card |
-| The next release while it is in progress | `manifest.next_reference` | dashboard "Next release" card (hidden while null) |
+| The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | versions model card |
+| The next release while it is in progress | `manifest.next_reference` | no page since the Dashboard was removed |
 | Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest |
-| Benchmark rows | `manifest.benchmark` | benchmark page, dashboard status bead |
-| Announcements | `web/data/whats_new.json` (text only, no metrics) | dashboard "What's new" |
+| Benchmark rows | `manifest.benchmark` | the Manuscript page's benchmark tables |
+| Announcements | `web/data/whats_new.json` (text only, no metrics) | no page since the Dashboard was removed |
 | A served model's trace, the gene space, the training recipe, the evaluation records | `web/data/workflow.json` (`scripts/build_workflow.py`, built with the manifest) | the Workflow page ([workflow.md](workflow.md)) |
+| The served model's evidence for a paper: development, post-hoc and held-out results, diagnoses, designs not kept | `web/data/manuscript.json` (`scripts/build_manuscript.py`, built with the manifest) | the Manuscript page ([manuscript.md](manuscript.md)) |

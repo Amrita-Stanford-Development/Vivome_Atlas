@@ -60,6 +60,7 @@ ALLOWED_MISSING = (
     "Atlas/Data/",
     "benchmark/PROTOCOL.md",
     "web/plots/",  # the original-model plots, removed 2026-09-30
+    "web/home.html",  # the Dashboard, removed 2026-10-17; named in research/todo.md's changelog
     "research/benchmark/khoury2026/",  # Khoury's tables, written once, at the final evaluation
     "research/benchmark/baselines_corrected/",  # written by the corrected-baselines queue
     "research/benchmark/khoury2026_posthoc/",  # (research/benchmark/baseline-corrections.md)

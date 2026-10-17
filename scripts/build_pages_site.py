@@ -26,6 +26,13 @@ PROJECT = "vivome-atlas"
 MAX_BYTES = 25 * 1024 * 1024  # Cloudflare Pages' per-file limit
 SKIP_DIRS, SKIP_FILES = ("tests",), ("README.md",)  # repository material, not the site
 UNUSED = ("data/atlas_RNA_lat128.parquet",)  # no page loads it
+# Pages that were renamed, so old links keep working (Pages' _redirects file).
+REDIRECTS = (
+    ("/benchmark", "/manuscript"),  # the Benchmark page became the Manuscript page (2026-10-17)
+    ("/benchmark.html", "/manuscript"),
+    ("/home", "/"),  # the Dashboard was removed (2026-10-17); its links go to the landing page
+    ("/home.html", "/"),
+)
 
 NOT_FOUND = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Not found · VivOME Atlas</title>
@@ -71,6 +78,7 @@ def build(bucket: str | None) -> None:
     # Without a 404.html, Pages answers any missing path with index.html (a
     # single-page-app fallback), so a missing data file would arrive as HTML.
     (site / "404.html").write_text(NOT_FOUND)
+    (site / "_redirects").write_bytes("".join(f"{old} {new} 301\n" for old, new in REDIRECTS).encode())
     (DIST / "large_files.json").write_text(json.dumps(
         [{"path": rel, "bytes": (WEB / rel).stat().st_size} for rel in large], indent=2) + "\n")
     toml = [f'name = "{PROJECT}"', 'pages_build_output_dir = "./site"', 'compatibility_date = "2026-10-01"']

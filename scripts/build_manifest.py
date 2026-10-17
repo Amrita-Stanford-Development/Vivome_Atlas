@@ -964,8 +964,13 @@ def main() -> None:
     print(f"  benchmark: {', '.join(f'''{d['name']} ({len(d['rows'])} rows)''' for d in manifest['benchmark']['datasets'])}")
     # The Workflow page's companion file, built for this same release.
     import build_workflow
-    size = build_workflow.write(build_workflow.build(manifest))
+    workflow = build_workflow.build(manifest)
+    size = build_workflow.write(workflow)
     print(f"Wrote {build_workflow.rel(build_workflow.OUTPUT)} ({size:,} bytes)")
+    # The Manuscript page's records, after the workflow data whose records it cites.
+    import build_manuscript
+    size = build_manuscript.write(build_manuscript.build(manifest, workflow))
+    print(f"Wrote {build_workflow.rel(build_manuscript.OUTPUT)} ({size:,} bytes)")
 
 
 if __name__ == "__main__":

@@ -27,6 +27,11 @@ class PlanTests(unittest.TestCase):
         self.assertTrue(all((bps.WEB / rel).stat().st_size <= bps.MAX_BYTES for rel in static))
         self.assertLess(len(static), 20_000)  # Pages' file limit on the free plan
 
+    def test_each_redirect_leaves_a_page_that_is_gone_for_one_that_exists(self):
+        for old, new in bps.REDIRECTS:
+            self.assertFalse((bps.WEB / f"{old.strip('/').removesuffix('.html')}.html").exists(), old)
+            self.assertTrue((bps.WEB / f"{new.strip('/') or 'index'}.html").exists(), new)
+
 
 if __name__ == "__main__":
     unittest.main()

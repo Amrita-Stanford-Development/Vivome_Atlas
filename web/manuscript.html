@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuscript · VivOME</title>
+    <meta name="description" content="The evidence for a journal manuscript on the served VivOME model: methods and why each part exists, the benchmark, the internal held-out test, the failure modes and the limits.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <style>
+        .page { max-width: 1060px; }
+        .page > section { scroll-margin-top: 96px; }
+        .sheet h3 { margin: 30px 0 10px; scroll-margin-top: 96px; }
+        .sheet h2 + h3 { margin-top: 8px; }
+        .sheet > p { font-size: 15px; margin-bottom: 12px; }
+        .ms-status { font-size: 14px; color: var(--ink-faint); margin-bottom: 4px; }
+        .ms-contents ol { padding-left: 22px; columns: 2 260px; column-gap: 32px; font-size: 15px; }
+        .ms-contents li { margin-bottom: 4px; break-inside: avoid; }
+        .ms-caveats { list-style: none; padding-left: 0 !important; font-size: 14px; }
+        .ms-caveats li { margin-bottom: 6px; }
+        .evidence { list-style: none; padding-left: 0 !important; margin-bottom: 8px; }
+        .evidence > li {
+            max-width: none;
+            font-size: 15px;
+            padding: 6px 0 6px 14px;
+            margin-bottom: 10px;
+            border-left: 3px solid rgba(0, 102, 163, 0.18);
+        }
+        .evidence > li > ul { padding-left: 20px; margin: 4px 0 0; }
+        .evidence > li > ul li { max-width: none; margin-bottom: 2px; }
+        .ev-src { display: block; margin-top: 4px; font-size: 12.5px; color: var(--ink-faint); line-height: 1.5; }
+        .ev-src code { font-size: 0.95em; }
+        .caveat { margin-left: 4px; vertical-align: 1px; font-size: 11.5px; }
+        [data-ms], [data-fact] { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+        .ms-table { font-size: 13.5px; }
+        .ms-table th, .ms-table td { padding-right: 14px; }
+        .ms-table td { line-height: 1.45; }
+        .ms-table td:first-child { color: var(--ink); font-weight: 500; min-width: 150px; }
+        .ms-table.wide td { min-width: 150px; }
+        .ms-table .num { text-align: right; white-space: nowrap; }
+        .ms-claims { padding-left: 22px; font-size: 15px; }
+        .ms-claims li { margin-bottom: 6px; }
+        #benchmark-mount h3 { margin-top: 24px; }
+        @media (max-width: 720px) {
+            .ms-contents ol { columns: 1; }
+            .evidence > li { padding-left: 10px; font-size: 14.5px; }
+        }
+    </style>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="project.html">Project</a>
+                <a href="workflow.html">Workflow</a>
+                <a href="manuscript.html" aria-current="page">Manuscript</a>
+                <a href="versions.html">Versions</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="page">
+        <h1 class="page-title">Manuscript</h1>
+        <p class="lede">Everything in this project a journal paper on the served model can use, sorted
+            under the sections of the paper. Each line is one claim, its numbers, where they come
+            from and how far they can be trusted.</p>
+        <div id="ms-error"></div>
+
+        <section class="sheet" id="front">
+            <p class="ms-status">Built for atlas <span data-fact="atlas_version">&nbsp;</span>, model
+                <span data-fact="model_name">&nbsp;</span>. Layout: Molecular &amp; Cellular Proteomics,
+                Technological Innovation and Resources. This is an evidence bank, not the paper's
+                prose.</p>
+            <h2>Contents</h2>
+            <nav class="ms-contents" aria-label="Sections">
+                <ol>
+                    <li><a href="#front-matter">Title, highlights, in brief, abstract</a></li>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#procedures">Experimental procedures</a></li>
+                    <li><a href="#rationale">Why each part is there</a></li>
+                    <li><a href="#results">Results</a></li>
+                    <li><a href="#benchmark">The benchmark tables</a></li>
+                    <li><a href="#alternatives">Tried and not adopted</a></li>
+                    <li><a href="#discussion">Discussion</a></li>
+                    <li><a href="#availability">Data and code availability</a></li>
+                    <li><a href="#supplement">Supplemental data plan</a></li>
+                    <li><a href="#figures">Figures and tables plan</a></li>
+                    <li><a href="#open-items">Before submission</a></li>
+                    <li><a href="#reviewers">Questions a reviewer will ask</a></li>
+                </ol>
+            </nav>
+            <h3>How to read a line</h3>
+            <p>The source under each claim is the committed file its numbers come from; hover a
+                number to see the exact field. The tags say what kind of evidence it is:</p>
+            <ul class="ms-caveats">
+                <li><span class="bead caveat" data-caveat="development">development</span> used while the model was built</li>
+                <li><span class="bead caveat" data-caveat="in-sample">in-sample</span> the model's one tuned weight was chosen on these data</li>
+                <li><span class="bead caveat" data-caveat="post-hoc">post-hoc</span> the labels had been read at an earlier scoring</li>
+                <li><span class="bead caveat" data-caveat="internal held-out">internal held-out</span> locked before development and scored once; never to be called external</li>
+                <li><span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span> RNA cells made to look like protein uploads, not protein</li>
+                <li><span class="bead bead-open caveat" data-caveat="pending">pending</span> not measured yet</li>
+            </ul>
+            <p>Earlier designs appear only as the problem a part of the served model fixes. The
+                served model's answers without its second opinion are its own answer path, so a
+                comparison with them is an ablation.</p>
+        </section>
+
+        <section class="sheet" id="front-matter">
+            <h2>Title, highlights, in brief, abstract</h2>
+            <h3>Working titles</h3>
+            <ul class="ms-claims">
+                <li>Cell-type labels for single-cell proteomics from an RNA atlas, with conformal answers and reasons to abstain</li>
+                <li>Transferring blood cell-type labels from RNA to mass-spectrometry single cells, honestly</li>
+                <li>VivOME: an RNA-trained label-transfer service for single-cell proteomics that states how sure it is</li>
+            </ul>
+            <h3>Highlights (candidates, at most 85 characters each)</h3>
+            <ul class="ms-claims">
+                <li>An encoder trained on RNA alone labels cells in single-cell proteomics data</li>
+                <li>Each cell gets an answer at the finest level the evidence supports, or a reason</li>
+                <li>A correlation second opinion is used only where an upload agrees with the encoder</li>
+                <li>A corrected, pre-registered benchmark against seven methods, plus a locked test</li>
+            </ul>
+            <h3>In brief</h3>
+            <ul class="evidence">
+                <li>The model is trained on <span data-ms="ref_cells"></span> blood RNA cells in
+                    <span data-ms="ref_classes"></span> types and reads protein uploads with no protein labels in training.
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code></span></li>
+                <li>On Fulcher 2026 its best guess reaches <span data-ms="fulcher_ba"></span> balanced accuracy over six
+                    types; on Khoury 2026, <span data-ms="khoury_ba"></span>, level with PCA and nearest neighbours
+                    (<span data-ms="bm_khoury_vs_pca"></span> points, CI <span data-ms="bm_khoury_vs_pca_lo"></span> to
+                    <span data-ms="bm_khoury_vs_pca_hi"></span>).
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/development.json</code>, <code>research/benchmark/khoury2026_posthoc_v41_check/</code>
+                    <span class="bead caveat" data-caveat="in-sample">in-sample</span><span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li>On Fulcher it commits to an answer for <span data-ms="committed_fulcher"></span> of cells, and
+                    <span data-ms="correct_fulcher"></span> of those answers are right at the level stated.
+                    <span class="ev-src"><code>research/benchmark/v41_development/confident.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>On a locked internal test of <span data-ms="ho_sets"></span> sets it passed
+                    <span data-ms="ho_pass"></span>, failed <span data-ms="ho_fail"></span>, and
+                    <span data-ms="ho_void"></span> were void.
+                    <span class="ev-src"><code>research/benchmark/heldout/</code>
+                    <span class="bead caveat" data-caveat="internal held-out">internal held-out</span></span></li>
+                <li>An external test on sorted CD4 and CD8 T cells waits for data:
+                    <span data-ms="open_sorted_test"></span>.
+                    <span class="ev-src"><code>research/benchmark/protocol-sorted-cd4cd8.md</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+            </ul>
+            <h3>Abstract, claim by claim</h3>
+            <ul class="evidence">
+                <li><strong>Problem.</strong> Single-cell mass-spectrometry proteomics rarely comes with
+                    independent cell-type labels, while RNA atlases do; a search found no public blood
+                    protein set whose labels do not come from clustering or from RNA.
+                    <span class="ev-src"><code>research/benchmark/side-tests.md</code></span></li>
+                <li><strong>Approach.</strong> A five-member encoder trained only on Tabula Sapiens blood RNA,
+                    applied to each upload after gene-wise scaling within it; per-class conformal sets give
+                    an answer at type, family or lineage level, or an abstention with its reason; a
+                    correlation to RNA type means is added to the best guess when the upload agrees with
+                    the encoder.
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code>, <code>docs/service/projection-api.md</code></span></li>
+                <li><strong>Results.</strong> Development, post-hoc and internal held-out figures above,
+                    each with its caveat; level with the best correctly scaled simple baselines out of
+                    sample, ahead of the integration tools.
+                    <span class="ev-src"><code>research/benchmark/baseline-corrections.md</code></span></li>
+                <li><strong>Availability.</strong> An online service that takes DIA-NN, FragPipe and plain
+                    matrices, with numbered, frozen releases.
+                    <span class="ev-src"><code>web/project.html</code>, <code>web/versions.html</code></span></li>
+            </ul>
+        </section>
+
+        <section class="sheet" id="introduction">
+            <h2>Introduction</h2>
+            <h3>The problem, as this project's data show it</h3>
+            <ul class="evidence">
+                <li>Public blood single-cell proteomics labels are not independent of the data: Fulcher
+                    2026's come from RNA label transfer plus cluster refinement, Khoury 2026's from clustering
+                    the same protein matrix, PBMC240's from weak clusters.
+                    <span class="ev-src"><code>research/benchmark/protocol-fulcher2026.md</code>, <code>research/benchmark/protocol-khoury2026.md</code>, <code>research/benchmark/side-tests.md</code></span></li>
+                <li>Each cell measures a small part of the gene space: a median of
+                    <span data-ms="ds_pbmc240_proteins_per_cell"></span> proteins per cell in PBMC240 and
+                    <span data-ms="ds_fulcher2026_proteins_per_cell"></span> in Fulcher, against
+                    <span data-ms="gs_size"></span> genes the model reads; <span data-ms="wf_missing_share"></span> of
+                    PBMC240's matrix is missing.
+                    <span class="ev-src"><code>research/notebook-outputs/astral_abstention/summary.json</code>, <code>service/model/evidence/workflow/pbmc240_trace_v41.json.gz</code></span></li>
+                <li>Canonical lineage markers are rarely measured: of <span data-ms="markers_checked"></span>
+                    markers audited, <span data-ms="markers_absent"></span> are outside the gene space, and none of
+                    those is detected in more than <span data-ms="markers_absent_max"></span> of cells in any of
+                    <span data-ms="markers_datasets"></span> datasets. Gains must come from patterns over abundant proteins.
+                    <span class="ev-src"><code>research/notebook-outputs/marker_audit/detection.csv</code></span></li>
+                <li>Integration tools assume things these data break: a review of this project's first
+                    benchmark found several baselines handicapped by the setup (a shared-population
+                    assumption, a likelihood that cannot fit z-scores, degenerate CCA settings, rescaled
+                    inputs), corrected from each tool's own documentation.
+                    <span class="ev-src"><code>research/benchmark/baseline-corrections.md</code></span></li>
+                <li>A user needs a label, the level it can be trusted at, and a reason when there is none,
+                    from a service that needs no installation.
+                    <span class="ev-src"><code>docs/service/projection-api.md</code></span></li>
+            </ul>
+            <h3>Contributions</h3>
+            <ol class="ms-claims">
+                <li>An encoder trained on RNA only that transfers blood cell-type labels to mass-spectrometry single cells.</li>
+                <li>An answer layer: per-class conformal sets, answers at type, family or lineage level, and four abstention reasons.</li>
+                <li>A second opinion, correlation to RNA type means over each cell's measured genes, used only where an upload agrees with the encoder.</li>
+                <li>A benchmark under one protocol with corrected baselines, pre-registered checks and a locked internal test.</li>
+                <li>A versioned atlas and an online service with frozen releases.</li>
+            </ol>
+            <h3>Framing</h3>
+            <ul class="evidence">
+                <li>The claim is label transfer with honest abstention, not a shared space where the two
+                    modalities mix: the encoder keeps RNA and protein apart (see Results) yet transfers
+                    labels.
+                    <span class="ev-src"><code>research/roadmap.md</code> (revision of 2026-10-01, item 9)</span></li>
+                <li>"Zero-shot" applies to training only: protein development data helped choose the
+                    encoder's training recipe and the one fusion weight.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_pretest/selection.json</code>
+                    <span class="bead caveat" data-caveat="in-sample">in-sample</span></span></li>
+            </ul>
+            <h3>References to collect</h3>
+            <p>Tabula Sapiens; Hao 2021 (CITE-seq PBMC atlas); SCoPE2; Fulcher 2026; Khoury 2026;
+                Furtwängler 2025; Rieckmann 2017; scANVI; MaxFuse; scGLUE; Harmony; Seurat CCA transfer;
+                Mondrian (class-conditional) conformal prediction; temperature scaling; logit-adjusted
+                loss; supervised contrastive learning; DIA-NN; FragPipe; the held-out sets' papers.</p>
+        </section>
+
+        <section class="sheet" id="procedures">
+            <h2>Experimental procedures</h2>
+
+            <h3 id="reference">The RNA reference</h3>
+            <ul class="evidence">
+                <li>Tabula Sapiens blood: <span data-ms="ref_cells"></span> cells from
+                    <span data-ms="ref_donors"></span> donors, in <span data-ms="ref_classes"></span> types, labelled
+                    by the atlas's cell ontology classes.
+                    <span class="ev-src"><code>service/model/runtime/reference_metadata.csv</code>, <code>service/model/v4_1/spec_v41.json</code></span></li>
+                <li>The types sit in <span data-ms="ref_groups"></span> families and
+                    <span data-ms="ref_lineages"></span> lineages, so an answer can be a type, a family or a lineage.
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code> (hierarchy)</span></li>
+                <li>The reference is uneven: neutrophils are <span data-ms="ref_neutrophil_share"></span> of its
+                    cells (<span data-ms="ref_neutrophils"></span>), and it holds <span data-ms="ref_mdc"></span>
+                    myeloid dendritic cell and <span data-ms="ref_pdc"></span> plasmacytoid dendritic cells.
+                    <span class="ev-src"><code>service/model/runtime/reference_metadata.csv</code></span></li>
+                <li>Training uses RNA only. Every donor contributed training cells; no donor was held out.
+                    <span class="ev-src"><code>research/notebook-run-history.md</code> (entry 13)</span></li>
+            </ul>
+
+            <h3 id="gene-space">The gene space</h3>
+            <ul class="evidence">
+                <li>The union of <span data-ms="gs_sources"></span> proteomics gene lists
+                    (<span data-ms="gs_union"></span> genes), less <span data-ms="gs_ig_tcr"></span> immunoglobulin
+                    and T-cell receptor genes, gives the model's space of <span data-ms="gs_size"></span> genes.
+                    <span class="ev-src"><code>service/model/evidence/feature_space_provenance.json</code></span></li>
+            </ul>
+
+            <h3 id="processing">Reading an upload</h3>
+            <ul class="evidence">
+                <li>Formats: DIA-NN reports, FragPipe TMT-Integrator tables and plain CSV or TSV matrices,
+                    up to <span data-ms="wf_service_max_cells"></span> cells and <span data-ms="wf_service_max_mb"></span> MB.
+                    <span class="ev-src"><code>service/pipeline/alignment.py</code>, <code>service/config.py</code></span></li>
+                <li>Gene names resolve through a frozen, offline HGNC table (symbols, Ensembl and UniProt
+                    accessions); a protein group naming several genes is dropped as ambiguous.
+                    <span class="ev-src"><code>service/pipeline/gene_ids.py</code></span></li>
+                <li>A matrix with no negative values and a median observed value above
+                    <span data-ms="wf_scale_threshold"></span> is read as linear and log2-transformed.
+                    <span class="ev-src"><code>service/pipeline/alignment.py</code>, <code>service/config.py</code></span></li>
+                <li>Rows naming the same gene merge by each cell's median of their observed values.
+                    <span class="ev-src"><code>service/pipeline/alignment.py</code></span></li>
+                <li>A cell with fewer than <span data-ms="wf_floor"></span> observed genes gets no answer
+                    (too little measured). The floor was set on simulations and is provisional.
+                    <span class="ev-src"><code>service/config.py</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+                <li>Each gene is z-scored within the upload over its observed values; unobserved genes are
+                    zero, with a mask the encoder reads. No RNA statistics are applied to the upload.
+                    <span class="ev-src"><code>service/pipeline/alignment.py</code></span></li>
+                <li>Smoothing is on: a cell's values become <span data-ms="wf_smoothing_own"></span> its own plus
+                    <span data-ms="wf_smoothing_alpha"></span> its <span data-ms="wf_smoothing_k"></span> nearest
+                    neighbours', on a graph of <span data-ms="wf_smoothing_pca"></span> principal components of the
+                    z-scored upload; the mask is left as measured.
+                    <span class="ev-src"><code>service/pipeline/smoothing.py</code>, <code>service/model/v4_1/spec_v41.json</code></span></li>
+            </ul>
+
+            <h3 id="encoder">The encoder and its training</h3>
+            <ul class="evidence">
+                <li><span data-ms="wf_members"></span> members with one architecture. The input is
+                    <span data-ms="wf_input_width"></span> wide: the masked values and the mask over
+                    <span data-ms="wf_genes"></span> genes, and the mean and measured share of
+                    <span data-ms="wf_modules"></span> gene modules. Two blocks of
+                    <span data-ms="wf_hidden1"></span> and <span data-ms="wf_hidden2"></span> units lead to a
+                    <span data-ms="wf_latent"></span>-dimensional, unit-length latent;
+                    <span data-ms="wf_parameters"></span> weights per member.
+                    <span class="ev-src"><code>service/pipeline/encoder.py</code>, <code>service/model/runtime/provenance.json</code></span></li>
+                <li>Training: <span data-ms="wf_recipe_epochs"></span> epochs, batches of
+                    <span data-ms="wf_recipe_batch"></span>, learning rate <span data-ms="wf_recipe_learning_rate"></span>,
+                    weight decay <span data-ms="wf_recipe_weight_decay"></span>, early stopping after
+                    <span data-ms="wf_recipe_patience"></span> epochs without gain, dropout
+                    <span data-ms="wf_recipe_dropout"></span>.
+                    <span class="ev-src"><code>research/notebook-outputs/nb2/nb1b_core.py</code>, <code>research/notebooks/v5_train.py</code></span></li>
+                <li>Each training cell keeps between <span data-ms="wf_recipe_coverage_low"></span> and
+                    <span data-ms="wf_recipe_coverage_high"></span> of its genes at random; validation uses
+                    <span data-ms="wf_recipe_validation_coverage"></span>. <span data-ms="wf_recipe_natural_share"></span> of batches
+                    keep the reference's composition; the rest hold a few types in random proportions, like
+                    narrow uploads, and are scaled as an upload is.
+                    <span class="ev-src"><code>research/notebook-outputs/nb2/nb1b_core.py</code></span></li>
+                <li>Losses: logit-adjusted cross-entropy on natural batches, a margin supervised
+                    contrastive loss (temperature <span data-ms="wf_recipe_contrastive_temperature"></span>, margin
+                    <span data-ms="wf_recipe_margin"></span>), a hubness penalty, and agreement between two masked
+                    views of each cell.
+                    <span class="ev-src"><code>research/notebook-outputs/nb2/nb1b_core.py</code></span></li>
+                <li>Each member's probabilities are a softmax of its cosines to the type centroids over a
+                    fitted temperature (<span data-ms="temp_min"></span> to <span data-ms="temp_max"></span>); the
+                    ensemble averages the members' probabilities.
+                    <span class="ev-src"><code>service/model/v3_1/nb2_spec_v31.json</code>, <code>service/pipeline/ensemble.py</code></span></li>
+            </ul>
+
+            <h3 id="answers">The answer layer</h3>
+            <ul class="evidence">
+                <li>All <span data-ms="ref_classes"></span> types compete; restricting the label space is an
+                    opt-in request setting.
+                    <span class="ev-src"><code>service/pipeline/label_space.py</code>, <code>docs/service/projection-api.md</code></span></li>
+                <li>Per-class (Mondrian) conformal sets at α <span data-ms="alpha"></span>, a target coverage of
+                    <span data-ms="coverage_target"></span>: one threshold per type, from <span data-ms="qhat_min"></span>
+                    to <span data-ms="qhat_max"></span> (marginal <span data-ms="qhat_marginal"></span>), fitted once on
+                    labelled RNA uploads. Nothing is fitted on the user's upload.
+                    <span class="ev-src"><code>service/model/v3_1/nb2_spec_v31.json</code>, <code>service/pipeline/calibration.py</code>
+                    <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+                <li>Every non-empty set also holds the answer path's top type and the fused best guess's.
+                    <span class="ev-src"><code>service/pipeline/fusion.py</code></span></li>
+                <li>A cell whose members' mean best cosine to the reference cells is below
+                    <span data-ms="wf_ood_threshold"></span> (the 1st percentile of in-distribution simulated cells)
+                    is outside the supported region; the search over the reference is exact.
+                    <span class="ev-src"><code>service/pipeline/abstention.py</code>, <code>service/pipeline/search.py</code></span></li>
+                <li>One type in the set: a type answer. Types sharing a family: a family answer. Sharing a
+                    lineage: a lineage answer. Otherwise none. The four reasons for none: too little
+                    measured, outside the supported region, no type stands out, several types fit.
+                    <span class="ev-src"><code>service/pipeline/ensemble.py</code></span></li>
+                <li>The same upload gives the same answer: fixed thresholds, a fixed seed in smoothing and
+                    an exact search; no cells are drawn from the upload for calibration.
+                    <span class="ev-src"><code>service/pipeline/fusion.py</code>, <code>service/tests/test_pipeline_versions.py</code></span></li>
+            </ul>
+
+            <h3 id="best-guess">The best guess and its second opinion</h3>
+            <ul class="evidence">
+                <li>The reference is re-encoded with every type weighted equally, and the type means of the
+                    z-scored RNA are kept under the same statistics.
+                    <span class="ev-src"><code>service/pipeline/fusion.py</code>, <code>service/model/v4/</code></span></li>
+                <li>Second opinion: each cell's Pearson correlation to the type means over its own measured,
+                    unsmoothed genes.
+                    <span class="ev-src"><code>service/pipeline/fusion.py</code></span></li>
+                <li>Agreement: the share of an upload's cells whose top correlation names the encoder's top
+                    type. At or above <span data-ms="wf_agreement_threshold"></span>, the guess is
+                    <span data-ms="wf_weight_used"></span> encoder (its smoothed and unsmoothed views,
+                    <span data-ms="wf_smoothed_share"></span> each) plus the rest from a softmax of the
+                    correlations at temperature <span data-ms="wf_correlation_temperature"></span>.
+                    Below it, the encoder alone decides (weight <span data-ms="wf_weight_flat"></span> against a
+                    flat term).
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code></span></li>
+                <li>The encoder weight is the one setting chosen on protein data, on Fulcher 2026, under
+                    fixed rules.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_pretest/rules.json</code>, <code>research/notebook-outputs/v41_pretest/locked_rule.json</code>
+                    <span class="bead caveat" data-caveat="in-sample">in-sample</span></span></li>
+            </ul>
+
+            <h3 id="datasets">Datasets and their roles</h3>
+            <p>Roles were set on 2026-10-15: most public data is development, a fixed part was locked
+                as the internal held-out test, and the external test is sorted cells requested from
+                their authors (<code>research/benchmark/side-tests.md</code>, amendment 1).</p>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Dataset</th><th>Accession</th><th>Acquisition</th><th>Cells</th><th>Labels, and are they independent?</th><th>Role</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fulcher 2026</td><td>PXD073881 (MSV000100684)</td><td>TMT, FragPipe TMT-Integrator</td><td class="num"><span data-ms="ds_fulcher2026_cells"></span>; <span data-ms="ds_fulcher_scored"></span> scored</td><td>RNA label transfer and cluster refinement; not independent. CD4 T, CD8 T, NK, B, monocyte, DC</td><td>development; in-sample for the weight</td></tr>
+                        <tr><td>Khoury 2026</td><td>Zenodo 22649483</td><td>timsTOF, mTRAQ, DIA-NN</td><td class="num"><span data-ms="ds_khoury_cells"></span></td><td>clusters of the same protein matrix; not independent. CD4 T, CD8 T, NK, B, monocyte</td><td>post-hoc</td></tr>
+                        <tr><td>PBMC240</td><td>accession to confirm</td><td>label-free DIA, DIA-NN</td><td class="num"><span data-ms="ds_pbmc240_cells"></span>; <span data-ms="ds_pbmc240_labelled"></span> with lineage labels</td><td>weak clusters, lineage only</td><td>development</td></tr>
+                        <tr><td>SCoPE2, published</td><td>MSV000083945</td><td>TMT with carrier; matrix centred and imputed</td><td class="num"><span data-ms="ds_scope2_cells"></span></td><td>experimental design; independent. Two states of one cell line</td><td>development</td></tr>
+                        <tr><td>SCoPE2, reprocessed</td><td>MSV000084660</td><td>the same runs, missing values kept</td><td class="num"><span data-ms="ds_scope2_reprocessed_cells"></span></td><td>experimental design</td><td>development</td></tr>
+                        <tr><td>Furtwängler 2025</td><td>Zenodo 15554000</td><td>bone-marrow CD34+ cells</td><td class="num"><span data-ms="ds_furtwangler2025_cells"></span></td><td>sorting gates; outside the reference</td><td>development (out of reference)</td></tr>
+                        <tr><td>Hao 2021, donors P5 to P8</td><td>GSE164378</td><td>CITE-seq RNA, masked like protein uploads</td><td class="num"><span data-ms="ds_hao_uploads"></span> uploads, <span data-ms="ds_hao_donors"></span> donors</td><td>RNA and surface antibodies; independent of this model</td><td>internal held-out</td></tr>
+                        <tr><td>PXD043355</td><td>PXD043355</td><td>label-free</td><td class="num"><span data-ms="ds_pxd043355_positive"></span> Jurkat, <span data-ms="ds_pxd043355_negative"></span> HeLa</td><td>cell line from the file</td><td>internal held-out</td></tr>
+                        <tr><td>PXD073250</td><td>PXD073250</td><td>diaPASEF, timsTOF, DIA-NN</td><td class="num"><span data-ms="ds_pxd073250_positive"></span> immune, <span data-ms="ds_pxd073250_negative"></span> keratinocyte</td><td>sorting gate; independent</td><td>internal held-out</td></tr>
+                        <tr><td>PXD046211</td><td>PXD046211</td><td>TMTpro with carrier</td><td class="num"><span data-ms="ds_pxd046211_positive"></span> PMA-treated, <span data-ms="ds_pxd046211_negative"></span> untreated</td><td>sample annotation; independent</td><td>internal held-out</td></tr>
+                        <tr><td>Tian</td><td>MSV000087462</td><td>label-free bulk of sorted T cells</td><td class="num">bulk samples</td><td>sorting; independent</td><td>internal held-out (void)</td></tr>
+                        <tr><td>PXD021882</td><td>PXD021882</td><td>pools of sorted cells</td><td class="num">pools</td><td>sorting</td><td>internal held-out (void)</td></tr>
+                        <tr><td>Sorted CD4 and CD8 T cells</td><td>requested from the authors</td><td>single cells</td><td class="num"><span data-ms="open_sorted_test"></span></td><td>sorting; independent</td><td>external test</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="suite">The simulated RNA evaluation suite</h3>
+            <ul class="evidence">
+                <li><span data-ms="suite_uploads"></span> uploads, <span data-ms="suite_cells"></span> cells, built
+                    from held-back RNA test cells with the missing-value patterns of real files, in six kinds:
+                    one type alone, a few types, many types, one lineage, PBMC-like and SCoPE2-like.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/summary.json</code>, <code>research/notebook-outputs/v41_phase3/rules.json</code>
+                    <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+                <li><span data-ms="suite_checks"></span> checks fixed before the run; <span data-ms="suite_checks_passed"></span>
+                    passed: coverage not below the answer path's; false abstention at most
+                    <span class="constant">3%</span>; correct when committed at least <span class="constant">94%</span>;
+                    committed share at most two points below; the best guess at least two points above; no
+                    kind of upload more than three points below.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/rules.json</code></span></li>
+                <li>It is the fourth use of these test cells, so it is a safety check, not evidence of a
+                    gain on protein.
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code> (evaluation)</span></li>
+            </ul>
+
+            <h3 id="protocol">The benchmark protocol</h3>
+            <ul class="evidence">
+                <li>Every method gets the same RNA reference, its labels and the same query cells; protein
+                    labels are read only when scoring.
+                    <span class="ev-src"><code>research/benchmark/methodology.md</code></span></li>
+                <li><span data-ms="bm_baselines"></span> baselines: correlation to type means, PCA, Harmony, scANVI,
+                    MaxFuse, scGLUE and Seurat CCA transfer, with seeds 0 to 2 where a method is stochastic.
+                    <span class="ev-src"><code>research/benchmark/baselines_corrected/inputs.csv</code>, <code>benchmark/baselines_run.py</code></span></li>
+                <li>Baselines get the benchmark genes each query measures (SCoPE2 <span data-ms="bm_genes_scope2"></span>,
+                    PBMC240 <span data-ms="bm_genes_pbmc240"></span>, Fulcher <span data-ms="bm_genes_fulcher2026"></span>),
+                    each z-scored over its observed values, the RNA side with every type weighted equally. The
+                    model reads its own gene space: <span data-ms="bm_genes_v41_fulcher"></span> Fulcher genes.
+                    <span class="ev-src"><code>research/benchmark/baselines_corrected/inputs.csv</code>, <code>research/notebook-outputs/astral_abstention/summary.json</code></span></li>
+                <li>Rules: a shared k-nearest-neighbour transfer (<span class="constant">k = 30</span>, cosine,
+                    distance weighted), nearest centroid, and each tool's own transfer.
+                    <span class="ev-src"><code>research/benchmark/methodology.md</code></span></li>
+                <li>Corrections to the baselines were taken from each tool's documentation and committed
+                    before any corrected run was scored; nothing was tuned.
+                    <span class="ev-src"><code>research/benchmark/baseline-corrections.md</code></span></li>
+                <li>Statistics: stratified and paired bootstraps, <span class="constant">2,000</span> resamples,
+                    seed 0, <span class="constant">95%</span> percentile intervals (every CI on this page). Held-out
+                    sets: one-sided permutation AUROC or a donor-blocked bootstrap.
+                    <span class="ev-src"><code>research/benchmark/harness.md</code>, <code>research/benchmark/protocol-heldout.md</code></span></li>
+                <li>Measures: balanced accuracy over the dataset's types; lymphoid and myeloid recall,
+                    reported together; committed share; correct when committed, judged at the level stated;
+                    conformal coverage.
+                    <span class="ev-src"><code>research/benchmark/methodology.md</code></span></li>
+                <li>"Ahead of the baselines" needs a lead of at least <span class="constant">3</span> points over
+                    every corrected arm, each paired CI above zero, on a sealed test.
+                    <span class="ev-src"><code>research/benchmark/protocol-sorted-cd4cd8.md</code></span></li>
+            </ul>
+
+            <h3 id="preregistration">Pre-registration and data handling</h3>
+            <ul class="evidence">
+                <li>Each protocol is frozen at the commit that adds it; changes are dated amendments.
+                    <span class="ev-src"><code>research/benchmark/protocol-heldout.md</code>, <code>research/benchmark/protocol-khoury2026.md</code></span></li>
+                <li>Loaders refuse to return a locked set's labels; each run writes its rules, with its
+                    script's sha256, before it starts.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_pretest/rules.json</code>, <code>research/notebook-outputs/v41_phase3/rules.json</code></span></li>
+                <li>Verdicts are written before labels are read: the Khoury check of the served rule was
+                    to "carry over" or not, fixed in advance.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code></span></li>
+                <li>Held-out sets were scored once, against model files frozen by sha256; the scorer refuses
+                    a second run.
+                    <span class="ev-src"><code>research/benchmark/heldout/hao2021/summary.json</code> (frozen_files)</span></li>
+            </ul>
+
+            <h3 id="implementation">Implementation</h3>
+            <ul class="evidence">
+                <li>Members exported to TorchScript and checked equal to the trained models; the reference
+                    search is exact.
+                    <span class="ev-src"><code>service/pipeline/encoder.py</code>, <code>service/pipeline/search.py</code></span></li>
+                <li>Each cell's response: its answer and level, its conformal set, the best guess, its
+                    similarity to the reference, and the reason when there is no answer.
+                    <span class="ev-src"><code>docs/service/projection-api.md</code></span></li>
+                <li>Frozen full responses, a development gate and three test suites guard the served
+                    behaviour; model files are listed with their sha256.
+                    <span class="ev-src"><code>research/benchmark/v41_dev_gate.json</code>, <code>service/model/v4_1/MANIFEST.json</code></span></li>
+                <li>The service runs on Google Cloud Run (<span data-ms="wf_service_cpu"></span> vCPU, at most
+                    <span data-ms="wf_service_max_instances"></span> instance, a <span data-ms="wf_service_timeout_seconds"></span>-second
+                    timeout); the site on Cloudflare Pages.
+                    <span class="ev-src"><code>deploy/huggingface/PUBLISH.md</code>, <code>docs/web/hosting.md</code></span></li>
+            </ul>
+        </section>
+
+        <section class="sheet" id="rationale">
+            <h2>Why each part is there</h2>
+            <p>Each part of the served model, the problem in an earlier design it fixes, the evidence,
+                and the alternative it replaced. Problems are named by what the earlier design did.</p>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Part</th><th>Problem it fixes</th><th>Evidence</th><th>Rejected</th></tr></thead>
+                    <tbody>
+                        <tr><td>Gene-wise scaling within each upload, with a mask</td>
+                            <td>Each protein differs from its mRNA by its own offset in log space; scaling each gene within the upload cancels it, scaling against the RNA reference keeps it.</td>
+                            <td>A probe on Fulcher: within the upload <span data-ms="ra_scaling_within"></span>, the raw profile <span data-ms="ra_scaling_raw"></span>, centred on the reference <span data-ms="ra_scaling_centred"></span>. The probe used sorted-cell protein means, not the served term. <code>research/notebook-outputs/upload_independent_probe/summary.json</code> <span class="bead caveat" data-caveat="development">development</span></td>
+                            <td>Per-cell scaling; carrying RNA statistics over</td></tr>
+                        <tr><td>Training batches of varied composition</td>
+                            <td>Scaled within an upload, narrow uploads lost their identity under the earlier training recipe.</td>
+                            <td>Five seeds each: RNA uploads <span data-ms="ra_rna_now"></span> against <span data-ms="ra_rna_before"></span>; one type alone <span data-ms="ra_single_now"></span> against <span data-ms="ra_single_before"></span>; PBMC240 lineage <span data-ms="ra_pbmc_lineage_now"></span> against <span data-ms="ra_pbmc_lineage_before"></span>; Fulcher, held out then, <span data-ms="ra_fulcher_pairings_won"></span> of <span data-ms="ra_fulcher_pairings"></span> seed pairings. <code>research/notebook-outputs/nb1d/nb1d_summary.json</code>, <code>research/benchmark/fulcher2026/paired_bootstrap.csv</code></td>
+                            <td>The earlier recipe; two variants that won on simulations and failed on real data</td></tr>
+                        <tr><td>Five members with fitted temperatures</td>
+                            <td>One encoder's results depended on its seed: SCoPE2 from <span data-ms="ra_seed_min"></span> to <span data-ms="ra_seed_max"></span> over five seeds of the earlier encoder.</td>
+                            <td>Calibration error <span data-ms="ra_ece_before"></span> before the temperature fit, <span data-ms="ra_ece_after"></span> after. <code>research/notebook-outputs/nb2/tables/temperature.csv</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></td>
+                            <td>One seed</td></tr>
+                        <tr><td>Nearest centroid on cosine</td>
+                            <td>On real protein, nearest centroid did better than optimal transport and neighbour rules, the reverse of the RNA-only result.</td>
+                            <td><code>service/pipeline/assignment.py</code> (module notes)</td>
+                            <td>Optimal transport; kNN</td></tr>
+                        <tr><td>No label-space restriction by default</td>
+                            <td>Restricted to the two types with protein support, a blood upload had no correct lymphoid label: every Fulcher cell came back macrophage, monocyte or none.</td>
+                            <td><code>research/todo.md</code> (critical product defects), <code>research/notebook-outputs/nb2/tables/label_space_grid_calsel.csv</code></td>
+                            <td>Restriction by default; estimating each upload's types</td></tr>
+                        <tr><td>Per-class conformal sets fitted once on labelled RNA</td>
+                            <td>With its thresholds fitted on each upload's own guesses, the earlier service abstained on <span data-ms="ra_abstain_before"></span> and was right on <span data-ms="ra_correct_before"></span> of its answers.</td>
+                            <td>The same suite: <span data-ms="ra_abstain_now"></span> abstained, <span data-ms="ra_correct_now"></span> right. Per-class against one threshold: worst type's coverage <span data-ms="ra_mondrian_worst"></span> against <span data-ms="ra_marginal_worst"></span>, mean <span data-ms="ra_mondrian_mean"></span> against <span data-ms="ra_marginal_mean"></span>. <code>research/notebook-outputs/nb2/nb2_summary.json</code>, <code>research/notebook-outputs/nb2/tables/conformal_choice_calsel.csv</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></td>
+                            <td>Calibration per upload; one threshold for all types</td></tr>
+                        <tr><td>Answers at type, family or lineage level</td>
+                            <td>The earlier fallback for confusable pairs could only answer at type level.</td>
+                            <td><code>service/README.md</code> (stages)</td>
+                            <td>The pair fallback</td></tr>
+                        <tr><td>The best guess joins every non-empty set</td>
+                            <td>A type could be named alone at about one percent probability.</td>
+                            <td>Coverage <span data-ms="ra_flag_coverage_before"></span> to <span data-ms="ra_flag_coverage_now"></span>; right when committed <span data-ms="ra_flag_correct_before"></span> to <span data-ms="ra_flag_correct_now"></span>. <code>research/notebook-outputs/nb3b/eval_flags_summary.csv</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></td>
+                            <td>Sets without it</td></tr>
+                        <tr><td>An absolute floor of observed genes</td>
+                            <td>A floor set as a share of the gene space refused most real cells.</td>
+                            <td><code>service/config.py</code> (MIN_OBSERVED_GENES)</td>
+                            <td>A fractional floor</td></tr>
+                        <tr><td>Detecting linear scale and taking log2</td>
+                            <td>Linear intensities read as if logged.</td>
+                            <td>Simulated uploads through the service: <span data-ms="ra_log_log"></span> with the transform, <span data-ms="ra_log_linear"></span> without. <code>research/notebook-outputs/nb1b/nb1b_summary.json</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></td>
+                            <td>No transform</td></tr>
+                        <tr><td>Duplicate rows merged by median</td>
+                            <td>Keeping the last row of a gene threw measured values away.</td>
+                            <td><code>service/model/MODEL_CARD.md</code>, <code>service/pipeline/alignment.py</code></td>
+                            <td>Last row wins</td></tr>
+                        <tr><td>An offline gene-name table</td>
+                            <td>Live lookups drift between builds.</td>
+                            <td><code>service/pipeline/gene_ids.py</code> (module notes)</td>
+                            <td>A live lookup</td></tr>
+                        <tr><td>Smoothing kept; half the guess from the smoothed view</td>
+                            <td>Without the smoothed view, the guess failed uploads of one type.</td>
+                            <td>One type alone: <span data-ms="ra_smooth_single_off"></span> unsmoothed, <span data-ms="ra_smooth_single_half"></span> half smoothed, <span data-ms="ra_smooth_single_before"></span> for the answer path; unsmoothed lost <span data-ms="ra_smooth_drop_off"></span> points on its worst kind of upload. <code>research/notebook-outputs/v4_phase3b/selection.json</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></td>
+                            <td>Smoothing off</td></tr>
+                        <tr><td>Every type weighted equally in the reference's statistics</td>
+                            <td>Neutrophils are <span data-ms="ref_neutrophil_share"></span> of the reference.</td>
+                            <td>Simulated suite <span data-ms="ra_cb_suite"></span> against <span data-ms="ra_cb_suite_before"></span>; on Fulcher alone no gain (<span data-ms="ra_cb_fulcher"></span> against <span data-ms="ra_cb_fulcher_before"></span>). <code>research/notebook-outputs/v4_phase3c/exploration.json</code></td>
+                            <td>Whole-blood statistics</td></tr>
+                        <tr><td>The correlation second opinion</td>
+                            <td>The encoder alone reached <span data-ms="ra_cb_fulcher"></span> on Fulcher.</td>
+                            <td>With the second opinion, <span data-ms="ra_corr_fulcher"></span>. <code>research/notebook-outputs/v41_phase3/development.json</code> <span class="bead caveat" data-caveat="in-sample">in-sample</span></td>
+                            <td>The encoder alone</td></tr>
+                        <tr><td>The agreement gate</td>
+                            <td>Used in every upload, the second opinion hurt uploads of one type (probability a type fails: <span data-ms="ra_gate_fail_ungated"></span>).</td>
+                            <td>Gated: <span data-ms="ra_gate_fail_gated"></span>. Median agreement: one type <span data-ms="ra_gate_median_single"></span>, many types <span data-ms="ra_gate_median_mixed"></span>, PBMC-like <span data-ms="ra_gate_median_pbmc"></span>. With a looser bar PBMC240 (agreement <span data-ms="ra_gate_pbmc_agreement"></span>) would use the term, and lymphoid recall would fall from <span data-ms="ra_gate_pbmc_gated"></span> to <span data-ms="ra_gate_pbmc_looser"></span>. <code>research/notebook-outputs/v4_phase3c/exploration.json</code></td>
+                            <td>A per-cell gate (<span data-ms="ra_gate_fail_per_cell"></span>); a higher encoder weight (<span data-ms="ra_gate_fail_w08"></span>)</td></tr>
+                        <tr><td>The guess joins the set beside the answer path's top type</td>
+                            <td>Replacing the top type cost coverage: <span data-ms="ra_join_replace"></span> against <span data-ms="ra_join_replace_before"></span>.</td>
+                            <td>Joining: <span data-ms="ra_join_now"></span> against <span data-ms="ra_join_now_before"></span>. <code>research/notebook-outputs/v4_phase3b/summary.json</code>, <code>research/notebook-outputs/v41_phase3/summary.json</code> <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></td>
+                            <td>Replacing it</td></tr>
+                        <tr><td>One weight, chosen under guardrails</td>
+                            <td>A weight tuned for simulated RNA never crosses the gap to protein.</td>
+                            <td><span data-ms="ra_weight_candidates"></span> candidates, <span data-ms="ra_weight_eligible"></span> within the guardrails, <span data-ms="ra_weight_stable"></span> stable over halves of Fulcher's runs; the stable one closest to the earlier rule. <code>research/notebook-outputs/v41_pretest/selection.json</code> <span class="bead caveat" data-caveat="in-sample">in-sample</span></td>
+                            <td>Lower weights, higher on Fulcher but outside the guardrails</td></tr>
+                        <tr><td>No calibration cells drawn from the upload</td>
+                            <td>Drawing them at random made identical uploads disagree.</td>
+                            <td><code>service/pipeline/pipeline.py</code> (upload_seed notes)</td>
+                            <td>A random slice per request</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="sheet" id="results">
+            <h2>Results</h2>
+
+            <h3 id="transfer">Labels transfer from RNA to protein</h3>
+            <ul class="evidence">
+                <li>Fulcher 2026: balanced accuracy <span data-ms="fulcher_ba"></span>; lymphoid recall
+                    <span data-ms="fulcher_lymphoid"></span>, myeloid <span data-ms="fulcher_myeloid"></span>.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/development.json</code>, <code>research/benchmark/v41_development/fulcher2026.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span><span class="bead caveat" data-caveat="in-sample">in-sample</span></span></li>
+                <li>Khoury 2026: balanced accuracy <span data-ms="khoury_ba"></span>; lymphoid recall
+                    <span data-ms="khoury_lymphoid"></span>, myeloid <span data-ms="khoury_myeloid"></span>.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li>PBMC240: lymphoid recall <span data-ms="pbmc240_lymphoid"></span>; myeloid
+                    <span data-ms="pbmc240_myeloid"></span>, of very few myeloid cells.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/development.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>The modalities stay apart in the encoder's space: a linear probe tells protein from RNA
+                    in <span data-ms="probe"></span> of SCoPE2 cells, and the macrophage and monocyte centroid
+                    cosines are <span data-ms="latent_cosine_macrophage"></span> and
+                    <span data-ms="latent_cosine_monocyte"></span>. Labels transfer anyway, so the paper claims
+                    label transfer. Measured on the answer path's latents, on SCoPE2's centred matrix; not
+                    on the fused guess (<span data-ms="open_probe_v41"></span>).
+                    <span class="ev-src"><code>service/model/evidence/v3_1_tables/modality_probe.json</code>, <code>service/model/evidence/v3_1_tables/latent_centroid_cosine.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+            </ul>
+            <div class="table-scroll">
+                <table class="support-table ms-table">
+                    <thead><tr><th>Recall by type</th><th class="num">Fulcher 2026</th><th class="num">Khoury 2026</th></tr></thead>
+                    <tbody>
+                        <tr><td>CD4 T</td><td class="num"><span data-ms="fulcher_recall_CD4T"></span></td><td class="num"><span data-ms="khoury_recall_CD4T"></span></td></tr>
+                        <tr><td>CD8 T</td><td class="num"><span data-ms="fulcher_recall_CD8T"></span></td><td class="num"><span data-ms="khoury_recall_CD8T"></span></td></tr>
+                        <tr><td>NK</td><td class="num"><span data-ms="fulcher_recall_NK"></span></td><td class="num"><span data-ms="khoury_recall_NK"></span></td></tr>
+                        <tr><td>B</td><td class="num"><span data-ms="fulcher_recall_B"></span></td><td class="num"><span data-ms="khoury_recall_B"></span></td></tr>
+                        <tr><td>Monocyte</td><td class="num"><span data-ms="fulcher_recall_monocyte"></span></td><td class="num"><span data-ms="khoury_recall_monocyte"></span></td></tr>
+                        <tr><td>Dendritic cell</td><td class="num"><span data-ms="fulcher_recall_DC"></span></td><td class="num">not labelled</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="answer-levels">Answers state their level, or abstain with a reason</h3>
+            <ul class="evidence">
+                <li>Fulcher: committed <span data-ms="committed_fulcher"></span>, right at the stated level
+                    <span data-ms="correct_fulcher"></span>. PBMC240: <span data-ms="committed_pbmc240"></span> and
+                    <span data-ms="correct_pbmc240"></span>. SCoPE2: <span data-ms="committed_scope2"></span> and
+                    <span data-ms="correct_scope2"></span>.
+                    <span class="ev-src"><code>research/benchmark/v41_development/confident.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>Simulated suite: committed <span data-ms="suite_committed"></span>, right when committed
+                    <span data-ms="suite_correct_when_committed"></span>, false abstention
+                    <span data-ms="suite_false_abstention"></span>. Most answers are broad: type
+                    <span data-ms="suite_level_class"></span>, family <span data-ms="suite_level_group"></span>,
+                    lineage <span data-ms="suite_level_lineage"></span>, none <span data-ms="suite_level_abstain"></span>.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/summary.json</code>
+                    <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+                <li>Coverage of the true type by the set: <span data-ms="suite_coverage"></span> on the simulated
+                    suite against a target of <span data-ms="coverage_target"></span>; on protein lower, so it is
+                    approximate there: Fulcher <span data-ms="coverage_fulcher"></span>
+                    (<span data-ms="coverage_fulcher_given_set"></span> among cells given a set), PBMC240
+                    <span data-ms="coverage_pbmc240"></span>, SCoPE2 <span data-ms="coverage_scope2"></span>; on Fulcher
+                    CD8 T <span data-ms="coverage_fulcher_CD8T"></span> and DC <span data-ms="coverage_fulcher_DC"></span>.
+                    Fitting it on protein needs labelled protein calibration cells.
+                    <span class="ev-src"><code>research/notebook-outputs/protein_coverage/coverage.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+            </ul>
+            <div class="table-scroll">
+                <table class="support-table ms-table">
+                    <thead><tr><th>Simulated uploads</th><th class="num">Cells</th><th class="num">Committed</th><th class="num">Right when committed</th><th class="num">Coverage</th><th class="num">Best guess</th></tr></thead>
+                    <tbody>
+                        <tr><td>One type alone</td><td class="num"><span data-ms="suite_single_cells"></span></td><td class="num"><span data-ms="suite_single_committed"></span></td><td class="num"><span data-ms="suite_single_correct_when_committed"></span></td><td class="num"><span data-ms="suite_single_coverage"></span></td><td class="num"><span data-ms="suite_single_best_guess_per_upload_balanced"></span></td></tr>
+                        <tr><td>A few types</td><td class="num"><span data-ms="suite_narrow_cells"></span></td><td class="num"><span data-ms="suite_narrow_committed"></span></td><td class="num"><span data-ms="suite_narrow_correct_when_committed"></span></td><td class="num"><span data-ms="suite_narrow_coverage"></span></td><td class="num"><span data-ms="suite_narrow_best_guess_per_upload_balanced"></span></td></tr>
+                        <tr><td>Many types</td><td class="num"><span data-ms="suite_mixed_cells"></span></td><td class="num"><span data-ms="suite_mixed_committed"></span></td><td class="num"><span data-ms="suite_mixed_correct_when_committed"></span></td><td class="num"><span data-ms="suite_mixed_coverage"></span></td><td class="num"><span data-ms="suite_mixed_best_guess_per_upload_balanced"></span></td></tr>
+                        <tr><td>One lineage</td><td class="num"><span data-ms="suite_lineage_cells"></span></td><td class="num"><span data-ms="suite_lineage_committed"></span></td><td class="num"><span data-ms="suite_lineage_correct_when_committed"></span></td><td class="num"><span data-ms="suite_lineage_coverage"></span></td><td class="num"><span data-ms="suite_lineage_best_guess_per_upload_balanced"></span></td></tr>
+                        <tr><td>PBMC-like</td><td class="num"><span data-ms="suite_pbmc_cells"></span></td><td class="num"><span data-ms="suite_pbmc_committed"></span></td><td class="num"><span data-ms="suite_pbmc_correct_when_committed"></span></td><td class="num"><span data-ms="suite_pbmc_coverage"></span></td><td class="num"><span data-ms="suite_pbmc_best_guess_per_upload_balanced"></span></td></tr>
+                        <tr><td>SCoPE2-like</td><td class="num"><span data-ms="suite_scope2_cells"></span></td><td class="num"><span data-ms="suite_scope2_committed"></span></td><td class="num"><span data-ms="suite_scope2_correct_when_committed"></span></td><td class="num"><span data-ms="suite_scope2_coverage"></span></td><td class="num"><span data-ms="suite_scope2_best_guess_per_upload_balanced"></span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="second-opinion">The second opinion and its gate</h3>
+            <ul class="evidence">
+                <li>Against its own answer path's guess, the served best guess gains
+                    <span data-ms="so_fulcher_gain"></span> points on Fulcher (CI <span data-ms="so_fulcher_gain_lo"></span>
+                    to <span data-ms="so_fulcher_gain_hi"></span>; from <span data-ms="so_fulcher_without"></span>).
+                    <span class="ev-src"><code>research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv</code>
+                    <span class="bead caveat" data-caveat="in-sample">in-sample</span></span></li>
+                <li>On Khoury, <span data-ms="so_khoury_gain"></span> points (CI <span data-ms="so_khoury_gain_lo"></span> to
+                    <span data-ms="so_khoury_gain_hi"></span>; from <span data-ms="so_khoury_without"></span>); on the
+                    held-out Hao donors, <span data-ms="ho_hao_gain"></span> (one-sided lower bound
+                    <span data-ms="ho_hao_gain_lower"></span>).
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv</code>, <code>research/benchmark/heldout/hao2021/summary.json</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span><span class="bead caveat" data-caveat="internal held-out">internal held-out</span></span></li>
+                <li>The gain is in NK cells and DCs: on Fulcher NK recall <span data-ms="fulcher_recall_NK"></span>
+                    against <span data-ms="so_fulcher_ncv_recall_NK_without"></span>, DC <span data-ms="fulcher_recall_DC"></span>
+                    against <span data-ms="so_fulcher_ncv_recall_DC_without"></span>; on Khoury NK
+                    <span data-ms="khoury_recall_NK"></span> against <span data-ms="so_khoury_nk_without"></span>.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/development.json</code>, <code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code></span></li>
+                <li>Upload agreement against the bar of <span data-ms="wf_agreement_threshold"></span>: Fulcher
+                    <span data-ms="so_agreement_fulcher2026"></span> and Khoury <span data-ms="so_agreement_khoury"></span> use
+                    the term; PBMC240 <span data-ms="so_agreement_pbmc240"></span>, SCoPE2
+                    <span data-ms="so_agreement_scope2"></span> and Furtwängler <span data-ms="so_agreement_furtwangler2025"></span>
+                    do not, so their answers are the answer path's.
+                    <span class="ev-src"><code>research/benchmark/v41_dev_gate.json</code></span></li>
+                <li>On the simulated suite the term is used in <span data-ms="suite_single_term_used"></span> of
+                    one-type uploads, <span data-ms="suite_mixed_term_used"></span> of many-type and
+                    <span data-ms="suite_pbmc_term_used"></span> of PBMC-like ones; one-type uploads keep the answer
+                    path's level (<span data-ms="suite_single_best_guess_per_upload_balanced"></span> against
+                    <span data-ms="suite_single_without"></span>) while PBMC-like ones gain
+                    (<span data-ms="suite_pbmc_best_guess_per_upload_balanced"></span> against
+                    <span data-ms="suite_pbmc_without"></span>).
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/summary.json</code>
+                    <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+            </ul>
+
+            <h3 id="benchmark">The benchmark</h3>
+            <ul class="evidence">
+                <li>Fulcher: all <span data-ms="bm_fulcher_favour"></span> of <span data-ms="bm_fulcher_pairings"></span>
+                    paired intervals favour the model, the smallest lower bound <span data-ms="bm_fulcher_lowest_ci"></span>
+                    points; ahead of correlation by <span data-ms="bm_fulcher_vs_correlation"></span>, Harmony by
+                    <span data-ms="bm_fulcher_vs_harmony_min"></span> to <span data-ms="bm_fulcher_vs_harmony_max"></span>,
+                    PCA with neighbours by <span data-ms="bm_fulcher_vs_pca_knn"></span>.
+                    <span class="ev-src"><code>research/benchmark/v41_development/paired_bootstrap_v41.csv</code>
+                    <span class="bead caveat" data-caveat="in-sample">in-sample</span></span></li>
+                <li>Khoury: level with PCA and neighbours (<span data-ms="bm_khoury_vs_pca"></span>, CI
+                    <span data-ms="bm_khoury_vs_pca_lo"></span> to <span data-ms="bm_khoury_vs_pca_hi"></span>), and with
+                    scANVI and neighbours in <span data-ms="bm_khoury_scanvi_knn_neither"></span> of
+                    <span data-ms="bm_khoury_scanvi_knn_runs"></span> seeds; ahead of correlation
+                    (<span data-ms="bm_khoury_vs_correlation"></span>), Harmony (<span data-ms="bm_khoury_vs_harmony_min"></span>
+                    to <span data-ms="bm_khoury_vs_harmony_max"></span>), scGLUE (<span data-ms="bm_khoury_vs_scglue_min"></span>
+                    to <span data-ms="bm_khoury_vs_scglue_max"></span>), MaxFuse (<span data-ms="bm_khoury_vs_maxfuse_min"></span>
+                    to <span data-ms="bm_khoury_vs_maxfuse_max"></span>) and Seurat (<span data-ms="bm_khoury_vs_seurat"></span>);
+                    <span data-ms="bm_khoury_baseline_favour"></span> of <span data-ms="bm_khoury_baseline_runs"></span>
+                    baseline runs favour the model.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li>SCoPE2: no method separates the macrophages from the monocytes of one cell line; the model
+                    is below chance and, on the reprocessed matrix, every method is at or below chance.
+                    <span class="ev-src"><code>research/benchmark/v41_development/paired_bootstrap_v41.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>Single baselines do better on single types of Fulcher: CD8 T recall Harmony with neighbours
+                    <span data-ms="bm_fulcher_cd8_harmony_knn"></span> against <span data-ms="fulcher_recall_CD8T"></span>; DC
+                    recall PCA nearest centroid <span data-ms="bm_fulcher_dc_pca_nc"></span> and correlation
+                    <span data-ms="bm_fulcher_dc_correlation"></span> against <span data-ms="fulcher_recall_DC"></span>.
+                    <span class="ev-src"><code>research/benchmark/baselines_corrected/fulcher2026_summary.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+            </ul>
+            <p>The tables: each method's score with its spread over seeds, and the model minus each run
+                by paired bootstrap. Khoury is post-hoc; Fulcher, PBMC240 and SCoPE2 are development
+                data, and Fulcher is in-sample for the model's one weight.</p>
+            <div id="benchmark-mount"></div>
+
+            <h3 id="heldout">The internal held-out test, scored once</h3>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Set</th><th>Question</th><th>Statistic</th><th>Result</th></tr></thead>
+                    <tbody>
+                        <tr><td>Hao 2021, P5 to P8</td><td>Does typing hold on held-out donors of another atlas, masked like protein?</td><td>Balanced accuracy minus the correlation baseline's</td><td>pass: <span data-ms="ho_hao_vs_correlation"></span> (lower bound <span data-ms="ho_hao_vs_correlation_lower"></span>); model <span data-ms="ho_hao_model"></span>, correlation <span data-ms="ho_hao_correlation"></span>, PCA <span data-ms="ho_hao_pca"></span></td></tr>
+                        <tr><td>PXD043355</td><td>Is a T-cell line (Jurkat) more blood-like than HeLa?</td><td>AUROC of reference similarity</td><td>pass: <span data-ms="ho_pxd043355_auroc"></span> (p <span data-ms="ho_pxd043355_p"></span>)</td></tr>
+                        <tr><td>PXD073250</td><td>Are immune cells more blood-like than keratinocytes from the same tumour?</td><td>AUROC of reference similarity</td><td>fail: <span data-ms="ho_pxd073250_auroc"></span> (p <span data-ms="ho_pxd073250_p"></span>)</td></tr>
+                        <tr><td>PXD046211</td><td>Do PMA-treated monocyte lines lean to macrophage over untreated ones?</td><td>AUROC of the macrophage score</td><td>fail: <span data-ms="ho_pxd046211_auroc"></span> (p <span data-ms="ho_pxd046211_p"></span>)</td></tr>
+                        <tr><td>Tian</td><td>Are sorted CD8 T bulks scored more CD8-like than their CD4 pairs?</td><td>Pairs won</td><td>void: <span data-ms="ho_tian_pairs"></span> matched pair in the deposit</td></tr>
+                        <tr><td>PXD021882</td><td>Are B-cell pools told from T-cell pools?</td><td>AUROC</td><td>void: the deposited table holds no B or T pools</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="evidence">
+                <li>The two foreign-cell sets score reference similarity, which the served model shares
+                    with its answer path, so they do not test the second opinion; the Hao set is RNA made
+                    protein-like, not protein.
+                    <span class="ev-src"><code>research/benchmark/protocol-heldout.md</code>
+                    <span class="bead caveat" data-caveat="internal held-out">internal held-out</span></span></li>
+                <li>Of Jurkat cells <span data-ms="ho_pxd043355_abstained_Jurkat"></span> and of HeLa cells
+                    <span data-ms="ho_pxd043355_abstained_HeLa"></span> get no answer: a third of HeLa cells get a
+                    confident blood answer.
+                    <span class="ev-src"><code>research/benchmark/heldout/pxd043355/summary.json</code>
+                    <span class="bead caveat" data-caveat="internal held-out">internal held-out</span></span></li>
+                <li>DC recall on the Hao donors: <span data-ms="ho_hao_dc"></span>, against the correlation
+                    baseline's <span data-ms="ho_hao_dc_correlation"></span>.
+                    <span class="ev-src"><code>research/benchmark/heldout/hao2021/summary.json</code>
+                    <span class="bead caveat" data-caveat="internal held-out">internal held-out</span></span></li>
+                <li>The sets are spent: they are development data now, and the result is reported as an
+                    internal test, never as external validation.
+                    <span class="ev-src"><code>research/benchmark/side-tests.md</code> (amendment 6)</span></li>
+            </ul>
+
+            <h3 id="failure-modes">Failure modes</h3>
+            <ul class="evidence">
+                <li><strong>One type uploaded alone collapses.</strong> Right when committed, alone against
+                    the same cells in their whole upload: B <span data-ms="single_alone_correct_B"></span> against
+                    <span data-ms="single_mixed_correct_B"></span>, NK <span data-ms="single_alone_correct_NK"></span> against
+                    <span data-ms="single_mixed_correct_NK"></span>, monocyte <span data-ms="single_alone_correct_monocyte"></span>
+                    against <span data-ms="single_mixed_correct_monocyte"></span>. CD4 and CD8 T cells uploaded
+                    together: recall <span data-ms="single_pair_recall_CD4T"></span> and
+                    <span data-ms="single_pair_recall_CD8T"></span>. It is the cost of scaling within the upload.
+                    <span class="ev-src"><code>research/notebook-outputs/single_type_uploads/summary.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li><strong>Cells outside the reference are rarely refused.</strong> CD34+ progenitors:
+                    <span data-ms="ood_furtwangler_flagged"></span> flagged, <span data-ms="ood_furtwangler_committed"></span>
+                    committed, <span data-ms="ood_furtwangler_t_cell"></span> best-guessed as T cells and
+                    <span data-ms="ood_furtwangler_progenitor"></span> as progenitors. The best guess's probability
+                    separates Fulcher from them with AUROC <span data-ms="ood_auroc"></span>.
+                    <span class="ev-src"><code>research/benchmark/furtwangler2025/v31_ood_check.json</code>, <code>research/notebook-outputs/v41_phase3/development.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li><strong>Foreign cell lines pass.</strong> The served threshold flags at most
+                    <span data-ms="ood_lines_flagged_max"></span> of <span data-ms="ood_lines_cells"></span> HEK293T, HCT116
+                    and K562 cells; <span data-ms="ood_lines_answered"></span> get a confident blood answer, and
+                    <span data-ms="ood_hmc3_answered"></span> of <span data-ms="ood_hmc3_cells"></span> microglial HMC3 cells.
+                    <span class="ev-src"><code>research/notebook-outputs/ood_candidates/summary.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li><strong>Astral PBMC runs commit less.</strong> <span data-ms="astral_committed_min"></span> to
+                    <span data-ms="astral_committed_max"></span> over <span data-ms="astral_runs"></span> runs, against
+                    <span data-ms="astral_committed_fulcher"></span> on Fulcher; not from size, since small Fulcher
+                    subsamples still commit <span data-ms="astral_committed_subsample"></span>.
+                    <span class="ev-src"><code>research/notebook-outputs/astral_abstention/summary.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li><strong>New donors cost accuracy.</strong> One member retrained without a third of the
+                    donors loses <span data-ms="donor_gap"></span> points on them (folds <span data-ms="donor_gap_min"></span>
+                    to <span data-ms="donor_gap_max"></span>); the served members saw every donor.
+                    <span class="ev-src"><code>research/notebook-outputs/donor_heldout/summary.json</code>
+                    <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+                <li><strong>CD8 against CD4 T cells.</strong> Khoury CD8 T recall <span data-ms="khoury_recall_CD8T"></span>:
+                    its "CD8 T" cluster is called naive CD4 T for <span data-ms="cd8_called_naive_cd4"></span>, CD4 T for
+                    <span data-ms="cd8_called_cd4"></span>, CD8 T for <span data-ms="cd8_called_cd8"></span>. Its clusters
+                    are told apart by S100A4 (AUROC <span data-ms="cd8_auc_s100a4"></span>) and ANXA1
+                    (<span data-ms="cd8_auc_anxa1"></span>) more than CD8A (<span data-ms="cd8_auc_cd8a"></span>), so they
+                    largely separate naive from memory cells; and the reference files
+                    <span data-ms="cd8_naive_like_in_cd4"></span> of its <span data-ms="cd8_naive_like"></span> naive-CD8-like
+                    cells under CD4 T.
+                    <span class="ev-src"><code>research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li><strong>Dendritic cells.</strong> The reference holds <span data-ms="ref_mdc"></span> myeloid and
+                    <span data-ms="ref_pdc"></span> plasmacytoid DCs; DC recall is <span data-ms="fulcher_recall_DC"></span>
+                    on Fulcher and <span data-ms="ho_hao_dc"></span> on the Hao donors.
+                    <span class="ev-src"><code>service/model/runtime/reference_metadata.csv</code>, <code>research/benchmark/heldout/hao2021/summary.json</code></span></li>
+                <li><strong>The reference's own labels.</strong> Its "macrophage" type
+                    (<span data-ms="ref_macrophage"></span> cells) is monocyte-like and comes mostly from two donors,
+                    and part of its <span data-ms="ref_cd8"></span> CD8 T cells are NK cells by the atlas's own free
+                    annotation and by markers.
+                    <span class="ev-src"><code>research/notebook-outputs/mac_mono_diagnosis/diagnosis.json</code>, <code>research/notebook-outputs/v5_labels/audit.json</code></span></li>
+            </ul>
+
+            <h3 id="alternatives">Tried and not adopted</h3>
+            <p>Each idea is named by what it changed. Each was measured under rules fixed before its run.</p>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Idea</th><th>Result</th><th>Why not adopted</th><th>Source</th></tr></thead>
+                    <tbody>
+                        <tr><td>Harmony stacked under the best guess</td><td>Fulcher <span data-ms="neg_stack_fulcher"></span>, but PBMC240 lymphoid recall <span data-ms="neg_stack_pbmc"></span></td><td>Fails the PBMC240 guardrail</td><td><code>research/notebook-outputs/v41_pretest/research_arm.csv</code></td></tr>
+                        <tr><td>Energy score on the encoder's hidden features, to refuse foreign cells</td><td>False abstention <span data-ms="neg_energy_false"></span> (bound <span data-ms="neg_energy_rule_false"></span>); scrambled cells refused <span data-ms="neg_energy_scrambled"></span> (needed <span data-ms="neg_energy_rule_scrambled"></span>)</td><td>NO GO</td><td><code>research/notebook-outputs/nb3b/summary.json</code></td></tr>
+                        <tr><td>Thresholds per coverage band, set on never-seen cells</td><td>False abstention <span data-ms="neg_band_false"></span>, worst kind of upload <span data-ms="neg_band_worst"></span>; scrambled cells refused <span data-ms="neg_band_scrambled"></span></td><td>NO GO: separation is the limit</td><td><code>research/notebook-outputs/nb3c/summary.json</code></td></tr>
+                        <tr><td>A protein-space score for foreign cells</td><td>AUROC gain <span data-ms="neg_protein_score_gain"></span>, short of the <span class="constant">0.05</span> required</td><td>NO GO</td><td><code>research/notebook-outputs/ood_candidates/summary.json</code></td></tr>
+                        <tr><td>Cleaned reference labels and retrained members</td><td>Khoury <span data-ms="neg_relabelled_khoury"></span> (CI <span data-ms="neg_relabelled_khoury_lo"></span> to <span data-ms="neg_relabelled_khoury_hi"></span>), CD8 T recall still <span data-ms="neg_relabelled_cd8"></span>; the SCoPE2-like uploads fell <span data-ms="neg_relabelled_scope2_drop"></span> points. A later variant was ahead on the Hao donors by <span data-ms="neg_relabelled_hao"></span> (lower bound <span data-ms="neg_relabelled_hao_lower"></span>) after failing a development guardrail.</td><td>Development guardrails; no gain on Khoury's CD8 T, which is naive against memory</td><td><code>research/benchmark/khoury2026_posthoc_v51_check/summary.json</code>, <code>research/notebook-outputs/v51_phase4/summary.json</code>, <code>research/benchmark/heldout/hao2021/summary.json</code></td></tr>
+                        <tr><td>Sorted-cell protein means in the second opinion</td><td>Khoury <span data-ms="neg_protein_means_khoury"></span> (CI <span data-ms="neg_protein_means_khoury_lo"></span> to <span data-ms="neg_protein_means_khoury_hi"></span>)</td><td>Worse out of sample; its release was reverted</td><td><code>research/benchmark/khoury2026_posthoc_v42_check/summary.json</code></td></tr>
+                        <tr><td>DC centres from another atlas</td><td>DC recall on the Hao development donors <span data-ms="neg_dc_before"></span> to <span data-ms="neg_dc_after"></span></td><td>NO GO</td><td><code>research/notebook-outputs/hao_dc_centres/summary.json</code></td></tr>
+                        <tr><td>A detector for narrow uploads</td><td>Flags <span data-ms="neg_narrow_single_flagged"></span> of simulated one-type uploads and <span data-ms="neg_narrow_mixed_flagged"></span> of many-type ones, but not narrow protein uploads</td><td>NO GO</td><td><code>research/notebook-outputs/narrow_upload/committed.json</code></td></tr>
+                        <tr><td>A per-cell gate; a higher encoder weight</td><td>Probability a type fails <span data-ms="ra_gate_fail_per_cell"></span> and <span data-ms="ra_gate_fail_w08"></span>, against <span data-ms="ra_gate_fail_gated"></span> gated</td><td>Less safe on one-type uploads</td><td><code>research/notebook-outputs/v4_phase3c/exploration.json</code></td></tr>
+                        <tr><td>A wider reference with tissue atlases; protein-like augmentation</td><td>Lower on Fulcher and the simulations; augmentation collapsed training</td><td>Rejected in the pre-test</td><td><code>research/notebook-run-history.md</code> (entry 20)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="sheet" id="discussion">
+            <h2>Discussion</h2>
+            <h3>What the evidence supports</h3>
+            <ul class="evidence">
+                <li>Lineage-level transfer from RNA to protein: lymphoid recall
+                    <span data-ms="khoury_lymphoid"></span> and myeloid <span data-ms="khoury_myeloid"></span> on Khoury.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li>Type-level results level with the best correctly scaled simple baselines out of sample,
+                    and ahead of the integration tools.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li>What no baseline offers: an answer at a stated level, right
+                    <span data-ms="correct_fulcher"></span> of the time on Fulcher, a reason when there is none, and a
+                    service that needs no installation.
+                    <span class="ev-src"><code>research/benchmark/v41_development/confident.csv</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+            </ul>
+            <h3>What it does not support yet</h3>
+            <ul class="evidence">
+                <li>A lead over the baselines: the criterion needs a sealed test with independent labels
+                    (<span data-ms="open_sorted_test"></span>).
+                    <span class="ev-src"><code>research/benchmark/protocol-sorted-cd4cd8.md</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+                <li>Conformal coverage on protein: below its target (<span data-ms="coverage_fulcher"></span> on
+                    Fulcher against <span data-ms="coverage_target"></span>).
+                    <span class="ev-src"><code>research/notebook-outputs/protein_coverage/coverage.json</code></span></li>
+            </ul>
+            <h3>Lessons for benchmarking</h3>
+            <ul class="evidence">
+                <li>Correctly scaled simple baselines are strong: once the setup handicaps were fixed, PCA
+                    with neighbours matched the model on Khoury.
+                    <span class="ev-src"><code>research/benchmark/baseline-corrections.md</code></span></li>
+                <li>Label bugs change conclusions: SCoPE2's macrophage and monocyte labels were swapped on
+                    every cell in this project's copy until corrected, which had turned restricted scores into
+                    100 minus the truth.
+                    <span class="ev-src"><code>research/benchmark/bugs-and-fixes.md</code> (entry 8)</span></li>
+            </ul>
+            <h3>Threats to validity</h3>
+            <ul class="evidence">
+                <li>No protein label used here is independent of the protein data or of RNA transfer.
+                    <span class="ev-src"><code>research/benchmark/side-tests.md</code></span></li>
+                <li>Fulcher is in-sample for the weight; Khoury has been read several times, including to
+                    choose the served model over an alternative.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v42_check/summary.json</code>
+                    <span class="bead caveat" data-caveat="post-hoc">post-hoc</span></span></li>
+                <li>The simulated test cells are on their fourth use.
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code> (evaluation)</span></li>
+                <li>The model reads more genes than the baselines (<span data-ms="bm_genes_v41_fulcher"></span>
+                    against <span data-ms="bm_genes_fulcher2026"></span> on Fulcher); scANVI trains on the query cells,
+                    which favours it.
+                    <span class="ev-src"><code>research/benchmark/results.md</code>, <code>research/benchmark/known-limitations.md</code></span></li>
+                <li>The reference's labels are imperfect in the T, NK and myeloid blocks, and it holds
+                    few DCs; Khoury has two donors.
+                    <span class="ev-src"><code>research/notebook-outputs/v5_labels/audit.json</code>, <code>research/benchmark/protocol-khoury2026.md</code></span></li>
+            </ul>
+            <h3>Next</h3>
+            <ul class="evidence">
+                <li>The sorted CD4 and CD8 external test, under its frozen protocol.
+                    <span class="ev-src"><code>research/benchmark/protocol-sorted-cd4cd8.md</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+                <li>Labelled protein calibration cells, so coverage can be fitted on protein.</li>
+                <li>Paired RNA and protein measurements in the same cells, to train across the gap.
+                    <span class="ev-src"><code>research/roadmap.md</code> (revision of 2026-10-04)</span></li>
+            </ul>
+        </section>
+
+        <section class="sheet" id="availability">
+            <h2>Data and code availability</h2>
+            <ul class="evidence">
+                <li>Every dataset's accession is in the datasets table above; PBMC240's needs confirming.
+                    <span class="ev-src"><code>research/benchmark/public-sets-downloads.json</code></span></li>
+                <li>Code: the repository on GitHub (Amrita-Stanford-Development/Vivome_Atlas); public access
+                    to confirm before submission.
+                    <span class="ev-src"><code>README.md</code></span></li>
+                <li>The service at <code>vivome-atlas-577083340913.us-central1.run.app</code>, used from the
+                    site at <code>vivome-atlas.pages.dev</code>.
+                    <span class="ev-src"><code>web/project.html</code></span></li>
+                <li>Release <span data-fact="atlas_version">&nbsp;</span>, its model files listed with sha256; a
+                    DOI: <span data-ms="open_doi"></span>.
+                    <span class="ev-src"><code>service/model/v4_1/MANIFEST.json</code>, <code>web/versions.html</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+            </ul>
+        </section>
+
+        <section class="sheet" id="supplement">
+            <h2>Supplemental data plan</h2>
+            <ul class="evidence">
+                <li>The reference's types with their cell counts, families and lineages.
+                    <span class="ev-src"><code>service/model/runtime/reference_metadata.csv</code>, <code>service/model/v4_1/spec_v41.json</code></span></li>
+                <li>Each type's conformal threshold and each member's temperature.
+                    <span class="ev-src"><code>service/model/v3_1/nb2_spec_v31.json</code></span></li>
+                <li>Every baseline's score by seed and rule, with its paired interval.
+                    <span class="ev-src"><code>research/benchmark/baselines_corrected/</code>, <code>research/benchmark/v41_development/paired_bootstrap_v41.csv</code></span></li>
+                <li>The simulated suite by kind of upload, with every pre-registered check.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/summary.json</code>, <code>research/notebook-outputs/v41_phase3/eval_by_scenario.csv</code></span></li>
+                <li>The timeline of protocols and amendments, with commit hashes.
+                    <span class="ev-src"><code>research/benchmark/protocol-heldout.md</code>, <code>research/benchmark/side-tests.md</code>, <code>research/todo.md</code></span></li>
+                <li>The setup checks behind the corrected baselines.
+                    <span class="ev-src"><code>research/benchmark/baselines_corrected/setup_checks.csv</code></span></li>
+            </ul>
+        </section>
+
+        <section class="sheet" id="figures">
+            <h2>Figures and tables plan</h2>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Item</th><th>Panels</th><th>Data</th></tr></thead>
+                    <tbody>
+                        <tr><td>Figure 1, design</td><td>Training on RNA; reading an upload; the answer layer; the second opinion and its gate; the online service</td><td>Diagram; <code>web/workflow.html</code> has the steps</td></tr>
+                        <tr><td>Figure 2, transfer</td><td>Recall by type on Fulcher and Khoury; lineage recall; the modality probe beside it</td><td><code>research/notebook-outputs/v41_phase3/development.json</code>, <code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code></td></tr>
+                        <tr><td>Figure 3, answers</td><td>Answer levels by kind of upload; coverage by type on RNA and on protein</td><td><code>research/notebook-outputs/v41_phase3/summary.json</code>, <code>research/notebook-outputs/protein_coverage/coverage.json</code></td></tr>
+                        <tr><td>Figure 4, second opinion</td><td>Upload agreement by kind and dataset with the bar; gain with and without it</td><td><code>research/notebook-outputs/v41_phase3/eval_uploads.csv</code>, <code>research/notebook-outputs/v4_phase3c/exploration.json</code></td></tr>
+                        <tr><td>Figure 5, benchmark</td><td>Forest plot of paired differences, Khoury and Fulcher</td><td><code>research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv</code>, <code>research/benchmark/v41_development/paired_bootstrap_v41.csv</code></td></tr>
+                        <tr><td>Figure 6, limits</td><td>One-type uploads; foreign cells; CD8 against CD4</td><td><code>research/notebook-outputs/single_type_uploads/summary.json</code>, <code>research/notebook-outputs/ood_candidates/summary.json</code>, <code>research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json</code></td></tr>
+                        <tr><td>Table 1</td><td>Datasets and roles</td><td>This page, procedures</td></tr>
+                        <tr><td>Table 2</td><td>The benchmark</td><td>This page, results</td></tr>
+                        <tr><td>Table 3</td><td>Why each part is there</td><td>This page</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The journal's figure files are a later task; every panel above has its data committed.</p>
+        </section>
+
+        <section class="sheet" id="open-items">
+            <h2>Before submission</h2>
+            <ul class="evidence">
+                <li>The external sorted-cell test: <span data-ms="open_sorted_test"></span>.
+                    <span class="ev-src"><code>research/benchmark/protocol-sorted-cd4cd8.md</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+                <li>The model's committed share on Khoury: <span data-ms="open_khoury_committed"></span>.
+                    <span class="ev-src"><code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+                <li>The modality probe on the fused guess: <span data-ms="open_probe_v41"></span>.
+                    <span class="ev-src"><code>service/model/evidence/v3_1_tables/modality_probe.json</code>
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+                <li>A DOI for the release: <span data-ms="open_doi"></span>; a bioRxiv preprint.
+                    <span class="ev-src"><code>research/working-context.md</code> (publication plan)
+                    <span class="bead bead-open caveat" data-caveat="pending">pending</span></span></li>
+                <li>PBMC240's provenance and accession.
+                    <span class="ev-src"><code>research/working-context.md</code> (paperwork)</span></li>
+                <li>Smoothing's first evidence was measured against SCoPE2's swapped labels; its case now
+                    rests on the simulated suite alone.
+                    <span class="ev-src"><code>service/pipeline/smoothing.py</code>, <code>research/notebook-outputs/v4_phase3b/selection.json</code></span></li>
+                <li>Two records disagree with their sources: the run history gives Fulcher's committed share
+                    as larger than <code>research/benchmark/v41_development/confident.csv</code>'s
+                    <span data-ms="committed_fulcher"></span>; <code>research/notebook-outputs/nb2/tables/temperature.csv</code>
+                    lists member 1's temperature unlike the served spec.
+                    <span class="ev-src"><code>research/notebook-run-history.md</code> (entry 32), <code>service/model/v3_1/nb2_spec_v31.json</code></span></li>
+                <li>The reference list; author names, affiliations, funding and competing interests.</li>
+            </ul>
+        </section>
+
+        <section class="sheet" id="reviewers">
+            <h2>Questions a reviewer will ask</h2>
+            <ul class="evidence">
+                <li><strong>Are the baselines fair?</strong> Their setup was reviewed and corrected from each
+                    tool's documentation before scoring, with setup checks recorded; but the model reads more
+                    genes than they do, and scANVI trains on the query cells.
+                    <span class="ev-src"><code>research/benchmark/baseline-corrections.md</code>, <code>research/benchmark/baselines_corrected/setup_checks.csv</code></span></li>
+                <li><strong>Is Khoury really out of sample?</strong> No method was developed on it, but its
+                    labels have been read since its first scoring, so every Khoury figure here is post-hoc.
+                    <span class="ev-src"><code>research/benchmark/protocol-khoury2026.md</code></span></li>
+                <li><strong>Are the labels independent?</strong> Not on Fulcher, Khoury or PBMC240; that is why
+                    the external test uses sorted cells.
+                    <span class="ev-src"><code>research/benchmark/side-tests.md</code></span></li>
+                <li><strong>Is the simulated suite reused?</strong> Yes, its test cells are on their fourth
+                    use; it guards against regressions and is not used as evidence of a protein gain.
+                    <span class="ev-src"><code>service/model/v4_1/spec_v41.json</code></span></li>
+                <li><strong>Is coverage guaranteed?</strong> No: <span data-ms="suite_coverage"></span> on the
+                    simulated suite and <span data-ms="coverage_fulcher"></span> on Fulcher, against a target of
+                    <span data-ms="coverage_target"></span>, so the paper calls it approximate.
+                    <span class="ev-src"><code>research/notebook-outputs/v41_phase3/summary.json</code>, <code>research/notebook-outputs/protein_coverage/coverage.json</code></span></li>
+                <li><strong>Why not train on paired RNA and protein?</strong> The project has no RNA and
+                    mass-spectrometry measurements of the same blood cells; the roadmap names such bridge data
+                    as the next step. CITE-seq measures a panel of surface antibodies, not the proteome.
+                    <span class="ev-src"><code>research/roadmap.md</code> (revision of 2026-10-04)</span></li>
+                <li><strong>Does a shared latent space mix the modalities?</strong> No, and the paper does not
+                    claim it: the probe tells them apart almost always.
+                    <span class="ev-src"><code>service/model/evidence/v3_1_tables/modality_probe.json</code></span></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="versions.html">Model card and releases</a>
+                <a href="manuscript.html">Manuscript</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module" src="js/biofield.js"></script>
+    <script type="module" async>
+        import { loadManifest, PENDING_LABEL } from './js/manifest.js';
+        import { buildBenchmarkTable, factText, errorPanel } from './js/panels.js';
+        import { loadManuscript, checkSync, msFact, msBasis } from './js/manuscript-data.js';
+
+        Promise.all([loadManifest(), loadManuscript()]).then(([manifest, manuscript]) => {
+            const sync = checkSync(manifest, manuscript);
+            if (!sync.ok) throw new Error(`This page's data files are from different releases: ${sync.problems.join('; ')}`);
+            document.getElementById('benchmark-mount').innerHTML =
+                buildBenchmarkTable(manifest, { currentOnly: true, roles: false, note: false });
+            for (const el of document.querySelectorAll('[data-fact]')) el.innerHTML = factText(manifest, el.dataset.fact);
+            for (const el of document.querySelectorAll('[data-ms]')) {
+                el.innerHTML = msFact(manuscript, el.dataset.ms);
+                el.title = msBasis(manuscript, el.dataset.ms);
+            }
+        }).catch((err) => {
+            document.getElementById('ms-error').innerHTML = errorPanel(err);
+            for (const el of document.querySelectorAll('[data-ms], [data-fact]')) el.textContent = PENDING_LABEL;
+        });
+    </script>
+</body>
+</html>
