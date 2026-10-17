@@ -45,45 +45,168 @@
             <div id="sync-banner"></div>
         </div>
 
-        <section class="sheet wf-primer" aria-labelledby="primer-title">
-            <span class="eyebrow">Start here</span>
-            <h2 id="primer-title">The question VivOME answers</h2>
-            <ol class="wf-primer-grid">
-                <li class="wf-primer-card">
-                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="24" fill="#EAF3FA" stroke="#0066A3" stroke-width="2"/><circle cx="36" cy="28" r="9" fill="#C9DDEE"/><circle cx="22" cy="40" r="3" fill="#0066A3" opacity="0.5"/><circle cx="42" cy="44" r="2.5" fill="#0066A3" opacity="0.5"/></svg>
-                    <h3>Every cell has a type</h3>
-                    <p>
-                        Blood holds many kinds of cells: T cells and B cells that fight infection, red cells that carry
-                        oxygen, platelets that help it clot, and more. Knowing which kind a cell is comes first in almost
-                        any study of it.
-                    </p>
+        <section class="wf-primer" aria-labelledby="primer-title">
+            <div class="wf-primer-head">
+                <span class="eyebrow">Start here</span>
+                <h2 id="primer-title">The question VivOME answers</h2>
+                <p>Four ideas, one picture each. Everything after this builds on them.</p>
+            </div>
+            <ol class="wf-scenes">
+                <li class="wf-scene" data-in style="--i: 0">
+                    <figure class="wf-ill">
+                        <svg viewBox="0 0 360 250" role="img" aria-labelledby="ill-1-title">
+                            <title id="ill-1-title">A drop of blood holding many kinds of cells, each kind drawn differently</title>
+                            <defs>
+                                <radialGradient id="ill-drop" cx="42%" cy="38%" r="70%">
+                                    <stop offset="0" stop-color="#FFF6F3"/>
+                                    <stop offset="1" stop-color="#F5DDD6"/>
+                                </radialGradient>
+                            </defs>
+                            <path d="M180 14 C 208 64 268 106 268 160 C 268 210 228 238 180 238 C 132 238 92 210 92 160 C 92 106 152 64 180 14 Z" fill="url(#ill-drop)" stroke="#DDB0A4" stroke-width="2"/>
+                            <path d="M150 82 C 140 96 128 112 124 128" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+                            <g class="wf-float"><circle cx="150" cy="128" r="15" fill="#DCE8F5" stroke="#3F7CB8" stroke-width="1.5"/><circle cx="151" cy="127" r="10" fill="#3F7CB8" opacity="0.85"/></g>
+                            <g class="wf-float" style="animation-delay: -1s"><circle cx="214" cy="118" r="15" fill="#E9E2F5" stroke="#7A5BB5" stroke-width="1.5"/><circle cx="215" cy="119" r="9.5" fill="#7A5BB5" opacity="0.85"/></g>
+                            <g class="wf-float" style="animation-delay: -3s"><circle cx="176" cy="160" r="20" fill="#FBF1D8" stroke="#B8901E" stroke-width="1.5"/><path d="M166 154 q 6 -8 16 -3 q 8 5 2 13 q -4 5 -10 2 q -4 -2 -8 -1 q -6 -4 0 -11 z" fill="#C9A227" opacity="0.85"/></g>
+                            <g class="wf-float" style="animation-delay: -4s"><circle cx="238" cy="152" r="15" fill="#E3E8F2" stroke="#5A6FA8" stroke-width="1.5"/><circle cx="239" cy="151" r="8.5" fill="#5A6FA8" opacity="0.85"/><circle cx="231" cy="158" r="1.6" fill="#5A6FA8"/><circle cx="245" cy="159" r="1.6" fill="#5A6FA8"/><circle cx="244" cy="143" r="1.6" fill="#5A6FA8"/></g>
+                            <g class="wf-float" style="animation-delay: -1.5s"><ellipse cx="124" cy="176" rx="15" ry="9" fill="#E7A091"/><ellipse cx="124" cy="176" rx="7" ry="3.5" fill="#F1BEB2"/></g>
+                            <g class="wf-float" style="animation-delay: -2.5s"><ellipse cx="160" cy="210" rx="15" ry="9" fill="#E7A091"/><ellipse cx="160" cy="210" rx="7" ry="3.5" fill="#F1BEB2"/></g>
+                            <g class="wf-float" style="animation-delay: -3.5s"><ellipse cx="236" cy="200" rx="14" ry="8.5" fill="#E7A091"/><ellipse cx="236" cy="200" rx="6.5" ry="3.2" fill="#F1BEB2"/></g>
+                            <g class="wf-float" style="animation-delay: -0.5s"><ellipse cx="184" cy="96" rx="13" ry="8" fill="#E7A091"/><ellipse cx="184" cy="96" rx="6" ry="3" fill="#F1BEB2"/></g>
+                            <ellipse cx="196" cy="214" rx="5" ry="3" fill="#B7AEC9"/><ellipse cx="128" cy="150" rx="4.5" ry="2.8" fill="#B7AEC9"/><ellipse cx="250" cy="176" rx="4.5" ry="2.8" fill="#B7AEC9"/><ellipse cx="200" cy="140" rx="4" ry="2.5" fill="#B7AEC9"/>
+                            <g class="wf-ill-labels" font-size="12" fill="#1D2B36">
+                                <line x1="135" y1="128" x2="62" y2="104" stroke="#9AA6AF"/><text x="16" y="100">T cell</text>
+                                <line x1="229" y1="114" x2="292" y2="86" stroke="#9AA6AF"/><text x="294" y="84">B cell</text>
+                                <line x1="252" y1="150" x2="296" y2="138" stroke="#9AA6AF"/><text x="298" y="136">NK cell</text>
+                                <line x1="194" y1="168" x2="296" y2="190" stroke="#9AA6AF"/><text x="298" y="194">monocyte</text>
+                                <line x1="110" y1="178" x2="62" y2="196" stroke="#9AA6AF"/><text x="4" y="200">red blood cell</text>
+                                <line x1="124" y1="152" x2="62" y2="150" stroke="#9AA6AF"/><text x="14" y="154">platelet</text>
+                            </g>
+                        </svg>
+                    </figure>
+                    <div class="wf-scene-text">
+                        <span class="wf-scene-num">01</span>
+                        <h3>Every cell has a type</h3>
+                        <p>
+                            Blood holds many kinds of cells: T cells and B cells that fight infection, red cells that
+                            carry oxygen, platelets that help it clot, and more. Knowing which kind a cell is comes first
+                            in almost any study of it.
+                        </p>
+                    </div>
                 </li>
-                <li class="wf-primer-card">
-                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 22c6-6 10 6 16 0" fill="none" stroke="#C8641E" stroke-width="3"/><path d="M28 22h8" stroke="#9AA6AF" stroke-width="2"/><path d="M33 18l4 4-4 4" fill="none" stroke="#9AA6AF" stroke-width="2"/><circle cx="48" cy="22" r="7" fill="#2F8F6A"/><circle cx="42" cy="40" r="5" fill="#2F8F6A" opacity="0.7"/><circle cx="54" cy="44" r="4" fill="#2F8F6A" opacity="0.5"/></svg>
-                    <h3>Two ways to read a cell</h3>
-                    <p>
-                        Every cell carries the same genes but switches different ones on. A switched-on gene is copied
-                        into <strong class="wf-rna">RNA</strong>, a working message, which is used to build
-                        <strong class="wf-prot">proteins</strong>, the molecules that do the cell's work.
-                    </p>
+                <li class="wf-scene" data-in style="--i: 1">
+                    <figure class="wf-ill">
+                        <svg viewBox="0 0 360 250" role="img" aria-labelledby="ill-2-title">
+                            <title id="ill-2-title">Inside a cell, a gene is copied into RNA, and RNA is used to build proteins</title>
+                            <circle cx="78" cy="125" r="66" fill="#F3F6F9" stroke="#C5CED6" stroke-width="2"/>
+                            <circle cx="78" cy="125" r="36" fill="#E3E9EF"/>
+                            <path d="M58 104 C 70 112 86 112 98 104 M58 146 C 70 138 86 138 98 146" fill="none" stroke="#9AA6AF" stroke-width="1"/>
+                            <path d="M62 100 C 92 112 64 125 94 137 C 70 146 70 150 62 150" fill="none" stroke="#1D2B36" stroke-width="2.2"/>
+                            <path d="M94 100 C 64 112 92 125 62 137 C 86 146 86 150 94 150" fill="none" stroke="#5B6B78" stroke-width="2.2"/>
+                            <g stroke="#9AA6AF" stroke-width="1.2"><line x1="70" y1="106" x2="86" y2="106"/><line x1="72" y1="118" x2="84" y2="118"/><line x1="70" y1="131" x2="86" y2="131"/><line x1="72" y1="143" x2="84" y2="143"/></g>
+                            <text x="78" y="212" font-size="11" text-anchor="middle" fill="#1D2B36">a gene, in the DNA</text>
+                            <path class="wf-flow" d="M120 125 L 150 125" stroke="#C8641E" stroke-width="2.5" fill="none"/>
+                            <path d="M150 119 L 158 125 L 150 131" fill="#C8641E"/>
+                            <g class="wf-float" style="animation-delay: -1s" fill="none" stroke="#C8641E" stroke-width="3" stroke-linecap="round">
+                                <path d="M170 102 q 8 -8 16 0 t 16 0 t 16 0"/>
+                                <path d="M166 125 q 8 -8 16 0 t 16 0 t 16 0 t 16 0"/>
+                                <path d="M172 148 q 8 -8 16 0 t 16 0"/>
+                            </g>
+                            <text x="196" y="180" font-size="12" font-weight="600" text-anchor="middle" fill="#C8641E">RNA</text>
+                            <text x="196" y="196" font-size="10.5" text-anchor="middle" fill="#4B4B4B">which genes are on</text>
+                            <path class="wf-flow" d="M240 125 L 268 125" stroke="#2F8F6A" stroke-width="2.5" fill="none"/>
+                            <path d="M268 119 L 276 125 L 268 131" fill="#2F8F6A"/>
+                            <g class="wf-float" style="animation-delay: -2s">
+                                <path d="M292 96 c 12 -10 30 -4 28 10 c -2 10 -16 8 -14 18 c 2 8 -14 12 -20 4 c -8 -10 -4 -24 6 -32 z" fill="#2F8F6A" opacity="0.85"/>
+                                <path d="M300 142 c 10 -6 26 0 22 12 c -3 9 -18 10 -24 4 c -5 -5 -4 -12 2 -16 z" fill="#2F8F6A" opacity="0.65"/>
+                                <circle cx="330" cy="128" r="7" fill="#2F8F6A" opacity="0.5"/>
+                            </g>
+                            <text x="312" y="188" font-size="12" font-weight="600" text-anchor="middle" fill="#2F8F6A">proteins</text>
+                            <text x="312" y="204" font-size="10.5" text-anchor="middle" fill="#4B4B4B">what it built</text>
+                        </svg>
+                    </figure>
+                    <div class="wf-scene-text">
+                        <span class="wf-scene-num">02</span>
+                        <h3>Two ways to read a cell</h3>
+                        <p>
+                            Every cell carries the same genes but switches different ones on. A switched-on gene is copied
+                            into <strong class="wf-rna">RNA</strong>, a working message, which is used to build
+                            <strong class="wf-prot">proteins</strong>, the molecules that do the cell's work. Measure
+                            either one, and you learn something about the cell.
+                        </p>
+                    </div>
                 </li>
-                <li class="wf-primer-card">
-                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="14" width="22" height="16" rx="4" fill="#C8641E"/><text x="17" y="26" font-size="10" text-anchor="middle" fill="#FFFFFF" font-family="Poppins, sans-serif">T</text><rect x="36" y="14" width="22" height="16" rx="4" fill="none" stroke="#2F8F6A" stroke-width="2" stroke-dasharray="3 2"/><text x="47" y="26" font-size="11" text-anchor="middle" fill="#2F8F6A" font-family="Poppins, sans-serif">?</text><circle cx="17" cy="44" r="6" fill="#C8641E" opacity="0.6"/><circle cx="47" cy="44" r="6" fill="#2F8F6A" opacity="0.6"/></svg>
-                    <h3>One side comes with names, the other does not</h3>
-                    <p>
-                        Experts have named the type of tens of thousands of cells measured by their RNA. Protein
-                        measurements of single cells are newer: they catch only the more plentiful proteins, and they
-                        rarely come with names for the cells.
-                    </p>
+                <li class="wf-scene" data-in style="--i: 2">
+                    <figure class="wf-ill">
+                        <svg viewBox="0 0 360 250" role="img" aria-labelledby="ill-3-title">
+                            <title id="ill-3-title">RNA-measured cells each carry a name tag; protein-measured cells carry question marks</title>
+                            <rect x="8" y="8" width="164" height="234" rx="16" fill="#C8641E" opacity="0.07"/>
+                            <rect x="188" y="8" width="164" height="234" rx="16" fill="#2F8F6A" opacity="0.07"/>
+                            <text x="90" y="32" font-size="12" font-weight="600" text-anchor="middle" fill="#C8641E">measured by RNA</text>
+                            <text x="270" y="32" font-size="12" font-weight="600" text-anchor="middle" fill="#2F8F6A">measured by protein</text>
+                            <g font-size="10" text-anchor="middle">
+                                <g class="wf-float"><circle cx="50" cy="74" r="14" fill="#FFFFFF" stroke="#C8641E" stroke-width="1.5"/><circle cx="50" cy="74" r="7" fill="#C8641E" opacity="0.5"/><rect x="24" y="92" width="52" height="16" rx="8" fill="#C8641E"/><text x="50" y="104" fill="#FFFFFF">T cell</text></g>
+                                <g class="wf-float" style="animation-delay: -2s"><circle cx="128" cy="74" r="14" fill="#FFFFFF" stroke="#C8641E" stroke-width="1.5"/><circle cx="128" cy="74" r="7" fill="#C8641E" opacity="0.5"/><rect x="102" y="92" width="52" height="16" rx="8" fill="#C8641E"/><text x="128" y="104" fill="#FFFFFF">B cell</text></g>
+                                <g class="wf-float" style="animation-delay: -1s"><circle cx="50" cy="146" r="14" fill="#FFFFFF" stroke="#C8641E" stroke-width="1.5"/><circle cx="50" cy="146" r="7" fill="#C8641E" opacity="0.5"/><rect x="18" y="164" width="64" height="16" rx="8" fill="#C8641E"/><text x="50" y="176" fill="#FFFFFF">monocyte</text></g>
+                                <g class="wf-float" style="animation-delay: -3s"><circle cx="128" cy="146" r="14" fill="#FFFFFF" stroke="#C8641E" stroke-width="1.5"/><circle cx="128" cy="146" r="7" fill="#C8641E" opacity="0.5"/><rect x="100" y="164" width="56" height="16" rx="8" fill="#C8641E"/><text x="128" y="176" fill="#FFFFFF">NK cell</text></g>
+                                <text x="90" y="214" font-size="10.5" fill="#4B4B4B">tens of thousands,</text>
+                                <text x="90" y="228" font-size="10.5" fill="#4B4B4B">each named by experts</text>
+                                <g class="wf-float" style="animation-delay: -1.5s"><circle cx="230" cy="74" r="14" fill="#FFFFFF" stroke="#2F8F6A" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="230" cy="74" r="7" fill="#2F8F6A" opacity="0.5"/><rect x="214" y="92" width="32" height="16" rx="8" fill="none" stroke="#2F8F6A" stroke-dasharray="3 2"/><text x="230" y="104" fill="#2F8F6A" font-weight="600">?</text></g>
+                                <g class="wf-float" style="animation-delay: -2.5s"><circle cx="308" cy="74" r="14" fill="#FFFFFF" stroke="#2F8F6A" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="308" cy="74" r="7" fill="#2F8F6A" opacity="0.5"/><rect x="292" y="92" width="32" height="16" rx="8" fill="none" stroke="#2F8F6A" stroke-dasharray="3 2"/><text x="308" y="104" fill="#2F8F6A" font-weight="600">?</text></g>
+                                <g class="wf-float" style="animation-delay: -0.5s"><circle cx="230" cy="146" r="14" fill="#FFFFFF" stroke="#2F8F6A" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="230" cy="146" r="7" fill="#2F8F6A" opacity="0.5"/><rect x="214" y="164" width="32" height="16" rx="8" fill="none" stroke="#2F8F6A" stroke-dasharray="3 2"/><text x="230" y="176" fill="#2F8F6A" font-weight="600">?</text></g>
+                                <g class="wf-float" style="animation-delay: -3.5s"><circle cx="308" cy="146" r="14" fill="#FFFFFF" stroke="#2F8F6A" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="308" cy="146" r="7" fill="#2F8F6A" opacity="0.5"/><rect x="292" y="164" width="32" height="16" rx="8" fill="none" stroke="#2F8F6A" stroke-dasharray="3 2"/><text x="308" y="176" fill="#2F8F6A" font-weight="600">?</text></g>
+                                <text x="270" y="214" font-size="10.5" fill="#4B4B4B">newer, catch fewer genes,</text>
+                                <text x="270" y="228" font-size="10.5" fill="#4B4B4B">and rarely named</text>
+                            </g>
+                        </svg>
+                    </figure>
+                    <div class="wf-scene-text">
+                        <span class="wf-scene-num">03</span>
+                        <h3>One side comes with names, the other does not</h3>
+                        <p>
+                            Experts have named the type of tens of thousands of cells measured by their RNA. Protein
+                            measurements of single cells are newer: they catch only the more plentiful proteins, and they
+                            rarely come with names for the cells.
+                        </p>
+                    </div>
                 </li>
-                <li class="wf-primer-card">
-                    <svg class="wf-icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="14" cy="32" r="8" fill="#2F8F6A" opacity="0.8"/><path d="M24 32h14" stroke="#0066A3" stroke-width="2.5"/><path d="M34 26l6 6-6 6" fill="none" stroke="#0066A3" stroke-width="2.5"/><rect x="42" y="22" width="18" height="20" rx="5" fill="#FFFFFF" stroke="#0066A3" stroke-width="2"/><path d="M46 32l3 3 6-7" fill="none" stroke="#0066A3" stroke-width="2.5"/></svg>
-                    <h3>VivOME's idea</h3>
-                    <p>
-                        Learn what each type looks like from the named RNA cells, then read a protein measurement
-                        through the genes both sides share. When the evidence is too weak to name a type, say so, and
-                        say why.
-                    </p>
+                <li class="wf-scene" data-in style="--i: 3">
+                    <figure class="wf-ill">
+                        <svg viewBox="0 0 360 250" role="img" aria-labelledby="ill-4-title">
+                            <title id="ill-4-title">A map learned from named RNA cells; a protein cell lands among the T cells and is named</title>
+                            <rect x="8" y="8" width="344" height="234" rx="16" fill="#F4F7FA"/>
+                            <text x="20" y="30" font-size="11" fill="#4B4B4B">a map learned from the named RNA cells</text>
+                            <g opacity="0.9">
+                                <g fill="#3F7CB8"><circle cx="232" cy="96" r="4"/><circle cx="246" cy="86" r="4"/><circle cx="254" cy="104" r="4"/><circle cx="238" cy="114" r="4"/><circle cx="262" cy="92" r="4"/><circle cx="224" cy="104" r="4"/><circle cx="250" cy="120" r="4"/><circle cx="266" cy="110" r="4"/></g>
+                                <g fill="#7A5BB5"><circle cx="102" cy="176" r="4"/><circle cx="116" cy="186" r="4"/><circle cx="94" cy="190" r="4"/><circle cx="110" cy="200" r="4"/><circle cx="126" cy="176" r="4"/><circle cx="88" cy="176" r="4"/></g>
+                                <g fill="#C9A227"><circle cx="270" cy="186" r="4"/><circle cx="284" cy="196" r="4"/><circle cx="262" cy="200" r="4"/><circle cx="292" cy="182" r="4"/><circle cx="278" cy="208" r="4"/><circle cx="298" cy="200" r="4"/></g>
+                                <g fill="#5A6FA8"><circle cx="186" cy="142" r="4"/><circle cx="198" cy="152" r="4"/><circle cx="178" cy="156" r="4"/><circle cx="192" cy="164" r="4"/><circle cx="206" cy="140" r="4"/></g>
+                            </g>
+                            <g font-size="10.5" fill="#1D2B36">
+                                <text x="276" y="80">T cells</text><text x="62" y="222">B cells</text><text x="262" y="232">monocytes</text><text x="210" y="176">NK cells</text>
+                            </g>
+                            <path class="wf-flow" d="M58 70 C 110 40 180 52 236 98" fill="none" stroke="#2F8F6A" stroke-width="2"/>
+                            <g class="wf-float" style="animation-delay: -1s"><circle cx="50" cy="74" r="13" fill="#FFFFFF" stroke="#2F8F6A" stroke-width="2"/><circle cx="50" cy="74" r="6.5" fill="#2F8F6A" opacity="0.75"/></g>
+                            <text x="50" y="104" font-size="10.5" text-anchor="middle" fill="#2F8F6A">a protein cell</text>
+                            <circle class="wf-pulse" cx="244" cy="102" r="9" fill="none" stroke="#2F8F6A" stroke-width="2.5"/>
+                            <g class="wf-pop">
+                                <rect x="128" y="104" width="84" height="22" rx="11" fill="#0066A3"/>
+                                <text x="170" y="119" font-size="11" text-anchor="middle" fill="#FFFFFF" font-weight="600">named: T cell</text>
+                            </g>
+                            <g>
+                                <rect x="20" y="130" width="122" height="22" rx="11" fill="#FFFFFF" stroke="#1D2B36"/>
+                                <text x="81" y="145" font-size="10" text-anchor="middle" fill="#1D2B36">or: not sure, and why</text>
+                            </g>
+                        </svg>
+                    </figure>
+                    <div class="wf-scene-text">
+                        <span class="wf-scene-num">04</span>
+                        <h3>VivOME's idea</h3>
+                        <p>
+                            Learn what each type looks like from the named RNA cells, and draw them as a map. Then place a
+                            protein measurement on that map, through the genes both sides share, and name it. When the
+                            evidence is too weak to name a type, say so, and say why.
+                        </p>
+                    </div>
                 </li>
             </ol>
         </section>
@@ -774,10 +897,9 @@
                                 <span data-cell="guess">&nbsp;</span>.
                             </p>
                             <p data-beat>
-                                It also asks for a second opinion: it compares the proteins our cell measured with the
-                                typical protein levels of known cell types, measured in sorted immune cells (Rieckmann
-                                et al. 2017). The more our cell's pattern rises and falls with a type's, the better
-                                they match.
+                                It also asks for a second opinion: it compares the genes our cell measured with the
+                                average profile of each cell type among the example cells. The more our cell's pattern
+                                rises and falls with a type's, the better they match.
                             </p>
                             <p data-beat>
                                 The second opinion only counts when it can be trusted: when it agrees with the learners
@@ -811,12 +933,9 @@
                         differ a little from step 8's. Their chances are mixed with the second opinion when it is
                         trusted (the learners weigh <span data-wf="weight_used">&nbsp;</span>), and otherwise with an
                         even split over the types (the learners weigh <span data-wf="weight_flat">&nbsp;</span>), which
-                        leaves the learners' top type on top. The protein levels cover
-                        <span data-wf="protein_classes">&nbsp;</span> of the types; for the others the second opinion
-                        uses RNA averages. In practice files the second opinion was trusted in
-                        <span data-wf="evaluation.uploads.used">&nbsp;</span>. On Fulcher 2026, development data, the
-                        protein levels changed the score by <span data-fact="fulcher_vs_previous">&nbsp;</span> against
-                        the previous release.
+                        leaves the learners' top type on top. In practice files the second opinion was trusted in
+                        <span data-wf="evaluation.uploads.used">&nbsp;</span>, and the table below shows our cell's
+                        numbers.
                     </p>
                     <div id="guess-table"></div>
                 </details>

@@ -410,6 +410,17 @@ function wireFilm() {
 
 // ---- start ----
 
+// The opening's scenes rise in once as they come into view ([data-in],
+// css/story.css). Wired before the data loads, so they show even if it fails.
+(() => {
+  const items = $$('[data-in]');
+  if (!('IntersectionObserver' in window)) { items.forEach((el) => el.classList.add('is-in')); return; }
+  const seen = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); seen.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -10% 0px' });
+  items.forEach((el) => seen.observe(el));
+})();
+
 Promise.all([loadManifest(), loadWorkflow()]).then(([manifest, workflow]) => {
   const sync = checkSync(manifest, workflow);
   $('#sync-banner').innerHTML = buildSyncBanner(sync.problems);

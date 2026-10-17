@@ -329,9 +329,10 @@
     }
     .skip-link:focus { top: 12px; }
 
+    /* The header stays at the top of the page and scrolls away with it
+       (the owner's choice, 2026-10-17); it does not follow the reader. */
     .site-header {
-        position: sticky;
-        top: 0;
+        position: relative;
         z-index: 10;
         border-radius: 0;
         border-width: 0 0 1px;
@@ -423,7 +424,6 @@
 
     @media (max-width: 720px) {
         :root { --gutter: 16px; }
-        .site-header { position: static; }
         .site-header-inner { gap: 12px; flex-wrap: wrap; row-gap: 4px; }
         .site-nav { margin-left: -10px; width: calc(100% + 10px); order: 2; flex-wrap: wrap; overflow: visible; }
         .site-nav a { padding: 5px 10px; }
