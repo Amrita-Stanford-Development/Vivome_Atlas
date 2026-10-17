@@ -23,8 +23,12 @@ runway, 1.2 of the window's height per sentence (`RUNWAY_PER_BEAT` in
 animation: each beat's share of the runway first plays its animation, then
 the frame fades to the beat's sentence, and the next beat's animation
 follows as the sentence fades (`playThenRead` in `web/js/timeline.js`).
+The sentence is in the accent blue, bold and justified, and types itself
+out letter by letter as it shows, with a caret blinking at the end
+(`typeset` in `web/js/workflow.js`; a filled value types as one piece).
 Dots under the figure show where the chapter is. Under reduced motion each
-beat shows its finished frame, then its sentence, with no fades.
+beat shows its finished frame, then its whole sentence at once, with no
+fades and no caret.
 A chapter's "In plain words", details, lookups and readouts follow its
 stage on the page itself, without a card, unpinned.
 

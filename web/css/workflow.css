@@ -354,8 +354,9 @@
     margin: 0;
     max-width: 50ch;
     font-size: clamp(17px, 1.65vw, 22px);
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.65;
+    letter-spacing: -0.005em;
     color: var(--accent);
     text-align: justify;
     text-align-last: left;
@@ -364,8 +365,25 @@
     opacity: 0;
     visibility: hidden;
 }
-.js .wf-runway.is-measured .wf-beats > [data-beat] a { color: inherit; font-weight: 600; }
+.js .wf-runway.is-measured .wf-beats > [data-beat] a { color: inherit; }
 .js .wf-runway.is-measured .wf-beats > [data-beat].is-active { opacity: 1; visibility: visible; }
+/* Typed: once the sentence shows (.is-typed, from web/js/workflow.js) its
+   letters appear one after another, 11ms apart (TYPE_MS there), and a caret
+   blinks at the end. Hiding them again is instant, under the fading screen. */
+.js .wf-runway.is-measured .wf-beats .wf-ch { opacity: 0; }
+.js .wf-runway.is-measured .wf-beats .is-typed .wf-ch { opacity: 1; transition: opacity 0.05s linear calc(var(--i) * 11ms); }
+.wf-caret { display: none; }
+.js .wf-runway.is-measured .wf-beats .wf-caret {
+    display: inline-block;
+    width: 0.09em;
+    height: 1.05em;
+    margin: 0 -0.17em 0 0.08em;
+    vertical-align: -0.16em;
+    background: currentColor;
+    opacity: 0;
+}
+.js .wf-runway.is-measured .wf-beats .is-typed .wf-caret { animation: wf-caret 1s steps(1) var(--typed, 0ms) infinite; }
+@keyframes wf-caret { 0% { opacity: 1; } 50% { opacity: 0; } }
 .wf-beat-dots { display: flex; justify-content: center; list-style: none; padding: 0; gap: 7px; margin: 2px 0 0; }
 .wf-beat-dots li { width: 8px; height: 8px; border-radius: 50%; background: var(--line); max-width: none; transition: background 0.3s ease; }
 .wf-beat-dots li.is-on { background: var(--accent); }
@@ -545,6 +563,8 @@ body.wf-film-open { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
     .wf-beat-dots li { transition: none; }
+    .js .wf-runway.is-measured .wf-beats .is-typed .wf-ch { transition: none; }
+    .js .wf-runway.is-measured .wf-beats .wf-caret { display: none; }
 }
 
 /* ---- print: the text and the finished figures, no chrome ---- */
@@ -559,7 +579,8 @@ body.wf-film-open { overflow: hidden; }
     .js .wf-runway.is-measured > .wf-pin { position: static; display: block; }
     .js .wf-runway.is-measured .wf-beats { position: static; display: block; opacity: 1; background: none; padding: 0; }
     .js .wf-runway.is-measured .wf-beats > [data-beat] { opacity: 1; visibility: visible; margin-bottom: 10px; }
-    .wf-beat-dots { display: none !important; }
+    .js .wf-runway.is-measured .wf-beats .wf-ch { opacity: 1; }
+    .wf-beat-dots, .wf-caret { display: none !important; }
     .wf-canvas { height: auto; }
     .wf-canvas canvas { display: none; }
     .wf-canvas .wf-print { position: static; display: block; }

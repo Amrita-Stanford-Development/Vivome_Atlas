@@ -319,6 +319,7 @@ function layoutPins() {
       dots.innerHTML = '<li></li>'.repeat(c.beats);
       screen.after(dots);
     }
+    $$('[data-beat]', screen).forEach(typeset);
     runway.classList.add('is-measured');
     const height = pin.offsetHeight;
     const top = head + Math.max(8, (room - height) / 2);
@@ -326,6 +327,48 @@ function layoutPins() {
     runway.style.setProperty('--pin-top', `${Math.round(top)}px`);
     pins.set(c.id, { runway, pin, screen, top, height, beats: $$('[data-beat]', screen), dots: $$('.wf-beat-dots li', section) });
   }
+}
+
+// Each sentence types itself out when it shows: its letters become spans
+// with their order (--i), shown in turn by the CSS, TYPE_MS apart. A filled
+// value (data-wf, data-fact, data-cell) types as one piece, so refilling it
+// for another followed cell still works. A caret blinks once it is typed.
+const TYPE_MS = 11;
+function typeset(beat) {
+  if (beat.dataset.typeset) return;
+  beat.dataset.typeset = 'yes';
+  let i = 0;
+  const walk = (node) => {
+    for (const child of [...node.childNodes]) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const frag = document.createDocumentFragment();
+        for (const part of child.textContent.split(/([ \t\n\r]+)/)) {
+          if (!part) continue;
+          if (/^[ \t\n\r]+$/.test(part)) { frag.append(' '); continue; }
+          for (const letter of part) {
+            const span = document.createElement('span');
+            span.className = 'wf-ch';
+            span.style.setProperty('--i', i++);
+            span.textContent = letter;
+            frag.append(span);
+          }
+        }
+        child.replaceWith(frag);
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        if (child.matches('[data-wf], [data-fact], [data-cell]')) {
+          child.classList.add('wf-ch');
+          child.style.setProperty('--i', i);
+          i += 3;
+        } else walk(child);
+      }
+    }
+  };
+  walk(beat);
+  const caret = document.createElement('span');
+  caret.className = 'wf-caret';
+  caret.setAttribute('aria-hidden', 'true');
+  beat.append(caret);
+  beat.style.setProperty('--typed', `${i * TYPE_MS}ms`);
 }
 
 // The scene's progress for a chapter's scroll: its beat's animation, held
@@ -353,7 +396,12 @@ function onScroll() {
     if (box.bottom < -vh || box.top > vh * 2) continue;
     const at = playThenRead(c, progressOf(c.id));
     const read = reduced ? (at.read > 0.5 ? 1 : 0) : at.read;
-    pin.beats.forEach((el, k) => el.classList.toggle('is-active', k === at.sentence));
+    pin.beats.forEach((el, k) => {
+      const on = k === at.sentence;
+      el.classList.toggle('is-active', on);
+      // Typed once its sentence shows; reset when another takes its place.
+      el.classList.toggle('is-typed', on && (read > 0.3 || el.classList.contains('is-typed')));
+    });
     pin.dots.forEach((el, k) => el.classList.toggle('is-on', k <= at.beat));
     pin.screen.style.setProperty('--read', read.toFixed(3));
     pin.screen.classList.toggle('is-reading', read > 0.5);
