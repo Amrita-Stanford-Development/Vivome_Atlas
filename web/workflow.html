@@ -214,39 +214,67 @@
         <section class="sheet wf-map" aria-labelledby="map-title">
             <span class="eyebrow">The journey at a glance</span>
             <h2 id="map-title">Four parts, twelve steps</h2>
-            <ol class="wf-parts">
-                <li class="wf-part-card">
-                    <span class="wf-part-num">Part 1 · 4 steps</span>
-                    <h3>What the model learns</h3>
-                    <p>Done once, before anyone sends a file: the data VivOME learns from, what a protein file looks
-                        like, the genes both sides share, and the training.</p>
-                    <a class="chapter-link" href="#part-1">Go to part 1</a>
+            <p class="wf-map-lede">One cell's file flows through all four, in order. Click any part or step to jump there.</p>
+            <div class="wf-journey">
+                <svg class="wf-journey-track" viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true">
+                    <line x1="0" y1="10" x2="1000" y2="10" class="wf-journey-rail"/>
+                    <line x1="0" y1="10" x2="1000" y2="10" class="wf-journey-pulse"/>
+                </svg>
+                <ol class="wf-stations">
+                <li class="wf-station" data-in style="--i: 0">
+                    <a class="wf-station-head" href="#part-1">
+                        <span class="wf-station-node"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="11" width="30" height="26" rx="4" fill="#EAF3FA" stroke="#0066A3" stroke-width="2"/><path d="M24 12v24" stroke="#0066A3" stroke-width="2"/><path d="M14 18h6M14 23h6M14 28h6M28 18h6M28 23h6M28 28h6" stroke="#0066A3" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                        <span class="wf-station-num">Part 1 · 4 steps</span>
+                        <span class="wf-station-title">What the model learns</span>
+                        <span class="wf-station-sub">Built once, before any file arrives.</span>
+                    </a>
+                    <ol class="wf-station-steps">
+                            <li><a href="#data">Two kinds of data</a></li>
+                            <li><a href="#files">What a protein file looks like</a></li>
+                            <li><a href="#genes">One shared list of genes</a></li>
+                            <li><a href="#training">How VivOME learns</a></li>
+                    </ol>
                 </li>
-                <li class="wf-part-card">
-                    <span class="wf-part-num">Part 2 · 2 steps</span>
-                    <h3>Reading a new file</h3>
-                    <p>A file arrives: its genes are fitted to the shared list, and each cell borrows a little from
-                        similar cells in the same file.</p>
-                    <a class="chapter-link" href="#part-2">Go to part 2</a>
+                <li class="wf-station" data-in style="--i: 1">
+                    <a class="wf-station-head" href="#part-2">
+                        <span class="wf-station-node"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 8h16l8 8v24a2 2 0 0 1-2 2H13a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" fill="#EAF6F1" stroke="#2F8F6A" stroke-width="2"/><path d="M29 8v8h8" fill="none" stroke="#2F8F6A" stroke-width="2"/><path d="M16 24h16M16 29h16M16 34h10" stroke="#2F8F6A" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                        <span class="wf-station-num">Part 2 · 2 steps</span>
+                        <span class="wf-station-title">Reading a new file</span>
+                        <span class="wf-station-sub">A researcher's file is fitted to the shared list.</span>
+                    </a>
+                    <ol class="wf-station-steps">
+                            <li><a href="#matching">Fitting the file to the shared list</a></li>
+                            <li><a href="#smoothing">Borrowing from similar cells</a></li>
+                    </ol>
                 </li>
-                <li class="wf-part-card">
-                    <span class="wf-part-num">Part 3 · 5 steps</span>
-                    <h3>The model's judgement</h3>
-                    <p>Each cell becomes a point on a map, then chances for each type, then a best guess and an
-                        answer, or a reason for none.</p>
-                    <a class="chapter-link" href="#part-3">Go to part 3</a>
+                <li class="wf-station" data-in style="--i: 2">
+                    <a class="wf-station-head" href="#part-3">
+                        <span class="wf-station-node"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="15" fill="#EAF3FA" stroke="#0066A3" stroke-width="2"/><circle cx="24" cy="24" r="8" fill="none" stroke="#0066A3" stroke-width="1.6"/><circle cx="24" cy="24" r="2.8" fill="#0066A3"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6" stroke="#0066A3" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+                        <span class="wf-station-num">Part 3 · 5 steps</span>
+                        <span class="wf-station-title">The model's judgement</span>
+                        <span class="wf-station-sub">The cell becomes a point, then an answer.</span>
+                    </a>
+                    <ol class="wf-station-steps">
+                            <li><a href="#encoder">A point on the map</a></li>
+                            <li><a href="#probabilities">Close to which types?</a></li>
+                            <li><a href="#guess">The best guess</a></li>
+                            <li><a href="#answer">The answer, or why not</a></li>
+                            <li><a href="#landing">Where the cell lands</a></li>
+                    </ol>
                 </li>
-                <li class="wf-part-card">
-                    <span class="wf-part-num">Part 4 · 1 step</span>
-                    <h3>How we know it works</h3>
-                    <p>Tests on cells whose types are known, a fair contest with other methods, sets kept back until
-                        the end, and the live service.</p>
-                    <a class="chapter-link" href="#part-4">Go to part 4</a>
+                <li class="wf-station" data-in style="--i: 3">
+                    <a class="wf-station-head" href="#part-4">
+                        <span class="wf-station-node"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 7l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V12z" fill="#EAF6F1" stroke="#2F8F6A" stroke-width="2"/><path d="M17 24l5 5 9-10" fill="none" stroke="#2F8F6A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                        <span class="wf-station-num">Part 4 · 1 step</span>
+                        <span class="wf-station-title">How we know it works</span>
+                        <span class="wf-station-sub">Tested three ways, and live today.</span>
+                    </a>
+                    <ol class="wf-station-steps">
+                            <li><a href="#results">Testing VivOME, and using it</a></li>
+                    </ol>
                 </li>
-            </ol>
-            <nav class="wf-toc" aria-label="Every step">
-                <ol id="toc"></ol>
-            </nav>
+                </ol>
+            </div>
         </section>
 
         <section class="sheet wf-howto" aria-labelledby="howto-title">

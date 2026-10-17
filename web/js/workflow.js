@@ -221,10 +221,6 @@ async function askService() {
 
 // ---- the table of contents and the figures' controls ----
 
-function buildToc() {
-  $('#toc').innerHTML = CHAPTERS.map((c) => `<li><a href="#${c.id}">${escapeHtml(c.title)}</a></li>`).join('');
-}
-
 function wireFigures() {
   for (const figure of $$('.wf-stage')) {
     const id = figure.dataset.scene;
@@ -364,8 +360,15 @@ function onScroll() {
     const box = document.getElementById(c.id).getBoundingClientRect();
     return box.top < vh * 0.5 && box.bottom > vh * 0.5;
   });
-  $$('.wf-toc a').forEach((a) => a.classList.toggle('is-current', current && a.getAttribute('href') === `#${current.id}`));
+  // Only when the chapter on screen changes: restyling the links on every
+  // scroll frame made them shimmer.
+  const id = current?.id ?? null;
+  if (id !== lastCurrent) {
+    lastCurrent = id;
+    $$('.wf-station-steps a').forEach((a) => a.classList.toggle('is-current', a.getAttribute('href') === `#${id}`));
+  }
 }
+let lastCurrent;
 
 function watchChapters() {
   const near = new IntersectionObserver((entries) => {
@@ -427,7 +430,6 @@ Promise.all([loadManifest(), loadWorkflow()]).then(([manifest, workflow]) => {
   $('#sync-banner').innerHTML = buildSyncBanner(sync.problems);
   ctx = buildContext(manifest, workflow);
   setSlots(manifest, workflow);
-  buildToc();
   buildPanels();
   buildPicker();
   wireFigures();

@@ -31,8 +31,9 @@ project's own terms (an outcome is "no answer: too little measured", not
 `OUTCOME_NOTES` in `web/js/workflow-data.js`, with `DESIGN_NAMES` and
 `PRACTICE_KINDS` for the training designs and the practice files). The
 opening has a "Start here" primer (what a cell type, RNA and a protein are,
-and VivOME's idea), a map of the four parts with every step, a "how to
-read" box with a word list, and "Meet the cell we follow": the followed
+and VivOME's idea, each illustrated), the journey as a flow of four
+stations on one track with each part's steps beneath it (down the page on
+phones), a "how to read" box with a word list, and "Meet the cell we follow": the followed
 cell as a card, and buttons that pick a cell by its result, each explained
 in an overlay. Each step's eyebrow names its part and its place in it, and
 each step ends with one "In plain words" card (`.wf-after`); technical
