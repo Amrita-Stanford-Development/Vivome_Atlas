@@ -13,17 +13,20 @@ Each part opens on a screen of its own (`.wf-part`): its number large and
 faint behind it, its title and what it covers, and its steps as a row of
 numbered links; it fades in as it comes into view. Each step opens with a
 smaller screen (`.wf-step-intro`): dots for where it sits in its part, its
-name and what it is about. When a chapter's
-stage (its heading, its sentences and its figure) reaches the middle of the
-window it holds still, and scrolling plays the figure's animation instead
-of moving the page; when the animation ends, the stage lets go and the page
-moves on. The scroll it takes is the chapter's runway, 0.8 of the window's
-height per sentence (`RUNWAY_PER_BEAT` in `web/js/workflow.js`). Each
-chapter's sentences are its beats (`<p data-beat>`); its progress, 0 to 1,
-is split evenly between them, and the sentence being played is highlighted.
-Where the sentences do not all fit beside the figure, and on narrow screens,
-they share one place and cross-fade, with dots for the chapter's progress.
-A chapter's details, lookups and readouts follow its stage, unpinned.
+name and what it is about. When a chapter's stage (its heading above its
+figure card) reaches the middle of the window it holds still, and
+scrolling plays the chapter instead of moving the page; when it ends, the
+stage lets go and the page moves on. The scroll it takes is the chapter's
+runway, 1.2 of the window's height per sentence (`RUNWAY_PER_BEAT` in
+`web/js/workflow.js`). Each chapter's sentences are its beats
+(`<p data-beat>`), and they sit inside the figure card, over the
+animation: each beat's share of the runway first plays its animation, then
+the frame fades to the beat's sentence, and the next beat's animation
+follows as the sentence fades (`playThenRead` in `web/js/timeline.js`).
+Dots under the figure show where the chapter is. Under reduced motion each
+beat shows its finished frame, then its sentence, with no fades.
+A chapter's "In plain words", details, lookups and readouts follow its
+stage on the page itself, without a card, unpinned.
 
 The page is written for a complete beginner. Plain words replace the
 project's own terms (an outcome is "no answer: too little measured", not

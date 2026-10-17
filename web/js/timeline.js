@@ -59,6 +59,30 @@ export function beatAt(chapter, p) {
   return clamp(Math.floor(clamp(p, 0, 1) * n), 0, n - 1);
 }
 
+// On the page each beat first plays its animation, then fades the frame to
+// its sentence (PLAY_SHARE of the beat's scroll animates). The scene's frame
+// is held a little before the beat's end (HOLD), where the scenes finish a
+// beat before cross-fading to the next. While the next beat starts, the last
+// sentence fades out (FADE_OUT). Returns the beat, the scene's progress, the
+// sentence to show and how strongly (0 to 1).
+export const PLAY_SHARE = 0.6;
+const HOLD = 0.035;
+const FADE_IN = 0.1;
+const FADE_OUT = 0.08;
+const smooth = (x) => { const t = clamp(x, 0, 1); return t * t * (3 - 2 * t); };
+export function playThenRead(chapter, p) {
+  const n = Math.max(1, chapter.beats);
+  const x = clamp(Number.isFinite(p) ? p : 0, 0, 1) * n;
+  const beat = Math.min(n - 1, Math.floor(x));
+  const u = x - beat;
+  const start = beat / n;
+  const hold = Math.max(start, (beat + 1) / n - HOLD);
+  const scene = start + (hold - start) * Math.min(1, u / PLAY_SHARE);
+  if (u >= PLAY_SHARE) return { beat, scene, hold, sentence: beat, read: smooth((u - PLAY_SHARE) / FADE_IN) };
+  if (beat > 0 && u < FADE_OUT) return { beat, scene, hold, sentence: beat - 1, read: 1 - smooth(u / FADE_OUT) };
+  return { beat, scene, hold, sentence: beat, read: 0 };
+}
+
 // Under reduced motion the film steps instead of animating: each beat holds
 // its finished frame, the end of its window.
 export function stepTarget(chapter, p) {

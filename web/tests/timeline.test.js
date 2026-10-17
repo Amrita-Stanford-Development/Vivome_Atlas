@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  CHAPTERS, STARTS, TOTAL, beatAt, beatWindow, formatClock, formatHash, locate, parseHash, stepTarget, timeOf,
+  CHAPTERS, PLAY_SHARE, STARTS, TOTAL, beatAt, beatWindow, formatClock, formatHash, locate, parseHash, playThenRead,
+  stepTarget, timeOf,
 } from '../js/timeline.js';
 
 test('the chapters add up to the film and start where the last ends', () => {
@@ -45,6 +46,31 @@ test('beats tile each chapter, and reduced motion holds each beat’s end', () =
       assert.ok(target >= p - 1e-9 && target <= 1);
       assert.equal(target, beatWindow(chapter, beatAt(chapter, p))[1]);
     }
+  }
+});
+
+test('each beat plays its animation, then shows its sentence over the held frame', () => {
+  for (const chapter of CHAPTERS) {
+    let last = -1;
+    for (let p = 0; p <= 1; p += 0.002) {
+      const at = playThenRead(chapter, p);
+      const [a, z] = beatWindow(chapter, at.beat);
+      assert.ok(at.scene >= a - 1e-9 && at.scene <= z, 'the scene stays in its beat');
+      assert.ok(at.scene >= last - 1e-9, 'the scene never runs backwards');
+      last = at.scene;
+      assert.ok(at.read >= 0 && at.read <= 1);
+      assert.ok(at.sentence === at.beat || at.sentence === at.beat - 1);
+    }
+    for (let b = 0; b < chapter.beats; b += 1) {
+      const [a, z] = beatWindow(chapter, b);
+      const playing = playThenRead(chapter, a + (z - a) * PLAY_SHARE * 0.5);
+      assert.equal(playing.read, 0, 'no sentence while the animation plays');
+      const reading = playThenRead(chapter, a + (z - a) * 0.95);
+      assert.equal(reading.read, 1);
+      assert.equal(reading.sentence, b);
+      assert.equal(reading.scene, reading.hold, 'the frame holds while the sentence shows');
+    }
+    assert.equal(playThenRead(chapter, 1).read, 1, 'the last sentence stays');
   }
 });
 

@@ -13,7 +13,7 @@
 
 import { formatCount, loadManifest, PENDING_LABEL } from './manifest.js';
 import { errorPanel, escapeHtml, factText } from './panels.js';
-import { CHAPTERS, beatAt, parseHash, stepTarget } from './timeline.js';
+import { CHAPTERS, parseHash, playThenRead } from './timeline.js';
 import {
   ANSWERED, OUTCOME_CHIPS, OUTCOME_NOTES, OUTCOME_ORDER, answerShort, answerText, checkSync, classColour, detailFor, geneLookup, guessText,
   loadWorkflow, outcomeCounts, wfText,
@@ -44,7 +44,7 @@ const MODULE_OF = {
 
 const state = { cell: 0, options: {} };
 // Scroll per beat while a stage is pinned, as a share of the window's height.
-const RUNWAY_PER_BEAT = 0.8;
+const RUNWAY_PER_BEAT = 1.2;
 const pins = new Map(); // chapter id -> {runway, pin, top, height}
 const scenes = new Map(); // chapter id -> {scene, section, progress}
 let ctx = null;
@@ -268,7 +268,7 @@ async function mountScene(id) {
   if (scenes.has(id)) return scenes.get(id);
   const section = document.getElementById(id);
   const holder = $('.wf-canvas', section);
-  const entry = { scene: null, section, progress: progressOf(id), loading: true };
+  const entry = { scene: null, section, progress: sceneProgress(id), loading: true };
   scenes.set(id, entry);
   try {
     const module = await MODULES[MODULE_OF[id]]();
@@ -284,9 +284,7 @@ async function mountScene(id) {
 function renderChapter(id) {
   const entry = scenes.get(id);
   if (!entry?.scene) return;
-  const chapter = CHAPTERS[chapterIndex(id)];
-  const p = reduced ? stepTarget(chapter, entry.progress) : entry.progress;
-  entry.scene.render(p, state);
+  entry.scene.render(entry.progress, state);
   const caption = $('[data-describe]', entry.section);
   if (caption) caption.textContent = entry.scene.describe(state);
 }
@@ -295,9 +293,10 @@ function renderAll() {
   for (const id of scenes.keys()) renderChapter(id);
 }
 
-// Pinning: each stage is centred in the window below the header and held
-// there for its chapter's runway. Where every beat does not fit beside the
-// figure (and on narrow screens), the beats share one place and cross-fade.
+// Pinning: each stage (its heading above its figure card) is centred in the
+// window and held there for its chapter's runway. Inside the card each beat
+// plays its animation, then the frame fades to the beat's sentence
+// (timeline.js, playThenRead), with dots for where the chapter is.
 function headerHeight() {
   const header = $('.site-header');
   return header && getComputedStyle(header).position === 'sticky' ? header.offsetHeight : 0;
@@ -307,29 +306,35 @@ function layoutPins() {
   const vh = window.innerHeight;
   const head = headerHeight();
   const room = vh - head - 16;
-  const narrow = window.matchMedia('(max-width: 1023px)').matches;
   for (const c of CHAPTERS) {
     const section = document.getElementById(c.id);
     const runway = $('.wf-runway', section);
     const pin = $('.wf-pin', section);
-    const text = $('.wf-text', section);
-    if (!runway || !pin) continue;
-    if (!$('.wf-beat-dots', text)) {
+    const screen = $('.wf-screen', section);
+    if (!runway || !pin || !screen) continue;
+    if (!$('.wf-beat-dots', section)) {
       const dots = document.createElement('ol');
       dots.className = 'wf-beat-dots';
       dots.setAttribute('aria-hidden', 'true');
       dots.innerHTML = '<li></li>'.repeat(c.beats);
-      text.appendChild(dots);
+      screen.after(dots);
     }
-    text.classList.toggle('wf-compact', narrow);
-    if (!narrow && pin.offsetHeight > room) text.classList.add('wf-compact');
+    runway.classList.add('is-measured');
     const height = pin.offsetHeight;
     const top = head + Math.max(8, (room - height) / 2);
     runway.style.setProperty('--runway', `${Math.round(height + c.beats * RUNWAY_PER_BEAT * vh)}px`);
     runway.style.setProperty('--pin-top', `${Math.round(top)}px`);
-    runway.classList.add('is-measured');
-    pins.set(c.id, { runway, pin, text, top, height });
+    pins.set(c.id, { runway, pin, screen, top, height, beats: $$('[data-beat]', screen), dots: $$('.wf-beat-dots li', section) });
   }
+}
+
+// The scene's progress for a chapter's scroll: its beat's animation, held
+// at the beat's last frame while the sentence shows; under reduced motion,
+// that last frame throughout.
+function sceneProgress(id) {
+  const chapter = CHAPTERS[chapterIndex(id)];
+  const at = playThenRead(chapter, progressOf(id));
+  return reduced ? at.hold : at.scene;
 }
 
 function progressOf(id) {
@@ -346,10 +351,13 @@ function onScroll() {
     if (!pin) continue;
     const box = pin.runway.getBoundingClientRect();
     if (box.bottom < -vh || box.top > vh * 2) continue;
-    const p = progressOf(c.id);
-    const beat = beatAt(c, p);
-    $$('[data-beat]', pin.text).forEach((el, k) => el.classList.toggle('is-active', k === beat));
-    $$('.wf-beat-dots li', pin.text).forEach((el, k) => el.classList.toggle('is-on', k <= beat));
+    const at = playThenRead(c, progressOf(c.id));
+    const read = reduced ? (at.read > 0.5 ? 1 : 0) : at.read;
+    pin.beats.forEach((el, k) => el.classList.toggle('is-active', k === at.sentence));
+    pin.dots.forEach((el, k) => el.classList.toggle('is-on', k <= at.beat));
+    pin.screen.style.setProperty('--read', read.toFixed(3));
+    pin.screen.classList.toggle('is-reading', read > 0.5);
+    const p = reduced ? at.hold : at.scene;
     const entry = scenes.get(c.id);
     if (entry && (Math.abs(p - entry.progress) > 0.002 || p === 1 || p === 0)) {
       entry.progress = p;

@@ -351,22 +351,24 @@
                     <div class="wf-text">
                         <span class="eyebrow">The journey in one picture</span>
                         <h2 id="h-open">One cell, start to end</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                Our cell, cell <span data-cell="number">&nbsp;</span>, arrives as one column of a
-                                protein file: the amounts of a few thousand proteins measured in that one cell, with
-                                blanks where a protein was not seen.
-                            </p>
-                            <p data-beat>
-                                Step by step, VivOME turns that column into a result. Its answer:
-                                <strong data-cell="answer">&nbsp;</strong>. Its best guess:
-                                <strong data-cell="guess">&nbsp;</strong>. Each stop on the line is a step on this
-                                page.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="open">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    Our cell, cell <span data-cell="number">&nbsp;</span>, arrives as one column of a
+                                    protein file: the amounts of a few thousand proteins measured in that one cell, with
+                                    blanks where a protein was not seen.
+                                </p>
+                                <p data-beat>
+                                    Step by step, VivOME turns that column into a result. Its answer:
+                                    <strong data-cell="answer">&nbsp;</strong>. Its best guess:
+                                    <strong data-cell="guess">&nbsp;</strong>. Each stop on the line is a step on this
+                                    page.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                     </figure>
                 </div>
@@ -402,30 +404,32 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 1 · What the model learns · Step 1 of 4</span>
                         <h2 id="h-data">Two kinds of data</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                To learn what each kind of blood cell looks like, VivOME studies examples whose kind
-                                is already known: <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula
-                                Sapiens, a free public collection of human cells. Experts named each cell's type,
-                                <span data-wf="classes">&nbsp;</span> types in all. On the map, each dot is a cell,
-                                and cells of one type sit together.
-                            </p>
-                            <p data-beat>
-                                The types are arranged like a family tree: each type belongs to a family, such as
-                                T cells, and each family to a broad branch, such as lymphoid. When VivOME is unsure
-                                of the exact type, it can still name the family or the branch. Lit up: the branch of
-                                our cell's best guess.
-                            </p>
-                            <p data-beat>
-                                Those examples were measured by reading their RNA. The cells VivOME is used on are
-                                measured differently, by their proteins: a few thousand per cell, with many blanks
-                                and no name. The two are joined through genes, since each protein is made from a
-                                gene. Six lists of proteins from earlier experiments decide which genes are used.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="data">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    To learn what each kind of blood cell looks like, VivOME studies examples whose kind
+                                    is already known: <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula
+                                    Sapiens, a free public collection of human cells. Experts named each cell's type,
+                                    <span data-wf="classes">&nbsp;</span> types in all. On the map, each dot is a cell,
+                                    and cells of one type sit together.
+                                </p>
+                                <p data-beat>
+                                    The types are arranged like a family tree: each type belongs to a family, such as
+                                    T cells, and each family to a broad branch, such as lymphoid. When VivOME is unsure
+                                    of the exact type, it can still name the family or the branch. Lit up: the branch of
+                                    our cell's best guess.
+                                </p>
+                                <p data-beat>
+                                    Those examples were measured by reading their RNA. The cells VivOME is used on are
+                                    measured differently, by their proteins: a few thousand per cell, with many blanks
+                                    and no name. The two are joined through genes, since each protein is made from a
+                                    gene. Six lists of proteins from earlier experiments decide which genes are used.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -466,32 +470,34 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 1 · What the model learns · Step 2 of 4</span>
                         <h2 id="h-files">What a protein file looks like</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                Here is a real protein file, the one our cell comes from. It is a big table, with
-                                one row per protein and one column per cell: <span data-wf="rows">&nbsp;</span>
-                                rows by <span data-wf="runs">&nbsp;</span> columns. In the picture, each tiny
-                                square is one protein in one cell: green where it was seen, pale where it was not.
-                                The rows run from the protein seen in most cells down to the rarest.
-                            </p>
-                            <p data-beat>
-                                Each number in the table says how strongly the instrument detected that protein in
-                                that cell: the bigger, the more of it. A blank means it was not detected, which often
-                                means there was too little of it to catch, not none. In all,
-                                <span data-wf="missing_share">&nbsp;</span> of this table is blank. Our cell has values
-                                for <span data-cell="observed_raw">&nbsp;</span> of the
-                                <span data-wf="rows">&nbsp;</span> proteins.
-                            </p>
-                            <p data-beat>
-                                Every lab writes its files a little differently: some put cells in rows instead of
-                                columns, some adjust the numbers first, and each uses its own software. Before
-                                anything else, VivOME reads every kind of file into the same shape: one row per
-                                cell, one column per gene.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="files">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    Here is a real protein file, the one our cell comes from. It is a big table, with
+                                    one row per protein and one column per cell: <span data-wf="rows">&nbsp;</span>
+                                    rows by <span data-wf="runs">&nbsp;</span> columns. In the picture, each tiny
+                                    square is one protein in one cell: green where it was seen, pale where it was not.
+                                    The rows run from the protein seen in most cells down to the rarest.
+                                </p>
+                                <p data-beat>
+                                    Each number in the table says how strongly the instrument detected that protein in
+                                    that cell: the bigger, the more of it. A blank means it was not detected, which often
+                                    means there was too little of it to catch, not none. In all,
+                                    <span data-wf="missing_share">&nbsp;</span> of this table is blank. Our cell has values
+                                    for <span data-cell="observed_raw">&nbsp;</span> of the
+                                    <span data-wf="rows">&nbsp;</span> proteins.
+                                </p>
+                                <p data-beat>
+                                    Every lab writes its files a little differently: some put cells in rows instead of
+                                    columns, some adjust the numbers first, and each uses its own software. Before
+                                    anything else, VivOME reads every kind of file into the same shape: one row per
+                                    cell, one column per gene.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -545,32 +551,34 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 1 · What the model learns · Step 3 of 4</span>
                         <h2 id="h-genes">One shared list of genes</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                First, the protein side. Six lists of proteins, from earlier experiments that
-                                measured many cells, are pooled into one. A gene named in several lists counts once,
-                                so together they name <span data-wf="gene_space.funnel.union">&nbsp;</span> genes.
-                                <span data-wf="gene_space.funnel.ig_tcr_excluded">&nbsp;</span> of them are pieces of
-                                antibody and T-cell receptor genes, which each B or T cell rearranges in its own way;
-                                they are left out, leaving
-                                <span data-wf="gene_space.funnel.union_without_ig_tcr">&nbsp;</span>.
-                            </p>
-                            <p data-beat>
-                                The RNA examples cover far more genes:
-                                <span data-wf="gene_space.funnel.rna_genes">&nbsp;</span>. Only genes on both sides can
-                                be compared, so VivOME keeps just the overlap:
-                                <span data-wf="gene_space.funnel.feature_space">&nbsp;</span> genes. This is its shared
-                                list.
-                            </p>
-                            <p data-beat>
-                                Each gene on the shared list gets its own seat, always in the same order. Every file
-                                is read into these same seats, so a seat always means the same gene. A seat stays
-                                empty when a cell's protein was not seen; Part 2, step 1 shows that for our cell.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="genes">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    First, the protein side. Six lists of proteins, from earlier experiments that
+                                    measured many cells, are pooled into one. A gene named in several lists counts once,
+                                    so together they name <span data-wf="gene_space.funnel.union">&nbsp;</span> genes.
+                                    <span data-wf="gene_space.funnel.ig_tcr_excluded">&nbsp;</span> of them are pieces of
+                                    antibody and T-cell receptor genes, which each B or T cell rearranges in its own way;
+                                    they are left out, leaving
+                                    <span data-wf="gene_space.funnel.union_without_ig_tcr">&nbsp;</span>.
+                                </p>
+                                <p data-beat>
+                                    The RNA examples cover far more genes:
+                                    <span data-wf="gene_space.funnel.rna_genes">&nbsp;</span>. Only genes on both sides can
+                                    be compared, so VivOME keeps just the overlap:
+                                    <span data-wf="gene_space.funnel.feature_space">&nbsp;</span> genes. This is its shared
+                                    list.
+                                </p>
+                                <p data-beat>
+                                    Each gene on the shared list gets its own seat, always in the same order. Every file
+                                    is read into these same seats, so a seat always means the same gene. A seat stays
+                                    empty when a cell's protein was not seen; Part 2, step 1 shows that for our cell.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -610,39 +618,41 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 1 · What the model learns · Step 4 of 4</span>
                         <h2 id="h-training">How VivOME learns</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                VivOME learns by example. It is shown the example cells, with their names, over and
-                                over: up to <span data-wf="training.recipe.epochs">&nbsp;</span> rounds. After each
-                                round it adjusts itself a little, until cells of the same type land close together on
-                                its map. No protein label is used at any point.
-                            </p>
-                            <p data-beat>
-                                It practises with most genes hidden. A real protein file has values for only a small
-                                share of the genes: our cell has <span data-cell="observed">&nbsp;</span> of the
-                                <span data-wf="feature_space">&nbsp;</span>. So in practice, most of each example's
-                                genes are hidden on purpose. It sees only
-                                <span data-wf="training.recipe.coverage_low">&nbsp;</span> to
-                                <span data-wf="training.recipe.coverage_high">&nbsp;</span> of them, and must still
-                                name the cell.
-                            </p>
-                            <p data-beat>
-                                Several learners instead of one. The same training is run
-                                <span data-wf="members">&nbsp;</span> times, each from a different random start, so
-                                each learner ends up slightly different. When a new cell arrives, all of them give
-                                their view and VivOME averages them (Part 3, step 2): a group that agrees is steadier than one.
-                            </p>
-                            <p data-beat>
-                                Did it learn? It was tested on example cells it had never practised on, with most of
-                                their genes hidden. It named
-                                <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span> of
-                                them correctly, counting every type equally. Guessing at random would be right about
-                                once in <span data-wf="classes">&nbsp;</span> tries.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="training">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    VivOME learns by example. It is shown the example cells, with their names, over and
+                                    over: up to <span data-wf="training.recipe.epochs">&nbsp;</span> rounds. After each
+                                    round it adjusts itself a little, until cells of the same type land close together on
+                                    its map. No protein label is used at any point.
+                                </p>
+                                <p data-beat>
+                                    It practises with most genes hidden. A real protein file has values for only a small
+                                    share of the genes: our cell has <span data-cell="observed">&nbsp;</span> of the
+                                    <span data-wf="feature_space">&nbsp;</span>. So in practice, most of each example's
+                                    genes are hidden on purpose. It sees only
+                                    <span data-wf="training.recipe.coverage_low">&nbsp;</span> to
+                                    <span data-wf="training.recipe.coverage_high">&nbsp;</span> of them, and must still
+                                    name the cell.
+                                </p>
+                                <p data-beat>
+                                    Several learners instead of one. The same training is run
+                                    <span data-wf="members">&nbsp;</span> times, each from a different random start, so
+                                    each learner ends up slightly different. When a new cell arrives, all of them give
+                                    their view and VivOME averages them (Part 3, step 2): a group that agrees is steadier than one.
+                                </p>
+                                <p data-beat>
+                                    Did it learn? It was tested on example cells it had never practised on, with most of
+                                    their genes hidden. It named
+                                    <span data-wf="training.encoder_choice.candidates.0.balanced_accuracy">&nbsp;</span> of
+                                    them correctly, counting every type equally. Guessing at random would be right about
+                                    once in <span data-wf="classes">&nbsp;</span> tries.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                     </figure>
                 </div>
@@ -718,37 +728,39 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 2 · Reading a new file · Step 1 of 2</span>
                         <h2 id="h-matching">Fitting the file to the shared list</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                VivOME has one seat for each of the <span data-wf="feature_space">&nbsp;</span> genes on
-                                its shared list (Part 1, step 3). It seats the file's proteins by their gene: this file fills
-                                <span data-wf="matched">&nbsp;</span> seats, and our cell has a value in
-                                <span data-cell="observed">&nbsp;</span> of them. The rest of our cell's seats stay
-                                empty.
-                            </p>
-                            <p data-beat>
-                                Most of our cell's seats are empty: <span data-cell="unmeasured">&nbsp;</span> of the
-                                <span data-wf="feature_space">&nbsp;</span>. An empty seat means "not measured", not
-                                "none there". So beside the amounts, VivOME keeps a second row, called a mask: 1 where
-                                the cell was measured, 0 where it was not. Without it, VivOME would have to put some
-                                number in every empty seat, and could no longer tell a guess from a measurement.
-                            </p>
-                            <p data-beat>
-                                Too little to judge. A cell needs values in at least
-                                <span data-wf="floor">&nbsp;</span> genes to be read. In this file a typical cell has
-                                <span data-wf="observed_median">&nbsp;</span>. Cells that fall short get no answer:
-                                <span data-wf="below_floor">&nbsp;</span> here.
-                            </p>
-                            <p data-beat>
-                                Last, VivOME compares each gene within the file. Machines differ: one may read every
-                                protein brighter than another. So for each gene it asks whether a cell has more or less
-                                than the file's average cell, which gives the same picture whichever machine made the
-                                file.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="matching">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    VivOME has one seat for each of the <span data-wf="feature_space">&nbsp;</span> genes on
+                                    its shared list (Part 1, step 3). It seats the file's proteins by their gene: this file fills
+                                    <span data-wf="matched">&nbsp;</span> seats, and our cell has a value in
+                                    <span data-cell="observed">&nbsp;</span> of them. The rest of our cell's seats stay
+                                    empty.
+                                </p>
+                                <p data-beat>
+                                    Most of our cell's seats are empty: <span data-cell="unmeasured">&nbsp;</span> of the
+                                    <span data-wf="feature_space">&nbsp;</span>. An empty seat means "not measured", not
+                                    "none there". So beside the amounts, VivOME keeps a second row, called a mask: 1 where
+                                    the cell was measured, 0 where it was not. Without it, VivOME would have to put some
+                                    number in every empty seat, and could no longer tell a guess from a measurement.
+                                </p>
+                                <p data-beat>
+                                    Too little to judge. A cell needs values in at least
+                                    <span data-wf="floor">&nbsp;</span> genes to be read. In this file a typical cell has
+                                    <span data-wf="observed_median">&nbsp;</span>. Cells that fall short get no answer:
+                                    <span data-wf="below_floor">&nbsp;</span> here.
+                                </p>
+                                <p data-beat>
+                                    Last, VivOME compares each gene within the file. Machines differ: one may read every
+                                    protein brighter than another. So for each gene it asks whether a cell has more or less
+                                    than the file's average cell, which gives the same picture whichever machine made the
+                                    file.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -799,28 +811,30 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 2 · Reading a new file · Step 2 of 2</span>
                         <h2 id="h-smoothing">Borrowing from similar cells</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                Measuring single cells is noisy: a protein can be missed or misread by chance. So VivOME
-                                lets each cell borrow a little from the cells in the same file that look most like it.
-                                Our cell's <span data-wf="smoothing_k">&nbsp;</span> closest matches are linked to it
-                                here.
-                            </p>
-                            <p data-beat>
-                                Closer matches count more. Each of our cell's values becomes a blend:
-                                <span data-wf="smoothing_own">&nbsp;</span> its own value and
-                                <span data-wf="smoothing_alpha">&nbsp;</span> the average of its matches, with the
-                                closest matches weighing the most.
-                            </p>
-                            <p data-beat>
-                                Borrowing does not invent a measurement. A seat that was empty for our cell can now get
-                                a value from its matches, but its mask still says 0: VivOME still knows our cell did
-                                not measure that gene.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="smoothing">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    Measuring single cells is noisy: a protein can be missed or misread by chance. So VivOME
+                                    lets each cell borrow a little from the cells in the same file that look most like it.
+                                    Our cell's <span data-wf="smoothing_k">&nbsp;</span> closest matches are linked to it
+                                    here.
+                                </p>
+                                <p data-beat>
+                                    Closer matches count more. Each of our cell's values becomes a blend:
+                                    <span data-wf="smoothing_own">&nbsp;</span> its own value and
+                                    <span data-wf="smoothing_alpha">&nbsp;</span> the average of its matches, with the
+                                    closest matches weighing the most.
+                                </p>
+                                <p data-beat>
+                                    Borrowing does not invent a measurement. A seat that was empty for our cell can now get
+                                    a value from its matches, but its mask still says 0: VivOME still knows our cell did
+                                    not measure that gene.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -877,27 +891,29 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 3 · The model's judgement · Step 1 of 5</span>
                         <h2 id="h-encoder">Turning the cell into a point on the map</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                The learners from Part 1, step 4 now read our cell. Each one takes in
-                                <span data-wf="input_width">&nbsp;</span> numbers: the cell's
-                                <span data-wf="genes">&nbsp;</span> values, its <span data-wf="genes">&nbsp;</span>
-                                mask marks, and two summaries for each of <span data-wf="modules">&nbsp;</span> groups
-                                of genes that tend to work together.
-                            </p>
-                            <p data-beat>
-                                Step by step, each learner squeezes those numbers down to just
-                                <span data-wf="latent">&nbsp;</span>. Those numbers are the cell's position on VivOME's
-                                map, a bit like an address: cells of the same type get nearby addresses.
-                            </p>
-                            <p data-beat>
-                                All <span data-wf="members">&nbsp;</span> learners do this side by side, so our cell gets
-                                one position from each. One of them also draws the shared map you will see in step 5 of this part.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="encoder">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    The learners from Part 1, step 4 now read our cell. Each one takes in
+                                    <span data-wf="input_width">&nbsp;</span> numbers: the cell's
+                                    <span data-wf="genes">&nbsp;</span> values, its <span data-wf="genes">&nbsp;</span>
+                                    mask marks, and two summaries for each of <span data-wf="modules">&nbsp;</span> groups
+                                    of genes that tend to work together.
+                                </p>
+                                <p data-beat>
+                                    Step by step, each learner squeezes those numbers down to just
+                                    <span data-wf="latent">&nbsp;</span>. Those numbers are the cell's position on VivOME's
+                                    map, a bit like an address: cells of the same type get nearby addresses.
+                                </p>
+                                <p data-beat>
+                                    All <span data-wf="members">&nbsp;</span> learners do this side by side, so our cell gets
+                                    one position from each. One of them also draws the shared map you will see in step 5 of this part.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                     </figure>
                 </div>
@@ -936,24 +952,26 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 3 · The model's judgement · Step 2 of 5</span>
                         <h2 id="h-probabilities">Which types is our cell close to?</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                Each of the <span data-wf="classes">&nbsp;</span> types has a home on the map: the
-                                middle of its example cells. Each learner measures how close our cell sits to every
-                                home.
-                            </p>
-                            <p data-beat>
-                                Each learner then turns closeness into chances that add up to 100%, giving most of the
-                                chance to the nearest homes.
-                            </p>
-                            <p data-beat>
-                                The <span data-wf="members">&nbsp;</span> learners' chances are averaged into one. The
-                                rest of the answer is built on this average.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="probabilities">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    Each of the <span data-wf="classes">&nbsp;</span> types has a home on the map: the
+                                    middle of its example cells. Each learner measures how close our cell sits to every
+                                    home.
+                                </p>
+                                <p data-beat>
+                                    Each learner then turns closeness into chances that add up to 100%, giving most of the
+                                    chance to the nearest homes.
+                                </p>
+                                <p data-beat>
+                                    The <span data-wf="members">&nbsp;</span> learners' chances are averaged into one. The
+                                    rest of the answer is built on this average.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -991,28 +1009,30 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 3 · The model's judgement · Step 3 of 5</span>
                         <h2 id="h-guess">The best guess</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                Even when VivOME will not give an answer (the next step), it still names the single most
-                                likely type: its best guess. For our cell that is
-                                <span data-cell="guess">&nbsp;</span>.
-                            </p>
-                            <p data-beat>
-                                It also asks for a second opinion: it compares the genes our cell measured with the
-                                average profile of each cell type among the example cells. The more our cell's pattern
-                                rises and falls with a type's, the better they match.
-                            </p>
-                            <p data-beat>
-                                The second opinion only counts when it can be trusted: when it agrees with the learners
-                                on at least <span data-wf="agreement_threshold">&nbsp;</span> of the file's cells. Here
-                                it agrees on <span data-wf="agreeing">&nbsp;</span> of
-                                <span data-wf="counted">&nbsp;</span> (<span data-wf="agreement">&nbsp;</span>), so for
-                                this file VivOME goes with the learners.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="guess">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    Even when VivOME will not give an answer (the next step), it still names the single most
+                                    likely type: its best guess. For our cell that is
+                                    <span data-cell="guess">&nbsp;</span>.
+                                </p>
+                                <p data-beat>
+                                    It also asks for a second opinion: it compares the genes our cell measured with the
+                                    average profile of each cell type among the example cells. The more our cell's pattern
+                                    rises and falls with a type's, the better they match.
+                                </p>
+                                <p data-beat>
+                                    The second opinion only counts when it can be trusted: when it agrees with the learners
+                                    on at least <span data-wf="agreement_threshold">&nbsp;</span> of the file's cells. Here
+                                    it agrees on <span data-wf="agreeing">&nbsp;</span> of
+                                    <span data-wf="counted">&nbsp;</span> (<span data-wf="agreement">&nbsp;</span>), so for
+                                    this file VivOME goes with the learners.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -1057,35 +1077,37 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 3 · The model's judgement · Step 4 of 5</span>
                         <h2 id="h-answer">The answer, or the reason for none</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                VivOME only names a type when it is sure enough. Each type has its own bar to clear,
-                                set so that the true type clears it <span data-wf="target_coverage">&nbsp;</span> of
-                                the time in tests on RNA cells. The types that clear their bars make a shortlist, and
-                                the likeliest type joins any shortlist that is not empty.
-                            </p>
-                            <p data-beat>
-                                Two checks come first. Was enough measured (at least
-                                <span data-wf="floor">&nbsp;</span> genes, Part 2, step 1)? And does the cell resemble anything
-                                VivOME learned from? A cell too unlike every example cell gets no answer rather than a
-                                forced one.
-                            </p>
-                            <p data-beat>
-                                Then the shortlist decides. One type: VivOME names it. Several types in one family: it
-                                names the family. Several families in one branch: the branch. Types from different
-                                branches, or an empty shortlist: no answer.
-                            </p>
-                            <p data-beat>
-                                Across the whole file, <span data-wf="committed">&nbsp;</span> of
-                                <span data-wf="runs">&nbsp;</span> cells got an answer: <span data-wf="outcome_class">&nbsp;</span>
-                                named as one type, <span data-wf="outcome_group">&nbsp;</span> narrowed to a family and
-                                <span data-wf="outcome_lineage">&nbsp;</span> to a branch. The rest got none, each with
-                                its reason.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="answer">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    VivOME only names a type when it is sure enough. Each type has its own bar to clear,
+                                    set so that the true type clears it <span data-wf="target_coverage">&nbsp;</span> of
+                                    the time in tests on RNA cells. The types that clear their bars make a shortlist, and
+                                    the likeliest type joins any shortlist that is not empty.
+                                </p>
+                                <p data-beat>
+                                    Two checks come first. Was enough measured (at least
+                                    <span data-wf="floor">&nbsp;</span> genes, Part 2, step 1)? And does the cell resemble anything
+                                    VivOME learned from? A cell too unlike every example cell gets no answer rather than a
+                                    forced one.
+                                </p>
+                                <p data-beat>
+                                    Then the shortlist decides. One type: VivOME names it. Several types in one family: it
+                                    names the family. Several families in one branch: the branch. Types from different
+                                    branches, or an empty shortlist: no answer.
+                                </p>
+                                <p data-beat>
+                                    Across the whole file, <span data-wf="committed">&nbsp;</span> of
+                                    <span data-wf="runs">&nbsp;</span> cells got an answer: <span data-wf="outcome_class">&nbsp;</span>
+                                    named as one type, <span data-wf="outcome_group">&nbsp;</span> narrowed to a family and
+                                    <span data-wf="outcome_lineage">&nbsp;</span> to a branch. The rest got none, each with
+                                    its reason.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
@@ -1122,26 +1144,28 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 3 · The model's judgement · Step 5 of 5</span>
                         <h2 id="h-landing">Where the cell lands on the map</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                This is VivOME's map. Each small dot is one of the example cells it learned from,
-                                coloured by its type; cells of the same type sit together. You can drag the map to
-                                turn it.
-                            </p>
-                            <p data-beat>
-                                The file's cells now drop onto the map, each at the position step 1 of this part gave it. Our cell
-                                lands among the example cells it most resembles, and is linked to its
-                                <span data-wf="transfer_k">&nbsp;</span> nearest ones.
-                            </p>
-                            <p data-beat>
-                                Those neighbours also tell VivOME what our cell is likely doing, such as how hard it is
-                                making new proteins, each with a plus-or-minus spread. All of it goes back to the
-                                researcher as a small results file, shown below.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="landing">
-                        <div class="wf-canvas wf-drag" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas wf-drag" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    This is VivOME's map. Each small dot is one of the example cells it learned from,
+                                    coloured by its type; cells of the same type sit together. You can drag the map to
+                                    turn it.
+                                </p>
+                                <p data-beat>
+                                    The file's cells now drop onto the map, each at the position step 1 of this part gave it. Our cell
+                                    lands among the example cells it most resembles, and is linked to its
+                                    <span data-wf="transfer_k">&nbsp;</span> nearest ones.
+                                </p>
+                                <p data-beat>
+                                    Those neighbours also tell VivOME what our cell is likely doing, such as how hard it is
+                                    making new proteins, each with a plus-or-minus spread. All of it goes back to the
+                                    researcher as a small results file, shown below.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <div class="wf-controls" role="group" aria-label="Colour the dots by">
                             <button type="button" class="wf-toggle" data-option="colour" data-value="class" aria-pressed="true">Colour by type</button>
@@ -1196,34 +1220,36 @@
                     <div class="wf-text">
                         <span class="eyebrow">Part 4 · How we know it works · Step 1 of 1</span>
                         <h2 id="h-results">Testing VivOME, and using it today</h2>
-                        <div class="wf-beats">
-                            <p data-beat>
-                                First, practice files. We built test files from RNA example cells VivOME had never
-                                trained on, hid most genes as in a protein file, and checked every answer. When VivOME
-                                gave an answer it was right <span data-fact="eval_rna_correct">&nbsp;</span> of the
-                                time; <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
-                            </p>
-                            <p data-beat>
-                                Second, a real protein file with known types, Fulcher 2026. Every method got the same
-                                examples, the same genes and the same scoring. VivOME's best guess named
-                                <span data-fact="fulcher_current">&nbsp;</span> correctly, counting every type equally.
-                                This file was also used while building VivOME, so it is not a fully independent test.
-                            </p>
-                            <p data-beat>
-                                Third, six test sets were locked away before building started and opened once, at the
-                                end. Two passed, two failed, and two could not be scored. This is our own test, not a
-                                check by an outside group.
-                            </p>
-                            <p data-beat>
-                                And today, anyone can send a file from the <a href="project.html">project page</a>. It
-                                goes to VivOME's service on Google Cloud Run, which wakes up, runs every step on this
-                                page on up to <span data-wf="service.max_cells">&nbsp;</span> cells, and sends the
-                                answers back.
-                            </p>
-                        </div>
                     </div>
                     <figure class="wf-stage sheet" data-scene="results">
-                        <div class="wf-canvas" aria-hidden="true"></div>
+                        <div class="wf-screen">
+                            <div class="wf-canvas" aria-hidden="true"></div>
+                            <div class="wf-beats" aria-live="polite">
+                                <p data-beat>
+                                    First, practice files. We built test files from RNA example cells VivOME had never
+                                    trained on, hid most genes as in a protein file, and checked every answer. When VivOME
+                                    gave an answer it was right <span data-fact="eval_rna_correct">&nbsp;</span> of the
+                                    time; <span data-fact="eval_rna_abstained">&nbsp;</span> of cells got no answer.
+                                </p>
+                                <p data-beat>
+                                    Second, a real protein file with known types, Fulcher 2026. Every method got the same
+                                    examples, the same genes and the same scoring. VivOME's best guess named
+                                    <span data-fact="fulcher_current">&nbsp;</span> correctly, counting every type equally.
+                                    This file was also used while building VivOME, so it is not a fully independent test.
+                                </p>
+                                <p data-beat>
+                                    Third, six test sets were locked away before building started and opened once, at the
+                                    end. Two passed, two failed, and two could not be scored. This is our own test, not a
+                                    check by an outside group.
+                                </p>
+                                <p data-beat>
+                                    And today, anyone can send a file from the <a href="project.html">project page</a>. It
+                                    goes to VivOME's service on Google Cloud Run, which wakes up, runs every step on this
+                                    page on up to <span data-wf="service.max_cells">&nbsp;</span> cells, and sends the
+                                    answers back.
+                                </p>
+                            </div>
+                        </div>
                         <figcaption class="caption" data-describe></figcaption>
                         <button class="wf-table-toggle" type="button" aria-expanded="false">Show as table</button>
                         <div class="wf-table" hidden></div>
