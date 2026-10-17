@@ -103,7 +103,18 @@ test('the receipt shows the service’s numbers, and Pending for what is missing
   for (const empty of [{}, null, undefined, receiptFromResponse({})]) {
     const html = clean(buildReceipt(empty));
     assert.equal((html.match(/Pending/g) ?? []).length, 4, html);
+    assert.match(html, /<summary>Your file<\/summary>/, 'the folded line leaves out what is missing');
   }
+});
+
+test('the receipt folds to one line: whose file, how many cells, which model', () => {
+  const r = receiptFromResponse({ n_cells: 216, n_features_matched: 2996, pipeline_version: 'v4.1', model_version: 'v4.1 (long name)' });
+  const open = clean(buildReceipt(r));
+  assert.match(open, /^<details class="fold atlas-receipt-card" open><summary>Your file · 216 cells · v4\.1<\/summary>/);
+  const folded = clean(buildReceipt(r, { open: false }));
+  assert.match(folded, /^<details class="fold atlas-receipt-card"><summary>/);
+  assert.match(folded, /v4\.1 \(long name\)/, 'the full model name is inside');
+  assert.match(clean(buildReceipt(receiptFromWorkflow(workflow), { open: false })), /<summary>The example · 238 cells · v4\.1<\/summary>/);
 });
 
 test('the outcome buttons cover every outcome, with counts and their state', () => {
@@ -121,7 +132,10 @@ test('the outcome buttons cover every outcome, with counts and their state', () 
 
 test('the answer key draws the five looks and says what the glow is', () => {
   const html = clean(buildAnswerKey());
-  assert.equal((html.match(/<svg/g) ?? []).length, 5);
+  // Each look twice: small in the folded line, and beside what it means.
+  assert.equal((html.match(/<svg/g) ?? []).length, 10);
+  assert.match(html, /^<details class="fold atlas-key-card"><summary>/, 'folded unless asked');
+  assert.match(clean(buildAnswerKey({ open: true })), /^<details class="fold atlas-key-card" open>/);
   for (const name of ['One type', 'A family', 'A branch', 'No answer', 'Not placed']) assert.ok(html.includes(name), name);
   assert.ok(html.includes('Glow: nearby reference cells of the type it was given, on this map.'));
   assert.match(html, /stroke-dasharray/, 'not placed: a broken ring');

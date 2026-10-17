@@ -52,9 +52,9 @@ Pure modules have no DOM and are covered by `node --test`
 | working | The service sends no progress: an **illustration** of its six steps loops (`SERVICE_STEPS` in `web/js/workflow-data.js`), with a clock and, after a few seconds, the note that the service may be waking up |
 | busy | Another file is being labelled: a countdown, then another try, three tries in all |
 | finishing | The illustration plays its remaining steps quickly |
-| receipt | The response's own numbers: cells, genes matched, whether the second opinion was used, the model |
+| receipt | The response's own numbers: cells, genes matched, whether the second opinion was used, the model. A folding card, open until the visitor has the camera |
 | flying | Cells arc from the sheet onto their coordinates by answer level (one type, family, branch, no answer), highest confidence first; each lands with a flash and a ripple, and nearby reference cells of its type glow briefly. The camera glides to frame them |
-| settling | The reference dims, the results open in the drawer, the camera settles on the landed cells |
+| settling | The reference dims, the results open in the drawer (Download and Clear, then About this answer, Answers and Cells as folding sections), the camera settles on the landed cells |
 | interactive | The visitor's camera. Click a cell or a table row for its card; the outcome chips show or hide answers; Replay, Download, Clear. A new file or the example replaces the answer shown |
 | failed | The reason in plain words, with Try again |
 
@@ -62,6 +62,8 @@ The guided part, from the receipt to the settled view, lasts about 8 to 9
 seconds for any number of cells; Skip (or Esc) jumps to the end, and a drag
 or the wheel hands the camera back at once: the landing goes on, but the
 camera stays where the visitor put it. Replay and Clear wait for the end.
+The sidebar folds away when a file is sent or the example starts and comes
+back at idle, chosen or failed (`sidebarFor` in `director.js`).
 Under reduced motion every duration is zero.
 
 **The example.** "Watch the example" replays the PBMC240 file traced through

@@ -128,39 +128,49 @@ function secondOpinionLine(receipt, whose) {
 // What came back for a file (answers.js, receiptFromResponse or
 // receiptFromWorkflow): how many cells, how many genes matched the shared
 // list, whether the second opinion was used, and which model answered.
-export function buildReceipt(receipt) {
+// A folding card: the line says whose file, how many cells and which model;
+// opened, the numbers. `open` while the landing plays, folded after.
+export function buildReceipt(receipt, { open = true } = {}) {
   const r = receipt ?? {};
   const recorded = r.source === 'recorded';
   const whose = recorded ? 'the file' : 'your file';
   const genes = finite(r.matched) && finite(r.unmatched)
     ? `${count(r.matched)} of ${count(Number(r.matched) + Number(r.unmatched))}`
     : count(r.matched);
-  return `<dl class="atlas-receipt">`
+  const line = [recorded ? 'The example' : 'Your file', finite(r.cells) ? `${count(r.cells)} cells` : '',
+    known(r.pipeline) ? e(r.pipeline) : ''].filter(Boolean).join(' · ');
+  return `<details class="fold atlas-receipt-card"${open ? ' open' : ''}><summary>${line}</summary>`
+    + `<dl class="atlas-receipt">`
     + field('Cells', count(r.cells))
     + field('Genes matched', genes)
     + field('Second opinion', secondOpinionLine(r, whose))
     + field('Model', text(r.model))
     + `</dl>`
-    + (recorded ? '<p class="caption">Recorded from the served model: no file was sent.</p>' : '');
+    + (recorded ? '<p class="caption">Recorded from the served model: no file was sent.</p>' : '')
+    + `</details>`;
 }
 
 // ---- the key ----
 
 const KEY = [
-  ['class', 'One type', 'filled, in its type’s colour'],
-  ['group', 'A family', 'paler, in a dark ring'],
-  ['lineage', 'A branch', 'paler still, in a soft halo'],
-  ['none', 'No answer', 'a grey ring'],
-  ['unplaced', 'Not placed', 'a broken ring, left on the file’s sheet'],
+  ['class', 'One type', 'Type', 'filled, in its type’s colour'],
+  ['group', 'A family', 'Family', 'paler, in a dark ring'],
+  ['lineage', 'A branch', 'Branch', 'paler still, in a soft halo'],
+  ['none', 'No answer', 'No answer', 'a grey ring'],
+  ['unplaced', 'Not placed', 'Not placed', 'a broken ring, left on the file’s sheet'],
 ];
 
-// How an answer is drawn: one picture per look, as the map draws it.
-export function buildAnswerKey() {
-  const items = KEY.map(([look, name, how]) => `<li class="atlas-key-item">${glyph(look)}`
+// How an answer is drawn: one picture per look, as the map draws it. A
+// folding card: the line shows the five looks; opened, what each one means.
+export function buildAnswerKey({ open = false } = {}) {
+  const row = KEY.map(([look, , short]) => `<span class="atlas-key-mini">${glyph(look, 'atlas-glyph', 14)}${e(short)}</span>`).join('');
+  const items = KEY.map(([look, name, , how]) => `<li class="atlas-key-item">${glyph(look)}`
     + `<span><strong>${e(name)}:</strong> ${e(how)}</span></li>`).join('');
-  return `<ul class="atlas-key">${items}</ul>`
+  return `<details class="fold atlas-key-card"${open ? ' open' : ''}><summary><span class="atlas-key-row">${row}</span></summary>`
+    + `<ul class="atlas-key">${items}</ul>`
     + '<p class="caption">A blue ring marks the cell you picked.</p>'
-    + '<p class="caption">Glow: nearby reference cells of the type it was given, on this map.</p>';
+    + '<p class="caption">Glow: nearby reference cells of the type it was given, on this map.</p>'
+    + '</details>';
 }
 
 // One button per outcome, with how many cells had it; `on` says which are

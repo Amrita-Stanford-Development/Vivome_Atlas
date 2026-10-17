@@ -5,6 +5,7 @@
 import { escapeHtml } from '../panels.js';
 import { plainName } from '../workflow-data.js';
 import { createServiceState, mountDataTab } from './data-tab.js';
+import { sidebarFor } from './director.js';
 import { mountExploreTab } from './explore-tab.js';
 import { createLanding } from './landing.js';
 import { createServiceClient } from './service-client.js';
@@ -60,10 +61,15 @@ async function loadReference() {
   };
 }
 
-// The drawer over the viewer's right side.
+// The drawer over the viewer's right side. While it is open the viewer is
+// marked, so the controls in its right corners move out from under it.
 function createDrawer() {
   const drawer = $('atlas-drawer');
-  const close = () => { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); };
+  const close = () => {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    $('three-container').classList.remove('drawer-open');
+  };
   $('drawer-close').addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
   return {
@@ -72,6 +78,7 @@ function createDrawer() {
       $('drawer-body').innerHTML = html;
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
+      $('three-container').classList.add('drawer-open');
     },
     body: (html) => { $('drawer-body').innerHTML = html; },
     close,
@@ -180,10 +187,23 @@ async function start() {
   });
 
   $('reset-view').addEventListener('click', () => stage.rig.reset());
+  function setSidebar(open) {
+    $('controls-panel').classList.toggle('collapsed', !open);
+    $('sidebar-toggle').setAttribute('aria-expanded', String(open));
+    $('sidebar-toggle').textContent = open ? 'Hide controls' : 'Show controls';
+  }
+  const sidebarOpen = () => !$('controls-panel').classList.contains('collapsed');
+  // Folded away while an answer plays (director.js, sidebarFor); the button
+  // opens or closes it any time.
+  let folded = false;
   $('sidebar-toggle').addEventListener('click', () => {
-    const collapsed = $('controls-panel').classList.toggle('collapsed');
-    $('sidebar-toggle').setAttribute('aria-expanded', String(!collapsed));
-    $('sidebar-toggle').textContent = collapsed ? 'Show controls' : 'Hide controls';
+    folded = false;
+    setSidebar(!sidebarOpen());
+  });
+  landing.onChange((st) => {
+    const next = sidebarFor(st, { open: sidebarOpen(), folded });
+    folded = next.folded;
+    if (next.open !== sidebarOpen()) setSidebar(next.open);
   });
 
   hideLoading();

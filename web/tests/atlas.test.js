@@ -34,6 +34,9 @@ test('the page keeps the copy rules', () => {
 });
 
 test('the page has its two tabs, the labels section old links arrive at, and a labelled illustration', () => {
+  // A class that sets display must not unhide what the page hides (the
+  // drop hint once stayed on the map).
+  assert.match(read('css/atlas.css'), /\.atlas-page \[hidden\] \{ display: none !important; \}/);
   for (const id of ['tab-explore', 'tab-data', 'panel-explore', 'panel-data', 'your-data', 'labels', 'status-card', 'legend-card', 'skip', 'atlas-drawer']) {
     assert.match(html, new RegExp(`id="${id}"`), id);
   }

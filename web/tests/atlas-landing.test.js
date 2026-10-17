@@ -357,6 +357,30 @@ test('a drag during the landing keeps the camera where the visitor put it', asyn
   assert.ok(stage.rig.poses.length > poses + 1);
 });
 
+test('the receipt is open while the landing plays and folds after; the drawer holds the answer', async () => {
+  const response = responseFromTrace();
+  const client = { async project(url, form, { onUpload }) { onUpload(1); return response; } };
+  const { els, landing, tick, opened } = setup({ client });
+  await landing.chooseFile(fileOf(40));
+  landing.send();
+  await settleMicrotasks();
+  tickUntil(landing, tick, 'receipt');
+  assert.match(els.get('status-card').innerHTML, /<details class="fold atlas-receipt-card" open><summary>Your file · 238 cells · v4\.1</);
+  assert.match(els.get('legend-card').innerHTML, /<details class="fold atlas-key-card"><summary>/, 'the key starts folded');
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  assert.match(els.get('status-card').innerHTML, /<details class="fold atlas-receipt-card"><summary>/, 'folded once the map is yours');
+  const results = opened.at(-1).html;
+  for (const title of ['About this answer', 'Answers', 'Cells (238)']) assert.ok(results.includes(`<summary>${title}</summary>`), title);
+  assert.match(results, /<details class="fold drawer-section" open><summary>Answers/, 'the answers are open');
+  assert.match(results, /data-action="download"/);
+  // Clear, from the drawer.
+  const clear = { target: { closest: (sel) => (sel === '[data-action]' ? { dataset: { action: 'clear' } } : null) } };
+  els.get('drawer-body').listeners.click.forEach((f) => f(clear));
+  assert.equal(landing.state.name, 'idle');
+  assert.equal(landing.run, null);
+});
+
 test('a failed load of the example can be tried again', async () => {
   const { els, landing, tick } = setup();
   const real = globalThis.fetch;

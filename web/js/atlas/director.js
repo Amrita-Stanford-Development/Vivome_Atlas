@@ -14,6 +14,17 @@ export const MAX_ATTEMPTS = 3;
 
 export const initialState = () => ({ name: 'idle' });
 
+// The sidebar for a state: it folds away when a file is sent or the example
+// starts, so the map has the room, and comes back when the visitor is
+// choosing again (cleared, cancelled, failed), unless they moved it
+// themselves in between (`folded` is then false).
+export function sidebarFor(state, { open, folded }) {
+  const name = state?.name;
+  if ((name === 'sending' || (name === 'working' && state.example)) && open) return { open: false, folded: true };
+  if (folded && ['idle', 'chosen', 'failed'].includes(name)) return { open: true, folded: false };
+  return { open, folded };
+}
+
 // What a state keeps from the one before it: the file and its check, the
 // answer, and whether it is the recorded example.
 function carry(state, name, extra = {}) {

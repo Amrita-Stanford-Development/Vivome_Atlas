@@ -22,10 +22,12 @@ export function showFailure(err) {
     </div>`;
 }
 
-// The tooltip: a few lines of text beside the pointer, inside the viewer.
+// The tooltip: a few lines of text beside the pointer, inside the viewer and
+// clear of the drawer when it is open.
 export function createTooltip() {
   const el = $('tooltip');
   const box = el.parentElement;
+  const drawer = $('atlas-drawer');
   return {
     show(lines, clientX, clientY) {
       el.textContent = lines.join('\n');
@@ -33,8 +35,9 @@ export function createTooltip() {
       const x = clientX - rect.left;
       const y = clientY - rect.top;
       el.style.opacity = '1';
-      // Flip to the left of the pointer near the right edge.
-      const flip = x > rect.width - 220;
+      // Flip to the left of the pointer near the right edge (or the drawer's).
+      const right = drawer.classList.contains('open') ? drawer.getBoundingClientRect().left - rect.left : rect.width;
+      const flip = x > right - 340;
       el.style.left = `${flip ? x - 14 : x + 14}px`;
       el.style.top = `${y + 12}px`;
       el.style.transform = flip ? 'translateX(-100%)' : 'none';

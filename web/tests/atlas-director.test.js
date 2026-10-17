@@ -3,7 +3,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { GUIDED, MAX_ATTEMPTS, initialState, transition } from '../js/atlas/director.js';
+import { GUIDED, MAX_ATTEMPTS, initialState, sidebarFor, transition } from '../js/atlas/director.js';
 
 const file = { name: 'cells.tsv', size: 10 };
 const check = { ok: true, cells: 238, problems: [] };
@@ -226,4 +226,24 @@ test('an event that does not apply leaves the very same state', () => {
       else assert.notEqual(next, states[name]);
     }
   }
+});
+
+test('the sidebar folds away while an answer plays, and comes back for the next choice', () => {
+  const at = (name, extra = {}) => ({ name, ...extra });
+  // Sent: folded, and remembered as folded by the page.
+  assert.deepEqual(sidebarFor(at('sending'), { open: true, folded: false }), { open: false, folded: true });
+  assert.deepEqual(sidebarFor(at('working', { example: true }), { open: true, folded: false }), { open: false, folded: true });
+  // It stays folded through the landing and the answer.
+  for (const name of ['working', 'busy', 'finishing', 'receipt', 'flying', 'settling', 'interactive']) {
+    assert.deepEqual(sidebarFor(at(name), { open: false, folded: true }), { open: false, folded: true }, name);
+  }
+  // Cleared, cancelled or failed: back.
+  for (const name of ['idle', 'chosen', 'failed']) {
+    assert.deepEqual(sidebarFor(at(name), { open: false, folded: true }), { open: true, folded: false }, name);
+  }
+  // Closed by the visitor before sending: it stays closed afterwards too.
+  assert.deepEqual(sidebarFor(at('sending'), { open: false, folded: false }), { open: false, folded: false });
+  assert.deepEqual(sidebarFor(at('idle'), { open: false, folded: false }), { open: false, folded: false });
+  // Choosing or checking a file leaves it alone.
+  assert.deepEqual(sidebarFor(at('checking'), { open: true, folded: false }), { open: true, folded: false });
 });

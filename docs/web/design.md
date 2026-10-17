@@ -198,6 +198,14 @@ white halo card, and a drawer that slides over the viewer's right side
   with Skip (and Esc); any drag or wheel hands it back at once. Under reduced
   motion nothing flies, the camera moves at once, and the waiting state is a
   still list of the steps.
+- **Room for the answer.** The sidebar folds away when a file is sent or the
+  example starts, and comes back when the visitor is choosing again. Text
+  over the map folds: the receipt is open while the landing plays and folds
+  to one line after ("Your file · 216 cells · v4.1"); the key is one row of
+  the five looks that opens to what each means; the drawer's sections
+  (About this answer, Answers, Cells) open and close, under Download and
+  Clear. While the drawer is open, the corner buttons and Replay move into
+  the space left of it.
 
 ## The Manuscript page
 

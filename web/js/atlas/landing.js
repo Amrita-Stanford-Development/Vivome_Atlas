@@ -57,7 +57,8 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   let workflow = null;      // the recorded example, loaded on demand
   let grid = null;          // RNA reference cells, for the neighbour glow
   let lastStatus = '';
-  let clock = 0;            // the flight clock the upload layer shows
+  let lastKey = '';
+  let clock = 0;           // the flight clock the upload layer shows
   let userCam = false;      // the visitor took the camera during this landing
 
   // A drag or the wheel during the guided landing hands the camera back: the
@@ -220,14 +221,25 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     };
   }
 
+  // The drawer's results as folding sections, under the results' own
+  // actions (the sidebar folds away while an answer is shown).
+  const section = (title, body, open = false) => `<details class="fold drawer-section"${open ? ' open' : ''}>`
+    + `<summary>${escapeHtml(title)}</summary>${body}</details>`;
+
   function resultsHtml() {
     if (!run) return '';
+    const cellsTitle = `Cells (${run.cells.length.toLocaleString('en-US')})`;
+    const download = run.source === 'service' ? '<button type="button" class="text-button" data-action="download">Download the response</button>' : '';
+    const actions = `<div class="drawer-actions">${download}<button type="button" class="text-button" data-action="clear">Clear</button></div>`;
     if (run.source === 'recorded') {
       // Every recorded cell is listed: the example has no response to download.
-      return `${buildExampleSummary(run.data)}<h3>Cells</h3><div class="table-scroll">${buildProjectionCells(recordedRows(run.cells), run.cells.length)}</div>`;
+      return `${actions}${buildExampleSummary(run.data)}`
+        + section(cellsTitle, `<div class="table-scroll">${buildProjectionCells(recordedRows(run.cells), run.cells.length)}</div>`);
     }
-    return `${buildProjectionSummary(run.data)}<h3>Answers</h3><div class="table-scroll">${buildProjectionLabels(run.data)}</div>`
-      + `<h3>Cells</h3><div class="table-scroll">${buildProjectionCells(run.data)}</div>`;
+    return actions
+      + section('About this answer', buildProjectionSummary(run.data))
+      + section('Answers', `<div class="table-scroll">${buildProjectionLabels(run.data)}</div>`, true)
+      + section(cellsTitle, `<div class="table-scroll">${buildProjectionCells(run.data)}</div>`);
   }
 
   function openResults() {
@@ -290,13 +302,16 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
         ? `The service was still busy after ${MAX_ATTEMPTS} tries. Try again in a few minutes.`
         : explainFailure(st.error, serviceUrl());
       status(`${errorPanel(new Error(message))}${retry}`);
-    } else if (run) status(buildReceipt(run.receipt));
+    } else if (run) status(buildReceipt(run.receipt, { open: name !== 'interactive' }));
     $('skip').hidden = !GUIDED.has(name);
     $('replay-view').hidden = name !== 'interactive';
     const legend = $('legend-card');
     if (run && (GUIDED.has(name) || name === 'interactive')) {
-      legend.innerHTML = buildAnswerKey() + (run.placeable ? ''
+      // Written only when it changes, so an opened key stays open.
+      const key = buildAnswerKey() + (run.placeable ? ''
         : `<p class="panel-note">This service runs ${escapeHtml(run.data?.pipeline_version ?? 'another model')}; its map is not this atlas's, so cells are listed, not placed.</p>`);
+      if (key !== lastKey) legend.innerHTML = key;
+      lastKey = key;
       legend.hidden = false;
     } else {
       legend.hidden = true;
@@ -525,6 +540,9 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   });
   $('drawer-body').addEventListener('click', (e) => {
     if (e.target.closest('[data-back]')) return openResults();
+    const action = e.target.closest('[data-action]')?.dataset.action;
+    if (action === 'download') return download();
+    if (action === 'clear') return dispatch({ type: 'CLEAR' });
     const row = e.target.closest('[data-cell]');
     if (row) select(Number(row.dataset.cell));
   });
@@ -536,6 +554,16 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       dispatch({ type: 'SKIP' });
     }
   }, true);
+
+  // The response as received, saved as a file.
+  function download() {
+    if (!run || run.source !== 'service') return;
+    const blob = new Blob([JSON.stringify(run.data, null, 2)], { type: 'application/json' });
+    const stem = (st.file?.name ?? 'upload').replace(/\.[^.]+$/, '');
+    const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `vivome-projection-${stem}.json` });
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
 
   function replay() {
     if (!run || st.name !== 'interactive') return;
@@ -577,14 +605,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       upload.setOutcomeOn(outcomeCode(outcome), on);
     },
     chips: () => (run ? buildOutcomeChips(outcomeCounts(run.cells), run.on) : ''),
-    download() {
-      if (!run || run.source !== 'service') return;
-      const blob = new Blob([JSON.stringify(run.data, null, 2)], { type: 'application/json' });
-      const stem = (st.file?.name ?? 'upload').replace(/\.[^.]+$/, '');
-      const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `vivome-projection-${stem}.json` });
-      link.click();
-      URL.revokeObjectURL(link.href);
-    },
+    download,
     // The uploaded cell under the pointer, or -1.
     pick(clientX, clientY) {
       if (!run || upload.n === 0 || upload.n !== run.cells.length) return -1;
