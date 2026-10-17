@@ -13,6 +13,8 @@ import {
   loadProfile, profileErrorHtml, profileLoadingHtml, profileProgressHtml, profileTableHtml,
 } from './gene-profile.js';
 import { createTooltip, hideLoading, showFailure } from './overlay.js';
+import { createTypeLabels } from './type-labels.js';
+import { mountViewControls } from './view-controls.js';
 import { atlasFrame, classCodes, classOrderFrom, parseMetadataCsv, sceneArray } from './reference-data.js';
 import { createReferenceLayer } from './reference-layer.js';
 import { pickScreen, projectAll } from './spatial.js';
@@ -91,7 +93,8 @@ async function start() {
   const ref = await loadReference();
   const stage = createStage(THREE, $('three-canvas'), $('three-container'), { reduced });
   const layer = createReferenceLayer(THREE, stage, ref);
-  mountExploreTab({ layer, order: ref.order, counts: ref.counts });
+  const labels = createTypeLabels({ stage, ref, layer, container: $('type-labels') });
+  mountExploreTab({ layer, order: ref.order, counts: ref.counts, onChange: () => labels.refresh() });
   const drawer = createDrawer();
   const tooltip = createTooltip();
 
@@ -119,6 +122,7 @@ async function start() {
     options: () => ({ modality: $('modality').value, restrict: $('restrict').checked }),
   });
   const dataTab = mountDataTab({ landing, client, service });
+  mountViewControls({ stage, layer, landing, labels });
   const tabs = { explore: [$('tab-explore'), $('panel-explore')], data: [$('tab-data'), $('panel-data')] };
   function showTab(which) {
     for (const [key, [tab, panel]] of Object.entries(tabs)) {
@@ -143,7 +147,10 @@ async function start() {
   function fromHash() {
     if (location.hash === '#your-data' || location.hash === '#labels') {
       showTab('data');
-      if (location.hash === '#labels') $('labels').scrollIntoView({ block: 'start' });
+      if (location.hash === '#labels') {
+        $('labels-fold').open = true;
+        $('labels').scrollIntoView({ block: 'start' });
+      }
     }
   }
   window.addEventListener('hashchange', fromHash);

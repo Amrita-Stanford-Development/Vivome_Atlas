@@ -381,6 +381,27 @@ test('the receipt is open while the landing plays and folds after; the drawer ho
   assert.equal(landing.run, null);
 });
 
+test('the visitor can hide their cells; a new file shows them again', async () => {
+  const { landing, tick, stage } = setup();
+  const seen = [];
+  landing.onChange((st) => seen.push(st.name));
+  await landing.watchExample();
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  // The cells themselves (the glow, under them, is drawn first; the ripples over them).
+  const cells = () => stage.added.find((o) => o.material?.uniforms?.uTime && o.renderOrder === 2);
+  assert.equal(cells().visible, true);
+  const before = seen.length;
+  landing.setCellsShown(false);
+  assert.equal(landing.cellsShown, false);
+  assert.equal(cells().visible, false);
+  assert.equal(landing.pick(400, 300), -1, 'hidden cells cannot be picked');
+  assert.ok(seen.length > before, 'the controls hear it');
+  await landing.chooseFile(fileOf(40));
+  assert.equal(landing.cellsShown, true, 'a new file is shown');
+  assert.equal(cells().visible, true);
+});
+
 test('a failed load of the example can be tried again', async () => {
   const { els, landing, tick } = setup();
   const real = globalThis.fetch;

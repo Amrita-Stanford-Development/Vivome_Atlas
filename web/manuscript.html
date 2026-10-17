@@ -43,6 +43,7 @@
         .ms-claims { padding-left: 22px; font-size: 15px; }
         .ms-claims li { margin-bottom: 6px; }
         #benchmark-mount h3 { margin-top: 24px; }
+        .sheet .support-tiles { max-width: 520px; }
         @media (max-width: 720px) {
             .ms-contents ol { columns: 1; }
             .evidence > li { padding-left: 10px; font-size: 14.5px; }
@@ -83,6 +84,7 @@
                     <li><a href="#procedures">Experimental procedures</a></li>
                     <li><a href="#rationale">Why each part is there</a></li>
                     <li><a href="#results">Results</a></li>
+                    <li><a href="#cross-modal-support">Cross-modal support and alignment diagnostics</a></li>
                     <li><a href="#benchmark">The benchmark tables</a></li>
                     <li><a href="#alternatives">Tried and not adopted</a></li>
                     <li><a href="#discussion">Discussion</a></li>
@@ -597,6 +599,25 @@
                 </table>
             </div>
 
+            <h3 id="cross-modal-support">Cross-modal support</h3>
+            <p>The atlas holds the reference's RNA cells and SCoPE2's protein cells; a type is
+                cross-modal when it has cells of both.</p>
+            <div class="support-tiles" id="support-tiles"></div>
+            <div class="table-scroll" id="support-table-mount"></div>
+            <p>Protein cells in the atlas cover only part of the label space. Types marked RNA only
+                have none there, so their place in the atlas is not a cross-modal result; how the
+                model does on them with real protein data is the recall by type above and
+                <a href="#benchmark">the benchmark</a>.
+                <span class="ev-src"><code>web/data/metadata_RNA_lat128.csv</code>, <code>web/data/metadata_PROT_lat128.csv</code></span></p>
+
+            <h3 id="alignment-diagnostics">Alignment diagnostics</h3>
+            <p>For each cross-modal type: how close its RNA and protein centroids are, in the atlas's
+                projection and in the encoder's space, and the modality probe. These are the numbers
+                behind the line above on the modalities staying apart.
+                <span class="ev-src"><code>service/model/evidence/v3_1_tables/latent_centroid_cosine.csv</code>, <code>service/model/evidence/v3_1_tables/modality_probe.json</code>
+                <span class="bead caveat" data-caveat="development">development</span></span></p>
+            <div class="table-scroll" id="diagnostics-mount"></div>
+
             <h3 id="answer-levels">Answers state their level, or abstain with a reason</h3>
             <ul class="evidence">
                 <li>Fulcher: committed <span data-ms="committed_fulcher"></span>, right at the stated level
@@ -1019,12 +1040,17 @@
     <script type="module" src="js/biofield.js"></script>
     <script type="module" async>
         import { loadManifest, PENDING_LABEL } from './js/manifest.js';
-        import { buildBenchmarkTable, factText, errorPanel } from './js/panels.js';
+        import {
+            buildBenchmarkTable, buildDiagnosticsTable, buildSupportSummary, buildSupportTable, factText, errorPanel,
+        } from './js/panels.js';
         import { loadManuscript, checkSync, msFact, msBasis } from './js/manuscript-data.js';
 
         Promise.all([loadManifest(), loadManuscript()]).then(([manifest, manuscript]) => {
             const sync = checkSync(manifest, manuscript);
             if (!sync.ok) throw new Error(`This page's data files are from different releases: ${sync.problems.join('; ')}`);
+            document.getElementById('support-tiles').innerHTML = buildSupportSummary(manifest);
+            document.getElementById('support-table-mount').innerHTML = buildSupportTable(manifest);
+            document.getElementById('diagnostics-mount').innerHTML = buildDiagnosticsTable(manifest);
             document.getElementById('benchmark-mount').innerHTML =
                 buildBenchmarkTable(manifest, { currentOnly: true, roles: false, note: false });
             for (const el of document.querySelectorAll('[data-fact]')) el.innerHTML = factText(manifest, el.dataset.fact);
@@ -1034,6 +1060,8 @@
             }
         }).catch((err) => {
             document.getElementById('ms-error').innerHTML = errorPanel(err);
+            document.getElementById('support-tiles').textContent = '';
+            for (const id of ['support-table-mount', 'diagnostics-mount']) document.getElementById(id).innerHTML = errorPanel(err);
             for (const el of document.querySelectorAll('[data-ms], [data-fact]')) el.textContent = PENDING_LABEL;
         });
     </script>

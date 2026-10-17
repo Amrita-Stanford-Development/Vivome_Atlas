@@ -71,8 +71,8 @@ line for every file.
 | Page | What it does |
 |------|--------------|
 | `index.html` | Landing page: the title panel, seven sections of cards, the finale |
-| `atlas.html` | The reference in 3D, with the cross-modal support map and alignment diagnostics; its Your data tab sends your own matrix to the service and places each cell on the map with its answer |
-| `manuscript.html` | Evidence bank for a journal paper on the served model, with the benchmark tables |
+| `atlas.html` | The reference in 3D, with view controls (names on the map, dimming, dot size); its Your data tab sends your own matrix to the service and places each cell on the map with its answer |
+| `manuscript.html` | Evidence bank for a journal paper on the served model, with the atlas's cross-modal support, the alignment diagnostics and the benchmark tables |
 | `workflow.html` | How VivOME works start to end, following one cell of the PBMC240 example |
 | `versions.html` | Model card, data availability, release protocol |
 | `miscellaneous.html` | Intentionally blank (former roadmap page) |

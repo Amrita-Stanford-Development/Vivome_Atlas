@@ -46,6 +46,29 @@ test('the page has its two tabs, the labels section old links arrive at, and a l
   assert.match(landing, /It shows the steps the service runs, not its progress\./);
 });
 
+test('Explore holds the view controls; the research panels live on the Manuscript page', () => {
+  const explore = html.slice(html.indexOf('id="panel-explore"'), html.indexOf('id="panel-data"'));
+  for (const id of ['your-cells', 'cells-toggle', 'explore-chips', 'rna-toggle', 'prot-toggle', 'names-toggle', 'dim-slider', 'size-slider', 'cell-type-filters']) {
+    assert.match(explore, new RegExp(`id="${id}"`), id);
+  }
+  assert.match(explore, /<section class="control-section sheet" id="your-cells" hidden>/, 'shown only with an answer');
+  for (const gone of ['support-tiles', 'support-table-mount', 'diagnostics-mount']) assert.ok(!html.includes(gone), gone);
+  assert.ok(!/buildSupport|buildDiagnostics/.test(read('js/atlas/explore-tab.js')));
+});
+
+test('with an answer on the map, Your data is the file’s card above the setup', () => {
+  const data = html.slice(html.indexOf('id="panel-data"'));
+  const card = data.indexOf('id="results-card"');
+  const setup = data.indexOf('id="data-setup"');
+  assert.ok(card > 0 && setup > card, 'the card comes first');
+  for (const id of ['send-another', 'open-results', 'replay', 'download', 'clear', 'labels-fold']) assert.match(data, new RegExp(`id="${id}"`), id);
+  // The rarely used parts fold away.
+  assert.match(data, /<details class="fold" id="labels-fold">/);
+  assert.match(data, /<details class="fold own-copy">/);
+  const tab = read('js/atlas/data-tab.js');
+  assert.match(tab, /\$\('data-setup'\)\.hidden = shown && !setupWanted/);
+});
+
 test('every number slot on the Your data tab has a measured record', async () => {
   const { wfFact } = await import('../js/workflow-data.js');
   const workflow = JSON.parse(read('data/workflow.json'));

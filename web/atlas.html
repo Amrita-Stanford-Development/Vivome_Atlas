@@ -41,8 +41,17 @@
                 <div class="well"><div class="stat-value" id="class-count">-</div><div class="stat-label">Cell types</div></div>
             </div>
 
+            <section class="control-section sheet" id="your-cells" hidden>
+                <div class="section-head">
+                    <h2 id="cells-toggle-label">Your cells</h2>
+                    <button type="button" class="toggle-switch active" id="cells-toggle" role="switch" aria-checked="true" aria-labelledby="cells-toggle-label"></button>
+                </div>
+                <p class="panel-note" id="your-cells-note"></p>
+                <div class="outcome-chips" id="explore-chips"></div>
+            </section>
+
             <section class="control-section sheet">
-                <h2>Modality</h2>
+                <h2>View</h2>
                 <div class="toggle-group">
                     <div class="toggle-item">
                         <span id="rna-toggle-label">RNA cells</span>
@@ -52,7 +61,21 @@
                         <span id="prot-toggle-label">Protein cells (SCoPE2, drawn larger)</span>
                         <button type="button" class="toggle-switch active" id="prot-toggle" role="switch" aria-checked="true" aria-labelledby="prot-toggle-label"></button>
                     </div>
+                    <div class="toggle-item">
+                        <span id="names-toggle-label">Names on the map</span>
+                        <button type="button" class="toggle-switch" id="names-toggle" role="switch" aria-checked="false" aria-labelledby="names-toggle-label"></button>
+                    </div>
                 </div>
+                <div class="slider-row">
+                    <label for="dim-slider">Dim the reference</label>
+                    <output id="dim-value" for="dim-slider">0%</output>
+                </div>
+                <input type="range" id="dim-slider" class="slider" min="0" max="90" step="5" value="0">
+                <div class="slider-row">
+                    <label for="size-slider">Dot size</label>
+                    <output id="size-value" for="size-slider">100%</output>
+                </div>
+                <input type="range" id="size-slider" class="slider" min="50" max="200" step="10" value="100">
             </section>
 
             <section class="control-section sheet">
@@ -66,49 +89,30 @@
                 <p class="panel-note">Each dot is a cell, coloured by its type. Click a type to show or hide it.</p>
                 <div class="cell-type-filters" id="cell-type-filters"></div>
             </section>
-
-            <section class="control-section sheet">
-                <details open>
-                    <summary>Cross-modal support</summary>
-                    <div class="support-tiles" id="support-tiles"></div>
-                    <div id="support-table-mount"></div>
-                    <p class="panel-note">
-                        Protein cells in this atlas cover only part of the label space. Cell types
-                        marked RNA only have none here, so their place in this view is not a
-                        cross-modal result; how the model does on them with real protein data is on
-                        <a href="manuscript.html#benchmark">the Manuscript page</a>.
-                    </p>
-                </details>
-            </section>
-
-            <section class="control-section sheet">
-                <details>
-                    <summary>Alignment diagnostics</summary>
-                    <div id="diagnostics-mount"></div>
-                </details>
-            </section>
             </div>
 
             <div id="panel-data" role="tabpanel" aria-labelledby="tab-data" hidden>
+                <section class="control-section sheet" id="results-card" hidden>
+                    <h2>Your file</h2>
+                    <p class="panel-note" id="results-note"></p>
+                    <div class="outcome-chips" id="outcome-chips"></div>
+                    <div class="actions">
+                        <button type="button" class="text-button" id="open-results">Open the results</button>
+                        <button type="button" class="text-button" id="replay">Replay</button>
+                        <button type="button" class="text-button" id="download">Download the response</button>
+                        <button type="button" class="text-button" id="clear">Clear</button>
+                        <button type="button" class="text-button" id="send-another">Send another file</button>
+                    </div>
+                </section>
+
+                <div id="data-setup">
                 <section class="control-section sheet" id="your-data">
                     <h2>Label your own cells</h2>
                     <p class="panel-text">
-                        Send a protein matrix to VivOME's online service. It answers for every cell, and
-                        the cells land on this map where the model places them. The service sees your
-                        file and nothing else.
+                        Send a protein matrix: every cell gets an answer and lands on this map. The
+                        service sees your file and nothing else.
                     </p>
                     <p class="service-line" id="service-status" role="status">Not checked yet.</p>
-                    <details class="own-copy">
-                        <summary>Use your own copy of the service</summary>
-                        <p class="panel-note">Run it from a clone of the repository, then enter its address (http://127.0.0.1:8001):</p>
-                        <pre class="well">pip install -r service/requirements.txt
-python -m service.app</pre>
-                        <label for="service-url">Service address</label>
-                        <div class="field-row">
-                            <input type="url" id="service-url" class="well" spellcheck="false">
-                            <button type="button" id="check-service" class="text-button">Check</button>
-                        </div>
-                    </details>
                 </section>
 
                 <section class="control-section sheet">
@@ -124,14 +128,12 @@ python -m service.app</pre>
 
                 <section class="control-section sheet">
                     <h2>Send a matrix</h2>
-                    <p class="panel-text">
-                        Send mixed cells, such as PBMCs, in one file. Each gene is scaled within the file
-                        you send, so a single sorted population loses the contrast the model needs
-                        (<a href="versions.html">known limits</a>).
-                    </p>
                     <p class="panel-note">
-                        Up to <span data-wf="service.max_cells">&nbsp;</span> cells and
-                        <span data-wf="service.max_mb">&nbsp;</span> MB per file. Or drop a file on the map.
+                        Mixed cells, such as PBMCs, in one file: each gene is scaled within the file, so
+                        a single sorted population loses the contrast the model needs
+                        (<a href="versions.html">known limits</a>). Up to
+                        <span data-wf="service.max_cells">&nbsp;</span> cells and
+                        <span data-wf="service.max_mb">&nbsp;</span> MB; or drop a file on the map.
                     </p>
                     <label for="modality">Modality</label>
                     <select id="modality" class="well">
@@ -140,7 +142,7 @@ python -m service.app</pre>
                     </select>
                     <label for="matrix">Matrix file: features in rows, cells in columns (CSV or TSV, or a DIA-NN report)</label>
                     <input type="file" id="matrix" class="well" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values">
-                    <label class="check"><input type="checkbox" id="restrict"> Limit answers to the cell types with protein evidence (see the supported label space below)</label>
+                    <label class="check"><input type="checkbox" id="restrict"> Only the cell types with protein evidence (see "What it can label")</label>
                     <div id="file-result" aria-live="polite"></div>
                     <div class="actions">
                         <button type="button" id="project" class="btn" disabled>Send and project</button>
@@ -148,27 +150,33 @@ python -m service.app</pre>
                     </div>
                 </section>
 
-                <section class="control-section sheet" id="results-card" hidden>
-                    <h2>Your cells</h2>
-                    <p class="panel-note" id="results-note"></p>
-                    <div class="outcome-chips" id="outcome-chips"></div>
-                    <div class="actions">
-                        <button type="button" class="text-button" id="open-results">Open the results</button>
-                        <button type="button" class="text-button" id="replay">Replay</button>
-                        <button type="button" class="text-button" id="download">Download the response</button>
-                        <button type="button" class="text-button" id="clear">Clear</button>
-                    </div>
+                <section class="control-section sheet" id="labels">
+                    <details class="fold" id="labels-fold">
+                        <summary>What it can label</summary>
+                        <p class="panel-text">
+                            A projection is only meaningful onto cell types the atlas supports. The
+                            service gives no answer when a cell falls outside this space rather than
+                            guessing. A real response, field by field, is on
+                            <a href="workflow.html#online">the Workflow page</a>.
+                        </p>
+                        <div class="supported-list" id="supported"></div>
+                    </details>
                 </section>
 
-                <section class="control-section sheet" id="labels">
-                    <h2>Supported label space</h2>
-                    <p class="panel-text">
-                        A projection is only meaningful onto cell types the atlas supports. The service
-                        gives no answer when a cell falls outside this space rather than guessing.
-                        A real response, field by field, is on <a href="workflow.html#online">the Workflow page</a>.
-                    </p>
-                    <div class="supported-list" id="supported"></div>
+                <section class="control-section sheet">
+                    <details class="fold own-copy">
+                        <summary>Use your own copy of the service</summary>
+                        <p class="panel-note">Run it from a clone of the repository, then enter its address (http://127.0.0.1:8001):</p>
+                        <pre class="well">pip install -r service/requirements.txt
+python -m service.app</pre>
+                        <label for="service-url">Service address</label>
+                        <div class="field-row">
+                            <input type="url" id="service-url" class="well" spellcheck="false">
+                            <button type="button" id="check-service" class="text-button">Check</button>
+                        </div>
+                    </details>
                 </section>
+                </div>
             </div>
         </div>
 
@@ -192,6 +200,7 @@ python -m service.app</pre>
                     <button type="button" class="glass" id="replay-view" hidden>Replay</button>
                 </div>
                 <div class="drop-hint" id="drop-hint" hidden>Drop the file to check it here, in your browser</div>
+                <div class="type-labels" id="type-labels" aria-hidden="true"></div>
 
                 <aside class="atlas-drawer sheet" id="atlas-drawer" aria-hidden="true" aria-labelledby="drawer-title">
                     <div class="drawer-head">

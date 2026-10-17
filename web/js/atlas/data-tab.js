@@ -37,6 +37,7 @@ export function mountDataTab({ landing, client, service }) {
   let opened = false;
   let workflow = null;
   let checks = 0;
+  let setupWanted = false;
 
   // Only the latest check speaks: one still waiting on a cold service, or
   // on an address since changed, is ignored when it answers.
@@ -64,7 +65,8 @@ export function mountDataTab({ landing, client, service }) {
         }
         const map = coordinatesCompatible(status.pipeline_version) ? ''
           : ' Its model draws a different map, so your cells will be listed, not placed.';
-        line(`Ready: ${status.model_version ?? 'the service'} (pipeline ${status.pipeline_version ?? 'unknown'}).${map}`, 'ready');
+        line(`Service ready: ${status.pipeline_version ?? status.model_version ?? 'model unknown'}.${map}`, 'ready');
+        $('service-status').title = status.model_version ?? '';
       }
     } catch (err) {
       clearTimeout(slow);
@@ -131,8 +133,13 @@ export function mountDataTab({ landing, client, service }) {
     $('matrix').disabled = !resting;
     setHtml($('file-result'), fileResult(st));
     const run = landing.run;
-    const shown = run && ['interactive', 'settling', 'flying', 'receipt', 'finishing'].includes(name);
+    const shown = Boolean(run) && ['interactive', 'settling', 'flying', 'receipt', 'finishing'].includes(name);
+    // With an answer on the map the tab is just the file's card; "Send
+    // another file" brings the setup back below it.
+    if (!shown) setupWanted = false;
     $('results-card').hidden = !shown;
+    $('data-setup').hidden = shown && !setupWanted;
+    $('send-another').hidden = !shown || setupWanted;
     if (shown) {
       $('results-note').textContent = run.source === 'recorded'
         ? 'The recorded example: answers from the served model, no file sent.'
@@ -166,12 +173,14 @@ export function mountDataTab({ landing, client, service }) {
     $('matrix').value = '';
     landing.clear();
   });
+  $('send-another').addEventListener('click', () => {
+    setupWanted = true;
+    update();
+    $('matrix').focus();
+  });
   $('outcome-chips').addEventListener('click', (e) => {
     const chip = e.target.closest('[data-outcome]');
-    if (!chip) return;
-    const on = chip.getAttribute('aria-pressed') !== 'true';
-    landing.setOutcomeOn(chip.dataset.outcome, on);
-    update();
+    if (chip) landing.setOutcomeOn(chip.dataset.outcome, chip.getAttribute('aria-pressed') !== 'true');
   });
 
   // A file dropped on the map is checked the same way.

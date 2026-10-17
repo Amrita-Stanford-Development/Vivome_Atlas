@@ -20,7 +20,7 @@ so a comparison with them is an ablation.
 | Introduction | the problem as this project's data show it, the contributions, the framing (label transfer, not a mixed space), references to collect |
 | Experimental procedures | the reference, the gene space, reading an upload, the encoder, the answer layer, the second opinion, the datasets and their roles, the simulated suite, the benchmark protocol, pre-registration, implementation |
 | Why each part is there | one row per part: the problem in an earlier design it fixes, the evidence, the alternative rejected |
-| Results | transfer, answer levels and coverage, the second opinion and its gate, the benchmark tables, the internal held-out test, failure modes, what was tried and not adopted |
+| Results | transfer, the atlas's cross-modal support and alignment diagnostics, answer levels and coverage, the second opinion and its gate, the benchmark tables, the internal held-out test, failure modes, what was tried and not adopted |
 | Discussion | what the evidence supports and does not yet, lessons, threats to validity, next steps |
 | Availability, supplement, figures | accessions and code; the supplemental tables; each figure's panels and data |
 | Before submission, reviewer questions | open items (pending records) and the answers a reviewer will need |
@@ -44,7 +44,11 @@ pending. The page's legend explains each one.
 No number is typed into the page. Each `data-ms` slot names a record in
 `web/data/manuscript.json`, and `msFact` shows it through `isMeasured`;
 hovering a number shows its basis (the file and field). `data-fact` slots
-read the manifest through `factText`. Protocol constants (a 95% interval,
+read the manifest through `factText`. Three panels in Results are built
+from the manifest by `web/js/panels.js`, through the same guard: the
+cross-modal support (`buildSupportSummary`, `buildSupportTable`), the
+alignment diagnostics (`buildDiagnosticsTable`) and the benchmark tables
+(`buildBenchmarkTable`). Protocol constants (a 95% interval,
 k = 30) are marked `<span class="constant">`, and
 `web/tests/manuscript.test.js` fails on any other typed percentage or
 decimal.

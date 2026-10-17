@@ -1,15 +1,15 @@
 // The Atlas page's Explore tab: the counts, the RNA and protein switches,
-// one list of the reference's cell types (which is also the colour key; a
-// click shows or hides a type), and the cross-modal support panels from the
-// manifest.
+// and one list of the reference's cell types (which is also the colour key;
+// a click shows or hides a type). The view controls and the visitor's cells
+// are view-controls.js. `onChange` hears every filter change.
 
-import { formatCount, loadManifest } from '../manifest.js';
-import { buildDiagnosticsTable, buildSupportSummary, buildSupportTable, errorPanel, escapeHtml } from '../panels.js';
+import { formatCount } from '../manifest.js';
+import { escapeHtml } from '../panels.js';
 import { CLASS_COLOURS, plainName } from '../workflow-data.js';
 
 const $ = (id) => document.getElementById(id);
 
-export function mountExploreTab({ layer, order, counts }) {
+export function mountExploreTab({ layer, order, counts, onChange = () => {} }) {
   $('rna-count').textContent = formatCount(counts.rna);
   $('prot-count').textContent = formatCount(counts.prot);
   $('class-count').textContent = formatCount(order.length);
@@ -21,6 +21,7 @@ export function mountExploreTab({ layer, order, counts }) {
       toggle.setAttribute('aria-checked', String(on));
       toggle.classList.toggle('active', on);
       layer.setModality(which, on);
+      onChange();
     });
   }
 
@@ -38,6 +39,7 @@ export function mountExploreTab({ layer, order, counts }) {
       item.setAttribute('aria-pressed', String(on));
       item.classList.toggle('deselected', !on);
     }
+    onChange();
   };
   list.addEventListener('click', (e) => {
     const item = e.target.closest('.filter-item');
@@ -48,13 +50,4 @@ export function mountExploreTab({ layer, order, counts }) {
   });
   $('types-all').addEventListener('click', () => { layer.setAllClasses(true); sync(); });
   $('types-none').addEventListener('click', () => { layer.setAllClasses(false); sync(); });
-
-  loadManifest().then((manifest) => {
-    $('support-tiles').innerHTML = buildSupportSummary(manifest);
-    $('support-table-mount').innerHTML = buildSupportTable(manifest);
-    $('diagnostics-mount').innerHTML = buildDiagnosticsTable(manifest);
-  }).catch((err) => {
-    $('support-table-mount').innerHTML = errorPanel(err);
-    $('diagnostics-mount').innerHTML = errorPanel(err);
-  });
 }

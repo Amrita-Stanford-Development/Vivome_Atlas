@@ -174,6 +174,7 @@ export function createStage(THREE, canvas, container, { reduced = false } = {}) 
   let last = 0;
   let width = 1;
   let height = 1;
+  let dotScale = 1;
   const listeners = [];
 
   function size() {
@@ -219,7 +220,13 @@ export function createStage(THREE, canvas, container, { reduced = false } = {}) 
     get height() { return height; },
     // The column-major view-projection matrix, for picking.
     viewProjection: () => new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse).elements,
-    // Device pixels per scene unit at distance 1, for point sizes.
-    pixelScale: () => (height * renderer.getPixelRatio() * camera.projectionMatrix.elements[5]) / 2,
+    // Device pixels per scene unit at distance 1, for point sizes, times the
+    // visitor's dot size (every layer sizes its dots, and picks them, by it).
+    pixelScale: () => (height * renderer.getPixelRatio() * camera.projectionMatrix.elements[5] * dotScale) / 2,
+    setDotScale(s) {
+      dotScale = Math.min(3, Math.max(0.25, Number(s) || 1));
+      invalidate();
+    },
+    get dotScale() { return dotScale; },
   };
 }

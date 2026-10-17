@@ -165,7 +165,7 @@ in the browser.
 
 | Panel builder | Page |
 |---|---|
-| `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `atlas.html` (`web/js/atlas/explore-tab.js`) |
+| `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `manuscript.html` (Results: cross-modal support, alignment diagnostics) |
 | `buildBenchmarkTable` (with `currentOnly`, `roles` and `note` options) | `manuscript.html` |
 | `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace`, `buildProjectionSummary`, `buildProjectionLabels`, `buildProjectionCells` | `atlas.html` (`web/js/atlas/data-tab.js`, `web/js/atlas/landing.js`) |

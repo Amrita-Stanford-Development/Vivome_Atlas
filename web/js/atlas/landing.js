@@ -123,6 +123,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
 
   // A sheet of waiting dots: the file, before its answers.
   function showSheet(n) {
+    upload.setShown(true); // a new file is always shown, whatever the switch said before
     if (!sheet) {
       sheet = benchFor();
       stage.rig.setGuided(true);
@@ -599,16 +600,24 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     clear: () => dispatch({ type: 'CLEAR' }),
     openResults,
     select,
+    // The answer filters and the switch for the visitor's cells; every
+    // control showing them (the Your data card, Explore) hears the change.
     setOutcomeOn(outcome, on) {
       if (!run) return;
       run.on[outcome] = on;
       upload.setOutcomeOn(outcomeCode(outcome), on);
+      render();
     },
+    setCellsShown(on) {
+      upload.setShown(on);
+      render();
+    },
+    get cellsShown() { return upload.shown; },
     chips: () => (run ? buildOutcomeChips(outcomeCounts(run.cells), run.on) : ''),
     download,
     // The uploaded cell under the pointer, or -1.
     pick(clientX, clientY) {
-      if (!run || upload.n === 0 || upload.n !== run.cells.length) return -1;
+      if (!run || !upload.shown || upload.n === 0 || upload.n !== run.cells.length) return -1;
       const rect = stage.renderer.domElement.getBoundingClientRect();
       const now = upload.positionsAt(clock);
       const screen = projectAll(now, upload.n, stage.viewProjection(), rect.width, rect.height);

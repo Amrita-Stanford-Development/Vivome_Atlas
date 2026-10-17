@@ -488,6 +488,7 @@ export function createUploadLayer(THREE, stage) {
     stage.scene.add(points);
   }
 
+  let shown = true; // the visitor's switch: their cells on the map or not
   let state = { n: 0, start: new Float32Array(0), end: new Float32Array(0), timing: new Float32Array(0), look: new Float32Array(0), meta: new Float32Array(0) };
   let neighbours = { m: 0, owner: null, data: null, attribute: null };
   let arcUp = [0, -1, 0];
@@ -568,8 +569,8 @@ export function createUploadLayer(THREE, stage) {
     cells.geometry = geometry;
     ripples.geometry = geometry;
     old.dispose();
-    cells.visible = n > 0;
-    ripples.visible = n > 0;
+    cells.visible = n > 0 && shown;
+    ripples.visible = n > 0 && shown;
     state = { n, start, end, timing, look, meta };
     flightUntil = until;
     syncNeighbourOutcomes();
@@ -595,7 +596,7 @@ export function createUploadLayer(THREE, stage) {
     const old = glow.geometry;
     glow.geometry = geometry;
     old.dispose();
-    glow.visible = m > 0;
+    glow.visible = m > 0 && shown;
     neighbours = { m, owner: m ? g.owner : null, data, attribute };
     syncNeighbourOutcomes();
     glowUntil = until;
@@ -678,7 +679,16 @@ export function createUploadLayer(THREE, stage) {
     setOpacity: (a) => set('uOpacity', Math.min(1, Math.max(0, Number(a) || 0))),
     get n() { return state.n; },
     // The same visibility the shader applies, for picking.
-    visible: (i) => i >= 0 && i < state.n && uniforms.uOpacity.value > 0
+    // Shows or hides every cell of the upload, with its ripples and glow.
+    setShown(on) {
+      shown = Boolean(on);
+      cells.visible = state.n > 0 && shown;
+      ripples.visible = state.n > 0 && shown;
+      glow.visible = neighbours.m > 0 && shown;
+      wake();
+    },
+    get shown() { return shown; },
+    visible: (i) => shown && i >= 0 && i < state.n && uniforms.uOpacity.value > 0
       && uniforms.uOutcomeOn.value[Math.round(Math.min(OUTCOMES - 1, Math.max(0, state.look[i * 4 + 2])))] > 0.5,
     // The radius cells draw at on the sheet, in scene units (at most the
     // full radius); they grow to the full radius as they fly.

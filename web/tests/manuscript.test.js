@@ -1,7 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { buildBenchmarkTable, factText } from '../js/panels.js';
+import {
+  buildBenchmarkTable, buildDiagnosticsTable, buildSupportSummary, buildSupportTable, factText,
+} from '../js/panels.js';
+import { formatCount, formatMetric, formatPercent } from '../js/manifest.js';
 import {
   CAVEATS, checkSync, formatManuscript, msBasis, msFact, validateManuscript,
 } from '../js/manuscript-data.js';
@@ -103,4 +106,53 @@ test('the benchmark tables on this page show the current model only, without the
   // The default keeps every row and note, as before.
   const full = buildBenchmarkTable(manifest);
   for (const method of new Set(ours)) assert.ok(full.includes(method), method);
+});
+
+test('the cross-modal support and alignment panels sit in Results, mounted from the manifest', () => {
+  const results = html.match(/<section class="sheet" id="results">[\s\S]*?<\/section>/)[0];
+  const at = (s) => results.indexOf(s);
+  for (const s of ['id="cross-modal-support"', 'id="support-tiles"', 'id="support-table-mount"',
+    'id="alignment-diagnostics"', 'id="diagnostics-mount"']) assert.ok(at(s) > 0, `${s} is not in Results`);
+  // After the transfer results they explain, before the answer levels.
+  assert.ok(at('id="transfer"') < at('id="cross-modal-support"'));
+  assert.ok(at('id="cross-modal-support"') < at('id="alignment-diagnostics"'));
+  assert.ok(at('id="alignment-diagnostics"') < at('id="answer-levels"'));
+  // The page's module fills each mount from the manifest, and a failed load
+  // puts the error panel in the tables' mounts instead of leaving them blank.
+  const script = html.match(/<script type="module" async>([\s\S]*?)<\/script>/)[1];
+  const [loaded, failed] = script.split('.catch(');
+  for (const [mount, builder] of [['support-tiles', 'buildSupportSummary'],
+    ['support-table-mount', 'buildSupportTable'], ['diagnostics-mount', 'buildDiagnosticsTable']]) {
+    assert.ok(loaded.includes(`getElementById('${mount}').innerHTML = ${builder}(manifest)`), `${mount} is not filled by ${builder}`);
+  }
+  for (const mount of ['support-table-mount', 'diagnostics-mount']) assert.ok(failed.includes(`'${mount}'`), `${mount} gets no error panel`);
+  assert.match(failed, /\.innerHTML = errorPanel\(err\)/);
+});
+
+test('the panels show the committed manifest\'s records, and a pending record reads Pending', () => {
+  const s = manifest.summary;
+  const tiles = buildSupportSummary(manifest);
+  for (const n of [s.cross_modal, s.rna_only, s.total]) assert.ok(tiles.includes(`>${formatCount(n)}<`), `tile ${n}`);
+  assert.ok(!/Pending/.test(tiles));
+  assert.equal((buildSupportTable(manifest).match(/<tr>/g) ?? []).length, manifest.cell_types.length + 1);
+
+  const crossModal = manifest.cell_types.filter((c) => c.support === 'cross_modal');
+  assert.equal(crossModal.length, s.cross_modal);
+  const diagnostics = buildDiagnosticsTable(manifest);
+  assert.ok(!/Pending/.test(diagnostics), 'a cross-modal diagnostic reads Pending');
+  for (const c of crossModal) {
+    assert.ok(diagnostics.includes(formatMetric(c.pca_centroid_cosine, 4)), `${c.name} centroid cosine`);
+    assert.ok(diagnostics.includes(formatMetric(c.latent_centroid_cosine, 4)), `${c.name} latent cosine`);
+    assert.ok(diagnostics.includes(formatPercent(c.modality_probe_accuracy)), `${c.name} modality probe`);
+  }
+
+  const held = structuredClone(manifest);
+  held.summary = {};
+  for (const c of held.cell_types) {
+    if (c.support === 'cross_modal') c.latent_centroid_cosine = { value: null, status: 'pending', phase: 'Diagnostics' };
+  }
+  assert.equal((buildSupportSummary(held).match(/Pending/g) ?? []).length, 3);
+  const pendingHtml = buildDiagnosticsTable(held);
+  assert.equal((pendingHtml.match(/<span class="pending">Pending<\/span>/g) ?? []).length, crossModal.length);
+  for (const c of crossModal) assert.ok(!pendingHtml.includes(formatMetric(c.latent_centroid_cosine, 4)), c.name);
 });

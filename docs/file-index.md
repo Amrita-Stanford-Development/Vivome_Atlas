@@ -18,8 +18,8 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `web/README.md` — how to serve the site and what each folder under `web/` holds
 - `web/index.html` — landing page: the title panel on the first screen, then seven sections of white and liquid-glass cards, and the finale
-- `web/atlas.html` — the Atlas page's markup: the 3D reference (RNA + protein) with its controls, support panels and drawer; its code is `web/js/atlas/`
-- `web/manuscript.html` — the Manuscript page: an evidence bank for a journal paper on the served model, in MCP's sections (methods and why each part is there, the benchmark tables, the internal held-out test, failure modes, what was tried and not kept, open items); every number a record
+- `web/atlas.html` — the Atlas page's markup: the 3D reference (RNA + protein) with its controls and drawer; its code is `web/js/atlas/`
+- `web/manuscript.html` — the Manuscript page: an evidence bank for a journal paper on the served model, in MCP's sections (methods and why each part is there, the atlas's cross-modal support and alignment diagnostics, the benchmark tables, the internal held-out test, failure modes, what was tried and not kept, open items); every number a record
 - `web/versions.html` — model card, known limits, earlier releases, prior baseline, data availability, release protocol
 - `web/workflow.html` — the Workflow page: how VivOME works start to end, 13 chapters following one PBMC240 run, a film mode
 - `web/miscellaneous.html` — intentionally blank (the former roadmap page); kept on purpose
@@ -53,11 +53,13 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/atlas/stage.js` — the Atlas page's renderer, camera, orbit rig (turn, move, zoom, glide, slow turn) and its draw-when-changed loop
 - `web/js/atlas/reference-layer.js` — every reference cell as one point cloud, shaded as small spheres; filters, dimming and focus as uniforms
 - `web/js/atlas/gene-profile.js` — a clicked cell's gene profile from the large CSVs, with the LFS check and the "not on this copy" message
-- `web/js/atlas/explore-tab.js` — the Atlas page's Explore controls: counts, modality switches, the cell-type list, the support panels
+- `web/js/atlas/explore-tab.js` — the Atlas page's Explore controls: counts, modality switches, the cell-type list
+- `web/js/atlas/view-controls.js` — the Atlas page's view controls in Explore: the visitor's cells and their answer filters, names on the map, dimming, dot size
+- `web/js/atlas/type-labels.js` — names on the Atlas page's map: each shown type's name at its centre, without overlaps
 - `web/js/atlas/overlay.js` — the Atlas page's loading screen, error panel and tooltip
 - `web/js/atlas/main.js` — the Atlas page's entry point: loads the reference, wires the modules and the two tabs
 - `web/js/atlas/landing.js` — the Atlas page's landing: runs the state machine on the stage's clock, from the file's sheet through the waiting illustration and the receipt to the flights, the camera and the results
-- `web/js/atlas/data-tab.js` — the Atlas page's Your data tab: the service line and address, the example, the file controls, the results card, the supported label space
+- `web/js/atlas/data-tab.js` — the Atlas page's Your data tab: the file's card while an answer is shown; otherwise the service line and address, the example, the file controls, the supported label space
 - `web/js/atlas/choreography.js` — the Atlas page's upload timing: the six waiting steps and their finish, the fly-in schedule level by level, the receipt, fly-in and settle timeline, the camera pose that frames the cells, reduced motion (pure)
 - `web/js/atlas/director.js` — the Atlas page's upload flow as one state machine: checking, sending, busy retries, the recorded example, the guided landing, exploring, failures (pure)
 - `web/js/atlas/file-check.js` — what the browser can tell about an upload before sending it: the header read in slices, rows counted by streaming, the separator and cell count (DIA-NN and FragPipe annotation columns), the service's limits (pure)
@@ -78,7 +80,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser
 - `web/tests/atlas-example.test.js` — the deployed PBMC240 example is byte-identical to the `service/examples/` copy, under Cloudflare Pages' 25 MiB file limit, and a DIA-NN report with a Genes column
 - `web/tests/atlas-choreography.test.js` — the fly-in fits its window for 1 to 2,000 cells in one level or four, level order and gaps, the landing timeline, the waiting loop and its finish, the camera pose, reduced motion
-- `web/tests/atlas-director.test.js` — every rule of the upload state machine, and that no state is changed in place
+- `web/tests/atlas-director.test.js` — every rule of the upload state machine, the sidebar's folding, and that no state is changed in place
+- `web/tests/atlas-view-controls.test.js` — the view controls: Your cells only with an answer on the map, and each control asking the right part of the page
+- `web/tests/atlas-type-labels.test.js` — names on the map: hidden and off-screen types get none, no two overlap, the larger type wins
 - `web/tests/atlas-file-check.test.js` — the file check on Node Blobs: tabs, commas, CRLF, empty and header-only files, headers longer than a slice, the real PBMC240 report (238 cells), the limits
 - `web/tests/atlas-service.test.js` — the service client with a fake transport: ready, busy (Retry-After 30, or hidden from the page), refused (413, 400), unreachable, not ready, timeout, cancel; the remembered address; the default address is the workflow data's
 - `web/tests/atlas-landing.test.js` — the landing run end to end on stand-ins for the page, three.js and the stage: the recorded example to the settled view, Skip and Replay, a file checked, sent and landed, a service on another map, busy, unreachable, refused in the browser
@@ -87,7 +91,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-data.test.js` — the Atlas page's reference cells read from the real files: counts, quoted names, each type keeps its colour, the scene frame, name anchors
 - `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
 - `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
-- `web/tests/manuscript.test.js` — the Manuscript page against the real files: every slot measured but the open items, no typed metric, copy rules, caveat tags, contents links, the current model's benchmark rows only
+- `web/tests/manuscript.test.js` — the Manuscript page against the real files: every slot measured but the open items, no typed metric, copy rules, caveat tags, contents links, the current model's benchmark rows only, the cross-modal support and alignment panels mounted in Results from the manifest (Pending when a record is pending)
 - `web/tests/timeline.test.js` — the film's clock: chapter lengths, locate, beats, reduced-motion steps, the address
 - `web/tests/workflow-layout.test.js` — the Workflow page's layout maths and static figures: rotation, Sankey conservation, colour ramps, ROC snapping, hatching, escaping
 - `web/tests/random.test.js` — tests for `random.js`, with its first draws pinned

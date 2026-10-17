@@ -206,6 +206,13 @@ white halo card, and a drawer that slides over the viewer's right side
   (About this answer, Answers, Cells) open and close, under Download and
   Clear. While the drawer is open, the corner buttons and Replay move into
   the space left of it.
+- **The sidebar after an answer.** Your data becomes the file's card
+  (answer filters, Replay, Download, Clear, Send another file); the setup
+  returns with Send another file or Clear. Explore gains Your cells (a
+  switch and the same answer filters) and View: the RNA and protein
+  switches, names on the map, Dim the reference and Dot size. The
+  cross-modal support and alignment diagnostics are research detail and
+  sit on the Manuscript page.
 
 ## The Manuscript page
 
@@ -232,7 +239,7 @@ when a release does.
 | Output | Lands in | Shown by |
 |---|---|---|
 | The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | versions model card |
-| Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest |
+| Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest for the Manuscript page's cross-modal support and alignment diagnostics |
 | Benchmark rows | `manifest.benchmark` | the Manuscript page's benchmark tables |
 | A served model's trace, the gene space, the training recipe, the evaluation records | `web/data/workflow.json` (`scripts/build_workflow.py`, built with the manifest) | the Workflow page ([workflow.md](workflow.md)) |
 | The served model's evidence for a paper: development, post-hoc and held-out results, diagnoses, designs not kept | `web/data/manuscript.json` (`scripts/build_manuscript.py`, built with the manifest) | the Manuscript page ([manuscript.md](manuscript.md)) |
