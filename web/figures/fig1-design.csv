@@ -1,0 +1,13 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,,reference cells,85233,,,cells,web/data/manuscript.json,records.ref_cells.value
+a,,reference types,22,,,types,web/data/manuscript.json,records.ref_classes.value
+a,,families,9,,,families,web/data/manuscript.json,records.ref_groups.value
+a,,lineages,5,,,lineages,web/data/manuscript.json,records.ref_lineages.value
+a,,shared gene list,9002,,,genes,web/data/manuscript.json,records.gs_size.value
+a,,proteomics gene lists,6,,,lists,web/data/manuscript.json,records.gs_sources.value
+a,,members,5,,,members,web/data/manuscript.json,records.wf_members.value
+b,,most cells per upload,2000,,,cells,web/data/manuscript.json,records.wf_service_max_cells.value
+b,,shared space,128,,,dimensions,web/data/manuscript.json,records.wf_latent.value
+b,,target coverage,0.9,,,share,web/data/manuscript.json,records.coverage_target.value
+b,,agreement gate,0.4,,,share,web/data/manuscript.json,records.wf_agreement_threshold.value
+b,,encoder weight at the gate,0.5,,,weight,web/data/manuscript.json,records.wf_weight_used.value

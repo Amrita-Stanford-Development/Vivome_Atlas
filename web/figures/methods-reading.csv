@@ -1,0 +1,881 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,,rows,3098,,,protein groups,web/data/workflow.json,facts.rows.value
+a,,cells,238,,,cells,web/data/workflow.json,facts.runs.value
+a,,missing share,0.6278,,,share,web/data/workflow.json,facts.missing_share.value
+a,,fewest cells,20,,,cells,web/data/workflow.json,service.min_cells.value
+a,,most cells,2000,,,cells,web/data/workflow.json,service.max_cells.value
+b,,median observed value,4780.32,,,linear,web/data/workflow.json,facts.median_linear.value
+b,,linear threshold,50.0,,,linear,web/data/workflow.json,facts.scale_threshold.value
+c,,rows resolved,3007,,,rows,web/data/workflow.json,facts.ids_matched.value
+c,,rows unmapped,32,,,rows,web/data/workflow.json,facts.ids_unmapped.value
+c,,rows ambiguous,59,,,rows,web/data/workflow.json,facts.ids_ambiguous.value
+c,,genes filled,2996,,,genes,web/data/workflow.json,facts.matched.value
+c,,shared gene list,9002,,,genes,web/data/workflow.json,facts.feature_space.value
+e,,own share,0.4,,,share,web/data/workflow.json,facts.smoothing_own.value
+e,,neighbour share,0.6,,,share,web/data/workflow.json,facts.smoothing_alpha.value
+e,,neighbours,15,,,cells,web/data/workflow.json,facts.smoothing_k.value
+e,,principal components,50,,,components,web/data/workflow.json,facts.smoothing_pca.value
+f,,floor,200,,,genes,web/data/workflow.json,facts.floor.value
+f,,median genes measured,1044,,,genes,web/data/workflow.json,facts.observed_median.value
+f,,cells below the floor,1,,,cells,web/data/workflow.json,facts.below_floor.value
+all,blue cell,Astral_TopMedPBMC1_041025_SP_31,1189,,,genes,web/data/workflow.json,trace.cells[29].observed (trace.story.default)
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_26,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 24]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_27,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 25]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_28,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 26]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_29,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 27]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_30,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 28]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_31,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 29]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_32,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 30]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_33,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 31]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_34,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 32]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_35,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 33]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_36,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 34]"
+a,"presence, row 193",Astral_TopMedPBMC1_041025_SP_37,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 193, column 35]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_26,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 24]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_27,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 25]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_28,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 26]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_29,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 27]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_30,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 28]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_31,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 29]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_32,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 30]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_33,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 31]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_34,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 32]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_35,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 33]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_36,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 34]"
+a,"presence, row 580",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 580, column 35]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_26,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 24]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_27,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 25]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_28,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 26]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_29,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 27]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_30,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 28]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_31,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 29]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_32,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 30]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_33,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 31]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_34,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 32]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_35,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 33]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_36,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 34]"
+a,"presence, row 968",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 968, column 35]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_26,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 24]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_27,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 25]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_28,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 26]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_29,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 27]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_30,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 28]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_31,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 29]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_32,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 30]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_33,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 31]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_34,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 32]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_35,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 33]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_36,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 34]"
+a,"presence, row 1355",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1355, column 35]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_26,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 24]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_27,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 25]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_28,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 26]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_29,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 27]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_30,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 28]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_31,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 29]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_32,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 30]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_33,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 31]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_34,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 32]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_35,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 33]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_36,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 34]"
+a,"presence, row 1742",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 1742, column 35]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_26,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 24]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_27,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 25]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_28,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 26]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_29,1,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 27]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_30,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 28]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_31,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 29]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_32,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 30]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_33,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 31]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_34,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 32]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_35,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 33]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_36,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 34]"
+a,"presence, row 2129",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2129, column 35]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_26,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 24]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_27,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 25]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_28,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 26]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_29,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 27]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_30,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 28]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_31,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 29]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_32,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 30]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_33,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 31]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_34,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 32]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_35,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 33]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_36,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 34]"
+a,"presence, row 2517",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2517, column 35]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_26,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 24]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_27,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 25]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_28,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 26]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_29,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 27]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_30,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 28]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_31,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 29]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_32,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 30]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_33,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 31]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_34,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 32]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_35,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 33]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_36,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 34]"
+a,"presence, row 2904",Astral_TopMedPBMC1_041025_SP_37,0,,,measured,web/data/workflow.json,"raw.pbmc240.parse.presence.bits[row 2904, column 35]"
+b,linear,TMA7;TMA7B,13488.4,,,linear,web/data/workflow.json,trace.detail[cell 29].raw_row[0][1]
+b,log2,TMA7;TMA7B,13.72,,,log2,web/data/workflow.json,trace.detail[cell 29].raw_row[0][2]
+c,merged,DBNL,2,,,rows,web/data/workflow.json,raw.pbmc240.collapse.examples[0].rows
+c,unmapped,IGLV3-16,,,,,web/data/workflow.json,raw.pbmc240.ids.unmapped_examples[1]
+c,ambiguous,DDT;DDTL,,,,,web/data/workflow.json,raw.pbmc240.ids.ambiguous_examples[1]
+d,log2,CD3E,12.6,,,log2,web/data/workflow.json,trace.heatmap.log2[0][0]
+d,z,CD3E,0.91,,,scaled,web/data/workflow.json,trace.heatmap.z[0][0]
+e,smoothed,CD3E,0.76,,,scaled,web/data/workflow.json,trace.heatmap.smoothed[0][0]
+d,log2,CD8A,,,,log2,web/data/workflow.json,trace.heatmap.log2[0][4]
+d,z,CD8A,0.0,,,scaled,web/data/workflow.json,trace.heatmap.z[0][4]
+e,smoothed,CD8A,0.01,,,scaled,web/data/workflow.json,trace.heatmap.smoothed[0][4]
+f,mask,CD3E,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][0]
+f,mask,CD3D,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][1]
+f,mask,CD2,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][2]
+f,mask,LCK,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][3]
+f,mask,CD8A,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][4]
+f,mask,CD4,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][5]
+f,mask,PRF1,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][6]
+f,mask,GZMB,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][7]
+f,mask,GZMA,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][8]
+f,mask,LYZ,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][9]
+f,mask,S100A8,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][10]
+f,mask,S100A9,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][11]
+f,mask,CD14,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][12]
+f,mask,HLA-DRA,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][13]
+f,mask,CD74,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][14]
+f,mask,PPBP,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][15]
+f,mask,PF4,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][16]
+f,mask,ITGA2B,0,,,measured,web/data/workflow.json,trace.heatmap.mask[0][17]
+f,mask,HBB,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][18]
+f,mask,CORO1A,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][19]
+f,mask,PTPRC,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][20]
+f,mask,VIM,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][21]
+f,mask,ACTBL2,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][22]
+f,mask,ACTG2,1,,,measured,web/data/workflow.json,trace.heatmap.mask[0][23]
+e,layout x,Astral_TopMedPBMC1_041025_SP_1,0.1591,,,,web/data/workflow.json,trace.cells[0].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_1,0.1984,,,,web/data/workflow.json,trace.cells[0].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_2,-0.073,,,,web/data/workflow.json,trace.cells[1].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_2,-0.0778,,,,web/data/workflow.json,trace.cells[1].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_3,0.2562,,,,web/data/workflow.json,trace.cells[2].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_3,0.3281,,,,web/data/workflow.json,trace.cells[2].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_4,0.2626,,,,web/data/workflow.json,trace.cells[3].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_4,0.3275,,,,web/data/workflow.json,trace.cells[3].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_5,0.2247,,,,web/data/workflow.json,trace.cells[4].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_5,0.0527,,,,web/data/workflow.json,trace.cells[4].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_6,-0.0519,,,,web/data/workflow.json,trace.cells[5].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_6,-0.2737,,,,web/data/workflow.json,trace.cells[5].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_7,0.0789,,,,web/data/workflow.json,trace.cells[6].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_7,-0.0514,,,,web/data/workflow.json,trace.cells[6].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_8,0.3912,,,,web/data/workflow.json,trace.cells[7].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_8,0.1819,,,,web/data/workflow.json,trace.cells[7].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_9,0.2766,,,,web/data/workflow.json,trace.cells[8].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_9,-0.0971,,,,web/data/workflow.json,trace.cells[8].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_10,0.3401,,,,web/data/workflow.json,trace.cells[9].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_10,-0.0112,,,,web/data/workflow.json,trace.cells[9].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_11,0.3393,,,,web/data/workflow.json,trace.cells[10].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_11,0.3281,,,,web/data/workflow.json,trace.cells[10].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_12,-0.5198,,,,web/data/workflow.json,trace.cells[11].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_12,0.3565,,,,web/data/workflow.json,trace.cells[11].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_13,0.2277,,,,web/data/workflow.json,trace.cells[12].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_13,0.2532,,,,web/data/workflow.json,trace.cells[12].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_15,-0.0221,,,,web/data/workflow.json,trace.cells[13].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_15,-0.1158,,,,web/data/workflow.json,trace.cells[13].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_16,0.3816,,,,web/data/workflow.json,trace.cells[14].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_16,-0.0187,,,,web/data/workflow.json,trace.cells[14].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_17,-0.4915,,,,web/data/workflow.json,trace.cells[15].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_17,0.3502,,,,web/data/workflow.json,trace.cells[15].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_18,0.144,,,,web/data/workflow.json,trace.cells[16].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_18,-0.2659,,,,web/data/workflow.json,trace.cells[16].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_19,0.002,,,,web/data/workflow.json,trace.cells[17].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_19,-0.284,,,,web/data/workflow.json,trace.cells[17].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_20,0.1381,,,,web/data/workflow.json,trace.cells[18].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_20,-0.2962,,,,web/data/workflow.json,trace.cells[18].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_21,0.1267,,,,web/data/workflow.json,trace.cells[19].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_21,0.0359,,,,web/data/workflow.json,trace.cells[19].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_22,0.2912,,,,web/data/workflow.json,trace.cells[20].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_22,0.3773,,,,web/data/workflow.json,trace.cells[20].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_23,-0.656,,,,web/data/workflow.json,trace.cells[21].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_23,0.2138,,,,web/data/workflow.json,trace.cells[21].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_24,0.2941,,,,web/data/workflow.json,trace.cells[22].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_24,-0.0502,,,,web/data/workflow.json,trace.cells[22].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_25,0.4039,,,,web/data/workflow.json,trace.cells[23].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_25,0.0897,,,,web/data/workflow.json,trace.cells[23].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_26,0.1805,,,,web/data/workflow.json,trace.cells[24].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_26,-0.2299,,,,web/data/workflow.json,trace.cells[24].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_27,0.3065,,,,web/data/workflow.json,trace.cells[25].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_27,-0.0729,,,,web/data/workflow.json,trace.cells[25].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_28,0.4986,,,,web/data/workflow.json,trace.cells[26].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_28,0.1562,,,,web/data/workflow.json,trace.cells[26].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_29,-0.7589,,,,web/data/workflow.json,trace.cells[27].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_29,-0.0042,,,,web/data/workflow.json,trace.cells[27].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_30,0.334,,,,web/data/workflow.json,trace.cells[28].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_30,-0.0208,,,,web/data/workflow.json,trace.cells[28].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_31,0.2532,,,,web/data/workflow.json,trace.cells[29].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_31,-0.0825,,,,web/data/workflow.json,trace.cells[29].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_32,0.2052,,,,web/data/workflow.json,trace.cells[30].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_32,0.3724,,,,web/data/workflow.json,trace.cells[30].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_33,0.2832,,,,web/data/workflow.json,trace.cells[31].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_33,0.1888,,,,web/data/workflow.json,trace.cells[31].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_34,0.2171,,,,web/data/workflow.json,trace.cells[32].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_34,0.1248,,,,web/data/workflow.json,trace.cells[32].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_35,0.1565,,,,web/data/workflow.json,trace.cells[33].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_35,0.0063,,,,web/data/workflow.json,trace.cells[33].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_36,0.141,,,,web/data/workflow.json,trace.cells[34].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_36,0.2899,,,,web/data/workflow.json,trace.cells[34].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_37,0.2082,,,,web/data/workflow.json,trace.cells[35].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_37,0.0171,,,,web/data/workflow.json,trace.cells[35].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_38,0.1443,,,,web/data/workflow.json,trace.cells[36].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_38,-0.2452,,,,web/data/workflow.json,trace.cells[36].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_39,0.1934,,,,web/data/workflow.json,trace.cells[37].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_39,0.0848,,,,web/data/workflow.json,trace.cells[37].layout[1]
+e,layout x,Astral_TopMedPBMC1_041025_SP_40,0.0569,,,,web/data/workflow.json,trace.cells[38].layout[0]
+e,layout y,Astral_TopMedPBMC1_041025_SP_40,-0.3319,,,,web/data/workflow.json,trace.cells[38].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_41,-0.0906,,,,web/data/workflow.json,trace.cells[39].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_41,-0.2777,,,,web/data/workflow.json,trace.cells[39].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_42,0.1593,,,,web/data/workflow.json,trace.cells[40].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_42,-0.032,,,,web/data/workflow.json,trace.cells[40].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_43,0.1777,,,,web/data/workflow.json,trace.cells[41].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_43,-0.368,,,,web/data/workflow.json,trace.cells[41].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_44,-0.1625,,,,web/data/workflow.json,trace.cells[42].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_44,-0.4232,,,,web/data/workflow.json,trace.cells[42].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_45,0.1855,,,,web/data/workflow.json,trace.cells[43].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_45,-0.0973,,,,web/data/workflow.json,trace.cells[43].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_46,0.1722,,,,web/data/workflow.json,trace.cells[44].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_46,-0.2138,,,,web/data/workflow.json,trace.cells[44].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_47,0.0835,,,,web/data/workflow.json,trace.cells[45].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_47,0.3108,,,,web/data/workflow.json,trace.cells[45].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_48,0.3622,,,,web/data/workflow.json,trace.cells[46].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_48,0.2429,,,,web/data/workflow.json,trace.cells[46].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_49,0.0603,,,,web/data/workflow.json,trace.cells[47].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_49,-0.1736,,,,web/data/workflow.json,trace.cells[47].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_50,0.3838,,,,web/data/workflow.json,trace.cells[48].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_50,0.0937,,,,web/data/workflow.json,trace.cells[48].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_51,0.3227,,,,web/data/workflow.json,trace.cells[49].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_51,0.4972,,,,web/data/workflow.json,trace.cells[49].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_52,-0.0326,,,,web/data/workflow.json,trace.cells[50].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_52,-0.5396,,,,web/data/workflow.json,trace.cells[50].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_53,0.0202,,,,web/data/workflow.json,trace.cells[51].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_53,-0.2193,,,,web/data/workflow.json,trace.cells[51].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_54,-0.1644,,,,web/data/workflow.json,trace.cells[52].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_54,-0.3051,,,,web/data/workflow.json,trace.cells[52].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_55,0.1822,,,,web/data/workflow.json,trace.cells[53].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_55,-0.0823,,,,web/data/workflow.json,trace.cells[53].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_56,0.1465,,,,web/data/workflow.json,trace.cells[54].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_56,-0.2877,,,,web/data/workflow.json,trace.cells[54].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_57,-0.644,,,,web/data/workflow.json,trace.cells[55].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_57,-0.1215,,,,web/data/workflow.json,trace.cells[55].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_58,-0.0091,,,,web/data/workflow.json,trace.cells[56].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_58,-0.2378,,,,web/data/workflow.json,trace.cells[56].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_59,0.1176,,,,web/data/workflow.json,trace.cells[57].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_59,0.2144,,,,web/data/workflow.json,trace.cells[57].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_60,0.3176,,,,web/data/workflow.json,trace.cells[58].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_60,0.1752,,,,web/data/workflow.json,trace.cells[58].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_61,-0.0866,,,,web/data/workflow.json,trace.cells[59].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_61,-0.1932,,,,web/data/workflow.json,trace.cells[59].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_62,-0.1733,,,,web/data/workflow.json,trace.cells[60].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_62,-0.4051,,,,web/data/workflow.json,trace.cells[60].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_63,-0.3017,,,,web/data/workflow.json,trace.cells[61].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_63,-0.0443,,,,web/data/workflow.json,trace.cells[61].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_64,-0.5598,,,,web/data/workflow.json,trace.cells[62].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_64,0.1268,,,,web/data/workflow.json,trace.cells[62].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_65,-0.1164,,,,web/data/workflow.json,trace.cells[63].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_65,-0.2486,,,,web/data/workflow.json,trace.cells[63].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_66,0.321,,,,web/data/workflow.json,trace.cells[64].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_66,0.4096,,,,web/data/workflow.json,trace.cells[64].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_67,0.357,,,,web/data/workflow.json,trace.cells[65].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_67,0.1959,,,,web/data/workflow.json,trace.cells[65].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_68,0.1711,,,,web/data/workflow.json,trace.cells[66].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_68,-0.1464,,,,web/data/workflow.json,trace.cells[66].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_69,-0.0205,,,,web/data/workflow.json,trace.cells[67].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_69,-0.3657,,,,web/data/workflow.json,trace.cells[67].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_70,0.1274,,,,web/data/workflow.json,trace.cells[68].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_70,-0.4143,,,,web/data/workflow.json,trace.cells[68].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_71,0.3217,,,,web/data/workflow.json,trace.cells[69].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_71,0.1639,,,,web/data/workflow.json,trace.cells[69].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_72,-0.1708,,,,web/data/workflow.json,trace.cells[70].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_72,-0.2134,,,,web/data/workflow.json,trace.cells[70].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_73,-0.1502,,,,web/data/workflow.json,trace.cells[71].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_73,-0.423,,,,web/data/workflow.json,trace.cells[71].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_74,0.3623,,,,web/data/workflow.json,trace.cells[72].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_74,-0.4167,,,,web/data/workflow.json,trace.cells[72].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_75,0.2518,,,,web/data/workflow.json,trace.cells[73].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_75,0.0868,,,,web/data/workflow.json,trace.cells[73].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_76,0.3692,,,,web/data/workflow.json,trace.cells[74].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_76,0.2526,,,,web/data/workflow.json,trace.cells[74].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_77,0.0194,,,,web/data/workflow.json,trace.cells[75].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_77,-0.2894,,,,web/data/workflow.json,trace.cells[75].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_78,0.0087,,,,web/data/workflow.json,trace.cells[76].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_78,-0.3238,,,,web/data/workflow.json,trace.cells[76].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_79,-0.0341,,,,web/data/workflow.json,trace.cells[77].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_79,0.1766,,,,web/data/workflow.json,trace.cells[77].layout[1]
+e,layout x,Astral_TopMedPBMC1_041225_SP_80,0.2224,,,,web/data/workflow.json,trace.cells[78].layout[0]
+e,layout y,Astral_TopMedPBMC1_041225_SP_80,-0.1082,,,,web/data/workflow.json,trace.cells[78].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_81,-0.6134,,,,web/data/workflow.json,trace.cells[79].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_81,-0.108,,,,web/data/workflow.json,trace.cells[79].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_82,0.1113,,,,web/data/workflow.json,trace.cells[80].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_82,-0.1852,,,,web/data/workflow.json,trace.cells[80].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_83,0.1462,,,,web/data/workflow.json,trace.cells[81].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_83,-0.0116,,,,web/data/workflow.json,trace.cells[81].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_84,-0.1297,,,,web/data/workflow.json,trace.cells[82].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_84,-0.3492,,,,web/data/workflow.json,trace.cells[82].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_85,0.2238,,,,web/data/workflow.json,trace.cells[83].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_85,-0.309,,,,web/data/workflow.json,trace.cells[83].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_86,-0.6956,,,,web/data/workflow.json,trace.cells[84].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_86,-0.2062,,,,web/data/workflow.json,trace.cells[84].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_87,0.4664,,,,web/data/workflow.json,trace.cells[85].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_87,0.2624,,,,web/data/workflow.json,trace.cells[85].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_88,-0.3508,,,,web/data/workflow.json,trace.cells[86].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_88,-0.1733,,,,web/data/workflow.json,trace.cells[86].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_89,0.2528,,,,web/data/workflow.json,trace.cells[87].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_89,-0.0874,,,,web/data/workflow.json,trace.cells[87].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_90,-0.1488,,,,web/data/workflow.json,trace.cells[88].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_90,-0.2185,,,,web/data/workflow.json,trace.cells[88].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_91,0.1239,,,,web/data/workflow.json,trace.cells[89].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_91,-0.0078,,,,web/data/workflow.json,trace.cells[89].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_92,0.3324,,,,web/data/workflow.json,trace.cells[90].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_92,0.2791,,,,web/data/workflow.json,trace.cells[90].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_93,0.4301,,,,web/data/workflow.json,trace.cells[91].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_93,0.3072,,,,web/data/workflow.json,trace.cells[91].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_94,0.1703,,,,web/data/workflow.json,trace.cells[92].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_94,-0.2719,,,,web/data/workflow.json,trace.cells[92].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_95,0.3185,,,,web/data/workflow.json,trace.cells[93].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_95,0.148,,,,web/data/workflow.json,trace.cells[93].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_96,0.2261,,,,web/data/workflow.json,trace.cells[94].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_96,0.0531,,,,web/data/workflow.json,trace.cells[94].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_97,-0.1168,,,,web/data/workflow.json,trace.cells[95].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_97,-0.2725,,,,web/data/workflow.json,trace.cells[95].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_98,0.29,,,,web/data/workflow.json,trace.cells[96].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_98,0.0268,,,,web/data/workflow.json,trace.cells[96].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_99,0.2174,,,,web/data/workflow.json,trace.cells[97].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_99,-0.0154,,,,web/data/workflow.json,trace.cells[97].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_100,0.312,,,,web/data/workflow.json,trace.cells[98].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_100,0.1767,,,,web/data/workflow.json,trace.cells[98].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_101,-0.1954,,,,web/data/workflow.json,trace.cells[99].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_101,-0.294,,,,web/data/workflow.json,trace.cells[99].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_102,-0.2147,,,,web/data/workflow.json,trace.cells[100].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_102,-0.458,,,,web/data/workflow.json,trace.cells[100].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_103,0.4049,,,,web/data/workflow.json,trace.cells[101].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_103,-0.0873,,,,web/data/workflow.json,trace.cells[101].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_104,0.327,,,,web/data/workflow.json,trace.cells[102].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_104,0.176,,,,web/data/workflow.json,trace.cells[102].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_105,0.286,,,,web/data/workflow.json,trace.cells[103].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_105,0.124,,,,web/data/workflow.json,trace.cells[103].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_106,-0.3096,,,,web/data/workflow.json,trace.cells[104].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_106,-0.4289,,,,web/data/workflow.json,trace.cells[104].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_107,0.3396,,,,web/data/workflow.json,trace.cells[105].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_107,-0.2834,,,,web/data/workflow.json,trace.cells[105].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_108,0.4205,,,,web/data/workflow.json,trace.cells[106].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_108,-0.1195,,,,web/data/workflow.json,trace.cells[106].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_109,0.1357,,,,web/data/workflow.json,trace.cells[107].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_109,-0.3598,,,,web/data/workflow.json,trace.cells[107].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_110,0.1886,,,,web/data/workflow.json,trace.cells[108].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_110,-0.1445,,,,web/data/workflow.json,trace.cells[108].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_111,0.1122,,,,web/data/workflow.json,trace.cells[109].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_111,0.2286,,,,web/data/workflow.json,trace.cells[109].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_112,0.1594,,,,web/data/workflow.json,trace.cells[110].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_112,-0.2768,,,,web/data/workflow.json,trace.cells[110].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_113,0.0928,,,,web/data/workflow.json,trace.cells[111].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_113,-0.6011,,,,web/data/workflow.json,trace.cells[111].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_114,0.1449,,,,web/data/workflow.json,trace.cells[112].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_114,-0.1946,,,,web/data/workflow.json,trace.cells[112].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_115,0.2924,,,,web/data/workflow.json,trace.cells[113].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_115,0.0215,,,,web/data/workflow.json,trace.cells[113].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_116,-0.5915,,,,web/data/workflow.json,trace.cells[114].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_116,0.2455,,,,web/data/workflow.json,trace.cells[114].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_117,0.2122,,,,web/data/workflow.json,trace.cells[115].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_117,0.1169,,,,web/data/workflow.json,trace.cells[115].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_118,0.2868,,,,web/data/workflow.json,trace.cells[116].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_118,-0.2351,,,,web/data/workflow.json,trace.cells[116].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_119,0.3657,,,,web/data/workflow.json,trace.cells[117].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_119,-0.1448,,,,web/data/workflow.json,trace.cells[117].layout[1]
+e,layout x,Astral_TopMedPBMC1_041325_SP_120,-0.0003,,,,web/data/workflow.json,trace.cells[118].layout[0]
+e,layout y,Astral_TopMedPBMC1_041325_SP_120,-0.5587,,,,web/data/workflow.json,trace.cells[118].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_121,-0.1015,,,,web/data/workflow.json,trace.cells[119].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_121,-0.1328,,,,web/data/workflow.json,trace.cells[119].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_122,0.395,,,,web/data/workflow.json,trace.cells[120].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_122,0.0072,,,,web/data/workflow.json,trace.cells[120].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_123,0.4603,,,,web/data/workflow.json,trace.cells[121].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_123,-0.1139,,,,web/data/workflow.json,trace.cells[121].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_124,0.2829,,,,web/data/workflow.json,trace.cells[122].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_124,0.327,,,,web/data/workflow.json,trace.cells[122].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_125,0.1152,,,,web/data/workflow.json,trace.cells[123].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_125,-0.1019,,,,web/data/workflow.json,trace.cells[123].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_126,0.352,,,,web/data/workflow.json,trace.cells[124].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_126,0.0288,,,,web/data/workflow.json,trace.cells[124].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_127,0.1787,,,,web/data/workflow.json,trace.cells[125].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_127,-0.0189,,,,web/data/workflow.json,trace.cells[125].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_128,0.1794,,,,web/data/workflow.json,trace.cells[126].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_128,-0.0988,,,,web/data/workflow.json,trace.cells[126].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_129,-0.8261,,,,web/data/workflow.json,trace.cells[127].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_129,0.2237,,,,web/data/workflow.json,trace.cells[127].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_130,0.3181,,,,web/data/workflow.json,trace.cells[128].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_130,0.0809,,,,web/data/workflow.json,trace.cells[128].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_131,-0.5036,,,,web/data/workflow.json,trace.cells[129].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_131,-0.0653,,,,web/data/workflow.json,trace.cells[129].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_132,-0.5328,,,,web/data/workflow.json,trace.cells[130].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_132,-0.2193,,,,web/data/workflow.json,trace.cells[130].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_133,-0.0055,,,,web/data/workflow.json,trace.cells[131].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_133,-0.4399,,,,web/data/workflow.json,trace.cells[131].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_134,-0.3009,,,,web/data/workflow.json,trace.cells[132].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_134,-0.0476,,,,web/data/workflow.json,trace.cells[132].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_135,-0.6969,,,,web/data/workflow.json,trace.cells[133].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_135,0.2626,,,,web/data/workflow.json,trace.cells[133].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_136,0.0757,,,,web/data/workflow.json,trace.cells[134].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_136,-0.3592,,,,web/data/workflow.json,trace.cells[134].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_137,0.0691,,,,web/data/workflow.json,trace.cells[135].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_137,-0.3119,,,,web/data/workflow.json,trace.cells[135].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_138,-0.793,,,,web/data/workflow.json,trace.cells[136].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_138,0.0871,,,,web/data/workflow.json,trace.cells[136].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_139,0.4602,,,,web/data/workflow.json,trace.cells[137].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_139,-0.0304,,,,web/data/workflow.json,trace.cells[137].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_140,-0.0938,,,,web/data/workflow.json,trace.cells[138].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_140,-0.0391,,,,web/data/workflow.json,trace.cells[138].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_141,-0.6037,,,,web/data/workflow.json,trace.cells[139].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_141,0.2187,,,,web/data/workflow.json,trace.cells[139].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_142,0.313,,,,web/data/workflow.json,trace.cells[140].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_142,-0.0446,,,,web/data/workflow.json,trace.cells[140].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_143,0.1524,,,,web/data/workflow.json,trace.cells[141].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_143,-0.0317,,,,web/data/workflow.json,trace.cells[141].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_144,0.0223,,,,web/data/workflow.json,trace.cells[142].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_144,0.578,,,,web/data/workflow.json,trace.cells[142].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_145,0.1204,,,,web/data/workflow.json,trace.cells[143].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_145,0.6378,,,,web/data/workflow.json,trace.cells[143].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_146,-0.4387,,,,web/data/workflow.json,trace.cells[144].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_146,0.1143,,,,web/data/workflow.json,trace.cells[144].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_147,0.1851,,,,web/data/workflow.json,trace.cells[145].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_147,-0.2123,,,,web/data/workflow.json,trace.cells[145].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_148,-0.5719,,,,web/data/workflow.json,trace.cells[146].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_148,0.3481,,,,web/data/workflow.json,trace.cells[146].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_149,0.2306,,,,web/data/workflow.json,trace.cells[147].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_149,0.2383,,,,web/data/workflow.json,trace.cells[147].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_150,0.3938,,,,web/data/workflow.json,trace.cells[148].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_150,-0.1665,,,,web/data/workflow.json,trace.cells[148].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_151,0.331,,,,web/data/workflow.json,trace.cells[149].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_151,-0.0461,,,,web/data/workflow.json,trace.cells[149].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_152,0.1645,,,,web/data/workflow.json,trace.cells[150].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_152,-0.1075,,,,web/data/workflow.json,trace.cells[150].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_153,-0.7468,,,,web/data/workflow.json,trace.cells[151].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_153,0.2114,,,,web/data/workflow.json,trace.cells[151].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_154,0.2314,,,,web/data/workflow.json,trace.cells[152].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_154,-0.1784,,,,web/data/workflow.json,trace.cells[152].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_155,0.1161,,,,web/data/workflow.json,trace.cells[153].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_155,-0.4128,,,,web/data/workflow.json,trace.cells[153].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_156,0.173,,,,web/data/workflow.json,trace.cells[154].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_156,-0.2302,,,,web/data/workflow.json,trace.cells[154].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_157,-0.26,,,,web/data/workflow.json,trace.cells[155].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_157,0.3501,,,,web/data/workflow.json,trace.cells[155].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_158,-0.6532,,,,web/data/workflow.json,trace.cells[156].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_158,0.0957,,,,web/data/workflow.json,trace.cells[156].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_159,0.3233,,,,web/data/workflow.json,trace.cells[157].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_159,0.0275,,,,web/data/workflow.json,trace.cells[157].layout[1]
+e,layout x,Astral_TopMedPBMC1_041425_SP_160,-0.0813,,,,web/data/workflow.json,trace.cells[158].layout[0]
+e,layout y,Astral_TopMedPBMC1_041425_SP_160,-0.1473,,,,web/data/workflow.json,trace.cells[158].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_161,-0.037,,,,web/data/workflow.json,trace.cells[159].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_161,-0.4132,,,,web/data/workflow.json,trace.cells[159].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_162,0.2464,,,,web/data/workflow.json,trace.cells[160].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_162,0.6454,,,,web/data/workflow.json,trace.cells[160].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_163,0.3482,,,,web/data/workflow.json,trace.cells[161].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_163,0.1852,,,,web/data/workflow.json,trace.cells[161].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_164,-0.1853,,,,web/data/workflow.json,trace.cells[162].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_164,-0.4556,,,,web/data/workflow.json,trace.cells[162].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_165,0.4387,,,,web/data/workflow.json,trace.cells[163].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_165,0.2369,,,,web/data/workflow.json,trace.cells[163].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_166,0.232,,,,web/data/workflow.json,trace.cells[164].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_166,-0.1611,,,,web/data/workflow.json,trace.cells[164].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_167,0.3824,,,,web/data/workflow.json,trace.cells[165].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_167,0.3219,,,,web/data/workflow.json,trace.cells[165].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_168,0.41,,,,web/data/workflow.json,trace.cells[166].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_168,0.1842,,,,web/data/workflow.json,trace.cells[166].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_169,0.0967,,,,web/data/workflow.json,trace.cells[167].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_169,-0.1868,,,,web/data/workflow.json,trace.cells[167].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_170,0.4646,,,,web/data/workflow.json,trace.cells[168].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_170,0.1804,,,,web/data/workflow.json,trace.cells[168].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_171,-0.606,,,,web/data/workflow.json,trace.cells[169].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_171,0.4148,,,,web/data/workflow.json,trace.cells[169].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_172,0.4142,,,,web/data/workflow.json,trace.cells[170].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_172,0.2296,,,,web/data/workflow.json,trace.cells[170].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_173,0.3407,,,,web/data/workflow.json,trace.cells[171].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_173,0.1531,,,,web/data/workflow.json,trace.cells[171].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_174,0.3012,,,,web/data/workflow.json,trace.cells[172].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_174,0.2069,,,,web/data/workflow.json,trace.cells[172].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_175,0.3081,,,,web/data/workflow.json,trace.cells[173].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_175,0.0711,,,,web/data/workflow.json,trace.cells[173].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_176,0.2658,,,,web/data/workflow.json,trace.cells[174].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_176,0.0811,,,,web/data/workflow.json,trace.cells[174].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_177,-0.5842,,,,web/data/workflow.json,trace.cells[175].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_177,0.4702,,,,web/data/workflow.json,trace.cells[175].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_178,0.0778,,,,web/data/workflow.json,trace.cells[176].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_178,0.1944,,,,web/data/workflow.json,trace.cells[176].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_179,0.1889,,,,web/data/workflow.json,trace.cells[177].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_179,-0.0835,,,,web/data/workflow.json,trace.cells[177].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_180,-0.1198,,,,web/data/workflow.json,trace.cells[178].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_180,-0.3141,,,,web/data/workflow.json,trace.cells[178].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_181,-0.093,,,,web/data/workflow.json,trace.cells[179].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_181,-0.1024,,,,web/data/workflow.json,trace.cells[179].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_182,0.3121,,,,web/data/workflow.json,trace.cells[180].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_182,0.5664,,,,web/data/workflow.json,trace.cells[180].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_183,-0.1063,,,,web/data/workflow.json,trace.cells[181].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_183,-0.2869,,,,web/data/workflow.json,trace.cells[181].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_184,-0.516,,,,web/data/workflow.json,trace.cells[182].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_184,0.2127,,,,web/data/workflow.json,trace.cells[182].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_185,-0.6035,,,,web/data/workflow.json,trace.cells[183].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_185,0.4345,,,,web/data/workflow.json,trace.cells[183].layout[1]
+e,layout x,Astral_TopMedPBMC1_041525_SP_186,0.3119,,,,web/data/workflow.json,trace.cells[184].layout[0]
+e,layout y,Astral_TopMedPBMC1_041525_SP_186,0.2392,,,,web/data/workflow.json,trace.cells[184].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_188,-0.1566,,,,web/data/workflow.json,trace.cells[185].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_188,-0.2633,,,,web/data/workflow.json,trace.cells[185].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_189,-0.6756,,,,web/data/workflow.json,trace.cells[186].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_189,-0.0239,,,,web/data/workflow.json,trace.cells[186].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_190,-0.6405,,,,web/data/workflow.json,trace.cells[187].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_190,-0.2477,,,,web/data/workflow.json,trace.cells[187].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_191,0.3146,,,,web/data/workflow.json,trace.cells[188].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_191,-0.0017,,,,web/data/workflow.json,trace.cells[188].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_192,0.3777,,,,web/data/workflow.json,trace.cells[189].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_192,0.0845,,,,web/data/workflow.json,trace.cells[189].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_193,-0.1137,,,,web/data/workflow.json,trace.cells[190].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_193,-0.1956,,,,web/data/workflow.json,trace.cells[190].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_194,-0.2388,,,,web/data/workflow.json,trace.cells[191].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_194,0.612,,,,web/data/workflow.json,trace.cells[191].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_195,-0.6602,,,,web/data/workflow.json,trace.cells[192].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_195,0.0236,,,,web/data/workflow.json,trace.cells[192].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_196,0.2799,,,,web/data/workflow.json,trace.cells[193].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_196,-0.0654,,,,web/data/workflow.json,trace.cells[193].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_197,-0.1878,,,,web/data/workflow.json,trace.cells[194].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_197,-0.5183,,,,web/data/workflow.json,trace.cells[194].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_198,0.3695,,,,web/data/workflow.json,trace.cells[195].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_198,-0.0704,,,,web/data/workflow.json,trace.cells[195].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_199,0.1345,,,,web/data/workflow.json,trace.cells[196].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_199,-0.3085,,,,web/data/workflow.json,trace.cells[196].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_200,0.2488,,,,web/data/workflow.json,trace.cells[197].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_200,0.2309,,,,web/data/workflow.json,trace.cells[197].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_201,0.0257,,,,web/data/workflow.json,trace.cells[198].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_201,-0.1347,,,,web/data/workflow.json,trace.cells[198].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_202,0.2887,,,,web/data/workflow.json,trace.cells[199].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_202,0.0635,,,,web/data/workflow.json,trace.cells[199].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_203,0.3109,,,,web/data/workflow.json,trace.cells[200].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_203,0.0301,,,,web/data/workflow.json,trace.cells[200].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_204,0.0799,,,,web/data/workflow.json,trace.cells[201].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_204,-0.3659,,,,web/data/workflow.json,trace.cells[201].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_205,0.1401,,,,web/data/workflow.json,trace.cells[202].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_205,-0.139,,,,web/data/workflow.json,trace.cells[202].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_206,0.2911,,,,web/data/workflow.json,trace.cells[203].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_206,-0.2815,,,,web/data/workflow.json,trace.cells[203].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_207,0.1328,,,,web/data/workflow.json,trace.cells[204].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_207,-0.5034,,,,web/data/workflow.json,trace.cells[204].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_208,0.3948,,,,web/data/workflow.json,trace.cells[205].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_208,-0.3636,,,,web/data/workflow.json,trace.cells[205].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_209,0.4421,,,,web/data/workflow.json,trace.cells[206].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_209,-0.1234,,,,web/data/workflow.json,trace.cells[206].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_210,-0.4072,,,,web/data/workflow.json,trace.cells[207].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_210,0.3243,,,,web/data/workflow.json,trace.cells[207].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_211,0.4409,,,,web/data/workflow.json,trace.cells[208].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_211,0.0789,,,,web/data/workflow.json,trace.cells[208].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_212,0.0063,,,,web/data/workflow.json,trace.cells[209].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_212,-0.1067,,,,web/data/workflow.json,trace.cells[209].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_213,0.2184,,,,web/data/workflow.json,trace.cells[210].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_213,-0.1202,,,,web/data/workflow.json,trace.cells[210].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_214,-0.1967,,,,web/data/workflow.json,trace.cells[211].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_214,-0.562,,,,web/data/workflow.json,trace.cells[211].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_215,0.3256,,,,web/data/workflow.json,trace.cells[212].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_215,-0.3443,,,,web/data/workflow.json,trace.cells[212].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_216,0.3556,,,,web/data/workflow.json,trace.cells[213].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_216,-0.0512,,,,web/data/workflow.json,trace.cells[213].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_217,-0.3668,,,,web/data/workflow.json,trace.cells[214].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_217,0.223,,,,web/data/workflow.json,trace.cells[214].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_218,0.2979,,,,web/data/workflow.json,trace.cells[215].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_218,0.0302,,,,web/data/workflow.json,trace.cells[215].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_219,0.1434,,,,web/data/workflow.json,trace.cells[216].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_219,-0.5067,,,,web/data/workflow.json,trace.cells[216].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_220,0.2806,,,,web/data/workflow.json,trace.cells[217].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_220,-0.0863,,,,web/data/workflow.json,trace.cells[217].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_221,0.0451,,,,web/data/workflow.json,trace.cells[218].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_221,-0.1876,,,,web/data/workflow.json,trace.cells[218].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_222,0.2396,,,,web/data/workflow.json,trace.cells[219].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_222,-0.2487,,,,web/data/workflow.json,trace.cells[219].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_223,0.1263,,,,web/data/workflow.json,trace.cells[220].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_223,-0.1923,,,,web/data/workflow.json,trace.cells[220].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_224,0.2956,,,,web/data/workflow.json,trace.cells[221].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_224,-0.1422,,,,web/data/workflow.json,trace.cells[221].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_225,0.1846,,,,web/data/workflow.json,trace.cells[222].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_225,-0.3966,,,,web/data/workflow.json,trace.cells[222].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_226,0.3379,,,,web/data/workflow.json,trace.cells[223].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_226,0.4083,,,,web/data/workflow.json,trace.cells[223].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_227,0.2602,,,,web/data/workflow.json,trace.cells[224].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_227,-0.1677,,,,web/data/workflow.json,trace.cells[224].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_228,0.1812,,,,web/data/workflow.json,trace.cells[225].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_228,0.1327,,,,web/data/workflow.json,trace.cells[225].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_229,-0.4726,,,,web/data/workflow.json,trace.cells[226].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_229,-0.011,,,,web/data/workflow.json,trace.cells[226].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_230,0.2511,,,,web/data/workflow.json,trace.cells[227].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_230,-0.074,,,,web/data/workflow.json,trace.cells[227].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_231,-0.708,,,,web/data/workflow.json,trace.cells[228].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_231,0.2551,,,,web/data/workflow.json,trace.cells[228].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_232,0.3227,,,,web/data/workflow.json,trace.cells[229].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_232,0.2054,,,,web/data/workflow.json,trace.cells[229].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_233,0.3319,,,,web/data/workflow.json,trace.cells[230].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_233,0.4568,,,,web/data/workflow.json,trace.cells[230].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_234,0.1385,,,,web/data/workflow.json,trace.cells[231].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_234,-0.2546,,,,web/data/workflow.json,trace.cells[231].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_235,0.3826,,,,web/data/workflow.json,trace.cells[232].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_235,0.0489,,,,web/data/workflow.json,trace.cells[232].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_236,0.236,,,,web/data/workflow.json,trace.cells[233].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_236,-0.069,,,,web/data/workflow.json,trace.cells[233].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_237,0.3091,,,,web/data/workflow.json,trace.cells[234].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_237,0.0691,,,,web/data/workflow.json,trace.cells[234].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_238,0.3132,,,,web/data/workflow.json,trace.cells[235].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_238,0.0263,,,,web/data/workflow.json,trace.cells[235].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_239,0.3009,,,,web/data/workflow.json,trace.cells[236].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_239,-0.0855,,,,web/data/workflow.json,trace.cells[236].layout[1]
+e,layout x,Astral_TopMedPBMC1_041725_SP_240,0.2767,,,,web/data/workflow.json,trace.cells[237].layout[0]
+e,layout y,Astral_TopMedPBMC1_041725_SP_240,-0.3129,,,,web/data/workflow.json,trace.cells[237].layout[1]
+e,neighbour,Astral_TopMedPBMC1_041325_SP_99,0.085,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][0]
+e,neighbour,Astral_TopMedPBMC1_041725_SP_209,0.082,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][1]
+e,neighbour,Astral_TopMedPBMC1_041425_SP_149,0.08,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][2]
+e,neighbour,Astral_TopMedPBMC1_041725_SP_199,0.075,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][3]
+e,neighbour,Astral_TopMedPBMC1_041725_SP_236,0.068,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][4]
+e,neighbour,Astral_TopMedPBMC1_041725_SP_239,0.067,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][5]
+e,neighbour,Astral_TopMedPBMC1_041325_SP_112,0.064,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][6]
+e,neighbour,Astral_TopMedPBMC1_041325_SP_105,0.063,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][7]
+e,neighbour,Astral_TopMedPBMC1_041525_SP_163,0.062,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][8]
+e,neighbour,Astral_TopMedPBMC1_041425_SP_126,0.062,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][9]
+e,neighbour,Astral_TopMedPBMC1_041325_SP_109,0.061,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][10]
+e,neighbour,Astral_TopMedPBMC1_041225_SP_43,0.059,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][11]
+e,neighbour,Astral_TopMedPBMC1_041725_SP_213,0.058,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][12]
+e,neighbour,Astral_TopMedPBMC1_041225_SP_69,0.058,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][13]
+e,neighbour,Astral_TopMedPBMC1_041225_SP_53,0.057,,,weight,web/data/workflow.json,trace.stages.smoothing.weights[29][14]
+f,genes measured,Astral_TopMedPBMC1_041025_SP_1,1059,,,genes,web/data/workflow.json,trace.cells[0].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_2,281,,,genes,web/data/workflow.json,trace.cells[1].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_3,1125,,,genes,web/data/workflow.json,trace.cells[2].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_4,834,,,genes,web/data/workflow.json,trace.cells[3].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_5,1032,,,genes,web/data/workflow.json,trace.cells[4].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_6,1092,,,genes,web/data/workflow.json,trace.cells[5].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_7,1144,,,genes,web/data/workflow.json,trace.cells[6].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_8,1118,,,genes,web/data/workflow.json,trace.cells[7].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_9,905,,,genes,web/data/workflow.json,trace.cells[8].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_10,1410,,,genes,web/data/workflow.json,trace.cells[9].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_11,1064,,,genes,web/data/workflow.json,trace.cells[10].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_12,1747,,,genes,web/data/workflow.json,trace.cells[11].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_13,1042,,,genes,web/data/workflow.json,trace.cells[12].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_15,708,,,genes,web/data/workflow.json,trace.cells[13].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_16,740,,,genes,web/data/workflow.json,trace.cells[14].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_17,1583,,,genes,web/data/workflow.json,trace.cells[15].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_18,966,,,genes,web/data/workflow.json,trace.cells[16].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_19,1078,,,genes,web/data/workflow.json,trace.cells[17].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_20,1504,,,genes,web/data/workflow.json,trace.cells[18].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_21,1057,,,genes,web/data/workflow.json,trace.cells[19].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_22,915,,,genes,web/data/workflow.json,trace.cells[20].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_23,1569,,,genes,web/data/workflow.json,trace.cells[21].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_24,986,,,genes,web/data/workflow.json,trace.cells[22].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_25,996,,,genes,web/data/workflow.json,trace.cells[23].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_26,1294,,,genes,web/data/workflow.json,trace.cells[24].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_27,963,,,genes,web/data/workflow.json,trace.cells[25].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_28,1026,,,genes,web/data/workflow.json,trace.cells[26].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_29,1699,,,genes,web/data/workflow.json,trace.cells[27].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_30,836,,,genes,web/data/workflow.json,trace.cells[28].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_31,1189,,,genes,web/data/workflow.json,trace.cells[29].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_32,1154,,,genes,web/data/workflow.json,trace.cells[30].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_33,1019,,,genes,web/data/workflow.json,trace.cells[31].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_34,922,,,genes,web/data/workflow.json,trace.cells[32].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_35,993,,,genes,web/data/workflow.json,trace.cells[33].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_36,1106,,,genes,web/data/workflow.json,trace.cells[34].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_37,954,,,genes,web/data/workflow.json,trace.cells[35].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_38,1309,,,genes,web/data/workflow.json,trace.cells[36].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_39,1103,,,genes,web/data/workflow.json,trace.cells[37].observed
+f,genes measured,Astral_TopMedPBMC1_041025_SP_40,1119,,,genes,web/data/workflow.json,trace.cells[38].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_41,1344,,,genes,web/data/workflow.json,trace.cells[39].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_42,1085,,,genes,web/data/workflow.json,trace.cells[40].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_43,1073,,,genes,web/data/workflow.json,trace.cells[41].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_44,914,,,genes,web/data/workflow.json,trace.cells[42].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_45,1234,,,genes,web/data/workflow.json,trace.cells[43].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_46,724,,,genes,web/data/workflow.json,trace.cells[44].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_47,1062,,,genes,web/data/workflow.json,trace.cells[45].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_48,1018,,,genes,web/data/workflow.json,trace.cells[46].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_49,948,,,genes,web/data/workflow.json,trace.cells[47].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_50,992,,,genes,web/data/workflow.json,trace.cells[48].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_51,914,,,genes,web/data/workflow.json,trace.cells[49].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_52,1569,,,genes,web/data/workflow.json,trace.cells[50].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_53,1085,,,genes,web/data/workflow.json,trace.cells[51].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_54,1144,,,genes,web/data/workflow.json,trace.cells[52].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_55,1154,,,genes,web/data/workflow.json,trace.cells[53].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_56,1165,,,genes,web/data/workflow.json,trace.cells[54].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_57,1566,,,genes,web/data/workflow.json,trace.cells[55].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_58,952,,,genes,web/data/workflow.json,trace.cells[56].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_59,1193,,,genes,web/data/workflow.json,trace.cells[57].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_60,636,,,genes,web/data/workflow.json,trace.cells[58].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_61,1292,,,genes,web/data/workflow.json,trace.cells[59].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_62,1141,,,genes,web/data/workflow.json,trace.cells[60].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_63,1200,,,genes,web/data/workflow.json,trace.cells[61].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_64,1960,,,genes,web/data/workflow.json,trace.cells[62].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_65,862,,,genes,web/data/workflow.json,trace.cells[63].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_66,1134,,,genes,web/data/workflow.json,trace.cells[64].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_67,1201,,,genes,web/data/workflow.json,trace.cells[65].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_68,1468,,,genes,web/data/workflow.json,trace.cells[66].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_69,1019,,,genes,web/data/workflow.json,trace.cells[67].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_70,1068,,,genes,web/data/workflow.json,trace.cells[68].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_71,1108,,,genes,web/data/workflow.json,trace.cells[69].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_72,1054,,,genes,web/data/workflow.json,trace.cells[70].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_73,898,,,genes,web/data/workflow.json,trace.cells[71].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_74,908,,,genes,web/data/workflow.json,trace.cells[72].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_75,1146,,,genes,web/data/workflow.json,trace.cells[73].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_76,1042,,,genes,web/data/workflow.json,trace.cells[74].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_77,1029,,,genes,web/data/workflow.json,trace.cells[75].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_78,1145,,,genes,web/data/workflow.json,trace.cells[76].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_79,1374,,,genes,web/data/workflow.json,trace.cells[77].observed
+f,genes measured,Astral_TopMedPBMC1_041225_SP_80,1063,,,genes,web/data/workflow.json,trace.cells[78].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_81,1893,,,genes,web/data/workflow.json,trace.cells[79].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_82,999,,,genes,web/data/workflow.json,trace.cells[80].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_83,1146,,,genes,web/data/workflow.json,trace.cells[81].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_84,1031,,,genes,web/data/workflow.json,trace.cells[82].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_85,1339,,,genes,web/data/workflow.json,trace.cells[83].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_86,1902,,,genes,web/data/workflow.json,trace.cells[84].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_87,948,,,genes,web/data/workflow.json,trace.cells[85].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_88,1853,,,genes,web/data/workflow.json,trace.cells[86].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_89,904,,,genes,web/data/workflow.json,trace.cells[87].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_90,1111,,,genes,web/data/workflow.json,trace.cells[88].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_91,1159,,,genes,web/data/workflow.json,trace.cells[89].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_92,1064,,,genes,web/data/workflow.json,trace.cells[90].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_93,914,,,genes,web/data/workflow.json,trace.cells[91].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_94,1075,,,genes,web/data/workflow.json,trace.cells[92].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_95,1072,,,genes,web/data/workflow.json,trace.cells[93].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_96,1082,,,genes,web/data/workflow.json,trace.cells[94].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_97,1132,,,genes,web/data/workflow.json,trace.cells[95].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_98,1037,,,genes,web/data/workflow.json,trace.cells[96].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_99,838,,,genes,web/data/workflow.json,trace.cells[97].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_100,1030,,,genes,web/data/workflow.json,trace.cells[98].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_101,1252,,,genes,web/data/workflow.json,trace.cells[99].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_102,841,,,genes,web/data/workflow.json,trace.cells[100].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_103,1110,,,genes,web/data/workflow.json,trace.cells[101].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_104,1079,,,genes,web/data/workflow.json,trace.cells[102].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_105,985,,,genes,web/data/workflow.json,trace.cells[103].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_106,1221,,,genes,web/data/workflow.json,trace.cells[104].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_107,854,,,genes,web/data/workflow.json,trace.cells[105].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_108,1050,,,genes,web/data/workflow.json,trace.cells[106].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_109,1197,,,genes,web/data/workflow.json,trace.cells[107].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_110,1134,,,genes,web/data/workflow.json,trace.cells[108].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_111,1551,,,genes,web/data/workflow.json,trace.cells[109].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_112,1084,,,genes,web/data/workflow.json,trace.cells[110].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_113,941,,,genes,web/data/workflow.json,trace.cells[111].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_114,1471,,,genes,web/data/workflow.json,trace.cells[112].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_115,1018,,,genes,web/data/workflow.json,trace.cells[113].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_116,1646,,,genes,web/data/workflow.json,trace.cells[114].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_117,1068,,,genes,web/data/workflow.json,trace.cells[115].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_118,1053,,,genes,web/data/workflow.json,trace.cells[116].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_119,1026,,,genes,web/data/workflow.json,trace.cells[117].observed
+f,genes measured,Astral_TopMedPBMC1_041325_SP_120,936,,,genes,web/data/workflow.json,trace.cells[118].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_121,1224,,,genes,web/data/workflow.json,trace.cells[119].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_122,1056,,,genes,web/data/workflow.json,trace.cells[120].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_123,892,,,genes,web/data/workflow.json,trace.cells[121].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_124,1048,,,genes,web/data/workflow.json,trace.cells[122].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_125,963,,,genes,web/data/workflow.json,trace.cells[123].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_126,1013,,,genes,web/data/workflow.json,trace.cells[124].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_127,946,,,genes,web/data/workflow.json,trace.cells[125].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_128,885,,,genes,web/data/workflow.json,trace.cells[126].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_129,1720,,,genes,web/data/workflow.json,trace.cells[127].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_130,1068,,,genes,web/data/workflow.json,trace.cells[128].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_131,1874,,,genes,web/data/workflow.json,trace.cells[129].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_132,1720,,,genes,web/data/workflow.json,trace.cells[130].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_133,951,,,genes,web/data/workflow.json,trace.cells[131].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_134,1898,,,genes,web/data/workflow.json,trace.cells[132].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_135,1757,,,genes,web/data/workflow.json,trace.cells[133].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_136,1173,,,genes,web/data/workflow.json,trace.cells[134].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_137,854,,,genes,web/data/workflow.json,trace.cells[135].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_138,1872,,,genes,web/data/workflow.json,trace.cells[136].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_139,809,,,genes,web/data/workflow.json,trace.cells[137].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_140,975,,,genes,web/data/workflow.json,trace.cells[138].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_141,1936,,,genes,web/data/workflow.json,trace.cells[139].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_142,786,,,genes,web/data/workflow.json,trace.cells[140].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_143,1097,,,genes,web/data/workflow.json,trace.cells[141].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_144,1674,,,genes,web/data/workflow.json,trace.cells[142].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_145,1149,,,genes,web/data/workflow.json,trace.cells[143].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_146,2024,,,genes,web/data/workflow.json,trace.cells[144].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_147,857,,,genes,web/data/workflow.json,trace.cells[145].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_148,1570,,,genes,web/data/workflow.json,trace.cells[146].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_149,957,,,genes,web/data/workflow.json,trace.cells[147].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_150,935,,,genes,web/data/workflow.json,trace.cells[148].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_151,995,,,genes,web/data/workflow.json,trace.cells[149].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_152,959,,,genes,web/data/workflow.json,trace.cells[150].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_153,1732,,,genes,web/data/workflow.json,trace.cells[151].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_154,761,,,genes,web/data/workflow.json,trace.cells[152].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_155,1163,,,genes,web/data/workflow.json,trace.cells[153].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_156,978,,,genes,web/data/workflow.json,trace.cells[154].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_157,1492,,,genes,web/data/workflow.json,trace.cells[155].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_158,2255,,,genes,web/data/workflow.json,trace.cells[156].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_159,1022,,,genes,web/data/workflow.json,trace.cells[157].observed
+f,genes measured,Astral_TopMedPBMC1_041425_SP_160,1036,,,genes,web/data/workflow.json,trace.cells[158].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_161,1617,,,genes,web/data/workflow.json,trace.cells[159].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_162,1130,,,genes,web/data/workflow.json,trace.cells[160].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_163,1025,,,genes,web/data/workflow.json,trace.cells[161].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_164,1018,,,genes,web/data/workflow.json,trace.cells[162].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_165,901,,,genes,web/data/workflow.json,trace.cells[163].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_166,950,,,genes,web/data/workflow.json,trace.cells[164].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_167,842,,,genes,web/data/workflow.json,trace.cells[165].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_168,855,,,genes,web/data/workflow.json,trace.cells[166].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_169,1085,,,genes,web/data/workflow.json,trace.cells[167].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_170,850,,,genes,web/data/workflow.json,trace.cells[168].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_171,1492,,,genes,web/data/workflow.json,trace.cells[169].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_172,763,,,genes,web/data/workflow.json,trace.cells[170].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_173,1022,,,genes,web/data/workflow.json,trace.cells[171].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_174,884,,,genes,web/data/workflow.json,trace.cells[172].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_175,860,,,genes,web/data/workflow.json,trace.cells[173].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_176,864,,,genes,web/data/workflow.json,trace.cells[174].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_177,1480,,,genes,web/data/workflow.json,trace.cells[175].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_178,889,,,genes,web/data/workflow.json,trace.cells[176].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_179,882,,,genes,web/data/workflow.json,trace.cells[177].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_180,988,,,genes,web/data/workflow.json,trace.cells[178].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_181,1042,,,genes,web/data/workflow.json,trace.cells[179].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_182,901,,,genes,web/data/workflow.json,trace.cells[180].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_183,932,,,genes,web/data/workflow.json,trace.cells[181].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_184,1504,,,genes,web/data/workflow.json,trace.cells[182].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_185,1655,,,genes,web/data/workflow.json,trace.cells[183].observed
+f,genes measured,Astral_TopMedPBMC1_041525_SP_186,1035,,,genes,web/data/workflow.json,trace.cells[184].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_188,1281,,,genes,web/data/workflow.json,trace.cells[185].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_189,1531,,,genes,web/data/workflow.json,trace.cells[186].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_190,1471,,,genes,web/data/workflow.json,trace.cells[187].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_191,969,,,genes,web/data/workflow.json,trace.cells[188].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_192,711,,,genes,web/data/workflow.json,trace.cells[189].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_193,998,,,genes,web/data/workflow.json,trace.cells[190].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_194,1585,,,genes,web/data/workflow.json,trace.cells[191].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_195,1619,,,genes,web/data/workflow.json,trace.cells[192].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_196,799,,,genes,web/data/workflow.json,trace.cells[193].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_197,1029,,,genes,web/data/workflow.json,trace.cells[194].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_198,761,,,genes,web/data/workflow.json,trace.cells[195].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_199,979,,,genes,web/data/workflow.json,trace.cells[196].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_200,967,,,genes,web/data/workflow.json,trace.cells[197].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_201,1174,,,genes,web/data/workflow.json,trace.cells[198].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_202,795,,,genes,web/data/workflow.json,trace.cells[199].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_203,888,,,genes,web/data/workflow.json,trace.cells[200].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_204,1195,,,genes,web/data/workflow.json,trace.cells[201].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_205,756,,,genes,web/data/workflow.json,trace.cells[202].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_206,774,,,genes,web/data/workflow.json,trace.cells[203].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_207,1037,,,genes,web/data/workflow.json,trace.cells[204].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_208,870,,,genes,web/data/workflow.json,trace.cells[205].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_209,888,,,genes,web/data/workflow.json,trace.cells[206].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_210,1743,,,genes,web/data/workflow.json,trace.cells[207].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_211,900,,,genes,web/data/workflow.json,trace.cells[208].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_212,1134,,,genes,web/data/workflow.json,trace.cells[209].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_213,979,,,genes,web/data/workflow.json,trace.cells[210].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_214,1126,,,genes,web/data/workflow.json,trace.cells[211].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_215,994,,,genes,web/data/workflow.json,trace.cells[212].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_216,810,,,genes,web/data/workflow.json,trace.cells[213].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_217,0,,,genes,web/data/workflow.json,trace.cells[214].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_218,1017,,,genes,web/data/workflow.json,trace.cells[215].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_219,929,,,genes,web/data/workflow.json,trace.cells[216].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_220,1049,,,genes,web/data/workflow.json,trace.cells[217].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_221,1144,,,genes,web/data/workflow.json,trace.cells[218].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_222,868,,,genes,web/data/workflow.json,trace.cells[219].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_223,981,,,genes,web/data/workflow.json,trace.cells[220].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_224,763,,,genes,web/data/workflow.json,trace.cells[221].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_225,1046,,,genes,web/data/workflow.json,trace.cells[222].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_226,1022,,,genes,web/data/workflow.json,trace.cells[223].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_227,942,,,genes,web/data/workflow.json,trace.cells[224].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_228,935,,,genes,web/data/workflow.json,trace.cells[225].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_229,1857,,,genes,web/data/workflow.json,trace.cells[226].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_230,1135,,,genes,web/data/workflow.json,trace.cells[227].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_231,1802,,,genes,web/data/workflow.json,trace.cells[228].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_232,1006,,,genes,web/data/workflow.json,trace.cells[229].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_233,1048,,,genes,web/data/workflow.json,trace.cells[230].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_234,1492,,,genes,web/data/workflow.json,trace.cells[231].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_235,1104,,,genes,web/data/workflow.json,trace.cells[232].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_236,986,,,genes,web/data/workflow.json,trace.cells[233].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_237,981,,,genes,web/data/workflow.json,trace.cells[234].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_238,775,,,genes,web/data/workflow.json,trace.cells[235].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_239,1017,,,genes,web/data/workflow.json,trace.cells[236].observed
+f,genes measured,Astral_TopMedPBMC1_041725_SP_240,888,,,genes,web/data/workflow.json,trace.cells[237].observed

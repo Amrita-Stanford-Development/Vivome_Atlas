@@ -39,3 +39,6 @@ service/model/v5_2/*.npz
 !.dev.vars.example
 .env*
 !.env.example
+
+# Journal figure files (PDF, 600 dpi TIFF): rebuilt on request by scripts/build_figures.py --journal
+research/figures/journal/

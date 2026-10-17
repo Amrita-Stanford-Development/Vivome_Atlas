@@ -1,0 +1,56 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,One type,All uploads,18.17,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.levels.class
+a,A family,All uploads,15.89,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.levels.group
+a,A branch,All uploads,51.77,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.levels.lineage
+a,No answer,All uploads,14.17,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.levels.abstain
+a,cells,All uploads,64779,,,cells,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.cells
+a,One type,One type alone,17.14,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.single.levels.class
+a,A family,One type alone,15.84,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.single.levels.group
+a,A branch,One type alone,38.97,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.single.levels.lineage
+a,No answer,One type alone,28.04,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.single.levels.abstain
+a,cells,One type alone,13014,,,cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.single.cells
+a,One type,A few types,21.78,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.narrow.levels.class
+a,A family,A few types,13.19,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.narrow.levels.group
+a,A branch,A few types,52.15,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.narrow.levels.lineage
+a,No answer,A few types,12.88,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.narrow.levels.abstain
+a,cells,A few types,16240,,,cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.narrow.cells
+a,One type,Many types,28.27,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.mixed.levels.class
+a,A family,Many types,15.83,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.mixed.levels.group
+a,A branch,Many types,47.64,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.mixed.levels.lineage
+a,No answer,Many types,8.26,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.mixed.levels.abstain
+a,cells,Many types,13912,,,cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.mixed.cells
+a,One type,One lineage,13.07,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.lineage.levels.class
+a,A family,One lineage,16.87,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.lineage.levels.group
+a,A branch,One lineage,58.09,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.lineage.levels.lineage
+a,No answer,One lineage,11.97,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.lineage.levels.abstain
+a,cells,One lineage,8487,,,cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.lineage.cells
+a,One type,PBMC-like,13.79,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.pbmc.levels.class
+a,A family,PBMC-like,20.1,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.pbmc.levels.group
+a,A branch,PBMC-like,60.93,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.pbmc.levels.lineage
+a,No answer,PBMC-like,5.18,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.pbmc.levels.abstain
+a,cells,PBMC-like,6680,,,cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.pbmc.cells
+a,One type,SCoPE2-like,0.61,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.scope2.levels.class
+a,A family,SCoPE2-like,17.27,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.scope2.levels.group
+a,A branch,SCoPE2-like,67.72,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.scope2.levels.lineage
+a,No answer,SCoPE2-like,14.41,,,% of cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.scope2.levels.abstain
+a,cells,SCoPE2-like,6446,,,cells,research/notebook-outputs/v41_phase3/summary.json,by_scenario.v4.1.scope2.cells
+b,RNA,Fulcher 2026: All cells,87.21,,,%,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.coverage
+b,Protein,Fulcher 2026: All cells,78.34,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.coverage_pct
+b,RNA,Fulcher 2026: CD4 T,92.17,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (COARSE CD4T: cd4-positive, alpha-beta t cell, naive thymus-derived cd4-positive, alpha-beta t cell): share covered of 6822 cells"
+b,Protein,Fulcher 2026: CD4 T,76.3,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.by_class.CD4T.coverage_pct
+b,RNA,Fulcher 2026: CD8 T,88.39,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (COARSE CD8T: cd8-positive, alpha-beta t cell): share covered of 6442 cells"
+b,Protein,Fulcher 2026: CD8 T,44.2,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.by_class.CD8T.coverage_pct
+b,RNA,Fulcher 2026: NK,86.56,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (COARSE NK: natural killer cell): share covered of 6458 cells"
+b,Protein,Fulcher 2026: NK,91.33,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.by_class.NK.coverage_pct
+b,RNA,Fulcher 2026: B,75.68,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (COARSE B: b cell, plasma cell): share covered of 7125 cells"
+b,Protein,Fulcher 2026: B,84.31,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.by_class.B.coverage_pct
+b,RNA,Fulcher 2026: Monocyte,89.43,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (COARSE monocyte: classical monocyte, intermediate monocyte, monocyte, non-classical monocyte): share covered of 22496 cells"
+b,Protein,Fulcher 2026: Monocyte,91.45,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.by_class.monocyte.coverage_pct
+b,Protein,Fulcher 2026: Dendritic cell,46.3,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.fulcher2026.by_class.DC.coverage_pct
+b,RNA,SCoPE2: All cells,87.21,,,%,research/notebook-outputs/v41_phase3/summary.json,result.v4.1.coverage
+b,Protein,SCoPE2: All cells,2.48,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.scope2.coverage_pct
+b,RNA,SCoPE2: Macrophage,93.87,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (macrophage): share covered of 3749 cells"
+b,Protein,SCoPE2: Macrophage,3.28,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.scope2.by_class.macrophage.coverage_pct
+b,RNA,SCoPE2: Monocyte,87.62,,,%,research/notebook-outputs/v41_phase3/eval_cells.csv.gz,"method v4.1, true in (monocyte): share covered of 13429 cells"
+b,Protein,SCoPE2: Monocyte,0.25,,,%,research/notebook-outputs/protein_coverage/coverage.json,v41.scope2.by_class.monocyte.coverage_pct
+b,,target,90.0,,,%,research/notebook-outputs/protein_coverage/coverage.json,target_pct

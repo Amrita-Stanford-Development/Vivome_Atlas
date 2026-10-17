@@ -1,0 +1,14 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,,bar,0.4,,,share of counted cells,web/data/manuscript.json,records.wf_agreement_threshold.value
+a,,"encoder weight, term used",0.5,,,weight,web/data/manuscript.json,records.wf_weight_used.value
+a,,"encoder weight, term flat",0.7,,,weight,web/data/manuscript.json,records.wf_weight_flat.value
+a,,smoothed share,0.5,,,share,web/data/manuscript.json,records.wf_smoothed_share.value
+a,,correlation temperature,0.05,,,temperature,web/data/manuscript.json,records.wf_correlation_temperature.value
+a,,"observed genes, floor",200,,,genes,web/data/manuscript.json,records.wf_floor.value
+b,PBMC240,cells,238,,,cells,web/data/workflow.json,facts.runs.value
+b,PBMC240,below the floor,1,,,cells,web/data/workflow.json,facts.below_floor.value
+b,PBMC240,counted,237,,,cells,web/data/workflow.json,facts.counted.value
+b,PBMC240,agreeing,87,,,cells,web/data/workflow.json,facts.agreeing.value
+b,PBMC240,agreement,0.3671,,,share of counted cells,web/data/workflow.json,facts.agreement.value
+b,PBMC240,bar,0.4,,,share of counted cells,web/data/workflow.json,facts.agreement_threshold.value
+b,PBMC240,flat,,,,correlation term,web/data/workflow.json,trace.stages.fusion.correlation_term

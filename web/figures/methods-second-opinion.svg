@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="402.610394pt" height="317.571024pt" viewBox="0 0 402.610394 317.571024" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 317.571024 
+L 402.610394 317.571024 
+L 402.610394 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 13.084724 76.580787 
+L 185.431181 76.580787 
+Q 189.966614 76.580787 189.966614 72.045354 
+L 189.966614 32.927244 
+Q 189.966614 28.391811 185.431181 28.391811 
+L 13.084724 28.391811 
+Q 8.549291 28.391811 8.549291 32.927244 
+L 8.549291 72.045354 
+Q 8.549291 76.580787 13.084724 76.580787 
+z
+" clip-path="url(#p72692729ab)" style="fill: #ffffff; stroke: #1d2b36; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 217.179213 76.580787 
+L 389.525669 76.580787 
+Q 394.061102 76.580787 394.061102 72.045354 
+L 394.061102 32.927244 
+Q 394.061102 28.391811 389.525669 28.391811 
+L 217.179213 28.391811 
+Q 212.64378 28.391811 212.64378 32.927244 
+L 212.64378 72.045354 
+Q 212.64378 76.580787 217.179213 76.580787 
+z
+" clip-path="url(#p72692729ab)" style="fill: #ffffff; stroke: #1d2b36; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 217.179213 147.446929 
+L 389.525669 147.446929 
+Q 394.061102 147.446929 394.061102 142.911496 
+L 394.061102 98.124094 
+Q 394.061102 93.588661 389.525669 93.588661 
+L 217.179213 93.588661 
+Q 212.64378 93.588661 212.64378 98.124094 
+L 212.64378 142.911496 
+Q 212.64378 147.446929 217.179213 147.446929 
+z
+" clip-path="url(#p72692729ab)" style="fill: #eaf0f6; stroke: #eaf0f6; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 303.352441 77.714646 
+Q 303.352441 85.084724 303.352441 91.113162 
+" clip-path="url(#p72692729ab)" style="fill: none; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 305.852441 86.113162 
+L 303.352441 91.113162 
+L 300.852441 86.113162 
+z
+" clip-path="url(#p72692729ab)" style="fill: #1d2b36; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 170.124094 125.053228 
+Q 190.533543 125.053228 210.048565 125.053228 
+" clip-path="url(#p72692729ab)" style="fill: none; stroke: #666666; stroke-width: 0.8; stroke-linecap: round"/>
+    <path d="M 206.048565 123.053228 
+L 210.048565 125.053228 
+L 206.048565 127.053228 
+z
+" clip-path="url(#p72692729ab)" style="fill: #666666; stroke: #666666; stroke-width: 0.8; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 13.084724 206.974488 
+L 389.525669 206.974488 
+Q 394.061102 206.974488 394.061102 202.439055 
+L 394.061102 168.990236 
+Q 394.061102 164.454803 389.525669 164.454803 
+L 13.084724 164.454803 
+Q 8.549291 164.454803 8.549291 168.990236 
+L 8.549291 202.439055 
+Q 8.549291 206.974488 13.084724 206.974488 
+z
+" clip-path="url(#p72692729ab)" style="fill: #ffffff; stroke: #1d2b36; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 99.257953 77.714646 
+Q 99.257953 120.517795 99.257953 161.979304 
+" clip-path="url(#p72692729ab)" style="fill: none; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 101.757953 156.979304 
+L 99.257953 161.979304 
+L 96.757953 156.979304 
+z
+" clip-path="url(#p72692729ab)" style="fill: #1d2b36; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 303.352441 148.580787 
+Q 303.352441 155.950866 303.352441 161.979304 
+" clip-path="url(#p72692729ab)" style="fill: none; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 305.852441 156.979304 
+L 303.352441 161.979304 
+L 300.852441 156.979304 
+z
+" clip-path="url(#p72692729ab)" style="fill: #1d2b36; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 13.084724 240.990236 
+L 389.525669 240.990236 
+Q 394.061102 240.990236 394.061102 236.454803 
+L 394.061102 225.68315 
+Q 394.061102 221.147717 389.525669 221.147717 
+L 13.084724 221.147717 
+Q 8.549291 221.147717 8.549291 225.68315 
+L 8.549291 236.454803 
+Q 8.549291 240.990236 13.084724 240.990236 
+z
+" clip-path="url(#p72692729ab)" style="fill: #ffffff; stroke: #1d2b36; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 201.305197 208.108346 
+Q 201.305197 214.061102 201.305197 218.672217 
+" clip-path="url(#p72692729ab)" style="fill: none; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 203.805197 213.672217 
+L 201.305197 218.672217 
+L 198.805197 213.672217 
+z
+" clip-path="url(#p72692729ab)" style="fill: #1d2b36; stroke: #1d2b36; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 22.155591 301.935118 
+L 312.990236 301.935118 
+Q 314.691024 301.935118 314.691024 300.234331 
+L 314.691024 289.462677 
+Q 314.691024 287.76189 312.990236 287.76189 
+L 22.155591 287.76189 
+Q 20.454803 287.76189 20.454803 289.462677 
+L 20.454803 300.234331 
+Q 20.454803 301.935118 22.155591 301.935118 
+z
+" clip-path="url(#p72692729ab)" style="fill: #ecebe7; stroke: #ecebe7; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 22.155591 301.935118 
+L 126.768132 301.935118 
+Q 128.46892 301.935118 128.46892 300.234331 
+L 128.46892 289.462677 
+Q 128.46892 287.76189 126.768132 287.76189 
+L 22.155591 287.76189 
+Q 20.454803 287.76189 20.454803 289.462677 
+L 20.454803 300.234331 
+Q 20.454803 301.935118 22.155591 301.935118 
+z
+" clip-path="url(#p72692729ab)" style="fill: #0066a3; stroke: #0066a3; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 138.149291 306.470551 
+L 138.149291 283.226457 
+" clip-path="url(#p72692729ab)" style="fill: none; stroke: #8a96a0; stroke-width: 1.2"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="8.549291" y="14.218583" transform="rotate(-0 8.549291 14.218583)">a</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 8px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="20.454803" y="14.218583" transform="rotate(-0 20.454803 14.218583)">Two terms, one gate</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1d2b36" x="99.257953" y="37.55173" transform="rotate(-0 99.257953 37.55173)">Encoder term</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="99.257953" y="45.467491" transform="rotate(-0 99.257953 45.467491)">the members' probabilities against type</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="99.257953" y="54.254893" transform="rotate(-0 99.257953 54.254893)">centroids, every type weighted equally;</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="99.257953" y="63.283466" transform="rotate(-0 99.257953 63.283466)">smoothed and unsmoothed views,</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="99.257953" y="72.516571" transform="rotate(-0 99.257953 72.516571)">50% each</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1d2b36" x="303.352441" y="36.90134" transform="rotate(-0 303.352441 36.90134)">Second opinion</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="46.163116" transform="rotate(-0 303.352441 46.163116)">each cell's Pearson correlation with the</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="54.254893" transform="rotate(-0 303.352441 54.254893)">type means, over its own measured,</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="63.084951" transform="rotate(-0 303.352441 63.084951)">unsmoothed genes; softmax at</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="71.881102" transform="rotate(-0 303.352441 71.881102)">temperature 0.05</text>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1d2b36" x="303.352441" y="105.121379" transform="rotate(-0 303.352441 105.121379)">The gate: the upload's agreement</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="114.675502" transform="rotate(-0 303.352441 114.675502)">the share of its counted cells (at least</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="123.179439" transform="rotate(-0 303.352441 123.179439)">200 observed genes) whose top correlation</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #4b4b4b" x="303.352441" y="131.64072" transform="rotate(-0 303.352441 131.64072)">names the answer path's top type</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 7.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1d2b36" x="303.352441" y="142.140781" transform="rotate(-0 303.352441 142.140781)">at or above 40%?</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; fill: #666666" transform="translate(147.662613 111.377404)">each cell's top type</text>
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; fill: #666666" transform="translate(147.438394 119.63009)">on the answer path</text>
+   </g>
+   <g id="text_19">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="17.053228" y="175.98752" transform="rotate(-0 17.053228 175.98752)">The best guess</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #0066a3" x="17.053228" y="188.007876" transform="rotate(-0 17.053228 188.007876)">at or above the bar, used:</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #4b4b4b" x="104.927244" y="187.777095" transform="rotate(-0 104.927244 187.777095)">weight 0.5 on the encoder, the rest on the correlation</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="17.053228" y="198.255257" transform="rotate(-0 17.053228 198.255257)">below the bar, flat:</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #4b4b4b" x="104.927244" y="198.014085" transform="rotate(-0 104.927244 198.014085)">weight 0.7 on the encoder's smoothed view, against a flat term; the encoder decides</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #1d2b36" x="201.305197" y="232.880226" transform="rotate(-0 201.305197 232.880226)">It joins every non-empty conformal set, beside the answer path's top type</text>
+   </g>
+   <g id="text_25">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="8.549291" y="262.250079" transform="rotate(-0 8.549291 262.250079)">b</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 8px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="20.454803" y="262.250079" transform="rotate(-0 20.454803 262.250079)">The gate on the Workflow page's example, PBMC240</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #4b4b4b" x="20.454803" y="274.266053" transform="rotate(-0 20.454803 274.266053)">238 cells; 1 below the floor, so 237 counted; 87 of them agree</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #ffffff" x="125.067345" y="296.659754" transform="rotate(-0 125.067345 296.659754)">agreement 36.7%</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #666666" x="140.983937" y="286.815784" transform="rotate(-0 140.983937 286.815784)">bar 40%</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #666666" x="314.691024" y="311.202486" transform="rotate(-0 314.691024 311.202486)">all counted cells</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 7.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #1d2b36" x="323.194961" y="292.999008" transform="rotate(-0 323.194961 292.999008)">term flat</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #666666" x="323.194961" y="302.415085" transform="rotate(-0 323.194961 302.415085)">below the bar</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p72692729ab">
+   <rect x="2.88" y="2.88" width="396.850394" height="311.811024"/>
+  </clipPath>
+ </defs>
+</svg>

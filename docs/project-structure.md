@@ -27,6 +27,7 @@ Vivome_Atlas/
 │   ├── css/                  shared styling (page.css) and per-page styles
 │   ├── js/                   ES modules; manifest.js and panels.js are pure
 │   │   └── atlas/            the Atlas page: the 3D viewer, the Explore tab, the Your data tab
+│   ├── figures/              the Manuscript's figures: SVG, CSV and index.json, from scripts/build_figures.py
 │   ├── data/                 what the pages load: atlas_manifest.json, workflow.json, manuscript.json,
 │   │                         cell metadata, embeddings, and examples/ (the example upload)
 │   └── tests/                node --test suites for js/
@@ -46,7 +47,7 @@ Vivome_Atlas/
 ├── benchmark/                FAIR COMPARISON: ours vs scANVI, MaxFuse, scGLUE
 │   └── results/              local 1 GB cache of runs (gitignored)
 │
-├── scripts/                  BUILD AND CHECKS: manifest builder, repo path checker
+├── scripts/                  BUILD AND CHECKS: manifest builder, figures (scripts/figures/), repo path checker
 │   └── archive/              one-off scripts kept as a record, no longer runnable
 │
 ├── deploy/                   HOSTING THE SERVICE AND THE SITE'S DOOR TO IT

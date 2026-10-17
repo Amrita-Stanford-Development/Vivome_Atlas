@@ -73,6 +73,7 @@ ALLOWED_MISSING = (
     "research/notebook-outputs/v52_phase4/",  # likewise, for v5.2
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
+    "research/figures/journal/",  # the journal's figure files, written on request by scripts/build_figures.py --journal, gitignored
 )
 
 # Frozen historical records: their code samples use paths relative to files

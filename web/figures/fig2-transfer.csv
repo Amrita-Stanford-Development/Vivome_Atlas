@@ -1,0 +1,22 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,Fulcher 2026,CD4 T,82.47,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.recall_CD4T
+a,Fulcher 2026,CD8 T,23.76,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.recall_CD8T
+a,Fulcher 2026,NK,90.0,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.recall_NK
+a,Fulcher 2026,B,98.04,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.recall_B
+a,Fulcher 2026,Monocyte,97.81,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.recall_monocyte
+a,Fulcher 2026,Dendritic cell,22.22,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.recall_DC
+a,Khoury 2026,CD4 T,82.8,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.recall_CD4T_pct
+a,Khoury 2026,CD8 T,2.7,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.recall_CD8T_pct
+a,Khoury 2026,NK,50.65,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.recall_NK_pct
+a,Khoury 2026,B,81.71,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.recall_B_pct
+a,Khoury 2026,Monocyte,94.7,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.recall_monocyte_pct
+a,Fulcher 2026,balanced accuracy,69.05,,,%,research/notebook-outputs/v41_phase3/development.json,fulcher2026.v4.1.balanced_accuracy_6_types
+a,Khoury 2026,balanced accuracy,62.51,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.balanced_accuracy_pct
+b,Fulcher 2026,Lymphoid,98.9203778677463,,,%,research/benchmark/v41_development/fulcher2026.csv,tool=v4.1 (served): lymphoid_recall_pct
+b,Khoury 2026,Lymphoid,95.97,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.lymphoid_recall_pct
+b,PBMC240,Lymphoid,92.31,,,%,research/notebook-outputs/v41_phase3/development.json,pbmc240.v4.1.lymphoid_recall
+b,Fulcher 2026,Myeloid,94.50980392156862,,,%,research/benchmark/v41_development/fulcher2026.csv,tool=v4.1 (served): myeloid_recall_pct
+b,Khoury 2026,Myeloid,96.77,,,%,research/benchmark/khoury2026_posthoc_v41_check/summary.json,scores.v4.1.myeloid_recall_pct
+b,PBMC240,Myeloid,80.0,,,%,research/notebook-outputs/v41_phase3/development.json,pbmc240.v4.1.myeloid_recall
+c,,protein or RNA,99.93288590604027,,,%,service/model/evidence/v3_1_tables/modality_probe.json,modality_probe_balanced_accuracy_pct
+c,,chance,50.0,,,%,service/model/evidence/v3_1_tables/modality_probe.json,"chance for its 2 balanced classes (RNA, protein; n_per_class each): 100 / classes"

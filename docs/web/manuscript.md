@@ -22,7 +22,7 @@ so a comparison with them is an ablation.
 | Why each part is there | one row per part: the problem in an earlier design it fixes, the evidence, the alternative rejected |
 | Results | transfer, the atlas's cross-modal support and alignment diagnostics, answer levels and coverage, the second opinion and its gate, the benchmark tables, the internal held-out test, failure modes, what was tried and not adopted |
 | Discussion | what the evidence supports and does not yet, lessons, threats to validity, next steps |
-| Availability, supplement, figures | accessions and code; the supplemental tables; each figure's panels and data |
+| Availability, supplement, figures | accessions and code; the supplemental tables; the list of figures and tables, with downloads |
 | Before submission, reviewer questions | open items (pending records) and the answers a reviewer will need |
 
 ## The evidence line
@@ -77,3 +77,28 @@ data, then the manuscript data, so all three are built for one release
 The builder refuses to run if the manifest's model is not v4.1: when the
 served model changes, the page's wording changes with it, and the builder
 is updated in the same commit.
+
+## Figures
+
+Each figure and Methods illustration is one module in `scripts/figures/`,
+drawn by `scripts/build_figures.py` from the repository's committed data
+(run it in the vivome environment, which has matplotlib):
+
+- `web/figures/<NAME>.svg` is what the page shows, and `NAME.csv` every number
+  it draws, with the file and field it came from (the page shows it as a
+  table on request);
+- `web/figures/index.json` holds each figure's title, legend, alt text,
+  section and sources; `web/js/figures.js` places each one in its slot,
+  `<div class="ms-figure-slot" data-figure="NAME">`, at the end of the
+  subsection whose result it supports, and lists them all in the Figures
+  section;
+- `--journal` also writes a PDF and a print-resolution TIFF of each into
+  `research/figures/journal/` (gitignored), at the journal's widths.
+
+A module splits what it shows (`data()`, standard library only: every
+number a row naming its source file and field) from how it is drawn
+(`draw()`), so the scripts suite checks each figure's numbers on any Python,
+and, with matplotlib, that the committed pictures are what the data draws
+now. Nothing in a figure is typed in, legends included. One style for all
+(`scripts/figures/style.py`): the site's colours, RNA and protein in their
+reserved colours, cell types named by position rather than by colour.

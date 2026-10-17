@@ -35,6 +35,19 @@
         .caveat { margin-left: 4px; vertical-align: 1px; font-size: 11.5px; }
         [data-ms], [data-fact] { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
         .ms-table { font-size: 13.5px; }
+        .ms-figure-slot { margin: 22px 0 8px; }
+        .ms-figure { margin: 0; }
+        .ms-figure img { display: block; width: 100%; height: auto; background: #FFFFFF; border-radius: 8px; }
+        .ms-figure-single img { max-width: 520px; }
+        .ms-figure-one-half img { max-width: 780px; }
+        .ms-figure figcaption { margin-top: 10px; font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
+        .ms-figure figcaption strong { color: var(--ink); }
+        .ms-figure-links { display: inline-flex; gap: 12px; margin-left: 10px; font-size: 12.5px; }
+        .ms-figure-numbers { margin-top: 8px; font-size: 13px; }
+        .ms-figure-numbers > summary { cursor: pointer; color: var(--accent); }
+        .ms-figure-table { font-size: 12px; }
+        .ms-figure-list { padding-left: 20px; }
+        .ms-figure-list li { margin: 4px 0; }
         .ms-table th, .ms-table td { padding-right: 14px; }
         .ms-table td { line-height: 1.45; }
         .ms-table td:first-child { color: var(--ink); font-weight: 500; min-width: 150px; }
@@ -89,7 +102,7 @@
                     <li><a href="#discussion">Discussion</a></li>
                     <li><a href="#availability">Data and code availability</a></li>
                     <li><a href="#supplement">Supplemental data plan</a></li>
-                    <li><a href="#figures">Figures and tables plan</a></li>
+                    <li><a href="#figures">Figures and tables</a></li>
                     <li><a href="#open-items">Before submission</a></li>
                     <li><a href="#reviewers">Questions a reviewer will ask</a></li>
                 </ol>
@@ -229,6 +242,8 @@
         <section class="sheet" id="procedures">
             <h2>Experimental procedures</h2>
 
+            <div class="ms-figure-slot" data-figure="fig1-design"></div>
+
             <h3 id="reference">The RNA reference</h3>
             <ul class="evidence">
                 <li>Tabula Sapiens blood: <span data-ms="ref_cells"></span> cells from
@@ -280,6 +295,8 @@
                     <span class="ev-src"><code>service/pipeline/smoothing.py</code>, <code>service/model/v4_1/spec_v41.json</code></span></li>
             </ul>
 
+            <div class="ms-figure-slot" data-figure="methods-reading"></div>
+
             <h3 id="encoder">The encoder and its training</h3>
             <ul class="evidence">
                 <li><span data-ms="wf_members"></span> members with one architecture. The input is
@@ -313,6 +330,8 @@
                     <span class="ev-src"><code>service/model/v3_1/nb2_spec_v31.json</code>, <code>service/pipeline/ensemble.py</code></span></li>
             </ul>
 
+            <div class="ms-figure-slot" data-figure="methods-encoder"></div>
+
             <h3 id="answers">The answer layer</h3>
             <ul class="evidence">
                 <li>All <span data-ms="ref_classes"></span> types compete; restricting the label space is an
@@ -339,6 +358,8 @@
                     <span class="ev-src"><code>service/pipeline/fusion.py</code>, <code>service/tests/test_pipeline_versions.py</code></span></li>
             </ul>
 
+            <div class="ms-figure-slot" data-figure="methods-answers"></div>
+
             <h3 id="best-guess">The best guess and its second opinion</h3>
             <ul class="evidence">
                 <li>The reference is re-encoded with every type weighted equally, and the type means of the
@@ -360,6 +381,8 @@
                     <span class="ev-src"><code>research/notebook-outputs/v41_pretest/rules.json</code>, <code>research/notebook-outputs/v41_pretest/locked_rule.json</code>
                     <span class="bead caveat" data-caveat="in-sample">in-sample</span></span></li>
             </ul>
+
+            <div class="ms-figure-slot" data-figure="methods-second-opinion"></div>
 
             <h3 id="datasets">Datasets and their roles</h3>
             <p>Roles were set on 2026-10-15: most public data is development, a fixed part was locked
@@ -598,6 +621,8 @@
                 </table>
             </div>
 
+            <div class="ms-figure-slot" data-figure="fig2-transfer"></div>
+
             <h3 id="cross-modal-support">Cross-modal support</h3>
             <p>The atlas holds the reference's RNA cells and SCoPE2's protein cells; a type is
                 cross-modal when it has cells of both.</p>
@@ -656,6 +681,8 @@
                 </table>
             </div>
 
+            <div class="ms-figure-slot" data-figure="fig3-answers"></div>
+
             <h3 id="second-opinion">The second opinion and its gate</h3>
             <ul class="evidence">
                 <li>Against its own answer path's guess, the served best guess gains
@@ -690,6 +717,8 @@
                     <span class="ev-src"><code>research/notebook-outputs/v41_phase3/summary.json</code>
                     <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
             </ul>
+
+            <div class="ms-figure-slot" data-figure="fig4-second-opinion"></div>
 
             <h3 id="benchmark">The benchmark</h3>
             <ul class="evidence">
@@ -727,6 +756,8 @@
                 by paired bootstrap. Khoury is post-hoc; Fulcher, PBMC240 and SCoPE2 are development
                 data, and Fulcher is in-sample for the model's one weight.</p>
             <div id="benchmark-mount"></div>
+
+            <div class="ms-figure-slot" data-figure="fig5-benchmark"></div>
 
             <h3 id="heldout">The internal held-out test, scored once</h3>
             <div class="table-scroll">
@@ -817,6 +848,8 @@
                     annotation and by markers.
                     <span class="ev-src"><code>research/notebook-outputs/mac_mono_diagnosis/diagnosis.json</code>, <code>research/notebook-outputs/v5_labels/audit.json</code></span></li>
             </ul>
+
+            <div class="ms-figure-slot" data-figure="fig6-limits"></div>
 
             <h3 id="alternatives">Tried and not adopted</h3>
             <p>Each idea is named by what it changed. Each was measured under rules fixed before its run.</p>
@@ -943,24 +976,18 @@
         </section>
 
         <section class="sheet" id="figures">
-            <h2>Figures and tables plan</h2>
-            <div class="table-scroll">
-                <table class="support-table ms-table wide">
-                    <thead><tr><th>Item</th><th>Panels</th><th>Data</th></tr></thead>
-                    <tbody>
-                        <tr><td>Figure 1, design</td><td>Training on RNA; reading an upload; the answer layer; the second opinion and its gate; the online service</td><td>Diagram; <code>web/workflow.html</code> has the steps</td></tr>
-                        <tr><td>Figure 2, transfer</td><td>Recall by type on Fulcher and Khoury; lineage recall; the modality probe beside it</td><td><code>research/notebook-outputs/v41_phase3/development.json</code>, <code>research/benchmark/khoury2026_posthoc_v41_check/summary.json</code></td></tr>
-                        <tr><td>Figure 3, answers</td><td>Answer levels by kind of upload; coverage by type on RNA and on protein</td><td><code>research/notebook-outputs/v41_phase3/summary.json</code>, <code>research/notebook-outputs/protein_coverage/coverage.json</code></td></tr>
-                        <tr><td>Figure 4, second opinion</td><td>Upload agreement by kind and dataset with the bar; gain with and without it</td><td><code>research/notebook-outputs/v41_phase3/eval_uploads.csv</code>, <code>research/notebook-outputs/v4_phase3c/exploration.json</code></td></tr>
-                        <tr><td>Figure 5, benchmark</td><td>Forest plot of paired differences, Khoury and Fulcher</td><td><code>research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv</code>, <code>research/benchmark/v41_development/paired_bootstrap_v41.csv</code></td></tr>
-                        <tr><td>Figure 6, limits</td><td>One-type uploads; foreign cells; CD8 against CD4</td><td><code>research/notebook-outputs/single_type_uploads/summary.json</code>, <code>research/notebook-outputs/ood_candidates/summary.json</code>, <code>research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json</code></td></tr>
-                        <tr><td>Table 1</td><td>Datasets and roles</td><td>This page, procedures</td></tr>
-                        <tr><td>Table 2</td><td>The benchmark</td><td>This page, results</td></tr>
-                        <tr><td>Table 3</td><td>Why each part is there</td><td>This page</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p>The journal's figure files are a later task; every panel above has its data committed.</p>
+            <h2>Figures and tables</h2>
+            <p>Every figure and Methods illustration is drawn from the repository's committed data by
+                <code>scripts/build_figures.py</code> and sits beside the result it supports, with its legend, its
+                sources and the numbers it draws. The journal's files (PDF, and TIFF at print resolution) are rebuilt
+                on request with <code>--journal</code>.</p>
+            <div id="figure-list"></div>
+            <h3>Tables</h3>
+            <ul class="evidence">
+                <li>Table 1, datasets and roles: <a href="#datasets">the datasets</a>.</li>
+                <li>Table 2, the benchmark: <a href="#benchmark">the benchmark</a>.</li>
+                <li>Table 3, why each part is there: <a href="#rationale">the rationale</a>.</li>
+            </ul>
         </section>
 
         <section class="sheet" id="open-items">
@@ -1042,6 +1069,8 @@
             buildBenchmarkTable, buildDiagnosticsTable, buildSupportSummary, buildSupportTable, factText, errorPanel,
         } from './js/panels.js';
         import { loadManuscript, checkSync, msFact, msBasis } from './js/manuscript-data.js';
+        import { mountFigures } from './js/figures.js';
+
 
         Promise.all([loadManifest(), loadManuscript()]).then(([manifest, manuscript]) => {
             const sync = checkSync(manifest, manuscript);
@@ -1061,6 +1090,11 @@
             document.getElementById('support-tiles').textContent = '';
             for (const id of ['support-table-mount', 'diagnostics-mount']) document.getElementById(id).innerHTML = errorPanel(err);
             for (const el of document.querySelectorAll('[data-ms], [data-fact]')) el.textContent = PENDING_LABEL;
+        });
+
+        // The figures load on their own: a figure that fails leaves the rest of the page as it is.
+        mountFigures().catch((err) => {
+            for (const el of document.querySelectorAll('.ms-figure-slot, #figure-list')) el.innerHTML = errorPanel(err);
         });
     </script>
 </body>

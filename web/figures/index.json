@@ -1,0 +1,158 @@
+{
+  "figures": [
+    {
+      "name": "fig1-design",
+      "title": "Figure 1",
+      "section": "procedures",
+      "width": "double",
+      "alt": "A schematic in two parts. a, training, done once and on RNA only: the RNA reference of blood cells, read over the shared gene list drawn from proteomics gene lists, trains the members of the encoder, and the parts the service keeps fixed follow from them: the type centroids, the atlas map, one threshold per type and the type means. Nothing is fitted on the user's upload. b, the path one uploaded cell takes, drawn in blue: a protein or RNA matrix comes in through the website's door to the online service, is read onto the shared gene list, and the members place the cell in the shared space, one of them also on the atlas map. The answer layer names one type, a family or a lineage, or gives no answer with its reason. Below it, a second opinion, the cell's correlation to the type means, enters the best guess only when enough of the file's cells agree with the encoder, and the best guess joins the set. The answer goes back as JSON. Dashed lines show what training hands to the service.",
+      "caption": "The design at a glance. a, Training, done once and on RNA only: the RNA reference, read over the shared gene list (pooled from proteomics gene lists), trains the encoder's members; the type centroids, the atlas map, one conformal threshold per type and the type means are fixed before any upload, and nothing is fitted on the user's upload. b, The path one uploaded cell takes through the online service (blue): in through the website's door, the upload is read onto the shared gene list (Methods illustration: reading an upload), the members place the cell in the shared space (one of them also on the atlas map), and the answer layer states one type, a family or a lineage, or no answer with its reason. The best guess takes the second opinion, a correlation to the type means over the cell's measured genes, only when the file passes the agreement gate, and it joins the cell's set. Each cell's answer goes back as JSON. Dashed lines: what training hands to the service. A schematic: the numbers are the served model's settings.",
+      "sources": [
+        "web/data/manuscript.json"
+      ],
+      "svg": "figures/fig1-design.svg",
+      "csv": "figures/fig1-design.csv"
+    },
+    {
+      "name": "fig2-transfer",
+      "title": "Figure 2",
+      "section": "transfer",
+      "width": "double",
+      "alt": "Three panels. a, a dot plot of recall by cell type for the served model on Fulcher and on Khoury: the CD four T, B and monocyte types are mostly right on both, NK on Fulcher and about half on Khoury, CD eight T cells are mostly missed, most of all on Khoury, and dendritic cells are mostly missed on Fulcher and not labelled on Khoury. b, recall by lineage, lymphoid and myeloid, on Fulcher, Khoury and the PBMC protein set: high on all. c, the modality probe: a linear probe tells protein cells from RNA cells in the encoder's space almost perfectly, far above its chance level.",
+      "caption": "Labels learned on RNA transfer to protein. a, Recall by author cell type of the served model's best guess on Fulcher (development data, on which its rule was chosen) and on Khoury (a post-hoc check); Khoury does not label dendritic cells. The legend gives each data set's balanced accuracy over its types. b, Recall by lineage on the same two data sets and on the PBMC protein set, which is labelled by lineage only and has very few myeloid cells. c, Balanced accuracy of a linear probe telling the macrophage and monocyte protein cells from as many RNA cells in the answer path's encoder space, against the chance level of a balanced two-class probe (grey line): the modalities stay apart, and labels transfer anyway. One point per value; the sources give no interval for recall.",
+      "sources": [
+        "research/notebook-outputs/v41_phase3/development.json",
+        "research/benchmark/khoury2026_posthoc_v41_check/summary.json",
+        "research/benchmark/v41_development/fulcher2026.csv",
+        "service/model/evidence/v3_1_tables/modality_probe.json"
+      ],
+      "svg": "figures/fig2-transfer.svg",
+      "csv": "figures/fig2-transfer.csv"
+    },
+    {
+      "name": "fig3-answers",
+      "title": "Figure 3",
+      "section": "answer-levels",
+      "width": "double",
+      "alt": "Two panels. a, stacked horizontal bars, one per kind of simulated RNA upload and one for all uploads, each split into the share of cells answered with one type, with a family, with a branch, or not answered: most answers name a branch, and uploads of one type alone go unanswered most often. b, a dumbbell per cell type comparing how often the answer set holds the true type on simulated RNA and on protein, against the target: on RNA most types are near the target; on Fulcher protein CD eight T and dendritic cells fall far below it, and on the macrophage and monocyte protein set almost no cell is covered.",
+      "caption": "Answers state their level, or abstain. a, The level of the served model's answer for each cell of the simulated RNA evaluation suite, by kind of upload: one type, a family of types, a branch (lineage), or no answer; each bar gives its number of cells. b, Coverage: the share of cells whose answer set holds the true type, on the simulated RNA suite (orange) and on development protein data (green), for Fulcher's author types and the two types of the macrophage and monocyte protein set, against the target the sets were fitted to on simulated RNA (grey line). On RNA a cell counts when its set holds its own reference type, grouped into Fulcher's types; on Fulcher when its set holds a type of its author label. A type without a cell in the suite has a protein value only.",
+      "sources": [
+        "research/notebook-outputs/v41_phase3/summary.json",
+        "research/notebook-outputs/v41_phase3/eval_cells.csv.gz",
+        "research/notebook-outputs/protein_coverage/coverage.json",
+        "benchmark/fulcher2026_score.py"
+      ],
+      "svg": "figures/fig3-answers.svg",
+      "csv": "figures/fig3-answers.csv"
+    },
+    {
+      "name": "fig4-second-opinion",
+      "title": "Figure 4",
+      "section": "second-opinion",
+      "width": "double",
+      "alt": "Three panels. (a) A strip plot of upload agreement, one dot per simulated upload in six kinds and one dot per protein dataset, with a grey horizontal line at the bar. Dots at or above the bar, where the second opinion is used, are blue; dots below are grey. Uploads of one type sit mostly below the bar, uploads of many types and PBMC-like ones mostly above it, SCoPE-like ones all below; Fulcher and Khoury are above, PBMC, SCoPE and Furtwangler below. (b) For each kind of upload and for Fulcher, Khoury and the held-out Hao donors, a grey dot for the answer path's guess joined to a blue dot for the served best guess, with the gain written at the right: little change for uploads of one type, large gains for PBMC-like and many-type uploads and for Fulcher. (c) For each kind of upload, the gain over the answer path with the second opinion used in every upload, an open circle, and gated at the bar, a filled circle; gating shrinks the loss on uploads of one type and the chance that a type fails there, costs a little on uploads of a few types and of one lineage, and keeps the gains on many-type and PBMC-like uploads.",
+      "caption": "The second opinion and its gate. (a) Upload agreement: the share of an upload's cells whose top correlation to the type means names the encoder's top type. Each dot is one upload of the simulated RNA suite, by kind (spread sideways at fixed offsets), or one protein dataset (diamonds, with their values). At or above the bar (grey line) the best guess uses the second opinion (blue); below it the encoder decides alone (grey). (b) Balanced accuracy of the answer path's guess (grey) and of the served best guess (blue), which adds the second opinion where an upload reaches the bar: mean per upload for each kind of simulated upload, and on Fulcher, Khoury and the held-out Hao donors (RNA masked like protein), with the gain in points at the right; for Fulcher and Khoury with its paired bootstrap 95% interval, for the Hao donors with its one-sided lower bound. Fulcher is in sample for the model's one tuned weight and Khoury is post hoc. (c) The gate, as chosen during development on the calibration uploads: the best guess's gain over the answer path with the second opinion used in every upload (open) and gated at the bar (filled), with the chance that some cell type fails on uploads of one type.",
+      "sources": [
+        "research/notebook-outputs/v41_phase3/eval_uploads.csv",
+        "research/notebook-outputs/v4_phase3c/exploration.json",
+        "research/benchmark/v41_dev_gate.json",
+        "research/benchmark/khoury2026_posthoc_v41_check/summary.json",
+        "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv",
+        "research/notebook-outputs/v41_phase3/summary.json",
+        "research/notebook-outputs/v41_phase3/development.json",
+        "research/benchmark/v41_development/paired_bootstrap_v41_vs_v31.csv",
+        "research/benchmark/heldout/hao2021/summary.json"
+      ],
+      "svg": "figures/fig4-second-opinion.svg",
+      "csv": "figures/fig4-second-opinion.csv"
+    },
+    {
+      "name": "fig5-benchmark",
+      "title": "Figure 5",
+      "section": "benchmark",
+      "width": "double",
+      "alt": "Two forest plots side by side, Khoury on the left and Fulcher on the right, on one horizontal scale of balanced accuracy points. Each row is one run of an outside method, grouped by method and named by its rule and seed; a dot marks the served model minus that run, a whisker its 95% interval, and a vertical line marks zero. Rows right of zero favour VivOME. On Fulcher every interval lies right of zero. On Khoury most do; the intervals for PCA with neighbours and for some scANVI runs with neighbours include zero.",
+      "caption": "The benchmark, the served VivOME model against each outside method. Each row is one run: a method, its rule for turning its output into a cell type, and its seed where the method is stochastic. The dot is the served model's balanced accuracy minus the run's, in points; the whisker is the paired bootstrap's 95% interval. Right of the zero line favours VivOME, left favours the method; blue marks an interval wholly right of zero, grey one that includes zero. (a) Khoury, scored post hoc. (b) Fulcher, development data, in sample for the model's one tuned weight. Every method gets the same RNA reference, its labels and the same query cells; comparisons with earlier VivOME models are left out.",
+      "sources": [
+        "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv",
+        "research/benchmark/v41_development/paired_bootstrap_v41.csv"
+      ],
+      "svg": "figures/fig5-benchmark.svg",
+      "csv": "figures/fig5-benchmark.csv"
+    },
+    {
+      "name": "fig6-limits",
+      "title": "Figure 6",
+      "section": "failure-modes",
+      "width": "double",
+      "alt": "Five panels. (a) Two dot plots sharing one list of six cell types: on the left the share of committed answers that are right, on the right recall, each for the cells in their whole upload, uploaded alone, and uploaded with one other type. Alone, most types fall far below their level in the whole upload. (b) One horizontal bar per foreign cell set, split into the reasons for no answer in greys and the answers given in blues by level, with the number answered at the right; almost none are refused as outside the reference, most get no answer because they fall between types, and some get a blood answer. (c) Bars of what the served model calls Khoury's cytotoxic T-cell cluster: mostly naive helper and helper T cells, rarely its own type. (d) For two memory markers and the cytotoxic marker, how well each tells Khoury's two T-cell clusters apart, against chance; the memory markers separate them far better. (e) Bars of where the reference files its naive cytotoxic-like T cells: mostly under helper T cells.",
+      "caption": "Where the model fails. (a) Cells of one type uploaded alone, against the same cells in their whole upload and uploaded with one other type: the share of committed answers that are right, and recall (the pairs are named below the panel). Scaling within the upload is the cause. (b) Foreign cells: what the served model gives each cell line and the microglia, as a share of the set's cells, split into the reasons for no answer (greys) and the answers it commits to by level (blues), with the cells answered at the right. (c) The cells of Khoury's cytotoxic T-cell cluster, by the fine type the served model calls them. (d) How well single markers tell Khoury's cytotoxic T-cell cluster from its helper T-cell cluster (area under the ROC curve, oriented to the cluster where the marker is higher; the grey line is chance). (e) The reference's naive cytotoxic-like T cells, by the type the reference files them under. All on development or post hoc data.",
+      "sources": [
+        "research/notebook-outputs/single_type_uploads/summary.json",
+        "research/notebook-outputs/ood_candidates/summary.json",
+        "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json",
+        "service/model/v4_1/spec_v41.json"
+      ],
+      "svg": "figures/fig6-limits.svg",
+      "csv": "figures/fig6-limits.csv"
+    },
+    {
+      "name": "methods-answers",
+      "title": "Methods illustration: the answer layer",
+      "section": "answers",
+      "width": "double",
+      "alt": "Two panels. a: a flow from one cell, read by the members, to its answer. Three checks in order: enough observed genes, else no answer because too little was measured; enough similarity to the reference cells, else no answer because the cell is outside the supported region; at least one type clearing its bar, else no answer because no type stands out. The set then also takes the answer path's top type and the fused best guess, and its types decide the level: one type, a family, a lineage, or no answer because several types fit. Each outcome is drawn in the Atlas page's answer look. b: every reference type, grouped by lineage and family, with a dot at the probability it needs to join a set, and a grey line at the threshold shared by all types.",
+      "caption": "a, How the answer layer treats one cell, in the order the service checks it. A cell with too few observed genes gets no answer and no best guess. A cell whose members' mean best cosine to the reference cells is below the out-of-distribution threshold is outside the supported region. Otherwise every type competes, and a type joins the cell's conformal set when its ensemble probability clears that type's bar; with no type in the set, no type stands out. A non-empty set also takes the answer path's top type and the fused best guess, and the answer is stated at the level the set's types share. Boxes take the Atlas page's looks: one type filled, a family paler in a dark ring, a lineage paler still, no answer a grey ring, broken when too little was measured. b, Each type's bar: the probability it needs to join a set, one minus its conformal threshold, fitted once on labelled RNA uploads (the per-class, Mondrian, sets). The grey line is the marginal threshold, one shared bar, shown for comparison. Types are grouped by lineage (headers) and family (brackets); a family or lineage answer names one of these groups.",
+      "sources": [
+        "web/data/workflow.json",
+        "web/data/manuscript.json",
+        "web/js/workflow-data.js"
+      ],
+      "svg": "figures/methods-answers.svg",
+      "csv": "figures/methods-answers.csv"
+    },
+    {
+      "name": "methods-encoder",
+      "title": "Methods illustration: the encoder",
+      "section": "encoder",
+      "width": "double",
+      "alt": "Three panels. a: one member of the encoder, as boxes from left to right: a cell's measured values and its mask over the gene space, with the mean and measured share of each gene module, form the input; two blocks lead to a unit-length latent. b: training on labelled RNA only, the members of one recipe with their fitted temperatures, and what each gives: type probabilities and a similarity to the reference cells, both averaged over the members for the answer layer, and, from the coordinate member alone, the coordinates of the atlas map. c: the map itself, the first two components of the coordinate member's projection, for a subsample of the RNA reference cells in orange and of the atlas's protein cells in green.",
+      "caption": "a, One member of the encoder: the masked values and the mask over the model's genes, with the mean and measured share of each gene module, pass through two blocks to a unit-length latent; the number of weights is per member. b, The members share one architecture and one training recipe on labelled RNA only, and differ by seed; each has its own fitted temperature T. A member scores a cell by the softmax of its cosines to the type centroids over T, and the ensemble averages the members' probabilities; the members' best cosines to the reference cells, averaged, give the similarity the answer layer checks. One member, the coordinate member, places cells on the atlas map through a principal component projection of its reference latents. c, The atlas map: the first two components for the RNA reference cells (orange) and the atlas's protein cells, placed by the service (green). A fixed subsample, every so many rows of each file; the protein file is sampled more densely so its cells stay visible. The axes have no units.",
+      "sources": [
+        "web/data/workflow.json",
+        "web/data/manuscript.json",
+        "web/data/metadata_RNA_lat128.csv",
+        "web/data/metadata_PROT_lat128.csv"
+      ],
+      "svg": "figures/methods-encoder.svg",
+      "csv": "figures/methods-encoder.csv"
+    },
+    {
+      "name": "methods-reading",
+      "title": "Methods illustration: reading an upload",
+      "section": "processing",
+      "width": "double",
+      "alt": "Six steps in two rows, each with a small picture and the PBMC protein file as the example. a, the matrix: features in rows and cells in columns; a sample of the file's real pattern of measured and missing values, with one cell outlined in blue. b, linear values are taken to a base-two logarithm: one value of the blue cell before and after. c, names are matched to the shared gene list: a duplicated gene is merged by its median, an unknown name and a name for several genes are left out. d, each gene is scaled within the file, drawn as a schematic: in a mixed file the high and low cells stay apart, while in a file of one sorted type the cells' shared high level becomes the file's mean. e, smoothing: the file's cells on the first two axes of their own graph, the blue cell joined to its nearest neighbours. f, the mask of what the blue cell measured on marker genes, and every cell's count of measured genes against the floor below which a cell gets no answer.",
+      "caption": "Reading an upload, step by step as the service does it, before the model sees it. a, The matrix: features in rows and cells in columns, or a DIA-NN or FragPipe TMT-Integrator table as it comes; the grid is a sample of the PBMC protein file's real rows and columns, filled where a value was measured. b, Linear values are taken to a base-two logarithm. c, Names resolve to the shared gene list through a frozen HGNC table; a group naming several genes is left out, and rows naming one gene merge by their median. d, Each gene is scaled within the file over its measured values (a schematic): this cancels each protein's own offset from its RNA, and in a file of one sorted type it also removes the contrast between types. e, Each value is smoothed with the cell's nearest neighbours on a graph of the file's own values (cells drawn on the graph's first two axes); the mask is not smoothed. f, The mask marks what each cell measured, and a cell below the floor of measured genes gets no answer. One cell of the PBMC file, the one the Workflow page follows, is drawn in blue; the numbers are the PBMC file's, from the service's own trace.",
+      "sources": [
+        "web/data/workflow.json"
+      ],
+      "svg": "figures/methods-reading.svg",
+      "csv": "figures/methods-reading.csv"
+    },
+    {
+      "name": "methods-second-opinion",
+      "title": "Methods illustration: the second opinion",
+      "section": "best-guess",
+      "width": "one-half",
+      "alt": "Two panels. a: two terms feed the best guess. The encoder term is the members' probabilities with every type weighted equally, from the smoothed and unsmoothed views in equal shares. The second opinion is each cell's correlation with the type means over its own measured genes. A gate measures the upload's agreement, the share of its counted cells whose top correlation names the answer path's top type. At or above the bar, the guess mixes the encoder and the correlation; below it, the correlation term is flat and the encoder decides. The guess then joins every non-empty set. b: the gate worked on the upload the Workflow page traces: a bar showing the share of counted cells that agree, ending short of the bar line, so the term is flat.",
+      "caption": "a, The fused best guess. The encoder term averages the members' probabilities against type centroids re-encoded with every type weighted equally, half from the smoothed view of the upload and half from the unsmoothed one. The second opinion is each cell's Pearson correlation with the type means of the z-scored RNA, every type weighted equally, over the cell's own measured, unsmoothed genes, turned into probabilities by a softmax at a fixed temperature. The gate counts the upload's cells with at least the floor's observed genes and asks what share of them have the same top type under the correlation as under the answer path. At or above the bar, the guess weights the encoder by the chosen weight and gives the rest to the correlation; below it, the encoder's smoothed view alone decides, against a flat term. Either way, the guess joins every non-empty conformal set beside the answer path's top type. b, The gate on the Workflow page's example upload, as traced from the served model: the share of counted cells that agree, against the bar.",
+      "sources": [
+        "web/data/manuscript.json",
+        "web/data/workflow.json"
+      ],
+      "svg": "figures/methods-second-opinion.svg",
+      "csv": "figures/methods-second-opinion.csv"
+    }
+  ]
+}

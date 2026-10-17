@@ -1,0 +1,29 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,,members,5,,,members,web/data/manuscript.json,records.wf_members.value
+a,,types,22,,,types,web/data/manuscript.json,records.ref_classes.value
+a,,"observed genes, floor",200,,,genes,web/data/manuscript.json,records.wf_floor.value
+a,,"similarity, threshold",0.779,,,cosine,web/data/manuscript.json,records.wf_ood_threshold.value
+a,,target coverage,0.9,,,share,web/data/manuscript.json,records.coverage_target.value
+b,type,lymphoid > B cell > B cell,0.9481,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[0], b cell"
+b,type,myeloid > granulocyte > basophil,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[1], basophil"
+b,type,lymphoid > T cell > CD4 T cell (helper),0.7162,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[2], cd4-positive, alpha-beta t cell"
+b,type,lymphoid > T cell > CD8 T cell (killer),0.9427,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[3], cd8-positive, alpha-beta t cell"
+b,type,myeloid > monocyte/macrophage > classical monocyte,0.9343,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[4], classical monocyte"
+b,type,myeloid > progenitor > myeloid progenitor,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[5], common myeloid progenitor"
+b,type,erythroid > erythroid > red blood cell,0.584,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[6], erythrocyte"
+b,type,progenitor > progenitor > blood precursor cell,0.9931,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[7], hematopoietic precursor cell"
+b,type,progenitor > progenitor > blood stem cell,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[8], hematopoietic stem cell"
+b,type,myeloid > monocyte/macrophage > intermediate monocyte,0.9409,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[9], intermediate monocyte"
+b,type,myeloid > monocyte/macrophage > macrophage,0.95,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[10], macrophage"
+b,type,lymphoid > T cell > NK T cell,0.9893,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[11], mature nk t cell"
+b,type,myeloid > monocyte/macrophage > monocyte,0.9083,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[12], monocyte"
+b,type,myeloid > dendritic cell > myeloid dendritic cell,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[13], myeloid dendritic cell"
+b,type,lymphoid > T cell > naive CD4 T cell,0.6401,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[14], naive thymus-derived cd4-positive, alpha-beta t cell"
+b,type,lymphoid > NK cell > natural killer (NK) cell,0.8932,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[15], natural killer cell"
+b,type,myeloid > granulocyte > neutrophil,0.5972,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[16], neutrophil"
+b,type,myeloid > monocyte/macrophage > non-classical monocyte,0.9827,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[17], non-classical monocyte"
+b,type,lymphoid > B cell > plasma cell,0.6691,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[18], plasma cell"
+b,type,myeloid > dendritic cell > plasmacytoid dendritic cell,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[19], plasmacytoid dendritic cell"
+b,type,other > platelet/megakaryocyte > platelet,0.0467,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[20], platelet"
+b,type,lymphoid > T cell > regulatory T cell,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[21], regulatory t cell"
+b,marginal,marginal,0.9105,,,qhat,web/data/manuscript.json,records.qhat_marginal.value

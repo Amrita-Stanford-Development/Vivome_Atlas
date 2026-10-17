@@ -1,0 +1,77 @@
+panel,series,label,value,lo,hi,unit,source,field
+a,in its whole upload,CD4 T,93.36,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > CD4T > correct_when_committed_pct
+a,alone,CD4 T,54.31,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > CD4T > correct_when_committed_pct
+a,paired: CD4T+CD8T,CD4 T,56.31,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > CD4T+CD8T > CD4T > correct_when_committed_pct
+a,in its whole upload,CD8 T,98.82,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > CD8T > correct_when_committed_pct
+a,alone,CD8 T,72.62,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > CD8T > correct_when_committed_pct
+a,paired: CD4T+CD8T,CD8 T,75.49,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > CD4T+CD8T > CD8T > correct_when_committed_pct
+a,in its whole upload,NK,99.28,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > NK > correct_when_committed_pct
+a,alone,NK,43.94,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > NK > correct_when_committed_pct
+a,in its whole upload,B,98.85,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > B > correct_when_committed_pct
+a,alone,B,6.25,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > B > correct_when_committed_pct
+a,paired: B+monocyte,B,100.0,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > B+monocyte > B > correct_when_committed_pct
+a,in its whole upload,Monocyte,100.0,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > monocyte > correct_when_committed_pct
+a,alone,Monocyte,37.04,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > monocyte > correct_when_committed_pct
+a,paired: B+monocyte,Monocyte,93.78,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > B+monocyte > monocyte > correct_when_committed_pct
+a,in its whole upload,DC,96.15,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > DC > correct_when_committed_pct
+a,alone,DC,65.22,,,"right when committed, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > DC > correct_when_committed_pct
+a,in its whole upload,CD4 T,82.47,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > CD4T > recall_pct
+a,alone,CD4 T,23.38,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > CD4T > recall_pct
+a,paired: CD4T+CD8T,CD4 T,28.25,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > CD4T+CD8T > CD4T > recall_pct
+a,in its whole upload,CD8 T,23.76,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > CD8T > recall_pct
+a,alone,CD8 T,11.05,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > CD8T > recall_pct
+a,paired: CD4T+CD8T,CD8 T,21.55,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > CD4T+CD8T > CD8T > recall_pct
+a,in its whole upload,NK,90.0,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > NK > recall_pct
+a,alone,NK,6.67,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > NK > recall_pct
+a,in its whole upload,B,98.04,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > B > recall_pct
+a,alone,B,11.76,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > B > recall_pct
+a,paired: B+monocyte,B,100.0,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > B+monocyte > B > recall_pct
+a,in its whole upload,Monocyte,97.81,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > monocyte > recall_pct
+a,alone,Monocyte,22.37,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > monocyte > recall_pct
+a,paired: B+monocyte,Monocyte,49.34,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > paired > B+monocyte > monocyte > recall_pct
+a,in its whole upload,DC,22.22,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > mixed > DC > recall_pct
+a,alone,DC,16.67,,,"recall, %",research/notebook-outputs/single_type_uploads/summary.json,v4.1 > alone > DC > recall_pct
+b,HEK293T,cells,13,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 293T > cells
+b,HEK293T,no answer: between types,10,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 293T > v41_served > ambiguous_between_classes
+b,HEK293T,"answer, type: erythrocyte",2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 293T > v41_served > answer: erythrocyte (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HEK293T,"answer, type: neutrophil",1,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 293T > v41_served > answer: neutrophil (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HCT116,cells,13,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 HCT116 > cells
+b,HCT116,no answer: between types,8,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 HCT116 > v41_served > ambiguous_between_classes
+b,HCT116,no answer: no confident label,1,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 HCT116 > v41_served > no_confident_label
+b,HCT116,"answer, lineage: lymphoid",2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 HCT116 > v41_served > answer: lymphoid (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HCT116,"answer, family: T cell",2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 HCT116 > v41_served > answer: T cell (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,K562,cells,14,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 K562 > cells
+b,K562,no answer: between types,9,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 K562 > v41_served > ambiguous_between_classes
+b,K562,no answer: no confident label,1,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 K562 > v41_served > no_confident_label
+b,K562,"answer, lineage: myeloid",1,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 K562 > v41_served > answer: myeloid (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,K562,"answer, family: T cell",2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 K562 > v41_served > answer: T cell (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,K562,"answer, type: erythrocyte",1,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > PXD077946 K562 > v41_served > answer: erythrocyte (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HMC3,cells,47,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > cells
+b,HMC3,no answer: outside the reference,2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > outside_supported_region
+b,HMC3,no answer: between types,25,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > ambiguous_between_classes
+b,HMC3,no answer: too little measured,1,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > coverage_too_low
+b,HMC3,"answer, lineage: lymphoid",5,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > answer: lymphoid (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HMC3,"answer, lineage: myeloid",4,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > answer: myeloid (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HMC3,"answer, family: T cell",8,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > answer: T cell (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,HMC3,"answer, type: neutrophil",2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 HMC3 > v41_served > answer: neutrophil (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,Microglia,cells,57,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > cells
+b,Microglia,no answer: outside the reference,2,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > v41_served > outside_supported_region
+b,Microglia,no answer: between types,26,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > v41_served > ambiguous_between_classes
+b,Microglia,no answer: too little measured,10,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > v41_served > coverage_too_low
+b,Microglia,"answer, lineage: lymphoid",3,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > v41_served > answer: lymphoid (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,Microglia,"answer, lineage: myeloid",3,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > v41_served > answer: myeloid (its level from service/model/v4_1/spec_v41.json > hierarchy)
+b,Microglia,"answer, type: erythrocyte",13,,,cells,research/notebook-outputs/ood_candidates/summary.json,foreign_development > MSV000099294 Microglia > v41_served > answer: erythrocyte (its level from service/model/v4_1/spec_v41.json > hierarchy)
+c,Khoury's CD8 T cluster,naive CD4 T,53.5,,,% of the cluster's cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > fine_classes_called > v4.1 > CD8T > naive CD4 T
+c,Khoury's CD8 T cluster,CD4 T,35.4,,,% of the cluster's cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > fine_classes_called > v4.1 > CD8T > CD4 T
+c,Khoury's CD8 T cluster,B,3.6,,,% of the cluster's cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > fine_classes_called > v4.1 > CD8T > B
+c,Khoury's CD8 T cluster,CD8 T,2.7,,,% of the cluster's cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > fine_classes_called > v4.1 > CD8T > CD8 T
+c,Khoury's CD8 T cluster,erythrocyte,2.7,,,% of the cluster's cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > fine_classes_called > v4.1 > CD8T > erythrocyte
+c,Khoury's CD8 T cluster,mature nk t cell,0.9,,,% of the cluster's cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > fine_classes_called > v4.1 > CD8T > mature nk t cell
+d,higher in the CD8 T cluster,CD8A,0.611,,,AUROC,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > auc_cd8_cluster_vs_cd4_cluster > CD8A > auc_cd8_cluster
+d,higher in the CD4 T cluster,S100A4,0.927,,,AUROC,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > auc_cd8_cluster_vs_cd4_cluster > S100A4 > 1 - auc_cd8_cluster
+d,higher in the CD4 T cluster,ANXA1,0.913,,,AUROC,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,khoury_posthoc > auc_cd8_cluster_vs_cd4_cluster > ANXA1 > 1 - auc_cd8_cluster
+e,all,naive CD8-like cells,356,,,cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,reference > naive_cd8_like_cells
+e,filed under,CD4 T,320,,,cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,reference > naive_cd8_like_by_class > CD4 T
+e,filed under,naive CD4 T,26,,,cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,reference > naive_cd8_like_by_class > naive CD4 T
+e,filed under,CD8 T,5,,,cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,reference > naive_cd8_like_by_class > CD8 T
+e,filed under,B,5,,,cells,research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json,reference > naive_cd8_like_by_class > B
