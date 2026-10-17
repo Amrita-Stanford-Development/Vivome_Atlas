@@ -2,12 +2,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
-  buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildNextReferenceCard, buildPriorBaselineCard,
-  buildAvailabilityTable, buildSupportedLabelSpace, buildReleaseStatus, buildWhatsNew, buildProofPoints, factText,
+  buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildPriorBaselineCard,
+  buildAvailabilityTable, buildSupportedLabelSpace, buildProofPoints, factText,
   buildPreviousReleaseCard, buildEarlierReleaseCard, buildEvaluationTable, buildPreviousEvaluationTable,
   buildProjectionSummary, buildProjectionLabels, buildProjectionCells, buildModelCardTable,
 } from '../js/panels.js';
-import { measured, pending, manifestFixture, nextReferenceFixture } from './fixtures.js';
+import { measured, pending, manifestFixture } from './fixtures.js';
 
 test('escapeHtml neutralises angle brackets and quotes', () => {
   assert.equal(escapeHtml('<b>"x"&\'y\'</b>'),
@@ -189,33 +189,6 @@ test('model card renders Pending, not NaN, for absent modality counts', () => {
   assert.ok(!html.includes('undefined'), html);
 });
 
-test('next reference card shows the settled architecture facts', () => {
-  // The real manifest's next_reference is null today — the architecture
-  // change it described is complete (folded into `model` instead). This
-  // rendering path stays real code, worth testing against a hypothetical
-  // future one via its own fixture.
-  const m = manifestFixture();
-  m.next_reference = nextReferenceFixture();
-  const html = buildNextReferenceCard(m);
-  assert.match(html, /module pooling/);
-  assert.match(html, /uniform/);
-  assert.match(html, /9,002/);
-  assert.match(html, /Not yet/);
-});
-
-test('next reference card never reads as an update to the deployed model card', () => {
-  const m = manifestFixture();
-  m.next_reference = nextReferenceFixture();
-  const html = buildNextReferenceCard(m);
-  assert.ok(!html.includes('VivOME v3 reference'), 'must not merge with the current release\'s own model card');
-});
-
-test('next reference card renders nothing when the manifest has no next_reference', () => {
-  const m = manifestFixture();
-  delete m.next_reference;
-  assert.equal(buildNextReferenceCard(m), '');
-});
-
 test('prior baseline card shows the real kept numbers, not erased', () => {
   const html = buildPriorBaselineCard(manifestFixture());
   assert.match(html, /CrossModalNet/);
@@ -330,67 +303,6 @@ test('supported label space lists cross-modal types and the RNA-only count', () 
   assert.match(html, /monocyte/);
   assert.match(html, /macrophage/);
   assert.match(html, /RNA-only \(1\)/);
-});
-
-test('release status shows the manifest release facts', () => {
-  const html = buildReleaseStatus(manifestFixture());
-  assert.match(html, /Atlas version<\/dt><dd>0\.5\.0/);
-  assert.match(html, /VivOME v4\.2/);
-  assert.match(html, /RNA cells<\/dt><dd>85,233/);
-  assert.match(html, /Protein cells<\/dt><dd>1,490/);
-});
-
-test('release status renders Pending, never undefined, for missing fields', () => {
-  const m = manifestFixture();
-  delete m.atlas_version;
-  delete m.model.name;
-  m.modalities = {};
-  const html = buildReleaseStatus(m);
-  assert.ok(!html.includes('undefined'), html);
-  assert.ok(!html.includes('NaN'), html);
-  assert.match(html, /Pending/);
-});
-
-test('release status escapes model names', () => {
-  const m = manifestFixture();
-  m.model.name = '<script>alert(1)</script>';
-  assert.ok(!buildReleaseStatus(m).includes('<script>'));
-});
-
-test("what's new formats dates and escapes every field", () => {
-  const html = buildWhatsNew([{
-    date: '2026-09-30', title: '<b>t</b>', text: '<img src=x>', link: 'atlas.html', link_text: '<i>go</i>',
-  }]);
-  assert.match(html, /30 September 2026/);
-  assert.match(html, /datetime="2026-09-30"/);
-  assert.ok(!html.includes('<b>') && !html.includes('<img') && !html.includes('<i>'), html);
-  assert.match(html, /href="atlas\.html"/);
-});
-
-test("what's new drops links that are not pages of this site", () => {
-  for (const link of ['javascript:alert(1)', 'https://example.com', '../secret.html', '//x.html']) {
-    const html = buildWhatsNew([{ date: '2026-09-30', title: 't', text: 'x', link }]);
-    assert.ok(!html.includes('href='), `${link} should not render: ${html}`);
-  }
-  const anchored = buildWhatsNew([{ date: '2026-09-30', title: 't', text: 'x', link: 'project.html#labels' }]);
-  assert.match(anchored, /href="project\.html#labels"/);
-});
-
-test("what's new says so when there is nothing to announce", () => {
-  assert.match(buildWhatsNew([]), /No announcements yet/);
-  assert.match(buildWhatsNew(null), /No announcements yet/);
-});
-
-test("the shipped what's new entries render with no metrics in them", async () => {
-  const { readFileSync } = await import('node:fs');
-  const entries = JSON.parse(readFileSync(new URL('../data/whats_new.json', import.meta.url), 'utf8'));
-  assert.ok(entries.length > 0);
-  for (const e of entries) {
-    assert.match(e.date, /^\d{4}-\d{2}-\d{2}$/, e.title);
-    // Numbers belong in the manifest; an announcement links to them instead.
-    // Version names (v3.1) are names, not measurements.
-    assert.ok(!/\d%|(?<![v\d.])\d+\.\d/.test(`${e.title} ${e.text}`), `metric-like text in: ${e.title}`);
-  }
 });
 
 test('proof points come from the manifest', () => {

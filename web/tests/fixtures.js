@@ -149,15 +149,3 @@ export function benchmarkFixture() {
     ],
   };
 }
-
-// A hypothetical non-null next_reference, matching the pre-v3 manifest
-// shape — used only by the tests guarding buildNextReferenceCard's
-// rendering path now that the default fixture's own next_reference is null.
-export function nextReferenceFixture() {
-  return {
-    feature_space_size: 9002, previous_feature_space_size: 2903,
-    detected_by_source: { scope2: 2907, fulcher: 1654 },
-    encoder_family: 'module pooling', mask_sampling: 'uniform', trained: false,
-    note: 'Architecture settled by a five-seed masking comparison; the reference is not trained yet.',
-  };
-}

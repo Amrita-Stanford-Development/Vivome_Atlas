@@ -769,8 +769,7 @@ def build_manifest(
         "cell_types": cell_types,
         "summary": summary,
         # No architecture change is currently in flight, so there is no "next"
-        # to report. The schema keeps supporting this field
-        # (web/js/panels.js:buildNextReferenceCard) for whenever one starts.
+        # to report; the schema keeps the field (docs/web/manifest.md).
         "next_reference": None,
         "previous_release": previous_release,
         "earlier_release": earlier_release,

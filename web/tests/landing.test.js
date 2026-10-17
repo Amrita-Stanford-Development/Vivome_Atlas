@@ -1,12 +1,10 @@
-// The landing (web/index.html) and its hero (web/js/hero.js): checks no other
-// test makes, so a typo can't quietly show Pending or break the hero.
+// The landing (web/index.html): checks no other test makes, so a typo can't
+// quietly show Pending.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { factText } from '../js/panels.js';
-import { KINDS } from '../js/biocells.js';
-import { CAST } from '../js/hero.js';
 import { manifestFixture } from './fixtures.js';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
@@ -33,12 +31,9 @@ test('the finale has its proof points slot, and the page one h1', () => {
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
 });
 
-test('the hero only casts objects biocells.js can build, and keeps some for phones', () => {
-  for (const c of CAST) {
-    assert.ok(KINDS.includes(c.kind), c.kind);
-    assert.ok(c.size > 0 && Math.abs(c.x) <= 1.1 && Math.abs(c.y) <= 1.1, c.kind);
-  }
-  assert.ok(CAST.filter((c) => c.phone).length >= 4);
+test('nothing is drawn in front of the title: no hero canvas, no hero script', () => {
+  assert.ok(!html.includes('hero-canvas'));
+  assert.ok(!html.includes('hero.js'));
 });
 
 test('the fixture manifest still renders the landing facts it has', () => {

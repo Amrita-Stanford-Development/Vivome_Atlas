@@ -198,9 +198,7 @@ when a release does.
 | Output | Lands in | Shown by |
 |---|---|---|
 | The deployed model and its facts | `manifest.model` (from `service/model/runtime/`) | versions model card |
-| The next release while it is in progress | `manifest.next_reference` | no page since the Dashboard was removed |
 | Re-exported atlas cells | `web/data/metadata_*_lat128.csv` | atlas viewer; regenerate the manifest |
 | Benchmark rows | `manifest.benchmark` | the Manuscript page's benchmark tables |
-| Announcements | `web/data/whats_new.json` (text only, no metrics) | no page since the Dashboard was removed |
 | A served model's trace, the gene space, the training recipe, the evaluation records | `web/data/workflow.json` (`scripts/build_workflow.py`, built with the manifest) | the Workflow page ([workflow.md](workflow.md)) |
 | The served model's evidence for a paper: development, post-hoc and held-out results, diagnoses, designs not kept | `web/data/manuscript.json` (`scripts/build_manuscript.py`, built with the manifest) | the Manuscript page ([manuscript.md](manuscript.md)) |

@@ -130,18 +130,12 @@ cosine; `cosine()` returns `None` and the builder converts it.
 
 ## Architecture
 
-`next_reference` is `null` in the current manifest — the last architecture
+`next_reference` is `null` in the current manifest: the last architecture
 change it described (`CrossModalNet` to the frozen RNA-only v3 reference) is
-complete, so there is nothing "next" to report. `web/js/panels.js:buildNextReferenceCard`
-still renders a non-null value, kept as real, tested code for whenever the
-next change starts — but `build_deployed_architecture_facts` is **not** a
-drop-in source for it: that function now returns only the facts folded into
-`model` (`feature_space_size`, `previous_feature_space_size`,
-`detected_by_source`, `encoder_family`, `mask_sampling`). Populating
-`next_reference` again means also supplying `trained` (`false`) and `note`
-(why it isn't trained yet) — `buildNextReferenceCard` reads both and
-`escapeHtml(undefined)` renders the literal string `"undefined"` if `note`
-is missing. Until then, those facts live on `model` directly. `first_release` is a
+complete, so there is nothing "next" to report, and no page shows it since
+the Dashboard was removed. The architecture facts (`feature_space_size`,
+`previous_feature_space_size`, `detected_by_source`, `encoder_family`,
+`mask_sampling`) live on `model` directly. `first_release` is a
 separate, permanent record of `CrossModalNet`'s own numbers, and
 `previous_release` and `earlier_release` of v4.1's and v3's, all kept as
 documented history rather than erased.
@@ -176,7 +170,6 @@ in the browser.
 | `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable` | `versions.html` |
 | `buildSupportedLabelSpace` | `project.html` |
 | `buildModelCardTable` | `versions.html` |
-| `buildReleaseStatus`, `buildNextReferenceCard` | none since the Dashboard was removed |
 | `buildProofPoints`, `factText` (the `data-fact` slots in prose) | `index.html`, `versions.html`, `manuscript.html` |
 
 The Manuscript page's other numbers are `data-ms` slots, filled from

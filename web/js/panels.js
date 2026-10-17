@@ -155,12 +155,11 @@ export function buildBenchmarkTable(manifest, options = {}) {
 const cardField = (label, value) =>
   `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
 
-// Shared by buildModelCard's optional architecture block and
-// buildNextReferenceCard — both describe an encoder's settled design facts
-// (feature space, encoder family, mask sampling, gene sources), just for
-// the currently-deployed architecture vs. a possible future one. Kept as
-// one implementation so the two cards can't drift in how they format the
-// same underlying fields.
+// Shared by buildModelCard's optional architecture block and the earlier
+// releases' cards: each describes an encoder's settled design facts
+// (feature space, encoder family, mask sampling, gene sources). Kept as one
+// implementation so the cards can't drift in how they format the same
+// underlying fields.
 function architectureFieldsHtml(source) {
   const sources = Object.entries(source.detected_by_source ?? {})
     .map(([name, count]) => `${escapeHtml(name)} (${formatCount(count)})`)
@@ -194,27 +193,10 @@ export function buildModelCard(manifest) {
     <p class="panel-note">${escapeHtml(m.notes)}</p>`;
 }
 
-// The next reference's architecture is decided; the reference itself is not
-// trained (service/model/README.md). This is deliberately a separate panel
-// from buildModelCard, not a merge into it: `manifest.model` describes the
-// currently deployed release, and this section must never be read as
-// updating that release's own numbers. Renders nothing when next_reference
-// is absent — older manifests without this field still render the page.
-export function buildNextReferenceCard(manifest) {
-  const n = manifest.next_reference;
-  if (!n) return '';
-  return `
-    <dl class="model-card">
-      ${architectureFieldsHtml(n)}
-      ${cardField('Reference trained', n.trained ? 'Yes' : 'Not yet')}
-    </dl>
-    <p class="panel-note">${escapeHtml(n.note)}</p>`;
-}
-
 // An earlier release, with its own seeds and architecture, kept as it was
-// measured: the previous one (v3.1) and the one before it (v3). Like
-// buildPriorBaselineCard and buildNextReferenceCard, an additive section: it
-// never edits buildModelCard's rendering of manifest.model.
+// measured: the previous one and the one before it. Like
+// buildPriorBaselineCard, an additive section: it never edits
+// buildModelCard's rendering of manifest.model.
 export function buildPreviousReleaseCard(manifest) {
   return releaseCard(manifest.previous_release);
 }
@@ -280,52 +262,6 @@ export function buildSupportedLabelSpace(manifest) {
 const textOrPending = (value) => (value === null || value === undefined || value === ''
   ? `<span class="pending">${PENDING_LABEL}</span>`
   : escapeHtml(value));
-
-// The dashboard's compact view of the release in manifest.model. The full
-// card, with architecture and seeds, stays on versions.html (buildModelCard).
-export function buildReleaseStatus(manifest) {
-  return `
-    <dl class="model-card">
-      ${cardField('Atlas version', textOrPending(manifest.atlas_version))}
-      ${cardField('Model', textOrPending(manifest.model?.name))}
-      ${cardField('Generated', textOrPending(manifest.generated))}
-      ${cardField('RNA cells', formatCount(manifest.modalities?.rna?.cells))}
-      ${cardField('Protein cells', formatCount(manifest.modalities?.prot?.cells))}
-      ${cardField('Cell types', formatCount(manifest.summary?.total))}
-    </dl>`;
-}
-
-const NEWS_DATE = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' });
-
-// Links in web/data/whats_new.json may only point at pages of this site, so
-// a bad entry can't smuggle in a javascript: or off-site URL.
-const SITE_PAGE = /^[a-z0-9_-]+\.html(#[a-z0-9_-]+)?$/i;
-
-function newsDate(iso) {
-  const date = new Date(`${iso}T00:00:00Z`);
-  return Number.isNaN(date.getTime()) ? escapeHtml(iso) : NEWS_DATE.format(date);
-}
-
-// Entries are text only (web/data/whats_new.json). Numbers belong in the
-// manifest, so an announcement links to the page that shows them.
-export function buildWhatsNew(entries) {
-  if (!Array.isArray(entries) || entries.length === 0) {
-    return '<p class="panel-note">No announcements yet.</p>';
-  }
-  const items = entries.map((e) => {
-    const link = SITE_PAGE.test(e.link ?? '')
-      ? `<a href="${escapeHtml(e.link)}">${escapeHtml(e.link_text ?? 'Read more')}</a>`
-      : '';
-    return `
-      <li>
-        <time datetime="${escapeHtml(e.date)}">${newsDate(e.date)}</time>
-        <h3>${escapeHtml(e.title)}</h3>
-        <p>${escapeHtml(e.text)}</p>
-        ${link}
-      </li>`;
-  }).join('');
-  return `<ol class="news">${items}</ol>`;
-}
 
 // The landing finale's proof points: plain facts from the manifest, each
 // through the same guards as every other panel, so a missing count reads

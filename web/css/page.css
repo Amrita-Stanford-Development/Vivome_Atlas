@@ -378,7 +378,6 @@
         background: var(--well);
         box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.14);
     }
-    .site-nav .site-nav-home { color: var(--accent); font-weight: 500; margin-left: 8px; }
 
     .site-footer {
         margin-top: auto;
@@ -427,7 +426,6 @@
         .site-header-inner { gap: 12px; flex-wrap: wrap; row-gap: 4px; }
         .site-nav { margin-left: -10px; width: calc(100% + 10px); order: 2; flex-wrap: wrap; overflow: visible; }
         .site-nav a { padding: 5px 10px; }
-        .site-nav .site-nav-home { margin-left: 0; }
         .page { padding-top: 32px; }
         .sheet { padding: 20px 18px; }
         .lede { font-size: 16px; }
