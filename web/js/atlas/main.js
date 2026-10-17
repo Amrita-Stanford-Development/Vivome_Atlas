@@ -180,7 +180,14 @@ async function start() {
     const mine = landing.pick(e.clientX, e.clientY);
     if (mine >= 0) return landing.select(mine);
     const i = pickAt(e.clientX, e.clientY);
-    if (i < 0) return;
+    if (i < 0) {
+      // A click on empty space lets go of the selected cell.
+      if (landing.current >= 0) {
+        landing.deselect();
+        landing.openResults();
+      }
+      return;
+    }
     const isProt = i >= ref.nRna;
     const modality = isProt ? 'prot' : 'rna';
     const name = plainName(ref.order[ref.codes[i]]);

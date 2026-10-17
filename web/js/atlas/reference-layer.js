@@ -1,7 +1,7 @@
 // The reference cells: every RNA and protein cell of the atlas as one
 // THREE.Points, drawn as small lit spheres by the shader (a sphere impostor:
-// each dot is shaded as if round). Filters, dimming and focusing a type are
-// uniform writes, so nothing is rebuilt when they change.
+// each dot is shaded as if round). Filters, dimming and highlighting a set of
+// types are uniform writes, so nothing is rebuilt when they change.
 //
 // Colours are web/js/workflow-data.js's CLASS_COLOURS, in the reference's
 // sorted class order, as the atlas has always assigned them. Every uniform
@@ -23,7 +23,8 @@ uniform float uProtScale;
 uniform float uPixelScale;
 uniform float uMaxSize;
 uniform float uDim;
-uniform float uFocus;
+uniform float uFocusOn[22];
+uniform float uFocusAny;
 varying vec3 vColour;
 varying float vDim;
 void main() {
@@ -41,8 +42,11 @@ void main() {
   float r = uRadius * (aModality < 0.5 ? 1.0 : uProtScale);
   gl_PointSize = clamp(2.0 * r * uPixelScale / max(-mv.z, 0.001), 1.0, uMaxSize);
   vColour = uPalette[c];
-  bool focused = uFocus < -0.5 || abs(aClass - uFocus) < 0.5;
-  vDim = focused ? uDim * 0.35 : uDim;
+  // No highlighted set: every type a little dimmed. With one: its types
+  // lightly dimmed at most, every other type faded strongly.
+  vDim = uFocusAny < 0.5 ? uDim * 0.35
+    : uFocusOn[c] > 0.5 ? uDim * 0.25
+    : max(uDim, 0.85);
 }`;
 
 // Lit from the upper left, front. At the centre the shading is about 1, so
@@ -79,7 +83,8 @@ export function createReferenceLayer(THREE, stage, { positions, codes, modality,
     uPixelScale: { value: 1 },
     uMaxSize: { value: Math.min(64, range ? range[1] : 64) },
     uDim: { value: 0 },
-    uFocus: { value: -1 },
+    uFocusOn: { value: new Array(22).fill(0) },
+    uFocusAny: { value: 0 },
   };
   const material = new THREE.ShaderMaterial({ vertexShader: VERTEX, fragmentShader: FRAGMENT, uniforms });
   const points = new THREE.Points(geometry, material);
@@ -91,6 +96,23 @@ export function createReferenceLayer(THREE, stage, { positions, codes, modality,
   const visible = (i) => uniforms.uClassOn.value[codes[i]] > 0.5
     && (modality[i] < 0.5 ? uniforms.uModalityOn.value.x : uniforms.uModalityOn.value.y) > 0.5;
 
+  // Highlights the types in `classes` (class indices; null or empty clears).
+  // Indices outside the palette are ignored.
+  function setFocusSet(classes) {
+    const on = uniforms.uFocusOn.value;
+    on.fill(0);
+    let any = 0;
+    for (const c of classes ?? []) {
+      const k = Number(c);
+      if (Number.isInteger(k) && k >= 0 && k < on.length) {
+        on[k] = 1;
+        any = 1;
+      }
+    }
+    uniforms.uFocusAny.value = any;
+    stage.invalidate();
+  }
+
   return {
     points, n, positions, codes, modality, visible,
     setClassOn(c, on) { uniforms.uClassOn.value[c] = on ? 1 : 0; stage.invalidate(); },
@@ -99,7 +121,11 @@ export function createReferenceLayer(THREE, stage, { positions, codes, modality,
     setModality(which, on) { uniforms.uModalityOn.value[which === 'rna' ? 'x' : 'y'] = on ? 1 : 0; stage.invalidate(); },
     setDim(v) { uniforms.uDim.value = v; stage.invalidate(); },
     get dim() { return uniforms.uDim.value; },
-    setFocus(c) { uniforms.uFocus.value = c ?? -1; stage.invalidate(); },
+    setFocusSet,
+    // The highlighted types, in class order; empty when none.
+    get focusSet() { return uniforms.uFocusAny.value > 0.5 ? uniforms.uFocusOn.value.flatMap((v, c) => (v > 0.5 ? [c] : [])) : []; },
+    // One type, or none: the set of one.
+    setFocus(c) { setFocusSet(c == null || c < 0 ? null : [c]); },
     // The drawn radius in CSS pixels of a reference dot at clip depth w.
     pickRadius: (w, isProt) => {
       const scale = stage.pixelScale() / stage.renderer.getPixelRatio();

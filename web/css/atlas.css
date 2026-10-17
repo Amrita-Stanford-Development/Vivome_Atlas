@@ -174,6 +174,35 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .slider-row output { font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 .slider { display: block; width: 100%; margin: 6px 0 2px; accent-color: var(--accent); }
 .section-head .toggle-switch { align-self: center; }
+
+/* Explore > Your cells: the types given, one row each. */
+.given-head { margin: 14px 0 6px; }
+.given-head h3 { font-size: 13.5px; margin: 0; }
+.types-given { display: grid; gap: 2px; max-height: 260px; overflow-y: auto; }
+.given-row { display: flex; align-items: center; gap: 4px; }
+.given-toggle {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    color: var(--ink);
+    cursor: pointer;
+}
+.given-toggle:hover { background: var(--accent-tint); }
+.given-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.given-count { color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.given-row.is-off .given-toggle { color: var(--ink-faint); }
+.given-row.is-off .browse-swatch, .given-row.is-off .atlas-glyph { opacity: 0.35; }
+.given-only { flex: none; font-size: 11.5px; padding: 2px 8px; }
+.highlight-item { margin-top: 12px; font-size: 13px; }
 .service-line.is-ready { color: var(--prot); }
 .service-line.is-down { color: var(--error); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
@@ -365,7 +394,15 @@ body.atlas-page { height: 100vh; overflow: hidden; }
     font-size: 12px;
     color: var(--ink-soft);
 }
-.flow-controls { position: absolute; left: 50%; bottom: 18px; z-index: 4; display: flex; gap: 8px; transform: translateX(-50%); transition: left 0.4s ease; }
+.flow-controls { position: absolute; left: 50%; bottom: 18px; z-index: 4; display: flex; align-items: center; gap: 8px; transform: translateX(-50%); transition: left 0.4s ease; }
+
+/* The step bar: one cell at a time. */
+.step-bar { display: flex; align-items: center; gap: 4px; padding: 3px; border-radius: 999px; }
+.flow-controls .step-bar button { padding: 6px 12px; background: transparent; }
+.flow-controls .step-bar button:hover { background: var(--accent-tint); }
+.flow-controls .step-bar button:disabled { color: var(--ink-faint); cursor: default; background: transparent; }
+.step-bar #step-prev, .step-bar #step-next { font-size: 18px; line-height: 1; padding: 4px 12px 6px; }
+.step-text { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums; }
 .flow-controls button { font: inherit; font-size: 13px; font-weight: 500; padding: 7px 16px; border: 0; border-radius: 999px; color: var(--ink); cursor: pointer; }
 .flow-controls button:hover { background: var(--accent-tint); }
 .drop-hint {
@@ -388,6 +425,44 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .drawer-section > summary { font-size: 14px; }
 .drawer-section[open] > summary { margin-bottom: 8px; }
 .drawer-section .table-scroll { margin: 0; }
+
+/* The cell browser (web/js/atlas/cell-browser.js): the cells grouped by the
+   answer each was given. */
+.browse-tools { display: flex; gap: 8px; margin-bottom: 10px; }
+.browse-tools input { flex: 1; min-width: 0; font: inherit; font-size: 13px; padding: 6px 10px; border: 0; border-radius: 8px; }
+.browse-tools select { font: inherit; font-size: 13px; padding: 6px 8px; border: 0; border-radius: 8px; }
+.browse-group { padding: 6px 0; border-top: 1px solid var(--line); }
+.browse-group > summary { font-size: 13.5px; font-weight: 600; gap: 8px; }
+.browse-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.browse-count { color: var(--ink-faint); font-weight: 500; font-variant-numeric: tabular-nums; }
+.browse-group[open] > summary { margin-bottom: 4px; }
+.browse-row {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) minmax(0, 1.3fr) 36px;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 5px 6px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    font: inherit;
+    font-size: 12.5px;
+    text-align: left;
+    color: var(--ink);
+    cursor: pointer;
+}
+.browse-row:hover { background: var(--accent-tint); }
+.browse-row.is-current { background: var(--accent-tint); box-shadow: inset 3px 0 0 var(--accent); }
+.browse-row.is-off { color: var(--ink-faint); }
+.browse-id { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.browse-answer { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); }
+.browse-conf { text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.browse-swatch { flex: none; display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.card-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-bottom: 10px; }
+.card-nav .drawer-back { margin: 0; flex-basis: 100%; text-align: left; }
+.card-nav-where { flex: 1; font-size: 12.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.card-group { font-size: 12.5px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
 .drawer-body h3 { font-size: 14px; margin: 16px 0 6px; }
 .drawer-body tr[data-cell] { cursor: pointer; }
 .drawer-body tr[data-cell]:hover td { background: var(--accent-tint); }

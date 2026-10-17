@@ -36,6 +36,7 @@ class El {
   setAttribute(k, v) { this.attrs[k] = String(v); }
   getAttribute(k) { return this.attrs[k] ?? null; }
   getBoundingClientRect() { return { left: 0, top: 0, width: 800, height: 600 }; }
+  querySelector() { return null; }
 }
 
 function installDocument() {
@@ -45,7 +46,8 @@ function installDocument() {
       if (!els.has(id)) els.set(id, new El(id));
       return els.get(id);
     },
-    addEventListener() {},
+    listeners: {},
+    addEventListener(type, f) { (globalThis.document.listeners[type] ??= []).push(f); },
     createElement: () => new El('a'),
     hidden: false,
   };
@@ -133,10 +135,11 @@ function setup({ client = null } = {}) {
   const els = installDocument();
   const stage = fakeStage();
   const dims = [];
+  const focus = [];
   const opened = [];
   const landing = createLanding({
     THREE: fakeThree(), stage, ref: fakeReference(),
-    reference: { setDim: (v) => dims.push(v) },
+    reference: { setDim: (v) => dims.push(v), setFocusSet: (set) => focus.push(set ? [...set] : null) },
     drawer: { open: (title, html) => opened.push({ title, html }), close() {}, body() {} },
     client: client ?? { project: async () => { throw new Error('no service'); } },
     serviceUrl: () => 'https://service.example',
@@ -146,7 +149,7 @@ function setup({ client = null } = {}) {
   const tick = (seconds) => {
     for (let t = 0; t < seconds; t += 1 / 30) stage.tickers.forEach((f) => f(1 / 30, t));
   };
-  return { els, stage, landing, tick, dims, opened };
+  return { els, stage, landing, tick, dims, focus, opened };
 }
 
 const settleMicrotasks = () => new Promise((done) => setTimeout(done, 0));
@@ -214,7 +217,7 @@ test('the recorded example plays from idle to the settled view', async () => {
   assert.ok(stage.rig.poses.length >= 2, 'the camera was guided');
   assert.match(landing.chips(), /data-outcome/);
   landing.select(0);
-  assert.match(opened.at(-1).html, /Back to all answers/);
+  assert.match(opened.at(-1).html, /Back to all cells/);
   landing.clear();
   assert.equal(landing.state.name, 'idle');
   assert.equal(landing.run, null);
@@ -371,8 +374,8 @@ test('the receipt is open while the landing plays and folds after; the drawer ho
   assert.equal(landing.state.name, 'interactive');
   assert.match(els.get('status-card').innerHTML, /<details class="fold atlas-receipt-card"><summary>/, 'folded once the map is yours');
   const results = opened.at(-1).html;
-  for (const title of ['About this answer', 'Answers', 'Cells (238)']) assert.ok(results.includes(`<summary>${title}</summary>`), title);
-  assert.match(results, /<details class="fold drawer-section" open><summary>Answers/, 'the answers are open');
+  for (const title of ['About this answer', 'Your cells (238)']) assert.ok(results.includes(`<summary>${title}</summary>`), title);
+  assert.match(results, /<details class="fold drawer-section" open><summary>Your cells/, 'the cells are open');
   assert.match(results, /data-action="download"/);
   // Clear, from the drawer.
   const clear = { target: { closest: (sel) => (sel === '[data-action]' ? { dataset: { action: 'clear' } } : null) } };
@@ -400,6 +403,119 @@ test('the visitor can hide their cells; a new file shows them again', async () =
   await landing.chooseFile(fileOf(40));
   assert.equal(landing.cellsShown, true, 'a new file is shown');
   assert.equal(cells().visible, true);
+});
+
+// ---- the cells, one by one ----
+
+async function settledExample() {
+  const ctx = setup();
+  await ctx.landing.watchExample();
+  ctx.tick(30);
+  assert.equal(ctx.landing.state.name, 'interactive');
+  return ctx;
+}
+const stepText = (els) => els.get('step-text').textContent;
+
+test('the drawer lists every cell, grouped by the answer it was given', async () => {
+  const { landing, opened } = await settledExample();
+  const html = opened.at(-1).html;
+  assert.match(html, /class="cell-browser"/);
+  assert.equal((html.match(/class="browse-row/g) ?? []).length, workflow.trace.cells.length, 'every cell, none capped');
+  const groups = landing.groups();
+  assert.equal(groups.reduce((sum, g) => sum + g.count, 0), workflow.trace.cells.length);
+  for (const g of groups) assert.ok(html.includes(`data-group="${g.key}"`), g.key);
+  assert.ok(!html.includes('<th>Label set</th>'), 'the capped table is gone');
+});
+
+test('the step bar walks the shown cells in the browser’s order, and wraps', async () => {
+  const { els, landing, opened } = await settledExample();
+  const n = workflow.trace.cells.length;
+  assert.equal(els.get('step-bar').hidden, false);
+  assert.equal(stepText(els), `${n} cells shown: step through them`);
+  els.get('step-next').listeners.click.forEach((f) => f());
+  const first = landing.current;
+  assert.ok(first >= 0);
+  assert.match(stepText(els), new RegExp(`^1 of ${n} · `));
+  assert.match(opened.at(-1).html, new RegExp(`1 of ${n}`), 'the card says where it is');
+  assert.match(opened.at(-1).html, /data-step="1"/);
+  landing.step(-1);
+  assert.match(stepText(els), new RegExp(`^${n} of ${n} · `), 'back from the first wraps to the last');
+  landing.step(1);
+  assert.equal(landing.current, first);
+  // The card's own Previous and Next.
+  const next = { target: { closest: (sel) => (sel === '[data-step]' ? { dataset: { step: '1' } } : null) } };
+  els.get('drawer-body').listeners.click.forEach((f) => f(next));
+  assert.match(stepText(els), new RegExp(`^2 of ${n} · `));
+});
+
+test('Play steps on its own until the last shown cell, and Pause stops it', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { els, landing } = await settledExample();
+  const only = landing.groups().find((g) => g.count >= 3);
+  landing.showOnlyGroup(only.key);
+  landing.play(true);
+  assert.equal(landing.playing, true);
+  assert.match(stepText(els), new RegExp(`^1 of ${only.count} · `));
+  assert.equal(els.get('step-play').textContent, 'Pause');
+  t.mock.timers.tick(2500);
+  assert.match(stepText(els), new RegExp(`^2 of ${only.count} · `));
+  // One step at a time: each step sets the next one's timer.
+  for (let k = 0; k < only.count + 2; k += 1) t.mock.timers.tick(2500);
+  assert.equal(landing.playing, false, 'it stops at the end');
+  assert.match(stepText(els), new RegExp(`^${only.count} of ${only.count} · `));
+  landing.play(true);
+  landing.play(false);
+  assert.equal(els.get('step-play').textContent, 'Play');
+});
+
+test('the types given filter the map, the browser and the steps', async () => {
+  const { els, landing, stage } = await settledExample();
+  const n = workflow.trace.cells.length;
+  const [first, second] = landing.groups();
+  landing.setGroupOn(first.key, false);
+  assert.equal(landing.groups()[0].on, false);
+  assert.equal(stepText(els), `${n - first.count} cells shown: step through them`);
+  const cells = stage.added.find((o) => o.material?.uniforms?.uTime && o.renderOrder === 2);
+  const shown = Object.values(cells.geometry.attributes).find((a) => a.itemSize === 1 && a.array.length === n && a.array.some((v) => v === 0));
+  assert.ok(shown, 'a per-cell mask reaches the GPU');
+  landing.showOnlyGroup(second.key);
+  assert.equal(stepText(els), `${second.count} cells shown: step through them`);
+  landing.step(1);
+  assert.ok(second.cells.includes(landing.current), 'only that type is stepped through');
+  // Hiding the selected cell's type lets go of it.
+  landing.setGroupOn(second.key, false);
+  assert.equal(landing.current, -1);
+  landing.setAllGroups(true);
+  assert.equal(stepText(els), `${n} cells shown: step through them`);
+});
+
+test('a selected cell’s possible types are highlighted on the reference', async () => {
+  const { landing, focus } = await settledExample();
+  const i = landing.run.cells.findIndex((c) => c.set.length >= 2);
+  landing.select(i);
+  assert.deepEqual(focus.at(-1), landing.run.cells[i].set);
+  landing.setHighlight(false);
+  assert.equal(focus.at(-1), null, 'switched off');
+  landing.setHighlight(true);
+  assert.deepEqual(focus.at(-1), landing.run.cells[i].set);
+  landing.deselect();
+  assert.equal(focus.at(-1), null, 'let go');
+  assert.equal(landing.current, -1);
+});
+
+test('the arrow keys step, except while typing', async () => {
+  const { landing } = await settledExample();
+  const keys = globalThis.document.listeners.keydown;
+  const press = (key, typing = false) => keys.forEach((f) => f({
+    key, target: { closest: () => (typing ? {} : null) }, preventDefault() {}, stopImmediatePropagation() {},
+  }));
+  press('ArrowRight');
+  const first = landing.current;
+  assert.ok(first >= 0);
+  press('ArrowRight', true);
+  assert.equal(landing.current, first, 'not while typing in the search box');
+  press('ArrowLeft');
+  assert.notEqual(landing.current, first);
 });
 
 test('a failed load of the example can be tried again', async () => {

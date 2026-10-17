@@ -16,13 +16,14 @@
 // Every number shown comes from the service's response or the recorded
 // example (web/data/workflow.json); the browser computes no model output.
 
-import { buildProjectionCells, buildProjectionLabels, buildProjectionSummary, errorPanel, escapeHtml } from '../panels.js';
+import { buildProjectionSummary, errorPanel, escapeHtml } from '../panels.js';
 import { SERVICE_STEPS, SERVICE_STEP_CHAPTERS, SERVICE_STEP_NOTES, answerShort } from '../workflow-data.js';
 import {
   answerStyle, coordinatesCompatible, outcomeCode, outcomeCounts, receiptFromResponse, receiptFromWorkflow,
   responseToCells, traceToCells,
 } from './answers.js';
 import { buildAnswerKey, buildAtlasCellCard, buildExampleSummary, buildOutcomeChips, buildReceipt } from './atlas-panels.js';
+import { answerGroups, browseOrder, buildBrowseList, buildCellBrowser } from './cell-browser.js';
 import { TIMING, finishWaiting, flightSchedule, framePose, landingTimeline, reducedTiming, waitingFrame } from './choreography.js';
 import { GUIDED, MAX_ATTEMPTS, initialState, transition } from './director.js';
 import { checkFile, checkLimits } from './file-check.js';
@@ -38,6 +39,8 @@ const clockText = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).pad
 // Where the file's sheet sits: beside the atlas, facing the camera.
 const BENCH = { pitch: 0.25, radius: 105, shift: 24, sheetAt: 62, sheetWidth: 30, sheetAspect: 1.6 };
 const NEIGHBOURS = { k: 6, maxR: 12, cell: 3 };
+// Play in the step bar: one cell this often (seconds), the camera flying to each.
+export const PLAY_SECONDS = 2.5;
 
 export function createLanding({ THREE, stage, ref, reference, drawer, client, serviceUrl, options, limits, reduced = false }) {
   const T = reduced ? reducedTiming() : TIMING;
@@ -60,6 +63,11 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   let lastKey = '';
   let clock = 0;           // the flight clock the upload layer shows
   let userCam = false;      // the visitor took the camera during this landing
+  let current = -1;         // the selected cell
+  let playing = false;
+  let playTimer = null;
+  let highlight = true;     // the selected cell's types stay bright on the reference
+  const browse = { sort: 'confidence', query: '', open: new Set() };
 
   // A drag or the wheel during the guided landing hands the camera back: the
   // landing goes on, but no longer moves it.
@@ -202,24 +210,58 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     const yaw = sheet.bench.yaw - 0.45;
     const fly = framePose(wide, { aspect, yaw, pitch: 0.45 });
     const settle = nPlaced ? framePose(boundingSphere(Float32Array.from(placed), nPlaced), { aspect, yaw, pitch: 0.45, margin: 1.25, minRadius: 45 }) : fly;
+    // The answers the cells were given, as groups (one per type, family,
+    // branch or reason for no answer), each shown or hidden by the visitor.
+    const groups = answerGroups(cells, ref.order, { placeable });
+    const groupOf = new Int32Array(n);
+    groups.forEach((g, k) => g.cells.forEach((i) => { groupOf[i] = k; }));
     return {
       source, data, cells, styles, placeable, schedule, model, poses: { fly, settle },
       timeline: landingTimeline(schedule, { T }),
       receipt: recorded ? receiptFromWorkflow(data) : receiptFromResponse(data),
       glow: neighboursOf(cells, styles, model, schedule),
       on: Object.fromEntries(Object.keys(outcomeCounts(cells)).map((k) => [k, true])),
+      groups, groupOf, groupOn: groups.map(() => true),
+      fills: styles.map((s) => s.fill),
     };
   }
 
-  // The recorded cells as the rows the results tables read.
-  function recordedRows(cells) {
+  // ---- the cells, one by one ----
+
+  // Shown by both filters: the answer level (the chips) and the type given.
+  const cellShown = (i) => run.on[run.cells[i].outcome] !== false && run.groupOn[run.groupOf[i]];
+  // The browser's order (grouped, sorted, searched), and the cells the step
+  // bar walks: the shown ones, in that order.
+  const browseList = () => browseOrder(run.cells, run.groups, browse);
+  const steps = () => browseList().filter(cellShown);
+
+  function browserOptions() {
     return {
-      cells: cells.map((c) => ({
-        cell_id: c.id, label: c.label, abstained: !['class', 'group', 'lineage'].includes(c.outcome),
-        abstain_reason: ['class', 'group', 'lineage'].includes(c.outcome) ? undefined : c.outcome,
-        label_set: c.set.map((k) => ref.order[k]), confidence: c.confidence, observed_genes: c.observed,
-      })),
+      ...browse, order: browseList(), fills: run.fills, shown: cellShown, selected: current,
     };
+  }
+
+  // The type filter on the GPU: a cell of a hidden group is not drawn.
+  function applyGroups() {
+    const all = run.groupOn.every(Boolean);
+    upload.setCellMask(all ? null : Uint8Array.from(run.groupOf, (k) => (run.groupOn[k] ? 1 : 0)));
+    if (current >= 0 && !cellShown(current)) deselect();
+    refreshBrowser();
+    render();
+  }
+
+  // The selected cell's possible types stay bright on the reference; the
+  // rest fade (the visitor's switch, on by default).
+  function focusTypes() {
+    const set = run && current >= 0 ? run.cells[current].set : [];
+    reference.setFocusSet(highlight && set.length ? set : null);
+  }
+
+  function deselect() {
+    current = -1;
+    upload.setSelected(-1);
+    reference.setFocusSet(null);
+    play(false);
   }
 
   // The drawer's results as folding sections, under the results' own
@@ -229,31 +271,89 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
 
   function resultsHtml() {
     if (!run) return '';
-    const cellsTitle = `Cells (${run.cells.length.toLocaleString('en-US')})`;
+    const cellsTitle = `Your cells (${run.cells.length.toLocaleString('en-US')})`;
     const download = run.source === 'service' ? '<button type="button" class="text-button" data-action="download">Download the response</button>' : '';
     const actions = `<div class="drawer-actions">${download}<button type="button" class="text-button" data-action="clear">Clear</button></div>`;
-    if (run.source === 'recorded') {
-      // Every recorded cell is listed: the example has no response to download.
-      return `${actions}${buildExampleSummary(run.data)}`
-        + section(cellsTitle, `<div class="table-scroll">${buildProjectionCells(recordedRows(run.cells), run.cells.length)}</div>`);
-    }
-    return actions
-      + section('About this answer', buildProjectionSummary(run.data))
-      + section('Answers', `<div class="table-scroll">${buildProjectionLabels(run.data)}</div>`, true)
-      + section(cellsTitle, `<div class="table-scroll">${buildProjectionCells(run.data)}</div>`);
+    const browser = section(cellsTitle, buildCellBrowser(run.cells, run.groups, browserOptions()), true);
+    if (run.source === 'recorded') return `${actions}${buildExampleSummary(run.data)}${browser}`;
+    return actions + section('About this answer', buildProjectionSummary(run.data)) + browser;
   }
 
   function openResults() {
     if (run) drawer.open(run.source === 'recorded' ? 'The example: answers' : 'Your file: answers', resultsHtml());
   }
 
-  function select(i) {
+  // Redraws the browser's list in place (the search box keeps its focus).
+  function refreshBrowser() {
+    const list = $('browse-list');
+    if (run && list && $('atlas-drawer').classList.contains('open') && !$('drawer-body').querySelector('.atlas-cell-card')) {
+      list.innerHTML = buildBrowseList(run.cells, run.groups, browserOptions());
+    }
+  }
+
+  // One cell's card, with its place among the cells shown and the way on.
+  function cardHtml(i) {
+    const list = steps();
+    const k = list.indexOf(i);
+    const where = k >= 0 ? `${(k + 1).toLocaleString('en-US')} of ${list.length.toLocaleString('en-US')}` : 'Hidden by a filter';
+    return '<div class="card-nav">'
+      + '<button type="button" class="drawer-back" data-back>Back to all cells</button>'
+      + `<span class="card-nav-where">${escapeHtml(where)}</span>`
+      + '<button type="button" class="text-button" data-step="-1" aria-label="Previous cell">&lsaquo; Previous</button>'
+      + '<button type="button" class="text-button" data-step="1" aria-label="Next cell">Next &rsaquo;</button>'
+      + `</div><p class="card-group">${escapeHtml(run.groups[run.groupOf[i]].name)}</p>`
+      + buildAtlasCellCard(run.cells[i], ref.order, { source: run.source });
+  }
+
+  function select(i, { fly = true } = {}) {
     if (!run || i < 0 || i >= run.cells.length) return;
+    current = i;
     upload.setSelected(i);
     upload.setGlowMode('selected');
-    const p = run.schedule.flies[i] ? run.model.end : run.model.start;
-    stage.rig.animateTo({ target: [p[i * 3], p[i * 3 + 1], p[i * 3 + 2]], radius: 18 }, T.flyToCell);
-    drawer.open('One cell', `<button type="button" class="drawer-back" data-back>Back to all answers</button>${buildAtlasCellCard(run.cells[i], ref.order, { source: run.source })}`);
+    focusTypes();
+    if (fly) {
+      const p = run.schedule.flies[i] ? run.model.end : run.model.start;
+      stage.rig.animateTo({ target: [p[i * 3], p[i * 3 + 1], p[i * 3 + 2]], radius: 18 }, T.flyToCell);
+    }
+    drawer.open('One cell', cardHtml(i));
+    render();
+  }
+
+  // The next or previous shown cell, in the browser's order (from the first
+  // or the last when none is selected); false at either end when `wrap` is off.
+  function step(direction, { wrap = true } = {}) {
+    if (!run) return false;
+    const list = steps();
+    if (!list.length) return false;
+    const k = list.indexOf(current);
+    let next = k < 0 ? (direction > 0 ? 0 : list.length - 1) : k + direction;
+    if (next < 0 || next >= list.length) {
+      if (!wrap) return false;
+      next = (next + list.length) % list.length;
+    }
+    select(list[next]);
+    return true;
+  }
+
+  // Play: a cell every PLAY_SECONDS, to the end of the shown cells.
+  function play(on) {
+    clearTimeout(playTimer);
+    playTimer = null;
+    playing = Boolean(on) && Boolean(run);
+    if (playing) {
+      const next = () => {
+        if (!step(1, { wrap: false })) return play(false);
+        playTimer = setTimeout(next, PLAY_SECONDS * 1000);
+        return undefined;
+      };
+      if (current < 0 || steps().indexOf(current) < 0) {
+        step(1);
+        playTimer = setTimeout(next, PLAY_SECONDS * 1000);
+      } else {
+        next();
+      }
+    }
+    render();
   }
 
   // ---- the overlays ----
@@ -306,6 +406,20 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     } else if (run) status(buildReceipt(run.receipt, { open: name !== 'interactive' }));
     $('skip').hidden = !GUIDED.has(name);
     $('replay-view').hidden = name !== 'interactive';
+    // The step bar: which shown cell is selected, and the way on.
+    const stepping = Boolean(run) && name === 'interactive' && upload.shown;
+    $('step-bar').hidden = !stepping;
+    if (stepping) {
+      const list = steps();
+      const k = list.indexOf(current);
+      const count = list.length.toLocaleString('en-US');
+      $('step-text').textContent = k >= 0
+        ? `${(k + 1).toLocaleString('en-US')} of ${count} · ${run.groups[run.groupOf[current]].name}`
+        : `${count} cells shown: step through them`;
+      $('step-play').textContent = playing ? 'Pause' : 'Play';
+      $('step-play').setAttribute('aria-pressed', String(playing));
+      for (const id of ['step-prev', 'step-next', 'step-play']) $(id).disabled = list.length === 0;
+    }
     const legend = $('legend-card');
     if (run && (GUIDED.has(name) || name === 'interactive')) {
       // Written only when it changes, so an opened key stays open.
@@ -326,6 +440,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   // answer leaves the map, and the new sheet takes the bench again.
   function dropRun() {
     if (!run && !sheet) return;
+    deselect();
     illustration.hide();
     upload.clear();
     reference.setDim(0);
@@ -358,6 +473,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     }
     if (name === 'interactive') finish();
     if (name === 'idle') {
+      deselect();
       illustration.hide();
       upload.clear();
       reference.setDim(0);
@@ -434,10 +550,14 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   // ---- what the page calls ----
 
   function arrive(data, source) {
+    deselect();
     run = buildRun(data, source);
-    // A new answer starts with every outcome shown and no cell selected.
+    // A new answer starts with every outcome and type shown, no cell
+    // selected, and its largest group open in the browser.
     upload.setAllOutcomes(true);
-    upload.setSelected(-1);
+    upload.setCellMask(null);
+    browse.query = '';
+    browse.open = new Set(run.groups.length ? [run.groups[0].key] : []);
     guide();
     finishSeconds = finishWaiting(waitingFrame(waited, { stepSeconds }), { stepSeconds, T });
     dispatch({ type: 'RESPONSE', response: data });
@@ -544,15 +664,51 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     const action = e.target.closest('[data-action]')?.dataset.action;
     if (action === 'download') return download();
     if (action === 'clear') return dispatch({ type: 'CLEAR' });
+    const stepper = e.target.closest('[data-step]');
+    if (stepper) {
+      play(false);
+      return step(Number(stepper.dataset.step));
+    }
     const row = e.target.closest('[data-cell]');
     if (row) select(Number(row.dataset.cell));
+    return undefined;
   });
+  // The browser's search and sort redraw its list; its groups remember
+  // whether they are open ('toggle' does not bubble, so it is caught on the way down).
+  $('drawer-body').addEventListener('input', (e) => {
+    if (e.target.dataset?.browse !== 'query') return;
+    browse.query = e.target.value;
+    refreshBrowser();
+    render();
+  });
+  $('drawer-body').addEventListener('change', (e) => {
+    if (e.target.dataset?.browse !== 'sort') return;
+    browse.sort = e.target.value;
+    refreshBrowser();
+    render();
+  });
+  $('drawer-body').addEventListener('toggle', (e) => {
+    const key = e.target.dataset?.group;
+    if (key === undefined) return;
+    if (e.target.open) browse.open.add(key);
+    else browse.open.delete(key);
+  }, true);
   $('skip').addEventListener('click', () => dispatch({ type: 'SKIP' }));
   $('replay-view').addEventListener('click', () => replay());
+  $('step-prev').addEventListener('click', () => { play(false); step(-1); });
+  $('step-next').addEventListener('click', () => { play(false); step(1); });
+  $('step-play').addEventListener('click', () => play(!playing));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && GUIDED.has(st.name)) {
       e.stopImmediatePropagation();
       dispatch({ type: 'SKIP' });
+    }
+    // The arrow keys step through the cells, unless the visitor is typing.
+    const typing = e.target?.closest?.('input, select, textarea, [contenteditable="true"]');
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && run && st.name === 'interactive' && upload.shown && !typing) {
+      e.preventDefault();
+      play(false);
+      step(e.key === 'ArrowRight' ? 1 : -1);
     }
   }, true);
 
@@ -569,7 +725,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   function replay() {
     if (!run || st.name !== 'interactive') return;
     drawer.close();
-    upload.setSelected(-1);
+    deselect();
     reference.setDim(0);
     stage.rig.setPose(sheet.bench);
     guide();
@@ -606,13 +762,48 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       if (!run) return;
       run.on[outcome] = on;
       upload.setOutcomeOn(outcomeCode(outcome), on);
+      if (current >= 0 && !cellShown(current)) deselect();
+      refreshBrowser();
       render();
     },
     setCellsShown(on) {
       upload.setShown(on);
+      if (!on) play(false);
       render();
     },
     get cellsShown() { return upload.shown; },
+    // The types given: each group with its count and whether it is shown.
+    groups: () => (run ? run.groups.map((g, k) => ({ ...g, count: g.cells.length, on: run.groupOn[k] })) : []),
+    setGroupOn(key, on) {
+      const k = run ? run.groups.findIndex((g) => g.key === key) : -1;
+      if (k < 0) return;
+      run.groupOn[k] = Boolean(on);
+      applyGroups();
+    },
+    showOnlyGroup(key) {
+      if (!run || !run.groups.some((g) => g.key === key)) return;
+      run.groupOn = run.groups.map((g) => g.key === key);
+      applyGroups();
+    },
+    setAllGroups(on) {
+      if (!run) return;
+      run.groupOn = run.groups.map(() => Boolean(on));
+      applyGroups();
+    },
+    setHighlight(on) {
+      highlight = Boolean(on);
+      focusTypes();
+      render();
+    },
+    get highlight() { return highlight; },
+    get current() { return current; },
+    get playing() { return playing; },
+    step,
+    play,
+    deselect() {
+      deselect();
+      render();
+    },
     chips: () => (run ? buildOutcomeChips(outcomeCounts(run.cells), run.on) : ''),
     download,
     // The uploaded cell under the pointer, or -1.
@@ -621,7 +812,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       const rect = stage.renderer.domElement.getBoundingClientRect();
       const now = upload.positionsAt(clock);
       const screen = projectAll(now, upload.n, stage.viewProjection(), rect.width, rect.height);
-      return pickScreen(screen, upload.n, clientX - rect.left, clientY - rect.top, 10, (i) => run.on[run.cells[i].outcome]);
+      return pickScreen(screen, upload.n, clientX - rect.left, clientY - rect.top, 10, (i) => upload.visible(i));
     },
     describe: (i) => (run ? `Your cell ${run.cells[i].id}: ${answerShort(run.cells[i])}` : ''),
   };

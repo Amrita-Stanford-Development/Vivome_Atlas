@@ -195,13 +195,15 @@ const DEFINES = [
 ].join('\n');
 
 // What the vertex shaders share: the per-cell attributes, the palette and
-// the switches, and the path.
+// the switches, and the path. aShow is the caller's per-cell mask
+// (setCellMask): 1 drawn, 0 hidden.
 const CELL_HEAD = `
 ${DEFINES}
 attribute vec3 aEnd;
 attribute vec2 aTiming;
 attribute vec4 aLook;
 attribute vec2 aMeta;
+attribute float aShow;
 uniform vec3 uPalette[${CLASSES}];
 uniform float uOutcomeOn[${OUTCOMES}];
 uniform float uTime;
@@ -233,6 +235,9 @@ vec3 pathPoint(vec3 s, vec3 e, float seed, float u) {
 float outcomeOn() {
   return uOutcomeOn[int(clamp(aLook.z, 0.0, ${glslFloat(OUTCOMES - 1)}) + 0.5)];
 }
+float drawn() {
+  return outcomeOn() * aShow;
+}
 vec3 fillColour() {
   return aLook.y < -0.5 ? NONE_COLOUR : uPalette[int(clamp(aLook.y, 0.0, ${glslFloat(CLASSES - 1)}) + 0.5)];
 }`;
@@ -247,7 +252,7 @@ varying float vRing;
 varying float vExtent;
 varying float vSoft;
 void main() {
-  if (outcomeOn() < 0.5) {
+  if (drawn() < 0.5) {
     gl_PointSize = 0.0;
     gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
     vColour = vec3(1.0);
@@ -346,7 +351,7 @@ varying float vV;
 varying float vSoft;
 void main() {
   float v = (uTime - landingTime(aTiming.x, aTiming.y)) / RIPPLE_SECONDS;
-  if (outcomeOn() < 0.5 || aLook.w < 0.5 || v < 0.0 || v > 1.0) {
+  if (drawn() < 0.5 || aLook.w < 0.5 || v < 0.0 || v > 1.0) {
     gl_PointSize = 0.0;
     gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
     vColour = vec3(1.0);
@@ -489,7 +494,10 @@ export function createUploadLayer(THREE, stage) {
   }
 
   let shown = true; // the visitor's switch: their cells on the map or not
-  let state = { n: 0, start: new Float32Array(0), end: new Float32Array(0), timing: new Float32Array(0), look: new Float32Array(0), meta: new Float32Array(0) };
+  let state = {
+    n: 0, start: new Float32Array(0), end: new Float32Array(0), timing: new Float32Array(0), look: new Float32Array(0), meta: new Float32Array(0),
+    show: new Float32Array(0), showAttribute: null,
+  };
   let neighbours = { m: 0, owner: null, data: null, attribute: null };
   let arcUp = [0, -1, 0];
   let clock = 0;
@@ -546,6 +554,7 @@ export function createUploadLayer(THREE, stage) {
     const timing = new Float32Array(n * 2);
     const look = new Float32Array(n * 4);
     const meta = new Float32Array(n * 2);
+    const show = new Float32Array(n).fill(1); // a new file starts with every cell drawn
     let until = -Infinity;
     for (let i = 0; i < n; i += 1) {
       timing[i * 2] = model.delay[i];
@@ -565,13 +574,15 @@ export function createUploadLayer(THREE, stage) {
     geometry.setAttribute('aTiming', new THREE.BufferAttribute(timing, 2));
     geometry.setAttribute('aLook', new THREE.BufferAttribute(look, 4));
     geometry.setAttribute('aMeta', new THREE.BufferAttribute(meta, 2));
+    const showAttribute = new THREE.BufferAttribute(show, 1);
+    geometry.setAttribute('aShow', showAttribute);
     const old = cells.geometry;
     cells.geometry = geometry;
     ripples.geometry = geometry;
     old.dispose();
     cells.visible = n > 0 && shown;
     ripples.visible = n > 0 && shown;
-    state = { n, start, end, timing, look, meta };
+    state = { n, start, end, timing, look, meta, show, showAttribute };
     flightUntil = until;
     syncNeighbourOutcomes();
     fed = true;
@@ -618,6 +629,19 @@ export function createUploadLayer(THREE, stage) {
     const { timing, look } = state;
     return cellRadius(easeFlight(t, timing[i * 2], timing[i * 2 + 1]), look[i * 4 + 3] > 0.5, uniforms.uSheetRadius.value);
   }
+
+  // Hides single cells: mask[i] truthy draws cell i, falsy hides it (with its
+  // ripple); null draws every cell. Written in place into aShow, so nothing
+  // is rebuilt. The neighbour glow ignores it.
+  function setCellMask(mask) {
+    const { n, show, showAttribute } = state;
+    if (mask != null && mask.length !== n) throw new Error(`The cell mask needs ${n} values, not ${mask.length}.`);
+    for (let i = 0; i < n; i += 1) show[i] = mask == null || mask[i] ? 1 : 0;
+    if (showAttribute) showAttribute.needsUpdate = true;
+    wake();
+  }
+
+  const cellShown = (i) => i >= 0 && i < state.n && state.show[i] > 0.5;
 
   function clear() {
     load({ n: 0 });
@@ -678,7 +702,6 @@ export function createUploadLayer(THREE, stage) {
     setSelected: (i) => set('uSelected', index(i)),
     setOpacity: (a) => set('uOpacity', Math.min(1, Math.max(0, Number(a) || 0))),
     get n() { return state.n; },
-    // The same visibility the shader applies, for picking.
     // Shows or hides every cell of the upload, with its ripples and glow.
     setShown(on) {
       shown = Boolean(on);
@@ -688,7 +711,14 @@ export function createUploadLayer(THREE, stage) {
       wake();
     },
     get shown() { return shown; },
-    visible: (i) => shown && i >= 0 && i < state.n && uniforms.uOpacity.value > 0
+    setCellMask,
+    // Whether cell i is drawn by the mask alone (the outcome filter aside).
+    cellShown,
+    // The mask as set: null while every cell is drawn, else a copy, 1 drawn, 0 hidden.
+    get mask() { return state.show.every((v) => v > 0.5) ? null : Uint8Array.from(state.show, (v) => (v > 0.5 ? 1 : 0)); },
+    // The same visibility the shader applies, for picking: the switch, the
+    // mask, the opacity and the outcome filter.
+    visible: (i) => shown && cellShown(i) && uniforms.uOpacity.value > 0
       && uniforms.uOutcomeOn.value[Math.round(Math.min(OUTCOMES - 1, Math.max(0, state.look[i * 4 + 2])))] > 0.5,
     // The radius cells draw at on the sheet, in scene units (at most the
     // full radius); they grow to the full radius as they fly.

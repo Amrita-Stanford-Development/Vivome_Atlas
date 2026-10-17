@@ -48,6 +48,18 @@
                 </div>
                 <p class="panel-note" id="your-cells-note"></p>
                 <div class="outcome-chips" id="explore-chips"></div>
+                <div class="section-head given-head">
+                    <h3>Types given</h3>
+                    <div>
+                        <button type="button" class="text-button" id="given-all">All</button>
+                        <button type="button" class="text-button" id="given-none">None</button>
+                    </div>
+                </div>
+                <div class="types-given" id="types-given"></div>
+                <div class="toggle-item highlight-item">
+                    <span id="highlight-toggle-label">Highlight a selected cell's types</span>
+                    <button type="button" class="toggle-switch active" id="highlight-toggle" role="switch" aria-checked="true" aria-labelledby="highlight-toggle-label"></button>
+                </div>
             </section>
 
             <section class="control-section sheet">
@@ -198,6 +210,12 @@ python -m service.app</pre>
                 <div class="flow-controls">
                     <button type="button" class="glass" id="skip" hidden>Skip</button>
                     <button type="button" class="glass" id="replay-view" hidden>Replay</button>
+                    <div class="step-bar glass" id="step-bar" role="group" aria-label="Your cells, one by one" hidden>
+                        <button type="button" id="step-prev" aria-label="Previous cell">&lsaquo;</button>
+                        <span class="step-text" id="step-text" aria-live="polite"></span>
+                        <button type="button" id="step-next" aria-label="Next cell">&rsaquo;</button>
+                        <button type="button" id="step-play" aria-pressed="false">Play</button>
+                    </div>
                 </div>
                 <div class="drop-hint" id="drop-hint" hidden>Drop the file to check it here, in your browser</div>
                 <div class="type-labels" id="type-labels" aria-hidden="true"></div>

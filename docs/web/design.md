@@ -213,6 +213,15 @@ white halo card, and a drawer that slides over the viewer's right side
   switches, names on the map, Dim the reference and Dot size. The
   cross-modal support and alignment diagnostics are research detail and
   sit on the Manuscript page.
+- **One cell at a time.** The drawer's cell browser lists every projected
+  cell, grouped by the answer it was given, with a swatch in the colour it
+  wears on the map; search by name and sort by confidence, file order or
+  likeness. The step bar on the map (Previous, "12 of 42 · T cell (a
+  family)", Next, Play) and the arrow keys go through the shown cells in
+  that order; a cell's card has its own Previous and Next. Selecting a cell
+  keeps its possible types bright on the reference and fades the rest (a
+  switch in Explore). Explore's Types given shows, hides or isolates the
+  cells of one answer.
 
 ## The Manuscript page
 

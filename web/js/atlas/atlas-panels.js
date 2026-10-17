@@ -69,6 +69,10 @@ const glyph = (look, cls = 'atlas-glyph', size = 22) => `<svg class="${cls}" wid
 // The look an outcome is drawn in (answers.js, answerStyle).
 const lookOf = (outcome) => (ANSWERED.has(outcome) ? outcome : outcome === 'coverage_too_low' ? 'unplaced' : 'none');
 
+// The same pictures for other panels (cell-browser.js): a look's glyph at a size.
+export const lookGlyph = (look, size = 22, cls = 'atlas-glyph') => glyph(look, cls, size);
+export { lookOf };
+
 // ---- one cell ----
 
 function guessLine(cell, classOrder) {

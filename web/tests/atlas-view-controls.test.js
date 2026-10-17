@@ -5,7 +5,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { CELLS_ON_MAP, dimPercent, mountViewControls } from '../js/atlas/view-controls.js';
+import { CELLS_ON_MAP, buildTypesGiven, dimPercent, mountViewControls } from '../js/atlas/view-controls.js';
 
 class El {
   constructor(id) {
@@ -49,6 +49,15 @@ function setup() {
     setCellsShown(on) { calls.push(['cells', on]); landing.cellsShown = on; listeners.forEach((f) => f(landing.state, landing.run)); },
     setOutcomeOn(outcome, on) { calls.push(['outcome', outcome, on]); },
     chips: () => '<button data-outcome="class" aria-pressed="true"></button>',
+    groups: () => [
+      { key: 'group:T cell', name: 'T cell (a family)', look: 'group', colour: null, count: 42, on: true },
+      { key: 'class:natural killer cell', name: 'NK cell', look: 'class', colour: '#123456', count: 3, on: false },
+    ],
+    highlight: true,
+    setHighlight(on) { calls.push(['highlight', on]); landing.highlight = on; },
+    setGroupOn(key, on) { calls.push(['group', key, on]); },
+    showOnlyGroup(key) { calls.push(['only', key]); },
+    setAllGroups(on) { calls.push(['all', on]); },
   };
   const layer = { dim: 0, setDim(v) { layer.dim = v; calls.push(['dim', v]); } };
   const stage = { setDotScale: (s) => calls.push(['size', s]) };
@@ -124,4 +133,40 @@ test('the dimming slider follows the dimming the landing sets', () => {
   layer.dim = 0;
   change();
   assert.equal(els.get('dim-slider').value, '60');
+});
+
+test('the types given: one row each, with a colour or the answer’s look, its count and Only', () => {
+  const html = buildTypesGiven([
+    { key: 'group:T cell', name: 'T cell (a family)', look: 'group', colour: null, count: 42, on: true },
+    { key: 'class:<script>x</script>', name: '<script>x</script>', look: 'class', colour: '#123456', count: 1234, on: false },
+  ]);
+  assert.equal((html.match(/class="given-row/g) ?? []).length, 2);
+  assert.match(html, /data-given="group:T cell" aria-pressed="true"/);
+  assert.match(html, /<svg/, 'a family wears its look');
+  assert.match(html, /background:#123456/, 'a type wears its colour');
+  assert.match(html, /class="given-row is-off"/);
+  assert.match(html, /1,234/);
+  assert.ok(!html.includes('<script>'), 'names are escaped');
+  assert.equal(buildTypesGiven([]), '');
+});
+
+test('the types given and the highlight switch ask the landing', () => {
+  const { els, landing, calls, change } = setup();
+  landing.run = { source: 'service', cells: [] };
+  landing.state = { name: 'interactive' };
+  change();
+  assert.match(els.get('types-given').innerHTML, /T cell \(a family\)/);
+  assert.equal(els.get('highlight-toggle').getAttribute('aria-checked'), 'true');
+  const row = { dataset: { given: 'group:T cell' }, getAttribute: () => 'true' };
+  els.get('types-given').fire('click', { target: { closest: (sel) => (sel === '[data-given]' ? row : null) } });
+  assert.deepEqual(calls.at(-1), ['group', 'group:T cell', false]);
+  const only = { dataset: { only: 'class:natural killer cell' } };
+  els.get('types-given').fire('click', { target: { closest: (sel) => (sel === '[data-only]' ? only : null) } });
+  assert.deepEqual(calls.at(-1), ['only', 'class:natural killer cell']);
+  els.get('given-all').fire('click');
+  assert.deepEqual(calls.at(-1), ['all', true]);
+  els.get('given-none').fire('click');
+  assert.deepEqual(calls.at(-1), ['all', false]);
+  els.get('highlight-toggle').fire('click');
+  assert.deepEqual(calls.at(-1), ['highlight', false]);
 });

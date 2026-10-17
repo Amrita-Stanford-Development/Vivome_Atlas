@@ -29,15 +29,16 @@ Pure modules have no DOM and are covered by `node --test`
 | `file-check.js` (pure) | Checks a file in the browser (header, cells, rows) against the service's limits |
 | `service-client.js` | The service's address, its status and project calls (upload progress, Retry-After, timeouts), plain-words failures |
 | `atlas-panels.js` (pure) | The cell card, the receipt, the answer key, the outcome chips, the example's summary |
+| `cell-browser.js` (pure) | The projected cells grouped by the answer each was given (one group per type, family, branch, reason for no answer, and not placed), their order (sorted by confidence, file order or likeness; searched by name), and the drawer's browser |
 | `stage.js` | Renderer, camera and orbit rig (drag to turn, right-drag to move, wheel to zoom, glide, slow turn until touched), one render loop that draws only when something changed, and the visitor's dot size (every layer sizes and picks its dots by `pixelScale`) |
-| `reference-layer.js` | All reference cells as one `THREE.Points`, shaded as small spheres; filters, dimming and focusing a type are uniform writes |
-| `upload-layer.js` | Uploaded cells: their flights, answer looks, landing flash and ripple, and the neighbour glow, all moved by the GPU on one clock |
+| `reference-layer.js` | All reference cells as one `THREE.Points`, shaded as small spheres; filters, dimming and highlighting a set of types (a selected cell's possible types) are uniform writes |
+| `upload-layer.js` | Uploaded cells: their flights, answer looks, landing flash and ripple, and the neighbour glow, all moved by the GPU on one clock; a per-cell mask hides the cells of a type the visitor hid |
 | `illustration.js` | The waiting illustration of the service's six steps |
 | `landing.js` | Runs the state machine on the stage's clock: the sheet, the illustration, the receipt, the flights, the camera, the results |
 | `data-tab.js` | The Your data tab. With an answer on the map it is the file's card (answer filters, Replay, Download, Clear, Send another file); otherwise the setup: the service line, the example, the file controls, and, folded, what it can label and an own copy's address |
 | `gene-profile.js` | A clicked reference cell's gene profile, streamed from the large CSVs; says so when this copy of the site does not have them |
 | `explore-tab.js` | Counts, the RNA and protein switches, the cell-type list (also the colour key) |
-| `view-controls.js` | In Explore: the visitor's cells while an answer is on the map (a switch and the answer filters), names on the map, dimming the reference, the dot size |
+| `view-controls.js` | In Explore: the visitor's cells while an answer is on the map (a switch, the answer filters, the types given with Only, and the highlight of a selected cell's types), names on the map, dimming the reference, the dot size |
 | `type-labels.js` | Names on the map: each shown type's name at its centre, placed so no two overlap, following the camera |
 | `overlay.js` | Loading screen, error panel, tooltip |
 | `main.js` | Loads the reference, wires everything, keeps `window.vivomeAtlas` as a console handle |
@@ -57,7 +58,7 @@ Pure modules have no DOM and are covered by `node --test`
 | receipt | The response's own numbers: cells, genes matched, whether the second opinion was used, the model. A folding card, open until the visitor has the camera |
 | flying | Cells arc from the sheet onto their coordinates by answer level (one type, family, branch, no answer), highest confidence first; each lands with a flash and a ripple, and nearby reference cells of its type glow briefly. The camera glides to frame them |
 | settling | The reference dims, the results open in the drawer (Download and Clear, then About this answer, Answers and Cells as folding sections), the camera settles on the landed cells |
-| interactive | The visitor's camera. Click a cell or a table row for its card; the outcome chips show or hide answers; Replay, Download, Clear. A new file or the example replaces the answer shown |
+| interactive | The visitor's camera. Click a cell or a row of the drawer's cell browser for its card; step through the shown cells with the step bar (Previous, Next, Play), the card's own Previous and Next, or the arrow keys; filter by answer level and by the type given; Replay, Download, Clear. A new file or the example replaces the answer shown |
 | failed | The reason in plain words, with Try again |
 
 The guided part, from the receipt to the settled view, lasts about 8 to 9

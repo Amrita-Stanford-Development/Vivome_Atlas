@@ -48,12 +48,20 @@ test('the page has its two tabs, the labels section old links arrive at, and a l
 
 test('Explore holds the view controls; the research panels live on the Manuscript page', () => {
   const explore = html.slice(html.indexOf('id="panel-explore"'), html.indexOf('id="panel-data"'));
-  for (const id of ['your-cells', 'cells-toggle', 'explore-chips', 'rna-toggle', 'prot-toggle', 'names-toggle', 'dim-slider', 'size-slider', 'cell-type-filters']) {
+  for (const id of ['your-cells', 'cells-toggle', 'explore-chips', 'types-given', 'given-all', 'given-none', 'highlight-toggle',
+    'rna-toggle', 'prot-toggle', 'names-toggle', 'dim-slider', 'size-slider', 'cell-type-filters']) {
     assert.match(explore, new RegExp(`id="${id}"`), id);
   }
   assert.match(explore, /<section class="control-section sheet" id="your-cells" hidden>/, 'shown only with an answer');
   for (const gone of ['support-tiles', 'support-table-mount', 'diagnostics-mount']) assert.ok(!html.includes(gone), gone);
   assert.ok(!/buildSupport|buildDiagnostics/.test(read('js/atlas/explore-tab.js')));
+});
+
+test('the map has a step bar for going through the cells one by one', () => {
+  assert.match(html, /<div class="step-bar glass" id="step-bar" role="group" aria-label="Your cells, one by one" hidden>/);
+  for (const id of ['step-prev', 'step-text', 'step-next', 'step-play']) assert.match(html, new RegExp(`id="${id}"`), id);
+  assert.match(html, /id="step-prev" aria-label="Previous cell"/);
+  assert.match(html, /id="step-next" aria-label="Next cell"/);
 });
 
 test('with an answer on the map, Your data is the file’s card above the setup', () => {

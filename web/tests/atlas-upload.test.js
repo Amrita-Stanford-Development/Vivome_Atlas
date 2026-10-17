@@ -164,7 +164,38 @@ test('uniform arrays are read in vertex shaders only', () => {
   for (const [name, { vertex, fragment }] of Object.entries(all)) {
     assert.ok(!/uniform\s+\w+\s+\w+\s*\[/.test(fragment), `${name}: a uniform array in the fragment shader`);
     assert.ok(/gl_PointSize/.test(vertex), name);
+    for (const [, array] of vertex.matchAll(/uniform\s+\w+\s+(\w+)\s*\[/g)) {
+      assert.ok(!new RegExp(`\\b${array}\\b`).test(fragment), `${name}: ${array} read in the fragment shader`);
+    }
   }
+});
+
+// The attributes a vertex shader declares (name to type) and the ones it reads.
+const declaredAttributes = (src) => new Map([...src.matchAll(/^\s*attribute\s+(\w+)\s+(\w+)\s*;/gm)].map((m) => [m[2], m[1]]));
+const readAttributes = (src) => new Set([...src.replace(/^\s*attribute\s.*$/gm, '').matchAll(/\ba[A-Z]\w*/g)].map((m) => m[0]));
+const ITEM_SIZES = { float: 1, vec2: 2, vec3: 3, vec4: 4 };
+
+test('every vertex shader declares the attributes it reads', () => {
+  const all = { ...SHADERS, illustration: ILLUSTRATION_SHADERS };
+  for (const [name, { vertex, fragment }] of Object.entries(all)) {
+    const declared = declaredAttributes(vertex);
+    const read = readAttributes(vertex);
+    assert.ok(read.size > 0, name);
+    for (const a of read) assert.ok(declared.has(a), `${name}: ${a} is read but not declared`);
+    assert.ok(!/\battribute\b/.test(fragment), `${name}: an attribute in the fragment shader`);
+  }
+});
+
+test('the cells and their ripples multiply the mask into the outcome filter', () => {
+  for (const name of ['cell', 'ripple']) {
+    const { vertex, fragment } = SHADERS[name];
+    assert.match(vertex, /attribute float aShow;/, name);
+    assert.match(vertex, /float drawn\(\) \{\s*return outcomeOn\(\) \* aShow;\s*\}/, name);
+    assert.match(vertex, /if \(drawn\(\) < 0\.5/, `${name}: the mask hides the cell`);
+    assert.ok(!/outcomeOn\(\) < 0\.5/.test(vertex), `${name}: no check that skips the mask`);
+    assert.ok(!/aShow/.test(fragment), name);
+  }
+  assert.ok(!/aShow/.test(SHADERS.glow.vertex), 'the glow ignores the mask');
 });
 
 // ---- the layer, on a stand-in for three.js ----
@@ -323,6 +354,106 @@ test('outcome switches, clearing and disposing', () => {
   layer.dispose();
   assert.equal(stage.children.size, 0);
   assert.equal(stage.tickers.length, 0);
+});
+
+test('the cells’ geometry carries every attribute the cell and ripple shaders declare', () => {
+  const stage = fakeStage();
+  const layer = createUploadLayer(fakeThree(), stage);
+  for (const m of [model(), { n: 0 }]) {
+    layer.load(m);
+    const { attributes } = layer.points.geometry;
+    for (const name of ['cell', 'ripple']) {
+      for (const [a, type] of declaredAttributes(SHADERS[name].vertex)) {
+        assert.ok(attributes[a], `${name}: ${a} is not on the geometry`);
+        assert.equal(attributes[a].itemSize, ITEM_SIZES[type], `${name}: ${a}`);
+        assert.equal(attributes[a].array.length, m.n * ITEM_SIZES[type], `${name}: ${a}`);
+      }
+    }
+  }
+  // The glow's geometry carries the glow shader's.
+  layer.setNeighbours({ m: 2, position: new Float32Array(6), cls: Float32Array.from([1, 2]), owner: Float32Array.from([0, 1]), at: Float32Array.from([1, 3]) });
+  const glow = [...stage.children].find((p) => p.material.vertexShader === SHADERS.glow.vertex);
+  for (const [a, type] of declaredAttributes(SHADERS.glow.vertex)) assert.equal(glow.geometry.attributes[a].itemSize, ITEM_SIZES[type], a);
+});
+
+test('the cell mask hides single cells from drawing and picking', async () => {
+  const stage = fakeStage();
+  const layer = createUploadLayer(fakeThree(), stage);
+  layer.load(model());
+  const attribute = layer.points.geometry.attributes.aShow;
+  assert.ok(attribute, 'the mask attribute');
+  assert.equal(attribute.itemSize, 1);
+  assert.deepEqual([...attribute.array], [1, 1, 1], 'every cell drawn after load');
+  assert.equal(layer.mask, null);
+  assert.deepEqual([0, 1, 2].map(layer.cellShown), [true, true, true]);
+  // The ripples draw from the same geometry, so the same mask.
+  const ripples = [...stage.children].find((p) => p.material.vertexShader === SHADERS.ripple.vertex);
+  assert.equal(ripples.geometry.attributes.aShow, attribute);
+
+  await settle();
+  const before = stage.invalidations;
+  attribute.needsUpdate = false;
+  layer.setCellMask([1, 0, 1]);
+  assert.equal(layer.points.geometry.attributes.aShow, attribute, 'written in place');
+  assert.deepEqual([...attribute.array], [1, 0, 1]);
+  assert.equal(attribute.needsUpdate, true);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [true, false, true]);
+  assert.deepEqual([0, 1, 2].map(layer.cellShown), [true, false, true]);
+  assert.deepEqual([...layer.mask], [1, 0, 1]);
+  await settle();
+  assert.equal(stage.invalidations, before + 1, 'redraws once');
+
+  // Any array-like, truthy drawn; the outcome filter still applies on top.
+  layer.setCellMask(Uint8Array.from([0, 1, 1]));
+  assert.deepEqual([...attribute.array], [0, 1, 1]);
+  layer.setCellMask([false, true, true]);
+  assert.deepEqual([...attribute.array], [0, 1, 1]);
+  layer.setOutcomeOn(3, false);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [false, false, true]);
+  layer.setOutcomeOn(3, true);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [false, true, true]);
+  assert.equal(layer.outcomeOn(0), true, 'the mask leaves the outcome switches alone');
+
+  // null draws every cell again.
+  attribute.needsUpdate = false;
+  layer.setCellMask(null);
+  assert.deepEqual([...attribute.array], [1, 1, 1]);
+  assert.equal(attribute.needsUpdate, true);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [true, true, true]);
+  assert.equal(layer.mask, null);
+
+  // A mask of the wrong length is refused and changes nothing.
+  layer.setCellMask([0, 0, 0]);
+  assert.throws(() => layer.setCellMask([1, 0]), /cell mask needs 3 values/);
+  assert.deepEqual([...attribute.array], [0, 0, 0]);
+  assert.equal(layer.cellShown(3), false, 'out of range');
+  assert.equal(layer.cellShown(-1), false, 'out of range');
+
+  // A new file starts with every cell drawn.
+  layer.load(model());
+  const fresh = layer.points.geometry.attributes.aShow;
+  assert.notEqual(fresh, attribute);
+  assert.deepEqual([...fresh.array], [1, 1, 1]);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [true, true, true]);
+  assert.equal(layer.mask, null);
+
+  // Selection, the switch, the CPU path and picking are untouched by the mask.
+  layer.setCellMask([1, 0, 1]);
+  layer.setSelected(1);
+  assert.equal(layer.points.material.uniforms.uSelected.value, 1);
+  near3(layer.positionsAt(10).subarray(3, 6), [-8, 4, 2], 1e-6, 'a hidden cell still has its place');
+  layer.setClock(10);
+  close(layer.pickRadius(1), FLIGHT.radius * FLIGHT.sprite * 500, 1e-9);
+  layer.setShown(false);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [false, false, false]);
+  layer.setShown(true);
+  assert.deepEqual([0, 1, 2].map(layer.visible), [true, false, true]);
+
+  // Clear empties the layer; the mask goes with it.
+  layer.clear();
+  assert.equal(layer.mask, null);
+  layer.setCellMask(null);
+  assert.throws(() => layer.setCellMask([1]), /cell mask needs 0 values/);
 });
 
 // ---- the waiting illustration ----

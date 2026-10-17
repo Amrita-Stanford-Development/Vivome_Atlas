@@ -54,6 +54,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/atlas/reference-layer.js` — every reference cell as one point cloud, shaded as small spheres; filters, dimming and focus as uniforms
 - `web/js/atlas/gene-profile.js` — a clicked cell's gene profile from the large CSVs, with the LFS check and the "not on this copy" message
 - `web/js/atlas/explore-tab.js` — the Atlas page's Explore controls: counts, modality switches, the cell-type list
+- `web/js/atlas/cell-browser.js` — the Atlas page's cell browser: projected cells grouped by the answer given, their order, search and markup
 - `web/js/atlas/view-controls.js` — the Atlas page's view controls in Explore: the visitor's cells and their answer filters, names on the map, dimming, dot size
 - `web/js/atlas/type-labels.js` — names on the Atlas page's map: each shown type's name at its centre, without overlaps
 - `web/js/atlas/overlay.js` — the Atlas page's loading screen, error panel and tooltip
@@ -81,12 +82,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-example.test.js` — the deployed PBMC240 example is byte-identical to the `service/examples/` copy, under Cloudflare Pages' 25 MiB file limit, and a DIA-NN report with a Genes column
 - `web/tests/atlas-choreography.test.js` — the fly-in fits its window for 1 to 2,000 cells in one level or four, level order and gaps, the landing timeline, the waiting loop and its finish, the camera pose, reduced motion
 - `web/tests/atlas-director.test.js` — every rule of the upload state machine, the sidebar's folding, and that no state is changed in place
+- `web/tests/atlas-cell-browser.test.js` — the cell browser: every cell in one group, the group order, each sort, search, escaping
 - `web/tests/atlas-view-controls.test.js` — the view controls: Your cells only with an answer on the map, and each control asking the right part of the page
 - `web/tests/atlas-type-labels.test.js` — names on the map: hidden and off-screen types get none, no two overlap, the larger type wins
 - `web/tests/atlas-file-check.test.js` — the file check on Node Blobs: tabs, commas, CRLF, empty and header-only files, headers longer than a slice, the real PBMC240 report (238 cells), the limits
 - `web/tests/atlas-service.test.js` — the service client with a fake transport: ready, busy (Retry-After 30, or hidden from the page), refused (413, 400), unreachable, not ready, timeout, cancel; the remembered address; the default address is the workflow data's
 - `web/tests/atlas-landing.test.js` — the landing run end to end on stand-ins for the page, three.js and the stage: the recorded example to the settled view, Skip and Replay, a file checked, sent and landed, a service on another map, busy, unreachable, refused in the browser
-- `web/tests/atlas-upload.test.js` — the flight path's ends, arc and fan, the shaders on the CPU's constants, uniform arrays in vertex shaders only, the layer's clock and switches on a stand-in for three.js, every illustration step seamless, in two tones, with equal bins
+- `web/tests/atlas-upload.test.js` — the flight path's ends, arc and fan, the shaders on the CPU's constants, uniform arrays in vertex shaders only, the layer's clock, switches and per-cell mask on a stand-in for three.js, every illustration step seamless, in two tones, with equal bins
+- `web/tests/atlas-reference-layer.test.js` — the reference layer on a stand-in for three.js: highlighting a set of types, uniform arrays in the vertex shader only, every declared attribute and uniform present
 - `web/tests/atlas-panels.test.js` — the Your data panels: a card for every outcome, escaping, Pending for a missing receipt, chips for every outcome, five looks in the key, the example summary
 - `web/tests/atlas-data.test.js` — the Atlas page's reference cells read from the real files: counts, quoted names, each type keeps its colour, the scene frame, name anchors
 - `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
