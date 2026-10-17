@@ -1,7 +1,9 @@
 // Geometry for the atlas: the orbit camera's pose, a grid for finding nearby
-// reference cells, picking a cell on screen, the sheet an uploaded file is
-// laid out on, and placing class names so they never overlap. Pure: no DOM,
-// no THREE, so node --test covers it.
+// reference cells, picking a cell on screen, the cloud an uploaded file waits
+// in, and placing class names so they never overlap. Pure: no DOM, no THREE,
+// so node --test covers it.
+
+import { rng } from '../random.js';
 
 // The view the atlas opens on (the viewer's long-standing default).
 export const DEFAULT_POSE = { target: [0, 0, 0], yaw: -2.45, pitch: 0.64, radius: 65 };
@@ -129,6 +131,77 @@ export function fileGridLayout(n, aspect = 1.6) {
     slots[i * 2 + 1] = rows === 1 ? 0.5 : row / (rows - 1);
   }
   return { cols, rows, slots };
+}
+
+// ---- the file's cloud ----
+
+// Before its cells fly, an uploaded file waits beside the atlas as a cloud:
+// an irregular, lumpy shape of a few overlapping lobes, as a cluster of the
+// reference looks. The shape is decoration (the cells have no answers yet)
+// and the same for the same seed. Sizes in scene units.
+export const CLOUD = {
+  lobes: 4,          // overlapping lobes, each a stretched, turned Gaussian
+  spread: 0.8,       // how far the lobes sit from the first, in the cloud's units
+  depth: 0.35,       // the lobes' spread in depth, flatter than across
+  edge: 0.98,        // the share of cells inside the unit radius; the rest are pulled to its edge
+  perCell: 2.2,      // the cloud's radius grows with the cube root of the cells ...
+  radius: [6, 15],   // ... between these
+  dotShare: 0.35,    // a resting cell's radius, as a share of the typical spacing
+  dot: [0.3, 0.9],   // between these (0.9: a flying cell's full radius)
+};
+
+// Each cell's resting place, as x, y, z in a unit ball (z the depth), cell
+// i in slot i.
+export function fileCloudLayout(n, seed = 1) {
+  const random = rng(seed);
+  const gauss = () => Math.sqrt(-2 * Math.log(Math.max(1e-12, random()))) * Math.cos(2 * Math.PI * random());
+  const lobes = Array.from({ length: CLOUD.lobes }, (_, k) => {
+    const angle = random() * 2 * Math.PI;
+    const away = k === 0 ? 0 : CLOUD.spread * (0.5 + 0.5 * random());
+    return {
+      at: [Math.cos(angle) * away, Math.sin(angle) * away * 0.8, (random() - 0.5) * CLOUD.depth],
+      sd: [0.16 + 0.16 * random(), 0.1 + 0.12 * random(), 0.08 + 0.08 * random()],
+      turn: random() * Math.PI,
+      weight: 0.5 + random(),
+    };
+  });
+  const total = lobes.reduce((sum, l) => sum + l.weight, 0);
+  const out = new Float32Array(n * 3);
+  const reach = new Float32Array(n);
+  for (let i = 0; i < n; i += 1) {
+    let pick = random() * total;
+    const lobe = lobes.find((l) => (pick -= l.weight) <= 0) ?? lobes[lobes.length - 1];
+    const a = gauss() * lobe.sd[0];
+    const b = gauss() * lobe.sd[1];
+    const cos = Math.cos(lobe.turn);
+    const sin = Math.sin(lobe.turn);
+    out[i * 3] = lobe.at[0] + a * cos - b * sin;
+    out[i * 3 + 1] = lobe.at[1] + a * sin + b * cos;
+    out[i * 3 + 2] = lobe.at[2] + gauss() * lobe.sd[2];
+  }
+  // Centred, and scaled so CLOUD.edge of the cells fall inside the unit ball;
+  // the few beyond are pulled to its edge.
+  const mean = [0, 1, 2].map((k) => { let s = 0; for (let i = 0; i < n; i += 1) s += out[i * 3 + k]; return n ? s / n : 0; });
+  for (let i = 0; i < n; i += 1) {
+    for (let k = 0; k < 3; k += 1) out[i * 3 + k] -= mean[k];
+    reach[i] = Math.hypot(out[i * 3], out[i * 3 + 1], out[i * 3 + 2]);
+  }
+  const sorted = Float32Array.from(reach).sort();
+  const scale = n ? 1 / Math.max(1e-6, sorted[Math.floor(CLOUD.edge * (n - 1))]) : 1;
+  for (let i = 0; i < n; i += 1) {
+    const shrink = Math.min(scale, 1 / Math.max(1e-6, reach[i]));
+    for (let k = 0; k < 3; k += 1) out[i * 3 + k] *= shrink;
+  }
+  return out;
+}
+
+// The cloud's radius and a resting cell's radius for n cells, in scene units.
+export function cloudSize(n) {
+  const cells = Math.max(1, n);
+  const radius = Math.min(CLOUD.radius[1], Math.max(CLOUD.radius[0], CLOUD.perCell * Math.cbrt(cells)));
+  const spacing = (2 * radius) / Math.cbrt(cells);
+  const dot = Math.min(CLOUD.dot[1], Math.max(CLOUD.dot[0], CLOUD.dotShare * spacing));
+  return { radius, dot };
 }
 
 // ---- class names ----

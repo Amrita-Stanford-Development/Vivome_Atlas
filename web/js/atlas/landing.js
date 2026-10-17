@@ -29,9 +29,11 @@ import { GUIDED, MAX_ATTEMPTS, initialState, transition } from './director.js';
 import { checkFile, checkLimits } from './file-check.js';
 import { createIllustration } from './illustration.js';
 import { toScene } from './reference-data.js';
-import { boundingSphere, buildGrid, fileGridLayout, nearestOfClasses, orbitPosition, pickScreen, projectAll } from './spatial.js';
+import {
+  boundingSphere, buildGrid, cloudSize, fileCloudLayout, nearestOfClasses, orbitPosition, pickScreen, projectAll,
+} from './spatial.js';
 import { explainFailure } from './service-client.js';
-import { createUploadLayer, sheetRadiusFor } from './upload-layer.js';
+import { FLIGHT, createUploadLayer } from './upload-layer.js';
 
 const $ = (id) => document.getElementById(id);
 const clockText = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
@@ -39,10 +41,14 @@ const clockText = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).pad
 // Where the file's sheet sits: beside the atlas, facing the camera.
 const BENCH = { pitch: 0.25, radius: 105, shift: 24, sheetAt: 62, sheetWidth: 30, sheetAspect: 1.6 };
 const NEIGHBOURS = { k: 6, maxR: 12, cell: 3 };
+// The file's cloud: its shape is seeded by this plus the file's cell count.
+const CLOUD_SEED = 0x5eed;
 // Play in the step bar: one cell this often (seconds), the camera flying to each.
 export const PLAY_SECONDS = 2.5;
 
-export function createLanding({ THREE, stage, ref, reference, drawer, client, serviceUrl, options, limits, reduced = false }) {
+export function createLanding({
+  THREE, stage, ref, reference, drawer, client, serviceUrl, options, limits, reduced = false, autoPlay = true,
+}) {
   const T = reduced ? reducedTiming() : TIMING;
   const upload = createUploadLayer(THREE, stage);
   const illustration = createIllustration(THREE, stage);
@@ -84,11 +90,11 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     upload.setClock(t);
   }
 
-  // Every load sizes the cells to fit the file's sheet; they grow to full
-  // size in flight.
+  // Every load sizes the resting cells for the file's cloud; they grow to
+  // full size in flight.
   function loadUpload(model) {
     upload.load(model);
-    upload.setSheetRadius(sheetRadiusFor(model.n, BENCH.sheetWidth, BENCH.sheetAspect));
+    upload.setSheetRadius(Math.min(FLIGHT.radius, cloudSize(model.n).dot));
   }
 
   // ---- geometry ----
@@ -116,20 +122,24 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     };
   }
 
+  // The file's cells at rest: an irregular cloud beside the atlas (its shape
+  // set by the file's size), facing the camera, a little deep.
   function sheetPositions(n, anchor) {
-    const { slots } = fileGridLayout(n, BENCH.sheetAspect);
+    const unit = fileCloudLayout(n, CLOUD_SEED + n);
+    const { radius } = cloudSize(n);
+    const { centre, right, up } = anchor;
+    const depth = [right[1] * up[2] - right[2] * up[1], right[2] * up[0] - right[0] * up[2], right[0] * up[1] - right[1] * up[0]];
     const out = new Float32Array(n * 3);
     for (let i = 0; i < n; i += 1) {
-      const u = slots[i * 2] - 0.5;
-      const v = 0.5 - slots[i * 2 + 1];
+      const [x, y, z] = [unit[i * 3], unit[i * 3 + 1], unit[i * 3 + 2]];
       for (let k = 0; k < 3; k += 1) {
-        out[i * 3 + k] = anchor.centre[k] + anchor.right[k] * u * anchor.width + anchor.up[k] * v * anchor.height;
+        out[i * 3 + k] = centre[k] + (right[k] * x + up[k] * y + depth[k] * z) * radius;
       }
     }
     return out;
   }
 
-  // A sheet of waiting dots: the file, before its answers.
+  // A cloud of waiting dots, breathing: the file, before its answers.
   function showSheet(n) {
     upload.setShown(true); // a new file is always shown, whatever the switch said before
     if (!sheet) {
@@ -146,6 +156,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     });
     upload.setOpacity(1);
     setClock(0);
+    if (!reduced) upload.setBreathing(true, sheet.anchor.centre);
   }
 
   // The waiting illustration plays on the sheet; the file's dots fade back
@@ -462,6 +473,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       if (!userCam) stage.rig.animateTo(run.poses.fly, Math.max(0, (run.timeline.fly[1] - run.timeline.fly[0]) * 0.8));
     }
     if (name === 'settling') {
+      upload.setBreathing(false);
       if (!userCam) stage.rig.animateTo(run.poses.settle, T.settle);
       openResults();
     }
@@ -470,6 +482,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       if (run) loadUpload({ ...run.model, flies: new Uint8Array(run.model.n) });
       upload.setOpacity(1);
       setClock(0);
+      if (!reduced && sheet) upload.setBreathing(true, sheet.anchor.centre);
     }
     if (name === 'interactive') finish();
     if (name === 'idle') {
@@ -484,12 +497,16 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     }
   }
 
-  // The settled view, reached at the end of the landing or by Skip.
+  // The settled view, reached at the end of the landing or by Skip. Then
+  // the camera goes to the first cell and Play walks on from it, unless the
+  // visitor took the camera during the landing or asked for less motion.
   function finish() {
     if (!run) return;
     illustration.hide();
     loadUpload(run.model);
     upload.setOpacity(1);
+    upload.setBreathing(false);
+    if (!reduced) upload.setPulse(true);
     upload.setNeighbours(run.glow);
     setClock(run.schedule.end + 10);
     upload.setGlowMode('selected');
@@ -497,6 +514,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     stage.rig.setGuided(false);
     if (!userCam) stage.rig.setPose(run.poses.settle);
     if (!$('atlas-drawer').classList.contains('open')) openResults();
+    if (autoPlay && !reduced && !userCam && upload.shown) play(true);
   }
 
   function dispatch(event) {

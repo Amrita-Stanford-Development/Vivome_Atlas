@@ -183,9 +183,14 @@ white halo card, and a drawer that slides over the viewer's right side
 - **Reference cells** are dots shaded as small spheres, in the cell-type
   palette (`CLASS_COLOURS`, one copy). The type list is the colour key.
 - **Uploaded cells** wear their answer: one type is filled in its colour with
-  a white outline; a family answer is a lighter fill with an ink ring; a
-  branch answer a paler fill with a soft halo; no answer a hollow grey ring;
-  a cell that cannot be placed stays on the file's sheet as a hollow ring.
+  a white rim; a family answer is a lighter fill with an ink ring; a
+  branch answer a paler fill with no ring; no answer a hollow grey ring;
+  a cell that cannot be placed stays in the file's cloud as a broken ring.
+  Landed, every cell is a bead: larger than any reference dot, in a soft
+  halo of its own colour that pulses slowly. Before it flies, the file
+  waits beside the atlas as an irregular cloud that breathes; its shape is
+  decoration, since the cells have no answers yet. Under reduced motion the
+  cloud does not breathe and the halo does not pulse.
   The legend shows each glyph. Hover and selection add an accent ring. No
   reserved colour is used.
 - **The waiting animation is an illustration.** The service sends no

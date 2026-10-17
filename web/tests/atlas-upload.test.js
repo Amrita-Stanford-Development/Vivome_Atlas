@@ -122,23 +122,25 @@ test('the shaders run the path on the constants the CPU uses', () => {
   assert.match(glsl, new RegExp(`uniform vec3 uPalette\\[${CLASS_COLOURS.length}\\]`));
 });
 
-test('a cell draws at the sheet radius on the sheet and grows to the full radius by landing', () => {
+test('a cell draws at its resting radius in the cloud and grows to a bead by landing', () => {
+  const bead = FLIGHT.radius * FLIGHT.landedScale;
+  assert.ok(bead > 1.5 * FLIGHT.radius, 'a bead is clearly larger than a protein reference dot');
   for (const sheet of [0.2, 0.45, FLIGHT.radius]) {
     assert.equal(cellRadius(0, true, sheet), sheet, 'at the start');
-    assert.equal(cellRadius(1, true, sheet), FLIGHT.radius, 'landed');
+    close(cellRadius(1, true, sheet), bead, 1e-12, 'landed');
     let last = 0;
     for (let t = -0.5; t <= 3; t += 0.01) {
       const r = cellRadius(easeFlight(t, 0, 2), true, sheet);
-      assert.ok(r <= FLIGHT.radius + 1e-12, `never past the full radius: ${r}`);
+      assert.ok(r <= bead + 1e-12, `never past a bead's radius: ${r}`);
       assert.ok(r >= last - 1e-12, 'only grows');
       last = r;
       assert.equal(cellRadius(easeFlight(t, 0, 2), false, sheet), sheet, 'a cell that stays keeps the sheet radius');
     }
   }
-  assert.equal(cellRadius(0.3, true), FLIGHT.radius, 'by default nothing changes');
+  assert.equal(cellRadius(0, true), FLIGHT.radius, 'by default a cell rests at a flying cell’s radius');
   // The shader grows it the same way.
   assert.match(SHADERS.cell.vertex, /uniform float uSheetRadius;/);
-  assert.match(SHADERS.cell.vertex, /float r = flies \? mix\(uSheetRadius, RADIUS, u\) : uSheetRadius;/);
+  assert.match(SHADERS.cell.vertex, /float r = flies \? mix\(uSheetRadius, RADIUS \* LANDED, u\) : uSheetRadius;/);
   assert.match(SHADERS.cell.vertex, /2\.0 \* r \* vExtent/);
 });
 
@@ -310,17 +312,17 @@ test('the layer draws and picks cells at the sheet radius until they fly', () =>
   layer.setSheetRadius(0.3);
   assert.equal(layer.points.material.uniforms.uSheetRadius.value, 0.3);
   close(layer.radiusAt(0, -1), 0.3, 1e-12, 'on the sheet');
-  close(layer.radiusAt(0, 10), FLIGHT.radius, 1e-12, 'landed');
+  close(layer.radiusAt(0, 10), FLIGHT.radius * FLIGHT.landedScale, 1e-12, 'landed');
   close(layer.radiusAt(2, 10), 0.3, 1e-12, 'a cell that stays');
-  for (let t = 0; t <= 2; t += 0.05) assert.ok(layer.radiusAt(1, t) <= FLIGHT.radius + 1e-12);
+  for (let t = 0; t <= 2; t += 0.05) assert.ok(layer.radiusAt(1, t) <= FLIGHT.radius * FLIGHT.landedScale + 1e-12);
   // Picking follows the drawn size: pixelScale 500, pixel ratio 1.
   layer.setClock(-1);
   close(layer.pickRadius(1, 0), 0.3 * FLIGHT.sprite * 500, 1e-9);
   close(layer.pickRadius(1), 0.3 * FLIGHT.sprite * 500, 1e-9, 'the largest drawn now');
   layer.setClock(10);
-  close(layer.pickRadius(1, 0), FLIGHT.radius * FLIGHT.sprite * 500, 1e-9);
+  close(layer.pickRadius(1, 0), FLIGHT.radius * FLIGHT.landedScale * FLIGHT.sprite * 500, 1e-9);
   close(layer.pickRadius(1, 2), 0.3 * FLIGHT.sprite * 500, 1e-9);
-  close(layer.pickRadius(1), FLIGHT.radius * FLIGHT.sprite * 500, 1e-9);
+  close(layer.pickRadius(1), FLIGHT.radius * FLIGHT.landedScale * FLIGHT.sprite * 500, 1e-9);
   const { pickRadius } = layer;
   close(pickRadius(1, 2), 0.3 * FLIGHT.sprite * 500, 1e-9, 'works detached');
   layer.setSheetRadius(5);
@@ -443,7 +445,7 @@ test('the cell mask hides single cells from drawing and picking', async () => {
   assert.equal(layer.points.material.uniforms.uSelected.value, 1);
   near3(layer.positionsAt(10).subarray(3, 6), [-8, 4, 2], 1e-6, 'a hidden cell still has its place');
   layer.setClock(10);
-  close(layer.pickRadius(1), FLIGHT.radius * FLIGHT.sprite * 500, 1e-9);
+  close(layer.pickRadius(1), FLIGHT.radius * FLIGHT.landedScale * FLIGHT.sprite * 500, 1e-9);
   layer.setShown(false);
   assert.deepEqual([0, 1, 2].map(layer.visible), [false, false, false]);
   layer.setShown(true);
@@ -588,4 +590,63 @@ test('the illustration draws its layout on the given plane', async () => {
   assert.ok(stage.invalidations >= 1);
   ill.dispose();
   assert.equal(stage.children.size, 0);
+});
+
+// Runs the stage's tickers for `seconds` in steps of 0.1 s; whether any still asks for frames.
+function runTickers(stage, seconds) {
+  let moving = false;
+  for (let t = 0; t < seconds - 1e-9; t += 0.1) moving = stage.tickers.map((f) => f(0.1, t)).some(Boolean);
+  return moving;
+}
+
+test('the waiting cloud breathes on the GPU, eased in and out, and then lets the stage rest', () => {
+  assert.match(SHADERS.cell.vertex, /vec3 home = breathe\(position, aMeta\.x\);/);
+  assert.match(SHADERS.cell.vertex, /pathPoint\(home, aEnd, aMeta\.x, u\)/, 'a flight leaves from the breathing place');
+  assert.equal(SHADER_DEFINES.BREATH_SWELL, FLIGHT.breathSwell);
+  assert.equal(SHADER_DEFINES.BREATH_RATE, FLIGHT.breathRate);
+  assert.equal(SHADER_DEFINES.BREATH_DRIFT, FLIGHT.breathDrift);
+  const stage = fakeStage();
+  const layer = createUploadLayer(fakeThree(), stage);
+  const u = layer.points.material.uniforms;
+  assert.equal(runTickers(stage, 1), false, 'still until asked');
+  layer.setBreathing(true, [62, 1, 2]);
+  assert.equal(layer.breathing, true);
+  assert.equal(u.uCloudCentre.value.x, 62);
+  runTickers(stage, FLIGHT.breathFade / 2);
+  assert.ok(u.uBreath.value > 0.3 && u.uBreath.value < 0.8, `fading in: ${u.uBreath.value}`);
+  assert.equal(runTickers(stage, 2), true, 'it keeps the stage drawing while it breathes');
+  assert.equal(u.uBreath.value, 1);
+  const t0 = u.uBreathTime.value;
+  runTickers(stage, 1);
+  assert.ok(u.uBreathTime.value > t0, 'its clock runs');
+  layer.setBreathing(false);
+  runTickers(stage, FLIGHT.breathFade + 0.2);
+  assert.equal(u.uBreath.value, 0, 'settled');
+  assert.equal(runTickers(stage, 1), false, 'and the stage rests again');
+  layer.setBreathing(true);
+  runTickers(stage, 2);
+  layer.clear();
+  assert.equal(u.uBreath.value, 0, 'clear stops it at once');
+});
+
+test('landed cells are beads: larger, in a halo of their colour that pulses while asked', () => {
+  assert.match(SHADERS.cell.vertex, /vHalo = bead \? mix\(1\.0, PULSE_LOW \+ \(1\.0 - PULSE_LOW\) \* beat, uPulse\) : 0\.0;/);
+  assert.match(SHADERS.cell.vertex, /vExtent = bead \? BEAD_SPRITE/);
+  assert.match(SHADERS.cell.fragment, /float halo = \(1\.0 - smoothstep\(HALO_IN, HALO_OUT, rho\)\) \* HALO_ALPHA \* vHalo;/);
+  assert.ok(FLIGHT.beadSprite >= SHADER_DEFINES.HALO_OUT && FLIGHT.beadSprite >= SHADER_DEFINES.ACCENT_OUT, 'room for the halo and the accent ring');
+  const stage = fakeStage();
+  const layer = createUploadLayer(fakeThree(), stage);
+  const u = layer.points.material.uniforms;
+  layer.load(model());
+  layer.setPulse(true);
+  assert.equal(layer.pulsing, true);
+  assert.equal(runTickers(stage, 2), true);
+  assert.equal(u.uPulse.value, 1);
+  layer.setShown(false);
+  assert.equal(runTickers(stage, 0.5), false, 'hidden cells need no frames');
+  layer.setShown(true);
+  layer.setPulse(false);
+  runTickers(stage, FLIGHT.pulseFade + 0.2);
+  assert.equal(u.uPulse.value, 0);
+  assert.equal(runTickers(stage, 1), false);
 });

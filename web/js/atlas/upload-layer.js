@@ -44,14 +44,23 @@ export const FLIGHT = {
   glowSteady: 0.7,      // its strength round the selected cell
   lightenGroup: 0.25,   // a family's fill, mixed this far toward white
   lightenLineage: 0.45, // a branch's
+  breathSwell: 0.06,    // while the file waits, its cloud swells by this share and back
+  breathRate: 1.1,      // radians a second: one breath in about 5.7 s
+  breathDrift: 0.35,    // and each waiting cell drifts on its own small loop, in scene units
+  breathFade: 0.8,      // seconds for the breathing to start or to settle
+  landedScale: 1.8,     // a landed cell is a bead this many times a flying cell's radius
+  beadSprite: 2.4,      // its sprite's half-size over its radius: room for the halo
+  pulseRate: 1.6,       // radians a second: the halo's slow pulse
+  pulseLow: 0.55,       // the halo's strength at the low of a pulse, as a share of its peak
+  pulseFade: 0.8,       // seconds for the pulse to start or to stop
 };
 
 // The answer looks, in units of the cell's radius (the sprite's edge is at
 // FLIGHT.sprite). atlas-panels.js draws the answer key from the same numbers.
 export const LOOK = {
-  outline: 1.15,          // one type: a thin white outline out to here
+  outline: 1.15,          // one type: a white rim out to here
   inkRing: [1.2, 1.52],   // a family: the ink ring (0.75 to 0.95 of the sprite)
-  halo: [0.96, 1.6],      // a branch: the soft halo (0.6 to 1.0 of the sprite)
+  halo: [1.0, 2.3],       // every landed cell: a soft halo in its own colour, from its edge to here
   haloAlpha: 0.5,
   hollow: [0.55, 1.0],    // no answer, and not placed: the hollow ring
   dashes: 8,              // not placed: its ring is broken into this many dashes
@@ -81,11 +90,12 @@ export function easeFlight(t, delay, duration) {
 
 export const landingTime = (delay, duration) => delay + Math.max(duration, FLIGHT.minDuration);
 
-// A cell's drawn radius at eased progress u: the sheet's radius on the sheet,
-// growing evenly to the full radius by landing. A cell that does not fly
-// keeps the sheet's. The vertex shader's mix(uSheetRadius, RADIUS, u).
+// A cell's drawn radius at eased progress u: its radius at rest in the
+// file's cloud, growing evenly to a bead's by landing. A cell that does not
+// fly keeps its resting radius. The vertex shader's
+// mix(uSheetRadius, RADIUS * LANDED, u).
 export function cellRadius(u, flies, sheetRadius = FLIGHT.radius) {
-  return flies ? sheetRadius * (1 - u) + FLIGHT.radius * u : sheetRadius;
+  return flies ? sheetRadius * (1 - u) + FLIGHT.radius * FLIGHT.landedScale * u : sheetRadius;
 }
 
 // A radius that fits n cells on a sheet `width` units wide laid out by
@@ -180,6 +190,8 @@ export const SHADER_DEFINES = {
   GLOW_SECONDS: FLIGHT.glowSeconds, GLOW_PEAK: FLIGHT.glowPeak, GLOW_RADIUS: FLIGHT.glowRadius,
   GLOW_ALPHA: FLIGHT.glowAlpha, GLOW_STEADY: FLIGHT.glowSteady,
   LIGHTEN_GROUP: FLIGHT.lightenGroup, LIGHTEN_LINEAGE: FLIGHT.lightenLineage,
+  BREATH_SWELL: FLIGHT.breathSwell, BREATH_RATE: FLIGHT.breathRate, BREATH_DRIFT: FLIGHT.breathDrift,
+  LANDED: FLIGHT.landedScale, BEAD_SPRITE: FLIGHT.beadSprite, PULSE_RATE: FLIGHT.pulseRate, PULSE_LOW: FLIGHT.pulseLow,
   OUTLINE: LOOK.outline, INK_IN: LOOK.inkRing[0], INK_OUT: LOOK.inkRing[1],
   HALO_IN: LOOK.halo[0], HALO_OUT: LOOK.halo[1], HALO_ALPHA: LOOK.haloAlpha,
   HOLLOW_IN: LOOK.hollow[0], HOLLOW_OUT: LOOK.hollow[1], DASHES: LOOK.dashes,
@@ -210,6 +222,19 @@ uniform float uTime;
 uniform vec3 uArcUp;
 uniform float uPixelScale;
 uniform float uMaxSize;
+uniform float uBreath;
+uniform float uBreathTime;
+uniform vec3 uCloudCentre;
+// Where a waiting cell rests: its place in the file's cloud, which breathes
+// (swells and settles about its centre) while each cell drifts on its own
+// small loop. uBreath fades it all in and out; at 0 the place is exact.
+vec3 breathe(vec3 p, float seed) {
+  if (uBreath <= 0.0) return p;
+  float phase = seed * 6.283185307179586;
+  float swell = 1.0 + BREATH_SWELL * sin(uBreathTime * BREATH_RATE);
+  vec3 drift = vec3(sin(uBreathTime * 0.9 + phase), cos(uBreathTime * 0.7 + phase * 1.3), sin(uBreathTime * 0.8 + phase * 0.7));
+  return uCloudCentre + (p - uCloudCentre) * mix(1.0, swell, uBreath) + drift * (BREATH_DRIFT * uBreath);
+}
 float easeFlight(float delay, float duration) {
   float u = clamp((uTime - delay) / max(duration, MIN_DURATION), 0.0, 1.0);
   return u * u * (3.0 - 2.0 * u);
@@ -246,11 +271,14 @@ const CELL_VERTEX = `${CELL_HEAD}
 uniform float uHover;
 uniform float uSelected;
 uniform float uSheetRadius;
+uniform float uPulse;
+uniform float uPulseTime;
 varying vec3 vColour;
 varying float vStyle;
 varying float vRing;
 varying float vExtent;
 varying float vSoft;
+varying float vHalo;
 void main() {
   if (drawn() < 0.5) {
     gl_PointSize = 0.0;
@@ -260,11 +288,14 @@ void main() {
     vRing = 0.0;
     vExtent = 1.0;
     vSoft = 1.0;
+    vHalo = 0.0;
     return;
   }
   bool flies = aLook.w > 0.5;
   float u = easeFlight(aTiming.x, aTiming.y);
-  vec3 p = flies ? pathPoint(position, aEnd, aMeta.x, u) : position;
+  // A flight leaves from the cell's breathing place, so the cloud pours into the map.
+  vec3 home = breathe(position, aMeta.x);
+  vec3 p = flies ? pathPoint(home, aEnd, aMeta.x, u) : home;
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
   vec3 fill = fillColour();
@@ -277,14 +308,19 @@ void main() {
   vColour = shown ? look : FLIGHT_COLOUR;
   vStyle = shown ? style : -1.0;
   vRing = (abs(aMeta.y - uSelected) < 0.5 || abs(aMeta.y - uHover) < 0.5) ? 1.0 : 0.0;
-  vExtent = vRing > 0.5 ? RINGED : SPRITE;
+  // Landed, a cell is a bead: larger than any reference dot, in a soft halo
+  // of its own colour that pulses slowly (uPulse fades the pulse in and out).
+  bool bead = flies && shown;
+  float beat = 0.5 + 0.5 * sin(uPulseTime * PULSE_RATE + aMeta.x * 6.283185307179586);
+  vHalo = bead ? mix(1.0, PULSE_LOW + (1.0 - PULSE_LOW) * beat, uPulse) : 0.0;
+  vExtent = bead ? BEAD_SPRITE : vRing > 0.5 ? RINGED : SPRITE;
   // The pop as it lands: up fast, back slower.
   float s = (uTime - landingTime(aTiming.x, aTiming.y)) / POP_SECONDS;
   float bump = (flies && s >= 0.0 && s <= 1.0)
     ? (s < POP_PEAK ? smoothstep(0.0, POP_PEAK, s) : 1.0 - smoothstep(POP_PEAK, 1.0, s))
     : 0.0;
-  // The sheet's radius on the sheet, the full radius by landing.
-  float r = flies ? mix(uSheetRadius, RADIUS, u) : uSheetRadius;
+  // The cloud's radius at rest, a bead's by landing.
+  float r = flies ? mix(uSheetRadius, RADIUS * LANDED, u) : uSheetRadius;
   float px = clamp(2.0 * r * vExtent * (1.0 + (POP - 1.0) * bump) * uPixelScale / max(-mv.z, 0.001), 1.0, uMaxSize);
   gl_PointSize = px;
   vSoft = 2.0 * vExtent / px;
@@ -302,6 +338,7 @@ varying float vStyle;
 varying float vRing;
 varying float vExtent;
 varying float vSoft;
+varying float vHalo;
 vec3 shade(vec3 c, vec2 q) {
   vec3 n = vec3(q.x, -q.y, sqrt(1.0 - min(dot(q, q), 1.0)));
   vec3 light = normalize(vec3(-0.45, 0.55, 0.7));
@@ -328,11 +365,17 @@ void main() {
     colour = mix(INK_COLOUR, shade(vColour, q), body);
     alpha = max(body, band(rho, INK_IN, INK_OUT));
   } else if (vStyle < 2.5) {
-    colour = mix(vColour, shade(vColour, q), body);
-    alpha = max(body, (1.0 - smoothstep(HALO_IN, HALO_OUT, rho)) * HALO_ALPHA);
+    colour = shade(vColour, q);
+    alpha = body;
   } else {
     alpha = band(rho, HOLLOW_IN, HOLLOW_OUT);
     if (vStyle > 3.5) alpha *= smoothstep(-0.2, 0.2, sin(atan(q.y, q.x) * DASHES));
+  }
+  // The bead's halo, under its look.
+  if (vHalo > 0.0) {
+    float halo = (1.0 - smoothstep(HALO_IN, HALO_OUT, rho)) * HALO_ALPHA * vHalo;
+    colour = mix(vColour, colour, alpha);
+    alpha = max(alpha, halo);
   }
   if (vRing > 0.5) {
     float ring = band(rho, ACCENT_IN, ACCENT_OUT);
@@ -475,6 +518,11 @@ export function createUploadLayer(THREE, stage) {
     uOpacity: { value: 1 },
     uGlowMode: { value: GLOW_MODES.landing },
     uMultiply: { value: lightScene ? 1 : 0 },
+    uBreath: { value: 0 },
+    uBreathTime: { value: 0 },
+    uPulse: { value: 0 },
+    uPulseTime: { value: 0 },
+    uCloudCentre: { value: new THREE.Vector3(0, 0, 0) },
   };
   const tint = lightScene
     ? { blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.ZeroFactor, blendDst: THREE.SrcColorFactor }
@@ -531,6 +579,41 @@ export function createUploadLayer(THREE, stage) {
     return feeding && clock < activeUntil();
   });
   stage.onFrame(() => { if (!disposed) uniforms.uPixelScale.value = stage.pixelScale(); });
+
+  // The waiting cloud's breath: eased in and out over FLIGHT.breathFade, and
+  // only drawing frames while it moves (the page goes still once it settles).
+  let breathTarget = 0;
+  const removeBreath = stage.addTicker((dt) => {
+    if (disposed) return false;
+    const a = uniforms.uBreath.value;
+    if (a === 0 && breathTarget === 0) return false;
+    const step = Math.min(1, (Number(dt) || 0) / FLIGHT.breathFade);
+    uniforms.uBreath.value = breathTarget > a ? Math.min(breathTarget, a + step) : Math.max(breathTarget, a - step);
+    uniforms.uBreathTime.value += Number(dt) || 0;
+    return true;
+  });
+  function setBreathing(on, centre) {
+    breathTarget = on ? 1 : 0;
+    if (centre) uniforms.uCloudCentre.value.set(centre[0], centre[1], centre[2]);
+    wake();
+  }
+
+  // The beads' slow pulse: eased in and out over FLIGHT.pulseFade; while on,
+  // the stage keeps drawing.
+  let pulseTarget = 0;
+  const removePulse = stage.addTicker((dt) => {
+    if (disposed) return false;
+    const a = uniforms.uPulse.value;
+    if (a === 0 && pulseTarget === 0) return false;
+    const step = Math.min(1, (Number(dt) || 0) / FLIGHT.pulseFade);
+    uniforms.uPulse.value = pulseTarget > a ? Math.min(pulseTarget, a + step) : Math.max(pulseTarget, a - step);
+    uniforms.uPulseTime.value += Number(dt) || 0;
+    return state.n > 0 && shown;
+  });
+  function setPulse(on) {
+    pulseTarget = on ? 1 : 0;
+    wake();
+  }
 
   // Each glowing reference cell takes its owner's outcome, so a hidden
   // outcome's glow hides with it.
@@ -651,6 +734,10 @@ export function createUploadLayer(THREE, stage) {
     uniforms.uOutcomeOn.value.fill(1);
     uniforms.uOpacity.value = 1;
     uniforms.uSheetRadius.value = FLIGHT.radius;
+    breathTarget = 0;
+    uniforms.uBreath.value = 0;
+    pulseTarget = 0;
+    uniforms.uPulse.value = 0;
     wake();
   }
 
@@ -659,6 +746,13 @@ export function createUploadLayer(THREE, stage) {
     load,
     setNeighbours,
     clear,
+    // The waiting cloud breathes about `centre` (scene units) while on; off,
+    // it settles over FLIGHT.breathFade and the cells rest at their places.
+    setBreathing,
+    get breathing() { return breathTarget > 0; },
+    // The landed beads' halo pulses slowly while on.
+    setPulse,
+    get pulsing() { return pulseTarget > 0; },
     // The flight clock, in seconds, on the clock the delays are on. Feed it
     // every frame while cells fly; the layer keeps the stage drawing until
     // the last ripple and burst are done.
@@ -732,11 +826,12 @@ export function createUploadLayer(THREE, stage) {
     // cell i's at the layer's clock, or without i the largest drawn now.
     pickRadius: (w, i = -1) => {
       let r = radiusAt(i);
-      if (!(i >= 0 && i < state.n)) for (let k = 0; k < state.n && r < FLIGHT.radius; k += 1) r = Math.max(r, radiusAt(k));
+      if (!(i >= 0 && i < state.n)) for (let k = 0; k < state.n && r < FLIGHT.radius * FLIGHT.landedScale; k += 1) r = Math.max(r, radiusAt(k));
       const scale = stage.pixelScale() / stage.renderer.getPixelRatio();
       return Math.max(4, (r * FLIGHT.sprite * scale) / w);
     },
-    // Every cell's position at clock t: the shader's path, on the CPU.
+    // Every cell's position at clock t: the shader's path, on the CPU (from
+    // the cloud's resting places: the breath is a small sway, ignored here).
     positionsAt(t, out = new Float32Array(state.n * 3)) {
       const { n, start, end, timing, look, meta } = state;
       for (let i = 0; i < n; i += 1) {
@@ -756,6 +851,8 @@ export function createUploadLayer(THREE, stage) {
       clear();
       disposed = true;
       removeTicker();
+      removeBreath();
+      removePulse();
       for (const points of [glow, cells, ripples]) {
         stage.scene.remove(points);
         points.material.dispose();

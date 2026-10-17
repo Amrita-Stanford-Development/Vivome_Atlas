@@ -131,7 +131,8 @@ function fakeReference() {
   return { order, frame: { centre: [0, 0, 0], scale: 50 }, n, nRna: n, positions, codes };
 }
 
-function setup({ client = null } = {}) {
+// Play does not start on its own here, unless a test asks (autoPlay).
+function setup({ client = null, autoPlay = false } = {}) {
   const els = installDocument();
   const stage = fakeStage();
   const dims = [];
@@ -145,6 +146,7 @@ function setup({ client = null } = {}) {
     serviceUrl: () => 'https://service.example',
     options: () => ({ modality: 'prot', restrict: false }),
     limits: () => ({ max_cells: 2000, max_upload_mb: 200, min_cells: 20 }),
+    autoPlay,
   });
   const tick = (seconds) => {
     for (let t = 0; t < seconds; t += 1 / 30) stage.tickers.forEach((f) => f(1 / 30, t));
@@ -516,6 +518,48 @@ test('the arrow keys step, except while typing', async () => {
   assert.equal(landing.current, first, 'not while typing in the search box');
   press('ArrowLeft');
   assert.notEqual(landing.current, first);
+});
+
+test('the file waits as a breathing cloud and settles as its cells land', async () => {
+  const { landing, tick, stage } = setup();
+  await landing.watchExample();
+  const u = uploadUniforms(stage);
+  tick(1);
+  assert.equal(u.uBreath.value, 1, 'breathing while it waits');
+  assert.equal(u.uPulse.value, 0);
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  assert.equal(u.uBreath.value, 0, 'still once landed');
+  assert.equal(u.uPulse.value, 1, 'the beads pulse');
+  landing.clear();
+  assert.equal(u.uPulse.value, 0);
+});
+
+test('once the cells land, the camera goes to the first cell and Play starts', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { landing, tick, stage, els } = setup({ autoPlay: true });
+  await landing.watchExample();
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  assert.equal(landing.playing, true);
+  assert.ok(landing.current >= 0);
+  assert.match(els.get('step-text').textContent, /^1 of /);
+  assert.equal(stage.rig.poses.at(-1).radius, 18, 'zoomed in on the cell');
+  t.mock.timers.tick(2500);
+  assert.match(els.get('step-text').textContent, /^2 of /);
+  landing.play(false);
+});
+
+test('Play does not start on its own after the visitor took the camera', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { landing, tick, stage } = setup({ autoPlay: true });
+  await landing.watchExample();
+  tickUntil(landing, tick, 'flying');
+  stage.rig.takeover();
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  assert.equal(landing.playing, false);
+  assert.equal(landing.current, -1);
 });
 
 test('a failed load of the example can be tried again', async () => {

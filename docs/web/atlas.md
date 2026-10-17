@@ -22,7 +22,7 @@ Pure modules have no DOM and are covered by `node --test`
 | Module | Role |
 |---|---|
 | `reference-data.js` (pure) | Reads the metadata CSVs into typed arrays; the class order (sorted, as the colours follow); the scene frame (`atlasFrame`: the box round every RNA and protein cell, 80 units across), kept so uploaded cells land through the same transform |
-| `spatial.js` (pure) | The orbit pose, nearest reference cells on a grid, screen-space picking, the file's sheet, label placement |
+| `spatial.js` (pure) | The orbit pose, nearest reference cells on a grid, screen-space picking, the file's cloud (an irregular, seeded shape of a few lobes, sized by the cell count), label placement |
 | `answers.js` (pure) | A service response or the recorded example as one cell shape; how each answer is drawn; which pipelines share this map (v3.1, v4, v4.1, v4.2); the receipt's numbers |
 | `choreography.js` (pure) | The landing's timing: the flight schedule, the guided timeline, the waiting loop, framing a pose, reduced-motion timing |
 | `director.js` (pure) | The page's state machine (below) |
@@ -34,7 +34,7 @@ Pure modules have no DOM and are covered by `node --test`
 | `reference-layer.js` | All reference cells as one `THREE.Points`, shaded as small spheres; filters, dimming and highlighting a set of types (a selected cell's possible types) are uniform writes |
 | `upload-layer.js` | Uploaded cells: their flights, answer looks, landing flash and ripple, and the neighbour glow, all moved by the GPU on one clock; a per-cell mask hides the cells of a type the visitor hid |
 | `illustration.js` | The waiting illustration of the service's six steps |
-| `landing.js` | Runs the state machine on the stage's clock: the sheet, the illustration, the receipt, the flights, the camera, the results |
+| `landing.js` | Runs the state machine on the stage's clock: the file's cloud, the illustration, the receipt, the flights, the camera, the results, and Play from the first cell once the cells have landed |
 | `data-tab.js` | The Your data tab. With an answer on the map it is the file's card (answer filters, Replay, Download, Clear, Send another file); otherwise the setup: the service line, the example, the file controls, and, folded, what it can label and an own copy's address |
 | `gene-profile.js` | A clicked reference cell's gene profile, streamed from the large CSVs; says so when this copy of the site does not have them |
 | `explore-tab.js` | Counts, the RNA and protein switches, the cell-type list (also the colour key) |
@@ -50,15 +50,15 @@ Pure modules have no DOM and are covered by `node --test`
 | State | What the visitor sees |
 |---|---|
 | idle | The atlas, turning slowly until touched |
-| checking, chosen | The file is checked in the browser; the camera eases aside and the file appears beside the atlas as a sheet of dots, one per cell. Nothing is sent yet |
+| checking, chosen | The file is checked in the browser; the camera eases aside and the file appears beside the atlas as an irregular cloud of dots, one per cell, that breathes (it swells and settles, each dot drifting on its own small loop). Nothing is sent yet |
 | sending | Real upload progress, with Cancel |
 | working | The service sends no progress: an **illustration** of its six steps loops (`SERVICE_STEPS` in `web/js/workflow-data.js`), with a clock and, after a few seconds, the note that the service may be waking up |
 | busy | Another file is being labelled: a countdown, then another try, three tries in all |
 | finishing | The illustration plays its remaining steps quickly |
 | receipt | The response's own numbers: cells, genes matched, whether the second opinion was used, the model. A folding card, open until the visitor has the camera |
-| flying | Cells arc from the sheet onto their coordinates by answer level (one type, family, branch, no answer), highest confidence first; each lands with a flash and a ripple, and nearby reference cells of its type glow briefly. The camera glides to frame them |
-| settling | The reference dims, the results open in the drawer (Download and Clear, then About this answer, Answers and Cells as folding sections), the camera settles on the landed cells |
-| interactive | The visitor's camera. Click a cell or a row of the drawer's cell browser for its card; step through the shown cells with the step bar (Previous, Next, Play), the card's own Previous and Next, or the arrow keys; filter by answer level and by the type given; Replay, Download, Clear. A new file or the example replaces the answer shown |
+| flying | Cells arc from their breathing places in the cloud onto their coordinates by answer level (one type, family, branch, no answer), highest confidence first; each lands with a flash and a ripple, and nearby reference cells of its type glow briefly. The camera glides to frame them |
+| settling | The cloud stops breathing; each landed cell is a bead, larger than any reference dot, in a halo of its own colour that pulses slowly. The reference dims, the results open in the drawer (Download and Clear, then About this answer, Answers and Cells as folding sections), the camera settles on the landed cells |
+| interactive | The camera flies to the first cell and Play walks on from it (not when the visitor took the camera during the landing, nor under reduced motion); then the visitor's camera. Click a cell or a row of the drawer's cell browser for its card; step through the shown cells with the step bar (Previous, Next, Play), the card's own Previous and Next, or the arrow keys; filter by answer level and by the type given; Replay, Download, Clear. A new file or the example replaces the answer shown |
 | failed | The reason in plain words, with Try again |
 
 The guided part, from the receipt to the settled view, lasts about 8 to 9

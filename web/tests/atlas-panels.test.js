@@ -41,7 +41,7 @@ test('a cell card says each kind of answer in plain words', () => {
   }
   const low = clean(buildAtlasCellCard(firstOf('coverage_too_low'), order, { source: 'recorded' }));
   assert.match(low, /too little was measured/);
-  assert.match(low, /stays on the file’s sheet/);
+  assert.match(low, /stays in the file’s cloud/);
   assert.match(low, /No file was sent/);
 });
 
@@ -64,7 +64,7 @@ test('a cell card for a service answer, placed or not', () => {
   assert.match(html, /From the service’s answer for your file/);
   assert.ok(!html.includes('Not placed'));
   const unplaced = clean(buildAtlasCellCard(noPlace, order));
-  assert.match(unplaced, /Not placed on the map: the answer gave it no place, so it stays on your file’s sheet/);
+  assert.match(unplaced, /Not placed on the map: the answer gave it no place, so it stays in your file’s cloud/);
   assert.match(unplaced, /none given/);
   assert.match(unplaced, /Pending/, 'no likeness given');
   assert.match(clean(buildAtlasCellCard(group, order, { placed: false })), /a different map/);

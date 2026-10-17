@@ -38,22 +38,27 @@ const ringAt = ([a, b]) => ({ r: round((a + b) / 2), w: round(b - a) });
 
 // One picture per look, drawn from the shader's own numbers (LOOK, FLIGHT),
 // in units of the cell's radius.
+// A landed bead's soft halo in its own colour, as three faint discs.
+const halo = (fill) => {
+  const [a, b] = LOOK.halo;
+  return [1, 0.62, 0.3].map((f, k) => `<circle r="${round(a + (b - a) * f)}" fill="${fill}" opacity="${round([0.1, 0.16, 0.24][k] * LOOK.haloAlpha * 2)}"/>`).join('');
+};
+
 const GLYPH_BODY = {
-  class: () => `<circle r="${LOOK.outline}" fill="${LOOK.colours.outline}"/><circle r="1" fill="${KEY_FILL}"/>`,
+  class: () => `${halo(KEY_FILL)}<circle r="${LOOK.outline}" fill="${LOOK.colours.outline}"/><circle r="1" fill="${KEY_FILL}"/>`,
   group: () => {
     const ring = ringAt(LOOK.inkRing);
-    return `<circle r="1" fill="${lighten(KEY_FILL, FLIGHT.lightenGroup)}"/>`
+    const fill = lighten(KEY_FILL, FLIGHT.lightenGroup);
+    return `${halo(fill)}<circle r="1" fill="${fill}"/>`
       + `<circle r="${ring.r}" fill="none" stroke="${LOOK.colours.ink}" stroke-width="${ring.w}"/>`;
   },
   lineage: () => {
     const fill = lighten(KEY_FILL, FLIGHT.lightenLineage);
-    const [a, b] = LOOK.halo;
-    const halo = [1, 0.62, 0.3].map((f, k) => `<circle r="${round(a + (b - a) * f)}" fill="${fill}" opacity="${[0.12, 0.2, 0.3][k]}"/>`);
-    return `${halo.join('')}<circle r="1" fill="${fill}"/>`;
+    return `${halo(fill)}<circle r="1" fill="${fill}"/>`;
   },
   none: () => {
     const ring = ringAt(LOOK.hollow);
-    return `<circle r="${ring.r}" fill="none" stroke="${LOOK.colours.none}" stroke-width="${ring.w}"/>`;
+    return `${halo(LOOK.colours.none)}<circle r="${ring.r}" fill="none" stroke="${LOOK.colours.none}" stroke-width="${ring.w}"/>`;
   },
   unplaced: () => {
     const ring = ringAt(LOOK.hollow);
@@ -63,7 +68,7 @@ const GLYPH_BODY = {
 };
 
 // Sized here so it never shows at an SVG's default 300 by 150; CSS may resize it.
-const glyph = (look, cls = 'atlas-glyph', size = 22) => `<svg class="${cls}" width="${size}" height="${size}" viewBox="-2 -2 4 4" `
+const glyph = (look, cls = 'atlas-glyph', size = 22) => `<svg class="${cls}" width="${size}" height="${size}" viewBox="-2.4 -2.4 4.8 4.8" `
   + `aria-hidden="true" focusable="false">${GLYPH_BODY[look]()}</svg>`;
 
 // The look an outcome is drawn in (answers.js, answerStyle).
@@ -91,11 +96,11 @@ function notPlacedReason(cell) {
 // One uploaded cell: what VivOME says, its best guess, the types it could
 // be, how like the reference it is, how much was measured, and its name in
 // the file. `placed` (default: it has a place and enough was measured) says
-// whether it flew to the map or stayed on the sheet.
+// whether it flew to the map or stayed in the file's cloud.
 export function buildAtlasCellCard(cell, classOrder, { source = 'service', placed = null } = {}) {
   if (!cell) return `<p class="pending">${PENDING_LABEL}</p>`;
   const onMap = placed ?? (cell.outcome !== 'coverage_too_low' && Array.isArray(cell.xyz));
-  const sheet = source === 'recorded' ? 'the file’s sheet' : 'your file’s sheet';
+  const sheet = source === 'recorded' ? 'the file’s cloud' : 'your file’s cloud';
   const names = (Array.isArray(cell.set) ? cell.set : [])
     .map((k) => classOrder?.[k])
     .filter((name) => name !== undefined)
@@ -112,7 +117,7 @@ export function buildAtlasCellCard(cell, classOrder, { source = 'service', place
     + field('Likeness to the reference', finite(cell.similarity) ? e(Number(cell.similarity).toFixed(3)) : pending)
     + field('Genes measured', count(cell.observed))
     + `</dl>`
-    + (onMap ? '' : `<p class="atlas-cell-note">Not placed on the map: ${e(notPlacedReason(cell))}, so it stays on ${sheet}.</p>`)
+    + (onMap ? '' : `<p class="atlas-cell-note">Not placed on the map: ${e(notPlacedReason(cell))}, so it stays in ${sheet}.</p>`)
     + `<p class="caption">${source === 'recorded'
       ? 'Recorded from the served model for the example file. No file was sent.'
       : 'From the service’s answer for your file.'}</p>`
@@ -157,11 +162,11 @@ export function buildReceipt(receipt, { open = true } = {}) {
 // ---- the key ----
 
 const KEY = [
-  ['class', 'One type', 'Type', 'filled, in its type’s colour'],
+  ['class', 'One type', 'Type', 'filled in its type’s colour, with a white rim'],
   ['group', 'A family', 'Family', 'paler, in a dark ring'],
-  ['lineage', 'A branch', 'Branch', 'paler still, in a soft halo'],
+  ['lineage', 'A branch', 'Branch', 'paler still, with no ring'],
   ['none', 'No answer', 'No answer', 'a grey ring'],
-  ['unplaced', 'Not placed', 'Not placed', 'a broken ring, left on the file’s sheet'],
+  ['unplaced', 'Not placed', 'Not placed', 'a broken ring, left in the file’s cloud'],
 ];
 
 // How an answer is drawn: one picture per look, as the map draws it. A
@@ -172,7 +177,7 @@ export function buildAnswerKey({ open = false } = {}) {
     + `<span><strong>${e(name)}:</strong> ${e(how)}</span></li>`).join('');
   return `<details class="fold atlas-key-card"${open ? ' open' : ''}><summary><span class="atlas-key-row">${row}</span></summary>`
     + `<ul class="atlas-key">${items}</ul>`
-    + '<p class="caption">A blue ring marks the cell you picked.</p>'
+    + '<p class="caption">Every landed cell is a bead in a soft halo of its colour. A blue ring marks the cell you picked.</p>'
     + '<p class="caption">Glow: nearby reference cells of the type it was given, on this map.</p>'
     + '</details>';
 }
@@ -194,5 +199,5 @@ export function buildExampleSummary(workflow) {
   const model = text(workflow?.built_for?.model_name);
   return `<p class="atlas-example">The example is PBMC240, a real file of ${cells} cells from a blood sample, `
     + `answered by ${model}. The answers were recorded from the served model, so no file is sent. `
-    + 'Each cell flies from the file’s sheet to the place the model gave it.</p>';
+    + 'Each cell flies from the file’s cloud to the place the model gave it.</p>';
 }
