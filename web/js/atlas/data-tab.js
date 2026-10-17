@@ -36,16 +36,24 @@ export function mountDataTab({ landing, client, service }) {
   };
   let opened = false;
   let workflow = null;
+  let checks = 0;
 
+  // Only the latest check speaks: one still waiting on a cold service, or
+  // on an address since changed, is ignored when it answers.
   async function checkService() {
     rememberServiceUrl(storage(), $('service-url').value.trim());
+    const seq = ++checks;
     service.state.ready = false;
+    service.state.status = null;
     line('Checking…');
     update();
-    const slow = setTimeout(() => line('Waking the service: after a quiet spell this takes up to a minute.'), 3000);
+    const slow = setTimeout(() => {
+      if (seq === checks) line('Waking the service: after a quiet spell this takes up to a minute.');
+    }, 3000);
     try {
       const status = await client.status(service.url());
       clearTimeout(slow);
+      if (seq !== checks) return;
       if (status?.status !== 'ready') {
         line(`The service is running but cannot label yet: ${status?.reason ?? 'no reason given'}.`, 'down');
       } else {
@@ -60,6 +68,7 @@ export function mountDataTab({ landing, client, service }) {
       }
     } catch (err) {
       clearTimeout(slow);
+      if (seq !== checks) return;
       line(explainFailure(err, service.url()), 'down');
     }
     update();
@@ -102,6 +111,15 @@ export function mountDataTab({ landing, client, service }) {
       </dl>${problems}`;
   }
 
+  // Assigns markup only when it changed: the landing redraws every frame
+  // while it waits, and #file-result is a live region.
+  const written = new Map();
+  const setHtml = (el, html) => {
+    if (written.get(el) === html) return;
+    el.innerHTML = html;
+    written.set(el, html);
+  };
+
   // Buttons and cards follow the landing's state.
   function update(st = landing.state) {
     const name = st.name;
@@ -111,7 +129,7 @@ export function mountDataTab({ landing, client, service }) {
     $('watch-example').disabled = !resting;
     $('send-example').disabled = !(resting && service.state.ready);
     $('matrix').disabled = !resting;
-    $('file-result').innerHTML = fileResult(st);
+    setHtml($('file-result'), fileResult(st));
     const run = landing.run;
     const shown = run && ['interactive', 'settling', 'flying', 'receipt', 'finishing'].includes(name);
     $('results-card').hidden = !shown;
@@ -119,14 +137,20 @@ export function mountDataTab({ landing, client, service }) {
       $('results-note').textContent = run.source === 'recorded'
         ? 'The recorded example: answers from the served model, no file sent.'
         : `${formatCount(run.cells.length)} cells from ${st.file?.name ?? 'your file'}.`;
-      $('outcome-chips').innerHTML = landing.chips();
+      setHtml($('outcome-chips'), landing.chips());
       $('download').hidden = run.source !== 'service';
+      // Replay and Clear wait for the landing to end.
+      $('replay').disabled = name !== 'interactive';
+      $('clear').disabled = name !== 'interactive';
     }
   }
   landing.onChange((st) => update(st));
 
   $('check-service').addEventListener('click', checkService);
   $('service-url').addEventListener('change', checkService);
+  // Emptied as the picker opens, so choosing the same file again still
+  // counts as a choice.
+  $('matrix').addEventListener('click', () => { $('matrix').value = ''; });
   $('matrix').addEventListener('change', () => {
     const file = $('matrix').files[0];
     if (file) landing.chooseFile(file);

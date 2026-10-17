@@ -87,8 +87,8 @@ function fakeThree() {
 
 function fakeStage() {
   const stage = {
-    tickers: [], frames: [], width: 800, height: 600,
-    scene: { background: { isColor: true, r: 1, g: 1, b: 1 }, add() {}, remove() {} },
+    tickers: [], frames: [], added: [], width: 800, height: 600,
+    scene: { background: { isColor: true, r: 1, g: 1, b: 1 }, add(o) { stage.added.push(o); }, remove() {} },
     camera: { matrixWorld: { elements: identity } },
     renderer: {
       getContext: () => ({ ALIASED_POINT_SIZE_RANGE: 1, getParameter: () => [1, 1024] }),
@@ -102,6 +102,10 @@ function fakeStage() {
       setPose(p) { stage.rig.poses.push(p); },
       reset() { stage.rig.poses.push('reset'); },
       setGuided() {},
+      listeners: {},
+      on(name, f) { (stage.rig.listeners[name] ??= []).push(f); },
+      // What the real rig does when the visitor drags during a guided move.
+      takeover() { (stage.rig.listeners.takeover ?? []).forEach((f) => f()); },
     },
     addTicker(f) { stage.tickers.push(f); return () => {}; },
     onFrame(f) { stage.frames.push(f); },
@@ -146,6 +150,22 @@ function setup({ client = null } = {}) {
 }
 
 const settleMicrotasks = () => new Promise((done) => setTimeout(done, 0));
+
+// The uploaded cells' uniforms, as the GPU would see them.
+const uploadUniforms = (stage) => stage.added.find((o) => o.material?.uniforms?.uTime).material.uniforms;
+
+// A file of n cells that passes the browser's check.
+function fileOf(n, name = `cells${n}.csv`) {
+  const ids = Array.from({ length: n }, (_, i) => `c${i}`);
+  const row = (gene) => `${gene},${ids.map(() => '1').join(',')}`;
+  return new File([`gene,${ids.join(',')}\n${['CD3E', 'CD19', 'CD14'].map(row).join('\n')}\n`], name);
+}
+
+// Ticks in small steps until the landing reaches the named state.
+function tickUntil(landing, tick, name, seconds = 30) {
+  for (let t = 0; t < seconds && landing.state.name !== name; t += 0.1) tick(0.1);
+  assert.equal(landing.state.name, name);
+}
 
 // The traced cells as the service's own response, for the fake service.
 function responseFromTrace() {
@@ -282,6 +302,100 @@ test('a busy service counts down, and an unreachable one says so', async () => {
   assert.equal(b.landing.state.name, 'failed');
   assert.match(b.els.get('status-card').innerHTML, /service\.example/);
   assert.match(b.els.get('status-card').innerHTML, /Try again/);
+});
+
+test('a new file chosen over an answer replaces it, and the next answer starts fresh', async () => {
+  const { landing, tick, stage } = setup();
+  await landing.watchExample();
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  landing.setOutcomeOn('lineage', false);
+  landing.select(3);
+  const benches = stage.rig.poses.length;
+  // More cells than the example: the old answer must not be read for them.
+  const check = await landing.chooseFile(fileOf(300));
+  assert.equal(check.ok, true);
+  assert.equal(landing.state.name, 'chosen');
+  assert.equal(landing.run, null, 'the old answer is gone');
+  assert.equal(landing.pick(400, 300), -1);
+  assert.equal(landing.describe(250), '');
+  assert.ok(stage.rig.poses.length > benches, 'the camera takes the bench again');
+  await landing.watchExample();
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  const u = uploadUniforms(stage);
+  assert.ok(u.uOutcomeOn.value.every((v) => v === 1), 'every outcome shown again');
+  assert.equal(u.uSelected.value, -1, 'no cell selected');
+});
+
+test('replay waits for the landing to end, and starts its sheet unanswered', async () => {
+  const { landing, tick, stage } = setup();
+  await landing.watchExample();
+  tickUntil(landing, tick, 'flying');
+  const poses = stage.rig.poses.length;
+  landing.replay();
+  assert.equal(landing.state.name, 'flying', 'not replayed mid-landing');
+  assert.equal(stage.rig.poses.length, poses, 'the camera was left alone');
+  tick(30);
+  landing.replay();
+  assert.equal(landing.state.name, 'receipt');
+  assert.equal(uploadUniforms(stage).uTime.value, 0, 'the clock starts again, so the sheet shows no answers yet');
+});
+
+test('a drag during the landing keeps the camera where the visitor put it', async () => {
+  const { landing, tick, stage } = setup();
+  await landing.watchExample();
+  tickUntil(landing, tick, 'flying');
+  stage.rig.takeover();
+  const poses = stage.rig.poses.length;
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+  assert.equal(stage.rig.poses.length, poses, 'no glide and no jump to the settled pose');
+  // A replay is guided again.
+  landing.replay();
+  tick(30);
+  assert.ok(stage.rig.poses.length > poses + 1);
+});
+
+test('a failed load of the example can be tried again', async () => {
+  const { els, landing, tick } = setup();
+  const real = globalThis.fetch;
+  globalThis.fetch = async () => { throw new TypeError('Failed to fetch'); };
+  await landing.watchExample();
+  assert.equal(landing.state.name, 'failed');
+  assert.match(els.get('status-card').innerHTML, /Try again/);
+  globalThis.fetch = real;
+  const retry = { target: { closest: (sel) => (sel === '[data-retry]' ? {} : null) } };
+  els.get('status-card').listeners.click.forEach((f) => f(retry));
+  await settleMicrotasks();
+  assert.equal(landing.state.name, 'working');
+  tick(30);
+  assert.equal(landing.state.name, 'interactive');
+});
+
+test('a service still busy after the last try says so', async () => {
+  let tries = 0;
+  const busy = { async project() { tries += 1; throw new ServiceError('busy', 'Busy.', { status: 503, retryAfter: 0 }); } };
+  const { els, landing } = setup({ client: busy });
+  await landing.chooseFile(fileOf(40));
+  landing.send();
+  for (let k = 0; k < 10 && landing.state.name !== 'failed'; k += 1) await settleMicrotasks();
+  assert.equal(landing.state.name, 'failed');
+  assert.equal(tries, 3);
+  assert.match(els.get('status-card').innerHTML, /still busy after 3 tries/);
+  assert.doesNotMatch(els.get('status-card').innerHTML, /Something went wrong/);
+});
+
+test('a check of a file no longer chosen is ignored', async () => {
+  const { landing } = setup();
+  const first = landing.chooseFile(fileOf(40, 'mine.csv'));
+  const second = landing.chooseFile(fileOf(60, 'other.csv'));
+  assert.equal(await second, null);
+  const check = await first;
+  assert.equal(landing.state.name, 'chosen');
+  assert.equal(landing.state.file.name, 'mine.csv');
+  assert.equal(check.cells, 40);
+  assert.equal(landing.state.check.cells, 40);
 });
 
 test('a file the service would refuse is stopped in the browser', async () => {

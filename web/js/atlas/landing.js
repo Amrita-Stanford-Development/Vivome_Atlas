@@ -24,7 +24,7 @@ import {
 } from './answers.js';
 import { buildAnswerKey, buildAtlasCellCard, buildExampleSummary, buildOutcomeChips, buildReceipt } from './atlas-panels.js';
 import { TIMING, finishWaiting, flightSchedule, framePose, landingTimeline, reducedTiming, waitingFrame } from './choreography.js';
-import { GUIDED, initialState, transition } from './director.js';
+import { GUIDED, MAX_ATTEMPTS, initialState, transition } from './director.js';
 import { checkFile, checkLimits } from './file-check.js';
 import { createIllustration } from './illustration.js';
 import { toScene } from './reference-data.js';
@@ -58,6 +58,17 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   let grid = null;          // RNA reference cells, for the neighbour glow
   let lastStatus = '';
   let clock = 0;            // the flight clock the upload layer shows
+  let userCam = false;      // the visitor took the camera during this landing
+
+  // A drag or the wheel during the guided landing hands the camera back: the
+  // landing goes on, but no longer moves it.
+  stage.rig.on('takeover', () => {
+    if (GUIDED.has(st.name)) userCam = true;
+  });
+  function guide() {
+    userCam = false;
+    stage.rig.setGuided(true);
+  }
 
   function setClock(t) {
     clock = t;
@@ -212,7 +223,8 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   function resultsHtml() {
     if (!run) return '';
     if (run.source === 'recorded') {
-      return `${buildExampleSummary(run.data)}<h3>Cells</h3><div class="table-scroll">${buildProjectionCells(recordedRows(run.cells))}</div>`;
+      // Every recorded cell is listed: the example has no response to download.
+      return `${buildExampleSummary(run.data)}<h3>Cells</h3><div class="table-scroll">${buildProjectionCells(recordedRows(run.cells), run.cells.length)}</div>`;
     }
     return `${buildProjectionSummary(run.data)}<h3>Answers</h3><div class="table-scroll">${buildProjectionLabels(run.data)}</div>`
       + `<h3>Cells</h3><div class="table-scroll">${buildProjectionCells(run.data)}</div>`;
@@ -273,8 +285,11 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     } else if (name === 'working' || name === 'finishing') status(workingHtml());
     else if (name === 'busy') status(`<p>Another file is being labelled. Trying again in ${Math.max(0, Math.ceil((st.retryAfter ?? 30) - phase))} s.</p>`);
     else if (name === 'failed') {
-      const retry = st.file && st.check?.ok ? '<button type="button" class="text-button" data-retry>Try again</button>' : '';
-      status(`${errorPanel(new Error(explainFailure(st.error, serviceUrl())))}${retry}`);
+      const retry = st.example || (st.file && st.check?.ok) ? '<button type="button" class="text-button" data-retry>Try again</button>' : '';
+      const message = st.stage === 'busy'
+        ? `The service was still busy after ${MAX_ATTEMPTS} tries. Try again in a few minutes.`
+        : explainFailure(st.error, serviceUrl());
+      status(`${errorPanel(new Error(message))}${retry}`);
     } else if (run) status(buildReceipt(run.receipt));
     $('skip').hidden = !GUIDED.has(name);
     $('replay-view').hidden = name !== 'interactive';
@@ -291,8 +306,21 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
 
   // ---- the state machine ----
 
+  // A new file or the example, chosen while an answer is shown: the old
+  // answer leaves the map, and the new sheet takes the bench again.
+  function dropRun() {
+    if (!run && !sheet) return;
+    illustration.hide();
+    upload.clear();
+    reference.setDim(0);
+    drawer.close();
+    run = null;
+    sheet = null;
+  }
+
   function enter(name) {
     phase = 0;
+    if (name === 'checking') dropRun();
     if (name === 'flying') {
       loadUpload(run.model);
       upload.setNeighbours(run.glow);
@@ -300,17 +328,17 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
       setClock(0);
       const e = stage.camera.matrixWorld.elements;
       upload.setArcUp([e[4], e[5], e[6]]);
-      stage.rig.setGuided(true);
-      stage.rig.animateTo(run.poses.fly, Math.max(0, (run.timeline.fly[1] - run.timeline.fly[0]) * 0.8));
+      if (!userCam) stage.rig.animateTo(run.poses.fly, Math.max(0, (run.timeline.fly[1] - run.timeline.fly[0]) * 0.8));
     }
     if (name === 'settling') {
-      stage.rig.animateTo(run.poses.settle, T.settle);
+      if (!userCam) stage.rig.animateTo(run.poses.settle, T.settle);
       openResults();
     }
     if (name === 'receipt') {
       illustration.hide();
       if (run) loadUpload({ ...run.model, flies: new Uint8Array(run.model.n) });
       upload.setOpacity(1);
+      setClock(0);
     }
     if (name === 'interactive') finish();
     if (name === 'idle') {
@@ -335,7 +363,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     upload.setGlowMode('selected');
     reference.setDim(0.6);
     stage.rig.setGuided(false);
-    stage.rig.setPose(run.poses.settle);
+    if (!userCam) stage.rig.setPose(run.poses.settle);
     if (!$('atlas-drawer').classList.contains('open')) openResults();
   }
 
@@ -391,22 +419,27 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
 
   function arrive(data, source) {
     run = buildRun(data, source);
+    // A new answer starts with every outcome shown and no cell selected.
+    upload.setAllOutcomes(true);
+    upload.setSelected(-1);
+    guide();
     finishSeconds = finishWaiting(waitingFrame(waited, { stepSeconds }), { stepSeconds, T });
     dispatch({ type: 'RESPONSE', response: data });
     stage.invalidate();
   }
 
   async function chooseFile(file) {
-    dispatch({ type: 'FILE_CHOSEN', file });
+    if (!dispatch({ type: 'FILE_CHOSEN', file })) return null;
     try {
       const check = await checkFile(file, file.name);
       const verdict = checkLimits(check, limits());
-      dispatch({ type: 'CHECKED', check: { ...check, ok: verdict.ok, problems: verdict.problems } });
+      // A check of a file no longer chosen is ignored (director.js).
+      if (!dispatch({ type: 'CHECKED', file, check: { ...check, ok: verdict.ok, problems: verdict.problems } })) return null;
       showSheet(check.cells);
       stage.invalidate();
       return st.check;
     } catch (error) {
-      dispatch({ type: 'CHECK_FAILED', error });
+      dispatch({ type: 'CHECK_FAILED', file, error });
       return null;
     }
   }
@@ -465,6 +498,13 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
 
   async function watchExample() {
     if (!dispatch({ type: 'EXAMPLE' })) return;
+    dropRun();
+    await playExample();
+  }
+
+  // The recorded example's waiting, from the start; it also runs again
+  // from "Try again" after a failed load.
+  async function playExample() {
     stepSeconds = T.exampleStep;
     waited = 0;
     try {
@@ -479,7 +519,9 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
 
   // Clicks inside the status card and the drawer.
   $('status-card').addEventListener('click', (e) => {
-    if (e.target.closest('[data-retry]') && dispatch({ type: 'RETRY' }) && st.name === 'sending') request();
+    if (!e.target.closest('[data-retry]') || !dispatch({ type: 'RETRY' })) return;
+    if (st.name === 'sending') request();
+    else if (st.example && st.name === 'working') playExample();
   });
   $('drawer-body').addEventListener('click', (e) => {
     if (e.target.closest('[data-back]')) return openResults();
@@ -496,11 +538,12 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
   }, true);
 
   function replay() {
-    if (!run) return;
+    if (!run || st.name !== 'interactive') return;
     drawer.close();
     upload.setSelected(-1);
     reference.setDim(0);
     stage.rig.setPose(sheet.bench);
+    guide();
     dispatch({ type: 'REPLAY' });
   }
 
@@ -544,7 +587,7 @@ export function createLanding({ THREE, stage, ref, reference, drawer, client, se
     },
     // The uploaded cell under the pointer, or -1.
     pick(clientX, clientY) {
-      if (!run || upload.n === 0) return -1;
+      if (!run || upload.n === 0 || upload.n !== run.cells.length) return -1;
       const rect = stage.renderer.domElement.getBoundingClientRect();
       const now = upload.positionsAt(clock);
       const screen = projectAll(now, upload.n, stage.viewProjection(), rect.width, rect.height);
