@@ -1,0 +1,39 @@
+{
+  "script_sha256": "c07d497fc1404e570d297b01281350578ae7e3b329ceb81b233090be47875b43",
+  "started": "2026-10-18T22:48:06",
+  "organs": [
+    "lymph_node",
+    "lung",
+    "large_intestine"
+  ],
+  "fold_seeds": 5,
+  "alpha": 0.1,
+  "min_n": 50,
+  "rare_min": 30,
+  "bars": {
+    "banding_lift": 10.0,
+    "mixed_coverage": 85.0,
+    "cwc": 90.0,
+    "folds": 8,
+    "colon_mixed_committed": 75.0,
+    "r2_coverage_drop": 1.0,
+    "r1_lift": 3.0,
+    "r1_coverage": 87.0,
+    "r1_cwc": 92.0,
+    "r3_over_r1r2": 5.0
+  },
+  "caches": {
+    "lymph_node": {
+      "calib": "7bc34dc16e1ea4a81463c690c844e30026b5c7fe08df8f5a000151edf6d754c4",
+      "rare": "ed51c5de54d224f248f4f660435887c7bb4e3e4f46cffb3078d7fc3e447b9a95"
+    },
+    "lung": {
+      "calib": "9333f139fb58c39f839abf21cda6730c0e7e9adcdbbc9707b1aef4a174d015ee",
+      "rare": "239993686ae3e3ed6a5ee1b13d016c49305e25067bf5eb2baa1123a091e99473"
+    },
+    "large_intestine": {
+      "calib": "4e550e98189cf125f5ee5d8923a87d06a33e900cccb3b0b9058f334451d02781",
+      "rare": "1234a19db0580546e45d85448ffcd2f1feb69edfbf913c84003f366becad30ae"
+    }
+  }
+}

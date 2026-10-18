@@ -772,6 +772,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/organ_v2_cache/rules.json` — A0's settings, written before the run
 - `research/notebook-outputs/organ_v2_cache/record.json` — A0: per organ and suite, cells, classes, the cache's sha256 (caches on Drive), the replay against the service and the qhat refit
 - `research/notebooks/organ_v2_calibration.py` — organ references v2, diagnostics A2 and A3 on A0's caches: calibration fitted on mixed or narrow uploads (with the owner's split G1 bands), and rare- and hard-class remedies (a chance floor, a group fallback, group-level sets), each on held halves, with decision rules fixed in the script
+- `research/notebook-outputs/organ_v2_calibration/rules.json` — A2 and A3's settings, bars and cache sha256s, written before the run
+- `research/notebook-outputs/organ_v2_calibration/a2.json` — A2: per organ, arm and fold, answers on held halves overall, for mixed and narrow uploads and by scenario
+- `research/notebook-outputs/organ_v2_calibration/a3.json` — A3: per organ, suite, arm and fold, answers and per-class results for the rare-class remedies
+- `research/notebook-outputs/organ_v2_calibration/decisions.json` — A2 and A3's decisions: banding to A4 for the colon only; the chance floor for the lymph node; the group fallback for the lung and colon
 - `research/notebooks/organ_v2_pools.py` — organ references v2, diagnostic A6 (the owner's decision): one member per organ trained with RNA pseudobulk pools beside single cells, against a control member, read on the seen protein sets and on single cells, with a decision rule fixed in the script
 - `research/notebooks/organ_v2_sink.py` — organ references v2, diagnosis A1b: what draws protein pools to one class (the path that picks it, the class's own markers, the pools' depth, the upload's company), an explanation only
 - `research/notebook-outputs/organ_v2_sink/rules.json` — A1b's settings, written before the run

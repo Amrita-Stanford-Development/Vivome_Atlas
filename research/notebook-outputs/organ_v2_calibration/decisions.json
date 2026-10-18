@@ -1,0 +1,149 @@
+{
+  "finished": "2026-10-18T22:50:15",
+  "seconds": 129,
+  "decisions": {
+    "lymph_node": {
+      "banding_goes_to_a4": false,
+      "banding_folds": 2,
+      "M_eligible": {
+        "M": false,
+        "M+T": false
+      },
+      "eligible_arms": [
+        "P0"
+      ],
+      "mixed_committed_75_folds": {
+        "P0": 7
+      },
+      "build": true,
+      "a3_medians": {
+        "R0": {
+          "committed": 82.14,
+          "coverage": 91.08500000000001,
+          "correct_when_committed": 96.565
+        },
+        "R1": {
+          "committed": 97.015,
+          "coverage": 88.215,
+          "correct_when_committed": 95.03999999999999
+        },
+        "R2": {
+          "committed": 95.315,
+          "coverage": 89.575,
+          "correct_when_committed": 96.09
+        },
+        "R1+R2": {
+          "committed": 97.14,
+          "coverage": 88.14,
+          "correct_when_committed": 94.975
+        },
+        "R3": {
+          "committed": 97.56,
+          "coverage": 88.44,
+          "correct_when_committed": 93.53
+        }
+      },
+      "adopt": {
+        "R2": false,
+        "R1": true,
+        "R3": false
+      }
+    },
+    "lung": {
+      "banding_goes_to_a4": false,
+      "banding_folds": 0,
+      "M_eligible": {
+        "M": false,
+        "M+T": false
+      },
+      "eligible_arms": [
+        "P0"
+      ],
+      "mixed_committed_75_folds": {
+        "P0": 10
+      },
+      "build": true,
+      "a3_medians": {
+        "R0": {
+          "committed": 85.78999999999999,
+          "coverage": 89.09,
+          "correct_when_committed": 96.13
+        },
+        "R1": {
+          "committed": 86.97,
+          "coverage": 88.92,
+          "correct_when_committed": 95.93
+        },
+        "R2": {
+          "committed": 83.86500000000001,
+          "coverage": 89.135,
+          "correct_when_committed": 96.25999999999999
+        },
+        "R1+R2": {
+          "committed": 85.64,
+          "coverage": 88.97,
+          "correct_when_committed": 96.07
+        },
+        "R3": {
+          "committed": 91.12,
+          "coverage": 86.785,
+          "correct_when_committed": 93.455
+        }
+      },
+      "adopt": {
+        "R2": true,
+        "R1": false,
+        "R3": false
+      }
+    },
+    "large_intestine": {
+      "banding_goes_to_a4": true,
+      "banding_folds": 10,
+      "M_eligible": {
+        "M": false,
+        "M+T": false
+      },
+      "eligible_arms": [
+        "P0",
+        "O2"
+      ],
+      "mixed_committed_75_folds": {
+        "P0": 0,
+        "O2": 10
+      },
+      "build": true,
+      "a3_medians": {
+        "R0": {
+          "committed": 29.725,
+          "coverage": 88.66,
+          "correct_when_committed": 98.22
+        },
+        "R1": {
+          "committed": 76.135,
+          "coverage": 79.35,
+          "correct_when_committed": 96.615
+        },
+        "R2": {
+          "committed": 10.59,
+          "coverage": 88.845,
+          "correct_when_committed": 99.875
+        },
+        "R1+R2": {
+          "committed": 64.38,
+          "coverage": 79.50999999999999,
+          "correct_when_committed": 98.25
+        },
+        "R3": {
+          "committed": 71.72,
+          "coverage": 86.32,
+          "correct_when_committed": 95.63499999999999
+        }
+      },
+      "adopt": {
+        "R2": true,
+        "R1": false,
+        "R3": false
+      }
+    }
+  }
+}
