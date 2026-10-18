@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Motion · VivOME</title>
-    <meta name="description" content="The storyboard for a short film about VivOME: each scene's rendered frame, its on-screen words, voice-over, motion and sound, from the surface down to the evidence and back into the light.">
+    <meta name="description" content="A short film about VivOME, and its storyboard: each scene's rendered frame, its on-screen words, voice-over, motion and sound, from the surface down to the evidence and back into the light.">
     <script>document.documentElement.classList.add('js');</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,9 +30,20 @@
         <header class="reel-head">
             <span class="eyebrow">Motion</span>
             <h1 class="display">A dive into <span class="cut">VivOME.</span></h1>
-            <p class="subhead">The storyboard for a film about VivOME, scene by scene: from the surface, down to the evidence, and back up into the light.</p>
+            <p class="subhead">A film about VivOME, and its storyboard scene by scene: from the surface, down to the evidence, and back up into the light.</p>
             <p class="reel-lede">The camera dives through the site's own water. At the surface is the problem; deeper down, what VivOME does and what is new in it; on the floor, the results; then it rises into the light. Running time <strong id="reel-total">&nbsp;</strong>.</p>
         </header>
+
+        <section class="sheet reel-film" id="film" aria-labelledby="film-title">
+            <h2 id="film-title">The film</h2>
+            <div class="reel-player">
+                <video id="reel-video" controls preload="metadata" playsinline poster="motion/film/poster.webp" width="1280" height="720">
+                    <source src="motion/film/vivome.mp4" type="video/mp4">
+                    <a href="motion/film/vivome.mp4">Download the film</a>
+                </video>
+            </div>
+            <div id="reel-film"></div>
+        </section>
 
         <nav class="reel-strip liquid" aria-label="Scenes">
             <ol id="reel-strip"></ol>
@@ -51,6 +62,7 @@
             <h2 id="how-title">How these frames are made</h2>
             <p>Each frame is a still from the film itself, rendered by HyperFrames from its compositions in the repository's <code>motion/</code> folder: HTML scenes animated with GSAP over the site's own living water and particles, drawn by three.js on the film's clock. Manim draws the answers scene, and FFmpeg grades each still.</p>
             <p>No number in a frame is typed in. When the frames are rendered, each one is read from the atlas's data files through the same rules as every page, and a record that is not measured yet reads Pending. Each still names its numbers and their sources, and the site's tests fail when a record no longer matches its still.</p>
+            <p>The film at the top is the same render, with its voice-over (a voice model run on the build machine, not a person) and its music, both made in code. It names the numbers it shows and speaks in a list of its own, and the tests fail when one of them no longer matches its record, as they do for the stills.</p>
             <p class="reel-links"><a class="chapter-link" href="manuscript.html">The evidence behind each number</a> <a class="chapter-link" href="workflow.html">How VivOME works, step by step</a></p>
         </section>
     </main>

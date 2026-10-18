@@ -1,10 +1,11 @@
 # The Motion page and the film
 
-`web/motion.html` is the storyboard for a film about VivOME: twelve scenes
-over 2 minutes 49 seconds, each shown as a still rendered from the film itself,
-beside its on-screen words, voice-over, motion notes and sound cue. The
-film is made in its own project, `motion/`, with HyperFrames and other
-motion tools; the page shows what it renders.
+`web/motion.html` shows a film about VivOME, 2 minutes 49 seconds long,
+and its storyboard: the film itself at the top, in a player, then its
+twelve scenes, each shown as a still rendered from the film beside its
+on-screen words, voice-over, motion notes and sound cue. The film is made in
+its own project, `motion/`, with HyperFrames and other motion tools; the
+page shows what it renders.
 
 ## The idea: a dive
 
@@ -129,12 +130,15 @@ checks each pair is within 40 pixels), so the eye carries it across.
 
 | File | Role |
 |---|---|
-| `web/motion.html` | the page: the shared header and footer, a strip of every scene, then one block per scene, the script and the method |
-| `web/js/reel-frames.js` | the storyboard, pure: every scene's timing, words, notes and number slots, and the page's markup builders |
-| `web/js/reel.js` | loads the manifest, the manuscript data and the stills' sidecar, and fills the page |
+| `web/motion.html` | the page: the shared header and footer, the film in a native player (its controls, its poster, no autoplay), a strip of every scene, then one block per scene, the script and the method |
+| `web/js/reel-frames.js` | the storyboard, pure: every scene's timing, words, notes and number slots, and the page's markup builders, the film's line and its warning among them |
+| `web/js/reel.js` | loads the manifest, the manuscript data and the stills' and the film's sidecars, and fills the page |
 | `web/css/reel.css` | the page's layout, for laptop and desktop screens |
 | `web/motion/frames/NN-<scene>.webp` | the stills, 1920 by 1080, rendered by `motion/scripts/stills.mjs` |
 | `web/motion/frames/index.json` | the sidecar: each still's time in the film and every number baked into it, with its record, file and field |
+| `web/motion/film/vivome.mp4` | the film, 1280 by 720, H.264 and AAC, streamable, under 24 MB (Cloudflare Pages takes files up to 25 MiB), written by `motion/scripts/film.mjs` |
+| `web/motion/film/poster.webp` | the player's poster: scene 1's card, at its still's time |
+| `web/motion/film/index.json` | the film's sidecar: its sha256, size and length, the release it was made for, and every number baked into it (on screen or spoken), with its record, file and field |
 | `web/tests/reel.test.js` | the checks below |
 
 The storyboard is one copy, read by the page and by the render pipeline,
@@ -157,9 +161,13 @@ A number baked into a render would bypass that guard, so:
 - the compositions fill their slots from it (`motion/lib/slots.js`); a
   pending record shows Pending;
 - `motion/scripts/stills.mjs` writes the sidecar with each still's numbers
-  and their sources;
+  and their sources, and `motion/scripts/film.mjs` the film's, with every
+  number it shows or speaks;
 - `web/tests/reel.test.js` fails when a sidecar value no longer matches its
-  record (render the stills again), and the page marks such a still too.
+  record (render the stills, or the film, again), and the page marks such a
+  still, or the film, too. For the film it also fails when its length is
+  not the storyboard's, its release is not the data's, or the file is not
+  the one its sidecar describes (its size and sha256).
 
 The test also checks that the scenes add up to the film's length, that every
 slot names a record, that no percentage or decimal is typed, that the copy
@@ -284,9 +292,17 @@ the picture at the composition's 1920 by 1080 (`renders/vivome-draft-1080.mp4`,
 silent); FFmpeg then writes `renders/vivome-draft.mp4`, 1280 by 720 with the
 sound in AAC, and `renders/vivome-draft-share.mp4`, about 20 MB, for
 sending (its picture rate is set from the film's length to keep it near
-that size). `motion/scripts/film.mjs` with `--skip-render` remixes the sound
-over the last picture, and `--name` names the files. Renders stay in the
-gitignored `motion/renders/` and are not on the site.
+that size). Those stay in the gitignored `motion/renders/`.
+
+It also writes the site's copy, `web/motion/film/vivome.mp4`: the same
+picture and sound in two passes at the best rate that keeps it under 24 MB
+(here about 960 kbit/s of picture and 128 of sound), with `+faststart` so
+it plays as it loads; its poster; and its sidecar. The numbers a render
+bakes in are kept beside it (`renders/<name>-1080.facts.json`), so the
+sidecar describes the picture, not the data as it is when the film is
+encoded; `--skip-render` remixes the sound over the last picture, and
+`--name` names the drafts. Commit the film, its poster and its sidecar
+together, as plain files (no Git LFS at this size).
 
 To change the film: edit the scene in `web/js/reel-frames.js` (words,
 timing, notes), then its composition, and its host in `motion/index.html`

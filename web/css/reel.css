@@ -10,6 +10,22 @@
 .reel-lede { margin-top: 18px; font-size: 18px; max-width: 64ch; color: var(--ink-soft); }
 .reel-lede strong { font-variant-numeric: tabular-nums; }
 
+/* ---- the film: the whole render, in a large 16:9 player on a sheet ---- */
+
+.reel-film { padding: 22px 22px 18px; margin-bottom: 36px; }
+.reel-film h2 { font-size: 20px; margin: 2px 4px 14px; }
+.reel-player video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    background: var(--bench);
+}
+.reel-film-note { margin: 14px 4px 0; font-size: 15px; color: var(--ink-soft); }
+.reel-film-note strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.reel-film .reel-stale { margin: 14px 4px 0; }
+
 /* ---- the strip: every scene's still, in order ---- */
 
 .reel-strip { padding: 16px; margin-bottom: 36px; }

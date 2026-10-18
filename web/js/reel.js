@@ -2,15 +2,16 @@
 // time, beside the still rendered for it (docs/web/motion.md).
 //
 // The words, timings and notes are web/js/reel-frames.js; the stills and
-// their sidecar are web/motion/frames/ (motion/scripts/stills.mjs). Numbers
-// in the notes go through the site's guards (msFact, factText): a failed
-// load shows Pending and an error, never a stale number. A still whose
+// their sidecar are web/motion/frames/ (motion/scripts/stills.mjs), the film
+// and its sidecar web/motion/film/ (motion/scripts/film.mjs). Numbers in the
+// notes go through the site's guards (msFact, factText): a failed load shows
+// Pending and an error, never a stale number. A still or a film whose
 // baked-in number no longer matches its record says so.
 
 import { loadManifest } from './manifest.js';
 import { checkSync, loadManuscript } from './manuscript-data.js';
 import { errorPanel } from './panels.js';
-import { FRAMES, TOTAL, buildScript, buildShot, buildStrip } from './reel-frames.js';
+import { FRAMES, TOTAL, buildFilm, buildScript, buildShot, buildStrip } from './reel-frames.js';
 import { formatClock } from './timeline.js';
 
 const $ = (id) => document.getElementById(id);
@@ -21,6 +22,12 @@ async function loadStills(url = './motion/frames/index.json') {
   const sidecar = await response.json();
   if (!Array.isArray(sidecar?.frames)) throw new Error('The stills\' list has no frames');
   return sidecar;
+}
+
+async function loadFilm(url = './motion/film/index.json') {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`The film's details failed to load: ${response.status} ${response.statusText}`);
+  return response.json();
 }
 
 function show(sources, sidecar) {
@@ -43,7 +50,15 @@ Promise.all([loadManifest(), loadManuscript()]).then(async ([manifest, manuscrip
     $('reel-error').innerHTML = errorPanel(err);
   }
   show({ manifest, manuscript }, sidecar);
+  let film = null;
+  try {
+    film = await loadFilm();
+  } catch (err) {
+    console.warn(err);
+  }
+  $('reel-film').innerHTML = buildFilm(film, { manifest, manuscript });
 }).catch((err) => {
   $('reel-error').innerHTML = errorPanel(err);
   show({}, null);
+  $('reel-film').innerHTML = buildFilm(null);
 });

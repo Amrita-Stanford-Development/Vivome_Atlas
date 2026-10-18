@@ -519,6 +519,23 @@ export function staleNumbers(still, sources) {
   });
 }
 
+// The film itself, under its player: its running time, from its sidecar
+// (web/motion/film/index.json, written by motion/scripts/film.mjs), and a
+// warning when a number baked into it, or the release it was made for, no
+// longer matches the records, as each still has.
+export function buildFilm(film, sources = {}) {
+  if (!film || !Number.isFinite(film.seconds)) {
+    return '<p class="reel-film-note"><span class="pending">The film\'s details did not load.</span></p>';
+  }
+  const stale = staleNumbers(film, sources);
+  const made = sources.manuscript?.built_for;
+  const elsewhere = made && film.built_for && JSON.stringify(film.built_for) !== JSON.stringify(made);
+  const warning = stale.length
+    ? `<p class="reel-stale">This film was rendered with an older value of ${stale.map((s) => escapeHtml(s.slot)).join(', ')}; render the film again.</p>`
+    : elsewhere ? '<p class="reel-stale">This film was rendered for another release of the atlas; render the film again.</p>' : '';
+  return `${warning}<p class="reel-film-note">The whole film, <strong>${escapeHtml(formatClock(Math.round(film.seconds)))}</strong>, with its voice-over and music. Its numbers are read from the same records as the stills below.</p>`;
+}
+
 // One scene: its still and everything the film's makers need beside it.
 export function buildShot(i, sources = {}, still = null) {
   const frame = FRAMES[i];

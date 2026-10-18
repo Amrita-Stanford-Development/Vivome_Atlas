@@ -4,10 +4,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { CAVEATS } from '../js/manuscript-data.js';
+import { formatClock } from '../js/timeline.js';
 import {
-  AFTER, CHAPTERS, EXIT, FADE, FRAMES, JOURNEY, OPENING, STARTS, TOTAL, VOICE_AT, buildScript, buildShot, buildStrip,
+  AFTER, CHAPTERS, EXIT, FADE, FRAMES, JOURNEY, OPENING, STARTS, TOTAL, VOICE_AT, buildFilm, buildScript, buildShot, buildStrip,
   cardLength, cardOpacity, cardRange, cueTime, fillSlots, frameSlots, journeyOf, locate, phrasesOf, rangeText,
   slotSource, slotText, slotsIn, staleNumbers, stillTime, voiceStart,
 } from '../js/reel-frames.js';
@@ -18,6 +20,7 @@ const manifest = JSON.parse(read('data/atlas_manifest.json'));
 const manuscript = JSON.parse(read('data/manuscript.json'));
 const sources = { manifest, manuscript };
 const sidecar = JSON.parse(read('motion/frames/index.json'));
+const film = JSON.parse(read('motion/film/index.json'));
 // The records the film shows as Pending on purpose: work not done yet.
 const PENDING_ON_PURPOSE = new Set(['ms:open_sorted_test']);
 const PAYLOAD = '<script>alert(1)</script>';
@@ -149,6 +152,44 @@ test('the rendered stills match the storyboard and the current records', () => {
   const changed = structuredClone(manuscript);
   changed.records.committed_fulcher.value = 0.5;
   assert.equal(staleNumbers(sidecar.frames[8], { manifest, manuscript: changed }).length, 1);
+});
+
+// The film on the page bakes its numbers in as the stills do: this fails
+// when a record has changed since it was made, or the storyboard's length
+// has, so the film is made again (cd motion && npm run film).
+test('the film on the page is the current film, its numbers the current records, its file the one described', () => {
+  assert.deepEqual(film.built_for, manuscript.built_for, 'the film was made for another release');
+  assert.ok(Math.abs(film.seconds - TOTAL) < 0.05, `the film runs ${film.seconds} s, the storyboard ${TOTAL} s`);
+  const file = readFileSync(new URL(`../motion/film/${film.file}`, import.meta.url));
+  assert.equal(file.length, film.bytes, 'the film is not the one its sidecar describes');
+  assert.ok(film.bytes < 24e6, `the film is ${film.bytes} bytes; Cloudflare Pages takes no file over 25 MiB`);
+  assert.equal(createHash('sha256').update(file).digest('hex'), film.sha256, 'the film is not the one its sidecar describes');
+  assert.ok(existsSync(new URL(`../motion/film/${film.poster}`, import.meta.url)), 'the film has no poster');
+  assert.deepEqual([film.width, film.height], [1280, 720]);
+  // Every number on screen or spoken, once, with its source.
+  const slots = [...new Set(FRAMES.flatMap(frameSlots).map((x) => x.id))];
+  assert.deepEqual(film.numbers.map((n) => n.slot), slots);
+  assert.deepEqual(staleNumbers(film, sources), [], 'the film shows a number that has changed: make it again');
+  for (const n of film.numbers) {
+    const [source, key] = n.slot.split(':');
+    assert.deepEqual({ file: n.file, field: n.field }, (({ file: f, field }) => ({ file: f, field }))(slotSource({ source, key }, sources)));
+  }
+  // The page says so when it goes stale, as it does for a still.
+  const changed = structuredClone(manuscript);
+  changed.records.committed_fulcher.value = 0.5;
+  assert.match(buildFilm(film, { manifest, manuscript: changed }), /class="reel-stale">This film was rendered with an older value of ms:committed_fulcher/);
+  assert.doesNotMatch(buildFilm(film, sources), /reel-stale/);
+  assert.match(buildFilm({ ...film, built_for: { ...film.built_for, model_name: 'another' } }, sources), /for another release/);
+  assert.ok(buildFilm(film, sources).includes(`<strong>${formatClock(TOTAL)}</strong>`), 'the page gives another running time');
+  assert.ok(!/NaN|undefined/.test(buildFilm(null)));
+  // A large native player, with its poster, that plays only when asked.
+  const html = read('motion.html');
+  const video = html.match(/<video[^>]*>/)?.[0];
+  assert.ok(video, 'the page has no player');
+  for (const attr of ['controls', 'preload="metadata"', 'playsinline', 'poster="motion/film/poster.webp"']) assert.ok(video.includes(attr), `the player has no ${attr}`);
+  assert.ok(!/autoplay/.test(video), 'the film plays by itself');
+  assert.match(html, /<source src="motion\/film\/vivome\.mp4" type="video\/mp4">/);
+  assert.ok(html.indexOf('id="film"') < html.indexOf('id="reel-strip"'), 'the film is not above the storyboard');
 });
 
 // The owner's rule for the film: one background throughout, the site's white
