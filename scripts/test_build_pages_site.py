@@ -42,7 +42,8 @@ class BuildTests(unittest.TestCase):
             proxy = dist / "functions" / "api" / "[[path]].js"
             self.assertEqual(proxy.read_bytes(), bps.PROXY.read_bytes())
             routes = json.loads((dist / "site" / "_routes.json").read_text())
-            self.assertEqual(routes["include"], ["/api/*"], "only /api wakes a Function")
+            self.assertEqual(routes["include"], ["/api/*", *sorted(f"/{rel}" for rel in bps.MEDIA)],
+                             "only /api and the media files wake a Function")
             toml = (dist / "wrangler.toml").read_text()
             self.assertIn(f'SERVICE_URL = "{bps.service_url()}"', toml)
             self.assertTrue(bps.service_url().startswith("https://"))
@@ -54,8 +55,33 @@ class BuildTests(unittest.TestCase):
             bps.build("bucket", dist)
             routes = json.loads((dist / "site" / "_routes.json").read_text())["include"]
             self.assertEqual(routes[0], "/api/*")
-            self.assertTrue(all(r.startswith("/data/") for r in routes[1:]) and len(routes) > 1)
+            data = [r for r in routes if r.startswith("/data/")]
+            self.assertTrue(data and len(data) == len(routes) - 1 - len(bps.MEDIA))
             self.assertIn('bucket_name = "bucket"', (dist / "wrangler.toml").read_text())
+
+
+class MediaTests(unittest.TestCase):
+    def test_media_is_stored_as_parts_with_a_function_that_serves_ranges(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            web, dist = Path(tmp) / "web", Path(tmp) / "dist"
+            (web / "motion" / "film").mkdir(parents=True)
+            data = bytes(range(256)) * (bps.PART // 256 * 2 + 3)  # two whole parts and a bit
+            (web / "motion" / "film" / "vivome.mp4").write_bytes(data)
+            routes = bps.write_media(dist / "site", dist / "functions", web)
+            self.assertEqual(routes, ["/motion/film/vivome.mp4"])
+            parts = sorted((dist / "site" / "motion" / "film" / "parts").iterdir())
+            self.assertEqual([p.name for p in parts], ["vivome.mp4.0000", "vivome.mp4.0001", "vivome.mp4.0002"])
+            self.assertEqual(b"".join(p.read_bytes() for p in parts), data)
+            code = (dist / "functions" / "motion" / "film" / "[name].js").read_text(encoding="utf-8")
+            self.assertIn(f'"size": {len(data)}', code)
+            self.assertIn('"parts": "/motion/film/parts/vivome.mp4."', code)
+            self.assertNotIn("export const MEDIA = {};", code)
+
+    def test_the_real_film_is_left_out_of_the_static_copy(self):
+        static, _ = bps.plan()
+        for rel in bps.MEDIA:
+            self.assertTrue((bps.WEB / rel).exists(), rel)
+            self.assertNotIn(rel, static)
 
 
 if __name__ == "__main__":

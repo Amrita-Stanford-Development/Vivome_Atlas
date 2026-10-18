@@ -90,6 +90,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-example.test.js` — the deployed PBMC240 example is byte-identical to the `service/examples/` copy, under Cloudflare Pages' 25 MiB file limit, and a DIA-NN report with a Genes column
 - `web/tests/atlas-choreography.test.js` — the fly-in fits its window for 1 to 2,000 cells in one level or four, level order and gaps, the landing timeline, the waiting loop and its finish, the camera pose, reduced motion
 - `web/tests/atlas-director.test.js` — every rule of the upload state machine, the sidebar's folding, and that no state is changed in place
+- `web/tests/media-function.test.js` — the media Function: ranges as browsers send them, parts cut at both ends, capped 206 answers, 416, HEAD, the whole file streamed in order, other files left static
 - `web/tests/api-proxy.test.js` — the site's /api door: the secret added, the sign-in kept back, an upload passed on with its length, plain answers when the service is missing
 - `web/tests/atlas-cell-browser.test.js` — the cell browser: every cell in one group, the group order, each sort, search, escaping
 - `web/tests/atlas-view-controls.test.js` — the view controls: Your cells only with an answer on the map, and each control asking the right part of the page
@@ -405,6 +406,7 @@ When you add, move or delete a file, update its line in the same commit.
 
 ## deploy/ — hosting the projection service
 
+- `deploy/pages/media.js` — the Pages Function that serves the site's media (the Motion page's film) with byte ranges from 1 MiB parts, so Safari and iPhones can play it
 - `deploy/pages/api-proxy.js` — the site's door to the labelling service: the Cloudflare Pages Function for /api/*, forwarding to Cloud Run with the secret the service checks
 - `deploy/huggingface/Dockerfile` — the projection service's image for a Hugging Face Space (Python 3.11, CPU torch) and its hosted settings: 0.0.0.0:7860, v4.1, the site's origin, 2,000 cells and 100 MB per upload, one projection at a time
 - `deploy/huggingface/space_card.md` — the Space's public page, written to the Space as README.md: what the service does, its model, limits and endpoints

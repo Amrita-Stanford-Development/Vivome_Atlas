@@ -8,6 +8,12 @@ at their usual URLs (/data/...) by a small Pages Function, so the pages
 need no change; without it they are simply absent and the atlas view shows
 its error panel.
 
+Media files the site plays (MEDIA: the Motion page's film) are stored as
+parts and served by deploy/pages/media.js, a Pages Function at the file's
+own URL that answers byte-range requests. Pages answers a Range request for
+a static file with the whole file, and Safari and every iPhone browser will
+not play a video without ranged answers.
+
 Every build also carries the site's door to the labelling service:
 deploy/pages/api-proxy.js as the Pages Function for /api/*, which forwards
 to the service at SERVICE_URL (wrangler.toml, from web/js/atlas/
@@ -21,6 +27,7 @@ once with wrangler; docs/web/hosting.md).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -35,6 +42,12 @@ SKIP_DIRS, SKIP_FILES = ("tests",), ("README.md",)  # repository material, not t
 UNUSED = ("data/atlas_RNA_lat128.parquet",)  # no page loads it
 PROXY = REPO / "deploy" / "pages" / "api-proxy.js"  # the /api/* Pages Function
 SERVICE_CLIENT = WEB / "js" / "atlas" / "service-client.js"  # where the service lives
+MEDIA_FUNCTION = REPO / "deploy" / "pages" / "media.js"  # byte ranges for MEDIA
+# Played with byte ranges (deploy/pages/media.js), by path in web/: each is
+# stored as parts of PART bytes beside it, in parts/, and left out of the
+# static copy.
+MEDIA = {rel.removeprefix("web/"): kind for rel, kind in {"web/motion/film/vivome.mp4": "video/mp4"}.items()}
+PART = 1024 * 1024
 # Pages that were renamed, so old links keep working (Pages' _redirects file).
 REDIRECTS = (
     ("/benchmark", "/manuscript"),  # the Benchmark page became the Manuscript page (2026-10-17)
@@ -74,7 +87,7 @@ def plan(web: Path = WEB) -> tuple[list[str], list[str]]:
     static, large = [], []
     for path in sorted(p for p in web.rglob("*") if p.is_file()):
         rel = path.relative_to(web).as_posix()
-        if rel.split("/")[0] in SKIP_DIRS or rel in SKIP_FILES or rel in UNUSED:
+        if rel.split("/")[0] in SKIP_DIRS or rel in SKIP_FILES or rel in UNUSED or rel in MEDIA:
             continue
         (large if path.stat().st_size > MAX_BYTES else static).append(rel)
     return static, large
@@ -83,6 +96,34 @@ def plan(web: Path = WEB) -> tuple[list[str], list[str]]:
 def service_url() -> str:
     """The hosted service's address, from the one line the site keeps it on."""
     return re.search(r"DEFAULT_SERVICE_URL = '([^']+)'", SERVICE_CLIENT.read_text(encoding="utf-8")).group(1)
+
+
+def write_media(site: Path, functions: Path, web: Path = WEB) -> list[str]:
+    """Each MEDIA file as parts, and the Function that serves it; returns its routes."""
+    table = {}
+    for rel, kind in MEDIA.items():
+        source = web / rel
+        if not source.exists():
+            continue
+        data = source.read_bytes()
+        folder, name = rel.rsplit("/", 1)
+        (site / folder / "parts").mkdir(parents=True, exist_ok=True)
+        for i in range(0, len(data), PART):
+            (site / folder / "parts" / f"{name}.{i // PART:04d}").write_bytes(data[i:i + PART])
+        table[f"/{rel}"] = {"size": len(data), "part": PART, "parts": f"/{folder}/parts/{name}.",
+                            "type": kind, "sha256": hashlib.sha256(data).hexdigest()}
+    if not table:
+        return []
+    source = MEDIA_FUNCTION.read_text(encoding="utf-8")
+    assert source.count("export const MEDIA = {};") == 1
+    code = source.replace("export const MEDIA = {};", f"export const MEDIA = {json.dumps(table)};")
+    # One Function per folder holding media, matching any file name there; the
+    # routes below send it only the media files themselves.
+    for folder in sorted({route.rsplit("/", 1)[0] for route in table}):
+        target = functions / folder.strip("/") / "[name].js"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(code.encode("utf-8"))
+    return sorted(table)
 
 
 def build(bucket: str | None, dist: Path = DIST) -> None:
@@ -102,7 +143,7 @@ def build(bucket: str | None, dist: Path = DIST) -> None:
     # The labelling service, reached through the site (deploy/pages/api-proxy.js).
     (dist / "functions" / "api").mkdir(parents=True)
     (dist / "functions" / "api" / "[[path]].js").write_bytes(PROXY.read_bytes())
-    routes = ["/api/*"]
+    routes = ["/api/*"] + write_media(site, dist / "functions")
     toml = [f'name = "{PROJECT}"', 'pages_build_output_dir = "./site"', 'compatibility_date = "2026-10-01"',
             "", "[vars]", f'SERVICE_URL = "{service_url()}"']
     if bucket:
@@ -114,7 +155,9 @@ def build(bucket: str | None, dist: Path = DIST) -> None:
     (site / "_routes.json").write_text(json.dumps({"version": 1, "include": routes, "exclude": []}, indent=2) + "\n")
     (dist / "wrangler.toml").write_text("\n".join(toml) + "\n")
     print(f"dist/site: {len(static)} files; left out for R2: {', '.join(large) or 'none'}"
-          + (f"; served from R2 bucket {bucket}" if bucket else "") + "; /api/* forwarded to the service")
+          + (f"; served from R2 bucket {bucket}" if bucket else "")
+          + "".join(f"; {r} served with byte ranges" for r in routes if r != "/api/*" and not r.startswith("/data/"))
+          + "; /api/* forwarded to the service")
 
 
 if __name__ == "__main__":

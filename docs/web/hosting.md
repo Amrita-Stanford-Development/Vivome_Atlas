@@ -50,6 +50,24 @@ The project was created with `pages project create ... --force`. Without
 `--force`, current Wrangler delegates to Workers, finds `web/` on its own,
 and refuses its 45 MB file. Later commands need no `--force`.
 
+## Media with byte ranges
+
+Pages answers a Range request for a static file with the whole file (200).
+Safari and every iPhone browser will not play a video without ranged (206)
+answers, so the media files the site plays (`MEDIA` in
+`scripts/build_pages_site.py`: the Motion page's film) are not uploaded as
+they are:
+
+- the build stores each as 1 MiB parts beside it, in `parts/`
+  (`parts/vivome.mp4.0000` and on, beside the film);
+- `deploy/pages/media.js` becomes the Pages Function for the file's own URL
+  (`functions/motion/film/[name].js`), and `_routes.json` sends it that URL
+  only. It answers a range from the parts (at most 4 MiB per answer, which
+  an open-ended `bytes=N-` allows), streams the parts in order for a
+  whole-file request, and answers HEAD and ranges past the end (416).
+
+The page links the file at its usual address, so nothing changes for it.
+
 ## The labelling service, through the site
 
 The service on Cloud Run answers only through the website. Pages call their
