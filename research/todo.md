@@ -435,7 +435,7 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - tiers 1 to 4 pass, most exactly: labels, split, suites, genes, statistics, mask profiles, calibration, the best-guess layer, and v4.1's frozen responses through the new loader;
   - tier 5: the retrained seed 1 matches on loss, balanced accuracy and calibration top-1, but fails the per-class 5-point check (served members differ by more than that among themselves on 11 of 20 classes); reported, not changed;
   - modules are not reproduced (another scikit-learn); blood keeps its served ones.
-- [!] **Stage 2, the colon bundle:**
+- [x] **Stage 2, the colon bundle: NO GO, closed** (owner, 2026-10-18; every failure in `research/organ-references.md`, "The large intestine's outcome"):
   - label audit done (entry 50): Paneth dropped (no DEFA5/DEFA6 in any donor), 22 classes;
   - G4 passed (entry 51): the locked test's intake and scorer run end to end on RNA pseudobulk;
   - fixed on the way: the service's DIA-NN parser (DIA-NN 1.8's Protein.Ids), and each organ's own gene identifier map;
@@ -445,9 +445,11 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
     - Kabatnik AUROC 1.0;
     - G2: an unseen donor costs 12.5 points.
     - Cause: per-upload scaling breaks narrow uploads; conformal sets too wide to commit.
-    - The locked test stays sealed.
-- [ ] **Stage 3, service and site:** the organ choice, with blood byte-identical. Waits for the beta sign-in work.
-- [ ] **Stage 4, the locked test scored once;** write-up; release 0.7.0 (deploys on the owner's approval).
+    - The locked test stays sealed (`side-tests.md`, amendment 8).
+- [-] **Stage 3, service and site:** not run for the colon (closed). The organ loader and organ gene maps are still needed for any organ that passes.
+- [-] **Stage 4:** not run for the colon; PXD052341 stays sealed.
+- [ ] **Deploy the DIA-NN 1.8 parser fix** (`d3ca02a`): the live service cannot read DIA-NN 1.8 protein tables until then (the owner approves deploys).
+- [ ] **The next organ** (owner, 2026-10-18).
 
 ---
 
@@ -655,3 +657,4 @@ because the held out classes were in training.
 | 2026-10-18 | **Track I, Stage 1: the organ reference builder, proven on blood** (run history, entry 49). `scripts/build_organ_reference.py` ports NB1, Build_Feature_Space, Reference_Projection_v3's modules, NB1d and NB2. On blood it reproduces labels, split, suites, genes, statistics, mask profiles, calibration and the best-guess layer, and v4.1's frozen responses through the new loader. Seed 1 retrained matches on loss, balanced accuracy and calibration top-1, but misses the per-class 5-point check, which the served members themselves miss. **Stage 2 begun:** the colon's label audit drops Paneth (entry 50); `research/notebooks/li_development.py` (G1, G3) committed before its run | this commit |
 | 2026-10-18 | **Track I, Stage 2: the locked test rehearsed (G4), two faults fixed** (run history, entry 51). The rehearsal found that the service's DIA-NN parser read DIA-NN 1.8's `Protein.Ids` as a sample (fixed, with a test; the live service has it too), and that its identifier map covers blood's 9,002 genes only, so colon uploads lost every colon gene. Each organ now builds its own map from HGNC (blood's reproduced exactly). The intake and scorer then ran end to end on RNA pseudobulk (97.3% balanced accuracy, p = 0.0001) | this commit |
 | 2026-10-18 | **Track I, Stage 2: the colon reference's gates, NO GO as built** (run history, entry 52). G1 commits 12% of cells (bar 75%), though committed answers are 99% right and coverage is 85%; G3 passes Kabatnik (AUROC 1.0) but misses Zheng (16.7%) and four of six polyp marker checks; G2: an unseen donor costs 12.5 points. Cause: per-upload scaling breaks narrow uploads, so conformal sets are too wide. Nothing tuned; the locked test stays sealed; the owner decides what next | this commit |
+| 2026-10-18 | **Track I: the colon closed** (the owner's decision). Every failure is listed in one place (`research/organ-references.md`, "The large intestine's outcome"): the three gate misses and their cause, the tier-5 check, the modules, the Paneth labels, a builder bug, the live DIA-NN 1.8 parser bug, the blood-only gene map, and the stopped first run. PXD052341 stays sealed (side-tests amendment 8). Next: another organ | this commit |

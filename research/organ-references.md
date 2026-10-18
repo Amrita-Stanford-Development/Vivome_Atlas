@@ -4,6 +4,11 @@ Planned 2026-10-17 and 2026-10-18 with the owner; Track I in
 `research/todo.md`. Where this conflicts with older plans, this file wins for
 organ work.
 
+**Status, 2026-10-18: the large intestine is closed, NO GO as built.** The
+owner's decision: document every failure and move to the next organ. The
+section below lists them all. The rest of this file is the plan as it was
+run.
+
 ## Why
 
 Instead of only chasing blood's weak classes, VivOME widens to other organs.
@@ -45,6 +50,111 @@ Colon accuracy on single protein cells stays Pending (the manifest rule).
    be committed and shown.
 5. **Raw-only deposits** may be searched with DIA-NN on this PC, with
    settings fixed before the search.
+
+## The large intestine's outcome: every failure, in one place
+
+Run history, entries 49 to 52; the records are under
+`research/notebook-outputs/` (`organ_builder_blood/`, `li_labels/`,
+`li_build/`, `li_development/`, `li_donor_heldout/`).
+
+**The gates (Stage 2), fixed before any colon model existed:**
+
+| Gate | Result | Bar | Verdict |
+|---|---|---|---|
+| G1, simulated colon uploads: committed | 12.0% | ≥ 75% | **miss** |
+| G1: correct when committed | 99.4% | ≥ 90% | pass |
+| G1: coverage | 85.3% | ≥ 85% | pass |
+| G1: false abstention | 0.24% | ≤ 2% | pass |
+| G3, Kabatnik: epithelium over stroma | AUROC 1.0 | ≥ 0.8 | pass |
+| G3, Zheng: T cell vs myeloid pools | 16.7% | ≥ 80% | **miss** |
+| G3, polyp plate: marker concordance | 2 of 6 groups | all ≥ 0.7 | **miss** |
+| G4, the locked test's rehearsal | runs end to end | runs | pass |
+| G2, one donor held out (a diagnosis) | 43.1 unseen, 55.6 seen | reported | gap 12.5 (blood 9.8) |
+
+**Why the gates missed:**
+- Every upload is scaled against itself. Narrow uploads (one lineage or one
+  class) lose their signal, far more on the colon than on blood.
+- Median nonconformity score by kind of upload:
+
+  | Kind of upload | Median score |
+  |---|---|
+  | one class | 0.99 |
+  | one lineage | 0.91 |
+  | whole tissue | 0.39 |
+
+- Conformal sets fitted over every kind of upload come out too wide: the
+  marginal threshold is 0.987, against blood's 0.91. Most sets then span
+  lineages and the cell abstains.
+- Leaving single-class uploads out of the fit moves the threshold only to
+  0.970, so they are not the whole cause.
+- Whole-tissue uploads are answered well (best guess 86.5%, coverage
+  99.7%), yet commit only 22%.
+- Real data follow the same pattern:
+  - Kabatnik's mixed upload separates perfectly;
+  - Zheng's immune-only upload fails, its T-cell pools guessed mast cells,
+    monocytes or endothelial cells;
+  - the polyp plate is almost all epithelium, and every cell abstained.
+
+**Failures and faults found on the way, all recorded:**
+1. **Blood acceptance, tier 5.** "Every class's recall within 5 points" of
+   the served seed missed: hematopoietic stem cells −10.0, naive CD4 T +9.5.
+   The five served seeds differ by more than 5 points among themselves on 11
+   of 20 classes, so the check was ill-posed. It is reported, not changed.
+2. **Modules are not reproduced** (adjusted Rand 0.30; another
+   scikit-learn). Blood keeps its served modules. The port is deterministic
+   and is used for other organs; one colon module ended up empty (harmless).
+3. **Tabula Sapiens' "Paneth cell of colon" is not Paneth cells.** No donor's
+   cells express DEFA5 or DEFA6. The class is dropped (217 cells).
+4. **The audit's marker-signature score was misleading.** It z-scores
+   near-zero genes across groups, so ambient RNA showed as matches. The
+   decisions used absolute shares instead.
+5. **A builder bug:** the class rule judged dropped classes when the audit
+   kept them. A unit test caught it, and it is fixed.
+6. **A service bug, live:** the DIA-NN parser read DIA-NN 1.8's `Protein.Ids`
+   column as a cell, so 1.8 protein tables could not be uploaded. It is fixed
+   with a test (`service/pipeline/alignment.py`) but not yet deployed.
+7. **A service limit:** the identifier map covers blood's 9,002 genes only,
+   so colon uploads lost every colon gene (2,446).
+   - Each organ now builds its own map from HGNC; blood's is reproduced
+     exactly.
+   - Research runs use it through `bundle.gene_map`.
+   - The served service does not yet load organ maps.
+8. **The first gate run was stopped,** at 40 of 240 uploads and before
+   anything was written, to take faults 6 and 7's fixes. The run that counts
+   is the second.
+
+**Limits of the data, known from the start:**
+- No human colon single-cell MS set with independent labels exists.
+- All three Deep Visual Proteomics sets come from one lab and one chemistry.
+- PXD051891 is not public.
+- Zheng's colorectal tables hold only macrophages, CD8 T and CD4 T cells.
+- The polyp plate's origin is unknown.
+- Tabula Sapiens' colon classes follow donors (TSP2 holds most stem cells,
+  TSP26 most best4+ cells).
+
+**What worked:**
+- The builder: blood's references rebuilt exactly, and v4.1's frozen
+  responses reproduced through the new loader.
+- The label audit.
+- Kabatnik's mixed upload (AUROC 1.0).
+- The sealed test's intake and scorer (rehearsed).
+- Whole-tissue simulated uploads' best guess (86.5%).
+
+**What stays:**
+- **PXD052341 stays sealed,** unopened, for any future colon reference
+  (`research/benchmark/side-tests.md`, amendment 8).
+- The colon's work folder and bundle stay on Drive
+  (`drive/Data/Results/Organs/large_intestine/`); nothing of it is served.
+- Stages 3 and 4 do not run for the colon.
+
+**Carried to the next organ:**
+- **The recipe is unchanged,** so an organ whose uploads are narrow (one
+  lineage) will likely miss G1 in the same way. Mixed, multi-lineage
+  uploads, as in blood, are where it works.
+- **Build the gene map with the gene space.**
+- **Read every development deposit with the service's own parser** before
+  any gate.
+- **Run the label audit before training.**
 
 ## What the code and data showed
 

@@ -135,6 +135,17 @@ stained images, then cut out together.
   2026-10-18), with settings fixed before the search.
 - **Roles in code:** `scripts/fetch_public_sets.py`, tier C.
 
+### Amendment 8, 2026-10-18: the colon reference closed; PXD052341 stays sealed
+
+The colon reference missed its development gates (run history, entry 52),
+and the owner closed it. That decision moves the colon's data as follows:
+- **PXD052341 is not scored and stays sealed:** downloaded and checksummed,
+  never opened. It stays the locked test for any future colon reference,
+  under its protocol, which a new candidate amendment would have to name.
+- **Zheng (PXD057118), Kabatnik (PXD046999) and the polyp plate stay
+  development.** They were read for the colon's gate G3.
+- **Their role in `scripts/fetch_public_sets.py` is unchanged.**
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

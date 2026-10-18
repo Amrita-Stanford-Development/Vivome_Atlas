@@ -2322,6 +2322,17 @@ when unseen.
 the owner; nothing was changed to pass a gate. The locked test (PXD052341)
 stays sealed, and the evaluation suite has now been used once.
 
+### 53. The colon closed; on to the next organ (Track I), 2026-10-18
+
+**The owner's decision, after entry 52:** document every failure and move to
+the next organ.
+- **Where it is documented:** `research/organ-references.md`, "The large
+  intestine's outcome", lists every gate, fault and data limit in one place.
+- **PXD052341 stays sealed** (`side-tests.md`, amendment 8).
+- **The two service fixes are committed but not deployed:** the DIA-NN 1.8
+  parse, and organ gene maps for research runs. The live service still fails
+  on DIA-NN 1.8 protein tables until a deploy.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
