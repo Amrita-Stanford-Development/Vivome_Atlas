@@ -772,6 +772,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/organ_v2_cache/rules.json` — A0's settings, written before the run
 - `research/notebook-outputs/organ_v2_cache/record.json` — A0: per organ and suite, cells, classes, the cache's sha256 (caches on Drive), the replay against the service and the qhat refit
 - `research/notebooks/organ_v2_calibration.py` — organ references v2, diagnostics A2 and A3 on A0's caches: calibration fitted on mixed or narrow uploads (with the owner's split G1 bands), and rare- and hard-class remedies (a chance floor, a group fallback, group-level sets), each on held halves, with decision rules fixed in the script
+- `research/notebooks/organ_v2_pools.py` — organ references v2, diagnostic A6 (the owner's decision): one member per organ trained with RNA pseudobulk pools beside single cells, against a control member, read on the seen protein sets and on single cells, with a decision rule fixed in the script
 - `research/notebooks/organ_v2_sink.py` — organ references v2, diagnosis A1b: what draws protein pools to one class (the path that picks it, the class's own markers, the pools' depth, the upload's company), an explanation only
 - `research/notebook-outputs/organ_v2_sink/rules.json` — A1b's settings, written before the run
 - `research/notebook-outputs/organ_v2_sink/probes.json` — A1b: each sink by path, with its class's markers removed, with pools thinned, and with each population alone
