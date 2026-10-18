@@ -91,6 +91,12 @@ class TableTests(unittest.TestCase):
         dev = {e["group"]: e["role"] for e in f.ENTRIES if e["tier"] == "L" and e["group"] != "LungMAP2025_MSV000094189"}
         self.assertEqual(set(dev.values()), {"development"})
 
+    def test_the_lymph_node_locked_test_is_held_out_and_only_its_niche_results(self):
+        # side-tests.md, amendment 11; research/benchmark/protocol-ln-pxd042367.md, "File used"
+        ln = [e for e in f.ENTRIES if "PXD042367" in e["url"]]
+        self.assertEqual([(e["group"], e["role"], e["tier"], e["name"]) for e in ln],
+                         [("Coscia2023_PXD042367", "held_out", "N", "DIANN_results_Fig4.rar")])
+
     def test_tier_c_is_the_colon_and_small(self):
         colon = [e for e in f.ENTRIES if e["tier"] == "C"]
         self.assertEqual({e["group"] for e in colon}, {"Post2025_PXD052341", "Zheng2025_PXD057118", "Kabatnik2024_PXD046999"})

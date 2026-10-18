@@ -18,7 +18,10 @@ Tier C is the colon reference's data (side-tests.md, amendment 7; about 9 MB):
 PXD052341, the colon's locked test, and the development sets PXD057118 and
 PXD046999 (Deep Visual Proteomics pools). Tier L is the lung's (amendment 9;
 about 930 MB): MSV000094189, the lung's locked test, and the development sets
-MSV000094373, the Human Protein Atlas DVP samples and PXD029341.
+MSV000094373, the Human Protein Atlas DVP samples and PXD029341. Tier N is the
+lymph node's (amendment 11; about 2.6 GB): PXD042367's tonsil-niche results,
+its locked test, and the development sets PXD047762, Zheng's tonsil tables
+and PXD011683.
 
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
@@ -58,7 +61,7 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "data" / "incoming" / "public_sets"
 RECORD = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 CHUNK = 8 << 20
-ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L")
+ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L", "N")
 RAW_SUFFIXES = (".raw", ".d.zip", ".wiff", ".mzml", ".mzml.zip", ".mzml.gz")
 HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu", "www.proteinatlas.org")
 PRIDE = "https://ftp.pride.ebi.ac.uk/pride/data/archive"
@@ -163,6 +166,17 @@ ENTRIES = (
       for n, s in (("dvp_sample_data.tsv.zip", 20083408), ("dvp_cell_types.tsv.zip", 668))],
     pride("Herrera2022_PXD029341", "development", "PXD029341", "2022/08", "results.zip", 854720055, tier="L"),
     pride("Herrera2022_PXD029341", "development", "PXD029341", "2022/08", "sdrf.tsv", 8709, tier="L"),
+    # tier N: the lymph node reference's data (side-tests.md, amendment 11). PXD042367's Fig. 4 results are the
+    # lymph node's locked test (research/benchmark/protocol-ln-pxd042367.md)
+    pride("Coscia2023_PXD042367", "held_out", "PXD042367", "2023/11", "DIANN_results_Fig4.rar", 230205158, tier="N"),
+    *[pride("Coscia2024_PXD047762", "development", "PXD047762", "2024/03", n, s, tier="N")
+      for n, s in (("DIANN_Fig2A.rar", 110267046), ("DIANN_Fig2B-F.rar", 424594120), ("DIANN_Fig3.rar", 59670355),
+                   ("DIANN_FigS2D-G.rar", 55821551), ("Rawfile_description.xlsx", 11823))],
+    *[pride("Zheng2025_PXD057118", "development", "PXD057118", "2024/12", n, s, tier="N")
+      for n, s in (("Tonsil_Cancer_pg_matrix_B_Cells.txt", 360620), ("Tonsil_Cancer_pg_matrix_Cytotoxic_T_Cells.txt", 836594),
+                   ("Tonsil_Cancer_pg_matrix_Helper_T_Cells.txt", 392851), ("Tonsil_Cancer_pg_matrix_Macrophages.txt", 264718),
+                   ("Tonsil_Cancer_pg_matrix_Plasma_Cells.txt", 344622), ("Tonsil_Cancer_pg_matrix_Tumor_Cells.txt", 649882))],
+    pride("DusSzachniewicz2021_PXD011683", "development", "PXD011683", "2021/09", "MaxQuant_Output.zip", 1932688240, tier="N"),
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
 # link; they were saved by hand into data/incoming/public_sets/PXD073250/ and are recorded by --record-manual.
@@ -288,7 +302,7 @@ def save_record(record: dict, path: Path = RECORD) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tier", choices=("A", "B", "C", "L", "all"), default="A")
+    parser.add_argument("--tier", choices=("A", "B", "C", "L", "N", "all"), default="A")
     parser.add_argument("--only", help="comma-separated groups")
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--list", action="store_true", help="list the entries and what is on disk; fetch nothing")

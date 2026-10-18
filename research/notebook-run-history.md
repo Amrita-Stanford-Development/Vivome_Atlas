@@ -2413,6 +2413,28 @@ The gap is 3.7 points (colon 12.5, blood 9.8).
 **Note:** the lung is far closer than the colon. The colon's cause, narrow
 uploads, shows here in milder form.
 
+### 56. The lymph node: data roles, label audit (Track I), 2026-10-18
+
+**Why:** after the lung (entry 55), the owner chose to move to the next organ
+with the same recipe: the lymph node.
+
+**The search:** no lymphoid-tissue single-cell MS set with independent labels
+exists. The usable sets are tonsil micro-regions (Coscia lab) and sorted or
+enriched B cells.
+
+**Roles** (`side-tests.md`, amendment 11; the owner's choice):
+- PXD042367's tonsil niches are locked, with the protocol committed before
+  any download;
+- PXD047762 (same lab), Zheng's tonsil pools, the Protein Atlas lymph-node
+  pools and PXD011683 are development.
+
+**Label audit** (`research/notebooks/organ_labels.py`):
+- the class rule drops erythrocytes, pDCs and precursors;
+- the "thymocytes" are mature T cells (CD1A, RAG1, DNTT at 0%; CD3E at 100%)
+  and are merged into CD4 T and CD8 T;
+- the generic "monocyte" class (9 to 32% on its own markers) is dropped.
+- 19 classes remain.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

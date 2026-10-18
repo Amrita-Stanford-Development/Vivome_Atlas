@@ -187,6 +187,61 @@ Run history, entry 55. Records: `research/notebook-outputs/lung_build/`,
 - The lung's work folder and bundle stay on Drive
   (`drive/Data/Results/Organs/lung/`).
 
+## Lymph node (the third organ, from 2026-10-18)
+
+**The owner's decisions:**
+- After the lung's narrow miss, the lymph node is next, from Tabula Sapiens
+  Lymph Node only.
+- The recipe and the gates are unchanged.
+- **Data roles,** in `side-tests.md`, amendment 11:
+  - **Locked test:** PXD042367's tonsil niches (one section, 146
+    micro-regions). Protocol: `research/benchmark/protocol-ln-pxd042367.md`.
+  - **Development:** PXD047762 (the same lab's tonsil micro-regions; the
+    owner's choice despite the shared lab), Zheng's tonsil pools, the
+    Protein Atlas lymph-node pools, and PXD011683's lymph-node B cells.
+
+**The atlas:** 129,062 cells from 6 donors, 99.8% immune.
+
+**Classes** (`scripts/organs/lymph_node.json`):
+- **The class rule drops three classes** (70 cells): erythrocytes,
+  plasmacytoid dendritic cells and hematopoietic precursors.
+- **The label audit** (`research/notebooks/organ_labels.py lymph_node`;
+  `research/notebook-outputs/lymph_node_labels/`):
+  - **the "thymocytes" are mature T cells.** 181 cells, nearly all TSP7, with
+    CD1A, RAG1 and DNTT at 0% and CD3E at 100%. They are merged into CD4 T
+    and CD8 T.
+  - **the generic "monocyte" class is dropped** (766 cells). It expresses
+    CD14, FCN1 and LYZ in only 9 to 32% of its cells, and resembles T cells or
+    endothelium in four of six donors.
+  - **the generic "T cell" class and the ILCs are weak but lymphoid.** They
+    stay, and the answer layer can fall back to their group.
+- **The result: 19 classes** under blood's lineages, lymphoid and myeloid,
+  plus stromal.
+- **Simulated uploads** use blood's three real protein profiles, computed
+  over the lymph node's gene space. Its cells are immune, so they are not
+  rank-transferred.
+
+**Gates, fixed before any lymph node model.** G1, G2 and G4 are the colon's.
+G3:
+- **PXD047762's micro-regions:** AUROC ≥ 0.8 of P(B cell group) − P(T cell
+  group), B-cell regions over T-cell regions.
+- **Zheng's tonsil pools,** as one upload: at least 80% of the B, CD8 T,
+  CD4 T, macrophage and plasma pools get their group as the argmax:
+  - B and plasma pools: B cell;
+  - CD8 T and CD4 T pools: T cell;
+  - macrophage pools: monocyte/macrophage.
+
+  Tumour pools are uploaded but not scored.
+- **The Protein Atlas samples,** all in one upload: at least 80% of the
+  lymph-node macrophage, CD4 T, CD8 T and B-cell pools get their group as
+  the argmax.
+- **PXD011683:** at least 80% of the reactive lymph-node (control) B-cell
+  samples get the B cell group as the argmax. Lymphoma samples are uploaded
+  but not scored.
+
+The wording may be fixed to a deposit's real layout by a dated note before
+the model, never after.
+
 ## The large intestine's outcome: every failure, in one place
 
 Run history, entries 49 to 52; the records are under

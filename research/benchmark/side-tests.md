@@ -191,6 +191,35 @@ The lung reference missed two development gates (run history, entry 55).
 - **MSV000094373, the Protein Atlas DVP samples and PXD029341** were read for
   G3 and stay development.
 
+### Amendment 11, 2026-10-18: the lymph node reference's data (owner's decisions)
+
+After the lung, the owner chose the lymph node, from Tabula Sapiens Lymph
+Node, with the same recipe (`research/organ-references.md`, "Lymph node").
+
+**The search.** It ran on 2026-10-18 over repositories and the literature,
+reading pages, file listings and papers only. It found:
+- no human lymph node, tonsil or spleen single-cell MS set with independent
+  labels;
+- no sorted lymph-node stroma.
+
+The usable sets are tonsil micro-regions and sorted B cells.
+
+| Role | Set | What it is |
+|---|---|---|
+| held_out: the lymph node's locked test | PXD042367, Makhmut 2023 (Coscia lab), its Fig. 4 | 146 tonsil micro-regions from one section: germinal-centre zones, mantle zone, interfollicular T zone and epithelium, annotated on immunofluorescence. Protocol: `research/benchmark/protocol-ln-pxd042367.md` |
+| development | PXD047762, Makhmut 2024 (Coscia lab) | Tonsil B-cell, T-cell and epithelial micro-regions; DIA-NN results and a raw-file description |
+| development | PXD057118, Zheng 2025, its tonsil tables | Tonsil cancer DVP pools: B, CD8 T, CD4 T, macrophage, plasma and tumour cells (the deposit was already development for the colon) |
+| development | The Human Protein Atlas DVP samples | Lymph-node macrophage, CD4 T, CD8 T and B-cell pools from one donor (already development for the lung) |
+| development | PXD011683, Duś-Szachniewicz 2021 | CD19+ B cells from reactive lymph-node aspirates and follicular lymphoma; MaxQuant |
+| reserve | PXD006191 (Díez 2021, sorted tonsil B subsets; peptide files only), PXD009569 (sorted Treg and Teff from lymph nodes; Mascot files only) | — |
+
+- **Locked means what amendment 1 says.**
+- **Caveat, the owner's choice:** PXD047762 comes from the same lab as the
+  locked test and may share its tonsils. Its development check can preview
+  the test.
+- **The locked set is one section of one donor.**
+- **Roles in code:** `scripts/fetch_public_sets.py`, tier N.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

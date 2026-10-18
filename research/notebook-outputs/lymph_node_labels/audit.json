@@ -1,0 +1,143 @@
+{
+  "script_sha256": "66cfe497340c4b6b209154a93b48c62c6195b005ef71b26ef791b60e82cba11f",
+  "run": "2026-10-18T09:08:03",
+  "organ": "lymph_node",
+  "min_cells": 20,
+  "markers": {
+    "b cell": [
+      "MS4A1",
+      "CD79A",
+      "CD19",
+      "PAX5"
+    ],
+    "plasma cell": [
+      "JCHAIN",
+      "MZB1",
+      "XBP1",
+      "PRDM1"
+    ],
+    "cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "IL7R"
+    ],
+    "naive thymus-derived cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "CCR7",
+      "SELL",
+      "LEF1"
+    ],
+    "cd8-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD8A",
+      "CD8B"
+    ],
+    "regulatory t cell": [
+      "FOXP3",
+      "IL2RA",
+      "CTLA4"
+    ],
+    "t cell": [
+      "CD3E",
+      "CD3D",
+      "TRAC"
+    ],
+    "mature nk t cell": [
+      "CD3E",
+      "NKG7",
+      "KLRB1",
+      "GZMK"
+    ],
+    "cd4-positive, alpha-beta thymocyte": [
+      "CD1A",
+      "RAG1",
+      "DNTT",
+      "CD4"
+    ],
+    "cd8-positive, alpha-beta thymocyte": [
+      "CD1A",
+      "RAG1",
+      "DNTT",
+      "CD8A"
+    ],
+    "natural killer cell": [
+      "NKG7",
+      "GNLY",
+      "KLRD1",
+      "NCAM1"
+    ],
+    "innate lymphoid cell": [
+      "IL7R",
+      "KIT",
+      "RORC",
+      "IL1R1"
+    ],
+    "macrophage": [
+      "CD68",
+      "C1QA",
+      "APOE",
+      "MARCO"
+    ],
+    "monocyte": [
+      "CD14",
+      "FCN1",
+      "LYZ"
+    ],
+    "classical monocyte": [
+      "CD14",
+      "S100A8",
+      "VCAN"
+    ],
+    "intermediate monocyte": [
+      "CD14",
+      "FCGR3A",
+      "HLA-DRA"
+    ],
+    "non-classical monocyte": [
+      "FCGR3A",
+      "CX3CR1",
+      "CDKN1C"
+    ],
+    "myeloid dendritic cell": [
+      "CD1C",
+      "CLEC10A",
+      "FCER1A",
+      "CLEC9A"
+    ],
+    "neutrophil": [
+      "CSF3R",
+      "FCGR3B",
+      "CXCR2"
+    ],
+    "mast cell": [
+      "TPSAB1",
+      "CPA3",
+      "KIT"
+    ],
+    "endothelial cell": [
+      "PECAM1",
+      "VWF",
+      "CDH5"
+    ],
+    "stromal cell": [
+      "COL1A1",
+      "PDGFRB",
+      "CCL19",
+      "CCL21"
+    ],
+    "erythrocyte": [
+      "HBB",
+      "HBA1"
+    ],
+    "plasmacytoid dendritic cell": [
+      "LILRA4",
+      "CLEC4C"
+    ],
+    "hematopoietic precursor cell": [
+      "CD34",
+      "SPINK2"
+    ]
+  },
+  "markers_not_in_atlas": []
+}

@@ -1,0 +1,95 @@
+class_name,donor,cells,own_markers_mean_share
+b cell,TSP14,8014,0.7849
+b cell,TSP2,5302,0.7617
+b cell,TSP21,13333,0.7772
+b cell,TSP25,12663,0.686
+b cell,TSP27,7316,0.7744
+b cell,TSP7,8118,0.7883
+"cd4-positive, alpha-beta t cell",TSP14,10416,0.7446
+"cd4-positive, alpha-beta t cell",TSP2,2431,0.7332
+"cd4-positive, alpha-beta t cell",TSP21,8905,0.7094
+"cd4-positive, alpha-beta t cell",TSP25,7467,0.6438
+"cd4-positive, alpha-beta t cell",TSP27,7654,0.6887
+"cd4-positive, alpha-beta t cell",TSP7,2407,0.7776
+"cd4-positive, alpha-beta thymocyte",TSP7,117,0.1795
+"cd8-positive, alpha-beta t cell",TSP14,6269,0.681
+"cd8-positive, alpha-beta t cell",TSP2,1033,0.6105
+"cd8-positive, alpha-beta t cell",TSP21,3579,0.6926
+"cd8-positive, alpha-beta t cell",TSP25,851,0.7105
+"cd8-positive, alpha-beta t cell",TSP27,2193,0.649
+"cd8-positive, alpha-beta t cell",TSP7,757,0.6971
+"cd8-positive, alpha-beta thymocyte",TSP7,54,0.1991
+classical monocyte,TSP14,87,0.7701
+classical monocyte,TSP2,131,0.8855
+classical monocyte,TSP21,146,0.863
+classical monocyte,TSP25,48,0.75
+classical monocyte,TSP7,137,0.8832
+endothelial cell,TSP14,136,0.799
+endothelial cell,TSP7,22,0.7879
+erythrocyte,TSP14,21,0.6667
+innate lymphoid cell,TSP14,275,0.2564
+innate lymphoid cell,TSP2,129,0.4709
+innate lymphoid cell,TSP7,340,0.2596
+intermediate monocyte,TSP14,50,0.9133
+intermediate monocyte,TSP2,125,0.9733
+intermediate monocyte,TSP21,45,1.0
+intermediate monocyte,TSP7,43,0.9767
+macrophage,TSP14,949,0.8369
+macrophage,TSP2,99,0.5934
+macrophage,TSP21,227,0.707
+macrophage,TSP25,330,0.7303
+macrophage,TSP27,39,0.5769
+macrophage,TSP7,150,0.7333
+mast cell,TSP14,31,0.8925
+mast cell,TSP2,33,1.0
+mast cell,TSP7,122,0.9918
+mature nk t cell,TSP14,235,0.5947
+mature nk t cell,TSP2,113,0.6593
+mature nk t cell,TSP21,104,0.7164
+mature nk t cell,TSP25,57,0.6184
+mature nk t cell,TSP27,62,0.6815
+mature nk t cell,TSP7,453,0.8124
+monocyte,TSP14,144,0.1412
+monocyte,TSP2,51,0.3203
+monocyte,TSP21,237,0.0858
+monocyte,TSP25,226,0.1416
+monocyte,TSP27,28,0.1547
+monocyte,TSP7,80,0.2875
+myeloid dendritic cell,TSP2,42,0.4583
+myeloid dendritic cell,TSP21,35,0.5286
+myeloid dendritic cell,TSP7,34,0.4706
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP14,969,0.8881
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP2,499,0.7419
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP21,671,0.8477
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP25,811,0.8804
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP27,831,0.8635
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP7,373,0.9008
+natural killer cell,TSP14,547,0.3409
+natural killer cell,TSP2,393,0.4695
+natural killer cell,TSP21,151,0.4454
+natural killer cell,TSP25,136,0.5165
+natural killer cell,TSP27,103,0.6141
+natural killer cell,TSP7,249,0.5582
+neutrophil,TSP14,155,0.914
+neutrophil,TSP21,41,0.8618
+neutrophil,TSP7,87,0.8391
+non-classical monocyte,TSP14,23,0.3478
+non-classical monocyte,TSP2,22,0.4091
+non-classical monocyte,TSP7,21,0.3333
+plasma cell,TSP14,2124,0.9469
+plasma cell,TSP2,283,0.9143
+plasma cell,TSP21,198,0.8207
+plasma cell,TSP25,2403,0.9734
+plasma cell,TSP27,589,0.9482
+plasma cell,TSP7,347,0.8307
+regulatory t cell,TSP14,595,0.8028
+regulatory t cell,TSP21,77,0.7749
+regulatory t cell,TSP27,133,0.7544
+regulatory t cell,TSP7,156,0.8483
+stromal cell,TSP14,106,0.4623
+t cell,TSP14,61,0.4754
+t cell,TSP2,286,0.1969
+t cell,TSP21,146,0.1735
+t cell,TSP25,320,0.2583
+t cell,TSP27,24,0.2639
+t cell,TSP7,444,0.2049

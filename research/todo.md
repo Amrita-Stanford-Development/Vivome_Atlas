@@ -459,6 +459,10 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
     - G3: LungMAP BPD AUROC 0.62 (bar 0.8; the control donors' epithelial pools called macrophage); HPA AT2 over AT1 1.0; IPF foci 0.88;
     - G2: an unseen donor costs 3.7 points.
     - MSV000094189 stays sealed (amendment 10).
+- [~] **The lymph node** (owner, 2026-10-18: next organ, same recipe; `research/organ-references.md`, "Lymph node"):
+  - roles set (amendment 11); PXD042367's protocol committed before its download;
+  - the label audit: thymocytes merged into CD4/CD8 T, generic monocytes dropped; 19 classes;
+  - next: fetch tier N, the build, gates G1 to G4.
 
 ---
 
@@ -669,3 +673,4 @@ because the held out classes were in training.
 | 2026-10-18 | **Track I: the colon closed** (the owner's decision). Every failure is listed in one place (`research/organ-references.md`, "The large intestine's outcome"): the three gate misses and their cause, the tier-5 check, the modules, the Paneth labels, a builder bug, the live DIA-NN 1.8 parser bug, the blood-only gene map, and the stopped first run. PXD052341 stays sealed (side-tests amendment 8). Next: another organ | this commit |
 | 2026-10-18 | **Track I: the lung started** (run history, entry 54). Search found only lineage-sorted pools (PNNL/LungMAP) and the HPA DVP AT1/AT2 pools. Roles (amendment 9, the owner's choice): MSV000094189 locked, with its protocol committed before any download; MSV000094373, the HPA DVP samples and PXD029341 development; MSV000081973 reserve. Classes: 28, 6 dropped by the class rule; the label audit (`research/notebooks/organ_labels.py`) drops nothing more | this commit |
 | 2026-10-18 | **Track I: the lung's gates, NO GO as built, narrowly** (run history, entry 55). G1 commits 73.4% (bar 75%) with 97.4% correct when committed and 90.3% coverage; whole-tissue uploads commit 99.1%. G3 passes the Protein Atlas AT2/AT1 (AUROC 1.0) and the IPF foci (0.88), misses LungMAP BPD (0.62: the control donors' epithelial pools called macrophage). G2 gap 3.7 points. Nothing tuned; MSV000094189 stays sealed (amendment 10); the owner decides | this commit |
+| 2026-10-18 | **Track I: the lymph node started** (run history, entry 56; the owner chose the next organ with the same recipe). Roles (amendment 11): PXD042367's tonsil niches locked, protocol before any download; PXD047762, Zheng's tonsil pools, the Protein Atlas lymph-node pools and PXD011683 development. Audit: thymocytes are mature T cells (merged), generic monocytes are not monocytes (dropped); 19 classes | this commit |

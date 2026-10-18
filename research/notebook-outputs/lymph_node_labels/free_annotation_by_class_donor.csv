@@ -1,0 +1,181 @@
+class_name,donor,free_annotation,cells
+b cell,TSP14,b cell,214
+b cell,TSP14,memory b cell,7672
+b cell,TSP14,naive b cell,128
+b cell,TSP2,b cell,526
+b cell,TSP2,memory b cell,3401
+b cell,TSP2,naive b cell,1375
+b cell,TSP21,b cell,165
+b cell,TSP21,memory b cell,11413
+b cell,TSP21,naive b cell,1755
+b cell,TSP25,b cell,275
+b cell,TSP25,memory b cell,7846
+b cell,TSP25,naive b cell,4542
+b cell,TSP27,b cell,193
+b cell,TSP27,memory b cell,4705
+b cell,TSP27,naive b cell,2418
+b cell,TSP7,b cell,1206
+b cell,TSP7,memory b cell,5598
+b cell,TSP7,naive b cell,1314
+"cd4-positive, alpha-beta t cell",TSP14,"cd4-positive, alpha-beta memory t cell",127
+"cd4-positive, alpha-beta t cell",TSP14,"cd4-positive, alpha-beta t cell",3165
+"cd4-positive, alpha-beta t cell",TSP14,innate lymphoid cell,450
+"cd4-positive, alpha-beta t cell",TSP14,t cell,6674
+"cd4-positive, alpha-beta t cell",TSP2,"cd4-positive, alpha-beta memory t cell",239
+"cd4-positive, alpha-beta t cell",TSP2,"cd4-positive, alpha-beta t cell",745
+"cd4-positive, alpha-beta t cell",TSP2,innate lymphoid cell,2
+"cd4-positive, alpha-beta t cell",TSP2,t cell,1445
+"cd4-positive, alpha-beta t cell",TSP21,"cd4-positive, alpha-beta memory t cell",69
+"cd4-positive, alpha-beta t cell",TSP21,"cd4-positive, alpha-beta t cell",2211
+"cd4-positive, alpha-beta t cell",TSP21,t cell,6625
+"cd4-positive, alpha-beta t cell",TSP25,"cd4-positive, alpha-beta memory t cell",191
+"cd4-positive, alpha-beta t cell",TSP25,"cd4-positive, alpha-beta t cell",1307
+"cd4-positive, alpha-beta t cell",TSP25,t cell,5969
+"cd4-positive, alpha-beta t cell",TSP27,"cd4-positive, alpha-beta memory t cell",92
+"cd4-positive, alpha-beta t cell",TSP27,"cd4-positive, alpha-beta t cell",1952
+"cd4-positive, alpha-beta t cell",TSP27,innate lymphoid cell,5
+"cd4-positive, alpha-beta t cell",TSP27,t cell,5605
+"cd4-positive, alpha-beta t cell",TSP7,"cd4-positive, alpha-beta memory t cell",19
+"cd4-positive, alpha-beta t cell",TSP7,"cd4-positive, alpha-beta t cell",1052
+"cd4-positive, alpha-beta t cell",TSP7,innate lymphoid cell,115
+"cd4-positive, alpha-beta t cell",TSP7,t cell,1221
+"cd4-positive, alpha-beta thymocyte",TSP14,"cd4-positive, alpha-beta thymocyte",5
+"cd4-positive, alpha-beta thymocyte",TSP7,"cd4-positive, alpha-beta thymocyte",117
+"cd8-positive, alpha-beta t cell",TSP14,"cd8-positive, alpha-beta memory t cell",2604
+"cd8-positive, alpha-beta t cell",TSP14,"cd8-positive, alpha-beta t cell",2723
+"cd8-positive, alpha-beta t cell",TSP14,innate lymphoid cell,172
+"cd8-positive, alpha-beta t cell",TSP14,t cell,770
+"cd8-positive, alpha-beta t cell",TSP2,"cd8-positive, alpha-beta memory t cell",831
+"cd8-positive, alpha-beta t cell",TSP2,"cd8-positive, alpha-beta t cell",101
+"cd8-positive, alpha-beta t cell",TSP2,t cell,101
+"cd8-positive, alpha-beta t cell",TSP21,"cd8-positive, alpha-beta memory t cell",1425
+"cd8-positive, alpha-beta t cell",TSP21,"cd8-positive, alpha-beta t cell",1958
+"cd8-positive, alpha-beta t cell",TSP21,t cell,196
+"cd8-positive, alpha-beta t cell",TSP25,"cd8-positive, alpha-beta memory t cell",285
+"cd8-positive, alpha-beta t cell",TSP25,"cd8-positive, alpha-beta t cell",389
+"cd8-positive, alpha-beta t cell",TSP25,t cell,177
+"cd8-positive, alpha-beta t cell",TSP27,"cd8-positive, alpha-beta memory t cell",842
+"cd8-positive, alpha-beta t cell",TSP27,"cd8-positive, alpha-beta t cell",1170
+"cd8-positive, alpha-beta t cell",TSP27,innate lymphoid cell,3
+"cd8-positive, alpha-beta t cell",TSP27,t cell,178
+"cd8-positive, alpha-beta t cell",TSP7,"cd8-positive, alpha-beta memory t cell",205
+"cd8-positive, alpha-beta t cell",TSP7,"cd8-positive, alpha-beta t cell",432
+"cd8-positive, alpha-beta t cell",TSP7,innate lymphoid cell,19
+"cd8-positive, alpha-beta t cell",TSP7,t cell,101
+"cd8-positive, alpha-beta thymocyte",TSP14,"cd8-positive, alpha-beta thymocyte",5
+"cd8-positive, alpha-beta thymocyte",TSP7,"cd8-positive, alpha-beta thymocyte",54
+classical monocyte,TSP14,classical monocyte,87
+classical monocyte,TSP2,classical monocyte,131
+classical monocyte,TSP21,classical monocyte,146
+classical monocyte,TSP25,classical monocyte,48
+classical monocyte,TSP27,classical monocyte,3
+classical monocyte,TSP7,classical monocyte,137
+endothelial cell,TSP14,endothelial cell,136
+endothelial cell,TSP2,endothelial cell,12
+endothelial cell,TSP21,endothelial cell,11
+endothelial cell,TSP27,endothelial cell,15
+endothelial cell,TSP7,endothelial cell,22
+erythrocyte,TSP14,erythrocyte,21
+erythrocyte,TSP2,erythrocyte,6
+erythrocyte,TSP21,erythrocyte,3
+erythrocyte,TSP25,erythrocyte,10
+erythrocyte,TSP7,erythrocyte,2
+hematopoietic precursor cell,TSP2,hematopoietic stem cell,1
+hematopoietic precursor cell,TSP25,hematopoietic stem cell,3
+hematopoietic precursor cell,TSP27,hematopoietic stem cell,2
+hematopoietic precursor cell,TSP7,hematopoietic stem cell,6
+innate lymphoid cell,TSP14,innate lymphoid cell,275
+innate lymphoid cell,TSP2,innate lymphoid cell,129
+innate lymphoid cell,TSP27,innate lymphoid cell,1
+innate lymphoid cell,TSP7,innate lymphoid cell,340
+intermediate monocyte,TSP14,intermediate monocyte,50
+intermediate monocyte,TSP2,intermediate monocyte,125
+intermediate monocyte,TSP21,intermediate monocyte,45
+intermediate monocyte,TSP25,intermediate monocyte,17
+intermediate monocyte,TSP27,intermediate monocyte,1
+intermediate monocyte,TSP7,intermediate monocyte,43
+macrophage,TSP14,macrophage,949
+macrophage,TSP2,macrophage,99
+macrophage,TSP21,macrophage,227
+macrophage,TSP25,macrophage,330
+macrophage,TSP27,macrophage,39
+macrophage,TSP7,macrophage,150
+mast cell,TSP14,mast cell,31
+mast cell,TSP2,mast cell,33
+mast cell,TSP21,mast cell,13
+mast cell,TSP25,mast cell,11
+mast cell,TSP27,mast cell,2
+mast cell,TSP7,mast cell,122
+mature nk t cell,TSP14,mature nk t cell,235
+mature nk t cell,TSP2,mature nk t cell,113
+mature nk t cell,TSP21,mature nk t cell,104
+mature nk t cell,TSP25,mature nk t cell,57
+mature nk t cell,TSP27,mature nk t cell,62
+mature nk t cell,TSP7,mature nk t cell,451
+mature nk t cell,TSP7,nk t cell,2
+monocyte,TSP14,monocyte,144
+monocyte,TSP2,monocyte,51
+monocyte,TSP21,monocyte,237
+monocyte,TSP25,monocyte,226
+monocyte,TSP27,monocyte,28
+monocyte,TSP7,monocyte,80
+myeloid dendritic cell,TSP14,cd1c-positive myeloid dendritic cell,7
+myeloid dendritic cell,TSP14,innate lymphoid cell,2
+myeloid dendritic cell,TSP14,memory b cell,2
+myeloid dendritic cell,TSP2,cd141-positive myeloid dendritic cell,28
+myeloid dendritic cell,TSP2,cd1c-positive myeloid dendritic cell,6
+myeloid dendritic cell,TSP2,conventional dendritic cell,6
+myeloid dendritic cell,TSP2,memory b cell,2
+myeloid dendritic cell,TSP21,cdc1,1
+myeloid dendritic cell,TSP21,cdc2,31
+myeloid dendritic cell,TSP21,conventional dendritic cell,3
+myeloid dendritic cell,TSP7,cd141-positive myeloid dendritic cell,4
+myeloid dendritic cell,TSP7,cd1c-positive myeloid dendritic cell,24
+myeloid dendritic cell,TSP7,conventional dendritic cell,6
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP14,"naive thymus-derived cd4-positive, alpha-beta t cell",969
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP2,"naive thymus-derived cd4-positive, alpha-beta t cell",499
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP21,"naive thymus-derived cd4-positive, alpha-beta t cell",671
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP25,"naive thymus-derived cd4-positive, alpha-beta t cell",811
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP27,"naive thymus-derived cd4-positive, alpha-beta t cell",831
+"naive thymus-derived cd4-positive, alpha-beta t cell",TSP7,"naive thymus-derived cd4-positive, alpha-beta t cell",373
+natural killer cell,TSP14,natural killer cell,547
+natural killer cell,TSP2,natural killer cell,351
+natural killer cell,TSP2,nk cell,42
+natural killer cell,TSP21,natural killer cell,151
+natural killer cell,TSP25,natural killer cell,136
+natural killer cell,TSP27,natural killer cell,103
+natural killer cell,TSP7,natural killer cell,241
+natural killer cell,TSP7,nk cell,8
+neutrophil,TSP14,neutrophil,155
+neutrophil,TSP2,neutrophil,6
+neutrophil,TSP21,neutrophil,41
+neutrophil,TSP25,neutrophil,12
+neutrophil,TSP27,neutrophil,2
+neutrophil,TSP7,neutrophil,87
+non-classical monocyte,TSP14,non-classical monocyte,23
+non-classical monocyte,TSP2,non-classical monocyte,22
+non-classical monocyte,TSP21,non-classical monocyte,4
+non-classical monocyte,TSP25,non-classical monocyte,1
+non-classical monocyte,TSP7,non-classical monocyte,21
+plasma cell,TSP14,plasma cell,2124
+plasma cell,TSP2,plasma cell,283
+plasma cell,TSP21,plasma cell,198
+plasma cell,TSP25,plasma cell,2403
+plasma cell,TSP27,plasma cell,589
+plasma cell,TSP7,plasma cell,347
+plasmacytoid dendritic cell,TSP14,plasmacytoid dendritic cell,2
+plasmacytoid dendritic cell,TSP2,plasmacytoid dendritic cell,4
+plasmacytoid dendritic cell,TSP7,plasmacytoid dendritic cell,10
+regulatory t cell,TSP14,regulatory t cell,595
+regulatory t cell,TSP2,regulatory t cell,7
+regulatory t cell,TSP21,regulatory t cell,77
+regulatory t cell,TSP27,regulatory t cell,133
+regulatory t cell,TSP7,regulatory t cell,156
+stromal cell,TSP14,stromal cell,106
+stromal cell,TSP7,stromal cell,5
+t cell,TSP14,t cell,61
+t cell,TSP2,t cell,286
+t cell,TSP21,t cell,146
+t cell,TSP25,t cell,320
+t cell,TSP27,t cell,24
+t cell,TSP7,t cell,444
