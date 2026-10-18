@@ -1,14 +1,15 @@
-// The site's field of particles (web/js/background.js), drawn the same way
-// but as a pure function of film time, so HyperFrames can seek to any frame:
-// cells, molecules, DNA and RNA strands, the molecular network and the flow
-// field. background.js moves its particles a step per animation frame with
-// Math.random(); here every position is worked out from seeded starting
-// values and the time, which gives the same picture at the same moment on
-// every render. The colours and shapes are background.js's own.
+// The site's field (web/js/background.js), drawn the same way but as a pure
+// function of film time, so HyperFrames can seek to any frame: the breathing
+// near-white base, the flow field, the molecular network, cells, molecules,
+// DNA and RNA strands, and the faint grid and edge shade. background.js
+// moves its particles a step per animation frame with Math.random(); here
+// every position is worked out from seeded starting values and the time,
+// which gives the same picture at the same moment on every render. The
+// colours and shapes are background.js's own.
 //
-// createField(width, height) -> { canvas, draw(t, { density, rise, deep }) }
-// draws onto a transparent canvas; web/js/biofield.js's water (lib/dive.js)
-// lays it behind the cells, as the site does.
+// createField(width, height) -> { canvas, draw(t, { climb, density, links, scale }) }
+// paints the whole frame; web/js/biofield.js's water (lib/dive.js) lays it
+// behind the cells, as the site does.
 
 import { rng } from '../vendor/site/random.js';
 
@@ -127,6 +128,47 @@ export function createField(width, height, seed = 17) {
     ctx.restore();
   }
 
+  // background.js's breathing base: the site's near-white field.
+  function base(time) {
+    const breathing = 0.5 + 0.3 * Math.sin(time * 0.8);
+    const wave1 = 0.4 + 0.2 * Math.sin(time * 0.5);
+    const wave2 = 0.3 + 0.15 * Math.sin(time * 0.7 + Math.PI / 3);
+    const sat = 12 + breathing * 20 + wave1 * 8;
+    const offset = wave2 * 5;
+    const g = ctx.createLinearGradient(0, 0, width, height);
+    g.addColorStop(0, `hsl(210, ${Math.min(sat + offset, 50)}%, ${94 + breathing * 2}%)`);
+    g.addColorStop(0.25, `hsl(212, ${Math.min(sat * 0.9 + offset, 45)}%, ${93 + breathing * 1.5}%)`);
+    g.addColorStop(0.5, `hsl(215, ${Math.min(sat * 0.8 + wave1 * 8, 50)}%, ${92 + breathing}%)`);
+    g.addColorStop(0.75, `hsl(213, ${Math.min(sat * 0.7 + offset, 45)}%, ${91 + breathing * 0.8}%)`);
+    g.addColorStop(1, `hsl(218, ${Math.min(sat * 0.6 + wave2 * 10, 50)}%, ${90 + breathing * 0.5}%)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, width, height);
+    const sx = width * (0.3 + 0.2 * Math.sin(time * 0.3));
+    const sy = height * (0.4 + 0.15 * Math.cos(time * 0.25));
+    const shimmer = ctx.createRadialGradient(sx, sy, 0, sx, sy, width * 0.8);
+    shimmer.addColorStop(0, `hsla(220, 35%, 96%, ${0.04 + wave1 * 0.03})`);
+    shimmer.addColorStop(0.5, `hsla(215, 30%, 94%, ${0.02 + wave2 * 0.02})`);
+    shimmer.addColorStop(1, 'hsla(210, 20%, 92%, 0)');
+    ctx.fillStyle = shimmer;
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  // background.js's faint grid and edge shade, drawn last.
+  function gridAndVignette() {
+    ctx.save();
+    ctx.globalAlpha = 0.03;
+    ctx.strokeStyle = 'rgba(0, 142, 204, 0.5)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < width; x += 100) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = 0; y < height; y += 100) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+    ctx.restore();
+    const v = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.max(width, height) * 0.7);
+    v.addColorStop(0, 'rgba(245, 245, 243, 0)');
+    v.addColorStop(1, 'rgba(0, 142, 204, 0.08)');
+    ctx.fillStyle = v;
+    ctx.fillRect(0, 0, width, height);
+  }
+
   function flowField(time, alpha) {
     const step = 50;
     ctx.save();
@@ -149,12 +191,14 @@ export function createField(width, height, seed = 17) {
 
   // t: film seconds. climb: how far the water has risen past the camera by
   // now, in background.js's frames (60 a second at its own pace). density:
-  // the share of particles shown. glow: brighter in the deep, where the
-  // water behind them is dark. links: the network's strength.
-  function draw(t, { climb = t * 60, density = 1, glow = 1, links = 1 } = {}) {
+  // the share of particles shown. links: the network's strength. scale:
+  // how large the particles are drawn (deeper, they come forward).
+  // It paints the whole frame, as background.js does: the base first, the
+  // grid and edge shade last.
+  function draw(t, { climb = t * 60, density = 1, glow = 1, links = 1, scale = 1 } = {}) {
     // background.js's clock: Date.now() * 0.00085 ms, about 0.85 a second.
     const time = t * 0.85;
-    ctx.clearRect(0, 0, width, height);
+    base(time);
     flowField(time, 0.05 * glow);
     if (links > 0) {
       const at = nodes.map((n) => [bounce(n.x + n.vx * t * 60, width), bounce(n.y + n.vy * t * 60, height)]);
@@ -185,8 +229,14 @@ export function createField(width, height, seed = 17) {
       const p = particles[i];
       const y = wrap(p.y - p.speedY * climb, -50, height + 100);
       const x = wrap(p.x + p.speedX * t * 60 + Math.sin(time * 0.42 + p.pulse) * 12, -50, width + 100);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(scale, scale);
+      ctx.translate(-x, -y);
       particle(p, x, y, time, glow);
+      ctx.restore();
     }
+    gridAndVignette();
   }
 
   return { canvas, draw };

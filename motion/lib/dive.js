@@ -7,10 +7,15 @@
 // - a clock HyperFrames owns: every frame is drawn on its `hf-seek` event,
 //   for that exact time, never from requestAnimationFrame. The water's
 //   state is stepped on a fixed 60 a second grid from the start of the film
-//   (the cells) or of the scene (the ripples and the ink), so a frame
-//   rendered on its own looks the same as one reached by playing;
-// - depth: the water darkens from the surface to the floor and lightens
-//   again on the way up, with light shafts, caustics and a waterline;
+//   (the cells) or of the scene (the ripples), so a frame rendered on its
+//   own looks the same as one reached by playing;
+// - depth, shown by the objects and never by colour: the background is the
+//   site's own white field and gel throughout (background.js's breathing
+//   base, biofield's frost). Going down, the cells come forward: the view
+//   narrows so they are larger, the camera drifts on through them, it sways
+//   so the near ones move more than the far (parallax), the far ones are
+//   drawn apart and softly blurred, and the particles grow; going up, all of
+//   that eases back. A waterline shows at the surface, in the gel's colours;
 // - the film's motif: a time code and a depth gauge.
 //
 // It also draws the scenes' data pictures (lib/scenes.js) on the same seek.
@@ -40,24 +45,8 @@ export function locate(t) {
   return { index, frame: f, plan: PLAN[f.id], local, p: local / f.seconds };
 }
 
-// ---- depth: the colour of the water, from the surface (0) to the floor (1) ----
-
-const STOPS = [
-  [0, '#E4F0F9', '#B4D3EB'],
-  [0.35, '#CBE1F2', '#7DB0D7'],
-  [0.7, '#6EA2CB', '#1E5B8A'],
-  [1, '#3A76A4', '#0A3152'],
-];
-const hex = (h) => new THREE.Color(h);
-function waterColours(d) {
-  let i = 0;
-  while (i < STOPS.length - 2 && d > STOPS[i + 1][0]) i++;
-  const [d0, t0, b0] = STOPS[i];
-  const [d1, t1, b1] = STOPS[i + 1];
-  const u = clamp((d - d0) / (d1 - d0));
-  return [hex(t0).lerp(hex(t1), u), hex(b0).lerp(hex(b1), u)];
-}
-
+// Depth, 0 at the surface to 1 at the deepest point: it changes what the
+// objects do, never the colour.
 export function depthAt(t) {
   const { frame, p } = locate(t);
   return lerp(frame.depth, smooth(p));
@@ -74,8 +63,18 @@ const canSimulate = supported(renderer);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 200);
-const target = createSceneTarget(THREE);
-target.setSize(W, H, 1);
+// The cells are drawn in two slices by distance: the far slice is blurred
+// (a soft depth of field), then the near slice laid over it.
+const nearTarget = createSceneTarget(THREE);
+const farTarget = createSceneTarget(THREE);
+nearTarget.setSize(W, H, 1);
+farTarget.setSize(W, H, 1);
+const plainTarget = (w, h) => new THREE.WebGLRenderTarget(w, h, {
+  minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false, stencilBuffer: false,
+});
+const blurA = plainTarget(W / 2, H / 2);
+const blurB = plainTarget(W / 2, H / 2);
+const cells = plainTarget(W, H);
 const flat = new THREE.Camera();
 
 const field = createField(W, H);
@@ -99,36 +98,39 @@ float cellEdge(vec2 p, float t) {
   return d2 - d1;
 }`;
 
-// Behind the cells: the water's body, light shafts, caustics, the floor's
-// pool of light and the particles. It fills only what the cells leave
-// uncovered (it is drawn after them, under their alpha).
+// Behind the cells: the site's field (lib/field.js: background.js's
+// breathing white base and its particles). It fills only what the cells
+// leave uncovered (it is drawn after them, under their alpha).
 const BACK = `
-uniform vec3 uTop; uniform vec3 uBottom; uniform float uTime; uniform float uShafts;
-uniform float uCaustic; uniform float uPool; uniform float uAspect; uniform sampler2D uField;
+uniform sampler2D uField;
 varying vec2 vUv;
-${NOISE}
+void main() { gl_FragColor = vec4(texture2D(uField, vUv).rgb, 1.0); }`;
+
+// A blur along one direction (9 taps), for the far slice of cells. The
+// textures hold colour premultiplied by alpha, so blurring them is exact.
+const BLUR = `
+uniform sampler2D uTex; uniform vec2 uStep;
+varying vec2 vUv;
 void main() {
-  vec2 uv = vUv;
-  vec3 col = mix(uBottom, uTop, smoothstep(0.0, 1.0, uv.y));
-  float sx = (uv.x - 0.5) * uAspect + (1.0 - uv.y) * 0.34;
-  float rays = smoothstep(0.44, 0.84, fbm(vec2(sx * 3.1, uTime * 0.05))) * pow(uv.y, 1.3);
-  col = mix(col, vec3(0.93, 0.97, 1.0), clamp(rays * uShafts * 0.42, 0.0, 1.0));
-  vec2 q = uv * vec2(uAspect, 1.0) * 5.2;
-  q += (vec2(fbm(q * 0.5 + uTime * 0.04), fbm(q * 0.5 + 7.3 - uTime * 0.03)) - 0.5) * 0.9;
-  float net = 1.0 - smoothstep(0.0, 0.1, cellEdge(q, uTime * 0.35));
-  col += vec3(0.72, 0.88, 1.0) * net * uCaustic * 0.11 * (0.35 + 0.65 * uv.y);
-  float pool = exp(-pow(length((uv - vec2(0.5, 0.4)) * vec2(uAspect, 1.0)) * 1.5, 2.0));
-  col += vec3(0.32, 0.58, 0.84) * pool * uPool * 0.32;
-  vec4 f = texture2D(uField, uv);
-  col = mix(col, f.rgb, f.a);
-  float v = length((uv - 0.5) * vec2(uAspect, 1.0));
-  col *= 1.0 - 0.16 * smoothstep(0.55, 1.15, v);
-  gl_FragColor = vec4(col, 1.0);
+  vec4 c = texture2D(uTex, vUv) * 0.2270270;
+  c += (texture2D(uTex, vUv + uStep * 1.3846154) + texture2D(uTex, vUv - uStep * 1.3846154)) * 0.3162162;
+  c += (texture2D(uTex, vUv + uStep * 3.2307692) + texture2D(uTex, vUv - uStep * 3.2307692)) * 0.0702703;
+  gl_FragColor = c;
+}`;
+
+// The near slice over the blurred far one.
+const COMBINE = `
+uniform sampler2D uNear; uniform sampler2D uFar;
+varying vec2 vUv;
+void main() {
+  vec4 n = texture2D(uNear, vUv);
+  gl_FragColor = n + texture2D(uFar, vUv) * (1.0 - n.a);
 }`;
 
 // Over everything: the surface, when it is in sight. Above the waterline
-// is the light (Snell's window, seen from below); along it a bright
-// meniscus; under it a glow.
+// the gel is clear and a shade brighter (Snell's window, seen from below);
+// along it a fine white meniscus with a soft grey edge under it. White and
+// grey only, so the frame keeps the site's colour.
 const SURFACE = `
 uniform float uWaterline; uniform float uTime; uniform float uAspect;
 varying vec2 vUv;
@@ -140,31 +142,35 @@ void main() {
   float above = smoothstep(wl - 0.0025, wl + 0.0025, uv.y);
   float line = exp(-pow((uv.y - wl) * 260.0, 2.0));
   float glow = exp(-pow((uv.y - wl) * 14.0, 2.0)) * (1.0 - above);
+  float edge = exp(-pow((uv.y - wl + 0.006) * 200.0, 2.0)) * (1.0 - above);
   vec2 q = vec2(x, uv.y) * 7.0;
   q += (vec2(fbm(q * 0.4 + uTime * 0.06), fbm(q * 0.4 + 5.1 - uTime * 0.05)) - 0.5) * 1.1;
   float shimmer = 1.0 - smoothstep(0.0, 0.12, cellEdge(q, uTime * 0.5));
-  vec3 sky = mix(vec3(0.95, 0.975, 1.0), vec3(1.0), clamp((uv.y - wl) * 2.5, 0.0, 1.0));
-  sky = mix(sky, vec3(0.80, 0.90, 0.98), shimmer * 0.22);
-  float a = clamp(max(above, max(line * 0.95, glow * 0.4)), 0.0, 1.0);
+  vec3 sky = mix(vec3(0.955, 0.965, 0.975), vec3(0.985, 0.99, 0.995), clamp((uv.y - wl) * 2.5, 0.0, 1.0));
+  sky += vec3(0.02) * shimmer;
+  float a = clamp(max(above, max(line * 0.9, max(glow * 0.35, edge * 0.5))), 0.0, 1.0);
   vec3 c = mix(vec3(1.0), sky, above);
-  c = mix(c, vec3(0.42, 0.66, 0.86), line * (1.0 - above) * 0.85);
+  c = mix(c, vec3(0.72, 0.74, 0.76), edge * (1.0 - line));
   gl_FragColor = vec4(c * a, a);
 }`;
 
-function pass(fragmentShader, uniforms, blending) {
+function pass(fragmentShader, uniforms, blending = { blending: THREE.NoBlending }) {
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
     vertexShader: QUAD, fragmentShader, uniforms, depthTest: false, depthWrite: false, transparent: true, ...blending,
   }));
   mesh.frustumCulled = false;
   const s = new THREE.Scene();
   s.add(mesh);
-  return { uniforms, draw: () => renderer.render(s, flat) };
+  return {
+    uniforms,
+    draw: () => renderer.render(s, flat),
+    into: (target) => { renderer.setRenderTarget(target); renderer.render(s, flat); renderer.setRenderTarget(null); },
+  };
 }
 
-const back = pass(BACK, {
-  uTop: { value: new THREE.Color() }, uBottom: { value: new THREE.Color() }, uTime: { value: 0 },
-  uShafts: { value: 1 }, uCaustic: { value: 1 }, uPool: { value: 0 }, uAspect: { value: W / H }, uField: { value: fieldTexture },
-}, {
+const blur = pass(BLUR, { uTex: { value: null }, uStep: { value: new THREE.Vector2() } });
+const combine = pass(COMBINE, { uNear: { value: nearTarget.texture }, uFar: { value: blurB.texture } });
+const back = pass(BACK, { uField: { value: fieldTexture } }, {
   blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
   blendSrc: THREE.OneMinusDstAlphaFactor, blendDst: THREE.OneFactor,
   blendSrcAlpha: THREE.OneMinusDstAlphaFactor, blendDstAlpha: THREE.OneFactor,
@@ -177,18 +183,54 @@ const surface = pass(SURFACE, { uWaterline: { value: 2 }, uTime: { value: 0 }, u
 
 // ---- the cells: stepped from the film's start ----
 
+// The layer's shared uniforms (its depth fade and haze) are reached through
+// any of its materials: every material holds the same objects.
 let layer = null;
 let layerStep = 0;
+let shared = null;
+const NEAR = 3;
+const FAR = 46;
 function freshLayer() {
   if (layer) { scene.remove(layer.group); layer.dispose(); }
-  layer = createBioLayer(THREE, { palette: PALETTES.vivid, density: 'rich' });
+  layer = createBioLayer(THREE, { palette: PALETTES.vivid, density: 'rich', near: NEAR, far: FAR });
   scene.add(layer.group);
+  shared = layer.group.children[0].material.uniforms;
   layerStep = 0;
   layer.update(0, { aspect: W / H });
 }
+// Deeper, the camera drifts on through the cells faster (scene units a
+// second), so they come forward and pass.
+const drift = (d) => 0.4 + 2.2 * d;
 function cellsTo(step) {
   if (!layer || step < layerStep) freshLayer();
-  while (layerStep < step) { layerStep++; layer.update(layerStep * STEP, { aspect: W / H }); }
+  while (layerStep < step) {
+    layerStep++;
+    layer.update(layerStep * STEP, { aspect: W / H, advance: STEP * drift(depthAt(layerStep * STEP)) });
+  }
+}
+
+// The cells in two slices: the far one blurred, the near one sharp. Deeper,
+// the split comes closer and the blur grows.
+function captureCells(d) {
+  const split = 17 - 6 * d;
+  const fade = shared.uDepthFade.value;
+  const haze = shared.uHaze.value;
+  fade.set(split, split + 3, FAR - 16, FAR);
+  shared.uHaze.value = 0.55 + 0.35 * d;
+  farTarget.capture(renderer, scene, camera);
+  const r = 0.8 + 3.2 * d;
+  blur.uniforms.uTex.value = farTarget.texture;
+  blur.uniforms.uStep.value.set(r / (W / 2), 0);
+  blur.into(blurA);
+  blur.uniforms.uTex.value = blurA.texture;
+  blur.uniforms.uStep.value.set(0, r / (H / 2));
+  blur.into(blurB);
+  // The very nearest cells fade before they fill the frame, so the words stay clear.
+  fade.set(NEAR + 1.5, NEAR + 6.5, split, split + 3);
+  shared.uHaze.value = haze;
+  nearTarget.capture(renderer, scene, camera);
+  combine.into(cells);
+  fade.set(NEAR, NEAR + 4, FAR - 16, FAR);
 }
 
 // ---- the effect: stepped from its scene's start ----
@@ -197,7 +239,7 @@ let fx = null;
 let fxScene = -1;
 let fxStep = 0;
 function effectName(plan) {
-  return canSimulate || plan.effect === 'still' || plan.effect === 'flow' ? plan.effect : 'flow';
+  return canSimulate || plan.effect === 'still' ? plan.effect : 'still';
 }
 function scripted(plan, s) {
   const out = [];
@@ -264,14 +306,13 @@ function climbAt(t) {
 
 // ---- the film's motif: the time code and the depth gauge ----
 
-const root = document.getElementById('root');
 const frost = document.getElementById('frost');
 const clock = document.getElementById('hud-time');
 const chapter = document.getElementById('hud-chapter');
 const mark = document.getElementById('gauge-mark');
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s) % 60).padStart(2, '0')}`;
 
-// The water clouds for a moment over a cut between unlike scenes.
+// The gel clouds for a moment over a cut between unlike scenes.
 function dip(t) {
   let d = 0;
   for (let i = 1; i < FRAMES.length; i++) {
@@ -290,29 +331,28 @@ export function draw(t) {
   cellsTo(Math.round(t / STEP));
   effectTo(index, plan, Math.round(local / STEP));
 
-  camera.fov = lerp(plan.fov, e, 45);
-  camera.rotation.set(lerp(plan.pitch, e), lerp(plan.yaw, e), lerp(plan.roll, e));
+  // Deeper: a narrower view (the cells larger) and a wider sway, which
+  // moves the near cells more than the far.
+  camera.fov = lerp(plan.fov, e, 45) * (1 - 0.24 * d);
+  camera.position.set(0.9 * d * Math.sin(t * 0.31), 0.55 * d * Math.sin(t * 0.23 + 1), 0);
+  camera.rotation.set(
+    lerp(plan.pitch, e) + 0.02 * d * Math.sin(t * 0.19),
+    lerp(plan.yaw, e) - 0.03 * d * Math.sin(t * 0.31),
+    lerp(plan.roll, e),
+  );
   camera.updateProjectionMatrix();
   layer.setFade(clamp(t / 1.6));
 
-  field.draw(t, { climb: climbAt(t), density: lerp(plan.field, e, 0.6), glow: 0.9 + d * 0.7, links: plan.links ?? 1 });
+  field.draw(t, { climb: climbAt(t), density: lerp(plan.field, e, 0.6), links: plan.links ?? 1, scale: 1 + 0.6 * d });
   fieldTexture.needsUpdate = true;
-
-  const [top, bottom] = waterColours(d);
-  back.uniforms.uTop.value.copy(top);
-  back.uniforms.uBottom.value.copy(bottom);
-  back.uniforms.uTime.value = t;
-  back.uniforms.uShafts.value = 1 - d * 0.55;
-  back.uniforms.uCaustic.value = plan.caustics ?? 0.6;
-  back.uniforms.uPool.value = plan.pool ?? 0;
 
   renderer.setRenderTarget(null);
   renderer.setScissorTest(false);
-  target.capture(renderer, scene, camera);
+  captureCells(d);
   renderer.setViewport(0, 0, W, H);
   renderer.setClearColor(0x000000, 0);
   renderer.clear();
-  fx.draw(renderer, target.texture);
+  fx.draw(renderer, cells.texture);
   back.draw();
   if (plan.waterline) {
     const wl = lerp(plan.waterline, smooth(p / (plan.surfaceBy ?? 1)));
@@ -327,9 +367,9 @@ export function draw(t) {
     }
   }
 
-  // The frost is the site's gel: thick near the surface, thin in the deep.
-  frost.style.opacity = String(clamp(0.8 - d * 0.66 + (plan.frost ?? 0) + dip(t) * 0.55, 0.06, 1));
-  root.classList.toggle('is-deep', d >= 0.45);
+  // The frost is the site's gel, the same all the way down; it clouds for a
+  // moment over a cut.
+  frost.style.opacity = String(clamp(0.72 + (plan.frost ?? 0) + dip(t) * 0.3, 0, 1));
   clock.textContent = fmt(t);
   chapter.textContent = V.chapters.find((c) => c.id === frame.chapter)?.label ?? '';
   mark.style.top = `${d * 100}%`;

@@ -249,7 +249,10 @@ as beads and each result's caveat bead.
 The film keeps this design system at 1920 by 1080: the site's stylesheet,
 type and objects, the cut motif once per headline, RNA and protein in their
 reserved colours only where they mean RNA and protein, the atlas palette for
-cell types, and the living water under every scene, darker with depth.
+cell types, and the site's white field and gel under every scene, the same
+throughout. Depth shows in the objects, which come closer and larger as the
+camera goes down, never in the background's colour; every word is in the
+site's dark ink.
 
 ## Shared chrome
 

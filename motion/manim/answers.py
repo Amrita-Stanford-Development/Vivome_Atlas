@@ -33,7 +33,7 @@ config.frame_rate = SHOT["fps"]
 
 PROT = "#2F8F6A"  # reserved: protein, and nothing else
 ACCENT = "#0073AD"
-NO_ANSWER = "#C9D3DC"
+NO_ANSWER = "#5B6B78"  # a grey on the site's white gel: no answer has no colour
 
 
 def to_scene(px, py):
@@ -130,7 +130,7 @@ class Answers(Scene):
                 outline.set_stroke(NO_ANSWER, width=4)
                 outline = DashedVMobject(outline, num_dashes=60)
             else:
-                outline.set_stroke(WHITE, width=4).set_fill(ACCENT, opacity=0.14)
+                outline.set_stroke(ACCENT, width=4).set_fill(ACCENT, opacity=0.1)
             play(
                 AnimationGroup(*[g.animate.set_opacity(1) for g in lit], *[g.animate.set_opacity(0.3) for g in rest]),
                 Create(outline),

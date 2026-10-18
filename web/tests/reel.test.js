@@ -138,6 +138,25 @@ test('the rendered stills match the storyboard and the current records', () => {
   assert.equal(staleNumbers(sidecar.frames[8], { manifest, manuscript: changed }).length, 1);
 });
 
+// The owner's rule for the film: one background throughout, the site's white
+// field and gel, never tinted with depth; depth shows in the objects, and
+// every word is in dark ink.
+test('the film keeps one white background: no tinting water effect, no white-on-dark scenes, no note of the water changing colour', async () => {
+  const { PLAN } = await import('../../motion/lib/plan.js');
+  assert.deepEqual(Object.keys(PLAN).sort(), FRAMES.map((f) => f.id).sort());
+  for (const [id, plan] of Object.entries(PLAN)) {
+    assert.ok(['still', 'rain', 'wake'].includes(plan.effect), `${id} uses the ${plan.effect} effect, which tints the gel`);
+  }
+  FRAMES.forEach((f, i) => {
+    const n = String(i + 1).padStart(2, '0');
+    assert.ok(!readRepo(`motion/compositions/s${n}-${f.id}.html`).includes('on-deep'), `${f.id} sets white type`);
+    for (const note of [f.camera, f.transition, f.water, f.particles]) {
+      assert.doesNotMatch(note, /\b(blue|bluer|dark|darker|darkens|caustic|ink)\b/i, `${f.id}: "${note}"`);
+    }
+  });
+  assert.ok(!readRepo('motion/lib/film.css').includes('on-deep'));
+});
+
 // docs/web/motion.md carries the full script, for producing the film.
 test('the docs carry every scene\'s time, words and notes as the storyboard has them', () => {
   const doc = readRepo('docs/web/motion.md');

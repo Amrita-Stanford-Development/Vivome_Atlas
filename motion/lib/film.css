@@ -1,7 +1,7 @@
 /* The film's look: the site's own tokens and objects (vendor/site/page.css,
-   a copy of web/css/page.css) at film scale, 1920 by 1080. Light scenes set
-   ink on the pale water; deep scenes (class on-deep) set white type, and
-   their liquid glass turns more opaque so it stays readable. */
+   a copy of web/css/page.css) at film scale, 1920 by 1080. The background
+   is the site's white field and gel in every scene, so every word is set in
+   the site's dark ink. */
 
 #root {
     position: relative;
@@ -52,9 +52,6 @@
     background: var(--accent-bright);
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85), 0 0 22px 6px rgba(0, 142, 204, 0.55);
 }
-.is-deep #hud-time { color: rgba(255, 255, 255, 0.82); }
-.is-deep #hud-chapter, .is-deep #gauge::before, .is-deep #gauge::after { color: rgba(255, 255, 255, 0.66); }
-.is-deep #gauge, .is-deep .gauge-tick { background: rgba(255, 255, 255, 0.32); }
 
 /* ---- type, at film scale (the site's levels: docs/web/design.md) ---- */
 
@@ -73,17 +70,10 @@
 .scene .bead::before { width: 15px; height: 15px; }
 .scene .liquid { border-radius: 30px; padding: 40px 44px; }
 .scene .pending { font-style: italic; color: var(--ink-faint); }
-.on-deep .pending { color: rgba(255, 255, 255, 0.82); }
 
-.on-deep .f-display, .on-deep .f-sub, .on-deep .f-wordmark { color: #FFFFFF; text-shadow: 0 2px 24px rgba(4, 30, 52, 0.35); }
-.on-deep .f-eyebrow { color: #9FD6F7; }
-.on-deep .f-caption { color: rgba(255, 255, 255, 0.78); }
-.on-deep .liquid {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.74));
-    border-color: rgba(255, 255, 255, 0.85);
-    box-shadow: inset 0 1px 0 #FFFFFF, 0 30px 60px -24px rgba(2, 24, 44, 0.6), 0 8px 22px -10px rgba(2, 24, 44, 0.4);
-}
-.on-deep .liquid .f-caption { color: var(--ink-faint); }
+/* As the cells come forward they pass behind the words: the liquid glass
+   is a little more opaque than the site's, so what it holds stays readable. */
+.scene .liquid { background: linear-gradient(160deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.62)); }
 
 /* Names placed on a map (lib/scenes.js). */
 .labels { position: absolute; inset: 0; pointer-events: none; }

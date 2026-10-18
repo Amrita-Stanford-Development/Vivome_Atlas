@@ -3,21 +3,21 @@
          The sealed test's record is pending, so it reads Pending. -->
     <style>
         #s-methods .head { position: absolute; left: 150px; top: 100px; width: 1500px; }
-        #s-methods .head .f-sub { margin-top: 22px; max-width: 46ch; color: #FFFFFF; }
+        #s-methods .head .f-sub { margin-top: 22px; max-width: 46ch; }
         #s-methods .methods { position: absolute; left: 150px; top: 470px; width: 1600px; display: flex; flex-wrap: wrap; gap: 16px; }
-        #s-methods .method { opacity: 0; background: rgba(255, 255, 255, 0.18); color: #FFFFFF; border: 2px solid rgba(255, 255, 255, 0.55); box-shadow: none; }
+        #s-methods .method { opacity: 0; border: 2px solid rgba(0, 102, 163, 0.35); }
         #s-methods .cards { position: absolute; left: 150px; top: 570px; width: 1600px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
         #s-methods .card { padding: 30px 40px; opacity: 0; }
         #s-methods .card .f-stat { font-size: 92px; }
         #s-methods .card .row { display: flex; align-items: center; gap: 18px; margin-top: 12px; }
         #s-methods .card .row .f-label { margin: 0; }
         #s-methods .limits { position: absolute; left: 150px; top: 880px; width: 1600px; display: grid; gap: 10px; opacity: 0; }
-        #s-methods .limits .f-caption { color: rgba(255, 255, 255, 0.88); font-size: 25px; }
+        #s-methods .limits .f-caption { color: var(--ink); font-size: 25px; }
         #s-methods .limits .bead { margin-left: 12px; vertical-align: 3px; }
         #s-methods .f-display, #s-methods .f-sub { opacity: 0; }
         #s-methods .cut { clip-path: inset(0 100% 0 0); }
     </style>
-    <div id="s-methods" class="scene on-deep" data-composition-id="s-methods" data-width="1920" data-height="1080">
+    <div id="s-methods" class="scene" data-composition-id="s-methods" data-width="1920" data-height="1080">
         <div class="head">
             <h1 class="f-display">Measured against established <span class="cut">methods.</span></h1>
             <p class="f-sub">On real protein data, VivOME is level with the best of them and ahead of the rest.</p>
