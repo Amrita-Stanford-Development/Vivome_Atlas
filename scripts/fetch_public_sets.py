@@ -14,10 +14,14 @@ Each entry has a role:
   (tier B's single HeLa and HEK293T). research/benchmark/side-tests.md lists
   the other alternatives.
 
+Tier C is the colon reference's data (side-tests.md, amendment 7; about 9 MB):
+PXD052341, the colon's locked test, and the development sets PXD057118 and
+PXD046999 (Deep Visual Proteomics pools).
+
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
 large PXD070599 search outputs for the single HeLa and HEK293T cells (about 24 GB),
-which repeat what smaller sets already give for abstention.
+which repeat what smaller sets already give for abstention; tier C is the colon's.
 
 The servers throttle each connection (about 50 KB/s), so a file is split into
 8 MiB ranges fetched on several connections at once. A download resumes where
@@ -29,6 +33,7 @@ and its sha256 is recorded in research/benchmark/public-sets-downloads.json.
     python scripts/fetch_public_sets.py --list             # from the repository root
     python scripts/fetch_public_sets.py                    # tier A
     python scripts/fetch_public_sets.py --tier all --only PXD070599_HeLa_HEK
+    python scripts/fetch_public_sets.py --tier C --only Zheng2025_PXD057118,Kabatnik2024_PXD046999
     python scripts/fetch_public_sets.py --workers 24
 """
 from __future__ import annotations
@@ -51,7 +56,7 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "data" / "incoming" / "public_sets"
 RECORD = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 CHUNK = 8 << 20
-ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B")
+ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C")
 RAW_SUFFIXES = (".raw", ".d.zip", ".wiff", ".mzml", ".mzml.zip", ".mzml.gz")
 HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu")
 PRIDE = "https://ftp.pride.ebi.ac.uk/pride/data/archive"
@@ -125,6 +130,27 @@ ENTRIES = (
     # tier B: PXD070599's single HeLa and HEK293T cells (abstention), DIA-NN outputs
     *[pride("PXD070599_HeLa_HEK", "reserve", "PXD070599", "2026/08", f"DS{n}_DIANN.tar.gz", s, tier="B")
       for n, s in ((12, 1676819567), (15, 1276924248), (14, 4290218537), (25, 4528065652), (16, 5086300411), (13, 7217998803))],
+    # tier C: the colon reference's data (side-tests.md, amendment 7); Deep Visual Proteomics pools.
+    # PXD052341 is the colon's locked test (research/benchmark/protocol-colon-pxd052341.md)
+    pride("Post2025_PXD052341", "held_out", "PXD052341", "2025/09", "DVP_data.pg_matrix.tsv", 8222603, tier="C"),
+    pride("Post2025_PXD052341", "held_out", "PXD052341", "2025/09", "Post_et_al_organoid_DVP_metadata.tsv", 71245, tier="C"),
+    *[pride("Zheng2025_PXD057118", "development", "PXD057118", "2024/12", n, s, tier="C")
+      for n, s in (
+          ("ColorectalCancer_pg_matrix_Macrophages.txt", 755998),
+          ("Colorectal_Cancer_pg_matrix_Cytotoxic_T_Cells.txt", 757197),
+          ("Colorectal_Cancer_pg_matrix_Helper_T_Cells.txt", 735134),
+          ("Metadata.xlsx", 10304),
+          ("PXD057118_community_annotated.sdrf.tsv", 107575))],
+    *[pride("Kabatnik2024_PXD046999", "development", "PXD046999", "2024/08", n, s, tier="C")
+      for n, s in (
+          ("C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv", 953149),
+          ("C_HDA_NMN-study_class1_MBR.pg_matrix.tsv", 1050746),
+          ("C_HDA_NMN-study_class4_MBR.pg_matrix.tsv", 795041),
+          ("CRA_revision_timstofultra_specificcohort_DIANN181_libraryfree.pg_matrix.tsv", 2222897),
+          ("CAA__MBR_LibraryFree_DIANN181.pg_matrix.tsv", 1389791),
+          ("Metadata_DVPonCRA_Kabatnik_et_al.csv", 4477),
+          ("Metadata_DVPonCRA_Kabatnik_et_al_revision_updated.csv", 5350),
+          ("PXD046999_community_annotated.sdrf.tsv", 10274))],
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
 # link; they were saved by hand into data/incoming/public_sets/PXD073250/ and are recorded by --record-manual.
@@ -250,7 +276,7 @@ def save_record(record: dict, path: Path = RECORD) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tier", choices=("A", "B", "all"), default="A")
+    parser.add_argument("--tier", choices=("A", "B", "C", "all"), default="A")
     parser.add_argument("--only", help="comma-separated groups")
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--list", action="store_true", help="list the entries and what is on disk; fetch nothing")

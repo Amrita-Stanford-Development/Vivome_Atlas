@@ -400,6 +400,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/todo.md` — progress against the roadmap, current verified numbers, open decisions, changelog
 - `research/working-context.md` — hand-off for a new session: how the work got here, owner decisions and standing instructions, the Track D extension's status, what's next
 - `research/notebook-run-history.md` — every notebook run, in order, and what each one found (17 entries, through T1 NB2)
+- `research/organ-references.md` — the organ references plan (Track I): the large intestine first, from Tabula Sapiens; the owner's decisions, the classes, the stages and their gates
 - `research/tier1-tier2-report.md` — the research report the roadmap's Tier 1 and Tier 2 work draws on, with a 2026-10-01 status note on which of its ideas are now tested
 - `research/archive/2026-08-29-resource-layer-plan.md` — the finished resource-layer build plan, frozen (its paths are from that time)
 - `research/benchmark/README.md` — reading order for the benchmark write-up
@@ -412,7 +413,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
 - `research/benchmark/protocol-khoury2026.md` — the Khoury 2026 final test set, sealed until its one scoring at the final v3.1 evaluation (2026-10-03): label-free facts recorded at sealing, the protocol and its seven amendments
 - `research/benchmark/protocol-sorted-cd4cd8.md` — the sorted CD4/CD8 test, written before any data: what qualifies, the sealing and intake rules, v4.1 and v5.2 frozen by sha256, the baselines (on each candidate's own reference labels), metrics and decision rules
-- `research/benchmark/side-tests.md` — the public datasets found on 2026-10-14 and their roles since amendment 1 (2026-10-15): development sets, the internal held-out test (locked until the end), and the alternatives kept unused for future tests
+- `research/benchmark/side-tests.md` — the public datasets found on 2026-10-14 and their roles since amendment 1 (2026-10-15): development sets, the internal held-out test (locked until the end), and the alternatives kept unused for future tests; amendment 7 (2026-10-18) sets the colon reference's data
+- `research/benchmark/protocol-colon-pxd052341.md` — the colon reference's locked test (PXD052341, Post 2025, pooled cell types of normal colon), written from PRIDE's file listing and the paper before any of its files was downloaded: inclusion, the five groups, the primary, the unsealing order
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
 - `research/benchmark/fulcher2026/family_summary.csv` — Fulcher 2026: mean, SD, min and max of every metric per family and rule

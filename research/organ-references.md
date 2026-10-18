@@ -1,0 +1,328 @@
+# Organ references: the large intestine first
+
+Planned 2026-10-17 and 2026-10-18 with the owner; Track I in
+`research/todo.md`. Where this conflicts with older plans, this file wins for
+organ work.
+
+## Why
+
+Instead of only chasing blood's weak classes, VivOME widens to other organs.
+As far as we know, no tool labels single-cell proteomics against an RNA
+reference outside blood. VivOME's encoders learn from RNA alone, so an organ
+needs:
+- an RNA atlas;
+- a reference built from it;
+- whatever protein data with independent labels exists for that organ.
+
+**The claim this can support:** the method extends to a second organ from
+RNA alone. It rests on:
+- measured RNA-side numbers;
+- development checks on pooled protein profiles;
+- one locked test on pooled profiles.
+
+Colon accuracy on single protein cells stays Pending (the manifest rule).
+
+## Owner's decisions
+
+1. **Separate references.** Blood v4.1 stays exactly as served: not retrained
+   and not re-validated. Mixing tissue cells into the blood reference lowered
+   blood scores (`research/notebook-run-history.md`, entry 20).
+2. **First organ: the large intestine**, from Tabula Sapiens Large Intestine
+   only. HTAN's polyp RNA may come later. The atlas is
+   `Large_Intestine_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad`, in
+   the project Drive's `scRNA-seq` folder:
+   - 30,084 cells from 5 donors, 29 `cell_ontology_class` values;
+   - compartments: immune 16,560, epithelium 9,649, stroma 2,679, glia 848,
+     endothelium 348.
+3. **Protein data roles** are in `research/benchmark/side-tests.md`,
+   amendment 7:
+   - **Locked test:** PXD052341 (Post 2025, normal colon), protocol
+     `research/benchmark/protocol-colon-pxd052341.md`.
+   - **Development:** PXD057118 (Zheng 2025), PXD046999 (Kabatnik 2024) and
+     the unlabelled polyp plate (516 cells).
+4. **The polyp plate is used fully.** Its genes join the gene list and its
+   detection pattern shapes the simulated uploads. Files derived from it may
+   be committed and shown.
+5. **Raw-only deposits** may be searched with DIA-NN on this PC, with
+   settings fixed before the search.
+
+## What the code and data showed
+
+- **No script builds a reference from an h5ad.** Blood's came from the Colab
+  notebooks NB1 and NB2. The in-repo pieces reuse blood's NB1 files.
+- **The upload simulator lives only on Drive** (`sim_generator.py`, in
+  Drive's `Results/Tier1_v31/NB1/`). `research/notebooks/v5_build.py` imports
+  it from there.
+  - Its scenarios are blood-specific: they call `classes.index("macrophage")`
+    and use blood lineage words.
+  - Training uses uniform random masks; the real-protein masks are used only
+    for the test and calibration uploads.
+- **Gene space.** The 9,002 genes miss the colon's markers: KRT20, MUC2, TFF3,
+  OLFM4, LGR5, CD68, PDGFRA, CDX2, BEST4, CHGA, SPINK4 and REG4. So the colon
+  needs its own gene space and its own encoders, about 125 MB per member at
+  about 11,000 genes (blood's are 98 MB).
+- **The donors confound the classes:**
+  - TSP2 holds 1,307 of 1,732 stem cells and 2,620 of 4,567 enterocytes;
+  - TSP14 holds 726 of 848 enteroglia;
+  - TSP26 has 593 "best4+" cells, 3 enterocytes and no goblet cells;
+  - naive CD4 T is 214 of 228 from TSP27;
+  - all 47 "mature nk t" cells are annotated "innate lymphoid cell";
+  - "myeloid leukocyte" is a catch-all.
+
+  So a label audit comes first, and leaving one donor out is a diagnosis,
+  not a clean test.
+- **Blood-only pieces of the service and site:**
+  - `service/config.py`'s cross-modal classes;
+  - restricted mode (`service/pipeline/label_space.py`);
+  - property transfer;
+  - `web/js/atlas/answers.js`, which places cells by `pipeline_version` alone;
+  - the 22 `CLASS_COLOURS` in `web/js/workflow-data.js`.
+
+  The service loads one bundle per process (`service/app.py`). The pipeline
+  modules take their classes, hierarchy and centroids from files.
+
+## Classes
+
+**Rule.** Keep a class with at least 50 cells and at least 5 cells in each of
+at least 2 donors. Otherwise merge it into its nearest kept Cell Ontology
+ancestor.
+
+**Merges:**
+- enterochromaffin-like + type L enteroendocrine → enteroendocrine cell (71);
+- NK + ILC + "mature nk t" → innate lymphoid cell (74);
+- myeloid DC + neutrophil → myeloid leukocyte (403);
+- naive CD4 T → CD4 T. This is one donor's annotation, and blood's CD4 /
+  naive CD4 pair is a known confusion.
+
+**23 classes,** answered as class, then group, then lineage:
+
+| Lineage | Group | Classes |
+|---|---|---|
+| epithelial | stem/TA | crypt stem cell, transit amplifying cell |
+| epithelial | absorptive | enterocyte, best4+ cell |
+| epithelial | secretory | goblet, Paneth, tuft, enteroendocrine |
+| immune | T/ILC | CD4 T, CD8 T, gamma-delta T, Treg, innate lymphoid cell |
+| immune | B lineage | B cell, plasma cell |
+| immune | myeloid | colon macrophage, monocyte, myeloid leukocyte, mast cell |
+| stromal | fibroblast | fibroblast, myofibroblast |
+| stromal | endothelial | endothelial cell |
+| stromal | glial | enteroglial cell |
+
+**Splits:**
+- train / validation / test: 65 / 15 / 20, stratified by class × donor;
+- leaving one donor out: a separate diagnosis. A class and donor pair counts
+  only when both sides have at least 20 cells.
+
+The label audit (markers per class × donor) runs before training and may
+change the merges, by a dated note here.
+
+## Stage 0: roles first, then the locked protocol
+
+**Commit A, before any PXD052341 file:**
+- amendment 7;
+- tier C in `scripts/fetch_public_sets.py`;
+- the protocol, written from PRIDE's file listing and the paper;
+- this file;
+- the Track I entries.
+
+**Commit B:** fetch tier C into `data/incoming/public_sets/` and record the
+sha256s. PXD052341 is downloaded and checksummed only.
+
+**DIA-NN.** A development deposit with only raw files gets a DIA-NN search
+with fixed settings:
+- the version pinned and recorded in `docs/setup-windows.md`;
+- a human UniProt FASTA;
+- library-free, 1% FDR.
+
+Free disk space is checked before each download.
+
+**Gate:** Zheng or Kabatnik yields a per-sample protein matrix with its
+class labels.
+
+## Stage 1: a reference builder, proven on blood
+
+**New:**
+- `scripts/build_organ_reference.py`. Its stages: labels, space, stats,
+  profiles, modules, suites, train, calibrate, layer, bundle, evaluate.
+- `scripts/organ_reference/`:
+  - the simulator copied byte for byte from Drive, its sha256 recorded;
+  - scenarios built from each organ's hierarchy (blood keeps its old ones
+    exactly);
+  - modules for labels, gene space, profiles, modules and calibration.
+- `scripts/organs/`: one JSON per organ (blood and large intestine) naming
+  the h5ad, columns, relabels, merges, hierarchy, gene and mask sources, and
+  seeds.
+- A unit test on a tiny synthetic h5ad, CPU only.
+
+**Reused:**
+
+| What | Where |
+|---|---|
+| `load_rna`, `encode` | `scripts/build_v4_bundle.py` |
+| `class_balanced_stats`, `class_means` | `service/pipeline/fusion.py` |
+| `train_variant`, `reference_embedding`, `centroids_from`, `query_inputs`, `raw_upload` | `research/notebook-outputs/nb2/nb1b_core.py` |
+| `fit_temperature`, `fit_qhat` | `research/notebook-outputs/nb2/nb2_core.py` |
+| `build`, `best_guess_layer`, `write_manifest` | `research/notebooks/v5_build.py` |
+| leaving one donor out | `research/notebooks/donor_heldout.py` |
+| answers, suite scores, coverage | `research/notebooks/v41_core.py`, `research/notebooks/v41_phase3.py` |
+| ported from the notebooks | NB1's `stratified_split` and `profile_from_obs`; Reference_Projection_v3's MiniBatchKMeans modules (target size 18) |
+
+**Simulated-upload missingness for the colon.** It sets the conformal,
+temperature and out-of-distribution calibration, and the gates G1 and G4.
+Four sources:
+- the polyp plate's per-cell detection, the only single-cell colon profile;
+- blood's SCoPE2, PBMC240 and Fulcher profiles, re-indexed by RNA-abundance
+  rank in the colon gene space, so that detection follows expression level
+  rather than blood gene identity;
+- random coverage, as for blood;
+- a pool profile from Zheng's and Kabatnik's detection, used only for the
+  pool rehearsal.
+
+**Gene space (colon).** It is built from:
+- the six existing sources (`service/model/evidence/feature_space_detail.csv`);
+- the development colon protein lists;
+- the polyp plate's genes.
+
+Immunoglobulin and T-cell receptor genes are removed, and the result is
+intersected with Tabula Sapiens' genes. The locked set's protein list is
+never read.
+
+**Blood acceptance,** in tiers. Exact retraining is impossible because of
+GPU nondeterminism and the Colab L4. The builder's outputs stay outside the
+repository; the record goes to
+`research/notebook-outputs/organ_builder_blood/`.
+1. **Exact:**
+   - NB1's `y_all.npy` and `splits_seed0.npz`, and its calibration and
+     evaluation suites;
+   - the 9,002 genes;
+   - the hierarchy and class order of `service/model/v3_1/nb2_spec_v31.json`.
+2. **Within tolerance:**
+   - the RNA statistics, to 1e-4;
+   - the mask profiles, to 1e-6;
+   - v4's class-balanced statistics and class means, to 1e-5;
+   - centroids at cosine ≥ 0.999999.
+3. **Calibration on the served members,** by the rules of
+   `research/notebook-outputs/v5_build/reproduce.json`:
+   - temperatures exact;
+   - the conformal threshold within one rank;
+   - the out-of-distribution threshold within 1e-3;
+   - latents at cosine ≥ 0.9999.
+4. **Loader and layout.** A blood bundle assembled from the served
+   statistics, centroids and calibration, and loaded by the new loader,
+   reproduces the `v41_full` fixtures in `service/tests/fixtures/` exactly.
+   The bundle from the rebuilt files is only reported (label agreement).
+5. **Training path.** Retrain seed 1 and compare it with the served seed-1
+   member alone:
+   - best validation loss within 0.02 (0.45517,
+     `research/notebook-outputs/v5_train/reproduce.json`);
+   - balanced accuracy within 2 points;
+   - each class's recall within 5 points;
+   - top-1 on the calibration uploads within 2 points of the served member's
+     own, computed in the same run.
+
+## Stage 2: the colon bundle, development checks, go or no go
+
+**The bundle.** `service/model/organs/large_intestine/`, in v4.1's layout:
+metadata, genes, specs, class-balanced statistics, class means, members,
+latents, centroids and MANIFEST.
+- The checkpoints are gitignored and fetched like v3.1's members.
+- v4.1's fusion settings are reused untuned.
+
+**Records.** `research/notebook-outputs/li_labels/` (the audit, first),
+`research/notebook-outputs/li_build/` and
+`research/notebook-outputs/li_donor_heldout/`.
+
+**Scripts:**
+- `research/notebooks/li_development.py`;
+- `research/notebooks/li_heldout_rehearsal.py`, which builds RNA pseudobulk
+  pools shaped like DVP;
+- `benchmark/colon_heldout_intake.py` and `benchmark/colon_heldout_score.py`,
+  which reuse:
+  - `auroc_with_p` (`benchmark/heldout_score.py`);
+  - the download check (`benchmark/heldout_intake.py`);
+  - the DIA-NN reader (`benchmark/heldout_formats.py`);
+- a colon option in `benchmark/baselines_corrected.py`.
+
+**Gates.** Fixed now, before any colon model exists. A miss stops the work
+and goes to the owner. No setting is tuned to pass a gate.
+- **G1, simulated uploads from the colon's RNA test cells:**
+  - correct when committed ≥ 90% (blood: 96.3);
+  - committed ≥ 75% (blood: 85.8);
+  - conformal coverage ≥ 85%;
+  - false abstention ≤ 2%.
+- **G2, one donor left out:** reported, not a gate. It uses one member per
+  fold and the nearest centroid under the colon masks
+  (`research/notebooks/donor_heldout.py`'s pattern), and reports lineage and
+  group recall.
+- **G3, development protein:**
+  - Kabatnik: AUROC ≥ 0.8 for epithelium (CDX2-high and CDX2-medium) over
+    stroma (CDX2-negative), on P(epithelial lineage);
+  - Zheng's colorectal tables: group accuracy ≥ 80% for T/ILC (CD8 T and
+    CD4 T tables) against myeloid (macrophage table);
+  - the polyp plate: for each called group with at least 20 cells, AUROC
+    ≥ 0.7 of a marker score taken from Tabula Sapiens class means.
+
+  If a deposit's layout turns out to differ (for example, no sample
+  annotation), the gate's wording may be fixed by a dated note before the
+  colon is built, never after.
+- **G4:** the locked test's rehearsal runs end to end on RNA pseudobulk.
+
+When all gates pass, an amendment to the protocol freezes the bundle's
+sha256s.
+
+## Stage 3: service and site (after the beta sign-in work lands)
+
+**Service:**
+- **`service/config.py`:** the organs, with blood the default, the served
+  organs from an environment variable, and per-organ directories through
+  `_env_path`.
+- **Loading:** a new `organs.py` in `service/pipeline/`. Blood still loads
+  through `pipeline.load_bundle`, unchanged. The bundle loaders take paths;
+  their defaults are unchanged.
+- **The `organ` field** in `POST /api/project` is optional:
+  - absent means blood, and the response is byte-identical;
+  - an unknown organ gets 400;
+  - the colon with restricted mode gets 400;
+  - colon responses name the organ and carry no properties.
+- **`/api/status`** lists the organs only when more than one is served.
+- **Memory.** A memory check measures peak RSS with both organs loaded and a
+  2,000-cell upload each.
+  - At 3.0 GiB or below: one process, with the colon loaded lazily.
+  - Above that: a second Cloud Run service from the same image, serving the
+    colon only. It scales to zero.
+- **Tests:** blood's fixtures are untouched; the colon gets its own goldens.
+  The deploy build and check scripts cover every served organ.
+
+**Site:**
+- **Atlas page, Your data:** an organ choice. The landing places cells by
+  organ and pipeline together.
+- **The colon map** is written by `scripts/export_atlas_coordinates.py` with
+  an organ option.
+- **`web/js/workflow-data.js`:** colon plain names and groups, and 23 colours
+  of their own. `CLASS_COLOURS` and blood's tests stay as they are.
+- **The manifest:** an organs block.
+  - The colon's RNA records are measured.
+  - Its protein accuracy stays Pending until the locked test's summary
+    exists.
+- **The Workflow page** stays blood-only. Blood is unchanged, so it needs no
+  re-trace.
+
+## Stage 4: score once, write up, release
+
+1. The candidate amendment.
+2. The intake: labels, then the upload.
+3. The baselines.
+4. The scorer, once.
+5. An amendment marks the set spent.
+6. The manifest, the Manuscript page's section and the figures are rebuilt.
+7. Atlas 0.7.0, with the colon reference named "large_intestine v1".
+8. Deploys only on the owner's explicit approval; the owner runs
+   `gcloud run deploy`.
+
+## Working rules
+
+- Commit by stage, naming files explicitly.
+- LF line endings.
+- `docs/file-index.md` in the same commit.
+- Tick `research/todo.md` with commit hashes.
+- UI checks are the owner's; Claude runs the automated tests only.

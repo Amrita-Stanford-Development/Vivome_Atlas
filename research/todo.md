@@ -6,7 +6,7 @@ notebook output path, and log it in the changelog at the bottom.
 
 Status markers: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked.
 
-Last updated: 2026-10-15 (release 0.4.0: v4.1 is the current release; v3.1 and v3 stay selectable)
+Last updated: 2026-10-18 (release 0.6.0: v4.1 served; Track I, organ references, started)
 
 ---
 
@@ -416,6 +416,26 @@ Plan approved 2026-10-12. Every method fails CD8 T: v4.1 recalls 2.7% on Khoury 
 - [x] The corrected baselines on the cleaned labels: rerun on v5.2's labels (`research/benchmark/baselines_corrected_labels_v52/`; run history, entry 45). scANVI seed 2 failed, as on the original labels.
 - [ ] **Phase 5:** the service (`"v5"`, selectable), its gate and frozen fixtures; release only after owner sign-off.
 
+### Track I, organ references: the large intestine (branch `integration/v4`)
+
+Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is a second, separate reference built from Tabula Sapiens Large Intestine. Blood v4.1 is unchanged.
+- **Owner's decisions:**
+  - separate references;
+  - the large intestine first, from Tabula Sapiens only;
+  - PXD052341 is the colon's locked test, and PXD057118, PXD046999 and the polyp plate are development (`side-tests.md`, amendment 7);
+  - the polyp plate is used fully;
+  - DIA-NN searches are allowed for raw-only deposits.
+
+- [~] **Stage 0, roles and the locked protocol:**
+  - amendment 7;
+  - tier C in `scripts/fetch_public_sets.py`;
+  - `research/benchmark/protocol-colon-pxd052341.md`, written before any of its files was downloaded;
+  - then the development sets fetched.
+- [ ] **Stage 1, a reference builder,** proven on blood (acceptance tiers 1 to 5).
+- [ ] **Stage 2, the colon bundle:** the label audit first, then gates G1, G3 and G4 (G2 reported); go or no go to the owner.
+- [ ] **Stage 3, service and site:** the organ choice, with blood byte-identical. Waits for the beta sign-in work.
+- [ ] **Stage 4, the locked test scored once;** write-up; release 0.7.0 (deploys on the owner's approval).
+
 ---
 
 ## 3. Colab notebooks
@@ -617,3 +637,4 @@ because the held out classes were in training.
 | 2026-10-17 | **Atlas page: a breathing cloud, glowing beads, Play by itself** (owner's requests). The file waits beside the atlas as an irregular cloud that breathes, then pours into the map; landed cells are beads in a pulsing halo of their colour; once they land, the camera flies to the first cell and Play starts (not after the visitor took the camera, nor under reduced motion). Site redeployed | `b0f0359` |
 | 2026-10-17 | **Beta, step 1: the Versions page goes; the service answers only through the site** (the owner's plan). /versions redirects to /manuscript. The site's /api door (a Pages Function, `deploy/pages/api-proxy.js`) forwards to Cloud Run with a secret; the service (revision `vivome-atlas-00005-njv`) answers 403 without it and takes at most 100 MB per upload. `check_space.py`: refused without the secret, 238 cells, 0 differ. Site redeployed. Next: the invited-only sign-in (Cloudflare Access) | `6ce5696` |
 | 2026-10-17 | **Manuscript figures and Methods illustrations** (owner's plan). Six figures and four Methods illustrations drawn from committed data by `scripts/build_figures.py` (SVG for the page, CSV of every number drawn with its source and field, PDF and print-resolution TIFF on request); each sits beside the result it supports. Figure 5 compares the served model with outside methods only. Site redeployed | `ae088e4` |
+| 2026-10-18 | **Track I, organ references: the large intestine first** (the owner's plan, `research/organ-references.md`). Colon data roles in `side-tests.md` amendment 7, from a 2026-10-17 search of PRIDE, ProteomeCentral, MassIVE, jPOST, iProX, PDC, HTAN and the literature (no human colon single-cell set with independent labels; the best are Deep Visual Proteomics pools). PXD052341 (Post 2025, normal colon) is locked as the colon's test, and its protocol is committed before any of its files is downloaded. PXD057118, PXD046999 and the polyp plate are development. Tier C in `scripts/fetch_public_sets.py`. Blood is unchanged | this commit |

@@ -100,6 +100,41 @@ test comes from the alternatives below. Their role in
 `scripts/fetch_public_sets.py` stays `held_out` as the record of how they
 were assigned and scored.
 
+### Amendment 7, 2026-10-18: the colon reference's data (owner's decisions)
+
+The owner chose to build a second, separate reference for the large
+intestine from Tabula Sapiens (`research/organ-references.md`). The blood
+roles above are unchanged.
+
+**The search.** It ran on 2026-10-17, reading repository pages and papers
+only, with no file opened. It covered:
+- PRIDE and ProteomeCentral, MassIVE, jPOST, iProX, the Proteomic Data
+  Commons and HTAN;
+- the literature.
+
+It found no human colon set of single cells with labels independent of the
+protein data. The best are Deep Visual Proteomics pools: cells classified on
+stained images, then cut out together.
+
+| Role | Set | What it is |
+|---|---|---|
+| held_out: the colon's locked test | PXD052341, Post 2025 | Normal colon mucosa, 3 donors: crypt-bottom and upper-crypt epithelium, goblet cells, PDGFR+ fibroblasts, CD45+ immune cells; pools of about 500 cells. Protocol: `research/benchmark/protocol-colon-pxd052341.md` |
+| development | PXD057118, Zheng 2025 | One colorectal tumour (and a tonsil tumour). Processed tables exist for its macrophages, CD8 T and CD4 T cells; its other classes are in raw files only (`ColorectalCancer.zip`, 49.5 GB) |
+| development | PXD046999, Kabatnik 2024 | FFPE colorectal adenomas: CDX2-high and CDX2-medium epithelium, CDX2-negative stroma; pools of about 100 cells |
+| development | The polyp plate | 516 single colon polyp cells × 4,535 proteins; no labels; origin unknown; local only. `drive/Data/scProteomics/Protein_polyps_p2.h5ad` in the project folder, sha256 `da0e99bd7798d9d960cd590551bf2fe5303f642f7ea267bcf2b76ddf2bea7f1e`. The owner allowed full use: derived files may be committed and shown |
+
+- **Locked means what amendment 1 says.** PXD052341's file listing (names and
+  sizes) was read to write its protocol, which the rule for local copies
+  allows. Its protocol was committed before any of its files was
+  downloaded.
+- **PXD051891,** Zheng's other accession, is not public.
+- **Caveat for any colon report:** the three Deep Visual Proteomics sets come
+  from one lab and one chemistry. The locked test is therefore not
+  independent of the development data's acquisition.
+- **Raw-only data** may be searched with DIA-NN on this PC (owner,
+  2026-10-18), with settings fixed before the search.
+- **Roles in code:** `scripts/fetch_public_sets.py`, tier C.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
@@ -130,6 +165,16 @@ comes from here. Keep this list current.
     PXD054944, PXD070012, PXD036211;
   - Hao 2021's ADT matrix and its 5' dataset (GEO GSE164378);
   - the unverified Peking University iProX leads PXD064083 and PXD049099.
+- **Colon (amendment 7), public, not downloaded:**
+  - PXD052341's raw archives named scDVP: in vivo 754 GB; organoid 353 GB
+    and 341 GB. They may hold single cells, and need a DIA-NN search. They
+    are the same donors as the locked test.
+  - PXD073051 (iProX): CD8 T cells microdissected from 3 colon cancers; T
+    cells only.
+  - PXD046176: microdissected epithelium and stroma of normal mucosa,
+    adenoma and carcinoma; 22 patients.
+  - PXD036591: small intestine in Crohn's disease, FACS EpCAM+, CD45+ and
+    double-negative.
 
 ## What counts as a side test
 

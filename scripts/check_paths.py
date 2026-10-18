@@ -74,6 +74,16 @@ ALLOWED_MISSING = (
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
     "research/figures/journal/",  # the journal's figure files, written on request by scripts/build_figures.py --journal, gitignored
+    # Files the organ references track will create (research/organ-references.md, Stages 1 to 4)
+    "scripts/build_organ_reference.py",
+    "scripts/organ_reference/",
+    "scripts/organs/",
+    "service/model/organs/",
+    "research/notebook-outputs/organ_builder_blood/",
+    "research/notebook-outputs/li_",
+    "research/notebooks/li_",
+    "benchmark/colon_heldout_",
+    "research/benchmark/heldout/pxd052341/",  # written once, when the colon's locked test is scored
 )
 
 # Frozen historical records: their code samples use paths relative to files

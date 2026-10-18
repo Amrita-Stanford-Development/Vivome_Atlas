@@ -13,6 +13,7 @@ Nothing here ships. The products are `web/` and `service/`, documented in
 | [todo.md](todo.md) | Progress against the roadmap, current verified numbers, open decisions, changelog |
 | [working-context.md](working-context.md) | Hand-off for a new session: how the work got here, owner decisions, where it stands, what's next |
 | [notebook-run-history.md](notebook-run-history.md) | Every notebook run, in order, and what each one found |
+| [organ-references.md](organ-references.md) | Organ references (Track I): the large intestine first, from Tabula Sapiens; decisions, classes, stages and gates |
 | [tier1-tier2-report.md](tier1-tier2-report.md) | The research report the roadmap's Tier 1 and Tier 2 work draws on |
 
 Before starting a roadmap task, read `todo.md` and the relevant track in

@@ -73,6 +73,20 @@ class TableTests(unittest.TestCase):
         core = sum(e["bytes"] for e in f.ENTRIES if e["tier"] == "A")
         self.assertTrue(3e9 < core < 6e9, core)
 
+    def test_the_colon_locked_test_is_held_out_and_only_its_two_processed_files(self):
+        # side-tests.md, amendment 7; research/benchmark/protocol-colon-pxd052341.md, "Files used"
+        post = [e for e in f.ENTRIES if "PXD052341" in e["url"]]
+        self.assertEqual({e["group"] for e in post}, {"Post2025_PXD052341"})
+        self.assertEqual({e["role"] for e in post}, {"held_out"})
+        self.assertEqual({e["tier"] for e in post}, {"C"})
+        self.assertEqual(sorted(e["name"] for e in post), ["DVP_data.pg_matrix.tsv", "Post_et_al_organoid_DVP_metadata.tsv"])
+
+    def test_tier_c_is_the_colon_and_small(self):
+        colon = [e for e in f.ENTRIES if e["tier"] == "C"]
+        self.assertEqual({e["group"] for e in colon}, {"Post2025_PXD052341", "Zheng2025_PXD057118", "Kabatnik2024_PXD046999"})
+        self.assertEqual({e["role"] for e in colon if e["group"] != "Post2025_PXD052341"}, {"development"})
+        self.assertLess(sum(e["bytes"] for e in colon), 20e6)
+
 
 class DownloaderTests(unittest.TestCase):
     @classmethod

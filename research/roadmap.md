@@ -14,6 +14,20 @@ service code (`pipeline.py`, `assignment.py`, `alignment.py`, `smoothing.py`,
 
 ---
 
+## Revision, 2026-10-18
+
+Where it conflicts with older sections below, this section wins.
+
+- **Organ references (Track I),** planned with the owner: a second,
+  separate reference for the large intestine, built from Tabula Sapiens
+  Large Intestine. Blood v4.1 stays exactly as served. The plan, the
+  owner's decisions and the gates are in `research/organ-references.md`.
+- **This is not T2 NB7's reference widening.** NB7 mixes tissue cells into
+  the blood reference, which lowered blood scores (entry 20). Track I
+  keeps each organ apart.
+- **The colon's protein data** are Deep Visual Proteomics pools. PXD052341
+  is locked as its test (`research/benchmark/side-tests.md`, amendment 7).
+
 ## Revision, 2026-10-04
 
 Where it conflicts with older sections below, this section wins.
