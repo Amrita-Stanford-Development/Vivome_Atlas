@@ -29,6 +29,18 @@
   "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json": "a7d47c2c9a693c02bcc2d6175d46ced004dd42dc9b96f04974ba35ff10f8e68c",
   "research/notebook-outputs/donor_heldout/summary.json": "60f2ed9486c99de5ff7346c7beb7bfaf3f6345c51f56fe60a4621dc0cf734fdc",
   "research/notebook-outputs/hao_dc_centres/summary.json": "a428710be5d33c371c30629eb577de2b232079156d83cdba287edcb5d701d265",
+  "research/notebook-outputs/li_build/classes.json": "fe99a094191f21474d74e72f737518d2357e2426082c0f265ad8a276da25303b",
+  "research/notebook-outputs/li_build/feature_space_provenance.json": "1f985b8c3aac563a0aa9d518f2652fa132d0512b0f2eb1e2a8f600c36f62ea91",
+  "research/notebook-outputs/li_development/g1.json": "dc05b03ed430db4b1374f2abb00251ebe0d55a1c7b4a580c18f96f4247b7a5ae",
+  "research/notebook-outputs/li_development/g3.json": "a6dad50f61c75fdc73717040afef05a3359f011b6b898c96ac3b253eee947b0b",
+  "research/notebook-outputs/li_development/gates.json": "cecbbb06db3d89a1c1a35fdd80a58f679a0119027c3835a0dc19df63833598a3",
+  "research/notebook-outputs/li_donor_heldout/summary.json": "bb50e81a66f9485247d4707f1e64620dd1610f507d6b654b0cfe800c9a323b58",
+  "research/notebook-outputs/lung_build/classes.json": "b96d4222a7afdbc14ca785cd880d734df8ff6d689fc073a65c0eb9d28f6c19be",
+  "research/notebook-outputs/lung_build/feature_space_provenance.json": "a6f32684ffd80e47d750481b404c7f7cdcc925ac0cd547a5e789bd487ef09745",
+  "research/notebook-outputs/lung_development/g1.json": "68fdd2a6247b7c654c0f9031a41a7cc829537be056a10602193bb88da179a7a5",
+  "research/notebook-outputs/lung_development/g3.json": "6e17d46dcb3e28057411b0b367774313a93878ec6525b51f4b54504602cfb19b",
+  "research/notebook-outputs/lung_development/gates.json": "cc322b8f06270f98f70359b676e62683f71182159c17b8f6bfaaf8691b63c254",
+  "research/notebook-outputs/lung_donor_heldout/summary.json": "adf27803e0507c7a9a5b38da09b595edd81a58d7f1ba84becac6daa0fbe3e184",
   "research/notebook-outputs/marker_audit/detection.csv": "fa91a96dab1b6971981951c490df3e2391e9a11fb5a1f20392736aa299e6ba37",
   "research/notebook-outputs/narrow_upload/committed.json": "77ce1ebd5c5672f9b9a12354d43f43458ee310f08a4a3a4fb9969ffeea7f8069",
   "research/notebook-outputs/nb1b/nb1b_summary.json": "e4821b1377be064b00879c9d8337ee7089b3a51d44bebbc5356af51b17072c41",
@@ -40,6 +52,7 @@
   "research/notebook-outputs/nb3b/summary.json": "48756d41c54780e6d591709fece99735bc651509339cbff15637b9e40a0930cf",
   "research/notebook-outputs/nb3c/summary.json": "fbe6474af10cdcdbef0fd108012c8a1a2f257357c533e97d7c3889f490beff1d",
   "research/notebook-outputs/ood_candidates/summary.json": "73ec982af811e3cbb990a28050defe1d61907997f9838df56638880816ba5a8c",
+  "research/notebook-outputs/organ_builder_blood/loader.json": "7d4efda7d9e79acdc9d5d636448f13c9d15db8f1184eb01e4c0b3d9066330b73",
   "research/notebook-outputs/protein_coverage/coverage.json": "6ef48fc35371ee34fd3d210620218113e6b5eac73970cbe73ab1edf7d10b9ea8",
   "research/notebook-outputs/single_type_uploads/summary.json": "2a7dfca0a53b854134ae68111f70fcefe7eb085b9c600ea509dcec63f4d94163",
   "research/notebook-outputs/upload_independent_probe/summary.json": "986efa3284c2bc35a2bf9a083990bae00bcf19c7f67b0b48e17ea679b151ecf1",
@@ -1123,6 +1136,198 @@
    "status": "pending",
    "phase": "External test",
    "note": "Sorted CD4/CD8 single cells, requested by email; protocol research/benchmark/protocol-sorted-cd4cd8.md"
+  },
+  "org_builder_differences": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/organ_builder_blood/loader.json: results > served_files/* > differences, summed",
+   "format": "count"
+  },
+  "org_li_classes": {
+   "value": 22,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_build/classes.json: class_order, counted",
+   "format": "count"
+  },
+  "org_li_committed": {
+   "value": 0.1201,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: overall > committed",
+   "format": "pct1"
+  },
+  "org_li_correct_when_committed": {
+   "value": 0.9935,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: overall > correct_when_committed",
+   "format": "pct1"
+  },
+  "org_li_coverage": {
+   "value": 0.8533,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: overall > coverage",
+   "format": "pct1"
+  },
+  "org_li_false_abstention": {
+   "value": 0.0024,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: overall > false_abstention",
+   "format": "pct2"
+  },
+  "org_li_g2_gap": {
+   "value": 0.1253,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_donor_heldout/summary.json: mean > seen minus unseen > balanced_accuracy",
+   "format": "pp"
+  },
+  "org_li_g2_seen": {
+   "value": 0.556,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_donor_heldout/summary.json: mean > seen > balanced_accuracy",
+   "format": "pct1"
+  },
+  "org_li_g2_unseen": {
+   "value": 0.4307,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_donor_heldout/summary.json: mean > unseen > balanced_accuracy",
+   "format": "pct1"
+  },
+  "org_li_genes": {
+   "value": 11448,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_build/feature_space_provenance.json: feature_space",
+   "format": "count"
+  },
+  "org_li_kabatnik": {
+   "value": 1.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g3.json: kabatnik > auroc_epithelial",
+   "format": "fixed3"
+  },
+  "org_li_polyp_groups": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g3.json: polyp > groups, counted",
+   "format": "count"
+  },
+  "org_li_polyp_pass": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g3.json: polyp > groups with auroc at least 0.7, counted",
+   "format": "count"
+  },
+  "org_li_single_committed": {
+   "value": 0.0017,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: by_scenario > random_1 > committed",
+   "format": "pct1"
+  },
+  "org_li_tissue_best": {
+   "value": 0.865,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: by_scenario > tissue > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "org_li_tissue_committed": {
+   "value": 0.2187,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g1.json: by_scenario > tissue > committed",
+   "format": "pct1"
+  },
+  "org_li_zheng": {
+   "value": 0.1667,
+   "status": "measured",
+   "basis": "research/notebook-outputs/li_development/g3.json: zheng > group_accuracy",
+   "format": "pct1"
+  },
+  "org_lung_bpd": {
+   "value": 0.62,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g3.json: bpd > auroc_epithelial",
+   "format": "fixed3"
+  },
+  "org_lung_classes": {
+   "value": 28,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_build/classes.json: class_order, counted",
+   "format": "count"
+  },
+  "org_lung_committed": {
+   "value": 0.7339,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: overall > committed",
+   "format": "pct1"
+  },
+  "org_lung_correct_when_committed": {
+   "value": 0.9741,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: overall > correct_when_committed",
+   "format": "pct1"
+  },
+  "org_lung_coverage": {
+   "value": 0.9034,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: overall > coverage",
+   "format": "pct1"
+  },
+  "org_lung_false_abstention": {
+   "value": 0.0001,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: overall > false_abstention",
+   "format": "pct2"
+  },
+  "org_lung_g2_gap": {
+   "value": 0.0367,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_donor_heldout/summary.json: mean > seen minus unseen > balanced_accuracy",
+   "format": "pp"
+  },
+  "org_lung_g2_seen": {
+   "value": 0.7208,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_donor_heldout/summary.json: mean > seen > balanced_accuracy",
+   "format": "pct1"
+  },
+  "org_lung_g2_unseen": {
+   "value": 0.6841,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_donor_heldout/summary.json: mean > unseen > balanced_accuracy",
+   "format": "pct1"
+  },
+  "org_lung_genes": {
+   "value": 12614,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_build/feature_space_provenance.json: feature_space",
+   "format": "count"
+  },
+  "org_lung_hpa": {
+   "value": 1.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g3.json: hpa > auroc_at2_over_at1",
+   "format": "fixed3"
+  },
+  "org_lung_ipf": {
+   "value": 0.8846,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g3.json: ipf > auroc_stromal_ff_over_alveoli",
+   "format": "fixed3"
+  },
+  "org_lung_single_committed": {
+   "value": 0.3158,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: by_scenario > random_1 > committed",
+   "format": "pct1"
+  },
+  "org_lung_tissue_best": {
+   "value": 0.8192,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: by_scenario > tissue > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "org_lung_tissue_committed": {
+   "value": 0.9906,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_development/g1.json: by_scenario > tissue > committed",
+   "format": "pct1"
   },
   "pbmc240_lymphoid": {
    "value": 0.9231,

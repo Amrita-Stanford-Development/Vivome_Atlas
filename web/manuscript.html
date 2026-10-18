@@ -98,6 +98,7 @@
                     <li><a href="#results">Results</a></li>
                     <li><a href="#cross-modal-support">Cross-modal support and alignment diagnostics</a></li>
                     <li><a href="#benchmark">The benchmark tables</a></li>
+                    <li><a href="#organs">Other organs: the colon and the lung</a></li>
                     <li><a href="#alternatives">Tried and not adopted</a></li>
                     <li><a href="#discussion">Discussion</a></li>
                     <li><a href="#availability">Data and code availability</a></li>
@@ -851,6 +852,50 @@
 
             <div class="ms-figure-slot" data-figure="fig6-limits"></div>
 
+            <h3 id="organs">Other organs: the colon and the lung</h3>
+            <p>The same recipe was run on two more Tabula Sapiens atlases, the large intestine and the
+                lung, each as its own reference beside blood, which is unchanged. A builder script first
+                rebuilt the served blood reference: assembled in the organ layout, blood gives v4.1's frozen
+                responses with <span data-ms="org_builder_differences"></span> differences. Each organ's gates
+                were fixed before its model existed; a miss stops the organ, and nothing is tuned to pass.</p>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Gate</th><th>Large intestine</th><th>Lung</th><th>Bar</th></tr></thead>
+                    <tbody>
+                        <tr><td>Classes and genes</td><td><span data-ms="org_li_classes"></span> classes, <span data-ms="org_li_genes"></span> genes</td><td><span data-ms="org_lung_classes"></span> classes, <span data-ms="org_lung_genes"></span> genes</td><td>none</td></tr>
+                        <tr><td>Simulated uploads: cells given an answer</td><td><span data-ms="org_li_committed"></span> (miss)</td><td><span data-ms="org_lung_committed"></span> (miss)</td><td>at least <span class="constant">75%</span></td></tr>
+                        <tr><td>Simulated uploads: right when answered, at the level stated</td><td><span data-ms="org_li_correct_when_committed"></span></td><td><span data-ms="org_lung_correct_when_committed"></span></td><td>at least <span class="constant">90%</span></td></tr>
+                        <tr><td>Simulated uploads: true type in the set</td><td><span data-ms="org_li_coverage"></span></td><td><span data-ms="org_lung_coverage"></span></td><td>at least <span class="constant">85%</span></td></tr>
+                        <tr><td>Simulated uploads: refused as foreign</td><td><span data-ms="org_li_false_abstention"></span></td><td><span data-ms="org_lung_false_abstention"></span></td><td>at most <span class="constant">2%</span></td></tr>
+                        <tr><td>Whole-tissue uploads: answered, and the best guess</td><td><span data-ms="org_li_tissue_committed"></span>, <span data-ms="org_li_tissue_best"></span></td><td><span data-ms="org_lung_tissue_committed"></span>, <span data-ms="org_lung_tissue_best"></span></td><td>reported</td></tr>
+                        <tr><td>One-class uploads: answered</td><td><span data-ms="org_li_single_committed"></span></td><td><span data-ms="org_lung_single_committed"></span></td><td>reported</td></tr>
+                        <tr><td>Protein pools of known type</td><td>epithelium over stroma, AUROC <span data-ms="org_li_kabatnik"></span> (pass); T cell over macrophage pools, <span data-ms="org_li_zheng"></span> right (miss); polyp cells' markers agree in <span data-ms="org_li_polyp_pass"></span> of <span data-ms="org_li_polyp_groups"></span> groups (miss)</td><td>sorted epithelium over endothelium, AUROC <span data-ms="org_lung_bpd"></span> (miss); AT2 over AT1, AUROC <span data-ms="org_lung_hpa"></span> (pass); fibroblastic foci over alveoli, AUROC <span data-ms="org_lung_ipf"></span> (pass)</td><td>per set</td></tr>
+                        <tr><td>One donor held out: balanced accuracy, unseen and seen</td><td><span data-ms="org_li_g2_unseen"></span> and <span data-ms="org_li_g2_seen"></span>, a gap of <span data-ms="org_li_g2_gap"></span> points</td><td><span data-ms="org_lung_g2_unseen"></span> and <span data-ms="org_lung_g2_seen"></span>, a gap of <span data-ms="org_lung_g2_gap"></span> points</td><td>reported</td></tr>
+                        <tr><td>Verdict</td><td>NO GO</td><td>NO GO, narrowly</td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="evidence">
+                <li>Both miss for one reason: each upload is scaled against itself, so an upload of one lineage
+                    or one class loses its signal, and conformal sets fitted over every kind of upload come out too
+                    wide to answer. Whole-tissue uploads are answered.
+                    <span class="ev-src"><code>research/notebook-outputs/li_development/g1.json</code>, <code>research/notebook-outputs/lung_development/g1.json</code>
+                    <span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span></span></li>
+                <li>The lung's miss on protein: every control donor's sorted epithelial pool is guessed macrophage.
+                    The colon's: tumour T-cell pools uploaded with only immune pools are guessed mast cells or monocytes.
+                    <span class="ev-src"><code>research/notebook-outputs/lung_development/g3.json</code>, <code>research/notebook-outputs/li_development/g3.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>Each organ's locked test stays sealed, unopened, for a reference that passes: PXD052341 for the
+                    colon, MSV000094189 for the lung. A third organ, the lymph node, is being built under the same
+                    gates.
+                    <span class="ev-src"><code>research/benchmark/side-tests.md</code> (amendments 8, 10 and 11)</span></li>
+                <li>On the way, two faults in the service: tables written by <code>DIA-NN 1.8</code> could not be read, and the
+                    identifier map named blood's genes only, so a colon upload lost every colon gene. Both are fixed.
+                    <span class="ev-src"><code>research/notebook-run-history.md</code> (entry 51)</span></li>
+                <li>Every failure, fault and limit of the data, in one place.
+                    <span class="ev-src"><code>research/organ-references.md</code></span></li>
+            </ul>
+
             <h3 id="alternatives">Tried and not adopted</h3>
             <p>Each idea is named by what it changed. Each was measured under rules fixed before its run.</p>
             <div class="table-scroll">
@@ -899,6 +944,9 @@
                 <li>Conformal coverage on protein: below its target (<span data-ms="coverage_fulcher"></span> on
                     Fulcher against <span data-ms="coverage_target"></span>).
                     <span class="ev-src"><code>research/notebook-outputs/protein_coverage/coverage.json</code></span></li>
+                <li>Other organs: the colon and lung references miss their development gates, narrow uploads
+                    being the shared cause, so neither is served.
+                    <span class="ev-src"><code>research/organ-references.md</code></span></li>
             </ul>
             <h3>Lessons for benchmarking</h3>
             <ul class="evidence">
@@ -936,6 +984,9 @@
                 <li>Labelled protein calibration cells, so coverage can be fitted on protein.</li>
                 <li>Paired RNA and protein measurements in the same cells, to train across the gap.
                     <span class="ev-src"><code>research/roadmap.md</code> (revision of 2026-10-04)</span></li>
+                <li>A third organ, the lymph node, built and checked under the same gates as the colon and
+                    the lung.
+                    <span class="ev-src"><code>research/organ-references.md</code> (Lymph node)</span></li>
             </ul>
         </section>
 

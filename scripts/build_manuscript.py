@@ -580,6 +580,43 @@ def negative(r: Records) -> None:
     assert r.json(FOREIGN)["GO"] is False and r.json(V51_PHASE4)["go"] is False
 
 
+def organs(r: Records) -> None:
+    """Track I: references for other organs (research/organ-references.md),
+    each organ's gates as its gate run recorded them."""
+    loader = r.json(NO / "organ_builder_blood" / "loader.json")
+    r.put("org_builder_differences", sum(v["differences"] for k, v in loader["results"].items() if k.startswith("served_files/")),
+          f"{rel(NO / 'organ_builder_blood' / 'loader.json')}: results > served_files/* > differences, summed", "count")
+    assert loader["passed"] is True
+    for organ, key in (("li", "li"), ("lung", "lung")):
+        build, dev, donor = NO / f"{organ}_build", NO / f"{organ}_development", NO / f"{organ}_donor_heldout" / "summary.json"
+        classes = r.json(build / "classes.json")["class_order"]
+        r.put(f"org_{key}_classes", len(classes), f"{rel(build / 'classes.json')}: class_order, counted", "count")
+        r.at(f"org_{key}_genes", build / "feature_space_provenance.json", ("feature_space",), "count")
+        g1 = dev / "g1.json"
+        for field, fmt in (("committed", "pct1"), ("correct_when_committed", "pct1"), ("coverage", "pct1"), ("false_abstention", "pct2")):
+            r.pct(f"org_{key}_{field}", g1, "overall", field, fmt=fmt)
+        r.pct(f"org_{key}_tissue_committed", g1, "by_scenario", "tissue", "committed")
+        r.pct(f"org_{key}_tissue_best", g1, "by_scenario", "tissue", "best_guess_per_upload_balanced")
+        r.pct(f"org_{key}_single_committed", g1, "by_scenario", "random_1", "committed")
+        r.pct(f"org_{key}_g2_unseen", donor, "mean", "unseen", "balanced_accuracy")
+        r.pct(f"org_{key}_g2_seen", donor, "mean", "seen", "balanced_accuracy")
+        mean = r.json(donor)["mean"]
+        r.put(f"org_{key}_g2_gap", round((mean["seen"]["balanced_accuracy"] - mean["unseen"]["balanced_accuracy"]) / 100, 6),
+              f"{rel(donor)}: mean > seen minus unseen > balanced_accuracy", "pp")
+        assert r.json(dev / "gates.json")["all_pass"] is False
+    g3 = NO / "li_development" / "g3.json"
+    r.at("org_li_kabatnik", g3, ("kabatnik", "auroc_epithelial"), "fixed3", digits=4)
+    r.pct("org_li_zheng", g3, "zheng", "group_accuracy")
+    polyp = r.json(g3)["polyp"]["groups"]
+    r.put("org_li_polyp_pass", sum(v["auroc"] is not None and v["auroc"] >= 0.7 for v in polyp.values()),
+          f"{rel(g3)}: polyp > groups with auroc at least 0.7, counted", "count")
+    r.put("org_li_polyp_groups", len(polyp), f"{rel(g3)}: polyp > groups, counted", "count")
+    g3 = NO / "lung_development" / "g3.json"
+    r.at("org_lung_bpd", g3, ("bpd", "auroc_epithelial"), "fixed3", digits=4)
+    r.at("org_lung_hpa", g3, ("hpa", "auroc_at2_over_at1"), "fixed3", digits=4)
+    r.at("org_lung_ipf", g3, ("ipf", "auroc_stromal_ff_over_alveoli"), "fixed3", digits=4)
+
+
 def waiting(r: Records) -> None:
     r.wait("open_sorted_test", "External test",
            "Sorted CD4/CD8 single cells, requested by email; protocol research/benchmark/protocol-sorted-cd4cd8.md")
@@ -614,6 +651,7 @@ def build(manifest: dict | None = None, workflow: dict | None = None) -> dict:
     heldout(r)
     robustness(r)
     negative(r)
+    organs(r)
     waiting(r)
     sources = sorted(r.sources | {WORKFLOW}, key=rel)
     return {
