@@ -1,0 +1,181 @@
+{
+  "finished": "2026-10-18T21:47:44",
+  "seconds": 364,
+  "decision": {
+    "IG": {
+      "organs": {
+        "lymph_node": {
+          "primary_gain": 0.0,
+          "best_random_gain": 0.0,
+          "beats_random": false,
+          "guards_hold": {
+            "hpa_lymph_node_pools": true
+          },
+          "worse_than_every_random": {
+            "zheng_group_accuracy": false,
+            "zheng_plasma_guesses": false,
+            "pxd011683_b_share": false,
+            "coscia_auroc": false,
+            "coscia_epithelium_plasma": false
+          }
+        },
+        "lung": {
+          "primary_gain": 0.0,
+          "best_random_gain": 0.01,
+          "beats_random": false,
+          "guards_hold": {
+            "hpa_at2_over_at1": true,
+            "ipf_foci_over_alveoli": true
+          },
+          "worse_than_every_random": {
+            "bpd_auroc": false,
+            "bpd_epithelial_immune": false
+          }
+        },
+        "large_intestine": {
+          "primary_gain": 0.0,
+          "best_random_gain": 0.0,
+          "beats_random": false,
+          "guards_hold": {
+            "kabatnik_auroc": true
+          },
+          "worse_than_every_random": {
+            "zheng_group_accuracy": false,
+            "zheng_t_pools_myeloid": false
+          }
+        }
+      },
+      "qualifies": false
+    },
+    "SERUM": {
+      "organs": {
+        "lymph_node": {
+          "primary_gain": 0.0,
+          "best_random_gain": 0.0,
+          "beats_random": false,
+          "guards_hold": {
+            "hpa_lymph_node_pools": true
+          },
+          "worse_than_every_random": {
+            "zheng_group_accuracy": false,
+            "zheng_plasma_guesses": false,
+            "pxd011683_b_share": false,
+            "coscia_auroc": false,
+            "coscia_epithelium_plasma": false
+          }
+        },
+        "lung": {
+          "primary_gain": 0.01,
+          "best_random_gain": 0.02,
+          "beats_random": false,
+          "guards_hold": {
+            "hpa_at2_over_at1": true,
+            "ipf_foci_over_alveoli": true
+          },
+          "worse_than_every_random": {
+            "bpd_auroc": false,
+            "bpd_epithelial_immune": false
+          }
+        },
+        "large_intestine": {
+          "primary_gain": 0.0,
+          "best_random_gain": 0.0,
+          "beats_random": false,
+          "guards_hold": {
+            "kabatnik_auroc": true
+          },
+          "worse_than_every_random": {
+            "zheng_group_accuracy": false,
+            "zheng_t_pools_myeloid": false
+          }
+        }
+      },
+      "qualifies": false
+    },
+    "v2_removes": "nothing"
+  },
+  "table": {
+    "lymph_node": {
+      "none": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 71.11,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0,
+        "hpa_lymph_node_pools": 100.0
+      },
+      "IG": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 73.33,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0,
+        "hpa_lymph_node_pools": 100.0
+      },
+      "SERUM": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 71.11,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0,
+        "hpa_lymph_node_pools": 100.0
+      },
+      "IG+SERUM": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 73.33,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0,
+        "hpa_lymph_node_pools": 100.0
+      }
+    },
+    "lung": {
+      "none": {
+        "bpd_auroc": 0.62,
+        "bpd_epithelial_immune": 6.0,
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "IG": {
+        "bpd_auroc": 0.62,
+        "bpd_epithelial_immune": 6.0,
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "SERUM": {
+        "bpd_auroc": 0.63,
+        "bpd_epithelial_immune": 6.0,
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "IG+SERUM": {
+        "bpd_auroc": 0.62,
+        "bpd_epithelial_immune": 6.0,
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      }
+    },
+    "large_intestine": {
+      "none": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0,
+        "kabatnik_auroc": 1.0
+      },
+      "IG": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0,
+        "kabatnik_auroc": 1.0
+      },
+      "SERUM": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0,
+        "kabatnik_auroc": 1.0
+      },
+      "IG+SERUM": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0,
+        "kabatnik_auroc": 1.0
+      }
+    }
+  }
+}

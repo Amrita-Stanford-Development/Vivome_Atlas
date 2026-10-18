@@ -1,0 +1,2100 @@
+{
+  "lymph_node": {
+    "none": {
+      "metrics": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 71.11,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0
+      },
+      "guards": {
+        "hpa_lymph_node_pools": 100.0
+      },
+      "reported": {
+        "hpa_non_immune_pools_b_group": 51
+      },
+      "rows_dropped": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "IG random": [
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 50
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          6,
+          8,
+          10,
+          21
+        ]
+      }
+    ],
+    "SERUM random": [
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 52
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 50
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 50
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 52
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 50
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          24,
+          45,
+          70,
+          63
+        ]
+      }
+    ],
+    "IG+SERUM random": [
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 0.96,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 52
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 50
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 51
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 73.33,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 52
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 49
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 52
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 41.03,
+          "zheng_plasma_guesses": 44.0,
+          "pxd011683_b_share": 71.11,
+          "coscia_auroc": 1.0,
+          "coscia_epithelium_plasma": 4.0
+        },
+        "guards": {
+          "hpa_lymph_node_pools": 100.0
+        },
+        "reported": {
+          "hpa_non_immune_pools_b_group": 50
+        },
+        "rows_dropped": [
+          30,
+          53,
+          80,
+          84
+        ]
+      }
+    ],
+    "IG": {
+      "metrics": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 73.33,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0
+      },
+      "guards": {
+        "hpa_lymph_node_pools": 100.0
+      },
+      "reported": {
+        "hpa_non_immune_pools_b_group": 52
+      },
+      "rows_dropped": [
+        6,
+        8,
+        10,
+        21
+      ]
+    },
+    "SERUM": {
+      "metrics": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 71.11,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0
+      },
+      "guards": {
+        "hpa_lymph_node_pools": 100.0
+      },
+      "reported": {
+        "hpa_non_immune_pools_b_group": 50
+      },
+      "rows_dropped": [
+        24,
+        45,
+        70,
+        63
+      ]
+    },
+    "IG+SERUM": {
+      "metrics": {
+        "zheng_group_accuracy": 41.03,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 73.33,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0
+      },
+      "guards": {
+        "hpa_lymph_node_pools": 100.0
+      },
+      "reported": {
+        "hpa_non_immune_pools_b_group": 53
+      },
+      "rows_dropped": [
+        30,
+        53,
+        80,
+        84
+      ]
+    }
+  },
+  "lung": {
+    "none": {
+      "metrics": {
+        "bpd_auroc": 0.62,
+        "bpd_epithelial_immune": 6.0
+      },
+      "guards": {
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "reported": {},
+      "rows_dropped": [
+        0,
+        0,
+        0
+      ]
+    },
+    "IG random": [
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          3,
+          10,
+          11
+        ]
+      }
+    ],
+    "SERUM random": [
+      {
+        "metrics": {
+          "bpd_auroc": 0.64,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.64,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8974
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.64,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.64,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          17,
+          60,
+          44
+        ]
+      }
+    ],
+    "IG+SERUM random": [
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.9103
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8974
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8974
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.64,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8974
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.62,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8846
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.9103
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      },
+      {
+        "metrics": {
+          "bpd_auroc": 0.63,
+          "bpd_epithelial_immune": 6.0
+        },
+        "guards": {
+          "hpa_at2_over_at1": 1.0,
+          "ipf_foci_over_alveoli": 0.8974
+        },
+        "reported": {},
+        "rows_dropped": [
+          20,
+          70,
+          55
+        ]
+      }
+    ],
+    "IG": {
+      "metrics": {
+        "bpd_auroc": 0.62,
+        "bpd_epithelial_immune": 6.0
+      },
+      "guards": {
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "reported": {},
+      "rows_dropped": [
+        6,
+        10,
+        12
+      ]
+    },
+    "SERUM": {
+      "metrics": {
+        "bpd_auroc": 0.63,
+        "bpd_epithelial_immune": 6.0
+      },
+      "guards": {
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "reported": {},
+      "rows_dropped": [
+        40,
+        60,
+        48
+      ]
+    },
+    "IG+SERUM": {
+      "metrics": {
+        "bpd_auroc": 0.62,
+        "bpd_epithelial_immune": 6.0
+      },
+      "guards": {
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "reported": {},
+      "rows_dropped": [
+        46,
+        70,
+        60
+      ]
+    }
+  },
+  "large_intestine": {
+    "none": {
+      "metrics": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0
+      },
+      "guards": {
+        "kabatnik_auroc": 1.0
+      },
+      "reported": {
+        "polyp_group_aurocs": {
+          "B cell": 0.8152,
+          "absorptive": 0.3962,
+          "endothelial": 0.4757,
+          "myeloid": 0.6537,
+          "secretory": 0.5416,
+          "stem/TA": 0.9728
+        }
+      },
+      "rows_dropped": [
+        0,
+        0,
+        0
+      ]
+    },
+    "IG random": [
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8086,
+            "absorptive": 0.3916,
+            "endothelial": 0.4766,
+            "myeloid": 0.6595,
+            "secretory": 0.5506,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3916,
+            "endothelial": 0.4706,
+            "myeloid": 0.6599,
+            "secretory": 0.5493,
+            "stem/TA": 0.9719
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8144,
+            "absorptive": 0.3911,
+            "endothelial": 0.4876,
+            "myeloid": 0.6537,
+            "secretory": 0.543,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4706,
+            "myeloid": 0.6537,
+            "secretory": 0.5473,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4695,
+            "myeloid": 0.6537,
+            "secretory": 0.5449,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4953,
+            "myeloid": 0.6537,
+            "secretory": 0.5516,
+            "stem/TA": 0.9705
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4757,
+            "myeloid": 0.6537,
+            "secretory": 0.5416,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8067,
+            "absorptive": 0.3978,
+            "endothelial": 0.4706,
+            "myeloid": 0.6537,
+            "secretory": 0.541,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4887,
+            "myeloid": 0.6555,
+            "secretory": 0.5416,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3925,
+            "endothelial": 0.4844,
+            "myeloid": 0.6537,
+            "secretory": 0.5488,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          10,
+          8,
+          8
+        ]
+      }
+    ],
+    "SERUM random": [
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3926,
+            "endothelial": 0.4976,
+            "myeloid": 0.6537,
+            "secretory": 0.5527,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8269,
+            "absorptive": 0.3932,
+            "endothelial": 0.4844,
+            "myeloid": 0.6495,
+            "secretory": 0.5587,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4785,
+            "myeloid": 0.6537,
+            "secretory": 0.5491,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8159,
+            "absorptive": 0.4004,
+            "endothelial": 0.468,
+            "myeloid": 0.6659,
+            "secretory": 0.5449,
+            "stem/TA": 0.9727
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3962,
+            "endothelial": 0.4932,
+            "myeloid": 0.6543,
+            "secretory": 0.5532,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3903,
+            "endothelial": 0.4837,
+            "myeloid": 0.659,
+            "secretory": 0.5402,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8067,
+            "absorptive": 0.4034,
+            "endothelial": 0.4837,
+            "myeloid": 0.6604,
+            "secretory": 0.5371,
+            "stem/TA": 0.9727
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8067,
+            "absorptive": 0.3905,
+            "endothelial": 0.468,
+            "myeloid": 0.6598,
+            "secretory": 0.5506,
+            "stem/TA": 0.9727
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3894,
+            "endothelial": 0.4764,
+            "myeloid": 0.6599,
+            "secretory": 0.5598,
+            "stem/TA": 0.9709
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8144,
+            "absorptive": 0.3833,
+            "endothelial": 0.4779,
+            "myeloid": 0.6597,
+            "secretory": 0.5728,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          47,
+          52,
+          21
+        ]
+      }
+    ],
+    "IG+SERUM random": [
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3977,
+            "endothelial": 0.4949,
+            "myeloid": 0.6655,
+            "secretory": 0.5513,
+            "stem/TA": 0.9734
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3961,
+            "endothelial": 0.4495,
+            "myeloid": 0.6459,
+            "secretory": 0.5452,
+            "stem/TA": 0.9734
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8067,
+            "absorptive": 0.3971,
+            "endothelial": 0.484,
+            "myeloid": 0.6537,
+            "secretory": 0.5474,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8124,
+            "absorptive": 0.4109,
+            "endothelial": 0.467,
+            "myeloid": 0.6557,
+            "secretory": 0.5515,
+            "stem/TA": 0.9727
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 22.22,
+          "zheng_t_pools_myeloid": 10.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.4017,
+            "endothelial": 0.4427,
+            "myeloid": 0.6543,
+            "secretory": 0.5588,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.3916,
+            "endothelial": 0.4776,
+            "myeloid": 0.659,
+            "secretory": 0.5495,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8067,
+            "absorptive": 0.3925,
+            "endothelial": 0.4538,
+            "myeloid": 0.6518,
+            "secretory": 0.5541,
+            "stem/TA": 0.9728
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.798,
+            "absorptive": 0.319,
+            "endothelial": 0.4752,
+            "myeloid": 0.6598,
+            "secretory": 0.5501,
+            "stem/TA": 0.9724
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8124,
+            "absorptive": 0.394,
+            "endothelial": 0.4882,
+            "myeloid": 0.659,
+            "secretory": 0.5528,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      },
+      {
+        "metrics": {
+          "zheng_group_accuracy": 16.67,
+          "zheng_t_pools_myeloid": 11.0
+        },
+        "guards": {
+          "kabatnik_auroc": 1.0
+        },
+        "reported": {
+          "polyp_group_aurocs": {
+            "B cell": 0.8152,
+            "absorptive": 0.4012,
+            "endothelial": 0.4965,
+            "myeloid": 0.6537,
+            "secretory": 0.5509,
+            "stem/TA": 0.9737
+          }
+        },
+        "rows_dropped": [
+          57,
+          60,
+          29
+        ]
+      }
+    ],
+    "IG": {
+      "metrics": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0
+      },
+      "guards": {
+        "kabatnik_auroc": 1.0
+      },
+      "reported": {
+        "polyp_group_aurocs": {
+          "B cell": 0.8097,
+          "absorptive": 0.4022,
+          "endothelial": 0.496,
+          "myeloid": 0.6537,
+          "secretory": 0.5446,
+          "stem/TA": 0.9716
+        }
+      },
+      "rows_dropped": [
+        10,
+        8,
+        8
+      ]
+    },
+    "SERUM": {
+      "metrics": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0
+      },
+      "guards": {
+        "kabatnik_auroc": 1.0
+      },
+      "reported": {
+        "polyp_group_aurocs": {
+          "B cell": 0.8152,
+          "absorptive": 0.389,
+          "endothelial": 0.4837,
+          "myeloid": 0.6598,
+          "secretory": 0.5585,
+          "stem/TA": 0.9727
+        }
+      },
+      "rows_dropped": [
+        47,
+        52,
+        21
+      ]
+    },
+    "IG+SERUM": {
+      "metrics": {
+        "zheng_group_accuracy": 16.67,
+        "zheng_t_pools_myeloid": 11.0
+      },
+      "guards": {
+        "kabatnik_auroc": 1.0
+      },
+      "reported": {
+        "polyp_group_aurocs": {
+          "B cell": 0.8097,
+          "absorptive": 0.401,
+          "endothelial": 0.5158,
+          "myeloid": 0.6598,
+          "secretory": 0.5475,
+          "stem/TA": 0.9715
+        }
+      },
+      "rows_dropped": [
+        57,
+        60,
+        29
+      ]
+    }
+  }
+}
