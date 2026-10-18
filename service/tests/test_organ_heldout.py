@@ -32,6 +32,24 @@ class LungNames(unittest.TestCase):
         self.assertEqual(lung.donor("EPI_1"), "all")
 
 
+class LymphNodeNames(unittest.TestCase):
+    def test_regions_by_meaning(self):
+        from benchmark import ln_heldout_intake as ln
+        self.assertEqual(ln.region("tonsil_Whisper_DZ3_S2-A1_1_1000.d"), "germinal centre")
+        self.assertEqual(ln.region("tonsil_MZ12"), "mantle zone")
+        self.assertEqual(ln.region("calamari_Whisper_B1_S1-A7_1_3807.d"), "B-cell region")
+        self.assertEqual(ln.region("calamari_Whisper_T4_S1-C10_1_3817.d"), "T zone")
+        self.assertEqual(ln.region("calamari_Whisper_epi3_S1-A9_1_3812.d"), "epithelium")
+        self.assertEqual(ln.region("tonsil_blank_1"), "excluded")
+
+    def test_two_zones_or_none_stop_the_automatic_map(self):
+        from benchmark import ln_heldout_intake as ln
+        self.assertIsNone(ln.region("calamari_Whisper_T1_S1-B8_1_3811.d"))  # a T region on plate well B8
+        self.assertIsNone(ln.region("run_0042.d"))
+        with self.assertRaises(SystemExit):
+            ln.read_label_map(["tonsil_TZ1", "run_7.d"])
+
+
 class ColonNames(unittest.TestCase):
     def test_groups_by_meaning(self):
         self.assertEqual(colon._group_of("Crypt bottom epithelium"), "crypt bottom")

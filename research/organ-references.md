@@ -237,10 +237,33 @@ G3:
   the argmax.
 - **PXD011683:** at least 80% of the reactive lymph-node (control) B-cell
   samples get the B cell group as the argmax. Lymphoma samples are uploaded
-  but not scored.
+  but not scored. (Superseded by the note below: the groups are not
+  documented, so every sample counts.)
 
 The wording may be fixed to a deposit's real layout by a dated note before
 the model, never after.
+
+**Note, 2026-10-18: G3 against the deposits as fetched,** before the lymph
+node model:
+- **PXD047762:** the tonsil experiment is its Fig. 3 table (14 regions: B1 to
+  B6 without B3, T1 to T6 without T5, and 4 epithelium regions). The check is
+  the 5 B-cell regions over the 5 T-cell regions.
+- **Zheng's six tonsil tables** carry UniProt accessions ("Protein") and log2
+  values, one table per population. They are read as one upload, resolved by
+  the lymph node's identifier map.
+- **PXD011683:**
+  - its 45 samples are named C, D and F (15 each), and neither the deposit
+    nor the abstract says which group is the control;
+  - every sample is a CD19+ magnetically enriched B-cell sample, normal or
+    lymphoma.
+  - So the gate counts every sample: at least 80% with the B cell group as
+    the argmax.
+
+**Gene space:** the base six sources, plus:
+- Zheng's colorectal table (the tonsil tables give accessions, not symbols);
+- the Protein Atlas proteins detected in the cell types this reference holds;
+- PXD047762's Fig. 3;
+- PXD011683.
 
 ## The large intestine's outcome: every failure, in one place
 

@@ -294,6 +294,44 @@
         "path": "drive:scProteomics/abundance_protein_MD.tsv",
         "read": "column",
         "column": "Gene"
+      },
+      {
+        "name": "zheng2025",
+        "path": "repo:data/incoming/public_sets/Zheng2025_PXD057118/ColorectalCancer_pg_matrix_Macrophages.txt",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "hpa_dvp",
+        "path": "repo:data/incoming/public_sets/HPA2026_DVP/dvp_sample_data.tsv.zip",
+        "read": "column",
+        "column": "Gene name",
+        "detected": {
+          "value": "Intensity",
+          "column": "Cell type",
+          "keep": [
+            "macrophages",
+            "cd4 t-cells",
+            "cd8 t-cells",
+            "b-cells",
+            "neutrophils",
+            "capillaries",
+            "smooth muscle cells"
+          ]
+        }
+      },
+      {
+        "name": "coscia2024",
+        "path": "drive:Results/Organs/lymph_node/dev/coscia2024_fig3_pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "dusszachniewicz2021",
+        "path": "repo:data/incoming/public_sets/DusSzachniewicz2021_PXD011683/MaxQuant_Output.zip",
+        "member": "proteinGroups.txt",
+        "read": "column",
+        "column": "Gene names"
       }
     ]
   },

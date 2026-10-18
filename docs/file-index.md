@@ -330,6 +330,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/heldout_formats.py` — the internal held-out test's readers (MaxQuant, Proteome Discoverer, sage TMT, DIA-NN), written from each deposit's documentation; each format's column names in one place
 - `benchmark/heldout_intake.py` — the internal held-out test's label maps and intake for the five protein sets: uploads, every candidate as served, per-class best-guess probabilities, the baselines' matrix; --rehearse on development or synthetic data
 - `benchmark/colon_heldout_intake.py` — the colon's locked test (PXD052341): the label map read from the deposit's metadata by meaning, and the intake (the colon candidate as served, per-sample probabilities, the baselines' matrix); --rehearse on RNA pseudobulk written in the deposit's format
+- `benchmark/ln_heldout_intake.py` — the lymph node's locked test (PXD042367's tonsil niches): the archive unpacked, regions read from run names by meaning, and the intake (the lymph node candidate as served); --rehearse on RNA pseudobulk regions written as a DIA-NN matrix in Excel
+- `benchmark/ln_heldout_score.py` — the lymph node's locked test's scoring, once: AUROC of P(B cell) minus P(T cell), B-zone regions over T-zone regions, with a permutation p
 - `benchmark/lung_heldout_intake.py` — the lung's locked test (MSV000094189): the label map read from sample names by meaning, and the intake (the lung candidate as served, the baselines' matrix); --rehearse on RNA pseudobulk written as a MaxQuant table
 - `benchmark/lung_heldout_score.py` — the lung's locked test's scoring, once: four-lineage balanced accuracy with a within-donor permutation p, and the secondary measures
 - `benchmark/colon_heldout_score.py` — the colon's locked test's scoring, once: five-group balanced accuracy with a within-donor permutation p, and the secondary measures
@@ -708,6 +710,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lung_build/gene_id_map_provenance.json` — the lung's identifier map
 - `research/notebook-outputs/lung_build/mask_profiles_summary.csv` — the lung's missingness profiles
 - `research/notebook-outputs/lung_build/bundle_MANIFEST.json` — the lung bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebooks/lymph_node_development.py` — Track I, the lymph node's gates G1 (simulated RNA uploads through the service's code) and G3 (the Coscia tonsil regions, Zheng's tonsil pools, the Protein Atlas lymph-node pools, PXD011683's B cells), scored once
 - `research/notebooks/lung_development.py` — Track I, the lung's gates G1 (simulated RNA uploads through the service's code) and G3 (the LungMAP BPD pools, the Human Protein Atlas DVP pools, the IPF regions), scored once
 - `research/notebooks/li_development.py` — Track I, Stage 2: the colon reference's gates G1 (simulated RNA uploads through the service's code) and G3 (Kabatnik, Zheng and the polyp plate), scored once
 - `research/notebook-outputs/organ_builder_blood/data_stages.json` — the builder's blood acceptance, tiers 1 and 2: labels, split, suites, genes, hierarchy, RNA statistics and mask profiles against NB1's

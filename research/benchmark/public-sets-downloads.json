@@ -1,4 +1,67 @@
 {
+  "Coscia2023_PXD042367/DIANN_results_Fig4.rar": {
+    "bytes": 230205158,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "held_out",
+    "sha256": "e779ca72044c731259a8f0b11c36c15522788aafb775ebba6919d02451c793e5",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2023/11/PXD042367/DIANN_results_Fig4.rar"
+  },
+  "Coscia2024_PXD047762/DIANN_Fig2A.rar": {
+    "bytes": 110267046,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "339d5fdb3f2cb0c91cbd28de1ca2209dc18c6ff10e4b272f7b20543b45ab7974",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/03/PXD047762/DIANN_Fig2A.rar"
+  },
+  "Coscia2024_PXD047762/DIANN_Fig2B-F.rar": {
+    "bytes": 424594120,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "c7a6cf3c8b3ae78745bf637b87f05e796c5e0d982c0c3f51477fbdbe993be135",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/03/PXD047762/DIANN_Fig2B-F.rar"
+  },
+  "Coscia2024_PXD047762/DIANN_Fig3.rar": {
+    "bytes": 59670355,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "ce722f26e60edf11224012369909eaf6a69c3c476f7666332563e87bd32c7f5b",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/03/PXD047762/DIANN_Fig3.rar"
+  },
+  "Coscia2024_PXD047762/DIANN_FigS2D-G.rar": {
+    "bytes": 55821551,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "08a6c596ecec92943cccec8dfc8af5e12a3fe07d402fcd1668dd95132b110539",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/03/PXD047762/DIANN_FigS2D-G.rar"
+  },
+  "Coscia2024_PXD047762/Rawfile_description.xlsx": {
+    "bytes": 11823,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "02cfd4ab8d4ba6ac0d3dfeafef9c5c091ee78c56ba08b3997dc61ea57b17835b",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/03/PXD047762/Rawfile_description.xlsx"
+  },
+  "DusSzachniewicz2021_PXD011683/MaxQuant_Output.zip": {
+    "bytes": 1932688240,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "d05f1b365da536b7a57a9a79414d1d1bc2a962167b68548dbfff7c902598bea2",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2021/09/PXD011683/MaxQuant_Output.zip"
+  },
   "HPA2026_DVP/dvp_cell_types.tsv.zip": {
     "bytes": 668,
     "fetched": "2026-10-18",
@@ -601,5 +664,59 @@
     "sha256": "54fe86c62d354ed20dcbf64f3273585c5b91be566223d37bbae7959a95f862c1",
     "tier": "C",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/PXD057118_community_annotated.sdrf.tsv"
+  },
+  "Zheng2025_PXD057118/Tonsil_Cancer_pg_matrix_B_Cells.txt": {
+    "bytes": 360620,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "6a07384956214970fb1f8147389cd9e12d0690ca3fc4649abf25d1cf3dafbaf7",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Tonsil_Cancer_pg_matrix_B_Cells.txt"
+  },
+  "Zheng2025_PXD057118/Tonsil_Cancer_pg_matrix_Cytotoxic_T_Cells.txt": {
+    "bytes": 836594,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "90a70326d26715bc7078bd4dcb5c3766006c427445d25410a2800677829b41b1",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Tonsil_Cancer_pg_matrix_Cytotoxic_T_Cells.txt"
+  },
+  "Zheng2025_PXD057118/Tonsil_Cancer_pg_matrix_Helper_T_Cells.txt": {
+    "bytes": 392851,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "54246066de9cea903e918b1f47239ff96bff478a25c74c5c0d05b1f6000ff9ae",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Tonsil_Cancer_pg_matrix_Helper_T_Cells.txt"
+  },
+  "Zheng2025_PXD057118/Tonsil_Cancer_pg_matrix_Macrophages.txt": {
+    "bytes": 264718,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "3b293f74b8a4c4c363b8a3336d6e8a941b39af1f9074712671d87913e761cf4c",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Tonsil_Cancer_pg_matrix_Macrophages.txt"
+  },
+  "Zheng2025_PXD057118/Tonsil_Cancer_pg_matrix_Plasma_Cells.txt": {
+    "bytes": 344622,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "54b0135f63bd54c19baeecacb4f2297efed32fc2f695a882fc013aba87f522bf",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Tonsil_Cancer_pg_matrix_Plasma_Cells.txt"
+  },
+  "Zheng2025_PXD057118/Tonsil_Cancer_pg_matrix_Tumor_Cells.txt": {
+    "bytes": 649882,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "8cb64a054e684df744045e6b6cc9a91e9cf14d395c28b7b8aac1ea6fe5291ae6",
+    "tier": "N",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Tonsil_Cancer_pg_matrix_Tumor_Cells.txt"
   }
 }
