@@ -1,0 +1,36 @@
+<template>
+    <!-- Scene 4, 0:28 to 0:38: RNA has names. A shoal of the reference's own
+         cells streams in and settles into the atlas map, coloured by type
+         (lib/scenes.js, from web/data/workflow.json). -->
+    <style>
+        #s-rna .left { position: absolute; left: 150px; top: 150px; width: 600px; }
+        #s-rna .fig { margin-top: 70px; }
+        #s-rna .f-caption { margin-top: 8px; }
+        #s-rna canvas { left: 0; top: 0; }
+        #s-rna .f-display, #s-rna .fig { opacity: 0; }
+        #s-rna .cut { clip-path: inset(0 100% 0 0); }
+    </style>
+    <div id="s-rna" class="scene" data-composition-id="s-rna" data-width="1920" data-height="1080">
+        <canvas id="rna-canvas" width="1920" height="1080" data-layout-ignore></canvas>
+        <div class="left">
+            <h1 class="f-display">RNA atlases already name their <span class="cut">cells.</span></h1>
+            <div class="fig">
+                <span class="f-stat" data-slot="ms:ref_cells" data-count-at="4.4" data-count-for="1.8"></span>
+                <span class="f-label">RNA cells, each one labelled</span>
+                <span class="f-caption">in <span data-slot="ms:ref_classes"></span> blood and immune cell types, from Tabula Sapiens</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            VivomeSlots.fill(document.getElementById('s-rna'));
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo('#s-rna .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.8);
+            tl.fromTo('#s-rna .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.8);
+            tl.fromTo('#s-rna .fig', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 4.2);
+            tl.fromTo('#s-rna .left', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 9.5);
+            window.__timelines = window.__timelines || {};
+            window.__timelines['s-rna'] = tl;
+        })();
+    </script>
+</template>

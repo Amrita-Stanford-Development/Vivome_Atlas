@@ -323,6 +323,10 @@ Run history, entry 57. Records: `research/notebook-outputs/lymph_node_build/`,
 - **The rehearsal (G4):** the RNA pseudobulk T-zone regions are abstained
   on 8 of 12 times, while every B-zone region is answered.
 
+**The maps on the site** (owner, 2026-10-18): the three organs' maps are
+shown on the Atlas page without labelling (`web/data/organs/`,
+`docs/web/atlas.md`, "Other organs").
+
 **What stays:**
 - **PXD042367 stays sealed** (`side-tests.md`, amendment 12). Its
   protocol's rule 1 allows no candidate that missed its gates.

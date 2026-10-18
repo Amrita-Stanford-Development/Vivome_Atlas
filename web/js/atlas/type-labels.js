@@ -75,10 +75,12 @@ export function labelLayout(anchors, viewProjection, width, height, {
 
 // The labels over the stage, in `container` (an element covering the viewer,
 // which takes no pointer events). Starts off. refresh() re-reads which types
-// are shown; call it after a filter change.
+// are shown; call it after a filter change. An organ's map brings its own
+// colours and names (ref.colours, ref.nameOf; web/js/atlas/organs.js).
 export function createTypeLabels({ stage, ref, layer, container }) {
   const nClasses = ref.order.length;
-  const names = ref.order.map((name) => plainName(name));
+  const colours = ref.colours ?? CLASS_COLOURS;
+  const names = ref.order.map((name) => (ref.nameOf ?? plainName)(name));
   const els = [];        // one label element per type, made on first show
   const measured = [];   // {w, h} per type once the page has laid it out
   let on = false;
@@ -98,7 +100,7 @@ export function createTypeLabels({ stage, ref, layer, container }) {
       el.dataset.class = String(c);
       const dot = document.createElement('span');
       dot.className = 'type-label-dot';
-      dot.style.background = CLASS_COLOURS[c];
+      dot.style.background = colours[c];
       const name = document.createElement('span');
       name.className = 'type-label-name';
       name.textContent = names[c];

@@ -1,0 +1,96 @@
+/* The Motion page (web/motion.html): the film's storyboard. Everything
+   shared is css/page.css: the sheet for the notes, liquid glass for the
+   strip of scenes, beads for the tools and the caveats, the type scale.
+   Laid out for laptop and desktop screens; each still keeps its 16:9 frame. */
+
+.reel { max-width: 1280px; padding-top: 56px; }
+
+.reel-head { max-width: 900px; margin-bottom: 34px; }
+.reel-head .display { margin-bottom: 20px; }
+.reel-lede { margin-top: 18px; font-size: 18px; max-width: 64ch; color: var(--ink-soft); }
+.reel-lede strong { font-variant-numeric: tabular-nums; }
+
+/* ---- the strip: every scene's still, in order ---- */
+
+.reel-strip { padding: 16px; margin-bottom: 36px; }
+.reel-strip ol { list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.reel-strip li { max-width: none; }
+.reel-strip a { display: flex; flex-direction: column; gap: 4px; color: var(--ink); text-decoration: none; }
+.reel-strip img, .reel-thumb-missing {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    background: var(--bench);
+    box-shadow: 0 6px 16px -10px rgba(var(--shade), 0.5);
+}
+.reel-strip a:hover img { outline: 2px solid var(--accent); outline-offset: 2px; }
+.reel-strip-time { font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.reel-strip-title { font-size: 13.5px; font-weight: 500; line-height: 1.3; }
+
+/* ---- one scene: its still beside its notes ---- */
+
+.reel-shot {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 28px;
+    align-items: start;
+    margin-bottom: 44px;
+    scroll-margin-top: 24px;
+}
+.reel-still { position: sticky; top: 24px; margin: 0; }
+.reel-still img, .reel-missing {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-sheet);
+    box-shadow: var(--halo);
+    background: var(--bench);
+}
+.reel-missing { display: grid; place-items: center; }
+.reel-still figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 14px; font-size: 13.5px; color: var(--ink-faint); }
+.reel-time { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.reel-notes { padding: 26px 30px; }
+.reel-notes h2 { font-size: 24px; margin-bottom: 10px; }
+.reel-notes h3 { font-size: 13px; font-weight: 600; color: var(--ink-faint); margin: 18px 0 6px; letter-spacing: 0.01em; }
+.reel-notes p { font-size: 15px; }
+.reel-notes .caption { margin-top: 14px; }
+.reel-screen { list-style: none; display: grid; gap: 6px; }
+.reel-screen li { display: grid; grid-template-columns: 6.2em 1fr; gap: 10px; font-size: 15px; max-width: none; }
+.reel-role { font-size: 12.5px; color: var(--ink-faint); padding-top: 2px; }
+.reel-said { color: var(--ink); }
+.reel-said .cut { padding: 0 0.12em; }
+.reel-num { font-weight: 600; font-variant-numeric: tabular-nums; }
+.reel-caveats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.reel-voice {
+    margin: 0;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-tint);
+    border-radius: 0 var(--r-well) var(--r-well) 0;
+    font-size: 15.5px;
+    color: var(--ink);
+}
+.reel-motion { display: grid; gap: 6px; }
+.reel-motion div { display: grid; grid-template-columns: 6.2em 1fr; gap: 10px; font-size: 14.5px; }
+.reel-motion dt { color: var(--ink-faint); font-size: 12.5px; padding-top: 2px; }
+.reel-stale { font-size: 14px; color: var(--error); margin-bottom: 8px; }
+
+/* ---- the script and the method ---- */
+
+.reel-sheet { margin-bottom: 36px; }
+.reel-sheet > p { font-size: 15px; margin-bottom: 12px; }
+.reel-script td { font-size: 14.5px; line-height: 1.5; }
+.reel-script-time { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--ink-faint); }
+.reel-links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.reel-links .chapter-link { font-weight: 500; }
+
+/* Narrow windows stack the notes under the still. */
+@media (max-width: 980px) {
+    .reel-shot { grid-template-columns: minmax(0, 1fr); }
+    .reel-still { position: static; }
+    .reel-strip ol { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

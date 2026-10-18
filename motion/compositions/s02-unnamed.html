@@ -1,0 +1,50 @@
+<template>
+    <!-- Scene 2, 0:08 to 0:18: without names. The camera sinks below the
+         waterline; protein cells drift past with empty name tags. -->
+    <style>
+        #s-unnamed .cell { position: absolute; opacity: 0; display: flex; align-items: center; gap: 18px; }
+        #s-unnamed .body {
+            width: var(--r); height: var(--r); border-radius: 50%; flex: none;
+            background: radial-gradient(circle at 34% 32%, rgba(255, 255, 255, 0.95), rgba(47, 143, 106, 0.32) 46%, rgba(47, 143, 106, 0.78));
+            box-shadow: 0 0 0 3px rgba(47, 143, 106, 0.9), 0 0 46px 6px rgba(47, 143, 106, 0.35);
+        }
+        #s-unnamed .tag {
+            font-size: 22px; font-weight: 500; color: var(--ink-faint);
+            padding: 6px 18px; border-radius: 999px; border: 2px dashed rgba(29, 43, 54, 0.38);
+            background: rgba(255, 255, 255, 0.72);
+        }
+        #s-unnamed .words { position: absolute; left: 150px; top: 640px; width: 1300px; }
+        #s-unnamed .words .f-sub { margin-top: 24px; max-width: 34ch; }
+        #s-unnamed .f-display, #s-unnamed .f-sub { opacity: 0; }
+        #s-unnamed .cut { clip-path: inset(0 100% 0 0); }
+    </style>
+    <div id="s-unnamed" class="scene" data-composition-id="s-unnamed" data-width="1920" data-height="1080">
+        <div class="cell" style="--r: 104px; left: 1040px; top: 250px"><span class="body"></span><span class="tag">Unnamed</span></div>
+        <div class="cell" style="--r: 78px; left: 1430px; top: 150px"><span class="body"></span><span class="tag">Unnamed</span></div>
+        <div class="cell" style="--r: 92px; left: 1300px; top: 430px"><span class="body"></span><span class="tag">Unnamed</span></div>
+        <div class="cell" style="--r: 66px; left: 760px; top: 420px"><span class="body"></span><span class="tag">Unnamed</span></div>
+        <div class="cell" style="--r: 84px; left: 1500px; top: 640px"><span class="body"></span><span class="tag">Unnamed</span></div>
+        <div class="words">
+            <h1 class="f-display">But they arrive without <span class="cut">names.</span></h1>
+            <p class="f-sub">Few protein datasets come labelled, and every lab detects a different set of proteins.</p>
+        </div>
+    </div>
+    <script>
+        (function () {
+            VivomeSlots.fill(document.getElementById('s-unnamed'));
+            const tl = gsap.timeline({ paused: true });
+            const cells = document.querySelectorAll('#s-unnamed .cell');
+            cells.forEach((cell, i) => {
+                tl.fromTo(cell, { opacity: 0, x: 60, y: 120 }, { opacity: 1, x: 0, y: 0, duration: 1.4, ease: 'power2.out' }, 0.6 + i * 0.5);
+                // Each keeps drifting up and across, as the water rises past the camera.
+                tl.fromTo(cell, { yPercent: 0, xPercent: 0 }, { yPercent: -60 - i * 12, xPercent: i % 2 ? -14 : 12, duration: 9.4, ease: 'none' }, 0.6);
+            });
+            tl.fromTo('#s-unnamed .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 2.0);
+            tl.fromTo('#s-unnamed .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 2.8);
+            tl.fromTo('#s-unnamed .f-sub', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 3.6);
+            tl.fromTo('#s-unnamed', { opacity: 1 }, { opacity: 0, duration: 0.6, ease: 'power1.in' }, 9.4);
+            window.__timelines = window.__timelines || {};
+            window.__timelines['s-unnamed'] = tl;
+        })();
+    </script>
+</template>

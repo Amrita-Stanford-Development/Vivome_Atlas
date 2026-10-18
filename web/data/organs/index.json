@@ -1,0 +1,406 @@
+{
+ "schema": "1",
+ "about": "Maps of other organs' references, shown without labelling: each missed its development gates (research/organ-references.md). Written by scripts/export_atlas_coordinates.py --organ.",
+ "coordinates": "PC1-PC3 of the coordinate member's reference latents through the bundle's own PCA, as the service would place an upload's cells",
+ "organs": [
+  {
+   "id": "large_intestine",
+   "name": "Large intestine",
+   "file": "organs/large_intestine/metadata_RNA.csv",
+   "atlas": "Large_Intestine_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "reference_version": "large_intestine v1",
+   "bundle_manifest_sha256": "674cd01c0ae6f77f59759e31c0f6fcaf5a8c5f60e851bf2cabdb95ebdf7ce026",
+   "cells": 29867,
+   "class_order": [
+    "b cell",
+    "best4+ intestinal epithelial cell, human",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "colon endothelial cell",
+    "colon macrophage",
+    "enterocyte of epithelium of large intestine",
+    "enteroendocrine cell",
+    "enteroglial cell",
+    "fibroblast",
+    "gamma-delta t cell",
+    "innate lymphoid cell",
+    "intestinal crypt stem cell of colon",
+    "large intestine goblet cell",
+    "mast cell",
+    "monocyte",
+    "myeloid leukocyte",
+    "myofibroblast cell",
+    "plasma cell",
+    "regulatory t cell",
+    "transit amplifying cell of colon",
+    "tuft cell of colon"
+   ],
+   "hierarchy": {
+    "b cell": {
+     "group": "B cell",
+     "lineage": "immune"
+    },
+    "best4+ intestinal epithelial cell, human": {
+     "group": "absorptive",
+     "lineage": "epithelial"
+    },
+    "cd4-positive, alpha-beta t cell": {
+     "group": "T cell/ILC",
+     "lineage": "immune"
+    },
+    "cd8-positive, alpha-beta t cell": {
+     "group": "T cell/ILC",
+     "lineage": "immune"
+    },
+    "colon endothelial cell": {
+     "group": "endothelial",
+     "lineage": "stromal"
+    },
+    "colon macrophage": {
+     "group": "myeloid",
+     "lineage": "immune"
+    },
+    "enterocyte of epithelium of large intestine": {
+     "group": "absorptive",
+     "lineage": "epithelial"
+    },
+    "enteroendocrine cell": {
+     "group": "secretory",
+     "lineage": "epithelial"
+    },
+    "enteroglial cell": {
+     "group": "glial",
+     "lineage": "stromal"
+    },
+    "fibroblast": {
+     "group": "fibroblast",
+     "lineage": "stromal"
+    },
+    "gamma-delta t cell": {
+     "group": "T cell/ILC",
+     "lineage": "immune"
+    },
+    "innate lymphoid cell": {
+     "group": "T cell/ILC",
+     "lineage": "immune"
+    },
+    "intestinal crypt stem cell of colon": {
+     "group": "stem/TA",
+     "lineage": "epithelial"
+    },
+    "large intestine goblet cell": {
+     "group": "secretory",
+     "lineage": "epithelial"
+    },
+    "mast cell": {
+     "group": "myeloid",
+     "lineage": "immune"
+    },
+    "monocyte": {
+     "group": "myeloid",
+     "lineage": "immune"
+    },
+    "myeloid leukocyte": {
+     "group": "myeloid",
+     "lineage": "immune"
+    },
+    "myofibroblast cell": {
+     "group": "fibroblast",
+     "lineage": "stromal"
+    },
+    "plasma cell": {
+     "group": "B cell",
+     "lineage": "immune"
+    },
+    "regulatory t cell": {
+     "group": "T cell/ILC",
+     "lineage": "immune"
+    },
+    "transit amplifying cell of colon": {
+     "group": "stem/TA",
+     "lineage": "epithelial"
+    },
+    "tuft cell of colon": {
+     "group": "secretory",
+     "lineage": "epithelial"
+    }
+   },
+   "labelling": false,
+   "gates": {
+    "record": "research/notebook-outputs/li_development/gates.json",
+    "all_pass": false
+   }
+  },
+  {
+   "id": "lung",
+   "name": "Lung",
+   "file": "organs/lung/metadata_RNA.csv",
+   "atlas": "Lung_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "reference_version": "lung v1",
+   "bundle_manifest_sha256": "914744a451f5da822aad194e706abd15144c6c6af3837e26de5bc01605b16777",
+   "cells": 65734,
+   "class_order": [
+    "adventitial cell",
+    "alveolar type 2 fibroblast cell",
+    "b cell",
+    "basal cell",
+    "basophil",
+    "bronchial smooth muscle cell",
+    "capillary endothelial cell",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "club cell",
+    "endothelial cell of artery",
+    "endothelial cell of lymphatic vessel",
+    "intermediate monocyte",
+    "lung ciliated cell",
+    "macrophage",
+    "mature nk t cell",
+    "monocyte",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "pericyte",
+    "plasma cell",
+    "respiratory goblet cell",
+    "type i pneumocyte",
+    "type ii pneumocyte",
+    "vascular associated smooth muscle cell",
+    "vein endothelial cell"
+   ],
+   "hierarchy": {
+    "adventitial cell": {
+     "group": "fibroblast",
+     "lineage": "stromal"
+    },
+    "alveolar type 2 fibroblast cell": {
+     "group": "fibroblast",
+     "lineage": "stromal"
+    },
+    "b cell": {
+     "group": "B cell",
+     "lineage": "immune"
+    },
+    "basal cell": {
+     "group": "airway epithelial",
+     "lineage": "epithelial"
+    },
+    "basophil": {
+     "group": "granulocyte",
+     "lineage": "immune"
+    },
+    "bronchial smooth muscle cell": {
+     "group": "smooth muscle/pericyte",
+     "lineage": "stromal"
+    },
+    "capillary endothelial cell": {
+     "group": "blood vessel endothelial",
+     "lineage": "endothelial"
+    },
+    "cd4-positive, alpha-beta t cell": {
+     "group": "T/NK cell",
+     "lineage": "immune"
+    },
+    "cd8-positive, alpha-beta t cell": {
+     "group": "T/NK cell",
+     "lineage": "immune"
+    },
+    "classical monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "immune"
+    },
+    "club cell": {
+     "group": "airway epithelial",
+     "lineage": "epithelial"
+    },
+    "endothelial cell of artery": {
+     "group": "blood vessel endothelial",
+     "lineage": "endothelial"
+    },
+    "endothelial cell of lymphatic vessel": {
+     "group": "lymphatic endothelial",
+     "lineage": "endothelial"
+    },
+    "intermediate monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "immune"
+    },
+    "lung ciliated cell": {
+     "group": "airway epithelial",
+     "lineage": "epithelial"
+    },
+    "macrophage": {
+     "group": "monocyte/macrophage",
+     "lineage": "immune"
+    },
+    "mature nk t cell": {
+     "group": "T/NK cell",
+     "lineage": "immune"
+    },
+    "monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "immune"
+    },
+    "natural killer cell": {
+     "group": "T/NK cell",
+     "lineage": "immune"
+    },
+    "neutrophil": {
+     "group": "granulocyte",
+     "lineage": "immune"
+    },
+    "non-classical monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "immune"
+    },
+    "pericyte": {
+     "group": "smooth muscle/pericyte",
+     "lineage": "stromal"
+    },
+    "plasma cell": {
+     "group": "B cell",
+     "lineage": "immune"
+    },
+    "respiratory goblet cell": {
+     "group": "airway epithelial",
+     "lineage": "epithelial"
+    },
+    "type i pneumocyte": {
+     "group": "alveolar epithelial",
+     "lineage": "epithelial"
+    },
+    "type ii pneumocyte": {
+     "group": "alveolar epithelial",
+     "lineage": "epithelial"
+    },
+    "vascular associated smooth muscle cell": {
+     "group": "smooth muscle/pericyte",
+     "lineage": "stromal"
+    },
+    "vein endothelial cell": {
+     "group": "blood vessel endothelial",
+     "lineage": "endothelial"
+    }
+   },
+   "labelling": false,
+   "gates": {
+    "record": "research/notebook-outputs/lung_development/gates.json",
+    "all_pass": false
+   }
+  },
+  {
+   "id": "lymph_node",
+   "name": "Lymph node",
+   "file": "organs/lymph_node/metadata_RNA.csv",
+   "atlas": "Lymph_Node_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "reference_version": "lymph_node v1",
+   "bundle_manifest_sha256": "ff2660f3c4aa8515929c53ed62dbdd28a20d66c5a3c81458ac10ca191b9e80e7",
+   "cells": 128226,
+   "class_order": [
+    "b cell",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "endothelial cell",
+    "innate lymphoid cell",
+    "intermediate monocyte",
+    "macrophage",
+    "mast cell",
+    "mature nk t cell",
+    "myeloid dendritic cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "plasma cell",
+    "regulatory t cell",
+    "stromal cell",
+    "t cell"
+   ],
+   "hierarchy": {
+    "b cell": {
+     "group": "B cell",
+     "lineage": "lymphoid"
+    },
+    "cd4-positive, alpha-beta t cell": {
+     "group": "T cell",
+     "lineage": "lymphoid"
+    },
+    "cd8-positive, alpha-beta t cell": {
+     "group": "T cell",
+     "lineage": "lymphoid"
+    },
+    "classical monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "myeloid"
+    },
+    "endothelial cell": {
+     "group": "endothelial",
+     "lineage": "stromal"
+    },
+    "innate lymphoid cell": {
+     "group": "NK/ILC",
+     "lineage": "lymphoid"
+    },
+    "intermediate monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "myeloid"
+    },
+    "macrophage": {
+     "group": "monocyte/macrophage",
+     "lineage": "myeloid"
+    },
+    "mast cell": {
+     "group": "granulocyte",
+     "lineage": "myeloid"
+    },
+    "mature nk t cell": {
+     "group": "T cell",
+     "lineage": "lymphoid"
+    },
+    "myeloid dendritic cell": {
+     "group": "dendritic cell",
+     "lineage": "myeloid"
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+     "group": "T cell",
+     "lineage": "lymphoid"
+    },
+    "natural killer cell": {
+     "group": "NK/ILC",
+     "lineage": "lymphoid"
+    },
+    "neutrophil": {
+     "group": "granulocyte",
+     "lineage": "myeloid"
+    },
+    "non-classical monocyte": {
+     "group": "monocyte/macrophage",
+     "lineage": "myeloid"
+    },
+    "plasma cell": {
+     "group": "B cell",
+     "lineage": "lymphoid"
+    },
+    "regulatory t cell": {
+     "group": "T cell",
+     "lineage": "lymphoid"
+    },
+    "stromal cell": {
+     "group": "stromal",
+     "lineage": "stromal"
+    },
+    "t cell": {
+     "group": "T cell",
+     "lineage": "lymphoid"
+    }
+   },
+   "labelling": false,
+   "gates": {
+    "record": "research/notebook-outputs/lymph_node_development/gates.json",
+    "all_pass": false
+   }
+  }
+ ]
+}

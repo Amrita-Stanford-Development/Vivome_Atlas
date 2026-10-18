@@ -21,6 +21,7 @@
                 <a href="atlas.html" aria-current="page">Atlas</a>
                 <a href="workflow.html">Workflow</a>
                 <a href="manuscript.html">Manuscript</a>
+                <a href="motion.html">Motion</a>
             </nav>
         </div>
     </header>
@@ -34,9 +35,15 @@
             </div>
 
             <div id="panel-explore" role="tabpanel" aria-labelledby="tab-explore">
+            <section class="control-section sheet organ-section">
+                <label class="organ-label" for="organ-select">Organ</label>
+                <select id="organ-select" class="organ-select"><option value="blood">Blood</option></select>
+                <p class="panel-note" id="organ-note">Blood: send your own cells in Your data. The other organs are maps only for now.</p>
+            </section>
+
             <div class="atlas-stats">
                 <div class="well"><div class="stat-value" id="rna-count">-</div><div class="stat-label">RNA cells</div></div>
-                <div class="well"><div class="stat-value" id="prot-count">-</div><div class="stat-label">Protein cells</div></div>
+                <div class="well" id="prot-well"><div class="stat-value" id="prot-count">-</div><div class="stat-label">Protein cells</div></div>
                 <div class="well"><div class="stat-value" id="class-count">-</div><div class="stat-label">Cell types</div></div>
             </div>
 
@@ -68,7 +75,7 @@
                         <span id="rna-toggle-label">RNA cells</span>
                         <button type="button" class="toggle-switch active" id="rna-toggle" role="switch" aria-checked="true" aria-labelledby="rna-toggle-label"></button>
                     </div>
-                    <div class="toggle-item">
+                    <div class="toggle-item" id="prot-toggle-row">
                         <span id="prot-toggle-label">Protein cells (SCoPE2, drawn larger)</span>
                         <button type="button" class="toggle-switch active" id="prot-toggle" role="switch" aria-checked="true" aria-labelledby="prot-toggle-label"></button>
                     </div>

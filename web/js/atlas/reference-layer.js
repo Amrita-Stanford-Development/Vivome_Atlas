@@ -4,26 +4,28 @@
 // types are uniform writes, so nothing is rebuilt when they change.
 //
 // Colours are web/js/workflow-data.js's CLASS_COLOURS, in the reference's
-// sorted class order, as the atlas has always assigned them. Every uniform
-// array is read in the vertex shader only (GLSL ES 1.0 guarantees dynamic
-// indexing of uniforms there, not in fragment shaders).
+// sorted class order, as the atlas has always assigned them; an organ's map
+// brings its own (`colours`, web/js/atlas/organs.js), and the uniform arrays
+// take its length. Every uniform array is read in the vertex shader only
+// (GLSL ES 1.0 guarantees dynamic indexing of uniforms there, not in
+// fragment shaders).
 
 import { CLASS_COLOURS } from '../workflow-data.js';
 
 export const RADIUS = { rna: 0.5, prot: 0.9 };   // scene units, as the spheres were
 
-const VERTEX = `
+const vertexShader = (k) => `
 attribute float aClass;
 attribute float aModality;
-uniform vec3 uPalette[22];
-uniform float uClassOn[22];
+uniform vec3 uPalette[${k}];
+uniform float uClassOn[${k}];
 uniform vec2 uModalityOn;
 uniform float uRadius;
 uniform float uProtScale;
 uniform float uPixelScale;
 uniform float uMaxSize;
 uniform float uDim;
-uniform float uFocusOn[22];
+uniform float uFocusOn[${k}];
 uniform float uFocusAny;
 varying vec3 vColour;
 varying float vDim;
@@ -67,7 +69,8 @@ void main() {
   gl_FragColor = vec4(mix(colour, vec3(1.0), vDim * 0.82), 1.0);
 }`;
 
-export function createReferenceLayer(THREE, stage, { positions, codes, modality, n }) {
+export function createReferenceLayer(THREE, stage, { positions, codes, modality, n, colours = CLASS_COLOURS }) {
+  const k = colours.length;
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('aClass', new THREE.BufferAttribute(Float32Array.from(codes), 1));
@@ -75,18 +78,18 @@ export function createReferenceLayer(THREE, stage, { positions, codes, modality,
   const gl = stage.renderer.getContext();
   const range = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
   const uniforms = {
-    uPalette: { value: CLASS_COLOURS.map((hex) => new THREE.Color(hex)) },
-    uClassOn: { value: new Array(22).fill(1) },
+    uPalette: { value: colours.map((hex) => new THREE.Color(hex)) },
+    uClassOn: { value: new Array(k).fill(1) },
     uModalityOn: { value: new THREE.Vector2(1, 1) },
     uRadius: { value: RADIUS.rna },
     uProtScale: { value: RADIUS.prot / RADIUS.rna },
     uPixelScale: { value: 1 },
     uMaxSize: { value: Math.min(64, range ? range[1] : 64) },
     uDim: { value: 0 },
-    uFocusOn: { value: new Array(22).fill(0) },
+    uFocusOn: { value: new Array(k).fill(0) },
     uFocusAny: { value: 0 },
   };
-  const material = new THREE.ShaderMaterial({ vertexShader: VERTEX, fragmentShader: FRAGMENT, uniforms });
+  const material = new THREE.ShaderMaterial({ vertexShader: vertexShader(k), fragmentShader: FRAGMENT, uniforms });
   const points = new THREE.Points(geometry, material);
   points.frustumCulled = false;
   stage.scene.add(points);

@@ -11,6 +11,10 @@ VivOME Atlas has three products and one record:
 4. **The research record** (`research/`) holds plans, progress, notebook
    outputs and findings. It explains why the products are the way they are.
 
+The film about VivOME (`motion/`) is a HyperFrames project with its own
+dependencies, like the service; it renders the stills the website's Motion
+page shows, so `web/` keeps no build step.
+
 `docs/` explains how the products work. `scripts/` builds and checks the
 repository. For a one-line description of every file, see
 [file-index.md](file-index.md).
@@ -22,12 +26,13 @@ Vivome_Atlas/
 ├── package.json              runs the JS tests (node --test); no dependencies
 │
 ├── web/                      THE WEBSITE: serve this folder as-is
-│   ├── *.html                one file per page: index, atlas, workflow, manuscript,
+│   ├── *.html                one file per page: index, atlas, workflow, manuscript, motion,
 │   │                         miscellaneous (blank on purpose), and two unlinked previews
 │   ├── css/                  shared styling (page.css) and per-page styles
 │   ├── js/                   ES modules; manifest.js and panels.js are pure
 │   │   └── atlas/            the Atlas page: the 3D viewer, the Explore tab, the Your data tab
 │   ├── figures/              the Manuscript's figures: SVG, CSV and index.json, from scripts/build_figures.py
+│   ├── motion/frames/        the Motion page's stills and their sidecar, from motion/scripts/stills.mjs
 │   ├── data/                 what the pages load: atlas_manifest.json, workflow.json, manuscript.json,
 │   │                         cell metadata, embeddings, and examples/ (the example upload)
 │   └── tests/                node --test suites for js/
@@ -53,6 +58,11 @@ Vivome_Atlas/
 ├── deploy/                   HOSTING THE SERVICE AND THE SITE'S DOOR TO IT
 │   ├── huggingface/          the Space's Dockerfile, page, build and check scripts
 │   └── pages/                the site's /api Function that forwards to the service (deploy/pages/api-proxy.js)
+│
+├── motion/                   THE FILM: a HyperFrames project with its own package.json
+│   ├── index.html            the root composition; compositions/ holds one scene each
+│   ├── lib/  manim/          the water, the data pictures and the number slots; the Manim scene
+│   └── scripts/              prepare, render the Manim shot, render the stills into web/motion/frames/
 │
 ├── docs/                     HOW THE PRODUCTS WORK
 │   ├── web/                  the manifest contract; the site's data files and Git LFS
@@ -86,6 +96,7 @@ Vivome_Atlas/
 | Documentation of how something works | `docs/web/` or `docs/service/` | a line in `docs/README.md` |
 | A downloaded or delivered dataset | `data/incoming/` (local only) | commit only the small tables that numbers cite |
 | A repo tool or check | `scripts/` | a test beside it (`scripts/test_*.py`) |
+| A scene or shot of the film | `motion/`, with its words and timing in `web/js/reel-frames.js` | render the stills again ([web/motion.md](web/motion.md)) |
 
 Any new tracked file also needs a line in [file-index.md](file-index.md).
 `scripts/check_paths.py` fails the test run otherwise.

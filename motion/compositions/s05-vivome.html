@@ -1,0 +1,58 @@
+<template>
+    <!-- Scene 5, 0:38 to 0:50: VivOME. The wordmark rises out of the water,
+         then the idea: trained on RNA, read on protein, with one gene list
+         between the two sides. -->
+    <style>
+        #s-vivome .mark { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+        #s-vivome .f-wordmark { display: inline-block; opacity: 0; }
+        #s-vivome .f-wordmark .cut { clip-path: inset(0 100% 0 0); }
+        #s-vivome .say { position: absolute; left: 0; right: 0; top: 300px; text-align: center; }
+        #s-vivome .say .f-display { opacity: 0; }
+        #s-vivome .say .f-sub { margin: 26px auto 0; max-width: 36ch; opacity: 0; }
+        #s-vivome .say .cut { clip-path: inset(0 100% 0 0); }
+        #s-vivome .bridge { position: absolute; left: 230px; right: 230px; top: 700px; height: 150px; }
+        #s-vivome .side { position: absolute; top: 0; width: 420px; padding: 30px 36px; opacity: 0; display: flex; flex-direction: column; gap: 12px; }
+        #s-vivome .side.rna { left: 0; }
+        #s-vivome .side.prot { right: 0; }
+        #s-vivome .side .f-label { margin: 0; color: var(--ink); font-size: 31px; }
+        #s-vivome .link { position: absolute; left: 470px; right: 470px; top: 62px; height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--rna), var(--accent), var(--prot)); transform-origin: left center; transform: scaleX(0); }
+        #s-vivome .genes { position: absolute; left: 0; right: 0; top: 96px; text-align: center; opacity: 0; }
+        #s-vivome .genes .f-label { color: var(--ink); margin: 0; }
+        #s-vivome .aside { position: absolute; left: 0; right: 0; top: 930px; text-align: center; opacity: 0; }
+    </style>
+    <div id="s-vivome" class="scene" data-composition-id="s-vivome" data-width="1920" data-height="1080">
+        <div class="mark"><span class="f-wordmark">Viv<span class="cut">OME</span></span></div>
+        <div class="say">
+            <h1 class="f-display">Trained on RNA.<br>Read on <span class="cut">protein.</span></h1>
+            <p class="f-sub">No protein labels, no paired cells, no retraining on your data.</p>
+        </div>
+        <div class="bridge">
+            <div class="side rna liquid"><span class="bead bead-rna">RNA</span><span class="f-label">Labelled RNA</span></div>
+            <div class="link"></div>
+            <div class="genes"><span class="f-label"><span data-slot="ms:gs_size"></span> genes link the two</span></div>
+            <div class="side prot liquid"><span class="bead bead-prot">Protein</span><span class="f-label">Your protein cells</span></div>
+        </div>
+        <div class="aside"><span class="f-caption">It carries the names across. It never mixes the two kinds of data.</span></div>
+    </div>
+    <script>
+        (function () {
+            VivomeSlots.fill(document.getElementById('s-vivome'));
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo('#s-vivome .f-wordmark', { opacity: 0, y: 70, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 1.4, ease: 'power3.out' }, 0.5);
+            tl.fromTo('#s-vivome .f-wordmark .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.8, ease: 'power2.inOut' }, 1.5);
+            // The wordmark rises to the top of the frame and makes room.
+            tl.fromTo('#s-vivome .mark', { y: 0, scale: 1 }, { y: -250, scale: 0.42, duration: 1.1, ease: 'power3.inOut' }, 3.6);
+            tl.fromTo('#s-vivome .say .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 4.4);
+            tl.fromTo('#s-vivome .say .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 5.2);
+            tl.fromTo('#s-vivome .say .f-sub', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 5.8);
+            tl.fromTo('#s-vivome .side.rna', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 6.8);
+            tl.fromTo('#s-vivome .side.prot', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 7.2);
+            tl.fromTo('#s-vivome .link', { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: 'power2.inOut' }, 7.6);
+            tl.fromTo('#s-vivome .genes', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 8.3);
+            tl.fromTo('#s-vivome .aside', { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power1.out' }, 8.9);
+            tl.fromTo('#s-vivome', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 11.5);
+            window.__timelines = window.__timelines || {};
+            window.__timelines['s-vivome'] = tl;
+        })();
+    </script>
+</template>

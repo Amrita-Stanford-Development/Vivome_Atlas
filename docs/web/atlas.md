@@ -21,7 +21,8 @@ Pure modules have no DOM and are covered by `node --test`
 
 | Module | Role |
 |---|---|
-| `reference-data.js` (pure) | Reads the metadata CSVs into typed arrays; the class order (sorted, as the colours follow); the scene frame (`atlasFrame`: the box round every RNA and protein cell, 80 units across), kept so uploaded cells land through the same transform |
+| `organs.js` (pure) | The organ maps: the organ the address names (`?organ=lung`), plain names for organ types, the families (the hierarchy's groups) and a colour per type, a family one hue |
+| `reference-data.js` (pure) | Reads the metadata CSVs and the organ maps into typed arrays; the class order (sorted, as the colours follow); the scene frame (`atlasFrame`: the box round every RNA and protein cell, 80 units across), kept so uploaded cells land through the same transform |
 | `spatial.js` (pure) | The orbit pose, nearest reference cells on a grid, screen-space picking, the file's cloud (an irregular, seeded shape of a few lobes, sized by the cell count), label placement |
 | `answers.js` (pure) | A service response or the recorded example as one cell shape; how each answer is drawn; which pipelines share this map (v3.1, v4, v4.1, v4.2); the receipt's numbers |
 | `choreography.js` (pure) | The landing's timing: the flight schedule, the guided timeline, the waiting loop, framing a pose, reduced-motion timing |
@@ -42,6 +43,23 @@ Pure modules have no DOM and are covered by `node --test`
 | `type-labels.js` | Names on the map: each shown type's name at its centre, placed so no two overlap, following the camera |
 | `overlay.js` | Loading screen, error panel, tooltip |
 | `main.js` | Loads the reference, wires everything, keeps `window.vivomeAtlas` as a console handle |
+
+## Other organs
+
+The Organ list at the top of Explore offers blood and the maps in
+`web/data/organs/index.json`: the large intestine, the lung and the lymph
+node. Choosing one loads `atlas.html?organ=<id>`. An organ's map is its
+reference's RNA cells in its own bundle's coordinate space, so an upload
+would land on it, but no file is labelled against it: each organ's
+reference missed its development gates (`research/organ-references.md`).
+So the organ page hides Your data and the protein cells, and says why.
+
+- **Colours** (`organPalette`): one hue per family, its types in shades of
+  it, so families read as blocks on the map. Blood keeps `CLASS_COLOURS`.
+- **The type list** is one block per family; a family's name shows or
+  hides the whole block.
+- **A cell** shows its type, family and branch; gene profiles are kept for
+  blood only.
 
 ## The landing
 
@@ -103,6 +121,6 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
 ## Data
 
 `web/data/metadata_RNA_lat128.csv` and `metadata_PROT_lat128.csv`
-([data.md](data.md)); `web/data/workflow.json` for the example and the
+([data.md](data.md)); the organ maps in `web/data/organs/`; `web/data/workflow.json` for the example and the
 service's limits. Gene profiles come from the large files, fetched only on a
 click; the public site leaves them out.

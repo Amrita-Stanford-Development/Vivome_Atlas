@@ -1,0 +1,37 @@
+<template>
+    <!-- Scene 12, 1:54 to 2:00: into the light. The camera breaks the
+         surface; the end card holds over the bright water. -->
+    <style>
+        #s-light .card { position: absolute; left: 0; right: 0; top: 230px; text-align: center; }
+        #s-light .f-wordmark { display: inline-block; font-size: 168px; opacity: 0; }
+        #s-light .f-display { margin: 64px auto 0; max-width: 15ch; opacity: 0; }
+        #s-light .actions { margin-top: 60px; display: flex; justify-content: center; gap: 28px; opacity: 0; }
+        #s-light .actions .go { background: linear-gradient(180deg, #0A74B6, var(--accent)); color: #FFFFFF; font-size: 28px; padding: 16px 34px; border-radius: 14px; }
+        #s-light .actions .f-chip { font-size: 28px; padding: 16px 34px; border-radius: 14px; }
+        #s-light .address { margin-top: 40px; opacity: 0; }
+        #s-light .address .f-caption { font-size: 27px; color: var(--ink-soft); }
+        #s-light .cut { clip-path: inset(0 100% 0 0); }
+    </style>
+    <div id="s-light" class="scene" data-composition-id="s-light" data-width="1920" data-height="1080">
+        <div class="card">
+            <span class="f-wordmark">Viv<span class="cut">OME</span></span>
+            <h1 class="f-display">No cell placed without <span class="cut">evidence.</span></h1>
+            <div class="actions"><span class="f-chip go">Explore the atlas</span><span class="f-chip">Label your data</span></div>
+            <div class="address"><span class="f-caption">vivome-atlas.pages.dev</span></div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            VivomeSlots.fill(document.getElementById('s-light'));
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo('#s-light .f-wordmark', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 2.7);
+            tl.fromTo('#s-light .f-wordmark .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 3.1);
+            tl.fromTo('#s-light .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 3.2);
+            tl.fromTo('#s-light .f-display .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 3.8);
+            tl.fromTo('#s-light .actions', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 4.0);
+            tl.fromTo('#s-light .address', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 4.3);
+            window.__timelines = window.__timelines || {};
+            window.__timelines['s-light'] = tl;
+        })();
+    </script>
+</template>

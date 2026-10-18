@@ -1,0 +1,253 @@
+{
+  "note": "Written by motion/scripts/stills.mjs; do not edit. Each still, when in the film it was taken, and every number baked into it with its source.",
+  "built_for": {
+    "atlas_version": "0.6.0",
+    "model_name": "VivOME v4.1"
+  },
+  "film_seconds": 120,
+  "rendered_with": {
+    "hyperframes": "0.8.169",
+    "gsap": "3.14.2",
+    "three": "0.128.0",
+    "ffmpeg": "9.0.2"
+  },
+  "frames": [
+    {
+      "scene": 1,
+      "id": "surface",
+      "file": "01-surface.webp",
+      "at": 5.933333333333334,
+      "bytes": 130236,
+      "numbers": []
+    },
+    {
+      "scene": 2,
+      "id": "unnamed",
+      "file": "02-unnamed.webp",
+      "at": 16,
+      "bytes": 169442,
+      "numbers": []
+    },
+    {
+      "scene": 3,
+      "id": "gaps",
+      "file": "03-gaps.webp",
+      "at": 26.4,
+      "bytes": 293022,
+      "numbers": [
+        {
+          "slot": "ms:wf_missing_share",
+          "text": "62.8%",
+          "record": "web/data/manuscript.json#wf_missing_share",
+          "file": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+          "field": ""
+        },
+        {
+          "slot": "ms:ds_fulcher2026_proteins_per_cell",
+          "text": "776",
+          "record": "web/data/manuscript.json#ds_fulcher2026_proteins_per_cell",
+          "file": "research/notebook-outputs/astral_abstention/summary.json",
+          "field": "Fulcher 2026 > proteins_per_cell_median"
+        },
+        {
+          "slot": "ms:gs_size",
+          "text": "9,002",
+          "record": "web/data/manuscript.json#gs_size",
+          "file": "service/model/evidence/feature_space_provenance.json",
+          "field": "feature_space"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "id": "rna",
+      "file": "04-rna.webp",
+      "at": 36.6,
+      "bytes": 195110,
+      "numbers": [
+        {
+          "slot": "ms:ref_cells",
+          "text": "85,233",
+          "record": "web/data/manuscript.json#ref_cells",
+          "file": "service/model/runtime/reference_metadata.csv",
+          "field": "the served reference's cells"
+        },
+        {
+          "slot": "ms:ref_classes",
+          "text": "22",
+          "record": "web/data/manuscript.json#ref_classes",
+          "file": "service/model/runtime/reference_metadata.csv",
+          "field": "the served reference's cells"
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "id": "vivome",
+      "file": "05-vivome.webp",
+      "at": 47.833333333333336,
+      "bytes": 200758,
+      "numbers": [
+        {
+          "slot": "ms:gs_size",
+          "text": "9,002",
+          "record": "web/data/manuscript.json#gs_size",
+          "file": "service/model/evidence/feature_space_provenance.json",
+          "field": "feature_space"
+        }
+      ]
+    },
+    {
+      "scene": 6,
+      "id": "built-for-gaps",
+      "file": "06-built-for-gaps.webp",
+      "at": 58.6,
+      "bytes": 204550,
+      "numbers": [
+        {
+          "slot": "ms:wf_members",
+          "text": "5",
+          "record": "web/data/manuscript.json#wf_members",
+          "file": "service/model/evidence/workflow/pbmc240_trace_v41.json.gz",
+          "field": ""
+        }
+      ]
+    },
+    {
+      "scene": 7,
+      "id": "answers",
+      "file": "07-answers.webp",
+      "at": 71.03333333333333,
+      "bytes": 241010,
+      "numbers": []
+    },
+    {
+      "scene": 8,
+      "id": "second-opinion",
+      "file": "08-second-opinion.webp",
+      "at": 78.86666666666666,
+      "bytes": 153748,
+      "numbers": [
+        {
+          "slot": "fact:model_name",
+          "text": "VivOME v4.1",
+          "record": "web/data/atlas_manifest.json",
+          "file": "web/data/atlas_manifest.json",
+          "field": "model.name"
+        }
+      ]
+    },
+    {
+      "scene": 9,
+      "id": "real-data",
+      "file": "09-real-data.webp",
+      "at": 90.8,
+      "bytes": 108658,
+      "numbers": [
+        {
+          "slot": "ms:committed_fulcher",
+          "text": "86.98%",
+          "record": "web/data/manuscript.json#committed_fulcher",
+          "file": "research/benchmark/v41_development/confident.csv",
+          "field": "committed_pct where model v41, dataset Fulcher 2026"
+        },
+        {
+          "slot": "ms:correct_fulcher",
+          "text": "97.92%",
+          "record": "web/data/manuscript.json#correct_fulcher",
+          "file": "research/benchmark/v41_development/confident.csv",
+          "field": "correct_when_committed_pct where model v41, dataset Fulcher 2026"
+        },
+        {
+          "slot": "ms:khoury_lymphoid",
+          "text": "96.0%",
+          "record": "web/data/manuscript.json#khoury_lymphoid",
+          "file": "research/benchmark/khoury2026_posthoc_v41_check/summary.json",
+          "field": "scores > v4.1 > lymphoid_recall_pct"
+        },
+        {
+          "slot": "ms:khoury_myeloid",
+          "text": "96.8%",
+          "record": "web/data/manuscript.json#khoury_myeloid",
+          "file": "research/benchmark/khoury2026_posthoc_v41_check/summary.json",
+          "field": "scores > v4.1 > myeloid_recall_pct"
+        }
+      ]
+    },
+    {
+      "scene": 10,
+      "id": "methods",
+      "file": "10-methods.webp",
+      "at": 102.8,
+      "bytes": 137232,
+      "numbers": [
+        {
+          "slot": "ms:bm_khoury_baseline_favour",
+          "text": "18",
+          "record": "web/data/manuscript.json#bm_khoury_baseline_favour",
+          "file": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv",
+          "field": "favours v4.1"
+        },
+        {
+          "slot": "ms:bm_khoury_baseline_runs",
+          "text": "21",
+          "record": "web/data/manuscript.json#bm_khoury_baseline_runs",
+          "file": "research/benchmark/khoury2026_posthoc_v41_check/paired_bootstrap.csv",
+          "field": "every baseline run"
+        },
+        {
+          "slot": "ms:bm_fulcher_favour",
+          "text": "31",
+          "record": "web/data/manuscript.json#bm_fulcher_favour",
+          "file": "research/benchmark/v41_development/paired_bootstrap_v41.csv",
+          "field": "dataset Fulcher 2026, favours v4.1"
+        },
+        {
+          "slot": "ms:bm_fulcher_pairings",
+          "text": "31",
+          "record": "web/data/manuscript.json#bm_fulcher_pairings",
+          "file": "research/benchmark/v41_development/paired_bootstrap_v41.csv",
+          "field": "dataset Fulcher 2026"
+        },
+        {
+          "slot": "ms:open_sorted_test",
+          "text": "Pending",
+          "record": "web/data/manuscript.json#open_sorted_test",
+          "file": "Sorted CD4/CD8 single cells, requested by email; protocol research/benchmark/protocol-sorted-cd4cd8.md",
+          "field": ""
+        }
+      ]
+    },
+    {
+      "scene": 11,
+      "id": "atlas",
+      "file": "11-atlas.webp",
+      "at": 112.8,
+      "bytes": 124748,
+      "numbers": [
+        {
+          "slot": "fact:model_name",
+          "text": "VivOME v4.1",
+          "record": "web/data/atlas_manifest.json",
+          "file": "web/data/atlas_manifest.json",
+          "field": "model.name"
+        },
+        {
+          "slot": "fact:atlas_version",
+          "text": "0.6.0",
+          "record": "web/data/atlas_manifest.json",
+          "file": "web/data/atlas_manifest.json",
+          "field": "atlas_version"
+        }
+      ]
+    },
+    {
+      "scene": 12,
+      "id": "light",
+      "file": "12-light.webp",
+      "at": 118.8,
+      "bytes": 64888,
+      "numbers": []
+    }
+  ]
+}

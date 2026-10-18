@@ -1,0 +1,50 @@
+<template>
+    <!-- Scene 8, 1:12 to 1:20: a second opinion. Two currents, the encoder
+         and the correlation to each RNA type's average, braid into one best
+         guess through a gate that opens only when the file agrees. -->
+    <style>
+        #s-second-opinion .head { position: absolute; left: 150px; top: 110px; width: 1450px; }
+        #s-second-opinion .new { position: absolute; left: 150px; top: 370px; opacity: 0; }
+        #s-second-opinion svg { position: absolute; left: 0; top: 0; }
+        #s-second-opinion .stream { fill: none; stroke-width: 10; stroke-linecap: butt; }
+        #s-second-opinion .tag { position: absolute; opacity: 0; }
+        #s-second-opinion .gate-note { position: absolute; left: 1010px; top: 560px; width: 420px; text-align: center; opacity: 0; }
+        #s-second-opinion .gate-note .f-caption { color: rgba(255, 255, 255, 0.9); font-size: 24px; }
+        #s-second-opinion .guess { position: absolute; left: 1430px; top: 762px; opacity: 0; font-size: 30px; padding: 12px 30px; border: 3px solid var(--accent-bright); }
+        #s-second-opinion .f-display { opacity: 0; }
+        #s-second-opinion .cut { clip-path: inset(0 100% 0 0); }
+    </style>
+    <div id="s-second-opinion" class="scene on-deep" data-composition-id="s-second-opinion" data-width="1920" data-height="1080">
+        <div class="head">
+            <h1 class="f-display">One best guess, with a second <span class="cut">opinion.</span></h1>
+        </div>
+        <span class="new f-chip"><span>New in <span data-slot="fact:model_name"></span></span></span>
+        <svg width="1920" height="1080" viewBox="0 0 1920 1080" data-layout-ignore>
+            <path class="stream a" d="M 170 700 C 520 700, 760 700, 1010 760 S 1260 800, 1420 800" stroke="#5FB3EA" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+            <path class="stream b" d="M 170 920 C 520 920, 760 900, 1010 840 S 1260 800, 1420 800" stroke="#F2D48B" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+            <rect class="gate" x="1196" y="700" width="14" height="190" rx="7" fill="#FFFFFF" opacity="0"/>
+        </svg>
+        <span class="tag f-chip" style="left: 170px; top: 610px">The encoder</span>
+        <span class="tag f-chip" style="left: 170px; top: 960px">Correlation to each RNA type's average</span>
+        <div class="gate-note"><span class="f-caption">Used only when your file agrees with the encoder</span></div>
+        <span class="guess f-chip">Best guess</span>
+    </div>
+    <script>
+        (function () {
+            VivomeSlots.fill(document.getElementById('s-second-opinion'));
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo('#s-second-opinion .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.3);
+            tl.fromTo('#s-second-opinion .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.0);
+            tl.fromTo('#s-second-opinion .new', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.5);
+            tl.fromTo('#s-second-opinion .tag', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.5 }, 1.6);
+            tl.fromTo('#s-second-opinion .stream.a', { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.6, ease: 'power1.inOut' }, 2.0);
+            tl.fromTo('#s-second-opinion .stream.b', { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.6, ease: 'power1.inOut' }, 2.5);
+            tl.fromTo('#s-second-opinion .gate', { opacity: 0 }, { opacity: 0.9, duration: 0.5, ease: 'power1.out' }, 3.0);
+            tl.fromTo('#s-second-opinion .gate-note', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 3.3);
+            tl.fromTo('#s-second-opinion .guess', { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.6)' }, 5.0);
+            tl.fromTo('#s-second-opinion', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 7.5);
+            window.__timelines = window.__timelines || {};
+            window.__timelines['s-second-opinion'] = tl;
+        })();
+    </script>
+</template>

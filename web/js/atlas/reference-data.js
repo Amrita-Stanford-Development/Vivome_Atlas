@@ -80,6 +80,47 @@ export function parseMetadataCsv(text, modality) {
   };
 }
 
+// An organ's map (web/data/organs/<organ>/metadata_RNA.csv): orig_index,
+// class_idx and PC1-PC3 per cell, the names from the organ's class order
+// (web/data/organs/index.json). The same shape as parseMetadataCsv's.
+export function parseOrganCsv(text, order) {
+  const lines = String(text).split('\n');
+  const header = parseCsvLine(lines[0].replace(/\r$/, ''));
+  const column = (name) => {
+    const i = header.indexOf(name);
+    if (i < 0) throw new Error(`The organ map has no ${name} column`);
+    return i;
+  };
+  const [pc1, pc2, pc3, idx, orig] = ['PC1', 'PC2', 'PC3', 'class_idx', 'orig_index'].map(column);
+  const size = Math.max(0, lines.length - 1);
+  const raw = new Float32Array(size * 3);
+  const classIdx = new Uint8Array(size);
+  const origIndex = new Uint32Array(size);
+  const names = [];
+  let n = 0;
+  for (let r = 1; r < lines.length; r += 1) {
+    const line = lines[r].replace(/\r$/, '');
+    if (!line.trim()) continue;
+    const v = line.split(',');
+    const x = Number(v[pc1]);
+    const y = Number(v[pc2]);
+    const z = Number(v[pc3]);
+    const c = Number(v[idx]);
+    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z) || !(c >= 0 && c < order.length)) continue;
+    raw[n * 3] = x;
+    raw[n * 3 + 1] = y;
+    raw[n * 3 + 2] = z;
+    classIdx[n] = c;
+    origIndex[n] = Number(v[orig]) || 0;
+    names.push(order[c]);
+    n += 1;
+  }
+  return {
+    modality: 'rna', n, names,
+    raw: raw.subarray(0, n * 3), classIdx: classIdx.subarray(0, n), origIndex: origIndex.subarray(0, n),
+  };
+}
+
 // The class order every colour follows: the sorted union of the class names
 // (web/js/workflow-data.js CLASS_COLOURS is indexed by this order).
 export function classOrderFrom(...datasets) {

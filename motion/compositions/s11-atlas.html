@@ -1,0 +1,48 @@
+<template>
+    <!-- Scene 11, 1:44 to 1:54: in your browser. A window like the Atlas
+         page's floats near the surface; the PBMC240 example file drops in
+         and its cells land on the reference, each in the Atlas page's
+         look for its answer (lib/scenes.js, from web/data/workflow.json). -->
+    <style>
+        #s-atlas .left { position: absolute; left: 150px; top: 190px; width: 520px; }
+        #s-atlas .left .f-display { font-size: 92px; }
+        #s-atlas .left .f-sub { margin-top: 30px; font-size: 33px; }
+        #s-atlas .window { position: absolute; left: 700px; top: 150px; width: 1060px; height: 790px; padding: 0; overflow: hidden; opacity: 0; }
+        #s-atlas .bar { height: 70px; display: flex; align-items: center; gap: 26px; padding: 0 30px; border-bottom: 1px solid rgba(29, 43, 54, 0.08); background: rgba(255, 255, 255, 0.55); }
+        #s-atlas .bar .wordmark { font-size: 26px; font-weight: 600; color: var(--ink); }
+        #s-atlas .bar .tab { font-size: 20px; color: var(--ink-soft); padding: 6px 16px; border-radius: 999px; }
+        #s-atlas .bar .tab.on { background: var(--well); color: var(--ink); }
+        #s-atlas canvas { left: 0; top: 70px; }
+        #s-atlas .file { position: absolute; left: 34px; top: 92px; opacity: 0; }
+        #s-atlas .receipt { position: absolute; left: 30px; bottom: 26px; opacity: 0; }
+        #s-atlas .f-display, #s-atlas .f-sub { opacity: 0; }
+        #s-atlas .left .cut { clip-path: inset(0 100% 0 0); }
+    </style>
+    <div id="s-atlas" class="scene" data-composition-id="s-atlas" data-width="1920" data-height="1080">
+        <div class="left">
+            <h1 class="f-display">Label your own <span class="cut">data.</span></h1>
+            <p class="f-sub">Send a DIA-NN, FragPipe or CSV file from the Atlas page. Your cells land on the reference, each with its answer or the reason for none.</p>
+        </div>
+        <div class="window liquid">
+            <div class="bar"><span class="wordmark">Viv<span class="cut">OME</span></span><span class="tab">Explore</span><span class="tab on">Your data</span></div>
+            <canvas id="atlas-canvas" width="1060" height="720" data-layout-ignore></canvas>
+            <span class="file f-chip">The PBMC240 example file</span>
+            <span class="receipt f-chip"><span>Answered by <span data-slot="fact:model_name"></span>, atlas <span data-slot="fact:atlas_version"></span></span></span>
+        </div>
+    </div>
+    <script>
+        (function () {
+            VivomeSlots.fill(document.getElementById('s-atlas'));
+            const tl = gsap.timeline({ paused: true });
+            tl.fromTo('#s-atlas .window', { opacity: 0, y: 120, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 1.4, ease: 'power3.out' }, 0.2);
+            tl.fromTo('#s-atlas .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.8);
+            tl.fromTo('#s-atlas .left .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.5);
+            tl.fromTo('#s-atlas .f-sub', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.0);
+            tl.fromTo('#s-atlas .file', { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1.2);
+            tl.fromTo('#s-atlas .receipt', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 7.6);
+            tl.fromTo('#s-atlas', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 9.5);
+            window.__timelines = window.__timelines || {};
+            window.__timelines['s-atlas'] = tl;
+        })();
+    </script>
+</template>

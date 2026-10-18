@@ -1,6 +1,8 @@
 // The Atlas page: loads the reference cells, draws them, and wires the
 // sidebar, the viewer and the drawer (docs/web/atlas.md). three.js r128 is
-// the page's classic <script> tag, read here as window.THREE.
+// the page's classic <script> tag, read here as window.THREE. With
+// ?organ=<id> it draws that organ's map instead (web/data/organs/), without
+// labelling: Your data is blood's only.
 
 import { escapeHtml } from '../panels.js';
 import { plainName } from '../workflow-data.js';
@@ -15,7 +17,8 @@ import {
 import { createTooltip, hideLoading, showFailure } from './overlay.js';
 import { createTypeLabels } from './type-labels.js';
 import { mountViewControls } from './view-controls.js';
-import { atlasFrame, classCodes, classOrderFrom, parseMetadataCsv, sceneArray } from './reference-data.js';
+import { BLOOD, familiesOf, organCellLines, organFrom, organHref, organPalette, organPlainName } from './organs.js';
+import { atlasFrame, classCodes, classOrderFrom, parseMetadataCsv, parseOrganCsv, sceneArray } from './reference-data.js';
 import { createReferenceLayer } from './reference-layer.js';
 import { pickScreen, projectAll } from './spatial.js';
 import { createStage } from './stage.js';
@@ -63,6 +66,51 @@ async function loadReference() {
   };
 }
 
+// The organ maps on offer; none when the index cannot be read, so blood
+// still loads.
+async function loadOrganIndex() {
+  try {
+    const response = await fetch(new URL('../../data/organs/index.json', import.meta.url));
+    return response.ok ? (await response.json()).organs ?? [] : [];
+  } catch {
+    return [];
+  }
+}
+
+// An organ's map in the same shape as loadReference's: RNA cells only, its
+// own class order, colours by family and plain names.
+async function loadOrganReference(organ) {
+  const rna = parseOrganCsv(await fetchText(new URL(`../../data/${organ.file}`, import.meta.url)), organ.class_order);
+  const order = organ.class_order;
+  const frame = atlasFrame(rna.raw);
+  const byClass = new Array(order.length).fill(0);
+  for (let i = 0; i < rna.n; i += 1) byClass[rna.classIdx[i]] += 1;
+  return {
+    order, frame, n: rna.n, nRna: rna.n,
+    positions: sceneArray(frame, rna.raw), raw: rna.raw, codes: rna.classIdx,
+    modality: new Float32Array(rna.n), origIndex: rna.origIndex,
+    counts: { rna: rna.n, prot: 0, byClass, protByClass: new Array(order.length).fill(0) },
+    colours: organPalette(order, organ.hierarchy), nameOf: organPlainName,
+    families: familiesOf(order, organ.hierarchy), organ,
+  };
+}
+
+// The organ chooser at the top of Explore. Choosing another organ loads its
+// page; an organ's map hides what only blood has (protein cells, Your data).
+function mountOrganChooser(organs, organ) {
+  const select = $('organ-select');
+  select.innerHTML = [{ id: BLOOD, name: 'Blood' }, ...organs].map((o) => `<option value="${escapeHtml(o.id)}">${
+    escapeHtml(o.id === BLOOD ? 'Blood' : `${o.name} (map only)`)}</option>`).join('');
+  select.value = organ ? organ.id : BLOOD;
+  select.addEventListener('change', () => location.assign(organHref(location.href, select.value)));
+  if (!organ) return;
+  $('organ-note').innerHTML = `Map only: files cannot be labelled against the ${escapeHtml(organ.name.toLowerCase())} yet, `
+    + 'because its reference missed its checks (<a href="manuscript.html#organs">why</a>). Colours keep each family of types together.';
+  document.title = `Atlas · ${organ.name} · VivOME`;
+  document.body.classList.add('organ-map');
+  for (const id of ['tab-data', 'prot-toggle-row', 'prot-well']) $(id).hidden = true;
+}
+
 // The drawer over the viewer's right side. While it is open the viewer is
 // marked, so the controls in its right corners move out from under it.
 function createDrawer() {
@@ -90,11 +138,17 @@ function createDrawer() {
 async function start() {
   const THREE = window.THREE;
   if (!THREE || THREE.REVISION !== '128') throw new Error('three.js r128 did not load, so the atlas cannot be drawn.');
-  const ref = await loadReference();
+  const organs = await loadOrganIndex();
+  const organ = organFrom(location.search, organs);
+  const ref = organ ? await loadOrganReference(organ) : await loadReference();
+  mountOrganChooser(organs, organ);
   const stage = createStage(THREE, $('three-canvas'), $('three-container'), { reduced });
   const layer = createReferenceLayer(THREE, stage, ref);
   const labels = createTypeLabels({ stage, ref, layer, container: $('type-labels') });
-  mountExploreTab({ layer, order: ref.order, counts: ref.counts, onChange: () => labels.refresh() });
+  mountExploreTab({
+    layer, order: ref.order, counts: ref.counts, colours: ref.colours, nameOf: ref.nameOf, families: ref.families,
+    onChange: () => labels.refresh(),
+  });
   const drawer = createDrawer();
   const tooltip = createTooltip();
 
@@ -145,6 +199,7 @@ async function start() {
   // atlas.html#your-data and #labels open the tab (the other pages link
   // here this way); #labels scrolls to the supported label space.
   function fromHash() {
+    if (organ) return;
     if (location.hash === '#your-data' || location.hash === '#labels') {
       showTab('data');
       if (location.hash === '#labels') {
@@ -165,6 +220,7 @@ async function start() {
       if (mine >= 0) return tooltip.show([landing.describe(mine), 'Click for its answer'], ev.clientX, ev.clientY);
       const i = pickAt(ev.clientX, ev.clientY);
       if (i < 0) return tooltip.hide();
+      if (organ) return tooltip.show(organCellLines(organ, ref.order[ref.codes[i]]), ev.clientX, ev.clientY);
       const isProt = i >= ref.nRna;
       tooltip.show([
         `${isProt ? 'Protein cell (SCoPE2)' : 'RNA reference cell'}: ${plainName(ref.order[ref.codes[i]])}`,
@@ -186,6 +242,12 @@ async function start() {
         landing.deselect();
         landing.openResults();
       }
+      return;
+    }
+    if (organ) {
+      const [title, family] = organCellLines(organ, ref.order[ref.codes[i]]);
+      drawer.open(title, `<p class="panel-note">${escapeHtml(family)}.</p>`
+        + '<p class="panel-note">This map shows where each reference cell sits; gene profiles are kept for blood only.</p>');
       return;
     }
     const isProt = i >= ref.nRna;
@@ -222,7 +284,7 @@ async function start() {
 
   hideLoading();
   // A handle for checking the page from the browser's console.
-  window.vivomeAtlas = { stage, layer, reference: ref, landing };
+  window.vivomeAtlas = { stage, layer, reference: ref, landing, organ };
 }
 
 start().catch(showFailure);

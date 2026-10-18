@@ -468,6 +468,7 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
     - G3: PXD047762 B over T 1.0 and the Protein Atlas pools 100% pass; Zheng's tonsil pools 41.0% (44 of 48 guessed plasma cell) and PXD011683 71.1% miss (bar 80%);
     - G2: an unseen donor costs 3.5 points.
     - PXD042367 stays sealed (amendment 12).
+- [x] **The organ maps on the Atlas page, without labelling** (owner, 2026-10-18): each organ's reference cells in 3D in its bundle's coordinate space (`scripts/export_atlas_coordinates.py --organ`, `web/data/organs/`), coloured by family; Your data stays blood's.
 
 ---
 

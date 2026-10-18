@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 // copies together: after removing the one aria-current marker, every page's
 // header and footer must be byte-identical to the landing page's.
 const CANONICAL = 'index.html';
-const PAGES = ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html'];
+const PAGES = ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html'];
 // The atlas is a full-window app view, so it carries the header but no footer.
 const WITHOUT_FOOTER = new Set(['atlas.html']);
 

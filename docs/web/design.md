@@ -237,6 +237,20 @@ its numbers as slots, its source in code type and a caveat bead
 pending). Earlier designs appear only as the problem a part of the served
 model fixes ([manuscript.md](manuscript.md)).
 
+## The Motion page
+
+`web/motion.html` is the storyboard for a film about VivOME
+([motion.md](motion.md)). A strip of liquid glass lists every scene; then
+each scene's still, a 16:9 image with the sheet's halo, stays in view while
+its notes scroll by on a sheet: the words on screen (numbers as slots), the
+voice-over, the motion notes and the sound, with the tools that render it
+as beads and each result's caveat bead.
+
+The film keeps this design system at 1920 by 1080: the site's stylesheet,
+type and objects, the cut motif once per headline, RNA and protein in their
+reserved colours only where they mean RNA and protein, the atlas palette for
+cell types, and the living water under every scene, darker with depth.
+
 ## Shared chrome
 
 The header (the wordmark, then the tool links) and the footer are static

@@ -42,3 +42,12 @@ service/model/v5_2/*.npz
 
 # Journal figure files (PDF, 600 dpi TIFF): rebuilt on request by scripts/build_figures.py --journal
 research/figures/journal/
+
+# The film's HyperFrames project (motion/, docs/web/motion.md): the site code
+# and data scripts/prepare.mjs copies and writes, Manim's frames, and
+# HyperFrames' snapshots, state and renders. The stills it makes are
+# committed under web/motion/frames/.
+motion/vendor/
+motion/build/
+motion/.hyperframes/
+motion/renders/

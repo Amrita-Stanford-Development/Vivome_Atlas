@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion · VivOME</title>
+    <meta name="description" content="The storyboard for a short film about VivOME: each scene's rendered frame, its on-screen words, voice-over, motion and sound, from the surface down to the evidence and back into the light.">
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="css/reel.css">
+</head>
+<body class="reel-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="workflow.html">Workflow</a>
+                <a href="manuscript.html">Manuscript</a>
+                <a href="motion.html" aria-current="page">Motion</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main" class="page reel">
+        <header class="reel-head">
+            <span class="eyebrow">Motion</span>
+            <h1 class="display">A dive into <span class="cut">VivOME.</span></h1>
+            <p class="subhead">The storyboard for a film about VivOME, scene by scene: from the surface, down to the evidence, and back up into the light.</p>
+            <p class="reel-lede">The camera dives through the site's own water. At the surface is the problem; deeper down, what VivOME does and what is new in it; on the floor, the results; then it rises into the light. Running time <strong id="reel-total">&nbsp;</strong>.</p>
+        </header>
+
+        <nav class="reel-strip liquid" aria-label="Scenes">
+            <ol id="reel-strip"></ol>
+        </nav>
+        <div id="reel-error"></div>
+
+        <section id="reel-shots" aria-label="The scenes"></section>
+
+        <section class="sheet reel-sheet" id="script" aria-labelledby="script-title">
+            <h2 id="script-title">The script</h2>
+            <p>The voice-over, scene by scene. Its numbers are read from the same records as the frames.</p>
+            <div class="table-scroll" id="reel-script"></div>
+        </section>
+
+        <section class="sheet reel-sheet" id="how" aria-labelledby="how-title">
+            <h2 id="how-title">How these frames are made</h2>
+            <p>Each frame is a still from the film itself, rendered by HyperFrames from its compositions in the repository's <code>motion/</code> folder: HTML scenes animated with GSAP over the site's own living water and particles, drawn by three.js on the film's clock. Manim draws the answers scene, and FFmpeg grades each still.</p>
+            <p>No number in a frame is typed in. When the frames are rendered, each one is read from the atlas's data files through the same rules as every page, and a record that is not measured yet reads Pending. Each still names its numbers and their sources, and the site's tests fail when a record no longer matches its still.</p>
+            <p class="reel-links"><a class="chapter-link" href="manuscript.html">The evidence behind each number</a> <a class="chapter-link" href="workflow.html">How VivOME works, step by step</a></p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="manuscript.html">Manuscript</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module" src="js/biofield.js"></script>
+    <script type="module" src="js/reel.js" async></script>
+</body>
+</html>
