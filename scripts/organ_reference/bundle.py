@@ -5,6 +5,7 @@ file in one place:
 
   reference_metadata.csv      cell, class_idx, class_name, lineage
   feature_space_genes.csv     the encoder's gene order
+  gene_id_map.tsv             the gene space's identifier map (gene_ids.py)
   answers_spec.json           the answers: temperatures, conformal sets,
                               abstention, hierarchy (nb2_spec_v31.json's layout)
   spec.json                   the best guess (spec_v41.json's layout and
@@ -17,22 +18,27 @@ file in one place:
 
 load() builds the service's own bundle objects (ensemble.V31Bundle under
 fusion.V4Bundle) from such a directory, so research code runs an organ's
-uploads through the served pipeline unchanged. The service learns to load
-organ directories itself in Stage 3 (research/organ-references.md).
+uploads through the served pipeline unchanged. The service resolves upload
+identifiers with one map (service/pipeline/gene_ids.py), so a run on an organ
+goes inside gene_map(directory), which hands the resolver the organ's map.
+The service learns to load organ directories, maps included, in Stage 3
+(research/organ-references.md).
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import re
 import shutil
 from datetime import date
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 
 from service import config
-from service.pipeline import coordinates, encoder, ensemble, fusion, reference
+from service.pipeline import coordinates, encoder, ensemble, fusion, gene_ids, reference
 
 from . import data
 
@@ -113,6 +119,7 @@ def write(work: Path, target: Path, cfg: dict, label: str, evaluation: dict, che
     table = pd.read_csv(work / "labels.csv.gz", keep_default_na=False)
     table[["cell", "class_idx", "class_name", "lineage"]].to_csv(target / "reference_metadata.csv", index=False, lineterminator="\n")
     shutil.copyfile(work / "feature_space_genes.csv", target / "feature_space_genes.csv")
+    shutil.copyfile(work / "gene_id_map.tsv", target / "gene_id_map.tsv")
     classes = json.loads((work / "classes.json").read_text(encoding="utf-8"))
     cal = json.loads((work / "calibration.json").read_text(encoding="utf-8"))
     members = sorted(cal["temperature"])
@@ -141,6 +148,7 @@ def assemble_served_blood(target: Path) -> None:
     runtime, v31, v4 = config.MODEL_DIR / "runtime", config.V31_DIR, config.V4_DIR
     for name in ("reference_metadata.csv", "feature_space_genes.csv", "reference_properties.npy", "property_names.json"):
         shutil.copyfile(runtime / name, target / name)
+    shutil.copyfile(runtime / "gene_id_map_v1.tsv", target / "gene_id_map.tsv")
     shutil.copyfile(SERVED_ANSWERS, target / "answers_spec.json")
     shutil.copyfile(SERVED_SPEC, target / "spec.json")
     for name in ("class_balanced_stats.npz", "class_means_cb.npy"):
@@ -153,6 +161,14 @@ def assemble_served_blood(target: Path) -> None:
             shutil.copyfile(v31 / "members" / f"V2_seed{k}_{suffix}", target / "members" / f"V2_seed{k}_{suffix}")
         shutil.copyfile(v4 / "members" / f"V2_seed{k}_centroids_cb.npy", target / "members" / f"V2_seed{k}_centroids_cb.npy")
     write_manifest(target, "blood's served v4.1 files (service/model/v3_1, v4, v4_1, runtime), assembled for the loader check")
+
+
+@contextlib.contextmanager
+def gene_map(directory: Path):
+    """The service's identifier resolver reads this organ's map inside the block."""
+    organ_map = gene_ids.load_gene_id_map(directory / "gene_id_map.tsv")
+    with mock.patch.object(gene_ids, "load_gene_id_map", lambda path=None: organ_map):
+        yield organ_map
 
 
 def load(directory: Path) -> "fusion.V4Bundle":

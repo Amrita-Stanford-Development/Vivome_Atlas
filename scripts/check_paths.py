@@ -78,7 +78,6 @@ ALLOWED_MISSING = (
     "service/model/organs/",
     "research/notebook-outputs/li_",
     "research/notebooks/li_",
-    "benchmark/colon_heldout_",
     "research/benchmark/heldout/pxd052341/",  # written once, when the colon's locked test is scored
 )
 

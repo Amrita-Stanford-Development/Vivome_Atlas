@@ -41,6 +41,16 @@ class ParseMatrixCsvTests(unittest.TestCase):
         self.assertTrue(np.isnan(raw.values[1, 0]))
         np.testing.assert_array_equal(raw.values, [[1.0, 2.0], [raw.values[1, 0], 4.0]])
 
+    def test_dia_nn_18_report_with_protein_ids_is_read(self):
+        # DIA-NN 1.8's pg_matrix adds Protein.Ids (found on PXD057118 and PXD046999, Track I)
+        header = "Protein.Group\tProtein.Ids\tProtein.Names\tGenes\tFirst.Protein.Description\t" \
+                 r"D:\raw\Pool_1.raw" + "\t" + r"D:\raw\Pool_2.raw"
+        row1 = "P1\tP1;A0A075B6H7\tNAME1\tGENE1\tdesc\t1.0\t2.0"
+        raw = alignment.parse_matrix_csv("\n".join([header, row1]))
+        self.assertEqual(raw.gene_names, ["GENE1"])
+        self.assertEqual(raw.cell_ids, ["Pool_1", "Pool_2"])
+        np.testing.assert_array_equal(raw.values, [[1.0, 2.0]])
+
     def test_fragpipe_tmt_table_uses_gene_column_and_drops_annotation_and_reference_columns(self):
         header = "\t".join([
             "Index", "NumberPSM", "Gene", "MaxPepProb", "Protein", "Protein ID", "Entry Name",

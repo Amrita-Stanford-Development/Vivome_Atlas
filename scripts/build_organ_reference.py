@@ -3,6 +3,7 @@ Stage 1), the steps the blood reference took in the Colab notebooks, in order:
 
   labels     the classes (scripts/organ_reference/labels.py)
   space      the gene space (gene_space.py)
+  gene_ids   the gene space's identifier map from HGNC (gene_ids.py), for the service's resolver
   stats      the RNA's whole-reference statistics and the split (scenarios.split)
   profiles   real missingness profiles (profiles.py)
   modules    co-expression modules (modules.py); blood takes its served ones
@@ -47,9 +48,9 @@ sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scripts"))
 import torch  # noqa: E402
 
-from organ_reference import bundle, calibrate, data, gene_space, labels, modules, profiles, scenarios  # noqa: E402
+from organ_reference import bundle, calibrate, data, gene_ids, gene_space, labels, modules, profiles, scenarios  # noqa: E402
 
-STAGES = ("labels", "space", "stats", "profiles", "modules", "suites", "train", "calibrate", "layer", "bundle")
+STAGES = ("labels", "space", "gene_ids", "stats", "profiles", "modules", "suites", "train", "calibrate", "layer", "bundle")
 CHECKS = ("accept", "accept_loader", "accept_training")
 ACCEPT_OUT = REPO / "research" / "notebook-outputs" / "organ_builder_blood"
 
@@ -104,6 +105,20 @@ def stage_space(b: Build) -> None:
     pd.DataFrame({"gene": space}).to_csv(b.path("feature_space_genes.csv"), index=False, lineterminator="\n")
     data.save_json(b.path("feature_space_provenance.json"), record)
     print(json.dumps(record))
+
+
+def stage_gene_ids(b: Build) -> None:
+    g = b.cfg["gene_ids"]
+    path = data.resolve(g["hgnc"])
+    if sha256(path) != g["sha256"]:
+        raise SystemExit(f"{path} is not the HGNC file the organ file names")
+    table = gene_ids.build(pd.read_csv(b.path("feature_space_genes.csv"))["gene"].astype(str).tolist(), path)
+    table.to_csv(b.path("gene_id_map.tsv"), sep="\t", index=False, lineterminator="\n")
+    data.save_json(b.path("gene_id_map_provenance.json"), {
+        "source": g["source"], "sha256": g["sha256"], "feature_space_genes": len(table),
+        "match_counts": table["match_type"].value_counts().to_dict(),
+        "resolution_method": "scripts/organ_reference/gene_ids.py (service/model/runtime/gene_id_map_v1_provenance.json's rule)"})
+    print(table["match_type"].value_counts().to_dict())
 
 
 def stage_stats(b: Build) -> None:
@@ -316,6 +331,9 @@ def accept(b: Build) -> None:
     served_genes = pd.read_csv(REPO / "service" / "model" / "runtime" / "feature_space_genes.csv")["gene"].astype(str)
     built_genes = pd.read_csv(b.path("feature_space_genes.csv"))["gene"].astype(str)
     checks["genes"] = served_genes.tolist() == built_genes.tolist()
+    served_map = pd.read_csv(REPO / "service" / "model" / "runtime" / "gene_id_map_v1.tsv", sep="\t", dtype=str, keep_default_na=False)
+    built_map = pd.read_csv(b.path("gene_id_map.tsv"), sep="\t", dtype=str, keep_default_na=False)
+    checks["gene_id_map"] = served_map.equals(built_map)
     record["genes_upper_equal"] = served_genes.str.upper().tolist() == built_genes.str.upper().tolist()
     spec = json.loads((REPO / "service" / "model" / "v3_1" / "nb2_spec_v31.json").read_text(encoding="utf-8"))
     classes = json.loads(b.path("classes.json").read_text(encoding="utf-8"))

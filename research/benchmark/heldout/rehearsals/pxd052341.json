@@ -1,0 +1,119 @@
+{
+  "protocol": "research/benchmark/protocol-colon-pxd052341.md",
+  "set": "pxd052341",
+  "statement": "An internal held-out test of the colon reference on pooled cell-type proteomes (about 500 image-classified cells per sample), never external validation and never a single-cell accuracy. The set comes from the same lab and chemistry as the development sets PXD057118 and PXD046999; the reference is Tabula Sapiens normal colon from other donors.",
+  "samples_by_group": {
+    "upper crypt": 15,
+    "goblet": 9,
+    "immune": 9,
+    "fibroblast": 6,
+    "crypt bottom": 6
+  },
+  "groups_scored": [
+    "crypt bottom",
+    "upper crypt",
+    "goblet",
+    "fibroblast",
+    "immune"
+  ],
+  "primary": {
+    "balanced_accuracy": 97.33,
+    "chance": 20.0,
+    "p": 9.999000099990002e-05,
+    "permutations": 10000,
+    "within_donor": true,
+    "passed": true,
+    "recall": {
+      "crypt bottom": 100.0,
+      "upper crypt": 86.67,
+      "goblet": 100.0,
+      "fibroblast": 100.0,
+      "immune": 100.0
+    }
+  },
+  "crypt_bottom_over_upper": {
+    "auroc": 1.0,
+    "p": 9.999000099990002e-05
+  },
+  "answers": {
+    "crypt bottom": {
+      "samples": 6,
+      "abstained": 100.0,
+      "levels": {},
+      "correct_when_committed": null
+    },
+    "upper crypt": {
+      "samples": 15,
+      "abstained": 100.0,
+      "levels": {},
+      "correct_when_committed": null
+    },
+    "goblet": {
+      "samples": 9,
+      "abstained": 100.0,
+      "levels": {},
+      "correct_when_committed": null
+    },
+    "fibroblast": {
+      "samples": 6,
+      "abstained": 100.0,
+      "levels": {},
+      "correct_when_committed": null
+    },
+    "immune": {
+      "samples": 9,
+      "abstained": 66.67,
+      "levels": {
+        "lineage": 3
+      },
+      "correct_when_committed": 100.0
+    }
+  },
+  "confusion": {
+    "crypt bottom": {
+      "crypt bottom": 6,
+      "fibroblast": 0,
+      "goblet": 0,
+      "immune": 0,
+      "upper crypt": 2
+    },
+    "fibroblast": {
+      "crypt bottom": 0,
+      "fibroblast": 6,
+      "goblet": 0,
+      "immune": 0,
+      "upper crypt": 0
+    },
+    "goblet": {
+      "crypt bottom": 0,
+      "fibroblast": 0,
+      "goblet": 9,
+      "immune": 0,
+      "upper crypt": 0
+    },
+    "immune": {
+      "crypt bottom": 0,
+      "fibroblast": 0,
+      "goblet": 0,
+      "immune": 9,
+      "upper crypt": 0
+    },
+    "upper crypt": {
+      "crypt bottom": 0,
+      "fibroblast": 0,
+      "goblet": 0,
+      "immune": 0,
+      "upper crypt": 13
+    }
+  },
+  "baselines": "run before scoring by benchmark/baselines_corrected.py (colon option); see research/organ-references.md, Stage 4",
+  "rehearsal": {
+    "what": "RNA pseudobulk of the colon reference's test cells, written as a DIA-NN pg_matrix",
+    "cells_per_pool": 100,
+    "pools_per_donor_group": 3,
+    "min_cells": 60,
+    "seed": 20261018,
+    "pools": 45,
+    "decoys": 3
+  }
+}

@@ -142,6 +142,11 @@
       }
     ]
   },
+  "gene_ids": {
+    "hgnc": "drive:Reference/hgnc_complete_set_2026-10-18.txt",
+    "sha256": "12363916be36f8f6f91879b0faade4eeaac973722de7136ec61329b77f2c2f91",
+    "source": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt, downloaded 2026-10-18"
+  },
   "mask_profiles": [
     {
       "name": "scope2",

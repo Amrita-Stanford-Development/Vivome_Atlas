@@ -328,6 +328,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/khoury2026_posthoc_score.py` — Khoury 2026 post-hoc: the corrected baselines scored beside v3.1 and v3 with the sealed scorer's code; checks v3.1's and v3's rows against the sealed tables
 - `benchmark/heldout_formats.py` — the internal held-out test's readers (MaxQuant, Proteome Discoverer, sage TMT, DIA-NN), written from each deposit's documentation; each format's column names in one place
 - `benchmark/heldout_intake.py` — the internal held-out test's label maps and intake for the five protein sets: uploads, every candidate as served, per-class best-guess probabilities, the baselines' matrix; --rehearse on development or synthetic data
+- `benchmark/colon_heldout_intake.py` — the colon's locked test (PXD052341): the label map read from the deposit's metadata by meaning, and the intake (the colon candidate as served, per-sample probabilities, the baselines' matrix); --rehearse on RNA pseudobulk written in the deposit's format
+- `benchmark/colon_heldout_score.py` — the colon's locked test's scoring, once: five-group balanced accuracy with a within-donor permutation p, and the secondary measures
 - `benchmark/heldout_score.py` — the internal held-out test's scoring, once per protein set: each candidate's primary and secondary measures, and the baselines'
 - `benchmark/heldout_hao2021.py` — the internal held-out test's Hao 2021 suite: simulated protein-like uploads of held-out donors, every candidate as served and two baselines, scored once; --rehearse on the development donors
 
@@ -357,6 +359,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/organ_reference/__init__.py` — the organ reference builder's parts, one notebook step each
 - `scripts/organ_reference/data.py` — paths (drive: and repo: prefixes), organ files, the atlas's obs columns and RNA
 - `scripts/organ_reference/labels.py` — the reference's classes: merges, drops and the class rule, in NB1's order
+- `scripts/organ_reference/gene_ids.py` — an organ's gene identifier map from HGNC's complete set, by gene_id_map_v1's rule, so uploads resolve onto the organ's own gene space
 - `scripts/organ_reference/gene_space.py` — the gene space: every symbol a proteomics source detected, minus Ig/TCR segments, that the atlas measures (Build_Feature_Space's rule)
 - `scripts/organ_reference/profiles.py` — real missingness profiles for simulated uploads (NB1, section 3), and another organ's profiles carried over by RNA-abundance rank
 - `scripts/organ_reference/modules.py` — co-expression modules for module pooling (Reference_Projection_v3, cell 5)

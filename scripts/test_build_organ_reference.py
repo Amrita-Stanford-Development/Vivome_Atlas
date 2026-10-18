@@ -162,6 +162,24 @@ class Profiles(unittest.TestCase):
         np.testing.assert_allclose(out["cell_frac"], [0.3, 0.6])
 
 
+class GeneIds(unittest.TestCase):
+    def test_hgncs_rule_symbol_first_then_aliases_that_agree(self):
+        from organ_reference import gene_ids
+        rows = [["hgnc_id", "symbol", "alias_symbol", "prev_symbol", "ensembl_gene_id", "uniprot_ids"],
+                ["HGNC:1", "C1orf1", "", "", "ENSG1", "P1"],
+                ["HGNC:2", "NEWNAME", "OLDA", "", "ENSG2", "P2|P3"],
+                ["HGNC:3", "XA", "TWIN", "", "ENSG3", "P4"],
+                ["HGNC:4", "XB", "", "TWIN", "ENSG4", "P5"]]
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "hgnc.txt"
+            path.write_bytes(("\n".join("\t".join(r) for r in rows) + "\n").encode("utf-8"))
+            t = gene_ids.build(["C1ORF1", "OLDA", "TWIN", "NOPE"], path)
+        self.assertEqual(t["match_type"].tolist(), ["symbol", "alias_or_prev_symbol", "ambiguous", "unmapped"])
+        self.assertEqual(t.loc[1, "uniprot_ids"], "P2|P3")
+        self.assertEqual(t.loc[2, "ambiguous_candidates"], "HGNC:3|HGNC:4")
+        self.assertEqual(t.loc[2, "ensembl_gene_id"], "")
+
+
 class Modules(unittest.TestCase):
     def test_every_gene_gets_a_module_of_about_the_target_size(self):
         X = np.random.default_rng(1).random((300, 72)).astype(np.float32)

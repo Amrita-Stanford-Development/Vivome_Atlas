@@ -38,6 +38,9 @@ recomputed with the service's functions.
   class-balanced class means (group mean minus the highest other group's),
   among genes the plate observes in at least 10% of cells.
 
+Every upload resolves its identifiers with the colon bundle's own gene map
+(organ_reference/bundle.gene_map), as the service will once it loads organs.
+
 Writes research/notebook-outputs/li_development/: rules.json, g1.json (with
 per-scenario figures), g3.json, and gates.json (every gate's value and
 verdict).
@@ -289,10 +292,11 @@ def main() -> None:
     t0 = time.time()
     b = bundle.load(build_dir / "bundle")
     print(f"bundle loaded: {len(b.class_names)} classes, {len(b.feature_genes)} genes ({time.time() - t0:.0f}s)", flush=True)
-    r1 = g1(b, build_dir, cfg, t0)
-    data.save_json(OUT / "g1.json", r1)
-    print(json.dumps(r1["overall"], indent=1), flush=True)
-    r3 = g3(b)
+    with bundle.gene_map(build_dir / "bundle"):
+        r1 = g1(b, build_dir, cfg, t0)
+        data.save_json(OUT / "g1.json", r1)
+        print(json.dumps(r1["overall"], indent=1), flush=True)
+        r3 = g3(b)
     data.save_json(OUT / "g3.json", r3)
     o = r1["overall"]
     polyp_aucs = {g: v["auroc"] for g, v in r3["polyp"]["groups"].items()}

@@ -78,7 +78,7 @@ class AlignedQuery:
 
 
 _DIA_NN_ANNOTATION_COLUMNS = frozenset({
-    "Protein.Group", "Protein.Names", "Genes",
+    "Protein.Group", "Protein.Ids", "Protein.Names", "Genes",  # Protein.Ids: DIA-NN 1.8's pg_matrix
     "First.Protein.Description", "N.Sequences", "N.Proteotypic.Sequences",
 })
 

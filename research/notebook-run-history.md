@@ -2211,6 +2211,45 @@ mean the same cells in every donor. RNA only.
   ambient-RNA artefacts of z-scoring near-zero genes (CD4 T cells
   "matching" Paneth markers). The decisions above rest on absolute shares.
 
+### 51. The colon's locked-test rehearsal finds two faults before any gate is scored (Track I, Stage 2), 2026-10-18
+
+**Why:** gate G4 asks the locked test's intake and scorer
+(`benchmark/colon_heldout_intake.py`, `benchmark/colon_heldout_score.py`) to
+run end to end before anything is unsealed.
+
+**How:** RNA pseudobulk pools of the colon's test cells (100 cells each,
+three per donor and group), detection drawn from the development DVP pools,
+written as a DIA-NN pg_matrix with a metadata table and three decoys
+(organoid, transplant, blank).
+
+**Two faults found, both fixed before any gate was scored:**
+- **The service's DIA-NN parser read `Protein.Ids` as a sample.** DIA-NN 1.8
+  writes that column (Zheng, Kabatnik, and Post 2025, which used 1.8.1), so
+  such uploads failed to parse. The column joins the parser's annotation
+  columns (`service/pipeline/alignment.py`, with a test); blood's uploads,
+  which lack it, read the same. This also affects the live service.
+- **The service's identifier map covers blood's 9,002 genes only**
+  (`gene_id_map_v1.tsv`), so a colon upload dropped every gene the colon
+  adds (KRT20, MUC2, TFF3, OLFM4, CDX2, about 2,400 in all): 9,002 of 11,448
+  features matched.
+  - Each organ now builds its own map from HGNC's complete set by the same
+    rule (`scripts/organ_reference/gene_ids.py`); on blood's genes it
+    reproduces `gene_id_map_v1.tsv` exactly.
+  - Colon runs resolve identifiers with the colon's map
+    (`bundle.gene_map`), and all 11,448 features match.
+  - The service learns to do this itself in Stage 3.
+- **The first G1 and G3 run was stopped** at 40 of 240 simulated uploads,
+  before anything was written or read, so that one run uses both fixes.
+
+**Result (G4 passes):**
+- the label reader keeps the 45 pools and drops all three decoys;
+- primary balanced accuracy 97.3% against 20% chance, p = 0.0001;
+- crypt bottom over upper crypt AUROC 1.0;
+- record: `research/benchmark/heldout/rehearsals/pxd052341.json`.
+
+Pseudobulk is easy; this says the code works, not how the real pools will
+score.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
