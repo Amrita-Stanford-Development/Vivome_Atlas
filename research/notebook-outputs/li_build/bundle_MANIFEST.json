@@ -1,0 +1,113 @@
+{
+  "source": "scripts/build_organ_reference.py on scripts/organs/large_intestine.json",
+  "files": {
+    "answers_spec.json": {
+      "sha256": "1e1d6869026c7fffc5144ad586a36a95388e41ea9996393fd707a1bb9bec4660",
+      "bytes": 6097
+    },
+    "class_balanced_stats.npz": {
+      "sha256": "9451ea944348283a0f65dfe6d71b92bca021cf1acc88e77b55c312c9d018384c",
+      "bytes": 92078
+    },
+    "class_means_cb.npy": {
+      "sha256": "989617b462a9c23143909b7ea386f98bb791714bd9c3b5326c8ca59e3b993a28",
+      "bytes": 1007552
+    },
+    "feature_space_genes.csv": {
+      "sha256": "008fdc8b41fe13c0bc9265efa0a128cb61ceacd78107a1748dd479ef2f65bea7",
+      "bytes": 72117
+    },
+    "gene_id_map.tsv": {
+      "sha256": "e0e21a85536021ca028b0b9f78d1335a27407b9d8be3b0c7fb3d44f4f6a50854",
+      "bytes": 550131
+    },
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "77601a626d8de6ae1eb7911a5b872e0eabfa4f066fb44599c0f76a7eefa67ae8",
+      "bytes": 130505229
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "71fa6055ce6f8d4e8a034b51cfea7e36181e5a8905e6711fb88f33f8e8cf42a3",
+      "bytes": 130505229
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "4643154c9d7991fdd0e2cd263fbeac5bab2b64d666a595f1368877145b8293b6",
+      "bytes": 130505229
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "914408ebb268a444fa40fcc953a97f04bd3400dd5cf4519088e33139332e538a",
+      "bytes": 130505229
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "32d6e3d732f610f2f17c3c8f6d13d2a04ab59c5e2a8eecb810b5148752ffd1f8",
+      "bytes": 130505229
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "b1113223c20c3e2a7aed89450d18cb9263eb859174aa61e0d8e547d02628e180",
+      "bytes": 11392
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "b70e0876075aa302176cdf6bfd8b08c2721761e068750789d8ea52fca9e6b779",
+      "bytes": 11392
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "11fbf7ddccf014e602856d95d29b35a1cc3bd331fcc74681bc41173de22ce9b5",
+      "bytes": 7646080
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "db47036bd7368d00fb8fdb5fe49c701626d6042f5f99006b02900c996a70e325",
+      "bytes": 11392
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "c9efa28cf631d1484c893ce0f4ba251985c00722a44604d97f64411697407165",
+      "bytes": 11392
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "79ffd5d86da2da2744bf36bc583a33a300155ba4d725fa40b208657619e4f152",
+      "bytes": 7646080
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "d6f28870bc99122e37bfa54e1e5797221d3f1dfc41acdc0129fd16cb74020349",
+      "bytes": 11392
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "ab1b03f1b7d77c6c824a83c82aa4ed2ab7a31f7aa72bbf29e743ba167c447d35",
+      "bytes": 11392
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "9ef64b845efe41f7872ebdc9e80dbaa44582264ea90c0b8391dc05deea7df80b",
+      "bytes": 7646080
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "5410cb2dd45126f57a3a35c1e7087095dda2d08a60096257c9b30a88825a693d",
+      "bytes": 11392
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "28b9c4fa38202bfed3e6e18a69a975f1467e8772f86a12e7fb4baaafb89af872",
+      "bytes": 11392
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "5f2f0b6267aac4cff3bc3ffbec1a65d304739c4c2cc01b6076c577dbf2370e0d",
+      "bytes": 7646080
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "f6e5ba5711001649eaaf8155b69d05d542a9bc5ab2764a97eedca3f68baecc0d",
+      "bytes": 11392
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "775391d870a2bf4bed207b1b39f3fceee2425bf6c60cfab16d5cead03eb5a309",
+      "bytes": 11392
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "a275928e8074680f70ee1d445a37ede9e07510833e4433b1d1c8a761cd094f64",
+      "bytes": 7646080
+    },
+    "reference_metadata.csv": {
+      "sha256": "59e358749ac0b71c60565d07937442b8b3acf236decf67c5b1de6b270fade023",
+      "bytes": 2622981
+    },
+    "spec.json": {
+      "sha256": "3dd6be97c5bcedc2638656e60ddca0906baea50e7a3c601fa723ff49d90017b8",
+      "bytes": 4833
+    }
+  }
+}

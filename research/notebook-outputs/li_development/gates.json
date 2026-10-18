@@ -1,0 +1,42 @@
+{
+  "finished": "2026-10-18T07:15:38",
+  "gates": {
+    "G1 correct when committed": {
+      "value": 99.35,
+      "pass": true
+    },
+    "G1 committed": {
+      "value": 12.01,
+      "pass": false
+    },
+    "G1 coverage": {
+      "value": 85.33,
+      "pass": true
+    },
+    "G1 false abstention": {
+      "value": 0.24,
+      "pass": true
+    },
+    "G3 Kabatnik AUROC": {
+      "value": 1.0,
+      "pass": true
+    },
+    "G3 Zheng group accuracy": {
+      "value": 16.67,
+      "pass": false
+    },
+    "G3 polyp marker AUROCs": {
+      "value": {
+        "B cell": 0.8152,
+        "absorptive": 0.3962,
+        "endothelial": 0.4757,
+        "myeloid": 0.6537,
+        "secretory": 0.5416,
+        "stem/TA": 0.9728
+      },
+      "pass": false
+    }
+  },
+  "all_pass": false,
+  "seconds": 699
+}

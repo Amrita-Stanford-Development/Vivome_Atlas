@@ -1,0 +1,128 @@
+{
+  "overall": {
+    "cells": 72850,
+    "committed": 12.01,
+    "correct_when_committed": 99.35,
+    "false_abstention": 0.24,
+    "levels": {
+      "abstain": 87.99,
+      "group": 7.65,
+      "lineage": 4.36
+    },
+    "best_guess_per_upload_balanced": 54.16,
+    "coverage": 85.33
+  },
+  "by_scenario": {
+    "lineage": {
+      "cells": 12938,
+      "committed": 4.39,
+      "correct_when_committed": 97.18,
+      "false_abstention": 0.82,
+      "levels": {
+        "abstain": 95.61,
+        "group": 3.66,
+        "lineage": 0.73
+      },
+      "best_guess_per_upload_balanced": 49.81,
+      "coverage": 87.31
+    },
+    "random_1": {
+      "cells": 11163,
+      "committed": 0.17,
+      "correct_when_committed": 31.58,
+      "false_abstention": 0.1,
+      "levels": {
+        "abstain": 99.83,
+        "group": 0.13,
+        "lineage": 0.04
+      },
+      "best_guess_per_upload_balanced": 5.32,
+      "coverage": 44.39
+    },
+    "random_2": {
+      "cells": 9190,
+      "committed": 8.41,
+      "correct_when_committed": 99.09,
+      "false_abstention": 0.41,
+      "levels": {
+        "abstain": 91.59,
+        "lineage": 4.86,
+        "group": 3.55
+      },
+      "best_guess_per_upload_balanced": 41.93,
+      "coverage": 75.47
+    },
+    "random_3": {
+      "cells": 7979,
+      "committed": 20.75,
+      "correct_when_committed": 99.88,
+      "false_abstention": 0.11,
+      "levels": {
+        "abstain": 79.25,
+        "group": 13.4,
+        "lineage": 7.36
+      },
+      "best_guess_per_upload_balanced": 61.07,
+      "coverage": 96.68
+    },
+    "random_5": {
+      "cells": 7451,
+      "committed": 15.21,
+      "correct_when_committed": 99.47,
+      "false_abstention": 0.07,
+      "levels": {
+        "abstain": 84.79,
+        "lineage": 8.63,
+        "group": 6.58
+      },
+      "best_guess_per_upload_balanced": 73.78,
+      "coverage": 98.09
+    },
+    "random_8": {
+      "cells": 10398,
+      "committed": 15.37,
+      "correct_when_committed": 99.37,
+      "false_abstention": 0.03,
+      "levels": {
+        "abstain": 84.63,
+        "group": 8.46,
+        "lineage": 6.91
+      },
+      "best_guess_per_upload_balanced": 80.88,
+      "coverage": 98.75
+    },
+    "tissue": {
+      "cells": 13731,
+      "committed": 21.87,
+      "correct_when_committed": 99.9,
+      "false_abstention": 0.01,
+      "levels": {
+        "abstain": 78.13,
+        "group": 16.9,
+        "lineage": 4.97
+      },
+      "best_guess_per_upload_balanced": 86.5,
+      "coverage": 99.69
+    }
+  },
+  "per_class_recall_committed": {
+    "b cell": 8.92,
+    "best4+ intestinal epithelial cell, human": 0.0,
+    "cd4-positive, alpha-beta t cell": 41.05,
+    "cd8-positive, alpha-beta t cell": 34.42,
+    "colon endothelial cell": 0.0,
+    "colon macrophage": 0.0,
+    "enterocyte of epithelium of large intestine": 0.21,
+    "enteroglial cell": 0.0,
+    "fibroblast": 0.0,
+    "gamma-delta t cell": 11.67,
+    "intestinal crypt stem cell of colon": 0.52,
+    "large intestine goblet cell": 0.24,
+    "mast cell": 1.66,
+    "myeloid leukocyte": 0.09,
+    "plasma cell": 0.1,
+    "regulatory t cell": 47.9,
+    "transit amplifying cell of colon": 2.96,
+    "tuft cell of colon": 0.98
+  }
+}

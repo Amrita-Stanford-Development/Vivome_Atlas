@@ -76,8 +76,6 @@ ALLOWED_MISSING = (
     "research/figures/journal/",  # the journal's figure files, written on request by scripts/build_figures.py --journal, gitignored
     # Files the organ references track will create (research/organ-references.md, Stages 2 to 4)
     "service/model/organs/",
-    "research/notebook-outputs/li_",
-    "research/notebooks/li_",
     "research/benchmark/heldout/pxd052341/",  # written once, when the colon's locked test is scored
 )
 

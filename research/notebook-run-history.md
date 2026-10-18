@@ -2250,6 +2250,78 @@ written as a DIA-NN pg_matrix with a metadata table and three decoys
 Pseudobulk is easy; this says the code works, not how the real pools will
 score.
 
+### 52. The colon reference's gates: NO GO as built (Track I, Stage 2), 2026-10-18
+
+**Why:** research/organ-references.md fixed gates G1 to G4 before any colon
+model existed. A miss stops the work and goes to the owner; nothing is
+tuned to pass.
+
+**The model:**
+- five members trained by NB1d's recipe on the colon's 22 classes and 11,448
+  genes (`research/notebook-outputs/li_build/`);
+- validation balanced accuracy about 63% under the 35% training mask
+  (blood: 66%);
+- calibration-suite top-1 56.3% (blood: 62.4%);
+- conformal thresholds near 0.98 for most classes (blood's marginal: 0.91).
+
+**G1, the evaluation suite through the service's code**
+(`research/notebooks/li_development.py`; 240 uploads, 72,850 cells):
+
+| | Value | Bar | |
+|---|---|---|---|
+| Correct when committed | 99.35% | ≥ 90 | pass |
+| Committed | 12.01% | ≥ 75 | **miss** |
+| Coverage | 85.33% | ≥ 85 | pass |
+| False abstention | 0.24% | ≤ 2 | pass |
+
+The best guess's mean per-upload balanced accuracy is 54.2 (blood v4.1:
+65.0). By scenario:
+- **whole-tissue mixtures:** best guess 86.5, coverage 99.7, committed 21.9;
+- **single-class uploads:** best guess 5.3, committed 0.2.
+
+**G3, development protein:**
+- **Kabatnik:** epithelium over stroma, AUROC 1.0 (pass). Mean P(epithelial)
+  is 0.62 for CDX2-high pools, 0.37 for CDX2-medium and 0.13 for stroma.
+- **Zheng:** group accuracy 16.7% (miss). Its upload holds only immune pools,
+  two-thirds T cells, and they are guessed mast cell, monocyte or endothelial
+  cell.
+- **The polyp plate:** every cell abstained. The best guesses are mostly
+  epithelial (secretory 110, stem/TA 104, absorptive 101). Marker
+  concordance passes for stem/TA (AUROC 0.97) and B cells (0.82), and misses
+  for absorptive (0.40), endothelial (0.48), myeloid (0.65) and secretory
+  (0.54).
+
+**G4:** passed (entry 51).
+
+**G2, one donor held out** (`research/notebooks/li_donor_heldout.py`; a
+diagnosis; mean over five folds):
+
+| | Unseen donor | Seen donors |
+|---|---|---|
+| Class balanced accuracy | 43.1 | 55.6 |
+| Group recall | 67.9 | 75.4 |
+| Lineage recall | 82.0 | 89.5 |
+
+The gap is 12.5 points (blood's was 9.8). TSP25 is the worst fold: 26.9
+when unseen.
+
+**Diagnosis, on the calibration suite only:**
+- **The sets are too wide to commit.** Conformal sets are fitted over every
+  kind of upload, and narrow uploads score badly. Uploads of one lineage
+  have a median nonconformity score of 0.91, single classes 0.99, and
+  whole-tissue mixtures 0.39.
+- **Single-class uploads are not the only cause.** Leaving them out moves
+  the marginal threshold only from 0.987 to 0.970.
+- **The cause is per-upload scaling.** Each upload is standardised against
+  itself, and on the colon this costs narrow compositions much more than on
+  blood.
+- **Real data follow the same pattern.** Kabatnik's upload (epithelium with
+  stroma) separates perfectly. Zheng's (immune only) fails.
+
+**Verdict:** NO GO for the colon reference as built. The decision goes to
+the owner; nothing was changed to pass a gate. The locked test (PXD052341)
+stays sealed, and the evaluation suite has now been used once.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

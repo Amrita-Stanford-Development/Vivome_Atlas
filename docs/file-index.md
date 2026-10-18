@@ -662,6 +662,21 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/li_labels/markers_by_class_donor.csv` — that audit: each marker's share expressing and mean, per class and donor
 - `research/notebook-outputs/li_labels/free_annotation_by_class_donor.csv` — that audit: the free annotations behind each class, per donor
 - `research/notebook-outputs/li_labels/audit.json` — that audit: the markers, and each class and donor's best-matching marker signature
+- `research/notebooks/li_donor_heldout.py` — Track I, Stage 2, G2: one colon member retrained with each donor held out, scored on unseen against seen donors' test cells (a diagnosis)
+- `research/notebook-outputs/li_donor_heldout/summary.json` — that diagnosis: per fold, class balanced accuracy, group and lineage recall, per-class recall, unseen against seen
+- `research/notebook-outputs/li_development/rules.json` — the gate run's rules: the script's sha256, the gates and the bundle's MANIFEST sha256, written before computing
+- `research/notebook-outputs/li_development/g1.json` — G1: the colon's evaluation suite through the service's code, overall and per scenario
+- `research/notebook-outputs/li_development/g1_cells.csv.gz` — G1: every scored cell's answer, level, best guess and coverage
+- `research/notebook-outputs/li_development/g3.json` — G3: Kabatnik, Zheng and the polyp plate through the colon bundle
+- `research/notebook-outputs/li_development/gates.json` — every gate's value and verdict
+- `research/notebook-outputs/li_build/calibration.json` — the colon build's calibration: temperatures, conformal thresholds, out-of-distribution threshold, the members' sha256s
+- `research/notebook-outputs/li_build/train_record.json` — the colon's five members: sha256, best validation loss, balanced accuracy
+- `research/notebook-outputs/li_build/classes.json` — the colon's 22 classes and hierarchy
+- `research/notebook-outputs/li_build/classes_by_donor.csv` — the colon's cells per class and donor
+- `research/notebook-outputs/li_build/feature_space_provenance.json` — the colon's gene space: each source's count
+- `research/notebook-outputs/li_build/gene_id_map_provenance.json` — the colon's identifier map: source, sha256, match counts
+- `research/notebook-outputs/li_build/mask_profiles_summary.csv` — the colon's missingness profiles: genes in set, detection, observed fraction
+- `research/notebook-outputs/li_build/bundle_MANIFEST.json` — the colon bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/li_development.py` — Track I, Stage 2: the colon reference's gates G1 (simulated RNA uploads through the service's code) and G3 (Kabatnik, Zheng and the polyp plate), scored once
 - `research/notebook-outputs/organ_builder_blood/data_stages.json` — the builder's blood acceptance, tiers 1 and 2: labels, split, suites, genes, hierarchy, RNA statistics and mask profiles against NB1's
 - `research/notebook-outputs/organ_builder_blood/calibration.json` — tier 3: the builder's calibration of the served members against NB2's spec

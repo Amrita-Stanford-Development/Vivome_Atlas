@@ -435,11 +435,17 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - tiers 1 to 4 pass, most exactly: labels, split, suites, genes, statistics, mask profiles, calibration, the best-guess layer, and v4.1's frozen responses through the new loader;
   - tier 5: the retrained seed 1 matches on loss, balanced accuracy and calibration top-1, but fails the per-class 5-point check (served members differ by more than that among themselves on 11 of 20 classes); reported, not changed;
   - modules are not reproduced (another scikit-learn); blood keeps its served ones.
-- [~] **Stage 2, the colon bundle:**
+- [!] **Stage 2, the colon bundle:**
   - label audit done (entry 50): Paneth dropped (no DEFA5/DEFA6 in any donor), 22 classes;
   - G4 passed (entry 51): the locked test's intake and scorer run end to end on RNA pseudobulk;
   - fixed on the way: the service's DIA-NN parser (DIA-NN 1.8's Protein.Ids), and each organ's own gene identifier map;
-  - then gates G1, G3 and G4 (G2 reported); go or no go to the owner.
+  - [!] **NO GO as built** (entry 52), and waiting on the owner's decision. Gates:
+    - G1 committed 12% (bar 75%), with correct when committed 99%;
+    - G3: Zheng 16.7% (bar 80%) and 2 of 6 polyp marker checks;
+    - Kabatnik AUROC 1.0;
+    - G2: an unseen donor costs 12.5 points.
+    - Cause: per-upload scaling breaks narrow uploads; conformal sets too wide to commit.
+    - The locked test stays sealed.
 - [ ] **Stage 3, service and site:** the organ choice, with blood byte-identical. Waits for the beta sign-in work.
 - [ ] **Stage 4, the locked test scored once;** write-up; release 0.7.0 (deploys on the owner's approval).
 
@@ -648,3 +654,4 @@ because the held out classes were in training.
 | 2026-10-18 | **Track I, Stage 0 done:** tier C fetched and checksummed. PXD052341 was downloaded only, never opened. G3 is worded against the development deposits as they are: Zheng's colorectal data are 18 immune pools, and Kabatnik's gate uses the one-search table of classes 1, 2 and 4 | this commit |
 | 2026-10-18 | **Track I, Stage 1: the organ reference builder, proven on blood** (run history, entry 49). `scripts/build_organ_reference.py` ports NB1, Build_Feature_Space, Reference_Projection_v3's modules, NB1d and NB2. On blood it reproduces labels, split, suites, genes, statistics, mask profiles, calibration and the best-guess layer, and v4.1's frozen responses through the new loader. Seed 1 retrained matches on loss, balanced accuracy and calibration top-1, but misses the per-class 5-point check, which the served members themselves miss. **Stage 2 begun:** the colon's label audit drops Paneth (entry 50); `research/notebooks/li_development.py` (G1, G3) committed before its run | this commit |
 | 2026-10-18 | **Track I, Stage 2: the locked test rehearsed (G4), two faults fixed** (run history, entry 51). The rehearsal found that the service's DIA-NN parser read DIA-NN 1.8's `Protein.Ids` as a sample (fixed, with a test; the live service has it too), and that its identifier map covers blood's 9,002 genes only, so colon uploads lost every colon gene. Each organ now builds its own map from HGNC (blood's reproduced exactly). The intake and scorer then ran end to end on RNA pseudobulk (97.3% balanced accuracy, p = 0.0001) | this commit |
+| 2026-10-18 | **Track I, Stage 2: the colon reference's gates, NO GO as built** (run history, entry 52). G1 commits 12% of cells (bar 75%), though committed answers are 99% right and coverage is 85%; G3 passes Kabatnik (AUROC 1.0) but misses Zheng (16.7%) and four of six polyp marker checks; G2: an unseen donor costs 12.5 points. Cause: per-upload scaling breaks narrow uploads, so conformal sets are too wide. Nothing tuned; the locked test stays sealed; the owner decides what next | this commit |

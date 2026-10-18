@@ -1,0 +1,287 @@
+{
+  "design": {
+    "uploads_per_side": 10,
+    "cells_per_upload": 500,
+    "min_class_cells": 20,
+    "profile": "polyp",
+    "seed": 1
+  },
+  "folds": {
+    "TSP14": {
+      "train_cells": 13052,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "colon endothelial cell",
+        "enterocyte of epithelium of large intestine",
+        "enteroglial cell",
+        "fibroblast",
+        "gamma-delta t cell",
+        "large intestine goblet cell",
+        "plasma cell",
+        "regulatory t cell"
+      ],
+      "best_val_loss": 1.2066508531570435,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 53.34,
+        "group_recall": 76.12,
+        "lineage_recall": 88.52,
+        "recall": {
+          "b cell": 76.1,
+          "cd4-positive, alpha-beta t cell": 19.0,
+          "cd8-positive, alpha-beta t cell": 24.8,
+          "colon endothelial cell": 7.6,
+          "enterocyte of epithelium of large intestine": 92.2,
+          "enteroglial cell": 61.6,
+          "fibroblast": 75.6,
+          "gamma-delta t cell": 37.0,
+          "large intestine goblet cell": 68.3,
+          "plasma cell": 98.8,
+          "regulatory t cell": 26.0
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 57.67,
+        "group_recall": 82.78,
+        "lineage_recall": 95.58,
+        "recall": {
+          "b cell": 72.0,
+          "cd4-positive, alpha-beta t cell": 51.6,
+          "cd8-positive, alpha-beta t cell": 47.8,
+          "colon endothelial cell": 29.8,
+          "enterocyte of epithelium of large intestine": 73.9,
+          "enteroglial cell": 34.2,
+          "fibroblast": 90.3,
+          "gamma-delta t cell": 62.5,
+          "large intestine goblet cell": 53.8,
+          "plasma cell": 95.2,
+          "regulatory t cell": 23.2
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 4.33,
+        "group_recall": 6.66,
+        "lineage_recall": 7.06
+      }
+    },
+    "TSP2": {
+      "train_cells": 16252,
+      "classes": [
+        "enterocyte of epithelium of large intestine",
+        "fibroblast",
+        "intestinal crypt stem cell of colon",
+        "large intestine goblet cell",
+        "transit amplifying cell of colon"
+      ],
+      "best_val_loss": 1.0101903676986694,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 36.68,
+        "group_recall": 53.7,
+        "lineage_recall": 73.44,
+        "recall": {
+          "enterocyte of epithelium of large intestine": 29.6,
+          "fibroblast": 76.8,
+          "intestinal crypt stem cell of colon": 1.4,
+          "large intestine goblet cell": 40.1,
+          "transit amplifying cell of colon": 35.5
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 55.96,
+        "group_recall": 68.72,
+        "lineage_recall": 87.96,
+        "recall": {
+          "enterocyte of epithelium of large intestine": 72.6,
+          "fibroblast": 51.4,
+          "intestinal crypt stem cell of colon": 16.8,
+          "large intestine goblet cell": 51.5,
+          "transit amplifying cell of colon": 87.5
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 19.28,
+        "group_recall": 15.02,
+        "lineage_recall": 14.52
+      }
+    },
+    "TSP25": {
+      "train_cells": 18479,
+      "classes": [
+        "best4+ intestinal epithelial cell, human",
+        "enterocyte of epithelium of large intestine",
+        "intestinal crypt stem cell of colon",
+        "large intestine goblet cell"
+      ],
+      "best_val_loss": 1.0056661367416382,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 26.91,
+        "group_recall": 47.58,
+        "lineage_recall": 66.9,
+        "recall": {
+          "best4+ intestinal epithelial cell, human": 11.8,
+          "enterocyte of epithelium of large intestine": 29.7,
+          "intestinal crypt stem cell of colon": 44.6,
+          "large intestine goblet cell": 21.5
+        },
+        "cells": 2520
+      },
+      "seen": {
+        "balanced_accuracy": 57.33,
+        "group_recall": 60.82,
+        "lineage_recall": 81.1,
+        "recall": {
+          "best4+ intestinal epithelial cell, human": 47.7,
+          "enterocyte of epithelium of large intestine": 48.5,
+          "intestinal crypt stem cell of colon": 88.9,
+          "large intestine goblet cell": 44.2
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 30.42,
+        "group_recall": 13.24,
+        "lineage_recall": 14.2
+      }
+    },
+    "TSP26": {
+      "train_cells": 16941,
+      "classes": [
+        "best4+ intestinal epithelial cell, human",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "fibroblast",
+        "gamma-delta t cell",
+        "mast cell",
+        "myeloid leukocyte",
+        "plasma cell"
+      ],
+      "best_val_loss": 1.1109459400177002,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 57.02,
+        "group_recall": 88.5,
+        "lineage_recall": 92.44,
+        "recall": {
+          "best4+ intestinal epithelial cell, human": 44.2,
+          "cd4-positive, alpha-beta t cell": 42.8,
+          "cd8-positive, alpha-beta t cell": 53.5,
+          "fibroblast": 74.0,
+          "gamma-delta t cell": 50.1,
+          "mast cell": 46.0,
+          "myeloid leukocyte": 53.7,
+          "plasma cell": 91.8
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 52.59,
+        "group_recall": 78.6,
+        "lineage_recall": 85.14,
+        "recall": {
+          "best4+ intestinal epithelial cell, human": 33.2,
+          "cd4-positive, alpha-beta t cell": 28.7,
+          "cd8-positive, alpha-beta t cell": 37.2,
+          "fibroblast": 64.3,
+          "gamma-delta t cell": 45.7,
+          "mast cell": 61.7,
+          "myeloid leukocyte": 64.3,
+          "plasma cell": 85.7
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": -4.43,
+        "group_recall": -9.9,
+        "lineage_recall": -7.3
+      }
+    },
+    "TSP27": {
+      "train_cells": 12980,
+      "classes": [
+        "b cell",
+        "best4+ intestinal epithelial cell, human",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "colon endothelial cell",
+        "enterocyte of epithelium of large intestine",
+        "fibroblast",
+        "gamma-delta t cell",
+        "large intestine goblet cell",
+        "mast cell",
+        "myeloid leukocyte",
+        "plasma cell",
+        "regulatory t cell"
+      ],
+      "best_val_loss": 1.3972362279891968,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 41.42,
+        "group_recall": 73.36,
+        "lineage_recall": 88.56,
+        "recall": {
+          "b cell": 31.7,
+          "best4+ intestinal epithelial cell, human": 43.6,
+          "cd4-positive, alpha-beta t cell": 21.0,
+          "cd8-positive, alpha-beta t cell": 41.2,
+          "colon endothelial cell": 5.1,
+          "enterocyte of epithelium of large intestine": 98.3,
+          "fibroblast": 60.2,
+          "gamma-delta t cell": 49.2,
+          "large intestine goblet cell": 39.0,
+          "mast cell": 59.4,
+          "myeloid leukocyte": 5.7,
+          "plasma cell": 70.9,
+          "regulatory t cell": 13.3
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 54.46,
+        "group_recall": 86.04,
+        "lineage_recall": 97.5,
+        "recall": {
+          "b cell": 63.3,
+          "best4+ intestinal epithelial cell, human": 71.8,
+          "cd4-positive, alpha-beta t cell": 29.7,
+          "cd8-positive, alpha-beta t cell": 43.1,
+          "colon endothelial cell": 31.6,
+          "enterocyte of epithelium of large intestine": 76.8,
+          "fibroblast": 67.5,
+          "gamma-delta t cell": 49.2,
+          "large intestine goblet cell": 68.0,
+          "mast cell": 59.2,
+          "myeloid leukocyte": 14.3,
+          "plasma cell": 90.8,
+          "regulatory t cell": 42.6
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 13.04,
+        "group_recall": 12.68,
+        "lineage_recall": 8.94
+      }
+    }
+  },
+  "mean": {
+    "unseen": {
+      "balanced_accuracy": 43.07,
+      "group_recall": 67.85,
+      "lineage_recall": 81.97
+    },
+    "seen": {
+      "balanced_accuracy": 55.6,
+      "group_recall": 75.39,
+      "lineage_recall": 89.46
+    }
+  },
+  "seconds": 293
+}

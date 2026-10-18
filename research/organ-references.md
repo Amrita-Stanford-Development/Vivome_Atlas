@@ -238,11 +238,11 @@ latents, centroids and MANIFEST.
 `research/notebook-outputs/li_donor_heldout/`.
 
 **Scripts:**
-- `research/notebooks/li_development.py`;
-- `research/notebooks/li_heldout_rehearsal.py`, which builds RNA pseudobulk
-  pools shaped like DVP;
-- `benchmark/colon_heldout_intake.py` and `benchmark/colon_heldout_score.py`,
-  which reuse:
+- `research/notebooks/li_development.py` (G1 and G3) and
+  `research/notebooks/li_donor_heldout.py` (G2);
+- `benchmark/colon_heldout_intake.py` and `benchmark/colon_heldout_score.py`;
+  their `--rehearse` builds RNA pseudobulk pools shaped like DVP (G4). They
+  reuse:
   - `auroc_with_p` (`benchmark/heldout_score.py`);
   - the download check (`benchmark/heldout_intake.py`);
   - the DIA-NN reader (`benchmark/heldout_formats.py`);
@@ -291,6 +291,20 @@ colon model exists.
 
 When all gates pass, an amendment to the protocol freezes the bundle's
 sha256s.
+
+**Result, 2026-10-18: NO GO as built** (run history, entries 51 and 52).
+- **Passed:** G4, and G3's Kabatnik check (AUROC 1.0).
+- **G1 missed on commitment:** 12% committed against 75%. Correct when
+  committed is 99%, and coverage 85%.
+- **G3 missed** on Zheng (16.7% group accuracy) and on four of the polyp
+  plate's six marker checks.
+- **Cause:** per-upload scaling costs narrow uploads (one lineage, one class)
+  far more on the colon than on blood. Conformal sets fitted over every kind
+  of upload then come out too wide to commit. Whole-tissue mixtures are
+  answered well (best guess 86.5%, coverage 99.7%) but still commit only
+  22%.
+- **What next is the owner's decision.** The locked test stays sealed.
+  Stage 3 does not start.
 
 ## Stage 3: service and site (after the beta sign-in work lands)
 

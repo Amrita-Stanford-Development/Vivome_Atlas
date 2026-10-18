@@ -1,0 +1,18 @@
+{
+  "script_sha256": "5ff3ec83f03b45ded55deaa6cf3bf51987bd65327404d82214a108e76f540ced",
+  "started": "2026-10-18T07:03:58",
+  "gates": {
+    "g1_correct_when_committed_min": 90.0,
+    "g1_committed_min": 75.0,
+    "g1_coverage_min": 85.0,
+    "g1_false_abstention_max": 2.0,
+    "g3_kabatnik_auroc_min": 0.8,
+    "g3_zheng_group_accuracy_min": 80.0,
+    "g3_polyp_auroc_min": 0.7,
+    "g3_polyp_min_cells": 20,
+    "g3_polyp_marker_genes": 20,
+    "g3_polyp_min_observed": 0.1
+  },
+  "bundle_manifest_sha256": "674cd01c0ae6f77f59759e31c0f6fcaf5a8c5f60e851bf2cabdb95ebdf7ce026",
+  "organ_file_sha256": "9b3ed8a7bdca1e56f08efb76fdd621824b3301c9ff96e4d63b38cd63f60c617a"
+}

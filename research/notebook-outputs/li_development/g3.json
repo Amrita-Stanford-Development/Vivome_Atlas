@@ -1,0 +1,533 @@
+{
+  "kabatnik": {
+    "pools": 27,
+    "by_class": {
+      "Class1": 9,
+      "Class2": 9,
+      "Class4": 9
+    },
+    "auroc_epithelial": 1.0,
+    "mean_p_epithelial": {
+      "Class1": 0.6246,
+      "Class2": 0.3748,
+      "Class4": 0.1256
+    },
+    "answers": [
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "enteroendocrine cell"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "enteroendocrine cell"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "enteroendocrine cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "enteroendocrine cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "enterocyte of epithelium of large intestine"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "enterocyte of epithelium of large intestine"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "tuft cell of colon"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "class": "Class1",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class2",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "class": "Class4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      }
+    ]
+  },
+  "zheng": {
+    "pools": 18,
+    "group_accuracy": 16.67,
+    "called_groups": {
+      "endothelial": {
+        "cd4": 1,
+        "cd8": 0,
+        "macrophage": 0
+      },
+      "myeloid": {
+        "cd4": 5,
+        "cd8": 6,
+        "macrophage": 3
+      },
+      "stem/TA": {
+        "cd4": 0,
+        "cd8": 0,
+        "macrophage": 3
+      }
+    },
+    "cd8_over_cd4_auroc": 0.75,
+    "answers": [
+      {
+        "truth": "macrophage",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": "epithelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "truth": "macrophage",
+        "label": "epithelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "truth": "macrophage",
+        "label": "epithelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "transit amplifying cell of colon"
+      },
+      {
+        "truth": "cd8",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "truth": "cd8",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "truth": "cd8",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "monocyte"
+      },
+      {
+        "truth": "cd8",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "mast cell"
+      },
+      {
+        "truth": "cd8",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "mast cell"
+      },
+      {
+        "truth": "cd8",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "mast cell"
+      },
+      {
+        "truth": "cd4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "mast cell"
+      },
+      {
+        "truth": "cd4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "mast cell"
+      },
+      {
+        "truth": "cd4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "mast cell"
+      },
+      {
+        "truth": "cd4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      },
+      {
+        "truth": "cd4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      },
+      {
+        "truth": "cd4",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "colon endothelial cell"
+      }
+    ]
+  },
+  "polyp": {
+    "cells": 516,
+    "best_guess_groups": {
+      "secretory": 110,
+      "stem/TA": 104,
+      "absorptive": 101,
+      "": 61,
+      "endothelial": 42,
+      "myeloid": 40,
+      "B cell": 40,
+      "T cell/ILC": 13,
+      "fibroblast": 4,
+      "glial": 1
+    },
+    "answers_levels": {
+      "abstain": 516
+    },
+    "groups": {
+      "B cell": {
+        "cells": 40,
+        "auroc": 0.8152,
+        "markers": [
+          "IGKC",
+          "IGHA1",
+          "IGHM",
+          "TXNDC5",
+          "HVCN1",
+          "SPCS2",
+          "IGHG1",
+          "FKBP11",
+          "SSR4",
+          "TCEA1",
+          "SRPRB",
+          "FKBP2",
+          "ICAM3",
+          "SDF2L1",
+          "PRDX4",
+          "PAPSS1",
+          "SCFD1",
+          "HM13",
+          "HSP90B1",
+          "RPA2"
+        ]
+      },
+      "absorptive": {
+        "cells": 101,
+        "auroc": 0.3962,
+        "markers": [
+          "KRT20",
+          "MYH14",
+          "CEACAM5",
+          "MUC13",
+          "MISP",
+          "LMO7",
+          "CGN",
+          "APOBR",
+          "ANXA11",
+          "FLNB",
+          "ACOX1",
+          "PLEC",
+          "AGPAT2",
+          "MAL2",
+          "PLXNB2",
+          "MT-ND2",
+          "HK2",
+          "ASS1",
+          "ITGB6",
+          "SLC22A18"
+        ]
+      },
+      "endothelial": {
+        "cells": 42,
+        "auroc": 0.4757,
+        "markers": [
+          "IFITM1",
+          "FABP5",
+          "AQP1",
+          "PML",
+          "FKBP9",
+          "TAP1",
+          "PNP",
+          "DPYSL3",
+          "SRP14",
+          "WARS1",
+          "LAP3",
+          "PSMB9",
+          "NCKAP1",
+          "CDC37",
+          "ARPC5L",
+          "SPTBN1",
+          "GNAI2",
+          "STING1",
+          "ENY2",
+          "FKBP1A"
+        ]
+      },
+      "myeloid": {
+        "cells": 40,
+        "auroc": 0.6537,
+        "markers": [
+          "CTSB",
+          "ASAH1",
+          "ITGB2",
+          "S100A9",
+          "BID",
+          "S100A8",
+          "MYO1F",
+          "CYBB",
+          "NCF2",
+          "GNS",
+          "CSTA",
+          "ARL8B",
+          "MNDA",
+          "CCL24",
+          "ITGAM",
+          "CTSS",
+          "CTSZ",
+          "ATP6V1B2",
+          "AKR1B1",
+          "PAPSS2"
+        ]
+      },
+      "secretory": {
+        "cells": 110,
+        "auroc": 0.5416,
+        "markers": [
+          "ANXA13",
+          "MUC2",
+          "MAP7",
+          "ELAPOR1",
+          "REP15",
+          "PCSK1",
+          "FCGBP",
+          "TFF3",
+          "CAMK2D",
+          "MYO1B",
+          "B3GNT6",
+          "CLCA1",
+          "CHDH",
+          "ATP2A3",
+          "ITLN1",
+          "RALYL",
+          "HID1",
+          "H1-4",
+          "EPB41L1",
+          "CTNNA2"
+        ]
+      },
+      "stem/TA": {
+        "cells": 104,
+        "auroc": 0.9728,
+        "markers": [
+          "GPX2",
+          "ADH1C",
+          "MGST1",
+          "PRDX5",
+          "COX5A",
+          "SUCLG1",
+          "MKI67",
+          "GGH",
+          "FERMT1",
+          "RAB25",
+          "C1QBP",
+          "ATP5F1B",
+          "AGR2",
+          "NOX1",
+          "UQCRH",
+          "TSPAN8",
+          "TXN",
+          "DCTPP1",
+          "UQCR10",
+          "COX4I1"
+        ]
+      }
+    }
+  }
+}

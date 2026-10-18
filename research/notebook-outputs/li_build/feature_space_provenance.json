@@ -1,0 +1,29 @@
+{
+  "sources": {
+    "bubis_hela": 5811,
+    "bubis_lung": 5853,
+    "bubis_candidates": 6230,
+    "pbmc240": 3196,
+    "scope2": 2935,
+    "fulcher": 1661,
+    "zheng2025": 5316,
+    "kabatnik2024": 9797,
+    "polyp_plate": 4585
+  },
+  "union_raw": 12081,
+  "union_no_ig": 11979,
+  "ig_tcr_excluded": 102,
+  "rna_genes": 61806,
+  "feature_space": 11448,
+  "per_source_in_space": {
+    "bubis_hela": 5774,
+    "bubis_lung": 5785,
+    "bubis_candidates": 6023,
+    "pbmc240": 3136,
+    "scope2": 2907,
+    "fulcher": 1654,
+    "zheng2025": 5263,
+    "kabatnik2024": 9406,
+    "polyp_plate": 4541
+  }
+}

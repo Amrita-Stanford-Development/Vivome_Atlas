@@ -1,0 +1,116 @@
+{
+  "class_order": [
+    "b cell",
+    "best4+ intestinal epithelial cell, human",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "colon endothelial cell",
+    "colon macrophage",
+    "enterocyte of epithelium of large intestine",
+    "enteroendocrine cell",
+    "enteroglial cell",
+    "fibroblast",
+    "gamma-delta t cell",
+    "innate lymphoid cell",
+    "intestinal crypt stem cell of colon",
+    "large intestine goblet cell",
+    "mast cell",
+    "monocyte",
+    "myeloid leukocyte",
+    "myofibroblast cell",
+    "plasma cell",
+    "regulatory t cell",
+    "transit amplifying cell of colon",
+    "tuft cell of colon"
+  ],
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "best4+ intestinal epithelial cell, human": {
+      "group": "absorptive",
+      "lineage": "epithelial"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "colon endothelial cell": {
+      "group": "endothelial",
+      "lineage": "stromal"
+    },
+    "colon macrophage": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "enterocyte of epithelium of large intestine": {
+      "group": "absorptive",
+      "lineage": "epithelial"
+    },
+    "enteroendocrine cell": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    },
+    "enteroglial cell": {
+      "group": "glial",
+      "lineage": "stromal"
+    },
+    "fibroblast": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "gamma-delta t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "innate lymphoid cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "intestinal crypt stem cell of colon": {
+      "group": "stem/TA",
+      "lineage": "epithelial"
+    },
+    "large intestine goblet cell": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    },
+    "mast cell": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "monocyte": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "myeloid leukocyte": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "myofibroblast cell": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "regulatory t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "transit amplifying cell of colon": {
+      "group": "stem/TA",
+      "lineage": "epithelial"
+    },
+    "tuft cell of colon": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    }
+  }
+}

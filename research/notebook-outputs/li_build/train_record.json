@@ -1,0 +1,42 @@
+{
+  "run": "2026-10-18T06:40:51",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "torch": "2.11.0+cu128",
+  "members": {
+    "V2_batchgene_aug_seed0.pt": {
+      "sha256": "77601a626d8de6ae1eb7911a5b872e0eabfa4f066fb44599c0f76a7eefa67ae8",
+      "best_val_loss": 1.1669472455978394,
+      "balanced": 57.69,
+      "epochs_run": 60,
+      "seconds": 73
+    },
+    "V2_batchgene_aug_seed1.pt": {
+      "sha256": "71fa6055ce6f8d4e8a034b51cfea7e36181e5a8905e6711fb88f33f8e8cf42a3",
+      "best_val_loss": 1.01516592502594,
+      "balanced": 68.28,
+      "epochs_run": 60,
+      "seconds": 71
+    },
+    "V2_batchgene_aug_seed2.pt": {
+      "sha256": "4643154c9d7991fdd0e2cd263fbeac5bab2b64d666a595f1368877145b8293b6",
+      "best_val_loss": 0.8507009148597717,
+      "balanced": 69.99,
+      "epochs_run": 60,
+      "seconds": 65
+    },
+    "V2_batchgene_aug_seed3.pt": {
+      "sha256": "914408ebb268a444fa40fcc953a97f04bd3400dd5cf4519088e33139332e538a",
+      "best_val_loss": 0.9466245174407959,
+      "balanced": 62.91,
+      "epochs_run": 60,
+      "seconds": 65
+    },
+    "V2_batchgene_aug_seed4.pt": {
+      "sha256": "32d6e3d732f610f2f17c3c8f6d13d2a04ab59c5e2a8eecb810b5148752ffd1f8",
+      "best_val_loss": 0.9579393267631531,
+      "balanced": 63.51,
+      "epochs_run": 60,
+      "seconds": 70
+    }
+  }
+}
