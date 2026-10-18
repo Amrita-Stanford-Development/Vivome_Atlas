@@ -82,6 +82,7 @@ ALLOWED_MISSING = (
     "research/figures/journal/",  # the journal's figure files, written on request by scripts/build_figures.py --journal, gitignored
     # Files the organ references track will create (research/organ-references.md, Stages 2 to 4)
     "service/model/organs/",
+    "research/notebook-outputs/organ_v2_",  # written by research/notebooks/organ_v2_*.py when each runs
     "research/benchmark/heldout/msv000094189/",  # written once, when the lung's locked test is scored
     "research/benchmark/heldout/pxd042367/",  # written once, when the lymph node's locked test is scored
     "research/benchmark/heldout/pxd052341/",  # written once, when the colon's locked test is scored
