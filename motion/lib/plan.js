@@ -1,88 +1,79 @@
-// Where each scene sits in the film's world, how the camera moves while it
-// plays, and what it asks of the water (lib/dive.js and lib/camera.js read
-// it). The film is one continuous shot: nothing here is applied as a step
-// at a scene's start.
+// Where each scene is in the film's water, the camera's journey to it, and
+// what it asks of the water (lib/dive.js and lib/camera.js read it).
 //
-// at      the scene's plane: [x, y, z] in the world (the scenes' own pixels;
-//         z is depth). The camera travels from plane to plane, so the
-//         outgoing cards leave and the incoming arrive with it.
-// move    the camera while the scene plays, as offsets from `at`:
-//         from and to are [dx, dy, dz, yaw, pitch, roll] (pixels and
-//         degrees; +dz is a push-in), eased; `until`, seconds into the
-//         scene, ends the move early so the shot can hold.
-// field   the share of the site's particles shown, and how fast the water
-//         rises past the camera (`rise`, 1 = background.js's own pace);
-//         `links` is the strength of their network. Pairs are [start, end],
-//         joined across scenes into one smooth curve.
-// rain    drops on the surface between two times in the scene (seconds),
-//         `rate` drops a second: rings in the gel, drawn, never heard
+// go      the journey to this scene from the one before, [dx, dy] in water
+//         units (y down); the first scene has its place, `at`, and the
+//         descent through the surface to it, `opening` (where the camera
+//         starts, from that place). The directions vary from journey to
+//         journey; the last rises through the surface.
+// field   the share of the site's particles shown while the scene's card
+//         is on; `links` is the strength of their network; `rise`, how fast
+//         the water rises past the camera (1 = background.js's own pace).
+//         Each holds while the card is on and eases to the next scene's
+//         value on the journey there.
+// rain    drops on the surface between two times in the card (seconds
+//         into it), `rate` drops a second: rings in the gel, drawn, never
+//         heard
 // wake    a scripted path: drops along [u, v] points (0..1 from the
-//         bottom left) between two times in the scene
-// splash  single drops: [seconds into the scene, u, v, strength, radius]
+//         bottom left) between two times in the card
+// splash  single drops: [seconds into the card, u, v, strength, radius]
 //
-// One ripple field (web/js/water.js's wake) runs the whole film; a scene
-// with no drops leaves it still, which is the site's still gel.
+// One ripple field (web/js/water.js's wake) runs the whole film; drops
+// fall only while a card is on, so the rings never ride a moving camera.
 
-// The water's surface: a level of the world (`y`, in the scenes' pixels)
-// over a stretch of it (`x`). One lies over the first scenes, which the
-// camera sinks from; one over the last, which it rises to. Where the camera
-// is deep, the surface is far above the frame and is not drawn.
+// The water's surface: a level of the world (`y`) over a stretch of it
+// (`x`). One lies over the first scenes, which the camera descends from;
+// one over the last, which it rises to. The camera passes from one stretch
+// to the other far below both, where neither is in sight.
 export const SURFACES = [
-  { y: -346, x: [-Infinity, 14500] },
-  { y: 4078, x: [14500, Infinity] },
+  { y: -3.9, x: [-Infinity, 17] },
+  { y: 21.8, x: [17, Infinity] },
 ];
 
 export const PLAN = {
   surface: {
-    at: [0, 0, 0], move: { from: [0, 40, -60], to: [40, 0, 60] },
-    field: [0.3, 0.35], rise: 0.6, rain: { from: 0, to: 8, rate: 0.75 },
+    at: [0, 0], opening: [0, -5.5],
+    field: 0.33, rise: 0.6, rain: { from: 0, to: 8, rate: 0.75 },
   },
-  unnamed: {
-    at: [200, 1500, 400], move: { from: [-70, -30, -50, -2], to: [70, 30, 40, 2] },
-    field: [0.4, 0.55], rise: 1.8, rain: { from: 0, to: 1.0, rate: 0.4 },
-  },
-  gaps: {
-    at: [2600, 1650, 700], move: { from: [-60, 0, -40, 1.2], to: [60, 0, 40, -1.2] },
-    field: [0.5, 0.55], rise: 0.8, links: [0.6, 0.4],
-  },
-  rna: {
-    at: [5000, 1800, 1000], move: { from: [-30, 20, -60, -2], to: [30, -10, 30, 2] },
-    field: [0.6, 0.7], rise: 1.4,
-  },
+  unnamed: { go: [0, 6], field: 0.48, rise: 1.2 },
+  gaps: { go: [8, 0], field: 0.52, rise: 0.8, links: 0.5 },
+  rna: { go: [6, 5], field: 0.65, rise: 1.2 },
   vivome: {
-    at: [5300, 3400, 1300], move: { from: [-70, -60, -40, -3], to: [70, 40, 70, 3] },
-    field: [0.7, 0.75], rise: 1, links: [1.3, 1.3],
+    go: [0, 6], field: 0.72, rise: 1, links: 1.3,
     wake: { from: 0.4, to: 3.4, path: [[0.22, 0.6], [0.4, 0.68], [0.6, 0.68], [0.78, 0.6]] },
   },
-  'built-for-gaps': {
-    at: [7700, 3600, 1600], move: { from: [-50, 0, -50, 1.2], to: [50, 0, 30, -1.2] },
-    field: [0.75, 0.8], rise: 1.1,
-  },
-  answers: {
-    at: [8000, 5200, 2000], move: { from: [0, 0, -70, -1.5], to: [0, 0, 10, 1.5] },
-    field: [0.55, 0.5], rise: 0.5,
-  },
+  'built-for-gaps': { go: [-6, 5], field: 0.78, rise: 1.1 },
+  answers: { go: [-8, 0], field: 0.52, rise: 0.5 },
   'second-opinion': {
-    at: [10400, 5400, 2300], move: { from: [-40, 0, -60, 1], to: [40, 0, 10, -1] },
-    field: [0.8, 0.85], rise: 1.3,
-    wake: { from: 2.0, to: 4.8, path: [[0.09, 0.35], [0.3, 0.35], [0.53, 0.3], [0.74, 0.26]] },
+    go: [6, 5], field: 0.82, rise: 1.2,
+    wake: { from: 0.3, to: 2.8, path: [[0.09, 0.35], [0.3, 0.35], [0.53, 0.3], [0.74, 0.26]] },
   },
-  'real-data': {
-    at: [10700, 7000, 2800], move: { from: [0, -60, -60, -1], to: [0, 0, 80, 1] },
-    field: [0.95, 1], rise: 0.7,
-  },
-  methods: {
-    at: [13100, 7100, 3000], move: { from: [-60, 0, -50, -1.5], to: [60, 0, 20, 1.5] },
-    field: [1, 0.9], rise: 1,
-  },
+  'real-data': { go: [0, 6], field: 0.97, rise: 0.7 },
+  methods: { go: [8, 0], field: 0.95, rise: 1 },
   atlas: {
-    at: [15900, 6100, 2400], move: { from: [0, 80, -40, 2], to: [0, -40, 60, -2] },
-    field: [0.75, 0.6], rise: 1.9,
-    wake: { from: 0.8, to: 4.2, path: [[0.95, 0.9], [0.84, 0.74], [0.74, 0.62], [0.64, 0.55]] },
+    go: [6, -5], field: 0.68, rise: 1.6,
+    wake: { from: 3.86, to: 5.4, path: [[0.42, 0.78], [0.52, 0.64], [0.62, 0.52], [0.7, 0.44]] },
   },
   light: {
-    at: [16200, 3700, 2000], move: { from: [0, 968, -40], to: [0, 0, 0], until: 3.6 },
-    field: [0.5, 0.25], rise: 2.6, rain: { from: 2.7, to: 6, rate: 0.9 },
-    splash: [[2.7, 0.5, 0.42, 2.4, 0.09]],
+    go: [0, -9.5], field: 0.38, rise: 2.2, rain: { from: 1.4, to: 7.5, rate: 0.9 },
+    splash: [[0.3, 0.5, 0.1, 2.0, 0.09]],
   },
 };
+
+// Where each card's closing picture ends and the next card's opening
+// picture begins, in the frame's pixels: the two scenes draw the same thing
+// in the same spot on either side of the journey, so the eye carries it
+// across (lib/scenes.js draws them; `spread` is a band's half-width).
+export const RHYMES = [
+  { from: 'surface', to: 'unnamed', close: [1500, 330], open: [1500, 330], what: 'the protein cell' },
+  { from: 'unnamed', to: 'gaps', close: [1500, 560], open: [1500, 560], what: 'the cell\'s column of proteins' },
+  { from: 'gaps', to: 'rna', close: [1700, 700], open: [1700, 700], what: 'the measured values, gathered as dots' },
+  { from: 'rna', to: 'vivome', close: [1240, 170], open: [1240, 170], spread: 280, what: 'a band of the atlas\'s cells' },
+  { from: 'vivome', to: 'built-for-gaps', close: [1330, 1014], open: [1330, 1014], what: 'a row of tiles, under the card' },
+  { from: 'built-for-gaps', to: 'answers', close: [1000, 640], open: [1000, 640], what: 'the encoders\' merged points' },
+  { from: 'answers', to: 'second-opinion', close: [170, 810], open: [170, 810], spread: 110, what: 'two strokes, the currents\' starts' },
+  { from: 'second-opinion', to: 'real-data', close: [751, 561], open: [751, 561], what: 'a block of a hundred particles' },
+  { from: 'real-data', to: 'methods', close: [560, 870], open: [560, 870], spread: 300, what: 'a row of dots, under the results' },
+  { from: 'methods', to: 'atlas', close: [915, 268], open: [915, 268], what: 'a file' },
+  { from: 'atlas', to: 'light', close: [1230, 165], open: [1230, 165], spread: 120, what: 'a few landed cells, rising' },
+];

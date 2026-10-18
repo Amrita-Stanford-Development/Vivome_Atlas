@@ -415,25 +415,26 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `motion/package.json` — the film's own project: pins HyperFrames, GSAP and three.js r128; npm scripts for data, manim, stills, preview and lint
 - `motion/package-lock.json` — the film project's locked dependency tree
-- `motion/index.html` — the film's root composition: 120 s, the living water, the frost, the twelve scene hosts, the time code and depth gauge
-- `motion/compositions/s*.html` — one HyperFrames composition per scene: its words, number slots and GSAP timeline
-- `motion/lib/dive.js` — the dive: the site's water (biocells, water effects, particles) drawn on every seek, with depth colours, light, waterline and the motif
-- `motion/lib/field.js` — `web/js/background.js`'s particle field, drawn as a pure function of film time
-- `motion/lib/plan.js` — each scene's water: effect, waterline, camera, particles, frost and cut
-- `motion/lib/camera.js` — the film's camera, pure: its keys from the plan, the eased path, how each scene's plane looks from it and its CSS transform, where a scene's point lands in the frame, the focus and the waterline
-- `motion/lib/bridges.js` — the morphs between scenes, drawn over them in the film's world
-- `motion/lib/map3d.js` — the atlas in 3D as three.js points for scenes 4 and 11, and the same camera without three.js for the morphs
-- `motion/lib/scenes.js` — the scenes' data pictures (matrix, reference map, example file landing) and the Manim frames, on each seek
+- `motion/index.html` — the film's root composition: its length, the living water, the frost, the twelve scene hosts (each on for its card only), the time code and depth gauge
+- `motion/compositions/s*.html` — one HyperFrames composition per scene: its cards, words, number slots and GSAP timeline keyed to the voice's phrases, opacity and reveals only
+- `motion/lib/dive.js` — the dive: the site's water (its objects at fixed depths, one ripple field, particles) drawn on every seek for the camera's place, the waterline, the time code and depth gauge, and the pictures of the card on screen
+- `motion/lib/field.js` — `web/js/background.js`'s particle field, drawn as a pure function of film time and moved with the camera, every particle at its own size
+- `motion/lib/plan.js` — each scene's journey and water (particles, rise, drops), the water's surfaces, and where each card closes and the next opens
+- `motion/lib/camera.js` — the film's camera, pure: each scene's place, the eased journeys between them (still during each card), the focus, the waterline, the depth gauge and a journey's direction
+- `motion/lib/map3d.js` — the atlas in 3D as three.js points for scenes 4 and 11, and the same camera without three.js for the pictures around it
+- `motion/lib/shoal.js` — the film's water objects at fixed depths and sizes, placed in closed form for the camera's place and the time, with the site's meshes and materials
+- `motion/lib/cues.js` — fades each scene's cards in and out where they stand, and times what happens in them to the voice's phrases
+- `motion/lib/scenes.js` — the scenes' data pictures keyed to the voice's phrases, each card's closing and opening pictures, and the Manim frames, on each seek
 - `motion/lib/slots.js` — fills the compositions' number slots from the render's facts and counts them up
 - `motion/lib/film.css` — the film's type and objects at 1920 by 1080, from the site's tokens
-- `motion/manim/answers.py` — the Manim scene for scene 7: the reference map and four example cells' sets of plausible types
+- `motion/manim/answers.py` — the Manim scene for scene 7: the reference map and four example cells' sets of plausible types, each narrowing as its rung is said
 - `motion/scripts/hf.mjs` — runs the HyperFrames CLI with FFmpeg and Chrome found and its telemetry off
 - `motion/scripts/prepare.mjs` — copies the site's code into `motion/vendor/` and writes the render's numbers and data into `motion/build/`
 - `motion/scripts/manim.mjs` — renders the Manim scene and cuts it into one PNG per film frame
 - `motion/scripts/stills.mjs` — snapshots each scene's still, grades it to WebP and writes the sidecar
-- `motion/scripts/voice.mjs` — speaks each scene's voice-over line with Kokoro on this machine (HyperFrames `tts`), its numbers filled from the data files, and fits it to its scene
+- `motion/scripts/voice.mjs` — speaks each scene's voice-over line with Kokoro on this machine (HyperFrames `tts`) at its natural pace, its numbers filled from the data files, and times its phrases against the storyboard
 - `motion/scripts/film.mjs` — renders the whole film, then the voice, the score, the FFmpeg mix (music ducked under the voice) and the 720p draft and share copy
-- `motion/audio/score.py` — the film's music and sound effects, synthesised in code (numpy): the ambient bed, the musical cues and the effects
+- `motion/audio/score.py` — the film's music, synthesised in code (numpy): the ambient bed, whose chords change on the journeys, and the musical cues
 - `motion/audio/phonemes.py` — the phonemes Kokoro will read for each voice-over line (kokoro-onnx's tokenizer), so the voice script can check the name is said as one word
 
 ## docs/ — how the product works

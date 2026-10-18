@@ -27,13 +27,14 @@
 #grain { position: absolute; inset: 0; background-repeat: repeat; }
 #veil { position: absolute; inset: 0; z-index: 8; background: #FFFFFF; pointer-events: none; }
 
-/* A scene fills the frame above the water. Its host is a plane the camera
-   sees (lib/dive.js sets its transform), above the water and the gel; the
-   morphs between scenes (#bridges) pass over it. */
-[id^="host-"] { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 3; }
+/* A scene fills the frame above the water and the gel, and never moves:
+   its cards fade in and out where they stand (lib/cues.js). */
+[id^="host-"] { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 3; transform: none; }
 .scene { position: absolute; inset: 0; z-index: 3; }
 .scene canvas, .scene img.layer { position: absolute; }
-#bridges { position: absolute; inset: 0; width: 1920px; height: 1080px; z-index: 4; pointer-events: none; }
+/* A scene's own picture over its cards, for what passes between them. */
+.scene canvas.over { left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+.scene .figure { position: absolute; inset: 0; pointer-events: none; }
 
 /* ---- the motif: the time code and the depth gauge ---- */
 

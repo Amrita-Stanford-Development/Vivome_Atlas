@@ -7,11 +7,12 @@
 // which gives the same picture at the same moment on every render. The
 // colours and shapes are background.js's own.
 //
-// createField(width, height) -> { canvas, draw(t, { climb, shift, density, links, scale }) }
+// createField(width, height) -> { canvas, draw(t, { climb, shift, density, links }) }
 // paints the whole frame; web/js/biofield.js's water (lib/dive.js) lays it
 // behind the cells, as the site does. `shift` moves it with the film's
 // camera: the particles each at their own pace (the faster risers are
-// nearer, so they move more), the network and the faint grid slower.
+// nearer, so they move more), the network and the faint grid slower. Every
+// particle keeps its size: none swells, grows or shrinks.
 
 import { rng } from '../vendor/site/random.js';
 
@@ -46,7 +47,7 @@ export function createField(width, height, seed = 17) {
     speedY: rand() * 0.42 + 0.17,
     speedX: (rand() - 0.5) * 0.25,
     opacity: rand() * 0.6 + 0.3,
-    pulse: rand() * TAU,
+    sway: rand() * TAU,
     helix: rand() * TAU,
     helixLength: rand() * 30 + 20,
     helixAmplitude: rand() * 8 + 4,
@@ -74,7 +75,7 @@ export function createField(width, height, seed = 17) {
   }
 
   function particle(p, x, y, time, glow) {
-    const size = p.size * (1 + Math.sin(time * 1.7 + p.pulse) * 0.2);
+    const size = p.size;
     ctx.save();
     ctx.globalAlpha = Math.min(1, p.opacity * glow);
     if (p.type === 'cell') {
@@ -197,19 +198,18 @@ export function createField(width, height, seed = 17) {
 
   // t: film seconds. climb: how far the water has risen past the camera by
   // now, in background.js's frames (60 a second at its own pace). shift:
-  // how far the film's camera has moved aside, in frame pixels at this
-  // layer's distance. density: the share of particles shown. links: the
-  // network's strength. scale: how large the particles are drawn (deeper,
-  // they come forward).
+  // [x, y], how far the film's camera has travelled, in frame pixels at
+  // this layer's distance (y down). density: the share of particles shown.
+  // links: the network's strength.
   // It paints the whole frame, as background.js does: the base first, the
   // grid and edge shade last.
-  function draw(t, { climb = t * 60, shift = 0, density = 1, glow = 1, links = 1, scale = 1 } = {}) {
+  function draw(t, { climb = t * 60, shift = [0, 0], density = 1, glow = 1, links = 1 } = {}) {
     // background.js's clock: Date.now() * 0.00085 ms, about 0.85 a second.
     const time = t * 0.85;
     // The network and the flow field move with the camera at half the
-    // particles' pace; vertically, with the water's rise beyond its own.
-    const sx = shift * 0.5;
-    const sy = (climb - t * 60) * 0.25;
+    // particles' pace.
+    const sx = shift[0] * 0.5;
+    const sy = shift[1] * 0.5;
     base(time);
     flowField(time, 0.05 * glow, sx, sy);
     if (links > 0) {
@@ -244,14 +244,10 @@ export function createField(width, height, seed = 17) {
     const level = particles.length * Math.max(0, Math.min(1, density));
     for (let i = 0; i < Math.ceil(level); i++) {
       const p = particles[i];
-      const y = wrap(p.y - p.speedY * climb, -50, height + 100);
-      const x = wrap(p.x + p.speedX * t * 60 + Math.sin(time * 0.42 + p.pulse) * 12 - shift * (0.4 + p.speedY * 1.4), -50, width + 100);
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.scale(scale, scale);
-      ctx.translate(-x, -y);
+      const pace = 0.4 + p.speedY * 1.4;
+      const y = wrap(p.y - p.speedY * climb - shift[1] * pace, -50, height + 100);
+      const x = wrap(p.x + p.speedX * t * 60 + Math.sin(time * 0.42 + p.sway) * 12 - shift[0] * pace, -50, width + 100);
       particle(p, x, y, time, glow * Math.min(1, level - i));
-      ctx.restore();
     }
     gridAndVignette(sx, sy);
   }

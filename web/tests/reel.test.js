@@ -7,8 +7,9 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { CAVEATS } from '../js/manuscript-data.js';
 import {
-  CHAPTERS, FRAMES, HANDOVER, STARTS, TOTAL, buildScript, buildShot, buildStrip, fillSlots, frameSlots, locate,
-  rangeText, slotSource, slotText, slotsIn, staleNumbers, stillTime,
+  AFTER, CHAPTERS, EXIT, FADE, FRAMES, JOURNEY, OPENING, STARTS, TOTAL, VOICE_AT, buildScript, buildShot, buildStrip,
+  cardLength, cardOpacity, cardRange, cueTime, fillSlots, frameSlots, journeyOf, locate, phrasesOf, rangeText,
+  slotSource, slotText, slotsIn, staleNumbers, stillTime, voiceStart,
 } from '../js/reel-frames.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
@@ -26,22 +27,34 @@ const visible = (frame) => [
   frame.particles, frame.sound, frame.title, frame.drawn ?? '',
 ];
 
-test('the scenes add up to two minutes, in order, each still inside its scene', () => {
-  assert.equal(TOTAL, 120);
-  assert.equal(FRAMES.reduce((s, f) => s + f.seconds, 0), 120);
+test('the scenes add up to the film, in order: a journey, then a card that holds its line and its still', () => {
+  assert.equal(TOTAL, FRAMES.reduce((s, f) => s + f.seconds, 0));
+  assert.ok(TOTAL <= 180, `${TOTAL} s is over three minutes`);
   assert.ok(FRAMES.length >= 8 && FRAMES.length <= 12, `${FRAMES.length} scenes`);
   FRAMES.forEach((f, i) => {
     assert.equal(STARTS[i], FRAMES.slice(0, i).reduce((s, g) => s + g.seconds, 0));
     assert.ok(f.seconds > 0 && Number.isInteger(f.seconds), f.id);
+    assert.equal(journeyOf(i), i === 0 ? OPENING : JOURNEY);
+    assert.deepEqual(cardRange(i), [STARTS[i] + journeyOf(i), STARTS[i] + f.seconds]);
     assert.ok(f.still > 0 && f.still <= 1, f.id);
-    assert.ok(stillTime(i) > STARTS[i] && stillTime(i) < STARTS[i] + f.seconds, `${f.id}'s still is outside it`);
+    // The still is taken once the line has been said, and before the card's
+    // closing picture.
+    const still = stillTime(i) - cardRange(i)[0];
+    assert.ok(still >= VOICE_AT + f.said.seconds, `${f.id}'s still is taken before its line ends`);
+    assert.ok(still <= (i === FRAMES.length - 1 ? cardLength(i) : cardLength(i) - FADE - EXIT), `${f.id}'s still is taken in its close`);
     assert.equal(locate(stillTime(i)).id, f.id);
+    assert.equal(locate(stillTime(i)).phase, 'card');
+    assert.equal(locate(STARTS[i] + 0.5).phase, 'journey');
     assert.ok(CHAPTERS.some((c) => c.id === f.chapter), f.id);
-    assert.ok(f.depth.every((d) => d >= 0 && d <= 1), f.id);
+    assert.ok(!('depth' in f), `${f.id} still sets a depth`);
+    // Long enough to hear the line and to read the card.
+    const words = f.screen.map((x) => x.text).join(' ').split(/\s+/).length;
+    assert.ok(cardLength(i) >= VOICE_AT + f.said.seconds + AFTER + FADE, `${f.id}'s card is shorter than its line`);
+    assert.ok(cardLength(i) >= FADE + words / 4 + 0.8, `${f.id}'s card is too short to read`);
   });
   assert.equal(new Set(FRAMES.map((f) => f.id)).size, FRAMES.length, 'scene ids are unique');
-  assert.equal(rangeText(0), '0:00 to 0:08');
-  assert.equal(locate(119.9).id, FRAMES.at(-1).id);
+  assert.equal(rangeText(0), '0:00 to 0:10');
+  assert.equal(locate(TOTAL - 0.1).id, FRAMES.at(-1).id);
 });
 
 test('every scene has its words, its motion notes and its sound', () => {
@@ -147,7 +160,7 @@ test('the film keeps one white background: no tinting water effect, no white-on-
   // One ripple field and one gel for the whole film: no scene picks its own
   // effect, frost or cut.
   for (const [id, plan] of Object.entries(PLAN)) {
-    for (const key of ['effect', 'frost', 'cut']) assert.ok(!(key in plan), `${id} sets its own ${key}`);
+    for (const key of ['effect', 'frost', 'cut', 'move']) assert.ok(!(key in plan), `${id} sets its own ${key}`);
   }
   FRAMES.forEach((f, i) => {
     const n = String(i + 1).padStart(2, '0');
@@ -175,84 +188,172 @@ test('each scene puts its words on its card kind, alternating white sheet and li
   assert.ok(!/\.liquid\s*\{[^}]*background/.test(film), 'the film keeps the site\'s own liquid glass');
 });
 
-// The owner's rule: one continuous move, with no cut. Depth runs on without
-// a step, each scene's cards hand over to the next's, and the sound is the
-// music and the voice only.
-test('the film is one continuous move: depth carries over, cards hand over, and there are no sound effects', () => {
+// The owner's rule: the cards never move. The camera travels between them
+// (a journey), and a card is on screen only while the camera stands still:
+// it fades in where it stands, holds and fades out. The sound is the music
+// and the voice only.
+test('card, journey, card: no card is on screen while the camera travels, and none overlaps another', () => {
   FRAMES.forEach((f, i) => {
-    if (i > 0) assert.equal(f.depth[0], FRAMES[i - 1].depth[1], `depth steps at ${f.id}`);
     assert.doesNotMatch(f.sound, /\b(rain|bubbles?|ticks?|whoosh|pings?|sonar|splash|noise|clicks?)\b/i, `${f.id}'s sound: "${f.sound}"`);
+    const [arrive, depart] = cardRange(i);
+    assert.equal(arrive, STARTS[i] + journeyOf(i));
+    if (i > 0) assert.ok(arrive - cardRange(i - 1)[1] >= JOURNEY - 1e-9, `${f.id}'s card overlaps the journey before it`);
+    assert.equal(cardOpacity(i, 0), 0, `${f.id}'s card is on as the camera arrives`);
+    assert.equal(cardOpacity(i, FADE), 1);
+    if (i < FRAMES.length - 1) assert.equal(cardOpacity(i, depart - arrive), 0, `${f.id}'s card is on as the camera leaves`);
+    else assert.equal(cardOpacity(i, depart - arrive), 1, 'the end card stays');
   });
-  assert.ok(HANDOVER > 0 && HANDOVER < Math.min(...FRAMES.map((f) => f.seconds)) / 3);
   const dive = readRepo('motion/lib/dive.js');
   assert.match(dive, /function waterTo\(step\)/, 'one ripple field, stepped from the film\'s start');
   assert.doesNotMatch(dive, /function dip\(|plan\.frost|plan\.effect/, 'a per-scene reset is back');
+  assert.doesNotMatch(dive, /style\.transform/, 'the cards are moved');
+  assert.match(dive, /if \(phase !== 'card'\) return out;/, 'drops fall while the camera travels');
 });
 
-// The owner's rule for the camera: one continuous, eased move through the
-// scenes' world (motion/lib/camera.js, from motion/lib/plan.js). It never
-// jumps or lurches, it frames each scene while it plays, and each scene's
-// cards are carried in and out of the frame by it: off the frame when its
-// host starts and when its host ends, so nothing appears or vanishes in view.
-test('the camera is one continuous, eased path that carries every scene in and out of the frame', async () => {
-  const { PLAN } = await import('../../motion/lib/plan.js');
-  const { IN, OUT, cameraKeys, planeView, poseAt, viewPoint } = await import('../../motion/lib/camera.js');
-  const spans = FRAMES.map((f, i) => ({ id: f.id, start: STARTS[i], seconds: f.seconds }));
-  for (const f of FRAMES) {
-    const plan = PLAN[f.id];
-    assert.equal(plan.at.length, 3, `${f.id} has a place in the world`);
-    assert.ok(plan.move?.from && plan.move?.to, `${f.id} has a move`);
-  }
-  const keys = cameraKeys(spans, PLAN, TOTAL);
-  assert.equal(keys.length, 2 * FRAMES.length + 1);
-  keys.slice(1).forEach((k, i) => assert.ok(k.t > keys[i].t, 'the keys run forward in time'));
-  // No jump and no lurch: the move per frame stays bounded and changes
-  // gradually, including across every key.
-  const frame = 1 / 30;
-  let prev = poseAt(keys, 0);
-  let before = [0, 0, 0];
+// The owner's rule for the camera: it travels from place to place through
+// the particles, between the cards, each journey eased at both ends, and is
+// exactly still while a card is on.
+test('the camera stands still for each card and travels between them, each journey eased and in its own direction', async () => {
+  const { PLAN, SURFACES } = await import('../../motion/lib/plan.js');
+  const { cameraPath, directionOf, gaugeAt, poseAt, waterlineAt } = await import('../../motion/lib/camera.js');
+  const spans = FRAMES.map((f, i) => ({ id: f.id, start: STARTS[i], seconds: f.seconds, journey: journeyOf(i) }));
+  const path = cameraPath(spans, PLAN);
+  const near = (a, b) => Math.hypot(a.x - b.x, a.y - b.y) < 1e-9;
+  FRAMES.forEach((f, i) => {
+    // Still during the card.
+    const [arrive, depart] = cardRange(i);
+    const at = poseAt(path, arrive);
+    for (let t = arrive; t <= depart; t += 0.25) assert.ok(near(poseAt(path, t), at), `the camera moves during ${f.id}'s card`);
+    // The journey takes its time, and starts and ends at rest.
+    const t0 = STARTS[i];
+    const t1 = t0 + journeyOf(i);
+    const step = (t) => { const a = poseAt(path, t); const b = poseAt(path, t + 1 / 30); return Math.hypot(b.x - a.x, b.y - a.y); };
+    assert.ok(step(t0) < 0.002 && step(t1 - 1 / 30) < 0.002, `${f.id}'s journey does not ease in and out`);
+    assert.ok(step((t0 + t1) / 2) > 0.01, `the camera does not travel before ${f.id}`);
+  });
+  // No jump and no lurch.
+  let before = 0;
+  let prev = poseAt(path, 0);
   for (let k = 1; k <= TOTAL * 30; k += 1) {
-    const pose = poseAt(keys, k * frame);
-    const step = [pose.x - prev.x, pose.y - prev.y, pose.z - prev.z];
-    assert.ok(Math.hypot(...step) < 80, `the camera jumps at ${(k * frame).toFixed(2)} s`);
-    assert.ok(Math.hypot(...step.map((v, j) => v - before[j])) < 5, `the camera lurches at ${(k * frame).toFixed(2)} s`);
-    for (const turn of ['yaw', 'pitch', 'roll']) assert.ok(Math.abs(pose[turn] - prev[turn]) < 0.3, `${turn} snaps at ${k * frame}`);
+    const pose = poseAt(path, k / 30);
+    const step = Math.hypot(pose.x - prev.x, pose.y - prev.y);
+    assert.ok(step < 0.3, `the camera jumps at ${(k / 30).toFixed(2)} s`);
+    assert.ok(Math.abs(step - before) < 0.03, `the camera lurches at ${(k / 30).toFixed(2)} s`);
     before = step;
     prev = pose;
   }
-  const outside = (pose, at) => {
-    const v = planeView(pose, at);
-    const corners = [[0, 0], [1920, 0], [0, 1080], [1920, 1080]].map(([x, y]) => viewPoint(v, x, y));
-    const xs = corners.map((c) => c[0]);
-    const ys = corners.map((c) => c[1]);
-    return Math.max(...xs) < 0 || Math.min(...xs) > 1920 || Math.max(...ys) < 0 || Math.min(...ys) > 1080;
-  };
+  // The journeys go different ways: down, sideways and diagonally, never
+  // twice the same way running, and the last rises.
+  const ways = FRAMES.slice(1).map((f) => directionOf(PLAN[f.id].go));
+  for (const way of ['down', 'right', 'left', 'down-right', 'down-left', 'up-right', 'up']) assert.ok(ways.includes(way), `no journey ${way}`);
+  ways.slice(1).forEach((w, k) => assert.notEqual(w, ways[k], `two journeys ${w} in a row`));
+  assert.equal(ways.at(-1), 'up');
+  // The depth gauge goes down only on journeys down, up only on journeys up.
+  FRAMES.slice(1).forEach((f, k) => {
+    const i = k + 1;
+    const [from, to] = [gaugeAt(path, STARTS[i], SURFACES), gaugeAt(path, cardRange(i)[0], SURFACES)];
+    const [, dy] = PLAN[f.id].go;
+    if (dy > 0) assert.ok(to >= from, `the gauge rises on the journey down to ${f.id}`);
+    if (dy < 0) assert.ok(to <= from, `the gauge falls on the journey up to ${f.id}`);
+    if (dy === 0) assert.ok(Math.abs(to - from) < 1e-9, `the gauge moves on the level journey to ${f.id}`);
+  });
+  // The waterline: in sight on the first card and the last, out of it on
+  // the others; the camera passes between the two surfaces out of sight of both.
   FRAMES.forEach((f, i) => {
-    // While the scene plays, the camera frames it: no more than a gentle
-    // push, pull or pan from where its layout fills the frame.
-    const from = i === 0 ? 0 : STARTS[i] + IN;
-    const to = i === FRAMES.length - 1 ? TOTAL : STARTS[i] + f.seconds - OUT;
-    if (f.id !== 'light') {
-      for (let t = from; t <= to; t += 0.25) {
-        const v = planeView(poseAt(keys, t), PLAN[f.id].at);
-        assert.ok(v.scale > 0.9 && v.scale < 1.1 && Math.abs(v.dx) < 100 && Math.abs(v.dy) < 100, `${f.id} is not framed at ${t} s`);
-      }
+    const wl = waterlineAt(poseAt(path, cardRange(i)[0]), SURFACES);
+    if (i === 0) assert.ok(wl > 0.5 && wl < 1, `the waterline on ${f.id}: ${wl}`);
+    else if (i === FRAMES.length - 1) assert.ok(wl < 0.5, `the waterline on ${f.id}: ${wl}`);
+    else assert.ok(wl > 1.05, `the waterline shows on ${f.id}: ${wl}`);
+  });
+  for (let t = 0; t < TOTAL; t += 1 / 30) {
+    const a = poseAt(path, t);
+    const b = poseAt(path, t + 1 / 30);
+    const [sa, sb] = [SURFACES.find((w) => a.x >= w.x[0] && a.x < w.x[1]), SURFACES.find((w) => b.x >= w.x[0] && b.x < w.x[1])];
+    if (sa === sb) continue;
+    for (const pose of [a, b]) for (const w of SURFACES) {
+      const wl = 0.5 + (pose.y - w.y) / (2 * 12 * Math.tan((23 * Math.PI) / 180));
+      assert.ok(wl > 1.05 || wl < -0.05, `the surfaces change in sight at ${t.toFixed(2)} s`);
     }
-    if (i === 0) return;
-    // At the host's start its plane is still out of the frame; at the last
-    // host's end, the last scene's plane is out of it again (scene 12 rises
-    // into view from above, so only its start is checked against 11's end
-    // where scene 11's cards are already below the frame).
-    assert.ok(outside(poseAt(keys, STARTS[i]), PLAN[f.id].at), `${f.id}'s cards are in view when its host starts`);
-    if (f.id !== 'light') assert.ok(outside(poseAt(keys, STARTS[i] + HANDOVER), PLAN[FRAMES[i - 1].id].at), `${FRAMES[i - 1].id}'s cards are in view when its host ends`);
+  }
+});
+
+// The owner's rule for the water: every object keeps its size. Each is at a
+// fixed depth; the camera's travel moves it across the frame by the travel
+// over its depth, and it wraps round only out of sight.
+test('the water\'s objects keep their size and depth, pass by in parallax, and wrap only out of sight', async () => {
+  const { placeAt, seedShoal, kinds } = await import('../../motion/lib/shoal.js');
+  const { ASPECT, TAN } = await import('../../motion/lib/camera.js');
+  let seed = 7;
+  const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  for (const [kind, spec] of kinds()) {
+    for (const o of seedShoal(rand, spec, 1.5)) {
+      const a = placeAt(o, { x: 0, y: 0 }, 10);
+      const b = placeAt(o, { x: 0.05, y: 0 }, 10);
+      const c = placeAt(o, { x: 0, y: 0.05 }, 10);
+      assert.equal(a.z, -o.d, kind);
+      assert.equal(b.z, a.z);
+      assert.equal(a.scale, b.scale);
+      assert.equal(a.scale, c.scale);
+      if (Math.abs(b.u) < o.hu - 0.1) assert.ok(Math.abs(b.u - a.u + 0.05 / (o.d * TAN * ASPECT)) < 1e-9, `${kind} does not pass by at its depth`);
+      if (Math.abs(c.v) < o.hv - 0.1) assert.ok(Math.abs(c.v - a.v - 0.05 / (o.d * TAN)) < 1e-9, `${kind} does not rise past at its depth`);
+      // A wrap happens only past the frame's edge, with the object out of sight.
+      assert.ok(o.hu > 1.05 && o.hv > 1.05);
+    }
+  }
+  const dive = readRepo('motion/lib/dive.js');
+  assert.doesNotMatch(dive, /camera\.fov\s*=/, 'the view narrows');
+  assert.doesNotMatch(dive, /advance|createBioLayer/, 'the camera moves forward through the objects');
+  const field = readRepo('motion/lib/field.js');
+  assert.doesNotMatch(field, /pulse|scale\(/, 'the particles change size');
+  const block = (text) => text.match(/const UM[\s\S]*?\n};\n/)[0];
+  assert.equal(block(readRepo('motion/lib/shoal.js')), block(read('js/biocells.js')), 'the water\'s table differs from the site\'s');
+});
+
+// Cards never move: what changes on a card is its opacity, or a word
+// revealed in place; and a card fades by itself, never through its scene.
+test('the cards stand still: no composition moves, scales or turns anything, and each fades its cards itself', () => {
+  FRAMES.forEach((f, i) => {
+    const n = String(i + 1).padStart(2, '0');
+    const html = readRepo(`motion/compositions/s${n}-${f.id}.html`);
+    const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+    assert.doesNotMatch(script, /\b(x|y|xPercent|yPercent|scale|scaleX|scaleY|rotation|rotationX|rotationY|rotate|transform)\s*:/, `${f.id} moves something`);
+    assert.equal((script.match(/VivomeCue\.card\(|C\.card\(/g) ?? []).length, 1, `${f.id} does not fade its cards`);
+    assert.ok(!script.includes(`'#s-${f.id}'`), `${f.id} fades through its scene`);
   });
 });
 
-// The morphs between scenes (motion/lib/bridges.js) start and end where the
-// scenes draw their pictures: their places are the compositions' own.
-test('the morphs between scenes start and end on the scenes\' own pictures', () => {
+// The pictures act out the voice: each phrase has its cue, inside the card,
+// in order, as motion/scripts/voice.mjs measured it at the voice's own pace.
+test('each line is spoken at its own pace and timed phrase by phrase inside its card', () => {
+  FRAMES.forEach((f, i) => {
+    const phrases = phrasesOf(f.voice);
+    assert.equal(phrases.join(' '), f.voice, f.id);
+    assert.equal(phrases.length, f.said.at.length, `${f.id} has ${phrases.length} phrases`);
+    assert.equal(f.said.at[0], 0);
+    f.said.at.forEach((at, k) => {
+      if (k > 0) assert.ok(at > f.said.at[k - 1], `${f.id}'s cues go back`);
+      const cue = cueTime(i, k);
+      assert.ok(cue >= VOICE_AT && cue <= cardLength(i) - FADE - (i === FRAMES.length - 1 ? 0 : EXIT), `${f.id}'s cue ${k} is outside its card`);
+    });
+    assert.ok(f.said.at.at(-1) < f.said.seconds);
+    assert.equal(voiceStart(i), cardRange(i)[0] + VOICE_AT);
+  });
+  const voice = readRepo('motion/scripts/voice.mjs');
+  assert.match(voice, /export const SPEED = 1;/);
+  assert.doesNotMatch(voice, /MAX_SPEED|TIGHT_/, 'a line may be hurried');
+});
+
+// What closes one card opens the next, in the same spot: the eye carries it
+// across the journey (motion/lib/plan.js, RHYMES), and the places the
+// pictures are drawn are the compositions' own.
+test('each card opens where the last one closed, on the scenes\' own pictures', async () => {
+  const { RHYMES } = await import('../../motion/lib/plan.js');
+  assert.deepEqual(RHYMES.map((r) => [r.from, r.to]), FRAMES.slice(1).map((f, i) => [FRAMES[i].id, f.id]));
+  for (const r of RHYMES) {
+    assert.ok(Math.hypot(r.open[0] - r.close[0], r.open[1] - r.close[1]) <= 40, `${r.to} opens away from where ${r.from} closed`);
+    for (const [x, y] of [r.open, r.close]) assert.ok(x >= 0 && x <= 1920 && y >= 0 && y <= 1080, `${r.from} closes off the frame`);
+  }
   const scenes = readRepo('motion/lib/scenes.js');
-  const bridges = readRepo('motion/lib/bridges.js');
   const px = (html, rule) => {
     const m = html.match(new RegExp(`${rule} \\{([^}]*)\\}`));
     assert.ok(m, `no rule ${rule}`);
@@ -270,12 +371,6 @@ test('the morphs between scenes start and end on the scenes\' own pictures', () 
   assert.match(scenes, new RegExp(`RNA_CANVAS = \\{ left: ${rx}, top: ${ry}, width: 980, height: 920 \\}`));
   const [dx, dy] = inside(readRepo('motion/compositions/s08-second-opinion.html'), '#s-second-opinion \\.diagram');
   assert.match(scenes, new RegExp(`DIAGRAM = \\{ left: ${dx}, top: ${dy} \\}`));
-  // Scene 2's first cell: its body's centre and radius.
-  const cell = readRepo('motion/compositions/s02-unnamed.html').match(/class="cell" style="--r: (\d+)px; left: (\d+)px; top: (\d+)px"/);
-  const r = Number(cell[1]) / 2;
-  assert.match(bridges, new RegExp(`HERO = \\{ x: ${Number(cell[2]) + r}, y: ${Number(cell[3]) + r}, r: ${r} \\}`));
-  // Scene 2 hands its first cell to the morph as the camera sets off.
-  assert.match(readRepo('motion/compositions/s02-unnamed.html'), /tl\.set\(cells\[0\]\.querySelector\('\.body'\), \{ opacity: 0 \}, 9\.7\)/);
 });
 
 // docs/web/motion.md carries the full script, for producing the film.
@@ -299,10 +394,9 @@ test('each composition shows its scene\'s words and numbers, at its place in the
     const host = index.match(new RegExp(`<div id="host-${frame.id}"[^>]*>`));
     assert.ok(host, `motion/index.html has no host for ${frame.id}`);
     assert.match(host[0], new RegExp(`data-composition-src="compositions/s${n}-${frame.id}\\.html"`));
-    assert.match(host[0], new RegExp(`data-start="${STARTS[i]}"`));
-    // Each scene's host lasts into the next while its cards hand over.
-    const lasts = i < FRAMES.length - 1 ? frame.seconds + HANDOVER : frame.seconds;
-    assert.match(host[0], new RegExp(`data-duration="${lasts}"`));
+    // Each scene's host is on while its card is, and only then.
+    assert.match(host[0], new RegExp(`data-start="${cardRange(i)[0]}"`));
+    assert.match(host[0], new RegExp(`data-duration="${cardLength(i)}"`));
     const html = readRepo(`motion/compositions/s${n}-${frame.id}.html`);
     const words = squash(html.replace(/<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->/g, ''));
     for (const item of frame.screen) {
@@ -313,5 +407,5 @@ test('each composition shows its scene\'s words and numbers, at its place in the
     }
     for (const key of frame.caveats ?? []) assert.ok(html.includes(`data-caveat="${key}"`), `${frame.id}: no ${key} bead`);
   });
-  assert.match(index, /data-duration="120"/);
+  assert.match(index, new RegExp(`data-composition-id="main" data-start="0" data-duration="${TOTAL}"`));
 });

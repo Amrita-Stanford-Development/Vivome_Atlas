@@ -3,19 +3,21 @@ nothing needs a licence. There are no sound effects; the film's sound is
 this music and the voice-over.
 
 Writes build/audio/music.wav, 48 kHz stereo, the length of the film: one
-continuous ambient bed in D major that never stops or restarts at a scene
-change (its chords cross-fade over a few seconds, its level is one smooth
-curve that rises towards the end), and the storyboard's musical cues
-(web/js/reel-frames.js, `sound`) played on it: the piano note on the title,
-the theme, the arpeggio, one tone per encoder, the notes stepping down the
-ladder, two lines braiding into one, a soft bass pulse, the plucks as cells
-land, the final chord. The mix (scripts/film.mjs, with FFmpeg) ducks it
-under the voice.
+continuous ambient bed in D major that never stops or restarts (its level is
+one smooth curve that rises towards the end); its chords change on the
+camera's journeys between the cards, each cross-fading over the journey, so
+the music moves when the camera does. On it, the storyboard's musical cues
+(web/js/reel-frames.js, `sound`): the piano note on the title, the theme,
+the arpeggio, one tone per encoder, the notes stepping down the ladder, two
+lines braiding into one, a soft bass pulse, the plucks as cells land, the
+final chord. The mix (scripts/film.mjs, with FFmpeg) ducks it under the
+voice.
 
-Each cue's time is a scene's start (build/timeline.json, from
-scripts/prepare.mjs) plus an offset that matches its composition's
-timeline. Every random choice is seeded, so the score is the same on every
-run. Needs numpy and soundfile (the vivome-voice env has both).
+Each cue's time comes from build/timeline.json (scripts/prepare.mjs): a
+scene's card plus an offset, or the moment a phrase of its line is said
+(cue), so a note lands with the picture it belongs to. Every random choice
+is seeded, so the score is the same on every run. Needs numpy and soundfile
+(the vivome-voice env has both).
 
     python audio/score.py
 """
@@ -32,13 +34,28 @@ OUT = ROOT / "build" / "audio"
 SR = 48000
 TOTAL = TIMELINE["total"]
 N = int(TOTAL * SR)
-START = {f["id"]: f["start"] for f in TIMELINE["frames"]}
+FRAMES = {f["id"]: f for f in TIMELINE["frames"]}
 rng = np.random.default_rng(7)
 
 
-def at(scene, offset):
-    """Seconds into the film: a scene's start plus an offset."""
-    return START[scene] + offset
+def card(scene, offset=0.0):
+    """Seconds into the film: when a scene's card arrives, plus an offset."""
+    return FRAMES[scene]["arrive"] + offset
+
+
+def cue(scene, k, offset=0.0):
+    """Seconds into the film: when phrase k of a scene's line is said, plus an offset."""
+    return FRAMES[scene]["cuesAt"][k] + offset
+
+
+def journey(scene):
+    """The camera's journey to a scene: its start and its length."""
+    return FRAMES[scene]["start"], FRAMES[scene]["journey"]
+
+
+def midway(scene):
+    start, length = journey(scene)
+    return start + length / 2
 
 
 def note(name):
@@ -74,17 +91,22 @@ def pluck(freq, dur=1.2):
 music = np.zeros((N, 2))
 t = np.arange(N) / SR
 
-# ---- the bed: one chord per chapter, cross-fading, never stopping ----
+# ---- the bed: chords that change on the journeys, never stopping ----
 
+# Each chord: when it takes over (the middle of a journey, or a cue), its
+# notes, and how long the cross-fade takes (a journey's length).
+JOURNEY = journey("gaps")[1]
 CHORDS = [
-    (0, ["D2", "A2", "F#3", "E4"]),
-    (at("gaps", 0), ["B1", "F#2", "D3"]),
-    (at("gaps", 6), ["A2", "A3"]),
-    (at("rna", 0), ["G2", "D3", "B3", "F#4", "A4"]),
-    (at("built-for-gaps", 0), ["E2", "B2", "G3", "D4", "F#4"]),
-    (at("real-data", 0), ["B1", "F#2", "A3", "C#4", "D4"]),
-    (at("atlas", 0), ["A2", "D3", "F#3", "A3", "E4"]),
-    (at("light", 3.2), ["D2", "A2", "D3", "F#3", "A3", "D4", "F#4", "A4"]),
+    (0, ["D2", "A2", "F#3", "E4"], JOURNEY),
+    (midway("gaps"), ["B1", "F#2", "D3"], JOURNEY),
+    # The pad thins to one held note as the missing values fall away.
+    (cue("gaps", 1, 0.6), ["A2", "A3"], 2.0),
+    (midway("rna"), ["G2", "D3", "B3", "F#4", "A4"], JOURNEY),
+    (midway("built-for-gaps"), ["E2", "B2", "G3", "D4", "F#4"], JOURNEY),
+    (midway("real-data"), ["B1", "F#2", "A3", "C#4", "D4"], JOURNEY),
+    (midway("atlas"), ["A2", "D3", "F#3", "A3", "E4"], JOURNEY),
+    # The final chord, as the camera breaks the surface.
+    (card("light", -0.4), ["D2", "A2", "D3", "F#3", "A3", "D4", "F#4", "A4"], JOURNEY),
 ]
 
 
@@ -106,15 +128,14 @@ def pad_voice(freq, length, seed):
     return out / 2.8
 
 
-FADE = 3.0  # seconds over which one chord gives way to the next
-for k, (start, notes) in enumerate(CHORDS):
-    end = CHORDS[k + 1][0] if k + 1 < len(CHORDS) else TOTAL
-    a, b = int(max(0, start - FADE / 2) * SR), int(min(TOTAL, end + FADE / 2) * SR)
+for k, (start, notes, fade) in enumerate(CHORDS):
+    end, out = (CHORDS[k + 1][0], CHORDS[k + 1][2]) if k + 1 < len(CHORDS) else (TOTAL, fade)
+    a, b = int(max(0, start - fade / 2) * SR), int(min(TOTAL, end + out / 2) * SR)
     length = b - a
     tt = np.arange(length) / SR
     # Equal-power cross-fades, so the bed keeps its level through a change.
-    rise_in = np.sin(np.pi / 2 * np.clip(tt / FADE, 0, 1)) if start > 0 else np.ones(length)
-    fall_out = np.cos(np.pi / 2 * np.clip((tt - (length / SR - FADE)) / FADE, 0, 1)) if end < TOTAL else np.ones(length)
+    rise_in = np.sin(np.pi / 2 * np.clip(tt / fade, 0, 1)) if start > 0 else np.ones(length)
+    fall_out = np.cos(np.pi / 2 * np.clip((tt - (length / SR - out)) / out, 0, 1)) if end < TOTAL else np.ones(length)
     voices = sum(pad_voice(note(n), length, 100 * k + i) for i, n in enumerate(notes)) / np.sqrt(len(notes))
     music[a:b] += voices * (rise_in * fall_out)[:, None]
 
@@ -128,7 +149,7 @@ def smoothstep(x):
 # the end, a swell as the camera surfaces that settles into the final
 # chord, and out to silence on the end card. One smooth curve.
 level = 0.16 + 0.14 * (t / TOTAL) ** 2
-level *= 1 + 0.35 * smoothstep((t - at("light", 0)) / 2.9) * (1 - smoothstep((t - at("light", 3.0)) / 1.8))
+level *= 1 + 0.35 * smoothstep((t - journey("light")[0]) / 2.2) * (1 - smoothstep((t - card("light", 0.6)) / 1.8))
 level *= smoothstep(t / 3.0)
 level *= smoothstep((TOTAL - 0.3 - t) / 2.6)
 music *= level[:, None]
@@ -137,58 +158,64 @@ music *= level[:, None]
 
 THEME = ["D5", "F#5", "E5", "A4"]
 
-# Scene 1: one soft piano note as the title lands.
-place(music, tone(note("D5"), 4, decay=1.6) + 0.6 * tone(note("A4"), 4, decay=1.6), at("surface", 2.9), gain=0.2)
-# Scene 4: a warm chord and the first hint of the theme.
+# Scene 1: one soft piano note as the title's last word lands.
+place(music, tone(note("D5"), 4, decay=1.6) + 0.6 * tone(note("A4"), 4, decay=1.6), cue("surface", 1, 0.9), gain=0.2)
+# Scene 4: a warm chord as the card comes in, and the first hint of the
+# theme as the atlas fills.
 for i, n in enumerate(["G3", "B3", "D4", "F#4"]):
-    place(music, tone(note(n), 5, decay=2.4, attack=0.2), at("rna", 1.5), pan=-0.3 + 0.2 * i, gain=0.08)
+    place(music, tone(note(n), 5, decay=2.4, attack=0.2), card("rna", 0.3), pan=-0.3 + 0.2 * i, gain=0.08)
 for i, n in enumerate(THEME):
-    place(music, tone(note(n), 3, decay=1.4), at("rna", 3.0 + 0.7 * i), gain=0.07)
-# Scene 5: a rising arpeggio as the wordmark appears, then the theme in full.
+    place(music, tone(note(n), 3, decay=1.4), cue("rna", 1, 0.7 * i), gain=0.07)
+# Scene 5: a rising arpeggio as the wordmark forms, then the theme in full
+# as the protein side joins the RNA side.
 for i, n in enumerate(["D4", "F#4", "A4", "D5", "F#5", "A5"]):
-    place(music, pluck(note(n)), at("vivome", 0.5 + 0.3 * i), pan=-0.5 + 0.2 * i, gain=0.1)
+    place(music, pluck(note(n)), card("vivome", 0.2 + 0.3 * i), pan=-0.5 + 0.2 * i, gain=0.1)
 for i, n in enumerate(THEME):
-    place(music, tone(note(n), 3, decay=1.6), at("vivome", 4.4 + 0.55 * i), gain=0.14)
-    place(music, tone(note(n) / 2, 3, decay=1.6), at("vivome", 4.4 + 0.55 * i), gain=0.05)
-# Scene 6: one soft tone per encoder, resolving into one chord.
+    place(music, tone(note(n), 3, decay=1.6), cue("vivome", 1, 0.2 + 0.55 * i), gain=0.14)
+    place(music, tone(note(n) / 2, 3, decay=1.6), cue("vivome", 1, 0.2 + 0.55 * i), gain=0.05)
+# Scene 6: one soft tone per encoder as they appear, resolving into one
+# chord as their answers merge.
 for i, n in enumerate(["A4", "C#5", "E5", "F#5", "A5"]):
-    place(music, tone(note(n), 2, decay=0.9), at("built-for-gaps", 8.0 + 0.16 * i), pan=-0.6 + 0.3 * i, gain=0.08)
+    place(music, tone(note(n), 2, decay=0.9), cue("built-for-gaps", 3, 0.3 + 0.16 * i), pan=-0.6 + 0.3 * i, gain=0.08)
 for n in ["A3", "E4", "A4", "C#5"]:
-    place(music, tone(note(n), 3, decay=1.5, attack=0.05), at("built-for-gaps", 8.9), gain=0.06)
-# Scene 7: a note down for each rung of the ladder; a soft stop on no answer.
+    place(music, tone(note(n), 3, decay=1.5, attack=0.05), cue("built-for-gaps", 3, 1.4), gain=0.06)
+# Scene 7: a note down for each rung of the ladder, as it is said; a soft
+# stop on no answer.
 for k, n in enumerate(["D5", "B4", "A4", "F#4"]):
     last = k == 3
-    place(music, tone(note(n), 2.5, decay=0.5 if last else 1.4), at("answers", TIMELINE["answers"][k] + 0.9), gain=0.09 if last else 0.13)
-# Scene 8: two lines of melody braid into one.
+    place(music, tone(note(n), 2.5, decay=0.5 if last else 1.4), cue("answers", k + 1), gain=0.09 if last else 0.13)
+# Scene 8: two lines of melody, one with each current, braid into one at
+# the best guess.
 for i, n in enumerate(["D5", "E5", "F#5", "A5"]):
-    place(music, tone(note(n), 1.6, decay=0.8), at("second-opinion", 2.0 + 0.6 * i), pan=-0.5, gain=0.09)
+    place(music, tone(note(n), 1.6, decay=0.8), card("second-opinion", 0.3 + 0.3 * i), pan=-0.5, gain=0.09)
 for i, n in enumerate(["A4", "B4", "D5", "E5"]):
-    place(music, tone(note(n), 1.6, decay=0.8), at("second-opinion", 2.3 + 0.6 * i), pan=0.5, gain=0.09)
+    place(music, tone(note(n), 1.6, decay=0.8), card("second-opinion", 1.4 + 0.3 * i), pan=0.5, gain=0.09)
 for n in ["D5", "F#5"]:
-    place(music, tone(note(n), 2.4, decay=1.2), at("second-opinion", 5.0), gain=0.12)
+    place(music, tone(note(n), 2.4, decay=1.2), card("second-opinion", 5.6), gain=0.12)
 # Scenes 9 and 10: a soft bass pulse on the chord's root, a note every
 # 1.5 seconds, swelling in and out; then a lighter counter-melody.
 beat = 1.5
-first, last = at("real-data", 0.5), at("atlas", 0)
+first, last = card("real-data", 0.5), FRAMES["methods"]["depart"]
 for k in range(int((last - first) / beat)):
     when = first + k * beat
     swell = min(1.0, (k + 1) / 4) * min(1.0, (last - when) / 4.5)
-    root = "B1" if when < at("methods", 0) else "E2"
+    root = "B1" if when < midway("methods") else "E2"
     place(music, tone(note(root), 1.6, decay=0.5, attack=0.03, partials=((1, 1.0), (2, 0.25))), when, gain=0.16 * swell)
 counter = ["F#5", "E5", "D5", "A4", "B4", "D5", "E5", "F#5", "A5", "F#5", "E5", "D5", "E5", "F#5", "A5", "B5"]
 for i, n in enumerate(counter):
-    place(music, pluck(note(n)), at("methods", 2.0 + 0.5 * i), pan=0.4 * np.sin(i), gain=0.06)
-# Scene 11: bright plucks as the cells land, and the theme in full.
-for i in range(22):
+    place(music, pluck(note(n)), card("methods", 2.0 + 0.5 * i), pan=0.4 * np.sin(i), gain=0.06)
+# Scene 11: bright plucks as the cells land, and the theme in full as each
+# shows its answer.
+for i in range(14):
     n = ["D5", "E5", "F#5", "A5", "B5", "D6"][int(rng.integers(6))]
-    place(music, pluck(note(n)), at("atlas", 2.0 + 4.0 * i / 22 + rng.uniform(0, 0.08)), pan=rng.uniform(-0.7, 0.7), gain=0.05)
+    place(music, pluck(note(n)), cue("atlas", 2, 0.6 + 1.0 * i / 14 + rng.uniform(0, 0.06)), pan=rng.uniform(-0.7, 0.7), gain=0.05)
 for i, n in enumerate(THEME):
-    place(music, tone(note(n), 3, decay=1.5), at("atlas", 3.0 + 0.55 * i), gain=0.12)
-    place(music, tone(note(n) / 2, 3, decay=1.5), at("atlas", 3.0 + 0.55 * i), gain=0.045)
-# Scene 12: the bright final chord as the camera surfaces; it rings out
-# under the end card and fades with the bed.
+    place(music, tone(note(n), 3, decay=1.5), cue("atlas", 3, 0.55 * i), gain=0.12)
+    place(music, tone(note(n) / 2, 3, decay=1.5), cue("atlas", 3, 0.55 * i), gain=0.045)
+# Scene 12: the bright final chord as the camera breaks the surface; it
+# rings out under the end card and fades with the bed.
 for i, n in enumerate(["D3", "A3", "D4", "F#4", "A4", "D5", "F#5"]):
-    place(music, tone(note(n), 2.75, decay=1.4, attack=0.02), at("light", 3.2 + 0.03 * i), pan=-0.5 + i / 6, gain=0.1)
+    place(music, tone(note(n), 2.75, decay=1.4, attack=0.02), card("light", -0.4 + 0.03 * i), pan=-0.5 + i / 6, gain=0.1)
 music *= smoothstep((TOTAL - 0.05 - t) / 1.2)[:, None]
 
 # ---- write, peaking a little under full scale ----

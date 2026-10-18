@@ -1,23 +1,25 @@
 <template>
-    <!-- Scene 11, 1:44 to 1:54: in your browser. The camera pulls back from
-         scene 10 to a window like the Atlas page's; the PBMC240 example
-         file drops in and its cells fly out of it and land on the reference
-         in 3D, each in the Atlas page's look for its answer (lib/scenes.js,
-         from web/data/workflow.json). The words and the window are white
-         cards, and arrive with the camera. -->
+    <!-- Scene 11: in your browser. It opens on the file scene 10 gathered,
+         now the PBMC240 example file in a window like the Atlas page's,
+         over the reference atlas in 3D, turning slowly. As the voice says
+         to send your file, the file is ringed; as it says your cells land
+         on the map, they fly out of the file and land, each with a trail;
+         as it says each with its answer, they take the Atlas page's looks
+         for their answers (lib/scenes.js, from web/data/workflow.json). At
+         the close a few landed cells rise to the window's top edge, where
+         scene 12's bubbles start. White cards. -->
     <style>
         #s-atlas .left { left: 110px; top: 170px; width: 560px; padding: 40px 46px; }
         #s-atlas .left .f-display { font-size: 88px; }
-        #s-atlas .left .f-sub { margin-top: 26px; font-size: 32px; }
+        #s-atlas .left .f-sub { margin-top: 26px; font-size: 32px; opacity: 0; }
         #s-atlas .window { left: 700px; top: 150px; width: 1060px; height: 790px; padding: 0; overflow: hidden; }
         #s-atlas .bar { height: 70px; display: flex; align-items: center; gap: 26px; padding: 0 30px; border-bottom: 1px solid var(--line); }
         #s-atlas .bar .wordmark { font-size: 26px; font-weight: 600; color: var(--ink); }
         #s-atlas .bar .tab { font-size: 21px; color: var(--ink-soft); padding: 6px 16px; border-radius: 999px; }
         #s-atlas .bar .tab.on { background: var(--well); color: var(--ink); }
         #s-atlas .window canvas { position: absolute; left: 0; top: 70px; }
-        #s-atlas .file { position: absolute; left: 34px; top: 92px; opacity: 0; border: 2px solid var(--line); }
+        #s-atlas .file { position: absolute; left: 34px; top: 92px; border: 2px solid var(--line); }
         #s-atlas .receipt { position: absolute; left: 30px; bottom: 26px; opacity: 0; border: 2px solid var(--line); }
-        #s-atlas .f-sub { opacity: 0; }
         #s-atlas .left .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-atlas" class="scene" data-composition-id="s-atlas" data-width="1920" data-height="1080">
@@ -31,18 +33,21 @@
             <span class="file f-chip">The PBMC240 example file</span>
             <span class="receipt f-chip"><span>Answered by <span data-slot="fact:model_name"></span>, atlas <span data-slot="fact:atlas_version"></span></span></span>
         </div>
+        <canvas id="atlas-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-atlas'));
+            const root = document.getElementById('s-atlas');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
+            const id = 'atlas';
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-atlas .left .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.5);
-            tl.fromTo('#s-atlas .f-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.0);
-            tl.fromTo('#s-atlas .file', { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1.2);
-            tl.fromTo('#s-atlas .receipt', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 7.6);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-atlas', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
+            C.card(tl, root, id);
+            // "It runs online."
+            tl.fromTo('#s-atlas .left .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.1);
+            // "Send your file from the Atlas page,"
+            tl.fromTo('#s-atlas .f-sub', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, C.cue(id, 1));
+            tl.fromTo('#s-atlas .receipt', { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, 6.8);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-atlas'] = tl;
         })();

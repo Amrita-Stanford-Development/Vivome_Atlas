@@ -250,12 +250,13 @@ The film keeps this design system at 1920 by 1080: the site's stylesheet,
 type and objects, the cut motif once per headline, RNA and protein in their
 reserved colours only where they mean RNA and protein, the atlas palette for
 cell types, and the site's white field and gel under every scene, the same
-throughout. Depth shows in the objects, which come closer and larger as the
-camera goes down, never in the background's colour. Every word and diagram
+throughout. Depth shows in the camera's journeys down and up, the depth
+gauge and the waterline, never in the background's colour. Every word and diagram
 sits on one of the site's cards, in the site's dark ink: the white sheet in
-odd scenes, liquid glass in even ones. The cards keep their place in the
-film's world and move with its one camera, so a scene hands over to the
-next by the camera's travel and a morph between the two, never by a fade.
+odd scenes, liquid glass in even ones. A card never moves: it fades in
+where it stands once the camera has come to rest, and fades out before the
+camera travels on through the water to the next; the water's objects keep
+their size as it does.
 
 ## Shared chrome
 

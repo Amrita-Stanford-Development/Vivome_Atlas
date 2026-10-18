@@ -1,15 +1,18 @@
 <template>
-    <!-- Scene 4, 0:28 to 0:38: RNA has names. The dots from scene 3 gather
-         in front of the camera, and the reference's own cells stream out of
-         them into the atlas in 3D, taking each type's colour as it is named,
-         while the map's camera flies in and draws back (lib/scenes.js, from
-         web/data/workflow.json). The words and the map each sit on liquid
-         glass, and arrive with the camera. -->
+    <!-- Scene 4: RNA has names. It opens on scene 3's dots, gathered as an
+         orange cloud, which streams out into the reference atlas in 3D
+         while the map turns slowly (lib/scenes.js, from
+         web/data/workflow.json). As the voice says the atlases are large,
+         the cells reach their full number and the count runs up; as it
+         says every cell has a name, each takes its type's colour, the map
+         comes to rest, and the big types are named. At the close a band of
+         the atlas's cells gathers at the map's top edge, where scene 5's
+         wordmark forms from them. Liquid glass. -->
     <style>
         #s-rna .left { left: 100px; top: 150px; width: 690px; padding: 40px 46px; }
         #s-rna .left .f-display { font-size: 88px; }
         #s-rna .fig { margin-top: 40px; opacity: 0; }
-        #s-rna .f-caption { margin-top: 8px; }
+        #s-rna .f-caption { margin-top: 8px; opacity: 0; }
         #s-rna .map { left: 820px; top: 110px; padding: 0; overflow: hidden; }
         #s-rna .cut { clip-path: inset(0 100% 0 0); }
     </style>
@@ -18,21 +21,26 @@
         <div class="left card liquid">
             <h1 class="f-display">RNA atlases already name their <span class="cut">cells.</span></h1>
             <div class="fig">
-                <span class="f-stat" data-slot="ms:ref_cells" data-count-at="4.4" data-count-for="1.8"></span>
+                <span class="f-stat" data-slot="ms:ref_cells" data-count-cue="1" data-count-for="1.6"></span>
                 <span class="f-label">RNA cells, each one labelled</span>
                 <span class="f-caption">in <span data-slot="ms:ref_classes"></span> blood and immune cell types, from Tabula Sapiens</span>
             </div>
         </div>
+        <canvas id="rna-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-rna'));
+            const root = document.getElementById('s-rna');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-rna .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.8);
-            tl.fromTo('#s-rna .fig', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 4.2);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-rna', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
+            C.card(tl, root, 'rna');
+            // "Single-cell RNA is different."
+            tl.fromTo('#s-rna .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.6);
+            // "Its atlases are large,"
+            tl.fromTo('#s-rna .fig', { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, C.cue('rna', 1));
+            // "and every cell in them has a name."
+            tl.fromTo('#s-rna .f-caption', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 6.4);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-rna'] = tl;
         })();

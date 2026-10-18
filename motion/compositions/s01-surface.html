@@ -1,28 +1,45 @@
 <template>
-    <!-- Scene 1, 0:00 to 0:08: the surface. Rain rings the water; the title
-         rises in under the waterline, on a white card. -->
+    <!-- Scene 1: the surface. The camera has come down through the rain
+         onto the water; the title card and a readout card fade in where
+         they stand. As the voice says single cells are measured, one cell
+         of the PBMC240 example file draws its proteins as bars, and as it
+         says one cell at a time, two more cells queue behind it
+         (lib/scenes.js). At the close the bars fold back into the cell,
+         which settles where scene 2 opens. White cards. -->
     <style>
-        #s-surface .title { left: 140px; top: 400px; max-width: 1420px; opacity: 0; }
+        #s-surface .title { left: 120px; top: 330px; width: 1010px; }
+        #s-surface .title .f-display { font-size: 92px; }
         #s-surface .w, #s-surface .f-eyebrow { display: inline-block; opacity: 0; }
         #s-surface .cut { clip-path: inset(0 100% 0 0); }
+        #s-surface .readout { left: 1200px; top: 210px; padding: 0; overflow: hidden; }
+        #s-surface .readout .f-caption { position: absolute; left: 32px; bottom: 22px; font-size: 22px; opacity: 0; }
     </style>
     <div id="s-surface" class="scene" data-composition-id="s-surface" data-width="1920" data-height="1080">
         <div class="title card sheet">
             <span class="f-eyebrow">Single-cell proteomics</span>
             <h1 class="f-display"><span class="w">Proteins,</span> <span class="w">measured</span> <span class="w">one</span> <span class="w">cell</span> <span class="w">at</span> <span class="w">a</span> <span class="cut">time.</span></h1>
         </div>
+        <div class="readout card sheet">
+            <canvas id="readout-canvas" width="600" height="660" data-layout-ignore></canvas>
+            <span class="f-caption">One cell of the PBMC240 example file</span>
+        </div>
+        <canvas id="surface-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-surface'));
+            const root = document.getElementById('s-surface');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-surface .title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 1.0);
-            tl.fromTo('#s-surface .f-eyebrow', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1.4);
-            tl.fromTo('#s-surface .w', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12 }, 1.8);
-            tl.fromTo('#s-surface .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 2.9);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-surface', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 9.2);
+            C.card(tl, root, 'surface');
+            const words = root.querySelectorAll('.w');
+            // "...measure the proteins inside single cells,"
+            tl.fromTo('#s-surface .f-eyebrow', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 0.3);
+            tl.fromTo([words[0], words[1]], { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', stagger: 0.2 }, 0.7);
+            tl.fromTo('#s-surface .readout .f-caption', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 1.9);
+            // "one cell at a time."
+            tl.fromTo([words[2], words[3], words[4], words[5]], { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out', stagger: 0.16 }, C.cue('surface', 1));
+            tl.fromTo('#s-surface .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, C.cue('surface', 1, 0.9));
             window.__timelines = window.__timelines || {};
             window.__timelines['s-surface'] = tl;
         })();

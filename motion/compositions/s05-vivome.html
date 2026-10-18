@@ -1,23 +1,29 @@
 <template>
-    <!-- Scene 5, 0:38 to 0:50: VivOME. Cells of scene 4's atlas stream into
-         the wordmark (lib/bridges.js) and it forms on a white card; then the
-         idea on a second one: trained on RNA, read on protein, with one gene
-         list between the two sides, and dots running across the link from
-         the RNA side to the protein side (lib/scenes.js). -->
+    <!-- Scene 5: VivOME. It opens on the band of atlas cells scene 4 left,
+         which flows into the wordmark as it forms (lib/scenes.js). Then the
+         idea, on a second card, phrase by phrase with the voice: labelled
+         RNA on one side; as the voice says it reads each protein cell, the
+         protein side and the link between them, with dots running across
+         it; then "no protein labels", "no paired cells", "no retraining",
+         each as it is said. At the close the dots pile into a row of tiles
+         at the card's foot, where scene 6's matrix fills from. White
+         cards. -->
     <style>
-        #s-vivome .mark { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; }
-        #s-vivome .mark .card { position: relative; padding: 30px 64px; opacity: 0; }
+        #s-vivome .mark { position: absolute; left: 0; right: 0; top: 60px; display: flex; justify-content: center; }
+        #s-vivome .mark .card { position: relative; padding: 30px 64px; }
+        #s-vivome .f-wordmark { font-size: 150px; }
         #s-vivome .f-wordmark .cut { clip-path: inset(0 100% 0 0); }
-        #s-vivome .say { left: 210px; right: 210px; top: 250px; text-align: center; opacity: 0; }
-        #s-vivome .say .f-display { opacity: 0; }
-        #s-vivome .say .f-sub { margin: 22px auto 0; max-width: 40ch; opacity: 0; }
+        #s-vivome .say { left: 210px; right: 210px; top: 300px; text-align: center; }
+        #s-vivome .say .second { opacity: 0; }
+        #s-vivome .say .f-sub { margin: 22px auto 0; max-width: 40ch; }
+        #s-vivome .say .part { opacity: 0; }
         #s-vivome .say .cut { clip-path: inset(0 100% 0 0); }
         #s-vivome .bridge { position: relative; height: 160px; margin-top: 46px; }
         #s-vivome .side { position: absolute; top: 0; width: 380px; display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0; }
         #s-vivome .side.rna { left: 40px; }
         #s-vivome .side.prot { right: 40px; }
         #s-vivome .side .f-label { margin: 0; color: var(--ink); font-size: 32px; }
-        #s-vivome .link { position: absolute; left: 440px; right: 440px; top: 52px; height: 5px; border-radius: 5px; background: linear-gradient(90deg, var(--rna), var(--accent), var(--prot)); transform-origin: left center; transform: scaleX(0); }
+        #s-vivome .link { position: absolute; left: 440px; right: 440px; top: 52px; height: 5px; border-radius: 5px; background: linear-gradient(90deg, var(--rna), var(--accent), var(--prot)); clip-path: inset(0 100% 0 0); }
         #s-vivome #link-canvas { position: absolute; left: 420px; top: 30px; pointer-events: none; }
         #s-vivome .genes { position: absolute; left: 0; right: 0; top: 78px; opacity: 0; }
         #s-vivome .genes .f-label { color: var(--ink); margin: 0; }
@@ -26,8 +32,8 @@
     <div id="s-vivome" class="scene" data-composition-id="s-vivome" data-width="1920" data-height="1080">
         <div class="mark"><div class="card sheet"><span class="f-wordmark">Viv<span class="cut">OME</span></span></div></div>
         <div class="say card sheet">
-            <h1 class="f-display">Trained on RNA.<br>Read on <span class="cut">protein.</span></h1>
-            <p class="f-sub">No protein labels, no paired cells, no retraining on your data.</p>
+            <h1 class="f-display">Trained on RNA.<br><span class="second">Read on <span class="cut">protein.</span></span></h1>
+            <p class="f-sub"><span class="part">No protein labels,</span> <span class="part">no paired cells,</span> <span class="part">no retraining on your data.</span></p>
             <div class="bridge">
                 <div class="side rna"><span class="bead bead-rna">RNA</span><span class="f-label">Labelled RNA</span></div>
                 <div class="link"></div>
@@ -37,28 +43,33 @@
             </div>
             <div class="aside"><span class="f-caption">It carries the names across. It never mixes the two kinds of data.</span></div>
         </div>
+        <canvas id="vivome-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-vivome'));
+            const root = document.getElementById('s-vivome');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
             const tl = gsap.timeline({ paused: true });
-            // The wordmark forms as scene 4's cells stream into it.
-            tl.fromTo('#s-vivome .mark .card', { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 1.0);
-            tl.fromTo('#s-vivome .f-wordmark .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.8, ease: 'power2.inOut' }, 1.5);
-            // The wordmark rises to the top of the frame and makes room.
-            tl.fromTo('#s-vivome .mark', { y: 0, scale: 1 }, { y: -265, scale: 0.42, duration: 1.1, ease: 'power3.inOut' }, 3.6);
-            tl.fromTo('#s-vivome .say', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 4.2);
-            tl.fromTo('#s-vivome .say .f-display', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 4.4);
-            tl.fromTo('#s-vivome .say .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 5.2);
-            tl.fromTo('#s-vivome .say .f-sub', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 5.8);
-            tl.fromTo('#s-vivome .side.rna', { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 6.8);
-            tl.fromTo('#s-vivome .side.prot', { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 7.2);
-            tl.fromTo('#s-vivome .link', { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: 'power2.inOut' }, 7.6);
-            tl.fromTo('#s-vivome .genes', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 8.3);
-            tl.fromTo('#s-vivome .aside', { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power1.out' }, 8.9);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-vivome', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 13.2);
+            C.card(tl, root, 'vivome', { later: [['#s-vivome .say', 1.4]] });
+            const reveal = (target, at, duration = 0.6) => tl.fromTo(target, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration, ease: 'power2.inOut' }, at);
+            const show = (target, at, duration = 0.6) => tl.fromTo(target, { opacity: 0 }, { opacity: 1, duration, ease: 'power1.out' }, at);
+            // "Vivome learns blood cell types from labelled RNA alone,"
+            reveal('#s-vivome .f-wordmark .cut', 0.8, 0.6);
+            show('#s-vivome .side.rna', 2.6);
+            // "then reads each protein cell against that reference."
+            show('#s-vivome .say .second', C.cue('vivome', 1), 0.5);
+            reveal('#s-vivome .say .cut', C.cue('vivome', 1, 0.6), 0.5);
+            show('#s-vivome .side.prot', C.cue('vivome', 1, 0.2));
+            reveal('#s-vivome .link', 5.0, 1.0);
+            show('#s-vivome .genes', 6.2);
+            // "No protein labels, no paired cells, and no retraining on your data."
+            // (A phrase that wraps onto a second line fades in whole.)
+            const parts = root.querySelectorAll('.part');
+            show(parts[0], C.cue('vivome', 2), 0.5);
+            show(parts[1], C.cue('vivome', 3), 0.5);
+            show(parts[2], C.cue('vivome', 4), 0.5);
+            show('#s-vivome .aside', 12.6, 0.8);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-vivome'] = tl;
         })();

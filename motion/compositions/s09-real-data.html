@@ -1,17 +1,25 @@
 <template>
-    <!-- Scene 9, 1:20 to 1:32: on real protein data, at the deepest point of
-         the dive. Every number is a slot filled from web/data/manuscript.json
-         (scripts/prepare.mjs), each with the caveat the Manuscript page gives
-         it. Headline, results and note each on a white card. -->
+    <!-- Scene 9: on real protein data, at the deepest point of the dive.
+         Every number is a slot filled from web/data/manuscript.json
+         (scripts/prepare.mjs), each with the caveat the Manuscript page
+         gives it, and each drawn from its own record (lib/scenes.js): it
+         opens on scene 8's block of particles, which becomes a grid of a
+         hundred squares; as the voice says how often VivOME answers, the
+         grid fills to that share; as it says how often those answers are
+         right, the right ones turn solid. Khoury 2026's two lineages fill
+         as bars. At the close the grid's squares slide into one row, where
+         scene 10's methods line up. White cards. -->
     <style>
         #s-real-data .head { left: 140px; top: 70px; padding-top: 32px; padding-bottom: 32px; }
-        #s-real-data .result { top: 290px; width: 780px; height: 560px; display: flex; flex-direction: column; opacity: 0; }
+        #s-real-data .result { top: 290px; width: 780px; height: 560px; display: flex; flex-direction: column; }
         #s-real-data .result.a { left: 140px; }
         #s-real-data .result.b { left: 960px; }
         #s-real-data .result-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
         #s-real-data .result-head .f-label { margin: 0; color: var(--ink); font-weight: 600; font-size: 34px; }
+        #s-real-data .fig { max-width: 420px; opacity: 0; }
         #s-real-data .fig + .fig { margin-top: 36px; }
-        #s-real-data .foot { left: 140px; top: 890px; width: 1600px; padding: 24px 40px; opacity: 0; }
+        #s-real-data .result canvas { position: absolute; left: 470px; top: 130px; }
+        #s-real-data .foot { left: 140px; top: 890px; width: 1600px; padding: 24px 40px; }
         #s-real-data .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-real-data" class="scene" data-composition-id="s-real-data" data-width="1920" data-height="1080">
@@ -21,38 +29,49 @@
         <div class="result a card sheet">
             <div class="result-head"><span class="f-label">Fulcher 2026</span><span class="bead caveat" data-caveat="development">development</span></div>
             <div class="fig">
-                <span class="f-stat" data-slot="ms:committed_fulcher" data-count-at="2.2"></span>
+                <span class="f-stat" data-slot="ms:committed_fulcher" data-count-cue="1"></span>
                 <span class="f-label">of cells given an answer</span>
             </div>
             <div class="fig">
-                <span class="f-stat" data-slot="ms:correct_fulcher" data-count-at="3.0"></span>
+                <span class="f-stat" data-slot="ms:correct_fulcher" data-count-cue="2"></span>
                 <span class="f-label">of those answers right, at the level stated</span>
             </div>
+            <canvas id="waffle-canvas" width="280" height="280" data-layout-ignore></canvas>
         </div>
         <div class="result b card sheet">
             <div class="result-head"><span class="f-label">Khoury 2026</span><span class="bead caveat" data-caveat="post-hoc">post-hoc</span></div>
             <div class="fig">
-                <span class="f-stat" data-slot="ms:khoury_lymphoid" data-count-at="4.2"></span>
+                <span class="f-stat" data-slot="ms:khoury_lymphoid" data-count-at="6.6"></span>
                 <span class="f-label">of lymphoid cells put in the lymphoid lineage</span>
             </div>
             <div class="fig">
-                <span class="f-stat" data-slot="ms:khoury_myeloid" data-count-at="5.0"></span>
+                <span class="f-stat" data-slot="ms:khoury_myeloid" data-count-at="7.5"></span>
                 <span class="f-label">of myeloid cells put in the myeloid lineage</span>
             </div>
+            <canvas id="lineage-canvas" width="280" height="360" data-layout-ignore></canvas>
         </div>
         <div class="foot card sheet"><span class="f-caption">Development: these data were used while VivOME was built. Post-hoc: their labels had been read before.</span></div>
+        <canvas id="real-data-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-real-data'));
+            const root = document.getElementById('s-real-data');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
+            const id = 'real-data';
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-real-data .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
-            tl.fromTo('#s-real-data .result.a', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 1.6);
-            tl.fromTo('#s-real-data .result.b', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 3.6);
-            tl.fromTo('#s-real-data .foot', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 6.2);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-real-data', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 13.2);
+            C.card(tl, root, id, { later: [['#s-real-data .result.b', 6.2], ['#s-real-data .foot', 10.0]] });
+            const show = (target, at) => tl.fromTo(target, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, at);
+            const figs = root.querySelectorAll('.fig');
+            // "On real blood protein data,"
+            tl.fromTo('#s-real-data .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.4);
+            // "here is how often it answers,"
+            show(figs[0], C.cue(id, 1));
+            // "and how often those answers are right."
+            show(figs[1], C.cue(id, 2));
+            // Khoury 2026's two lineages.
+            show(figs[2], 6.6);
+            show(figs[3], 7.5);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-real-data'] = tl;
         })();

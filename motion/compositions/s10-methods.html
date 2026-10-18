@@ -1,22 +1,31 @@
 <template>
-    <!-- Scene 10, 1:32 to 1:44: against established methods, and the limits.
-         The sealed test's record is pending, so it reads Pending. Headline,
-         results and limits each on liquid glass. -->
+    <!-- Scene 10: against established methods, and the limits. It opens on
+         the row of dots scene 9 left, which becomes the row of methods, each
+         named in turn. As the voice says VivOME is level with the best, the
+         comparisons come in, one square for each baseline run and each
+         paired comparison, filled where it favours VivOME (lib/scenes.js,
+         from web/data/manuscript.json). As it says where VivOME is still
+         weak, the limits card names them, the weak types as dashed rings;
+         as it says "it says so", the sealed test on sorted cells shows as
+         Pending, which its record is. At the close the squares gather into
+         a file, where scene 11's file opens. Liquid glass. -->
     <style>
         #s-methods .head { left: 140px; top: 50px; width: 1600px; padding: 32px 52px 34px; }
-        #s-methods .head .f-sub { margin-top: 18px; max-width: 52ch; }
+        #s-methods .head .f-sub { margin-top: 18px; max-width: 52ch; opacity: 0; }
         #s-methods .methods { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 14px; }
         #s-methods .method { opacity: 0; border: 2px solid rgba(0, 102, 163, 0.35); }
-        #s-methods .result { top: 596px; width: 780px; padding: 28px 40px; opacity: 0; }
+        #s-methods .result { top: 596px; width: 780px; padding: 28px 40px; }
         #s-methods .result.a { left: 140px; }
         #s-methods .result.b { left: 960px; }
         #s-methods .result .f-stat { font-size: 92px; }
         #s-methods .result .row { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 12px; }
-        #s-methods .result .row .f-label { margin: 0; }
-        #s-methods .limits { left: 140px; top: 870px; width: 1600px; padding: 24px 40px; display: grid; gap: 8px; opacity: 0; }
+        #s-methods .result .row .f-label { margin: 0; max-width: 21ch; }
+        #s-methods .result canvas { position: absolute; left: 480px; top: 12px; }
+        #s-methods .limits { left: 140px; top: 870px; width: 1600px; padding: 24px 40px; display: grid; gap: 8px; }
         #s-methods .limits .f-caption { color: var(--ink); }
+        #s-methods .limits .sealed { opacity: 0; }
         #s-methods .limits .bead { margin-left: 12px; vertical-align: 3px; }
-        #s-methods .f-sub { opacity: 0; }
+        #s-methods .limits canvas { position: absolute; left: 1200px; top: 16px; }
         #s-methods .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-methods" class="scene" data-composition-id="s-methods" data-width="1920" data-height="1080">
@@ -30,29 +39,37 @@
         <div class="result a card liquid">
             <span class="f-stat"><span data-slot="ms:bm_khoury_baseline_favour"></span> of <span data-slot="ms:bm_khoury_baseline_runs"></span></span>
             <div class="row"><span class="f-label">baseline runs favour VivOME on Khoury 2026</span><span class="bead caveat" data-caveat="post-hoc">post-hoc</span></div>
+            <canvas id="runs-canvas" width="240" height="120" data-layout-ignore></canvas>
         </div>
         <div class="result b card liquid">
             <span class="f-stat"><span data-slot="ms:bm_fulcher_favour"></span> of <span data-slot="ms:bm_fulcher_pairings"></span></span>
             <div class="row"><span class="f-label">paired comparisons favour VivOME on Fulcher 2026</span><span class="bead caveat" data-caveat="in-sample">in-sample</span></div>
+            <canvas id="pairs-canvas" width="240" height="120" data-layout-ignore></canvas>
         </div>
         <div class="limits card liquid">
             <span class="f-caption">Still weak: CD8 T cells and dendritic cells, for every method tested.</span>
-            <span class="f-caption">A sealed test on sorted cells: <span data-slot="ms:open_sorted_test"></span><span class="bead bead-open caveat" data-caveat="pending">pending</span></span>
+            <span class="f-caption sealed">A sealed test on sorted cells: <span data-slot="ms:open_sorted_test"></span><span class="bead bead-open caveat" data-caveat="pending">pending</span></span>
+            <canvas id="weak-canvas" width="300" height="80" data-layout-ignore></canvas>
         </div>
+        <canvas id="methods-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-methods'));
+            const root = document.getElementById('s-methods');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
+            const id = 'methods';
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-methods .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
-            tl.fromTo('#s-methods .f-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 1.8);
-            // The methods rise in as bubbles, one after another.
-            tl.fromTo('#s-methods .method', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.18 }, 2.8);
-            tl.fromTo('#s-methods .result', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 1.2 }, 4.6);
-            tl.fromTo('#s-methods .limits', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 7.6);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-methods', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 13.2);
+            C.card(tl, root, id, {
+                later: [['#s-methods .result.a', C.cue(id, 2)], ['#s-methods .result.b', 4.6], ['#s-methods .limits', C.cue(id, 3)]],
+            });
+            // "Against established methods," the methods, one after another.
+            tl.fromTo('#s-methods .method', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out', stagger: 0.18 }, 0.3);
+            tl.fromTo('#s-methods .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.3);
+            // "on real protein data, it is level with the best and ahead of the rest."
+            tl.fromTo('#s-methods .f-sub', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, C.cue(id, 1));
+            // "Where it is still weak, it says so."
+            tl.fromTo('#s-methods .sealed', { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, C.cue(id, 4));
             window.__timelines = window.__timelines || {};
             window.__timelines['s-methods'] = tl;
         })();

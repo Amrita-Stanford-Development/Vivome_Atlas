@@ -1,18 +1,20 @@
 <template>
-    <!-- Scene 8, 1:12 to 1:20: a second opinion. Two currents, the encoder
-         and the correlation to each RNA type's average, start where scene
-         7's ladder folded into them (lib/bridges.js); they flow to a gate, a
-         meter fills to its mark, the gate opens, and they run on as one best
-         guess (lib/scenes.js draws them). Headline and diagram on liquid
-         glass. -->
+    <!-- Scene 8: a second opinion. Its two currents start where scene 7's
+         strokes ended: the encoder's draws first, then the correlation to
+         each RNA type's average, each with particles flowing along it
+         (lib/scenes.js). As the voice says the second opinion is used only
+         when the file agrees with the encoder, the gate appears with its
+         note; a meter fills to its mark, the gate opens, and the two run on
+         as one best guess. At the close the particles pack into a block,
+         where scene 9's first result fills from. Liquid glass. -->
     <style>
         #s-second-opinion .head { left: 140px; top: 56px; max-width: 1480px; padding-top: 32px; padding-bottom: 32px; }
-        #s-second-opinion .new { margin-top: 18px; }
+        #s-second-opinion .new { margin-top: 18px; opacity: 0; }
         #s-second-opinion .diagram { left: 110px; top: 470px; width: 1680px; height: 580px; padding: 0; }
-        #s-second-opinion .tag { position: absolute; opacity: 0; }
-        #s-second-opinion .gate-note { position: absolute; left: 1000px; top: 512px; width: 440px; text-align: center; opacity: 0; }
+        #s-second-opinion .tag { position: absolute; }
+        #s-second-opinion .gate-note { position: absolute; left: 1000px; top: 512px; width: 440px; text-align: center; }
         #s-second-opinion .gate-note .f-caption { color: var(--ink); }
-        #s-second-opinion .guess { position: absolute; left: 1440px; top: 770px; opacity: 0; font-size: 31px; padding: 12px 30px; border: 3px solid var(--accent-bright); }
+        #s-second-opinion .guess { position: absolute; left: 1440px; top: 770px; font-size: 31px; padding: 12px 30px; border: 3px solid var(--accent-bright); }
         #s-second-opinion .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-second-opinion" class="scene" data-composition-id="s-second-opinion" data-width="1920" data-height="1080">
@@ -21,22 +23,33 @@
             <span class="new f-chip"><span>New in <span data-slot="fact:model_name"></span></span></span>
         </div>
         <div class="diagram card liquid"><canvas id="so-canvas" width="1678" height="578" data-layout-ignore></canvas></div>
-        <span class="tag f-chip" style="left: 170px; top: 610px">The encoder</span>
-        <span class="tag f-chip" style="left: 170px; top: 960px">Correlation to each RNA type's average</span>
+        <span class="tag encoder f-chip" style="left: 170px; top: 610px">The encoder</span>
+        <span class="tag correlation f-chip" style="left: 170px; top: 960px">Correlation to each RNA type's average</span>
         <div class="gate-note"><span class="f-caption">Used only when your file agrees with the encoder</span></div>
         <span class="guess f-chip">Best guess</span>
+        <canvas id="second-opinion-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-second-opinion'));
+            const root = document.getElementById('s-second-opinion');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
+            const so = window.VIVOME.secondOpinion;
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-second-opinion .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.0);
-            tl.fromTo('#s-second-opinion .tag', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.5 }, 1.6);
-            tl.fromTo('#s-second-opinion .gate-note', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 3.3);
-            tl.fromTo('#s-second-opinion .guess', { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.6)' }, 5.0);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-second-opinion', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 9.2);
+            // Each current's tag with its current; the gate's note as the
+            // voice says when the second opinion is used; the best guess
+            // once the two have run on as one.
+            C.card(tl, root, 'second-opinion', {
+                later: [
+                    ['#s-second-opinion .tag.encoder', so.encoder[0]],
+                    ['#s-second-opinion .tag.correlation', so.correlation[0]],
+                    ['#s-second-opinion .gate-note', C.cue('second-opinion', 1)],
+                    ['#s-second-opinion .guess', so.guess],
+                ],
+            });
+            // "Its best guess adds a second opinion,"
+            tl.fromTo('#s-second-opinion .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.6);
+            tl.fromTo('#s-second-opinion .new', { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, 2.0);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-second-opinion'] = tl;
         })();

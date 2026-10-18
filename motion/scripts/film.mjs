@@ -8,7 +8,7 @@
 //    time and the music ducked under the voice (a sidechain compressor),
 //    the whole brought to -16 LUFS;
 // 4. FFmpeg writes renders/<name>.mp4 (1280 by 720, H.264 and AAC) and a
-//    smaller copy for sending, renders/<name>-share.mp4 (about 17 MB).
+//    smaller copy for sending, renders/<name>-share.mp4 (about 20 MB).
 //
 // Run scripts/prepare.mjs and scripts/manim.mjs first (npm run film does).
 // Everything it writes is gitignored; nothing goes on the site.
@@ -33,6 +33,8 @@ const run = (cmd, args, label = cmd) => {
   if (r.status !== 0) throw new Error(`${label} failed (${r.status})`);
 };
 const clock = (start) => `${((Date.now() - start) / 1000).toFixed(0)} s`;
+// The film's length, from the storyboard (scripts/prepare.mjs writes it).
+const TOTAL = JSON.parse(readFileSync(join(ROOT, 'build', 'timeline.json'), 'utf8')).total;
 
 const t0 = Date.now();
 if (!skipRender || !existsSync(master)) {
@@ -50,7 +52,8 @@ const voice = JSON.parse(readFileSync(join(audio, 'voice.json'), 'utf8'));
 const long = voice.lines.filter((l) => !l.fits);
 if (long.length) console.warn(`film: voice lines that run long: ${long.map((l) => l.id).join(', ')}`);
 
-// The mix: voice lines at their times, the music ducked under them.
+// The mix: each voice line where its card's line starts, the music ducked
+// under them.
 const inputs = ['-i', join(audio, 'music.wav')];
 const lines = voice.lines.map((l, k) => {
   inputs.push('-i', join(ROOT, l.file));
@@ -59,12 +62,12 @@ const lines = voice.lines.map((l, k) => {
 });
 const filter = [
   ...lines,
-  `${voice.lines.map((_, k) => `[v${k}]`).join('')}amix=inputs=${voice.lines.length}:normalize=0:duration=longest,apad=whole_dur=120[voice]`,
+  `${voice.lines.map((_, k) => `[v${k}]`).join('')}amix=inputs=${voice.lines.length}:normalize=0:duration=longest,apad=whole_dur=${TOTAL}[voice]`,
   '[voice]asplit=2[vo][key]',
   '[0:a][key]sidechaincompress=threshold=0.01:ratio=12:attack=20:release=500:makeup=1[ducked]',
   '[ducked]volume=0.42[m]',
   '[vo]volume=1.0[v]',
-  '[m][v]amix=inputs=2:normalize=0:duration=first,atrim=0:120,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[out]',
+  `[m][v]amix=inputs=2:normalize=0:duration=first,atrim=0:${TOTAL},loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[out]`,
 ].join(';');
 const mix = join(audio, 'mix.wav');
 run('ffmpeg', ['-v', 'error', '-y', ...inputs, '-filter_complex', filter, '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', mix], 'mix');
@@ -79,7 +82,10 @@ run('ffmpeg', ['-v', 'error', '-y', '-i', master, '-i', mix, '-map', '0:v', '-ma
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '20', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k',
   '-movflags', '+faststart', '-shortest', draft], 'draft');
 const log = join(audio, 'share2pass');
-const shareVideo = ['-vf', scale, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '1000k', '-maxrate', '1500k', '-bufsize', '3000k', '-pix_fmt', 'yuv420p', '-passlogfile', log];
+// The copy for sending: a picture rate that keeps it near 20 MB whatever
+// the film's length (at most 1000 kbit/s), beside 128 kbit/s of sound.
+const kbps = Math.min(1000, Math.floor((19.5e6 * 8) / TOTAL / 1000 - 128));
+const shareVideo = ['-vf', scale, '-c:v', 'libx264', '-preset', 'slow', '-b:v', `${kbps}k`, '-maxrate', `${Math.round(kbps * 1.5)}k`, '-bufsize', `${kbps * 3}k`, '-pix_fmt', 'yuv420p', '-passlogfile', log];
 run('ffmpeg', ['-v', 'error', '-y', '-i', master, ...shareVideo, '-pass', '1', '-an', '-f', 'mp4', process.platform === 'win32' ? 'NUL' : '/dev/null'], 'share, pass 1');
 run('ffmpeg', ['-v', 'error', '-y', '-i', master, '-i', mix, '-map', '0:v', '-map', '1:a', ...shareVideo, '-pass', '2',
   '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', '-shortest', share], 'share, pass 2');

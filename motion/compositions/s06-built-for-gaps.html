@@ -1,14 +1,17 @@
 <template>
-    <!-- Scene 6, 0:50 to 1:00: built for gaps. The matrix of scene 3 again:
-         a mask marks each gap, each protein is scaled within the file, then
-         smoothed over similar cells, each step a band sweeping the matrix
-         (lib/scenes.js, from web/data/workflow.json). Headline, points and
-         matrix on liquid glass. As the camera leaves, the rows stream into
-         the encoders (lib/bridges.js). -->
+    <!-- Scene 6: built for gaps. It opens on the row of tiles scene 5 left,
+         which fills down into scene 3's matrix again (lib/scenes.js, from
+         web/data/workflow.json). Each point lands as the voice says it, with
+         its step on the matrix: a mask marks each gap; a band sweeps down as
+         each protein is scaled within the file; a band sweeps across as
+         each cell borrows from similar cells; then the encoders, one for
+         each of the served model's members, take in the rows and their
+         answers merge. At the close the merged points gather at the
+         matrix's edge, where scene 7's map grows from. Liquid glass. -->
     <style>
         #s-built-for-gaps .head { left: 140px; top: 70px; padding-top: 34px; padding-bottom: 34px; }
         #s-built-for-gaps .points { position: absolute; left: 140px; top: 330px; width: 700px; display: grid; gap: 20px; }
-        #s-built-for-gaps .point { position: relative; padding: 24px 32px; display: flex; align-items: center; gap: 18px; opacity: 0; }
+        #s-built-for-gaps .point { position: relative; padding: 24px 32px; display: flex; align-items: center; gap: 18px; }
         #s-built-for-gaps .point .f-label { margin: 0; color: var(--ink); font-size: 31px; }
         #s-built-for-gaps .point i { width: 16px; height: 16px; border-radius: 50%; background: var(--accent-bright); flex: none; }
         #s-built-for-gaps .matrix { left: 880px; top: 330px; padding: 28px 24px 24px; }
@@ -25,20 +28,22 @@
             <div class="point liquid"><i></i><span class="f-label"><span data-slot="ms:wf_members"></span> encoders answer together.</span></div>
         </div>
         <div class="matrix card liquid"><canvas id="mask-canvas" width="860" height="560" data-layout-ignore></canvas></div>
+        <canvas id="built-for-gaps-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-built-for-gaps'));
+            const root = document.getElementById('s-built-for-gaps');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
+            const id = 'built-for-gaps';
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-built-for-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
-            // Each point lands with the step of the matrix it names.
-            const at = [1.2, 3.6, 6.2, 8.0];
-            document.querySelectorAll('#s-built-for-gaps .point').forEach((el, i) => {
-                tl.fromTo(el, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }, at[i]);
-            });
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-built-for-gaps', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
+            // Each point lands as the voice says it (the third, which the
+            // voice leaves out, with its step on the matrix).
+            const points = [...root.querySelectorAll('.point')];
+            const at = [C.cue(id, 1), C.cue(id, 2), 5.6, C.cue(id, 3)];
+            C.card(tl, root, id, { later: points.map((el, i) => [el, at[i]]) });
+            // "It is built for gaps:"
+            tl.fromTo('#s-built-for-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.0);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-built-for-gaps'] = tl;
         })();

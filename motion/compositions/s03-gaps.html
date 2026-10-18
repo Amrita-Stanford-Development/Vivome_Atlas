@@ -1,18 +1,21 @@
 <template>
-    <!-- Scene 3, 0:18 to 0:28: mostly missing. The PBMC240 example file's
-         own matrix fills in, and its missing values fall away
-         (lib/scenes.js draws it from web/data/workflow.json). Headline,
-         numbers and matrix each on a white card. The headline and the
-         matrix arrive with the camera; the numbers build in place. -->
+    <!-- Scene 3: mostly missing. It opens on the column scene 2 left, which
+         takes its place as the first of the PBMC240 example file's matrix;
+         the matrix fills column by column, each tile lighting as it is read
+         (lib/scenes.js, from web/data/workflow.json). As the voice says much
+         of the matrix is empty, the missing tiles fall away and the missing
+         share counts up. At the close the measured tiles lift off as dots
+         and gather at the right edge, where scene 4's atlas begins. White
+         cards. -->
     <style>
         #s-gaps .head { left: 140px; top: 60px; max-width: 1480px; padding-top: 34px; padding-bottom: 34px; }
-        #s-gaps .stats { left: 140px; top: 400px; width: 580px; padding: 34px 44px; opacity: 0; }
+        #s-gaps .stats { left: 140px; top: 400px; width: 580px; padding: 34px 44px; }
         #s-gaps .stats .f-stat { font-size: 96px; }
         #s-gaps .stats .f-stat-s { font-size: 80px; }
         #s-gaps .fig + .fig { margin-top: 30px; }
         #s-gaps .f-caption { margin-top: 6px; }
+        #s-gaps .fig, #s-gaps .genes { opacity: 0; }
         #s-gaps .matrix { left: 760px; top: 400px; padding: 28px 24px 24px; }
-        #s-gaps .fig { opacity: 0; }
         #s-gaps .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-gaps" class="scene" data-composition-id="s-gaps" data-width="1920" data-height="1080">
@@ -21,28 +24,34 @@
         </div>
         <div class="stats card sheet">
             <div class="fig">
-                <span class="f-stat" data-slot="ms:wf_missing_share" data-count-at="3.2"></span>
+                <span class="f-stat" data-slot="ms:wf_missing_share" data-count-cue="1"></span>
                 <span class="f-label">of the values in one public file are missing</span>
                 <span class="f-caption">PBMC240, the example file on the Workflow page</span>
             </div>
             <div class="fig">
-                <span class="f-stat f-stat-s" data-slot="ms:ds_fulcher2026_proteins_per_cell" data-count-at="4.6"></span>
+                <span class="f-stat f-stat-s" data-slot="ms:ds_fulcher2026_proteins_per_cell" data-count-at="5.0"></span>
                 <span class="f-label">proteins measured per cell in Fulcher 2026, the median</span>
-                <span class="f-caption">VivOME reads <span data-slot="ms:gs_size"></span> genes.</span>
+                <span class="f-caption genes">VivOME reads <span data-slot="ms:gs_size"></span> genes.</span>
             </div>
         </div>
         <div class="matrix card sheet"><canvas id="gaps-canvas" width="960" height="560" data-layout-ignore></canvas></div>
+        <canvas id="gaps-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-gaps'));
+            const root = document.getElementById('s-gaps');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.4);
-            tl.fromTo('#s-gaps .stats', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.8);
-            tl.fromTo('#s-gaps .fig', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 1.4 }, 3.0);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-gaps', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
+            // The numbers' card comes in as the voice says the matrix is empty.
+            C.card(tl, root, 'gaps', { later: [['#s-gaps .stats', C.cue('gaps', 1)]] });
+            const figs = root.querySelectorAll('.fig');
+            // "And each cell is only partly seen."
+            tl.fromTo('#s-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 1.7);
+            // "Much of a protein matrix is empty."
+            tl.fromTo(figs[0], { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, C.cue('gaps', 1));
+            tl.fromTo(figs[1], { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 5.0);
+            tl.fromTo('#s-gaps .genes', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 6.6);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-gaps'] = tl;
         })();

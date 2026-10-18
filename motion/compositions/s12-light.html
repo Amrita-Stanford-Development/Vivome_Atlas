@@ -1,8 +1,10 @@
 <template>
-    <!-- Scene 12, 1:54 to 2:00: into the light. The camera rises out of the
-         map to the surface; the end card, liquid glass, waits above the
-         water and comes into view as the camera breaks the surface, its
-         words forming as it settles. -->
+    <!-- Scene 12: into the light. The camera has risen through the surface;
+         the end card, liquid glass, fades in above the water. Scene 11's
+         cells rise as bubbles and burst at the wordmark, which forms as the
+         voice says its name; the promise follows as it is said, then the
+         two ways in and the address. Rain rings the water under it to the
+         end, and the card stays. -->
     <style>
         #s-light .end { left: 360px; right: 360px; top: 120px; padding: 56px 64px 60px; text-align: center; }
         #s-light .f-wordmark { display: inline-block; font-size: 160px; opacity: 0; }
@@ -21,19 +23,27 @@
             <div class="actions"><span class="f-chip go">Explore the atlas</span><span class="f-chip">Label your data</span></div>
             <div class="address"><span class="f-caption">vivome-atlas.pages.dev</span></div>
         </div>
+        <canvas id="light-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-light'));
+            const root = document.getElementById('s-light');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
+            const id = 'light';
             const tl = gsap.timeline({ paused: true });
-            // The card comes into view from about 2.4 s, as the camera
-            // surfaces (lib/plan.js); its words form as it settles.
-            tl.fromTo('#s-light .f-wordmark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.2);
-            tl.fromTo('#s-light .f-wordmark .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 2.6);
-            tl.fromTo('#s-light .f-display', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.8);
-            tl.fromTo('#s-light .f-display .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 3.3);
-            tl.fromTo('#s-light .actions', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 3.6);
-            tl.fromTo('#s-light .address', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 3.9);
+            C.card(tl, root, id);
+            const show = (target, at, duration = 0.6) => tl.fromTo(target, { opacity: 0 }, { opacity: 1, duration, ease: 'power1.out' }, at);
+            const reveal = (target, at) => tl.fromTo(target, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, at);
+            // "Bring your protein cells up into the light."
+            show('#s-light .f-wordmark', 1.4, 0.7);
+            // "Vivome:"
+            reveal('#s-light .f-wordmark .cut', C.cue(id, 1));
+            // "no cell placed without evidence."
+            show('#s-light .f-display', C.cue(id, 2));
+            reveal('#s-light .f-display .cut', 4.6);
+            show('#s-light .actions', 5.4);
+            show('#s-light .address', 5.8);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-light'] = tl;
         })();

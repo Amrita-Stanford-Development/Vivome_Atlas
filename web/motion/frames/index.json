@@ -4,7 +4,7 @@
     "atlas_version": "0.6.0",
     "model_name": "VivOME v4.1"
   },
-  "film_seconds": 120,
+  "film_seconds": 169,
   "rendered_with": {
     "hyperframes": "0.8.169",
     "gsap": "3.14.2",
@@ -16,24 +16,24 @@
       "scene": 1,
       "id": "surface",
       "file": "01-surface.webp",
-      "at": 5.933333333333334,
-      "bytes": 67674,
+      "at": 8,
+      "bytes": 62900,
       "numbers": []
     },
     {
       "scene": 2,
       "id": "unnamed",
       "file": "02-unnamed.webp",
-      "at": 16,
-      "bytes": 102904,
+      "at": 20.9,
+      "bytes": 69158,
       "numbers": []
     },
     {
       "scene": 3,
       "id": "gaps",
       "file": "03-gaps.webp",
-      "at": 26.4,
-      "bytes": 148558,
+      "at": 34.7,
+      "bytes": 140972,
       "numbers": [
         {
           "slot": "ms:wf_missing_share",
@@ -62,8 +62,8 @@
       "scene": 4,
       "id": "rna",
       "file": "04-rna.webp",
-      "at": 36.6,
-      "bytes": 114170,
+      "at": 46.733333333333334,
+      "bytes": 85926,
       "numbers": [
         {
           "slot": "ms:ref_cells",
@@ -85,8 +85,8 @@
       "scene": 5,
       "id": "vivome",
       "file": "05-vivome.webp",
-      "at": 47.833333333333336,
-      "bytes": 83502,
+      "at": 64.66666666666667,
+      "bytes": 72168,
       "numbers": [
         {
           "slot": "ms:gs_size",
@@ -101,8 +101,8 @@
       "scene": 6,
       "id": "built-for-gaps",
       "file": "06-built-for-gaps.webp",
-      "at": 58.6,
-      "bytes": 155714,
+      "at": 78.7,
+      "bytes": 105986,
       "numbers": [
         {
           "slot": "ms:wf_members",
@@ -117,16 +117,16 @@
       "scene": 7,
       "id": "answers",
       "file": "07-answers.webp",
-      "at": 71.03333333333333,
-      "bytes": 72800,
+      "at": 92.8,
+      "bytes": 84114,
       "numbers": []
     },
     {
       "scene": 8,
       "id": "second-opinion",
       "file": "08-second-opinion.webp",
-      "at": 78.86666666666666,
-      "bytes": 83918,
+      "at": 104.16666666666667,
+      "bytes": 66268,
       "numbers": [
         {
           "slot": "fact:model_name",
@@ -141,8 +141,8 @@
       "scene": 9,
       "id": "real-data",
       "file": "09-real-data.webp",
-      "at": 90.8,
-      "bytes": 87152,
+      "at": 122.2,
+      "bytes": 99738,
       "numbers": [
         {
           "slot": "ms:committed_fulcher",
@@ -178,8 +178,8 @@
       "scene": 10,
       "id": "methods",
       "file": "10-methods.webp",
-      "at": 102.8,
-      "bytes": 101400,
+      "at": 141.53333333333333,
+      "bytes": 100602,
       "numbers": [
         {
           "slot": "ms:bm_khoury_baseline_favour",
@@ -222,8 +222,8 @@
       "scene": 11,
       "id": "atlas",
       "file": "11-atlas.webp",
-      "at": 112.8,
-      "bytes": 101838,
+      "at": 156.13333333333333,
+      "bytes": 85844,
       "numbers": [
         {
           "slot": "fact:model_name",
@@ -245,8 +245,8 @@
       "scene": 12,
       "id": "light",
       "file": "12-light.webp",
-      "at": 118.8,
-      "bytes": 61656,
+      "at": 168.26666666666668,
+      "bytes": 46910,
       "numbers": []
     }
   ]

@@ -12,8 +12,9 @@
 //    site's own formatters (web/js/reel-frames.js), with its source; and
 //    the data the drawn shots use, from web/data/workflow.json.
 // 3. build/answers.json: the Manim shot's map and cells (manim/answers.py).
-// 4. build/timeline.json: when each scene starts, for the score
-//    (audio/score.py).
+// 4. build/timeline.json: when each scene's journey and card are, and when
+//    each phrase of its line is said, in film seconds, for the score
+//    (audio/score.py) and the mix (scripts/film.mjs).
 //
 // Nothing here is typed in: run it before every preview or render (the npm
 // scripts do). It refuses to run on a manifest and manuscript data built
@@ -26,11 +27,15 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const { RHYMES } = await import(pathToFileURL(join(ROOT, 'lib', 'plan.js')).href);
 const REPO = join(ROOT, '..');
 const site = (p) => join(REPO, p);
 const load = (p) => import(pathToFileURL(site(p)).href);
 
-const { FRAMES, STARTS, TOTAL, HANDOVER, CHAPTERS, frameSlots, slotText, slotMeasured, slotSource } = await load('web/js/reel-frames.js');
+const {
+  FRAMES, STARTS, TOTAL, CHAPTERS, FADE, EXIT, VOICE_AT, journeyOf, cardRange, cardLength, cueTime,
+  frameSlots, slotText, slotMeasured, slotSource,
+} = await load('web/js/reel-frames.js');
 const { checkSync } = await load('web/js/manuscript-data.js');
 const { CLASS_COLOURS } = await load('web/js/workflow-data.js');
 
@@ -62,10 +67,15 @@ const sync = checkSync(manifest, manuscript);
 if (!sync.ok) throw new Error(`The data files are from different releases: ${sync.problems.join('; ')}`);
 const sources = { manifest, manuscript };
 
+// Each number as text, through the site's guards, with its source; a
+// measured record also gives its value, for the pictures that draw it (a
+// grid filled to a share, a row of squares). A pending one has none.
 const facts = {};
 for (const frame of FRAMES) {
   for (const slot of frameSlots(frame)) {
-    facts[slot.id] = { text: slotText(slot, sources), measured: slotMeasured(slot, sources), ...slotSource(slot, sources) };
+    const measured = slotMeasured(slot, sources);
+    const value = slot.source === 'ms' && measured ? manuscript.records[slot.key].value : null;
+    facts[slot.id] = { text: slotText(slot, sources), measured, value, ...slotSource(slot, sources) };
   }
 }
 
@@ -133,9 +143,13 @@ const answers = ['class', 'group', 'lineage', 'ambiguous_between_classes'].map((
   };
 });
 
-// Where the answers shot draws its map, and when each cell's answer
-// starts: Manim draws the map and the sets, the composition the words.
-const answersFrame = FRAMES.find((f) => f.id === 'answers');
+// Where the answers shot draws its map, and when: the four cells land
+// together at the start of scene 7's card, each with its widest set; then
+// each cell's set narrows as its rung is said (its phrase, from the
+// storyboard's `said`), and the last widens as "or no answer" is said.
+// Manim draws the map and the sets, the composition the words.
+const answersAt = FRAMES.findIndex((f) => f.id === 'answers');
+const frame30 = (v) => Math.round(v * 30) / 30;
 // The shot looks closely at the types the four cells' sets name.
 const involved = new Set(answers.flatMap((a) => a.types));
 const near = sample.filter((p) => involved.has(p[2]));
@@ -163,20 +177,37 @@ const stagesOf = (a) => {
   return all.filter((set, i) => i === all.length - 1 || !sameTypes(set, all[i + 1]));
 };
 const stages = answers.map(stagesOf);
-// Each cell fades in and flies to its place (land), its first set is drawn
-// (first), and each later one takes its place (step): seconds, each a
-// whole number of the film's frames, so Manim's frames keep to the clock.
-const timing = { land: 0.6, first: 0.5, step: 0.4 };
 const answersShot = {
   box: [90, 230, 1130, 1040],
   bounds: [...pad(q(nx, 0.02), q(nx, 0.98)), ...pad(q(ny, 0.02), q(ny, 0.98))],
-  seconds: answersFrame.seconds,
+  seconds: cardLength(answersAt),
   fps: 30,
-  starts: answers.map((_, k) => +(1.6 + k * 2.5).toFixed(2)),
-  ...timing,
+  // The map's points arrive from where scene 6 left its points (seconds
+  // into the card).
+  map: [0.3, 1.0],
+  from: RHYMES.find((r) => r.to === 'answers').open,
+  // When each cell appears, its fade and its flight to its place, the
+  // drawing of its widest set, and each later stage's step.
+  land: answers.map((_, k) => frame30(1.0 + k * 0.2)),
+  fade: 0.2,
+  flight: 0.3,
+  outline: 0.4,
+  step: 0.4,
   stages,
-  // When, after its start, each cell's set has narrowed: its answer shows.
-  settle: stages.map((st) => +(timing.land + timing.first + timing.step * (st.length - 1)).toFixed(2)),
+  // When each cell's set has settled: as its rung is said.
+  settle: answers.map((_, k) => frame30(cueTime(answersAt, k + 1))),
+  // When the reason for no answer is said.
+  reason: frame30(cueTime(answersAt, 5)),
+};
+
+// Scene 8's diagram, in seconds into its card: when each current is drawn
+// (from, for), when the gate appears (as the voice says when the second
+// opinion is used), the meter fills, the gate opens, and the best guess
+// shows.
+const secondAt = FRAMES.findIndex((f) => f.id === 'second-opinion');
+const secondOpinion = {
+  encoder: [0.3, 1.2], correlation: [1.4, 1.2], gate: +cueTime(secondAt, 1).toFixed(3),
+  meter: [3.4, 4.4], open: [4.6, 5.0], guess: 5.6,
 };
 
 // The atlas in 3D for the flights of scenes 4 and 11: the same reference
@@ -197,9 +228,17 @@ const hm = w.trace.heatmap;
 const VIVOME = {
   built_for: manuscript.built_for,
   total: TOTAL,
-  handover: HANDOVER,
+  fade: FADE,
   chapters: CHAPTERS,
-  frames: FRAMES.map((f, i) => ({ id: f.id, title: f.title, chapter: f.chapter, start: STARTS[i], seconds: f.seconds, depth: f.depth })),
+  // Each scene: its journey, then its card (arrive to depart, film
+  // seconds); when its line starts, each phrase's cue and its closing
+  // picture, in seconds into the card.
+  frames: FRAMES.map((f, i) => ({
+    id: f.id, title: f.title, chapter: f.chapter, start: STARTS[i], seconds: f.seconds,
+    journey: journeyOf(i), arrive: cardRange(i)[0], depart: cardRange(i)[1], card: cardLength(i),
+    voiceAt: VOICE_AT, cues: f.said.at.map((_, k) => +cueTime(i, k).toFixed(3)), exit: +(cardLength(i) - FADE - EXIT).toFixed(3),
+    last: i === FRAMES.length - 1,
+  })),
   facts,
   classes,
   map: { sample, bounds, centres },
@@ -207,6 +246,7 @@ const VIVOME = {
   cells,
   answers,
   answersShot,
+  secondOpinion,
   heatmap: { genes: hm.genes, log2: hm.log2, z: hm.z, mask: hm.mask, smoothed: hm.smoothed },
 };
 write('build/facts.js', `// Written by scripts/prepare.mjs from web/data/; do not edit.\nwindow.VIVOME = ${JSON.stringify(VIVOME)};\n`);
@@ -217,7 +257,7 @@ write('build/answers.json', `${JSON.stringify({ classes, map: { sample, bounds, 
 
 // ---- 4. the scene timeline, for the score (audio/score.py) ----
 
-write('build/timeline.json', `${JSON.stringify({ total: TOTAL, frames: VIVOME.frames, answers: answersShot.starts }, null, 1)}\n`);
+write('build/timeline.json', `${JSON.stringify({ total: TOTAL, frames: VIVOME.frames.map((f) => ({ ...f, cuesAt: f.cues.map((c) => +(f.arrive + c).toFixed(3)) })) }, null, 1)}\n`);
 
 const pending = Object.entries(facts).filter(([, f]) => !f.measured).map(([k]) => k);
 console.log(`prepare: ${Object.keys(facts).length} numbers for ${FRAMES.length} scenes (${TOTAL} s)`

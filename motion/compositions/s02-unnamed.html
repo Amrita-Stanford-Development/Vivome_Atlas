@@ -1,55 +1,60 @@
 <template>
-    <!-- Scene 2, 0:08 to 0:18: without names. The camera sinks below the
-         waterline; protein cells drift past with empty name tags. The words
-         sit on liquid glass. The first cell stays put: as the camera leaves,
-         it opens into its column of scene 3's matrix (lib/bridges.js draws
-         it from here on, HERO). -->
+    <!-- Scene 2: without names. The cell from scene 1 opens the pool, and
+         four more protein cells join it; as the voice says they arrive
+         without names, each gets an empty name tag. As it says every lab
+         detects a different set, each cell shows its own short column of
+         the proteins measured in it: the sets differ from cell to cell
+         (the PBMC240 example file, lib/scenes.js). At the close the first
+         cell's column grows to full height where scene 3's matrix opens.
+         Liquid glass. -->
     <style>
-        #s-unnamed .cell { position: absolute; opacity: 0; display: flex; align-items: center; gap: 18px; }
-        #s-unnamed .body {
-            width: var(--r); height: var(--r); border-radius: 50%; flex: none;
-            background: radial-gradient(circle at 34% 32%, rgba(255, 255, 255, 0.95), rgba(47, 143, 106, 0.32) 46%, rgba(47, 143, 106, 0.78));
-            box-shadow: 0 0 0 3px rgba(47, 143, 106, 0.9), 0 0 46px 6px rgba(47, 143, 106, 0.35);
-        }
-        #s-unnamed .tag {
-            font-size: 24px; font-weight: 500; color: var(--ink-soft);
-            padding: 6px 20px; border-radius: 999px; border: 2px dashed rgba(29, 43, 54, 0.45);
-            background: rgba(255, 255, 255, 0.9);
-        }
-        #s-unnamed .words { left: 140px; top: 600px; max-width: 1240px; }
-        #s-unnamed .words .f-sub { margin-top: 24px; max-width: 36ch; opacity: 0; }
+        #s-unnamed .words { left: 140px; top: 610px; width: 1060px; }
+        #s-unnamed .words .f-display { font-size: 92px; }
+        #s-unnamed .words .f-sub { margin-top: 24px; max-width: 34ch; }
+        #s-unnamed .words .part { opacity: 0; }
         #s-unnamed .cut { clip-path: inset(0 100% 0 0); }
+        #s-unnamed .pool { left: 1240px; top: 90px; padding: 0; overflow: hidden; }
+        #s-unnamed .tag {
+            position: absolute; font-size: 21px; font-weight: 500; color: var(--ink-soft); white-space: nowrap;
+            padding: 4px 16px; border-radius: 999px; border: 2px dashed rgba(29, 43, 54, 0.45);
+            background: rgba(255, 255, 255, 0.9); transform: translateX(-50%); clip-path: inset(0 100% 0 0);
+        }
     </style>
     <div id="s-unnamed" class="scene" data-composition-id="s-unnamed" data-width="1920" data-height="1080">
-        <div class="cell" style="--r: 104px; left: 1040px; top: 250px"><span class="body"></span><span class="tag">Unnamed</span></div>
-        <div class="cell" style="--r: 78px; left: 1430px; top: 150px"><span class="body"></span><span class="tag">Unnamed</span></div>
-        <div class="cell" style="--r: 92px; left: 1300px; top: 430px"><span class="body"></span><span class="tag">Unnamed</span></div>
-        <div class="cell" style="--r: 66px; left: 760px; top: 380px"><span class="body"></span><span class="tag">Unnamed</span></div>
-        <div class="cell" style="--r: 84px; left: 1500px; top: 640px"><span class="body"></span><span class="tag">Unnamed</span></div>
+        <div class="pool card liquid">
+            <canvas id="pool-canvas" width="560" height="820" data-layout-ignore></canvas>
+            <span class="tag" style="left: 259px; top: 297px">Unnamed</span>
+            <span class="tag" style="left: 110px; top: 160px">Unnamed</span>
+            <span class="tag" style="left: 440px; top: 176px">Unnamed</span>
+            <span class="tag" style="left: 120px; top: 524px">Unnamed</span>
+            <span class="tag" style="left: 420px; top: 568px">Unnamed</span>
+        </div>
         <div class="words card liquid">
             <h1 class="f-display">But they arrive without <span class="cut">names.</span></h1>
-            <p class="f-sub">Few protein datasets come labelled, and every lab detects a different set of proteins.</p>
+            <p class="f-sub"><span class="part">Few protein datasets come labelled,</span> <span class="part">and every lab detects a different set of proteins.</span></p>
         </div>
+        <canvas id="unnamed-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
-            VivomeSlots.fill(document.getElementById('s-unnamed'));
+            const root = document.getElementById('s-unnamed');
+            VivomeSlots.fill(root);
+            const C = VivomeCue;
             const tl = gsap.timeline({ paused: true });
-            const cells = document.querySelectorAll('#s-unnamed .cell');
-            cells.forEach((cell, i) => {
-                tl.fromTo(cell, { opacity: 0, x: 60, y: 120 }, { opacity: 1, x: 0, y: 0, duration: 1.4, ease: 'power2.out' }, 0.6 + i * 0.5);
-                // The others keep drifting up and across, as the water rises
-                // past the camera.
-                if (i > 0) tl.fromTo(cell, { yPercent: 0, xPercent: 0 }, { yPercent: -60 - i * 12, xPercent: i % 2 ? -14 : 12, duration: 9.4, ease: 'none' }, 0.6);
-            });
-            // The first cell's tag lets go; then its body is handed to the morph.
-            tl.to(cells[0].querySelector('.tag'), { opacity: 0, x: 30, duration: 0.5, ease: 'power2.in' }, 9.0);
-            tl.set(cells[0].querySelector('.body'), { opacity: 0 }, 9.7);
-            tl.fromTo('#s-unnamed .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 2.8);
-            tl.fromTo('#s-unnamed .f-sub', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 3.6);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-unnamed', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
+            C.card(tl, root, 'unnamed');
+            const reveal = (target, at, duration = 0.6) => tl.fromTo(target, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration, ease: 'power2.inOut' }, at);
+            // "But those cells arrive without names."
+            reveal('#s-unnamed .cut', 2.0, 0.5);
+            tl.fromTo(root.querySelectorAll('.tag'), { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.4, ease: 'power2.inOut', stagger: 0.12 }, 1.6);
+            // "Labelled protein references are few,"
+            // (A phrase that wraps onto a second line fades in whole.)
+            const show = (target, at, duration) => tl.fromTo(target, { opacity: 0 }, { opacity: 1, duration, ease: 'power1.out' }, at);
+            const parts = root.querySelectorAll('.part');
+            show(parts[0], C.cue('unnamed', 1), 0.6);
+            // "and every lab detects a different set of proteins."
+            show(parts[1], C.cue('unnamed', 2), 0.6);
+            // The tags make way as the first cell's column grows.
+            tl.fromTo(root.querySelectorAll('.tag'), { opacity: 1 }, { opacity: 0, duration: 0.4, ease: 'power1.in', immediateRender: false }, C.exit('unnamed'));
             window.__timelines = window.__timelines || {};
             window.__timelines['s-unnamed'] = tl;
         })();

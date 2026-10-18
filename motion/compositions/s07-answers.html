@@ -1,12 +1,14 @@
 <template>
-    <!-- Scene 7, 1:00 to 1:12: honest answers. Manim draws the reference map
-         and, one by one, four cells of the PBMC240 example file with their
-         sets of plausible types (manim/answers.py, rendered to
-         build/manim/answers/); lib/scenes.js shows its frame for each moment
-         and puts each answer beside its cell once its set has narrowed. The
-         ladder steps down with them, and at the end folds into the two
-         currents of scene 8 (lib/bridges.js). Headline, map and ladder each
-         on a white card. -->
+    <!-- Scene 7: honest answers. Manim draws the reference map growing from
+         where scene 6 left its points, and four cells of the PBMC240
+         example file landing on it, each with the widest set its types
+         belong to (manim/answers.py, rendered to build/manim/answers/). As
+         the voice names each rung (a cell type, its group, its lineage, or
+         no answer), that cell's set narrows to its answer (the last one
+         widens), the rung lights and the answer shows beside the cell
+         (lib/scenes.js); the reason is shown as it is said. At the close
+         the last cell's best guess splits into two strokes at the map's
+         edge, where scene 8's two currents start. White cards. -->
     <style>
         #s-answers .head { left: 140px; top: 46px; padding-top: 30px; padding-bottom: 30px; }
         #s-answers .map { left: 70px; top: 232px; width: 1080px; height: 818px; padding: 0; }
@@ -14,7 +16,7 @@
         #s-answers .ladder { left: 1180px; top: 232px; width: 600px; height: 640px; padding: 34px 36px; display: grid; gap: 14px; align-content: start; }
         #s-answers .rung { padding: 16px 22px; border-radius: 16px; background: var(--bench); opacity: 0.32; border-left: 7px solid transparent; }
         #s-answers .rung .f-label { margin: 0; color: var(--ink); font-weight: 600; font-size: 30px; }
-        #s-answers .rung .f-caption { margin-top: 2px; color: var(--ink-soft); }
+        #s-answers .rung .f-caption { margin-top: 2px; color: var(--ink-soft); opacity: 0; }
         #s-answers .rung:nth-child(1) { border-left-color: var(--accent); }
         #s-answers .rung:nth-child(2) { border-left-color: rgba(0, 102, 163, 0.65); }
         #s-answers .rung:nth-child(3) { border-left-color: rgba(0, 102, 163, 0.35); }
@@ -24,7 +26,7 @@
     </style>
     <div id="s-answers" class="scene" data-composition-id="s-answers" data-width="1920" data-height="1080">
         <div class="map card sheet"></div>
-        <img id="answers-img" class="layer" alt="" data-layout-ignore>
+        <div class="figure"><img id="answers-img" class="layer" alt="" data-layout-ignore></div>
         <div class="head card sheet">
             <h1 class="f-display">When unsure, it says <span class="cut">so.</span></h1>
         </div>
@@ -35,6 +37,7 @@
             <div class="rung"><span class="f-label">No answer, and the reason</span><span class="f-caption" data-answer="3"></span></div>
             <div class="aside"><span class="f-caption">Cells of the PBMC240 example file, and the answers VivOME gave them.</span></div>
         </div>
+        <canvas id="answers-over" class="over" width="1920" height="1080" data-layout-ignore></canvas>
     </div>
     <script>
         (function () {
@@ -45,21 +48,22 @@
                 const a = window.VIVOME.answers[Number(el.dataset.answer)];
                 el.textContent = a ? a.answer : '';
             }
-            const starts = window.VIVOME.answersShot.starts;
+            const C = VivomeCue;
+            const shot = window.VIVOME.answersShot;
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-answers .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.0);
-            root.querySelectorAll('.rung').forEach((rung, k) => {
-                tl.fromTo(rung, { opacity: 0.32, x: 0 }, { opacity: 1, x: -10, duration: 0.5, ease: 'power2.out' }, starts[k] + 0.9);
-                if (k < 3) tl.fromTo(rung, { x: -10 }, { x: 0, duration: 0.4, ease: 'power2.inOut' }, starts[k + 1] + 0.6);
+            C.card(tl, root, 'answers');
+            // "Every cell gets the most precise answer the evidence allows:"
+            tl.fromTo('#s-answers .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.5, ease: 'power2.inOut' }, 2.6);
+            // "a cell type, its group, its lineage, or no answer,": each rung
+            // lights as it is said, as its cell's set settles.
+            const rungs = root.querySelectorAll('.rung');
+            rungs.forEach((rung, k) => {
+                tl.fromTo(rung, { opacity: 0.32 }, { opacity: 1, duration: 0.35, ease: 'power1.out' }, shot.settle[k] - 0.15);
+                if (k < 3) tl.fromTo(rung.querySelector('.f-caption'), { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out' }, shot.settle[k]);
             });
-            tl.fromTo('#s-answers .aside', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 2.4);
-            // The ladder folds: its rungs close up, then the card shrinks to
-            // its middle, where two currents leave for scene 8.
-            tl.to('#s-answers .rung, #s-answers .aside', { scaleY: 0, opacity: 0, duration: 0.35, ease: 'power2.in', stagger: 0.07 }, 11.3);
-            tl.to('#s-answers .ladder', { scaleX: 0.25, scaleY: 0.08, opacity: 0, duration: 0.45, ease: 'power3.in' }, 11.65);
-            // The camera carries the cards out of the frame (lib/dive.js); this
-            // only clears anything left at the edge before the host ends.
-            tl.fromTo('#s-answers', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 13.2);
+            // "and the reason why."
+            tl.fromTo(rungs[3].querySelector('.f-caption'), { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power1.out' }, shot.reason);
+            tl.fromTo('#s-answers .aside', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 8.8);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-answers'] = tl;
         })();

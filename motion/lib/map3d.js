@@ -1,16 +1,18 @@
 // The atlas in 3D, as the Atlas page shows it: the reference's own cells at
 // their coordinates in the atlas's projection (web/data/workflow.json), in
 // the atlas palette (CLASS_COLOURS), drawn as soft round points by three.js
-// into a scene's canvas. Scene 4 flies through it; scene 11 lands the
-// example file's cells on it. A pure function of the time, like the water.
+// into a scene's canvas, turning slowly at a fixed distance. Scene 4 builds
+// it from the cells scene 3 left; scene 11 lands the example file's cells
+// on it. A pure function of the time, like the water.
 //
 // createMap3D(canvas, capacity) -> { draw(view, list), project(view, xyz) }
 // where the view is the camera (orbit angle, height, distance, target,
 // fov), and the list gives per point its position, colour, size, opacity
 // and look (0 a filled dot; 1 filled with a white rim; 2 lighter with an ink
 // ring; 3 paler, no ring; 4 a hollow ring; 5 a broken ring), so the Atlas
-// page's answer looks can be drawn too. projectPoint() is the same camera
-// without three.js, for the handovers (lib/bridges.js).
+// page's answer looks can be drawn too. projectPoint() and unprojectPoint()
+// are the same camera without three.js, for the pictures drawn around the
+// map (lib/scenes.js).
 
 const THREE = window.THREE;
 

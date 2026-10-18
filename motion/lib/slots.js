@@ -5,9 +5,11 @@
 // own script can fill its slots while it builds its timeline.
 //
 // A slot with data-count-at="1.2" (and data-count-for, seconds, default
-// 1.4) counts up from zero to its text from that time in its scene, with
-// the landing's maths (web/js/motion.js, as build/count.js). lib/dive.js
-// calls tick() on every seek, so the count is a function of the time.
+// 1.4) counts up from zero to its text from that time in its card, with
+// the landing's maths (web/js/motion.js, as build/count.js);
+// data-count-cue="2" counts up from the time phrase 2 of the scene's line
+// is said (lib/cues.js). lib/dive.js calls tick() on every seek, so the
+// count is a function of the time.
 //
 //   VivomeSlots.fill(sceneRoot)          fill every slot inside it
 //   VivomeSlots.tick(sceneRoot, seconds) set each counting slot for that time
@@ -27,8 +29,11 @@
   function tick(root, seconds) {
     const count = window.VivomeCount && window.VivomeCount.countText;
     if (!root || !count) return;
-    for (const el of root.querySelectorAll('[data-slot][data-count-at]')) {
-      const at = Number(el.dataset.countAt) || 0;
+    const id = String(root.dataset.compositionId || '').replace(/^s-/, '');
+    for (const el of root.querySelectorAll('[data-slot][data-count-at], [data-slot][data-count-cue]')) {
+      const at = el.dataset.countCue !== undefined && window.VivomeCue
+        ? window.VivomeCue.cue(id, Number(el.dataset.countCue))
+        : Number(el.dataset.countAt) || 0;
       const span = Number(el.dataset.countFor) || 1.4;
       const t = Math.min(1, Math.max(0, (seconds - at) / span));
       el.textContent = count(el.dataset.final || el.textContent, t);
