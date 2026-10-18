@@ -1,7 +1,7 @@
 {
   "organ": "lung",
   "title": "Lung",
-  "notes": "research/organ-references.md, lung: Tabula Sapiens Lung only. The class rule (at least 50 cells, at least 5 cells in each of at least 2 donors) fails six classes with no kept Cell Ontology ancestor among the classes, so they are dropped (113 cells): myeloid and plasmacytoid dendritic cells, mast cells, pulmonary ionocytes, bronchial serous cells and mesothelial cells. Endothelium is its own lineage here (16% of the lung's cells).",
+  "notes": "research/organ-references.md, lung: Tabula Sapiens Lung only. The class rule (at least 50 cells, at least 5 cells in each of at least 2 donors) fails six classes with no kept Cell Ontology ancestor among the classes, so they are dropped (113 cells): myeloid and plasmacytoid dendritic cells, mast cells, pulmonary ionocytes, bronchial serous cells and mesothelial cells. Endothelium is its own lineage here (16% of the lung's cells). The Human Protein Atlas DVP table lists every gene in every sample; only proteins detected in pools of cell types this reference contains count toward the gene space.",
   "rna": "drive:scRNA-seq/Lung_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
   "label_column": "cell_ontology_class",
   "donor_column": "donor",
@@ -394,6 +394,41 @@
         "path": "drive:scProteomics/abundance_protein_MD.tsv",
         "read": "column",
         "column": "Gene"
+      },
+      {
+        "name": "lungmap_bpd",
+        "path": "repo:data/incoming/public_sets/LungMAP2025_BPD_MSV000094373/combined_protein.tsv",
+        "read": "column",
+        "column": "Gene"
+      },
+      {
+        "name": "hpa_dvp",
+        "path": "repo:data/incoming/public_sets/HPA2026_DVP/dvp_sample_data.tsv.zip",
+        "read": "column",
+        "column": "Gene name",
+        "detected": {
+          "value": "Intensity",
+          "column": "Cell type",
+          "keep": [
+            "alveolar cells type 1",
+            "alveolar cells type 2",
+            "macrophages",
+            "cd4 t-cells",
+            "cd8 t-cells",
+            "b-cells",
+            "capillaries",
+            "smooth muscle cells",
+            "neutrophils",
+            "ciliated cells"
+          ]
+        }
+      },
+      {
+        "name": "herrera_ipf",
+        "path": "repo:data/incoming/public_sets/Herrera2022_PXD029341/results.zip",
+        "member": "txt/proteinGroups.txt",
+        "read": "column",
+        "column": "Gene names"
       }
     ]
   },

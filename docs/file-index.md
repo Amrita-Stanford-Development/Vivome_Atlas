@@ -271,6 +271,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/legacy/v2/README.md` — the previous model (CrossModalNet), kept as a baseline and audit trail
 - `service/model/legacy/v2/provenance.json` — CrossModalNet's training config and headline numbers
 - `service/model/legacy/v2/shared_genes.csv` — CrossModalNet's 2,903-gene feature space
+- `service/tests/test_organ_heldout.py` — how the organ references' locked-test intakes read sample names (lung populations and donors, colon groups), on invented names
 - `service/tests/test_heldout.py` — the held-out readers, label rules, statistics and guards agree with protocol-heldout.md
 
 ## benchmark/ — fair comparison harness
@@ -329,6 +330,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/heldout_formats.py` — the internal held-out test's readers (MaxQuant, Proteome Discoverer, sage TMT, DIA-NN), written from each deposit's documentation; each format's column names in one place
 - `benchmark/heldout_intake.py` — the internal held-out test's label maps and intake for the five protein sets: uploads, every candidate as served, per-class best-guess probabilities, the baselines' matrix; --rehearse on development or synthetic data
 - `benchmark/colon_heldout_intake.py` — the colon's locked test (PXD052341): the label map read from the deposit's metadata by meaning, and the intake (the colon candidate as served, per-sample probabilities, the baselines' matrix); --rehearse on RNA pseudobulk written in the deposit's format
+- `benchmark/lung_heldout_intake.py` — the lung's locked test (MSV000094189): the label map read from sample names by meaning, and the intake (the lung candidate as served, the baselines' matrix); --rehearse on RNA pseudobulk written as a MaxQuant table
+- `benchmark/lung_heldout_score.py` — the lung's locked test's scoring, once: four-lineage balanced accuracy with a within-donor permutation p, and the secondary measures
 - `benchmark/colon_heldout_score.py` — the colon's locked test's scoring, once: five-group balanced accuracy with a within-donor permutation p, and the secondary measures
 - `benchmark/heldout_score.py` — the internal held-out test's scoring, once per protein set: each candidate's primary and secondary measures, and the baselines'
 - `benchmark/heldout_hao2021.py` — the internal held-out test's Hao 2021 suite: simulated protein-like uploads of held-out donors, every candidate as served and two baselines, scored once; --rehearse on the development donors
@@ -684,6 +687,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/li_build/gene_id_map_provenance.json` — the colon's identifier map: source, sha256, match counts
 - `research/notebook-outputs/li_build/mask_profiles_summary.csv` — the colon's missingness profiles: genes in set, detection, observed fraction
 - `research/notebook-outputs/li_build/bundle_MANIFEST.json` — the colon bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebooks/lung_development.py` — Track I, the lung's gates G1 (simulated RNA uploads through the service's code) and G3 (the LungMAP BPD pools, the Human Protein Atlas DVP pools, the IPF regions), scored once
 - `research/notebooks/li_development.py` — Track I, Stage 2: the colon reference's gates G1 (simulated RNA uploads through the service's code) and G3 (Kabatnik, Zheng and the polyp plate), scored once
 - `research/notebook-outputs/organ_builder_blood/data_stages.json` — the builder's blood acceptance, tiers 1 and 2: labels, split, suites, genes, hierarchy, RNA statistics and mask profiles against NB1's
 - `research/notebook-outputs/organ_builder_blood/calibration.json` — tier 3: the builder's calibration of the served members against NB2's spec

@@ -3,10 +3,15 @@ immunoglobulin and T-cell receptor segments, that the RNA atlas measures,
 sorted (Build_Feature_Space's rule; service/model/evidence/
 feature_space_provenance.json records blood's counts).
 
-A source is read one of three ways: a column of gene symbols (split on ";"),
-a header of gene symbols (cells in rows), or an h5ad's var names.
+A source is read one of three ways: a column of gene symbols (split on ";";
+"member" names the table inside a zip archive; "detected" keeps, from a long
+table listing every gene, only those with a positive value in rows of the
+named samples), a header of gene symbols (cells in rows), or an h5ad's var
+names.
 """
 from __future__ import annotations
+
+import zipfile
 
 import h5py
 import pandas as pd
@@ -30,7 +35,13 @@ def split_symbols(values) -> set[str]:
 def source_symbols(source: dict) -> set[str]:
     path = data.resolve(source["path"])
     if source["read"] == "column":
-        return split_symbols(pd.read_csv(path, sep="\t", low_memory=False, usecols=[source["column"]])[source["column"]])
+        handle = zipfile.ZipFile(path).open(source["member"]) if "member" in source else path  # a table inside a zip
+        det = source.get("detected")  # a long table: keep genes with a positive value in the listed samples' rows
+        cols = [source["column"]] + ([det["value"], det["column"]] if det else [])
+        t = pd.read_csv(handle, sep="\t", low_memory=False, usecols=cols)
+        if det:
+            t = t[(t[det["value"]] > 0) & t[det["column"]].isin(det["keep"])]
+        return split_symbols(t[source["column"]])
     if source["read"] == "header":
         return split_symbols(pd.read_csv(path, sep="\t", nrows=0, index_col=0).columns.astype(str))
     if source["read"] == "h5ad_var":

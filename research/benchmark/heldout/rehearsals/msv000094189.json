@@ -1,0 +1,109 @@
+{
+  "protocol": "research/benchmark/protocol-lung-msv000094189.md",
+  "set": "msv000094189",
+  "statement": "An internal held-out test of the lung reference on pooled, FACS-sorted lineage proteomes, never external validation and never a single-cell accuracy. The donors are children (0 to 8 years) and the reference is adult; the development set MSV000094373 comes from the same lab and may share donors; the sorting antigens are measured in the proteomes.",
+  "samples_by_lineage": {
+    "epithelial": 8,
+    "endothelial": 8,
+    "stromal": 8,
+    "immune": 8
+  },
+  "lineages_scored": [
+    "epithelial",
+    "endothelial",
+    "stromal",
+    "immune"
+  ],
+  "primary": {
+    "balanced_accuracy": 100.0,
+    "chance": 25.0,
+    "p": 9.999000099990002e-05,
+    "permutations": 10000,
+    "within_donor": true,
+    "passed": true,
+    "recall": {
+      "epithelial": 100.0,
+      "endothelial": 100.0,
+      "stromal": 100.0,
+      "immune": 100.0
+    }
+  },
+  "confusion": {
+    "endothelial": {
+      "endothelial": 8,
+      "epithelial": 0,
+      "immune": 0,
+      "stromal": 0
+    },
+    "epithelial": {
+      "endothelial": 0,
+      "epithelial": 8,
+      "immune": 0,
+      "stromal": 0
+    },
+    "immune": {
+      "endothelial": 0,
+      "epithelial": 0,
+      "immune": 8,
+      "stromal": 0
+    },
+    "stromal": {
+      "endothelial": 0,
+      "epithelial": 0,
+      "immune": 0,
+      "stromal": 8
+    }
+  },
+  "by_donor": {
+    "tsp1": 100.0,
+    "tsp14": 100.0,
+    "tsp2": 100.0,
+    "tsp25": 100.0
+  },
+  "answers": {
+    "epithelial": {
+      "samples": 8,
+      "abstained": 0.0,
+      "levels": {
+        "lineage": 8
+      },
+      "correct_when_committed": 100.0
+    },
+    "endothelial": {
+      "samples": 8,
+      "abstained": 0.0,
+      "levels": {
+        "class": 6,
+        "group": 2
+      },
+      "correct_when_committed": 100.0
+    },
+    "stromal": {
+      "samples": 8,
+      "abstained": 0.0,
+      "levels": {
+        "lineage": 8
+      },
+      "correct_when_committed": 100.0
+    },
+    "immune": {
+      "samples": 8,
+      "abstained": 0.0,
+      "levels": {
+        "class": 6,
+        "group": 2
+      },
+      "correct_when_committed": 100.0
+    }
+  },
+  "baselines": "run before scoring by benchmark/baselines_corrected.py (lung option); see research/organ-references.md, Lung",
+  "rehearsal": {
+    "what": "RNA pseudobulk of the lung reference's test cells, written as a MaxQuant proteinGroups table",
+    "cells_per_pool": 200,
+    "pools_per_donor_lineage": 2,
+    "min_cells": 60,
+    "seed": 20261018,
+    "pools": 32,
+    "decoys": 2
+  }
+}

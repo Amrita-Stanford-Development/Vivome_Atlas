@@ -151,10 +151,10 @@ def candidate_dir(rehearse: bool) -> Path:
     return work
 
 
-def run_candidate(directory: Path, raw: alignment.RawMatrix, out: Path) -> dict:
+def run_candidate(directory: Path, raw: alignment.RawMatrix, out: Path, prefix: str = "li") -> dict:
     b = organ_bundle.load(directory)
     names = list(b.class_names)
-    with organ_bundle.gene_map(directory):  # the colon's own identifier map
+    with organ_bundle.gene_map(directory):  # the organ's own identifier map
         response = pipeline.run_projection(b, raw)
         p = class_probabilities(b, raw)
     t = table(response)
@@ -163,8 +163,8 @@ def run_candidate(directory: Path, raw: alignment.RawMatrix, out: Path) -> dict:
     has = served != ""
     if not np.array_equal(served[has], mine[has]):
         raise SystemExit(f"the recomputed probabilities' argmax differs from the served best guess on {int((served[has] != mine[has]).sum())} samples")
-    t.to_csv(out / "li_pred.csv", index=False, lineterminator="\n")
-    np.savez_compressed(out / "li_probs.npz", probs=p.astype(np.float32), class_names=np.array(names, dtype=object),
+    t.to_csv(out / f"{prefix}_pred.csv", index=False, lineterminator="\n")
+    np.savez_compressed(out / f"{prefix}_probs.npz", probs=p.astype(np.float32), class_names=np.array(names, dtype=object),
                         hierarchy=json.dumps(b.hierarchy))
     return {"pipeline_version": response["pipeline_version"], "reference_version": b.spec.get("reference_version"),
             "manifest_sha256": sha256(directory / "MANIFEST.json"), "n_cells": response["n_cells"],
