@@ -1,0 +1,80 @@
+{
+  "protocol": "research/benchmark/protocol-ln-pxd042367.md",
+  "set": "pxd042367",
+  "statement": "An internal held-out test of the lymph node reference on laser-microdissected tonsil micro-regions (mixtures of the cells in 4,000 square micrometres), never external validation and never a single-cell accuracy. Tonsil is a secondary lymphoid organ but not a lymph node; every region comes from one section of one donor; the development set PXD047762 comes from the same lab and may share tonsils.",
+  "regions_by_zone": {
+    "B zone": 24,
+    "T zone": 12,
+    "epithelium": 4
+  },
+  "primary": {
+    "auroc_b_over_t": 1.0,
+    "p": 9.999000099990002e-05,
+    "passed": true,
+    "b_zone": 24,
+    "t_zone": 12
+  },
+  "argmax_group": {
+    "B cell": {
+      "T zone": 0,
+      "epithelium": 0,
+      "germinal centre": 12,
+      "mantle zone": 12
+    },
+    "NK/ILC": {
+      "T zone": 0,
+      "epithelium": 1,
+      "germinal centre": 0,
+      "mantle zone": 0
+    },
+    "T cell": {
+      "T zone": 12,
+      "epithelium": 3,
+      "germinal centre": 0,
+      "mantle zone": 0
+    }
+  },
+  "answers": {
+    "B zone": {
+      "regions": 24,
+      "abstained": 0.0,
+      "levels": {
+        "class": 18,
+        "group": 6
+      }
+    },
+    "T zone": {
+      "regions": 12,
+      "abstained": 66.67,
+      "levels": {
+        "group": 4
+      }
+    },
+    "epithelium": {
+      "regions": 4,
+      "abstained": 25.0,
+      "levels": {
+        "lineage": 3
+      }
+    }
+  },
+  "germinal_centre_vs_mantle": {
+    "mean_p_b_gc": 0.9089,
+    "mean_p_b_mantle": 0.8836
+  },
+  "epithelium": {
+    "regions": 4,
+    "abstained": 25.0,
+    "auroc_similarity_lymphoid_over_epithelium": 1.0
+  },
+  "baselines": "run before scoring by benchmark/baselines_corrected.py (lymph node option); see research/organ-references.md, Lymph node",
+  "rehearsal": {
+    "what": "RNA pseudobulk regions of the lymph node reference's test cells, written as a DIA-NN pg_matrix in Excel",
+    "cells_per_region": 100,
+    "regions_per_kind": 12,
+    "seed": 20261018,
+    "regions": 36,
+    "epithelium_decoys": 4,
+    "blanks": 1
+  }
+}

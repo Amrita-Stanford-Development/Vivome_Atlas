@@ -58,7 +58,7 @@ def score(directory: Path) -> tuple[dict, pd.DataFrame]:
         out["primary"] = {"void": "too few B-zone or T-zone regions (rule 7)"}
         return out, scores
     auc, p = auroc_with_p(s[bt], zone[bt] == "B zone")
-    out["primary"] = {"auroc_b_over_t": round(auc, 4), "p": p, "passed": p < 0.05,
+    out["primary"] = {"auroc_b_over_t": round(auc, 4), "p": p, "passed": bool(p < 0.05),
                       "b_zone": int((zone == "B zone").sum()), "t_zone": int((zone == "T zone").sum())}
     out["argmax_group"] = pd.crosstab(pd.Series(reg, name="region"), pd.Series(called, name="called")).to_dict()
     out["answers"] = {z: {"regions": int((zone == z).sum()), "abstained": round(100 * float(scores[zone == z]["abstained"].mean()), 2),
@@ -95,7 +95,7 @@ def main(argv: "list[str] | None" = None) -> None:
     target.write_bytes((json.dumps(out, indent=2, default=str) + "\n").encode("utf-8"))
     if not args.rehearse:
         scores.to_csv(target.parent / "scores.csv", index=False, lineterminator="\n")
-    print(json.dumps(out.get("primary"), indent=1), json.dumps(out.get("epithelium")))
+    print(json.dumps(out.get("primary"), indent=1, default=str), json.dumps(out.get("epithelium"), default=str))
 
 
 if __name__ == "__main__":
