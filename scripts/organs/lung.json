@@ -1,0 +1,465 @@
+{
+  "organ": "lung",
+  "title": "Lung",
+  "notes": "research/organ-references.md, lung: Tabula Sapiens Lung only. The class rule (at least 50 cells, at least 5 cells in each of at least 2 donors) fails six classes with no kept Cell Ontology ancestor among the classes, so they are dropped (113 cells): myeloid and plasmacytoid dendritic cells, mast cells, pulmonary ionocytes, bronchial serous cells and mesothelial cells. Endothelium is its own lineage here (16% of the lung's cells).",
+  "rna": "drive:scRNA-seq/Lung_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+  "label_column": "cell_ontology_class",
+  "donor_column": "donor",
+  "merge": {},
+  "drop": [
+    "mast cell",
+    "mesothelial cell",
+    "myeloid dendritic cell",
+    "plasmacytoid dendritic cell",
+    "pulmonary ionocyte",
+    "serous cell of epithelium of bronchus"
+  ],
+  "dropped_hierarchy": {
+    "mast cell": {
+      "group": "granulocyte",
+      "lineage": "immune"
+    },
+    "mesothelial cell": {
+      "group": "mesothelium",
+      "lineage": "stromal"
+    },
+    "myeloid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "immune"
+    },
+    "plasmacytoid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "immune"
+    },
+    "pulmonary ionocyte": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "serous cell of epithelium of bronchus": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    }
+  },
+  "class_rule": {
+    "min_cells": 50,
+    "min_cells_per_donor": 5,
+    "min_donors": 2
+  },
+  "hierarchy": {
+    "adventitial cell": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "alveolar type 2 fibroblast cell": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "b cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "basal cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "basophil": {
+      "group": "granulocyte",
+      "lineage": "immune"
+    },
+    "bronchial smooth muscle cell": {
+      "group": "smooth muscle/pericyte",
+      "lineage": "stromal"
+    },
+    "capillary endothelial cell": {
+      "group": "blood vessel endothelial",
+      "lineage": "endothelial"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "club cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "endothelial cell of artery": {
+      "group": "blood vessel endothelial",
+      "lineage": "endothelial"
+    },
+    "endothelial cell of lymphatic vessel": {
+      "group": "lymphatic endothelial",
+      "lineage": "endothelial"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "lung ciliated cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "mature nk t cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "natural killer cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "immune"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "pericyte": {
+      "group": "smooth muscle/pericyte",
+      "lineage": "stromal"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "respiratory goblet cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "type i pneumocyte": {
+      "group": "alveolar epithelial",
+      "lineage": "epithelial"
+    },
+    "type ii pneumocyte": {
+      "group": "alveolar epithelial",
+      "lineage": "epithelial"
+    },
+    "vascular associated smooth muscle cell": {
+      "group": "smooth muscle/pericyte",
+      "lineage": "stromal"
+    },
+    "vein endothelial cell": {
+      "group": "blood vessel endothelial",
+      "lineage": "endothelial"
+    }
+  },
+  "audit_markers": {
+    "type i pneumocyte": [
+      "AGER",
+      "RTKN2",
+      "CLIC5",
+      "EMP2"
+    ],
+    "type ii pneumocyte": [
+      "SFTPC",
+      "SFTPB",
+      "SFTPA1",
+      "LAMP3",
+      "ABCA3"
+    ],
+    "basal cell": [
+      "KRT5",
+      "TP63",
+      "KRT15"
+    ],
+    "club cell": [
+      "SCGB1A1",
+      "SCGB3A1",
+      "BPIFB1"
+    ],
+    "lung ciliated cell": [
+      "FOXJ1",
+      "CAPS",
+      "TPPP3",
+      "DNAH5"
+    ],
+    "respiratory goblet cell": [
+      "MUC5AC",
+      "MUC5B",
+      "TFF1",
+      "SPDEF"
+    ],
+    "capillary endothelial cell": [
+      "CA4",
+      "EDNRB",
+      "APLNR",
+      "GPIHBP1"
+    ],
+    "endothelial cell of artery": [
+      "GJA5",
+      "DKK2",
+      "BMX",
+      "SERPINE2"
+    ],
+    "vein endothelial cell": [
+      "ACKR1",
+      "CPE",
+      "SELE"
+    ],
+    "endothelial cell of lymphatic vessel": [
+      "PROX1",
+      "CCL21",
+      "MMRN1",
+      "TFF3"
+    ],
+    "alveolar type 2 fibroblast cell": [
+      "INMT",
+      "GPC3",
+      "ITGA8",
+      "NPNT"
+    ],
+    "adventitial cell": [
+      "PI16",
+      "SFRP2",
+      "MFAP5",
+      "SERPINF1"
+    ],
+    "pericyte": [
+      "PDGFRB",
+      "HIGD1B",
+      "COX4I2",
+      "RGS5"
+    ],
+    "bronchial smooth muscle cell": [
+      "DES",
+      "ACTA2",
+      "MYH11",
+      "CNN1"
+    ],
+    "vascular associated smooth muscle cell": [
+      "MYH11",
+      "ACTA2",
+      "NOTCH3",
+      "PLN"
+    ],
+    "cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "IL7R"
+    ],
+    "cd8-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD8A",
+      "CD8B"
+    ],
+    "natural killer cell": [
+      "NKG7",
+      "GNLY",
+      "KLRD1",
+      "NCAM1"
+    ],
+    "mature nk t cell": [
+      "CD3E",
+      "NKG7",
+      "KLRB1",
+      "GZMK"
+    ],
+    "b cell": [
+      "MS4A1",
+      "CD79A",
+      "CD19"
+    ],
+    "plasma cell": [
+      "JCHAIN",
+      "MZB1",
+      "IGHA1"
+    ],
+    "macrophage": [
+      "MARCO",
+      "FABP4",
+      "APOE",
+      "C1QA"
+    ],
+    "classical monocyte": [
+      "CD14",
+      "S100A8",
+      "VCAN",
+      "FCN1"
+    ],
+    "intermediate monocyte": [
+      "CD14",
+      "FCGR3A",
+      "HLA-DRA",
+      "CSF1R"
+    ],
+    "non-classical monocyte": [
+      "FCGR3A",
+      "CX3CR1",
+      "CDKN1C"
+    ],
+    "monocyte": [
+      "CD14",
+      "FCN1",
+      "LYZ"
+    ],
+    "basophil": [
+      "HDC",
+      "MS4A2",
+      "CPA3",
+      "GATA2",
+      "CLC"
+    ],
+    "neutrophil": [
+      "CSF3R",
+      "FCGR3B",
+      "CXCR2",
+      "S100A8"
+    ],
+    "myeloid dendritic cell": [
+      "CD1C",
+      "CLEC10A",
+      "FCER1A"
+    ],
+    "plasmacytoid dendritic cell": [
+      "LILRA4",
+      "CLEC4C",
+      "IL3RA"
+    ],
+    "mast cell": [
+      "TPSAB1",
+      "CPA3",
+      "KIT"
+    ],
+    "pulmonary ionocyte": [
+      "FOXI1",
+      "CFTR",
+      "ASCL3"
+    ],
+    "serous cell of epithelium of bronchus": [
+      "LTF",
+      "LYZ",
+      "DMBT1"
+    ],
+    "mesothelial cell": [
+      "MSLN",
+      "UPK3B",
+      "WT1"
+    ]
+  },
+  "split": {
+    "stratify": "class_donor",
+    "test": 0.2,
+    "val": 0.15,
+    "seed": 0
+  },
+  "gene_space": {
+    "sources": [
+      {
+        "name": "bubis_hela",
+        "path": "drive:scProteomics/Protein_JB.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_lung",
+        "path": "drive:scProteomics/20240701_100039_MM_run62p2_revision_50SPD_25cmIO_all_MEpergroup_Proteins.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_candidates",
+        "path": "drive:scProteomics/Candidates.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "pbmc240",
+        "path": "drive:scProteomics/PBMC_240cells_proteins.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "scope2",
+        "path": "drive:scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+        "read": "header"
+      },
+      {
+        "name": "fulcher",
+        "path": "drive:scProteomics/abundance_protein_MD.tsv",
+        "read": "column",
+        "column": "Gene"
+      }
+    ]
+  },
+  "gene_ids": {
+    "hgnc": "drive:Reference/hgnc_complete_set_2026-10-18.txt",
+    "sha256": "12363916be36f8f6f91879b0faade4eeaac973722de7136ec61329b77f2c2f91",
+    "source": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt, downloaded 2026-10-18"
+  },
+  "mask_profiles": [
+    {
+      "name": "scope2_rank",
+      "read": "rank_transfer",
+      "from_organ": "blood",
+      "from_profile": "scope2"
+    },
+    {
+      "name": "pbmc240_rank",
+      "read": "rank_transfer",
+      "from_organ": "blood",
+      "from_profile": "pbmc240"
+    },
+    {
+      "name": "fulcher_rank",
+      "read": "rank_transfer",
+      "from_organ": "blood",
+      "from_profile": "fulcher"
+    }
+  ],
+  "modules": {
+    "target_size": 18,
+    "cells": 15000,
+    "pca": 64,
+    "seed": 0
+  },
+  "suites": {
+    "scenarios": "hierarchy",
+    "n_uploads": 240,
+    "calib_seed": 11,
+    "eval_seed": 22,
+    "profiles": [
+      "scope2_rank",
+      "pbmc240_rank",
+      "fulcher_rank",
+      "random_0.15",
+      "random_0.25",
+      "random_0.35"
+    ]
+  },
+  "train": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hidden": [
+      1024,
+      512
+    ],
+    "dropout": 0.1,
+    "latent": 128
+  },
+  "calibration": {
+    "alpha": 0.1,
+    "min_n": 50,
+    "knn": 15
+  }
+}

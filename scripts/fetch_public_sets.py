@@ -16,7 +16,9 @@ Each entry has a role:
 
 Tier C is the colon reference's data (side-tests.md, amendment 7; about 9 MB):
 PXD052341, the colon's locked test, and the development sets PXD057118 and
-PXD046999 (Deep Visual Proteomics pools).
+PXD046999 (Deep Visual Proteomics pools). Tier L is the lung's (amendment 9;
+about 930 MB): MSV000094189, the lung's locked test, and the development sets
+MSV000094373, the Human Protein Atlas DVP samples and PXD029341.
 
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
@@ -56,9 +58,9 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "data" / "incoming" / "public_sets"
 RECORD = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 CHUNK = 8 << 20
-ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C")
+ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L")
 RAW_SUFFIXES = (".raw", ".d.zip", ".wiff", ".mzml", ".mzml.zip", ".mzml.gz")
-HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu")
+HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu", "www.proteinatlas.org")
 PRIDE = "https://ftp.pride.ebi.ac.uk/pride/data/archive"
 MASSIVE = "ftp://massive-ftp.ucsd.edu"
 ZENODO = "https://zenodo.org/api/records"
@@ -151,6 +153,16 @@ ENTRIES = (
           ("Metadata_DVPonCRA_Kabatnik_et_al.csv", 4477),
           ("Metadata_DVPonCRA_Kabatnik_et_al_revision_updated.csv", 5350),
           ("PXD046999_community_annotated.sdrf.tsv", 10274))],
+    # tier L: the lung reference's data (side-tests.md, amendment 9). MSV000094189 is the lung's locked test
+    # (research/benchmark/protocol-lung-msv000094189.md)
+    *[entry("LungMAP2025_MSV000094189", "held_out", n, f"{MASSIVE}/v07/MSV000094189/quant/MaxQuant/{n}", s, tier="L")
+      for n, s in (("proteinGroups.txt", 52208897), ("Protein_metadata.csv", 26370), ("summary.txt", 25536))],
+    entry("LungMAP2025_BPD_MSV000094373", "development", "combined_protein.tsv",
+          f"{MASSIVE}/v07/MSV000094373/quant/MSFragger/combined_protein.tsv", 2820464, tier="L"),
+    *[entry("HPA2026_DVP", "development", n, f"https://www.proteinatlas.org/download/tsv/{n}", s, tier="L")
+      for n, s in (("dvp_sample_data.tsv.zip", 20083408), ("dvp_cell_types.tsv.zip", 668))],
+    pride("Herrera2022_PXD029341", "development", "PXD029341", "2022/08", "results.zip", 854720055, tier="L"),
+    pride("Herrera2022_PXD029341", "development", "PXD029341", "2022/08", "sdrf.tsv", 8709, tier="L"),
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
 # link; they were saved by hand into data/incoming/public_sets/PXD073250/ and are recorded by --record-manual.
@@ -276,7 +288,7 @@ def save_record(record: dict, path: Path = RECORD) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tier", choices=("A", "B", "C", "all"), default="A")
+    parser.add_argument("--tier", choices=("A", "B", "C", "L", "all"), default="A")
     parser.add_argument("--only", help="comma-separated groups")
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--list", action="store_true", help="list the entries and what is on disk; fetch nothing")

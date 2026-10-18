@@ -51,6 +51,78 @@ Colon accuracy on single protein cells stays Pending (the manifest rule).
 5. **Raw-only deposits** may be searched with DIA-NN on this PC, with
    settings fixed before the search.
 
+## Lung (the second organ, from 2026-10-18)
+
+**The owner's decisions:**
+- After the colon closed, lung is next, from Tabula Sapiens Lung only.
+- The recipe is unchanged, and so are the gates.
+- **Data roles,** in `research/benchmark/side-tests.md`, amendment 9:
+  - **Locked test:** MSV000094189, 11 pediatric donors × 4 sorted lineages.
+    Protocol: `research/benchmark/protocol-lung-msv000094189.md`.
+  - **Development:**
+    - MSV000094373 (sorted epithelium and endothelium, BPD and control; the
+      same lab, possibly the same donors);
+    - the Human Protein Atlas DVP pools (AT1/AT2 among 27 cell types);
+    - PXD029341 (IPF and control regions).
+  - **Reserve:** MSV000081973.
+
+**The atlas:**
+- 65,847 cells from 4 donors;
+- immune 29,636, epithelium 22,779, endothelium 10,648, stroma 2,784.
+- It mixes lineages as whole tissue, the case the colon's best guess handled
+  well.
+
+**Classes** (`scripts/organs/lung.json`; the colon's class rule):
+- **Six classes fail the rule** and have no kept ancestor among the classes,
+  so they are dropped (113 cells): myeloid and plasmacytoid dendritic cells,
+  mast cells, pulmonary ionocytes, bronchial serous cells, mesothelial cells.
+- **28 classes,** in four lineages:
+
+  | Lineage | Group | Classes |
+  |---|---|---|
+  | epithelial | alveolar | AT1, AT2 |
+  | epithelial | airway | basal, club, ciliated, goblet |
+  | endothelial | blood vessel | capillary, artery, vein |
+  | endothelial | lymphatic | lymphatic |
+  | stromal | fibroblast | alveolar fibroblast, adventitial |
+  | stromal | smooth muscle/pericyte | pericyte, bronchial and vascular smooth muscle |
+  | immune | T/NK | CD4 T, CD8 T, NK, NK T |
+  | immune | B | B cell, plasma cell |
+  | immune | monocyte/macrophage | macrophage, three monocyte subsets, generic monocyte |
+  | immune | granulocyte | basophil, neutrophil |
+
+**Label audit** (`research/notebooks/organ_labels.py lung`, run 2026-10-18;
+`research/notebook-outputs/lung_labels/`):
+- **Most classes express their own markers in every donor:**
+  - AT2 98 to 99%;
+  - lymphatic endothelium 82 to 90%;
+  - intermediate monocytes 90 to 96%;
+  - basophils 64 to 71% (genuine basophils).
+- **Four class–donor groups stand out:**
+  - TSP14's club and adventitial cells carry strong AT2 (surfactant) signal,
+    likely ambient RNA;
+  - the generic "monocyte" class is mixed, as it was in blood;
+  - TSP2's arterial cells look venous;
+  - goblet cells look club-like.
+- **Each doubt stays within its group,** where the answer layer can fall
+  back. No class is wrong in every donor, so nothing more is dropped.
+
+**Gates, fixed before any lung model exists.** G1, G2 and G4 are the colon's.
+G3 uses the lung's development data:
+- **MSV000094373:** AUROC ≥ 0.8 of P(epithelial lineage), epithelial pools
+  over endothelial pools.
+- **The Human Protein Atlas DVP samples,** uploaded together (every tissue,
+  so the upload is mixed):
+  - if AT1 and AT2 are separate: AUROC ≥ 0.8 of P(AT2) − P(AT1), AT2 pools
+    over AT1 pools;
+  - if they are merged: at least 80% of the lung pools with epithelial as
+    the argmax lineage.
+- **PXD029341:** AUROC ≥ 0.7 of P(stromal lineage), fibroblastic-focus
+  regions over alveolar regions.
+
+The wording may be fixed to a deposit's real layout by a dated note before
+the lung model is built, never after.
+
 ## The large intestine's outcome: every failure, in one place
 
 Run history, entries 49 to 52; the records are under

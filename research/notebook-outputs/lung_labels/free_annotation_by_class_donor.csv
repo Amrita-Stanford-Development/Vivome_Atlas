@@ -1,0 +1,196 @@
+class_name,donor,free_annotation,cells
+adventitial cell,TSP1,adventitial fibroblast,82
+adventitial cell,TSP14,adventitial fibroblast,89
+adventitial cell,TSP2,adventitial fibroblast,269
+adventitial cell,TSP25,adventitial fibroblast,141
+alveolar type 2 fibroblast cell,TSP1,alveolar fibroblast,211
+alveolar type 2 fibroblast cell,TSP14,alveolar fibroblast,118
+alveolar type 2 fibroblast cell,TSP2,alveolar fibroblast,183
+alveolar type 2 fibroblast cell,TSP25,alveolar fibroblast,601
+b cell,TSP1,b cell,195
+b cell,TSP14,b cell,10
+b cell,TSP2,b cell,197
+b cell,TSP25,b cell,261
+basal cell,TSP1,basal cell,64
+basal cell,TSP1,capillary endothelial cell,1
+basal cell,TSP1,type ii pneumocyte,1
+basal cell,TSP14,basal cell,119
+basal cell,TSP2,adventitial fibroblast,2
+basal cell,TSP2,arterial endothelial cell,2
+basal cell,TSP2,basal cell,2388
+basal cell,TSP2,capillary endothelial cell,5
+basal cell,TSP2,myofibroblast cell,1
+basal cell,TSP2,type ii pneumocyte,1
+basal cell,TSP2,vein endothelial cell,1
+basal cell,TSP25,basal cell,1429
+basal cell,TSP25,t cell,1
+basophil,TSP1,basophil,494
+basophil,TSP14,basophil,75
+basophil,TSP2,basophil,291
+basophil,TSP25,basophil,462
+bronchial smooth muscle cell,TSP1,airway smooth muscle cell,38
+bronchial smooth muscle cell,TSP14,airway smooth muscle cell,50
+bronchial smooth muscle cell,TSP2,airway smooth muscle cell,46
+bronchial smooth muscle cell,TSP25,airway smooth muscle cell,86
+capillary endothelial cell,TSP1,capillary aerocyte,136
+capillary endothelial cell,TSP1,capillary endothelial cell,455
+capillary endothelial cell,TSP14,capillary aerocyte,271
+capillary endothelial cell,TSP14,capillary endothelial cell,1012
+capillary endothelial cell,TSP2,capillary aerocyte,1090
+capillary endothelial cell,TSP2,capillary endothelial cell,2478
+capillary endothelial cell,TSP25,capillary aerocyte,622
+capillary endothelial cell,TSP25,capillary endothelial cell,1179
+"cd4-positive, alpha-beta t cell",TSP1,"cd4-positive, alpha-beta t cell",307
+"cd4-positive, alpha-beta t cell",TSP14,"cd4-positive, alpha-beta t cell",304
+"cd4-positive, alpha-beta t cell",TSP2,"cd4-positive, alpha-beta t cell",951
+"cd4-positive, alpha-beta t cell",TSP25,"cd4-positive, alpha-beta t cell",562
+"cd8-positive, alpha-beta t cell",TSP1,"cd8-positive, alpha-beta t cell",460
+"cd8-positive, alpha-beta t cell",TSP14,"cd8-positive, alpha-beta t cell",32
+"cd8-positive, alpha-beta t cell",TSP2,"cd8-positive, alpha-beta t cell",1089
+"cd8-positive, alpha-beta t cell",TSP2,t cell,1
+"cd8-positive, alpha-beta t cell",TSP25,"cd8-positive, alpha-beta t cell",315
+"cd8-positive, alpha-beta t cell",TSP25,t cell,1
+classical monocyte,TSP1,classical monocyte,519
+classical monocyte,TSP14,classical monocyte,240
+classical monocyte,TSP2,classical monocyte,647
+classical monocyte,TSP25,classical monocyte,163
+club cell,TSP1,basal cell,1
+club cell,TSP1,capillary endothelial cell,1
+club cell,TSP1,club cell,59
+club cell,TSP14,club cell,143
+club cell,TSP2,basal cell,3
+club cell,TSP2,club cell,1200
+club cell,TSP2,pericyte,7
+club cell,TSP25,club cell,333
+endothelial cell of artery,TSP1,arterial endothelial cell,323
+endothelial cell of artery,TSP14,arterial endothelial cell,561
+endothelial cell of artery,TSP2,arterial endothelial cell,416
+endothelial cell of artery,TSP25,arterial endothelial cell,454
+endothelial cell of lymphatic vessel,TSP1,endothelial cell of lymphatic vessel,39
+endothelial cell of lymphatic vessel,TSP14,endothelial cell of lymphatic vessel,68
+endothelial cell of lymphatic vessel,TSP2,endothelial cell of lymphatic vessel,53
+endothelial cell of lymphatic vessel,TSP25,endothelial cell of lymphatic vessel,155
+intermediate monocyte,TSP1,dendritic cell,1
+intermediate monocyte,TSP1,intermediate monocyte,218
+intermediate monocyte,TSP1,nk cell,1
+intermediate monocyte,TSP14,intermediate monocyte,610
+intermediate monocyte,TSP2,intermediate monocyte,1642
+intermediate monocyte,TSP2,macrophage,1
+intermediate monocyte,TSP25,intermediate monocyte,312
+lung ciliated cell,TSP1,lung ciliated cell,327
+lung ciliated cell,TSP14,lung ciliated cell,219
+lung ciliated cell,TSP2,lung ciliated cell,381
+lung ciliated cell,TSP25,lung ciliated cell,282
+macrophage,TSP1,adventitial fibroblast,1
+macrophage,TSP1,alveolar fibroblast,1
+macrophage,TSP1,capillary aerocyte,1
+macrophage,TSP1,"cd4-positive, alpha-beta t cell",1
+macrophage,TSP1,dendritic cell,6
+macrophage,TSP1,endothelial cell of artery,1
+macrophage,TSP1,macrophage,10080
+macrophage,TSP1,type ii pneumocyte,2
+macrophage,TSP1,vein endothelial cell,1
+macrophage,TSP14,capillary aerocyte,1
+macrophage,TSP14,capillary endothelial cell,1
+macrophage,TSP14,macrophage,881
+macrophage,TSP14,type ii pneumocyte,2
+macrophage,TSP2,capillary endothelial cell,1
+macrophage,TSP2,"cd4-positive, alpha-beta t cell",1
+macrophage,TSP2,macrophage,4166
+macrophage,TSP2,type ii pneumocyte,1
+macrophage,TSP2,vein endothelial cell,1
+macrophage,TSP25,capillary endothelial cell,1
+macrophage,TSP25,macrophage,1336
+mast cell,TSP2,capillary endothelial cell,1
+mast cell,TSP25,mast cell,1
+mast cell,TSP25,t cell,1
+mature nk t cell,TSP1,nk t cell,77
+mature nk t cell,TSP14,nk t cell,3
+mature nk t cell,TSP2,nk t cell,49
+mature nk t cell,TSP25,nk t cell,34
+mesothelial cell,TSP1,mesothelial cell,7
+mesothelial cell,TSP2,mesothelial cell,7
+mesothelial cell,TSP25,mesothelial cell,4
+monocyte,TSP1,monocyte,164
+monocyte,TSP14,monocyte,33
+monocyte,TSP2,monocyte,290
+monocyte,TSP25,monocyte,19
+myeloid dendritic cell,TSP1,myeloid dendritic cell,32
+myeloid dendritic cell,TSP2,myeloid dendritic cell,1
+natural killer cell,TSP1,"cd4-positive, alpha-beta t cell",1
+natural killer cell,TSP1,natural killer cell,114
+natural killer cell,TSP14,natural killer cell,29
+natural killer cell,TSP2,natural killer cell,547
+natural killer cell,TSP25,natural killer cell,328
+neutrophil,TSP1,neutrophil,8
+neutrophil,TSP14,neutrophil,290
+neutrophil,TSP2,neutrophil,37
+neutrophil,TSP25,neutrophil,36
+non-classical monocyte,TSP1,non-classical monocyte,98
+non-classical monocyte,TSP14,non-classical monocyte,48
+non-classical monocyte,TSP2,non-classical monocyte,368
+non-classical monocyte,TSP25,non-classical monocyte,13
+pericyte,TSP1,pericyte,85
+pericyte,TSP14,pericyte,45
+pericyte,TSP2,pericyte,386
+pericyte,TSP25,pericyte,223
+plasma cell,TSP1,plasma cell,33
+plasma cell,TSP14,plasma cell,6
+plasma cell,TSP2,plasma cell,96
+plasma cell,TSP25,plasma cell,13
+plasmacytoid dendritic cell,TSP1,plasmacytoid dendritic cell,19
+pulmonary ionocyte,TSP1,pulmonary ionocyte,3
+pulmonary ionocyte,TSP14,pulmonary ionocyte,2
+pulmonary ionocyte,TSP2,pulmonary ionocyte,17
+pulmonary ionocyte,TSP25,pulmonary ionocyte,3
+respiratory goblet cell,TSP1,basal cell,1
+respiratory goblet cell,TSP1,capillary endothelial cell,3
+respiratory goblet cell,TSP1,lung ciliated cell,1
+respiratory goblet cell,TSP1,respiratory goblet cell,238
+respiratory goblet cell,TSP1,type ii pneumocyte,1
+respiratory goblet cell,TSP14,respiratory goblet cell,68
+respiratory goblet cell,TSP2,basal cell,1
+respiratory goblet cell,TSP2,respiratory goblet cell,490
+respiratory goblet cell,TSP25,respiratory goblet cell,237
+serous cell of epithelium of bronchus,TSP1,serous cell of epithelium of bronchus,5
+serous cell of epithelium of bronchus,TSP2,serous cell of epithelium of bronchus,10
+type i pneumocyte,TSP1,arterial endothelial cell,1
+type i pneumocyte,TSP1,"cd8-positive, alpha-beta t cell",1
+type i pneumocyte,TSP1,type i pneumocyte,159
+type i pneumocyte,TSP1,type ii pneumocyte,5
+type i pneumocyte,TSP14,capillary aerocyte,1
+type i pneumocyte,TSP14,type i pneumocyte,2801
+type i pneumocyte,TSP2,alveolar fibroblast,2
+type i pneumocyte,TSP2,basal cell,2
+type i pneumocyte,TSP2,type i pneumocyte,38
+type i pneumocyte,TSP25,mesothelial cell,1
+type i pneumocyte,TSP25,type i pneumocyte,105
+type ii pneumocyte,TSP1,adventitial fibroblast,2
+type ii pneumocyte,TSP1,alveolar fibroblast,2
+type ii pneumocyte,TSP1,arterial endothelial cell,1
+type ii pneumocyte,TSP1,basal cell,1
+type ii pneumocyte,TSP1,capillary aerocyte,4
+type ii pneumocyte,TSP1,capillary endothelial cell,3
+type ii pneumocyte,TSP1,fibroblast,1
+type ii pneumocyte,TSP1,lung ciliated cell,3
+type ii pneumocyte,TSP1,respiratory goblet cell,13
+type ii pneumocyte,TSP1,type ii pneumocyte,1268
+type ii pneumocyte,TSP1,vein endothelial cell,1
+type ii pneumocyte,TSP14,respiratory goblet cell,1
+type ii pneumocyte,TSP14,type ii pneumocyte,4688
+type ii pneumocyte,TSP2,basal cell,3
+type ii pneumocyte,TSP2,respiratory goblet cell,86
+type ii pneumocyte,TSP2,type i pneumocyte,1
+type ii pneumocyte,TSP2,type ii pneumocyte,4043
+type ii pneumocyte,TSP25,macrophage,1
+type ii pneumocyte,TSP25,respiratory goblet cell,11
+type ii pneumocyte,TSP25,type ii pneumocyte,1461
+vascular associated smooth muscle cell,TSP1,vascular associated smooth muscle cell,45
+vascular associated smooth muscle cell,TSP14,vascular associated smooth muscle cell,1
+vascular associated smooth muscle cell,TSP2,vascular associated smooth muscle cell,27
+vascular associated smooth muscle cell,TSP25,vascular associated smooth muscle cell,58
+vein endothelial cell,TSP1,vein endothelial cell,57
+vein endothelial cell,TSP14,vein endothelial cell,177
+vein endothelial cell,TSP2,basal cell,1
+vein endothelial cell,TSP2,vein endothelial cell,630
+vein endothelial cell,TSP25,vein endothelial cell,471

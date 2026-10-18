@@ -146,6 +146,42 @@ and the owner closed it. That decision moves the colon's data as follows:
   development.** They were read for the colon's gate G3.
 - **Their role in `scripts/fetch_public_sets.py` is unchanged.**
 
+### Amendment 9, 2026-10-18: the lung reference's data (owner's decisions)
+
+The next organ is the lung, from Tabula Sapiens Lung
+(`research/organ-references.md`, "Lung").
+
+**The search.** It ran on 2026-10-18, reading repository pages, file listings
+and papers only, with no file opened. It covered:
+- PRIDE, ProteomeCentral, MassIVE, jPOST, iProX, LungMAP, HuBMAP, PDC and the
+  Human Protein Atlas;
+- the literature.
+
+It found no human lung single-cell MS set with fine independent labels. The
+best are FACS-sorted lineage pools from one PNNL/LungMAP group.
+
+| Role | Set | What it is |
+|---|---|---|
+| held_out: the lung's locked test | MSV000094189, Ushakumary 2025 | 11 pediatric donors; sequentially sorted CD45+ immune, PECAM1+ endothelial, EpCAM+ epithelial and triple-negative mesenchymal pools. MaxQuant 1.6 MaxLFQ, DDA. Protocol: `research/benchmark/protocol-lung-msv000094189.md` |
+| development | MSV000094373, Ushakumary 2025 (BPD) | 5 bronchopulmonary dysplasia and 5 control lungs; sorted EpCAM+ epithelial and CD31+/CD144+ endothelial pools; FragPipe `combined_protein.tsv` |
+| development | The Human Protein Atlas DVP atlas (Weiss 2026) | One donor; image-classified pools of 27 cell types from 14 tissues, lung AT1/AT2 among them. `dvp_sample_data.tsv.zip` |
+| development | PXD029341, Herrera 2022 | Laser-microdissected IPF and control lung regions (fibroblastic foci, scar, alveoli); MaxQuant `results.zip` |
+| reserve | MSV000081973, Kyle 2018 and Du 2019 | 3 donors, the same four sorted lineages; raw files only |
+
+- **Locked means what amendment 1 says.** MSV000094189's MassIVE folder
+  listing (names and sizes) was read to write its protocol. Its protocol is
+  committed before any of its files is downloaded.
+- **Caveat, the owner's choice:** the development set MSV000094373 comes from
+  the same lab and biorepository as the locked test and may share donors.
+  Its development check can therefore preview the test, and every lung
+  report says so.
+- **Alternatives, not used:**
+  - PXD014762: alveoli against vessels, 3 donors, 6 samples, a group-level
+    quant table only;
+  - region sets PXD043807, PXD040654, PXD036465, PXD058626 and PXD058805;
+  - cultured and iPSC-derived lung cells (PXD034135, PXD019240 and others).
+- **Roles in code:** `scripts/fetch_public_sets.py`, tier L.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

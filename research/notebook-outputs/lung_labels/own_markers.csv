@@ -1,0 +1,106 @@
+class_name,donor,cells,own_markers_mean_share
+adventitial cell,TSP1,82,0.875
+adventitial cell,TSP14,89,0.1629
+adventitial cell,TSP2,269,0.9135
+adventitial cell,TSP25,141,0.8475
+alveolar type 2 fibroblast cell,TSP1,211,0.6505
+alveolar type 2 fibroblast cell,TSP14,118,0.6801
+alveolar type 2 fibroblast cell,TSP2,183,0.4358
+alveolar type 2 fibroblast cell,TSP25,601,0.5766
+b cell,TSP1,195,0.6923
+b cell,TSP2,197,0.6988
+b cell,TSP25,261,0.659
+basal cell,TSP1,66,0.7121
+basal cell,TSP14,119,0.507
+basal cell,TSP2,2400,0.7942
+basal cell,TSP25,1430,0.7818
+basophil,TSP1,494,0.7101
+basophil,TSP14,75,0.7013
+basophil,TSP2,291,0.6461
+basophil,TSP25,462,0.6368
+bronchial smooth muscle cell,TSP1,38,0.75
+bronchial smooth muscle cell,TSP14,50,0.35
+bronchial smooth muscle cell,TSP2,46,0.7989
+bronchial smooth muscle cell,TSP25,86,0.5203
+capillary endothelial cell,TSP1,591,0.2678
+capillary endothelial cell,TSP14,1283,0.2274
+capillary endothelial cell,TSP2,3568,0.4805
+capillary endothelial cell,TSP25,1801,0.3268
+"cd4-positive, alpha-beta t cell",TSP1,307,0.6395
+"cd4-positive, alpha-beta t cell",TSP14,304,0.6415
+"cd4-positive, alpha-beta t cell",TSP2,951,0.6544
+"cd4-positive, alpha-beta t cell",TSP25,562,0.6263
+"cd8-positive, alpha-beta t cell",TSP1,460,0.6152
+"cd8-positive, alpha-beta t cell",TSP14,32,0.5208
+"cd8-positive, alpha-beta t cell",TSP2,1090,0.6116
+"cd8-positive, alpha-beta t cell",TSP25,316,0.6646
+classical monocyte,TSP1,519,0.7389
+classical monocyte,TSP14,240,0.8104
+classical monocyte,TSP2,647,0.9127
+classical monocyte,TSP25,163,0.8972
+club cell,TSP1,61,0.6284
+club cell,TSP14,143,0.3124
+club cell,TSP2,1210,0.7113
+club cell,TSP25,333,0.5075
+endothelial cell of artery,TSP1,323,0.3166
+endothelial cell of artery,TSP14,561,0.3663
+endothelial cell of artery,TSP2,416,0.1364
+endothelial cell of artery,TSP25,454,0.4752
+endothelial cell of lymphatic vessel,TSP1,39,0.9039
+endothelial cell of lymphatic vessel,TSP14,68,0.8823
+endothelial cell of lymphatic vessel,TSP2,53,0.8207
+endothelial cell of lymphatic vessel,TSP25,155,0.9
+intermediate monocyte,TSP1,220,0.9511
+intermediate monocyte,TSP14,610,0.9459
+intermediate monocyte,TSP2,1643,0.9039
+intermediate monocyte,TSP25,312,0.9624
+lung ciliated cell,TSP1,327,0.9197
+lung ciliated cell,TSP14,219,0.7409
+lung ciliated cell,TSP2,381,0.8937
+lung ciliated cell,TSP25,282,0.8396
+macrophage,TSP1,10094,0.9273
+macrophage,TSP14,885,0.7565
+macrophage,TSP2,4170,0.9049
+macrophage,TSP25,1337,0.7549
+mature nk t cell,TSP1,77,0.6429
+mature nk t cell,TSP2,49,0.6429
+mature nk t cell,TSP25,34,0.6471
+monocyte,TSP1,164,0.2825
+monocyte,TSP14,33,0.7576
+monocyte,TSP2,290,0.5506
+myeloid dendritic cell,TSP1,32,0.8542
+natural killer cell,TSP1,115,0.8174
+natural killer cell,TSP14,29,0.8965
+natural killer cell,TSP2,547,0.8551
+natural killer cell,TSP25,328,0.8918
+neutrophil,TSP14,290,0.8337
+neutrophil,TSP2,37,0.6892
+neutrophil,TSP25,36,0.7916
+non-classical monocyte,TSP1,98,0.6565
+non-classical monocyte,TSP14,48,0.2917
+non-classical monocyte,TSP2,368,0.4158
+pericyte,TSP1,85,0.7147
+pericyte,TSP14,45,0.65
+pericyte,TSP2,386,0.7947
+pericyte,TSP25,223,0.7253
+plasma cell,TSP1,33,0.8081
+plasma cell,TSP2,96,0.809
+respiratory goblet cell,TSP1,244,0.457
+respiratory goblet cell,TSP14,68,0.2389
+respiratory goblet cell,TSP2,491,0.2556
+respiratory goblet cell,TSP25,237,0.155
+type i pneumocyte,TSP1,166,0.9428
+type i pneumocyte,TSP14,2802,0.8726
+type i pneumocyte,TSP2,42,0.7798
+type i pneumocyte,TSP25,106,0.934
+type ii pneumocyte,TSP1,1299,0.9788
+type ii pneumocyte,TSP14,4689,0.9878
+type ii pneumocyte,TSP2,4133,0.9778
+type ii pneumocyte,TSP25,1473,0.9893
+vascular associated smooth muscle cell,TSP1,45,0.8056
+vascular associated smooth muscle cell,TSP2,27,0.6481
+vascular associated smooth muscle cell,TSP25,58,0.7629
+vein endothelial cell,TSP1,57,0.462
+vein endothelial cell,TSP14,177,0.5706
+vein endothelial cell,TSP2,631,0.4797
+vein endothelial cell,TSP25,471,0.4989

@@ -368,6 +368,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/organ_reference/calibrate.py` — training (NB1d's recipe), calibration (NB2's, as v5_build runs it) and the class-balanced best-guess layer, with the organ's data passed in
 - `scripts/organ_reference/bundle.py` — an organ reference's files in one directory (v4.1's layout), its MANIFEST, blood's served files assembled the same way, and a loader building the service's own bundle objects
 - `scripts/organs/blood.json` — blood's organ file: reproduces the served reference's inputs (the builder's proof)
+- `scripts/organs/lung.json` — the lung's organ file: Tabula Sapiens Lung, the six classes dropped by the class rule, the hierarchy (four lineages), the audit markers, gene sources and profiles
 - `scripts/organs/large_intestine.json` — the large intestine's organ file: Tabula Sapiens, the merges, the dropped Paneth class, the hierarchy, gene sources and profiles
 - `scripts/test_build_organ_reference.py` — the builder's parts on a tiny synthetic h5ad: labels, RNA reading, splits, suites, profiles, modules, and the simulator's sha256
 - `scripts/test_fetch_public_sets.py` — tests the table (roles, hosts, no raw files) and the downloader against a local range server: ranges, resume, size and checksum refusals
@@ -431,6 +432,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/protocol-khoury2026.md` — the Khoury 2026 final test set, sealed until its one scoring at the final v3.1 evaluation (2026-10-03): label-free facts recorded at sealing, the protocol and its seven amendments
 - `research/benchmark/protocol-sorted-cd4cd8.md` — the sorted CD4/CD8 test, written before any data: what qualifies, the sealing and intake rules, v4.1 and v5.2 frozen by sha256, the baselines (on each candidate's own reference labels), metrics and decision rules
 - `research/benchmark/side-tests.md` — the public datasets found on 2026-10-14 and their roles since amendment 1 (2026-10-15): development sets, the internal held-out test (locked until the end), and the alternatives kept unused for future tests; amendment 7 (2026-10-18) sets the colon reference's data
+- `research/benchmark/protocol-lung-msv000094189.md` — the lung reference's locked test (MSV000094189, sorted lineage pools of 11 pediatric donors), written from MassIVE's file listing and the paper before any of its files was downloaded
 - `research/benchmark/protocol-colon-pxd052341.md` — the colon reference's locked test (PXD052341, Post 2025, pooled cell types of normal colon), written from PRIDE's file listing and the paper before any of its files was downloaded: inclusion, the five groups, the primary, the unsealing order
 - `research/benchmark/fulcher2026/gate.json` — Fulcher 2026 gate record: PBMC240 reproduction cosines (V2_seed0, v3_seed0; both gene conventions), centroid check, checkpoint sha256s
 - `research/benchmark/fulcher2026/per_seed_scores.csv` — Fulcher 2026: each model-seed and rule: balanced accuracy, per-type and lineage recall
@@ -658,6 +660,11 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/hao_dc_centres/offset.json` — the offset design's probe and swap checks
 - `research/notebooks/ood_candidates.py` — Goal 2, Phase 2c: three out-of-distribution scores against the served one, tuned on scrambled cells and Furtwangler 2025, reported on development cell lines; NO GO
 - `research/notebook-outputs/ood_candidates/summary.json` — those scores' AUROCs, thresholds, false abstention and the foreign development sets, with v4.1's served answers for them
+- `research/notebooks/organ_labels.py` — Track I: an organ's label audit (its markers from the organ file), before any model of it
+- `research/notebook-outputs/lung_labels/markers_by_class_donor.csv` — the lung's audit: each marker's share expressing and mean, per class and donor
+- `research/notebook-outputs/lung_labels/free_annotation_by_class_donor.csv` — the lung's audit: free annotations per class and donor
+- `research/notebook-outputs/lung_labels/own_markers.csv` — the lung's audit: each class and donor's mean share over its own markers
+- `research/notebook-outputs/lung_labels/audit.json` — the lung's audit: the markers and the run
 - `research/notebooks/li_labels.py` — Track I, Stage 2: the large intestine's label audit (canonical markers and free annotations per class and donor), before any colon model
 - `research/notebook-outputs/li_labels/markers_by_class_donor.csv` — that audit: each marker's share expressing and mean, per class and donor
 - `research/notebook-outputs/li_labels/free_annotation_by_class_donor.csv` — that audit: the free annotations behind each class, per donor

@@ -1,0 +1,200 @@
+{
+  "script_sha256": "66cfe497340c4b6b209154a93b48c62c6195b005ef71b26ef791b60e82cba11f",
+  "run": "2026-10-18T07:45:43",
+  "organ": "lung",
+  "min_cells": 20,
+  "markers": {
+    "type i pneumocyte": [
+      "AGER",
+      "RTKN2",
+      "CLIC5",
+      "EMP2"
+    ],
+    "type ii pneumocyte": [
+      "SFTPC",
+      "SFTPB",
+      "SFTPA1",
+      "LAMP3",
+      "ABCA3"
+    ],
+    "basal cell": [
+      "KRT5",
+      "TP63",
+      "KRT15"
+    ],
+    "club cell": [
+      "SCGB1A1",
+      "SCGB3A1",
+      "BPIFB1"
+    ],
+    "lung ciliated cell": [
+      "FOXJ1",
+      "CAPS",
+      "TPPP3",
+      "DNAH5"
+    ],
+    "respiratory goblet cell": [
+      "MUC5AC",
+      "MUC5B",
+      "TFF1",
+      "SPDEF"
+    ],
+    "capillary endothelial cell": [
+      "CA4",
+      "EDNRB",
+      "APLNR",
+      "GPIHBP1"
+    ],
+    "endothelial cell of artery": [
+      "GJA5",
+      "DKK2",
+      "BMX",
+      "SERPINE2"
+    ],
+    "vein endothelial cell": [
+      "ACKR1",
+      "CPE",
+      "SELE"
+    ],
+    "endothelial cell of lymphatic vessel": [
+      "PROX1",
+      "CCL21",
+      "MMRN1",
+      "TFF3"
+    ],
+    "alveolar type 2 fibroblast cell": [
+      "INMT",
+      "GPC3",
+      "ITGA8",
+      "NPNT"
+    ],
+    "adventitial cell": [
+      "PI16",
+      "SFRP2",
+      "MFAP5",
+      "SERPINF1"
+    ],
+    "pericyte": [
+      "PDGFRB",
+      "HIGD1B",
+      "COX4I2",
+      "RGS5"
+    ],
+    "bronchial smooth muscle cell": [
+      "DES",
+      "ACTA2",
+      "MYH11",
+      "CNN1"
+    ],
+    "vascular associated smooth muscle cell": [
+      "MYH11",
+      "ACTA2",
+      "NOTCH3",
+      "PLN"
+    ],
+    "cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "IL7R"
+    ],
+    "cd8-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD8A",
+      "CD8B"
+    ],
+    "natural killer cell": [
+      "NKG7",
+      "GNLY",
+      "KLRD1",
+      "NCAM1"
+    ],
+    "mature nk t cell": [
+      "CD3E",
+      "NKG7",
+      "KLRB1",
+      "GZMK"
+    ],
+    "b cell": [
+      "MS4A1",
+      "CD79A",
+      "CD19"
+    ],
+    "plasma cell": [
+      "JCHAIN",
+      "MZB1",
+      "IGHA1"
+    ],
+    "macrophage": [
+      "MARCO",
+      "FABP4",
+      "APOE",
+      "C1QA"
+    ],
+    "classical monocyte": [
+      "CD14",
+      "S100A8",
+      "VCAN",
+      "FCN1"
+    ],
+    "intermediate monocyte": [
+      "CD14",
+      "FCGR3A",
+      "HLA-DRA",
+      "CSF1R"
+    ],
+    "non-classical monocyte": [
+      "FCGR3A",
+      "CX3CR1",
+      "CDKN1C"
+    ],
+    "monocyte": [
+      "CD14",
+      "FCN1",
+      "LYZ"
+    ],
+    "basophil": [
+      "HDC",
+      "MS4A2",
+      "CPA3",
+      "GATA2",
+      "CLC"
+    ],
+    "neutrophil": [
+      "CSF3R",
+      "FCGR3B",
+      "CXCR2",
+      "S100A8"
+    ],
+    "myeloid dendritic cell": [
+      "CD1C",
+      "CLEC10A",
+      "FCER1A"
+    ],
+    "plasmacytoid dendritic cell": [
+      "LILRA4",
+      "CLEC4C",
+      "IL3RA"
+    ],
+    "mast cell": [
+      "TPSAB1",
+      "CPA3",
+      "KIT"
+    ],
+    "pulmonary ionocyte": [
+      "FOXI1",
+      "CFTR",
+      "ASCL3"
+    ],
+    "serous cell of epithelium of bronchus": [
+      "LTF",
+      "LYZ",
+      "DMBT1"
+    ],
+    "mesothelial cell": [
+      "MSLN",
+      "UPK3B",
+      "WT1"
+    ]
+  },
+  "markers_not_in_atlas": []
+}

@@ -2333,6 +2333,32 @@ the next organ.
   parse, and organ gene maps for research runs. The live service still fails
   on DIA-NN 1.8 protein tables until a deploy.
 
+### 54. The lung: data roles, label audit (Track I), 2026-10-18
+
+**Why:** after the colon (entry 53), the owner chose the lung, keeping the
+recipe and the gates.
+
+**The search** (repositories and literature; pages, listings and papers
+only): no human lung single-cell MS set with fine independent labels exists.
+The best are FACS-sorted lineage pools from one PNNL/LungMAP group, plus the
+Human Protein Atlas DVP pools of AT1 and AT2.
+
+**Roles** (`side-tests.md`, amendment 9; the owner's choice):
+- MSV000094189 is locked, with its protocol committed before any download;
+- MSV000094373, the HPA DVP samples and PXD029341 are development;
+- MSV000081973 is in reserve.
+
+**Classes** (`scripts/organs/lung.json`): 28 kept, 6 dropped by the class
+rule (113 cells).
+
+**Label audit** (`research/notebooks/organ_labels.py`, the colon's audit
+with its markers in the organ file):
+- most classes express their own markers in every donor;
+- the four doubtful groups each stay within their group (TSP14's ambient
+  surfactant signal, the mixed generic monocytes, TSP2's venous-looking
+  arteries, club-like goblet cells);
+- nothing more is dropped.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

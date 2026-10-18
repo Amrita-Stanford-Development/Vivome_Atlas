@@ -81,6 +81,16 @@ class TableTests(unittest.TestCase):
         self.assertEqual({e["tier"] for e in post}, {"C"})
         self.assertEqual(sorted(e["name"] for e in post), ["DVP_data.pg_matrix.tsv", "Post_et_al_organoid_DVP_metadata.tsv"])
 
+    def test_the_lung_locked_test_is_held_out_and_only_its_maxquant_tables(self):
+        # side-tests.md, amendment 9; research/benchmark/protocol-lung-msv000094189.md, "Files used"
+        lung = [e for e in f.ENTRIES if "MSV000094189" in e["url"]]
+        self.assertEqual({e["group"] for e in lung}, {"LungMAP2025_MSV000094189"})
+        self.assertEqual({e["role"] for e in lung}, {"held_out"})
+        self.assertEqual({e["tier"] for e in lung}, {"L"})
+        self.assertEqual(sorted(e["name"] for e in lung), ["Protein_metadata.csv", "proteinGroups.txt", "summary.txt"])
+        dev = {e["group"]: e["role"] for e in f.ENTRIES if e["tier"] == "L" and e["group"] != "LungMAP2025_MSV000094189"}
+        self.assertEqual(set(dev.values()), {"development"})
+
     def test_tier_c_is_the_colon_and_small(self):
         colon = [e for e in f.ENTRIES if e["tier"] == "C"]
         self.assertEqual({e["group"] for e in colon}, {"Post2025_PXD052341", "Zheng2025_PXD057118", "Kabatnik2024_PXD046999"})

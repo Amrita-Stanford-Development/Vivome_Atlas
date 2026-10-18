@@ -449,7 +449,11 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
 - [-] **Stage 3, service and site:** not run for the colon (closed). The organ loader and organ gene maps are still needed for any organ that passes.
 - [-] **Stage 4:** not run for the colon; PXD052341 stays sealed.
 - [ ] **Deploy the DIA-NN 1.8 parser fix** (`d3ca02a`): the live service cannot read DIA-NN 1.8 protein tables until then (the owner approves deploys).
-- [ ] **The next organ** (owner, 2026-10-18).
+- [~] **The lung** (owner, 2026-10-18; `research/organ-references.md`, "Lung"):
+  - search done; roles set (`side-tests.md`, amendment 9);
+  - MSV000094189's protocol committed before its download;
+  - the label audit kept all 28 classes;
+  - next: fetch tier L, the build, gates G1 to G4.
 
 ---
 
@@ -658,3 +662,4 @@ because the held out classes were in training.
 | 2026-10-18 | **Track I, Stage 2: the locked test rehearsed (G4), two faults fixed** (run history, entry 51). The rehearsal found that the service's DIA-NN parser read DIA-NN 1.8's `Protein.Ids` as a sample (fixed, with a test; the live service has it too), and that its identifier map covers blood's 9,002 genes only, so colon uploads lost every colon gene. Each organ now builds its own map from HGNC (blood's reproduced exactly). The intake and scorer then ran end to end on RNA pseudobulk (97.3% balanced accuracy, p = 0.0001) | this commit |
 | 2026-10-18 | **Track I, Stage 2: the colon reference's gates, NO GO as built** (run history, entry 52). G1 commits 12% of cells (bar 75%), though committed answers are 99% right and coverage is 85%; G3 passes Kabatnik (AUROC 1.0) but misses Zheng (16.7%) and four of six polyp marker checks; G2: an unseen donor costs 12.5 points. Cause: per-upload scaling breaks narrow uploads, so conformal sets are too wide. Nothing tuned; the locked test stays sealed; the owner decides what next | this commit |
 | 2026-10-18 | **Track I: the colon closed** (the owner's decision). Every failure is listed in one place (`research/organ-references.md`, "The large intestine's outcome"): the three gate misses and their cause, the tier-5 check, the modules, the Paneth labels, a builder bug, the live DIA-NN 1.8 parser bug, the blood-only gene map, and the stopped first run. PXD052341 stays sealed (side-tests amendment 8). Next: another organ | this commit |
+| 2026-10-18 | **Track I: the lung started** (run history, entry 54). Search found only lineage-sorted pools (PNNL/LungMAP) and the HPA DVP AT1/AT2 pools. Roles (amendment 9, the owner's choice): MSV000094189 locked, with its protocol committed before any download; MSV000094373, the HPA DVP samples and PXD029341 development; MSV000081973 reserve. Classes: 28, 6 dropped by the class rule; the label audit (`research/notebooks/organ_labels.py`) drops nothing more | this commit |
