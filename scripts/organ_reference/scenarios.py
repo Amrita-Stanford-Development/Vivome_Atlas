@@ -58,8 +58,15 @@ def _classes_for(scenario, eligible, classes, hierarchy, rng):
     raise ValueError(scenario)
 
 
-def make_suite(name, pool_idx, pool_y, classes, hierarchy, profiles, n_uploads, seed, min_cells=20):
-    """sim_generator.make_suite with the organ's scenarios and profiles."""
+def make_suite(name, pool_idx, pool_y, classes, hierarchy, profiles, n_uploads, seed, min_cells=20,
+               cap_per_class=False):
+    """sim_generator.make_suite with the organ's scenarios and profiles.
+
+    With cap_per_class (organ references v2), a class with fewer cells than
+    its share gives all it has and the other classes keep their share;
+    otherwise, as v1, the whole upload shrinks to the scarcest class, so a
+    low min_cells would shrink most uploads. Each upload also records how
+    many lineages its classes span."""
     rng = np.random.default_rng(seed)
     by_class = {c: pool_idx[pool_y == c] for c in np.unique(pool_y)}
     eligible = np.array([c for c, v in by_class.items() if len(v) >= min_cells])
@@ -78,18 +85,24 @@ def make_suite(name, pool_idx, pool_y, classes, hierarchy, profiles, n_uploads, 
         n_total = int(rng.choice(sg.SIZES))
         want = np.maximum(5, np.round(props * n_total)).astype(int)
         avail = np.array([len(by_class[c]) for c in cls])
-        scale = min(1.0, float(np.min(avail / want)))
-        take = np.maximum(3, np.floor(want * scale)).astype(int)
+        if cap_per_class:
+            take = np.minimum(want, avail)
+        else:
+            scale = min(1.0, float(np.min(avail / want)))
+            take = np.maximum(3, np.floor(want * scale)).astype(int)
         cell_idx = np.concatenate([rng.choice(by_class[c], min(t, len(by_class[c])), replace=False)
                                    for c, t in zip(cls, take)])
         prof = str(rng.choice(profiles))
         miss = "per_cell" if (not prof.startswith("random") and rng.random() < 0.5) else "none"
-        specs.append({"id": f"{name}_{u:04d}", "suite": name, "scenario": sc,
-                      "classes": [classes[c] for c in cls],
-                      "cell_idx": [int(i) for i in cell_idx],
-                      "profile": prof, "missingness": miss,
-                      "stress": bool(rng.random() < 0.15),
-                      "seed": int(rng.integers(0, 2**31 - 1))})
+        spec = {"id": f"{name}_{u:04d}", "suite": name, "scenario": sc,
+                "classes": [classes[c] for c in cls],
+                "cell_idx": [int(i) for i in cell_idx],
+                "profile": prof, "missingness": miss,
+                "stress": bool(rng.random() < 0.15),
+                "seed": int(rng.integers(0, 2**31 - 1))}
+        if cap_per_class:
+            spec["lineages"] = len({hierarchy[classes[c]]["lineage"] for c in cls})
+        specs.append(spec)
     return specs
 
 

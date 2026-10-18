@@ -768,6 +768,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_build/gene_id_map_provenance.json` — the lymph node's identifier map
 - `research/notebook-outputs/lymph_node_build/mask_profiles_summary.csv` — the lymph node's missingness profiles (blood's, as measured)
 - `research/notebook-outputs/lymph_node_build/bundle_MANIFEST.json` — the lymph node bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebooks/organ_v2_cache.py` — organ references v2, diagnostic A0: every calibration answer of the v1 bundles (v1's calibration suite and a rare-class suite) cached for offline calibration trials, with a replay check against the service
 - `research/notebooks/organ_v2_masking.py` — organ references v2, diagnostic A1: each organ's G3 on its v1 bundle with immunoglobulin constant chains, serum proteins, both, or as many random genes removed from every upload; a decision rule fixed in the script picks v2's gene exclusions
 - `research/notebooks/lymph_node_development.py` — Track I, the lymph node's gates G1 (simulated RNA uploads through the service's code) and G3 (the Coscia tonsil regions, Zheng's tonsil pools, the Protein Atlas lymph-node pools, PXD011683's B cells), scored once
 - `research/notebooks/lung_development.py` — Track I, the lung's gates G1 (simulated RNA uploads through the service's code) and G3 (the LungMAP BPD pools, the Human Protein Atlas DVP pools, the IPF regions), scored once

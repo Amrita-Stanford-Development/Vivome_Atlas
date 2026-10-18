@@ -139,6 +139,21 @@ class Suites(unittest.TestCase):
                 self.assertEqual(spec["missingness"], "none")
         self.assertEqual({s["scenario"] for s in a} >= {"lineage:epi", "lineage:imm", "tissue"}, True)
 
+    def test_capping_per_class_keeps_the_other_classes_shares_and_counts_lineages(self):
+        # one class of 6 cells: v1 shrinks every class in its uploads to its size; the cap does not
+        y = np.concatenate([np.repeat(np.arange(4), 300), np.full(6, 4)])
+        pool = np.arange(len(y))
+        v1 = scenarios.make_suite("t", pool, y, self.classes, self.h, ("random_0.25",), 40, 3, min_cells=5)
+        v2 = scenarios.make_suite("t", pool, y, self.classes, self.h, ("random_0.25",), 40, 3, min_cells=5, cap_per_class=True)
+        self.assertTrue(all("lineages" not in s for s in v1))
+        with_short = lambda suite: [s for s in suite if "s1" in s["classes"] and len(s["classes"]) > 1]  # noqa: E731
+        self.assertTrue(with_short(v2))
+        self.assertGreater(np.mean([len(s["cell_idx"]) for s in with_short(v2)]),
+                           np.mean([len(s["cell_idx"]) for s in with_short(v1)]))
+        for s in v2:
+            self.assertEqual(s["lineages"], len({self.h[c]["lineage"] for c in s["classes"]}))
+            self.assertLessEqual(int(np.isin(s["cell_idx"], np.flatnonzero(y == 4)).sum()), 6)
+
     def test_the_simulator_is_nb1s_copy(self):
         path = Path(scenarios.__file__).with_name("sim_generator.py")
         self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), SIM_GENERATOR_SHA256)
