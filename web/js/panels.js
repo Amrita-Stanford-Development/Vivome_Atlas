@@ -295,7 +295,32 @@ const FACTS = {
   previous_release_version: (m) => textOrPending(m.previous_release?.atlas_version),
   v3_model_name: (m) => textOrPending(m.earlier_release?.model_name),
   v3_atlas_version: (m) => textOrPending(m.earlier_release?.atlas_version),
+  organ_atlas: (m) => textOrPending(m.organs?.atlas),
+  organs_total: (m) => formatCount(m.organs?.total),
+  organs_labelling: (m) => formatCount(m.organs?.labelling),
+  organs_maps: (m) => formatCount(m.organs?.maps),
+  organs_to_build: (m) => formatCount(m.organs?.to_build),
 };
+
+// The atlas's organs (manifest.organs, scripts/build_manifest.py): one chip
+// per organ of the RNA atlas, marked by what VivOME has of it. Blood and the
+// organ maps link to their view on the Atlas page. Names are data, so they
+// are escaped; an absent list reads Pending.
+export const ORGAN_STATUS = { labelling: 'labels files', map: 'map open', to_build: 'to build' };
+
+export function buildOrganGrid(manifest) {
+  const list = manifest?.organs?.list;
+  if (!Array.isArray(list) || !list.length) return `<p class="pending">${PENDING_LABEL}</p>`;
+  const chip = (o) => {
+    const status = Object.hasOwn(ORGAN_STATUS, o?.status) ? o.status : 'to_build';
+    const href = status === 'labelling' ? 'atlas.html'
+      : status === 'map' && typeof o.id === 'string' ? `atlas.html?organ=${encodeURIComponent(o.id)}` : null;
+    const inner = `<span class="organ-name">${escapeHtml(o?.name ?? '')}</span><span class="organ-status">${ORGAN_STATUS[status]}</span>`;
+    const cls = `organ-chip organ-${status.replace('_', '-')}`;
+    return href ? `<li class="${cls}"><a href="${escapeHtml(href)}">${inner}</a></li>` : `<li class="${cls}">${inner}</li>`;
+  };
+  return `<ul class="organ-grid">${list.map(chip).join('')}</ul>`;
+}
 
 export function factText(manifest, key) {
   const fact = FACTS[key];

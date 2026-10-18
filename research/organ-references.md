@@ -54,6 +54,11 @@ Colon accuracy on single protein cells stays Pending (the manifest rule).
    be committed and shown.
 5. **Raw-only deposits** may be searched with DIA-NN on this PC, with
    settings fixed before the search.
+6. **The aim (2026-10-18): every organ of Tabula Sapiens.** Tabula Sapiens
+   v2 has 28 organs (`web/data/organs/tabula_sapiens.json`, from its
+   Figshare record). The site presents VivOME as a growing atlas: blood labels
+   files, built organs are maps, the rest are to build (the manifest's
+   `organs`).
 
 ## Lung (the second organ, from 2026-10-18)
 

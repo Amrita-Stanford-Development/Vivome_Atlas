@@ -145,6 +145,23 @@ Atlas version `0.6.0`, schema `1.0`. 22 cell types: 2 cross-modal, 20
 RNA-only, 0 protein-only. RNA 85,233 cells across 22 classes; protein 1,490
 cells (SCoPE2 mass spectrometry).
 
+## The atlas's organs
+
+`organs` lists every organ of the RNA atlas the references come from,
+Tabula Sapiens v2 (`web/data/organs/tabula_sapiens.json`, written by
+`scripts/tabula_sapiens_organs.py` from the Figshare record), each marked by
+what VivOME has of it (`build_organs`):
+- `labelling`: the served reference's organ, blood;
+- `map`: an organ reference built and shown on the Atlas page without
+  labelling (`web/data/organs/index.json`), with its cells and types;
+- `to_build`: the rest.
+
+`total`, `labelling`, `maps` and `to_build` count them. They are counts of
+committed lists, so they are plain numbers like `summary`'s. The landing
+shows them through `factText` (`organs_total` and the rest) and draws the
+list with `buildOrganGrid`; the Manuscript page's records `org_ts_*` copy
+them.
+
 ## The Workflow page's companion file
 
 `web/data/workflow.json` holds what only the Workflow page needs: the trace
@@ -168,7 +185,7 @@ in the browser.
 | `buildBenchmarkTable` (with `currentOnly`, `roles` and `note` options) | `manuscript.html` |
 | `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable`, `buildModelCardTable` | none: no page mounts them |
 | `buildSupportedLabelSpace`, `buildProjectionSummary`, `buildProjectionLabels`, `buildProjectionCells` | `atlas.html` (`web/js/atlas/data-tab.js`, `web/js/atlas/landing.js`) |
-| `buildProofPoints` | `index.html` |
+| `buildProofPoints`, `buildOrganGrid` | `index.html` |
 | `factText` (the `data-fact` slots in prose) | `index.html`, `workflow.html`, `manuscript.html` |
 
 The Manuscript page's other numbers are `data-ms` slots, filled from

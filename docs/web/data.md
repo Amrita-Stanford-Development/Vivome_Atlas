@@ -11,6 +11,7 @@ Latent embeddings and metadata, latent dim 128.
 | `metadata_RNA_lat128.csv` | RNA metadata, 85,233 rows; PCs in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`) |
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
 | `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows; the served v3.1 model's projection of SCoPE2 (`scripts/export_atlas_coordinates.py`) |
+| `organs/tabula_sapiens.json` | Every organ of Tabula Sapiens v2, the atlas the references come from: name, file and size from its Figshare record (`scripts/tabula_sapiens_organs.py`); the manifest's `organs` marks each one |
 | `organs/index.json` | The organ maps the Atlas page offers, without labelling: each organ's name, class order and hierarchy, cell count, bundle MANIFEST sha256 and gate record (`scripts/export_atlas_coordinates.py --organ`) |
 | `organs/<organ>/metadata_RNA.csv` | One organ's map: `orig_index` (the row of its bundle's `reference_metadata.csv`), `class_idx` (in the index's class order) and `PC1`-`PC3`, from its coordinate member's reference latents through its bundle's own PCA |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |

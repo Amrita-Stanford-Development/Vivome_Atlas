@@ -1,0 +1,150 @@
+{
+ "source": {
+  "atlas": "Tabula Sapiens v2",
+  "figshare_article": 27921984,
+  "url": "https://figshare.com/articles/dataset/Tabula_Sapiens_v2/27921984",
+  "retrieved": "2026-10-18"
+ },
+ "organs": [
+  {
+   "name": "Bladder",
+   "file": "Bladder_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 3932499489
+  },
+  {
+   "name": "Blood",
+   "file": "Blood_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 3037527756
+  },
+  {
+   "name": "Bone marrow",
+   "file": "Bone_Marrow_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1222840322
+  },
+  {
+   "name": "Ear",
+   "file": "Ear_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 199624331
+  },
+  {
+   "name": "Eye",
+   "file": "Eye_TSP1_30_version2d_10X_smartseq_scvi_Nov122024_updated.h5ad",
+   "bytes": 4374025850
+  },
+  {
+   "name": "Fat",
+   "file": "Fat_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 4441748497
+  },
+  {
+   "name": "Heart",
+   "file": "Heart_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1375752255
+  },
+  {
+   "name": "Kidney",
+   "file": "Kidney_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 524034766
+  },
+  {
+   "name": "Large intestine",
+   "file": "Large_Intestine_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1220944648
+  },
+  {
+   "name": "Liver",
+   "file": "Liver_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 986694079
+  },
+  {
+   "name": "Lung",
+   "file": "Lung_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 3790956913
+  },
+  {
+   "name": "Lymph node",
+   "file": "Lymph_Node_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 4907454436
+  },
+  {
+   "name": "Mammary",
+   "file": "Mammary_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1581641818
+  },
+  {
+   "name": "Muscle",
+   "file": "Muscle_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 2441016511
+  },
+  {
+   "name": "Ovary",
+   "file": "Ovary_TSP1_30_version2d_10X_smartseq_scvi_Nov262024.h5ad",
+   "bytes": 2173805633
+  },
+  {
+   "name": "Pancreas",
+   "file": "Pancreas_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 865149287
+  },
+  {
+   "name": "Prostate",
+   "file": "Prostate_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1065240381
+  },
+  {
+   "name": "Salivary gland",
+   "file": "Salivary_Gland_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 2135187171
+  },
+  {
+   "name": "Skin",
+   "file": "Skin_TSP1_30_version2d_10X_smartseq_scvi_Nov122024_updated.h5ad",
+   "bytes": 615423037
+  },
+  {
+   "name": "Small intestine",
+   "file": "Small_Intestine_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 2140573487
+  },
+  {
+   "name": "Spleen",
+   "file": "Spleen_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 3172261758
+  },
+  {
+   "name": "Stomach",
+   "file": "Stomach_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1278543079
+  },
+  {
+   "name": "Testis",
+   "file": "Testis_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 443842850
+  },
+  {
+   "name": "Thymus",
+   "file": "Thymus_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 2062511061
+  },
+  {
+   "name": "Tongue",
+   "file": "Tongue_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 2362678253
+  },
+  {
+   "name": "Trachea",
+   "file": "Trachea_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1140842603
+  },
+  {
+   "name": "Uterus",
+   "file": "Uterus_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 1059376449
+  },
+  {
+   "name": "Vasculature",
+   "file": "Vasculature_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+   "bytes": 2584536594
+  }
+ ]
+}

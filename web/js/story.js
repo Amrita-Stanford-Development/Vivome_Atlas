@@ -1,14 +1,15 @@
 // The landing (index.html): its numbers and its scroll reveals.
 //
 // - Numbers: every [data-fact] slot is filled from the manifest by factText,
-//   and the finale's proof points by buildProofPoints (web/js/panels.js).
-//   A failed load shows Pending and an error, never a stale number.
+//   the finale's proof points by buildProofPoints and the organs' grid by
+//   buildOrganGrid (web/js/panels.js). A failed load shows Pending and an
+//   error, never a stale number.
 // - Each [data-in] block rises in once as it comes into view, and each
 //   [data-count] number counts up to its manifest value.
 // Under reduced motion nothing moves: every block is shown at once.
 
 import { loadManifest, PENDING_LABEL } from './manifest.js';
-import { buildProofPoints, factText, errorPanel } from './panels.js';
+import { buildOrganGrid, buildProofPoints, factText, errorPanel } from './panels.js';
 import { countText } from './motion.js';
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -18,8 +19,10 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const facts = loadManifest().then((manifest) => {
   for (const el of document.querySelectorAll('[data-fact]')) el.innerHTML = factText(manifest, el.dataset.fact);
   document.getElementById('proof-points').innerHTML = buildProofPoints(manifest);
+  document.getElementById('organ-grid').innerHTML = buildOrganGrid(manifest);
 }).catch((err) => {
   for (const el of document.querySelectorAll('[data-fact]')) el.textContent = PENDING_LABEL;
+  document.getElementById('organ-grid').textContent = PENDING_LABEL;
   document.getElementById('proof-points').innerHTML = errorPanel(err);
 });
 

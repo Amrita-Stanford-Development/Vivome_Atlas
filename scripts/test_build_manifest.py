@@ -1,6 +1,7 @@
 import unittest
 
 from build_manifest import (
+    build_organs,
     build_benchmark, build_deployed_architecture_facts, build_manifest, build_model_seeds,
     build_model_card, build_first_release_facts, build_v3_release, build_v31_evaluation,
     build_v31_release, build_v41_evaluation, build_v41_release, build_v42_release, build_v41_model, build_v42_evaluation, build_v42_model,
@@ -521,6 +522,38 @@ class TestBuildModelCard(unittest.TestCase):
         self.assertIn(("v3", "restricted_native_centroid"), family)
         # SCoPE2's curated labels (research/benchmark/bugs-and-fixes.md, 8).
         self.assertAlmostEqual(family[("v3", "restricted_native_centroid")]["bal_max"], 49.21287376338508)
+
+
+
+class TestBuildOrgans(unittest.TestCase):
+    ATLAS = {"source": {"atlas": "Tabula Sapiens v2", "figshare_article": 1, "retrieved": "2026-10-18"},
+             "organs": [{"name": "Blood", "file": "Blood_TSP.h5ad"}, {"name": "Lung", "file": "Lung_TSP.h5ad"},
+                        {"name": "Heart", "file": "Heart_TSP.h5ad"}]}
+    MAPS = {"organs": [{"id": "lung", "atlas": "Lung_TSP.h5ad", "cells": 10, "class_order": ["a", "b"]}]}
+
+    def test_marks_each_organ_by_what_vivome_has_of_it(self):
+        organs = build_organs(self.ATLAS, self.MAPS, "Blood_TSP.h5ad")
+        self.assertEqual((organs["total"], organs["labelling"], organs["maps"], organs["to_build"]), (3, 1, 1, 1))
+        self.assertEqual(organs["list"][1], {"name": "Lung", "status": "map", "id": "lung", "cells": 10, "types": 2})
+        self.assertEqual(organs["list"][2], {"name": "Heart", "status": "to_build"})
+        self.assertEqual(organs["atlas"], "Tabula Sapiens v2")
+
+    def test_refuses_a_served_reference_or_a_map_outside_the_atlas(self):
+        with self.assertRaises(ValueError):
+            build_organs(self.ATLAS, self.MAPS, "Other.h5ad")
+        with self.assertRaises(ValueError):
+            build_organs(self.ATLAS, {"organs": [{"id": "x", "atlas": "X.h5ad", "cells": 1, "class_order": []}]},
+                         "Blood_TSP.h5ad")
+
+    def test_the_committed_manifest_counts_the_committed_lists(self):
+        import json
+        from build_manifest import ATLAS_DIR
+        manifest = json.loads((ATLAS_DIR / "atlas_manifest.json").read_text(encoding="utf-8"))
+        atlas = json.loads((ATLAS_DIR / "organs" / "tabula_sapiens.json").read_text(encoding="utf-8"))
+        maps = json.loads((ATLAS_DIR / "organs" / "index.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["organs"]["total"], len(atlas["organs"]))
+        self.assertEqual(manifest["organs"]["maps"], len(maps["organs"]))
+        self.assertEqual(manifest["organs"]["labelling"], 1)
 
 
 if __name__ == "__main__":

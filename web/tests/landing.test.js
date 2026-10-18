@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { factText } from '../js/panels.js';
+import { buildOrganGrid, factText } from '../js/panels.js';
 import { manifestFixture } from './fixtures.js';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
@@ -38,4 +38,28 @@ test('nothing is drawn in front of the title: no hero canvas, no hero script', (
 
 test('the fixture manifest still renders the landing facts it has', () => {
   assert.equal(factText(manifestFixture(), 'rna_cells'), '85,233');
+});
+
+test('the organs band shows every organ of the atlas, blood and the maps linked to the Atlas page', () => {
+  assert.match(main, /id="organ-grid"/);
+  const real = JSON.parse(readFileSync(new URL('../data/atlas_manifest.json', import.meta.url), 'utf8'));
+  const grid = buildOrganGrid(real);
+  const chips = [...grid.matchAll(/<li class="organ-chip organ-([a-z-]+)">/g)].map((m) => m[1]);
+  assert.equal(chips.length, real.organs.total);
+  assert.equal(chips.filter((s) => s === 'labelling').length, real.organs.labelling);
+  assert.equal(chips.filter((s) => s === 'map').length, real.organs.maps);
+  assert.equal(chips.filter((s) => s === 'to-build').length, real.organs.to_build);
+  assert.equal(real.organs.labelling + real.organs.maps + real.organs.to_build, real.organs.total);
+  assert.match(grid, /<a href="atlas\.html"><span class="organ-name">Blood<\/span>/);
+  for (const id of ['large_intestine', 'lung', 'lymph_node']) assert.ok(grid.includes(`href="atlas.html?organ=${id}"`), id);
+});
+
+test('the organ grid escapes names, reads Pending without a list, and never links an organ to build', () => {
+  const grid = buildOrganGrid({ organs: { list: [{ name: '<script>x</script>', status: 'to_build', id: 'x' }, { name: 'Odd', status: 'weird' }] } });
+  assert.match(grid, /&lt;script&gt;/);
+  assert.ok(!grid.includes('<script>'));
+  assert.ok(!grid.includes('<a '), 'organs to build have no link');
+  assert.equal((grid.match(/organ-to-build/g) ?? []).length, 2);
+  assert.match(buildOrganGrid({}), /Pending/);
+  assert.match(factText({}, 'organs_total'), /Pending/);
 });

@@ -139,6 +139,7 @@
                 <li>Each cell gets an answer at the finest level the evidence supports, or a reason</li>
                 <li>A correlation second opinion is used only where an upload agrees with the encoder</li>
                 <li>A corrected, pre-registered benchmark against seven methods, plus a locked test</li>
+                <li>The same builder makes a reference for any Tabula Sapiens organ from its RNA</li>
             </ul>
             <h3>In brief</h3>
             <ul class="evidence">
@@ -160,6 +161,12 @@
                     <span data-ms="ho_void"></span> were void.
                     <span class="ev-src"><code>research/benchmark/heldout/</code>
                     <span class="bead caveat" data-caveat="internal held-out">internal held-out</span></span></li>
+                <li>Beyond blood: the same builder made references for <span data-ms="org_ts_maps"></span> more of
+                    the <span data-ms="org_ts_total"></span> organs in Tabula Sapiens. None passed its development
+                    gates, so each is a map on the Atlas page, with no labelling; <span data-ms="org_ts_to_build"></span>
+                    organs are still to build.
+                    <span class="ev-src"><code>research/organ-references.md</code>, <code>web/data/organs/tabula_sapiens.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
                 <li>An external test on sorted CD4 and CD8 T cells waits for data:
                     <span data-ms="open_sorted_test"></span>.
                     <span class="ev-src"><code>research/benchmark/protocol-sorted-cd4cd8.md</code>
@@ -181,6 +188,10 @@
                     each with its caveat; level with the best correctly scaled simple baselines out of
                     sample, ahead of the integration tools.
                     <span class="ev-src"><code>research/benchmark/baseline-corrections.md</code></span></li>
+                <li><strong>Scope.</strong> Blood is served. The aim is a reference for every organ of Tabula
+                    Sapiens, each from its RNA alone; the large intestine, lung and lymph node references were
+                    built under gates fixed before each model, missed them, and are shown as maps only.
+                    <span class="ev-src"><code>research/organ-references.md</code>, <code>web/data/organs/index.json</code></span></li>
                 <li><strong>Availability.</strong> An online service that takes DIA-NN, FragPipe and plain
                     matrices, with numbered, frozen releases.
                     <span class="ev-src"><code>web/atlas.html</code>, <code>web/js/atlas/service-client.js</code>, <code>service/model/MODEL_CARD.md</code></span></li>
@@ -222,6 +233,8 @@
                 <li>A second opinion, correlation to RNA type means over each cell's measured genes, used only where an upload agrees with the encoder.</li>
                 <li>A benchmark under one protocol with corrected baselines, pre-registered checks and a locked internal test.</li>
                 <li>A versioned atlas and an online service with frozen releases.</li>
+                <li>A builder that makes a reference for any Tabula Sapiens organ from its RNA, with gates fixed
+                    before each model; run on three organs so far, whose maps are open.</li>
             </ol>
             <h3>Framing</h3>
             <ul class="evidence">
@@ -854,8 +867,10 @@
             <div class="ms-figure-slot" data-figure="fig6-limits"></div>
 
             <h3 id="organs">Other organs: the colon, the lung and the lymph node</h3>
-            <p>The same recipe was run on three more Tabula Sapiens atlases, the large intestine, the
-                lung and the lymph node, each as its own reference beside blood, which is unchanged. A builder script first
+            <p>The aim is a reference for each of the <span data-ms="org_ts_total"></span> organs in Tabula
+                Sapiens, built by one script from that organ's RNA alone. The same recipe was run on three more
+                Tabula Sapiens atlases, the large intestine, the lung and the lymph node, each as its own
+                reference beside blood, which is unchanged. A builder script first
                 rebuilt the served blood reference: assembled in the organ layout, blood gives v4.1's frozen
                 responses with <span data-ms="org_builder_differences"></span> differences. Each organ's gates
                 were fixed before its model existed; a miss stops the organ, and nothing is tuned to pass. Each
@@ -992,9 +1007,10 @@
                 <li>Labelled protein calibration cells, so coverage can be fitted on protein.</li>
                 <li>Paired RNA and protein measurements in the same cells, to train across the gap.
                     <span class="ev-src"><code>research/roadmap.md</code> (revision of 2026-10-04)</span></li>
-                <li>Other organs: a reference that passes its development gates, then its locked test, scored
-                    once.
-                    <span class="ev-src"><code>research/organ-references.md</code></span></li>
+                <li>Every Tabula Sapiens organ: <span data-ms="org_ts_to_build"></span> are still to build, each
+                    needing protein data of its own for its gates; the three built so far first need a fix for
+                    their misses, then their locked tests, scored once.
+                    <span class="ev-src"><code>research/organ-references.md</code>, <code>web/data/organs/tabula_sapiens.json</code></span></li>
             </ul>
         </section>
 
@@ -1009,6 +1025,9 @@
                 <li>The service at <code>vivome-atlas-577083340913.us-central1.run.app</code>, used from the
                     site at <code>vivome-atlas.pages.dev</code>.
                     <span class="ev-src"><code>web/atlas.html</code>, <code>web/js/atlas/service-client.js</code></span></li>
+                <li>The organ maps: each organ's reference cells and their 3D coordinates, with the list of
+                    Tabula Sapiens' organs they come from.
+                    <span class="ev-src"><code>web/data/organs/index.json</code>, <code>web/data/organs/tabula_sapiens.json</code></span></li>
                 <li>Release <span data-fact="atlas_version">&nbsp;</span>, its model files listed with sha256; a
                     DOI: <span data-ms="open_doi"></span>.
                     <span class="ev-src"><code>service/model/v4_1/MANIFEST.json</code>, <code>docs/web/manifest.md</code> (release protocol)

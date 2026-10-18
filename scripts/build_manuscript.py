@@ -580,9 +580,13 @@ def negative(r: Records) -> None:
     assert r.json(FOREIGN)["GO"] is False and r.json(V51_PHASE4)["go"] is False
 
 
-def organs(r: Records) -> None:
+def organs(r: Records, manifest: dict) -> None:
     """Track I: references for other organs (research/organ-references.md),
-    each organ's gates as its gate run recorded them."""
+    each organ's gates as its gate run recorded them, and the atlas's organs
+    as the manifest counts them (scripts/build_manifest.py, build_organs)."""
+    atlas = manifest["organs"]
+    for key, field in (("org_ts_total", "total"), ("org_ts_maps", "maps"), ("org_ts_to_build", "to_build")):
+        r.put(key, atlas[field], f"{rel(MANIFEST)}: organs > {field} ({atlas['source']})", "count")
     loader = r.json(NO / "organ_builder_blood" / "loader.json")
     r.put("org_builder_differences", sum(v["differences"] for k, v in loader["results"].items() if k.startswith("served_files/")),
           f"{rel(NO / 'organ_builder_blood' / 'loader.json')}: results > served_files/* > differences, summed", "count")
@@ -659,7 +663,7 @@ def build(manifest: dict | None = None, workflow: dict | None = None) -> dict:
     heldout(r)
     robustness(r)
     negative(r)
-    organs(r)
+    organs(r, manifest)
     waiting(r)
     sources = sorted(r.sources | {WORKFLOW}, key=rel)
     return {

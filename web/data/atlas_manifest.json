@@ -3162,5 +3162,136 @@
       "status": "not_distributed",
       "note": "Only the 3-component PCA projection ships with this build."
     }
+  },
+  "organs": {
+    "atlas": "Tabula Sapiens v2",
+    "source": "web/data/organs/tabula_sapiens.json (Figshare article 27921984, retrieved 2026-10-18); web/data/organs/index.json",
+    "total": 28,
+    "labelling": 1,
+    "maps": 3,
+    "to_build": 24,
+    "list": [
+      {
+        "name": "Bladder",
+        "status": "to_build"
+      },
+      {
+        "name": "Blood",
+        "status": "labelling"
+      },
+      {
+        "name": "Bone marrow",
+        "status": "to_build"
+      },
+      {
+        "name": "Ear",
+        "status": "to_build"
+      },
+      {
+        "name": "Eye",
+        "status": "to_build"
+      },
+      {
+        "name": "Fat",
+        "status": "to_build"
+      },
+      {
+        "name": "Heart",
+        "status": "to_build"
+      },
+      {
+        "name": "Kidney",
+        "status": "to_build"
+      },
+      {
+        "name": "Large intestine",
+        "status": "map",
+        "id": "large_intestine",
+        "cells": 29867,
+        "types": 22
+      },
+      {
+        "name": "Liver",
+        "status": "to_build"
+      },
+      {
+        "name": "Lung",
+        "status": "map",
+        "id": "lung",
+        "cells": 65734,
+        "types": 28
+      },
+      {
+        "name": "Lymph node",
+        "status": "map",
+        "id": "lymph_node",
+        "cells": 128226,
+        "types": 19
+      },
+      {
+        "name": "Mammary",
+        "status": "to_build"
+      },
+      {
+        "name": "Muscle",
+        "status": "to_build"
+      },
+      {
+        "name": "Ovary",
+        "status": "to_build"
+      },
+      {
+        "name": "Pancreas",
+        "status": "to_build"
+      },
+      {
+        "name": "Prostate",
+        "status": "to_build"
+      },
+      {
+        "name": "Salivary gland",
+        "status": "to_build"
+      },
+      {
+        "name": "Skin",
+        "status": "to_build"
+      },
+      {
+        "name": "Small intestine",
+        "status": "to_build"
+      },
+      {
+        "name": "Spleen",
+        "status": "to_build"
+      },
+      {
+        "name": "Stomach",
+        "status": "to_build"
+      },
+      {
+        "name": "Testis",
+        "status": "to_build"
+      },
+      {
+        "name": "Thymus",
+        "status": "to_build"
+      },
+      {
+        "name": "Tongue",
+        "status": "to_build"
+      },
+      {
+        "name": "Trachea",
+        "status": "to_build"
+      },
+      {
+        "name": "Uterus",
+        "status": "to_build"
+      },
+      {
+        "name": "Vasculature",
+        "status": "to_build"
+      }
+    ]
   }
 }

@@ -1443,6 +1443,24 @@
    "basis": "research/notebook-outputs/lung_development/g1.json: by_scenario > tissue > committed",
    "format": "pct1"
   },
+  "org_ts_maps": {
+   "value": 3,
+   "status": "measured",
+   "basis": "web/data/atlas_manifest.json: organs > maps (web/data/organs/tabula_sapiens.json (Figshare article 27921984, retrieved 2026-10-18); web/data/organs/index.json)",
+   "format": "count"
+  },
+  "org_ts_to_build": {
+   "value": 24,
+   "status": "measured",
+   "basis": "web/data/atlas_manifest.json: organs > to_build (web/data/organs/tabula_sapiens.json (Figshare article 27921984, retrieved 2026-10-18); web/data/organs/index.json)",
+   "format": "count"
+  },
+  "org_ts_total": {
+   "value": 28,
+   "status": "measured",
+   "basis": "web/data/atlas_manifest.json: organs > total (web/data/organs/tabula_sapiens.json (Figshare article 27921984, retrieved 2026-10-18); web/data/organs/index.json)",
+   "format": "count"
+  },
   "pbmc240_lymphoid": {
    "value": 0.9231,
    "status": "measured",

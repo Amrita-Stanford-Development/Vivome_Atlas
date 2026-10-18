@@ -35,6 +35,7 @@ CORRECTED_DIR = REPO_ROOT / "research" / "benchmark" / "baselines_corrected"
 KHOURY_POSTHOC_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc"
 KHOURY_V41_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc_v41_check"
 KHOURY_V42_DIR = REPO_ROOT / "research" / "benchmark" / "khoury2026_posthoc_v42_check"
+ORGANS_DIR = ATLAS_DIR / "organs"
 
 # decisive_summary.json's winner_config.enc -> a readable label for the manifest.
 # Keep this in sync with service/pipeline/encoder.py's _ENCODER_FAMILIES table;
@@ -792,6 +793,40 @@ def build_manifest(
     }
 
 
+# The atlas's organs: every organ of the RNA atlas the references come from
+# (web/data/organs/tabula_sapiens.json, scripts/tabula_sapiens_organs.py),
+# each marked by what VivOME has of it. "labelling": the served reference's
+# organ, whose files the service labels; "map": an organ reference built and
+# shown on the Atlas page without labelling (web/data/organs/index.json);
+# "to_build": the rest.
+def build_organs(atlas: dict, organ_maps: dict, served_rna: str) -> dict:
+    maps = {o["atlas"]: o for o in organ_maps["organs"]}
+    organs = []
+    for o in atlas["organs"]:
+        if o["file"] == served_rna:
+            organs.append({"name": o["name"], "status": "labelling"})
+        elif o["file"] in maps:
+            m = maps[o["file"]]
+            organs.append({"name": o["name"], "status": "map", "id": m["id"],
+                           "cells": m["cells"], "types": len(m["class_order"])})
+        else:
+            organs.append({"name": o["name"], "status": "to_build"})
+    if sum(o["status"] == "labelling" for o in organs) != 1:
+        raise ValueError(f"the served reference {served_rna} is not one of the atlas's organs")
+    if sum(o["status"] == "map" for o in organs) != len(maps):
+        raise ValueError("an organ map's atlas file is not in the atlas's organ list")
+    return {
+        "atlas": atlas["source"]["atlas"],
+        "source": (f"web/data/organs/tabula_sapiens.json (Figshare article {atlas['source']['figshare_article']}, "
+                   f"retrieved {atlas['source']['retrieved']}); web/data/organs/index.json"),
+        "total": len(organs),
+        "labelling": sum(o["status"] == "labelling" for o in organs),
+        "maps": sum(o["status"] == "map" for o in organs),
+        "to_build": sum(o["status"] == "to_build" for o in organs),
+        "list": organs,
+    }
+
+
 # The model card's accuracy table (v3's; no page shows it). Each row names the
 # decision rule it was scored with, because the two rules in use differ:
 # nearest centroid is what the service runs; shared kNN is the rule every
@@ -954,6 +989,9 @@ def main() -> None:
         model_card=model_card,
         benchmark=build_benchmark(tables),
     )
+    served_rna = json.loads((SERVICE_MODEL_DIR / "v4_1" / "spec_v41.json").read_text(encoding="utf-8"))["reference"]["rna"]
+    manifest["organs"] = build_organs(json.loads((ORGANS_DIR / "tabula_sapiens.json").read_text(encoding="utf-8")),
+                                      json.loads((ORGANS_DIR / "index.json").read_text(encoding="utf-8")), served_rna)
     OUTPUT_PATH.write_bytes((json.dumps(manifest, indent=2) + "\n").encode("utf-8"))
     s = manifest["summary"]
     print(f"Wrote {OUTPUT_PATH.relative_to(REPO_ROOT)}")

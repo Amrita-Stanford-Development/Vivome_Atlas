@@ -31,9 +31,9 @@
         <section class="hero" aria-labelledby="hero-title">
             <div class="hero-stage">
                 <div class="hero-panel liquid">
-                    <span class="eyebrow hero-in" style="--d: 0.6s">VivOME, for blood and immune cells</span>
+                    <span class="eyebrow hero-in" style="--d: 0.6s">VivOME, an atlas of human cell types</span>
                     <h1 id="hero-title" class="display display-xl hero-in" style="--d: 0.8s">Cell-type labels for single-cell <span class="cut">proteomics.</span></h1>
-                    <p class="subhead hero-in" style="--d: 1.3s">VivOME reads each cell's protein measurements against a labelled reference of human blood cells measured by RNA.</p>
+                    <p class="subhead hero-in" style="--d: 1.3s">VivOME reads each cell's protein measurements against labelled references built from RNA: human blood today, and organ by organ across the Tabula Sapiens atlas.</p>
                     <p class="hero-body hero-in" style="--d: 1.5s">Each cell gets a cell type, a broader group or lineage when the evidence is weaker, or no answer and the reason.</p>
                     <div class="hero-actions hero-in" style="--d: 1.8s">
                         <a class="btn" href="atlas.html">Explore the atlas</a>
@@ -93,12 +93,12 @@
             <header class="band-head" data-in>
                 <span class="eyebrow">Explore</span>
                 <h2 id="atlas-title" class="display">Explore the <span class="cut">reference.</span></h2>
-                <p class="subhead">The atlas is open in your browser now.</p>
+                <p class="subhead">The atlas is open in your browser now: blood, and the maps of <span data-fact="organs_maps">&nbsp;</span> more organs.</p>
             </header>
             <div class="bento">
                 <article class="card sheet span-12" data-in style="--i: 0">
                     <p class="card-lead">Rotate and zoom through every reference cell in 3D, filter by cell type, and click any cell for its gene profile.</p>
-                    <p>Protein cells are shown with their published labels, so you can see where each type lands.</p>
+                    <p>Protein cells are shown with their published labels, so you can see where each type lands. Switch the organ to see the large intestine, the lung or the lymph node.</p>
                     <a class="btn" href="atlas.html">Open the atlas</a>
                 </article>
                 <article class="card liquid span-3" data-in style="--i: 1">
@@ -220,15 +220,27 @@
 
         <section class="band" aria-labelledby="organs-title">
             <header class="band-head" data-in>
-                <span class="eyebrow">Next</span>
-                <h2 id="organs-title" class="display">Beyond <span class="cut">blood.</span></h2>
-                <p class="subhead">The same recipe is being tried on other organs, each from its own RNA atlas.</p>
+                <span class="eyebrow">The atlas</span>
+                <h2 id="organs-title" class="display">One recipe, organ by <span class="cut">organ.</span></h2>
+                <p class="subhead"><span data-fact="organ_atlas">&nbsp;</span> describes <span data-fact="organs_total">&nbsp;</span> human organs in RNA. VivOME's aim is a reference for every one of them, each built the same way from its organ's RNA alone.</p>
             </header>
             <div class="bento">
-                <article class="card sheet span-12" data-in style="--i: 0">
-                    <h3>Large intestine, lung and lymph node</h3>
-                    <p>Each organ gets its own reference beside blood, and blood's stays as it is. Before an organ labels files, it must pass checks written down before its model was built, and a test kept sealed until then. None has passed yet, but each organ's map is open on the Atlas page: its cell types and their families, in 3D.</p>
-                    <span class="bead bead-open">In progress</span>
+                <article class="card liquid span-4" data-in style="--i: 0">
+                    <span class="stat" data-fact="organs_labelling" data-count>&nbsp;</span>
+                    <span class="stat-label">organ labels your files today: blood</span>
+                </article>
+                <article class="card liquid span-4" data-in style="--i: 1">
+                    <span class="stat" data-fact="organs_maps" data-count>&nbsp;</span>
+                    <span class="stat-label">more organs built, their maps open to explore</span>
+                </article>
+                <article class="card liquid span-4" data-in style="--i: 2">
+                    <span class="stat" data-fact="organs_to_build" data-count>&nbsp;</span>
+                    <span class="stat-label">organs still to build</span>
+                </article>
+                <article class="card sheet span-12" data-in style="--i: 3">
+                    <h3>Every organ of the atlas</h3>
+                    <div id="organ-grid" class="organ-grid-slot"></div>
+                    <p>Each organ gets its own reference beside blood, and blood's stays as it is. Before an organ labels files, it must pass checks written down before its model was built, and a test kept sealed until then. The large intestine, the lung and the lymph node have not passed yet. Their maps are open on the Atlas page, with their cell types and families in 3D, and every failure is published.</p>
                     <p class="chapter-links"><a class="chapter-link" href="atlas.html?organ=lymph_node">Explore the organ maps</a> <a class="chapter-link" href="manuscript.html#organs">See where each organ stands</a></p>
                 </article>
             </div>
