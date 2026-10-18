@@ -771,6 +771,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/organ_v2_cache.py` — organ references v2, diagnostic A0: every calibration answer of the v1 bundles (v1's calibration suite and a rare-class suite) cached for offline calibration trials, with a replay check against the service
 - `research/notebooks/organ_v2_calibration.py` — organ references v2, diagnostics A2 and A3 on A0's caches: calibration fitted on mixed or narrow uploads (with the owner's split G1 bands), and rare- and hard-class remedies (a chance floor, a group fallback, group-level sets), each on held halves, with decision rules fixed in the script
 - `research/notebooks/organ_v2_sink.py` — organ references v2, diagnosis A1b: what draws protein pools to one class (the path that picks it, the class's own markers, the pools' depth, the upload's company), an explanation only
+- `research/notebook-outputs/organ_v2_sink/rules.json` — A1b's settings, written before the run
+- `research/notebook-outputs/organ_v2_sink/probes.json` — A1b: each sink by path, with its class's markers removed, with pools thinned, and with each population alone
 - `research/notebooks/organ_v2_masking.py` — organ references v2, diagnostic A1: each organ's G3 on its v1 bundle with immunoglobulin constant chains, serum proteins, both, or as many random genes removed from every upload; a decision rule fixed in the script picks v2's gene exclusions
 - `research/notebook-outputs/organ_v2_masking/rules.json` — A1's rules, written before the run: the gene sets per organ, the guards, the seed
 - `research/notebook-outputs/organ_v2_masking/runs.json` — A1: every condition's G3 metrics per organ, with the rows each upload lost

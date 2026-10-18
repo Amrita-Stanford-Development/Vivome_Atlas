@@ -1,0 +1,29 @@
+{
+  "script_sha256": "8e0c6e026aa093328d71bb85c6ee4ee143a099591dd915fdd41dc4a5013855a5",
+  "started": "2026-10-18T21:48:11",
+  "seed": 20261018,
+  "tops": [
+    25,
+    50,
+    100,
+    200
+  ],
+  "depths": [
+    0.1,
+    0.2,
+    0.4
+  ],
+  "draws": 5,
+  "cases": {
+    "lymph_node": {
+      "zheng_tonsil": "plasma cell",
+      "coscia": "plasma cell"
+    },
+    "lung": {
+      "bpd": "macrophage"
+    },
+    "large_intestine": {
+      "zheng_colon": "mast cell"
+    }
+  }
+}

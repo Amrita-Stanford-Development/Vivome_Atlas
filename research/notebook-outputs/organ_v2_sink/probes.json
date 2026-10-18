@@ -1,0 +1,1061 @@
+{
+  "lymph_node": {
+    "zheng_tonsil": {
+      "sink": "plasma cell",
+      "pools": 48,
+      "base": {
+        "encoder": [
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "b cell",
+          "neutrophil",
+          "neutrophil",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "b cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell"
+        ],
+        "correlation": [
+          "b cell",
+          "classical monocyte",
+          "b cell",
+          "classical monocyte",
+          "b cell",
+          "b cell",
+          "cd8-positive, alpha-beta t cell",
+          "regulatory t cell",
+          "classical monocyte",
+          "innate lymphoid cell",
+          "cd8-positive, alpha-beta t cell",
+          "b cell",
+          "cd8-positive, alpha-beta t cell",
+          "neutrophil",
+          "cd8-positive, alpha-beta t cell",
+          "myeloid dendritic cell",
+          "intermediate monocyte",
+          "intermediate monocyte",
+          "intermediate monocyte",
+          "myeloid dendritic cell",
+          "intermediate monocyte",
+          "myeloid dendritic cell",
+          "regulatory t cell",
+          "intermediate monocyte",
+          "regulatory t cell",
+          "intermediate monocyte",
+          "regulatory t cell",
+          "neutrophil",
+          "t cell",
+          "endothelial cell",
+          "t cell",
+          "macrophage",
+          "t cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "myeloid dendritic cell",
+          "myeloid dendritic cell",
+          "plasma cell",
+          "myeloid dendritic cell",
+          "plasma cell",
+          "regulatory t cell",
+          "myeloid dendritic cell",
+          "regulatory t cell",
+          "regulatory t cell"
+        ],
+        "fused": [
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "neutrophil",
+          "neutrophil",
+          "neutrophil",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "b cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell"
+        ],
+        "agreement": 0.1667,
+        "correlation_used": false,
+        "observed": [
+          1715,
+          2839,
+          1790,
+          2915,
+          1792,
+          2874,
+          2263,
+          2195,
+          2248,
+          1360,
+          2708,
+          1331,
+          2766,
+          1319,
+          2698,
+          3009,
+          3413,
+          2958,
+          3371,
+          2990,
+          3352,
+          2599,
+          2532,
+          2779,
+          2757,
+          2805,
+          2717,
+          1084,
+          1318,
+          1086,
+          1348,
+          1069,
+          1307,
+          1431,
+          2774,
+          1471,
+          2792,
+          1462,
+          2873,
+          3207,
+          3469,
+          3490,
+          3722,
+          3422,
+          3655,
+          3835,
+          3796,
+          3845
+        ]
+      },
+      "base_sink_share": {
+        "encoder": 91.67,
+        "correlation": 16.67,
+        "fused": 91.67
+      },
+      "markers": {
+        "25": {
+          "removed": 13,
+          "fused_sink_share": 91.67,
+          "encoder_sink_share": 89.58,
+          "random_fused_sink_share": [
+            91.67,
+            91.67,
+            91.67,
+            91.67,
+            91.67
+          ],
+          "first_markers": [
+            "MZB1",
+            "JCHAIN",
+            "TNFRSF17",
+            "DERL3",
+            "IGHG1",
+            "TXNDC5",
+            "IGLL5",
+            "IGHG2",
+            "SEC11C",
+            "MYBL2"
+          ]
+        },
+        "50": {
+          "removed": 26,
+          "fused_sink_share": 91.67,
+          "encoder_sink_share": 91.67,
+          "random_fused_sink_share": [
+            91.67,
+            91.67,
+            91.67,
+            91.67,
+            91.67
+          ],
+          "first_markers": null
+        },
+        "100": {
+          "removed": 49,
+          "fused_sink_share": 91.67,
+          "encoder_sink_share": 91.67,
+          "random_fused_sink_share": [
+            91.67,
+            91.67,
+            91.67,
+            91.67,
+            91.67
+          ],
+          "first_markers": null
+        },
+        "200": {
+          "removed": 105,
+          "fused_sink_share": 89.58,
+          "encoder_sink_share": 89.58,
+          "random_fused_sink_share": [
+            91.67,
+            91.67,
+            91.67,
+            91.67,
+            91.67
+          ],
+          "first_markers": null
+        }
+      },
+      "depth": {
+        "0.1": [
+          43.75,
+          35.42,
+          33.33,
+          39.58,
+          47.92
+        ],
+        "0.2": [
+          54.17,
+          54.17,
+          54.17,
+          54.17,
+          56.25
+        ],
+        "0.4": [
+          70.83,
+          77.08,
+          75.0,
+          81.25,
+          75.0
+        ]
+      },
+      "company": {
+        "B cell": {
+          "pools": 6,
+          "fused_sink_share": 0.0,
+          "fused": {
+            "innate lymphoid cell": 3,
+            "b cell": 3
+          }
+        },
+        "CD4 T": {
+          "pools": 6,
+          "fused_sink_share": 50.0,
+          "fused": {
+            "plasma cell": 3,
+            "innate lymphoid cell": 3
+          }
+        },
+        "CD8 T": {
+          "pools": 15,
+          "fused_sink_share": 80.0,
+          "fused": {
+            "plasma cell": 12,
+            "b cell": 3
+          }
+        },
+        "macrophage": {
+          "pools": 6,
+          "fused_sink_share": 66.67,
+          "fused": {
+            "plasma cell": 4,
+            "innate lymphoid cell": 2
+          }
+        },
+        "plasma": {
+          "pools": 6,
+          "fused_sink_share": 83.33,
+          "fused": {
+            "plasma cell": 5,
+            "t cell": 1
+          }
+        },
+        "tumour": {
+          "pools": 9,
+          "fused_sink_share": 66.67,
+          "fused": {
+            "plasma cell": 6,
+            "b cell": 1,
+            "neutrophil": 1
+          }
+        }
+      },
+      "by_population_base": {
+        "B cell": {
+          "plasma cell": 6
+        },
+        "CD4 T": {
+          "plasma cell": 5,
+          "b cell": 1
+        },
+        "CD8 T": {
+          "plasma cell": 12,
+          "neutrophil": 3
+        },
+        "macrophage": {
+          "plasma cell": 6
+        },
+        "plasma": {
+          "plasma cell": 6
+        },
+        "tumour": {
+          "plasma cell": 9
+        }
+      }
+    },
+    "coscia": {
+      "sink": "plasma cell",
+      "pools": 14,
+      "base": {
+        "encoder": [
+          "plasma cell",
+          "plasma cell",
+          "cd4-positive, alpha-beta t cell",
+          "b cell",
+          "b cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "cd8-positive, alpha-beta t cell",
+          "cd4-positive, alpha-beta t cell",
+          "cd4-positive, alpha-beta t cell",
+          "cd8-positive, alpha-beta t cell",
+          "cd4-positive, alpha-beta t cell"
+        ],
+        "correlation": [
+          "plasma cell",
+          "plasma cell",
+          "regulatory t cell",
+          "b cell",
+          "b cell",
+          "endothelial cell",
+          "stromal cell",
+          "endothelial cell",
+          "endothelial cell",
+          "cd8-positive, alpha-beta t cell",
+          "regulatory t cell",
+          "cd8-positive, alpha-beta t cell",
+          "t cell",
+          "stromal cell"
+        ],
+        "fused": [
+          "plasma cell",
+          "plasma cell",
+          "cd4-positive, alpha-beta t cell",
+          "b cell",
+          "b cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "plasma cell",
+          "cd8-positive, alpha-beta t cell",
+          "cd4-positive, alpha-beta t cell",
+          "cd4-positive, alpha-beta t cell",
+          "cd8-positive, alpha-beta t cell",
+          "cd4-positive, alpha-beta t cell"
+        ],
+        "agreement": 0.3571,
+        "correlation_used": false,
+        "observed": [
+          1975,
+          1902,
+          2009,
+          1955,
+          1848,
+          1595,
+          1569,
+          1415,
+          1453,
+          1718,
+          1763,
+          1761,
+          1562,
+          1834
+        ]
+      },
+      "base_sink_share": {
+        "encoder": 42.86,
+        "correlation": 14.29,
+        "fused": 42.86
+      },
+      "markers": {
+        "25": {
+          "removed": 10,
+          "fused_sink_share": 42.86,
+          "encoder_sink_share": 35.71,
+          "random_fused_sink_share": [
+            42.86,
+            42.86,
+            42.86,
+            42.86,
+            42.86
+          ],
+          "first_markers": [
+            "MZB1",
+            "JCHAIN",
+            "TNFRSF17",
+            "DERL3",
+            "IGHG1",
+            "TXNDC5",
+            "IGLL5",
+            "IGHG2",
+            "SEC11C",
+            "MYBL2"
+          ]
+        },
+        "50": {
+          "removed": 15,
+          "fused_sink_share": 35.71,
+          "encoder_sink_share": 28.57,
+          "random_fused_sink_share": [
+            42.86,
+            42.86,
+            42.86,
+            42.86,
+            42.86
+          ],
+          "first_markers": null
+        },
+        "100": {
+          "removed": 25,
+          "fused_sink_share": 28.57,
+          "encoder_sink_share": 28.57,
+          "random_fused_sink_share": [
+            42.86,
+            42.86,
+            42.86,
+            42.86,
+            42.86
+          ],
+          "first_markers": null
+        },
+        "200": {
+          "removed": 50,
+          "fused_sink_share": 28.57,
+          "encoder_sink_share": 28.57,
+          "random_fused_sink_share": [
+            42.86,
+            42.86,
+            42.86,
+            42.86,
+            42.86
+          ],
+          "first_markers": null
+        }
+      },
+      "depth": {
+        "0.1": [
+          21.43,
+          28.57,
+          21.43,
+          14.29,
+          14.29
+        ],
+        "0.2": [
+          42.86,
+          35.71,
+          28.57,
+          35.71,
+          42.86
+        ],
+        "0.4": [
+          28.57,
+          35.71,
+          35.71,
+          42.86,
+          42.86
+        ]
+      },
+      "company": {
+        "B": {
+          "pools": 5,
+          "fused_sink_share": 40.0,
+          "fused": {
+            "plasma cell": 2,
+            "b cell": 2,
+            "cd8-positive, alpha-beta t cell": 1
+          }
+        },
+        "T": {
+          "pools": 5,
+          "fused_sink_share": 0.0,
+          "fused": {
+            "cd4-positive, alpha-beta t cell": 2,
+            "naive thymus-derived cd4-positive, alpha-beta t cell": 2,
+            "t cell": 1
+          }
+        },
+        "epithelium": {
+          "pools": 4,
+          "fused_sink_share": 0.0,
+          "fused": {
+            "b cell": 2,
+            "innate lymphoid cell": 1,
+            "t cell": 1
+          }
+        }
+      },
+      "by_population_base": {
+        "B": {
+          "plasma cell": 2,
+          "b cell": 2,
+          "cd4-positive, alpha-beta t cell": 1
+        },
+        "T": {
+          "cd4-positive, alpha-beta t cell": 3,
+          "cd8-positive, alpha-beta t cell": 2
+        },
+        "epithelium": {
+          "plasma cell": 4
+        }
+      }
+    }
+  },
+  "lung": {
+    "bpd": {
+      "sink": "macrophage",
+      "pools": 20,
+      "base": {
+        "encoder": [
+          "capillary endothelial cell",
+          "macrophage",
+          "capillary endothelial cell",
+          "macrophage",
+          "monocyte",
+          "macrophage",
+          "monocyte",
+          "macrophage",
+          "endothelial cell of lymphatic vessel",
+          "macrophage",
+          "bronchial smooth muscle cell",
+          "type ii pneumocyte",
+          "capillary endothelial cell",
+          "type ii pneumocyte",
+          "endothelial cell of artery",
+          "type i pneumocyte",
+          "vein endothelial cell",
+          "respiratory goblet cell",
+          "endothelial cell of artery",
+          "macrophage"
+        ],
+        "correlation": [
+          "capillary endothelial cell",
+          "intermediate monocyte",
+          "capillary endothelial cell",
+          "macrophage",
+          "neutrophil",
+          "macrophage",
+          "classical monocyte",
+          "intermediate monocyte",
+          "mature nk t cell",
+          "monocyte",
+          "bronchial smooth muscle cell",
+          "type ii pneumocyte",
+          "capillary endothelial cell",
+          "type ii pneumocyte",
+          "vein endothelial cell",
+          "type i pneumocyte",
+          "vein endothelial cell",
+          "lung ciliated cell",
+          "endothelial cell of artery",
+          "macrophage"
+        ],
+        "fused": [
+          "capillary endothelial cell",
+          "macrophage",
+          "capillary endothelial cell",
+          "macrophage",
+          "classical monocyte",
+          "macrophage",
+          "classical monocyte",
+          "macrophage",
+          "endothelial cell of lymphatic vessel",
+          "intermediate monocyte",
+          "bronchial smooth muscle cell",
+          "type ii pneumocyte",
+          "capillary endothelial cell",
+          "type ii pneumocyte",
+          "vein endothelial cell",
+          "type i pneumocyte",
+          "vein endothelial cell",
+          "respiratory goblet cell",
+          "endothelial cell of artery",
+          "macrophage"
+        ],
+        "agreement": 0.6,
+        "correlation_used": true,
+        "observed": [
+          1178,
+          808,
+          1278,
+          1411,
+          901,
+          1054,
+          1387,
+          1028,
+          1284,
+          1000,
+          1701,
+          1470,
+          1738,
+          1358,
+          1707,
+          1495,
+          1994,
+          1955,
+          1862,
+          1513
+        ]
+      },
+      "base_sink_share": {
+        "encoder": 30.0,
+        "correlation": 15.0,
+        "fused": 25.0
+      },
+      "markers": {
+        "25": {
+          "removed": 11,
+          "fused_sink_share": 25.0,
+          "encoder_sink_share": 30.0,
+          "random_fused_sink_share": [
+            25.0,
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ],
+          "first_markers": [
+            "APOC1",
+            "ACP5",
+            "GPD1",
+            "CYP27A1",
+            "INHBA",
+            "MARCO",
+            "ATP6V0D2",
+            "PPARG",
+            "OLR1",
+            "FBP1"
+          ]
+        },
+        "50": {
+          "removed": 22,
+          "fused_sink_share": 25.0,
+          "encoder_sink_share": 30.0,
+          "random_fused_sink_share": [
+            25.0,
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ],
+          "first_markers": null
+        },
+        "100": {
+          "removed": 43,
+          "fused_sink_share": 25.0,
+          "encoder_sink_share": 30.0,
+          "random_fused_sink_share": [
+            25.0,
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ],
+          "first_markers": null
+        },
+        "200": {
+          "removed": 85,
+          "fused_sink_share": 25.0,
+          "encoder_sink_share": 30.0,
+          "random_fused_sink_share": [
+            25.0,
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ],
+          "first_markers": null
+        }
+      },
+      "depth": {
+        "0.1": [
+          10.0,
+          20.0,
+          20.0,
+          15.0,
+          15.0
+        ],
+        "0.2": [
+          25.0,
+          15.0,
+          15.0,
+          20.0,
+          20.0
+        ],
+        "0.4": [
+          25.0,
+          20.0,
+          25.0,
+          25.0,
+          20.0
+        ]
+      },
+      "company": {
+        "BPD endothelial": {
+          "pools": 5,
+          "fused_sink_share": 40.0,
+          "fused": {
+            "macrophage": 2,
+            "capillary endothelial cell": 1,
+            "endothelial cell of lymphatic vessel": 1
+          }
+        },
+        "BPD epithelial": {
+          "pools": 5,
+          "fused_sink_share": 0.0,
+          "fused": {
+            "monocyte": 1,
+            "type ii pneumocyte": 1,
+            "endothelial cell of lymphatic vessel": 1
+          }
+        },
+        "control endothelial": {
+          "pools": 5,
+          "fused_sink_share": 40.0,
+          "fused": {
+            "macrophage": 2,
+            "capillary endothelial cell": 1,
+            "natural killer cell": 1
+          }
+        },
+        "control epithelial": {
+          "pools": 5,
+          "fused_sink_share": 40.0,
+          "fused": {
+            "macrophage": 2,
+            "b cell": 1,
+            "monocyte": 1
+          }
+        }
+      },
+      "by_population_base": {
+        "BPD endothelial": {
+          "vein endothelial cell": 2,
+          "endothelial cell of lymphatic vessel": 1,
+          "capillary endothelial cell": 1
+        },
+        "BPD epithelial": {
+          "intermediate monocyte": 1,
+          "type ii pneumocyte": 1,
+          "type i pneumocyte": 1
+        },
+        "control endothelial": {
+          "capillary endothelial cell": 2,
+          "classical monocyte": 2,
+          "bronchial smooth muscle cell": 1
+        },
+        "control epithelial": {
+          "macrophage": 4,
+          "type ii pneumocyte": 1
+        }
+      }
+    }
+  },
+  "large_intestine": {
+    "zheng_colon": {
+      "sink": "mast cell",
+      "pools": 18,
+      "base": {
+        "encoder": [
+          "colon endothelial cell",
+          "colon endothelial cell",
+          "colon endothelial cell",
+          "transit amplifying cell of colon",
+          "transit amplifying cell of colon",
+          "transit amplifying cell of colon",
+          "monocyte",
+          "monocyte",
+          "monocyte",
+          "innate lymphoid cell",
+          "innate lymphoid cell",
+          "innate lymphoid cell",
+          "innate lymphoid cell",
+          "innate lymphoid cell",
+          "mast cell",
+          "innate lymphoid cell",
+          "colon endothelial cell",
+          "colon endothelial cell"
+        ],
+        "correlation": [
+          "plasma cell",
+          "colon macrophage",
+          "plasma cell",
+          "transit amplifying cell of colon",
+          "transit amplifying cell of colon",
+          "transit amplifying cell of colon",
+          "monocyte",
+          "monocyte",
+          "plasma cell",
+          "enterocyte of epithelium of large intestine",
+          "intestinal crypt stem cell of colon",
+          "intestinal crypt stem cell of colon",
+          "regulatory t cell",
+          "regulatory t cell",
+          "monocyte",
+          "fibroblast",
+          "fibroblast",
+          "fibroblast"
+        ],
+        "fused": [
+          "colon endothelial cell",
+          "colon endothelial cell",
+          "colon endothelial cell",
+          "transit amplifying cell of colon",
+          "transit amplifying cell of colon",
+          "transit amplifying cell of colon",
+          "monocyte",
+          "monocyte",
+          "monocyte",
+          "mast cell",
+          "mast cell",
+          "mast cell",
+          "mast cell",
+          "mast cell",
+          "mast cell",
+          "colon endothelial cell",
+          "colon endothelial cell",
+          "colon endothelial cell"
+        ],
+        "agreement": 0.2778,
+        "correlation_used": false,
+        "observed": [
+          4236,
+          4187,
+          4243,
+          4654,
+          4648,
+          4612,
+          4220,
+          4256,
+          4252,
+          4625,
+          4636,
+          4687,
+          3629,
+          3615,
+          3754,
+          4134,
+          4257,
+          4203
+        ]
+      },
+      "base_sink_share": {
+        "encoder": 5.56,
+        "correlation": 0.0,
+        "fused": 33.33
+      },
+      "markers": {
+        "25": {
+          "removed": 10,
+          "fused_sink_share": 33.33,
+          "encoder_sink_share": 0.0,
+          "random_fused_sink_share": [
+            33.33,
+            33.33,
+            33.33,
+            33.33,
+            33.33
+          ],
+          "first_markers": [
+            "TPSAB1",
+            "TPSB2",
+            "CPA3",
+            "ADAM12",
+            "RHEX",
+            "FER",
+            "GALNT6",
+            "RAB27B",
+            "CTSG",
+            "IL18R1"
+          ]
+        },
+        "50": {
+          "removed": 19,
+          "fused_sink_share": 33.33,
+          "encoder_sink_share": 5.56,
+          "random_fused_sink_share": [
+            33.33,
+            33.33,
+            33.33,
+            33.33,
+            33.33
+          ],
+          "first_markers": null
+        },
+        "100": {
+          "removed": 38,
+          "fused_sink_share": 33.33,
+          "encoder_sink_share": 0.0,
+          "random_fused_sink_share": [
+            33.33,
+            33.33,
+            33.33,
+            33.33,
+            33.33
+          ],
+          "first_markers": null
+        },
+        "200": {
+          "removed": 91,
+          "fused_sink_share": 27.78,
+          "encoder_sink_share": 5.56,
+          "random_fused_sink_share": [
+            33.33,
+            33.33,
+            33.33,
+            33.33,
+            33.33
+          ],
+          "first_markers": null
+        }
+      },
+      "depth": {
+        "0.1": [
+          38.89,
+          27.78,
+          16.67,
+          22.22,
+          27.78
+        ],
+        "0.2": [
+          16.67,
+          27.78,
+          33.33,
+          38.89,
+          33.33
+        ],
+        "0.4": [
+          50.0,
+          27.78,
+          33.33,
+          27.78,
+          33.33
+        ]
+      },
+      "company": {
+        "cd4": {
+          "pools": 6,
+          "fused_sink_share": 50.0,
+          "fused": {
+            "mast cell": 3,
+            "colon endothelial cell": 2,
+            "enteroendocrine cell": 1
+          }
+        },
+        "cd8": {
+          "pools": 6,
+          "fused_sink_share": 0.0,
+          "fused": {
+            "transit amplifying cell of colon": 3,
+            "monocyte": 2,
+            "plasma cell": 1
+          }
+        },
+        "macrophage": {
+          "pools": 6,
+          "fused_sink_share": 0.0,
+          "fused": {
+            "monocyte": 3,
+            "transit amplifying cell of colon": 3
+          }
+        }
+      },
+      "by_population_base": {
+        "cd4": {
+          "mast cell": 3,
+          "colon endothelial cell": 3
+        },
+        "cd8": {
+          "monocyte": 3,
+          "mast cell": 3
+        },
+        "macrophage": {
+          "colon endothelial cell": 3,
+          "transit amplifying cell of colon": 3
+        }
+      }
+    }
+  }
+}
