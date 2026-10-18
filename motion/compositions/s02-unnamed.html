@@ -1,7 +1,9 @@
 <template>
     <!-- Scene 2, 0:08 to 0:18: without names. The camera sinks below the
          waterline; protein cells drift past with empty name tags. The words
-         sit on liquid glass. -->
+         sit on liquid glass. The first cell stays put: as the camera leaves,
+         it opens into its column of scene 3's matrix (lib/bridges.js draws
+         it from here on, HERO). -->
     <style>
         #s-unnamed .cell { position: absolute; opacity: 0; display: flex; align-items: center; gap: 18px; }
         #s-unnamed .body {
@@ -14,7 +16,7 @@
             padding: 6px 20px; border-radius: 999px; border: 2px dashed rgba(29, 43, 54, 0.45);
             background: rgba(255, 255, 255, 0.9);
         }
-        #s-unnamed .words { left: 140px; top: 600px; max-width: 1240px; opacity: 0; }
+        #s-unnamed .words { left: 140px; top: 600px; max-width: 1240px; }
         #s-unnamed .words .f-sub { margin-top: 24px; max-width: 36ch; opacity: 0; }
         #s-unnamed .cut { clip-path: inset(0 100% 0 0); }
     </style>
@@ -36,13 +38,18 @@
             const cells = document.querySelectorAll('#s-unnamed .cell');
             cells.forEach((cell, i) => {
                 tl.fromTo(cell, { opacity: 0, x: 60, y: 120 }, { opacity: 1, x: 0, y: 0, duration: 1.4, ease: 'power2.out' }, 0.6 + i * 0.5);
-                // Each keeps drifting up and across, as the water rises past the camera.
-                tl.fromTo(cell, { yPercent: 0, xPercent: 0 }, { yPercent: -60 - i * 12, xPercent: i % 2 ? -14 : 12, duration: 9.4, ease: 'none' }, 0.6);
+                // The others keep drifting up and across, as the water rises
+                // past the camera.
+                if (i > 0) tl.fromTo(cell, { yPercent: 0, xPercent: 0 }, { yPercent: -60 - i * 12, xPercent: i % 2 ? -14 : 12, duration: 9.4, ease: 'none' }, 0.6);
             });
-            tl.fromTo('#s-unnamed .words', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.3);
+            // The first cell's tag lets go; then its body is handed to the morph.
+            tl.to(cells[0].querySelector('.tag'), { opacity: 0, x: 30, duration: 0.5, ease: 'power2.in' }, 9.0);
+            tl.set(cells[0].querySelector('.body'), { opacity: 0 }, 9.7);
             tl.fromTo('#s-unnamed .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 2.8);
             tl.fromTo('#s-unnamed .f-sub', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 3.6);
-            tl.fromTo('#s-unnamed', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 9.9);
+            // The camera carries the cards out of the frame (lib/dive.js); this
+            // only clears anything left at the edge before the host ends.
+            tl.fromTo('#s-unnamed', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-unnamed'] = tl;
         })();

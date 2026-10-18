@@ -3,7 +3,7 @@
          The sealed test's record is pending, so it reads Pending. Headline,
          results and limits each on liquid glass. -->
     <style>
-        #s-methods .head { left: 140px; top: 50px; width: 1600px; padding: 32px 52px 34px; opacity: 0; }
+        #s-methods .head { left: 140px; top: 50px; width: 1600px; padding: 32px 52px 34px; }
         #s-methods .head .f-sub { margin-top: 18px; max-width: 52ch; }
         #s-methods .methods { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 14px; }
         #s-methods .method { opacity: 0; border: 2px solid rgba(0, 102, 163, 0.35); }
@@ -16,7 +16,7 @@
         #s-methods .limits { left: 140px; top: 870px; width: 1600px; padding: 24px 40px; display: grid; gap: 8px; opacity: 0; }
         #s-methods .limits .f-caption { color: var(--ink); }
         #s-methods .limits .bead { margin-left: 12px; vertical-align: 3px; }
-        #s-methods .f-display, #s-methods .f-sub { opacity: 0; }
+        #s-methods .f-sub { opacity: 0; }
         #s-methods .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-methods" class="scene" data-composition-id="s-methods" data-width="1920" data-height="1080">
@@ -44,15 +44,15 @@
         (function () {
             VivomeSlots.fill(document.getElementById('s-methods'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-methods .head', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.3);
-            tl.fromTo('#s-methods .f-display', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.4);
             tl.fromTo('#s-methods .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
             tl.fromTo('#s-methods .f-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 1.8);
             // The methods rise in as bubbles, one after another.
             tl.fromTo('#s-methods .method', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.18 }, 2.8);
             tl.fromTo('#s-methods .result', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 1.2 }, 4.6);
             tl.fromTo('#s-methods .limits', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 7.6);
-            tl.fromTo('#s-methods', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 11.9);
+            // The camera carries the cards out of the frame (lib/dive.js); this
+            // only clears anything left at the edge before the host ends.
+            tl.fromTo('#s-methods', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 13.2);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-methods'] = tl;
         })();

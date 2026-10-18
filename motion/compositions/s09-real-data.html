@@ -4,7 +4,7 @@
          (scripts/prepare.mjs), each with the caveat the Manuscript page gives
          it. Headline, results and note each on a white card. -->
     <style>
-        #s-real-data .head { left: 140px; top: 70px; padding-top: 32px; padding-bottom: 32px; opacity: 0; }
+        #s-real-data .head { left: 140px; top: 70px; padding-top: 32px; padding-bottom: 32px; }
         #s-real-data .result { top: 290px; width: 780px; height: 560px; display: flex; flex-direction: column; opacity: 0; }
         #s-real-data .result.a { left: 140px; }
         #s-real-data .result.b { left: 960px; }
@@ -46,12 +46,13 @@
         (function () {
             VivomeSlots.fill(document.getElementById('s-real-data'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-real-data .head', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.4);
             tl.fromTo('#s-real-data .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
             tl.fromTo('#s-real-data .result.a', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 1.6);
             tl.fromTo('#s-real-data .result.b', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 3.6);
             tl.fromTo('#s-real-data .foot', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 6.2);
-            tl.fromTo('#s-real-data', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 11.9);
+            // The camera carries the cards out of the frame (lib/dive.js); this
+            // only clears anything left at the edge before the host ends.
+            tl.fromTo('#s-real-data', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 13.2);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-real-data'] = tl;
         })();

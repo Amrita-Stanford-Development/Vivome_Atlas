@@ -142,12 +142,55 @@ const near = sample.filter((p) => involved.has(p[2]));
 const nx = near.map((p) => p[0]).sort((a, b) => a - b);
 const ny = near.map((p) => p[1]).sort((a, b) => a - b);
 const pad = (lo, hi) => [lo - (hi - lo) * 0.08, hi + (hi - lo) * 0.08];
+// How each cell's set narrows in the shot, from the wider sets its types
+// belong to down to the set itself: a cell-type answer from its group and
+// its lineage (the wider first: the two are not always nested), a group
+// answer from its lineage, a lineage answer from every type; with no
+// answer, the set widens instead, from the best guess to every type that
+// fits. A stage that names the same types as the next is left out.
+const typesWhere = (keep) => classes.map((_, k) => k).filter((k) => keep(classes[k]));
+const sameTypes = (a, b) => a.length === b.length && [...a].sort().every((v, i) => v === [...b].sort()[i]);
+const stagesOf = (a) => {
+  const first = classes[a.types[0]];
+  const wide = {
+    class: [typesWhere((c) => c.lineage === first.lineage), typesWhere((c) => c.group === first.group)],
+    group: [typesWhere((c) => c.lineage === first.lineage)],
+    lineage: [classes.map((_, k) => k)],
+    none: [[cells[a.cell].guess]],
+  }[a.level];
+  if (a.level !== 'none') wide.sort((x, y) => y.length - x.length);
+  const all = [...wide, a.types];
+  return all.filter((set, i) => i === all.length - 1 || !sameTypes(set, all[i + 1]));
+};
+const stages = answers.map(stagesOf);
+// Each cell fades in and flies to its place (land), its first set is drawn
+// (first), and each later one takes its place (step): seconds, each a
+// whole number of the film's frames, so Manim's frames keep to the clock.
+const timing = { land: 0.6, first: 0.5, step: 0.4 };
 const answersShot = {
   box: [90, 230, 1130, 1040],
   bounds: [...pad(q(nx, 0.02), q(nx, 0.98)), ...pad(q(ny, 0.02), q(ny, 0.98))],
   seconds: answersFrame.seconds,
   fps: 30,
   starts: answers.map((_, k) => +(1.6 + k * 2.5).toFixed(2)),
+  ...timing,
+  stages,
+  // When, after its start, each cell's set has narrowed: its answer shows.
+  settle: stages.map((st) => +(timing.land + timing.first + timing.step * (st.length - 1)).toFixed(2)),
+};
+
+// The atlas in 3D for the flights of scenes 4 and 11: the same reference
+// sample and the example file's cells at their coordinates in the atlas's
+// projection, centred and scaled so the cloud spans about one unit.
+const raw3 = w.reference.sample.slice(0, 2600).map(([x, y, z, c]) => [x / 1000, y / 1000, z / 1000, c]);
+const mid3 = [0, 1, 2].map((k) => raw3.reduce((s, p) => s + p[k], 0) / raw3.length);
+const radii = raw3.map((p) => Math.hypot(p[0] - mid3[0], p[1] - mid3[1], p[2] - mid3[2])).sort((a, b) => a - b);
+const unit = 1 / radii[Math.floor(radii.length * 0.95)];
+const to3 = (xyz) => xyz.map((v, k) => +((v - mid3[k]) * unit).toFixed(4));
+const atlas3 = {
+  points: raw3.map(([x, y, z, c]) => [...to3([x, y, z]), c]),
+  centres: w.reference.centres.map((c) => to3(c.map((v) => v / 1000))),
+  cells: w.trace.cells.map((c) => (c.xyz ? to3(c.xyz) : null)),
 };
 
 const hm = w.trace.heatmap;
@@ -160,6 +203,7 @@ const VIVOME = {
   facts,
   classes,
   map: { sample, bounds, centres },
+  atlas3,
   cells,
   answers,
   answersShot,

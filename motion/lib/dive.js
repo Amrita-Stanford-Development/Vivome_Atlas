@@ -1,34 +1,41 @@
 // The dive: one continuous shot of the site's living water under all twelve
 // scenes. It is web/js/biofield.js's water (the cells and threads of
 // web/js/biocells.js through an effect of web/js/water.js, over the
-// particles of web/js/background.js, here lib/field.js), with three
-// things the site does not need:
+// particles of web/js/background.js, here lib/field.js), with what the site
+// does not need:
 //
 // - a clock HyperFrames owns: every frame is drawn on its `hf-seek` event,
 //   for that exact time, never from requestAnimationFrame. The water's
 //   state (the cells and the one ripple field) is stepped on a fixed 60 a
 //   second grid from the start of the film, so a frame rendered on its own
 //   looks the same as one reached by playing;
-// - one continuous shot: nothing resets at a scene's start. The camera,
-//   depth, the particles' density and the water's rise follow smooth curves
-//   through the scenes' values (lib/plan.js), and each scene's pictures stay
-//   drawn while its cards hand over to the next scene's;
+// - one camera (lib/camera.js) on one eased path through a world where each
+//   scene's cards are a plane (lib/plan.js). Each frame it sets every
+//   scene's host to where the camera sees its plane, so cards arrive and
+//   leave with the camera, never by fading; it moves the water's own camera
+//   with it, so the near cells pass faster than the far (parallax), the
+//   site's particles drift slower still, and a push-in carries the camera on
+//   through the cells; it racks focus, the water behind going soft while a
+//   scene plays and sharpening as the camera travels;
 // - depth, shown by the objects and never by colour: the background is the
 //   site's own white field and gel throughout (background.js's breathing
 //   base, biofield's frost). Going down, the cells come forward: the view
-//   narrows so they are larger, the camera drifts on through them, it sways
-//   so the near ones move more than the far (parallax), the far ones are
-//   drawn apart and softly blurred, and the particles grow; going up, all of
-//   that eases back. A waterline shows at the surface, in the gel's colours;
+//   narrows so they are larger, the camera drifts on through them faster,
+//   the far ones are drawn apart and softly blurred, and the particles grow;
+//   going up, all of that eases back. Where the camera is near the surface,
+//   the waterline shows, in the gel's colours;
 // - the film's motif: a time code and a depth gauge.
 //
-// It also draws the scenes' data pictures (lib/scenes.js) on the same seek.
+// It also draws the scenes' data pictures (lib/scenes.js) and the morphs
+// between scenes (lib/bridges.js) on the same seek.
 
 import { PALETTES, createBioLayer } from '../vendor/site/biocells.js';
 import { createEffect, createSceneTarget, supported } from '../vendor/site/water.js';
 import { createField } from './field.js';
-import { PLAN } from './plan.js';
+import { PLAN, SURFACES } from './plan.js';
 import { DRAW, sceneRoots } from './scenes.js';
+import { createBridges } from './bridges.js';
+import { cameraKeys, cssTransform, planeView, poseAt, settled, waterline } from './camera.js';
 
 const W = 1920;
 const H = 1080;
@@ -38,8 +45,6 @@ const FRAMES = V.frames;
 const THREE = window.THREE;
 
 const clamp = (x, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, x));
-const smooth = (x) => { const t = clamp(x); return t * t * (3 - 2 * t); };
-const lerp = (pair, t, fallback = 0) => (pair ? pair[0] + (pair[1] - pair[0]) * t : fallback);
 
 export function locate(t) {
   let index = FRAMES.length - 1;
@@ -84,10 +89,6 @@ function curve(keys) {
   };
 }
 const pair = (name, fallback) => (plan, frame, end) => (plan[name] ? plan[name][end] : fallback);
-const FOV = curve(keysOf(pair('fov', 45)));
-const PITCH = curve(keysOf(pair('pitch', 0)));
-const YAW = curve(keysOf(pair('yaw', 0)));
-const ROLL = curve(keysOf(pair('roll', 0)));
 const DENSITY = curve(keysOf(pair('field', 0.6)));
 const LINKS = curve(keysOf(pair('links', 1)));
 const RISE = curve(keysOf((plan) => plan.rise ?? 1));
@@ -96,16 +97,56 @@ const DEPTH = curve(keysOf((plan, frame, end) => frame.depth[end]));
 // Depth, 0 at the surface to 1 at the deepest point: it changes what the
 // objects do, never the colour.
 export const depthAt = (t) => clamp(DEPTH(t));
+// Deeper, the camera drifts on through the cells faster (scene units a
+// second), so they come forward and pass.
+const drift = (d) => 0.4 + 2.2 * d;
 
-// How far the water has risen past the camera, in background.js's frames:
-// the rise speed added up on the 60 a second grid, once.
-const CLIMB = new Float64Array(Math.round(V.total / STEP) + 2);
-for (let k = 1; k < CLIMB.length; k++) CLIMB[k] = CLIMB[k - 1] + RISE((k - 1) * STEP) * STEP * 60;
-function climbAt(t) {
+// ---- the camera ----
+
+const SPANS = FRAMES.map((f) => ({ id: f.id, start: f.start, seconds: f.seconds }));
+const KEYS = cameraKeys(SPANS, PLAN, V.total);
+export const poseOf = (t) => poseAt(KEYS, clamp(t, 0, V.total));
+const hosts = new Map();
+const hostOf = (id) => {
+  if (!hosts.get(id)?.isConnected) hosts.set(id, document.getElementById(`host-${id}`));
+  return hosts.get(id);
+};
+
+// Tables on the 60 a second grid, worked out once: how far the water has
+// risen past the camera (in background.js's frames: the rise speed added
+// up), how far the camera has dollied through the cells (scene units), and
+// the camera's sideways and vertical travel with its slow part taken out,
+// so the water's camera follows the moves and drifts back between them.
+const N = Math.round(V.total / STEP) + 2;
+const CLIMB = new Float64Array(N);
+const ADVANCE = new Float64Array(N);
+const SWAY_X = new Float64Array(N);
+const SWAY_Y = new Float64Array(N);
+{
+  const keep = 1 - Math.exp(-STEP / 2.5);
+  let pose = poseOf(0);
+  let slowX = pose.x;
+  let slowY = pose.y;
+  for (let k = 1; k < N; k++) {
+    const t = k * STEP;
+    const next = poseOf(t);
+    CLIMB[k] = CLIMB[k - 1] + RISE(t - STEP) * STEP * 60;
+    ADVANCE[k] = ADVANCE[k - 1] + STEP * drift(depthAt(t)) + (next.z - pose.z) * 0.004;
+    slowX += (next.x - slowX) * keep;
+    slowY += (next.y - slowY) * keep;
+    SWAY_X[k] = next.x - slowX;
+    SWAY_Y[k] = next.y - slowY;
+    pose = next;
+  }
+}
+function tableAt(table, t) {
   const x = clamp(t, 0, V.total) / STEP;
   const k = Math.floor(x);
-  return CLIMB[k] + (CLIMB[Math.min(CLIMB.length - 1, k + 1)] - CLIMB[k]) * (x - k);
+  return table[k] + (table[Math.min(N - 1, k + 1)] - table[k]) * (x - k);
 }
+// The water's camera moves at most this far aside (scene units): the cells
+// fill the view with a margin, and this keeps the margin out of sight.
+const soft = (v, limit) => limit * Math.tanh(v / limit);
 
 // ---- the renderer and its passes ----
 
@@ -253,27 +294,26 @@ function freshLayer() {
   layerStep = 0;
   layer.update(0, { aspect: W / H });
 }
-// Deeper, the camera drifts on through the cells faster (scene units a
-// second), so they come forward and pass.
-const drift = (d) => 0.4 + 2.2 * d;
 function cellsTo(step) {
   if (!layer || step < layerStep) freshLayer();
   while (layerStep < step) {
     layerStep++;
-    layer.update(layerStep * STEP, { aspect: W / H, advance: STEP * drift(depthAt(layerStep * STEP)) });
+    layer.update(layerStep * STEP, { aspect: W / H, advance: ADVANCE[layerStep] - ADVANCE[layerStep - 1] });
   }
 }
 
 // The cells in two slices: the far one blurred, the near one sharp. Deeper,
-// the split comes closer and the blur grows.
-function captureCells(d) {
+// the split comes closer and the blur grows; `focus` (1 while a scene
+// plays, falling as the camera travels) racks the blur off the water as
+// the camera flies through it.
+function captureCells(d, focus) {
   const split = 17 - 6 * d;
   const fade = shared.uDepthFade.value;
   const haze = shared.uHaze.value;
   fade.set(split, split + 3, FAR - 16, FAR);
   shared.uHaze.value = 0.55 + 0.35 * d;
   farTarget.capture(renderer, scene, camera);
-  const r = 0.8 + 3.2 * d;
+  const r = (0.8 + 3.2 * d) * (0.35 + 0.65 * focus);
   blur.uniforms.uTex.value = farTarget.texture;
   blur.uniforms.uStep.value.set(r / (W / 2), 0);
   blur.into(blurA);
@@ -362,43 +402,65 @@ const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s) % 60).padStart(
 
 // ---- one frame ----
 
+const bridges = createBridges(document.getElementById('bridges'));
+
 export function draw(t) {
-  const { index, frame, plan, local, p } = locate(t);
+  const { index, frame, local, p } = locate(t);
   const d = depthAt(t);
   const step = Math.round(t / STEP);
   cellsTo(step);
   waterTo(step);
+  const pose = poseOf(t);
 
-  // Deeper: a narrower view (the cells larger) and a wider sway, which
-  // moves the near cells more than the far.
-  camera.fov = FOV(t) * (1 - 0.24 * d);
-  camera.position.set(0.9 * d * Math.sin(t * 0.31), 0.55 * d * Math.sin(t * 0.23 + 1), 0);
-  camera.rotation.set(PITCH(t) + 0.02 * d * Math.sin(t * 0.19), YAW(t) - 0.03 * d * Math.sin(t * 0.31), ROLL(t));
+  // Each scene's cards where the camera sees its plane.
+  FRAMES.forEach((f) => {
+    const host = hostOf(f.id);
+    if (!host) return;
+    // A transformed host is a layer of its own: keep it over the gel.
+    host.style.zIndex = '3';
+    host.style.transformOrigin = '960px 540px';
+    host.style.transform = cssTransform(planeView(pose, PLAN[f.id].at));
+  });
+  const focus = Math.max(...SPANS.map((_, i) => settled(SPANS, i, t)));
+
+  // The water's camera: deeper, a narrower view (the cells larger) and a
+  // slow sway; it follows the film camera's moves aside, up and round.
+  const deg = Math.PI / 180;
+  camera.fov = 46 * (1 - 0.24 * d);
+  camera.position.set(
+    soft(tableAt(SWAY_X, t) * 0.0016, 0.45) + 0.6 * d * Math.sin(t * 0.31),
+    -soft(tableAt(SWAY_Y, t) * 0.0016, 0.25) + 0.4 * d * Math.sin(t * 0.23 + 1),
+    0,
+  );
+  camera.rotation.set(
+    -pose.pitch * 0.6 * deg + 0.02 * d * Math.sin(t * 0.19),
+    -pose.yaw * 0.6 * deg - 0.03 * d * Math.sin(t * 0.31),
+    pose.roll * 0.5 * deg,
+  );
   camera.updateProjectionMatrix();
   layer.setFade(clamp(t / 1.6));
 
-  field.draw(t, { climb: climbAt(t), density: DENSITY(t), links: LINKS(t), scale: 1 + 0.6 * d });
+  // The site's particles: further off, so they drift slower than the cards.
+  field.draw(t, {
+    climb: tableAt(CLIMB, t) + pose.y * 0.12, shift: pose.x * 0.12, density: DENSITY(t), links: LINKS(t), scale: 1 + 0.6 * d,
+  });
   fieldTexture.needsUpdate = true;
 
   renderer.setRenderTarget(null);
   renderer.setScissorTest(false);
-  captureCells(d);
+  captureCells(d, focus);
   renderer.setViewport(0, 0, W, H);
   renderer.setClearColor(0x000000, 0);
   renderer.clear();
   fx.draw(renderer, cells.texture);
   back.draw();
-  if (plan.waterline) {
-    const wl = lerp(plan.waterline, smooth(p / (plan.surfaceBy ?? 1)));
-    if (wl > -0.05 && wl < 1.05) {
-      surface.uniforms.uWaterline.value = wl;
-      surface.uniforms.uTime.value = t;
-      surface.draw();
-    } else if (wl <= -0.05) {
-      surface.uniforms.uWaterline.value = -1;
-      surface.uniforms.uTime.value = t;
-      surface.draw();
-    }
+  // The waterline, where the camera is near the surface; above it, the
+  // whole frame is above the water.
+  const wl = waterline(pose, SURFACES);
+  if (wl < 1.05) {
+    surface.uniforms.uWaterline.value = wl > -0.05 ? wl : -1;
+    surface.uniforms.uTime.value = t;
+    surface.draw();
   }
 
   clock.textContent = fmt(t);
@@ -407,13 +469,15 @@ export function draw(t) {
 
   for (const el of sceneRoots(frame.id)) window.VivomeSlots?.tick(el, local);
   const pending = [DRAW[frame.id]?.(local, p, frame)];
-  // While the last scene's cards hand over to these, its pictures stay as
-  // they ended, so a frame rendered on its own shows them too.
+  // While the last scene is carried away, its pictures go on past its end,
+  // so its morph into this scene can start from them.
   const before = FRAMES[index - 1];
   if (before && local < V.handover) {
-    for (const el of sceneRoots(before.id)) window.VivomeSlots?.tick(el, before.seconds + local);
-    pending.push(DRAW[before.id]?.(before.seconds, 1, before));
+    const went = before.seconds + local;
+    for (const el of sceneRoots(before.id)) window.VivomeSlots?.tick(el, went);
+    pending.push(DRAW[before.id]?.(went, went / before.seconds, before));
   }
+  bridges(t, poseOf);
   return pending.filter(Boolean);
 }
 

@@ -7,9 +7,11 @@
 // which gives the same picture at the same moment on every render. The
 // colours and shapes are background.js's own.
 //
-// createField(width, height) -> { canvas, draw(t, { climb, density, links, scale }) }
+// createField(width, height) -> { canvas, draw(t, { climb, shift, density, links, scale }) }
 // paints the whole frame; web/js/biofield.js's water (lib/dive.js) lays it
-// behind the cells, as the site does.
+// behind the cells, as the site does. `shift` moves it with the film's
+// camera: the particles each at their own pace (the faster risers are
+// nearer, so they move more), the network and the faint grid slower.
 
 import { rng } from '../vendor/site/random.js';
 
@@ -154,13 +156,13 @@ export function createField(width, height, seed = 17) {
   }
 
   // background.js's faint grid and edge shade, drawn last.
-  function gridAndVignette() {
+  function gridAndVignette(sx, sy) {
     ctx.save();
     ctx.globalAlpha = 0.03;
     ctx.strokeStyle = 'rgba(0, 142, 204, 0.5)';
     ctx.lineWidth = 0.5;
-    for (let x = 0; x < width; x += 100) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
-    for (let y = 0; y < height; y += 100) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+    for (let x = -wrap(sx, 0, 100); x < width; x += 100) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); }
+    for (let y = -wrap(sy, 0, 100); y < height; y += 100) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
     ctx.restore();
     const v = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.max(width, height) * 0.7);
     v.addColorStop(0, 'rgba(245, 245, 243, 0)');
@@ -169,16 +171,20 @@ export function createField(width, height, seed = 17) {
     ctx.fillRect(0, 0, width, height);
   }
 
-  function flowField(time, alpha) {
+  function flowField(time, alpha, sx, sy) {
     const step = 50;
+    const ox = wrap(sx, 0, step);
+    const oy = wrap(sy, 0, step);
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.lineWidth = 1;
-    for (let i = 0; i * step < width; i++) {
-      for (let j = 0; j * step < height; j++) {
-        const x = i * step;
-        const y = j * step;
-        const angle = (Math.sin(x * 0.01 + time * 0.17) + Math.cos(y * 0.01 + time * 0.127)) * Math.PI;
+    for (let i = 0; i * step < width + step; i++) {
+      for (let j = 0; j * step < height + step; j++) {
+        const x = i * step - ox;
+        const y = j * step - oy;
+        const wx = x + sx;
+        const wy = y + sy;
+        const angle = (Math.sin(wx * 0.01 + time * 0.17) + Math.cos(wy * 0.01 + time * 0.127)) * Math.PI;
         ctx.strokeStyle = `hsla(${200 + Math.sin(time + i * 0.1) * 20}, 70%, 50%, 0.15)`;
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -190,18 +196,27 @@ export function createField(width, height, seed = 17) {
   }
 
   // t: film seconds. climb: how far the water has risen past the camera by
-  // now, in background.js's frames (60 a second at its own pace). density:
-  // the share of particles shown. links: the network's strength. scale:
-  // how large the particles are drawn (deeper, they come forward).
+  // now, in background.js's frames (60 a second at its own pace). shift:
+  // how far the film's camera has moved aside, in frame pixels at this
+  // layer's distance. density: the share of particles shown. links: the
+  // network's strength. scale: how large the particles are drawn (deeper,
+  // they come forward).
   // It paints the whole frame, as background.js does: the base first, the
   // grid and edge shade last.
-  function draw(t, { climb = t * 60, density = 1, glow = 1, links = 1, scale = 1 } = {}) {
+  function draw(t, { climb = t * 60, shift = 0, density = 1, glow = 1, links = 1, scale = 1 } = {}) {
     // background.js's clock: Date.now() * 0.00085 ms, about 0.85 a second.
     const time = t * 0.85;
+    // The network and the flow field move with the camera at half the
+    // particles' pace; vertically, with the water's rise beyond its own.
+    const sx = shift * 0.5;
+    const sy = (climb - t * 60) * 0.25;
     base(time);
-    flowField(time, 0.05 * glow);
+    flowField(time, 0.05 * glow, sx, sy);
     if (links > 0) {
-      const at = nodes.map((n) => [bounce(n.x + n.vx * t * 60, width), bounce(n.y + n.vy * t * 60, height)]);
+      const at = nodes.map((n) => [
+        wrap(bounce(n.x + n.vx * t * 60, width) - sx, 0, width),
+        wrap(bounce(n.y + n.vy * t * 60, height) - sy, 0, height),
+      ]);
       ctx.save();
       ctx.globalAlpha = 0.1 * links * glow;
       ctx.lineWidth = 0.8;
@@ -230,7 +245,7 @@ export function createField(width, height, seed = 17) {
     for (let i = 0; i < Math.ceil(level); i++) {
       const p = particles[i];
       const y = wrap(p.y - p.speedY * climb, -50, height + 100);
-      const x = wrap(p.x + p.speedX * t * 60 + Math.sin(time * 0.42 + p.pulse) * 12, -50, width + 100);
+      const x = wrap(p.x + p.speedX * t * 60 + Math.sin(time * 0.42 + p.pulse) * 12 - shift * (0.4 + p.speedY * 1.4), -50, width + 100);
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(scale, scale);
@@ -238,7 +253,7 @@ export function createField(width, height, seed = 17) {
       particle(p, x, y, time, glow * Math.min(1, level - i));
       ctx.restore();
     }
-    gridAndVignette();
+    gridAndVignette(sx, sy);
   }
 
   return { canvas, draw };

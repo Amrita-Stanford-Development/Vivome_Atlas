@@ -1,15 +1,17 @@
 <template>
     <!-- Scene 6, 0:50 to 1:00: built for gaps. The matrix of scene 3 again:
          a mask marks each gap, each protein is scaled within the file, then
-         smoothed over similar cells (lib/scenes.js, from
-         web/data/workflow.json). Headline, points and matrix on liquid glass. -->
+         smoothed over similar cells, each step a band sweeping the matrix
+         (lib/scenes.js, from web/data/workflow.json). Headline, points and
+         matrix on liquid glass. As the camera leaves, the rows stream into
+         the encoders (lib/bridges.js). -->
     <style>
-        #s-built-for-gaps .head { left: 140px; top: 70px; padding-top: 34px; padding-bottom: 34px; opacity: 0; }
+        #s-built-for-gaps .head { left: 140px; top: 70px; padding-top: 34px; padding-bottom: 34px; }
         #s-built-for-gaps .points { position: absolute; left: 140px; top: 330px; width: 700px; display: grid; gap: 20px; }
         #s-built-for-gaps .point { position: relative; padding: 24px 32px; display: flex; align-items: center; gap: 18px; opacity: 0; }
         #s-built-for-gaps .point .f-label { margin: 0; color: var(--ink); font-size: 31px; }
         #s-built-for-gaps .point i { width: 16px; height: 16px; border-radius: 50%; background: var(--accent-bright); flex: none; }
-        #s-built-for-gaps .matrix { left: 880px; top: 330px; padding: 28px 24px 24px; opacity: 0; }
+        #s-built-for-gaps .matrix { left: 880px; top: 330px; padding: 28px 24px 24px; }
         #s-built-for-gaps .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-built-for-gaps" class="scene" data-composition-id="s-built-for-gaps" data-width="1920" data-height="1080">
@@ -28,15 +30,15 @@
         (function () {
             VivomeSlots.fill(document.getElementById('s-built-for-gaps'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-built-for-gaps .head', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.3);
             tl.fromTo('#s-built-for-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
-            tl.fromTo('#s-built-for-gaps .matrix', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.5);
             // Each point lands with the step of the matrix it names.
             const at = [1.2, 3.6, 6.2, 8.0];
             document.querySelectorAll('#s-built-for-gaps .point').forEach((el, i) => {
                 tl.fromTo(el, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }, at[i]);
             });
-            tl.fromTo('#s-built-for-gaps', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 9.9);
+            // The camera carries the cards out of the frame (lib/dive.js); this
+            // only clears anything left at the edge before the host ends.
+            tl.fromTo('#s-built-for-gaps', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-built-for-gaps'] = tl;
         })();

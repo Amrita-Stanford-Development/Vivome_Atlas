@@ -2,15 +2,16 @@
     <!-- Scene 3, 0:18 to 0:28: mostly missing. The PBMC240 example file's
          own matrix fills in, and its missing values fall away
          (lib/scenes.js draws it from web/data/workflow.json). Headline,
-         numbers and matrix each on a white card. -->
+         numbers and matrix each on a white card. The headline and the
+         matrix arrive with the camera; the numbers build in place. -->
     <style>
-        #s-gaps .head { left: 140px; top: 60px; max-width: 1480px; padding-top: 34px; padding-bottom: 34px; opacity: 0; }
+        #s-gaps .head { left: 140px; top: 60px; max-width: 1480px; padding-top: 34px; padding-bottom: 34px; }
         #s-gaps .stats { left: 140px; top: 400px; width: 580px; padding: 34px 44px; opacity: 0; }
         #s-gaps .stats .f-stat { font-size: 96px; }
         #s-gaps .stats .f-stat-s { font-size: 80px; }
         #s-gaps .fig + .fig { margin-top: 30px; }
         #s-gaps .f-caption { margin-top: 6px; }
-        #s-gaps .matrix { left: 760px; top: 400px; padding: 28px 24px 24px; opacity: 0; }
+        #s-gaps .matrix { left: 760px; top: 400px; padding: 28px 24px 24px; }
         #s-gaps .fig { opacity: 0; }
         #s-gaps .cut { clip-path: inset(0 100% 0 0); }
     </style>
@@ -36,12 +37,12 @@
         (function () {
             VivomeSlots.fill(document.getElementById('s-gaps'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-gaps .head', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.4);
             tl.fromTo('#s-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.4);
-            tl.fromTo('#s-gaps .matrix', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.6);
             tl.fromTo('#s-gaps .stats', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.8);
             tl.fromTo('#s-gaps .fig', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 1.4 }, 3.0);
-            tl.fromTo('#s-gaps', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 9.9);
+            // The camera carries the cards out of the frame (lib/dive.js); this
+            // only clears anything left at the edge before the host ends.
+            tl.fromTo('#s-gaps', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-gaps'] = tl;
         })();

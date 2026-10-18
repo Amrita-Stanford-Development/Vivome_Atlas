@@ -420,6 +420,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `motion/lib/dive.js` — the dive: the site's water (biocells, water effects, particles) drawn on every seek, with depth colours, light, waterline and the motif
 - `motion/lib/field.js` — `web/js/background.js`'s particle field, drawn as a pure function of film time
 - `motion/lib/plan.js` — each scene's water: effect, waterline, camera, particles, frost and cut
+- `motion/lib/camera.js` — the film's camera, pure: its keys from the plan, the eased path, how each scene's plane looks from it and its CSS transform, where a scene's point lands in the frame, the focus and the waterline
+- `motion/lib/bridges.js` — the morphs between scenes, drawn over them in the film's world
+- `motion/lib/map3d.js` — the atlas in 3D as three.js points for scenes 4 and 11, and the same camera without three.js for the morphs
 - `motion/lib/scenes.js` — the scenes' data pictures (matrix, reference map, example file landing) and the Manim frames, on each seek
 - `motion/lib/slots.js` — fills the compositions' number slots from the render's facts and counts them up
 - `motion/lib/film.css` — the film's type and objects at 1920 by 1080, from the site's tokens

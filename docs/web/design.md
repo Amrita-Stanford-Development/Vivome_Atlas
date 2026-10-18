@@ -253,7 +253,9 @@ cell types, and the site's white field and gel under every scene, the same
 throughout. Depth shows in the objects, which come closer and larger as the
 camera goes down, never in the background's colour. Every word and diagram
 sits on one of the site's cards, in the site's dark ink: the white sheet in
-odd scenes, liquid glass in even ones.
+odd scenes, liquid glass in even ones. The cards keep their place in the
+film's world and move with its one camera, so a scene hands over to the
+next by the camera's travel and a morph between the two, never by a fade.
 
 ## Shared chrome
 

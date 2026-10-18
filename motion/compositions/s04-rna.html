@@ -1,20 +1,20 @@
 <template>
-    <!-- Scene 4, 0:28 to 0:38: RNA has names. A shoal of the reference's own
-         cells streams in and settles into the atlas map, coloured by type
-         (lib/scenes.js, from web/data/workflow.json). The words and the map
-         each sit on liquid glass. -->
+    <!-- Scene 4, 0:28 to 0:38: RNA has names. The dots from scene 3 gather
+         in front of the camera, and the reference's own cells stream out of
+         them into the atlas in 3D, taking each type's colour as it is named,
+         while the map's camera flies in and draws back (lib/scenes.js, from
+         web/data/workflow.json). The words and the map each sit on liquid
+         glass, and arrive with the camera. -->
     <style>
-        #s-rna .left { left: 100px; top: 150px; width: 690px; padding: 40px 46px; opacity: 0; }
+        #s-rna .left { left: 100px; top: 150px; width: 690px; padding: 40px 46px; }
         #s-rna .left .f-display { font-size: 88px; }
         #s-rna .fig { margin-top: 40px; opacity: 0; }
         #s-rna .f-caption { margin-top: 8px; }
-        #s-rna .map { left: 820px; top: 110px; width: 980px; height: 920px; padding: 0; opacity: 0; }
-        #s-rna canvas { left: 0; top: 0; }
+        #s-rna .map { left: 820px; top: 110px; padding: 0; overflow: hidden; }
         #s-rna .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-rna" class="scene" data-composition-id="s-rna" data-width="1920" data-height="1080">
-        <div class="map card liquid"></div>
-        <canvas id="rna-canvas" width="1920" height="1080" data-layout-ignore></canvas>
+        <div class="map card liquid"><canvas id="rna-canvas" width="980" height="920" data-layout-ignore></canvas></div>
         <div class="left card liquid">
             <h1 class="f-display">RNA atlases already name their <span class="cut">cells.</span></h1>
             <div class="fig">
@@ -28,11 +28,11 @@
         (function () {
             VivomeSlots.fill(document.getElementById('s-rna'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-rna .map', { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power2.out' }, 0.3);
-            tl.fromTo('#s-rna .left', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.7);
             tl.fromTo('#s-rna .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.8);
             tl.fromTo('#s-rna .fig', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 4.2);
-            tl.fromTo('#s-rna', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 9.9);
+            // The camera carries the cards out of the frame (lib/dive.js); this
+            // only clears anything left at the edge before the host ends.
+            tl.fromTo('#s-rna', { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power1.in' }, 11.2);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-rna'] = tl;
         })();

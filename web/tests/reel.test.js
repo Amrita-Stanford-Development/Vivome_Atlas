@@ -183,10 +183,99 @@ test('the film is one continuous move: depth carries over, cards hand over, and 
     if (i > 0) assert.equal(f.depth[0], FRAMES[i - 1].depth[1], `depth steps at ${f.id}`);
     assert.doesNotMatch(f.sound, /\b(rain|bubbles?|ticks?|whoosh|pings?|sonar|splash|noise|clicks?)\b/i, `${f.id}'s sound: "${f.sound}"`);
   });
-  assert.ok(HANDOVER > 0 && HANDOVER < Math.min(...FRAMES.map((f) => f.seconds)) / 4);
+  assert.ok(HANDOVER > 0 && HANDOVER < Math.min(...FRAMES.map((f) => f.seconds)) / 3);
   const dive = readRepo('motion/lib/dive.js');
   assert.match(dive, /function waterTo\(step\)/, 'one ripple field, stepped from the film\'s start');
   assert.doesNotMatch(dive, /function dip\(|plan\.frost|plan\.effect/, 'a per-scene reset is back');
+});
+
+// The owner's rule for the camera: one continuous, eased move through the
+// scenes' world (motion/lib/camera.js, from motion/lib/plan.js). It never
+// jumps or lurches, it frames each scene while it plays, and each scene's
+// cards are carried in and out of the frame by it: off the frame when its
+// host starts and when its host ends, so nothing appears or vanishes in view.
+test('the camera is one continuous, eased path that carries every scene in and out of the frame', async () => {
+  const { PLAN } = await import('../../motion/lib/plan.js');
+  const { IN, OUT, cameraKeys, planeView, poseAt, viewPoint } = await import('../../motion/lib/camera.js');
+  const spans = FRAMES.map((f, i) => ({ id: f.id, start: STARTS[i], seconds: f.seconds }));
+  for (const f of FRAMES) {
+    const plan = PLAN[f.id];
+    assert.equal(plan.at.length, 3, `${f.id} has a place in the world`);
+    assert.ok(plan.move?.from && plan.move?.to, `${f.id} has a move`);
+  }
+  const keys = cameraKeys(spans, PLAN, TOTAL);
+  assert.equal(keys.length, 2 * FRAMES.length + 1);
+  keys.slice(1).forEach((k, i) => assert.ok(k.t > keys[i].t, 'the keys run forward in time'));
+  // No jump and no lurch: the move per frame stays bounded and changes
+  // gradually, including across every key.
+  const frame = 1 / 30;
+  let prev = poseAt(keys, 0);
+  let before = [0, 0, 0];
+  for (let k = 1; k <= TOTAL * 30; k += 1) {
+    const pose = poseAt(keys, k * frame);
+    const step = [pose.x - prev.x, pose.y - prev.y, pose.z - prev.z];
+    assert.ok(Math.hypot(...step) < 80, `the camera jumps at ${(k * frame).toFixed(2)} s`);
+    assert.ok(Math.hypot(...step.map((v, j) => v - before[j])) < 5, `the camera lurches at ${(k * frame).toFixed(2)} s`);
+    for (const turn of ['yaw', 'pitch', 'roll']) assert.ok(Math.abs(pose[turn] - prev[turn]) < 0.3, `${turn} snaps at ${k * frame}`);
+    before = step;
+    prev = pose;
+  }
+  const outside = (pose, at) => {
+    const v = planeView(pose, at);
+    const corners = [[0, 0], [1920, 0], [0, 1080], [1920, 1080]].map(([x, y]) => viewPoint(v, x, y));
+    const xs = corners.map((c) => c[0]);
+    const ys = corners.map((c) => c[1]);
+    return Math.max(...xs) < 0 || Math.min(...xs) > 1920 || Math.max(...ys) < 0 || Math.min(...ys) > 1080;
+  };
+  FRAMES.forEach((f, i) => {
+    // While the scene plays, the camera frames it: no more than a gentle
+    // push, pull or pan from where its layout fills the frame.
+    const from = i === 0 ? 0 : STARTS[i] + IN;
+    const to = i === FRAMES.length - 1 ? TOTAL : STARTS[i] + f.seconds - OUT;
+    if (f.id !== 'light') {
+      for (let t = from; t <= to; t += 0.25) {
+        const v = planeView(poseAt(keys, t), PLAN[f.id].at);
+        assert.ok(v.scale > 0.9 && v.scale < 1.1 && Math.abs(v.dx) < 100 && Math.abs(v.dy) < 100, `${f.id} is not framed at ${t} s`);
+      }
+    }
+    if (i === 0) return;
+    // At the host's start its plane is still out of the frame; at the last
+    // host's end, the last scene's plane is out of it again (scene 12 rises
+    // into view from above, so only its start is checked against 11's end
+    // where scene 11's cards are already below the frame).
+    assert.ok(outside(poseAt(keys, STARTS[i]), PLAN[f.id].at), `${f.id}'s cards are in view when its host starts`);
+    if (f.id !== 'light') assert.ok(outside(poseAt(keys, STARTS[i] + HANDOVER), PLAN[FRAMES[i - 1].id].at), `${FRAMES[i - 1].id}'s cards are in view when its host ends`);
+  });
+});
+
+// The morphs between scenes (motion/lib/bridges.js) start and end where the
+// scenes draw their pictures: their places are the compositions' own.
+test('the morphs between scenes start and end on the scenes\' own pictures', () => {
+  const scenes = readRepo('motion/lib/scenes.js');
+  const bridges = readRepo('motion/lib/bridges.js');
+  const px = (html, rule) => {
+    const m = html.match(new RegExp(`${rule} \\{([^}]*)\\}`));
+    assert.ok(m, `no rule ${rule}`);
+    const get = (k) => Number(m[1].match(new RegExp(`(?:^|[\\s;])${k}: (-?\\d+)px`))?.[1] ?? NaN);
+    const pad = m[1].match(/padding: (\d+)px(?: (\d+)px)?/);
+    return { left: get('left'), top: get('top'), padTop: pad ? Number(pad[1]) : 0, padLeft: pad ? Number(pad[2] ?? pad[1]) : 0 };
+  };
+  // A canvas inside a card sits past the card's 1px rim and its padding.
+  const inside = (html, rule) => { const r = px(html, rule); return [r.left + 1 + r.padLeft, r.top + 1 + r.padTop]; };
+  const [gx, gy] = inside(readRepo('motion/compositions/s03-gaps.html'), '#s-gaps \\.matrix');
+  assert.match(scenes, new RegExp(`gaps: \\{ left: ${gx}, top: ${gy}, width: 960 \\}`));
+  const [mx, my] = inside(readRepo('motion/compositions/s06-built-for-gaps.html'), '#s-built-for-gaps \\.matrix');
+  assert.match(scenes, new RegExp(`'built-for-gaps': \\{ left: ${mx}, top: ${my}, width: 860 \\}`));
+  const [rx, ry] = inside(readRepo('motion/compositions/s04-rna.html'), '#s-rna \\.map');
+  assert.match(scenes, new RegExp(`RNA_CANVAS = \\{ left: ${rx}, top: ${ry}, width: 980, height: 920 \\}`));
+  const [dx, dy] = inside(readRepo('motion/compositions/s08-second-opinion.html'), '#s-second-opinion \\.diagram');
+  assert.match(scenes, new RegExp(`DIAGRAM = \\{ left: ${dx}, top: ${dy} \\}`));
+  // Scene 2's first cell: its body's centre and radius.
+  const cell = readRepo('motion/compositions/s02-unnamed.html').match(/class="cell" style="--r: (\d+)px; left: (\d+)px; top: (\d+)px"/);
+  const r = Number(cell[1]) / 2;
+  assert.match(bridges, new RegExp(`HERO = \\{ x: ${Number(cell[2]) + r}, y: ${Number(cell[3]) + r}, r: ${r} \\}`));
+  // Scene 2 hands its first cell to the morph as the camera sets off.
+  assert.match(readRepo('motion/compositions/s02-unnamed.html'), /tl\.set\(cells\[0\]\.querySelector\('\.body'\), \{ opacity: 0 \}, 9\.7\)/);
 });
 
 // docs/web/motion.md carries the full script, for producing the film.

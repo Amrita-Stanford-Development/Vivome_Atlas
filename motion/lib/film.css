@@ -27,9 +27,13 @@
 #grain { position: absolute; inset: 0; background-repeat: repeat; }
 #veil { position: absolute; inset: 0; z-index: 8; background: #FFFFFF; pointer-events: none; }
 
-/* A scene fills the frame above the water. */
+/* A scene fills the frame above the water. Its host is a plane the camera
+   sees (lib/dive.js sets its transform), above the water and the gel; the
+   morphs between scenes (#bridges) pass over it. */
+[id^="host-"] { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 3; }
 .scene { position: absolute; inset: 0; z-index: 3; }
 .scene canvas, .scene img.layer { position: absolute; }
+#bridges { position: absolute; inset: 0; width: 1920px; height: 1080px; z-index: 4; pointer-events: none; }
 
 /* ---- the motif: the time code and the depth gauge ---- */
 
