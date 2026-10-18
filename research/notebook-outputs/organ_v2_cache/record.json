@@ -1,0 +1,227 @@
+{
+  "lymph_node": {
+    "bundle_manifest_sha256": "ff2660f3c4aa8515929c53ed62dbdd28a20d66c5a3c81458ac10ca191b9e80e7",
+    "calib": {
+      "cells": 68017,
+      "uploads": 240,
+      "cells_per_class": {
+        "b cell": 13145,
+        "cd4-positive, alpha-beta t cell": 7311,
+        "cd8-positive, alpha-beta t cell": 12862,
+        "classical monocyte": 1998,
+        "endothelial cell": 1295,
+        "innate lymphoid cell": 2299,
+        "intermediate monocyte": 1581,
+        "macrophage": 3370,
+        "mast cell": 1327,
+        "mature nk t cell": 3233,
+        "myeloid dendritic cell": 0,
+        "naive thymus-derived cd4-positive, alpha-beta t cell": 2976,
+        "natural killer cell": 4440,
+        "neutrophil": 1377,
+        "non-classical monocyte": 0,
+        "plasma cell": 5485,
+        "regulatory t cell": 2786,
+        "stromal cell": 0,
+        "t cell": 2532
+      },
+      "cache_sha256": "7bc34dc16e1ea4a81463c690c844e30026b5c7fe08df8f5a000151edf6d754c4",
+      "replay": {
+        "uploads": 5,
+        "cells": 1306,
+        "mismatches": 0
+      },
+      "refit": {
+        "marginal_qhat": 0.922819,
+        "v1_marginal_qhat": 0.9228837626872528,
+        "worst_qhat_difference": 0.000693,
+        "ok": true
+      }
+    },
+    "rare": {
+      "cells": 92054,
+      "uploads": 240,
+      "cells_per_class": {
+        "b cell": 16741,
+        "cd4-positive, alpha-beta t cell": 10888,
+        "cd8-positive, alpha-beta t cell": 12217,
+        "classical monocyte": 2420,
+        "endothelial cell": 1398,
+        "innate lymphoid cell": 3126,
+        "intermediate monocyte": 1560,
+        "macrophage": 4506,
+        "mast cell": 1373,
+        "mature nk t cell": 3254,
+        "myeloid dendritic cell": 953,
+        "naive thymus-derived cd4-positive, alpha-beta t cell": 10223,
+        "natural killer cell": 3801,
+        "neutrophil": 1593,
+        "non-classical monocyte": 467,
+        "plasma cell": 8096,
+        "regulatory t cell": 3893,
+        "stromal cell": 1009,
+        "t cell": 4536
+      },
+      "cache_sha256": "ed51c5de54d224f248f4f660435887c7bb4e3e4f46cffb3078d7fc3e447b9a95"
+    },
+    "seconds": 586
+  },
+  "lung": {
+    "bundle_manifest_sha256": "914744a451f5da822aad194e706abd15144c6c6af3837e26de5bc01605b16777",
+    "calib": {
+      "cells": 67725,
+      "uploads": 240,
+      "cells_per_class": {
+        "adventitial cell": 1388,
+        "alveolar type 2 fibroblast cell": 1688,
+        "b cell": 1720,
+        "basal cell": 6349,
+        "basophil": 2082,
+        "bronchial smooth muscle cell": 577,
+        "capillary endothelial cell": 7389,
+        "cd4-positive, alpha-beta t cell": 1637,
+        "cd8-positive, alpha-beta t cell": 1512,
+        "classical monocyte": 2047,
+        "club cell": 2509,
+        "endothelial cell of artery": 2823,
+        "endothelial cell of lymphatic vessel": 1113,
+        "intermediate monocyte": 1997,
+        "lung ciliated cell": 1925,
+        "macrophage": 8041,
+        "mature nk t cell": 455,
+        "monocyte": 1008,
+        "natural killer cell": 1722,
+        "neutrophil": 1192,
+        "non-classical monocyte": 938,
+        "pericyte": 1817,
+        "plasma cell": 596,
+        "respiratory goblet cell": 2012,
+        "type i pneumocyte": 3775,
+        "type ii pneumocyte": 6699,
+        "vascular associated smooth muscle cell": 580,
+        "vein endothelial cell": 2134
+      },
+      "cache_sha256": "9333f139fb58c39f839abf21cda6730c0e7e9adcdbbc9707b1aef4a174d015ee",
+      "replay": {
+        "uploads": 5,
+        "cells": 956,
+        "mismatches": 0
+      },
+      "refit": {
+        "marginal_qhat": 0.961487,
+        "v1_marginal_qhat": 0.9614940296977115,
+        "worst_qhat_difference": 0.000782,
+        "ok": true
+      }
+    },
+    "rare": {
+      "cells": 100717,
+      "uploads": 240,
+      "cells_per_class": {
+        "adventitial cell": 1944,
+        "alveolar type 2 fibroblast cell": 3055,
+        "b cell": 1710,
+        "basal cell": 5831,
+        "basophil": 2967,
+        "bronchial smooth muscle cell": 1034,
+        "capillary endothelial cell": 9218,
+        "cd4-positive, alpha-beta t cell": 4135,
+        "cd8-positive, alpha-beta t cell": 2817,
+        "classical monocyte": 4274,
+        "club cell": 5193,
+        "endothelial cell of artery": 4607,
+        "endothelial cell of lymphatic vessel": 1605,
+        "intermediate monocyte": 5138,
+        "lung ciliated cell": 3226,
+        "macrophage": 8895,
+        "mature nk t cell": 688,
+        "monocyte": 1689,
+        "natural killer cell": 3074,
+        "neutrophil": 1279,
+        "non-classical monocyte": 1481,
+        "pericyte": 2229,
+        "plasma cell": 557,
+        "respiratory goblet cell": 3018,
+        "type i pneumocyte": 6865,
+        "type ii pneumocyte": 9999,
+        "vascular associated smooth muscle cell": 677,
+        "vein endothelial cell": 3512
+      },
+      "cache_sha256": "239993686ae3e3ed6a5ee1b13d016c49305e25067bf5eb2baa1123a091e99473"
+    },
+    "seconds": 495
+  },
+  "large_intestine": {
+    "bundle_manifest_sha256": "674cd01c0ae6f77f59759e31c0f6fcaf5a8c5f60e851bf2cabdb95ebdf7ce026",
+    "calib": {
+      "cells": 58982,
+      "uploads": 240,
+      "cells_per_class": {
+        "b cell": 3673,
+        "best4+ intestinal epithelial cell, human": 2346,
+        "cd4-positive, alpha-beta t cell": 5368,
+        "cd8-positive, alpha-beta t cell": 6328,
+        "colon endothelial cell": 2165,
+        "colon macrophage": 1418,
+        "enterocyte of epithelium of large intestine": 6153,
+        "enteroendocrine cell": 0,
+        "enteroglial cell": 2615,
+        "fibroblast": 5073,
+        "gamma-delta t cell": 2740,
+        "innate lymphoid cell": 0,
+        "intestinal crypt stem cell of colon": 4324,
+        "large intestine goblet cell": 4562,
+        "mast cell": 2269,
+        "monocyte": 0,
+        "myeloid leukocyte": 1860,
+        "myofibroblast cell": 0,
+        "plasma cell": 4038,
+        "regulatory t cell": 1940,
+        "transit amplifying cell of colon": 1314,
+        "tuft cell of colon": 796
+      },
+      "cache_sha256": "4e550e98189cf125f5ee5d8923a87d06a33e900cccb3b0b9058f334451d02781",
+      "replay": {
+        "uploads": 5,
+        "cells": 845,
+        "mismatches": 0
+      },
+      "refit": {
+        "marginal_qhat": 0.987345,
+        "v1_marginal_qhat": 0.9873448632216204,
+        "worst_qhat_difference": 6e-06,
+        "ok": true
+      }
+    },
+    "rare": {
+      "cells": 92804,
+      "uploads": 240,
+      "cells_per_class": {
+        "b cell": 5860,
+        "best4+ intestinal epithelial cell, human": 4544,
+        "cd4-positive, alpha-beta t cell": 10410,
+        "cd8-positive, alpha-beta t cell": 11438,
+        "colon endothelial cell": 1770,
+        "colon macrophage": 1483,
+        "enterocyte of epithelium of large intestine": 14338,
+        "enteroendocrine cell": 494,
+        "enteroglial cell": 4085,
+        "fibroblast": 5878,
+        "gamma-delta t cell": 6487,
+        "innate lymphoid cell": 446,
+        "intestinal crypt stem cell of colon": 4281,
+        "large intestine goblet cell": 5958,
+        "mast cell": 1873,
+        "monocyte": 342,
+        "myeloid leukocyte": 1635,
+        "myofibroblast cell": 482,
+        "plasma cell": 6272,
+        "regulatory t cell": 2459,
+        "transit amplifying cell of colon": 1275,
+        "tuft cell of colon": 994
+      },
+      "cache_sha256": "1234a19db0580546e45d85448ffcd2f1feb69edfbf913c84003f366becad30ae"
+    },
+    "seconds": 355
+  }
+}

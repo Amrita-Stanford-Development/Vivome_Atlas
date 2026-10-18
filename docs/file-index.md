@@ -769,6 +769,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_build/mask_profiles_summary.csv` — the lymph node's missingness profiles (blood's, as measured)
 - `research/notebook-outputs/lymph_node_build/bundle_MANIFEST.json` — the lymph node bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/organ_v2_cache.py` — organ references v2, diagnostic A0: every calibration answer of the v1 bundles (v1's calibration suite and a rare-class suite) cached for offline calibration trials, with a replay check against the service
+- `research/notebook-outputs/organ_v2_cache/rules.json` — A0's settings, written before the run
+- `research/notebook-outputs/organ_v2_cache/record.json` — A0: per organ and suite, cells, classes, the cache's sha256 (caches on Drive), the replay against the service and the qhat refit
 - `research/notebooks/organ_v2_calibration.py` — organ references v2, diagnostics A2 and A3 on A0's caches: calibration fitted on mixed or narrow uploads (with the owner's split G1 bands), and rare- and hard-class remedies (a chance floor, a group fallback, group-level sets), each on held halves, with decision rules fixed in the script
 - `research/notebooks/organ_v2_sink.py` — organ references v2, diagnosis A1b: what draws protein pools to one class (the path that picks it, the class's own markers, the pools' depth, the upload's company), an explanation only
 - `research/notebook-outputs/organ_v2_sink/rules.json` — A1b's settings, written before the run

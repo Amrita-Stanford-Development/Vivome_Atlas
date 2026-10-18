@@ -1,0 +1,16 @@
+{
+  "script_sha256": "9b063745f422453e92696eacf2806daf420695ae487357e7f03461858eb3d0ca",
+  "started": "2026-10-18T21:50:51",
+  "organs": [
+    "lymph_node",
+    "lung",
+    "large_intestine"
+  ],
+  "rare_suite": {
+    "seed": 33,
+    "min_cells": 5,
+    "n_uploads": 240
+  },
+  "replay_uploads": 5,
+  "qhat_tolerance": 0.005
+}
