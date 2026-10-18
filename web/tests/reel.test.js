@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { CAVEATS } from '../js/manuscript-data.js';
 import {
-  CHAPTERS, FRAMES, STARTS, TOTAL, buildScript, buildShot, buildStrip, fillSlots, frameSlots, locate,
+  CHAPTERS, FRAMES, HANDOVER, STARTS, TOTAL, buildScript, buildShot, buildStrip, fillSlots, frameSlots, locate,
   rangeText, slotSource, slotText, slotsIn, staleNumbers, stillTime,
 } from '../js/reel-frames.js';
 
@@ -144,8 +144,10 @@ test('the rendered stills match the storyboard and the current records', () => {
 test('the film keeps one white background: no tinting water effect, no white-on-dark scenes, no note of the water changing colour', async () => {
   const { PLAN } = await import('../../motion/lib/plan.js');
   assert.deepEqual(Object.keys(PLAN).sort(), FRAMES.map((f) => f.id).sort());
+  // One ripple field and one gel for the whole film: no scene picks its own
+  // effect, frost or cut.
   for (const [id, plan] of Object.entries(PLAN)) {
-    assert.ok(['still', 'rain', 'wake'].includes(plan.effect), `${id} uses the ${plan.effect} effect, which tints the gel`);
+    for (const key of ['effect', 'frost', 'cut']) assert.ok(!(key in plan), `${id} sets its own ${key}`);
   }
   FRAMES.forEach((f, i) => {
     const n = String(i + 1).padStart(2, '0');
@@ -173,6 +175,20 @@ test('each scene puts its words on its card kind, alternating white sheet and li
   assert.ok(!/\.liquid\s*\{[^}]*background/.test(film), 'the film keeps the site\'s own liquid glass');
 });
 
+// The owner's rule: one continuous move, with no cut. Depth runs on without
+// a step, each scene's cards hand over to the next's, and the sound is the
+// music and the voice only.
+test('the film is one continuous move: depth carries over, cards hand over, and there are no sound effects', () => {
+  FRAMES.forEach((f, i) => {
+    if (i > 0) assert.equal(f.depth[0], FRAMES[i - 1].depth[1], `depth steps at ${f.id}`);
+    assert.doesNotMatch(f.sound, /\b(rain|bubbles?|ticks?|whoosh|pings?|sonar|splash|noise|clicks?)\b/i, `${f.id}'s sound: "${f.sound}"`);
+  });
+  assert.ok(HANDOVER > 0 && HANDOVER < Math.min(...FRAMES.map((f) => f.seconds)) / 4);
+  const dive = readRepo('motion/lib/dive.js');
+  assert.match(dive, /function waterTo\(step\)/, 'one ripple field, stepped from the film\'s start');
+  assert.doesNotMatch(dive, /function dip\(|plan\.frost|plan\.effect/, 'a per-scene reset is back');
+});
+
 // docs/web/motion.md carries the full script, for producing the film.
 test('the docs carry every scene\'s time, words and notes as the storyboard has them', () => {
   const doc = readRepo('docs/web/motion.md');
@@ -195,7 +211,9 @@ test('each composition shows its scene\'s words and numbers, at its place in the
     assert.ok(host, `motion/index.html has no host for ${frame.id}`);
     assert.match(host[0], new RegExp(`data-composition-src="compositions/s${n}-${frame.id}\\.html"`));
     assert.match(host[0], new RegExp(`data-start="${STARTS[i]}"`));
-    assert.match(host[0], new RegExp(`data-duration="${frame.seconds}"`));
+    // Each scene's host lasts into the next while its cards hand over.
+    const lasts = i < FRAMES.length - 1 ? frame.seconds + HANDOVER : frame.seconds;
+    assert.match(host[0], new RegExp(`data-duration="${lasts}"`));
     const html = readRepo(`motion/compositions/s${n}-${frame.id}.html`);
     const words = squash(html.replace(/<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<!--[\s\S]*?-->/g, ''));
     for (const item of frame.screen) {

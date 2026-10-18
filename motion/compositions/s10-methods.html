@@ -52,7 +52,7 @@
             tl.fromTo('#s-methods .method', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.18 }, 2.8);
             tl.fromTo('#s-methods .result', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 1.2 }, 4.6);
             tl.fromTo('#s-methods .limits', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 7.6);
-            tl.fromTo('#s-methods', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 11.5);
+            tl.fromTo('#s-methods', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 11.9);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-methods'] = tl;
         })();

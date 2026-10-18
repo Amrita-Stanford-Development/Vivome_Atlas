@@ -17,7 +17,7 @@
       "id": "surface",
       "file": "01-surface.webp",
       "at": 5.933333333333334,
-      "bytes": 65222,
+      "bytes": 64274,
       "numbers": []
     },
     {
@@ -25,7 +25,7 @@
       "id": "unnamed",
       "file": "02-unnamed.webp",
       "at": 16,
-      "bytes": 106658,
+      "bytes": 107140,
       "numbers": []
     },
     {
@@ -33,7 +33,7 @@
       "id": "gaps",
       "file": "03-gaps.webp",
       "at": 26.4,
-      "bytes": 174656,
+      "bytes": 167220,
       "numbers": [
         {
           "slot": "ms:wf_missing_share",
@@ -63,7 +63,7 @@
       "id": "rna",
       "file": "04-rna.webp",
       "at": 36.6,
-      "bytes": 117754,
+      "bytes": 116470,
       "numbers": [
         {
           "slot": "ms:ref_cells",
@@ -86,7 +86,7 @@
       "id": "vivome",
       "file": "05-vivome.webp",
       "at": 47.833333333333336,
-      "bytes": 75502,
+      "bytes": 76172,
       "numbers": [
         {
           "slot": "ms:gs_size",
@@ -102,7 +102,7 @@
       "id": "built-for-gaps",
       "file": "06-built-for-gaps.webp",
       "at": 58.6,
-      "bytes": 161972,
+      "bytes": 162864,
       "numbers": [
         {
           "slot": "ms:wf_members",
@@ -118,7 +118,7 @@
       "id": "answers",
       "file": "07-answers.webp",
       "at": 71.03333333333333,
-      "bytes": 76912,
+      "bytes": 77538,
       "numbers": []
     },
     {
@@ -126,7 +126,7 @@
       "id": "second-opinion",
       "file": "08-second-opinion.webp",
       "at": 78.86666666666666,
-      "bytes": 80082,
+      "bytes": 80410,
       "numbers": [
         {
           "slot": "fact:model_name",
@@ -142,7 +142,7 @@
       "id": "real-data",
       "file": "09-real-data.webp",
       "at": 90.8,
-      "bytes": 97514,
+      "bytes": 94388,
       "numbers": [
         {
           "slot": "ms:committed_fulcher",
@@ -179,7 +179,7 @@
       "id": "methods",
       "file": "10-methods.webp",
       "at": 102.8,
-      "bytes": 125960,
+      "bytes": 124948,
       "numbers": [
         {
           "slot": "ms:bm_khoury_baseline_favour",
@@ -223,7 +223,7 @@
       "id": "atlas",
       "file": "11-atlas.webp",
       "at": 112.8,
-      "bytes": 90306,
+      "bytes": 91632,
       "numbers": [
         {
           "slot": "fact:model_name",
@@ -246,7 +246,7 @@
       "id": "light",
       "file": "12-light.webp",
       "at": 118.8,
-      "bytes": 54914,
+      "bytes": 58648,
       "numbers": []
     }
   ]

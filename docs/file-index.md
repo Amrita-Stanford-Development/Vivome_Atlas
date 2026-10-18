@@ -431,6 +431,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `motion/scripts/voice.mjs` — speaks each scene's voice-over line with Kokoro on this machine (HyperFrames `tts`), its numbers filled from the data files, and fits it to its scene
 - `motion/scripts/film.mjs` — renders the whole film, then the voice, the score, the FFmpeg mix (music ducked under the voice) and the 720p draft and share copy
 - `motion/audio/score.py` — the film's music and sound effects, synthesised in code (numpy): the ambient bed, the musical cues and the effects
+- `motion/audio/phonemes.py` — the phonemes Kokoro will read for each voice-over line (kokoro-onnx's tokenizer), so the voice script can check the name is said as one word
 
 ## docs/ — how the product works
 

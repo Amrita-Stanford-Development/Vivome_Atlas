@@ -20,7 +20,7 @@
             tl.fromTo('#s-surface .f-eyebrow', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 1.4);
             tl.fromTo('#s-surface .w', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12 }, 1.8);
             tl.fromTo('#s-surface .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 2.9);
-            tl.to('#s-surface .title', { opacity: 0, y: -80, duration: 0.9, ease: 'power2.in' }, 7.0);
+            tl.fromTo('#s-surface', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 7.9);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-surface'] = tl;
         })();

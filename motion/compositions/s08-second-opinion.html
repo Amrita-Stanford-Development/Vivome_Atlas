@@ -46,7 +46,7 @@
             tl.fromTo('#s-second-opinion .gate', { opacity: 0 }, { opacity: 0.7, duration: 0.5, ease: 'power1.out' }, 3.0);
             tl.fromTo('#s-second-opinion .gate-note', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 3.3);
             tl.fromTo('#s-second-opinion .guess', { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.6)' }, 5.0);
-            tl.fromTo('#s-second-opinion', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 7.5);
+            tl.fromTo('#s-second-opinion', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 7.9);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-second-opinion'] = tl;
         })();

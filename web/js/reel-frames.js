@@ -48,7 +48,7 @@ export const FRAMES = [
     transition: 'Opens from white light. Flows on into scene 2 as the camera tips down.',
     water: 'Rain on the surface: each drop sends rings across the white gel, and a fine white waterline runs along the top.',
     particles: 'Sparse. Cells and molecules drift up towards the light.',
-    sound: 'Rain on water, close. A low pad fades in; one soft piano note as the title lands.',
+    sound: 'A low pad fades in from silence; one soft piano note as the title lands.',
     tools: ['HyperFrames', 'GSAP', 'three.js water (rain)'],
   },
   {
@@ -66,10 +66,10 @@ export const FRAMES = [
     ],
     voice: 'But those cells arrive without names. Labelled protein references are few, and every lab detects a different set of proteins.',
     camera: 'Tips down and sinks; the waterline slides up and out of the frame.',
-    transition: 'One continuous move from scene 1. Leaves through a cloud of silt.',
+    transition: 'One continuous move from scene 1. Its card drifts up and fades as scene 3\'s rise in.',
     water: 'The same white gel, still now; the waterline slides up out of sight.',
     particles: 'Protein cells in green drift past, each with an empty name tag.',
-    sound: 'The rain muffles as we go under. A slow low swell; a hollow tick as each empty tag appears.',
+    sound: 'The pad carries on, a little lower, as the camera goes under.',
     tools: ['HyperFrames', 'GSAP', 'three.js water (still)'],
   },
   {
@@ -91,10 +91,10 @@ export const FRAMES = [
     ],
     voice: 'And each cell is only partly seen. Much of a protein matrix is empty.',
     camera: 'A slow sideways track along a matrix of cells and proteins.',
-    transition: 'The missing tiles fall away as specks that become the RNA cells of scene 4.',
+    transition: 'Its cards drift up and fade as scene 4\'s map and words rise in; the camera keeps sinking.',
     water: 'The white gel thickens a little: the frost rises and the far cells soften.',
     particles: 'The molecular network loses links as values drop out.',
-    sound: 'Dry ticks as tiles drop out. The pad thins to one held note.',
+    sound: 'The pad thins to one held note as the missing values fall away.',
     drawn: 'The matrix: the PBMC240 example file\'s own values, as the Workflow page shows them (web/data/workflow.json); striped tiles were not measured.',
     tools: ['HyperFrames', 'GSAP', 'three.js water (still)', 'canvas'],
   },
@@ -114,7 +114,7 @@ export const FRAMES = [
     ],
     voice: 'Single-cell RNA is different. Its atlases are large, and every cell in them has a name.',
     camera: 'Descends through a shoal of cells, then pulls back to see the whole map.',
-    transition: 'The map holds and slides aside to become one side of scene 5.',
+    transition: 'Its cards fade as scene 5\'s wordmark rises in; the camera keeps its course.',
     water: 'The same white gel. The camera drifts on through the cells, which come closer and larger as it goes down.',
     particles: 'RNA strands in red and gold thread through the shoal.',
     sound: 'A warm chord: the first hint of the theme.',
@@ -140,10 +140,10 @@ export const FRAMES = [
     ],
     voice: 'VivOME learns blood cell types from labelled RNA alone, then reads each protein cell against that reference. No protein labels, no paired cells, and no retraining on your data.',
     camera: 'Holds on the wordmark, then a slow crane down to the bridge between the two sides.',
-    transition: 'The wordmark rises out of the particles. Leaves on a push into the protein side.',
+    transition: 'The wordmark\'s card rises in as scene 4\'s cards fade. Its cards drift up and fade as scene 6\'s rise in.',
     water: 'A slow wake ripples through the white gel as the wordmark rises.',
     particles: 'The network links up across the frame as the bridge forms.',
-    sound: 'The theme enters in full: a rising arpeggio, and a soft whoosh as the wordmark locks.',
+    sound: 'The theme enters in full: a rising arpeggio as the wordmark appears.',
     tools: ['HyperFrames', 'GSAP', 'three.js water (wake)'],
   },
   {
@@ -163,7 +163,7 @@ export const FRAMES = [
     ],
     voice: 'It is built for gaps: it knows which proteins were never measured, scales each one within your file, and asks {ms:wf_members} encoders to answer together.',
     camera: 'Tracks along the matrix from scene 3, now lit: a mask marks each gap.',
-    transition: 'Match cut from scene 3\'s matrix. Leaves as the beams meet in one point that drops into scene 7.',
+    transition: 'Its matrix is scene 3\'s, now lit. Its cards fade as scene 7\'s map and ladder rise in.',
     water: 'The white gel, clearer than in scene 3; nearer cells drift larger past the camera, the far ones softly out of focus.',
     particles: 'Streams of particles converge on one point.',
     sound: 'Soft tones, one per encoder, resolving into one chord.',
@@ -188,7 +188,7 @@ export const FRAMES = [
     ],
     voice: 'Every cell gets the most precise answer the evidence allows: a cell type, its group, its lineage, or no answer, and the reason why.',
     camera: 'Locked off on the reference map, seen flat from one side.',
-    transition: 'Each answer steps down the ladder in turn. Leaves as the last cell\'s outline dissolves into the gel.',
+    transition: 'Each answer steps down the ladder in turn. Its cards fade as scene 8\'s rise in.',
     water: 'Still gel, so the diagram reads cleanly.',
     particles: 'Few and slow, kept to the edges.',
     sound: 'Descending notes, one per rung, and a soft stop on no answer.',
@@ -213,7 +213,7 @@ export const FRAMES = [
     ],
     voice: 'Its best guess adds a second opinion, used only when your file agrees with the encoder.',
     camera: 'Follows two currents as they braid into one.',
-    transition: 'Comes in as scene 7\'s outline dissolves. Leaves as the braided current dives on down.',
+    transition: 'Its cards rise in over scene 7\'s as they fade, and fade in turn as the camera goes deeper.',
     water: 'A wake follows the two currents through the white gel.',
     particles: 'Two streams of particles that merge after a gate.',
     sound: 'Two lines of melody braid into one.',
@@ -225,7 +225,7 @@ export const FRAMES = [
     chapter: 'results',
     card: 'sheet',
     seconds: 12,
-    depth: [0.84, 1],
+    depth: [0.82, 1],
     still: 0.9,
     screen: [
       { role: 'headline', text: 'Checked against real data.', cut: 'data.' },
@@ -244,10 +244,10 @@ export const FRAMES = [
     caveats: ['development', 'post-hoc'],
     voice: 'On real blood protein data, here is how often it answers, and how often those answers are right.',
     camera: 'Settles at the deepest point of the dive; the cards rise among the nearest cells.',
-    transition: 'Leaves on a slow pan along the floor into scene 10.',
+    transition: 'Its cards fade as scene 10\'s rise in; the camera reaches its deepest point and turns.',
     water: 'The same white gel; at the deepest point the cells are closest and largest, and the far ones most softly blurred.',
     particles: 'Dense and close: cells and strands drift large around the cards.',
-    sound: 'The music drops to a deep pulse; each number lands with a soft sonar ping.',
+    sound: 'The music settles on a low, slow bass pulse under the numbers.',
     tools: ['HyperFrames', 'GSAP', 'three.js water (still)'],
   },
   {
@@ -271,7 +271,7 @@ export const FRAMES = [
     caveats: ['post-hoc', 'in-sample', 'pending'],
     voice: 'Against established methods, on real protein data, it is level with the best and ahead of the rest. Where it is still weak, it says so.',
     camera: 'A slow pan along the floor past the methods, each a bubble with its name.',
-    transition: 'Leaves as the camera turns up towards the light.',
+    transition: 'Its cards fade as the Atlas window rises in; the camera turns up towards the light.',
     water: 'The same white gel; the cells begin to recede as the camera turns to rise.',
     particles: 'The methods rise past the camera as bubbles, each with its name: scANVI, MaxFuse, scGLUE, Harmony, Seurat, PCA and correlation.',
     sound: 'The pulse continues under a lighter counter-melody: the rise begins.',
@@ -283,7 +283,7 @@ export const FRAMES = [
     chapter: 'use',
     card: 'sheet',
     seconds: 10,
-    depth: [0.6, 0.25],
+    depth: [0.9, 0.25],
     still: 0.88,
     screen: [
       { role: 'headline', text: 'Label your own data.', cut: 'data.' },
@@ -293,7 +293,7 @@ export const FRAMES = [
     ],
     voice: 'It runs online. Send your file from the Atlas page, and your cells land on the map, each with its answer.',
     camera: 'Rises through the water towards a browser window floating near the surface.',
-    transition: 'Leaves as the camera keeps rising and breaks the surface.',
+    transition: 'Its cards fade as the end card rises in; the camera keeps rising and breaks the surface.',
     water: 'A wake: the file leaves a trail of ripples as it drops into the atlas.',
     particles: 'The file\'s cells fly in as beads and land in their places.',
     sound: 'Bright plucks as each cell lands; the theme returns in full.',
@@ -306,7 +306,7 @@ export const FRAMES = [
     chapter: 'use',
     card: 'liquid',
     seconds: 6,
-    depth: [0.2, 0],
+    depth: [0.25, 0],
     still: 0.8,
     screen: [
       { role: 'wordmark', text: 'VivOME' },
@@ -317,10 +317,10 @@ export const FRAMES = [
     ],
     voice: 'Bring your protein cells up into the light. VivOME: no cell placed without evidence.',
     camera: 'Rushes up and breaks the surface, then settles.',
-    transition: 'The splash clears to white and the end card holds.',
+    transition: 'The end card rises in as the camera surfaces, and holds.',
     water: 'The waterline sweeps down the frame as we surface and settles low; rain rings the water under the end card.',
     particles: 'Bubbles rise and burst at the surface, then the frame clears.',
-    sound: 'A swell, a splash as we break the surface, and a bright final chord. Silence on the end card.',
+    sound: 'The music swells as the camera surfaces and resolves on a bright final chord, then fades to silence on the end card.',
     tools: ['HyperFrames', 'GSAP', 'three.js water (rain)'],
   },
 ];
@@ -331,6 +331,12 @@ export const STARTS = FRAMES.reduce((acc, f, i) => {
 }, []);
 
 export const TOTAL = STARTS[STARTS.length - 1] + FRAMES[FRAMES.length - 1].seconds;
+
+// Seconds a scene's cards stay on into the next scene while they fade out
+// and the next scene's rise in, so the screen never empties and nothing
+// switches at once. Each scene's host in motion/index.html lasts this much
+// longer than the scene (but the last).
+export const HANDOVER = 0.8;
 
 // A scene's number (1-based, two digits for file names) and its range.
 export const sceneNumber = (i) => String(i + 1).padStart(2, '0');

@@ -51,7 +51,7 @@
             tl.fromTo('#s-vivome .link', { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: 'power2.inOut' }, 7.6);
             tl.fromTo('#s-vivome .genes', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 8.3);
             tl.fromTo('#s-vivome .aside', { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power1.out' }, 8.9);
-            tl.fromTo('#s-vivome', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 11.5);
+            tl.fromTo('#s-vivome', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 11.9);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-vivome'] = tl;
         })();

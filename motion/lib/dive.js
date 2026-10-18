@@ -6,9 +6,13 @@
 //
 // - a clock HyperFrames owns: every frame is drawn on its `hf-seek` event,
 //   for that exact time, never from requestAnimationFrame. The water's
-//   state is stepped on a fixed 60 a second grid from the start of the film
-//   (the cells) or of the scene (the ripples), so a frame rendered on its
-//   own looks the same as one reached by playing;
+//   state (the cells and the one ripple field) is stepped on a fixed 60 a
+//   second grid from the start of the film, so a frame rendered on its own
+//   looks the same as one reached by playing;
+// - one continuous shot: nothing resets at a scene's start. The camera,
+//   depth, the particles' density and the water's rise follow smooth curves
+//   through the scenes' values (lib/plan.js), and each scene's pictures stay
+//   drawn while its cards hand over to the next scene's;
 // - depth, shown by the objects and never by colour: the background is the
 //   site's own white field and gel throughout (background.js's breathing
 //   base, biofield's frost). Going down, the cells come forward: the view
@@ -45,11 +49,62 @@ export function locate(t) {
   return { index, frame: f, plan: PLAN[f.id], local, p: local / f.seconds };
 }
 
+// ---- smooth curves through the scenes ----
+// One key at each scene boundary (the mean of the two scenes' values there,
+// which agree when the storyboard is continuous), joined by a cubic Hermite
+// curve with Catmull-Rom tangents: no value, and no speed, changes at once.
+
+const KEY_T = [...FRAMES.map((f) => f.start), V.total];
+function keysOf(get) {
+  return KEY_T.map((_, k) => {
+    const before = k > 0 ? get(PLAN[FRAMES[k - 1].id], FRAMES[k - 1], 1) : undefined;
+    const after = k < FRAMES.length ? get(PLAN[FRAMES[k].id], FRAMES[k], 0) : undefined;
+    if (before === undefined) return after;
+    if (after === undefined) return before;
+    return (before + after) / 2;
+  });
+}
+function curve(keys) {
+  const n = keys.length;
+  const slope = (k) => {
+    const a = Math.max(0, k - 1);
+    const b = Math.min(n - 1, k + 1);
+    return (keys[b] - keys[a]) / (KEY_T[b] - KEY_T[a]);
+  };
+  return (t) => {
+    const x = clamp(t, 0, V.total);
+    let k = 0;
+    while (k < n - 2 && x >= KEY_T[k + 1]) k++;
+    const h = KEY_T[k + 1] - KEY_T[k];
+    const u = (x - KEY_T[k]) / h;
+    const u2 = u * u;
+    const u3 = u2 * u;
+    return (2 * u3 - 3 * u2 + 1) * keys[k] + (u3 - 2 * u2 + u) * h * slope(k)
+      + (-2 * u3 + 3 * u2) * keys[k + 1] + (u3 - u2) * h * slope(k + 1);
+  };
+}
+const pair = (name, fallback) => (plan, frame, end) => (plan[name] ? plan[name][end] : fallback);
+const FOV = curve(keysOf(pair('fov', 45)));
+const PITCH = curve(keysOf(pair('pitch', 0)));
+const YAW = curve(keysOf(pair('yaw', 0)));
+const ROLL = curve(keysOf(pair('roll', 0)));
+const DENSITY = curve(keysOf(pair('field', 0.6)));
+const LINKS = curve(keysOf(pair('links', 1)));
+const RISE = curve(keysOf((plan) => plan.rise ?? 1));
+const DEPTH = curve(keysOf((plan, frame, end) => frame.depth[end]));
+
 // Depth, 0 at the surface to 1 at the deepest point: it changes what the
 // objects do, never the colour.
-export function depthAt(t) {
-  const { frame, p } = locate(t);
-  return lerp(frame.depth, smooth(p));
+export const depthAt = (t) => clamp(DEPTH(t));
+
+// How far the water has risen past the camera, in background.js's frames:
+// the rise speed added up on the 60 a second grid, once.
+const CLIMB = new Float64Array(Math.round(V.total / STEP) + 2);
+for (let k = 1; k < CLIMB.length; k++) CLIMB[k] = CLIMB[k - 1] + RISE((k - 1) * STEP) * STEP * 60;
+function climbAt(t) {
+  const x = clamp(t, 0, V.total) / STEP;
+  const k = Math.floor(x);
+  return CLIMB[k] + (CLIMB[Math.min(CLIMB.length - 1, k + 1)] - CLIMB[k]) * (x - k);
 }
 
 // ---- the renderer and its passes ----
@@ -233,54 +288,46 @@ function captureCells(d) {
   fade.set(NEAR, NEAR + 4, FAR - 16, FAR);
 }
 
-// ---- the effect: stepped from its scene's start ----
+// ---- the water's surface: one ripple field for the whole film ----
+// web/js/water.js's ripples, without their own rain; the drops are the
+// scenes' (rain, a wake, a splash), chosen by a hash of the step, so the
+// field at any moment is the same however the render reached it. With no
+// drops it lies flat: the site's still gel.
 
-let fx = null;
-let fxScene = -1;
-let fxStep = 0;
-function effectName(plan) {
-  return canSimulate || plan.effect === 'still' ? plan.effect : 'still';
-}
-function scripted(plan, s) {
+const hash = (k, salt) => { const x = Math.sin(k * 12.9898 + salt * 78.233) * 43758.5453; return x - Math.floor(x); };
+function dropsAt(k) {
+  const { plan, local } = locate(k * STEP);
   const out = [];
+  const r = plan.rain;
+  if (r && local >= r.from && local <= r.to && hash(k, 1) < r.rate * STEP) {
+    out.push([0.05 + hash(k, 2) * 0.9, 0.05 + hash(k, 3) * 0.9, 0.5 + hash(k, 4) * 0.5, 0.025 + hash(k, 5) * 0.03]);
+  }
   const w = plan.wake;
-  if (w && s >= w.from && s <= w.to && Math.round(s / STEP) % 4 === 0) {
-    const u = (s - w.from) / (w.to - w.from) * (w.path.length - 1);
-    const k = Math.min(w.path.length - 2, Math.floor(u));
-    const f = u - k;
-    out.push([w.path[k][0] + (w.path[k + 1][0] - w.path[k][0]) * f, w.path[k][1] + (w.path[k + 1][1] - w.path[k][1]) * f, 0.3, 0.026]);
+  if (w && local >= w.from && local <= w.to && k % 4 === 0) {
+    const u = (local - w.from) / (w.to - w.from) * (w.path.length - 1);
+    const j = Math.min(w.path.length - 2, Math.floor(u));
+    const f = u - j;
+    out.push([w.path[j][0] + (w.path[j + 1][0] - w.path[j][0]) * f, w.path[j][1] + (w.path[j + 1][1] - w.path[j][1]) * f, 0.3, 0.026]);
   }
   for (const [at, u, v, strength, radius] of plan.splash ?? []) {
-    if (Math.abs(s - at) < STEP / 2) out.push([u, v, strength, radius]);
+    if (Math.abs(local - at) < STEP / 2) out.push([u, v, strength, radius]);
   }
   return out;
 }
-function effectTo(index, plan, step) {
-  if (!fx || fxScene !== index || step < fxStep) {
+let fx = null;
+let fxStep = -1;
+function waterTo(step) {
+  if (!fx || step < fxStep) {
     fx?.dispose();
-    fx = createEffect(THREE, effectName(plan));
+    fx = createEffect(THREE, canSimulate ? 'wake' : 'still');
     fx.setSize(W, H);
-    fxScene = index;
-    fxStep = 0;
-    fx.step(renderer, 0, 0);
+    fxStep = -1;
   }
   while (fxStep < step) {
     fxStep++;
-    for (const d of scripted(plan, fxStep * STEP)) fx.drop(...d);
-    fx.step(renderer, fxStep * STEP, STEP);
+    for (const d of dropsAt(fxStep)) fx.drop(...d);
+    fx.step(renderer, fxStep * STEP, fxStep === 0 ? 0 : STEP);
   }
-}
-
-// How far the water has risen past the camera by time t, in background.js's
-// frames: each scene's pace, added up.
-function climbAt(t) {
-  let climb = 0;
-  for (const f of FRAMES) {
-    const span = clamp(t - f.start, 0, f.seconds);
-    climb += span * 60 * (PLAN[f.id].rise ?? 1);
-    if (t < f.start + f.seconds) break;
-  }
-  return climb;
 }
 
 // ---- the gel's grain: white specks with page.css's alpha curve
@@ -306,44 +353,31 @@ function climbAt(t) {
 
 // ---- the film's motif: the time code and the depth gauge ----
 
-const frost = document.getElementById('frost');
+// The frost is the site's gel, the same all the way through.
+document.getElementById('frost').style.opacity = '0.72';
 const clock = document.getElementById('hud-time');
 const chapter = document.getElementById('hud-chapter');
 const mark = document.getElementById('gauge-mark');
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s) % 60).padStart(2, '0')}`;
 
-// The gel clouds for a moment over a cut between unlike scenes.
-function dip(t) {
-  let d = 0;
-  for (let i = 1; i < FRAMES.length; i++) {
-    if (PLAN[FRAMES[i].id].cut !== 'dip') continue;
-    d = Math.max(d, Math.exp(-(((t - FRAMES[i].start) / 0.32) ** 2)));
-  }
-  return d;
-}
-
 // ---- one frame ----
 
 export function draw(t) {
   const { index, frame, plan, local, p } = locate(t);
-  const e = smooth(p);
-  const d = lerp(frame.depth, e);
-  cellsTo(Math.round(t / STEP));
-  effectTo(index, plan, Math.round(local / STEP));
+  const d = depthAt(t);
+  const step = Math.round(t / STEP);
+  cellsTo(step);
+  waterTo(step);
 
   // Deeper: a narrower view (the cells larger) and a wider sway, which
   // moves the near cells more than the far.
-  camera.fov = lerp(plan.fov, e, 45) * (1 - 0.24 * d);
+  camera.fov = FOV(t) * (1 - 0.24 * d);
   camera.position.set(0.9 * d * Math.sin(t * 0.31), 0.55 * d * Math.sin(t * 0.23 + 1), 0);
-  camera.rotation.set(
-    lerp(plan.pitch, e) + 0.02 * d * Math.sin(t * 0.19),
-    lerp(plan.yaw, e) - 0.03 * d * Math.sin(t * 0.31),
-    lerp(plan.roll, e),
-  );
+  camera.rotation.set(PITCH(t) + 0.02 * d * Math.sin(t * 0.19), YAW(t) - 0.03 * d * Math.sin(t * 0.31), ROLL(t));
   camera.updateProjectionMatrix();
   layer.setFade(clamp(t / 1.6));
 
-  field.draw(t, { climb: climbAt(t), density: lerp(plan.field, e, 0.6), links: plan.links ?? 1, scale: 1 + 0.6 * d });
+  field.draw(t, { climb: climbAt(t), density: DENSITY(t), links: LINKS(t), scale: 1 + 0.6 * d });
   fieldTexture.needsUpdate = true;
 
   renderer.setRenderTarget(null);
@@ -367,19 +401,24 @@ export function draw(t) {
     }
   }
 
-  // The frost is the site's gel, the same all the way down; it clouds for a
-  // moment over a cut.
-  frost.style.opacity = String(clamp(0.72 + (plan.frost ?? 0) + dip(t) * 0.3, 0, 1));
   clock.textContent = fmt(t);
   chapter.textContent = V.chapters.find((c) => c.id === frame.chapter)?.label ?? '';
   mark.style.top = `${d * 100}%`;
 
   for (const el of sceneRoots(frame.id)) window.VivomeSlots?.tick(el, local);
-  return DRAW[frame.id]?.(local, p, frame) ?? null;
+  const pending = [DRAW[frame.id]?.(local, p, frame)];
+  // While the last scene's cards hand over to these, its pictures stay as
+  // they ended, so a frame rendered on its own shows them too.
+  const before = FRAMES[index - 1];
+  if (before && local < V.handover) {
+    for (const el of sceneRoots(before.id)) window.VivomeSlots?.tick(el, before.seconds + local);
+    pending.push(DRAW[before.id]?.(before.seconds, 1, before));
+  }
+  return pending.filter(Boolean);
 }
 
 window.addEventListener('hf-seek', (event) => {
   const pending = draw(Math.max(0, Number(event.detail?.time) || 0));
-  if (pending && typeof event.detail?.waitUntil === 'function') event.detail.waitUntil(pending);
+  if (typeof event.detail?.waitUntil === 'function') for (const wait of pending) event.detail.waitUntil(wait);
 });
 draw(0);

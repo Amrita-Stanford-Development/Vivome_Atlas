@@ -224,8 +224,10 @@ export function createField(width, height, seed = 17) {
       }
       ctx.restore();
     }
-    const shown = Math.round(particles.length * Math.max(0, Math.min(1, density)));
-    for (let i = 0; i < shown; i++) {
+    // As the density changes, the next particle fades in or out over its
+    // share, so none appears or vanishes at once.
+    const level = particles.length * Math.max(0, Math.min(1, density));
+    for (let i = 0; i < Math.ceil(level); i++) {
       const p = particles[i];
       const y = wrap(p.y - p.speedY * climb, -50, height + 100);
       const x = wrap(p.x + p.speedX * t * 60 + Math.sin(time * 0.42 + p.pulse) * 12, -50, width + 100);
@@ -233,7 +235,7 @@ export function createField(width, height, seed = 17) {
       ctx.translate(x, y);
       ctx.scale(scale, scale);
       ctx.translate(-x, -y);
-      particle(p, x, y, time, glow);
+      particle(p, x, y, time, glow * Math.min(1, level - i));
       ctx.restore();
     }
     gridAndVignette();

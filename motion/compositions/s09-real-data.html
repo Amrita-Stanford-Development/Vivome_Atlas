@@ -51,7 +51,7 @@
             tl.fromTo('#s-real-data .result.a', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 1.6);
             tl.fromTo('#s-real-data .result.b', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 3.6);
             tl.fromTo('#s-real-data .foot', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 6.2);
-            tl.fromTo('#s-real-data', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 11.5);
+            tl.fromTo('#s-real-data', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 11.9);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-real-data'] = tl;
         })();

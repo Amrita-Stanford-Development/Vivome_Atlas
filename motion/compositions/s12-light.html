@@ -1,6 +1,7 @@
 <template>
-    <!-- Scene 12, 1:54 to 2:00: into the light. The camera breaks the
-         surface; the end card, liquid glass, holds over the white gel. -->
+    <!-- Scene 12, 1:54 to 2:00: into the light. The end card, liquid glass,
+         rises in as scene 11's cards fade, and holds while the camera breaks
+         the surface below it. -->
     <style>
         #s-light .end { left: 360px; right: 360px; top: 120px; padding: 56px 64px 60px; text-align: center; opacity: 0; }
         #s-light .f-wordmark { display: inline-block; font-size: 160px; opacity: 0; }
@@ -24,13 +25,13 @@
         (function () {
             VivomeSlots.fill(document.getElementById('s-light'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-light .end', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.5);
-            tl.fromTo('#s-light .f-wordmark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.7);
-            tl.fromTo('#s-light .f-wordmark .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 3.1);
-            tl.fromTo('#s-light .f-display', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 3.2);
-            tl.fromTo('#s-light .f-display .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 3.8);
-            tl.fromTo('#s-light .actions', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 4.0);
-            tl.fromTo('#s-light .address', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 4.3);
+            tl.fromTo('#s-light .end', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.4);
+            tl.fromTo('#s-light .f-wordmark', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.6);
+            tl.fromTo('#s-light .f-wordmark .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.0);
+            tl.fromTo('#s-light .f-display', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 1.1);
+            tl.fromTo('#s-light .f-display .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.7);
+            tl.fromTo('#s-light .actions', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 2.0);
+            tl.fromTo('#s-light .address', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 2.3);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-light'] = tl;
         })();

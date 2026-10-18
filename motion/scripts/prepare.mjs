@@ -30,7 +30,7 @@ const REPO = join(ROOT, '..');
 const site = (p) => join(REPO, p);
 const load = (p) => import(pathToFileURL(site(p)).href);
 
-const { FRAMES, STARTS, TOTAL, CHAPTERS, frameSlots, slotText, slotMeasured, slotSource } = await load('web/js/reel-frames.js');
+const { FRAMES, STARTS, TOTAL, HANDOVER, CHAPTERS, frameSlots, slotText, slotMeasured, slotSource } = await load('web/js/reel-frames.js');
 const { checkSync } = await load('web/js/manuscript-data.js');
 const { CLASS_COLOURS } = await load('web/js/workflow-data.js');
 
@@ -154,6 +154,7 @@ const hm = w.trace.heatmap;
 const VIVOME = {
   built_for: manuscript.built_for,
   total: TOTAL,
+  handover: HANDOVER,
   chapters: CHAPTERS,
   frames: FRAMES.map((f, i) => ({ id: f.id, title: f.title, chapter: f.chapter, start: STARTS[i], seconds: f.seconds, depth: f.depth })),
   facts,

@@ -41,7 +41,7 @@
             tl.fromTo('#s-gaps .matrix', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.6);
             tl.fromTo('#s-gaps .stats', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.8);
             tl.fromTo('#s-gaps .fig', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 1.4 }, 3.0);
-            tl.fromTo('#s-gaps', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 9.5);
+            tl.fromTo('#s-gaps', { opacity: 1, y: 0 }, { opacity: 0, y: -30, duration: 0.9, ease: 'power2.inOut' }, 9.9);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-gaps'] = tl;
         })();

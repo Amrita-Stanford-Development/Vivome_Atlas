@@ -34,9 +34,18 @@ scenes, its liquid glass (`.liquid`) in even ones, both straight from
 page lists it among the scene's notes, and the test checks that each
 composition uses its scene's kind and no other.
 
-The film has sound: a voice-over speaking each scene's line, a soft ambient
-score that rises towards the end, and the storyboard's sound cues. The
-stills on the page are silent; the sound is in the rendered film only.
+The film is one continuous move, with no cut. The water, the cells, the
+particles and the camera never reset at a scene's start: the camera, the
+depth, the particles' density and the water's rise follow smooth curves
+through the scenes' values, and one ripple field runs the whole film. The
+cards hand over: each scene's cards stay on for 0.8 seconds into the next
+scene (`HANDOVER` in the storyboard), fading out with a slight drift up
+while the next scene's rise in, so the screen never empties.
+
+The film's sound is a voice-over speaking each scene's line and a soft
+music bed under the whole film, one continuous piece that rises towards the
+end; there are no sound effects. The stills on the page are silent; the
+sound is in the rendered film only.
 
 ## The page
 
@@ -96,7 +105,7 @@ film is made (`motion/scripts/voice.mjs`); a spoken number is never typed.
 | FFmpeg | cutting Manim's QuickTime file into one frame per film frame; grading each still and writing it as WebP | Manim's own PNG sequence skips held frames, so its frame numbers would not be times |
 | Canvas | the data pictures: the missing-value matrix, the reference map, the example file landing | drawn from `web/data/workflow.json` on each seek, as the Workflow page draws them |
 | Kokoro-82M, through HyperFrames' `tts` | the voice-over | a local, openly licensed text-to-speech model: the script never leaves this machine |
-| numpy and soundfile | the score: the ambient bed, the musical cues and the effects, synthesised in `motion/audio/score.py` | made in code, so no music or sample is downloaded and nothing needs a licence |
+| numpy and soundfile | the music: the ambient bed and its musical cues, synthesised in `motion/audio/score.py` | made in code, so no music or sample is downloaded and nothing needs a licence |
 | FFmpeg | the mix: each voice line at its time, the music ducked under the voice by a sidechain compressor, the whole at -16 LUFS; then the draft and the copy for sending | one tool for the sound and the encodes |
 
 Lottie is not used: it plays animations designed elsewhere, and the film
@@ -121,9 +130,17 @@ HyperFrames downloads the model files once, about 350 MB, into
 is fitted to its scene: it starts just after the scene does and ends before
 the next. A line that runs long is spoken a little faster (at most 1.2
 times), then given shorter pauses around it; the words never change. In
-this draft every line fits: scene 5's is spoken at 1.13 times, the rest at
-normal speed. Kokoro reads the name as it is spelt; how it says "VivOME" is
-worth a listen before a final cut.
+this draft every line fits: scene 5's is spoken at 1.08 times, the rest at
+normal speed.
+
+The voice says the name as one word, "Vivome", VIV-ohm, as in genome and
+proteome; the screen keeps the wordmark VivOME. Written VivOME, the
+phonemizer spells it out (`vˈaɪv ˌoʊˌɛmˈiː`, "vive O M E"); written Vivome it
+gives `vˈɪvoʊm`, one word stressed on its first syllable, like `dʒˈiːnoʊm`
+(genome) and `pɹˈoʊɾoʊm` (proteome). `motion/scripts/voice.mjs` reads every
+line through the same phonemizer before speaking (`motion/audio/phonemes.py`),
+records the phonemes in its report, and stops if the name would come out
+any other way.
 
 ## The project: `motion/`
 
@@ -134,8 +151,8 @@ keeps no build step.
 |---|---|
 | `motion/index.html` | the root composition: 120 seconds, the water, the frost, the twelve scene hosts, the time code and the depth gauge |
 | `motion/compositions/sNN-<scene>.html` | one scene each: its words, diagrams and GSAP timeline |
-| `motion/lib/dive.js` | the water, drawn on every `hf-seek`: the cells stepped on a 60 a second grid from the film's start, each effect from its scene's start, so any frame renders the same on its own; depth as the objects coming forward (a narrower view, the drift, parallax, the far cells blurred); the waterline; the motif |
-| `motion/lib/plan.js` | each scene's water: its effect, waterline, camera, particles, frost and cut |
+| `motion/lib/dive.js` | the water, drawn on every `hf-seek`: the cells and one ripple field stepped on a 60 a second grid from the film's start, so any frame renders the same on its own; smooth curves through the scenes' values for the camera, depth, particles and rise; depth as the objects coming forward (a narrower view, the drift, parallax, the far cells blurred); the waterline; each scene's pictures kept drawn through its handover; the motif |
+| `motion/lib/plan.js` | what each scene asks of the water: camera, particles, waterline, and the drops (rain, wakes, a splash) that ring the one ripple field |
 | `motion/lib/field.js` | the site's particle field, as a function of time |
 | `motion/lib/scenes.js` | the data pictures and the Manim frames, on the same seek |
 | `motion/lib/slots.js` | fills number slots; counts them up with the landing's maths |
@@ -146,7 +163,8 @@ keeps no build step.
 | `motion/scripts/manim.mjs` | renders the Manim scene and cuts it into frames |
 | `motion/scripts/stills.mjs` | snapshots each scene's still, grades it and writes the sidecar |
 | `motion/scripts/voice.mjs` | speaks each scene's line with Kokoro and fits it to its scene; its report is `motion/build/audio/voice.json` |
-| `motion/audio/score.py` | the music and the effects, synthesised in code |
+| `motion/audio/score.py` | the music, synthesised in code: one continuous bed and its cues |
+| `motion/audio/phonemes.py` | the phonemes Kokoro will read for each line, so the voice script can check the name |
 | `motion/scripts/film.mjs` | renders the whole film, then the voice, the score, the mix and the two encodes |
 
 `motion/vendor/`, `motion/build/` (the generated sound included),
@@ -187,7 +205,8 @@ if its timing changed; the test checks they agree. Render the stills again.
 
 Number slots are written as they are in the storyboard; the page and the
 render show each record's value, or Pending. The voice-over runs at about
-two words a second, read by Kokoro's `af_heart` voice.
+two words a second, read by Kokoro's `af_heart` voice, which says the name
+as one word, Vivome.
 
 ### 1. The surface (0:00 to 0:08, 8 s)
 
@@ -200,7 +219,7 @@ Chapter: the problem. Made with HyperFrames, GSAP, three.js water (rain).
 - **Transition:** Opens from white light. Flows on into scene 2 as the camera tips down.
 - **Water:** Rain on the surface: each drop sends rings across the white gel, and a fine white waterline runs along the top.
 - **Particles:** Sparse. Cells and molecules drift up towards the light.
-- **Sound:** Rain on water, close. A low pad fades in; one soft piano note as the title lands.
+- **Sound:** A low pad fades in from silence; one soft piano note as the title lands.
 
 ### 2. Without names (0:08 to 0:18, 10 s)
 
@@ -210,10 +229,10 @@ Chapter: the problem. Made with HyperFrames, GSAP, three.js water (still).
 - **Voice-over:** "But those cells arrive without names. Labelled protein references are few, and every lab detects a different set of proteins."
 - **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Tips down and sinks; the waterline slides up and out of the frame.
-- **Transition:** One continuous move from scene 1. Leaves through a cloud of silt.
+- **Transition:** One continuous move from scene 1. Its card drifts up and fades as scene 3's rise in.
 - **Water:** The same white gel, still now; the waterline slides up out of sight.
 - **Particles:** Protein cells in green drift past, each with an empty name tag.
-- **Sound:** The rain muffles as we go under. A slow low swell; a hollow tick as each empty tag appears.
+- **Sound:** The pad carries on, a little lower, as the camera goes under.
 
 ### 3. Mostly missing (0:18 to 0:28, 10 s)
 
@@ -223,10 +242,10 @@ Chapter: the problem. Made with HyperFrames, GSAP, three.js water (still), canva
 - **Voice-over:** "And each cell is only partly seen. Much of a protein matrix is empty."
 - **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** A slow sideways track along a matrix of cells and proteins.
-- **Transition:** The missing tiles fall away as specks that become the RNA cells of scene 4.
+- **Transition:** Its cards drift up and fade as scene 4's map and words rise in; the camera keeps sinking.
 - **Water:** The white gel thickens a little: the frost rises and the far cells soften.
 - **Particles:** The molecular network loses links as values drop out.
-- **Sound:** Dry ticks as tiles drop out. The pad thins to one held note.
+- **Sound:** The pad thins to one held note as the missing values fall away.
 - **Drawn from data:** The matrix: the PBMC240 example file's own values, as the Workflow page shows them (web/data/workflow.json); striped tiles were not measured.
 
 ### 4. RNA has names (0:28 to 0:38, 10 s)
@@ -237,7 +256,7 @@ Chapter: the solution. Made with HyperFrames, GSAP, three.js water (still), canv
 - **Voice-over:** "Single-cell RNA is different. Its atlases are large, and every cell in them has a name."
 - **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Descends through a shoal of cells, then pulls back to see the whole map.
-- **Transition:** The map holds and slides aside to become one side of scene 5.
+- **Transition:** Its cards fade as scene 5's wordmark rises in; the camera keeps its course.
 - **Water:** The same white gel. The camera drifts on through the cells, which come closer and larger as it goes down.
 - **Particles:** RNA strands in red and gold thread through the shoal.
 - **Sound:** A warm chord: the first hint of the theme.
@@ -251,10 +270,10 @@ Chapter: the solution. Made with HyperFrames, GSAP, three.js water (wake).
 - **Voice-over:** "VivOME learns blood cell types from labelled RNA alone, then reads each protein cell against that reference. No protein labels, no paired cells, and no retraining on your data."
 - **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Holds on the wordmark, then a slow crane down to the bridge between the two sides.
-- **Transition:** The wordmark rises out of the particles. Leaves on a push into the protein side.
+- **Transition:** The wordmark's card rises in as scene 4's cards fade. Its cards drift up and fade as scene 6's rise in.
 - **Water:** A slow wake ripples through the white gel as the wordmark rises.
 - **Particles:** The network links up across the frame as the bridge forms.
-- **Sound:** The theme enters in full: a rising arpeggio, and a soft whoosh as the wordmark locks.
+- **Sound:** The theme enters in full: a rising arpeggio as the wordmark appears.
 
 ### 6. Built for gaps (0:50 to 1:00, 10 s)
 
@@ -264,7 +283,7 @@ Chapter: what is new. Made with HyperFrames, GSAP, three.js water (still), canva
 - **Voice-over:** "It is built for gaps: it knows which proteins were never measured, scales each one within your file, and asks {ms:wf_members} encoders to answer together."
 - **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Tracks along the matrix from scene 3, now lit: a mask marks each gap.
-- **Transition:** Match cut from scene 3's matrix. Leaves as the beams meet in one point that drops into scene 7.
+- **Transition:** Its matrix is scene 3's, now lit. Its cards fade as scene 7's map and ladder rise in.
 - **Water:** The white gel, clearer than in scene 3; nearer cells drift larger past the camera, the far ones softly out of focus.
 - **Particles:** Streams of particles converge on one point.
 - **Sound:** Soft tones, one per encoder, resolving into one chord.
@@ -278,7 +297,7 @@ Chapter: what is new. Made with Manim, HyperFrames, GSAP, three.js water (still)
 - **Voice-over:** "Every cell gets the most precise answer the evidence allows: a cell type, its group, its lineage, or no answer, and the reason why."
 - **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Locked off on the reference map, seen flat from one side.
-- **Transition:** Each answer steps down the ladder in turn. Leaves as the last cell's outline dissolves into the gel.
+- **Transition:** Each answer steps down the ladder in turn. Its cards fade as scene 8's rise in.
 - **Water:** Still gel, so the diagram reads cleanly.
 - **Particles:** Few and slow, kept to the edges.
 - **Sound:** Descending notes, one per rung, and a soft stop on no answer.
@@ -292,7 +311,7 @@ Chapter: what is new. Made with HyperFrames, GSAP, three.js water (wake).
 - **Voice-over:** "Its best guess adds a second opinion, used only when your file agrees with the encoder."
 - **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Follows two currents as they braid into one.
-- **Transition:** Comes in as scene 7's outline dissolves. Leaves as the braided current dives on down.
+- **Transition:** Its cards rise in over scene 7's as they fade, and fade in turn as the camera goes deeper.
 - **Water:** A wake follows the two currents through the white gel.
 - **Particles:** Two streams of particles that merge after a gate.
 - **Sound:** Two lines of melody braid into one.
@@ -306,10 +325,10 @@ Chapter: the results. Made with HyperFrames, GSAP, three.js water (still).
 - **Voice-over:** "On real blood protein data, here is how often it answers, and how often those answers are right."
 - **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Settles at the deepest point of the dive; the cards rise among the nearest cells.
-- **Transition:** Leaves on a slow pan along the floor into scene 10.
+- **Transition:** Its cards fade as scene 10's rise in; the camera reaches its deepest point and turns.
 - **Water:** The same white gel; at the deepest point the cells are closest and largest, and the far ones most softly blurred.
 - **Particles:** Dense and close: cells and strands drift large around the cards.
-- **Sound:** The music drops to a deep pulse; each number lands with a soft sonar ping.
+- **Sound:** The music settles on a low, slow bass pulse under the numbers.
 
 ### 10. Against established methods (1:32 to 1:44, 12 s)
 
@@ -320,7 +339,7 @@ Chapter: the results. Made with HyperFrames, GSAP, three.js water (still).
 - **Voice-over:** "Against established methods, on real protein data, it is level with the best and ahead of the rest. Where it is still weak, it says so."
 - **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** A slow pan along the floor past the methods, each a bubble with its name.
-- **Transition:** Leaves as the camera turns up towards the light.
+- **Transition:** Its cards fade as the Atlas window rises in; the camera turns up towards the light.
 - **Water:** The same white gel; the cells begin to recede as the camera turns to rise.
 - **Particles:** The methods rise past the camera as bubbles, each with its name: scANVI, MaxFuse, scGLUE, Harmony, Seurat, PCA and correlation.
 - **Sound:** The pulse continues under a lighter counter-melody: the rise begins.
@@ -333,7 +352,7 @@ Chapter: use it. Made with HyperFrames, GSAP, three.js water (wake), canvas.
 - **Voice-over:** "It runs online. Send your file from the Atlas page, and your cells land on the map, each with its answer."
 - **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Rises through the water towards a browser window floating near the surface.
-- **Transition:** Leaves as the camera keeps rising and breaks the surface.
+- **Transition:** Its cards fade as the end card rises in; the camera keeps rising and breaks the surface.
 - **Water:** A wake: the file leaves a trail of ripples as it drops into the atlas.
 - **Particles:** The file's cells fly in as beads and land in their places.
 - **Sound:** Bright plucks as each cell lands; the theme returns in full.
@@ -347,7 +366,7 @@ Chapter: use it. Made with HyperFrames, GSAP, three.js water (rain).
 - **Voice-over:** "Bring your protein cells up into the light. VivOME: no cell placed without evidence."
 - **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Rushes up and breaks the surface, then settles.
-- **Transition:** The splash clears to white and the end card holds.
+- **Transition:** The end card rises in as the camera surfaces, and holds.
 - **Water:** The waterline sweeps down the frame as we surface and settles low; rain rings the water under the end card.
 - **Particles:** Bubbles rise and burst at the surface, then the frame clears.
-- **Sound:** A swell, a splash as we break the surface, and a bright final chord. Silence on the end card.
+- **Sound:** The music swells as the camera surfaces and resolves on a bright final chord, then fades to silence on the end card.

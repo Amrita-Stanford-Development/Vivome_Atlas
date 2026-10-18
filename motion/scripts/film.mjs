@@ -3,10 +3,10 @@
 // 1. HyperFrames renders the picture at the composition's 1920 by 1080,
 //    silent (renders/<name>-1080.mp4), unless --skip-render reuses it;
 // 2. scripts/voice.mjs speaks the voice-over (Kokoro, on this machine);
-//    audio/score.py writes the music and the effects;
+//    audio/score.py writes the music. There are no sound effects;
 // 3. FFmpeg mixes them (build/audio/mix.wav): each voice line placed at its
-//    time, the music ducked under the voice (a sidechain compressor), the
-//    effects beside it, the whole brought to -16 LUFS;
+//    time and the music ducked under the voice (a sidechain compressor),
+//    the whole brought to -16 LUFS;
 // 4. FFmpeg writes renders/<name>.mp4 (1280 by 720, H.264 and AAC) and a
 //    smaller copy for sending, renders/<name>-share.mp4 (about 17 MB).
 //
@@ -51,11 +51,11 @@ const long = voice.lines.filter((l) => !l.fits);
 if (long.length) console.warn(`film: voice lines that run long: ${long.map((l) => l.id).join(', ')}`);
 
 // The mix: voice lines at their times, the music ducked under them.
-const inputs = ['-i', join(audio, 'music.wav'), '-i', join(audio, 'fx.wav')];
+const inputs = ['-i', join(audio, 'music.wav')];
 const lines = voice.lines.map((l, k) => {
   inputs.push('-i', join(ROOT, l.file));
   const ms = Math.round(l.at * 1000);
-  return `[${k + 2}:a]aresample=48000,pan=stereo|c0=c0|c1=c0,adelay=${ms}:all=1[v${k}]`;
+  return `[${k + 1}:a]aresample=48000,pan=stereo|c0=c0|c1=c0,adelay=${ms}:all=1[v${k}]`;
 });
 const filter = [
   ...lines,
@@ -63,9 +63,8 @@ const filter = [
   '[voice]asplit=2[vo][key]',
   '[0:a][key]sidechaincompress=threshold=0.01:ratio=12:attack=20:release=500:makeup=1[ducked]',
   '[ducked]volume=0.42[m]',
-  '[1:a]volume=0.5[f]',
   '[vo]volume=1.0[v]',
-  '[m][f][v]amix=inputs=3:normalize=0:duration=first,atrim=0:120,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[out]',
+  '[m][v]amix=inputs=2:normalize=0:duration=first,atrim=0:120,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[out]',
 ].join(';');
 const mix = join(audio, 'mix.wav');
 run('ffmpeg', ['-v', 'error', '-y', ...inputs, '-filter_complex', filter, '-map', '[out]', '-ac', '2', '-c:a', 'pcm_s16le', mix], 'mix');

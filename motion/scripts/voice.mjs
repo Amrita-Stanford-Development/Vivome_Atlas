@@ -3,6 +3,13 @@
 // files as the page fills them, read by Kokoro-82M on this machine through
 // HyperFrames' `tts` (kokoro-onnx; nothing is sent anywhere).
 //
+// The name is said as one word, "Vivome" (VIV-ohm, as in genome and
+// proteome); written VivOME, the phonemizer spells out O, M, E. Only the
+// text the voice reads changes, never the wordmark on screen. Before
+// speaking, each line's phonemes are worked out as Kokoro will (through
+// audio/phonemes.py) and recorded; a line where the name is not /vˈɪvoʊm/
+// stops the run.
+//
 // Each line must fit its scene, starting LEAD seconds in and ending TAIL
 // seconds before the next. A line that runs long is spoken a little faster
 // (up to MAX_SPEED), then given shorter pauses around it (TIGHT_LEAD and
@@ -30,7 +37,10 @@ const { FRAMES, STARTS, slotsIn, slotText } = await import(pathToFileURL(join(RE
 const json = (p) => JSON.parse(readFileSync(join(REPO, p), 'utf8'));
 const sources = { manifest: json('web/data/atlas_manifest.json'), manuscript: json('web/data/manuscript.json') };
 
-const spoken = (text) => slotsIn(text).reduce((s, slot) => s.replace(slot.token, slotText(slot, sources)), text);
+export const SAY_NAME = 'Vivome';
+export const NAME_PHONEMES = 'vˈɪvoʊm';
+const spoken = (text) => slotsIn(text).reduce((s, slot) => s.replace(slot.token, slotText(slot, sources)), text)
+  .replace(/VivOME/g, SAY_NAME);
 const seconds = (file) => {
   const r = spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', file], { env: toolEnv(), encoding: 'utf8' });
   if (r.status !== 0) throw new Error(`ffprobe failed on ${file}`);
@@ -38,6 +48,20 @@ const seconds = (file) => {
 };
 
 mkdirSync(OUT, { recursive: true });
+
+// What Kokoro will say: each line's phonemes, worked out before speaking.
+const texts = FRAMES.map((frame) => spoken(frame.voice));
+const voicePython = process.env.HYPERFRAMES_PYTHON || toolEnv().HYPERFRAMES_PYTHON;
+const listFile = join(ROOT, 'build', 'audio', 'lines.json');
+writeFileSync(listFile, JSON.stringify(texts));
+const said = spawnSync(voicePython, [join(ROOT, 'audio', 'phonemes.py'), listFile], { env: { ...toolEnv(), PYTHONIOENCODING: 'utf-8' }, encoding: 'utf8' });
+if (said.status !== 0) throw new Error(`phonemes failed: ${said.stderr}`);
+const phonemes = JSON.parse(said.stdout);
+texts.forEach((text, i) => {
+  if (text.includes(SAY_NAME) && !phonemes[i].includes(NAME_PHONEMES)) {
+    throw new Error(`scene ${i + 1} would not say ${SAY_NAME} as one word: ${phonemes[i]}`);
+  }
+});
 const reportFile = join(ROOT, 'build', 'audio', 'voice.json');
 const before = existsSync(reportFile) ? JSON.parse(readFileSync(reportFile, 'utf8')) : { lines: [] };
 
@@ -49,7 +73,7 @@ async function say(text, speed, file) {
 
 const lines = [];
 for (const [i, frame] of FRAMES.entries()) {
-  const text = spoken(frame.voice);
+  const text = texts[i];
   const file = join(OUT, `${String(i + 1).padStart(2, '0')}-${frame.id}.wav`);
   const budget = frame.seconds - LEAD - TAIL;
   const kept = before.lines.find((l) => l.id === frame.id && l.text === text && l.voice === VOICE && existsSync(file));
@@ -65,7 +89,7 @@ for (const [i, frame] of FRAMES.entries()) {
   const room = tight ? frame.seconds - TIGHT_LEAD - TIGHT_TAIL : budget;
   const fits = length <= room;
   lines.push({
-    scene: i + 1, id: frame.id, text, voice: VOICE, speed, seconds: +length.toFixed(3), room: +room.toFixed(3),
+    scene: i + 1, id: frame.id, text, phonemes: phonemes[i], voice: VOICE, speed, seconds: +length.toFixed(3), room: +room.toFixed(3),
     pauses: tight ? 'short' : 'normal', at: +(STARTS[i] + lead).toFixed(3), file: `build/audio/voice/${file.split(/[\\/]/).pop()}`, fits,
   });
   console.log(`voice ${String(i + 1).padStart(2, '0')} ${frame.id}: ${length.toFixed(2)} s of ${room.toFixed(2)} at speed ${speed}${tight ? ', short pauses' : ''}${fits ? '' : '  RUNS LONG'}`);
