@@ -1,0 +1,39 @@
+{
+  "finished": "2026-10-18T10:31:30",
+  "gates": {
+    "G1 correct when committed": {
+      "value": 95.49,
+      "pass": true
+    },
+    "G1 committed": {
+      "value": 84.41,
+      "pass": true
+    },
+    "G1 coverage": {
+      "value": 89.19,
+      "pass": true
+    },
+    "G1 false abstention": {
+      "value": 0.65,
+      "pass": true
+    },
+    "G3 Coscia B over T AUROC": {
+      "value": 1.0,
+      "pass": true
+    },
+    "G3 Zheng tonsil group accuracy": {
+      "value": 41.03,
+      "pass": false
+    },
+    "G3 HPA lymph-node pools group accuracy": {
+      "value": 100.0,
+      "pass": true
+    },
+    "G3 PXD011683 B share": {
+      "value": 71.11,
+      "pass": false
+    }
+  },
+  "all_pass": false,
+  "seconds": 1129
+}

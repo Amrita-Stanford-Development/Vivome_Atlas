@@ -1,0 +1,136 @@
+{
+  "overall": {
+    "cells": 78926,
+    "committed": 84.41,
+    "correct_when_committed": 95.49,
+    "false_abstention": 0.65,
+    "levels": {
+      "group": 38.01,
+      "class": 23.39,
+      "lineage": 23.01,
+      "abstain": 15.59
+    },
+    "best_guess_per_upload_balanced": 61.88,
+    "coverage": 89.19
+  },
+  "by_scenario": {
+    "lineage": {
+      "cells": 10184,
+      "committed": 79.31,
+      "correct_when_committed": 93.83,
+      "false_abstention": 1.78,
+      "levels": {
+        "lineage": 27.3,
+        "group": 26.59,
+        "class": 25.42,
+        "abstain": 20.69
+      },
+      "best_guess_per_upload_balanced": 58.98,
+      "coverage": 89.56
+    },
+    "random_1": {
+      "cells": 15056,
+      "committed": 86.84,
+      "correct_when_committed": 89.57,
+      "false_abstention": 0.6,
+      "levels": {
+        "group": 40.78,
+        "lineage": 37.37,
+        "abstain": 13.16,
+        "class": 8.69
+      },
+      "best_guess_per_upload_balanced": 43.8,
+      "coverage": 81.54
+    },
+    "random_2": {
+      "cells": 13253,
+      "committed": 86.82,
+      "correct_when_committed": 95.99,
+      "false_abstention": 1.0,
+      "levels": {
+        "group": 45.42,
+        "lineage": 25.93,
+        "class": 15.46,
+        "abstain": 13.18
+      },
+      "best_guess_per_upload_balanced": 53.71,
+      "coverage": 85.2
+    },
+    "random_3": {
+      "cells": 9549,
+      "committed": 83.22,
+      "correct_when_committed": 96.94,
+      "false_abstention": 0.38,
+      "levels": {
+        "group": 43.46,
+        "class": 23.06,
+        "abstain": 16.78,
+        "lineage": 16.7
+      },
+      "best_guess_per_upload_balanced": 65.68,
+      "coverage": 90.16
+    },
+    "random_5": {
+      "cells": 7237,
+      "committed": 75.75,
+      "correct_when_committed": 96.81,
+      "false_abstention": 0.4,
+      "levels": {
+        "group": 30.3,
+        "lineage": 25.55,
+        "abstain": 24.25,
+        "class": 19.9
+      },
+      "best_guess_per_upload_balanced": 69.92,
+      "coverage": 93.78
+    },
+    "random_8": {
+      "cells": 6892,
+      "committed": 78.58,
+      "correct_when_committed": 97.53,
+      "false_abstention": 0.38,
+      "levels": {
+        "group": 33.36,
+        "lineage": 25.94,
+        "abstain": 21.42,
+        "class": 19.28
+      },
+      "best_guess_per_upload_balanced": 74.92,
+      "coverage": 92.69
+    },
+    "tissue": {
+      "cells": 16755,
+      "committed": 90.23,
+      "correct_when_committed": 99.13,
+      "false_abstention": 0.11,
+      "levels": {
+        "class": 45.0,
+        "group": 38.75,
+        "abstain": 9.77,
+        "lineage": 6.48
+      },
+      "best_guess_per_upload_balanced": 74.86,
+      "coverage": 95.03
+    }
+  },
+  "per_class_recall_committed": {
+    "b cell": 88.63,
+    "cd4-positive, alpha-beta t cell": 96.37,
+    "cd8-positive, alpha-beta t cell": 83.05,
+    "classical monocyte": 40.73,
+    "endothelial cell": 49.76,
+    "innate lymphoid cell": 71.36,
+    "intermediate monocyte": 62.54,
+    "macrophage": 5.73,
+    "mast cell": 0.07,
+    "mature nk t cell": 91.65,
+    "myeloid dendritic cell": 6.53,
+    "naive thymus-derived cd4-positive, alpha-beta t cell": 92.98,
+    "natural killer cell": 88.73,
+    "neutrophil": 4.66,
+    "plasma cell": 88.93,
+    "regulatory t cell": 95.05,
+    "stromal cell": 65.18,
+    "t cell": 96.63
+  }
+}

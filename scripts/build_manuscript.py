@@ -587,7 +587,7 @@ def organs(r: Records) -> None:
     r.put("org_builder_differences", sum(v["differences"] for k, v in loader["results"].items() if k.startswith("served_files/")),
           f"{rel(NO / 'organ_builder_blood' / 'loader.json')}: results > served_files/* > differences, summed", "count")
     assert loader["passed"] is True
-    for organ, key in (("li", "li"), ("lung", "lung")):
+    for organ, key in (("li", "li"), ("lung", "lung"), ("lymph_node", "ln")):
         build, dev, donor = NO / f"{organ}_build", NO / f"{organ}_development", NO / f"{organ}_donor_heldout" / "summary.json"
         classes = r.json(build / "classes.json")["class_order"]
         r.put(f"org_{key}_classes", len(classes), f"{rel(build / 'classes.json')}: class_order, counted", "count")
@@ -615,6 +615,14 @@ def organs(r: Records) -> None:
     r.at("org_lung_bpd", g3, ("bpd", "auroc_epithelial"), "fixed3", digits=4)
     r.at("org_lung_hpa", g3, ("hpa", "auroc_at2_over_at1"), "fixed3", digits=4)
     r.at("org_lung_ipf", g3, ("ipf", "auroc_stromal_ff_over_alveoli"), "fixed3", digits=4)
+    g3 = NO / "lymph_node_development" / "g3.json"
+    r.at("org_ln_coscia", g3, ("coscia2024", "auroc_b_over_t"), "fixed3", digits=4)
+    r.pct("org_ln_zheng", g3, "zheng_tonsil", "group_accuracy")
+    r.pct("org_ln_hpa", g3, "hpa", "group_accuracy_lymph_node_pools")
+    r.pct("org_ln_b_share", g3, "pxd011683", "b_share")
+    r.at("org_ln_zheng_pools", g3, ("zheng_tonsil", "pools"), "count")
+    r.put("org_ln_zheng_plasma", sum(a["best_guess"] == "plasma cell" for a in r.json(g3)["zheng_tonsil"]["answers"]),
+          f"{rel(g3)}: zheng_tonsil > answers with best_guess plasma cell, counted", "count")
 
 
 def waiting(r: Records) -> None:

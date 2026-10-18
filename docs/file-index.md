@@ -697,6 +697,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/li_build/bundle_MANIFEST.json` — the colon bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/organ_donor_heldout.py` — Track I, G2 for any organ: one member retrained with each donor held out, unseen against seen (a diagnosis)
 - `research/notebook-outputs/lung_donor_heldout/summary.json` — the lung's G2: per fold, class balanced accuracy, group and lineage recall
+- `research/notebook-outputs/lymph_node_donor_heldout/summary.json` — the lymph node's G2: per fold, class balanced accuracy, group and lineage recall
+- `research/notebook-outputs/lymph_node_development/rules.json` — the lymph node's gate run: script sha256, gates and bundle MANIFEST, written before computing
+- `research/notebook-outputs/lymph_node_development/g1.json` — the lymph node's G1: its evaluation suite through the service's code, overall and per scenario
+- `research/notebook-outputs/lymph_node_development/g1_cells.csv.gz` — the lymph node's G1: every scored cell
+- `research/notebook-outputs/lymph_node_development/g3.json` — the lymph node's G3: PXD047762's tonsil regions, Zheng's tonsil pools, the Protein Atlas pools, PXD011683's B cells
+- `research/notebook-outputs/lymph_node_development/gates.json` — the lymph node's gates: values and verdicts
 - `research/notebook-outputs/lung_development/rules.json` — the lung's gate run: script sha256, gates and bundle MANIFEST, written before computing
 - `research/notebook-outputs/lung_development/g1.json` — the lung's G1: its evaluation suite through the service's code, overall and per scenario
 - `research/notebook-outputs/lung_development/g1_cells.csv.gz` — the lung's G1: every scored cell
@@ -710,6 +716,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lung_build/gene_id_map_provenance.json` — the lung's identifier map
 - `research/notebook-outputs/lung_build/mask_profiles_summary.csv` — the lung's missingness profiles
 - `research/notebook-outputs/lung_build/bundle_MANIFEST.json` — the lung bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebook-outputs/lymph_node_build/calibration.json` — the lymph node build's calibration: temperatures, conformal and out-of-distribution thresholds, the members' sha256s
+- `research/notebook-outputs/lymph_node_build/train_record.json` — the lymph node's five members
+- `research/notebook-outputs/lymph_node_build/classes.json` — the lymph node's 19 classes and hierarchy
+- `research/notebook-outputs/lymph_node_build/classes_by_donor.csv` — the lymph node's cells per class and donor
+- `research/notebook-outputs/lymph_node_build/feature_space_provenance.json` — the lymph node's gene space: each source's count
+- `research/notebook-outputs/lymph_node_build/gene_id_map_provenance.json` — the lymph node's identifier map
+- `research/notebook-outputs/lymph_node_build/mask_profiles_summary.csv` — the lymph node's missingness profiles (blood's, as measured)
+- `research/notebook-outputs/lymph_node_build/bundle_MANIFEST.json` — the lymph node bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/lymph_node_development.py` — Track I, the lymph node's gates G1 (simulated RNA uploads through the service's code) and G3 (the Coscia tonsil regions, Zheng's tonsil pools, the Protein Atlas lymph-node pools, PXD011683's B cells), scored once
 - `research/notebooks/lung_development.py` — Track I, the lung's gates G1 (simulated RNA uploads through the service's code) and G3 (the LungMAP BPD pools, the Human Protein Atlas DVP pools, the IPF regions), scored once
 - `research/notebooks/li_development.py` — Track I, Stage 2: the colon reference's gates G1 (simulated RNA uploads through the service's code) and G3 (Kabatnik, Zheng and the polyp plate), scored once

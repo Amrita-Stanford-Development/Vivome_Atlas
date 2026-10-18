@@ -41,6 +41,12 @@
   "research/notebook-outputs/lung_development/g3.json": "6e17d46dcb3e28057411b0b367774313a93878ec6525b51f4b54504602cfb19b",
   "research/notebook-outputs/lung_development/gates.json": "cc322b8f06270f98f70359b676e62683f71182159c17b8f6bfaaf8691b63c254",
   "research/notebook-outputs/lung_donor_heldout/summary.json": "adf27803e0507c7a9a5b38da09b595edd81a58d7f1ba84becac6daa0fbe3e184",
+  "research/notebook-outputs/lymph_node_build/classes.json": "e1e4f18305001549861ae131377087ead25b68f488d50b58fb5f0c31822cfe99",
+  "research/notebook-outputs/lymph_node_build/feature_space_provenance.json": "0323cf9678acb55fabf520041ddf42661f147dc3c3ab5476467221438bac8204",
+  "research/notebook-outputs/lymph_node_development/g1.json": "539fd6df59fc2f70b82202ddc6a86421fd99e467e4c4a9802fc51fa6f434c3a1",
+  "research/notebook-outputs/lymph_node_development/g3.json": "fe2d76f19340ec1a8296209d194331477457609f75ce04dfe39399438c685175",
+  "research/notebook-outputs/lymph_node_development/gates.json": "9943a270de073c3ff173f629020884b33c45157db2346968556e58c05a0bee8e",
+  "research/notebook-outputs/lymph_node_donor_heldout/summary.json": "8b9d1e99c8caabacd3f522f9008e0a40328e21ae2bdce85875c44f48f57da1b8",
   "research/notebook-outputs/marker_audit/detection.csv": "fa91a96dab1b6971981951c490df3e2391e9a11fb5a1f20392736aa299e6ba37",
   "research/notebook-outputs/narrow_upload/committed.json": "77ce1ebd5c5672f9b9a12354d43f43458ee310f08a4a3a4fb9969ffeea7f8069",
   "research/notebook-outputs/nb1b/nb1b_summary.json": "e4821b1377be064b00879c9d8337ee7089b3a51d44bebbc5356af51b17072c41",
@@ -1238,6 +1244,114 @@
    "status": "measured",
    "basis": "research/notebook-outputs/li_development/g3.json: zheng > group_accuracy",
    "format": "pct1"
+  },
+  "org_ln_b_share": {
+   "value": 0.7111,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g3.json: pxd011683 > b_share",
+   "format": "pct1"
+  },
+  "org_ln_classes": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_build/classes.json: class_order, counted",
+   "format": "count"
+  },
+  "org_ln_committed": {
+   "value": 0.8441,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: overall > committed",
+   "format": "pct1"
+  },
+  "org_ln_correct_when_committed": {
+   "value": 0.9549,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: overall > correct_when_committed",
+   "format": "pct1"
+  },
+  "org_ln_coscia": {
+   "value": 1.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g3.json: coscia2024 > auroc_b_over_t",
+   "format": "fixed3"
+  },
+  "org_ln_coverage": {
+   "value": 0.8919,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: overall > coverage",
+   "format": "pct1"
+  },
+  "org_ln_false_abstention": {
+   "value": 0.0065,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: overall > false_abstention",
+   "format": "pct2"
+  },
+  "org_ln_g2_gap": {
+   "value": 0.0347,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_donor_heldout/summary.json: mean > seen minus unseen > balanced_accuracy",
+   "format": "pp"
+  },
+  "org_ln_g2_seen": {
+   "value": 0.5716,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_donor_heldout/summary.json: mean > seen > balanced_accuracy",
+   "format": "pct1"
+  },
+  "org_ln_g2_unseen": {
+   "value": 0.5369,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_donor_heldout/summary.json: mean > unseen > balanced_accuracy",
+   "format": "pct1"
+  },
+  "org_ln_genes": {
+   "value": 12668,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_build/feature_space_provenance.json: feature_space",
+   "format": "count"
+  },
+  "org_ln_hpa": {
+   "value": 1.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g3.json: hpa > group_accuracy_lymph_node_pools",
+   "format": "pct1"
+  },
+  "org_ln_single_committed": {
+   "value": 0.8684,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: by_scenario > random_1 > committed",
+   "format": "pct1"
+  },
+  "org_ln_tissue_best": {
+   "value": 0.7486,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: by_scenario > tissue > best_guess_per_upload_balanced",
+   "format": "pct1"
+  },
+  "org_ln_tissue_committed": {
+   "value": 0.9023,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g1.json: by_scenario > tissue > committed",
+   "format": "pct1"
+  },
+  "org_ln_zheng": {
+   "value": 0.4103,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g3.json: zheng_tonsil > group_accuracy",
+   "format": "pct1"
+  },
+  "org_ln_zheng_plasma": {
+   "value": 44,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g3.json: zheng_tonsil > answers with best_guess plasma cell, counted",
+   "format": "count"
+  },
+  "org_ln_zheng_pools": {
+   "value": 48,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_development/g3.json: zheng_tonsil > pools",
+   "format": "count"
   },
   "org_lung_bpd": {
    "value": 0.62,

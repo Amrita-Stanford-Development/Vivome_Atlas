@@ -265,6 +265,70 @@ node model:
 - PXD047762's Fig. 3;
 - PXD011683.
 
+### The lymph node's outcome (2026-10-18): NO GO as built
+
+Run history, entry 57. Records: `research/notebook-outputs/lymph_node_build/`,
+`lymph_node_development/`, `lymph_node_donor_heldout/`.
+
+**The model:**
+- 19 classes and 12,668 genes;
+- five members at 69.8 to 72.5% validation balanced accuracy;
+- calibration top-1 60.5%;
+- marginal conformal threshold 0.923 (lung 0.961, colon 0.987, blood 0.91).
+
+| Gate | Result | Bar | Verdict |
+|---|---|---|---|
+| G1, simulated lymph node uploads: committed | 84.4% | ≥ 75% | pass |
+| G1: correct when committed | 95.5% | ≥ 90% | pass |
+| G1: coverage | 89.2% | ≥ 85% | pass |
+| G1: false abstention | 0.65% | ≤ 2% | pass |
+| G3, PXD047762's Fig. 3: B-cell over T-cell regions | AUROC 1.0 | ≥ 0.8 | pass |
+| G3, Zheng's tonsil pools: group as the argmax | 41.0% (16 of 39) | ≥ 80% | **miss** |
+| G3, the Protein Atlas lymph-node pools: group as the argmax | 100% (20 of 20) | ≥ 80% | pass |
+| G3, PXD011683: B cell as the argmax group | 71.1% (32 of 45) | ≥ 80% | **miss** |
+| G4, the locked test's rehearsal | runs end to end | runs | pass |
+| G2, one donor held out (a diagnosis) | 53.7 unseen, 57.2 seen | reported | gap 3.5 (lung 3.7, colon 12.5, blood 9.8) |
+
+**What the results show:**
+- **The first organ to pass G1, narrow uploads included.** One-class
+  uploads commit 86.8% and one-lineage uploads 79.3% (lung 31.6% and 55.7%).
+  Whole-tissue uploads commit 90.2%, with a best guess of 74.9%.
+  - The colon's and the lung's cause does not show here.
+  - One difference: the lymph node's simulated uploads use blood's real
+    protein profiles as measured, where the colon and the lung used them
+    rank-transferred. Whether that explains it was not tested.
+- **Rare myeloid cells are named but seldom answered.** The best guess names
+  94% of neutrophils, 81% of macrophages and 80% of mast cells. The answer
+  layer commits on only 9 to 12% of them, and is right at the stated level
+  for 4.7%, 5.7% and 0.1% of all of them.
+  - B, T, NK and plasma cells are right for 83 to 97%.
+  - The atlas holds 54,746 B cells against 1,794 macrophages, 303
+    neutrophils and 212 mast cells.
+- **Zheng's tonsil pools: a plasma-cell sink.** In the one upload of 48
+  pools, 44 are guessed plasma cell: every B, plasma, macrophage and tumour
+  pool, 5 of 6 CD4 T and 12 of 15 CD8 T pools. Only 4 of the 21 T-cell pools
+  get the T cell group.
+- **PXD047762: perfect ranking, a wrong name for epithelium.** B-cell
+  regions rank above T-cell regions (AUROC 1.0), but all 4 epithelium
+  regions are called plasma cell at class level, not refused. The reference
+  holds no epithelial class, and the out-of-distribution score does not flag
+  these regions.
+- **PXD011683:** sample group F has 15 of 15 called B cell, D 10 of 15 and C
+  7 of 15; the rest are called T cell. Which group is the control is not
+  documented, so the gate counted every sample, as the note above fixed.
+- **The Protein Atlas:** all 20 lymph-node macrophage, CD4 T, CD8 T and
+  B-cell pools are called by their group.
+- **Across donors the encoder holds up:** group recall is 89.9 unseen
+  against 93.4 seen, and lineage recall 96.6 against 97.3.
+- **The rehearsal (G4):** the RNA pseudobulk T-zone regions are abstained
+  on 8 of 12 times, while every B-zone region is answered.
+
+**What stays:**
+- **PXD042367 stays sealed** (`side-tests.md`, amendment 12). Its
+  protocol's rule 1 allows no candidate that missed its gates.
+- The lymph node's work folder and bundle stay on Drive
+  (`drive/Data/Results/Organs/lymph_node/`).
+
 ## The large intestine's outcome: every failure, in one place
 
 Run history, entries 49 to 52; the records are under

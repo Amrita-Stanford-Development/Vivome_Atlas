@@ -2435,6 +2435,65 @@ enriched B cells.
 - the generic "monocyte" class (9 to 32% on its own markers) is dropped.
 - 19 classes remain.
 
+### 57. The lymph node reference's gates: NO GO as built (Track I), 2026-10-18
+
+**Why:** the lymph node's gates were fixed before any lymph node model
+(`research/organ-references.md`, "Lymph node", with its note on the
+deposits' layouts). G1, G2 and G4 are the colon's.
+
+**The model:**
+- 19 classes and 12,668 genes;
+- members at 69.8 to 72.5% validation balanced accuracy;
+- calibration top-1 60.5%;
+- marginal conformal threshold 0.923.
+
+**G1** (`research/notebooks/lymph_node_development.py`; 240 uploads, 78,926
+cells): all four pass.
+- committed 84.4% (bar 75%);
+- correct when committed 95.5%, coverage 89.2%, false abstention 0.65%.
+- **By upload kind:**
+
+  | Upload | Committed | Best guess |
+  |---|---|---|
+  | whole tissue | 90.2% | 74.9% |
+  | eight classes | 78.6% | 74.9% |
+  | one lineage | 79.3% | 59.0% |
+  | one class | 86.8% | 43.8% |
+
+- Rare myeloid cells: the best guess names most of them, but the answer
+  layer commits on 9 to 12% of macrophages, neutrophils and mast cells.
+
+**G3:**
+- **PXD047762's Fig. 3: AUROC 1.0, pass.** All 4 epithelium regions are
+  called plasma cell at class level.
+- **Zheng's tonsil pools: 41.0%, miss.** 44 of 48 pools are guessed plasma
+  cell, whatever their population.
+- **The Protein Atlas lymph-node pools: 100%, pass.**
+- **PXD011683: 71.1%, miss.** 8 of sample group C's 15 and 5 of D's 15 are
+  called T cell; F is all B cell.
+
+**G4:** passed (`0ab21b9`). The rehearsal on RNA pseudobulk written as a
+DIA-NN matrix in Excel gave B over T AUROC 1.0. The scorer's pass flag was
+written as text, and is now a JSON boolean.
+
+**G2** (`research/notebooks/organ_donor_heldout.py lymph_node fulcher`; a
+diagnosis):
+
+| | Unseen donor | Seen donors |
+|---|---|---|
+| Class balanced accuracy | 53.7 | 57.2 |
+| Group recall | 89.9 | 93.4 |
+| Lineage recall | 96.6 | 97.3 |
+
+The gap is 3.5 points (lung 3.7, colon 12.5, blood 9.8).
+
+**Verdict:** NO GO as built. Nothing was tuned. PXD042367 stays sealed
+(`side-tests.md`, amendment 12), and the decision goes to the owner.
+
+**Note:** the misses are on protein pools, not on simulated uploads. Out of
+the reference, and in one upload of mixed pools, the lymph node's answers
+collapse onto plasma cell.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

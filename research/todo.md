@@ -462,7 +462,12 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
 - [~] **The lymph node** (owner, 2026-10-18: next organ, same recipe; `research/organ-references.md`, "Lymph node"):
   - roles set (amendment 11); PXD042367's protocol committed before its download;
   - the label audit: thymocytes merged into CD4/CD8 T, generic monocytes dropped; 19 classes;
-  - next: fetch tier N, the build, gates G1 to G4.
+  - tier N fetched; the gate script and the locked test's intake committed before their runs (`f5f9ec1`); G4 passed (`0ab21b9`); the build, and gates G1 to G3 (entry 57):
+  - [!] **NO GO as built.** Waiting on the owner's decision.
+    - G1 passes, the first organ to: committed 84.4%, correct when committed 95.5%, coverage 89.2%; one-class uploads commit 86.8%;
+    - G3: PXD047762 B over T 1.0 and the Protein Atlas pools 100% pass; Zheng's tonsil pools 41.0% (44 of 48 guessed plasma cell) and PXD011683 71.1% miss (bar 80%);
+    - G2: an unseen donor costs 3.5 points.
+    - PXD042367 stays sealed (amendment 12).
 
 ---
 

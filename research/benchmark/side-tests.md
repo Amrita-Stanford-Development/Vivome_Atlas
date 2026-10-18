@@ -220,6 +220,16 @@ The usable sets are tonsil micro-regions and sorted B cells.
 - **The locked set is one section of one donor.**
 - **Roles in code:** `scripts/fetch_public_sets.py`, tier N.
 
+### Amendment 12, 2026-10-18: the lymph node reference missed its gates; PXD042367 stays sealed
+
+The lymph node reference missed two development gates (run history, entry
+57): Zheng's tonsil pools and PXD011683.
+- **PXD042367 is not scored and stays sealed:** downloaded and checksummed,
+  never opened. Its protocol's rule 1 allows no candidate that missed its
+  gates, so it waits for a lymph node reference that passes.
+- **PXD047762, Zheng's tonsil tables, the Protein Atlas lymph-node pools and
+  PXD011683** were read for G3 and stay development.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
