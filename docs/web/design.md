@@ -251,8 +251,9 @@ type and objects, the cut motif once per headline, RNA and protein in their
 reserved colours only where they mean RNA and protein, the atlas palette for
 cell types, and the site's white field and gel under every scene, the same
 throughout. Depth shows in the objects, which come closer and larger as the
-camera goes down, never in the background's colour; every word is in the
-site's dark ink.
+camera goes down, never in the background's colour. Every word and diagram
+sits on one of the site's cards, in the site's dark ink: the white sheet in
+odd scenes, liquid glass in even ones.
 
 ## Shared chrome
 

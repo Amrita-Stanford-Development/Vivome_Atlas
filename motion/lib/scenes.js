@@ -208,7 +208,7 @@ function rnaMap(local, p) {
   const s = surface('rna-canvas');
   if (!s) return;
   const { g } = s;
-  const place = placer([760, 150, 1760, 1000]);
+  const place = placer([840, 150, 1760, 1000]);
   const pts = V.map.sample;
   const n = pts.length;
   for (let i = 0; i < n; i++) {

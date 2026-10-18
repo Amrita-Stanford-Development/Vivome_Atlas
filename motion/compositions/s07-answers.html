@@ -4,34 +4,35 @@
          sets of plausible types (manim/answers.py, rendered to
          build/manim/answers/); lib/scenes.js shows its frame for each moment
          and puts each answer beside its cell. The ladder steps down with
-         them. -->
+         them. Headline, map and ladder each on a white card. -->
     <style>
-        #s-answers .head { position: absolute; left: 150px; top: 70px; width: 1500px; }
+        #s-answers .head { left: 140px; top: 46px; padding-top: 30px; padding-bottom: 30px; opacity: 0; }
+        #s-answers .map { left: 70px; top: 232px; width: 1080px; height: 818px; padding: 0; opacity: 0; }
         #s-answers img.layer { left: 0; top: 0; width: 1920px; height: 1080px; }
-        #s-answers .ladder { position: absolute; left: 1210px; top: 300px; width: 540px; display: grid; gap: 16px; }
-        #s-answers .rung { padding: 20px 26px; opacity: 0.32; border-left: 6px solid transparent; }
-        #s-answers .rung .f-label { margin: 0; color: var(--ink); font-weight: 600; font-size: 28px; }
-        #s-answers .rung .f-caption { margin-top: 4px; color: var(--ink-soft); font-size: 22px; }
+        #s-answers .ladder { left: 1180px; top: 232px; width: 600px; padding: 34px 36px; display: grid; gap: 14px; opacity: 0; }
+        #s-answers .rung { padding: 16px 22px; border-radius: 16px; background: var(--bench); opacity: 0.32; border-left: 7px solid transparent; }
+        #s-answers .rung .f-label { margin: 0; color: var(--ink); font-weight: 600; font-size: 30px; }
+        #s-answers .rung .f-caption { margin-top: 2px; color: var(--ink-soft); }
         #s-answers .rung:nth-child(1) { border-left-color: var(--accent); }
         #s-answers .rung:nth-child(2) { border-left-color: rgba(0, 102, 163, 0.65); }
         #s-answers .rung:nth-child(3) { border-left-color: rgba(0, 102, 163, 0.35); }
-        #s-answers .rung:nth-child(4) { border-left-color: rgba(29, 43, 54, 0.25); }
-        #s-answers .aside { position: absolute; left: 1210px; top: 900px; width: 560px; opacity: 0; }
-        #s-answers .f-display { opacity: 0; }
+        #s-answers .rung:nth-child(4) { border-left-color: rgba(29, 43, 54, 0.3); }
+        #s-answers .aside { margin-top: 8px; opacity: 0; }
         #s-answers .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-answers" class="scene" data-composition-id="s-answers" data-width="1920" data-height="1080">
+        <div class="map card sheet"></div>
         <img id="answers-img" class="layer" alt="" data-layout-ignore>
-        <div class="head">
+        <div class="head card sheet">
             <h1 class="f-display">When unsure, it says <span class="cut">so.</span></h1>
         </div>
-        <div class="ladder">
-            <div class="rung liquid"><span class="f-label">Cell type</span><span class="f-caption" data-answer="0"></span></div>
-            <div class="rung liquid"><span class="f-label">Group</span><span class="f-caption" data-answer="1"></span></div>
-            <div class="rung liquid"><span class="f-label">Lineage</span><span class="f-caption" data-answer="2"></span></div>
-            <div class="rung liquid"><span class="f-label">No answer, and the reason</span><span class="f-caption" data-answer="3"></span></div>
+        <div class="ladder card sheet">
+            <div class="rung"><span class="f-label">Cell type</span><span class="f-caption" data-answer="0"></span></div>
+            <div class="rung"><span class="f-label">Group</span><span class="f-caption" data-answer="1"></span></div>
+            <div class="rung"><span class="f-label">Lineage</span><span class="f-caption" data-answer="2"></span></div>
+            <div class="rung"><span class="f-label">No answer, and the reason</span><span class="f-caption" data-answer="3"></span></div>
+            <div class="aside"><span class="f-caption">Cells of the PBMC240 example file, and the answers VivOME gave them.</span></div>
         </div>
-        <div class="aside"><span class="f-caption">Cells of the PBMC240 example file, and the answers VivOME gave them.</span></div>
     </div>
     <script>
         (function () {
@@ -44,11 +45,13 @@
             }
             const starts = window.VIVOME.answersShot.starts;
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-answers .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.3);
+            tl.fromTo('#s-answers .map', { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power2.out' }, 0.1);
+            tl.fromTo('#s-answers .head', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.3);
             tl.fromTo('#s-answers .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.inOut' }, 1.0);
+            tl.fromTo('#s-answers .ladder', { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 0.8);
             root.querySelectorAll('.rung').forEach((rung, k) => {
-                tl.fromTo(rung, { opacity: 0.32, x: 0 }, { opacity: 1, x: -14, duration: 0.5, ease: 'power2.out' }, starts[k] + 0.9);
-                if (k < 3) tl.fromTo(rung, { x: -14 }, { x: 0, duration: 0.4, ease: 'power2.inOut' }, starts[k + 1] + 0.6);
+                tl.fromTo(rung, { opacity: 0.32, x: 0 }, { opacity: 1, x: -10, duration: 0.5, ease: 'power2.out' }, starts[k] + 0.9);
+                if (k < 3) tl.fromTo(rung, { x: -10 }, { x: 0, duration: 0.4, ease: 'power2.inOut' }, starts[k + 1] + 0.6);
             });
             tl.fromTo('#s-answers .aside', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' }, 2.4);
             tl.fromTo('#s-answers', { opacity: 1 }, { opacity: 0, duration: 0.4, ease: 'power1.in' }, 11.6);

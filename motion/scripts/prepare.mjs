@@ -12,6 +12,8 @@
 //    site's own formatters (web/js/reel-frames.js), with its source; and
 //    the data the drawn shots use, from web/data/workflow.json.
 // 3. build/answers.json: the Manim shot's map and cells (manim/answers.py).
+// 4. build/timeline.json: when each scene starts, for the score
+//    (audio/score.py).
 //
 // Nothing here is typed in: run it before every preview or render (the npm
 // scripts do). It refuses to run on a manifest and manuscript data built
@@ -167,6 +169,10 @@ write('build/facts.js', `// Written by scripts/prepare.mjs from web/data/; do no
 // ---- 3. the Manim shot ----
 
 write('build/answers.json', `${JSON.stringify({ classes, map: { sample, bounds, centres }, answers, shot: answersShot }, null, 1)}\n`);
+
+// ---- 4. the scene timeline, for the score (audio/score.py) ----
+
+write('build/timeline.json', `${JSON.stringify({ total: TOTAL, frames: VIVOME.frames, answers: answersShot.starts }, null, 1)}\n`);
 
 const pending = Object.entries(facts).filter(([, f]) => !f.measured).map(([k]) => k);
 console.log(`prepare: ${Object.keys(facts).length} numbers for ${FRAMES.length} scenes (${TOTAL} s)`

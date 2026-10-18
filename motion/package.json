@@ -12,7 +12,8 @@
     "preview": "node scripts/prepare.mjs && node scripts/hf.mjs preview",
     "lint": "node scripts/prepare.mjs && node scripts/hf.mjs lint",
     "manim": "node scripts/prepare.mjs && node scripts/manim.mjs",
-    "stills": "node scripts/prepare.mjs && node scripts/manim.mjs && node scripts/stills.mjs"
+    "stills": "node scripts/prepare.mjs && node scripts/manim.mjs && node scripts/stills.mjs",
+    "film": "node scripts/prepare.mjs && node scripts/manim.mjs && node scripts/film.mjs"
   },
   "devDependencies": {
     "gsap": "3.14.2",

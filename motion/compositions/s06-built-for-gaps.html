@@ -2,19 +2,18 @@
     <!-- Scene 6, 0:50 to 1:00: built for gaps. The matrix of scene 3 again:
          a mask marks each gap, each protein is scaled within the file, then
          smoothed over similar cells (lib/scenes.js, from
-         web/data/workflow.json). -->
+         web/data/workflow.json). Headline, points and matrix on liquid glass. -->
     <style>
-        #s-built-for-gaps .head { position: absolute; left: 150px; top: 110px; width: 1400px; }
-        #s-built-for-gaps .points { position: absolute; left: 150px; top: 360px; width: 700px; display: grid; gap: 22px; }
-        #s-built-for-gaps .point { padding: 24px 30px; display: flex; align-items: center; gap: 18px; opacity: 0; }
-        #s-built-for-gaps .point .f-label { margin: 0; color: var(--ink); font-size: 30px; }
+        #s-built-for-gaps .head { left: 140px; top: 70px; padding-top: 34px; padding-bottom: 34px; opacity: 0; }
+        #s-built-for-gaps .points { position: absolute; left: 140px; top: 330px; width: 700px; display: grid; gap: 20px; }
+        #s-built-for-gaps .point { position: relative; padding: 24px 32px; display: flex; align-items: center; gap: 18px; opacity: 0; }
+        #s-built-for-gaps .point .f-label { margin: 0; color: var(--ink); font-size: 31px; }
         #s-built-for-gaps .point i { width: 16px; height: 16px; border-radius: 50%; background: var(--accent-bright); flex: none; }
-        #s-built-for-gaps canvas { left: 930px; top: 360px; }
-        #s-built-for-gaps .f-display { opacity: 0; }
+        #s-built-for-gaps .matrix { left: 880px; top: 330px; padding: 28px 24px 24px; opacity: 0; }
         #s-built-for-gaps .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-built-for-gaps" class="scene" data-composition-id="s-built-for-gaps" data-width="1920" data-height="1080">
-        <div class="head">
+        <div class="head card liquid">
             <h1 class="f-display">Built for missing <span class="cut">values.</span></h1>
         </div>
         <div class="points">
@@ -23,14 +22,15 @@
             <div class="point liquid"><i></i><span class="f-label">It borrows from similar cells in the same file.</span></div>
             <div class="point liquid"><i></i><span class="f-label"><span data-slot="ms:wf_members"></span> encoders answer together.</span></div>
         </div>
-        <canvas id="mask-canvas" width="840" height="560" data-layout-ignore></canvas>
+        <div class="matrix card liquid"><canvas id="mask-canvas" width="860" height="560" data-layout-ignore></canvas></div>
     </div>
     <script>
         (function () {
             VivomeSlots.fill(document.getElementById('s-built-for-gaps'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-built-for-gaps .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.4);
+            tl.fromTo('#s-built-for-gaps .head', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.3);
             tl.fromTo('#s-built-for-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
+            tl.fromTo('#s-built-for-gaps .matrix', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.5);
             // Each point lands with the step of the matrix it names.
             const at = [1.2, 3.6, 6.2, 8.0];
             document.querySelectorAll('#s-built-for-gaps .point').forEach((el, i) => {

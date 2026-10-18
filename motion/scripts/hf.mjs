@@ -4,6 +4,8 @@
 // - FFmpeg and FFprobe from the vivome-motion conda env, put first on PATH
 //   (or from VIVOME_FFMPEG_DIR, a folder holding ffmpeg and ffprobe);
 // - the system Chrome, unless HYPERFRAMES_BROWSER_PATH is already set;
+// - the vivome-voice conda env's Python for the local voice (`tts`), unless
+//   HYPERFRAMES_PYTHON is already set;
 // - telemetry, update checks and skill installs off, so a render sends
 //   nothing anywhere and changes nothing outside this folder.
 //
@@ -25,6 +27,9 @@ export function toolEnv(base = process.env) {
     const key = Object.keys(env).find((k) => k.toUpperCase() === 'PATH') ?? 'PATH';
     env[key] = `${ffmpeg}${delimiter}${env[key] ?? ''}`;
   }
+  // The local voice (Kokoro, through kokoro-onnx) runs in the vivome-voice env.
+  const voice = join(homedir(), 'miniforge3', 'envs', 'vivome-voice', process.platform === 'win32' ? 'python.exe' : 'bin/python');
+  if (!env.HYPERFRAMES_PYTHON && existsSync(voice)) env.HYPERFRAMES_PYTHON = voice;
   const chrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
   if (!env.HYPERFRAMES_BROWSER_PATH && process.platform === 'win32' && existsSync(chrome)) env.HYPERFRAMES_BROWSER_PATH = chrome;
   env.HYPERFRAMES_NO_TELEMETRY = '1';

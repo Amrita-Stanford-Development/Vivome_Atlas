@@ -270,28 +270,38 @@ code, not the test.
 The Motion page's stills are rendered by the film's own project, `motion/`
 ([web/motion.md](web/motion.md)). It needs Node 22 or later (the LTS above
 is), Google Chrome (installed at the usual place; HyperFrames finds it), and
-two conda environments, kept apart from `vivome` so nothing there changes
+three conda environments, kept apart from `vivome` so nothing there changes
 (Miniforge Prompt):
 
 ```bash
 conda create -y -n vivome-motion -c conda-forge ffmpeg                 # FFmpeg and FFprobe
 conda create -y -n vivome-manim -c conda-forge python=3.12 manim       # Manim, for scene 7
+conda create -y -n vivome-voice -c conda-forge python=3.12 pip         # the voice and the score
+%USERPROFILE%\miniforge3\envs\vivome-voice\python.exe -m pip install kokoro-onnx soundfile
 ```
 
 Manim has its own environment because conda-forge's FFmpeg brought Python
-3.15, which Manim does not support yet. Then, in Git Bash:
+3.15, which Manim does not support yet. `vivome-voice` holds kokoro-onnx
+(the local Kokoro text-to-speech HyperFrames calls) with numpy and
+soundfile, which the score uses too. Then, in Git Bash:
 
 ```bash
 cd /d/Project/Vivome/Vivome_Atlas/motion
 npm install          # HyperFrames, GSAP and three.js r128, at the versions package.json pins
 npm run stills       # renders the stills into web/motion/frames/
+npm run film         # renders the film with its sound into motion/renders/
 ```
+
+The first `npm run film` downloads Kokoro's model files once, about 350 MB,
+into `%USERPROFILE%\.cache\hyperframes\tts\`, outside the repository.
 
 Nothing is installed system-wide: `motion/scripts/hf.mjs` puts
 `vivome-motion`'s FFmpeg first on the path and points HyperFrames at Chrome
-for each run, and `motion/scripts/manim.mjs` runs Manim from `vivome-manim`
-with that environment's DLL folders on the path. To use other copies, set
+for each run, and points its text-to-speech at `vivome-voice`'s Python;
+`motion/scripts/manim.mjs` runs Manim from `vivome-manim` with that
+environment's DLL folders on the path. To use other copies, set
 `VIVOME_FFMPEG_DIR` (a folder holding `ffmpeg` and `ffprobe`),
-`VIVOME_MANIM_PYTHON` or `HYPERFRAMES_BROWSER_PATH`. HyperFrames' telemetry,
+`VIVOME_MANIM_PYTHON`, `VIVOME_VOICE_PYTHON` (for the score),
+`HYPERFRAMES_PYTHON` (for the voice) or `HYPERFRAMES_BROWSER_PATH`. HyperFrames' telemetry,
 update checks and skill installs are switched off on every run. The tests
 need none of this: they read the committed stills and their sidecar.

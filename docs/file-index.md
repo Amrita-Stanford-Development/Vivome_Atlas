@@ -428,6 +428,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `motion/scripts/prepare.mjs` — copies the site's code into `motion/vendor/` and writes the render's numbers and data into `motion/build/`
 - `motion/scripts/manim.mjs` — renders the Manim scene and cuts it into one PNG per film frame
 - `motion/scripts/stills.mjs` — snapshots each scene's still, grades it to WebP and writes the sidecar
+- `motion/scripts/voice.mjs` — speaks each scene's voice-over line with Kokoro on this machine (HyperFrames `tts`), its numbers filled from the data files, and fits it to its scene
+- `motion/scripts/film.mjs` — renders the whole film, then the voice, the score, the FFmpeg mix (music ducked under the voice) and the 720p draft and share copy
+- `motion/audio/score.py` — the film's music and sound effects, synthesised in code (numpy): the ambient bed, the musical cues and the effects
 
 ## docs/ — how the product works
 

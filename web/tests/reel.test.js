@@ -157,6 +157,22 @@ test('the film keeps one white background: no tinting water effect, no white-on-
   assert.ok(!readRepo('motion/lib/film.css').includes('on-deep'));
 });
 
+// Every word and diagram sits on one of the site's two cards: white sheets
+// in odd scenes, liquid glass in even ones; a scene uses only its own kind.
+test('each scene puts its words on its card kind, alternating white sheet and liquid glass', () => {
+  FRAMES.forEach((f, i) => {
+    assert.equal(f.card, i % 2 === 0 ? 'sheet' : 'liquid', `${f.id}'s card`);
+    const n = String(i + 1).padStart(2, '0');
+    const classes = [...readRepo(`motion/compositions/s${n}-${f.id}.html`).matchAll(/class="([^"]*)"/g)].map((m) => m[1].split(/\s+/));
+    const kinds = new Set(classes.flat().filter((c) => c === 'sheet' || c === 'liquid'));
+    assert.deepEqual([...kinds], [f.card], `${f.id} uses ${[...kinds].join(' and ')} cards`);
+    assert.ok(classes.some((c) => c.includes('card') && c.includes(f.card)), `${f.id} has no ${f.card} card`);
+  });
+  const film = readRepo('motion/lib/film.css');
+  assert.match(film, /\.scene \.sheet, \.scene \.liquid \{/, 'the film styles both of the site\'s cards');
+  assert.ok(!/\.liquid\s*\{[^}]*background/.test(film), 'the film keeps the site\'s own liquid glass');
+});
+
 // docs/web/motion.md carries the full script, for producing the film.
 test('the docs carry every scene\'s time, words and notes as the storyboard has them', () => {
   const doc = readRepo('docs/web/motion.md');

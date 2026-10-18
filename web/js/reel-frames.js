@@ -24,15 +24,18 @@ export const CHAPTERS = [
   { id: 'use', label: 'Use it' },
 ];
 
-// Each scene: its length in seconds, its chapter, how deep the camera is
-// (0 at the surface, 1 on the floor) at its start and end, and when its
-// still is taken (a share of the scene). `screen` is the on-screen text,
-// line by line; a headline's `cut` is its one word in the accent block.
+// Each scene: its length in seconds, its chapter, the card its words and
+// diagrams sit on (`card`: the site's white `sheet` or its `liquid` glass,
+// odd scenes white, even scenes glass), how deep the camera is (0 at the
+// surface, 1 on the floor) at its start and end, and when its still is
+// taken (a share of the scene). `screen` is the on-screen text, line by
+// line; a headline's `cut` is its one word in the accent block.
 export const FRAMES = [
   {
     id: 'surface',
     title: 'The surface',
     chapter: 'problem',
+    card: 'sheet',
     seconds: 8,
     depth: [0, 0.06],
     still: 0.74,
@@ -52,6 +55,7 @@ export const FRAMES = [
     id: 'unnamed',
     title: 'Without names',
     chapter: 'problem',
+    card: 'liquid',
     seconds: 10,
     depth: [0.06, 0.18],
     still: 0.8,
@@ -72,6 +76,7 @@ export const FRAMES = [
     id: 'gaps',
     title: 'Mostly missing',
     chapter: 'problem',
+    card: 'sheet',
     seconds: 10,
     depth: [0.18, 0.28],
     still: 0.84,
@@ -97,6 +102,7 @@ export const FRAMES = [
     id: 'rna',
     title: 'RNA has names',
     chapter: 'solution',
+    card: 'liquid',
     seconds: 10,
     depth: [0.28, 0.4],
     still: 0.86,
@@ -119,6 +125,7 @@ export const FRAMES = [
     id: 'vivome',
     title: 'VivOME',
     chapter: 'solution',
+    card: 'sheet',
     seconds: 12,
     depth: [0.4, 0.5],
     still: 0.82,
@@ -143,6 +150,7 @@ export const FRAMES = [
     id: 'built-for-gaps',
     title: 'Built for gaps',
     chapter: 'new',
+    card: 'liquid',
     seconds: 10,
     depth: [0.5, 0.62],
     still: 0.86,
@@ -166,6 +174,7 @@ export const FRAMES = [
     id: 'answers',
     title: 'Honest answers',
     chapter: 'new',
+    card: 'sheet',
     seconds: 12,
     depth: [0.62, 0.74],
     still: 0.92,
@@ -190,6 +199,7 @@ export const FRAMES = [
     id: 'second-opinion',
     title: 'A second opinion',
     chapter: 'new',
+    card: 'liquid',
     seconds: 8,
     depth: [0.74, 0.82],
     still: 0.86,
@@ -213,6 +223,7 @@ export const FRAMES = [
     id: 'real-data',
     title: 'On real protein data',
     chapter: 'results',
+    card: 'sheet',
     seconds: 12,
     depth: [0.84, 1],
     still: 0.9,
@@ -243,6 +254,7 @@ export const FRAMES = [
     id: 'methods',
     title: 'Against established methods',
     chapter: 'results',
+    card: 'liquid',
     seconds: 12,
     depth: [1, 0.9],
     still: 0.9,
@@ -269,6 +281,7 @@ export const FRAMES = [
     id: 'atlas',
     title: 'In your browser',
     chapter: 'use',
+    card: 'sheet',
     seconds: 10,
     depth: [0.6, 0.25],
     still: 0.88,
@@ -291,6 +304,7 @@ export const FRAMES = [
     id: 'light',
     title: 'Into the light',
     chapter: 'use',
+    card: 'liquid',
     seconds: 6,
     depth: [0.2, 0],
     still: 0.8,
@@ -425,6 +439,12 @@ export function headlineHtml(item, sources) {
 
 const chapterLabel = (id) => CHAPTERS.find((c) => c.id === id)?.label ?? id;
 
+// The site's two cards (web/css/page.css), as the notes name them.
+export const CARDS = {
+  sheet: 'White cards: the site\'s sheet, with its soft blue halo',
+  liquid: 'Liquid glass: the site\'s frosted glass over the gel',
+};
+
 const ROLE_LABEL = {
   eyebrow: 'Eyebrow', headline: 'Headline', sub: 'Line', stat: 'Number', label: 'Label', caption: 'Caption',
   point: 'Point', tag: 'Tag', chip: 'Chip', wordmark: 'Wordmark',
@@ -455,7 +475,8 @@ export function buildShot(i, sources = {}, still = null) {
   const frame = FRAMES[i];
   const n = sceneNumber(i);
   const notes = [
-    ['Camera', frame.camera], ['Transition', frame.transition], ['Water', frame.water], ['Particles', frame.particles],
+    ['Cards', CARDS[frame.card] ?? frame.card], ['Camera', frame.camera], ['Transition', frame.transition],
+    ['Water', frame.water], ['Particles', frame.particles],
   ].map(([k, v]) => `<div><dt>${k}</dt><dd>${escapeHtml(v)}</dd></div>`).join('');
   const stale = still ? staleNumbers(still, sources) : [];
   const image = still?.file

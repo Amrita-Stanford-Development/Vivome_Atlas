@@ -27,6 +27,17 @@ the particles grow; on the way up, all of that eases back. A time code and
 a depth gauge in every frame carry the motif. The end breaks the surface:
 "No cell placed without evidence."
 
+Every word and diagram sits on a card, so it reads over the moving cells,
+even at 720p: the site's white card with its blue halo (`.sheet`) in odd
+scenes, its liquid glass (`.liquid`) in even ones, both straight from
+`web/css/page.css`. The storyboard names each scene's card (`card`), the
+page lists it among the scene's notes, and the test checks that each
+composition uses its scene's kind and no other.
+
+The film has sound: a voice-over speaking each scene's line, a soft ambient
+score that rises towards the end, and the storyboard's sound cues. The
+stills on the page are silent; the sound is in the rendered film only.
+
 ## The page
 
 | File | Role |
@@ -66,8 +77,12 @@ A number baked into a render would bypass that guard, so:
 The test also checks that the scenes add up to 120 seconds, that every
 slot names a record, that no percentage or decimal is typed, that the copy
 keeps the site's rules (no em dashes, none of the words that wait for
-evidence), that every caveat is one of the Manuscript page's, and that each
-composition shows its scene's words and slots at its place in the film.
+evidence), that every caveat is one of the Manuscript page's, that each
+composition shows its scene's words and slots at its place in the film, on
+its scene's card kind, and that the film keeps one white background.
+
+The voice-over speaks the same slots, filled from the same records when the
+film is made (`motion/scripts/voice.mjs`); a spoken number is never typed.
 
 ## The tools, and why each
 
@@ -80,10 +95,35 @@ composition shows its scene's words and slots at its place in the film.
 | Manim | scene 7, the answers: the map and each cell's set of plausible types | sets that grow and outline exactly the types they hold are geometry, which Manim draws precisely; it renders on a transparent background |
 | FFmpeg | cutting Manim's QuickTime file into one frame per film frame; grading each still and writing it as WebP | Manim's own PNG sequence skips held frames, so its frame numbers would not be times |
 | Canvas | the data pictures: the missing-value matrix, the reference map, the example file landing | drawn from `web/data/workflow.json` on each seek, as the Workflow page draws them |
+| Kokoro-82M, through HyperFrames' `tts` | the voice-over | a local, openly licensed text-to-speech model: the script never leaves this machine |
+| numpy and soundfile | the score: the ambient bed, the musical cues and the effects, synthesised in `motion/audio/score.py` | made in code, so no music or sample is downloaded and nothing needs a licence |
+| FFmpeg | the mix: each voice line at its time, the music ducked under the voice by a sidechain compressor, the whole at -16 LUFS; then the draft and the copy for sending | one tool for the sound and the encodes |
 
 Lottie is not used: it plays animations designed elsewhere, and the film
 has none; everything here is data, 3D or exact geometry. Remotion is not
 used because of its company licence.
+
+### The voice, and what it is made with
+
+| Part | Version | Licence |
+|---|---|---|
+| Kokoro-82M (hexgrad), the voice model, as `kokoro-v1.0.onnx` and `voices-v1.0.bin` from kokoro-onnx's `model-files-v1.0` release | v1.0 | Apache 2.0 |
+| The voice, `af_heart` ("Heart", American English) | in `voices-v1.0.bin` | Apache 2.0, with the model |
+| kokoro-onnx, which runs it | 0.6.1 | MIT |
+| onnxruntime | 1.31.0 | MIT |
+| espeak-ng, the phonemizer kokoro-onnx loads | as bundled by espeakng-loader 0.2.4 | GPL-3.0 (the tool; the speech it helps make is not covered) |
+| HyperFrames' `tts` command, which calls it | 0.8.169 | Apache 2.0 |
+| numpy and soundfile, for the score | 2.5.4, 0.14.0 | BSD-3-Clause |
+| FFmpeg, for the mix and the encodes | 9.0.2 (conda-forge) | LGPL and GPL |
+
+HyperFrames downloads the model files once, about 350 MB, into
+`%USERPROFILE%\.cache\hyperframes\tts\`, outside the repository. Each line
+is fitted to its scene: it starts just after the scene does and ends before
+the next. A line that runs long is spoken a little faster (at most 1.2
+times), then given shorter pauses around it; the words never change. In
+this draft every line fits: scene 5's is spoken at 1.13 times, the rest at
+normal speed. Kokoro reads the name as it is spelt; how it says "VivOME" is
+worth a listen before a final cut.
 
 ## The project: `motion/`
 
@@ -105,10 +145,13 @@ keeps no build step.
 | `motion/scripts/prepare.mjs` | copies the site's code into `motion/vendor/` and writes `motion/build/` |
 | `motion/scripts/manim.mjs` | renders the Manim scene and cuts it into frames |
 | `motion/scripts/stills.mjs` | snapshots each scene's still, grades it and writes the sidecar |
+| `motion/scripts/voice.mjs` | speaks each scene's line with Kokoro and fits it to its scene; its report is `motion/build/audio/voice.json` |
+| `motion/audio/score.py` | the music and the effects, synthesised in code |
+| `motion/scripts/film.mjs` | renders the whole film, then the voice, the score, the mix and the two encodes |
 
-`motion/vendor/`, `motion/build/`, `motion/.hyperframes/` and
-`motion/renders/` are written by the scripts and gitignored, as is
-`motion/node_modules/`.
+`motion/vendor/`, `motion/build/` (the generated sound included),
+`motion/.hyperframes/` and `motion/renders/` are written by the scripts and
+gitignored, as is `motion/node_modules/`.
 
 ## Rendering
 
@@ -118,6 +161,7 @@ tools"). From `motion/`:
 ```bash
 npm install          # HyperFrames, GSAP and three.js r128, pinned
 npm run stills       # prepare, Manim, then the twelve stills and their sidecar
+npm run film         # the whole film with its sound: a 720p draft and a copy to send
 npm run preview      # HyperFrames Studio, to watch the film play
 npm run lint         # HyperFrames' checks of the compositions
 ```
@@ -127,12 +171,12 @@ npm run lint         # HyperFrames' checks of the compositions
 (comma-separated); the other stills and their sidecar entries stay. Commit
 the stills and `web/motion/frames/index.json` together.
 
-The whole film renders silent, since there is no recorded voice-over or
-music yet, in about two and a half minutes on this PC: run `npm run manim`
-from `motion/`, then `motion/scripts/hf.mjs` with
-`render --output renders/<name>.mp4 --fps 30 --quality draft`. HyperFrames
-renders at the composition's 1920 by 1080; FFmpeg then scales a draft to
-1280 by 720 and makes a smaller copy for sending. Renders stay in the
+`npm run film` takes about three minutes on this PC. HyperFrames renders
+the picture at the composition's 1920 by 1080 (`renders/vivome-draft-1080.mp4`,
+silent); FFmpeg then writes `renders/vivome-draft.mp4`, 1280 by 720 with the
+sound in AAC, and `renders/vivome-draft-share.mp4`, about 17 MB, for
+sending. `motion/scripts/film.mjs` with `--skip-render` remixes the sound
+over the last picture, and `--name` names the files. Renders stay in the
 gitignored `motion/renders/` and are not on the site.
 
 To change the film: edit the scene in `web/js/reel-frames.js` (words,
@@ -143,7 +187,7 @@ if its timing changed; the test checks they agree. Render the stills again.
 
 Number slots are written as they are in the storyboard; the page and the
 render show each record's value, or Pending. The voice-over runs at about
-two words a second.
+two words a second, read by Kokoro's `af_heart` voice.
 
 ### 1. The surface (0:00 to 0:08, 8 s)
 
@@ -151,6 +195,7 @@ Chapter: the problem. Made with HyperFrames, GSAP, three.js water (rain).
 
 - **On screen:** eyebrow "Single-cell proteomics"; headline "Proteins, measured one cell at a time."
 - **Voice-over:** "Mass spectrometry can now measure the proteins inside single cells, one cell at a time."
+- **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Just under the surface, looking up and ahead; a slow push in.
 - **Transition:** Opens from white light. Flows on into scene 2 as the camera tips down.
 - **Water:** Rain on the surface: each drop sends rings across the white gel, and a fine white waterline runs along the top.
@@ -163,6 +208,7 @@ Chapter: the problem. Made with HyperFrames, GSAP, three.js water (still).
 
 - **On screen:** headline "But they arrive without names."; line "Few protein datasets come labelled, and every lab detects a different set of proteins."; tag "Unnamed".
 - **Voice-over:** "But those cells arrive without names. Labelled protein references are few, and every lab detects a different set of proteins."
+- **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Tips down and sinks; the waterline slides up and out of the frame.
 - **Transition:** One continuous move from scene 1. Leaves through a cloud of silt.
 - **Water:** The same white gel, still now; the waterline slides up out of sight.
@@ -175,6 +221,7 @@ Chapter: the problem. Made with HyperFrames, GSAP, three.js water (still), canva
 
 - **On screen:** headline "And each one is only partly seen."; number "{ms:wf_missing_share}"; label "of the values in one public file are missing"; caption "PBMC240, the example file on the Workflow page"; number "{ms:ds_fulcher2026_proteins_per_cell}"; label "proteins measured per cell in Fulcher 2026, the median"; caption "VivOME reads {ms:gs_size} genes."
 - **Voice-over:** "And each cell is only partly seen. Much of a protein matrix is empty."
+- **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** A slow sideways track along a matrix of cells and proteins.
 - **Transition:** The missing tiles fall away as specks that become the RNA cells of scene 4.
 - **Water:** The white gel thickens a little: the frost rises and the far cells soften.
@@ -188,6 +235,7 @@ Chapter: the solution. Made with HyperFrames, GSAP, three.js water (still), canv
 
 - **On screen:** headline "RNA atlases already name their cells."; number "{ms:ref_cells}"; label "RNA cells, each one labelled"; caption "in {ms:ref_classes} blood and immune cell types, from Tabula Sapiens".
 - **Voice-over:** "Single-cell RNA is different. Its atlases are large, and every cell in them has a name."
+- **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Descends through a shoal of cells, then pulls back to see the whole map.
 - **Transition:** The map holds and slides aside to become one side of scene 5.
 - **Water:** The same white gel. The camera drifts on through the cells, which come closer and larger as it goes down.
@@ -201,6 +249,7 @@ Chapter: the solution. Made with HyperFrames, GSAP, three.js water (wake).
 
 - **On screen:** wordmark "VivOME"; headline "Trained on RNA. Read on protein."; line "No protein labels, no paired cells, no retraining on your data."; label "Labelled RNA"; label "Your protein cells"; label "{ms:gs_size} genes link the two"; caption "It carries the names across. It never mixes the two kinds of data."
 - **Voice-over:** "VivOME learns blood cell types from labelled RNA alone, then reads each protein cell against that reference. No protein labels, no paired cells, and no retraining on your data."
+- **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Holds on the wordmark, then a slow crane down to the bridge between the two sides.
 - **Transition:** The wordmark rises out of the particles. Leaves on a push into the protein side.
 - **Water:** A slow wake ripples through the white gel as the wordmark rises.
@@ -213,6 +262,7 @@ Chapter: what is new. Made with HyperFrames, GSAP, three.js water (still), canva
 
 - **On screen:** headline "Built for missing values."; point "It knows which proteins were never measured."; point "It scales each protein within your file."; point "It borrows from similar cells in the same file."; point "{ms:wf_members} encoders answer together."
 - **Voice-over:** "It is built for gaps: it knows which proteins were never measured, scales each one within your file, and asks {ms:wf_members} encoders to answer together."
+- **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Tracks along the matrix from scene 3, now lit: a mask marks each gap.
 - **Transition:** Match cut from scene 3's matrix. Leaves as the beams meet in one point that drops into scene 7.
 - **Water:** The white gel, clearer than in scene 3; nearer cells drift larger past the camera, the far ones softly out of focus.
@@ -226,6 +276,7 @@ Chapter: what is new. Made with Manim, HyperFrames, GSAP, three.js water (still)
 
 - **On screen:** headline "When unsure, it says so."; label "Cell type"; label "Group"; label "Lineage"; label "No answer, and the reason"; caption "Cells of the PBMC240 example file, and the answers VivOME gave them."
 - **Voice-over:** "Every cell gets the most precise answer the evidence allows: a cell type, its group, its lineage, or no answer, and the reason why."
+- **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Locked off on the reference map, seen flat from one side.
 - **Transition:** Each answer steps down the ladder in turn. Leaves as the last cell's outline dissolves into the gel.
 - **Water:** Still gel, so the diagram reads cleanly.
@@ -239,6 +290,7 @@ Chapter: what is new. Made with HyperFrames, GSAP, three.js water (wake).
 
 - **On screen:** headline "One best guess, with a second opinion."; label "The encoder"; label "Correlation to each RNA type's average"; label "Used only when your file agrees with the encoder"; label "Best guess"; chip "New in {fact:model_name}".
 - **Voice-over:** "Its best guess adds a second opinion, used only when your file agrees with the encoder."
+- **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Follows two currents as they braid into one.
 - **Transition:** Comes in as scene 7's outline dissolves. Leaves as the braided current dives on down.
 - **Water:** A wake follows the two currents through the white gel.
@@ -252,6 +304,7 @@ Chapter: the results. Made with HyperFrames, GSAP, three.js water (still).
 - **On screen:** headline "Checked against real data."; label "Fulcher 2026"; number "{ms:committed_fulcher}"; label "of cells given an answer"; number "{ms:correct_fulcher}"; label "of those answers right, at the level stated"; label "Khoury 2026"; number "{ms:khoury_lymphoid}"; label "of lymphoid cells put in the lymphoid lineage"; number "{ms:khoury_myeloid}"; label "of myeloid cells put in the myeloid lineage"; caption "Development: these data were used while VivOME was built. Post-hoc: their labels had been read before."
 - **Caveats shown:** development, post-hoc.
 - **Voice-over:** "On real blood protein data, here is how often it answers, and how often those answers are right."
+- **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Settles at the deepest point of the dive; the cards rise among the nearest cells.
 - **Transition:** Leaves on a slow pan along the floor into scene 10.
 - **Water:** The same white gel; at the deepest point the cells are closest and largest, and the far ones most softly blurred.
@@ -265,6 +318,7 @@ Chapter: the results. Made with HyperFrames, GSAP, three.js water (still).
 - **On screen:** headline "Measured against established methods."; line "On real protein data, VivOME is level with the best of them and ahead of the rest."; number "{ms:bm_khoury_baseline_favour} of {ms:bm_khoury_baseline_runs}"; label "baseline runs favour VivOME on Khoury 2026"; number "{ms:bm_fulcher_favour} of {ms:bm_fulcher_pairings}"; label "paired comparisons favour VivOME on Fulcher 2026"; caption "Still weak: CD8 T cells and dendritic cells, for every method tested."; caption "A sealed test on sorted cells: {ms:open_sorted_test}".
 - **Caveats shown:** post-hoc, in-sample, pending.
 - **Voice-over:** "Against established methods, on real protein data, it is level with the best and ahead of the rest. Where it is still weak, it says so."
+- **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** A slow pan along the floor past the methods, each a bubble with its name.
 - **Transition:** Leaves as the camera turns up towards the light.
 - **Water:** The same white gel; the cells begin to recede as the camera turns to rise.
@@ -277,6 +331,7 @@ Chapter: use it. Made with HyperFrames, GSAP, three.js water (wake), canvas.
 
 - **On screen:** headline "Label your own data."; line "Send a DIA-NN, FragPipe or CSV file from the Atlas page. Your cells land on the reference, each with its answer or the reason for none."; chip "The PBMC240 example file"; caption "Answered by {fact:model_name}, atlas {fact:atlas_version}".
 - **Voice-over:** "It runs online. Send your file from the Atlas page, and your cells land on the map, each with its answer."
+- **Cards:** White cards: the site's sheet, with its soft blue halo.
 - **Camera:** Rises through the water towards a browser window floating near the surface.
 - **Transition:** Leaves as the camera keeps rising and breaks the surface.
 - **Water:** A wake: the file leaves a trail of ripples as it drops into the atlas.
@@ -290,6 +345,7 @@ Chapter: use it. Made with HyperFrames, GSAP, three.js water (rain).
 
 - **On screen:** wordmark "VivOME"; headline "No cell placed without evidence."; chip "Explore the atlas"; chip "Label your data"; caption "vivome-atlas.pages.dev".
 - **Voice-over:** "Bring your protein cells up into the light. VivOME: no cell placed without evidence."
+- **Cards:** Liquid glass: the site's frosted glass over the gel.
 - **Camera:** Rushes up and breaks the surface, then settles.
 - **Transition:** The splash clears to white and the end card holds.
 - **Water:** The waterline sweeps down the frame as we surface and settles low; rain rings the water under the end card.

@@ -1,21 +1,24 @@
 <template>
     <!-- Scene 3, 0:18 to 0:28: mostly missing. The PBMC240 example file's
          own matrix fills in, and its missing values fall away
-         (lib/scenes.js draws it from web/data/workflow.json). -->
+         (lib/scenes.js draws it from web/data/workflow.json). Headline,
+         numbers and matrix each on a white card. -->
     <style>
-        #s-gaps .head { position: absolute; left: 150px; top: 110px; width: 1360px; }
-        #s-gaps .stats { position: absolute; left: 150px; top: 410px; width: 540px; }
-        #s-gaps .fig + .fig { margin-top: 46px; }
-        #s-gaps .f-caption { margin-top: 8px; }
-        #s-gaps canvas { left: 770px; top: 410px; }
-        #s-gaps .f-display, #s-gaps .fig { opacity: 0; }
+        #s-gaps .head { left: 140px; top: 60px; max-width: 1480px; padding-top: 34px; padding-bottom: 34px; opacity: 0; }
+        #s-gaps .stats { left: 140px; top: 400px; width: 580px; padding: 34px 44px; opacity: 0; }
+        #s-gaps .stats .f-stat { font-size: 96px; }
+        #s-gaps .stats .f-stat-s { font-size: 80px; }
+        #s-gaps .fig + .fig { margin-top: 30px; }
+        #s-gaps .f-caption { margin-top: 6px; }
+        #s-gaps .matrix { left: 760px; top: 400px; padding: 28px 24px 24px; opacity: 0; }
+        #s-gaps .fig { opacity: 0; }
         #s-gaps .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-gaps" class="scene" data-composition-id="s-gaps" data-width="1920" data-height="1080">
-        <div class="head">
+        <div class="head card sheet">
             <h1 class="f-display">And each one is only partly <span class="cut">seen.</span></h1>
         </div>
-        <div class="stats">
+        <div class="stats card sheet">
             <div class="fig">
                 <span class="f-stat" data-slot="ms:wf_missing_share" data-count-at="3.2"></span>
                 <span class="f-label">of the values in one public file are missing</span>
@@ -27,15 +30,17 @@
                 <span class="f-caption">VivOME reads <span data-slot="ms:gs_size"></span> genes.</span>
             </div>
         </div>
-        <canvas id="gaps-canvas" width="1000" height="560" data-layout-ignore></canvas>
+        <div class="matrix card sheet"><canvas id="gaps-canvas" width="960" height="560" data-layout-ignore></canvas></div>
     </div>
     <script>
         (function () {
             VivomeSlots.fill(document.getElementById('s-gaps'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-gaps .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.5);
+            tl.fromTo('#s-gaps .head', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.4);
             tl.fromTo('#s-gaps .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.4);
-            tl.fromTo('#s-gaps .fig', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 1.4 }, 3.0);
+            tl.fromTo('#s-gaps .matrix', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.6);
+            tl.fromTo('#s-gaps .stats', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.8);
+            tl.fromTo('#s-gaps .fig', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 1.4 }, 3.0);
             tl.fromTo('#s-gaps', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 9.5);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-gaps'] = tl;

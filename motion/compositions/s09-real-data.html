@@ -1,26 +1,25 @@
 <template>
-    <!-- Scene 9, 1:20 to 1:32: on real protein data, at the floor of the
-         dive. Every number is a slot filled from web/data/manuscript.json
-         (scripts/prepare.mjs), each with the caveat the Manuscript page
-         gives it. -->
+    <!-- Scene 9, 1:20 to 1:32: on real protein data, at the deepest point of
+         the dive. Every number is a slot filled from web/data/manuscript.json
+         (scripts/prepare.mjs), each with the caveat the Manuscript page gives
+         it. Headline, results and note each on a white card. -->
     <style>
-        #s-real-data .head { position: absolute; left: 150px; top: 110px; width: 1500px; }
-        #s-real-data .card { position: absolute; top: 300px; width: 760px; height: 560px; display: flex; flex-direction: column; opacity: 0; }
-        #s-real-data .card.a { left: 150px; }
-        #s-real-data .card.b { left: 960px; }
-        #s-real-data .card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
-        #s-real-data .card-head .f-label { margin: 0; color: var(--ink); font-weight: 600; font-size: 34px; }
-        #s-real-data .fig + .fig { margin-top: 38px; }
-        #s-real-data .foot { position: absolute; left: 150px; top: 910px; width: 1570px; opacity: 0; }
-        #s-real-data .f-display { opacity: 0; }
+        #s-real-data .head { left: 140px; top: 70px; padding-top: 32px; padding-bottom: 32px; opacity: 0; }
+        #s-real-data .result { top: 290px; width: 780px; height: 560px; display: flex; flex-direction: column; opacity: 0; }
+        #s-real-data .result.a { left: 140px; }
+        #s-real-data .result.b { left: 960px; }
+        #s-real-data .result-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+        #s-real-data .result-head .f-label { margin: 0; color: var(--ink); font-weight: 600; font-size: 34px; }
+        #s-real-data .fig + .fig { margin-top: 36px; }
+        #s-real-data .foot { left: 140px; top: 890px; width: 1600px; padding: 24px 40px; opacity: 0; }
         #s-real-data .cut { clip-path: inset(0 100% 0 0); }
     </style>
     <div id="s-real-data" class="scene" data-composition-id="s-real-data" data-width="1920" data-height="1080">
-        <div class="head">
+        <div class="head card sheet">
             <h1 class="f-display">Checked against real <span class="cut">data.</span></h1>
         </div>
-        <div class="card a liquid">
-            <div class="card-head"><span class="f-label">Fulcher 2026</span><span class="bead caveat" data-caveat="development">development</span></div>
+        <div class="result a card sheet">
+            <div class="result-head"><span class="f-label">Fulcher 2026</span><span class="bead caveat" data-caveat="development">development</span></div>
             <div class="fig">
                 <span class="f-stat" data-slot="ms:committed_fulcher" data-count-at="2.2"></span>
                 <span class="f-label">of cells given an answer</span>
@@ -30,8 +29,8 @@
                 <span class="f-label">of those answers right, at the level stated</span>
             </div>
         </div>
-        <div class="card b liquid">
-            <div class="card-head"><span class="f-label">Khoury 2026</span><span class="bead caveat" data-caveat="post-hoc">post-hoc</span></div>
+        <div class="result b card sheet">
+            <div class="result-head"><span class="f-label">Khoury 2026</span><span class="bead caveat" data-caveat="post-hoc">post-hoc</span></div>
             <div class="fig">
                 <span class="f-stat" data-slot="ms:khoury_lymphoid" data-count-at="4.2"></span>
                 <span class="f-label">of lymphoid cells put in the lymphoid lineage</span>
@@ -41,17 +40,17 @@
                 <span class="f-label">of myeloid cells put in the myeloid lineage</span>
             </div>
         </div>
-        <div class="foot"><span class="f-caption">Development: these data were used while VivOME was built. Post-hoc: their labels had been read before.</span></div>
+        <div class="foot card sheet"><span class="f-caption">Development: these data were used while VivOME was built. Post-hoc: their labels had been read before.</span></div>
     </div>
     <script>
         (function () {
             VivomeSlots.fill(document.getElementById('s-real-data'));
             const tl = gsap.timeline({ paused: true });
-            tl.fromTo('#s-real-data .f-display', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 0.4);
+            tl.fromTo('#s-real-data .head', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.4);
             tl.fromTo('#s-real-data .cut', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power2.inOut' }, 1.2);
-            tl.fromTo('#s-real-data .card.a', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 1.6);
-            tl.fromTo('#s-real-data .card.b', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 3.6);
-            tl.fromTo('#s-real-data .foot', { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power1.out' }, 6.2);
+            tl.fromTo('#s-real-data .result.a', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 1.6);
+            tl.fromTo('#s-real-data .result.b', { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }, 3.6);
+            tl.fromTo('#s-real-data .foot', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 6.2);
             tl.fromTo('#s-real-data', { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power1.in' }, 11.5);
             window.__timelines = window.__timelines || {};
             window.__timelines['s-real-data'] = tl;
