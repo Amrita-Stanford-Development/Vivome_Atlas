@@ -1,0 +1,34 @@
+{
+  "script_sha256": "0e8762a8aa4b6956baf94fe6eb00b1aa2b07d46ab915c50194e3943a2e5a147d",
+  "run": "2026-10-18T06:27:01",
+  "tiers": "1 and 2 (data stages)",
+  "checks": {
+    "y_all": true,
+    "splits": true,
+    "suite_calib": true,
+    "suite_eval": true,
+    "genes": true,
+    "class_order": true,
+    "hierarchy": true,
+    "reference_metadata": true,
+    "rna_stats": true,
+    "mask_profiles": true
+  },
+  "detail": {
+    "genes_upper_equal": true,
+    "rna_stats_largest_difference": 0.0,
+    "mask_profiles": {
+      "cell_frac_fulcher": 0.0,
+      "cell_frac_pbmc240": 0.0,
+      "cell_frac_scope2": 0.0,
+      "det_prob_fulcher": 0.0,
+      "det_prob_pbmc240": 0.0,
+      "det_prob_scope2": 0.0,
+      "gene_set_fulcher": 0,
+      "gene_set_pbmc240": 0,
+      "gene_set_scope2": 0
+    },
+    "modules_adjusted_rand_built_vs_served": 0.2999
+  },
+  "passed": true
+}

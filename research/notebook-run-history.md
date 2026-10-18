@@ -2122,6 +2122,95 @@ v4.1 again.
   its second opinion is the reference's RNA class means, and Step 9 says so.
 - Pages, model card, READMEs and API doc name v4.1 as served.
 
+### 49. A reference builder, proven on blood (Track I, Stage 1), 2026-10-18
+
+**Why:** no script built a reference from an atlas; blood's came from the
+Colab notebooks. The large intestine (`research/organ-references.md`) needs
+the same steps run on its own atlas, so they were ported first and checked
+against blood's served files.
+
+**How:** `scripts/build_organ_reference.py` with `scripts/organ_reference/`,
+driven by `scripts/organs/blood.json`:
+- labels, split and suites: NB1's;
+- the gene space: Build_Feature_Space's, from its six source files;
+- missingness profiles: NB1's;
+- modules: Reference_Projection_v3's;
+- training: NB1d's, through nb1b_core;
+- calibration: NB2's, as `research/notebooks/v5_build.py` runs it;
+- the best-guess layer: v4's.
+
+For blood, the calibration and layer run on the served v3.1 members.
+Tiers fixed in the plan before the run.
+
+**Results** (`research/notebook-outputs/organ_builder_blood/`):
+- **Tier 1, exact:**
+  - class indices, the split, both 240-upload suites, the 9,002 genes
+    (recomputed from the six sources), the class order, the hierarchy and
+    the reference metadata are all identical.
+  - The genes needed NB1's upper case; the atlas spells 44 of them
+    otherwise.
+- **Tier 2:**
+  - the RNA statistics and all nine mask-profile arrays differ by 0.0;
+  - v4's class-balanced statistics and class means differ by 0.0;
+  - class-balanced centroids are at cosine ≥ 0.9999998.
+- **Tier 3:** the calibration of the served members, by v5_build's
+  rules:
+  - temperatures exact;
+  - every conformal threshold within one rank;
+  - out-of-distribution threshold 0.77898926, equal to NB2's;
+  - latents and centroids matching.
+- **Tier 4:** blood's served files, assembled in the organ layout and
+  loaded by the new loader (`scripts/organ_reference/bundle.py`),
+  reproduce v4.1's four frozen responses with no difference. The bundle
+  from the rebuilt files agrees on 100% of labels; it differs only in the
+  calibration's wording and the properties organ bundles do not ship.
+- **Tier 5, seed 1 retrained against the served seed 1:**
+  - best validation loss 0.449 (NB1d 0.455);
+  - balanced accuracy 66.1 against 66.0;
+  - calibration top-1 61.5 against 62.2.
+  - **The check "every class's recall within 5 points" failed as written:**
+    hematopoietic stem cell is −10.0 (10 validation cells), and naive CD4
+    T is +9.5. The five served members differ by more than 5 points from
+    each other on 11 of 20 classes (naive CD4 T from 0% to 100%), so this
+    check could not tell a sound training path from a faulty one
+    (`training_served_spread.json`). It is reported, not changed.
+- **Modules are not reproduced** (adjusted Rand 0.30 against the served
+  ones; another scikit-learn). The port is deterministic, with the same
+  size distribution. Blood keeps its served modules; other organs use the
+  port.
+
+### 50. The large intestine's label audit (Track I, Stage 2), 2026-10-18
+
+**Why:** Tabula Sapiens annotated each donor separately, and the colon's
+classes follow donors closely. Before any colon model, each class should
+mean the same cells in every donor. RNA only.
+
+**How** (`research/notebooks/li_labels.py`; markers fixed before the run):
+- for each class and donor with at least 20 cells, the share expressing
+  each canonical marker;
+- the free annotations behind each class.
+
+**Results** (`research/notebook-outputs/li_labels/`):
+- **"Paneth cell of colon" is not Paneth cells in any donor.** DEFA5 and
+  DEFA6 are expressed by 0% of its cells everywhere. By donor:
+  - TSP25's are best4+ cells (BEST4 77%, CA7 84%);
+  - TSP2's look like stem and TA cells;
+  - TSP14's are mixed colonocytes.
+
+  The class is dropped (217 cells), recorded in
+  `scripts/organs/large_intestine.json`. The reference has 22 classes.
+- **The other classes hold:**
+  - best4+ cells are genuine in every donor, TSP26's 593 included (BEST4
+    100%);
+  - goblet cells express MUC2 at 98 to 99%;
+  - enterocytes, TA and mast cells are consistent.
+- **"Myeloid leukocyte" looks like macrophages** with fewer genes detected
+  (C1QA 70 to 79%). It stays apart in the myeloid group, where the answer
+  layer can fall back to the group.
+- The marker-signature score flags 14 class–donor groups, most of them
+  ambient-RNA artefacts of z-scoring near-zero genes (CD4 T cells
+  "matching" Paneth markers). The decisions above rest on absolute shares.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

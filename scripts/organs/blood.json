@@ -1,0 +1,197 @@
+{
+  "organ": "blood",
+  "title": "Blood",
+  "notes": "Reproduces the served blood reference's inputs: T1 NB1 (labels, split, statistics, mask profiles, suites), Build_Feature_Space (genes), Reference_Projection_v3 (modules), NB1d (training), NB2 (calibration). Built only to prove the builder; blood v4.1 stays as served.",
+  "rna": "drive:scRNA-seq/Blood_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+  "label_column": "cell_ontology_class",
+  "donor_column": "donor",
+  "merge": {},
+  "class_rule": null,
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "basophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "common myeloid progenitor": {
+      "group": "progenitor",
+      "lineage": "myeloid"
+    },
+    "erythrocyte": {
+      "group": "erythroid",
+      "lineage": "erythroid"
+    },
+    "hematopoietic precursor cell": {
+      "group": "progenitor",
+      "lineage": "progenitor"
+    },
+    "hematopoietic stem cell": {
+      "group": "progenitor",
+      "lineage": "progenitor"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "mature nk t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "myeloid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "natural killer cell": {
+      "group": "NK cell",
+      "lineage": "lymphoid"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "plasmacytoid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "platelet": {
+      "group": "platelet/megakaryocyte",
+      "lineage": "other"
+    },
+    "regulatory t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    }
+  },
+  "split": {
+    "stratify": "class",
+    "test": 0.2,
+    "val": 0.15,
+    "seed": 0
+  },
+  "gene_space": {
+    "sources": [
+      {
+        "name": "bubis_hela",
+        "path": "drive:scProteomics/Protein_JB.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_lung",
+        "path": "drive:scProteomics/20240701_100039_MM_run62p2_revision_50SPD_25cmIO_all_MEpergroup_Proteins.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_candidates",
+        "path": "drive:scProteomics/Candidates.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "pbmc240",
+        "path": "drive:scProteomics/PBMC_240cells_proteins.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "scope2",
+        "path": "drive:scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+        "read": "header"
+      },
+      {
+        "name": "fulcher",
+        "path": "drive:scProteomics/abundance_protein_MD.tsv",
+        "read": "column",
+        "column": "Gene"
+      }
+    ]
+  },
+  "mask_profiles": [
+    {
+      "name": "scope2",
+      "read": "cells_by_genes",
+      "path": "drive:scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+      "gene_set": "scope2"
+    },
+    {
+      "name": "pbmc240",
+      "read": "diann_pg",
+      "path": "drive:scProteomics/PBMC_240cells_proteins.tsv",
+      "gene_set": "pbmc240"
+    },
+    {
+      "name": "fulcher",
+      "read": "fulcher",
+      "path": "drive:scProteomics/abundance_protein_MD.tsv",
+      "gene_set": "fulcher"
+    }
+  ],
+  "modules": {
+    "target_size": 18,
+    "cells": 15000,
+    "pca": 64,
+    "seed": 0
+  },
+  "suites": {
+    "scenarios": "blood",
+    "n_uploads": 240,
+    "calib_seed": 11,
+    "eval_seed": 22
+  },
+  "train": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hidden": [
+      1024,
+      512
+    ],
+    "dropout": 0.1,
+    "latent": 128
+  },
+  "calibration": {
+    "alpha": 0.1,
+    "min_n": 50,
+    "knn": 15
+  }
+}

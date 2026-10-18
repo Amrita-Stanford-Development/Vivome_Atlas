@@ -1,0 +1,1049 @@
+{
+  "script_sha256": "93297bfe61ddeae49fb9ecedc299eceae5bb9f05ba72fcd8f00fe349ea6cd676",
+  "run": "2026-10-18T06:30:52",
+  "min_cells": 20,
+  "markers": {
+    "intestinal crypt stem cell of colon": [
+      "LGR5",
+      "OLFM4",
+      "ASCL2",
+      "SMOC2"
+    ],
+    "transit amplifying cell of colon": [
+      "MKI67",
+      "TOP2A",
+      "PCNA"
+    ],
+    "enterocyte of epithelium of large intestine": [
+      "CA1",
+      "CA2",
+      "SLC26A3",
+      "AQP8",
+      "CEACAM7",
+      "GUCA2A"
+    ],
+    "best4+ intestinal epithelial cell, human": [
+      "BEST4",
+      "OTOP2",
+      "CA7",
+      "SPIB",
+      "GUCA2B"
+    ],
+    "large intestine goblet cell": [
+      "MUC2",
+      "TFF3",
+      "CLCA1",
+      "FCGBP",
+      "ZG16",
+      "SPINK4"
+    ],
+    "paneth cell of colon": [
+      "DEFA5",
+      "DEFA6",
+      "REG3A",
+      "ITLN2",
+      "REG4"
+    ],
+    "tuft cell of colon": [
+      "POU2F3",
+      "TRPM5",
+      "IRAG2",
+      "SH2D6"
+    ],
+    "enteroendocrine cell": [
+      "CHGA",
+      "CHGB",
+      "PYY",
+      "GCG",
+      "TPH1"
+    ],
+    "cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "IL7R"
+    ],
+    "cd8-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD8A",
+      "CD8B"
+    ],
+    "gamma-delta t cell": [
+      "TRDC",
+      "TRGC1",
+      "TRGC2"
+    ],
+    "regulatory t cell": [
+      "FOXP3",
+      "IL2RA",
+      "CTLA4"
+    ],
+    "innate lymphoid cell": [
+      "NCAM1",
+      "KLRD1",
+      "GNLY",
+      "KIT"
+    ],
+    "b cell": [
+      "MS4A1",
+      "CD79A",
+      "CD19"
+    ],
+    "plasma cell": [
+      "JCHAIN",
+      "MZB1",
+      "IGHA1"
+    ],
+    "colon macrophage": [
+      "CD68",
+      "C1QA",
+      "C1QB",
+      "APOE"
+    ],
+    "monocyte": [
+      "CD14",
+      "FCN1",
+      "S100A8"
+    ],
+    "myeloid leukocyte": [
+      "LYZ",
+      "CD1C",
+      "CLEC10A",
+      "S100A9"
+    ],
+    "mast cell": [
+      "TPSAB1",
+      "CPA3",
+      "KIT"
+    ],
+    "fibroblast": [
+      "COL1A1",
+      "DCN",
+      "PDGFRA",
+      "LUM"
+    ],
+    "myofibroblast cell": [
+      "ACTA2",
+      "MYH11",
+      "DES",
+      "TAGLN"
+    ],
+    "colon endothelial cell": [
+      "PECAM1",
+      "VWF",
+      "CDH5"
+    ],
+    "enteroglial cell": [
+      "S100B",
+      "PLP1",
+      "SOX10"
+    ]
+  },
+  "mismatches": [
+    {
+      "class_name": "cd4-positive, alpha-beta t cell",
+      "donor": "TSP26",
+      "cells": 441,
+      "best_match": "regulatory t cell",
+      "own_score": 1.376,
+      "top3": {
+        "regulatory t cell": 1.538,
+        "cd4-positive, alpha-beta t cell": 1.376,
+        "cd8-positive, alpha-beta t cell": 0.352
+      }
+    },
+    {
+      "class_name": "cd4-positive, alpha-beta t cell",
+      "donor": "TSP27",
+      "cells": 1482,
+      "best_match": "paneth cell of colon",
+      "own_score": 1.027,
+      "top3": {
+        "paneth cell of colon": 1.738,
+        "cd4-positive, alpha-beta t cell": 1.027,
+        "regulatory t cell": 0.601
+      }
+    },
+    {
+      "class_name": "colon macrophage",
+      "donor": "TSP14",
+      "cells": 22,
+      "best_match": "myeloid leukocyte",
+      "own_score": 1.671,
+      "top3": {
+        "myeloid leukocyte": 2.665,
+        "colon macrophage": 1.671,
+        "cd4-positive, alpha-beta t cell": 0.871
+      }
+    },
+    {
+      "class_name": "enterocyte of epithelium of large intestine",
+      "donor": "TSP14",
+      "cells": 522,
+      "best_match": "paneth cell of colon",
+      "own_score": 0.664,
+      "top3": {
+        "paneth cell of colon": 0.782,
+        "enterocyte of epithelium of large intestine": 0.664,
+        "best4+ intestinal epithelial cell, human": 0.164
+      }
+    },
+    {
+      "class_name": "intestinal crypt stem cell of colon",
+      "donor": "TSP14",
+      "cells": 26,
+      "best_match": "enterocyte of epithelium of large intestine",
+      "own_score": -0.436,
+      "top3": {
+        "enterocyte of epithelium of large intestine": 1.238,
+        "monocyte": -0.101,
+        "enteroendocrine cell": -0.103
+      }
+    },
+    {
+      "class_name": "intestinal crypt stem cell of colon",
+      "donor": "TSP25",
+      "cells": 346,
+      "best_match": "enterocyte of epithelium of large intestine",
+      "own_score": 0.121,
+      "top3": {
+        "enterocyte of epithelium of large intestine": 0.46,
+        "large intestine goblet cell": 0.277,
+        "intestinal crypt stem cell of colon": 0.121
+      }
+    },
+    {
+      "class_name": "intestinal crypt stem cell of colon",
+      "donor": "TSP27",
+      "cells": 52,
+      "best_match": "transit amplifying cell of colon",
+      "own_score": 0.571,
+      "top3": {
+        "transit amplifying cell of colon": 1.317,
+        "enteroendocrine cell": 0.993,
+        "enterocyte of epithelium of large intestine": 0.859
+      }
+    },
+    {
+      "class_name": "myeloid leukocyte",
+      "donor": "TSP26",
+      "cells": 117,
+      "best_match": "colon macrophage",
+      "own_score": 1.065,
+      "top3": {
+        "colon macrophage": 1.292,
+        "myeloid leukocyte": 1.065,
+        "monocyte": 0.595
+      }
+    },
+    {
+      "class_name": "myeloid leukocyte",
+      "donor": "TSP27",
+      "cells": 255,
+      "best_match": "colon macrophage",
+      "own_score": 1.124,
+      "top3": {
+        "colon macrophage": 1.756,
+        "myeloid leukocyte": 1.124,
+        "regulatory t cell": 0.562
+      }
+    },
+    {
+      "class_name": "paneth cell of colon",
+      "donor": "TSP14",
+      "cells": 128,
+      "best_match": "enterocyte of epithelium of large intestine",
+      "own_score": 0.424,
+      "top3": {
+        "enterocyte of epithelium of large intestine": 0.979,
+        "paneth cell of colon": 0.424,
+        "best4+ intestinal epithelial cell, human": 0.309
+      }
+    },
+    {
+      "class_name": "paneth cell of colon",
+      "donor": "TSP2",
+      "cells": 45,
+      "best_match": "intestinal crypt stem cell of colon",
+      "own_score": 0.368,
+      "top3": {
+        "intestinal crypt stem cell of colon": 1.75,
+        "transit amplifying cell of colon": 1.738,
+        "enterocyte of epithelium of large intestine": 0.465
+      }
+    },
+    {
+      "class_name": "paneth cell of colon",
+      "donor": "TSP25",
+      "cells": 44,
+      "best_match": "best4+ intestinal epithelial cell, human",
+      "own_score": -0.231,
+      "top3": {
+        "best4+ intestinal epithelial cell, human": 1.952,
+        "enterocyte of epithelium of large intestine": 0.294,
+        "intestinal crypt stem cell of colon": 0.21
+      }
+    },
+    {
+      "class_name": "transit amplifying cell of colon",
+      "donor": "TSP25",
+      "cells": 69,
+      "best_match": "paneth cell of colon",
+      "own_score": 1.972,
+      "top3": {
+        "paneth cell of colon": 2.544,
+        "transit amplifying cell of colon": 1.972,
+        "intestinal crypt stem cell of colon": 1.294
+      }
+    },
+    {
+      "class_name": "transit amplifying cell of colon",
+      "donor": "TSP27",
+      "cells": 40,
+      "best_match": "intestinal crypt stem cell of colon",
+      "own_score": 2.476,
+      "top3": {
+        "intestinal crypt stem cell of colon": 2.51,
+        "transit amplifying cell of colon": 2.476,
+        "enteroendocrine cell": 1.997
+      }
+    }
+  ],
+  "by_class": {
+    "b cell": {
+      "TSP14": {
+        "cells": 514,
+        "best_match": "b cell",
+        "own_score": 3.868,
+        "top3": {
+          "b cell": 3.868,
+          "plasma cell": 0.246,
+          "regulatory t cell": 0.227
+        }
+      },
+      "TSP2": {
+        "cells": 30,
+        "best_match": "b cell",
+        "own_score": 4.202,
+        "top3": {
+          "b cell": 4.202,
+          "myeloid leukocyte": 0.464,
+          "plasma cell": 0.022
+        }
+      },
+      "TSP26": {
+        "cells": 66,
+        "best_match": "b cell",
+        "own_score": 3.841,
+        "top3": {
+          "b cell": 3.841,
+          "plasma cell": 0.408,
+          "regulatory t cell": 0.114
+        }
+      },
+      "TSP27": {
+        "cells": 1443,
+        "best_match": "b cell",
+        "own_score": 3.256,
+        "top3": {
+          "b cell": 3.256,
+          "regulatory t cell": 0.043,
+          "tuft cell of colon": -0.027
+        }
+      }
+    },
+    "best4+ intestinal epithelial cell, human": {
+      "TSP2": {
+        "cells": 92,
+        "best_match": "best4+ intestinal epithelial cell, human",
+        "own_score": 2.507,
+        "top3": {
+          "best4+ intestinal epithelial cell, human": 2.507,
+          "enterocyte of epithelium of large intestine": 0.921,
+          "intestinal crypt stem cell of colon": 0.602
+        }
+      },
+      "TSP25": {
+        "cells": 140,
+        "best_match": "best4+ intestinal epithelial cell, human",
+        "own_score": 3.016,
+        "top3": {
+          "best4+ intestinal epithelial cell, human": 3.016,
+          "enterocyte of epithelium of large intestine": 0.876,
+          "large intestine goblet cell": 0.052
+        }
+      },
+      "TSP26": {
+        "cells": 593,
+        "best_match": "best4+ intestinal epithelial cell, human",
+        "own_score": 4.583,
+        "top3": {
+          "best4+ intestinal epithelial cell, human": 4.583,
+          "enterocyte of epithelium of large intestine": 1.509,
+          "enteroendocrine cell": -0.112
+        }
+      },
+      "TSP27": {
+        "cells": 265,
+        "best_match": "best4+ intestinal epithelial cell, human",
+        "own_score": 3.695,
+        "top3": {
+          "best4+ intestinal epithelial cell, human": 3.695,
+          "enterocyte of epithelium of large intestine": 1.302,
+          "large intestine goblet cell": -0.022
+        }
+      }
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "TSP14": {
+        "cells": 2541,
+        "best_match": "cd4-positive, alpha-beta t cell",
+        "own_score": 1.819,
+        "top3": {
+          "cd4-positive, alpha-beta t cell": 1.819,
+          "regulatory t cell": 0.731,
+          "cd8-positive, alpha-beta t cell": 0.699
+        }
+      },
+      "TSP26": {
+        "cells": 441,
+        "best_match": "regulatory t cell",
+        "own_score": 1.376,
+        "top3": {
+          "regulatory t cell": 1.538,
+          "cd4-positive, alpha-beta t cell": 1.376,
+          "cd8-positive, alpha-beta t cell": 0.352
+        }
+      },
+      "TSP27": {
+        "cells": 1482,
+        "best_match": "paneth cell of colon",
+        "own_score": 1.027,
+        "top3": {
+          "paneth cell of colon": 1.738,
+          "cd4-positive, alpha-beta t cell": 1.027,
+          "regulatory t cell": 0.601
+        }
+      }
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "TSP14": {
+        "cells": 2157,
+        "best_match": "cd8-positive, alpha-beta t cell",
+        "own_score": 2.945,
+        "top3": {
+          "cd8-positive, alpha-beta t cell": 2.945,
+          "cd4-positive, alpha-beta t cell": 1.401,
+          "gamma-delta t cell": 1.242
+        }
+      },
+      "TSP2": {
+        "cells": 20,
+        "best_match": "cd8-positive, alpha-beta t cell",
+        "own_score": 3.136,
+        "top3": {
+          "cd8-positive, alpha-beta t cell": 3.136,
+          "innate lymphoid cell": 1.539,
+          "cd4-positive, alpha-beta t cell": 1.44
+        }
+      },
+      "TSP26": {
+        "cells": 410,
+        "best_match": "cd8-positive, alpha-beta t cell",
+        "own_score": 3.841,
+        "top3": {
+          "cd8-positive, alpha-beta t cell": 3.841,
+          "cd4-positive, alpha-beta t cell": 1.514,
+          "gamma-delta t cell": 1.018
+        }
+      },
+      "TSP27": {
+        "cells": 373,
+        "best_match": "cd8-positive, alpha-beta t cell",
+        "own_score": 2.205,
+        "top3": {
+          "cd8-positive, alpha-beta t cell": 2.205,
+          "cd4-positive, alpha-beta t cell": 0.918,
+          "gamma-delta t cell": 0.757
+        }
+      }
+    },
+    "colon endothelial cell": {
+      "TSP14": {
+        "cells": 145,
+        "best_match": "colon endothelial cell",
+        "own_score": 2.555,
+        "top3": {
+          "colon endothelial cell": 2.555,
+          "fibroblast": 0.34,
+          "myofibroblast cell": 0.097
+        }
+      },
+      "TSP2": {
+        "cells": 26,
+        "best_match": "colon endothelial cell",
+        "own_score": 4.224,
+        "top3": {
+          "colon endothelial cell": 4.224,
+          "transit amplifying cell of colon": 0.302,
+          "monocyte": -0.141
+        }
+      },
+      "TSP26": {
+        "cells": 50,
+        "best_match": "colon endothelial cell",
+        "own_score": 4.537,
+        "top3": {
+          "colon endothelial cell": 4.537,
+          "myofibroblast cell": 1.056,
+          "enteroendocrine cell": -0.181
+        }
+      },
+      "TSP27": {
+        "cells": 119,
+        "best_match": "colon endothelial cell",
+        "own_score": 4.035,
+        "top3": {
+          "colon endothelial cell": 4.035,
+          "myofibroblast cell": 0.488,
+          "large intestine goblet cell": 0.137
+        }
+      }
+    },
+    "colon macrophage": {
+      "TSP14": {
+        "cells": 22,
+        "best_match": "myeloid leukocyte",
+        "own_score": 1.671,
+        "top3": {
+          "myeloid leukocyte": 2.665,
+          "colon macrophage": 1.671,
+          "cd4-positive, alpha-beta t cell": 0.871
+        }
+      },
+      "TSP26": {
+        "cells": 64,
+        "best_match": "colon macrophage",
+        "own_score": 3.833,
+        "top3": {
+          "colon macrophage": 3.833,
+          "myeloid leukocyte": 2.265,
+          "monocyte": 1.131
+        }
+      },
+      "TSP27": {
+        "cells": 240,
+        "best_match": "colon macrophage",
+        "own_score": 4.588,
+        "top3": {
+          "colon macrophage": 4.588,
+          "myeloid leukocyte": 2.358,
+          "monocyte": 1.594
+        }
+      }
+    },
+    "enterocyte of epithelium of large intestine": {
+      "TSP14": {
+        "cells": 522,
+        "best_match": "paneth cell of colon",
+        "own_score": 0.664,
+        "top3": {
+          "paneth cell of colon": 0.782,
+          "enterocyte of epithelium of large intestine": 0.664,
+          "best4+ intestinal epithelial cell, human": 0.164
+        }
+      },
+      "TSP2": {
+        "cells": 2620,
+        "best_match": "enterocyte of epithelium of large intestine",
+        "own_score": 2.478,
+        "top3": {
+          "enterocyte of epithelium of large intestine": 2.478,
+          "paneth cell of colon": 0.753,
+          "large intestine goblet cell": -0.039
+        }
+      },
+      "TSP25": {
+        "cells": 570,
+        "best_match": "enterocyte of epithelium of large intestine",
+        "own_score": 2.584,
+        "top3": {
+          "enterocyte of epithelium of large intestine": 2.584,
+          "large intestine goblet cell": 0.319,
+          "best4+ intestinal epithelial cell, human": 0.06
+        }
+      },
+      "TSP27": {
+        "cells": 852,
+        "best_match": "enterocyte of epithelium of large intestine",
+        "own_score": 3.409,
+        "top3": {
+          "enterocyte of epithelium of large intestine": 3.409,
+          "large intestine goblet cell": 0.239,
+          "best4+ intestinal epithelial cell, human": 0.087
+        }
+      }
+    },
+    "enteroendocrine cell": {
+      "TSP2": {
+        "cells": 49,
+        "best_match": "enteroendocrine cell",
+        "own_score": 7.624,
+        "top3": {
+          "enteroendocrine cell": 7.624,
+          "paneth cell of colon": 1.327,
+          "intestinal crypt stem cell of colon": 1.121
+        }
+      }
+    },
+    "enteroglial cell": {
+      "TSP14": {
+        "cells": 726,
+        "best_match": "enteroglial cell",
+        "own_score": 4.466,
+        "top3": {
+          "enteroglial cell": 4.466,
+          "innate lymphoid cell": 0.527,
+          "monocyte": 0.071
+        }
+      },
+      "TSP26": {
+        "cells": 32,
+        "best_match": "enteroglial cell",
+        "own_score": 3.763,
+        "top3": {
+          "enteroglial cell": 3.763,
+          "innate lymphoid cell": 0.897,
+          "fibroblast": 0.202
+        }
+      },
+      "TSP27": {
+        "cells": 88,
+        "best_match": "enteroglial cell",
+        "own_score": 5.527,
+        "top3": {
+          "enteroglial cell": 5.527,
+          "innate lymphoid cell": 1.173,
+          "plasma cell": 0.142
+        }
+      }
+    },
+    "fibroblast": {
+      "TSP14": {
+        "cells": 1064,
+        "best_match": "fibroblast",
+        "own_score": 2.809,
+        "top3": {
+          "fibroblast": 2.809,
+          "colon macrophage": 0.335,
+          "intestinal crypt stem cell of colon": 0.326
+        }
+      },
+      "TSP2": {
+        "cells": 121,
+        "best_match": "fibroblast",
+        "own_score": 4.142,
+        "top3": {
+          "fibroblast": 4.142,
+          "intestinal crypt stem cell of colon": 0.496,
+          "gamma-delta t cell": 0.41
+        }
+      },
+      "TSP25": {
+        "cells": 37,
+        "best_match": "fibroblast",
+        "own_score": 2.977,
+        "top3": {
+          "fibroblast": 2.977,
+          "intestinal crypt stem cell of colon": 0.653,
+          "colon macrophage": 0.234
+        }
+      },
+      "TSP26": {
+        "cells": 263,
+        "best_match": "fibroblast",
+        "own_score": 3.642,
+        "top3": {
+          "fibroblast": 3.642,
+          "intestinal crypt stem cell of colon": 0.625,
+          "colon macrophage": 0.536
+        }
+      },
+      "TSP27": {
+        "cells": 1112,
+        "best_match": "fibroblast",
+        "own_score": 3.311,
+        "top3": {
+          "fibroblast": 3.311,
+          "colon macrophage": 0.919,
+          "myofibroblast cell": 0.227
+        }
+      }
+    },
+    "gamma-delta t cell": {
+      "TSP14": {
+        "cells": 584,
+        "best_match": "gamma-delta t cell",
+        "own_score": 4.97,
+        "top3": {
+          "gamma-delta t cell": 4.97,
+          "cd8-positive, alpha-beta t cell": 2.261,
+          "cd4-positive, alpha-beta t cell": 1.481
+        }
+      },
+      "TSP26": {
+        "cells": 515,
+        "best_match": "gamma-delta t cell",
+        "own_score": 3.795,
+        "top3": {
+          "gamma-delta t cell": 3.795,
+          "cd8-positive, alpha-beta t cell": 2.783,
+          "cd4-positive, alpha-beta t cell": 1.443
+        }
+      },
+      "TSP27": {
+        "cells": 731,
+        "best_match": "gamma-delta t cell",
+        "own_score": 2.943,
+        "top3": {
+          "gamma-delta t cell": 2.943,
+          "cd8-positive, alpha-beta t cell": 1.457,
+          "innate lymphoid cell": 1.007
+        }
+      }
+    },
+    "innate lymphoid cell": {
+      "TSP27": {
+        "cells": 37,
+        "best_match": "innate lymphoid cell",
+        "own_score": 2.532,
+        "top3": {
+          "innate lymphoid cell": 2.532,
+          "gamma-delta t cell": 1.478,
+          "mast cell": 0.872
+        }
+      }
+    },
+    "intestinal crypt stem cell of colon": {
+      "TSP14": {
+        "cells": 26,
+        "best_match": "enterocyte of epithelium of large intestine",
+        "own_score": -0.436,
+        "top3": {
+          "enterocyte of epithelium of large intestine": 1.238,
+          "monocyte": -0.101,
+          "enteroendocrine cell": -0.103
+        }
+      },
+      "TSP2": {
+        "cells": 1307,
+        "best_match": "intestinal crypt stem cell of colon",
+        "own_score": 1.625,
+        "top3": {
+          "intestinal crypt stem cell of colon": 1.625,
+          "enterocyte of epithelium of large intestine": 0.722,
+          "transit amplifying cell of colon": 0.457
+        }
+      },
+      "TSP25": {
+        "cells": 346,
+        "best_match": "enterocyte of epithelium of large intestine",
+        "own_score": 0.121,
+        "top3": {
+          "enterocyte of epithelium of large intestine": 0.46,
+          "large intestine goblet cell": 0.277,
+          "intestinal crypt stem cell of colon": 0.121
+        }
+      },
+      "TSP27": {
+        "cells": 52,
+        "best_match": "transit amplifying cell of colon",
+        "own_score": 0.571,
+        "top3": {
+          "transit amplifying cell of colon": 1.317,
+          "enteroendocrine cell": 0.993,
+          "enterocyte of epithelium of large intestine": 0.859
+        }
+      }
+    },
+    "large intestine goblet cell": {
+      "TSP14": {
+        "cells": 596,
+        "best_match": "large intestine goblet cell",
+        "own_score": 3.074,
+        "top3": {
+          "large intestine goblet cell": 3.074,
+          "paneth cell of colon": 0.927,
+          "enteroendocrine cell": -0.126
+        }
+      },
+      "TSP2": {
+        "cells": 354,
+        "best_match": "large intestine goblet cell",
+        "own_score": 3.945,
+        "top3": {
+          "large intestine goblet cell": 3.945,
+          "paneth cell of colon": 1.542,
+          "enterocyte of epithelium of large intestine": -0.069
+        }
+      },
+      "TSP25": {
+        "cells": 206,
+        "best_match": "large intestine goblet cell",
+        "own_score": 3.957,
+        "top3": {
+          "large intestine goblet cell": 3.957,
+          "paneth cell of colon": 0.726,
+          "intestinal crypt stem cell of colon": 0.022
+        }
+      },
+      "TSP27": {
+        "cells": 401,
+        "best_match": "large intestine goblet cell",
+        "own_score": 3.076,
+        "top3": {
+          "large intestine goblet cell": 3.076,
+          "enterocyte of epithelium of large intestine": 1.177,
+          "paneth cell of colon": 0.889
+        }
+      }
+    },
+    "mast cell": {
+      "TSP14": {
+        "cells": 51,
+        "best_match": "mast cell",
+        "own_score": 4.219,
+        "top3": {
+          "mast cell": 4.219,
+          "innate lymphoid cell": 0.628,
+          "regulatory t cell": 0.26
+        }
+      },
+      "TSP26": {
+        "cells": 100,
+        "best_match": "mast cell",
+        "own_score": 4.362,
+        "top3": {
+          "mast cell": 4.362,
+          "innate lymphoid cell": 0.693,
+          "tuft cell of colon": -0.063
+        }
+      },
+      "TSP27": {
+        "cells": 233,
+        "best_match": "mast cell",
+        "own_score": 4.467,
+        "top3": {
+          "mast cell": 4.467,
+          "innate lymphoid cell": 0.869,
+          "plasma cell": 0.171
+        }
+      }
+    },
+    "monocyte": {
+      "TSP26": {
+        "cells": 21,
+        "best_match": "monocyte",
+        "own_score": 6.171,
+        "top3": {
+          "monocyte": 6.171,
+          "myeloid leukocyte": 4.013,
+          "colon macrophage": 0.98
+        }
+      }
+    },
+    "myeloid leukocyte": {
+      "TSP14": {
+        "cells": 20,
+        "best_match": "myeloid leukocyte",
+        "own_score": 2.532,
+        "top3": {
+          "myeloid leukocyte": 2.532,
+          "colon macrophage": 2.123,
+          "monocyte": 1.888
+        }
+      },
+      "TSP26": {
+        "cells": 117,
+        "best_match": "colon macrophage",
+        "own_score": 1.065,
+        "top3": {
+          "colon macrophage": 1.292,
+          "myeloid leukocyte": 1.065,
+          "monocyte": 0.595
+        }
+      },
+      "TSP27": {
+        "cells": 255,
+        "best_match": "colon macrophage",
+        "own_score": 1.124,
+        "top3": {
+          "colon macrophage": 1.756,
+          "myeloid leukocyte": 1.124,
+          "regulatory t cell": 0.562
+        }
+      }
+    },
+    "myofibroblast cell": {
+      "TSP14": {
+        "cells": 71,
+        "best_match": "myofibroblast cell",
+        "own_score": 7.951,
+        "top3": {
+          "myofibroblast cell": 7.951,
+          "intestinal crypt stem cell of colon": 0.496,
+          "fibroblast": 0.02
+        }
+      }
+    },
+    "paneth cell of colon": {
+      "TSP14": {
+        "cells": 128,
+        "best_match": "enterocyte of epithelium of large intestine",
+        "own_score": 0.424,
+        "top3": {
+          "enterocyte of epithelium of large intestine": 0.979,
+          "paneth cell of colon": 0.424,
+          "best4+ intestinal epithelial cell, human": 0.309
+        }
+      },
+      "TSP2": {
+        "cells": 45,
+        "best_match": "intestinal crypt stem cell of colon",
+        "own_score": 0.368,
+        "top3": {
+          "intestinal crypt stem cell of colon": 1.75,
+          "transit amplifying cell of colon": 1.738,
+          "enterocyte of epithelium of large intestine": 0.465
+        }
+      },
+      "TSP25": {
+        "cells": 44,
+        "best_match": "best4+ intestinal epithelial cell, human",
+        "own_score": -0.231,
+        "top3": {
+          "best4+ intestinal epithelial cell, human": 1.952,
+          "enterocyte of epithelium of large intestine": 0.294,
+          "intestinal crypt stem cell of colon": 0.21
+        }
+      }
+    },
+    "plasma cell": {
+      "TSP14": {
+        "cells": 468,
+        "best_match": "plasma cell",
+        "own_score": 4.188,
+        "top3": {
+          "plasma cell": 4.188,
+          "b cell": 0.63,
+          "tuft cell of colon": -0.157
+        }
+      },
+      "TSP26": {
+        "cells": 1098,
+        "best_match": "plasma cell",
+        "own_score": 4.839,
+        "top3": {
+          "plasma cell": 4.839,
+          "b cell": 0.673,
+          "enteroendocrine cell": -0.186
+        }
+      },
+      "TSP27": {
+        "cells": 1742,
+        "best_match": "plasma cell",
+        "own_score": 3.83,
+        "top3": {
+          "plasma cell": 3.83,
+          "b cell": 0.668,
+          "transit amplifying cell of colon": 0.023
+        }
+      }
+    },
+    "regulatory t cell": {
+      "TSP14": {
+        "cells": 189,
+        "best_match": "regulatory t cell",
+        "own_score": 3.513,
+        "top3": {
+          "regulatory t cell": 3.513,
+          "cd4-positive, alpha-beta t cell": 1.63,
+          "cd8-positive, alpha-beta t cell": 0.666
+        }
+      },
+      "TSP26": {
+        "cells": 32,
+        "best_match": "regulatory t cell",
+        "own_score": 4.701,
+        "top3": {
+          "regulatory t cell": 4.701,
+          "cd4-positive, alpha-beta t cell": 1.092,
+          "cd8-positive, alpha-beta t cell": 0.111
+        }
+      },
+      "TSP27": {
+        "cells": 411,
+        "best_match": "regulatory t cell",
+        "own_score": 2.813,
+        "top3": {
+          "regulatory t cell": 2.813,
+          "cd4-positive, alpha-beta t cell": 1.293,
+          "plasma cell": 0.113
+        }
+      }
+    },
+    "transit amplifying cell of colon": {
+      "TSP2": {
+        "cells": 127,
+        "best_match": "transit amplifying cell of colon",
+        "own_score": 6.336,
+        "top3": {
+          "transit amplifying cell of colon": 6.336,
+          "intestinal crypt stem cell of colon": 2.846,
+          "large intestine goblet cell": 0.074
+        }
+      },
+      "TSP25": {
+        "cells": 69,
+        "best_match": "paneth cell of colon",
+        "own_score": 1.972,
+        "top3": {
+          "paneth cell of colon": 2.544,
+          "transit amplifying cell of colon": 1.972,
+          "intestinal crypt stem cell of colon": 1.294
+        }
+      },
+      "TSP27": {
+        "cells": 40,
+        "best_match": "intestinal crypt stem cell of colon",
+        "own_score": 2.476,
+        "top3": {
+          "intestinal crypt stem cell of colon": 2.51,
+          "transit amplifying cell of colon": 2.476,
+          "enteroendocrine cell": 1.997
+        }
+      }
+    },
+    "tuft cell of colon": {
+      "TSP14": {
+        "cells": 70,
+        "best_match": "tuft cell of colon",
+        "own_score": 5.913,
+        "top3": {
+          "tuft cell of colon": 5.913,
+          "intestinal crypt stem cell of colon": 0.945,
+          "innate lymphoid cell": 0.722
+        }
+      },
+      "TSP2": {
+        "cells": 95,
+        "best_match": "tuft cell of colon",
+        "own_score": 5.118,
+        "top3": {
+          "tuft cell of colon": 5.118,
+          "mast cell": 0.506,
+          "innate lymphoid cell": 0.359
+        }
+      }
+    }
+  }
+}

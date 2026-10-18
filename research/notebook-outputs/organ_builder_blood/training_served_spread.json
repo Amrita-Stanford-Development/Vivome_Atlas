@@ -1,0 +1,222 @@
+{
+  "b cell": {
+    "validation_cells": 584,
+    "served_seed_recalls": [
+      99.0,
+      99.0,
+      99.0,
+      99.0,
+      99.0
+    ],
+    "served_spread": 0.0
+  },
+  "basophil": {
+    "validation_cells": 6,
+    "served_seed_recalls": [
+      66.7,
+      66.7,
+      66.7,
+      66.7,
+      66.7
+    ],
+    "served_spread": 0.0
+  },
+  "cd4-positive, alpha-beta t cell": {
+    "validation_cells": 735,
+    "served_seed_recalls": [
+      2.7,
+      85.7,
+      93.6,
+      92.2,
+      92.9
+    ],
+    "served_spread": 90.9
+  },
+  "cd8-positive, alpha-beta t cell": {
+    "validation_cells": 686,
+    "served_seed_recalls": [
+      29.6,
+      30.6,
+      50.0,
+      22.0,
+      43.3
+    ],
+    "served_spread": 28.0
+  },
+  "classical monocyte": {
+    "validation_cells": 1589,
+    "served_seed_recalls": [
+      77.3,
+      82.1,
+      76.0,
+      78.9,
+      79.8
+    ],
+    "served_spread": 6.1
+  },
+  "erythrocyte": {
+    "validation_cells": 1732,
+    "served_seed_recalls": [
+      99.8,
+      99.8,
+      99.8,
+      99.7,
+      99.6
+    ],
+    "served_spread": 0.2
+  },
+  "hematopoietic precursor cell": {
+    "validation_cells": 20,
+    "served_seed_recalls": [
+      70.0,
+      65.0,
+      65.0,
+      70.0,
+      65.0
+    ],
+    "served_spread": 5.0
+  },
+  "hematopoietic stem cell": {
+    "validation_cells": 10,
+    "served_seed_recalls": [
+      40.0,
+      50.0,
+      40.0,
+      30.0,
+      40.0
+    ],
+    "served_spread": 20.0
+  },
+  "intermediate monocyte": {
+    "validation_cells": 155,
+    "served_seed_recalls": [
+      54.8,
+      20.6,
+      58.1,
+      58.1,
+      63.2
+    ],
+    "served_spread": 42.6
+  },
+  "macrophage": {
+    "validation_cells": 184,
+    "served_seed_recalls": [
+      60.9,
+      59.2,
+      66.3,
+      56.5,
+      53.8
+    ],
+    "served_spread": 12.5
+  },
+  "mature nk t cell": {
+    "validation_cells": 30,
+    "served_seed_recalls": [
+      66.7,
+      70.0,
+      73.3,
+      70.0,
+      63.3
+    ],
+    "served_spread": 10.0
+  },
+  "monocyte": {
+    "validation_cells": 1440,
+    "served_seed_recalls": [
+      83.8,
+      84.9,
+      85.3,
+      83.8,
+      85.3
+    ],
+    "served_spread": 1.5
+  },
+  "naive thymus-derived cd4-positive, alpha-beta t cell": {
+    "validation_cells": 74,
+    "served_seed_recalls": [
+      100.0,
+      28.4,
+      0.0,
+      0.0,
+      2.7
+    ],
+    "served_spread": 100.0
+  },
+  "natural killer cell": {
+    "validation_cells": 459,
+    "served_seed_recalls": [
+      89.8,
+      90.0,
+      68.2,
+      95.0,
+      76.9
+    ],
+    "served_spread": 26.8
+  },
+  "neutrophil": {
+    "validation_cells": 4830,
+    "served_seed_recalls": [
+      99.4,
+      99.3,
+      99.2,
+      99.3,
+      99.5
+    ],
+    "served_spread": 0.2
+  },
+  "non-classical monocyte": {
+    "validation_cells": 53,
+    "served_seed_recalls": [
+      90.6,
+      88.7,
+      88.7,
+      90.6,
+      94.3
+    ],
+    "served_spread": 5.7
+  },
+  "plasma cell": {
+    "validation_cells": 122,
+    "served_seed_recalls": [
+      99.2,
+      99.2,
+      98.4,
+      99.2,
+      99.2
+    ],
+    "served_spread": 0.8
+  },
+  "plasmacytoid dendritic cell": {
+    "validation_cells": 4,
+    "served_seed_recalls": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "served_spread": 0.0
+  },
+  "platelet": {
+    "validation_cells": 66,
+    "served_seed_recalls": [
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0
+    ],
+    "served_spread": 0.0
+  },
+  "regulatory t cell": {
+    "validation_cells": 6,
+    "served_seed_recalls": [
+      0.0,
+      0.0,
+      0.0,
+      16.7,
+      0.0
+    ],
+    "served_spread": 16.7
+  }
+}

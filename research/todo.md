@@ -431,8 +431,13 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - tier C fetched (15 files, sha256s in `research/benchmark/public-sets-downloads.json`);
   - G3 worded against the deposits' layouts, before any colon model (`research/organ-references.md`, note of 2026-10-18).
   - Gate passed: Zheng and Kabatnik both have per-sample tables with labels, so no DIA-NN search is needed.
-- [ ] **Stage 1, a reference builder,** proven on blood (acceptance tiers 1 to 5).
-- [ ] **Stage 2, the colon bundle:** the label audit first, then gates G1, G3 and G4 (G2 reported); go or no go to the owner.
+- [x] **Stage 1, a reference builder,** proven on blood (`scripts/build_organ_reference.py`; run history, entry 49):
+  - tiers 1 to 4 pass, most exactly: labels, split, suites, genes, statistics, mask profiles, calibration, the best-guess layer, and v4.1's frozen responses through the new loader;
+  - tier 5: the retrained seed 1 matches on loss, balanced accuracy and calibration top-1, but fails the per-class 5-point check (served members differ by more than that among themselves on 11 of 20 classes); reported, not changed;
+  - modules are not reproduced (another scikit-learn); blood keeps its served ones.
+- [~] **Stage 2, the colon bundle:**
+  - label audit done (entry 50): Paneth dropped (no DEFA5/DEFA6 in any donor), 22 classes;
+  - then gates G1, G3 and G4 (G2 reported); go or no go to the owner.
 - [ ] **Stage 3, service and site:** the organ choice, with blood byte-identical. Waits for the beta sign-in work.
 - [ ] **Stage 4, the locked test scored once;** write-up; release 0.7.0 (deploys on the owner's approval).
 
@@ -639,3 +644,4 @@ because the held out classes were in training.
 | 2026-10-17 | **Manuscript figures and Methods illustrations** (owner's plan). Six figures and four Methods illustrations drawn from committed data by `scripts/build_figures.py` (SVG for the page, CSV of every number drawn with its source and field, PDF and print-resolution TIFF on request); each sits beside the result it supports. Figure 5 compares the served model with outside methods only. Site redeployed | `ae088e4` |
 | 2026-10-18 | **Track I, organ references: the large intestine first** (the owner's plan, `research/organ-references.md`). Colon data roles in `side-tests.md` amendment 7, from a 2026-10-17 search of PRIDE, ProteomeCentral, MassIVE, jPOST, iProX, PDC, HTAN and the literature (no human colon single-cell set with independent labels; the best are Deep Visual Proteomics pools). PXD052341 (Post 2025, normal colon) is locked as the colon's test, and its protocol is committed before any of its files is downloaded. PXD057118, PXD046999 and the polyp plate are development. Tier C in `scripts/fetch_public_sets.py`. Blood is unchanged | `bcaa0f2` |
 | 2026-10-18 | **Track I, Stage 0 done:** tier C fetched and checksummed. PXD052341 was downloaded only, never opened. G3 is worded against the development deposits as they are: Zheng's colorectal data are 18 immune pools, and Kabatnik's gate uses the one-search table of classes 1, 2 and 4 | this commit |
+| 2026-10-18 | **Track I, Stage 1: the organ reference builder, proven on blood** (run history, entry 49). `scripts/build_organ_reference.py` ports NB1, Build_Feature_Space, Reference_Projection_v3's modules, NB1d and NB2. On blood it reproduces labels, split, suites, genes, statistics, mask profiles, calibration and the best-guess layer, and v4.1's frozen responses through the new loader. Seed 1 retrained matches on loss, balanced accuracy and calibration top-1, but misses the per-class 5-point check, which the served members themselves miss. **Stage 2 begun:** the colon's label audit drops Paneth (entry 50); `research/notebooks/li_development.py` (G1, G3) committed before its run | this commit |

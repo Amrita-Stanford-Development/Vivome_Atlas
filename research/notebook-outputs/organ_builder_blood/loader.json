@@ -1,0 +1,78 @@
+{
+  "script_sha256": "4b0ce935ecc7fb4826754ff3730fc213dbc1761390060f812166405f7ece99c8",
+  "run": "2026-10-18T06:28:29",
+  "tier": "4 (bundle layout and loader)",
+  "checks": {
+    "served_files/scope2_default": true,
+    "served_files/scope2_restricted": true,
+    "served_files/pbmc240_default": true,
+    "served_files/pbmc240_restricted": true
+  },
+  "results": {
+    "served_files/scope2_default": {
+      "differences": 0,
+      "first": [],
+      "label_agreement": 100.0
+    },
+    "served_files/scope2_restricted": {
+      "differences": 0,
+      "first": [],
+      "label_agreement": 100.0
+    },
+    "served_files/pbmc240_default": {
+      "differences": 0,
+      "first": [],
+      "label_agreement": 100.0
+    },
+    "served_files/pbmc240_restricted": {
+      "differences": 0,
+      "first": [],
+      "label_agreement": 100.0
+    },
+    "rebuilt_files/scope2_default": {
+      "differences": 51,
+      "first": [
+        "response.calibration.applies_to: \"labelled RNA simulated uploads (the organ's calibration suite, validation split cells); approximate on protein\" != 'labelled RNA simulated uploads (NB1 calibration suite, validation split cells); approximate on protein'",
+        "response.cells[0].properties: keys differ",
+        "response.cells[1].properties: keys differ",
+        "response.cells[2].properties: keys differ",
+        "response.cells[3].properties: keys differ"
+      ],
+      "label_agreement": 100.0
+    },
+    "rebuilt_files/scope2_restricted": {
+      "differences": 51,
+      "first": [
+        "response.calibration.applies_to: \"labelled RNA simulated uploads (the organ's calibration suite, validation split cells); approximate on protein\" != 'labelled RNA simulated uploads (NB1 calibration suite, validation split cells); approximate on protein'",
+        "response.cells[0].properties: keys differ",
+        "response.cells[1].properties: keys differ",
+        "response.cells[2].properties: keys differ",
+        "response.cells[3].properties: keys differ"
+      ],
+      "label_agreement": 100.0
+    },
+    "rebuilt_files/pbmc240_default": {
+      "differences": 51,
+      "first": [
+        "response.calibration.applies_to: \"labelled RNA simulated uploads (the organ's calibration suite, validation split cells); approximate on protein\" != 'labelled RNA simulated uploads (NB1 calibration suite, validation split cells); approximate on protein'",
+        "response.cells[0].properties: keys differ",
+        "response.cells[1].properties: keys differ",
+        "response.cells[2].properties: keys differ",
+        "response.cells[3].properties: keys differ"
+      ],
+      "label_agreement": 100.0
+    },
+    "rebuilt_files/pbmc240_restricted": {
+      "differences": 51,
+      "first": [
+        "response.calibration.applies_to: \"labelled RNA simulated uploads (the organ's calibration suite, validation split cells); approximate on protein\" != 'labelled RNA simulated uploads (NB1 calibration suite, validation split cells); approximate on protein'",
+        "response.cells[0].properties: keys differ",
+        "response.cells[1].properties: keys differ",
+        "response.cells[2].properties: keys differ",
+        "response.cells[3].properties: keys differ"
+      ],
+      "label_agreement": 100.0
+    }
+  },
+  "passed": true
+}

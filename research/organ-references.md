@@ -108,6 +108,11 @@ ancestor.
 | stromal | endothelial | endothelial cell |
 | stromal | glial | enteroglial cell |
 
+**Note, 2026-10-18: the label audit drops Paneth.** "Paneth cell of
+colon" (217 cells) has no Paneth markers in any donor (DEFA5 and DEFA6 at
+0%). It is dropped, so the reference has **22 classes**; the secretory
+group is goblet, tuft and enteroendocrine (run history, entry 50).
+
 **Splits:**
 - train / validation / test: 65 / 15 / 20, stratified by class × donor;
 - leaving one donor out: a separate diagnosis. A class and donor pair counts

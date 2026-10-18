@@ -353,6 +353,20 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/build_v41_spec.py` — writes v4.1's spec (v4's with Phase A's locked rule and Phase C's verdict) and a MANIFEST pinning v4's data files
 - `scripts/build_v42_spec.py` — writes v4.2's protein class means (from Rieckmann's sorted proteomes, via `research/notebooks/rieckmann_feasibility.py`), its spec (evaluation pending, or passed with `--passed RECORD`) and its MANIFEST, which also pins v4's data files
 - `scripts/fetch_public_sets.py` — fetches the public datasets of `research/benchmark/side-tests.md` (each group's role: reference, development, held out as the internal test, or reserve) into `data/incoming/public_sets/`: processed outputs only, parallel resumable ranges, size and checksum verified, sha256 recorded
+- `scripts/build_organ_reference.py` — builds an organ's reference from its RNA atlas (research/organ-references.md, Stage 1): labels, gene space, statistics and split, missingness profiles, modules, suites, training, calibration, the best-guess layer and the bundle, each stage into the organ's Drive work folder; `accept`, `accept_loader` and `accept_training` check blood's build against the served blood reference
+- `scripts/organ_reference/__init__.py` — the organ reference builder's parts, one notebook step each
+- `scripts/organ_reference/data.py` — paths (drive: and repo: prefixes), organ files, the atlas's obs columns and RNA
+- `scripts/organ_reference/labels.py` — the reference's classes: merges, drops and the class rule, in NB1's order
+- `scripts/organ_reference/gene_space.py` — the gene space: every symbol a proteomics source detected, minus Ig/TCR segments, that the atlas measures (Build_Feature_Space's rule)
+- `scripts/organ_reference/profiles.py` — real missingness profiles for simulated uploads (NB1, section 3), and another organ's profiles carried over by RNA-abundance rank
+- `scripts/organ_reference/modules.py` — co-expression modules for module pooling (Reference_Projection_v3, cell 5)
+- `scripts/organ_reference/scenarios.py` — the split (NB1's, or within class and donor) and the simulated uploads (NB1's suites for blood, hierarchy scenarios for other organs)
+- `scripts/organ_reference/sim_generator.py` — T1 NB1's upload simulator, copied byte for byte from Drive (sha256 pinned by the builder's test)
+- `scripts/organ_reference/calibrate.py` — training (NB1d's recipe), calibration (NB2's, as v5_build runs it) and the class-balanced best-guess layer, with the organ's data passed in
+- `scripts/organ_reference/bundle.py` — an organ reference's files in one directory (v4.1's layout), its MANIFEST, blood's served files assembled the same way, and a loader building the service's own bundle objects
+- `scripts/organs/blood.json` — blood's organ file: reproduces the served reference's inputs (the builder's proof)
+- `scripts/organs/large_intestine.json` — the large intestine's organ file: Tabula Sapiens, the merges, the dropped Paneth class, the hierarchy, gene sources and profiles
+- `scripts/test_build_organ_reference.py` — the builder's parts on a tiny synthetic h5ad: labels, RNA reading, splits, suites, profiles, modules, and the simulator's sha256
 - `scripts/test_fetch_public_sets.py` — tests the table (roles, hosts, no raw files) and the downloader against a local range server: ranges, resume, size and checksum refusals
 - `research/benchmark/public-sets-downloads.json` — what `scripts/fetch_public_sets.py` fetched: each file's role, URL, size, sha256 and date
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
@@ -641,6 +655,17 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/hao_dc_centres/offset.json` — the offset design's probe and swap checks
 - `research/notebooks/ood_candidates.py` — Goal 2, Phase 2c: three out-of-distribution scores against the served one, tuned on scrambled cells and Furtwangler 2025, reported on development cell lines; NO GO
 - `research/notebook-outputs/ood_candidates/summary.json` — those scores' AUROCs, thresholds, false abstention and the foreign development sets, with v4.1's served answers for them
+- `research/notebooks/li_labels.py` — Track I, Stage 2: the large intestine's label audit (canonical markers and free annotations per class and donor), before any colon model
+- `research/notebook-outputs/li_labels/markers_by_class_donor.csv` — that audit: each marker's share expressing and mean, per class and donor
+- `research/notebook-outputs/li_labels/free_annotation_by_class_donor.csv` — that audit: the free annotations behind each class, per donor
+- `research/notebook-outputs/li_labels/audit.json` — that audit: the markers, and each class and donor's best-matching marker signature
+- `research/notebooks/li_development.py` — Track I, Stage 2: the colon reference's gates G1 (simulated RNA uploads through the service's code) and G3 (Kabatnik, Zheng and the polyp plate), scored once
+- `research/notebook-outputs/organ_builder_blood/data_stages.json` — the builder's blood acceptance, tiers 1 and 2: labels, split, suites, genes, hierarchy, RNA statistics and mask profiles against NB1's
+- `research/notebook-outputs/organ_builder_blood/calibration.json` — tier 3: the builder's calibration of the served members against NB2's spec
+- `research/notebook-outputs/organ_builder_blood/layer.json` — tier 2: the builder's class-balanced statistics, class means and centroids against v4's
+- `research/notebook-outputs/organ_builder_blood/loader.json` — tier 4: blood's served files in the organ layout, through the new loader, against v4.1's frozen responses
+- `research/notebook-outputs/organ_builder_blood/training.json` — tier 5: seed 1 retrained by the builder against the served seed 1
+- `research/notebook-outputs/organ_builder_blood/training_served_spread.json` — the five served members' own per-class validation recall, the spread tier 5's class check is read against
 - `research/notebooks/donor_heldout.py` — Goal 2, Phase 1.6: one member retrained with each third of the reference's donors held out, scored on unseen against seen donors' test cells (a diagnosis)
 - `research/notebook-outputs/donor_heldout/summary.json` — that diagnosis: per fold, balanced accuracy and per-class recall on unseen and seen donors
 - `research/benchmark/protocol-heldout.md` — the internal held-out test's protocol for Tian, PXD021882, PXD043355, PXD073250 and PXD046211, written before any of their files was opened, with its rehearsals

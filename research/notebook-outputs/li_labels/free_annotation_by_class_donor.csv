@@ -1,0 +1,124 @@
+class_name,donor,free_annotation,cells
+b cell,TSP14,b cell,514
+b cell,TSP2,b cell,30
+b cell,TSP25,b cell,16
+b cell,TSP26,b cell,66
+b cell,TSP27,b cell,1443
+"best4+ intestinal epithelial cell, human",TSP2,best4+ intestinal epithelial cell,92
+"best4+ intestinal epithelial cell, human",TSP25,best4+ intestinal epithelial cell,140
+"best4+ intestinal epithelial cell, human",TSP26,best4+ intestinal epithelial cell,593
+"best4+ intestinal epithelial cell, human",TSP27,best4+ intestinal epithelial cell,265
+"cd4-positive, alpha-beta t cell",TSP14,"cd4-positive, alpha-beta t cell",2532
+"cd4-positive, alpha-beta t cell",TSP14,"naive thymus-derived cd4-positive, alpha-beta t cell",9
+"cd4-positive, alpha-beta t cell",TSP2,"cd4-positive, alpha-beta t cell",3
+"cd4-positive, alpha-beta t cell",TSP25,"cd4-positive, alpha-beta t cell",1
+"cd4-positive, alpha-beta t cell",TSP26,"cd4-positive, alpha-beta t cell",436
+"cd4-positive, alpha-beta t cell",TSP26,"naive thymus-derived cd4-positive, alpha-beta t cell",5
+"cd4-positive, alpha-beta t cell",TSP27,"cd4-positive, alpha-beta t cell",1268
+"cd4-positive, alpha-beta t cell",TSP27,"naive thymus-derived cd4-positive, alpha-beta t cell",214
+"cd8-positive, alpha-beta t cell",TSP14,"cd8-positive, alpha-beta t cell",2157
+"cd8-positive, alpha-beta t cell",TSP2,"cd8-positive, alpha-beta t cell",20
+"cd8-positive, alpha-beta t cell",TSP25,"cd8-positive, alpha-beta t cell",2
+"cd8-positive, alpha-beta t cell",TSP26,"cd8-positive, alpha-beta t cell",410
+"cd8-positive, alpha-beta t cell",TSP27,"cd8-positive, alpha-beta t cell",373
+colon endothelial cell,TSP14,colon endothelial cell,145
+colon endothelial cell,TSP2,colon endothelial cell,26
+colon endothelial cell,TSP25,colon endothelial cell,8
+colon endothelial cell,TSP26,colon endothelial cell,50
+colon endothelial cell,TSP27,colon endothelial cell,119
+colon macrophage,TSP14,colon macrophage,22
+colon macrophage,TSP2,colon macrophage,1
+colon macrophage,TSP25,colon macrophage,1
+colon macrophage,TSP26,colon macrophage,64
+colon macrophage,TSP27,colon macrophage,240
+enterocyte of epithelium of large intestine,TSP14,enterocyte of epithelium of large intestine,522
+enterocyte of epithelium of large intestine,TSP2,crypt top colonocyte,874
+enterocyte of epithelium of large intestine,TSP2,enterocyte of epithelium of large intestine,1746
+enterocyte of epithelium of large intestine,TSP25,crypt top colonocyte,250
+enterocyte of epithelium of large intestine,TSP25,enterocyte of epithelium of large intestine,320
+enterocyte of epithelium of large intestine,TSP26,crypt top colonocyte,3
+enterocyte of epithelium of large intestine,TSP27,enterocyte of epithelium of large intestine,852
+enteroendocrine cell,TSP14,enterochromaffin-like cell,1
+enteroendocrine cell,TSP14,type l enteroendocrine cell,1
+enteroendocrine cell,TSP2,enterochromaffin-like cell,17
+enteroendocrine cell,TSP2,type l enteroendocrine cell,32
+enteroendocrine cell,TSP25,enterochromaffin-like cell,1
+enteroendocrine cell,TSP25,type l enteroendocrine cell,8
+enteroendocrine cell,TSP27,enterochromaffin-like cell,8
+enteroendocrine cell,TSP27,type l enteroendocrine cell,3
+enteroglial cell,TSP14,enteroglial cell,726
+enteroglial cell,TSP2,enteroglial cell,1
+enteroglial cell,TSP25,enteroglial cell,1
+enteroglial cell,TSP26,enteroglial cell,32
+enteroglial cell,TSP27,enteroglial cell,88
+fibroblast,TSP14,fibroblast,1064
+fibroblast,TSP2,fibroblast,121
+fibroblast,TSP25,fibroblast,37
+fibroblast,TSP26,fibroblast,263
+fibroblast,TSP27,fibroblast,1112
+gamma-delta t cell,TSP14,gamma-delta t cell,584
+gamma-delta t cell,TSP2,gamma-delta t cell,13
+gamma-delta t cell,TSP25,gamma-delta t cell,13
+gamma-delta t cell,TSP26,gamma-delta t cell,515
+gamma-delta t cell,TSP27,gamma-delta t cell,731
+innate lymphoid cell,TSP14,innate lymphoid cell,13
+innate lymphoid cell,TSP14,mast cell,1
+innate lymphoid cell,TSP14,natural killer cell,5
+innate lymphoid cell,TSP2,innate lymphoid cell,4
+innate lymphoid cell,TSP2,natural killer cell,4
+innate lymphoid cell,TSP25,innate lymphoid cell,1
+innate lymphoid cell,TSP26,innate lymphoid cell,8
+innate lymphoid cell,TSP26,natural killer cell,1
+innate lymphoid cell,TSP27,innate lymphoid cell,33
+innate lymphoid cell,TSP27,natural killer cell,4
+intestinal crypt stem cell of colon,TSP14,intestinal crypt stem cell of large intestine,26
+intestinal crypt stem cell of colon,TSP2,intestinal crypt stem cell of large intestine,1307
+intestinal crypt stem cell of colon,TSP25,intestinal crypt stem cell of large intestine,346
+intestinal crypt stem cell of colon,TSP26,intestinal crypt stem cell of large intestine,1
+intestinal crypt stem cell of colon,TSP27,intestinal crypt stem cell of large intestine,52
+large intestine goblet cell,TSP14,large intestine goblet cell,596
+large intestine goblet cell,TSP2,large intestine goblet cell,354
+large intestine goblet cell,TSP25,large intestine goblet cell,206
+large intestine goblet cell,TSP27,large intestine goblet cell,401
+mast cell,TSP14,mast cell,51
+mast cell,TSP25,mast cell,9
+mast cell,TSP26,mast cell,100
+mast cell,TSP27,mast cell,232
+mast cell,TSP27,plasma cell,1
+monocyte,TSP14,monocyte,15
+monocyte,TSP2,monocyte,1
+monocyte,TSP25,monocyte,15
+monocyte,TSP26,monocyte,21
+monocyte,TSP27,monocyte,14
+myeloid leukocyte,TSP14,"cd8-positive, alpha-beta t cell",1
+myeloid leukocyte,TSP14,dendritic cell,3
+myeloid leukocyte,TSP14,myeloid leukocyte,13
+myeloid leukocyte,TSP14,neutrophil,3
+myeloid leukocyte,TSP2,myeloid leukocyte,2
+myeloid leukocyte,TSP2,neutrophil,6
+myeloid leukocyte,TSP25,myeloid leukocyte,3
+myeloid leukocyte,TSP26,dendritic cell,6
+myeloid leukocyte,TSP26,myeloid leukocyte,111
+myeloid leukocyte,TSP27,dendritic cell,30
+myeloid leukocyte,TSP27,myeloid leukocyte,225
+myofibroblast cell,TSP14,myofibroblast cell and pericyte,71
+myofibroblast cell,TSP26,myofibroblast cell and pericyte,7
+myofibroblast cell,TSP27,myofibroblast cell and pericyte,4
+paneth cell of colon,TSP14,paneth cell of colon,128
+paneth cell of colon,TSP2,paneth cell of colon,45
+paneth cell of colon,TSP25,paneth cell of colon,44
+plasma cell,TSP14,plasma cell,468
+plasma cell,TSP26,plasma cell,1098
+plasma cell,TSP27,plasma cell,1742
+regulatory t cell,TSP14,regulatory t cell,189
+regulatory t cell,TSP2,regulatory t cell,1
+regulatory t cell,TSP26,regulatory t cell,32
+regulatory t cell,TSP27,regulatory t cell,411
+transit amplifying cell of colon,TSP14,transit amplifying cell of colon,1
+transit amplifying cell of colon,TSP2,transit amplifying cell of colon,127
+transit amplifying cell of colon,TSP25,transit amplifying cell of colon,69
+transit amplifying cell of colon,TSP27,transit amplifying cell of colon,40
+tuft cell of colon,TSP14,tuft cell of colon,70
+tuft cell of colon,TSP2,tuft cell of colon,95
+tuft cell of colon,TSP25,tuft cell of colon,3
+tuft cell of colon,TSP27,tuft cell of colon,10

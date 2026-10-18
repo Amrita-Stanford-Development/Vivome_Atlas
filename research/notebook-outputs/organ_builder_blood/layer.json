@@ -1,0 +1,22 @@
+{
+  "script_sha256": "0e8762a8aa4b6956baf94fe6eb00b1aa2b07d46ab915c50194e3943a2e5a147d",
+  "run": "2026-10-18T06:27:01",
+  "tier": "2 (the best-guess layer)",
+  "checks": {
+    "stats": true,
+    "class_means": true,
+    "centroids_cb": true
+  },
+  "largest_differences": {
+    "stats": 0.0,
+    "class_means": 0.0
+  },
+  "centroids_cb_min_cosine": {
+    "seed0": 0.9999998211860657,
+    "seed1": 0.9999998807907104,
+    "seed2": 0.9999998807907104,
+    "seed3": 0.9999998807907104,
+    "seed4": 0.9999998807907104
+  },
+  "passed": true
+}

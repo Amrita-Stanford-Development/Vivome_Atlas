@@ -1,0 +1,82 @@
+{
+  "script_sha256": "0e8762a8aa4b6956baf94fe6eb00b1aa2b07d46ab915c50194e3943a2e5a147d",
+  "run": "2026-10-18T06:27:01",
+  "tier": "3 (calibration of the served members)",
+  "checks": {
+    "temperature": true,
+    "qhat": true,
+    "ood_threshold": true,
+    "member_files": true
+  },
+  "detail": {
+    "temperature": {
+      "V2_batchgene_aug_seed0.pt": [
+        0.14060712576942577,
+        0.14060712576942577
+      ],
+      "V2_batchgene_aug_seed1.pt": [
+        0.15345534297879426,
+        0.15345534297879426
+      ],
+      "V2_batchgene_aug_seed2.pt": [
+        0.15345534297879426,
+        0.15345534297879426
+      ],
+      "V2_batchgene_aug_seed3.pt": [
+        0.15345534297879426,
+        0.15345534297879426
+      ],
+      "V2_batchgene_aug_seed4.pt": [
+        0.15345534297879426,
+        0.15345534297879426
+      ]
+    },
+    "qhat_within_one_rank": {
+      "marginal": true,
+      "b cell": true,
+      "cd4-positive, alpha-beta t cell": true,
+      "cd8-positive, alpha-beta t cell": true,
+      "classical monocyte": true,
+      "erythrocyte": true,
+      "hematopoietic precursor cell": true,
+      "intermediate monocyte": true,
+      "macrophage": true,
+      "mature nk t cell": true,
+      "monocyte": true,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": true,
+      "natural killer cell": true,
+      "neutrophil": true,
+      "non-classical monocyte": true,
+      "plasma cell": true,
+      "platelet": true
+    },
+    "ood": [
+      0.7789892554283142,
+      0.7789892554283142
+    ],
+    "member_files": {
+      "V2_batchgene_aug_seed0.pt": {
+        "latents_median": 1.0,
+        "centroids_min": 0.9999998807907104
+      },
+      "V2_batchgene_aug_seed1.pt": {
+        "latents_median": 1.0,
+        "centroids_min": 0.9999998807907104
+      },
+      "V2_batchgene_aug_seed2.pt": {
+        "latents_median": 1.0,
+        "centroids_min": 0.9999998807907104
+      },
+      "V2_batchgene_aug_seed3.pt": {
+        "latents_median": 1.0,
+        "centroids_min": 0.9999998807907104
+      },
+      "V2_batchgene_aug_seed4.pt": {
+        "latents_median": 1.0,
+        "centroids_min": 0.9999999403953552
+      }
+    }
+  },
+  "suite_top1_accuracy": 62.448,
+  "passed": true
+}

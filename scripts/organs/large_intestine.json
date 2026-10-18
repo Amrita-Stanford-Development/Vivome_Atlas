@@ -1,0 +1,286 @@
+{
+  "organ": "large_intestine",
+  "title": "Large intestine",
+  "notes": "research/organ-references.md: Tabula Sapiens Large Intestine only; classes kept with at least 50 cells and at least 5 cells in each of at least 2 donors, the rest merged into their nearest kept Cell Ontology ancestor. 'mature nk t cell' is merged into innate lymphoid cell because all 47 are annotated 'innate lymphoid cell' (free_annotation); naive CD4 T into CD4 T because 214 of its 228 cells are one donor's (TSP27). The label audit (research/notebooks/li_labels.py, 2026-10-18) dropped 'paneth cell of colon': no donor's cells express the Paneth markers DEFA5 or DEFA6 (0%), and they resemble best4+ cells (TSP25), stem and TA cells (TSP2) or mixed colonocytes (TSP14).",
+  "rna": "drive:scRNA-seq/Large_Intestine_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+  "label_column": "cell_ontology_class",
+  "donor_column": "donor",
+  "merge": {
+    "enterochromaffin-like cell": "enteroendocrine cell",
+    "type l enteroendocrine cell": "enteroendocrine cell",
+    "natural killer cell": "innate lymphoid cell",
+    "mature nk t cell": "innate lymphoid cell",
+    "myeloid dendritic cell": "myeloid leukocyte",
+    "neutrophil": "myeloid leukocyte",
+    "naive thymus-derived cd4-positive, alpha-beta t cell": "cd4-positive, alpha-beta t cell"
+  },
+  "class_rule": {
+    "min_cells": 50,
+    "min_cells_per_donor": 5,
+    "min_donors": 2
+  },
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "best4+ intestinal epithelial cell, human": {
+      "group": "absorptive",
+      "lineage": "epithelial"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "colon endothelial cell": {
+      "group": "endothelial",
+      "lineage": "stromal"
+    },
+    "colon macrophage": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "enterocyte of epithelium of large intestine": {
+      "group": "absorptive",
+      "lineage": "epithelial"
+    },
+    "enteroendocrine cell": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    },
+    "enteroglial cell": {
+      "group": "glial",
+      "lineage": "stromal"
+    },
+    "fibroblast": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "gamma-delta t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "innate lymphoid cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "intestinal crypt stem cell of colon": {
+      "group": "stem/TA",
+      "lineage": "epithelial"
+    },
+    "large intestine goblet cell": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    },
+    "mast cell": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "monocyte": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "myeloid leukocyte": {
+      "group": "myeloid",
+      "lineage": "immune"
+    },
+    "myofibroblast cell": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "regulatory t cell": {
+      "group": "T cell/ILC",
+      "lineage": "immune"
+    },
+    "transit amplifying cell of colon": {
+      "group": "stem/TA",
+      "lineage": "epithelial"
+    },
+    "tuft cell of colon": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    }
+  },
+  "split": {
+    "stratify": "class_donor",
+    "test": 0.2,
+    "val": 0.15,
+    "seed": 0
+  },
+  "gene_space": {
+    "sources": [
+      {
+        "name": "bubis_hela",
+        "path": "drive:scProteomics/Protein_JB.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_lung",
+        "path": "drive:scProteomics/20240701_100039_MM_run62p2_revision_50SPD_25cmIO_all_MEpergroup_Proteins.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_candidates",
+        "path": "drive:scProteomics/Candidates.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "pbmc240",
+        "path": "drive:scProteomics/PBMC_240cells_proteins.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "scope2",
+        "path": "drive:scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+        "read": "header"
+      },
+      {
+        "name": "fulcher",
+        "path": "drive:scProteomics/abundance_protein_MD.tsv",
+        "read": "column",
+        "column": "Gene"
+      },
+      {
+        "name": "zheng2025",
+        "path": "repo:data/incoming/public_sets/Zheng2025_PXD057118/ColorectalCancer_pg_matrix_Macrophages.txt",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "zheng2025",
+        "path": "repo:data/incoming/public_sets/Zheng2025_PXD057118/Colorectal_Cancer_pg_matrix_Cytotoxic_T_Cells.txt",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "zheng2025",
+        "path": "repo:data/incoming/public_sets/Zheng2025_PXD057118/Colorectal_Cancer_pg_matrix_Helper_T_Cells.txt",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "kabatnik2024",
+        "path": "repo:data/incoming/public_sets/Kabatnik2024_PXD046999/C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "kabatnik2024",
+        "path": "repo:data/incoming/public_sets/Kabatnik2024_PXD046999/C_HDA_NMN-study_class1_MBR.pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "kabatnik2024",
+        "path": "repo:data/incoming/public_sets/Kabatnik2024_PXD046999/C_HDA_NMN-study_class4_MBR.pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "kabatnik2024",
+        "path": "repo:data/incoming/public_sets/Kabatnik2024_PXD046999/CRA_revision_timstofultra_specificcohort_DIANN181_libraryfree.pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "kabatnik2024",
+        "path": "repo:data/incoming/public_sets/Kabatnik2024_PXD046999/CAA__MBR_LibraryFree_DIANN181.pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "polyp_plate",
+        "path": "drive:scProteomics/Protein_polyps_p2.h5ad",
+        "read": "h5ad_var"
+      }
+    ]
+  },
+  "mask_profiles": [
+    {
+      "name": "polyp",
+      "read": "h5ad_cells",
+      "path": "drive:scProteomics/Protein_polyps_p2.h5ad",
+      "gene_set": "detected"
+    },
+    {
+      "name": "scope2_rank",
+      "read": "rank_transfer",
+      "from_organ": "blood",
+      "from_profile": "scope2"
+    },
+    {
+      "name": "pbmc240_rank",
+      "read": "rank_transfer",
+      "from_organ": "blood",
+      "from_profile": "pbmc240"
+    },
+    {
+      "name": "fulcher_rank",
+      "read": "rank_transfer",
+      "from_organ": "blood",
+      "from_profile": "fulcher"
+    }
+  ],
+  "modules": {
+    "target_size": 18,
+    "cells": 15000,
+    "pca": 64,
+    "seed": 0
+  },
+  "suites": {
+    "scenarios": "hierarchy",
+    "n_uploads": 240,
+    "calib_seed": 11,
+    "eval_seed": 22,
+    "profiles": [
+      "polyp",
+      "scope2_rank",
+      "pbmc240_rank",
+      "fulcher_rank",
+      "random_0.15",
+      "random_0.25",
+      "random_0.35"
+    ]
+  },
+  "train": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hidden": [
+      1024,
+      512
+    ],
+    "dropout": 0.1,
+    "latent": 128
+  },
+  "calibration": {
+    "alpha": 0.1,
+    "min_n": 50,
+    "knn": 15
+  },
+  "drop": [
+    "paneth cell of colon"
+  ],
+  "dropped_hierarchy": {
+    "paneth cell of colon": {
+      "group": "secretory",
+      "lineage": "epithelial"
+    }
+  }
+}
