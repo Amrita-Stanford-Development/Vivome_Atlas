@@ -1,4 +1,76 @@
 {
+  "Kabatnik2024_PXD046999/C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv": {
+    "bytes": 953149,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "24bfe3712a6bd49c5449f164e1993cd73ef4427f3032a6fa9d6556e52a02f064",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv"
+  },
+  "Kabatnik2024_PXD046999/CAA__MBR_LibraryFree_DIANN181.pg_matrix.tsv": {
+    "bytes": 1389791,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "6a542181c85e286b116380c656666e3c52f78894bf46f84a1bbdf42ebfb42dcd",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/CAA__MBR_LibraryFree_DIANN181.pg_matrix.tsv"
+  },
+  "Kabatnik2024_PXD046999/CRA_revision_timstofultra_specificcohort_DIANN181_libraryfree.pg_matrix.tsv": {
+    "bytes": 2222897,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "abf1ca748b7e6443725e8498a88a8fcc684d98a52edfed3000145ef12972e299",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/CRA_revision_timstofultra_specificcohort_DIANN181_libraryfree.pg_matrix.tsv"
+  },
+  "Kabatnik2024_PXD046999/C_HDA_NMN-study_class1_MBR.pg_matrix.tsv": {
+    "bytes": 1050746,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "6153557996c5f89e2ef010c83e36d6cf23e506d50040de900e9dd0547f148875",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/C_HDA_NMN-study_class1_MBR.pg_matrix.tsv"
+  },
+  "Kabatnik2024_PXD046999/C_HDA_NMN-study_class4_MBR.pg_matrix.tsv": {
+    "bytes": 795041,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "ce66ea05f767449aaf76fc1b4cd941138f29a8b063db9be833be225af57a798b",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/C_HDA_NMN-study_class4_MBR.pg_matrix.tsv"
+  },
+  "Kabatnik2024_PXD046999/Metadata_DVPonCRA_Kabatnik_et_al.csv": {
+    "bytes": 4477,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "a37a6bfcf0f962b4dcf5a489b4cdcf3afc49f605c8be07bf9485f1724ba9d937",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/Metadata_DVPonCRA_Kabatnik_et_al.csv"
+  },
+  "Kabatnik2024_PXD046999/Metadata_DVPonCRA_Kabatnik_et_al_revision_updated.csv": {
+    "bytes": 5350,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "cbee7fd971ab6156605ce2484326b87da43c7647d9ddd9f36f330532d2329295",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/Metadata_DVPonCRA_Kabatnik_et_al_revision_updated.csv"
+  },
+  "Kabatnik2024_PXD046999/PXD046999_community_annotated.sdrf.tsv": {
+    "bytes": 10274,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "61f7399bd21bbff94ad7eea347b10b2ce7d2fe28d8b4370bff9571db1a7dfb15",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD046999/PXD046999_community_annotated.sdrf.tsv"
+  },
   "Khoury2026_bulk_sorted/Bulk_R1_LibGen_Global.zip": {
     "bytes": 577290773,
     "fetched": "2026-10-14",
@@ -359,6 +431,24 @@
     "tier": "A",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/09/PXD077946/diann_singlecell.zip"
   },
+  "Post2025_PXD052341/DVP_data.pg_matrix.tsv": {
+    "bytes": 8222603,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "held_out",
+    "sha256": "18deaf7d29c96ead6bf7cf761b3b34835b2880fc5102b02b0a61af530888a1fc",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/09/PXD052341/DVP_data.pg_matrix.tsv"
+  },
+  "Post2025_PXD052341/Post_et_al_organoid_DVP_metadata.tsv": {
+    "bytes": 71245,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "held_out",
+    "sha256": "a2ae3afaf852bd76d13041d1037e0b510c9423584fd254a06ad1b968df9f8946",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/09/PXD052341/Post_et_al_organoid_DVP_metadata.tsv"
+  },
   "Rieckmann2017_PXD004352/PXD004352_community_annotated.sdrf.tsv": {
     "bytes": 468141,
     "fetched": "2026-10-14",
@@ -394,5 +484,50 @@
     "sha256": "1ae01a63bdd61e5f533a1bf00fce8ac3404c43f613f53a60e7f3322927278d92",
     "tier": "A",
     "url": "ftp://massive-ftp.ucsd.edu/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsMMsample.xlsx"
+  },
+  "Zheng2025_PXD057118/ColorectalCancer_pg_matrix_Macrophages.txt": {
+    "bytes": 755998,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "af8cb0cac4946e497530456606becaf3b06bfe07096370f05d63b1563cec5f23",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/ColorectalCancer_pg_matrix_Macrophages.txt"
+  },
+  "Zheng2025_PXD057118/Colorectal_Cancer_pg_matrix_Cytotoxic_T_Cells.txt": {
+    "bytes": 757197,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "9a8e43e74add96a84c334384810562f3d980e6b409e313db4fde9cd716f6bcfb",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Colorectal_Cancer_pg_matrix_Cytotoxic_T_Cells.txt"
+  },
+  "Zheng2025_PXD057118/Colorectal_Cancer_pg_matrix_Helper_T_Cells.txt": {
+    "bytes": 735134,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "0cd2e578ce6b522dfc451f08030970de92a78e524d073ebed96d2dcad491b661",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Colorectal_Cancer_pg_matrix_Helper_T_Cells.txt"
+  },
+  "Zheng2025_PXD057118/Metadata.xlsx": {
+    "bytes": 10304,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "f10d3fd825e83f71d2939d1a9ef85a9cf9e192bcf8bf89d6dd0f09cc15749566",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/Metadata.xlsx"
+  },
+  "Zheng2025_PXD057118/PXD057118_community_annotated.sdrf.tsv": {
+    "bytes": 107575,
+    "fetched": "2026-10-18",
+    "published_check": null,
+    "role": "development",
+    "sha256": "54fe86c62d354ed20dcbf64f3273585c5b91be566223d37bbae7959a95f862c1",
+    "tier": "C",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/12/PXD057118/PXD057118_community_annotated.sdrf.tsv"
   }
 }

@@ -267,6 +267,23 @@ and goes to the owner. No setting is tuned to pass a gate.
   colon is built, never after.
 - **G4:** the locked test's rehearsal runs end to end on RNA pseudobulk.
 
+**Note, 2026-10-18: G3 against the deposits as fetched.** Fixed before any
+colon model exists.
+- **Zheng (PXD057118).** Its colorectal data are immune cells only: 18
+  pools, each a macrophage, CD8 T or CD4 T pool, 3 from lamina propria and 3
+  from tumour epithelium. The three tables share one protein list (5,295
+  groups), so they are read as one upload. The service needs at least 20
+  rows, so the development script runs the pipeline's functions directly.
+  The gate stays T/ILC against myeloid, with CD8 T against CD4 T reported.
+- **Kabatnik (PXD046999).** The deposit's metadata defines:
+  - class 1: CDX2-high epithelium;
+  - class 2: CDX2-medium epithelium;
+  - class 4: CDX2-negative stroma ("class 3" in the paper's own wording).
+
+  The gate's input is `C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv`: all
+  three classes from one search, 27 pools. The class 1 and class 4 tables
+  were searched apart, and are reported only.
+
 When all gates pass, an amendment to the protocol freezes the bundle's
 sha256s.
 

@@ -426,11 +426,11 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - the polyp plate is used fully;
   - DIA-NN searches are allowed for raw-only deposits.
 
-- [~] **Stage 0, roles and the locked protocol:**
-  - amendment 7;
-  - tier C in `scripts/fetch_public_sets.py`;
-  - `research/benchmark/protocol-colon-pxd052341.md`, written before any of its files was downloaded;
-  - then the development sets fetched.
+- [x] **Stage 0, roles and the locked protocol:**
+  - amendment 7, tier C and the protocol, committed before any of the set's files was downloaded (`bcaa0f2`);
+  - tier C fetched (15 files, sha256s in `research/benchmark/public-sets-downloads.json`);
+  - G3 worded against the deposits' layouts, before any colon model (`research/organ-references.md`, note of 2026-10-18).
+  - Gate passed: Zheng and Kabatnik both have per-sample tables with labels, so no DIA-NN search is needed.
 - [ ] **Stage 1, a reference builder,** proven on blood (acceptance tiers 1 to 5).
 - [ ] **Stage 2, the colon bundle:** the label audit first, then gates G1, G3 and G4 (G2 reported); go or no go to the owner.
 - [ ] **Stage 3, service and site:** the organ choice, with blood byte-identical. Waits for the beta sign-in work.
@@ -637,4 +637,5 @@ because the held out classes were in training.
 | 2026-10-17 | **Atlas page: a breathing cloud, glowing beads, Play by itself** (owner's requests). The file waits beside the atlas as an irregular cloud that breathes, then pours into the map; landed cells are beads in a pulsing halo of their colour; once they land, the camera flies to the first cell and Play starts (not after the visitor took the camera, nor under reduced motion). Site redeployed | `b0f0359` |
 | 2026-10-17 | **Beta, step 1: the Versions page goes; the service answers only through the site** (the owner's plan). /versions redirects to /manuscript. The site's /api door (a Pages Function, `deploy/pages/api-proxy.js`) forwards to Cloud Run with a secret; the service (revision `vivome-atlas-00005-njv`) answers 403 without it and takes at most 100 MB per upload. `check_space.py`: refused without the secret, 238 cells, 0 differ. Site redeployed. Next: the invited-only sign-in (Cloudflare Access) | `6ce5696` |
 | 2026-10-17 | **Manuscript figures and Methods illustrations** (owner's plan). Six figures and four Methods illustrations drawn from committed data by `scripts/build_figures.py` (SVG for the page, CSV of every number drawn with its source and field, PDF and print-resolution TIFF on request); each sits beside the result it supports. Figure 5 compares the served model with outside methods only. Site redeployed | `ae088e4` |
-| 2026-10-18 | **Track I, organ references: the large intestine first** (the owner's plan, `research/organ-references.md`). Colon data roles in `side-tests.md` amendment 7, from a 2026-10-17 search of PRIDE, ProteomeCentral, MassIVE, jPOST, iProX, PDC, HTAN and the literature (no human colon single-cell set with independent labels; the best are Deep Visual Proteomics pools). PXD052341 (Post 2025, normal colon) is locked as the colon's test, and its protocol is committed before any of its files is downloaded. PXD057118, PXD046999 and the polyp plate are development. Tier C in `scripts/fetch_public_sets.py`. Blood is unchanged | this commit |
+| 2026-10-18 | **Track I, organ references: the large intestine first** (the owner's plan, `research/organ-references.md`). Colon data roles in `side-tests.md` amendment 7, from a 2026-10-17 search of PRIDE, ProteomeCentral, MassIVE, jPOST, iProX, PDC, HTAN and the literature (no human colon single-cell set with independent labels; the best are Deep Visual Proteomics pools). PXD052341 (Post 2025, normal colon) is locked as the colon's test, and its protocol is committed before any of its files is downloaded. PXD057118, PXD046999 and the polyp plate are development. Tier C in `scripts/fetch_public_sets.py`. Blood is unchanged | `bcaa0f2` |
+| 2026-10-18 | **Track I, Stage 0 done:** tier C fetched and checksummed. PXD052341 was downloaded only, never opened. G3 is worded against the development deposits as they are: Zheng's colorectal data are 18 immune pools, and Kabatnik's gate uses the one-search table of classes 1, 2 and 4 | this commit |
