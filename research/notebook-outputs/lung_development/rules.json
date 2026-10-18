@@ -1,0 +1,15 @@
+{
+  "script_sha256": "a5854ecf83c8a26f6420133a30c2a6c673760c0157b849961092ef1ad32877fb",
+  "started": "2026-10-18T08:37:39",
+  "gates": {
+    "g1_correct_when_committed_min": 90.0,
+    "g1_committed_min": 75.0,
+    "g1_coverage_min": 85.0,
+    "g1_false_abstention_max": 2.0,
+    "g3_bpd_auroc_min": 0.8,
+    "g3_hpa_at2_auroc_min": 0.8,
+    "g3_ipf_auroc_min": 0.7
+  },
+  "bundle_manifest_sha256": "914744a451f5da822aad194e706abd15144c6c6af3837e26de5bc01605b16777",
+  "organ_file_sha256": "ce80d8cb3be1bf8cff2e680150d991d573ae9ac179efbe2ea8bc90460a35bb1e"
+}

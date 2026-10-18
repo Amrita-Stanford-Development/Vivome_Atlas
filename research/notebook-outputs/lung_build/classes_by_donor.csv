@@ -1,0 +1,30 @@
+class_name,TSP1,TSP14,TSP2,TSP25,all
+adventitial cell,82,89,269,141,581
+alveolar type 2 fibroblast cell,211,118,183,601,1113
+b cell,195,10,197,261,663
+basal cell,66,119,2400,1430,4015
+basophil,494,75,291,462,1322
+bronchial smooth muscle cell,38,50,46,86,220
+capillary endothelial cell,591,1283,3568,1801,7243
+"cd4-positive, alpha-beta t cell",307,304,951,562,2124
+"cd8-positive, alpha-beta t cell",460,32,1090,316,1898
+classical monocyte,519,240,647,163,1569
+club cell,61,143,1210,333,1747
+endothelial cell of artery,323,561,416,454,1754
+endothelial cell of lymphatic vessel,39,68,53,155,315
+intermediate monocyte,220,610,1643,312,2785
+lung ciliated cell,327,219,381,282,1209
+macrophage,10094,885,4170,1337,16486
+mature nk t cell,77,3,49,34,163
+monocyte,164,33,290,19,506
+natural killer cell,115,29,547,328,1019
+neutrophil,8,290,37,36,371
+non-classical monocyte,98,48,368,13,527
+pericyte,85,45,386,223,739
+plasma cell,33,6,96,13,148
+respiratory goblet cell,244,68,491,237,1040
+type i pneumocyte,166,2802,42,106,3116
+type ii pneumocyte,1299,4689,4133,1473,11594
+vascular associated smooth muscle cell,45,1,27,58,131
+vein endothelial cell,57,177,631,471,1336
+all,16418,12997,24612,11707,65734

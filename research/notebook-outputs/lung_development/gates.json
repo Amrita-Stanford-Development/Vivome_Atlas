@@ -1,0 +1,35 @@
+{
+  "finished": "2026-10-18T08:51:42",
+  "gates": {
+    "G1 correct when committed": {
+      "value": 97.41,
+      "pass": true
+    },
+    "G1 committed": {
+      "value": 73.39,
+      "pass": false
+    },
+    "G1 coverage": {
+      "value": 90.34,
+      "pass": true
+    },
+    "G1 false abstention": {
+      "value": 0.01,
+      "pass": true
+    },
+    "G3 LungMAP BPD AUROC": {
+      "value": 0.62,
+      "pass": false
+    },
+    "G3 HPA AT2 over AT1 AUROC": {
+      "value": 1.0,
+      "pass": true
+    },
+    "G3 IPF fibroblastic foci AUROC": {
+      "value": 0.8846,
+      "pass": true
+    }
+  },
+  "all_pass": false,
+  "seconds": 843
+}

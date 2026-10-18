@@ -2359,6 +2359,60 @@ with its markers in the organ file):
   arteries, club-like goblet cells);
 - nothing more is dropped.
 
+### 55. The lung reference's gates: NO GO as built, narrowly (Track I), 2026-10-18
+
+**Why:** the lung's gates were fixed before any lung model
+(`research/organ-references.md`, "Lung"): G1, G2 and G4 are the colon's, and
+G3 uses its own development data.
+
+**The model:**
+- 28 classes and 12,614 genes;
+- members at 72 to 75% validation balanced accuracy;
+- calibration top-1 60.5%;
+- marginal conformal threshold 0.961.
+
+**G1** (`research/notebooks/lung_development.py`; 240 uploads, 79,807 cells):
+- **committed 73.4%: miss** (bar 75%);
+- correct when committed 97.4%, coverage 90.3% and false abstention 0.01%,
+  all passing.
+- **By upload kind:**
+
+  | Upload | Committed | Best guess |
+  |---|---|---|
+  | whole tissue | 99.1% | 81.9% |
+  | eight classes | 98.0% | 79.2% |
+  | one lineage | 55.7% | 49.9% |
+  | one class | 31.6% | 24.5% |
+
+**G3:**
+- **MSV000094373: AUROC 0.62, miss.** Every control donor's epithelial pool
+  is called macrophage (4 of 4). The BPD donors' epithelial pools are mostly
+  called epithelial, and 7 of 10 endothelial pools are right.
+- **The Protein Atlas: AT2 over AT1, AUROC 1.0, pass.** Every AT1 pool's
+  argmax lineage is immune.
+- **PXD029341: fibroblastic foci over alveoli, AUROC 0.88, pass.** Mean
+  P(stromal) is 0.60 in foci, 0.33 in mature scar and 0.10 in alveoli.
+
+**G4:** passed. The rehearsal on RNA pseudobulk written as a MaxQuant table
+gave 32 pools and 100%.
+
+**G2** (`research/notebooks/organ_donor_heldout.py lung fulcher_rank`; a
+diagnosis):
+
+| | Unseen donor | Seen donors |
+|---|---|---|
+| Class balanced accuracy | 68.4 | 72.1 |
+| Group recall | 94.2 | 98.3 |
+| Lineage recall | 97.9 | 99.7 |
+
+The gap is 3.7 points (colon 12.5, blood 9.8).
+
+**Verdict:** NO GO as built. Nothing was tuned. MSV000094189 stays sealed
+(`side-tests.md`, amendment 10), and the decision goes to the owner.
+
+**Note:** the lung is far closer than the colon. The colon's cause, narrow
+uploads, shows here in milder form.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

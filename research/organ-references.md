@@ -4,10 +4,14 @@ Planned 2026-10-17 and 2026-10-18 with the owner; Track I in
 `research/todo.md`. Where this conflicts with older plans, this file wins for
 organ work.
 
-**Status, 2026-10-18: the large intestine is closed, NO GO as built.** The
-owner's decision: document every failure and move to the next organ. The
-section below lists them all. The rest of this file is the plan as it was
-run.
+**Status, 2026-10-18:**
+- **The large intestine is closed, NO GO as built.** The owner's decision:
+  document every failure and move to the next organ. "The large intestine's
+  outcome" lists them all.
+- **The lung missed narrowly, NO GO as built.** G1 committed 73.4% against
+  75%, and G3's LungMAP check gave AUROC 0.62 against 0.8. See "The lung's
+  outcome".
+- The rest of this file is the plan as it was run.
 
 ## Why
 
@@ -122,6 +126,66 @@ G3 uses the lung's development data:
 
 The wording may be fixed to a deposit's real layout by a dated note before
 the lung model is built, never after.
+
+**Note, 2026-10-18: G3 against the deposits as fetched,** before the lung
+model:
+- MSV000094373's 20 pools are named `_Epi_` and `_Endo_`;
+- the Protein Atlas keeps AT1 and AT2 apart (5 pools each), so the AUROC
+  form holds;
+- PXD029341's 25 regions are named `FF`, `MtrScr` and `NmlAlv`/`NmAlv`.
+
+The lung's gene space takes the Protein Atlas proteins only where they are
+detected in pools of cell types this reference holds (its table lists every
+gene): 12,614 genes.
+
+### The lung's outcome (2026-10-18): NO GO as built, narrowly
+
+Run history, entry 55. Records: `research/notebook-outputs/lung_build/`,
+`lung_development/`, `lung_donor_heldout/`.
+
+**The model:**
+- 28 classes and 12,614 genes;
+- five members at 72 to 75% validation balanced accuracy (colon 63%, blood
+  66%);
+- calibration top-1 60.5%;
+- marginal conformal threshold 0.961 (colon 0.987, blood 0.91).
+
+| Gate | Result | Bar | Verdict |
+|---|---|---|---|
+| G1, simulated lung uploads: committed | 73.4% | ≥ 75% | **miss** |
+| G1: correct when committed | 97.4% | ≥ 90% | pass |
+| G1: coverage | 90.3% | ≥ 85% | pass |
+| G1: false abstention | 0.01% | ≤ 2% | pass |
+| G3, MSV000094373: epithelial over endothelial pools | AUROC 0.62 | ≥ 0.8 | **miss** |
+| G3, the Protein Atlas: AT2 over AT1 pools | AUROC 1.0 | ≥ 0.8 | pass |
+| G3, PXD029341: fibroblastic foci over alveoli | AUROC 0.88 | ≥ 0.7 | pass |
+| G4, the locked test's rehearsal | runs end to end | runs | pass |
+| G2, one donor held out (a diagnosis) | 68.4 unseen, 72.1 seen | reported | gap 3.7 (colon 12.5, blood 9.8) |
+
+**What the results show:**
+- **Whole-tissue uploads work.** They commit 99.1% of cells, with a best
+  guess of 81.9%.
+- **Narrow uploads stay weak, the colon's cause in milder form.**
+  Single-class uploads commit 31.6% and lineage-only uploads 55.7%. They pull
+  the overall rate just under the bar.
+- **MSV000094373: every control donor's epithelial pool is called
+  macrophage.** That is 4 of 4, mostly at class level. The BPD donors'
+  epithelial pools are mostly called epithelial, and the endothelial pools
+  are mostly right (7 of 10).
+  - Whether those control EpCAM+ sorts carry macrophage material cannot be
+    told from here.
+  - The upload holds only two lineages.
+- **The Protein Atlas:** every AT1 pool's argmax lineage is immune, yet AT2
+  over AT1 separates perfectly. The heart's capillary pools are called
+  stromal.
+- **Across donors the encoder holds up:** group recall is 94.2 unseen
+  against 98.3 seen, and lineage recall 97.9 against 99.7.
+
+**What stays:**
+- **MSV000094189 stays sealed** (`side-tests.md`, amendment 10). Its
+  protocol's rule 1 allows no candidate that missed its gates.
+- The lung's work folder and bundle stay on Drive
+  (`drive/Data/Results/Organs/lung/`).
 
 ## The large intestine's outcome: every failure, in one place
 

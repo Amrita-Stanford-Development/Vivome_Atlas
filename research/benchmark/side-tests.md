@@ -182,6 +182,15 @@ best are FACS-sorted lineage pools from one PNNL/LungMAP group.
   - cultured and iPSC-derived lung cells (PXD034135, PXD019240 and others).
 - **Roles in code:** `scripts/fetch_public_sets.py`, tier L.
 
+### Amendment 10, 2026-10-18: the lung reference missed its gates; MSV000094189 stays sealed
+
+The lung reference missed two development gates (run history, entry 55).
+- **MSV000094189 is not scored and stays sealed:** downloaded and
+  checksummed, never opened. Its protocol's rule 1 allows no candidate that
+  missed its gates, so it waits for a lung reference that passes.
+- **MSV000094373, the Protein Atlas DVP samples and PXD029341** were read for
+  G3 and stay development.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

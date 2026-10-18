@@ -1,0 +1,146 @@
+{
+  "overall": {
+    "cells": 79807,
+    "committed": 73.39,
+    "correct_when_committed": 97.41,
+    "false_abstention": 0.01,
+    "levels": {
+      "group": 32.46,
+      "abstain": 26.61,
+      "class": 21.68,
+      "lineage": 19.25
+    },
+    "best_guess_per_upload_balanced": 58.92,
+    "coverage": 90.34
+  },
+  "by_scenario": {
+    "lineage": {
+      "cells": 19552,
+      "committed": 55.74,
+      "correct_when_committed": 95.87,
+      "false_abstention": 0.01,
+      "levels": {
+        "abstain": 44.26,
+        "class": 21.68,
+        "group": 21.36,
+        "lineage": 12.7
+      },
+      "best_guess_per_upload_balanced": 49.9,
+      "coverage": 91.3
+    },
+    "random_1": {
+      "cells": 10904,
+      "committed": 31.58,
+      "correct_when_committed": 85.25,
+      "false_abstention": 0.03,
+      "levels": {
+        "abstain": 68.42,
+        "group": 17.21,
+        "lineage": 11.61,
+        "class": 2.76
+      },
+      "best_guess_per_upload_balanced": 24.5,
+      "coverage": 64.95
+    },
+    "random_2": {
+      "cells": 7732,
+      "committed": 62.92,
+      "correct_when_committed": 96.67,
+      "false_abstention": 0.01,
+      "levels": {
+        "abstain": 37.08,
+        "group": 34.97,
+        "lineage": 19.62,
+        "class": 8.33
+      },
+      "best_guess_per_upload_balanced": 54.11,
+      "coverage": 85.14
+    },
+    "random_3": {
+      "cells": 8765,
+      "committed": 88.44,
+      "correct_when_committed": 98.76,
+      "false_abstention": 0.0,
+      "levels": {
+        "group": 42.64,
+        "lineage": 24.31,
+        "class": 21.49,
+        "abstain": 11.56
+      },
+      "best_guess_per_upload_balanced": 69.66,
+      "coverage": 95.89
+    },
+    "random_5": {
+      "cells": 9947,
+      "committed": 90.82,
+      "correct_when_committed": 98.63,
+      "false_abstention": 0.0,
+      "levels": {
+        "group": 49.48,
+        "lineage": 24.76,
+        "class": 16.58,
+        "abstain": 9.18
+      },
+      "best_guess_per_upload_balanced": 73.7,
+      "coverage": 97.1
+    },
+    "random_8": {
+      "cells": 10691,
+      "committed": 97.96,
+      "correct_when_committed": 99.27,
+      "false_abstention": 0.0,
+      "levels": {
+        "group": 49.11,
+        "lineage": 25.4,
+        "class": 23.46,
+        "abstain": 2.04
+      },
+      "best_guess_per_upload_balanced": 79.18,
+      "coverage": 98.22
+    },
+    "tissue": {
+      "cells": 12216,
+      "committed": 99.06,
+      "correct_when_committed": 99.15,
+      "false_abstention": 0.0,
+      "levels": {
+        "class": 49.75,
+        "group": 26.51,
+        "lineage": 22.81,
+        "abstain": 0.94
+      },
+      "best_guess_per_upload_balanced": 81.92,
+      "coverage": 98.34
+    }
+  },
+  "per_class_recall_committed": {
+    "adventitial cell": 81.5,
+    "alveolar type 2 fibroblast cell": 73.52,
+    "b cell": 93.2,
+    "basal cell": 66.41,
+    "basophil": 67.97,
+    "bronchial smooth muscle cell": 60.59,
+    "capillary endothelial cell": 48.96,
+    "cd4-positive, alpha-beta t cell": 70.13,
+    "cd8-positive, alpha-beta t cell": 94.02,
+    "classical monocyte": 89.66,
+    "club cell": 79.75,
+    "endothelial cell of artery": 50.09,
+    "endothelial cell of lymphatic vessel": 65.67,
+    "intermediate monocyte": 81.6,
+    "lung ciliated cell": 84.64,
+    "macrophage": 79.74,
+    "mature nk t cell": 99.05,
+    "monocyte": 89.68,
+    "natural killer cell": 85.85,
+    "neutrophil": 79.82,
+    "non-classical monocyte": 89.03,
+    "pericyte": 43.22,
+    "plasma cell": 84.24,
+    "respiratory goblet cell": 63.43,
+    "type i pneumocyte": 51.8,
+    "type ii pneumocyte": 96.77,
+    "vascular associated smooth muscle cell": 65.67,
+    "vein endothelial cell": 53.08
+  }
+}

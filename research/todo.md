@@ -453,7 +453,12 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - search done; roles set (`side-tests.md`, amendment 9);
   - MSV000094189's protocol committed before its download;
   - the label audit kept all 28 classes;
-  - next: fetch tier L, the build, gates G1 to G4.
+  - tier L fetched; the build, and gates G1 to G4 (entry 55):
+  - [!] **NO GO as built, narrowly.** Waiting on the owner's decision.
+    - G1 committed 73.4% (bar 75%); correct when committed 97.4%, coverage 90.3%;
+    - G3: LungMAP BPD AUROC 0.62 (bar 0.8; the control donors' epithelial pools called macrophage); HPA AT2 over AT1 1.0; IPF foci 0.88;
+    - G2: an unseen donor costs 3.7 points.
+    - MSV000094189 stays sealed (amendment 10).
 
 ---
 
@@ -663,3 +668,4 @@ because the held out classes were in training.
 | 2026-10-18 | **Track I, Stage 2: the colon reference's gates, NO GO as built** (run history, entry 52). G1 commits 12% of cells (bar 75%), though committed answers are 99% right and coverage is 85%; G3 passes Kabatnik (AUROC 1.0) but misses Zheng (16.7%) and four of six polyp marker checks; G2: an unseen donor costs 12.5 points. Cause: per-upload scaling breaks narrow uploads, so conformal sets are too wide. Nothing tuned; the locked test stays sealed; the owner decides what next | this commit |
 | 2026-10-18 | **Track I: the colon closed** (the owner's decision). Every failure is listed in one place (`research/organ-references.md`, "The large intestine's outcome"): the three gate misses and their cause, the tier-5 check, the modules, the Paneth labels, a builder bug, the live DIA-NN 1.8 parser bug, the blood-only gene map, and the stopped first run. PXD052341 stays sealed (side-tests amendment 8). Next: another organ | this commit |
 | 2026-10-18 | **Track I: the lung started** (run history, entry 54). Search found only lineage-sorted pools (PNNL/LungMAP) and the HPA DVP AT1/AT2 pools. Roles (amendment 9, the owner's choice): MSV000094189 locked, with its protocol committed before any download; MSV000094373, the HPA DVP samples and PXD029341 development; MSV000081973 reserve. Classes: 28, 6 dropped by the class rule; the label audit (`research/notebooks/organ_labels.py`) drops nothing more | this commit |
+| 2026-10-18 | **Track I: the lung's gates, NO GO as built, narrowly** (run history, entry 55). G1 commits 73.4% (bar 75%) with 97.4% correct when committed and 90.3% coverage; whole-tissue uploads commit 99.1%. G3 passes the Protein Atlas AT2/AT1 (AUROC 1.0) and the IPF foci (0.88), misses LungMAP BPD (0.62: the control donors' epithelial pools called macrophage). G2 gap 3.7 points. Nothing tuned; MSV000094189 stays sealed (amendment 10); the owner decides | this commit |

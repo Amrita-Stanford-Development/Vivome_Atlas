@@ -1,0 +1,113 @@
+{
+  "source": "scripts/build_organ_reference.py on scripts/organs/lung.json",
+  "files": {
+    "answers_spec.json": {
+      "sha256": "4eaa077c2d1e36210a5be72fa4ed95d3cb2f52b0f07e3b11e7a5cdd37ef31e01",
+      "bytes": 7180
+    },
+    "class_balanced_stats.npz": {
+      "sha256": "13c020d0d7539145a5e97e4df344d342fb2b559e77dc34369ba267ea98e38982",
+      "bytes": 101406
+    },
+    "class_means_cb.npy": {
+      "sha256": "a822a00eaddaddc071e577ecdee070f1a08f67fbc22524fb993b25ef1c7b2869",
+      "bytes": 1412896
+    },
+    "feature_space_genes.csv": {
+      "sha256": "8b52c7665270156271cdba0a3fbf93b9a58a5c67ec3873b732efe2ec829847d4",
+      "bytes": 79544
+    },
+    "gene_id_map.tsv": {
+      "sha256": "be39bb9e52ed05aae1a8110d201f17e056452179b132142e06d4b0615cd4365d",
+      "bytes": 606497
+    },
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "c67991ba04d4e597cacbb736a9dd371f598ebe418301f077c5894eb03b7c7fff",
+      "bytes": 146838605
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "ae071db7347d399100c74d2c561916e504def9867fcfe1394c755b5eb9d1a66c",
+      "bytes": 146838605
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "869d24790ed6e39ca155c7291e3efce60b4f9ca02b5197f5d0c209f0fc890ab7",
+      "bytes": 146838605
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "ac60f28c3b9a8698209213e95c5294541a47752e701e50fbc5d9bb2c11c42766",
+      "bytes": 146838605
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "04aa8d1742cd77a96ed6fb7165938004eeedd506e6ae6c9762b67cccddfde2e6",
+      "bytes": 146838605
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "79b2323f35ac47dc39470b932982edcc43c2f87bc64570a254a6a70dafb25cac",
+      "bytes": 14464
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "fb4d996843b758b0efd39974204f61df8790d8c0e24c68bd500bd92f30e364b8",
+      "bytes": 14464
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "313239f5e5b2204acb0eb5993ef82c4fa0f302b32ab576d0817fe58c1308a82d",
+      "bytes": 16828032
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "cdea65fb83ded3b530ca7f13453a2660329fd57f28f6b6a7864fb30524892769",
+      "bytes": 14464
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "ef3b70f827d13c4c3e78f3e06d76560c1a57c0e35a0000ee4fec7d09de3f755a",
+      "bytes": 14464
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "b93ee531e16ccb0bb56564652240a5b144a69bcd4f0802ed91999953157952d2",
+      "bytes": 16828032
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "abbcb0e9c94772b401e1af86e467a75bf14ebd3b24dabe300a432c60a31c7e7b",
+      "bytes": 14464
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "478123349e98698a8a522d9f22e61314018d39ba00da30b2c7051a816bbfa3f6",
+      "bytes": 14464
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "755b0d09fa9f93773dd83394ce69e32489820a00e1f2ab838b419e502b07c07d",
+      "bytes": 16828032
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "e78456970d5cce39e2ac001eb9159153b531dbcb53adb32c1531517aeccd7d3c",
+      "bytes": 14464
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "b2f1f89d8743debbbc5e1a89d7de12e77d79f6f482a4bd3192eab1076c7c8b51",
+      "bytes": 14464
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "9e10cfab246a914691ad8a26f4c9c28bc92984a7f556181e49407ebcbce614eb",
+      "bytes": 16828032
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "a71d5548cc80af5fabe25552e81e6d7ec98968ef0b8f95158bf8160414b57be1",
+      "bytes": 14464
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "fe332ba0b16828539559c2ba1e2f7365a1895f7a1863b671449e13b0a9190b93",
+      "bytes": 14464
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "a07172a2210956a42827ca042a5a482cc65c590bbeff54937cd077627d809588",
+      "bytes": 16828032
+    },
+    "reference_metadata.csv": {
+      "sha256": "5dabd33211c3206e36afd821ffebc7f372095c174386c22714fb9d4ef56174de",
+      "bytes": 5219958
+    },
+    "spec.json": {
+      "sha256": "9e83661ebf80dc96c632bc8794c9fb841ac680749e5a3a99ff97adae05d0257e",
+      "bytes": 5636
+    }
+  }
+}

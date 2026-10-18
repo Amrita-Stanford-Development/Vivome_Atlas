@@ -687,6 +687,21 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/li_build/gene_id_map_provenance.json` — the colon's identifier map: source, sha256, match counts
 - `research/notebook-outputs/li_build/mask_profiles_summary.csv` — the colon's missingness profiles: genes in set, detection, observed fraction
 - `research/notebook-outputs/li_build/bundle_MANIFEST.json` — the colon bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebooks/organ_donor_heldout.py` — Track I, G2 for any organ: one member retrained with each donor held out, unseen against seen (a diagnosis)
+- `research/notebook-outputs/lung_donor_heldout/summary.json` — the lung's G2: per fold, class balanced accuracy, group and lineage recall
+- `research/notebook-outputs/lung_development/rules.json` — the lung's gate run: script sha256, gates and bundle MANIFEST, written before computing
+- `research/notebook-outputs/lung_development/g1.json` — the lung's G1: its evaluation suite through the service's code, overall and per scenario
+- `research/notebook-outputs/lung_development/g1_cells.csv.gz` — the lung's G1: every scored cell
+- `research/notebook-outputs/lung_development/g3.json` — the lung's G3: LungMAP BPD pools, the Protein Atlas DVP pools, the IPF regions
+- `research/notebook-outputs/lung_development/gates.json` — the lung's gates: values and verdicts
+- `research/notebook-outputs/lung_build/calibration.json` — the lung build's calibration: temperatures, conformal and out-of-distribution thresholds, the members' sha256s
+- `research/notebook-outputs/lung_build/train_record.json` — the lung's five members
+- `research/notebook-outputs/lung_build/classes.json` — the lung's 28 classes and hierarchy
+- `research/notebook-outputs/lung_build/classes_by_donor.csv` — the lung's cells per class and donor
+- `research/notebook-outputs/lung_build/feature_space_provenance.json` — the lung's gene space: each source's count
+- `research/notebook-outputs/lung_build/gene_id_map_provenance.json` — the lung's identifier map
+- `research/notebook-outputs/lung_build/mask_profiles_summary.csv` — the lung's missingness profiles
+- `research/notebook-outputs/lung_build/bundle_MANIFEST.json` — the lung bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/lung_development.py` — Track I, the lung's gates G1 (simulated RNA uploads through the service's code) and G3 (the LungMAP BPD pools, the Human Protein Atlas DVP pools, the IPF regions), scored once
 - `research/notebooks/li_development.py` — Track I, Stage 2: the colon reference's gates G1 (simulated RNA uploads through the service's code) and G3 (Kabatnik, Zheng and the polyp plate), scored once
 - `research/notebook-outputs/organ_builder_blood/data_stages.json` — the builder's blood acceptance, tiers 1 and 2: labels, split, suites, genes, hierarchy, RNA statistics and mask profiles against NB1's

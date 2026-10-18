@@ -1,0 +1,353 @@
+{
+  "organ": "lung",
+  "design": {
+    "uploads_per_side": 10,
+    "cells_per_upload": 500,
+    "min_class_cells": 20,
+    "profile": "fulcher_rank",
+    "seed": 1
+  },
+  "folds": {
+    "TSP1": {
+      "train_cells": 32056,
+      "classes": [
+        "alveolar type 2 fibroblast cell",
+        "b cell",
+        "basophil",
+        "capillary endothelial cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "endothelial cell of artery",
+        "intermediate monocyte",
+        "lung ciliated cell",
+        "macrophage",
+        "monocyte",
+        "natural killer cell",
+        "non-classical monocyte",
+        "respiratory goblet cell",
+        "type i pneumocyte",
+        "type ii pneumocyte"
+      ],
+      "best_val_loss": 0.8929517269134521,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 60.46,
+        "group_recall": 93.32,
+        "lineage_recall": 96.88,
+        "recall": {
+          "alveolar type 2 fibroblast cell": 40.6,
+          "b cell": 87.9,
+          "basophil": 66.7,
+          "capillary endothelial cell": 96.4,
+          "cd4-positive, alpha-beta t cell": 93.6,
+          "cd8-positive, alpha-beta t cell": 12.5,
+          "classical monocyte": 47.3,
+          "endothelial cell of artery": 83.0,
+          "intermediate monocyte": 18.2,
+          "lung ciliated cell": 94.3,
+          "macrophage": 91.1,
+          "monocyte": 32.0,
+          "natural killer cell": 0.0,
+          "non-classical monocyte": 0.0,
+          "respiratory goblet cell": 69.7,
+          "type i pneumocyte": 96.1,
+          "type ii pneumocyte": 98.4
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 63.71,
+        "group_recall": 98.04,
+        "lineage_recall": 99.64,
+        "recall": {
+          "alveolar type 2 fibroblast cell": 66.4,
+          "b cell": 94.5,
+          "basophil": 89.6,
+          "capillary endothelial cell": 97.0,
+          "cd4-positive, alpha-beta t cell": 95.8,
+          "cd8-positive, alpha-beta t cell": 20.7,
+          "classical monocyte": 31.6,
+          "endothelial cell of artery": 58.7,
+          "intermediate monocyte": 59.8,
+          "lung ciliated cell": 94.3,
+          "macrophage": 97.5,
+          "monocyte": 17.5,
+          "natural killer cell": 1.6,
+          "non-classical monocyte": 14.1,
+          "respiratory goblet cell": 48.4,
+          "type i pneumocyte": 99.4,
+          "type ii pneumocyte": 95.9
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 3.25,
+        "group_recall": 4.72,
+        "lineage_recall": 2.76
+      }
+    },
+    "TSP14": {
+      "train_cells": 34279,
+      "classes": [
+        "alveolar type 2 fibroblast cell",
+        "basal cell",
+        "capillary endothelial cell",
+        "cd4-positive, alpha-beta t cell",
+        "classical monocyte",
+        "club cell",
+        "endothelial cell of artery",
+        "intermediate monocyte",
+        "lung ciliated cell",
+        "macrophage",
+        "type i pneumocyte",
+        "type ii pneumocyte",
+        "vein endothelial cell"
+      ],
+      "best_val_loss": 0.7088430523872375,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 74.35,
+        "group_recall": 87.92,
+        "lineage_recall": 96.1,
+        "recall": {
+          "alveolar type 2 fibroblast cell": 78.0,
+          "basal cell": 90.2,
+          "capillary endothelial cell": 93.0,
+          "cd4-positive, alpha-beta t cell": 92.5,
+          "classical monocyte": 35.1,
+          "club cell": 74.5,
+          "endothelial cell of artery": 72.6,
+          "intermediate monocyte": 51.0,
+          "lung ciliated cell": 93.2,
+          "macrophage": 96.6,
+          "type i pneumocyte": 76.4,
+          "type ii pneumocyte": 86.5,
+          "vein endothelial cell": 26.9
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 81.3,
+        "group_recall": 98.46,
+        "lineage_recall": 99.66,
+        "recall": {
+          "alveolar type 2 fibroblast cell": 89.9,
+          "basal cell": 95.4,
+          "capillary endothelial cell": 98.5,
+          "cd4-positive, alpha-beta t cell": 91.8,
+          "classical monocyte": 40.2,
+          "club cell": 89.1,
+          "endothelial cell of artery": 71.7,
+          "intermediate monocyte": 27.6,
+          "lung ciliated cell": 98.6,
+          "macrophage": 98.4,
+          "type i pneumocyte": 88.9,
+          "type ii pneumocyte": 97.6,
+          "vein endothelial cell": 69.3
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 6.95,
+        "group_recall": 10.54,
+        "lineage_recall": 3.56
+      }
+    },
+    "TSP2": {
+      "train_cells": 26727,
+      "classes": [
+        "adventitial cell",
+        "alveolar type 2 fibroblast cell",
+        "b cell",
+        "basal cell",
+        "basophil",
+        "capillary endothelial cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "club cell",
+        "endothelial cell of artery",
+        "intermediate monocyte",
+        "lung ciliated cell",
+        "macrophage",
+        "monocyte",
+        "natural killer cell",
+        "non-classical monocyte",
+        "pericyte",
+        "respiratory goblet cell",
+        "type ii pneumocyte",
+        "vein endothelial cell"
+      ],
+      "best_val_loss": 0.7853874564170837,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 64.71,
+        "group_recall": 97.9,
+        "lineage_recall": 99.18,
+        "recall": {
+          "adventitial cell": 45.6,
+          "alveolar type 2 fibroblast cell": 89.5,
+          "b cell": 98.0,
+          "basal cell": 79.5,
+          "basophil": 93.2,
+          "capillary endothelial cell": 99.6,
+          "cd4-positive, alpha-beta t cell": 84.5,
+          "cd8-positive, alpha-beta t cell": 56.7,
+          "classical monocyte": 39.1,
+          "club cell": 85.8,
+          "endothelial cell of artery": 46.8,
+          "intermediate monocyte": 51.5,
+          "lung ciliated cell": 97.1,
+          "macrophage": 99.0,
+          "monocyte": 15.3,
+          "natural killer cell": 10.4,
+          "non-classical monocyte": 7.7,
+          "pericyte": 23.3,
+          "respiratory goblet cell": 69.3,
+          "type ii pneumocyte": 96.1,
+          "vein endothelial cell": 71.1
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 68.57,
+        "group_recall": 98.22,
+        "lineage_recall": 99.7,
+        "recall": {
+          "adventitial cell": 65.2,
+          "alveolar type 2 fibroblast cell": 80.3,
+          "b cell": 90.0,
+          "basal cell": 94.1,
+          "basophil": 100.0,
+          "capillary endothelial cell": 98.1,
+          "cd4-positive, alpha-beta t cell": 89.6,
+          "cd8-positive, alpha-beta t cell": 61.3,
+          "classical monocyte": 74.8,
+          "club cell": 71.2,
+          "endothelial cell of artery": 61.8,
+          "intermediate monocyte": 39.7,
+          "lung ciliated cell": 96.6,
+          "macrophage": 98.2,
+          "monocyte": 56.8,
+          "natural killer cell": 0.0,
+          "non-classical monocyte": 15.6,
+          "pericyte": 18.0,
+          "respiratory goblet cell": 68.4,
+          "type ii pneumocyte": 97.7,
+          "vein endothelial cell": 62.5
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 3.86,
+        "group_recall": 0.32,
+        "lineage_recall": 0.52
+      }
+    },
+    "TSP25": {
+      "train_cells": 35113,
+      "classes": [
+        "adventitial cell",
+        "alveolar type 2 fibroblast cell",
+        "b cell",
+        "basal cell",
+        "basophil",
+        "capillary endothelial cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "club cell",
+        "endothelial cell of artery",
+        "endothelial cell of lymphatic vessel",
+        "intermediate monocyte",
+        "lung ciliated cell",
+        "macrophage",
+        "natural killer cell",
+        "pericyte",
+        "respiratory goblet cell",
+        "type i pneumocyte",
+        "type ii pneumocyte",
+        "vein endothelial cell"
+      ],
+      "best_val_loss": 0.6579121351242065,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 74.1,
+        "group_recall": 97.82,
+        "lineage_recall": 99.36,
+        "recall": {
+          "adventitial cell": 80.0,
+          "alveolar type 2 fibroblast cell": 76.4,
+          "b cell": 97.1,
+          "basal cell": 82.5,
+          "basophil": 100.0,
+          "capillary endothelial cell": 99.5,
+          "cd4-positive, alpha-beta t cell": 85.1,
+          "cd8-positive, alpha-beta t cell": 45.0,
+          "classical monocyte": 38.2,
+          "club cell": 77.0,
+          "endothelial cell of artery": 52.6,
+          "endothelial cell of lymphatic vessel": 75.8,
+          "intermediate monocyte": 57.1,
+          "lung ciliated cell": 92.4,
+          "macrophage": 98.6,
+          "natural killer cell": 5.7,
+          "pericyte": 63.7,
+          "respiratory goblet cell": 72.2,
+          "type i pneumocyte": 89.4,
+          "type ii pneumocyte": 99.1,
+          "vein endothelial cell": 68.9
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 74.74,
+        "group_recall": 98.54,
+        "lineage_recall": 99.7,
+        "recall": {
+          "adventitial cell": 80.0,
+          "alveolar type 2 fibroblast cell": 72.7,
+          "b cell": 96.0,
+          "basal cell": 91.7,
+          "basophil": 96.2,
+          "capillary endothelial cell": 99.2,
+          "cd4-positive, alpha-beta t cell": 85.7,
+          "cd8-positive, alpha-beta t cell": 56.8,
+          "classical monocyte": 34.7,
+          "club cell": 83.5,
+          "endothelial cell of artery": 56.7,
+          "endothelial cell of lymphatic vessel": 50.0,
+          "intermediate monocyte": 44.9,
+          "lung ciliated cell": 98.9,
+          "macrophage": 97.8,
+          "natural killer cell": 6.1,
+          "pericyte": 80.4,
+          "respiratory goblet cell": 78.2,
+          "type i pneumocyte": 100.0,
+          "type ii pneumocyte": 99.1,
+          "vein endothelial cell": 61.0
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 0.64,
+        "group_recall": 0.72,
+        "lineage_recall": 0.34
+      }
+    }
+  },
+  "mean": {
+    "unseen": {
+      "balanced_accuracy": 68.41,
+      "group_recall": 94.24,
+      "lineage_recall": 97.88
+    },
+    "seen": {
+      "balanced_accuracy": 72.08,
+      "group_recall": 98.32,
+      "lineage_recall": 99.67
+    }
+  },
+  "seconds": 532
+}
