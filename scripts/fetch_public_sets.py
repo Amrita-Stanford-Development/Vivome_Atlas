@@ -21,7 +21,9 @@ about 930 MB): MSV000094189, the lung's locked test, and the development sets
 MSV000094373, the Human Protein Atlas DVP samples and PXD029341. Tier N is the
 lymph node's (amendment 11; about 2.6 GB): PXD042367's tonsil-niche results,
 its locked test, and the development sets PXD047762, Zheng's tonsil tables
-and PXD011683.
+and PXD011683. Tier V is the organ references v2's fresh development sets
+(amendment 13; about 190 MB), never read before v2: PXD058626 (lung airways
+and alveoli) and PXD045043 (spleen red and white pulp, hosted by jPOST).
 
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
@@ -61,9 +63,9 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "data" / "incoming" / "public_sets"
 RECORD = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 CHUNK = 8 << 20
-ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L", "N")
+ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L", "N", "V")
 RAW_SUFFIXES = (".raw", ".d.zip", ".wiff", ".mzml", ".mzml.zip", ".mzml.gz")
-HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu", "www.proteinatlas.org")
+HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu", "www.proteinatlas.org", "ftp.jpostdb.org")
 PRIDE = "https://ftp.pride.ebi.ac.uk/pride/data/archive"
 MASSIVE = "ftp://massive-ftp.ucsd.edu"
 ZENODO = "https://zenodo.org/api/records"
@@ -177,6 +179,12 @@ ENTRIES = (
                    ("Tonsil_Cancer_pg_matrix_Helper_T_Cells.txt", 392851), ("Tonsil_Cancer_pg_matrix_Macrophages.txt", 264718),
                    ("Tonsil_Cancer_pg_matrix_Plasma_Cells.txt", 344622), ("Tonsil_Cancer_pg_matrix_Tumor_Cells.txt", 649882))],
     pride("DusSzachniewicz2021_PXD011683", "development", "PXD011683", "2021/09", "MaxQuant_Output.zip", 1932688240, tier="N"),
+    # tier V: the organ references v2's fresh development sets (side-tests.md, amendment 13), unread before v2
+    *[pride("Herrera2025_PXD058626", "development", "PXD058626", "2025/06", n, s, tier="V")
+      for n, s in (("combined_protein.tsv", 6813450), ("experiment_annotation.tsv", 17734),
+                   ("PXD058626_community_annotated.sdrf.tsv", 5930), ("fragpipe-files.fp-manifest", 15119))],
+    entry("Kitata2025_PXD045043", "development", "Report_DIA-NN_Spleen.zip",
+          "ftp://ftp.jpostdb.org/JPST002191/Report_DIA-NN_Spleen.zip", 185986731, tier="V"),
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
 # link; they were saved by hand into data/incoming/public_sets/PXD073250/ and are recorded by --record-manual.
@@ -261,9 +269,10 @@ def download_http(url: str, dest: Path, size: int, workers: int, chunk: int) -> 
 
 
 def download_ftps(url: str, dest: Path, size: int | None) -> None:
-    """MassIVE's FTP needs TLS; curl resumes with -C -."""
+    """MassIVE's FTP needs TLS (jPOST's takes plain FTP); curl resumes with -C -."""
     part = dest.with_name(dest.name + ".part")
-    subprocess.run(["curl", "-s", "--ssl-reqd", "--retry", "5", "-C", "-", "-o", str(part), url], check=True)
+    tls = ["--ssl-reqd"] if "massive-ftp" in url else []
+    subprocess.run(["curl", "-s", *tls, "--retry", "5", "-C", "-", "-o", str(part), url], check=True)
     if size is not None and part.stat().st_size != size:
         raise OSError(f"{url}: {part.stat().st_size} bytes, expected {size}")
     part.replace(dest)
@@ -302,7 +311,7 @@ def save_record(record: dict, path: Path = RECORD) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tier", choices=("A", "B", "C", "L", "N", "all"), default="A")
+    parser.add_argument("--tier", choices=(*TIERS, "all"), default="A")
     parser.add_argument("--only", help="comma-separated groups")
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--list", action="store_true", help="list the entries and what is on disk; fetch nothing")

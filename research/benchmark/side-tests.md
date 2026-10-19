@@ -178,7 +178,8 @@ best are FACS-sorted lineage pools from one PNNL/LungMAP group.
 - **Alternatives, not used:**
   - PXD014762: alveoli against vessels, 3 donors, 6 samples, a group-level
     quant table only;
-  - region sets PXD043807, PXD040654, PXD036465, PXD058626 and PXD058805;
+  - region sets PXD043807, PXD040654, PXD036465 and PXD058805 (PXD058626 became
+    v2's fresh lung set, amendment 13);
   - cultured and iPSC-derived lung cells (PXD034135, PXD019240 and others).
 - **Roles in code:** `scripts/fetch_public_sets.py`, tier L.
 
@@ -229,6 +230,34 @@ The lymph node reference missed two development gates (run history, entry
   gates, so it waits for a lymph node reference that passes.
 - **PXD047762, Zheng's tonsil tables, the Protein Atlas lymph-node pools and
   PXD011683** were read for G3 and stay development.
+
+### Amendment 13, 2026-10-19: fresh development sets for the organ references' v2 (owner's decisions)
+
+The v2 diagnostics (`research/organ-references.md`, "Version 2") read every
+v1 development set again, so those sets are now **seen**. The owner
+(2026-10-18) chose to judge v2 on sets never read before. The search ran on
+2026-10-18 over repositories and the literature, reading pages, file
+listings and papers only. Its report is summarised here.
+
+| Organ | Role | Set | What it is |
+|---|---|---|---|
+| Lymph node | development, fresh | PXD045043 (jPOST JPST002191), Kitata 2025 (PNNL) | Normal human spleen from one donor: red-pulp and white-pulp voxels of 20 to 200 µm, picked by eye before any MS (labels in the raw-file names). DIA-NN results (`Report_DIA-NN_Spleen.zip`). The 42-voxel map is excluded: its region calls came from the protein data. |
+| Lung | development, fresh | PXD058626, Herrera 2025 | Laser-captured lung regions on H&E, confirmed by a pathologist: 12 non-fibrotic control airways and 12 control alveoli (paired by donor), plus IPF regions. A FragPipe table (`combined_protein.tsv`) with its annotation. Same lab leader as the seen PXD029341; different samples. |
+| Colon | reserve | PXD069723 (Adv Sci 2026) | Colon wall of 4 patients: enteric nervous system against muscle layers, 24 runs, with DIA-NN results. It is kept unread for the next colon candidate, because no colon v2 is built: A2 and A4's rules stop it (no label-free band key). |
+
+- **Seen sets.** The v1 development sets of all three organs stay
+  development, marked seen. The v2 diagnostics used them to choose
+  settings, so they no longer carry a gate.
+- **Locked tests.** PXD052341, MSV000094189 and PXD042367 are unchanged and
+  sealed.
+- **Searched, not usable now:**
+  - PXD046567 (colon; iProX unreachable from this PC, raw only);
+  - PXD043807 (COVID lungs; raw only);
+  - PXD069877 (tonsil T zones; the locked set's lab);
+  - PXD006191 and PXD009569 (lymph-node reserves; raw only).
+- **Data requests worth making:** PSPro (Tian lab), the Castleman niches,
+  the Schiller COPD data, and the label maps of PXD040654 and PXD046176.
+- **Roles in code:** `scripts/fetch_public_sets.py`, tier V.
 
 ### Alternatives kept unused, for future tests or future development
 

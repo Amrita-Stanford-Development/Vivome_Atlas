@@ -97,6 +97,12 @@ class TableTests(unittest.TestCase):
         self.assertEqual([(e["group"], e["role"], e["tier"], e["name"]) for e in ln],
                          [("Coscia2023_PXD042367", "held_out", "N", "DIANN_results_Fig4.rar")])
 
+    def test_tier_v_is_the_v2_fresh_development_sets_and_holds_nothing_locked(self):
+        v = [e for e in f.ENTRIES if e["tier"] == "V"]
+        self.assertEqual({e["group"] for e in v}, {"Herrera2025_PXD058626", "Kitata2025_PXD045043"})
+        self.assertTrue(all(e["role"] == "development" for e in v))
+        self.assertLess(sum(e["bytes"] for e in v), 250e6)
+
     def test_tier_c_is_the_colon_and_small(self):
         colon = [e for e in f.ENTRIES if e["tier"] == "C"]
         self.assertEqual({e["group"] for e in colon}, {"Post2025_PXD052341", "Zheng2025_PXD057118", "Kabatnik2024_PXD046999"})
