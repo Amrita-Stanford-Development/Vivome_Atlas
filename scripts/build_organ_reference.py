@@ -121,11 +121,25 @@ def stage_gene_ids(b: Build) -> None:
     print(table["match_type"].value_counts().to_dict())
 
 
+def reused_split(b: Build) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """A later version's split (organ references v2): the base organ's own,
+    carried over through the atlas rows, so each cell keeps its part and the
+    test cells are the base's test cells minus any dropped classes."""
+    base = Build(b.cfg["split"]["reuse_from"])
+    position = {int(r): i for i, r in enumerate(b.table()["row"].to_numpy())}
+    rows = base.table()["row"].to_numpy()
+    old = np.load(base.path("splits_seed0.npz"))
+    part = lambda name: np.sort(np.array([position[int(r)] for r in rows[old[name]] if int(r) in position], dtype=np.int64))  # noqa: E731
+    return part("train"), part("val"), part("test")
+
+
 def stage_stats(b: Build) -> None:
     X = b.X()
     np.savez(b.path("rna_global_stats.npz"), mu=X.mean(0), sd=X.std(0))
     y, donors = np.load(b.path("y_all.npy")), np.load(b.path("donors.npy"))
-    TR, VA, TE = scenarios.split(b.cfg, y, donors)
+    TR, VA, TE = reused_split(b) if b.cfg["split"].get("reuse_from") else scenarios.split(b.cfg, y, donors)
+    if len(TR) + len(VA) + len(TE) != len(y) or len(np.unique(np.concatenate([TR, VA, TE]))) != len(y):
+        raise SystemExit("the split does not partition the reference's cells")
     np.savez(b.path("splits_seed0.npz"), train=TR, val=VA, test=TE)
     print(f"train {len(TR):,} val {len(VA):,} test {len(TE):,}")
 
@@ -213,16 +227,17 @@ def stage_calibrate(b: Build) -> None:
     models = {n: calibrate.load_model(p, s, arch) for n, p in paths.items()}
     suite = json.loads(b.path("sim_suite_calib_v1.json").read_text(encoding="utf-8"))
     got = calibrate.calibrate(models, s, b.X(), dict(np.load(b.path("mask_profiles.npz"))), suite, b.names(),
-                              b.cfg["calibration"], log=lambda m: print(m, flush=True))
+                              b.cfg["calibration"], log=lambda m: print(m, flush=True), hierarchy=b.cfg["hierarchy"])
     b.path("members").mkdir(exist_ok=True)
     for name in paths:
         seed = name.split("seed")[1].split(".")[0]
         np.save(b.path("members") / f"V2_seed{seed}_reference_latent_f16.npy", got["latents"][name])
         np.save(b.path("members") / f"V2_seed{seed}_centroids.npy", got["centroids"][name].astype(np.float32))
-    np.savez(b.path("calibration_scores.npz"), scores=got["scores"], y=got["y"])
+    np.savez(b.path("calibration_scores.npz"), scores=got["scores"], y=got["y"], upload=got["upload"])
     data.save_json(b.path("calibration.json"), {k: got[k] for k in (
         "temperature", "qhat_by_class", "marginal_qhat", "ood_threshold", "n_uploads", "n_cells", "cells_per_class",
-        "suite_top1_accuracy")} | {"members": {n: sha256(p) for n, p in paths.items()}})
+        "suite_top1_accuracy") if k in got} | {k: got[k] for k in ("qhat_options",) if k in got}
+        | {"members": {n: sha256(p) for n, p in paths.items()}})
     print(json.dumps({k: got[k] for k in ("temperature", "marginal_qhat", "ood_threshold", "suite_top1_accuracy")}, indent=1))
 
 
@@ -237,7 +252,7 @@ def stage_layer(b: Build) -> None:
 
 
 def stage_bundle(b: Build) -> None:
-    label = f"{b.organ} v1"
+    label = b.cfg.get("reference_version", f"{b.organ} v1")
     evaluation = {"status": "pending", "record": None}
     bundle.write(b.dir, b.path("bundle"), b.cfg, label, evaluation, member_paths(b))
     print(f"wrote {b.path('bundle')} ({label}, evaluation pending)")

@@ -93,8 +93,29 @@ def member_scores(model, xs, M, ref_tr, cen_tr, device, knn: int, chunk=4096):
     return cos, torch.cat(mx).numpy().astype(np.float16)
 
 
+def fit_qhat_v2(scores: np.ndarray, y: np.ndarray, cells: np.ndarray, C: int, cal: dict, group_of: np.ndarray) -> tuple:
+    """nb2_core.fit_qhat (Mondrian per true class), with organ references v2's
+    two options (research/notebook-outputs/organ_v2_calibration/decisions.json):
+    - "rare_min": a class with fewer unique calibration cells than this takes
+      its group's pooled quantile, or the marginal one if its group is also short;
+    - "floor": "chance" keeps every entry bar at or above chance, qhat at most 1 - 1/C.
+    Without them it is nb2_core.fit_qhat exactly."""
+    q, marg = n2.fit_qhat(scores, y, C, cal["alpha"], True, cal["min_n"])
+    if cal.get("rare_min"):
+        for c in range(C):
+            if len(np.unique(cells[y == c])) < cal["rare_min"]:
+                same = np.isin(y, np.flatnonzero(group_of == group_of[c]))
+                if len(np.unique(cells[same])) >= cal["rare_min"]:
+                    q[c] = float(np.quantile(scores[same], n2.conformal_level(int(same.sum()), cal["alpha"]), method="higher"))
+                else:
+                    q[c] = marg
+    if cal.get("floor") == "chance":
+        q = np.minimum(q, 1.0 - 1.0 / C)
+    return q, marg
+
+
 def calibrate(models: dict, s: dict, X_raw: np.ndarray, profiles: dict, suite: list, names: list[str], cal: dict,
-              log=print) -> dict:
+              log=print, hierarchy: dict | None = None) -> dict:
     """v5_build.build on any organ: latents, centroids and the calibration."""
     t0 = time.time()
     y, TR, C, device = s["y"], s["TR"], s["C"], s["device"]
@@ -110,7 +131,7 @@ def calibrate(models: dict, s: dict, X_raw: np.ndarray, profiles: dict, suite: l
     G = s["XG"].shape[1]
     cos = {k: [] for k in models}
     maxcos = {k: [] for k in models}
-    ys = []
+    ys, ups, cells = [], [], []
     for u, spec in enumerate(suite):
         raw, gs = core.raw_upload(spec, X_raw, profiles, G, sg)
         xs, M = core.query_inputs(raw, gs, "gene", convention="service", graph_input="zscored", smooth=True)
@@ -119,6 +140,8 @@ def calibrate(models: dict, s: dict, X_raw: np.ndarray, profiles: dict, suite: l
             cos[k].append(c)
             maxcos[k].append(mx)
         ys.append(y[np.asarray(spec["cell_idx"])])
+        ups.append(np.full(len(spec["cell_idx"]), u, np.int32))
+        cells.append(np.asarray(spec["cell_idx"]))
         if (u + 1) % 50 == 0:
             log(f"calibration suite: {u + 1}/{len(suite)} uploads ({time.time() - t0:.0f}s)")
     yy = np.concatenate(ys)
@@ -129,9 +152,16 @@ def calibrate(models: dict, s: dict, X_raw: np.ndarray, profiles: dict, suite: l
         P = P + n2.softmax(L, temps[k])
     P = P / len(models)
     scores = 1.0 - P[np.arange(len(yy)), yy]
-    q, marg = n2.fit_qhat(scores, yy, C, cal["alpha"], True, cal["min_n"])
+    options = {k: cal[k] for k in ("rare_min", "floor") if k in cal}
+    if options:
+        groups = sorted({hierarchy[n]["group"] for n in names})
+        group_of = np.array([groups.index(hierarchy[n]["group"]) for n in names])
+        q, marg = fit_qhat_v2(scores, yy, np.concatenate(cells), C, cal, group_of)
+    else:
+        q, marg = n2.fit_qhat(scores, yy, C, cal["alpha"], True, cal["min_n"])
     mc = np.mean([np.concatenate(maxcos[k]).astype(np.float32) for k in models], 0)
     return {"latents": lat, "centroids": cen_all, "temperature": temps, "scores": scores, "y": yy,
+            "upload": np.concatenate(ups), **({"qhat_options": options} if options else {}),
             "qhat_by_class": {names[c]: float(q[c]) for c in range(C)}, "marginal_qhat": float(marg),
             "ood_threshold": float(np.quantile(mc, 0.01)), "n_uploads": len(suite), "n_cells": int(len(yy)),
             "cells_per_class": {names[c]: int((yy == c).sum()) for c in range(C)},

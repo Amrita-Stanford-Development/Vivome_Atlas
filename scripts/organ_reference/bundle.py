@@ -82,6 +82,12 @@ def answers_spec(class_order: list[str], hierarchy: dict, cal: dict, cfg: dict, 
     spec["conformal"]["qhat_by_class"] = cal["qhat_by_class"]
     spec["conformal"]["marginal_qhat"] = cal["marginal_qhat"]
     spec["conformal"]["calibrated_on"] = "labelled RNA simulated uploads (the organ's calibration suite, validation split cells)"
+    options = cal.get("qhat_options") or {}
+    if options:
+        spec["conformal"]["options"] = options
+        spec["conformal"]["calibrated_on"] += "; " + "; ".join(
+            {"rare_min": f"classes with fewer than {options.get('rare_min')} calibration cells take their group's threshold",
+             "floor": "no entry bar below chance (qhat at most 1 - 1/C)"}[k] for k in options)
     spec["ood"]["threshold"] = cal["ood_threshold"]
     spec["hierarchy"] = hierarchy
     spec["class_order"] = class_order
@@ -127,7 +133,7 @@ def write(work: Path, target: Path, cfg: dict, label: str, evaluation: dict, che
     answers = answers_spec(classes["class_order"], classes["hierarchy"], cal, cfg, members, source)
     data.save_json(target / "answers_spec.json", answers)
     rna = data.resolve(cfg["rna"]).name
-    data.save_json(target / "spec.json", best_guess_spec(answers, cfg["organ"], label, len(table), rna, evaluation))
+    data.save_json(target / "spec.json", best_guess_spec(answers, cfg.get("base_organ", cfg["organ"]), label, len(table), rna, evaluation))
     shutil.copyfile(work / "class_balanced_stats.npz", target / "class_balanced_stats.npz")
     shutil.copyfile(work / "class_means_cb.npy", target / "class_means_cb.npy")
     for name in members:

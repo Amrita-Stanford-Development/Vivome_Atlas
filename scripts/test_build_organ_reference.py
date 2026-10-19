@@ -204,5 +204,42 @@ class Modules(unittest.TestCase):
         np.testing.assert_array_equal(mod, modules.build(X, target_size=6, cells=200, pca=8, seed=0))
 
 
+
+class QhatOptions(unittest.TestCase):
+    """organ references v2's calibration options (calibrate.fit_qhat_v2)."""
+
+    def setUp(self):
+        from organ_reference import calibrate
+        self.calibrate, self.n2 = calibrate, calibrate.n2
+        rng = np.random.default_rng(0)
+        self.y = np.concatenate([np.repeat(0, 400), np.repeat(1, 400), np.repeat(2, 60)])
+        self.scores = rng.uniform(0, 1, len(self.y)) ** np.where(self.y == 2, 0.2, 2.0)
+        # class 2's 60 rows are only 12 distinct cells, each drawn five times
+        self.cells = np.concatenate([np.arange(400), np.arange(400, 800), np.repeat(np.arange(800, 812), 5)])
+        self.group_of = np.array([0, 1, 1])
+
+    def test_without_options_it_is_nb2s_fit(self):
+        cal = {"alpha": 0.1, "min_n": 50}
+        q, m = self.calibrate.fit_qhat_v2(self.scores, self.y, self.cells, 3, cal, self.group_of)
+        q0, m0 = self.n2.fit_qhat(self.scores, self.y, 3, 0.1, True, 50)
+        np.testing.assert_array_equal(q, q0)
+        self.assertEqual(m, m0)
+
+    def test_the_floor_keeps_every_entry_bar_at_or_above_chance(self):
+        q, _ = self.calibrate.fit_qhat_v2(self.scores, self.y, self.cells, 3, {"alpha": 0.1, "min_n": 50, "floor": "chance"}, self.group_of)
+        self.assertTrue((1.0 - q >= 1.0 / 3 - 1e-12).all())
+
+    def test_a_class_with_few_unique_cells_takes_its_groups_threshold(self):
+        cal = {"alpha": 0.1, "min_n": 50, "rare_min": 30}
+        q, _ = self.calibrate.fit_qhat_v2(self.scores, self.y, self.cells, 3, cal, self.group_of)
+        q0, _ = self.n2.fit_qhat(self.scores, self.y, 3, 0.1, True, 50)
+        self.assertEqual(q[0], q0[0])
+        self.assertEqual(q[1], q0[1])
+        same = np.isin(self.y, [1, 2])
+        want = float(np.quantile(self.scores[same], self.n2.conformal_level(int(same.sum()), 0.1), method="higher"))
+        self.assertEqual(q[2], want)
+        self.assertNotEqual(q[2], q0[2])
+
+
 if __name__ == "__main__":
     unittest.main()

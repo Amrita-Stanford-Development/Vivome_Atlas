@@ -113,5 +113,6 @@ def suites(cfg: dict, y: np.ndarray, classes: list[str], VA: np.ndarray, TE: np.
         return (sg.make_suite("calib", VA, y[VA], classes, s["n_uploads"], seed=s["calib_seed"]),
                 sg.make_suite("eval", TE, y[TE], classes, s["n_uploads"], seed=s["eval_seed"]))
     h, p = cfg["hierarchy"], tuple(s["profiles"])
-    return (make_suite("calib", VA, y[VA], classes, h, p, s["n_uploads"], s["calib_seed"]),
-            make_suite("eval", TE, y[TE], classes, h, p, s["n_uploads"], s["eval_seed"]))
+    rule = {"min_cells": s.get("min_cells", 20), "cap_per_class": s.get("cap_per_class", False)}
+    return (make_suite("calib", VA, y[VA], classes, h, p, s["n_uploads"], s["calib_seed"], **rule),
+            make_suite("eval", TE, y[TE], classes, h, p, s["n_uploads"], s["eval_seed"], **rule))
