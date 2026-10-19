@@ -259,6 +259,20 @@ listings and papers only. Its report is summarised here.
   the Schiller COPD data, and the label maps of PXD040654 and PXD046176.
 - **Roles in code:** `scripts/fetch_public_sets.py`, tier V.
 
+### Amendment 14, 2026-10-19: the organ references' v2 candidates and their gates
+
+The v2 plan is `research/organ-references.md`, "Version 2".
+- **Candidates:** "lymph_node v2" (`scripts/organs/lymph_node_v2.json`)
+  and "lung v2" (`scripts/organs/lung_v2.json`). No colon v2 is built: the
+  diagnostics A2 and A4 stop it.
+- **G1 is split** (the owner's decision of 2026-10-18). Mixed uploads carry
+  the four bars; narrow uploads only the 90% safety bar.
+- **G3 runs on amendment 13's fresh sets:** PXD045043 (lymph node) and
+  PXD058626 (lung). The v1 development sets are seen and reported only.
+- **The locked tests are unchanged and sealed.** PXD042367 and
+  MSV000094189 are each unsealed only if its organ's v2 passes, then scored
+  once under its protocol's amendment 1. PXD052341 stays sealed.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

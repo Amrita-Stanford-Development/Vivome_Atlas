@@ -87,8 +87,13 @@ def read_label_map(samples: list[str]) -> tuple[pd.DataFrame, dict]:
                                 "excluded": excluded}
 
 
+# The candidate's build (the protocol's amendment 1, 2026-10-19: "lung v2", built from
+# scripts/organs/lung_v2.json); v1 missed its gates.
+CANDIDATE = "lung_v2"
+
+
 def candidate_dir(rehearse: bool) -> Path:
-    work = organ_data.WORK / "lung" / "bundle"
+    work = organ_data.WORK / CANDIDATE / "bundle"
     if rehearse:
         return work
     m = re.search(r"candidate.*?MANIFEST\.json[^`]*`([0-9a-f]{64})`", PROTOCOL.read_text(encoding="utf-8"), re.I | re.S)
@@ -131,11 +136,11 @@ CODE = {"epithelial": "EPI", "endothelial": "END", "stromal": "MES", "immune": "
 def rehearsal_files(directory: Path) -> tuple[Path, dict]:
     """Pseudobulk pools of the lung's test cells by donor and lineage, detection drawn
     from the development sorted pools (MSV000094373), plus pre-sort-mix and QC decoys."""
-    work = organ_data.WORK / "lung"
+    work = organ_data.WORK / CANDIDATE
     lab = pd.read_csv(work / "labels.csv.gz", keep_default_na=False)
     test = np.load(work / "splits_seed0.npz")["test"]
     genes = pd.read_csv(work / "feature_space_genes.csv")["gene"].tolist()
-    X = organ_data.load_rna(organ_data.resolve(organ_data.load_organ("lung")["rna"]), genes)[lab["row"].to_numpy()]
+    X = organ_data.load_rna(organ_data.resolve(organ_data.load_organ(CANDIDATE)["rna"]), genes)[lab["row"].to_numpy()]
     dev = pd.read_csv(PUBLIC / "LungMAP2025_BPD_MSV000094373" / "combined_protein.tsv", sep="\t", low_memory=False)
     lfq = dev[[c for c in dev.columns if c.endswith(" MaxLFQ Intensity")]].to_numpy(float)
     seen_share = pd.Series((lfq > 0).mean(1), index=dev["Gene"].fillna("").str.upper()).groupby(level=0).max()

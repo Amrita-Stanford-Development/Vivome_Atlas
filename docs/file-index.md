@@ -790,6 +790,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebooks/organ_v2_sink.py` — organ references v2, diagnosis A1b: what draws protein pools to one class (the path that picks it, the class's own markers, the pools' depth, the upload's company), an explanation only
 - `research/notebook-outputs/organ_v2_sink/rules.json` — A1b's settings, written before the run
 - `research/notebook-outputs/organ_v2_sink/probes.json` — A1b: each sink by path, with its class's markers removed, with pools thinned, and with each population alone
+- `research/notebook-outputs/organ_v2_registry.json` — the organ references v2's registry: each candidate's organ file and suites (sha256, before training) and its bundle's MANIFEST (at freeze, before its gates)
 - `research/notebooks/organ_v2_gates.py` — organ references v2: an organ's split G1 (mixed uploads gated, narrow uploads safe) and G3 on its fresh development set, scored once against the registered suite and bundle; its seen sets reported
 - `research/notebooks/organ_v2_masking.py` — organ references v2, diagnostic A1: each organ's G3 on its v1 bundle with immunoglobulin constant chains, serum proteins, both, or as many random genes removed from every upload; a decision rule fixed in the script picks v2's gene exclusions
 - `research/notebook-outputs/organ_v2_masking/rules.json` — A1's rules, written before the run: the gene sets per organ, the guards, the seed

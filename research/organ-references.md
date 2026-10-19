@@ -173,8 +173,8 @@ Run history, entry 55. Records: `research/notebook-outputs/lung_build/`,
 - **Narrow uploads stay weak, the colon's cause in milder form.**
   Single-class uploads commit 31.6% and lineage-only uploads 55.7%. They pull
   the overall rate just under the bar.
-- **MSV000094373: every control donor's epithelial pool is called
-  macrophage.** That is 4 of 4, mostly at class level. The BPD donors'
+- **MSV000094373: 4 of the 5 control donors' epithelial pools are called
+  macrophage** (corrected 2026-10-19; it said 4 of 4), mostly at class level. The BPD donors'
   epithelial pools are mostly called epithelial, and the endothelial pools
   are mostly right (7 of 10).
   - Whether those control EpCAM+ sorts carry macrophage material cannot be
@@ -337,6 +337,84 @@ shown on the Atlas page without labelling (`web/data/organs/`,
   protocol's rule 1 allows no candidate that missed its gates.
 - The lymph node's work folder and bundle stay on Drive
   (`drive/Data/Results/Organs/lymph_node/`).
+
+## Version 2: correcting the organs (from 2026-10-18)
+
+The owner asked to correct the three organs. The plan explored every
+failure, tested each suspected cause with a diagnostic committed before its
+run, and builds v2 candidates only from what the diagnostics support.
+
+**The owner's decisions (2026-10-18):**
+- **G1 is split.** Mixed uploads (at least 3 classes spanning at least 2
+  lineages, or a whole tissue) must meet G1's four bars. Narrow uploads (one
+  or two classes, or one lineage) must only be safe: correct when committed
+  at least 90%. G1 as v1 wrote it is always reported. This was fixed before
+  any diagnostic ran.
+- **Fresh G3 sets.** v2 is judged on development sets never read before
+  (`side-tests.md`, amendment 13). The v1 sets are seen and reported only.
+- **Order.** The lymph node, then the lung, then the colon.
+- **Settings.** Gene exclusions and pool training are decided by
+  diagnostics, with rules fixed before each ran.
+
+**The diagnostics** (`research/notebook-outputs/organ_v2_*`):
+
+| Step | Question | Result and decision |
+|---|---|---|
+| A1 | Do immunoglobulin or serum proteins make the sinks? | No: removing them moves nothing in any organ. v2 removes no genes. |
+| A1b | What draws pools to one class? | The encoder, on deep, mixed pools. Removing plasma's own markers changes nothing; thinning pools to single-cell depth halves the lymph node's sink; B-cell pools uploaded alone are never plasma. An explanation only. |
+| A0 | Can calibration be replayed offline? | Yes: the cache equals the service on every replayed cell. Its refit check was amended after the first run, from rank to a qhat bound of 0.005 (the largest shift is 0.0008). |
+| A2 | What can calibration do under the split G1? | Lung: v1's own rule already gives mixed uploads 96.6% committed. Lymph node: mixed 78.5%. Colon: 16.8%, and 97% only if each upload's band were known. Calibrating on mixed uploads only is unsafe for narrow ones. |
+| A3 | Rare and hard classes | Lymph node: the chance floor (committed 82 → 97 on the rare-class suite, coverage 91.1 → 88.2). Lung and colon: the group fallback for classes with under 30 calibration cells. |
+| A4 | Can the colon's band be read without labels? | No key passes: each reads some real narrow upload as mixed, or no real mixed upload as mixed. **The colon v2 is not built.** |
+| A6 | Does training on RNA pools remove the sinks? | Short of its bar: the lymph node's plasma guesses fall 44 → 35 of 48 (the bar was 12 fewer). v2 does not train on pools. Pools helped single cells in every organ (validation +0.7 to +6.5 points). |
+| A5 | Profiles, explanation only | Not run. No v2 decision depends on it once G1 is split. |
+
+**The candidates.** Each is its v1 file with the decided changes only:
+
+| | lymph node v2 (`scripts/organs/lymph_node_v2.json`) | lung v2 (`scripts/organs/lung_v2.json`) |
+|---|---|---|
+| Classes | v1's minus the generic "t cell" (18) | v1's minus the generic "monocyte" (27) |
+| Split | v1's, carried through the atlas rows | v1's, carried through the atlas rows |
+| Suites | new seeds; every class with at least 5 cells, short classes capped | the same |
+| Calibration | the chance floor | the group fallback (under 30 cells) |
+| Unchanged | gene space, identifier map, profiles, module settings, training, fusion | the same |
+
+**The gates, fixed now, before any v2 model** (`research/notebooks/organ_v2_gates.py`):
+- **G1, split:**
+  - mixed uploads: committed ≥ 75, correct when committed ≥ 90, coverage
+    ≥ 85, false abstention ≤ 2;
+  - narrow uploads: correct when committed ≥ 90.
+- **G3, fresh**, AUROC ≥ 0.8:
+  - **lung v2, PXD058626:** every run's FragPipe "Intensity" in one upload.
+    The score is P(airway epithelial group) − P(alveolar epithelial group),
+    control airways (12) over control alveoli (12). IPF regions are
+    reported.
+  - **lymph node v2, PXD045043:** P(B cell group), white pulp over red pulp,
+    over the single labelled DIA voxels. The 42-voxel map (its labels came
+    from the protein data) and technical replicates are excluded. The
+    reader is fixed by a dated note on the deposit's layout once it is
+    downloaded (jPOST refused this network's connections on 2026-10-19),
+    before the lymph node's gate run.
+- **G2:** one donor held out, a diagnosis.
+- **G4:** the locked test's rehearsal on the v2 bundle.
+- **Seen sets:** each organ's v1 G3 sets, reported only.
+
+**Registry.** Each v2 suite's sha256 is recorded in
+`research/notebook-outputs/organ_v2_registry.json` before training. Each
+bundle's MANIFEST sha256 is added at freeze, before its gates. The gate
+script refuses anything else.
+
+**Stop rules:**
+- Each v2 candidate's gates run once.
+- A miss stops that organ; nothing is tuned.
+- A change after any v2 gate result is a v3.
+- A pass unseals that organ's locked test, which is scored once under its
+  protocol's amendment 1.
+
+**Correction, 2026-10-19.** The lung's outcome said "4 of 4" control
+donors' epithelial pools were called macrophage. MSV000094373 has five
+control donors, and D119's pool is called epithelial, so it is 4 of 5. The
+text above and run history entry 55 are corrected.
 
 ## The large intestine's outcome: every failure, in one place
 

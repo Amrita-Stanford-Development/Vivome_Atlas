@@ -2385,8 +2385,8 @@ G3 uses its own development data.
   | one class | 31.6% | 24.5% |
 
 **G3:**
-- **MSV000094373: AUROC 0.62, miss.** Every control donor's epithelial pool
-  is called macrophage (4 of 4). The BPD donors' epithelial pools are mostly
+- **MSV000094373: AUROC 0.62, miss.** 4 of the 5 control donors' epithelial
+  pools are called macrophage (corrected 2026-10-19; it said 4 of 4). The BPD donors' epithelial pools are mostly
   called epithelial, and 7 of 10 endothelial pools are right.
 - **The Protein Atlas: AT2 over AT1, AUROC 1.0, pass.** Every AT1 pool's
   argmax lineage is immune.

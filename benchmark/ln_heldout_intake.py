@@ -108,8 +108,13 @@ def read_matrix(path: Path) -> alignment.RawMatrix:
     return alignment.parse_matrix_csv(path.read_text(encoding="utf-8"))
 
 
+# The candidate's build (the protocol's amendment 1, 2026-10-19: "lymph_node v2", built
+# from scripts/organs/lymph_node_v2.json); v1 missed its gates.
+CANDIDATE = "lymph_node_v2"
+
+
 def candidate_dir(rehearse: bool) -> Path:
-    work = organ_data.WORK / "lymph_node" / "bundle"
+    work = organ_data.WORK / CANDIDATE / "bundle"
     if rehearse:
         return work
     m = re.search(r"candidate.*?MANIFEST\.json[^`]*`([0-9a-f]{64})`", PROTOCOL.read_text(encoding="utf-8"), re.I | re.S)
@@ -157,12 +162,12 @@ def rehearsal_files(directory: Path) -> tuple[Path, dict]:
     """Regions as mixtures of the reference's test cells (germinal-centre-like,
     mantle-like, T-zone-like), detection from PXD047762's development regions,
     plus epithelium decoys (values shuffled across proteins) and a blank."""
-    work = organ_data.WORK / "lymph_node"
+    work = organ_data.WORK / CANDIDATE
     lab = pd.read_csv(work / "labels.csv.gz", keep_default_na=False)
     test = np.load(work / "splits_seed0.npz")["test"]
     genes = pd.read_csv(work / "feature_space_genes.csv")["gene"].tolist()
-    X = organ_data.load_rna(organ_data.resolve(organ_data.load_organ("lymph_node")["rna"]), genes)[lab["row"].to_numpy()]
-    dev = pd.read_csv(work / "dev" / "coscia2024_fig3_pg_matrix.tsv", sep="\t")
+    X = organ_data.load_rna(organ_data.resolve(organ_data.load_organ(CANDIDATE)["rna"]), genes)[lab["row"].to_numpy()]
+    dev = pd.read_csv(organ_data.WORK / "lymph_node" / "dev" / "coscia2024_fig3_pg_matrix.tsv", sep="\t")
     runs = [c for c in dev.columns if c.endswith(".d")]
     seen_share = pd.Series(np.isfinite(dev[runs].to_numpy(float)).mean(1), index=dev["Genes"].fillna("").str.upper()).groupby(level=0).max()
     p_det = np.array([float(seen_share.get(g.upper(), 0.0)) for g in genes])

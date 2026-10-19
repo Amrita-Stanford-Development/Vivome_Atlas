@@ -103,4 +103,11 @@ in DIA-NN's layout. The record goes to
 
 ## Amendments
 
-None yet.
+**Amendment 1, 2026-10-19: the candidate is "lymph_node v2".** The v1 bundle
+missed its development gates, so under rule 1 it is no candidate. The
+organ's v2 (`scripts/organs/lymph_node_v2.json`; `research/organ-references.md`,
+"Version 2"; `side-tests.md`, amendment 14) replaces it as the one
+candidate. Its intake reads the v2 work folder (`CANDIDATE` in the intake
+script). Its bundle's MANIFEST.json sha256 is added below at freeze, before
+any unsealing, and only if the v2 gates pass. Nothing else in this
+protocol changes.
