@@ -1,0 +1,314 @@
+[
+  {
+    "upload": "Kabatnik Class1 alone",
+    "cells": 9,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.1111111111111111,
+      "K2": 2.336573541485641,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 0.0,
+    "committed_wrong_banded": {
+      "K1": 0.0,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Kabatnik Class2 alone",
+    "cells": 9,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.1111111111111111,
+      "K2": 1.4174111811317323,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 0.0,
+    "committed_wrong_banded": {
+      "K1": 0.0,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Kabatnik Class4 alone",
+    "cells": 9,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.3333333333333333,
+      "K2": 2.8888455168024434,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 0.0,
+    "committed_wrong_banded": {
+      "K1": 0.0,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Kabatnik classes 1, 2 and 4",
+    "cells": 27,
+    "expected": "mixed",
+    "keys": {
+      "K1": 0.37037037037037035,
+      "K2": 2.2255677090277444,
+      "K3": 2.570877908090048
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "Zheng macrophage alone",
+    "cells": 6,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.8333333333333334,
+      "K2": 2.749459273997205,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": true,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 0.0,
+    "committed_wrong_banded": {
+      "K1": 50.0,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Zheng cd8 alone",
+    "cells": 6,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.8333333333333334,
+      "K2": 2.0,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": true,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 0.0,
+    "committed_wrong_banded": {
+      "K1": 83.33,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Zheng cd4 alone",
+    "cells": 6,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.0,
+      "K2": 2.381101577952299,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 0.0,
+    "committed_wrong_banded": {
+      "K1": 0.0,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Zheng all three",
+    "cells": 18,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.2777777777777778,
+      "K2": 2.6670945128082106,
+      "K3": null
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    },
+    "committed_wrong_pooled": 16.67,
+    "committed_wrong_banded": {
+      "K1": 0.0,
+      "K2": 0.0,
+      "K3": 0.0
+    }
+  },
+  {
+    "upload": "Fulcher 2026, full",
+    "cells": 1275,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.37411764705882355,
+      "K2": 1.4830292390027269,
+      "K3": 11.252783412348021
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": true
+    }
+  },
+  {
+    "upload": "Fulcher 2026, CD4T alone",
+    "cells": 308,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.1331168831168831,
+      "K2": 2.2574947199637334,
+      "K3": 4.637829304389881
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "Fulcher 2026, CD8T alone",
+    "cells": 181,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.17679558011049723,
+      "K2": 2.1813897202853427,
+      "K3": 3.1362023301195023
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "Fulcher 2026, NK alone",
+    "cells": 150,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.22,
+      "K2": 2.219726585582989,
+      "K3": 3.1168569551478016
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "Fulcher 2026, B alone",
+    "cells": 102,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.1568627450980392,
+      "K2": 2.0483548284294124,
+      "K3": 2.4192120043570116
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "Fulcher 2026, monocyte alone",
+    "cells": 456,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.16447368421052633,
+      "K2": 2.4158400627305507,
+      "K3": 5.948450343067871
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "Fulcher 2026, DC alone",
+    "cells": 54,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.12962962962962962,
+      "K2": 1.894619907122149,
+      "K3": 2.0751173368011258
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": false
+    }
+  },
+  {
+    "upload": "PBMC240",
+    "cells": 238,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.18565400843881857,
+      "K2": 2.3065441846046615,
+      "K3": 7.545546416067635
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": true
+    }
+  },
+  {
+    "upload": "SCoPE2, published",
+    "cells": 1490,
+    "expected": "narrow",
+    "keys": {
+      "K1": 0.12013422818791947,
+      "K2": 1.4190749752002894,
+      "K3": 17.539164871570392
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": true
+    }
+  },
+  {
+    "upload": "Polyp plate",
+    "cells": 516,
+    "expected": "mixed",
+    "keys": {
+      "K1": 0.24395604395604395,
+      "K2": 2.167664245014001,
+      "K3": 17.671786061354958
+    },
+    "reads_mixed": {
+      "K1": false,
+      "K2": false,
+      "K3": true
+    }
+  }
+]

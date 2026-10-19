@@ -1,0 +1,124 @@
+{
+  "lymph_node": {
+    "pools": 2512,
+    "control": {
+      "validation_balanced": 69.97,
+      "epochs_run": 60,
+      "calib_top1": 57.577,
+      "metrics": {
+        "zheng_group_accuracy": 35.9,
+        "zheng_plasma_guesses": 44.0,
+        "pxd011683_b_share": 73.33,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0
+      },
+      "guards": {
+        "hpa_lymph_node_pools": 75.0
+      },
+      "reported": {
+        "hpa_non_immune_pools_b_group": 56
+      },
+      "checkpoint_sha256": "ef5125b18812cd9e3aa46ccf36c2ceea18d866290ff135058f09c1baea79d02f"
+    },
+    "pooled": {
+      "validation_balanced": 70.71,
+      "epochs_run": 60,
+      "calib_top1": 61.291,
+      "metrics": {
+        "zheng_group_accuracy": 30.77,
+        "zheng_plasma_guesses": 35.0,
+        "pxd011683_b_share": 82.22,
+        "coscia_auroc": 1.0,
+        "coscia_epithelium_plasma": 4.0
+      },
+      "guards": {
+        "hpa_lymph_node_pools": 75.0
+      },
+      "reported": {
+        "hpa_non_immune_pools_b_group": 64
+      },
+      "checkpoint_sha256": "14fa426c0103005515c8730127a5220ba7ea916ae1127cd96f74af1f7cc508f5"
+    }
+  },
+  "lung": {
+    "pools": 3214,
+    "control": {
+      "validation_balanced": 74.8,
+      "epochs_run": 60,
+      "calib_top1": 52.293,
+      "metrics": {
+        "bpd_auroc": 0.61,
+        "bpd_epithelial_immune": 6.0
+      },
+      "guards": {
+        "hpa_at2_over_at1": 1.0,
+        "ipf_foci_over_alveoli": 0.8846
+      },
+      "reported": {},
+      "checkpoint_sha256": "c27172c633cd9756fd8906f4e78f2f6057ba5789edc86628f75eefac88f26d53"
+    },
+    "pooled": {
+      "validation_balanced": 76.61,
+      "epochs_run": 60,
+      "calib_top1": 58.028,
+      "metrics": {
+        "bpd_auroc": 0.48,
+        "bpd_epithelial_immune": 6.0
+      },
+      "guards": {
+        "hpa_at2_over_at1": 0.96,
+        "ipf_foci_over_alveoli": 0.8974
+      },
+      "reported": {},
+      "checkpoint_sha256": "fa2e500325c872eef1eca0c5129b63d190c2fb124e216c52b98cf523b54a9fc9"
+    }
+  },
+  "large_intestine": {
+    "pools": 2015,
+    "control": {
+      "validation_balanced": 68.28,
+      "epochs_run": 60,
+      "calib_top1": 53.804,
+      "metrics": {
+        "zheng_group_accuracy": 44.44,
+        "zheng_t_pools_myeloid": 6.0
+      },
+      "guards": {
+        "kabatnik_auroc": 1.0
+      },
+      "reported": {
+        "polyp_group_aurocs": {
+          "B cell": 0.8321,
+          "T cell/ILC": 0.655,
+          "absorptive": 0.3088,
+          "endothelial": 0.4511,
+          "secretory": 0.6379,
+          "stem/TA": 0.9771
+        }
+      },
+      "checkpoint_sha256": "635d5f0bfd6a773e89b445890047a6f9e3a3c75a5ee810925e4a94dd7b98e55c"
+    },
+    "pooled": {
+      "validation_balanced": 74.75,
+      "epochs_run": 60,
+      "calib_top1": 57.489,
+      "metrics": {
+        "zheng_group_accuracy": 50.0,
+        "zheng_t_pools_myeloid": 4.0
+      },
+      "guards": {
+        "kabatnik_auroc": 1.0
+      },
+      "reported": {
+        "polyp_group_aurocs": {
+          "B cell": 0.8029,
+          "T cell/ILC": 0.5772,
+          "absorptive": 0.3961,
+          "secretory": 0.5187,
+          "stem/TA": 0.9662
+        }
+      },
+      "checkpoint_sha256": "3ac45272923bf4d61b8bebdfff194e20a3432e331cb349ebc755dfe938f14319"
+    }
+  }
+}

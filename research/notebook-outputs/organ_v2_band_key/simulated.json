@@ -1,0 +1,104 @@
+{
+  "held": {
+    "K1": [
+      {
+        "threshold": 0.603579,
+        "narrow_as_mixed": 4.62,
+        "mixed_as_mixed": 64.91
+      },
+      {
+        "threshold": 0.6772891600000002,
+        "narrow_as_mixed": 0.0,
+        "mixed_as_mixed": 50.0
+      },
+      {
+        "threshold": 0.5815687999999999,
+        "narrow_as_mixed": 6.15,
+        "mixed_as_mixed": 66.67
+      },
+      {
+        "threshold": 0.6940703999999999,
+        "narrow_as_mixed": 0.0,
+        "mixed_as_mixed": 43.86
+      },
+      {
+        "threshold": 0.6794350799999999,
+        "narrow_as_mixed": 0.0,
+        "mixed_as_mixed": 49.15
+      }
+    ],
+    "K2": [
+      {
+        "threshold": 2.860990997797786,
+        "narrow_as_mixed": 4.62,
+        "mixed_as_mixed": 8.77
+      },
+      {
+        "threshold": 2.8512089699449144,
+        "narrow_as_mixed": 4.69,
+        "mixed_as_mixed": 6.9
+      },
+      {
+        "threshold": 2.781562685335805,
+        "narrow_as_mixed": 7.69,
+        "mixed_as_mixed": 14.04
+      },
+      {
+        "threshold": 2.860990997797786,
+        "narrow_as_mixed": 4.62,
+        "mixed_as_mixed": 12.28
+      },
+      {
+        "threshold": 2.8319872251716034,
+        "narrow_as_mixed": 4.76,
+        "mixed_as_mixed": 8.47
+      }
+    ],
+    "K3": [
+      {
+        "threshold": 6.097209587427727,
+        "narrow_as_mixed": 6.15,
+        "mixed_as_mixed": 12.28
+      },
+      {
+        "threshold": 6.510307179947184,
+        "narrow_as_mixed": 3.12,
+        "mixed_as_mixed": 13.79
+      },
+      {
+        "threshold": 6.436913435919768,
+        "narrow_as_mixed": 3.08,
+        "mixed_as_mixed": 14.04
+      },
+      {
+        "threshold": 5.790976691012402,
+        "narrow_as_mixed": 7.69,
+        "mixed_as_mixed": 15.79
+      },
+      {
+        "threshold": 7.793461077858995,
+        "narrow_as_mixed": 0.0,
+        "mixed_as_mixed": 0.0
+      }
+    ]
+  },
+  "final_thresholds": {
+    "K1": 0.637176,
+    "K2": 2.8906210515744735,
+    "K3": 6.613259799081632
+  },
+  "medians": {
+    "K1": {
+      "mixed": 0.6713055,
+      "narrow": 0.175614
+    },
+    "K2": {
+      "mixed": 2.297151142618148,
+      "narrow": 1.9013406646507658
+    },
+    "K3": {
+      "mixed": 3.386952639667478,
+      "narrow": 2.2386197618511074
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "script_sha256": "d6f8aea63476e8ecee0f76768c359011922a7f13920e2e77bb128fff8caee8f4",
+  "started": "2026-10-18T22:50:28",
+  "seed_member": 1,
+  "seed_pools": 20261018,
+  "pool_share": 0.1,
+  "pool_min": 20,
+  "pool_max": 400,
+  "pool_sizes": [
+    10,
+    30,
+    100,
+    300
+  ],
+  "pure": 0.7,
+  "majority": 0.8,
+  "calib_uploads": 120,
+  "sink_drop": 12,
+  "cost": 2.0
+}

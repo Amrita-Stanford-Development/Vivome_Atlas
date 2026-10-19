@@ -1,0 +1,21 @@
+{
+  "script_sha256": "e8bbed540c76bd3e5c7d7bb51241431890cad6b0e2225efcc9c898a993e81efe",
+  "started": "2026-10-18T22:53:11",
+  "organ": "large_intestine",
+  "seeds": 5,
+  "narrow_quantile": 98.0,
+  "bars": {
+    "sim_narrow_as_mixed_max": 3.0,
+    "sim_mixed_as_mixed_min": 50.0,
+    "seeds_needed": 4,
+    "wrong_increase_max": 5.0
+  },
+  "k3_settings": {
+    "components": 5,
+    "min_observed": 0.5,
+    "permutations": 3,
+    "min_cells": 20,
+    "min_proteins": 50
+  },
+  "cache_sha256": "4e550e98189cf125f5ee5d8923a87d06a33e900cccb3b0b9058f334451d02781"
+}

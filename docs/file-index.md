@@ -769,6 +769,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_build/mask_profiles_summary.csv` — the lymph node's missingness profiles (blood's, as measured)
 - `research/notebook-outputs/lymph_node_build/bundle_MANIFEST.json` — the lymph node bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/organ_v2_band_key.py` — organ references v2, diagnostic A4 (colon only): label-free keys for mixed against narrow uploads, set on simulated uploads and checked on real narrow and mixed uploads, with a pass rule fixed in the script
+- `research/notebook-outputs/organ_v2_band_key/rules.json` — A4's settings, written before the run
+- `research/notebook-outputs/organ_v2_band_key/simulated.json` — A4: each key's thresholds and held-half rates on simulated colon uploads
+- `research/notebook-outputs/organ_v2_band_key/real.json` — A4: each key on real narrow and mixed uploads through the colon bundle, and committed-and-wrong under each rule
+- `research/notebook-outputs/organ_v2_band_key/decision.json` — A4's decision: no key passes, so the colon v2 is not built
 - `research/notebooks/organ_v2_cache.py` — organ references v2, diagnostic A0: every calibration answer of the v1 bundles (v1's calibration suite and a rare-class suite) cached for offline calibration trials, with a replay check against the service
 - `research/notebook-outputs/organ_v2_cache/rules.json` — A0's settings, written before the run
 - `research/notebook-outputs/organ_v2_cache/record.json` — A0: per organ and suite, cells, classes, the cache's sha256 (caches on Drive), the replay against the service and the qhat refit
@@ -778,6 +782,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/organ_v2_calibration/a3.json` — A3: per organ, suite, arm and fold, answers and per-class results for the rare-class remedies
 - `research/notebook-outputs/organ_v2_calibration/decisions.json` — A2 and A3's decisions: banding to A4 for the colon only; the chance floor for the lymph node; the group fallback for the lung and colon
 - `research/notebooks/organ_v2_pools.py` — organ references v2, diagnostic A6 (the owner's decision): one member per organ trained with RNA pseudobulk pools beside single cells, against a control member, read on the seen protein sets and on single cells, with a decision rule fixed in the script
+- `research/notebook-outputs/organ_v2_pools/rules.json` — A6's settings, written before the run
+- `research/notebook-outputs/organ_v2_pools/results.json` — A6: control and pooled members per organ, on single cells and on the seen protein sets
+- `research/notebook-outputs/organ_v2_pools/decision.json` — A6's decision: the sink falls short of its bar, so v2 does not train on pools
 - `research/notebooks/organ_v2_sink.py` — organ references v2, diagnosis A1b: what draws protein pools to one class (the path that picks it, the class's own markers, the pools' depth, the upload's company), an explanation only
 - `research/notebook-outputs/organ_v2_sink/rules.json` — A1b's settings, written before the run
 - `research/notebook-outputs/organ_v2_sink/probes.json` — A1b: each sink by path, with its class's markers removed, with pools thinned, and with each population alone

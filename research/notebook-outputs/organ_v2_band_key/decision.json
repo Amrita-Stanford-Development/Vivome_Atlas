@@ -1,0 +1,33 @@
+{
+  "finished": "2026-10-18T22:55:01",
+  "seconds": 110,
+  "keys": {
+    "K1": {
+      "simulated": false,
+      "real_narrow_read_narrow": false,
+      "a_real_mixed_read_mixed": false,
+      "wrong_within": false,
+      "passes": false,
+      "mixed_share_median": 50.0
+    },
+    "K2": {
+      "simulated": false,
+      "real_narrow_read_narrow": true,
+      "a_real_mixed_read_mixed": false,
+      "wrong_within": true,
+      "passes": false,
+      "mixed_share_median": 8.77
+    },
+    "K3": {
+      "simulated": false,
+      "real_narrow_read_narrow": false,
+      "a_real_mixed_read_mixed": true,
+      "wrong_within": true,
+      "passes": false,
+      "mixed_share_median": 13.79
+    }
+  },
+  "chosen": null,
+  "threshold": null,
+  "colon_v2_built": false
+}

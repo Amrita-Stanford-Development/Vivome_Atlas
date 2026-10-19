@@ -1,0 +1,32 @@
+{
+  "finished": "2026-10-18T23:17:12",
+  "seconds": 1604,
+  "sink_drop_met": false,
+  "guards_hold": {
+    "lymph_node": {
+      "hpa_lymph_node_pools": false
+    },
+    "lung": {
+      "hpa_at2_over_at1": true,
+      "ipf_foci_over_alveoli": true
+    },
+    "large_intestine": {
+      "kabatnik_auroc": true
+    }
+  },
+  "cost_within": {
+    "lymph_node": {
+      "validation": true,
+      "calib_top1": true
+    },
+    "lung": {
+      "validation": true,
+      "calib_top1": true
+    },
+    "large_intestine": {
+      "validation": true,
+      "calib_top1": true
+    }
+  },
+  "v2_trains_on_pools": false
+}
