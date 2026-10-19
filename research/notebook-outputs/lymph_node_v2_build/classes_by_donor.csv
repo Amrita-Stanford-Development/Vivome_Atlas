@@ -1,0 +1,20 @@
+class_name,TSP14,TSP2,TSP21,TSP25,TSP27,TSP7,all
+b cell,8014,5302,13333,12663,7316,8118,54746
+"cd4-positive, alpha-beta t cell",10421,2431,8905,7467,7654,2524,39402
+"cd8-positive, alpha-beta t cell",6274,1033,3579,851,2193,811,14741
+classical monocyte,87,131,146,48,3,137,552
+endothelial cell,136,12,11,0,15,22,196
+innate lymphoid cell,275,129,0,0,1,340,745
+intermediate monocyte,50,125,45,17,1,43,281
+macrophage,949,99,227,330,39,150,1794
+mast cell,31,33,13,11,2,122,212
+mature nk t cell,235,113,104,57,62,453,1024
+myeloid dendritic cell,11,42,35,0,0,34,122
+"naive thymus-derived cd4-positive, alpha-beta t cell",969,499,671,811,831,373,4154
+natural killer cell,547,393,151,136,103,249,1579
+neutrophil,155,6,41,12,2,87,303
+non-classical monocyte,23,22,4,1,0,21,71
+plasma cell,2124,283,198,2403,589,347,5944
+regulatory t cell,595,7,77,0,133,156,968
+stromal cell,106,0,0,0,0,5,111
+all,31002,10660,27540,24807,18944,13992,126945

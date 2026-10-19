@@ -1,0 +1,29 @@
+{
+  "sources": {
+    "bubis_hela": 5811,
+    "bubis_lung": 5853,
+    "bubis_candidates": 6230,
+    "pbmc240": 3196,
+    "scope2": 2935,
+    "fulcher": 1661,
+    "lungmap_bpd": 5073,
+    "hpa_dvp": 10996,
+    "herrera_ipf": 3673
+  },
+  "union_raw": 13170,
+  "union_no_ig": 13061,
+  "ig_tcr_excluded": 109,
+  "rna_genes": 61806,
+  "feature_space": 12614,
+  "per_source_in_space": {
+    "bubis_hela": 5774,
+    "bubis_lung": 5785,
+    "bubis_candidates": 6023,
+    "pbmc240": 3136,
+    "scope2": 2907,
+    "fulcher": 1654,
+    "lungmap_bpd": 5049,
+    "hpa_dvp": 10916,
+    "herrera_ipf": 3442
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "source": "scripts/build_organ_reference.py on scripts/organs/lung_v2.json",
+  "files": {
+    "answers_spec.json": {
+      "sha256": "8faa1f6135b1c16279839255d2100e0808907de775e56a0ce163272bb4d54cd5",
+      "bytes": 7163
+    },
+    "class_balanced_stats.npz": {
+      "sha256": "7324182283e33c9323cef20cf25f5975d7924ea55114155d4ac2ac7abf1cd707",
+      "bytes": 101406
+    },
+    "class_means_cb.npy": {
+      "sha256": "844f4ea3b1ba1b299874ad25f00413595b58ec3df854b08e4e6793cef6d04087",
+      "bytes": 1362440
+    },
+    "feature_space_genes.csv": {
+      "sha256": "8b52c7665270156271cdba0a3fbf93b9a58a5c67ec3873b732efe2ec829847d4",
+      "bytes": 79544
+    },
+    "gene_id_map.tsv": {
+      "sha256": "be39bb9e52ed05aae1a8110d201f17e056452179b132142e06d4b0615cd4365d",
+      "bytes": 606497
+    },
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "855831460a3bd92ca03187ef7e45c798ef09d77cb0284567d7cc339d9561f038",
+      "bytes": 146838093
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "ce484cadcc1e064ad7edae7f3f7d678afec07db34d8fc820151d2743d0f44953",
+      "bytes": 146838093
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "505e60036858df8631cf3367463227add5479f8bc9bd3a6dcf4aa4551bfc2487",
+      "bytes": 146838093
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "a11e00edb6de1cb19fd2f0e5c4fa5892d84971d9437a4d4714aaab9ae41e0983",
+      "bytes": 146838093
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "b37f8d4a821ff8557f61d32662bbd7fe0c8659efe39789ff0a32efab8daeec84",
+      "bytes": 146838093
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "8f3e2b5c1b7d39d78b1afd3d6233c7e2c3a2305e67ff7d27a33648e917293e6c",
+      "bytes": 13952
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "099e5def29838138a5f9ae58210d596d942baec34932b03d5b387e2e917685ef",
+      "bytes": 13952
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "5b4938462041ece61acb5fb44a5ec5982eba534d5ff1766390d03689012ef92a",
+      "bytes": 16698496
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "52c3855416f89f6d9d4eba6acb0e4d51ab231972b488ca01e8d2b67c06a336a9",
+      "bytes": 13952
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "c3cee5bba940d927f18621610368b8fe525155e85897894a52628db34005cd5c",
+      "bytes": 13952
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "000ed2bb1d8c0354075fa55abbec528dbbd5d8e9a47bf76d7b376c80cd77c45d",
+      "bytes": 16698496
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "d7c5665689be2d7c9fd19cd781139b1fc0851f2192da3ac685c6a0212440afae",
+      "bytes": 13952
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "eb248ce68053116848050ace8985d7d3c15d833bd3ca42b8af6c2f3dece211d6",
+      "bytes": 13952
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "0e93c1cb4e637f964d29d2c2ff62203c8c8da83963e3c085fbc723fadb4aa386",
+      "bytes": 16698496
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "93d7d123bcfa77916bc4dd23464713258f146d184495650cd225e07494282799",
+      "bytes": 13952
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "88465b3966f9a4a4a4a66e75c2cddeb9d75b423d46241a9bbe7f50a7419f9276",
+      "bytes": 13952
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "e2d21e71a222fe71ddf0cb78389a667500aba6e640193dca05a24bd7b49865ae",
+      "bytes": 16698496
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "625577aea02235557e7532ce3545097da89a3699def06411a8a712db14008936",
+      "bytes": 13952
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "73b0e5fcd39e855955716933d126ad0b4d224cf50d0f26736eb55b73289f4691",
+      "bytes": 13952
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "82919c18f4dbb0bfa680b829e2b13b1f7f3d23d91a1ee938ac2bee36c90ac423",
+      "bytes": 16698496
+    },
+    "reference_metadata.csv": {
+      "sha256": "2de790a5ab6d3c859e4c95a6afdc81edbe66cd3e9fe04c26597b42e4d066e8f5",
+      "bytes": 5184500
+    },
+    "spec.json": {
+      "sha256": "68cbe8096cfad448f107f0de45563bc2d444554dd3c2a132e050bffaf8d31640",
+      "bytes": 5531
+    }
+  }
+}

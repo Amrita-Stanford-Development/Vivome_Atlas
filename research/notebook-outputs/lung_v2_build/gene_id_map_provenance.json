@@ -1,0 +1,12 @@
+{
+  "source": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt, downloaded 2026-10-18",
+  "sha256": "12363916be36f8f6f91879b0faade4eeaac973722de7136ec61329b77f2c2f91",
+  "feature_space_genes": 12614,
+  "match_counts": {
+    "symbol": 12472,
+    "alias_or_prev_symbol": 136,
+    "unmapped": 5,
+    "ambiguous": 1
+  },
+  "resolution_method": "scripts/organ_reference/gene_ids.py (service/model/runtime/gene_id_map_v1_provenance.json's rule)"
+}

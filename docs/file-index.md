@@ -762,6 +762,22 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lung_build/gene_id_map_provenance.json` — the lung's identifier map
 - `research/notebook-outputs/lung_build/mask_profiles_summary.csv` — the lung's missingness profiles
 - `research/notebook-outputs/lung_build/bundle_MANIFEST.json` — the lung bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebook-outputs/lymph_node_v2_build/calibration.json` — the lymph node v2 build's calibration: temperatures, thresholds with their options, the members' sha256s
+- `research/notebook-outputs/lymph_node_v2_build/train_record.json` — the lymph node v2 build's five members
+- `research/notebook-outputs/lymph_node_v2_build/classes.json` — the lymph node v2 build's classes and hierarchy
+- `research/notebook-outputs/lymph_node_v2_build/classes_by_donor.csv` — the lymph node v2 build's cells per class and donor
+- `research/notebook-outputs/lymph_node_v2_build/feature_space_provenance.json` — the lymph node v2 build's gene space
+- `research/notebook-outputs/lymph_node_v2_build/gene_id_map_provenance.json` — the lymph node v2 build's identifier map
+- `research/notebook-outputs/lymph_node_v2_build/mask_profiles_summary.csv` — the lymph node v2 build's missingness profiles
+- `research/notebook-outputs/lymph_node_v2_build/bundle_MANIFEST.json` — the lymph node v2 build's bundle MANIFEST, frozen (on Drive, not in the repository)
+- `research/notebook-outputs/lung_v2_build/calibration.json` — the lung v2 build's calibration: temperatures, thresholds with their options, the members' sha256s
+- `research/notebook-outputs/lung_v2_build/train_record.json` — the lung v2 build's five members
+- `research/notebook-outputs/lung_v2_build/classes.json` — the lung v2 build's classes and hierarchy
+- `research/notebook-outputs/lung_v2_build/classes_by_donor.csv` — the lung v2 build's cells per class and donor
+- `research/notebook-outputs/lung_v2_build/feature_space_provenance.json` — the lung v2 build's gene space
+- `research/notebook-outputs/lung_v2_build/gene_id_map_provenance.json` — the lung v2 build's identifier map
+- `research/notebook-outputs/lung_v2_build/mask_profiles_summary.csv` — the lung v2 build's missingness profiles
+- `research/notebook-outputs/lung_v2_build/bundle_MANIFEST.json` — the lung v2 build's bundle MANIFEST, frozen (on Drive, not in the repository)
 - `research/notebook-outputs/lymph_node_build/calibration.json` — the lymph node build's calibration: temperatures, conformal and out-of-distribution thresholds, the members' sha256s
 - `research/notebook-outputs/lymph_node_build/train_record.json` — the lymph node's five members
 - `research/notebook-outputs/lymph_node_build/classes.json` — the lymph node's 19 classes and hierarchy

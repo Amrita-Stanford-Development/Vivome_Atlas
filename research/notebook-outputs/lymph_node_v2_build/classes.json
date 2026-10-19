@@ -1,0 +1,96 @@
+{
+  "class_order": [
+    "b cell",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "endothelial cell",
+    "innate lymphoid cell",
+    "intermediate monocyte",
+    "macrophage",
+    "mast cell",
+    "mature nk t cell",
+    "myeloid dendritic cell",
+    "naive thymus-derived cd4-positive, alpha-beta t cell",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "plasma cell",
+    "regulatory t cell",
+    "stromal cell"
+  ],
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "endothelial cell": {
+      "group": "endothelial",
+      "lineage": "stromal"
+    },
+    "innate lymphoid cell": {
+      "group": "NK/ILC",
+      "lineage": "lymphoid"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "mast cell": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "mature nk t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "myeloid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "natural killer cell": {
+      "group": "NK/ILC",
+      "lineage": "lymphoid"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "regulatory t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "stromal cell": {
+      "group": "stromal",
+      "lineage": "stromal"
+    }
+  }
+}

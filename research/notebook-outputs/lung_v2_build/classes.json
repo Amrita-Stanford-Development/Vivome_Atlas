@@ -1,0 +1,141 @@
+{
+  "class_order": [
+    "adventitial cell",
+    "alveolar type 2 fibroblast cell",
+    "b cell",
+    "basal cell",
+    "basophil",
+    "bronchial smooth muscle cell",
+    "capillary endothelial cell",
+    "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta t cell",
+    "classical monocyte",
+    "club cell",
+    "endothelial cell of artery",
+    "endothelial cell of lymphatic vessel",
+    "intermediate monocyte",
+    "lung ciliated cell",
+    "macrophage",
+    "mature nk t cell",
+    "natural killer cell",
+    "neutrophil",
+    "non-classical monocyte",
+    "pericyte",
+    "plasma cell",
+    "respiratory goblet cell",
+    "type i pneumocyte",
+    "type ii pneumocyte",
+    "vascular associated smooth muscle cell",
+    "vein endothelial cell"
+  ],
+  "hierarchy": {
+    "adventitial cell": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "alveolar type 2 fibroblast cell": {
+      "group": "fibroblast",
+      "lineage": "stromal"
+    },
+    "b cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "basal cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "basophil": {
+      "group": "granulocyte",
+      "lineage": "immune"
+    },
+    "bronchial smooth muscle cell": {
+      "group": "smooth muscle/pericyte",
+      "lineage": "stromal"
+    },
+    "capillary endothelial cell": {
+      "group": "blood vessel endothelial",
+      "lineage": "endothelial"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "club cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "endothelial cell of artery": {
+      "group": "blood vessel endothelial",
+      "lineage": "endothelial"
+    },
+    "endothelial cell of lymphatic vessel": {
+      "group": "lymphatic endothelial",
+      "lineage": "endothelial"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "lung ciliated cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "mature nk t cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "natural killer cell": {
+      "group": "T/NK cell",
+      "lineage": "immune"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "immune"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "immune"
+    },
+    "pericyte": {
+      "group": "smooth muscle/pericyte",
+      "lineage": "stromal"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "immune"
+    },
+    "respiratory goblet cell": {
+      "group": "airway epithelial",
+      "lineage": "epithelial"
+    },
+    "type i pneumocyte": {
+      "group": "alveolar epithelial",
+      "lineage": "epithelial"
+    },
+    "type ii pneumocyte": {
+      "group": "alveolar epithelial",
+      "lineage": "epithelial"
+    },
+    "vascular associated smooth muscle cell": {
+      "group": "smooth muscle/pericyte",
+      "lineage": "stromal"
+    },
+    "vein endothelial cell": {
+      "group": "blood vessel endothelial",
+      "lineage": "endothelial"
+    }
+  }
+}
