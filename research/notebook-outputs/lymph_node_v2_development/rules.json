@@ -1,0 +1,21 @@
+{
+  "script_sha256": "25660258e7d29c89a8c21f14fddd531b397998f9f1d11248d0397dffab297519",
+  "started": "2026-10-20T21:41:10",
+  "gates": {
+    "mixed_committed_min": 75.0,
+    "mixed_correct_when_committed_min": 90.0,
+    "mixed_coverage_min": 85.0,
+    "mixed_false_abstention_max": 2.0,
+    "narrow_correct_when_committed_min": 90.0,
+    "g3_auroc_min": 0.8
+  },
+  "registry": {
+    "organ_file_sha256": "effbbe829635db0fd21df7fa2689320d12f985cb6514d4a75bdf894178fc0c7b",
+    "calib_suite_sha256": "06a3252078cb1db8664c8d7eace34246f10b6b5f6f2f94b65217fef008cf60ca",
+    "eval_suite_sha256": "1104d18b22f57970881a79068113b7829e09d14be3757a0dd26255d8926db2d5",
+    "bundle_manifest_sha256": "5fb71df05e56718219bce54e8b75edddb440ae8e015950981944222d6ae4512f",
+    "registered": "2026-10-19, before training",
+    "frozen": "2026-10-19, after training, before any v2 gate"
+  },
+  "organ_file_sha256": "effbbe829635db0fd21df7fa2689320d12f985cb6514d4a75bdf894178fc0c7b"
+}

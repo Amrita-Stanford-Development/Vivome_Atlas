@@ -1,0 +1,677 @@
+{
+  "coscia2024": {
+    "regions": 14,
+    "by_region": {
+      "B": 5,
+      "T": 5,
+      "epithelium": 4
+    },
+    "auroc_b_over_t": 1.0,
+    "argmax_group": {
+      "B cell": {
+        "B": 4,
+        "T": 0,
+        "epithelium": 4
+      },
+      "T cell": {
+        "B": 1,
+        "T": 5,
+        "epithelium": 0
+      }
+    },
+    "answers": [
+      {
+        "truth": "B",
+        "label": "lymphoid",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "B",
+        "label": "lymphoid",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "B",
+        "label": "lymphoid",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "innate lymphoid cell"
+      },
+      {
+        "truth": "B",
+        "label": "b cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "B",
+        "label": "b cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "epithelium",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "epithelium",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "epithelium",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "epithelium",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "T",
+        "label": "T cell",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "cd8-positive, alpha-beta t cell"
+      },
+      {
+        "truth": "T",
+        "label": "lymphoid",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "cd4-positive, alpha-beta t cell"
+      },
+      {
+        "truth": "T",
+        "label": "T cell",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "cd4-positive, alpha-beta t cell"
+      },
+      {
+        "truth": "T",
+        "label": "T cell",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "cd8-positive, alpha-beta t cell"
+      },
+      {
+        "truth": "T",
+        "label": "lymphoid",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "cd4-positive, alpha-beta t cell"
+      }
+    ]
+  },
+  "zheng_tonsil": {
+    "pools": 48,
+    "by_population": {
+      "CD8 T": 15,
+      "tumour": 9,
+      "B cell": 6,
+      "CD4 T": 6,
+      "macrophage": 6,
+      "plasma": 6
+    },
+    "group_accuracy": 38.46,
+    "called_groups": {
+      "B cell": {
+        "B cell": 6,
+        "CD4 T": 6,
+        "CD8 T": 12,
+        "macrophage": 6,
+        "plasma": 6,
+        "tumour": 9
+      },
+      "T cell": {
+        "B cell": 0,
+        "CD4 T": 0,
+        "CD8 T": 3,
+        "macrophage": 0,
+        "plasma": 0,
+        "tumour": 0
+      }
+    },
+    "answers": [
+      {
+        "truth": "B cell",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "B cell",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "B cell",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "B cell",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "B cell",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "B cell",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "neutrophil"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "neutrophil"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "neutrophil"
+      },
+      {
+        "truth": "CD8 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD8 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD4 T",
+        "label": "b cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "CD4 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD4 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD4 T",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD4 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "CD4 T",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "macrophage",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "plasma",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "plasma",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "plasma",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "plasma",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "plasma",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "plasma",
+        "label": "plasma cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "tumour",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "plasma cell"
+      }
+    ]
+  },
+  "hpa": {
+    "pools": 128,
+    "group_accuracy_lymph_node_pools": 80.0,
+    "called_groups": {
+      "B cell": {
+        "alveolar cells type 1": 5,
+        "alveolar cells type 2": 5,
+        "astrocytes and neuropil": 3,
+        "b-cells": 5,
+        "capillaries": 0,
+        "cardiomyocytes": 5,
+        "cd4 t-cells": 4,
+        "cd8 t-cells": 0,
+        "ciliated cells": 0,
+        "collecting ducts": 0,
+        "distal tubules": 5,
+        "glomeruli": 1,
+        "granulosa cells": 2,
+        "hepatocytes": 5,
+        "keratinocytes": 0,
+        "large ducts": 3,
+        "macrophages": 0,
+        "microglia and neuropil": 3,
+        "neurons": 5,
+        "neutrophils": 0,
+        "oocytes": 0,
+        "pancreas epithelial cells": 5,
+        "pancreatic islets": 5,
+        "proximal tubules": 0,
+        "secretory cells": 0,
+        "skeletal myofibers": 5,
+        "smooth muscle cells": 5
+      },
+      "NK/ILC": {
+        "alveolar cells type 1": 0,
+        "alveolar cells type 2": 0,
+        "astrocytes and neuropil": 0,
+        "b-cells": 0,
+        "capillaries": 5,
+        "cardiomyocytes": 0,
+        "cd4 t-cells": 0,
+        "cd8 t-cells": 0,
+        "ciliated cells": 0,
+        "collecting ducts": 0,
+        "distal tubules": 0,
+        "glomeruli": 0,
+        "granulosa cells": 0,
+        "hepatocytes": 0,
+        "keratinocytes": 0,
+        "large ducts": 0,
+        "macrophages": 0,
+        "microglia and neuropil": 0,
+        "neurons": 0,
+        "neutrophils": 0,
+        "oocytes": 1,
+        "pancreas epithelial cells": 0,
+        "pancreatic islets": 0,
+        "proximal tubules": 0,
+        "secretory cells": 0,
+        "skeletal myofibers": 0,
+        "smooth muscle cells": 0
+      },
+      "T cell": {
+        "alveolar cells type 1": 0,
+        "alveolar cells type 2": 0,
+        "astrocytes and neuropil": 1,
+        "b-cells": 0,
+        "capillaries": 0,
+        "cardiomyocytes": 0,
+        "cd4 t-cells": 1,
+        "cd8 t-cells": 5,
+        "ciliated cells": 5,
+        "collecting ducts": 5,
+        "distal tubules": 0,
+        "glomeruli": 1,
+        "granulosa cells": 0,
+        "hepatocytes": 0,
+        "keratinocytes": 5,
+        "large ducts": 2,
+        "macrophages": 0,
+        "microglia and neuropil": 2,
+        "neurons": 0,
+        "neutrophils": 0,
+        "oocytes": 1,
+        "pancreas epithelial cells": 0,
+        "pancreatic islets": 0,
+        "proximal tubules": 0,
+        "secretory cells": 5,
+        "skeletal myofibers": 0,
+        "smooth muscle cells": 0
+      },
+      "granulocyte": {
+        "alveolar cells type 1": 0,
+        "alveolar cells type 2": 0,
+        "astrocytes and neuropil": 1,
+        "b-cells": 0,
+        "capillaries": 0,
+        "cardiomyocytes": 0,
+        "cd4 t-cells": 0,
+        "cd8 t-cells": 0,
+        "ciliated cells": 0,
+        "collecting ducts": 0,
+        "distal tubules": 0,
+        "glomeruli": 0,
+        "granulosa cells": 0,
+        "hepatocytes": 0,
+        "keratinocytes": 0,
+        "large ducts": 0,
+        "macrophages": 0,
+        "microglia and neuropil": 0,
+        "neurons": 0,
+        "neutrophils": 2,
+        "oocytes": 0,
+        "pancreas epithelial cells": 0,
+        "pancreatic islets": 0,
+        "proximal tubules": 0,
+        "secretory cells": 0,
+        "skeletal myofibers": 0,
+        "smooth muscle cells": 0
+      },
+      "monocyte/macrophage": {
+        "alveolar cells type 1": 0,
+        "alveolar cells type 2": 0,
+        "astrocytes and neuropil": 0,
+        "b-cells": 0,
+        "capillaries": 0,
+        "cardiomyocytes": 0,
+        "cd4 t-cells": 0,
+        "cd8 t-cells": 0,
+        "ciliated cells": 0,
+        "collecting ducts": 0,
+        "distal tubules": 0,
+        "glomeruli": 2,
+        "granulosa cells": 0,
+        "hepatocytes": 0,
+        "keratinocytes": 0,
+        "large ducts": 0,
+        "macrophages": 5,
+        "microglia and neuropil": 0,
+        "neurons": 0,
+        "neutrophils": 3,
+        "oocytes": 0,
+        "pancreas epithelial cells": 0,
+        "pancreatic islets": 0,
+        "proximal tubules": 5,
+        "secretory cells": 0,
+        "skeletal myofibers": 0,
+        "smooth muscle cells": 0
+      }
+    }
+  },
+  "pxd011683": {
+    "samples": 45,
+    "reader": {
+      "format": "MaxQuant proteinGroups",
+      "file": "proteinGroups.txt",
+      "rows_read": 10832,
+      "rows_dropped_flagged": 784,
+      "rows_without_gene": 70,
+      "rows_kept": 9978,
+      "quantity": "LFQ intensity",
+      "flags_read": [
+        "Only identified by site",
+        "Reverse",
+        "Potential contaminant"
+      ]
+    },
+    "b_share": 73.33,
+    "called_by_sample_group": {
+      "B cell": {
+        "C": 7,
+        "D": 11,
+        "F": 15
+      },
+      "NK/ILC": {
+        "C": 0,
+        "D": 1,
+        "F": 0
+      },
+      "T cell": {
+        "C": 8,
+        "D": 3,
+        "F": 0
+      }
+    }
+  }
+}

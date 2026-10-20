@@ -2494,6 +2494,70 @@ The gap is 3.5 points (lung 3.7, colon 12.5, blood 9.8).
 the reference, and in one upload of mixed pools, the lymph node's answers
 collapse onto plasma cell.
 
+### 58. Organ references v2: diagnostics, candidates and freeze (Track I), 2026-10-18 to 2026-10-20
+
+**Why:** the owner asked to correct the three organs that missed their
+gates (entries 52, 55 and 57). Every suspected cause was tested by a
+diagnostic, each committed with its rules before it ran, on v1's bundles,
+v1's calibration suites and seen development sets only. The design is in
+`research/organ-references.md`, "Version 2".
+
+**The owner's decisions (2026-10-18), fixed before any diagnostic:**
+- G1 is split: mixed uploads meet the four bars; narrow uploads must be
+  correct when committed at least 90%;
+- fresh G3 sets, never read before; the v1 sets are reported as seen;
+- the order is the lymph node, the lung, then the colon.
+
+**The diagnostics** (`research/notebook-outputs/organ_v2_*`):
+
+| Step | Commit | Result | Decision |
+|---|---|---|---|
+| A1, Ig and serum masking | `bff18d6` | No sink moves in any organ | v2 removes no genes |
+| A1b, sink probes | `6e07438` | The encoder makes the sink on deep, mixed pools; thinning pools to single-cell depth halves the lymph node's; B-cell pools alone are never plasma | An explanation only |
+| A0, calibration cache | `e9ab07e` | The cache replays the service exactly; the refit check was amended from rank to a qhat bound of 0.005 (`b2fc37c`; largest shift 0.0008) | A2 and A3 may run |
+| A2, banded calibration | `93566be` | Lung mixed uploads 96.6% committed on v1's own rule; lymph node 78.5%; colon 16.8%, and 97.1% only with each upload's band known. Mixed-only calibration leaves narrow uploads 65 to 88% correct when committed | Mixed-only calibration is unsafe; the colon needs a band key |
+| A3, rare and hard classes | `93566be` | The chance floor lifts the lymph node's rare-class commitment 82 → 97 (coverage 91.1 → 88.2); the group fallback suits the lung and colon | Lymph node: the chance floor; lung and colon: the group fallback below 30 cells |
+| A4, colon band key | `23f3747` | No label-free key passes: each reads a real narrow upload as mixed, or no real mixed upload as mixed | **The colon v2 is not built** |
+| A6, pool training | `23f3747` | The lymph node's plasma guesses fall 44 → 35 of 48 (the bar asked 12 fewer); single-cell validation rises 0.7 to 6.5 points in every organ | v2 does not train on pools |
+| A5, profiles | — | Not run; no v2 decision depends on it once G1 is split | — |
+
+**Fresh G3 sets** (`side-tests.md`, amendment 13, `ad6b3c4`):
+- the lymph node: PXD045043, spleen red and white pulp voxels. jPOST
+  refused this network until 2026-10-20; the fetched matrix holds exactly
+  26 labelled voxels (`c5d0524`);
+- the lung: PXD058626, control airway and alveolar regions;
+- the colon: PXD069723, reserved and unread, since no colon v2 is built.
+
+**The candidates** (`271daae`; pre-registered in `bdeefbb`, with the suites'
+sha256s in `research/notebook-outputs/organ_v2_registry.json` before
+training):
+
+| | Lymph node v2 | Lung v2 |
+|---|---|---|
+| Classes | 18 (v1's minus the generic "t cell") | 27 (v1's minus the generic "monocyte") |
+| Calibration | chance floor | group fallback below 30 cells |
+| Members' validation | 69.8 to 72.8% | 74.3 to 78.6% |
+| Calibration top-1 | 66.4% | 66.3% |
+| Marginal qhat | 0.888 | 0.944 |
+| MANIFEST sha256 (frozen `d9d400f`) | `5fb71df0…` | `1e545828…` |
+
+Everything else is v1's: split (carried through the atlas rows), gene
+space, profiles, training and fusion.
+
+**The locked tests' baselines** (`a806049`): the protocols' rule 8
+baselines (correlation and PCA with kNN) now run on each candidate's own
+gene space and labels (`benchmark/organ_baselines.py`). The intakes save
+the upload over the organ's genes, and the scorers refuse a real scoring
+without `baselines.json` (each protocol's amendment 2).
+
+**G4, the locked tests' rehearsals on the v2 bundles:**
+- lymph node v2: B over T AUROC 1.0, p 1e-4 (`f805bec`); baselines:
+  correlation 1.0, PCA kNN 0.597;
+- lung v2: 32 pools, every lineage 100% (`476fcc1`); baselines: correlation
+  100, PCA kNN 96.9.
+
+G1 and G3 then ran once per candidate (entry 59).
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

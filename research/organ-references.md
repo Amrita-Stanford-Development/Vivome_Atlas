@@ -429,6 +429,53 @@ donors' epithelial pools were called macrophage. MSV000094373 has five
 control donors, and D119's pool is called epithelial, so it is 4 of 5. The
 text above and run history entry 55 are corrected.
 
+### The lymph node v2's outcome (2026-10-20): NO GO, by 0.18 points
+
+`research/notebooks/organ_v2_gates.py lymph_node_v2`, run once on the
+frozen bundle (MANIFEST `5fb71df0…`). Outputs are in
+`research/notebook-outputs/lymph_node_v2_development/`.
+
+**G1, split** (240 uploads, 109,918 cells):
+
+| Band | Committed | Correct when committed | Coverage | False abstention | Verdict |
+|---|---|---|---|---|---|
+| Mixed (63,555 cells) | 96.5 (≥ 75) | 97.7 (≥ 90) | 92.4 (≥ 85) | 0.32 (≤ 2) | pass |
+| Narrow (46,363 cells) | 94.3 | **89.8 (≥ 90)** | 82.9 | 0.81 | **miss** |
+| As v1 wrote G1 | 95.6 | 94.4 | 88.4 | 0.53 | would pass |
+
+- **Narrow uploads by kind:** one class 84.7% correct when committed,
+  two classes 86.8%, one lineage 94.1%.
+- **Why:** the chance floor (A3) raised narrow uploads' commitment, and
+  their correctness fell with it. In A2 (v1's bundle, held halves of its
+  calibration suite), v1's rule gave narrow uploads 87.3% committed and
+  94.3% correct when committed; v2 gives 94.3% and 89.8%.
+  A3 judged the floor on a pooled rare-class suite, and its adoption rule
+  did not check the narrow band.
+
+**G3, fresh: PXD045043, AUROC 0.917, pass.**
+- P(B cell group), white pulp over red pulp, on the 26 voxels.
+- By voxel size: 20 µm 0.67, 50 µm 0.67, 100 and 200 µm 1.0.
+- Best guesses:
+  - white pulp: 9 B cell, 3 plasma cell, 1 innate lymphoid cell;
+  - red pulp: 7 macrophage, 6 plasma cell.
+- 11 of 13 red-pulp voxels abstain; 12 of 13 white-pulp voxels commit, 11
+  at class level.
+
+**Seen sets, reported only** (v1's figures in brackets):
+- PXD047762's Fig. 3: AUROC 1.0 (1.0). The 4 epithelium regions are still
+  called plasma cell.
+- Zheng's tonsil pools: 38.5% (41.0%).
+- The Protein Atlas lymph-node pools: 80.0% (100%).
+- PXD011683: 73.3% (71.1%).
+
+The plasma sink on tissue pools remains.
+
+**G4:** passed (`f805bec`).
+
+**Verdict:** NO GO. By the stop rules nothing is tuned and PXD042367 stays
+sealed. Any change now would be a v3, and its G3 could no longer use
+PXD045043, which this run has read. The decision goes to the owner.
+
 ## The large intestine's outcome: every failure, in one place
 
 Run history, entries 49 to 52; the records are under
