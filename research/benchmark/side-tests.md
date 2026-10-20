@@ -273,6 +273,18 @@ The v2 plan is `research/organ-references.md`, "Version 2".
   MSV000094189 are each unsealed only if its organ's v2 passes, then scored
   once under its protocol's amendment 1. PXD052341 stays sealed.
 
+### Amendment 15, 2026-10-21: the v2 gate runs read both fresh sets
+
+The lymph node v2 and lung v2 each ran their gates once on 2026-10-20
+(`research/organ-references.md`, both v2 outcomes). Both are NO GO.
+- **PXD045043** (spleen) and **PXD058626** (lung regions) have now been
+  read. They are development, marked seen: a later candidate's G3 cannot
+  count on them as fresh, unless the owner decides otherwise for a change
+  that cannot move its G3 score (organ-references, "Options for a v3").
+- **PXD069723** (colon) stays reserved and unread.
+- **The locked tests** PXD042367, MSV000094189 and PXD052341 are unchanged
+  and sealed.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
