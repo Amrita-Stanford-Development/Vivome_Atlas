@@ -228,7 +228,8 @@ def load_encoder(
             stacklevel=2,
         )
 
-    raw_state_dict = torch.load(weights_path, map_location="cpu", weights_only=False)
+    # tensors only: a checkpoint that carries code is refused, never run
+    raw_state_dict = torch.load(weights_path, map_location="cpu", weights_only=True)
     state_dict = _strip_prefixes(raw_state_dict)
     classifier = None
     if "classifier.fc.weight" in raw_state_dict and "classifier.fc.bias" in raw_state_dict:

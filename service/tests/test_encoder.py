@@ -154,6 +154,38 @@ class LoadEncoderDevPlaceholderTests(unittest.TestCase):
         self.assertNotEqual(label, encoder.MODEL_VERSION_LABEL_PRODUCTION)
 
 
+_PAYLOAD_RAN = []
+
+
+def _payload_ran():
+    _PAYLOAD_RAN.append(True)
+    return {}
+
+
+class _Payload:
+    """Pickles to a call of _payload_ran: what a tampered checkpoint could carry."""
+
+    def __reduce__(self):
+        return (_payload_ran, ())
+
+
+class LoadEncoderSafeUnpicklingTests(unittest.TestCase):
+    """Checkpoints are read as tensors only (torch.load's weights_only), so a
+    tampered file cannot run code when the service loads it. Every shipped
+    checkpoint is a plain state dict and loads the same either way."""
+
+    def test_a_checkpoint_carrying_code_is_refused_without_running_it(self):
+        import pickle
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "tampered.pt"
+            torch.save({"x": _Payload()}, path)
+            with self.assertRaises(pickle.UnpicklingError):
+                encoder.load_encoder(path)
+        self.assertEqual(_PAYLOAD_RAN, [], "the checkpoint's code ran")
+
+
 class UnknownArchitectureFamilyTests(unittest.TestCase):
     def test_unrecognised_encoder_family_raises_clearly(self):
         import json

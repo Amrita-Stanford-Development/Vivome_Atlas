@@ -13,6 +13,10 @@ keeps no build step, and the deploy only copies it.
   and the RNA parquet no page loads.
 - `dist/site/404.html`: without it, Pages answers a missing path with
   `index.html`, so a missing data file would arrive as HTML.
+- `dist/site/_headers`: security headers on every static file, from the
+  builder's `HEADERS`. No other site may show the pages in a frame, the
+  browser never second-guesses a file's type, and the camera, microphone,
+  location, payment and USB features are off. Functions set their own headers.
 - `dist/large_files.json`: the files over Pages' 25 MiB per-file limit, left
   out of the static copy. These are the two RNA atlas parts (1.4 GB each)
   and `atlas_PROT_lat128.csv` (45 MB).

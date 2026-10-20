@@ -48,6 +48,17 @@ MEDIA_FUNCTION = REPO / "deploy" / "pages" / "media.js"  # byte ranges for MEDIA
 # static copy.
 MEDIA = {rel.removeprefix("web/"): kind for rel, kind in {"web/motion/film/vivome.mp4": "video/mp4"}.items()}
 PART = 1024 * 1024
+# Sent with every static file (Pages' _headers file): no other site may show
+# these pages in a frame, the browser never second-guesses a file's type, and
+# browser features the site never uses are off. Functions (the /api door, the
+# film) answer with their own headers.
+HEADERS = (
+    ("X-Content-Type-Options", "nosniff"),
+    ("X-Frame-Options", "DENY"),
+    ("Content-Security-Policy", "frame-ancestors 'none'"),
+    ("Referrer-Policy", "strict-origin-when-cross-origin"),
+    ("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(), usb=()"),
+)
 # Pages that were renamed, so old links keep working (Pages' _redirects file).
 REDIRECTS = (
     ("/benchmark", "/manuscript"),  # the Benchmark page became the Manuscript page (2026-10-17)
@@ -138,6 +149,7 @@ def build(bucket: str | None, dist: Path = DIST) -> None:
     # single-page-app fallback), so a missing data file would arrive as HTML.
     (site / "404.html").write_text(NOT_FOUND)
     (site / "_redirects").write_bytes("".join(f"{old} {new} 301\n" for old, new in REDIRECTS).encode())
+    (site / "_headers").write_bytes(("/*\n" + "".join(f"  {name}: {value}\n" for name, value in HEADERS)).encode())
     (dist / "large_files.json").write_text(json.dumps(
         [{"path": rel, "bytes": (WEB / rel).stat().st_size} for rel in large], indent=2) + "\n")
     # The labelling service, reached through the site (deploy/pages/api-proxy.js).

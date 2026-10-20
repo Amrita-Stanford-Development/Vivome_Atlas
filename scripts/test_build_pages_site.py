@@ -49,6 +49,20 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(bps.service_url().startswith("https://"))
             self.assertNotIn("SECRET", toml, "the secret is never written to a file")
 
+    def test_every_static_file_carries_the_security_headers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dist = Path(tmp) / "dist"
+            bps.build(None, dist)
+            lines = (dist / "site" / "_headers").read_text().splitlines()
+        self.assertEqual(lines[0], "/*", "one rule, for every path")
+        sent = dict(line.strip().split(": ", 1) for line in lines[1:])
+        self.assertEqual(sent["X-Frame-Options"], "DENY")
+        self.assertEqual(sent["Content-Security-Policy"], "frame-ancestors 'none'")
+        self.assertEqual(sent["X-Content-Type-Options"], "nosniff")
+        self.assertIn("camera=()", sent["Permissions-Policy"])
+        self.assertNotIn("fullscreen", sent["Permissions-Policy"], "the film may still go full screen")
+        self.assertTrue(all(line.startswith("  ") for line in lines[1:]), "Pages reads indented lines as headers")
+
     def test_with_r2_the_large_files_are_routed_too(self):
         with tempfile.TemporaryDirectory() as tmp:
             dist = Path(tmp) / "dist"
