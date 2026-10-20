@@ -68,10 +68,19 @@ def _bundle_or_error() -> tuple[pipeline.ReferenceBundle | None, int, str]:
     try:
         return _get_bundle(), 200, ""
     except reference.PendingArtifactError as exc:
-        return None, 503, str(exc)
+        return None, 503, _from_the_repository(str(exc))
     except Exception as exc:  # noqa: BLE001 — a broken artifact must still produce an HTTP answer
         logger.exception("could not load the reference bundle")
-        return None, 500, f"the reference could not be loaded: {type(exc).__name__}: {exc}"
+        return None, 500, _from_the_repository(f"the reference could not be loaded: {type(exc).__name__}: {exc}")
+
+
+def _from_the_repository(reason: str) -> str:
+    """A reason with its file paths written from the repository's root
+    (service/model/...), not the server's own disk; the log keeps them whole."""
+    root = config.SERVICE_ROOT.parent
+    for prefix in (str(root), root.as_posix()):
+        reason = reason.replace(prefix + "\\", "").replace(prefix + "/", "")
+    return reason
 
 
 def _parse_multipart(content_type: str, body: bytes) -> dict[str, bytes]:

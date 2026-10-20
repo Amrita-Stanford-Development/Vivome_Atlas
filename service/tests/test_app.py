@@ -213,6 +213,18 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 500)
         self.assertIn("gene_id_map_v1.tsv", payload["reason"])
 
+    def test_a_load_error_names_files_from_the_repository_not_the_server_s_disk(self):
+        root = config.SERVICE_ROOT.parent
+        missing = root / "service" / "model" / "v4_1" / "spec_v41.json"
+        for error, code in ((reference.PendingArtifactError(f"{missing} does not exist"), 503),
+                            (FileNotFoundError(f"No such file: '{missing.as_posix()}'"), 500)):
+            with patch("service.pipeline.pipeline.load_bundle", side_effect=error):
+                status, _, payload = self._get("/api/status")
+            self.assertEqual(status, code)
+            self.assertNotIn(str(root), payload["reason"])
+            self.assertNotIn(root.as_posix(), payload["reason"])
+            self.assertIn("spec_v41.json", payload["reason"])
+
     def test_a_missing_artifact_is_checked_again_on_the_next_request(self):
         """Files fetched while the service runs are picked up without a restart."""
         bundle = self._synthetic_bundle()
