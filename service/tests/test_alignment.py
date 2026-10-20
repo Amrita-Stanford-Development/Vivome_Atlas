@@ -486,6 +486,18 @@ def _r_table_with_blank_missing_values():
     return header + "\n" + "\n".join(rows) + "\n"
 
 
+class QuietZscoreTests(unittest.TestCase):
+    def test_a_gene_no_cell_measured_is_0_without_a_warning(self):
+        """Every real upload has such genes; each warned in the service's log."""
+        import warnings
+        values = np.array([[1.0, 2.0, 3.0], [np.nan, np.nan, np.nan]], dtype=np.float32)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            z = alignment.zscore_per_gene(values)
+        self.assertEqual([str(w.message) for w in caught], [])
+        np.testing.assert_array_equal(z[1], 0.0)
+
+
 class RnaZerosTests(unittest.TestCase):
     """In RNA a 0 is a measured value, so it votes in the scale's median as it
     always did: raw counts with most values 0 stay as they are, every 0

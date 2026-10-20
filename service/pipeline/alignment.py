@@ -439,12 +439,12 @@ def zscore_per_gene(raw_values: np.ndarray, eps: float = 1e-8) -> np.ndarray:
     value in every observed cell is 0 by its spread, not its std: float32's
     mean misses such a constant by a rounding error, the std then equals it,
     and the cells came out +/-1, so answers depended on the constant."""
-    mean = np.nanmean(raw_values, axis=1, keepdims=True)
-    std = np.nanstd(raw_values, axis=1, keepdims=True)
-    z = (raw_values - mean) / np.clip(std, eps, None)
     with warnings.catch_warnings():
-        warnings.simplefilter("ignore", RuntimeWarning)  # an all-missing gene
+        warnings.simplefilter("ignore", RuntimeWarning)  # a gene no cell measured: NaN, then 0 below
+        mean = np.nanmean(raw_values, axis=1, keepdims=True)
+        std = np.nanstd(raw_values, axis=1, keepdims=True)
         spread = np.nanmax(raw_values, axis=1, keepdims=True) - np.nanmin(raw_values, axis=1, keepdims=True)
+    z = (raw_values - mean) / np.clip(std, eps, None)
     z = np.where(spread > 0, z, 0.0)
     return np.nan_to_num(z, nan=0.0)
 

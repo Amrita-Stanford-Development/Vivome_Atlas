@@ -111,6 +111,7 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
     def tearDownClass(cls):
         cls.server.shutdown()
         cls.thread.join()
+        cls.server.server_close()  # its listening socket too
 
     def setUp(self):
         app._bundle = None
