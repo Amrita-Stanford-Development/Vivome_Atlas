@@ -104,10 +104,16 @@ read as missing.
 - The file may be UTF-8 (a byte order mark, as in Excel's "CSV UTF-8", is
   ignored), UTF-16 with its byte order mark (Excel's "Unicode Text"), or
   Windows-1252 (Excel's plain "CSV"). An Excel workbook (.xlsx) or another
-  binary file is refused (400), saying what to send instead.
-- Perseus's annotation rows (`#!{...}`) are skipped.
+  binary file is refused (400), saying what to send instead. So is UTF-16
+  that ends in half a character: the file was cut off, perhaps mid-number.
+- Perseus's annotation rows (`#!{...}`) are skipped, and so are rows that
+  hold nothing but white space or separators.
 - A plain matrix written by R without the corner field over its row names
-  is read with every cell under its own name.
+  is read with every cell under its own name. The judgement is made on the
+  first 50 rows with anything in them: every one is one field longer than
+  the header, at least one of those extra fields is filled (R writes a
+  missing value as an empty field with `na=""`), and the header's first
+  field is neither blank nor an identifier label such as `gene`.
 - A versioned Ensembl ID (GENCODE's `ENSG00000121410.12`) matches its gene.
 
 **Refused (400), with a message naming the problem:**
