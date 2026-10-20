@@ -20,6 +20,7 @@ Each release, from the repository root, with the `gcloud` CLI logged in to
 the project owner's account:
 
 ```bash
+python deploy/huggingface/rehearse.py      # first, this code with the hosted settings, locally: 0 differ
 python deploy/huggingface/build_space.py
 gcloud run deploy vivome-atlas --source deploy/huggingface/space --region us-central1   --memory 4Gi --cpu 2 --max-instances 1 --min-instances 0 --concurrency 4 --timeout 300   --port 7860 --allow-unauthenticated --cpu-boost --execution-environment gen2
 VIVOME_PROXY_SECRET=THE_SECRET python deploy/huggingface/check_space.py https://vivome-atlas-577083340913.us-central1.run.app
@@ -48,6 +49,9 @@ projects one upload at a time (settings in `Dockerfile`). Its address is
   LFS, and `space_manifest.json` (every file's sha256 and the commit).
 - `check_space.py`: posts the PBMC240 example to a running service, as the
   site does, and compares every cell with this repository's own run.
+- `rehearse.py`: starts this repository's service locally with the
+  Dockerfile's settings (on 127.0.0.1, without the website's secret), runs
+  `check_space.py` against it, and stops it.
 
 ## Steps
 

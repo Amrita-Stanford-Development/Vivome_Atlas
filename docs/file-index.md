@@ -402,6 +402,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/test_build_workflow.py` — `web/data/workflow.json` is the builder's output, within its budget, built for the manifest's release; its records and cross-checks
 - `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, and optionally the R2-backed large files)
+- `scripts/test_deploy_rehearse.py` — tests for `deploy/huggingface/rehearse.py`: the Dockerfile's settings read, the rehearsal local and without the secret
 - `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index
 - `scripts/test_repo_paths.py` — runs `check_paths.py` as part of the normal test suite
@@ -411,10 +412,11 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `deploy/pages/media.js` — the Pages Function that serves the site's media (the Motion page's film) with byte ranges from 1 MiB parts, so Safari and iPhones can play it
 - `deploy/pages/api-proxy.js` — the site's door to the labelling service: the Cloudflare Pages Function for /api/*, forwarding to Cloud Run with the secret the service checks
-- `deploy/huggingface/Dockerfile` — the projection service's image for a Hugging Face Space (Python 3.11, CPU torch) and its hosted settings: 0.0.0.0:7860, v4.1, the site's origin, 2,000 cells and 100 MB per upload, one projection at a time
+- `deploy/huggingface/Dockerfile` — the projection service's image for a Hugging Face Space (Python 3.11, CPU torch) and its hosted settings: 0.0.0.0:7860, v4.1, the site's origin, 2,000 cells and 31 MiB per upload (under Cloud Run's 32 MiB), one projection at a time
 - `deploy/huggingface/space_card.md` — the Space's public page, written to the Space as README.md: what the service does, its model, limits and endpoints
 - `deploy/huggingface/build_space.py` — stages the Space in the gitignored folder deploy/huggingface/space: the service package, only the served version's model files (traced by loading the bundle and projecting the PBMC240 example), pinned requirements, Git LFS attributes and a sha256 manifest
 - `deploy/huggingface/check_space.py` — posts the PBMC240 example to a running service as the site does and compares every cell with this repository's own run
+- `deploy/huggingface/rehearse.py` — a deploy's rehearsal: this repository's service started locally with the Dockerfile's settings, then `check_space.py` against it
 - `deploy/huggingface/PUBLISH.md` — how to publish the service (Google Cloud Run, live; a Hugging Face Space, for reference) and point the site at it
 
 ## motion/ — the product film (HyperFrames; its own dependencies)
