@@ -2576,7 +2576,7 @@ split G1 and the fresh G3 sets. Details are in `research/organ-references.md`,
 | G1 mixed: committed, correct when committed | 96.5, 97.7 (pass) | 97.3, 98.6 (pass) |
 | G1 mixed: coverage, false abstention | 92.4, 0.32 (pass) | 96.6, 0.0 (pass) |
 | G1 narrow: correct when committed (≥ 90) | **89.8 (miss)** | 90.1 (pass) |
-| G1 as v1 wrote it: committed | 95.6 (v1 84.4) | 83.7 (v1 73.4) |
+| G1 as v1 wrote it: committed | 95.5 (v1 84.4) | 83.7 (v1 73.4) |
 | G3, fresh (AUROC ≥ 0.8) | PXD045043 spleen, white over red pulp: 0.917 (pass) | PXD058626, control airways over alveoli: **0.764 (miss)** |
 | G4, the rehearsal | pass | pass |
 | Verdict | **NO GO** | **NO GO** |
@@ -2600,7 +2600,7 @@ PXD045043 or PXD058626, which these runs read.
 **G2** (one donor held out, a diagnosis), class balanced accuracy unseen
 against seen:
 - lymph node v2: 55.7 against 59.3, a gap of 3.6 (v1 3.5);
-- lung v2: 70.3 against 75.6, a gap of 5.3 (v1 3.7).
+- lung v2: 70.30 against 75.55, a gap of 5.25 (v1 3.7).
 
 **A7, the colon** (`research/notebooks/organ_v2_declared.py`, rules
 committed before it ran, `2bdbcf3`): could a user declare a colon upload

@@ -449,7 +449,7 @@ frozen bundle (MANIFEST `5fb71df0…`). Outputs are in
 |---|---|---|---|---|---|
 | Mixed (63,555 cells) | 96.5 (≥ 75) | 97.7 (≥ 90) | 92.4 (≥ 85) | 0.32 (≤ 2) | pass |
 | Narrow (46,363 cells) | 94.3 | **89.8 (≥ 90)** | 82.9 | 0.81 | **miss** |
-| As v1 wrote G1 | 95.6 | 94.4 | 88.4 | 0.53 | would pass |
+| As v1 wrote G1 | 95.5 | 94.4 | 88.4 | 0.53 | would pass |
 
 - **Narrow uploads by kind:** one class 84.7% correct when committed,
   two classes 86.8%, one lineage 94.1%.
@@ -535,7 +535,8 @@ bundle (MANIFEST `1e545828…`). Outputs are in
 **G4:** passed (`476fcc1`).
 
 **G2** (one donor held out, 4 folds; a diagnosis): class balanced accuracy
-70.3 unseen against 75.6 seen, a gap of 5.3 points (v1 3.7). Group recall
+70.30 unseen against 75.55 seen, a gap of 5.25 points (v1 3.7; the folds are
+stored to two decimals, so the gap is given as stored). Group recall
 is 93.8 against 98.4, and lineage recall 97.4 against 99.7.
 
 **Verdict:** NO GO. By the stop rules nothing is tuned, and MSV000094189
