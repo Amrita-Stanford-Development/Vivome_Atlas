@@ -36,9 +36,10 @@ export async function loadManifest(url = './data/atlas_manifest.json') {
 // value. Everything else — pending, absent, malformed — renders as Pending.
 // This is the single guard that keeps unmeasured quantities off the page.
 export function isMeasured(metric) {
+  // A number, never a string, boolean or list that Number() would turn into one.
   return metric?.status === 'measured'
-    && metric.value !== null
-    && Number.isFinite(Number(metric.value));
+    && typeof metric.value === 'number'
+    && Number.isFinite(metric.value);
 }
 
 export function formatMetric(metric, digits = 3) {
@@ -61,7 +62,8 @@ export function metricBasis(metric) {
 const COUNT_FORMAT = new Intl.NumberFormat('en-US');
 
 export function formatCount(value) {
-  if (value === null || value === undefined) return PENDING_LABEL;
+  if (value === null || value === undefined || typeof value === 'boolean' || typeof value === 'object') return PENDING_LABEL;
+  if (typeof value === 'string' && value.trim() === '') return PENDING_LABEL;
   const n = Number(value);
   return Number.isFinite(n) ? COUNT_FORMAT.format(n) : PENDING_LABEL;
 }

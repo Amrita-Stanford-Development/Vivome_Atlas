@@ -678,12 +678,12 @@ test('after cancelling a file the service was working on, a busy answer names th
   const { els, landing } = setup({ client, limits: () => ({}) });
   await landing.chooseFile(fileOf(25));
   landing.send();
-  await settleMicrotasks();
+  for (let i = 0; i < 50 && landing.state.name !== 'working'; i += 1) await settleMicrotasks();
   assert.equal(landing.state.name, 'working');
   landing.cancel();
-  await settleMicrotasks();
+  for (let i = 0; i < 50 && landing.state.name !== 'chosen'; i += 1) await settleMicrotasks();
   landing.send();
-  for (let i = 0; i < 20 && landing.state.name !== 'busy'; i += 1) await settleMicrotasks();
+  for (let i = 0; i < 50 && landing.state.name !== 'busy'; i += 1) await settleMicrotasks();
   assert.equal(landing.state.name, 'busy');
   assert.match(els.get('status-card').innerHTML, /still finishing the file you cancelled/);
   landing.cancel();

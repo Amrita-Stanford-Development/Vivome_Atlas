@@ -54,6 +54,10 @@ test('isMeasured is true only for a measured record with a finite value', () => 
   assert.equal(isMeasured(pending('Phase 1')), false);
   assert.equal(isMeasured({ value: 'abc', status: 'measured' }), false);
   assert.equal(isMeasured(undefined), false);
+  // malformed values read Pending, never 0% or 100% (CLAUDE.md)
+  for (const value of ['', ' ', true, false, [], [7], {}, '0.5']) {
+    assert.equal(isMeasured({ value, status: 'measured' }), false, JSON.stringify(value));
+  }
 });
 
 test('formatCount groups thousands', () => {
@@ -65,6 +69,7 @@ test('formatCount never renders NaN or undefined for a missing count', () => {
   assert.equal(formatCount(undefined), PENDING_LABEL);
   assert.equal(formatCount(null), PENDING_LABEL);
   assert.equal(formatCount('not a number'), PENDING_LABEL);
+  for (const value of ['', '  ', true, false, [], [7], {}]) assert.equal(formatCount(value), PENDING_LABEL, JSON.stringify(value));
   assert.equal(formatCount(NaN), PENDING_LABEL);
 });
 

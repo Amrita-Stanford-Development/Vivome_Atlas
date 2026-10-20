@@ -156,3 +156,9 @@ test('the panels show the committed manifest\'s records, and a pending record re
   assert.equal((pendingHtml.match(/<span class="pending">Pending<\/span>/g) ?? []).length, crossModal.length);
   for (const c of crossModal) assert.ok(!pendingHtml.includes(formatMetric(c.latent_centroid_cosine, 4)), c.name);
 });
+
+test('a value is rounded once, from its source: the marginal threshold 0.9105286 reads 0.911', () => {
+  const spec = JSON.parse(readFileSync(new URL('../../service/model/v3_1/nb2_spec_v31.json', import.meta.url), 'utf8'));
+  assert.equal(msFact(manuscript, 'qhat_marginal'), spec.conformal.marginal_qhat.toFixed(3));
+  assert.equal(msFact(manuscript, 'qhat_marginal'), '0.911');
+});

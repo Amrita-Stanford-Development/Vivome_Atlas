@@ -429,8 +429,9 @@ def service() -> dict:
         "concurrent_projections": measured(int(env("VIVOME_MAX_CONCURRENT_PROJECTIONS")), rel(SERVICE_CONFIG)),
         # For running it yourself: the smallest file it takes, its local port, its Python.
         "min_cells": measured(int(re.search(r"^MIN_CELLS_REFUSE = (\d+)", validation, re.M).group(1)), rel(SERVICE_VALIDATION)),
-        "local_port": measured(int(env("VIVOME_PORT")), rel(SERVICE_CONFIG), "plain"),
-        "python": measured(float(re.search(r"^FROM python:(\d+\.\d+)", docker, re.M).group(1)), rel(DOCKERFILE), "plain"),
+        "local_port": measured(int(env("VIVOME_PORT")), rel(SERVICE_CONFIG), "integer"),
+        # a version is words, not a number: 3.10 must not read 3.1
+        "python_version": re.search(r"^FROM python:(\d+\.\d+)", docker, re.M).group(1),
         "endpoints": ["GET /api/status", "POST /api/project"],
     }
 

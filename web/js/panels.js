@@ -67,7 +67,7 @@ export function buildSupportTable(manifest) {
     <tr>
       <td class="support-name">${escapeHtml(c.name)}</td>
       <td class="support-num">${formatCount(c.rna_cells)}</td>
-      <td class="support-num">${c.prot_cells > 0 ? formatCount(c.prot_cells) : 'none'}</td>
+      <td class="support-num">${c.prot_cells === 0 ? 'none' : formatCount(c.prot_cells)}</td>
       <td><span class="support-badge badge-${escapeHtml(c.support)}">${
         escapeHtml(SUPPORT_LABEL[c.support] ?? c.support)
       }</span></td>

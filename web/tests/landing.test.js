@@ -63,3 +63,18 @@ test('the organ grid escapes names, reads Pending without a list, and never link
   assert.match(buildOrganGrid({}), /Pending/);
   assert.match(factText({}, 'organs_total'), /Pending/);
 });
+
+test('each release card describes the release it names', () => {
+  const real = JSON.parse(readFileSync(new URL('../data/atlas_manifest.json', import.meta.url), 'utf8'));
+  const card = (eyebrow) => {
+    const at = main.indexOf(`<span class="eyebrow">${eyebrow}</span>`);
+    return main.slice(at, main.indexOf('</li>', at));
+  };
+  // the previous release is v4.2: protein class means in the best guess
+  assert.match(real.previous_release.note, /protein class means/);
+  assert.match(card('Previous'), /protein class means/);
+  assert.doesNotMatch(card('Previous'), /trained only on labelled blood RNA/, 'that was v3.1');
+  // the current release serves v4.1 again; its answers are not "the same" as v4.2's best guess
+  assert.doesNotMatch(card('Current'), /The same answers/);
+  assert.match(card('Current'), /again/);
+});

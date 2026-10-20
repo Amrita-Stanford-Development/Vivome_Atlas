@@ -718,8 +718,8 @@ L 532.95874 234.130394
 " clip-path="url(#p281661abe9)" style="fill: none; stroke: #e4e3de; stroke-width: 0.5; stroke-linecap: square"/>
    </g>
    <g id="line2d_36">
-    <path d="M 465.854173 240.990236 
-L 465.854173 29.809134 
+    <path d="M 465.852036 240.990236 
+L 465.852036 29.809134 
 " clip-path="url(#p281661abe9)" style="fill: none; stroke: #8a96a0; stroke-width: 0.8; stroke-linecap: square"/>
    </g>
    <g id="matplotlib.axis_1">
@@ -893,7 +893,7 @@ L 532.95874 240.990236
 " style="fill: none; stroke: #1d2b36; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_73">
-    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #666666" x="468.065197" y="35.472254" transform="rotate(-0 468.065197 35.472254)">marginal</text>
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #666666" x="468.06306" y="35.472254" transform="rotate(-0 468.06306 35.472254)">marginal</text>
    </g>
   </g>
  </g>

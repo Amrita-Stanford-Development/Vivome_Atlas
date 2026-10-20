@@ -5,6 +5,7 @@ import { factText } from '../js/panels.js';
 import { CHAPTERS } from '../js/timeline.js';
 import {
   CLASS_COLOURS, OUTCOME_CHIPS, OUTCOME_LABELS, OUTCOME_NOTES, checkSync, decodeBits, formatRecord, geneLookup, recordAt, storyFor, validateWorkflow, wfFact,
+  wfText,
 } from '../js/workflow-data.js';
 import {
   buildCellCard, buildGeneLookup, buildHeldoutCards, buildLadderTrace, buildPbmcTable, buildRawSnippet,
@@ -155,4 +156,33 @@ test('a cell without its own detail borrows the story cell with its outcome', ()
   const d = storyFor(workflow, other);
   assert.equal(cells[d.cell].outcome, 'lineage');
   assert.equal(storyFor(workflow, workflow.trace.story.cells[0]).cell, workflow.trace.story.cells[0]);
+});
+
+test('a port is shown as a number without grouping, and the Python version as written', () => {
+  assert.equal(wfFact(workflow, 'service.local_port'), '8001');
+  assert.equal(wfText(workflow, 'python'), workflow.service.python_version);
+  assert.match(workflow.service.python_version, /^3\.\d+$/);
+});
+
+test('the Fulcher picture says VivOME won only when no other method shown scored as high', async () => {
+  const { fulcherVerdict } = await import('../js/scenes-evidence.js');
+  const rec = (value) => ({ value, status: 'measured', basis: 'x', format: 'percent' });
+  const ours = { ours: true, method: 'VivOME v4.1', score: rec(0.69) };
+  assert.equal(fulcherVerdict([ours, { method: 'scANVI', score: rec(0.63) }], 'VivOME v4.1'), true);
+  assert.equal(fulcherVerdict([ours, { method: 'scANVI', score: rec(0.72) }], 'VivOME v4.1'), false, 'a baseline overtook it');
+  assert.equal(fulcherVerdict([{ method: 'scANVI', score: rec(0.63) }], 'VivOME v4.1'), false, 'no served row');
+  const real = workflow.evidence?.fulcher ?? null;
+  if (real) assert.equal(typeof fulcherVerdict(real.rows, 'VivOME v4.1'), 'boolean');
+});
+
+test('the ladder does not pass a cell over a pending floor or threshold', () => {
+  const cell = workflow.trace.cells.find((c) => c.outcome === 'class');
+  const pending = { ...workflow, facts: { ...workflow.facts, floor: { value: null, status: 'pending', phase: 'x' },
+    ood_threshold: { value: null, status: 'pending', phase: 'x' } } };
+  const html = buildLadderTrace(cell, pending);
+  assert.match(html, /Pending/);
+  assert.doesNotMatch(html, /at least 0 needed/);
+  // a cell that stopped for too few genes is not shown passing a floor nobody knows
+  const thin = { ...cell, outcome: 'coverage_too_low', observed: 50 };
+  assert.match(buildLadderTrace(thin, pending), /wf-stop"><span class="level">Enough measured\?/);
 });

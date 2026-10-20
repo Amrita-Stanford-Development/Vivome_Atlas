@@ -4,7 +4,7 @@
 // (a training batch, the four forces, a bootstrap draw) are illustrations
 // with no numbers and say so; every number drawn is a recorded one.
 
-import { isMeasured } from './manifest.js';
+import { PENDING_LABEL, isMeasured } from './manifest.js';
 import { PRACTICE_KINDS, SERVICE_STEPS as STEPS, formatRecord, plainName } from './workflow-data.js';
 import { buildScenarioTable, buildServiceCard } from './workflow-panels.js';
 import { clamp, lerp, phase } from './workflow-layout.js';
@@ -46,10 +46,20 @@ const box = (g, x, y, w, h, label, { colour = INK, fill = '#FFFFFF', opacity = 1
 // share a real file has. Beat 3: several learners, averaged. (Their test is
 // the first beat of the results.)
 
+// Whether the served model named more Fulcher cells correctly than every
+// other method in the contest: rows are the evidence's Fulcher rows; an
+// earlier VivOME is not this contest's entry.
+export function fulcherVerdict(rows, modelName) {
+  const scored = (rows ?? []).filter((r) => isMeasured(r.score));
+  const served = scored.find((r) => r.ours && String(r.method).startsWith(modelName ?? '\u0000'));
+  if (!served) return false;
+  return scored.every((r) => r === served || r.ours || r.score.value < served.score.value);
+}
+
 export function training(el, ctx) {
   const w = ctx.workflow;
   const t = w.training;
-  const epochs = t.recipe.epochs.value;
+  const epochs = isMeasured(t.recipe.epochs) ? t.recipe.epochs.value : null;
   const pts = w.reference.sample.slice(0, 900);
   const xs = pts.map((q) => q[0]);
   const ys = pts.map((q) => q[1]);
@@ -74,7 +84,7 @@ export function training(el, ctx) {
       const learn = phase(p, 0.04, 0.28);
       const round = Math.max(1, Math.round(epochs * learn));
       text(g, 'Learning by example', 12, 22, { size: 12, weight: 600, colour: INK });
-      chip(g, `round ${round} of up to ${epochs}`, width - 12, 20, { size: 11, align: 'right', border: ACCENT, colour: ACCENT });
+      chip(g, epochs === null ? 'learning' : `round ${round} of up to ${epochs}`, width - 12, 20, { size: 11, align: 'right', border: ACCENT, colour: ACCENT });
       const map = fit(width - 24, height - 92, 12, 40);
       pts.forEach((q, i) => {
         const [mx, my] = map(q);
@@ -98,8 +108,9 @@ export function training(el, ctx) {
       const genes = 64;
       const bw = width - 24;
       const gw = bw / genes;
-      const lo = t.recipe.coverage_low.value;
-      const hi = t.recipe.coverage_high.value;
+      const shares = isMeasured(t.recipe.coverage_low) && isMeasured(t.recipe.coverage_high);
+      const lo = shares ? t.recipe.coverage_low.value : 1;
+      const hi = shares ? t.recipe.coverage_high.value : 1;
       const top = narrow ? 70 : 58;
       const stripH = clamp((height - top - 30) / 4 - 22, 8, 32);
       const gap = stripH + 22;
@@ -120,7 +131,7 @@ export function training(el, ctx) {
         text(g, label, 12, y + stripH + 14, { size: 10, colour: INK, opacity, max: bw });
       };
       [lo, (lo + hi) / 2, hi].forEach((keep, v) => {
-        strip(top + v * gap, hide === 0 ? 1 : keep, ACCENT, `practice: ${Math.round(keep * 100)}% of its genes shown`, hide > 0 ? 1 : 0.4);
+        strip(top + v * gap, hide === 0 ? 1 : keep, ACCENT, shares ? `practice: ${Math.round(keep * 100)}% of its genes shown` : `practice: ${PENDING_LABEL}`, hide > 0 ? 1 : 0.4);
       });
       // A real protein file, for comparison: our cell's share.
       const real = phase(p, 0.49, 0.6);
@@ -183,7 +194,7 @@ export function training(el, ctx) {
     }
 
   }, {
-    describe: () => `${t.members.length} learners, each trained on the named RNA examples alone, up to ${epochs} rounds, with most genes hidden in practice.`,
+    describe: () => `${t.members.length} learners, each trained on the named RNA examples alone, up to ${epochs ?? PENDING_LABEL} rounds, with most genes hidden in practice.`,
   });
 }
 
@@ -293,7 +304,7 @@ export function results(el, ctx) {
       const served = (r) => r.ours && String(r.method).startsWith(m?.model?.name ?? '\u0000');
       const fits = Math.max(4, Math.floor((height - 130) / 15));
       const rows = fulcher.rows.filter((r) => isMeasured(r.score) && (!r.ours || served(r))).slice(0, Math.min(narrow ? 6 : 12, fits));
-      const best = rows.length && served(rows[0]);
+      const best = fulcherVerdict(fulcher.rows, m?.model?.name);
       const left = narrow ? 130 : Math.min(300, width * 0.46);
       const x = (v) => left + v * (width - left - 24);
       const rowH = Math.min(24, (height - 130) / rows.length);

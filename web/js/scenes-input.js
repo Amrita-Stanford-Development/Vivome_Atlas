@@ -6,7 +6,7 @@
 // and scrubbing draw the same thing. Every value drawn comes from
 // web/data/workflow.json (ctx.workflow); nothing here computes a model output.
 
-import { formatCount } from './manifest.js';
+import { PENDING_LABEL, formatCount, isMeasured } from './manifest.js';
 import { escapeHtml } from './panels.js';
 import { decodeBits, formatRecord, geneLookup, snippetRows } from './workflow-data.js';
 import { buildPbmcTable, buildHeaderMorph } from './workflow-panels.js';
@@ -18,6 +18,8 @@ import {
 
 const fc = (x) => formatCount(x);
 const compact = (v) => (v >= 1e6 ? `${(v / 1e6).toFixed(1)}M` : v >= 1e4 ? `${Math.round(v / 1e3)}k` : v >= 1e3 ? `${(v / 1e3).toFixed(1)}k` : `${Math.round(v)}`);
+// A count record as compact text; a pending one reads Pending, never 0.
+const countOf = (record) => (isMeasured(record) ? compact(record.value) : PENDING_LABEL);
 
 // A scene from a draw function: the canvas, the last frame kept for resizes.
 function scene(el, draw, { describe = () => '', table = () => '', dispose = () => {} } = {}) {
@@ -215,7 +217,7 @@ export function data(el, ctx) {
         const lit = hot && i === guess;
         text(g, short(names[i]), treeX - 6, y + 4, { size: Math.min(11, rowH * 0.78), align: 'right', colour: lit ? ACCENT : INK, weight: lit ? 600 : 400, max: treeX - 10 });
         dot(g, treeX + 10, y, Math.min(4.5, rowH * 0.3), ctx.classColour(i));
-        text(g, compact(classes[i].cells.value), treeX + 20, y + 4, { size: 9.5, colour: FAINT });
+        text(g, countOf(classes[i].cells), treeX + 20, y + 4, { size: 9.5, colour: FAINT });
         const key = `${classes[i].lineage}|${classes[i].group}`;
         const sx = treeX + 52;
         line(g, sx, y, lerp(sx, gx - 8, links), lerp(y, groupY[key], links), { colour: lit ? ACCENT : LINE, width: lit ? 2.4 : 1 });
@@ -278,7 +280,7 @@ export function data(el, ctx) {
         text(g, s.name, x, y + 8, { size: 10, colour: INK, max: colW * 0.46 });
         const bw = (colW * 0.5 - 44) * (s.genes.value / maxG) * lists;
         bar(g, x + colW * 0.47, y, bw, 9, PROT, 2, 0.85);
-        text(g, compact(s.genes.value), x + colW * 0.47 + bw + 4, y + 8, { size: 9.5, colour: FAINT });
+        text(g, countOf(s.genes), x + colW * 0.47 + bw + 4, y + 8, { size: 9.5, colour: FAINT });
       });
       g.restore();
     }
@@ -644,7 +646,7 @@ export function genes(el, ctx) {
         text(g, s.name, 12, y + 12, { size: 10.5, colour: INK, opacity: appear, max: listW });
         const bw = (listW - 50) * (s.genes.value / maxS);
         bar(g, 12, y + 18, bw, 10, PROT, 2, 0.85 * appear);
-        text(g, compact(s.genes.value), 16 + bw, y + 27, { size: 9.5, colour: FAINT, opacity: appear });
+        text(g, countOf(s.genes), 16 + bw, y + 27, { size: 9.5, colour: FAINT, opacity: appear });
         if (pool > 0 && pool < 1) {
           const t2 = clamp(pool * 1.4 - k * 0.07, 0, 1);
           dot(g, lerp(12 + bw, pileX, t2), lerp(y + 23, pileTop + pileMax * 0.5, t2), 3, PROT, 1 - t2 * 0.3);

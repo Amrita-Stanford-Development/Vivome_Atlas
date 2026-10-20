@@ -220,7 +220,7 @@ def answer_layer(r: Records) -> None:
     basis = f"{rel(SPEC_ANSWERS)}: conformal > qhat_by_class"
     r.put("qhat_min", round(min(qhat.values()), 4), basis, "fixed3")
     r.put("qhat_max", round(max(qhat.values()), 4), basis, "fixed3")
-    r.at("qhat_marginal", SPEC_ANSWERS, ("conformal", "marginal_qhat"), "fixed3", digits=4)
+    r.at("qhat_marginal", SPEC_ANSWERS, ("conformal", "marginal_qhat"), "fixed3")
     r.at("alpha", SPEC_ANSWERS, ("conformal", "alpha"), "plain")
 
 
@@ -453,8 +453,8 @@ def heldout(r: Records) -> None:
     r.pct("ho_hao_dc_correlation", hao, "by_model", "correlation", "dc_recall")
     for key in ("pxd043355", "pxd073250", "pxd046211"):
         path = HELDOUT / key / "summary.json"
-        r.at(f"ho_{key}_auroc", path, ("candidates", "v4.1", "primary", "auroc"), "fixed3", digits=4)
-        r.at(f"ho_{key}_p", path, ("candidates", "v4.1", "primary", "p"), "fixed3", digits=4)
+        r.at(f"ho_{key}_auroc", path, ("candidates", "v4.1", "primary", "auroc"), "fixed3")
+        r.at(f"ho_{key}_p", path, ("candidates", "v4.1", "primary", "p"), "fixed3")
     path = HELDOUT / "pxd043355" / "summary.json"
     for group in ("Jurkat", "HeLa"):
         r.pct(f"ho_pxd043355_abstained_{group}", path, "candidates", "v4.1", "secondary", "abstained_pct_by_group", group)
@@ -495,7 +495,7 @@ def robustness(r: Records) -> None:
     r.pct("ood_furtwangler_committed", DEVELOPMENT, "furtwangler2025", "v4.1", "committed")
     r.pct("ood_furtwangler_progenitor", DEVELOPMENT, "furtwangler2025", "v4.1", "progenitor_share")
     r.pct("ood_furtwangler_t_cell", DEVELOPMENT, "furtwangler2025", "v4.1", "t_cell_share")
-    r.at("ood_auroc", DEVELOPMENT, ("out_of_reference_auroc", "v4.1"), "fixed3", digits=4)
+    r.at("ood_auroc", DEVELOPMENT, ("out_of_reference_auroc", "v4.1"), "fixed3")
     foreign = r.json(FOREIGN)["foreign_development"]
     lines = [k for k in foreign if k.startswith("PXD077946")]
     r.put("ood_lines_flagged_max", round(max(foreign[k]["below_threshold_pct"]["S0"] for k in lines) / 100, 6),
@@ -609,18 +609,18 @@ def organs(r: Records, manifest: dict) -> None:
               f"{rel(donor)}: mean > seen minus unseen > balanced_accuracy", "pp")
         assert r.json(dev / "gates.json")["all_pass"] is False
     g3 = NO / "li_development" / "g3.json"
-    r.at("org_li_kabatnik", g3, ("kabatnik", "auroc_epithelial"), "fixed3", digits=4)
+    r.at("org_li_kabatnik", g3, ("kabatnik", "auroc_epithelial"), "fixed3")
     r.pct("org_li_zheng", g3, "zheng", "group_accuracy")
     polyp = r.json(g3)["polyp"]["groups"]
     r.put("org_li_polyp_pass", sum(v["auroc"] is not None and v["auroc"] >= 0.7 for v in polyp.values()),
           f"{rel(g3)}: polyp > groups with auroc at least 0.7, counted", "count")
     r.put("org_li_polyp_groups", len(polyp), f"{rel(g3)}: polyp > groups, counted", "count")
     g3 = NO / "lung_development" / "g3.json"
-    r.at("org_lung_bpd", g3, ("bpd", "auroc_epithelial"), "fixed3", digits=4)
-    r.at("org_lung_hpa", g3, ("hpa", "auroc_at2_over_at1"), "fixed3", digits=4)
-    r.at("org_lung_ipf", g3, ("ipf", "auroc_stromal_ff_over_alveoli"), "fixed3", digits=4)
+    r.at("org_lung_bpd", g3, ("bpd", "auroc_epithelial"), "fixed3")
+    r.at("org_lung_hpa", g3, ("hpa", "auroc_at2_over_at1"), "fixed3")
+    r.at("org_lung_ipf", g3, ("ipf", "auroc_stromal_ff_over_alveoli"), "fixed3")
     g3 = NO / "lymph_node_development" / "g3.json"
-    r.at("org_ln_coscia", g3, ("coscia2024", "auroc_b_over_t"), "fixed3", digits=4)
+    r.at("org_ln_coscia", g3, ("coscia2024", "auroc_b_over_t"), "fixed3")
     r.pct("org_ln_zheng", g3, "zheng_tonsil", "group_accuracy")
     r.pct("org_ln_hpa", g3, "hpa", "group_accuracy_lymph_node_pools")
     r.pct("org_ln_b_share", g3, "pxd011683", "b_share")
@@ -635,7 +635,7 @@ def organs(r: Records, manifest: dict) -> None:
             r.pct(f"org_{key}_mixed_{field}", g1, "mixed", field, fmt=fmt)
         r.pct(f"org_{key}_narrow_correct_when_committed", g1, "narrow", "correct_when_committed", fmt="pct2")
         r.pct(f"org_{key}_v1_committed", g1, "as_written_v1", "committed")
-        r.at(f"org_{key}_g3", dev / "g3.json", ("auroc",), "fixed3", digits=4)
+        r.at(f"org_{key}_g3", dev / "g3.json", ("auroc",), "fixed3")
         assert r.json(dev / "gates.json")["all_pass"] is False
     a7 = NO / "organ_v2_declared" / "real.json"
     kab = next(e for e in r.json(a7) if e["upload"] == "Kabatnik classes 1, 2 and 4")

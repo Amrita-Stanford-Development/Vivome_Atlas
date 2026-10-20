@@ -87,7 +87,7 @@
   "service/model/runtime/reference_metadata.csv": "b0d5d1e761d6969e401fa605f74e4367e7d65d5c9fdea444471bbccee65d4054",
   "service/model/v3_1/nb2_spec_v31.json": "af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd",
   "service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
-  "web/data/workflow.json": "c71f73c2c2ff7b67c40d83ef1e7f8fc5cb177afdd263065407a83dbc0dc7662a"
+  "web/data/workflow.json": "a29fb96e8458332502706382ae978288bd194a2910a13dd5891976c3b18d5223"
  },
  "records": {
   "alpha": {
@@ -793,7 +793,7 @@
    "format": "fixed3"
   },
   "ho_pxd043355_p": {
-   "value": 0.0147,
+   "value": 0.014699,
    "status": "measured",
    "basis": "research/benchmark/heldout/pxd043355/summary.json: candidates > v4.1 > primary > p",
    "format": "fixed3"
@@ -805,7 +805,7 @@
    "format": "fixed3"
   },
   "ho_pxd046211_p": {
-   "value": 0.2951,
+   "value": 0.29507,
    "status": "measured",
    "basis": "research/benchmark/heldout/pxd046211/summary.json: candidates > v4.1 > primary > p",
    "format": "fixed3"
@@ -817,7 +817,7 @@
    "format": "fixed3"
   },
   "ho_pxd073250_p": {
-   "value": 0.975,
+   "value": 0.975002,
    "status": "measured",
    "basis": "research/benchmark/heldout/pxd073250/summary.json: candidates > v4.1 > primary > p",
    "format": "fixed3"
@@ -1579,7 +1579,7 @@
    "format": "pct2"
   },
   "qhat_marginal": {
-   "value": 0.9105,
+   "value": 0.910529,
    "status": "measured",
    "basis": "service/model/v3_1/nb2_spec_v31.json: conformal > marginal_qhat",
    "format": "fixed3"

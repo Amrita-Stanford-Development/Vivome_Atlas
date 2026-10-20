@@ -6,7 +6,7 @@ import unittest
 
 import build_workflow as bw
 
-FORMATS = {"count", "percent", "plain", "fixed2", "fixed3", "fixed4", "points"}
+FORMATS = {"count", "percent", "plain", "integer", "fixed2", "fixed3", "fixed4", "points"}
 
 
 def records(node, path=""):

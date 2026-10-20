@@ -461,3 +461,13 @@ test('model card facts compare like with like and come from the manifest', () =>
     assert.match(factText(manifestFixture(), key), /Pending/, `${key} without a model card`);
   }
 });
+
+test('a protein count of 0 reads none; a missing one reads Pending, not none', () => {
+  const m = manifestFixture();
+  m.cell_types = m.cell_types.map((c, i) => (i === 1 ? { ...c, prot_cells: null } : c));
+  const html = buildSupportTable(m);
+  const rowOf = (name) => html.slice(html.indexOf(`>${name}<`), html.indexOf('</tr>', html.indexOf(`>${name}<`)));
+  const missing = m.cell_types[1].name;
+  assert.match(rowOf(missing), /Pending/);
+  assert.match(html, /none/, 'a class with 0 protein cells still reads none');
+});

@@ -177,11 +177,14 @@ export function buildSecondOpinionTable(detail, classOrder) {
 export function buildLadderTrace(cell, workflow) {
   if (!cell) return `<p class="pending">${PENDING_LABEL}</p>`;
   const f = workflow?.facts ?? {};
-  const floor = f.floor?.value;
-  const threshold = f.ood_threshold?.value;
+  // A pending floor or threshold is shown as Pending, and the rung's verdict
+  // is then the cell's own recorded outcome, never a comparison with null.
+  const floor = isMeasured(f.floor) ? f.floor.value : null;
+  const threshold = isMeasured(f.ood_threshold) ? f.ood_threshold.value : null;
+  const passes = (limit, value, reason) => (limit === null ? cell.outcome !== reason : value >= limit);
   const rungs = [
-    ['Enough measured?', `values in ${formatCount(cell.observed)} genes; at least ${formatCount(floor)} needed`, cell.observed >= floor, 'coverage_too_low'],
-    ['Like the example cells?', `likeness ${num(cell.similarity, 3)}; at least ${num(threshold, 3)} needed`, cell.similarity >= threshold, 'outside_supported_region'],
+    ['Enough measured?', `values in ${formatCount(cell.observed)} genes; at least ${formatCount(floor)} needed`, passes(floor, cell.observed, 'coverage_too_low'), 'coverage_too_low'],
+    ['Like the example cells?', `likeness ${num(cell.similarity, 3)}; at least ${threshold === null ? PENDING_LABEL : num(threshold, 3)} needed`, passes(threshold, cell.similarity, 'outside_supported_region'), 'outside_supported_region'],
     ['Any type on the shortlist?', `${cell.candidate_set.length} type${cell.candidate_set.length === 1 ? '' : 's'} on it`, cell.candidate_set.length > 0, 'no_confident_label'],
     ['One type, family or branch they share?', isAnswered(cell) ? `${plainName(cell.label)} (${OUTCOME_LABELS[cell.outcome]})` : 'they share no family or branch', isAnswered(cell), 'ambiguous_between_classes'],
   ];

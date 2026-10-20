@@ -26,4 +26,4 @@ b,type,lymphoid > B cell > plasma cell,0.6691,,,qhat (joins a set at probability
 b,type,myeloid > dendritic cell > plasmacytoid dendritic cell,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[19], plasmacytoid dendritic cell"
 b,type,other > platelet/megakaryocyte > platelet,0.0467,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[20], platelet"
 b,type,lymphoid > T cell > regulatory T cell,0.9105,,,qhat (joins a set at probability 1 - qhat or more),web/data/workflow.json,"trace.stages.calibration.qhat[21], regulatory t cell"
-b,marginal,marginal,0.9105,,,qhat,web/data/manuscript.json,records.qhat_marginal.value
+b,marginal,marginal,0.910529,,,qhat,web/data/manuscript.json,records.qhat_marginal.value

@@ -55,6 +55,7 @@ export function formatRecord(record) {
     case 'fixed4': return v.toFixed(4);
     case 'points': return `${v >= 0 ? '+' : '−'}${Math.abs(v * 100).toFixed(2)}`;
     case 'plain': return DECIMALS.format(v);
+    case 'integer': return String(Math.round(v)); // a port, not a count: no grouping
     default: return formatCount(v);
   }
 }
@@ -78,6 +79,7 @@ export function wfFact(workflow, key) {
 const TEXTS = {
   annotation_columns: (w) => (w?.raw?.pbmc240?.parse?.annotation_columns ?? []).join(', '),
   header_example: (w) => w?.raw?.pbmc240?.parse?.header_examples?.[0]?.[0] ?? '',
+  python: (w) => w?.service?.python_version ?? '',
 };
 export function wfText(workflow, key) {
   const text = TEXTS[key]?.(workflow);
