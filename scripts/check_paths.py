@@ -83,6 +83,7 @@ ALLOWED_MISSING = (
     # Files the organ references track will create (research/organ-references.md, Stages 2 to 4)
     "service/model/organs/",
     "research/notebook-outputs/organ_v2_",  # written by research/notebooks/organ_v2_*.py when each runs
+    "research/notebook-outputs/label_stability/",  # written by research/notebooks/label_stability.py when it runs
     "research/benchmark/heldout/msv000094189/",  # written once, when the lung's locked test is scored
     "research/benchmark/heldout/pxd042367/",  # written once, when the lymph node's locked test is scored
     "research/benchmark/heldout/pxd052341/",  # written once, when the colon's locked test is scored
