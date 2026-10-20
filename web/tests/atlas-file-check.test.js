@@ -212,6 +212,16 @@ test('R\'s layout of a DIA-NN table: its first annotation column is not a cell, 
 
 test('a row of separators alone is not a feature row', async () => {
   assert.equal((await checkFile(blob('gene,c1,c2\nG0,1,2\n,,\nG1,3,4\n'))).features, 2);
+  // only the file's own separator: a line of commas in a tab-separated file is a row the service reads
+  assert.equal((await checkFile(blob('gene\tc1\tc2\nG0\t1\t2\n\t\t\nG1\t3\t4\n,,\n'))).features, 3);
+});
+
+test('UTF-16 cut off mid-character is refused, as the service refuses it', async () => {
+  const text = 'gene,c1,c2\nG0,1,2\nG1,3,4\n';
+  const bytes = new Uint8Array(2 + text.length * 2 + 1);
+  bytes.set([0xff, 0xfe]);
+  for (let i = 0; i < text.length; i += 1) bytes[2 + 2 * i] = text.charCodeAt(i);
+  await assert.rejects(checkFile(blob(bytes)), /cut off/);
 });
 
 test('the size check leaves room for the form around the file', () => {

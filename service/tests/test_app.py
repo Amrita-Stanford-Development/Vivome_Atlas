@@ -78,11 +78,17 @@ class DecodeMatrixTests(unittest.TestCase):
     def test_windows_1252_as_excel_writes_plain_csv(self):
         self.assertEqual(app._decode_matrix("gene,20 \u00b5m\nA1BG,1.5\n".encode("cp1252")), "gene,20 \u00b5m\nA1BG,1.5\n")
 
-    def test_utf16_with_an_odd_last_byte_is_read_as_the_browser_reads_it(self):
-        """The browser's decoder puts U+FFFD for a lone last byte; the service
-        reads the file too, instead of refusing it before its slot."""
-        data = b"\xff\xfe" + "gene,c1\nA1BG,1.5\n".encode("utf-16-le") + b"\x00"
-        self.assertTrue(app._decode_matrix(data).startswith("gene,c1\nA1BG,1.5\n"))
+    def test_utf16_cut_off_mid_character_is_refused_in_words(self):
+        """A lone last byte means the file was cut off, perhaps mid-number:
+        refused, as the browser's check refuses it, never read short."""
+        for bom, codec in ((b"\xff\xfe", "utf-16-le"), (b"\xfe\xff", "utf-16-be")):
+            data = bom + "gene,c1,c2\nG0,1,2\nG1,3,4\n".encode(codec) + b"\x00"
+            with self.assertRaises(ValueError) as caught:
+                app._decode_matrix(data)
+            self.assertIn("cut off", str(caught.exception))
+            whole = bom + "gene,c1,c2\nG0,1,2\nG1,3,4\n".encode(codec)
+            raw = app.alignment.parse_matrix_csv(app._decode_matrix(whole))
+            self.assertEqual(raw.gene_names, ["G0", "G1"])
 
     def test_a_workbook_or_a_binary_file_is_refused_in_words(self):
         with self.assertRaises(ValueError) as caught:

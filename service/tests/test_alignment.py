@@ -240,6 +240,14 @@ class UploadLayoutTests(unittest.TestCase):
         raw = alignment.parse_matrix_csv("gene\tc1\tc2\nG0\t1\t2\n\t\nG1\t3\t4\n")
         self.assertEqual(raw.gene_names, ["G0", "G1"])
 
+    def test_white_space_rows_are_skipped_in_every_layout(self):
+        mq = ("Majority protein IDs\tGene names\tIntensity A\tIntensity B\n"
+              "P1\tCD3E\t100\t200\n  \t  \t  \nP2\tCD4\t300\t400\n")
+        self.assertEqual(alignment.parse_matrix_csv(mq).gene_names, ["CD3E", "CD4"])
+        sn = ("PG.Genes\t[1] a.raw.PG.Quantity\t[2] b.raw.PG.Quantity\n"
+              "CD3E\t1.5\t2.5\n   \nCD4\t3.5\t4.5\n")
+        self.assertEqual(alignment.parse_matrix_csv(sn).gene_names, ["CD3E", "CD4"])
+
     def test_a_header_with_a_corner_is_never_shifted(self):
         """Only R's layout shifts the header: a named or blank corner, or a
         data row whose extra field is empty, means the header is whole."""

@@ -77,13 +77,13 @@ const isPerseusRow = (line) => line.replace(/^"/, '').startsWith('#!{');
 
 // How many lines hold anything but white space (Perseus rows aside), streamed
 // in chunks.
-export async function countNonEmptyLines(blob, { encoding = 'utf-8' } = {}) {
+export async function countNonEmptyLines(blob, { encoding = 'utf-8', separator = null } = {}) {
   const reader = blob.stream().getReader();
   const decoder = new TextDecoder(encoding);
   let count = 0;
   let tail = '';
-  // separators alone (",,") hold nothing either, as the service reads them
-  const counts = (line) => line.replace(/[\t,]/g, '').trim() !== '' && !isPerseusRow(line);
+  // the file's own separator alone (",," in a CSV) holds nothing either, as the service reads it
+  const counts = (line) => (separator ? line.split(separator).join('') : line).trim() !== '' && !isPerseusRow(line);
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -101,11 +101,13 @@ export async function countNonEmptyLines(blob, { encoding = 'utf-8' } = {}) {
 // a workbook or another binary file is refused in the same words.
 const WORKBOOK = 'The file is an Excel workbook (.xlsx), not text: save the sheet as CSV or tab-separated text and send that file.';
 const BINARY = 'The file is a binary file (Parquet, for example), not text: send it as CSV or tab-separated text.';
+const CUT = 'The file is UTF-16 text, but the file ends in half a character, so it looks cut off: save it again and send the new file.';
 async function sniffEncoding(blob) {
   const head = new Uint8Array(await blob.slice(0, 4096).arrayBuffer());
   const startsWith = (bytes) => bytes.every((b, i) => head[i] === b);
-  if (startsWith([0xff, 0xfe])) return 'utf-16le';
-  if (startsWith([0xfe, 0xff])) return 'utf-16be';
+  const utf16 = startsWith([0xff, 0xfe]) ? 'utf-16le' : startsWith([0xfe, 0xff]) ? 'utf-16be' : null;
+  if (utf16 && blob.size % 2) throw new Error(CUT); // cut off mid-character, perhaps mid-number
+  if (utf16) return utf16;
   if (startsWith([0x50, 0x4b, 0x03, 0x04])) throw new Error(WORKBOOK);
   // Parquet starts and ends with "PAR1"; a text file may start with it (a cell's name).
   const tail = new Uint8Array(await blob.slice(Math.max(0, blob.size - 4)).arrayBuffer());
@@ -241,7 +243,7 @@ export async function checkFile(blob, name = blob?.name ?? '') {
     }
   }
   if (parsed.cellEstimate < 1) throw new Error('The header row lists no cells.');
-  const features = (await countNonEmptyLines(blob, { encoding })) - 1;
+  const features = (await countNonEmptyLines(blob, { encoding, separator: parsed.separator })) - 1;
   if (features < 1) throw new Error('The file has a header row but no feature rows.');
   return {
     name, size: blob.size, separator: parsed.separator, columns: parsed.columns,

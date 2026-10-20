@@ -248,17 +248,16 @@ class PerUploadWorkTests(unittest.TestCase):
         from service.pipeline import gene_ids
         bundle = self.bundles["v4.1"]
         pipeline.run_projection(bundle, self.raw)
-        real_read = pd.read_csv
+        real_read = gene_ids._read_gene_id_map
         reads = []
 
-        def reading(path, *args, **kwargs):
-            if Path(path).name == Path(config.GENE_ID_MAP_PATH).name:
-                reads.append(path)
-            return real_read(path, *args, **kwargs)
+        def reading(source):
+            reads.append(source)
+            return real_read(source)
 
-        with mock.patch.object(gene_ids.pd, "read_csv", reading):
+        with mock.patch.object(gene_ids, "_read_gene_id_map", reading):
             pipeline.run_projection(bundle, self.raw)
-        self.assertEqual(reads, [], "the map was read from disk again")
+        self.assertEqual(reads, [], "the map was parsed again")
 
 
 class _EstimatedLabelSpace:

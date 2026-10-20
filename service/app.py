@@ -52,11 +52,11 @@ def _get_bundle() -> pipeline.ReferenceBundle:
         # Re-check inside the lock: another thread may have finished loading
         # while this one was waiting for it.
         if _bundle is None:
-            bundle = pipeline.load_bundle(config.PIPELINE_VERSION)
-            # The identifier map every upload needs: a missing one is the
-            # service's fault, said here, not a 400 blaming the visitor's file.
+            # The identifier map every upload needs, first (it is quick): a
+            # missing one is the service's fault, said here, not a 400 blaming
+            # the visitor's file.
             gene_ids.load_gene_id_map()
-            _bundle = bundle
+            _bundle = pipeline.load_bundle(config.PIPELINE_VERSION)
             logger.info("Reference bundle loaded. model_version=%s", _bundle.model_version)
         return _bundle
 
@@ -107,7 +107,9 @@ def _decode_matrix(data: bytes) -> str:
     symbols are ASCII either way). An Excel workbook or another binary file
     is refused in words."""
     if data.startswith((b"\xff\xfe", b"\xfe\xff")):
-        return data.decode("utf-16", errors="replace")  # a lone last byte, as the browser reads it
+        if len(data) % 2:  # cut off mid-character, perhaps mid-number: never read short
+            raise alignment.UnreadableMatrix("the file ends in half a character, so it looks cut off: save it again and send the new file")
+        return data.decode("utf-16", errors="replace")
     if data.startswith(b"PK\x03\x04"):
         raise alignment.UnreadableMatrix("the matrix is an Excel workbook (.xlsx), not text: save the sheet as CSV or "
                                          "tab-separated text and send that file")

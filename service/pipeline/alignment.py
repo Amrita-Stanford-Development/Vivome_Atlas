@@ -193,6 +193,8 @@ def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities
              for pattern in quantities]
     rows = []
     for line, row in lines:
+        if not any(field.strip() for field in row):
+            continue  # white space alone holds nothing (the browser's check skips it too)
         if len(row) <= gene_idx or not row[gene_idx]:
             continue
         if any(i < len(row) and row[i].strip() == "+" for i in flag_idx):
