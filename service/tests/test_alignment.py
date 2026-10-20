@@ -229,6 +229,15 @@ class UploadLayoutTests(unittest.TestCase):
         raw = alignment.parse_matrix_csv("\n".join([header] + rows))
         self.assertEqual(raw.gene_names, ["GENE1"])
 
+    def test_a_table_without_any_identifier_is_refused_by_name(self):
+        # a DIA-NN report whose Genes column is blank on every row (a FASTA without GN= fields)
+        text = "Protein.Group\tProtein.Names\tGenes\ta.raw\tb.raw\nP1\tN1\t\t1.0\t2.0\nP2\tN2\t\t3.0\t4.0\n"
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            alignment.parse_matrix_csv(text)
+        self.assertIn("'Genes'", str(caught.exception))
+        with self.assertRaises(alignment.UnreadableMatrix):
+            alignment.parse_matrix_csv("gene,c1,c2\n")  # a header and no rows
+
     def test_a_maxquant_table_without_any_gene_name_says_so(self):
         header = "\t".join(["Majority protein IDs", "Gene names", "LFQ intensity S1", "LFQ intensity S2"])
         with self.assertRaises(alignment.UnreadableMatrix) as caught:
@@ -274,6 +283,17 @@ class ZScorePerGeneTests(unittest.TestCase):
         z = alignment.zscore_per_gene(raw)
         self.assertTrue(np.all(np.isfinite(z)))
         np.testing.assert_array_equal(z, np.zeros_like(z))
+
+    def test_a_gene_with_one_value_in_every_cell_z_scores_to_0_whatever_the_value(self):
+        # float32's mean misses a constant by a rounding error, which the std
+        # then equals: z came out +/-1, so answers depended on the constant
+        for v in (7.3, 0.1, 12.345, 1000.0):
+            for n in (20, 238, 2000):
+                z = alignment.zscore_per_gene(np.full((1, n), v, np.float32))
+                np.testing.assert_array_equal(z, np.zeros((1, n)), err_msg=f"{v} over {n} cells")
+        with_missing = np.full((1, 40), 7.3, np.float32)
+        with_missing[0, ::3] = np.nan
+        np.testing.assert_array_equal(alignment.zscore_per_gene(with_missing), np.zeros((1, 40)))
 
     def test_nan_entries_do_not_poison_the_dataset_statistic(self):
         raw = np.array([[1.0, 2.0, np.nan]])

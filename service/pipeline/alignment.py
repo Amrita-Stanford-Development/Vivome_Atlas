@@ -311,7 +311,11 @@ def parse_matrix_csv(text: str) -> RawMatrix:
             continue
         gene_names.append(row[gene_col_idx])
         rows.append([_number(row[i], header[i]) for i in cell_col_indices])
-    values = np.array(rows, dtype=np.float32) if rows else np.empty((0, len(cell_ids)), dtype=np.float32)
+    if not rows:
+        column = header[gene_col_idx] if gene_col_idx < len(header) and header[gene_col_idx].strip() else "the first column"
+        raise UnreadableMatrix(f"no row has an identifier in {column!r}, so no protein or gene can be named. "
+                               f"The service reads {_READABLE_LAYOUTS}.")
+    values = np.array(rows, dtype=np.float32)
     return RawMatrix(gene_names=gene_names, cell_ids=cell_ids, values=values)
 
 
@@ -405,10 +409,17 @@ def collapse_duplicate_genes(raw: RawMatrix) -> RawMatrix:
 def zscore_per_gene(raw_values: np.ndarray, eps: float = 1e-8) -> np.ndarray:
     """raw_values: (n_raw_genes, n_cells). Z-score each row against this
     dataset's own mean/std, computed only from the cells in this upload.
-    A zero-variance gene z-scores to 0 rather than +/-inf."""
+    A zero-variance gene z-scores to 0 rather than +/-inf. A gene with one
+    value in every observed cell is 0 by its spread, not its std: float32's
+    mean misses such a constant by a rounding error, the std then equals it,
+    and the cells came out +/-1, so answers depended on the constant."""
     mean = np.nanmean(raw_values, axis=1, keepdims=True)
     std = np.nanstd(raw_values, axis=1, keepdims=True)
     z = (raw_values - mean) / np.clip(std, eps, None)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)  # an all-missing gene
+        spread = np.nanmax(raw_values, axis=1, keepdims=True) - np.nanmin(raw_values, axis=1, keepdims=True)
+    z = np.where(spread > 0, z, 0.0)
     return np.nan_to_num(z, nan=0.0)
 
 

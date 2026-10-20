@@ -13,6 +13,11 @@ class FuzzySmoothTests(unittest.TestCase):
         smoothed = smoothing.fuzzy_smooth(shared, full, k=3, alpha=0.0)
         np.testing.assert_allclose(smoothed, shared)
 
+    def test_no_native_features_is_a_no_op_not_a_crash(self):
+        x = np.random.default_rng(0).normal(size=(25, 8)).astype(np.float32)
+        out = smoothing.fuzzy_smooth(x, np.empty((25, 0), np.float32))
+        np.testing.assert_array_equal(out, x)
+
     def test_single_cell_upload_is_a_no_op_not_a_crash(self):
         shared = np.array([[1.0, 2.0, 3.0]])
         full = np.array([[1.0, 2.0]])

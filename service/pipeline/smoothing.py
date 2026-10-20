@@ -87,8 +87,9 @@ def fuzzy_smooth(
     (1 - alpha) * original + alpha * neighbour-weighted average.
     """
     n_cells = shared_values.shape[0]
-    if n_cells <= 1:
-        # No graph to build from a single cell; nothing to smooth against.
+    if n_cells <= 1 or full_query_values.shape[1] == 0:
+        # No graph to build from a single cell, or from no native features;
+        # nothing to smooth against.
         return shared_values.copy()
 
     neighbour_idx, weights = _knn_weights(full_query_values, k, n_pca, seed)
