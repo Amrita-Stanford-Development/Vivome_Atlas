@@ -149,6 +149,8 @@ function buildPicker() {
     tip.classList.add('is-on');
   };
   const hideTip = () => tip.classList.remove('is-on');
+  // Escape closes it, wherever the pointer or focus is (WCAG 1.4.13).
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideTip(); });
   const chips = $('#outcome-chips');
   chips.addEventListener('pointerover', (e) => { const b = e.target.closest('.wf-chip'); if (b) showTip(b); });
   // A tap leaves the overlay open until the next tap elsewhere.

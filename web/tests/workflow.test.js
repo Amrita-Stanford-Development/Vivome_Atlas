@@ -223,3 +223,16 @@ test('the cell search lists buttons, and says how many it found', async () => {
   assert.match(html, /<p class="visually-hidden" id="cell-results-count" role="status"><\/p>/);
   assert.doesNotMatch(read('js/workflow.js'), /role="option"/);
 });
+
+test('each "Show as table" button names the table it opens, and Escape closes the result tooltip', () => {
+  const html = read('workflow.html');
+  const toggles = [...html.matchAll(/<button class="wf-table-toggle"[^>]*>[\s\S]*?<\/button>\s*<div class="wf-table"[^>]*>/g)];
+  assert.ok(toggles.length >= 5);
+  for (const [markup] of toggles) {
+    const controls = markup.match(/aria-controls="([^"]+)"/)?.[1];
+    assert.ok(controls, markup.slice(0, 80));
+    assert.match(markup, new RegExp(`<div class="wf-table" id="${controls}"`));
+  }
+  assert.match(read('js/workflow.js'), /key === 'Escape'\) hideTip\(\)/);
+});
+
