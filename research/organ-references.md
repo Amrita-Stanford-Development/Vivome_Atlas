@@ -535,6 +535,15 @@ stays sealed. The split G1 and the group fallback fixed v1's G1 miss (73.4
 against alveolar epithelium, which no v1 gate tested. Any change is a v3,
 the owner's call. PXD058626 has now been read.
 
+**Note, 2026-10-20: FragPipe's contaminant rows.** A review after the run
+found that the G3 reader (`organ_v2_gates.read_fragpipe_intensity`) kept
+the 12 rows FragPipe marks `contam_` that have gene names: bovine albumin,
+chicken lysozyme, bovine trypsin and the caseins. They merged into the
+human rows of the same genes. Left out, G3 is unchanged at AUROC 0.764
+(`research/notebooks/organ_v2_lung_g3_contaminants.py`, an explanation
+only). The miss is the model's, not the reader's. The service now leaves
+these rows out of every FragPipe upload (`a1fcbbe`).
+
 ### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
 
 A4 found no label-free key, so the one key left was the user: the upload

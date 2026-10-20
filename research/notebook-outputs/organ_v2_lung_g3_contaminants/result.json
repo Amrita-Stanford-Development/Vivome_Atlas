@@ -1,0 +1,103 @@
+{
+  "finished": "2026-10-20T23:22:06",
+  "rows_left_out": [
+    {
+      "protein": "contam_sp|O77727|K1C15_SHEEP",
+      "gene": "KRT15"
+    },
+    {
+      "protein": "contam_sp|O82803|SRPP_HEVBR",
+      "gene": "SRPP"
+    },
+    {
+      "protein": "contam_sp|P00698|LYSC_CHICK",
+      "gene": "LYZ"
+    },
+    {
+      "protein": "contam_sp|P00711|LALBA_BOVIN",
+      "gene": "LALBA"
+    },
+    {
+      "protein": "contam_sp|P00760|TRY1_BOVIN",
+      "gene": "PRSS1"
+    },
+    {
+      "protein": "contam_sp|P01012|OVAL_CHICK",
+      "gene": "SERPINB14"
+    },
+    {
+      "protein": "contam_sp|P02662|CASA1_BOVIN",
+      "gene": "CSN1S1"
+    },
+    {
+      "protein": "contam_sp|P02663|CASA2_BOVIN",
+      "gene": "CSN1S2"
+    },
+    {
+      "protein": "contam_sp|P02666|CASB_BOVIN",
+      "gene": "CSN2"
+    },
+    {
+      "protein": "contam_sp|P02668|CASK_BOVIN",
+      "gene": "CSN3"
+    },
+    {
+      "protein": "contam_sp|P02769|ALBU_BOVIN",
+      "gene": "ALB"
+    },
+    {
+      "protein": "contam_sp|P68082|MYG_HORSE",
+      "gene": "MB"
+    }
+  ],
+  "auroc_gate_run": 0.7639,
+  "auroc_without_contaminants": 0.7639,
+  "mean_score_by_region": {
+    "IPF ABEC": 0.1209,
+    "IPF Alveoli": 0.0069,
+    "IPF DistalAirway": 0.4827,
+    "IPF Fibroblastic Foci": 0.0795,
+    "IPF HCAirway": 0.4551,
+    "control airway": 0.3148,
+    "control alveoli": -0.1869
+  },
+  "argmax_lineage": {
+    "endothelial": {
+      "IPF ABEC": 0,
+      "IPF Alveoli": 3,
+      "IPF DistalAirway": 0,
+      "IPF Fibroblastic Foci": 0,
+      "IPF HCAirway": 0,
+      "control airway": 0,
+      "control alveoli": 0
+    },
+    "epithelial": {
+      "IPF ABEC": 5,
+      "IPF Alveoli": 6,
+      "IPF DistalAirway": 12,
+      "IPF Fibroblastic Foci": 3,
+      "IPF HCAirway": 11,
+      "control airway": 12,
+      "control alveoli": 8
+    },
+    "immune": {
+      "IPF ABEC": 7,
+      "IPF Alveoli": 3,
+      "IPF DistalAirway": 0,
+      "IPF Fibroblastic Foci": 0,
+      "IPF HCAirway": 0,
+      "control airway": 0,
+      "control alveoli": 4
+    },
+    "stromal": {
+      "IPF ABEC": 0,
+      "IPF Alveoli": 0,
+      "IPF DistalAirway": 0,
+      "IPF Fibroblastic Foci": 17,
+      "IPF HCAirway": 0,
+      "control airway": 0,
+      "control alveoli": 0
+    }
+  },
+  "verdict": "unchanged: NO GO under the stop rules (explanation only)"
+}

@@ -836,6 +836,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/organ_v2_sink/probes.json` — A1b: each sink by path, with its class's markers removed, with pools thinned, and with each population alone
 - `research/notebook-outputs/organ_v2_registry.json` — the organ references v2's registry: each candidate's organ file and suites (sha256, before training) and its bundle's MANIFEST (at freeze, before its gates)
 - `research/notebooks/organ_v2_gates.py` — organ references v2: an organ's split G1 (mixed uploads gated, narrow uploads safe) and G3 on its fresh development set, scored once against the registered suite and bundle; its seen sets reported
+- `research/notebook-outputs/organ_v2_lung_g3_contaminants/rules.json` — the lung G3 sensitivity check's settings and sha256s, written before the run
+- `research/notebook-outputs/organ_v2_lung_g3_contaminants/result.json` — the lung v2's G3 without FragPipe's contaminant rows: AUROC unchanged at 0.764
 - `research/notebooks/organ_v2_lung_g3_contaminants.py` — an explanation after the lung v2's gates: its G3 run again without FragPipe's contaminant and decoy rows, which the gate reader kept; the verdict stays NO GO
 - `research/notebooks/organ_v2_masking.py` — organ references v2, diagnostic A1: each organ's G3 on its v1 bundle with immunoglobulin constant chains, serum proteins, both, or as many random genes removed from every upload; a decision rule fixed in the script picks v2's gene exclusions
 - `research/notebook-outputs/organ_v2_masking/rules.json` — A1's rules, written before the run: the gene sets per organ, the guards, the seed
