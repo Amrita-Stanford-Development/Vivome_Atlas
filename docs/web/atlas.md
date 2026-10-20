@@ -106,6 +106,20 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
   `web/data/workflow.json` records); an address the visitor types for their
   own copy is remembered in their browser.
 
+## Keyboards and screen readers
+
+- **Hidden panels are inert.** The closed drawer and the folded sidebar take
+  no focus and are not read out. Focus inside one when it hides moves to the
+  sidebar's button beside the map.
+- **One status line.** The status card changes every second while it waits
+  (its clock, the send share), so it is not a live region. A hidden status
+  line (`#status-line`, `statusLine` in `director.js`) says each step once,
+  a failure's reason, and how many cells were answered.
+- **Arrow keys** step through the shown cells, except while the visitor
+  types or is on the panel's tabs, where they change the tab.
+- **Not yet:** the 3D map has no keyboard path, so turning, moving, zooming
+  and a cell's profile need a mouse (`research/todo.md`, Accessibility).
+
 ## Drawing
 
 - **One draw call** for 86,723 reference cells. The vertex shader reads the
