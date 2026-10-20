@@ -57,6 +57,28 @@ become the gene identifiers, DIA-NN's other annotation columns
 columns, and each remaining column's Windows raw-file-path header is
 cleaned to its basename without `.raw`.
 
+Three more protein tables are read as their software writes them
+(`service/pipeline/alignment.py`):
+- **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs" and "Gene
+  names"):
+  - "Gene names" gives the identifiers;
+  - rows marked "+" as reverse, contaminant or only identified by site are
+    left out;
+  - one cell per sample, from "LFQ intensity <sample>" when any value is
+    above 0, else from "Intensity <sample>".
+- **FragPipe's LFQ `combined_protein.tsv`** (it has "Gene" and "Combined
+  Total Peptides"): "Gene" gives the identifiers, and there is one cell per
+  sample, from "<sample> MaxLFQ Intensity" when present, else from
+  "<sample> Intensity".
+- **A FragPipe TMT-Integrator protein table** (it has "Gene"): "Gene" gives
+  the identifiers. Its annotation columns and reference channels are not
+  cells.
+
+In MaxQuant's and FragPipe's LFQ tables, 0 means "not quantified" and is
+read as missing. A table with text where a number belongs is refused
+(400). The message names the column and lists the layouts the service
+reads.
+
 ```json
 200 Response
 {

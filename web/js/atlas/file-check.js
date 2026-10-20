@@ -28,6 +28,14 @@ export const FRAGPIPE_ANNOTATIONS = Object.freeze([
 ]);
 const FRAGPIPE_REFERENCE_PREFIXES = ['RefInt_', 'RefDInt_'];
 
+// MaxQuant's proteinGroups.txt and FragPipe's LFQ combined_protein.tsv: the
+// service reads one cell per sample from the first of these quantity
+// columns it finds (service/pipeline/alignment.py); every other column
+// is annotation.
+const MAXQUANT_QUANTITIES = [/^LFQ intensity (.+)$/, /^Intensity (.+)$/];
+const FRAGPIPE_LFQ_QUANTITIES = [/^(?!Combined )(.+) MaxLFQ Intensity$/, /^(?!Combined )(.+?)(?<! MaxLFQ) Intensity$/];
+const sampleColumns = (fields, patterns) => patterns.map((p) => fields.filter((f) => p.test(f)).length).find((n) => n > 0) ?? 0;
+
 // The file's first line, without its line ending. By default from the first
 // HEADER_BYTES only; a larger maxBytes reads on, a slice at a time, until
 // the line ends.
@@ -104,6 +112,15 @@ export function parseHeader(line) {
   const commas = text.split(',').length - 1;
   const separator = tabs > commas ? '\t' : ',';
   const fields = splitFields(text, separator);
+  const maxquant = fields.includes('Majority protein IDs') && fields.includes('Gene names');
+  const fragpipeLfq = !maxquant && fields.includes('Gene') && fields.includes('Combined Total Peptides');
+  if (maxquant || fragpipeLfq) {
+    const cells = sampleColumns(fields, maxquant ? MAXQUANT_QUANTITIES : FRAGPIPE_LFQ_QUANTITIES);
+    return {
+      separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells,
+      format: maxquant ? 'maxquant' : 'fragpipe-lfq',
+    };
+  }
   const diann = fields.includes('Genes');
   const fragpipe = !diann && fields.includes('Gene');
   const idColumn = diann ? fields.indexOf('Genes') : fragpipe ? fields.indexOf('Gene') : 0;

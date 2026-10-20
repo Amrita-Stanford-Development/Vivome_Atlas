@@ -75,6 +75,99 @@ class ParseMatrixCsvTests(unittest.TestCase):
         self.assertTrue(np.isnan(raw.values[0, 0]))
         self.assertEqual(raw.values[0, 1], 2.0)
 
+    # MaxQuant's proteinGroups.txt, in its own column layout (read from
+    # PXD011683's and PXD029341's files): per-sample peptides, intensity, LFQ
+    # intensity and iBAQ columns, flag columns marked "+", 0 for "not quantified".
+    MAXQUANT_HEADER = [
+        "Protein IDs", "Majority protein IDs", "Peptide counts (all)", "Protein names", "Gene names",
+        "Fasta headers", "Number of proteins", "Peptides", "Peptides S1", "Peptides S2", "Sequence coverage [%]",
+        "Intensity", "Intensity S1", "Intensity S2", "iBAQ S1", "iBAQ S2", "LFQ intensity S1", "LFQ intensity S2",
+        "Only identified by site", "Reverse", "Potential contaminant", "id",
+    ]
+
+    def maxquant(self, rows):
+        return "\n".join(["\t".join(self.MAXQUANT_HEADER)] + ["\t".join(r) for r in rows])
+
+    def test_maxquant_protein_groups_read_lfq_per_sample_and_drop_flagged_rows(self):
+        text = self.maxquant([
+            ["P1", "P1", "3", "Name 1", "GENE1", ">sp|P1", "1", "3", "2", "1", "12.5", "1900", "1000", "900", "5", "4",
+             "950", "0", "", "", "", "0"],
+            ["REV__P9", "REV__P9", "1", "", "", "", "1", "1", "1", "0", "3", "10", "10", "0", "1", "0", "10", "0",
+             "", "+", "", "1"],
+            ["CON__P8", "CON__P8", "2", "Keratin", "KRT1", "", "1", "2", "1", "1", "8", "700", "300", "400", "2", "2",
+             "300", "400", "", "", "+", "2"],
+            ["P5", "P5", "1", "Name 5", "GENE5", "", "1", "1", "1", "0", "2", "20", "20", "0", "1", "0", "20", "0",
+             "+", "", "", "3"],
+            ["P2;P3", "P2;P3", "4;2", "Name 2;Name 3", "GENE2;GENE3", "", "2", "4", "1", "3", "20", "800", "0", "800",
+             "0", "6", "0", "500", "", "", "", "4"],
+            ["P4", "P4", "1", "", "", "", "1", "1", "1", "1", "5", "60", "30", "30", "1", "1", "30", "30", "", "", "", "5"],
+        ])
+        raw = alignment.parse_matrix_csv(text)
+        self.assertEqual(raw.cell_ids, ["S1", "S2"])
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2;GENE3"])  # flagged rows and a row without a gene are left out
+        self.assertEqual(raw.values[0, 0], np.float32(950))
+        self.assertTrue(np.isnan(raw.values[0, 1]))  # 0 is "not quantified"
+        self.assertTrue(np.isnan(raw.values[1, 0]))
+        self.assertEqual(raw.values[1, 1], np.float32(500))
+
+    def test_a_very_long_annotation_field_is_read(self):
+        # PXD011683's proteinGroups.txt has ID lists past csv's default 131,072-character field limit
+        row = ["P1", "P1", "3", "", "GENE1", ">sp|P1 " + "x" * 300_000, "1", "3", "2", "1", "1", "1900", "1000", "900",
+               "5", "4", "950", "0", "", "", "", "0"]
+        raw = alignment.parse_matrix_csv(self.maxquant([row]))
+        self.assertEqual(raw.gene_names, ["GENE1"])
+
+    def test_maxquant_without_lfq_values_reads_intensity(self):
+        rows = [["P1", "P1", "3", "", "GENE1", "", "1", "3", "2", "1", "1", "1900", "1000", "900", "5", "4", "0", "0",
+                 "", "", "", "0"]]
+        raw = alignment.parse_matrix_csv(self.maxquant(rows))
+        self.assertEqual(raw.cell_ids, ["S1", "S2"])
+        np.testing.assert_array_equal(raw.values, [[1000, 900]])
+
+    # FragPipe's LFQ protein table (combined_protein.tsv, as in PXD058626).
+    FRAGPIPE_HEADER = [
+        "Protein", "Protein ID", "Entry Name", "Gene", "Protein Length", "Organism", "Protein Existence",
+        "Description", "Protein Probability", "Top Peptide Probability", "Combined Total Peptides",
+        "Combined Spectral Count", "Combined Unique Spectral Count", "Combined Total Spectral Count",
+        "A_1 Spectral Count", "A_1 Unique Spectral Count", "A_1 Total Spectral Count", "A_1 Intensity",
+        "A_1 MaxLFQ Intensity", "B_2 Spectral Count", "B_2 Unique Spectral Count", "B_2 Total Spectral Count",
+        "B_2 Intensity", "B_2 MaxLFQ Intensity", "Indistinguishable Proteins",
+    ]
+
+    def test_fragpipe_lfq_table_reads_maxlfq_per_sample(self):
+        rows = [
+            ["sp|P1|A_HUMAN", "P1", "A_HUMAN", "GENE1", "300", "Homo sapiens", "1:Experimental evidence at protein level",
+             "desc", "1.0", "0.99", "5", "9", "8", "9", "4", "4", "4", "1500.5", "1400", "5", "4", "5", "0", "0", ""],
+            ["sp|P2|B_HUMAN", "P2", "B_HUMAN", "GENE2", "200", "Homo sapiens",
+             "2:Experimental evidence at transcript level", "desc", "0.99", "0.98", "2", "3", "3", "3", "0", "0", "0",
+             "0", "0", "3", "3", "3", "800", "750.25", "sp|P3|C_HUMAN"],
+        ]
+        text = "\n".join(["\t".join(self.FRAGPIPE_HEADER)] + ["\t".join(r) for r in rows])
+        raw = alignment.parse_matrix_csv(text)
+        self.assertEqual(raw.cell_ids, ["A_1", "B_2"])
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2"])
+        self.assertEqual(raw.values[0, 0], np.float32(1400))
+        self.assertEqual(raw.values[1, 1], np.float32(750.25))
+        self.assertTrue(np.isnan(raw.values[0, 1]) and np.isnan(raw.values[1, 0]))
+
+    def test_fragpipe_lfq_table_without_maxlfq_reads_intensity(self):
+        header = [c for c in self.FRAGPIPE_HEADER if not c.endswith("MaxLFQ Intensity")]
+        row = ["sp|P1|A_HUMAN", "P1", "A_HUMAN", "GENE1", "300", "Homo sapiens", "1:Experimental evidence at protein level",
+               "desc", "1.0", "0.99", "5", "9", "8", "9", "4", "4", "4", "1500.5", "5", "4", "5", "60", ""]
+        raw = alignment.parse_matrix_csv("\n".join(["\t".join(header), "\t".join(row)]))
+        self.assertEqual(raw.cell_ids, ["A_1", "B_2"])
+        np.testing.assert_array_equal(raw.values, [[np.float32(1500.5), 60]])
+
+    def test_text_where_a_number_belongs_is_refused_by_name(self):
+        """A table the service cannot read says which column holds text, and
+        which layouts it reads, instead of failing on a bare conversion."""
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            alignment.parse_matrix_csv("gene,cellA,Description\nGENE1,1.0,a kinase\n")
+        message = str(caught.exception)
+        self.assertIn("'Description'", message)
+        self.assertIn("MaxQuant", message)
+        self.assertIsInstance(caught.exception, ValueError)
+
 
 class ZScorePerGeneTests(unittest.TestCase):
     def test_zscores_use_only_this_datasets_own_stats(self):

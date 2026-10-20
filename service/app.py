@@ -271,7 +271,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
         try:
             raw = alignment.parse_matrix_csv(matrix_text)
             warnings = validation.validate(raw)
-        except validation.ValidationError as exc:
+        except (validation.ValidationError, alignment.UnreadableMatrix) as exc:
             self._send_json(400, {"error": str(exc)})
             return
         except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently

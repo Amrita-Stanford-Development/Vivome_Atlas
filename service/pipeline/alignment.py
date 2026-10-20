@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import csv
 import io
+import re
 import warnings
 from collections import defaultdict
 from dataclasses import dataclass, replace
@@ -96,6 +97,69 @@ _FRAGPIPE_TMT_REFERENCE_PREFIXES = ("RefInt_", "RefDInt_")
 # Missing-value spellings: blank (the contract, DIA-NN) and R's "NA" (FragPipe).
 _MISSING_VALUES = frozenset({"", "NA"})
 
+# MaxQuant's proteinGroups.txt: a "Gene names" column, flag columns that mark
+# decoys, contaminants and site-only groups with "+", and per-sample
+# quantities. "LFQ intensity <sample>" is read when any is above 0, else
+# "Intensity <sample>"; 0 is MaxQuant's "not quantified". The research reader
+# (benchmark/heldout_formats.read_maxquant) reads the same way.
+_MAXQUANT_MARKERS = ("Majority protein IDs", "Gene names")
+_MAXQUANT_FLAGS = frozenset({"Only identified by site", "Reverse", "Potential contaminant", "Contaminant"})
+_MAXQUANT_QUANTITIES = (re.compile(r"^LFQ intensity (.+)$"), re.compile(r"^Intensity (.+)$"))
+
+# FragPipe's LFQ protein table (combined_protein.tsv): "Gene", annotation and
+# "Combined ..." columns, then per sample its spectral counts, "<sample>
+# Intensity" and, when MaxLFQ ran, "<sample> MaxLFQ Intensity", which is read
+# first. 0 is "not quantified".
+_FRAGPIPE_LFQ_MARKERS = ("Gene", "Combined Total Peptides")
+_FRAGPIPE_LFQ_QUANTITIES = (re.compile(r"^(?!Combined )(.+) MaxLFQ Intensity$"),
+                            re.compile(r"^(?!Combined )(.+?)(?<! MaxLFQ) Intensity$"))
+
+# MaxQuant's ID-list columns can pass csv's default 131,072-character field
+# limit (PXD011683); the upload itself is bounded (config's upload limit).
+csv.field_size_limit(2**31 - 1)
+
+_READABLE_LAYOUTS = ("a matrix with identifiers in the first column and one column per cell; a DIA-NN pg_matrix; "
+                     "MaxQuant proteinGroups.txt; FragPipe combined_protein.tsv or a TMT-Integrator table")
+
+
+class UnreadableMatrix(ValueError):
+    """An upload the parser cannot read, with a message for the person who
+    sent it (service/app.py answers 400 with it)."""
+
+
+def _number(text: str, column: str) -> float:
+    if text in _MISSING_VALUES:
+        return np.nan
+    try:
+        return float(text)
+    except ValueError:
+        raise UnreadableMatrix(f"column {column!r} holds text ({text[:40]!r}) where a number belongs. "
+                               f"The service reads {_READABLE_LAYOUTS}.") from None
+
+
+def _parse_quantity_table(header: list[str], reader, gene_column: str, quantities: tuple,
+                          flags: frozenset = frozenset()) -> "RawMatrix":
+    """MaxQuant's and FragPipe's LFQ tables: one row per protein group, the
+    gene column's text as identifiers, rows flagged "+" left out, and the
+    first quantity pattern with any value above 0 as the cells (each
+    pattern's group is the sample name). 0 is missing."""
+    gene_idx = header.index(gene_column)
+    flag_idx = [i for i, name in enumerate(header) if name in flags]
+    found = [[(i, m.group(1).strip()) for i, name in enumerate(header) if (m := pattern.match(name))]
+             for pattern in quantities]
+    rows = [row for row in reader if len(row) > gene_idx and row[gene_idx]
+            and not any(i < len(row) and row[i].strip() == "+" for i in flag_idx)]
+    chosen = next((cols for cols in found if cols and any(
+        row[i] not in _MISSING_VALUES and _number(row[i], header[i]) > 0 for row in rows for i, _ in cols)), None)
+    chosen = chosen or next((cols for cols in found if cols), None)
+    if chosen is None:
+        raise UnreadableMatrix(f"this looks like a protein table with a {gene_column!r} column but no per-sample "
+                               f"intensity columns. The service reads {_READABLE_LAYOUTS}.")
+    values = np.array([[_number(row[i], header[i]) for i, _ in chosen] for row in rows],
+                      dtype=np.float32).reshape(len(rows), len(chosen))
+    values[values == 0] = np.nan
+    return RawMatrix(gene_names=[row[gene_idx] for row in rows], cell_ids=[name for _, name in chosen], values=values)
+
 
 def _clean_dia_nn_cell_id(raw_header: str) -> str:
     """DIA-NN report columns are Windows raw-file paths (e.g.
@@ -127,11 +191,19 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     A FragPipe TMT-Integrator protein table is recognised by a "Gene" column
     (and no "Genes" column): "Gene" supplies the identifiers, its annotation
     columns and reference-channel columns are excluded, and the channel
-    headers are kept verbatim. "NA" is read as missing in every format."""
+    headers are kept verbatim. "NA" is read as missing in every format.
+
+    MaxQuant's proteinGroups.txt and FragPipe's LFQ combined_protein.tsv are
+    read as they come (_parse_quantity_table). A text value where a number
+    belongs raises UnreadableMatrix, naming the column."""
     first_line = text.split("\n", 1)[0]
     delimiter = "\t" if first_line.count("\t") > first_line.count(",") else ","
     reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     header = next(reader)
+    if all(m in header for m in _MAXQUANT_MARKERS):
+        return _parse_quantity_table(header, reader, "Gene names", _MAXQUANT_QUANTITIES, _MAXQUANT_FLAGS)
+    if all(m in header for m in _FRAGPIPE_LFQ_MARKERS):
+        return _parse_quantity_table(header, reader, "Gene", _FRAGPIPE_LFQ_QUANTITIES)
 
     is_dia_nn_report = "Genes" in header
     is_fragpipe_tmt = not is_dia_nn_report and "Gene" in header
@@ -163,7 +235,7 @@ def parse_matrix_csv(text: str) -> RawMatrix:
         if not row or not row[gene_col_idx]:
             continue
         gene_names.append(row[gene_col_idx])
-        rows.append([np.nan if row[i] in _MISSING_VALUES else float(row[i]) for i in cell_col_indices])
+        rows.append([_number(row[i], header[i]) for i in cell_col_indices])
     values = np.array(rows, dtype=np.float32) if rows else np.empty((0, len(cell_ids)), dtype=np.float32)
     return RawMatrix(gene_names=gene_names, cell_ids=cell_ids, values=values)
 

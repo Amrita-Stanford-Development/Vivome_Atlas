@@ -38,6 +38,21 @@ test('a header line, with tabs or commas, and its cells', () => {
   assert.equal(parseHeader('gene').cellEstimate, 0);
 });
 
+test('MaxQuant and FragPipe LFQ tables count one cell per sample, as the service reads them', () => {
+  const maxquant = ['Protein IDs', 'Majority protein IDs', 'Gene names', 'Peptides S1', 'Peptides S2', 'Intensity',
+    'Intensity S1', 'Intensity S2', 'iBAQ S1', 'iBAQ S2', 'LFQ intensity S1', 'LFQ intensity S2', 'Reverse',
+    'Potential contaminant', 'id'].join('\t');
+  assert.deepEqual(parseHeader(maxquant), { separator: '\t', columns: 15, annotation: 13, cellEstimate: 2, format: 'maxquant' });
+  const noLfq = ['Majority protein IDs', 'Gene names', 'Intensity', 'Intensity S1', 'Intensity S2', 'Intensity S3'].join('\t');
+  assert.equal(parseHeader(noLfq).cellEstimate, 3);
+  const fragpipe = ['Protein', 'Protein ID', 'Gene', 'Combined Total Peptides', 'Combined Spectral Count',
+    'A_1 Spectral Count', 'A_1 Intensity', 'A_1 MaxLFQ Intensity', 'B_2 Spectral Count', 'B_2 Intensity',
+    'B_2 MaxLFQ Intensity', 'Indistinguishable Proteins'].join('\t');
+  assert.deepEqual(parseHeader(fragpipe), { separator: '\t', columns: 12, annotation: 10, cellEstimate: 2, format: 'fragpipe-lfq' });
+  const noMaxLfq = ['Gene', 'Combined Total Peptides', 'A_1 Intensity', 'B_2 Intensity', 'C_3 Intensity'].join('\t');
+  assert.equal(parseHeader(noMaxLfq).cellEstimate, 3);
+});
+
 test('reading the header line from a slice, and on when asked', async () => {
   assert.equal(await readHeaderLine(blob('gene,a,b\r\nX,1,2\r\n')), 'gene,a,b');
   assert.equal(await readHeaderLine(blob('gene\ta\tb')), 'gene\ta\tb', 'no line end at all');

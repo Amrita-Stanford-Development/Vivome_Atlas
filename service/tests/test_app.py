@@ -246,6 +246,14 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         for cell in restricted["cells"]:
             self.assertTrue(set(cell["label_set"]) <= set(config.CROSS_MODAL_SUPPORTED_CLASSES))
 
+    def test_a_table_with_text_where_numbers_belong_is_400_naming_the_column(self):
+        self._install_synthetic_bundle()
+        status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot",
+                                          b"gene,c1,Description\nA1BG,1.0,a glycoprotein\n")
+        self.assertEqual(status, 400)
+        self.assertIn("'Description'", payload["error"])
+        self.assertIn("MaxQuant proteinGroups.txt", payload["error"])
+
     def test_a_malformed_restriction_option_is_400(self):
         status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", b"gene,c1\nA1BG,1.0\n",
                                           {"restrict_to_supported_classes": b"sometimes"})
