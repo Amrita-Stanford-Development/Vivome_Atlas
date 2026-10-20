@@ -39,6 +39,14 @@ music bed under the whole film, one continuous piece that rises towards the
 end; there are no sound effects. The stills on the page are silent; the
 sound is in the rendered film only.
 
+The film has English captions (`web/motion/film/vivome.en.vtt`), off until
+the viewer turns them on in the player. Each cue is one phrase of a scene's
+voice line, from when it is said until the next phrase starts, with the
+numbers the film says. `captionsVtt` in `web/js/reel-frames.js` builds them
+from the same records the voice follows, and `motion/scripts/captions.mjs`
+writes the file after a render. `web/tests/motion.test.js` fails if the
+file and the records differ.
+
 ## Card, journey, card
 
 The film has one rhythm. Before each scene the camera travels through the
