@@ -2655,6 +2655,41 @@ passed: v4.1 answered every upload identically twice.
   these uploads.
 - Nothing any release answered was contradicted by the next.
 
+### 61. Blood, trained with RNA pools as well as single cells (a diagnostic), 2026-10-20
+
+**Why:** in the organs, training on pseudobulk pools did not remove the
+sinks, but it raised single-cell validation by 0.7 to 6.5 points in every
+organ (entry 58, A6). Blood's served encoder never saw pools.
+
+**How** (`research/notebooks/blood_pools.py`; rules committed before the
+run, `953490f`; a plumbing fix after a crash before any result,
+`8e09c50`):
+- blood's organ-layout work folder, with A6's pool settings: 3,110 pools
+  over 22 classes;
+- control and pooled members for seeds 1 and 2;
+- each read by nearest centroid.
+
+| | Seed 1 control | Seed 1 pooled | Seed 2 control | Seed 2 pooled |
+|---|---|---|---|---|
+| Validation balanced accuracy | 66.7 | 71.1 | 67.8 | 73.3 |
+| Calibration-suite top-1 | 60.9 | 66.3 | 63.2 | 67.3 |
+| Fulcher 2026, six types (development) | 56.8 | 58.7 | 53.0 | 60.1 |
+
+**Reading, fixed before the run:** pools are "promising for blood" only if
+Fulcher gains at least 2 points in every seed, and nothing else falls by
+more than 2. Seed 1 gained 1.82 on Fulcher, so the verdict is **not
+promising**, as written.
+
+**What it shows anyway:**
+- Every measure improved in both seeds: validation +4.4 and +5.5,
+  calibration top-1 +5.4 and +4.1, Fulcher +1.8 and +7.1.
+- One seed's Fulcher swing is about the seed spread (V2's five seeds:
+  57.3 ± 2.2).
+
+Blood v4.1 is unchanged. A pooled blood candidate would be a new model:
+five members, its own pre-registered gates on a fresh suite, and the
+owner's decision.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

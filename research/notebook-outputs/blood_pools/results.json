@@ -1,0 +1,37 @@
+{
+  "pools": 3110,
+  "seeds": {
+    "1": {
+      "control": {
+        "validation_balanced": 66.71,
+        "epochs_run": 60,
+        "calib_top1": 60.855,
+        "fulcher_balanced_6types": 56.84,
+        "checkpoint_sha256": "d8c66596c20f7af389d9692dc3c76dfa666047fe6a4ee772167969fb991dba70"
+      },
+      "pooled": {
+        "validation_balanced": 71.14,
+        "epochs_run": 60,
+        "calib_top1": 66.277,
+        "fulcher_balanced_6types": 58.66,
+        "checkpoint_sha256": "a3a5d1f64d54cae68bb2b492aa5821ab1ebcf719149ffb70bbde150b2abb0158"
+      }
+    },
+    "2": {
+      "control": {
+        "validation_balanced": 67.79,
+        "epochs_run": 60,
+        "calib_top1": 63.182,
+        "fulcher_balanced_6types": 52.99,
+        "checkpoint_sha256": "c79b76731240d1eaedc5c23664202ae6e70dec242242f2e2b67321b6eca4a37e"
+      },
+      "pooled": {
+        "validation_balanced": 73.28,
+        "epochs_run": 60,
+        "calib_top1": 67.262,
+        "fulcher_balanced_6types": 60.06,
+        "checkpoint_sha256": "0d9cc840a41c63e8007743ba08628695ed063314c270ef3cacc332fe9f527951"
+      }
+    }
+  }
+}

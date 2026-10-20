@@ -1,0 +1,25 @@
+{
+  "script_sha256": "186777ad4879bee65056834eba217f384bc5903c5024aa902db5bfecf1dec045",
+  "started": "2026-10-20T22:45:50",
+  "seeds": [
+    1,
+    2
+  ],
+  "gain": 2.0,
+  "cost": 2.0,
+  "pools": {
+    "seed": 20261018,
+    "share": 0.1,
+    "min": 20,
+    "max": 400,
+    "sizes": [
+      10,
+      30,
+      100,
+      300
+    ],
+    "pure": 0.7,
+    "majority": 0.8
+  },
+  "a6_script_sha256": "d6f8aea63476e8ecee0f76768c359011922a7f13920e2e77bb128fff8caee8f4"
+}

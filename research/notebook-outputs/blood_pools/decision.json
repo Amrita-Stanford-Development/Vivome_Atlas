@@ -1,0 +1,17 @@
+{
+  "finished": "2026-10-20T23:07:17",
+  "seconds": 1287,
+  "by_seed": {
+    "1": {
+      "fulcher_gain": 1.82,
+      "validation_change": 4.43,
+      "calib_top1_change": 5.422
+    },
+    "2": {
+      "fulcher_gain": 7.07,
+      "validation_change": 5.49,
+      "calib_top1_change": 4.08
+    }
+  },
+  "promising_for_blood": false
+}

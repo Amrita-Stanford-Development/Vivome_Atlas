@@ -801,6 +801,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_build/gene_id_map_provenance.json` — the lymph node's identifier map
 - `research/notebook-outputs/lymph_node_build/mask_profiles_summary.csv` — the lymph node's missingness profiles (blood's, as measured)
 - `research/notebook-outputs/lymph_node_build/bundle_MANIFEST.json` — the lymph node bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebook-outputs/blood_pools/rules.json` — the blood pool diagnostic's settings, written before the run
+- `research/notebook-outputs/blood_pools/results.json` — blood members with and without RNA pools, two seeds: validation, calibration-suite top-1, Fulcher 2026
+- `research/notebook-outputs/blood_pools/decision.json` — the reading: not promising as written (seed 1's Fulcher gain 1.82, bar 2); every measure rose in both seeds
 - `research/notebooks/blood_pools.py` — a diagnostic after the organs' A6: blood members trained with and without RNA pools (two seeds), on validation, the calibration suite and Fulcher 2026, with a reading fixed in the script; blood v4.1 unchanged
 - `research/notebook-outputs/label_stability/rules.json` — label stability's settings and script sha256, written before the run
 - `research/notebook-outputs/label_stability/per_cell.csv.gz` — label stability: every development cell's answer and best guess under each served model, and its kind of change for each pair of releases
