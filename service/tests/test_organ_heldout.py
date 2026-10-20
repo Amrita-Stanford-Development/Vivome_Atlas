@@ -120,6 +120,67 @@ class LockedTestGuards(unittest.TestCase):
             auroc_with_p(np.array([0.9, np.nan, 0.1, 0.2]), np.array([True, True, False, False]))
 
 
+class LockedTestIntegrity(unittest.TestCase):
+    """What the scorers trust from the intake, and what the intakes refuse."""
+
+    def test_a_changed_intake_output_stops_the_scorer(self):
+        import json
+        import tempfile
+        from unittest import mock
+
+        from benchmark import heldout_intake, ln_heldout_score, lung_heldout_score
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            (out / "label_map.csv").write_text("cell_id,group,scored\na,B zone,True\n", encoding="utf-8")
+            good = heldout_intake.sha256(out / "label_map.csv")
+            (out / "intake.json").write_text(json.dumps({"outputs": {"label_map.csv": good}}), encoding="utf-8")
+            heldout_intake.check_outputs(out)  # unchanged: no error
+            (out / "label_map.csv").write_text("cell_id,group,scored\na,T zone,True\n", encoding="utf-8")
+            with self.assertRaises(SystemExit) as caught:
+                heldout_intake.check_outputs(out)
+            self.assertIn("label_map.csv", str(caught.exception))
+            for scorer in (ln_heldout_score, lung_heldout_score):
+                with mock.patch.object(scorer, "out_dir", return_value=out), self.assertRaises(SystemExit) as caught:
+                    scorer.main(["--rehearse"])
+                self.assertIn("label_map.csv", str(caught.exception), scorer.__name__)
+
+    def test_the_organ_scripts_refuse_vivome_overrides(self):
+        import os
+        from unittest import mock
+
+        import tempfile
+
+        from benchmark import ln_heldout_intake as ln
+        from benchmark import ln_heldout_score, lung_heldout_score
+        ran = AssertionError("the guarded work ran")
+        with tempfile.TemporaryDirectory() as tmp:
+            for module, work in ((ln, "rehearsal_files"), (lung, "rehearsal_files"),
+                                 (ln_heldout_score, "score"), (lung_heldout_score, "score")):
+                with mock.patch.dict(os.environ, {"VIVOME_GENE_ID_MAP": "elsewhere.tsv"}), \
+                        mock.patch.object(module, "out_dir", return_value=Path(tmp) / "x"), \
+                        mock.patch.object(module, work, side_effect=ran), self.assertRaises(SystemExit) as caught:
+                    module.main(["--rehearse"])
+                self.assertIn("VIVOME_GENE_ID_MAP", str(caught.exception), module.__name__)
+
+    def test_a_void_set_is_recorded_once_opened(self):
+        import json
+        import tempfile
+        from unittest import mock
+
+        import pandas as pd
+        from benchmark import ln_heldout_intake as ln
+        with tempfile.TemporaryDirectory() as tmp:
+            record = Path(tmp) / "summary.json"
+            few = pd.DataFrame({"cell_id": ["a", "b"], "group": ["B zone", "T zone"], "scored": [True, True]})
+            with mock.patch.object(ln, "void_record", return_value=record), self.assertRaises(SystemExit):
+                ln.intake(few, Path(tmp) / "m.tsv", Path(tmp) / "heldout_pxd042367", Path(tmp), {})
+            self.assertTrue(json.loads(record.read_text(encoding="utf-8"))["void"].startswith("too few"))
+            record.unlink()
+            with mock.patch.object(ln, "void_record", return_value=record), self.assertRaises(SystemExit):
+                ln.intake(few, Path(tmp) / "m.tsv", Path(tmp) / "heldout_pxd042367_rehearsal", Path(tmp), {})
+            self.assertFalse(record.exists(), "a rehearsal records nothing")
+
+
 class ColonNames(unittest.TestCase):
     def test_groups_by_meaning(self):
         self.assertEqual(colon._group_of("Crypt bottom epithelium"), "crypt bottom")

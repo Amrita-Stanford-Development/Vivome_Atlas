@@ -35,6 +35,7 @@ import pandas as pd
 from benchmark import heldout_formats as formats
 from benchmark.colon_heldout_intake import DOWNLOADS, PUBLIC, REPO, RESULTS, organ_data, run_candidate
 from benchmark.heldout_intake import facts, write_labels
+from benchmark.khoury2026_embed import refuse_overrides
 from benchmark.sorted_cd4cd8_intake import benchmark_matrix, sha256
 from benchmark.organ_baselines import organ_matrix
 
@@ -124,9 +125,25 @@ def candidate_dir(rehearse: bool) -> Path:
     return work
 
 
+
+def void_record() -> Path:
+    """Where a void set is recorded once its labels are read: the summary the
+    scorer would write, so the scored-once guard then holds."""
+    return REPO / "research" / "benchmark" / "heldout" / SET / "summary.json"
+
+
+def record_void(out: Path, reason: str) -> None:
+    if "rehearsal" not in out.name:
+        target = void_record()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps({"protocol": str(PROTOCOL.relative_to(REPO)).replace("\\", "/"), "set": SET,
+                                      "void": reason}, indent=2) + "\n", encoding="utf-8", newline="\n")
+    raise SystemExit(f"void: {reason}")
+
+
 def intake(labels: pd.DataFrame, matrix: Path, out: Path, candidate: Path, source: dict) -> dict:
     if len(labels) < 20:
-        raise SystemExit(f"void: {len(labels)} samples, fewer than 20 (rule 5)")
+        record_void(out, f"{len(labels)} samples, fewer than 20 (rule 5)")
     tab = formats.read_maxquant(matrix)
     raw = tab.raw(labels["cell_id"].tolist())
     (out / "cell_ids.txt").write_text("\n".join(raw.cell_ids) + "\n", encoding="utf-8", newline="\n")
@@ -198,6 +215,7 @@ def main(argv: "list[str] | None" = None) -> None:
     parser.add_argument("--label-map", type=Path)
     parser.add_argument("--reason")
     args = parser.parse_args(argv)
+    refuse_overrides()  # the repository's model files, not an export elsewhere
     out = out_dir(args.rehearse)
     if args.rehearse:
         if out.exists():

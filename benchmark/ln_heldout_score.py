@@ -26,7 +26,9 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
 
+from benchmark.heldout_intake import check_outputs
 from benchmark.heldout_score import auroc_with_p
+from benchmark.khoury2026_embed import refuse_overrides
 from benchmark.ln_heldout_intake import REPO, SET, out_dir
 
 STATEMENT = ("An internal held-out test of the lymph node reference on laser-microdissected tonsil micro-regions (mixtures "
@@ -82,6 +84,7 @@ def main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rehearse", action="store_true")
     args = parser.parse_args(argv)
+    refuse_overrides()  # the repository's model files, not an export elsewhere
     directory = out_dir(args.rehearse)
     if args.rehearse:
         target = REPO / "research" / "benchmark" / "heldout" / "rehearsals" / f"{SET}.json"
@@ -91,6 +94,7 @@ def main(argv: "list[str] | None" = None) -> None:
             raise SystemExit("the locked test was scored; it is scored once")
     if not args.rehearse and not (directory / "baselines.json").exists():
         raise SystemExit("run the baselines first: python -m benchmark.organ_baselines ln (rule 9)")
+    check_outputs(directory)
     out, scores = score(directory)
     if args.rehearse:
         out["rehearsal"] = json.loads((directory / "labels.json").read_text(encoding="utf-8")).get("source")

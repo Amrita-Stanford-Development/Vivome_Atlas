@@ -394,6 +394,16 @@ def intake(name: str, labels: pd.DataFrame, sources: dict, out: Path, source_rec
     return record
 
 
+def check_outputs(directory: Path) -> None:
+    """Every file the intake recorded (intake.json's outputs) is unchanged
+    since, or the scorer stops: the label map, the predictions and the
+    query matrices it reads."""
+    record = json.loads((directory / "intake.json").read_text(encoding="utf-8"))
+    changed = [name for name, digest in record.get("outputs", {}).items() if sha256(directory / name) != digest]
+    if changed:
+        raise SystemExit(f"changed since the intake recorded them: {changed}; the scorer reads only what the intake wrote")
+
+
 def check_labels(labels: pd.DataFrame, groups: "set | None" = None, required: tuple = (),
                  known_ids: "list | None" = None) -> pd.DataFrame:
     """A label map, checked before anything is written: its columns, one row

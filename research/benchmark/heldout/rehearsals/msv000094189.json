@@ -118,6 +118,12 @@
         "basal cell": 1
       },
       "unscorable_samples": 0,
+      "lineages_scored": [
+        "endothelial",
+        "epithelial",
+        "immune",
+        "stromal"
+      ],
       "balanced_accuracy": 100.0,
       "called_by_lineage": {
         "endothelial": {
@@ -159,6 +165,12 @@
         "plasma cell": 1
       },
       "unscorable_samples": 0,
+      "lineages_scored": [
+        "endothelial",
+        "epithelial",
+        "immune",
+        "stromal"
+      ],
       "balanced_accuracy": 100.0,
       "called_by_lineage": {
         "endothelial": {

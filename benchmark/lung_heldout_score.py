@@ -28,6 +28,8 @@ import pandas as pd
 from sklearn.metrics import balanced_accuracy_score
 
 from benchmark.colon_heldout_score import PERMUTATIONS, balanced_with_p, correct_answer
+from benchmark.heldout_intake import check_outputs
+from benchmark.khoury2026_embed import refuse_overrides
 from benchmark.lung_heldout_intake import LINEAGES, REPO, SET, out_dir
 
 MIN_SAMPLES, MIN_LINEAGES = 3, 3
@@ -86,6 +88,7 @@ def main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rehearse", action="store_true")
     args = parser.parse_args(argv)
+    refuse_overrides()  # the repository's model files, not an export elsewhere
     directory = out_dir(args.rehearse)
     if args.rehearse:
         target = REPO / "research" / "benchmark" / "heldout" / "rehearsals" / f"{SET}.json"
@@ -95,6 +98,7 @@ def main(argv: "list[str] | None" = None) -> None:
             raise SystemExit("the locked test was scored; it is scored once")
     if not args.rehearse and not (directory / "baselines.json").exists():
         raise SystemExit("run the baselines first: python -m benchmark.organ_baselines lung (rule 10)")
+    check_outputs(directory)
     out, scores = score(directory)
     if args.rehearse:
         out["rehearsal"] = json.loads((directory / "labels.json").read_text(encoding="utf-8")).get("source")
