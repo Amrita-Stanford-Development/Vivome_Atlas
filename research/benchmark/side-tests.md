@@ -286,7 +286,9 @@ comes from here. Keep this list current.
 - **Data requests not yet made:** Brenes et al. (sorted blood neutrophils) and
   Lange et al. (CD19-sorted B cells).
 - **Embargoed or restricted, to re-check:** PXD084266, PXD080834, PXD076177,
-  the HUPO inter-lab benchmark (Zenodo 21181080).
+  the HUPO inter-lab benchmark (Zenodo 21181080). Re-checked 2026-10-20:
+  PRIDE still answers 404 for all three PXDs, and the Zenodo record is still
+  restricted, with no files listed.
 - **Public, not downloaded:**
   - PXD070599's single HeLa and HEK293T (tier B, 24 GB; role `reserve` in
     `scripts/fetch_public_sets.py`);
