@@ -31,17 +31,19 @@ two, so a panel shows either the basis or the phase without branching.
 
 ```js
 metric?.status === 'measured'
-  && metric.value !== null
-  && Number.isFinite(Number(metric.value))
+  && typeof metric.value === 'number'
+  && Number.isFinite(metric.value)
 ```
 
-Anything else renders as `Pending`. This is the one decision that keeps
+Anything else renders as `Pending`, including a value that `Number()` would
+turn into a number: a blank string, a boolean or a list. This is the one decision that keeps
 unmeasured quantities off the page — a metric that later becomes measured
 stops looking pending with no edit to any panel.
 
 Counts are bare scalars rather than metric records, so they have their own
 guard, `formatCount()`. Without it a truncated manifest would render `NaN` or
-`undefined` as an authoritative cell count.
+`undefined` as an authoritative cell count. It also reads Pending for a
+blank string, a boolean or an object.
 
 `validateManifest()` checks the required top-level keys and refuses a
 `schema_version` other than `1.0`, naming what is wrong. Pages call
