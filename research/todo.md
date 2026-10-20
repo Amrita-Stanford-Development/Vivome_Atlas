@@ -456,7 +456,7 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - the hosted upload limit of 31 MiB, under Cloud Run's 32 MiB per HTTP/1 request (`172b7d3`; the Dockerfile sets it, so it applies on the next deploy);
   - model files read as tensors only, so a tampered checkpoint is refused, not run (`387a6e2`);
   - 2,000 cells in about 10 s instead of 32 s, answers unchanged (`401f086`);
-  - three reviews' fixes to the upload path, with the browser's check kept in step (`3bbea2d`, `79a27d8`, `1fc905f`).
+  - four reviews' fixes to the upload path, with the browser's check kept in step (`3bbea2d`, `79a27d8`, `1fc905f`, `8847f3e`), and a deploy rehearsal in one command (`deploy/huggingface/rehearse.py`, `fcd2b61`).
 
   Rehearsed locally with the hosted settings (2026-10-21): `check_space.py` finds 0 of 238 cells differ, and real FragPipe LFQ, Spectronaut and DIA-NN 1.8 tables are read over HTTP.
 
@@ -750,5 +750,5 @@ Amendments: sorted 5, lymph node 4 and 5, lung 4 and 5, colon 1. The sorted rehe
 - Fixed from the review: the Workflow page's Python version; RNA zeros vote on the scale again; "PAR1" text files; R's corner rule; the example send; the cancelled-file note; the organ baselines' constant genes.
 - The site sends security headers, and the /api door drops the visitor's location headers.
 - A second review of those fixes found four more, now fixed: R tables with blank missing values, the rows the browser judges, the example send, and the cancelled-file note. A third found none new, and older browser/service differences, now fixed (DIA-NN tables in R's layout, white-space rows, the size check's room for the form, a missing gene map said at load).
-- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d`, `79a27d8`, `1fc905f` |
+- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d`, `79a27d8`, `1fc905f`, `8847f3e` |
 | 2026-10-21 | **Accessibility** (a static review): the film's English captions; inert hidden panels on the Atlas page; a status line instead of a status card read out every second; the film's keys; the Workflow cell search; load errors announced. The visible changes wait for the owner (the todo's Accessibility item). | `6adc5fc`, `6d5a748` |
