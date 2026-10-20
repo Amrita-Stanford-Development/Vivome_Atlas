@@ -25,7 +25,7 @@ import {
 import { buildAnswerKey, buildAtlasCellCard, buildExampleSummary, buildOutcomeChips, buildReceipt } from './atlas-panels.js';
 import { answerGroups, browseOrder, buildBrowseList, buildCellBrowser } from './cell-browser.js';
 import { TIMING, finishWaiting, flightSchedule, framePose, landingTimeline, reducedTiming, waitingFrame } from './choreography.js';
-import { GUIDED, MAX_ATTEMPTS, initialState, transition } from './director.js';
+import { GUIDED, MAX_ATTEMPTS, initialState, statusLine, transition } from './director.js';
 import { checkFile, checkLimits } from './file-check.js';
 import { createIllustration } from './illustration.js';
 import { toScene } from './reference-data.js';
@@ -414,15 +414,20 @@ export function createLanding({
       const who = cancelledWork ? 'The service is still finishing the file you cancelled.' : 'Another file is being labelled.';
       status(`<p>${who} Trying again in ${Math.max(0, Math.ceil((st.retryAfter ?? 30) - phase))} s.</p>`);
     }
-    else if (name === 'failed') {
+    let failure = '';
+    if (name === 'failed') {
       // A file the service turned down would be turned down again as it is.
       const again = st.example || (st.file && st.check?.ok && st.error?.kind !== 'refused');
       const retry = again ? '<button type="button" class="text-button" data-retry>Try again</button>' : '';
-      const message = st.stage === 'busy'
+      failure = st.stage === 'busy'
         ? `The service was still busy after ${MAX_ATTEMPTS} tries. Try again in a few minutes.`
         : explainFailure(st.error, serviceUrl());
-      status(`${errorPanel(new Error(message))}${retry}`);
-    } else if (run) status(buildReceipt(run.receipt, { open: name !== 'interactive' }));
+      status(`${errorPanel(new Error(failure))}${retry}`);
+    } else if (run && !['idle', 'checking', 'chosen', 'sending', 'working', 'finishing', 'busy'].includes(name)) {
+      status(buildReceipt(run.receipt, { open: name !== 'interactive' }));
+    }
+    const line = statusLine(st, { cells: run?.cells?.length ?? null, failure });
+    if ($('status-line').textContent !== line) $('status-line').textContent = line;
     $('skip').hidden = !GUIDED.has(name);
     $('replay-view').hidden = name !== 'interactive';
     // The step bar: which shown cell is selected, and the way on.
@@ -733,8 +738,9 @@ export function createLanding({
       e.stopImmediatePropagation();
       dispatch({ type: 'SKIP' });
     }
-    // The arrow keys step through the cells, unless the visitor is typing.
-    const typing = e.target?.closest?.('input, select, textarea, [contenteditable="true"]');
+    // The arrow keys step through the cells, unless the visitor is typing or
+    // on the panel's tabs (main.js: there the arrows change the tab).
+    const typing = e.target?.closest?.('input, select, textarea, [contenteditable="true"], [role="tablist"]');
     if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && run && st.name === 'interactive' && upload.shown && !typing) {
       e.preventDefault();
       play(false);

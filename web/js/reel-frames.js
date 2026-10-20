@@ -371,6 +371,33 @@ export const phrasesOf = (text) => String(text).split(/(?<=[,.:;?!])\s+/);
 // When phrase k of scene i's line is said, in seconds into its card.
 export const cueTime = (i, k) => VOICE_AT + FRAMES[i].said.at[k];
 
+// The film's captions, as WebVTT: each phrase of each scene's voice line,
+// from when it is said until the next phrase starts (or the line ends), with
+// the numbers as the film says them (its index.json `numbers`).
+// motion/scripts/captions.mjs writes them to web/motion/film/vivome.en.vtt.
+const vttTime = (seconds) => {
+  const ms = Math.round(seconds * 1000);
+  const two = (n) => String(n).padStart(2, '0');
+  return `${two(Math.floor(ms / 3600000))}:${two(Math.floor(ms / 60000) % 60)}:${two(Math.floor(ms / 1000) % 60)}.${String(ms % 1000).padStart(3, '0')}`;
+};
+export function captionsVtt(numbers = []) {
+  const said = new Map(numbers.map((n) => [n.slot, n.text]));
+  const cues = [];
+  FRAMES.forEach((frame, i) => {
+    const text = String(frame.voice).replace(SLOT, (token, source, key) => said.get(`${source}:${key}`) ?? token);
+    const phrases = phrasesOf(text);
+    if (phrases.length !== frame.said.at.length) {
+      throw new Error(`scene ${frame.id}: ${phrases.length} phrases, but ${frame.said.at.length} times`);
+    }
+    phrases.forEach((phrase, k) => {
+      const start = voiceStart(i) + frame.said.at[k];
+      const end = voiceStart(i) + (k + 1 < phrases.length ? frame.said.at[k + 1] : frame.said.seconds);
+      cues.push(`${cues.length + 1}\n${vttTime(start)} --> ${vttTime(end)}\n${phrase}`);
+    });
+  });
+  return `WEBVTT\n\n${cues.join('\n\n')}\n`;
+}
+
 // How visible scene i's card is, `local` seconds into it: it fades in, holds
 // and fades out (the last card stays to the end).
 export function cardOpacity(i, local) {

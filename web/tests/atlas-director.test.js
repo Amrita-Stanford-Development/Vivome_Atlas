@@ -3,7 +3,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { GUIDED, MAX_ATTEMPTS, initialState, sidebarFor, transition } from '../js/atlas/director.js';
+import { GUIDED, MAX_ATTEMPTS, initialState, sidebarFor, statusLine, transition } from '../js/atlas/director.js';
 
 const file = { name: 'cells.tsv', size: 10 };
 const check = { ok: true, cells: 238, problems: [] };
@@ -264,4 +264,18 @@ test('limits that change nothing leave the state as it was', () => {
   const worse = transition(chosen, { type: 'LIMITS', check: { ...check, ok: false, problems: ['too many cells'] } });
   assert.notEqual(worse, chosen);
   assert.equal(worse.check.ok, false);
+});
+
+test('the status line for screen readers changes with the step, not with the clock', () => {
+  const file = { name: 'a.csv' };
+  const early = { name: 'working', file, since: 1 };
+  const late = { name: 'working', file, since: 59 };
+  assert.equal(statusLine(early), statusLine(late));
+  assert.match(statusLine(early), /Waiting for the answer/);
+  assert.match(statusLine({ name: 'working', example: true }), /recorded example/);
+  assert.equal(statusLine({ name: 'failed' }, { failure: 'The service turned the file down.' }), 'The service turned the file down.');
+  for (const name of ['finishing', 'receipt', 'flying', 'settling', 'interactive']) {
+    assert.equal(statusLine({ name }, { cells: 1240 }), 'Answers for 1,240 cells are on the map.', name);
+  }
+  assert.equal(statusLine({ name: 'idle' }), '');
 });

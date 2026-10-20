@@ -113,12 +113,16 @@ function mountOrganChooser(organs, organ) {
 
 // The drawer over the viewer's right side. While it is open the viewer is
 // marked, so the controls in its right corners move out from under it.
+// Closed, it is inert: off screen, it takes no focus and is not read out.
+// Focus inside it when it closes goes to the controls' button beside the map.
 function createDrawer() {
   const drawer = $('atlas-drawer');
   const close = () => {
+    const inside = drawer.contains(document.activeElement);
     drawer.classList.remove('open');
-    drawer.setAttribute('aria-hidden', 'true');
+    drawer.inert = true;
     $('three-container').classList.remove('drawer-open');
+    if (inside) $('sidebar-toggle').focus();
   };
   $('drawer-close').addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
@@ -127,7 +131,7 @@ function createDrawer() {
       $('drawer-title').textContent = title;
       $('drawer-body').innerHTML = html;
       drawer.classList.add('open');
-      drawer.setAttribute('aria-hidden', 'false');
+      drawer.inert = false;
       $('three-container').classList.add('drawer-open');
     },
     body: (html) => { $('drawer-body').innerHTML = html; },
@@ -264,10 +268,16 @@ async function start() {
   });
 
   $('reset-view').addEventListener('click', () => stage.rig.reset());
+  // Folded, the sidebar is inert (it only fades out), and focus inside it
+  // goes to the button that opens it again.
   function setSidebar(open) {
-    $('controls-panel').classList.toggle('collapsed', !open);
+    const panel = $('controls-panel');
+    const inside = panel.contains(document.activeElement);
+    panel.classList.toggle('collapsed', !open);
+    panel.inert = !open;
     $('sidebar-toggle').setAttribute('aria-expanded', String(open));
     $('sidebar-toggle').textContent = open ? 'Hide controls' : 'Show controls';
+    if (!open && inside) $('sidebar-toggle').focus();
   }
   const sidebarOpen = () => !$('controls-panel').classList.contains('collapsed');
   // Folded away while an answer plays (director.js, sidebarFor); the button

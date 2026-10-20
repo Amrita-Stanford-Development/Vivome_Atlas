@@ -518,6 +518,11 @@ test('the arrow keys step, except while typing', async () => {
   assert.equal(landing.current, first, 'not while typing in the search box');
   press('ArrowLeft');
   assert.notEqual(landing.current, first);
+  // on the panel's tabs the arrows change the tab only
+  const at = landing.current;
+  keys.forEach((f) => f({ key: 'ArrowRight', target: { closest: (sel) => (sel.includes('[role="tablist"]') ? {} : null) },
+    preventDefault() {}, stopImmediatePropagation() {} }));
+  assert.equal(landing.current, at, 'not while on the tabs');
 });
 
 test('the file waits as a breathing cloud and settles as its cells land', async () => {
@@ -681,6 +686,7 @@ test('a file the service turned down is not offered again as it is', async () =>
   assert.equal(landing.state.name, 'failed');
   assert.match(els.get('status-card').innerHTML, /turned the file down/);
   assert.doesNotMatch(els.get('status-card').innerHTML, /Try again/);
+  assert.match(els.get('status-line').textContent, /turned the file down/, 'the failure is announced once');
 });
 
 test('after cancelling a file the service was working on, a busy answer names that file', async () => {

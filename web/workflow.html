@@ -40,7 +40,7 @@
                 <button class="btn" type="button" data-film="play">Play the whole story</button>
                 <span class="caption">About seven minutes, with captions. Space pauses, the arrow keys skip.</span>
             </div>
-            <div id="sync-banner"></div>
+            <div id="sync-banner" role="alert"></div>
         </div>
 
         <section class="wf-primer" aria-labelledby="primer-title">
@@ -350,7 +350,8 @@
                     <label for="cell-search">Or pick a cell by its number</label>
                     <input class="well" id="cell-search" type="search" inputmode="numeric" autocomplete="off" aria-describedby="cell-search-hint">
                     <span class="visually-hidden" id="cell-search-hint">Matching cells appear below the field.</span>
-                    <ul class="wf-results" id="cell-results" role="listbox" aria-label="Matching cells"></ul>
+                    <ul class="wf-results" id="cell-results" aria-label="Matching cells"></ul>
+                    <p class="visually-hidden" id="cell-results-count" role="status"></p>
                 </div>
             </div>
         </section>
@@ -1554,7 +1555,7 @@
         <button type="button" class="wf-fbtn" data-film="close" aria-label="Close the film">&#10005;</button>
     </div>
 
-    <div class="wf-theatre" id="theatre" hidden role="dialog" aria-modal="true" aria-labelledby="theatre-title">
+    <div class="wf-theatre" id="theatre" hidden role="dialog" aria-labelledby="theatre-title">
         <div class="wf-theatre-frame">
             <p class="eyebrow" id="theatre-step"></p>
             <h2 id="theatre-title"></h2>

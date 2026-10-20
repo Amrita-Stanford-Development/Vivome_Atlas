@@ -92,3 +92,19 @@ test('the browser computes no model output', () => {
     assert.ok(!/softmax\(/.test(src), `${f} computes a softmax`);
   }
 });
+
+test('hidden panels on the Atlas page are inert, and hovering the map is not announced', () => {
+  const html = readFileSync(new URL('../atlas.html', import.meta.url), 'utf8');
+  assert.match(html, /<aside class="atlas-drawer sheet" id="atlas-drawer" inert /, 'the closed drawer takes no focus');
+  assert.doesNotMatch(html, /id="tooltip" role="status"/, 'a hover name is not read out on every move');
+  const main = readFileSync(new URL('../js/atlas/main.js', import.meta.url), 'utf8');
+  assert.match(main, /drawer\.inert = true/);
+  assert.match(main, /drawer\.inert = false/);
+  assert.match(main, /panel\.inert = !open/, 'a folded sidebar takes no focus');
+});
+
+test('the status card is not read out on every tick; a status line says each step once', () => {
+  const html = readFileSync(new URL('../atlas.html', import.meta.url), 'utf8');
+  assert.match(html, /<div class="status-card glass" id="status-card" hidden><\/div>/);
+  assert.match(html, /<p class="visually-hidden" id="status-line" role="status"><\/p>/);
+});

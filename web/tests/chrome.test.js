@@ -69,3 +69,27 @@ test('the living water is behind every page but the atlas', () => {
     else assert.ok(water > field, `${page} should load js/biofield.js after js/background.js`);
   }
 });
+
+test('no page hides a control from screen readers while it can still take focus', () => {
+  const focusable = /<(button|input|select|textarea|summary)\b|<a\s[^>]*href=/;
+  for (const page of ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html']) {
+    const html = read(page);
+    for (const m of html.matchAll(/<([a-z0-9]+)\b[^>]*\baria-hidden="true"[^>]*>/g)) {
+      let depth = 1;
+      let i = m.index + m[0].length;
+      while (depth > 0) {
+        const open = html.indexOf(`<${m[1]}`, i);
+        const close = html.indexOf(`</${m[1]}>`, i);
+        if (close < 0) break;
+        if (open >= 0 && open < close) { depth += 1; i = open + 1; } else { depth -= 1; i = close + 1; }
+      }
+      assert.doesNotMatch(html.slice(m.index, i), focusable, `${page}: ${m[0].slice(0, 60)}`);
+    }
+  }
+});
+
+test('a page-level error, written when a load fails, is announced', () => {
+  for (const [page, id] of [['manuscript.html', 'ms-error'], ['motion.html', 'reel-error'], ['workflow.html', 'sync-banner']]) {
+    assert.match(read(page), new RegExp(`<div id="${id}" role="alert"></div>`), page);
+  }
+});

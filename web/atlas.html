@@ -205,13 +205,14 @@ python -m service.app</pre>
                     <div class="loading-text">Loading the atlas</div>
                 </div>
                 <canvas id="three-canvas" aria-label="The atlas: every reference cell as a dot in three dimensions"></canvas>
-                <div class="tooltip" id="tooltip" role="status"></div>
+                <div class="tooltip" id="tooltip"></div>
                 <div class="view-tools">
                     <button type="button" class="glass" id="sidebar-toggle" aria-expanded="true" aria-controls="controls-panel">Hide controls</button>
                     <button type="button" class="glass" id="reset-view">Reset view</button>
                 </div>
                 <div class="scene-info glass" id="scene-info">Drag to turn, right-drag to move, scroll to zoom, click a cell for its gene profile</div>
-                <div class="status-card glass" id="status-card" aria-live="polite" hidden></div>
+                <div class="status-card glass" id="status-card" hidden></div>
+                <p class="visually-hidden" id="status-line" role="status"></p>
                 <div class="legend-card glass" id="legend-card" hidden></div>
                 <div class="flow-controls">
                     <button type="button" class="glass" id="skip" hidden>Skip</button>
@@ -226,7 +227,7 @@ python -m service.app</pre>
                 <div class="drop-hint" id="drop-hint" hidden>Drop the file to check it here, in your browser</div>
                 <div class="type-labels" id="type-labels" aria-hidden="true"></div>
 
-                <aside class="atlas-drawer sheet" id="atlas-drawer" aria-hidden="true" aria-labelledby="drawer-title">
+                <aside class="atlas-drawer sheet" id="atlas-drawer" inert aria-labelledby="drawer-title">
                     <div class="drawer-head">
                         <h2 id="drawer-title">Cell</h2>
                         <button type="button" class="drawer-close" id="drawer-close" aria-label="Close">&times;</button>

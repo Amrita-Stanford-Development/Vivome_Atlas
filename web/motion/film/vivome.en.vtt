@@ -1,0 +1,169 @@
+WEBVTT
+
+1
+00:00:02.300 --> 00:00:06.360
+Mass spectrometry can now measure the proteins inside single cells,
+
+2
+00:00:06.360 --> 00:00:07.630
+one cell at a time.
+
+3
+00:00:12.800 --> 00:00:15.370
+But those cells arrive without names.
+
+4
+00:00:15.370 --> 00:00:17.760
+Labelled protein references are few,
+
+5
+00:00:17.760 --> 00:00:20.310
+and every lab detects a different set of proteins.
+
+6
+00:00:25.800 --> 00:00:28.220
+And each cell is only partly seen.
+
+7
+00:00:28.220 --> 00:00:30.070
+Much of a protein matrix is empty.
+
+8
+00:00:39.800 --> 00:00:42.380
+Single-cell RNA is different.
+
+9
+00:00:42.380 --> 00:00:44.100
+Its atlases are large,
+
+10
+00:00:44.100 --> 00:00:45.690
+and every cell in them has a name.
+
+11
+00:00:51.800 --> 00:00:55.700
+VivOME learns blood cell types from labelled RNA alone,
+
+12
+00:00:55.700 --> 00:00:59.050
+then reads each protein cell against that reference.
+
+13
+00:00:59.050 --> 00:01:00.440
+No protein labels,
+
+14
+00:01:00.440 --> 00:01:01.700
+no paired cells,
+
+15
+00:01:01.700 --> 00:01:03.300
+and no retraining on your data.
+
+16
+00:01:09.800 --> 00:01:11.450
+It is built for gaps:
+
+17
+00:01:11.450 --> 00:01:13.750
+it knows which proteins were never measured,
+
+18
+00:01:13.750 --> 00:01:15.730
+scales each one within your file,
+
+19
+00:01:15.730 --> 00:01:17.990
+and asks 5 encoders to answer together.
+
+20
+00:01:23.800 --> 00:01:27.730
+Every cell gets the most precise answer the evidence allows:
+
+21
+00:01:27.730 --> 00:01:28.680
+a cell type,
+
+22
+00:01:28.680 --> 00:01:29.350
+its group,
+
+23
+00:01:29.350 --> 00:01:30.090
+its lineage,
+
+24
+00:01:30.090 --> 00:01:31.080
+or no answer,
+
+25
+00:01:31.080 --> 00:01:32.030
+and the reason why.
+
+26
+00:01:37.800 --> 00:01:40.300
+Its best guess adds a second opinion,
+
+27
+00:01:40.300 --> 00:01:42.960
+used only when your file agrees with the encoder.
+
+28
+00:01:49.800 --> 00:01:51.730
+On real blood protein data,
+
+29
+00:01:51.730 --> 00:01:53.660
+here is how often it answers,
+
+30
+00:01:53.660 --> 00:01:55.620
+and how often those answers are right.
+
+31
+00:02:08.800 --> 00:02:10.450
+Against established methods,
+
+32
+00:02:10.450 --> 00:02:12.090
+on real protein data,
+
+33
+00:02:12.090 --> 00:02:14.870
+it is level with the best and ahead of the rest.
+
+34
+00:02:14.870 --> 00:02:15.990
+Where it is still weak,
+
+35
+00:02:15.990 --> 00:02:16.690
+it says so.
+
+36
+00:02:27.800 --> 00:02:29.270
+It runs online.
+
+37
+00:02:29.270 --> 00:02:31.360
+Send your file from the Atlas page,
+
+38
+00:02:31.360 --> 00:02:32.960
+and your cells land on the map,
+
+39
+00:02:32.960 --> 00:02:33.940
+each with its answer.
+
+40
+00:02:41.800 --> 00:02:44.140
+Bring your protein cells up into the light.
+
+41
+00:02:44.140 --> 00:02:44.900
+VivOME:
+
+42
+00:02:44.900 --> 00:02:46.730
+no cell placed without evidence.

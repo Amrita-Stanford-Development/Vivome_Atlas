@@ -194,3 +194,25 @@ test('the ladder does not pass a cell over a pending floor or threshold', () => 
   const thin = { ...cell, outcome: 'coverage_too_low', observed: 50 };
   assert.match(buildLadderTrace(thin, pending), /wf-stop"><span class="level">Enough measured\?/);
 });
+
+test('the film\'s keys leave a focused field or button its own keys', async () => {
+  const { filmKeyAction } = await import('../js/film.js');
+  assert.equal(filmKeyAction(' ', false, null), 'toggle');
+  assert.equal(filmKeyAction(' ', false, 'button'), null, 'Space presses the focused button');
+  assert.equal(filmKeyAction('ArrowRight', false, 'field'), null, 'the scrubber takes its arrows');
+  assert.equal(filmKeyAction('ArrowRight', true, null), 'forward');
+  assert.equal(filmKeyAction('ArrowLeft', false, 'button'), 'prev');
+  assert.equal(filmKeyAction('Escape', false, 'field'), null);
+  assert.equal(filmKeyAction('Escape', false, null), 'close');
+  assert.equal(filmKeyAction('c', false, null), 'captions');
+  const html = read('workflow.html');
+  assert.doesNotMatch(html, /id="theatre"[^>]*aria-modal/, 'its controls sit beside it, so it is not modal to a screen reader');
+  assert.match(read('js/film.js'), /\.inert = on/, 'the page behind the film takes no focus');
+});
+
+test('the cell search lists buttons, and says how many it found', () => {
+  const html = read('workflow.html');
+  assert.doesNotMatch(html, /role="listbox"/);
+  assert.match(html, /<p class="visually-hidden" id="cell-results-count" role="status"><\/p>/);
+  assert.doesNotMatch(read('js/workflow.js'), /role="option"/);
+});

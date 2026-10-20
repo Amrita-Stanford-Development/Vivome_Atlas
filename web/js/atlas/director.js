@@ -14,6 +14,24 @@ export const MAX_ATTEMPTS = 3;
 
 export const initialState = () => ({ name: 'idle' });
 
+// One short sentence for screen readers, said when the flow moves to another
+// step. The status card is not read out: while it waits it changes every
+// second (its clock, the send share). A failure's sentence is its
+// explanation, which the page supplies; once answered, the number of cells.
+export function statusLine(state, { cells = null, failure = '' } = {}) {
+  switch (state?.name) {
+    case 'checking': return 'Checking the file in your browser.';
+    case 'chosen': return state.check?.ok ? 'Checked in your browser; nothing has been sent yet.' : '';
+    case 'sending': return 'Sending your file.';
+    case 'working': return state.example ? 'Replaying the recorded example; no file is sent.' : 'Waiting for the answer from the service.';
+    case 'busy': return 'The service is busy with another file; trying again shortly.';
+    case 'failed': return failure;
+    case 'finishing': case 'receipt': case 'flying': case 'settling': case 'interactive':
+      return cells === null ? '' : `Answers for ${cells.toLocaleString('en-US')} cells are on the map.`;
+    default: return '';
+  }
+}
+
 // The sidebar for a state: it folds away when a file is sent or the example
 // starts, so the map has the room, and comes back when the visitor is
 // choosing again (cleared, cancelled, failed), unless they moved it

@@ -167,7 +167,10 @@ function buildPicker() {
   const results = $('#cell-results');
   input.placeholder = `A number from 1 to ${cells.length}`;
   input.addEventListener('input', () => {
-    results.innerHTML = searchCells(w, input.value).map((i) => `<li><button type="button" role="option" data-pick="${i}">Cell ${i + 1}</button></li>`).join('');
+    const found = searchCells(w, input.value);
+    results.innerHTML = found.map((i) => `<li><button type="button" data-pick="${i}">Cell ${i + 1}</button></li>`).join('');
+    $('#cell-results-count').textContent = input.value.trim()
+      ? `${found.length === 0 ? 'No' : found.length} matching ${found.length === 1 ? 'cell' : 'cells'}` : '';
   });
   results.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-pick]');

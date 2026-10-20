@@ -13,6 +13,25 @@ import {
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
+// What a key does while the film is open. A focused field keeps its own keys
+// (the scrubber its arrows); a focused button or link keeps Space, which
+// presses it. control: 'field', 'button' or null.
+export function filmKeyAction(key, shift, control) {
+  if (control === 'field') return null;
+  if (key === ' ') return control === 'button' ? null : 'toggle';
+  if (key === 'ArrowRight') return shift ? 'forward' : 'next';
+  if (key === 'ArrowLeft') return shift ? 'back' : 'prev';
+  if (key === 'Escape') return 'close';
+  if (key === 'c' || key === 'C') return 'captions';
+  return null;
+}
+
+// The page behind the film: inert while it plays, so focus stays with the
+// film and its bar (they sit beside the page, not in it).
+const setPageInert = (on) => {
+  for (const el of $$('body > .skip-link, body > header, body > main, body > footer')) el.inert = on;
+};
+
 export function createFilm({ ctx, state, reduced, loadScene, setCell }) {
   const bar = $('#filmbar');
   const theatre = $('#theatre');
@@ -125,6 +144,7 @@ export function createFilm({ ctx, state, reduced, loadScene, setCell }) {
     bar.hidden = true;
     theatre.hidden = true;
     document.body.classList.remove('wf-film-open', 'wf-present', 'wf-awake');
+    setPageInert(false);
     history.replaceState(null, '', location.pathname + location.search);
     opener?.focus?.();
   }
@@ -134,6 +154,7 @@ export function createFilm({ ctx, state, reduced, loadScene, setCell }) {
     bar.hidden = false;
     theatre.hidden = false;
     document.body.classList.add('wf-film-open');
+    setPageInert(true);
     setPresent(!!inPresent);
     t = Math.min(TOTAL, Math.max(0, start));
     shown = -1;
@@ -160,12 +181,18 @@ export function createFilm({ ctx, state, reduced, loadScene, setCell }) {
   scrub.addEventListener('input', () => seek(Number(scrub.value)));
   speedSelect.addEventListener('change', () => { speed = Number(speedSelect.value) || 1; });
   document.addEventListener('keydown', (e) => {
-    if (theatre.hidden || e.target.closest?.('input, select, textarea')) return;
-    if (e.key === ' ') { e.preventDefault(); setPlaying(!playing); }
-    else if (e.key === 'ArrowRight') { e.preventDefault(); if (e.shiftKey) seek(t + 5); else skip(1); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); if (e.shiftKey) seek(t - 5); else skip(-1); }
-    else if (e.key === 'Escape') close();
-    else if (e.key === 'c' || e.key === 'C') $('[data-film="captions"]', bar).click();
+    if (theatre.hidden) return;
+    const control = e.target.closest?.('input, select, textarea') ? 'field'
+      : e.target.closest?.('button, a[href], summary') ? 'button' : null;
+    const action = filmKeyAction(e.key, e.shiftKey, control);
+    if (['toggle', 'next', 'prev', 'forward', 'back'].includes(action)) e.preventDefault();
+    if (action === 'toggle') setPlaying(!playing);
+    else if (action === 'next') skip(1);
+    else if (action === 'prev') skip(-1);
+    else if (action === 'forward') seek(t + 5);
+    else if (action === 'back') seek(t - 5);
+    else if (action === 'close') close();
+    else if (action === 'captions') $('[data-film="captions"]', bar).click();
   });
   document.addEventListener('visibilitychange', () => { if (document.hidden && playing) setPlaying(false); });
   window.addEventListener('resize', () => { if (!theatre.hidden) { scene?.resize(); draw(); } });
