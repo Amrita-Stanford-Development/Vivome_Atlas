@@ -307,9 +307,10 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
     ood_score = np.mean([
         search.faiss_max_cosine_to_reference(z, m.reference_latents) for z, m in zip(embeddings, bundle.members)
     ], axis=0)
+    observed = aligned.per_cell_observed_genes  # sums the whole mask: once per upload, not per cell
     verdict = components.abstention.score(
         max_similarity=ood_score, hidden_features=None,
-        per_cell_observed_genes=aligned.per_cell_observed_genes,
+        per_cell_observed_genes=observed,
         label_sets=calibrated.label_sets, calibration_indices=calibrated.calibration_indices,
     )
     guess_position, guess_probability = best_guess(probs, space.positions)
@@ -334,7 +335,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
         entry = {
             "cell_id": cell_id,
             "coordinates": [float(x) for x in coords[i]],
-            "observed_genes": int(aligned.per_cell_observed_genes[i]),
+            "observed_genes": int(observed[i]),
             # The out-of-distribution score, compared against reference_abstain_threshold.
             "reference_similarity": float(ood_score[i]),
         }

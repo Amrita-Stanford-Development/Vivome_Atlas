@@ -213,6 +213,54 @@ class V41IsUnchangedTests(unittest.TestCase):
                     assert_same(self, json.loads(json.dumps(fresh)), frozen)
 
 
+class PerUploadWorkTests(unittest.TestCase):
+    """Work done once per upload stays once per upload. Each cell's count of
+    observed genes sums the whole upload's mask, so counting it inside the
+    per-cell loop made a projection quadratic in its cells (2,000 cells: 20 of
+    29 seconds). The gene identifier map is read from disk once, not on every
+    request."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.raw = _load_pbmc240_50()
+        try:
+            cls.bundles = {version: pipeline.load_bundle(version) for version in ("v3", "v3.1", "v4.1")}
+        except reference.PendingArtifactError as exc:
+            raise unittest.SkipTest(f"{exc} Run scripts/fetch_v31_members.py.")
+
+    def test_the_observed_gene_counts_are_computed_a_fixed_number_of_times(self):
+        from service.pipeline import alignment
+        original = alignment.AlignedQuery.per_cell_observed_genes
+        for version, bundle in self.bundles.items():
+            calls = []
+
+            def counted(matrix):
+                calls.append(1)
+                return original.fget(matrix)
+
+            with self.subTest(version=version), \
+                    mock.patch.object(alignment.AlignedQuery, "per_cell_observed_genes", property(counted)):
+                response = pipeline.run_projection(bundle, self.raw)
+                self.assertEqual(len(response["cells"]), 50)
+                self.assertLessEqual(len(calls), 3, f"{len(calls)} counts for 50 cells")
+
+    def test_the_gene_identifier_map_is_read_once_across_requests(self):
+        from service.pipeline import gene_ids
+        bundle = self.bundles["v4.1"]
+        pipeline.run_projection(bundle, self.raw)
+        real_read = pd.read_csv
+        reads = []
+
+        def reading(path, *args, **kwargs):
+            if Path(path).name == Path(config.GENE_ID_MAP_PATH).name:
+                reads.append(path)
+            return real_read(path, *args, **kwargs)
+
+        with mock.patch.object(gene_ids.pd, "read_csv", reading):
+            pipeline.run_projection(bundle, self.raw)
+        self.assertEqual(reads, [], "the map was read from disk again")
+
+
 class _EstimatedLabelSpace:
     """Stands in for NB2's estimator: two classes, each with a support score."""
 

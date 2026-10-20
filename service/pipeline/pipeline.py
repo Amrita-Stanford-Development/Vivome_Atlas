@@ -273,10 +273,11 @@ def run_projection(
 
     # Stage 6 (raw pass — Stage 7 may downgrade an AMBIGUOUS verdict below)
     max_similarity = search.faiss_max_cosine_to_reference(query_embeddings, bundle.reference_embeddings)
+    observed = aligned.per_cell_observed_genes  # sums the whole mask: once per upload, not per cell
     abstention_result = components.abstention.score(
         max_similarity=max_similarity,
         hidden_features=hidden,
-        per_cell_observed_genes=aligned.per_cell_observed_genes,
+        per_cell_observed_genes=observed,
         label_sets=calibrated.label_sets,
         calibration_indices=calibrated.calibration_indices,
     )
@@ -326,7 +327,7 @@ def run_projection(
         entry = {
             "cell_id": cell_id,
             "coordinates": [float(x) for x in coords[i]],
-            "observed_genes": int(aligned.per_cell_observed_genes[i]),
+            "observed_genes": int(observed[i]),
         }
         if abstention_result.abstained[i]:
             entry.update(label=None, label_set=[], confidence=None, abstained=True,

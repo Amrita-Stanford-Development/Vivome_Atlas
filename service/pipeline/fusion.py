@@ -435,7 +435,8 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
     ])
     space = components.label_space.estimate(None, names, restrict_to_supported_classes)
     probs = components.label_space.probabilities(all_class_probs, space)
-    counted = aligned.per_cell_observed_genes >= int(bundle.spec["preprocessing"]["min_observed_genes"])
+    observed = aligned.per_cell_observed_genes  # sums the whole mask: once per upload, not per cell
+    counted = observed >= int(bundle.spec["preprocessing"]["min_observed_genes"])
     guess = best_guess_probabilities(bundle, embeddings, aligned.values, aligned.mask, all_class_probs, counted,
                                      protein, rna_upload=rna_upload)
     guess_probs = components.label_space.probabilities(guess.probabilities, space)
@@ -446,7 +447,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
     ], axis=0)
     verdict = components.abstention.score(
         max_similarity=ood_score, hidden_features=None,
-        per_cell_observed_genes=aligned.per_cell_observed_genes,
+        per_cell_observed_genes=observed,
         label_sets=calibrated.label_sets, calibration_indices=calibrated.calibration_indices,
     )
     anchor = answers.members[answers.coordinate_member]
@@ -463,7 +464,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
             resolved = ensemble.resolve(set_names, answers.hierarchy)
             reason = abstention.AbstainReason.NONE if resolved else abstention.AbstainReason.AMBIGUOUS
         entry = {"cell_id": cell_id, "coordinates": [float(x) for x in coords[i]],
-                 "observed_genes": int(aligned.per_cell_observed_genes[i]), "reference_similarity": float(ood_score[i])}
+                 "observed_genes": int(observed[i]), "reference_similarity": float(ood_score[i])}
         if resolved:
             label, level = resolved
             entry.update(label=label, label_level=level, label_set=set_names,

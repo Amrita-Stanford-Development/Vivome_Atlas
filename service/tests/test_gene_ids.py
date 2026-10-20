@@ -107,6 +107,22 @@ class SharedAccessionTests(unittest.TestCase):
         self.assertEqual(r.resolved, [None, None, "HBA1", None])
         self.assertEqual(r.ambiguous_identifiers, ["P69905", "Q9H3K6-2", "HBA1;P69905"])
 
+    def test_a_map_is_read_again_once_its_file_changes(self):
+        import os
+        import tempfile
+        from pathlib import Path
+        header = "gene_symbol\tmatch_type\tensembl_gene_id\tuniprot_ids\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "map.tsv"
+            path.write_text(header + "CD3E\texact\tENSG00000198851\tP07766\n", encoding="utf-8")
+            first = gene_ids.load_gene_id_map(path)
+            self.assertIs(gene_ids.load_gene_id_map(path), first, "an unchanged file is read once")
+            path.write_text(header + "CD4\texact\tENSG00000010610\tP01730\n", encoding="utf-8")
+            os.utime(path, ns=(first_ns := path.stat().st_mtime_ns + 10**9, first_ns))
+            second = gene_ids.load_gene_id_map(path)
+        self.assertEqual(set(second.symbol_to_feature), {"CD4"})
+        self.assertEqual(set(first.symbol_to_feature), {"CD3E"})
+
     def test_the_real_map_lists_the_shared_accessions_and_maps_none_of_them(self):
         gene_map = gene_ids.load_gene_id_map()
         self.assertEqual(gene_map.shared_accessions["P69905"], frozenset({"HBA1", "HBA2"}))

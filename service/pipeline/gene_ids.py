@@ -31,7 +31,23 @@ class GeneIdMap:
     shared_accessions: dict[str, frozenset[str]] = field(default_factory=dict)
 
 
+# Each map file as last read: its size and modification time, and the map.
+_LOADED: dict[str, tuple[int, int, "GeneIdMap"]] = {}
+
+
 def load_gene_id_map(path: Path = config.GENE_ID_MAP_PATH) -> GeneIdMap:
+    """The map in `path`, read from disk once and then shared, read-only,
+    between requests. A file whose size or modification time has changed is
+    read again."""
+    stat = Path(path).stat()
+    key = str(Path(path).resolve())
+    cached = _LOADED.get(key)
+    if cached is None or cached[:2] != (stat.st_size, stat.st_mtime_ns):
+        cached = _LOADED[key] = (stat.st_size, stat.st_mtime_ns, _read_gene_id_map(path))
+    return cached[2]
+
+
+def _read_gene_id_map(path: Path) -> GeneIdMap:
     """`match_type == "ambiguous"` rows (a feature-space gene whose own HGNC
     resolution was itself ambiguous — see the provenance file) contribute
     only their symbol; they never gain an Ensembl/UniProt cross-reference,
