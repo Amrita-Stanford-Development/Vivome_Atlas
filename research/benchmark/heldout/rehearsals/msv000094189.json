@@ -65,7 +65,8 @@
       "samples": 8,
       "abstained": 0.0,
       "levels": {
-        "lineage": 8
+        "class": 4,
+        "lineage": 4
       },
       "correct_when_committed": 100.0
     },
@@ -96,7 +97,97 @@
       "correct_when_committed": 100.0
     }
   },
-  "baselines": "run before scoring by benchmark/baselines_corrected.py (lung option); see research/organ-references.md, Lung",
+  "baselines": {
+    "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class) with the queries; the K nearest RNA cells vote.",
+    "rna_cells": 65228,
+    "query_samples": 32,
+    "candidate": "lung_v2",
+    "correlation": {
+      "predicted_class": {
+        "capillary endothelial cell": 6,
+        "type ii pneumocyte": 4,
+        "intermediate monocyte": 4,
+        "pericyte": 3,
+        "club cell": 3,
+        "bronchial smooth muscle cell": 2,
+        "endothelial cell of artery": 2,
+        "macrophage": 2,
+        "alveolar type 2 fibroblast cell": 2,
+        "non-classical monocyte": 2,
+        "adventitial cell": 1,
+        "basal cell": 1
+      },
+      "balanced_accuracy": 100.0,
+      "called_by_lineage": {
+        "endothelial": {
+          "endothelial": 8,
+          "epithelial": 0,
+          "immune": 0,
+          "stromal": 0
+        },
+        "epithelial": {
+          "endothelial": 0,
+          "epithelial": 8,
+          "immune": 0,
+          "stromal": 0
+        },
+        "immune": {
+          "endothelial": 0,
+          "epithelial": 0,
+          "immune": 8,
+          "stromal": 0
+        },
+        "stromal": {
+          "endothelial": 0,
+          "epithelial": 0,
+          "immune": 0,
+          "stromal": 8
+        }
+      }
+    },
+    "pca_knn": {
+      "predicted_class": {
+        "capillary endothelial cell": 6,
+        "intermediate monocyte": 5,
+        "club cell": 4,
+        "pericyte": 3,
+        "alveolar type 2 fibroblast cell": 3,
+        "plasma cell": 2,
+        "macrophage": 2,
+        "endothelial cell of artery": 2,
+        "type ii pneumocyte": 2,
+        "adventitial cell": 2,
+        "classical monocyte": 1
+      },
+      "balanced_accuracy": 96.88,
+      "called_by_lineage": {
+        "endothelial": {
+          "endothelial": 8,
+          "epithelial": 0,
+          "immune": 0,
+          "stromal": 0
+        },
+        "epithelial": {
+          "endothelial": 0,
+          "epithelial": 7,
+          "immune": 0,
+          "stromal": 0
+        },
+        "immune": {
+          "endothelial": 0,
+          "epithelial": 1,
+          "immune": 8,
+          "stromal": 0
+        },
+        "stromal": {
+          "endothelial": 0,
+          "epithelial": 0,
+          "immune": 0,
+          "stromal": 8
+        }
+      }
+    }
+  },
   "rehearsal": {
     "what": "RNA pseudobulk of the lung reference's test cells, written as a MaxQuant proteinGroups table",
     "cells_per_pool": 200,
