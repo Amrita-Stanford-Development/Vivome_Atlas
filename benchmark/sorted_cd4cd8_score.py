@@ -61,6 +61,7 @@ from benchmark import fulcher2026_score as fulcher
 from benchmark.baselines_score import hierarchy
 from benchmark.evaluate import paired_bootstrap_diff
 from benchmark.khoury2026_embed import refuse_overrides
+from benchmark.heldout_intake import check_outputs
 from benchmark.sorted_cd4cd8_intake import MODELS, out_dir, sha256
 
 REPO = datasets.REPO
@@ -235,6 +236,7 @@ def main(argv: list[str] | None = None) -> None:
     intake = json.loads((src / "intake.json").read_text())
     if intake["rehearsal"] != rehearse:
         sys.exit("the intake's outputs are from the other mode")
+    check_outputs(src)  # the intake's files, unchanged since it recorded their sha256s
     cell_ids = (src / "cell_ids.txt").read_text(encoding="utf-8").splitlines()
     predictions, answers, gaps = collect(rehearse, cell_ids)  # every label-free check, done
     for labels, gap in gaps.items():

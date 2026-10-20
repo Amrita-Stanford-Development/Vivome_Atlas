@@ -168,7 +168,10 @@ def run_candidate(directory: Path, raw: alignment.RawMatrix, out: Path, prefix: 
                         hierarchy=json.dumps(b.hierarchy))
     return {"pipeline_version": response["pipeline_version"], "reference_version": b.spec.get("reference_version"),
             "manifest_sha256": sha256(directory / "MANIFEST.json"), "n_cells": response["n_cells"],
-            "n_features_matched": response["n_features_matched"]}
+            "n_features_matched": response["n_features_matched"],
+            # rule 2's check covers the samples with a served best guess; the rest
+            # (under the gene floor) are scored from the probabilities, and counted here
+            "samples_without_best_guess": int((~has).sum())}
 
 
 def intake(labels: pd.DataFrame, matrix: Path, out: Path, candidate: Path, source: dict) -> dict:

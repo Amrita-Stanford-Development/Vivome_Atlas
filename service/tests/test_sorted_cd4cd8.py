@@ -102,3 +102,21 @@ class ReviewGuardTests(unittest.TestCase):
         self.assertEqual(facts["CD4"]["rows"], 1)
         # in a linear upload 0 is "not detected"
         self.assertAlmostEqual(facts["CD4"]["cells_observed_pct"], 33.33, places=2)
+
+    def test_the_scorer_stops_when_an_intake_output_changed(self):
+        import json
+        from benchmark import heldout_intake
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp)
+            (src / "cell_ids.txt").write_text("c1\nc2\n", encoding="utf-8")
+            digest = heldout_intake.sha256(src / "cell_ids.txt")
+            (src / "intake.json").write_text(json.dumps({"rehearsal": True, "outputs": {"cell_ids.txt": digest}}),
+                                             encoding="utf-8")
+            (src / "cell_ids.txt").write_text("c1\nc3\n", encoding="utf-8")
+            with mock.patch.object(score, "out_dir", return_value=src), \
+                    mock.patch.object(score, "tables_dir", return_value=src / "tables"), \
+                    mock.patch.object(score, "collect", side_effect=AssertionError("scoring went on")), \
+                    self.assertRaises(SystemExit) as caught:
+                score.main(["--rehearse"])
+            self.assertIn("cell_ids.txt", str(caught.exception))
+
