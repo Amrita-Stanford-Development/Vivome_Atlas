@@ -192,8 +192,8 @@
                     Sapiens, each from its RNA alone; the large intestine, lung and lymph node references were
                     built under gates fixed before each model, missed them, and are shown as maps only.
                     <span class="ev-src"><code>research/organ-references.md</code>, <code>web/data/organs/index.json</code></span></li>
-                <li><strong>Availability.</strong> An online service that takes DIA-NN, FragPipe and plain
-                    matrices, with numbered, frozen releases.
+                <li><strong>Availability.</strong> An online service that takes DIA-NN, Spectronaut, MaxQuant
+                    and FragPipe tables as they come, and plain matrices, with numbered, frozen releases.
                     <span class="ev-src"><code>web/atlas.html</code>, <code>web/js/atlas/service-client.js</code>, <code>service/model/MODEL_CARD.md</code></span></li>
             </ul>
         </section>
@@ -286,7 +286,8 @@
 
             <h3 id="processing">Reading an upload</h3>
             <ul class="evidence">
-                <li>Formats: DIA-NN reports, FragPipe TMT-Integrator tables and plain CSV or TSV matrices,
+                <li>Formats: DIA-NN reports, Spectronaut protein pivot reports, MaxQuant's proteinGroups.txt,
+                    FragPipe LFQ and TMT-Integrator tables, and plain CSV or TSV matrices,
                     up to <span data-ms="wf_service_max_cells"></span> cells and <span data-ms="wf_service_max_mb"></span> MB.
                     <span class="ev-src"><code>service/pipeline/alignment.py</code>, <code>service/config.py</code></span></li>
                 <li>Gene names resolve through a frozen, offline HGNC table (symbols, Ensembl and UniProt
