@@ -155,4 +155,16 @@ added here by amendment before unsealing.
 
 ## Amendments
 
-None yet.
+**Amendment 1, 2026-10-21: the code's guards, before the set is opened.**
+A review of the lymph node's and lung's locked tests found these gaps,
+which the colon's code shared. The colon has no candidate (it missed its
+gates), so the set is sealed and stays so.
+- **Rule 1:** the labels step (`--labels`) now checks for the frozen
+  candidate before it reads any sealed file. Before, only the later intake
+  step did.
+- **Overrides:** the intake and the scorer refuse VIVOME_* overrides, as
+  the other locked tests do.
+- **The intake's files:** the scorer stops if any file the intake recorded
+  (the label map, the predictions, the query matrices) has changed since.
+
+Tests are in `service/tests/test_organ_heldout.py`.

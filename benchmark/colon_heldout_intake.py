@@ -45,6 +45,7 @@ from benchmark import datasets
 from benchmark import heldout_formats as formats
 from benchmark.baselines_v31 import table
 from benchmark.heldout_intake import class_probabilities, facts, write_labels
+from benchmark.khoury2026_embed import refuse_overrides
 from benchmark.sorted_cd4cd8_intake import benchmark_matrix, sha256
 from service.pipeline import alignment, pipeline
 
@@ -281,6 +282,7 @@ def main(argv: "list[str] | None" = None) -> None:
     parser.add_argument("--label-map", type=Path, help="a map written by hand by the protocol's rules (with --labels)")
     parser.add_argument("--reason", help="why the map was written by hand (with --label-map)")
     args = parser.parse_args(argv)
+    refuse_overrides()  # the repository's model files, not an export elsewhere
     out = out_dir(args.rehearse)
     if args.rehearse:
         if out.exists():
@@ -295,6 +297,7 @@ def main(argv: "list[str] | None" = None) -> None:
     if args.labels:
         if (out / "label_map.csv").exists():
             raise SystemExit("the label map exists; it is written once")
+        candidate_dir(False)  # rule 1: no frozen candidate, no unsealing; checked before any sealed file is read
         source = {rel: _check_download(rel) for rel in INPUTS}
         if args.label_map is not None:
             if not args.reason:

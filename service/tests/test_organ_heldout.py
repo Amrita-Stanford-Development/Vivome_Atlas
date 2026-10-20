@@ -181,6 +181,44 @@ class LockedTestIntegrity(unittest.TestCase):
             self.assertFalse(record.exists(), "a rehearsal records nothing")
 
 
+class ColonGuards(unittest.TestCase):
+    """The colon's locked test (PXD052341) has the lymph node's and lung's
+    guards: no candidate, no unsealing; no overrides; the intake's files
+    checked by the scorer."""
+
+    def test_the_labels_step_checks_for_a_frozen_candidate_first(self):
+        from unittest import mock
+        with mock.patch.object(colon, "candidate_dir", side_effect=SystemExit("no candidate")), \
+                mock.patch.object(colon, "_check_download", side_effect=AssertionError("a sealed file was touched")):
+            with self.assertRaises(SystemExit) as caught:
+                colon.main(["--labels"])
+        self.assertEqual(str(caught.exception), "no candidate")
+
+    def test_overrides_are_refused_and_the_scorer_checks_the_intake(self):
+        import json
+        import os
+        import tempfile
+        from unittest import mock
+
+        from benchmark import colon_heldout_score, heldout_intake
+        ran = AssertionError("the guarded work ran")
+        with tempfile.TemporaryDirectory() as tmp:
+            for module, work in ((colon, "rehearsal_files"), (colon_heldout_score, "score")):
+                with mock.patch.dict(os.environ, {"VIVOME_GENE_ID_MAP": "elsewhere.tsv"}), \
+                        mock.patch.object(module, "out_dir", return_value=Path(tmp) / "x"), \
+                        mock.patch.object(module, work, side_effect=ran), self.assertRaises(SystemExit) as caught:
+                    module.main(["--rehearse"])
+                self.assertIn("VIVOME_GENE_ID_MAP", str(caught.exception), module.__name__)
+            out = Path(tmp)
+            (out / "label_map.csv").write_text("a\n", encoding="utf-8")
+            (out / "intake.json").write_text(json.dumps({"outputs": {"label_map.csv": "0" * 64}}), encoding="utf-8")
+            with mock.patch.object(colon_heldout_score, "out_dir", return_value=out), \
+                    mock.patch.object(colon_heldout_score, "score", side_effect=ran), self.assertRaises(SystemExit) as caught:
+                colon_heldout_score.main(["--rehearse"])
+            self.assertIn("label_map.csv", str(caught.exception))
+            self.assertTrue(callable(heldout_intake.check_outputs))
+
+
 class ColonNames(unittest.TestCase):
     def test_groups_by_meaning(self):
         self.assertEqual(colon._group_of("Crypt bottom epithelium"), "crypt bottom")
