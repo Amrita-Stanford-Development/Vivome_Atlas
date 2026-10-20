@@ -23,13 +23,13 @@
     },
     "NK/ILC": {
       "T zone": 0,
-      "epithelium": 1,
+      "epithelium": 4,
       "germinal centre": 0,
       "mantle zone": 0
     },
     "T cell": {
       "T zone": 12,
-      "epithelium": 3,
+      "epithelium": 0,
       "germinal centre": 0,
       "mantle zone": 0
     }
@@ -45,26 +45,27 @@
     },
     "T zone": {
       "regions": 12,
-      "abstained": 66.67,
+      "abstained": 0.0,
       "levels": {
-        "group": 4
+        "group": 12
       }
     },
     "epithelium": {
       "regions": 4,
-      "abstained": 25.0,
+      "abstained": 0.0,
       "levels": {
-        "lineage": 3
+        "lineage": 3,
+        "class": 1
       }
     }
   },
   "germinal_centre_vs_mantle": {
-    "mean_p_b_gc": 0.9089,
-    "mean_p_b_mantle": 0.8836
+    "mean_p_b_gc": 0.9104,
+    "mean_p_b_mantle": 0.9011
   },
   "epithelium": {
     "regions": 4,
-    "abstained": 25.0,
+    "abstained": 0.0,
     "auroc_similarity_lymphoid_over_epithelium": 1.0
   },
   "baselines": "run before scoring by benchmark/baselines_corrected.py (lymph node option); see research/organ-references.md, Lymph node",
