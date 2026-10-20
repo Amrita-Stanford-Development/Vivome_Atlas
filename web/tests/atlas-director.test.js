@@ -247,3 +247,11 @@ test('the sidebar folds away while an answer plays, and comes back for the next 
   // Choosing or checking a file leaves it alone.
   assert.deepEqual(sidebarFor(at('checking'), { open: true, folded: false }), { open: true, folded: false });
 });
+
+test('new limits replace a chosen file\'s check, and only then', () => {
+  const chosen = { name: 'chosen', file: 'f', check: { ok: true, problems: [] } };
+  const judged = transition(chosen, { type: 'LIMITS', check: { ok: false, problems: ['too few'] } });
+  assert.deepEqual(judged, { name: 'chosen', file: 'f', check: { ok: false, problems: ['too few'] } });
+  const sending = { name: 'sending', file: 'f', check: { ok: true } };
+  assert.equal(transition(sending, { type: 'LIMITS', check: { ok: false } }), sending);
+});

@@ -53,6 +53,10 @@ export function transition(state, event) {
       if (name !== 'checking' || (event.file !== undefined && event.file !== state.file)) return state;
       return { name: 'chosen', file: state.file, check: event.check };
 
+    case 'LIMITS':
+      // The service's limits arrived or changed after the file was checked.
+      return name === 'chosen' && event.check ? { name: 'chosen', file: state.file, check: event.check } : state;
+
     case 'CHECK_FAILED':
       if (name !== 'checking' || (event.file !== undefined && event.file !== state.file)) return state;
       return { name: 'failed', file: state.file, error: event.error, stage: 'check' };

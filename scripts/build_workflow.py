@@ -424,7 +424,8 @@ def service() -> dict:
         "concurrency": measured(int(flag("concurrency")), basis),
         "timeout_seconds": measured(int(flag("timeout")), basis),
         "max_cells": measured(int(env("VIVOME_MAX_UPLOAD_CELLS")), rel(SERVICE_CONFIG)),
-        "max_mb": measured(int(float(env("VIVOME_MAX_UPLOAD_MB"))), rel(SERVICE_CONFIG)),
+        # the hosted copy's own limit (its Dockerfile), under Cloud Run's 32 MiB per HTTP/1 request
+        "max_mb": measured(int(float(re.search(r"VIVOME_MAX_UPLOAD_MB=(\S+)", docker).group(1))), rel(DOCKERFILE)),
         "concurrent_projections": measured(int(env("VIVOME_MAX_CONCURRENT_PROJECTIONS")), rel(SERVICE_CONFIG)),
         # For running it yourself: the smallest file it takes, its local port, its Python.
         "min_cells": measured(int(re.search(r"^MIN_CELLS_REFUSE = (\d+)", validation, re.M).group(1)), rel(SERVICE_VALIDATION)),

@@ -10,7 +10,9 @@ RUN apt-get update \
 
 # The settings the service reads (service/config.py). A container sees the
 # host's cores but gets 2 on the free tier, so the thread pools are capped to
-# match, or they oversubscribe and every projection slows down.
+# match, or they oversubscribe and every projection slows down. The upload
+# limit is 31 MiB: Cloud Run takes at most 32 MiB in an HTTP/1 request, which
+# this server speaks, and the form around the file needs a little room.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     OMP_NUM_THREADS=2 \
@@ -20,7 +22,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     VIVOME_PIPELINE_VERSION=v4.1 \
     VIVOME_ALLOWED_ORIGINS=https://vivome-atlas.pages.dev \
     VIVOME_MAX_UPLOAD_CELLS=2000 \
-    VIVOME_MAX_UPLOAD_MB=100 \
+    VIVOME_MAX_UPLOAD_MB=31 \
     VIVOME_MAX_CONCURRENT_PROJECTIONS=1
 
 # Hugging Face runs the container as user 1000.

@@ -377,6 +377,12 @@ test('projection summary reports the upload, the label space and the abstention 
   const restricted = projection();
   restricted.label_space = { restricted_to_supported_classes: true, candidate_classes: ['macrophage', 'monocyte'] };
   assert.match(buildProjectionSummary(restricted), /Restricted to macrophage, monocyte/);
+  const log = projection();
+  log.value_scale = { detected: 'log', transformed: false };
+  assert.match(buildProjectionSummary(log), /Already on a log scale/);
+  const empty = projection();
+  empty.value_scale = { detected: 'unknown', transformed: false };
+  assert.match(buildProjectionSummary(empty), /No values to read/, 'not a log scale: there was nothing to judge');
 });
 
 test('projection labels count each label and each abstain reason, most first', () => {

@@ -409,7 +409,9 @@ export function createLanding({
     } else if (name === 'working' || name === 'finishing') status(workingHtml());
     else if (name === 'busy') status(`<p>Another file is being labelled. Trying again in ${Math.max(0, Math.ceil((st.retryAfter ?? 30) - phase))} s.</p>`);
     else if (name === 'failed') {
-      const retry = st.example || (st.file && st.check?.ok) ? '<button type="button" class="text-button" data-retry>Try again</button>' : '';
+      // A file the service turned down would be turned down again as it is.
+      const again = st.example || (st.file && st.check?.ok && st.error?.kind !== 'refused');
+      const retry = again ? '<button type="button" class="text-button" data-retry>Try again</button>' : '';
       const message = st.stage === 'busy'
         ? `The service was still busy after ${MAX_ATTEMPTS} tries. Try again in a few minutes.`
         : explainFailure(st.error, serviceUrl());
@@ -764,10 +766,34 @@ export function createLanding({
       dispatch({ type: 'CANCEL' });
     },
     watchExample,
+    // The example is sent only if nothing changed while it loaded: a file
+    // the visitor chose meanwhile stays theirs. A load that fails says so.
     async sendExample() {
-      const blob = await (await fetch(new URL('../../data/examples/pbmc240_proteins_raw.tsv', import.meta.url))).blob();
-      const check = await chooseFile(new File([blob], 'pbmc240_proteins_raw.tsv', { type: 'text/tab-separated-values' }));
+      const before = st;
+      const name = 'pbmc240_proteins_raw.tsv';
+      let blob;
+      try {
+        const response = await fetch(new URL(`../../data/examples/${name}`, import.meta.url));
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        blob = await response.blob();
+      } catch (error) {
+        if (st !== before) return;
+        const file = new File([], name);
+        if (dispatch({ type: 'FILE_CHOSEN', file })) {
+          dispatch({ type: 'CHECK_FAILED', file, error: new Error(`The example file could not be loaded (${error.message}). Try again.`) });
+        }
+        return;
+      }
+      if (st !== before) return;
+      const check = await chooseFile(new File([blob], name, { type: 'text/tab-separated-values' }));
       if (check?.ok) send();
+    },
+    // The service's limits arrived or changed after a file was checked
+    // (data-tab.js): the file is judged again against them.
+    recheckLimits() {
+      if (st.name !== 'chosen' || !st.check) return;
+      const verdict = checkLimits(st.check, limits());
+      dispatch({ type: 'LIMITS', check: { ...st.check, ok: verdict.ok, problems: verdict.problems } });
     },
     skip: () => dispatch({ type: 'SKIP' }),
     replay,

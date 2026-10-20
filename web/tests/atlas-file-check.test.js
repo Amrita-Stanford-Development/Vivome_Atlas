@@ -159,8 +159,8 @@ test('the limits, as numbers or as the workflow data records them', () => {
   assert.equal(checkLimits({ cells: 1, size: 10 }, limits).problems[0], 'The file has 1 cell; the service needs at least 20 in one upload.');
 
   const large = checkLimits({ cells: 500, size: 250.4 * 1024 * 1024 }, limits);
-  assert.equal(s.max_mb.value, 100, 'what the site’s host takes in one request');
-  assert.match(large.problems[0], /^The file is 250\.4 MB; the service takes at most 100 MB per upload\./);
+  assert.equal(s.max_mb.value, 31, 'what Cloud Run takes in one HTTP/1 request, with room for the form');
+  assert.match(large.problems[0], /^The file is 250\.4 MB; the service takes at most 31 MB per upload\./);
 
   const both = checkLimits({ cells: 3000, size: 300 * 1024 * 1024 }, limits);
   assert.equal(both.problems.length, 2);
@@ -171,4 +171,36 @@ test('the limits, as numbers or as the workflow data records them', () => {
   assert.deepEqual(checkLimits({ cells: 99999, size: 1e12 }, null), { ok: true, problems: [] });
   const pending = { max_cells: { value: null, status: 'pending' }, min_cells: { value: 20, status: 'measured' } };
   assert.deepEqual(checkLimits({ cells: 99999, size: 1 }, pending), { ok: true, problems: [] });
+});
+
+test('a table written by R without the corner field counts every header field as a cell, as the service reads it', async () => {
+  const header = Array.from({ length: 20 }, (_, i) => `c${i + 1}`).join('\t');
+  const row = ['CD3E', ...Array.from({ length: 20 }, (_, i) => String(i + 1))].join('\t');
+  const check = await checkFile(blob(`${header}\n${row}\n${row.replace('CD3E', 'CD4')}\n`));
+  assert.equal(check.cells, 20);
+  assert.equal(checkLimits(check, { min_cells: 20 }).ok, true);
+  // a trailing separator on the rows only is not a missing corner
+  assert.equal((await checkFile(blob('gene,c1,c2\nG1,1,2,\nG2,3,4,\n'))).cells, 2);
+});
+
+test('a workbook, a binary file or UTF-16 text is read the way the service reads it', async () => {
+  await assert.rejects(checkFile(blob(new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0, 0, 0, 0]))), /Excel workbook/);
+  await assert.rejects(checkFile(blob(new Uint8Array([0x50, 0x41, 0x52, 0x31, 0, 1, 2, 3]))), /not text/);
+  const cells = Array.from({ length: 25 }, (_, i) => `E:\raw\SP_${i + 1}.raw`);
+  const text = [['Protein.Group', 'Protein.Names', 'Genes', ...cells].join('\t'),
+    ['P1', 'N1', 'CD3E', ...cells.map(() => '1.5')].join('\t'),
+    ['P2', 'N2', 'CD4', ...cells.map(() => '2.5')].join('\t')].join('\r\n') + '\r\n';
+  const utf16 = new Uint8Array(2 + text.length * 2);
+  utf16.set([0xff, 0xfe]);
+  for (let i = 0; i < text.length; i += 1) utf16[2 + 2 * i] = text.charCodeAt(i);
+  const check = await checkFile(blob(utf16));
+  assert.equal(check.format, 'diann');
+  assert.equal(check.cells, 25);
+  assert.equal(check.features, 2);
+});
+
+test('Perseus annotation rows are not feature rows', async () => {
+  const header = ['Majority protein IDs', 'Gene names', 'LFQ intensity S1', 'LFQ intensity S2'].join('\t');
+  const check = await checkFile(blob(`${header}\n#!{Type}E\tT\tE\tE\n#!{C:Group}\t\tA\tB\nP1\tGENE1\t100\t200\n`));
+  assert.equal(check.features, 1);
 });

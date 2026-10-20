@@ -219,6 +219,7 @@ test('a network failure, and what the visitor is told for each address', async (
   const hosted = explainFailure(err, `${DEFAULT_SERVICE_URL}/`);
   assert.ok(hosted.includes(DEFAULT_SERVICE_URL));
   assert.ok(!hosted.includes('VIVOME_ALLOWED_ORIGINS'), 'the hosted service is not the visitor’s to configure');
+  assert.match(hosted, /reload the page/, 'an expired sign-in looks like a network failure to the page');
 });
 
 test('a timeout, and cancelling', async () => {
@@ -309,4 +310,35 @@ test('the browser transport: fetch for the status, XMLHttpRequest for the upload
   } finally {
     Object.assign(globalThis, saved);
   }
+});
+
+test('answers from the site or the host, not the service, are told as what they are', async () => {
+  // the host's own size limit: an HTML 413, no JSON
+  const big = await failure(fake({ status: 413, body: '<html>Request Entity Too Large</html>' }).client.project(OWN, {}));
+  assert.equal(big.kind, 'refused');
+  assert.match(explainFailure(big, OWN), /too large/);
+  assert.match(explainFailure(big, OWN), /Split the cells/);
+  // the site's /api door could not reach the service
+  const proxy = { error: 'the labelling service did not answer', reason: 'connection refused' };
+  const gateway = await failure(fake({ status: 502, body: proxy }).client.project(OWN, {}));
+  assert.equal(gateway.kind, 'gateway');
+  assert.match(explainFailure(gateway, OWN), /could not reach the labelling service: connection refused/);
+  // any other answer that says what went wrong is shown in its words
+  const forbidden = await failure(fake({ status: 403, body: { error: 'requests come through the site' } }).client.project(OWN, {}));
+  assert.match(explainFailure(forbidden, OWN), /requests come through the site/);
+  // the host stopped waiting, not this page
+  for (const status of [504, 524]) {
+    const late = await failure(fake({ status, body: '<html>timeout</html>' }).client.project(OWN, {}));
+    assert.equal(late.kind, 'timeout');
+    assert.match(explainFailure(late, OWN), /stopped waiting for it/);
+    assert.ok(!/this page stopped waiting/.test(explainFailure(late, OWN)));
+  }
+});
+
+test('a busy answer to the status check promises no retry the page does not make', async () => {
+  const busy = await failure(fake({ status: 429, body: '' }).client.status(OWN));
+  assert.equal(busy.kind, 'busy');
+  const line = explainFailure(busy, OWN, { retrying: false });
+  assert.ok(!/by itself/.test(line), line);
+  assert.match(line, /Check again/);
 });

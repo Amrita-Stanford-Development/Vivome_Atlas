@@ -163,8 +163,9 @@ work. The hosted copy sets it: it answers only through its website, whose
 `/api/...` (a Cloudflare Pages Function, `deploy/pages/api-proxy.js`)
 forwards each request with the secret, behind the site's sign-in. Pages
 call their own site's `/api` (`siteServiceUrl` in
-`web/js/atlas/service-client.js`). The site's host takes at most 100 MB in
-one request, which is the upload limit.
+`web/js/atlas/service-client.js`). The hosted copy's upload limit is 31 MiB:
+Cloud Run takes at most 32 MiB in an HTTP/1 request (the site's host,
+Cloudflare, takes 100 MB). `/api/status` reports it as `max_upload_mb`.
 
 A browser may read the service's responses only from an allowed origin
 (`config.ALLOWED_ORIGINS`, env `VIVOME_ALLOWED_ORIGINS`, comma separated).

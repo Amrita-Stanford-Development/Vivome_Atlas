@@ -315,9 +315,9 @@ PORT = int(os.environ.get("VIVOME_PORT", "8001"))
 # locally with these raised.
 MAX_UPLOAD_CELLS = int(os.environ.get("VIVOME_MAX_UPLOAD_CELLS", "2000"))
 # A DIA-NN report of 2,000 cells over about 8,000 proteins is near 200 MB of
-# text, but the hosted copy is reached through its website, whose host
-# (Cloudflare) takes at most 100 MB in one request: 100 MB is the default, and
-# a copy run at home can raise it.
+# text. 100 MB is the default for a copy run at home, which can raise it. The
+# hosted copy takes less: Cloud Run takes at most 32 MiB in an HTTP/1 request,
+# so its Dockerfile sets 31 (deploy/huggingface/Dockerfile).
 MAX_UPLOAD_BYTES = int(float(os.environ.get("VIVOME_MAX_UPLOAD_MB", "100")) * 1024 * 1024)
 # Projections running at once. Each takes every core it can and up to about
 # 3.6 GB, so the hosted copy runs one at a time and answers 503 to the next

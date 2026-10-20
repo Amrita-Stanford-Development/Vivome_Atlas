@@ -64,6 +64,7 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
         service.state.status = status;
         if (status.limits) {
           service.state.limits = { ...service.state.limits, max_cells: status.limits.max_cells, max_upload_mb: status.limits.max_upload_mb };
+          landing.recheckLimits();
         }
         const map = coordinatesCompatible(status.pipeline_version) ? ''
           : ' Its model draws a different map, so your cells will be listed, not placed.';
@@ -73,7 +74,7 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
     } catch (err) {
       clearTimeout(slow);
       if (seq !== checks) return;
-      line(explainFailure(err, service.url()), 'down');
+      line(explainFailure(err, service.url(), { retrying: false }), 'down');
     }
     update();
   }
@@ -91,6 +92,7 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
         max_cells: value('max_cells'), max_upload_mb: value('max_mb'), min_cells: value('min_cells'),
         ...(service.state.limits ?? {}),
       };
+      landing.recheckLimits();
       for (const el of document.querySelectorAll('#panel-data [data-wf]')) el.innerHTML = wfFact(workflow, el.dataset.wf);
     } catch (err) {
       for (const el of document.querySelectorAll('#panel-data [data-wf]')) el.textContent = PENDING_LABEL;

@@ -353,7 +353,8 @@ export function buildProjectionSummary(result) {
     ? `Restricted to ${candidates.map(escapeHtml).join(', ')}`
     : `All ${formatCount(candidates.length)} reference classes`;
   const scale = result?.value_scale;
-  const scaleText = scale?.transformed ? 'Linear intensities, log2-transformed' : 'Already on a log scale';
+  const scaleText = scale?.transformed ? 'Linear intensities, log2-transformed'
+    : scale?.detected === 'unknown' ? 'No values to read' : 'Already on a log scale';
   return `
     <dl class="model-card">
       ${cardField('Cells', formatCount(result?.n_cells))}

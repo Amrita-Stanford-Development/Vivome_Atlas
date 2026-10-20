@@ -132,7 +132,7 @@ function fakeReference() {
 }
 
 // Play does not start on its own here, unless a test asks (autoPlay).
-function setup({ client = null, autoPlay = false } = {}) {
+function setup({ client = null, autoPlay = false, limits = () => ({ max_cells: 2000, max_upload_mb: 200, min_cells: 20 }) } = {}) {
   const els = installDocument();
   const stage = fakeStage();
   const dims = [];
@@ -145,7 +145,7 @@ function setup({ client = null, autoPlay = false } = {}) {
     client: client ?? { project: async () => { throw new Error('no service'); } },
     serviceUrl: () => 'https://service.example',
     options: () => ({ modality: 'prot', restrict: false }),
-    limits: () => ({ max_cells: 2000, max_upload_mb: 200, min_cells: 20 }),
+    limits,
     autoPlay,
   });
   const tick = (seconds) => {
@@ -610,4 +610,55 @@ test('a file the service would refuse is stopped in the browser', async () => {
   assert.ok(check.problems.length >= 1);
   landing.send();
   assert.equal(landing.state.name, 'chosen', 'not sent');
+});
+
+test('a file checked before the limits arrived is judged again when they do', async () => {
+  let current = {};
+  const { landing } = setup({ limits: () => current });
+  await landing.chooseFile(fileOf(5));
+  assert.equal(landing.state.check.ok, true, 'no limits known yet');
+  current = { max_cells: 2000, max_upload_mb: 200, min_cells: 20 };
+  landing.recheckLimits();
+  assert.equal(landing.state.name, 'chosen');
+  assert.equal(landing.state.check.ok, false);
+  assert.match(landing.state.check.problems.join(' '), /at least 20/);
+});
+
+test('the example file does not replace a file the visitor chose while it loaded', async () => {
+  const sent = [];
+  const { landing } = setup({ client: { project: async (url, form) => { sent.push(form.get('matrix').name); throw new Error('stop'); } } });
+  const real = globalThis.fetch;
+  let release;
+  globalThis.fetch = (url) => (String(url).endsWith('pbmc240_proteins_raw.tsv')
+    ? new Promise((done) => { release = () => real(url).then(done); })
+    : real(url));
+  const example = landing.sendExample();
+  await settleMicrotasks();
+  await landing.chooseFile(fileOf(40, 'mine.csv'));
+  release();
+  await example;
+  globalThis.fetch = real;
+  assert.equal(landing.state.file.name, 'mine.csv');
+  assert.deepEqual(sent, []);
+});
+
+test('an example file that cannot load says so', async () => {
+  const { landing } = setup();
+  const real = globalThis.fetch;
+  globalThis.fetch = async () => { throw new TypeError('Failed to fetch'); };
+  await landing.sendExample();
+  globalThis.fetch = real;
+  assert.equal(landing.state.name, 'failed');
+  assert.match(String(landing.state.error?.message), /example file could not be loaded/);
+});
+
+test('a file the service turned down is not offered again as it is', async () => {
+  const refusal = Object.assign(new Error('upload has 4 cells; at least 20 are required'), { kind: 'refused', status: 400 });
+  const { els, landing } = setup({ client: { project: async () => { throw refusal; } }, limits: () => ({}) });
+  await landing.chooseFile(fileOf(25));
+  landing.send();
+  for (let i = 0; i < 20 && landing.state.name !== 'failed'; i += 1) await settleMicrotasks();
+  assert.equal(landing.state.name, 'failed');
+  assert.match(els.get('status-card').innerHTML, /turned the file down/);
+  assert.doesNotMatch(els.get('status-card').innerHTML, /Try again/);
 });

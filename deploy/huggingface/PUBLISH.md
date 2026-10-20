@@ -31,7 +31,8 @@ The check must report that a request without the secret is refused, and
 ## Hugging Face Space (reference)
 
 The Space runs `service/` in Docker on Hugging Face's free CPU tier (2 cores,
-16 GB). It serves v4.1, accepts at most 2,000 cells and 100 MB per upload, and
+16 GB). It serves v4.1, accepts at most 2,000 cells and 31 MiB per upload (the
+Dockerfile's limit, set for Cloud Run), and
 projects one upload at a time (settings in `Dockerfile`). Its address is
 `https://USER-vivome-atlas.hf.space`, where USER is the Hugging Face account.
 

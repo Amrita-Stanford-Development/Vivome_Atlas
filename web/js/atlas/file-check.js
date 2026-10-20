@@ -52,35 +52,70 @@ const sampleColumns = (fields, patterns) => patterns.map((p) => fields.filter((f
 // The file's first line, without its line ending. By default from the first
 // HEADER_BYTES only; a larger maxBytes reads on, a slice at a time, until
 // the line ends.
-export async function readHeaderLine(blob, { maxBytes = HEADER_BYTES } = {}) {
-  const decoder = new TextDecoder();
+export async function readHeaderLine(blob, { maxBytes = HEADER_BYTES, encoding = 'utf-8' } = {}) {
+  return (await readLines(blob, { count: 1, maxBytes, encoding }))[0] ?? '';
+}
+
+// The file's first `count` lines, without line endings, read a slice at a
+// time up to maxBytes (the last line may be cut there).
+export async function readLines(blob, { count = 1, maxBytes = HEADER_BYTES, encoding = 'utf-8' } = {}) {
+  const decoder = new TextDecoder(encoding);
   let text = '';
   for (let offset = 0; offset < Math.min(blob.size, maxBytes); offset += HEADER_BYTES) {
     const end = Math.min(blob.size, maxBytes, offset + HEADER_BYTES);
-    const searchFrom = text.length;
     text += decoder.decode(new Uint8Array(await blob.slice(offset, end).arrayBuffer()), { stream: end < blob.size });
-    const newline = text.indexOf('\n', searchFrom);
-    if (newline !== -1) return text.slice(0, newline).replace(/\r$/, '');
+    if (text.split('\n').length > count) break;
   }
-  return (text + decoder.decode()).replace(/\r$/, '');
+  if (text.split('\n').length <= count) text += decoder.decode();
+  return text.split('\n').slice(0, count).map((line) => line.replace(/\r$/, ''));
 }
 
-// How many lines hold anything but white space, streamed in chunks.
-export async function countNonEmptyLines(blob) {
+// Perseus writes annotation rows ("#!{Type}...") under the header; the
+// service skips them, so they are not feature rows.
+const isPerseusRow = (line) => line.startsWith('#!{');
+
+// How many lines hold anything but white space (Perseus rows aside), streamed
+// in chunks.
+export async function countNonEmptyLines(blob, { encoding = 'utf-8' } = {}) {
   const reader = blob.stream().getReader();
-  const decoder = new TextDecoder();
+  const decoder = new TextDecoder(encoding);
   let count = 0;
   let tail = '';
+  const counts = (line) => line.trim() !== '' && !isPerseusRow(line);
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
     const parts = (tail + decoder.decode(value, { stream: true })).split('\n');
     tail = parts.pop();
-    for (const part of parts) if (part.trim() !== '') count += 1;
+    for (const part of parts) if (counts(part)) count += 1;
   }
   tail += decoder.decode();
-  if (tail.trim() !== '') count += 1;
+  if (counts(tail)) count += 1;
   return count;
+}
+
+// What the file's first bytes say about it, as the service reads them
+// (service/app.py, _decode_matrix): UTF-16 with its byte order mark is text;
+// a workbook or another binary file is refused in the same words.
+const WORKBOOK = 'The file is an Excel workbook (.xlsx), not text: save the sheet as CSV or tab-separated text and send that file.';
+const BINARY = 'The file is a binary file (Parquet, for example), not text: send it as CSV or tab-separated text.';
+async function sniffEncoding(blob) {
+  const head = new Uint8Array(await blob.slice(0, 4096).arrayBuffer());
+  const startsWith = (bytes) => bytes.every((b, i) => head[i] === b);
+  if (startsWith([0xff, 0xfe])) return 'utf-16le';
+  if (startsWith([0xfe, 0xff])) return 'utf-16be';
+  if (startsWith([0x50, 0x4b, 0x03, 0x04])) throw new Error(WORKBOOK);
+  if (startsWith([0x50, 0x41, 0x52, 0x31]) || head.includes(0)) throw new Error(BINARY);
+  return 'utf-8';
+}
+
+// R's write.table writes no corner field over the row names, so every data
+// row is one field longer than the header; the service then reads every
+// header field as a cell (service/pipeline/alignment.py). A trailing
+// separator on the data rows alone adds an empty field instead.
+export function missingCorner(fields, rows) {
+  return rows.length > 0 && fields[fields.length - 1].trim() !== ''
+    && rows.every((r) => r.length === fields.length + 1) && rows.some((r) => r[r.length - 1].trim() !== '');
 }
 
 // One header line's fields, as the service's CSV reader splits them: a
@@ -160,12 +195,20 @@ export function parseHeader(line) {
 
 // The file's shape, or an Error saying in plain words why it cannot be sent.
 export async function checkFile(blob, name = blob?.name ?? '') {
-  const header = await readHeaderLine(blob, { maxBytes: HEADER_LIMIT_BYTES });
+  const encoding = await sniffEncoding(blob);
+  const lines = await readLines(blob, { count: 51, maxBytes: HEADER_LIMIT_BYTES, encoding });
+  const header = lines[0] ?? '';
   if (header.trim() === '') throw new Error('The file has no header row.');
-  const parsed = parseHeader(header);
+  let parsed = parseHeader(header);
   if (parsed.refusal) throw new Error(parsed.refusal);
+  if (parsed.format === 'matrix') {
+    const rows = lines.slice(1).filter((l) => l.trim() !== '' && !isPerseusRow(l)).map((l) => splitFields(l, parsed.separator));
+    if (missingCorner(splitFields(header, parsed.separator), rows)) {
+      parsed = { ...parsed, annotation: parsed.annotation - 1, cellEstimate: parsed.cellEstimate + 1 };
+    }
+  }
   if (parsed.cellEstimate < 1) throw new Error('The header row lists no cells.');
-  const features = (await countNonEmptyLines(blob)) - 1;
+  const features = (await countNonEmptyLines(blob, { encoding })) - 1;
   if (features < 1) throw new Error('The file has a header row but no feature rows.');
   return {
     name, size: blob.size, separator: parsed.separator, columns: parsed.columns,

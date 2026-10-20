@@ -72,13 +72,17 @@ export const isOwnCopy = (url, where = globalThis.location) => {
 // error and reason), timeout, cancelled, bad (an answer this page cannot
 // read).
 export class ServiceError extends Error {
-  constructor(kind, message, { status = null, reason = null, retryAfter = null, cause } = {}) {
+  // host: a timeout the host gave up on, not this page; said: the answer
+  // carried its own error text, which is shown.
+  constructor(kind, message, { status = null, reason = null, retryAfter = null, cause, host = false, said = false } = {}) {
     super(message, cause === undefined ? undefined : { cause });
     this.name = 'ServiceError';
     this.kind = kind;
     this.status = status;
     this.reason = reason;
     this.retryAfter = retryAfter;
+    this.host = host;
+    this.said = said;
   }
 }
 
@@ -178,9 +182,23 @@ function failureOf(res, payload) {
   if ((status === 400 || status === 413) && payload) {
     return new ServiceError('refused', error ?? `The service turned the file down (HTTP ${status}).`, { status, reason });
   }
-  if (status === 408 || status === 504) return new ServiceError('timeout', 'The service took too long to answer.', { status });
-  return new ServiceError('bad', `The service answered HTTP ${status}${payload ? '' : ' with no JSON'}.`, { status, reason });
+  // The host's own size limit answers 413 in HTML, before the service sees the file.
+  if (status === 413) {
+    return new ServiceError('refused', 'The file is too large for one request', { status, reason: SIZE_ADVICE });
+  }
+  // The site's /api door (deploy/pages/api-proxy.js) could not reach the service.
+  if (status === 502 && payload) {
+    return new ServiceError('gateway', error ?? 'The site could not reach the labelling service.', { status, reason });
+  }
+  // 504 and Cloudflare's 524: the host stopped waiting for the service.
+  if (status === 408 || status === 504 || status === 524) {
+    return new ServiceError('timeout', 'The host stopped waiting for the service.', { status, host: true });
+  }
+  return new ServiceError('bad', error ?? `The service answered HTTP ${status}${payload ? '' : ' with no JSON'}.`,
+    { status, reason, said: Boolean(error) });
 }
+
+const SIZE_ADVICE = 'Split the cells at random into smaller files, so each is still a mix of cell types.';
 
 export function createServiceClient({ transport = browserTransport } = {}) {
   return {
@@ -250,26 +268,35 @@ const sentence = (text) => {
   return t === '' || /[.!?]$/.test(t) ? t : `${t}.`;
 };
 
-// One plain sentence for the visitor about what went wrong.
-export function explainFailure(err, url = DEFAULT_SERVICE_URL) {
+// One plain sentence for the visitor about what went wrong. `retrying` is
+// false where nothing tries again by itself (the status check).
+export function explainFailure(err, url = DEFAULT_SERVICE_URL, { retrying = true } = {}) {
   const address = normaliseServiceUrl(url) || DEFAULT_SERVICE_URL;
   switch (err?.kind) {
     case 'network':
       return isOwnCopy(address)
         ? `Could not reach the service at ${address}: is it running, and does its VIVOME_ALLOWED_ORIGINS list this page's address?`
-        : `Could not reach the service at ${address}. Check the connection and try again.`;
+        : `Could not reach the service at ${address}. Check the connection, or reload the page in case your sign-in ran out, and try again.`;
     case 'busy':
-      return `Another file is being labelled right now, so this page will try again by itself in about ${err.retryAfter ?? BUSY_RETRY_SECONDS} seconds.`;
+      return retrying
+        ? `Another file is being labelled right now, so this page will try again by itself in about ${err.retryAfter ?? BUSY_RETRY_SECONDS} seconds.`
+        : `The service is busy right now. Press Check again in about ${err.retryAfter ?? BUSY_RETRY_SECONDS} seconds.`;
+    case 'gateway':
+      return sentence(`The site could not reach the labelling service: ${err.reason ?? err.message}`);
     case 'unavailable':
       return sentence(`The service is running but cannot label yet: ${err.reason ?? err.message}`);
     case 'refused':
       return [sentence(`The service turned the file down: ${err.message}`), sentence(err.reason)].filter(Boolean).join(' ');
     case 'timeout':
-      return `The service at ${address} did not answer in time, so this page stopped waiting.`;
+      return err.host
+        ? `The service at ${address} took too long, and the host stopped waiting for it (HTTP ${err.status}). Large files take longest: ${SIZE_ADVICE.charAt(0).toLowerCase()}${SIZE_ADVICE.slice(1)}`
+        : `The service at ${address} did not answer in time, so this page stopped waiting.`;
     case 'cancelled':
       return 'The upload was cancelled before the service answered.';
     case 'bad':
-      return `The service at ${address} answered in a way this page cannot read${err.status ? ` (HTTP ${err.status})` : ''}.`;
+      return err.said
+        ? [sentence(`The service at ${address} answered HTTP ${err.status}: ${err.message}`), sentence(err.reason)].filter(Boolean).join(' ')
+        : `The service at ${address} answered in a way this page cannot read${err.status ? ` (HTTP ${err.status})` : ''}.`;
     default:
       return sentence(err?.message || 'Something went wrong.');
   }
