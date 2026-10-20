@@ -736,3 +736,16 @@ The locked tests' PCA baseline was re-centred (amendment 3). The three locked te
 - Organ maps refuse files.
 
 The site was deployed at 22:32 with the Manuscript's v2 table and the organ map fix. | `ed5188d`, `a1fcbbe`, `54a6a9a`, `24391cc`, `172b7d3`, `2bf80a4`, `ce523c8`, `6bfb1bb` |
+| 2026-10-21 | **The locked tests' code, held to their protocols before any is opened** (a read-only review).
+- The lymph node, lung and colon labels steps check for a frozen candidate before reading any sealed file.
+- Scorers check the intake's files; intakes and scorers refuse VIVOME_* overrides; a void set is recorded.
+- The sorted CD4/CD8 test enforces its 50 cells per type, writes its caveats and donors, and finds CD8B by any identifier.
+
+Amendments: sorted 5, lymph node 4 and 5, lung 4 and 5, colon 1. The sorted rehearsal still reproduces Fulcher exactly. | `0d15a73`, `a615974`, `9a84561`, `40cff24`, `3bbea2d` |
+| 2026-10-21 | **Service: security, speed, and a review of the night's own changes** (not deployed).
+- Model files are read as tensors only; the dependency audit found one low torch advisory, which does not apply.
+- 2,000 cells take 10 s instead of 32 s, with identical answers: a per-cell recount of the whole mask, and the gene ID map read four times per request.
+- Fixed from the review: the Workflow page's Python version; RNA zeros vote on the scale again; "PAR1" text files; R's corner rule; the example send; the cancelled-file note; the organ baselines' constant genes.
+- The site sends security headers, and the /api door drops the visitor's location headers.
+- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d` |
+| 2026-10-21 | **Accessibility** (a static review): the film's English captions; inert hidden panels on the Atlas page; a status line instead of a status card read out every second; the film's keys; the Workflow cell search; load errors announced. The visible changes wait for the owner (the todo's Accessibility item). | `6adc5fc`, `6d5a748` |
