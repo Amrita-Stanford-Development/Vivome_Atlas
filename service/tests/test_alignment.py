@@ -169,6 +169,73 @@ class ParseMatrixCsvTests(unittest.TestCase):
         self.assertIsInstance(caught.exception, ValueError)
 
 
+class UploadLayoutTests(unittest.TestCase):
+    """Faults found by a review of the upload path (2026-10-20), each read
+    silently as the wrong cells or values before."""
+
+    def test_maxquant_silac_and_tmt_tables_are_refused_by_kind(self):
+        silac = "\t".join(["Majority protein IDs", "Gene names", "Ratio H/L", "Intensity", "Intensity L", "Intensity H"])
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            alignment.parse_matrix_csv(silac + "\nP1\tGENE1\t1.2\t300\t100\t200\n")
+        self.assertIn("SILAC", str(caught.exception))
+        tmt = "\t".join(["Majority protein IDs", "Gene names", "Reporter intensity corrected 1 X1",
+                         "Reporter intensity corrected 2 X1", "Intensity X1"])
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            alignment.parse_matrix_csv(tmt + "\nP1\tGENE1\t10\t20\t300\n")
+        self.assertIn("TMT", str(caught.exception))
+
+    def test_fragpipe_contaminant_and_decoy_rows_are_left_out(self):
+        header = "\t".join(["Protein", "Protein ID", "Gene", "Combined Total Peptides", "A Intensity", "B Intensity"])
+        rows = ["sp|P02768|ALBU_HUMAN\tP02768\tALB\t9\t100\t200",
+                "contam_sp|P02769|ALBU_BOVIN\tP02769\tALB\t3\t5000\t6000",
+                "rev_sp|P12345|X_HUMAN\tP12345\tGENE9\t1\t10\t20"]
+        raw = alignment.parse_matrix_csv("\n".join([header] + rows))
+        self.assertEqual(raw.gene_names, ["ALB"])
+        np.testing.assert_array_equal(raw.values, [[100, 200]])
+
+    def test_fragpipe_unique_and_total_intensity_columns_are_not_cells(self):
+        header = "\t".join(["Protein", "Gene", "Combined Total Peptides", "A Intensity", "A Unique Intensity",
+                            "A Total Intensity", "A Razor Intensity", "A MaxLFQ Unique Intensity"])
+        raw = alignment.parse_matrix_csv(header + "\nsp|P1|A_HUMAN\tGENE1\t3\t100\t90\t110\t95\t0\n")
+        self.assertEqual(raw.cell_ids, ["A"])
+
+    def test_a_header_without_the_row_name_corner_is_read(self):
+        """R's write.table writes no corner field: every data row is one
+        field longer than the header."""
+        raw = alignment.parse_matrix_csv("S1\tS2\tS3\nGENE1\t1\t2\t3\nGENE2\t4\t5\t6\n")
+        self.assertEqual(raw.cell_ids, ["S1", "S2", "S3"])
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2"])
+        np.testing.assert_array_equal(raw.values, [[1, 2, 3], [4, 5, 6]])
+
+    def test_a_trailing_separator_on_every_row_is_not_a_missing_corner(self):
+        raw = alignment.parse_matrix_csv("gene,c1,c2\nGENE1,1,2,\nGENE2,3,4,\n")
+        self.assertEqual(raw.cell_ids, ["c1", "c2"])
+        np.testing.assert_array_equal(raw.values, [[1, 2], [3, 4]])
+
+    def test_a_row_too_short_for_the_header_is_refused_naming_its_line(self):
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            alignment.parse_matrix_csv("gene,c1,c2,c3\nGENE1,1,2,3\nGENE2,4\n")
+        self.assertIn("line 3", str(caught.exception))
+
+    def test_a_byte_order_mark_does_not_change_the_reading(self):
+        text = "Protein.Group\tProtein.Ids\tGenes\ta.raw\tb.raw\nP1\tP1\tGENE1\t1.0\t2.0\n"
+        plain, marked = alignment.parse_matrix_csv(text), alignment.parse_matrix_csv("\ufeff" + text)
+        self.assertEqual((marked.gene_names, marked.cell_ids), (plain.gene_names, plain.cell_ids))
+        np.testing.assert_array_equal(marked.values, plain.values)
+
+    def test_perseus_annotation_rows_are_skipped(self):
+        header = "\t".join(["Majority protein IDs", "Gene names", "LFQ intensity S1", "LFQ intensity S2"])
+        rows = ["#!{Type}E\tT\tE\tE", "P1\tGENE1\t100\t200"]
+        raw = alignment.parse_matrix_csv("\n".join([header] + rows))
+        self.assertEqual(raw.gene_names, ["GENE1"])
+
+    def test_a_maxquant_table_without_any_gene_name_says_so(self):
+        header = "\t".join(["Majority protein IDs", "Gene names", "LFQ intensity S1", "LFQ intensity S2"])
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            alignment.parse_matrix_csv(header + "\nP1\t\t100\t200\nP2\t\t1\t2\n")
+        self.assertIn("Gene names", str(caught.exception))
+
+
 class ZScorePerGeneTests(unittest.TestCase):
     def test_zscores_use_only_this_datasets_own_stats(self):
         raw = np.array([[0.0, 10.0, 20.0]])  # one gene, three cells
@@ -305,6 +372,19 @@ class DetectAndTransformValueScaleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ZerosAndScaleTests(unittest.TestCase):
+    def test_zeros_do_not_hide_a_linear_scale(self):
+        """0 is "not detected", so it does not vote in the scale's median: a
+        sparse linear matrix with 60% zeros is still linear."""
+        rng = np.random.default_rng(0)
+        values = rng.uniform(1e5, 1e7, size=(50, 10))
+        values[rng.random((50, 10)) < 0.6] = 0.0
+        out, scale = alignment.detect_and_transform_value_scale(values)
+        self.assertEqual(scale.detected, "linear")
+        self.assertFalse(np.any(out == 0))
+        self.assertTrue(np.all(np.isnan(out[values == 0])))
 
 
 class InputRobustnessTests(unittest.TestCase):

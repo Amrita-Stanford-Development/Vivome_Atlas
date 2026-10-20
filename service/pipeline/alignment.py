@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import csv
 import io
+import itertools
 import re
 import warnings
 from collections import defaultdict
@@ -101,18 +102,25 @@ _MISSING_VALUES = frozenset({"", "NA"})
 # decoys, contaminants and site-only groups with "+", and per-sample
 # quantities. "LFQ intensity <sample>" is read when any is above 0, else
 # "Intensity <sample>"; 0 is MaxQuant's "not quantified". The research reader
-# (benchmark/heldout_formats.read_maxquant) reads the same way.
+# (benchmark/heldout_formats.read_maxquant) reads the same way. SILAC and TMT
+# searches are refused: their intensities are labels or whole plexes, not cells.
 _MAXQUANT_MARKERS = ("Majority protein IDs", "Gene names")
 _MAXQUANT_FLAGS = frozenset({"Only identified by site", "Reverse", "Potential contaminant", "Contaminant"})
 _MAXQUANT_QUANTITIES = (re.compile(r"^LFQ intensity (.+)$"), re.compile(r"^Intensity (.+)$"))
+_MAXQUANT_SILAC = re.compile(r"^Ratio [HML]/[HML]")
+_MAXQUANT_TMT_PREFIX = "Reporter intensity"
 
 # FragPipe's LFQ protein table (combined_protein.tsv): "Gene", annotation and
 # "Combined ..." columns, then per sample its spectral counts, "<sample>
 # Intensity" and, when MaxLFQ ran, "<sample> MaxLFQ Intensity", which is read
-# first. 0 is "not quantified".
+# first when any is above 0. The "Unique", "Total" and "Razor" intensities are
+# other summaries of the same sample, not cells. Rows whose "Protein" starts
+# with contam_ or rev_ are FragPipe's contaminants and decoys. 0 is "not
+# quantified".
 _FRAGPIPE_LFQ_MARKERS = ("Gene", "Combined Total Peptides")
 _FRAGPIPE_LFQ_QUANTITIES = (re.compile(r"^(?!Combined )(.+) MaxLFQ Intensity$"),
-                            re.compile(r"^(?!Combined )(.+?)(?<! MaxLFQ) Intensity$"))
+                            re.compile(r"^(?!Combined )(.+?)(?<! MaxLFQ)(?<! Unique)(?<! Total)(?<! Razor) Intensity$"))
+_FRAGPIPE_DECOY_PREFIXES = ("contam_", "rev_")
 
 # MaxQuant's ID-list columns can pass csv's default 131,072-character field
 # limit (PXD011683); the upload itself is bounded (config's upload limit).
@@ -137,28 +145,61 @@ def _number(text: str, column: str) -> float:
                                f"The service reads {_READABLE_LAYOUTS}.") from None
 
 
-def _parse_quantity_table(header: list[str], reader, gene_column: str, quantities: tuple,
-                          flags: frozenset = frozenset()) -> "RawMatrix":
+def _short_row(line: int, fields: int, header: list[str]) -> UnreadableMatrix:
+    return UnreadableMatrix(f"line {line} has {fields} fields, fewer than the header's {len(header)}: "
+                            "every row needs a value, or an empty field, for every column.")
+
+
+def _refuse_labelled_maxquant(header: list[str]) -> None:
+    if any(name.startswith(_MAXQUANT_TMT_PREFIX) for name in header):
+        raise UnreadableMatrix("this MaxQuant table is a TMT search (it has Reporter intensity columns): its Intensity "
+                               "columns are whole plexes, not cells. Send the reporter intensities as a matrix with one "
+                               "column per cell instead.")
+    if any(_MAXQUANT_SILAC.match(name) for name in header):
+        raise UnreadableMatrix("this MaxQuant table is a SILAC search (it has Ratio columns): its intensities are "
+                               "labels, not cells. The service reads label-free tables.")
+
+
+def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities: tuple,
+                          flags: frozenset = frozenset(), decoy_column: "str | None" = None,
+                          decoy_prefixes: tuple = ()) -> "RawMatrix":
     """MaxQuant's and FragPipe's LFQ tables: one row per protein group, the
-    gene column's text as identifiers, rows flagged "+" left out, and the
-    first quantity pattern with any value above 0 as the cells (each
-    pattern's group is the sample name). 0 is missing."""
+    gene column's text as identifiers, rows flagged "+" and decoy or
+    contaminant rows left out, and the first quantity pattern with any value
+    above 0 as the cells (each pattern's group is the sample name). 0 is
+    missing. `lines` yields (line number, fields)."""
     gene_idx = header.index(gene_column)
     flag_idx = [i for i, name in enumerate(header) if name in flags]
+    decoy_idx = header.index(decoy_column) if decoy_column in header else None
     found = [[(i, m.group(1).strip()) for i, name in enumerate(header) if (m := pattern.match(name))]
              for pattern in quantities]
-    rows = [row for row in reader if len(row) > gene_idx and row[gene_idx]
-            and not any(i < len(row) and row[i].strip() == "+" for i in flag_idx)]
+    rows = []
+    for line, row in lines:
+        if len(row) <= gene_idx or not row[gene_idx]:
+            continue
+        if any(i < len(row) and row[i].strip() == "+" for i in flag_idx):
+            continue
+        if decoy_idx is not None and decoy_idx < len(row) and row[decoy_idx].startswith(decoy_prefixes):
+            continue
+        rows.append((line, row))
+    if not rows:
+        raise UnreadableMatrix(f"no row has a value in {gene_column!r}, so no protein can be named. "
+                               f"The service reads {_READABLE_LAYOUTS}.")
     chosen = next((cols for cols in found if cols and any(
-        row[i] not in _MISSING_VALUES and _number(row[i], header[i]) > 0 for row in rows for i, _ in cols)), None)
+        i < len(row) and row[i] not in _MISSING_VALUES and _number(row[i], header[i]) > 0
+        for _, row in rows for i, _ in cols)), None)
     chosen = chosen or next((cols for cols in found if cols), None)
     if chosen is None:
         raise UnreadableMatrix(f"this looks like a protein table with a {gene_column!r} column but no per-sample "
                                f"intensity columns. The service reads {_READABLE_LAYOUTS}.")
-    values = np.array([[_number(row[i], header[i]) for i, _ in chosen] for row in rows],
+    needed = max(i for i, _ in chosen)
+    for line, row in rows:
+        if len(row) <= needed:
+            raise _short_row(line, len(row), header)
+    values = np.array([[_number(row[i], header[i]) for i, _ in chosen] for _, row in rows],
                       dtype=np.float32).reshape(len(rows), len(chosen))
     values[values == 0] = np.nan
-    return RawMatrix(gene_names=[row[gene_idx] for row in rows], cell_ids=[name for _, name in chosen], values=values)
+    return RawMatrix(gene_names=[row[gene_idx] for _, row in rows], cell_ids=[name for _, name in chosen], values=values)
 
 
 def _clean_dia_nn_cell_id(raw_header: str) -> str:
@@ -194,19 +235,35 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     headers are kept verbatim. "NA" is read as missing in every format.
 
     MaxQuant's proteinGroups.txt and FragPipe's LFQ combined_protein.tsv are
-    read as they come (_parse_quantity_table). A text value where a number
-    belongs raises UnreadableMatrix, naming the column."""
+    read as they come (_parse_quantity_table). A plain matrix written by R
+    without the corner field over its row names is read too. A text value
+    where a number belongs, or a row too short for the header, raises
+    UnreadableMatrix, naming the column or the line."""
+    text = text[1:] if text.startswith("\ufeff") else text  # Excel's "CSV UTF-8" starts with a byte order mark
     first_line = text.split("\n", 1)[0]
     delimiter = "\t" if first_line.count("\t") > first_line.count(",") else ","
     reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     header = next(reader)
+    # Perseus writes annotation rows ("#!{Type}...") under the header.
+    lines = ((n, row) for n, row in enumerate(reader, start=2) if row and not row[0].startswith("#!{"))
     if all(m in header for m in _MAXQUANT_MARKERS):
-        return _parse_quantity_table(header, reader, "Gene names", _MAXQUANT_QUANTITIES, _MAXQUANT_FLAGS)
+        _refuse_labelled_maxquant(header)
+        return _parse_quantity_table(header, lines, "Gene names", _MAXQUANT_QUANTITIES, flags=_MAXQUANT_FLAGS)
     if all(m in header for m in _FRAGPIPE_LFQ_MARKERS):
-        return _parse_quantity_table(header, reader, "Gene", _FRAGPIPE_LFQ_QUANTITIES)
+        return _parse_quantity_table(header, lines, "Gene", _FRAGPIPE_LFQ_QUANTITIES,
+                                     decoy_column="Protein", decoy_prefixes=_FRAGPIPE_DECOY_PREFIXES)
 
     is_dia_nn_report = "Genes" in header
     is_fragpipe_tmt = not is_dia_nn_report and "Gene" in header
+    if not (is_dia_nn_report or is_fragpipe_tmt):
+        # R's write.table writes no corner field over the row names, so every
+        # data row is one field longer than the header. A trailing separator
+        # on the data rows alone also adds a field, but an empty one.
+        head = list(itertools.islice(lines, 50))
+        if (head and header[-1].strip() and all(len(row) == len(header) + 1 for _, row in head)
+                and any(row[-1].strip() for _, row in head)):
+            header = [""] + header
+        lines = itertools.chain(head, lines)
     if is_dia_nn_report:
         gene_col_idx = header.index("Genes")
     elif is_fragpipe_tmt:
@@ -229,10 +286,15 @@ def parse_matrix_csv(text: str) -> RawMatrix:
         for i in cell_col_indices
     ]
 
+    needed = max([gene_col_idx] + cell_col_indices)
     gene_names: list[str] = []
     rows: list[list[float]] = []
-    for row in reader:
-        if not row or not row[gene_col_idx]:
+    for line, row in lines:
+        if len(row) <= needed:
+            if len(row) > gene_col_idx and not row[gene_col_idx]:
+                continue
+            raise _short_row(line, len(row), header)
+        if not row[gene_col_idx]:
             continue
         gene_names.append(row[gene_col_idx])
         rows.append([_number(row[i], header[i]) for i in cell_col_indices])
@@ -279,7 +341,10 @@ def detect_and_transform_value_scale(
 
     observed_values = raw_values[observed]
     has_negative = bool((observed_values < 0).any())
-    median_value = float(np.median(observed_values))
+    # 0 is "not detected" (below), so it does not vote: a sparse linear matrix
+    # with most values 0 is still linear.
+    nonzero = observed_values[observed_values != 0]
+    median_value = float(np.median(nonzero)) if nonzero.size else 0.0
     is_linear = (not has_negative) and (median_value > median_threshold)
     if not is_linear:
         return raw_values, ValueScale(detected="log", transformed=False)

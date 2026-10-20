@@ -16,7 +16,8 @@ export const HEADER_LIMIT_BYTES = 16 * 1024 * 1024;
 // A DIA-NN report's annotation columns (docs/service/projection-api.md):
 // "Genes" holds the identifiers; none of them is a cell.
 export const DIANN_ANNOTATIONS = Object.freeze([
-  'Genes', 'Protein.Group', 'Protein.Names', 'First.Protein.Description', 'N.Sequences', 'N.Proteotypic.Sequences',
+  'Genes', 'Protein.Group', 'Protein.Ids', 'Protein.Names', 'First.Protein.Description', 'N.Sequences',
+  'N.Proteotypic.Sequences',
 ]);
 
 // A FragPipe TMT-Integrator protein table's, which the service also reads
@@ -31,9 +32,18 @@ const FRAGPIPE_REFERENCE_PREFIXES = ['RefInt_', 'RefDInt_'];
 // MaxQuant's proteinGroups.txt and FragPipe's LFQ combined_protein.tsv: the
 // service reads one cell per sample from the first of these quantity
 // columns it finds (service/pipeline/alignment.py); every other column
-// is annotation.
+// is annotation. FragPipe's unique, total and razor intensities summarise the
+// same sample; MaxQuant SILAC and TMT searches are refused, as the service
+// refuses them.
 const MAXQUANT_QUANTITIES = [/^LFQ intensity (.+)$/, /^Intensity (.+)$/];
-const FRAGPIPE_LFQ_QUANTITIES = [/^(?!Combined )(.+) MaxLFQ Intensity$/, /^(?!Combined )(.+?)(?<! MaxLFQ) Intensity$/];
+const FRAGPIPE_LFQ_QUANTITIES = [
+  /^(?!Combined )(.+) MaxLFQ Intensity$/,
+  /^(?!Combined )(.+?)(?<! MaxLFQ)(?<! Unique)(?<! Total)(?<! Razor) Intensity$/,
+];
+const MAXQUANT_REFUSALS = [
+  [(f) => f.startsWith('Reporter intensity'), 'This MaxQuant table is a TMT search: its Intensity columns are whole plexes, not cells. Send the reporter intensities as a matrix with one column per cell instead.'],
+  [(f) => /^Ratio [HML]\/[HML]/.test(f), 'This MaxQuant table is a SILAC search: its intensities are labels, not cells. The service reads label-free tables.'],
+];
 const sampleColumns = (fields, patterns) => patterns.map((p) => fields.filter((f) => p.test(f)).length).find((n) => n > 0) ?? 0;
 
 // The file's first line, without its line ending. By default from the first
@@ -116,9 +126,10 @@ export function parseHeader(line) {
   const fragpipeLfq = !maxquant && fields.includes('Gene') && fields.includes('Combined Total Peptides');
   if (maxquant || fragpipeLfq) {
     const cells = sampleColumns(fields, maxquant ? MAXQUANT_QUANTITIES : FRAGPIPE_LFQ_QUANTITIES);
+    const refusal = maxquant ? MAXQUANT_REFUSALS.find(([is]) => fields.some(is))?.[1] : undefined;
     return {
       separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells,
-      format: maxquant ? 'maxquant' : 'fragpipe-lfq',
+      format: maxquant ? 'maxquant' : 'fragpipe-lfq', ...(refusal ? { refusal } : {}),
     };
   }
   const diann = fields.includes('Genes');
@@ -145,6 +156,7 @@ export async function checkFile(blob, name = blob?.name ?? '') {
   const header = await readHeaderLine(blob, { maxBytes: HEADER_LIMIT_BYTES });
   if (header.trim() === '') throw new Error('The file has no header row.');
   const parsed = parseHeader(header);
+  if (parsed.refusal) throw new Error(parsed.refusal);
   if (parsed.cellEstimate < 1) throw new Error('The header row lists no cells.');
   const features = (await countNonEmptyLines(blob)) - 1;
   if (features < 1) throw new Error('The file has a header row but no feature rows.');

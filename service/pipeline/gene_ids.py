@@ -103,6 +103,8 @@ def _resolve_one(identifier: str, gene_map: GeneIdMap) -> tuple[str | None, str]
             candidates.add(gene_map.symbol_to_feature[upper])
         elif part in gene_map.ensembl_to_feature:
             candidates.add(gene_map.ensembl_to_feature[part])
+        elif part.startswith("ENSG") and part.split(".", 1)[0] in gene_map.ensembl_to_feature:
+            candidates.add(gene_map.ensembl_to_feature[part.split(".", 1)[0]])  # GENCODE's versioned IDs
         elif part in gene_map.uniprot_to_feature:
             candidates.add(gene_map.uniprot_to_feature[part])
         elif "-" in part and _uniprot_base_accession(part) in gene_map.uniprot_to_feature:

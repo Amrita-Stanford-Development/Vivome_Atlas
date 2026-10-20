@@ -23,6 +23,11 @@ class ResolveIdentifiersTests(unittest.TestCase):
         r = gene_ids.resolve_identifiers(["ENSG00000121410"], _tiny_map())
         self.assertEqual(r.resolved, ["A1BG"])
 
+    def test_a_versioned_ensembl_id_matches(self):
+        # GENCODE writes ENSG00000121410.12; the map stores the unversioned ID
+        r = gene_ids.resolve_identifiers(["ENSG00000121410.12", "ENSG00000141510.18"], _tiny_map())
+        self.assertEqual(r.resolved, ["A1BG", "TP53"])
+
     def test_uniprot_accession_matches(self):
         r = gene_ids.resolve_identifiers(["P04637"], _tiny_map())
         self.assertEqual(r.resolved, ["TP53"])

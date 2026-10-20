@@ -52,10 +52,10 @@ The matrix has feature names in the first column and cell IDs in the header
 row. A real DIA-NN report is also accepted directly: when a "Genes" column
 is present, its values (which may be semicolon-separated protein groups)
 become the gene identifiers, DIA-NN's other annotation columns
-(`Protein.Group`, `Protein.Names`, `First.Protein.Description`,
-`N.Sequences`, `N.Proteotypic.Sequences`) are excluded from the cell
-columns, and each remaining column's Windows raw-file-path header is
-cleaned to its basename without `.raw`.
+(`Protein.Group`, `Protein.Ids` from DIA-NN 1.8, `Protein.Names`,
+`First.Protein.Description`, `N.Sequences`, `N.Proteotypic.Sequences`) are
+excluded from the cell columns, and each remaining column's Windows
+raw-file-path header is cleaned to its basename without `.raw`.
 
 Three more protein tables are read as their software writes them
 (`service/pipeline/alignment.py`):
@@ -65,19 +65,35 @@ Three more protein tables are read as their software writes them
   - rows marked "+" as reverse, contaminant or only identified by site are
     left out;
   - one cell per sample, from "LFQ intensity <sample>" when any value is
-    above 0, else from "Intensity <sample>".
+    above 0, else from "Intensity <sample>";
+  - a SILAC search (Ratio columns) or a TMT search (Reporter intensity
+    columns) is refused, because its intensities are labels or whole
+    plexes, not cells.
 - **FragPipe's LFQ `combined_protein.tsv`** (it has "Gene" and "Combined
-  Total Peptides"): "Gene" gives the identifiers, and there is one cell per
-  sample, from "<sample> MaxLFQ Intensity" when present, else from
-  "<sample> Intensity".
+  Total Peptides"):
+  - "Gene" gives the identifiers;
+  - rows whose "Protein" starts with `contam_` or `rev_` are left out;
+  - one cell per sample, from "<sample> MaxLFQ Intensity" when any value is
+    above 0, else from "<sample> Intensity". The unique, total and razor
+    intensities are not cells.
 - **A FragPipe TMT-Integrator protein table** (it has "Gene"): "Gene" gives
   the identifiers. Its annotation columns and reference channels are not
   cells.
 
 In MaxQuant's and FragPipe's LFQ tables, 0 means "not quantified" and is
-read as missing. A table with text where a number belongs is refused
-(400). The message names the column and lists the layouts the service
-reads.
+read as missing.
+
+**In every layout:**
+- A byte order mark (Excel's "CSV UTF-8") is ignored.
+- Perseus's annotation rows (`#!{...}`) are skipped.
+- A plain matrix written by R without the corner field over its row names
+  is read with every cell under its own name.
+- A versioned Ensembl ID (GENCODE's `ENSG00000121410.12`) matches its gene.
+
+**Refused (400), with a message naming the problem:**
+- a table with text where a number belongs (the message names the column
+  and lists the layouts the service reads);
+- a row too short for its header (the message names the line).
 
 ```json
 200 Response

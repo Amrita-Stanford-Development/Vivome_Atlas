@@ -51,6 +51,26 @@ test('MaxQuant and FragPipe LFQ tables count one cell per sample, as the service
   assert.deepEqual(parseHeader(fragpipe), { separator: '\t', columns: 12, annotation: 10, cellEstimate: 2, format: 'fragpipe-lfq' });
   const noMaxLfq = ['Gene', 'Combined Total Peptides', 'A_1 Intensity', 'B_2 Intensity', 'C_3 Intensity'].join('\t');
   assert.equal(parseHeader(noMaxLfq).cellEstimate, 3);
+  const summaries = ['Protein', 'Gene', 'Combined Total Peptides', 'A Intensity', 'A Unique Intensity', 'A Total Intensity',
+    'A Razor Intensity', 'A MaxLFQ Unique Intensity'].join('\t');
+  assert.equal(parseHeader(summaries).cellEstimate, 1, 'unique, total and razor intensities are not cells');
+});
+
+test('MaxQuant SILAC and TMT searches are refused in words, as the service refuses them', async () => {
+  const silac = ['Majority protein IDs', 'Gene names', 'Ratio H/L', 'Intensity', 'Intensity L', 'Intensity H'].join('\t');
+  assert.match(parseHeader(silac).refusal, /SILAC/);
+  const tmt = ['Majority protein IDs', 'Gene names', 'Reporter intensity corrected 1 X1', 'Intensity X1'].join('\t');
+  assert.match(parseHeader(tmt).refusal, /TMT/);
+  await assert.rejects(checkFile(blob(`${tmt}\nP1\tGENE1\t10\t300\n`)), /TMT/);
+});
+
+test('the DIA-NN annotation columns are the service\'s own list', () => {
+  const source = readFileSync(new URL('../../service/pipeline/alignment.py', import.meta.url), 'utf8');
+  const block = /_DIA_NN_ANNOTATION_COLUMNS = frozenset\(\{([\s\S]*?)\}\)/.exec(source)[1];
+  const python = [...block.matchAll(/"([^"]+)"/g)].map((m) => m[1]).sort();
+  assert.deepEqual([...DIANN_ANNOTATIONS].sort(), python);
+  const diann18 = ['Protein.Group', 'Protein.Ids', 'Protein.Names', 'Genes', 'First.Protein.Description', 'a.raw', 'b.raw'].join('\t');
+  assert.equal(parseHeader(diann18).cellEstimate, 2);
 });
 
 test('reading the header line from a slice, and on when asked', async () => {
