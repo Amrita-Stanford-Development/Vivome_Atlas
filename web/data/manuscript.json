@@ -29,6 +29,7 @@
   "research/notebook-outputs/cd8_cd4_diagnosis/diagnosis.json": "a7d47c2c9a693c02bcc2d6175d46ced004dd42dc9b96f04974ba35ff10f8e68c",
   "research/notebook-outputs/donor_heldout/summary.json": "60f2ed9486c99de5ff7346c7beb7bfaf3f6345c51f56fe60a4621dc0cf734fdc",
   "research/notebook-outputs/hao_dc_centres/summary.json": "a428710be5d33c371c30629eb577de2b232079156d83cdba287edcb5d701d265",
+  "research/notebook-outputs/label_stability/summary.json": "658338e994baae4f7c74ee4b4ed9f61f1f8f78138ee977d855551868c82067ef",
   "research/notebook-outputs/li_build/classes.json": "fe99a094191f21474d74e72f737518d2357e2426082c0f265ad8a276da25303b",
   "research/notebook-outputs/li_build/feature_space_provenance.json": "1f985b8c3aac563a0aa9d518f2652fa132d0512b0f2eb1e2a8f600c36f62ea91",
   "research/notebook-outputs/li_development/g1.json": "dc05b03ed430db4b1374f2abb00251ebe0d55a1c7b4a580c18f96f4247b7a5ae",
@@ -2152,6 +2153,36 @@
    "status": "measured",
    "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v3.1 > balanced_accuracy_pct",
    "format": "pct2"
+  },
+  "stab_cells": {
+   "value": 5509,
+   "status": "measured",
+   "basis": "research/notebook-outputs/label_stability/summary.json: pairs > 0.2.0 (v3) to 0.3.0 (v3.1) > all > cells",
+   "format": "count"
+  },
+  "stab_contradicted_since_v31": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/label_stability/summary.json: pairs after 0.3.0 > all > contradicted, the most",
+   "format": "pct1"
+  },
+  "stab_min_since_v31": {
+   "value": 0.9946,
+   "status": "measured",
+   "basis": "research/notebook-outputs/label_stability/summary.json: pairs after 0.3.0 > all > label_stability, the least",
+   "format": "pct1"
+  },
+  "stab_v3_v31": {
+   "value": 0.3144,
+   "status": "measured",
+   "basis": "research/notebook-outputs/label_stability/summary.json: pairs > 0.2.0 (v3) to 0.3.0 (v3.1) > all > label_stability",
+   "format": "pct1"
+  },
+  "stab_v3_v31_contradicted": {
+   "value": 0.1628,
+   "status": "measured",
+   "basis": "research/notebook-outputs/label_stability/summary.json: pairs > 0.2.0 (v3) to 0.3.0 (v3.1) > all > contradicted",
+   "format": "pct1"
   },
   "suite_best_guess_per_upload_balanced": {
    "value": 0.6497,

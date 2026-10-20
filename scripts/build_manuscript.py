@@ -644,6 +644,24 @@ def organs(r: Records, manifest: dict) -> None:
     assert r.json(NO / "organ_v2_declared" / "decision.json")["supported"] is False
 
 
+def stability(r: Records) -> None:
+    """Label stability between releases (release protocol step 5;
+    research/notebooks/label_stability.py): each pair of releases on the same
+    development protein uploads."""
+    path = NO / "label_stability" / "summary.json"
+    pairs = r.json(path)["pairs"]
+    first = "0.2.0 (v3) to 0.3.0 (v3.1)"
+    later = [k for k in pairs if k != first]
+    assert len(later) == 3 and all("all" in pairs[k] for k in pairs)
+    r.put("stab_cells", pairs[first]["all"]["cells"], f"{rel(path)}: pairs > {first} > all > cells", "count")
+    r.pct("stab_v3_v31", path, "pairs", first, "all", "label_stability")
+    r.pct("stab_v3_v31_contradicted", path, "pairs", first, "all", "contradicted")
+    r.put("stab_min_since_v31", round(min(pairs[k]["all"]["label_stability"] for k in later) / 100, 6),
+          f"{rel(path)}: pairs after 0.3.0 > all > label_stability, the least", "pct1")
+    r.put("stab_contradicted_since_v31", round(max(pairs[k]["all"]["contradicted"] for k in later) / 100, 6),
+          f"{rel(path)}: pairs after 0.3.0 > all > contradicted, the most", "pct1")
+
+
 def waiting(r: Records) -> None:
     r.wait("open_sorted_test", "External test",
            "Sorted CD4/CD8 single cells, requested by email; protocol research/benchmark/protocol-sorted-cd4cd8.md")
@@ -679,6 +697,7 @@ def build(manifest: dict | None = None, workflow: dict | None = None) -> dict:
     robustness(r)
     negative(r)
     organs(r, manifest)
+    stability(r)
     waiting(r)
     sources = sorted(r.sources | {WORKFLOW}, key=rel)
     return {

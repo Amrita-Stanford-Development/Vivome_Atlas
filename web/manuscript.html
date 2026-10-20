@@ -1063,6 +1063,14 @@
                 <li>The organ maps: each organ's reference cells and their 3D coordinates, with the list of
                     Tabula Sapiens' organs they come from.
                     <span class="ev-src"><code>web/data/organs/index.json</code>, <code>web/data/organs/tabula_sapiens.json</code></span></li>
+                <li>Answers stay put from one release to the next. On the same <span data-ms="stab_cells"></span>
+                    protein cells, every release since v3.1 keeps at least <span data-ms="stab_min_since_v31"></span>
+                    of the previous release's answers, or narrows or widens them within the same family, and
+                    contradicts <span data-ms="stab_contradicted_since_v31"></span>. v3.1 itself replaced v3's
+                    answers: <span data-ms="stab_v3_v31"></span> kept, <span data-ms="stab_v3_v31_contradicted"></span>
+                    contradicted.
+                    <span class="ev-src"><code>research/notebook-outputs/label_stability/summary.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
                 <li>Release <span data-fact="atlas_version">&nbsp;</span>, its model files listed with sha256; a
                     DOI: <span data-ms="open_doi"></span>.
                     <span class="ev-src"><code>service/model/v4_1/MANIFEST.json</code>, <code>docs/web/manifest.md</code> (release protocol)

@@ -17,6 +17,47 @@ Before changing anything, read [CLAUDE.md](../CLAUDE.md). Before a roadmap
 task, read [todo.md](todo.md) and [roadmap.md](roadmap.md), whose latest
 revision is at the top.
 
+## Where things stand (2026-10-21)
+
+The sections further down ("Where things stand (2026-10-05)", "Next",
+"Open after Track D") describe early October and are kept as history.
+This section is the current state. The changelog in [todo.md](todo.md) and
+the run history have the detail.
+
+- **Release:**
+  - atlas 0.6.0 (tag `atlas-v0.6.0`), serving model v4.1
+    (`service/config.py`, `PIPELINE_VERSION`);
+  - earlier releases: 0.5.0 (v4.2), 0.4.0 (v4.1's first), 0.3.0 (v3.1),
+    0.2.0 (v3).
+  - **Label stability** between them is measured (run history entry 60).
+    Since v3.1, no release has contradicted the one before.
+- **Branch:** `integration/v4` is the working branch.
+- **Hosting:**
+  - the site is on Cloudflare Pages (`vivome-atlas.pages.dev`);
+  - the service is on Google Cloud Run (`docs/web/hosting.md`,
+    `deploy/huggingface/PUBLISH.md`).
+- **Committed, not deployed:** the service reads DIA-NN 1.8, Spectronaut,
+  MaxQuant and FragPipe LFQ tables. Upload faults found by review are
+  fixed, and the parse runs inside the projection slot. Deploy the service
+  first, then the site: the Atlas page's upload label and file check
+  already name the new layouts (`research/todo.md`, the deploy item).
+- **Other organs (Track I):**
+  - the colon, lung and lymph node references were built from Tabula
+    Sapiens RNA alone;
+  - v1 missed its gates for all three, and v2 (lymph node, lung) missed by
+    one gate each. No colon v2 was built;
+  - the three locked tests stay sealed;
+  - a v3 is the owner's decision, and needs fresh protein development sets;
+  - everything is in [organ-references.md](organ-references.md). The
+    organ maps are on the Atlas page, map only.
+- **Blood:** v4.1 unchanged. Training with RNA pools raised every measure
+  in a two-seed diagnostic, but missed its fixed bar (run history entry 61).
+  A pooled candidate is the owner's call.
+- **Service flags** were evaluated on RNA by T1 NB3b (run history entry 18).
+  Whether to retire restricted mode is the owner's call.
+- **Open, for the owner:** the service deploy, an organ v3, a pooled blood
+  candidate, and the DOI.
+
 ## The project
 
 VivOME Atlas is a versioned joint latent atlas of single-cell RNA and
