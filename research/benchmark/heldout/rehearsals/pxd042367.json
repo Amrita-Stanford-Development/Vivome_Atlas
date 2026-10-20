@@ -68,7 +68,91 @@
     "abstained": 0.0,
     "auroc_similarity_lymphoid_over_epithelium": 1.0
   },
-  "baselines": "run before scoring by benchmark/baselines_corrected.py (lymph node option); see research/organ-references.md, Lymph node",
+  "baselines": {
+    "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class) with the queries; the K nearest RNA cells vote.",
+    "rna_cells": 126945,
+    "query_samples": 40,
+    "candidate": "lymph_node_v2",
+    "correlation": {
+      "predicted_class": {
+        "b cell": 15,
+        "plasma cell": 8,
+        "macrophage": 5,
+        "regulatory t cell": 4,
+        "innate lymphoid cell": 3,
+        "classical monocyte": 2,
+        "neutrophil": 1,
+        "cd8-positive, alpha-beta t cell": 1,
+        "endothelial cell": 1
+      },
+      "auroc_b_over_t": 1.0,
+      "argmax_group_by_zone": {
+        "B cell": {
+          "B zone": 23,
+          "T zone": 0,
+          "epithelium": 0
+        },
+        "NK/ILC": {
+          "B zone": 0,
+          "T zone": 0,
+          "epithelium": 3
+        },
+        "T cell": {
+          "B zone": 0,
+          "T zone": 5,
+          "epithelium": 0
+        },
+        "endothelial": {
+          "B zone": 0,
+          "T zone": 0,
+          "epithelium": 1
+        },
+        "granulocyte": {
+          "B zone": 1,
+          "T zone": 0,
+          "epithelium": 0
+        },
+        "monocyte/macrophage": {
+          "B zone": 0,
+          "T zone": 7,
+          "epithelium": 0
+        }
+      }
+    },
+    "pca_knn": {
+      "predicted_class": {
+        "classical monocyte": 27,
+        "neutrophil": 5,
+        "endothelial cell": 3,
+        "intermediate monocyte": 3,
+        "b cell": 1,
+        "mast cell": 1
+      },
+      "auroc_b_over_t": 0.5972,
+      "argmax_group_by_zone": {
+        "B cell": {
+          "B zone": 1,
+          "T zone": 0,
+          "epithelium": 0
+        },
+        "endothelial": {
+          "B zone": 0,
+          "T zone": 0,
+          "epithelium": 1
+        },
+        "granulocyte": {
+          "B zone": 3,
+          "T zone": 0,
+          "epithelium": 0
+        },
+        "monocyte/macrophage": {
+          "B zone": 20,
+          "T zone": 12,
+          "epithelium": 3
+        }
+      }
+    }
+  },
   "rehearsal": {
     "what": "RNA pseudobulk regions of the lymph node reference's test cells, written as a DIA-NN pg_matrix in Excel",
     "cells_per_region": 100,

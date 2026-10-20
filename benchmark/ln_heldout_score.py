@@ -73,7 +73,8 @@ def score(directory: Path) -> tuple[dict, pd.DataFrame]:
         sim = scores["reference_similarity"].astype(float).to_numpy()
         out["epithelium"] = {"regions": int(epi.sum()), "abstained": round(100 * float(scores[epi]["abstained"].mean()), 2),
                              "auroc_similarity_lymphoid_over_epithelium": round(float(roc_auc_score(bt[bt | epi], sim[bt | epi])), 4)}
-    out["baselines"] = "run before scoring by benchmark/baselines_corrected.py (lymph node option); see research/organ-references.md, Lymph node"
+    path = directory / "baselines.json"  # benchmark/organ_baselines.py, run after the intake (rule 9)
+    out["baselines"] = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
     return out, scores
 
 
@@ -88,6 +89,8 @@ def main(argv: "list[str] | None" = None) -> None:
         target = REPO / "research" / "benchmark" / "heldout" / SET / "summary.json"
         if target.exists():
             raise SystemExit("the locked test was scored; it is scored once")
+    if not args.rehearse and not (directory / "baselines.json").exists():
+        raise SystemExit("run the baselines first: python -m benchmark.organ_baselines ln (rule 9)")
     out, scores = score(directory)
     if args.rehearse:
         out["rehearsal"] = json.loads((directory / "labels.json").read_text(encoding="utf-8")).get("source")

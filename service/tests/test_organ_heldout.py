@@ -60,5 +60,30 @@ class ColonNames(unittest.TestCase):
         self.assertIsNone(colon._group_of("enteroendocrine"))
 
 
+class OrganBaselines(unittest.TestCase):
+    """benchmark/organ_baselines.py: the correlation rule finds each class's own
+    profile, and groups take their best class or their summed votes."""
+
+    def test_correlation_picks_the_class_whose_mean_the_sample_follows(self):
+        import numpy as np
+        from benchmark import organ_baselines as ob
+        rng = np.random.default_rng(0)
+        means = rng.normal(size=(3, 40))
+        labels = np.repeat(np.array(["a", "b", "c"]), 50)
+        rna_z = np.repeat(means, 50, axis=0) + rng.normal(scale=0.1, size=(150, 40))
+        q = np.stack([means[2], means[0]]) * 2.0 + 5.0  # on another scale, as a protein upload is
+        q[0, :10] = np.nan
+        scores, classes = ob.correlation_scores(rna_z, labels, q)
+        self.assertEqual([classes[i] for i in scores.argmax(1)], ["c", "a"])
+
+    def test_groups_take_the_best_class_or_the_summed_votes(self):
+        import numpy as np
+        from benchmark import organ_baselines as ob
+        h = {"a": {"group": "G1", "lineage": "L"}, "b": {"group": "G1", "lineage": "L"}, "c": {"group": "G2", "lineage": "L"}}
+        s = np.array([[0.2, 0.5, 0.3]])
+        self.assertEqual(ob.by_level(s, ["a", "b", "c"], h, "group", "max").to_dict("records"), [{"G1": 0.5, "G2": 0.3}])
+        self.assertEqual(ob.by_level(s, ["a", "b", "c"], h, "group", "sum").to_dict("records"), [{"G1": 0.7, "G2": 0.3}])
+
+
 if __name__ == "__main__":
     unittest.main()

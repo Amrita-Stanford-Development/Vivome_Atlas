@@ -77,7 +77,8 @@ def score(directory: Path) -> tuple[dict, pd.DataFrame]:
                                                                             for lbl, lvl in zip(com["label"], com["level"])])), 2)
                                                  if len(com) else None)}
     out["answers"] = answers
-    out["baselines"] = "run before scoring by benchmark/baselines_corrected.py (lung option); see research/organ-references.md, Lung"
+    path = directory / "baselines.json"  # benchmark/organ_baselines.py, run after the intake (rule 10)
+    out["baselines"] = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
     return out, scores
 
 
@@ -92,6 +93,8 @@ def main(argv: "list[str] | None" = None) -> None:
         target = REPO / "research" / "benchmark" / "heldout" / SET / "summary.json"
         if target.exists():
             raise SystemExit("the locked test was scored; it is scored once")
+    if not args.rehearse and not (directory / "baselines.json").exists():
+        raise SystemExit("run the baselines first: python -m benchmark.organ_baselines lung (rule 10)")
     out, scores = score(directory)
     if args.rehearse:
         out["rehearsal"] = json.loads((directory / "labels.json").read_text(encoding="utf-8")).get("source")

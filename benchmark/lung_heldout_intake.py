@@ -36,6 +36,7 @@ from benchmark import heldout_formats as formats
 from benchmark.colon_heldout_intake import DOWNLOADS, PUBLIC, REPO, RESULTS, organ_data, run_candidate
 from benchmark.heldout_intake import facts, write_labels
 from benchmark.sorted_cd4cd8_intake import benchmark_matrix, sha256
+from benchmark.organ_baselines import organ_matrix
 
 PROTOCOL = REPO / "research" / "benchmark" / "protocol-lung-msv000094189.md"
 SET = "msv000094189"
@@ -112,6 +113,8 @@ def intake(labels: pd.DataFrame, matrix: Path, out: Path, candidate: Path, sourc
     (out / "cell_ids.txt").write_text("\n".join(raw.cell_ids) + "\n", encoding="utf-8", newline="\n")
     run = run_candidate(candidate, raw, out, prefix="lung")
     np.savez_compressed(out / "query_benchmark.npz", x=benchmark_matrix(raw), cell_ids=np.array(raw.cell_ids, dtype=object))
+    # the baselines' input on the organ's own gene space (benchmark/organ_baselines.py)
+    np.savez_compressed(out / "query_organ.npz", x=organ_matrix(raw, candidate), cell_ids=np.array(raw.cell_ids, dtype=object))
     record = {"protocol": "research/benchmark/protocol-lung-msv000094189.md", "set": SET, "rehearsal": "rehearsal" in out.name,
               "source": source, "reader": tab.record, "candidate": run, "label_free_facts": facts(raw),
               "outputs": {p.name: sha256(p) for p in sorted(out.iterdir()) if p.suffix in (".csv", ".txt", ".npz")}}

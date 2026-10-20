@@ -111,3 +111,19 @@ candidate. Its intake reads the v2 work folder (`CANDIDATE` in the intake
 script). Its bundle's MANIFEST.json sha256 is added below at freeze, before
 any unsealing, and only if the v2 gates pass. Nothing else in this
 protocol changes.
+
+**Amendment 2, 2026-10-20: where the baselines run.** Rule 8's two
+baselines, correlation and PCA with kNN, run in `benchmark/organ_baselines.py`.
+
+- **Inputs:** the candidate's reference cells over its own gene space,
+  scaled with every class weighted equally, as in
+  `benchmark/baselines_corrected.py`.
+- **When:** after the intake and before the scorer. The intake now also
+  saves the upload over the organ's genes (`query_organ.npz`).
+- **Scoring:** each baseline is scored by this protocol's primary measure,
+  and the scorer copies `baselines.json` into `summary.json`.
+- **Guard:** the scorer refuses to score the real set before the baselines
+  exist.
+- **Rehearsal:** done on the rehearsal intake.
+
+They remain secondary and never decide.
