@@ -462,6 +462,12 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
 
   The site's side (`172b7d3`, `2bf80a4`, `387a6e2`) has the Atlas page's file check, its messages, the /api door that no longer forwards the visitor's identity or address, and security headers on every static file.
 
+  **A deploy review (2026-10-21, read-only) found it safe to deploy** (`59ba7a2`), on conditions now in `deploy/huggingface/PUBLISH.md`:
+  - rebuild the staged Space first: the folder on the PC is the 2026-10-17 build, and `check_space.py` could not tell it from the new code;
+  - `check_space.py` must show `max_upload_mb` 31.0;
+  - redeploy the site soon after;
+  - watch memory on the first large uploads (2,000 cells peaked at 2.8 to 3.0 GiB of the 4 GiB locally).
+
   **Order:** the service first (`deploy/huggingface/PUBLISH.md`), then the site. `ed5188d`'s Atlas page label and file check name MaxQuant and FragPipe; deployed before the service, they would invite files the live service still refuses.
 - [~] **The lung** (owner, 2026-10-18; `research/organ-references.md`, "Lung"):
   - search done; roles set (`side-tests.md`, amendment 9);
@@ -750,5 +756,5 @@ Amendments: sorted 5, lymph node 4 and 5, lung 4 and 5, colon 1. The sorted rehe
 - Fixed from the review: the Workflow page's Python version; RNA zeros vote on the scale again; "PAR1" text files; R's corner rule; the example send; the cancelled-file note; the organ baselines' constant genes.
 - The site sends security headers, and the /api door drops the visitor's location headers.
 - A second review of those fixes found four more, now fixed: R tables with blank missing values, the rows the browser judges, the example send, and the cancelled-file note. A third found none new, and older browser/service differences, now fixed (DIA-NN tables in R's layout, white-space rows, the size check's room for the form, a missing gene map said at load).
-- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d`, `79a27d8`, `1fc905f`, `8847f3e` |
+- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d`, `79a27d8`, `1fc905f`, `8847f3e`, `fcd2b61`, `59ba7a2` |
 | 2026-10-21 | **Accessibility** (a static review): the film's English captions; inert hidden panels on the Atlas page; a status line instead of a status card read out every second; the film's keys; the Workflow cell search; load errors announced. The visible changes wait for the owner (the todo's Accessibility item). | `6adc5fc`, `6d5a748` |
