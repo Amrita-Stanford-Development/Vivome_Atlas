@@ -167,7 +167,10 @@ The Atlas page's Your data tab calls `/api/status` before offering an upload.
 - **503** with a `Retry-After` header (seconds) when every projection slot
   is taken by other uploads. This is checked before the matrix is read:
   reading a large table takes several times its size in memory, so it
-  happens inside the slot;
+  happens inside the slot. So a matrix the service would turn down (a 400,
+  or a 413 for too many cells) can first be answered busy, and gets its
+  refusal once a slot is free. The request's size, its form and a file that
+  is not text are checked before the slot;
 - **400** for a malformed request or matrix.
 
 With `VIVOME_PROXY_SECRET` set, both endpoints answer **403** to any request
