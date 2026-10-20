@@ -699,3 +699,28 @@ because the held out classes were in training.
 | 2026-10-18 | **Track I: the lung started** (run history, entry 54). Search found only lineage-sorted pools (PNNL/LungMAP) and the HPA DVP AT1/AT2 pools. Roles (amendment 9, the owner's choice): MSV000094189 locked, with its protocol committed before any download; MSV000094373, the HPA DVP samples and PXD029341 development; MSV000081973 reserve. Classes: 28, 6 dropped by the class rule; the label audit (`research/notebooks/organ_labels.py`) drops nothing more | this commit |
 | 2026-10-18 | **Track I: the lung's gates, NO GO as built, narrowly** (run history, entry 55). G1 commits 73.4% (bar 75%) with 97.4% correct when committed and 90.3% coverage; whole-tissue uploads commit 99.1%. G3 passes the Protein Atlas AT2/AT1 (AUROC 1.0) and the IPF foci (0.88), misses LungMAP BPD (0.62: the control donors' epithelial pools called macrophage). G2 gap 3.7 points. Nothing tuned; MSV000094189 stays sealed (amendment 10); the owner decides | this commit |
 | 2026-10-18 | **Track I: the lymph node started** (run history, entry 56; the owner chose the next organ with the same recipe). Roles (amendment 11): PXD042367's tonsil niches locked, protocol before any download; PXD047762, Zheng's tonsil pools, the Protein Atlas lymph-node pools and PXD011683 development. Audit: thymocytes are mature T cells (merged), generic monocytes are not monocytes (dropped); 19 classes | this commit |
+| 2026-10-19 | **Track I, organs v2: diagnostics, candidates, freeze** (run history, entry 58). Diagnostics A0 to A6, each with its rules first:
+- no gene exclusions;
+- the sinks come from the encoder on deep mixed pools;
+- the chance floor for the lymph node, the group fallback for the lung;
+- no colon band key, so no colon v2;
+- pool training short of its bar.
+
+Fresh G3 sets were registered (amendment 13), and the candidates pre-registered and frozen (amendment 14, MANIFESTs). | `93566be`, `23f3747`, `bdeefbb`, `d9d400f` |
+| 2026-10-20 | **Track I, organs v2: both NO GO, each by one gate** (run history, entry 59).
+- Lymph node v2: narrow uploads 89.8% correct when committed (bar 90); the miss is the B cells', read as T cells when uploaded alone. The fresh spleen G3 passes (0.917).
+- Lung v2: G1 passes; fresh PXD058626 G3 0.764 (bar 0.8). Markers reach only 0.868 on that set, and PCA kNN 0.774.
+- A7, a user-declared make-up for the colon: not supported.
+
+The locked tests' PCA baseline was re-centred (amendment 3). The three locked tests stay sealed. Options for a v3 are written for the owner. | `2bdbcf3`, `c462b24`, `fa5f9d5`, `ad432d6`, `0000737`, `b40b063`, `e9b4494` |
+| 2026-10-20 | **Label stability between releases, first measured** (run history, entry 60). Since v3.1, no release has contradicted the one before (at least 99.5% stable); it is on the Manuscript. **Blood with RNA pools** (entry 61): every measure rose in both seeds, but it is not promising as written. | `071d2d5`, `8ecf50a`, `eaf935f` |
+| 2026-10-21 | **Service and site, from five read-only reviews** (not deployed; the todo's deploy item).
+- The service reads MaxQuant, FragPipe LFQ and Spectronaut tables, and spreadsheet encodings.
+- Silent misreadings are fixed: SILAC and TMT tables, FragPipe contaminants, R's missing corner, zeros hiding a linear scale, constant genes.
+- Clear refusals, and the parse runs inside the projection slot.
+- The hosted upload limit is 31 MiB, under Cloud Run's 32 MiB per HTTP/1 request.
+- The Atlas page's upload flow is fixed, and the /api door keeps the visitor's identity and address.
+- The pages' numbers are rounded once, malformed records read Pending, and the release cards are right.
+- Organ maps refuse files.
+
+The site was deployed at 22:32 with the Manuscript's v2 table and the organ map fix. | `ed5188d`, `a1fcbbe`, `54a6a9a`, `24391cc`, `172b7d3`, `2bf80a4`, `ce523c8`, `6bfb1bb` |
