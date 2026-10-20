@@ -170,3 +170,33 @@ regions called classical monocyte.
 
 This was fixed on the rehearsals, before any real scoring. The baselines
 stay secondary and never decide.
+
+**Amendment 4, 2026-10-21: the code held to rules 1, 3, 4 and 7, before the
+set is opened.** A read-only review compared the intake, scorer and
+baselines with this protocol. Tests are in
+`service/tests/test_organ_heldout.py`.
+- **Rule 1:** the labels step (`--labels`) now checks for the frozen
+  candidate before it touches any sealed file. Before, only the later
+  intake step did.
+- **Rule 4, the population names:**
+  - a gate written with its sign is read by the sign: CD45+ is immune,
+    EpCAM+ epithelial, CD31+ endothelial, and CD45−CD31−EpCAM− (triple
+    negative) stromal. A negative marker alone names nothing (before,
+    "CD45-" and "CD45neg" read as immune);
+  - the exclusion words (pmx, mix, mixed, unsorted, presort, qc, blank,
+    library) are matched as whole words. "pool" is no longer one, since the
+    samples are themselves pools. A name with both a population and an
+    exclusion word is doubt.
+- **Rule 3, the donor:** a sample whose name gives no donor is doubt, which
+  means a map written by hand from the deposit's metadata. Before, such
+  samples were pooled into one donor, "all", and rule 7's within-donor
+  permutation became unblocked for them.
+- **A map written by hand is checked before anything is written:**
+  - its columns, a donor included;
+  - one row per sample;
+  - groups only the four lineages;
+  - scored as True or False;
+  - every sample in the matrix.
+- **Amendment 2's baselines** are scored by rule 7 as the scorer is: a
+  lineage with fewer than 3 samples is left out of their balanced accuracy
+  too.

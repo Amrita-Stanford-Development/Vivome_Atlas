@@ -3,6 +3,7 @@
 protocol-colon-pxd052341.md, rules 3 to 5). Written before either set is
 opened, on invented names."""
 import unittest
+from pathlib import Path
 
 from benchmark import colon_heldout_intake as colon
 from benchmark import lung_heldout_intake as lung
@@ -44,10 +45,79 @@ class LymphNodeNames(unittest.TestCase):
 
     def test_two_zones_or_none_stop_the_automatic_map(self):
         from benchmark import ln_heldout_intake as ln
-        self.assertIsNone(ln.region("calamari_Whisper_T1_S1-B8_1_3811.d"))  # a T region on plate well B8
+        self.assertEqual(ln.region("calamari_Whisper_T1_S1-B8_1_3811.d"), "T zone")  # plate well B8 is not a region
         self.assertIsNone(ln.region("run_0042.d"))
         with self.assertRaises(SystemExit):
             ln.read_label_map(["tonsil_TZ1", "run_7.d"])
+
+
+class LockedTestGuards(unittest.TestCase):
+    """A review of the locked tests' code against their protocols (2026-10-21),
+    before either set is opened."""
+
+    def test_the_labels_step_checks_for_a_frozen_candidate_before_anything_else(self):
+        from unittest import mock
+
+        from benchmark import ln_heldout_intake as ln
+        from benchmark import lung_heldout_intake as lung
+        for module in (ln, lung):
+            with mock.patch.object(module, "candidate_dir", side_effect=SystemExit("no candidate")), \
+                    mock.patch.object(module, "_check_download", side_effect=AssertionError("a sealed file was touched")):
+                with self.assertRaises(SystemExit) as caught:
+                    module.main(["--labels"])
+            self.assertEqual(str(caught.exception), "no candidate", module.__name__)
+
+    def test_lung_gate_names_are_read_by_their_signs(self):
+        self.assertEqual(lung.population("D006_CD45-CD31-EpCAM-_1"), "stromal")  # triple negative (rule 4)
+        self.assertEqual(lung.population("D006_CD45-EpCAM+_1"), "epithelial")
+        self.assertEqual(lung.population("D006_CD45-CD31+_1"), "endothelial")
+        self.assertIsNone(lung.population("D006_CD45neg_1"))
+        self.assertEqual(lung.population("D12_CD45pos"), "immune")
+
+    def test_lung_exclusions_are_whole_words_and_a_population_beside_one_is_doubt(self):
+        self.assertIsNone(lung.population("D006_Mixed_immune_1"))
+        self.assertEqual(lung.population("D006_EPI_pool1"), "epithelial")
+        self.assertEqual(lung.population("D006_EPI_pooled"), "epithelial")
+        self.assertEqual(lung.population("LMAP_D006_PMX_1"), "excluded")
+
+    def test_a_lung_name_without_a_donor_stops_the_automatic_map(self):
+        with self.assertRaises(SystemExit):
+            lung.read_label_map(["D1_EPI", "EPI_2"])
+
+    def test_lymph_node_well_codes_are_not_regions_and_two_regions_are_doubt(self):
+        from benchmark import ln_heldout_intake as ln
+        self.assertIsNone(ln.region("tonsil_K562_S2-B1_1_3001.d"))
+        self.assertEqual(ln.region("GC3_S2-B4"), "germinal centre")
+        self.assertEqual(ln.region("Mantle2_S2-B5"), "mantle zone")
+        self.assertIsNone(ln.region("GC1_Mantle2"))
+
+    def test_a_label_map_is_checked_before_anything_is_written(self):
+        import tempfile
+
+        import pandas as pd
+        from benchmark.heldout_intake import write_labels
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            bad = pd.DataFrame({"cell_id": ["a", "b"], "group": ["B zone", "T zone"]})  # no scored column
+            with self.assertRaises(SystemExit):
+                write_labels(bad, out, {}, groups={"B zone", "T zone", "epithelium"})
+            self.assertFalse((out / "label_map.csv").exists())
+            spelled = pd.DataFrame({"cell_id": ["a", "b"], "group": ["B zone", "T Zone"], "scored": [True, True]})
+            with self.assertRaises(SystemExit):
+                write_labels(spelled, out, {}, groups={"B zone", "T zone", "epithelium"})
+            twice = pd.DataFrame({"cell_id": ["a", "a"], "group": ["B zone", "T zone"], "scored": [True, True]})
+            with self.assertRaises(SystemExit):
+                write_labels(twice, out, {}, groups={"B zone", "T zone", "epithelium"})
+            no_donor = pd.DataFrame({"cell_id": ["a"], "group": ["epithelial"], "scored": [True]})
+            with self.assertRaises(SystemExit):
+                write_labels(no_donor, out, {}, groups=set(lung.LINEAGES), required=("donor",))
+            self.assertFalse((out / "label_map.csv").exists())
+
+    def test_the_auroc_p_value_refuses_a_score_that_is_not_a_number(self):
+        import numpy as np
+        from benchmark.heldout_score import auroc_with_p
+        with self.assertRaises(ValueError):
+            auroc_with_p(np.array([0.9, np.nan, 0.1, 0.2]), np.array([True, True, False, False]))
 
 
 class ColonNames(unittest.TestCase):
@@ -110,18 +180,23 @@ class OrganBaselines(unittest.TestCase):
         import numpy as np
         import pandas as pd
         from benchmark import organ_baselines as ob
-        h = {"a": {"group": "G1", "lineage": "epithelial"}, "b": {"group": "G2", "lineage": "immune"}}
-        scores = np.array([[0.9, 0.1], [np.nan, np.nan], [0.2, 0.8]])
-        labels = pd.DataFrame({"group": ["epithelial", "epithelial", "immune"], "scored": ["True"] * 3})
+        h = {"a": {"group": "G1", "lineage": "epithelial"}, "b": {"group": "G2", "lineage": "immune"},
+             "c": {"group": "G3", "lineage": "stromal"}}
+        scores = np.array([[0.9, 0.1, 0.0], [np.nan, np.nan, np.nan], [0.8, 0.1, 0.0], [0.7, 0.2, 0.0],
+                           [0.2, 0.8, 0.0], [0.1, 0.9, 0.0], [0.3, 0.6, 0.0], [0.0, 0.0, 0.9], [0.9, 0.0, 0.1]])
+        labels = pd.DataFrame({"group": ["epithelial"] * 4 + ["immune"] * 3 + ["stromal"] * 2, "scored": ["True"] * 9})
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            lung = ob.score_entry("lung", scores, ["a", "b"], h, labels, "max")
+            lung = ob.score_entry("lung", scores, ["a", "b", "c"], h, labels, "max")
             hl = {"b": {"group": "B cell", "lineage": "lymphoid"}, "t": {"group": "T cell", "lineage": "lymphoid"}}
             s = np.array([[0.9, 0.1], [0.1, 0.9], [np.nan, np.nan], [0.8, 0.3], [0.2, 0.7]])
             zones = pd.DataFrame({"group": ["B zone", "T zone", "B zone", "B zone", "T zone"]})
             ln = ob.score_entry("ln", s, ["b", "t"], hl, zones, "max")
         self.assertEqual(lung["unscorable_samples"], 1)
-        self.assertEqual(lung["balanced_accuracy"], 75.0)  # epithelial 1 of 2, immune 1 of 1
+        # stromal has 2 samples, under the protocol's 3, so it is left out (rule 7);
+        # epithelial 3 of 4 (the unscorable one is wrong), immune 3 of 3
+        self.assertEqual(lung["balanced_accuracy"], 87.5)
+        self.assertEqual(lung["lineages_scored"], ["epithelial", "immune"])
         self.assertEqual(lung["called_by_lineage"][ob.NONE]["epithelial"], 1)
         self.assertEqual((ln["unscorable_samples"], ln["auroc_b_over_t"]), (1, 1.0))
         self.assertEqual(ln["argmax_group_by_zone"][ob.NONE]["B zone"], 1)

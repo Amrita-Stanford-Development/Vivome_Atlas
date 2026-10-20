@@ -43,7 +43,15 @@ SET = "msv000094189"
 INPUTS = ("LungMAP2025_MSV000094189/proteinGroups.txt", "LungMAP2025_MSV000094189/Protein_metadata.csv",
           "LungMAP2025_MSV000094189/summary.txt")
 LINEAGES = ("epithelial", "endothelial", "stromal", "immune")
-EXCLUDE = ("pmx", "mix", "unsorted", "presort", "pool", "qc", "blank", "library")
+# Whole words only: the samples are themselves pools of sorted cells, and the
+# paper's own population is "CD45+ mixed immune cells".
+EXCLUDE = frozenset({"pmx", "mix", "mixed", "unsorted", "presort", "presorted", "qc", "blank", "library"})
+# A gate written with its sign: a positive marker names its lineage, a
+# negative one names none, and all three negative is the triple-negative
+# mesenchymal sort (rule 4).
+MARKERS = {"cd45": "immune", "ptprc": "immune", "epcam": "epithelial", "cd326": "epithelial",
+           "cd31": "endothelial", "pecam1": "endothelial", "pecam": "endothelial"}
+SIGNED = re.compile(r"(cd45|ptprc|epcam|cd326|cd31|pecam1|pecam)(\+|-|(?:positive|negative|pos|neg)(?![a-z]))")
 
 
 def out_dir(rehearse: bool) -> Path:
@@ -51,10 +59,16 @@ def out_dir(rehearse: bool) -> Path:
 
 
 def population(name: str) -> "str | None":
-    tokens = [t for t in re.split(r"[^a-z0-9]+", name.lower()) if t]
-    if any(t.startswith(EXCLUDE) for t in tokens):
-        return "excluded"
-    found = set()
+    """Rule 4's population, "excluded", or None for doubt."""
+    low = name.lower()
+    positive, negative = set(), set()
+    for m in SIGNED.finditer(low):
+        (positive if m.group(2) in ("+", "pos", "positive") else negative).add(MARKERS[m.group(1)])
+    tokens = [t for t in re.split(r"[^a-z0-9]+", SIGNED.sub(" ", low)) if t]
+    excluded = any(re.sub(r"\d+$", "", t) in EXCLUDE for t in tokens)
+    found = set(positive)
+    if not positive and negative == {"immune", "endothelial", "epithelial"}:
+        found.add("stromal")
     for t in tokens:
         if t.startswith("epi"):
             found.add("epithelial")
@@ -64,6 +78,8 @@ def population(name: str) -> "str | None":
             found.add("stromal")
         elif t.startswith(("mic", "immune", "cd45")):
             found.add("immune")
+    if excluded:
+        return None if found else "excluded"  # a population beside an exclusion word is doubt
     return found.pop() if len(found) == 1 else None
 
 
@@ -80,10 +96,13 @@ def read_label_map(samples: list[str]) -> tuple[pd.DataFrame, dict]:
             excluded += 1
         elif p is None:
             doubt.append(s)
+        elif donor(s) == "all":
+            doubt.append(s)  # rule 3: a donor is assigned without doubt, or the map is written by hand
         else:
             rows.append({"cell_id": s, "group": p, "donor": donor(s), "scored": True})
     if doubt:
-        raise SystemExit(f"{len(doubt)} sample names name no single population, e.g. {doubt[:3]}: write the map by hand (rule 3)")
+        raise SystemExit(f"{len(doubt)} sample names name no single population or no donor, e.g. {doubt[:3]}: "
+                         "write the map by hand (rule 3)")
     return pd.DataFrame(rows), {"rules": "protocol rules 3 and 4, read from the sample names by meaning (automatic)",
                                 "excluded": excluded}
 
@@ -193,6 +212,7 @@ def main(argv: "list[str] | None" = None) -> None:
     if args.labels:
         if (out / "label_map.csv").exists():
             raise SystemExit("the label map exists; it is written once")
+        candidate_dir(False)  # rule 1: no frozen candidate, no unsealing; checked before any sealed file is read
         source = {rel: _check_download(rel) for rel in INPUTS}
         if args.label_map is not None:
             if not args.reason:
@@ -200,7 +220,8 @@ def main(argv: "list[str] | None" = None) -> None:
             labels, info = pd.read_csv(args.label_map), {"rules": "protocol rules 3 and 4, written by hand", "reason": args.reason}
         else:
             labels, info = read_label_map(formats.read_maxquant(matrix).samples)
-        print("label map sha256", write_labels(labels, out, {**info, "inputs": source}))
+        print("label map sha256", write_labels(labels, out, {**info, "inputs": source}, groups=set(LINEAGES),
+                                               required=("donor",), known_ids=formats.read_maxquant(matrix).samples))
         return
     if (out / "intake.json").exists():
         raise SystemExit("the intake ran; it runs once")

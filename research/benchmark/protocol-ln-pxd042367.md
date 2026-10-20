@@ -154,3 +154,25 @@ regions called classical monocyte.
 
 This was fixed on the rehearsals, before any real scoring. The baselines
 stay secondary and never decide.
+
+**Amendment 4, 2026-10-21: the code held to rules 1 and 3, before the set
+is opened.** A read-only review compared the intake and scorer with this
+protocol. Tests are in `service/tests/test_organ_heldout.py`.
+- **Rule 1:** the labels step (`--labels`) now checks for the frozen
+  candidate before it touches any sealed file. Before, only the later
+  intake step did, so the label step could have opened the set with no
+  candidate.
+- **Rule 3, the region names:**
+  - a plate slot and well, such as "S2-B1", is not read as a region; before,
+    its row letter B made a B-cell region;
+  - a name with two regions is doubt, which means a map written by hand,
+    instead of taking the first alphabetically.
+- **A map written by hand is checked before anything is written:**
+  - its columns;
+  - one row per run;
+  - groups only B zone, T zone or epithelium;
+  - scored as True or False;
+  - every run in the matrix.
+- **Rule 7:** the AUROC's permutation p refuses a score that is not a
+  finite number. NaN fails every comparison, so p would have come out at
+  its smallest.

@@ -231,3 +231,33 @@ its frozen files changed, and nothing it does to a protein upload:
 
 v4.2 is still scored as amendment 3 says: as served, a candidate, reported
 against v4.1. The intake checks the new sha256s.
+
+## Amendment 5, 2026-10-21, before any data: the scripts held to this protocol
+
+A read-only review compared the scripts with this protocol. The scripts now
+do what the protocol already said (tests in
+`service/tests/test_sorted_cd4cd8.py`).
+- **"A qualifying dataset" is checked before any score.**
+  - At least 50 single cells each of CD4 T and CD8 T after quality control
+    (amendment 1: only single cells count).
+  - A dataset short of that gets no scores and no verdicts. Its labels have
+    been read, so `summary.json` records "qualifies": false with the
+    counts, and the scored-once guard holds.
+- **"Caveats, stated alongside every result":** the three caveats are
+  written into `summary.json`, with the single cells per type.
+- **"The donor count is reported beside every figure":**
+  - the labels file may carry a `donor` column (cell_id, type, unit,
+    donor). The donors among the scored single cells, overall and for CD4 T
+    and CD8 T, go into `summary.json`;
+  - without the column, it says "not given in the labels file", and the
+    intake amendment records the donor count from the authors.
+- **The panel's markers** (amendment 2) are found by the uploaded
+  identifiers: a row counts for CD8A, CD8B or CD4 when any member of its
+  identifier group is the marker's symbol or UniProt accession (P01732,
+  P10966, P01730).
+  - The service's gene map does not hold CD8B, so through the map CD8B was
+    always "not measured".
+  - Values are first put on the service's scale, so a 0 in a linear upload
+    is "not detected".
+- **The rehearsal on Fulcher reproduces its committed tables exactly**
+  (largest balanced-accuracy difference 0.000000 points).

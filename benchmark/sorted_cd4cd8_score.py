@@ -75,6 +75,34 @@ ARMS = {("correlation", "correlation"): ("corr", (0,)), ("pca", "shared_knn"): (
         ("maxfuse", "matching"): ("match", (0, 1, 2)), ("scglue", "shared_knn"): ("knn", (0, 1, 2)),
         ("seurat", "native"): ("native", (0,))}
 LEAD_POINTS, BA_SLACK_POINTS = 3.0, 1.0
+MIN_SORTED_CELLS = 50  # "A qualifying dataset": CD4 T and CD8 T, at least 50 single cells each after QC
+# "Caveats, stated alongside every result" (the protocol's three, in its words)
+CAVEATS = (
+    "Batch can stand in for the label: sorted populations are often prepared or run separately, and the amendment "
+    "at intake records how this dataset did it.",
+    "The panel decides what is possible: whether CD8A, CD8B and CD4 are measured, and in what share of cells, is "
+    "recorded at intake.",
+    "Donors are few: the donor count is reported beside every figure.",
+)
+
+
+def qualifies(true_type: np.ndarray) -> tuple[bool, dict]:
+    """Whether the scored single cells hold at least MIN_SORTED_CELLS each of
+    CD4 T and CD8 T (the protocol's "A qualifying dataset"; amendment 1: only
+    single cells count), and the two counts."""
+    counts = {t: int((np.asarray(true_type) == t).sum()) for t in ("CD4T", "CD8T")}
+    return all(n >= MIN_SORTED_CELLS for n in counts.values()), counts
+
+
+def donor_counts(labels: pd.DataFrame, single: np.ndarray) -> "dict | str":
+    """Donors among the scored single cells, overall and per type, from the
+    labels file's donor column when it has one (amendment 5)."""
+    if "donor" not in labels.columns:
+        return "not given in the labels file"
+    sub = labels[np.asarray(single)]
+    out = {"all": int(sub["donor"].nunique())}
+    out.update({t: int(g["donor"].nunique()) for t, g in sub.groupby("type") if t in ("CD4T", "CD8T")})
+    return out
 
 
 def tables_dir(rehearse: bool) -> Path:
@@ -221,6 +249,17 @@ def main(argv: list[str] | None = None) -> None:
     bulk = (labels["unit"] == "bulk").to_numpy() & labels["type"].isin(ALL_TYPES).to_numpy()
     sorted_types = tuple(t for t in ALL_TYPES if (labels["type"].to_numpy()[single] == t).any())
     true_type = labels["type"].to_numpy()[single]
+    ok, counts = qualifies(true_type)
+    if not ok:
+        # Not a qualifying dataset: no scores and no verdicts. The labels have been read, so a record of why is
+        # written, and the scored-once guard then holds.
+        tables.mkdir(parents=True, exist_ok=True)
+        (tables / "summary.json").write_text(json.dumps({
+            "protocol": "research/benchmark/protocol-sorted-cd4cd8.md", "rehearsal": rehearse, "qualifies": False,
+            "reason": f"single cells after QC: CD4 T {counts['CD4T']}, CD8 T {counts['CD8T']}; at least "
+                      f"{MIN_SORTED_CELLS} each are needed", "labels_sha256": None if rehearse else args.sha256},
+            indent=2) + "\n", encoding="utf-8", newline="\n")
+        sys.exit("not a qualifying dataset: " + json.dumps(counts))
 
     rows = []
     for (name, label_set, seed, rule), pred in predictions.items():
@@ -278,7 +317,8 @@ def main(argv: list[str] | None = None) -> None:
     (tables / "answers.json").write_text(json.dumps(answer_table, indent=2) + "\n", encoding="utf-8", newline="\n")
     summary = {"protocol": "research/benchmark/protocol-sorted-cd4cd8.md", "rehearsal": rehearse,
                "sorted_types": list(sorted_types), "n_single_scored": int(single.sum()), "n_bulk_scored": int(bulk.sum()),
-               "baseline_runs_not_scored": gaps, "verdicts": verdicts,
+               "baseline_runs_not_scored": gaps, "verdicts": verdicts, "qualifies": True,
+               "single_cells_by_type": counts, "donors": donor_counts(labels.reset_index(), single), "caveats": list(CAVEATS),
                "labels_sha256": None if rehearse else args.sha256}
     (tables / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n")
     ours_rows = per_run[(per_run["reference_labels"] == "own") & (per_run["unit"] == "single")]

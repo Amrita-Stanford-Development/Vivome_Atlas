@@ -68,3 +68,37 @@ class GuardTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReviewGuardTests(unittest.TestCase):
+    """A review of the scripts against the protocol (2026-10-21), before any data."""
+
+    def test_a_dataset_needs_50_single_cells_each_of_cd4_and_cd8_t(self):
+        types = np.array(["CD4T"] * 60 + ["CD8T"] * 10 + ["B"] * 60)
+        ok, counts = score.qualifies(types)
+        self.assertFalse(ok)
+        self.assertEqual(counts, {"CD4T": 60, "CD8T": 10})
+        self.assertTrue(score.qualifies(np.array(["CD4T"] * 50 + ["CD8T"] * 50))[0])
+        self.assertFalse(score.qualifies(np.array(["CD4T"] * 80))[0])
+
+    def test_the_caveats_are_the_protocols_and_donors_are_counted(self):
+        text = PROTOCOL.read_text(encoding="utf-8")
+        for caveat in score.CAVEATS:
+            self.assertIn(caveat.split(":")[0], text)
+        import pandas as pd
+        labels = pd.DataFrame({"type": ["CD4T", "CD4T", "CD8T", "B"], "unit": ["single"] * 4, "donor": ["d1", "d2", "d1", "d1"]})
+        single = np.array([True, True, True, False])
+        self.assertEqual(score.donor_counts(labels, single), {"all": 2, "CD4T": 2, "CD8T": 1})
+        self.assertEqual(score.donor_counts(labels.drop(columns="donor"), single), "not given in the labels file")
+
+    def test_markers_are_found_by_the_uploaded_identifiers(self):
+        from service.pipeline import alignment
+        raw = alignment.RawMatrix(gene_names=["CD8A;CD8B", "P10966", "CD4", "PTPRC"], cell_ids=["c1", "c2", "c3"],
+                                  values=np.array([[1000.0, 0.0, 2000.0], [500.0, 600.0, 0.0], [0.0, 0.0, 900.0],
+                                                   [100.0, 100.0, 100.0]], np.float32))
+        facts = intake.marker_facts(raw)
+        self.assertEqual(facts["CD8B"]["rows"], 2)
+        self.assertEqual(facts["CD8A"]["rows"], 1)
+        self.assertEqual(facts["CD4"]["rows"], 1)
+        # in a linear upload 0 is "not detected"
+        self.assertAlmostEqual(facts["CD4"]["cells_observed_pct"], 33.33, places=2)

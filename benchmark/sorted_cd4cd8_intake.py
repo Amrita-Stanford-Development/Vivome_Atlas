@@ -63,6 +63,9 @@ FROZEN = {
 }
 MODELS = {"v31": "v3.1", "v41": "v4.1", "v42": "v4.2", "v52": "v5.2"}  # table name -> pipeline version
 MARKERS = ("CD8A", "CD8B", "CD4")
+# Each marker by its symbol or its UniProt accession, as an upload may name it.
+# CD8B is outside the service's gene map, so the map cannot be used for this.
+MARKER_IDS = {"CD8A": {"CD8A", "P01732"}, "CD8B": {"CD8B", "P10966"}, "CD4": {"CD4", "P01730"}}
 
 
 def out_dir(rehearse: bool) -> Path:
@@ -101,12 +104,16 @@ def load_bundle(version: str):
 
 def marker_facts(raw: alignment.RawMatrix) -> dict:
     """Rule 2's allowed facts about the panel: is each marker measured, and in
-    what share of cells (identifiers resolved by the service's gene map)."""
-    symbols = gene_ids.resolve_to_feature_symbols(raw.gene_names)
+    what share of cells. A row counts for a marker when any member of its
+    identifier group (split on ";") is the marker's symbol or UniProt
+    accession. Values are on the service's scale first, so a 0 in a linear
+    upload is "not detected", as the service reads it."""
+    groups = [{p.strip().upper().split("-")[0] for p in str(g).split(";") if p.strip()} for g in raw.gene_names]
+    values, _ = alignment.detect_and_transform_value_scale(np.asarray(raw.values, dtype=np.float32))
     facts = {}
     for marker in MARKERS:
-        rows = [i for i, s in enumerate(symbols) if s == marker]
-        observed = np.isfinite(raw.values[rows]).any(axis=0) if rows else np.zeros(len(raw.cell_ids), bool)
+        rows = [i for i, g in enumerate(groups) if g & MARKER_IDS[marker]]
+        observed = np.isfinite(values[rows]).any(axis=0) if rows else np.zeros(len(raw.cell_ids), bool)
         facts[marker] = {"rows": len(rows), "cells_observed_pct": round(100 * float(observed.mean()), 2)}
     return facts
 

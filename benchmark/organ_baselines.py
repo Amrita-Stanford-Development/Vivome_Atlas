@@ -169,6 +169,11 @@ def score_entry(organ: str, scores: np.ndarray, classes: list, hierarchy: dict, 
     else:
         truth = labels["group"].to_numpy()
         scored = labels["scored"].astype(str).to_numpy() == "True"
+        # rule 7: a lineage with fewer than 3 scored samples is left out, as the scorer does
+        counts = pd.Series(truth[scored]).value_counts()
+        kept = sorted(g for g, n in counts.items() if n >= 3)
+        scored = scored & np.isin(truth, kept)
+        entry["lineages_scored"] = kept
         called = called_at(by_level(scores, classes, hierarchy, "lineage", how), scorable)
         entry["balanced_accuracy"] = round(100 * float(balanced_accuracy_score(truth[scored], called[scored])), 2)
         entry["called_by_lineage"] = pd.crosstab(pd.Series(truth[scored], name="truth"), pd.Series(called[scored], name="called")).to_dict()

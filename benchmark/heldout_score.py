@@ -75,7 +75,11 @@ def rehearsal_record(name: str) -> Path:
 def auroc_with_p(scores: np.ndarray, positive: np.ndarray, permutations: int = PERMUTATIONS,
                  seed: int = SEED) -> tuple[float, float]:
     """AUROC of `scores` for positive over negative (ties count half), and
-    the one-sided permutation p: (1 + permutations at least as high) / (1 + permutations)."""
+    the one-sided permutation p: (1 + permutations at least as high) / (1 + permutations).
+    A score that is not a finite number is refused: NaN fails every comparison,
+    so p would come out at its smallest and the test would pass."""
+    if not np.isfinite(np.asarray(scores, dtype=float)).all():
+        raise ValueError("a score is not a finite number; the AUROC and its p are not computed")
     ranks = rankdata(scores)
     n1, n0 = int(positive.sum()), int((~positive).sum())
     scale = n1 * n0

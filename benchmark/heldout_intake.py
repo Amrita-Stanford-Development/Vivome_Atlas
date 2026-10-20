@@ -394,12 +394,37 @@ def intake(name: str, labels: pd.DataFrame, sources: dict, out: Path, source_rec
     return record
 
 
-def write_labels(labels: pd.DataFrame, out: Path, info: dict) -> str:
+def check_labels(labels: pd.DataFrame, groups: "set | None" = None, required: tuple = (),
+                 known_ids: "list | None" = None) -> pd.DataFrame:
+    """A label map, checked before anything is written: its columns, one row
+    per id, groups from the protocol's own list, scored as booleans, every id
+    in the matrix. Returns the map with scored as booleans."""
+    missing = [c for c in ("cell_id", "group", "scored", *required) if c not in labels.columns]
+    if missing:
+        raise SystemExit(f"the label map has no {missing} column")
+    if labels["cell_id"].astype(str).duplicated().any():
+        raise SystemExit("the label map names a sample twice")
+    if groups is not None and not set(labels["group"]) <= set(groups):
+        raise SystemExit(f"the label map has groups outside {sorted(groups)}: {sorted(set(labels['group']) - set(groups))}")
+    truth = {True: True, False: False, "True": True, "False": False, "true": True, "false": False}
+    if not labels["scored"].map(lambda v: v in truth).all():
+        raise SystemExit("the label map's scored column must be True or False")
+    for c in required:
+        if labels[c].astype(str).str.strip().isin(["", "nan"]).any():
+            raise SystemExit(f"the label map has a row without a {c}")
+    if known_ids is not None and not set(labels["cell_id"].astype(str)) <= set(map(str, known_ids)):
+        raise SystemExit("the label map names a sample the matrix does not have")
+    return labels.assign(scored=labels["scored"].map(truth))
+
+
+def write_labels(labels: pd.DataFrame, out: Path, info: dict, groups: "set | None" = None, required: tuple = (),
+                 known_ids: "list | None" = None) -> str:
+    labels = check_labels(labels, groups, required, known_ids)
+    counts = labels.groupby("group")["scored"].agg(["size", "sum"]).astype(int)
     out.mkdir(parents=True, exist_ok=True)
     path = out / "label_map.csv"
     labels.to_csv(path, index=False, lineterminator="\n")
     digest = sha256(path)
-    counts = labels.groupby("group")["scored"].agg(["size", "sum"]).astype(int)
     (out / "labels.json").write_text(json.dumps({
         "label_map_sha256": digest, "rows": len(labels),
         "groups": {g: {"included": int(r["size"]), "scored": int(r["sum"])} for g, r in counts.iterrows()},

@@ -66,13 +66,17 @@ def out_dir(rehearse: bool) -> Path:
     return RESULTS / (f"heldout_{SET}_rehearsal" if rehearse else f"heldout_{SET}")
 
 
+# A plate slot and well, as in "S2-B1", names no region (its letter is a row).
+SLOT_WELL = re.compile(r"(?<![a-z0-9])s\d+-[a-p]\d+(?![0-9])")
+
+
 def region(name: str) -> "str | None":
-    tokens = [re.sub(r"\d+$", "", t) for t in re.split(r"[^a-z0-9]+", name.lower()) if t]
+    """Rule 3's region, or None for doubt (no region, or more than one)."""
+    tokens = [re.sub(r"\d+$", "", t) for t in re.split(r"[^a-z0-9]+", SLOT_WELL.sub(" ", name.lower())) if t]
     if any(t in EXCLUDE for t in tokens):
         return "excluded"
     found = {r for r, words in WORDS.items() for t in tokens if t in words}
-    zones = {ZONE[r] for r in found}
-    return found.pop() if len(found) == 1 else (sorted(found)[0] if len(zones) == 1 and found else None)
+    return found.pop() if len(found) == 1 else None
 
 
 def read_label_map(runs: list[str]) -> tuple[pd.DataFrame, dict]:
@@ -218,6 +222,7 @@ def main(argv: "list[str] | None" = None) -> None:
     if args.labels:
         if (out / "label_map.csv").exists():
             raise SystemExit("the label map exists; it is written once")
+        candidate_dir(False)  # rule 1: no frozen candidate, no unsealing; checked before any sealed file is read
         source = {rel: _check_download(rel) for rel in INPUTS}
         matrix = matrix_from_archive(PUBLIC / INPUTS[0], out / "archive")
         if args.label_map is not None:
@@ -226,7 +231,8 @@ def main(argv: "list[str] | None" = None) -> None:
             labels, info = pd.read_csv(args.label_map), {"rules": "protocol rule 3, written by hand", "reason": args.reason}
         else:
             labels, info = read_label_map(read_matrix(matrix).cell_ids)
-        print("label map sha256", write_labels(labels, out, {**info, "inputs": source, "matrix": matrix.name}))
+        print("label map sha256", write_labels(labels, out, {**info, "inputs": source, "matrix": matrix.name},
+                                               groups=set(ZONE.values()), known_ids=read_matrix(matrix).cell_ids))
         return
     if (out / "intake.json").exists():
         raise SystemExit("the intake ran; it runs once")
