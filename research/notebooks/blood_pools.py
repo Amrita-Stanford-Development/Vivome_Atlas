@@ -39,6 +39,7 @@ v2_diagnostics/pools/.
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import sys
@@ -71,6 +72,12 @@ GAIN, COST = 2.0, 2.0
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def gene_map(bundle_dir: Path):
+    """An organ bundle's own gene map; blood's bundle has none, since the
+    service's default map is blood's."""
+    return bundle.gene_map(bundle_dir) if (bundle_dir / "gene_id_map.tsv").exists() else contextlib.nullcontext()
 
 
 def fulcher_balanced(member: "a6.Member", b) -> float:
@@ -132,7 +139,7 @@ def main() -> None:
             del model, s, Xa
             torch.cuda.empty_cache()
             member = a6.Member(encoder.load_encoder(path), cen, float(temperatures[f"V2_batchgene_aug_seed{seed}.pt"]), names)
-            with bundle.gene_map(build_dir / "bundle"):
+            with gene_map(build_dir / "bundle"):
                 entry = {"validation_balanced": round(100 * best["val_bal"], 2), "epochs_run": info["epochs_run"],
                          "calib_top1": a6.suite_top1(member, b, suite, X, y, profiles),
                          "fulcher_balanced_6types": fulcher_balanced(member, b), "checkpoint_sha256": sha256(path)}
