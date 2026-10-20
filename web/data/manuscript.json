@@ -41,12 +41,18 @@
   "research/notebook-outputs/lung_development/g3.json": "6e17d46dcb3e28057411b0b367774313a93878ec6525b51f4b54504602cfb19b",
   "research/notebook-outputs/lung_development/gates.json": "cc322b8f06270f98f70359b676e62683f71182159c17b8f6bfaaf8691b63c254",
   "research/notebook-outputs/lung_donor_heldout/summary.json": "adf27803e0507c7a9a5b38da09b595edd81a58d7f1ba84becac6daa0fbe3e184",
+  "research/notebook-outputs/lung_v2_development/g1.json": "02a46daff41e783dcc320ee310cb47947feebd3cdbd912aee901e905ab465447",
+  "research/notebook-outputs/lung_v2_development/g3.json": "5228d7b2bde5d82c49e1e605fb85f4728d29ad23cd5e80d2d651a8e36a3fbf23",
+  "research/notebook-outputs/lung_v2_development/gates.json": "33349aa058d801c02d7af5cb0a44686f224d03ecb0b51ebdc134f5a16edfff9d",
   "research/notebook-outputs/lymph_node_build/classes.json": "e1e4f18305001549861ae131377087ead25b68f488d50b58fb5f0c31822cfe99",
   "research/notebook-outputs/lymph_node_build/feature_space_provenance.json": "0323cf9678acb55fabf520041ddf42661f147dc3c3ab5476467221438bac8204",
   "research/notebook-outputs/lymph_node_development/g1.json": "539fd6df59fc2f70b82202ddc6a86421fd99e467e4c4a9802fc51fa6f434c3a1",
   "research/notebook-outputs/lymph_node_development/g3.json": "fe2d76f19340ec1a8296209d194331477457609f75ce04dfe39399438c685175",
   "research/notebook-outputs/lymph_node_development/gates.json": "9943a270de073c3ff173f629020884b33c45157db2346968556e58c05a0bee8e",
   "research/notebook-outputs/lymph_node_donor_heldout/summary.json": "8b9d1e99c8caabacd3f522f9008e0a40328e21ae2bdce85875c44f48f57da1b8",
+  "research/notebook-outputs/lymph_node_v2_development/g1.json": "4eee895c3b42703992735454675eb8358461bfcb961f05337a6344f73e02b742",
+  "research/notebook-outputs/lymph_node_v2_development/g3.json": "fff2972392c2ff2bdcd6a4ac93a3c28495baf73b6514a91ed045049a3933b561",
+  "research/notebook-outputs/lymph_node_v2_development/gates.json": "a1284ff26ca06fb7bd0cda3e58f76faea34f09dbbe2f529510ad40bddb9c9ca6",
   "research/notebook-outputs/marker_audit/detection.csv": "fa91a96dab1b6971981951c490df3e2391e9a11fb5a1f20392736aa299e6ba37",
   "research/notebook-outputs/narrow_upload/committed.json": "77ce1ebd5c5672f9b9a12354d43f43458ee310f08a4a3a4fb9969ffeea7f8069",
   "research/notebook-outputs/nb1b/nb1b_summary.json": "e4821b1377be064b00879c9d8337ee7089b3a51d44bebbc5356af51b17072c41",
@@ -59,6 +65,8 @@
   "research/notebook-outputs/nb3c/summary.json": "fbe6474af10cdcdbef0fd108012c8a1a2f257357c533e97d7c3889f490beff1d",
   "research/notebook-outputs/ood_candidates/summary.json": "73ec982af811e3cbb990a28050defe1d61907997f9838df56638880816ba5a8c",
   "research/notebook-outputs/organ_builder_blood/loader.json": "7d4efda7d9e79acdc9d5d636448f13c9d15db8f1184eb01e4c0b3d9066330b73",
+  "research/notebook-outputs/organ_v2_declared/decision.json": "ce4e92134b6bab7292ce7be6e679b5783fd1cbd90bf0fab0519667c8dd793ffa",
+  "research/notebook-outputs/organ_v2_declared/real.json": "748b242973f9d7fad5efa4087bd6240e34c865ba1f00fa58c5876734bad2f29f",
   "research/notebook-outputs/protein_coverage/coverage.json": "6ef48fc35371ee34fd3d210620218113e6b5eac73970cbe73ab1edf7d10b9ea8",
   "research/notebook-outputs/single_type_uploads/summary.json": "2a7dfca0a53b854134ae68111f70fcefe7eb085b9c600ea509dcec63f4d94163",
   "research/notebook-outputs/upload_independent_probe/summary.json": "986efa3284c2bc35a2bf9a083990bae00bcf19c7f67b0b48e17ea679b151ecf1",
@@ -1143,6 +1151,12 @@
    "phase": "External test",
    "note": "Sorted CD4/CD8 single cells, requested by email; protocol research/benchmark/protocol-sorted-cd4cd8.md"
   },
+  "org_a7_kabatnik_wrong": {
+   "value": 0.4444,
+   "status": "measured",
+   "basis": "research/notebook-outputs/organ_v2_declared/real.json: Kabatnik classes 1, 2 and 4 > declared_mixed > committed_and_wrong",
+   "format": "pct1"
+  },
   "org_builder_differences": {
    "value": 0,
    "status": "measured",
@@ -1243,6 +1257,48 @@
    "value": 0.1667,
    "status": "measured",
    "basis": "research/notebook-outputs/li_development/g3.json: zheng > group_accuracy",
+   "format": "pct1"
+  },
+  "org_ln2_g3": {
+   "value": 0.9172,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g3.json: auroc",
+   "format": "fixed3"
+  },
+  "org_ln2_mixed_committed": {
+   "value": 0.9647,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g1.json: mixed > committed",
+   "format": "pct1"
+  },
+  "org_ln2_mixed_correct_when_committed": {
+   "value": 0.9765,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g1.json: mixed > correct_when_committed",
+   "format": "pct1"
+  },
+  "org_ln2_mixed_coverage": {
+   "value": 0.9238,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g1.json: mixed > coverage",
+   "format": "pct1"
+  },
+  "org_ln2_mixed_false_abstention": {
+   "value": 0.0032,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g1.json: mixed > false_abstention",
+   "format": "pct2"
+  },
+  "org_ln2_narrow_correct_when_committed": {
+   "value": 0.8982,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g1.json: narrow > correct_when_committed",
+   "format": "pct2"
+  },
+  "org_ln2_v1_committed": {
+   "value": 0.9555,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lymph_node_v2_development/g1.json: as_written_v1 > committed",
    "format": "pct1"
   },
   "org_ln_b_share": {
@@ -1352,6 +1408,48 @@
    "status": "measured",
    "basis": "research/notebook-outputs/lymph_node_development/g3.json: zheng_tonsil > pools",
    "format": "count"
+  },
+  "org_lung2_g3": {
+   "value": 0.7639,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g3.json: auroc",
+   "format": "fixed3"
+  },
+  "org_lung2_mixed_committed": {
+   "value": 0.9727,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g1.json: mixed > committed",
+   "format": "pct1"
+  },
+  "org_lung2_mixed_correct_when_committed": {
+   "value": 0.9861,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g1.json: mixed > correct_when_committed",
+   "format": "pct1"
+  },
+  "org_lung2_mixed_coverage": {
+   "value": 0.9658,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g1.json: mixed > coverage",
+   "format": "pct1"
+  },
+  "org_lung2_mixed_false_abstention": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g1.json: mixed > false_abstention",
+   "format": "pct2"
+  },
+  "org_lung2_narrow_correct_when_committed": {
+   "value": 0.9009,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g1.json: narrow > correct_when_committed",
+   "format": "pct2"
+  },
+  "org_lung2_v1_committed": {
+   "value": 0.8366,
+   "status": "measured",
+   "basis": "research/notebook-outputs/lung_v2_development/g1.json: as_written_v1 > committed",
+   "format": "pct1"
   },
   "org_lung_bpd": {
    "value": 0.62,

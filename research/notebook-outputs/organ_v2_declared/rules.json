@@ -1,0 +1,18 @@
+{
+  "script_sha256": "70f17b3e716a80fe43026fbb6f97df43172177562d01416cdde5986740f246fc",
+  "started": "2026-10-20T22:16:05",
+  "organ": "large_intestine",
+  "shares": [
+    0.0,
+    0.05,
+    0.1,
+    0.25,
+    0.5
+  ],
+  "bars": {
+    "kabatnik_wrong_max": 10.0,
+    "cwc_at_10": 90.0
+  },
+  "a2_sha256": "65010ef5ad71057ad76622babe3e9371781adda4e9f03dd3a0cb38a2462e72ea",
+  "cache_sha256": "4e550e98189cf125f5ee5d8923a87d06a33e900cccb3b0b9058f334451d02781"
+}

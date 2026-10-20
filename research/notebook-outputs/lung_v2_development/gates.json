@@ -1,0 +1,31 @@
+{
+  "finished": "2026-10-20T22:19:11",
+  "gates": {
+    "G1 mixed committed": {
+      "value": 97.27,
+      "pass": true
+    },
+    "G1 mixed correct when committed": {
+      "value": 98.61,
+      "pass": true
+    },
+    "G1 mixed coverage": {
+      "value": 96.58,
+      "pass": true
+    },
+    "G1 mixed false abstention": {
+      "value": 0.0,
+      "pass": true
+    },
+    "G1 narrow correct when committed": {
+      "value": 90.09,
+      "pass": true
+    },
+    "G3 PXD058626 AUROC": {
+      "value": 0.7639,
+      "pass": false
+    }
+  },
+  "all_pass": false,
+  "seconds": 1201
+}

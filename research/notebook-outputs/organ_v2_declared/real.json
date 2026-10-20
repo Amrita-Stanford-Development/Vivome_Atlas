@@ -1,0 +1,566 @@
+[
+  {
+    "upload": "Kabatnik Class1 alone",
+    "cells": 9,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 77.78,
+      "levels": {
+        "class": 2,
+        "group": 0,
+        "lineage": 5
+      },
+      "committed_lineages": {
+        "immune": 5,
+        "epithelial": 2
+      },
+      "committed_and_wrong": 55.56,
+      "correct_when_committed": 28.57
+    }
+  },
+  {
+    "upload": "Kabatnik Class2 alone",
+    "cells": 9,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 77.78,
+      "levels": {
+        "class": 1,
+        "group": 0,
+        "lineage": 6
+      },
+      "committed_lineages": {
+        "immune": 6,
+        "epithelial": 1
+      },
+      "committed_and_wrong": 66.67,
+      "correct_when_committed": 14.29
+    }
+  },
+  {
+    "upload": "Kabatnik Class4 alone",
+    "cells": 9,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 55.56,
+      "levels": {
+        "class": 1,
+        "group": 0,
+        "lineage": 4
+      },
+      "committed_lineages": {
+        "epithelial": 3,
+        "immune": 2
+      },
+      "committed_and_wrong": 55.56,
+      "correct_when_committed": 0.0
+    }
+  },
+  {
+    "upload": "Kabatnik classes 1, 2 and 4",
+    "cells": 27,
+    "expected": "mixed",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 85.19,
+      "levels": {
+        "class": 6,
+        "group": 12,
+        "lineage": 5
+      },
+      "committed_lineages": {
+        "epithelial": 10,
+        "immune": 12,
+        "stromal": 1
+      },
+      "committed_and_wrong": 44.44,
+      "correct_when_committed": 47.83
+    }
+  },
+  {
+    "upload": "Zheng macrophage alone",
+    "cells": 6,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 66.67,
+      "levels": {
+        "class": 4,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {
+        "immune": 1,
+        "epithelial": 3
+      },
+      "committed_and_wrong": 50.0,
+      "correct_when_committed": 25.0
+    }
+  },
+  {
+    "upload": "Zheng cd8 alone",
+    "cells": 6,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 83.33,
+      "levels": {
+        "class": 2,
+        "group": 0,
+        "lineage": 3
+      },
+      "committed_lineages": {
+        "immune": 2,
+        "epithelial": 3
+      },
+      "committed_and_wrong": 83.33,
+      "correct_when_committed": 0.0
+    }
+  },
+  {
+    "upload": "Zheng cd4 alone",
+    "cells": 6,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 66.67,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 4
+      },
+      "committed_lineages": {
+        "immune": 3,
+        "epithelial": 1
+      },
+      "committed_and_wrong": 16.67,
+      "correct_when_committed": 75.0
+    }
+  },
+  {
+    "upload": "Zheng all three",
+    "cells": 18,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 16.67,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 3
+      },
+      "committed_lineages": {
+        "epithelial": 3
+      },
+      "committed_and_wrong": 16.67,
+      "correct_when_committed": 0.0
+    },
+    "declared_mixed": {
+      "committed": 88.89,
+      "levels": {
+        "class": 6,
+        "group": 3,
+        "lineage": 7
+      },
+      "committed_lineages": {
+        "stromal": 4,
+        "epithelial": 3,
+        "immune": 9
+      },
+      "committed_and_wrong": 38.89,
+      "correct_when_committed": 56.25
+    }
+  },
+  {
+    "upload": "Fulcher 2026, full",
+    "cells": 1275,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 24.94,
+      "levels": {
+        "class": 0,
+        "group": 195,
+        "lineage": 123
+      },
+      "committed_lineages": {
+        "immune": 318
+      },
+      "committed_and_wrong": 0.08,
+      "correct_when_committed": 99.69
+    },
+    "declared_mixed": {
+      "committed": 87.14,
+      "levels": {
+        "class": 174,
+        "group": 864,
+        "lineage": 73
+      },
+      "committed_lineages": {
+        "immune": 1050,
+        "epithelial": 47,
+        "stromal": 14
+      },
+      "committed_and_wrong": 7.03,
+      "correct_when_committed": 91.93
+    }
+  },
+  {
+    "upload": "Fulcher 2026, CD4T alone",
+    "cells": 308,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 3.25,
+      "levels": {
+        "class": 0,
+        "group": 6,
+        "lineage": 4
+      },
+      "committed_lineages": {
+        "immune": 10
+      },
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": 100.0
+    },
+    "declared_mixed": {
+      "committed": 71.75,
+      "levels": {
+        "class": 63,
+        "group": 70,
+        "lineage": 88
+      },
+      "committed_lineages": {
+        "immune": 162,
+        "epithelial": 39,
+        "stromal": 20
+      },
+      "committed_and_wrong": 29.55,
+      "correct_when_committed": 58.82
+    }
+  },
+  {
+    "upload": "Fulcher 2026, CD8T alone",
+    "cells": 181,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 2.76,
+      "levels": {
+        "class": 0,
+        "group": 2,
+        "lineage": 3
+      },
+      "committed_lineages": {
+        "immune": 5
+      },
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": 100.0
+    },
+    "declared_mixed": {
+      "committed": 68.51,
+      "levels": {
+        "class": 52,
+        "group": 30,
+        "lineage": 42
+      },
+      "committed_lineages": {
+        "immune": 90,
+        "epithelial": 16,
+        "stromal": 18
+      },
+      "committed_and_wrong": 32.6,
+      "correct_when_committed": 52.42
+    }
+  },
+  {
+    "upload": "Fulcher 2026, NK alone",
+    "cells": 150,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 4.0,
+      "levels": {
+        "class": 0,
+        "group": 3,
+        "lineage": 3
+      },
+      "committed_lineages": {
+        "immune": 6
+      },
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": 100.0
+    },
+    "declared_mixed": {
+      "committed": 67.33,
+      "levels": {
+        "class": 37,
+        "group": 33,
+        "lineage": 31
+      },
+      "committed_lineages": {
+        "immune": 74,
+        "epithelial": 18,
+        "stromal": 9
+      },
+      "committed_and_wrong": 27.33,
+      "correct_when_committed": 59.41
+    }
+  },
+  {
+    "upload": "Fulcher 2026, B alone",
+    "cells": 102,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.98,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 1
+      },
+      "committed_lineages": {
+        "immune": 1
+      },
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": 100.0
+    },
+    "declared_mixed": {
+      "committed": 58.82,
+      "levels": {
+        "class": 20,
+        "group": 23,
+        "lineage": 17
+      },
+      "committed_lineages": {
+        "immune": 47,
+        "epithelial": 11,
+        "stromal": 2
+      },
+      "committed_and_wrong": 48.04,
+      "correct_when_committed": 18.33
+    }
+  },
+  {
+    "upload": "Fulcher 2026, monocyte alone",
+    "cells": 456,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 2.63,
+      "levels": {
+        "class": 0,
+        "group": 11,
+        "lineage": 1
+      },
+      "committed_lineages": {
+        "immune": 12
+      },
+      "committed_and_wrong": 2.41,
+      "correct_when_committed": 8.33
+    },
+    "declared_mixed": {
+      "committed": 66.01,
+      "levels": {
+        "class": 112,
+        "group": 99,
+        "lineage": 90
+      },
+      "committed_lineages": {
+        "immune": 202,
+        "stromal": 39,
+        "epithelial": 60
+      },
+      "committed_and_wrong": 40.57,
+      "correct_when_committed": 38.54
+    }
+  },
+  {
+    "upload": "Fulcher 2026, DC alone",
+    "cells": 54,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 74.07,
+      "levels": {
+        "class": 22,
+        "group": 6,
+        "lineage": 12
+      },
+      "committed_lineages": {
+        "immune": 32,
+        "epithelial": 6,
+        "stromal": 2
+      },
+      "committed_and_wrong": 31.48,
+      "correct_when_committed": 57.5
+    }
+  },
+  {
+    "upload": "PBMC240",
+    "cells": 238,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 6.3,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 15
+      },
+      "committed_lineages": {
+        "immune": 15
+      },
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": 100.0
+    },
+    "declared_mixed": {
+      "committed": 73.95,
+      "levels": {
+        "class": 62,
+        "group": 82,
+        "lineage": 32
+      },
+      "committed_lineages": {
+        "epithelial": 42,
+        "stromal": 3,
+        "immune": 131
+      },
+      "committed_and_wrong": 18.91,
+      "correct_when_committed": 74.43
+    }
+  },
+  {
+    "upload": "SCoPE2, published",
+    "cells": 1490,
+    "expected": "narrow",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {},
+      "committed_and_wrong": 0.0,
+      "correct_when_committed": null
+    },
+    "declared_mixed": {
+      "committed": 54.03,
+      "levels": {
+        "class": 231,
+        "group": 85,
+        "lineage": 489
+      },
+      "committed_lineages": {
+        "immune": 741,
+        "epithelial": 45,
+        "stromal": 19
+      },
+      "committed_and_wrong": 4.3,
+      "correct_when_committed": 92.05
+    }
+  },
+  {
+    "upload": "Polyp plate",
+    "cells": 516,
+    "expected": "mixed",
+    "pooled": {
+      "committed": 0.0,
+      "levels": {
+        "class": 0,
+        "group": 0,
+        "lineage": 0
+      },
+      "committed_lineages": {}
+    },
+    "declared_mixed": {
+      "committed": 72.87,
+      "levels": {
+        "class": 165,
+        "group": 120,
+        "lineage": 91
+      },
+      "committed_lineages": {
+        "epithelial": 306,
+        "stromal": 22,
+        "immune": 48
+      }
+    }
+  }
+]

@@ -473,7 +473,9 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - fresh development sets registered (amendment 13; PXD058626 and PXD045043 fetched); candidates and split G1 pre-registered (amendment 14, protocol amendments 1, `research/notebook-outputs/organ_v2_registry.json`);
   - lymph_node_v2 and lung_v2 trained and frozen (`d9d400f`); both locked-test rehearsals pass, with the protocols' baselines on each organ's own gene space (`a806049`); run history entry 58;
   - [!] **lymph node v2: NO GO, by 0.18 points.** Mixed uploads pass all four bars (committed 96.5, correct when committed 97.7, coverage 92.4, false abstention 0.32); narrow uploads are 89.8% correct when committed (bar 90), because the chance floor commits more of them. G3 on the fresh spleen set passes (AUROC 0.917). PXD042367 stays sealed; a change would be a v3, the owner's call;
-  - lung v2: gates running.
+  - [!] **lung v2: NO GO, on the fresh G3.** G1 passes every bar (mixed committed 97.3, correct when committed 98.6; narrow 90.1); as v1 wrote G1 it commits 83.7 (v1 73.4). PXD058626's control airways over alveoli: AUROC 0.764 (bar 0.8). MSV000094189 stays sealed; a change would be a v3, the owner's call;
+  - A7, a user-declared upload make-up for the colon: not supported (Kabatnik's mixed upload 44% committed and wrong); the colon stays NO GO, PXD069723 reserved and unread;
+  - the locked tests' PCA baseline projected around the class-balanced centre (protocols' amendment 3; rehearsals 1.0 and 100, were 0.597 and 96.9).
 - [x] **The atlas framing** (owner, 2026-10-18: the aim is every Tabula Sapiens organ): the 28-organ list (`scripts/tabula_sapiens_organs.py`), the manifest's `organs`, the landing's organs band with every organ's chip, and the Manuscript's highlights, in brief, scope, contributions and Next.
 - [x] **The organ maps on the Atlas page, without labelling** (owner, 2026-10-18): each organ's reference cells in 3D in its bundle's coordinate space (`scripts/export_atlas_coordinates.py --organ`, `web/data/organs/`), coloured by family; Your data stays blood's.
 

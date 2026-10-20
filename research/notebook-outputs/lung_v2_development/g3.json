@@ -1,0 +1,701 @@
+{
+  "set": "PXD058626",
+  "runs": 91,
+  "by_region": {
+    "IPF Fibroblastic Foci": 20,
+    "IPF ABEC": 12,
+    "IPF DistalAirway": 12,
+    "control airway": 12,
+    "IPF Alveoli": 12,
+    "control alveoli": 12,
+    "IPF HCAirway": 11
+  },
+  "auroc": 0.7639,
+  "score": "P(airway epithelial) - P(alveolar epithelial)",
+  "mean_score_by_region": {
+    "IPF ABEC": 0.1206,
+    "IPF Alveoli": 0.0031,
+    "IPF DistalAirway": 0.4816,
+    "IPF Fibroblastic Foci": 0.0776,
+    "IPF HCAirway": 0.4541,
+    "control airway": 0.3147,
+    "control alveoli": -0.1878
+  },
+  "argmax_lineage": {
+    "endothelial": {
+      "IPF ABEC": 0,
+      "IPF Alveoli": 3,
+      "IPF DistalAirway": 0,
+      "IPF Fibroblastic Foci": 0,
+      "IPF HCAirway": 0,
+      "control airway": 0,
+      "control alveoli": 0
+    },
+    "epithelial": {
+      "IPF ABEC": 5,
+      "IPF Alveoli": 6,
+      "IPF DistalAirway": 12,
+      "IPF Fibroblastic Foci": 3,
+      "IPF HCAirway": 11,
+      "control airway": 12,
+      "control alveoli": 8
+    },
+    "immune": {
+      "IPF ABEC": 7,
+      "IPF Alveoli": 3,
+      "IPF DistalAirway": 0,
+      "IPF Fibroblastic Foci": 0,
+      "IPF HCAirway": 0,
+      "control airway": 0,
+      "control alveoli": 4
+    },
+    "stromal": {
+      "IPF ABEC": 0,
+      "IPF Alveoli": 0,
+      "IPF DistalAirway": 0,
+      "IPF Fibroblastic Foci": 17,
+      "IPF HCAirway": 0,
+      "control airway": 0,
+      "control alveoli": 0
+    }
+  },
+  "answers": [
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF DistalAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "club cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "epithelial",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF HCAirway",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "monocyte/macrophage",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "non-classical monocyte"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "monocyte/macrophage",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "classical monocyte"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "neutrophil",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "neutrophil"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "epithelial",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "epithelial",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF ABEC",
+      "label": "epithelial",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "capillary endothelial cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "endothelial cell of lymphatic vessel"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "endothelial cell of lymphatic vessel"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "IPF Alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "endothelial cell of lymphatic vessel"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "vascular associated smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": "stromal",
+      "level": "lineage",
+      "abstained": false,
+      "best_guess": "bronchial smooth muscle cell"
+    },
+    {
+      "truth": "IPF Fibroblastic Foci",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "lung ciliated cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "control airway",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control airway",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "basal cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "basal cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "basal cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control airway",
+      "label": "airway epithelial",
+      "level": "group",
+      "abstained": false,
+      "best_guess": "respiratory goblet cell"
+    },
+    {
+      "truth": "control airway",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "neutrophil"
+    },
+    {
+      "truth": "control alveoli",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "endothelial cell of lymphatic vessel"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "endothelial cell of lymphatic vessel"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": "type ii pneumocyte",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "type ii pneumocyte"
+    },
+    {
+      "truth": "control alveoli",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "type ii pneumocyte"
+    }
+  ]
+}

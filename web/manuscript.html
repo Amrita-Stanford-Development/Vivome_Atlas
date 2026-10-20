@@ -919,6 +919,41 @@
                     <span class="ev-src"><code>research/organ-references.md</code></span></li>
             </ul>
 
+            <p id="organs-v2">A second version of the lymph node and the lung was built from what diagnostics found, each
+                with its rules fixed first. Two of the owner's changes apply. Uploads of one or two types now only need to
+                be right when answered, at least <span class="constant">90%</span>; mixed uploads keep the four bars.
+                And each organ is judged on a protein set never read before. Neither version passes, each by one gate,
+                and nothing was tuned to pass.</p>
+            <div class="table-scroll">
+                <table class="support-table ms-table wide">
+                    <thead><tr><th>Gate</th><th>Lymph node, version 2</th><th>Lung, version 2</th><th>Bar</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mixed uploads: cells given an answer</td><td><span data-ms="org_ln2_mixed_committed"></span></td><td><span data-ms="org_lung2_mixed_committed"></span></td><td>at least <span class="constant">75%</span></td></tr>
+                        <tr><td>Mixed uploads: right when answered</td><td><span data-ms="org_ln2_mixed_correct_when_committed"></span></td><td><span data-ms="org_lung2_mixed_correct_when_committed"></span></td><td>at least <span class="constant">90%</span></td></tr>
+                        <tr><td>Mixed uploads: true type in the set</td><td><span data-ms="org_ln2_mixed_coverage"></span></td><td><span data-ms="org_lung2_mixed_coverage"></span></td><td>at least <span class="constant">85%</span></td></tr>
+                        <tr><td>Mixed uploads: refused as foreign</td><td><span data-ms="org_ln2_mixed_false_abstention"></span></td><td><span data-ms="org_lung2_mixed_false_abstention"></span></td><td>at most <span class="constant">2%</span></td></tr>
+                        <tr><td>Uploads of one or two types: right when answered</td><td><span data-ms="org_ln2_narrow_correct_when_committed"></span> (miss)</td><td><span data-ms="org_lung2_narrow_correct_when_committed"></span> (pass)</td><td>at least <span class="constant">90%</span></td></tr>
+                        <tr><td>All uploads: cells given an answer (the first version's gate)</td><td><span data-ms="org_ln2_v1_committed"></span> (first version <span data-ms="org_ln_committed"></span>)</td><td><span data-ms="org_lung2_v1_committed"></span> (first version <span data-ms="org_lung_committed"></span>)</td><td>at least <span class="constant">75%</span></td></tr>
+                        <tr><td>A fresh protein set</td><td>spleen white pulp over red pulp, AUROC <span data-ms="org_ln2_g3"></span> (pass)</td><td>airways over alveoli, AUROC <span data-ms="org_lung2_g3"></span> (miss)</td><td>at least <span class="constant">0.8</span></td></tr>
+                        <tr><td>Verdict</td><td>NO GO</td><td>NO GO</td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <ul class="evidence">
+                <li>The lymph node's fix for rare types answers more one- and two-type uploads, and those answers are
+                    wrong more often. The lung reads each lung region's broad kind right, but often takes airway lining
+                    for the air sacs' lining.
+                    <span class="ev-src"><code>research/notebook-outputs/lymph_node_v2_development/g1.json</code>, <code>research/notebook-outputs/lung_v2_development/g3.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>No second colon was built: nothing in an upload tells mixed from narrow safely. Letting the user say
+                    so does not help either. Declared mixed, a real mixed colon upload has <span data-ms="org_a7_kabatnik_wrong"></span>
+                    of its cells answered wrong, because its pools are read as the wrong kind before any threshold applies.
+                    <span class="ev-src"><code>research/notebook-outputs/organ_v2_declared/real.json</code>
+                    <span class="bead caveat" data-caveat="development">development</span></span></li>
+                <li>The locked tests stay sealed.
+                    <span class="ev-src"><code>research/organ-references.md</code> ("Version 2")</span></li>
+            </ul>
+
             <h3 id="alternatives">Tried and not adopted</h3>
             <p>Each idea is named by what it changed. Each was measured under rules fixed before its run.</p>
             <div class="table-scroll">

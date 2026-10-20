@@ -2556,7 +2556,68 @@ without `baselines.json` (each protocol's amendment 2).
 - lung v2: 32 pools, every lineage 100% (`476fcc1`); baselines: correlation
   100, PCA kNN 96.9.
 
+A code review then found the PCA baseline's projection off-centre: queries
+were shifted toward the small classes, and 65% of their neighbours were
+other queries. Projected around the class-balanced centre, the rehearsals
+give PCA kNN 1.0 (lymph node) and 100 (lung). Each protocol's amendment 3
+records the fix and the setup checks, before any real scoring.
+
 G1 and G3 then ran once per candidate (entry 59).
+
+### 59. Organ references v2: the gates, both NO GO; A7 (Track I), 2026-10-20
+
+**Why:** entry 58's two frozen candidates ran their gates once
+(`research/notebooks/organ_v2_gates.py`), the lymph node first, under the
+split G1 and the fresh G3 sets. Details are in `research/organ-references.md`,
+"Version 2".
+
+| | Lymph node v2 | Lung v2 |
+|---|---|---|
+| G1 mixed: committed, correct when committed | 96.5, 97.7 (pass) | 97.3, 98.6 (pass) |
+| G1 mixed: coverage, false abstention | 92.4, 0.32 (pass) | 96.6, 0.0 (pass) |
+| G1 narrow: correct when committed (≥ 90) | **89.8 (miss)** | 90.1 (pass) |
+| G1 as v1 wrote it: committed | 95.6 (v1 84.4) | 83.7 (v1 73.4) |
+| G3, fresh (AUROC ≥ 0.8) | PXD045043 spleen, white over red pulp: 0.917 (pass) | PXD058626, control airways over alveoli: **0.764 (miss)** |
+| G4, the rehearsal | pass | pass |
+| Verdict | **NO GO** | **NO GO** |
+
+**What the misses show:**
+- **The lymph node:** the chance floor commits more narrow uploads (94.3%
+  against 87.3% under v1's rule in A2), and one- and two-class uploads are
+  then wrong more often (84.7% and 86.8% correct when committed). A3 judged
+  the floor on a pooled suite, and its adoption rule did not check the
+  narrow band.
+- **The lung:** every region gets the right lineage, but airway epithelium
+  is often guessed as alveolar (4 of 12 control airways are type II
+  pneumocyte). No v1 gate tested within-epithelium regions.
+- **The plasma sink** on tissue pools remains in both (seen sets).
+
+**Locked tests:** PXD042367 and MSV000094189 stay sealed. Each protocol's
+rule 1 allows no candidate that missed its gates. Nothing was tuned. A
+change to either organ is a v3, the owner's call, and its G3 cannot reuse
+PXD045043 or PXD058626, which these runs read.
+
+**G2** (one donor held out, a diagnosis) is run for both v2 candidates and
+reported in organ-references when done.
+
+**A7, the colon** (`research/notebooks/organ_v2_declared.py`, rules
+committed before it ran, `2bdbcf3`): could a user declare a colon upload
+mixed, so it gets the mixed band's thresholds? On simulated uploads,
+declared-mixed uploads stay at 94.0% correct when committed even with 10%
+of them really narrow. On real protein the idea fails:
+- Kabatnik's truly mixed upload, declared mixed, has 44.4% of its cells
+  committed and wrong (bar 10%);
+- narrow uploads declared mixed reach up to 83% wrong.
+
+Not supported. The colon's pools are placed in the wrong lineage before any
+threshold applies, so calibration cannot fix it. The colon stays NO GO.
+
+**Also tonight:**
+- a code review of the organ v2 code found the PCA baseline off-centre
+  (entry 58's note; amendment 3);
+- an organ map's hidden Your data could be reached by an arrow key or a
+  dropped file, which would have drawn blood answers on the organ's map.
+  It is closed, with a test.
 
 ## The throughline
 

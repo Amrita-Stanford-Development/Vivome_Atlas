@@ -1,0 +1,14 @@
+{
+  "finished": "2026-10-20T22:16:24",
+  "seconds": 18,
+  "checks": {
+    "kabatnik_mixed": false,
+    "polyp_plate": true,
+    "simulated_cwc_at_10": true
+  },
+  "supported": false,
+  "hazard": {
+    "largest_rise_in_committed_and_wrong": 83.33,
+    "upload": "Zheng cd8 alone"
+  }
+}

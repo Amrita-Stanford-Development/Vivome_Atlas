@@ -364,7 +364,7 @@ run, and builds v2 candidates only from what the diagnostics support.
 | A1b | What draws pools to one class? | The encoder, on deep, mixed pools. Removing plasma's own markers changes nothing; thinning pools to single-cell depth halves the lymph node's sink; B-cell pools uploaded alone are never plasma. An explanation only. |
 | A0 | Can calibration be replayed offline? | Yes: the cache equals the service on every replayed cell. Its refit check was amended after the first run, from rank to a qhat bound of 0.005 (the largest shift is 0.0008). |
 | A2 | What can calibration do under the split G1? | Lung: v1's own rule already gives mixed uploads 96.6% committed. Lymph node: mixed 78.5%. Colon: 16.8%, and 97% only if each upload's band were known. Calibrating on mixed uploads only is unsafe for narrow ones. |
-| A3 | Rare and hard classes | Lymph node: the chance floor (committed 82 → 97 on the rare-class suite, coverage 91.1 → 88.2). Lung and colon: the group fallback for classes with under 30 calibration cells. |
+| A3 | Rare and hard classes | Lymph node: the chance floor (committed 82 → 97 on the rare-class suite, coverage 91.1 → 88.2). Lung and colon: the group fallback for classes with under 30 unique calibration cells. |
 | A4 | Can the colon's band be read without labels? | No key passes: each reads some real narrow upload as mixed, or no real mixed upload as mixed. **The colon v2 is not built.** |
 | A6 | Does training on RNA pools remove the sinks? | Short of its bar: the lymph node's plasma guesses fall 44 → 35 of 48 (the bar was 12 fewer). v2 does not train on pools. Pools helped single cells in every organ (validation +0.7 to +6.5 points). |
 | A5 | Profiles, explanation only | Not run. No v2 decision depends on it once G1 is split. |
@@ -376,7 +376,7 @@ run, and builds v2 candidates only from what the diagnostics support.
 | Classes | v1's minus the generic "t cell" (18) | v1's minus the generic "monocyte" (27) |
 | Split | v1's, carried through the atlas rows | v1's, carried through the atlas rows |
 | Suites | new seeds; every class with at least 5 cells, short classes capped | the same |
-| Calibration | the chance floor | the group fallback (under 30 cells) |
+| Calibration | the chance floor | the group fallback: a class with under 30 unique calibration cells takes its group's threshold, or the marginal one if the group is short too |
 | Unchanged | gene space, identifier map, profiles, module settings, training, fusion | the same |
 
 **The gates, fixed now, before any v2 model** (`research/notebooks/organ_v2_gates.py`):
@@ -411,6 +411,14 @@ run:
 - The reader (`organ_v2_gates.py`, `g3_lymph_node`) was checked without a
   model: 13 red and 13 white voxels; 5,114 of 5,252 protein groups
   resolved.
+
+**Note, 2026-10-20: what "cells" means in the group fallback.** The rule
+counts unique calibration cells, not calibration rows. A cell can sit in
+several uploads, so a class can have hundreds of rows and still fall under
+30. In the lung v2: vascular smooth muscle has 651 rows but 20 cells, plasma
+680 and 22, and mature NK T 722 and 24; all three take their group's
+threshold. The frozen bundle's `answers_spec.json` says "fewer than 30
+calibration cells"; the code (`calibrate.fit_qhat_v2`) is the reference.
 
 **Registry.** Each v2 suite's sha256 is recorded in
 `research/notebook-outputs/organ_v2_registry.json` before training. Each
@@ -475,6 +483,87 @@ The plasma sink on tissue pools remains.
 **Verdict:** NO GO. By the stop rules nothing is tuned and PXD042367 stays
 sealed. Any change now would be a v3, and its G3 could no longer use
 PXD045043, which this run has read. The decision goes to the owner.
+
+### The lung v2's outcome (2026-10-20): NO GO, on the fresh G3
+
+`research/notebooks/organ_v2_gates.py lung_v2`, run once on the frozen
+bundle (MANIFEST `1e545828…`). Outputs are in
+`research/notebook-outputs/lung_v2_development/`.
+
+**G1, split** (240 uploads, 119,096 cells): **every bar passes.**
+
+| Band | Committed | Correct when committed | Coverage | False abstention | Verdict |
+|---|---|---|---|---|---|
+| Mixed (62,019 cells) | 97.3 (≥ 75) | 98.6 (≥ 90) | 96.6 (≥ 85) | 0.0 (≤ 2) | pass |
+| Narrow (57,077 cells) | 68.9 | 90.1 (≥ 90) | 73.1 | 0.04 | pass |
+| As v1 wrote G1 | 83.7 (v1: 73.4) | 95.3 | 85.3 | 0.02 | would pass |
+
+- One-class uploads are the weak kind: 49.8% committed, 75.9% correct when
+  committed.
+- Whole-tissue uploads: 99.2% committed, best guess 84.8%.
+
+**G3, fresh: PXD058626, AUROC 0.764, miss** (bar 0.8).
+- The score is P(airway epithelial) − P(alveolar epithelial), control
+  airways (12) over control alveoli (12).
+- Every control airway region's argmax lineage is epithelial. Best guesses:
+  - airways: 5 respiratory goblet cell, 3 basal cell, 4 type II pneumocyte;
+  - alveoli: 8 type II pneumocyte, 2 lymphatic endothelial, 1 neutrophil,
+    1 plasma cell.
+- The IPF regions, reported only: fibroblastic foci are stromal in 17 of
+  20, and distal and honeycomb airways epithelial in all 23.
+- The miss comes from airways read as alveolar epithelium. Whole-region
+  lineage is mostly right.
+
+**Seen sets, reported only** (v1's figures in brackets):
+- MSV000094373, epithelial over endothelial pools: AUROC 0.66 (0.62);
+- the Protein Atlas, AT2 over AT1: 1.0 (1.0);
+- PXD029341, fibroblastic foci over alveoli: 0.94 (0.88).
+
+**G4:** passed (`476fcc1`).
+
+**Verdict:** NO GO. By the stop rules nothing is tuned, and MSV000094189
+stays sealed. The split G1 and the group fallback fixed v1's G1 miss (73.4
+→ 83.7 committed as v1 wrote it). The fresh tissue set now fails on airway
+against alveolar epithelium, which no v1 gate tested. Any change is a v3,
+the owner's call. PXD058626 has now been read.
+
+### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
+
+A4 found no label-free key, so the one key left was the user: the upload
+form would ask whether a sample is mixed (whole tissue, or at least 3 types
+across at least 2 lineages). A declared-mixed upload would get the mixed
+band's thresholds.
+
+`research/notebooks/organ_v2_declared.py` ran once, on v1's colon bundle and
+seen data only, with its reading fixed in the script. Outputs are in
+`research/notebook-outputs/organ_v2_declared/`.
+
+**Simulated uploads** (A2's folds): declared-mixed uploads stay at 94.0% correct when committed
+with 10% of them really narrow, 90.5% with 25%, and 83.6% with half.
+
+**Real protein, through the colon bundle:**
+
+| Upload | Pooled: committed | Declared mixed: committed | Declared mixed: committed and wrong |
+|---|---|---|---|
+| Kabatnik classes 1, 2 and 4 (truly mixed) | 0% | 85.2% | **44.4%** of cells (correct when committed 47.8%) |
+| Polyp plate (no labels) | 0% | 72.9% | 306 of 376 answers epithelial |
+| Kabatnik pools, one class each | 0% | 56 to 78% | 56 to 67% |
+| Zheng's immune pools, one type each | 0% | 67 to 83% | 17 to 83% |
+| Fulcher 2026, full | 24.9% | 87.1% | 7.0% |
+| Fulcher 2026, one type each | 0 to 4% | 59 to 74% | 27 to 48% |
+
+**Reading:**
+- The rule was "supported" only if the labelled real mixed upload had at
+  most 10% of its cells committed and wrong. It had 44.4%, so **not
+  supported**.
+- The hazard is large. A narrow upload declared mixed gets up to 83% of
+  its cells wrong (Zheng's CD8 T pools).
+- The thresholds are not the colon's problem. Kabatnik's epithelial pools
+  are placed among immune types before any threshold applies, so no
+  calibration rule can make their answers right.
+
+Nothing is served. The colon stays at NO GO, and PXD069723 stays reserved
+and unread.
 
 ## The large intestine's outcome: every failure, in one place
 

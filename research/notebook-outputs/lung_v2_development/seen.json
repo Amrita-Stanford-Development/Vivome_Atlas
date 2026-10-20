@@ -1,0 +1,629 @@
+{
+  "bpd": {
+    "pools": 20,
+    "by_population": {
+      "endothelial": 10,
+      "epithelial": 10
+    },
+    "auroc_epithelial": 0.66,
+    "argmax_lineage": {
+      "endothelial": {
+        "endothelial": 7,
+        "epithelial": 0
+      },
+      "epithelial": {
+        "endothelial": 0,
+        "epithelial": 4
+      },
+      "immune": {
+        "endothelial": 2,
+        "epithelial": 6
+      },
+      "stromal": {
+        "endothelial": 1,
+        "epithelial": 0
+      }
+    },
+    "answers": [
+      {
+        "truth": "endothelial",
+        "label": "blood vessel endothelial",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "epithelial",
+        "label": "macrophage",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "macrophage"
+      },
+      {
+        "truth": "endothelial",
+        "label": "blood vessel endothelial",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "epithelial",
+        "label": "macrophage",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "macrophage"
+      },
+      {
+        "truth": "endothelial",
+        "label": "monocyte/macrophage",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "classical monocyte"
+      },
+      {
+        "truth": "epithelial",
+        "label": "macrophage",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "macrophage"
+      },
+      {
+        "truth": "endothelial",
+        "label": "monocyte/macrophage",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "classical monocyte"
+      },
+      {
+        "truth": "epithelial",
+        "label": "macrophage",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "macrophage"
+      },
+      {
+        "truth": "endothelial",
+        "label": "endothelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "endothelial cell of lymphatic vessel"
+      },
+      {
+        "truth": "epithelial",
+        "label": "monocyte/macrophage",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "intermediate monocyte"
+      },
+      {
+        "truth": "endothelial",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "bronchial smooth muscle cell"
+      },
+      {
+        "truth": "epithelial",
+        "label": "type ii pneumocyte",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "type ii pneumocyte"
+      },
+      {
+        "truth": "endothelial",
+        "label": "capillary endothelial cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "epithelial",
+        "label": "epithelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "type ii pneumocyte"
+      },
+      {
+        "truth": "endothelial",
+        "label": "endothelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "epithelial",
+        "label": "epithelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "type i pneumocyte"
+      },
+      {
+        "truth": "endothelial",
+        "label": "blood vessel endothelial",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "vein endothelial cell"
+      },
+      {
+        "truth": "epithelial",
+        "label": "airway epithelial",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "respiratory goblet cell"
+      },
+      {
+        "truth": "endothelial",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "endothelial cell of artery"
+      },
+      {
+        "truth": "epithelial",
+        "label": "macrophage",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "macrophage"
+      }
+    ]
+  },
+  "hpa": {
+    "pools": 128,
+    "auroc_at2_over_at1": 1.0,
+    "at_pools_lineage": {
+      "immune": 5,
+      "epithelial": 5
+    },
+    "by_cell_type": {
+      "alveolar cells type 1": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "macrophage": 2,
+          "classical monocyte": 2,
+          "capillary endothelial cell": 1
+        }
+      },
+      "alveolar cells type 2": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "type ii pneumocyte": 5
+        }
+      },
+      "astrocytes and neuropil": {
+        "lineage": {
+          "endothelial": 5
+        },
+        "best_guess": {
+          "endothelial cell of lymphatic vessel": 5
+        }
+      },
+      "b-cells": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "b cell": 5
+        }
+      },
+      "capillaries": {
+        "lineage": {
+          "stromal": 5
+        },
+        "best_guess": {
+          "bronchial smooth muscle cell": 4,
+          "vascular associated smooth muscle cell": 1
+        }
+      },
+      "cardiomyocytes": {
+        "lineage": {
+          "stromal": 5
+        },
+        "best_guess": {
+          "bronchial smooth muscle cell": 5
+        }
+      },
+      "cd4 t-cells": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "b cell": 5
+        }
+      },
+      "cd8 t-cells": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "cd8-positive, alpha-beta t cell": 5
+        }
+      },
+      "ciliated cells": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "lung ciliated cell": 5
+        }
+      },
+      "collecting ducts": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "respiratory goblet cell": 2,
+          "club cell": 2,
+          "type ii pneumocyte": 1
+        }
+      },
+      "distal tubules": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "type ii pneumocyte": 5
+        }
+      },
+      "glomeruli": {
+        "lineage": {
+          "endothelial": 4
+        },
+        "best_guess": {
+          "capillary endothelial cell": 3,
+          "bronchial smooth muscle cell": 1
+        }
+      },
+      "granulosa cells": {
+        "lineage": {
+          "immune": 2
+        },
+        "best_guess": {
+          "cd4-positive, alpha-beta t cell": 2
+        }
+      },
+      "hepatocytes": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "type ii pneumocyte": 5
+        }
+      },
+      "keratinocytes": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "basal cell": 5
+        }
+      },
+      "large ducts": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "respiratory goblet cell": 5
+        }
+      },
+      "macrophages": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "intermediate monocyte": 5
+        }
+      },
+      "microglia and neuropil": {
+        "lineage": {
+          "endothelial": 5
+        },
+        "best_guess": {
+          "endothelial cell of lymphatic vessel": 5
+        }
+      },
+      "neurons": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "endothelial cell of lymphatic vessel": 4,
+          "b cell": 1
+        }
+      },
+      "neutrophils": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "neutrophil": 5
+        }
+      },
+      "oocytes": {
+        "lineage": {
+          "stromal": 2
+        },
+        "best_guess": {
+          "bronchial smooth muscle cell": 2
+        }
+      },
+      "pancreas epithelial cells": {
+        "lineage": {
+          "immune": 3,
+          "epithelial": 2
+        },
+        "best_guess": {
+          "plasma cell": 5
+        }
+      },
+      "pancreatic islets": {
+        "lineage": {
+          "immune": 5
+        },
+        "best_guess": {
+          "plasma cell": 5
+        }
+      },
+      "proximal tubules": {
+        "lineage": {
+          "epithelial": 5
+        },
+        "best_guess": {
+          "type ii pneumocyte": 5
+        }
+      },
+      "secretory cells": {
+        "lineage": {
+          "epithelial": 4,
+          "stromal": 1
+        },
+        "best_guess": {
+          "basal cell": 2,
+          "lung ciliated cell": 2,
+          "bronchial smooth muscle cell": 1
+        }
+      },
+      "skeletal myofibers": {
+        "lineage": {
+          "stromal": 3,
+          "epithelial": 2
+        },
+        "best_guess": {
+          "lung ciliated cell": 3,
+          "bronchial smooth muscle cell": 2
+        }
+      },
+      "smooth muscle cells": {
+        "lineage": {
+          "stromal": 5
+        },
+        "best_guess": {
+          "bronchial smooth muscle cell": 5
+        }
+      }
+    }
+  },
+  "ipf": {
+    "regions": 25,
+    "by_region": {
+      "alveoli": 13,
+      "fibroblastic focus": 6,
+      "mature scar": 6
+    },
+    "reader": {
+      "format": "MaxQuant proteinGroups",
+      "file": "herrera_proteinGroups.txt",
+      "rows_read": 3583,
+      "rows_dropped_flagged": 278,
+      "rows_without_gene": 14,
+      "rows_kept": 3291,
+      "quantity": "LFQ intensity",
+      "flags_read": [
+        "Only identified by site",
+        "Reverse",
+        "Potential contaminant"
+      ]
+    },
+    "auroc_stromal_ff_over_alveoli": 0.9359,
+    "mean_p_lineage_by_region": {
+      "mature scar": {
+        "endothelial": 0.0663,
+        "epithelial": 0.0311,
+        "immune": 0.5401,
+        "stromal": 0.3626
+      },
+      "fibroblastic focus": {
+        "endothelial": 0.0203,
+        "epithelial": 0.0646,
+        "immune": 0.1492,
+        "stromal": 0.7659
+      },
+      "alveoli": {
+        "endothelial": 0.2278,
+        "epithelial": 0.3292,
+        "immune": 0.3615,
+        "stromal": 0.0815
+      }
+    },
+    "answers": [
+      {
+        "truth": "fibroblastic focus",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "alveolar type 2 fibroblast cell"
+      },
+      {
+        "truth": "fibroblastic focus",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "alveolar type 2 fibroblast cell"
+      },
+      {
+        "truth": "fibroblastic focus",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "alveolar type 2 fibroblast cell"
+      },
+      {
+        "truth": "fibroblastic focus",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "alveolar type 2 fibroblast cell"
+      },
+      {
+        "truth": "fibroblastic focus",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "adventitial cell"
+      },
+      {
+        "truth": "fibroblastic focus",
+        "label": "neutrophil",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "neutrophil"
+      },
+      {
+        "truth": "mature scar",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "mature scar",
+        "label": "immune",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "plasma cell"
+      },
+      {
+        "truth": "mature scar",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "mature scar",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "bronchial smooth muscle cell"
+      },
+      {
+        "truth": "mature scar",
+        "label": "stromal",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "adventitial cell"
+      },
+      {
+        "truth": "mature scar",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "b cell"
+      },
+      {
+        "truth": "alveoli",
+        "label": "monocyte/macrophage",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "intermediate monocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "club cell"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "type ii pneumocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": "epithelial",
+        "level": "lineage",
+        "abstained": false,
+        "best_guess": "type ii pneumocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": "capillary endothelial cell",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "type i pneumocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "type i pneumocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "type i pneumocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "type i pneumocyte"
+      },
+      {
+        "truth": "alveoli",
+        "label": null,
+        "level": null,
+        "abstained": true,
+        "best_guess": "natural killer cell"
+      },
+      {
+        "truth": "alveoli",
+        "label": "blood vessel endothelial",
+        "level": "group",
+        "abstained": false,
+        "best_guess": "capillary endothelial cell"
+      },
+      {
+        "truth": "alveoli",
+        "label": "macrophage",
+        "level": "class",
+        "abstained": false,
+        "best_guess": "macrophage"
+      }
+    ]
+  }
+}

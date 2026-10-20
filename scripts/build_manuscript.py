@@ -627,6 +627,21 @@ def organs(r: Records, manifest: dict) -> None:
     r.at("org_ln_zheng_pools", g3, ("zheng_tonsil", "pools"), "count")
     r.put("org_ln_zheng_plasma", sum(a["best_guess"] == "plasma cell" for a in r.json(g3)["zheng_tonsil"]["answers"]),
           f"{rel(g3)}: zheng_tonsil > answers with best_guess plasma cell, counted", "count")
+    # Version 2 (research/organ-references.md, "Version 2"): the split G1 and a fresh G3 set each
+    for organ, key in (("lymph_node_v2", "ln2"), ("lung_v2", "lung2")):
+        dev = NO / f"{organ}_development"
+        g1 = dev / "g1.json"
+        for field, fmt in (("committed", "pct1"), ("correct_when_committed", "pct1"), ("coverage", "pct1"), ("false_abstention", "pct2")):
+            r.pct(f"org_{key}_mixed_{field}", g1, "mixed", field, fmt=fmt)
+        r.pct(f"org_{key}_narrow_correct_when_committed", g1, "narrow", "correct_when_committed", fmt="pct2")
+        r.pct(f"org_{key}_v1_committed", g1, "as_written_v1", "committed")
+        r.at(f"org_{key}_g3", dev / "g3.json", ("auroc",), "fixed3", digits=4)
+        assert r.json(dev / "gates.json")["all_pass"] is False
+    a7 = NO / "organ_v2_declared" / "real.json"
+    kab = next(e for e in r.json(a7) if e["upload"] == "Kabatnik classes 1, 2 and 4")
+    r.put("org_a7_kabatnik_wrong", round(kab["declared_mixed"]["committed_and_wrong"] / 100, 6),
+          f"{rel(a7)}: Kabatnik classes 1, 2 and 4 > declared_mixed > committed_and_wrong", "pct1")
+    assert r.json(NO / "organ_v2_declared" / "decision.json")["supported"] is False
 
 
 def waiting(r: Records) -> None:

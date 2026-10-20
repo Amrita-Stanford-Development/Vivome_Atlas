@@ -763,6 +763,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lung_build/gene_id_map_provenance.json` — the lung's identifier map
 - `research/notebook-outputs/lung_build/mask_profiles_summary.csv` — the lung's missingness profiles
 - `research/notebook-outputs/lung_build/bundle_MANIFEST.json` — the lung bundle's MANIFEST (on Drive, not in the repository)
+- `research/notebook-outputs/lung_v2_development/rules.json` — the lung v2's gate run: script sha256, the split G1's bars, the registry's sha256s, written before computing
+- `research/notebook-outputs/lung_v2_development/g1.json` — the lung v2's G1: its evaluation suite through the service's code, split into mixed and narrow uploads, as v1 wrote it, and per scenario
+- `research/notebook-outputs/lung_v2_development/g1_cells.csv.gz` — the lung v2's G1: every scored cell
+- `research/notebook-outputs/lung_v2_development/g3.json` — the lung v2's G3: PXD058626's regions, control airways over control alveoli, the IPF regions reported
+- `research/notebook-outputs/lung_v2_development/seen.json` — the lung v2 on v1's G3 sets, reported as seen
+- `research/notebook-outputs/lung_v2_development/gates.json` — the lung v2's gates: values and verdicts
 - `research/notebook-outputs/lymph_node_v2_development/rules.json` — the lymph node v2's gate run: script sha256, the split G1's bars, the registry's sha256s, written before computing
 - `research/notebook-outputs/lymph_node_v2_development/g1.json` — the lymph node v2's G1: its evaluation suite through the service's code, split into mixed and narrow uploads, as v1 wrote it, and per scenario
 - `research/notebook-outputs/lymph_node_v2_development/g1_cells.csv.gz` — the lymph node v2's G1: every scored cell
@@ -799,6 +805,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/organ_v2_band_key/real.json` — A4: each key on real narrow and mixed uploads through the colon bundle, and committed-and-wrong under each rule
 - `research/notebook-outputs/organ_v2_band_key/decision.json` — A4's decision: no key passes, so the colon v2 is not built
 - `research/notebooks/organ_v2_declared.py` — organ references v2, diagnostic A7 (colon only): what a user-declared upload make-up (mixed or narrow) would give on real uploads through the colon bundle, and what a wrong declaration would cost, with a reading fixed in the script; evidence for a written proposal, nothing served
+- `research/notebook-outputs/organ_v2_declared/rules.json` — A7's settings, written before the run
+- `research/notebook-outputs/organ_v2_declared/real.json` — A7: each real upload through the colon bundle, pooled and as if declared mixed: committed, answer levels, committed-and-wrong where labels exist
+- `research/notebook-outputs/organ_v2_declared/misdeclared.json` — A7: correct when committed among declared-mixed uploads for each share of them really narrow, from A2's folds
+- `research/notebook-outputs/organ_v2_declared/decision.json` — A7's reading: not supported (Kabatnik's mixed upload 44% committed and wrong)
 - `research/notebooks/organ_v2_cache.py` — organ references v2, diagnostic A0: every calibration answer of the v1 bundles (v1's calibration suite and a rare-class suite) cached for offline calibration trials, with a replay check against the service
 - `research/notebook-outputs/organ_v2_cache/rules.json` — A0's settings, written before the run
 - `research/notebook-outputs/organ_v2_cache/record.json` — A0: per organ and suite, cells, classes, the cache's sha256 (caches on Drive), the replay against the service and the qhat refit
