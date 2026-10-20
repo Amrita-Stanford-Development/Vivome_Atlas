@@ -574,6 +574,48 @@ the same 24 control regions, airways over alveoli:
 - A v3 judged on this set would have little room above the bar. A cleaner
   fresh set would test the airway reading better.
 
+### Options for a v3, for the owner (2026-10-21)
+
+These are options only. A v3 is the owner's decision, and any v3 gets
+fresh suites and its rules fixed first.
+
+**Lymph node: a calibration-only v3 is the cheapest real chance.**
+- **What:** the frozen v2 bundle with v1's calibration rule (no chance
+  floor). The members, fusion, classes and gene space are unchanged.
+- **Why it could pass G1:**
+  - v2's narrow miss is the B cells' (95.7% without them);
+  - the floor commits more of them;
+  - in A2, v1's rule held narrow uploads at 94.3% correct when committed.
+- **Why G3 cannot move:** the spleen score (P(B cell group)) is summed
+  from the fused best guess (`li_development.fused`), which calibration
+  never touches. So PXD045043's 0.917 would stand as it is, and reusing the
+  set would not be tuning on it. That reuse is still the owner's call.
+- **What it costs:**
+  - a new evaluation suite (new seed) for G1, since v2's suite has been
+    scored;
+  - recalibration (minutes);
+  - G1 once.
+  - The cost to accept: the rare myeloid classes stay rarely committed, as
+    in v1.
+- **Not settled by this:** narrow B-cell uploads are read as T cells, as
+  in blood. A v3 would only keep those uploads from being committed.
+
+**Lung: the miss is the set's ceiling as much as the model's.**
+- On PXD058626, markers reach 0.868, PCA with kNN 0.774, and the model
+  0.764. The bar is 0.8.
+- **Options:**
+  - (a) a cleaner fresh set of airway and alveolar regions (amendment 13's
+    data requests);
+  - (b) a G3 bar set against the set's own positive control, decided
+    before any v3 result;
+  - (c) leave the lung at NO GO.
+- The model is unchanged by any of these; only the judging set or the bar
+  changes.
+
+**Colon:** no option from calibration or a user declaration (A4, A7). It
+needs new data: colon single cells, or sorted populations with
+independent labels.
+
 ### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
 
 A4 found no label-free key, so the one key left was the user: the upload
