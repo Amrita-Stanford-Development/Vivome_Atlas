@@ -1,0 +1,244 @@
+{
+  "definition": "Each cell's answer is either an abstention\nor a label at the class, group or lineage level. A label stands for the set\nof classes it covers, read from v3.1's hierarchy (service/model/v3_1/\nnb2_spec_v31.json); v3 answers at class level. For a pair of releases, old\nthen new, each cell is one of:\n- same: both abstain, or the same label at the same level;\n- refined: both answer, and the new answer lies inside the old (a group\n  became one of its classes);\n- coarsened: both answer, and the old answer lies inside the new;\n- contradicted: both answer, and neither contains the other;\n- newly answered, or newly abstained.\n\n**Label stability** is the share of cells that are same, refined or\ncoarsened: their new answer does not contradict the last release's and\ndoes not appear or vanish. The contradicted share is the headline\ninstability. The best guess's agreement is reported beside it (v3 has\nnone).",
+  "missing_versions": {},
+  "determinism_check": "v4.1 answered every upload identically twice",
+  "pairs": {
+    "0.2.0 (v3) to 0.3.0 (v3.1)": {
+      "all": {
+        "cells": 5509,
+        "label_stability": 31.44,
+        "same": 22.16,
+        "refined": 0.0,
+        "coarsened": 9.28,
+        "contradicted": 16.28,
+        "newly answered": 30.42,
+        "newly abstained": 21.86,
+        "best_guess_agreement": null
+      },
+      "by_upload": {
+        "Fulcher 2026": {
+          "cells": 1275,
+          "label_stability": 26.27,
+          "same": 7.45,
+          "refined": 0.0,
+          "coarsened": 18.82,
+          "contradicted": 24.39,
+          "newly answered": 43.92,
+          "newly abstained": 5.41,
+          "best_guess_agreement": null
+        },
+        "PBMC240": {
+          "cells": 238,
+          "label_stability": 30.26,
+          "same": 14.29,
+          "refined": 0.0,
+          "coarsened": 15.97,
+          "contradicted": 32.35,
+          "newly answered": 24.37,
+          "newly abstained": 13.03,
+          "best_guess_agreement": null
+        },
+        "SCoPE2, published": {
+          "cells": 1490,
+          "label_stability": 38.79,
+          "same": 28.12,
+          "refined": 0.0,
+          "coarsened": 10.67,
+          "contradicted": 5.1,
+          "newly answered": 37.18,
+          "newly abstained": 18.93,
+          "best_guess_agreement": null
+        },
+        "Furtwangler 2025": {
+          "cells": 2506,
+          "label_stability": 29.81,
+          "same": 26.86,
+          "refined": 0.0,
+          "coarsened": 2.95,
+          "contradicted": 17.28,
+          "newly answered": 20.11,
+          "newly abstained": 32.8,
+          "best_guess_agreement": null
+        }
+      }
+    },
+    "0.3.0 (v3.1) to 0.4.0 (v4.1)": {
+      "all": {
+        "cells": 5509,
+        "label_stability": 99.46,
+        "same": 99.33,
+        "refined": 0.0,
+        "coarsened": 0.13,
+        "contradicted": 0.0,
+        "newly answered": 0.0,
+        "newly abstained": 0.54,
+        "best_guess_agreement": 79.36
+      },
+      "by_upload": {
+        "Fulcher 2026": {
+          "cells": 1275,
+          "label_stability": 97.8,
+          "same": 97.25,
+          "refined": 0.0,
+          "coarsened": 0.55,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 2.2,
+          "best_guess_agreement": 70.75
+        },
+        "PBMC240": {
+          "cells": 238,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 96.62
+        },
+        "SCoPE2, published": {
+          "cells": 1490,
+          "label_stability": 99.93,
+          "same": 99.93,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.07,
+          "best_guess_agreement": 66.38
+        },
+        "Furtwangler 2025": {
+          "cells": 2506,
+          "label_stability": 99.96,
+          "same": 99.96,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.04,
+          "best_guess_agreement": 89.82
+        }
+      }
+    },
+    "0.4.0 (v4.1) to 0.5.0 (v4.2)": {
+      "all": {
+        "cells": 5509,
+        "label_stability": 99.92,
+        "same": 99.85,
+        "refined": 0.0,
+        "coarsened": 0.07,
+        "contradicted": 0.0,
+        "newly answered": 0.07,
+        "newly abstained": 0.0,
+        "best_guess_agreement": 95.61
+      },
+      "by_upload": {
+        "Fulcher 2026": {
+          "cells": 1275,
+          "label_stability": 99.68,
+          "same": 99.37,
+          "refined": 0.0,
+          "coarsened": 0.31,
+          "contradicted": 0.0,
+          "newly answered": 0.31,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 81.02
+        },
+        "PBMC240": {
+          "cells": 238,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 100.0
+        },
+        "SCoPE2, published": {
+          "cells": 1490,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 100.0
+        },
+        "Furtwangler 2025": {
+          "cells": 2506,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 100.0
+        }
+      }
+    },
+    "0.5.0 (v4.2) to 0.6.0 (v4.1)": {
+      "all": {
+        "cells": 5509,
+        "label_stability": 99.92,
+        "same": 99.85,
+        "refined": 0.07,
+        "coarsened": 0.0,
+        "contradicted": 0.0,
+        "newly answered": 0.0,
+        "newly abstained": 0.07,
+        "best_guess_agreement": 95.61
+      },
+      "by_upload": {
+        "Fulcher 2026": {
+          "cells": 1275,
+          "label_stability": 99.68,
+          "same": 99.37,
+          "refined": 0.31,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.31,
+          "best_guess_agreement": 81.02
+        },
+        "PBMC240": {
+          "cells": 238,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 100.0
+        },
+        "SCoPE2, published": {
+          "cells": 1490,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 100.0
+        },
+        "Furtwangler 2025": {
+          "cells": 2506,
+          "label_stability": 100.0,
+          "same": 100.0,
+          "refined": 0.0,
+          "coarsened": 0.0,
+          "contradicted": 0.0,
+          "newly answered": 0.0,
+          "newly abstained": 0.0,
+          "best_guess_agreement": 100.0
+        }
+      }
+    }
+  },
+  "seconds": 245
+}

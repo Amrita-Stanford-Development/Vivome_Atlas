@@ -2619,6 +2619,40 @@ threshold applies, so calibration cannot fix it. The colon stays NO GO.
   dropped file, which would have drawn blood answers on the organ's map.
   It is closed, with a test.
 
+### 60. Label stability between releases (release protocol), 2026-10-20
+
+**Why:** the release protocol's step 5 (`docs/web/manifest.md`) asks for
+label stability against the previous release. No release had measured it,
+because v3 answers at class level only and later models at three levels.
+
+**The definition** (`research/notebooks/label_stability.py`, committed
+before the run, `af116da`):
+- each answer stands for the classes it covers in v3.1's hierarchy;
+- a cell is same, refined, coarsened, contradicted, newly answered or newly
+  abstained;
+- stability is same, refined and coarsened together.
+
+Every served model (v3, v3.1, v4.1, v4.2) answered the development protein
+uploads, each sent whole through `run_projection`: Fulcher 2026, PBMC240,
+SCoPE2 as published and Furtwängler 2025, 5,509 cells. The first check
+passed: v4.1 answered every upload identically twice.
+
+| Release | Stable | Contradicted | Newly answered | Newly abstained | Best guess agrees |
+|---|---|---|---|---|---|
+| 0.2.0 (v3) to 0.3.0 (v3.1) | 31.4% | 16.3% | 30.4% | 21.9% | (none in v3) |
+| 0.3.0 (v3.1) to 0.4.0 (v4.1) | 99.5% | 0% | 0% | 0.5% | 79.4% |
+| 0.4.0 (v4.1) to 0.5.0 (v4.2) | 99.9% | 0% | 0.07% | 0% | 95.6% |
+| 0.5.0 (v4.2) to 0.6.0 (v4.1) | 99.9% | 0% | 0% | 0.07% | 95.6% |
+
+**What it shows:**
+- v3.1 replaced v3's answers wholesale: a new encoder, a new rule and
+  hierarchical answers.
+- Since then, every release kept v3.1's answers and changed only the best
+  guess. Fulcher moved most: 97.8% stable into v4.1, and its best guess
+  agrees 70.8%. v4.2's protein class means changed Fulcher only, among
+  these uploads.
+- Nothing any release answered was contradicted by the next.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

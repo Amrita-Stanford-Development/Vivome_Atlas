@@ -207,12 +207,30 @@ from data, and `web/tests/fixtures.js` deliberately names one class
 4. Tag the release and archive it for a persistent identifier.
 5. Record label stability against the previous version, below.
 
-Label stability is not yet measured for any release. 0.6.0 answers every
-upload exactly as 0.4.0 (both serve v4.1). 0.5.0 answered RNA uploads as
-0.4.0; on protein uploads its best guess changed, and with it some answers,
-since each set holds the best guess, so the share that changed still needs
-computing. v3 answers at class level only, so
-comparing it with the later releases needs a definition first.
+Label stability is measured by `research/notebooks/label_stability.py`
+(run history entry 60; `research/notebook-outputs/label_stability/`). Each
+cell's answer stands for the classes it covers in v3.1's hierarchy, so v3's
+class-only answers compare with the later levels. Between two releases each
+cell is:
+- same, refined (narrowed inside the old answer) or coarsened (widened
+  around it): together, its stability;
+- contradicted;
+- newly answered or newly abstained.
+
+It runs on the development protein uploads (Fulcher 2026, PBMC240, SCoPE2,
+Furtwängler 2025; 5,509 cells), each sent whole:
+
+| Release | Stable | Contradicted | Newly answered | Newly abstained | Best guess agrees |
+|---|---|---|---|---|---|
+| 0.2.0 (v3) to 0.3.0 (v3.1) | 31.4% | 16.3% | 30.4% | 21.9% | (v3 has none) |
+| 0.3.0 (v3.1) to 0.4.0 (v4.1) | 99.5% | 0% | 0% | 0.5% | 79.4% |
+| 0.4.0 (v4.1) to 0.5.0 (v4.2) | 99.9% | 0% | 0.07% | 0% | 95.6% |
+| 0.5.0 (v4.2) to 0.6.0 (v4.1) | 99.9% | 0% | 0% | 0.07% | 95.6% |
+
+Since v3.1, no release has contradicted an answer of the one before. The
+changes are in the best guess, which every set holds, and in a few answers
+widened or withdrawn because of it. A new release runs the script again
+with its pair added.
 
 ## Tests
 

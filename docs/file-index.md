@@ -800,6 +800,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_build/mask_profiles_summary.csv` — the lymph node's missingness profiles (blood's, as measured)
 - `research/notebook-outputs/lymph_node_build/bundle_MANIFEST.json` — the lymph node bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/blood_pools.py` — a diagnostic after the organs' A6: blood members trained with and without RNA pools (two seeds), on validation, the calibration suite and Fulcher 2026, with a reading fixed in the script; blood v4.1 unchanged
+- `research/notebook-outputs/label_stability/rules.json` — label stability's settings and script sha256, written before the run
+- `research/notebook-outputs/label_stability/per_cell.csv.gz` — label stability: every development cell's answer and best guess under each served model, and its kind of change for each pair of releases
+- `research/notebook-outputs/label_stability/summary.json` — label stability between releases, overall and per upload
 - `research/notebooks/label_stability.py` — label stability between releases (release protocol step 5): every served model since 0.2.0 on the same development uploads, each cell's answer same, refined, coarsened, contradicted, newly answered or newly abstained, with a definition fixed in the script
 - `research/notebooks/organ_v2_band_key.py` — organ references v2, diagnostic A4 (colon only): label-free keys for mixed against narrow uploads, set on simulated uploads and checked on real narrow and mixed uploads, with a pass rule fixed in the script
 - `research/notebook-outputs/organ_v2_band_key/rules.json` — A4's settings, written before the run
