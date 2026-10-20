@@ -98,6 +98,42 @@
     "tier": "L",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2022/08/PXD029341/sdrf.tsv"
   },
+  "Herrera2025_PXD058626/PXD058626_community_annotated.sdrf.tsv": {
+    "bytes": 5930,
+    "fetched": "2026-10-19",
+    "published_check": null,
+    "role": "development",
+    "sha256": "7a6fdd6ca8e1a4d95be4b27688917c4d915addf986f6685cb73d520cf1c4efb3",
+    "tier": "V",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/06/PXD058626/PXD058626_community_annotated.sdrf.tsv"
+  },
+  "Herrera2025_PXD058626/combined_protein.tsv": {
+    "bytes": 6813450,
+    "fetched": "2026-10-19",
+    "published_check": null,
+    "role": "development",
+    "sha256": "9076cfddf314f2aca6446ff2bceefcb3d7d4c7c1fae99fccea589846d06217c0",
+    "tier": "V",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/06/PXD058626/combined_protein.tsv"
+  },
+  "Herrera2025_PXD058626/experiment_annotation.tsv": {
+    "bytes": 17734,
+    "fetched": "2026-10-19",
+    "published_check": null,
+    "role": "development",
+    "sha256": "50fea7b3c058e149e8cfbaa0d3ab925fe9e5dffa0eb795f33aeb100d2ba39eae",
+    "tier": "V",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/06/PXD058626/experiment_annotation.tsv"
+  },
+  "Herrera2025_PXD058626/fragpipe-files.fp-manifest": {
+    "bytes": 15119,
+    "fetched": "2026-10-19",
+    "published_check": null,
+    "role": "development",
+    "sha256": "8221adcbea130b63b75816506fea19ab51e063325c3629b456b6aebb70dfa41f",
+    "tier": "V",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/06/PXD058626/fragpipe-files.fp-manifest"
+  },
   "Kabatnik2024_PXD046999/C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv": {
     "bytes": 953149,
     "fetched": "2026-10-18",
@@ -178,6 +214,15 @@
     "sha256": "46c5dddcf7359eedee6ac55fc10625c291124a0c6ccd8a47d9080ec36fafaf33",
     "tier": "A",
     "url": "https://zenodo.org/api/records/22649483/files/Bulk_R1_LibGen_Global.zip/content"
+  },
+  "Kitata2025_PXD045043/Report_DIA-NN_Spleen.zip": {
+    "bytes": 185986731,
+    "fetched": "2026-10-20",
+    "published_check": null,
+    "role": "development",
+    "sha256": "774097f5bbbf503d5580ebc8e85de1048b0cc3c41b024995035ab316d6cce7e8",
+    "tier": "V",
+    "url": "ftp://ftp.jpostdb.org/JPST002191/Report_DIA-NN_Spleen.zip"
   },
   "LungMAP2025_BPD_MSV000094373/combined_protein.tsv": {
     "bytes": 2820464,

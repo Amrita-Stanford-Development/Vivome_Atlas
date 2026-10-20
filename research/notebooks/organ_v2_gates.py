@@ -148,8 +148,46 @@ def g3_lung(b) -> dict:
             "answers": lung_development.answers(response, region)}
 
 
+SPLEEN = "Report_DIA-NN_Spleen/ALL_noCarbamy.pg_matrix.tsv"
+
+
+def spleen_matrix() -> Path:
+    """PXD045043's DIA-NN protein groups (the final pass), taken out of the archive once."""
+    import zipfile
+    target = data.WORK / "lymph_node_v2" / "dev" / "spleen_ALL_noCarbamy.pg_matrix.tsv"
+    if not target.exists():
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(zipfile.ZipFile(DEV / "Kitata2025_PXD045043" / "Report_DIA-NN_Spleen.zip").read(SPLEEN))
+    return target
+
+
+def spleen_region(run: str) -> tuple[str, int]:
+    """(red pulp | white pulp, voxel size in µm) from a run name such as wSOP_Spleen_200umDIA_Wh_R2_..."""
+    import re
+    m = re.search(r"Spleen_(\d+)umDIA_(Red|Wh)_", run)
+    if not m:
+        raise SystemExit(f"{run}: not a labelled voxel")
+    return ("white pulp" if m.group(2) == "Wh" else "red pulp"), int(m.group(1))
+
+
 def g3_lymph_node(b) -> dict:
-    raise SystemExit("the spleen reader is fixed by the dated note on PXD045043's layout; add it before the gate run")
+    from benchmark import heldout_formats
+    table = heldout_formats.read_dia_nn(spleen_matrix())
+    raw = table.raw()
+    labels = [spleen_region(r) for r in raw.cell_ids]
+    region = [r for r, _ in labels]
+    size = np.array([s for _, s in labels])
+    response, G, _ = li.run_upload(b, raw)
+    grp = li.group_sums(G, b.class_names, b.hierarchy, "group")
+    s = grp["B cell"].to_numpy()
+    white = np.array(region) == "white pulp"
+    return {"set": "PXD045043", "voxels": len(region), "by_region": pd.Series(region).value_counts().to_dict(),
+            "auroc": round(float(roc_auc_score(white, s)), 4), "score": "P(B cell group)",
+            "auroc_by_size": {int(k): round(float(roc_auc_score(white[size == k], s[size == k])), 4) for k in sorted(set(size))
+                              if 0 < white[size == k].sum() < (size == k).sum()},
+            "mean_score_by_region": pd.Series(s).groupby(np.array(region)).mean().round(4).to_dict(),
+            "argmax_group": pd.crosstab(pd.Series(region, name="region"), pd.Series(grp.idxmax(1).to_numpy(), name="called")).to_dict(),
+            "answers": lymph_node_development.answers(response, region)}
 
 
 G3 = {"lung_v2": g3_lung, "lymph_node_v2": g3_lymph_node}

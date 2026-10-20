@@ -399,6 +399,19 @@ run, and builds v2 candidates only from what the diagnostics support.
 - **G4:** the locked test's rehearsal on the v2 bundle.
 - **Seen sets:** each organ's v1 G3 sets, reported only.
 
+**Note, 2026-10-20: PXD045043 as fetched**, before the lymph node's gate
+run:
+- The download got through on 2026-10-20. The archive's final-pass DIA-NN
+  protein-group matrix (`ALL_noCarbamy.pg_matrix.tsv`) holds exactly the 26
+  single labelled voxels: red and white pulp at 20, 50 and 100 µm (3 + 3
+  each) and 200 µm (4 + 4).
+- The map and the replicate runs are not in it.
+- The gate takes all 26 in one upload. Labels are read from each run's name
+  (`_Red_` or `_Wh_`); the AUROC by voxel size is reported.
+- The reader (`organ_v2_gates.py`, `g3_lymph_node`) was checked without a
+  model: 13 red and 13 white voxels; 5,114 of 5,252 protein groups
+  resolved.
+
 **Registry.** Each v2 suite's sha256 is recorded in
 `research/notebook-outputs/organ_v2_registry.json` before training. Each
 bundle's MANIFEST sha256 is added at freeze, before its gates. The gate
