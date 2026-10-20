@@ -448,7 +448,11 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
     - The locked test stays sealed (`side-tests.md`, amendment 8).
 - [-] **Stage 3, service and site:** not run for the colon (closed). The organ loader and organ gene maps are still needed for any organ that passes.
 - [-] **Stage 4:** not run for the colon; PXD052341 stays sealed.
-- [ ] **Deploy the DIA-NN 1.8 parser fix** (`d3ca02a`): the live service cannot read DIA-NN 1.8 protein tables until then (the owner approves deploys).
+- [ ] **Deploy the service's parser changes** (the owner approves deploys; the auto-mode classifier refused it on 2026-10-20). Until then the live service cannot read:
+  - DIA-NN 1.8 protein tables (`d3ca02a`);
+  - MaxQuant's proteinGroups.txt or FragPipe's LFQ combined_protein.tsv (`ed5188d`), which also gives a clear 400 naming the column for any table it cannot read.
+
+  **Order:** the service first (`deploy/huggingface/PUBLISH.md`), then the site. `ed5188d`'s Atlas page label and file check name MaxQuant and FragPipe; deployed before the service, they would invite files the live service still refuses.
 - [~] **The lung** (owner, 2026-10-18; `research/organ-references.md`, "Lung"):
   - search done; roles set (`side-tests.md`, amendment 9);
   - MSV000094189's protocol committed before its download;
