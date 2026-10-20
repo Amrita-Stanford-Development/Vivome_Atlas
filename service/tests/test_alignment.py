@@ -232,6 +232,14 @@ class UploadLayoutTests(unittest.TestCase):
         raw = alignment.parse_matrix_csv("s1,s2\n" + perseus + good + "G49,1,2,3\n")
         self.assertEqual(raw.cell_ids, ["s2"], "row 50 is one field too long, so the header is whole")
 
+    def test_a_row_of_white_space_is_skipped_not_refused(self):
+        """As the browser's check skips it: a trailing line of spaces, or a
+        lone separator, holds nothing."""
+        raw = alignment.parse_matrix_csv("gene,c1,c2\nG0,1,2\nG1,3,4\n \n")
+        self.assertEqual(raw.gene_names, ["G0", "G1"])
+        raw = alignment.parse_matrix_csv("gene\tc1\tc2\nG0\t1\t2\n\t\nG1\t3\t4\n")
+        self.assertEqual(raw.gene_names, ["G0", "G1"])
+
     def test_a_header_with_a_corner_is_never_shifted(self):
         """Only R's layout shifts the header: a named or blank corner, or a
         data row whose extra field is empty, means the header is whole."""

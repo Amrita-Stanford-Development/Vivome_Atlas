@@ -13,6 +13,7 @@ corrupted an earlier build of this project.
 from __future__ import annotations
 
 import hashlib
+import io
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -41,15 +42,16 @@ def load_gene_id_map(path: Path = config.GENE_ID_MAP_PATH) -> GeneIdMap:
     requests. Its bytes are hashed on every call (a fraction of a
     millisecond), so a file whose content has changed is parsed again, even
     one rewritten within a single clock tick."""
-    digest = hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    data = Path(path).read_bytes()  # read once: the map parsed is the one hashed
+    digest = hashlib.sha256(data).hexdigest()
     key = str(Path(path).resolve())
     cached = _LOADED.get(key)
     if cached is None or cached[0] != digest:
-        cached = _LOADED[key] = (digest, _read_gene_id_map(path))
+        cached = _LOADED[key] = (digest, _read_gene_id_map(io.BytesIO(data)))
     return cached[1]
 
 
-def _read_gene_id_map(path: Path) -> GeneIdMap:
+def _read_gene_id_map(path: "Path | io.BytesIO") -> GeneIdMap:
     """`match_type == "ambiguous"` rows (a feature-space gene whose own HGNC
     resolution was itself ambiguous — see the provenance file) contribute
     only their symbol; they never gain an Ensembl/UniProt cross-reference,

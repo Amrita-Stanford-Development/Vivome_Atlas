@@ -645,8 +645,9 @@ export function createLanding({
       upload.setOpacity(1);
       // The service turned the file down in its own words: it read the file,
       // which it does only in a projection slot, so the cancelled work is done.
-      // (Its refusals before the slot, of the form or the encoding, are ones
-      // this page's own checks never send it.)
+      // (Its refusals before the slot are ones this page's checks keep from
+      // it: the size check leaves room for the form, binary files are refused
+      // here as there, and the form is this page's own.)
       if (error?.kind === 'refused' && error.said) cancelledWork = false;
       if (error?.kind === 'busy') {
         dispatch({ type: 'BUSY', retryAfter: error.retryAfter ?? 30 });

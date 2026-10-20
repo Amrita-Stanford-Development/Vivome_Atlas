@@ -205,6 +205,23 @@ test('R\'s layout with blank missing values, and the rows judged, as the service
   assert.equal((await checkFile(blob(`s1,s2\n${perseus}\n${good}\nG49,1,2,3\n`))).cells, 1);
 });
 
+test('R\'s layout of a DIA-NN table: its first annotation column is not a cell, as the service reads it', async () => {
+  const rows = Array.from({ length: 30 }, (_, g) => `G${g}\tP${g}\t${g}\t${g + 1}`).join('\n');
+  assert.equal((await checkFile(blob(`Protein.Group\ts1\ts2\n${rows}\n`))).cells, 2);
+});
+
+test('a row of separators alone is not a feature row', async () => {
+  assert.equal((await checkFile(blob('gene,c1,c2\nG0,1,2\n,,\nG1,3,4\n'))).features, 2);
+});
+
+test('the size check leaves room for the form around the file', () => {
+  const limits = { max_upload_mb: 31 };
+  const exact = checkLimits({ cells: 100, size: 31 * 1024 * 1024 }, limits);
+  assert.equal(exact.ok, false, 'a file of exactly the limit is over it once sent');
+  assert.match(exact.problems[0], /the form around the file needs a little room/);
+  assert.equal(checkLimits({ cells: 100, size: 30 * 1024 * 1024 }, limits).ok, true);
+});
+
 test('Perseus rows are skipped quoted or not, before the first 50 rows are judged, as the service does', async () => {
   const header = Array.from({ length: 20 }, (_, i) => `c${i + 1}`).join(',');
   const row = (g) => [g, ...Array.from({ length: 20 }, (_, i) => String(i + 1))].join(',');

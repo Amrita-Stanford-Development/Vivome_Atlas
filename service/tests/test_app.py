@@ -78,6 +78,12 @@ class DecodeMatrixTests(unittest.TestCase):
     def test_windows_1252_as_excel_writes_plain_csv(self):
         self.assertEqual(app._decode_matrix("gene,20 \u00b5m\nA1BG,1.5\n".encode("cp1252")), "gene,20 \u00b5m\nA1BG,1.5\n")
 
+    def test_utf16_with_an_odd_last_byte_is_read_as_the_browser_reads_it(self):
+        """The browser's decoder puts U+FFFD for a lone last byte; the service
+        reads the file too, instead of refusing it before its slot."""
+        data = b"\xff\xfe" + "gene,c1\nA1BG,1.5\n".encode("utf-16-le") + b"\x00"
+        self.assertTrue(app._decode_matrix(data).startswith("gene,c1\nA1BG,1.5\n"))
+
     def test_a_workbook_or_a_binary_file_is_refused_in_words(self):
         with self.assertRaises(ValueError) as caught:
             app._decode_matrix(b"PK\x03\x04" + bytes(40))
@@ -183,6 +189,17 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
             status, payload = _post_multipart(f"{self.base_url}/api/project", b"rna", b"gene,c1\nA1BG,1.0\n")
             self.assertEqual(status, 500)
             self.assertIn("disk unreadable", payload["reason"])
+
+    def test_a_missing_gene_identifier_map_is_the_service_s_fault_said_at_load(self):
+        """Not a 400 blaming the visitor's file: the map every upload needs is
+        checked when the reference loads."""
+        from service.pipeline import gene_ids
+        bundle = self._synthetic_bundle()
+        with patch("service.pipeline.pipeline.load_bundle", return_value=bundle), \
+                patch.object(gene_ids, "load_gene_id_map", side_effect=FileNotFoundError("gene_id_map_v1.tsv")):
+            status, _, payload = self._get("/api/status")
+        self.assertEqual(status, 500)
+        self.assertIn("gene_id_map_v1.tsv", payload["reason"])
 
     def test_a_missing_artifact_is_checked_again_on_the_next_request(self):
         """Files fetched while the service runs are picked up without a restart."""

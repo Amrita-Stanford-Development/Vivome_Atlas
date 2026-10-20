@@ -82,7 +82,8 @@ export async function countNonEmptyLines(blob, { encoding = 'utf-8' } = {}) {
   const decoder = new TextDecoder(encoding);
   let count = 0;
   let tail = '';
-  const counts = (line) => line.trim() !== '' && !isPerseusRow(line);
+  // separators alone (",,") hold nothing either, as the service reads them
+  const counts = (line) => line.replace(/[\t,]/g, '').trim() !== '' && !isPerseusRow(line);
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -232,7 +233,10 @@ export async function checkFile(blob, name = blob?.name ?? '') {
       lines = await readLines(blob, { count, maxBytes: HEADER_LIMIT_BYTES, encoding });
       rows = judgedRows(lines.slice(1), parsed.separator);
     }
-    if (missingCorner(splitFields(header, parsed.separator), rows)) {
+    // R's layout: the first header field names a cell, unless it is one of
+    // DIA-NN's annotation columns (the service leaves those out by name)
+    const fields = splitFields(header, parsed.separator);
+    if (missingCorner(fields, rows) && !DIANN_ANNOTATIONS.includes(fields[0])) {
       parsed = { ...parsed, annotation: parsed.annotation - 1, cellEstimate: parsed.cellEstimate + 1 };
     }
   }
@@ -254,6 +258,7 @@ function limitValue(limit) {
 }
 
 const MB = 1024 * 1024;
+const FORM_ROOM = 64 * 1024;
 const SPLIT_ADVICE = 'Split the cells at random into smaller files, so each is still a mix of cell types.';
 
 // Whether a checked file fits the service: at most max_cells cells and
@@ -271,8 +276,12 @@ export function checkLimits(check, limits = {}) {
   if (minCells !== null && check.cells < minCells) {
     problems.push(`The file has ${formatCount(check.cells)} ${cellWord(check.cells)}; the service needs at least ${formatCount(minCells)} in one upload.`);
   }
-  if (maxMb !== null && check.size > maxMb * MB) {
-    problems.push(`The file is ${(check.size / MB).toFixed(1)} MB; the service takes at most ${formatCount(maxMb)} MB per upload. ${SPLIT_ADVICE}`);
+  // The request is the file plus the form around it (its fields and
+  // boundaries, a few hundred bytes): a file within FORM_ROOM of the limit
+  // would be turned down once sent.
+  if (maxMb !== null && check.size > maxMb * MB - FORM_ROOM) {
+    const close = check.size <= maxMb * MB ? ', and the form around the file needs a little room' : '';
+    problems.push(`The file is ${(check.size / MB).toFixed(1)} MB; the service takes at most ${formatCount(maxMb)} MB per upload${close}. ${SPLIT_ADVICE}`);
   }
   return { ok: problems.length === 0, problems };
 }

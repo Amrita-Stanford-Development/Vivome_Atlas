@@ -324,6 +324,8 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     gene_names: list[str] = []
     rows: list[list[float]] = []
     for line, row in lines:
+        if not any(field.strip() for field in row):
+            continue  # white space alone holds nothing (the browser's check skips it too)
         if len(row) <= needed:
             if len(row) > gene_col_idx and not row[gene_col_idx]:
                 continue

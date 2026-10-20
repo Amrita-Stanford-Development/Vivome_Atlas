@@ -140,6 +140,21 @@ class SharedAccessionTests(unittest.TestCase):
         self.assertEqual(set(first.symbol_to_feature), {"CD3E"})
         self.assertEqual(set(second.symbol_to_feature), {"CD3G"})
 
+    def test_the_map_parsed_is_the_one_hashed(self):
+        """The bytes are read once: a rewrite between the hash and the parse
+        cannot put one file's map under another's digest."""
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+        header = "gene_symbol\tmatch_type\tensembl_gene_id\tuniprot_ids\n"
+        hashed = (header + "CD3E\texact\tENSG00000198851\tP07766\n").encode("utf-8")
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "race.tsv"
+            path.write_text(header + "CD4\texact\tENSG00000010610\tP01730\n", encoding="utf-8")
+            with mock.patch.object(Path, "read_bytes", return_value=hashed):
+                loaded = gene_ids.load_gene_id_map(path)
+        self.assertEqual(set(loaded.symbol_to_feature), {"CD3E"})
+
     def test_the_real_map_lists_the_shared_accessions_and_maps_none_of_them(self):
         gene_map = gene_ids.load_gene_id_map()
         self.assertEqual(gene_map.shared_accessions["P69905"], frozenset({"HBA1", "HBA2"}))
