@@ -27,6 +27,18 @@ Content-Type: multipart/form-data
   restrict_to_supported_classes : "true" | "false"   (optional; default "false")
 ```
 
+**`modality`** says what the matrix measures:
+- **`"prot"`:** protein intensities, linear or log. A linear upload is
+  found and log2-transformed (`value_scale` in the response).
+- **`"rna"`:** expects log-normalised expression, as the reference's own RNA
+  is (the atlas h5ad's `X`, log1p of normalised counts). Raw counts are not
+  transformed:
+  - their nonzero median is under the linear-scale threshold of 50, so they
+    are read as log values;
+  - every 0 counts as a measured value.
+
+  Normalise and log1p counts before uploading.
+
 **`restrict_to_supported_classes`** limits every label to the classes with
 cross-modal protein evidence (`config.CROSS_MODAL_SUPPORTED_CLASSES`,
 currently macrophage and monocyte). By default labels are assigned among

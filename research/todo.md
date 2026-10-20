@@ -452,6 +452,7 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - DIA-NN 1.8 protein tables (`d3ca02a`);
   - MaxQuant's proteinGroups.txt or FragPipe's LFQ combined_protein.tsv (`ed5188d`), which also gives a clear 400 naming the column for any table it cannot read;
   - the upload-path fixes from two reviews, Spectronaut pivot reports, spreadsheet encodings and parsing inside the projection slot (`a1fcbbe`, `54a6a9a`);
+  - constant genes z-scored to 0, and a clear refusal for an upload with no named rows (`24391cc`);
   - the hosted upload limit of 31 MiB, under Cloud Run's 32 MiB per HTTP/1 request (`172b7d3`; the Dockerfile sets it, so it applies on the next deploy).
 
   The site's side (`172b7d3`, `2bf80a4`) has the Atlas page's file check, its messages and the /api door that no longer forwards the visitor's identity or address.
