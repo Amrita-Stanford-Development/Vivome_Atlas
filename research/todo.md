@@ -747,5 +747,6 @@ Amendments: sorted 5, lymph node 4 and 5, lung 4 and 5, colon 1. The sorted rehe
 - 2,000 cells take 10 s instead of 32 s, with identical answers: a per-cell recount of the whole mask, and the gene ID map read four times per request.
 - Fixed from the review: the Workflow page's Python version; RNA zeros vote on the scale again; "PAR1" text files; R's corner rule; the example send; the cancelled-file note; the organ baselines' constant genes.
 - The site sends security headers, and the /api door drops the visitor's location headers.
-- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d` |
+- A second review of those fixes found four more, now fixed: R tables with blank missing values, the rows the browser judges, the example send, and the cancelled-file note.
+- Rehearsed locally with the hosted settings: `check_space.py` finds 0 differences. | `387a6e2`, `401f086`, `3bbea2d`, `79a27d8` |
 | 2026-10-21 | **Accessibility** (a static review): the film's English captions; inert hidden panels on the Atlas page; a status line instead of a status card read out every second; the film's keys; the Workflow cell search; load errors announced. The visible changes wait for the owner (the todo's Accessibility item). | `6adc5fc`, `6d5a748` |
