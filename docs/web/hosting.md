@@ -65,6 +65,9 @@ they are:
   only. It answers a range from the parts (at most 4 MiB per answer, which
   an open-ended `bytes=N-` allows), streams the parts in order for a
   whole-file request, and answers HEAD and ranges past the end (416).
+- A part is used only when it answers OK at its own length. A missing, cut
+  or wrong part makes a ranged answer 502, and breaks a whole-file stream
+  rather than send other bytes as the video.
 
 The page links the file at its usual address, so nothing changes for it.
 

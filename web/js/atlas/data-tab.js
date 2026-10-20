@@ -27,7 +27,9 @@ export function createServiceState() {
   };
 }
 
-export function mountDataTab({ landing, client, service }) {
+// acceptsFiles is false on an organ's map, which labels no file: a file
+// dropped there is refused instead of opening this tab.
+export function mountDataTab({ landing, client, service, acceptsFiles = true }) {
   const line = (text, kind = null) => {
     const el = $('service-status');
     el.textContent = text;
@@ -189,12 +191,17 @@ export function mountDataTab({ landing, client, service }) {
   box.addEventListener('dragover', (e) => {
     if (![...(e.dataTransfer?.types ?? [])].includes('Files')) return;
     e.preventDefault();
+    if (!acceptsFiles) {
+      e.dataTransfer.dropEffect = 'none';
+      return;
+    }
     hint.hidden = false;
   });
   box.addEventListener('dragleave', (e) => { if (!box.contains(e.relatedTarget)) hint.hidden = true; });
   box.addEventListener('drop', (e) => {
     e.preventDefault();
     hint.hidden = true;
+    if (!acceptsFiles) return;
     const file = e.dataTransfer?.files?.[0];
     if (!file || !['idle', 'chosen', 'interactive', 'failed'].includes(landing.state.name)) return;
     showDataTab();

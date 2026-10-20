@@ -16,7 +16,10 @@ const MEDIA = {
 };
 const media = MEDIA['/motion/film/vivome.mp4'];
 
-function fakeEnv() {
+// missing: part indexes that come back as some other file with a 200 (a
+// wrong upload, or a site without its 404 page), the case only the length
+// check catches.
+function fakeEnv(missing = []) {
   const asked = [];
   return {
     asked,
@@ -27,14 +30,15 @@ function fakeEnv() {
         const m = /\.(\d{4})$/.exec(path);
         if (!m || !path.startsWith(media.parts)) return new Response(`static ${path}`, { status: 200 });
         const i = Number(m[1]);
+        if (missing.includes(i)) return new Response('<!doctype html><title>VivOME</title>', { status: 200 });
         return new Response(DATA.slice(i * media.part, (i + 1) * media.part));
       },
     },
   };
 }
 
-const call = (path, init = {}) => {
-  const env = fakeEnv();
+const call = (path, init = {}, missing = []) => {
+  const env = fakeEnv(missing);
   return createHandler(MEDIA)({ request: new Request(`https://site.dev${path}`, init), env }).then((r) => ({ r, env }));
 };
 
@@ -94,4 +98,14 @@ test('any other file in the folder is the static file', async () => {
   const { r, env } = await call('/motion/film/poster.webp', { headers: { Range: 'bytes=0-1' } });
   assert.equal(await r.text(), 'static /motion/film/poster.webp');
   assert.deepEqual(env.asked, ['/motion/film/poster.webp']);
+});
+
+test('a missing part is never sent as video bytes', async () => {
+  const ranged = await call('/motion/film/vivome.mp4', { headers: { Range: 'bytes=999990-2000009' } }, [1]);
+  assert.equal(ranged.r.status, 502);
+  const whole = await call('/motion/film/vivome.mp4', {}, [0]);
+  assert.equal(whole.r.status, 502);
+  const later = await call('/motion/film/vivome.mp4', {}, [5]);
+  assert.equal(later.r.status, 200);
+  await assert.rejects(later.r.arrayBuffer(), /media part 5 missing/);
 });

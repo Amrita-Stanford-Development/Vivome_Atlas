@@ -116,6 +116,19 @@ class Splits(unittest.TestCase):
                 self.assertEqual(int(((donors[te] == d) & (y[te] == c)).sum()), 4)
 
 
+    def test_a_reused_split_needs_the_same_rna_file(self):
+        """A v2 carries its base's split through the atlas rows, which only
+        name the same cells when both read one RNA file."""
+        import build_organ_reference as bor
+        for organ in ("lymph_node_v2", "lung_v2"):
+            cfg = data.load_organ(organ)
+            self.assertEqual(cfg["rna"], data.load_organ(cfg["split"]["reuse_from"])["rna"], organ)
+        v2 = mock.Mock(cfg={"rna": "a.h5ad", "split": {"reuse_from": "base"}})
+        with mock.patch.object(bor, "Build", return_value=mock.Mock(cfg={"rna": "b.h5ad"})):
+            with self.assertRaises(SystemExit):
+                bor.reused_split(v2)
+
+
 class Suites(unittest.TestCase):
     def setUp(self):
         self.classes = ["e1", "e2", "i1", "i2", "s1"]

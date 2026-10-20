@@ -143,3 +143,30 @@ baselines, correlation and PCA with kNN, run in `benchmark/organ_baselines.py`.
 - **Rehearsal:** done on the rehearsal intake.
 
 They remain secondary and never decide.
+
+**Amendment 3, 2026-10-20: the PCA baseline's centre, and the setup
+checks.** A code review found the PCA with kNN baseline weak on both
+rehearsals: lymph node AUROC 0.597 against correlation's 1.0, with 27 of 40
+regions called classical monocyte.
+
+- **The cause:** the components are fitted on RNA cells sampled per class,
+  and the projection subtracted that sample's own mean. Sampling per class
+  leaves the mean off the reference's class-balanced centre, and the shift
+  moved every query toward the small classes. The queries' neighbours were
+  65% other queries.
+- **What was ruled out:** fitting on RNA and queries stacked, with
+  distance-weighted votes as in `benchmark/baselines_corrected.py`, gave
+  the same 0.596. So the method's documented use was not the cause.
+- **The fix:** both sides are projected around the class-balanced centre,
+  which `class_balanced_z` puts at 0.
+  - Lymph node rehearsal: 1.0.
+  - Lung rehearsal: 100 (was 96.9).
+- **The setup checks:** each `baselines.json` now records the space's
+  held-out RNA kNN balanced accuracy against chance, and the queries' share
+  of RNA neighbours.
+- **Missing scores:** a sample without a correlation score (fewer than 3
+  measured genes) is called "(none)". It counts as wrong for the lung and is
+  left out of the lymph node's AUROC; the count is reported.
+
+This was fixed on the rehearsals, before any real scoring. The baselines
+stay secondary and never decide.

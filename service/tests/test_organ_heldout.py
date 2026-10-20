@@ -84,6 +84,48 @@ class OrganBaselines(unittest.TestCase):
         self.assertEqual(ob.by_level(s, ["a", "b", "c"], h, "group", "max").to_dict("records"), [{"G1": 0.5, "G2": 0.3}])
         self.assertEqual(ob.by_level(s, ["a", "b", "c"], h, "group", "sum").to_dict("records"), [{"G1": 0.7, "G2": 0.3}])
 
+    def test_the_knn_space_is_centred_on_the_reference_not_on_its_sample(self):
+        """Classes sampled unequally leave the sample's mean off the class-balanced
+        centre; queries are projected around the centre (amendment 3), so an
+        upload with nothing measured lands on it."""
+        import numpy as np
+        from benchmark import organ_baselines as ob
+        rng = np.random.default_rng(1)
+        labels = np.array(["big"] * 900 + ["small"] * 60)
+        rna = np.vstack([rng.normal(1.0, 0.3, (900, 60)), rng.normal(-1.0, 0.3, (60, 60))])
+        ref, ref_labels, qp = ob.knn_space(rna, labels, np.full((1, 60), np.nan))
+        np.testing.assert_allclose(qp, 0.0)
+        self.assertEqual(len(ref), 960)
+        small = rna[labels == "small"].mean(0) + 3.0  # another scale, as a protein upload is
+        q = np.vstack([small, rna[labels == "big"].mean(0) + 3.0])
+        q[:, :20] = np.nan
+        votes, classes = ob.knn_votes(*ob.knn_space(rna, labels, q), ["big", "small"])
+        self.assertEqual([classes[i] for i in votes.argmax(1)], ["small", "big"])
+
+    def test_a_sample_without_a_score_is_called_none_not_a_crash(self):
+        """Correlation leaves a sample with under 3 measured genes without a
+        score: the lung counts it wrong, the lymph node leaves it out."""
+        import warnings
+
+        import numpy as np
+        import pandas as pd
+        from benchmark import organ_baselines as ob
+        h = {"a": {"group": "G1", "lineage": "epithelial"}, "b": {"group": "G2", "lineage": "immune"}}
+        scores = np.array([[0.9, 0.1], [np.nan, np.nan], [0.2, 0.8]])
+        labels = pd.DataFrame({"group": ["epithelial", "epithelial", "immune"], "scored": ["True"] * 3})
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            lung = ob.score_entry("lung", scores, ["a", "b"], h, labels, "max")
+            hl = {"b": {"group": "B cell", "lineage": "lymphoid"}, "t": {"group": "T cell", "lineage": "lymphoid"}}
+            s = np.array([[0.9, 0.1], [0.1, 0.9], [np.nan, np.nan], [0.8, 0.3], [0.2, 0.7]])
+            zones = pd.DataFrame({"group": ["B zone", "T zone", "B zone", "B zone", "T zone"]})
+            ln = ob.score_entry("ln", s, ["b", "t"], hl, zones, "max")
+        self.assertEqual(lung["unscorable_samples"], 1)
+        self.assertEqual(lung["balanced_accuracy"], 75.0)  # epithelial 1 of 2, immune 1 of 1
+        self.assertEqual(lung["called_by_lineage"][ob.NONE]["epithelial"], 1)
+        self.assertEqual((ln["unscorable_samples"], ln["auroc_b_over_t"]), (1, 1.0))
+        self.assertEqual(ln["argmax_group_by_zone"][ob.NONE]["B zone"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -126,6 +126,8 @@ def reused_split(b: Build) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     carried over through the atlas rows, so each cell keeps its part and the
     test cells are the base's test cells minus any dropped classes."""
     base = Build(b.cfg["split"]["reuse_from"])
+    if base.cfg["rna"] != b.cfg["rna"]:
+        raise SystemExit(f"{b.cfg['split']['reuse_from']} reads another RNA file; its rows are not this organ's rows")
     position = {int(r): i for i, r in enumerate(b.table()["row"].to_numpy())}
     rows = base.table()["row"].to_numpy()
     old = np.load(base.path("splits_seed0.npz"))

@@ -135,3 +135,60 @@ test('the reference layer takes an organ palette’s length for its uniform arra
   layer.setFocusSet([27, 28]);
   assert.deepEqual(layer.focusSet, [27]);
 });
+
+// A stand-in page: every element the Your data tab looks up, recording its
+// listeners, so a drop can be played without a browser.
+function fakePage() {
+  const els = new Map();
+  const make = () => ({
+    handlers: {}, hidden: true, disabled: false, value: '', title: '', innerHTML: '', textContent: '', files: [],
+    dataset: {}, classList: { toggle() {}, add() {}, remove() {} },
+    addEventListener(type, f) { this.handlers[type] = f; }, contains: () => false, focus() {},
+  });
+  return {
+    els,
+    document: {
+      getElementById: (id) => (els.has(id) ? els.get(id) : els.set(id, make()).get(id)),
+      querySelectorAll: () => [],
+    },
+  };
+}
+
+test('an organ map refuses a dropped file; blood takes it to Your data', async () => {
+  const { mountDataTab } = await import('../js/atlas/data-tab.js');
+  const saved = globalThis.document;
+  try {
+    for (const acceptsFiles of [false, true]) {
+      const page = fakePage();
+      globalThis.document = page.document;
+      const chosen = [];
+      let shown = 0;
+      const landing = { state: { name: 'idle' }, run: null, onChange() {}, chooseFile: (f) => chosen.push(f), chips: () => '' };
+      const service = { state: { ready: false, limits: null }, url: () => '', limits: () => ({}) };
+      const tab = mountDataTab({ landing, client: {}, service, acceptsFiles });
+      tab.onShow = () => { shown += 1; };
+      const box = page.els.get('three-container');
+      const hint = page.els.get('drop-hint');
+      const transfer = { types: ['Files'], files: [{ name: 'cells.csv' }], dropEffect: 'copy' };
+      let prevented = 0;
+      const event = { dataTransfer: transfer, preventDefault: () => { prevented += 1; } };
+      box.handlers.dragover(event);
+      assert.equal(hint.hidden, !acceptsFiles, 'the drop hint shows only where files are taken');
+      box.handlers.drop(event);
+      assert.equal(prevented, 2, 'the browser never opens the file in place of the page');
+      assert.deepEqual(chosen.length, acceptsFiles ? 1 : 0);
+      assert.equal(shown, acceptsFiles ? 1 : 0);
+      if (!acceptsFiles) assert.equal(transfer.dropEffect, 'none');
+    }
+  } finally {
+    globalThis.document = saved;
+  }
+});
+
+test('the organ page guards Your data on every path: tabs, arrow keys, the address, drops', () => {
+  const main = read('js/atlas/main.js');
+  assert.match(main, /mountDataTab\(\{ landing, client, service, acceptsFiles: !organ \}\)/);
+  assert.match(main, /function showTab\(which\) \{\n\s+if \(organ && which === 'data'\) return;/);
+  assert.match(main, /if \(organ \|\| \(e\.key !== 'ArrowLeft' && e\.key !== 'ArrowRight'\)\) return;/);
+  assert.match(main, /function fromHash\(\) \{\n\s+if \(organ\) return;/);
+});

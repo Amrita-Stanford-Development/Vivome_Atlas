@@ -175,10 +175,11 @@ async function start() {
     limits: service.limits,
     options: () => ({ modality: $('modality').value, restrict: $('restrict').checked }),
   });
-  const dataTab = mountDataTab({ landing, client, service });
+  const dataTab = mountDataTab({ landing, client, service, acceptsFiles: !organ });
   mountViewControls({ stage, layer, landing, labels });
   const tabs = { explore: [$('tab-explore'), $('panel-explore')], data: [$('tab-data'), $('panel-data')] };
   function showTab(which) {
+    if (organ && which === 'data') return; // an organ's map labels no file
     for (const [key, [tab, panel]] of Object.entries(tabs)) {
       const on = key === which;
       tab.setAttribute('aria-selected', String(on));
@@ -191,7 +192,7 @@ async function start() {
   $('tab-explore').addEventListener('click', () => showTab('explore'));
   $('tab-data').addEventListener('click', () => showTab('data'));
   $('controls-panel').querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (organ || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
     const next = $('tab-explore').getAttribute('aria-selected') === 'true' ? 'data' : 'explore';
     showTab(next);
     tabs[next][0].focus();

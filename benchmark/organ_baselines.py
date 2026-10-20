@@ -13,7 +13,9 @@ The two simple methods are the corrected benchmark's
 - **correlation:** Pearson over each sample's measured genes to every class
   mean of the RNA side; the predicted class is the argmax.
 - **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,
-  sampled per class) with the queries; the K nearest RNA cells vote.
+  sampled per class), both sides projected around the class-balanced centre;
+  the K nearest RNA cells vote. Its setup checks (held-out RNA kNN, the
+  queries' share of RNA neighbours) are recorded beside it.
 
 Each is scored by its protocol's primary measure:
 - lymph node: AUROC of S = score(B cell group) - score(T cell group),
@@ -49,6 +51,7 @@ from organ_reference import bundle as organ_bundle  # noqa: E402
 RNA_CELLS = 30000
 K = 30
 SEED = 0
+NONE = "(none)"  # a sample a baseline cannot score; wrong for the lung, left out of the lymph node's AUROC
 
 
 def organ_matrix(raw: alignment.RawMatrix, candidate: Path) -> np.ndarray:
@@ -100,16 +103,41 @@ def correlation_scores(rna_z, labels, q) -> tuple[np.ndarray, list[str]]:
     return out, classes
 
 
-def knn_votes(rna_z, labels, q) -> tuple[np.ndarray, list[str]]:
+def knn_space(rna_z, labels, q) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """(RNA cells, their labels, queries) in the PCA space. The components are
+    fitted on RNA cells sampled per class; both sides are projected around the
+    reference's class-balanced centre (0 after class_balanced_z), not the
+    sample's own mean. Sampling per class leaves that mean off the centre, and
+    the shift moved every query toward the small classes (amendment 3)."""
     rng = np.random.default_rng(SEED)
     classes = sorted(set(labels))
     per = max(1, RNA_CELLS // len(classes))
     keep = np.concatenate([rng.choice(np.flatnonzero(labels == c), min(per, int((labels == c).sum())), replace=False) for c in classes])
     pcs = PCA(n_components=50, random_state=SEED).fit(rna_z[keep])
-    ref, qp = pcs.transform(rna_z[keep]), pcs.transform(query_z(q))
+    return rna_z[keep] @ pcs.components_.T, labels[keep], query_z(q) @ pcs.components_.T
+
+
+def knn_votes(ref, ref_labels, qp, classes) -> tuple[np.ndarray, list[str]]:
     _, idx = NearestNeighbors(n_neighbors=K, metric="cosine").fit(ref).kneighbors(qp)
-    lab = labels[keep][idx]
+    lab = ref_labels[idx]
     return np.stack([(lab == c).mean(1) for c in classes], 1), classes
+
+
+def setup_checks(ref, ref_labels, qp, classes) -> dict:
+    """The kNN space's own checks (benchmark/baselines_corrected.py's): does it
+    carry the classes on held-out RNA cells, and do queries sit among RNA
+    cells or apart from them?"""
+    rng = np.random.default_rng(SEED)
+    test = rng.choice(len(ref), len(ref) // 5, replace=False)
+    train = np.setdiff1d(np.arange(len(ref)), test)
+    votes, _ = knn_votes(ref[train], ref_labels[train], ref[test], classes)
+    held = balanced_accuracy_score(ref_labels[test], np.array(classes)[votes.argmax(1)])
+    joint = np.vstack([ref, qp])
+    _, idx = NearestNeighbors(n_neighbors=K + 1, metric="cosine").fit(joint).kneighbors(qp)
+    return {"rna_holdout_knn_balanced_accuracy_pct": round(100 * float(held), 2),
+            "rna_holdout_chance_pct": round(100 / len(classes), 2),
+            "query_neighbour_share_median_pct": round(100 * float(np.median((idx[:, 1:] >= len(ref)).mean(1))), 2),
+            "query_neighbour_share_if_mixed_pct": round(100 * len(qp) / len(joint), 3)}
 
 
 def by_level(scores, classes, hierarchy, level, how) -> pd.DataFrame:
@@ -117,6 +145,34 @@ def by_level(scores, classes, hierarchy, level, how) -> pd.DataFrame:
     cols = {k: [i for i, c in enumerate(classes) if hierarchy[c][level] == k] for k in keys}
     agg = (lambda s, i: np.nanmax(s[:, i], 1)) if how == "max" else (lambda s, i: s[:, i].sum(1))
     return pd.DataFrame({k: agg(scores, i) for k, i in cols.items()})
+
+
+def called_at(df: pd.DataFrame, scorable: np.ndarray) -> np.ndarray:
+    return np.where(scorable, df.fillna(-np.inf).idxmax(1).to_numpy(), NONE)
+
+
+def score_entry(organ: str, scores: np.ndarray, classes: list, hierarchy: dict, labels: pd.DataFrame, how: str) -> dict:
+    """One baseline's scores (samples x classes) by the protocol's primary
+    measure. A sample with no finite score (correlation needs 3 measured
+    genes) is called NONE."""
+    groups = by_level(scores, classes, hierarchy, "group", how)
+    scorable = np.isfinite(scores).any(1)
+    pred = np.where(scorable, np.array(classes)[np.nan_to_num(scores, nan=-np.inf).argmax(1)], NONE)
+    entry = {"predicted_class": pd.Series(pred).value_counts().to_dict(), "unscorable_samples": int((~scorable).sum())}
+    if organ == "ln":
+        zone = labels["group"].to_numpy()
+        bt = np.isin(zone, ["B zone", "T zone"])
+        s = (groups["B cell"] - groups["T cell"]).to_numpy()
+        ok = bt & np.isfinite(s)
+        entry["auroc_b_over_t"] = round(float(roc_auc_score(zone[ok] == "B zone", s[ok])), 4)
+        entry["argmax_group_by_zone"] = pd.crosstab(pd.Series(zone, name="zone"), pd.Series(called_at(groups, scorable), name="called")).to_dict()
+    else:
+        truth = labels["group"].to_numpy()
+        scored = labels["scored"].astype(str).to_numpy() == "True"
+        called = called_at(by_level(scores, classes, hierarchy, "lineage", how), scorable)
+        entry["balanced_accuracy"] = round(100 * float(balanced_accuracy_score(truth[scored], called[scored])), 2)
+        entry["called_by_lineage"] = pd.crosstab(pd.Series(truth[scored], name="truth"), pd.Series(called[scored], name="called")).to_dict()
+    return entry
 
 
 def run(organ: str, rehearse: bool) -> dict:
@@ -137,26 +193,12 @@ def run(organ: str, rehearse: bool) -> dict:
     rna_z = class_balanced_z(X, rna_labels)
     result = {"method": __doc__.split("\n\n")[1].strip(), "rna_cells": int(len(X)), "query_samples": int(len(q)),
               "candidate": candidate_organ}
-    for name, (scores, classes), how in (("correlation", correlation_scores(rna_z, rna_labels, q), "max"),
-                                         ("pca_knn", knn_votes(rna_z, rna_labels, q), "sum")):
-        groups = by_level(scores, classes, hierarchy, "group", how)
-        lineages = by_level(scores, classes, hierarchy, "lineage", how)
-        pred = np.array(classes)[np.nan_to_num(scores, nan=-np.inf).argmax(1)]
-        entry = {"predicted_class": pd.Series(pred).value_counts().to_dict()}
-        if organ == "ln":
-            zone = labels["group"].to_numpy()
-            bt = np.isin(zone, ["B zone", "T zone"])
-            s = (groups["B cell"] - groups["T cell"]).to_numpy()
-            ok = bt & np.isfinite(s)
-            entry["auroc_b_over_t"] = round(float(roc_auc_score(zone[ok] == "B zone", s[ok])), 4)
-            entry["argmax_group_by_zone"] = pd.crosstab(pd.Series(zone, name="zone"), pd.Series(groups.idxmax(1).to_numpy(), name="called")).to_dict()
-        else:
-            truth = labels["group"].to_numpy()
-            scored = labels["scored"].astype(str).to_numpy() == "True"
-            called = lineages.idxmax(1).to_numpy()
-            entry["balanced_accuracy"] = round(100 * float(balanced_accuracy_score(truth[scored], called[scored])), 2)
-            entry["called_by_lineage"] = pd.crosstab(pd.Series(truth[scored], name="truth"), pd.Series(called[scored], name="called")).to_dict()
-        result[name] = entry
+    classes = sorted(set(rna_labels))
+    space = knn_space(rna_z, rna_labels, q)
+    for name, (scores, cls), how in (("correlation", correlation_scores(rna_z, rna_labels, q), "max"),
+                                     ("pca_knn", knn_votes(*space, classes), "sum")):
+        result[name] = score_entry(organ, scores, cls, hierarchy, labels, how)
+    result["pca_knn"]["setup_checks"] = setup_checks(*space, classes)
     (out / "baselines.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
     return result
 

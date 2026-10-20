@@ -98,7 +98,7 @@
     }
   },
   "baselines": {
-    "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class) with the queries; the K nearest RNA cells vote.",
+    "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class), both sides projected around the class-balanced centre;\n  the K nearest RNA cells vote. Its setup checks (held-out RNA kNN, the\n  queries' share of RNA neighbours) are recorded beside it.",
     "rna_cells": 65228,
     "query_samples": 32,
     "candidate": "lung_v2",
@@ -117,6 +117,7 @@
         "adventitial cell": 1,
         "basal cell": 1
       },
+      "unscorable_samples": 0,
       "balanced_accuracy": 100.0,
       "called_by_lineage": {
         "endothelial": {
@@ -150,16 +151,15 @@
         "capillary endothelial cell": 6,
         "intermediate monocyte": 5,
         "club cell": 4,
-        "pericyte": 3,
-        "alveolar type 2 fibroblast cell": 3,
-        "plasma cell": 2,
-        "macrophage": 2,
+        "adventitial cell": 4,
+        "alveolar type 2 fibroblast cell": 4,
+        "type ii pneumocyte": 3,
+        "macrophage": 3,
         "endothelial cell of artery": 2,
-        "type ii pneumocyte": 2,
-        "adventitial cell": 2,
-        "classical monocyte": 1
+        "plasma cell": 1
       },
-      "balanced_accuracy": 96.88,
+      "unscorable_samples": 0,
+      "balanced_accuracy": 100.0,
       "called_by_lineage": {
         "endothelial": {
           "endothelial": 8,
@@ -169,13 +169,13 @@
         },
         "epithelial": {
           "endothelial": 0,
-          "epithelial": 7,
+          "epithelial": 8,
           "immune": 0,
           "stromal": 0
         },
         "immune": {
           "endothelial": 0,
-          "epithelial": 1,
+          "epithelial": 0,
           "immune": 8,
           "stromal": 0
         },
@@ -185,6 +185,12 @@
           "immune": 0,
           "stromal": 8
         }
+      },
+      "setup_checks": {
+        "rna_holdout_knn_balanced_accuracy_pct": 84.8,
+        "rna_holdout_chance_pct": 3.7,
+        "query_neighbour_share_median_pct": 10.0,
+        "query_neighbour_share_if_mixed_pct": 0.142
       }
     }
   },

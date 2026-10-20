@@ -53,6 +53,8 @@ reference's RNA cells in its own bundle's coordinate space, so an upload
 would land on it, but no file is labelled against it: each organ's
 reference missed its development gates (`research/organ-references.md`).
 So the organ page hides Your data and the protein cells, and says why.
+Every way into Your data is closed there: its tab, the arrow keys, the
+address (`#your-data`) and a file dropped on the map, which is refused.
 
 - **Colours** (`organPalette`): one hue per family, its types in shades of
   it, so families read as blocks on the map. Blood keeps `CLASS_COLOURS`.

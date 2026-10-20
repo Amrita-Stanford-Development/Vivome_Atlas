@@ -46,6 +46,18 @@ export function partsFor(start, end, part) {
 
 export const partPath = (media, index) => `${media.parts}${String(index).padStart(4, '0')}`;
 
+// A part's own length: PART bytes, the last one what is left. A part is used
+// only when it answers OK at its own length (a missing, cut or wrong file is
+// null), so no other bytes are ever sent as the video.
+export const partLength = (media, index) => Math.min(media.part, media.size - index * media.part);
+
+async function readPart(fetchPart, media, index) {
+  const response = await fetchPart(index);
+  if (!response.ok) return null;
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  return bytes.length === partLength(media, index) ? bytes : null;
+}
+
 export function createHandler(table) {
   return async function onRequest({ request, env }) {
     const url = new URL(request.url);
@@ -69,14 +81,19 @@ export function createHandler(table) {
         headers.set('content-length', String(media.size));
         return new Response(null, { status: 200, headers });
       }
+      // The first part is read before answering, so a missing file is a 502;
+      // a part missing later breaks the stream rather than send wrong bytes.
       const count = Math.ceil(media.size / media.part);
+      const first = await readPart(part, media, 0);
+      if (!first) return new Response('Media part missing', { status: 502 });
       let next = 0;
       const body = new ReadableStream({
         async pull(controller) {
           if (next >= count) return controller.close();
-          const response = await part(next);
+          const bytes = next === 0 ? first : await readPart(part, media, next);
+          if (!bytes) return controller.error(new Error(`media part ${next} missing`));
           next += 1;
-          controller.enqueue(new Uint8Array(await response.arrayBuffer()));
+          controller.enqueue(bytes);
         },
       });
       return new Response(body, { status: 200, headers });
@@ -89,9 +106,8 @@ export function createHandler(table) {
     const body = new Uint8Array(end - start + 1);
     let at = 0;
     for (const { index, from, to } of partsFor(start, end, media.part)) {
-      const response = await part(index);
-      if (!response.ok) return new Response('Media part missing', { status: 502 });
-      const bytes = new Uint8Array(await response.arrayBuffer());
+      const bytes = await readPart(part, media, index);
+      if (!bytes) return new Response('Media part missing', { status: 502 });
       body.set(bytes.subarray(from, to), at);
       at += to - from;
     }

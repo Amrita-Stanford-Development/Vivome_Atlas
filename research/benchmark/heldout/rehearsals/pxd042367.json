@@ -69,7 +69,7 @@
     "auroc_similarity_lymphoid_over_epithelium": 1.0
   },
   "baselines": {
-    "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class) with the queries; the K nearest RNA cells vote.",
+    "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class), both sides projected around the class-balanced centre;\n  the K nearest RNA cells vote. Its setup checks (held-out RNA kNN, the\n  queries' share of RNA neighbours) are recorded beside it.",
     "rna_cells": 126945,
     "query_samples": 40,
     "candidate": "lymph_node_v2",
@@ -85,6 +85,7 @@
         "cd8-positive, alpha-beta t cell": 1,
         "endothelial cell": 1
       },
+      "unscorable_samples": 0,
       "auroc_b_over_t": 1.0,
       "argmax_group_by_zone": {
         "B cell": {
@@ -121,35 +122,44 @@
     },
     "pca_knn": {
       "predicted_class": {
-        "classical monocyte": 27,
-        "neutrophil": 5,
-        "endothelial cell": 3,
-        "intermediate monocyte": 3,
-        "b cell": 1,
-        "mast cell": 1
+        "b cell": 15,
+        "plasma cell": 10,
+        "regulatory t cell": 5,
+        "macrophage": 4,
+        "innate lymphoid cell": 3,
+        "cd8-positive, alpha-beta t cell": 1,
+        "naive thymus-derived cd4-positive, alpha-beta t cell": 1,
+        "classical monocyte": 1
       },
-      "auroc_b_over_t": 0.5972,
+      "unscorable_samples": 0,
+      "auroc_b_over_t": 1.0,
       "argmax_group_by_zone": {
         "B cell": {
-          "B zone": 1,
-          "T zone": 0,
-          "epithelium": 0
-        },
-        "endothelial": {
-          "B zone": 0,
+          "B zone": 24,
           "T zone": 0,
           "epithelium": 1
         },
-        "granulocyte": {
-          "B zone": 3,
+        "NK/ILC": {
+          "B zone": 0,
           "T zone": 0,
+          "epithelium": 3
+        },
+        "T cell": {
+          "B zone": 0,
+          "T zone": 6,
           "epithelium": 0
         },
         "monocyte/macrophage": {
-          "B zone": 20,
-          "T zone": 12,
-          "epithelium": 3
+          "B zone": 0,
+          "T zone": 6,
+          "epithelium": 0
         }
+      },
+      "setup_checks": {
+        "rna_holdout_knn_balanced_accuracy_pct": 74.93,
+        "rna_holdout_chance_pct": 5.56,
+        "query_neighbour_share_median_pct": 13.33,
+        "query_neighbour_share_if_mixed_pct": 0.247
       }
     }
   },
