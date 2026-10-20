@@ -662,3 +662,29 @@ test('a file the service turned down is not offered again as it is', async () =>
   assert.match(els.get('status-card').innerHTML, /turned the file down/);
   assert.doesNotMatch(els.get('status-card').innerHTML, /Try again/);
 });
+
+test('after cancelling a file the service was working on, a busy answer names that file', async () => {
+  let calls = 0;
+  const client = {
+    project: async (url, form, { signal, onUpload }) => {
+      calls += 1;
+      if (calls === 1) {
+        onUpload(1);
+        return new Promise((_, reject) => signal.addEventListener('abort', () => reject(Object.assign(new Error('cancelled'), { kind: 'cancelled' }))));
+      }
+      throw Object.assign(new Error('busy'), { kind: 'busy', retryAfter: 30 });
+    },
+  };
+  const { els, landing } = setup({ client, limits: () => ({}) });
+  await landing.chooseFile(fileOf(25));
+  landing.send();
+  await settleMicrotasks();
+  assert.equal(landing.state.name, 'working');
+  landing.cancel();
+  await settleMicrotasks();
+  landing.send();
+  for (let i = 0; i < 20 && landing.state.name !== 'busy'; i += 1) await settleMicrotasks();
+  assert.equal(landing.state.name, 'busy');
+  assert.match(els.get('status-card').innerHTML, /still finishing the file you cancelled/);
+  landing.cancel();
+});

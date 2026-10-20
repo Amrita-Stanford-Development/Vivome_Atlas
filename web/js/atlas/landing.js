@@ -68,6 +68,9 @@ export function createLanding({
   let lastStatus = '';
   let lastKey = '';
   let clock = 0;           // the flight clock the upload layer shows
+  // The visitor cancelled while the service had their file: cancelling stops
+  // the wait, not the service's work, so the next busy answer is likely theirs.
+  let cancelledWork = false;
   let userCam = false;      // the visitor took the camera during this landing
   let current = -1;         // the selected cell
   let playing = false;
@@ -407,7 +410,10 @@ export function createLanding({
       const pct = Math.round(uploaded * 100);
       status(`<p>Sending your file: ${pct}%</p><div class="bar"><span style="width:${pct}%"></span></div>`);
     } else if (name === 'working' || name === 'finishing') status(workingHtml());
-    else if (name === 'busy') status(`<p>Another file is being labelled. Trying again in ${Math.max(0, Math.ceil((st.retryAfter ?? 30) - phase))} s.</p>`);
+    else if (name === 'busy') {
+      const who = cancelledWork ? 'The service is still finishing the file you cancelled.' : 'Another file is being labelled.';
+      status(`<p>${who} Trying again in ${Math.max(0, Math.ceil((st.retryAfter ?? 30) - phase))} s.</p>`);
+    }
     else if (name === 'failed') {
       // A file the service turned down would be turned down again as it is.
       const again = st.example || (st.file && st.check?.ok && st.error?.kind !== 'refused');
@@ -626,6 +632,7 @@ export function createLanding({
         startIllustration();
         dispatch({ type: 'UPLOADED' });
       }
+      cancelledWork = false;
       if (st.name === 'working') arrive(response, 'service');
     } catch (error) {
       if (error?.kind === 'cancelled' || !['sending', 'working'].includes(st.name)) return;
@@ -759,6 +766,7 @@ export function createLanding({
     chooseFile,
     send,
     cancel() {
+      if (st.name === 'working') cancelledWork = true;
       abort?.abort();
       clearTimeout(busyTimer);
       illustration.hide();
