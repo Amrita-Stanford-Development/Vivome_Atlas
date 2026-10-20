@@ -2597,8 +2597,10 @@ rule 1 allows no candidate that missed its gates. Nothing was tuned. A
 change to either organ is a v3, the owner's call, and its G3 cannot reuse
 PXD045043 or PXD058626, which these runs read.
 
-**G2** (one donor held out, a diagnosis) is run for both v2 candidates and
-reported in organ-references when done.
+**G2** (one donor held out, a diagnosis), class balanced accuracy unseen
+against seen:
+- lymph node v2: 55.7 against 59.3, a gap of 3.6 (v1 3.5);
+- lung v2: 70.3 against 75.6, a gap of 5.3 (v1 3.7).
 
 **A7, the colon** (`research/notebooks/organ_v2_declared.py`, rules
 committed before it ran, `2bdbcf3`): could a user declare a colon upload

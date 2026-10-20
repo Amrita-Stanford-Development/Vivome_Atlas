@@ -744,6 +744,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/li_build/bundle_MANIFEST.json` — the colon bundle's MANIFEST (on Drive, not in the repository)
 - `research/notebooks/organ_donor_heldout.py` — Track I, G2 for any organ: one member retrained with each donor held out, unseen against seen (a diagnosis)
 - `research/notebook-outputs/lung_donor_heldout/summary.json` — the lung's G2: per fold, class balanced accuracy, group and lineage recall
+- `research/notebook-outputs/lung_v2_donor_heldout/summary.json` — the lung v2's G2: per fold, class balanced accuracy, group and lineage recall
+- `research/notebook-outputs/lymph_node_v2_donor_heldout/summary.json` — the lymph node v2's G2: per fold, class balanced accuracy, group and lineage recall
 - `research/notebook-outputs/lymph_node_donor_heldout/summary.json` — the lymph node's G2: per fold, class balanced accuracy, group and lineage recall
 - `research/notebook-outputs/lymph_node_development/rules.json` — the lymph node's gate run: script sha256, gates and bundle MANIFEST, written before computing
 - `research/notebook-outputs/lymph_node_development/g1.json` — the lymph node's G1: its evaluation suite through the service's code, overall and per scenario

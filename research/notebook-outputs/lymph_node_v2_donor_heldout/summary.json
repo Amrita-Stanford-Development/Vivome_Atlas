@@ -1,0 +1,361 @@
+{
+  "organ": "lymph_node_v2",
+  "design": {
+    "uploads_per_side": 10,
+    "cells_per_upload": 500,
+    "min_class_cells": 20,
+    "profile": "fulcher",
+    "seed": 1
+  },
+  "folds": {
+    "TSP14": {
+      "train_cells": 62367,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "innate lymphoid cell",
+        "macrophage",
+        "mature nk t cell",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "neutrophil",
+        "plasma cell",
+        "regulatory t cell"
+      ],
+      "best_val_loss": 0.5759914517402649,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 60.94,
+        "group_recall": 88.1,
+        "lineage_recall": 96.98,
+        "recall": {
+          "b cell": 97.8,
+          "cd4-positive, alpha-beta t cell": 37.1,
+          "cd8-positive, alpha-beta t cell": 56.3,
+          "innate lymphoid cell": 23.4,
+          "macrophage": 85.2,
+          "mature nk t cell": 7.7,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 46.4,
+          "natural killer cell": 84.3,
+          "neutrophil": 100.0,
+          "plasma cell": 100.0,
+          "regulatory t cell": 32.1
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 60.04,
+        "group_recall": 91.48,
+        "lineage_recall": 97.22,
+        "recall": {
+          "b cell": 91.1,
+          "cd4-positive, alpha-beta t cell": 40.6,
+          "cd8-positive, alpha-beta t cell": 58.8,
+          "innate lymphoid cell": 44.4,
+          "macrophage": 56.4,
+          "mature nk t cell": 11.1,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 32.6,
+          "natural killer cell": 92.1,
+          "neutrophil": 100.0,
+          "plasma cell": 100.0,
+          "regulatory t cell": 33.3
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": -0.9,
+        "group_recall": 3.38,
+        "lineage_recall": 0.24
+      }
+    },
+    "TSP2": {
+      "train_cells": 75591,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "innate lymphoid cell",
+        "intermediate monocyte",
+        "macrophage",
+        "mature nk t cell",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "plasma cell"
+      ],
+      "best_val_loss": 0.5266066789627075,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 52.83,
+        "group_recall": 89.36,
+        "lineage_recall": 97.58,
+        "recall": {
+          "b cell": 89.7,
+          "cd4-positive, alpha-beta t cell": 45.1,
+          "cd8-positive, alpha-beta t cell": 74.4,
+          "classical monocyte": 98.3,
+          "innate lymphoid cell": 35.6,
+          "intermediate monocyte": 0.0,
+          "macrophage": 68.8,
+          "mature nk t cell": 14.9,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 4.4,
+          "natural killer cell": 50.0,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 57.02,
+        "group_recall": 94.0,
+        "lineage_recall": 97.54,
+        "recall": {
+          "b cell": 92.6,
+          "cd4-positive, alpha-beta t cell": 38.3,
+          "cd8-positive, alpha-beta t cell": 71.5,
+          "classical monocyte": 82.6,
+          "innate lymphoid cell": 44.4,
+          "intermediate monocyte": 0.0,
+          "macrophage": 95.0,
+          "mature nk t cell": 21.9,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 26.6,
+          "natural killer cell": 54.7,
+          "plasma cell": 99.6
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 4.19,
+        "group_recall": 4.64,
+        "lineage_recall": -0.04
+      }
+    },
+    "TSP21": {
+      "train_cells": 64620,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "macrophage",
+        "mature nk t cell",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "plasma cell"
+      ],
+      "best_val_loss": 0.6261693835258484,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 60.13,
+        "group_recall": 88.64,
+        "lineage_recall": 94.28,
+        "recall": {
+          "b cell": 84.5,
+          "cd4-positive, alpha-beta t cell": 34.1,
+          "cd8-positive, alpha-beta t cell": 62.6,
+          "classical monocyte": 53.8,
+          "macrophage": 68.8,
+          "mature nk t cell": 44.4,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 28.7,
+          "natural killer cell": 64.3,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 59.73,
+        "group_recall": 91.96,
+        "lineage_recall": 96.44,
+        "recall": {
+          "b cell": 87.0,
+          "cd4-positive, alpha-beta t cell": 38.8,
+          "cd8-positive, alpha-beta t cell": 66.0,
+          "classical monocyte": 66.7,
+          "macrophage": 70.7,
+          "mature nk t cell": 35.4,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 23.7,
+          "natural killer cell": 49.4,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": -0.4,
+        "group_recall": 3.32,
+        "lineage_recall": 2.16
+      }
+    },
+    "TSP25": {
+      "train_cells": 66395,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "macrophage",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "plasma cell"
+      ],
+      "best_val_loss": 0.5989251732826233,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 57.67,
+        "group_recall": 88.12,
+        "lineage_recall": 92.82,
+        "recall": {
+          "b cell": 78.4,
+          "cd4-positive, alpha-beta t cell": 31.0,
+          "cd8-positive, alpha-beta t cell": 45.7,
+          "macrophage": 54.2,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 31.5,
+          "natural killer cell": 63.0,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 65.59,
+        "group_recall": 92.92,
+        "lineage_recall": 96.3,
+        "recall": {
+          "b cell": 88.4,
+          "cd4-positive, alpha-beta t cell": 27.3,
+          "cd8-positive, alpha-beta t cell": 71.1,
+          "macrophage": 75.9,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 18.2,
+          "natural killer cell": 78.3,
+          "plasma cell": 100.0
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 7.92,
+        "group_recall": 4.8,
+        "lineage_recall": 3.48
+      }
+    },
+    "TSP27": {
+      "train_cells": 70203,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "plasma cell",
+        "regulatory t cell"
+      ],
+      "best_val_loss": 0.52425616979599,
+      "epochs_run": 59,
+      "unseen": {
+        "balanced_accuracy": 52.44,
+        "group_recall": 83.68,
+        "lineage_recall": 91.58,
+        "recall": {
+          "b cell": 85.7,
+          "cd4-positive, alpha-beta t cell": 27.0,
+          "cd8-positive, alpha-beta t cell": 51.4,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 36.2,
+          "natural killer cell": 21.7,
+          "plasma cell": 100.0,
+          "regulatory t cell": 45.2
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 56.55,
+        "group_recall": 89.66,
+        "lineage_recall": 93.6,
+        "recall": {
+          "b cell": 84.4,
+          "cd4-positive, alpha-beta t cell": 37.4,
+          "cd8-positive, alpha-beta t cell": 68.3,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 30.8,
+          "natural killer cell": 22.2,
+          "plasma cell": 99.6,
+          "regulatory t cell": 53.2
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 4.11,
+        "group_recall": 5.98,
+        "lineage_recall": 2.02
+      }
+    },
+    "TSP7": {
+      "train_cells": 73424,
+      "classes": [
+        "b cell",
+        "cd4-positive, alpha-beta t cell",
+        "cd8-positive, alpha-beta t cell",
+        "classical monocyte",
+        "innate lymphoid cell",
+        "macrophage",
+        "mature nk t cell",
+        "naive thymus-derived cd4-positive, alpha-beta t cell",
+        "natural killer cell",
+        "plasma cell",
+        "regulatory t cell"
+      ],
+      "best_val_loss": 0.5361860394477844,
+      "epochs_run": 60,
+      "unseen": {
+        "balanced_accuracy": 50.05,
+        "group_recall": 84.42,
+        "lineage_recall": 93.26,
+        "recall": {
+          "b cell": 75.7,
+          "cd4-positive, alpha-beta t cell": 64.7,
+          "cd8-positive, alpha-beta t cell": 67.6,
+          "classical monocyte": 50.0,
+          "innate lymphoid cell": 12.2,
+          "macrophage": 34.4,
+          "mature nk t cell": 54.4,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 8.2,
+          "natural killer cell": 40.7,
+          "plasma cell": 100.0,
+          "regulatory t cell": 42.6
+        },
+        "cells": 5000
+      },
+      "seen": {
+        "balanced_accuracy": 56.71,
+        "group_recall": 92.96,
+        "lineage_recall": 96.7,
+        "recall": {
+          "b cell": 89.7,
+          "cd4-positive, alpha-beta t cell": 54.1,
+          "cd8-positive, alpha-beta t cell": 69.6,
+          "classical monocyte": 27.8,
+          "innate lymphoid cell": 14.3,
+          "macrophage": 83.9,
+          "mature nk t cell": 40.6,
+          "naive thymus-derived cd4-positive, alpha-beta t cell": 25.0,
+          "natural killer cell": 54.4,
+          "plasma cell": 100.0,
+          "regulatory t cell": 64.5
+        },
+        "cells": 5000
+      },
+      "gap_seen_minus_unseen": {
+        "balanced_accuracy": 6.66,
+        "group_recall": 8.54,
+        "lineage_recall": 3.44
+      }
+    }
+  },
+  "mean": {
+    "unseen": {
+      "balanced_accuracy": 55.68,
+      "group_recall": 87.05,
+      "lineage_recall": 94.42
+    },
+    "seen": {
+      "balanced_accuracy": 59.27,
+      "group_recall": 92.16,
+      "lineage_recall": 96.3
+    }
+  },
+  "seconds": 2643
+}

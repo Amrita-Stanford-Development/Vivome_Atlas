@@ -480,6 +480,10 @@ The plasma sink on tissue pools remains.
 
 **G4:** passed (`f805bec`).
 
+**G2** (one donor held out, 6 folds; a diagnosis): class balanced accuracy
+55.7 unseen against 59.3 seen, a gap of 3.6 points (v1 3.5). Group recall
+is 87.1 against 92.2, and lineage recall 94.4 against 96.3.
+
 **Verdict:** NO GO. By the stop rules nothing is tuned and PXD042367 stays
 sealed. Any change now would be a v3, and its G3 could no longer use
 PXD045043, which this run has read. The decision goes to the owner.
@@ -520,6 +524,10 @@ bundle (MANIFEST `1e545828…`). Outputs are in
 - PXD029341, fibroblastic foci over alveoli: 0.94 (0.88).
 
 **G4:** passed (`476fcc1`).
+
+**G2** (one donor held out, 4 folds; a diagnosis): class balanced accuracy
+70.3 unseen against 75.6 seen, a gap of 5.3 points (v1 3.7). Group recall
+is 93.8 against 98.4, and lineage recall 97.4 against 99.7.
 
 **Verdict:** NO GO. By the stop rules nothing is tuned, and MSV000094189
 stays sealed. The split G1 and the group fallback fixed v1's G1 miss (73.4
