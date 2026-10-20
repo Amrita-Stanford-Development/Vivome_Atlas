@@ -450,7 +450,11 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
 - [-] **Stage 4:** not run for the colon; PXD052341 stays sealed.
 - [ ] **Deploy the service's parser changes** (the owner approves deploys; the auto-mode classifier refused it on 2026-10-20). Until then the live service cannot read:
   - DIA-NN 1.8 protein tables (`d3ca02a`);
-  - MaxQuant's proteinGroups.txt or FragPipe's LFQ combined_protein.tsv (`ed5188d`), which also gives a clear 400 naming the column for any table it cannot read.
+  - MaxQuant's proteinGroups.txt or FragPipe's LFQ combined_protein.tsv (`ed5188d`), which also gives a clear 400 naming the column for any table it cannot read;
+  - the upload-path fixes from two reviews, Spectronaut pivot reports, spreadsheet encodings and parsing inside the projection slot (`a1fcbbe`, `54a6a9a`);
+  - the hosted upload limit of 31 MiB, under Cloud Run's 32 MiB per HTTP/1 request (`172b7d3`; the Dockerfile sets it, so it applies on the next deploy).
+
+  The site's side (`172b7d3`, `2bf80a4`) has the Atlas page's file check, its messages and the /api door that no longer forwards the visitor's identity or address.
 
   **Order:** the service first (`deploy/huggingface/PUBLISH.md`), then the site. `ed5188d`'s Atlas page label and file check name MaxQuant and FragPipe; deployed before the service, they would invite files the live service still refuses.
 - [~] **The lung** (owner, 2026-10-18; `research/organ-references.md`, "Lung"):
