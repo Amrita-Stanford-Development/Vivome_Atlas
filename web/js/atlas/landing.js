@@ -643,9 +643,11 @@ export function createLanding({
       if (error?.kind === 'cancelled' || !['sending', 'working'].includes(st.name)) return;
       illustration.hide();
       upload.setOpacity(1);
-      // The service itself answered (not the site's door or the host), so
-      // whatever was cancelled there is finished: parsing runs in its slot.
-      if (error?.status && !['busy', 'gateway'].includes(error.kind) && !error.host) cancelledWork = false;
+      // The service turned the file down in its own words: it read the file,
+      // which it does only in a projection slot, so the cancelled work is done.
+      // (Its refusals before the slot, of the form or the encoding, are ones
+      // this page's own checks never send it.)
+      if (error?.kind === 'refused' && error.said) cancelledWork = false;
       if (error?.kind === 'busy') {
         dispatch({ type: 'BUSY', retryAfter: error.retryAfter ?? 30 });
         if (st.name === 'busy') {
@@ -783,10 +785,12 @@ export function createLanding({
       dispatch({ type: 'CANCEL' });
     },
     watchExample,
-    // The example is sent only if nothing changed while it loaded: a file
-    // the visitor chose meanwhile stays theirs. A load that fails says so.
+    // The example is sent only if the visitor chose nothing while it loaded:
+    // a file they chose meanwhile stays theirs. The service's limits arriving
+    // in the meantime change nothing. A load that fails says so.
     async sendExample() {
       const before = st;
+      const changed = () => st.name !== before.name || st.file !== before.file;
       const name = 'pbmc240_proteins_raw.tsv';
       let blob;
       try {
@@ -794,14 +798,14 @@ export function createLanding({
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         blob = await response.blob();
       } catch (error) {
-        if (st !== before) return;
+        if (changed()) return;
         const file = new File([], name);
         if (dispatch({ type: 'FILE_CHOSEN', file })) {
           dispatch({ type: 'CHECK_FAILED', file, error: new Error(`The example file could not be loaded (${error.message}). Try again.`) });
         }
         return;
       }
-      if (st !== before) return;
+      if (changed()) return;
       const check = await chooseFile(new File([blob], name, { type: 'text/tab-separated-values' }));
       if (check?.ok) send();
     },

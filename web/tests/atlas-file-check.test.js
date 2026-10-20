@@ -187,6 +187,24 @@ test('a table written by R without the corner field counts every header field as
   assert.equal((await checkFile(blob(',c1,c2\nG0,1,2,9\nG1,3,4,9\n'))).cells, 2);
 });
 
+test('R\'s layout with blank missing values, and the rows judged, as the service reads them', async () => {
+  // R's write.table(m, sep="\t", na=""): a row whose last value is missing (service/tests/test_alignment.py)
+  const header = Array.from({ length: 20 }, (_, i) => `s${i + 1}`).join('\t');
+  const rows = Array.from({ length: 30 }, (_, g) => {
+    const values = Array.from({ length: 20 }, (_, i) => String(g + i));
+    if (g % 3 === 0) values[19] = '';
+    return [`G${g}`, ...values].join('\t');
+  });
+  assert.equal((await checkFile(blob(`${header}\n${rows.join('\n')}\n`))).cells, 20);
+  // a row of blank fields is not judged
+  const plain = Array.from({ length: 30 }, (_, g) => `G${g},${g},${g + 1}`).join('\n');
+  assert.equal((await checkFile(blob(`s1,s2\n,,\n${plain}\n`))).cells, 2);
+  // 12 Perseus rows ahead: the 50 rows judged reach row 50, which is one field too long
+  const perseus = Array.from({ length: 12 }, () => '#!{Type}E,E').join('\n');
+  const good = Array.from({ length: 49 }, (_, g) => `G${g},${g},${g + 1}`).join('\n');
+  assert.equal((await checkFile(blob(`s1,s2\n${perseus}\n${good}\nG49,1,2,3\n`))).cells, 1);
+});
+
 test('Perseus rows are skipped quoted or not, before the first 50 rows are judged, as the service does', async () => {
   const header = Array.from({ length: 20 }, (_, i) => `c${i + 1}`).join(',');
   const row = (g) => [g, ...Array.from({ length: 20 }, (_, i) => String(i + 1))].join(',');

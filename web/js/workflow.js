@@ -17,7 +17,7 @@ import { CHAPTERS, parseHash, playThenRead } from './timeline.js';
 import {
   ANSWERED, OUTCOME_CHIPS, OUTCOME_NOTES, OUTCOME_ORDER, answerShort, answerText, checkSync, classColour, detailFor, geneLookup, guessText,
   loadWorkflow, outcomeCounts, wfText,
-  searchCells, storyFor, wfFact,
+  searchCells, searchStatus, storyFor, wfFact,
 } from './workflow-data.js';
 import {
   buildCellCard, buildEncoderChoice, buildFormatCards, buildGeneLookup, buildGuessTable,
@@ -169,8 +169,7 @@ function buildPicker() {
   input.addEventListener('input', () => {
     const found = searchCells(w, input.value);
     results.innerHTML = found.map((i) => `<li><button type="button" data-pick="${i}">Cell ${i + 1}</button></li>`).join('');
-    $('#cell-results-count').textContent = input.value.trim()
-      ? `${found.length === 0 ? 'No' : found.length} matching ${found.length === 1 ? 'cell' : 'cells'}` : '';
+    $('#cell-results-count').textContent = searchStatus(input.value, found);
   });
   results.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-pick]');

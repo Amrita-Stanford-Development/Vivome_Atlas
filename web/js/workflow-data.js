@@ -267,6 +267,15 @@ export function storyFor(workflow, index) {
   return same ?? workflow?.trace?.detail?.[0] ?? null;
 }
 
+// What the cell search says it found, for screen readers: the list stops at
+// searchCells' limit, so a full list is "the first" of them.
+export function searchStatus(query, found, limit = 8) {
+  if (!String(query ?? '').trim()) return '';
+  if (found.length === 0) return 'No matching cells';
+  if (found.length >= limit) return `The first ${found.length} matching cells`;
+  return `${found.length} matching ${found.length === 1 ? 'cell' : 'cells'}`;
+}
+
 export function searchCells(workflow, query, limit = 8) {
   const q = String(query ?? '').trim().toLowerCase();
   if (!q) return [];

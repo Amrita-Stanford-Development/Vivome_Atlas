@@ -667,6 +667,28 @@ test('the example is still sent when only the service limits arrive while it loa
   assert.deepEqual(sent, ['pbmc240_proteins_raw.tsv']);
 });
 
+test('the example is still sent when the limits change the verdict on the visitor\'s file while it loads', async () => {
+  const sent = [];
+  let limits = {};
+  const { landing } = setup({ client: { project: async (url, form) => { sent.push(form.get('matrix').name); throw new Error('stop'); } },
+    limits: () => limits });
+  await landing.chooseFile(fileOf(40, 'mine.csv'));
+  const real = globalThis.fetch;
+  let release;
+  globalThis.fetch = (url) => (String(url).endsWith('pbmc240_proteins_raw.tsv')
+    ? new Promise((done) => { release = () => real(url).then(done); })
+    : real(url));
+  const example = landing.sendExample();
+  await settleMicrotasks();
+  limits = { min_cells: 45 }; // the status check answered: the visitor's 40 cells are now too few
+  landing.recheckLimits();
+  assert.equal(landing.state.check.ok, false);
+  release();
+  await example;
+  globalThis.fetch = real;
+  assert.deepEqual(sent, ['pbmc240_proteins_raw.tsv']);
+});
+
 test('an example file that cannot load says so', async () => {
   const { landing } = setup();
   const real = globalThis.fetch;
@@ -724,7 +746,7 @@ test('once the service has answered again, a busy answer no longer blames the ca
         onUpload(1);
         return new Promise((_, reject) => signal.addEventListener('abort', () => reject(Object.assign(new Error('cancelled'), { kind: 'cancelled' }))));
       }
-      if (calls === 2) throw Object.assign(new Error('the file has text where a number belongs'), { kind: 'refused', status: 400 });
+      if (calls === 2) throw Object.assign(new Error('the file has text where a number belongs'), { kind: 'refused', status: 400, said: true });
       throw Object.assign(new Error('busy'), { kind: 'busy', status: 503, retryAfter: 30 });
     },
   };
@@ -743,5 +765,33 @@ test('once the service has answered again, a busy answer no longer blames the ca
   assert.equal(landing.state.name, 'busy');
   assert.doesNotMatch(els.get('status-card').innerHTML, /file you cancelled/);
   assert.match(els.get('status-card').innerHTML, /Another file is being labelled/);
+  landing.cancel();
+});
+
+test('a refusal the service did not word itself (the host\'s own page) keeps the cancelled-file note', async () => {
+  let calls = 0;
+  const client = {
+    project: async (url, form, { signal, onUpload }) => {
+      calls += 1;
+      if (calls === 1) {
+        onUpload(1);
+        return new Promise((_, reject) => signal.addEventListener('abort', () => reject(Object.assign(new Error('cancelled'), { kind: 'cancelled' }))));
+      }
+      if (calls === 2) throw Object.assign(new Error('The file is too large for one request'), { kind: 'refused', status: 413, said: false });
+      throw Object.assign(new Error('busy'), { kind: 'busy', status: 503, retryAfter: 30 });
+    },
+  };
+  const { els, landing } = setup({ client, limits: () => ({}) });
+  await landing.chooseFile(fileOf(25));
+  landing.send();
+  for (let i = 0; i < 50 && landing.state.name !== 'working'; i += 1) await settleMicrotasks();
+  landing.cancel();
+  for (let i = 0; i < 50 && landing.state.name !== 'chosen'; i += 1) await settleMicrotasks();
+  landing.send();
+  for (let i = 0; i < 50 && landing.state.name !== 'failed'; i += 1) await settleMicrotasks();
+  await landing.chooseFile(fileOf(30, 'third.csv'));
+  landing.send();
+  for (let i = 0; i < 50 && landing.state.name !== 'busy'; i += 1) await settleMicrotasks();
+  assert.match(els.get('status-card').innerHTML, /still finishing the file you cancelled/);
   landing.cancel();
 });

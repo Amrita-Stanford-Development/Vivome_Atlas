@@ -282,10 +282,20 @@ def parse_matrix_csv(text: str) -> RawMatrix:
         # data row is one field longer than the header, and its first header
         # field is a cell. A trailing separator on the data rows alone adds an
         # empty field instead; a blank or named corner means the header is whole.
-        head = list(itertools.islice(lines, 50))
+        # The first 50 rows with anything in them are judged, as the
+        # browser's check judges them (web/js/atlas/file-check.js). One
+        # filled extra field is enough: R writes a missing value as an empty
+        # field with na="", the last one included.
+        head, judged = [], []
+        for item in lines:
+            head.append(item)
+            if any(field.strip() for field in item[1]):
+                judged.append(item[1])
+                if len(judged) == 50:
+                    break
         corner = header[0].strip()
-        if (head and header[-1].strip() and corner and corner.lower() not in _CORNER_LABELS
-                and all(len(row) == len(header) + 1 and row[-1].strip() for _, row in head)):
+        if (judged and header[-1].strip() and corner and corner.lower() not in _CORNER_LABELS
+                and all(len(row) == len(header) + 1 for row in judged) and any(row[-1].strip() for row in judged)):
             header = [""] + header
         lines = itertools.chain(head, lines)
     if is_dia_nn_report:

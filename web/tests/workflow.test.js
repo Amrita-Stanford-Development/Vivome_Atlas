@@ -210,7 +210,13 @@ test('the film\'s keys leave a focused field or button its own keys', async () =
   assert.match(read('js/film.js'), /\.inert = on/, 'the page behind the film takes no focus');
 });
 
-test('the cell search lists buttons, and says how many it found', () => {
+test('the cell search lists buttons, and says how many it found', async () => {
+  const { searchStatus } = await import('../js/workflow-data.js');
+  assert.equal(searchStatus('', []), '');
+  assert.equal(searchStatus('99999', []), 'No matching cells');
+  assert.equal(searchStatus('1', [0]), '1 matching cell');
+  assert.equal(searchStatus('PBMC', [0, 1, 2]), '3 matching cells');
+  assert.equal(searchStatus('PBMC', [0, 1, 2, 3, 4, 5, 6, 7], 8), 'The first 8 matching cells', 'the list stops at its limit');
   const html = read('workflow.html');
   assert.doesNotMatch(html, /role="listbox"/);
   assert.match(html, /<p class="visually-hidden" id="cell-results-count" role="status"><\/p>/);

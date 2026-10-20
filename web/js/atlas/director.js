@@ -24,7 +24,7 @@ export function statusLine(state, { cells = null, failure = '' } = {}) {
     case 'chosen': return state.check?.ok ? 'Checked in your browser; nothing has been sent yet.' : '';
     case 'sending': return 'Sending your file.';
     case 'working': return state.example ? 'Replaying the recorded example; no file is sent.' : 'Waiting for the answer from the service.';
-    case 'busy': return 'The service is busy with another file; trying again shortly.';
+    case 'busy': return 'The service is busy; this page will try again shortly.';
     case 'failed': return failure;
     case 'finishing': case 'receipt': case 'flying': case 'settling': case 'interactive':
       return cells === null ? '' : `Answers for ${cells.toLocaleString('en-US')} cells are on the map.`;

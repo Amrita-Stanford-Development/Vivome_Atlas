@@ -196,6 +196,17 @@ test('project: not ready yet (503 without Retry-After, or 500)', async () => {
   }
 });
 
+test('a refusal in the service\'s own words is marked as said; the host\'s own 413 page is not', async () => {
+  for (const [reply, said] of [
+    [{ status: 400, body: { error: 'column holds text' } }, true],
+    [{ status: 413, body: '<html>Request Entity Too Large</html>' }, false],
+  ]) {
+    const err = await fake(reply).client.project('https://service.example', new FormData()).catch((e) => e);
+    assert.equal(err.kind, 'refused');
+    assert.equal(err.said, said);
+  }
+});
+
 test('project: refused, 413 and 400, with the service’s own words', async () => {
   const big = await failure(fake({ status: 413, body: TOO_MANY }).client.project(OWN, {}));
   assert.deepEqual([big.kind, big.status, big.message, big.reason], ['refused', 413, TOO_MANY.error, TOO_MANY.reason]);

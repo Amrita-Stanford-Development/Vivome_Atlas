@@ -123,6 +123,23 @@ class SharedAccessionTests(unittest.TestCase):
         self.assertEqual(set(second.symbol_to_feature), {"CD4"})
         self.assertEqual(set(first.symbol_to_feature), {"CD3E"})
 
+    def test_a_rewrite_within_one_clock_tick_is_read_again(self):
+        """Same size, same modification time, new content: still read again."""
+        import os
+        import tempfile
+        from pathlib import Path
+        header = "gene_symbol\tmatch_type\tensembl_gene_id\tuniprot_ids\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "map.tsv"
+            path.write_text(header + "CD3E\texact\tENSG00000198851\tP07766\n", encoding="utf-8")
+            stamp = path.stat().st_mtime_ns
+            first = gene_ids.load_gene_id_map(path)
+            path.write_text(header + "CD3G\texact\tENSG00000160654\tP09693\n", encoding="utf-8")
+            os.utime(path, ns=(stamp, stamp))
+            second = gene_ids.load_gene_id_map(path)
+        self.assertEqual(set(first.symbol_to_feature), {"CD3E"})
+        self.assertEqual(set(second.symbol_to_feature), {"CD3G"})
+
     def test_the_real_map_lists_the_shared_accessions_and_maps_none_of_them(self):
         gene_map = gene_ids.load_gene_id_map()
         self.assertEqual(gene_map.shared_accessions["P69905"], frozenset({"HBA1", "HBA2"}))

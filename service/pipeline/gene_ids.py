@@ -12,6 +12,7 @@ corrupted an earlier build of this project.
 """
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -31,20 +32,21 @@ class GeneIdMap:
     shared_accessions: dict[str, frozenset[str]] = field(default_factory=dict)
 
 
-# Each map file as last read: its size and modification time, and the map.
-_LOADED: dict[str, tuple[int, int, "GeneIdMap"]] = {}
+# Each map file as last read: its content's sha256, and the map.
+_LOADED: dict[str, tuple[str, "GeneIdMap"]] = {}
 
 
 def load_gene_id_map(path: Path = config.GENE_ID_MAP_PATH) -> GeneIdMap:
-    """The map in `path`, read from disk once and then shared, read-only,
-    between requests. A file whose size or modification time has changed is
-    read again."""
-    stat = Path(path).stat()
+    """The map in `path`, parsed once and then shared, read-only, between
+    requests. Its bytes are hashed on every call (a fraction of a
+    millisecond), so a file whose content has changed is parsed again, even
+    one rewritten within a single clock tick."""
+    digest = hashlib.sha256(Path(path).read_bytes()).hexdigest()
     key = str(Path(path).resolve())
     cached = _LOADED.get(key)
-    if cached is None or cached[:2] != (stat.st_size, stat.st_mtime_ns):
-        cached = _LOADED[key] = (stat.st_size, stat.st_mtime_ns, _read_gene_id_map(path))
-    return cached[2]
+    if cached is None or cached[0] != digest:
+        cached = _LOADED[key] = (digest, _read_gene_id_map(path))
+    return cached[1]
 
 
 def _read_gene_id_map(path: Path) -> GeneIdMap:

@@ -73,7 +73,8 @@ export const isOwnCopy = (url, where = globalThis.location) => {
 // read).
 export class ServiceError extends Error {
   // host: a timeout the host gave up on, not this page; said: the answer
-  // carried its own error text, which is shown.
+  // carried its own error text (a refusal or an unreadable answer in the
+  // service's own words).
   constructor(kind, message, { status = null, reason = null, retryAfter = null, cause, host = false, said = false } = {}) {
     super(message, cause === undefined ? undefined : { cause });
     this.name = 'ServiceError';
@@ -180,7 +181,8 @@ function failureOf(res, payload) {
     return new ServiceError('unavailable', error ?? 'The service cannot label yet.', { status, reason: why });
   }
   if ((status === 400 || status === 413) && payload) {
-    return new ServiceError('refused', error ?? `The service turned the file down (HTTP ${status}).`, { status, reason });
+    return new ServiceError('refused', error ?? `The service turned the file down (HTTP ${status}).`,
+      { status, reason, said: Boolean(error) });
   }
   // The host's own size limit answers 413 in HTML, before the service sees the file.
   if (status === 413) {

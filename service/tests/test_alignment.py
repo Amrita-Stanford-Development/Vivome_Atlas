@@ -212,6 +212,26 @@ class UploadLayoutTests(unittest.TestCase):
         self.assertEqual(raw.cell_ids, ["c1", "c2"])
         np.testing.assert_array_equal(raw.values, [[1, 2], [3, 4]])
 
+    def test_r_s_layout_with_blank_missing_values_is_read(self):
+        """Blank is R's missing value with na="": a row whose last value is
+        missing must not stop the header being read as R writes it."""
+        raw = alignment.parse_matrix_csv(_r_table_with_blank_missing_values())
+        self.assertEqual(raw.cell_ids, [f"s{i}" for i in range(1, 21)])
+        self.assertTrue(np.isnan(raw.values[0, -1]))
+        self.assertEqual(raw.values[1, 0], 1.0)
+
+    def test_the_first_50_rows_with_anything_in_them_are_judged(self):
+        """Rows of blank fields, and Perseus rows, are not among the 50 rows
+        the header is judged by, as in the browser's check
+        (web/tests/atlas-file-check.test.js holds the same files)."""
+        rows = "".join(f"G{g},{g},{g + 1}\n" for g in range(30))
+        raw = alignment.parse_matrix_csv("s1,s2\n" + ",,\n" + rows)
+        self.assertEqual(raw.cell_ids, ["s1", "s2"])
+        perseus = "#!{Type}E,E\n" * 12
+        good = "".join(f"G{g},{g},{g + 1}\n" for g in range(49))
+        raw = alignment.parse_matrix_csv("s1,s2\n" + perseus + good + "G49,1,2,3\n")
+        self.assertEqual(raw.cell_ids, ["s2"], "row 50 is one field too long, so the header is whole")
+
     def test_a_header_with_a_corner_is_never_shifted(self):
         """Only R's layout shifts the header: a named or blank corner, or a
         data row whose extra field is empty, means the header is whole."""
@@ -443,6 +463,19 @@ class ZerosAndScaleTests(unittest.TestCase):
         self.assertEqual(scale.detected, "linear")
         self.assertFalse(np.any(out == 0))
         self.assertTrue(np.all(np.isnan(out[values == 0])))
+
+
+def _r_table_with_blank_missing_values():
+    """R's write.table(m, sep="\t", na=""): no corner field, and a missing
+    value is an empty field, the last one included."""
+    header = "\t".join(f"s{i}" for i in range(1, 21))
+    rows = []
+    for g in range(30):
+        values = [str(g + i) for i in range(20)]
+        if g % 3 == 0:
+            values[-1] = ""  # this row's last cell is missing
+        rows.append("\t".join([f"G{g}", *values]))
+    return header + "\n" + "\n".join(rows) + "\n"
 
 
 class RnaZerosTests(unittest.TestCase):

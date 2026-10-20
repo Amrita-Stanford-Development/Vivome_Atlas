@@ -38,3 +38,9 @@ test('the film has English captions, each phrase of its voice-over at the time i
   assert.ok(cues.at(-1).includes(`--> 00:02:${(end - 120).toFixed(3).padStart(6, '0')}`), 'the last cue ends with the last line');
   assert.equal(phrasesOf('a, b. c').length, 3);
 });
+
+test('caption text escapes what WebVTT reads as markup', async () => {
+  const { vttText } = await import('../js/reel-frames.js');
+  assert.equal(vttText('A & B <c> --> d'), 'A &amp; B &lt;c&gt; --&gt; d');
+});
+

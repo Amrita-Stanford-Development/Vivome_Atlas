@@ -380,6 +380,8 @@ const vttTime = (seconds) => {
   const two = (n) => String(n).padStart(2, '0');
   return `${two(Math.floor(ms / 3600000))}:${two(Math.floor(ms / 60000) % 60)}:${two(Math.floor(ms / 1000) % 60)}.${String(ms % 1000).padStart(3, '0')}`;
 };
+// A cue's text as WebVTT reads it: &, < and > are markup there.
+export const vttText = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 export function captionsVtt(numbers = []) {
   const said = new Map(numbers.map((n) => [n.slot, n.text]));
   const cues = [];
@@ -392,7 +394,7 @@ export function captionsVtt(numbers = []) {
     phrases.forEach((phrase, k) => {
       const start = voiceStart(i) + frame.said.at[k];
       const end = voiceStart(i) + (k + 1 < phrases.length ? frame.said.at[k + 1] : frame.said.seconds);
-      cues.push(`${cues.length + 1}\n${vttTime(start)} --> ${vttTime(end)}\n${phrase}`);
+      cues.push(`${cues.length + 1}\n${vttTime(start)} --> ${vttTime(end)}\n${vttText(phrase)}`);
     });
   });
   return `WEBVTT\n\n${cues.join('\n\n')}\n`;

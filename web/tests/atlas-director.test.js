@@ -278,4 +278,5 @@ test('the status line for screen readers changes with the step, not with the clo
     assert.equal(statusLine({ name }, { cells: 1240 }), 'Answers for 1,240 cells are on the map.', name);
   }
   assert.equal(statusLine({ name: 'idle' }), '');
+  assert.doesNotMatch(statusLine({ name: 'busy' }), /another file/, 'it may be the visitor\'s own cancelled file');
 });
