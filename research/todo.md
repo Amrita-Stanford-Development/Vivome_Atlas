@@ -488,6 +488,15 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - [!] **lung v2: NO GO, on the fresh G3.** G1 passes every bar (mixed committed 97.3, correct when committed 98.6; narrow 90.1); as v1 wrote G1 it commits 83.7 (v1 73.4). PXD058626's control airways over alveoli: AUROC 0.764 (bar 0.8). MSV000094189 stays sealed; a change would be a v3, the owner's call;
   - A7, a user-declared upload make-up for the colon: not supported (Kabatnik's mixed upload 44% committed and wrong); the colon stays NO GO, PXD069723 reserved and unread;
   - the locked tests' PCA baseline projected around the class-balanced centre (protocols' amendment 3; rehearsals 1.0 and 100, were 0.597 and 96.9).
+- [~] **Accessibility** (a static review, 2026-10-21; no browser driving). Fixed without changing what a sighted visitor sees (`6adc5fc`): the film's captions; the Atlas drawer and folded sidebar inert; the status card no longer read out every second; the film's keys and inert page; the cell search's list; load errors announced.
+  - [ ] **Open, each a visible change for the owner to see first:**
+    - **Workflow, the story's sentences:** a screen reader reaches one sentence per chapter (inactive ones are `visibility: hidden`), letter by letter (each letter a span). Proposed: hide inactive sentences by clipping instead, and wrap the letters in `aria-hidden` with a hidden copy of the sentence.
+    - **Contrast:** the RNA and protein colours as text (3.8:1; text-only tokens `#B45A1B` and `#2B8160` reach 4.5:1); faded "off" filters and chips (1.6 to 2.6:1); form fields and the switch track without a visible edge (1.1:1; a `#858585` border reaches 3:1).
+    - **The 3D map by keyboard:** turning, moving, zooming and opening a cell's profile are mouse only.
+    - **Zoom on a PC:** at high zoom the Atlas sidebar cannot be scrolled into view; the Workflow hides its chapter headings at 820px and below.
+    - **Motion:** a "Pause motion" control for the background and the map's turning (the system setting already stops them).
+    - **Smaller:** the Workflow result tooltip (Escape, hover); focus rings clipped by the header and filter lists; small grey text over the moving background.
+
 - [ ] **A pooled blood candidate?** (owner's call) Training on RNA pools raised every measure in both seeds (validation +4.4 and +5.5, calibration top-1 +5.4 and +4.1, Fulcher +1.8 and +7.1), but the fixed reading says not promising: seed 1's Fulcher gain was 1.82, bar 2 (run history entry 61). A candidate would need five members and its own pre-registered gates.
 - [x] **The atlas framing** (owner, 2026-10-18: the aim is every Tabula Sapiens organ): the 28-organ list (`scripts/tabula_sapiens_organs.py`), the manifest's `organs`, the landing's organs band with every organ's chip, and the Manuscript's highlights, in brief, scope, contributions and Next.
 - [x] **The organ maps on the Atlas page, without labelling** (owner, 2026-10-18): each organ's reference cells in 3D in its bundle's coordinate space (`scripts/export_atlas_coordinates.py --organ`, `web/data/organs/`), coloured by family; Your data stays blood's.
