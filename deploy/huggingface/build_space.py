@@ -20,6 +20,7 @@ A previous build is replaced, except a .git folder (a clone of the Space).
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
@@ -110,7 +111,9 @@ def write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8", newline="\n")
 
 
-def main() -> None:
+def main(argv: "list[str] | None" = None) -> None:
+    # Only --help: it says what the script does, before anything is replaced.
+    argparse.ArgumentParser(description=__doc__.split("\n\n")[0]).parse_args(argv)
     version = dockerfile_setting("VIVOME_PIPELINE_VERSION")
     data, model_version = runtime_files(version)
     from service import config

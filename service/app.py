@@ -80,6 +80,8 @@ def _parse_multipart(content_type: str, body: bytes) -> dict[str, bytes]:
     reused directly."""
     header = f"Content-Type: {content_type}\r\nMIME-Version: 1.0\r\n\r\n".encode("ascii")
     message = message_from_bytes(header + body)
+    if not message.is_multipart():  # no boundary: answered 400, not a dropped connection
+        raise ValueError("the form has no parts (its multipart boundary is missing)")
     fields: dict[str, bytes] = {}
     for part in message.get_payload():
         name = part.get_param("name", header="content-disposition")

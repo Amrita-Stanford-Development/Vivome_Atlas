@@ -36,5 +36,20 @@ class HostedEnvTests(unittest.TestCase):
         self.assertEqual(env["PATH"], "p")
 
 
+class BuildSpaceHelpTests(unittest.TestCase):
+    """build_space.py --help says what it does and builds nothing (it used to
+    replace the staged Space)."""
+
+    def test_help_builds_nothing(self):
+        from unittest import mock
+        spec = importlib.util.spec_from_file_location("build_space", REPO / "deploy" / "huggingface" / "build_space.py")
+        build_space = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(build_space)
+        with mock.patch.object(build_space, "runtime_files", side_effect=AssertionError("the build started")), \
+                self.assertRaises(SystemExit) as caught:
+            build_space.main(["--help"])
+        self.assertEqual(caught.exception.code, 0)
+
+
 if __name__ == "__main__":
     unittest.main()

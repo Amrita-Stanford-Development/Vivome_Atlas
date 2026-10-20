@@ -26,8 +26,14 @@ gcloud run deploy vivome-atlas --source deploy/huggingface/space --region us-cen
 VIVOME_PROXY_SECRET=THE_SECRET python deploy/huggingface/check_space.py https://vivome-atlas-577083340913.us-central1.run.app
 ```
 
-The check must report that a request without the secret is refused, and
-`0 differ`, before the site points at a new revision.
+Before the deploy, `deploy/huggingface/space/space_manifest.json` must name
+this commit, with `uncommitted_changes` false: a stale staged folder would
+re-ship the old code, and `check_space.py` cannot tell (the example's answers
+may not change). The check must report that a request without the secret is
+refused, the status's `max_upload_mb` as the Dockerfile sets it (a `VIVOME_*`
+setting on the Cloud Run service itself would override it, and a deploy
+keeps such settings), and `0 differ`, before the site points at a new
+revision.
 
 ## Hugging Face Space (reference)
 

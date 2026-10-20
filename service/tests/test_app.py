@@ -35,6 +35,11 @@ class ParseMultipartTests(unittest.TestCase):
         self.assertEqual(fields["modality"], b"rna")
         self.assertEqual(fields["matrix"], b"gene,c1\nA1BG,1.0\n")
 
+    def test_a_form_without_its_boundary_is_refused_not_dropped(self):
+        """It raised AttributeError, and the connection closed with no answer."""
+        with self.assertRaises(ValueError):
+            app._parse_multipart("multipart/form-data", b"modality=rna&matrix=gene,c1")
+
 
 def _post_multipart(url: str, modality: bytes, matrix: bytes, extra: dict[str, bytes] | None = None) -> tuple[int, dict]:
     status, _, payload = _post_multipart_with_headers(url, modality, matrix, extra)

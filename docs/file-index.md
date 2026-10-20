@@ -402,7 +402,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/test_build_workflow.py` — `web/data/workflow.json` is the builder's output, within its budget, built for the manifest's release; its records and cross-checks
 - `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, and optionally the R2-backed large files)
-- `scripts/test_deploy_rehearse.py` — tests for `deploy/huggingface/rehearse.py`: the Dockerfile's settings read, the rehearsal local and without the secret
+- `scripts/test_deploy_rehearse.py` — tests for the deploy scripts: `rehearse.py` reads the Dockerfile's settings and stays local and without the secret; `build_space.py --help` builds nothing
 - `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index
 - `scripts/test_repo_paths.py` — runs `check_paths.py` as part of the normal test suite
