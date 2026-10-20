@@ -459,6 +459,15 @@ frozen bundle (MANIFEST `5fb71df0…`). Outputs are in
   94.3% correct when committed; v2 gives 94.3% and 89.8%.
   A3 judged the floor on a pooled rare-class suite, and its adoption rule
   did not check the narrow band.
+- **The miss is one class's** (from `g1_cells.csv.gz`, 2026-10-21):
+  - without B cells, narrow uploads are 95.7% correct when committed;
+  - B cells in narrow uploads are 65.8% (8,614 committed). 2,840 of their
+    2,946 wrong answers are the T cell group, with CD4 T as the best guess;
+  - in mixed uploads B cells are 99.5%.
+
+  Uploaded alone or with one other type, B cells lose, under each upload's
+  own per-gene scaling, what sets them apart from T cells. Blood shows the
+  same weakness (B cells abstain most in NB3c, run history entry 19).
 
 **G3, fresh: PXD045043, AUROC 0.917, pass.**
 - P(B cell group), white pulp over red pulp, on the 26 voxels.
