@@ -91,3 +91,21 @@ test('the secret header is the one the service checks', () => {
   const check = readFileSync(new URL('../../deploy/huggingface/check_space.py', import.meta.url), 'utf8');
   assert.match(check, new RegExp(`SECRET_HEADER = "${SECRET_HEADER}"`));
 });
+
+test('who the visitor is and where they are stay on the site too', async () => {
+  const calls = fakeFetch();
+  const request = new Request('https://vivome-atlas.pages.dev/api/status', {
+    headers: {
+      'Cf-Access-Authenticated-User-Email': 'visitor@example.org', 'Cf-Access-Client-Id': 'id',
+      'CF-Connecting-IP': '203.0.113.7', 'True-Client-IP': '203.0.113.7', 'X-Forwarded-For': '203.0.113.7',
+      'X-Real-IP': '203.0.113.7', Origin: 'https://vivome-atlas.pages.dev',
+    },
+  });
+  await onRequest({ request, env: ENV, params: { path: ['status'] } });
+  const headers = calls[0].init.headers;
+  for (const name of ['cf-access-authenticated-user-email', 'cf-access-client-id', 'cf-connecting-ip', 'true-client-ip',
+    'x-forwarded-for', 'x-real-ip']) {
+    assert.equal(headers.get(name), null, name);
+  }
+  assert.equal(headers.get('origin'), 'https://vivome-atlas.pages.dev');
+});

@@ -11,8 +11,10 @@
 export const SECRET_HEADER = 'X-VivOME-Proxy-Secret';
 
 // What the service never needs to see: the visitor's sign-in cookie and
-// token stay on this site.
-const DROPPED = ['cookie', 'cf-access-jwt-assertion', 'host'];
+// token, who they are (Access's cf-access-* headers, such as the signed-in
+// email) and where they are (their address) stay on this site.
+const DROPPED = ['cookie', 'host', 'cf-connecting-ip', 'true-client-ip', 'x-forwarded-for', 'x-real-ip'];
+const DROPPED_PREFIXES = ['cf-access-'];
 
 const answer = (status, body) => new Response(JSON.stringify(body), {
   status, headers: { 'Content-Type': 'application/json' },
@@ -29,6 +31,9 @@ export async function onRequest({ request, env, params }) {
   const target = `${String(env.SERVICE_URL).replace(/\/+$/, '')}/api/${path}${new URL(request.url).search}`;
   const headers = new Headers(request.headers);
   for (const name of DROPPED) headers.delete(name);
+  for (const name of [...headers.keys()]) {
+    if (DROPPED_PREFIXES.some((prefix) => name.startsWith(prefix))) headers.delete(name);
+  }
   headers.set(SECRET_HEADER, env.SERVICE_SECRET);
   const init = { method: request.method, headers, redirect: 'manual' };
   if (request.body && !['GET', 'HEAD'].includes(request.method)) {

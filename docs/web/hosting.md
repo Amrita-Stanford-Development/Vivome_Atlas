@@ -77,9 +77,15 @@ The service on Cloud Run answers only through the website. Pages call their
 own site's `/api/status` and `/api/project`; the Function forwards each
 request to `SERVICE_URL` with the secret `SERVICE_SECRET` in the
 `X-VivOME-Proxy-Secret` header, and the service, with the same secret in
-`VIVOME_PROXY_SECRET`, answers 403 to anything without it. Behind the site's
+`VIVOME_PROXY_SECRET`, answers 403 to anything without it. The Function
+keeps the visitor's sign-in cookie and token, Access's `cf-access-*`
+headers (the signed-in email among them) and the visitor's address on the
+site; the service gets none of them. Behind the site's
 sign-in, only signed-in visitors reach it. Cloudflare takes at most 100 MB in
-one request, so that is the upload limit.
+one request, and Cloud Run at most 32 MiB in an HTTP/1 request, which the
+service's server speaks. So the hosted copy's upload limit is 31 MiB
+(`VIVOME_MAX_UPLOAD_MB` in `deploy/huggingface/Dockerfile`), and the page
+checks a file against it before sending.
 
 The secret is set once, never in a file. Make a long random value, then:
 
