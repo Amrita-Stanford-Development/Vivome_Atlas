@@ -108,3 +108,11 @@ test('the status card is not read out on every tick; a status line says each ste
   assert.match(html, /<div class="status-card glass" id="status-card" hidden><\/div>/);
   assert.match(html, /<p class="visually-hidden" id="status-line" role="status"><\/p>/);
 });
+
+test('the step bar\'s Play button says what it will do, not also whether it is pressed', () => {
+  const html = readFileSync(new URL('../atlas.html', import.meta.url), 'utf8');
+  assert.match(html, /<button type="button" id="step-play">Play<\/button>/);
+  const landing = readFileSync(new URL('../js/atlas/landing.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(landing, /\$\('step-play'\)\.setAttribute\('aria-pressed'/);
+});
+

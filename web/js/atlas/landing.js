@@ -440,8 +440,9 @@ export function createLanding({
       $('step-text').textContent = k >= 0
         ? `${(k + 1).toLocaleString('en-US')} of ${count} · ${run.groups[run.groupOf[current]].name}`
         : `${count} cells shown: step through them`;
+      // Its label says what a press does (one or the other: a label that
+      // changes and a pressed state would read "Pause, pressed").
       $('step-play').textContent = playing ? 'Pause' : 'Play';
-      $('step-play').setAttribute('aria-pressed', String(playing));
       for (const id of ['step-prev', 'step-next', 'step-play']) $(id).disabled = list.length === 0;
     }
     const legend = $('legend-card');
