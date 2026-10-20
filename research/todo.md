@@ -453,9 +453,12 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
   - MaxQuant's proteinGroups.txt or FragPipe's LFQ combined_protein.tsv (`ed5188d`), which also gives a clear 400 naming the column for any table it cannot read;
   - the upload-path fixes from two reviews, Spectronaut pivot reports, spreadsheet encodings and parsing inside the projection slot (`a1fcbbe`, `54a6a9a`);
   - constant genes z-scored to 0, and a clear refusal for an upload with no named rows (`24391cc`);
-  - the hosted upload limit of 31 MiB, under Cloud Run's 32 MiB per HTTP/1 request (`172b7d3`; the Dockerfile sets it, so it applies on the next deploy).
+  - the hosted upload limit of 31 MiB, under Cloud Run's 32 MiB per HTTP/1 request (`172b7d3`; the Dockerfile sets it, so it applies on the next deploy);
+  - model files read as tensors only, so a tampered checkpoint is refused, not run (`387a6e2`).
 
-  The site's side (`172b7d3`, `2bf80a4`) has the Atlas page's file check, its messages and the /api door that no longer forwards the visitor's identity or address.
+  Rehearsed locally with the hosted settings (2026-10-21): `check_space.py` finds 0 of 238 cells differ, and real FragPipe LFQ, Spectronaut and DIA-NN 1.8 tables are read over HTTP.
+
+  The site's side (`172b7d3`, `2bf80a4`, `387a6e2`) has the Atlas page's file check, its messages, the /api door that no longer forwards the visitor's identity or address, and security headers on every static file.
 
   **Order:** the service first (`deploy/huggingface/PUBLISH.md`), then the site. `ed5188d`'s Atlas page label and file check name MaxQuant and FragPipe; deployed before the service, they would invite files the live service still refuses.
 - [~] **The lung** (owner, 2026-10-18; `research/organ-references.md`, "Lung"):
