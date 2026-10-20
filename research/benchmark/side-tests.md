@@ -327,6 +327,26 @@ comes from here. Keep this list current.
     adenoma and carcinoma; 22 patients.
   - PXD036591: small intestine in Crohn's disease, FACS EpCAM+, CD45+ and
     double-negative.
+  - **Searched again 2026-10-21** (PRIDE, ProteomeCentral across its members,
+    MassIVE, PDC, HuBMAP, Zenodo, figshare and the 2023 to 2026 literature;
+    iProX-only projects not reached). Nothing new can gate a colon reference:
+    no public set has independently labelled colon cell types beyond the
+    locked test. Found, none downloaded:
+    - PXD050335 (Crohn's colon resections): mucosa against submucosa/wall,
+      by dissection; 52 label-free runs (17 of them from non-IBD resections),
+      as two separate MaxQuant searches. Two compartments only;
+    - PXD041366 (iProX): MACS-sorted CD4 and CD8 T cells from colorectal
+      tumours and distant normal tissue, 13 patients, TMT. T cells only;
+    - PXD073004 and PXD073053: laser-microdissected submucosa and muscularis
+      of the ileum (Crohn's strictures and controls). Small intestine;
+    - an LCM study of four cell types from one colon tumour and its normal
+      tissue (Anal Chem 2018), in its supporting tables only. One donor.
+  - **Leads, no public data yet:** a DVP atlas of 27 cell types in 14
+    tissues (bioRxiv 2026, data on publication; the colon is not among its
+    DVP tissues); an LCM study of lymphoid structures in colorectal cancer
+    (Oncogene 2026, no accession); FACS-sorted colon epithelial populations
+    from 7 patients shown at HUPO 2024 (no paper; a data request could be
+    made).
 
 ## What counts as a side test
 
