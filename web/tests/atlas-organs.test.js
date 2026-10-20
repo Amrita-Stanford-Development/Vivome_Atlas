@@ -189,6 +189,6 @@ test('the organ page guards Your data on every path: tabs, arrow keys, the addre
   const main = read('js/atlas/main.js');
   assert.match(main, /mountDataTab\(\{ landing, client, service, acceptsFiles: !organ \}\)/);
   assert.match(main, /function showTab\(which\) \{\n\s+if \(organ && which === 'data'\) return;/);
-  assert.match(main, /if \(organ \|\| \(e\.key !== 'ArrowLeft' && e\.key !== 'ArrowRight'\)\) return;/);
+  assert.match(main, /if \(organ \|\| !next\) return;/, 'the tab keys (arrows, Home, End) do nothing on an organ page');
   assert.match(main, /function fromHash\(\) \{\n\s+if \(organ\) return;/);
 });
