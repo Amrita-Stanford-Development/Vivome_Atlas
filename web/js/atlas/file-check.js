@@ -44,6 +44,9 @@ const MAXQUANT_REFUSALS = [
   [(f) => f.startsWith('Reporter intensity'), 'This MaxQuant table is a TMT search: its Intensity columns are whole plexes, not cells. Send the reporter intensities as a matrix with one column per cell instead.'],
   [(f) => /^Ratio [HML]\/[HML]/.test(f), 'This MaxQuant table is a SILAC search: its intensities are labels, not cells. The service reads label-free tables.'],
 ];
+// Spectronaut's protein-group pivot report: one "[n] <run>.PG.Quantity" column
+// per run, "PG.Genes" the identifiers.
+const SPECTRONAUT_QUANTITIES = [/^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$/];
 const sampleColumns = (fields, patterns) => patterns.map((p) => fields.filter((f) => p.test(f)).length).find((n) => n > 0) ?? 0;
 
 // The file's first line, without its line ending. By default from the first
@@ -122,6 +125,10 @@ export function parseHeader(line) {
   const commas = text.split(',').length - 1;
   const separator = tabs > commas ? '\t' : ',';
   const fields = splitFields(text, separator);
+  if (fields.includes('PG.Genes') && fields.some((f) => SPECTRONAUT_QUANTITIES[0].test(f))) {
+    const cells = sampleColumns(fields, SPECTRONAUT_QUANTITIES);
+    return { separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells, format: 'spectronaut' };
+  }
   const maxquant = fields.includes('Majority protein IDs') && fields.includes('Gene names');
   const fragpipeLfq = !maxquant && fields.includes('Gene') && fields.includes('Combined Total Peptides');
   if (maxquant || fragpipeLfq) {

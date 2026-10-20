@@ -64,6 +64,29 @@ def _post_multipart_with_headers(url: str, modality: bytes, matrix: bytes,
         return exc.code, dict(exc.headers), json.loads(exc.read())
 
 
+class DecodeMatrixTests(unittest.TestCase):
+    """The matrix file's bytes as text: the encodings spreadsheet programs
+    write are read, and a file that is not text is refused in words."""
+
+    def test_utf8_with_or_without_a_byte_order_mark(self):
+        self.assertEqual(app._decode_matrix("gene,c\u00b51\n".encode("utf-8")), "gene,c\u00b51\n")
+        self.assertTrue(app._decode_matrix("\ufeffgene,c1\n".encode("utf-8")).endswith("gene,c1\n"))
+
+    def test_utf16_with_its_byte_order_mark_as_excel_writes_unicode_text(self):
+        self.assertEqual(app._decode_matrix("gene\tc1\nA1BG\t1.5\n".encode("utf-16")), "gene\tc1\nA1BG\t1.5\n")
+
+    def test_windows_1252_as_excel_writes_plain_csv(self):
+        self.assertEqual(app._decode_matrix("gene,20 \u00b5m\nA1BG,1.5\n".encode("cp1252")), "gene,20 \u00b5m\nA1BG,1.5\n")
+
+    def test_a_workbook_or_a_binary_file_is_refused_in_words(self):
+        with self.assertRaises(ValueError) as caught:
+            app._decode_matrix(b"PK\x03\x04" + bytes(40))
+        self.assertIn("Excel workbook", str(caught.exception))
+        with self.assertRaises(ValueError) as caught:
+            app._decode_matrix(b"PAR1" + bytes(40))
+        self.assertIn("not text", str(caught.exception))
+
+
 class ProjectionHandlerHttpTests(unittest.TestCase):
     """A real HTTP round trip against ThreadingHTTPServer, so "wired up
     end-to-end" means the actual socket path, not just direct function
@@ -322,6 +345,25 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
             slots.release()  # that upload is done
             status, _, _ = _post_multipart_with_headers(url, b"prot", matrix)
             self.assertEqual(status, 200)
+
+    def test_a_busy_service_answers_before_parsing_the_matrix(self):
+        """Parsing a large table takes several times its size in memory, so it
+        happens only inside a projection slot, one upload at a time."""
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
+        with patch.object(app, "_projection_slots", threading.BoundedSemaphore(1)) as slots, \
+                patch.object(app.alignment, "parse_matrix_csv", wraps=app.alignment.parse_matrix_csv) as parse:
+            slots.acquire()
+            status, _ = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+            slots.release()
+        self.assertEqual(status, 503)
+        parse.assert_not_called()
+
+    def test_an_excel_workbook_is_400_saying_what_to_send(self):
+        self._install_synthetic_bundle()
+        status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", b"PK\x03\x04" + bytes(64))
+        self.assertEqual(status, 400)
+        self.assertIn("Excel workbook", payload["error"])
 
     def test_a_failed_projection_gives_its_slot_back(self):
         feature_genes = self._install_synthetic_bundle()

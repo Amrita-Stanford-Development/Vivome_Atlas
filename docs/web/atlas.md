@@ -27,7 +27,7 @@ Pure modules have no DOM and are covered by `node --test`
 | `answers.js` (pure) | A service response or the recorded example as one cell shape; how each answer is drawn; which pipelines share this map (v3.1, v4, v4.1, v4.2); the receipt's numbers |
 | `choreography.js` (pure) | The landing's timing: the flight schedule, the guided timeline, the waiting loop, framing a pose, reduced-motion timing |
 | `director.js` (pure) | The page's state machine (below) |
-| `file-check.js` (pure) | Checks a file in the browser (header, cells, rows) against the service's limits; it counts cells the way the service reads each layout (a plain matrix, DIA-NN, MaxQuant, FragPipe LFQ or TMT) |
+| `file-check.js` (pure) | Checks a file in the browser (header, cells, rows) against the service's limits; it counts cells the way the service reads each layout (a plain matrix, DIA-NN, Spectronaut, MaxQuant, FragPipe LFQ or TMT) |
 | `service-client.js` | The service's address, its status and project calls (upload progress, Retry-After, timeouts), plain-words failures |
 | `atlas-panels.js` (pure) | The cell card, the receipt, the answer key, the outcome chips, the example's summary |
 | `cell-browser.js` (pure) | The projected cells grouped by the answer each was given (one group per type, family, branch, reason for no answer, and not placed), their order (sorted by confidence, file order or likeness; searched by name), and the drawer's browser |

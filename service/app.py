@@ -96,6 +96,26 @@ def _parse_bool_field(value: bytes | None) -> bool:
     raise ValueError(f"restrict_to_supported_classes must be true or false, got {text!r}")
 
 
+def _decode_matrix(data: bytes) -> str:
+    """The matrix file's text. UTF-8 (a byte order mark is left for the
+    parser), UTF-16 with its byte order mark (Excel's "Unicode Text"), or
+    else Windows-1252 (Excel's plain "CSV" on Windows: numbers and gene
+    symbols are ASCII either way). An Excel workbook or another binary file
+    is refused in words."""
+    if data.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return data.decode("utf-16")
+    if data.startswith(b"PK\x03\x04"):
+        raise alignment.UnreadableMatrix("the matrix is an Excel workbook (.xlsx), not text: save the sheet as CSV or "
+                                         "tab-separated text and send that file")
+    if data.startswith(b"PAR1") or b"\x00" in data[:4096]:
+        raise alignment.UnreadableMatrix("the matrix is a binary file (Parquet, for example), not text: send it as CSV "
+                                         "or tab-separated text")
+    try:
+        return data.decode("utf-8")
+    except UnicodeDecodeError:
+        return data.decode("cp1252", errors="replace")
+
+
 def _log_upload(matrix_text: str, result: dict) -> None:
     """Per-upload audit line (Track B) — enough to debug a bad projection or
     watch for drift (coverage collapsing, abstention rate climbing) without
@@ -250,10 +270,13 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             if modality not in ("rna", "prot"):
                 self._send_json(400, {"error": f"modality must be 'rna' or 'prot', got {modality!r}"})
                 return
-            matrix_text = fields["matrix"].decode("utf-8")
+            matrix_text = _decode_matrix(fields["matrix"])
             restrict = _parse_bool_field(fields.get("restrict_to_supported_classes"))
         except KeyError as exc:
             self._send_json(400, {"error": f"missing required field: {exc}"})
+            return
+        except alignment.UnreadableMatrix as exc:
+            self._send_json(400, {"error": str(exc)})
             return
         except (UnicodeDecodeError, ValueError) as exc:
             self._send_json(400, {"error": f"malformed request: {exc}"})
@@ -268,26 +291,8 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             })
             return
 
-        try:
-            raw = alignment.parse_matrix_csv(matrix_text)
-            warnings = validation.validate(raw)
-        except (validation.ValidationError, alignment.UnreadableMatrix) as exc:
-            self._send_json(400, {"error": str(exc)})
-            return
-        except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
-            logger.exception("could not parse the submitted matrix")
-            self._send_json(400, {"error": "could not process the submitted matrix"})
-            return
-
-        if len(raw.cell_ids) > config.MAX_UPLOAD_CELLS:
-            self._send_json(413, {
-                "error": f"the matrix has {len(raw.cell_ids):,} cells; this service projects at most "
-                         f"{config.MAX_UPLOAD_CELLS:,} per upload",
-                "reason": "Split the cells at random into uploads of at most that many, so each is still a mix of "
-                          "cell types, or run the service yourself with VIVOME_MAX_UPLOAD_CELLS raised.",
-            })
-            return
-
+        # Parsing a large table takes several times its size in memory, so it
+        # happens inside a projection slot too: one upload's work at a time.
         if not _projection_slots.acquire(blocking=False):
             self._send_json(503, {
                 "error": "the service is busy with another upload",
@@ -296,11 +301,32 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             }, headers={"Retry-After": str(config.BUSY_RETRY_AFTER_SECONDS)})
             return
         try:
-            result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality)
-        except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
-            logger.exception("projection failed")
-            self._send_json(400, {"error": "could not process the submitted matrix"})
-            return
+            try:
+                raw = alignment.parse_matrix_csv(matrix_text)
+                warnings = validation.validate(raw)
+            except (validation.ValidationError, alignment.UnreadableMatrix) as exc:
+                self._send_json(400, {"error": str(exc)})
+                return
+            except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
+                logger.exception("could not parse the submitted matrix")
+                self._send_json(400, {"error": "could not process the submitted matrix"})
+                return
+
+            if len(raw.cell_ids) > config.MAX_UPLOAD_CELLS:
+                self._send_json(413, {
+                    "error": f"the matrix has {len(raw.cell_ids):,} cells; this service projects at most "
+                             f"{config.MAX_UPLOAD_CELLS:,} per upload",
+                    "reason": "Split the cells at random into uploads of at most that many, so each is still a mix of "
+                              "cell types, or run the service yourself with VIVOME_MAX_UPLOAD_CELLS raised.",
+                })
+                return
+
+            try:
+                result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality)
+            except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
+                logger.exception("projection failed")
+                self._send_json(400, {"error": "could not process the submitted matrix"})
+                return
         finally:
             _projection_slots.release()
 

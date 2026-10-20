@@ -95,8 +95,9 @@ _FRAGPIPE_TMT_ANNOTATION_COLUMNS = frozenset({
 })
 _FRAGPIPE_TMT_REFERENCE_PREFIXES = ("RefInt_", "RefDInt_")
 
-# Missing-value spellings: blank (the contract, DIA-NN) and R's "NA" (FragPipe).
-_MISSING_VALUES = frozenset({"", "NA"})
+# Missing-value spellings: blank (the contract, DIA-NN), R's "NA" (FragPipe),
+# and Spectronaut's "Filtered" and "NaN".
+_MISSING_VALUES = frozenset({"", "NA", "Filtered", "NaN"})
 
 # MaxQuant's proteinGroups.txt: a "Gene names" column, flag columns that mark
 # decoys, contaminants and site-only groups with "+", and per-sample
@@ -122,12 +123,20 @@ _FRAGPIPE_LFQ_QUANTITIES = (re.compile(r"^(?!Combined )(.+) MaxLFQ Intensity$"),
                             re.compile(r"^(?!Combined )(.+?)(?<! MaxLFQ)(?<! Unique)(?<! Total)(?<! Razor) Intensity$"))
 _FRAGPIPE_DECOY_PREFIXES = ("contam_", "rev_")
 
+# Spectronaut's protein-group pivot report: "PG.Genes" and other "PG."
+# annotation columns, then one "[n] <run>.PG.Quantity" column per run, named
+# by its run without the file extension. 0 is "not quantified".
+_SPECTRONAUT_GENES = "PG.Genes"
+_SPECTRONAUT_QUANTITIES = (re.compile(r"^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$"),)
+_RUN_EXTENSION = re.compile(r"\.(raw|d|wiff|mzml|htrms)$", re.IGNORECASE)
+
 # MaxQuant's ID-list columns can pass csv's default 131,072-character field
 # limit (PXD011683); the upload itself is bounded (config's upload limit).
 csv.field_size_limit(2**31 - 1)
 
 _READABLE_LAYOUTS = ("a matrix with identifiers in the first column and one column per cell; a DIA-NN pg_matrix; "
-                     "MaxQuant proteinGroups.txt; FragPipe combined_protein.tsv or a TMT-Integrator table")
+                     "a Spectronaut protein-group pivot report; MaxQuant proteinGroups.txt; FragPipe "
+                     "combined_protein.tsv or a TMT-Integrator table")
 
 
 class UnreadableMatrix(ValueError):
@@ -162,7 +171,7 @@ def _refuse_labelled_maxquant(header: list[str]) -> None:
 
 def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities: tuple,
                           flags: frozenset = frozenset(), decoy_column: "str | None" = None,
-                          decoy_prefixes: tuple = ()) -> "RawMatrix":
+                          decoy_prefixes: tuple = (), rename=lambda name: name) -> "RawMatrix":
     """MaxQuant's and FragPipe's LFQ tables: one row per protein group, the
     gene column's text as identifiers, rows flagged "+" and decoy or
     contaminant rows left out, and the first quantity pattern with any value
@@ -171,7 +180,7 @@ def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities
     gene_idx = header.index(gene_column)
     flag_idx = [i for i, name in enumerate(header) if name in flags]
     decoy_idx = header.index(decoy_column) if decoy_column in header else None
-    found = [[(i, m.group(1).strip()) for i, name in enumerate(header) if (m := pattern.match(name))]
+    found = [[(i, rename(m.group(1).strip())) for i, name in enumerate(header) if (m := pattern.match(name))]
              for pattern in quantities]
     rows = []
     for line, row in lines:
@@ -234,8 +243,9 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     columns and reference-channel columns are excluded, and the channel
     headers are kept verbatim. "NA" is read as missing in every format.
 
-    MaxQuant's proteinGroups.txt and FragPipe's LFQ combined_protein.tsv are
-    read as they come (_parse_quantity_table). A plain matrix written by R
+    MaxQuant's proteinGroups.txt, FragPipe's LFQ combined_protein.tsv and
+    Spectronaut's protein-group pivot report are read as they come
+    (_parse_quantity_table). A plain matrix written by R
     without the corner field over its row names is read too. A text value
     where a number belongs, or a row too short for the header, raises
     UnreadableMatrix, naming the column or the line."""
@@ -249,6 +259,9 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     if all(m in header for m in _MAXQUANT_MARKERS):
         _refuse_labelled_maxquant(header)
         return _parse_quantity_table(header, lines, "Gene names", _MAXQUANT_QUANTITIES, flags=_MAXQUANT_FLAGS)
+    if _SPECTRONAUT_GENES in header and any(_SPECTRONAUT_QUANTITIES[0].match(name) for name in header):
+        return _parse_quantity_table(header, lines, _SPECTRONAUT_GENES, _SPECTRONAUT_QUANTITIES,
+                                     rename=lambda run: _RUN_EXTENSION.sub("", run))
     if all(m in header for m in _FRAGPIPE_LFQ_MARKERS):
         return _parse_quantity_table(header, lines, "Gene", _FRAGPIPE_LFQ_QUANTITIES,
                                      decoy_column="Protein", decoy_prefixes=_FRAGPIPE_DECOY_PREFIXES)

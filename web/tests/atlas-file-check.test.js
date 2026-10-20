@@ -56,6 +56,12 @@ test('MaxQuant and FragPipe LFQ tables count one cell per sample, as the service
   assert.equal(parseHeader(summaries).cellEstimate, 1, 'unique, total and razor intensities are not cells');
 });
 
+test('a Spectronaut pivot report counts one cell per run', () => {
+  const header = ['PG.ProteinGroups', 'PG.Genes', 'PG.ProteinNames', '[1] a.raw.PG.Quantity', '[2] b.raw.PG.Quantity',
+    '[3] c.d.PG.Quantity'].join('\t');
+  assert.deepEqual(parseHeader(header), { separator: '\t', columns: 6, annotation: 3, cellEstimate: 3, format: 'spectronaut' });
+});
+
 test('MaxQuant SILAC and TMT searches are refused in words, as the service refuses them', async () => {
   const silac = ['Majority protein IDs', 'Gene names', 'Ratio H/L', 'Intensity', 'Intensity L', 'Intensity H'].join('\t');
   assert.match(parseHeader(silac).refusal, /SILAC/);

@@ -57,8 +57,12 @@ become the gene identifiers, DIA-NN's other annotation columns
 excluded from the cell columns, and each remaining column's Windows
 raw-file-path header is cleaned to its basename without `.raw`.
 
-Three more protein tables are read as their software writes them
+Four more protein tables are read as their software writes them
 (`service/pipeline/alignment.py`):
+- **Spectronaut's protein-group pivot report** (it has "PG.Genes" and
+  "<run>.PG.Quantity" columns): "PG.Genes" gives the identifiers, and there
+  is one cell per run, named by the run without its "[n]" prefix or file
+  extension. "Filtered", "NaN" and 0 are missing.
 - **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs" and "Gene
   names"):
   - "Gene names" gives the identifiers;
@@ -84,7 +88,10 @@ In MaxQuant's and FragPipe's LFQ tables, 0 means "not quantified" and is
 read as missing.
 
 **In every layout:**
-- A byte order mark (Excel's "CSV UTF-8") is ignored.
+- The file may be UTF-8 (a byte order mark, as in Excel's "CSV UTF-8", is
+  ignored), UTF-16 with its byte order mark (Excel's "Unicode Text"), or
+  Windows-1252 (Excel's plain "CSV"). An Excel workbook (.xlsx) or another
+  binary file is refused (400), saying what to send instead.
 - Perseus's annotation rows (`#!{...}`) are skipped.
 - A plain matrix written by R without the corner field over its row names
   is read with every cell under its own name.
@@ -145,7 +152,9 @@ The Atlas page's Your data tab calls `/api/status` before offering an upload.
 - **413** when the request is larger than `max_upload_mb`, or the matrix
   has more cells than `max_cells`;
 - **503** with a `Retry-After` header (seconds) when every projection slot
-  is taken by other uploads;
+  is taken by other uploads. This is checked before the matrix is read:
+  reading a large table takes several times its size in memory, so it
+  happens inside the slot;
 - **400** for a malformed request or matrix.
 
 With `VIVOME_PROXY_SECRET` set, both endpoints answer **403** to any request

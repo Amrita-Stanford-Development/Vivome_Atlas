@@ -236,6 +236,32 @@ class UploadLayoutTests(unittest.TestCase):
         self.assertIn("Gene names", str(caught.exception))
 
 
+class SpectronautTests(unittest.TestCase):
+    """Spectronaut's protein-group pivot report: "PG.Genes", annotation
+    columns, and one "[n] <run>.PG.Quantity" column per run."""
+
+    HEADER = ["PG.ProteinGroups", "PG.ProteinAccessions", "PG.Genes", "PG.ProteinNames", "PG.ProteinDescriptions",
+              "PG.Organisms", "[1] 20240101_PBMC_cell1.raw.PG.Quantity", "[2] 20240101_PBMC_cell2.raw.PG.Quantity",
+              "[3] cell3.d.PG.Quantity"]
+
+    def test_runs_are_cells_and_pg_genes_the_identifiers(self):
+        rows = ["P1\tP1\tGENE1\tA_HUMAN\tdesc\tHomo sapiens\t1500.5\tFiltered\t20",
+                "P2;P3\tP2;P3\tGENE2;GENE3\tB_HUMAN\tdesc\tHomo sapiens\tNaN\t300\t0"]
+        raw = alignment.parse_matrix_csv("\n".join(["\t".join(self.HEADER)] + rows))
+        self.assertEqual(raw.cell_ids, ["20240101_PBMC_cell1", "20240101_PBMC_cell2", "cell3"])
+        self.assertEqual(raw.gene_names, ["GENE1", "GENE2;GENE3"])
+        self.assertEqual(raw.values[0, 0], np.float32(1500.5))
+        self.assertTrue(np.isnan(raw.values[0, 1]))  # "Filtered"
+        self.assertTrue(np.isnan(raw.values[1, 0]))  # "NaN"
+        self.assertTrue(np.isnan(raw.values[1, 2]))  # 0 is not quantified
+        self.assertEqual(raw.values[1, 1], np.float32(300))
+
+    def test_a_report_without_run_quantities_is_refused_in_words(self):
+        header = ["PG.ProteinGroups", "PG.Genes", "R.FileName", "PG.Quantity"]
+        with self.assertRaises(alignment.UnreadableMatrix):
+            alignment.parse_matrix_csv("\t".join(header) + "\nP1\tGENE1\trun1\t100\n")
+
+
 class ZScorePerGeneTests(unittest.TestCase):
     def test_zscores_use_only_this_datasets_own_stats(self):
         raw = np.array([[0.0, 10.0, 20.0]])  # one gene, three cells
