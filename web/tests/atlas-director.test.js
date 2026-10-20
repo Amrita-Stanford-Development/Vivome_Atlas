@@ -255,3 +255,13 @@ test('new limits replace a chosen file\'s check, and only then', () => {
   const sending = { name: 'sending', file: 'f', check: { ok: true } };
   assert.equal(transition(sending, { type: 'LIMITS', check: { ok: false } }), sending);
 });
+
+test('limits that change nothing leave the state as it was', () => {
+  const file = { name: 'a.csv' };
+  const check = { ok: true, problems: [], cells: 40 };
+  const chosen = { name: 'chosen', file, check };
+  assert.equal(transition(chosen, { type: 'LIMITS', check: { ...check } }), chosen);
+  const worse = transition(chosen, { type: 'LIMITS', check: { ...check, ok: false, problems: ['too many cells'] } });
+  assert.notEqual(worse, chosen);
+  assert.equal(worse.check.ok, false);
+});

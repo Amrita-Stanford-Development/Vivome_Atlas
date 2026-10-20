@@ -415,7 +415,7 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
 
 def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None",
             modality: str = "prot") -> dict:
-    smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw)
+    smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw, modality)
     rna_upload = modality == "rna"
     uses_protein = getattr(bundle, "protein_means", None) is not None and not rna_upload
     protein = protein_query(raw, bundle.protein_genes) if uses_protein else None

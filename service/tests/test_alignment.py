@@ -212,6 +212,18 @@ class UploadLayoutTests(unittest.TestCase):
         self.assertEqual(raw.cell_ids, ["c1", "c2"])
         np.testing.assert_array_equal(raw.values, [[1, 2], [3, 4]])
 
+    def test_a_header_with_a_corner_is_never_shifted(self):
+        """Only R's layout shifts the header: a named or blank corner, or a
+        data row whose extra field is empty, means the header is whole."""
+        raw = alignment.parse_matrix_csv("gene,c1,c2\nG0,1,2,\nG1,3,4,5\n")  # one row's extra field filled
+        self.assertEqual(raw.cell_ids, ["c1", "c2"])
+        np.testing.assert_array_equal(raw.values, [[1, 2], [3, 4]])
+        raw = alignment.parse_matrix_csv("Gene,c1,c2\nG0,1,2,9\nG1,3,4,9\n")  # a corner label
+        self.assertEqual(raw.cell_ids, ["c1", "c2"])
+        raw = alignment.parse_matrix_csv(",c1,c2\nG0,1,2,9\nG1,3,4,9\n")  # a blank corner
+        self.assertEqual(raw.cell_ids, ["c1", "c2"])
+        np.testing.assert_array_equal(raw.values, [[1, 2], [3, 4]])
+
     def test_a_row_too_short_for_the_header_is_refused_naming_its_line(self):
         with self.assertRaises(alignment.UnreadableMatrix) as caught:
             alignment.parse_matrix_csv("gene,c1,c2,c3\nGENE1,1,2,3\nGENE2,4\n")
@@ -431,6 +443,39 @@ class ZerosAndScaleTests(unittest.TestCase):
         self.assertEqual(scale.detected, "linear")
         self.assertFalse(np.any(out == 0))
         self.assertTrue(np.all(np.isnan(out[values == 0])))
+
+
+class RnaZerosTests(unittest.TestCase):
+    """In RNA a 0 is a measured value, so it votes in the scale's median as it
+    always did: raw counts with most values 0 stay as they are, every 0
+    measured. Only protein's 0 ("not quantified") is left out of the vote."""
+
+    @staticmethod
+    def _counts(cells=50):
+        from service.tests.test_golden_fixtures import _load_pbmc240_50
+        genes = _load_pbmc240_50().gene_names
+        rng = np.random.default_rng(1)
+        counts = rng.poisson(150, size=(len(genes), cells)).astype(np.float32)
+        counts[rng.random(counts.shape) < 0.75] = 0.0  # Smart-seq-like: most genes not seen in a cell
+        return alignment.RawMatrix(gene_names=list(genes), cell_ids=[f"c{i}" for i in range(cells)], values=counts)
+
+    def test_rna_counts_keep_their_zeros_as_measured(self):
+        raw = self._counts()
+        out, scale = alignment.detect_and_transform_value_scale(raw.values, zeros_vote=True)
+        self.assertEqual(scale.detected, "log")
+        self.assertTrue(np.all(out[raw.values == 0] == 0))
+        _, prot = alignment.detect_and_transform_value_scale(raw.values)
+        self.assertEqual(prot.detected, "linear", "protein's zeros still do not vote")
+
+    def test_the_service_passes_the_upload_s_modality(self):
+        from service.pipeline import pipeline
+        raw = self._counts()
+        for version in ("v3", "v3.1", "v4.1"):
+            bundle = pipeline.load_bundle(version)
+            for modality, expected in (("rna", "log"), ("prot", "linear")):
+                with self.subTest(version=version, modality=modality):
+                    response = pipeline.run_projection(bundle, raw, modality=modality)
+                    self.assertEqual(response["value_scale"]["detected"], expected)
 
 
 class InputRobustnessTests(unittest.TestCase):

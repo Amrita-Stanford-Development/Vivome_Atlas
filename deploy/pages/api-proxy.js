@@ -12,9 +12,11 @@ export const SECRET_HEADER = 'X-VivOME-Proxy-Secret';
 
 // What the service never needs to see: the visitor's sign-in cookie and
 // token, who they are (Access's cf-access-* headers, such as the signed-in
-// email) and where they are (their address) stay on this site.
-const DROPPED = ['cookie', 'host', 'cf-connecting-ip', 'true-client-ip', 'x-forwarded-for', 'x-real-ip'];
-const DROPPED_PREFIXES = ['cf-access-'];
+// email) and where they are (their address, and Cloudflare's visitor
+// location headers: cf-ipcountry, cf-ipcity and the rest) stay on this site.
+const DROPPED = ['cookie', 'host', 'cf-connecting-ip', 'true-client-ip', 'x-forwarded-for', 'x-real-ip',
+  'cf-region', 'cf-region-code', 'cf-metro-code', 'cf-postal-code', 'cf-timezone'];
+const DROPPED_PREFIXES = ['cf-access-', 'cf-ip'];
 
 const answer = (status, body) => new Response(JSON.stringify(body), {
   status, headers: { 'Content-Type': 'application/json' },

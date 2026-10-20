@@ -99,12 +99,15 @@ test('who the visitor is and where they are stay on the site too', async () => {
       'Cf-Access-Authenticated-User-Email': 'visitor@example.org', 'Cf-Access-Client-Id': 'id',
       'CF-Connecting-IP': '203.0.113.7', 'True-Client-IP': '203.0.113.7', 'X-Forwarded-For': '203.0.113.7',
       'X-Real-IP': '203.0.113.7', Origin: 'https://vivome-atlas.pages.dev',
+      'CF-IPCountry': 'IN', 'CF-IPCity': 'Kochi', 'CF-IPLatitude': '9.9', 'CF-IPLongitude': '76.3', 'CF-Region': 'Kerala',
+      'CF-Postal-Code': '682001', 'CF-Timezone': 'Asia/Kolkata', 'CF-Metro-Code': '0', 'CF-Region-Code': 'KL',
     },
   });
   await onRequest({ request, env: ENV, params: { path: ['status'] } });
   const headers = calls[0].init.headers;
   for (const name of ['cf-access-authenticated-user-email', 'cf-access-client-id', 'cf-connecting-ip', 'true-client-ip',
-    'x-forwarded-for', 'x-real-ip']) {
+    'x-forwarded-for', 'x-real-ip', 'cf-ipcountry', 'cf-ipcity', 'cf-iplatitude', 'cf-iplongitude', 'cf-region',
+    'cf-postal-code', 'cf-timezone', 'cf-metro-code', 'cf-region-code']) {
     assert.equal(headers.get(name), null, name);
   }
   assert.equal(headers.get('origin'), 'https://vivome-atlas.pages.dev');

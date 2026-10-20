@@ -83,8 +83,10 @@ class DecodeMatrixTests(unittest.TestCase):
             app._decode_matrix(b"PK\x03\x04" + bytes(40))
         self.assertIn("Excel workbook", str(caught.exception))
         with self.assertRaises(ValueError) as caught:
-            app._decode_matrix(b"PAR1" + bytes(40))
+            app._decode_matrix(b"PAR1" + bytes(40) + b"PAR1")
         self.assertIn("not text", str(caught.exception))
+        # text that merely starts with "PAR1" (a cell's name) is text
+        self.assertEqual(app._decode_matrix(b"PAR1_a,PAR1_b\nG0,1,2\n"), "PAR1_a,PAR1_b\nG0,1,2\n")
 
 
 class ProjectionHandlerHttpTests(unittest.TestCase):

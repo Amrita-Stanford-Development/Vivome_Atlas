@@ -399,7 +399,9 @@ def check_outputs(directory: Path) -> None:
     since, or the scorer stops: the label map, the predictions and the
     query matrices it reads."""
     record = json.loads((directory / "intake.json").read_text(encoding="utf-8"))
-    changed = [name for name, digest in record.get("outputs", {}).items() if sha256(directory / name) != digest]
+    if not record.get("outputs"):
+        raise SystemExit("intake.json records no outputs, so nothing the scorer reads can be checked")
+    changed = [name for name, digest in record["outputs"].items() if sha256(directory / name) != digest]
     if changed:
         raise SystemExit(f"changed since the intake recorded them: {changed}; the scorer reads only what the intake wrote")
 
@@ -420,7 +422,7 @@ def check_labels(labels: pd.DataFrame, groups: "set | None" = None, required: tu
     if not labels["scored"].map(lambda v: v in truth).all():
         raise SystemExit("the label map's scored column must be True or False")
     for c in required:
-        if labels[c].astype(str).str.strip().isin(["", "nan"]).any():
+        if labels[c].isna().any() or labels[c].astype(str).str.strip().isin(["", "nan", "None"]).any():
             raise SystemExit(f"the label map has a row without a {c}")
     if known_ids is not None and not set(labels["cell_id"].astype(str)) <= set(map(str, known_ids)):
         raise SystemExit("the label map names a sample the matrix does not have")

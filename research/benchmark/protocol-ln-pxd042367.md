@@ -176,3 +176,19 @@ protocol. Tests are in `service/tests/test_organ_heldout.py`.
 - **Rule 7:** the AUROC's permutation p refuses a score that is not a
   finite number. NaN fails every comparison, so p would have come out at
   its smallest.
+
+**Amendment 5, 2026-10-21: what the scorer trusts, before the set is opened.**
+A second review of the night's code; the set stays sealed. Tests are in
+`service/tests/test_organ_heldout.py`.
+- **The intake's files:** the scorer stops if a file the intake recorded
+  (the label map, the predictions, the query matrices) has changed since,
+  or if the intake's record lists none.
+- **Overrides:** the intake and the scorer refuse VIVOME_* overrides, so
+  they read only the repository's model files.
+- **A void set** found when the labels are read is recorded at once, as the
+  set's summary, so it cannot be opened a second time. A rehearsal records
+  nothing.
+- **Amendment 2's baselines:** a gene with one value in every sample
+  z-scores to 0, as the service's `zscore_per_gene` does. float32's mean
+  missed such a constant by a rounding error and gave -1. No gene in the
+  rehearsal's upload is constant, so the rehearsal's baselines are unchanged.

@@ -53,9 +53,14 @@ export function transition(state, event) {
       if (name !== 'checking' || (event.file !== undefined && event.file !== state.file)) return state;
       return { name: 'chosen', file: state.file, check: event.check };
 
-    case 'LIMITS':
-      // The service's limits arrived or changed after the file was checked.
-      return name === 'chosen' && event.check ? { name: 'chosen', file: state.file, check: event.check } : state;
+    case 'LIMITS': {
+      // The service's limits arrived or changed after the file was checked;
+      // a verdict that did not change leaves the state as it was.
+      if (name !== 'chosen' || !event.check) return state;
+      const same = state.check?.ok === event.check.ok
+        && JSON.stringify(state.check?.problems ?? []) === JSON.stringify(event.check.problems ?? []);
+      return same ? state : { name: 'chosen', file: state.file, check: event.check };
+    }
 
     case 'CHECK_FAILED':
       if (name !== 'checking' || (event.file !== undefined && event.file !== state.file)) return state;

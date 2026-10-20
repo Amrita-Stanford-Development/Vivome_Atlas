@@ -181,12 +181,28 @@ test('a table written by R without the corner field counts every header field as
   assert.equal(checkLimits(check, { min_cells: 20 }).ok, true);
   // a trailing separator on the rows only is not a missing corner
   assert.equal((await checkFile(blob('gene,c1,c2\nG1,1,2,\nG2,3,4,\n'))).cells, 2);
+  // nor is a named or blank corner, or one row's extra field filled (service/tests/test_alignment.py)
+  assert.equal((await checkFile(blob('gene,c1,c2\nG0,1,2,\nG1,3,4,5\n'))).cells, 2);
+  assert.equal((await checkFile(blob('Gene,c1,c2\nG0,1,2,9\nG1,3,4,9\n'))).cells, 2);
+  assert.equal((await checkFile(blob(',c1,c2\nG0,1,2,9\nG1,3,4,9\n'))).cells, 2);
+});
+
+test('Perseus rows are skipped quoted or not, before the first 50 rows are judged, as the service does', async () => {
+  const header = Array.from({ length: 20 }, (_, i) => `c${i + 1}`).join(',');
+  const row = (g) => [g, ...Array.from({ length: 20 }, (_, i) => String(i + 1))].join(',');
+  const perseus = ['"#!{Type}"', ...Array.from({ length: 20 }, () => 'E')].join(',');
+  const rows = Array.from({ length: 50 }, (_, i) => row(`G${i}`));
+  const check = await checkFile(blob([header, perseus, perseus, ...rows].join('\n') + '\n'));
+  assert.equal(check.cells, 20, 'R layout: every header field a cell');
+  assert.equal(check.features, 50, 'the quoted Perseus rows are not features');
 });
 
 test('a workbook, a binary file or UTF-16 text is read the way the service reads it', async () => {
   await assert.rejects(checkFile(blob(new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0, 0, 0, 0]))), /Excel workbook/);
   await assert.rejects(checkFile(blob(new Uint8Array([0x50, 0x41, 0x52, 0x31, 0, 1, 2, 3]))), /not text/);
-  const cells = Array.from({ length: 25 }, (_, i) => `E:\raw\SP_${i + 1}.raw`);
+  // text that merely starts with "PAR1" (a cell's name) is text, as the service reads it
+  assert.equal((await checkFile(blob('PAR1_a,PAR1_b\nG0,1,2\n'))).cells, 2);
+  const cells = Array.from({ length: 25 }, (_, i) => `E:\\raw\\SP_${i + 1}.raw`);
   const text = [['Protein.Group', 'Protein.Names', 'Genes', ...cells].join('\t'),
     ['P1', 'N1', 'CD3E', ...cells.map(() => '1.5')].join('\t'),
     ['P2', 'N2', 'CD4', ...cells.map(() => '2.5')].join('\t')].join('\r\n') + '\r\n';

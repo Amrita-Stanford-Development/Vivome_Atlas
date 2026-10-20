@@ -107,7 +107,8 @@ def _decode_matrix(data: bytes) -> str:
     if data.startswith(b"PK\x03\x04"):
         raise alignment.UnreadableMatrix("the matrix is an Excel workbook (.xlsx), not text: save the sheet as CSV or "
                                          "tab-separated text and send that file")
-    if data.startswith(b"PAR1") or b"\x00" in data[:4096]:
+    # Parquet starts and ends with "PAR1"; a text file may start with it (a cell's name).
+    if (data.startswith(b"PAR1") and data.endswith(b"PAR1")) or b"\x00" in data[:4096]:
         raise alignment.UnreadableMatrix("the matrix is a binary file (Parquet, for example), not text: send it as CSV "
                                          "or tab-separated text")
     try:

@@ -144,6 +144,28 @@ class LockedTestIntegrity(unittest.TestCase):
                     scorer.main(["--rehearse"])
                 self.assertIn("label_map.csv", str(caught.exception), scorer.__name__)
 
+    def test_an_intake_record_without_its_outputs_stops_the_scorer(self):
+        import json
+        import tempfile
+
+        import pandas as pd
+        from benchmark import heldout_intake
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            for record in ({}, {"outputs": {}}):
+                (out / "intake.json").write_text(json.dumps(record), encoding="utf-8")
+                with self.assertRaises(SystemExit) as caught:
+                    heldout_intake.check_outputs(out)
+                self.assertIn("records no outputs", str(caught.exception))
+        labels = pd.DataFrame({"cell_id": ["a", "b"], "group": ["B zone", "T zone"], "scored": [True, True],
+                               "donor": ["d1", None]})
+        with self.assertRaises(SystemExit) as caught:
+            heldout_intake.check_labels(labels, required=("donor",))
+        self.assertIn("without a donor", str(caught.exception))
+        labels["donor"] = ["d1", "None"]
+        with self.assertRaises(SystemExit):
+            heldout_intake.check_labels(labels, required=("donor",))
+
     def test_the_organ_scripts_refuse_vivome_overrides(self):
         import os
         from unittest import mock
@@ -232,6 +254,17 @@ class ColonNames(unittest.TestCase):
 class OrganBaselines(unittest.TestCase):
     """benchmark/organ_baselines.py: the correlation rule finds each class's own
     profile, and groups take their best class or their summed votes."""
+
+    def test_a_constant_gene_z_scores_to_zero_as_the_service_does(self):
+        import numpy as np
+        from benchmark import organ_baselines as ob
+        rng = np.random.default_rng(0)
+        q = rng.normal(size=(20, 3)).astype(np.float32)
+        q[:, 1] = np.float32(7.3)  # float32's mean misses 7.3 by a rounding error
+        q[:, 2] = np.float32(23.1)
+        z = ob.query_z(q)
+        np.testing.assert_array_equal(z[:, 1:], 0.0)
+        self.assertGreater(np.abs(z[:, 0]).max(), 0.5)
 
     def test_correlation_picks_the_class_whose_mean_the_sample_follows(self):
         import numpy as np

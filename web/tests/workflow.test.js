@@ -158,10 +158,16 @@ test('a cell without its own detail borrows the story cell with its outcome', ()
   assert.equal(storyFor(workflow, workflow.trace.story.cells[0]).cell, workflow.trace.story.cells[0]);
 });
 
-test('a port is shown as a number without grouping, and the Python version as written', () => {
+test('a port is shown as a number without grouping, and the Python version as written', async () => {
   assert.equal(wfFact(workflow, 'service.local_port'), '8001');
   assert.equal(wfText(workflow, 'python'), workflow.service.python_version);
   assert.match(workflow.service.python_version, /^3\.\d+$/);
+  // the "run it yourself" scene says it too, in its picture and its words
+  const { localNeeds, localDescription } = await import('../js/scenes-evidence.js');
+  const python = `Python ${workflow.service.python_version}`;
+  assert.equal(localNeeds(workflow)[0][0], python);
+  assert.match(localDescription(workflow), new RegExp(`needs ${python.replace('.', '\\.')} and`));
+  assert.equal(localNeeds({ ...workflow, service: { ...workflow.service, python_version: undefined } })[0][0], 'Python \u2026');
 });
 
 test('the Fulcher picture says VivOME won only when no other method shown scored as high', async () => {
@@ -171,8 +177,10 @@ test('the Fulcher picture says VivOME won only when no other method shown scored
   assert.equal(fulcherVerdict([ours, { method: 'scANVI', score: rec(0.63) }], 'VivOME v4.1'), true);
   assert.equal(fulcherVerdict([ours, { method: 'scANVI', score: rec(0.72) }], 'VivOME v4.1'), false, 'a baseline overtook it');
   assert.equal(fulcherVerdict([{ method: 'scANVI', score: rec(0.63) }], 'VivOME v4.1'), false, 'no served row');
-  const real = workflow.evidence?.fulcher ?? null;
-  if (real) assert.equal(typeof fulcherVerdict(real.rows, 'VivOME v4.1'), 'boolean');
+  // the real contest, as the results scene reads it
+  const real = manifest.benchmark.datasets.find((d) => d.key === 'fulcher2026');
+  assert.ok(real?.rows?.length, 'the manifest has Fulcher rows');
+  assert.equal(typeof fulcherVerdict(real.rows, manifest.model.name), 'boolean');
 });
 
 test('the ladder does not pass a cell over a pending floor or threshold', () => {

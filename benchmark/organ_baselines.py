@@ -33,6 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -83,9 +84,14 @@ def reference(work: Path, organ: str) -> tuple[np.ndarray, np.ndarray, dict]:
 
 
 def query_z(q: np.ndarray) -> np.ndarray:
-    with np.errstate(all="ignore"):
+    """Each gene z-scored over the upload's samples. A gene with one value in
+    every sample is 0 by its spread, as the service's zscore_per_gene: float32's
+    mean misses such a constant by a rounding error, and its z came out -1."""
+    with np.errstate(all="ignore"), warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)  # an all-missing gene
         z = (q - np.nanmean(q, 0)) / np.nanstd(q, 0)
-    return np.where(np.isfinite(z), z, 0.0).astype(np.float32)
+        spread = np.nanmax(q, 0) - np.nanmin(q, 0)
+    return np.where(np.isfinite(z) & (spread > 0), z, 0.0).astype(np.float32)
 
 
 def correlation_scores(rna_z, labels, q) -> tuple[np.ndarray, list[str]]:

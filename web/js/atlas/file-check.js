@@ -72,7 +72,9 @@ export async function readLines(blob, { count = 1, maxBytes = HEADER_BYTES, enco
 
 // Perseus writes annotation rows ("#!{Type}...") under the header; the
 // service skips them, so they are not feature rows.
-const isPerseusRow = (line) => line.startsWith('#!{');
+// Perseus writes annotation rows ("#!{Type}...") under the header; the
+// service reads the first field unquoted, so a quoted one counts too.
+const isPerseusRow = (line) => line.replace(/^"/, '').startsWith('#!{');
 
 // How many lines hold anything but white space (Perseus rows aside), streamed
 // in chunks.
@@ -105,17 +107,29 @@ async function sniffEncoding(blob) {
   if (startsWith([0xff, 0xfe])) return 'utf-16le';
   if (startsWith([0xfe, 0xff])) return 'utf-16be';
   if (startsWith([0x50, 0x4b, 0x03, 0x04])) throw new Error(WORKBOOK);
-  if (startsWith([0x50, 0x41, 0x52, 0x31]) || head.includes(0)) throw new Error(BINARY);
+  // Parquet starts and ends with "PAR1"; a text file may start with it (a cell's name).
+  const tail = new Uint8Array(await blob.slice(Math.max(0, blob.size - 4)).arrayBuffer());
+  const parquet = startsWith([0x50, 0x41, 0x52, 0x31]) && [0x50, 0x41, 0x52, 0x31].every((b, i) => tail[i] === b);
+  if (parquet || head.includes(0)) throw new Error(BINARY);
   return 'utf-8';
 }
 
 // R's write.table writes no corner field over the row names, so every data
 // row is one field longer than the header; the service then reads every
 // header field as a cell (service/pipeline/alignment.py). A trailing
-// separator on the data rows alone adds an empty field instead.
+// separator on the data rows alone adds an empty field instead; a blank or
+// named corner (CORNER_LABELS, the service's _CORNER_LABELS) means the
+// header is whole. rows: the first 50 data rows.
+export const CORNER_LABELS = new Set([
+  'gene', 'genes', 'gene_symbol', 'gene symbol', 'gene_name', 'gene name', 'gene_id', 'symbol', 'symbols',
+  'protein', 'proteins', 'protein_id', 'protein id', 'accession', 'uniprot', 'ensembl', 'ensembl_id',
+  'feature', 'features', 'id',
+]);
 export function missingCorner(fields, rows) {
-  return rows.length > 0 && fields[fields.length - 1].trim() !== ''
-    && rows.every((r) => r.length === fields.length + 1) && rows.some((r) => r[r.length - 1].trim() !== '');
+  const corner = (fields[0] ?? '').trim();
+  return rows.length > 0 && fields[fields.length - 1].trim() !== '' && corner !== ''
+    && !CORNER_LABELS.has(corner.toLowerCase())
+    && rows.every((r) => r.length === fields.length + 1 && r[r.length - 1].trim() !== '');
 }
 
 // One header line's fields, as the service's CSV reader splits them: a
@@ -196,13 +210,15 @@ export function parseHeader(line) {
 // The file's shape, or an Error saying in plain words why it cannot be sent.
 export async function checkFile(blob, name = blob?.name ?? '') {
   const encoding = await sniffEncoding(blob);
-  const lines = await readLines(blob, { count: 51, maxBytes: HEADER_LIMIT_BYTES, encoding });
+  // the header and 50 data rows past any Perseus rows, as the service judges them
+  const lines = await readLines(blob, { count: 61, maxBytes: HEADER_LIMIT_BYTES, encoding });
   const header = lines[0] ?? '';
   if (header.trim() === '') throw new Error('The file has no header row.');
   let parsed = parseHeader(header);
   if (parsed.refusal) throw new Error(parsed.refusal);
   if (parsed.format === 'matrix') {
-    const rows = lines.slice(1).filter((l) => l.trim() !== '' && !isPerseusRow(l)).map((l) => splitFields(l, parsed.separator));
+    const rows = lines.slice(1).filter((l) => l.trim() !== '' && !isPerseusRow(l)).slice(0, 50)
+      .map((l) => splitFields(l, parsed.separator));
     if (missingCorner(splitFields(header, parsed.separator), rows)) {
       parsed = { ...parsed, annotation: parsed.annotation - 1, cellEstimate: parsed.cellEstimate + 1 };
     }

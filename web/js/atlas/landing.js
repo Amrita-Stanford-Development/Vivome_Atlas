@@ -638,6 +638,9 @@ export function createLanding({
       if (error?.kind === 'cancelled' || !['sending', 'working'].includes(st.name)) return;
       illustration.hide();
       upload.setOpacity(1);
+      // The service itself answered (not the site's door or the host), so
+      // whatever was cancelled there is finished: parsing runs in its slot.
+      if (error?.status && !['busy', 'gateway'].includes(error.kind) && !error.host) cancelledWork = false;
       if (error?.kind === 'busy') {
         dispatch({ type: 'BUSY', retryAfter: error.retryAfter ?? 30 });
         if (st.name === 'busy') {

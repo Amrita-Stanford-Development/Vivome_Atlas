@@ -515,10 +515,25 @@ export function online(el, ctx) {
 // Beat 1: a computer of your own, the two commands and the address it
 // answers at. Beat 2: what it needs. Beat 3: what is ready and what is not.
 
+// What running the service yourself needs, as the scene lists it, and the
+// scene's words for it.
+export function localNeeds(w) {
+  const svc = w.service;
+  const rec = (r) => (isMeasured(r) ? formatRecord(r) : '\u2026');
+  return [
+    [`Python ${svc.python_version || '\u2026'}`, 'the language it is written in'],
+    ['an ordinary processor', 'no graphics card'],
+    ['a few gigabytes of memory', 'more for bigger files'],
+    [`up to ${rec(svc.max_cells)} cells and ${rec(svc.max_mb)} MB a file`, 'the cloud copy\u2019s limits, which you can raise'],
+  ];
+}
+export function localDescription(w) {
+  return `The same service on your own computer: two commands from a copy of the code; it needs Python ${w.service.python_version || '\u2026'} and an ordinary processor. Not finished: the learners' files are not yet public, and there is no one-click download.`;
+}
+
 export function local(el, ctx) {
   const w = ctx.workflow;
   const svc = w.service;
-  const rec = (r) => (isMeasured(r) ? formatRecord(r) : '\u2026');
   const mono = (g, str, x, y, { size = 11, colour = INK, opacity = 1, max } = {}) => {
     g.save();
     g.globalAlpha *= opacity;
@@ -565,12 +580,7 @@ export function local(el, ctx) {
       g.save();
       g.globalAlpha = two;
       text(g, 'What it needs', 12, 22, { size: 12, weight: 600, colour: INK });
-      const needs = [
-        [`Python ${rec(svc.python)}`, 'the language it is written in'],
-        ['an ordinary processor', 'no graphics card'],
-        ['a few gigabytes of memory', 'more for bigger files'],
-        [`up to ${rec(svc.max_cells)} cells and ${rec(svc.max_mb)} MB a file`, 'the cloud copy\u2019s limits, which you can raise'],
-      ];
+      const needs = localNeeds(w);
       const rowH = clamp((height - 60) / needs.length, 34, 62);
       const show = phase(p, 0.36, 0.5);
       needs.forEach(([a, b], k) => {
@@ -603,6 +613,6 @@ export function local(el, ctx) {
       g.restore();
     }
   }, {
-    describe: () => `The same service on your own computer: two commands from a copy of the code; it needs Python ${rec(svc.python)} and an ordinary processor. Not finished: the learners' files are not yet public, and there is no one-click download.`,
+    describe: () => localDescription(w),
   });
 }

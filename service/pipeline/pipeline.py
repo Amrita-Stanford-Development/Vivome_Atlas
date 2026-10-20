@@ -121,13 +121,15 @@ def load_bundle(version: str):
 
 
 def _prepare_query(
-    feature_genes: list[str], raw: alignment.RawMatrix,
+    feature_genes: list[str], raw: alignment.RawMatrix, modality: str = "prot",
 ) -> tuple[np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
     """Stages 0-2, up to the encoder's input."""
     # Stage 0 — detect and correct linear-scale intensity input (e.g. a raw
     # DIA-NN report) before anything else touches it. Never transforms data
     # already on a log scale (see alignment.detect_and_transform_value_scale).
-    transformed_values, value_scale = alignment.detect_and_transform_value_scale(raw.values)
+    # An RNA upload's zeros are measured values, so they vote on the scale.
+    transformed_values, value_scale = alignment.detect_and_transform_value_scale(
+        raw.values, zeros_vote=modality == "rna")
     raw = dataclasses.replace(raw, values=transformed_values)
 
     # Stage 1 — several rows for one gene become one, on log-scale values.
@@ -150,12 +152,13 @@ def _prepare_query(
 
 def embed_query(
     encoder_handle: "encoder.EncoderHandle", feature_genes: list[str], raw: alignment.RawMatrix,
+    modality: str = "prot",
 ) -> tuple[np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
     """Stages 0-3: value scale, alignment, smoothing, encoding — the whole
     query side, from a parsed upload to latent vectors. run_projection and
     the benchmark harness (benchmark/) both call this, so an
     evaluation scores exactly what the service computes."""
-    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw)
+    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw, modality)
     # Stage 3
     query_embeddings = encoder_handle.encode(smoothed_values, aligned.mask)
     return query_embeddings, aligned, value_scale
@@ -163,10 +166,11 @@ def embed_query(
 
 def embed_query_with_hidden(
     encoder_handle: "encoder.EncoderHandle", feature_genes: list[str], raw: alignment.RawMatrix,
+    modality: str = "prot",
 ) -> tuple[np.ndarray, np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
     """embed_query plus the encoder's 512-dimensional pre-projection features,
     which v3.1's out-of-distribution score reads (T1 NB3)."""
-    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw)
+    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw, modality)
     query_embeddings, hidden = encoder_handle.encode_with_hidden(smoothed_values, aligned.mask)
     return query_embeddings, hidden, aligned, value_scale
 
@@ -217,12 +221,15 @@ def run_projection(
     `abstain_category` (docs/service/projection-api.md, "v3.1").
 
     `modality` is the upload's ("prot" or "rna", the request's form field).
-    Only v4.2 reads it: its protein class means apply to protein uploads, and
-    an RNA upload takes v4.1's RNA class means instead.
+    Every version reads it at Stage 0, where an RNA upload's zeros are
+    measured values; v4.2 also reads it for its class means: its protein
+    class means apply to protein uploads, and an RNA upload takes v4.1's RNA
+    class means instead.
     """
     if bundle.pipeline_version == "v3.1":
         from service.pipeline import ensemble  # imports this module
-        return ensemble.project(bundle, raw, restrict_to_supported_classes, components or bundle.components)
+        return ensemble.project(bundle, raw, restrict_to_supported_classes, components or bundle.components,
+                                modality=modality)
     if bundle.pipeline_version in FUSION_VERSIONS:
         from service.pipeline import fusion  # imports this module
         return fusion.project(bundle, raw, restrict_to_supported_classes, components, modality=modality)
@@ -250,9 +257,9 @@ def run_projection(
     hidden = None
     if components.abstention.needs_hidden:
         query_embeddings, hidden, aligned, value_scale = embed_query_with_hidden(
-            bundle.encoder_handle, bundle.feature_genes, raw)
+            bundle.encoder_handle, bundle.feature_genes, raw, modality)
     else:
-        query_embeddings, aligned, value_scale = embed_query(bundle.encoder_handle, bundle.feature_genes, raw)
+        query_embeddings, aligned, value_scale = embed_query(bundle.encoder_handle, bundle.feature_genes, raw, modality)
 
     # Stage 4 — scored only within the label space. v3: all reference classes
     # by default, config.CROSS_MODAL_SUPPORTED_CLASSES when the request opts in

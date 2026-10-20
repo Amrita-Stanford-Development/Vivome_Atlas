@@ -144,6 +144,15 @@ class UnreadableMatrix(ValueError):
     sent it (service/app.py answers 400 with it)."""
 
 
+# A header's first field that names the identifier column, not a cell
+# (web/js/atlas/file-check.js keeps the same list).
+_CORNER_LABELS = frozenset({
+    "gene", "genes", "gene_symbol", "gene symbol", "gene_name", "gene name", "gene_id", "symbol", "symbols",
+    "protein", "proteins", "protein_id", "protein id", "accession", "uniprot", "ensembl", "ensembl_id",
+    "feature", "features", "id",
+})
+
+
 def _number(text: str, column: str) -> float:
     if text in _MISSING_VALUES:
         return np.nan
@@ -270,11 +279,13 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     is_fragpipe_tmt = not is_dia_nn_report and "Gene" in header
     if not (is_dia_nn_report or is_fragpipe_tmt):
         # R's write.table writes no corner field over the row names, so every
-        # data row is one field longer than the header. A trailing separator
-        # on the data rows alone also adds a field, but an empty one.
+        # data row is one field longer than the header, and its first header
+        # field is a cell. A trailing separator on the data rows alone adds an
+        # empty field instead; a blank or named corner means the header is whole.
         head = list(itertools.islice(lines, 50))
-        if (head and header[-1].strip() and all(len(row) == len(header) + 1 for _, row in head)
-                and any(row[-1].strip() for _, row in head)):
+        corner = header[0].strip()
+        if (head and header[-1].strip() and corner and corner.lower() not in _CORNER_LABELS
+                and all(len(row) == len(header) + 1 and row[-1].strip() for _, row in head)):
             header = [""] + header
         lines = itertools.chain(head, lines)
     if is_dia_nn_report:
@@ -328,6 +339,7 @@ class ValueScale:
 def detect_and_transform_value_scale(
     raw_values: np.ndarray,
     median_threshold: float = config.LINEAR_SCALE_MEDIAN_THRESHOLD,
+    zeros_vote: bool = False,
 ) -> tuple[np.ndarray, ValueScale]:
     """raw_values: (n_raw_genes, n_cells), NaN for missing (this dataset's
     raw units, before any z-scoring). A DIA-NN or similar linear-intensity
@@ -358,10 +370,12 @@ def detect_and_transform_value_scale(
 
     observed_values = raw_values[observed]
     has_negative = bool((observed_values < 0).any())
-    # 0 is "not detected" (below), so it does not vote: a sparse linear matrix
-    # with most values 0 is still linear.
-    nonzero = observed_values[observed_values != 0]
-    median_value = float(np.median(nonzero)) if nonzero.size else 0.0
+    # In protein 0 is "not detected" (below), so it does not vote: a sparse
+    # linear matrix with most values 0 is still linear. In RNA (zeros_vote) a 0
+    # is a measured value and votes, so raw counts that are mostly 0 are read
+    # as they are, every 0 measured.
+    voters = observed_values if zeros_vote else observed_values[observed_values != 0]
+    median_value = float(np.median(voters)) if voters.size else 0.0
     is_linear = (not has_negative) and (median_value > median_threshold)
     if not is_linear:
         return raw_values, ValueScale(detected="log", transformed=False)

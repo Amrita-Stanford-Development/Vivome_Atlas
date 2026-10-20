@@ -31,10 +31,11 @@ Content-Type: multipart/form-data
 - **`"prot"`:** protein intensities, linear or log. A linear upload is
   found and log2-transformed (`value_scale` in the response).
 - **`"rna"`:** expects log-normalised expression, as the reference's own RNA
-  is (the atlas h5ad's `X`, log1p of normalised counts). Raw counts are not
+  is (the atlas h5ad's `X`, log1p of normalised counts). In RNA a 0 is a
+  measured value, so it votes on the scale. Raw counts are usually not
   transformed:
-  - their nonzero median is under the linear-scale threshold of 50, so they
-    are read as log values;
+  - their median, zeros included, is under the linear-scale threshold of
+    50, so they are read as log values;
   - every 0 counts as a measured value.
 
   Normalise and log1p counts before uploading.

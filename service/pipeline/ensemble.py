@@ -276,12 +276,13 @@ class V31Bundle:
 
 # ---- the request ----
 
-def project(bundle: V31Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components") -> dict:
+def project(bundle: V31Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components",
+            modality: str = "prot") -> dict:
     """The v3.1 response: every v3 field, with the label answered at the
     level the evidence supports, plus label_level and best_guess per cell and
     the v3.1 blocks (docs/service/projection-api.md, "v3.1")."""
     # Stages 0-2 (v3's, once for every member).
-    smoothed_values, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw)
+    smoothed_values, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw, modality)
     return project_prepared(bundle, smoothed_values, aligned, value_scale,
                             gene_ids.resolve_identifiers(raw.gene_names), restrict_to_supported_classes, components)
 
