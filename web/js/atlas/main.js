@@ -195,9 +195,13 @@ async function start() {
   dataTab.onShow = () => showTab('data');
   $('tab-explore').addEventListener('click', () => showTab('explore'));
   $('tab-data').addEventListener('click', () => showTab('data'));
+  // The tab pattern's keys: the arrows move to the other tab, Home and End to
+  // the first and the last.
   $('controls-panel').querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
-    if (organ || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
-    const next = $('tab-explore').getAttribute('aria-selected') === 'true' ? 'data' : 'explore';
+    const other = $('tab-explore').getAttribute('aria-selected') === 'true' ? 'data' : 'explore';
+    const next = { ArrowLeft: other, ArrowRight: other, Home: 'explore', End: 'data' }[e.key];
+    if (organ || !next) return;
+    e.preventDefault();
     showTab(next);
     tabs[next][0].focus();
   });

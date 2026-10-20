@@ -116,3 +116,10 @@ test('the step bar\'s Play button says what it will do, not also whether it is p
   assert.doesNotMatch(landing, /\$\('step-play'\)\.setAttribute\('aria-pressed'/);
 });
 
+test('the panel\'s tabs take Home and End as well as the arrows', () => {
+  const main = readFileSync(new URL('../js/atlas/main.js', import.meta.url), 'utf8');
+  const handler = main.slice(main.indexOf("querySelector('[role=\"tablist\"]').addEventListener('keydown'"));
+  assert.match(handler.slice(0, 900), /Home: 'explore', End: 'data'/);
+  assert.match(handler.slice(0, 900), /e\.preventDefault\(\)/, 'Home and End do not also scroll the page');
+});
+
