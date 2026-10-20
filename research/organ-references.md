@@ -542,7 +542,10 @@ chicken lysozyme, bovine trypsin and the caseins. They merged into the
 human rows of the same genes. Left out, G3 is unchanged at AUROC 0.764
 (`research/notebooks/organ_v2_lung_g3_contaminants.py`, an explanation
 only). The miss is the model's, not the reader's. The service now leaves
-these rows out of every FragPipe upload (`a1fcbbe`).
+these rows out of every FragPipe upload (`a1fcbbe`), and so does the gate
+reader for any later run. The gate script also checks the calibration suite
+and the organ file against the registry now, and treats any gate output,
+not only `gates.json`, as a run that has started.
 
 ### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
 

@@ -114,8 +114,12 @@ def g1(b_full, build_dir: Path, cfg: dict, out: Path, t0: float) -> dict:
 
 def read_fragpipe_intensity(path: Path) -> alignment.RawMatrix:
     """FragPipe's combined_protein.tsv: its "Gene" column and each sample's
-    "Intensity" (PXD058626 has no MaxLFQ columns), 0 as missing."""
+    "Intensity" (PXD058626 has no MaxLFQ columns), 0 as missing. FragPipe's
+    contaminant and decoy rows (contam_, rev_) are left out, as the service
+    leaves them out. The lung v2's gate run (2026-10-20) read them; without
+    them its G3 is unchanged (organ_v2_lung_g3_contaminants.py)."""
     t = pd.read_csv(path, sep="\t", low_memory=False)
+    t = t[~t["Protein"].astype(str).str.startswith(("contam_", "rev_"))]
     cols = [c for c in t.columns if c.endswith(" Intensity") and not c.endswith("MaxLFQ Intensity")]
     v = t[cols].apply(pd.to_numeric, errors="coerce").to_numpy(np.float32)
     v[v <= 0] = np.nan
@@ -200,12 +204,16 @@ def main() -> None:
         raise SystemExit(f"no v2 gates for {organ}")
     build_dir = data.WORK / organ
     out = REPO / "research" / "notebook-outputs" / f"{organ}_development"
-    if (out / "gates.json").exists():
+    # Any gate output means a run started: a crash after G1 must not allow a second run.
+    if any((out / name).exists() for name in ("gates.json", "g1.json", "g3.json")):
         raise SystemExit(f"{organ}'s v2 gates were run; they are scored once")
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))[organ]
-    for name, key in (("sim_suite_eval_v1.json", "eval_suite_sha256"), ("bundle/MANIFEST.json", "bundle_manifest_sha256")):
-        if sha256(build_dir / name) != registry.get(key):
-            raise SystemExit(f"{build_dir / name} is not the registered one ({key})")
+    for path, key in ((build_dir / "sim_suite_eval_v1.json", "eval_suite_sha256"),
+                      (build_dir / "sim_suite_calib_v1.json", "calib_suite_sha256"),
+                      (build_dir / "bundle" / "MANIFEST.json", "bundle_manifest_sha256"),
+                      (data.ORGANS / f"{organ}.json", "organ_file_sha256")):
+        if sha256(path) != registry.get(key):
+            raise SystemExit(f"{path} is not the registered one ({key})")
     out.mkdir(parents=True, exist_ok=True)
     cfg = data.load_organ(organ)
     data.save_json(out / "rules.json", {"script_sha256": sha256(Path(__file__)), "started": datetime.now().isoformat(timespec="seconds"),
