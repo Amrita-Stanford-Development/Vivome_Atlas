@@ -1,0 +1,27 @@
+{
+  "script_sha256": "c6766f12e5cb3a474dc00ff932e7aa57224104fafc83a3a5b92cc844360ff455",
+  "started": "2026-10-20T23:58:18",
+  "table_sha256": "9076cfddf314f2aca6446ff2bceefcb3d7d4c7c1fae99fccea589846d06217c0",
+  "airway": [
+    "SCGB1A1",
+    "SCGB3A1",
+    "MUC5B",
+    "MUC5AC",
+    "KRT5",
+    "FOXJ1",
+    "TPPP3",
+    "BPIFB1"
+  ],
+  "alveolar": [
+    "SFTPC",
+    "SFTPB",
+    "SFTPA1",
+    "SFTPA2",
+    "AGER",
+    "NAPSA",
+    "LAMP3",
+    "EMP2"
+  ],
+  "baselines_sha256": "b82d000f38da3229c351f792a9559d414f507fbd225290d9ede0f58198283794",
+  "bundle_manifest_sha256": "1e545828825218f240c8206a860008ff3e4c65e622be9288c724031b0fd92b9e"
+}

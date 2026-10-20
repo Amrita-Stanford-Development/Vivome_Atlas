@@ -547,6 +547,24 @@ reader for any later run. The gate script also checks the calibration suite
 and the organ file against the registry now, and treats any gate output,
 not only `gates.json`, as a run that has started.
 
+**Note, 2026-10-21: how hard PXD058626's question is**
+(`research/notebooks/organ_v2_lung_g3_context.py`, an explanation only). On
+the same 24 control regions, airways over alveoli:
+
+| Method | AUROC |
+|---|---|
+| Marker positive control: airway markers (SCGB1A1, MUC5B, KRT5, FOXJ1 and others) minus alveolar (SFTPC, AGER, NAPSA and others), from the protein data alone | 0.868 |
+| PCA with kNN baseline, on the lung v2's genes | 0.774 |
+| The lung v2 (the gate run) | 0.764 |
+| Correlation baseline | 0.590 |
+
+- Even textbook markers do not separate the regions fully: the dissected
+  airways carry alveolar tissue, or the reverse.
+- The 0.8 bar sits close to what the markers reach.
+- The model is level with the stronger simple method.
+- A v3 judged on this set would have little room above the bar. A cleaner
+  fresh set would test the airway reading better.
+
 ### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
 
 A4 found no label-free key, so the one key left was the user: the upload

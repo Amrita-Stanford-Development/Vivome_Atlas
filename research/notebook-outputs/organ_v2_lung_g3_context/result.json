@@ -1,0 +1,46 @@
+{
+  "finished": "2026-10-20T23:58:44",
+  "regions": {
+    "control airway": 12,
+    "control alveoli": 12
+  },
+  "auroc_model_gate_run": 0.7639,
+  "auroc_markers": 0.8681,
+  "markers": {
+    "used": {
+      "airway": [
+        "SCGB1A1",
+        "SCGB3A1",
+        "MUC5B",
+        "MUC5AC",
+        "KRT5",
+        "FOXJ1",
+        "TPPP3",
+        "BPIFB1"
+      ],
+      "alveolar": [
+        "SFTPC",
+        "SFTPB",
+        "SFTPA1",
+        "SFTPA2",
+        "AGER",
+        "NAPSA",
+        "LAMP3",
+        "EMP2"
+      ]
+    },
+    "missing": {
+      "airway": [],
+      "alveolar": []
+    }
+  },
+  "setup_checks_knn": {
+    "rna_holdout_knn_balanced_accuracy_pct": 84.8,
+    "rna_holdout_chance_pct": 3.7,
+    "query_neighbour_share_median_pct": 73.33,
+    "query_neighbour_share_if_mixed_pct": 0.401
+  },
+  "auroc_correlation": 0.5903,
+  "auroc_pca_knn": 0.7743,
+  "verdict": "unchanged: NO GO under the stop rules (explanation only)"
+}
