@@ -285,6 +285,20 @@ The lymph node v2 and lung v2 each ran their gates once on 2026-10-20
 - **The locked tests** PXD042367, MSV000094189 and PXD052341 are unchanged
   and sealed.
 
+### Amendment 16, 2026-10-21: the lymph node v3 candidate (the owner's go-ahead)
+
+The owner chose to build a lymph node v3 (2026-10-21):
+`research/organ-references.md`, "Version 3: the lymph node".
+- **Candidate:** "lymph_node v3" (`scripts/organs/lymph_node_v3.json`):
+  v2's members and calibration suite, with v1's calibration rule (no chance
+  floor), and a new evaluation suite.
+- **G3 reuses PXD045043**, already read for v2 (amendment 15). The owner
+  allowed it: v3's change cannot move its score, which comes from the fused
+  best guess, and v3 keeps v2's temperatures.
+- **The locked test PXD042367 stays sealed.** If v3 passes its gates, it is
+  frozen (the protocol's amendment 6), and the owner is asked before the set
+  is opened. MSV000094189 and PXD052341 are unchanged and sealed.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

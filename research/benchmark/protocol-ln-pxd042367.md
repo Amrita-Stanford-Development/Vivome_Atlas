@@ -192,3 +192,13 @@ A second review of the night's code; the set stays sealed. Tests are in
   z-scores to 0, as the service's `zscore_per_gene` does. float32's mean
   missed such a constant by a rounding error and gave -1. No gene in the
   rehearsal's upload is constant, so the rehearsal's baselines are unchanged.
+
+**Amendment 6, 2026-10-21: the candidate is "lymph_node v3".** v2 missed one
+gate (narrow uploads 89.82% correct when committed, bar 90), so under rule 1
+it is no candidate. v3 (`scripts/organs/lymph_node_v3.json`;
+`research/organ-references.md`, "Version 3: the lymph node"; `side-tests.md`,
+amendment 16) is v2 with v1's calibration rule, and replaces it as the one
+candidate. The intake reads the v3 work folder (`CANDIDATE`). The bundle's
+MANIFEST.json sha256 is added in a later amendment at freeze, and only if
+v3 passes its gates; the owner is asked before the set is opened. Nothing
+else in this protocol changes.

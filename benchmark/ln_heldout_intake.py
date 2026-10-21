@@ -114,9 +114,9 @@ def read_matrix(path: Path) -> alignment.RawMatrix:
     return alignment.parse_matrix_csv(path.read_text(encoding="utf-8"))
 
 
-# The candidate's build (the protocol's amendment 1, 2026-10-19: "lymph_node v2", built
-# from scripts/organs/lymph_node_v2.json); v1 missed its gates.
-CANDIDATE = "lymph_node_v2"
+# The candidate's build (the protocol's amendment 6, 2026-10-21: "lymph_node v3", built
+# from scripts/organs/lymph_node_v3.json); v1 and v2 missed their gates.
+CANDIDATE = "lymph_node_v3"
 
 
 def candidate_dir(rehearse: bool) -> Path:

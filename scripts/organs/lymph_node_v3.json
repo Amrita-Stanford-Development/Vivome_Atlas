@@ -1,0 +1,409 @@
+{
+  "organ": "lymph_node_v3",
+  "title": "Lymph node v3",
+  "notes": "research/organ-references.md, 'Version 3: the lymph node' (2026-10-21, the owner's go-ahead): lymph_node v2's file with v1's calibration rule, without the chance floor. v2 missed only its narrow-upload bar (89.82 against 90), and the floor commits more of the narrow uploads it gets wrong (the B cells'); in A2, v1's rule held narrow uploads at 94.3% correct when committed. The members are v2's (copied, not retrained), and so are the classes, the gene space, the split and the calibration suite (its seed is v2's): calibration data is fitting data, and keeping it keeps v2's temperatures, so the fused best guess, and with it G3's spleen score, is v2's. Only the evaluation suite is new (a new seed), since v2's has been scored. v2: research/organ-references.md, 'Version 2' (2026-10-19): lymph_node v1's file with the v2 diagnostics' decisions (research/notebook-outputs/organ_v2_*). The generic 't cell' class is dropped: its specific sub-types are kept (the owner's rule, 2026-10-18). The split is v1's, carried through the atlas rows. Every class with at least 5 validation or test cells is in the suites, a short class giving what it has (cap_per_class); the suites' seeds are new. The calibration adds the chance floor (A3: committed 82 to 97 on the rare-class suite, coverage 91.1 to 88.2). The gene space, its sources, the identifier map, the missingness profiles, the modules' settings and the training are v1's. v1: research/organ-references.md, lymph node: Tabula Sapiens Lymph Node only. The class rule fails three classes with no kept Cell Ontology ancestor, dropped (70 cells): erythrocytes, plasmacytoid dendritic cells, hematopoietic precursor cells. The lineages are blood's (lymphoid, myeloid) plus stromal. The cells are immune like blood's, so the simulated uploads use blood's three real protein profiles computed over this gene space, not rank-transferred. The label audit (research/notebooks/organ_labels.py, 2026-10-18): the 'thymocytes' (181 cells, nearly all TSP7) express no thymocyte marker (CD1A, RAG1, DNTT 0%) and are mature T cells (CD3E 100%, TRAC 88%), so they are merged into CD4 T and CD8 T; the generic 'monocyte' class (766 cells) expresses CD14, FCN1 and LYZ in only 9 to 32% of cells and resembles T cells or endothelium in four of six donors, so it is dropped.",
+  "rna": "drive:scRNA-seq/Lymph_Node_TSP1_30_version2d_10X_smartseq_scvi_Nov122024.h5ad",
+  "label_column": "cell_ontology_class",
+  "donor_column": "donor",
+  "merge": {
+    "cd4-positive, alpha-beta thymocyte": "cd4-positive, alpha-beta t cell",
+    "cd8-positive, alpha-beta thymocyte": "cd8-positive, alpha-beta t cell"
+  },
+  "drop": [
+    "erythrocyte",
+    "hematopoietic precursor cell",
+    "monocyte",
+    "plasmacytoid dendritic cell",
+    "t cell"
+  ],
+  "dropped_hierarchy": {
+    "erythrocyte": {
+      "group": "erythroid",
+      "lineage": "other"
+    },
+    "hematopoietic precursor cell": {
+      "group": "progenitor",
+      "lineage": "other"
+    },
+    "monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "plasmacytoid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    }
+  },
+  "class_rule": {
+    "min_cells": 50,
+    "min_cells_per_donor": 5,
+    "min_donors": 2
+  },
+  "hierarchy": {
+    "b cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "cd8-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "endothelial cell": {
+      "group": "endothelial",
+      "lineage": "stromal"
+    },
+    "innate lymphoid cell": {
+      "group": "NK/ILC",
+      "lineage": "lymphoid"
+    },
+    "intermediate monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "macrophage": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "mast cell": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "mature nk t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "myeloid dendritic cell": {
+      "group": "dendritic cell",
+      "lineage": "myeloid"
+    },
+    "naive thymus-derived cd4-positive, alpha-beta t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "natural killer cell": {
+      "group": "NK/ILC",
+      "lineage": "lymphoid"
+    },
+    "neutrophil": {
+      "group": "granulocyte",
+      "lineage": "myeloid"
+    },
+    "non-classical monocyte": {
+      "group": "monocyte/macrophage",
+      "lineage": "myeloid"
+    },
+    "plasma cell": {
+      "group": "B cell",
+      "lineage": "lymphoid"
+    },
+    "regulatory t cell": {
+      "group": "T cell",
+      "lineage": "lymphoid"
+    },
+    "stromal cell": {
+      "group": "stromal",
+      "lineage": "stromal"
+    }
+  },
+  "audit_markers": {
+    "b cell": [
+      "MS4A1",
+      "CD79A",
+      "CD19",
+      "PAX5"
+    ],
+    "plasma cell": [
+      "JCHAIN",
+      "MZB1",
+      "XBP1",
+      "PRDM1"
+    ],
+    "cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "IL7R"
+    ],
+    "naive thymus-derived cd4-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD4",
+      "CCR7",
+      "SELL",
+      "LEF1"
+    ],
+    "cd8-positive, alpha-beta t cell": [
+      "CD3E",
+      "CD8A",
+      "CD8B"
+    ],
+    "regulatory t cell": [
+      "FOXP3",
+      "IL2RA",
+      "CTLA4"
+    ],
+    "t cell": [
+      "CD3E",
+      "CD3D",
+      "TRAC"
+    ],
+    "mature nk t cell": [
+      "CD3E",
+      "NKG7",
+      "KLRB1",
+      "GZMK"
+    ],
+    "cd4-positive, alpha-beta thymocyte": [
+      "CD1A",
+      "RAG1",
+      "DNTT",
+      "CD4"
+    ],
+    "cd8-positive, alpha-beta thymocyte": [
+      "CD1A",
+      "RAG1",
+      "DNTT",
+      "CD8A"
+    ],
+    "natural killer cell": [
+      "NKG7",
+      "GNLY",
+      "KLRD1",
+      "NCAM1"
+    ],
+    "innate lymphoid cell": [
+      "IL7R",
+      "KIT",
+      "RORC",
+      "IL1R1"
+    ],
+    "macrophage": [
+      "CD68",
+      "C1QA",
+      "APOE",
+      "MARCO"
+    ],
+    "monocyte": [
+      "CD14",
+      "FCN1",
+      "LYZ"
+    ],
+    "classical monocyte": [
+      "CD14",
+      "S100A8",
+      "VCAN"
+    ],
+    "intermediate monocyte": [
+      "CD14",
+      "FCGR3A",
+      "HLA-DRA"
+    ],
+    "non-classical monocyte": [
+      "FCGR3A",
+      "CX3CR1",
+      "CDKN1C"
+    ],
+    "myeloid dendritic cell": [
+      "CD1C",
+      "CLEC10A",
+      "FCER1A",
+      "CLEC9A"
+    ],
+    "neutrophil": [
+      "CSF3R",
+      "FCGR3B",
+      "CXCR2"
+    ],
+    "mast cell": [
+      "TPSAB1",
+      "CPA3",
+      "KIT"
+    ],
+    "endothelial cell": [
+      "PECAM1",
+      "VWF",
+      "CDH5"
+    ],
+    "stromal cell": [
+      "COL1A1",
+      "PDGFRB",
+      "CCL19",
+      "CCL21"
+    ],
+    "erythrocyte": [
+      "HBB",
+      "HBA1"
+    ],
+    "plasmacytoid dendritic cell": [
+      "LILRA4",
+      "CLEC4C"
+    ],
+    "hematopoietic precursor cell": [
+      "CD34",
+      "SPINK2"
+    ]
+  },
+  "split": {
+    "stratify": "class_donor",
+    "test": 0.2,
+    "val": 0.15,
+    "seed": 0,
+    "reuse_from": "lymph_node"
+  },
+  "gene_space": {
+    "sources": [
+      {
+        "name": "bubis_hela",
+        "path": "drive:scProteomics/Protein_JB.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_lung",
+        "path": "drive:scProteomics/20240701_100039_MM_run62p2_revision_50SPD_25cmIO_all_MEpergroup_Proteins.tsv",
+        "read": "column",
+        "column": "PG.Genes"
+      },
+      {
+        "name": "bubis_candidates",
+        "path": "drive:scProteomics/Candidates.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "pbmc240",
+        "path": "drive:scProteomics/PBMC_240cells_proteins.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "scope2",
+        "path": "drive:scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+        "read": "header"
+      },
+      {
+        "name": "fulcher",
+        "path": "drive:scProteomics/abundance_protein_MD.tsv",
+        "read": "column",
+        "column": "Gene"
+      },
+      {
+        "name": "zheng2025",
+        "path": "repo:data/incoming/public_sets/Zheng2025_PXD057118/ColorectalCancer_pg_matrix_Macrophages.txt",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "hpa_dvp",
+        "path": "repo:data/incoming/public_sets/HPA2026_DVP/dvp_sample_data.tsv.zip",
+        "read": "column",
+        "column": "Gene name",
+        "detected": {
+          "value": "Intensity",
+          "column": "Cell type",
+          "keep": [
+            "macrophages",
+            "cd4 t-cells",
+            "cd8 t-cells",
+            "b-cells",
+            "neutrophils",
+            "capillaries",
+            "smooth muscle cells"
+          ]
+        }
+      },
+      {
+        "name": "coscia2024",
+        "path": "drive:Results/Organs/lymph_node/dev/coscia2024_fig3_pg_matrix.tsv",
+        "read": "column",
+        "column": "Genes"
+      },
+      {
+        "name": "dusszachniewicz2021",
+        "path": "repo:data/incoming/public_sets/DusSzachniewicz2021_PXD011683/MaxQuant_Output.zip",
+        "member": "proteinGroups.txt",
+        "read": "column",
+        "column": "Gene names"
+      }
+    ]
+  },
+  "gene_ids": {
+    "hgnc": "drive:Reference/hgnc_complete_set_2026-10-18.txt",
+    "sha256": "12363916be36f8f6f91879b0faade4eeaac973722de7136ec61329b77f2c2f91",
+    "source": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt, downloaded 2026-10-18"
+  },
+  "mask_profiles": [
+    {
+      "name": "scope2",
+      "read": "cells_by_genes",
+      "path": "drive:scProteomics/blood_joint_cells_by_proteins_GENELEVEL.tsv",
+      "gene_set": "scope2"
+    },
+    {
+      "name": "pbmc240",
+      "read": "diann_pg",
+      "path": "drive:scProteomics/PBMC_240cells_proteins.tsv",
+      "gene_set": "pbmc240"
+    },
+    {
+      "name": "fulcher",
+      "read": "fulcher",
+      "path": "drive:scProteomics/abundance_protein_MD.tsv",
+      "gene_set": "fulcher"
+    }
+  ],
+  "modules": {
+    "target_size": 18,
+    "cells": 15000,
+    "pca": 64,
+    "seed": 0
+  },
+  "suites": {
+    "scenarios": "hierarchy",
+    "n_uploads": 240,
+    "calib_seed": 2026101911,
+    "eval_seed": 2026102133,
+    "profiles": [
+      "scope2",
+      "pbmc240",
+      "fulcher",
+      "random_0.15",
+      "random_0.25",
+      "random_0.35"
+    ],
+    "min_cells": 5,
+    "cap_per_class": true
+  },
+  "train": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hidden": [
+      1024,
+      512
+    ],
+    "dropout": 0.1,
+    "latent": 128
+  },
+  "calibration": {
+    "alpha": 0.1,
+    "min_n": 50,
+    "knn": 15
+  },
+  "base_organ": "lymph_node",
+  "reference_version": "lymph_node v3"
+}

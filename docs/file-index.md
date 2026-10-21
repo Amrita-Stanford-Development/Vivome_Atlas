@@ -392,6 +392,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/organs/blood.json` — blood's organ file: reproduces the served reference's inputs (the builder's proof)
 - `scripts/organs/lymph_node_v2.json` — the lymph node v2: v1's file without the generic T cell class, with v1's split carried over, new suites (every class with 5 cells, capped per class) and the chance floor
 - `scripts/organs/lung_v2.json` — the lung v2: v1's file without the generic monocyte class, with v1's split carried over, new suites and the group fallback for classes with under 30 calibration cells
+- `scripts/organs/lymph_node_v3.json` — the lymph node v3: v2's file with v1's calibration rule (no chance floor) and a new evaluation suite; v2's members and calibration suite
 - `scripts/organs/lymph_node.json` — the lymph node's organ file: Tabula Sapiens Lymph Node, the thymocyte merges, the dropped classes (class rule and audit), the hierarchy (lymphoid, myeloid, stromal), blood's protein profiles
 - `scripts/organs/lung.json` — the lung's organ file: Tabula Sapiens Lung, the six classes dropped by the class rule, the hierarchy (four lineages), the audit markers, gene sources and profiles
 - `scripts/organs/large_intestine.json` — the large intestine's organ file: Tabula Sapiens, the merges, the dropped Paneth class, the hierarchy, gene sources and profiles

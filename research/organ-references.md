@@ -617,6 +617,48 @@ fresh suites and its rules fixed first.
 needs new data: colon single cells, or sorted populations with
 independent labels.
 
+## Version 3: the lymph node (2026-10-21)
+
+The owner chose the calibration-only v3 from "Options for a v3" (2026-10-21).
+Everything below is fixed before any v3 calibration.
+
+**The candidate** (`scripts/organs/lymph_node_v3.json`): lymph node v2 with
+v1's calibration rule, without the chance floor.
+- **Kept from v2:** the members (copied, not retrained), the classes, the
+  gene space, the split, the fusion, and the calibration suite: its seed is
+  v2's, and it reproduces v2's file (sha256 `06a3252078cb…`). Calibration data
+  is fitting data, not a test. Keeping it keeps v2's temperatures, so the
+  fused best guess, and with it G3's score, is v2's.
+- **New:** the evaluation suite (seed 2026102133, sha256
+  `d00b1e6c3123…`), since v2's has been scored. Every other data file
+  reproduces v2's (the label table's content too; only its gzip timestamp
+  differs).
+- **Registered** in `research/notebook-outputs/organ_v2_registry.json`
+  before calibration. The bundle's MANIFEST is added at freeze.
+
+**The gates are v2's** (`research/notebooks/organ_v2_gates.py`, unchanged
+bars):
+- **G1, split:** mixed uploads: committed ≥ 75, correct when committed ≥ 90,
+  coverage ≥ 85, false abstention ≤ 2. Narrow uploads: correct when committed
+  ≥ 90. As written for v1, G1 is reported.
+- **G3:** PXD045043, P(B cell group), white pulp over red pulp, AUROC ≥ 0.8.
+  The set was read for v2 (0.917); its reuse is the owner's decision
+  (`side-tests.md`, amendment 16). Expected unchanged; if it is not, the
+  calibration-only premise failed and that is reported.
+- **G2** (one donor held out) is a diagnosis, and its script retrains one
+  member per fold and never reads calibration, so v2's result is v3's
+  (55.7 unseen, 59.3 seen). It is not run again.
+- **G4:** the locked test's rehearsal on the v3 bundle, before G1.
+- **Checks before any gate:** every MANIFEST entry other than
+  `answers_spec.json` and `spec.json` equals v2's, and the temperatures are
+  v2's.
+
+**Stop rules:**
+- **A miss** stops v3: it is documented, nothing is tuned, and PXD042367
+  stays sealed.
+- **A pass** freezes v3 (the protocol's amendment 6 gains its MANIFEST
+  sha256). The owner is asked before PXD042367 is opened.
+
 ### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
 
 A4 found no label-free key, so the one key left was the user: the upload

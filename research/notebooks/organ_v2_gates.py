@@ -65,7 +65,8 @@ REGISTRY = REPO / "research" / "notebook-outputs" / "organ_v2_registry.json"
 DEV = REPO / "data" / "incoming" / "public_sets"
 GATES = {"mixed_committed_min": 75.0, "mixed_correct_when_committed_min": 90.0, "mixed_coverage_min": 85.0,
          "mixed_false_abstention_max": 2.0, "narrow_correct_when_committed_min": 90.0, "g3_auroc_min": 0.8}
-SEEN = {"lymph_node_v2": lymph_node_development, "lung_v2": lung_development}
+SEEN = {"lymph_node_v2": lymph_node_development, "lung_v2": lung_development,
+        "lymph_node_v3": lymph_node_development}  # v3: research/organ-references.md, "Version 3"
 
 
 def sha256(path: Path) -> str:
@@ -194,7 +195,7 @@ def g3_lymph_node(b) -> dict:
             "answers": lymph_node_development.answers(response, region)}
 
 
-G3 = {"lung_v2": g3_lung, "lymph_node_v2": g3_lymph_node}
+G3 = {"lung_v2": g3_lung, "lymph_node_v2": g3_lymph_node, "lymph_node_v3": g3_lymph_node}
 
 
 def main() -> None:
