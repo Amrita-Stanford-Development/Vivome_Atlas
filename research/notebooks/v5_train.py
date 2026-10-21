@@ -51,6 +51,10 @@ research/notebook-outputs/v51_train/. Variant v5.2 uses v5.2's labels, which
 are v5.1's with CD4/CD8 lineage relabelled by a classifier trained on Hao
 et al. 2021 (research/notebooks/v52_labels.py); its checkpoints go to
 ckpt_v52/. Both rest on the same reproduction (same code, same machine).
+Variant v5.3 adds RNA pools to the training rows; variant v5.4 adds the
+Allen Human Immune Health Atlas's cells of its training donors
+(research/notebooks/allen_rows.py), both on the original labels, with
+validation unchanged.
 
     python research/notebooks/v5_train.py reproduce      # from the repository root
     python research/notebooks/v5_train.py clean
@@ -87,6 +91,7 @@ V3_EXPORT = DRIVE / "ReferenceProjection_v3" / "export"
 NB1B_CKPT = DRIVE / "Tier1_v31" / "NB1b" / "ckpt"
 CKPT = DRIVE / "Tier1_v31" / "V5" / "ckpt"
 LABELS = REPO / "research" / "notebook-outputs" / "v5_labels" / "reference_labels_clean.csv.gz"
+ALLEN_ROWS = DRIVE / "Tier1_v31" / "V5" / "allen_rows_v54.npz"  # research/notebooks/allen_rows.py
 OUT = REPO / "research" / "notebook-outputs" / "v5_train"
 VARIANTS = {
     "v5": {"labels": LABELS, "ckpt": CKPT, "out": OUT, "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt"},
@@ -102,6 +107,11 @@ VARIANTS = {
     "v5.3": {"labels": config.MODEL_DIR / "runtime" / "reference_metadata.csv",
              "ckpt": DRIVE / "Tier1_v31" / "V5" / "ckpt_v53", "out": REPO / "research" / "notebook-outputs" / "v53_train",
              "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt_v53", "pools": True},
+    # v5.4 (owner, 2026-10-21; research/notebooks/v54_gates.py): the original labels, with the Allen
+    # atlas's training-donor cells added to the training rows (run history entry 65: route B).
+    "v5.4": {"labels": config.MODEL_DIR / "runtime" / "reference_metadata.csv",
+             "ckpt": DRIVE / "Tier1_v31" / "V5" / "ckpt_v54", "out": REPO / "research" / "notebook-outputs" / "v54_train",
+             "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt_v54", "extra": ALLEN_ROWS},
 }
 SEEDS, REPRO_SEED = (0, 1, 2, 3, 4), 1
 ARCH = {"hidden": (1024, 512), "dropout": 0.1, "latent": 128}
@@ -247,9 +257,25 @@ def clean(s: dict, variant: str = "v5") -> None:
                   "pure": pools_recipe.PURE, "majority": pools_recipe.MAJORITY,
                   "recipe_sha256": hashlib.sha256(Path(pools_recipe.__file__).read_bytes()).hexdigest()}
         print(f"{len(rows):,} pools added to {len(s['TR']):,} training rows", flush=True)
+    elif v.get("extra"):
+        # Another atlas's cells (allen_rows.py: log-normalised as Tabula Sapiens, the feature genes,
+        # the reference's class positions), appended to the training rows; validation is unchanged.
+        # The prior is computed over every training row, these included.
+        extra = np.load(v["extra"])
+        rows, labels = extra["X_train"], extra["y_train"].astype(s["y_clean"].dtype)
+        n = len(s["y_clean"])
+        s_train = {**s, "XG": torch.cat([s["XG"], torch.from_numpy(rows).to(s["device"], dtype=torch.float16)]),
+                   "TR": np.concatenate([np.asarray(s["TR"]), np.arange(n, n + len(rows))])}
+        y_train = np.concatenate([s["y_clean"], labels])
+        pooled = {"extra_rows": int(len(rows)), "file": v["extra"].name,
+                  "sha256": hashlib.sha256(v["extra"].read_bytes()).hexdigest(),
+                  "per_class": {s["names"][c]: int((labels == c).sum()) for c in np.unique(labels)}}
+        print(f"{len(rows):,} Allen rows added to {len(s['TR']):,} training rows", flush=True)
     for seed in SEEDS:
         path = v["ckpt"] / f"V2_batchgene_aug_seed{seed}.pt"
-        print(f"[seed {seed}] training on {'the original labels with pools' if pooled else 'the cleaned labels'}", flush=True)
+        what = ('the original labels with pools' if v.get('pools') else
+                'the original labels with the Allen rows' if v.get('extra') else 'the cleaned labels')
+        print(f"[seed {seed}] training on {what}", flush=True)
         model, info = train(s_train, y_train, seed)
         torch.save(model.state_dict(), path)
         (v["ckpt"] / f"V2_batchgene_aug_seed{seed}.json").write_text(json.dumps(
@@ -268,7 +294,7 @@ def clean(s: dict, variant: str = "v5") -> None:
         "torch": torch.__version__, "labels": v["labels"].relative_to(REPO).as_posix(),
         "labels_sha256": hashlib.sha256(v["labels"].read_bytes()).hexdigest(),
         "reproduction": "research/notebook-outputs/v5_train/reproduce.json",
-        "checkpoint_dir": v["ckpt_record"], "members": members, **({"pools": pooled} if pooled else {}),
+        "checkpoint_dir": v["ckpt_record"], "members": members, **({("extra" if v.get("extra") else "pools"): pooled} if pooled else {}),
         "seconds": round(time.time() - t0)}, indent=2) + "\n", newline="\n")
     print(f"trained {len(members)} members ({time.time() - t0:.0f}s)")
 

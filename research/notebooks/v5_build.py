@@ -89,6 +89,13 @@ its record in research/notebook-outputs/v51_build/. The reproduction is
 shared. A class without cells (NK T in v5.1) gets zero centroids and a zero
 class mean, so it is never chosen.
 
+Variant v5.4 (route B of run history entry 65) also counts the Allen
+atlas's training-donor cells (research/notebooks/allen_rows.py), the rows
+its members trained on, in every centroid (served and calibration) and in
+v4.1's class-balanced statistics, class means and centroids. The reference
+latents, the calibration suite and the out-of-distribution reference stay
+Tabula Sapiens's, the cells the service holds one by one.
+
     python research/notebooks/v5_build.py reproduce      # from the repository root
     python research/notebooks/v5_build.py build
     python research/notebooks/v5_build.py spec
@@ -141,6 +148,10 @@ VARIANTS = {
     "v5.3": {"dir": REPO / "service" / "model" / "v5_3", "out": REPO / "research" / "notebook-outputs" / "v53_build",
              "phase4": REPO / "research" / "notebook-outputs" / "v53_gates" / "spec_block.json",
              "answers": "nb2_spec_v53.json", "spec": "spec_v53.json"},
+    # v5.4: the Allen atlas's training-donor cells in training and in the centroids; v54_gates.py's block
+    "v5.4": {"dir": REPO / "service" / "model" / "v5_4", "out": REPO / "research" / "notebook-outputs" / "v54_build",
+             "phase4": REPO / "research" / "notebook-outputs" / "v54_gates" / "spec_block.json",
+             "answers": "nb2_spec_v54.json", "spec": "spec_v54.json"},
 }
 K_NN, ALPHA, MIN_N = 15, 0.10, 50
 TOL_Q, TOL_COS = 1e-3, 0.9999
@@ -160,19 +171,29 @@ def member_scores(model, xs, M, ref_tr, cen_tr, device, chunk=4096):
     return cos, torch.cat(mx).numpy().astype(np.float16)
 
 
-def build(members: dict, y: np.ndarray, s: dict, X_raw: np.ndarray, t0: float) -> dict:
-    """members: name -> checkpoint path. Returns latents, centroids, calibration."""
+def build(members: dict, y: np.ndarray, s: dict, X_raw: np.ndarray, t0: float, extra: "dict | None" = None) -> dict:
+    """members: name -> checkpoint path. Returns latents, centroids, calibration.
+    extra (v5.4): another atlas's training rows, counted in every centroid."""
     names, C, device = s["names"], len(s["names"]), s["device"]
     TR = s["TR"]
+    if extra is not None:
+        XE = torch.from_numpy(extra["X"]).to(device, dtype=torch.float16)
+        yE = extra["y"].astype(y.dtype)
     models, lat, cen_all, ref_tr, cen_tr = {}, {}, {}, {}, {}
     for name, path in members.items():
         m = train.load_model(path, s)
         Z = core.reference_embedding(m, s["XG"], "batch_gene", s["mu"], s["sd"], device)
         models[name], lat[name] = m, Z.astype(np.float16)
-        cen_all[name] = core.centroids_from(Z, y, C)
         ref = torch.from_numpy(Z).to(device, torch.float16)
         ref_tr[name] = ref[torch.from_numpy(TR).to(device)]
-        cen_tr[name] = torch.from_numpy(core.centroids_from(Z[TR], y[TR], C)).to(device)
+        if extra is None:
+            cen_all[name] = core.centroids_from(Z, y, C)
+            cen_tr[name] = torch.from_numpy(core.centroids_from(Z[TR], y[TR], C)).to(device)
+        else:
+            ZE = core.reference_embedding(m, XE, "batch_gene", s["mu"], s["sd"], device)
+            cen_all[name] = core.centroids_from(np.vstack([Z, ZE]), np.concatenate([y, yE]), C)
+            cen_tr[name] = torch.from_numpy(core.centroids_from(np.vstack([Z[TR], ZE]),
+                                                                np.concatenate([y[TR], yE]), C)).to(device)
     print(f"reference latents for {len(models)} members ({time.time() - t0:.0f}s)", flush=True)
     profiles = dict(np.load(bundle.NB1 / "mask_profiles.npz"))
     suite = json.loads((bundle.NB1 / "sim_suite_calib_v1.json").read_text())
@@ -268,10 +289,15 @@ def write_spec(got: dict, record: dict, variant: str = "v5") -> dict:
     return spec
 
 
-def best_guess_layer(members: dict, y: np.ndarray, X_raw: np.ndarray, n_classes: int) -> dict:
+def best_guess_layer(members: dict, y: np.ndarray, X_raw: np.ndarray, n_classes: int,
+                     extra: "dict | None" = None) -> dict:
     """v4.1's reference side on v5's members (scripts/build_v4_bundle.py's
     steps): class-balanced statistics, class means, and each member's
-    centroids of the reference re-encoded under those statistics."""
+    centroids of the reference re-encoded under those statistics. extra
+    (v5.4): another atlas's training rows, counted in all three."""
+    if extra is not None:
+        X_raw = np.vstack([X_raw, extra["X"].astype(np.float32)])
+        y = np.concatenate([y, extra["y"].astype(y.dtype)])
     mu, sd = class_balanced_stats(X_raw, y, n_classes)
     means = class_means(X_raw, y, n_classes, mu, sd)
     cb = {}
@@ -330,9 +356,17 @@ def build_v5(s: dict, X_raw: np.ndarray, variant: str = "v5") -> None:
         if hashlib.sha256(path.read_bytes()).hexdigest() != entry["sha256"]:
             raise SystemExit(f"{path} is not the checkpoint v5_train.py recorded")
         members[name] = path
-    got = build(members, s["y_clean"], s, X_raw, t0)
-    layer = best_guess_layer(members, s["y_clean"], X_raw, len(s["names"]))
-    which = "the original labels" if variant == "v5.3" else "the cleaned labels"
+    extra = None
+    if tv.get("extra"):
+        rows = np.load(tv["extra"])
+        if hashlib.sha256(tv["extra"].read_bytes()).hexdigest() != trained["extra"]["sha256"]:
+            raise SystemExit(f"{tv['extra']} is not the file the members trained on")
+        extra = {"X": rows["X_train"], "y": rows["y_train"]}
+    got = build(members, s["y_clean"], s, X_raw, t0, extra)
+    layer = best_guess_layer(members, s["y_clean"], X_raw, len(s["names"]), extra)
+    which = ("the original labels" if variant == "v5.3" else
+             "the original labels, with the Allen atlas's training-donor cells" if variant == "v5.4" else
+             "the cleaned labels")
     print(f"best-guess layer built ({time.time() - t0:.0f}s)", flush=True)
     (target / "members").mkdir(parents=True, exist_ok=True)
     files = {}
@@ -352,6 +386,9 @@ def build_v5(s: dict, X_raw: np.ndarray, variant: str = "v5") -> None:
     files["class_means_cb.npy"] = f"class-balanced z-scored RNA class means under {which}, class position order (22 x 9,002)"
     labels = tv["labels"]
     record = {"labels": f"{labels.relative_to(REPO).as_posix()} (sha256 {hashlib.sha256(labels.read_bytes()).hexdigest()})"}
+    if extra is not None:
+        record["extra_rows"] = {"file": tv["extra"].name, "sha256": trained["extra"]["sha256"], "rows": int(len(extra["y"])),
+                                "counted_in": "every centroid; the class-balanced statistics and class means"}
     answers = write_spec(got, record, variant)
     (target / v["answers"]).write_text(json.dumps(answers, indent=2) + "\n", newline="\n")
     files[v["answers"]] = f"{variant}'s answers: temperatures, conformal thresholds, out-of-distribution threshold (NB2's layout)"

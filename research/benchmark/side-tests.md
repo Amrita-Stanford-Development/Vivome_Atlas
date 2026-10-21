@@ -389,6 +389,25 @@ tier W of `scripts/fetch_public_sets.py`:
   e522d2cd-7927-4e59-a4ed-064009569279; 1.82 M PBMCs, 108 donors).
   **Reference** RNA, free for development; not a test.
 
+### Amendment 22, 2026-10-21: candidate v5.4, its gates fixed before training
+
+Route B of run history entry 65 (step 2 of the data search):
+- **Candidate:** v5.4, v4.1's rule on five V2 members trained with the Allen
+  atlas's cells of 86 training donors added to the training rows, on the
+  original labels; those cells are also counted in every centroid and in
+  v4.1's class means. The rows: `research/notebooks/allen_rows.py` (its
+  donors, classes, caps and normalisation fixed in the script); naive CD8 T
+  cells are left out, since Tabula Sapiens's original labels file them under
+  CD4.
+- **Gates,** fixed in `research/notebooks/v54_gates.py` before training: on
+  the 22 Allen donors held out, myeloid DC and pDC recall at least 50% each;
+  the calibration suite's top-1 at least 60.448 (v3.1's minus 2); Fulcher at
+  least v4.1 + 2; no loss on PXD056050's pools; PBMC240 lymphoid recall at
+  least v4.1 - 2; Fulcher committed at least v4.1 - 2 and correct when
+  committed at least v4.1 - 1; out-of-reference AUROC at least v4.1 - 0.03.
+- **Not served either way.** A GO makes v5.4 a frozen candidate for the
+  sorted CD4/CD8 test, by that protocol's next amendment.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

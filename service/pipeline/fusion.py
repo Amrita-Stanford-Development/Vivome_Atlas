@@ -85,6 +85,7 @@ MODEL_VERSION_LABELS = {
     "v5.1": "v5.1 (v5 with the NK T class folded into NK in training)",
     "v5.2": "v5.2 (v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et al. 2021)",
     "v5.3": "v5.3 (v4.1's rule on V2 members trained with RNA pools added, on the original labels, with its own calibration)",
+    "v5.4": "v5.4 (v4.1's rule on V2 members trained with the Allen Human Immune Health Atlas's cells added, on the original labels, with its own calibration)",
 }
 ANSWERS_FROM = {"v4": "v3.1", "v4.1": "v3.1", "v4.2": "v3.1", **{v: v for v in config.V5_FAMILY}}
 TRACK = {"v4": "Track G", "v4.1": "Track G", "v4.2": "Goal 2", **{v: "Track H" for v in config.V5_FAMILY}}
