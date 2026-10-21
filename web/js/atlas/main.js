@@ -22,9 +22,10 @@ import { atlasFrame, classCodes, classOrderFrom, parseMetadataCsv, parseOrganCsv
 import { createReferenceLayer } from './reference-layer.js';
 import { pickScreen, projectAll } from './spatial.js';
 import { createStage } from './stage.js';
+import { motionStill, onMotionChange } from '../motion-pref.js';
 
 const $ = (id) => document.getElementById(id);
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced = motionStill();
 
 async function fetchText(url) {
   const response = await fetch(url);
@@ -161,6 +162,12 @@ async function start() {
     serviceUrl: service.url,
     limits: service.limits,
     options: () => ({ modality: $('modality').value }),
+  });
+  // The header's switch, pressed on this page: the map's slow turn and the
+  // landing's loops stop, or may start again.
+  onMotionChange(() => {
+    stage.rig.setStill(motionStill());
+    landing.setStill(motionStill());
   });
   const dataTab = mountDataTab({ landing, client, service, acceptsFiles: !organ });
   mountViewControls({ stage, layer, landing, labels });

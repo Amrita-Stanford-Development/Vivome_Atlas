@@ -82,6 +82,34 @@ export function createOrbitRig(camera, canvas, { reduced = false } = {}) {
   });
   canvas.addEventListener('pointercancel', () => { press = null; });
   canvas.addEventListener('pointerleave', () => { if (!press) emit('leave'); });
+  // The keyboard, with the map focused (atlas.html gives the canvas a tab
+  // stop): the arrows turn it, Shift and the arrows move it, + and - zoom,
+  // Enter opens the cell nearest the centre (a click there).
+  canvas.addEventListener('keydown', (e) => {
+    const turn = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    const zoom = { '+': 0.9, '=': 0.9, '-': 1 / 0.9, '_': 1 / 0.9 }[e.key];
+    if (e.key === 'Enter') {
+      const r = canvas.getBoundingClientRect();
+      emit('click', { clientX: r.left + r.width / 2, clientY: r.top + r.height / 2, button: 0 });
+      return;
+    }
+    if (!turn && !zoom) return;
+    e.preventDefault();
+    touched();
+    anim = null;
+    if (zoom) {
+      pose.radius = clamp(pose.radius * zoom, RADIUS_RANGE[0], RADIUS_RANGE[1]);
+    } else if (e.shiftKey) {
+      const step = pose.radius * 0.05;
+      const right = [camera.matrixWorld.elements[0], camera.matrixWorld.elements[1], camera.matrixWorld.elements[2]];
+      const up = [camera.matrixWorld.elements[4], camera.matrixWorld.elements[5], camera.matrixWorld.elements[6]];
+      for (let k = 0; k < 3; k += 1) pose.target[k] += -right[k] * turn[0] * step + up[k] * turn[1] * step;
+    } else {
+      pose.yaw += turn[0] * 0.15;
+      pose.pitch = clamp(pose.pitch + turn[1] * 0.15, -PITCH_LIMIT, PITCH_LIMIT);
+    }
+    apply();
+  });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     touched();
@@ -147,6 +175,25 @@ export function createOrbitRig(camera, canvas, { reduced = false } = {}) {
     setGuided: (on) => { guided = on; },
     get guided() { return guided; },
     stopAutoRotate: () => { autoRotate = false; },
+    // The header's switch (motion-pref.js), pressed midway: still stops the
+    // slow turn and ends a glide where it was going; moving again lets the
+    // turn come back after the idle minutes, as after any touch.
+    setStill(on) {
+      reduced = Boolean(on);
+      clearTimeout(idleTimer);
+      if (!reduced) {
+        idleTimer = setTimeout(() => { autoRotate = true; emit('change'); }, 120000);
+        return;
+      }
+      autoRotate = false;
+      if (anim) {
+        Object.assign(pose, anim.to);
+        const done = anim.done;
+        anim = null;
+        apply();
+        done?.();
+      }
+    },
   };
 }
 

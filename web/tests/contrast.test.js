@@ -91,3 +91,22 @@ test('no text is drawn in the bright RNA or protein colours', () => {
     assert.doesNotMatch(read(`css/${sheet}`), /\bcolor: var\(--(rna|prot)\)/, sheet);
   }
 });
+
+test('grey text straight on the moving field, or on liquid glass, is the soft grey', () => {
+  // The field at its darkest (web/js/background.js): the gradient's last stop,
+  // hsl(218, 50%, 89.5%), under the 8% accent vignette.
+  const hsl = (h, s, l) => {
+    const a = s * Math.min(l, 1 - l);
+    const f = (n) => { const k = (n + h / 30) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+    return [f(0), f(8), f(4)];
+  };
+  const darkest = hsl(218, 0.5, 0.895).map((v, i) => v * 0.92 + [0, 142, 204][i] / 255 * 0.08);
+  const hex = `#${darkest.map((v) => Math.round(v * 255).toString(16).padStart(2, '0')).join('')}`;
+  assert.ok(contrast(token('ink-soft'), hex) >= 4.5, `--ink-soft on ${hex}: ${contrast(token('ink-soft'), hex).toFixed(2)}`);
+  assert.ok(contrast(token('ink-faint'), hex) < 4.5, 'the reason: the faint grey does not reach it there');
+  assert.match(css, /\.liquid \{ --ink-faint: var\(--ink-soft\); \}/);
+  assert.match(css, /\.site-footer-inner \{[^}]*color: var\(--ink-soft\)/);
+  assert.match(read('css/story.css'), /\.scroll-cue \{[^}]*color: var\(--ink-soft\)/);
+  assert.match(read('css/workflow.css'), /\.wf-part-cue \{[^}]*color: var\(--ink-soft\)/);
+});
+

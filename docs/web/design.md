@@ -260,11 +260,22 @@ their size as it does.
 
 ## Shared chrome
 
-The header (the wordmark, then the tool links) and the footer are static
+The header (the wordmark, the tool links, then the Pause motion switch)
+and the footer are static
 markup copied into each page, so they work without JS and don't shift the
 layout. `web/tests/chrome.test.js` pins every copy byte-identical to
 `web/index.html`'s, apart from the one `aria-current="page"` marker. Change
 one, change all, and add a new page to the test's `PAGES` list.
+
+**Pause motion** (`web/js/motion-pref.js`) is a button with
+`aria-pressed`. Pressed, the site is as still as under the system's
+reduced-motion setting: the field and the water draw one frame, the CSS
+loops and transitions stop (`html.motion-off`, beside each
+`prefers-reduced-motion` block), the landing shows every block at once,
+the Workflow figures hold their finished frames, and the Atlas map stops
+turning. The choice is kept in this browser only. Wherever these docs say
+reduced motion, the switch counts the same; on the Atlas page, pressed
+midway, it stops the loops and Play but keeps the landing's timing.
 
 ## Where new results land
 

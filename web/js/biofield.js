@@ -5,12 +5,14 @@
 // both behind the page, so the content and the white cards sit on top.
 //
 // Loaded after background.js as <script type="module" src="js/biofield.js">;
-// it mounts itself. Under prefers-reduced-motion it draws one still frame
-// and the pointer leaves no wake. Without WebGL, or if three.js fails to
-// load, it removes itself and the page keeps background.js alone.
+// it mounts itself. When motion is still (web/js/motion-pref.js) it draws
+// one still frame and the pointer leaves no wake. Without WebGL, or if
+// three.js fails to load, it removes itself and the page keeps
+// background.js alone.
 
 import { PALETTES, createBioLayer } from './biocells.js';
 import { createEffect, createSceneTarget, supported } from './water.js';
+import { motionStill, onMotionChange } from './motion-pref.js';
 
 // The same three.js build as the landing story and the atlas viewer.
 // web/tests/chrome.test.js pins the URLs together.
@@ -31,7 +33,6 @@ for (const el of [canvas, frost]) {
 const field = document.querySelector('.site-bg');
 if (field) field.after(canvas, frost); else document.body.prepend(canvas, frost);
 
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 const compact = window.matchMedia('(max-width: 820px)').matches;
 
 function giveUp(err) {
@@ -74,7 +75,7 @@ function start(THREE) {
   let running = false;
 
   function draw(now, dt) {
-    const t = reduced.matches ? 1 : Math.min(1, (now - born) / 2600);
+    const t = motionStill() ? 1 : Math.min(1, (now - born) / 2600);
     layer.setFade(t * t * (3 - 2 * t));
     layer.update(time, { aspect: camera.aspect });
     renderer.setScissorTest(false);
@@ -96,7 +97,7 @@ function start(THREE) {
   }
 
   function play() {
-    if (reduced.matches) {
+    if (motionStill()) {
       running = false;
       draw(performance.now(), 0);
     } else if (!running) {
@@ -120,14 +121,14 @@ function start(THREE) {
   // The wake: a small drop wherever the pointer has moved a few pixels on.
   let lastWake = null;
   window.addEventListener('pointermove', (e) => {
-    if (reduced.matches) return;
+    if (motionStill()) return;
     if (lastWake && Math.hypot(e.clientX - lastWake[0], e.clientY - lastWake[1]) < 6) return;
     lastWake = [e.clientX, e.clientY];
     effect.drop(e.clientX / window.innerWidth, 1 - e.clientY / window.innerHeight, 0.22, 0.02);
   }, { passive: true });
 
   window.addEventListener('resize', resize);
-  reduced.addEventListener('change', play);
+  onMotionChange(play);
   resize();
   play();
   // The field's particles join the gel (css/page.css).

@@ -109,6 +109,13 @@
             scroll-behavior: auto !important;
         }
     }
+    /* The header's Pause motion switch (js/motion-pref.js) does the same. */
+    html.motion-off *, html.motion-off *::before, html.motion-off *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 @layer components {
@@ -180,6 +187,10 @@
             0 6px 16px -8px rgba(var(--shade), 0.2);
         padding: 24px 26px;
     }
+    /* Liquid glass lets the moving field through: the faint grey would fall
+       to about 4.3:1 there (3.7 under a passing glow), so text inside takes
+       the soft grey (5.7 or better). */
+    .liquid { --ink-faint: var(--ink-soft); }
     .liquid::after {
         content: "";
         position: absolute;
@@ -389,6 +400,26 @@
         box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.14);
     }
 
+    /* Pause motion (js/motion-pref.js): a switch, pressed while the site is still. */
+    .motion-toggle {
+        font: inherit;
+        font-size: 13px;
+        color: var(--ink-soft);
+        background: transparent;
+        border: 0;
+        border-radius: 999px;
+        padding: 6px 12px;
+        box-shadow: inset 0 0 0 1px var(--edge);
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    .motion-toggle:hover { background: var(--accent-tint); color: var(--ink); }
+    .motion-toggle[aria-pressed="true"] {
+        color: var(--ink);
+        background: var(--well);
+        box-shadow: inset 0 0 0 1px var(--edge), inset 1px 1px 3px rgba(var(--shade), 0.14);
+    }
+
     .site-footer {
         margin-top: auto;
         border-top: 1px solid var(--line);
@@ -402,7 +433,7 @@
         align-items: baseline;
         gap: 8px 28px;
         font-size: 13px;
-        color: var(--ink-faint);
+        color: var(--ink-soft);
     }
     .site-footer .wordmark { font-size: 16px; }
     .site-footer nav { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; }
@@ -436,6 +467,7 @@
         .site-header-inner { gap: 12px; flex-wrap: wrap; row-gap: 4px; }
         .site-nav { margin-left: -10px; width: calc(100% + 10px); order: 2; flex-wrap: wrap; overflow: visible; }
         .site-nav a { padding: 5px 10px; }
+        .motion-toggle { order: 1; margin-left: auto; padding: 5px 10px; }
         .page { padding-top: 32px; }
         .sheet { padding: 20px 18px; }
         .lede { font-size: 16px; }

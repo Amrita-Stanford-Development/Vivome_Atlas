@@ -584,6 +584,20 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .gene-profile-table .gene-name { color: var(--ink); }
 .gene-profile-table .gene-value { text-align: right; font-variant-numeric: tabular-nums; }
 
+/* High zoom on a PC (a window under 720 CSS pixels): the sidebar and the
+   viewer no longer fit side by side, so the page scrolls, the controls sit
+   above the viewer at full width, and the viewer keeps a usable height. */
+@media (max-width: 720px) {
+    body.atlas-page { height: auto; overflow: visible; }
+    .main-content { flex-direction: column; }
+    .controls-panel { width: auto; overflow: visible; padding: 16px 16px 0; }
+    .controls-panel.collapsed { margin-left: 0; display: none; }
+    .visualization-area,
+    .controls-panel.collapsed + .visualization-area { height: max(320px, 80vh); padding: 0 16px 16px; }
+    .atlas-drawer { width: auto; left: 14px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .atlas-drawer, .controls-panel { transition: none; }
 }
+.motion-off .atlas-drawer, .motion-off .controls-panel { transition: none; }

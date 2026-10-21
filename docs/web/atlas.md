@@ -89,7 +89,10 @@ or the wheel hands the camera back at once: the landing goes on, but the
 camera stays where the visitor put it. Replay and Clear wait for the end.
 The sidebar folds away when a file is sent or the example starts and comes
 back at idle, chosen or failed (`sidebarFor` in `director.js`).
-Under reduced motion every duration is zero.
+Under reduced motion every duration is zero. The header's Pause motion
+switch, pressed midway, stops the map's turn, the file's breathing, the
+answers' pulse and Play, and ends the example's waiting at once; the
+timing stays as the landing began.
 
 **The example.** "Watch the example" replays the PBMC240 file traced through
 the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.

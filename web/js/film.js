@@ -2,8 +2,9 @@
 // page, one chapter's scene at a time, with the chapter's own sentences as
 // captions (its <p data-beat> elements). Play, pause, scrub, skip, change
 // speed; the address keeps the place (#film&t=95.5&cell=3), and &present
-// opens a 16:9 frame for screen recording. A hidden tab pauses it. Under
-// reduced motion each beat holds its finished frame instead of animating.
+// opens a 16:9 frame for screen recording. A hidden tab pauses it. When
+// motion is still (still(), from web/js/motion-pref.js) each beat holds its
+// finished frame instead of animating.
 // The clock maths is web/js/timeline.js.
 
 import {
@@ -32,7 +33,7 @@ const setPageInert = (on) => {
   for (const el of $$('body > .skip-link, body > header, body > main, body > footer')) el.inert = on;
 };
 
-export function createFilm({ ctx, state, reduced, loadScene, setCell }) {
+export function createFilm({ ctx, state, still = () => false, loadScene, setCell }) {
   const bar = $('#filmbar');
   const theatre = $('#theatre');
   const stage = $('#theatre-stage');
@@ -81,7 +82,7 @@ export function createFilm({ ctx, state, reduced, loadScene, setCell }) {
     const where = locate(t);
     if (where.index !== shown) { show(where.index); return; }
     const chapter = CHAPTERS[where.index];
-    if (scene) scene.render(reduced ? stepTarget(chapter, where.p) : where.p, state);
+    if (scene) scene.render(still() ? stepTarget(chapter, where.p) : where.p, state);
     const beats = beatsOf(chapter.id);
     caption.textContent = beats[beatAt(chapter, where.p)] ?? '';
     clock.textContent = `${formatClock(t)} / ${formatClock(TOTAL)}`;

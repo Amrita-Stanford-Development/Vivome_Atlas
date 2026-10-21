@@ -4,17 +4,19 @@
 //
 // Ported from the original visual.html animation (docs/web/design.md). Loaded
 // as <script type="module" src="js/background.js"></script>; it mounts itself.
-// Under prefers-reduced-motion it draws a single still frame and stops.
+// When motion is still (web/js/motion-pref.js: the system's reduced motion
+// or the header's Pause motion switch) it draws a single still frame and
+// stops. It also loads motion-pref.js for every page, which wires the switch.
 // With <body data-field="still"> it draws the water alone, without its
 // particles (the preview pages use this to compare the water effects).
+
+import { motionStill, onMotionChange } from './motion-pref.js';
 
 const canvas = document.createElement('canvas');
 canvas.className = 'site-bg';
 canvas.setAttribute('aria-hidden', 'true');
 document.body.prepend(canvas);
 const ctx = canvas.getContext('2d');
-
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 class Particle {
   constructor(type) {
@@ -297,7 +299,7 @@ function loop() {
 }
 
 function start() {
-  if (reducedMotion.matches) {
+  if (motionStill()) {
     running = false;
     frame(false);
   } else if (!running) {
@@ -311,7 +313,7 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => { populate(); if (!running) frame(false); }, 150);
 });
-reducedMotion.addEventListener('change', start);
+onMotionChange(start);
 
 populate();
 start();

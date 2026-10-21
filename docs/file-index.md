@@ -35,6 +35,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/biocells.js` — the 3D objects, built in code: DNA and chromatin, red cell, platelet, white cells, threads and a long cell; the shape maths is pure
 - `web/js/water.js` — the water effects over those objects (still, flowing gel, rain, touch, wake, ink): GPU ripples and ink
 - `web/js/motion.js` — pure motion maths for the landing: numbers counting up
+- `web/js/motion-pref.js` — the visitor's motion preference for every page: the system's reduced motion or the header's Pause motion switch (kept in this browser), and who to tell when it changes
 - `web/js/random.js` — the seeded random numbers behind the procedural visuals
 - `web/js/story.js` — the landing's controller: manifest facts and proof points, scroll reveals and count-ups
 - `web/js/workflow.js` — the Workflow page's controller: loads the manifest and workflow.json, fills slots, the followed cell, scroll progress, lazy scenes, the live-service check
@@ -81,13 +82,15 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/fixtures.js` — shared manifest fixture for the JS tests, including a `<script>` class name that proves escaping
 - `web/tests/manifest.test.js` — tests for `manifest.js`: validation, formatting, the measured/pending guard
 - `web/tests/panels.test.js` — tests for `panels.js`: every panel builder, and HTML escaping
-- `web/tests/contrast.test.js` — text colours at 4.5:1 or better on every background, form fields' edges at 3:1, off controls readable, decorative numbers hidden, the RNA and protein text colours the same on pages and canvases
+- `web/tests/contrast.test.js` — text colours at 4.5:1 or better on every background, form fields' edges at 3:1, off controls readable, decorative numbers hidden, the RNA and protein text colours the same on pages and canvases, grey text on the moving field or liquid glass in the soft grey
 - `web/tests/chrome.test.js` — pins the shared site header and footer byte-identical across pages, one three.js build, and the living water on every page but the atlas
 - `web/tests/motion.test.js` — tests for `motion.js`: clamping, and counting up in the final number's format
+- `web/tests/motion-pref.test.js` — the Pause motion switch: pausing and resuming, remembered, the system setting, on every page's header, read by every moving part, and the map's turn and glides stopping midway
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and nothing is drawn in front of its title
 - `web/tests/workflow.test.js` — the Workflow page against the real files: every number slot measured, copy rules, chapters, escaping, palette, service address, no model maths in the browser
 - `web/tests/reel.test.js` — the storyboard's timing, cues, slots and copy rules; the camera, water and cards; the stills and the film match the current records; the compositions and docs match the storyboard
-- `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser
+- `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser, its layout at high zoom
+- `web/tests/atlas-map-keys.test.js` — the Atlas map by keyboard: the arrows turn it, Shift and the arrows move it, + and - zoom, Enter opens the cell at the centre; the map takes focus and says how
 - `web/tests/atlas-example.test.js` — the deployed PBMC240 example is byte-identical to the `service/examples/` copy, under Cloudflare Pages' 25 MiB file limit, and a DIA-NN report with a Genes column
 - `web/tests/atlas-choreography.test.js` — the fly-in fits its window for 1 to 2,000 cells in one level or four, level order and gaps, the landing timeline, the waiting loop and its finish, the camera pose, reduced motion
 - `web/tests/atlas-director.test.js` — every rule of the upload state machine, the sidebar's folding, and that no state is changed in place

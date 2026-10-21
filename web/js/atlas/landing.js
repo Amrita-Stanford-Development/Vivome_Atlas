@@ -741,9 +741,10 @@ export function createLanding({
       e.stopImmediatePropagation();
       dispatch({ type: 'SKIP' });
     }
-    // The arrow keys step through the cells, unless the visitor is typing or
-    // on the panel's tabs (main.js: there the arrows change the tab).
-    const typing = e.target?.closest?.('input, select, textarea, [contenteditable="true"], [role="tablist"]');
+    // The arrow keys step through the cells, unless the visitor is typing, on
+    // the panel's tabs (main.js: there the arrows change the tab), or on the
+    // map (stage.js: there they turn it).
+    const typing = e.target?.closest?.('input, select, textarea, [contenteditable="true"], [role="tablist"], [role="application"]');
     if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && run && st.name === 'interactive' && upload.shown && !typing) {
       e.preventDefault();
       play(false);
@@ -866,6 +867,17 @@ export function createLanding({
     get playing() { return playing; },
     step,
     play,
+    // The header's switch (motion-pref.js), pressed midway: the file's
+    // breathing, the answers' pulse and Play stop, and the example's waiting
+    // steps end at once; the landing keeps the timing it began with.
+    setStill(on) {
+      reduced = Boolean(on);
+      if (!reduced) return;
+      upload.setBreathing(false);
+      upload.setPulse(false);
+      if (playing) play(false);
+      if (st.name === 'working' && st.example && workflow) arrive(workflow, 'recorded');
+    },
     deselect() {
       deselect();
       render();

@@ -6,13 +6,15 @@
 //   error, never a stale number.
 // - Each [data-in] block rises in once as it comes into view, and each
 //   [data-count] number counts up to its manifest value.
-// Under reduced motion nothing moves: every block is shown at once.
+// When motion is still (web/js/motion-pref.js: the system's reduced motion
+// or the header's switch) nothing moves: every block is shown at once.
 
 import { loadManifest, PENDING_LABEL } from './manifest.js';
 import { buildOrganGrid, buildProofPoints, factText, errorPanel } from './panels.js';
 import { countText } from './motion.js';
+import { motionStill, onMotionChange } from './motion-pref.js';
 
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced = motionStill();
 
 // ---- numbers ----
 
@@ -28,6 +30,7 @@ const facts = loadManifest().then((manifest) => {
 
 // A number counts up from zero to its final text, once, in about 1.4 s.
 function countUp(el) {
+  if (motionStill()) return;
   const final = el.textContent;
   if (countText(final, 0) === final) return;   // not a plain number
   const start = performance.now();
@@ -56,3 +59,7 @@ if (reduced || !('IntersectionObserver' in window)) {
   }, { threshold: 0.15 });
   for (const el of blocks) seen.observe(el);
 }
+// Paused midway (the header's switch): the rest is shown at once.
+onMotionChange(() => {
+  if (motionStill()) for (const el of blocks) el.classList.add('is-in');
+});

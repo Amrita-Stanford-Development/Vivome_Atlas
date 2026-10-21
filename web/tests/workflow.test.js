@@ -249,3 +249,10 @@ test('screen readers get every sentence of a chapter, whole: a hidden copy besid
   assert.doesNotMatch(html, /as a CSV or TSV table or a DIA-NN report\./, 'the formats are the service\'s current ones');
 });
 
+test('the result overlay can be pointed at: it stays while the pointer crosses onto it', () => {
+  assert.match(read('css/workflow.css'), /\.wf-tip\.is-on \{[^}]*pointer-events: auto/);
+  const js = read('js/workflow.js');
+  assert.match(js, /tip\.addEventListener\('pointerenter', \(\) => clearTimeout\(hideTimer\)\)/);
+  assert.match(js, /!b\.contains\(e\.relatedTarget\)\) hideSoon\(\)/, 'leaving a button waits a moment');
+  assert.match(js, /closest\?\.\('\.wf-chip, \.wf-tip'\)\) hideTip\(\)/, 'a press on the overlay keeps it');
+});

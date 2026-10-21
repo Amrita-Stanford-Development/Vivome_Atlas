@@ -23,6 +23,7 @@
                 <a href="manuscript.html">Manuscript</a>
                 <a href="motion.html">Motion</a>
             </nav>
+            <button type="button" class="motion-toggle" aria-pressed="false">Pause motion</button>
         </div>
     </header>
 
@@ -198,13 +199,13 @@ python -m service.app</pre>
                     <div class="loading-spinner"></div>
                     <div class="loading-text">Loading the atlas</div>
                 </div>
-                <canvas id="three-canvas" aria-label="The atlas: every reference cell as a dot in three dimensions"></canvas>
+                <canvas id="three-canvas" tabindex="0" role="application" aria-label="The atlas: every reference cell as a dot in three dimensions" aria-describedby="scene-info"></canvas>
                 <div class="tooltip" id="tooltip"></div>
                 <div class="view-tools">
                     <button type="button" class="glass" id="sidebar-toggle" aria-expanded="true" aria-controls="controls-panel">Hide controls</button>
                     <button type="button" class="glass" id="reset-view">Reset view</button>
                 </div>
-                <div class="scene-info glass" id="scene-info">Drag to turn, right-drag to move, scroll to zoom, click a cell for its gene profile</div>
+                <div class="scene-info glass" id="scene-info">Drag to turn, right-drag to move, scroll to zoom, click a cell for its gene profile. By keyboard, on the map: arrows turn, Shift and arrows move, + and − zoom, Enter opens the cell at the centre</div>
                 <div class="status-card glass" id="status-card" hidden></div>
                 <p class="visually-hidden" id="status-line" role="status"></p>
                 <div class="legend-card glass" id="legend-card" hidden></div>

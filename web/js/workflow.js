@@ -8,7 +8,8 @@
 // and the page moves on. Scenes load when their chapter comes near
 // (web/js/scenes-*.js). The film
 // (web/js/film.js) loads on "Play the whole story" or a #film link.
-// Under reduced motion nothing animates: each figure shows the finished
+// When motion is still (web/js/motion-pref.js: the system's reduced motion
+// or the header's switch) nothing animates: each figure shows the finished
 // frame of the beat being read.
 
 import { formatCount, loadManifest, PENDING_LABEL } from './manifest.js';
@@ -26,8 +27,9 @@ import {
 } from './workflow-panels.js';
 import { treeSvg } from './workflow-svg.js';
 import { siteServiceUrl } from './atlas/service-client.js';
+import { motionStill, onMotionChange } from './motion-pref.js';
 
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let reduced = motionStill();
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
@@ -136,7 +138,9 @@ function buildPicker() {
     + group('No answer', OUTCOME_ORDER.filter((k) => !ANSWERED.has(k)));
   const pick = $('.wf-pick');
   const tip = $('#outcome-tip');
+  let hideTimer = null;
   const showTip = (b) => {
+    clearTimeout(hideTimer);
     tip.innerHTML = `<strong>${escapeHtml(b.dataset.label)}</strong>${escapeHtml(b.dataset.note)}`;
     tip.hidden = false;
     const p = pick.getBoundingClientRect();
@@ -148,7 +152,18 @@ function buildPicker() {
     tip.style.top = `${top}px`;
     tip.classList.add('is-on');
   };
-  const hideTip = () => tip.classList.remove('is-on');
+  const hideTip = () => {
+    clearTimeout(hideTimer);
+    tip.classList.remove('is-on');
+  };
+  // Leaving a button, the pointer has a moment to cross onto the overlay,
+  // which then stays while it is pointed at (WCAG 1.4.13).
+  const hideSoon = () => {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideTip, 300);
+  };
+  tip.addEventListener('pointerenter', () => clearTimeout(hideTimer));
+  tip.addEventListener('pointerleave', (e) => { if (!e.relatedTarget?.closest?.('.wf-chip')) hideSoon(); });
   // Escape closes it, wherever the pointer or focus is (WCAG 1.4.13).
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideTip(); });
   const chips = $('#outcome-chips');
@@ -156,9 +171,9 @@ function buildPicker() {
   // A tap leaves the overlay open until the next tap elsewhere.
   chips.addEventListener('pointerout', (e) => {
     const b = e.target.closest('.wf-chip');
-    if (b && e.pointerType !== 'touch' && !b.contains(e.relatedTarget)) hideTip();
+    if (b && e.pointerType !== 'touch' && !b.contains(e.relatedTarget)) hideSoon();
   });
-  document.addEventListener('pointerdown', (e) => { if (!e.target.closest?.('.wf-chip')) hideTip(); });
+  document.addEventListener('pointerdown', (e) => { if (!e.target.closest?.('.wf-chip, .wf-tip')) hideTip(); });
   chips.addEventListener('focusin', (e) => { const b = e.target.closest('.wf-chip'); if (b) showTip(b); });
   chips.addEventListener('focusout', hideTip);
   $('#outcome-chips').addEventListener('click', (e) => {
@@ -458,6 +473,9 @@ function watchChapters() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => { layoutPins(); for (const { scene } of scenes.values()) scene?.resize(); onScroll(); }, 120);
   });
+  // The header's switch: the figures jump to the frame being read, or
+  // animate again.
+  onMotionChange(() => { reduced = motionStill(); onScroll(); });
 }
 
 // ---- the film ----
@@ -468,7 +486,7 @@ async function openFilm(fromHash = null) {
     film = createFilm({
       ctx,
       state,
-      reduced,
+      still: () => reduced,
       loadScene: async (id, holder) => (await MODULES[MODULE_OF[id]]())[id](holder, ctx),
       setCell,
     });

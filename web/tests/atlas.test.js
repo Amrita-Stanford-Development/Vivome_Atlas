@@ -140,3 +140,12 @@ test('restricted mode is retired: no option on the page, and the request does no
   assert.doesNotMatch(landing, /restrict_to_supported_classes/);
 });
 
+test('at high zoom the Atlas page scrolls and its controls sit above the viewer', () => {
+  const css = readFileSync(new URL('../css/atlas.css', import.meta.url), 'utf8');
+  const narrow = css.slice(css.indexOf('@media (max-width: 720px)'));
+  const block = narrow.slice(0, narrow.indexOf('\n}\n'));
+  assert.ok(block.length > 0, 'a narrow layout exists');
+  assert.match(block, /body\.atlas-page \{ height: auto; overflow: visible; \}/);
+  assert.match(block, /\.main-content \{ flex-direction: column; \}/);
+  assert.match(block, /\.controls-panel \{ width: auto; overflow: visible;/);
+});
