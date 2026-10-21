@@ -17,7 +17,7 @@ import { CHAPTERS, parseHash, playThenRead } from './timeline.js';
 import {
   ANSWERED, OUTCOME_CHIPS, OUTCOME_NOTES, OUTCOME_ORDER, answerShort, answerText, checkSync, classColour, detailFor, geneLookup, guessText,
   loadWorkflow, outcomeCounts, wfText,
-  searchCells, searchStatus, storyFor, wfFact,
+  beatsText, searchCells, searchStatus, storyFor, wfFact,
 } from './workflow-data.js';
 import {
   buildCellCard, buildEncoderChoice, buildFormatCards, buildGeneLookup, buildGuessTable,
@@ -324,6 +324,17 @@ function layoutPins() {
       dots.setAttribute('aria-hidden', 'true');
       dots.innerHTML = '<li></li>'.repeat(c.beats);
       screen.after(dots);
+    }
+    // Screen readers get the sentences whole (beatsText), made before they are
+    // split into letters; the animated copy is hidden from them.
+    const beatsBox = $('.wf-beats', screen);
+    if (beatsBox && !$('.wf-beats-text', screen)) {
+      const copy = document.createElement('div');
+      copy.className = 'visually-hidden wf-beats-text';
+      copy.innerHTML = beatsText($$('[data-beat]', beatsBox).map((b) => b.innerHTML));
+      beatsBox.after(copy);
+      beatsBox.setAttribute('aria-hidden', 'true');
+      for (const a of $$('a', beatsBox)) a.tabIndex = -1;
     }
     $$('[data-beat]', screen).forEach(typeset);
     runway.classList.add('is-measured');

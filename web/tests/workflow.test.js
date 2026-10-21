@@ -236,3 +236,16 @@ test('each "Show as table" button names the table it opens, and Escape closes th
   assert.match(read('js/workflow.js'), /key === 'Escape'\) hideTip\(\)/);
 });
 
+test('screen readers get every sentence of a chapter, whole: a hidden copy beside the animated one', async () => {
+  const { beatsText } = await import('../js/workflow-data.js');
+  const copy = beatsText(['It starts in the <a href="atlas.html#your-data">Atlas page</a>.', 'Cell <span data-cell="number">3</span> arrives.']);
+  assert.equal(copy, '<p>It starts in the <a tabindex="-1" href="atlas.html#your-data">Atlas page</a>.</p>'
+    + '<p>Cell <span data-cell="number">3</span> arrives.</p>');
+  const js = read('js/workflow.js');
+  assert.match(js, /wf-beats-text/, 'the copy is made');
+  assert.match(js, /setAttribute\('aria-hidden', 'true'\)[\s\S]{0,80}|beatsBox\.setAttribute\('aria-hidden'/);
+  const html = read('workflow.html');
+  assert.doesNotMatch(html, /class="wf-beats" aria-live/, 'the animated copy no longer announces each change');
+  assert.doesNotMatch(html, /as a CSV or TSV table or a DIA-NN report\./, 'the formats are the service\'s current ones');
+});
+

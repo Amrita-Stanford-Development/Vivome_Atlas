@@ -212,6 +212,9 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .given-head { margin: 14px 0 6px; }
 .given-head h3 { font-size: 13.5px; margin: 0; }
 .types-given { display: grid; gap: 2px; max-height: 260px; overflow-y: auto; }
+/* These lists scroll, so a focus ring is drawn inside the row (page.css). */
+.cell-type-filters :focus-visible,
+.types-given :focus-visible { outline-offset: -2px; }
 .given-row { display: flex; align-items: center; gap: 4px; }
 .given-toggle {
     flex: 1;

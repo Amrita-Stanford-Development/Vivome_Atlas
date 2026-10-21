@@ -93,3 +93,14 @@ test('a page-level error, written when a load fails, is announced', () => {
     assert.match(read(page), new RegExp(`<div id="${id}" role="alert"></div>`), page);
   }
 });
+
+test('focus rings are not cut off by scrolling containers, and narrow pages keep their headings', () => {
+  const page = read('css/page.css');
+  assert.match(page, /\.site-nav a:focus-visible \{[^}]*outline-offset: -2px/, 'the header links scroll sideways');
+  const atlas = read('css/atlas.css');
+  assert.match(atlas, /\.cell-type-filters :focus-visible,\s*\.types-given :focus-visible \{[^}]*outline-offset: -2px/);
+  const workflow = read('css/workflow.css');
+  const narrow = workflow.slice(workflow.indexOf('@media (max-width: 820px)'));
+  assert.doesNotMatch(narrow.slice(0, narrow.indexOf('\n}\n')), /h2 \{ display: none/, 'a heading hidden by display: none is gone for screen readers too');
+});
+

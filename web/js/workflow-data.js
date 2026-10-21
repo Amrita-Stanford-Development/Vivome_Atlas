@@ -267,6 +267,14 @@ export function storyFor(workflow, index) {
   return same ?? workflow?.trace?.detail?.[0] ?? null;
 }
 
+// A chapter's sentences for screen readers, whole and in order: the
+// animated copy shows one at a time and splits each into letters, so it is
+// hidden from them, and this copy (visually hidden) is read instead. A link
+// in it takes no Tab stop, since it is not seen; browse mode still opens it.
+export function beatsText(beatHtml) {
+  return beatHtml.map((html) => `<p>${String(html).replace(/<a /g, '<a tabindex="-1" ').trim()}</p>`).join('');
+}
+
 // What the cell search says it found, for screen readers. The page shows
 // `limit` cells and asks searchCells for one more, so it knows when there
 // are more than it shows.

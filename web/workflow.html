@@ -367,7 +367,7 @@
                     <figure class="wf-stage sheet" data-scene="open">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     Our cell, cell <span data-cell="number">&nbsp;</span>, arrives as one column of a
                                     protein file: the amounts of a few thousand proteins measured in that one cell, with
@@ -420,7 +420,7 @@
                     <figure class="wf-stage sheet" data-scene="data">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     To learn what each kind of blood cell looks like, VivOME studies examples whose kind
                                     is already known: <span data-wf="rna_cells">&nbsp;</span> blood cells from Tabula
@@ -486,7 +486,7 @@
                     <figure class="wf-stage sheet" data-scene="files">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     Here is a real protein file, the one our cell comes from. It is a big table, with
                                     one row per protein and one column per cell: <span data-wf="rows">&nbsp;</span>
@@ -567,7 +567,7 @@
                     <figure class="wf-stage sheet" data-scene="genes">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     First, the protein side. Six lists of proteins, from earlier experiments that
                                     measured many cells, are pooled into one. A gene named in several lists counts once,
@@ -634,7 +634,7 @@
                     <figure class="wf-stage sheet" data-scene="training">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     VivOME learns by example. It is shown the example cells, with their names, over and
                                     over: up to <span data-wf="training.recipe.epochs">&nbsp;</span> rounds. After each
@@ -737,7 +737,7 @@
                     <figure class="wf-stage sheet" data-scene="matching">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     VivOME has one seat for each of the <span data-wf="feature_space">&nbsp;</span> genes on
                                     its shared list (Part 1, step 3). It seats the file's proteins by their gene: this file fills
@@ -820,7 +820,7 @@
                     <figure class="wf-stage sheet" data-scene="smoothing">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     Measuring single cells is noisy: a protein can be missed or misread by chance. So VivOME
                                     lets each cell borrow a little from the cells in the same file that look most like it.
@@ -901,7 +901,7 @@
                     <figure class="wf-stage sheet" data-scene="encoder">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     The learners from Part 1, step 4 now read our cell. Each one takes in
                                     <span data-wf="input_width">&nbsp;</span> numbers: the cell's
@@ -962,7 +962,7 @@
                     <figure class="wf-stage sheet" data-scene="probabilities">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     Each of the <span data-wf="classes">&nbsp;</span> types has a home on the map: the
                                     middle of its example cells. Each learner measures how close our cell sits to every
@@ -1019,7 +1019,7 @@
                     <figure class="wf-stage sheet" data-scene="second">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     It starts from the example cells. For each of the <span data-wf="classes">&nbsp;</span>
                                     types, VivOME knows how much of every gene the type's average cell has, compared with
@@ -1130,7 +1130,7 @@
                     <figure class="wf-stage sheet" data-scene="guess">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     VivOME now has two sets of chances: the learners' (step 2) and the second opinion's
                                     (step 3). Where the second opinion is trusted, it mixes them, the learners weighing
@@ -1192,7 +1192,7 @@
                     <figure class="wf-stage sheet" data-scene="answer">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     VivOME only names a type when it is sure enough. Each type has its own bar to clear,
                                     set so that the true type clears it <span data-wf="target_coverage">&nbsp;</span> of
@@ -1259,7 +1259,7 @@
                     <figure class="wf-stage sheet" data-scene="landing">
                         <div class="wf-screen">
                             <div class="wf-canvas wf-drag" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     This is VivOME's map. Each small dot is one of the example cells it learned from,
                                     coloured by its type; cells of the same type sit together. You can drag the map to
@@ -1335,7 +1335,7 @@
                     <figure class="wf-stage sheet" data-scene="results">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     First, did it learn? Straight after training, VivOME was tested on example cells it had
                                     never practised on, with most of their genes hidden. It named
@@ -1410,10 +1410,10 @@
                     <figure class="wf-stage sheet" data-scene="online">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     It starts in the <a href="atlas.html#your-data">Atlas page's Your data tab</a>. You choose your file: proteins or
-                                    genes in rows, cells in columns, as a CSV or TSV table or a DIA-NN report. A first check
+                                    genes in rows, cells in columns, as a CSV or TSV table, or a DIA-NN, Spectronaut, MaxQuant or FragPipe table as it comes. A first check
                                     runs in your browser, counting the file's rows and columns, and sends nothing.
                                 </p>
                                 <p data-beat>
@@ -1493,7 +1493,7 @@
                     <figure class="wf-stage sheet" data-scene="local">
                         <div class="wf-screen">
                             <div class="wf-canvas" aria-hidden="true"></div>
-                            <div class="wf-beats" aria-live="polite">
+                            <div class="wf-beats">
                                 <p data-beat>
                                     The same service can run on your own computer, so your file never leaves it. From a copy
                                     of VivOME's code, two commands install what it needs and start it, and the Atlas page
