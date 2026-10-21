@@ -834,6 +834,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/blood_pools/results.json` — blood members with and without RNA pools, two seeds: validation, calibration-suite top-1, Fulcher 2026
 - `research/notebook-outputs/blood_pools/decision.json` — the reading: not promising as written (seed 1's Fulcher gain 1.82, bar 2); every measure rose in both seeds
 - `research/notebooks/v53_gates.py` — candidate v5.3 (pooled blood members): its development gates against v4.1, fixed before training (Fulcher, PBMC240, answers, out-of-reference AUROC; SCoPE2 reported); not served either way
+- `research/notebooks/gene_weights.py` — candidate v4.3: v4.1's correlation term with each gene weighted by its RNA-protein agreement across classes (Rieckmann's protein means), protein uploads only; its development gates, fixed before the run, on Fulcher, PXD056050's sorted pools, PBMC240 and the out-of-reference AUROC; Monaco 2019 as a second RNA source, reported
 - `research/notebooks/blood_pools.py` — a diagnostic after the organs' A6: blood members trained with and without RNA pools (two seeds), on validation, the calibration suite and Fulcher 2026, with a reading fixed in the script; blood v4.1 unchanged
 - `research/notebook-outputs/label_stability/rules.json` — label stability's settings and script sha256, written before the run
 - `research/notebook-outputs/label_stability/per_cell.csv.gz` — label stability: every development cell's answer and best guess under each served model, and its kind of change for each pair of releases

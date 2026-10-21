@@ -62,6 +62,24 @@
     "tier": "N",
     "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2021/09/PXD011683/MaxQuant_Output.zip"
   },
+  "Gong2025_HIHA/4f925e42-3e42-4e2d-8394-4e88bf9a0ff2.h5ad": {
+    "bytes": 347259294,
+    "fetched": "2026-10-21",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "7ee085ba4209a90a3810010199c1f12c34b3d0cbf273f1cfb45028fab9abcaa2",
+    "tier": "W",
+    "url": "https://datasets.cellxgene.cziscience.com/4f925e42-3e42-4e2d-8394-4e88bf9a0ff2.h5ad"
+  },
+  "Gong2025_HIHA/70dd5115-cec8-49ad-a2fb-f985067b193f.h5ad": {
+    "bytes": 59053452,
+    "fetched": "2026-10-21",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "7027876b9a2c4fa69e9da6b54fd5c233ba10e201553501d1457871da77e81482",
+    "tier": "W",
+    "url": "https://datasets.cellxgene.cziscience.com/70dd5115-cec8-49ad-a2fb-f985067b193f.h5ad"
+  },
   "HPA2026_DVP/dvp_cell_types.tsv.zip": {
     "bytes": 668,
     "fetched": "2026-10-18",
@@ -313,6 +331,15 @@
     "sha256": "5694cf9e420f601a0c2a7140e2d65006ba73967627676e954f23e6bc1be467ba",
     "tier": "A",
     "url": "ftp://massive-ftp.ucsd.edu/v11/MSV000099294/quant/Spectronaut/DirectDIA_Microglia_1cell_Reports/DirectDIA_Microglia_1cell_Protein_Quant_Pivot_Report.tsv"
+  },
+  "Monaco2019_GSE107011/GSE107011_Processed_data_TPM.txt.gz": {
+    "bytes": 15420393,
+    "fetched": "2026-10-21",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "8c4abbdd4a118a051e7ef8ef4858568a3e67e60135733b06dab80b430efc1eb9",
+    "tier": "W",
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107011/suppl/GSE107011_Processed_data_TPM.txt.gz"
   },
   "PXD020586/PXD020586_community_annotated.sdrf.tsv": {
     "bytes": 3820932,
@@ -664,6 +691,24 @@
     "sha256": "1ae01a63bdd61e5f533a1bf00fce8ac3404c43f613f53a60e7f3322927278d92",
     "tier": "A",
     "url": "ftp://massive-ftp.ucsd.edu/v03/MSV000087462/search/Search%20Engine%20Files/proteinGroupsMMsample.xlsx"
+  },
+  "Zamore2025_PXD056050/DIA-NN_immune_cells.zip": {
+    "bytes": 77701779,
+    "fetched": "2026-10-21",
+    "published_check": null,
+    "role": "development",
+    "sha256": "755c010b90a330939a395d83d096363261b9ad979a76cc3b9097f57d70af1490",
+    "tier": "W",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/07/PXD056050/DIA-NN_immune_cells.zip"
+  },
+  "Zamore2025_PXD056050/PXD056050_community_annotated.sdrf.tsv": {
+    "bytes": 21321,
+    "fetched": "2026-10-21",
+    "published_check": null,
+    "role": "development",
+    "sha256": "a281eadbe3934cb8d55fdef0d5f8e1691786697444a317a81cef8001bda002ff",
+    "tier": "W",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/07/PXD056050/PXD056050_community_annotated.sdrf.tsv"
   },
   "Zheng2025_PXD057118/ColorectalCancer_pg_matrix_Macrophages.txt": {
     "bytes": 755998,
