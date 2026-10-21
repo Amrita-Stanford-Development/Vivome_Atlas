@@ -80,6 +80,15 @@
     "tier": "W",
     "url": "https://datasets.cellxgene.cziscience.com/70dd5115-cec8-49ad-a2fb-f985067b193f.h5ad"
   },
+  "Gong2025_HIHA/c1ce03ce-4b71-4b8d-b695-c3cec99cdfc2.h5ad": {
+    "bytes": 11527725872,
+    "fetched": "2026-10-21",
+    "published_check": null,
+    "role": "reference",
+    "sha256": "d0089703b8f0ca7a1a9012745e3e4c5e52b639cc364e617fc57bc8d6bf6fb0cb",
+    "tier": "W",
+    "url": "https://datasets.cellxgene.cziscience.com/c1ce03ce-4b71-4b8d-b695-c3cec99cdfc2.h5ad"
+  },
   "HPA2026_DVP/dvp_cell_types.tsv.zip": {
     "bytes": 668,
     "fetched": "2026-10-18",

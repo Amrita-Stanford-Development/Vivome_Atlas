@@ -21,7 +21,11 @@ Fixed before any row is drawn:
 - **Values:** the raw counts to log1p(counts / total x 10,000), the total over
   every gene, as Tabula Sapiens's X (checked: each cell's expm1 sums to
   10,000) and Hao's; then the reference's feature genes by symbol, a gene
-  missing from the atlas left at 0.
+  missing from the atlas left at 0. The symbol is CELLxGENE's feature_name.
+  Plumbing fix, 2026-10-21, before any member was trained: the first run
+  read the atlas's own gene_symbols column, which in the whole atlas is
+  empty for most genes (542 of 9,002 feature genes found; 8,941 by
+  feature_name). Nothing else changed.
 
 Writes the rows (float16) and their labels, donors and Cell Ontology labels
 to ROWS on the project Drive (outside git, beside the checkpoints), and a
@@ -133,7 +137,7 @@ def main() -> None:
     i_held = draw(classes, donors, held_keep, lambda c: CAP_HELD, rng)
 
     genes = reference.load_feature_space_genes()
-    symbols = a.var["gene_symbols"].astype(str).str.upper().to_numpy()
+    symbols = a.var["feature_name"].astype(str).str.upper().to_numpy()
     first: dict = {}
     for j, s in enumerate(symbols):
         first.setdefault(s, j)
