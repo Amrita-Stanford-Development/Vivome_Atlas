@@ -2813,6 +2813,39 @@ Furtwängler are unchanged (the correlation term is flat there).
   that is a third lab where CD8 T cells are read as CD4 T. The cause lies in
   the encoder and its reference, not the correlation term.
 
+### 65. Do the Allen atlas's dendritic cells land on Tabula Sapiens's centroids? A probe, 2026-10-21
+
+**Why:** step 2 of the data search's report: fill blood's empty classes
+(myeloid DC, pDC, CMP) from the Allen Human Immune Health Atlas (108
+donors). Hao 2021's DCs failed in the class centres (entry 40), so a probe
+first, with its reading fixed before the run
+(`research/notebooks/allen_dc_probe.py`, `fb58067`).
+
+**How:** up to 2,000 cells per Allen label, normalised as Tabula Sapiens
+(log1p of counts per 10,000), embedded the reference's way by v4.1's five
+members; each member's class-balanced centroids. Platelets and erythrocytes
+are the control.
+
+| Allen cells | n | Recall of the target class | Where most land |
+|---|---|---|---|
+| cDC1 | 943 | 0.0 | non-classical monocyte, monocyte, CD4 T |
+| cDC2 (three states) | 5,236 | 0.0 to 0.03 | non-classical monocyte, monocyte, CD4 T |
+| pDC | 2,000 | 0.09 | monocyte, HSC, CD4 T |
+| CMP | 1,075 | 4.26 | monocyte, non-classical monocyte |
+| Platelet (control) | 2,000 | 85.74 | platelet |
+| Erythrocyte (control) | 1,508 | 66.25 | erythrocyte |
+
+The Allen pDC centre's cosine with Tabula Sapiens's pDC centroid is -0.13
+to 0.20 across the members; the cDC centre's with the myeloid DC centroid,
+-0.36 to 0.35 (bar 0.5).
+
+**Reading, as fixed: route B.** The controls land, so the atlases are not
+the problem in general; the encoder never learned a dendritic cell (it
+trained on 1 myeloid DC and 29 pDCs), and it reads the Allen DCs as other
+myeloid or T cells. No class centre can fix that. The Allen cells go into
+training, beside Allen cells of every class, so that the atlas cannot stand
+in for the class (side-tests amendment 21).
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

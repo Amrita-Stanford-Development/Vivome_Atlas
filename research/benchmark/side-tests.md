@@ -380,6 +380,15 @@ reads them.
 - **Used, 2026-10-21:** PXD056050 and Monaco by candidate v4.3's gates
   (run history entry 64; NO GO).
 
+### Amendment 21, 2026-10-21: the whole Allen atlas, for training (before it is read)
+
+The probe of run history entry 65 chose route B: the Allen cells go into
+the members' training, beside Allen cells of every class. Its data, added to
+tier W of `scripts/fetch_public_sets.py`:
+- **The Allen Human Immune Health Atlas, all cells** (CELLxGENE dataset
+  e522d2cd-7927-4e59-a4ed-064009569279; 1.82 M PBMCs, 108 donors).
+  **Reference** RNA, free for development; not a test.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

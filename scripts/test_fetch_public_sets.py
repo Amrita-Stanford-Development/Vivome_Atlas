@@ -109,7 +109,7 @@ class TableTests(unittest.TestCase):
         self.assertEqual({e["group"]: e["role"] for e in w},
                          {"Zamore2025_PXD056050": "development", "Monaco2019_GSE107011": "reference",
                           "Gong2025_HIHA": "reference"})
-        self.assertLess(sum(e["bytes"] for e in w), 600e6)
+        self.assertLess(sum(e["bytes"] for e in w), 12.5e9)
 
     def test_tier_c_is_the_colon_and_small(self):
         colon = [e for e in f.ENTRIES if e["tier"] == "C"]

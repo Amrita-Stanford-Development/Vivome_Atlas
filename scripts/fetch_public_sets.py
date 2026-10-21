@@ -24,10 +24,11 @@ its locked test, and the development sets PXD047762, Zheng's tonsil tables
 and PXD011683. Tier V is the organ references v2's fresh development sets
 (amendment 13; about 190 MB), never read before v2: PXD058626 (lung airways
 and alveoli) and PXD045043 (spleen red and white pulp, hosted by jPOST).
-Tier W is the 2026-10-21 search's (amendment 20; about 500 MB): PXD056050
+Tier W is the 2026-10-21 search's (amendments 20 and 21; about 12 GB): PXD056050
 (FACS-sorted immune populations from another lab, development), Monaco 2019's
 sorted RNA (GEO GSE107011) and the Allen Human Immune Health Atlas's
-dendritic-cell and other-cells files (CELLxGENE), both RNA references.
+dendritic-cell and other-cells files and whole atlas (CELLxGENE), RNA
+references.
 
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
@@ -201,6 +202,9 @@ ENTRIES = (
     *[entry("Gong2025_HIHA", "reference", n, f"https://datasets.cellxgene.cziscience.com/{n}", s, tier="W")
       for n, s in (("4f925e42-3e42-4e2d-8394-4e88bf9a0ff2.h5ad", 347259294),
                    ("70dd5115-cec8-49ad-a2fb-f985067b193f.h5ad", 59053452))],
+    # the whole Allen atlas (dataset e522d2cd-7927-4e59-a4ed-064009569279), for training (amendment 21)
+    entry("Gong2025_HIHA", "reference", "c1ce03ce-4b71-4b8d-b695-c3cec99cdfc2.h5ad",
+          "https://datasets.cellxgene.cziscience.com/c1ce03ce-4b71-4b8d-b695-c3cec99cdfc2.h5ad", 11527725872, tier="W"),
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
 # link; they were saved by hand into data/incoming/public_sets/PXD073250/ and are recorded by --record-manual.

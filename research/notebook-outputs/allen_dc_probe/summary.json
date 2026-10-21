@@ -1,0 +1,117 @@
+{
+  "script_sha256": "4a3b224cd2c82c3a56253b2f8b5864a2b2512cc50576f101efcdac9dfbbbffb4",
+  "run": "2026-10-21T16:15:11",
+  "cells": 12762,
+  "per_member": [
+    {
+      "cos_allen_pdc_ts_pdc": -0.0342,
+      "cos_allen_cdc_ts_mdc": 0.1585
+    },
+    {
+      "cos_allen_pdc_ts_pdc": -0.1325,
+      "cos_allen_cdc_ts_mdc": -0.0543
+    },
+    {
+      "cos_allen_pdc_ts_pdc": 0.1167,
+      "cos_allen_cdc_ts_mdc": -0.3552
+    },
+    {
+      "cos_allen_pdc_ts_pdc": 0.113,
+      "cos_allen_cdc_ts_mdc": 0.0371
+    },
+    {
+      "cos_allen_pdc_ts_pdc": 0.1972,
+      "cos_allen_cdc_ts_mdc": 0.3516
+    }
+  ],
+  "landing": {
+    "cDC1": {
+      "n": 943,
+      "target": "myeloid dendritic cell",
+      "recall_pct": 0.0,
+      "top": {
+        "non-classical monocyte": 29.06,
+        "monocyte": 18.11,
+        "cd4-positive, alpha-beta t cell": 14.1
+      }
+    },
+    "HLA-DRhi cDC2": {
+      "n": 2000,
+      "target": "myeloid dendritic cell",
+      "recall_pct": 0.03,
+      "top": {
+        "non-classical monocyte": 25.07,
+        "monocyte": 18.23,
+        "cd4-positive, alpha-beta t cell": 15.61
+      }
+    },
+    "CD14+ cDC2": {
+      "n": 2000,
+      "target": "myeloid dendritic cell",
+      "recall_pct": 0.01,
+      "top": {
+        "non-classical monocyte": 25.19,
+        "monocyte": 18.12,
+        "cd4-positive, alpha-beta t cell": 15.8
+      }
+    },
+    "ISG+ cDC2": {
+      "n": 1236,
+      "target": "myeloid dendritic cell",
+      "recall_pct": 0.0,
+      "top": {
+        "non-classical monocyte": 22.02,
+        "monocyte": 19.11,
+        "hematopoietic stem cell": 16.38
+      }
+    },
+    "pDC": {
+      "n": 2000,
+      "target": "plasmacytoid dendritic cell",
+      "recall_pct": 0.09,
+      "top": {
+        "monocyte": 18.72,
+        "hematopoietic stem cell": 18.44,
+        "cd4-positive, alpha-beta t cell": 16.4
+      }
+    },
+    "CMP cell": {
+      "n": 1075,
+      "target": "common myeloid progenitor",
+      "recall_pct": 4.26,
+      "top": {
+        "monocyte": 22.59,
+        "non-classical monocyte": 22.29,
+        "cd4-positive, alpha-beta t cell": 15.35
+      }
+    },
+    "Platelet": {
+      "n": 2000,
+      "target": "platelet",
+      "recall_pct": 85.74,
+      "top": {
+        "platelet": 85.74,
+        "non-classical monocyte": 3.58,
+        "naive thymus-derived cd4-positive, alpha-beta t cell": 2.84
+      }
+    },
+    "Erythrocyte": {
+      "n": 1508,
+      "target": "erythrocyte",
+      "recall_pct": 66.25,
+      "top": {
+        "erythrocyte": 66.25,
+        "platelet": 8.47,
+        "non-classical monocyte": 7.71
+      }
+    }
+  },
+  "reading": {
+    "cosines_at_least": 0.5,
+    "controls_at_least": 50.0,
+    "cosines_ok": false,
+    "controls_ok": true,
+    "route": "B: the Allen cells into training, beside Allen cells of every class"
+  },
+  "seconds": 10
+}

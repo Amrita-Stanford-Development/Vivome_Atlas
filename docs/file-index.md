@@ -910,6 +910,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/gene_weights/weights.json` — v4.3's gene weights: how many genes, their agreement, the self-check, and Monaco 2019's weights beside them
 - `research/notebook-outputs/gene_weights/development.json` — v4.1 and v4.3 as served on Fulcher 2026, PBMC240, SCoPE2 (both versions), Furtwängler 2025, PXD056050's sorted pools (each pool's call) and the out-of-reference AUROC
 - `research/notebook-outputs/gene_weights/decision.json` — v4.3's self-checks, each gate and the verdict (NO GO)
+- `research/notebook-outputs/allen_dc_probe/summary.json` — step 2's probe: where the Allen atlas's DCs, CMPs and controls land under v4.1's members, the centre cosines, and the route its fixed reading chose (B)
 - `research/notebook-outputs/v52_diagnose/diagnosis.json` — v5.2 against v4.1 and v5.1 on calibration cells under each label version, and on the development data
 - `research/notebook-outputs/v51_labels/reference_labels_v51.csv.gz` — v5.1: every reference cell's original and v5.1 label, class index and reason
 - `research/notebook-outputs/v51_labels/audit.json` — v5.1: the folded cells by original label and the class counts
