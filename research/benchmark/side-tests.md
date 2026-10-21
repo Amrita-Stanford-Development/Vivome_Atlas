@@ -324,6 +324,11 @@ entry 61). That reading stands; v5.3 is a new candidate with its own gates.
   v5.3 a frozen candidate for the sorted CD4/CD8 test, by that protocol's
   next amendment. The simulated evaluation suite's `te_eval` cells are not
   used (they would be on their sixth use).
+- **Outcome, 2026-10-21: development gates missed** (run history entry
+  63). Fulcher 69.39 (bar 71.05), PBMC240 lymphoid recall 87.18 (bar
+  90.31), answers committed 85.69 and correct when committed 95.43 (bars
+  86.57 and 96.93); only the out-of-reference AUROC passed (0.7985). v5.3
+  stays refused and is not a sorted-test candidate.
 
 ### Alternatives kept unused, for future tests or future development
 

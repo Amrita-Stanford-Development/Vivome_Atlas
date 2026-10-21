@@ -1,0 +1,16 @@
+{
+  "script_sha256": "78df7e3f3a2537750b62522bb5a33982ffeda7b1f355efdf88f461de81862589",
+  "started": "2026-10-21T12:01:36",
+  "go": {
+    "fulcher_gain_min": 2.0,
+    "pbmc240_drop_max": 2.0,
+    "committed_drop_max": 2.0,
+    "correct_drop_max": 1.0,
+    "auroc_drop_max": 0.03
+  },
+  "v41_expected": {
+    "fulcher2026": 69.05,
+    "pbmc240": 92.31
+  },
+  "tolerance": 0.01
+}

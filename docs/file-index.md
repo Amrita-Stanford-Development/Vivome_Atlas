@@ -243,6 +243,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v5_2/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA under v5.2's labels (gitignored; rebuilt by `research/notebooks/v5_build.py`)
 - `service/model/v5_2/class_means_cb.npy` — class-balanced z-scored RNA class means under v5.2's labels (gitignored, likewise)
 - `service/model/v5_2/members/V2_seed*_*.npy` — each v5.2 member's latents, centroids and class-balanced centroids (gitignored, likewise)
+- `service/model/v5_3/nb2_spec_v53.json` — v5.3's answers (members trained with RNA pools): temperatures, conformal and out-of-distribution thresholds (NB2's layout)
+- `service/model/v5_3/spec_v53.json` — v5.3's best guess: v4.1's settings on v5.3's members, and its evaluation's status (development gates missed)
+- `service/model/v5_3/MANIFEST.json` — sha256, size and description of every v5.3 file, checked when v5.3 loads
+- `service/model/v5_3/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA for v5.3 (gitignored; rebuilt by `research/notebooks/v5_build.py`)
+- `service/model/v5_3/class_means_cb.npy` — class-balanced z-scored RNA class means for v5.3 (gitignored, likewise)
+- `service/model/v5_3/members/V2_seed*_*.npy` — each v5.3 member's latents, centroids and class-balanced centroids (gitignored, likewise)
 - `service/model/runtime/reference_model.pt` — the production v3 encoder checkpoint (Git LFS, ~94 MB)
 - `service/model/runtime/reference_embedding.npy` — every RNA reference cell in the 128-d latent space (85,233 × 128)
 - `service/model/runtime/reference_centroids.npy` — one latent centroid per class (22 × 128), in `class_idx` order
@@ -888,6 +894,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/v52_labels/audit.json` — v5.2: the gate (and the first run's), the cells moved by direction, assay and donor, the class counts, marker detection in moved and kept cells, and the classifier's call on every T and NK cell
 - `research/notebook-outputs/v52_train/train_record.json` — v5.2: each member's checkpoint sha256, training figures and reference diagnostics
 - `research/notebook-outputs/v52_build/build_record.json` — v5.2: the fitted temperatures, thresholds, calibration counts and the files written
+- `research/notebook-outputs/v53_train/train_record.json` — v5.3: each pooled member's checkpoint sha256, training figures, the pools and reference diagnostics
+- `research/notebook-outputs/v53_build/build_record.json` — v5.3: the fitted temperatures, thresholds, calibration counts and the files written
+- `research/notebook-outputs/v53_gates/rules.json` — v5.3's development gates as run: the script's sha256, the bars and the start time
+- `research/notebook-outputs/v53_gates/development.json` — v5.3 and v4.1 as served on Fulcher 2026, PBMC240, SCoPE2 (both versions), Furtwängler 2025 and the out-of-reference AUROC
+- `research/notebook-outputs/v53_gates/decision.json` — v5.3's self-check, each gate and the verdict (NO GO)
+- `research/notebook-outputs/v53_gates/spec_block.json` — the evaluation block written into v5.3's spec: development gates missed, not served
 - `research/notebook-outputs/v52_diagnose/diagnosis.json` — v5.2 against v4.1 and v5.1 on calibration cells under each label version, and on the development data
 - `research/notebook-outputs/v51_labels/reference_labels_v51.csv.gz` — v5.1: every reference cell's original and v5.1 label, class index and reason
 - `research/notebook-outputs/v51_labels/audit.json` — v5.1: the folded cells by original label and the class counts

@@ -1,0 +1,84 @@
+{
+  "fulcher2026": {
+    "v4.1": {
+      "balanced_accuracy_6_types": 69.05,
+      "recall_CD4T": 82.47,
+      "recall_CD8T": 23.76,
+      "recall_NK": 90.0,
+      "recall_B": 98.04,
+      "recall_monocyte": 97.81,
+      "recall_DC": 22.22,
+      "committed": 86.98,
+      "answers_committed": 88.57,
+      "answers_correct_when_committed": 97.93
+    },
+    "v5.3": {
+      "balanced_accuracy_6_types": 69.39,
+      "recall_CD4T": 80.19,
+      "recall_CD8T": 23.76,
+      "recall_NK": 87.33,
+      "recall_B": 98.04,
+      "recall_monocyte": 97.37,
+      "recall_DC": 29.63,
+      "committed": 84.16,
+      "answers_committed": 85.69,
+      "answers_correct_when_committed": 95.43
+    }
+  },
+  "pbmc240": {
+    "v4.1": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 73.42
+    },
+    "v5.3": {
+      "lymphoid_recall": 87.18,
+      "myeloid_recall": 100.0,
+      "committed": 73.0
+    }
+  },
+  "scope2": {
+    "v4.1": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "balanced_accuracy_restricted": 48.4,
+      "committed": 52.95
+    },
+    "v5.3": {
+      "balanced_accuracy_unrestricted": 3.1,
+      "balanced_accuracy_restricted": 40.97,
+      "committed": 57.52
+    }
+  },
+  "scope2_reprocessed": {
+    "v4.1": {
+      "progenitor_share": 1.6,
+      "t_cell_share": 28.72,
+      "median_max_probability": 0.2745,
+      "committed": 31.03
+    },
+    "v5.3": {
+      "progenitor_share": 4.61,
+      "t_cell_share": 28.63,
+      "median_max_probability": 0.2869,
+      "committed": 26.6
+    }
+  },
+  "furtwangler2025": {
+    "v4.1": {
+      "progenitor_share": 0.32,
+      "t_cell_share": 56.94,
+      "median_max_probability": 0.2669,
+      "committed": 40.58
+    },
+    "v5.3": {
+      "progenitor_share": 5.55,
+      "t_cell_share": 53.95,
+      "median_max_probability": 0.2657,
+      "committed": 34.92
+    }
+  },
+  "out_of_reference_auroc": {
+    "v4.1": 0.7898,
+    "v5.3": 0.7985
+  }
+}

@@ -2734,6 +2734,44 @@ weakness blood v4.1 shows (a listed Manuscript failure mode), not
 calibration. A v4 would need a change to the encoder or the reference, and
 a fresh G3 set.
 
+### 63. The pooled blood candidate v5.3, 2026-10-21
+
+**Why.** The owner chose to build a pooled blood candidate although entry
+61's fixed reading said "not promising" (seed 1's Fulcher gain 1.82, bar 2).
+That reading stood; v5.3 was a new candidate with its own gates.
+
+**Fixed first** (`600c2ad`, before any training): side-tests amendment 18;
+`research/notebooks/v53_gates.py`, with its gates and a self-check that v4.1
+reproduces its committed development figures.
+
+**How:** five V2 members trained on this PC's GPU with the diagnostic's 3,110
+RNA pools added to the 55,402 training rows, on the original labels
+(`v5_train.py clean --variant v5.3`, 885 s). Validation balanced accuracy by
+seed: 73.59, 71.97, 70.30, 69.97, 72.57. v4.1's rule on them
+(`v5_build.py build --variant v5.3`): calibration-suite top-1 67.23.
+
+**Gates** (`research/notebook-outputs/v53_gates/`; the self-check passed,
+v4.1 at 69.05 and 92.31 exactly):
+
+| Gate | v5.3 | v4.1 | Bar | |
+|---|---|---|---|---|
+| Fulcher 2026, six-type balanced accuracy | 69.39 | 69.05 | ≥ 71.05 | miss |
+| PBMC240, lymphoid recall | 87.18 | 92.31 | ≥ 90.31 | miss |
+| Fulcher, answers committed | 85.69 | 88.57 | ≥ 86.57 | miss |
+| Fulcher, correct when committed | 95.43 | 97.93 | ≥ 96.93 | miss |
+| Out-of-reference AUROC (Fulcher against Furtwängler's progenitors) | 0.7985 | 0.7898 | ≥ 0.7598 | pass |
+
+Reported only: PBMC240 myeloid recall 100 (v4.1 80); Fulcher CD8 T recall
+23.76 (unchanged), CD4 T 80.19 (82.47), DC 29.63 (22.22); SCoPE2 restricted
+40.97 (48.4).
+
+**NO GO.** Pools raised the members' own validation scores, but as served,
+with v4.1's rule, v5.3 is no better on Fulcher and worse on PBMC240's
+lymphoid cells and on the answers. CD8 T recall, the weakness the pools were
+hoped to help, did not move. The spec's evaluation block says "development
+gates missed", so the service keeps refusing v5.3; it is not a candidate for
+the sorted CD4/CD8 test. Nothing is tuned.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

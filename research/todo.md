@@ -505,7 +505,7 @@ Planned 2026-10-17 and 18 with the owner (`research/organ-references.md`). It is
     - **Motion:** a "Pause motion" control for the background and the map's turning (the system setting already stops them).
     - **Smaller:** the Workflow result tooltip (Escape, hover); focus rings clipped by the header and filter lists; small grey text over the moving background.
 
-- [ ] **A pooled blood candidate?** (owner's call) Training on RNA pools raised every measure in both seeds (validation +4.4 and +5.5, calibration top-1 +5.4 and +4.1, Fulcher +1.8 and +7.1), but the fixed reading says not promising: seed 1's Fulcher gain was 1.82, bar 2 (run history entry 61). A candidate would need five members and its own pre-registered gates.
+- [x] **A pooled blood candidate, v5.3** (owner's go-ahead, 2026-10-21; pre-registered `600c2ad`). **NO GO** on its development gates: Fulcher 69.39 (bar 71.05), PBMC240 lymphoid recall 87.18 (bar 90.31), answers committed 85.69 and correct when committed 95.43 (bars 86.57 and 96.93); out-of-reference AUROC passed (0.7985). CD8 T recall unchanged. Refused by the service; not a sorted-test candidate (run history entry 63; side-tests amendment 18).
 - [x] **The atlas framing** (owner, 2026-10-18: the aim is every Tabula Sapiens organ): the 28-organ list (`scripts/tabula_sapiens_organs.py`), the manifest's `organs`, the landing's organs band with every organ's chip, and the Manuscript's highlights, in brief, scope, contributions and Next.
 - [x] **The organ maps on the Atlas page, without labelling** (owner, 2026-10-18): each organ's reference cells in 3D in its bundle's coordinate space (`scripts/export_atlas_coordinates.py --organ`, `web/data/organs/`), coloured by family; Your data stays blood's.
 
