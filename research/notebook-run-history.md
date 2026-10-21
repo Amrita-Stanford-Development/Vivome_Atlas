@@ -2846,6 +2846,62 @@ myeloid or T cells. No class centre can fix that. The Allen cells go into
 training, beside Allen cells of every class, so that the atlas cannot stand
 in for the class (side-tests amendment 21).
 
+### 66. The Allen atlas in training and centroids (candidate v5.4), 2026-10-21
+
+**Why:** route B of entry 65. The encoder never learned a dendritic cell;
+the Allen Human Immune Health Atlas has thousands, from 108 donors.
+
+**Fixed first** (`b14fb1d`, before any row was drawn; side-tests amendment
+22): the rows (`research/notebooks/allen_rows.py`), the training and build
+variants, and the gates (`research/notebooks/v54_gates.py`). One plumbing
+fix before any training (`38cee23`): the whole atlas's own gene-symbol
+column is mostly empty, so the rows read CELLxGENE's feature_name (8,941 of
+9,002 feature genes; the first draw had found 542).
+
+**How:** 24,607 Allen cells from 86 training donors (up to 3,000 for myeloid
+DC, pDC and CMP, 1,500 for the other 12 classes; naive CD8 T left out)
+added to the 55,402 training rows; five members, 247 s each. The same cells
+counted in every centroid and in v4.1's class means. On Tabula Sapiens's own
+cells the CD8 T and NK centroids moved apart (cosine 0.92 to 0.94, from
+about 0.98).
+
+| Gate | v5.4 | v4.1 | Bar | |
+|---|---|---|---|---|
+| Allen donors held out: myeloid DC / pDC recall | 97.7 / 99.8 | 0.0 / 0.0 | ≥ 50 each | pass |
+| Calibration suite top-1 | 65.24 | 62.45 (v3.1's members) | ≥ 60.45 | pass |
+| Fulcher 2026, six types | 76.00 | 69.05 | ≥ 71.05 | pass |
+| PXD056050 pools | 57.5 | 57.5 | ≥ 57.5 | pass |
+| PBMC240, lymphoid recall | 93.16 | 92.31 | ≥ 90.31 | pass |
+| Fulcher, answers committed | **53.56** | 88.57 | ≥ 86.57 | **miss** |
+| Fulcher, correct when committed | 97.61 | 97.93 | ≥ 96.93 | pass |
+| Out-of-reference AUROC | **0.7575** | 0.7898 | ≥ 0.7598 | **miss** |
+
+Fulcher recall (v5.4 / v4.1): DC 72.2 / 22.2, NK 93.3 / 90.0, CD4 T 78.9 /
+82.5, CD8 T 19.9 / 23.8, monocyte 93.6 / 97.8, B 98.0 / 98.0. On the Allen
+donors held out, every class's recall rose (CD8 T 88.8 from 4.0; B 100 from
+5.6). PXD056050's calls are v4.1's: all 4 CD8 T pools still CD4 T.
+
+**NO GO,** on the answers and the AUROC. Nothing is tuned; the spec says
+"development gates missed", so the service refuses v5.4.
+
+**Why the answers fell (a diagnosis after the verdict):** 597 of Fulcher's
+602 abstentions are "ambiguous between classes" (v4.1: 161). The
+calibration suite holds Tabula Sapiens cells only, so myeloid DC, pDC, CMP
+and regulatory T cells have no calibration cells and take the marginal
+threshold, which rose from 0.900 to 0.949: each joins a set from a 5%
+probability (10% before). Members that now recognise these classes give
+them 5% often, so sets span lineages and cells abstain. The members are
+better; the answer layer's calibration does not cover what they learned.
+
+**What it shows:**
+- The best guess gains on protein where the reference gained cells: DC
+  recall 22 to 72 on Fulcher.
+- CD8 T on protein is not a matter of RNA cells: the members learned CD8 T
+  on unseen Allen donors (88.8%), yet sorted CD8 T protein (Fulcher,
+  PXD056050) is still read as CD4 T.
+- A next candidate would calibrate the new classes: Allen cells never used
+  in training, in the calibration suite. That is the owner's call.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

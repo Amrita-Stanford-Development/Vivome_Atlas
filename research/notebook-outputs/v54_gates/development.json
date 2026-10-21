@@ -1,0 +1,510 @@
+{
+  "allen_heldout": {
+    "v4.1": {
+      "b cell": {
+        "n": 500,
+        "recall": 5.64
+      },
+      "cd4-positive, alpha-beta t cell": {
+        "n": 500,
+        "recall": 18.04
+      },
+      "cd8-positive, alpha-beta t cell": {
+        "n": 500,
+        "recall": 3.96
+      },
+      "classical monocyte": {
+        "n": 500,
+        "recall": 0.8
+      },
+      "common myeloid progenitor": {
+        "n": 238,
+        "recall": 4.71
+      },
+      "erythrocyte": {
+        "n": 238,
+        "recall": 44.37
+      },
+      "intermediate monocyte": {
+        "n": 500,
+        "recall": 0.0
+      },
+      "myeloid dendritic cell": {
+        "n": 500,
+        "recall": 0.0
+      },
+      "naive thymus-derived cd4-positive, alpha-beta t cell": {
+        "n": 500,
+        "recall": 5.72
+      },
+      "natural killer cell": {
+        "n": 500,
+        "recall": 6.0
+      },
+      "non-classical monocyte": {
+        "n": 500,
+        "recall": 31.64
+      },
+      "plasma cell": {
+        "n": 360,
+        "recall": 1.5
+      },
+      "plasmacytoid dendritic cell": {
+        "n": 500,
+        "recall": 0.0
+      },
+      "platelet": {
+        "n": 500,
+        "recall": 87.96
+      },
+      "regulatory t cell": {
+        "n": 500,
+        "recall": 1.12
+      }
+    },
+    "v5.4": {
+      "b cell": {
+        "n": 500,
+        "recall": 100.0
+      },
+      "cd4-positive, alpha-beta t cell": {
+        "n": 500,
+        "recall": 60.92
+      },
+      "cd8-positive, alpha-beta t cell": {
+        "n": 500,
+        "recall": 88.84
+      },
+      "classical monocyte": {
+        "n": 500,
+        "recall": 83.12
+      },
+      "common myeloid progenitor": {
+        "n": 238,
+        "recall": 99.58
+      },
+      "erythrocyte": {
+        "n": 238,
+        "recall": 72.52
+      },
+      "intermediate monocyte": {
+        "n": 500,
+        "recall": 95.64
+      },
+      "myeloid dendritic cell": {
+        "n": 500,
+        "recall": 97.72
+      },
+      "naive thymus-derived cd4-positive, alpha-beta t cell": {
+        "n": 500,
+        "recall": 85.32
+      },
+      "natural killer cell": {
+        "n": 500,
+        "recall": 97.6
+      },
+      "non-classical monocyte": {
+        "n": 500,
+        "recall": 94.84
+      },
+      "plasma cell": {
+        "n": 360,
+        "recall": 99.72
+      },
+      "plasmacytoid dendritic cell": {
+        "n": 500,
+        "recall": 99.8
+      },
+      "platelet": {
+        "n": 500,
+        "recall": 99.76
+      },
+      "regulatory t cell": {
+        "n": 500,
+        "recall": 86.84
+      }
+    }
+  },
+  "calibration_suite_top1": {
+    "v3.1 members": 62.448,
+    "v5.4": 65.243
+  },
+  "fulcher2026": {
+    "v4.1": {
+      "balanced_accuracy_6_types": 69.05,
+      "recall_CD4T": 82.47,
+      "recall_CD8T": 23.76,
+      "recall_NK": 90.0,
+      "recall_B": 98.04,
+      "recall_monocyte": 97.81,
+      "recall_DC": 22.22,
+      "committed": 86.98,
+      "answers_committed": 88.57,
+      "answers_correct_when_committed": 97.93
+    },
+    "v5.4": {
+      "balanced_accuracy_6_types": 76.0,
+      "recall_CD4T": 78.9,
+      "recall_CD8T": 19.89,
+      "recall_NK": 93.33,
+      "recall_B": 98.04,
+      "recall_monocyte": 93.64,
+      "recall_DC": 72.22,
+      "committed": 52.78,
+      "answers_committed": 53.56,
+      "answers_correct_when_committed": 97.61
+    }
+  },
+  "pbmc240": {
+    "v4.1": {
+      "lymphoid_recall": 92.31,
+      "myeloid_recall": 80.0,
+      "committed": 73.42
+    },
+    "v5.4": {
+      "lymphoid_recall": 93.16,
+      "myeloid_recall": 80.0,
+      "committed": 51.48
+    }
+  },
+  "scope2": {
+    "v4.1": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "balanced_accuracy_restricted": 48.4,
+      "committed": 52.95
+    },
+    "v5.4": {
+      "balanced_accuracy_unrestricted": 0.0,
+      "balanced_accuracy_restricted": 44.84,
+      "committed": 2.68
+    }
+  },
+  "scope2_reprocessed": {
+    "v4.1": {
+      "progenitor_share": 1.6,
+      "t_cell_share": 28.72,
+      "median_max_probability": 0.2745,
+      "committed": 31.03
+    },
+    "v5.4": {
+      "progenitor_share": 12.94,
+      "t_cell_share": 18.26,
+      "median_max_probability": 0.3087,
+      "committed": 9.57
+    }
+  },
+  "furtwangler2025": {
+    "v4.1": {
+      "progenitor_share": 0.32,
+      "t_cell_share": 56.94,
+      "median_max_probability": 0.2669,
+      "committed": 40.58
+    },
+    "v5.4": {
+      "progenitor_share": 11.89,
+      "t_cell_share": 37.55,
+      "median_max_probability": 0.293,
+      "committed": 8.38
+    }
+  },
+  "pxd056050": {
+    "v4.1": {
+      "balanced_accuracy": 57.5,
+      "per_group": {
+        "B": {
+          "n": 8,
+          "recall": 87.5
+        },
+        "CD8T": {
+          "n": 4,
+          "recall": 0.0
+        },
+        "T": {
+          "n": 4,
+          "recall": 100.0
+        },
+        "NK": {
+          "n": 2,
+          "recall": 0.0
+        },
+        "monocyte": {
+          "n": 4,
+          "recall": 100.0
+        }
+      },
+      "calls": [
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "erythrocyte"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "monocyte"
+        },
+        {
+          "group": "NK",
+          "best_guess": "non-classical monocyte"
+        },
+        {
+          "group": "NK",
+          "best_guess": "non-classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        }
+      ]
+    },
+    "v5.4": {
+      "balanced_accuracy": 57.5,
+      "per_group": {
+        "B": {
+          "n": 8,
+          "recall": 87.5
+        },
+        "CD8T": {
+          "n": 4,
+          "recall": 0.0
+        },
+        "T": {
+          "n": 4,
+          "recall": 100.0
+        },
+        "NK": {
+          "n": 2,
+          "recall": 0.0
+        },
+        "monocyte": {
+          "n": 4,
+          "recall": 100.0
+        }
+      },
+      "calls": [
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "erythrocyte"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "B",
+          "best_guess": "b cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "CD8T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "plasma cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "monocyte",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "NK",
+          "best_guess": "non-classical monocyte"
+        },
+        {
+          "group": "NK",
+          "best_guess": "non-classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "classical monocyte"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd8-positive, alpha-beta t cell"
+        },
+        {
+          "group": "context",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "naive thymus-derived cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "naive thymus-derived cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "cd4-positive, alpha-beta t cell"
+        },
+        {
+          "group": "T",
+          "best_guess": "naive thymus-derived cd4-positive, alpha-beta t cell"
+        }
+      ]
+    }
+  },
+  "out_of_reference_auroc": {
+    "v4.1": 0.7898,
+    "v5.4": 0.7575
+  }
+}

@@ -252,6 +252,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/v5_3/class_balanced_stats.npz` — per-gene class-balanced mean and SD of the reference RNA for v5.3 (gitignored; rebuilt by `research/notebooks/v5_build.py`)
 - `service/model/v5_3/class_means_cb.npy` — class-balanced z-scored RNA class means for v5.3 (gitignored, likewise)
 - `service/model/v5_3/members/V2_seed*_*.npy` — each v5.3 member's latents, centroids and class-balanced centroids (gitignored, likewise)
+- `service/model/v5_4/nb2_spec_v54.json` — v5.4's answers (members trained with the Allen atlas's cells added): temperatures, conformal and out-of-distribution thresholds (NB2's layout)
+- `service/model/v5_4/spec_v54.json` — v5.4's best guess: v4.1's settings on v5.4's members, and its evaluation's status (development gates missed)
+- `service/model/v5_4/MANIFEST.json` — sha256, size and description of every v5.4 file, checked when v5.4 loads
+- `service/model/v5_4/class_balanced_stats.npz` — per-gene class-balanced mean and SD for v5.4, the Allen training rows included (gitignored; rebuilt by `research/notebooks/v5_build.py`)
+- `service/model/v5_4/class_means_cb.npy` — class-balanced z-scored RNA class means for v5.4 (gitignored, likewise)
+- `service/model/v5_4/members/V2_seed*_*.npy` — each v5.4 member's latents, centroids and class-balanced centroids (gitignored, likewise)
 - `service/model/runtime/reference_model.pt` — the production v3 encoder checkpoint (Git LFS, ~94 MB)
 - `service/model/runtime/reference_embedding.npy` — every RNA reference cell in the 128-d latent space (85,233 × 128)
 - `service/model/runtime/reference_centroids.npy` — one latent centroid per class (22 × 128), in `class_idx` order
@@ -913,6 +919,13 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/gene_weights/development.json` — v4.1 and v4.3 as served on Fulcher 2026, PBMC240, SCoPE2 (both versions), Furtwängler 2025, PXD056050's sorted pools (each pool's call) and the out-of-reference AUROC
 - `research/notebook-outputs/gene_weights/decision.json` — v4.3's self-checks, each gate and the verdict (NO GO)
 - `research/notebook-outputs/allen_dc_probe/summary.json` — step 2's probe: where the Allen atlas's DCs, CMPs and controls land under v4.1's members, the centre cosines, and the route its fixed reading chose (B)
+- `research/notebook-outputs/v54_allen_rows/record.json` — candidate v5.4's Allen rows: the source, the rows file's sha256, the feature genes found, the donors held out and the rows per class
+- `research/notebook-outputs/v54_train/train_record.json` — v5.4: each member's checkpoint sha256, training figures, the Allen rows and reference diagnostics
+- `research/notebook-outputs/v54_build/build_record.json` — v5.4: the fitted temperatures, thresholds, calibration counts, the Allen rows counted, and the files written
+- `research/notebook-outputs/v54_gates/rules.json` — v5.4's gates as run: the script's sha256, the bars and the start time
+- `research/notebook-outputs/v54_gates/development.json` — v4.1 and v5.4 on the held-out Allen donors (recall per class), the calibration suite, Fulcher 2026, PBMC240, SCoPE2 (both versions), Furtwängler 2025, PXD056050's pools and the out-of-reference AUROC
+- `research/notebook-outputs/v54_gates/decision.json` — v5.4's self-check, each gate and the verdict (NO GO)
+- `research/notebook-outputs/v54_gates/spec_block.json` — the evaluation block written into v5.4's spec: development gates missed, not served
 - `research/notebook-outputs/v52_diagnose/diagnosis.json` — v5.2 against v4.1 and v5.1 on calibration cells under each label version, and on the development data
 - `research/notebook-outputs/v51_labels/reference_labels_v51.csv.gz` — v5.1: every reference cell's original and v5.1 label, class index and reason
 - `research/notebook-outputs/v51_labels/audit.json` — v5.1: the folded cells by original label and the class counts

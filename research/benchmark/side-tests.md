@@ -407,6 +407,11 @@ Route B of run history entry 65 (step 2 of the data search):
   committed at least v4.1 - 1; out-of-reference AUROC at least v4.1 - 0.03.
 - **Not served either way.** A GO makes v5.4 a frozen candidate for the
   sorted CD4/CD8 test, by that protocol's next amendment.
+- **Outcome, 2026-10-21: development gates missed** (run history entry
+  66). Fulcher 76.00 (bar 71.05) and the held-out Allen DCs (97.7 and
+  99.8) passed; answers committed 53.56 (bar 86.57) and the
+  out-of-reference AUROC 0.7575 (bar 0.7598) missed. v5.4 stays refused
+  and is not a sorted-test candidate.
 
 ### Alternatives kept unused, for future tests or future development
 

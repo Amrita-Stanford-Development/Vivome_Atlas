@@ -1,0 +1,19 @@
+{
+  "script_sha256": "a9f6a265f4096679c5033b4efe7fcb77423e5c88119e33356a7fc288790bd044",
+  "started": "2026-10-21T16:56:08",
+  "go": {
+    "heldout_dc_recall_min": 50.0,
+    "suite_top1_min": 60.448,
+    "fulcher_gain_min": 2.0,
+    "pxd056050_drop_max": 0.0,
+    "pbmc240_drop_max": 2.0,
+    "committed_drop_max": 2.0,
+    "correct_drop_max": 1.0,
+    "auroc_drop_max": 0.03
+  },
+  "v41_expected": {
+    "fulcher2026": 69.05,
+    "pbmc240": 92.31
+  },
+  "tolerance": 0.01
+}

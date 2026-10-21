@@ -1,0 +1,125 @@
+{
+  "source": "research/notebooks/v5_build.py (members from research/notebooks/v5_train.py, labels from research/notebooks/v5_labels.py)",
+  "files": {
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "4b7c660bbed76ce1fb6ecd54b3157220467e1b3b8c031cdd2d5319e9ff613268",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed0.pt)"
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "b970c2d66ef0611353208b30d897d18e624ba9189dfc97afedf6877fc6386cbd",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "765438c01dbaf62342ade56aa53bccd56f57124e092044ae4783b03cb369d107",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order"
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "0c727cb71824b2d804f0b8216c76b484b1c7505f06ffe0814a5ddd5f9d49a9ab",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed0.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)"
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "c3fb74c266aea44fc7b6b73e358deb7c1aa0018067cf79527467559800ffa048",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed1.pt)"
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "f2f127892c9c59370bb232477357a0a537f66425008c5b104890fbd7f5ca8485",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "2c63261893bf2c3fd5f659402daec4feb709840bb5c8535f610e6fdc44f73a13",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order"
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "0c89d2e0fc99cfde72ce5de99cee8bfc3eb0ee15ee27e72d0a7ab824701326c9",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed1.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)"
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "b5e3c56d14ff14294dd287b946e619958ff0287d88cac7405ca2a7ffaf279337",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed2.pt)"
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "aa830219fe73bce197b00ccd711bc2dad74089ebbf5db6e0117567781cf50c2f",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "66a811868b81978d25fab9cfc3aaa8f095b3214c205aeaac33fc913273279e89",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order"
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "4cff4e66f02469b9f815d3757055e6a5bfcb754828e6e00958c37e871ea70abd",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed2.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)"
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "a738ec6b8443a9d1e18e19198ba8d56dc5b180edf8177a0ad7da12f1a66f5856",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed3.pt)"
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "c318938341ff175b05260ba2134402b5ca9277fc314f601df8ab224c17263594",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "fcc05950c8a8d37b2587e3fecbf75c79639234998416f2ce0e87cbc04869a8de",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order"
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "fb1396bb7843d5d74b84d9c1e2c7f67dd2f4cfb0a9a2d24d794648b8062dae90",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed3.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)"
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "2a8cc2a1d370c7685b9e9766c2d6da4d5b9b7ef8c70f4bca9744bbccffbfe24f",
+      "bytes": 98277965,
+      "from": "v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed4.pt)"
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "0c64082f1e6f3e87458a466c4e795025d29e96dde5ccb600404375fa120bb267",
+      "bytes": 21819776,
+      "from": "all reference cells, reference_metadata.csv row order"
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "809736a5a05047b4bca7492b6f5661e6d8667e66a16962cc55585680091bc464",
+      "bytes": 11392,
+      "from": "class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order"
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "5b660c02353ccb5b4cc646dac446faf4a24da49e4b972fdc9b81db7b69467532",
+      "bytes": 11392,
+      "from": "V2_batchgene_aug_seed4.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)"
+    },
+    "class_balanced_stats.npz": {
+      "sha256": "2757b0b5f759fac2341305a3a316c938fb39da345174d58663798a9d165344c5",
+      "bytes": 72510,
+      "from": "per-gene class-balanced mean and SD over all reference cells, the original labels, with the Allen atlas's training-donor cells"
+    },
+    "class_means_cb.npy": {
+      "sha256": "7e1f3996108d14a99a95e356d4772f729d2fd2a76dbff3507a383eafc4d082fe",
+      "bytes": 792304,
+      "from": "class-balanced z-scored RNA class means under the original labels, with the Allen atlas's training-donor cells, class position order (22 x 9,002)"
+    },
+    "nb2_spec_v54.json": {
+      "sha256": "abf549158d4742060160ef0acde28239209204261f9c26777da7b6a891a1f554",
+      "bytes": 6799,
+      "from": "v5.4's answers: temperatures, conformal thresholds, out-of-distribution threshold (NB2's layout)"
+    },
+    "spec_v54.json": {
+      "sha256": "1c0f0fafb2ce2a44b5556e46cb4288ba9262dd4ccf4642e911149cada4dbaa60",
+      "bytes": 5281,
+      "from": "v5.4's best guess (v4.1's layout and settings)"
+    }
+  }
+}
