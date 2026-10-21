@@ -486,6 +486,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/working-context.md` — hand-off for a new session: how the work got here, owner decisions and standing instructions, the Track D extension's status, what's next
 - `research/notebook-run-history.md` — every notebook run, in order, and what each one found (17 entries, through T1 NB2)
 - `research/organ-references.md` — the organ references plan (Track I): the large intestine first, from Tabula Sapiens; the owner's decisions, the classes, the stages and their gates
+- `research/reference-data-search.md` — the 2026-10-21 data search, RNA as well as protein: atlases that could rebuild the blood and organ references, data with RNA and protein together, new protein sets, and the recommended next steps
 - `research/tier1-tier2-report.md` — the research report the roadmap's Tier 1 and Tier 2 work draws on, with a 2026-10-01 status note on which of its ideas are now tested
 - `research/archive/2026-08-29-resource-layer-plan.md` — the finished resource-layer build plan, frozen (its paths are from that time)
 - `research/benchmark/README.md` — reading order for the benchmark write-up

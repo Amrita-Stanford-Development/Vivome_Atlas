@@ -330,6 +330,35 @@ entry 61). That reading stands; v5.3 is a new candidate with its own gates.
   86.57 and 96.93); only the out-of-reference AUROC passed (0.7985). v5.3
   stays refused and is not a sorted-test candidate.
 
+### Amendment 19, 2026-10-21: a second search, RNA as well as protein (the owner's request)
+
+Five agents searched repositories and the literature, reading pages, file
+listings, metadata APIs and papers only; nothing was downloaded and no
+sealed set was opened. The report, with the RNA atlases it found, is
+[reference-data-search.md](../reference-data-search.md). What changes here:
+- **A candidate sealed CD4/CD8 test, unopened:** MSV000102427 (PXD080865,
+  Foster lab, the GIRAFI preprint; public since 2026-08-10). About 311
+  FACS-sorted bone-marrow mononuclear cells stained for CD4, CD8, CD19 and
+  CD13, with CD4 and CD8 T-cell populations (from the preprint), and 116
+  magnetically enriched PBMCs. Bone marrow, not blood. Its files and
+  metadata stay unopened until a protocol is committed; whether each gate
+  went to its own wells is not stated.
+- **A possible T-against-B test, unopened:** PXD064083 (iProX), about 78
+  single CD3+ T cells and 70 single CD19+ B cells from ALS patients and
+  controls. PXD049099 (8 and 10 cells) is too small for a test.
+- **Status changes:** PXD080834 is the CNPEM head-and-neck cancer PBMC set,
+  unsorted, so development only once released; the HUPO benchmark (Zenodo
+  21181080) holds cell lines only and leaves the immune watch-list; the
+  iProX leads are resolved (the PROXI API lists iProX files); Krisp,
+  O'Connor, Brenes and Lange are still not public.
+- **The Human Protein Atlas DVP samples stay development** (amendments 9
+  and 11); they are not a new test.
+- **PXD051795** (laser-captured lymph-node B cells, one lymphoma patient) is
+  from the sealed lymph-node test's lab group: its donors must be shown to
+  differ before any use.
+- **The LungMAP developing-lung atlas (Ushakumary 2025) uses MSV000094189,**
+  the sealed lung test: it is not development data.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
@@ -340,8 +369,21 @@ comes from here. Keep this list current.
   neutrophils after QC; amendment 3).
 - **Requested by email:** Krisp et al. (sorted CD4, CD8, CD19, CD14 single
   cells; the main test) and O'Connor et al. (sorted T, B, NK, monocytes).
+- **Public, unopened, candidate tests (amendment 19):** MSV000102427
+  (FACS-sorted bone-marrow CD4 and CD8 T cells, B and myeloid cells) and
+  PXD064083 (single CD3+ T and CD19+ B cells).
 - **Data requests not yet made:** Brenes et al. (sorted blood neutrophils) and
-  Lange et al. (CD19-sorted B cells).
+  Lange et al. (CD19-sorted B cells); for the organs, the Schiller lab (135
+  histology-defined airway regions), Leiden University Medical Center (van
+  der Pan, de Laat: FACS-sorted colon epithelial populations, 7 patients)
+  and the Oncogene 2026 lymphoid-structure authors.
+- **Public, not downloaded, for development (amendment 19):** PXD056050
+  (FACS-sorted B, T, CD8 T, monocytes and NK, DIA-NN output);
+  MSV000099890 (six MACS-sorted types with RNA-seq of the same cells,
+  GSE286042); PXD038810 (CD4 and CD8 T cells, protein and RNA counts);
+  PXD060953 (9 sorted B-cell subsets, protein and RNA); PXD010154 and
+  PXD016999 (tissues profiled for protein and RNA); PXD051795 (see
+  amendment 19).
 - **Embargoed or restricted, to re-check:** PXD084266, PXD080834, PXD076177,
   the HUPO inter-lab benchmark (Zenodo 21181080). Re-checked 2026-10-20:
   PRIDE still answers 404 for all three PXDs, and the Zenodo record is still
@@ -495,14 +537,15 @@ fetched. Each group has one role, fixed in the script's table:
 
 ## Leads not verified
 
-- PXD064083 and PXD049099 (Peking University, iProX): single T and B cells
-  by file name, no CD4/CD8 split. iProX could not be reached from this PC, so
-  neither was opened.
+- PXD064083 and PXD049099 (iProX): resolved by amendment 19 through the
+  ProteomeXchange PROXI API (single CD3+ T and CD19+ B cells, no CD4/CD8
+  split).
 
 ## Nothing found for
 
 - DC against macrophage with independent labels.
-- A public set of single cells with sorted CD4 and CD8 labels.
+- A public set of single blood cells with sorted CD4 and CD8 labels (the
+  nearest, from bone marrow, is MSV000102427; amendment 19).
 
 ## Coverage and gaps of the 2026-10-14 search
 
