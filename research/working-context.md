@@ -36,18 +36,17 @@ the run history have the detail.
   - the site is on Cloudflare Pages (`vivome-atlas.pages.dev`);
   - the service is on Google Cloud Run (`docs/web/hosting.md`,
     `deploy/huggingface/PUBLISH.md`).
-- **Committed, not deployed:**
+- **Deployed 2026-10-21** (Cloud Run revision `vivome-atlas-00006-rkt`,
+  then the site; `research/todo.md`, the deploy item):
   - the service reads DIA-NN 1.8, Spectronaut, MaxQuant and FragPipe LFQ
     tables. Upload faults found by review are fixed, and the parse runs
     inside the projection slot;
   - 2,000 cells take about 10 s instead of 32 s, with identical answers;
-  - model files are read as tensors only;
+  - model files are read as tensors only; the upload limit is 31 MiB;
   - the site has security headers, the film's captions and accessibility
     fixes.
 
-  Deploy the service first, then the site: the Atlas page's upload label
-  and file check already name the new layouts (`research/todo.md`, the
-  deploy item). Rehearsed locally with the hosted settings: 0 differences.
+  `check_space.py` against the live service: 0 of 238 cells differ.
 - **Other organs (Track I):**
   - the colon, lung and lymph node references were built from Tabula
     Sapiens RNA alone;
@@ -62,8 +61,8 @@ the run history have the detail.
   A pooled candidate is the owner's call.
 - **Service flags** were evaluated on RNA by T1 NB3b (run history entry 18).
   Whether to retire restricted mode is the owner's call.
-- **Open, for the owner:** the service deploy, an organ v3, a pooled blood
-  candidate, and the DOI.
+- **Open, for the owner:** an organ v3, a pooled blood candidate, the
+  visible accessibility changes, and the DOI.
 
 ## The project
 
