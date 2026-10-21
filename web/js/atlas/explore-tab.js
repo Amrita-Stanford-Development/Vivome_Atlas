@@ -15,10 +15,9 @@ export function mountExploreTab({
   layer, order, counts, colours = CLASS_COLOURS, nameOf = plainName, families = null, onChange = () => {},
 }) {
   $('rna-count').textContent = formatCount(counts.rna);
-  $('prot-count').textContent = formatCount(counts.prot);
   $('class-count').textContent = formatCount(order.length);
 
-  for (const which of ['rna', 'prot']) {
+  for (const which of ['rna']) {
     const toggle = $(`${which}-toggle`);
     toggle.addEventListener('click', () => {
       const on = toggle.getAttribute('aria-checked') !== 'true';

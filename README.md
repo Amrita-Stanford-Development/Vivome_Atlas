@@ -116,9 +116,10 @@ Atlas version `0.6.0`, manifest schema `1.0`.
 - **Earlier releases:** `VivOME v4.2` (atlas `0.5.0`, protein class means in
   the best guess), `VivOME v3.1` (atlas `0.3.0`) and `VivOME v3 reference`
   (atlas `0.2.0`) stay selectable in the service.
-- **Data:** 22 cell types, 2 of them cross-modal in the atlas (macrophage,
-  monocyte) and 20 RNA-only. RNA 85,233 cells; protein 1,490 cells (SCoPE2
-  mass spectrometry).
+- **Data:** 22 cell types in an RNA reference of 85,233 cells; the Atlas
+  map draws these alone. SCoPE2's 1,490 protein cells (macrophage and
+  monocyte) are a development result on the Manuscript page, not part of
+  the map.
 - **Benchmark:** published on `web/manuscript.html`: VivOME against the
   corrected baselines on Khoury 2026 (post-hoc), Fulcher 2026,
   PBMC240 and SCoPE2 (`research/benchmark/results.md`), beside the rest of

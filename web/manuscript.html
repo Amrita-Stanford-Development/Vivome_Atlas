@@ -411,7 +411,7 @@
                         <tr><td>Fulcher 2026</td><td>PXD073881 (MSV000100684)</td><td>TMT, FragPipe TMT-Integrator</td><td class="num"><span data-ms="ds_fulcher2026_cells"></span>; <span data-ms="ds_fulcher_scored"></span> scored</td><td>RNA label transfer and cluster refinement; not independent. CD4 T, CD8 T, NK, B, monocyte, DC</td><td>development; in-sample for the weight</td></tr>
                         <tr><td>Khoury 2026</td><td>Zenodo 22649483</td><td>timsTOF, mTRAQ, DIA-NN</td><td class="num"><span data-ms="ds_khoury_cells"></span></td><td>clusters of the same protein matrix; not independent. CD4 T, CD8 T, NK, B, monocyte</td><td>post-hoc</td></tr>
                         <tr><td>PBMC240</td><td>accession to confirm</td><td>label-free DIA, DIA-NN</td><td class="num"><span data-ms="ds_pbmc240_cells"></span>; <span data-ms="ds_pbmc240_labelled"></span> with lineage labels</td><td>weak clusters, lineage only</td><td>development</td></tr>
-                        <tr><td>SCoPE2, published</td><td>MSV000083945</td><td>TMT with carrier; matrix centred and imputed</td><td class="num"><span data-ms="ds_scope2_cells"></span></td><td>experimental design; independent. Two states of one cell line</td><td>development</td></tr>
+                        <tr><td>SCoPE2, published</td><td>MSV000083945</td><td>TMT with carrier; matrix centred and imputed</td><td class="num"><span data-ms="ds_scope2_cells"></span></td><td>experimental design; independent. Two states of one cell line</td><td>development; it guided the design (smoothing, scaling, the assignment rule)</td></tr>
                         <tr><td>SCoPE2, reprocessed</td><td>MSV000084660</td><td>the same runs, missing values kept</td><td class="num"><span data-ms="ds_scope2_reprocessed_cells"></span></td><td>experimental design</td><td>development</td></tr>
                         <tr><td>Furtwängler 2025</td><td>Zenodo 15554000</td><td>bone-marrow CD34+ cells</td><td class="num"><span data-ms="ds_furtwangler2025_cells"></span></td><td>sorting gates; outside the reference</td><td>development (out of reference)</td></tr>
                         <tr><td>Hao 2021, donors P5 to P8</td><td>GSE164378</td><td>CITE-seq RNA, masked like protein uploads</td><td class="num"><span data-ms="ds_hao_uploads"></span> uploads, <span data-ms="ds_hao_donors"></span> donors</td><td>RNA and surface antibodies; independent of this model</td><td>internal held-out</td></tr>
@@ -640,8 +640,9 @@
             <div class="ms-figure-slot" data-figure="fig2-transfer"></div>
 
             <h3 id="cross-modal-support">Cross-modal support</h3>
-            <p>The atlas holds the reference's RNA cells and SCoPE2's protein cells; a type is
-                cross-modal when it has cells of both.</p>
+            <p>SCoPE2's protein cells, projected into the reference's space, against the
+                reference's RNA cells; a type is cross-modal when it has cells of both. They are a
+                development result here, not part of the Atlas map.</p>
             <div class="support-tiles" id="support-tiles"></div>
             <div class="table-scroll" id="support-table-mount"></div>
             <p>Protein cells in the atlas cover only part of the label space. Types marked RNA only

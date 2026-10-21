@@ -49,7 +49,7 @@ test('the page has its two tabs, the labels section old links arrive at, and a l
 test('Explore holds the view controls; the research panels live on the Manuscript page', () => {
   const explore = html.slice(html.indexOf('id="panel-explore"'), html.indexOf('id="panel-data"'));
   for (const id of ['your-cells', 'cells-toggle', 'explore-chips', 'types-given', 'given-all', 'given-none', 'highlight-toggle',
-    'rna-toggle', 'prot-toggle', 'names-toggle', 'dim-slider', 'size-slider', 'cell-type-filters']) {
+    'rna-toggle', 'names-toggle', 'dim-slider', 'size-slider', 'cell-type-filters']) {
     assert.match(explore, new RegExp(`id="${id}"`), id);
   }
   assert.match(explore, /<section class="control-section sheet" id="your-cells" hidden>/, 'shown only with an answer');
@@ -121,5 +121,15 @@ test('the panel\'s tabs take Home and End as well as the arrows', () => {
   const handler = main.slice(main.indexOf("querySelector('[role=\"tablist\"]').addEventListener('keydown'"));
   assert.match(handler.slice(0, 900), /Home: 'explore', End: 'data'/);
   assert.match(handler.slice(0, 900), /e\.preventDefault\(\)/, 'Home and End do not also scroll the page');
+});
+
+test('the blood map is the RNA reference alone: SCoPE2\'s protein cells are a Manuscript result, not on the map', () => {
+  const html = readFileSync(new URL('../atlas.html', import.meta.url), 'utf8');
+  for (const gone of ['prot-toggle', 'prot-well', 'prot-count', 'SCoPE2']) assert.ok(!html.includes(gone), gone);
+  const main = readFileSync(new URL('../js/atlas/main.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(main, /metadata_PROT_lat128/, 'the map does not load the protein layer');
+  assert.doesNotMatch(main, /isProt/);
+  const explore = readFileSync(new URL('../js/atlas/explore-tab.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(explore, /prot-count|'prot'\]/);
 });
 

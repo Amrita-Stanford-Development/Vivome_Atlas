@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas · VivOME</title>
-    <meta name="description" content="Explore RNA and protein cells from the VivOME atlas in one 3D space.">
+    <meta name="description" content="Explore the VivOME atlas's labelled reference cells in 3D, and place your own protein cells on it.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -43,7 +43,6 @@
 
             <div class="atlas-stats">
                 <div class="well"><div class="stat-value" id="rna-count">-</div><div class="stat-label">RNA cells</div></div>
-                <div class="well" id="prot-well"><div class="stat-value" id="prot-count">-</div><div class="stat-label">Protein cells</div></div>
                 <div class="well"><div class="stat-value" id="class-count">-</div><div class="stat-label">Cell types</div></div>
             </div>
 
@@ -74,10 +73,6 @@
                     <div class="toggle-item">
                         <span id="rna-toggle-label">RNA cells</span>
                         <button type="button" class="toggle-switch active" id="rna-toggle" role="switch" aria-checked="true" aria-labelledby="rna-toggle-label"></button>
-                    </div>
-                    <div class="toggle-item" id="prot-toggle-row">
-                        <span id="prot-toggle-label">Protein cells (SCoPE2, drawn larger)</span>
-                        <button type="button" class="toggle-switch active" id="prot-toggle" role="switch" aria-checked="true" aria-labelledby="prot-toggle-label"></button>
                     </div>
                     <div class="toggle-item">
                         <span id="names-toggle-label">Names on the map</span>

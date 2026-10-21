@@ -1,8 +1,10 @@
 # The Atlas page
 
 `web/atlas.html` draws the reference: every RNA cell of the Tabula Sapiens
-blood reference and every SCoPE2 protein cell, as dots in the 3D space the
-served model's coordinate member defines. Its Your data tab sends a
+blood reference, as dots in the 3D space the served model's coordinate
+member defines. Protein cells are not part of the map (owner, 2026-10-21):
+SCoPE2's are a labelled result on the Manuscript page, and a visitor's own
+land on the map from Your data. Its Your data tab sends a
 visitor's file to the online service, and the file's cells land on the same
 map where the model places them. It is an app view on PC screens: the
 header, a sidebar with two tabs, the viewer, and a drawer that slides over
@@ -22,7 +24,7 @@ Pure modules have no DOM and are covered by `node --test`
 | Module | Role |
 |---|---|
 | `organs.js` (pure) | The organ maps: the organ the address names (`?organ=lung`), plain names for organ types, the families (the hierarchy's groups) and a colour per type, a family one hue |
-| `reference-data.js` (pure) | Reads the metadata CSVs and the organ maps into typed arrays; the class order (sorted, as the colours follow); the scene frame (`atlasFrame`: the box round every RNA and protein cell, 80 units across), kept so uploaded cells land through the same transform |
+| `reference-data.js` (pure) | Reads the metadata CSVs and the organ maps into typed arrays; the class order (sorted, as the colours follow); the scene frame (`atlasFrame`: the box round every reference cell, 80 units across), kept so uploaded cells land through the same transform |
 | `spatial.js` (pure) | The orbit pose, nearest reference cells on a grid, screen-space picking, the file's cloud (an irregular, seeded shape of a few lobes, sized by the cell count), label placement |
 | `answers.js` (pure) | A service response or the recorded example as one cell shape; how each answer is drawn; which pipelines share this map (v3.1, v4, v4.1, v4.2); the receipt's numbers |
 | `choreography.js` (pure) | The landing's timing: the flight schedule, the guided timeline, the waiting loop, framing a pose, reduced-motion timing |
@@ -52,7 +54,7 @@ node. Choosing one loads `atlas.html?organ=<id>`. An organ's map is its
 reference's RNA cells in its own bundle's coordinate space, so an upload
 would land on it, but no file is labelled against it: each organ's
 reference missed its development gates (`research/organ-references.md`).
-So the organ page hides Your data and the protein cells, and says why.
+So the organ page hides Your data, and says why.
 Every way into Your data is closed there: its tab, the arrow keys, the
 address (`#your-data`) and a file dropped on the map, which is refused.
 
@@ -132,11 +134,10 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
   fly; `positionsAt` repeats the same path on the CPU for picking.
 - **Picking** projects every point to the screen once per camera move and
   takes the nearest visible one; uploaded cells first. No raycasting.
-- **Sizes** are scene units: radius 0.5 for RNA cells, 0.9 for protein cells.
+- **Sizes** are scene units: radius 0.5 for reference cells.
 
 ## Data
 
-`web/data/metadata_RNA_lat128.csv` and `metadata_PROT_lat128.csv`
-([data.md](data.md)); the organ maps in `web/data/organs/`; `web/data/workflow.json` for the example and the
+`web/data/metadata_RNA_lat128.csv` ([data.md](data.md)); the organ maps in `web/data/organs/`; `web/data/workflow.json` for the example and the
 service's limits. Gene profiles come from the large files, fetched only on a
 click; the public site leaves them out.

@@ -32,37 +32,20 @@ async function fetchText(url) {
   return response.text();
 }
 
-// The reference, RNA cells first, then protein, in scene units.
+// The reference: blood's labelled RNA cells, in scene units. Protein cells
+// are not part of the map: SCoPE2's are a result on the Manuscript page, and
+// a visitor's own land on it from Your data.
 async function loadReference() {
-  const [rnaText, protText] = await Promise.all([
-    fetchText(new URL('../../data/metadata_RNA_lat128.csv', import.meta.url)),
-    fetchText(new URL('../../data/metadata_PROT_lat128.csv', import.meta.url)),
-  ]);
-  const rna = parseMetadataCsv(rnaText, 'rna');
-  const prot = parseMetadataCsv(protText, 'prot');
-  const order = classOrderFrom(rna, prot);
-  const frame = atlasFrame(rna.raw, prot.raw);
-  const n = rna.n + prot.n;
-  const positions = new Float32Array(n * 3);
-  positions.set(sceneArray(frame, rna.raw));
-  positions.set(sceneArray(frame, prot.raw), rna.n * 3);
-  const raw = new Float32Array(n * 3);
-  raw.set(rna.raw);
-  raw.set(prot.raw, rna.n * 3);
-  const codes = new Uint8Array(n);
-  codes.set(classCodes(rna, order));
-  codes.set(classCodes(prot, order), rna.n);
-  const modality = new Float32Array(n);
-  modality.fill(1, rna.n);
-  const origIndex = new Uint32Array(n);
-  origIndex.set(rna.origIndex);
-  origIndex.set(prot.origIndex, rna.n);
+  const rna = parseMetadataCsv(await fetchText(new URL('../../data/metadata_RNA_lat128.csv', import.meta.url)), 'rna');
+  const order = classOrderFrom(rna);
+  const frame = atlasFrame(rna.raw);
+  const codes = classCodes(rna, order);
   const byClass = new Array(order.length).fill(0);
-  const protByClass = new Array(order.length).fill(0);
-  for (let i = 0; i < n; i += 1) (i < rna.n ? byClass : protByClass)[codes[i]] += 1;
+  for (let i = 0; i < rna.n; i += 1) byClass[codes[i]] += 1;
   return {
-    order, frame, n, nRna: rna.n, positions, raw, codes, modality, origIndex,
-    counts: { rna: rna.n, prot: prot.n, byClass, protByClass },
+    order, frame, n: rna.n, nRna: rna.n, positions: sceneArray(frame, rna.raw), raw: rna.raw, codes,
+    modality: new Float32Array(rna.n), origIndex: rna.origIndex,
+    counts: { rna: rna.n, prot: 0, byClass, protByClass: new Array(order.length).fill(0) },
   };
 }
 
@@ -96,7 +79,7 @@ async function loadOrganReference(organ) {
 }
 
 // The organ chooser at the top of Explore. Choosing another organ loads its
-// page; an organ's map hides what only blood has (protein cells, Your data).
+// page; an organ's map hides what only blood has (Your data).
 function mountOrganChooser(organs, organ) {
   const select = $('organ-select');
   select.innerHTML = [{ id: BLOOD, name: 'Blood' }, ...organs].map((o) => `<option value="${escapeHtml(o.id)}">${
@@ -108,7 +91,7 @@ function mountOrganChooser(organs, organ) {
     + 'because its reference missed its checks (<a href="manuscript.html#organs">why</a>). Colours keep each family of types together.';
   document.title = `Atlas · ${organ.name} · VivOME`;
   document.body.classList.add('organ-map');
-  for (const id of ['tab-data', 'prot-toggle-row', 'prot-well']) $(id).hidden = true;
+  $('tab-data').hidden = true;
 }
 
 // The drawer over the viewer's right side. While it is open the viewer is
@@ -230,9 +213,8 @@ async function start() {
       const i = pickAt(ev.clientX, ev.clientY);
       if (i < 0) return tooltip.hide();
       if (organ) return tooltip.show(organCellLines(organ, ref.order[ref.codes[i]]), ev.clientX, ev.clientY);
-      const isProt = i >= ref.nRna;
       tooltip.show([
-        `${isProt ? 'Protein cell (SCoPE2)' : 'RNA reference cell'}: ${plainName(ref.order[ref.codes[i]])}`,
+        `RNA reference cell: ${plainName(ref.order[ref.codes[i]])}`,
         `PC1 ${ref.raw[i * 3].toFixed(2)}, PC2 ${ref.raw[i * 3 + 1].toFixed(2)}, PC3 ${ref.raw[i * 3 + 2].toFixed(2)}`,
         'Click for its gene profile',
       ], ev.clientX, ev.clientY);
@@ -259,12 +241,10 @@ async function start() {
         + '<p class="panel-note">This map shows where each reference cell sits; gene profiles are kept for blood only.</p>');
       return;
     }
-    const isProt = i >= ref.nRna;
-    const modality = isProt ? 'prot' : 'rna';
     const name = plainName(ref.order[ref.codes[i]]);
-    drawer.open(`${isProt ? 'Protein' : 'RNA'} cell: ${name}`, profileLoadingHtml(name, modality));
+    drawer.open(`RNA cell: ${name}`, profileLoadingHtml(name, 'rna'));
     try {
-      const profile = await loadProfile(modality, ref.origIndex[i], (rows) => drawer.body(profileProgressHtml(rows)));
+      const profile = await loadProfile('rna', ref.origIndex[i], (rows) => drawer.body(profileProgressHtml(rows)));
       drawer.body(`<p class="panel-note">${escapeHtml(Object.keys(profile).length.toLocaleString('en-US'))} genes.</p>${profileTableHtml(profile)}`);
     } catch (err) {
       drawer.body(profileErrorHtml(err));

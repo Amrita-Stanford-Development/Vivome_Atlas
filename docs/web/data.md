@@ -10,7 +10,7 @@ Latent embeddings and metadata, latent dim 128.
 | `atlas_RNA_lat128-001-part1.csv`, `-part2.csv` | Split CSV form of the same — **Git LFS** |
 | `metadata_RNA_lat128.csv` | RNA metadata, 85,233 rows; PCs in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`) |
 | `atlas_PROT_lat128.parquet` / `.csv` | Protein coordinates, ~45 MB |
-| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows; the served v3.1 model's projection of SCoPE2 (`scripts/export_atlas_coordinates.py`) |
+| `metadata_PROT_lat128.csv` | Protein metadata, 1,490 rows; the served v3.1 model's projection of SCoPE2 (`scripts/export_atlas_coordinates.py`). Not drawn on the Atlas map since 2026-10-21: SCoPE2 is a development result on the Manuscript page, which reads its records |
 | `organs/tabula_sapiens.json` | Every organ of Tabula Sapiens v2, the atlas the references come from: name, file and size from its Figshare record (`scripts/tabula_sapiens_organs.py`); the manifest's `organs` marks each one |
 | `organs/index.json` | The organ maps the Atlas page offers, without labelling: each organ's name, class order and hierarchy, cell count, bundle MANIFEST sha256 and gate record (`scripts/export_atlas_coordinates.py --organ`) |
 | `organs/<organ>/metadata_RNA.csv` | One organ's map: `orig_index` (the row of its bundle's `reference_metadata.csv`), `class_idx` (in the index's class order) and `PC1`-`PC3`, from its coordinate member's reference latents through its bundle's own PCA |
@@ -37,8 +37,8 @@ don't recognise.
 member (seed 4), with a fixed sign. A cell the service projects therefore
 lands on the atlas the site displays; `service/tests/test_pipeline_versions.py`
 pins the RNA file to it. The Atlas page maps PCs to scene units with one
-frame computed from the reference (`atlasFrame`: the box round every RNA and
-protein cell, 80 units across), and places uploaded cells through the same
+frame computed from the reference (`atlasFrame`: the box round every RNA
+reference cell, 80 units across), and places uploaded cells through the same
 frame.
 
 Class names are quoted CSV fields and **some contain commas** (`class_idx` 2,
