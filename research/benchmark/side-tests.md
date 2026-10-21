@@ -377,6 +377,8 @@ blood's empty classes from the Allen atlas. Their data, fetched as tier W of
 
 None of them is a test. Every gate is fixed in its script before the script
 reads them.
+- **Used, 2026-10-21:** PXD056050 and Monaco by candidate v4.3's gates
+  (run history entry 64; NO GO).
 
 ### Alternatives kept unused, for future tests or future development
 

@@ -1,0 +1,25 @@
+{
+  "finished": "2026-10-21T16:11:49",
+  "self_check": {
+    "fulcher2026": {
+      "expected": 69.05,
+      "got": 69.05,
+      "passed": true
+    },
+    "pbmc240": {
+      "expected": 92.31,
+      "got": 92.31,
+      "passed": true
+    }
+  },
+  "checks": {
+    "fulcher_gain": false,
+    "pxd056050_no_loss": true,
+    "pbmc240_guardrail": true,
+    "fulcher_committed": true,
+    "fulcher_correct_when_committed": true,
+    "out_of_reference_auroc": true
+  },
+  "go": false,
+  "seconds": 33
+}

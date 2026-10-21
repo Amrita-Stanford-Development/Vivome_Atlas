@@ -1,0 +1,32 @@
+{
+  "genes": 9002,
+  "with_protein": 7996,
+  "classes": 16,
+  "rho_median": 0.4353,
+  "share_weight_zero": 0.1711,
+  "fill_weight": 0.4353,
+  "self_check_unit_weights_max_gap": 0.0,
+  "monaco": {
+    "classes": [
+      "b cell",
+      "basophil",
+      "cd4-positive, alpha-beta t cell",
+      "cd8-positive, alpha-beta t cell",
+      "classical monocyte",
+      "intermediate monocyte",
+      "myeloid dendritic cell",
+      "naive thymus-derived cd4-positive, alpha-beta t cell",
+      "natural killer cell",
+      "neutrophil",
+      "non-classical monocyte",
+      "plasma cell",
+      "plasmacytoid dendritic cell",
+      "regulatory t cell"
+    ],
+    "genes": 7989,
+    "spearman_rho_reference_vs_monaco": 0.6455,
+    "spearman_weight_reference_vs_monaco": 0.6417,
+    "rho_median_monaco": 0.4744,
+    "note": "reported only"
+  }
+}

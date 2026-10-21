@@ -2772,6 +2772,47 @@ hoped to help, did not move. The spec's evaluation block says "development
 gates missed", so the service keeps refusing v5.3; it is not a candidate for
 the sorted CD4/CD8 test. Nothing is tuned.
 
+### 64. Gene weights from protein-RNA agreement in the correlation term (candidate v4.3), 2026-10-21
+
+**Why:** step 1 of the 2026-10-21 data search's report
+(`research/reference-data-search.md`). v4.1's correlation term counts every
+gene the same, although some genes' RNA contrasts between classes might not
+hold on protein.
+
+**Fixed first** (`research/notebooks/gene_weights.py`, committed before the
+run; side-tests amendment 20 for its data): each feature gene weighted by
+max(0, rho), rho the Pearson correlation across v4.2's 16 covered classes
+between v4.1's RNA class means and Rieckmann 2017's protein class means;
+protein uploads only. Self-checks passed: unit weights reproduce v4.1's
+correlation exactly, and v4.1 reproduced Fulcher 69.05 and PBMC240 92.31.
+
+**The weights:** 7,996 of 9,002 feature genes have a protein; their median
+rho is 0.435, and 17.1% get weight 0. Monaco 2019's sorted RNA gives similar
+weights (Spearman 0.64 over 7,989 genes and 14 classes).
+
+| Gate | v4.3 | v4.1 | Bar | |
+|---|---|---|---|---|
+| Fulcher 2026, six types | 69.34 | 69.05 | ≥ 71.05 | miss |
+| PXD056050 pools (another lab), five sorted groups | 57.5 | 57.5 | ≥ 57.5 | pass |
+| PBMC240, lymphoid recall | 92.31 | 92.31 | ≥ 90.31 | pass |
+| Fulcher, answers committed / correct when committed | 88.65 / 97.93 | 88.57 / 97.93 | ≥ 86.57 / ≥ 96.93 | pass |
+| Out-of-reference AUROC | 0.7951 | 0.7898 | ≥ 0.7598 | pass |
+
+Fulcher's CD8 T recall is 23.76 for both. PBMC240, both SCoPE2 versions and
+Furtwängler are unchanged (the correlation term is flat there).
+
+**NO GO.** Nothing is tuned; v4.3 is not built.
+
+**What it shows:**
+- Most genes' RNA contrasts between classes hold on protein (median rho
+  0.435), so the correlation term is not where CD8 T cells are lost.
+- **Another lab's sorted pools show the CD8 T failure plainly:** v4.1 calls
+  all 4 FACS-sorted CD8 T pools of PXD056050 CD4 T, and both activated-NK
+  pools non-classical monocyte; B (7 of 8), total T (4 of 4) and monocytes
+  (4 of 4) are right. With Fulcher (CD8 T recall 23.8) and Khoury (2.7),
+  that is a third lab where CD8 T cells are read as CD4 T. The cause lies in
+  the encoder and its reference, not the correlation term.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
