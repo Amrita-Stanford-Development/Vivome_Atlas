@@ -789,6 +789,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_v2_build/gene_id_map_provenance.json` — the lymph node v2 build's identifier map
 - `research/notebook-outputs/lymph_node_v2_build/mask_profiles_summary.csv` — the lymph node v2 build's missingness profiles
 - `research/notebook-outputs/lymph_node_v2_build/bundle_MANIFEST.json` — the lymph node v2 build's bundle MANIFEST, frozen (on Drive, not in the repository)
+- `research/notebook-outputs/lymph_node_v3_build/calibration.json` — the lymph node v3 build's calibration: v2's temperatures, v1's thresholds (no chance floor), the members' sha256s
+- `research/notebook-outputs/lymph_node_v3_build/train_record.json` — the lymph node v3 build's five members: v2's, copied (v2's training record)
+- `research/notebook-outputs/lymph_node_v3_build/classes.json` — the lymph node v3 build's classes and hierarchy (v2's)
+- `research/notebook-outputs/lymph_node_v3_build/classes_by_donor.csv` — the lymph node v3 build's cells per class and donor (v2's)
+- `research/notebook-outputs/lymph_node_v3_build/feature_space_provenance.json` — the lymph node v3 build's gene space (v2's)
+- `research/notebook-outputs/lymph_node_v3_build/gene_id_map_provenance.json` — the lymph node v3 build's identifier map (v2's)
+- `research/notebook-outputs/lymph_node_v3_build/mask_profiles_summary.csv` — the lymph node v3 build's missingness profiles (v2's)
+- `research/notebook-outputs/lymph_node_v3_build/bundle_MANIFEST.json` — the lymph node v3 build's bundle MANIFEST, frozen (on Drive, not in the repository)
 - `research/notebook-outputs/lung_v2_build/calibration.json` — the lung v2 build's calibration: temperatures, thresholds with their options, the members' sha256s
 - `research/notebook-outputs/lung_v2_build/train_record.json` — the lung v2 build's five members
 - `research/notebook-outputs/lung_v2_build/classes.json` — the lung v2 build's classes and hierarchy

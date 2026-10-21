@@ -1,0 +1,113 @@
+{
+  "source": "scripts/build_organ_reference.py on scripts/organs/lymph_node_v3.json",
+  "files": {
+    "answers_spec.json": {
+      "sha256": "cd1a16dfa8da1fe228ff37d71402a5fb689e48a672605b1e7de1df7ba6ecd56b",
+      "bytes": 5324
+    },
+    "class_balanced_stats.npz": {
+      "sha256": "35ccc56135e29b4c067f151efa31a13356064b6b02931b4e926854ee282ab5fb",
+      "bytes": 101838
+    },
+    "class_means_cb.npy": {
+      "sha256": "3bfdfa2b54685587a65a7e3fe305739ada5ec40e18156e21bf40fb2263701319",
+      "bytes": 912224
+    },
+    "feature_space_genes.csv": {
+      "sha256": "335623f754d8068dbdbcc2522b605e2a9dd3cc737662445afaa163168ffddd78",
+      "bytes": 80133
+    },
+    "gene_id_map.tsv": {
+      "sha256": "5648092df98495d31cce0326e41dcb6160ba4036b58c68c3a29300b99783c504",
+      "bytes": 609153
+    },
+    "members/V2_batchgene_aug_seed0.pt": {
+      "sha256": "a56b6ce8a312d7fdbb39563206e67eedfaf829f40429e8e66d4cd3bf3e2fbddb",
+      "bytes": 147603853
+    },
+    "members/V2_batchgene_aug_seed1.pt": {
+      "sha256": "0c24a780e2a50f84e88358a97626bf9db78025b77c9434c562b37e62feb161c4",
+      "bytes": 147603853
+    },
+    "members/V2_batchgene_aug_seed2.pt": {
+      "sha256": "3ed7b9b478cc9ef47a4bff4dc23510f959c26ea73735758113cc2286be5087a3",
+      "bytes": 147603853
+    },
+    "members/V2_batchgene_aug_seed3.pt": {
+      "sha256": "f5c1983ab0643bfd486e97c8f0459b560b7331d0c02f9f7863f7c950c852ec15",
+      "bytes": 147603853
+    },
+    "members/V2_batchgene_aug_seed4.pt": {
+      "sha256": "ccddaefc52326f57f76a9be4756a2313d92146b2915a583d76b8161826b39d77",
+      "bytes": 147603853
+    },
+    "members/V2_seed0_centroids.npy": {
+      "sha256": "ed0bc30a4ddc914700bf40550a001e96367ea86ffe5345b92159a3c09a558728",
+      "bytes": 9344
+    },
+    "members/V2_seed0_centroids_cb.npy": {
+      "sha256": "797060fdf3c20ab144f24e71ccf2f6ac7ff802f3299c9be8836dd19b41e2817d",
+      "bytes": 9344
+    },
+    "members/V2_seed0_reference_latent_f16.npy": {
+      "sha256": "c8b0a2095d93e27b6eeb48d605b50d0689709a15fc029670d6a5f1168eaad882",
+      "bytes": 32498048
+    },
+    "members/V2_seed1_centroids.npy": {
+      "sha256": "19e65c52e8565ef96dc4d9a9ef760fb487fbe8a469510768d0c100d963f5839b",
+      "bytes": 9344
+    },
+    "members/V2_seed1_centroids_cb.npy": {
+      "sha256": "83a18f318fe92f12d37e2db746b1c814b3e05e929fc4fa663afa3d84c41433ea",
+      "bytes": 9344
+    },
+    "members/V2_seed1_reference_latent_f16.npy": {
+      "sha256": "4de38be92f4ae7d5246f0f14a0314d221ed314868813296c555577b7b0c20318",
+      "bytes": 32498048
+    },
+    "members/V2_seed2_centroids.npy": {
+      "sha256": "03734a3dd24dd82725d9779de2727f47460164cbb1c86f57ca3b9cd190626c61",
+      "bytes": 9344
+    },
+    "members/V2_seed2_centroids_cb.npy": {
+      "sha256": "69d7cbaf1f028da3e1d4adad9b1ccf183f18c45926abc72f6a4d590ae3a7c6f3",
+      "bytes": 9344
+    },
+    "members/V2_seed2_reference_latent_f16.npy": {
+      "sha256": "73faef1787dc0e449b95e37ca29cb53afeacd66c66c093d353c440b5d8fa877f",
+      "bytes": 32498048
+    },
+    "members/V2_seed3_centroids.npy": {
+      "sha256": "b165bcb3587de711fe69e544618f62b84078a47bf39d26ee8876e824550643f8",
+      "bytes": 9344
+    },
+    "members/V2_seed3_centroids_cb.npy": {
+      "sha256": "593eebdef091515a4f8eb2d477c92b38ba767883c7f67108bb0ae08a01d8cf32",
+      "bytes": 9344
+    },
+    "members/V2_seed3_reference_latent_f16.npy": {
+      "sha256": "a531435ead541fd864db1b778fa86354544f0dc6c7d5d062244685ad325f548c",
+      "bytes": 32498048
+    },
+    "members/V2_seed4_centroids.npy": {
+      "sha256": "f39cdba58d4741921ac4e9aaef3793fa961ad3f6cb5aa00c0d965a61983f0f0d",
+      "bytes": 9344
+    },
+    "members/V2_seed4_centroids_cb.npy": {
+      "sha256": "7e36c015f948ae140c22db28c29850cacc850a346571ecf2b9d6c98427e262c1",
+      "bytes": 9344
+    },
+    "members/V2_seed4_reference_latent_f16.npy": {
+      "sha256": "fd9f4d74ebb015f64693b197718d6a8d86f7a930495732bb43865139d8597a10",
+      "bytes": 32498048
+    },
+    "reference_metadata.csv": {
+      "sha256": "fbc0bfc06b63f8c6e47edaabe61136ee2438a508a7707238c2d1bf2f22a022c6",
+      "bytes": 11178469
+    },
+    "spec.json": {
+      "sha256": "f8b133aa4637df4915d07250da21849c6b77e946e2550967b26282495ce30d4b",
+      "bytes": 4285
+    }
+  }
+}

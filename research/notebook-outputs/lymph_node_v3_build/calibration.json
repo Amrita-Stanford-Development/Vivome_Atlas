@@ -1,0 +1,61 @@
+{
+  "temperature": {
+    "V2_batchgene_aug_seed0.pt": 0.1674775880658808,
+    "V2_batchgene_aug_seed1.pt": 0.18278113984106029,
+    "V2_batchgene_aug_seed2.pt": 0.1674775880658808,
+    "V2_batchgene_aug_seed3.pt": 0.18278113984106029,
+    "V2_batchgene_aug_seed4.pt": 0.18278113984106029
+  },
+  "qhat_by_class": {
+    "b cell": 0.7785521085133009,
+    "cd4-positive, alpha-beta t cell": 0.8137731317346322,
+    "cd8-positive, alpha-beta t cell": 0.9172912885517339,
+    "classical monocyte": 0.978477113301528,
+    "endothelial cell": 0.9955996189626405,
+    "innate lymphoid cell": 0.9800102553461721,
+    "intermediate monocyte": 0.8589632268040027,
+    "macrophage": 0.7574461789857805,
+    "mast cell": 0.7765841574697694,
+    "mature nk t cell": 0.9723922626879158,
+    "myeloid dendritic cell": 0.9956034535193122,
+    "naive thymus-derived cd4-positive, alpha-beta t cell": 0.751154325399283,
+    "natural killer cell": 0.9678855469292347,
+    "neutrophil": 0.15632807082760292,
+    "non-classical monocyte": 0.9979505491572151,
+    "plasma cell": 0.08010852809055324,
+    "regulatory t cell": 0.9256178446862842,
+    "stromal cell": 0.9957229003381739
+  },
+  "marginal_qhat": 0.8881364800684619,
+  "ood_threshold": 0.7734853625297546,
+  "n_uploads": 240,
+  "n_cells": 81850,
+  "cells_per_class": {
+    "b cell": 10441,
+    "cd4-positive, alpha-beta t cell": 13325,
+    "cd8-positive, alpha-beta t cell": 9054,
+    "classical monocyte": 2560,
+    "endothelial cell": 1537,
+    "innate lymphoid cell": 3666,
+    "intermediate monocyte": 1685,
+    "macrophage": 5836,
+    "mast cell": 1219,
+    "mature nk t cell": 4034,
+    "myeloid dendritic cell": 904,
+    "naive thymus-derived cd4-positive, alpha-beta t cell": 6965,
+    "natural killer cell": 4998,
+    "neutrophil": 1595,
+    "non-classical monocyte": 429,
+    "plasma cell": 9537,
+    "regulatory t cell": 3138,
+    "stromal cell": 927
+  },
+  "suite_top1_accuracy": 66.373,
+  "members": {
+    "V2_batchgene_aug_seed0.pt": "a56b6ce8a312d7fdbb39563206e67eedfaf829f40429e8e66d4cd3bf3e2fbddb",
+    "V2_batchgene_aug_seed1.pt": "0c24a780e2a50f84e88358a97626bf9db78025b77c9434c562b37e62feb161c4",
+    "V2_batchgene_aug_seed2.pt": "3ed7b9b478cc9ef47a4bff4dc23510f959c26ea73735758113cc2286be5087a3",
+    "V2_batchgene_aug_seed3.pt": "f5c1983ab0643bfd486e97c8f0459b560b7331d0c02f9f7863f7c950c852ec15",
+    "V2_batchgene_aug_seed4.pt": "ccddaefc52326f57f76a9be4756a2313d92146b2915a583d76b8161826b39d77"
+  }
+}
