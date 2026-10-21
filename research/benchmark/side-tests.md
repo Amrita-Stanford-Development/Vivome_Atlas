@@ -306,6 +306,25 @@ points (narrow uploads 89.99% correct when committed, bar 90). PXD045043 was
 read a third time (G3 0.9172, unchanged). PXD042367 is not opened and stays
 sealed; MSV000094189 and PXD052341 are unchanged and sealed.
 
+### Amendment 18, 2026-10-21: the pooled blood candidate v5.3 (the owner's go-ahead)
+
+The owner chose to build a pooled blood candidate (2026-10-21), although the
+blood_pools diagnostic's fixed reading said "not promising" (run history
+entry 61). That reading stands; v5.3 is a new candidate with its own gates.
+- **Candidate:** v5.3, v4.1's rule on five V2 members trained with RNA pools
+  added to the training rows (the diagnostic's pools), on the original
+  labels (`research/notebooks/v5_train.py clean --variant v5.3`;
+  `research/notebooks/v5_build.py build --variant v5.3`).
+- **Gates,** fixed in `research/notebooks/v53_gates.py` before training, on
+  development data only: Fulcher at least v4.1 + 2; PBMC240 lymphoid recall
+  at least v4.1 - 2; Fulcher committed at least v4.1 - 2 and correct when
+  committed at least v4.1 - 1; out-of-reference AUROC at least v4.1 - 0.03.
+  SCoPE2 is reported, as development data.
+- **Not served either way.** The held-out protein sets are spent; a GO makes
+  v5.3 a frozen candidate for the sorted CD4/CD8 test, by that protocol's
+  next amendment. The simulated evaluation suite's `te_eval` cells are not
+  used (they would be on their sixth use).
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

@@ -669,8 +669,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/v41_phase3/spec_block.json` — v4.1, Phase C: the verdict, for `scripts/build_v41_spec.py`
 - `research/notebooks/v5_labels.py` — v5, Phase 0: cleans the reference's CD8 T, NK and NK T labels by the atlas's own `free_annotation`, with a marker audit; the dropped dendritic-cell rule and its evidence in the docstring
 - `research/notebooks/v5_checkpoint.py` — v5, Phase 1: v4.1 against v4.1 with centroids and class means from the cleaned labels (current encoder), on the v4.1 cache's cells, cleaned truth
-- `research/notebooks/v5_train.py` — v5, Phase 2: NB1d's training recipe on this PC's GPU; a reproduction stage against NB1d's seed 1, then five members on the cleaned labels (`--variant v5.1`: on v5.1's labels)
-- `research/notebooks/v5_build.py` — v5, Phase 3: v5's latents, centroids, temperatures, conformal and out-of-distribution thresholds by NB2's recipe, and v4.1's class-balanced layer, into `service/model/v5/` (`--variant v5.1`: into `service/model/v5_1/`); a reproduction mode against v3.1's spec
+- `research/notebooks/v5_train.py` — v5, Phase 2: NB1d's training recipe on this PC's GPU; a reproduction stage against NB1d's seed 1, then five members on the cleaned labels (`--variant v5.1`: on v5.1's labels; `--variant v5.3`: on the original labels with RNA pools added to the training rows)
+- `research/notebooks/v5_build.py` — v5, Phase 3: v5's latents, centroids, temperatures, conformal and out-of-distribution thresholds by NB2's recipe, and v4.1's class-balanced layer, into `service/model/v5/` (`--variant v5.1`: into `service/model/v5_1/`; `--variant v5.3`: its own folder, built when trained); a reproduction mode against v3.1's spec
 - `research/notebooks/v5_phase4.py` — v5, Phase 4: the pre-registered evaluation against v4.1 and v3.1 on cleaned truth, with development guardrails (not yet run)
 - `research/notebooks/v5_diagnose.py` — v5, v5.1 and v5.2: how each differs from v4.1 and from the version before it on Fulcher and on CD8 T and NK, on calibration cells and development data, under each label version; chooses nothing
 - `research/notebooks/v51_labels.py` — v5.1: v5's cleaned labels with the NK T class folded into NK (its cells are NK by markers)
@@ -822,6 +822,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/blood_pools/rules.json` — the blood pool diagnostic's settings, written before the run
 - `research/notebook-outputs/blood_pools/results.json` — blood members with and without RNA pools, two seeds: validation, calibration-suite top-1, Fulcher 2026
 - `research/notebook-outputs/blood_pools/decision.json` — the reading: not promising as written (seed 1's Fulcher gain 1.82, bar 2); every measure rose in both seeds
+- `research/notebooks/v53_gates.py` — candidate v5.3 (pooled blood members): its development gates against v4.1, fixed before training (Fulcher, PBMC240, answers, out-of-reference AUROC; SCoPE2 reported); not served either way
 - `research/notebooks/blood_pools.py` — a diagnostic after the organs' A6: blood members trained with and without RNA pools (two seeds), on validation, the calibration suite and Fulcher 2026, with a reading fixed in the script; blood v4.1 unchanged
 - `research/notebook-outputs/label_stability/rules.json` — label stability's settings and script sha256, written before the run
 - `research/notebook-outputs/label_stability/per_cell.csv.gz` — label stability: every development cell's answer and best guess under each served model, and its kind of change for each pair of releases

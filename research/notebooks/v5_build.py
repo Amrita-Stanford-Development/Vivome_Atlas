@@ -137,6 +137,10 @@ VARIANTS = {
     "v5.2": {"dir": REPO / "service" / "model" / "v5_2", "out": REPO / "research" / "notebook-outputs" / "v52_build",
              "phase4": REPO / "research" / "notebook-outputs" / "v52_phase4" / "spec_block.json",
              "answers": "nb2_spec_v52.json", "spec": "spec_v52.json"},
+    # v5.3: pooled training on the original labels; its evaluation is v53_gates.py's block
+    "v5.3": {"dir": REPO / "service" / "model" / "v5_3", "out": REPO / "research" / "notebook-outputs" / "v53_build",
+             "phase4": REPO / "research" / "notebook-outputs" / "v53_gates" / "spec_block.json",
+             "answers": "nb2_spec_v53.json", "spec": "spec_v53.json"},
 }
 K_NN, ALPHA, MIN_N = 15, 0.10, 50
 TOL_Q, TOL_COS = 1e-3, 0.9999
@@ -328,6 +332,7 @@ def build_v5(s: dict, X_raw: np.ndarray, variant: str = "v5") -> None:
         members[name] = path
     got = build(members, s["y_clean"], s, X_raw, t0)
     layer = best_guess_layer(members, s["y_clean"], X_raw, len(s["names"]))
+    which = "the original labels" if variant == "v5.3" else "the cleaned labels"
     print(f"best-guess layer built ({time.time() - t0:.0f}s)", flush=True)
     (target / "members").mkdir(parents=True, exist_ok=True)
     files = {}
@@ -339,12 +344,12 @@ def build_v5(s: dict, X_raw: np.ndarray, variant: str = "v5") -> None:
         np.save(target / "members" / f"V2_seed{seed}_centroids_cb.npy", layer["centroids_cb"][name])
         files[f"members/{name}"] = f"v5_train.py checkpoint ({tv['ckpt_record']}/{name})"
         files[f"members/V2_seed{seed}_reference_latent_f16.npy"] = "all reference cells, reference_metadata.csv row order"
-        files[f"members/V2_seed{seed}_centroids.npy"] = "class means of the reference latents under the cleaned labels, class_idx order"
-        files[f"members/V2_seed{seed}_centroids_cb.npy"] = f"{name} centroids under class-balanced statistics (cleaned labels)"
+        files[f"members/V2_seed{seed}_centroids.npy"] = f"class means of the reference latents under {which}, class_idx order"
+        files[f"members/V2_seed{seed}_centroids_cb.npy"] = f"{name} centroids under class-balanced statistics ({which})"
     np.savez(target / "class_balanced_stats.npz", mu=layer["mu"], sd=layer["sd"])
     np.save(target / "class_means_cb.npy", layer["means"])
-    files["class_balanced_stats.npz"] = "per-gene class-balanced mean and SD over all reference cells, cleaned labels"
-    files["class_means_cb.npy"] = "class-balanced z-scored RNA class means under the cleaned labels, class position order (22 x 9,002)"
+    files["class_balanced_stats.npz"] = f"per-gene class-balanced mean and SD over all reference cells, {which}"
+    files["class_means_cb.npy"] = f"class-balanced z-scored RNA class means under {which}, class position order (22 x 9,002)"
     labels = tv["labels"]
     record = {"labels": f"{labels.relative_to(REPO).as_posix()} (sha256 {hashlib.sha256(labels.read_bytes()).hexdigest()})"}
     answers = write_spec(got, record, variant)

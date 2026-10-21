@@ -96,6 +96,12 @@ VARIANTS = {
     "v5.2": {"labels": REPO / "research" / "notebook-outputs" / "v52_labels" / "reference_labels_v52.csv.gz",
              "ckpt": DRIVE / "Tier1_v31" / "V5" / "ckpt_v52", "out": REPO / "research" / "notebook-outputs" / "v52_train",
              "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt_v52"},
+    # v5.3 (owner, 2026-10-21; research/notebooks/v53_gates.py): v4.1's members' recipe and the
+    # original labels (reference_metadata.csv's class_idx), with RNA pools added to the
+    # training rows (research/notebook-outputs/blood_pools: every measure up in two seeds).
+    "v5.3": {"labels": config.MODEL_DIR / "runtime" / "reference_metadata.csv",
+             "ckpt": DRIVE / "Tier1_v31" / "V5" / "ckpt_v53", "out": REPO / "research" / "notebook-outputs" / "v53_train",
+             "ckpt_record": "Drive Data/Results/Tier1_v31/V5/ckpt_v53", "pools": True},
 }
 SEEDS, REPRO_SEED = (0, 1, 2, 3, 4), 1
 ARCH = {"hidden": (1024, 512), "dropout": 0.1, "latent": 128}
@@ -131,7 +137,9 @@ def setup(labels: Path = LABELS) -> dict:
     split = np.load(bundle.NB1 / "splits_seed0.npz")
     print(f"RNA {X.shape} in {time.time() - t:.0f}s; statistics match NB1's within {gap:.1e}; "
           f"train {len(split['train']):,} val {len(split['val']):,}", flush=True)
-    return {"names": names, "y_all": y_all, "y_clean": lab["class_idx_clean"].to_numpy(), "device": device,
+    # a labels file without class_idx_clean is the original labels (v5.3: reference_metadata.csv)
+    y_clean = (lab["class_idx_clean"] if "class_idx_clean" in lab.columns else lab["class_idx"]).to_numpy()
+    return {"names": names, "y_all": y_all, "y_clean": y_clean, "device": device, "X": X,
             "XG": torch.from_numpy(X).to(device, dtype=torch.float16), "assign": assign.to(device),
             "mu": torch.from_numpy(stats["mu"].astype(np.float32)).to(device),
             "sd": torch.from_numpy(stats["sd"].astype(np.float32)).to(device),
@@ -223,10 +231,26 @@ def clean(s: dict, variant: str = "v5") -> None:
     v = VARIANTS[variant]
     v["ckpt"].mkdir(parents=True, exist_ok=True)
     t0, members = time.time(), {}
+    s_train, y_train, pooled = s, s["y_clean"], {}
+    if v.get("pools"):
+        # The blood_pools diagnostic's pools (research/notebooks/organ_v2_pools.py, make_pools: its
+        # seed and settings), built from training rows only and appended to the training rows;
+        # validation is unchanged. The prior is computed over every training row, pools included.
+        import organ_v2_pools as pools_recipe
+        rows, labels = pools_recipe.make_pools(s["X"], s["y_clean"], np.asarray(s["TR"]), len(s["names"]))
+        n = len(s["y_clean"])
+        s_train = {**s, "XG": torch.cat([s["XG"], torch.from_numpy(rows).to(s["device"], dtype=torch.float16)]),
+                   "TR": np.concatenate([np.asarray(s["TR"]), np.arange(n, n + len(rows))])}
+        y_train = np.concatenate([s["y_clean"], labels])
+        pooled = {"pools": int(len(rows)), "seed": pools_recipe.SEED_POOLS, "share": pools_recipe.POOL_SHARE,
+                  "min": pools_recipe.POOL_MIN, "max": pools_recipe.POOL_MAX, "sizes": list(pools_recipe.POOL_SIZES),
+                  "pure": pools_recipe.PURE, "majority": pools_recipe.MAJORITY,
+                  "recipe_sha256": hashlib.sha256(Path(pools_recipe.__file__).read_bytes()).hexdigest()}
+        print(f"{len(rows):,} pools added to {len(s['TR']):,} training rows", flush=True)
     for seed in SEEDS:
         path = v["ckpt"] / f"V2_batchgene_aug_seed{seed}.pt"
-        print(f"[seed {seed}] training on the cleaned labels", flush=True)
-        model, info = train(s, s["y_clean"], seed)
+        print(f"[seed {seed}] training on {'the original labels with pools' if pooled else 'the cleaned labels'}", flush=True)
+        model, info = train(s_train, y_train, seed)
         torch.save(model.state_dict(), path)
         (v["ckpt"] / f"V2_batchgene_aug_seed{seed}.json").write_text(json.dumps(
             {k: v for k, v in info.items() if k != "history"}) + "\n", newline="\n")
@@ -244,7 +268,7 @@ def clean(s: dict, variant: str = "v5") -> None:
         "torch": torch.__version__, "labels": v["labels"].relative_to(REPO).as_posix(),
         "labels_sha256": hashlib.sha256(v["labels"].read_bytes()).hexdigest(),
         "reproduction": "research/notebook-outputs/v5_train/reproduce.json",
-        "checkpoint_dir": v["ckpt_record"], "members": members,
+        "checkpoint_dir": v["ckpt_record"], "members": members, **({"pools": pooled} if pooled else {}),
         "seconds": round(time.time() - t0)}, indent=2) + "\n", newline="\n")
     print(f"trained {len(members)} members ({time.time() - t0:.0f}s)")
 

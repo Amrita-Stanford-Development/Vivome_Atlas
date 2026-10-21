@@ -126,7 +126,7 @@ ATLAS_VERSION = "0.6.0"
 # evaluation passes. "v5.1": v5 with the NK T class folded into NK in training.
 # "v5.2": v5.1 with CD4/CD8 T labels corrected by a classifier trained on Hao et
 # al. 2021. Both are likewise refused until their evaluation passes.
-PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v4.2", "v5", "v5.1", "v5.2")
+PIPELINE_VERSIONS = ("v3", "v3.1", "v4", "v4.1", "v4.2", "v5", "v5.1", "v5.2", "v5.3")
 PIPELINE_VERSION = os.environ.get("VIVOME_PIPELINE_VERSION", "v4.1")
 if PIPELINE_VERSION not in PIPELINE_VERSIONS:
     raise ValueError(f"VIVOME_PIPELINE_VERSION={PIPELINE_VERSION!r}; expected one of {PIPELINE_VERSIONS}.")
@@ -178,6 +178,7 @@ V51_MANIFEST_PATH = V51_DIR / "MANIFEST.json"
 V51_MEMBERS_DIR = V51_DIR / "members"
 
 V52_DIR = _env_path("VIVOME_V52_DIR", MODEL_DIR / "v5_2")
+V53_DIR = _env_path("VIVOME_V53_DIR", MODEL_DIR / "v5_3")
 
 # Every version built by research/notebooks/v5_build.py: (directory, answers'
 # spec, best guess's spec). fusion.py reads its files from here.
@@ -185,6 +186,7 @@ V5_FAMILY = {
     "v5": (V5_DIR, "nb2_spec_v5.json", "spec_v5.json"),
     "v5.1": (V51_DIR, "nb2_spec_v51.json", "spec_v51.json"),
     "v5.2": (V52_DIR, "nb2_spec_v52.json", "spec_v52.json"),
+    "v5.3": (V53_DIR, "nb2_spec_v53.json", "spec_v53.json"),
 }
 
 # Stage 5 / Stage 6 — fraction of the query drawn as the random calibration

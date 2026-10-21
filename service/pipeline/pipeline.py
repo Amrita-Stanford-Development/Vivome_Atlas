@@ -82,7 +82,7 @@ class Components:
 
 # The versions service/pipeline/fusion.py serves: v3.1's answers (v5: its own)
 # with the fused best guess.
-FUSION_VERSIONS = ("v4", "v4.1", "v4.2", "v5", "v5.1", "v5.2")
+FUSION_VERSIONS = ("v4", "v4.1", "v4.2", "v5", "v5.1", "v5.2", "v5.3")
 
 
 def components_for(version: str) -> Components:
