@@ -299,6 +299,13 @@ The owner chose to build a lymph node v3 (2026-10-21):
   frozen (the protocol's amendment 6), and the owner is asked before the set
   is opened. MSV000094189 and PXD052341 are unchanged and sealed.
 
+### Amendment 17, 2026-10-21: the lymph node v3 missed; PXD042367 stays sealed
+
+The lymph node v3 ran its gates once (run history entry 62): NO GO, by 0.01
+points (narrow uploads 89.99% correct when committed, bar 90). PXD045043 was
+read a third time (G3 0.9172, unchanged). PXD042367 is not opened and stays
+sealed; MSV000094189 and PXD052341 are unchanged and sealed.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

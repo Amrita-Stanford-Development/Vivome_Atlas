@@ -1,0 +1,21 @@
+{
+  "script_sha256": "9cb5f758c2c64cdae7c9287ce1fc768226e8fc3732501c70329ae805d136e281",
+  "started": "2026-10-21T11:23:07",
+  "gates": {
+    "mixed_committed_min": 75.0,
+    "mixed_correct_when_committed_min": 90.0,
+    "mixed_coverage_min": 85.0,
+    "mixed_false_abstention_max": 2.0,
+    "narrow_correct_when_committed_min": 90.0,
+    "g3_auroc_min": 0.8
+  },
+  "registry": {
+    "organ_file_sha256": "de268b7d6519b4d2dda47a0d51d6c985727d507bc49a7042f18224a4b4cfcc8c",
+    "calib_suite_sha256": "06a3252078cb1db8664c8d7eace34246f10b6b5f6f2f94b65217fef008cf60ca",
+    "eval_suite_sha256": "d00b1e6c3123f7a45991377aaf85bb68a63a1731acb596875b45903afd27796a",
+    "bundle_manifest_sha256": "0cbd39dc51c3dd79edb1b7757953b815839c98f844870cc72400c922d3637ef6",
+    "registered": "2026-10-21, before calibration (members are lymph_node_v2's)",
+    "frozen": "2026-10-21, after calibration, before any v3 gate"
+  },
+  "organ_file_sha256": "de268b7d6519b4d2dda47a0d51d6c985727d507bc49a7042f18224a4b4cfcc8c"
+}

@@ -52,10 +52,9 @@
     },
     "epithelium": {
       "regions": 4,
-      "abstained": 0.0,
+      "abstained": 50.0,
       "levels": {
-        "lineage": 3,
-        "class": 1
+        "lineage": 2
       }
     }
   },
@@ -65,14 +64,14 @@
   },
   "epithelium": {
     "regions": 4,
-    "abstained": 0.0,
+    "abstained": 50.0,
     "auroc_similarity_lymphoid_over_epithelium": 1.0
   },
   "baselines": {
     "method": "The two simple methods are the corrected benchmark's\n(`benchmark/baselines_corrected.py`), on the organ's own gene space:\n- **RNA side:** the candidate's reference cells over its feature genes,\n  scaled per gene with every class weighted equally (class_balanced_z).\n- **Query side:** the intake's upload over the same genes, on the service's\n  log scale, z-scored per gene within the upload (unmeasured genes 0).\n- **correlation:** Pearson over each sample's measured genes to every class\n  mean of the RNA side; the predicted class is the argmax.\n- **PCA + kNN:** a 50-component PCA of the RNA side (at most RNA_CELLS cells,\n  sampled per class), both sides projected around the class-balanced centre;\n  the K nearest RNA cells vote. Its setup checks (held-out RNA kNN, the\n  queries' share of RNA neighbours) are recorded beside it.",
     "rna_cells": 126945,
     "query_samples": 40,
-    "candidate": "lymph_node_v2",
+    "candidate": "lymph_node_v3",
     "correlation": {
       "predicted_class": {
         "b cell": 15,

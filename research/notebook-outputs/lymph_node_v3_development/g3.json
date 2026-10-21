@@ -1,0 +1,218 @@
+{
+  "set": "PXD045043",
+  "voxels": 26,
+  "by_region": {
+    "red pulp": 13,
+    "white pulp": 13
+  },
+  "auroc": 0.9172,
+  "score": "P(B cell group)",
+  "auroc_by_size": {
+    "20": 0.6667,
+    "50": 0.6667,
+    "100": 1.0,
+    "200": 1.0
+  },
+  "mean_score_by_region": {
+    "red pulp": 0.3307,
+    "white pulp": 0.6471
+  },
+  "argmax_group": {
+    "B cell": {
+      "red pulp": 6,
+      "white pulp": 12
+    },
+    "T cell": {
+      "red pulp": 0,
+      "white pulp": 1
+    },
+    "monocyte/macrophage": {
+      "red pulp": 7,
+      "white pulp": 0
+    }
+  },
+  "answers": [
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "plasma cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "innate lymphoid cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "red pulp",
+      "label": null,
+      "level": null,
+      "abstained": true,
+      "best_guess": "macrophage"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    },
+    {
+      "truth": "white pulp",
+      "label": "b cell",
+      "level": "class",
+      "abstained": false,
+      "best_guess": "b cell"
+    }
+  ]
+}

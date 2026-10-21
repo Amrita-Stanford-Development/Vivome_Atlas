@@ -2690,6 +2690,50 @@ Blood v4.1 is unchanged. A pooled blood candidate would be a new model:
 five members, its own pre-registered gates on a fresh suite, and the
 owner's decision.
 
+### 62. The lymph node v3 (calibration-only), 2026-10-21
+
+**Why.** The owner chose the calibration-only v3 from "Options for a v3":
+lymph node v2's members with v1's calibration rule, since v2 missed only its
+narrow-upload bar (89.82, bar 90) and the chance floor commits more of the
+narrow uploads it gets wrong.
+
+**Fixed first** (`431fa3b`, before calibration): `scripts/organs/lymph_node_v3.json`
+(v2's file without the floor, a new evaluation-suite seed); the data stages
+reproduced v2's files, the calibration suite's sha256 included; side-tests
+amendment 16 (G3 reuses PXD045043 with the owner's leave); the protocol's
+amendment 6; `research/organ-references.md`, "Version 3".
+
+**Build** (`b9e4bd9`): v2's members copied (sha256 equal); calibrate, layer
+and bundle. The pre-registered checks passed: every bundle file but the two
+specs equals v2's; the temperatures and the out-of-distribution threshold are
+v2's; the thresholds change only for the 8 classes v2's floor had capped at
+0.9444. MANIFEST `0cbd39dc…` registered before any gate.
+
+**Gates** (`research/notebook-outputs/lymph_node_v3_development/`; G4 passed
+first, the rehearsal's B over T AUROC 1.0):
+
+| Gate | v3 | v2 | Bar | |
+|---|---|---|---|---|
+| G1 mixed: committed / correct when committed / coverage / false abstention | 80.37 / 98.73 / 95.20 / 0.26 | 96.47 / 97.65 / 92.38 / 0.32 | ≥ 75 / ≥ 90 / ≥ 85 / ≤ 2 | pass |
+| G1 narrow: correct when committed | **89.99** | 89.82 | ≥ 90 | **miss, by 0.01** |
+| G3 PXD045043, white over red pulp | 0.9172 | 0.917 | ≥ 0.8 | pass (unchanged, as predicted) |
+| G1 as v1 wrote it: committed / correct when committed | 80.37 / 95.36 | 95.55 / 94.39 | (reported) | |
+
+G2 is v2's (it never reads calibration): 55.7 unseen, 59.3 seen.
+
+**NO GO, by 0.01 points.** v1's rule commits less (80.4% against 96.5% for
+mixed uploads) but barely changes the narrow uploads' accuracy, because the
+miss is still the B cells': in narrow uploads they are committed 94.1% and
+correct when committed 67.7% (read as T cells), 2,395 of the 3,087 wrong
+answers. Without them narrow uploads are 97.05% correct when committed. The
+floor's 8 rare classes were never the cause. Nothing is tuned; PXD042367
+stays sealed (side-tests amendment 17).
+
+**What would move it** is the B cells' reading in narrow uploads, the same
+weakness blood v4.1 shows (a listed Manuscript failure mode), not
+calibration. A v4 would need a change to the encoder or the reference, and
+a fresh G3 set.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

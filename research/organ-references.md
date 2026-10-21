@@ -659,6 +659,21 @@ bars):
 - **A pass** freezes v3 (the protocol's amendment 6 gains its MANIFEST
   sha256). The owner is asked before PXD042367 is opened.
 
+**Outcome, 2026-10-21: NO GO, by 0.01 points** (run history entry 62;
+`research/notebook-outputs/lymph_node_v3_development/`).
+- **G1 mixed passes:** committed 80.37, correct when committed 98.73,
+  coverage 95.20, false abstention 0.26.
+- **G1 narrow misses:** correct when committed 89.99 (bar 90; v2 89.82).
+- **G3 passes, unchanged as predicted:** PXD045043 AUROC 0.9172.
+- **G4 passed** (the rehearsal); G2 is v2's.
+- **The cause is the B cells'**, not calibration: in narrow uploads they are
+  committed 94.1% and correct when committed 67.7%, 2,395 of the 3,087
+  wrong answers; without them narrow uploads are 97.05%. v1's rule commits
+  less overall but leaves the B cells as they were.
+- **PXD042367 stays sealed** (`side-tests.md`, amendment 17). Nothing is
+  tuned. A v4 would need the B cells' narrow reading fixed in the encoder or
+  the reference, and a fresh G3 set.
+
 ### A7: could the user declare the colon's upload make-up? (2026-10-20): not supported
 
 A4 found no label-free key, so the one key left was the user: the upload

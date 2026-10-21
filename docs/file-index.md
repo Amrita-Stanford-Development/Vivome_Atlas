@@ -781,6 +781,12 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/lymph_node_v2_development/g3.json` — the lymph node v2's G3: PXD045043's spleen voxels, white pulp over red pulp
 - `research/notebook-outputs/lymph_node_v2_development/seen.json` — the lymph node v2 on v1's G3 sets, reported as seen
 - `research/notebook-outputs/lymph_node_v2_development/gates.json` — the lymph node v2's gates: values and verdicts
+- `research/notebook-outputs/lymph_node_v3_development/rules.json` — the lymph node v3's gate run: script sha256, v2's bars, the registry's sha256s, written before computing
+- `research/notebook-outputs/lymph_node_v3_development/g1.json` — the lymph node v3's G1 on its new evaluation suite: mixed and narrow uploads, as v1 wrote it, per scenario
+- `research/notebook-outputs/lymph_node_v3_development/g1_cells.csv.gz` — the lymph node v3's G1: every scored cell
+- `research/notebook-outputs/lymph_node_v3_development/g3.json` — the lymph node v3's G3: PXD045043's spleen voxels (read for v2; unchanged, as predicted)
+- `research/notebook-outputs/lymph_node_v3_development/seen.json` — the lymph node v3 on v1's G3 sets, reported as seen
+- `research/notebook-outputs/lymph_node_v3_development/gates.json` — the lymph node v3's gates: values and verdicts (NO GO by 0.01 on narrow uploads)
 - `research/notebook-outputs/lymph_node_v2_build/calibration.json` — the lymph node v2 build's calibration: temperatures, thresholds with their options, the members' sha256s
 - `research/notebook-outputs/lymph_node_v2_build/train_record.json` — the lymph node v2 build's five members
 - `research/notebook-outputs/lymph_node_v2_build/classes.json` — the lymph node v2 build's classes and hierarchy
