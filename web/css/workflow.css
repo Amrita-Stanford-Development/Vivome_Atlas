@@ -312,8 +312,8 @@
 /* Plain-words sections after a chapter's stage. */
 .wf-after h3 { margin: 18px 0 6px; font-size: 17px; }
 .wf-after > p { font-size: 15.5px; margin-bottom: 10px; }
-.wf-rna { color: var(--rna); }
-.wf-prot { color: var(--prot); }
+.wf-rna { color: var(--rna-ink); }
+.wf-prot { color: var(--prot-ink); }
 .wf-plain { font-size: 14.5px; line-height: 1.6; }
 
 /* ---- a chapter: a pinned stage on a scroll runway ----
@@ -458,7 +458,7 @@
 .wf-ladder li { grid-template-columns: 11.5em 1fr; }
 .wf-rung.wf-pass { box-shadow: inset 4px 0 0 var(--accent) !important; }
 .wf-rung.wf-stop { box-shadow: inset 4px 0 0 var(--ink) !important; background: var(--well); }
-.wf-rung.wf-skipped { opacity: 0.55; box-shadow: inset 4px 0 0 var(--line) !important; }
+.wf-rung.wf-skipped { color: var(--ink-faint); box-shadow: inset 4px 0 0 var(--line) !important; }
 .wf-heldout { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .wf-heldout .wf-svg { max-width: 200px; margin-top: 8px; }
 .wf-heldout-sheet { margin-top: 8px; }

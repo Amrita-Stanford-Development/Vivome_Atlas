@@ -13,7 +13,7 @@ import {
   sequential,
 } from './workflow-layout.js';
 import {
-  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, hatch, line, mountCanvas, onDrag, short, text,
+  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, PROT_INK, RNA, SOFT, alpha, bar, chip, dot, hatch, line, mountCanvas, onDrag, short, text,
 } from './scene-kit.js';
 
 const fc = (x) => formatCount(x);
@@ -146,7 +146,7 @@ export function encoder(el, ctx) {
         text(g, fc(layer.width), colX[i], 40 + H + 18, { size: 12, colour: INK, align: 'center', weight: 600, opacity: on });
       });
       const last = colX[layers.length - 1];
-      text(g, 'the cell\u2019s address', last, 40 + H + 34, { size: 10.5, colour: PROT, align: 'center', weight: 600, opacity: squeeze });
+      text(g, 'the cell\u2019s address', last, 40 + H + 34, { size: 10.5, colour: PROT_INK, align: 'center', weight: 600, opacity: squeeze });
       for (let k = 0; k < 40; k += 1) {
         const t = squeeze * 1.4 - (k / 40) * 0.4;
         if (t <= 0 || t >= 1) continue;

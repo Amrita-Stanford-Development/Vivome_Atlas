@@ -85,7 +85,8 @@
 .organ-map > a { background: var(--accent-tint); box-shadow: inset 0 0 0 1px rgba(0, 102, 163, 0.35); }
 .organ-map .organ-status { color: var(--accent); }
 .organ-chip > a:hover { box-shadow: inset 0 0 0 2px var(--accent); }
-.organ-to-build { opacity: 0.8; }
+/* To build: the name in the soft ink, not faded, so it still reads at 4.5:1. */
+.organ-to-build .organ-name { color: var(--ink-soft); }
 
 /* Steps: five numbered cards. */
 .step-card .step-num { font-size: 15px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; }

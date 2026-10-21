@@ -10,6 +10,10 @@ export const BENCH = '#F5F5F3';
 export const ACCENT = '#0066A3';
 export const RNA = '#C8641E';   // reserved: RNA, and nothing else
 export const PROT = '#2F8F6A';  // reserved: protein, and nothing else
+// The same hues for text (page.css's --rna-ink and --prot-ink): the bright ones
+// read at under 4:1 on white, so words use these, and dots and strokes the above.
+export const RNA_INK = '#A35118';
+export const PROT_INK = '#277657';
 export const FONT = "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
 
 export function alpha(hex, a) {

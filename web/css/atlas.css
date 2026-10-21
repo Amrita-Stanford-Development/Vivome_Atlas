@@ -48,7 +48,7 @@ body.atlas-page { height: 100vh; overflow: hidden; }
     border: 0;
     border-radius: 12px;
     background: var(--well);
-    box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.22);
+    box-shadow: inset 0 0 0 1px var(--edge), inset 1px 1px 3px rgba(var(--shade), 0.22);
     cursor: pointer;
     transition: background 0.2s ease;
 }
@@ -67,7 +67,6 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .toggle-switch.active { background: var(--on, var(--accent)); }
 .toggle-switch.active::after { transform: translateX(20px); }
 #rna-toggle { --on: var(--rna); }
-#prot-toggle { --on: var(--prot); }
 
 .text-button {
     font: inherit;
@@ -99,8 +98,11 @@ body.atlas-page { height: 100vh; overflow: hidden; }
     cursor: pointer;
 }
 .filter-item:hover { background: var(--accent-tint); }
-.filter-item.deselected { opacity: 0.35; }
-.filter-item.deselected:hover { opacity: 0.55; }
+/* Off: the swatch fades and the name is struck through, in the faint ink
+   (5:1 or more), so an off filter stays readable and its state is not
+   colour alone. */
+.filter-item.deselected .color-indicator { opacity: 0.3; }
+.filter-item.deselected .filter-name { color: var(--ink-faint); text-decoration: line-through; }
 .filter-name { color: var(--ink); }
 /* An organ's map lists its types by family; the family's name shows or hides
    the whole block. */
@@ -123,7 +125,7 @@ body.atlas-page { height: 100vh; overflow: hidden; }
     cursor: pointer;
 }
 .filter-family-head:hover { background: var(--accent-tint); }
-.filter-family-head.deselected { opacity: 0.45; }
+.filter-family-head.deselected .filter-name { color: var(--ink-faint); text-decoration: line-through; }
 .filter-family-head .filter-count { font-weight: 400; }
 
 .organ-section .organ-label { margin-top: 0; }
@@ -175,6 +177,8 @@ body.atlas-page { height: 100vh; overflow: hidden; }
     padding: 8px 10px;
     border: 0;
 }
+/* The organ chooser has no well of its own: its edge, as every field's. */
+.organ-select { border-radius: 8px; box-shadow: inset 0 0 0 1px var(--edge); }
 .controls-panel input[type="file"]::file-selector-button {
     font: inherit;
     font-size: 12.5px;
@@ -232,7 +236,7 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .given-row.is-off .browse-swatch, .given-row.is-off .atlas-glyph { opacity: 0.35; }
 .given-only { flex: none; font-size: 11.5px; padding: 2px 8px; }
 .highlight-item { margin-top: 12px; font-size: 13px; }
-.service-line.is-ready { color: var(--prot); }
+.service-line.is-ready { color: var(--prot-ink); }
 .service-line.is-down { color: var(--error); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .actions .btn { font-size: 13px; padding: 8px 14px; }
@@ -254,7 +258,7 @@ body.atlas-page { height: 100vh; overflow: hidden; }
     color: var(--ink);
     cursor: pointer;
 }
-.outcome-chips button[aria-pressed="false"] { opacity: 0.45; }
+.outcome-chips button[aria-pressed="false"] { color: var(--ink-faint); text-decoration: line-through; background: var(--bench); }
 .supported-list { font-size: 13px; }
 .supported-list p + p { margin-top: 8px; }
 

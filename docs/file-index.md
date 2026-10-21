@@ -81,6 +81,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/fixtures.js` — shared manifest fixture for the JS tests, including a `<script>` class name that proves escaping
 - `web/tests/manifest.test.js` — tests for `manifest.js`: validation, formatting, the measured/pending guard
 - `web/tests/panels.test.js` — tests for `panels.js`: every panel builder, and HTML escaping
+- `web/tests/contrast.test.js` — text colours at 4.5:1 or better on every background, form fields' edges at 3:1, off controls readable, decorative numbers hidden, the RNA and protein text colours the same on pages and canvases
 - `web/tests/chrome.test.js` — pins the shared site header and footer byte-identical across pages, one three.js build, and the living water on every page but the atlas
 - `web/tests/motion.test.js` — tests for `motion.js`: clamping, and counting up in the final number's format
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and nothing is drawn in front of its title

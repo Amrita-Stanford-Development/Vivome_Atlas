@@ -13,7 +13,7 @@ import { buildPbmcTable, buildHeaderMorph } from './workflow-panels.js';
 import { clamp, distanceForOverlap, diverging, histogramBars, lerp, phase, sequential, ticks } from './workflow-layout.js';
 import { rng } from './random.js';
 import {
-  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, hatch, line, mountCanvas, short, text,
+  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, PROT_INK, RNA, RNA_INK, SOFT, alpha, bar, chip, dot, hatch, line, mountCanvas, short, text,
 } from './scene-kit.js';
 
 const fc = (x) => formatCount(x);
@@ -178,7 +178,7 @@ export function data(el, ctx) {
     const labels = phase(settle, 0.75, 1) * (1 - toTree);
     if (settle > 0) {
       text(g, `${fc(total)} example cells with known types (a sample is drawn; one dot is one cell)`, 12, 20,
-        { size: 12, weight: 600, colour: RNA, opacity: 1 - toTree, max: width - 24 });
+        { size: 12, weight: 600, colour: RNA_INK, opacity: 1 - toTree, max: width - 24 });
     }
     if (labels > 0) {
       const placed = [];
@@ -240,11 +240,11 @@ export function data(el, ctx) {
     if (toSides > 0) {
       g.save();
       g.globalAlpha = toSides;
-      text(g, 'Learned from: RNA, every cell named', 12, 40, { size: 12.5, weight: 600, colour: RNA, max: width * 0.44 });
-      chip(g, `${names.length} types`, 12, sideH + 34, { size: 10.5, colour: RNA, border: RNA });
+      text(g, 'Learned from: RNA, every cell named', 12, 40, { size: 12.5, weight: 600, colour: RNA_INK, max: width * 0.44 });
+      chip(g, `${names.length} types`, 12, sideH + 34, { size: 10.5, colour: RNA_INK, border: RNA });
       const px = width * 0.5;
       const pw = width - px - 12;
-      text(g, 'Used on: proteins of one cell, no name', px, 40, { size: 12.5, weight: 600, colour: PROT, max: pw });
+      text(g, 'Used on: proteins of one cell, no name', px, 40, { size: 12.5, weight: 600, colour: PROT_INK, max: pw });
       const { detail, own } = ctx.detail(state);
       // A typical stretch of the cell's column: rows other cells also see, and some they miss.
       const rows = detail ? snippetRows(w.trace.detail, 24).map((k) => detail.raw_row[k]) : [];
@@ -258,7 +258,7 @@ export function data(el, ctx) {
         if (tileH > 11) text(g, row[0].split(';')[0], x + 4, y + tileH - 5, { size: 9, colour: INK, max: tileW - 8 });
       });
       const below = 52 + 12 * tileH + 18;
-      chip(g, 'type: ?', px, below, { size: 11, colour: PROT, border: PROT });
+      chip(g, 'type: ?', px, below, { size: 11, colour: PROT_INK, border: PROT });
       text(g, `our cell: ${fc(cell.observed)} of ${fc(featureSpace)} genes measured`, px + 66, below + 4, { size: 10.5, colour: SOFT, max: pw - 70 });
       hatch(g, px, below + 18, 22, 10);
       text(g, 'striped: not seen in this cell', px + 28, below + 27, { size: 10, colour: FAINT, max: pw - 30 });
@@ -714,12 +714,12 @@ export function genes(el, ctx) {
         g.fill();
         g.restore();
       }
-      text(g, 'RNA examples', cx - R * 0.55, cy - R * 0.2, { size: 12.5, weight: 600, colour: RNA, align: 'center' });
-      text(g, `${fc(rna)} genes`, cx - R * 0.55, cy - R * 0.2 + 18, { size: 11.5, colour: RNA, align: 'center' });
+      text(g, 'RNA examples', cx - R * 0.55, cy - R * 0.2, { size: 12.5, weight: 600, colour: RNA_INK, align: 'center' });
+      text(g, `${fc(rna)} genes`, cx - R * 0.55, cy - R * 0.2 + 18, { size: 11.5, colour: RNA_INK, align: 'center' });
       const lx = cx + R + 18;
       line(g, px + r * 0.7, cy - r * 0.7, lx - 4, cy - r - 18, { colour: PROT, width: 1, opacity: enter });
-      text(g, 'protein lists', lx, cy - r - 22, { size: 12, weight: 600, colour: PROT, opacity: enter, max: width - lx - 8 });
-      text(g, `${fc(kept)} genes`, lx, cy - r - 6, { size: 11, colour: PROT, opacity: enter, max: width - lx - 8 });
+      text(g, 'protein lists', lx, cy - r - 22, { size: 12, weight: 600, colour: PROT_INK, opacity: enter, max: width - lx - 8 });
+      text(g, `${fc(kept)} genes`, lx, cy - r - 6, { size: 11, colour: PROT_INK, opacity: enter, max: width - lx - 8 });
       if (lens > 0) chip(g, `shared list: ${fc(shared)} genes`, px, cy + r + 24, { size: 12, align: 'center', border: ACCENT, colour: ACCENT, opacity: lens });
       g.restore();
     }

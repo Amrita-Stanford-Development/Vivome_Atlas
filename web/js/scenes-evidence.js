@@ -10,7 +10,7 @@ import { buildScenarioTable, buildServiceCard } from './workflow-panels.js';
 import { clamp, lerp, phase } from './workflow-layout.js';
 import { rng } from './random.js';
 import {
-  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, RNA, SOFT, alpha, bar, chip, dot, line, mountCanvas, roundRect, text,
+  ACCENT, BENCH, FAINT, FONT, INK, LINE, PROT, RNA, RNA_INK, SOFT, alpha, bar, chip, dot, line, mountCanvas, roundRect, text,
 } from './scene-kit.js';
 
 function scene(el, draw, { describe = () => '', table = () => '' } = {}) {
@@ -95,7 +95,7 @@ export function training(el, ctx) {
       });
       text(g, 'Each dot is an example cell, coloured by its type. The end is the real map from step 1;', 12, height - 44, { size: 10, colour: FAINT, max: width - 24 });
       text(g, 'the scattered start and the path in between are drawn to show the idea.', 12, height - 30, { size: 10, colour: FAINT, max: width - 24 });
-      text(g, 'No protein labels: only the named RNA examples.', 12, height - 14, { size: 10, colour: RNA, max: width - 24 });
+      text(g, 'No protein labels: only the named RNA examples.', 12, height - 14, { size: 10, colour: RNA_INK, max: width - 24 });
       g.restore();
     }
 
