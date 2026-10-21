@@ -337,7 +337,8 @@ listings, metadata APIs and papers only; nothing was downloaded and no
 sealed set was opened. The report, with the RNA atlases it found, is
 [reference-data-search.md](../reference-data-search.md). What changes here:
 - **A candidate sealed CD4/CD8 test, unopened:** MSV000102427 (PXD080865,
-  Foster lab, the GIRAFI preprint; public since 2026-08-10). About 311
+  Foster lab, the GIRAFI preprint 10.64898/2026.05.18.726081; announced
+  2026-08-10; CC0). About 311
   FACS-sorted bone-marrow mononuclear cells stained for CD4, CD8, CD19 and
   CD13, with CD4 and CD8 T-cell populations (from the preprint), and 116
   magnetically enriched PBMCs. Bone marrow, not blood. Its files and

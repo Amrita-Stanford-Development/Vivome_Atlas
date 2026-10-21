@@ -140,8 +140,9 @@ Zenodo, Figshare, Mendeley Data (now searchable), and every bioRxiv and
 medRxiv preprint since 2026-05-01. No new single-cell set with sorted CD4
 and CD8 blood T cells appeared. But one public set that the 2026-10-14 search
 missed comes close:
-- **MSV000102427 (PXD080865), Foster lab, UBC, the GIRAFI preprint:**
-  public since 2026-08-10 (checked); timsTOF SCP and Ultra 2. Its preprint
+- **MSV000102427 (PXD080865), Foster lab, UBC, the GIRAFI preprint**
+  (10.64898/2026.05.18.726081): announced to ProteomeXchange 2026-08-10
+  (checked); CC0; timsTOF SCP and Ultra 2, DIA-NN 1.8.2. Its preprint
   describes about 311 FACS-sorted **bone-marrow** mononuclear cells stained
   for CD4, CD8, CD19 and CD13, with CD4 and CD8 T-cell populations, and 116
   PBMCs after magnetic enrichment. Labels from sorting, so independent of
@@ -149,7 +150,7 @@ missed comes close:
   many cells each class has. **A candidate sealed CD4/CD8 test** (bone
   marrow, not blood); nothing of it was opened.
 - **PXD064083** (iProX; Immunity & Inflammation 2025): about 78 single CD3+
-  T cells and 70 single CD19+ B cells from ALS patients and controls, timsTOF
+  T cells and 70 single CD19+ B cells from 9 ALS patients and 26 controls, timsTOF
   diaPASEF. A possible T-against-B test; no CD4/CD8 split.
 - **PXD049099** (iProX): 8 single CD3+ and 10 single CD19+ cells. Too small
   for a test.
