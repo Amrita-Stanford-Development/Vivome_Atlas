@@ -24,7 +24,7 @@ Content-Type: multipart/form-data
 
   modality                      : "rna" | "prot"
   matrix                        : CSV or TSV (auto-detected), features in rows, cells in columns
-  restrict_to_supported_classes : "true" | "false"   (optional; default "false")
+  restrict_to_supported_classes : retired; "true" is answered 400
 ```
 
 **`modality`** says what the matrix measures:
@@ -40,16 +40,20 @@ Content-Type: multipart/form-data
 
   Normalise and log1p counts before uploading.
 
-**`restrict_to_supported_classes`** limits every label to the classes with
-cross-modal protein evidence (`config.CROSS_MODAL_SUPPORTED_CLASSES`,
-currently macrophage and monocyte). By default labels are assigned among
-all 22 reference classes. A restricted upload can only be labelled
-macrophage or monocyte, or abstain, so the restriction is wrong for
-anything else: a PBMC upload restricted this way cannot get a lymphoid
-label. The response's `label_space` field reports which candidate set was
-used.
+**`restrict_to_supported_classes` is retired** (the owner, 2026-10-21).
+Every label is chosen among all 22 reference classes. `"true"` is answered
+400, saying so; `"false"`, or no field, is labelled as always. The
+response's `label_space` field still reports the candidate set (always
+unrestricted). The pipeline keeps the option internally, so the recorded
+results made with it reproduce.
 
-**Restricted mode was not evaluated under v3.1, and is not recommended
+It limited every label to the classes with cross-modal protein evidence
+(`config.CROSS_MODAL_SUPPORTED_CLASSES`: macrophage and monocyte), so a
+restricted upload could only be labelled one of those two, or abstain. That
+is wrong for anything else: a PBMC upload restricted this way could not get
+a lymphoid label.
+
+**Restricted mode was not evaluated under v3.1, and was not recommended
 there.** NB2 never evaluated it. On SCoPE2, v3.1 restricted with its
 service flags on commits every cell, but 97.9% of the answers are
 "monocyte/macrophage". That group is exactly the two allowed classes, so it

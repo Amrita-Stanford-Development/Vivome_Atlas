@@ -289,7 +289,13 @@ class ProjectionHandler(BaseHTTPRequestHandler):
                 self._send_json(400, {"error": f"modality must be 'rna' or 'prot', got {modality!r}"})
                 return
             matrix_text = _decode_matrix(fields["matrix"])
-            restrict = _parse_bool_field(fields.get("restrict_to_supported_classes"))
+            # Restricted mode was retired (owner, 2026-10-21): every label is
+            # chosen among all the reference's classes.
+            if _parse_bool_field(fields.get("restrict_to_supported_classes")):
+                self._send_json(400, {"error": "restrict_to_supported_classes is retired: every label is chosen among "
+                                               "all the reference's classes; send the file without it"})
+                return
+            restrict = False
         except KeyError as exc:
             self._send_json(400, {"error": f"missing required field: {exc}"})
             return

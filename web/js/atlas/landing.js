@@ -614,10 +614,9 @@ export function createLanding({
 
   async function request() {
     const { file } = st;
-    const { modality, restrict } = options();
+    const { modality } = options();
     const form = new FormData();
     form.append('modality', modality);
-    form.append('restrict_to_supported_classes', restrict ? 'true' : 'false');
     form.append('matrix', file, file.name);
     abort = new AbortController();
     uploaded = 0;

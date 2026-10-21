@@ -160,7 +160,7 @@ async function start() {
     THREE, stage, ref, reference: layer, drawer, client, reduced,
     serviceUrl: service.url,
     limits: service.limits,
-    options: () => ({ modality: $('modality').value, restrict: $('restrict').checked }),
+    options: () => ({ modality: $('modality').value }),
   });
   const dataTab = mountDataTab({ landing, client, service, acceptsFiles: !organ });
   mountViewControls({ stage, layer, landing, labels });

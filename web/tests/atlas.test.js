@@ -133,3 +133,10 @@ test('the blood map is the RNA reference alone: SCoPE2\'s protein cells are a Ma
   assert.doesNotMatch(explore, /prot-count|'prot'\]/);
 });
 
+test('restricted mode is retired: no option on the page, and the request does not ask for it', () => {
+  const html = readFileSync(new URL('../atlas.html', import.meta.url), 'utf8');
+  assert.ok(!html.includes('id="restrict"'));
+  const landing = readFileSync(new URL('../js/atlas/landing.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(landing, /restrict_to_supported_classes/);
+});
+

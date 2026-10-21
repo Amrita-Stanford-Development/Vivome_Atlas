@@ -144,7 +144,7 @@ function setup({ client = null, autoPlay = false, limits = () => ({ max_cells: 2
     drawer: { open: (title, html) => opened.push({ title, html }), close() {}, body() {} },
     client: client ?? { project: async () => { throw new Error('no service'); } },
     serviceUrl: () => 'https://service.example',
-    options: () => ({ modality: 'prot', restrict: false }),
+    options: () => ({ modality: 'prot' }),
     limits,
     autoPlay,
   });
@@ -264,7 +264,7 @@ test('a file is checked, sent, waited on and landed', async () => {
   await settleMicrotasks();
   await settleMicrotasks();
   assert.ok(['working', 'finishing'].includes(landing.state.name), landing.state.name);
-  assert.deepEqual(sent, { url: 'https://service.example', modality: 'prot', restrict: 'false' });
+  assert.deepEqual(sent, { url: 'https://service.example', modality: 'prot', restrict: null }, 'restricted mode is retired');
   tick(15);
   assert.equal(landing.state.name, 'interactive');
   assert.equal(landing.run.source, 'service');

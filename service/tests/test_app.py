@@ -295,22 +295,22 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(first[0], 200)
         self.assertEqual(first, second)
 
-    def test_label_space_is_unrestricted_by_default_and_restricted_on_request(self):
+    def test_every_label_space_is_unrestricted_and_restricted_mode_is_retired(self):
+        """Restricted mode was retired (owner, 2026-10-21): a request for it is
+        turned down in words; "false", or no field, is labelled as always."""
         feature_genes = self._install_synthetic_bundle()
         matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()
         url = f"{self.base_url}/api/project"
 
-        status, default = _post_multipart(url, b"prot", matrix)
-        self.assertEqual(status, 200)
-        self.assertFalse(default["label_space"]["restricted_to_supported_classes"])
-        self.assertEqual(len(default["label_space"]["candidate_classes"]), 22)
+        for extra in (None, {"restrict_to_supported_classes": b"false"}):
+            status, default = _post_multipart(url, b"prot", matrix, extra)
+            self.assertEqual(status, 200)
+            self.assertFalse(default["label_space"]["restricted_to_supported_classes"])
+            self.assertEqual(len(default["label_space"]["candidate_classes"]), 22)
 
-        status, restricted = _post_multipart(url, b"prot", matrix, {"restrict_to_supported_classes": b"true"})
-        self.assertEqual(status, 200)
-        self.assertTrue(restricted["label_space"]["restricted_to_supported_classes"])
-        self.assertEqual(set(restricted["label_space"]["candidate_classes"]), set(config.CROSS_MODAL_SUPPORTED_CLASSES))
-        for cell in restricted["cells"]:
-            self.assertTrue(set(cell["label_set"]) <= set(config.CROSS_MODAL_SUPPORTED_CLASSES))
+        status, refused = _post_multipart(url, b"prot", matrix, {"restrict_to_supported_classes": b"true"})
+        self.assertEqual(status, 400)
+        self.assertIn("retired", refused["error"])
 
     def test_a_table_with_text_where_numbers_belong_is_400_naming_the_column(self):
         self._install_synthetic_bundle()
