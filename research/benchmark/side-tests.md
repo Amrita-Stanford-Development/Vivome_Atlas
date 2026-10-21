@@ -360,6 +360,24 @@ sealed set was opened. The report, with the RNA atlases it found, is
 - **The LungMAP developing-lung atlas (Ushakumary 2025) uses MSV000094189,**
   the sealed lung test: it is not development data.
 
+### Amendment 20, 2026-10-21: roles for the first sets of the 2026-10-21 search (before any is read)
+
+The owner chose (2026-10-21) to start on two steps of the search's report:
+gene weights for the correlation term from protein-RNA agreement, and
+blood's empty classes from the Allen atlas. Their data, fetched as tier W of
+`scripts/fetch_public_sets.py`:
+- **PXD056050** (Zamore 2025): FACS-sorted B, naive B, T, CD8 T, monocytes
+  and activated NK, a mix and PBMC, about 4 pools each; its DIA-NN output.
+  **Development**, as a second lab's check beside Fulcher 2026. Never read
+  before this amendment.
+- **Monaco 2019** (GEO GSE107011): sorted bulk RNA of 29 types. **Reference**
+  RNA, free for development.
+- **The Allen Human Immune Health Atlas** (Gong 2025): its dendritic-cell and
+  other-cells files. **Reference** RNA, free for development.
+
+None of them is a test. Every gate is fixed in its script before the script
+reads them.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

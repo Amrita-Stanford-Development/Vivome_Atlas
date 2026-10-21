@@ -24,6 +24,10 @@ its locked test, and the development sets PXD047762, Zheng's tonsil tables
 and PXD011683. Tier V is the organ references v2's fresh development sets
 (amendment 13; about 190 MB), never read before v2: PXD058626 (lung airways
 and alveoli) and PXD045043 (spleen red and white pulp, hosted by jPOST).
+Tier W is the 2026-10-21 search's (amendment 20; about 500 MB): PXD056050
+(FACS-sorted immune populations from another lab, development), Monaco 2019's
+sorted RNA (GEO GSE107011) and the Allen Human Immune Health Atlas's
+dendritic-cell and other-cells files (CELLxGENE), both RNA references.
 
 Only processed outputs (search results, matrices, label maps) are fetched, never
 raw mass-spectrometry files. Tier A is the core set (about 4 GB); tier B is the
@@ -63,9 +67,10 @@ REPO = Path(__file__).resolve().parents[1]
 ROOT = REPO / "data" / "incoming" / "public_sets"
 RECORD = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 CHUNK = 8 << 20
-ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L", "N", "V")
+ROLES, TIERS = ("reference", "development", "held_out", "reserve"), ("A", "B", "C", "L", "N", "V", "W")
 RAW_SUFFIXES = (".raw", ".d.zip", ".wiff", ".mzml", ".mzml.zip", ".mzml.gz")
-HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu", "www.proteinatlas.org", "ftp.jpostdb.org")
+HOSTS = ("ftp.pride.ebi.ac.uk", "zenodo.org", "massive-ftp.ucsd.edu", "www.proteinatlas.org", "ftp.jpostdb.org",
+         "ftp.ncbi.nlm.nih.gov", "datasets.cellxgene.cziscience.com")
 PRIDE = "https://ftp.pride.ebi.ac.uk/pride/data/archive"
 MASSIVE = "ftp://massive-ftp.ucsd.edu"
 ZENODO = "https://zenodo.org/api/records"
@@ -185,6 +190,17 @@ ENTRIES = (
                    ("PXD058626_community_annotated.sdrf.tsv", 5930), ("fragpipe-files.fp-manifest", 15119))],
     entry("Kitata2025_PXD045043", "development", "Report_DIA-NN_Spleen.zip",
           "ftp://ftp.jpostdb.org/JPST002191/Report_DIA-NN_Spleen.zip", 185986731, tier="V"),
+    # tier W: the 2026-10-21 search (side-tests.md, amendment 20; research/reference-data-search.md)
+    *[pride("Zamore2025_PXD056050", "development", "PXD056050", "2025/07", n, s, tier="W")
+      for n, s in (("DIA-NN_immune_cells.zip", 77701779), ("PXD056050_community_annotated.sdrf.tsv", 21321))],
+    entry("Monaco2019_GSE107011", "reference", "GSE107011_Processed_data_TPM.txt.gz",
+          "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107011/suppl/GSE107011_Processed_data_TPM.txt.gz",
+          15420393, tier="W"),
+    # the Allen atlas's dendritic cells (CELLxGENE dataset dade16db-a38b-41f5-95c8-7ec0238d17fc) and other cells
+    # (81ffdcd6-3f04-40bc-8bb0-9748f4ffe576), in collection 77f9d7e9-5675-49c3-abed-ce02f39eef1b
+    *[entry("Gong2025_HIHA", "reference", n, f"https://datasets.cellxgene.cziscience.com/{n}", s, tier="W")
+      for n, s in (("4f925e42-3e42-4e2d-8394-4e88bf9a0ff2.h5ad", 347259294),
+                   ("70dd5115-cec8-49ad-a2fb-f985067b193f.h5ad", 59053452))],
 )
 # The two supplementary files of PXD073250's paper (Life Science Alliance, PMC13315484) have no stable direct
 # link; they were saved by hand into data/incoming/public_sets/PXD073250/ and are recorded by --record-manual.

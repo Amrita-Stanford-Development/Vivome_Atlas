@@ -103,6 +103,14 @@ class TableTests(unittest.TestCase):
         self.assertTrue(all(e["role"] == "development" for e in v))
         self.assertLess(sum(e["bytes"] for e in v), 250e6)
 
+    def test_tier_w_is_the_2026_10_21_search_and_holds_nothing_locked(self):
+        # side-tests.md, amendment 20
+        w = [e for e in f.ENTRIES if e["tier"] == "W"]
+        self.assertEqual({e["group"]: e["role"] for e in w},
+                         {"Zamore2025_PXD056050": "development", "Monaco2019_GSE107011": "reference",
+                          "Gong2025_HIHA": "reference"})
+        self.assertLess(sum(e["bytes"] for e in w), 600e6)
+
     def test_tier_c_is_the_colon_and_small(self):
         colon = [e for e in f.ENTRIES if e["tier"] == "C"]
         self.assertEqual({e["group"] for e in colon}, {"Post2025_PXD052341", "Zheng2025_PXD057118", "Kabatnik2024_PXD046999"})
