@@ -52,17 +52,29 @@ the run history have the detail.
     Sapiens RNA alone;
   - v1 missed its gates for all three, and v2 (lymph node, lung) missed by
     one gate each. No colon v2 was built;
+  - the lymph node v3 (v2's members with v1's calibration rule) missed by
+    0.01 points: narrow B cells are read as T cells, an encoder weakness
+    that calibration cannot fix (run history entry 62);
   - the three locked tests stay sealed;
-  - a v3 is the owner's decision, and needs fresh protein development sets;
+  - a further version is the owner's decision, and needs an encoder or
+    reference change and fresh protein development sets;
   - everything is in [organ-references.md](organ-references.md). The
     organ maps are on the Atlas page, map only.
-- **Blood:** v4.1 unchanged. Training with RNA pools raised every measure
-  in a two-seed diagnostic, but missed its fixed bar (run history entry 61).
-  A pooled candidate is the owner's call.
-- **Service flags** were evaluated on RNA by T1 NB3b (run history entry 18).
-  Whether to retire restricted mode is the owner's call.
-- **Open, for the owner:** an organ v3, a pooled blood candidate, the
-  visible accessibility changes, and the DOI.
+- **Blood:** v4.1 unchanged. The pooled candidate v5.3 (five members
+  trained with RNA pools) missed 4 of its 5 pre-registered development
+  gates and is refused by the service (run history entry 63).
+- **Restricted mode is retired** (owner, 2026-10-21): the service answers
+  400 to `restrict_to_supported_classes`.
+- **SCoPE2 is off the Atlas map** (owner, 2026-10-21): the map is the RNA
+  reference alone; SCoPE2 is a Manuscript result, labelled development
+  data, not an external test.
+- **Committed, not deployed** (deploys need the owner's go-ahead): the
+  SCoPE2 and restricted-mode changes, and the visible accessibility
+  changes (contrast, the Workflow story for screen readers, the map by
+  keyboard, a Pause motion switch, the Atlas page at high zoom). The owner
+  looks at the pages before a deploy.
+- **Open, for the owner:** the deploy of the above, an organ v4, and the
+  DOI.
 
 ## The project
 
