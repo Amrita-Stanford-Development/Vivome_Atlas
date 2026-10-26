@@ -413,6 +413,30 @@ Route B of run history entry 65 (step 2 of the data search):
   out-of-reference AUROC 0.7575 (bar 0.7598) missed. v5.4 stays refused
   and is not a sorted-test candidate.
 
+### Amendment 23, 2026-10-26: candidate v5.5, its gates fixed before the build
+
+The diagnosis after v5.4's verdict (run history entry 66): its calibration
+suite held no myeloid DC, pDC, CMP or regulatory T cell, so those classes
+took the marginal threshold. The owner chose (2026-10-26) a candidate that
+calibrates them:
+- **Candidate:** v5.5, v5.4's five members, centroids and best-guess layer
+  unchanged, its answers refitted (`research/notebooks/v5_build.py build
+  --variant v5.5`). Nothing is trained.
+- **Cells:** the 22 Allen donors held out of v5.4's training (never trained
+  on; v5.4's gate used them only to measure the members, which v5.5 keeps),
+  split with seed 0: 11 calibrate (120 simulated uploads by NB1's
+  generator, beside Tabula Sapiens's 240), 11 check (60 uploads). The
+  out-of-distribution threshold stays v5.4's.
+- **Gates,** fixed in `research/notebooks/v55_gates.py` before the build:
+  v5.4's eight with v5.4's bars (the DC recall on the 11 check donors only;
+  the suite's top-1 on Tabula Sapiens's uploads), and on the check uploads
+  a coverage of at least 85% for each of myeloid DC, pDC, CMP and
+  regulatory T. The out-of-reference AUROC gate is unchanged, by the
+  owner's choice, though v5.4 missed it on progenitors it now recognises:
+  the recalibration moves that score only through the temperatures.
+- **Not served either way.** A GO makes v5.5 a frozen candidate for the
+  sorted CD4/CD8 test, by that protocol's next amendment.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

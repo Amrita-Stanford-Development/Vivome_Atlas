@@ -87,7 +87,7 @@
   "service/model/runtime/reference_metadata.csv": "b0d5d1e761d6969e401fa605f74e4367e7d65d5c9fdea444471bbccee65d4054",
   "service/model/v3_1/nb2_spec_v31.json": "af142e91927214cf877bb2a95779236e6e1a9844a21ad248da77a1bbba442ddd",
   "service/model/v4_1/spec_v41.json": "0b4d7ba486345af8ee04622c625c42d0c3dd14729764cec61446d26c38ca77de",
-  "web/data/workflow.json": "f8a2014d4cb60846bd75f1edbf1bdde54c97ce69d660029ecefe6f20df8484ad"
+  "web/data/workflow.json": "db482d3a674f8f3c212ba3a9216fea2cd28cac1fcdf31764c544f19a2bfa065e"
  },
  "records": {
   "alpha": {

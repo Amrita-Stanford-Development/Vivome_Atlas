@@ -32,6 +32,9 @@ service/model/v5_3/*.npz
 service/model/v5_4/members/
 service/model/v5_4/*.npy
 service/model/v5_4/*.npz
+service/model/v5_5/members/
+service/model/v5_5/*.npy
+service/model/v5_5/*.npz
 
 # Cloudflare Pages build output and wrangler cache (scripts/build_pages_site.py)
 /dist/

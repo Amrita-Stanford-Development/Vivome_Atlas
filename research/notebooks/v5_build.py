@@ -96,11 +96,37 @@ v4.1's class-balanced statistics, class means and centroids. The reference
 latents, the calibration suite and the out-of-distribution reference stay
 Tabula Sapiens's, the cells the service holds one by one.
 
+Variant v5.5 (side-tests amendment 23; research/notebooks/v55_gates.py)
+trains nothing: v5.4's members, centroids and best-guess layer, copied
+from service/model/v5_4/ and checked against its MANIFEST, with the answers
+recalibrated. v5.4's calibration suite had no myeloid DC, pDC, CMP or
+regulatory T cell, so those classes took the marginal threshold (run
+history entry 66). Fixed before the run:
+- **Cells:** the 22 Allen donors held out of v5.4's training
+  (allen_rows.py's rows; never trained on), sorted and shuffled with seed
+  0: the first 11 calibrate, the other 11 check.
+- **Uploads:** NB1's generator (sim_generator.make_suite's steps, its sizes
+  and profiles) over each half's rows: 120 calibration uploads (seed 0) and
+  60 check uploads (seed 1), without the scope2_like scenario, since the
+  Allen atlas has no macrophages.
+- **Fit:** NB2's recipe as above, the temperatures and the conformal
+  thresholds on Tabula Sapiens's 240 uploads and the 120 Allen uploads
+  together. The out-of-distribution threshold stays the Tabula Sapiens
+  uploads' (v5.4's): its reference is Tabula Sapiens's cells.
+- **Self-check first:** Tabula Sapiens's uploads alone must give v5.4's
+  temperatures and out-of-distribution threshold, and its thresholds
+  within one rank (the reproduction's check), else stop.
+- **Recorded:** the suite's top-1 on Tabula Sapiens's uploads (comparable
+  with v3.1's), on the Allen uploads and on both; and on the check uploads,
+  each class's coverage (the true class in the conformal set, before the
+  best guess joins it) and the share of one-class sets.
+
     python research/notebooks/v5_build.py reproduce      # from the repository root
     python research/notebooks/v5_build.py build
     python research/notebooks/v5_build.py spec
     python research/notebooks/v5_build.py build --variant v5.1
     python research/notebooks/v5_build.py build --variant v5.2      # into service/model/v5_2/, likewise
+    python research/notebooks/v5_build.py build --variant v5.5      # v5.4's members, recalibrated
 """
 from __future__ import annotations
 
@@ -152,8 +178,18 @@ VARIANTS = {
     "v5.4": {"dir": REPO / "service" / "model" / "v5_4", "out": REPO / "research" / "notebook-outputs" / "v54_build",
              "phase4": REPO / "research" / "notebook-outputs" / "v54_gates" / "spec_block.json",
              "answers": "nb2_spec_v54.json", "spec": "spec_v54.json"},
+    # v5.5: v5.4's members, recalibrated with Allen cells of donors held out of training; v55_gates.py's block
+    "v5.5": {"dir": REPO / "service" / "model" / "v5_5", "out": REPO / "research" / "notebook-outputs" / "v55_build",
+             "phase4": REPO / "research" / "notebook-outputs" / "v55_gates" / "spec_block.json",
+             "answers": "nb2_spec_v55.json", "spec": "spec_v55.json", "members_of": "v5.4"},
 }
 K_NN, ALPHA, MIN_N = 15, 0.10, 50
+# v5.5 (the docstring): the held-out donors' split and the Allen uploads
+ALLEN_SPLIT_SEED, CALIB_DONORS = 0, 11
+ALLEN_CALIB_UPLOADS, ALLEN_CALIB_SEED = 120, 0
+ALLEN_CHECK_UPLOADS, ALLEN_CHECK_SEED = 60, 1
+ALLEN_SCENARIOS = ["random_1", "random_2", "random_3", "random_5", "random_8"] * 2 + ["myeloid", "lymphoid", "pbmc_like"]
+ALLEN_TARGETS = ("myeloid dendritic cell", "plasmacytoid dendritic cell", "common myeloid progenitor", "regulatory t cell")
 TOL_Q, TOL_COS = 1e-3, 0.9999
 RANK_SLACK = 3e-4  # the float16 rounding of a conformal score (the amendment above)
 
@@ -171,9 +207,60 @@ def member_scores(model, xs, M, ref_tr, cen_tr, device, chunk=4096):
     return cos, torch.cat(mx).numpy().astype(np.float16)
 
 
-def build(members: dict, y: np.ndarray, s: dict, X_raw: np.ndarray, t0: float, extra: "dict | None" = None) -> dict:
+def suite_scores(models: dict, suite: list, X: np.ndarray, y: np.ndarray, ref_tr: dict, cen_tr: dict, G: int,
+                 device, t0: float, what: str = "calibration suite") -> tuple:
+    """Step 1 on one suite whose cell_idx index X's rows: each member's cosines
+    to the train-split centroids and maximum cosines to the train-split
+    reference latents (float16), and the cells' labels."""
+    profiles = dict(np.load(bundle.NB1 / "mask_profiles.npz"))
+    cos = {k: [] for k in models}
+    maxcos = {k: [] for k in models}
+    ys = []
+    for u, spec in enumerate(suite):
+        raw, gs = core.raw_upload(spec, X, profiles, G, sg)
+        xs, M = core.query_inputs(raw, gs, "gene", convention="service", graph_input="zscored", smooth=True)
+        for k, m in models.items():
+            c, mx = member_scores(m, xs, M, ref_tr[k], cen_tr[k], device)
+            cos[k].append(c)
+            maxcos[k].append(mx)
+        ys.append(y[np.asarray(spec["cell_idx"])])
+        if (u + 1) % 50 == 0:
+            print(f"{what}: {u + 1}/{len(suite)} uploads ({time.time() - t0:.0f}s)", flush=True)
+    return ({k: np.concatenate(v) for k, v in cos.items()}, {k: np.concatenate(v) for k, v in maxcos.items()},
+            np.concatenate(ys))
+
+
+def mean_probabilities(cos: dict, temps: dict) -> np.ndarray:
+    """The members' mean softmax of their cosines under their temperatures."""
+    P = 0.0
+    for k, L in cos.items():
+        P = P + n2.softmax(L.astype(np.float64), temps[k])
+    return P / len(cos)
+
+
+def fit_answers(cos: dict, maxcos: dict, yy: np.ndarray, names: list) -> dict:
+    """Steps 2 to 4 on one suite's scores."""
+    C = len(names)
+    temps = {k: n2.fit_temperature(L.astype(np.float64), yy)[0] for k, L in cos.items()}
+    P = mean_probabilities(cos, temps)
+    scores = 1.0 - P[np.arange(len(yy)), yy]
+    q, marg = n2.fit_qhat(scores, yy, C, ALPHA, True, MIN_N)
+    mc = np.mean([v.astype(np.float32) for v in maxcos.values()], 0)
+    return {"temperature": temps, "scores": scores, "y": yy, "qhat": q,
+            "qhat_by_class": {names[c]: float(q[c]) for c in range(C)}, "marginal_qhat": float(marg),
+            "ood_threshold": float(np.quantile(mc, 0.01)), "n_cells": int(len(yy)),
+            "cells_per_class": {names[c]: int((yy == c).sum()) for c in range(C)},
+            "suite_top1_accuracy": round(100 * float((P.argmax(1) == yy).mean()), 3)}
+
+
+def build(members: dict, y: np.ndarray, s: dict, X_raw: np.ndarray, t0: float, extra: "dict | None" = None,
+          allen: "dict | None" = None) -> dict:
     """members: name -> checkpoint path. Returns latents, centroids, calibration.
-    extra (v5.4): another atlas's training rows, counted in every centroid."""
+    extra (v5.4): another atlas's training rows, counted in every centroid.
+    allen (v5.5): the held-out Allen rows ("X", "y") and two suites over
+    them: "calib" joins the fit, "check" is scored under it. Then the
+    out-of-distribution threshold and the top-1 are Tabula Sapiens's
+    uploads', and "ts_only" is the fit on those uploads alone."""
     names, C, device = s["names"], len(s["names"]), s["device"]
     TR = s["TR"]
     if extra is not None:
@@ -195,37 +282,52 @@ def build(members: dict, y: np.ndarray, s: dict, X_raw: np.ndarray, t0: float, e
             cen_tr[name] = torch.from_numpy(core.centroids_from(np.vstack([Z[TR], ZE]),
                                                                 np.concatenate([y[TR], yE]), C)).to(device)
     print(f"reference latents for {len(models)} members ({time.time() - t0:.0f}s)", flush=True)
-    profiles = dict(np.load(bundle.NB1 / "mask_profiles.npz"))
     suite = json.loads((bundle.NB1 / "sim_suite_calib_v1.json").read_text())
     G = s["XG"].shape[1]
-    cos = {k: [] for k in models}
-    maxcos = {k: [] for k in models}
-    ys = []
-    for u, spec in enumerate(suite):
-        raw, gs = core.raw_upload(spec, X_raw, profiles, G, sg)
-        xs, M = core.query_inputs(raw, gs, "gene", convention="service", graph_input="zscored", smooth=True)
-        for k, m in models.items():
-            c, mx = member_scores(m, xs, M, ref_tr[k], cen_tr[k], device)
-            cos[k].append(c)
-            maxcos[k].append(mx)
-        ys.append(y[np.asarray(spec["cell_idx"])])
-        if (u + 1) % 50 == 0:
-            print(f"calibration suite: {u + 1}/{len(suite)} uploads ({time.time() - t0:.0f}s)", flush=True)
-    yy = np.concatenate(ys)
-    temps, P = {}, 0.0
-    for k in models:
-        L = np.concatenate(cos[k]).astype(np.float64)
-        temps[k] = n2.fit_temperature(L, yy)[0]
-        P = P + n2.softmax(L, temps[k])
-    P = P / len(models)
-    scores = 1.0 - P[np.arange(len(yy)), yy]
-    q, marg = n2.fit_qhat(scores, yy, C, ALPHA, True, MIN_N)
-    mc = np.mean([np.concatenate(maxcos[k]).astype(np.float32) for k in models], 0)
-    return {"latents": lat, "centroids": cen_all, "temperature": temps, "scores": scores, "y": yy,
-            "qhat_by_class": {names[c]: float(q[c]) for c in range(C)}, "marginal_qhat": float(marg),
-            "ood_threshold": float(np.quantile(mc, 0.01)), "n_uploads": len(suite), "n_cells": int(len(yy)),
-            "cells_per_class": {names[c]: int((yy == c).sum()) for c in range(C)},
-            "suite_top1_accuracy": round(100 * float((P.argmax(1) == yy).mean()), 3)}
+    cos, maxcos, yy = suite_scores(models, suite, X_raw, y, ref_tr, cen_tr, G, device, t0)
+    ts = fit_answers(cos, maxcos, yy, names)
+    if allen is None:
+        return {"latents": lat, "centroids": cen_all, **ts, "n_uploads": len(suite)}
+    cos_a, maxcos_a, ya = suite_scores(models, allen["calib"], allen["X"], allen["y"], ref_tr, cen_tr, G, device, t0,
+                                       "Allen calibration uploads")
+    both = fit_answers({k: np.concatenate([cos[k], cos_a[k]]) for k in models},
+                       {k: np.concatenate([maxcos[k], maxcos_a[k]]) for k in models}, np.concatenate([yy, ya]), names)
+    cos_c, _, yc = suite_scores(models, allen["check"], allen["X"], allen["y"], ref_tr, cen_tr, G, device, t0,
+                                "Allen check uploads")
+    def top1(scores: dict, labels: np.ndarray) -> float:
+        return round(100 * float((mean_probabilities(scores, both["temperature"]).argmax(1) == labels).mean()), 3)
+
+    P_c = mean_probabilities(cos_c, both["temperature"])
+    sets = n2.prediction_sets(P_c, both["qhat"], np.ones(C, dtype=bool))
+    check = {}
+    for c in np.unique(yc):
+        at = yc == c
+        check[names[c]] = {"n": int(at.sum()), "coverage": round(100 * float(sets[at, c].mean()), 2),
+                           "one_class_sets": round(100 * float((sets[at].sum(1) == 1).mean()), 2),
+                           "top1": round(100 * float((P_c[at].argmax(1) == c).mean()), 2)}
+    return {"latents": lat, "centroids": cen_all, **both, "ts_only": ts,
+            "ood_threshold": ts["ood_threshold"], "n_uploads": len(suite) + len(allen["calib"]),
+            "n_uploads_allen": len(allen["calib"]),
+            "allen_cells_per_class": {names[c]: int((ya == c).sum()) for c in range(C)},
+            "suite_top1_accuracy": top1(cos, yy), "suite_top1_accuracy_allen": top1(cos_a, ya),
+            "suite_top1_accuracy_both": both["suite_top1_accuracy"],
+            "check": {"n_uploads": len(allen["check"]), "n_cells": int(len(yc)), "by_class": check}}
+
+
+def within_one_rank(scores: np.ndarray, y: np.ndarray, names: list, conformal: dict) -> dict:
+    """The reproduction's conformal check (the amendment above): a spec's
+    threshold for the marginal and for every class with at least MIN_N cells
+    lies between this run's order statistics at ranks k - 1 and k + 1, k the
+    conformal rank, each bound widened by RANK_SLACK."""
+    out = {}
+    for label, sc, target in ([("marginal", scores, conformal["marginal_qhat"])]
+                              + [(c, scores[y == names.index(c)], conformal["qhat_by_class"][c])
+                                 for c in names if (y == names.index(c)).sum() >= MIN_N]):
+        ordered = np.sort(sc)
+        k = int(np.ceil(n2.conformal_level(len(ordered), ALPHA) * (len(ordered) - 1)))  # np.quantile's "higher" index
+        lo, hi = ordered[max(k - 1, 0)] - RANK_SLACK, ordered[min(k + 1, len(ordered) - 1)] + RANK_SLACK
+        out[label] = bool(lo <= target <= hi)
+    return out
 
 
 def reproduce(s: dict, X_raw: np.ndarray) -> None:
@@ -238,15 +340,7 @@ def reproduce(s: dict, X_raw: np.ndarray) -> None:
     checks["temperature"] = all(abs(a - b) < 1e-12 for a, b in detail["temperature"].values())
     gap = {c: abs(got["qhat_by_class"][c] - spec["conformal"]["qhat_by_class"][c]) for c in got["qhat_by_class"]}
     detail["qhat_largest_gap"] = max(gap.values())
-    detail["qhat_within_one_rank"] = {}
-    names = s["names"]
-    for label, sc, nb2 in ([("marginal", got["scores"], spec["conformal"]["marginal_qhat"])]
-                           + [(c, got["scores"][got["y"] == names.index(c)], spec["conformal"]["qhat_by_class"][c])
-                              for c in names if (got["y"] == names.index(c)).sum() >= MIN_N]):
-        ordered = np.sort(sc)
-        k = int(np.ceil(n2.conformal_level(len(ordered), ALPHA) * (len(ordered) - 1)))  # np.quantile's "higher" index
-        lo, hi = ordered[max(k - 1, 0)] - RANK_SLACK, ordered[min(k + 1, len(ordered) - 1)] + RANK_SLACK
-        detail["qhat_within_one_rank"][label] = bool(lo <= nb2 <= hi)
+    detail["qhat_within_one_rank"] = within_one_rank(got["scores"], got["y"], s["names"], spec["conformal"])
     checks["qhat"] = all(detail["qhat_within_one_rank"].values())
     detail["ood"] = (got["ood_threshold"], spec["ood"]["threshold"])
     checks["ood_threshold"] = abs(got["ood_threshold"] - spec["ood"]["threshold"]) <= TOL_Q
@@ -406,6 +500,134 @@ def build_v5(s: dict, X_raw: np.ndarray, variant: str = "v5") -> None:
     print(f"wrote {len(files)} files to {target} ({time.time() - t0:.0f}s)")
 
 
+def allen_split(donors: np.ndarray) -> tuple:
+    """v5.5's split of the held-out donors (the docstring): a calibration mask
+    over the rows, and the calibration and check donors."""
+    order = [str(d) for d in np.random.default_rng(ALLEN_SPLIT_SEED).permutation(sorted({str(d) for d in donors}))]
+    calib = order[:CALIB_DONORS]
+    return np.isin(donors.astype(str), calib), sorted(calib), sorted(order[CALIB_DONORS:])
+
+
+def allen_suite(name: str, idx: np.ndarray, y: np.ndarray, classes: list, n_uploads: int, seed: int) -> list:
+    """sim_generator.make_suite's steps (its sizes, profiles, proportions and
+    draws, in its order) over the rows idx, with ALLEN_SCENARIOS."""
+    rng = np.random.default_rng(seed)
+    by_class = {c: idx[y[idx] == c] for c in np.unique(y[idx])}
+    eligible = np.array([c for c, v in by_class.items() if len(v) >= 20])
+    specs = []
+    for u in range(n_uploads):
+        sc = ALLEN_SCENARIOS[u % len(ALLEN_SCENARIOS)]
+        cls = sg._scenario_classes(sc, eligible, classes, rng)
+        props = rng.dirichlet(np.ones(len(cls)))
+        want = np.maximum(5, np.round(props * int(rng.choice(sg.SIZES)))).astype(int)
+        scale = min(1.0, float(np.min(np.array([len(by_class[c]) for c in cls]) / want)))
+        take = np.maximum(3, np.floor(want * scale)).astype(int)
+        cell_idx = np.concatenate([rng.choice(by_class[c], min(t, len(by_class[c])), replace=False)
+                                   for c, t in zip(cls, take)])
+        prof = str(rng.choice(sg.PROFILE_CHOICES))
+        miss = "per_cell" if (not prof.startswith("random") and rng.random() < 0.5) else "none"
+        specs.append({"id": f"{name}_{u:04d}", "suite": name, "scenario": sc, "classes": [classes[c] for c in cls],
+                      "cell_idx": [int(i) for i in cell_idx], "profile": prof, "missingness": miss,
+                      "stress": bool(rng.random() < 0.15), "seed": int(rng.integers(0, 2**31 - 1))})
+    return specs
+
+
+def build_v55(s: dict, X_raw: np.ndarray) -> None:
+    """v5.5 (the docstring): v5.4's files and members, its answers refitted
+    with the held-out Allen donors' calibration uploads."""
+    t0 = time.time()
+    rep = json.loads((OUT / "reproduce.json").read_text()) if (OUT / "reproduce.json").exists() else {}
+    if not rep.get("passed"):
+        raise SystemExit("the reproduction has not passed (research/notebook-outputs/v5_build/reproduce.json)")
+    variant = "v5.5"
+    v = VARIANTS[variant]
+    src, tv = VARIANTS[v["members_of"]], train.VARIANTS[v["members_of"]]
+    names = s["names"]
+    trained = json.loads((tv["out"] / "train_record.json").read_text())
+    members = {}
+    for name, entry in trained["members"].items():
+        path = tv["ckpt"] / name
+        if hashlib.sha256(path.read_bytes()).hexdigest() != entry["sha256"]:
+            raise SystemExit(f"{path} is not the checkpoint v5_train.py recorded")
+        members[name] = path
+    if hashlib.sha256(tv["extra"].read_bytes()).hexdigest() != trained["extra"]["sha256"]:
+        raise SystemExit(f"{tv['extra']} is not the file the members trained on")
+    rows = np.load(tv["extra"], allow_pickle=True)  # the donors are strings
+    extra = {"X": rows["X_train"], "y": rows["y_train"]}
+    calib_rows, calib_donors, check_donors = allen_split(rows["donor_hold"])
+    yh = rows["y_hold"]
+    allen = {"X": rows["X_hold"], "y": yh,
+             "calib": allen_suite("allen_calib", np.flatnonzero(calib_rows), yh, names, ALLEN_CALIB_UPLOADS, ALLEN_CALIB_SEED),
+             "check": allen_suite("allen_check", np.flatnonzero(~calib_rows), yh, names, ALLEN_CHECK_UPLOADS, ALLEN_CHECK_SEED)}
+    drawn = np.concatenate([yh[np.asarray(u["cell_idx"])] for u in allen["calib"]])
+    short = {c: int((drawn == names.index(c)).sum()) for c in ALLEN_TARGETS if (drawn == names.index(c)).sum() < MIN_N}
+    if short:
+        raise SystemExit(f"the Allen calibration uploads hold fewer than {MIN_N} cells of {short}: no member was run")
+    old = json.loads((src["dir"] / "MANIFEST.json").read_text(encoding="utf-8"))
+    for rel, entry in old["files"].items():
+        if hashlib.sha256((src["dir"] / rel).read_bytes()).hexdigest() != entry["sha256"]:
+            raise SystemExit(f"{src['dir'] / rel} is not v5.4's file: rebuild v5.4 first")
+    got = build(members, s["y_clean"], s, X_raw, t0, extra, allen)
+
+    a54 = json.loads((src["dir"] / src["answers"]).read_text(encoding="utf-8"))
+    ts = got["ts_only"]
+    detail = {"temperature": {k: (ts["temperature"][k], a54["assignment"]["temperature"][k]) for k in members},
+              "ood": (ts["ood_threshold"], a54["ood"]["threshold"]),
+              "qhat_within_one_rank": within_one_rank(ts["scores"], ts["y"], names, a54["conformal"]),
+              "centroids_min_cosine": {}}
+    for name in members:
+        seed = name.split("seed")[1].split(".")[0]
+        served = np.load(src["dir"] / "members" / f"V2_seed{seed}_centroids.npy")
+        detail["centroids_min_cosine"][name] = float((got["centroids"][name] * served).sum(1).min())
+    self_check = {"temperature": all(abs(a - b) < 1e-12 for a, b in detail["temperature"].values()),
+                  "ood_threshold": abs(ts["ood_threshold"] - a54["ood"]["threshold"]) <= TOL_Q,
+                  "qhat": all(detail["qhat_within_one_rank"].values()),
+                  "centroids": all(c >= TOL_COS for c in detail["centroids_min_cosine"].values())}
+    v["out"].mkdir(parents=True, exist_ok=True)
+    if not all(self_check.values()):
+        (v["out"] / "self_check.json").write_text(json.dumps({"checks": self_check, "detail": detail}, indent=2,
+                                                             default=str) + "\n", newline="\n")
+        raise SystemExit(f"STOP: Tabula Sapiens's uploads alone did not give v5.4's answers: {self_check}")
+    print(f"self-check passed; refitted with the Allen uploads ({time.time() - t0:.0f}s)", flush=True)
+
+    target = v["dir"]
+    files = {}
+    for rel, entry in old["files"].items():
+        if rel in (src["answers"], src["spec"]):
+            continue
+        (target / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src["dir"] / rel, target / rel)
+        files[rel] = f"v5.4's file: {entry['from']}"
+    labels = tv["labels"]
+    record = {"labels": f"{labels.relative_to(REPO).as_posix()} (sha256 {hashlib.sha256(labels.read_bytes()).hexdigest()})"}
+    answers = write_spec(got, record, variant)
+    answers["source"] = (f"research/notebooks/v5_build.py: NB2's recipe on v5.4's members (variant v5.5), "
+                         f"labels {record['labels']}")
+    answers["encoder"] = a54["encoder"]
+    answers["conformal"]["calibrated_on"] = (
+        "labelled RNA simulated uploads: NB1's calibration suite (Tabula Sapiens validation-split cells) and "
+        f"{ALLEN_CALIB_UPLOADS} uploads of the Allen atlas's cells from {CALIB_DONORS} donors held out of v5.4's training")
+    answers["ood"]["threshold"] = a54["ood"]["threshold"]
+    answers["ood"]["fit"] = a54["ood"]["fit"] + " (Tabula Sapiens's uploads: v5.4's)"
+    (target / v["answers"]).write_text(json.dumps(answers, indent=2) + "\n", newline="\n")
+    files[v["answers"]] = f"{variant}'s answers: temperatures, conformal thresholds, out-of-distribution threshold (NB2's layout)"
+    (target / v["spec"]).write_text(json.dumps(make_v5_spec(answers, record["labels"], variant), indent=2) + "\n", newline="\n")
+    files[v["spec"]] = f"{variant}'s best guess (v4.1's layout and settings)"
+    write_manifest(files, target)
+    keep = ("temperature", "marginal_qhat", "ood_threshold", "qhat_by_class", "n_uploads", "n_uploads_allen", "n_cells",
+            "cells_per_class", "allen_cells_per_class", "suite_top1_accuracy", "suite_top1_accuracy_allen",
+            "suite_top1_accuracy_both", "check")
+    (v["out"] / "build_record.json").write_text(json.dumps({
+        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "variant": variant,
+        "run": datetime.now().isoformat(timespec="seconds"), "gpu": torch.cuda.get_device_name(0), **record,
+        "members_of": v["members_of"], "self_check": self_check, "self_check_detail": detail,
+        "donors": {"calibration": calib_donors, "check": check_donors},
+        **{k: got[k] for k in keep}, "files": files, "seconds": round(time.time() - t0)}, indent=2, default=str) + "\n",
+        newline="\n")
+    print(json.dumps({k: got[k] for k in ("temperature", "suite_top1_accuracy", "suite_top1_accuracy_allen")}, indent=1))
+    print(f"wrote {len(files)} files to {target} ({time.time() - t0:.0f}s)")
+
+
 def rewrite_spec(variant: str = "v5") -> None:
     """spec_v5.json and the MANIFEST only; every other file must be unchanged."""
     v = VARIANTS[variant]
@@ -431,11 +653,16 @@ def main() -> None:
     if mode == "spec":
         rewrite_spec(args.variant)
         return
-    s = train.setup(train.VARIANTS[args.variant]["labels"])
+    s = train.setup(train.VARIANTS[VARIANTS[args.variant].get("members_of", args.variant)]["labels"])
     meta = pd.read_csv(config.MODEL_DIR / "runtime" / "reference_metadata.csv")
     X_raw = bundle.load_rna(bundle.RNA, [g for g in pd.read_csv(config.FEATURE_SPACE_GENES_PATH)["gene"]],
                             meta["cell"].astype(str).tolist())
-    reproduce(s, X_raw) if mode == "reproduce" else build_v5(s, X_raw, args.variant)
+    if mode == "reproduce":
+        reproduce(s, X_raw)
+    elif args.variant == "v5.5":
+        build_v55(s, X_raw)
+    else:
+        build_v5(s, X_raw, args.variant)
 
 
 if __name__ == "__main__":
