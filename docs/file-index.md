@@ -96,6 +96,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-director.test.js` — every rule of the upload state machine, the sidebar's folding, and that no state is changed in place
 - `web/tests/media-function.test.js` — the media Function: ranges as browsers send them, parts cut at both ends, capped 206 answers, 416, HEAD, the whole file streamed in order, other files left static
 - `web/tests/api-proxy.test.js` — the site's /api door: the secret added, the sign-in kept back, an upload passed on with its length, plain answers when the service is missing
+- `web/tests/beta-gate.test.js` — the beta's sign-in: password check, the form, refusals, the cookie's proof, signing out, safe returns, missing secrets, the header mark on the real pages
 - `web/tests/atlas-cell-browser.test.js` — the cell browser: every cell in one group, the group order, each sort, search, escaping
 - `web/tests/atlas-view-controls.test.js` — the view controls: Your cells only with an answer on the map, and each control asking the right part of the page
 - `web/tests/atlas-type-labels.test.js` — names on the map: hidden and off-screen types get none, no two overlap, the larger type wins
@@ -419,9 +420,11 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/test_build_workflow.py` — `web/data/workflow.json` is the builder's output, within its budget, built for the manifest's release; its records and cross-checks
-- `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, the gene profiles as gzipped float32 shards, and optionally the R2-backed large files)
+- `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, the gene profiles as gzipped float32 shards, the beta's sign-in with its invited emails, and optionally the R2-backed large files)
 - `scripts/test_deploy_rehearse.py` — tests for the deploy scripts: `rehearse.py` reads the Dockerfile's settings and stays local and without the secret; `build_space.py --help` builds nothing
 - `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
+- `scripts/beta_access.py` — manages the beta's sign-in: the invited emails (`~/.vivome-beta/emails.txt`) and the password's Pages secrets
+- `scripts/test_beta_access.py` — tests for `beta_access.py`: the hash the gate checks, generated passwords, the email list, the secrets set
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index
 - `scripts/test_repo_paths.py` — runs `check_paths.py` as part of the normal test suite
 - `scripts/archive/promote_v3_atlas.py` — one-off (already run) that promoted the v3 viewer metadata; its inputs no longer exist
@@ -430,6 +433,7 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `deploy/pages/media.js` — the Pages Function that serves the site's media (the Motion page's film) with byte ranges from 1 MiB parts, so Safari and iPhones can play it
 - `deploy/pages/api-proxy.js` — the site's door to the labelling service: the Cloudflare Pages Function for /api/*, forwarding to Cloud Run with the secret the service checks
+- `deploy/pages/beta-gate.js` — the beta's sign-in: the Pages middleware in front of every path; an invited email and the one password, a signed 30-day cookie, the Beta mark and Sign out link on every page
 - `deploy/huggingface/Dockerfile` — the projection service's image for a Hugging Face Space (Python 3.11, CPU torch) and its hosted settings: 0.0.0.0:7860, v4.1, the site's origin, 2,000 cells and 31 MiB per upload (under Cloud Run's 32 MiB), one projection at a time
 - `deploy/huggingface/space_card.md` — the Space's public page, written to the Space as README.md: what the service does, its model, limits and endpoints
 - `deploy/huggingface/build_space.py` — stages the Space in the gitignored folder deploy/huggingface/space: the service package, only the served version's model files (traced by loading the bundle and projecting the PBMC240 example), pinned requirements, Git LFS attributes and a sha256 manifest

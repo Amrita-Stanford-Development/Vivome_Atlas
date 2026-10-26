@@ -28,8 +28,15 @@ to the service at SERVICE_URL (wrangler.toml, from web/js/atlas/
 service-client.js) with the secret SERVICE_SECRET (a Pages secret, set
 once with wrangler; docs/web/hosting.md).
 
+And the beta's sign-in: deploy/pages/beta-gate.js as functions/_middleware.js,
+in front of every path, with the invited emails of BETA_EMAILS (a local file
+outside the repository) written into it. The build stops when that file is
+missing or empty, rather than publish a site nobody can enter; --open builds
+the site without sign-in.
+
     python scripts/build_pages_site.py                  # static site, with the profile shards
     python scripts/build_pages_site.py --no-profiles    # without them (faster)
+    python scripts/build_pages_site.py --open           # without the beta's sign-in
     python scripts/build_pages_site.py --r2 BUCKET      # plus the R2-backed large files
     cd dist && npx wrangler@4 pages deploy             # publish (see docs/web/hosting.md)
 """
@@ -59,6 +66,9 @@ PROFILE_DIGITS = 5  # a shard's number in its file name, zero-padded
 PROXY = REPO / "deploy" / "pages" / "api-proxy.js"  # the /api/* Pages Function
 SERVICE_CLIENT = WEB / "js" / "atlas" / "service-client.js"  # where the service lives
 MEDIA_FUNCTION = REPO / "deploy" / "pages" / "media.js"  # byte ranges for MEDIA
+GATE = REPO / "deploy" / "pages" / "beta-gate.js"  # the beta's sign-in, as functions/_middleware.js
+# The invited emails: one a line, "#" starts a comment (scripts/beta_access.py).
+BETA_EMAILS = Path.home() / ".vivome-beta" / "emails.txt"
 # Played with byte ranges (deploy/pages/media.js), by path in web/: each is
 # stored as parts of PART bytes beside it, in parts/, and left out of the
 # static copy.
@@ -202,7 +212,39 @@ def write_profiles(site: Path, web: Path = WEB, cells: int = PROFILE_CELLS) -> d
     return index
 
 
-def build(bucket: str | None, dist: Path = DIST, profiles: bool = True) -> None:
+def invited(path: Path) -> list[str]:
+    """The invited emails in `path`, lowercased, each once, in the file's order."""
+    emails = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        email = line.split("#", 1)[0].strip().lower()
+        if not email:
+            continue
+        if not re.fullmatch(r"[^@\s,\"]+@[^@\s,\"]+\.[^@\s,\"]+", email):
+            raise SystemExit(f"{path}: not an email address: {email!r}")
+        if email not in emails:
+            emails.append(email)
+    return emails
+
+
+def write_gate(functions: Path, emails: list[str]) -> None:
+    """The beta's sign-in as the site's middleware, with its invited emails."""
+    source = GATE.read_text(encoding="utf-8")
+    assert source.count("export const EMAILS = [];") == 1
+    functions.mkdir(parents=True, exist_ok=True)
+    (functions / "_middleware.js").write_bytes(
+        source.replace("export const EMAILS = [];", f"export const EMAILS = {json.dumps(emails)};").encode("utf-8"))
+
+
+def build(bucket: str | None, dist: Path = DIST, profiles: bool = True, beta: Path | None = BETA_EMAILS) -> None:
+    """beta: the invited emails' file, or None for a site without sign-in."""
+    emails = None
+    if beta is not None:
+        if not beta.exists():
+            raise SystemExit(f"{beta} is missing: the site would let nobody in. Add the invited emails "
+                             "(python scripts/beta_access.py add EMAIL), or build with --open.")
+        emails = invited(beta)
+        if not emails:
+            raise SystemExit(f"{beta} names no email: the site would let nobody in.")
     if dist.exists():
         shutil.rmtree(dist)
     static, large = plan()
@@ -229,6 +271,9 @@ def build(bucket: str | None, dist: Path = DIST, profiles: bool = True) -> None:
         (dist / "functions" / "data" / "[[path]].js").write_text(FUNCTION)
         routes += [f"/{rel}" for rel in large]
         toml += ["", "[[r2_buckets]]", 'binding = "DATA"', f'bucket_name = "{bucket}"']
+    if emails is not None:
+        write_gate(dist / "functions", emails)
+        routes = ["/*"]  # the sign-in stands in front of every path
     # Only these paths wake a Function; every other file is served as it is.
     (site / "_routes.json").write_text(json.dumps({"version": 1, "include": routes, "exclude": []}, indent=2) + "\n")
     (dist / "wrangler.toml").write_text("\n".join(toml) + "\n")
@@ -238,13 +283,15 @@ def build(bucket: str | None, dist: Path = DIST, profiles: bool = True) -> None:
     print(f"dist/site: {files} files; left out for R2: {', '.join(large) or 'none'}"
           + (f"; served from R2 bucket {bucket}" if bucket else "")
           + "".join(f"; {m} gene profiles as {shards[m]['shards']} shards" for m in PROFILES if m in shards)
-          + "".join(f"; {r} served with byte ranges" for r in routes if r != "/api/*" and not r.startswith("/data/"))
-          + "; /api/* forwarded to the service")
+          + "".join(f"; /{r} served with byte ranges" for r in MEDIA if (WEB / r).exists())
+          + "; /api/* forwarded to the service"
+          + (f"; sign-in for {len(emails)} invited email{'s' if len(emails) != 1 else ''}" if emails else "; no sign-in"))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--r2", metavar="BUCKET", help="serve the large files from this R2 bucket")
     parser.add_argument("--no-profiles", action="store_true", help="leave out the gene profile shards")
+    parser.add_argument("--open", action="store_true", help="build without the beta's sign-in")
     args = parser.parse_args()
-    build(args.r2, profiles=not args.no_profiles)
+    build(args.r2, profiles=not args.no_profiles, beta=None if args.open else BETA_EMAILS)

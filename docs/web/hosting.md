@@ -31,6 +31,9 @@ keeps no build step, and the deploy only copies it.
 - `dist/functions/api/[[path]].js`: the site's door to the labelling service
   (below), copied from `deploy/pages/api-proxy.js`, and `dist/site/_routes.json`,
   so a Function runs for `/api/*` only and every other file is served as it is.
+- `dist/functions/_middleware.js`: the beta's sign-in (below), from
+  `deploy/pages/beta-gate.js`, with the invited emails written in. With it,
+  `_routes.json` sends every path through Functions.
 - `dist/wrangler.toml`: the project's settings, with `SERVICE_URL`, the
   hosted service's address, read from `web/js/atlas/service-client.js`.
 
@@ -55,6 +58,44 @@ cd dist && npx wrangler@4 pages deploy site --project-name vivome-atlas --branch
 
 `--branch main` publishes to the production address. Another branch name
 gives a preview address. The first sign-in is `npx wrangler@4 login`.
+
+## The beta sign-in
+
+The site is a closed beta. Every path, the pages, the data files and the
+`/api` door included, first asks for an invited email and the beta's one
+password (`deploy/pages/beta-gate.js`, the site's Pages middleware). No
+email is verified: the owner's choice for a beta shared only with the
+people invited (2026-10-26). The sign-in page and every refusal tell search
+engines not to index them.
+
+- **Who is invited:** `~/.vivome-beta/emails.txt` on the PC that builds the
+  site (`C:\Users\amarn\.vivome-beta\emails.txt`), outside the repository,
+  one email a line. `scripts/build_pages_site.py` writes the list into the
+  middleware, and refuses to build without it (`--open` builds a site
+  without sign-in). A change reaches the site with the next deploy:
+
+  ```bash
+  python scripts/beta_access.py add someone@example.org    # or remove, or list
+  python scripts/build_pages_site.py
+  cd dist && npx wrangler@4 pages deploy site --project-name vivome-atlas --branch main
+  ```
+
+- **The password:** two Pages secrets, `BETA_PASSWORD_HASH` (a salted
+  SHA-256; the password itself is stored nowhere on the site) and
+  `BETA_SESSION_KEY` (signs the session cookie). `python scripts/beta_access.py
+  password` asks for a new one and sets both. `--generate` makes one and saves
+  it to `~/.vivome-beta/password.txt`. Then deploy. A new password signs
+  everyone out. The site does not limit attempts, so the password needs at
+  least 12 characters.
+- **A session** lasts 30 days, in an `HttpOnly`, `Secure` cookie. It ends
+  early when the email leaves the list or the password changes. The /api
+  door drops the cookie, so the service never sees it. Every page's header
+  gains a "Beta" mark and a "Sign out" link (`/__beta/signout`), added on the
+  way out, so `web/` itself has neither.
+- **A deployment without the two secrets** lets nobody in: it answers 503.
+
+Every request now runs the middleware, so it counts toward the Workers free
+plan's 100,000 requests a day. A visit loads a few dozen files.
 
 The project was created with `pages project create ... --force`. Without
 `--force`, current Wrangler delegates to Workers, finds `web/` on its own,
@@ -88,10 +129,9 @@ own site's `/api/status` and `/api/project`; the Function forwards each
 request to `SERVICE_URL` with the secret `SERVICE_SECRET` in the
 `X-VivOME-Proxy-Secret` header, and the service, with the same secret in
 `VIVOME_PROXY_SECRET`, answers 403 to anything without it. The Function
-keeps the visitor's sign-in cookie and token, Access's `cf-access-*`
-headers (the signed-in email among them) and the visitor's address on the
-site; the service gets none of them. Behind the site's
-sign-in, only signed-in visitors reach it. Cloudflare takes at most 100 MB in
+keeps the visitor's cookies, any `cf-access-*` headers and the visitor's
+address on the site; the service gets none of them. Behind the site's
+sign-in (above), only signed-in visitors reach it. Cloudflare takes at most 100 MB in
 one request, and Cloud Run at most 32 MiB in an HTTP/1 request, which the
 service's server speaks. So the hosted copy's upload limit is 31 MiB
 (`VIVOME_MAX_UPLOAD_MB` in `deploy/huggingface/Dockerfile`), and the page

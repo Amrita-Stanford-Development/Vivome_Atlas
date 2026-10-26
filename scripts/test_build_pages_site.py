@@ -42,7 +42,7 @@ class BuildTests(unittest.TestCase):
     def test_every_build_carries_the_door_to_the_service(self):
         with tempfile.TemporaryDirectory() as tmp:
             dist = Path(tmp) / "dist"
-            bps.build(None, dist, profiles=False)
+            bps.build(None, dist, profiles=False, beta=None)
             proxy = dist / "functions" / "api" / "[[path]].js"
             self.assertEqual(proxy.read_bytes(), bps.PROXY.read_bytes())
             routes = json.loads((dist / "site" / "_routes.json").read_text())
@@ -56,7 +56,7 @@ class BuildTests(unittest.TestCase):
     def test_every_static_file_carries_the_security_headers(self):
         with tempfile.TemporaryDirectory() as tmp:
             dist = Path(tmp) / "dist"
-            bps.build(None, dist, profiles=False)
+            bps.build(None, dist, profiles=False, beta=None)
             lines = (dist / "site" / "_headers").read_text().splitlines()
         self.assertEqual(lines[0], "/*", "one rule, for every path")
         sent = dict(line.strip().split(": ", 1) for line in lines[1:])
@@ -70,12 +70,54 @@ class BuildTests(unittest.TestCase):
     def test_with_r2_the_large_files_are_routed_too(self):
         with tempfile.TemporaryDirectory() as tmp:
             dist = Path(tmp) / "dist"
-            bps.build("bucket", dist, profiles=False)
+            bps.build("bucket", dist, profiles=False, beta=None)
             routes = json.loads((dist / "site" / "_routes.json").read_text())["include"]
             self.assertEqual(routes[0], "/api/*")
             data = [r for r in routes if r.startswith("/data/")]
             self.assertTrue(data and len(data) == len(routes) - 1 - len(bps.MEDIA))
             self.assertIn('bucket_name = "bucket"', (dist / "wrangler.toml").read_text())
+
+
+class GateTests(unittest.TestCase):
+    def test_the_sign_in_stands_in_front_of_every_path_with_the_invited_emails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            emails, dist = Path(tmp) / "emails.txt", Path(tmp) / "dist"
+            emails.write_text("# invited\nOwner@Example.org\n\nfriend@example.org  # a note\nowner@example.org\n")
+            bps.build(None, dist, profiles=False, beta=emails)
+            gate = (dist / "functions" / "_middleware.js").read_text(encoding="utf-8")
+            routes = json.loads((dist / "site" / "_routes.json").read_text())["include"]
+            proxy = (dist / "functions" / "api" / "[[path]].js").exists()
+        self.assertIn('export const EMAILS = ["owner@example.org", "friend@example.org"];', gate)
+        self.assertEqual(gate.replace('["owner@example.org", "friend@example.org"]', "[]"),
+                         bps.GATE.read_text(encoding="utf-8"), "only the list differs from the source")
+        self.assertEqual(routes, ["/*"], "every path goes through the sign-in")
+        self.assertTrue(proxy, "the service's door is still there, behind the sign-in")
+
+    def test_no_build_without_an_invited_email(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dist = Path(tmp) / "dist"
+            dist.mkdir()
+            (dist / "keep").write_text("an earlier build")
+            with self.assertRaises(SystemExit):
+                bps.build(None, dist, profiles=False, beta=Path(tmp) / "missing.txt")
+            (Path(tmp) / "empty.txt").write_text("# nobody yet\n")
+            with self.assertRaises(SystemExit):
+                bps.build(None, dist, profiles=False, beta=Path(tmp) / "empty.txt")
+            self.assertTrue((dist / "keep").exists(), "a refused build leaves the earlier one as it was")
+
+    def test_a_line_that_is_not_an_email_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "emails.txt"
+            for bad in ("owner at example.org", 'a"b@example.org', "a@b"):
+                path.write_text(bad + "\n")
+                with self.assertRaises(SystemExit, msg=bad):
+                    bps.invited(path)
+
+    def test_without_the_gate_only_the_service_and_media_wake_a_function(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dist = Path(tmp) / "dist"
+            bps.build(None, dist, profiles=False, beta=None)
+            self.assertFalse((dist / "functions" / "_middleware.js").exists())
 
 
 class MediaTests(unittest.TestCase):
