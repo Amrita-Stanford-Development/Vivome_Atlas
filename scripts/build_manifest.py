@@ -128,8 +128,8 @@ def build_deployed_architecture_facts(decisive_summary: dict, feature_space_deta
 
 
 def build_model_seeds(reference_seeds_rows: list[dict], provenance: dict) -> dict:
-    """model.seeds: a seed COUNT (rendered with 0 decimal places,
-    web/js/panels.js:buildModelCard), not an accuracy — the accuracy and its CI
+    """model.seeds: a seed COUNT (rendered with 0 decimal places by the
+    `seeds` fact in web/js/panels.js), not an accuracy — the accuracy and its CI
     go in `basis`, which is exactly what the UI surfaces alongside it."""
     n_seeds = len(reference_seeds_rows)
     mean_bal_acc = provenance["reference_seed_mean_bal_acc"]

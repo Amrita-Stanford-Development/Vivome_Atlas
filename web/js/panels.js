@@ -21,12 +21,6 @@ const SUPPORT_LABEL = {
   prot_only: 'Protein only',
 };
 
-const AVAILABILITY_LABEL = {
-  available: 'Available',
-  lfs_not_fetched: 'Not fetched (Git LFS)',
-  not_distributed: 'Not distributed',
-};
-
 const table = (headers, rows) =>
   `<table class="support-table"><thead><tr>${
     headers.map((h) => `<th>${escapeHtml(h)}</th>`).join('')
@@ -155,95 +149,6 @@ export function buildBenchmarkTable(manifest, options = {}) {
 const cardField = (label, value) =>
   `<div class="card-field"><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`;
 
-// Shared by buildModelCard's optional architecture block and the earlier
-// releases' cards: each describes an encoder's settled design facts
-// (feature space, encoder family, mask sampling, gene sources). Kept as one
-// implementation so the cards can't drift in how they format the same
-// underlying fields.
-function architectureFieldsHtml(source) {
-  const sources = Object.entries(source.detected_by_source ?? {})
-    .map(([name, count]) => `${escapeHtml(name)} (${formatCount(count)})`)
-    .join(', ');
-  return [
-    cardField('Feature space', `${formatCount(source.feature_space_size)} genes (was ${formatCount(source.previous_feature_space_size)})`),
-    cardField('Encoder family', textOrPending(source.encoder_family)),
-    cardField('Mask sampling', textOrPending(source.mask_sampling)),
-    cardField('Detected by source', sources),
-  ].join('');
-}
-
-export function buildModelCard(manifest) {
-  const m = manifest.model;
-  // Architecture facts (feature_space_size, encoder_family, ...) are
-  // optional — present for the current v3 reference, absent on an older
-  // manifest that predates this schema addition.
-  const architectureFields = m.feature_space_size == null ? '' : architectureFieldsHtml(m);
-  return `
-    <dl class="model-card">
-      ${cardField('Atlas version', escapeHtml(manifest.atlas_version))}
-      ${cardField('Generated', escapeHtml(manifest.generated))}
-      ${cardField('Model', escapeHtml(m.name))}
-      ${cardField('Latent dimension', formatCount(m.latent_dim))}
-      ${cardField('Training regime', escapeHtml(m.training_regime))}
-      ${cardField('Seeds', metricText(m.seeds, (x) => formatMetric(x, 0)))}
-      ${cardField('RNA cells', formatCount(manifest.modalities.rna?.cells))}
-      ${cardField('Protein cells', formatCount(manifest.modalities.prot?.cells))}
-      ${architectureFields}
-    </dl>
-    <p class="panel-note">${escapeHtml(m.notes)}</p>`;
-}
-
-// An earlier release, with its own seeds and architecture, kept as it was
-// measured: the previous one and the one before it. Like
-// buildPriorBaselineCard, an additive section: it never edits
-// buildModelCard's rendering of manifest.model.
-export function buildPreviousReleaseCard(manifest) {
-  return releaseCard(manifest.previous_release);
-}
-
-export function buildEarlierReleaseCard(manifest) {
-  return releaseCard(manifest.earlier_release);
-}
-
-function releaseCard(p) {
-  if (!p) return '';
-  const architectureFields = p.feature_space_size == null ? '' : architectureFieldsHtml(p);
-  return `
-    <dl class="model-card">
-      ${cardField('Model', textOrPending(p.model_name))}
-      ${cardField('Atlas version', textOrPending(p.atlas_version))}
-      ${cardField('Seeds', metricText(p.seeds, (x) => formatMetric(x, 0)))}
-      ${architectureFields}
-    </dl>
-    <p class="panel-note">${textOrPending(p.note)}</p>`;
-}
-
-// The first model's own numbers, kept as the documented baseline rather than
-// erased when the architecture moved on.
-export function buildPriorBaselineCard(manifest) {
-  const p = manifest.first_release;
-  if (!p) return '';
-  return `
-    <dl class="model-card">
-      ${cardField('Model', escapeHtml(p.model_name))}
-      ${cardField('Shared genes', formatCount(p.n_shared_genes))}
-      ${cardField('Zero-shot AUC (raw)', metricText(p.zero_shot_auc_raw, (x) => formatMetric(x, 4)))}
-      ${cardField('Zero-shot AUC (smoothed)', metricText(p.zero_shot_auc_smoothed, (x) => formatMetric(x, 4)))}
-      ${cardField('Shipped properties', (p.shipped_properties ?? []).map(escapeHtml).join(', '))}
-    </dl>
-    <p class="panel-note">${escapeHtml(p.note)}</p>`;
-}
-
-export function buildAvailabilityTable(manifest) {
-  const rows = Object.entries(manifest.data_availability).map(([key, info]) => `
-    <tr>
-      <td><code>${escapeHtml(key)}</code></td>
-      <td>${escapeHtml(AVAILABILITY_LABEL[info.status] ?? info.status)}</td>
-      <td>${escapeHtml(info.note)}${info.remedy ? ` <code>${escapeHtml(info.remedy)}</code>` : ''}</td>
-    </tr>`).join('');
-  return table(['Asset', 'Status', 'Notes'], rows);
-}
-
 export function buildSupportedLabelSpace(manifest) {
   const supported = manifest.cell_types
     .filter((c) => c.support === 'cross_modal')
@@ -332,14 +237,6 @@ export function factText(manifest, key) {
 // read from the manifest; cell ids come from the visitor's file, so every
 // value is escaped like any other data.
 
-const ABSTAIN_TEXT = {
-  coverage_too_low: 'Too few observed genes',
-  outside_supported_region: 'Outside the region the atlas has evidence for',
-  no_confident_label: 'No class met the confidence bar',
-  ambiguous_between_classes: 'Ambiguous between classes',
-};
-
-const abstainText = (reason) => ABSTAIN_TEXT[reason] ?? reason ?? 'Abstained';
 const cellsOf = (result) => (Array.isArray(result?.cells) ? result.cells : []);
 const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(1)}%` : '');
 
@@ -368,46 +265,7 @@ export function buildProjectionSummary(result) {
     </dl>`;
 }
 
-// How many cells got each label, and how many abstained for each reason.
-export function buildProjectionLabels(result) {
-  const cells = cellsOf(result);
-  const counts = new Map();
-  for (const c of cells) {
-    const key = c.abstained ? `\u0000${c.abstain_reason}` : c.label;
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
-  const rows = [...counts.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .map(([key, count]) => {
-      const name = key.startsWith('\u0000')
-        ? `<span class="pending">Abstained: ${escapeHtml(abstainText(key.slice(1)))}</span>`
-        : escapeHtml(key);
-      return `<tr><td class="support-name">${name}</td><td class="support-num">${formatCount(count)}</td>`
-        + `<td class="support-num">${share(count, cells.length)}</td></tr>`;
-    }).join('');
-  return table(['Label', 'Cells', 'Share'], rows);
-}
-
-// One row per cell, the first `limit` of them. Each row carries its cell's
-// index in result.cells (data-cell), so a click on a row can select the cell.
-export function buildProjectionCells(result, limit = 200) {
-  const cells = cellsOf(result);
-  const rows = cells.slice(0, limit).map((c, i) => {
-    const labelSet = (c.label_set ?? []).map(escapeHtml).join(', ');
-    const confidence = Number.isFinite(c.confidence) ? c.confidence.toFixed(3) : '';
-    const label = c.abstained
-      ? `<span class="pending">${escapeHtml(abstainText(c.abstain_reason))}</span>`
-      : escapeHtml(c.label);
-    return `<tr data-cell="${i}"><td><code>${escapeHtml(c.cell_id)}</code></td><td>${label}</td><td>${labelSet}</td>`
-      + `<td class="support-num">${confidence}</td><td class="support-num">${formatCount(c.observed_genes)}</td></tr>`;
-  }).join('');
-  const note = cells.length > limit
-    ? `<p class="panel-note">Showing the first ${formatCount(limit)} of ${formatCount(cells.length)} cells. Download the response for all of them.</p>`
-    : '';
-  return table(['Cell', 'Label', 'Label set', 'Confidence', 'Observed genes'], rows) + note;
-}
-
-// ---- The model card's accuracy table (v3's; no page mounts it) ----
+// ---- A measured value with its spread, and the facts the prose cites ----
 // manifest.model_card: each row names its decision rule, because a
 // shipped-checkpoint number and a 5-seed mean compare only under one rule.
 
@@ -419,49 +277,6 @@ function cardValue(metric) {
   const range = Number.isFinite(metric.min) && Number.isFinite(metric.max)
     ? `<span class="metric-basis">range ${pct1(metric.min)} to ${pct1(metric.max)}%</span>` : '';
   return `${escapeHtml(formatPercent(metric))}${sd}${range}`;
-}
-
-export function buildModelCardTable(manifest) {
-  const rows = manifest.model_card?.rows ?? [];
-  if (rows.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
-  const body = rows.map((r) => `
-    <tr>
-      <td>${escapeHtml(r.measure)}<span class="metric-basis"><code>${escapeHtml(metricBasis(r.accuracy))}</code></span></td>
-      <td>${escapeHtml(r.rule)}</td>
-      <td class="support-num">${cardValue(r.accuracy)}</td>
-      <td class="support-num">${cardValue(r.balanced_accuracy)}</td>
-    </tr>`).join('');
-  return table(['Measure', 'Decision rule', 'Accuracy', 'Balanced accuracy'], body);
-}
-
-// A release's evaluation (manifest.model.evaluation for the current release,
-// previous_release.evaluation for the one before): each number with what it
-// describes. The suite is simulated uploads of held-out RNA cells, and its
-// title says whose; the development datasets are measured as served.
-function evaluationHtml(ev) {
-  const suite = ev?.suite?.rows ?? [];
-  const served = ev?.served ?? [];
-  if (suite.length === 0 && served.length === 0) return `<p class="pending">${PENDING_LABEL}</p>`;
-  const valueRow = (measure, metric) => `
-    <tr>
-      <td>${escapeHtml(measure)}<span class="metric-basis"><code>${escapeHtml(metricBasis(metric))}</code></span></td>
-      <td class="support-num">${cardValue(metric)}</td>
-    </tr>`;
-  const suiteRows = suite.map((r) => valueRow(r.measure, r.value)).join('');
-  const servedRows = served.map((r) => [
-    valueRow(`${r.dataset}: committed`, r.committed),
-    valueRow(`${r.dataset}: ${r.correct_label}`, r.correct),
-  ].join('')).join('');
-  return `<h3>${textOrPending(ev?.suite?.title)}</h3>${table(['Measure', 'Value'], suiteRows)}`
-    + `<h3>Development datasets, as served</h3>${table(['Measure', 'Value'], servedRows)}`;
-}
-
-export function buildEvaluationTable(manifest) {
-  return evaluationHtml(manifest.model?.evaluation);
-}
-
-export function buildPreviousEvaluationTable(manifest) {
-  return evaluationHtml(manifest.previous_release?.evaluation);
 }
 
 const cardRow = (m, key) => (m.model_card?.rows ?? []).find((r) => r.key === key);

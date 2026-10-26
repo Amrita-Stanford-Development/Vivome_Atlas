@@ -2,10 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
-  buildDiagnosticsTable, buildBenchmarkTable, buildModelCard, buildPriorBaselineCard,
-  buildAvailabilityTable, buildSupportedLabelSpace, buildProofPoints, factText,
-  buildPreviousReleaseCard, buildEarlierReleaseCard, buildEvaluationTable, buildPreviousEvaluationTable,
-  buildProjectionSummary, buildProjectionLabels, buildProjectionCells, buildModelCardTable,
+  buildDiagnosticsTable, buildBenchmarkTable, buildSupportedLabelSpace, buildProofPoints, factText,
+  buildProjectionSummary,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture } from './fixtures.js';
 
@@ -147,103 +145,6 @@ test('benchmark that is not signed off shows a pending banner and no table', () 
   assert.match(buildBenchmarkTable({ benchmark: {} }), /Pending: pending sign-off/);
 });
 
-test('model card shows version, dims, and a measured seed count', () => {
-  const html = buildModelCard(manifestFixture());
-  assert.match(html, /0\.5\.0/);
-  assert.match(html, /128/);
-  assert.match(html, /<dd>5<\/dd>/);
-  assert.ok(!/<span class="pending">5/.test(html),
-    'a measured seed count must not carry the pending style');
-});
-
-test('model card marks a pending seed count with the pending style', () => {
-  const m = manifestFixture();
-  m.model.seeds = pending('Phase 1');
-  const html = buildModelCard(m);
-  assert.match(html, /<span class="pending">Pending<\/span>/);
-});
-
-test('model card renders the folded-in architecture facts', () => {
-  const html = buildModelCard(manifestFixture());
-  assert.match(html, /9,002/);
-  assert.match(html, /module pooling/);
-});
-
-test('model card omits the architecture fields on an older manifest that predates them', () => {
-  const m = manifestFixture();
-  delete m.model.feature_space_size;
-  delete m.model.previous_feature_space_size;
-  delete m.model.encoder_family;
-  delete m.model.mask_sampling;
-  delete m.model.detected_by_source;
-  const html = buildModelCard(m);
-  assert.ok(!html.includes('undefined'), html);
-  assert.ok(!html.includes('NaN'), html);
-});
-
-test('model card renders Pending, not NaN, for absent modality counts', () => {
-  const m = manifestFixture();
-  m.modalities = {};
-  const html = buildModelCard(m);
-  assert.ok(!html.includes('NaN'), html);
-  assert.ok(!html.includes('undefined'), html);
-});
-
-test('prior baseline card shows the real kept numbers, not erased', () => {
-  const html = buildPriorBaselineCard(manifestFixture());
-  assert.match(html, /CrossModalNet/);
-  assert.match(html, /2,903/);
-  assert.match(html, /0\.6417/);
-  assert.match(html, /ribosome/);
-});
-
-test('prior baseline card renders nothing when the manifest has no first_release', () => {
-  const m = manifestFixture();
-  delete m.first_release;
-  assert.equal(buildPriorBaselineCard(m), '');
-});
-
-test('previous release card shows v4.1, and the earlier one v3, each with its own facts', () => {
-  const previous = buildPreviousReleaseCard(manifestFixture());
-  assert.match(previous, /VivOME v4\.1/);
-  assert.match(previous, /0\.4\.0/);
-  assert.match(previous, /Seeds<\/dt><dd>5/);
-  assert.match(previous, /Mask sampling<\/dt><dd><span class="pending">/);
-  const earlier = buildEarlierReleaseCard(manifestFixture());
-  assert.match(earlier, /VivOME v3 reference/);
-  assert.match(earlier, /0\.2\.0/);
-  assert.match(earlier, /uniform/);
-  assert.equal(buildPreviousReleaseCard({ ...manifestFixture(), previous_release: null }), '');
-  assert.equal(buildEarlierReleaseCard({ ...manifestFixture(), earlier_release: undefined }), '');
-});
-
-test('a missing mask sampling reads Pending, never undefined', () => {
-  const html = buildModelCard(manifestFixture());
-  assert.ok(!/undefined/.test(html));
-  assert.match(html, /Mask sampling<\/dt><dd><span class="pending">/);
-});
-
-test('evaluation tables title their suite and label each basis, for this release and the previous', () => {
-  const html = buildEvaluationTable(manifestFixture());
-  assert.match(html, /<h3>Simulated uploads of held-out RNA cells \(v4\.1&#39;s pre-registered evaluation; v4\.2 answers RNA uploads exactly as v4\.1\)<\/h3>/);
-  assert.match(html, /the suite&#39;s fourth use/);
-  assert.match(html, /96\.3%/);
-  assert.match(html, /Fulcher 2026: committed/);
-  assert.match(html, /98\.3%/);
-  const previous = buildPreviousEvaluationTable(manifestFixture());
-  assert.match(previous, /<h3>Simulated uploads of held-out RNA cells \(v4\.1&#39;s pre-registered evaluation\)<\/h3>/);
-  assert.match(previous, /served settings, development data/);
-  assert.match(previous, /97\.9%/);
-});
-
-test('evaluation table reads Pending when a release has no evaluation', () => {
-  const m = manifestFixture();
-  delete m.model.evaluation;
-  delete m.previous_release.evaluation;
-  assert.match(buildEvaluationTable(m), /class="pending"/);
-  assert.match(buildPreviousEvaluationTable(m), /class="pending"/);
-});
-
 test('release facts name each release from its own block', () => {
   const m = manifestFixture();
   assert.equal(factText(m, 'model_name'), 'VivOME v4.2');
@@ -284,17 +185,6 @@ test('every fact the manuscript page asks for exists in the real manifest', asyn
     const text = html.slice(html.indexOf('<main'), html.indexOf('</main>')).replace(/<[^>]+>/g, ' ');
     assert.ok(!text.includes('—'), `${page}: em dash`);
   }
-});
-
-test('availability table maps status enums to readable labels', () => {
-  const html = buildAvailabilityTable(manifestFixture());
-  assert.match(html, /Not fetched \(Git LFS\)/);
-  assert.match(html, /Available/);
-  assert.ok(!html.includes('lfs_not_fetched'), 'raw enum token must not reach the page');
-});
-
-test('availability table shows the remedy command', () => {
-  assert.match(buildAvailabilityTable(manifestFixture()), /git lfs install &amp;&amp; git lfs pull/);
 });
 
 test('supported label space lists cross-modal types and the RNA-only count', () => {
@@ -387,34 +277,9 @@ test('projection summary reports the upload, the label space and the abstention 
   assert.match(buildProjectionSummary(empty), /No values to read/, 'not a log scale: there was nothing to judge');
 });
 
-test('projection labels count each label and each abstain reason, most first', () => {
-  const html = buildProjectionLabels(projection());
-  assert.ok(html.indexOf('monocyte') < html.indexOf('Abstained'), html);
-  assert.match(html, /monocyte<\/td><td class="support-num">2<\/td><td class="support-num">66\.7%/);
-  assert.match(html, /Abstained: Too few observed genes/);
-});
-
-test('projection cells escape ids from the upload and show abstentions plainly', () => {
-  const html = buildProjectionCells(projection());
-  assert.ok(!html.includes('<img'), 'a cell id from the upload must not become markup');
-  assert.match(html, /&lt;img/);
-  assert.match(html, /0\.912/);
-  assert.match(html, /Too few observed genes/);
-});
-
-test('projection cells show the first rows and say how many there are', () => {
-  const html = buildProjectionCells(projection(), 2);
-  assert.equal((html.match(/<tr[\s>]/g) ?? []).length, 3, 'header row plus two cells');
-  assert.match(html, /first 2 of 3 cells/);
-  // Each row names its cell's index in the response, so a click can select it.
-  assert.deepEqual([...html.matchAll(/<tr data-cell="(\d+)">/g)].map((m) => Number(m[1])), [0, 1]);
-});
-
-test('projection builders survive a malformed response', () => {
-  for (const build of [buildProjectionSummary, buildProjectionLabels, buildProjectionCells]) {
-    const html = build({});
-    assert.ok(!html.includes('undefined') && !html.includes('NaN'), `${build.name}: ${html}`);
-  }
+test('the projection summary survives a malformed response', () => {
+  const html = buildProjectionSummary({});
+  assert.ok(!html.includes('undefined') && !html.includes('NaN'), html);
 });
 
 const withModelCard = () => {
@@ -436,19 +301,6 @@ const withModelCard = () => {
   };
   return m;
 };
-
-test("the model card table names each row's rule and shows mean, spread and range", () => {
-  const html = buildModelCardTable(withModelCard());
-  assert.match(html, /nearest centroid \(the service&#39;s rule\)/);
-  assert.match(html, /79\.8%/);
-  assert.match(html, /63\.3% &plusmn; 10\.8/);
-  assert.match(html, /range 50\.8 to 79\.8%/);
-  assert.ok(!html.includes('<b>x</b>'), 'measure names are escaped');
-});
-
-test('the model card table reads Pending when the manifest has none', () => {
-  assert.match(buildModelCardTable(manifestFixture()), /Pending/);
-});
 
 test('model card facts compare like with like and come from the manifest', () => {
   const m = withModelCard();

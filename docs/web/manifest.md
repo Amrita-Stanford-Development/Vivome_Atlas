@@ -115,7 +115,7 @@ Computed from repository data:
   `shared kNN (the benchmark's rule)`), because a seed and a mean compare
   only under the same one. `vs_scanvi` counts the seed pairings v3 wins
   against scANVI, from `paired_bootstrap_ours_vs_scanvi.csv`.
-  `buildModelCardTable` and the model-card facts of `factText` read it.
+  The model-card facts of `factText` read it.
 
 Emitted as pending, with the phase that will produce each:
 
@@ -185,8 +185,7 @@ in the browser.
 |---|---|
 | `buildSupportSummary`, `buildSupportTable`, `buildDiagnosticsTable` | `manuscript.html` (Results: cross-modal support, alignment diagnostics) |
 | `buildBenchmarkTable` (with `currentOnly`, `roles` and `note` options) | `manuscript.html` |
-| `buildModelCard`, `buildEvaluationTable`, `buildPreviousReleaseCard`, `buildPreviousEvaluationTable`, `buildEarlierReleaseCard`, `buildPriorBaselineCard`, `buildAvailabilityTable`, `buildModelCardTable` | none: no page mounts them |
-| `buildSupportedLabelSpace`, `buildProjectionSummary`, `buildProjectionLabels`, `buildProjectionCells` | `atlas.html` (`web/js/atlas/data-tab.js`, `web/js/atlas/landing.js`) |
+| `buildSupportedLabelSpace`, `buildProjectionSummary` | `atlas.html` (`web/js/atlas/data-tab.js`, `web/js/atlas/landing.js`) |
 | `buildProofPoints`, `buildOrganGrid` | `index.html` |
 | `factText` (the `data-fact` slots in prose) | `index.html`, `workflow.html`, `manuscript.html` |
 

@@ -4,12 +4,10 @@
 // The public site has the RNA profiles as shards (data/profiles/, written by
 // scripts/build_pages_site.py): float32 values, gzipped, a fixed number of
 // cells each, so a click fetches one shard of about 120 KB. Without shards
-// (a clone of the repository), the profiles come from the large CSVs
-// (web/data/atlas_PROT_lat128.csv, 47 MB; the RNA parts, 1.43 GB each, as Git
-// LFS objects): the protein file is read once and every profile kept; the RNA
-// parts are searched row by row until the cell is found. A clone without
-// `git lfs pull` gets the LFS remedy (isLfsPointer, the one copy of the
-// check, in web/js/manifest.js).
+// (a clone of the repository), the RNA profiles come from the large CSV parts
+// (1.43 GB each, Git LFS objects), searched row by row until the cell is
+// found. A clone without `git lfs pull` gets the LFS remedy (isLfsPointer,
+// the one copy of the check, in web/js/manifest.js).
 
 import { isLfsPointer } from '../manifest.js';
 import { escapeHtml } from '../panels.js';
@@ -17,7 +15,6 @@ import { parseCsvLine } from './reference-data.js';
 
 // Resolved from this module, so they hold wherever the page lives.
 const FILES = {
-  prot: [new URL('../../data/atlas_PROT_lat128.csv', import.meta.url).href],
   rna: [new URL('../../data/atlas_RNA_lat128-001-part1.csv', import.meta.url).href,
     new URL('../../data/atlas_RNA_lat128-001-part2.csv', import.meta.url).href],
 };
@@ -28,7 +25,6 @@ const MISSING = 'Gene profiles are not on this copy of the site: the files are t
 const LFS = 'The profile file is a Git LFS object that has not been fetched. Run: git lfs install && git lfs pull';
 
 const cache = new Map();
-let protLoad = null;
 let shardIndex = null;
 
 const pause = () => new Promise((resolve) => setTimeout(resolve, 1));
@@ -151,19 +147,8 @@ export async function loadProfile(modality, origIndex, onProgress) {
   if (index?.[modality]) {
     const profile = await shardLoad(index, modality, origIndex);
     if (profile) cache.set(key, profile);
-  } else if (modality === 'prot') {
-    if (!protLoad) {
-      protLoad = scan(FILES.prot, (values, genes) => {
-        cache.set(`prot_${Number(values[2])}`, profileOf(values, genes));
-        return false;
-      }, onProgress).catch((err) => {
-        protLoad = null;
-        throw err;
-      });
-    }
-    await protLoad;
   } else {
-    await scan(FILES.rna, (values, genes) => {
+    await scan(FILES[modality] ?? [], (values, genes) => {
       if (Number(values[2]) !== origIndex) return false;
       cache.set(key, profileOf(values, genes));
       return true;

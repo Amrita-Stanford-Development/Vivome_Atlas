@@ -431,7 +431,7 @@ class TestBenchmark(unittest.TestCase):
 
 class TestBuildModelSeeds(unittest.TestCase):
     def test_value_is_a_seed_count_not_an_accuracy(self):
-        # web/js/panels.js:buildModelCard renders this with 0 decimal places —
+        # web/js/panels.js's `seeds` fact renders this with 0 decimal places —
         # an accuracy like 0.7143 would render as "1". The count belongs in
         # value; the accuracy and its CI belong in basis.
         rows = [{"seed": str(i)} for i in range(5)]
