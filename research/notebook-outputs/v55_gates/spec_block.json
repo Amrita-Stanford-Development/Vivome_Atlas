@@ -1,0 +1,7 @@
+{
+  "evaluation": {
+    "status": "development gates missed",
+    "record": "research/notebook-outputs/v55_gates/decision.json",
+    "note": "not served: a development result; the sorted CD4/CD8 cells are the test"
+  }
+}

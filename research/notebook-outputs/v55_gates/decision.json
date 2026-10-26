@@ -1,0 +1,43 @@
+{
+  "finished": "2026-10-26T20:43:51",
+  "self_check": {
+    "v4.1 fulcher2026": {
+      "expected": 69.05,
+      "got": 69.05,
+      "passed": true
+    },
+    "v4.1 pbmc240": {
+      "expected": 92.31,
+      "got": 92.31,
+      "passed": true
+    },
+    "v5.4 fulcher2026": {
+      "expected": 76.0,
+      "got": 76.0,
+      "passed": true
+    },
+    "v5.4 answers_committed": {
+      "expected": 53.56,
+      "got": 53.56,
+      "passed": true
+    },
+    "v5.4 out_of_reference_auroc": {
+      "expected": 0.7575,
+      "got": 0.7575,
+      "passed": true
+    }
+  },
+  "checks": {
+    "check_donors_dc_recall": true,
+    "suite_top1": true,
+    "fulcher_gain": true,
+    "pxd056050_no_loss": true,
+    "pbmc240_guardrail": true,
+    "fulcher_committed": false,
+    "fulcher_correct_when_committed": true,
+    "out_of_reference_auroc": true,
+    "check_coverage": true
+  },
+  "go": false,
+  "seconds": 46
+}

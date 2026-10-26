@@ -1,0 +1,306 @@
+{
+  "script_sha256": "78b97a125c9a76bd0d8f42e7a197cffdc6d5ca1d408899f47516710b337213df",
+  "variant": "v5.5",
+  "run": "2026-10-26T20:42:44",
+  "gpu": "NVIDIA RTX 4000 Ada Generation",
+  "labels": "service/model/runtime/reference_metadata.csv (sha256 b0d5d1e761d6969e401fa605f74e4367e7d65d5c9fdea444471bbccee65d4054)",
+  "members_of": "v5.4",
+  "self_check": {
+    "temperature": true,
+    "ood_threshold": true,
+    "qhat": true,
+    "centroids": true
+  },
+  "self_check_detail": {
+    "temperature": {
+      "V2_batchgene_aug_seed0.pt": [
+        0.12883463966367817,
+        0.12883463966367817
+      ],
+      "V2_batchgene_aug_seed1.pt": [
+        0.14060712576942577,
+        0.14060712576942577
+      ],
+      "V2_batchgene_aug_seed2.pt": [
+        0.12883463966367817,
+        0.12883463966367817
+      ],
+      "V2_batchgene_aug_seed3.pt": [
+        0.12883463966367817,
+        0.12883463966367817
+      ],
+      "V2_batchgene_aug_seed4.pt": [
+        0.14060712576942577,
+        0.14060712576942577
+      ]
+    },
+    "ood": [
+      0.7591797113418579,
+      0.7591797113418579
+    ],
+    "qhat_within_one_rank": {
+      "marginal": true,
+      "b cell": true,
+      "cd4-positive, alpha-beta t cell": true,
+      "cd8-positive, alpha-beta t cell": true,
+      "classical monocyte": true,
+      "erythrocyte": true,
+      "hematopoietic precursor cell": true,
+      "intermediate monocyte": true,
+      "macrophage": true,
+      "mature nk t cell": true,
+      "monocyte": true,
+      "naive thymus-derived cd4-positive, alpha-beta t cell": true,
+      "natural killer cell": true,
+      "neutrophil": true,
+      "non-classical monocyte": true,
+      "plasma cell": true,
+      "platelet": true
+    },
+    "centroids_min_cosine": {
+      "V2_batchgene_aug_seed0.pt": 0.9999997615814209,
+      "V2_batchgene_aug_seed1.pt": 0.9999998807907104,
+      "V2_batchgene_aug_seed2.pt": 0.9999998807907104,
+      "V2_batchgene_aug_seed3.pt": 0.9999998807907104,
+      "V2_batchgene_aug_seed4.pt": 0.9999998807907104
+    }
+  },
+  "donors": {
+    "calibration": [
+      "BR1010",
+      "BR1011",
+      "BR1012",
+      "BR1017",
+      "BR1026",
+      "BR1044",
+      "BR1048",
+      "BR1050",
+      "BR2028",
+      "BR2052",
+      "UP1021"
+    ],
+    "check": [
+      "BR1006",
+      "BR1009",
+      "BR1014",
+      "BR1023",
+      "BR1032",
+      "BR1054",
+      "BR2008",
+      "BR2014",
+      "BR2050",
+      "BR2051",
+      "UP1024"
+    ]
+  },
+  "temperature": {
+    "V2_batchgene_aug_seed0.pt": 0.14060712576942577,
+    "V2_batchgene_aug_seed1.pt": 0.15345534297879426,
+    "V2_batchgene_aug_seed2.pt": 0.12883463966367817,
+    "V2_batchgene_aug_seed3.pt": 0.12883463966367817,
+    "V2_batchgene_aug_seed4.pt": 0.15345534297879426
+  },
+  "marginal_qhat": 0.9548166477900403,
+  "ood_threshold": 0.7591797113418579,
+  "qhat_by_class": {
+    "b cell": 0.8694124278533072,
+    "basophil": 0.9548166477900403,
+    "cd4-positive, alpha-beta t cell": 0.955165064473618,
+    "cd8-positive, alpha-beta t cell": 0.9218244229902618,
+    "classical monocyte": 0.9044678418880474,
+    "common myeloid progenitor": 0.9333662684609947,
+    "erythrocyte": 0.9466721696676038,
+    "hematopoietic precursor cell": 0.9994051036633738,
+    "hematopoietic stem cell": 0.9548166477900403,
+    "intermediate monocyte": 0.9641613765918542,
+    "macrophage": 0.9524579132045057,
+    "mature nk t cell": 0.996378175064094,
+    "monocyte": 0.9401598872810454,
+    "myeloid dendritic cell": 0.9222748877336097,
+    "naive thymus-derived cd4-positive, alpha-beta t cell": 0.9704029039948647,
+    "natural killer cell": 0.9230663826544796,
+    "neutrophil": 0.5645600785999132,
+    "non-classical monocyte": 0.9674486841233038,
+    "plasma cell": 0.8394000860507804,
+    "plasmacytoid dendritic cell": 0.9394603084924659,
+    "platelet": 0.18365008471548538,
+    "regulatory t cell": 0.9849636352807328
+  },
+  "n_uploads": 360,
+  "n_uploads_allen": 120,
+  "n_cells": 113991,
+  "cells_per_class": {
+    "b cell": 8267,
+    "basophil": 0,
+    "cd4-positive, alpha-beta t cell": 9416,
+    "cd8-positive, alpha-beta t cell": 9298,
+    "classical monocyte": 9354,
+    "common myeloid progenitor": 2003,
+    "erythrocyte": 6753,
+    "hematopoietic precursor cell": 460,
+    "hematopoietic stem cell": 0,
+    "intermediate monocyte": 5691,
+    "macrophage": 6185,
+    "mature nk t cell": 943,
+    "monocyte": 12799,
+    "myeloid dendritic cell": 2001,
+    "naive thymus-derived cd4-positive, alpha-beta t cell": 6822,
+    "natural killer cell": 6752,
+    "neutrophil": 8227,
+    "non-classical monocyte": 6165,
+    "plasma cell": 4458,
+    "plasmacytoid dendritic cell": 3297,
+    "platelet": 2655,
+    "regulatory t cell": 2445
+  },
+  "allen_cells_per_class": {
+    "b cell": 2577,
+    "basophil": 0,
+    "cd4-positive, alpha-beta t cell": 3018,
+    "cd8-positive, alpha-beta t cell": 2037,
+    "classical monocyte": 2973,
+    "common myeloid progenitor": 2003,
+    "erythrocyte": 1667,
+    "hematopoietic precursor cell": 0,
+    "hematopoietic stem cell": 0,
+    "intermediate monocyte": 2464,
+    "macrophage": 0,
+    "mature nk t cell": 0,
+    "monocyte": 0,
+    "myeloid dendritic cell": 2001,
+    "naive thymus-derived cd4-positive, alpha-beta t cell": 4228,
+    "natural killer cell": 1726,
+    "neutrophil": 0,
+    "non-classical monocyte": 3777,
+    "plasma cell": 1267,
+    "plasmacytoid dendritic cell": 3297,
+    "platelet": 1425,
+    "regulatory t cell": 2445
+  },
+  "suite_top1_accuracy": 65.265,
+  "suite_top1_accuracy_allen": 41.553,
+  "suite_top1_accuracy_both": 57.588,
+  "check": {
+    "n_uploads": 60,
+    "n_cells": 18400,
+    "by_class": {
+      "b cell": {
+        "n": 1419,
+        "coverage": 97.11,
+        "one_class_sets": 31.22,
+        "top1": 96.26
+      },
+      "cd4-positive, alpha-beta t cell": {
+        "n": 1904,
+        "coverage": 78.41,
+        "one_class_sets": 0.74,
+        "top1": 63.5
+      },
+      "cd8-positive, alpha-beta t cell": {
+        "n": 1257,
+        "coverage": 64.6,
+        "one_class_sets": 1.11,
+        "top1": 40.97
+      },
+      "classical monocyte": {
+        "n": 1683,
+        "coverage": 59.83,
+        "one_class_sets": 1.31,
+        "top1": 50.86
+      },
+      "common myeloid progenitor": {
+        "n": 717,
+        "coverage": 90.1,
+        "one_class_sets": 0.14,
+        "top1": 33.19
+      },
+      "erythrocyte": {
+        "n": 1124,
+        "coverage": 94.4,
+        "one_class_sets": 61.92,
+        "top1": 80.6
+      },
+      "intermediate monocyte": {
+        "n": 953,
+        "coverage": 97.17,
+        "one_class_sets": 0.52,
+        "top1": 7.87
+      },
+      "myeloid dendritic cell": {
+        "n": 1311,
+        "coverage": 86.65,
+        "one_class_sets": 0.0,
+        "top1": 3.74
+      },
+      "naive thymus-derived cd4-positive, alpha-beta t cell": {
+        "n": 827,
+        "coverage": 87.3,
+        "one_class_sets": 0.97,
+        "top1": 0.48
+      },
+      "natural killer cell": {
+        "n": 1780,
+        "coverage": 67.13,
+        "one_class_sets": 0.28,
+        "top1": 27.87
+      },
+      "non-classical monocyte": {
+        "n": 766,
+        "coverage": 97.0,
+        "one_class_sets": 0.13,
+        "top1": 1.31
+      },
+      "plasma cell": {
+        "n": 1046,
+        "coverage": 77.34,
+        "one_class_sets": 0.57,
+        "top1": 77.34
+      },
+      "plasmacytoid dendritic cell": {
+        "n": 1478,
+        "coverage": 97.63,
+        "one_class_sets": 0.2,
+        "top1": 84.44
+      },
+      "platelet": {
+        "n": 878,
+        "coverage": 61.16,
+        "one_class_sets": 13.33,
+        "top1": 73.58
+      },
+      "regulatory t cell": {
+        "n": 1257,
+        "coverage": 85.84,
+        "one_class_sets": 0.32,
+        "top1": 0.0
+      }
+    }
+  },
+  "files": {
+    "members/V2_batchgene_aug_seed0.pt": "v5.4's file: v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed0.pt)",
+    "members/V2_seed0_reference_latent_f16.npy": "v5.4's file: all reference cells, reference_metadata.csv row order",
+    "members/V2_seed0_centroids.npy": "v5.4's file: class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order",
+    "members/V2_seed0_centroids_cb.npy": "v5.4's file: V2_batchgene_aug_seed0.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)",
+    "members/V2_batchgene_aug_seed1.pt": "v5.4's file: v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed1.pt)",
+    "members/V2_seed1_reference_latent_f16.npy": "v5.4's file: all reference cells, reference_metadata.csv row order",
+    "members/V2_seed1_centroids.npy": "v5.4's file: class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order",
+    "members/V2_seed1_centroids_cb.npy": "v5.4's file: V2_batchgene_aug_seed1.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)",
+    "members/V2_batchgene_aug_seed2.pt": "v5.4's file: v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed2.pt)",
+    "members/V2_seed2_reference_latent_f16.npy": "v5.4's file: all reference cells, reference_metadata.csv row order",
+    "members/V2_seed2_centroids.npy": "v5.4's file: class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order",
+    "members/V2_seed2_centroids_cb.npy": "v5.4's file: V2_batchgene_aug_seed2.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)",
+    "members/V2_batchgene_aug_seed3.pt": "v5.4's file: v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed3.pt)",
+    "members/V2_seed3_reference_latent_f16.npy": "v5.4's file: all reference cells, reference_metadata.csv row order",
+    "members/V2_seed3_centroids.npy": "v5.4's file: class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order",
+    "members/V2_seed3_centroids_cb.npy": "v5.4's file: V2_batchgene_aug_seed3.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)",
+    "members/V2_batchgene_aug_seed4.pt": "v5.4's file: v5_train.py checkpoint (Drive Data/Results/Tier1_v31/V5/ckpt_v54/V2_batchgene_aug_seed4.pt)",
+    "members/V2_seed4_reference_latent_f16.npy": "v5.4's file: all reference cells, reference_metadata.csv row order",
+    "members/V2_seed4_centroids.npy": "v5.4's file: class means of the reference latents under the original labels, with the Allen atlas's training-donor cells, class_idx order",
+    "members/V2_seed4_centroids_cb.npy": "v5.4's file: V2_batchgene_aug_seed4.pt centroids under class-balanced statistics (the original labels, with the Allen atlas's training-donor cells)",
+    "class_balanced_stats.npz": "v5.4's file: per-gene class-balanced mean and SD over all reference cells, the original labels, with the Allen atlas's training-donor cells",
+    "class_means_cb.npy": "v5.4's file: class-balanced z-scored RNA class means under the original labels, with the Allen atlas's training-donor cells, class position order (22 x 9,002)",
+    "nb2_spec_v55.json": "v5.5's answers: temperatures, conformal thresholds, out-of-distribution threshold (NB2's layout)",
+    "spec_v55.json": "v5.5's best guess (v4.1's layout and settings)"
+  },
+  "seconds": 84
+}

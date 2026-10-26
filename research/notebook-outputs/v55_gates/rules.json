@@ -1,0 +1,33 @@
+{
+  "script_sha256": "deed29351a12a56ca74cfe4cb46c0e2c2c7071251cdd803c6a4231fa2283d39f",
+  "started": "2026-10-26T20:43:05",
+  "go": {
+    "heldout_dc_recall_min": 50.0,
+    "suite_top1_min": 60.448,
+    "fulcher_gain_min": 2.0,
+    "pxd056050_drop_max": 0.0,
+    "pbmc240_drop_max": 2.0,
+    "committed_drop_max": 2.0,
+    "correct_drop_max": 1.0,
+    "auroc_drop_max": 0.03,
+    "check_coverage_min": 85.0
+  },
+  "coverage_classes": [
+    "myeloid dendritic cell",
+    "plasmacytoid dendritic cell",
+    "common myeloid progenitor",
+    "regulatory t cell"
+  ],
+  "v41_expected": {
+    "fulcher2026": 69.05,
+    "pbmc240": 92.31
+  },
+  "v54_expected": {
+    "fulcher2026": 76.0,
+    "answers_committed": 53.56,
+    "out_of_reference_auroc": 0.7575
+  },
+  "tolerance": 0.01,
+  "tolerance_auroc": 0.0001,
+  "build_record_sha256": "86d87c905c8b451efb12a94493d15347fc169ce213b4b17d1c400f47f743728d"
+}

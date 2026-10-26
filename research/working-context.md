@@ -78,9 +78,13 @@ the run history have the detail.
   the visible accessibility changes (contrast, the Workflow story for
   screen readers, the map by keyboard, a Pause motion switch, the Atlas
   page at high zoom), for the owner to look at.
-- **Open, for the owner:** an organ v4, a blood candidate that calibrates
-  v5.4's new classes, and the DOI. The Google Cloud free trial ends about
-  2027-01-14: "Activate full account" before then.
+- **Blood candidate v5.5** (v5.4 recalibrated with held-out Allen donors,
+  2026-10-26): NO GO on the answers committed (42.52, bar 86.57); the
+  members are unsure of the Allen cells under protein-like coverage, so
+  honest calibration widened the sets (run history entry 67).
+- **Open, for the owner:** an organ v4, a blood candidate that changes the
+  members or the answer rule, and the DOI. The Google Cloud free trial
+  ends about 2027-01-14: "Activate full account" before then.
 
 ## The project
 

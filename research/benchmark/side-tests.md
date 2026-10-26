@@ -436,6 +436,10 @@ calibrates them:
   the recalibration moves that score only through the temperatures.
 - **Not served either way.** A GO makes v5.5 a frozen candidate for the
   sorted CD4/CD8 test, by that protocol's next amendment.
+- **Outcome, 2026-10-26: development gates missed** (run history entry
+  67). Answers committed 42.52 (bar 86.57) missed; the other eight
+  passed, the out-of-reference AUROC among them (0.7679, bar 0.7598).
+  v5.5 stays refused and is not a sorted-test candidate.
 
 ### Alternatives kept unused, for future tests or future development
 

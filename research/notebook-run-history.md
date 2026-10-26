@@ -2902,6 +2902,67 @@ better; the answer layer's calibration does not cover what they learned.
 - A next candidate would calibrate the new classes: Allen cells never used
   in training, in the calibration suite. That is the owner's call.
 
+### 67. v5.4 recalibrated with held-out Allen donors (candidate v5.5), 2026-10-26
+
+**Why:** entry 66's diagnosis. v5.4's calibration suite held no myeloid
+DC, pDC, CMP or regulatory T cell, so those classes took the marginal
+threshold, and Fulcher's answers fell to 53.56% committed.
+
+**Fixed first** (`1663caf`; side-tests amendment 23): the donors' split,
+the uploads and the fit (`research/notebooks/v5_build.py --variant v5.5`),
+and the gates (`research/notebooks/v55_gates.py`). The owner kept the
+out-of-reference gate unchanged.
+
+**How:** nothing trained; v5.4's member files copied and checked against
+its MANIFEST. The 22 Allen donors held out of training, split 11 and 11;
+120 calibration uploads of the first 11 (36,905 cells) beside Tabula
+Sapiens's 240 (77,086); temperatures and conformal thresholds refitted on
+both, the out-of-distribution threshold v5.4's. Self-check passed: Tabula
+Sapiens's uploads alone gave v5.4's temperatures, thresholds and
+out-of-distribution threshold. Three members' temperatures rose one step of
+the grid (0.1288 to 0.1406; 0.1406 to 0.1535, twice). 84 s to build, 46 s
+for the gates.
+
+| Gate | v5.5 | v5.4 | v4.1 | Bar | |
+|---|---|---|---|---|---|
+| Check donors: myeloid DC / pDC recall | 97.98 / 99.59 | the same members | 0.0 / 0.0 | ≥ 50 each | pass |
+| Calibration suite top-1 (Tabula Sapiens's uploads) | 65.27 | 65.24 | 62.45 (v3.1's members) | ≥ 60.45 | pass |
+| Fulcher 2026, six types | 76.00 | 76.00 | 69.05 | ≥ 71.05 | pass |
+| PXD056050 pools | 57.5 | 57.5 | 57.5 | ≥ 57.5 | pass |
+| PBMC240, lymphoid recall | 93.16 | 93.16 | 92.31 | ≥ 90.31 | pass |
+| Fulcher, answers committed | **42.52** | 53.56 | 88.57 | ≥ 86.57 | **miss** |
+| Fulcher, correct when committed | 98.31 | 97.61 | 97.93 | ≥ 96.93 | pass |
+| Out-of-reference AUROC | 0.7679 | 0.7575 | 0.7898 | ≥ 0.7598 | pass |
+| Check uploads: coverage of myeloid DC / pDC / CMP / regulatory T | 86.65 / 97.63 / 90.10 / 85.84 | | | ≥ 85 each | pass |
+
+**NO GO,** on the answers. Nothing is tuned; the spec says "development
+gates missed", so the service refuses v5.5. The best guess is v5.4's
+(Fulcher DC recall 72.2, CD8 T 19.9); only its probability moved, with the
+temperatures, and that lifted the AUROC.
+
+**Why the answers fell further (a diagnosis after the verdict):** each
+class joins a set from probability 1 - its threshold. For the four classes
+that bar moved from 5.1% to 7.8% (myeloid DC), 6.1% (pDC), 6.7% (CMP) and
+1.5% (regulatory T); for classes the Allen atlas shares with Tabula
+Sapiens it fell, CD4 T from 14.7% to 4.5%, CD8 T from 11.7% to 7.8%,
+erythrocyte from 43.1% to 5.3%. Under the simulated protein-like coverage
+the members are far less sure of the Allen cells than of Tabula Sapiens's:
+top-1 41.55% on the Allen uploads against 65.27% (on the check uploads,
+myeloid DC 3.7%, regulatory T 0.0%, naive CD4 T 0.5%), though with every
+gene they name them (the check donors' recall 57 to 100%). Calibrating on
+cells the members are unsure of rightly lowers the bars, so more sets span
+classes: Fulcher's "ambiguous" abstentions rose from 597 to 734 of its
+1,275 cells. On the check donors, coverage held for the four classes and
+fell short for classes calibrated mostly on Tabula Sapiens's cells
+(classical monocyte 59.8, platelet 61.2, CD8 T 64.6, NK 67.1; reported).
+
+**What it shows:**
+- v5.4's committed share is limited by how sure its members are under
+  sparse coverage, on another atlas's cells, not by missing calibration
+  cells: honest calibration widened the sets.
+- A next candidate would change the members or the answer rule, not the
+  calibration. That is the owner's call.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
