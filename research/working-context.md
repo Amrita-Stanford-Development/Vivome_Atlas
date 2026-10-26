@@ -17,7 +17,7 @@ Before changing anything, read [CLAUDE.md](../CLAUDE.md). Before a roadmap
 task, read [todo.md](todo.md) and [roadmap.md](roadmap.md), whose latest
 revision is at the top.
 
-## Where things stand (2026-10-21)
+## Where things stand (2026-10-26)
 
 The sections further down ("Where things stand (2026-10-05)", "Next",
 "Open after Track D") describe early October and are kept as history.
@@ -36,6 +36,12 @@ the run history have the detail.
   - the site is on Cloudflare Pages (`vivome-atlas.pages.dev`);
   - the service is on Google Cloud Run (`docs/web/hosting.md`,
     `deploy/huggingface/PUBLISH.md`).
+- **Deployed 2026-10-26:** Cloud Run revision `vivome-atlas-00007-flw`
+  (the same model; restricted mode answers 400), and the site with
+  everything below, the gene profiles as shards (a click fetches one
+  shard) and the beta's sign-in (`docs/web/hosting.md`, "The beta
+  sign-in": an invited email and one password; invited: the owner).
+  `check_space.py`: 0 of 238 cells differ.
 - **Deployed 2026-10-21** (Cloud Run revision `vivome-atlas-00006-rkt`,
   then the site; `research/todo.md`, the deploy item):
   - the service reads DIA-NN 1.8, Spectronaut, MaxQuant and FragPipe LFQ
@@ -68,13 +74,13 @@ the run history have the detail.
 - **SCoPE2 is off the Atlas map** (owner, 2026-10-21): the map is the RNA
   reference alone; SCoPE2 is a Manuscript result, labelled development
   data, not an external test.
-- **Committed, not deployed** (deploys need the owner's go-ahead): the
-  SCoPE2 and restricted-mode changes, and the visible accessibility
-  changes (contrast, the Workflow story for screen readers, the map by
-  keyboard, a Pause motion switch, the Atlas page at high zoom). The owner
-  looks at the pages before a deploy.
-- **Open, for the owner:** the deploy of the above, an organ v4, and the
-  DOI.
+- **Live since 2026-10-26:** the SCoPE2 and restricted-mode changes, and
+  the visible accessibility changes (contrast, the Workflow story for
+  screen readers, the map by keyboard, a Pause motion switch, the Atlas
+  page at high zoom), for the owner to look at.
+- **Open, for the owner:** an organ v4, a blood candidate that calibrates
+  v5.4's new classes, and the DOI. The Google Cloud free trial ends about
+  2027-01-14: "Activate full account" before then.
 
 ## The project
 
