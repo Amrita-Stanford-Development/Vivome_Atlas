@@ -252,9 +252,8 @@ export function buildSupportedLabelSpace(manifest) {
     <p><strong>Cross-modal support (${formatCount(supported.length)}):</strong> ${supported.join(', ')}</p>
     <p><strong>RNA-only (${formatCount(manifest.summary?.rna_only)}):</strong> these types have no
     protein cells in the atlas. Real protein data has since tested several of them (see
-    <a href="manuscript.html#benchmark">the benchmark</a>). By default the service assigns them to protein
-    queries; a request can set <code>restrict_to_supported_classes</code> to limit labels to the
-    cross-modal types.</p>`;
+    <a href="manuscript.html#benchmark">the benchmark</a>). The service assigns them to protein
+    queries too: every label is chosen among all the reference's classes.</p>`;
 }
 
 // A missing string field renders as Pending, never as the literal "undefined"

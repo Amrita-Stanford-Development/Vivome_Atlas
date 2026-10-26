@@ -303,6 +303,8 @@ test('supported label space lists cross-modal types and the RNA-only count', () 
   assert.match(html, /monocyte/);
   assert.match(html, /macrophage/);
   assert.match(html, /RNA-only \(1\)/);
+  assert.match(html, /among all the reference's classes/);
+  assert.doesNotMatch(html, /restrict_to_supported_classes/, 'restricted mode is retired (2026-10-21)');
 });
 
 test('proof points come from the manifest', () => {
