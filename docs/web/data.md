@@ -79,9 +79,9 @@ version https://git-lfs.github.com/spec/v1
 The app handles this rather than crashing. `isLfsPointer()` in
 `web/js/manifest.js` detects the magic string, and the Atlas page's gene
 profile (`web/js/atlas/gene-profile.js`) checks before parsing a profile and
-shows `git lfs pull` as the remedy. On the public site the large files are
-left out (`scripts/build_pages_site.py`), and a click says the profiles are
-not on that copy.
+shows `git lfs pull` as the remedy. The public site leaves the large files
+out and reads each profile from a shard that `scripts/build_pages_site.py`
+writes from the parquet ([hosting.md](hosting.md)).
 
 The magic string exists once, in `web/js/manifest.js`; `web/tests/lfs.test.js`
 fails if a copy appears in any other page or module.

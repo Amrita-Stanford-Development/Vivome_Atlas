@@ -11,6 +11,14 @@ keeps no build step, and the deploy only copies it.
 
 - `dist/site/`: every file of `web/` except `web/tests/`, `web/README.md`,
   and the RNA parquet no page loads.
+- `dist/site/data/profiles/`: each RNA reference cell's gene profile, from
+  that parquet, as 2,664 shards of 32 cells: float32 values, gzipped, about
+  350 MB in all, with `index.json` naming the genes. A click on a cell
+  fetches one shard (at most 211 KB). The values are the ones the CSV parts
+  print, and the page shows the same four decimals from either. The
+  parquet also holds the one cell the CSV parts lack (`orig_index` 42616).
+  The shards are byte-identical between builds, so a redeploy uploads none
+  of them again. `--no-profiles` leaves them out.
 - `dist/site/404.html`: without it, Pages answers a missing path with
   `index.html`, so a missing data file would arrive as HTML.
 - `dist/site/_headers`: security headers on every static file, from the
@@ -26,10 +34,8 @@ keeps no build step, and the deploy only copies it.
 - `dist/wrangler.toml`: the project's settings, with `SERVICE_URL`, the
   hosted service's address, read from `web/js/atlas/service-client.js`.
 
-The 3D view does not need them: its positions come from the small
-`metadata_*_lat128.csv` files, which are deployed. The three large files hold
-each cell's gene profile, so until they are served from R2 (below), clicking
-a cell cannot show its profile. Every other page works.
+No page needs the large files: the 3D view's positions come from the small
+`metadata_*_lat128.csv` files, and the gene profiles from the shards.
 
 Pages serves `/atlas.html` at `/atlas`. The `.html` addresses redirect with
 a 308, so the site's own links keep working. Pages that were removed or
@@ -105,10 +111,11 @@ the same order. `deploy/huggingface/check_space.py` reads it from the
 `VIVOME_PROXY_SECRET` in its own environment and first checks that a request
 without it is refused.
 
-## The large files (R2), not yet active
+## The large files (R2), not active
 
-R2 must first be enabled once in the Cloudflare dashboard (R2 Object
-Storage). Then:
+The site does not need them: the gene profiles reach it as shards (above).
+To serve the CSVs themselves at their usual URLs, R2 must first be enabled
+once in the Cloudflare dashboard (R2 Object Storage). Then:
 
 1. Create the bucket: `npx wrangler@4 r2 bucket create vivome-atlas-data`.
 2. Upload the three files under the key `data/<file name>`. The 1.4 GB parts
@@ -121,6 +128,4 @@ That build adds a Pages Function (`functions/data/[[path]].js`) that serves
 the three files from the bucket at their usual `/data/...` URLs, so no page
 changes, and adds their three paths to `_routes.json`.
 
-R2's free tier covers 10 GB of storage, and downloads are free. The RNA view
-still downloads 2.7 GB per visitor, so a lighter web copy is a separate,
-open decision.
+R2's free tier covers 10 GB of storage, and downloads are free.

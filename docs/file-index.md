@@ -60,7 +60,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/atlas/spatial.js` — the Atlas page's geometry: the orbit pose, nearest reference cells on a grid, screen-space picking, the file's sheet, label placement (pure)
 - `web/js/atlas/stage.js` — the Atlas page's renderer, camera, orbit rig (turn, move, zoom, glide, slow turn) and its draw-when-changed loop
 - `web/js/atlas/reference-layer.js` — every reference cell as one point cloud, shaded as small spheres; filters, dimming and focus as uniforms
-- `web/js/atlas/gene-profile.js` — a clicked cell's gene profile from the large CSVs, with the LFS check and the "not on this copy" message
+- `web/js/atlas/gene-profile.js` — a clicked cell's gene profile: one shard on the public site, else from the large CSVs, with the LFS check and the "not on this copy" message
 - `web/js/atlas/explore-tab.js` — the Atlas page's Explore controls: counts, modality switches, the cell-type list
 - `web/js/atlas/cell-browser.js` — the Atlas page's cell browser: projected cells grouped by the answer given, their order, search and markup
 - `web/js/atlas/view-controls.js` — the Atlas page's view controls in Explore: the visitor's cells and their answer filters, names on the map, dimming, dot size
@@ -106,6 +106,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-reference-layer.test.js` — the reference layer on a stand-in for three.js: highlighting a set of types, uniform arrays in the vertex shader only, every declared attribute and uniform present
 - `web/tests/atlas-panels.test.js` — the Your data panels: a card for every outcome, escaping, Pending for a missing receipt, chips for every outcome, five looks in the key, the example summary
 - `web/tests/atlas-organs.test.js` — the organ maps read from the real files: the index against the gate records, cells and classes per map, plain names, the address, families and colours, the reference layer sized by an organ's palette
+- `web/tests/atlas-gene-profile.test.js` — a clicked cell's gene profile: the float32 text the CSVs print, a shard's rows, one shard fetched per click, and the CSV fallback without shards
 - `web/tests/atlas-data.test.js` — the Atlas page's reference cells read from the real files: counts, quoted names, each type keeps its colour, the scene frame, name anchors
 - `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
 - `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
@@ -418,7 +419,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/v31_evidence.py` — v3.1's latent centroid cosine and modality probe, by the v3 export's method (which it first checks against v3's tables)
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/test_build_workflow.py` — `web/data/workflow.json` is the builder's output, within its budget, built for the manifest's release; its records and cross-checks
-- `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, and optionally the R2-backed large files)
+- `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, the gene profiles as gzipped float32 shards, and optionally the R2-backed large files)
 - `scripts/test_deploy_rehearse.py` — tests for the deploy scripts: `rehearse.py` reads the Dockerfile's settings and stays local and without the secret; `build_space.py --help` builds nothing
 - `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
 - `scripts/check_paths.py` — fails if a cited repo path doesn't exist, or a tracked file is missing from this index

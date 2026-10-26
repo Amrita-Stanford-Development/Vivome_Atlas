@@ -39,7 +39,7 @@ Pure modules have no DOM and are covered by `node --test`
 | `illustration.js` | The waiting illustration of the service's six steps |
 | `landing.js` | Runs the state machine on the stage's clock: the file's cloud, the illustration, the receipt, the flights, the camera, the results, and Play from the first cell once the cells have landed |
 | `data-tab.js` | The Your data tab. With an answer on the map it is the file's card (answer filters, Replay, Download, Clear, Send another file); otherwise the setup: the service line, the example, the file controls, and, folded, what it can label and an own copy's address |
-| `gene-profile.js` | A clicked reference cell's gene profile, streamed from the large CSVs; says so when this copy of the site does not have them |
+| `gene-profile.js` | A clicked reference cell's gene profile: one shard from `data/profiles/` on the public site, else streamed from the large CSVs; says so when this copy of the site has neither |
 | `explore-tab.js` | Counts, the RNA and protein switches, the cell-type list (also the colour key) |
 | `view-controls.js` | In Explore: the visitor's cells while an answer is on the map (a switch, the answer filters, the types given with Only, and the highlight of a selected cell's types), names on the map, dimming the reference, the dot size |
 | `type-labels.js` | Names on the map: each shown type's name at its centre, placed so no two overlap, following the camera |
@@ -142,5 +142,6 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
 ## Data
 
 `web/data/metadata_RNA_lat128.csv` ([data.md](data.md)); the organ maps in `web/data/organs/`; `web/data/workflow.json` for the example and the
-service's limits. Gene profiles come from the large files, fetched only on a
-click; the public site leaves them out.
+service's limits. Gene profiles are fetched only on a click: on the public
+site from the shards `scripts/build_pages_site.py` writes to `data/profiles/`
+([hosting.md](hosting.md)), elsewhere from the large CSVs.

@@ -73,6 +73,7 @@ ALLOWED_MISSING = (
     "research/notebook-outputs/v52_phase4/",  # likewise, for v5.2
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
+    "data/profiles/",  # the gene profile shards, written only into dist/site/ by scripts/build_pages_site.py
     # The film's project writes these, all gitignored (docs/web/motion.md)
     "motion/vendor/",  # the site code motion/scripts/prepare.mjs copies
     "motion/build/",  # its numbers and data, and Manim's frames

@@ -8,6 +8,14 @@ at their usual URLs (/data/...) by a small Pages Function, so the pages
 need no change; without it they are simply absent and the atlas view shows
 its error panel.
 
+The Atlas page's gene profiles (PROFILES: one row of gene values per RNA
+reference cell) reach the site as shards instead: every PROFILE_CELLS cells
+as float32 values, gzipped, in data/profiles/, with data/profiles/index.json
+naming the genes. A click then fetches one shard of about 120 KB, where the
+CSV parts would need up to 2.9 GB read (web/js/atlas/gene-profile.js).
+Without the source (a clone without `git lfs pull`), no shards are written
+and a click says the profiles are not on this copy.
+
 Media files the site plays (MEDIA: the Motion page's film) are stored as
 parts and served by deploy/pages/media.js, a Pages Function at the file's
 own URL that answers byte-range requests. Pages answers a Range request for
@@ -20,13 +28,15 @@ to the service at SERVICE_URL (wrangler.toml, from web/js/atlas/
 service-client.js) with the secret SERVICE_SECRET (a Pages secret, set
 once with wrangler; docs/web/hosting.md).
 
-    python scripts/build_pages_site.py                  # static site only
+    python scripts/build_pages_site.py                  # static site, with the profile shards
+    python scripts/build_pages_site.py --no-profiles    # without them (faster)
     python scripts/build_pages_site.py --r2 BUCKET      # plus the R2-backed large files
     cd dist && npx wrangler@4 pages deploy             # publish (see docs/web/hosting.md)
 """
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 import re
@@ -38,8 +48,14 @@ WEB = REPO / "web"
 DIST = REPO / "dist"
 PROJECT = "vivome-atlas"
 MAX_BYTES = 25 * 1024 * 1024  # Cloudflare Pages' per-file limit
+MAX_FILES = 20_000  # Cloudflare Pages' file limit on the free plan
 SKIP_DIRS, SKIP_FILES = ("tests",), ("README.md",)  # repository material, not the site
-UNUSED = ("data/atlas_RNA_lat128.parquet",)  # no page loads it
+UNUSED = ("data/atlas_RNA_lat128.parquet",)  # no page loads it; the profile shards are built from it
+# The gene profiles' sources, by modality, in web/ (the same float32 values the
+# CSV parts print), and the cells per shard.
+PROFILES = {"rna": "data/atlas_RNA_lat128.parquet"}
+PROFILE_CELLS = 32
+PROFILE_DIGITS = 5  # a shard's number in its file name, zero-padded
 PROXY = REPO / "deploy" / "pages" / "api-proxy.js"  # the /api/* Pages Function
 SERVICE_CLIENT = WEB / "js" / "atlas" / "service-client.js"  # where the service lives
 MEDIA_FUNCTION = REPO / "deploy" / "pages" / "media.js"  # byte ranges for MEDIA
@@ -137,7 +153,56 @@ def write_media(site: Path, functions: Path, web: Path = WEB) -> list[str]:
     return sorted(table)
 
 
-def build(bucket: str | None, dist: Path = DIST) -> None:
+def is_lfs_pointer(path: Path) -> bool:
+    """True for a Git LFS object that has not been fetched (git lfs pull)."""
+    with open(path, "rb") as handle:
+        return handle.read(64).startswith(b"version https://git-lfs")
+
+
+def write_profiles(site: Path, web: Path = WEB, cells: int = PROFILE_CELLS) -> dict:
+    """The gene profiles as gzipped float32 shards in site/data/profiles/, with
+    their index.json; returns the index, or {} when no source is on this copy."""
+    index = {}
+    for modality, rel in PROFILES.items():
+        source = web / rel
+        if not source.exists() or is_lfs_pointer(source):
+            continue
+        import numpy as np  # only here: the rest of the build needs neither
+        import pyarrow.parquet as pq
+        table = pq.read_table(source)
+        genes = [name for name in table.column_names if name.startswith("gene_")]
+        # A cell's shard and row follow from its orig_index alone.
+        order = table.column("orig_index").to_numpy()
+        if not (order == np.arange(len(order))).all():
+            raise ValueError(f"{rel}: orig_index is not 0 to n-1 in order")
+        values = np.column_stack([table.column(g).to_numpy() for g in genes])
+        # float32, as the CSV parts print it: the page reads each value back
+        # through its shortest float32 text, so both copies show the same digits.
+        if values.dtype != np.float32:
+            raise ValueError(f"{rel}: gene values are {values.dtype}, not float32")
+        values = values.astype("<f4", copy=False)
+        folder = site / "data" / "profiles" / modality
+        folder.mkdir(parents=True, exist_ok=True)
+        for start in range(0, len(values), cells):
+            # mtime=0: the same values give the same bytes, so a redeploy
+            # uploads no shard again.
+            (folder / f"{start // cells:0{PROFILE_DIGITS}d}.f32.gz").write_bytes(
+                gzip.compress(values[start:start + cells].tobytes(), compresslevel=6, mtime=0))
+        index[modality] = {
+            "cells": len(values), "shards": -(-len(values) // cells), "file": f"{modality}/{{shard}}.f32.gz",
+            "genes": [g.removeprefix("gene_") for g in genes],
+            "source": rel, "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        }
+    if not index:
+        return {}
+    index = {"cells_per_shard": cells, "digits": PROFILE_DIGITS,
+             "values": "float32, little-endian; one row of genes per cell, in orig_index order; each file gzipped",
+             **index}
+    (site / "data" / "profiles" / "index.json").write_bytes((json.dumps(index) + "\n").encode())
+    return index
+
+
+def build(bucket: str | None, dist: Path = DIST, profiles: bool = True) -> None:
     if dist.exists():
         shutil.rmtree(dist)
     static, large = plan()
@@ -150,6 +215,7 @@ def build(bucket: str | None, dist: Path = DIST) -> None:
     (site / "404.html").write_text(NOT_FOUND)
     (site / "_redirects").write_bytes("".join(f"{old} {new} 301\n" for old, new in REDIRECTS).encode())
     (site / "_headers").write_bytes(("/*\n" + "".join(f"  {name}: {value}\n" for name, value in HEADERS)).encode())
+    shards = write_profiles(site) if profiles else {}
     (dist / "large_files.json").write_text(json.dumps(
         [{"path": rel, "bytes": (WEB / rel).stat().st_size} for rel in large], indent=2) + "\n")
     # The labelling service, reached through the site (deploy/pages/api-proxy.js).
@@ -166,8 +232,12 @@ def build(bucket: str | None, dist: Path = DIST) -> None:
     # Only these paths wake a Function; every other file is served as it is.
     (site / "_routes.json").write_text(json.dumps({"version": 1, "include": routes, "exclude": []}, indent=2) + "\n")
     (dist / "wrangler.toml").write_text("\n".join(toml) + "\n")
-    print(f"dist/site: {len(static)} files; left out for R2: {', '.join(large) or 'none'}"
+    files = sum(1 for p in site.rglob("*") if p.is_file())
+    if files >= MAX_FILES:
+        raise SystemExit(f"dist/site holds {files} files; Cloudflare Pages takes fewer than {MAX_FILES}")
+    print(f"dist/site: {files} files; left out for R2: {', '.join(large) or 'none'}"
           + (f"; served from R2 bucket {bucket}" if bucket else "")
+          + "".join(f"; {m} gene profiles as {shards[m]['shards']} shards" for m in PROFILES if m in shards)
           + "".join(f"; {r} served with byte ranges" for r in routes if r != "/api/*" and not r.startswith("/data/"))
           + "; /api/* forwarded to the service")
 
@@ -175,4 +245,6 @@ def build(bucket: str | None, dist: Path = DIST) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--r2", metavar="BUCKET", help="serve the large files from this R2 bucket")
-    build(parser.parse_args().r2)
+    parser.add_argument("--no-profiles", action="store_true", help="leave out the gene profile shards")
+    args = parser.parse_args()
+    build(args.r2, profiles=not args.no_profiles)
