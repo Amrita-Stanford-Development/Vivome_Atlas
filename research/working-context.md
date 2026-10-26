@@ -17,7 +17,7 @@ Before changing anything, read [CLAUDE.md](../CLAUDE.md). Before a roadmap
 task, read [todo.md](todo.md) and [roadmap.md](roadmap.md), whose latest
 revision is at the top.
 
-## Where things stand (2026-10-26)
+## Where things stand (2026-10-27)
 
 The sections further down ("Where things stand (2026-10-05)", "Next",
 "Open after Track D") describe early October and are kept as history.
@@ -82,6 +82,13 @@ the run history have the detail.
   2026-10-26): NO GO on the answers committed (42.52, bar 86.57); the
   members are unsure of the Allen cells under protein-like coverage, so
   honest calibration widened the sets (run history entry 67).
+- **The external sorted test no longer sets the order** (owner,
+  2026-10-27). The data requests (O'Connor et al., Krisp et al.) had never
+  been sent; the owner sends them now, from a Stanford address. Data that
+  arrives stays sealed until a candidate improves CD8 T on development data
+  (`research/benchmark/protocol-sorted-cd4cd8.md`, amendment 6). Next is the
+  bioRxiv preprint, with CD8 T as a stated limitation; posting it needs the
+  owner's guide to agree the authors, the affiliation and the timing.
 - **Open, for the owner:** an organ v4, a blood candidate that changes the
   members or the answer rule, and the DOI. The Google Cloud free trial
   ends about 2027-01-14: "Activate full account" before then.

@@ -261,3 +261,35 @@ do what the protocol already said (tests in
     is "not detected".
 - **The rehearsal on Fulcher reproduces its committed tables exactly**
   (largest balanced-accuracy difference 0.000000 points).
+
+## Amendment 6, 2026-10-27, before any data: the requests, and when the test runs
+
+Nothing above changes for the models, the metrics or the decision rules.
+- **No request had been sent.** The opening note ("Two data requests are
+  pending") and amendment 1 read as if both had gone out. The drafts were
+  ready on 2026-10-09 and 2026-10-14, but none was sent. The owner sends
+  both now, from a Stanford address:
+  - O'Connor et al. to Dr Pirrotte, the preprint's correspondence address;
+  - Krisp et al. through Dr Coscia, his co-author at the MDC-Bruker Center
+    (Klingeberg et al., Mol Cell Proteomics 2026), since no address for
+    Dr Krisp is public.
+- **The two sets, checked against their sources on 2026-10-27:**
+  - Krisp et al. is two posters: Lorne Proteomics 2024 (timsTOF Ultra,
+    Spectronaut 18) and AUS-oMicS 2025 (timsTOF Ultra 2, single cells and
+    10-cell bulks, Spectronaut 19 with directDIA+). The request asks for
+    either. The service reads Spectronaut reports, so the intake
+    (amendment 2) is unchanged.
+  - O'Connor et al. (bioRxiv 2026): one healthy donor; 1,540 sorted and 887
+    unsorted cells; Spectronaut 20. The authors re-annotated 32 dendritic
+    cells in the monocyte pool and 17 monocytes in the T-cell pool, and
+    marked 142 dim NK cells "Unknown". If received, it is scored under its
+    own lineage-level protocol (amendment 1), which says how those cells
+    count before its labels are opened.
+- **When the test runs (owner, 2026-10-27).** Every candidate and every
+  corrected baseline fails CD8 T on protein (on Khoury, v4.1 2.7%, PCA kNN
+  0.9%), and no blood candidate since v4.2 has passed its development
+  gates. A qualifying dataset that arrives is stored sealed (rule 1) and may
+  go through the label-free intake, but its labels are opened only when the
+  owner chooses: normally once a candidate has improved CD8 T recall on
+  development data, so that the one scoring does not just confirm a known
+  failure. The preprint does not wait for this test.

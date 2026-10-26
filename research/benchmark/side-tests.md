@@ -449,8 +449,10 @@ comes from here. Keep this list current.
 
 - **Downloaded, sealed, in reserve:** PXD061065 (277 single glioblastoma
   neutrophils after QC; amendment 3).
-- **Requested by email:** Krisp et al. (sorted CD4, CD8, CD19, CD14 single
-  cells; the main test) and O'Connor et al. (sorted T, B, NK, monocytes).
+- **Data requests, sent by the owner from 2026-10-27** (none had gone out
+  before; `research/benchmark/protocol-sorted-cd4cd8.md`, amendment 6):
+  Krisp et al. (sorted CD4, CD8, CD19, CD14 single cells; the main test) and
+  O'Connor et al. (sorted T, B, NK, monocytes).
 - **Public, unopened, candidate tests (amendment 19):** MSV000102427
   (FACS-sorted bone-marrow CD4 and CD8 T cells, B and myeloid cells) and
   PXD064083 (single CD3+ T and CD19+ B cells).
