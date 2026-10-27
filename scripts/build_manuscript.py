@@ -480,6 +480,28 @@ def heldout(r: Records) -> None:
     r.put("ho_sets", len(outcomes), basis, "count")
 
 
+def sorted_tb(r: Records) -> None:
+    """PXD064083, sorted single T and B cells, scored once
+    (research/benchmark/protocol-pxd064083.md; run history entry 68)."""
+    path = HELDOUT / "pxd064083" / "summary.json"
+    summary = r.json(path)
+    v41 = ("candidates", "v4.1")
+    r.at("st_tb_auroc", path, (*v41, "primary", "auroc"), "fixed3")
+    r.at("st_tb_p", path, (*v41, "primary", "p"), "fixed4")
+    r.at("st_tb_cells_b", path, ("cells", "B"), "count")
+    r.at("st_tb_cells_t", path, ("cells", "T"), "count")
+    r.at("st_tb_donors", path, ("donors", "T"), "count")
+    r.put("ds_pxd064083_cells", sum(summary["cells"].values()), f"{rel(path)}: cells (B + T)", "count")
+    r.pct("st_tb_ba", path, *v41, "secondary", "best_guess_balanced_accuracy")
+    r.pct("st_tb_committed", path, *v41, "secondary", "answers_committed_pct")
+    r.pct("st_tb_correct", path, *v41, "secondary", "answers_correct_when_committed_pct")
+    r.pct("st_tb_ba_pca", path, "baselines_secondary", "pca", "balanced_accuracy")
+    r.pct("st_tb_ba_correlation", path, "baselines_secondary", "correlation", "balanced_accuracy")
+    r.at("st_tb_auroc_log2", path, ("amendment_1_log2", "candidates", "v4.1", "auroc", "auroc"), "fixed3")
+    r.pct("st_tb_ba_log2", path, "amendment_1_log2", "candidates", "v4.1", "best_guess_balanced_accuracy")
+    assert summary["candidates"]["v4.1"]["primary"]["pass"] is True
+
+
 def robustness(r: Records) -> None:
     # One type uploaded alone, against the same cells in their whole upload.
     for t in ("B", "NK", "monocyte", "CD4T"):
@@ -694,6 +716,7 @@ def build(manifest: dict | None = None, workflow: dict | None = None) -> dict:
     answers(r)
     second_opinion(r)
     heldout(r)
+    sorted_tb(r)
     robustness(r)
     negative(r)
     organs(r, manifest)

@@ -16,6 +16,7 @@ export const CAVEATS = {
   'in-sample': 'in-sample: the one tuned weight was chosen on these data',
   'post-hoc': 'post-hoc: the labels were read at an earlier scoring',
   'internal held-out': 'internal held-out: locked before development, scored once',
+  'sorted test': 'sorted test: labels from cell sorting, locked before it was read, scored once',
   'simulated RNA': 'simulated RNA uploads, not protein',
   pending: 'not measured yet',
 };

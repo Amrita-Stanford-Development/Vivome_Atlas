@@ -20,7 +20,7 @@ so a comparison with them is an ablation.
 | Introduction | the problem as this project's data show it, the contributions, the framing (label transfer, not a mixed space), references to collect |
 | Experimental procedures | the reference, the gene space, reading an upload, the encoder, the answer layer, the second opinion, the datasets and their roles, the simulated suite, the benchmark protocol, pre-registration, implementation |
 | Why each part is there | one row per part: the problem in an earlier design it fixes, the evidence, the alternative rejected |
-| Results | transfer, the atlas's cross-modal support and alignment diagnostics, answer levels and coverage, the second opinion and its gate, the benchmark tables, the internal held-out test, failure modes, other organs (the aim of every Tabula Sapiens organ; the colon, the lung and the lymph node, each organ's gates from its gate run), what was tried and not adopted |
+| Results | transfer, the atlas's cross-modal support and alignment diagnostics, answer levels and coverage, the second opinion and its gate, the benchmark tables, the internal held-out test, the sorted T-and-B test (PXD064083), failure modes, other organs (the aim of every Tabula Sapiens organ; the colon, the lung and the lymph node, each organ's gates from its gate run), what was tried and not adopted |
 | Discussion | what the evidence supports and does not yet, lessons, threats to validity, next steps |
 | Availability, supplement, figures | accessions and code; the supplemental tables; the list of figures and tables, with downloads |
 | Before submission, reviewer questions | open items (pending records) and the answers a reviewer will need |
@@ -36,8 +36,8 @@ Each line is one claim, then its source and a caveat bead:
 ```
 
 The caveat vocabulary is `CAVEATS` in `web/js/manuscript-data.js`:
-development, in-sample, post-hoc, internal held-out, simulated RNA,
-pending. The page's legend explains each one.
+development, in-sample, post-hoc, internal held-out, sorted test,
+simulated RNA, pending. The page's legend explains each one.
 
 ## Where the numbers come from
 

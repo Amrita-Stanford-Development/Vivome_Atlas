@@ -13,6 +13,7 @@
   "research/benchmark/heldout/pxd021882/summary.json": "843a74299e20906dd001bc54bb70bf89ec5fbd3d1c2290aa376028e50629ce35",
   "research/benchmark/heldout/pxd043355/summary.json": "0699d914f6906164adf19a165c63364e0f94d3ffffdceabf1b2f0d819712975c",
   "research/benchmark/heldout/pxd046211/summary.json": "5cbb5dc85e63879faf5b87294d372b519cf5f448080d065ba9350d9b9279b08c",
+  "research/benchmark/heldout/pxd064083/summary.json": "db12f6578c028603e1bdfe9651b88fd69690edd2cb2084edf8e72e1659bffe2a",
   "research/benchmark/heldout/pxd073250/summary.json": "f9745206f5ca3af2130ea8917a0300514724fae41b9677a99c7d7b10ef643a46",
   "research/benchmark/heldout/tian/summary.json": "f5b51e14e4544dd13be4183b543a249916a0b9a3fd0df72da7f0df68e974674a",
   "research/benchmark/khoury2026/summary.json": "38c33d3276d21361bbdd4a117cb9e415af94d4d113d6e8222168ecd3c265b71d",
@@ -580,6 +581,12 @@
    "value": 156,
    "status": "measured",
    "basis": "research/benchmark/heldout/pxd046211/summary.json: candidates > v4.1 > primary > n_positive",
+   "format": "count"
+  },
+  "ds_pxd064083_cells": {
+   "value": 148,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: cells (B + T)",
    "format": "count"
   },
   "ds_pxd073250_negative": {
@@ -2153,6 +2160,78 @@
    "status": "measured",
    "basis": "research/benchmark/khoury2026_posthoc_v41_check/summary.json: scores > v3.1 > balanced_accuracy_pct",
    "format": "pct2"
+  },
+  "st_tb_auroc": {
+   "value": 0.9973,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: candidates > v4.1 > primary > auroc",
+   "format": "fixed3"
+  },
+  "st_tb_auroc_log2": {
+   "value": 0.98,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: amendment_1_log2 > candidates > v4.1 > auroc > auroc",
+   "format": "fixed3"
+  },
+  "st_tb_ba": {
+   "value": 0.8516,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: candidates > v4.1 > secondary > best_guess_balanced_accuracy",
+   "format": "pct1"
+  },
+  "st_tb_ba_correlation": {
+   "value": 0.5101,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: baselines_secondary > correlation > balanced_accuracy",
+   "format": "pct1"
+  },
+  "st_tb_ba_log2": {
+   "value": 0.8595,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: amendment_1_log2 > candidates > v4.1 > best_guess_balanced_accuracy",
+   "format": "pct1"
+  },
+  "st_tb_ba_pca": {
+   "value": 0.7846,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: baselines_secondary > pca > balanced_accuracy",
+   "format": "pct1"
+  },
+  "st_tb_cells_b": {
+   "value": 70,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: cells > B",
+   "format": "count"
+  },
+  "st_tb_cells_t": {
+   "value": 78,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: cells > T",
+   "format": "count"
+  },
+  "st_tb_committed": {
+   "value": 0.7703,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: candidates > v4.1 > secondary > answers_committed_pct",
+   "format": "pct1"
+  },
+  "st_tb_correct": {
+   "value": 0.9649,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: candidates > v4.1 > secondary > answers_correct_when_committed_pct",
+   "format": "pct1"
+  },
+  "st_tb_donors": {
+   "value": 16,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: donors > T",
+   "format": "count"
+  },
+  "st_tb_p": {
+   "value": 0.0001,
+   "status": "measured",
+   "basis": "research/benchmark/heldout/pxd064083/summary.json: candidates > v4.1 > primary > p",
+   "format": "fixed4"
   },
   "stab_cells": {
    "value": 5509,

@@ -118,6 +118,7 @@
                 <li><span class="bead caveat" data-caveat="in-sample">in-sample</span> the model's one tuned weight was chosen on these data</li>
                 <li><span class="bead caveat" data-caveat="post-hoc">post-hoc</span> the labels had been read at an earlier scoring</li>
                 <li><span class="bead caveat" data-caveat="internal held-out">internal held-out</span> locked before development and scored once; never to be called external</li>
+                <li><span class="bead caveat" data-caveat="sorted test">sorted test</span> labels from cell sorting, independent of the protein data; locked before it was read and scored once</li>
                 <li><span class="bead caveat" data-caveat="simulated RNA">simulated RNA</span> RNA cells made to look like protein uploads, not protein</li>
                 <li><span class="bead bead-open caveat" data-caveat="pending">pending</span> not measured yet</li>
             </ul>
@@ -421,6 +422,7 @@
                         <tr><td>PXD046211</td><td>PXD046211</td><td>TMTpro with carrier</td><td class="num"><span data-ms="ds_pxd046211_positive"></span> PMA-treated, <span data-ms="ds_pxd046211_negative"></span> untreated</td><td>sample annotation; independent</td><td>internal held-out</td></tr>
                         <tr><td>Tian</td><td>MSV000087462</td><td>label-free bulk of sorted T cells</td><td class="num">bulk samples</td><td>sorting; independent</td><td>internal held-out (void)</td></tr>
                         <tr><td>PXD021882</td><td>PXD021882</td><td>pools of sorted cells</td><td class="num">pools</td><td>sorting</td><td>internal held-out (void)</td></tr>
+                        <tr><td>Sorted single T and B cells</td><td>PXD064083 (iProX)</td><td>timsTOF DIA-PASEF, one search per lineage</td><td class="num"><span data-ms="ds_pxd064083_cells"></span></td><td>CD3 and CD19 isolation; independent</td><td>sorted test</td></tr>
                         <tr><td>Sorted CD4 and CD8 T cells</td><td>requested from the authors</td><td>single cells</td><td class="num"><span data-ms="open_sorted_test"></span></td><td>sorting; independent</td><td>external test</td></tr>
                     </tbody>
                 </table>
@@ -809,6 +811,36 @@
                 <li>The sets are spent: they are development data now, and the result is reported as an
                     internal test, never as external validation.
                     <span class="ev-src"><code>research/benchmark/side-tests.md</code> (amendment 6)</span></li>
+            </ul>
+
+            <h3 id="sorted-tb">Sorted single T and B cells, scored once</h3>
+            <p>PXD064083 holds single CD3+ T and CD19+ B cells from the blood of healthy donors and ALS
+                patients, isolated by their surface markers: the first test here whose labels do not come
+                from the protein data. Its protocol was committed before any of its data files was read.</p>
+            <ul class="evidence">
+                <li>B told from T: AUROC <span data-ms="st_tb_auroc"></span> (p <span data-ms="st_tb_p"></span>)
+                    for the B score against the T score, over <span data-ms="st_tb_cells_b"></span> B and
+                    <span data-ms="st_tb_cells_t"></span> T cells from <span data-ms="st_tb_donors"></span> donors.
+                    <span class="ev-src"><code>research/benchmark/heldout/pxd064083/summary.json</code>
+                    <span class="bead caveat" data-caveat="sorted test">sorted test</span></span></li>
+                <li>The best guess names the right lineage for <span data-ms="st_tb_ba"></span> of cells,
+                    balanced over the two, against <span data-ms="st_tb_ba_pca"></span> for PCA with neighbours
+                    and <span data-ms="st_tb_ba_correlation"></span> for correlation. No paired interval was
+                    registered, so the gap is described, not tested.
+                    <span class="ev-src"><code>research/benchmark/heldout/pxd064083/summary.json</code>
+                    <span class="bead caveat" data-caveat="sorted test">sorted test</span></span></li>
+                <li><span data-ms="st_tb_committed"></span> of cells get an answer, and
+                    <span data-ms="st_tb_correct"></span> of those are right at the level they state.
+                    <span class="ev-src"><code>research/benchmark/heldout/pxd064083/summary.json</code>
+                    <span class="bead caveat" data-caveat="sorted test">sorted test</span></span></li>
+                <li>The authors' values are linear on a small scale, which the service reads as log. Read on
+                    the log2 scale, a secondary added before any output was looked at, the AUROC is
+                    <span data-ms="st_tb_auroc_log2"></span> and the balanced accuracy
+                    <span data-ms="st_tb_ba_log2"></span>.
+                    <span class="ev-src"><code>research/benchmark/protocol-pxd064083.md</code> (amendment 1)
+                    <span class="bead caveat" data-caveat="sorted test">sorted test</span></span></li>
+                <li>A lineage test only, from one lab: the deposit does not split CD4 from CD8 T cells.
+                    <span class="ev-src"><code>research/notebook-run-history.md</code> (entry 68)</span></li>
             </ul>
 
             <h3 id="failure-modes">Failure modes</h3>
