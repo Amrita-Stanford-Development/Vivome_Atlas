@@ -122,8 +122,9 @@ Atlas version `0.6.0`, manifest schema `1.0`.
   the map.
 - **Benchmark:** published on `web/manuscript.html`: VivOME against the
   corrected baselines on Khoury 2026 (post-hoc), Fulcher 2026,
-  PBMC240 and SCoPE2 (`research/benchmark/results.md`), beside the rest of
-  the evidence a journal paper would use.
+  PBMC240 and SCoPE2, and a test scored once on sorted single T and B cells
+  (PXD064083) (`research/benchmark/results.md`), beside the rest of the
+  evidence a journal paper would use.
 
 Latent centroid cosine and the modality probe are measured for the 2
 cross-modal classes, in v3.1's coordinate space, which v4.1 and v4.2 share.

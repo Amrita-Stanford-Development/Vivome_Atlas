@@ -1746,10 +1746,48 @@ correlation term is used (`research/notebook-run-history.md`, entry 26).
 - **Every check passes, against v3.1 and against v4.** No paired CI favours
   either, and correct-when-committed drops at most 0.05 points.
 
-The claim "v4.1 beats the corrected baselines" waits for a sealed test.
-None is public yet: two searches and an outside deep-research run found no
-public PBMC proteomics set with labels independent of the protein data, so
-the strongest designs need a data request.
+The claim "v4.1 beats the corrected baselines" over the blood types waits
+for a sealed test of them. One sealed test with sorting labels exists, of T
+against B only ([below](#v41-on-sorted-single-t-and-b-cells-pxd064083)).
+Two searches and an outside deep-research run found no public PBMC
+proteomics set with finer labels independent of the protein data, so the
+strongest designs need a data request.
+
+## v4.1 on sorted single T and B cells (PXD064083)
+
+PXD064083 (Wong lab; iProX IPX0011993000) holds single CD3+ T and CD19+ B
+cells from the blood of healthy donors and ALS patients, isolated by their
+surface markers, so its labels do not come from the protein data. The
+protocol ([protocol-pxd064083.md](protocol-pxd064083.md)) was committed
+before any data file was read, and the set was scored once
+(`benchmark/pxd064083_score.py`; tables in
+[heldout/pxd064083/](heldout/pxd064083/); run history, entry 68). The
+primary is the AUROC of S = P(B) − P(CD4T or CD8T), B over T, over the genes
+both searches report. 70 B and 78 T cells, 16 donors.
+
+| | v4.1 | v4.2 | v5.2 | v3.1 | PCA, kNN | Correlation |
+|---|---|---|---|---|---|---|
+| AUROC, B over T (p 0.0001 each) | **0.997** | 0.996 | 0.997 | 0.996 | | |
+| Best guess, balanced accuracy over the two lineages | **85.2** | 85.3 | 85.9 | 84.6 | 78.5 | 51.0 |
+| Best guess right, B cells | 85.7 | 88.6 | 87.1 | 87.1 | | |
+| Best guess right, T cells | 84.6 | 82.1 | 84.6 | 82.1 | | |
+| Committed | 77.0 | 80.4 | 82.4 | 80.4 | | |
+| Correct when committed | 96.5 | 95.8 | 96.7 | 95.8 | | |
+
+- **Every candidate passes,** so the test does not tell them apart. By donor
+  status, v4.1's AUROC is 0.995 in healthy donors and 0.998 in ALS patients.
+- **Ahead of both baselines, untested.** The protocol registered no paired
+  interval, so the gaps (+6.7 over PCA with kNN, +34.2 over correlation)
+  are described, not tested. They are the two baselines this test ran
+  (seed 0), not the full corrected set.
+- **On the log2 scale** (amendment 1, before any output was looked at): the
+  authors' values are linear on a small scale (median about 7), which the
+  service reads as log. Read as log2, v4.1's AUROC is 0.980 and its balanced
+  accuracy 86.0, against 75.0 for PCA with kNN and 45.7 for correlation.
+- **What it does not show:** the finer types (the deposit does not split
+  CD4 from CD8 T cells), or another lab. Each lineage was searched apart,
+  so batch can stand in for the label: the upload keeps only the genes both
+  searches report, but cannot remove a search's own scaling.
 
 ## v5.1: cleaned reference labels, retrained members (Track H)
 

@@ -233,8 +233,8 @@ white halo card, and a drawer that slides over the viewer's right side
 `web/manuscript.html` is for researchers writing the paper, not for
 beginners: an evidence bank in the journal's sections, one claim per line,
 its numbers as slots, its source in code type and a caveat bead
-(development, in-sample, post-hoc, internal held-out, simulated RNA,
-pending). Earlier designs appear only as the problem a part of the served
+(development, in-sample, post-hoc, internal held-out, sorted test,
+simulated RNA, pending). Earlier designs appear only as the problem a part of the served
 model fixes ([manuscript.md](manuscript.md)).
 
 ## The Motion page

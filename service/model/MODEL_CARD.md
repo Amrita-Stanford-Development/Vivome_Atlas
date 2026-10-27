@@ -79,6 +79,10 @@ its data file `protein_class_means.npz`, on v4.1's spec. Record:
   50.7, 81.7, 94.7). It is also below PCA with kNN there (-2.7, CI -4.5 to
   -1.0). This check cannot change release 0.5.0; whether to keep serving
   v4.2 is the owner's decision.
+- **Sorted single T and B cells** (PXD064083, scored once; v4.1's section
+  below): B told from T with AUROC 0.996, a pass, as for every candidate.
+  Its best guess names the right lineage for 85.3% of cells, balanced
+  (v4.1: 85.2%).
 
 ### Known limits
 
@@ -186,6 +190,32 @@ external validation.
 - **Tian and PXD021882** were void: their deposits hold no matched CD4/CD8
   pairs and no B or T pools.
 
+### Sorted single T and B cells (PXD064083)
+
+Single CD3+ T and CD19+ B cells from the blood of healthy donors and ALS
+patients (Wong lab; iProX IPX0011993000), isolated by their surface
+markers, so the labels do not come from the protein data. The protocol was
+committed before any data file was read, and the set was scored once
+(`research/benchmark/protocol-pxd064083.md`; results in
+`research/benchmark/heldout/pxd064083/`; run history, entry 68).
+- **B told from T:** AUROC 0.997 (p 0.0001) for the B score against the T
+  score, over 70 B and 78 T cells from 16 donors: a pass. Healthy donors
+  0.995, ALS patients 0.998.
+- **Best guess:** the right lineage for 85.2% of cells, balanced (B 85.7%,
+  T 84.6%), against 78.5% for PCA with kNN and 51.0% for correlation. No
+  paired interval was registered, so the gap is described, not tested.
+- **Answers:** 77.0% of cells committed, 96.5% of those correct at the
+  level they state.
+- **Every candidate passes** (v4.2 0.996, v5.2 0.997, v3.1 0.996), so the
+  test does not tell them apart.
+- **Read on the log2 scale** (amendment 1, added before any output was
+  looked at): AUROC 0.980, balanced accuracy 86.0%. The service reads these
+  values as log (limit 8).
+- **What it does not show:** the finer types (the deposit does not split
+  CD4 from CD8 T cells), or another lab. Each lineage was searched apart,
+  so batch can stand in for the label: the upload keeps only the genes both
+  searches report, but cannot remove a search's own scaling.
+
 ### Known limits
 
 1. **CD8 T cells.** Recall is 2.7% on Khoury and 23.8% on Fulcher, and every
@@ -198,10 +228,12 @@ external validation.
 3. **SCoPE2's macrophages and monocytes** are not separated. v4.1 is below
    chance there, and on the reprocessed matrix every method is at or below
    chance.
-4. **No external test yet.** Fulcher chose v4.1's weight, Khoury is
-   post-hoc, and the internal held-out test (above) used data set aside by
-   us, not by an independent group. Its one test of CD4 against CD8 was
-   void, so that question waits for the sorted cells
+4. **No sorted test of the finer types.** Fulcher chose v4.1's weight,
+   Khoury is post-hoc, and the internal held-out test (above) used data set
+   aside by us, not by an independent group; its one test of CD4 against
+   CD8 was void. The sorted test (PXD064083, above) has labels independent
+   of the protein data, but tells only T from B, in one lab. CD4 against
+   CD8 waits for sorted cells
    (`research/benchmark/protocol-sorted-cd4cd8.md`).
 5. **Uploads of one cell type.** Every gene is z-scored within its upload,
    so an upload of a single sorted population loses the contrast the model
@@ -217,6 +249,14 @@ external validation.
    ambiguous, but some get a committed blood-cell answer
    (`research/notebook-run-history.md`, entry 41).
 7. **v3.1's known limits apply to the answers** (below).
+8. **Linear values on a small scale are read as log.** Stage 0 calls a
+   table linear only when its non-zero median is above 50
+   (`config.LINEAR_SCALE_MEDIAN_THRESHOLD`). PXD064083's linear values
+   (median about 7, up to 211,000) were read as log: no log2 was taken,
+   and zeros counted as measured. v4.1 still told T from B there (above),
+   but such a table is not read as intended: take its log2 before
+   uploading, and leave each 0 empty (not detected). The fix is open in
+   `research/todo.md`.
 
 ## v3.1: the T1 NB2 ensemble
 
