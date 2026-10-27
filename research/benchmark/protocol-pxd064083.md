@@ -147,3 +147,48 @@ PXD064083 file was read. Record:
 Baselines on the same matrix: correlation 35.7 and PCA with kNN 55.8
 balanced accuracy. The narrow upload is visible: on Fulcher's full upload,
 v4.1's answers are correct when committed for 97.9% of cells.
+
+## Amendments
+
+### 1, 2026-10-27, before any model output was looked at: a secondary on the log2 scale
+
+**Where it stood.** The files arrived and were received (`da15a5b`). The
+label map was built: 148 cells, 78 T and 70 B, 16 donors each, none
+excluded. The intake ran both uploads through every candidate and wrote
+their outputs, but none of those outputs has been opened.
+
+**What the intake's label-free facts show.**
+- Each file holds one sheet ("Sheet3" in `SEARCH_T.xlsx`, "Sheet4" in
+  `SEARCH_B.xlsx`): `PG.Genes` and one column per run, with no empty value.
+- Both have 2,508 rows with the same gene names in the same order, except
+  three rows. Those are unnamed in `SEARCH_T.xlsx` and named by accession in
+  `SEARCH_B.xlsx` (P0DOX2, P0DOX7, P0DOX8). The shared protein list suggests
+  one search exported per lineage.
+- Zeros make up 43.9% and 46.6% of the values.
+- The non-zero values run from 0.81 and 0.87 (1st percentile) through a
+  median of 6.99 and 7.92 to a maximum of 91,500 and 211,000.
+- These are linear quantities on a small scale: a log2 table cannot span
+  five orders of magnitude.
+- The service's Stage 0 reads a table as linear only when its non-zero median
+  is above 50. So it reads these as log: it takes no log2, and it counts a 0
+  as a measured value.
+
+**The owner's decision (2026-10-27).**
+- **The primary is unchanged** (rule 7), and it alone decides. It measures
+  the service on this file as the service reads it.
+- **Added, a secondary that never decides.** The primary upload (rule 5) is
+  rebuilt from each table read as the service reads a file it recognises as
+  linear: 0 not detected, every other value log2. It gets every candidate as
+  served, rule 8's measures, and the two baselines on its matrix (dataset
+  `heldout_pxd064083_log2`; `benchmark/pxd064083_intake.py --log2`). It is
+  reported beside the primary, never instead of it.
+- **This departs from rule 9,** which allows only format fixes once the
+  label map exists. It adds a measure and changes none. It was decided on
+  the label-free facts above, before any model output was looked at.
+
+**Rehearsed** on Fulcher 2026's two reports, which the service already reads
+as linear: the secondary equals the primary on every figure, for every
+candidate and both baselines (`research/benchmark/heldout/rehearsals/pxd064083.json`).
+
+**The service's misreading** of such a file is a service fault, recorded in
+`research/todo.md`. It changes nothing served here.

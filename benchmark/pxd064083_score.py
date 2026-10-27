@@ -17,7 +17,9 @@ lineages, a guess right when its class is in the cell's group (B cell or
 T cell, the reference hierarchy); the coarse best guesses and abstention per
 lineage; answers committed and correct when committed at the stated level
 (a class or group in the cell's group, or the lymphoid lineage); the
-baselines' balanced accuracy and coarse calls.
+baselines' balanced accuracy and coarse calls. Amendment 1, also secondary:
+the same measures on the primary upload built from the tables read as
+linear (benchmark/pxd064083_intake.py --log2), and the baselines on it.
 
     python -m benchmark.pxd064083_score --rehearse
     python -m benchmark.pxd064083_score              # once
@@ -100,18 +102,15 @@ def balanced(right: np.ndarray, groups: np.ndarray) -> float:
     return round(100 * float(np.mean([right[groups == g].mean() for g in ("B", "T") if (groups == g).any()])), 2)
 
 
-def candidate(labels: pd.DataFrame, pred: pd.DataFrame, union_pred: pd.DataFrame, score: np.ndarray,
-              union_score: np.ndarray, h: dict) -> dict:
+def measures(labels: pd.DataFrame, pred: pd.DataFrame, score: np.ndarray, h: dict) -> dict:
+    """One upload's measures: the AUROC of S and the answers (rules 7 and 8)."""
     groups = labels["group"].to_numpy()
-    out = {"primary": {"statistic": "AUROC of S = P(B) - P(CD4T or CD8T), B over T, the genes both searches report",
-                       **auroc(score, groups)}}
-    out["primary"]["pass"] = bool(not out["primary"]["void"] and out["primary"]["p"] < ALPHA)
     guess_right = np.array([in_group(g, "class", lin, h) for g, lin in zip(pred["best_guess"], groups)])
     committed = ~pred["abstained"].to_numpy()
     answer_right = np.array([in_group(l, lv, lin, h) for l, lv, lin in zip(pred["label"], pred["label_level"], groups)])
     coarse = pred["best_guess"].map(lambda c: COARSE.get(c, "other") if c else "none")
-    out["secondary"] = {
-        "auroc_union": auroc(union_score, groups),
+    return {
+        "auroc": auroc(score, groups),
         "auroc_by_status": {s: auroc(score[labels["status"].eq(s).to_numpy()], groups[labels["status"].eq(s).to_numpy()])
                             for s in sorted(labels["status"].unique())},
         "best_guess_balanced_accuracy": balanced(guess_right, groups),
@@ -122,14 +121,42 @@ def candidate(labels: pd.DataFrame, pred: pd.DataFrame, union_pred: pd.DataFrame
         "answers_correct_when_committed_pct": (round(100 * float(answer_right[committed].mean()), 2)
                                                if committed.any() else None),
         "answer_level_pct": shares(pred.loc[committed, "label_level"]) if committed.any() else {},
-        "union_best_guess_balanced_accuracy": balanced(
-            np.array([in_group(g, "class", lin, h) for g, lin in zip(union_pred["best_guess"], groups)]), groups),
     }
+
+
+def candidate(labels: pd.DataFrame, pred: pd.DataFrame, union_pred: pd.DataFrame, score: np.ndarray,
+              union_score: np.ndarray, h: dict) -> dict:
+    main_, union = measures(labels, pred, score, h), measures(labels, union_pred, union_score, h)
+    out = {"primary": {"statistic": "AUROC of S = P(B) - P(CD4T or CD8T), B over T, the genes both searches report",
+                       **main_.pop("auroc")}}
+    out["primary"]["pass"] = bool(not out["primary"]["void"] and out["primary"]["p"] < ALPHA)
+    out["secondary"] = {"auroc_union": union["auroc"], **main_,
+                        "union_best_guess_balanced_accuracy": union["best_guess_balanced_accuracy"]}
     return out
 
 
-def baselines(rehearse: bool, labels: pd.DataFrame, h: dict) -> dict:
-    dataset = f"heldout_{NAME}_rehearsal" if rehearse else f"heldout_{NAME}"
+def log2_secondary(rehearse: bool, labels: pd.DataFrame, cell_ids: list[str], h: dict) -> "dict | None":
+    """Amendment 1: the primary upload from the tables read as linear (0 not
+    detected, other values log2); every candidate's measures. Never decides."""
+    directory = out_dir(f"{NAME}_log2", rehearse)
+    if not (directory / "intake.json").exists():
+        return None
+    check_outputs(directory)
+    if [c for c in (directory / "cell_ids.txt").read_text(encoding="utf-8").splitlines() if c] != cell_ids:
+        raise SystemExit("amendment 1's cells are not the label map's")
+    found = {}
+    for key, version in MODELS.items():
+        pred = read_pred(directory / f"{key}_pred.csv", cell_ids)
+        saved = np.load(directory / f"{key}_probs.npz", allow_pickle=True)
+        score = contrast_score(saved["probs"], [str(c) for c in saved["class_names"]], "pxd021882")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            found[version] = measures(labels, pred, score, h)
+    return found
+
+
+def baselines(rehearse: bool, labels: pd.DataFrame, h: dict, name: str = NAME) -> dict:
+    dataset = f"heldout_{name}_rehearsal" if rehearse else f"heldout_{name}"
     groups = labels["group"].to_numpy()
     found = {}
     for tool, column in BASELINE_ARMS.items():
@@ -191,6 +218,11 @@ def main(argv: "list[str] | None" = None) -> None:
             result["primary"].update({"void": True, "pass": False, "reason": "fewer than 20 cells of a lineage (rule 6)"})
         summary["candidates"][version] = result
     summary["baselines_secondary"] = baselines(args.rehearse, labels, h)
+    log2 = log2_secondary(args.rehearse, labels, cell_ids, h)
+    summary["amendment_1_log2"] = None if log2 is None else {
+        "reading": "each table as the service treats a linear file: 0 not detected, every other value log2; the "
+                   "genes both searches report; secondary, never deciding",
+        "candidates": log2, "baselines": baselines(args.rehearse, labels, h, f"{NAME}_log2")}
     tables.mkdir(parents=True, exist_ok=True)
     per_cell.to_csv(tables / "scores.csv", index=False, lineterminator="\n")
     (tables / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n")

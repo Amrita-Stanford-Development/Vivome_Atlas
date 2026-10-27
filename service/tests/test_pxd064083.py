@@ -150,6 +150,35 @@ class MergeTests(unittest.TestCase):
             intake.build_uploads(tables, self.labels)
 
 
+class AmendmentOneTests(unittest.TestCase):
+    def test_a_linear_table_is_read_as_the_service_reads_a_linear_file(self):
+        got = intake.as_linear(table(["A", "B"], ["HC1_Tcell_1", "HC1_Tcell_2"], [[0, 8], [0.5, np.nan]]))
+        np.testing.assert_allclose(got.values, [[np.nan, 3], [-1, np.nan]])
+        want, _ = intake.alignment.detect_and_transform_value_scale(np.array([[0, 800], [50.5, np.nan]], dtype=np.float32))
+        self.assertTrue(np.isnan(want[0, 0]))  # the service's own linear branch: 0 is not detected, the rest log2
+
+    def test_a_table_with_negative_values_is_refused(self):
+        with self.assertRaisesRegex(SystemExit, "not linear"):
+            intake.as_linear(table(["A"], ["HC1_Tcell_1"], [[-1.0]]))
+
+    def test_it_runs_after_the_intake_and_once(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dirs = {intake.NAME: Path(tmp) / "primary", f"{intake.NAME}_log2": Path(tmp) / "log2"}
+            with mock.patch.object(intake, "out_dir", side_effect=lambda name, rehearse: dirs[name]):
+                with self.assertRaisesRegex(SystemExit, "after the intake"):
+                    intake.main(["--log2"])
+                dirs[intake.NAME].mkdir()
+                (dirs[intake.NAME] / "intake.json").write_text("{}")
+                dirs[f"{intake.NAME}_log2"].mkdir()
+                (dirs[f"{intake.NAME}_log2"] / "intake.json").write_text("{}")
+                with self.assertRaisesRegex(SystemExit, "runs once"):
+                    intake.main(["--log2"])
+
+    def test_the_baselines_can_read_its_matrix(self):
+        from benchmark import baselines_inputs
+        self.assertIn("heldout_pxd064083_log2", baselines_inputs.HELDOUT)
+
+
 class ScoreRuleTests(unittest.TestCase):
     def test_an_answer_names_the_sorted_lineage(self):
         h = score.hierarchy()

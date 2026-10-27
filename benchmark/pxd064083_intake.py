@@ -6,6 +6,7 @@ of the deposit's data files was downloaded or read.
     python -m benchmark.pxd064083_intake --receive      # the files fetched by hand: their sha256, once
     python -m benchmark.pxd064083_intake --labels       # the label map, from the run names, once
     python -m benchmark.pxd064083_intake                # the intake, once
+    python -m benchmark.pxd064083_intake --log2         # amendment 1's secondary, once (--rehearse to rehearse it)
 
 The deposit holds the authors' two search outputs, SEARCH_T.xlsx (the T-cell
 runs) and SEARCH_B.xlsx (the B-cell runs), in data/incoming/public_sets/PXD064083/.
@@ -32,10 +33,17 @@ upload keeps the genes both searches report (a feature-space symbol, else
 the first identifier); union/ holds the secondary upload, every gene either
 reports.
 
+Amendment 1 (a secondary, added before any model output was looked at): the
+authors' values are linear on a small scale, which the service's Stage 0
+reads as log, so --log2 also scores the primary upload built from the tables
+as the service treats a linear file: 0 not detected, every other value log2.
+
 Writes benchmark/results/heldout_pxd064083/ (heldout_pxd064083_rehearsal/
 when rehearsing): label_map.csv, labels.json, intake.json, cell_ids.txt,
 <model>_pred.csv, <model>_probs.npz, query_benchmark.npz, and union/ with the
-union upload's <model>_pred.csv and <model>_probs.npz.
+union upload's <model>_pred.csv and <model>_probs.npz; --log2 writes
+heldout_pxd064083_log2/ (intake.json, cell_ids.txt, <model>_pred.csv,
+<model>_probs.npz, query_benchmark.npz).
 """
 from __future__ import annotations
 
@@ -216,6 +224,42 @@ def build_uploads(tables: dict, labels: pd.DataFrame) -> tuple[dict, dict]:
     return uploads, record
 
 
+def as_linear(table: Table) -> Table:
+    """Amendment 1's secondary reading: the table as the service treats a file
+    it recognises as linear (its Stage 0): 0 is not detected, every other
+    value log2. A table with a negative value is not linear and is refused."""
+    values = np.asarray(table.values, dtype=np.float64)
+    if (values[np.isfinite(values)] < 0).any():
+        raise SystemExit(f"{table.record.get('file', 'a table')} has negative values, so it is not linear (amendment 1)")
+    out = np.full(values.shape, np.nan, dtype=np.float32)
+    positive = np.isfinite(values) & (values > 0)
+    out[positive] = np.log2(values[positive])
+    return Table(genes=list(table.genes), samples=list(table.samples), values=out,
+                 record={**table.record, "amendment_1": "0 as not detected, other values log2"})
+
+
+def intake_log2(tables: dict, labels: pd.DataFrame, out: Path, source: dict) -> dict:
+    """Amendment 1's secondary: the primary upload (the genes both searches
+    report) from the log2 tables, every candidate as served, and the
+    baselines' matrix; written to its own folder, once."""
+    labels = labels.reset_index(drop=True)
+    frozen = check_frozen()
+    uploads, merge = build_uploads({lin: as_linear(t) for lin, t in tables.items()}, labels)
+    cell_ids = labels["cell_id"].tolist()
+    (out / "cell_ids.txt").write_text("\n".join(cell_ids) + "\n", encoding="utf-8", newline="\n")
+    runs = run_models({"all": uploads["intersection"]}, out)
+    np.savez_compressed(out / "query_benchmark.npz", x=benchmark_matrix(uploads["intersection"]),
+                        cell_ids=np.array(cell_ids, dtype=object))
+    outputs = {p.name: sha256(p) for p in sorted(out.iterdir()) if p.suffix in (".csv", ".txt", ".npz")}
+    raw = uploads["intersection"]
+    record = {"protocol": PROTOCOL, "amendment": 1, "set": NAME, "rehearsal": "rehearsal" in out.name, "source": source,
+              "merge": merge, "frozen_files": frozen,
+              "label_free_facts": {**facts(raw), "cells_at_coverage_floor": floor_facts(raw)}, "runs": runs,
+              "outputs": outputs}
+    (out / "intake.json").write_text(json.dumps(record, indent=2, default=str) + "\n", encoding="utf-8", newline="\n")
+    return record
+
+
 def floor_facts(raw: alignment.RawMatrix) -> int:
     """Cells with at least MIN_OBSERVED_GENES feature-space genes observed,
     the service's coverage floor."""
@@ -296,9 +340,30 @@ def main(argv: "list[str] | None" = None) -> None:
     step.add_argument("--rehearse", action="store_true", help="Fulcher 2026, development data")
     step.add_argument("--receive", action="store_true", help="record the fetched files' sha256, once")
     step.add_argument("--labels", action="store_true", help="build the label map, once")
+    parser.add_argument("--log2", action="store_true", help="amendment 1's secondary, after the intake (or its rehearsal)")
     args = parser.parse_args(argv)
     refuse_overrides()
     out = out_dir(NAME, args.rehearse)
+    if args.log2:
+        if args.receive or args.labels:
+            sys.exit("--log2 runs alone, or with --rehearse")
+        out2 = out_dir(f"{NAME}_log2", args.rehearse)
+        if not (out / "intake.json").exists():
+            sys.exit("amendment 1's secondary runs after the intake")
+        if (out2 / "intake.json").exists() and not args.rehearse:
+            sys.exit(f"{out2 / 'intake.json'} exists: amendment 1's secondary runs once")
+        if out2.exists():
+            shutil.rmtree(out2)
+        out2.mkdir(parents=True)
+        labels = pd.read_csv(out / "label_map.csv", dtype={"cell_id": str, "sample": str, "donor": str})
+        if args.rehearse:
+            paths, source = {lin: out / "deposit" / n for lin, n in FILES.items()}, {"dataset": "the rehearsal's deposit"}
+        else:
+            paths = {lin: FOLDER / n for lin, n in FILES.items()}
+            source = {"inputs_sha256": check_receipt(), "label_map_sha256": sha256(out / "label_map.csv")}
+        record = intake_log2({lin: read_table(p) for lin, p in paths.items()}, labels, out2, source)
+        print(json.dumps({"facts": record["label_free_facts"], "merge": record["merge"]}, indent=2))
+        return
     if args.rehearse:
         if out.exists():
             shutil.rmtree(out)
