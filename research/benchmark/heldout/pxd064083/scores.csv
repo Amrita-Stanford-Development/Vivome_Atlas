@@ -1,0 +1,149 @@
+cell_id,upload,sample,group,scored,table,donor,status,v31_score,v31_best_guess,v41_score,v41_best_guess,v42_score,v42_best_guess,v52_score,v52_best_guess
+ALS5_T1_Tcell_1,all,ALS5_T1_Tcell_1,T,True,T,ALS5,ALS,-0.20697,erythrocyte,-0.260925,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.193051,erythrocyte,-0.308179,"naive thymus-derived cd4-positive, alpha-beta t cell"
+ALS5_T1_Tcell_2,all,ALS5_T1_Tcell_2,T,True,T,ALS5,ALS,-0.582617,"cd8-positive, alpha-beta t cell",-0.439573,"cd8-positive, alpha-beta t cell",-0.433221,"cd8-positive, alpha-beta t cell",-0.547036,"cd8-positive, alpha-beta t cell"
+ALS5_T1_Tcell_3,all,ALS5_T1_Tcell_3,T,True,T,ALS5,ALS,-0.635021,"cd4-positive, alpha-beta t cell",-0.656694,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.488238,"cd4-positive, alpha-beta t cell",-0.721866,"cd4-positive, alpha-beta t cell"
+ALS5_T1_Tcell_4,all,ALS5_T1_Tcell_4,T,True,T,ALS5,ALS,-0.536984,"cd8-positive, alpha-beta t cell",-0.40914,"cd8-positive, alpha-beta t cell",-0.399606,"cd8-positive, alpha-beta t cell",-0.527043,"cd8-positive, alpha-beta t cell"
+ALS5_T1_Tcell_5,all,ALS5_T1_Tcell_5,T,True,T,ALS5,ALS,-0.662362,"cd8-positive, alpha-beta t cell",-0.525001,"cd8-positive, alpha-beta t cell",-0.487429,"cd8-positive, alpha-beta t cell",-0.667664,"cd8-positive, alpha-beta t cell"
+HC4_Tcell_1,all,HC4_Tcell_1,T,True,T,HC4,HC,-0.701164,"cd8-positive, alpha-beta t cell",-0.600799,"cd8-positive, alpha-beta t cell",-0.515786,"cd8-positive, alpha-beta t cell",-0.766907,"cd8-positive, alpha-beta t cell"
+HC4_Tcell_2,all,HC4_Tcell_2,T,True,T,HC4,HC,-0.44949,"cd8-positive, alpha-beta t cell",-0.199409,erythrocyte,-0.357882,"cd8-positive, alpha-beta t cell",-0.216631,erythrocyte
+HC4_Tcell_3,all,HC4_Tcell_3,T,True,T,HC4,HC,-0.84548,"cd4-positive, alpha-beta t cell",-0.74487,"cd4-positive, alpha-beta t cell",-0.621238,"cd4-positive, alpha-beta t cell",-0.808555,"cd8-positive, alpha-beta t cell"
+HC4_Tcell_4,all,HC4_Tcell_4,T,True,T,HC4,HC,-0.549838,"cd8-positive, alpha-beta t cell",-0.306678,"cd8-positive, alpha-beta t cell",-0.418588,"cd8-positive, alpha-beta t cell",-0.363505,"cd8-positive, alpha-beta t cell"
+HC4_Tcell_5,all,HC4_Tcell_5,T,True,T,HC4,HC,-0.823092,"cd4-positive, alpha-beta t cell",-0.659669,"cd4-positive, alpha-beta t cell",-0.608786,"cd4-positive, alpha-beta t cell",-0.734887,"cd8-positive, alpha-beta t cell"
+ALS4_T1_Tcell_1,all,ALS4_T1_Tcell_1,T,True,T,ALS4,ALS,-0.930726,"cd4-positive, alpha-beta t cell",-0.683119,"cd4-positive, alpha-beta t cell",-0.67813,"cd4-positive, alpha-beta t cell",-0.700945,"cd4-positive, alpha-beta t cell"
+ALS4_T1_Tcell_2,all,ALS4_T1_Tcell_2,T,True,T,ALS4,ALS,-0.982646,"cd4-positive, alpha-beta t cell",-0.925132,"cd4-positive, alpha-beta t cell",-0.714093,"cd4-positive, alpha-beta t cell",-0.92429,"cd4-positive, alpha-beta t cell"
+ALS4_T1_Tcell_3,all,ALS4_T1_Tcell_3,T,True,T,ALS4,ALS,-0.975972,"cd4-positive, alpha-beta t cell",-0.918382,"cd4-positive, alpha-beta t cell",-0.709668,"cd4-positive, alpha-beta t cell",-0.933364,"cd4-positive, alpha-beta t cell"
+ALS4_T1_Tcell_4,all,ALS4_T1_Tcell_4,T,True,T,ALS4,ALS,-0.830215,"cd4-positive, alpha-beta t cell",-0.682827,"cd4-positive, alpha-beta t cell",-0.613049,"cd4-positive, alpha-beta t cell",-0.750414,"cd8-positive, alpha-beta t cell"
+ALS4_T1_Tcell_5,all,ALS4_T1_Tcell_5,T,True,T,ALS4,ALS,-0.82703,"cd4-positive, alpha-beta t cell",-0.681144,"cd8-positive, alpha-beta t cell",-0.606974,"cd4-positive, alpha-beta t cell",-0.785852,"cd8-positive, alpha-beta t cell"
+ALS6_T1_Tcell_1,all,ALS6_T1_Tcell_1,T,True,T,ALS6,ALS,-0.596499,"cd8-positive, alpha-beta t cell",-0.314039,"cd8-positive, alpha-beta t cell",-0.441656,"cd8-positive, alpha-beta t cell",-0.410099,"cd8-positive, alpha-beta t cell"
+ALS6_T1_Tcell_2,all,ALS6_T1_Tcell_2,T,True,T,ALS6,ALS,-0.948315,"cd4-positive, alpha-beta t cell",-0.784643,"cd4-positive, alpha-beta t cell",-0.688781,"cd4-positive, alpha-beta t cell",-0.806032,"cd4-positive, alpha-beta t cell"
+ALS6_T1_Tcell_3,all,ALS6_T1_Tcell_3,T,True,T,ALS6,ALS,-0.663644,"cd8-positive, alpha-beta t cell",-0.393238,"cd8-positive, alpha-beta t cell",-0.492713,"cd8-positive, alpha-beta t cell",-0.477752,"cd8-positive, alpha-beta t cell"
+ALS6_T1_Tcell_4,all,ALS6_T1_Tcell_4,T,True,T,ALS6,ALS,-0.16254,erythrocyte,-0.001266,plasma cell,-0.158417,erythrocyte,-0.026474,plasma cell
+ALS6_T1_Tcell_5,all,ALS6_T1_Tcell_5,T,True,T,ALS6,ALS,-0.670634,"cd8-positive, alpha-beta t cell",-0.546034,"cd8-positive, alpha-beta t cell",-0.493666,"cd8-positive, alpha-beta t cell",-0.655635,"cd8-positive, alpha-beta t cell"
+HC5_Tcell_1,all,HC5_Tcell_1,T,True,T,HC5,HC,-0.711718,"cd4-positive, alpha-beta t cell",-0.544328,"cd4-positive, alpha-beta t cell",-0.536698,"cd4-positive, alpha-beta t cell",-0.5865,"cd8-positive, alpha-beta t cell"
+HC5_Tcell_2,all,HC5_Tcell_2,T,True,T,HC5,HC,0.014768,macrophage,-0.001907,macrophage,-0.017258,macrophage,-0.011,macrophage
+HC5_Tcell_3,all,HC5_Tcell_3,T,True,T,HC5,HC,-0.859412,"cd4-positive, alpha-beta t cell",-0.665862,"cd4-positive, alpha-beta t cell",-0.631418,"cd4-positive, alpha-beta t cell",-0.702458,"cd8-positive, alpha-beta t cell"
+HC5_Tcell_4,all,HC5_Tcell_4,T,True,T,HC5,HC,-0.897157,"cd4-positive, alpha-beta t cell",-0.71598,"cd4-positive, alpha-beta t cell",-0.654677,"cd4-positive, alpha-beta t cell",-0.738792,"cd8-positive, alpha-beta t cell"
+HC5_Tcell_5,all,HC5_Tcell_5,T,True,T,HC5,HC,-0.15055,neutrophil,-0.160653,erythrocyte,-0.146383,neutrophil,-0.154496,erythrocyte
+ALS8_T1_Tcell_1,all,ALS8_T1_Tcell_1,T,True,T,ALS8,ALS,-0.806865,"cd4-positive, alpha-beta t cell",-0.614872,"cd4-positive, alpha-beta t cell",-0.604813,"cd4-positive, alpha-beta t cell",-0.613784,"cd4-positive, alpha-beta t cell"
+ALS8_T1_Tcell_2,all,ALS8_T1_Tcell_2,T,True,T,ALS8,ALS,-0.399034,neutrophil,-0.391252,"cd4-positive, alpha-beta t cell",-0.324451,neutrophil,-0.368561,"cd8-positive, alpha-beta t cell"
+ALS8_T1_Tcell_3,all,ALS8_T1_Tcell_3,T,True,T,ALS8,ALS,-0.819836,"cd4-positive, alpha-beta t cell",-0.636814,"cd4-positive, alpha-beta t cell",-0.615042,"cd4-positive, alpha-beta t cell",-0.671482,"cd8-positive, alpha-beta t cell"
+ALS8_T1_Tcell_4,all,ALS8_T1_Tcell_4,T,True,T,ALS8,ALS,-0.561849,"cd8-positive, alpha-beta t cell",-0.559099,"cd8-positive, alpha-beta t cell",-0.437859,"cd4-positive, alpha-beta t cell",-0.678642,"cd8-positive, alpha-beta t cell"
+ALS8_T1_Tcell_5,all,ALS8_T1_Tcell_5,T,True,T,ALS8,ALS,-0.104757,neutrophil,-0.155041,neutrophil,-0.112078,neutrophil,-0.129463,erythrocyte
+HC6_Tcell_1,all,HC6_Tcell_1,T,True,T,HC6,HC,-0.071442,erythrocyte,-0.059251,erythrocyte,-0.08401,erythrocyte,-0.069587,erythrocyte
+HC6_Tcell_2,all,HC6_Tcell_2,T,True,T,HC6,HC,-0.357584,natural killer cell,-0.19052,erythrocyte,-0.28358,natural killer cell,-0.126539,erythrocyte
+HC6_Tcell_3,all,HC6_Tcell_3,T,True,T,HC6,HC,-0.475909,natural killer cell,-0.267234,erythrocyte,-0.356916,natural killer cell,-0.260716,erythrocyte
+HC6_Tcell_4,all,HC6_Tcell_4,T,True,T,HC6,HC,-0.508227,"cd8-positive, alpha-beta t cell",-0.392416,natural killer cell,-0.379226,"cd8-positive, alpha-beta t cell",-0.305355,natural killer cell
+HC6_Tcell_5,all,HC6_Tcell_5,T,True,T,HC6,HC,-0.440361,natural killer cell,-0.27272,natural killer cell,-0.32954,natural killer cell,-0.212929,natural killer cell
+HC7_Tcell_1,all,HC7_Tcell_1,T,True,T,HC7,HC,0.00585,platelet,-0.00506,platelet,-0.027989,platelet,0.00447,platelet
+HC7_Tcell_2,all,HC7_Tcell_2,T,True,T,HC7,HC,-0.757762,"cd8-positive, alpha-beta t cell",-0.511559,"cd8-positive, alpha-beta t cell",-0.558809,"cd8-positive, alpha-beta t cell",-0.542616,"cd8-positive, alpha-beta t cell"
+HC7_Tcell_3,all,HC7_Tcell_3,T,True,T,HC7,HC,-0.969857,"cd4-positive, alpha-beta t cell",-0.775969,"cd4-positive, alpha-beta t cell",-0.70572,"cd4-positive, alpha-beta t cell",-0.799564,"cd8-positive, alpha-beta t cell"
+HC7_Tcell_4,all,HC7_Tcell_4,T,True,T,HC7,HC,-0.970925,"cd4-positive, alpha-beta t cell",-0.784944,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.707002,"cd4-positive, alpha-beta t cell",-0.822848,"cd8-positive, alpha-beta t cell"
+HC7_Tcell_5,all,HC7_Tcell_5,T,True,T,HC7,HC,-0.901674,"cd4-positive, alpha-beta t cell",-0.722783,"cd4-positive, alpha-beta t cell",-0.663277,"cd4-positive, alpha-beta t cell",-0.748478,"cd8-positive, alpha-beta t cell"
+ALS2_T1_Tcell_1,all,ALS2_T1_Tcell_1,T,True,T,ALS2,ALS,-0.923824,"cd4-positive, alpha-beta t cell",-0.829609,"cd4-positive, alpha-beta t cell",-0.675177,"cd4-positive, alpha-beta t cell",-0.857436,"cd8-positive, alpha-beta t cell"
+ALS2_T1_Tcell_2,all,ALS2_T1_Tcell_2,T,True,T,ALS2,ALS,-0.831208,"cd4-positive, alpha-beta t cell",-0.63852,"cd8-positive, alpha-beta t cell",-0.610573,"cd4-positive, alpha-beta t cell",-0.776216,"cd8-positive, alpha-beta t cell"
+ALS2_T1_Tcell_3,all,ALS2_T1_Tcell_3,T,True,T,ALS2,ALS,-0.894254,"cd4-positive, alpha-beta t cell",-0.798747,"cd4-positive, alpha-beta t cell",-0.653867,"cd4-positive, alpha-beta t cell",-0.883585,"cd8-positive, alpha-beta t cell"
+ALS2_T1_Tcell_4,all,ALS2_T1_Tcell_4,T,True,T,ALS2,ALS,-0.972161,"cd4-positive, alpha-beta t cell",-0.810896,"cd4-positive, alpha-beta t cell",-0.705949,"cd4-positive, alpha-beta t cell",-0.850105,"cd4-positive, alpha-beta t cell"
+ALS2_T1_Tcell_5,all,ALS2_T1_Tcell_5,T,True,T,ALS2,ALS,-0.878494,"cd4-positive, alpha-beta t cell",-0.697153,"cd8-positive, alpha-beta t cell",-0.642952,"cd4-positive, alpha-beta t cell",-0.795836,"cd8-positive, alpha-beta t cell"
+HC1_Tcell_1,all,HC1_Tcell_1,T,True,T,HC1,HC,-0.842728,"cd4-positive, alpha-beta t cell",-0.712781,"cd8-positive, alpha-beta t cell",-0.617737,"cd4-positive, alpha-beta t cell",-0.835627,"cd8-positive, alpha-beta t cell"
+HC1_Tcell_2,all,HC1_Tcell_2,T,True,T,HC1,HC,-0.948439,"cd4-positive, alpha-beta t cell",-0.851001,"cd4-positive, alpha-beta t cell",-0.690164,"cd4-positive, alpha-beta t cell",-0.891992,"cd8-positive, alpha-beta t cell"
+HC1_Tcell_3,all,HC1_Tcell_3,T,True,T,HC1,HC,-0.877772,"cd4-positive, alpha-beta t cell",-0.705342,"cd8-positive, alpha-beta t cell",-0.640567,"cd4-positive, alpha-beta t cell",-0.830406,"cd8-positive, alpha-beta t cell"
+HC1_Tcell_4,all,HC1_Tcell_4,T,True,T,HC1,HC,-0.982904,"cd4-positive, alpha-beta t cell",-0.877834,"cd4-positive, alpha-beta t cell",-0.713596,"cd4-positive, alpha-beta t cell",-0.894858,"cd4-positive, alpha-beta t cell"
+HC1_Tcell_5,all,HC1_Tcell_5,T,True,T,HC1,HC,-0.96186,"cd4-positive, alpha-beta t cell",-0.774634,"cd4-positive, alpha-beta t cell",-0.698927,"cd4-positive, alpha-beta t cell",-0.797455,"cd4-positive, alpha-beta t cell"
+ALS7_T1_Tcell_1,all,ALS7_T1_Tcell_1,T,True,T,ALS7,ALS,-0.903007,"cd4-positive, alpha-beta t cell",-0.686091,"cd8-positive, alpha-beta t cell",-0.658599,"cd4-positive, alpha-beta t cell",-0.744092,"cd8-positive, alpha-beta t cell"
+ALS7_T1_Tcell_2,all,ALS7_T1_Tcell_2,T,True,T,ALS7,ALS,-0.782453,"cd8-positive, alpha-beta t cell",-0.529606,"cd8-positive, alpha-beta t cell",-0.575332,"cd8-positive, alpha-beta t cell",-0.592621,"cd8-positive, alpha-beta t cell"
+ALS7_T1_Tcell_3,all,ALS7_T1_Tcell_3,T,True,T,ALS7,ALS,-0.971963,"cd4-positive, alpha-beta t cell",-0.734071,"cd4-positive, alpha-beta t cell",-0.704874,"cd4-positive, alpha-beta t cell",-0.742374,"cd4-positive, alpha-beta t cell"
+ALS7_T1_Tcell_4,all,ALS7_T1_Tcell_4,T,True,T,ALS7,ALS,-0.969681,"cd4-positive, alpha-beta t cell",-0.802248,"cd4-positive, alpha-beta t cell",-0.703778,"cd4-positive, alpha-beta t cell",-0.812598,"cd4-positive, alpha-beta t cell"
+HC2_Tcell_1,all,HC2_Tcell_1,T,True,T,HC2,HC,-0.96366,"cd4-positive, alpha-beta t cell",-0.80529,"cd4-positive, alpha-beta t cell",-0.700301,"cd4-positive, alpha-beta t cell",-0.842672,"cd8-positive, alpha-beta t cell"
+HC2_Tcell_2,all,HC2_Tcell_2,T,True,T,HC2,HC,-0.970266,"cd4-positive, alpha-beta t cell",-0.725165,"cd4-positive, alpha-beta t cell",-0.705412,"cd4-positive, alpha-beta t cell",-0.722465,"cd8-positive, alpha-beta t cell"
+HC2_Tcell_3,all,HC2_Tcell_3,T,True,T,HC2,HC,-0.961895,"cd4-positive, alpha-beta t cell",-0.869094,"cd4-positive, alpha-beta t cell",-0.699129,"cd4-positive, alpha-beta t cell",-0.898891,"cd8-positive, alpha-beta t cell"
+HC2_Tcell_4,all,HC2_Tcell_4,T,True,T,HC2,HC,-0.923351,"cd4-positive, alpha-beta t cell",-0.739543,"cd4-positive, alpha-beta t cell",-0.674291,"cd4-positive, alpha-beta t cell",-0.779628,"cd8-positive, alpha-beta t cell"
+HC3_Tcell_1,all,HC3_Tcell_1,T,True,T,HC3,HC,-0.961218,"cd4-positive, alpha-beta t cell",-0.751225,"cd4-positive, alpha-beta t cell",-0.699596,"cd4-positive, alpha-beta t cell",-0.822257,"cd4-positive, alpha-beta t cell"
+HC3_Tcell_2,all,HC3_Tcell_2,T,True,T,HC3,HC,-0.984579,"cd4-positive, alpha-beta t cell",-0.518009,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.715648,"cd4-positive, alpha-beta t cell",-0.386271,"cd4-positive, alpha-beta t cell"
+HC3_Tcell_3,all,HC3_Tcell_3,T,True,T,HC3,HC,-0.706948,"cd8-positive, alpha-beta t cell",-0.542749,"cd8-positive, alpha-beta t cell",-0.519738,"cd8-positive, alpha-beta t cell",-0.611658,"cd8-positive, alpha-beta t cell"
+HC3_Tcell_4,all,HC3_Tcell_4,T,True,T,HC3,HC,-0.91393,"cd4-positive, alpha-beta t cell",-0.833638,"cd4-positive, alpha-beta t cell",-0.666925,"cd4-positive, alpha-beta t cell",-0.907746,"cd8-positive, alpha-beta t cell"
+HC3_Tcell_5,all,HC3_Tcell_5,T,True,T,HC3,HC,-0.925668,"cd4-positive, alpha-beta t cell",-0.727912,"cd4-positive, alpha-beta t cell",-0.67404,"cd4-positive, alpha-beta t cell",-0.765404,"cd8-positive, alpha-beta t cell"
+ALS9_T1_Tcell_1,all,ALS9_T1_Tcell_1,T,True,T,ALS9,ALS,-0.980522,"cd4-positive, alpha-beta t cell",-0.798719,"cd4-positive, alpha-beta t cell",-0.712027,"cd4-positive, alpha-beta t cell",-0.81275,"cd4-positive, alpha-beta t cell"
+ALS9_T1_Tcell_2,all,ALS9_T1_Tcell_2,T,True,T,ALS9,ALS,-0.8083,"cd8-positive, alpha-beta t cell",-0.731618,"cd4-positive, alpha-beta t cell",-0.595004,"cd4-positive, alpha-beta t cell",-0.833586,"cd8-positive, alpha-beta t cell"
+ALS9_T1_Tcell_3,all,ALS9_T1_Tcell_3,T,True,T,ALS9,ALS,-0.094692,myeloid dendritic cell,-0.114273,erythrocyte,-0.100858,macrophage,-0.212774,"cd8-positive, alpha-beta t cell"
+ALS9_T1_Tcell_4,all,ALS9_T1_Tcell_4,T,True,T,ALS9,ALS,-0.932573,"cd4-positive, alpha-beta t cell",-0.67776,"cd4-positive, alpha-beta t cell",-0.676572,"cd4-positive, alpha-beta t cell",-0.673968,"cd8-positive, alpha-beta t cell"
+ALS9_T1_Tcell_5,all,ALS9_T1_Tcell_5,T,True,T,ALS9,ALS,-0.623939,"cd4-positive, alpha-beta t cell",-0.484916,"cd8-positive, alpha-beta t cell",-0.473107,"cd4-positive, alpha-beta t cell",-0.579299,"cd8-positive, alpha-beta t cell"
+ALS3_T1_Tcell_1,all,ALS3_T1_Tcell_1,T,True,T,ALS3,ALS,-0.730307,"cd8-positive, alpha-beta t cell",-0.553944,"cd8-positive, alpha-beta t cell",-0.535409,"cd8-positive, alpha-beta t cell",-0.597899,"cd8-positive, alpha-beta t cell"
+ALS3_T1_Tcell_2,all,ALS3_T1_Tcell_2,T,True,T,ALS3,ALS,-0.797966,"cd8-positive, alpha-beta t cell",-0.663693,"cd8-positive, alpha-beta t cell",-0.584721,"cd8-positive, alpha-beta t cell",-0.762242,"cd8-positive, alpha-beta t cell"
+ALS3_T1_Tcell_3,all,ALS3_T1_Tcell_3,T,True,T,ALS3,ALS,-0.6615,"cd8-positive, alpha-beta t cell",-0.525173,"cd8-positive, alpha-beta t cell",-0.486099,"cd8-positive, alpha-beta t cell",-0.615457,"cd8-positive, alpha-beta t cell"
+ALS3_T1_Tcell_4,all,ALS3_T1_Tcell_4,T,True,T,ALS3,ALS,-0.530915,neutrophil,-0.425192,"cd4-positive, alpha-beta t cell",-0.413329,neutrophil,-0.497819,"cd8-positive, alpha-beta t cell"
+ALS3_T1_Tcell_5,all,ALS3_T1_Tcell_5,T,True,T,ALS3,ALS,-0.915913,"cd4-positive, alpha-beta t cell",-0.814392,regulatory t cell,-0.666811,"cd4-positive, alpha-beta t cell",-0.851148,regulatory t cell
+ALS1_T1_Tcell_1,all,ALS1_T1_Tcell_1,T,True,T,ALS1,ALS,-0.201176,myeloid dendritic cell,-0.327575,"cd4-positive, alpha-beta t cell",-0.183019,myeloid dendritic cell,-0.218515,erythrocyte
+ALS1_T1_Tcell_2,all,ALS1_T1_Tcell_2,T,True,T,ALS1,ALS,-0.981154,"cd4-positive, alpha-beta t cell",-0.703788,"cd4-positive, alpha-beta t cell",-0.713238,"cd4-positive, alpha-beta t cell",-0.707783,"cd4-positive, alpha-beta t cell"
+ALS1_T1_Tcell_3,all,ALS1_T1_Tcell_3,T,True,T,ALS1,ALS,-0.972255,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.823042,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.707001,"naive thymus-derived cd4-positive, alpha-beta t cell",-0.847485,"naive thymus-derived cd4-positive, alpha-beta t cell"
+ALS1_T1_Tcell_4,all,ALS1_T1_Tcell_4,T,True,T,ALS1,ALS,-0.950424,"cd4-positive, alpha-beta t cell",-0.706362,"cd4-positive, alpha-beta t cell",-0.690804,"cd4-positive, alpha-beta t cell",-0.738399,"cd8-positive, alpha-beta t cell"
+ALS1_T1_Tcell_5,all,ALS1_T1_Tcell_5,T,True,T,ALS1,ALS,-0.984195,"cd4-positive, alpha-beta t cell",-0.861045,"cd4-positive, alpha-beta t cell",-0.715258,"cd4-positive, alpha-beta t cell",-0.881706,"cd4-positive, alpha-beta t cell"
+ALS5_T1_Bcell_1,all,ALS5_T1_Bcell_1,B,True,B,ALS5,ALS,0.951015,b cell,0.512743,b cell,0.554565,b cell,0.512882,b cell
+ALS5_T1_Bcell_2,all,ALS5_T1_Bcell_2,B,True,B,ALS5,ALS,0.184101,macrophage,0.115235,erythrocyte,0.103336,macrophage,0.046574,erythrocyte
+ALS5_T1_Bcell_3,all,ALS5_T1_Bcell_3,B,True,B,ALS5,ALS,0.958736,b cell,0.664628,b cell,0.569499,b cell,0.679005,b cell
+ALS5_T1_Bcell_4,all,ALS5_T1_Bcell_4,B,True,B,ALS5,ALS,0.957405,b cell,0.568263,b cell,0.567619,b cell,0.584984,b cell
+ALS5_T1_Bcell_5,all,ALS5_T1_Bcell_5,B,True,B,ALS5,ALS,0.937731,b cell,0.512748,b cell,0.556013,b cell,0.530589,b cell
+HC4_Bcell_1,all,HC4_Bcell_1,B,True,B,HC4,HC,0.958281,b cell,0.558615,b cell,0.566816,b cell,0.576316,b cell
+HC4_Bcell_2,all,HC4_Bcell_2,B,True,B,HC4,HC,0.958187,b cell,0.575404,b cell,0.569237,b cell,0.590062,b cell
+HC4_Bcell_3,all,HC4_Bcell_3,B,True,B,HC4,HC,0.958003,b cell,0.601187,b cell,0.567024,b cell,0.617108,b cell
+HC4_Bcell_4,all,HC4_Bcell_4,B,True,B,HC4,HC,0.952799,b cell,0.498812,b cell,0.562645,b cell,0.51189,b cell
+HC4_Bcell_5,all,HC4_Bcell_5,B,True,B,HC4,HC,0.954276,b cell,0.522168,b cell,0.570743,b cell,0.539773,b cell
+ALS4_T1_Bcell_1,all,ALS4_T1_Bcell_1,B,True,B,ALS4,ALS,0.950169,b cell,0.557096,plasma cell,0.557896,b cell,0.560484,plasma cell
+ALS4_T1_Bcell_2,all,ALS4_T1_Bcell_2,B,True,B,ALS4,ALS,0.00076,monocyte,0.011913,monocyte,-0.027327,monocyte,0.009334,monocyte
+ALS4_T1_Bcell_3,all,ALS4_T1_Bcell_3,B,True,B,ALS4,ALS,0.893296,b cell,0.472154,b cell,0.51613,b cell,0.459584,b cell
+ALS6_T1_Bcell_1,all,ALS6_T1_Bcell_1,B,True,B,ALS6,ALS,-0.051706,plasma cell,0.091631,erythrocyte,-0.069738,plasma cell,0.171946,plasma cell
+ALS6_T1_Bcell_2,all,ALS6_T1_Bcell_2,B,True,B,ALS6,ALS,0.957502,b cell,0.515471,b cell,0.568071,b cell,0.531944,b cell
+ALS6_T1_Bcell_3,all,ALS6_T1_Bcell_3,B,True,B,ALS6,ALS,-0.381289,"cd4-positive, alpha-beta t cell",-0.162342,erythrocyte,-0.293525,"cd4-positive, alpha-beta t cell",-0.239994,erythrocyte
+HC5_Bcell_1,all,HC5_Bcell_1,B,True,B,HC5,HC,0.957265,b cell,0.652163,b cell,0.56654,b cell,0.678363,b cell
+HC5_Bcell_2,all,HC5_Bcell_2,B,True,B,HC5,HC,0.95136,b cell,0.534687,b cell,0.567486,b cell,0.560363,b cell
+HC5_Bcell_3,all,HC5_Bcell_3,B,True,B,HC5,HC,0.957373,b cell,0.58412,b cell,0.568485,b cell,0.600356,b cell
+HC5_Bcell_4,all,HC5_Bcell_4,B,True,B,HC5,HC,0.959385,b cell,0.612063,b cell,0.572885,b cell,0.624269,b cell
+HC5_Bcell_5,all,HC5_Bcell_5,B,True,B,HC5,HC,0.945785,b cell,0.487422,b cell,0.557218,b cell,0.500652,b cell
+ALS8_T1_Bcell_1,all,ALS8_T1_Bcell_1,B,True,B,ALS8,ALS,0.242588,b cell,0.237867,b cell,0.128083,b cell,0.300216,b cell
+ALS8_T1_Bcell_2,all,ALS8_T1_Bcell_2,B,True,B,ALS8,ALS,0.00289,myeloid dendritic cell,0.022706,myeloid dendritic cell,-0.026325,myeloid dendritic cell,0.050474,myeloid dendritic cell
+ALS8_T1_Bcell_3,all,ALS8_T1_Bcell_3,B,True,B,ALS8,ALS,0.12467,b cell,0.160909,b cell,0.051784,b cell,0.199651,b cell
+ALS8_T1_Bcell_4,all,ALS8_T1_Bcell_4,B,True,B,ALS8,ALS,0.065575,macrophage,0.075911,macrophage,0.025886,macrophage,0.105444,macrophage
+ALS8_T1_Bcell_5,all,ALS8_T1_Bcell_5,B,True,B,ALS8,ALS,0.104489,macrophage,0.159072,b cell,0.049757,b cell,0.213301,b cell
+HC6_Bcell_1,all,HC6_Bcell_1,B,True,B,HC6,HC,-0.067207,erythrocyte,-0.131529,erythrocyte,-0.094124,erythrocyte,-0.088805,erythrocyte
+HC6_Bcell_2,all,HC6_Bcell_2,B,True,B,HC6,HC,0.946038,b cell,0.552724,b cell,0.567637,b cell,0.564095,b cell
+HC6_Bcell_3,all,HC6_Bcell_3,B,True,B,HC6,HC,-0.029395,erythrocyte,-0.011263,erythrocyte,-0.056939,erythrocyte,-0.008065,erythrocyte
+HC6_Bcell_4,all,HC6_Bcell_4,B,True,B,HC6,HC,0.95463,b cell,0.490486,b cell,0.565022,b cell,0.500737,b cell
+HC6_Bcell_5,all,HC6_Bcell_5,B,True,B,HC6,HC,0.960689,plasma cell,0.910866,plasma cell,0.634682,plasma cell,0.903975,plasma cell
+HC7_Bcell_1,all,HC7_Bcell_1,B,True,B,HC7,HC,0.954018,b cell,0.502748,b cell,0.562864,b cell,0.51752,b cell
+HC7_Bcell_2,all,HC7_Bcell_2,B,True,B,HC7,HC,0.631346,b cell,0.483227,b cell,0.298011,b cell,0.46606,b cell
+HC7_Bcell_3,all,HC7_Bcell_3,B,True,B,HC7,HC,0.957189,b cell,0.647497,b cell,0.565589,b cell,0.664166,b cell
+HC7_Bcell_4,all,HC7_Bcell_4,B,True,B,HC7,HC,0.953828,b cell,0.725947,b cell,0.561752,b cell,0.740446,b cell
+HC7_Bcell_5,all,HC7_Bcell_5,B,True,B,HC7,HC,0.947051,plasma cell,0.570111,plasma cell,0.625139,plasma cell,0.539527,plasma cell
+ALS2_T1_Bcell_1,all,ALS2_T1_Bcell_1,B,True,B,ALS2,ALS,0.917324,plasma cell,0.90717,plasma cell,0.566439,plasma cell,0.89542,plasma cell
+ALS2_T1_Bcell_2,all,ALS2_T1_Bcell_2,B,True,B,ALS2,ALS,0.87631,b cell,0.621213,plasma cell,0.44107,b cell,0.62925,plasma cell
+ALS2_T1_Bcell_3,all,ALS2_T1_Bcell_3,B,True,B,ALS2,ALS,0.878992,plasma cell,0.875923,plasma cell,0.502784,plasma cell,0.866211,plasma cell
+ALS2_T1_Bcell_4,all,ALS2_T1_Bcell_4,B,True,B,ALS2,ALS,0.944628,b cell,0.635023,b cell,0.538891,b cell,0.657008,b cell
+ALS2_T1_Bcell_5,all,ALS2_T1_Bcell_5,B,True,B,ALS2,ALS,0.874576,b cell,0.600938,plasma cell,0.444784,b cell,0.628958,b cell
+HC1_Bcell_1,all,HC1_Bcell_1,B,True,B,HC1,HC,0.946055,b cell,0.536101,b cell,0.548467,b cell,0.560693,b cell
+HC1_Bcell_2,all,HC1_Bcell_2,B,True,B,HC1,HC,-0.00045,monocyte,0.118987,erythrocyte,-0.040405,monocyte,0.145782,erythrocyte
+HC1_Bcell_3,all,HC1_Bcell_3,B,True,B,HC1,HC,0.945382,b cell,0.618444,b cell,0.541509,b cell,0.643217,b cell
+HC1_Bcell_4,all,HC1_Bcell_4,B,True,B,HC1,HC,0.951432,b cell,0.672271,b cell,0.555139,b cell,0.687943,b cell
+HC1_Bcell_5,all,HC1_Bcell_5,B,True,B,HC1,HC,0.941501,b cell,0.533781,b cell,0.549956,b cell,0.555198,b cell
+ALS7_T1_Bcell_1,all,ALS7_T1_Bcell_1,B,True,B,ALS7,ALS,0.936609,b cell,0.486082,b cell,0.542821,b cell,0.512578,b cell
+ALS7_T1_Bcell_2,all,ALS7_T1_Bcell_2,B,True,B,ALS7,ALS,0.939597,b cell,0.493569,b cell,0.547386,b cell,0.513608,b cell
+ALS7_T1_Bcell_3,all,ALS7_T1_Bcell_3,B,True,B,ALS7,ALS,0.941159,b cell,0.547561,b cell,0.543494,b cell,0.57152,b cell
+HC2_Bcell_1,all,HC2_Bcell_1,B,True,B,HC2,HC,0.936786,b cell,0.528347,b cell,0.541703,b cell,0.551162,b cell
+HC2_Bcell_2,all,HC2_Bcell_2,B,True,B,HC2,HC,0.952446,b cell,0.633816,b cell,0.555879,b cell,0.652116,b cell
+HC2_Bcell_3,all,HC2_Bcell_3,B,True,B,HC2,HC,0.945445,b cell,0.661505,b cell,0.550681,b cell,0.677741,b cell
+HC3_Bcell_1,all,HC3_Bcell_1,B,True,B,HC3,HC,0.498918,plasma cell,0.28017,plasma cell,0.302896,plasma cell,0.375539,plasma cell
+HC3_Bcell_2,all,HC3_Bcell_2,B,True,B,HC3,HC,0.95855,b cell,0.52928,b cell,0.571208,b cell,0.54434,b cell
+HC3_Bcell_4,all,HC3_Bcell_4,B,True,B,HC3,HC,0.95642,b cell,0.472238,b cell,0.565206,b cell,0.489485,b cell
+ALS9_T1_Bcell_1,all,ALS9_T1_Bcell_1,B,True,B,ALS9,ALS,0.569345,b cell,0.307694,plasma cell,0.298818,b cell,0.345302,plasma cell
+ALS9_T1_Bcell_2,all,ALS9_T1_Bcell_2,B,True,B,ALS9,ALS,0.956109,b cell,0.536718,b cell,0.558359,b cell,0.553277,b cell
+ALS9_T1_Bcell_3,all,ALS9_T1_Bcell_3,B,True,B,ALS9,ALS,0.857393,plasma cell,0.354231,plasma cell,0.563644,plasma cell,0.413047,plasma cell
+ALS9_T1_Bcell_4,all,ALS9_T1_Bcell_4,B,True,B,ALS9,ALS,0.954127,b cell,0.478608,b cell,0.567948,b cell,0.496154,b cell
+ALS9_T1_Bcell_5,all,ALS9_T1_Bcell_5,B,True,B,ALS9,ALS,0.854376,b cell,0.369368,b cell,0.484915,b cell,0.388832,b cell
+ALS3_T1_Bcell_1,all,ALS3_T1_Bcell_1,B,True,B,ALS3,ALS,0.138357,plasma cell,0.136723,erythrocyte,0.055365,plasma cell,0.11197,erythrocyte
+ALS3_T1_Bcell_2,all,ALS3_T1_Bcell_2,B,True,B,ALS3,ALS,0.954732,b cell,0.664131,b cell,0.559667,b cell,0.681133,b cell
+ALS3_T1_Bcell_3,all,ALS3_T1_Bcell_3,B,True,B,ALS3,ALS,0.950508,b cell,0.519717,b cell,0.556918,b cell,0.535325,b cell
+ALS3_T1_Bcell_4,all,ALS3_T1_Bcell_4,B,True,B,ALS3,ALS,0.952595,b cell,0.554439,b cell,0.556888,b cell,0.577668,b cell
+ALS3_T1_Bcell_5,all,ALS3_T1_Bcell_5,B,True,B,ALS3,ALS,0.953851,b cell,0.60433,b cell,0.553154,b cell,0.617198,b cell
+ALS1_T1_Bcell_1,all,ALS1_T1_Bcell_1,B,True,B,ALS1,ALS,0.958185,b cell,0.654057,b cell,0.566451,b cell,0.6709,b cell
+ALS1_T1_Bcell_2,all,ALS1_T1_Bcell_2,B,True,B,ALS1,ALS,0.957257,b cell,0.760652,b cell,0.566002,b cell,0.779282,b cell
+ALS1_T1_Bcell_3,all,ALS1_T1_Bcell_3,B,True,B,ALS1,ALS,0.953058,b cell,0.592719,b cell,0.558885,b cell,0.607614,b cell
+ALS1_T1_Bcell_4,all,ALS1_T1_Bcell_4,B,True,B,ALS1,ALS,0.958749,b cell,0.586947,b cell,0.573069,b cell,0.604209,b cell
+ALS1_T1_Bcell_5,all,ALS1_T1_Bcell_5,B,True,B,ALS1,ALS,0.947124,b cell,0.394283,b cell,0.55893,b cell,0.431299,b cell

@@ -459,6 +459,15 @@ isolation:
 - **Not reachable from here:** iProX times out on this network, so the two
   files come by hand, and their sha256 is recorded on receipt.
 - Once scored, it becomes development data, as every spent test does.
+- **Outcome, 2026-10-27: pass** (run history entry 68). It was scored once,
+  after its amendment 1, which added a secondary on the log2 scale.
+  - v4.1's AUROC, B over T, is 0.997 (p = 0.0001), and 0.980 on the log2
+    scale.
+  - Its best guess has a balanced accuracy of 85.2, against PCA with kNN's
+    78.5.
+  - Its answers commit for 77.0% of cells and are 96.5% correct when
+    committed.
+  - PXD064083 is now development data.
 
 ### Alternatives kept unused, for future tests or future development
 
@@ -474,8 +483,8 @@ comes from here. Keep this list current.
   O'Connor et al. (sorted T, B, NK, monocytes).
 - **Public, unopened, candidate tests (amendment 19):** MSV000102427
   (FACS-sorted bone-marrow CD4 and CD8 T cells, B and myeloid cells).
-  PXD064083 (single CD3+ T and CD19+ B cells) is now a sealed test
-  (amendment 24).
+  PXD064083 (single CD3+ T and CD19+ B cells) was used as a sealed test and
+  is spent (amendment 24).
 - **Data requests not yet made:** Brenes et al. (sorted blood neutrophils) and
   Lange et al. (CD19-sorted B cells); for the organs, the Schiller lab (135
   histology-defined airway regions), Leiden University Medical Center (van

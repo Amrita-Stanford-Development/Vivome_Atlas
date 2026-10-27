@@ -2963,6 +2963,60 @@ fell short for classes calibrated mostly on Tabula Sapiens's cells
 - A next candidate would change the members or the answer rule, not the
   calibration. That is the owner's call.
 
+### 68. Sorted single T and B cells (PXD064083), the sealed test, scored once, 2026-10-27
+
+**Why:** the paper's test labels so far came from clustering the protein
+data. PXD064083's come from cell isolation (CD3+ T, CD19+ B), so they are
+independent of it.
+
+**Fixed first:**
+- `aa361c1`: the protocol (`research/benchmark/protocol-pxd064083.md`;
+  side-tests amendment 24), written before any data file was downloaded and
+  rehearsed on Fulcher 2026.
+- `da15a5b`: the two files' receipt. iProX does not answer from the
+  project's network, so the owner fetched them on another one.
+- `9dce210`: amendment 1, written before any model output was looked at.
+  The files' values are linear on a small scale (non-zero median 7.0 and
+  7.9, maximum 211,000), which the service's Stage 0 reads as log. So a
+  secondary that never decides scores the same upload on the log2 scale.
+
+**The data:** 148 single cells (78 T, 70 B) from 16 donors, 7 healthy and
+9 with ALS, about five cells per donor and lineage. The two files share one
+protein list, which suggests one search exported per lineage. The upload
+holds the 2,505 genes both report, 2,305 of them in the feature space, and
+every cell passes the coverage floor.
+
+| | v4.1 (headline) | v3.1 | v4.2 | v5.2 |
+|---|---|---|---|---|
+| **Primary:** AUROC of P(B) − P(T), B over T (p) | **0.997** (0.0001) | 0.996 | 0.996 | 0.997 |
+| Amendment 1, the log2 scale: AUROC | 0.980 | 0.981 | 0.980 | 0.982 |
+| Best guess, balanced accuracy (B; T) | 85.2 (85.7; 84.6) | 84.6 | 85.3 | 85.9 |
+| The same, on the log2 scale | 86.0 (88.6; 83.3) | 86.1 | 86.0 | 87.2 |
+| Answers committed; correct when committed | 77.0%; 96.5% | 80.4%; 95.8% | 80.4%; 95.8% | 82.4%; 96.7% |
+| The same, on the log2 scale | 68.9%; 95.1% | 68.9%; 95.1% | 68.9%; 95.1% | 74.3%; 93.6% |
+
+- **Baselines,** best-guess balanced accuracy on the same matrices: PCA
+  with kNN 78.5 (75.0 on the log2 scale) and correlation 51.0 (45.7).
+- **By donor status:** v4.1's AUROC is 0.995 among healthy donors and 0.998
+  among ALS patients.
+- **A pass,** for every candidate (p < 0.05).
+
+**What it shows:**
+- On cells whose labels come from sorting, the served model separates B
+  from T almost perfectly, and its best guess names the right lineage for
+  85% of cells (balanced). The best simple baseline gets 78.5. No paired
+  interval was pre-registered, so that gap is described, not tested.
+- The answers it commits to are right 96.5% of the time at the level they
+  state, close to Fulcher's 97.9% (development data).
+- Reading the files on the right scale changes the picture little (AUROC
+  0.980, balanced accuracy 86.0), though fewer answers commit (68.9%).
+- The T cells' best guesses are CD4 T for 56% and CD8 T for 28%. The
+  deposit does not split CD4 from CD8, so this says nothing about that
+  question.
+- **Caveats:** a lineage test only, from one lab; 148 cells; half the
+  donors have ALS.
+- The set is spent, and it is development data from now on.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
