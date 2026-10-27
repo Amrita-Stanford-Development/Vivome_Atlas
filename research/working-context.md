@@ -89,6 +89,11 @@ the run history have the detail.
   (`research/benchmark/protocol-sorted-cd4cd8.md`, amendment 6). Next is the
   bioRxiv preprint, with CD8 T as a stated limitation; posting it needs the
   owner's guide to agree the authors, the affiliation and the timing.
+- **A sealed test with sorting labels, ready** (2026-10-27): PXD064083's
+  single CD3+ T and CD19+ B cells (`research/benchmark/protocol-pxd064083.md`;
+  side-tests amendment 24). The scripts are rehearsed. iProX does not answer
+  from the project's network, so its two search outputs must be fetched by
+  hand (`research/todo.md` has the addresses) before the one scoring.
 - **Open, for the owner:** an organ v4, a blood candidate that changes the
   members or the answer rule, and the DOI. The Google Cloud free trial
   ends about 2027-01-14: "Activate full account" before then.

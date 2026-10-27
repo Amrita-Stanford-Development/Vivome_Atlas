@@ -89,6 +89,8 @@ ALLOWED_MISSING = (
     "research/benchmark/heldout/msv000094189/",  # written once, when the lung's locked test is scored
     "research/benchmark/heldout/pxd042367/",  # written once, when the lymph node's locked test is scored
     "research/benchmark/heldout/pxd052341/",  # written once, when the colon's locked test is scored
+    "research/benchmark/pxd064083/",  # the receipt, written when PXD064083's files arrive (protocol-pxd064083.md)
+    "research/benchmark/heldout/pxd064083/",  # written once, when PXD064083 is scored
 )
 
 # Frozen historical records: their code samples use paths relative to files

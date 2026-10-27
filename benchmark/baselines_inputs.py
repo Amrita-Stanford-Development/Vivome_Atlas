@@ -39,8 +39,10 @@ ADDED = ("scope2_reprocessed",)  # development data added in Track G, Phase 4; c
 SEALED = ("khoury2026",)  # built only at the final v3.1 evaluation (protocol-khoury2026.md)
 SORTED = ("sorted_cd4cd8",)  # the sorted CD4/CD8 test: its intake's matrix (protocol-sorted-cd4cd8.md)
 # The internal held-out test's protein sets and their rehearsals: each intake's
-# matrix (benchmark/heldout_intake.py; protocol-heldout.md)
-HELDOUT = tuple(f"heldout_{s}{suffix}" for s in ("tian", "pxd021882", "pxd043355", "pxd073250", "pxd046211")
+# matrix (benchmark/heldout_intake.py; protocol-heldout.md), and the sorted
+# T-against-B set's (benchmark/pxd064083_intake.py; protocol-pxd064083.md)
+HELDOUT = tuple(f"heldout_{s}{suffix}" for s in ("tian", "pxd021882", "pxd043355", "pxd073250", "pxd046211",
+                                                 "pxd064083")
                 for suffix in ("", "_rehearsal"))
 QUERY_INPUT = {
     "scope2": "SCoPE2 published gene-level matrix, as provided (gene- and cell-centred by its authors, complete)",

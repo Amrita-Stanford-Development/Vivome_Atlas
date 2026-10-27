@@ -312,6 +312,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/model/legacy/v2/shared_genes.csv` — CrossModalNet's 2,903-gene feature space
 - `service/tests/test_organ_heldout.py` — how the organ references' locked-test intakes read sample names (lung populations and donors, colon groups), on invented names
 - `service/tests/test_heldout.py` — the held-out readers, label rules, statistics and guards agree with protocol-heldout.md
+- `service/tests/test_pxd064083.py` — the sorted T-and-B test's label rule, readers (wide and long reports), the merge of its two searches, scoring rules and guards agree with protocol-pxd064083.md
 
 ## benchmark/ — fair comparison harness
 
@@ -376,6 +377,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `benchmark/lung_heldout_score.py` — the lung's locked test's scoring, once: four-lineage balanced accuracy with a within-donor permutation p, and the secondary measures
 - `benchmark/colon_heldout_score.py` — the colon's locked test's scoring, once: five-group balanced accuracy with a within-donor permutation p, and the secondary measures
 - `benchmark/heldout_score.py` — the internal held-out test's scoring, once per protein set: each candidate's primary and secondary measures, and the baselines'
+- `benchmark/pxd064083_intake.py` — the sorted T-and-B test (PXD064083): the hand-fetched files' receipt, the label map from the run names, and the intake, which merges the two lineages' searches into one upload (the genes both report, and the union) and runs every candidate as served; rehearsed on Fulcher 2026 written as two Spectronaut reports
+- `benchmark/pxd064083_score.py` — the sorted T-and-B test's scoring, once: the AUROC of P(B) − P(T), B over T, with its permutation p, and the secondary measures and baselines
 - `benchmark/heldout_hao2021.py` — the internal held-out test's Hao 2021 suite: simulated protein-like uploads of held-out donors, every candidate as served and two baselines, scored once; --rehearse on the development donors
 
 ## scripts/ — build and repository checks
@@ -516,7 +519,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/protocol-fulcher2026.md` — the Fulcher 2026 held-out evaluation protocol, frozen before any scoring: data, models, gate, class mapping, metrics
 - `research/benchmark/protocol-khoury2026.md` — the Khoury 2026 final test set, sealed until its one scoring at the final v3.1 evaluation (2026-10-03): label-free facts recorded at sealing, the protocol and its seven amendments
 - `research/benchmark/protocol-sorted-cd4cd8.md` — the sorted CD4/CD8 test, written before any data: what qualifies, the sealing and intake rules, v4.1 and v5.2 frozen by sha256, the baselines (on each candidate's own reference labels), metrics and decision rules; amendment 6 (2026-10-27): the requests had not been sent, and the labels stay sealed until a candidate improves CD8 T on development data
-- `research/benchmark/side-tests.md` — the public datasets found on 2026-10-14 and their roles since amendment 1 (2026-10-15): development sets, the internal held-out test (locked until the end), and the alternatives kept unused for future tests; amendment 7 (2026-10-18) sets the colon reference's data
+- `research/benchmark/side-tests.md` — the public datasets found on 2026-10-14 and their roles since amendment 1 (2026-10-15): development sets, the internal held-out test (locked until the end), and the alternatives kept unused for future tests; amendment 7 (2026-10-18) sets the colon reference's data; amendment 24 (2026-10-27) makes PXD064083 a sealed test of sorted single T and B cells
 - `research/benchmark/protocol-ln-pxd042367.md` — the lymph node reference's locked test (PXD042367's tonsil niches, one section), written from PRIDE's listing and the paper before any of its files was downloaded
 - `research/benchmark/protocol-lung-msv000094189.md` — the lung reference's locked test (MSV000094189, sorted lineage pools of 11 pediatric donors), written from MassIVE's file listing and the paper before any of its files was downloaded
 - `research/benchmark/protocol-colon-pxd052341.md` — the colon reference's locked test (PXD052341, Post 2025, pooled cell types of normal colon), written from PRIDE's file listing and the paper before any of its files was downloaded: inclusion, the five groups, the primary, the unsealing order
@@ -913,6 +916,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/protocol-heldout-hao2021.md` — the internal held-out test's protocol for Hao 2021's held-out donors, written before any of their cells was read, with its rehearsal
 - `research/benchmark/heldout/rehearsals/*.json` — each protein set's rehearsal on development or synthetic data (benchmark/heldout_score.py --rehearse)
 - `research/benchmark/heldout/rehearsals/hao2021.json` — the Hao suite's rehearsal on donors P1 to P4 (benchmark/heldout_hao2021.py --rehearse)
+- `research/benchmark/protocol-pxd064083.md` — the sorted T-and-B test's protocol (PXD064083, single CD3+ T and CD19+ B cells), written before any of its data files was downloaded: the receipt, the label rule, the merge of its two searches, AUROC of P(B) − P(T) as the primary, and the rehearsal on Fulcher 2026
+- `research/benchmark/heldout/rehearsals/pxd064083.json` — that test's rehearsal on Fulcher 2026's B and T cells written as two Spectronaut reports (benchmark/pxd064083_score.py --rehearse)
 - `research/benchmark/heldout/*/summary.json` — the internal held-out test's results, one per set (tian, pxd021882, pxd043355, pxd073250, pxd046211, hao2021): every candidate's primary and secondary measures, the baselines', void reasons
 - `research/benchmark/heldout/*/scores.csv` — each scored protein set's per-sample scores and labels
 - `research/notebooks/v52_labels.py` — v5.2: a classifier trained on Hao et al. 2021's labels (GEO GSE164378, in `data/incoming/Hao2021/`) moves Tabula Sapiens cells between the CD4 and CD8 T lineages, behind a donor-held-out gate; its amendment (threshold 0.95) in the docstring

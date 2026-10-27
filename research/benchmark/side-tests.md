@@ -441,6 +441,25 @@ calibrates them:
   passed, the out-of-reference AUROC among them (0.7679, bar 0.7598).
   v5.5 stays refused and is not a sorted-test candidate.
 
+### Amendment 24, 2026-10-27: PXD064083, a sealed test of sorted single T and B cells (the owner's go-ahead)
+
+The sorted CD4/CD8 test no longer blocks the preprint
+(`research/benchmark/protocol-sorted-cd4cd8.md`, amendment 6), and the
+paper's test labels so far come from clustering the protein data. So the
+owner chose (2026-10-27) to use a public set whose labels come from cell
+isolation:
+- **PXD064083** (iProX IPX0011993000): single CD3+ T and CD19+ B cells from
+  the blood of ALS patients and healthy controls, timsTOF DIA-PASEF, each
+  lineage searched apart (`SEARCH_T.xlsx`, `SEARCH_B.xlsx`). **A sealed
+  test,** scored once, by `research/benchmark/protocol-pxd064083.md`, at the
+  lineage level only.
+- **What was seen before the protocol:** the record and its file list, whose
+  run names carry the lineage, donor and replicate (the list was printed on
+  2026-10-21 and 2026-10-27). No data file has been downloaded.
+- **Not reachable from here:** iProX times out on this network, so the two
+  files come by hand, and their sha256 is recorded on receipt.
+- Once scored, it becomes development data, as every spent test does.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
@@ -454,8 +473,9 @@ comes from here. Keep this list current.
   Krisp et al. (sorted CD4, CD8, CD19, CD14 single cells; the main test) and
   O'Connor et al. (sorted T, B, NK, monocytes).
 - **Public, unopened, candidate tests (amendment 19):** MSV000102427
-  (FACS-sorted bone-marrow CD4 and CD8 T cells, B and myeloid cells) and
-  PXD064083 (single CD3+ T and CD19+ B cells).
+  (FACS-sorted bone-marrow CD4 and CD8 T cells, B and myeloid cells).
+  PXD064083 (single CD3+ T and CD19+ B cells) is now a sealed test
+  (amendment 24).
 - **Data requests not yet made:** Brenes et al. (sorted blood neutrophils) and
   Lange et al. (CD19-sorted B cells); for the organs, the Schiller lab (135
   histology-defined airway regions), Leiden University Medical Center (van

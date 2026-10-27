@@ -1,0 +1,376 @@
+{
+  "set": "pxd064083",
+  "protocol": "research/benchmark/protocol-pxd064083.md",
+  "rehearsal": true,
+  "statement": "Single T and B cells isolated by their surface markers (CD3, CD19), so the labels are independent of the protein data. One lab, one search per lineage, blood of ALS patients and healthy controls; a T-against-B lineage test, not a test of finer types.",
+  "headline": "v4.1",
+  "label_map_sha256": "1f591aa205cd0afb0ea3969801d37e16674f48363252fab741f316d2f6947498",
+  "intake_source": {
+    "dataset": "Fulcher 2026 (development): B and T cells as two Spectronaut pivot reports",
+    "files_sha256": {
+      "SEARCH_T.xlsx": "338e3d7c3a946798df2fb08e7b53578d98ff3bf435c220445bfab3a9e9d63164",
+      "SEARCH_B.xlsx": "0ed2c79aa921b52ac9cf0ff96b59aefaf4d7fbe2f44c02c368e6660c0c540355"
+    },
+    "joint_search": null,
+    "excluded_runs": [],
+    "runs_per_table": {
+      "T": 489,
+      "B": 102
+    }
+  },
+  "cells": {
+    "B": 102,
+    "T": 489
+  },
+  "donors": {
+    "B": 2,
+    "T": 2
+  },
+  "merge": {
+    "tables_used": [
+      "T",
+      "B"
+    ],
+    "scales": {
+      "T": "linear",
+      "B": "linear"
+    },
+    "genes_reported": {
+      "T": 1660,
+      "B": 1599
+    },
+    "genes_in_both": 1599,
+    "genes_in_either": 1660,
+    "feature_genes_in_both": 1593,
+    "feature_genes_in_either": 1653
+  },
+  "candidates": {
+    "v3.1": {
+      "primary": {
+        "statistic": "AUROC of S = P(B) - P(CD4T or CD8T), B over T, the genes both searches report",
+        "auroc": 0.9568,
+        "p": 0.0001,
+        "n_b": 102,
+        "n_t": 489,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "auroc_union": {
+          "auroc": 0.957,
+          "p": 0.0001,
+          "n_b": 102,
+          "n_t": 489,
+          "void": false
+        },
+        "auroc_by_status": {
+          "ALS": {
+            "auroc": 0.9521,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 245,
+            "void": false
+          },
+          "HC": {
+            "auroc": 0.9614,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 244,
+            "void": false
+          }
+        },
+        "best_guess_balanced_accuracy": 70.05,
+        "best_guess_right_pct": {
+          "B": 85.3,
+          "T": 54.8
+        },
+        "best_guess_coarse_pct": {
+          "B": {
+            "B": 85.3,
+            "monocyte": 6.9,
+            "other": 4.9,
+            "DC": 2.0,
+            "CD4T": 1.0
+          },
+          "T": {
+            "CD4T": 31.5,
+            "other": 18.8,
+            "CD8T": 16.8,
+            "monocyte": 12.7,
+            "B": 9.8,
+            "NK": 5.5,
+            "DC": 4.9
+          }
+        },
+        "abstained_pct": {
+          "B": 56.9,
+          "T": 51.3
+        },
+        "answers_committed_pct": 47.72,
+        "answers_correct_when_committed_pct": 77.3,
+        "answer_level_pct": {
+          "lineage": 48.9,
+          "group": 37.9,
+          "class": 13.1
+        },
+        "union_best_guess_balanced_accuracy": 70.05
+      }
+    },
+    "v4.1": {
+      "primary": {
+        "statistic": "AUROC of S = P(B) - P(CD4T or CD8T), B over T, the genes both searches report",
+        "auroc": 0.9501,
+        "p": 0.0001,
+        "n_b": 102,
+        "n_t": 489,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "auroc_union": {
+          "auroc": 0.9503,
+          "p": 0.0001,
+          "n_b": 102,
+          "n_t": 489,
+          "void": false
+        },
+        "auroc_by_status": {
+          "ALS": {
+            "auroc": 0.947,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 245,
+            "void": false
+          },
+          "HC": {
+            "auroc": 0.9525,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 244,
+            "void": false
+          }
+        },
+        "best_guess_balanced_accuracy": 70.99,
+        "best_guess_right_pct": {
+          "B": 84.3,
+          "T": 57.7
+        },
+        "best_guess_coarse_pct": {
+          "B": {
+            "B": 84.3,
+            "monocyte": 7.8,
+            "other": 3.9,
+            "DC": 2.9,
+            "CD4T": 1.0
+          },
+          "T": {
+            "CD4T": 33.3,
+            "other": 18.2,
+            "CD8T": 15.3,
+            "monocyte": 12.7,
+            "B": 10.2,
+            "DC": 5.1,
+            "NK": 5.1
+          }
+        },
+        "abstained_pct": {
+          "B": 56.9,
+          "T": 51.5
+        },
+        "answers_committed_pct": 47.55,
+        "answers_correct_when_committed_pct": 77.58,
+        "answer_level_pct": {
+          "lineage": 49.1,
+          "group": 37.7,
+          "class": 13.2
+        },
+        "union_best_guess_balanced_accuracy": 70.68
+      }
+    },
+    "v4.2": {
+      "primary": {
+        "statistic": "AUROC of S = P(B) - P(CD4T or CD8T), B over T, the genes both searches report",
+        "auroc": 0.9501,
+        "p": 0.0001,
+        "n_b": 102,
+        "n_t": 489,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "auroc_union": {
+          "auroc": 0.9503,
+          "p": 0.0001,
+          "n_b": 102,
+          "n_t": 489,
+          "void": false
+        },
+        "auroc_by_status": {
+          "ALS": {
+            "auroc": 0.947,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 245,
+            "void": false
+          },
+          "HC": {
+            "auroc": 0.9525,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 244,
+            "void": false
+          }
+        },
+        "best_guess_balanced_accuracy": 70.99,
+        "best_guess_right_pct": {
+          "B": 84.3,
+          "T": 57.7
+        },
+        "best_guess_coarse_pct": {
+          "B": {
+            "B": 84.3,
+            "monocyte": 7.8,
+            "other": 3.9,
+            "DC": 2.9,
+            "CD4T": 1.0
+          },
+          "T": {
+            "CD4T": 33.3,
+            "other": 18.2,
+            "CD8T": 15.3,
+            "monocyte": 12.7,
+            "B": 10.2,
+            "DC": 5.1,
+            "NK": 5.1
+          }
+        },
+        "abstained_pct": {
+          "B": 56.9,
+          "T": 51.5
+        },
+        "answers_committed_pct": 47.55,
+        "answers_correct_when_committed_pct": 77.58,
+        "answer_level_pct": {
+          "lineage": 49.1,
+          "group": 37.7,
+          "class": 13.2
+        },
+        "union_best_guess_balanced_accuracy": 70.68
+      }
+    },
+    "v5.2": {
+      "primary": {
+        "statistic": "AUROC of S = P(B) - P(CD4T or CD8T), B over T, the genes both searches report",
+        "auroc": 0.9509,
+        "p": 0.0001,
+        "n_b": 102,
+        "n_t": 489,
+        "void": false,
+        "pass": true
+      },
+      "secondary": {
+        "auroc_union": {
+          "auroc": 0.9511,
+          "p": 0.0001,
+          "n_b": 102,
+          "n_t": 489,
+          "void": false
+        },
+        "auroc_by_status": {
+          "ALS": {
+            "auroc": 0.946,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 245,
+            "void": false
+          },
+          "HC": {
+            "auroc": 0.9561,
+            "p": 0.0001,
+            "n_b": 51,
+            "n_t": 244,
+            "void": false
+          }
+        },
+        "best_guess_balanced_accuracy": 63.98,
+        "best_guess_right_pct": {
+          "B": 77.5,
+          "T": 50.5
+        },
+        "best_guess_coarse_pct": {
+          "B": {
+            "B": 77.5,
+            "monocyte": 12.7,
+            "DC": 7.8,
+            "other": 1.0,
+            "CD8T": 1.0
+          },
+          "T": {
+            "CD8T": 30.5,
+            "CD4T": 20.0,
+            "other": 14.7,
+            "monocyte": 12.9,
+            "B": 10.2,
+            "NK": 7.2,
+            "DC": 4.5
+          }
+        },
+        "abstained_pct": {
+          "B": 46.1,
+          "T": 46.6
+        },
+        "answers_committed_pct": 53.47,
+        "answers_correct_when_committed_pct": 61.08,
+        "answer_level_pct": {
+          "lineage": 47.5,
+          "group": 33.9,
+          "class": 18.7
+        },
+        "union_best_guess_balanced_accuracy": 64.08
+      }
+    }
+  },
+  "baselines_secondary": {
+    "correlation": {
+      "balanced_accuracy": 35.72,
+      "coarse_pct": {
+        "B": {
+          "B": 41.2,
+          "other": 35.3,
+          "DC": 18.6,
+          "monocyte": 3.9,
+          "CD4T": 1.0
+        },
+        "T": {
+          "other": 39.3,
+          "CD4T": 25.4,
+          "monocyte": 18.0,
+          "B": 5.9,
+          "DC": 4.9,
+          "NK": 3.9,
+          "CD8T": 2.7
+        }
+      }
+    },
+    "pca": {
+      "balanced_accuracy": 55.76,
+      "coarse_pct": {
+        "B": {
+          "B": 51.0,
+          "other": 31.4,
+          "DC": 16.7,
+          "CD4T": 1.0
+        },
+        "T": {
+          "CD4T": 51.1,
+          "other": 26.2,
+          "CD8T": 8.6,
+          "B": 7.8,
+          "NK": 4.7,
+          "DC": 1.2,
+          "monocyte": 0.4
+        }
+      }
+    }
+  }
+}
