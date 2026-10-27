@@ -917,6 +917,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/benchmark/heldout/rehearsals/*.json` — each protein set's rehearsal on development or synthetic data (benchmark/heldout_score.py --rehearse)
 - `research/benchmark/heldout/rehearsals/hao2021.json` — the Hao suite's rehearsal on donors P1 to P4 (benchmark/heldout_hao2021.py --rehearse)
 - `research/benchmark/protocol-pxd064083.md` — the sorted T-and-B test's protocol (PXD064083, single CD3+ T and CD19+ B cells), written before any of its data files was downloaded: the receipt, the label rule, the merge of its two searches, AUROC of P(B) − P(T) as the primary, and the rehearsal on Fulcher 2026
+- `research/benchmark/pxd064083/receipt.json` — that test's two search outputs, fetched by hand from iProX: their sha256 and size, recorded on receipt before anything read them (benchmark/pxd064083_intake.py --receive)
 - `research/benchmark/heldout/rehearsals/pxd064083.json` — that test's rehearsal on Fulcher 2026's B and T cells written as two Spectronaut reports (benchmark/pxd064083_score.py --rehearse)
 - `research/benchmark/heldout/*/summary.json` — the internal held-out test's results, one per set (tian, pxd021882, pxd043355, pxd073250, pxd046211, hao2021): every candidate's primary and secondary measures, the baselines', void reasons
 - `research/benchmark/heldout/*/scores.csv` — each scored protein set's per-sample scores and labels

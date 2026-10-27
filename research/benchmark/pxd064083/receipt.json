@@ -1,0 +1,14 @@
+{
+  "received": "2026-10-27",
+  "source": "iProX IPX0011993000, by hand",
+  "files": {
+    "SEARCH_T.xlsx": {
+      "sha256": "6b264da4decac89e2249e3e7e19033f5e37f7575b047dab453e07443ce7cfa03",
+      "bytes": 1914695
+    },
+    "SEARCH_B.xlsx": {
+      "sha256": "41fc7b0b19928616411de79973671829db9498ff4aa2ef2f298fbdd337dfc3f5",
+      "bytes": 1681149
+    }
+  }
+}
