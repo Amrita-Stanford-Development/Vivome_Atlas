@@ -34,6 +34,30 @@ class ProteinQueryTests(unittest.TestCase):
         np.testing.assert_allclose(values[:2, 0], (cd8a - cd8a.mean()) / (cd8a.std() + 1e-8))
         self.assertTrue((values[:, 2] == 0).all())
 
+    def test_it_reads_the_table_as_stage_0_decided(self):
+        """fusion.project passes Stage 0's value scale, so a stated linear
+        reading reaches the protein query too: it reads the table as Stage 0's
+        log2 values, a 0 missing (research/value-scale-plan.md, Phase A)."""
+        raw = alignment.RawMatrix(gene_names=["CD8A", "GNLY"], cell_ids=["a", "b", "c"],
+                                  values=np.array([[2.0, 8.0, 0.0], [4.0, 16.0, 64.0]], dtype=np.float32))
+        genes = ("CD8A", "GNLY")
+        log2, scale = alignment.detect_and_transform_value_scale(raw.values, stated="linear")
+        self.assertEqual(scale.detected, "log", "the rule reads these small values as log")
+        values, mask = fusion.protein_query(raw, genes, scale)
+        expected = fusion.protein_query(alignment.RawMatrix(raw.gene_names, raw.cell_ids, log2), genes)
+        np.testing.assert_array_equal(values, expected[0])
+        np.testing.assert_array_equal(mask, expected[1])
+        self.assertEqual(mask[2, 0], 0, "the 0 is missing under a linear reading")
+        self.assertEqual(fusion.protein_query(raw, genes)[1][2, 0], 1, "and measured under the rule's log reading")
+
+    def test_stage_0_s_automatic_scale_gives_exactly_the_values_it_gave_before(self):
+        raw = _load_pbmc240_50()  # float32, read linear: log2 must be taken in float32 as Stage 0 takes it
+        raw = alignment.RawMatrix(raw.gene_names, raw.cell_ids, np.where(raw.values > 3e4, np.inf, raw.values))
+        genes = tuple(fusion.first_symbol(g) for g in raw.gene_names[:400])
+        _, scale = alignment.detect_and_transform_value_scale(raw.values)
+        for got, before in zip(fusion.protein_query(raw, genes, scale), fusion.protein_query(raw, genes)):
+            np.testing.assert_array_equal(got, before)
+
 
 
 class V42ServiceTests(unittest.TestCase):

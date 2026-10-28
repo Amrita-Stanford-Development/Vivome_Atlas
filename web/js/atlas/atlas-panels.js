@@ -7,7 +7,7 @@
 // here computes one beyond counting.
 
 import { PENDING_LABEL, formatCount } from '../manifest.js';
-import { escapeHtml } from '../panels.js';
+import { escapeHtml, valueScaleText } from '../panels.js';
 import {
   ANSWERED, OUTCOME_CHIPS, OUTCOME_NOTES, OUTCOME_ORDER, answerSentence, formatRecord, guessText, plainName,
 } from '../workflow-data.js';
@@ -134,9 +134,25 @@ function secondOpinionLine(receipt, whose) {
   return pending;
 }
 
+// The visitor's choice for the values, in the words of atlas.html's #value-scale.
+const SCALE_ASKED = { linear: 'Raw intensities', log: 'Already log' };
+
+// How the values were read; a reading the visitor chose that the reply does
+// not name (a service from before the choice existed) is said, not hidden.
+function scaleLine(receipt) {
+  const read = valueScaleText(receipt.scale);
+  if (!read) return pending;
+  const asked = SCALE_ASKED[receipt.scaleAsked];
+  if (asked && !receipt.scale?.stated) {
+    return e(`${read}. This service did not take your choice (${asked}): it read the values on its own.`);
+  }
+  return e(read);
+}
+
 // What came back for a file (answers.js, receiptFromResponse or
 // receiptFromWorkflow): how many cells, how many genes matched the shared
-// list, whether the second opinion was used, and which model answered.
+// list, how the values were read, whether the second opinion was used, and
+// which model answered.
 // A folding card: the line says whose file, how many cells and which model;
 // opened, the numbers. `open` while the landing plays, folded after.
 export function buildReceipt(receipt, { open = true } = {}) {
@@ -152,6 +168,7 @@ export function buildReceipt(receipt, { open = true } = {}) {
     + `<dl class="atlas-receipt">`
     + field('Cells', count(r.cells))
     + field('Genes matched', genes)
+    + field('Values', scaleLine(r))
     + field('Second opinion', secondOpinionLine(r, whose))
     + field('Model', text(r.model))
     + `</dl>`

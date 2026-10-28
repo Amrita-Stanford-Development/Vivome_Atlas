@@ -102,9 +102,23 @@ test('the receipt shows the service’s numbers, and Pending for what is missing
   assert.ok(!live.includes('no file was sent'));
   for (const empty of [{}, null, undefined, receiptFromResponse({})]) {
     const html = clean(buildReceipt(empty));
-    assert.equal((html.match(/Pending/g) ?? []).length, 4, html);
+    assert.equal((html.match(/Pending/g) ?? []).length, 5, html);
     assert.match(html, /<summary>Your file<\/summary>/, 'the folded line leaves out what is missing');
   }
+});
+
+test('the receipt says how the values were read', () => {
+  assert.match(clean(buildReceipt(receiptFromWorkflow(workflow))), /Values<\/dt><dd>Linear intensities, log2-transformed</);
+  const stated = { detected: 'log', transformed: true, stated: 'linear' };
+  const live = clean(buildReceipt(receiptFromResponse({ n_cells: 5, value_scale: stated }, { scaleAsked: 'linear' })));
+  assert.match(live, /Linear intensities, log2-transformed\. You chose this; on its own the service reads them as already on a log scale\./);
+  assert.ok(!live.includes('did not take'));
+});
+
+test('the receipt warns when the service did not take the visitor’s reading', () => {
+  const older = { detected: 'log', transformed: false };  // a service from before value_scale existed
+  const html = clean(buildReceipt(receiptFromResponse({ n_cells: 5, value_scale: older }, { scaleAsked: 'linear' })));
+  assert.match(html, /Already on a log scale\. This service did not take your choice \(Raw intensities\): it read the values on its own\./);
 });
 
 test('the receipt folds to one line: whose file, how many cells, which model', () => {

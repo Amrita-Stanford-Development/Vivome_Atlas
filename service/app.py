@@ -111,6 +111,25 @@ def _parse_bool_field(value: bytes | None) -> bool:
     raise ValueError(f"restrict_to_supported_classes must be true or false, got {text!r}")
 
 
+VALUE_SCALE_CHOICES = ("auto", *alignment.READINGS)
+
+
+def _parse_value_scale_field(value: bytes | None, modality: str) -> str | None:
+    """Optional value_scale form field: the upload's scale as the user
+    states it ("linear" or "log"), or None for "auto", empty or absent,
+    which leaves it to Stage 0's rule. Protein only: an RNA upload's scale is
+    always read by the rule."""
+    text = (value or b"").decode("utf-8").strip().lower()
+    if text in ("", "auto"):
+        return None
+    if text not in alignment.READINGS:
+        raise ValueError(f"value_scale must be one of {', '.join(VALUE_SCALE_CHOICES)}, got {text!r}")
+    if modality != "prot":
+        raise ValueError("value_scale can be stated only for a protein upload; an RNA upload's scale is read "
+                         "by the service (send auto, or leave the field out)")
+    return text
+
+
 def _decode_matrix(data: bytes) -> str:
     """The matrix file's text. UTF-8 (a byte order mark is left for the
     parser), UTF-16 with its byte order mark (Excel's "Unicode Text"), or
@@ -249,6 +268,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             "limits": {"max_cells": config.MAX_UPLOAD_CELLS,
                        "max_upload_mb": round(config.MAX_UPLOAD_BYTES / 2**20, 1),
                        "concurrent_projections": max(1, config.MAX_CONCURRENT_PROJECTIONS)},
+            "value_scale": {"choices": list(VALUE_SCALE_CHOICES), "modalities": ["prot"]},
         })
 
     def do_POST(self) -> None:  # noqa: N802 (stdlib naming)
@@ -287,6 +307,11 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             modality = fields["modality"].decode("utf-8")
             if modality not in ("rna", "prot"):
                 self._send_json(400, {"error": f"modality must be 'rna' or 'prot', got {modality!r}"})
+                return
+            try:
+                stated_scale = _parse_value_scale_field(fields.get("value_scale"), modality)
+            except ValueError as exc:
+                self._send_json(400, {"error": str(exc)})
                 return
             matrix_text = _decode_matrix(fields["matrix"])
             # Restricted mode was retired (owner, 2026-10-21): every label is
@@ -346,7 +371,12 @@ class ProjectionHandler(BaseHTTPRequestHandler):
                 return
 
             try:
-                result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality)
+                result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality,
+                                                 stated_scale=stated_scale)
+            except alignment.NotIntensities as exc:  # a linear reading stated for a log or centred table
+                self._send_json(400, {"error": str(exc), "reason": "Send it with value_scale auto or log (on the Atlas "
+                                                                   "page, Automatic or Already log)."})
+                return
             except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
                 logger.exception("projection failed")
                 self._send_json(400, {"error": "could not process the submitted matrix"})

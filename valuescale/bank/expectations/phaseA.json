@@ -1,0 +1,48 @@
+{
+  "step": "phaseA",
+  "written": "2026-10-28, before Phase A's service change was made and before its diagnostics ran",
+  "about": "What Phase A's diagnostics must show (research/value-scale-plan.md, Phase A): the request may state the scale (value_scale = auto, linear or log), the reply says how the file was read, and the automatic reading is unchanged. Not edited after the run: a difference is explained in the report.",
+  "tables": "every bank table Step 1's D3 traced, on the same cells (a table above 2,000 cells drawn with the same seed); the tables the service refuses for fewer than 20 cells stay refused under every reading",
+  "pipeline": "v4.1, modality prot, pipeline.run_projection, as D3",
+  "A0_baseline": "run on the code before the change: the full reply of every traced table, as canonical JSON (keys sorted), and its sha256",
+  "A1_automatic_unchanged": {
+    "every_table": [
+      "the reply with no stated scale has the same sha256 as the baseline's",
+      "its value_scale has exactly the keys detected and transformed (no stated)",
+      "its summary (value scale, cells, genes matched, label levels, abstention reasons, top labels) equals D3's in research/notebook-outputs/value_scale_step1/report.json"
+    ]
+  },
+  "A2_stated_reading": {
+    "every_table_and_reading": [
+      "value_scale.detected is the automatic rule's reading (unchanged by the stated one)",
+      "value_scale.stated is the stated reading",
+      "value_scale.transformed is true exactly when the stated reading is linear"
+    ],
+    "same_as_automatic": "when the stated reading equals the automatic one, the reply equals the automatic reply in every field except value_scale.stated",
+    "refused": "a linear reading of a table with any negative value is refused with an error that names the negatives; in the bank these are scope2_export, furtwangler_log2fc_nan and cptac_ccrcc_tumor (D1's negative shares 0.50, 0.15 and 0.34). A log reading of them is not refused.",
+    "refused_linear_tables": ["scope2_export", "furtwangler_log2fc_nan", "cptac_ccrcc_tumor"]
+  },
+  "A3_invariants_under_each_reading": [
+    "no +-inf after Stage 0",
+    "under a linear reading, the values Stage 0 makes missing equal the zeros and infinities in the parsed table",
+    "under a log reading, Stage 0 makes missing only the infinities",
+    "mask sum equals the observed values in the matched genes after duplicates are merged",
+    "each z-scored gene's observed values have mean 0 and SD 1 (to 1e-4), or are all 0 for a constant gene",
+    "the encoder input (smoothed values and mask) is finite",
+    "the v4.2-style protein query (fusion.protein_query) reads the table the same way as Stage 0",
+    "every cell has a label or an abstention reason"
+  ],
+  "A4_answers_by_reading": "reported, not judged: per table, the cells whose answer (label, or abstention reason) differs between the linear and the log reading, and the answered count under each. Expected to differ most on the six linear tables today's rule reads as log (pxd064083_t, pxd064083_b, msv000099294_hmc3, msv000099294_microglia, furtwangler_batchcorr, furtwangler_batchcorr_norm), whose stated linear reading is the right one",
+  "A5_through_the_app": {
+    "tables": ["pbmc240_diann", "khoury_column_normalized", "scope2_export"],
+    "requests": "service.app's handler in an in-process server, the request the site sends: value_scale absent, auto, linear and log",
+    "expect": [
+      "a 200 reply equals pipeline.run_projection's for the same reading, apart from the app's warnings",
+      "absent and auto give the same reply",
+      "scope2_export with linear is answered 400, and the error names the negative values",
+      "modality rna with linear or log is answered 400 (the stated scale is for protein uploads)",
+      "an unknown value (for example raw) is answered 400, and the error names auto, linear and log",
+      "GET /api/status lists auto, linear and log"
+    ]
+  }
+}

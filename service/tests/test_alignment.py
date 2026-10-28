@@ -464,6 +464,77 @@ class DetectAndTransformValueScaleTests(unittest.TestCase):
         np.testing.assert_allclose(transformed_linear, log_values, atol=1e-5)
 
 
+class StatedValueScaleTests(unittest.TestCase):
+    """A request may state the reading (research/value-scale-plan.md, Phase A):
+    the stated reading is applied, the rule's own reading is still reported,
+    and a call that states nothing is unchanged."""
+
+    # PXD064083-like: linear, but its non-zero median is below the rule's 50
+    SMALL_LINEAR = np.array([[0.0, 3.0, 7.0, 211.0], [5.0, 0.0, 9.0, 12.0]], dtype=np.float32)
+
+    def test_a_stated_linear_reading_takes_log2_where_the_rule_reads_log(self):
+        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="linear")
+        self.assertEqual((scale.detected, scale.transformed, scale.stated), ("log", True, "linear"))
+        nonzero = self.SMALL_LINEAR != 0
+        np.testing.assert_allclose(out[nonzero], np.log2(self.SMALL_LINEAR[nonzero]))
+        self.assertTrue(np.isnan(out[~nonzero]).all(), "under a linear reading a 0 is not detected")
+
+    def test_a_stated_log_reading_leaves_a_linear_looking_table_as_it_is(self):
+        raw = np.array([[100.0, 4000.0, 20000.0]], dtype=np.float32)
+        out, scale = alignment.detect_and_transform_value_scale(raw, stated="log")
+        self.assertEqual((scale.detected, scale.transformed, scale.stated), ("linear", False, "log"))
+        np.testing.assert_array_equal(out, raw)
+
+    def test_stating_the_rule_s_own_reading_gives_the_same_values(self):
+        for raw in (np.array([[100.0, 0.0, 20000.0]]), np.array([[1.0, 2.0, -3.0]])):
+            auto_out, auto = alignment.detect_and_transform_value_scale(raw)
+            out, scale = alignment.detect_and_transform_value_scale(raw, stated=auto.detected)
+            np.testing.assert_array_equal(out, auto_out)
+            self.assertEqual((scale.detected, scale.transformed), (auto.detected, auto.transformed))
+
+    def test_a_linear_reading_of_negative_values_is_refused(self):
+        with self.assertRaisesRegex(ValueError, "negative"):
+            alignment.detect_and_transform_value_scale(np.array([[-5.0, 4000.0]]), stated="linear")
+
+    def test_an_unknown_reading_is_refused(self):
+        with self.assertRaisesRegex(ValueError, "linear.*log"):
+            alignment.detect_and_transform_value_scale(np.array([[1.0]]), stated="raw")
+
+    def test_infinities_are_missing_under_a_stated_reading_too(self):
+        raw = np.array([[3.0, -np.inf, 7.0, np.inf]], dtype=np.float32)
+        for stated in ("linear", "log"):
+            with self.subTest(stated=stated):
+                out, _ = alignment.detect_and_transform_value_scale(raw, stated=stated)
+                self.assertTrue(np.isnan(out[0, [1, 3]]).all())
+                self.assertTrue(np.isfinite(out[0, [0, 2]]).all())
+
+    def test_a_table_with_no_observed_value_stays_unknown(self):
+        _, scale = alignment.detect_and_transform_value_scale(np.array([[np.nan, np.nan]]), stated="linear")
+        self.assertEqual((scale.detected, scale.transformed, scale.stated), ("unknown", False, "linear"))
+
+    def test_the_reply_names_the_stated_reading_only_when_one_was_stated(self):
+        values = np.array([[1.0, 2.0]])
+        _, auto = alignment.detect_and_transform_value_scale(values)
+        self.assertEqual(auto.response(), {"detected": "log", "transformed": False})
+        _, stated = alignment.detect_and_transform_value_scale(values, stated="linear")
+        self.assertEqual(stated.response(), {"detected": "log", "transformed": True, "stated": "linear"})
+
+    def test_the_rule_and_the_reading_are_separate_steps(self):
+        values = self.SMALL_LINEAR
+        self.assertEqual(alignment.median_rule(values), "log")
+        self.assertEqual(alignment.median_rule(values * 1000), "linear")
+        self.assertEqual(alignment.median_rule(np.full((2, 2), np.nan)), "unknown")
+        np.testing.assert_array_equal(alignment.apply_reading(values, "log"), values)
+        self.assertTrue(np.isnan(alignment.apply_reading(values, "linear")[values == 0]).all())
+
+    def test_a_value_scale_built_without_a_stated_reading_still_works(self):
+        """benchmark/v31_dev_gate.py builds ValueScale(detected=..., transformed=...)."""
+        scale = alignment.ValueScale("log", False)
+        self.assertIsNone(scale.stated)
+        self.assertEqual(scale.reading, "log")
+        self.assertEqual(alignment.ValueScale("log", True, "linear").reading, "linear")
+
+
 if __name__ == "__main__":
     unittest.main()
 

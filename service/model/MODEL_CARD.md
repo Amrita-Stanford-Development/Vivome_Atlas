@@ -253,10 +253,15 @@ committed before any data file was read, and the set was scored once
    table linear only when its non-zero median is above 50
    (`config.LINEAR_SCALE_MEDIAN_THRESHOLD`). PXD064083's linear values
    (median about 7, up to 211,000) were read as log: no log2 was taken,
-   and zeros counted as measured. v4.1 still told T from B there (above),
-   but such a table is not read as intended: take its log2 before
-   uploading, and leave each 0 empty (not detected). The fix is open in
-   `research/todo.md`.
+   and zeros counted as measured. The diagnostic bank found the same on
+   MSV000099294's single cells and Furtwangler 2025's TMT signal-to-noise
+   tables: 6 of its 28 linear tables
+   (`research/notebook-outputs/value_scale_step1/`). v4.1 still told T
+   from B on PXD064083 (above), but such a table is not read as intended.
+   Send it as raw intensities (the request's `value_scale` `"linear"`; on
+   the Atlas page, Values: Raw intensities), or take its log2 before
+   uploading and leave each 0 empty (not detected). A detector with a
+   measured error rate is being built (`research/value-scale-plan.md`).
 
 ## v3.1: the T1 NB2 ensemble
 

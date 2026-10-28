@@ -24,12 +24,15 @@ Content-Type: multipart/form-data
 
   modality                      : "rna" | "prot"
   matrix                        : CSV or TSV (auto-detected), features in rows, cells in columns
+  value_scale                   : optional, protein only: "auto" (or no field) | "linear" | "log"
   restrict_to_supported_classes : retired; "true" is answered 400
 ```
 
 **`modality`** says what the matrix measures:
 - **`"prot"`:** protein intensities, linear or log. A linear upload is
-  found and log2-transformed (`value_scale` in the response).
+  found and log2-transformed (`value_scale` in the response). The rule
+  reads a linear table on a small scale (non-zero median under 50) as log;
+  the request can say so instead (`value_scale`, below).
 - **`"rna"`:** expects log-normalised expression, as the reference's own RNA
   is (the atlas h5ad's `X`, log1p of normalised counts). In RNA a 0 is a
   measured value, so it votes on the scale. Raw counts are usually not
@@ -39,6 +42,19 @@ Content-Type: multipart/form-data
   - every 0 counts as a measured value.
 
   Normalise and log1p counts before uploading.
+
+**`value_scale`** states a protein upload's scale, instead of leaving it to
+the rule (`research/value-scale-plan.md`, Phase A):
+- **`"auto"`, empty or no field:** the rule reads it, as always; the reply
+  is unchanged.
+- **`"linear"`:** raw intensities: each 0 is made missing and log2 is taken
+  of the rest. A table with a negative value is answered 400 (no intensity
+  is negative), with a `reason`.
+- **`"log"`:** already log: the values are used as they are.
+
+Any other value is answered 400 naming the three, and so is `"linear"` or
+`"log"` with `modality` `"rna"` (an RNA upload's scale is always read by the
+rule). The response's `value_scale` then also carries `stated`.
 
 **`restrict_to_supported_classes` is retired** (the owner, 2026-10-21).
 Every label is chosen among all 22 reference classes. `"true"` is answered
@@ -132,7 +148,8 @@ read as missing.
   "n_cells"              : "<int>",
   "n_features_matched"   : "<int>",
   "n_features_unmatched" : "<int>",
-  "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>"},
+  "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>",
+                            "stated": "linear" | "log" (only when the request stated one)},
   "label_space"          : {"restricted_to_supported_classes": "<bool>", "candidate_classes": ["<string>", "..."]},
   "gene_id_resolution"   : {"matched": "<int>", "unmapped": "<int>", "ambiguous": "<int>",
                             "unmapped_identifiers": ["<string>", "..."], "ambiguous_identifiers": ["<string>", "..."]},
@@ -160,8 +177,9 @@ read as missing.
 }
 ```
 
-`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version", "pipeline_version", "limits"}`,
-where `limits` is `{"max_cells", "max_upload_mb", "concurrent_projections"}`,
+`GET /api/status` answers `{"status": "ready", "atlas_version", "model_version", "pipeline_version", "limits", "value_scale"}`,
+where `limits` is `{"max_cells", "max_upload_mb", "concurrent_projections"}`
+and `value_scale` is `{"choices": ["auto", "linear", "log"], "modalities": ["prot"]}`,
 or `{"status": "unavailable", "reason"}`:
 - **503** while an artifact is missing or not yet fetched;
 - **500** for any other load error.
@@ -222,7 +240,11 @@ hundreds to tens of thousands) and log2-transformed before anything else
 touched it. `"detected": "log"` means the upload already looked log-scale
 and was left alone; `"unknown"` means the upload had no observed values at
 all. The detection rule and its threshold are in
-`service/model/canonical_preprocessing.json`.
+`service/model/canonical_preprocessing.json`. With a stated reading
+(`value_scale` in the request), `detected` is still the rule's reading,
+`stated` is the request's, and `transformed` follows the stated one: a
+reply with `"detected": "log", "transformed": true, "stated": "linear"` read
+raw intensities the rule would have taken as log.
 
 **`gene_id_resolution`** reports how the upload's own feature identifiers
 (gene symbols, Ensembl gene IDs, UniProt accessions, or a DIA-NN-style

@@ -428,5 +428,27 @@ class AbstainCategoryTests(unittest.TestCase):
             self.assertIn(reason, abstention.CATEGORY_BY_REASON)
 
 
+class StatedValueScaleTests(unittest.TestCase):
+    """A request may state the upload's value scale (research/value-scale-plan.md,
+    Phase A). Every version applies it at Stage 0 and says so in value_scale;
+    stating the rule's own reading changes nothing else in the reply."""
+
+    def test_every_version_applies_and_reports_the_stated_reading(self):
+        raw = _load_pbmc240_50()  # raw DIA-NN intensities: the rule reads linear
+        for version in ("v3", "v3.1", "v4.1", "v4.2"):
+            with self.subTest(version=version):
+                bundle = pipeline.load_bundle(version)
+                reply = lambda **kw: json.loads(json.dumps(pipeline.run_projection(bundle, raw, **kw)))  # noqa: E731
+                auto = reply()
+                same = reply(stated_scale="linear")
+                self.assertEqual(same["value_scale"], {"detected": "linear", "transformed": True, "stated": "linear"})
+                del same["value_scale"]["stated"]
+                self.assertEqual(same, auto)
+                other = reply(stated_scale="log")
+                self.assertEqual(other["value_scale"], {"detected": "linear", "transformed": False, "stated": "log"})
+                self.assertNotEqual([c["coordinates"] for c in other["cells"]],
+                                    [c["coordinates"] for c in auto["cells"]])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -344,16 +344,84 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     return RawMatrix(gene_names=gene_names, cell_ids=cell_ids, values=values)
 
 
+READINGS = ("linear", "log")  # what a request may state (value_scale); "auto" states nothing
+
+
+class NotIntensities(ValueError):
+    """A linear reading was stated for values that cannot be intensities."""
+
+
 @dataclass(frozen=True)
 class ValueScale:
-    detected: str  # "linear" | "log" | "unknown" (no observed values at all)
+    detected: str  # "linear" | "log" | "unknown" (no observed values at all): the rule's reading
     transformed: bool
+    stated: str | None = None  # the reading the request stated, or None when it left it to the rule
+
+    @property
+    def reading(self) -> str:
+        """The reading Stage 0 applied: the stated one, else the rule's."""
+        return self.detected if self.detected == "unknown" or self.stated is None else self.stated
+
+    def response(self) -> dict:
+        """The reply's value_scale. `stated` appears only when a reading was
+        stated, so a reply to a request that states none is unchanged."""
+        out = {"detected": self.detected, "transformed": self.transformed}
+        if self.stated is not None:
+            out["stated"] = self.stated
+        return out
+
+
+def finite_or_missing(values: np.ndarray) -> np.ndarray:
+    """values with +/-inf made missing (NaN), in values' own dtype."""
+    return np.where(np.isfinite(values), values, np.nan).astype(values.dtype, copy=False)
+
+
+def median_rule(
+    values: np.ndarray,
+    median_threshold: float = config.LINEAR_SCALE_MEDIAN_THRESHOLD,
+    zeros_vote: bool = False,
+) -> str:
+    """The rule's reading of values (NaN for missing): "linear", "log", or
+    "unknown" when no value is observed (detect_and_transform_value_scale
+    explains the rule)."""
+    observed = np.isfinite(values)
+    if not observed.any():
+        return "unknown"
+    observed_values = values[observed]
+    has_negative = bool((observed_values < 0).any())
+    # In protein 0 is "not detected" (apply_reading), so it does not vote: a
+    # sparse linear matrix with most values 0 is still linear. In RNA
+    # (zeros_vote) a 0 is a measured value and votes, so raw counts that are
+    # mostly 0 are read as they are, every 0 measured.
+    voters = observed_values if zeros_vote else observed_values[observed_values != 0]
+    median_value = float(np.median(voters)) if voters.size else 0.0
+    return "linear" if (not has_negative) and (median_value > median_threshold) else "log"
+
+
+def apply_reading(values: np.ndarray, reading: str) -> np.ndarray:
+    """values (NaN for missing, no +/-inf) read as `reading`: a log reading
+    leaves them as they are; a linear one makes each 0 missing ("not
+    detected") and takes log2 of the rest. A linear reading of a negative
+    value is refused: no intensity is negative."""
+    if reading != "linear":
+        return values
+    observed = ~np.isnan(values)
+    if (values[observed] < 0).any():
+        raise NotIntensities(f"{int((values[observed] < 0).sum()):,} values are negative, so they are not raw "
+                             "intensities: the table is already on a log scale, or centred")
+    transformed = values.copy()
+    zero_mask = observed & (transformed == 0)
+    transformed[zero_mask] = np.nan
+    log_mask = observed & ~zero_mask
+    transformed[log_mask] = np.log2(transformed[log_mask])
+    return transformed
 
 
 def detect_and_transform_value_scale(
     raw_values: np.ndarray,
     median_threshold: float = config.LINEAR_SCALE_MEDIAN_THRESHOLD,
     zeros_vote: bool = False,
+    stated: str | None = None,
 ) -> tuple[np.ndarray, ValueScale]:
     """raw_values: (n_raw_genes, n_cells), NaN for missing (this dataset's
     raw units, before any z-scoring). A DIA-NN or similar linear-intensity
@@ -376,30 +444,18 @@ def detect_and_transform_value_scale(
     log table exported from R writes log2(0) as -Inf, and one infinite value
     would otherwise turn its whole gene to 0 while still marked observed,
     and make a linear file look like log scale.
+
+    `stated` ("linear" or "log", the request's value_scale) overrides the
+    rule's reading; the rule still runs, and the result reports both. A
+    linear reading of a table with a negative value is refused
+    (apply_reading).
     """
-    raw_values = np.where(np.isfinite(raw_values), raw_values, np.nan).astype(raw_values.dtype, copy=False)
-    observed = ~np.isnan(raw_values)
-    if not observed.any():
-        return raw_values, ValueScale(detected="unknown", transformed=False)
-
-    observed_values = raw_values[observed]
-    has_negative = bool((observed_values < 0).any())
-    # In protein 0 is "not detected" (below), so it does not vote: a sparse
-    # linear matrix with most values 0 is still linear. In RNA (zeros_vote) a 0
-    # is a measured value and votes, so raw counts that are mostly 0 are read
-    # as they are, every 0 measured.
-    voters = observed_values if zeros_vote else observed_values[observed_values != 0]
-    median_value = float(np.median(voters)) if voters.size else 0.0
-    is_linear = (not has_negative) and (median_value > median_threshold)
-    if not is_linear:
-        return raw_values, ValueScale(detected="log", transformed=False)
-
-    transformed = raw_values.copy()
-    zero_mask = observed & (transformed == 0)
-    transformed[zero_mask] = np.nan
-    log_mask = observed & ~zero_mask
-    transformed[log_mask] = np.log2(transformed[log_mask])
-    return transformed, ValueScale(detected="linear", transformed=True)
+    if stated is not None and stated not in READINGS:
+        raise ValueError(f"the value scale must be linear or log (or left to the service), got {stated!r}")
+    raw_values = finite_or_missing(raw_values)
+    scale = ValueScale(detected=median_rule(raw_values, median_threshold, zeros_vote), transformed=False, stated=stated)
+    scale = replace(scale, transformed=scale.reading == "linear")
+    return apply_reading(raw_values, scale.reading), scale
 
 
 def collapse_duplicate_genes(raw: RawMatrix) -> RawMatrix:

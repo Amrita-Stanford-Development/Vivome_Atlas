@@ -240,6 +240,24 @@ export function factText(manifest, key) {
 const cellsOf = (result) => (Array.isArray(result?.cells) ? result.cells : []);
 const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(1)}%` : '');
 
+// How the service read the file's values (the response's value_scale): the
+// reading it applied and, when the visitor chose that reading (stated),
+// whether the service on its own reads them the same way. null for a
+// value_scale this page does not know.
+const SCALE_READ = { linear: 'Linear intensities, log2-transformed', log: 'Already on a log scale' };
+const SCALE_ALONE = { linear: 'linear intensities', log: 'already on a log scale' };
+
+export function valueScaleText(scale) {
+  if (!scale || typeof scale !== 'object') return null;
+  if (scale.detected === 'unknown') return 'No values to read';
+  if (!Object.hasOwn(SCALE_ALONE, scale.detected ?? '')) return null;
+  const read = SCALE_READ[scale.transformed ? 'linear' : 'log'];
+  if (!Object.hasOwn(SCALE_ALONE, scale.stated ?? '')) return read;
+  return scale.stated === scale.detected
+    ? `${read}. You chose this; the service reads them so too.`
+    : `${read}. You chose this; on its own the service reads them as ${SCALE_ALONE[scale.detected]}.`;
+}
+
 export function buildProjectionSummary(result) {
   const cells = cellsOf(result);
   const abstained = cells.filter((c) => c.abstained).length;
@@ -248,9 +266,7 @@ export function buildProjectionSummary(result) {
   const spaceText = space?.restricted_to_supported_classes
     ? `Restricted to ${candidates.map(escapeHtml).join(', ')}`
     : `All ${formatCount(candidates.length)} reference classes`;
-  const scale = result?.value_scale;
-  const scaleText = scale?.transformed ? 'Linear intensities, log2-transformed'
-    : scale?.detected === 'unknown' ? 'No values to read' : 'Already on a log scale';
+  const scaleText = valueScaleText(result?.value_scale) ?? textOrPending(null);
   return `
     <dl class="model-card">
       ${cardField('Cells', formatCount(result?.n_cells))}

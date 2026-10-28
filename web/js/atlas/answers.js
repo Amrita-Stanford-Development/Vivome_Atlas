@@ -87,13 +87,16 @@ export function outcomeCounts(cells) {
 }
 
 // What the receipt shows when an answer arrives: the service's own numbers.
-export function receiptFromResponse(r) {
+// scaleAsked is the reading the visitor chose for the values (atlas.html's
+// #value-scale), null for Automatic.
+export function receiptFromResponse(r, { scaleAsked = null } = {}) {
   return {
     source: 'service',
     cells: r?.n_cells ?? (Array.isArray(r?.cells) ? r.cells.length : null),
     matched: r?.n_features_matched ?? null,
     unmatched: r?.n_features_unmatched ?? null,
     scale: r?.value_scale ?? null,
+    scaleAsked: ['linear', 'log'].includes(scaleAsked) ? scaleAsked : null,
     secondOpinion: r?.best_guess_rule?.correlation_term ?? null,
     agreement: r?.best_guess_rule?.agreement ?? null,
     threshold: r?.best_guess_rule?.agreement_threshold ?? null,
@@ -107,12 +110,14 @@ export function receiptFromResponse(r) {
 export function receiptFromWorkflow(w) {
   const value = (record) => (record?.status === 'measured' ? record.value : null);
   const fusion = w?.trace?.stages?.fusion ?? {};
+  const scale = w?.raw?.pbmc240?.scale;
   return {
     source: 'recorded',
     cells: value(w?.facts?.runs),
     matched: value(w?.facts?.matched),
     unmatched: value(w?.facts?.unmatched_rows),
-    scale: null,
+    scale: scale ? { detected: scale.detected, transformed: scale.transformed } : null,
+    scaleAsked: null,
     secondOpinion: fusion.correlation_term ?? null,
     agreement: fusion.agreement ?? null,
     threshold: fusion.threshold ?? null,

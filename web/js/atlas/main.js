@@ -161,7 +161,8 @@ async function start() {
     THREE, stage, ref, reference: layer, drawer, client, reduced,
     serviceUrl: service.url,
     limits: service.limits,
-    options: () => ({ modality: $('modality').value }),
+    // The reading of the values is for protein files; an RNA file is read by the service.
+    options: () => ({ modality: $('modality').value, valueScale: $('modality').value === 'prot' ? $('value-scale').value : 'auto' }),
   });
   // The header's switch, pressed on this page: the map's slow turn and the
   // landing's loops stop, or may start again.

@@ -489,6 +489,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `valuescale/corpus/variants.py` — labelled variants of a bank table (rescaled, logged, offset, normalised, subsampled, missing values induced by intensity, zero-filled, and foreign tables), seeded by name
 - `valuescale/corpus/denylist.py` — the sealed accessions (the organ references' locked tests and the reserve) and the check every corpus path passes
 - `valuescale/bank/expectations/step1.json` — Step 1's expected outcomes (D1 the bank, D2 today's rule, D3 today's pipeline), written before the run
+- `valuescale/bank/expectations/phaseA.json` — Phase A's expected outcomes (the stated reading: the automatic reply unchanged, a stated reading applied and said, the invariants under each reading, the app's answers), written before the change
 - `valuescale/tests/__init__.py` — marks the test folder as a package
 - `valuescale/tests/test_bank.py` — every bank entry has a quoted provenance label; nothing sealed is named; the denylist; nothing imports the service
 - `valuescale/tests/test_variants.py` — variants carry the label of how they were made, are exact where they should be, and repeat on every run
@@ -1024,10 +1025,14 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/v4_pretest/selection_calibration_suite.csv` — v4 pre-test: the fusion grid on NB1's calibration suite, per scenario (the choice)
 - `research/notebook-outputs/v4_pretest/evaluation_suite.csv` — v4 pre-test: v3.1, the encoder alone and the v4 candidate on NB1's evaluation suite, scored once
 - `research/notebook-outputs/v4_pretest/development_predictions_v4_candidate.csv` — v4 pre-test: the candidate's best guess per cell on SCoPE2, PBMC240, Fulcher and Furtwängler (Phase 2's gate reference)
-- `research/notebooks/value_scale_diagnostics.py` — the raw-or-log framework's diagnostics, one step at a time, on the diagnostic bank against expectations written before each run; Step 1: D1 the bank, D2 today's Stage 0 rule on every table and variant, D3 today's pipeline traced stage by stage with its invariants
+- `research/notebooks/value_scale_diagnostics.py` — the raw-or-log framework's diagnostics, one step at a time, on the diagnostic bank against expectations written before each run; Step 1: D1 the bank, D2 today's Stage 0 rule on every table and variant, D3 today's pipeline traced stage by stage with its invariants; Phase A: the replies before the change, then the stated reading checked on every table and through the app
 - `research/notebook-outputs/value_scale_step1/report.md` — Step 1's diagnostic report: expected against observed, one row per table
-- `research/notebook-outputs/value_scale_step1/notes.md` — Step 1's notes, written after the run: the two D1 failures explained (the bank's layout listing), the six linear tables today's rule reads as log, the zeros in log tables
+- `research/notebook-outputs/value_scale_step1/notes.md` — Step 1's notes, written after the run: the two D1 failures explained (the bank's layout listing), the six linear tables today's rule reads as log, the zeros in log tables, and D3's four z-score failures its report missed
 - `research/notebook-outputs/value_scale_step1/report.json` — the same run in full: every table's D1 facts, every D2 reading, every D3 invariant and answer summary
+- `research/notebook-outputs/value_scale_phaseA/baseline.json` — the sha256 of every traced bank table's full reply on the code before Phase A's change
+- `research/notebook-outputs/value_scale_phaseA/report.md` — Phase A's diagnostic report: per table the automatic reply against the baseline, each stated reading and its invariants, the answers that change; the app's answers
+- `research/notebook-outputs/value_scale_phaseA/notes.md` — Phase A's notes, written after the run: the z-score failures explained (float32 rounding), the answers a stated reading changes
+- `research/notebook-outputs/value_scale_phaseA/report.json` — the same run in full: every table's checks, answered counts and the app's replies
 - `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)
 - `research/notebook-outputs/nb2/nb2_summary.json` — NB2: gates, the six choices, the evaluation-suite figures for v3.1 and v3, the negative control, the development datasets

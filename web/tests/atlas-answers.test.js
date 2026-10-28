@@ -101,3 +101,14 @@ test('the receipt holds the service\'s numbers, or the recorded example\'s', () 
   assert.equal(w.secondOpinion, workflow.trace.stages.fusion.correlation_term);
   assert.equal(w.model, workflow.built_for.model_name);
 });
+
+test('the receipt holds how the values were read, and the reading the visitor asked for', () => {
+  assert.deepEqual(receiptFromResponse(response).scale, { detected: 'linear', transformed: true });
+  assert.equal(receiptFromResponse(response).scaleAsked, null);
+  assert.equal(receiptFromResponse(response, { scaleAsked: 'log' }).scaleAsked, 'log');
+  assert.equal(receiptFromResponse(response, { scaleAsked: 'auto' }).scaleAsked, null, 'automatic asks for nothing');
+  const w = receiptFromWorkflow(workflow);
+  assert.deepEqual(w.scale, { detected: workflow.raw.pbmc240.scale.detected, transformed: workflow.raw.pbmc240.scale.transformed });
+  assert.equal(w.scaleAsked, null);
+  assert.equal(receiptFromWorkflow({}).scale, null);
+});

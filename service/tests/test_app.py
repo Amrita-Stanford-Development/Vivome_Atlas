@@ -355,6 +355,62 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(payload["limits"]["max_upload_mb"], round(config.MAX_UPLOAD_BYTES / 2**20, 1))
         self.assertGreaterEqual(payload["limits"]["concurrent_projections"], 1)
 
+    def test_status_lists_the_value_scale_choices(self):
+        self._install_synthetic_bundle()
+        _, _, payload = self._get("/api/status")
+        self.assertEqual(payload["value_scale"], {"choices": ["auto", "linear", "log"], "modalities": ["prot"]})
+
+    def _small_linear_matrix(self, feature_genes):
+        """Positive values with a median below 50: the rule reads them as log."""
+        rng = np.random.default_rng(3)
+        values = rng.uniform(1, 40, size=(100, 25))
+        lines = ["gene," + ",".join(f"c{i}" for i in range(25))]
+        lines += [g + "," + ",".join(f"{v:.3f}" for v in row) for g, row in zip(feature_genes[:100], values)]
+        return "\n".join(lines).encode()
+
+    def test_a_stated_value_scale_is_applied_and_said_in_the_reply(self):
+        matrix = self._small_linear_matrix(self._install_synthetic_bundle())
+        url = f"{self.base_url}/api/project"
+        status, auto = _post_multipart(url, b"prot", matrix)
+        self.assertEqual((status, auto["value_scale"]), (200, {"detected": "log", "transformed": False}))
+        for value in (b"", b"auto", b" Auto "):
+            with self.subTest(value=value):
+                self.assertEqual(_post_multipart(url, b"prot", matrix, {"value_scale": value}), (200, auto))
+        status, payload = _post_multipart(url, b"prot", matrix, {"value_scale": b"linear"})
+        self.assertEqual((status, payload["value_scale"]), (200, {"detected": "log", "transformed": True, "stated": "linear"}))
+        self.assertNotEqual(payload["cells"], auto["cells"])
+        status, payload = _post_multipart(url, b"prot", matrix, {"value_scale": b"log"})
+        self.assertEqual((status, payload["value_scale"]), (200, {"detected": "log", "transformed": False, "stated": "log"}))
+        del payload["value_scale"]["stated"]
+        self.assertEqual(payload, auto)
+
+    def test_an_unknown_value_scale_is_400_naming_the_choices(self):
+        matrix = self._small_linear_matrix(self._install_synthetic_bundle())
+        status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix, {"value_scale": b"raw"})
+        self.assertEqual(status, 400)
+        for choice in ("auto", "linear", "log"):
+            self.assertIn(choice, payload["error"])
+
+    def test_a_stated_value_scale_on_an_rna_upload_is_400(self):
+        matrix = self._small_linear_matrix(self._install_synthetic_bundle())
+        url = f"{self.base_url}/api/project"
+        for value in (b"linear", b"log"):
+            with self.subTest(value=value):
+                status, payload = _post_multipart(url, b"rna", matrix, {"value_scale": value})
+                self.assertEqual(status, 400)
+                self.assertIn("protein", payload["error"])
+        self.assertEqual(_post_multipart(url, b"rna", matrix, {"value_scale": b"auto"})[0], 200)
+
+    def test_a_linear_reading_of_a_table_with_negative_values_is_400_saying_why(self):
+        feature_genes = self._install_synthetic_bundle()
+        matrix = fixtures.synthetic_matrix_csv(feature_genes[:100], [f"c{i}" for i in range(25)]).encode()  # normal values
+        url = f"{self.base_url}/api/project"
+        status, payload = _post_multipart(url, b"prot", matrix, {"value_scale": b"linear"})
+        self.assertEqual(status, 400)
+        self.assertIn("negative", payload["error"])
+        self.assertIn("Already log", payload["reason"])
+        self.assertEqual(_post_multipart(url, b"prot", matrix, {"value_scale": b"log"})[0], 200)
+
     def test_an_upload_over_the_byte_cap_is_413_with_the_reason(self):
         """The body is read and dropped before the answer, so the client gets
         the 413 rather than a reset connection."""

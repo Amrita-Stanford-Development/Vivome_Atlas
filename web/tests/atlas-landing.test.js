@@ -132,7 +132,10 @@ function fakeReference() {
 }
 
 // Play does not start on its own here, unless a test asks (autoPlay).
-function setup({ client = null, autoPlay = false, limits = () => ({ max_cells: 2000, max_upload_mb: 200, min_cells: 20 }) } = {}) {
+function setup({
+  client = null, autoPlay = false, limits = () => ({ max_cells: 2000, max_upload_mb: 200, min_cells: 20 }),
+  options = () => ({ modality: 'prot' }),
+} = {}) {
   const els = installDocument();
   const stage = fakeStage();
   const dims = [];
@@ -144,7 +147,7 @@ function setup({ client = null, autoPlay = false, limits = () => ({ max_cells: 2
     drawer: { open: (title, html) => opened.push({ title, html }), close() {}, body() {} },
     client: client ?? { project: async () => { throw new Error('no service'); } },
     serviceUrl: () => 'https://service.example',
-    options: () => ({ modality: 'prot' }),
+    options,
     limits,
     autoPlay,
   });
@@ -265,11 +268,28 @@ test('a file is checked, sent, waited on and landed', async () => {
   await settleMicrotasks();
   assert.ok(['working', 'finishing'].includes(landing.state.name), landing.state.name);
   assert.deepEqual(sent, { url: 'https://service.example', modality: 'prot', restrict: null }, 'restricted mode is retired');
+  assert.equal(landing.run.receipt.scaleAsked, null);
   tick(15);
   assert.equal(landing.state.name, 'interactive');
   assert.equal(landing.run.source, 'service');
   assert.equal(landing.run.placeable, true);
   assert.match(els.get('status-card').innerHTML, /2,996|2996/);
+});
+
+test('a stated reading is sent, and an automatic one is not', async () => {
+  for (const [valueScale, expected] of [['linear', 'linear'], ['log', 'log'], ['auto', null], [undefined, null]]) {
+    const response = responseFromTrace();
+    let sent = 'not sent';
+    const client = { async project(url, form, { onUpload }) { sent = form.get('value_scale'); onUpload(1); return response; } };
+    const { landing, tick } = setup({ client, options: () => ({ modality: 'prot', valueScale }) });
+    const bytes = readFileSync(new URL('../data/examples/pbmc240_proteins_raw.tsv', import.meta.url));
+    await landing.chooseFile(new File([bytes], 'x.tsv'));
+    landing.send();
+    await settleMicrotasks();
+    tick(15);
+    assert.equal(sent, expected, String(valueScale));
+    assert.equal(landing.run.receipt.scaleAsked, expected, String(valueScale));
+  }
 });
 
 test('a service on another map lists cells without placing them', async () => {

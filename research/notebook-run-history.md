@@ -3044,12 +3044,43 @@ three candidates were dropped, each with its reason in the bank.
   tables divided by 10^3 or 10^6, normalised per protein or given as
   percentages are misread almost always. Foreign tables get a confident
   reading.
-- D3, today's pipeline traced stage by stage: 37 of 37 keep every stage
-  invariant; 8 are refused for fewer than 20 cells, as the service does.
+- D3, today's pipeline traced stage by stage: 33 of 37 keep every stage
+  invariant (the report's 37 missed four z-score failures, found in Phase A,
+  entry 70: float32 rounding); 8 are refused for fewer than 20 cells, as the
+  service does.
 
 **What it shows:** the size threshold misreads real single-cell tables from
 three sources, not one. Zeros that stand for missing values also occur in
 log tables, which B1 now measures.
+
+### 70. The raw-or-log framework, Phase A: the stated reading, 2026-10-28
+
+**Why:** until the detector exists, a user whose raw table is read as log
+needs a way to say so (`research/value-scale-plan.md`, Phase A). The
+request's `value_scale` (`auto`, `linear`, `log`) and the Atlas page's
+Values menu now state it; the reply's `value_scale` says how the file was
+read. The automatic reading is unchanged.
+
+**Before the change** the full reply of every traced bank table was kept
+(`research/notebook-outputs/value_scale_phaseA/baseline.json`, two runs
+identical), so "unchanged" could be checked byte for byte.
+
+**Results** (`research/notebook-outputs/value_scale_phaseA/`, report and notes):
+- A1: the automatic reply equals the baseline's on all 30 traced tables.
+- A2: a stated reading is applied and said on every table; stating the
+  rule's own reading changes nothing else; a linear reading is refused on
+  exactly the three tables with negative values.
+- A3: every invariant holds under each reading but one, the z-score check,
+  on five tables. Four fail it under the automatic reading too, which
+  Step 1's D3 missed (its script did not count NumPy's False). The cause is
+  float32 rounding in the service's z-score, not this change.
+- A4: on the six linear tables the rule reads as log, a stated linear
+  reading changes 11 to 36 of each small table's answers, and over 1,100
+  of 2,000 on Furtwangler's.
+- A5: the request the site sends, through the app, 19 of 19.
+
+**What it shows:** the override works and leaves every automatic reply as
+it was. The z-score's float32 rounding is a separate finding for the owner.
 
 ## The throughline
 

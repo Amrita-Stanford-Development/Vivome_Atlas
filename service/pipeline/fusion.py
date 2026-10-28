@@ -176,13 +176,19 @@ def first_symbol(name: str) -> str:
     return str(name).split(";")[0].strip().upper()
 
 
-def protein_query(raw, genes) -> tuple[np.ndarray, np.ndarray]:
+def protein_query(raw, genes, scale=None) -> tuple[np.ndarray, np.ndarray]:
     """(values, mask), cells x genes: the upload over v4.2's protein means'
     genes, matched by first_symbol, on the log scale the service detects, a
     gene's rows merged by per-cell median, each gene z-scored over its observed
-    values within the upload; unobserved entries 0 with mask 0."""
+    values within the upload; unobserved entries 0 with mask 0. `scale` is
+    Stage 0's alignment.ValueScale for this upload, so the table is read as
+    Stage 0 read it, a stated reading included; without it, Stage 0's rule
+    reads the table here."""
     from service.pipeline import alignment
-    values, _ = alignment.detect_and_transform_value_scale(raw.values)
+    if scale is None:
+        values, _ = alignment.detect_and_transform_value_scale(raw.values)
+    else:
+        values = alignment.apply_reading(alignment.finite_or_missing(raw.values), scale.reading)
     index = {g: i for i, g in enumerate(genes)}
     x = np.full((len(raw.cell_ids), len(genes)), np.nan, np.float64)
     rows: dict[int, list[int]] = {}
@@ -417,11 +423,11 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
 
 
 def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None",
-            modality: str = "prot") -> dict:
-    smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw, modality)
+            modality: str = "prot", stated_scale: str | None = None) -> dict:
+    smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw, modality, stated_scale)
     rna_upload = modality == "rna"
     uses_protein = getattr(bundle, "protein_means", None) is not None and not rna_upload
-    protein = protein_query(raw, bundle.protein_genes) if uses_protein else None
+    protein = protein_query(raw, bundle.protein_genes, value_scale) if uses_protein else None
     return project_prepared(bundle, smoothed, aligned, value_scale, gene_ids.resolve_identifiers(raw.gene_names),
                             restrict_to_supported_classes, components or bundle.components, protein=protein,
                             rna_upload=rna_upload)
@@ -491,7 +497,7 @@ def project_prepared(bundle, smoothed_values, aligned, value_scale, gene_id_reso
         "n_cells": len(aligned.cell_ids),
         "n_features_matched": aligned.n_features_matched,
         "n_features_unmatched": aligned.n_features_unmatched,
-        "value_scale": {"detected": value_scale.detected, "transformed": value_scale.transformed},
+        "value_scale": value_scale.response(),
         "label_space": {"restricted_to_supported_classes": restrict_to_supported_classes,
                         "candidate_classes": [names[p] for p in positions]},
         "supported_classes": {"names": [names[p] for p in positions], "method": space.method, "support": None,

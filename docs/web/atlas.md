@@ -77,7 +77,7 @@ address (`#your-data`) and a file dropped on the map, which is refused.
 | working | The service sends no progress: an **illustration** of its six steps loops (`SERVICE_STEPS` in `web/js/workflow-data.js`), with a clock and, after a few seconds, the note that the service may be waking up |
 | busy | Another file is being labelled: a countdown, then another try, three tries in all |
 | finishing | The illustration plays its remaining steps quickly |
-| receipt | The response's own numbers: cells, genes matched, whether the second opinion was used, the model. A folding card, open until the visitor has the camera |
+| receipt | The response's own numbers: cells, genes matched, how the values were read, whether the second opinion was used, the model. A folding card, open until the visitor has the camera |
 | flying | Cells arc from their breathing places in the cloud onto their coordinates by answer level (one type, family, branch, no answer), highest confidence first; each lands with a flash and a ripple, and nearby reference cells of its type glow briefly. The camera glides to frame them |
 | settling | The cloud stops breathing; each landed cell is a bead, larger than any reference dot, in a halo of its own colour that pulses slowly. The reference dims, the results open in the drawer (Download and Clear, then About this answer, Answers and Cells as folding sections), the camera settles on the landed cells |
 | interactive | The camera flies to the first cell and Play walks on from it (not when the visitor took the camera during the landing, nor under reduced motion); then the visitor's camera. Click a cell or a row of the drawer's cell browser for its card; step through the shown cells with the step bar (Previous, Next, Play), the card's own Previous and Next, or the arrow keys; filter by answer level and by the type given; Replay, Download, Clear. A new file or the example replaces the answer shown |
@@ -107,6 +107,13 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
   (`COMPATIBLE_PIPELINES`). Otherwise the cells are listed, not placed.
 - **Limits** come from the service's status when it gives them, else from the
   Workflow data's service records.
+- **Values** (`#value-scale`, protein only): Automatic sends no field, so the
+  service reads the scale itself; Raw intensities or Already log sends
+  `value_scale` `linear` or `log` (`docs/service/projection-api.md`). The
+  receipt and About this answer say how the values were read and whether it
+  was the visitor's choice (`valueScaleText` in `web/js/panels.js`). A reply
+  without `stated` to a chosen reading came from a service older than the
+  choice, and the receipt says the choice was not taken.
 - **Address:** the online service by default (`DEFAULT_SERVICE_URL`, which
   `web/data/workflow.json` records); an address the visitor types for their
   own copy is remembered in their browser.

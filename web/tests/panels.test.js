@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   escapeHtml, errorPanel, buildSupportSummary, buildSupportTable,
   buildDiagnosticsTable, buildBenchmarkTable, buildSupportedLabelSpace, buildProofPoints, factText,
-  buildProjectionSummary,
+  buildProjectionSummary, valueScaleText,
 } from '../js/panels.js';
 import { measured, pending, manifestFixture } from './fixtures.js';
 
@@ -275,6 +275,27 @@ test('projection summary reports the upload, the label space and the abstention 
   const empty = projection();
   empty.value_scale = { detected: 'unknown', transformed: false };
   assert.match(buildProjectionSummary(empty), /No values to read/, 'not a log scale: there was nothing to judge');
+});
+
+test('valueScaleText says how the values were read, and whose choice it was', () => {
+  assert.equal(valueScaleText({ detected: 'linear', transformed: true }), 'Linear intensities, log2-transformed');
+  assert.equal(valueScaleText({ detected: 'log', transformed: false }), 'Already on a log scale');
+  assert.equal(valueScaleText({ detected: 'unknown', transformed: false }), 'No values to read');
+  assert.equal(valueScaleText({ detected: 'log', transformed: true, stated: 'linear' }),
+    'Linear intensities, log2-transformed. You chose this; on its own the service reads them as already on a log scale.');
+  assert.equal(valueScaleText({ detected: 'linear', transformed: false, stated: 'log' }),
+    'Already on a log scale. You chose this; on its own the service reads them as linear intensities.');
+  assert.equal(valueScaleText({ detected: 'linear', transformed: true, stated: 'linear' }),
+    'Linear intensities, log2-transformed. You chose this; the service reads them so too.');
+  assert.equal(valueScaleText({ detected: 'log', transformed: false, stated: '<b>x</b>' }), 'Already on a log scale',
+    'a stated reading the page does not know is left out');
+  for (const bad of [null, undefined, 'linear', {}, { detected: '<img src=x>' }]) assert.equal(valueScaleText(bad), null);
+});
+
+test('the projection summary says a stated reading', () => {
+  const stated = projection();
+  stated.value_scale = { detected: 'log', transformed: true, stated: 'linear' };
+  assert.match(buildProjectionSummary(stated), /Values<\/dt><dd>Linear intensities, log2-transformed\. You chose this/);
 });
 
 test('the projection summary survives a malformed response', () => {

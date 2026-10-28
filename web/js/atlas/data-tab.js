@@ -135,6 +135,7 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
     $('watch-example').disabled = !resting;
     $('send-example').disabled = !(resting && service.state.ready);
     $('matrix').disabled = !resting;
+    $('value-scale').disabled = $('modality').value !== 'prot';  // an RNA file is read by the service
     setHtml($('file-result'), fileResult(st));
     const run = landing.run;
     const shown = Boolean(run) && ['interactive', 'settling', 'flying', 'receipt', 'finishing'].includes(name);
@@ -159,6 +160,7 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
 
   $('check-service').addEventListener('click', checkService);
   $('service-url').addEventListener('change', checkService);
+  $('modality').addEventListener('change', () => update());
   // Emptied as the picker opens, so choosing the same file again still
   // counts as a choice.
   $('matrix').addEventListener('click', () => { $('matrix').value = ''; });

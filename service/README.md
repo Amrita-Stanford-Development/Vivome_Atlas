@@ -132,6 +132,18 @@ subset is drawn from a generator seeded with a hash of the upload
 (`pipeline.upload_seed`). Before this, it was unseeded, and the same file
 could return different abstentions.
 
+**A request may state a protein upload's value scale** (form field
+`value_scale`: `auto`, `linear` or `log`; see
+[`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
+Stage 0's median rule reads linear tables on a small scale as log
+(`research/notebook-outputs/value_scale_step1/`), so the user can say which
+the file is. `alignment.median_rule` is the rule, `alignment.apply_reading`
+applies a reading, and `detect_and_transform_value_scale` runs both, with
+the stated reading winning. Every version receives it as `stated_scale`
+(`pipeline.run_projection`), v4.2's protein query included. With no field,
+Stage 0 and the reply are unchanged byte for byte
+(`research/notebook-outputs/value_scale_phaseA/`).
+
 **Pipeline versions.** `config.PIPELINE_VERSION` (env
 `VIVOME_PIPELINE_VERSION`) chooses which bundle loads, and with it the label
 space, conformal and abstention components (`pipeline.components_for`).
