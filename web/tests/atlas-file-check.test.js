@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   DIANN_ANNOTATIONS, HEADER_BYTES, HEADER_LIMIT_BYTES, checkFile, checkLimits, countNonEmptyLines, parseHeader,
-  readHeaderLine, splitFields,
+  readHeaderLine, splitFields, valueFactsText,
 } from '../js/atlas/file-check.js';
 
 const workflow = JSON.parse(readFileSync(new URL('../data/workflow.json', import.meta.url), 'utf8'));
@@ -101,6 +101,37 @@ test('reading the header line from a slice, and on when asked', async () => {
   assert.equal(await readHeaderLine(blob(split), { maxBytes: HEADER_LIMIT_BYTES }), split.split('\n')[0]);
 });
 
+test('the check reads the values in the cell columns: range, zeros, empties and negatives', async () => {
+  const matrix = 'gene,a,b\nG1,0,5\nG2,-1.5,NA\nG3,,200\n';
+  assert.deepEqual((await checkFile(blob(matrix))).values,
+    { entries: 6, empty: 2, zeros: 1, negatives: 1, min: -1.5, max: 200 });
+  const diann = 'Protein.Group\tProtein.Names\tGenes\tFirst.Protein.Description\tc1\tc2\n'
+    + 'P1\tN1\tCD3E\t-99 kDa protein\t1000\t0\nP2\tN2\tCD19\tsomething\t\t30000\n';
+  assert.deepEqual((await checkFile(blob(diann))).values,
+    { entries: 4, empty: 1, zeros: 1, negatives: 0, min: 0, max: 30000 }, 'annotation columns are not values');
+  const maxquant = 'Majority protein IDs\tGene names\tIntensity\tIntensity s1\tLFQ intensity s1\tLFQ intensity s2\n'
+    + 'P1\tCD3E\t9e9\t5e9\t100\t0\n';
+  assert.deepEqual((await checkFile(blob(maxquant))).values,
+    { entries: 2, empty: 0, zeros: 1, negatives: 0, min: 0, max: 100 }, 'only the LFQ intensities, as the service reads them');
+  const rTable = 'a\tb\nG1\t1\t2\nG2\t3\t4\n';
+  assert.deepEqual((await checkFile(blob(rTable))).values,
+    { entries: 4, empty: 0, zeros: 0, negatives: 0, min: 1, max: 4 }, 'R\'s layout: every header field is a cell');
+  const quoted = 'gene,a,b\n"G1, isoform 2",7,8\n';
+  assert.deepEqual((await checkFile(blob(quoted))).values,
+    { entries: 2, empty: 0, zeros: 0, negatives: 0, min: 7, max: 8 }, 'a quoted comma does not shift the columns');
+});
+
+test('the value facts in words', () => {
+  assert.equal(valueFactsText({ entries: 200, empty: 20, zeros: 90, negatives: 0, min: 0, max: 211481 }),
+    'From 0 to 211,481; 45.0% are 0 and 10.0% are empty; none is negative.');
+  assert.equal(valueFactsText({ entries: 4, empty: 0, zeros: 0, negatives: 1, min: -1.523, max: 12.75 }),
+    'From -1.523 to 12.75; 0.0% are 0 and 0.0% are empty; 1 is negative.');
+  assert.equal(valueFactsText({ entries: 10, empty: 0, zeros: 0, negatives: 3, min: -2, max: 1234.56 }),
+    'From -2 to 1,234.6; 0.0% are 0 and 0.0% are empty; 3 are negative.');
+  assert.equal(valueFactsText({ entries: 3, empty: 3, zeros: 0, negatives: 0, min: null, max: null }), 'Every value is empty.');
+  for (const bad of [null, undefined, {}, { entries: 0 }]) assert.equal(valueFactsText(bad), null);
+});
+
 test('counting lines by streaming, whatever the line endings', async () => {
   assert.equal(await countNonEmptyLines(blob('')), 0);
   assert.equal(await countNonEmptyLines(blob('a\nb\n\n  \nc')), 3);
@@ -111,7 +142,10 @@ test('counting lines by streaming, whatever the line endings', async () => {
 
 test('a file checked: tabs and commas, CRLF', async () => {
   const tsv = await checkFile(blob('gene\ta\tb\tc\nCD3E\t1\t2\t3\nCD19\t4\t5\t6\n'), 'cells.tsv');
-  assert.deepEqual(tsv, { name: 'cells.tsv', size: 33, separator: '\t', columns: 4, annotation: 1, format: 'matrix', features: 2, cells: 3 });
+  assert.deepEqual(tsv, {
+    name: 'cells.tsv', size: 33, separator: '\t', columns: 4, annotation: 1, format: 'matrix', features: 2, cells: 3,
+    values: { entries: 6, empty: 0, zeros: 0, negatives: 0, min: 1, max: 6 },
+  });
   const csv = await checkFile(blob('gene,a,b\r\nCD3E,1,2\r\n\r\nCD19,4,5\r\nCD14,7,8\r\n'));
   assert.deepEqual([csv.name, csv.separator, csv.columns, csv.features, csv.cells], ['', ',', 3, 3, 2]);
   const file = new File(['gene,a\nX,1\n'], 'named.csv');

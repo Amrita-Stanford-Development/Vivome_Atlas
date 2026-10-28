@@ -50,6 +50,12 @@ class ProteinQueryTests(unittest.TestCase):
         self.assertEqual(mask[2, 0], 0, "the 0 is missing under a linear reading")
         self.assertEqual(fusion.protein_query(raw, genes)[1][2, 0], 1, "and measured under the rule's log reading")
 
+    def test_it_reads_a_zero_as_stage_0_was_told_to(self):
+        raw = alignment.RawMatrix(gene_names=["CD8A", "GNLY"], cell_ids=["a", "b", "c"],
+                                  values=np.array([[2.0, 8.0, 0.0], [4.0, 16.0, 64.0]], dtype=np.float32))
+        _, scale = alignment.detect_and_transform_value_scale(raw.values, stated="log", zeros="missing")
+        self.assertEqual(fusion.protein_query(raw, ("CD8A", "GNLY"), scale)[1][2, 0], 0, "the 0 is not measured")
+
     def test_stage_0_s_automatic_scale_gives_exactly_the_values_it_gave_before(self):
         raw = _load_pbmc240_50()  # float32, read linear: log2 must be taken in float32 as Stage 0 takes it
         raw = alignment.RawMatrix(raw.gene_names, raw.cell_ids, np.where(raw.values > 3e4, np.inf, raw.values))

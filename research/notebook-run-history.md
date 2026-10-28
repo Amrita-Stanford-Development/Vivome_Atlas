@@ -3082,6 +3082,30 @@ identical), so "unchanged" could be checked byte for byte.
 **What it shows:** the override works and leaves every automatic reply as
 it was. The z-score's float32 rounding is a separate finding for the owner.
 
+### 71. The raw-or-log framework, Phase A2: what a 0 means, 2026-10-28
+
+**Why:** the owner asked for the choices that change the answer to be the
+user's (2026-10-28). Besides the scale, one does: in an already-log table, a
+0 is either a measured value or "not measured". Furtwangler 2025's log
+tables write "not measured" as 0 in 68% of entries. Log base, offsets and
+units change nothing, since every gene is z-scored within the upload, so
+they are not offered.
+
+**What was built:** the request's `zeros` (`missing`, `measured`; only with
+`value_scale` `log`), the Atlas page's Zeros menu, the file's value facts in
+the browser's check (range, zeros, empties, negatives), and the final
+review's smaller points.
+
+**Results** (`research/notebook-outputs/value_scale_phaseA2/`, report and
+notes): every check passes after two fixes. The first run found that
+saying a 0 is not measured made a row-major copy of a column-major
+subsample, which moved replies in their last digits; the copy now keeps the
+layout. The expectations had also named a table over the upload limit for
+the app check; the check now sends its traced subsample. The automatic
+reply is still the baseline's on all 30 tables. Reading Furtwangler's log
+zeros as not measured lifts the cells answered on furtwangler_log2 from 524
+to 806 of 2,000; whether the answers improve is B1's question.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

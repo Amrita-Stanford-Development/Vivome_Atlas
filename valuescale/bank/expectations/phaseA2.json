@@ -1,0 +1,41 @@
+{
+  "step": "phaseA2",
+  "written": "2026-10-28, before the zeros choice was built and before its diagnostics ran",
+  "about": "Phase A, second part (the owner, 2026-10-28: 'do all the fixes'): with a log reading the request may also state what a 0 means (zeros = missing or measured); the final review's smaller points are fixed. The automatic reading is still unchanged. Not edited after the run: a difference is explained in the report.",
+  "tables": "every bank table Phase A traced, on the same cells",
+  "pipeline": "v4.1, modality prot, pipeline.run_projection",
+  "B1_automatic_unchanged": "the reply with no stated scale has the baseline's sha256 (value_scale_phaseA/baseline.json) on every traced table",
+  "B2_zeros": {
+    "with_value_scale_log": [
+      "zeros missing: value_scale is {detected, transformed false, stated log, zeros missing}; Stage 0 makes missing exactly the zeros and the infinities",
+      "zeros measured: the reply equals the stated log reply in every field but value_scale.zeros (a 0 already counts as measured under a log reading)",
+      "a table with no 0 gives the same answers with zeros missing as with zeros measured"
+    ],
+    "refused": "zeros stated with a linear reading, or with no stated reading, is refused (pipeline: ValueError; app: 400 naming value_scale log)",
+    "changes_reported": "reported, not judged: per table with zeros, the answers that change between zeros measured and zeros missing; expected largest on the Furtwangler log tables, whose zeros (about 68%) stand for missing values"
+  },
+  "B3_invariants_under_log_with_zeros_missing": [
+    "no +-inf after Stage 0",
+    "the values Stage 0 makes missing equal the zeros and infinities in the parsed table",
+    "mask sum equals the observed values in the matched genes after duplicates are merged",
+    "the encoder input (smoothed values and mask) is finite",
+    "v4.2's protein query reads the table as Stage 0 did",
+    "every cell has a label or an abstention reason"
+  ],
+  "B3_note": "the z-score check is left out here: its five failures (Phase A, float32 rounding) are the next step's (zscore.json)",
+  "B4_through_the_app": {
+    "tables": ["pbmc240_diann", "furtwangler_log2"],
+    "expect": [
+      "value_scale log with zeros missing: 200, equal to pipeline.run_projection's reply",
+      "zeros missing without value_scale log: 400 naming value_scale log",
+      "modality rna with zeros missing: 400",
+      "an unknown zeros value: 400 naming missing and measured",
+      "GET /api/status lists the zeros choices"
+    ]
+  },
+  "B5_review_fixes": [
+    "the pipeline itself refuses a stated scale or zeros on an RNA upload (ValueError), not only the app",
+    "apply_reading refuses a reading other than linear, log or unknown",
+    "a single negative value is said as '1 value is negative'"
+  ]
+}

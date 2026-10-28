@@ -241,17 +241,20 @@ const cellsOf = (result) => (Array.isArray(result?.cells) ? result.cells : []);
 const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(1)}%` : '');
 
 // How the service read the file's values (the response's value_scale): the
-// reading it applied and, when the visitor chose that reading (stated),
-// whether the service on its own reads them the same way. null for a
-// value_scale this page does not know.
+// reading it applied, what a 0 was read as when the visitor said it (zeros),
+// and, when the visitor chose the reading (stated), whether the service on
+// its own reads them the same way. null for a value_scale this page does not
+// know.
 const SCALE_READ = { linear: 'Linear intensities, log2-transformed', log: 'Already on a log scale' };
 const SCALE_ALONE = { linear: 'linear intensities', log: 'already on a log scale' };
+const ZEROS_READ = { missing: ', each 0 read as not measured', measured: ', each 0 read as a measured value' };
 
 export function valueScaleText(scale) {
   if (!scale || typeof scale !== 'object') return null;
   if (scale.detected === 'unknown') return 'No values to read';
   if (!Object.hasOwn(SCALE_ALONE, scale.detected ?? '')) return null;
-  const read = SCALE_READ[scale.transformed ? 'linear' : 'log'];
+  const zeros = Object.hasOwn(ZEROS_READ, scale.zeros ?? '') ? ZEROS_READ[scale.zeros] : '';
+  const read = SCALE_READ[scale.transformed ? 'linear' : 'log'] + zeros;
   if (!Object.hasOwn(SCALE_ALONE, scale.stated ?? '')) return read;
   return scale.stated === scale.detected
     ? `${read}. You chose this; the service reads them so too.`

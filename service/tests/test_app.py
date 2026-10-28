@@ -358,7 +358,36 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
     def test_status_lists_the_value_scale_choices(self):
         self._install_synthetic_bundle()
         _, _, payload = self._get("/api/status")
-        self.assertEqual(payload["value_scale"], {"choices": ["auto", "linear", "log"], "modalities": ["prot"]})
+        self.assertEqual(payload["value_scale"], {"choices": ["auto", "linear", "log"], "modalities": ["prot"],
+                                                  "zeros": ["auto", "missing", "measured"]})
+
+    def test_with_a_log_reading_a_request_may_say_a_zero_is_not_measured(self):
+        matrix = self._small_linear_matrix(self._install_synthetic_bundle())
+        lines = matrix.decode().split("\n")
+        lines[1] = ",".join([lines[1].split(",")[0], "0"] + lines[1].split(",")[2:])  # one 0
+        matrix = "\n".join(lines).encode()
+        url = f"{self.base_url}/api/project"
+        status, payload = _post_multipart(url, b"prot", matrix, {"value_scale": b"log", "zeros": b"missing"})
+        self.assertEqual((status, payload["value_scale"]),
+                         (200, {"detected": "log", "transformed": False, "stated": "log", "zeros": "missing"}))
+        status, plain = _post_multipart(url, b"prot", matrix, {"value_scale": b"log", "zeros": b"auto"})
+        self.assertNotIn("zeros", plain["value_scale"])
+
+    def test_what_a_zero_means_is_refused_without_a_log_reading(self):
+        matrix = self._small_linear_matrix(self._install_synthetic_bundle())
+        url = f"{self.base_url}/api/project"
+        for fields in ({"zeros": b"missing"}, {"value_scale": b"linear", "zeros": b"missing"},
+                       {"value_scale": b"auto", "zeros": b"measured"}):
+            with self.subTest(fields=fields):
+                status, payload = _post_multipart(url, b"prot", matrix, fields)
+                self.assertEqual(status, 400)
+                self.assertIn("value_scale log", payload["error"])
+        status, payload = _post_multipart(url, b"prot", matrix, {"value_scale": b"log", "zeros": b"none"})
+        self.assertEqual(status, 400)
+        self.assertIn("missing", payload["error"])
+        self.assertIn("measured", payload["error"])
+        status, payload = _post_multipart(url, b"rna", matrix, {"zeros": b"missing"})
+        self.assertEqual(status, 400)
 
     def _small_linear_matrix(self, feature_genes):
         """Positive values with a median below 50: the rule reads them as log."""

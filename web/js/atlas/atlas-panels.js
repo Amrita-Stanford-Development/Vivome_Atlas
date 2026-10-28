@@ -134,16 +134,20 @@ function secondOpinionLine(receipt, whose) {
   return pending;
 }
 
-// The visitor's choice for the values, in the words of atlas.html's #value-scale.
+// The visitor's choices for the values, in the words of atlas.html's
+// #value-scale and #zeros.
 const SCALE_ASKED = { linear: 'Raw intensities', log: 'Already log' };
+const ZEROS_ASKED = { missing: 'a 0 is not measured', measured: 'a 0 is a measured value' };
 
-// How the values were read; a reading the visitor chose that the reply does
-// not name (a service from before the choice existed) is said, not hidden.
+// How the values were read; a choice the reply does not name (a service from
+// before the choice existed) is said, not hidden.
 function scaleLine(receipt) {
   const read = valueScaleText(receipt.scale);
   if (!read) return pending;
-  const asked = SCALE_ASKED[receipt.scaleAsked];
-  if (asked && !receipt.scale?.stated) {
+  const scaleIgnored = SCALE_ASKED[receipt.scaleAsked] && !receipt.scale?.stated;
+  const zerosIgnored = ZEROS_ASKED[receipt.zerosAsked] && !receipt.scale?.zeros;
+  if (scaleIgnored || zerosIgnored) {
+    const asked = [SCALE_ASKED[receipt.scaleAsked], ZEROS_ASKED[receipt.zerosAsked]].filter(Boolean).join('; ');
     return e(`${read}. This service did not take your choice (${asked}): it read the values on its own.`);
   }
   return e(read);

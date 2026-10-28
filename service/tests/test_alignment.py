@@ -527,6 +527,46 @@ class StatedValueScaleTests(unittest.TestCase):
         np.testing.assert_array_equal(alignment.apply_reading(values, "log"), values)
         self.assertTrue(np.isnan(alignment.apply_reading(values, "linear")[values == 0]).all())
 
+    def test_a_log_reading_may_say_a_zero_is_not_measured(self):
+        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="missing")
+        self.assertEqual((scale.reading, scale.transformed, scale.zeros), ("log", False, "missing"))
+        zero = self.SMALL_LINEAR == 0
+        self.assertTrue(np.isnan(out[zero]).all())
+        np.testing.assert_array_equal(out[~zero], self.SMALL_LINEAR[~zero])
+        self.assertEqual(scale.response(), {"detected": "log", "transformed": False, "stated": "log", "zeros": "missing"})
+
+    def test_a_zero_said_to_be_measured_is_read_as_a_log_reading_reads_it(self):
+        plain, _ = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log")
+        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="measured")
+        np.testing.assert_array_equal(out, plain)
+        self.assertEqual(scale.response()["zeros"], "measured")
+
+    def test_saying_a_zero_is_not_measured_keeps_the_table_s_memory_layout(self):
+        """A subsampled table is column-major. A row-major copy would change the
+        order of the sums downstream, so a table with no 0 would get a reply
+        that differs in its last digits (Phase A2's diagnostics, fulcher_tmt)."""
+        values = np.asfortranarray(self.SMALL_LINEAR)
+        out = alignment.apply_reading(values, "log", "missing")
+        self.assertTrue(out.flags.f_contiguous)
+        self.assertFalse(np.shares_memory(out, values), "the table itself is not changed")
+
+    def test_what_a_zero_means_can_be_said_only_with_a_log_reading(self):
+        for stated in (None, "linear"):
+            with self.subTest(stated=stated), self.assertRaisesRegex(ValueError, "log"):
+                alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated=stated, zeros="missing")
+        with self.assertRaisesRegex(ValueError, "missing.*measured"):
+            alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="none")
+
+    def test_a_reading_the_service_does_not_know_is_refused(self):
+        with self.assertRaisesRegex(ValueError, "reading"):
+            alignment.apply_reading(self.SMALL_LINEAR, "Linear")
+
+    def test_one_negative_value_is_said_in_the_singular(self):
+        with self.assertRaisesRegex(alignment.NotIntensities, r"^1 value is negative"):
+            alignment.detect_and_transform_value_scale(np.array([[-5.0, 4000.0]]), stated="linear")
+        with self.assertRaisesRegex(alignment.NotIntensities, r"^2 values are negative"):
+            alignment.detect_and_transform_value_scale(np.array([[-5.0, -1.0, 4000.0]]), stated="linear")
+
     def test_a_value_scale_built_without_a_stated_reading_still_works(self):
         """benchmark/v31_dev_gate.py builds ValueScale(detected=..., transformed=...)."""
         scale = alignment.ValueScale("log", False)

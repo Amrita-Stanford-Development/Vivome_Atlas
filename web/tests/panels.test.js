@@ -292,6 +292,15 @@ test('valueScaleText says how the values were read, and whose choice it was', ()
   for (const bad of [null, undefined, 'linear', {}, { detected: '<img src=x>' }]) assert.equal(valueScaleText(bad), null);
 });
 
+test('valueScaleText says what a 0 was read as, when the visitor said it', () => {
+  assert.equal(valueScaleText({ detected: 'log', transformed: false, stated: 'log', zeros: 'missing' }),
+    'Already on a log scale, each 0 read as not measured. You chose this; the service reads them so too.');
+  assert.equal(valueScaleText({ detected: 'linear', transformed: false, stated: 'log', zeros: 'measured' }),
+    'Already on a log scale, each 0 read as a measured value. You chose this; on its own the service reads them as linear intensities.');
+  assert.equal(valueScaleText({ detected: 'log', transformed: false, stated: 'log', zeros: '<b>x</b>' }),
+    'Already on a log scale. You chose this; the service reads them so too.', 'a zeros value the page does not know is left out');
+});
+
 test('the projection summary says a stated reading', () => {
   const stated = projection();
   stated.value_scale = { detected: 'log', transformed: true, stated: 'linear' };

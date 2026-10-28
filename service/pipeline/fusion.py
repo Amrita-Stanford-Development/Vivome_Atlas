@@ -188,7 +188,7 @@ def protein_query(raw, genes, scale=None) -> tuple[np.ndarray, np.ndarray]:
     if scale is None:
         values, _ = alignment.detect_and_transform_value_scale(raw.values)
     else:
-        values = alignment.apply_reading(alignment.finite_or_missing(raw.values), scale.reading)
+        values = alignment.apply_reading(alignment.finite_or_missing(raw.values), scale.reading, scale.zeros)
     index = {g: i for i, g in enumerate(genes)}
     x = np.full((len(raw.cell_ids), len(genes)), np.nan, np.float64)
     rows: dict[int, list[int]] = {}
@@ -423,8 +423,9 @@ def best_guess_probabilities(bundle: V4Bundle, smoothed_embeddings: list[np.ndar
 
 
 def project(bundle: V4Bundle, raw, restrict_to_supported_classes: bool, components: "pipeline.Components | None",
-            modality: str = "prot", stated_scale: str | None = None) -> dict:
-    smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw, modality, stated_scale)
+            modality: str = "prot", stated_scale: str | None = None, stated_zeros: str | None = None) -> dict:
+    smoothed, aligned, value_scale = pipeline._prepare_query(bundle.feature_genes, raw, modality, stated_scale,
+                                                             stated_zeros)
     rna_upload = modality == "rna"
     uses_protein = getattr(bundle, "protein_means", None) is not None and not rna_upload
     protein = protein_query(raw, bundle.protein_genes, value_scale) if uses_protein else None

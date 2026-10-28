@@ -25,6 +25,7 @@ Content-Type: multipart/form-data
   modality                      : "rna" | "prot"
   matrix                        : CSV or TSV (auto-detected), features in rows, cells in columns
   value_scale                   : optional, protein only: "auto" (or no field) | "linear" | "log"
+  zeros                         : optional, with value_scale "log": "auto" (or no field) | "missing" | "measured"
   restrict_to_supported_classes : retired; "true" is answered 400
 ```
 
@@ -55,6 +56,20 @@ the rule (`research/value-scale-plan.md`, Phase A):
 Any other value is answered 400 naming the three, and so is `"linear"` or
 `"log"` with `modality` `"rna"` (an RNA upload's scale is always read by the
 rule). The response's `value_scale` then also carries `stated`.
+
+**`zeros`** says what a 0 in an already-log table means, with `value_scale`
+`"log"`:
+- **`"auto"`, empty or no field:** a 0 counts as a measured value, as always.
+- **`"missing"`:** a 0 is not measured (a table that writes "not seen" as 0),
+  so it is made missing.
+- **`"measured"`:** a 0 is a real value; the same as `"auto"` today, but
+  stated.
+
+Without `value_scale` `"log"` it is answered 400: read as raw intensities,
+every 0 is "not detected", since log2 of 0 does not exist, and with
+`"auto"` the reading is not known before the file is read. Any other value
+is answered 400 naming the choices. The response's `value_scale` then also
+carries `zeros`.
 
 **`restrict_to_supported_classes` is retired** (the owner, 2026-10-21).
 Every label is chosen among all 22 reference classes. `"true"` is answered
@@ -149,7 +164,8 @@ read as missing.
   "n_features_matched"   : "<int>",
   "n_features_unmatched" : "<int>",
   "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>",
-                            "stated": "linear" | "log" (only when the request stated one)},
+                            "stated": "linear" | "log" (only when the request stated one),
+                            "zeros": "missing" | "measured" (only when the request said it)},
   "label_space"          : {"restricted_to_supported_classes": "<bool>", "candidate_classes": ["<string>", "..."]},
   "gene_id_resolution"   : {"matched": "<int>", "unmapped": "<int>", "ambiguous": "<int>",
                             "unmapped_identifiers": ["<string>", "..."], "ambiguous_identifiers": ["<string>", "..."]},
@@ -179,7 +195,7 @@ read as missing.
 
 `GET /api/status` answers `{"status": "ready", "atlas_version", "model_version", "pipeline_version", "limits", "value_scale"}`,
 where `limits` is `{"max_cells", "max_upload_mb", "concurrent_projections"}`
-and `value_scale` is `{"choices": ["auto", "linear", "log"], "modalities": ["prot"]}`,
+and `value_scale` is `{"choices": ["auto", "linear", "log"], "modalities": ["prot"], "zeros": ["auto", "missing", "measured"]}`,
 or `{"status": "unavailable", "reason"}`:
 - **503** while an artifact is missing or not yet fetched;
 - **500** for any other load error.
@@ -244,7 +260,9 @@ all. The detection rule and its threshold are in
 (`value_scale` in the request), `detected` is still the rule's reading,
 `stated` is the request's, and `transformed` follows the stated one: a
 reply with `"detected": "log", "transformed": true, "stated": "linear"` read
-raw intensities the rule would have taken as log.
+raw intensities the rule would have taken as log. A table with no observed
+value stays `"unknown"`, untransformed, whatever was stated; the stated
+reading is still echoed.
 
 **`gene_id_resolution`** reports how the upload's own feature identifiers
 (gene symbols, Ensembl gene IDs, UniProt accessions, or a DIA-NN-style

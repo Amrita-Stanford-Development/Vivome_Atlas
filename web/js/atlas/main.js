@@ -161,8 +161,12 @@ async function start() {
     THREE, stage, ref, reference: layer, drawer, client, reduced,
     serviceUrl: service.url,
     limits: service.limits,
-    // The reading of the values is for protein files; an RNA file is read by the service.
-    options: () => ({ modality: $('modality').value, valueScale: $('modality').value === 'prot' ? $('value-scale').value : 'auto' }),
+    // The reading of the values is for protein files (an RNA file is read by
+    // the service), and what a 0 means for a file read as already log.
+    options: () => {
+      const valueScale = $('modality').value === 'prot' ? $('value-scale').value : 'auto';
+      return { modality: $('modality').value, valueScale, zeros: valueScale === 'log' ? $('zeros').value : 'auto' };
+    },
   });
   // The header's switch, pressed on this page: the map's slow turn and the
   // landing's loops stop, or may start again.

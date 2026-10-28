@@ -8,6 +8,7 @@ import { PENDING_LABEL, formatCount, isMeasured, loadManifest } from '../manifes
 import { buildSupportedLabelSpace, errorPanel, escapeHtml } from '../panels.js';
 import { loadWorkflow, wfFact } from '../workflow-data.js';
 import { coordinatesCompatible } from './answers.js';
+import { valueFactsText } from './file-check.js';
 import { explainFailure, rememberServiceUrl, serviceUrlFrom } from './service-client.js';
 
 const $ = (id) => document.getElementById(id);
@@ -110,10 +111,13 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
     const c = st.check;
     if (!c) return '';
     const problems = (c.problems ?? []).map((p) => `<p class="panel-error">${escapeHtml(p)}</p>`).join('');
+    // What the values look like, so the visitor can choose how they are read (Values, Zeros).
+    const facts = valueFactsText(c.values);
     return `<dl>
         <dt>File</dt><dd>${escapeHtml(c.name)} (${escapeHtml((c.size / 1024).toFixed(1))} KB)</dd>
         <dt>Cells</dt><dd>${formatCount(c.cells)}</dd>
-        <dt>Feature rows</dt><dd>${formatCount(c.features)}</dd>
+        <dt>Feature rows</dt><dd>${formatCount(c.features)}</dd>${facts ? `
+        <dt>Values</dt><dd>${escapeHtml(facts)}</dd>` : ''}
       </dl>${problems}`;
   }
 
@@ -135,7 +139,13 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
     $('watch-example').disabled = !resting;
     $('send-example').disabled = !(resting && service.state.ready);
     $('matrix').disabled = !resting;
-    $('value-scale').disabled = $('modality').value !== 'prot';  // an RNA file is read by the service
+    // An RNA file is read by the service, and what a 0 means is asked only of a
+    // file read as already log: a menu that does not apply shows Automatic.
+    const protein = $('modality').value === 'prot';
+    if (!protein) $('value-scale').value = 'auto';
+    $('value-scale').disabled = !protein;
+    if ($('value-scale').value !== 'log') $('zeros').value = 'auto';
+    $('zeros').disabled = $('value-scale').value !== 'log';
     setHtml($('file-result'), fileResult(st));
     const run = landing.run;
     const shown = Boolean(run) && ['interactive', 'settling', 'flying', 'receipt', 'finishing'].includes(name);
@@ -164,7 +174,11 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
     landing.optionsChanged();
     update();
   });
-  $('value-scale').addEventListener('change', () => landing.optionsChanged());
+  $('value-scale').addEventListener('change', () => {
+    landing.optionsChanged();
+    update();
+  });
+  $('zeros').addEventListener('change', () => landing.optionsChanged());
   // Emptied as the picker opens, so choosing the same file again still
   // counts as a choice.
   $('matrix').addEventListener('click', () => { $('matrix').value = ''; });

@@ -107,8 +107,12 @@ test('the receipt holds how the values were read, and the reading the visitor as
   assert.equal(receiptFromResponse(response).scaleAsked, null);
   assert.equal(receiptFromResponse(response, { scaleAsked: 'log' }).scaleAsked, 'log');
   assert.equal(receiptFromResponse(response, { scaleAsked: 'auto' }).scaleAsked, null, 'automatic asks for nothing');
+  assert.equal(receiptFromResponse(response).zerosAsked, null);
+  assert.equal(receiptFromResponse(response, { zerosAsked: 'missing' }).zerosAsked, 'missing');
+  assert.equal(receiptFromResponse(response, { zerosAsked: 'auto' }).zerosAsked, null);
   const w = receiptFromWorkflow(workflow);
   assert.deepEqual(w.scale, { detected: workflow.raw.pbmc240.scale.detected, transformed: workflow.raw.pbmc240.scale.transformed });
   assert.equal(w.scaleAsked, null);
+  assert.equal(w.zerosAsked, null);
   assert.equal(receiptFromWorkflow({}).scale, null);
 });

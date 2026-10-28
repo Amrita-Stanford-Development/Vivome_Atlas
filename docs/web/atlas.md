@@ -29,7 +29,7 @@ Pure modules have no DOM and are covered by `node --test`
 | `answers.js` (pure) | A service response or the recorded example as one cell shape; how each answer is drawn; which pipelines share this map (v3.1, v4, v4.1, v4.2); the receipt's numbers |
 | `choreography.js` (pure) | The landing's timing: the flight schedule, the guided timeline, the waiting loop, framing a pose, reduced-motion timing |
 | `director.js` (pure) | The page's state machine (below) |
-| `file-check.js` (pure) | Checks a file in the browser (header, cells, rows) against the service's limits; it counts cells the way the service reads each layout (a plain matrix, DIA-NN, Spectronaut, MaxQuant, FragPipe LFQ or TMT) |
+| `file-check.js` (pure) | Checks a file in the browser (header, cells, rows, and its values' range, zeros, empties and negatives) against the service's limits; it counts cells the way the service reads each layout (a plain matrix, DIA-NN, Spectronaut, MaxQuant, FragPipe LFQ or TMT) |
 | `service-client.js` | The service's address, its status and project calls (upload progress, Retry-After, timeouts), plain-words failures |
 | `atlas-panels.js` (pure) | The cell card, the receipt, the answer key, the outcome chips, the example's summary |
 | `cell-browser.js` (pure) | The projected cells grouped by the answer each was given (one group per type, family, branch, reason for no answer, and not placed), their order (sorted by confidence, file order or likeness; searched by name), and the drawer's browser |
@@ -107,13 +107,19 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
   (`COMPATIBLE_PIPELINES`). Otherwise the cells are listed, not placed.
 - **Limits** come from the service's status when it gives them, else from the
   Workflow data's service records.
-- **Values** (`#value-scale`, protein only): Automatic sends no field, so the
-  service reads the scale itself; Raw intensities or Already log sends
-  `value_scale` `linear` or `log` (`docs/service/projection-api.md`). The
-  receipt and About this answer say how the values were read and whether it
-  was the visitor's choice (`valueScaleText` in `web/js/panels.js`). A reply
-  without `stated` to a chosen reading came from a service older than the
-  choice, and the receipt says the choice was not taken.
+- **Values** (`#value-scale`, protein only) and **Zeros** (`#zeros`, with
+  Already log): Automatic sends no field, so the service reads the scale
+  itself; Raw intensities or Already log sends `value_scale` `linear` or
+  `log`, and Not measured or Measured sends `zeros` `missing` or `measured`
+  (`docs/service/projection-api.md`). A menu that does not apply is
+  disabled and shows Automatic. The file's check lists its values' range,
+  zeros, empties and negatives (`valueFactsText` in `file-check.js`) to
+  help the choice. The receipt and About this answer say how the values
+  were read and whether it was the visitor's choice (`valueScaleText` in
+  `web/js/panels.js`). A reply without `stated` or `zeros` to a choice came
+  from a service older than the choice, and the receipt says it was not
+  taken. Changing either menu after the service turned the file down offers
+  Send again (`OPTIONS_CHANGED` in `director.js`).
 - **Address:** the online service by default (`DEFAULT_SERVICE_URL`, which
   `web/data/workflow.json` records); an address the visitor types for their
   own copy is remembered in their browser.

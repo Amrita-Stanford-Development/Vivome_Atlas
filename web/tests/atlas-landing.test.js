@@ -292,6 +292,21 @@ test('a stated reading is sent, and an automatic one is not', async () => {
   }
 });
 
+test('what a 0 means is sent when the visitor said it', async () => {
+  for (const [zeros, expected] of [['missing', 'missing'], ['measured', 'measured'], ['auto', null], [undefined, null]]) {
+    let sent = 'not sent';
+    const client = { async project(url, form, { onUpload }) { sent = form.get('zeros'); onUpload(1); return responseFromTrace(); } };
+    const { landing, tick } = setup({ client, options: () => ({ modality: 'prot', valueScale: 'log', zeros }) });
+    const bytes = readFileSync(new URL('../data/examples/pbmc240_proteins_raw.tsv', import.meta.url));
+    await landing.chooseFile(new File([bytes], 'x.tsv'));
+    landing.send();
+    await settleMicrotasks();
+    tick(15);
+    assert.equal(sent, expected, String(zeros));
+    assert.equal(landing.run.receipt.zerosAsked, expected, String(zeros));
+  }
+});
+
 test('a service on another map lists cells without placing them', async () => {
   const response = { ...responseFromTrace(), pipeline_version: 'v5.2' };
   const client = { async project(url, form, { onUpload }) { onUpload(1); return response; } };

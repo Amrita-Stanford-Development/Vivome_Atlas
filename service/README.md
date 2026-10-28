@@ -133,14 +133,16 @@ subset is drawn from a generator seeded with a hash of the upload
 could return different abstentions.
 
 **A request may state a protein upload's value scale** (form field
-`value_scale`: `auto`, `linear` or `log`; see
+`value_scale`: `auto`, `linear` or `log`, and with `log` what a 0 means,
+`zeros`: `missing` or `measured`; see
 [`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
 Stage 0's median rule reads linear tables on a small scale as log
 (`research/notebook-outputs/value_scale_step1/`), so the user can say which
 the file is. `alignment.median_rule` is the rule, `alignment.apply_reading`
 applies a reading, and `detect_and_transform_value_scale` runs both, with
-the stated reading winning. Every version receives it as `stated_scale`
-(`pipeline.run_projection`), v4.2's protein query included. With no field,
+the stated reading winning. Every version receives them as `stated_scale`
+and `stated_zeros` (`pipeline.run_projection`, which refuses either on an
+RNA upload), v4.2's protein query included. With no field,
 Stage 0 and the reply are unchanged byte for byte
 (`research/notebook-outputs/value_scale_phaseA/`).
 

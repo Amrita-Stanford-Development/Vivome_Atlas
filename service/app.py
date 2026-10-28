@@ -112,6 +112,7 @@ def _parse_bool_field(value: bytes | None) -> bool:
 
 
 VALUE_SCALE_CHOICES = ("auto", *alignment.READINGS)
+ZEROS_CHOICES = ("auto", *alignment.ZEROS)
 
 
 def _parse_value_scale_field(value: bytes | None, modality: str) -> str | None:
@@ -127,6 +128,21 @@ def _parse_value_scale_field(value: bytes | None, modality: str) -> str | None:
     if modality != "prot":
         raise ValueError("value_scale can be stated only for a protein upload; an RNA upload's scale is read "
                          "by the service (send auto, or leave the field out)")
+    return text
+
+
+def _parse_zeros_field(value: bytes | None, stated_scale: str | None) -> str | None:
+    """Optional zeros form field: what a 0 in the table means ("missing" or
+    "measured"), or None for "auto", empty or absent. Only with value_scale
+    log: read as raw intensities, every 0 is not detected."""
+    text = (value or b"").decode("utf-8").strip().lower()
+    if text in ("", "auto"):
+        return None
+    if text not in alignment.ZEROS:
+        raise ValueError(f"zeros must be one of {', '.join(ZEROS_CHOICES)}, got {text!r}")
+    if stated_scale != "log":
+        raise ValueError("zeros can be stated only with value_scale log: read as raw intensities, every 0 is not "
+                         "detected (and an RNA upload's scale is read by the service)")
     return text
 
 
@@ -268,7 +284,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             "limits": {"max_cells": config.MAX_UPLOAD_CELLS,
                        "max_upload_mb": round(config.MAX_UPLOAD_BYTES / 2**20, 1),
                        "concurrent_projections": max(1, config.MAX_CONCURRENT_PROJECTIONS)},
-            "value_scale": {"choices": list(VALUE_SCALE_CHOICES), "modalities": ["prot"]},
+            "value_scale": {"choices": list(VALUE_SCALE_CHOICES), "modalities": ["prot"], "zeros": list(ZEROS_CHOICES)},
         })
 
     def do_POST(self) -> None:  # noqa: N802 (stdlib naming)
@@ -310,6 +326,7 @@ class ProjectionHandler(BaseHTTPRequestHandler):
                 return
             try:
                 stated_scale = _parse_value_scale_field(fields.get("value_scale"), modality)
+                stated_zeros = _parse_zeros_field(fields.get("zeros"), stated_scale)
             except ValueError as exc:
                 self._send_json(400, {"error": str(exc)})
                 return
@@ -372,10 +389,9 @@ class ProjectionHandler(BaseHTTPRequestHandler):
 
             try:
                 result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality,
-                                                 stated_scale=stated_scale)
+                                                 stated_scale=stated_scale, stated_zeros=stated_zeros)
             except alignment.NotIntensities as exc:  # a linear reading stated for a log or centred table
-                self._send_json(400, {"error": str(exc), "reason": "Send it with value_scale auto or log (on the Atlas "
-                                                                   "page, Automatic or Already log)."})
+                self._send_json(400, {"error": str(exc), "reason": "Choose Already log, or Automatic, for this file."})
                 return
             except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
                 logger.exception("projection failed")

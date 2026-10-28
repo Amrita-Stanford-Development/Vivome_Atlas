@@ -121,6 +121,16 @@ test('the receipt warns when the service did not take the visitor’s reading', 
   assert.match(html, /Already on a log scale\. This service did not take your choice \(Raw intensities\): it read the values on its own\./);
 });
 
+test('the receipt warns when the service did not take what the visitor said a 0 means', () => {
+  const noZeros = { detected: 'log', transformed: false, stated: 'log' };
+  const html = clean(buildReceipt(receiptFromResponse({ n_cells: 5, value_scale: noZeros }, { scaleAsked: 'log', zerosAsked: 'missing' })));
+  assert.match(html, /This service did not take your choice \(Already log; a 0 is not measured\): it read the values on its own\./);
+  const taken = { ...noZeros, zeros: 'missing' };
+  const ok = clean(buildReceipt(receiptFromResponse({ n_cells: 5, value_scale: taken }, { scaleAsked: 'log', zerosAsked: 'missing' })));
+  assert.match(ok, /Already on a log scale, each 0 read as not measured\. You chose this/);
+  assert.ok(!ok.includes('did not take'));
+});
+
 test('the receipt folds to one line: whose file, how many cells, which model', () => {
   const r = receiptFromResponse({ n_cells: 216, n_features_matched: 2996, pipeline_version: 'v4.1', model_version: 'v4.1 (long name)' });
   const open = clean(buildReceipt(r));

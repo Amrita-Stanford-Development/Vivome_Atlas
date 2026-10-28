@@ -1,0 +1,979 @@
+{
+ "step": "phaseA2",
+ "run": "2026-10-28T13:16:51",
+ "pipeline_version": "v4.1",
+ "tables": [
+  {
+   "id": "pbmc240_diann",
+   "label": "linear",
+   "refused": false,
+   "cells": 238,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 172,
+    "zeros missing": 172
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "kabatnik_cra_timstofultra",
+   "label": "linear",
+   "refused": false,
+   "cells": 25,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 11,
+    "zeros missing": 11
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "kabatnik_c3_region",
+   "label": "linear",
+   "refused": false,
+   "cells": 27,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 11,
+    "zeros missing": 11
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "pxd073250_diann",
+   "label": "linear",
+   "refused": false,
+   "cells": 557,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 159,
+    "zeros missing": 159
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "pxd077946_diann_genes",
+   "label": "linear",
+   "refused": false,
+   "cells": 40,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 18,
+    "zeros missing": 18
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "zamore_diann",
+   "label": "linear",
+   "refused": false,
+   "cells": 30,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 29,
+    "zeros missing": 29
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "pxd064083_t",
+   "label": "linear",
+   "refused": false,
+   "cells": 78,
+   "zero_share": 0.4387,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 47,
+    "zeros missing": 40
+   },
+   "changed": 39,
+   "pass_": true
+  },
+  {
+   "id": "pxd064083_b",
+   "label": "linear",
+   "refused": false,
+   "cells": 70,
+   "zero_share": 0.4658,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 20,
+    "zeros missing": 23
+   },
+   "changed": 22,
+   "pass_": true
+  },
+  {
+   "id": "pxd021882_maxquant",
+   "label": "linear",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "dusszachniewicz_maxquant",
+   "label": "linear",
+   "refused": false,
+   "cells": 45,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 22,
+    "zeros missing": 22
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "herrera2025_fragpipe",
+   "label": "linear",
+   "refused": false,
+   "cells": 91,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 49,
+    "zeros missing": 49
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "lungmap_bpd_fragpipe",
+   "label": "linear",
+   "refused": false,
+   "cells": 20,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 7,
+    "zeros missing": 7
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "msv000099294_hmc3",
+   "label": "linear",
+   "refused": false,
+   "cells": 47,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 19,
+    "zeros missing": 19
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "msv000099294_microglia",
+   "label": "linear",
+   "refused": false,
+   "cells": 57,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 19,
+    "zeros missing": 19
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "pxd061052_spectronaut",
+   "label": "linear",
+   "refused": false,
+   "cells": 29,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 8,
+    "zeros missing": 8
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "pxd043355_pd",
+   "label": "linear",
+   "refused": false,
+   "cells": 59,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 49,
+    "zeros missing": 49
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "fulcher_tmt",
+   "label": "linear",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 1282,
+    "zeros missing": 1282
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "scope2_export",
+   "label": "log",
+   "refused": false,
+   "cells": 1490,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 789,
+    "zeros missing": 789
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "khoury_column_normalized",
+   "label": "log",
+   "refused": false,
+   "cells": 1651,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 1535,
+    "zeros missing": 1535
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_batchcorr",
+   "label": "linear",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.6838,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 792,
+    "zeros missing": 638
+   },
+   "changed": 1280,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_batchcorr_norm",
+   "label": "linear",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.6835,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 634,
+    "zeros missing": 787
+   },
+   "changed": 1096,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_log2",
+   "label": "log",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.6839,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 524,
+    "zeros missing": 806
+   },
+   "changed": 1100,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_log2_imputed",
+   "label": "log",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 488,
+    "zeros missing": 488
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_log2_nan",
+   "label": "log",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 801,
+    "zeros missing": 801
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_log2fc_nan",
+   "label": "log",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 793,
+    "zeros missing": 793
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "furtwangler_log2_raw_sn",
+   "label": "log",
+   "refused": false,
+   "cells": 2000,
+   "zero_share": 0.6834,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 946,
+    "zeros missing": 975
+   },
+   "changed": 1302,
+   "pass_": true
+  },
+  {
+   "id": "pxd049412_hela250pg",
+   "label": "linear",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "pxd049412_a549_singlecells",
+   "label": "linear",
+   "refused": false,
+   "cells": 50,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 11,
+    "zeros missing": 11
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "pxd069060_diann_report",
+   "label": "linear",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "quantms_pxd004452_ibaq",
+   "label": "linear",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "quantms_pxd004452_ribaq",
+   "label": "log",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "brunner_diann_1ng",
+   "label": "linear",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "brunner_mq_singlecells",
+   "label": "linear",
+   "refused": false,
+   "cells": 51,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 21,
+    "zeros missing": 21
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "krull_singlecells",
+   "label": "linear",
+   "refused": false,
+   "cells": 143,
+   "zero_share": 0.0007,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 51,
+    "zeros missing": 53
+   },
+   "changed": 13,
+   "pass_": true
+  },
+  {
+   "id": "cong_mq_singlecells",
+   "label": "linear",
+   "refused": true,
+   "pass_": true
+  },
+  {
+   "id": "hu2023_pd_k562",
+   "label": "linear",
+   "refused": false,
+   "cells": 72,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 3,
+    "zeros missing": 3
+   },
+   "changed": 0,
+   "pass_": true
+  },
+  {
+   "id": "cptac_ccrcc_tumor",
+   "label": "log",
+   "refused": false,
+   "cells": 110,
+   "zero_share": 0.0,
+   "checks": {
+    "B1_sha256_as_baseline": true,
+    "B2_measured_equals_log": true,
+    "B2_missing_value_scale": true,
+    "B2_no_zeros_no_change": true,
+    "B3_every_cell_answered_or_abstained": true,
+    "B2_zeros_refused_with_auto": true,
+    "B2_zeros_refused_with_linear": true,
+    "B3_no_inf_after_stage0": true,
+    "B3_stage0_missing_as_expected": true,
+    "B3_mask_sum_equals_observed": true,
+    "B3_prepare_query_matches_trace": true,
+    "B3_encoder_input_finite": true,
+    "B3_protein_query_reads_as_stage0": true
+   },
+   "failed": [],
+   "answered": {
+    "zeros measured": 47,
+    "zeros missing": 47
+   },
+   "changed": 0,
+   "pass_": true
+  }
+ ],
+ "app": [
+  {
+   "check": "GET /api/status lists the zeros choices",
+   "pass": true
+  },
+  {
+   "check": "pbmc240_diann (its file), value_scale log with zeros missing: 200, equal to pipeline.run_projection's reply",
+   "pass": true,
+   "status": 200,
+   "error": null
+  },
+  {
+   "check": "furtwangler_log2 (its 2,000-cell subsample), value_scale log with zeros missing: 200, equal to pipeline.run_projection's reply",
+   "pass": true,
+   "status": 200,
+   "error": null
+  },
+  {
+   "check": "zeros missing without value_scale: 400 naming value_scale log",
+   "status": 400,
+   "error": "zeros can be stated only with value_scale log: read as raw intensities, every 0 is not detected (and an RNA upload's scale is read by the service)",
+   "pass": true
+  },
+  {
+   "check": "zeros missing with value_scale linear: 400 naming value_scale log",
+   "status": 400,
+   "error": "zeros can be stated only with value_scale log: read as raw intensities, every 0 is not detected (and an RNA upload's scale is read by the service)",
+   "pass": true
+  },
+  {
+   "check": "modality rna with zeros missing: 400",
+   "pass": true,
+   "status": 400,
+   "error": "zeros can be stated only with value_scale log: read as raw intensities, every 0 is not detected (and an RNA upload's scale is read by the service)"
+  },
+  {
+   "check": "zeros none: 400 naming missing and measured",
+   "status": 400,
+   "error": "zeros must be one of auto, missing, measured, got 'none'",
+   "pass": true
+  }
+ ],
+ "review_fixes": [
+  {
+   "check": "the pipeline refuses {'stated_scale': 'log'} on an RNA upload",
+   "pass": true
+  },
+  {
+   "check": "the pipeline refuses {'stated_scale': 'log', 'stated_zeros': 'missing'} on an RNA upload",
+   "pass": true
+  },
+  {
+   "check": "apply_reading refuses the reading 'Linear'",
+   "pass": true
+  },
+  {
+   "check": "one negative value is said as '1 value is negative'",
+   "pass": true
+  }
+ ]
+}

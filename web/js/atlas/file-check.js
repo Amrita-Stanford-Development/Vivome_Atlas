@@ -1,6 +1,7 @@
 // What the browser can tell about an upload before sending it: its
-// separator, how many cells and feature rows it has, and whether those fit
-// the service's limits. Expression matrices are routinely gigabytes, so the
+// separator, how many cells and feature rows it has, what its values look
+// like (range, zeros, empties, negatives), and whether those fit the
+// service's limits. Expression matrices are routinely gigabytes, so the
 // file is never read into memory whole: the header line is read slice by
 // slice and the rows are counted by streaming, and peak memory stays flat
 // whatever the file's size. Pure: works on any Blob (a File in the browser,
@@ -47,7 +48,27 @@ const MAXQUANT_REFUSALS = [
 // Spectronaut's protein-group pivot report: one "[n] <run>.PG.Quantity" column
 // per run, "PG.Genes" the identifiers.
 const SPECTRONAUT_QUANTITIES = [/^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$/];
-const sampleColumns = (fields, patterns) => patterns.map((p) => fields.filter((f) => p.test(f)).length).find((n) => n > 0) ?? 0;
+const QUANTITIES = { spectronaut: SPECTRONAUT_QUANTITIES, maxquant: MAXQUANT_QUANTITIES, 'fragpipe-lfq': FRAGPIPE_LFQ_QUANTITIES };
+
+// The service's missing values (service/pipeline/alignment.py, _MISSING_VALUES).
+const MISSING_VALUES = new Set(['', 'NA', 'Filtered', 'NaN']);
+
+// Which header fields are cells, by the layout: the first of the layout's
+// quantity columns the header has (Spectronaut, MaxQuant, FragPipe LFQ), or
+// else every field but the identifier column, the known annotation columns
+// and blank names.
+function cellColumns(fields, format) {
+  const quantities = QUANTITIES[format];
+  if (quantities) {
+    const pattern = quantities.find((p) => fields.some((f) => p.test(f)));
+    return pattern ? fields.flatMap((f, i) => (pattern.test(f) ? [i] : [])) : [];
+  }
+  const idColumn = format === 'diann' ? fields.indexOf('Genes') : format === 'fragpipe' ? fields.indexOf('Gene') : 0;
+  const known = (name) => (format === 'fragpipe'
+    ? FRAGPIPE_ANNOTATIONS.includes(name) || FRAGPIPE_REFERENCE_PREFIXES.some((p) => name.startsWith(p))
+    : DIANN_ANNOTATIONS.includes(name));
+  return fields.flatMap((name, i) => (i === idColumn || known(name) || name.trim() === '' ? [] : [i]));
+}
 
 // The file's first line, without its line ending. By default from the first
 // HEADER_BYTES only; a larger maxBytes reads on, a slice at a time, until
@@ -78,22 +99,65 @@ const isPerseusRow = (line) => line.replace(/^"/, '').startsWith('#!{');
 // How many lines hold anything but white space (Perseus rows aside), streamed
 // in chunks.
 export async function countNonEmptyLines(blob, { encoding = 'utf-8', separator = null } = {}) {
+  return (await scanLines(blob, { encoding, separator })).lines;
+}
+
+// The same count, and with `columns` (the cell columns' positions in a data
+// row) what the rows below the header hold there: how many entries, empty
+// (as the service reads missing values, or not a number), 0 and negative,
+// and the smallest and largest number.
+async function scanLines(blob, { encoding = 'utf-8', separator = null, columns = null } = {}) {
   const reader = blob.stream().getReader();
   const decoder = new TextDecoder(encoding);
+  const values = { entries: 0, empty: 0, zeros: 0, negatives: 0, min: null, max: null };
   let count = 0;
   let tail = '';
   // the file's own separator alone (",," in a CSV) holds nothing either, as the service reads it
   const counts = (line) => (separator ? line.split(separator).join('') : line).trim() !== '' && !isPerseusRow(line);
+  const tally = (line) => {
+    const fields = line.includes('"') ? splitFields(line, separator) : line.split(separator);
+    for (const i of columns) {
+      const text = (fields[i] ?? '').trim();
+      const x = MISSING_VALUES.has(text) ? NaN : Number(text);
+      values.entries += 1;
+      if (!Number.isFinite(x)) {
+        values.empty += 1;
+        continue;
+      }
+      if (x === 0) values.zeros += 1;
+      if (x < 0) values.negatives += 1;
+      if (values.min === null || x < values.min) values.min = x;
+      if (values.max === null || x > values.max) values.max = x;
+    }
+  };
+  const take = (line) => {
+    if (!counts(line)) return;
+    count += 1;
+    if (columns && count > 1) tally(line);  // the first line is the header
+  };
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
     const parts = (tail + decoder.decode(value, { stream: true })).split('\n');
     tail = parts.pop();
-    for (const part of parts) if (counts(part)) count += 1;
+    for (const part of parts) take(part);
   }
   tail += decoder.decode();
-  if (counts(tail)) count += 1;
-  return count;
+  take(tail);
+  return { lines: count, values: columns ? values : null };
+}
+
+// A file's values in one plain sentence (checkFile's `values`), or null.
+const factNumber = (x) => (Number.isInteger(x) || Math.abs(x) >= 100
+  ? x.toLocaleString('en-US', { maximumFractionDigits: 1 }) : String(Number(x.toPrecision(4))));
+export function valueFactsText(values) {
+  if (!values || !(values.entries > 0)) return null;
+  if (values.min === null) return 'Every value is empty.';
+  const share = (n) => `${((n / values.entries) * 100).toFixed(1)}%`;
+  const negative = values.negatives === 0 ? 'none is negative'
+    : `${formatCount(values.negatives)} ${values.negatives === 1 ? 'is' : 'are'} negative`;
+  return `From ${factNumber(values.min)} to ${factNumber(values.max)}; ${share(values.zeros)} are 0 and `
+    + `${share(values.empty)} are empty; ${negative}.`;
 }
 
 // What the file's first bytes say about it, as the service reads them
@@ -186,36 +250,23 @@ export function parseHeader(line) {
   const separator = tabs > commas ? '\t' : ',';
   const fields = splitFields(text, separator);
   if (fields.includes('PG.Genes') && fields.some((f) => SPECTRONAUT_QUANTITIES[0].test(f))) {
-    const cells = sampleColumns(fields, SPECTRONAUT_QUANTITIES);
+    const cells = cellColumns(fields, 'spectronaut').length;
     return { separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells, format: 'spectronaut' };
   }
   const maxquant = fields.includes('Majority protein IDs') && fields.includes('Gene names');
   const fragpipeLfq = !maxquant && fields.includes('Gene') && fields.includes('Combined Total Peptides');
   if (maxquant || fragpipeLfq) {
-    const cells = sampleColumns(fields, maxquant ? MAXQUANT_QUANTITIES : FRAGPIPE_LFQ_QUANTITIES);
+    const format = maxquant ? 'maxquant' : 'fragpipe-lfq';
+    const cells = cellColumns(fields, format).length;
     const refusal = maxquant ? MAXQUANT_REFUSALS.find(([is]) => fields.some(is))?.[1] : undefined;
     return {
       separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells,
-      format: maxquant ? 'maxquant' : 'fragpipe-lfq', ...(refusal ? { refusal } : {}),
+      format, ...(refusal ? { refusal } : {}),
     };
   }
-  const diann = fields.includes('Genes');
-  const fragpipe = !diann && fields.includes('Gene');
-  const idColumn = diann ? fields.indexOf('Genes') : fragpipe ? fields.indexOf('Gene') : 0;
-  const known = (name) => (fragpipe
-    ? FRAGPIPE_ANNOTATIONS.includes(name) || FRAGPIPE_REFERENCE_PREFIXES.some((p) => name.startsWith(p))
-    : DIANN_ANNOTATIONS.includes(name));
-  let annotation = 0;
-  fields.forEach((name, i) => {
-    if (i === idColumn || known(name) || name.trim() === '') annotation += 1;
-  });
-  return {
-    separator,
-    columns: fields.length,
-    annotation,
-    cellEstimate: fields.length - annotation,
-    format: diann ? 'diann' : fragpipe ? 'fragpipe' : 'matrix',
-  };
+  const format = fields.includes('Genes') ? 'diann' : fields.includes('Gene') ? 'fragpipe' : 'matrix';
+  const cells = cellColumns(fields, format).length;
+  return { separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells, format };
 }
 
 // The file's shape, or an Error saying in plain words why it cannot be sent.
@@ -239,15 +290,19 @@ export async function checkFile(blob, name = blob?.name ?? '') {
     // DIA-NN's annotation columns (the service leaves those out by name)
     const fields = splitFields(header, parsed.separator);
     if (missingCorner(fields, rows) && !DIANN_ANNOTATIONS.includes(fields[0])) {
-      parsed = { ...parsed, annotation: parsed.annotation - 1, cellEstimate: parsed.cellEstimate + 1 };
+      parsed = { ...parsed, annotation: parsed.annotation - 1, cellEstimate: parsed.cellEstimate + 1, corner: 'missing' };
     }
   }
   if (parsed.cellEstimate < 1) throw new Error('The header row lists no cells.');
-  const features = (await countNonEmptyLines(blob, { encoding, separator: parsed.separator })) - 1;
+  // Without a corner field every header field is a cell, one place left of its values.
+  const fields = splitFields(header, parsed.separator);
+  const columns = parsed.corner === 'missing' ? fields.map((_, i) => i + 1) : cellColumns(fields, parsed.format);
+  const scan = await scanLines(blob, { encoding, separator: parsed.separator, columns });
+  const features = scan.lines - 1;
   if (features < 1) throw new Error('The file has a header row but no feature rows.');
   return {
     name, size: blob.size, separator: parsed.separator, columns: parsed.columns,
-    annotation: parsed.annotation, format: parsed.format, features, cells: parsed.cellEstimate,
+    annotation: parsed.annotation, format: parsed.format, features, cells: parsed.cellEstimate, values: scan.values,
   };
 }
 

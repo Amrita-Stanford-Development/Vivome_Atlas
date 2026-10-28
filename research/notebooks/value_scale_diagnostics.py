@@ -6,6 +6,7 @@ checked against the expectations written before it ran
     python research/notebooks/value_scale_diagnostics.py --step step1    # from the repository root
     python research/notebooks/value_scale_diagnostics.py --step phaseA-baseline   # before Phase A's change
     python research/notebooks/value_scale_diagnostics.py --step phaseA
+    python research/notebooks/value_scale_diagnostics.py --step phaseA2
 
 Step 1:
 - D1, the bank itself: each source file matches its recorded sha256, parses
@@ -25,6 +26,9 @@ Phase A (the request may state the scale, value_scale):
 - A2, a stated reading is applied and said, and a linear reading of negative
   values refused; A3, the stage invariants under each reading; A4, the
   answers that change with the reading; A5, the same through the app.
+- Phase A2 (what a 0 means, zeros, with a log reading): the automatic reply
+  still the baseline's; zeros applied, said and refused without a log
+  reading; the invariants; the app; the final review's smaller points.
 
 Writes research/notebook-outputs/value_scale_<step>/report.md (expected
 against observed, one row per table) and report.json.
@@ -428,21 +432,24 @@ def answer_of(cell: dict) -> str:
     return cell["label"] if cell.get("label") is not None else f"no answer: {cell.get('abstain_reason')}"
 
 
-def _reading_invariants(bundle, raw: alignment.RawMatrix, stated: str | None, protein_genes) -> dict:
-    """A3: Stage 0 under a reading, then the stages up to the encoder's input."""
+def _reading_invariants(bundle, raw: alignment.RawMatrix, stated: str | None, protein_genes,
+                        zeros: str | None = None) -> dict:
+    """A3: Stage 0 under a reading (and, with a log one, what a 0 means), then
+    the stages up to the encoder's input."""
     values0 = raw.values
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
-        scaled, scale = alignment.detect_and_transform_value_scale(values0, stated=stated)
+        scaled, scale = alignment.detect_and_transform_value_scale(values0, stated=stated, zeros=zeros)
         inv = {"no_inf_after_stage0": not np.isinf(scaled).any()}
         made_missing = int((np.isnan(scaled) & ~np.isnan(values0)).sum())
         infinities = int(np.isinf(values0).sum())
-        inv["stage0_missing_as_expected"] = made_missing == (int((values0 == 0).sum()) + infinities if scale.transformed
+        zeros_missing = scale.transformed or zeros == "missing"
+        inv["stage0_missing_as_expected"] = made_missing == (int((values0 == 0).sum()) + infinities if zeros_missing
                                                              else infinities)
         collapsed = alignment.collapse_duplicate_genes(alignment.RawMatrix(raw.gene_names, raw.cell_ids, scaled))
         aligned, _, checks, _, _ = _align_and_zscore(bundle, collapsed)
         inv.update(checks)
-        smoothed, aligned_again, _ = pipeline._prepare_query(bundle.feature_genes, raw, "prot", stated)
+        smoothed, aligned_again, _ = pipeline._prepare_query(bundle.feature_genes, raw, "prot", stated, zeros)
         inv["prepare_query_matches_trace"] = bool(np.array_equal(aligned.values, aligned_again.values)
                                                   and np.array_equal(aligned.mask, aligned_again.mask))
         inv["encoder_input_finite"] = bool(np.isfinite(smoothed).all() and np.isfinite(aligned.mask).all())
@@ -649,9 +656,204 @@ def step1() -> None:
     print(f"wrote {(out / 'report.md').relative_to(REPO).as_posix()}")
 
 
+APP_TABLES_A2 = ("pbmc240_diann", "furtwangler_log2")
+
+
+def _without_zeros(reply_text: str) -> str:
+    reply = json.loads(reply_text)
+    reply["value_scale"].pop("zeros", None)
+    return canonical(reply)
+
+
+def matrix_tsv(raw: alignment.RawMatrix) -> bytes:
+    """A traced table as a plain matrix the service reads back to the same
+    float32 values (9 significant digits; a missing value empty)."""
+    lines = ["gene\t" + "\t".join(raw.cell_ids)]
+    for name, row in zip(raw.gene_names, raw.values):
+        lines.append(name + "\t" + "\t".join("" if np.isnan(x) else f"{x:.9g}" for x in row.tolist()))
+    return ("\n".join(lines) + "\n").encode("utf-8")
+
+
+def b4_through_the_app(bank: dict, replies: dict, reply_of) -> list[dict]:
+    """B4: the zeros field as the site sends it, to service.app's handler in
+    this process. A table D3 traced on a subsample (over the service's 2,000
+    cells) is sent as that subsample, and compared with the pipeline's reply
+    to the subsample as the service parses it back: the parser's row-major
+    table and the column-major subsample sum in another order, which moves
+    the reply's last digits (notes.md)."""
+    server = ThreadingHTTPServer(("127.0.0.1", 0), app.ProjectionHandler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{server.server_port}"
+    url = f"{base}/api/project"
+    rows = []
+    try:
+        with urllib.request.urlopen(f"{base}/api/status", timeout=600) as response:
+            status = json.loads(response.read())
+        rows.append({"check": "GET /api/status lists the zeros choices",
+                     "pass": status.get("value_scale", {}).get("zeros") == ["auto", "missing", "measured"]})
+        entries = {e["id"]: e for e in bank["entries"]}
+        for table in APP_TABLES_A2:
+            raw, reply = replies[table]
+            whole, _, upload = load_entry(entries[table])
+            sent = upload.read_bytes() if len(raw.cell_ids) == len(whole.cell_ids) else matrix_tsv(raw)
+            how = "its file" if len(raw.cell_ids) == len(whole.cell_ids) else f"its {len(raw.cell_ids):,}-cell subsample"
+            if len(raw.cell_ids) != len(whole.cell_ids):
+                parsed = alignment.parse_matrix_csv(sent.decode("utf-8"))
+                assert np.array_equal(parsed.values, raw.values, equal_nan=True), "the subsample reads back exactly"
+                reply = reply_of(parsed)
+            code, payload = _post(url, {"modality": b"prot", "value_scale": b"log", "zeros": b"missing"}, sent)
+            payload.pop("warnings", None)
+            rows.append({"check": f"{table} ({how}), value_scale log with zeros missing: 200, equal to "
+                                  "pipeline.run_projection's reply",
+                         "pass": code == 200 and canonical(payload) == reply, "status": code,
+                         "error": payload.get("error") if code != 200 else None})
+        matrix = load_entry(entries[APP_TABLES_A2[0]])[2].read_bytes()
+        for fields, what in (({"modality": b"prot", "zeros": b"missing"}, "zeros missing without value_scale"),
+                             ({"modality": b"prot", "value_scale": b"linear", "zeros": b"missing"},
+                              "zeros missing with value_scale linear")):
+            code, payload = _post(url, fields, matrix)
+            rows.append({"check": f"{what}: 400 naming value_scale log", "status": code, "error": payload.get("error"),
+                         "pass": code == 400 and "value_scale log" in payload.get("error", "")})
+        code, payload = _post(url, {"modality": b"rna", "zeros": b"missing"}, matrix)
+        rows.append({"check": "modality rna with zeros missing: 400", "pass": code == 400, "status": code,
+                     "error": payload.get("error")})
+        code, payload = _post(url, {"modality": b"prot", "value_scale": b"log", "zeros": b"none"}, matrix)
+        rows.append({"check": "zeros none: 400 naming missing and measured", "status": code, "error": payload.get("error"),
+                     "pass": code == 400 and "missing" in payload.get("error", "") and "measured" in payload.get("error", "")})
+    finally:
+        server.shutdown()
+        server.server_close()
+    return rows
+
+
+def b5_review_fixes(bundle, raw: alignment.RawMatrix) -> list[dict]:
+    """B5: the final review's smaller points, on a bank table and two small arrays."""
+    rows = []
+    for kw in ({"stated_scale": "log"}, {"stated_scale": "log", "stated_zeros": "missing"}):
+        try:
+            pipeline.run_projection(bundle, raw, modality="rna", **kw)
+            ok = False
+        except ValueError as err:
+            ok = "RNA" in str(err)
+        rows.append({"check": f"the pipeline refuses {kw} on an RNA upload", "pass": ok})
+    try:
+        alignment.apply_reading(np.array([[1.0]]), "Linear")
+        ok = False
+    except ValueError:
+        ok = True
+    rows.append({"check": "apply_reading refuses the reading 'Linear'", "pass": ok})
+    try:
+        alignment.detect_and_transform_value_scale(np.array([[-5.0, 4000.0]]), stated="linear")
+        ok = False
+    except alignment.NotIntensities as err:
+        ok = str(err).startswith("1 value is negative")
+    rows.append({"check": "one negative value is said as '1 value is negative'", "pass": ok})
+    return rows
+
+
+def phase_a2() -> None:
+    bank = fetch.load_bank()
+    out = OUT / "value_scale_phaseA2"
+    out.mkdir(parents=True, exist_ok=True)
+    baseline = json.loads((OUT / "value_scale_phaseA" / "baseline.json").read_text(encoding="utf-8"))["sha256"]
+    bundle = pipeline.load_bundle(VERSION)
+    protein_genes = pipeline.load_bundle("v4.2").protein_genes
+    run = lambda raw, **kw: canonical(pipeline.run_projection(bundle, raw, modality="prot", **kw))  # noqa: E731
+    rows, app_replies, first_raw = [], {}, None
+    for entry in bank["entries"]:
+        raw = traced_table(entry, load_entry(entry)[0])
+        row = {"id": entry["id"], "label": entry["label"]}
+        if raw is None:
+            row.update(refused=True, pass_=baseline.get(entry["id"]) is None)
+            rows.append(row)
+            continue
+        first_raw = first_raw or raw
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            auto = run(raw)
+            as_log = run(raw, stated_scale="log")
+            measured = run(raw, stated_scale="log", stated_zeros="measured")
+            missing = run(raw, stated_scale="log", stated_zeros="missing")
+        if entry["id"] in APP_TABLES_A2:
+            app_replies[entry["id"]] = (raw, missing)
+        zeros = int((raw.values == 0).sum())
+        reply_missing = json.loads(missing)
+        checks = {
+            "B1_sha256_as_baseline": hashlib.sha256(auto.encode("utf-8")).hexdigest() == baseline.get(entry["id"]),
+            "B2_measured_equals_log": _without_zeros(measured) == as_log,
+            "B2_missing_value_scale": reply_missing["value_scale"] == {
+                "detected": json.loads(auto)["value_scale"]["detected"], "transformed": False, "stated": "log",
+                "zeros": "missing"},
+            "B2_no_zeros_no_change": zeros > 0 or _without_zeros(missing) == as_log,
+            "B3_every_cell_answered_or_abstained": all(c.get("label") is not None or c.get("abstain_reason")
+                                                       for c in reply_missing["cells"]),
+        }
+        for stated in (None, "linear"):
+            try:
+                alignment.detect_and_transform_value_scale(raw.values, stated=stated, zeros="missing")
+                checks[f"B2_zeros_refused_with_{stated or 'auto'}"] = False
+            except alignment.NotIntensities:
+                checks[f"B2_zeros_refused_with_{stated or 'auto'}"] = False
+            except ValueError:
+                checks[f"B2_zeros_refused_with_{stated or 'auto'}"] = True
+        for k, ok in _reading_invariants(bundle, raw, "log", protein_genes, zeros="missing").items():
+            if k != "zscore_mean0_sd1":  # the next step's (expectations/phaseA2.json, B3_note)
+                checks[f"B3_{k}"] = bool(ok)
+        before = [answer_of(c) for c in json.loads(measured)["cells"]]
+        after = [answer_of(c) for c in reply_missing["cells"]]
+        row.update(refused=False, cells=len(raw.cell_ids), zero_share=round(zeros / raw.values.size, 4), checks=checks,
+                   failed=[k for k, ok in checks.items() if not ok],
+                   answered={"zeros measured": sum(not a.startswith("no answer") for a in before),
+                             "zeros missing": sum(not a.startswith("no answer") for a in after)},
+                   changed=sum(a != b for a, b in zip(before, after)))
+        row["pass_"] = not row["failed"]
+        rows.append(row)
+        print(f"  B {entry['id']}: {'PASS' if row['pass_'] else 'FAIL ' + ','.join(row['failed'])}", flush=True)
+    print("B4, through the app; B5, the review's fixes", flush=True)
+    app_rows = b4_through_the_app(bank, app_replies, lambda raw: run(raw, stated_scale="log", stated_zeros="missing"))
+    fix_rows = b5_review_fixes(bundle, first_raw)
+    payload = {"step": "phaseA2", "run": datetime.now().isoformat(timespec="seconds"), "pipeline_version": VERSION,
+               "tables": rows, "app": app_rows, "review_fixes": fix_rows}
+    (out / "report.json").write_bytes((json.dumps(payload, indent=1, default=str) + "\n").encode("utf-8"))
+    (out / "report.md").write_bytes(report_phase_a2(rows, app_rows, fix_rows).encode("utf-8"))
+    print(f"wrote {(out / 'report.md').relative_to(REPO).as_posix()}")
+
+
+def report_phase_a2(rows: list, app_rows: list, fix_rows: list) -> str:
+    lines = ["# Value-scale diagnostics, Phase A2: what a 0 means", "",
+             f"Run {datetime.now().strftime('%Y-%m-%d %H:%M')} by research/notebooks/value_scale_diagnostics.py. "
+             "Expectations: valuescale/bank/expectations/phaseA2.json, written before the change. Baseline: "
+             "../value_scale_phaseA/baseline.json. Explained in notes.md beside this file.", ""]
+    n = sum(r["pass_"] for r in rows)
+    lines += [f"## B1 to B3, every bank table: {n} of {len(rows)} pass", "",
+              "B1: the automatic reply is the baseline's, byte for byte. B2: with a log reading, zeros measured changes "
+              "nothing but value_scale.zeros, zeros missing is applied and said, and zeros is refused without a log "
+              "reading. B3: the stage invariants under a log reading with zeros missing (the z-score check is the next "
+              "step's).", ""]
+    table = []
+    for r in rows:
+        if r["refused"]:
+            table.append([r["id"], "", "", "", "", "refused (fewer than 20 cells)" + ("" if r["pass_"] else ", NOT as the baseline")])
+            continue
+        a = r["answered"]
+        table.append([r["id"], r["zero_share"], f"{a['zeros measured']}/{a['zeros missing']}", r["changed"], r["cells"],
+                      "PASS" if r["pass_"] else "FAIL: " + ", ".join(r["failed"])])
+    lines += [_md_table(["table", "share of 0", "answered, zeros measured/missing", "answers changed", "cells", "result"],
+                        table), ""]
+    m = sum(r["pass"] for r in app_rows)
+    lines += [f"## B4, through the app: {m} of {len(app_rows)} pass", "",
+              _md_table(["check", "status", "result"],
+                        [[r["check"], r.get("status", ""), "PASS" if r["pass"] else "FAIL" + (f" ({r['error']})" if r.get("error") else "")]
+                         for r in app_rows]), ""]
+    k = sum(r["pass"] for r in fix_rows)
+    lines += [f"## B5, the final review's smaller points: {k} of {len(fix_rows)} pass", "",
+              _md_table(["check", "result"], [[r["check"], "PASS" if r["pass"] else "FAIL"] for r in fix_rows]), ""]
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a}
+    steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2}
     parser.add_argument("--step", choices=tuple(steps), required=True)
     args = parser.parse_args()
     steps[args.step]()

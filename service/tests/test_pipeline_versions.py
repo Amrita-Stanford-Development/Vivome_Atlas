@@ -448,6 +448,17 @@ class StatedValueScaleTests(unittest.TestCase):
                 self.assertEqual(other["value_scale"], {"detected": "linear", "transformed": False, "stated": "log"})
                 self.assertNotEqual([c["coordinates"] for c in other["cells"]],
                                     [c["coordinates"] for c in auto["cells"]])
+                measured = reply(stated_scale="log", stated_zeros="measured")
+                self.assertEqual(measured["value_scale"].pop("zeros"), "measured")
+                self.assertEqual(measured, other, "under a log reading a 0 already counts as measured")
+                self.assertEqual(reply(stated_scale="log", stated_zeros="missing")["value_scale"]["zeros"], "missing")
+
+    def test_an_rna_upload_s_scale_is_never_stated(self):
+        raw = _load_pbmc240_50()
+        bundle = pipeline.load_bundle("v4.1")
+        for kw in ({"stated_scale": "log"}, {"stated_scale": "log", "stated_zeros": "missing"}):
+            with self.subTest(**kw), self.assertRaisesRegex(ValueError, "RNA"):
+                pipeline.run_projection(bundle, raw, modality="rna", **kw)
 
 
 if __name__ == "__main__":

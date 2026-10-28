@@ -88,8 +88,9 @@ export function outcomeCounts(cells) {
 
 // What the receipt shows when an answer arrives: the service's own numbers.
 // scaleAsked is the reading the visitor chose for the values (atlas.html's
-// #value-scale), null for Automatic.
-export function receiptFromResponse(r, { scaleAsked = null } = {}) {
+// #value-scale) and zerosAsked what they said a 0 means (#zeros); null for
+// Automatic.
+export function receiptFromResponse(r, { scaleAsked = null, zerosAsked = null } = {}) {
   return {
     source: 'service',
     cells: r?.n_cells ?? (Array.isArray(r?.cells) ? r.cells.length : null),
@@ -97,6 +98,7 @@ export function receiptFromResponse(r, { scaleAsked = null } = {}) {
     unmatched: r?.n_features_unmatched ?? null,
     scale: r?.value_scale ?? null,
     scaleAsked: ['linear', 'log'].includes(scaleAsked) ? scaleAsked : null,
+    zerosAsked: ['missing', 'measured'].includes(zerosAsked) ? zerosAsked : null,
     secondOpinion: r?.best_guess_rule?.correlation_term ?? null,
     agreement: r?.best_guess_rule?.agreement ?? null,
     threshold: r?.best_guess_rule?.agreement_threshold ?? null,
@@ -118,6 +120,7 @@ export function receiptFromWorkflow(w) {
     unmatched: value(w?.facts?.unmatched_rows),
     scale: scale ? { detected: scale.detected, transformed: scale.transformed } : null,
     scaleAsked: null,
+    zerosAsked: null,
     secondOpinion: fusion.correlation_term ?? null,
     agreement: fusion.agreement ?? null,
     threshold: fusion.threshold ?? null,

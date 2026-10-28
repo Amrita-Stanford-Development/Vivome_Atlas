@@ -122,15 +122,19 @@ def load_bundle(version: str):
 
 def _prepare_query(
     feature_genes: list[str], raw: alignment.RawMatrix, modality: str = "prot", stated_scale: str | None = None,
+    stated_zeros: str | None = None,
 ) -> tuple[np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
     """Stages 0-2, up to the encoder's input."""
+    if modality == "rna" and (stated_scale is not None or stated_zeros is not None):
+        raise ValueError("an RNA upload's value scale is read by the service; it cannot be stated")
     # Stage 0 — detect and correct linear-scale intensity input (e.g. a raw
     # DIA-NN report) before anything else touches it. Never transforms data
     # already on a log scale (see alignment.detect_and_transform_value_scale).
     # An RNA upload's zeros are measured values, so they vote on the scale.
-    # A reading the request states (stated_scale) is applied instead of the rule's.
+    # A reading the request states (stated_scale, and with a log reading what
+    # a 0 means, stated_zeros) is applied instead of the rule's.
     transformed_values, value_scale = alignment.detect_and_transform_value_scale(
-        raw.values, zeros_vote=modality == "rna", stated=stated_scale)
+        raw.values, zeros_vote=modality == "rna", stated=stated_scale, zeros=stated_zeros)
     raw = dataclasses.replace(raw, values=transformed_values)
 
     # Stage 1 — several rows for one gene become one, on log-scale values.
@@ -153,13 +157,13 @@ def _prepare_query(
 
 def embed_query(
     encoder_handle: "encoder.EncoderHandle", feature_genes: list[str], raw: alignment.RawMatrix,
-    modality: str = "prot", stated_scale: str | None = None,
+    modality: str = "prot", stated_scale: str | None = None, stated_zeros: str | None = None,
 ) -> tuple[np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
     """Stages 0-3: value scale, alignment, smoothing, encoding — the whole
     query side, from a parsed upload to latent vectors. run_projection and
     the benchmark harness (benchmark/) both call this, so an
     evaluation scores exactly what the service computes."""
-    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw, modality, stated_scale)
+    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw, modality, stated_scale, stated_zeros)
     # Stage 3
     query_embeddings = encoder_handle.encode(smoothed_values, aligned.mask)
     return query_embeddings, aligned, value_scale
@@ -167,11 +171,11 @@ def embed_query(
 
 def embed_query_with_hidden(
     encoder_handle: "encoder.EncoderHandle", feature_genes: list[str], raw: alignment.RawMatrix,
-    modality: str = "prot", stated_scale: str | None = None,
+    modality: str = "prot", stated_scale: str | None = None, stated_zeros: str | None = None,
 ) -> tuple[np.ndarray, np.ndarray, alignment.AlignedQuery, alignment.ValueScale]:
     """embed_query plus the encoder's 512-dimensional pre-projection features,
     which v3.1's out-of-distribution score reads (T1 NB3)."""
-    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw, modality, stated_scale)
+    smoothed_values, aligned, value_scale = _prepare_query(feature_genes, raw, modality, stated_scale, stated_zeros)
     query_embeddings, hidden = encoder_handle.encode_with_hidden(smoothed_values, aligned.mask)
     return query_embeddings, hidden, aligned, value_scale
 
@@ -199,6 +203,7 @@ def run_projection(
     components: "Components | None" = None,
     modality: str = "prot",
     stated_scale: str | None = None,
+    stated_zeros: str | None = None,
 ) -> dict:
     """Runs Stages 1-8 and returns the response dict. `cells` entries match
     docs/service/projection-api.md exactly; `properties` and `model_version` are
@@ -230,17 +235,19 @@ def run_projection(
 
     `stated_scale` ("linear" or "log", the request's value_scale) is the
     upload's value scale as the user states it; None leaves it to Stage 0's
-    rule (alignment.detect_and_transform_value_scale). The reply's
-    value_scale then carries `stated`.
+    rule (alignment.detect_and_transform_value_scale). With "log",
+    `stated_zeros` ("missing" or "measured", the request's zeros) says what
+    a 0 means. The reply's value_scale then carries `stated` and `zeros`.
+    Both are for protein uploads: with modality "rna" either is refused.
     """
     if bundle.pipeline_version == "v3.1":
         from service.pipeline import ensemble  # imports this module
         return ensemble.project(bundle, raw, restrict_to_supported_classes, components or bundle.components,
-                                modality=modality, stated_scale=stated_scale)
+                                modality=modality, stated_scale=stated_scale, stated_zeros=stated_zeros)
     if bundle.pipeline_version in FUSION_VERSIONS:
         from service.pipeline import fusion  # imports this module
         return fusion.project(bundle, raw, restrict_to_supported_classes, components, modality=modality,
-                              stated_scale=stated_scale)
+                              stated_scale=stated_scale, stated_zeros=stated_zeros)
     components = components or components_for(bundle.pipeline_version)
     rng = rng or np.random.default_rng(upload_seed(raw))
 
@@ -265,10 +272,10 @@ def run_projection(
     hidden = None
     if components.abstention.needs_hidden:
         query_embeddings, hidden, aligned, value_scale = embed_query_with_hidden(
-            bundle.encoder_handle, bundle.feature_genes, raw, modality, stated_scale)
+            bundle.encoder_handle, bundle.feature_genes, raw, modality, stated_scale, stated_zeros)
     else:
         query_embeddings, aligned, value_scale = embed_query(bundle.encoder_handle, bundle.feature_genes, raw, modality,
-                                                             stated_scale)
+                                                             stated_scale, stated_zeros)
 
     # Stage 4 — scored only within the label space. v3: all reference classes
     # by default, config.CROSS_MODAL_SUPPORTED_CLASSES when the request opts in

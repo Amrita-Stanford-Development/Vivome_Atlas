@@ -345,6 +345,7 @@ def parse_matrix_csv(text: str) -> RawMatrix:
 
 
 READINGS = ("linear", "log")  # what a request may state (value_scale); "auto" states nothing
+ZEROS = ("missing", "measured")  # what a 0 means, stated with a log reading (zeros); "auto" states nothing
 
 
 class NotIntensities(ValueError):
@@ -356,6 +357,7 @@ class ValueScale:
     detected: str  # "linear" | "log" | "unknown" (no observed values at all): the rule's reading
     transformed: bool
     stated: str | None = None  # the reading the request stated, or None when it left it to the rule
+    zeros: str | None = None  # what the request said a 0 means (ZEROS), with a stated log reading
 
     @property
     def reading(self) -> str:
@@ -363,11 +365,14 @@ class ValueScale:
         return self.detected if self.detected == "unknown" or self.stated is None else self.stated
 
     def response(self) -> dict:
-        """The reply's value_scale. `stated` appears only when a reading was
-        stated, so a reply to a request that states none is unchanged."""
+        """The reply's value_scale. `stated` and `zeros` appear only when the
+        request said them, so a reply to a request that says neither is
+        unchanged."""
         out = {"detected": self.detected, "transformed": self.transformed}
         if self.stated is not None:
             out["stated"] = self.stated
+        if self.zeros is not None:
+            out["zeros"] = self.zeros
         return out
 
 
@@ -398,17 +403,26 @@ def median_rule(
     return "linear" if (not has_negative) and (median_value > median_threshold) else "log"
 
 
-def apply_reading(values: np.ndarray, reading: str) -> np.ndarray:
+def apply_reading(values: np.ndarray, reading: str, zeros: str | None = None) -> np.ndarray:
     """values (NaN for missing, no +/-inf) read as `reading`: a log reading
-    leaves them as they are; a linear one makes each 0 missing ("not
+    leaves them as they are, or makes each 0 missing when `zeros` is
+    "missing" (a table that writes "not measured" as 0); "unknown" (no
+    observed value) leaves them too; a linear one makes each 0 missing ("not
     detected") and takes log2 of the rest. A linear reading of a negative
     value is refused: no intensity is negative."""
+    if reading not in ("linear", "log", "unknown"):
+        raise ValueError(f"no such reading of the values: {reading!r} (linear, log or unknown)")
     if reading != "linear":
-        return values
+        if zeros != "missing":
+            return values
+        out = values.copy(order="K")  # the table's own layout: another would change the sums' order downstream
+        out[out == 0] = np.nan
+        return out
     observed = ~np.isnan(values)
-    if (values[observed] < 0).any():
-        raise NotIntensities(f"{int((values[observed] < 0).sum()):,} values are negative, so they are not raw "
-                             "intensities: the table is already on a log scale, or centred")
+    negative = int((values[observed] < 0).sum())
+    if negative:
+        raise NotIntensities(f"{negative:,} {'value is' if negative == 1 else 'values are'} negative, so they are "
+                             "not raw intensities: the table is already on a log scale, or centred")
     transformed = values.copy()
     zero_mask = observed & (transformed == 0)
     transformed[zero_mask] = np.nan
@@ -422,6 +436,7 @@ def detect_and_transform_value_scale(
     median_threshold: float = config.LINEAR_SCALE_MEDIAN_THRESHOLD,
     zeros_vote: bool = False,
     stated: str | None = None,
+    zeros: str | None = None,
 ) -> tuple[np.ndarray, ValueScale]:
     """raw_values: (n_raw_genes, n_cells), NaN for missing (this dataset's
     raw units, before any z-scoring). A DIA-NN or similar linear-intensity
@@ -448,14 +463,23 @@ def detect_and_transform_value_scale(
     `stated` ("linear" or "log", the request's value_scale) overrides the
     rule's reading; the rule still runs, and the result reports both. A
     linear reading of a table with a negative value is refused
-    (apply_reading).
+    (apply_reading). With a stated log reading, `zeros` ("missing" or
+    "measured") says what a 0 in the table means; under a linear reading a 0
+    is always "not detected", and the rule's reading is not known in
+    advance, so `zeros` needs `stated` "log".
     """
     if stated is not None and stated not in READINGS:
         raise ValueError(f"the value scale must be linear or log (or left to the service), got {stated!r}")
+    if zeros is not None and zeros not in ZEROS:
+        raise ValueError(f"what a 0 means must be missing or measured (or left to the service), got {zeros!r}")
+    if zeros is not None and stated != "log":
+        raise ValueError("what a 0 means can be said only with a log reading: read as raw intensities, every 0 is "
+                         "not detected")
     raw_values = finite_or_missing(raw_values)
-    scale = ValueScale(detected=median_rule(raw_values, median_threshold, zeros_vote), transformed=False, stated=stated)
+    scale = ValueScale(detected=median_rule(raw_values, median_threshold, zeros_vote), transformed=False, stated=stated,
+                       zeros=zeros)
     scale = replace(scale, transformed=scale.reading == "linear")
-    return apply_reading(raw_values, scale.reading), scale
+    return apply_reading(raw_values, scale.reading, zeros), scale
 
 
 def collapse_duplicate_genes(raw: RawMatrix) -> RawMatrix:

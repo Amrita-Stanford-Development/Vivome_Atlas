@@ -160,6 +160,12 @@
                         <option value="linear">Raw intensities: the service takes log2</option>
                         <option value="log">Already log: used as they are</option>
                     </select>
+                    <label for="zeros">Zeros (files already log)</label>
+                    <select id="zeros" class="well">
+                        <option value="auto">Automatic: a 0 counts as a measured value</option>
+                        <option value="missing">Not measured: a 0 means the protein was not seen</option>
+                        <option value="measured">Measured: a 0 is a real value</option>
+                    </select>
                     <label for="matrix">Matrix file: features in rows, cells in columns (CSV or TSV), or a DIA-NN, Spectronaut, MaxQuant (proteinGroups.txt) or FragPipe protein table as it comes</label>
                     <input type="file" id="matrix" class="well" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values">
                     <div id="file-result" aria-live="polite"></div>

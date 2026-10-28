@@ -195,7 +195,7 @@ export function createLanding({
     };
   }
 
-  function buildRun(data, source, { scaleAsked = null } = {}) {
+  function buildRun(data, source, { scaleAsked = null, zerosAsked = null } = {}) {
     const recorded = source === 'recorded';
     const cells = recorded ? traceToCells(data) : responseToCells(data, ref.order);
     const placeable = recorded || coordinatesCompatible(data?.pipeline_version);
@@ -232,7 +232,7 @@ export function createLanding({
     return {
       source, data, cells, styles, placeable, schedule, model, poses: { fly, settle },
       timeline: landingTimeline(schedule, { T }),
-      receipt: recorded ? receiptFromWorkflow(data) : receiptFromResponse(data, { scaleAsked }),
+      receipt: recorded ? receiptFromWorkflow(data) : receiptFromResponse(data, { scaleAsked, zerosAsked }),
       glow: neighboursOf(cells, styles, model, schedule),
       on: Object.fromEntries(Object.keys(outcomeCounts(cells)).map((k) => [k, true])),
       groups, groupOf, groupOn: groups.map(() => true),
@@ -615,12 +615,13 @@ export function createLanding({
 
   async function request() {
     const { file } = st;
-    const { modality, valueScale = 'auto' } = options();
+    const { modality, valueScale = 'auto', zeros = 'auto' } = options();
     const form = new FormData();
     form.append('modality', modality);
-    // A reading the visitor chose for the values; Automatic sends nothing,
-    // as the page did before the choice existed.
+    // A reading the visitor chose for the values, and with Already log what a
+    // 0 means; Automatic sends nothing, as the page did before the choice existed.
     if (valueScale !== 'auto') form.append('value_scale', valueScale);
+    if (zeros !== 'auto') form.append('zeros', zeros);
     form.append('matrix', file, file.name);
     abort = new AbortController();
     uploaded = 0;
@@ -642,7 +643,7 @@ export function createLanding({
         dispatch({ type: 'UPLOADED' });
       }
       cancelledWork = false;
-      if (st.name === 'working') arrive(response, 'service', { scaleAsked: valueScale });
+      if (st.name === 'working') arrive(response, 'service', { scaleAsked: valueScale, zerosAsked: zeros });
     } catch (error) {
       if (error?.kind === 'cancelled' || !['sending', 'working'].includes(st.name)) return;
       illustration.hide();
