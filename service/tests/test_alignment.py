@@ -348,6 +348,30 @@ class ZScorePerGeneTests(unittest.TestCase):
         z = alignment.zscore_per_gene(raw)
         self.assertTrue(np.isfinite(z[0, 0]) and np.isfinite(z[0, 1]))
 
+    def test_a_gene_whose_values_differ_by_far_less_than_their_level_z_scores_exactly(self):
+        """lungmap_bpd_fragpipe's RAB2B: in float32 its mean came out 0.00135
+        (research/notebook-outputs/value_scale_phaseA/notes.md)."""
+        raw = np.array([[22.717167, 22.71858, np.nan], [23.165524, 23.168373, 23.199709]], dtype=np.float32)
+        z = alignment.zscore_per_gene(raw)
+        self.assertEqual(z.dtype, np.float32, "the service's own dtype")
+        for gene in range(2):
+            observed = z[gene][~np.isnan(raw[gene])].astype(np.float64)
+            self.assertLess(abs(observed.mean()), 1e-6, gene)
+            self.assertLess(abs(observed.std() - 1), 1e-6, gene)
+
+    def test_a_gene_constant_but_for_rounding_z_scores_to_0(self):
+        """furtwangler_batchcorr read as linear: MRPL13's 12 values agree to six
+        digits, rounding leftovers; their z-scores were noise."""
+        raw = np.array([[1.829023, 1.829024, 1.829025, 1.829024] * 3], dtype=np.float32)
+        np.testing.assert_array_equal(alignment.zscore_per_gene(raw), np.zeros_like(raw))
+        large = np.array([[100000.0, 100000.5, 100000.25]], dtype=np.float32)
+        np.testing.assert_array_equal(alignment.zscore_per_gene(large), np.zeros_like(large))
+
+    def test_a_small_real_spread_is_kept(self):
+        raw = np.array([[100.0, 100.01, 100.02], [0.001, 0.002, 0.003]], dtype=np.float32)
+        z = alignment.zscore_per_gene(raw)
+        np.testing.assert_allclose(z, [[-1.2247449, 0.0, 1.2247449]] * 2, atol=1e-3)
+
 
 class AlignToFeatureSpaceTests(unittest.TestCase):
     feature_genes = ["A1BG", "A2M", "AAAS", "UNMEASURED_GENE"]

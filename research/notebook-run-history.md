@@ -3106,6 +3106,33 @@ reply is still the baseline's on all 30 tables. Reading Furtwangler's log
 zeros as not measured lifts the cells answered on furtwangler_log2 from 524
 to 806 of 2,000; whether the answers improve is B1's question.
 
+### 72. The float64 z-score, 2026-10-28
+
+**Why:** Phase A's diagnostics found the service's z-score off by up to
+0.0016 in a gene's mean (float32 rounding), and noise for a gene constant
+but for its last digits. The owner chose to fix both.
+
+**What changed:** `alignment.zscore_per_gene` computes each gene's mean and
+spread in float64 and returns float32, as the notebooks' convention does;
+a gene whose values agree to about five significant digits
+(`config.ZSCORE_NEAR_CONSTANT_SPREAD`, 1e-5) is 0, like a constant one.
+
+**Results** (`research/notebook-outputs/value_scale_zscore/`, report and
+notes):
+- The z-score invariant holds on all 30 traced tables under every reading.
+- No gene is near-constant under any table's automatic reading. Read as
+  linear, furtwangler_batchcorr has 10, now 0.
+- Against Phase A's baseline, answers are unchanged on 29 of 30 tables. The
+  prediction that coordinates would stay within 0.01 was wrong: they move by
+  up to 0.08, all in cells whose 15 smoothing neighbours changed at a
+  near-tie. msv000099294_hmc3, a linear table the rule reads as log, changes
+  3 of 47 answers.
+- Two recorded results moved, accepted by the owner. v3's frozen replies:
+  one cell per dataset crosses its abstention cut-off, and the test now
+  names those two cells (the frozen files are kept). The Workflow example:
+  11 of 238 cells' numbers move, by up to 0.009, every label unchanged; it
+  was re-traced, with `workflow.json` and the methods-reading figure rebuilt.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

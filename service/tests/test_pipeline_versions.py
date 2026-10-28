@@ -45,6 +45,18 @@ def assert_same(test, fresh, frozen, where="response"):
         test.assertEqual(fresh, frozen, where)
 
 
+# Cells whose answer has changed since freezing, by the change that moved
+# them; the frozen files stay as they were. The float64 z-score (owner,
+# 2026-10-28; research/notebook-outputs/value_scale_zscore/notes.md) moved
+# each of these across v3's abstention cut-off. Their other fields are
+# compared as before.
+CHANGED_SINCE_FREEZING = {
+    ("scope2", "default"): {31: {"label": None, "abstained": True, "abstain_reason": "no_confident_label"}},
+    ("pbmc240", "default"): {42: {"label": "cd4-positive, alpha-beta t cell", "abstained": False}},
+}
+ANSWER_FIELDS = ("label", "label_set", "confidence", "abstained", "abstain_reason")
+
+
 class V3IsUnchangedTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -64,8 +76,14 @@ class V3IsUnchangedTests(unittest.TestCase):
                     # Compared under the release number they were frozen with:
                     # the version moves with every release, v3's behaviour must not.
                     with mock.patch.object(config, "ATLAS_VERSION", frozen["atlas_version"]):
-                        fresh = pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)
-                    assert_same(self, json.loads(json.dumps(fresh)), frozen)
+                        fresh = json.loads(json.dumps(
+                            pipeline.run_projection(self.bundle, raw, restrict_to_supported_classes=restrict)))
+                    for i, answer in CHANGED_SINCE_FREEZING.get((name, mode), {}).items():
+                        for key, value in answer.items():
+                            self.assertEqual(fresh["cells"][i].get(key), value, f"cell {i}: {key}")
+                        for cells in (fresh["cells"], frozen["cells"]):
+                            cells[i] = {k: v for k, v in cells[i].items() if k not in ANSWER_FIELDS}
+                    assert_same(self, fresh, frozen)
 
     def test_a_v3_response_carries_none_of_the_v31_fields(self):
         fresh = pipeline.run_projection(self.bundle, self.raws["scope2"])

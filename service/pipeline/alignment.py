@@ -516,19 +516,30 @@ def collapse_duplicate_genes(raw: RawMatrix) -> RawMatrix:
 
 def zscore_per_gene(raw_values: np.ndarray, eps: float = 1e-8) -> np.ndarray:
     """raw_values: (n_raw_genes, n_cells). Z-score each row against this
-    dataset's own mean/std, computed only from the cells in this upload.
-    A zero-variance gene z-scores to 0 rather than +/-inf. A gene with one
-    value in every observed cell is 0 by its spread, not its std: float32's
-    mean misses such a constant by a rounding error, the std then equals it,
-    and the cells came out +/-1, so answers depended on the constant."""
+    dataset's own mean/std, computed only from the cells in this upload, in
+    float64 (as the notebooks' convention, benchmark/notebook_convention.py),
+    and returned in raw_values' own dtype. In float32 a gene whose few values
+    differ by far less than their level lost its mean to rounding: 0.0016
+    off on a bank table (research/notebook-outputs/value_scale_phaseA/).
+
+    A zero-variance gene z-scores to 0 rather than +/-inf, and so does a gene
+    constant but for rounding: one whose observed values agree to about five
+    significant digits (spread at most config.ZSCORE_NEAR_CONSTANT_SPREAD of
+    its largest absolute value). Divided by so small a spread, rounding
+    leftovers came out as large as real differences between cells. Each is 0
+    by its spread, not its std: float32's mean missed a constant by a rounding
+    error, the std then equalled it, and the cells came out +/-1, so answers
+    depended on the constant."""
+    x = raw_values.astype(np.float64, copy=False)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)  # a gene no cell measured: NaN, then 0 below
-        mean = np.nanmean(raw_values, axis=1, keepdims=True)
-        std = np.nanstd(raw_values, axis=1, keepdims=True)
-        spread = np.nanmax(raw_values, axis=1, keepdims=True) - np.nanmin(raw_values, axis=1, keepdims=True)
-    z = (raw_values - mean) / np.clip(std, eps, None)
-    z = np.where(spread > 0, z, 0.0)
-    return np.nan_to_num(z, nan=0.0)
+        mean = np.nanmean(x, axis=1, keepdims=True)
+        std = np.nanstd(x, axis=1, keepdims=True)
+        top, bottom = np.nanmax(x, axis=1, keepdims=True), np.nanmin(x, axis=1, keepdims=True)
+        varies = (top - bottom) > config.ZSCORE_NEAR_CONSTANT_SPREAD * np.maximum(np.abs(top), np.abs(bottom))
+    z = (x - mean) / np.clip(std, eps, None)
+    z = np.where(varies, z, 0.0)
+    return np.nan_to_num(z, nan=0.0).astype(raw_values.dtype, copy=False)
 
 
 def align_to_feature_space(raw: RawMatrix, feature_genes: list[str]) -> AlignedQuery:

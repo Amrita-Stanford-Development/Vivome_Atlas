@@ -7,6 +7,7 @@ checked against the expectations written before it ran
     python research/notebooks/value_scale_diagnostics.py --step phaseA-baseline   # before Phase A's change
     python research/notebooks/value_scale_diagnostics.py --step phaseA
     python research/notebooks/value_scale_diagnostics.py --step phaseA2
+    python research/notebooks/value_scale_diagnostics.py --step zscore
 
 Step 1:
 - D1, the bank itself: each source file matches its recorded sha256, parses
@@ -29,6 +30,9 @@ Phase A (the request may state the scale, value_scale):
 - Phase A2 (what a 0 means, zeros, with a log reading): the automatic reply
   still the baseline's; zeros applied, said and refused without a log
   reading; the invariants; the app; the final review's smaller points.
+- The z-score step (the float64 z-score and the near-constant rule): the
+  invariant under every reading, the genes zeroed, and the replies against
+  Phase A's baseline.
 
 Writes research/notebook-outputs/value_scale_<step>/report.md (expected
 against observed, one row per table) and report.json.
@@ -185,7 +189,8 @@ def _align_and_zscore(bundle, collapsed: alignment.RawMatrix) -> tuple:
     """Stage 1's alignment and the per-gene z-scores of a table after
     duplicates are merged, with two invariants: the mask counts exactly the
     observed values of the matched genes, and each z-scored gene has mean 0
-    and SD 1 (or is all 0 when constant)."""
+    and SD 1 (or is all 0 when constant, or constant but for rounding:
+    config.ZSCORE_NEAR_CONSTANT_SPREAD)."""
     aligned = alignment.align_to_feature_space(collapsed, bundle.feature_genes)
     index = {g: i for i, g in enumerate(bundle.feature_genes)}
     last_row = {}
@@ -200,8 +205,8 @@ def _align_and_zscore(bundle, collapsed: alignment.RawMatrix) -> tuple:
         obs = observed[i]
         if not obs.any():
             continue
-        zi, xi = z[i, obs].astype(np.float64), collapsed.values[i, obs]
-        if np.nanmax(xi) - np.nanmin(xi) == 0:
+        zi, xi = z[i, obs].astype(np.float64), collapsed.values[i, obs].astype(np.float64)
+        if xi.max() - xi.min() <= config.ZSCORE_NEAR_CONSTANT_SPREAD * np.abs(xi).max():
             constant_ok &= bool(np.all(zi == 0))
             continue
         worst_mean = max(worst_mean, abs(zi.mean()))
@@ -851,9 +856,103 @@ def report_phase_a2(rows: list, app_rows: list, fix_rows: list) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _near_constant_genes(values: np.ndarray) -> int:
+    """Genes the near-constant rule zeroes: observed in two or more cells, not
+    one value, and a spread of at most config.ZSCORE_NEAR_CONSTANT_SPREAD of
+    the largest absolute value (alignment.zscore_per_gene)."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        top, bottom = np.nanmax(values, axis=1).astype(np.float64), np.nanmin(values, axis=1).astype(np.float64)
+    spread, size = top - bottom, np.maximum(np.abs(top), np.abs(bottom))
+    return int(((spread > 0) & (spread <= config.ZSCORE_NEAR_CONSTANT_SPREAD * size)).sum())
+
+
+def _floats(a, b, out: list) -> None:
+    if isinstance(b, dict):
+        for k in b:
+            if k in a:
+                _floats(a[k], b[k], out)
+    elif isinstance(b, list):
+        for x, y in zip(a, b):
+            _floats(x, y, out)
+    elif isinstance(b, float) and isinstance(a, (int, float)):
+        out.append(abs(a - b))
+
+
+def zscore_step() -> None:
+    """Z1 to Z3 and Z5 (expectations/zscore.json): the float64 z-score with the
+    near-constant rule, on every traced table, against Phase A's baseline."""
+    bank = fetch.load_bank()
+    out = OUT / "value_scale_zscore"
+    out.mkdir(parents=True, exist_ok=True)
+    bundle = pipeline.load_bundle(VERSION)
+    protein_genes = pipeline.load_bundle("v4.2").protein_genes
+    rows = []
+    for entry in bank["entries"]:
+        raw = traced_table(entry, load_entry(entry)[0])
+        row = {"id": entry["id"], "label": entry["label"]}
+        if raw is None:
+            row.update(refused=True, pass_=True)
+            rows.append(row)
+            continue
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            fresh = json.loads(canonical(pipeline.run_projection(bundle, raw, modality="prot")))
+        before = json.loads((BASELINE_REPLIES / f"{entry['id']}.json").read_text(encoding="utf-8"))
+        changed = sum((a.get("label"), a.get("abstain_reason")) != (b.get("label"), b.get("abstain_reason"))
+                      for a, b in zip(fresh["cells"], before["cells"]))
+        diffs: list = []
+        for a, b in zip(fresh["cells"], before["cells"]):
+            _floats(a.get("coordinates", []), b.get("coordinates", []), diffs)
+        checks, near = {}, {}
+        checks["Z3_fields_but_cells_unchanged"] = {k: v for k, v in fresh.items() if k != "cells"} == \
+            {k: v for k, v in before.items() if k != "cells"}
+        checks["Z3_answers_kept_99pct"] = changed <= 0.01 * len(fresh["cells"])
+        checks["Z3_coordinates_within_0.01"] = (max(diffs) if diffs else 0.0) < 0.01
+        for stated in (None, "linear", "log"):
+            name = stated or "auto"
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", RuntimeWarning)
+                    scaled, _ = alignment.detect_and_transform_value_scale(raw.values, stated=stated)
+            except alignment.NotIntensities:
+                continue
+            collapsed = alignment.collapse_duplicate_genes(alignment.RawMatrix(raw.gene_names, raw.cell_ids, scaled))
+            near[name] = _near_constant_genes(collapsed.values)
+            for k, ok in _reading_invariants(bundle, raw, stated, protein_genes).items():
+                checks[f"{'Z1' if k == 'zscore_mean0_sd1' else 'Z5'}_{name}_{k}"] = bool(ok)
+        checks["Z2_no_near_constant_gene_under_auto"] = near.get("auto", 0) == 0
+        row.update(refused=False, cells=len(raw.cell_ids), answers_changed=changed,
+                   largest_coordinate_change=r4(max(diffs) if diffs else 0.0), near_constant=near, checks=checks,
+                   failed=[k for k, ok in checks.items() if not ok])
+        row["pass_"] = not row["failed"]
+        rows.append(row)
+        print(f"  Z {entry['id']}: {'PASS' if row['pass_'] else 'FAIL ' + ','.join(row['failed'])} "
+              f"(answers changed {changed}, near-constant {near})", flush=True)
+    payload = {"step": "zscore", "run": datetime.now().isoformat(timespec="seconds"), "pipeline_version": VERSION,
+               "near_constant_spread": config.ZSCORE_NEAR_CONSTANT_SPREAD, "tables": rows}
+    (out / "report.json").write_bytes((json.dumps(payload, indent=1, default=str) + "\n").encode("utf-8"))
+    traced = [r for r in rows if not r["refused"]]
+    lines = ["# Value-scale diagnostics: the float64 z-score", "",
+             f"Run {datetime.now().strftime('%Y-%m-%d %H:%M')} by research/notebooks/value_scale_diagnostics.py. "
+             "Expectations: valuescale/bank/expectations/zscore.json, written before the change. Baseline: "
+             "../value_scale_phaseA/baseline.json (the replies before Phase A). Explained in notes.md beside this file.",
+             "", f"## Z1 to Z3 and Z5, every traced table: {sum(r['pass_'] for r in traced)} of {len(traced)} pass", "",
+             "Z1: the z-score invariant under the automatic, linear and log readings. Z2: no near-constant gene under "
+             "the automatic reading. Z3: against the baseline, every field but the cells unchanged, at least 99% of "
+             "answers kept, coordinates within 0.01. Z5: Phase A's other invariants.", "",
+             _md_table(["table", "cells", "answers changed", "largest coordinate change", "near-constant genes "
+                        "(auto/linear/log)", "result"],
+                       [[r["id"], r["cells"], r["answers_changed"], r["largest_coordinate_change"],
+                         "/".join(str(r["near_constant"].get(k, "refused")) for k in ("auto", "linear", "log")),
+                         "PASS" if r["pass_"] else "FAIL: " + ", ".join(r["failed"])] for r in traced]), ""]
+    (out / "report.md").write_bytes(("\n".join(lines) + "\n").encode("utf-8"))
+    print(f"wrote {(out / 'report.md').relative_to(REPO).as_posix()}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2}
+    steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2, "zscore": zscore_step}
     parser.add_argument("--step", choices=tuple(steps), required=True)
     args = parser.parse_args()
     steps[args.step]()

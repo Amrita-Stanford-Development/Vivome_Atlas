@@ -1,0 +1,25 @@
+{
+  "step": "zscore",
+  "written": "2026-10-28, before the z-score change was made and before its diagnostics ran",
+  "about": "The owner, 2026-10-28 ('do all the fixes'): the service's per-gene z-score (alignment.zscore_per_gene) computes each gene's mean and spread in float64, as the notebooks' convention does (benchmark/notebook_convention.py), and a gene whose observed values agree to about five significant digits (spread at most 1e-5 of its largest absolute value) is treated as constant, z = 0, as a gene with one value already is. Found by Phase A's diagnostics (value_scale_phaseA/notes.md). This changes replies slightly, so Phase A's byte-for-byte check against the baseline no longer applies; the change is measured against it instead. Not edited after the run: a difference is explained in the report.",
+  "tables": "every bank table Phase A traced, on the same cells",
+  "pipeline": "v4.1, modality prot, pipeline.run_projection",
+  "Z1_zscore_invariant": "each z-scored gene's observed values have mean 0 and SD 1 to 1e-4, or are all 0 for a constant or near-constant gene, on every traced table under the automatic, linear and log readings (the five Phase A failures pass)",
+  "Z2_near_constant_genes": {
+    "automatic_readings": "no gene in any traced table is near-constant (Phase A's count: 0 of 119,123), so the rule zeroes nothing under the automatic readings",
+    "furtwangler_batchcorr_read_linear": "about 10 genes are near-constant and get z = 0 (Phase A's count with spread at most 1e-5 of the level: 10)"
+  },
+  "Z3_replies_against_the_baseline": {
+    "what": "under the automatic reading, each table's reply against value_scale_phaseA/baseline.json's replies",
+    "predicted": [
+      "every field but the cells' numbers is unchanged (value_scale, label space, gene counts)",
+      "at least 99% of each table's cells keep their answer (label, or abstention reason); most tables keep all",
+      "coordinates move by less than 0.01"
+    ]
+  },
+  "Z4_frozen_fixtures": "the service's frozen comparisons (service/tests: test_golden_fixtures, test_pipeline_versions) are run; a float that moves beyond their tolerance is measured and reported with the labels, label sets and abstentions compared exactly. Accepting such a change is the owner's decision; no fixture is regenerated in this step.",
+  "Z5_other_checks": [
+    "scripts/trace_workflow.py's own consistency checks against the service still pass",
+    "the stage invariants of Phase A (A3) hold under each reading"
+  ]
+}

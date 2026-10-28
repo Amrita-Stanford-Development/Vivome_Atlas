@@ -132,6 +132,14 @@ subset is drawn from a generator seeded with a hash of the upload
 (`pipeline.upload_seed`). Before this, it was unseeded, and the same file
 could return different abstentions.
 
+**Each gene is z-scored in float64** (`alignment.zscore_per_gene`, Stages
+1 and 2), as the notebooks' convention does, and returned in float32. A
+gene whose observed values agree to about five significant digits
+(`config.ZSCORE_NEAR_CONSTANT_SPREAD`) is 0, like a gene with one value: its
+differences are rounding. In float32 the mean of a gene whose few values
+differ by far less than their level was off by up to 0.0016
+(`research/notebook-outputs/value_scale_zscore/`).
+
 **A request may state a protein upload's value scale** (form field
 `value_scale`: `auto`, `linear` or `log`, and with `log` what a 0 means,
 `zeros`: `missing` or `measured`; see

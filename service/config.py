@@ -233,6 +233,14 @@ PROVISIONAL_CONSTANTS = ("MIN_OBSERVED_GENES",)
 # commonly has and linear-scale intensity data cannot.
 LINEAR_SCALE_MEDIAN_THRESHOLD = 50.0
 
+# Stages 1 and 2 — a gene whose observed values agree to about five
+# significant digits (spread at most this share of its largest absolute
+# value) is constant but for rounding, and z-scores to 0 like a constant gene
+# (alignment.zscore_per_gene). No gene of the diagnostic bank's 30 tables is
+# that close under their own readings; 10 of furtwangler_batchcorr's are when
+# it is read as linear (research/notebook-outputs/value_scale_phaseA/notes.md).
+ZSCORE_NEAR_CONSTANT_SPREAD = 1e-5
+
 # Stage 2 — fuzzy smoothing neighbourhood size within the query's own full
 # feature set (brief Stage 2, the MaxFuse idea). k, alpha, and the PCA
 # dimension match VivOME_Prototype_Export.ipynb exactly — that notebook is
