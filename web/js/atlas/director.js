@@ -149,6 +149,12 @@ export function transition(state, event) {
       return out;
     }
 
+    case 'OPTIONS_CHANGED':
+      // The visitor changed how the file is read (Values, Modality): a file the
+      // service turned down may now be taken, so Send is offered again.
+      if (name !== 'failed' || state.example || state.error?.kind !== 'refused' || !canSend(state)) return state;
+      return { name: 'chosen', file: state.file, check: state.check };
+
     case 'CLEAR':
       return ['chosen', 'interactive', 'failed'].includes(name) ? initialState() : state;
 

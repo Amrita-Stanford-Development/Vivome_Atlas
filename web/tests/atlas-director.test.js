@@ -206,6 +206,18 @@ test('a failure keeps the file and its check, from any state but idle', () => {
   assert.equal(transition(unsendable, { type: 'RETRY' }), unsendable);
 });
 
+test('changing how a refused file is read brings it back to chosen', () => {
+  const refusal = Object.assign(new Error('12 values are negative'), { kind: 'refused', status: 400 });
+  const refused = run(working(), { type: 'FAILED', error: refusal });
+  assert.deepEqual(run(refused, { type: 'OPTIONS_CHANGED' }), { name: 'chosen', file, check });
+  const states = everyState();
+  for (const name of ALL) assert.equal(transition(states[name], { type: 'OPTIONS_CHANGED' }), states[name], name);
+  const unsendable = { name: 'failed', file, check: badCheck, error: refusal, stage: 'working' };
+  assert.equal(transition(unsendable, { type: 'OPTIONS_CHANGED' }), unsendable);
+  const example = { name: 'failed', example: true, error: refusal, stage: 'working' };
+  assert.equal(transition(example, { type: 'OPTIONS_CHANGED' }), example);
+});
+
 test('clearing goes back to idle', () => {
   const states = everyState();
   for (const name of ALL) {

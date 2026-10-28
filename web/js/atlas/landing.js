@@ -416,7 +416,8 @@ export function createLanding({
     }
     let failure = '';
     if (name === 'failed') {
-      // A file the service turned down would be turned down again as it is.
+      // A file the service turned down would be turned down again as it is;
+      // changing how it is read (Values, Modality) offers Send again (OPTIONS_CHANGED).
       const again = st.example || (st.file && st.check?.ok && st.error?.kind !== 'refused');
       const retry = again ? '<button type="button" class="text-button" data-retry>Try again</button>' : '';
       failure = st.stage === 'busy'
@@ -821,6 +822,9 @@ export function createLanding({
       const verdict = checkLimits(st.check, limits());
       dispatch({ type: 'LIMITS', check: { ...st.check, ok: verdict.ok, problems: verdict.problems } });
     },
+    // The visitor changed how the file is read (data-tab.js): a refused file
+    // may be sent again.
+    optionsChanged: () => dispatch({ type: 'OPTIONS_CHANGED' }),
     skip: () => dispatch({ type: 'SKIP' }),
     replay,
     clear: () => dispatch({ type: 'CLEAR' }),

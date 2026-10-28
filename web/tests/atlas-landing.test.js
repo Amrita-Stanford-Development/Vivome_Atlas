@@ -731,6 +731,33 @@ test('a file the service turned down is not offered again as it is', async () =>
   assert.match(els.get('status-line').textContent, /turned the file down/, 'the failure is announced once');
 });
 
+test('a file turned down for its reading is sent again once the reading changes', async () => {
+  const refusal = Object.assign(new Error('12 values are negative, so they are not raw intensities'), { kind: 'refused', status: 400, said: true });
+  const sent = [];
+  const client = {
+    project: async (url, form, { onUpload }) => {
+      sent.push(form.get('value_scale'));
+      if (sent.length === 1) throw refusal;
+      onUpload(1);
+      return responseFromTrace();
+    },
+  };
+  let valueScale = 'linear';
+  const { landing, tick } = setup({ client, limits: () => ({}), options: () => ({ modality: 'prot', valueScale }) });
+  await landing.chooseFile(fileOf(25));
+  landing.send();
+  for (let i = 0; i < 20 && landing.state.name !== 'failed'; i += 1) await settleMicrotasks();
+  assert.equal(landing.state.name, 'failed');
+  valueScale = 'log';
+  landing.optionsChanged();
+  assert.equal(landing.state.name, 'chosen', 'Send is offered again');
+  landing.send();
+  await settleMicrotasks();
+  tick(15);
+  assert.equal(landing.state.name, 'interactive');
+  assert.deepEqual(sent, ['linear', 'log']);
+});
+
 test('after cancelling a file the service was working on, a busy answer names that file', async () => {
   let calls = 0;
   const client = {

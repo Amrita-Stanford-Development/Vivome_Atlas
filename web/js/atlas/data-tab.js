@@ -160,7 +160,11 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
 
   $('check-service').addEventListener('click', checkService);
   $('service-url').addEventListener('change', checkService);
-  $('modality').addEventListener('change', () => update());
+  $('modality').addEventListener('change', () => {
+    landing.optionsChanged();
+    update();
+  });
+  $('value-scale').addEventListener('change', () => landing.optionsChanged());
   // Emptied as the picker opens, so choosing the same file again still
   // counts as a choice.
   $('matrix').addEventListener('click', () => { $('matrix').value = ''; });

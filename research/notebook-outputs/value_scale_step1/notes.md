@@ -60,14 +60,14 @@ NumPy's `False`, so its failures were never counted (report.json stores them
 as the string "False"). Four tables fail it: pbmc240_diann,
 dusszachniewicz_maxquant, lungmap_bpd_fragpipe and
 furtwangler_log2_imputed. Their worst z-scored gene has a mean of 0.0001 to
-0.0016, not 0 to 1e-4. Every other invariant held on all 37.
+0.0016, not 0 to 1e-4. Every other invariant held on all 30 traced tables.
 
 The cause is float32 rounding in the service's z-score
 (`alignment.zscore_per_gene`), on genes whose few values differ by much
 less than their level: lungmap_bpd_fragpipe's RAB2B is 22.7172 and 22.7186.
 Computed in float64 the same means are below 1e-13. Phase A's diagnostics
 found it (`../value_scale_phaseA/notes.md`), and the script now counts NumPy
-results too. 8 tables were refused for fewer than 20 cells, as the service
-refuses them. The expectation's example
+results too. 7 tables were refused for fewer than 20 cells, as the service
+refuses them (an earlier version of these notes said 8). The expectation's example
 "3 runs in the sdrf" for `pxd069060_diann_report` was wrong (the report
 holds 12 runs), but the rule the expectation states held.

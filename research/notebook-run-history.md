@@ -3044,10 +3044,10 @@ three candidates were dropped, each with its reason in the bank.
   tables divided by 10^3 or 10^6, normalised per protein or given as
   percentages are misread almost always. Foreign tables get a confident
   reading.
-- D3, today's pipeline traced stage by stage: 33 of 37 keep every stage
-  invariant (the report's 37 missed four z-score failures, found in Phase A,
-  entry 70: float32 rounding); 8 are refused for fewer than 20 cells, as the
-  service does.
+- D3, today's pipeline traced stage by stage: 33 of 37 pass, not the
+  report's 37. 7 are refused for fewer than 20 cells, as the service does,
+  and 26 of the 30 traced keep every stage invariant; the report missed four
+  z-score failures (float32 rounding), found in Phase A (entry 70).
 
 **What it shows:** the size threshold misreads real single-cell tables from
 three sources, not one. Zeros that stand for missing values also occur in
