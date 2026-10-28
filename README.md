@@ -55,6 +55,7 @@ site detects this and shows the fix instead of failing on a parse error.
 ```
 web/          the public website: static pages, data, plots, JS tests
 service/      the projection API (Python): pipeline, model files, tests
+valuescale/   is a table still linear, or already log? a self-contained package (in progress)
 benchmark/    fair comparison vs scANVI, MaxFuse, scGLUE, Harmony
 scripts/      manifest builder and repository checks
 docs/         how the products work: manifest, data, API contract
@@ -102,6 +103,7 @@ Nothing to install.
 node --test                                          # JS modules under web/js/
 python -m unittest discover -s scripts             # manifest builder + repo path check
 python -m unittest discover -s service/tests -t .   # projection service (needs service/requirements.txt)
+python -m unittest discover -s valuescale/tests -t . # the raw-or-log package (valuescale/)
 ```
 
 ## Current state

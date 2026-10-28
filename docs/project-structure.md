@@ -15,6 +15,10 @@ The film about VivOME (`motion/`) is a HyperFrames project with its own
 dependencies, like the service; it renders the stills the website's Motion
 page shows, so `web/` keeps no build step.
 
+The raw-or-log package (`valuescale/`) decides whether an uploaded table
+still needs a log. It imports nothing from `service/`, so it can become its
+own package later; its plan is `research/value-scale-plan.md`.
+
 `docs/` explains how the products work. `scripts/` builds and checks the
 repository. For a one-line description of every file, see
 [file-index.md](file-index.md).
@@ -48,6 +52,11 @@ Vivome_Atlas/
 │   │   └── legacy/           previous model (v2/) and the dev checkpoint (dev/)
 │   ├── examples/             a real PBMC240 upload for demos and end-to-end tests
 │   └── tests/                unittest suite, with golden fixtures
+│
+├── valuescale/               RAW OR LOG: a self-contained package (imports nothing from service/)
+│   ├── corpus/               the diagnostic bank: bank.json, fetch, extract, labelled variants, the denylist
+│   ├── bank/expectations/    each step's expected outcomes, written before the step runs
+│   └── tests/                unittest suite
 │
 ├── benchmark/                FAIR COMPARISON: ours vs scANVI, MaxFuse, scGLUE
 │   └── results/              local 1 GB cache of runs (gitignored)
@@ -96,6 +105,7 @@ Vivome_Atlas/
 | Documentation of how something works | `docs/web/` or `docs/service/` | a line in `docs/README.md` |
 | A downloaded or delivered dataset | `data/incoming/` (local only) | commit only the small tables that numbers cite |
 | A repo tool or check | `scripts/` | a test beside it (`scripts/test_*.py`) |
+| Raw-or-log detection, its bank or corpus | `valuescale/` (never importing `service/`) | a test in `valuescale/tests/`; each step's expectations in `valuescale/bank/expectations/` before it runs |
 | A scene or shot of the film | `motion/`, with its words and timing in `web/js/reel-frames.js` | render the stills again ([web/motion.md](web/motion.md)) |
 
 Any new tracked file also needs a line in [file-index.md](file-index.md).
@@ -136,4 +146,5 @@ Run all three from the repository root before committing:
 node --test                                          # web/js
 python -m unittest discover -s scripts              # manifest builder + path/index check
 python -m unittest discover -s service/tests -t .   # projection service
+python -m unittest discover -s valuescale/tests -t . # the raw-or-log package
 ```

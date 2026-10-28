@@ -3017,6 +3017,40 @@ every cell passes the coverage floor.
   donors have ALS.
 - The set is spent, and it is development data from now on.
 
+### 69. The raw-or-log framework, Step 1: the diagnostic bank, 2026-10-28
+
+**Why:** the owner asked for the raw-or-log detector
+(`research/value-scale-plan.md`) to start from a bank of real public tables
+whose scale is known from provenance, with diagnostics after every step.
+
+**The bank** (`valuescale/corpus/bank.json`): 37 tables from 21 deposits and
+this project's data. 28 are linear and 9 log, labelled before any statistic
+was computed, from software documentation, column or layer names, or the
+authors' own code. DIA-NN, MaxQuant, FragPipe, Spectronaut, Proteome
+Discoverer, TMT-Integrator, quantms, CPTAC and the authors' own pipelines
+are all in it; Orbitrap, Astral and timsTOF; bulk, low-input and single
+cells. Each table also gets 20 to 25 labelled variants
+(`valuescale/corpus/variants.py`). One label was corrected while checking a
+file's header (`quantms_pxd004452_ribaq`, kept as an inferred case), and
+three candidates were dropped, each with its reason in the bank.
+
+**Results** (`research/notebook-outputs/value_scale_step1/`, report and notes):
+- D1, the bank: 35 of 37 pass. The two failures are the bank's listing of
+  MSV000099294's layout, not the parser. The owner accepted them, the
+  listing was corrected, and both pass a re-run of D1.
+- D2, today's Stage 0 rule: all 9 log tables read correctly; **6 of the 28
+  linear tables read as log**: PXD064083 (known) and, new, MSV000099294's
+  single cells (Spectronaut) and Furtwangler's TMTpro S/N layers. Linear
+  tables divided by 10^3 or 10^6, normalised per protein or given as
+  percentages are misread almost always. Foreign tables get a confident
+  reading.
+- D3, today's pipeline traced stage by stage: 37 of 37 keep every stage
+  invariant; 8 are refused for fewer than 20 cells, as the service does.
+
+**What it shows:** the size threshold misreads real single-cell tables from
+three sources, not one. Zeros that stand for missing values also occur in
+log tables, which B1 now measures.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

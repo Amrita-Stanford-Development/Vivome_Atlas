@@ -72,6 +72,8 @@ ALLOWED_MISSING = (
     "research/notebook-outputs/v51_phase4/",  # likewise, with --version v5.1
     "research/notebook-outputs/v52_phase4/",  # likewise, for v5.2
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
+    "research/benchmark/protocol-value-scale.md",  # the raw-or-log plan's B0 protocol, written before its corpus is fetched
+    "research/notebooks/value_scale_cost.py",  # the raw-or-log plan's B1 cost study (research/value-scale-plan.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
     "data/profiles/",  # the gene profile shards, written only into dist/site/ by scripts/build_pages_site.py
     # The film's project writes these, all gitignored (docs/web/motion.md)

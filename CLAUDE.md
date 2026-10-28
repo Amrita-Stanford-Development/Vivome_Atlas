@@ -103,9 +103,10 @@ protocol is in [docs/web/manifest.md](docs/web/manifest.md).
 node --test                                          # from the repo root
 python -m unittest discover -s scripts              # manifest builder + path/index check
 python -m unittest discover -s service/tests -t .   # projection service, from the repo root
+python -m unittest discover -s valuescale/tests -t . # the raw-or-log package, from the repo root
 ```
 
-Run all three before committing. `web/tests/lfs.test.js` asserts the shipped RNA
+Run all four before committing. `web/tests/lfs.test.js` asserts the shipped RNA
 parts are still unfetched LFS pointers — if you have run `git lfs pull`
 locally it will fail, which is expected and is not a reason to change the
 test.

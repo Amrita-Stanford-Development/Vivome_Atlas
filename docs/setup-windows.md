@@ -201,6 +201,7 @@ python scripts\fetch_v31_members.py
 python -m benchmark.datasets
 python -m unittest discover -s scripts
 python -m unittest discover -s service/tests -t .
+python -m unittest discover -s valuescale/tests -t .
 node --test
 python -m benchmark.v31_dev_gate
 ```

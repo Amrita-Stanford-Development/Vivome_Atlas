@@ -1,0 +1,182 @@
+{
+  "data/incoming/Fulcher2026/RTLS-and-TMT32-scProteomics-of-PBMCs-main/Single_PBMCs_Fig4/Data/abundance_protein_MD.tsv": {
+    "bytes": 38703307,
+    "recorded": "2026-10-28",
+    "sha256": "85bce484c75c5510d3725093fb690d157d2c85a4cc5b7b51eae6b0a0cada4467",
+    "url": null
+  },
+  "data/incoming/Furtwangler2025/hBM_celltype.h5ad": {
+    "bytes": 277399064,
+    "recorded": "2026-10-28",
+    "sha256": "cf88fe32cc45eb086c362b1e16d0e282fed37f673848626ad6e64342f9b612a0",
+    "url": null
+  },
+  "data/incoming/Khoury2026/Protein_x_Cell_Matrix_Column_Normalized.csv": {
+    "bytes": 46595998,
+    "recorded": "2026-10-28",
+    "sha256": "514c08ca01dac2d58a2cfed97fb574a3c555c82ab6169eb68946c86bf25f1c1b",
+    "url": null
+  },
+  "data/incoming/public_sets/DusSzachniewicz2021_PXD011683/MaxQuant_Output.zip": {
+    "bytes": 1932688240,
+    "recorded": "2026-10-28",
+    "sha256": "d05f1b365da536b7a57a9a79414d1d1bc2a962167b68548dbfff7c902598bea2",
+    "url": null
+  },
+  "data/incoming/public_sets/Herrera2025_PXD058626/combined_protein.tsv": {
+    "bytes": 6813450,
+    "recorded": "2026-10-28",
+    "sha256": "9076cfddf314f2aca6446ff2bceefcb3d7d4c7c1fae99fccea589846d06217c0",
+    "url": null
+  },
+  "data/incoming/public_sets/Kabatnik2024_PXD046999/C3_region1k_DIANN181_MBR_c124.pg_matrix.tsv": {
+    "bytes": 953149,
+    "recorded": "2026-10-28",
+    "sha256": "24bfe3712a6bd49c5449f164e1993cd73ef4427f3032a6fa9d6556e52a02f064",
+    "url": null
+  },
+  "data/incoming/public_sets/Kabatnik2024_PXD046999/CRA_revision_timstofultra_specificcohort_DIANN181_libraryfree.pg_matrix.tsv": {
+    "bytes": 2222897,
+    "recorded": "2026-10-28",
+    "sha256": "abf1ca748b7e6443725e8498a88a8fcc684d98a52edfed3000145ef12972e299",
+    "url": null
+  },
+  "data/incoming/public_sets/LungMAP2025_BPD_MSV000094373/combined_protein.tsv": {
+    "bytes": 2820464,
+    "recorded": "2026-10-28",
+    "sha256": "3019b1ae7074088e60619446622a1dbb02359237912e9a82182799131fa576ce",
+    "url": null
+  },
+  "data/incoming/public_sets/MSV000099294/DirectDIA_HMC3_1cell_Protein_Quant_Pivot_Report.tsv": {
+    "bytes": 2094536,
+    "recorded": "2026-10-28",
+    "sha256": "7c5af41e68436bca9470111656c16d2dc18f59f4b9d1881df542f691d34d53a9",
+    "url": null
+  },
+  "data/incoming/public_sets/MSV000099294/DirectDIA_Microglia_1cell_Protein_Quant_Pivot_Report.tsv": {
+    "bytes": 1285592,
+    "recorded": "2026-10-28",
+    "sha256": "5694cf9e420f601a0c2a7140e2d65006ba73967627676e954f23e6bc1be467ba",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD021882/proteinGroups.txt": {
+    "bytes": 6946011,
+    "recorded": "2026-10-28",
+    "sha256": "b361db6bb8359f97795aa76280bf6839bfb3b60c11f756dd4b3f9967b4ed8aca",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD043355/HeLa_VS_Jurkat_Proteins.txt": {
+    "bytes": 9757952,
+    "recorded": "2026-10-28",
+    "sha256": "d92ee9a8afea6059a4b3c7365a6c94479b9c762bbc79bff1e2b6cbb9290e7598",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD061052/20241206_144402_gbm_minibulk_full_fasta_19.4_Report.tsv": {
+    "bytes": 4995983,
+    "recorded": "2026-10-28",
+    "sha256": "c0b3ca1ffcd781f4417224800693ed38da12fd85698ccf6686b842b37f29b973",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD064083/SEARCH_B.xlsx": {
+    "bytes": 1681149,
+    "recorded": "2026-10-28",
+    "sha256": "41fc7b0b19928616411de79973671829db9498ff4aa2ef2f298fbdd337dfc3f5",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD064083/SEARCH_T.xlsx": {
+    "bytes": 1914695,
+    "recorded": "2026-10-28",
+    "sha256": "6b264da4decac89e2249e3e7e19033f5e37f7575b047dab453e07443ce7cfa03",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD073250/report.pg_matrix.tsv": {
+    "bytes": 6073326,
+    "recorded": "2026-10-28",
+    "sha256": "337f8b79d7a64d64128ea5b0504afe220a6e9aabbcd0cbb33471ac8f37e267b1",
+    "url": null
+  },
+  "data/incoming/public_sets/PXD077946/diann_singlecell.zip": {
+    "bytes": 16952702,
+    "recorded": "2026-10-28",
+    "sha256": "0bd4c3b9bbd3ad8e94acf7e3ef9dba4330dd1c25667630f177539b5bc5714a05",
+    "url": null
+  },
+  "data/incoming/public_sets/Zamore2025_PXD056050/DIA-NN_immune_cells.zip": {
+    "bytes": 77701779,
+    "recorded": "2026-10-28",
+    "sha256": "755c010b90a330939a395d83d096363261b9ad979a76cc3b9097f57d70af1490",
+    "url": null
+  },
+  "data/incoming/value-scale-bank/CPTAC-CCRCC/HS_CPTAC_CCRCC_proteome_Tumor.cct": {
+    "bytes": 19368136,
+    "recorded": "2026-10-28",
+    "sha256": "16e75796570a56d854094d119140587814026eb6356240596fa3667da513e9c2",
+    "url": "https://linkedomics.org/data_download/CPTAC-CCRCC/HS_CPTAC_CCRCC_proteome_Tumor.cct"
+  },
+  "data/incoming/value-scale-bank/MSV000089625/ProteinAbundances.csv": {
+    "bytes": 1194354,
+    "recorded": "2026-10-28",
+    "sha256": "2d4d7c0b0eb697ecf3ac66cab14f9569142feab9636ce756d0c0222d56855bf9",
+    "url": "https://raw.githubusercontent.com/dionezhang/CPM/master/ProteinAbundances.csv"
+  },
+  "data/incoming/value-scale-bank/PXD004452/PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv": {
+    "bytes": 1963005,
+    "recorded": "2026-10-28",
+    "sha256": "d3eeda09680f207728707d717e472da0703b90c423d86e108f12be96680e8963",
+    "url": "https://ftp.pride.ebi.ac.uk/pub/databases/pride/resources/proteomes/absolute-expression/quantms-data/PXD004452/PXD004452-8c3d7d43-b1e7-4a36-a430-23e41bcbe07c.absolute.tsv"
+  },
+  "data/incoming/value-scale-bank/PXD016921/MQsearchresults_Single_cell.zip": {
+    "bytes": 199106494,
+    "recorded": "2026-10-28",
+    "sha256": "b824772c6cb310c97f505801cd741e6e47b243a158632aeffb454f7b8f583def",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2020/02/PXD016921/MQsearchresults_Single_cell.zip"
+  },
+  "data/incoming/value-scale-bank/PXD024043/DIANN1.8_diaPASEF_1ng_repetitions.zip": {
+    "bytes": 115761212,
+    "recorded": "2026-10-28",
+    "sha256": "f176892ccacff45bb370313d3f7328824f45d64cfa480dd4a500b04a3d658068",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2022/02/PXD024043/DIANN1.8_diaPASEF_1ng_repetitions.zip"
+  },
+  "data/incoming/value-scale-bank/PXD024043/MQ_Dilutions_SingleCells_RawPlusMBR.zip": {
+    "bytes": 42969530,
+    "recorded": "2026-10-28",
+    "sha256": "07f477a1ced965ce12958832d56466381a6127d5d9a5edbc15671156aa14222e",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2022/02/PXD024043/MQ_Dilutions_SingleCells_RawPlusMBR.zip"
+  },
+  "data/incoming/value-scale-bank/PXD049412/20240701_100039_MM_run62p2_revision_50SPD_25cmIO_all_MEpergroup_Proteins.tsv": {
+    "bytes": 15786608,
+    "recorded": "2026-10-28",
+    "sha256": "d6e2f42cba747e2df6461fd9020ac0c1ba39de71c5cda965e6dbd8afc88f5de8",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/01/PXD049412/20240701_100039_MM_run62p2_revision_50SPD_25cmIO_all_MEpergroup_Proteins.tsv"
+  },
+  "data/incoming/value-scale-bank/PXD049412/JB_250pgHeLa_50SPD_SO_MBR_Report_Protein_JB_Pivot_.tsv": {
+    "bytes": 2037835,
+    "recorded": "2026-10-28",
+    "sha256": "f678d13929ddb8cb05ceb4e790294a9a99af489b62ba20299be3fb4c61e99e07",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2025/01/PXD049412/JB_250pgHeLa_50SPD_SO_MBR_Report_Protein_JB_Pivot_.tsv"
+  },
+  "data/incoming/value-scale-bank/PXD053464/03_SingleCell_Searches.zip": {
+    "bytes": 79144668,
+    "recorded": "2026-10-28",
+    "sha256": "5dffafc6b2d4553cefdd9597300ae451ec9ebe6184df862a74f1a3369b9fca5c",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2024/08/PXD053464/03_SingleCell_Searches.zip"
+  },
+  "data/incoming/value-scale-bank/PXD069060/P4899_report.tsv": {
+    "bytes": 80437533,
+    "recorded": "2026-10-28",
+    "sha256": "ce5932a49555fec5c8022a5b11eef8faf66533ad9aacf4aa46670e181f82bc88",
+    "url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2026/04/PXD069060/P4899_report.tsv"
+  },
+  "service/examples/pbmc240_proteins_raw.tsv": {
+    "bytes": 2758124,
+    "recorded": "2026-10-28",
+    "sha256": "10bb38331870bf395ef6e646c23cbb85923224bcf32a7d2484695ee8ac83d9c1",
+    "url": null
+  },
+  "service/model/source/app_export/blood_joint_cells_by_proteins_GENELEVEL.tsv": {
+    "bytes": 81821166,
+    "recorded": "2026-10-28",
+    "sha256": "2813af22d0f215ef8b75eb5d2162cc37715c43b90fecee7af43d49421e6ff2f6",
+    "url": null
+  }
+}

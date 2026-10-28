@@ -1,0 +1,47 @@
+{
+  "step": "step1",
+  "written": "2026-10-28, before D1, D2 or D3 was run",
+  "about": "What Step 1's diagnostics must show (research/value-scale-plan.md, Step 1d). Not edited after the run: a difference is explained in the report.",
+  "D1": {
+    "every_entry": {
+      "sha256_matches_record": true,
+      "parses_with_service_parser": true,
+      "layout_as_listed": true,
+      "label_has_quote": true,
+      "min_cells": 1,
+      "min_genes_matched_to_feature_space": 100
+    },
+    "recorded_not_judged": ["cells", "proteins", "genes_matched", "missing_share", "zero_share", "negative_share", "quantiles of observed values"]
+  },
+  "D2": {
+    "rule": "service/pipeline/alignment.py detect_and_transform_value_scale, protein (zeros do not vote), median threshold 50",
+    "right_answer": "the label: linear -> detected linear; log -> detected log; foreign variants are reported, not judged",
+    "predicted_misreads": {
+      "entries": {
+        "pxd064083_t": "linear on a small scale (median about 7) read as log, as found in amendment 1",
+        "pxd064083_b": "linear on a small scale (median about 8) read as log, as found in amendment 1"
+      },
+      "variants_of_linear_tables": {
+        "times_1e-6": "a linear table divided by a million: its median falls below 50, read as log",
+        "per_protein_median": "each protein divided by its median: values near 1, read as log",
+        "per_cell_percent": "shares of a cell's total in percent: far below 50, read as log"
+      },
+      "variants_of_log_tables": {}
+    },
+    "note": "D2 is the picture before the fix. Any other misread is a finding about today's rule and is listed, not a failure of the step."
+  },
+  "D3": {
+    "pipeline": "v4.1, modality prot, the service's own calls (scripts/trace_workflow.py:166-189)",
+    "cells": "a table with more than 2,000 cells (the service's upload limit) is traced on 2,000 cells drawn with a seed from its id; a table with fewer than 20 is refused, as the service refuses it",
+    "expected_refusals": "the service's own validation (service/pipeline/validation.py) refuses exactly the tables with fewer than 20 cells (MIN_CELLS_REFUSE), e.g. pxd049412_hela250pg (3 runs) and pxd069060_diann_report (3 runs in the sdrf); an orientation refusal of any bank table is not expected",
+    "invariants_on_every_traced_table": [
+      "no +-inf after Stage 0",
+      "when Stage 0 reads linear, the zeros it makes missing equal the zeros in the parsed table",
+      "mask sum equals the observed values in the matched genes after duplicates are merged",
+      "each z-scored gene's observed values have mean 0 and SD 1 (to 1e-4), or are all 0 for a constant gene",
+      "the encoder input (smoothed values and mask) is finite",
+      "smoothing recomputed from the graph equals the service's smoothed values (atol 1e-6)",
+      "every cell has a label or an abstention reason"
+    ]
+  }
+}

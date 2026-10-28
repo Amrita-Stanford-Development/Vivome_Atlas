@@ -477,6 +477,22 @@ When you add, move or delete a file, update its line in the same commit.
 - `motion/audio/score.py` — the film's music, synthesised in code (numpy): the ambient bed, whose chords change on the journeys, and the musical cues
 - `motion/audio/phonemes.py` — the phonemes Kokoro will read for each voice-over line (kokoro-onnx's tokenizer), so the voice script can check the name is said as one word
 
+## valuescale/ — is a table still linear, or already log? (a self-contained package)
+
+- `valuescale/README.md` — what the package is for, what is built (Step 1, the diagnostic bank), its commands
+- `valuescale/__init__.py` — the package's docstring and version; it imports nothing from `service/`
+- `valuescale/corpus/__init__.py` — the corpus subpackage: the bank and, later, the calibration corpus
+- `valuescale/corpus/bank.json` — the diagnostic bank: 37 real tables, each labelled linear or log from provenance (documentation, a column or layer name, or the authors' code, quoted) before any statistic was computed, with its cases, source and parser path
+- `valuescale/corpus/bank-files.json` — every bank source file's size and sha256, recorded by `fetch.py`
+- `valuescale/corpus/fetch.py` — downloads the bank's tables (ranged, resumable) into `data/incoming/value-scale-bank/` and records or checks every source file's sha256
+- `valuescale/corpus/extract.py` — turns each bank entry into the file a user would upload: the native table, a zip member, or a plain matrix from xlsx, h5ad layers, Proteome Discoverer exports and long reports
+- `valuescale/corpus/variants.py` — labelled variants of a bank table (rescaled, logged, offset, normalised, subsampled, missing values induced by intensity, zero-filled, and foreign tables), seeded by name
+- `valuescale/corpus/denylist.py` — the sealed accessions (the organ references' locked tests and the reserve) and the check every corpus path passes
+- `valuescale/bank/expectations/step1.json` — Step 1's expected outcomes (D1 the bank, D2 today's rule, D3 today's pipeline), written before the run
+- `valuescale/tests/__init__.py` — marks the test folder as a package
+- `valuescale/tests/test_bank.py` — every bank entry has a quoted provenance label; nothing sealed is named; the denylist; nothing imports the service
+- `valuescale/tests/test_variants.py` — variants carry the label of how they were made, are exact where they should be, and repeat on every run
+
 ## docs/ — how the product works
 
 - `docs/README.md` — index of `docs/` and `research/`
@@ -506,6 +522,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/working-context.md` — hand-off for a new session: how the work got here, owner decisions and standing instructions, the Track D extension's status, what's next
 - `research/notebook-run-history.md` — every notebook run, in order, and what each one found (17 entries, through T1 NB2)
 - `research/organ-references.md` — the organ references plan (Track I): the large intestine first, from Tabula Sapiens; the owner's decisions, the classes, the stages and their gates
+- `research/value-scale-detection.md` — the raw-or-log question's research (2026-10-27): every published rule is a hand-set size threshold with no error rate; units differ by instrument and normalisation; the properties that do not depend on units; the first proposed method
+- `research/value-scale-plan.md` — the approved plan (2026-10-28) for a calibrated raw-or-log detector built as the `valuescale/` package: the diagnostic bank first, diagnostics after every step, the site's override, the conformal method, the corpus and the sealed test
 - `research/reference-data-search.md` — the 2026-10-21 data search, RNA as well as protein: atlases that could rebuild the blood and organ references, data with RNA and protein together, new protein sets, and the recommended next steps
 - `research/tier1-tier2-report.md` — the research report the roadmap's Tier 1 and Tier 2 work draws on, with a 2026-10-01 status note on which of its ideas are now tested
 - `research/archive/2026-08-29-resource-layer-plan.md` — the finished resource-layer build plan, frozen (its paths are from that time)
@@ -1006,6 +1024,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/v4_pretest/selection_calibration_suite.csv` — v4 pre-test: the fusion grid on NB1's calibration suite, per scenario (the choice)
 - `research/notebook-outputs/v4_pretest/evaluation_suite.csv` — v4 pre-test: v3.1, the encoder alone and the v4 candidate on NB1's evaluation suite, scored once
 - `research/notebook-outputs/v4_pretest/development_predictions_v4_candidate.csv` — v4 pre-test: the candidate's best guess per cell on SCoPE2, PBMC240, Fulcher and Furtwängler (Phase 2's gate reference)
+- `research/notebooks/value_scale_diagnostics.py` — the raw-or-log framework's diagnostics, one step at a time, on the diagnostic bank against expectations written before each run; Step 1: D1 the bank, D2 today's Stage 0 rule on every table and variant, D3 today's pipeline traced stage by stage with its invariants
+- `research/notebook-outputs/value_scale_step1/report.md` — Step 1's diagnostic report: expected against observed, one row per table
+- `research/notebook-outputs/value_scale_step1/notes.md` — Step 1's notes, written after the run: the two D1 failures explained (the bank's layout listing), the six linear tables today's rule reads as log, the zeros in log tables
+- `research/notebook-outputs/value_scale_step1/report.json` — the same run in full: every table's D1 facts, every D2 reading, every D3 invariant and answer summary
 - `research/notebooks/t1_nb3b_ood_and_flags.py` — T1 NB3b as a script: out-of-distribution scores on the encoders' 512-d hidden features, chosen on RNA controls, evaluated once; the service flags and restricted mode on RNA
 - `research/notebook-outputs/nb2/nb2_spec_v31.json` — NB2's v3.1 specification as delivered (copied to `service/model/v3_1/`)
 - `research/notebook-outputs/nb2/nb2_summary.json` — NB2: gates, the six choices, the evaluation-suite figures for v3.1 and v3, the negative control, the development datasets
