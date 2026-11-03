@@ -481,6 +481,11 @@ When you add, move or delete a file, update its line in the same commit.
 
 - `valuescale/README.md` — what the package is for, what is built (Step 1, the diagnostic bank), its commands
 - `valuescale/__init__.py` — the package's docstring and version; it imports nothing from `service/`
+- `valuescale/gates.py` — the detector's gates: a real share of negatives (1% or more) means already transformed, non-negative integers with 20 or more distinct values mean counts; stray negatives and ties at a cell's minimum are made missing
+- `valuescale/statistics.py` — the detector's statistics: per-cell Bowley and Moors skewness and the tail ratio, the level–spread Spearman correlation (missing ranked lowest), and the side features; each unchanged by its classes' nuisances
+- `valuescale/conformal.py` — the conformal code: the strata, the umbrella order statistic and threshold, the rehearsal threshold, exact binomial and Clopper–Pearson calculations, the answer set and verdict
+- `valuescale/score.py` — the class scores: a typicality rank (k nearest design rows) and the probability of a ridge logistic regression, fitted on design rows grouped by deposit, combined by their minimum; the model as JSON
+- `valuescale/method.py` — the method end to end (`assess`): gates, statistics, class scores, answer set, with a reason for "can't tell" and "unlike either"
 - `valuescale/corpus/__init__.py` — the corpus subpackage: the bank and, later, the calibration corpus
 - `valuescale/corpus/bank.json` — the diagnostic bank: 37 real tables, each labelled linear or log from provenance (documentation, a column or layer name, or the authors' code, quoted) before any statistic was computed, with its cases, source and parser path
 - `valuescale/corpus/bank-files.json` — every bank source file's size and sha256, recorded by `fetch.py`
@@ -488,6 +493,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `valuescale/corpus/extract.py` — turns each bank entry into the file a user would upload: the native table, a zip member, or a plain matrix from xlsx, h5ad layers, Proteome Discoverer exports and long reports
 - `valuescale/corpus/variants.py` — labelled variants of a bank table (rescaled, logged, offset, normalised, subsampled, missing values induced by intensity, zero-filled, and foreign tables), seeded by name
 - `valuescale/corpus/denylist.py` — the sealed accessions (the organ references' locked tests and the reserve) and the check every corpus path passes
+- `valuescale/corpus/strata.py` — the protocol's strata, one seeded subsample per stratum, and the constructed log variant of a linear subsample (log2, log10, ln, or log2(x + 1) when the median positive value is at least 10)
 - `valuescale/bank/expectations/b1.json` — B1's expected outcomes and decision rules (what each mistake costs: v4.1 on every bank table read linear, log with zeros measured and log with zeros missing; the invariants, refusals, the cost's direction and size, zeros, accuracy where labels exist; the rules that fix the "can't tell" reading and the zeros policy), written before the cost study existed
 - `valuescale/bank/expectations/b2.json` — B2's expected outcomes (the method on the bank and its variants: the method as built, with its gates, statistics, score and provisional thresholds; which gate fires where, invariance, drift, separation, the conformal code in simulation, the verdicts), written before any of B2's code existed
 - `valuescale/bank/expectations/step1.json` — Step 1's expected outcomes (D1 the bank, D2 today's rule, D3 today's pipeline), written before the run
@@ -497,6 +503,13 @@ When you add, move or delete a file, update its line in the same commit.
 - `valuescale/tests/__init__.py` — marks the test folder as a package
 - `valuescale/tests/test_bank.py` — every bank entry has a quoted provenance label; nothing sealed is named; the denylist; nothing imports the service
 - `valuescale/tests/test_variants.py` — variants carry the label of how they were made, are exact where they should be, and repeat on every run
+- `valuescale/tests/test_gates.py` — the gates: the negatives bar, stray negatives, counts, non-finite values, ties at a cell's minimum, unchanged by scale and shift
+- `valuescale/tests/test_statistics.py` — the statistics separate a linear table from its log, are unchanged by each class's nuisance, and handle few cells, per-protein normalisation and missing values as documented
+- `valuescale/tests/test_conformal.py` — the binomial, the umbrella k and threshold, the rehearsal threshold, Clopper–Pearson, the answer set
+- `valuescale/tests/test_strata.py` — strata bounds, the protocol's seed, subsamples and the constructed log variant
+- `valuescale/tests/test_score.py` — the class scores: typical rows, rows like neither, missing features, linear-only features, deposits left out, JSON round trip
+- `valuescale/tests/test_method.py` — the method end to end: linear and log tables, a gate, too few columns, no spread, reasons
+- `valuescale/tests/test_independence.py` — the shipped modules import numpy and the standard library only, and nothing imports the service
 
 ## docs/ — how the product works
 
