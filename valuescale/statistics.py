@@ -146,6 +146,10 @@ def spearman(a: np.ndarray, b: np.ndarray) -> float:
 
 
 def level_spread(values: np.ndarray) -> float:
+    """Spreads are ranked at float32 precision, relative to their median:
+    many tables hold exactly equal spreads (float32 or whole-number values),
+    and a rescaled copy computes them with different last digits in float64,
+    which would break those ties and move the correlation in its 6th digit."""
     level, spread = protein_level_spread(values)
     eligible = np.flatnonzero(np.isfinite(level) & np.isfinite(spread))
     if eligible.size < MIN_LEVEL_SPREAD_PROTEINS:
@@ -153,7 +157,10 @@ def level_spread(values: np.ndarray) -> float:
     if eligible.size > LEVEL_SPREAD_PROTEINS:
         rng = np.random.default_rng(pattern_seed(values))
         eligible = np.sort(rng.choice(eligible, LEVEL_SPREAD_PROTEINS, replace=False))
-    return spearman(level[eligible], spread[eligible])
+    s = spread[eligible]
+    typical = float(np.median(np.abs(s)))
+    s = (s / (typical if typical > 0 else 1.0)).astype(np.float32).astype(np.float64)
+    return spearman(level[eligible], s)
 
 
 def column_sum_cv(values: np.ndarray) -> float:

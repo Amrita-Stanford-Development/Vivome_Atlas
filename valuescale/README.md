@@ -24,6 +24,22 @@ Step 1, the diagnostic bank (`corpus/`):
   another base, offset, normalised, subsampled, with extra missing values,
   and "foreign" tables that neither reading fits.
 - `denylist.py` refuses the sealed test sets.
+- `strata.py` makes the protocol's subsamples per stratum and the
+  constructed log variant of a linear subsample.
+
+Phase B, B2, the method (numpy and the standard library only):
+- `gates.py`: a real share of negatives means already transformed; whole
+  numbers mean linear; stray negatives and ties at a cell's minimum are
+  made missing.
+- `statistics.py`: shape statistics unchanged by each class's nuisance
+  (per-cell skew, kurtosis and tail, and how a protein's spread follows its
+  level).
+- `score.py`: one score per class, the smaller of a typicality rank and a
+  probability, fitted on design tables grouped by deposit.
+- `conformal.py`: thresholds with a guarantee (the umbrella order
+  statistic), exact intervals, the answer set.
+- `method.py`: `assess`, from a table to a verdict (linear, log, can't
+  tell, unlike either) with its reason.
 
 `bank/expectations/` holds each step's expected outcomes, written before the
 step runs. The diagnostics that check them are

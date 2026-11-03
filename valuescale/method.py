@@ -9,7 +9,12 @@
 - `reason`: why, for "cant_tell" and "unlike_either"; None otherwise.
 
 Fewer than MIN_COLUMNS columns is "can't tell" (no calibrated stratum); a
-table on which no per-cell statistic can be computed is "unlike either".
+table on which no per-cell statistic can be computed is "unlike either". A
+per-protein-normalised table (every protein divided by, or centred on, its
+own level: `row_median_spread` below statistics.ROW_NORMALISED_BAR) is
+"can't tell": with the protein levels gone, a linear table's values are
+ratios near 1 and look like logs (B2's diagnostics,
+research/notebook-outputs/value_scale_b2/notes.md).
 """
 from __future__ import annotations
 
@@ -22,6 +27,7 @@ from valuescale import conformal, gates, score
 from valuescale import statistics as st
 
 PER_CELL = ("bowley", "moors", "tail")
+PER_PROTEIN_REASON = "per-protein normalised: each protein's level was removed, so its shape cannot tell"
 
 
 def _fmt(v: float) -> str:
@@ -45,6 +51,8 @@ def assess(values: np.ndarray, model: score.Model, thresholds: Mapping[str, floa
     out["features"] = f
     if all(math.isnan(f[name]) for name in PER_CELL):
         return {**out, "set": [], "verdict": "unlike_either", "reason": "no spread"}
+    if not math.isnan(f["row_median_spread"]) and f["row_median_spread"] < st.ROW_NORMALISED_BAR:
+        return {**out, "set": list(conformal.CLASSES), "verdict": "cant_tell", "reason": PER_PROTEIN_REASON}
     parts = score.class_parts(f, model)
     scores = {y: min(p["typicality"], p["discriminative"]) for y, p in parts.items()}
     answer = conformal.answer_set(scores, thresholds)

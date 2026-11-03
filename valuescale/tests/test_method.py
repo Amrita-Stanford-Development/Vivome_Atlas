@@ -58,6 +58,12 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(a["verdict"], "unlike_either")
         self.assertEqual(a["reason"], "no spread")
 
+    def test_a_per_protein_normalised_table_is_cant_tell(self):
+        x = _linear(seed=95)
+        a = method.assess(x / np.nanmedian(x, axis=1, keepdims=True), self.model, self.thresholds)
+        self.assertEqual(a["verdict"], "cant_tell")
+        self.assertEqual(a["reason"], method.PER_PROTEIN_REASON)
+
     def test_every_answer_carries_a_reason_unless_one_class_fits(self):
         a = method.assess(_linear(seed=97), self.model, self.thresholds)
         self.assertIsNone(a["reason"])

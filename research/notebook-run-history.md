@@ -3167,6 +3167,39 @@ a probe written after the run):
 - The owner accepted the failed row and dropped the message (protocol
   amendment 1), 2026-11-03.
 
+### 74. The raw-or-log framework, Phase B, B2: the method, 2026-11-03
+
+**Why:** the detector itself: gates, statistics, one score per class and
+conformal thresholds (protocol `research/benchmark/protocol-value-scale.md`).
+
+**What was built:** `valuescale/gates.py`, `statistics.py`,
+`conformal.py`, `score.py`, `method.py` and `corpus/strata.py`, each written
+test first, numpy only. `research/notebooks/value_scale_method.py` runs the
+method on the bank and its variants against
+`valuescale/bank/expectations/b2.json`, which was written first. Each table is
+scored by a model fitted without its deposit, with rehearsal thresholds (no
+guarantee until B3's calibration).
+
+**Results** (`research/notebook-outputs/value_scale_b2/`, report and notes):
+- The six small-scale linear tables that today's rule reads as log are all
+  read linear. Every real log table is read log, except one whose values
+  are 68% imputed.
+- Separation 0.992. The conformal code matches its exact rates in
+  simulation. No feature flips between the classes under subsampling or
+  missingness.
+- 17 of 571 labelled variants are wrong (3.0%).
+- The first run found two faults, fixed test first:
+  - a rank statistic broke tied values under rescaling;
+  - per-protein-normalised tables looked log. They are now "can't tell".
+- Remaining, for the owner:
+  - the gates' prediction list was incomplete;
+  - the counts gate also fires on MaxQuant's whole-number intensities
+    (rightly linear);
+  - the imputed table is read linear;
+  - pxd043355_pd is "unlike either";
+  - CPTAC's ratio forms are read log;
+  - percentile ranks are mostly "can't tell".
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

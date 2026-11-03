@@ -47,6 +47,14 @@ class InvarianceTests(unittest.TestCase):
         for c in (1e-6, 1e-3, 1e3):
             self.assert_same(base, st.features(x * c), st.FEATURES)
 
+    def test_level_spread_keeps_tied_spreads_tied_under_scale(self):
+        # whole-number intensities (MaxQuant writes them so) give many proteins
+        # exactly the same spread; rescaling must not break those ties
+        x = np.round(_linear(genes=2000, cells=40))
+        base = st.level_spread(x)
+        for c in (1e-6, 1e-3, 7.3):
+            self.assertEqual(st.level_spread(x * c), base)
+
     def test_log_features_are_unchanged_by_base_and_offset(self):
         log2 = np.log2(_linear())
         base = st.features(log2)
