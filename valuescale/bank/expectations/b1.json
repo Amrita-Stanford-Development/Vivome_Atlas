@@ -1,0 +1,32 @@
+{
+  "step": "b1",
+  "written": "2026-11-03, before research/notebooks/value_scale_cost.py existed and before any of its runs",
+  "about": "Phase B, B1 (research/value-scale-plan.md): what each mistake costs. v4.1 runs on every bank table under each reading and, with a log reading, each meaning of a 0. The result fixes the reading the service uses on 'can't tell' and whether a protein 0 is missing under both readings. Not edited after the run: a difference is explained in the report.",
+  "tables": "every bank table, traced as Phase A traced it (vsd.traced_table: the service's validation, at most 2,000 cells with D3's seed); plus pxd064083_union, the T and B tables side by side (the genes either reports, NaN where one lacks a gene), since the two tables alone are narrow uploads",
+  "pipeline": "v4.1, modality prot, pipeline.run_projection with stated_scale and stated_zeros",
+  "conditions": {
+    "linear": "stated_scale linear (log2 taken, zeros missing)",
+    "log_zeros_measured": "stated_scale log, zeros measured (today's reading of a table it calls log)",
+    "log_zeros_missing": "stated_scale log, zeros missing"
+  },
+  "right_reading": "the bank label: linear tables -> linear; log tables -> log_zeros_missing (identical to log_zeros_measured when the table has no 0; the bank's log tables with zeros, furtwangler_log2 and furtwangler_log2_raw_sn, use 0 for 'not measured': the authors' own _nan layer has missing values exactly there)",
+  "measures": {
+    "changed_best_guess": "share of cells whose best-guess class differs from the right reading's",
+    "changed_answer": "share of cells whose answer (label and level, or no answer) differs from the right reading's",
+    "answered": "share of cells with an answer",
+    "accuracy": "where labels exist: balanced accuracy of the best guess over coarse groups with at least 5 cells, a guess right when its COARSE type (benchmark/fulcher2026_score.py) is in the cell's group; CD4 T and CD8 T form one group T. Labels: pxd064083_union (sorted T or B), fulcher_tmt (the authors' coarse annotation; Unknown left out), pbmc240_diann (the authors' marker-based labels: T cell, NK cell, Dendritic, Monocyte; unassigned and Platelet left out). Khoury 2026 stays sealed: no accuracy."
+  },
+  "rows": {
+    "B1_invariants": "every table x condition the pipeline accepts: the stage invariants hold (value_scale_diagnostics._reading_invariants: no +-inf after Stage 0, Stage 0's missing values as expected, mask sum, z-score mean 0 and SD 1 or a constant gene 0, prepare_query equal to the trace, finite encoder input, v4.2's protein query reading as Stage 0) and every cell has a label or an abstention reason",
+    "B1_refusals": "linear is refused (NotIntensities) exactly on the tables with a negative value",
+    "B1_direction": "the median changed_best_guess of log tables read linear is below that of linear tables read as log (log_zeros_measured, today's misread)",
+    "B1_log_read_linear_small": "the median changed_best_guess of non-negative log tables read linear is at most 0.10",
+    "B1_zeros": "on the tables with at least 5% zeros, read as log: zeros missing changes fewer best guesses against the right reading than zeros measured, on a majority of them",
+    "B1_accuracy": "on each labelled table, the right reading's accuracy is at least the wrong reading's minus 2 points (linear tables: against log_zeros_measured)"
+  },
+  "decisions_by_rule": {
+    "cant_tell_reading": "linear if the median changed_best_guess of log tables read linear is at most that of linear tables read as log (log_zeros_measured); log otherwise",
+    "zeros": "a protein 0 is missing under both readings if B1_zeros holds; otherwise a 0 stays measured under a log reading, as today"
+  },
+  "expected_decisions": "cant_tell_reading linear (a log of log2 values is near a straight line within a gene, which the z-score removes); zeros missing under both readings"
+}
