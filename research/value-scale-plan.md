@@ -226,6 +226,7 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
 - `baselines.py`: GEO2R, ExpressAnalyst, scGPT, Omics Playground, ProteoPy, Gemma, CellTypist and median-50, each re-implemented from a cited permalink. CIBERSORT is re-implemented from its description, because of its licence.
 - `corpus/`: bank, fetch, extract, variants, split, and `score_test.py`, which refuses a second run.
 - `bank/expectations/`: one file per step.
+- A candidate gate, decided on design data before any calibration score is computed: a table with no missing values is "can't tell", since it may have been filled in (`research/notebook-outputs/value_scale_b2/notes.md`).
 - `valuescale/tests/`:
   - invariance properties;
   - the gates and the reports;
@@ -241,6 +242,7 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
   - These are recorded in a "fields added since freezing" list in `service/tests/test_pipeline_versions.py` `assert_same`.
   - `test_golden_fixtures.py` compares the frozen keys only. The frozen fixtures are never regenerated.
 - The site's `valueScaleText` covers the new verdicts. "Can't tell" and "unlike either" show a warning beside the scale menu.
+- The site asks for the reading when a protein file is chosen: raw intensities, already log, or "I don't know", which runs the detector. Uploaders mostly know (owner, 2026-11-04). The design is agreed with the owner before it is built.
 - **Tests:**
   - the tiny-matrix and uniform-random tests in `test_alignment.py` (412-472) move to `median_rule` / `apply_reading`;
   - new log-normal cases: PXD064083-like, 45% zeros, log2, log10 and +10 offsets, ratio tables, too-small-to-tell;

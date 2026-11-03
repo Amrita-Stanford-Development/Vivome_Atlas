@@ -132,3 +132,17 @@ Accept the remaining failures as explained, or not:
 4. the variants: the imputed table, CPTAC's ratios and the percentile ranks.
 
 The two fixes after the first run are in the plan's ledger as rulings.
+
+## The owner's decisions (2026-11-04)
+
+1. The four remaining failures are accepted, as explained above.
+2. Uploaders mostly know whether their file is raw or log. The site will ask
+   them to choose when they upload a protein file, and the automatic
+   detector serves those who don't know. The design is agreed with the
+   owner before B5 builds it.
+3. A candidate for B4: a table with no missing values gets "can't tell",
+   since it may have been filled in. furtwangler_log2_imputed is the only
+   bank table with none; the next lowest is kabatnik_cra_timstofultra at
+   7.9%. A log table filtered to the proteins seen in every cell has none
+   either, so the rule is decided on design data, before any calibration
+   score is computed.
