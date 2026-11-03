@@ -1,0 +1,38 @@
+{
+  "step": "b3",
+  "written": "2026-11-04, after valuescale/corpus/frame.py and before the frame was built, before any calibration or test deposit was listed or fetched, and before the draw's code existed",
+  "about": "Phase B, B3 (research/value-scale-plan.md; protocol research/benchmark/protocol-value-scale.md with amendment 1): the corpus, protein v1. The frame, the walk, the labels and the hand audit. No detector statistic, gate or verdict is computed on any drawn deposit in B3. Not edited after the run: a difference is explained in the report.",
+  "draw_as_built": {
+    "index": "records start at their GetDataset link; a line break inside a title is joined with a space; the repository is the first field after the title that names one; bytes that are not UTF-8 are replaced (the accessions are ASCII)",
+    "tracked_identifiers": "git grep -I at the protocol's commit 26519a8: text files only, any letter case (the bank's ids are lower case)",
+    "massive": "a MassIVE row's MSV identifier and FTP folder come from its ProteomeCentral announcement; the folder is listed with ftplib over explicit TLS (what curl --ssl-reqd does), down to three folder levels below the dataset root",
+    "candidates": "names matched without regard to case: *pg_matrix.tsv (DIA-NN matrix), *combined_protein.tsv (FragPipe), proteinGroups*.txt (MaxQuant), *_Proteins.txt (Proteome Discoverer); a text or parquet file with 'report' in its name is read at its header: PG.Quantity with PG.ProteinGroups and R.FileName, or '<run>.PG.Quantity' columns, is Spectronaut; Protein.Group and Run with PG.MaxLFQ or PG.Quantity is a DIA-NN long report. Zip archives of 500 MB or less are listed through range requests and their members matched the same way",
+    "one_table": "the first candidate in the protocol's order decides the deposit; ties by file name, then path. When it is not eligible, the deposit is skipped with the reason",
+    "too_large": "a single file over 1 GiB (the protocol names no bar for single files; 1 GiB keeps a long report's parse in memory). Archives over 500 MB are not listed (the protocol)",
+    "header_first": "a wide table's header is read before the full fetch; when no quantity family reaches 20 columns, the deposit is skipped as too few columns without fetching the rest",
+    "parse": "the service's parser (alignment.parse_matrix_csv) for DIA-NN matrices, MaxQuant, FragPipe and Spectronaut pivots; the bank's readers for Proteome Discoverer ('Abundance: ' columns; Gene Symbol, else Accession) and long reports (the first value per protein and run; DIA-NN on PG.MaxLFQ, else PG.Quantity; Spectronaut on PG.Quantity)",
+    "labels": "on the names of the chosen value columns only (a Spectronaut pivot's PG.AvgLog2Quantity is not a value column). Unclear and excluded: a ratio, z-score, imputation or a scale-changing normalisation named (ratio, z-score, zscore, imput, scaled, centred, centered, quantile, vsn, combat), a TMT-Integrator table, or a linear-labelled table holding a negative value. Log: a log named (log2, log10, ln, log). Linear: a native output, quoted from bank.json's quotes for its software",
+    "skip_reasons": "no candidate, too large, unparseable, too few columns, too few rows, unclear label, audit disagreement; and two the protocol did not list: no file list (the listing failed after retries) and fetch failed",
+    "stop": "when every quota is met in both splits, or after 10,000 deposits have been listed"
+  },
+  "rows": {
+    "B3_frame": {
+      "kept_before_denylist": "18,859 rows (counted on the index while writing frame.py: 17,346 PRIDE, 1,513 MassIVE)",
+      "dropped_sealed": "at most 4",
+      "dropped_tracked": "between 20 and 101 (101 distinct identifiers are tracked; many are mouse, older than 2020, or iProX)",
+      "calibration_share": "between 0.48 and 0.52 of the frame"
+    },
+    "B3_records": "every kept deposit has its file's URL, size and sha256, parses into at least 20 columns and 200 rows, and has its label with a quote (linear: the software's; log: the column name)",
+    "B3_quota_S1": "met: at least 59 linear deposits with 20 or more columns in each split",
+    "B3_quota_S2": "met: at least 59 linear deposits with 50 or more columns in each split",
+    "B3_quota_S3": "short: fewer than 59 linear deposits with 301 or more columns in at least one split, so S3 pools with S2 into '50 to 2,000'",
+    "B3_stop": "the walk lists 10,000 deposits, since S3 stays short",
+    "B3_yield": "between 3 and 15 kept deposits per 100 listed (the pilot: 25 of 200 PRIDE projects named a native table and 81 more held only archives)",
+    "B3_skips": "no candidate is the most common reason, over half of all listed deposits",
+    "B3_real_log": "fewer than 59 real log tables in each split (native names rarely hold logged values), so the real-log test stratum carries no guarantee, as the protocol allows",
+    "B3_software": "DIA-NN or MaxQuant is the most common software among kept linear deposits",
+    "B3_audit": "the hand audit of a seeded 20% of each split's labelled deposits agrees on at least 90% (expected at least 95%); disagreements are excluded",
+    "B3_sealed": "no sealed accession is listed or opened: the frame drops them and every path, URL and accession passes denylist.check",
+    "B3_no_statistic": "the draw imports none of valuescale's gates, statistics, score or method modules, and conformal only for the strata's bounds, through strata.py (a test)"
+  }
+}
