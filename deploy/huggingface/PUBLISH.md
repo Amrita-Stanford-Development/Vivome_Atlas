@@ -35,6 +35,14 @@ setting on the Cloud Run service itself would override it, and a deploy
 keeps such settings), and `0 differ`, before the site points at a new
 revision.
 
+The labels must match exactly; the numbers need not. Cloud Run runs Linux,
+whose log has other last digits than this PC's, and for a few cells the
+pipeline turns last digits into visible moves: on 2026-11-03 (revision
+00008), 3 of PBMC240's 238 cells differed by about 0.01 in coordinates and
+best-guess probability, only on readings that take the log, while on this
+PC alone inputs nudged by one part in a million moved cells by up to 0.04.
+Gaps of that size, with no label different, are not a deploy fault.
+
 ## Hugging Face Space (reference)
 
 The Space runs `service/` in Docker on Hugging Face's free CPU tier (2 cores,

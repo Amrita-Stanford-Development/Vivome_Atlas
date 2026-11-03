@@ -1,6 +1,6 @@
 # Plan: a calibrated raw-or-log detector for uploads, built as a reusable framework
 
-Status: approved by the owner on 2026-10-28. Step 1 (the diagnostic bank) is done and its two explained failures accepted (`research/notebook-outputs/value_scale_step1/notes.md`); Phase A is next, and nothing below Step 1 is built yet.
+Status: approved by the owner on 2026-10-28. Step 1 (the diagnostic bank) is done and its two explained failures accepted (`research/notebook-outputs/value_scale_step1/notes.md`). Phase A, with the zeros choice (A2) and the float64 z-score its diagnostics called for, is built and was deployed on 2026-11-03 (`research/todo.md`). Phase B is next, and nothing in it is built yet.
 
 ## Context
 
