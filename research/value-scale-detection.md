@@ -40,11 +40,10 @@ are binding; this is their summary.
     per class and stratum.
   - **The answer:** {linear}, {log}, {both} = "can't tell", or {} = "unlike
     either".
-- **"Can't tell":**
-  - if z(x) and z(log2 x) correlate at 0.98 or more per protein (median),
-    the reply says the choice barely matters;
-  - otherwise the service uses the reading the cost study (step 1 below)
-    finds cheaper, and warns.
+- **"Can't tell":** the service reads the table linear, the reading B1's
+  cost study found cheaper (`research/notebook-outputs/value_scale_b1/`),
+  warns, and offers the other reading. A protein 0 is "not measured" under
+  either reading.
 - **The corpus and its splits:** the protocol replaces section 5 below.
   Fresh deposits are drawn from the ProteomeXchange index with a fixed seed;
   the design split is everything already looked at, and calibration and

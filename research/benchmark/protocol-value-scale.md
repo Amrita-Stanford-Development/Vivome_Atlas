@@ -218,4 +218,18 @@ stratum and the strata pooled, with Clopper–Pearson 95% intervals:
 
 ## Amendments
 
-None yet.
+### 1. 2026-11-03: no "the choice barely matters" message
+
+Written before any calibration or test deposit was fetched or read.
+
+- **What changes:** "When the detector can't tell" loses its first bullet.
+  On "can't tell" the service always reads the table as B1 fixed (linear),
+  warns, and offers the other reading. No correlation threshold is applied.
+- **Why:** B1's probe (`research/notebook-outputs/value_scale_b1/notes.md`,
+  `posthoc.md`) computed the check's statistic on the design split. Seven
+  bank tables reach 0.98, and on six of them the other reading changes 8 to
+  20% of best guesses. The message would be wrong on most tables that
+  reach the bar.
+- **Decided by:** the owner, 2026-11-03.
+- **Effect on scoring:** none. "Can't tell" was already counted by B1's
+  reading.

@@ -99,7 +99,8 @@ table with zeros that is misread as log has its zeros read as missing. On
 this one table that costs 12 points against today's misread. The
 calibrated detector is what makes that misread rare.
 
-## For the owner, before B2
+## The owner's decisions (2026-11-03)
 
-1. Accept the failed row, as explained above, or not.
-2. Accept the proposed change to the "can't tell" message, or not.
+1. The failed row is accepted: no reading can be expected to cost nothing
+   on every table.
+2. The "barely matters" message is dropped (protocol amendment 1).

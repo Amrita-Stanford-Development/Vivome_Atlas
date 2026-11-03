@@ -3164,7 +3164,8 @@ a probe written after the run):
   reach it (8 to 20% of best guesses change).
 - On the sorted T and B cells misread as log, zeros missing costs 12
   accuracy points against zeros measured.
-- The failed row and a change to the message wait for the owner.
+- The owner accepted the failed row and dropped the message (protocol
+  amendment 1), 2026-11-03.
 
 ## The throughline
 

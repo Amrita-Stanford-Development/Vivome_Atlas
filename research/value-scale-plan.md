@@ -194,8 +194,8 @@ This is the framework's front end; the default reading is unchanged.
 - The log class is calibrated on constructed variants plus the real non-negative log tables. The real log tables also form a separate sealed test stratum.
 
 **On "can't tell"**
-- A check without the model: the median per-gene correlation between z(x) and z(log2 x). If it is ≥ about 0.98, the reply says the choice barely matters.
-- Otherwise the service uses B1's cheaper reading, warns, and offers a re-run with the other reading.
+- The service uses B1's cheaper reading (linear), warns, and offers a re-run with the other reading.
+- Dropped by the owner on 2026-11-03, after B1: a model-free check saying "the choice barely matters" when z(x) and z(log2 x) correlate at about 0.98 or more. On the bank it would be wrong on 6 of the 7 tables that reach 0.98 (`research/notebook-outputs/value_scale_b1/notes.md`; protocol amendment 1).
 
 **Diagnostics B2, on the bank and its variants:**
 - **Gates:** which gate fires, against the expectation. For example, SCoPE2 hits the negatives gate (73,419 of the 146,750 values in its 50-cell slice are negative), and the count variants hit the integers gate.
