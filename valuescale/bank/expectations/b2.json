@@ -1,0 +1,47 @@
+{
+  "step": "b2",
+  "written": "2026-11-03, before valuescale/gates.py, statistics.py, conformal.py, score.py or B2's diagnostics script existed, and before any of B2's statistics was computed on a bank table",
+  "about": "Phase B, B2 (research/value-scale-plan.md; protocol research/benchmark/protocol-value-scale.md with amendment 1): the method, run on the bank and its variants. Not edited after the run: a difference is explained in the report.",
+  "method_as_built": {
+    "gates": {
+      "order": "non-finite values are missing; then negatives, counts, and the clean-up below",
+      "negatives": "at least 1% of observed values below 0: the table is already transformed, so the reading is log (no log taken). Fewer: those values are made missing (stray negatives) and the detector runs",
+      "counts": "every observed value a non-negative integer, with at least 20 distinct values: counts, so the reading is linear",
+      "clean_up": "in each cell, values tied at the cell's minimum (two or more equal values) are made missing: zeros for 'not detected' and imputation spikes. Unchanged by x -> c*x and x -> a + c*x"
+    },
+    "statistics": {
+      "per_cell": "on each cell's observed values (cells with at least 20): Bowley skewness (Q75 + Q25 - 2 Q50)/(Q75 - Q25); Moors kurtosis ((E7 - E5) + (E3 - E1))/(E6 - E2) on octiles; the tail ratio (Q99 - Q50)/(Q75 - Q25); D = log10(Q95/Q05) when Q05 > 0. A table feature is the median over cells, missing with fewer than 5 cells",
+      "core": ["bowley", "moors", "tail", "level_spread"],
+      "level_spread": "proteins: up to 1,000 with a finite level, drawn with a seed from the table's missing-value pattern (unchanged by both nuisances); level = median over all cells and spread = Q75 - Q50, missing values ranked lowest (order statistics, no interpolation); the Spearman correlation of spread on level. Missing when fewer than 20 proteins qualify, or when row_median_spread is below 0.1 (per-protein-normalised tables)",
+      "side_both_classes": ["missing_share", "row_median_spread (IQR of protein medians / median of protein IQRs)", "cell_bowley_iqr (IQR over cells of per-cell Bowley)"],
+      "side_linear_only": ["decades (D, median over cells)", "column_sum_cv (SD / mean of column sums)"],
+      "linear_only_why": "D and the column-sum spread are unchanged by x -> c*x but not by x -> a + c*x, so they enter the linear class's typicality only"
+    },
+    "score": {
+      "typicality": "per class: distance to the class's design rows, each feature standardised by the class's median and IQR/1.349, root mean square over the features both rows have; the mean of the 3 nearest rows from other deposits",
+      "discriminative": "ridge logistic regression (lambda 1) of log vs linear on the features both classes share, standardised by the pooled median and IQR/1.349, a missing feature at 0",
+      "combination": "each kind turned into a design rank for class y (the share of class y's design rows, each scored leaving its deposit out, that look no more typical); the class score is the smaller of the two ranks. Fixed here, before any calibration statistic",
+      "answer": "class y is in the set when its score is at least its threshold; {linear}, {log}, {linear, log} = can't tell, {} = unlike either; fewer than 20 columns = can't tell, reason 'too few columns'; no per-cell statistic computable = unlike either, reason 'no spread'"
+    },
+    "design_rows": "every bank table with at least 20 columns that no gate decides: one subsample per stratum it reaches (S1 20-49, S2 50-300, S3 301-2,000 columns; size uniform in the stratum's range capped by the table, columns in order, seed sha256('20261103:' + table id + ':' + stratum)); each linear subsample also gives one constructed log variant (log2, log10 or ln with zeros missing, or log2(x + 1) with zeros 0 when the median positive value is at least 10, else log2; chosen by the same seed). Deposits group the rows for leaving one out",
+    "provisional_thresholds": "B2 has no calibration split, so its verdicts use a rehearsal threshold per class: the floor(0.05 (n + 1))-th smallest design score of that class, each design row scored with its deposit left out. No guarantee is claimed for them. A bank table and its variants are scored by a model and thresholds fitted without the table's deposit"
+  },
+  "rows": {
+    "B2_gates": {
+      "negatives": "fires on exactly: scope2_export, furtwangler_log2fc_nan, cptac_ccrcc_tumor; every zscore_genes variant; the log2, log10, ln and log2_times_0.5 variants of pxd064083_t and pxd064083_b (about 2% of their positive values are below 1); and the subsample and missing variants of the three log tables with negatives. On no linear-labelled table or variant",
+      "counts": "fires on exactly: every counts variant (made in B2: the linear values divided by their median positive value, times 5, rounded) and every ranks variant (per-cell ranks are integers: a known false call, the gate cannot tell ranks from counts)",
+      "stray_negatives": "made missing, under 1%: the log variants of msv000099294_hmc3 and msv000099294_microglia, and of pxd049412_a549_singlecells"
+    },
+    "B2_invariance": "each feature is unchanged within 1e-9 between a linear table and its times_1e-6, times_1e-3 and times_1e3 variants (all nine features); and, for the core and both-class side features, between a table's log2 variant and its log10, ln, log2_plus10, log2_times_0.5 and log2_minus_min variants, on every bank table whose log2 variant has no negative value (the stray-negative rule is not unchanged by +a, so those are left out and listed)",
+    "B2_drift": "for each core feature, the sign of (median over linear rows - median over log rows) is the same under no drift, subsample_20, subsample_50, subsample_300, missing_40 and missing_70 (linear rows: the bank's linear tables; log rows: their log2 forms and the real log tables no gate decides). Predicted: linear above log on all four core features; induced missingness raises the log rows' Bowley (it removes the low tail) without crossing the linear median. Each feature's median shift per class and condition is tabled",
+    "B2_separation": "with each deposit left out, the area under the curve of s_linear - s_log between linear and log design rows is at least 0.95",
+    "B2_conformal": {
+      "umbrella_k": "k(59) = 1, k(120) = 2, k(200) = 5; no k below 59 at alpha = delta = 0.05",
+      "simulation": "1,000 repeats at each of n = 59, 120, 200, scores from a known continuous distribution: the share of repeats whose true miss rate exceeds alpha is within 3 binomial standard errors of P(Binomial(n, alpha) <= k - 1), which is at most delta; the mean true miss rate is at most alpha",
+      "clopper_pearson": "matches scipy.stats.beta quantiles within 1e-9 on a grid of (x, n)"
+    },
+    "B2_verdicts_bank": "every bank table: the right class alone, or can't tell with its reason; never the wrong class alone. The 7 tables under 20 columns are can't tell, 'too few columns'. The three log tables with negatives are log by the gate. Predicted {linear}: every linear table with at least 20 columns, the small-scale ones included (pxd064083_t, pxd064083_b, msv000099294_hmc3, msv000099294_microglia, furtwangler_batchcorr, furtwangler_batchcorr_norm). Predicted {log}: khoury_column_normalized and the Furtwangler log tables, of which furtwangler_log2_imputed may be can't tell (imputed values reshape the low tail)",
+    "B2_verdicts_variants": "on the variants of the bank tables with at least 20 columns: no linear- or log-labelled variant gets the wrong class alone, except at most 5% of them, all subsample_20 or missing_70. Foreign variants: zscore_genes log by the negatives gate, ranks linear by the counts gate (both known), presence unlike either ('no spread'), per-protein percentile ranks (made in B2, the protocol's foreign set) unlike either",
+    "B2_design_size": "recorded, not judged: design rows per class and stratum (predicted about 42 linear and 57 log, most log rows constructed), and deposits"
+  }
+}
