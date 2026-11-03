@@ -1,9 +1,54 @@
 # Detecting a table's value scale: research and proposed method
 
-Status: proposal, 2026-10-27, for the owner's decision. Nothing here is
-implemented. It answers the fault found on PXD064083
-(`research/benchmark/protocol-pxd064083.md`, amendment 1; `research/todo.md`,
-"the linear-scale rule misreads small-scale linear tables").
+Status: the research of 2026-10-27, which led to the owner's plan
+(`research/value-scale-plan.md`, approved 2026-10-28). It answers the fault
+found on PXD064083 (`research/benchmark/protocol-pxd064083.md`, amendment 1;
+`research/todo.md`, "the linear-scale rule misreads small-scale linear
+tables"). The method was revised after an adversarial review; the revised
+method is summarised below and rules wherever "Proposed method" differs.
+
+## The method as revised (2026-11-03)
+
+The plan's B2 and the protocol (`research/benchmark/protocol-value-scale.md`)
+are binding; this is their summary.
+
+- **Gates, as proposed,** with two changes:
+  - a few stray negatives are made missing, and only a real share of
+    negatives means "no log";
+  - all non-negative integers need at least 20 distinct values to mean
+    counts.
+- **The statistics:**
+  - **Core,** each unchanged by x → c·x on a linear table and by x → a + c·x
+    on a log one:
+    - per-cell Bowley and Moors skewness;
+    - the tail ratio (Q99 − Q50)/(Q75 − Q25);
+    - the Spearman correlation between a protein's level and its spread,
+      missing values ranked lowest, over at most 1,000 proteins.
+  - **Side features:**
+    - D, on the linear side only;
+    - the missing share;
+    - how much row medians vary;
+    - how much per-cell statistics vary;
+    - the column-sum spread.
+  - D, b and K below are not the core any more. Magnitude is still not used.
+- **The decision** is per-class split conformal prediction, not two
+  one-sided quantile tests:
+  - **The score:** one score per class combines a typicality score
+    (distance to that class's design tables) and a discriminative one.
+  - **The threshold:** an umbrella order statistic per class and cell-count
+    stratum, so P(miss > α) ≤ δ with α = δ = 0.05. That needs 59 deposits
+    per class and stratum.
+  - **The answer:** {linear}, {log}, {both} = "can't tell", or {} = "unlike
+    either".
+- **"Can't tell":**
+  - if z(x) and z(log2 x) correlate at 0.98 or more per protein (median),
+    the reply says the choice barely matters;
+  - otherwise the service uses the reading the cost study (step 1 below)
+    finds cheaper, and warns.
+- **The corpus and its splits:** the protocol replaces section 5 below.
+  Fresh deposits are drawn from the ProteomeXchange index with a fixed seed;
+  the design split is everything already looked at, and calibration and
+  test are split by the deposit's hash.
 
 ## The question
 
