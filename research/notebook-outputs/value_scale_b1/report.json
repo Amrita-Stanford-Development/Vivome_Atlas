@@ -1,0 +1,958 @@
+{
+ "step": "b1",
+ "run": "2026-11-03T19:34:27",
+ "pipeline_version": "v4.1",
+ "rows": {
+  "B1_invariants": {
+   "pass": true,
+   "failures": {}
+  },
+  "B1_refusals": {
+   "pass": true,
+   "wrong": []
+  },
+  "B1_direction": {
+   "pass": true,
+   "median_log_read_linear": 0.124,
+   "median_linear_read_as_log": 0.22,
+   "n_log": 5,
+   "n_linear": 23
+  },
+  "B1_log_read_linear_small": {
+   "pass": false,
+   "median_log_read_linear": 0.124
+  },
+  "B1_zeros": {
+   "pass": true,
+   "missing_better_on": [
+    "furtwangler_batchcorr",
+    "furtwangler_batchcorr_norm",
+    "furtwangler_log2",
+    "furtwangler_log2_raw_sn",
+    "pxd064083_b",
+    "pxd064083_t",
+    "pxd064083_union"
+   ],
+   "measured_at_least_as_good_on": [],
+   "linear_tables_only": {
+    "missing_better": 5,
+    "of": 5
+   }
+  },
+  "B1_accuracy": {
+   "pass": true,
+   "tables": {
+    "pbmc240_diann": {
+     "right": 52.99,
+     "wrong": 45.01,
+     "pass": true
+    },
+    "fulcher_tmt": {
+     "right": 65.94,
+     "wrong": 67.32,
+     "pass": true
+    },
+    "pxd064083_union": {
+     "right": 85.95,
+     "wrong": 85.16,
+     "pass": true
+    }
+   }
+  }
+ },
+ "decisions": {
+  "cant_tell_reading": "linear",
+  "zeros": "missing under both readings"
+ },
+ "tables": [
+  {
+   "id": "pbmc240_diann",
+   "label": "linear",
+   "cells": 238,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.7311,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0,
+     "accuracy": 52.99
+    },
+    "log_zeros_measured": {
+     "answered": 0.7227,
+     "changed_best_guess": 0.1555,
+     "changed_answer": 0.2101,
+     "accuracy": 45.01
+    },
+    "log_zeros_missing": {
+     "answered": 0.7227,
+     "changed_best_guess": 0.1555,
+     "changed_answer": 0.2101,
+     "accuracy": 45.01
+    }
+   },
+   "labelled_cells": {
+    "DC": 11,
+    "NK": 56,
+    "T": 61,
+    "monocyte": 5
+   }
+  },
+  {
+   "id": "kabatnik_cra_timstofultra",
+   "label": "linear",
+   "cells": 25,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.4,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.44,
+     "changed_best_guess": 0.16,
+     "changed_answer": 0.24
+    },
+    "log_zeros_missing": {
+     "answered": 0.44,
+     "changed_best_guess": 0.16,
+     "changed_answer": 0.24
+    }
+   }
+  },
+  {
+   "id": "kabatnik_c3_region",
+   "label": "linear",
+   "cells": 27,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.4815,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.4074,
+     "changed_best_guess": 0.1481,
+     "changed_answer": 0.1481
+    },
+    "log_zeros_missing": {
+     "answered": 0.4074,
+     "changed_best_guess": 0.1481,
+     "changed_answer": 0.1481
+    }
+   }
+  },
+  {
+   "id": "pxd073250_diann",
+   "label": "linear",
+   "cells": 557,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.3052,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.2855,
+     "changed_best_guess": 0.2765,
+     "changed_answer": 0.1759
+    },
+    "log_zeros_missing": {
+     "answered": 0.2855,
+     "changed_best_guess": 0.2765,
+     "changed_answer": 0.1759
+    }
+   }
+  },
+  {
+   "id": "pxd077946_diann_genes",
+   "label": "linear",
+   "cells": 40,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.5,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.45,
+     "changed_best_guess": 0.125,
+     "changed_answer": 0.125
+    },
+    "log_zeros_missing": {
+     "answered": 0.45,
+     "changed_best_guess": 0.125,
+     "changed_answer": 0.125
+    }
+   }
+  },
+  {
+   "id": "zamore_diann",
+   "label": "linear",
+   "cells": 30,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.8667,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.9667,
+     "changed_best_guess": 0.0667,
+     "changed_answer": 0.1
+    },
+    "log_zeros_missing": {
+     "answered": 0.9667,
+     "changed_best_guess": 0.0667,
+     "changed_answer": 0.1
+    }
+   }
+  },
+  {
+   "id": "pxd064083_t",
+   "label": "linear",
+   "cells": 78,
+   "zero_share": 0.4387,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.5128,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.6026,
+     "changed_best_guess": 0.5513,
+     "changed_answer": 0.4615
+    },
+    "log_zeros_missing": {
+     "answered": 0.5128,
+     "changed_best_guess": 0.3077,
+     "changed_answer": 0.3077
+    }
+   }
+  },
+  {
+   "id": "pxd064083_b",
+   "label": "linear",
+   "cells": 70,
+   "zero_share": 0.4658,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.3714,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.2857,
+     "changed_best_guess": 0.4714,
+     "changed_answer": 0.3857
+    },
+    "log_zeros_missing": {
+     "answered": 0.3286,
+     "changed_best_guess": 0.2429,
+     "changed_answer": 0.2
+    }
+   }
+  },
+  {
+   "id": "pxd021882_maxquant",
+   "label": "linear",
+   "not_traced": true
+  },
+  {
+   "id": "dusszachniewicz_maxquant",
+   "label": "linear",
+   "cells": 45,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.4444,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.4889,
+     "changed_best_guess": 0.1556,
+     "changed_answer": 0.2889
+    },
+    "log_zeros_missing": {
+     "answered": 0.4889,
+     "changed_best_guess": 0.1556,
+     "changed_answer": 0.2889
+    }
+   }
+  },
+  {
+   "id": "herrera2025_fragpipe",
+   "label": "linear",
+   "cells": 91,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.4176,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.5385,
+     "changed_best_guess": 0.5495,
+     "changed_answer": 0.5934
+    },
+    "log_zeros_missing": {
+     "answered": 0.5385,
+     "changed_best_guess": 0.5495,
+     "changed_answer": 0.5934
+    }
+   }
+  },
+  {
+   "id": "lungmap_bpd_fragpipe",
+   "label": "linear",
+   "cells": 20,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.5,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.35,
+     "changed_best_guess": 0.2,
+     "changed_answer": 0.25
+    },
+    "log_zeros_missing": {
+     "answered": 0.35,
+     "changed_best_guess": 0.2,
+     "changed_answer": 0.25
+    }
+   }
+  },
+  {
+   "id": "msv000099294_hmc3",
+   "label": "linear",
+   "cells": 47,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.3191,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.3404,
+     "changed_best_guess": 0.2128,
+     "changed_answer": 0.2128
+    },
+    "log_zeros_missing": {
+     "answered": 0.3404,
+     "changed_best_guess": 0.2128,
+     "changed_answer": 0.2128
+    }
+   }
+  },
+  {
+   "id": "msv000099294_microglia",
+   "label": "linear",
+   "cells": 57,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.2456,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.3333,
+     "changed_best_guess": 0.2456,
+     "changed_answer": 0.193
+    },
+    "log_zeros_missing": {
+     "answered": 0.3333,
+     "changed_best_guess": 0.2456,
+     "changed_answer": 0.193
+    }
+   }
+  },
+  {
+   "id": "pxd061052_spectronaut",
+   "label": "linear",
+   "cells": 29,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.2414,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.2759,
+     "changed_best_guess": 0.2069,
+     "changed_answer": 0.2414
+    },
+    "log_zeros_missing": {
+     "answered": 0.2759,
+     "changed_best_guess": 0.2069,
+     "changed_answer": 0.2414
+    }
+   }
+  },
+  {
+   "id": "pxd043355_pd",
+   "label": "linear",
+   "cells": 59,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.4407,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.8305,
+     "changed_best_guess": 0.3898,
+     "changed_answer": 0.5593
+    },
+    "log_zeros_missing": {
+     "answered": 0.8305,
+     "changed_best_guess": 0.3898,
+     "changed_answer": 0.5593
+    }
+   }
+  },
+  {
+   "id": "fulcher_tmt",
+   "label": "linear",
+   "cells": 2000,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.6785,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0,
+     "accuracy": 65.94
+    },
+    "log_zeros_measured": {
+     "answered": 0.641,
+     "changed_best_guess": 0.2155,
+     "changed_answer": 0.21,
+     "accuracy": 67.32
+    },
+    "log_zeros_missing": {
+     "answered": 0.641,
+     "changed_best_guess": 0.2155,
+     "changed_answer": 0.21,
+     "accuracy": 67.32
+    }
+   },
+   "labelled_cells": {
+    "B": 80,
+    "DC": 40,
+    "NK": 120,
+    "T": 368,
+    "monocyte": 346
+   }
+  },
+  {
+   "id": "scope2_export",
+   "label": "log",
+   "cells": 1490,
+   "zero_share": 0.0,
+   "negative": true,
+   "right": "log_zeros_missing",
+   "refused": [
+    "linear"
+   ],
+   "failed_invariants": {},
+   "conditions": {
+    "log_zeros_measured": {
+     "answered": 0.5295,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_missing": {
+     "answered": 0.5295,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "khoury_column_normalized",
+   "label": "log",
+   "cells": 1651,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "log_zeros_missing",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.931,
+     "changed_best_guess": 0.0121,
+     "changed_answer": 0.02
+    },
+    "log_zeros_measured": {
+     "answered": 0.9297,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_missing": {
+     "answered": 0.9297,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "furtwangler_batchcorr",
+   "label": "linear",
+   "cells": 2000,
+   "zero_share": 0.6838,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.336,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.396,
+     "changed_best_guess": 0.8315,
+     "changed_answer": 0.6215
+    },
+    "log_zeros_missing": {
+     "answered": 0.3185,
+     "changed_best_guess": 0.281,
+     "changed_answer": 0.262
+    }
+   }
+  },
+  {
+   "id": "furtwangler_batchcorr_norm",
+   "label": "linear",
+   "cells": 2000,
+   "zero_share": 0.6835,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.4015,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.317,
+     "changed_best_guess": 0.8935,
+     "changed_answer": 0.5625
+    },
+    "log_zeros_missing": {
+     "answered": 0.3935,
+     "changed_best_guess": 0.265,
+     "changed_answer": 0.2235
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2",
+   "label": "log",
+   "cells": 2000,
+   "zero_share": 0.6839,
+   "negative": false,
+   "right": "log_zeros_missing",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.401,
+     "changed_best_guess": 0.128,
+     "changed_answer": 0.1255
+    },
+    "log_zeros_measured": {
+     "answered": 0.262,
+     "changed_best_guess": 0.9245,
+     "changed_answer": 0.55
+    },
+    "log_zeros_missing": {
+     "answered": 0.403,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2_imputed",
+   "label": "log",
+   "cells": 2000,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "log_zeros_missing",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.24,
+     "changed_best_guess": 0.08,
+     "changed_answer": 0.027
+    },
+    "log_zeros_measured": {
+     "answered": 0.244,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_missing": {
+     "answered": 0.244,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2_nan",
+   "label": "log",
+   "cells": 2000,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "log_zeros_missing",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.395,
+     "changed_best_guess": 0.124,
+     "changed_answer": 0.1105
+    },
+    "log_zeros_measured": {
+     "answered": 0.4005,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_missing": {
+     "answered": 0.4005,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2fc_nan",
+   "label": "log",
+   "cells": 2000,
+   "zero_share": 0.0,
+   "negative": true,
+   "right": "log_zeros_missing",
+   "refused": [
+    "linear"
+   ],
+   "failed_invariants": {},
+   "conditions": {
+    "log_zeros_measured": {
+     "answered": 0.3965,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_missing": {
+     "answered": 0.3965,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2_raw_sn",
+   "label": "log",
+   "cells": 2000,
+   "zero_share": 0.6834,
+   "negative": false,
+   "right": "log_zeros_missing",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.503,
+     "changed_best_guess": 0.14,
+     "changed_answer": 0.127
+    },
+    "log_zeros_measured": {
+     "answered": 0.473,
+     "changed_best_guess": 0.745,
+     "changed_answer": 0.651
+    },
+    "log_zeros_missing": {
+     "answered": 0.4875,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "pxd049412_hela250pg",
+   "label": "linear",
+   "not_traced": true
+  },
+  {
+   "id": "pxd049412_a549_singlecells",
+   "label": "linear",
+   "cells": 50,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.1,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.22,
+     "changed_best_guess": 0.22,
+     "changed_answer": 0.2
+    },
+    "log_zeros_missing": {
+     "answered": 0.22,
+     "changed_best_guess": 0.22,
+     "changed_answer": 0.2
+    }
+   }
+  },
+  {
+   "id": "pxd069060_diann_report",
+   "label": "linear",
+   "not_traced": true
+  },
+  {
+   "id": "quantms_pxd004452_ibaq",
+   "label": "linear",
+   "not_traced": true
+  },
+  {
+   "id": "quantms_pxd004452_ribaq",
+   "label": "log",
+   "not_traced": true
+  },
+  {
+   "id": "brunner_diann_1ng",
+   "label": "linear",
+   "not_traced": true
+  },
+  {
+   "id": "brunner_mq_singlecells",
+   "label": "linear",
+   "cells": 51,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.0588,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.4118,
+     "changed_best_guess": 0.2549,
+     "changed_answer": 0.4118
+    },
+    "log_zeros_missing": {
+     "answered": 0.4118,
+     "changed_best_guess": 0.2549,
+     "changed_answer": 0.4118
+    }
+   }
+  },
+  {
+   "id": "krull_singlecells",
+   "label": "linear",
+   "cells": 143,
+   "zero_share": 0.0007,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.3357,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.3566,
+     "changed_best_guess": 0.4126,
+     "changed_answer": 0.2937
+    },
+    "log_zeros_missing": {
+     "answered": 0.3706,
+     "changed_best_guess": 0.3986,
+     "changed_answer": 0.3007
+    }
+   }
+  },
+  {
+   "id": "cong_mq_singlecells",
+   "label": "linear",
+   "not_traced": true
+  },
+  {
+   "id": "hu2023_pd_k562",
+   "label": "linear",
+   "cells": 72,
+   "zero_share": 0.0,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.0556,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_measured": {
+     "answered": 0.0417,
+     "changed_best_guess": 0.1944,
+     "changed_answer": 0.125
+    },
+    "log_zeros_missing": {
+     "answered": 0.0417,
+     "changed_best_guess": 0.1944,
+     "changed_answer": 0.125
+    }
+   }
+  },
+  {
+   "id": "cptac_ccrcc_tumor",
+   "label": "log",
+   "cells": 110,
+   "zero_share": 0.0,
+   "negative": true,
+   "right": "log_zeros_missing",
+   "refused": [
+    "linear"
+   ],
+   "failed_invariants": {},
+   "conditions": {
+    "log_zeros_measured": {
+     "answered": 0.4273,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    },
+    "log_zeros_missing": {
+     "answered": 0.4273,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0
+    }
+   }
+  },
+  {
+   "id": "pxd064083_union",
+   "label": "linear",
+   "cells": 148,
+   "zero_share": 0.4512,
+   "negative": false,
+   "right": "linear",
+   "refused": [],
+   "failed_invariants": {},
+   "conditions": {
+    "linear": {
+     "answered": 0.6892,
+     "changed_best_guess": 0.0,
+     "changed_answer": 0.0,
+     "accuracy": 85.95
+    },
+    "log_zeros_measured": {
+     "answered": 0.7703,
+     "changed_best_guess": 0.2905,
+     "changed_answer": 0.2635,
+     "accuracy": 85.16
+    },
+    "log_zeros_missing": {
+     "answered": 0.7162,
+     "changed_best_guess": 0.2838,
+     "changed_answer": 0.2095,
+     "accuracy": 73.26
+    }
+   },
+   "labelled_cells": {
+    "B": 70,
+    "T": 78
+   }
+  }
+ ]
+}

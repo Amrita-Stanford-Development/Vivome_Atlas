@@ -72,7 +72,6 @@ ALLOWED_MISSING = (
     "research/notebook-outputs/v51_phase4/",  # likewise, with --version v5.1
     "research/notebook-outputs/v52_phase4/",  # likewise, for v5.2
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
-    "research/notebooks/value_scale_cost.py",  # the raw-or-log plan's B1 cost study (research/value-scale-plan.md)
     "valuescale/corpus/score_test.py",  # the raw-or-log plan's B3/B7 one-time scorer (research/benchmark/protocol-value-scale.md)
     "valuescale/baselines.py",  # the raw-or-log plan's B4 baseline rules (research/value-scale-plan.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored

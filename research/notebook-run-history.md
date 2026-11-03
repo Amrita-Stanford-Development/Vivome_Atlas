@@ -3133,6 +3133,39 @@ notes):
   11 of 238 cells' numbers move, by up to 0.009, every label unchanged; it
   was re-traced, with `workflow.json` and the methods-reading figure rebuilt.
 
+### 73. The raw-or-log framework, Phase B, B1: what each mistake costs, 2026-11-03
+
+**Why:** Phase B's detector will sometimes say "can't tell". The service
+then needs a reading, and the cheaper mistake should be the one it makes.
+Phase A2 also left open whether a protein 0 should be "not measured" under
+a log reading too.
+
+**What was run:** `research/notebooks/value_scale_cost.py`. v4.1 ran on
+the 30 bank tables the service accepts, plus the sorted T and B cells side
+by side. Each table was read linear, as log with zeros measured, and as log
+with zeros missing. The expectations and decision rules were written first
+(`valuescale/bank/expectations/b1.json`).
+
+**Results** (`research/notebook-outputs/value_scale_b1/`, report, notes and
+a probe written after the run):
+- Five of six rows pass. The invariants hold everywhere, and linear is
+  refused on exactly the three tables with negatives.
+- Log tables read linear change a median 12.4% of best guesses. Linear
+  tables read as log change 22.0%. So on "can't tell" the service will read
+  linear.
+- On all 7 tables with at least 5% zeros, zeros missing is closer to the
+  right reading than zeros measured. So a protein 0 will be missing under
+  both readings.
+- Failed: the expectation that log tables read linear change at most 10%.
+  Four of the five are one deposit, Furtwangler's stem cells (8 to 14%).
+  Khoury's blood cells change 1.2%.
+- The probe found that B2's planned "the choice barely matters" message,
+  at a correlation of 0.98, would be wrong on 6 of the 7 bank tables that
+  reach it (8 to 20% of best guesses change).
+- On the sorted T and B cells misread as log, zeros missing costs 12
+  accuracy points against zeros measured.
+- The failed row and a change to the message wait for the owner.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
