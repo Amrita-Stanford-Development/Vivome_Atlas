@@ -79,6 +79,26 @@ class VisitTests(unittest.TestCase):
         r = self.visit("PXD000013", tools)
         self.assertEqual((r["outcome"], r["header_columns"], fetched), ("too few columns", 12, []))
 
+    def test_a_header_the_parser_refuses_is_unparseable_without_the_fetch(self):
+        """A SILAC proteinGroups.txt of 427 MB came down PRIDE's FTP only to be
+        refused for its Ratio columns, which its header already shows."""
+        fetched, seen = [], []
+
+        def refuse(cand, header):
+            seen.append(len(header))
+            raise ValueError("a SILAC search")
+        tools = _tools()._replace(fetch=lambda e, f: fetched.append(e) or (f / e.name, {}), refuse=refuse)
+        r = self.visit("PXD000013", tools)
+        self.assertEqual((r["outcome"], r["detail"], r["refused_on"], fetched, seen),
+                         ("unparseable", "ValueError: a SILAC search", "header", [], [402]))
+
+    def test_a_header_with_too_few_columns_stays_too_few_columns(self):
+        tools = _tools({3: 12})._replace(refuse=lambda cand, header: 1 / 0)
+        self.assertEqual(self.visit("PXD000013", tools)["outcome"], "too few columns")
+
+    def test_without_a_refusal_the_table_is_fetched_as_before(self):
+        self.assertEqual(self.visit("PXD000013", _tools()._replace(refuse=lambda cand, header: None))["outcome"], "kept")
+
     def test_a_kept_deposit_carries_its_record(self):
         r = self.visit("PXD000013")
         self.assertEqual(r["outcome"], "kept")
@@ -179,6 +199,30 @@ class RunnerFetchTests(unittest.TestCase):
         self.assertEqual(rec["bytes"], size)
         self.assertLessEqual(peak[0], remote.FTP_SITES["ftp.pride.ebi.ac.uk"][1] // 2)
         self.assertGreater(peak[0], 1)
+
+    def test_the_header_refusal_is_the_parsers_own_word_for_word(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        alignment = runner.alignment  # the runner's parser: the package itself never imports the service
+        refuse = runner.make_tools({"massive": {}}).refuse
+        f = File("proteinGroups.txt", 10, "ftp://x/proteinGroups.txt")
+        wide = tables.Candidate("maxquant", "wide", tables.Entry(f, None, 10), ())
+        base = ["Protein IDs", "Majority protein IDs", "Gene names"] + [f"Intensity s{i}" for i in range(25)]
+        for extra in (["Ratio H/L s1", "Ratio H/L normalized s1"], ["Reporter intensity 1 s1"]):
+            header = base + extra
+            with self.assertRaises(alignment.UnreadableMatrix) as mine:
+                refuse(wide, header)
+            body = "\t".join(header) + "\n" + "\t".join(["P1", "P1", "G1"] + ["1"] * (len(header) - 3)) + "\n"
+            with self.assertRaises(alignment.UnreadableMatrix) as theirs:
+                alignment.parse_matrix_csv(body)
+            self.assertEqual(str(mine.exception), str(theirs.exception))
+        self.assertIsNone(refuse(wide, base))
+        self.assertIsNone(refuse(wide, ["Protein.Group", "Genes"] + [f"Ratio H/L s{i}" for i in range(25)]))
+        long = tables.Candidate("diann_report", "long", tables.Entry(f, None, 10), ())
+        self.assertIsNone(refuse(long, base + ["Ratio H/L s1"]))
 
 
 class NoStatisticTests(unittest.TestCase):

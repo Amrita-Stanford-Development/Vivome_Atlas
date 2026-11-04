@@ -156,7 +156,18 @@ def make_tools(record: dict) -> draw.Tools:
                             ids=np.asarray(ids, dtype=str))
         return parsed
 
-    return draw.Tools(list_files, columns_of, members_of, fetch, parse, columns_of)
+    def refuse(cand, header):
+        """The parser's refusal of a SILAC or TMT MaxQuant table, which reads
+        the header alone (alignment.parse_matrix_csv), so the table need not
+        come down first. The header is the parser's for any header without a
+        line break inside quotes."""
+        if cand.kind == "proteome_discoverer" or cand.layout in ("long", "spectronaut_long"):
+            return None  # read by tables.py, not by the service's parser
+        if all(m in header for m in alignment._MAXQUANT_MARKERS):
+            alignment._refuse_labelled_maxquant(header)
+        return None
+
+    return draw.Tools(list_files, columns_of, members_of, fetch, parse, columns_of, refuse)
 
 
 def cmd_walk(args) -> int:

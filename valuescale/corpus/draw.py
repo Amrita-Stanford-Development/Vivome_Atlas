@@ -5,7 +5,9 @@ For each deposit, in the frame's order:
 2. choose its one table (tables.first_candidate; no candidate);
 3. a single file over tables.FILE_MAX is too large;
 4. a wide table's header is read first: when no quantity family reaches 20
-   columns, the deposit is skipped as too few columns without the full fetch;
+   columns, the deposit is skipped as too few columns without the full fetch,
+   and a table the parser refuses on its header alone (a SILAC or TMT
+   MaxQuant search) is unparseable without it, in the parser's own words;
 5. fetch it, with its size and sha256 (fetch failed);
 6. parse it (unparseable), then at least 20 columns and 200 rows;
 7. label it (tables.label; unclear label).
@@ -53,6 +55,7 @@ class Tools(NamedTuple):
     fetch: Callable  # (Entry, folder) -> (local path of the table, {bytes, sha256, ...})
     parse: Callable  # (Candidate, local path) -> Parsed
     header: Callable  # (Entry) -> a wide table's header fields, or None
+    refuse: Callable | None = None  # (Candidate, header) -> raises where the parser refuses the header itself
 
 
 def _short(exc: BaseException) -> str:
@@ -92,6 +95,13 @@ def visit(accession: str, repo: str, split: str, tools: Tools, root: Path) -> di
         n = tables.quantity_columns(cand.kind, cand.layout, header) if header else None
         if n is not None and n < MIN_COLUMNS:
             return {**out, "outcome": "too few columns", "header_columns": n}
+        if header and tools.refuse is not None:
+            try:
+                tools.refuse(cand, header)
+            except denylist.SealedData:
+                raise
+            except Exception as exc:
+                return {**out, "outcome": "unparseable", "detail": _short(exc), "refused_on": "header"}
     try:
         local, record = tools.fetch(entry, root / accession)
     except denylist.SealedData:
