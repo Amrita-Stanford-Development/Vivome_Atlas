@@ -23,6 +23,7 @@ import ftplib
 import hashlib
 import io
 import json
+import re
 import threading
 import time
 import urllib.error
@@ -164,6 +165,38 @@ def massive_files(ftp_url: str, ftp=None, depth: int = MASSIVE_DEPTH) -> list[Fi
         with ftp_connection(ftp_url) as conn:
             return listing(conn)
     return _retry(one)
+
+
+def massive_folders(ftp=None) -> dict[str, str]:
+    """Every MassIVE dataset's folder on massive-ftp.ucsd.edu (MSV -> /vNN/MSV),
+    from one listing of each top folder; the v folders are read first."""
+
+    def listing(conn) -> dict[str, str]:
+        tops = [n for n, f in conn.mlsd("/") if f.get("type") == "dir"]
+        out: dict[str, str] = {}
+        for top in sorted(tops, key=lambda n: (not n.startswith("v"), n)):
+            for name, facts in conn.mlsd(f"/{top}"):
+                if facts.get("type") == "dir" and re.fullmatch(r"MSV\d{9}", name):
+                    out.setdefault(name, f"/{top}/{name}")
+        return out
+
+    if ftp is not None:
+        return listing(ftp)
+
+    def one():
+        with ftp_connection(f"ftp://{MASSIVE_HOST}/") as conn:
+            return listing(conn)
+    return _retry(one)
+
+
+def massive_root(ftp_url: str, msv: str, folders: dict[str, str]) -> str:
+    """The dataset's folder on the current host. Older announcements name
+    ftp://massive.ucsd.edu/MSV.../, which no longer answers."""
+    if urlparse(ftp_url).hostname == MASSIVE_HOST:
+        return ftp_url
+    if msv in folders:
+        return f"ftp://{MASSIVE_HOST}{folders[msv]}/"
+    raise OSError(f"{msv} is not on {MASSIVE_HOST}")
 
 
 def ftp_read(url: str, start: int, length: int) -> bytes:

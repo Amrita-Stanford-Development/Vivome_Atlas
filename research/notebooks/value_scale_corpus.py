@@ -74,6 +74,23 @@ def _text_header(read) -> list | None:
     return None
 
 
+MASSIVE_FOLDERS = DATA / "massive_folders.json"
+_folders_lock = threading.Lock()
+_folders: dict = {}
+
+
+def massive_folders() -> dict:
+    """MSV -> its folder on massive-ftp.ucsd.edu, listed once and cached."""
+    with _folders_lock:
+        if not _folders:
+            if MASSIVE_FOLDERS.exists():
+                _folders.update(json.loads(MASSIVE_FOLDERS.read_text(encoding="utf-8")))
+            else:
+                _folders.update(remote.massive_folders())
+                MASSIVE_FOLDERS.write_bytes((json.dumps(_folders, sort_keys=True) + "\n").encode("utf-8"))
+        return _folders
+
+
 def make_tools(record: dict) -> draw.Tools:
     massive = record["massive"]
 
@@ -84,7 +101,7 @@ def make_tools(record: dict) -> draw.Tools:
         denylist.check(msv or "", ftp or "")
         if not ftp:
             raise OSError("the announcement names no MassIVE FTP folder")
-        return remote.massive_files(ftp)
+        return remote.massive_files(remote.massive_root(ftp, msv, massive_folders()))
 
     def columns_of(entry):
         f = entry.file

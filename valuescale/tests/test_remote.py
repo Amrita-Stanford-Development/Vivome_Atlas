@@ -64,6 +64,36 @@ class MassiveTests(unittest.TestCase):
                          (10, "ftp://massive-ftp.ucsd.edu/v15/MSV000000001/other/proteinGroups.txt"))
 
 
+class OldHostTests(unittest.TestCase):
+    """899 of the frame's 1,507 MassIVE announcements name ftp://massive.ucsd.edu/MSV.../,
+    which no longer answers; the dataset sits in a /vNN/ folder of massive-ftp.ucsd.edu."""
+
+    def test_folders_map_each_dataset_to_its_place(self):
+        tree = {"v04": {"MSV000089258": {}, "MSV000000002": {}}, "x01": {"MSV000089258": {}, "readme": 1},
+                "v15": {"MSV000103821": {}}}
+
+        class Root(FakeFtp):
+            def mlsd(self, path):
+                node = self.tree
+                for part in [p for p in path.split("/") if p]:
+                    node = node[part]
+                for name, value in node.items():
+                    yield (name, {"type": "dir"} if isinstance(value, dict) else {"type": "file", "size": "1"})
+
+        folders = remote.massive_folders(ftp=Root(tree))
+        self.assertEqual(folders, {"MSV000089258": "/v04/MSV000089258", "MSV000000002": "/v04/MSV000000002",
+                                   "MSV000103821": "/v15/MSV000103821"})
+
+    def test_an_old_host_url_is_moved_to_the_current_host(self):
+        folders = {"MSV000089258": "/v04/MSV000089258"}
+        self.assertEqual(remote.massive_root("ftp://massive.ucsd.edu/MSV000089258/", "MSV000089258", folders),
+                         "ftp://massive-ftp.ucsd.edu/v04/MSV000089258/")
+        current = "ftp://massive-ftp.ucsd.edu/v15/MSV000103821/"
+        self.assertEqual(remote.massive_root(current, "MSV000103821", folders), current)
+        with self.assertRaises(OSError):
+            remote.massive_root("ftp://massive.ucsd.edu/MSV000000009/", "MSV000000009", folders)
+
+
 def _zip_bytes():
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
