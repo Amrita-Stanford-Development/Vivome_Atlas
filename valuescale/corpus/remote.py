@@ -110,6 +110,7 @@ def pride_files(accession: str, get_json=get_json, page_size: int = 500) -> list
 
 FTP_SITES = {"ftp.pride.ebi.ac.uk": (False, 8), MASSIVE_HOST: (True, 4)}  # host: (TLS, connections at once)
 CHUNK = 8 << 20
+STREAMS = 4  # one file's connections: half PRIDE's cap, so the walk's other deposits keep the rest
 _slots = {host: threading.BoundedSemaphore(n) for host, (_, n) in FTP_SITES.items()}
 
 
@@ -222,7 +223,7 @@ def chunks(size: int, chunk: int = CHUNK) -> list[tuple[int, int]]:
     return [(s, min(s + chunk, size) - 1) for s in range(0, size, chunk)]
 
 
-def ftp_download(url: str, dest: Path, size: int, streams: int = 4) -> None:
+def ftp_download(url: str, dest: Path, size: int, streams: int = STREAMS) -> None:
     """In CHUNK ranges on up to `streams` connections, resumable from the
     .part file and its record of finished ranges."""
     part = dest.with_name(dest.name + ".part")
@@ -327,7 +328,7 @@ def member_head(url: str, size: int, member: str, nbytes: int, fetch=fetch_range
 
 
 def fetch_member(file: File, member: str, dest: Path, fetch=fetch_range, block: int = BLOCK,
-                 chunk: int = CHUNK, streams: int = 8) -> dict:
+                 chunk: int = CHUNK, streams: int = STREAMS) -> dict:
     """One member of a zip archive without the rest of it. The member's bytes
     and the archive's central directory are fetched by range into a sparse
     copy of the archive, which zipfile reads, checking the member's CRC. B3's
@@ -398,7 +399,7 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def download(file: File, dest: Path, workers: int = 4) -> None:
+def download(file: File, dest: Path, workers: int = STREAMS) -> None:
     """The whole file to dest (resumable), checked against the listed size."""
     denylist.check(file.url, dest)
     if dest.exists():

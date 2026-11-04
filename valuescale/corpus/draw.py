@@ -36,7 +36,7 @@ QUOTA = 59
 LIMIT = 10_000
 MIN_COLUMNS, MIN_ROWS = 20, 200
 SPLITS = ("calibration", "test")
-LOOKAHEAD = 8  # deposits in flight per worker: one slow deposit must not hold up the rest
+LOOKAHEAD = 64  # deposits in flight per worker: a report that takes 20 minutes must not hold up the rest
 
 
 class Parsed(NamedTuple):

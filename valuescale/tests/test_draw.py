@@ -119,10 +119,66 @@ class WalkTests(unittest.TestCase):
         self.assertTrue(draw.met(q, 2))
         self.assertFalse(draw.met(draw.quotas(records[:-1]), 2))
 
+    def test_one_slow_deposit_does_not_hold_up_the_rest(self):
+        """B3 met a 296 MB report that took over 20 minutes over PRIDE's FTP; the
+        walk visits about 19 deposits a minute, so 8 workers must keep going
+        through at least 500 more while one waits."""
+        import threading
+        others, release = [], threading.Event()
+
+        def visit_fn(acc, repo, split, tools, root):
+            if acc == "PXD000100":
+                release.wait(timeout=10)
+                return {"accession": acc, "repo": repo, "split": split, "outcome": "no candidate",
+                        "released_by": "count" if release.is_set() else "timeout"}
+            others.append(acc)
+            if len(others) >= 500:
+                release.set()
+            return {"accession": acc, "repo": repo, "split": split, "outcome": "no candidate"}
+
+        records = draw.walk(self.order(600), _tools(), self.log, self.dir, limit=600, quota=10 ** 6, workers=8,
+                            visit_fn=visit_fn)
+        self.assertEqual(records[0]["released_by"], "count")
+        self.assertEqual([r["accession"] for r in records], [r[0] for r in self.order(600)])
+
     def test_a_log_that_does_not_match_the_order_stops_the_walk(self):
         self.log.write_text(json.dumps({"accession": "PXD999999"}) + "\n", encoding="utf-8")
         with self.assertRaises(SystemExit):
             draw.walk(self.order(5), _tools(), self.log, self.dir, limit=5)
+
+
+class RunnerFetchTests(unittest.TestCase):
+    def test_a_whole_file_download_leaves_connections_for_the_rest_of_the_walk(self):
+        """A 296 MB report took all 8 of PRIDE's connections, and the walk's
+        header reads for other deposits waited on it."""
+        import importlib.util
+        import threading
+        import time
+        from unittest import mock
+        from valuescale.corpus import remote
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        size = remote.CHUNK * 12
+        now, peak, lock = [0], [0], threading.Lock()
+
+        def ftp_read(url, start, length):
+            with lock:
+                now[0] += 1
+                peak[0] = max(peak[0], now[0])
+            time.sleep(0.05)
+            with lock:
+                now[0] -= 1
+            return b"\0" * length
+
+        f = File("report.tsv", size, "ftp://ftp.pride.ebi.ac.uk/pride/x/report.tsv")
+        folder = Path(tempfile.mkdtemp())
+        with mock.patch.object(remote, "ftp_read", ftp_read):
+            path, rec = runner.make_tools({"massive": {}}).fetch(tables.Entry(f, None, size), folder)
+        self.assertEqual(rec["bytes"], size)
+        self.assertLessEqual(peak[0], remote.FTP_SITES["ftp.pride.ebi.ac.uk"][1] // 2)
+        self.assertGreater(peak[0], 1)
 
 
 class NoStatisticTests(unittest.TestCase):

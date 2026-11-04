@@ -119,7 +119,7 @@ def make_tools(record: dict) -> draw.Tools:
         f = entry.file
         if entry.member is None:
             dest = folder / _safe(f.path)
-            remote.download(f, dest, workers=8)  # the host's slots cap the connections
+            remote.download(f, dest)  # remote.STREAMS connections: the walk keeps the host's other slots
             return dest, {"bytes": dest.stat().st_size, "sha256": remote.sha256(dest)}
         # a member alone, by range: the archive itself is never fetched whole
         target = folder / "members" / _safe(entry.member)
