@@ -44,7 +44,7 @@ AUDIT = REPO / "valuescale" / "corpus" / "audit.json"
 EXPECTATIONS = REPO / "valuescale" / "bank" / "expectations" / "b3.json"
 OUT = REPO / "research" / "notebook-outputs" / "value_scale_b3"
 HEADER_BYTES = (1 << 20, 16 << 20)
-BIG_PARSE = 200 << 20
+BIG_PARSE = 50 << 20  # parsed one at a time: the PC runs other jobs too
 AUDIT_SHARE = 0.2
 _big = threading.Semaphore(1)
 

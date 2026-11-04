@@ -36,6 +36,7 @@ QUOTA = 59
 LIMIT = 10_000
 MIN_COLUMNS, MIN_ROWS = 20, 200
 SPLITS = ("calibration", "test")
+LOOKAHEAD = 8  # deposits in flight per worker: one slow deposit must not hold up the rest
 
 
 class Parsed(NamedTuple):
@@ -152,7 +153,7 @@ def walk(order, tools: Tools, log: Path, root: Path, limit: int = LIMIT, quota: 
         pending: deque = deque()
 
         def top_up():
-            while len(pending) < 2 * workers:
+            while len(pending) < LOOKAHEAD * workers:
                 row = next(todo, None)
                 if row is None:
                     return

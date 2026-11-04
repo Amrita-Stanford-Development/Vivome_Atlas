@@ -15,7 +15,9 @@ Protein.Group and Run with PG.MaxLFQ or PG.Quantity a DIA-NN long report.
 **One table per deposit:** the first candidate in the order DIA-NN matrix,
 FragPipe, MaxQuant, Spectronaut, Proteome Discoverer, DIA-NN long report,
 then the members of zip archives of 500 MB or less in the same order. Ties go
-by file name, then path (archive members: member name, then archive).
+by file name, then path (archive members: member name, then archive). Zipped
+raw instrument data (`*.d.zip`, `*.raw.zip`, `*.wiff.zip`, `*.mzML.zip` and
+the like) is never a protein table and is not listed.
 
 **Labels**, on the names of the chosen value columns only (a Spectronaut
 pivot's PG.AvgLog2Quantity is not a value column):
@@ -33,6 +35,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -49,6 +52,11 @@ QUOTE_KEYS = {"DIA-NN": "diann", "FragPipe": "fragpipe", "MaxQuant": "maxquant",
 ARCHIVE_MAX = 500_000_000
 FILE_MAX = ARCHIVE_MAX  # the archive bar for single files too (b3.json, changed before the run)
 REPORT_EXTENSIONS = (".tsv", ".txt", ".csv", ".xls", ".parquet")
+# Raw instrument data zipped (a Bruker .d folder, a Thermo .raw, SCIEX .wiff,
+# peak lists): never a protein table, so not listed. B3's walk met a MassIVE
+# deposit with 421 of them beside 421 search zips.
+RAW_ARCHIVE = re.compile(r"\.(?:d|raw|wiff|wiff2|mzml|mzxml|mgf|tdf|baf)\.zip$")
+ARCHIVE_WORKERS = 4
 BANK = Path(__file__).with_name("bank.json")
 
 DIA_NN_ANNOTATION = frozenset({"Protein.Group", "Protein.Ids", "Protein.Names", "Genes",
@@ -105,6 +113,8 @@ def name_kind(name: str) -> str | None:
         return "proteome_discoverer"
     if "report" in n and n.endswith(REPORT_EXTENSIONS) and not ("matrix" in n or "stats" in n or n.endswith(".log.txt")):
         return "report"
+    if RAW_ARCHIVE.search(n):
+        return "raw_archive"
     if n.endswith(".zip"):
         return "archive"
     return None
@@ -153,8 +163,10 @@ def first_candidate(files: list[File], columns_of, members_of) -> Candidate | No
     archives = sorted((f for f in files if name_kind(f.name) == "archive" and f.size <= ARCHIVE_MAX),
                       key=lambda f: (f.name.lower(), f.path))
     members = []
-    for f in archives:
-        for m in members_of(f):
+    with ThreadPoolExecutor(max_workers=ARCHIVE_WORKERS) as pool:
+        listed = list(pool.map(members_of, archives))  # in the archives' order
+    for f, found in zip(archives, listed):
+        for m in found:
             name, size = (m, 0) if isinstance(m, str) else (m.name, m.size)
             if not name.endswith("/") and name_kind(name) not in (None, "archive"):
                 members.append(Entry(f, name, size))

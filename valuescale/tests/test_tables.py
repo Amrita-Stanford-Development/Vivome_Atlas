@@ -29,7 +29,11 @@ class NameTests(unittest.TestCase):
                  "Study_Proteins.txt": "proteome_discoverer", "report.tsv": "report",
                  "My_Spectronaut_Report.xls": "report", "report.parquet": "report", "data.zip": "archive",
                  "report.pr_matrix.tsv": None, "report.stats.tsv": None, "report.log.txt": None,
-                 "peptides.txt": None, "x.raw": None, "proteinGroups.txt.gz": None}
+                 "peptides.txt": None, "x.raw": None, "proteinGroups.txt.gz": None,
+                 # raw instrument data zipped: never a protein table, so not listed
+                 "HLAII-C4_S1-C4_1_6665.d.zip": "raw_archive", "run1.raw.zip": "raw_archive",
+                 "run1.wiff.zip": "raw_archive", "run1.mzML.zip": "raw_archive", "peaks.mgf.zip": "raw_archive",
+                 "TUM_lysn_9.zip": "archive", "results.d.tar.zip": "archive"}
         for name, kind in cases.items():
             self.assertEqual(tables.name_kind(name), kind, name)
 
@@ -79,6 +83,30 @@ class CandidateTests(unittest.TestCase):
         members = {"big.zip": ["report.pg_matrix.tsv"], "small.zip": ["sub/proteinGroups.txt", "notes.txt"]}
         got, _ = self.first(files, members=members)
         self.assertEqual((got.kind, got.entry.file.path, got.entry.member), ("maxquant", "small.zip", "sub/proteinGroups.txt"))
+
+    def test_raw_data_archives_are_not_listed(self):
+        listed = []
+        files = [_f("a.d.zip", size=10), _f("b.zip", size=10)]
+
+        def members_of(f):
+            listed.append(f.path)
+            return ["sub/proteinGroups.txt"] if f.path == "a.d.zip" else []
+
+        self.assertIsNone(tables.first_candidate(files, lambda e: None, members_of))
+        self.assertEqual(listed, ["b.zip"])
+
+    def test_many_archives_are_listed_in_order_whatever_finishes_first(self):
+        import time
+        files = [_f(f"r{i:03d}.zip", size=10) for i in range(30)]
+
+        def members_of(f):
+            time.sleep(0.002 * (30 - int(f.path[1:4])))  # the last archives answer first
+            return [f"proteinGroups_{f.path[:4]}.txt"]
+
+        got, _ = self.first(files, members={f.path: [f"proteinGroups_{f.path[:4]}.txt"] for f in files})
+        self.assertEqual(got.entry.member, "proteinGroups_r000.txt")
+        got = tables.first_candidate(files, lambda e: None, members_of)
+        self.assertEqual((got.entry.file.path, got.entry.member), ("r000.zip", "proteinGroups_r000.txt"))
 
     def test_nothing_named_is_no_candidate(self):
         got, _ = self.first([_f("x.raw"), _f("report.tsv")], {"report.tsv": ["QC"]})
