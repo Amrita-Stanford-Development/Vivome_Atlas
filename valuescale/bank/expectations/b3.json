@@ -8,12 +8,13 @@
     "massive": "a MassIVE row's MSV identifier and FTP folder come from its ProteomeCentral announcement; the folder is listed with ftplib over explicit TLS (what curl --ssl-reqd does), down to three folder levels below the dataset root",
     "candidates": "names matched without regard to case: *pg_matrix.tsv (DIA-NN matrix), *combined_protein.tsv (FragPipe), proteinGroups*.txt (MaxQuant), *_Proteins.txt (Proteome Discoverer); a text or parquet file with 'report' in its name is read at its header: PG.Quantity with PG.ProteinGroups and R.FileName, or '<run>.PG.Quantity' columns, is Spectronaut; Protein.Group and Run with PG.MaxLFQ or PG.Quantity is a DIA-NN long report. Zip archives of 500 MB or less are listed through range requests and their members matched the same way",
     "one_table": "the first candidate in the protocol's order decides the deposit; ties by file name, then path. When it is not eligible, the deposit is skipped with the reason",
-    "too_large": "a single file over 1 GiB (the protocol names no bar for single files; 1 GiB keeps a long report's parse in memory). Archives over 500 MB are not listed (the protocol)",
+    "too_large": "a single file over 500 MB, the protocol's bar for archives. Archives over 500 MB are not listed (the protocol)",
     "header_first": "a wide table's header is read before the full fetch; when no quantity family reaches 20 columns, the deposit is skipped as too few columns without fetching the rest",
     "parse": "the service's parser (alignment.parse_matrix_csv) for DIA-NN matrices, MaxQuant, FragPipe and Spectronaut pivots; the bank's readers for Proteome Discoverer ('Abundance: ' columns; Gene Symbol, else Accession) and long reports (the first value per protein and run; DIA-NN on PG.MaxLFQ, else PG.Quantity; Spectronaut on PG.Quantity)",
     "labels": "on the names of the chosen value columns only (a Spectronaut pivot's PG.AvgLog2Quantity is not a value column). Unclear and excluded: a ratio, z-score, imputation or a scale-changing normalisation named (ratio, z-score, zscore, imput, scaled, centred, centered, quantile, vsn, combat), a TMT-Integrator table, or a linear-labelled table holding a negative value. Log: a log named (log2, log10, ln, log). Linear: a native output, quoted from bank.json's quotes for its software",
     "skip_reasons": "no candidate, too large, unparseable, too few columns, too few rows, unclear label, audit disagreement; and two the protocol did not list: no file list (the listing failed after retries) and fetch failed",
-    "stop": "when every quota is met in both splits, or after 10,000 deposits have been listed"
+    "stop": "when every quota is met in both splits, or after 10,000 deposits have been listed",
+    "repository_reads": "PRIDE files are read over FTP (ftp.pride.ebi.ac.uk), at most 8 connections at once; MassIVE over FTP with TLS, at most 4"
   },
   "rows": {
     "B3_frame": {
@@ -34,5 +35,6 @@
     "B3_audit": "the hand audit of a seeded 20% of each split's labelled deposits agrees on at least 90% (expected at least 95%); disagreements are excluded",
     "B3_sealed": "no sealed accession is listed or opened: the frame drops them and every path, URL and accession passes denylist.check",
     "B3_no_statistic": "the draw imports none of valuescale's gates, statistics, score or method modules, and conformal only for the strata's bounds, through strata.py (a test)"
-  }
+  },
+  "changed_before_the_run": "2026-11-04, after a smoke test of the real tools on three design (bank) deposits and before any frame deposit was listed: PRIDE's HTTPS took 15 to 30 s to a first byte and gave 0.34 MB/s on 16 connections; its FTP took 2 to 10 s and gave 0.70 MB/s on 8, and refused 16 connections at once. So PRIDE files are read over FTP with at most 8 connections, and the single-file bar is 500 MB (was 1 GiB): at 0.7 MB/s a 1 GiB file takes about 25 minutes. The smoke test also showed the protocol's first-candidate rule skipping PXD049412, whose first Spectronaut report by name holds 3 runs; the rule stands"
 }

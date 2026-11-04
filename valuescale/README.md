@@ -41,6 +41,19 @@ Phase B, B2, the method (numpy and the standard library only):
 - `method.py`: `assess`, from a table to a verdict (linear, log, can't
   tell, unlike either) with its reason.
 
+Phase B, B3, the corpus (`corpus/`, not shipped):
+- `frame.py`: the draw's frame from ProteomeXchange's index, with the sealed
+  and tracked accessions dropped, shuffled with the protocol's seed, and
+  each deposit's split by its hash (`frame.json`).
+- `remote.py`: a deposit's files listed and read remotely (PRIDE's API,
+  MassIVE's FTP folder, zip archives through range requests).
+- `tables.py`: which file is a deposit's table, the readers the service's
+  parser lacks, and the provenance labels.
+- `draw.py`: the walk, its log in the frame's order (`walk.jsonl`), the
+  quotas and the stop rule. The runner is
+  `research/notebooks/value_scale_corpus.py`, which brings the service's
+  parser.
+
 `bank/expectations/` holds each step's expected outcomes, written before the
 step runs. The diagnostics that check them are
 `research/notebooks/value_scale_diagnostics.py`.
@@ -53,8 +66,10 @@ From the repository root, with the vivome environment:
 python -m valuescale.corpus.fetch                    # download the bank, record sha256s
 python -m valuescale.corpus.extract                  # upload-ready files
 python research/notebooks/value_scale_diagnostics.py --step step1
+python -m valuescale.corpus.frame                    # B3: the draw's frame
+python research/notebooks/value_scale_corpus.py walk # B3: the walk (hours; resumes)
 python -m unittest discover -s valuescale/tests -t .
 ```
 
-Downloads and extracted files go to `data/incoming/value-scale-bank/`, which
-is not tracked.
+Downloads and extracted files go to `data/incoming/value-scale-bank/` and
+`data/incoming/value-scale-corpus/`, which are not tracked.
