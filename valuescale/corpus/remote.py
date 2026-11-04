@@ -42,7 +42,7 @@ from valuescale.corpus import fetch as bank_fetch
 PRIDE_FILES = "https://www.ebi.ac.uk/pride/ws/archive/v2/projects/{}/files?pageSize={}&page={}"
 MASSIVE_HOST = "massive-ftp.ucsd.edu"
 MASSIVE_DEPTH = 3
-BLOCK = 256 << 10
+BLOCK = 64 << 10  # PRIDE's FTP gives about 90 KB/s per connection
 AGENT = {"User-Agent": "valuescale-draw/1"}
 
 
@@ -285,24 +285,31 @@ class RangeFile(io.RawIOBase):
     def tell(self) -> int:
         return self.pos
 
-    def _block(self, i: int) -> bytes:
-        if i not in self.cache:
-            start = i * self.block
-            self.cache[i] = self.fetch(self.url, start, min(start + self.block, self.size) - 1)
-        return self.cache[i]
-
     def readinto(self, b) -> int:
+        """Missing blocks are fetched in contiguous runs, one fetch per run."""
         n = max(0, min(len(b), self.size - self.pos))
-        out = bytearray()
-        while len(out) < n:
-            i, off = divmod(self.pos + len(out), self.block)
-            chunk = self._block(i)[off:off + n - len(out)]
-            if not chunk:
-                break
-            out += chunk
-        b[:len(out)] = out
-        self.pos += len(out)
-        return len(out)
+        if n == 0:
+            return 0
+        first, last = self.pos // self.block, (self.pos + n - 1) // self.block
+        i = first
+        while i <= last:
+            if i in self.cache:
+                i += 1
+                continue
+            j = i
+            while j < last and j + 1 not in self.cache:
+                j += 1
+            start = i * self.block
+            data = self.fetch(self.url, start, min((j + 1) * self.block, self.size) - 1)
+            for k in range(i, j + 1):
+                self.cache[k] = data[(k - i) * self.block:(k - i + 1) * self.block]
+            i = j + 1
+        joined = b"".join(self.cache[k] for k in range(first, last + 1))
+        off = self.pos - first * self.block
+        chunk = joined[off:off + n]
+        b[:len(chunk)] = chunk
+        self.pos += len(chunk)
+        return len(chunk)
 
 
 def head(url: str, size: int, nbytes: int, fetch=fetch_range) -> bytes:

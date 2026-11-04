@@ -120,6 +120,15 @@ class RangeTests(unittest.TestCase):
                           "notes.txt": 5})
         self.assertLess(sum(e - s + 1 for s, e in self.calls), len(self.data))
 
+    def test_a_long_read_is_one_fetch_however_many_blocks_it_spans(self):
+        f = remote.RangeFile("https://x/a.zip", len(self.data), self.fetch, block=16)
+        f.seek(5)
+        self.assertEqual(f.read(300), self.data[5:305])
+        self.assertEqual(len(self.calls), 1)
+        f.seek(0)
+        self.assertEqual(f.read(400), self.data[:400])  # blocks 0 to 19 are cached: 20 to 24 in one fetch
+        self.assertEqual(len(self.calls), 2)
+
     def test_a_members_first_bytes_are_inflated(self):
         head = remote.member_head("https://x/a.zip", len(self.data), "results/report.pg_matrix.tsv", 64,
                                   fetch=self.fetch, block=1024)
