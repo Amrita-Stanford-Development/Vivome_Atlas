@@ -126,6 +126,33 @@ class RangeTests(unittest.TestCase):
         self.assertTrue(head.startswith(b"Protein.Group\tGenes\tA\tB\nP1\tG1\t1\t2\n"))
         self.assertGreaterEqual(len(head), 64)
 
+    def test_a_member_is_fetched_without_the_rest_of_the_archive(self):
+        import random
+        buf = io.BytesIO()
+        rng = random.Random(0)
+        with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("raw/big.bin", bytes(rng.getrandbits(8) for _ in range(200_000)))  # incompressible
+            zf.writestr("txt/proteinGroups.txt", "Majority protein IDs\tGene names\n" + "P\tG\n" * 3000)
+            zf.writestr("zz.bin", bytes(rng.getrandbits(8) for _ in range(100_000)))
+        data = buf.getvalue()
+        calls = []
+
+        def fetch(url, start, end):
+            calls.append((start, end))
+            return data[start:end + 1]
+
+        import tempfile
+        from pathlib import Path
+        dest = Path(tempfile.mkdtemp()) / "proteinGroups.txt"
+        rec = remote.fetch_member(remote.File("a.zip", len(data), "https://x/a.zip"), "txt/proteinGroups.txt", dest,
+                                  fetch=fetch, block=4096, chunk=8192)
+        expected = ("Majority protein IDs\tGene names\n" + "P\tG\n" * 3000).encode()
+        self.assertEqual(dest.read_bytes(), expected)
+        self.assertEqual(rec["member_bytes"], len(expected))
+        self.assertEqual(rec["member_sha256"], __import__("hashlib").sha256(expected).hexdigest())
+        self.assertLess(sum(e - s + 1 for s, e in calls), len(data) / 2)
+        self.assertFalse(any(p.name.endswith(".sparse.zip") for p in dest.parent.iterdir()))
+
     def test_a_files_first_bytes(self):
         self.assertEqual(remote.head("https://x/a.zip", len(self.data), 10, fetch=self.fetch), self.data[:10])
         self.assertEqual(remote.head("https://x/a.zip", 4, 10, fetch=self.fetch), self.data[:4])

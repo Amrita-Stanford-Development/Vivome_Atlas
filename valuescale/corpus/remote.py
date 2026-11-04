@@ -24,6 +24,7 @@ import hashlib
 import io
 import json
 import re
+import struct
 import threading
 import time
 import urllib.error
@@ -316,6 +317,55 @@ def zip_members(url: str, size: int, fetch=fetch_range, block: int = BLOCK) -> l
 def member_head(url: str, size: int, member: str, nbytes: int, fetch=fetch_range, block: int = BLOCK) -> bytes:
     with zipfile.ZipFile(RangeFile(url, size, fetch, block)) as zf, zf.open(member) as fh:
         return fh.read(nbytes)
+
+
+def fetch_member(file: File, member: str, dest: Path, fetch=fetch_range, block: int = BLOCK,
+                 chunk: int = CHUNK, streams: int = 8) -> dict:
+    """One member of a zip archive without the rest of it. The member's bytes
+    and the archive's central directory are fetched by range into a sparse
+    copy of the archive, which zipfile reads, checking the member's CRC. B3's
+    walk met a 409 MB archive holding the table it wanted."""
+    denylist.check(file.url, dest)
+    with zipfile.ZipFile(RangeFile(file.url, file.size, fetch, block)) as zf:
+        info = zf.getinfo(member)
+        cd_start = zf.start_dir
+    local = fetch(file.url, info.header_offset, info.header_offset + 29)
+    name_len, extra_len = struct.unpack("<HH", local[26:30])
+    data_end = info.header_offset + 30 + name_len + extra_len + info.compress_size + 24  # and any data descriptor
+    spans = [(info.header_offset, min(file.size, data_end) - 1), (cd_start, file.size - 1)]
+    pieces = [(s, min(s + chunk, end + 1) - 1) for start, end in spans for s in range(start, end + 1, chunk)]
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    sparse = dest.with_name(dest.name + ".sparse.zip")
+    part = dest.with_name(dest.name + ".part")
+    lock = threading.Lock()
+    try:
+        with sparse.open("wb") as fh:
+            fh.truncate(file.size)
+
+        def one(piece):
+            s, e = piece
+            data = fetch(file.url, s, e)
+            if len(data) != e - s + 1:
+                raise OSError(f"{file.url} bytes {s}-{e}: got {len(data)}")
+            with lock, sparse.open("r+b") as fh:
+                fh.seek(s)
+                fh.write(data)
+
+        with ThreadPoolExecutor(max_workers=streams) as pool:
+            for future in [pool.submit(one, p) for p in pieces]:
+                future.result()
+        h, size = hashlib.sha256(), 0
+        with zipfile.ZipFile(sparse) as zf, zf.open(member) as src, part.open("wb") as out:
+            while data := src.read(4 << 20):
+                out.write(data)
+                h.update(data)
+                size += len(data)
+        part.replace(dest)
+    finally:
+        sparse.unlink(missing_ok=True)
+        part.unlink(missing_ok=True)
+    return {"member_bytes": size, "member_sha256": h.hexdigest(), "member_crc32": f"{info.CRC:08x}",
+            "fetched": "the member and the archive's central directory, by range"}
 
 
 def parquet_columns(url: str, size: int, fetch=fetch_range) -> list[str]:

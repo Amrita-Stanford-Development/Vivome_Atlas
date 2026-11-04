@@ -26,7 +26,6 @@ import random
 import re
 import sys
 import threading
-import zipfile
 from collections import Counter
 from pathlib import Path
 
@@ -118,21 +117,17 @@ def make_tools(record: dict) -> draw.Tools:
 
     def fetch(entry, folder):
         f = entry.file
-        dest = folder / _safe(f.path)
-        remote.download(f, dest, workers=8)  # the host's slots cap the connections
-        rec = {"bytes": dest.stat().st_size, "sha256": remote.sha256(dest)}
         if entry.member is None:
-            return dest, rec
+            dest = folder / _safe(f.path)
+            remote.download(f, dest, workers=8)  # the host's slots cap the connections
+            return dest, {"bytes": dest.stat().st_size, "sha256": remote.sha256(dest)}
+        # a member alone, by range: the archive itself is never fetched whole
         target = folder / "members" / _safe(entry.member)
-        if not target.exists():
-            target.parent.mkdir(parents=True, exist_ok=True)
-            part = target.with_name(target.name + ".part")
-            with zipfile.ZipFile(dest) as zf, zf.open(entry.member) as src, part.open("wb") as out:
-                while block := src.read(4 << 20):
-                    out.write(block)
-            part.replace(target)
-        rec.update(member_bytes=target.stat().st_size, member_sha256=remote.sha256(target))
-        return target, rec
+        if target.exists():
+            rec = {"member_bytes": target.stat().st_size, "member_sha256": remote.sha256(target)}
+        else:
+            rec = remote.fetch_member(f, entry.member, target)
+        return target, {"archive_bytes": f.size, **rec}
 
     def parse(cand, path):
         big = path.stat().st_size > BIG_PARSE
@@ -277,9 +272,11 @@ def report(records, record, audit) -> dict:
     sample = [a for s in audit.get("sample", {}).values() for a in s]
     judged = [a for a in sample if a in audit_verdicts]
     agree = sum(1 for a in judged if audit_verdicts[a].get("agrees"))
-    bad_records = [r["accession"] for r in kept if not (
-        r.get("url") and isinstance(r.get("bytes"), int) and re.fullmatch(r"[0-9a-f]{64}", r.get("sha256", ""))
-        and r["columns"] >= draw.MIN_COLUMNS and r["rows"] >= draw.MIN_ROWS and r.get("quote"))]
+    def complete(r):  # a member's record carries the member's size and sha256 and the archive's listed size
+        size, sha = (r.get("member_bytes"), r.get("member_sha256", "")) if r.get("member") else (r.get("bytes"), r.get("sha256", ""))
+        return bool(r.get("url") and isinstance(size, int) and re.fullmatch(r"[0-9a-f]{64}", sha)
+                    and r["columns"] >= draw.MIN_COLUMNS and r["rows"] >= draw.MIN_ROWS and r.get("quote"))
+    bad_records = [r["accession"] for r in kept if not complete(r)]
     outcomes = Counter(r["outcome"] for r in records)
     software = Counter(r["software"] for r in final if r["label"] == "linear")
     real_log = Counter(r["split"] for r in final if r["label"] == "log")
