@@ -308,6 +308,42 @@ class AuditPacketTests(unittest.TestCase):
         plain.write_bytes(b"Protein IDs\tIntensity a\nP1\t100\n")
         self.assertEqual(runner._header_lines(plain), (["Protein IDs", "Intensity a"], []))
 
+    def test_a_parquet_tables_header_is_its_schemas_column_names(self):
+        """The audit's packets for DIA-NN report.parquet tables showed binary or
+        no column names: the file was read as text."""
+        import importlib.util
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        path = Path(tempfile.mkdtemp()) / "report.parquet"
+        pq.write_table(pa.table({"Run": ["a"], "Protein.Group": ["P1"], "PG.MaxLFQ": [1.0]}), path)
+        self.assertEqual(runner._header_lines(path), (["Run", "Protein.Group", "PG.MaxLFQ"], []))
+
+    def test_a_packet_names_every_value_column_however_long_the_header(self):
+        """MaxQuant's Intensity and LFQ columns came after the packets' first
+        120 names, so the audit never saw them."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        other = ["Protein IDs", "Majority protein IDs", "Gene names"] + [f"Peptides s{i}" for i in range(130)]
+        lfq = [f"LFQ intensity s{i}" for i in range(24)]
+        raw = [f"Intensity s{i}" for i in range(24)]
+        text = runner._columns_section("maxquant", "wide", other + raw + lfq)
+        for name in other + raw + lfq:
+            self.assertIn(name, text)
+        self.assertNotIn("...", text)
+        self.assertIn("LFQ intensity (24)", text)
+        self.assertIn("Intensity (24)", text)
+        self.assertIn("LFQ intensity when any value is above 0, else Intensity", text)
+        long = runner._columns_section("diann_report", "long", ["Run", "Protein.Group", "PG.MaxLFQ", "PG.Quantity"])
+        self.assertIn("PG.MaxLFQ", long)
+        self.assertIn("runs are rows", long)
+
 
 class NoStatisticTests(unittest.TestCase):
     def test_the_draw_imports_no_detector_module(self):

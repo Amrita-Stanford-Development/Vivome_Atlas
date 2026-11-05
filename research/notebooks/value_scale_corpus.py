@@ -238,7 +238,11 @@ def _local_table(r: dict) -> Path:
 def _header_lines(path: Path, most: int = 12) -> tuple[list, list]:
     """The table's header, and the Perseus annotation rows ("#!{...") right
     under it: a table saved from Perseus keeps MaxQuant's column names
-    whatever it did to the values. No value row is read past them."""
+    whatever it did to the values. No value row is read past them. A parquet
+    table's header is its schema's column names."""
+    if path.suffix.lower() == ".parquet":
+        import pyarrow.parquet as pq
+        return list(pq.ParquetFile(path).schema_arrow.names), []
     with path.open("r", encoding="utf-8-sig", errors="replace", newline="") as fh:
         header = remote.first_line_fields(fh.readline().encode("utf-8")) or []
         notes = []
@@ -248,6 +252,51 @@ def _header_lines(path: Path, most: int = 12) -> tuple[list, list]:
                 break
             notes.append(line)
     return header, notes
+
+
+_FAMILIES = {  # kind: the parser's value-column families, in its order of preference
+    "maxquant": [("LFQ intensity", tables.MAXQUANT_QUANTITIES[0]), ("Intensity", tables.MAXQUANT_QUANTITIES[1])],
+    "fragpipe": [("MaxLFQ Intensity", tables.FRAGPIPE_LFQ_QUANTITIES[0]), ("Intensity", tables.FRAGPIPE_LFQ_QUANTITIES[1])],
+    "spectronaut": [("PG.Quantity", tables.SPECTRONAUT_QUANTITY)],
+    "proteome_discoverer": [("Abundance", "^" + re.escape(tables.PD_PREFIX))],
+}
+_RULES = {
+    "maxquant": "the parser reads LFQ intensity when any value is above 0, else Intensity",
+    "fragpipe": "the parser reads MaxLFQ Intensity when any value is above 0, else Intensity",
+    "spectronaut": "the parser reads the PG.Quantity columns",
+    "proteome_discoverer": "the reader reads the Abundance columns",
+    "diann_matrix": "every column but DIA-NN's annotation columns is a run",
+}
+
+
+def _columns_section(kind: str, layout: str, header: list) -> str:
+    """Every column name: the value columns by family first, then the rest,
+    none cut off. MaxQuant's value columns came after the first 120 names."""
+    if layout in ("long", "spectronaut_long"):
+        return (f"## The table's column names ({len(header)})\n\nA long report: its runs are rows; the value column is "
+                f"PG.MaxLFQ, else PG.Quantity.\n\n" + ", ".join(header))
+    if kind == "diann_matrix":
+        families = [("runs", [c for c in header if c.strip() and c not in tables.DIA_NN_ANNOTATION])]
+    else:
+        families = [(label, [c for c in header if re.match(p, c)]) for label, p in _FAMILIES[kind]]
+    used = {c for _, names in families for c in names}
+    lines = [f"## Value columns ({_RULES[kind]})", ""]
+    lines += [f"{label} ({len(names)}): " + (", ".join(names) or "none") for label, names in families]
+    rest = [c for c in header if c not in used]
+    lines += ["", f"## The table's other columns ({len(rest)})", "", ", ".join(rest)]
+    return "\n".join(lines)
+
+
+_RAW = re.compile(r"\.(raw|wiff|wiff\.scan|wiff2|mzml|mzxml|mgf|tdf|tdf_bin|baf|d\.zip|raw\.zip|mzml\.gz)$", re.I)
+
+
+def _files_section(names: list) -> str:
+    """Every file but raw instrument data in full; raw files counted by kind."""
+    raw = Counter(m.group(1).lower() for n in names if (m := _RAW.search(n)))
+    rest = [n for n in names if not _RAW.search(n)]
+    counted = ", ".join(f".{k} {v}" for k, v in sorted(raw.items())) or "none"
+    return (f"## The deposit's files ({len(names)}: {len(rest)} listed, raw instrument files counted: {counted})\n\n"
+            + "\n".join(rest))
 
 
 def _methods(r: dict, record: dict) -> str:
@@ -287,13 +336,12 @@ def cmd_audit_packets(args) -> int:
             text = [f"# {acc} ({split}, {r['repo']})", "",
                     f"Label by script: **{r['label']}** ({r['software']}, {r['kind']}, layout {r['layout']}).",
                     f"Table: `{r['file']}`" + (f", member `{r['member']}`" if r.get("member") else "")
-                    + f"; {r['columns']} columns, {r['rows']} rows; quantity {r.get('quantity')}.", "",
-                    f"## The table's column names ({len(header)})", "", ", ".join(header[:120])
-                    + (" ..." if len(header) > 120 else ""), "",
+                    + f"; {r['columns']} columns, {r['rows']} rows"
+                    + (f"; value column {r['quantity']}." if r.get("quantity") else "."), "",
+                    _columns_section(r["kind"], r["layout"], header), "",
                     f"## Annotation rows under the header ({len(notes)})", "",
                     "\n".join(n[:300] for n in notes) or "none", "",
-                    f"## The deposit's files ({len(names)})", "", "\n".join(names[:300])
-                    + ("\n..." if len(names) > 300 else ""), "",
+                    _files_section(names), "",
                     "## Methods", "", _methods(r, record)]
             path.write_bytes(("\n".join(text) + "\n").encode("utf-8"))
             print(f"  {acc}", flush=True)
