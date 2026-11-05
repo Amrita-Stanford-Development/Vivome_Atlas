@@ -262,6 +262,33 @@ class RunnerFetchTests(unittest.TestCase):
         self.assertIsNone(refuse(long, base + ["Ratio H/L s1"]))
 
 
+class ParsedTablePlaceTests(unittest.TestCase):
+    def test_the_parsed_table_lands_in_the_deposits_own_folder_however_deep_its_file(self):
+        """95 of the walk's 366 kept tables were saved beside a file in a
+        subfolder (MassIVE's search/, an archive's txt/): one place per deposit."""
+        import importlib.util
+        from unittest import mock
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        data = Path(tempfile.mkdtemp())
+        header = ["Protein IDs", "Majority protein IDs", "Gene names"] + [f"LFQ intensity s{i}" for i in range(3)]
+        body = "\t".join(header) + "\n" + "P1\tP1\tG1\t1\t2\t3\nP2\tP2\tG2\t4\t5\t6\n"
+        f = File("proteinGroups.txt", 10, "ftp://x/proteinGroups.txt")
+        cand = tables.Candidate("maxquant", "wide", tables.Entry(f, "txt/proteinGroups.txt", 10), ())
+        for rel in ("PXD000001/members/txt/proteinGroups.txt", "PXD000002/search/proteinGroups.txt",
+                    "PXD000003/proteinGroups.txt"):
+            path = data / rel
+            path.parent.mkdir(parents=True)
+            path.write_text(body, encoding="utf-8")
+            with mock.patch.object(runner, "DATA", data):
+                runner.make_tools({"massive": {}}).parse(cand, path)
+            acc = rel.split("/")[0]
+            self.assertEqual([p.relative_to(data / acc).as_posix() for p in (data / acc).rglob("table.npz")],
+                             ["table.npz"])
+
+
 class AuditPacketTests(unittest.TestCase):
     def test_a_packet_shows_the_header_and_perseus_annotation_rows_never_values(self):
         """A table saved from Perseus keeps MaxQuant's column names whatever it

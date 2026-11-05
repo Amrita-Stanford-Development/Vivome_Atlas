@@ -13,8 +13,8 @@ From the repository root, with the vivome environment. The frame comes
 from `python -m valuescale.corpus.frame`. The walk's log is
 valuescale/corpus/walk.jsonl (one line per listed deposit, in the frame's
 order; a stopped walk resumes). Downloads go to
-data/incoming/value-scale-corpus/<accession>/, with each parsed table as
-table.npz beside its file. No detector statistic, gate or verdict is
+data/incoming/value-scale-corpus/<accession>/, with the deposit's parsed
+table as <accession>/table.npz. No detector statistic, gate or verdict is
 computed on any drawn deposit here: the report counts records, quotas and
 the audit, from the log alone.
 """
@@ -152,7 +152,7 @@ def make_tools(record: dict) -> draw.Tools:
         finally:
             if big:
                 _big.release()
-        np.savez_compressed(path.parent / "table.npz" if path.parent.name != "members" else path.parent.parent / "table.npz",
+        np.savez_compressed(DATA / path.relative_to(DATA).parts[0] / "table.npz",  # the deposit's folder, however deep the file
                             values=np.asarray(parsed.values, dtype=np.float32), cells=np.asarray(parsed.cells, dtype=str),
                             ids=np.asarray(ids, dtype=str))
         return parsed
