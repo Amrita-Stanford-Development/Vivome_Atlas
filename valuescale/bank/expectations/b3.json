@@ -59,5 +59,19 @@
       "unchanged": "the 4 CR-only tables, the 2 '550 Failed to open file' and the 2 missing MassIVE folders fail again as before",
       "nothing_else": "no record outside fetch failed and no file list changes, and the log keeps the frame's order"
     }
+  },
+  "audit_rubric": {
+    "written": "2026-11-05, before any audit packet was made or read",
+    "reads": "each sampled deposit's packet: the script's label, the table's file and member names, its column names, the Perseus annotation rows under its header, the deposit's file names, and its methods text (PRIDE's project record, or MassIVE's announcement). Never a value.",
+    "question": "do the table's headers, its place in the deposit and the methods support the script's label: linear for a software's own output, log for a header naming a log on the value columns?",
+    "disagree_when": [
+      "the annotation rows show the table was saved from Perseus (a #!{Type} row): it is not the software's own output, which is what the linear label rests on",
+      "the table's file, member or folder name names a step after the software that changes the scale: log, normalised, imputed, batch-corrected, scaled, z-scored or 'processed'",
+      "the methods say the deposited table itself (by its name, or as the deposit's protein table) was log-transformed, scaled, imputed or batch-corrected before deposit",
+      "for a log label: the log word belongs to a column other than the value columns, or the methods say the deposited values are not logged"
+    ],
+    "agree_otherwise": "a transformation the methods place in the analysis after the software (Perseus, R, the paper's statistics), without saying the deposited table holds it, leaves the deposited table as the software wrote it. The software's own normalisation in its run (DIA-NN's, MaxQuant's LFQ, Spectronaut's, Proteome Discoverer's) is its own output. Silence is agreement.",
+    "each_verdict": "agree or disagree, quoting the packet's words that decide it",
+    "who": "subagents judge the packets under this rubric; Claude reads again every disagreement and every tenth agreement; the notes list every disagreement for the owner"
   }
 }

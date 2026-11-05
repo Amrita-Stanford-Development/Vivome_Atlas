@@ -262,6 +262,26 @@ class RunnerFetchTests(unittest.TestCase):
         self.assertIsNone(refuse(long, base + ["Ratio H/L s1"]))
 
 
+class AuditPacketTests(unittest.TestCase):
+    def test_a_packet_shows_the_header_and_perseus_annotation_rows_never_values(self):
+        """A table saved from Perseus keeps MaxQuant's column names whatever it
+        did to the values; its "#!{" rows under the header say so."""
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        path = Path(tempfile.mkdtemp()) / "proteinGroups.txt"
+        path.write_bytes(b"\xef\xbb\xbfProtein IDs\tLFQ intensity a\tLFQ intensity b\n"
+                         b"#!{Type}T\tE\tE\n#!{C:Group}\tx\ty\nP1\t23.5\t24.1\nP2\t21.0\t22.2\n")
+        header, notes = runner._header_lines(path)
+        self.assertEqual(header, ["Protein IDs", "LFQ intensity a", "LFQ intensity b"])
+        self.assertEqual(notes, ["#!{Type}T\tE\tE", "#!{C:Group}\tx\ty"])
+        plain = path.with_name("plain.txt")
+        plain.write_bytes(b"Protein IDs\tIntensity a\nP1\t100\n")
+        self.assertEqual(runner._header_lines(plain), (["Protein IDs", "Intensity a"], []))
+
+
 class NoStatisticTests(unittest.TestCase):
     def test_the_draw_imports_no_detector_module(self):
         banned = {"valuescale.gates", "valuescale.statistics", "valuescale.score", "valuescale.method"}

@@ -235,6 +235,21 @@ def _local_table(r: dict) -> Path:
     return folder / "members" / _safe(r["member"]) if r.get("member") else folder / _safe(r["file"])
 
 
+def _header_lines(path: Path, most: int = 12) -> tuple[list, list]:
+    """The table's header, and the Perseus annotation rows ("#!{...") right
+    under it: a table saved from Perseus keeps MaxQuant's column names
+    whatever it did to the values. No value row is read past them."""
+    with path.open("r", encoding="utf-8-sig", errors="replace", newline="") as fh:
+        header = remote.first_line_fields(fh.readline().encode("utf-8")) or []
+        notes = []
+        for _ in range(most):
+            line = fh.readline().rstrip("\r\n")
+            if not line.startswith("#!{"):
+                break
+            notes.append(line)
+    return header, notes
+
+
 def _methods(r: dict, record: dict) -> str:
     """The deposit's own words on how its data were processed: PRIDE's
     project record, or MassIVE's announcement."""
@@ -267,8 +282,7 @@ def cmd_audit_packets(args) -> int:
             if path.exists():
                 continue
             r = records[acc]
-            with _local_table(r).open("r", encoding="utf-8-sig", errors="replace") as fh:
-                header = remote.first_line_fields((fh.readline()).encode("utf-8")) or []
+            header, notes = _header_lines(_local_table(r))
             names = sorted(f.path for f in tools.list_files(acc, r["repo"]))
             text = [f"# {acc} ({split}, {r['repo']})", "",
                     f"Label by script: **{r['label']}** ({r['software']}, {r['kind']}, layout {r['layout']}).",
@@ -276,6 +290,8 @@ def cmd_audit_packets(args) -> int:
                     + f"; {r['columns']} columns, {r['rows']} rows; quantity {r.get('quantity')}.", "",
                     f"## The table's column names ({len(header)})", "", ", ".join(header[:120])
                     + (" ..." if len(header) > 120 else ""), "",
+                    f"## Annotation rows under the header ({len(notes)})", "",
+                    "\n".join(n[:300] for n in notes) or "none", "",
                     f"## The deposit's files ({len(names)})", "", "\n".join(names[:300])
                     + ("\n..." if len(names) > 300 else ""), "",
                     "## Methods", "", _methods(r, record)]
