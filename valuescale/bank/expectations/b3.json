@@ -36,5 +36,28 @@
     "B3_sealed": "no sealed accession is listed or opened: the frame drops them and every path, URL and accession passes denylist.check",
     "B3_no_statistic": "the draw imports none of valuescale's gates, statistics, score or method modules, and conformal only for the strata's bounds, through strata.py (a test)"
   },
-  "changed_before_the_run": "2026-11-04, after a smoke test of the real tools on three design (bank) deposits and before any frame deposit was listed: PRIDE's HTTPS took 15 to 30 s to a first byte and gave 0.34 MB/s on 16 connections; its FTP took 2 to 10 s and gave 0.70 MB/s on 8, and refused 16 connections at once. So PRIDE files are read over FTP with at most 8 connections, and the single-file bar is 500 MB (was 1 GiB): at 0.7 MB/s a 1 GiB file takes about 25 minutes. The smoke test also showed the protocol's first-candidate rule skipping PXD049412, whose first Spectronaut report by name holds 3 runs; the rule stands"
+  "changed_before_the_run": "2026-11-04, after a smoke test of the real tools on three design (bank) deposits and before any frame deposit was listed: PRIDE's HTTPS took 15 to 30 s to a first byte and gave 0.34 MB/s on 16 connections; its FTP took 2 to 10 s and gave 0.70 MB/s on 8, and refused 16 connections at once. So PRIDE files are read over FTP with at most 8 connections, and the single-file bar is 500 MB (was 1 GiB): at 0.7 MB/s a 1 GiB file takes about 25 minutes. The smoke test also showed the protocol's first-candidate rule skipping PXD049412, whose first Spectronaut report by name holds 3 runs; the rule stands",
+  "revisit": {
+    "written": "2026-11-05, before the revisit runs, with the walk at 8,255 listed; the remaining deposits are walked with the fixed reads first",
+    "why": "two transport faults (commit bfd6451): a transfer PRIDE's FTP ended early was returned as a whole read and never tried again, and MassIVE's '530 Authentication error' at an anonymous login was not tried again",
+    "what": "every record whose outcome is fetch failed or no file list is visited once more with the fixed tools, after the walk stops, in its place in the log; the outcome it replaces is kept as revisited_from",
+    "failed_at_8255": {
+      "short read ('bytes N-N: got N')": 47,
+      "BadZipFile": 15,
+      "MassIVE 530": 5,
+      "MassIVE listing after 5 tries": 6,
+      "CR-only line endings ('new-line character seen in unquoted field')": 4,
+      "550 Failed to open file": 2,
+      "MassIVE folder does not exist": 2,
+      "total": 81
+    },
+    "expected": {
+      "short_reads": "at least 40 of the 47 are no longer fetch failed",
+      "bad_zip": "at least 8 of the 15 are no longer fetch failed (those that were short reads inside the archive's directory); the rest are archives zipfile cannot read",
+      "massive_530": "at least 4 of the 5 are listed",
+      "after_retries": "no expectation: the 6 failed for reasons not seen",
+      "unchanged": "the 4 CR-only tables, the 2 '550 Failed to open file' and the 2 missing MassIVE folders fail again as before",
+      "nothing_else": "no record outside fetch failed and no file list changes, and the log keeps the frame's order"
+    }
+  }
 }
