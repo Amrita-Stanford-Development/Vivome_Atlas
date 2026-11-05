@@ -3,6 +3,7 @@ PRIDE API's pages, a MassIVE FTP folder, and zip archives read through
 range requests."""
 from __future__ import annotations
 
+import ftplib
 import io
 import unittest
 import zipfile
@@ -178,6 +179,83 @@ class SiteTests(unittest.TestCase):
     def test_chunks_cover_a_file_once(self):
         self.assertEqual(remote.chunks(20, 8), [(0, 7), (8, 15), (16, 19)])
         self.assertEqual(remote.chunks(8, 8), [(0, 7)])
+
+
+class DroppedConnectionTests(unittest.TestCase):
+    """B3's walk logged 14 proteinGroups.txt files and the slow 245 to 330 MB
+    reports as 'fetch failed: ... got N': PRIDE's FTP ended a transfer early,
+    and the short read was returned instead of tried again."""
+
+    def setUp(self):
+        from unittest import mock
+        self.data = bytes(range(256)) * 400
+        self.rests, self.drops = [], [3000, 5000]  # bytes each RETR gives before its connection ends
+        test = self
+
+        class Sock:
+            def __init__(self, at):
+                self.at, self.left = at, (test.drops.pop(0) if test.drops else len(test.data))
+
+            def recv(self, n):
+                n = min(n, self.left, 1024)
+                b = test.data[self.at:self.at + n]
+                self.at += len(b)
+                self.left -= len(b)
+                return b
+
+            def close(self):
+                pass
+
+        class Conn:
+            def voidcmd(self, cmd):
+                pass
+
+            def transfercmd(self, cmd, rest=None):
+                test.rests.append(rest or 0)
+                return Sock(rest or 0)
+
+        from contextlib import contextmanager
+
+        @contextmanager
+        def connection(url):
+            yield Conn()
+        self.patches = [mock.patch.object(remote, "ftp_connection", connection),
+                        mock.patch.object(remote.time, "sleep", lambda s: None)]
+        for p in self.patches:
+            p.start()
+
+    def tearDown(self):
+        for p in self.patches:
+            p.stop()
+
+    def test_a_read_cut_short_is_resumed_where_it_stopped(self):
+        got = remote.ftp_read("ftp://ftp.pride.ebi.ac.uk/pride/x", 100, 20_000)
+        self.assertEqual(got, self.data[100:20_100])
+        self.assertEqual(self.rests, [100, 3100, 8100])
+
+    def test_a_read_that_never_progresses_fails(self):
+        self.drops = [0] * 50
+        with self.assertRaises(OSError):
+            remote.ftp_read("ftp://ftp.pride.ebi.ac.uk/pride/x", 0, 1000)
+
+    def test_a_refused_login_is_tried_again_and_a_missing_file_is_not(self):
+        calls = []
+
+        def flaky():
+            calls.append(1)
+            if len(calls) < 3:
+                raise ftplib.error_perm("530 Authentication error: invalid credentials")
+            return "listed"
+        self.assertEqual(remote._retry(flaky), "listed")
+        self.assertEqual(len(calls), 3)
+
+        def missing():
+            calls.append(1)
+            raise ftplib.error_perm("550 no such file")
+        calls.clear()
+        with self.assertRaises(ftplib.error_perm):
+            remote._retry(missing)
+        self.assertEqual(len(calls), 1)
 
 
 class HeaderTests(unittest.TestCase):

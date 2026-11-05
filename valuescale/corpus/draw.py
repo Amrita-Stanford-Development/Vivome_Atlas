@@ -182,3 +182,31 @@ def walk(order, tools: Tools, log: Path, root: Path, limit: int = LIMIT, quota: 
                 break
             top_up()
     return records
+
+
+FAILED_READS = ("fetch failed", "no file list")
+
+
+def revisit(log: Path, tools: Tools, root: Path, workers: int = 4, visit_fn=visit,
+            outcomes=FAILED_READS) -> list[dict]:
+    """Each record whose read failed is visited again with the walk's tools as
+    they now are, in its place in the log; the outcome it replaces is kept as
+    revisited_from. B3's walk returned a short FTP read as whole until
+    2026-11-05, so a transfer PRIDE ended early was logged as fetch failed.
+    The log is rewritten once, at the end: a revisit that stops part way
+    leaves it as it was. Not to be run while the walk is writing the log."""
+    records = [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines() if line.strip()]
+    todo = [i for i, r in enumerate(records) if r.get("outcome") in outcomes]
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {i: pool.submit(visit_fn, records[i]["accession"], records[i]["repo"], records[i]["split"],
+                                  tools, root) for i in todo}
+        done = {}
+        for i in todo:
+            done[i] = {**futures[i].result(), "revisited_from": {"outcome": records[i]["outcome"],
+                                                                 "detail": records[i].get("detail")}}
+    for i, record in done.items():
+        records[i] = record
+    tmp = log.with_name(log.name + ".tmp")
+    tmp.write_bytes("".join(json.dumps(r, sort_keys=True) + "\n" for r in records).encode("utf-8"))
+    tmp.replace(log)
+    return records

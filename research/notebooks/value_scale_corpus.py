@@ -4,6 +4,7 @@ the real network and the service's parser, the hand audit's sample, and the
 diagnostics against valuescale/bank/expectations/b3.json.
 
     python research/notebooks/value_scale_corpus.py walk [--workers 4]
+    python research/notebooks/value_scale_corpus.py revisit [--workers 4]
     python research/notebooks/value_scale_corpus.py audit-sample
     python research/notebooks/value_scale_corpus.py audit-packets
     python research/notebooks/value_scale_corpus.py report
@@ -191,6 +192,16 @@ def cmd_walk(args) -> int:
     return 0
 
 
+def cmd_revisit(args) -> int:
+    """The walk's failed reads, visited again once the walk has stopped."""
+    check_patterns()
+    before = Counter(r["outcome"] for r in _records() if r["outcome"] in draw.FAILED_READS)
+    records = draw.revisit(LOG, make_tools(frame.load()), DATA, workers=args.workers)
+    again = [r for r in records if "revisited_from" in r]
+    print(f"revisited {sum(before.values())} ({dict(before)}): now {dict(Counter(r['outcome'] for r in again))}")
+    return 0
+
+
 def _records() -> list[dict]:
     return [json.loads(x) for x in LOG.read_text(encoding="utf-8").splitlines() if x.strip()]
 
@@ -352,11 +363,13 @@ def main() -> int:
     w = sub.add_parser("walk")
     w.add_argument("--workers", type=int, default=8)
     w.add_argument("--limit", type=int, default=draw.LIMIT)
+    r = sub.add_parser("revisit")
+    r.add_argument("--workers", type=int, default=8)
     sub.add_parser("audit-sample")
     sub.add_parser("audit-packets")
     sub.add_parser("report")
     args = parser.parse_args()
-    return {"walk": cmd_walk, "audit-sample": cmd_audit_sample, "audit-packets": cmd_audit_packets,
+    return {"walk": cmd_walk, "revisit": cmd_revisit, "audit-sample": cmd_audit_sample, "audit-packets": cmd_audit_packets,
             "report": cmd_report}[args.cmd](args)
 
 

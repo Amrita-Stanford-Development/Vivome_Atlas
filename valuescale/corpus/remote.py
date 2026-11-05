@@ -72,12 +72,20 @@ def _retry(fn, tries: int = 5):
             if 400 <= exc.code < 500 and exc.code != 429:
                 raise
             last = exc
-        except ftplib.error_perm:
-            raise  # 5xx: no such file or folder
+        except ftplib.error_perm as exc:
+            if not _refused_login(exc):
+                raise  # 5xx: no such file or folder
+            last = exc
         except (OSError, EOFError, ftplib.Error) as exc:
             last = exc
         time.sleep(min(2 ** attempt, 30))
     raise OSError(f"after {tries} tries: {last}")
+
+
+def _refused_login(exc: ftplib.error_perm) -> bool:
+    """MassIVE's FTP at times answers an anonymous login with "530
+    Authentication error: invalid credentials"; the next login is let in."""
+    return str(exc).startswith("530")
 
 
 def get_json(url: str):
@@ -201,22 +209,40 @@ def massive_root(ftp_url: str, msv: str, folders: dict[str, str]) -> str:
     raise OSError(f"{msv} is not on {MASSIVE_HOST}")
 
 
-def ftp_read(url: str, start: int, length: int) -> bytes:
+def ftp_read(url: str, start: int, length: int, tries: int = 5) -> bytes:
+    """length bytes from start: every caller asks within the file. A transfer
+    the server ends early is resumed where it stopped, on a new connection;
+    the read fails after `tries` attempts in a row that bring nothing."""
     path = urlparse(url).path
-
-    def one():
-        with ftp_connection(url) as conn:
-            conn.voidcmd("TYPE I")
-            sock = conn.transfercmd(f"RETR {path}", rest=start or None)
-            got = bytearray()
-            while len(got) < length:
-                b = sock.recv(min(1 << 16, length - len(got)))
-                if not b:
-                    break
-                got += b
-            sock.close()
-            return bytes(got)
-    return _retry(one)
+    got = bytearray()
+    idle, last = 0, None
+    while True:
+        before = len(got)
+        try:
+            with ftp_connection(url) as conn:
+                conn.voidcmd("TYPE I")
+                sock = conn.transfercmd(f"RETR {path}", rest=(start + len(got)) or None)
+                try:
+                    while len(got) < length:
+                        b = sock.recv(min(1 << 16, length - len(got)))
+                        if not b:
+                            break
+                        got += b
+                finally:
+                    sock.close()
+            if len(got) == length:
+                return bytes(got)
+            last = OSError(f"{url} bytes {start}-{start + length - 1}: the transfer ended after {len(got)}")
+        except ftplib.error_perm as exc:
+            if not _refused_login(exc):
+                raise
+            last = exc
+        except (OSError, EOFError, ftplib.Error) as exc:
+            last = exc
+        idle = 0 if len(got) > before else idle + 1
+        if idle >= tries:
+            raise OSError(f"after {tries} tries without progress: {last}")
+        time.sleep(min(2 ** idle, 30))
 
 
 def chunks(size: int, chunk: int = CHUNK) -> list[tuple[int, int]]:

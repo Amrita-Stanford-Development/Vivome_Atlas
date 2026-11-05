@@ -50,7 +50,7 @@ Phase B, B3, the corpus (`corpus/`, not shipped):
 - `tables.py`: which file is a deposit's table, the readers the service's
   parser lacks, and the provenance labels.
 - `draw.py`: the walk, its log in the frame's order (`walk.jsonl`), the
-  quotas and the stop rule. The runner is
+  quotas and the stop rule, and the second visit of failed reads. The runner is
   `research/notebooks/value_scale_corpus.py`, which brings the service's
   parser.
 
@@ -68,6 +68,7 @@ python -m valuescale.corpus.extract                  # upload-ready files
 python research/notebooks/value_scale_diagnostics.py --step step1
 python -m valuescale.corpus.frame                    # B3: the draw's frame
 python research/notebooks/value_scale_corpus.py walk # B3: the walk (hours; resumes)
+python research/notebooks/value_scale_corpus.py revisit  # B3: failed reads again, once the walk has stopped
 python -m unittest discover -s valuescale/tests -t .
 ```
 

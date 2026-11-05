@@ -167,6 +167,43 @@ class WalkTests(unittest.TestCase):
             draw.walk(self.order(5), _tools(), self.log, self.dir, limit=5)
 
 
+class RevisitTests(unittest.TestCase):
+    """Reads that failed on a transport fault the walk then fixed (a short FTP
+    read returned as whole) are visited again, in place."""
+
+    def setUp(self):
+        self.dir = Path(tempfile.mkdtemp())
+        self.log = self.dir / "walk.jsonl"
+        rows = [("PXD000101", "kept"), ("PXD000102", "fetch failed"), ("PXD000103", "no candidate"),
+                ("PXD000104", "no file list"), ("PXD000105", "unparseable")]
+        self.before = [{"accession": a, "repo": "PRIDE", "split": "test", "outcome": o, "detail": f"was {o}"}
+                       for a, o in rows]
+        self.log.write_text("".join(json.dumps(r, sort_keys=True) + "\n" for r in self.before), encoding="utf-8")
+
+    def test_only_failed_reads_are_visited_again_and_keep_their_place(self):
+        seen = []
+
+        def visit_fn(acc, repo, split, tools, root):
+            seen.append(acc)
+            return {"accession": acc, "repo": repo, "split": split, "outcome": "kept", "label": "linear"}
+        records = draw.revisit(self.log, _tools(), self.dir, workers=2, visit_fn=visit_fn)
+        self.assertEqual(sorted(seen), ["PXD000102", "PXD000104"])
+        lines = [json.loads(x) for x in self.log.read_text(encoding="utf-8").splitlines()]
+        self.assertEqual(lines, records)
+        self.assertEqual([r["accession"] for r in lines], [r["accession"] for r in self.before])
+        self.assertEqual([r["outcome"] for r in lines], ["kept", "kept", "no candidate", "kept", "unparseable"])
+        self.assertEqual(lines[1]["revisited_from"], {"outcome": "fetch failed", "detail": "was fetch failed"})
+        self.assertNotIn("revisited_from", lines[0])
+        self.assertEqual(lines[2], self.before[2])
+
+    def test_a_revisit_that_stops_part_way_leaves_the_log_as_it_was(self):
+        def visit_fn(acc, repo, split, tools, root):
+            raise RuntimeError("stopped")
+        with self.assertRaises(RuntimeError):
+            draw.revisit(self.log, _tools(), self.dir, visit_fn=visit_fn)
+        self.assertEqual([json.loads(x) for x in self.log.read_text(encoding="utf-8").splitlines()], self.before)
+
+
 class RunnerFetchTests(unittest.TestCase):
     def test_a_whole_file_download_leaves_connections_for_the_rest_of_the_walk(self):
         """A 296 MB report took all 8 of PRIDE's connections, and the walk's
