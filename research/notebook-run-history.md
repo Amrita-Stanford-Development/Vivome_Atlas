@@ -3200,6 +3200,55 @@ guarantee until B3's calibration).
   - CPTAC's ratio forms are read log;
   - percentile ranks are mostly "can't tell".
 
+### 75. The raw-or-log framework, Phase B, B3: the corpus, 2026-11-05
+
+**Why:** the calibration and test tables for the detector. They are public
+deposits never used in design, drawn and labelled by fixed rules before any
+detector statistic touches them (protocol
+`research/benchmark/protocol-value-scale.md`).
+
+**What was built:**
+- `valuescale/corpus/` builds the frame and walks it:
+  - `frame.py` makes the frame from ProteomeXchange's index (18,813 human
+    PRIDE and MassIVE deposits from 2020 to 2026, sealed and tracked
+    accessions dropped, split by hash);
+  - `remote.py` reads the repositories over FTP, a zip member by range;
+  - `tables.py` chooses each deposit's first candidate table and labels it
+    from its software and column names;
+  - `draw.py` walks the frame in its order and logs each outcome to
+    `walk.jsonl`.
+- `research/notebooks/value_scale_corpus.py` runs the walk, a second visit
+  of failed reads, and the hand audit's sample and packets. It also writes
+  the report against `valuescale/bank/expectations/b3.json`, which was
+  written first.
+- Subagents judged the audit packets under a rubric committed before any
+  packet was made (`valuescale/corpus/audit.json`).
+
+**Results** (`research/notebook-outputs/value_scale_b3/`, report and notes):
+- 10,000 deposits listed and 402 kept, all linear. 401 remain after the
+  audit: 188 in calibration and 213 in test.
+- S1 and S2 meet the quota of 59 in both splits (S2: 62 and 61). S3 is
+  short (3 and 8), as expected, so it pools with S2 into "50 to 2,000".
+- No real log table was found. The log class is calibrated on constructed
+  variants, and the real-log test stratum is empty.
+- The audit agrees on 80 of 81 (98.8%). PXD039540, a table in a
+  normalisation folder of an R archive, is excluded.
+- Faults found during the walk, all in reading files and each fixed test
+  first:
+  - one slow download held up the log;
+  - SILAC and TMT tables were fetched before being refused;
+  - cut-short FTP reads were taken as complete, and MassIVE's 530 was not
+    retried;
+  - the audit's first packets hid columns.
+
+  The 93 failed reads were visited again and every expectation for the
+  revisit was met. The 53 affected packets were judged again, and both
+  judgements agreed.
+- One row fails: B3_frame. The frame keeps 18,869 deposits, against 18,859
+  expected. The expected count was made with the csv module, which merged
+  6 records, and with a species match that was case-sensitive, which missed
+  4. The frame is right. It goes to the owner.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

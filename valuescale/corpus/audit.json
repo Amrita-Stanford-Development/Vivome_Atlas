@@ -1,0 +1,749 @@
+{
+ "about": "B3's hand audit (research/benchmark/protocol-value-scale.md): a seeded 20% of each split's kept deposits, drawn by sha256('20261103:audit:' + accession). Packets (data/incoming/value-scale-corpus/audit/) give headers, the table's place in the deposit and the methods, never values. The first packets cut the column list at 120 names, the file list at 300 and misread parquet headers: the 53 they affected were judged again on rebuilt packets, and both judgements agreed on all 53. Claude reread the one disagreement and every tenth agreement.",
+ "sample": {
+  "calibration": [
+   "PXD000809",
+   "PXD010149",
+   "PXD011993",
+   "PXD017672",
+   "PXD018903",
+   "PXD022350",
+   "PXD030049",
+   "PXD030775",
+   "PXD033012",
+   "PXD034013",
+   "PXD036519",
+   "PXD036782",
+   "PXD038196",
+   "PXD038493",
+   "PXD043293",
+   "PXD043536",
+   "PXD046570",
+   "PXD048456",
+   "PXD050990",
+   "PXD053422",
+   "PXD056331",
+   "PXD056664",
+   "PXD057955",
+   "PXD058054",
+   "PXD058255",
+   "PXD060145",
+   "PXD060457",
+   "PXD061430",
+   "PXD061942",
+   "PXD064286",
+   "PXD067204",
+   "PXD071177",
+   "PXD071670",
+   "PXD074156",
+   "PXD074256",
+   "PXD080843",
+   "PXD082023",
+   "PXD082653"
+  ],
+  "test": [
+   "PXD014325",
+   "PXD015430",
+   "PXD015690",
+   "PXD018625",
+   "PXD021677",
+   "PXD022038",
+   "PXD025057",
+   "PXD028371",
+   "PXD029202",
+   "PXD032750",
+   "PXD033488",
+   "PXD035199",
+   "PXD037660",
+   "PXD038008",
+   "PXD038583",
+   "PXD039540",
+   "PXD040811",
+   "PXD044455",
+   "PXD045547",
+   "PXD048567",
+   "PXD049683",
+   "PXD052895",
+   "PXD052994",
+   "PXD055784",
+   "PXD056356",
+   "PXD056620",
+   "PXD057586",
+   "PXD058818",
+   "PXD060348",
+   "PXD065392",
+   "PXD068281",
+   "PXD068594",
+   "PXD068982",
+   "PXD069597",
+   "PXD069667",
+   "PXD072589",
+   "PXD073189",
+   "PXD073251",
+   "PXD073754",
+   "PXD074117",
+   "PXD074830",
+   "PXD075835",
+   "PXD076462"
+  ]
+ },
+ "verdicts": {
+  "PXD000809": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "member `Lung_pY_search_result/txt/proteinGroups.txt` ... Intensity (30): Intensity 106, Intensity 108, ...",
+   "reason": "Native MaxQuant proteinGroups.txt with Intensity columns; Perseus is named only for the later bioinformatics analysis.",
+   "reread": "Claude reread: agrees; MaxQuant txt output in a search-result archive, Intensity columns (no LFQ), Perseus only for analysis."
+  },
+  "PXD010149": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "The results from MaxQuant were entered into Perseus (v 1.5.4.1) [28] where data was filtered and Log2 transformed.",
+   "reason": "The Log2 step is placed in Perseus after MaxQuant, while the chosen table is txt/proteinGroups.txt in the deposited zipped MaxQuant txt folder with native LFQ intensity columns and no Perseus annotation rows."
+  },
+  "PXD011993": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `MaxQuant_Output.zip`, member `proteinGroups.txt`; 24 columns, 7727 rows. ... LFQ intensity (24): LFQ intensity 01, LFQ intensity 02",
+   "reason": "Native MaxQuant proteinGroups.txt with LFQ intensity columns and no Perseus rows; the methods only point to another dataset and name no transformation of the deposited table."
+  },
+  "PXD014325": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups.txt`; 20 columns, 1414 rows. ... LFQ intensity (20): LFQ intensity DC_TNFa, ... Downstream analysis of proteomic data was performed by Perseus software (version 1.6.0.7).",
+   "reason": "Native MaxQuant proteinGroups.txt with LFQ intensity columns, no annotation rows, and the methods place all further processing in Perseus downstream."
+  },
+  "PXD015430": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "The Maxquant output phospho (STY) table was processed using Perseus (Tyanova et al., 2016) (version 1.5.2.11) software suite",
+   "reason": "The deposited table is MaxQuant_Output.zip/proteinGroups.txt with native LFQ intensity columns; imputation and median-log normalisation are Perseus/limma analysis steps on another table."
+  },
+  "PXD015690": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `imaconly_multiconsensus_-1_Proteins.txt`; 33 columns, 33605 rows. ... Abundance (33): Abundance: F1: 126, Control, ...",
+   "reason": "Proteome Discoverer 2.3 Proteins.txt read on its plain 'Abundance:' columns (the Scaled, Normalized, Ratio and log2 Ratio columns are separate); 'imaconly' names the IMAC fractions, not a scale step, and the methods describe no transformation of the deposited table."
+  },
+  "PXD017672": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Further data analysis was performed with the Perseus software (version 1.5.5.3) after loading the proteingroups file from MaxQuant.",
+   "reason": "Filtering and imputation happen in Perseus after loading the MaxQuant file; the deposited txt.zip member txt/proteinGroups.txt carries native LFQ intensity columns and no annotation rows."
+  },
+  "PXD018625": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Once we obtained LFQ values, we performed all downstream analyses with Perseus (v. 1.5.2.4).",
+   "reason": "Perseus is placed downstream of MaxQuant; the deposited proteinGroups.txt carries native LFQ intensity columns and no #! annotation rows."
+  },
+  "PXD018903": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups.txt`; 24 columns, 2782 rows. ... LFQ intensity (24): LFQ intensity ETO4, LFQ intensity ETO4_140707140621, ...",
+   "reason": "Native MaxQuant proteinGroups.txt beside mqpar.xml and the other txt outputs, with no annotation rows, and the methods are silent."
+  },
+  "PXD021677": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups_NormalFASTA_LFQ.txt`; 1290 columns, 703 rows. ... A regular FASTA file was downloaded from the UniProt database in May 2019",
+   "reason": "'NormalFASTA' names the regular (non-variant) FASTA search, matching the deposit's Variant_proteinGroups.txt, not a normalisation; the 1290 value columns are all 'LFQ intensity <run>', and Perseus is placed in the analysis."
+  },
+  "PXD022038": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Data analysis was performed using Perseus (version 1.6.6.0). MaxQuant proteinGroups.txt output files were filtered against contaminants and reverse dataset. Base 2 logarithm was applied to all measurements",
+   "reason": "The log2 and median subtraction are Perseus analysis applied to the MaxQuant output; the deposited proteinGroups.txt is that native output with LFQ intensity columns.",
+   "reread": "Claude reread: agrees; MaxQuant proteinGroups.txt beside mqpar.xml and peptides.txt."
+  },
+  "PXD022350": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups_EV1.txt`; 27 columns, 5059 rows. ... IBAQ values LFQ (label-free) intensities were calculated using the in-built algorithms.",
+   "reason": "Native MaxQuant proteinGroups (EV1 is a dataset suffix) with LFQ intensity columns computed by MaxQuant's in-built algorithm; no annotation rows and no later transformation described."
+  },
+  "PXD025057": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `MQ_search_results.zip`, member `proteinGroups.txt`; ... Intensity (24): Intensity 220_Nsco_1820_CG_IP_B1, ... The resulting data was visualized using ggplot2 (9) within R.",
+   "reason": "Native MaxQuant proteinGroups.txt inside the MaxQuant results archive, read on the Intensity family (no LFQ columns present); R is used only for plotting."
+  },
+  "PXD028371": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Label free data were analysed with the following softares: MaxQuant/Perseus/R",
+   "reason": "The methods name no transformation of the deposited table, and the lone proteinGroups.txt has native MaxQuant LFQ intensity columns with no Perseus annotation rows."
+  },
+  "PXD029202": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "LFQ algorithm implemented was used for protein quantification through MaxQuant software, statistical analysis was performed by Perseus v1.6.14.0, SPSS 26.0 and Graph Prism v8.0 software.",
+   "reason": "Native MaxQuant proteinGroups.txt with LFQ intensity; the FOT conversion and log2 z-scores are placed in the analysis, not in the deposited table."
+  },
+  "PXD030049": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Protein abundance was calculated on the basis of the normalized spectral protein intensity (LFQ intensity).",
+   "reason": "Native MaxQuant proteinGroups.txt; the normalisation named is MaxQuant's own LFQ."
+  },
+  "PXD030775": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "For the data evaluation in Perseus, data was grouped and filtered according to missing values. ... Data was log2 transformed and imputation was performed according normal distribution",
+   "reason": "Log2 and imputation are Perseus evaluation steps; the deposited member MQ_search_plasma_txt/proteinGroups.txt is native MaxQuant output with LFQ intensity columns and no Perseus rows."
+  },
+  "PXD032750": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Protein quantification and data normalization relied on the MaxLFQ algorithm implemented in MaxQuant ... For further analysis, the Perseus software (1.6.6.0) was used",
+   "reason": "Native MaxQuant proteinGroups.txt whose LFQ intensity columns carry MaxQuant's own MaxLFQ normalisation; Perseus comes after, in the analysis."
+  },
+  "PXD033012": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "MaxQuant-processed data for these regions were imported into Perseus software for statistical analysis. ... LFQ values were log2-transformed and missing values were replaced with values from a normal distribution",
+   "reason": "The log2, imputation and z-scoring are done in Perseus for the statistics; the deposited proteinGroups.txt has native LFQ intensity columns and no Perseus annotation rows."
+  },
+  "PXD033488": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Further analysis was performed using a custom pipeline developed in R (3.6.1), which utilizes the LFQ intensity values in the MaxQuant output file proteinGroups.txt.",
+   "reason": "The methods call the deposited proteinGroups.txt the MaxQuant output; imputation and limma happen afterwards in R."
+  },
+  "PXD034013": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `txt.zip`, member `txt/proteinGroups.txt`; 24 columns, 1437 rows. ... The mass spectrometry data were analyzed with MaxQuant software.",
+   "reason": "Native MaxQuant txt folder output with LFQ intensity columns; the methods describe nothing after MaxQuant.",
+   "reread": "Claude reread: agrees; MaxQuant txt.zip, LFQ intensity columns, no transformation named."
+  },
+  "PXD035199": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `txt_191008.zip`, member `proteinGroups.txt`; LFQ intensity (45): LFQ intensity 1AT1, LFQ intensity 1AT2, LFQ intensity 1AT3",
+   "reason": "A native MaxQuant proteinGroups.txt in a txt output zip, with no annotation rows and methods silent on any transformation of the deposited table."
+  },
+  "PXD036519": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "The resulting protein-level data were analyzed using R v.3.5.0. Protein abundances are expressed as parts-per-million (ppm) and protein copies.",
+   "reason": "The ppm and copy numbers were computed later in R; the timestamped Spectronaut Report.xls with PG.Quantity columns is Spectronaut's own export."
+  },
+  "PXD036782": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "For Succinyl-K peptides, raw files were processed with MaxQuant (v 1.6.17.0) using the standard settings",
+   "reason": "proteinGroups.txt sits among MaxQuant's other txt outputs with native LFQ intensity columns; no transformation of it is described."
+  },
+  "PXD037660": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups_MBR_-_Copy.txt`; 48 columns, 2368 rows. ... The downstream proteins and statistical analyses were performed with Perseus software version 1.6.15.0",
+   "reason": "The name marks match-between-runs and a file copy, not a scale change; the full native MaxQuant column set and LFQ intensity columns are present, and Perseus is downstream."
+  },
+  "PXD038008": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Differential protein expression analysis was performed using the R-package prolfqua. Only proteins identified by at least two peptides were included into the analysis. First, protein abundances were log2 transformed.",
+   "reason": "The log2 step is in the prolfqua R analysis after FragPipe; the chosen combined_protein.tsv has only native FragPipe columns (MaxLFQ/Unique/Total Intensity, spectral counts) and no annotation rows."
+  },
+  "PXD038196": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "used to further analyze protein abundance for comparison across different groups in Perseus (version 1.6.2.3). LFQs were log2 transformed and further normalized by the median LFQ of each individual sample.",
+   "reason": "The log2 and median normalisation happen in Perseus during analysis; the deposited member is MaxQuant's own proteinGroups.txt (the folder name is a WeTransfer label) with no annotation rows."
+  },
+  "PXD038493": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `Sareen_TOTAL_LibFree.pg_matrix.tsv`; 21 columns, 9908 rows; quantity None.",
+   "reason": "This is DIA-NN's native pg_matrix from the library-free total-protein search, beside its DIA-NN log and report, and no transformation of it is named."
+  },
+  "PXD038583": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Match between runs and LFQ quantification were enabled. Other parameters were used as pre-set in the software.",
+   "reason": "MaxQuant's own LFQ output in txt_TS2/proteinGroups.txt; the methods describe no later transformation of the deposited table."
+  },
+  "PXD039540": {
+   "agrees": false,
+   "doubt": true,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `R_result.zip`, member `b_analysis_global_normalization/proteinGroups.txt`; 24 columns, 1346 rows.",
+   "reason": "The chosen table sits in an R results archive under a folder named for global normalization, a scale-changing step after MaxQuant named in the member path; close because its columns are MaxQuant's native set and it may be an unchanged copy of the input.",
+   "reread": "Claude reread: agrees with the disagreement. The table is a member of R_result.zip in b_analysis_global_normalization/, a folder named for a normalisation after MaxQuant (the rubric's name rule); MaxQuant_result_txt.zip (678 MB) is over the 500 MB archive bar, which is why this member was the candidate."
+  },
+  "PXD040811": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "processed with MaxQuant (version 2.0.3.1.) using the default settings and label-free quantification (LFQ) (LFQ min ratio count 2, normalization type classic)",
+   "reason": "The only normalisation named is MaxQuant's own LFQ, and proteinGroups.txt sits beside mqpar.xml, evidence.txt and summary.txt as MaxQuant's native output."
+  },
+  "PXD043293": {
+   "agrees": true,
+   "doubt": true,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "20210404_121956_20210402_Report_Colab-Niklas_full_norm.csv",
+   "reason": "The name says 'norm', but its Spectronaut .params/.setup.txt/.log.txt siblings mark it as Spectronaut's own timestamped report from default directDIA, so the normalisation is Spectronaut's; Perseus comes after. Close because the name names normalisation.",
+   "reread": "Claude reread: agrees; the 'norm' in the name is the Spectronaut report's own scheme: its .log.txt, .params and .setup.txt sit beside it, directDIA with default settings, Perseus afterwards."
+  },
+  "PXD043536": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "The normalised protein intensity of each identified protein was used for label free quantitation (LFQ ) [28].",
+   "reason": "The 'normalised' intensity is MaxQuant's own LFQ; the table proteinGroupsIP1.txt is native output with LFQ intensity columns, and the ratios and t-tests are analysis."
+  },
+  "PXD044455": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `txt_SN.zip`, member `txt/proteinGroups.txt`; 30 columns, 1548 rows. ... Relative protein amounts were determined by the MaxLFQ algorithm with a minimum ratio count of two.",
+   "reason": "Native MaxQuant txt-folder proteinGroups.txt with MaxLFQ columns; no post-software transformation is mentioned."
+  },
+  "PXD045547": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `Karakosta_Perifakio.pg_matrix.tsv`; 81 columns, 3643 rows; quantity None.",
+   "reason": "DIA-NN 1.8 pg_matrix deposited next to its pr_matrix and unique_genes_matrix; the methods describe no step after DIA-NN."
+  },
+  "PXD046570": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `20250212_150159_24C021_Ves-depleted_T2_Report.tsv`; 25 columns, 929 rows; quantity None.",
+   "reason": "In this Spectronaut pivot the 25 value columns are the PG.Quantity runs; the PG.Log2Quantity columns are separate and are not the value columns. The DIA-NN methods describe another experiment and name no transformation of this table."
+  },
+  "PXD048456": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `report.pg_matrix.tsv`; 42 columns, 9146 rows; quantity None.",
+   "reason": "Native DIA-NN pg_matrix; the RT-dependent cross-run normalisation named in the methods is DIA-NN's own."
+  },
+  "PXD048567": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups.txt`; 141 columns, 376 rows. ... LFQ intensity (0): none ... Intensity (141): Intensity 01, Intensity 01_20231123192355",
+   "reason": "Native MaxQuant Intensity columns beside the other txt outputs; Perseus is mentioned only for the bioinformatics analysis."
+  },
+  "PXD049683": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups.txt`; 20 columns, 3300 rows. Intensity (20): Intensity 01, Intensity 02, Intensity 03",
+   "reason": "A native MaxQuant proteinGroups.txt (Intensity columns, no LFQ) with no annotation rows; the methods only say MaxQuant v1.5.7.4 was used and name no transformation."
+  },
+  "PXD050990": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "‘Robust LC (high precision)’ was set for quantification and ‘RT & signal-dep’ was set for cross-run normalization.",
+   "reason": "The normalisation is DIA-NN's own, and report-first-pass.pg_matrix.tsv is DIA-NN's native matrix ('first-pass' is a DIA-NN pass, not a step that changes the scale)."
+  },
+  "PXD052895": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Further data analysis was performed in Perseus software (version 2.0.5.0), were the values were transformed to their log2-value and the biological replicates were grouped.",
+   "reason": "The log2 transform and imputation were done in Perseus after the software; the deposited report.pg_matrix.tsv is DIA-NN's own matrix with no Perseus rows."
+  },
+  "PXD052994": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `Nicolaidis_Aggelopoulou_30494.pg_matrix.tsv`; 112 columns, 3887 rows; quantity None.",
+   "reason": "A native DIA-NN 1.8.1 pg_matrix with no scale word in its name; R analysis comes later.",
+   "reread": "Claude reread: agrees; DIA-NN 1.8.1 pg_matrix beside its pr_matrix and unique_genes_matrix."
+  },
+  "PXD053422": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Data was filtered by q-value 0.01 and local regression normalization was used for the cross-run normalization. ... The data was further processed in R where relative abundance values were log2 transformed",
+   "reason": "Native Spectronaut pivot report (PG.Quantity) with its run's own normalisation; Excel filtering and log2 in R are later analysis steps."
+  },
+  "PXD055784": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups.txt`; 20 columns, 1475 rows. LFQ intensity (20): LFQ intensity AD1_protein1, LFQ intensity AD1_protein2",
+   "reason": "The table is a native MaxQuant proteinGroups.txt deposited with the full txt output (mqpar.xml, evidence.txt, summary.txt, parameters.txt); the methods describe Proteome Discoverer 2.2 instead but name no transformation of this table."
+  },
+  "PXD056331": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `LH_CRC_Revision_72h_Cavin1KD_Proteome_Report_Protein_groups_JVO.tsv`; 24 columns, 9961 rows; quantity None.",
+   "reason": "Spectronaut protein-group report pivot with '[n] run.PG.Quantity' value columns; the file name names no scale-changing step and the methods describe no transformation."
+  },
+  "PXD056356": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `search/FP22_DIA_SpecLib_Quant/diann-output/report.pg_matrix.tsv`; 143 columns, 7555 rows.",
+   "reason": "DIA-NN's own pg_matrix in FragPipe's diann-output folder, run-named columns, no annotation rows; the methods describe no transformation."
+  },
+  "PXD056620": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Normalisation of intensities across samples was performed using the MaxLFQ algorithm within the MaxQuant software.",
+   "reason": "The normalisation named is MaxQuant's own MaxLFQ, and the methods say the MaxQuant proteinGroups.txt output was used for downstream analysis."
+  },
+  "PXD056664": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Raw spectra were analyzed by the search engine DIA-NN (version 1.878) using a library-based approach",
+   "reason": "REX_pooled_fibers.pg_matrix.tsv is DIA-NN's native protein-group matrix, and no transformation of it is named."
+  },
+  "PXD057586": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Mass spectrometry proteomics data were analysed using DEP (v1.11.0) [109] on MaxQuant results. Data was filtered, normalized and imputed using default parameters.",
+   "reason": "DEP filtering, normalisation and imputation are analysis run on the MaxQuant results; the deposited txt/proteinGroups.txt is the native output with LFQ intensity columns."
+  },
+  "PXD057955": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "The protein level quantification (report.pg_matrix.tsv) and peptide level quantitation files (report.pr_matrix.tsv) are provided in the folder \"DIANN_Results.\"",
+   "reason": "The methods name the deposited report.pg_matrix.tsv as DIA-NN's own protein-level output."
+  },
+  "PXD058054": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `results.zip`, member `results/report-first-pass.pg_matrix.tsv`; 32 columns, 8992 rows; quantity None.",
+   "reason": "DIA-NN 1.8.1 first-pass pg_matrix inside results.zip; native output with no later processing described."
+  },
+  "PXD058255": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "DIA file was processed in Spectronaut using a default setting.",
+   "reason": "This is Spectronaut's own timestamped report (with its .params file), its value columns are PG.Quantity, and no later step is named.",
+   "reread": "Claude reread: agrees; Spectronaut report .xls beside its .params and the .sne, default settings."
+  },
+  "PXD058818": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups_matching_pre_20_40_30_180.txt`; 29 columns, 1321 rows. ... LFQ intensity (29): LFQ intensity 1_+180_Ex, ...",
+   "reason": "Renamed MaxQuant proteinGroups with native columns; the file name names a sample set, not a scale-changing step."
+  },
+  "PXD060145": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups_coRIC_control_0412.txt`; 45 columns, 3835 rows. ... The protein-level output files, after the removal of contaminant proteins and glycoproteins, were used for further statistics.",
+   "reason": "A renamed MaxQuant table with its full native column set (Reverse and Potential contaminant still present); neither the name nor the methods name a scale change, and the filtering is for later statistics."
+  },
+  "PXD060348": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `1300_all-combined_report.pg_matrix.tsv`; 39 columns, 6263 rows; quantity None.",
+   "reason": "DIA-NN pg_matrix with DIA-NN's native header (run paths as columns); 'all-combined' names the set of runs, not a scale step, and the methods describe no transformation."
+  },
+  "PXD060457": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "ProteinGroups.txt table from MQ output was analyzed using a homemade R Studio pipeline and a moderated t-test statistics from an empirical Bayes method was used.",
+   "reason": "The deposited proteinGroups_APEX_TBC1D22B_RQ_BT549.txt is the MaxQuant output (the suffix names the experiment) with LFQ intensity columns; R is downstream analysis."
+  },
+  "PXD061430": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `search/proteinGroups.txt`; 31 columns, 4860 rows. ... LFQ intensity (31): LFQ intensity 1, LFQ intensity 10",
+   "reason": "Native MaxQuant proteinGroups.txt in the search folder with LFQ intensity columns; the announcement text names no transformation."
+  },
+  "PXD061942": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `20240513_MS024_E2_S25-48_supernatant_DIAnn_report.tsv`; 71 columns, 2753 rows; quantity PG.MaxLFQ.",
+   "reason": "A native DIA-NN long report read on PG.MaxLFQ; the RT-dependent cross-run normalisation is DIA-NN's own, and FragPipe-Analyst log2 fold changes are later analysis."
+  },
+  "PXD064286": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `search/report.pg_matrix.tsv`; 45 columns, 5104 rows; quantity None.",
+   "reason": "DIA-NN report.pg_matrix.tsv in the search folder alongside DIA-NN's log, stats and pipeline files; native output."
+  },
+  "PXD065392": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `20240814_allreps-TOM-fragpipe.zip`, member `20240814_allreps-TOM/combined_protein.tsv`; 20 columns, 4224 rows; quantity None.",
+   "reason": "This is FragPipe's native combined_protein.tsv with Intensity and MaxLFQ Intensity columns, and no transformation is named."
+  },
+  "PXD067204": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Data were normalized in DIA-NN using MaxLFQ.",
+   "reason": "DIA-NN long report read on PG.MaxLFQ, DIA-NN's own normalised output; the KNN imputation was in R for the limma statistics."
+  },
+  "PXD068281": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Non-normalized intensities were exported, log2-transformed and normalization was carried out using an in-house R-script",
+   "reason": "Log2 and LOESS normalisation are done in an in-house R script after export; the deposited proteinGroups.txt is MaxQuant's own.",
+   "reread": "Claude reread: agrees; MaxQuant proteinGroups.txt; the methods log2-transform and LOESS-normalise exported non-normalised intensities in an R script afterwards."
+  },
+  "PXD068594": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Using Python (3.13.5) and the packages pandas (2.3.0) and directlfq (0.3.2), protein intensities were quantified using directLFQ",
+   "reason": "directLFQ was a later step; the deposited member is DIA-NN's own report.pg_matrix.tsv in a folder named E2V_pg_matrix_filesFromDIANN."
+  },
+  "PXD068982": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Table: `proteinGroups.txt`; 141 columns, 376 rows. ... LFQ intensity (0): none ... Intensity (141): Intensity 01, Intensity 01_20231123192355, ...",
+   "reason": "Native MaxQuant proteinGroups.txt read on its raw Intensity family (no LFQ columns); the Python statistics in the methods are analysis, not the deposited table."
+  },
+  "PXD069597": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Normalized protein intensity values from Spectronaut were log2-transformed prior to statistical analysis.",
+   "reason": "Spectronaut's own normalised PG.Quantity values were log2-transformed afterwards for the ROTS statistics in R; nothing says the deposited report holds the logged values."
+  },
+  "PXD069667": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `Cassette.pg_matrix.tsv`; 27 columns, 901 rows; quantity None.",
+   "reason": "A native DIA-NN 2.0 pg_matrix name and header, and the methods describe only the DIA-NN run."
+  },
+  "PXD071177": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `report.tsv`; 30 columns, 4974 rows; quantity PG.MaxLFQ.",
+   "reason": "DIA-NN main report in long format quantified on PG.MaxLFQ, DIA-NN's own output; the methods describe no later transformation."
+  },
+  "PXD071670": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Label by script: **linear** (DIA-NN, diann_report, layout long). Table: `search/1050_DIANM_report.parquet`; 38 columns, 3602 rows; value column PG.MaxLFQ.",
+   "reason": "A DIA-NN main report read on PG.MaxLFQ, DIA-NN's own output; 'DIANM' looks like a typo for DIANN (its siblings are *_DIANN_report.parquet) and the announcement describes no transformation."
+  },
+  "PXD072589": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `ALICO_D150_DIA_results.pg_matrix.tsv`; 20 columns, 7190 rows; quantity None.",
+   "reason": "Native DIA-NN pg_matrix with RT-dependent normalisation (DIA-NN's own); the Excel processing described applies to the Proteome Discoverer data."
+  },
+  "PXD073189": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Protein quantitation was undertaken using the MaxLFQ option ... Data analysis was undertaken as above utilizing Perseus v1.6.07.",
+   "reason": "Native Spectronaut protein report (PG.Quantity, MaxLFQ in Spectronaut); the member name's PEP_0_01 is an identification threshold, and Perseus is the later analysis."
+  },
+  "PXD073251": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Protein intensities reported in proteinGroups.txt file and evidence intensities reported in evidence.txt file (output of MaxQuant program) were further processed using the software container environment",
+   "reason": "The methods call the deposited proteinGroups.txt MaxQuant's output, processed further only afterwards."
+  },
+  "PXD073754": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "differential expression analysis performed using the DEP R package (Zhang et al, 2018). Data was normalised with variance stabilising normalisation (VSN)",
+   "reason": "DIA-NN's own report.parquet read on PG.MaxLFQ; VSN, imputation and log2 are DEP/limma analysis steps after DIA-NN.",
+   "reread": "Claude reread: agrees; DIA-NN report.parquet read on PG.MaxLFQ; VSN, imputation and log2 are in the DEP R analysis afterwards."
+  },
+  "PXD074117": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "All analyses were performed in R 4.2.2 (2022-10-31, UCRT) within RStudio. ... Raw SWATH-DIA intensities at the protein and peptide levels were log2-transformed",
+   "reason": "Log2, quantile normalisation, ComBat and kNN imputation are R analysis; the deposited report.pg_matrix.tsv is DIA-NN's native matrix (202 runs incl. calibration runs, not the 174 analysed samples)."
+  },
+  "PXD074156": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Match-between-runs was enabled, and cross-run global normalization was applied prior to downstream analyses (Table S1). Protein-group intensities were log2-transformed, and proteins were retained for differential analysis only if they contained ≥70% valid values across the dataset.",
+   "reason": "The global normalisation is DIA-NN's own and the log2 step belongs to the R analysis; the chosen report.parquet is DIA-NN's main report (beside report.log.txt) read on PG.MaxLFQ."
+  },
+  "PXD074256": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `quant/DIANN_output/DIA24_HemaQC_20231219_report-first-pass.pg_matrix.tsv`; 20 columns, 2256 rows; quantity None.",
+   "reason": "DIA-NN first-pass pg_matrix in the DIANN_output folder next to DIA-NN's stats and log files; native output."
+  },
+  "PXD074830": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Data was searched using DIANN v1.8.1 in library free mode. Data were analysed with Perseus, LIMMA packages, Excel and visualised with Prism and Adobe Illustrator.",
+   "reason": "ELN351177_Final.pg_matrix.tsv is a native DIA-NN matrix with run-path headers next to its log and stats files; the deposit's VSN-normalised csv is a separate file, not the chosen table."
+  },
+  "PXD075835": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "In similar fashion, the shotgun proteomics data were further analyzed in Perseus after uploading the combined_protein table from FragPipe. MaxLFQ intensities were log2-transformed and the data were normalized by subtracting the median intensity in each sample.",
+   "reason": "Log2, median normalisation and imputation are done in Perseus after uploading FragPipe's combined_protein table, whose deposited copy has native MaxLFQ Intensity columns and no annotation rows."
+  },
+  "PXD076462": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "rebuilt (second judgement)",
+   "quote": "Perseus software v.1.6.2.0 was used to process the data further. ... The iBAQ protein intensity values were log-transformed",
+   "reason": "The deposited txt.zip/txt/proteinGroups.txt is MaxQuant's native output; log transformation is done later in Perseus, on iBAQ."
+  },
+  "PXD080843": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Data filtering and calculation of LFQ values were performed using the R package DIAgui",
+   "reason": "DIAgui's LFQ in R was a later step; the deposited report.pg_matrix.tsv, beside report.pr_matrix.tsv and report.tsv, is DIA-NN's own matrix."
+  },
+  "PXD082023": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Protein search was performed with DIANN 1.8.1",
+   "reason": "report.pg_matrix.tsv is DIA-NN's native protein-group matrix, and no transformation is named."
+  },
+  "PXD082653": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "first (layout only changed)",
+   "quote": "Table: `main_ConvNeXt_report.pg_matrix.tsv`; 83 columns, 8175 rows; quantity None.",
+   "reason": "Native DIA-NN 2.2.0 pg_matrix ('ConvNeXt' names the hit-selection model, not a scale step) with DIA-NN's own RT-dependent normalisation."
+  }
+ }
+}
