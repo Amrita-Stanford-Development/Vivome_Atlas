@@ -113,8 +113,16 @@ _MISSING_VALUES = frozenset({"", "NA", "Filtered", "NaN"})
 # (benchmark/heldout_formats.read_maxquant) reads a table with gene names the
 # same way. SILAC and TMT searches are refused: their intensities are labels
 # or whole plexes, not cells.
+#
+# A header is MaxQuant's when it has "Majority protein IDs" and "Gene names",
+# spelled so (the test before 2026-11-06), or a majority protein IDs column
+# in any case (MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs") and a
+# MaxQuant quantity column. So a plain matrix whose identifier column is
+# named "Majority protein IDs" is read as a plain matrix, as before. When a
+# name comes in two spellings, MaxQuant's own comes first.
 _MAXQUANT_IDS = "majority protein ids"
 _MAXQUANT_GENES = "gene names"
+_MAXQUANT_SPELLINGS = {_MAXQUANT_IDS: "Majority protein IDs", _MAXQUANT_GENES: "Gene names"}
 _MAXQUANT_LEFT_OUT = ("REV__", "CON__")
 _FASTA_ACCESSION = re.compile(r"^(?:sp|tr)\|([^|]+)\|")
 _MAXQUANT_FLAGS = frozenset({"Only identified by site", "Reverse", "Potential contaminant", "Contaminant"})
@@ -139,12 +147,12 @@ _FRAGPIPE_DECOY_PREFIXES = ("contam_", "rev_")
 # extension. 0 is "not quantified". The rows are named by the first of
 # _SPECTRONAUT_IDS the report has: "PG.Genes", else the protein groups, else
 # the accessions (B3's corpus met reports without PG.Genes, and one without
-# the "PG." prefix on its annotation columns, PXD065519). A report with
-# peptide, precursor or fragment columns (PEP., EG., FG.) gives each protein
-# group several rows, and is refused.
+# the "PG." prefix on its annotation columns, PXD065519). A pivot with
+# peptide or precursor columns (PEP., EG.) repeats its protein group's
+# PG.Quantity on each of the group's rows; collapse_duplicate_genes merges
+# the rows of one gene by their median, which is that same value.
 _SPECTRONAUT_IDS = ("PG.Genes", "Genes", "PG.ProteinGroups", "ProteinGroups", "PG.ProteinAccessions",
                     "ProteinAccessions")
-_SPECTRONAUT_FINER = re.compile(r"^(?:\[\d+\]\s*.+?\.)?(?:PEP|EG|FG)\.")
 _SPECTRONAUT_QUANTITIES = (re.compile(r"^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$"),)
 _RUN_EXTENSION = re.compile(r"\.(raw|d|wiff|mzml|htrms)$", re.IGNORECASE)
 
@@ -188,11 +196,17 @@ def _short_row(line: int, fields: int, header: list[str]) -> UnreadableMatrix:
 
 def _maxquant_columns(header: list[str]) -> "tuple[str, str | None] | None":
     """MaxQuant's majority protein IDs column and its gene names column (None
-    when it has none), spelled as the header spells them; None when the
-    header is not MaxQuant's."""
-    names = {name.lower(): name for name in reversed(header)}  # the first spelling wins
-    ids = names.get(_MAXQUANT_IDS)
-    return None if ids is None else (ids, names.get(_MAXQUANT_GENES))
+    when it has none), spelled as the header spells them, MaxQuant's own
+    spelling first; None when the header is not MaxQuant's."""
+    names = {name.lower(): name for name in reversed(header)}  # else the first spelling wins
+    names.update({low: exact for low, exact in _MAXQUANT_SPELLINGS.items() if exact in header})
+    ids, genes = names.get(_MAXQUANT_IDS), names.get(_MAXQUANT_GENES)
+    if ids is None:
+        return None
+    exact_pair = all(exact in header for exact in _MAXQUANT_SPELLINGS.values())
+    if not exact_pair and not any(pattern.match(name) for pattern in _MAXQUANT_QUANTITIES for name in header):
+        return None
+    return ids, genes
 
 
 def _maxquant_ids(text: str) -> str:
@@ -232,17 +246,9 @@ def header_layout(header: list[str]) -> str:
 
 def refuse_by_header(header: list[str]) -> None:
     """The refusals parse_matrix_csv makes from the header alone, before any
-    row is read: a MaxQuant SILAC or TMT search, a peptide-level Spectronaut
-    report."""
-    layout = header_layout(header)
-    if layout == "maxquant":
+    row is read: a MaxQuant SILAC or TMT search."""
+    if header_layout(header) == "maxquant":
         _refuse_labelled_maxquant(header)
-    elif layout == "spectronaut":
-        finer = next((name for name in header if _SPECTRONAUT_FINER.match(name)), None)
-        if finer is not None:
-            raise UnreadableMatrix(f"this Spectronaut report is at the peptide level (it has a {finer!r} column): "
-                                   "one protein group fills several rows. Export the protein-group pivot report, "
-                                   "whose rows are protein groups, and send that file.")
 
 
 def _refuse_labelled_maxquant(header: list[str]) -> None:

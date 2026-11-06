@@ -278,6 +278,54 @@ class RunnerFetchTests(unittest.TestCase):
         self.assertIsNone(refuse(long, base + ["Ratio H/L s1"]))
 
 
+class CleanupRunnerTests(unittest.TestCase):
+    """B3's third visit (research/notebooks/value_scale_corpus.py): the
+    selection and the visit."""
+
+    def runner(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("value_scale_corpus",
+                                                      REPO / "research/notebooks/value_scale_corpus.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        return runner
+
+    def test_a_header_that_cannot_be_read_now_is_not_chosen_by_the_probe(self):
+        from types import SimpleNamespace
+        from unittest import mock
+        runner = self.runner()
+        out = Path(tempfile.mkdtemp()) / "cleanup.json"
+        records = [{"accession": f"PXD00000{i}", "outcome": "too few columns", "header_columns": 0} for i in range(3)]
+        now = {"PXD000000": 0, "PXD000001": None, "PXD000002": 25}
+        with mock.patch.object(runner, "_records", return_value=records), \
+                mock.patch.object(runner, "cleanup_reasons", return_value=[]), \
+                mock.patch.object(runner, "make_tools"), mock.patch.object(runner.frame, "load"), \
+                mock.patch.object(runner, "_zero_columns_header_now", side_effect=lambda r, tools: now[r["accession"]]), \
+                mock.patch.object(runner, "CLEANUP", out):
+            runner.cmd_cleanup_selection(SimpleNamespace(workers=1))
+        written = json.loads(out.read_text(encoding="utf-8"))
+        self.assertEqual(written["records"], {"PXD000002": ["header"]})
+        self.assertEqual(written["probe"], {"read": 3, "now_nonzero": 1, "now_unreadable": 1})
+
+    def test_the_third_visit_is_made_once(self):
+        """A second run would nest the third visit inside a fourth."""
+        from types import SimpleNamespace
+        from unittest import mock
+        runner = self.runner()
+        folder = Path(tempfile.mkdtemp())
+        log, chosen = folder / "walk.jsonl", folder / "cleanup.json"
+        line = (json.dumps({"accession": "PXD000001", "outcome": "kept", "revisited_for": ["reader"],
+                            "revisited_from": {"outcome": "unparseable"}}) + "\n").encode("utf-8")
+        log.write_bytes(line)
+        chosen.write_bytes(json.dumps({"records": {"PXD000001": ["reader"]}}).encode("utf-8"))
+        with mock.patch.object(runner, "LOG", log), mock.patch.object(runner, "CLEANUP", chosen), \
+                mock.patch.object(runner, "make_tools", side_effect=AssertionError("visited")):
+            with self.assertRaises(SystemExit) as caught:
+                runner.cmd_revisit(SimpleNamespace(cleanup=True, workers=1))
+        self.assertIn("PXD000001", str(caught.exception))
+        self.assertEqual(log.read_bytes(), line)
+
+
 class ParsedTablePlaceTests(unittest.TestCase):
     def test_the_parsed_table_lands_in_the_deposits_own_folder_however_deep_its_file(self):
         """95 of the walk's 366 kept tables were saved beside a file in a

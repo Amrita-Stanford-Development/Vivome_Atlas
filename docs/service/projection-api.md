@@ -120,10 +120,13 @@ Four more protein tables are read as their software writes them
   - there is one cell per run, named by the run without its "[n]" prefix or
     file extension;
   - "Filtered", "NaN" and 0 are missing;
-  - a report with peptide, precursor or fragment columns ("PEP.", "EG.",
-    "FG.") is refused: each protein group fills several of its rows.
-- **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs", in any
-  case: MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs"):
+  - a pivot with peptide or precursor columns ("PEP.", "EG.") repeats its
+    protein group's quantity on each of the group's rows. The rows of one
+    gene are merged by their median, which is that same value.
+- **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs" and
+  "Gene names", spelled so; or "Majority protein IDs" in any case, as
+  MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs", and an "Intensity
+  <sample>" or "LFQ intensity <sample>" column):
   - "Gene names" gives the identifiers. A table without that column is named
     by its "Majority protein IDs": UniProt accessions, with decoy (`REV__`)
     and contaminant (`CON__`) members left out and a FASTA header

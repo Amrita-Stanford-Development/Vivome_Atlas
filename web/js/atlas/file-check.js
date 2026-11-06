@@ -46,23 +46,24 @@ const MAXQUANT_REFUSALS = [
   [(f) => /^Ratio [HML]\/[HML]/.test(f), 'This MaxQuant table is a SILAC search: its intensities are labels, not cells. The service reads label-free tables.'],
 ];
 // MaxQuant's protein-group column, in any case (MaxQuant 1.0 to 1.2 wrote
-// "Majority Protein IDs"): the service reads a table with it as MaxQuant's,
-// its rows named by "Gene names", else by these protein IDs.
+// "Majority Protein IDs"). The service reads a header as MaxQuant's when it
+// has "Majority protein IDs" and "Gene names", spelled so, or this column in
+// any case and a MaxQuant quantity column; its rows are named by "Gene
+// names", else by these protein IDs.
 export const MAXQUANT_IDS = 'majority protein ids';
+function isMaxquant(fields) {
+  if (!fields.some((f) => f.toLowerCase() === MAXQUANT_IDS)) return false;
+  return (fields.includes('Majority protein IDs') && fields.includes('Gene names'))
+    || fields.some((f) => MAXQUANT_QUANTITIES.some((pattern) => pattern.test(f)));
+}
 // Spectronaut's protein-group pivot report: one "[n] <run>.PG.Quantity" column
 // per run, its rows named by the first of SPECTRONAUT_IDS the report has (the
-// service's _SPECTRONAUT_IDS). A report with peptide, precursor or fragment
-// columns gives each protein group several rows, and is refused.
+// service's _SPECTRONAUT_IDS). A pivot with peptide or precursor columns
+// repeats each protein group's quantity on several rows, which the service
+// merges.
 export const SPECTRONAUT_IDS = Object.freeze(['PG.Genes', 'Genes', 'PG.ProteinGroups', 'ProteinGroups',
   'PG.ProteinAccessions', 'ProteinAccessions']);
 const SPECTRONAUT_QUANTITIES = [/^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$/];
-const SPECTRONAUT_FINER = /^(?:\[\d+\]\s*.+?\.)?(?:PEP|EG|FG)\./;
-function spectronautRefusal(fields) {
-  const finer = fields.find((f) => SPECTRONAUT_FINER.test(f));
-  return finer === undefined ? undefined
-    : `This Spectronaut report is at the peptide level (it has a ${finer} column): one protein group fills several rows. `
-      + 'Export the protein-group pivot report, whose rows are protein groups, and send that file.';
-}
 const QUANTITIES = { spectronaut: SPECTRONAUT_QUANTITIES, maxquant: MAXQUANT_QUANTITIES, 'fragpipe-lfq': FRAGPIPE_LFQ_QUANTITIES };
 
 // The service's missing values (service/pipeline/alignment.py, _MISSING_VALUES).
@@ -272,15 +273,14 @@ export function parseHeader(line) {
   const separator = tabs > commas ? '\t' : ',';
   const fields = splitFields(text, separator);
   // the service's header tests, in its order (service/pipeline/alignment.py header_layout)
-  const maxquant = fields.some((f) => f.toLowerCase() === MAXQUANT_IDS);
+  const maxquant = isMaxquant(fields);
   const spectronaut = !maxquant && SPECTRONAUT_IDS.some((name) => fields.includes(name))
     && fields.some((f) => SPECTRONAUT_QUANTITIES[0].test(f));
   const fragpipeLfq = !maxquant && !spectronaut && fields.includes('Gene') && fields.includes('Combined Total Peptides');
   if (maxquant || spectronaut || fragpipeLfq) {
     const format = maxquant ? 'maxquant' : spectronaut ? 'spectronaut' : 'fragpipe-lfq';
     const cells = cellColumns(fields, format).length;
-    const refusal = maxquant ? MAXQUANT_REFUSALS.find(([is]) => fields.some(is))?.[1]
-      : spectronaut ? spectronautRefusal(fields) : undefined;
+    const refusal = maxquant ? MAXQUANT_REFUSALS.find(([is]) => fields.some(is))?.[1] : undefined;
     return {
       separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells,
       format, ...(refusal ? { refusal } : {}),

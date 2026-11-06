@@ -229,13 +229,32 @@ def text_encoding(path: Path) -> str:
     return "utf-8-sig"
 
 
+def readable_encoding(path: Path) -> str:
+    """text_encoding, refusing what the service refuses before it decodes an
+    upload (service/app.py `_decode_matrix`): UTF-16 cut mid-character, an
+    Excel workbook, and a binary file (Parquet, or a NUL in the first 4,096
+    bytes of a file that is not UTF-16)."""
+    encoding, size = text_encoding(path), path.stat().st_size
+    if encoding == "utf-16":
+        if size % 2:
+            raise ValueError("the file ends in half a character, so it looks cut off")
+        return encoding
+    with path.open("rb") as fh:
+        head = fh.read(4096)
+        fh.seek(max(size - 4, 0))
+        tail = fh.read(4)
+    if head.startswith(b"PK\x03\x04"):
+        raise ValueError("the file is an Excel workbook (.xlsx), not text")
+    if (head.startswith(b"PAR1") and tail == b"PAR1") or b"\x00" in head:
+        raise ValueError("the file is a binary file (Parquet, for example), not text")
+    return encoding
+
+
 def read_text(path: Path) -> str:
-    """The file's text as the service decodes an upload: a byte Windows-1252
-    leaves undefined is replaced, and UTF-16 cut mid-character is refused."""
-    encoding, data = text_encoding(path), path.read_bytes()
-    if encoding == "utf-16" and len(data) % 2:
-        raise ValueError("the file ends in half a character, so it looks cut off")
-    return data.decode(encoding, errors="replace")
+    """The file's text as the service decodes an upload: what it refuses is
+    refused (readable_encoding), and a byte Windows-1252 leaves undefined is
+    replaced."""
+    return path.read_bytes().decode(readable_encoding(path), errors="replace")
 
 
 def _sep(path: Path, encoding: str) -> str:
@@ -247,7 +266,7 @@ def _sep(path: Path, encoding: str) -> str:
 def read_proteome_discoverer(path: Path) -> Table:
     """'Abundance: ' columns; Gene Symbol as the identifier, else Accession;
     rows with neither dropped."""
-    encoding = text_encoding(path)
+    encoding = readable_encoding(path)
     df = pd.read_csv(path, sep=_sep(path, encoding), dtype=str, keep_default_na=False, encoding=encoding,
                      encoding_errors="replace")
     cells = [c for c in df.columns if c.startswith(PD_PREFIX)]
@@ -270,7 +289,7 @@ def read_long(path: Path, layout: str) -> Table:
         import pyarrow.parquet as pq
         names = pq.ParquetFile(path).schema_arrow.names
     else:
-        encoding = text_encoding(path)
+        encoding = readable_encoding(path)
         sep = _sep(path, encoding)
         names = pd.read_csv(path, sep=sep, nrows=0, encoding=encoding, encoding_errors="replace").columns.tolist()
     if layout == "diann_report":
@@ -302,8 +321,11 @@ def read_long(path: Path, layout: str) -> Table:
 
 
 def is_tmt_integrator(columns) -> bool:
-    """The service's parser reads a 'Gene' table without 'Genes' or FragPipe's
-    LFQ markers as a TMT-Integrator table."""
+    """A 'Gene' table without 'Genes', FragPipe's LFQ markers or a majority
+    protein IDs column. The runner asks the parser itself
+    (alignment.header_layout, "fragpipe-tmt"); nothing calls this but its
+    test, and it does not test for a Spectronaut pivot or for the parser's
+    MaxQuant quantity columns."""
     cols = set(columns)
     return ("Gene" in cols and "Genes" not in cols and not all(m in cols for m in FRAGPIPE_LFQ_MARKERS)
             and not any(c.lower() == MAXQUANT_IDS for c in cols))

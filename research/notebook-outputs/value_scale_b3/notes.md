@@ -368,7 +368,8 @@ a stop below 10,000, are no longer needed, because the walk finished at
      the corpus tool: lone-CR line endings; MaxQuant tables without "Gene
      names" (named by their protein IDs), and MaxQuant 1.0 to 1.2's
      title-case names; Spectronaut pivots without PG.Genes or without the
-     "PG." prefix, with peptide-level reports refused in words; macOS
+     "PG." prefix (a code review dropped a refusal of peptide-level pivots
+     before the third visit ran: the parser already read them); macOS
      companion files ("._"), never chosen again; long reports in
      Windows-1252, read as the service reads an upload;
    - every record these touch, and B3's 31 remaining failed reads, visited

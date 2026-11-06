@@ -310,7 +310,9 @@ found and read, and they add two skip reasons.
 
 Written after the clean-up's code (`76d490a`) and before its third visit
 ran. No detector statistic, gate or verdict had been computed on any
-calibration or test deposit.
+calibration or test deposit. Revised the same day, still before the third
+visit ran, after a code review of the clean-up; the revision is in
+`valuescale/bank/expectations/b3_revisit2.json`, `changed_before_the_run`.
 
 B3's walk met faults in our own code: tables the walk could not read, or
 read wrongly, because of the service's parser or the corpus tool, not
@@ -320,26 +322,32 @@ because of the files. The owner chose to fix all of them before B4
 - **What changed, test first, in the service's parser, the site's file
   check and the corpus tool:**
   - a lone CR ends a line (Excel's "CSV (Macintosh)");
-  - a MaxQuant table is known by "Majority protein IDs" in any case. Without
-    "Gene names", its rows are named by their majority protein IDs: UniProt
-    accessions, with decoys and contaminants left out;
+  - a MaxQuant table is known by "Majority protein IDs" with "Gene names",
+    spelled so, as before; or by "Majority protein IDs" in any case with a
+    MaxQuant quantity column ("Intensity <sample>" or "LFQ intensity
+    <sample>"). Without "Gene names", its rows are named by their majority
+    protein IDs: UniProt accessions, with decoys and contaminants left out;
   - a Spectronaut pivot is named by PG.Genes, else its protein groups, else
-    its accessions, with or without the "PG." prefix. A peptide-level report
-    is refused on its header, before the full fetch, as amendment 2's
-    MaxQuant refusal is;
+    its accessions, with or without the "PG." prefix. A pivot with peptide
+    or precursor columns is read, as before: each row repeats its protein
+    group's quantity;
   - a macOS companion file ("._", or under `__MACOSX/`) is never a
     candidate;
   - every table is decoded as the service decodes an upload (UTF-16 by its
-    byte order mark, UTF-8, else Windows-1252), and the header reader knows
-    UTF-16 by its byte order mark.
+    byte order mark, UTF-8, else Windows-1252), and what the service refuses
+    as not text (a workbook, a binary file, UTF-16 cut mid-character) is
+    unparseable. The header reader knows UTF-16 by its byte order mark.
 - **Effect on step 4** ("eligible when it parses ... with the service's
   parser"): the wording stands, and the parser reads more tables. A table
-  it read before is read as before, with one exception: a Spectronaut pivot
-  whose only identifier column is PG.ProteinGroups was read as a plain
-  matrix and is now read as Spectronaut's. Its cells are named by run, and a
-  0 is missing, as the parser's Spectronaut rule says.
-  - In B3's corpus this touches two kept tables, PXD046524 (calibration) and
-    PXD037506 (test).
+  it read before is read as before, unless its header now passes the
+  MaxQuant or Spectronaut test it failed before. Such a table takes that
+  reader's rule: its cells are named by sample or by run, and a 0 is
+  missing. In a MaxQuant table, decoy, contaminant and flagged rows are also
+  left out.
+  - In B3's corpus, two tables the parser read before take a new reader.
+    Both are kept Spectronaut pivots whose only identifier column is
+    PG.ProteinGroups: PXD046524 (calibration) and PXD037506 (test). Every
+    other table whose reader changes was unparseable before.
   - On the diagnostic bank it touches MSV000099294's two tables. Their values
     are identical (they hold no 0), and only their cells' names change.
     `valuescale/corpus/bank.json`, frozen on 2026-10-28, still lists their

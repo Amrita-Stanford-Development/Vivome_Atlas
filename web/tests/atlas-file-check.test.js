@@ -75,12 +75,19 @@ test('the reader is chosen by the service\'s header tests, in its order', () => 
     assert.deepEqual(parseHeader(header),
       { separator: '\t', columns: ids.length + 2, annotation: ids.length, cellEstimate: 2, format: 'spectronaut' }, ids.join());
   }
+  // a header that passes MaxQuant's test and Spectronaut's is MaxQuant's
+  const both = ['Majority protein IDs', 'Gene names', 'PG.Genes', '[1] a.raw.PG.Quantity', 'LFQ intensity S1'].join('\t');
+  assert.equal(parseHeader(both).format, 'maxquant');
+  // "Majority protein IDs" alone, or in another spelling, needs a MaxQuant quantity column, as in the service
+  assert.equal(parseHeader(['Majority protein IDs', 'c1', 'c2'].join('\t')).format, 'matrix');
+  assert.equal(parseHeader(['Majority protein IDs', 'Gene names', 'c1'].join('\t')).format, 'maxquant');
 });
 
-test('a peptide-level Spectronaut report is refused in words, as the service refuses it', async () => {
-  const header = ['PG.ProteinAccessions', 'PEP.StrippedSequence', '[1] a.raw.PG.Quantity'].join('\t');
-  assert.match(parseHeader(header).refusal, /peptide level.*PEP\.StrippedSequence/);
-  await assert.rejects(checkFile(blob(`${header}\nP1\tPEPTIDEK\t10\n`)), /peptide level/);
+test('a precursor-level Spectronaut pivot is read, as the service reads it', async () => {
+  // its rows repeat their protein group's PG.Quantity; the service merges the rows of one gene
+  const header = ['PG.ProteinAccessions', 'PG.Genes', 'EG.PrecursorId', '[1] a.raw.PG.Quantity'].join('\t');
+  assert.deepEqual(parseHeader(header), { separator: '\t', columns: 4, annotation: 3, cellEstimate: 1, format: 'spectronaut' });
+  await assert.doesNotReject(checkFile(blob(`${header}\nP1\tGENE1\t_PEPTIDEK_.2\t10\n`)));
 });
 
 test('the Spectronaut identifier columns and the MaxQuant column are the service\'s own', () => {

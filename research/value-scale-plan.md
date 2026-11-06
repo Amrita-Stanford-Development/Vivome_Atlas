@@ -7,7 +7,7 @@ Phase B, as of 2026-11-06:
 - **B1, the cost study:** done, with its failed row accepted by the owner (`8608c11`, `ab18152`).
 - **B2, the method:** done, with its failures accepted by the owner (`0e147eb`, `19d79eb`).
 - **B3, the corpus:** run (`5c9e521`), with its failed row accepted by the owner on 2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
-- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`, not yet deployed. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed, and the visit is running.
+- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`, not yet deployed. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed. A code review's fixes came before the visit ran: the refusal of peptide-level Spectronaut pivots is dropped, as the parser read them before, and the MaxQuant test is narrowed so a plain matrix reads as before (protocol amendment 3; `b3_revisit2.json`, `changed_before_the_run`). The selection is unchanged. Then the visit.
 - **B4 to B7:** not started.
 
 Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 75).

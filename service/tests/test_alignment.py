@@ -163,6 +163,26 @@ class ParseMatrixCsvTests(unittest.TestCase):
         for layout, header in cases.items():
             with self.subTest(layout=layout):
                 self.assertEqual(alignment.header_layout(header), layout)
+        # the order: a header that passes MaxQuant's test and Spectronaut's is MaxQuant's
+        both = ["Majority protein IDs", "Gene names", "PG.Genes", "[1] a.raw.PG.Quantity", "LFQ intensity S1"]
+        self.assertEqual(alignment.header_layout(both), "maxquant")
+
+    def test_a_plain_matrix_named_by_majority_protein_ids_is_read_as_before(self):
+        # MaxQuant's reader takes "Majority protein IDs" with "Gene names", spelled so, as before 2026-11-06.
+        # Another spelling, or the IDs column alone, also needs a MaxQuant quantity column; without one the
+        # header is a plain matrix's, read as it was before the clean-up
+        raw = alignment.parse_matrix_csv("Majority protein IDs\tc1\tc2\nP1\t1\t2\n")
+        self.assertEqual((raw.gene_names, raw.cell_ids), (["P1"], ["c1", "c2"]))
+        self.assertEqual(alignment.header_layout(["Majority protein IDs", "c1", "c2"]), "matrix")
+        self.assertEqual(alignment.header_layout(["majority protein ids", "Intensity c1"]), "maxquant")
+        self.assertEqual(alignment.header_layout(["Majority protein IDs", "Gene names", "c1"]), "maxquant")
+
+    def test_maxquant_columns_spelled_as_maxquant_spells_them_come_first(self):
+        header = ["Majority Protein IDs", "Majority protein IDs", "Gene Names", "Gene names", "Intensity a"]
+        raw = alignment.parse_matrix_csv("\t".join(header) + "\nX1\tP1\tOTHER\tGENE1\t5\n")
+        self.assertEqual(raw.gene_names, ["GENE1"])
+        raw = alignment.parse_matrix_csv("Majority Protein IDs\tMajority protein IDs\tIntensity a\nX1\tP1\t5\n")
+        self.assertEqual(raw.gene_names, ["P1"])
 
     # FragPipe's LFQ protein table (combined_protein.tsv, as in PXD058626).
     FRAGPIPE_HEADER = [
@@ -393,13 +413,20 @@ class SpectronautTests(unittest.TestCase):
         raw = self.read(["ProteinGroups", "[1] r1.raw.PG.Quantity"], [["P9", "7"]])
         self.assertEqual(raw.gene_names, ["P9"])
 
-    def test_a_peptide_level_report_is_refused_in_words(self):
-        # PXD038040: a PEP.StrippedSequence on each row, so one protein group fills many rows
-        with self.assertRaises(alignment.UnreadableMatrix) as caught:
-            self.read(["PG.ProteinAccessions", "PEP.StrippedSequence", "[1] a.raw.PG.Quantity"],
-                      [["P1", "PEPTIDEK", "10"], ["P1", "OTHERPEPK", "10"]])
-        self.assertIn("peptide", str(caught.exception))
-        self.assertIn("PEP.StrippedSequence", str(caught.exception))
+    def test_a_precursor_level_pivot_is_read_and_its_repeated_rows_collapse_by_the_median(self):
+        # PXD036468 and PXD060304 (EG.PrecursorId), PXD057503 and PXD057796 (PEP.GroupingKey), PXD038040
+        # (PEP.StrippedSequence): each row repeats its protein group's PG.Quantity, so the rows of one gene
+        # merge into that same value (collapse_duplicate_genes). Not refused: the service read them so before
+        header = ["PG.ProteinAccessions", "PG.Genes", "EG.PrecursorId", "[1] a.raw.PG.Quantity",
+                  "[2] b.raw.PG.Quantity"]
+        alignment.refuse_by_header(header)
+        raw = self.read(header, [["P04637", "TP53", "_PEPTIDEK_.2", "10", "20"],
+                                 ["P04637", "TP53", "_OTHERK_.3", "10", "20"],
+                                 ["P04217", "A1BG", "_THIRDK_.2", "5", "0"]])
+        self.assertEqual((raw.gene_names, raw.cell_ids), (["TP53", "TP53", "A1BG"], ["a", "b"]))
+        out = alignment.collapse_duplicate_genes(raw)
+        self.assertEqual(out.gene_names, ["TP53", "A1BG"])
+        np.testing.assert_array_equal(out.values, [[10, 20], [5, np.nan]])
 
 
 class ZScorePerGeneTests(unittest.TestCase):

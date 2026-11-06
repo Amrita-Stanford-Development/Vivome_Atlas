@@ -1,13 +1,18 @@
 """B3, the corpus (research/value-scale-plan.md; protocol
 research/benchmark/protocol-value-scale.md): the walk over the frame with
 the real network and the service's parser, the hand audit's sample, and the
-diagnostics against valuescale/bank/expectations/b3.json.
+diagnostics against valuescale/bank/expectations/b3.json. The clean-up of
+2026-11-06 (protocol amendment 3): cleanup-selection chooses the records
+its fixes touch, revisit --cleanup visits them a third time, and
+audit-cleanup lists the tables that visit adds for the audit, against
+valuescale/bank/expectations/b3_revisit2.json.
 
     python research/notebooks/value_scale_corpus.py walk [--workers 4]
     python research/notebooks/value_scale_corpus.py revisit [--workers 4]
     python research/notebooks/value_scale_corpus.py cleanup-selection [--workers 4]
     python research/notebooks/value_scale_corpus.py revisit --cleanup [--workers 4]
     python research/notebooks/value_scale_corpus.py audit-sample
+    python research/notebooks/value_scale_corpus.py audit-cleanup
     python research/notebooks/value_scale_corpus.py audit-packets
     python research/notebooks/value_scale_corpus.py report
 
@@ -164,8 +169,7 @@ def make_tools(record: dict) -> draw.Tools:
 
     def refuse(cand, header):
         """The parser's refusals from the header alone (alignment.refuse_by_header:
-        a MaxQuant SILAC or TMT search, a peptide-level Spectronaut report),
-        so the table need not come down first. The header is the parser's for
+        a MaxQuant SILAC or TMT search), so the table need not come down first. The header is the parser's for
         any header without a line break inside quotes."""
         if cand.kind == "proteome_discoverer" or cand.layout in ("long", "spectronaut_long"):
             return None  # read by tables.py, not by the service's parser
@@ -201,14 +205,18 @@ def cmd_revisit(args) -> int:
     --cleanup, the records in CLEANUP instead, each with its reasons as
     revisited_for."""
     check_patterns()
-    tools = make_tools(frame.load())
     if not args.cleanup:
         before = Counter(r["outcome"] for r in _records() if r["outcome"] in draw.FAILED_READS)
-        records = draw.revisit(LOG, tools, DATA, workers=args.workers)
+        records = draw.revisit(LOG, make_tools(frame.load()), DATA, workers=args.workers)
         again = [r for r in records if "revisited_from" in r]
         print(f"revisited {sum(before.values())} ({dict(before)}): now {dict(Counter(r['outcome'] for r in again))}")
         return 0
     chosen = json.loads(CLEANUP.read_text(encoding="utf-8"))["records"]
+    done = sorted(r["accession"] for r in _records() if r["accession"] in chosen and "revisited_for" in r)
+    if done:  # a second run would nest the third visit inside a fourth
+        raise SystemExit(f"the third visit is made once: {len(done)} chosen records already hold revisited_for "
+                         f"({', '.join(done[:5])})")
+    tools = make_tools(frame.load())
     before = Counter(r["outcome"] for r in _records() if r["accession"] in chosen)
 
     def visit_fn(acc, repo, split, tools, root):
@@ -302,7 +310,7 @@ def cmd_cleanup_selection(args) -> int:
         now = list(pool.map(lambda r: _zero_columns_header_now(r, tools), zero))
     probe = {r["accession"]: n for r, n in zip(zero, now)}
     for acc, n in probe.items():
-        if n != 0:
+        if n:  # names some now; a header that cannot be read now (None) is the server's, not the fault's
             chosen.setdefault(acc, []).append("header")
     out = {"about": "The records the clean-up of 2026-11-06 touches, each with its reasons "
                     "(research/notebooks/value_scale_corpus.py cleanup-selection; revisit --cleanup visits them).",
@@ -331,12 +339,42 @@ def audit_sample(records) -> dict:
 
 
 def cmd_audit_sample(args) -> int:
+    """The sample, drawn once: drawn again after the third visit it would
+    shift, as the rank takes in the tables the visit added."""
     sample = audit_sample(_records())
     existing = json.loads(AUDIT.read_text(encoding="utf-8")) if AUDIT.exists() else {}
+    if existing.get("sample"):
+        raise SystemExit(f"{AUDIT} already holds the sample; it is drawn once (b3_revisit2.json's audit)")
     existing["sample"] = sample
     existing.setdefault("verdicts", {})
     AUDIT.write_bytes((json.dumps(existing, indent=1, sort_keys=True) + "\n").encode("utf-8"))
     print({k: len(v) for k, v in sample.items()})
+    return 0
+
+
+def newly_kept(records) -> dict:
+    """By split, the tables the clean-up's third visit kept that no earlier
+    visit had kept."""
+    def kept_before(prior):
+        while prior:
+            if prior.get("outcome") == "kept":
+                return True
+            prior = prior.get("revisited_from")
+        return False
+    out = {s: [] for s in draw.SPLITS}
+    for r in records:
+        if r.get("revisited_for") and r["outcome"] == "kept" and not kept_before(r.get("revisited_from")):
+            out[r["split"]].append(r["accession"])
+    return {s: sorted(v) for s, v in out.items()}
+
+
+def cmd_audit_cleanup(args) -> int:
+    """audit.json's "cleanup": every table the third visit added, each to be
+    judged under b3.json's rubric (b3_revisit2.json's audit)."""
+    audit = json.loads(AUDIT.read_text(encoding="utf-8"))
+    audit["cleanup"] = newly_kept(_records())
+    AUDIT.write_bytes((json.dumps(audit, indent=1, sort_keys=True) + "\n").encode("utf-8"))
+    print({k: len(v) for k, v in audit["cleanup"].items()})
     return 0
 
 
@@ -438,7 +476,7 @@ def cmd_audit_packets(args) -> int:
     out = DATA / "audit"
     out.mkdir(parents=True, exist_ok=True)
     tools = make_tools(record)
-    for split, accs in audit["sample"].items():
+    for split, accs in [*audit["sample"].items(), *audit.get("cleanup", {}).items()]:
         for acc in accs:
             path = out / f"{acc}.md"
             if path.exists():
@@ -508,6 +546,14 @@ def report(records, record, audit) -> dict:
                      "pass": bool(judged) and len(judged) == len(sample) and agree / len(judged) >= 0.9},
         "B3_sealed": {"found": sealed_seen, "pass": not sealed_seen},
     }
+    if "cleanup" in audit:  # the tables the third visit added (b3_revisit2.json's audit)
+        added = [a for s in audit["cleanup"].values() for a in s]
+        judged_added = [a for a in added if a in audit_verdicts]
+        agree_added = sum(1 for a in judged_added if audit_verdicts[a].get("agrees"))
+        rows["B3_audit_cleanup"] = {
+            "found": {"added": len(added), "judged": len(judged_added), "agree": agree_added,
+                      "rate": round(agree_added / len(judged_added), 4) if judged_added else None},
+            "pass": len(judged_added) == len(added) and (not added or agree_added / len(judged_added) >= 0.9)}
     return {"step": "b3", "listed": listed, "kept": len(kept), "after_audit": len(final), "quotas": q,
             "rows": rows}
 
@@ -515,8 +561,8 @@ def report(records, record, audit) -> dict:
 def render(rep: dict) -> str:
     lines = ["# B3 diagnostics: the corpus", "",
              "Generated by `research/notebooks/value_scale_corpus.py report` from `valuescale/corpus/walk.jsonl`,",
-             "`frame.json` and `audit.json`, against `valuescale/bank/expectations/b3.json`. No detector statistic",
-             "was computed on any drawn deposit.", "",
+             "`frame.json` and `audit.json`, against `valuescale/bank/expectations/b3.json` (B3_audit_cleanup:",
+             "`b3_revisit2.json`, the third visit). No detector statistic was computed on any drawn deposit.", "",
              f"Listed {rep['listed']}; kept {rep['kept']}; after the audit {rep['after_audit']}.", "",
              "| Row | Pass | Found |", "|---|---|---|"]
     for name, row in rep["rows"].items():
@@ -546,11 +592,13 @@ def main() -> int:
     c = sub.add_parser("cleanup-selection")
     c.add_argument("--workers", type=int, default=4)
     sub.add_parser("audit-sample")
+    sub.add_parser("audit-cleanup")
     sub.add_parser("audit-packets")
     sub.add_parser("report")
     args = parser.parse_args()
     return {"walk": cmd_walk, "revisit": cmd_revisit, "cleanup-selection": cmd_cleanup_selection,
-            "audit-sample": cmd_audit_sample, "audit-packets": cmd_audit_packets, "report": cmd_report}[args.cmd](args)
+            "audit-sample": cmd_audit_sample, "audit-cleanup": cmd_audit_cleanup,
+            "audit-packets": cmd_audit_packets, "report": cmd_report}[args.cmd](args)
 
 
 if __name__ == "__main__":

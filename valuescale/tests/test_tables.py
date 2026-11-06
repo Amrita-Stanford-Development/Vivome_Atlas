@@ -200,8 +200,25 @@ class ReaderTests(unittest.TestCase):
         with self.assertRaises(ValueError):  # cut mid-character: the service refuses it rather than read it short
             tables.read_text(self.write_bytes("cut.tsv", b"\xff\xfe" + "A\tB\n1".encode("utf-16-le")[:-1]))
 
+    def test_what_the_service_refuses_as_not_text_is_refused_by_every_text_reader(self):
+        # service/app.py _decode_matrix: a workbook, a binary file (Parquet, or a NUL in the first 4096 bytes)
+        # and UTF-16 cut mid-character are refused, not read as text
+        long = "R.FileName\tPG.ProteinGroups\tPG.Quantity\nr1\tP1\t5\n"
+        cases = {"workbook": b"PK\x03\x04" + b"\x00" * 8, "parquet": b"PAR1" + b"\x01" * 8 + b"PAR1",
+                 "nul": b"A\tB\n1\x002\n", "cut": b"\xff\xfe" + long.encode("utf-16-le")[:-1]}
+        readers = {"text": tables.read_text, "long": lambda p: tables.read_long(p, "spectronaut_long"),
+                   "proteome discoverer": tables.read_proteome_discoverer}
+        for case, data in cases.items():
+            path = self.write_bytes(f"{case}.tsv", data)
+            for reader, read in readers.items():
+                with self.subTest(case=case, reader=reader):
+                    with self.assertRaisesRegex(ValueError, "not text|cut off"):
+                        read(path)
+        # a text file whose first field starts with "PAR1" is text, as the service reads it
+        self.assertEqual(tables.read_text(self.write_bytes("par.tsv", b"PAR1\tB\n1\t2\n")), "PAR1\tB\n1\t2\n")
+
     def test_windows_1252_and_utf_16_reports_are_read(self):
-        # B3's walk met three Spectronaut long reports and one Proteome Discoverer table in Windows-1252
+        # B3's walk met three Spectronaut long reports in Windows-1252; a Proteome Discoverer table is read the same way
         long = "R.FileName\tPG.ProteinGroups\tPG.Quantity\nrun—1\tP1\t5\nrun—2\tP1\t7\n"
         for i, data in enumerate([long.encode("cp1252"), b"\xff\xfe" + long.encode("utf-16-le")]):
             with self.subTest(i=i):
