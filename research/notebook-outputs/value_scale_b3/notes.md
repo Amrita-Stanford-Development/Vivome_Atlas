@@ -28,11 +28,12 @@ No detector statistic, gate or verdict was computed on any drawn deposit.
   `data/incoming/value-scale-corpus/<accession>/table.npz`, ready for B4.
 
 Kept linear deposits per stratum. A table counts in every stratum it
-reaches, so a table with 400 columns counts in S1, S2 and S3:
+reaches, so a table with 400 columns counts in S1, S2 and S3. The report
+counts after the audit:
 
 | Stratum | Calibration | Test | Quota |
 |---|---|---|---|
-| S1, 20 or more columns | 188 | 213 (212 after the audit) | 59 |
+| S1, 20 or more columns | 188 | 214 (213 after the audit) | 59 |
 | S2, 50 or more columns | 62 | 61 | 59 |
 | S3, 301 or more columns | 3 | 8 | 59 |
 
