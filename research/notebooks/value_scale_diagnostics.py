@@ -76,22 +76,11 @@ def r4(x) -> float | None:
 
 
 def layout_of(text: str) -> str:
-    """The parser path a file takes, by the same header tests in the same
-    order as alignment.parse_matrix_csv."""
+    """The parser path a file takes (alignment.header_layout)."""
     text = text[1:] if text.startswith("﻿") else text
-    first = text.split("\n", 1)[0]
+    first = re.split(r"\r\n|\r|\n", text, maxsplit=1)[0]
     header = next(csv.reader(io.StringIO(first), delimiter="\t" if first.count("\t") > first.count(",") else ","))
-    if all(m in header for m in alignment._MAXQUANT_MARKERS):
-        return "maxquant"
-    if alignment._SPECTRONAUT_GENES in header and any(alignment._SPECTRONAUT_QUANTITIES[0].match(h) for h in header):
-        return "spectronaut"
-    if all(m in header for m in alignment._FRAGPIPE_LFQ_MARKERS):
-        return "fragpipe-lfq"
-    if "Genes" in header:
-        return "dia-nn"
-    if "Gene" in header:
-        return "fragpipe-tmt"
-    return "matrix"
+    return alignment.header_layout(header)
 
 
 def basis_of(bank: dict, entry: dict) -> dict:

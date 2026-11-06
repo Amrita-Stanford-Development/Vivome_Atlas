@@ -17,7 +17,8 @@ FragPipe, MaxQuant, Spectronaut, Proteome Discoverer, DIA-NN long report,
 then the members of zip archives of 500 MB or less in the same order. Ties go
 by file name, then path (archive members: member name, then archive). Zipped
 raw instrument data (`*.d.zip`, `*.raw.zip`, `*.wiff.zip`, `*.mzML.zip` and
-the like) is never a protein table and is not listed.
+the like) is never a protein table and is not listed. Nor is a Mac's
+companion file: a name starting "._", or anything under `__MACOSX/`.
 
 **Labels**, on the names of the chosen value columns only (a Spectronaut
 pivot's PG.AvgLog2Quantity is not a value column):
@@ -32,6 +33,7 @@ The quantity patterns copy the service's parser's
 """
 from __future__ import annotations
 
+import codecs
 import fnmatch
 import json
 import re
@@ -61,7 +63,7 @@ BANK = Path(__file__).with_name("bank.json")
 
 DIA_NN_ANNOTATION = frozenset({"Protein.Group", "Protein.Ids", "Protein.Names", "Genes",
                                "First.Protein.Description", "N.Sequences", "N.Proteotypic.Sequences"})
-MAXQUANT_MARKERS = ("Majority protein IDs", "Gene names")
+MAXQUANT_IDS = "majority protein ids"  # MaxQuant's protein-group column, in any case
 MAXQUANT_QUANTITIES = (r"^LFQ intensity (.+)$", r"^Intensity (.+)$")
 FRAGPIPE_LFQ_MARKERS = ("Gene", "Combined Total Peptides")
 FRAGPIPE_LFQ_QUANTITIES = (r"^(?!Combined )(.+) MaxLFQ Intensity$",
@@ -101,8 +103,16 @@ class Table:
     quantity: str | None = None
 
 
+def is_mac_companion(name: str) -> bool:
+    """A Mac's companion file (its resource fork, "._name", or anything under
+    __MACOSX/), written beside the real file: never a table."""
+    return name.rsplit("/", 1)[-1].startswith("._") or "__macosx/" in name.lower()
+
+
 def name_kind(name: str) -> str | None:
     n = name.rsplit("/", 1)[-1].lower()
+    if is_mac_companion(name):
+        return None
     if fnmatch.fnmatch(n, "*pg_matrix.tsv"):
         return "diann_matrix"
     if fnmatch.fnmatch(n, "*combined_protein.tsv"):
@@ -200,8 +210,36 @@ def _numbers(frame: pd.DataFrame) -> np.ndarray:
         raise ValueError(f"text where a number belongs: {exc}") from None
 
 
-def _sep(path: Path) -> str:
-    with path.open("r", encoding="utf-8-sig", errors="replace") as fh:
+def text_encoding(path: Path) -> str:
+    """The encoding the service reads an uploaded matrix in (service/app.py
+    `_decode_matrix`): UTF-16 by its byte order mark, else UTF-8 (a byte
+    order mark skipped) when the whole file is UTF-8, else Windows-1252
+    (Excel's plain "CSV" on Windows)."""
+    with path.open("rb") as fh:
+        if fh.read(2) in (b"\xff\xfe", b"\xfe\xff"):
+            return "utf-16"
+        fh.seek(0)
+        decoder = codecs.getincrementaldecoder("utf-8")()
+        try:
+            for block in iter(lambda: fh.read(1 << 20), b""):
+                decoder.decode(block)
+            decoder.decode(b"", final=True)
+        except UnicodeDecodeError:
+            return "cp1252"
+    return "utf-8-sig"
+
+
+def read_text(path: Path) -> str:
+    """The file's text as the service decodes an upload: a byte Windows-1252
+    leaves undefined is replaced, and UTF-16 cut mid-character is refused."""
+    encoding, data = text_encoding(path), path.read_bytes()
+    if encoding == "utf-16" and len(data) % 2:
+        raise ValueError("the file ends in half a character, so it looks cut off")
+    return data.decode(encoding, errors="replace")
+
+
+def _sep(path: Path, encoding: str) -> str:
+    with path.open("r", encoding=encoding, errors="replace") as fh:
         line = fh.readline()
     return "\t" if line.count("\t") >= line.count(",") else ","
 
@@ -209,7 +247,9 @@ def _sep(path: Path) -> str:
 def read_proteome_discoverer(path: Path) -> Table:
     """'Abundance: ' columns; Gene Symbol as the identifier, else Accession;
     rows with neither dropped."""
-    df = pd.read_csv(path, sep=_sep(path), dtype=str, keep_default_na=False, encoding="utf-8-sig")
+    encoding = text_encoding(path)
+    df = pd.read_csv(path, sep=_sep(path, encoding), dtype=str, keep_default_na=False, encoding=encoding,
+                     encoding_errors="replace")
     cells = [c for c in df.columns if c.startswith(PD_PREFIX)]
     if not cells:
         raise ValueError(f"no column starts with {PD_PREFIX!r}")
@@ -230,7 +270,9 @@ def read_long(path: Path, layout: str) -> Table:
         import pyarrow.parquet as pq
         names = pq.ParquetFile(path).schema_arrow.names
     else:
-        names = pd.read_csv(path, sep=_sep(path), nrows=0, encoding="utf-8-sig").columns.tolist()
+        encoding = text_encoding(path)
+        sep = _sep(path, encoding)
+        names = pd.read_csv(path, sep=sep, nrows=0, encoding=encoding, encoding_errors="replace").columns.tolist()
     if layout == "diann_report":
         row, column = "Protein.Group", "Run"
         quantities = [q for q in ("PG.MaxLFQ", "PG.Quantity") if q in names]
@@ -243,8 +285,8 @@ def read_long(path: Path, layout: str) -> Table:
     if parquet:
         df = pd.read_parquet(path, columns=usecols).astype(str)
     else:
-        df = pd.read_csv(path, sep=_sep(path), usecols=usecols, dtype=str, keep_default_na=False,
-                         encoding="utf-8-sig")
+        df = pd.read_csv(path, sep=sep, usecols=usecols, dtype=str, keep_default_na=False,
+                         encoding=encoding, encoding_errors="replace")
     df = df[df[row].str.strip() != ""]
     if not quantities:
         raise ValueError("no quantity column")
@@ -264,7 +306,7 @@ def is_tmt_integrator(columns) -> bool:
     LFQ markers as a TMT-Integrator table."""
     cols = set(columns)
     return ("Gene" in cols and "Genes" not in cols and not all(m in cols for m in FRAGPIPE_LFQ_MARKERS)
-            and not all(m in cols for m in MAXQUANT_MARKERS))
+            and not any(c.lower() == MAXQUANT_IDS for c in cols))
 
 
 def quotes() -> dict:

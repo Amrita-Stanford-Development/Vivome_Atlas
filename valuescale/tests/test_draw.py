@@ -196,6 +196,22 @@ class RevisitTests(unittest.TestCase):
         self.assertNotIn("revisited_from", lines[0])
         self.assertEqual(lines[2], self.before[2])
 
+    def test_a_chosen_set_is_visited_again_and_earlier_visits_are_kept_inside(self):
+        # B3's third visit: the records the clean-up of 2026-11-06 touches, chosen by a rule
+        def second(acc, repo, split, tools, root):
+            return {"accession": acc, "repo": repo, "split": split, "outcome": "unparseable", "detail": "second"}
+
+        def third(acc, repo, split, tools, root):
+            return {"accession": acc, "repo": repo, "split": split, "outcome": "kept", "label": "linear"}
+        draw.revisit(self.log, _tools(), self.dir, visit_fn=second)
+        records = draw.revisit(self.log, _tools(), self.dir, visit_fn=third,
+                               select=lambda r: r["accession"] in ("PXD000102", "PXD000105"))
+        self.assertEqual([r["outcome"] for r in records], ["kept", "kept", "no candidate", "unparseable", "kept"])
+        self.assertEqual(records[1]["revisited_from"], {"outcome": "unparseable", "detail": "second", "revisited_from": {
+            "outcome": "fetch failed", "detail": "was fetch failed"}})
+        self.assertEqual(records[4]["revisited_from"], {"outcome": "unparseable", "detail": "was unparseable"})
+        self.assertEqual([json.loads(x) for x in self.log.read_text(encoding="utf-8").splitlines()], records)
+
     def test_a_revisit_that_stops_part_way_leaves_the_log_as_it_was(self):
         def visit_fn(acc, repo, split, tools, root):
             raise RuntimeError("stopped")

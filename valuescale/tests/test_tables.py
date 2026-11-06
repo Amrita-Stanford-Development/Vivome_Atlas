@@ -84,6 +84,17 @@ class CandidateTests(unittest.TestCase):
         got, _ = self.first(files, members=members)
         self.assertEqual((got.kind, got.entry.file.path, got.entry.member), ("maxquant", "small.zip", "sub/proteinGroups.txt"))
 
+    def test_macos_companion_files_are_never_tables(self):
+        # a zip made on a Mac carries "._" files (resource forks) beside each real file, often under __MACOSX/;
+        # B3's walk chose seven of them over the real table
+        for name in ("._report.pg_matrix.tsv", "__MACOSX/out/._WU348313_report.pg_matrix.tsv",
+                     "DIANN/._P4097_output.pg_matrix.tsv", "__MACOSX/txt/proteinGroups.txt", "._proteinGroups.txt"):
+            self.assertIsNone(tables.name_kind(name), name)
+        files = [_f("DIANN.zip", size=10)]
+        members = ["__MACOSX/DIANN/._WU297517_report.pg_matrix.tsv", "DIANN/WU297517_report.pg_matrix.tsv"]
+        cand = tables.first_candidate(files, lambda e: None, lambda f: members)
+        self.assertEqual(cand.entry.member, "DIANN/WU297517_report.pg_matrix.tsv")
+
     def test_raw_data_archives_are_not_listed(self):
         listed = []
         files = [_f("a.d.zip", size=10), _f("b.zip", size=10)]
@@ -168,6 +179,38 @@ class ReaderTests(unittest.TestCase):
         path = self.write("r.tsv", "R.FileName\tPG.ProteinGroups\tPG.Quantity\nA\tP1\tabc\n")
         with self.assertRaises(ValueError):
             tables.read_long(path, "spectronaut_long")
+
+    def write_bytes(self, name, data):
+        path = self.dir / name
+        path.write_bytes(data)
+        return path
+
+    def test_text_is_decoded_as_the_service_decodes_an_upload(self):
+        # service/app.py _decode_matrix: UTF-16 by its byte order mark, else UTF-8, else Windows-1252
+        cases = {b"A\tB\n": "utf-8-sig", b"\xef\xbb\xbfA\tB\n": "utf-8-sig", "Aé\tB\n".encode("utf-8"): "utf-8-sig",
+                 b"\xff\xfe" + "A\tB\n".encode("utf-16-le"): "utf-16", b"\xfe\xff" + "A\tB\n".encode("utf-16-be"): "utf-16",
+                 b"A\x97B\tC\n": "cp1252"}
+        for i, (data, encoding) in enumerate(cases.items()):
+            with self.subTest(data=data):
+                self.assertEqual(tables.text_encoding(self.write_bytes(f"t{i}.tsv", data)), encoding)
+        # a byte past the first block decides too; an undefined Windows-1252 byte is replaced, as the service does
+        self.assertEqual(tables.text_encoding(self.write_bytes("late.tsv", b"A\tB\n" + b"1\t2\n" * 400_000 + b"\x97\n")), "cp1252")
+        self.assertEqual(tables.read_text(self.write_bytes("odd.tsv", b"A\x81\x97\tB\n")), "A�—\tB\n")
+        self.assertEqual(tables.read_text(self.write_bytes("u16.tsv", b"\xff\xfe" + "Aé\tB\n".encode("utf-16-le"))), "Aé\tB\n")
+        with self.assertRaises(ValueError):  # cut mid-character: the service refuses it rather than read it short
+            tables.read_text(self.write_bytes("cut.tsv", b"\xff\xfe" + "A\tB\n1".encode("utf-16-le")[:-1]))
+
+    def test_windows_1252_and_utf_16_reports_are_read(self):
+        # B3's walk met three Spectronaut long reports and one Proteome Discoverer table in Windows-1252
+        long = "R.FileName\tPG.ProteinGroups\tPG.Quantity\nrun—1\tP1\t5\nrun—2\tP1\t7\n"
+        for i, data in enumerate([long.encode("cp1252"), b"\xff\xfe" + long.encode("utf-16-le")]):
+            with self.subTest(i=i):
+                t = tables.read_long(self.write_bytes(f"r{i}.tsv", data), "spectronaut_long")
+                self.assertEqual((t.ids, t.cells), (["P1"], ["run—1", "run—2"]))
+                np.testing.assert_array_equal(t.values, [[5, 7]])
+        pd_text = "Accession\tGene Symbol\tAbundance: F1: A·B\nP1\tG1\t3\n"
+        t = tables.read_proteome_discoverer(self.write_bytes("x_Proteins.txt", pd_text.encode("cp1252")))
+        self.assertEqual((t.ids, t.cells), (["G1"], ["F1: A·B"]))
 
 
 class LabelTests(unittest.TestCase):

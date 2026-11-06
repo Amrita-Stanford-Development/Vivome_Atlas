@@ -414,11 +414,21 @@ def parquet_columns(url: str, size: int, fetch=fetch_range) -> list[str]:
 
 
 def first_line_fields(data: bytes) -> list[str] | None:
-    """The header's fields, or None when the bytes end before the first line does."""
-    text = data.decode("utf-8-sig", errors="replace")
-    if "\n" not in text:
+    """The header's fields, or None when the bytes end before the first line does.
+
+    A line ends in LF, CRLF or a lone CR (Excel's "CSV (Macintosh)"), as the
+    service's `parse_matrix_csv` reads it. UTF-16 is known by its byte order
+    mark, as the service's upload knows it (service/app.py `_decode_matrix`);
+    other text is read as UTF-8, where the names that decide anything are
+    ASCII."""
+    if data.startswith((b"\xff\xfe", b"\xfe\xff")):
+        text = data[: len(data) - len(data) % 2].decode("utf-16", errors="replace")  # the bytes may stop mid-character
+    else:
+        text = data.decode("utf-8-sig", errors="replace")
+    end = re.search(r"[\r\n]", text)
+    if end is None:
         return None
-    line = text.split("\n", 1)[0].rstrip("\r")
+    line = text[: end.start()]
     delimiter = "\t" if line.count("\t") > line.count(",") else ","
     return next(csv.reader([line], delimiter=delimiter))
 

@@ -99,13 +99,24 @@ _FRAGPIPE_TMT_REFERENCE_PREFIXES = ("RefInt_", "RefDInt_")
 # and Spectronaut's "Filtered" and "NaN".
 _MISSING_VALUES = frozenset({"", "NA", "Filtered", "NaN"})
 
-# MaxQuant's proteinGroups.txt: a "Gene names" column, flag columns that mark
-# decoys, contaminants and site-only groups with "+", and per-sample
-# quantities. "LFQ intensity <sample>" is read when any is above 0, else
-# "Intensity <sample>"; 0 is MaxQuant's "not quantified". The research reader
-# (benchmark/heldout_formats.read_maxquant) reads the same way. SILAC and TMT
-# searches are refused: their intensities are labels or whole plexes, not cells.
-_MAXQUANT_MARKERS = ("Majority protein IDs", "Gene names")
+# MaxQuant's proteinGroups.txt, known by its "Majority protein IDs" column in
+# any case (MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs" and "Gene
+# Names"): flag columns that mark decoys, contaminants and site-only groups
+# with "+", and per-sample quantities. "LFQ intensity <sample>" is read when
+# any is above 0, else "Intensity <sample>"; 0 is MaxQuant's "not
+# quantified". "Gene names" name the rows. A table without that column
+# (MaxQuant writes it only when its FASTA parse rules find gene names; 52 of
+# B3's corpus tables) is named by its majority protein IDs instead, UniProt
+# accessions gene_ids.py resolves: decoy (REV__) and contaminant (CON__)
+# members are left out, and a UniProt FASTA header (sp|P12345|NAME_HUMAN) is
+# cut to its accession. The research reader
+# (benchmark/heldout_formats.read_maxquant) reads a table with gene names the
+# same way. SILAC and TMT searches are refused: their intensities are labels
+# or whole plexes, not cells.
+_MAXQUANT_IDS = "majority protein ids"
+_MAXQUANT_GENES = "gene names"
+_MAXQUANT_LEFT_OUT = ("REV__", "CON__")
+_FASTA_ACCESSION = re.compile(r"^(?:sp|tr)\|([^|]+)\|")
 _MAXQUANT_FLAGS = frozenset({"Only identified by site", "Reverse", "Potential contaminant", "Contaminant"})
 _MAXQUANT_QUANTITIES = (re.compile(r"^LFQ intensity (.+)$"), re.compile(r"^Intensity (.+)$"))
 _MAXQUANT_SILAC = re.compile(r"^Ratio [HML]/[HML]")
@@ -123,10 +134,17 @@ _FRAGPIPE_LFQ_QUANTITIES = (re.compile(r"^(?!Combined )(.+) MaxLFQ Intensity$"),
                             re.compile(r"^(?!Combined )(.+?)(?<! MaxLFQ)(?<! Unique)(?<! Total)(?<! Razor) Intensity$"))
 _FRAGPIPE_DECOY_PREFIXES = ("contam_", "rev_")
 
-# Spectronaut's protein-group pivot report: "PG.Genes" and other "PG."
-# annotation columns, then one "[n] <run>.PG.Quantity" column per run, named
-# by its run without the file extension. 0 is "not quantified".
-_SPECTRONAUT_GENES = "PG.Genes"
+# Spectronaut's protein-group pivot report: "PG." annotation columns, then one
+# "[n] <run>.PG.Quantity" column per run, named by its run without the file
+# extension. 0 is "not quantified". The rows are named by the first of
+# _SPECTRONAUT_IDS the report has: "PG.Genes", else the protein groups, else
+# the accessions (B3's corpus met reports without PG.Genes, and one without
+# the "PG." prefix on its annotation columns, PXD065519). A report with
+# peptide, precursor or fragment columns (PEP., EG., FG.) gives each protein
+# group several rows, and is refused.
+_SPECTRONAUT_IDS = ("PG.Genes", "Genes", "PG.ProteinGroups", "ProteinGroups", "PG.ProteinAccessions",
+                    "ProteinAccessions")
+_SPECTRONAUT_FINER = re.compile(r"^(?:\[\d+\]\s*.+?\.)?(?:PEP|EG|FG)\.")
 _SPECTRONAUT_QUANTITIES = (re.compile(r"^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$"),)
 _RUN_EXTENSION = re.compile(r"\.(raw|d|wiff|mzml|htrms)$", re.IGNORECASE)
 
@@ -168,6 +186,65 @@ def _short_row(line: int, fields: int, header: list[str]) -> UnreadableMatrix:
                             "every row needs a value, or an empty field, for every column.")
 
 
+def _maxquant_columns(header: list[str]) -> "tuple[str, str | None] | None":
+    """MaxQuant's majority protein IDs column and its gene names column (None
+    when it has none), spelled as the header spells them; None when the
+    header is not MaxQuant's."""
+    names = {name.lower(): name for name in reversed(header)}  # the first spelling wins
+    ids = names.get(_MAXQUANT_IDS)
+    return None if ids is None else (ids, names.get(_MAXQUANT_GENES))
+
+
+def _maxquant_ids(text: str) -> str:
+    """A majority protein IDs field as gene_ids.py reads a group: decoy and
+    contaminant members left out, a FASTA header cut to its accession."""
+    members = []
+    for part in text.split(";"):
+        part = part.strip()
+        if part and not part.startswith(_MAXQUANT_LEFT_OUT):
+            fasta = _FASTA_ACCESSION.match(part)
+            members.append(fasta.group(1) if fasta else part)
+    return ";".join(members)
+
+
+def _spectronaut_ids(header: list[str]) -> "str | None":
+    return next((name for name in _SPECTRONAUT_IDS if name in header), None)
+
+
+def header_layout(header: list[str]) -> str:
+    """The reader parse_matrix_csv chooses for a header, tested in this
+    order: "maxquant", "spectronaut", "fragpipe-lfq", "dia-nn" (a "Genes"
+    column), "fragpipe-tmt" (a "Gene" column), else "matrix". The site's file
+    check (web/js/atlas/file-check.js parseHeader) tests the same names in
+    the same order."""
+    if _maxquant_columns(header):
+        return "maxquant"
+    if _spectronaut_ids(header) and any(_SPECTRONAUT_QUANTITIES[0].match(name) for name in header):
+        return "spectronaut"
+    if all(m in header for m in _FRAGPIPE_LFQ_MARKERS):
+        return "fragpipe-lfq"
+    if "Genes" in header:
+        return "dia-nn"
+    if "Gene" in header:
+        return "fragpipe-tmt"
+    return "matrix"
+
+
+def refuse_by_header(header: list[str]) -> None:
+    """The refusals parse_matrix_csv makes from the header alone, before any
+    row is read: a MaxQuant SILAC or TMT search, a peptide-level Spectronaut
+    report."""
+    layout = header_layout(header)
+    if layout == "maxquant":
+        _refuse_labelled_maxquant(header)
+    elif layout == "spectronaut":
+        finer = next((name for name in header if _SPECTRONAUT_FINER.match(name)), None)
+        if finer is not None:
+            raise UnreadableMatrix(f"this Spectronaut report is at the peptide level (it has a {finer!r} column): "
+                                   "one protein group fills several rows. Export the protein-group pivot report, "
+                                   "whose rows are protein groups, and send that file.")
+
+
 def _refuse_labelled_maxquant(header: list[str]) -> None:
     if any(name.startswith(_MAXQUANT_TMT_PREFIX) for name in header):
         raise UnreadableMatrix("this MaxQuant table is a TMT search (it has Reporter intensity columns): its Intensity "
@@ -180,9 +257,10 @@ def _refuse_labelled_maxquant(header: list[str]) -> None:
 
 def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities: tuple,
                           flags: frozenset = frozenset(), decoy_column: "str | None" = None,
-                          decoy_prefixes: tuple = (), rename=lambda name: name) -> "RawMatrix":
+                          decoy_prefixes: tuple = (), rename=lambda name: name, ids=None) -> "RawMatrix":
     """MaxQuant's and FragPipe's LFQ tables: one row per protein group, the
-    gene column's text as identifiers, rows flagged "+" and decoy or
+    gene column's text as identifiers (through `ids` when given; a row left
+    without an identifier is left out), rows flagged "+" and decoy or
     contaminant rows left out, and the first quantity pattern with any value
     above 0 as the cells (each pattern's group is the sample name). 0 is
     missing. `lines` yields (line number, fields)."""
@@ -191,17 +269,20 @@ def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities
     decoy_idx = header.index(decoy_column) if decoy_column in header else None
     found = [[(i, rename(m.group(1).strip())) for i, name in enumerate(header) if (m := pattern.match(name))]
              for pattern in quantities]
-    rows = []
+    rows, names = [], []
     for line, row in lines:
         if not any(field.strip() for field in row):
             continue  # white space alone holds nothing (the browser's check skips it too)
-        if len(row) <= gene_idx or not row[gene_idx]:
+        name = row[gene_idx] if len(row) > gene_idx else ""
+        name = ids(name) if ids is not None else name
+        if not name:
             continue
         if any(i < len(row) and row[i].strip() == "+" for i in flag_idx):
             continue
         if decoy_idx is not None and decoy_idx < len(row) and row[decoy_idx].startswith(decoy_prefixes):
             continue
         rows.append((line, row))
+        names.append(name)
     if not rows:
         raise UnreadableMatrix(f"no row has a value in {gene_column!r}, so no protein can be named. "
                                f"The service reads {_READABLE_LAYOUTS}.")
@@ -219,7 +300,7 @@ def _parse_quantity_table(header: list[str], lines, gene_column: str, quantities
     values = np.array([[_number(row[i], header[i]) for i, _ in chosen] for _, row in rows],
                       dtype=np.float32).reshape(len(rows), len(chosen))
     values[values == 0] = np.nan
-    return RawMatrix(gene_names=[row[gene_idx] for _, row in rows], cell_ids=[name for _, name in chosen], values=values)
+    return RawMatrix(gene_names=names, cell_ids=[name for _, name in chosen], values=values)
 
 
 def _clean_dia_nn_cell_id(raw_header: str) -> str:
@@ -238,7 +319,8 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     data tab): features in rows, cells in columns; first column is the
     feature name, header row is cell IDs. Comma or tab separated,
     auto-detected from the header line -- a real DIA-NN report is tab
-    separated.
+    separated. Lines may end in LF, CRLF or a lone CR (Excel's "CSV
+    (Macintosh)").
 
     A DIA-NN report also carries its own annotation columns
     (Protein.Group, Protein.Names, Genes, First.Protein.Description,
@@ -256,29 +338,36 @@ def parse_matrix_csv(text: str) -> RawMatrix:
 
     MaxQuant's proteinGroups.txt, FragPipe's LFQ combined_protein.tsv and
     Spectronaut's protein-group pivot report are read as they come
-    (_parse_quantity_table). A plain matrix written by R
+    (_parse_quantity_table); header_layout says which reader a header gets. A plain matrix written by R
     without the corner field over its row names is read too. A text value
     where a number belongs, or a row too short for the header, raises
     UnreadableMatrix, naming the column or the line."""
     text = text[1:] if text.startswith("\ufeff") else text  # Excel's "CSV UTF-8" starts with a byte order mark
+    if "\r" in text:  # Windows ends a line with CRLF, Excel's "CSV (Macintosh)" with a lone CR
+        text = text.replace("\r\n", "\n").replace("\r", "\n")
     first_line = text.split("\n", 1)[0]
     delimiter = "\t" if first_line.count("\t") > first_line.count(",") else ","
     reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     header = next(reader)
     # Perseus writes annotation rows ("#!{Type}...") under the header.
     lines = ((n, row) for n, row in enumerate(reader, start=2) if row and not row[0].startswith("#!{"))
-    if all(m in header for m in _MAXQUANT_MARKERS):
-        _refuse_labelled_maxquant(header)
-        return _parse_quantity_table(header, lines, "Gene names", _MAXQUANT_QUANTITIES, flags=_MAXQUANT_FLAGS)
-    if _SPECTRONAUT_GENES in header and any(_SPECTRONAUT_QUANTITIES[0].match(name) for name in header):
-        return _parse_quantity_table(header, lines, _SPECTRONAUT_GENES, _SPECTRONAUT_QUANTITIES,
+    layout = header_layout(header)
+    refuse_by_header(header)
+    if layout == "maxquant":
+        ids_column, genes_column = _maxquant_columns(header)
+        if genes_column is not None:
+            return _parse_quantity_table(header, lines, genes_column, _MAXQUANT_QUANTITIES, flags=_MAXQUANT_FLAGS)
+        return _parse_quantity_table(header, lines, ids_column, _MAXQUANT_QUANTITIES, flags=_MAXQUANT_FLAGS,
+                                     ids=_maxquant_ids)
+    if layout == "spectronaut":
+        return _parse_quantity_table(header, lines, _spectronaut_ids(header), _SPECTRONAUT_QUANTITIES,
                                      rename=lambda run: _RUN_EXTENSION.sub("", run))
-    if all(m in header for m in _FRAGPIPE_LFQ_MARKERS):
+    if layout == "fragpipe-lfq":
         return _parse_quantity_table(header, lines, "Gene", _FRAGPIPE_LFQ_QUANTITIES,
                                      decoy_column="Protein", decoy_prefixes=_FRAGPIPE_DECOY_PREFIXES)
 
-    is_dia_nn_report = "Genes" in header
-    is_fragpipe_tmt = not is_dia_nn_report and "Gene" in header
+    is_dia_nn_report = layout == "dia-nn"
+    is_fragpipe_tmt = layout == "fragpipe-tmt"
     if not (is_dia_nn_report or is_fragpipe_tmt):
         # R's write.table writes no corner field over the row names, so every
         # data row is one field longer than the header, and its first header

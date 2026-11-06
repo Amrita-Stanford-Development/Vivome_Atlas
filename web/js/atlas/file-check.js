@@ -45,9 +45,24 @@ const MAXQUANT_REFUSALS = [
   [(f) => f.startsWith('Reporter intensity'), 'This MaxQuant table is a TMT search: its Intensity columns are whole plexes, not cells. Send the reporter intensities as a matrix with one column per cell instead.'],
   [(f) => /^Ratio [HML]\/[HML]/.test(f), 'This MaxQuant table is a SILAC search: its intensities are labels, not cells. The service reads label-free tables.'],
 ];
+// MaxQuant's protein-group column, in any case (MaxQuant 1.0 to 1.2 wrote
+// "Majority Protein IDs"): the service reads a table with it as MaxQuant's,
+// its rows named by "Gene names", else by these protein IDs.
+export const MAXQUANT_IDS = 'majority protein ids';
 // Spectronaut's protein-group pivot report: one "[n] <run>.PG.Quantity" column
-// per run, "PG.Genes" the identifiers.
+// per run, its rows named by the first of SPECTRONAUT_IDS the report has (the
+// service's _SPECTRONAUT_IDS). A report with peptide, precursor or fragment
+// columns gives each protein group several rows, and is refused.
+export const SPECTRONAUT_IDS = Object.freeze(['PG.Genes', 'Genes', 'PG.ProteinGroups', 'ProteinGroups',
+  'PG.ProteinAccessions', 'ProteinAccessions']);
 const SPECTRONAUT_QUANTITIES = [/^(?:\[\d+\]\s*)?(.+?)\.PG\.Quantity$/];
+const SPECTRONAUT_FINER = /^(?:\[\d+\]\s*.+?\.)?(?:PEP|EG|FG)\./;
+function spectronautRefusal(fields) {
+  const finer = fields.find((f) => SPECTRONAUT_FINER.test(f));
+  return finer === undefined ? undefined
+    : `This Spectronaut report is at the peptide level (it has a ${finer} column): one protein group fills several rows. `
+      + 'Export the protein-group pivot report, whose rows are protein groups, and send that file.';
+}
 const QUANTITIES = { spectronaut: SPECTRONAUT_QUANTITIES, maxquant: MAXQUANT_QUANTITIES, 'fragpipe-lfq': FRAGPIPE_LFQ_QUANTITIES };
 
 // The service's missing values (service/pipeline/alignment.py, _MISSING_VALUES).
@@ -77,6 +92,10 @@ export async function readHeaderLine(blob, { maxBytes = HEADER_BYTES, encoding =
   return (await readLines(blob, { count: 1, maxBytes, encoding }))[0] ?? '';
 }
 
+// A line ends in LF, CRLF or a lone CR (Excel's "CSV (Macintosh)"), as the
+// service reads it.
+const LINE_END = /\r\n|\r|\n/;
+
 // The file's first `count` lines, without line endings, read a slice at a
 // time up to maxBytes (the last line may be cut there).
 export async function readLines(blob, { count = 1, maxBytes = HEADER_BYTES, encoding = 'utf-8' } = {}) {
@@ -85,10 +104,10 @@ export async function readLines(blob, { count = 1, maxBytes = HEADER_BYTES, enco
   for (let offset = 0; offset < Math.min(blob.size, maxBytes); offset += HEADER_BYTES) {
     const end = Math.min(blob.size, maxBytes, offset + HEADER_BYTES);
     text += decoder.decode(new Uint8Array(await blob.slice(offset, end).arrayBuffer()), { stream: end < blob.size });
-    if (text.split('\n').length > count) break;
+    if (text.split(LINE_END).length > count) break;
   }
-  if (text.split('\n').length <= count) text += decoder.decode();
-  return text.split('\n').slice(0, count).map((line) => line.replace(/\r$/, ''));
+  if (text.split(LINE_END).length <= count) text += decoder.decode();
+  return text.split(LINE_END).slice(0, count);
 }
 
 // Perseus writes annotation rows ("#!{Type}...") under the header; the
@@ -138,8 +157,11 @@ async function scanLines(blob, { encoding = 'utf-8', separator = null, columns =
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    const parts = (tail + decoder.decode(value, { stream: true })).split('\n');
-    tail = parts.pop();
+    const text = tail + decoder.decode(value, { stream: true });
+    // a CR that ends this chunk may be half of a CRLF: it waits for the next
+    const cut = text.endsWith('\r') ? text.length - 1 : text.length;
+    const parts = text.slice(0, cut).split(LINE_END);
+    tail = parts.pop() + text.slice(cut);
     for (const part of parts) take(part);
   }
   tail += decoder.decode();
@@ -249,16 +271,16 @@ export function parseHeader(line) {
   const commas = text.split(',').length - 1;
   const separator = tabs > commas ? '\t' : ',';
   const fields = splitFields(text, separator);
-  if (fields.includes('PG.Genes') && fields.some((f) => SPECTRONAUT_QUANTITIES[0].test(f))) {
-    const cells = cellColumns(fields, 'spectronaut').length;
-    return { separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells, format: 'spectronaut' };
-  }
-  const maxquant = fields.includes('Majority protein IDs') && fields.includes('Gene names');
-  const fragpipeLfq = !maxquant && fields.includes('Gene') && fields.includes('Combined Total Peptides');
-  if (maxquant || fragpipeLfq) {
-    const format = maxquant ? 'maxquant' : 'fragpipe-lfq';
+  // the service's header tests, in its order (service/pipeline/alignment.py header_layout)
+  const maxquant = fields.some((f) => f.toLowerCase() === MAXQUANT_IDS);
+  const spectronaut = !maxquant && SPECTRONAUT_IDS.some((name) => fields.includes(name))
+    && fields.some((f) => SPECTRONAUT_QUANTITIES[0].test(f));
+  const fragpipeLfq = !maxquant && !spectronaut && fields.includes('Gene') && fields.includes('Combined Total Peptides');
+  if (maxquant || spectronaut || fragpipeLfq) {
+    const format = maxquant ? 'maxquant' : spectronaut ? 'spectronaut' : 'fragpipe-lfq';
     const cells = cellColumns(fields, format).length;
-    const refusal = maxquant ? MAXQUANT_REFUSALS.find(([is]) => fields.some(is))?.[1] : undefined;
+    const refusal = maxquant ? MAXQUANT_REFUSALS.find(([is]) => fields.some(is))?.[1]
+      : spectronaut ? spectronautRefusal(fields) : undefined;
     return {
       separator, columns: fields.length, annotation: fields.length - cells, cellEstimate: cells,
       format, ...(refusal ? { refusal } : {}),

@@ -124,6 +124,46 @@ class ParseMatrixCsvTests(unittest.TestCase):
         self.assertEqual(raw.cell_ids, ["S1", "S2"])
         np.testing.assert_array_equal(raw.values, [[1000, 900]])
 
+    def test_maxquant_without_gene_names_is_named_by_its_majority_protein_ids(self):
+        # 52 of B3's MaxQuant tables have no "Gene names" column; gene_ids.py resolves the UniProt accessions
+        header = ["Protein IDs", "Majority protein IDs", "Intensity", "Intensity S1", "Intensity S2",
+                  "LFQ intensity S1", "LFQ intensity S2", "Reverse", "Potential contaminant"]
+        rows = [["P1;P1-2;Q9", "P1;P1-2", "30", "10", "20", "11", "21", "", ""],
+                ["REV__P9", "REV__P9", "5", "5", "0", "5", "0", "+", ""],
+                ["sp|P2|B_HUMAN;tr|Q3|Q3_HUMAN", "sp|P2|B_HUMAN;tr|Q3|Q3_HUMAN", "31", "0", "31", "0", "31", "", ""],
+                ["CON__P02768;P4", "CON__P02768;P4", "9", "4", "5", "4", "5", "", ""],  # the contaminant member alone goes
+                ["REV__P8;CON__P7", "REV__P8;CON__P7", "2", "1", "1", "1", "1", "", ""],  # nothing is left to name it
+                ["P5", "", "2", "1", "1", "1", "1", "", ""]]
+        raw = alignment.parse_matrix_csv("\n".join(["\t".join(header)] + ["\t".join(r) for r in rows]))
+        self.assertEqual(raw.gene_names, ["P1;P1-2", "P2;Q3", "P4"])
+        self.assertEqual(raw.cell_ids, ["S1", "S2"])
+        np.testing.assert_array_equal(raw.values, [[11, 21], [np.nan, 31], [4, 5]])
+        self.assertEqual(alignment.header_layout(header), "maxquant")
+
+    def test_an_old_maxquant_table_with_title_case_names_is_read(self):
+        # MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs", "Gene Names" and a "Contaminant" flag (PXD054457)
+        header = ["Protein IDs", "Majority Protein IDs", "Gene Names", "Intensity", "Intensity a", "Intensity b",
+                  "Only identified by site", "Reverse", "Contaminant"]
+        rows = [["P1", "P1", "GENE1", "3", "1", "2", "", "", ""], ["P2", "P2", "GENE2", "7", "3", "4", "", "", "+"]]
+        raw = alignment.parse_matrix_csv("\n".join(["\t".join(header)] + ["\t".join(r) for r in rows]))
+        self.assertEqual((raw.gene_names, raw.cell_ids), (["GENE1"], ["a", "b"]))
+        np.testing.assert_array_equal(raw.values, [[1, 2]])
+        no_genes = alignment.parse_matrix_csv("Majority Protein IDs\tIntensity a\nP7\t5\n")
+        self.assertEqual((no_genes.gene_names, no_genes.cell_ids), (["P7"], ["a"]))
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:  # a SILAC search is refused, gene names or not
+            alignment.parse_matrix_csv("Majority protein IDs\tRatio H/L\tIntensity L\tIntensity H\nP1\t1.2\t100\t200\n")
+        self.assertIn("SILAC", str(caught.exception))
+
+    def test_the_header_decides_the_reader_in_one_place(self):
+        cases = {"maxquant": ["Majority protein IDs", "Gene names", "LFQ intensity S1"],
+                 "spectronaut": ["PG.ProteinGroups", "[1] a.raw.PG.Quantity"],
+                 "fragpipe-lfq": ["Protein", "Gene", "Combined Total Peptides", "A Intensity"],
+                 "dia-nn": ["Protein.Group", "Genes", "a.raw"], "fragpipe-tmt": ["Index", "Gene", "c1"],
+                 "matrix": ["gene", "c1", "c2"]}
+        for layout, header in cases.items():
+            with self.subTest(layout=layout):
+                self.assertEqual(alignment.header_layout(header), layout)
+
     # FragPipe's LFQ protein table (combined_protein.tsv, as in PXD058626).
     FRAGPIPE_HEADER = [
         "Protein", "Protein ID", "Entry Name", "Gene", "Protein Length", "Organism", "Protein Existence",
@@ -271,6 +311,16 @@ class UploadLayoutTests(unittest.TestCase):
         self.assertEqual((marked.gene_names, marked.cell_ids), (plain.gene_names, plain.cell_ids))
         np.testing.assert_array_equal(marked.values, plain.values)
 
+    def test_old_mac_and_windows_line_endings_do_not_change_the_reading(self):
+        # Excel's "CSV (Macintosh)" ends lines with a lone CR; B3's corpus walk met five such tables
+        text = "Protein.Group\tProtein.Ids\tGenes\ta.raw\tb.raw\nP1\tP1\tGENE1\t1.0\t2.0\nP2\tP2\tGENE2\t3.0\t\n"
+        plain = alignment.parse_matrix_csv(text)
+        for ending in ("\r", "\r\n"):
+            with self.subTest(ending=repr(ending)):
+                other = alignment.parse_matrix_csv(text.replace("\n", ending))
+                self.assertEqual((other.gene_names, other.cell_ids), (plain.gene_names, plain.cell_ids))
+                np.testing.assert_array_equal(other.values, plain.values)
+
     def test_perseus_annotation_rows_are_skipped(self):
         header = "\t".join(["Majority protein IDs", "Gene names", "LFQ intensity S1", "LFQ intensity S2"])
         rows = ["#!{Type}E\tT\tE\tE", "P1\tGENE1\t100\t200"]
@@ -317,6 +367,39 @@ class SpectronautTests(unittest.TestCase):
         header = ["PG.ProteinGroups", "PG.Genes", "R.FileName", "PG.Quantity"]
         with self.assertRaises(alignment.UnreadableMatrix):
             alignment.parse_matrix_csv("\t".join(header) + "\nP1\tGENE1\trun1\t100\n")
+
+    def read(self, header, rows):
+        return alignment.parse_matrix_csv("\n".join(["\t".join(header)] + ["\t".join(r) for r in rows]))
+
+    def test_a_pivot_without_pg_genes_is_named_by_its_protein_groups_else_accessions(self):
+        # B3's walk met pivots with PG.ProteinGroups or PG.ProteinAccessions and no PG.Genes (PXD057989, PXD034184)
+        quantities = ["[1] a.raw.PG.Quantity", "[2] b.d.PG.Quantity"]
+        raw = self.read(["PG.ProteinGroups", "PG.ProteinAccessions", "PG.ProteinNames", *quantities],
+                        [["P1;P2", "P1", "A_HUMAN", "10", "20"], ["", "P3", "B_HUMAN", "1", "2"]])
+        self.assertEqual((raw.gene_names, raw.cell_ids), (["P1;P2"], ["a", "b"]))
+        raw = self.read(["PG.ProteinAccessions", "PG.ProteinDescriptions", *quantities], [["P3;P4", "desc", "5", "0"]])
+        self.assertEqual(raw.gene_names, ["P3;P4"])
+        np.testing.assert_array_equal(raw.values, [[5, np.nan]])
+
+    def test_a_pivot_without_column_prefixes_is_read(self):
+        # PXD065519: the annotation columns have no "PG." prefix; the run columns keep theirs
+        header = ["MolecularWeight", "ProteinAccessions", "Genes", "ProteinDescriptions",
+                  "[1] r1.raw.PG.NrOfStrippedSequencesUsedForQuantification", "[1] r1.raw.PG.Quantity",
+                  "[2] r2.raw.PG.Quantity"]
+        raw = self.read(header, [["52000", "P1", "GENE1", "desc", "4", "100", "200"]])
+        self.assertEqual((raw.gene_names, raw.cell_ids), (["GENE1"], ["r1", "r2"]))
+        np.testing.assert_array_equal(raw.values, [[100, 200]])
+        self.assertEqual(alignment.header_layout(header), "spectronaut")
+        raw = self.read(["ProteinGroups", "[1] r1.raw.PG.Quantity"], [["P9", "7"]])
+        self.assertEqual(raw.gene_names, ["P9"])
+
+    def test_a_peptide_level_report_is_refused_in_words(self):
+        # PXD038040: a PEP.StrippedSequence on each row, so one protein group fills many rows
+        with self.assertRaises(alignment.UnreadableMatrix) as caught:
+            self.read(["PG.ProteinAccessions", "PEP.StrippedSequence", "[1] a.raw.PG.Quantity"],
+                      [["P1", "PEPTIDEK", "10"], ["P1", "OTHERPEPK", "10"]])
+        self.assertIn("peptide", str(caught.exception))
+        self.assertIn("PEP.StrippedSequence", str(caught.exception))
 
 
 class ZScorePerGeneTests(unittest.TestCase):

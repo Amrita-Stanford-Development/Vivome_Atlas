@@ -107,13 +107,22 @@ raw-file-path header is cleaned to its basename without `.raw`.
 
 Four more protein tables are read as their software writes them
 (`service/pipeline/alignment.py`):
-- **Spectronaut's protein-group pivot report** (it has "PG.Genes" and
-  "<run>.PG.Quantity" columns): "PG.Genes" gives the identifiers, and there
-  is one cell per run, named by the run without its "[n]" prefix or file
-  extension. "Filtered", "NaN" and 0 are missing.
-- **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs" and "Gene
-  names"):
-  - "Gene names" gives the identifiers;
+- **Spectronaut's protein-group pivot report** (it has "<run>.PG.Quantity"
+  columns and an identifier column):
+  - the identifiers come from the first of "PG.Genes", "PG.ProteinGroups"
+    and "PG.ProteinAccessions" the report has, each with or without its
+    "PG." prefix;
+  - there is one cell per run, named by the run without its "[n]" prefix or
+    file extension;
+  - "Filtered", "NaN" and 0 are missing;
+  - a report with peptide, precursor or fragment columns ("PEP.", "EG.",
+    "FG.") is refused: each protein group fills several of its rows.
+- **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs", in any
+  case: MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs"):
+  - "Gene names" gives the identifiers. A table without that column is named
+    by its "Majority protein IDs": UniProt accessions, with decoy (`REV__`)
+    and contaminant (`CON__`) members left out and a FASTA header
+    (`sp|P12345|NAME_HUMAN`) cut to its accession;
   - rows marked "+" as reverse, contaminant or only identified by site are
     left out;
   - one cell per sample, from "LFQ intensity <sample>" when any value is
@@ -141,6 +150,7 @@ read as missing.
   Windows-1252 (Excel's plain "CSV"). An Excel workbook (.xlsx) or another
   binary file is refused (400), saying what to send instead. So is UTF-16
   that ends in half a character: the file was cut off, perhaps mid-number.
+- Lines may end in LF, CRLF, or a lone CR (Excel's "CSV (Macintosh)").
 - Perseus's annotation rows (`#!{...}`) are skipped, and so are rows that
   hold nothing but white space or separators.
 - A plain matrix written by R without the corner field over its row names

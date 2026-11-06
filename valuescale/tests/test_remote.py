@@ -266,6 +266,21 @@ class HeaderTests(unittest.TestCase):
     def test_a_header_cut_mid_line_is_not_a_header(self):
         self.assertIsNone(remote.first_line_fields(b"A\tB\tC"))
 
+    def test_a_line_may_end_in_a_lone_cr(self):
+        # Excel's "CSV (Macintosh)"; B3's walk met six such tables
+        self.assertEqual(remote.first_line_fields(b"A\tB\tC\r1\t2\t3\r"), ["A", "B", "C"])
+        self.assertEqual(remote.first_line_fields(b'A,"B, b",C\r1,2,3\n'), ["A", "B, b", "C"])
+        self.assertIsNone(remote.first_line_fields(b"A\tB\tC"))
+
+    def test_a_utf_16_header_is_read_by_its_byte_order_mark(self):
+        # as the service decodes an upload (service/app.py _decode_matrix); the bytes may stop mid-character
+        for bom, codec in ((b"\xff\xfe", "utf-16-le"), (b"\xfe\xff", "utf-16-be")):
+            data = bom + "Gène\tB\tC\r\n1\t2\t3\r\n".encode(codec)
+            with self.subTest(codec=codec):
+                self.assertEqual(remote.first_line_fields(data), ["Gène", "B", "C"])
+                self.assertEqual(remote.first_line_fields(data[:-1]), ["Gène", "B", "C"])
+                self.assertIsNone(remote.first_line_fields(data[:9]))
+
 
 if __name__ == "__main__":
     unittest.main()

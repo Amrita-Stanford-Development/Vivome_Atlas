@@ -5,6 +5,8 @@ diagnostics against valuescale/bank/expectations/b3.json.
 
     python research/notebooks/value_scale_corpus.py walk [--workers 4]
     python research/notebooks/value_scale_corpus.py revisit [--workers 4]
+    python research/notebooks/value_scale_corpus.py cleanup-selection [--workers 4]
+    python research/notebooks/value_scale_corpus.py revisit --cleanup [--workers 4]
     python research/notebooks/value_scale_corpus.py audit-sample
     python research/notebooks/value_scale_corpus.py audit-packets
     python research/notebooks/value_scale_corpus.py report
@@ -28,6 +30,7 @@ import re
 import sys
 import threading
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -59,6 +62,8 @@ def check_patterns() -> None:
             raise SystemExit(f"valuescale/corpus/tables.py's patterns differ from the parser's: {mine}")
     if tables.DIA_NN_ANNOTATION != alignment._DIA_NN_ANNOTATION_COLUMNS:
         raise SystemExit("valuescale/corpus/tables.py's DIA-NN annotation columns differ from the parser's")
+    if tables.MAXQUANT_IDS != alignment._MAXQUANT_IDS:
+        raise SystemExit("valuescale/corpus/tables.py's MaxQuant column differs from the parser's")
 
 
 def _safe(path: str) -> Path:
@@ -144,10 +149,10 @@ def make_tools(record: dict) -> draw.Tools:
                 parsed = draw.Parsed(t.cells, t.values, False, t.quantity)
                 ids = t.ids
             else:
-                text = path.read_bytes().decode("utf-8", errors="replace")
+                text = tables.read_text(path)  # decoded as the service decodes an upload
                 header = remote.first_line_fields(text[:HEADER_BYTES[1]].encode("utf-8")) or []
                 raw = alignment.parse_matrix_csv(text)
-                parsed = draw.Parsed(list(raw.cell_ids), raw.values, tables.is_tmt_integrator(header))
+                parsed = draw.Parsed(list(raw.cell_ids), raw.values, alignment.header_layout(header) == "fragpipe-tmt")
                 ids = raw.gene_names
         finally:
             if big:
@@ -158,14 +163,13 @@ def make_tools(record: dict) -> draw.Tools:
         return parsed
 
     def refuse(cand, header):
-        """The parser's refusal of a SILAC or TMT MaxQuant table, which reads
-        the header alone (alignment.parse_matrix_csv), so the table need not
-        come down first. The header is the parser's for any header without a
-        line break inside quotes."""
+        """The parser's refusals from the header alone (alignment.refuse_by_header:
+        a MaxQuant SILAC or TMT search, a peptide-level Spectronaut report),
+        so the table need not come down first. The header is the parser's for
+        any header without a line break inside quotes."""
         if cand.kind == "proteome_discoverer" or cand.layout in ("long", "spectronaut_long"):
             return None  # read by tables.py, not by the service's parser
-        if all(m in header for m in alignment._MAXQUANT_MARKERS):
-            alignment._refuse_labelled_maxquant(header)
+        alignment.refuse_by_header(header)
         return None
 
     return draw.Tools(list_files, columns_of, members_of, fetch, parse, columns_of, refuse)
@@ -193,12 +197,121 @@ def cmd_walk(args) -> int:
 
 
 def cmd_revisit(args) -> int:
-    """The walk's failed reads, visited again once the walk has stopped."""
+    """The walk's failed reads, visited again once the walk has stopped; with
+    --cleanup, the records in CLEANUP instead, each with its reasons as
+    revisited_for."""
     check_patterns()
-    before = Counter(r["outcome"] for r in _records() if r["outcome"] in draw.FAILED_READS)
-    records = draw.revisit(LOG, make_tools(frame.load()), DATA, workers=args.workers)
-    again = [r for r in records if "revisited_from" in r]
-    print(f"revisited {sum(before.values())} ({dict(before)}): now {dict(Counter(r['outcome'] for r in again))}")
+    tools = make_tools(frame.load())
+    if not args.cleanup:
+        before = Counter(r["outcome"] for r in _records() if r["outcome"] in draw.FAILED_READS)
+        records = draw.revisit(LOG, tools, DATA, workers=args.workers)
+        again = [r for r in records if "revisited_from" in r]
+        print(f"revisited {sum(before.values())} ({dict(before)}): now {dict(Counter(r['outcome'] for r in again))}")
+        return 0
+    chosen = json.loads(CLEANUP.read_text(encoding="utf-8"))["records"]
+    before = Counter(r["outcome"] for r in _records() if r["accession"] in chosen)
+
+    def visit_fn(acc, repo, split, tools, root):
+        return {**draw.visit(acc, repo, split, tools, root), "revisited_for": chosen[acc]}
+    records = draw.revisit(LOG, tools, DATA, workers=args.workers, visit_fn=visit_fn,
+                           select=lambda r: r["accession"] in chosen)
+    now = Counter(r["outcome"] for r in records if r["accession"] in chosen)
+    print(f"revisited {sum(before.values())} ({dict(before)}): now {dict(now)}")
+    return 0
+
+
+# The clean-up before B4 (2026-11-06; research/value-scale-plan.md, B3): the
+# faults in our own code that B3's walk met, fixed in the parser, the site's
+# check and the corpus tool. CLEANUP lists the records they touch; the third
+# visit (revisit --cleanup) visits those again.
+CLEANUP = REPO / "valuescale" / "corpus" / "cleanup_20261106.json"
+_NEWLINE_IN_FIELD = "new-line character seen in unquoted field"  # csv's error on a lone CR before the fix
+
+
+def _reader_before_cleanup(header: list) -> str:
+    """The parser's reader for a header before the clean-up (commit 3c053c9):
+    MaxQuant only with both "Majority protein IDs" and "Gene names", spelled
+    so; Spectronaut only with "PG.Genes"."""
+    if "Majority protein IDs" in header and "Gene names" in header:
+        return "maxquant"
+    if "PG.Genes" in header and any(alignment._SPECTRONAUT_QUANTITIES[0].match(h) for h in header):
+        return "spectronaut"
+    if all(m in header for m in alignment._FRAGPIPE_LFQ_MARKERS):
+        return "fragpipe-lfq"
+    if "Genes" in header:
+        return "dia-nn"
+    if "Gene" in header:
+        return "fragpipe-tmt"
+    return "matrix"
+
+
+def cleanup_reasons(r: dict) -> list:
+    """Why the clean-up touches a record, from the log and the local table's
+    header and encoding (never its values)."""
+    reasons = []
+    detail = str(r.get("detail") or "")
+    if r["outcome"] in draw.FAILED_READS:
+        reasons.append("failed read")
+    if _NEWLINE_IN_FIELD in detail:
+        reasons.append("line endings")
+    if "UnicodeDecodeError" in detail:
+        reasons.append("decoding")
+    chosen = r.get("member") or r.get("file")
+    if chosen and tables.is_mac_companion(chosen):
+        reasons.append("macOS file")
+    if r.get("file") and r.get("kind") != "proteome_discoverer" and r.get("layout") in ("wide", "spectronaut_pivot"):
+        path = _local_table(r)
+        if path.exists() and path.suffix.lower() != ".parquet":
+            if tables.text_encoding(path) != "utf-8-sig" and "decoding" not in reasons:
+                reasons.append("decoding")
+            header, _ = _header_lines(path, 0)
+            if _reader_before_cleanup(header) != alignment.header_layout(header):
+                reasons.append("reader")
+    return reasons
+
+
+def _zero_columns_header_now(r: dict, tools: draw.Tools):
+    """A "too few columns" record's quantity columns as the header reader now
+    reads its header (a UTF-16 header read as UTF-8 named none); None when
+    the header cannot be read."""
+    entry = tables.Entry(remote.File(r["file"], r["listed_bytes"], r["url"]), r.get("member"), 0)
+    try:
+        header = tools.header(entry)
+    except denylist.SealedData:
+        raise
+    except Exception:  # noqa: BLE001 - a read that fails now is the server's, not the fault's
+        return None
+    return tables.quantity_columns(r["kind"], r["layout"], header) if header else None
+
+
+def cmd_cleanup_selection(args) -> int:
+    """CLEANUP: each record the clean-up touches, with its reasons. The 199
+    "too few columns" records whose header named no quantity column have
+    their header read again (the header alone); the rest is the log and the
+    local tables' headers."""
+    check_patterns()
+    records = _records()
+    chosen = {}
+    for r in records:
+        reasons = cleanup_reasons(r)
+        if reasons:
+            chosen[r["accession"]] = reasons
+    zero = [r for r in records if r["outcome"] == "too few columns" and r.get("header_columns") == 0]
+    tools = make_tools(frame.load())
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        now = list(pool.map(lambda r: _zero_columns_header_now(r, tools), zero))
+    probe = {r["accession"]: n for r, n in zip(zero, now)}
+    for acc, n in probe.items():
+        if n != 0:
+            chosen.setdefault(acc, []).append("header")
+    out = {"about": "The records the clean-up of 2026-11-06 touches, each with its reasons "
+                    "(research/notebooks/value_scale_corpus.py cleanup-selection; revisit --cleanup visits them).",
+           "reasons": dict(Counter(x for v in chosen.values() for x in v).most_common()),
+           "probe": {"read": len(probe), "now_nonzero": sum(1 for n in probe.values() if n), "now_unreadable":
+                     sum(1 for n in probe.values() if n is None)},
+           "records": dict(sorted(chosen.items()))}
+    CLEANUP.write_bytes((json.dumps(out, indent=1, sort_keys=True) + "\n").encode("utf-8"))
+    print(json.dumps({k: out[k] for k in ("reasons", "probe")}), len(chosen))
     return 0
 
 
@@ -243,7 +356,7 @@ def _header_lines(path: Path, most: int = 12) -> tuple[list, list]:
     if path.suffix.lower() == ".parquet":
         import pyarrow.parquet as pq
         return list(pq.ParquetFile(path).schema_arrow.names), []
-    with path.open("r", encoding="utf-8-sig", errors="replace", newline="") as fh:
+    with path.open("r", encoding=tables.text_encoding(path), errors="replace", newline="") as fh:
         header = remote.first_line_fields(fh.readline().encode("utf-8")) or []
         notes = []
         for _ in range(most):
@@ -429,12 +542,15 @@ def main() -> int:
     w.add_argument("--limit", type=int, default=draw.LIMIT)
     r = sub.add_parser("revisit")
     r.add_argument("--workers", type=int, default=8)
+    r.add_argument("--cleanup", action="store_true", help="the records cleanup-selection chose")
+    c = sub.add_parser("cleanup-selection")
+    c.add_argument("--workers", type=int, default=4)
     sub.add_parser("audit-sample")
     sub.add_parser("audit-packets")
     sub.add_parser("report")
     args = parser.parse_args()
-    return {"walk": cmd_walk, "revisit": cmd_revisit, "audit-sample": cmd_audit_sample, "audit-packets": cmd_audit_packets,
-            "report": cmd_report}[args.cmd](args)
+    return {"walk": cmd_walk, "revisit": cmd_revisit, "cleanup-selection": cmd_cleanup_selection,
+            "audit-sample": cmd_audit_sample, "audit-packets": cmd_audit_packets, "report": cmd_report}[args.cmd](args)
 
 
 if __name__ == "__main__":

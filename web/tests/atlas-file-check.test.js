@@ -6,8 +6,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
-  DIANN_ANNOTATIONS, HEADER_BYTES, HEADER_LIMIT_BYTES, checkFile, checkLimits, countNonEmptyLines, parseHeader,
-  readHeaderLine, splitFields, valueFactsText,
+  DIANN_ANNOTATIONS, HEADER_BYTES, HEADER_LIMIT_BYTES, MAXQUANT_IDS, SPECTRONAUT_IDS, checkFile, checkLimits,
+  countNonEmptyLines, parseHeader, readHeaderLine, splitFields, valueFactsText,
 } from '../js/atlas/file-check.js';
 
 const workflow = JSON.parse(readFileSync(new URL('../data/workflow.json', import.meta.url), 'utf8'));
@@ -60,6 +60,34 @@ test('a Spectronaut pivot report counts one cell per run', () => {
   const header = ['PG.ProteinGroups', 'PG.Genes', 'PG.ProteinNames', '[1] a.raw.PG.Quantity', '[2] b.raw.PG.Quantity',
     '[3] c.d.PG.Quantity'].join('\t');
   assert.deepEqual(parseHeader(header), { separator: '\t', columns: 6, annotation: 3, cellEstimate: 3, format: 'spectronaut' });
+});
+
+test('the reader is chosen by the service\'s header tests, in its order', () => {
+  // MaxQuant without "Gene names" (named by its protein IDs), and MaxQuant 1.0 to 1.2's title case
+  const noGenes = ['Protein IDs', 'Majority protein IDs', 'Intensity', 'Intensity S1', 'Intensity S2', 'Reverse'].join('\t');
+  assert.deepEqual(parseHeader(noGenes), { separator: '\t', columns: 6, annotation: 4, cellEstimate: 2, format: 'maxquant' });
+  assert.equal(parseHeader(['Majority Protein IDs', 'Gene Names', 'Intensity a', 'Intensity b'].join('\t')).format, 'maxquant');
+  assert.match(parseHeader(['Majority protein IDs', 'Ratio H/L', 'Intensity L', 'Intensity H'].join('\t')).refusal, /SILAC/);
+  // Spectronaut without PG.Genes, or without the "PG." prefix on its annotation columns
+  for (const ids of [['PG.ProteinGroups'], ['PG.ProteinAccessions', 'PG.ProteinDescriptions'],
+    ['MolecularWeight', 'ProteinAccessions', 'Genes']]) {
+    const header = [...ids, '[1] a.raw.PG.Quantity', '[2] b.d.PG.Quantity'].join('\t');
+    assert.deepEqual(parseHeader(header),
+      { separator: '\t', columns: ids.length + 2, annotation: ids.length, cellEstimate: 2, format: 'spectronaut' }, ids.join());
+  }
+});
+
+test('a peptide-level Spectronaut report is refused in words, as the service refuses it', async () => {
+  const header = ['PG.ProteinAccessions', 'PEP.StrippedSequence', '[1] a.raw.PG.Quantity'].join('\t');
+  assert.match(parseHeader(header).refusal, /peptide level.*PEP\.StrippedSequence/);
+  await assert.rejects(checkFile(blob(`${header}\nP1\tPEPTIDEK\t10\n`)), /peptide level/);
+});
+
+test('the Spectronaut identifier columns and the MaxQuant column are the service\'s own', () => {
+  const source = readFileSync(new URL('../../service/pipeline/alignment.py', import.meta.url), 'utf8');
+  const block = /_SPECTRONAUT_IDS = \(([\s\S]*?)\)/.exec(source)[1];
+  assert.deepEqual([...SPECTRONAUT_IDS], [...block.matchAll(/"([^"]+)"/g)].map((m) => m[1]));
+  assert.equal(MAXQUANT_IDS, /_MAXQUANT_IDS = "([^"]+)"/.exec(source)[1]);
 });
 
 test('MaxQuant SILAC and TMT searches are refused in words, as the service refuses them', async () => {
@@ -150,6 +178,18 @@ test('a file checked: tabs and commas, CRLF', async () => {
   assert.deepEqual([csv.name, csv.separator, csv.columns, csv.features, csv.cells], ['', ',', 3, 3, 2]);
   const file = new File(['gene,a\nX,1\n'], 'named.csv');
   assert.equal((await checkFile(file)).name, 'named.csv', 'a File brings its name');
+});
+
+test('a file whose lines end in a lone CR (Excel\'s "CSV (Macintosh)") is checked as its LF twin, as the service reads it', async () => {
+  const lf = 'gene\ta\tb\nCD3E\t1\t0\n\nCD19\t\t-2\n';
+  const cr = lf.replaceAll('\n', '\r');
+  assert.deepEqual(await checkFile(blob(cr), 'mac.tsv'), await checkFile(blob(lf), 'mac.tsv'));
+  assert.equal(await countNonEmptyLines(blob('a\rb\r\r  \rc')), 3);
+  // a CR at the end of one streamed chunk and its LF at the start of the next end one line, not two
+  const rows = Array.from({ length: 30000 }, (_, i) => `G${i},${i},1`);
+  const crlf = ['gene,a,b', ...rows].join('\r\n');
+  assert.equal(await countNonEmptyLines(blob(crlf)), 30001);
+  assert.equal(await countNonEmptyLines(blob(crlf.replaceAll('\r\n', '\r'))), 30001, 'lone CRs across many chunks');
 });
 
 test('a file that cannot be sent says why in plain words', async () => {
