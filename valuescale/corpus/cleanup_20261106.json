@@ -1,0 +1,337 @@
+{
+ "about": "The records the clean-up of 2026-11-06 touches, each with its reasons (research/notebooks/value_scale_corpus.py cleanup-selection; revisit --cleanup visits them).",
+ "probe": {
+  "now_nonzero": 0,
+  "now_unreadable": 0,
+  "read": 199
+ },
+ "reasons": {
+  "decoding": 9,
+  "failed read": 31,
+  "line endings": 6,
+  "macOS file": 7,
+  "reader": 61
+ },
+ "records": {
+  "PXD001608": [
+   "reader"
+  ],
+  "PXD002127": [
+   "reader"
+  ],
+  "PXD003185": [
+   "reader"
+  ],
+  "PXD005285": [
+   "line endings"
+  ],
+  "PXD008394": [
+   "reader"
+  ],
+  "PXD008707": [
+   "reader"
+  ],
+  "PXD008715": [
+   "failed read",
+   "line endings"
+  ],
+  "PXD012687": [
+   "reader"
+  ],
+  "PXD014438": [
+   "reader"
+  ],
+  "PXD016603": [
+   "reader"
+  ],
+  "PXD016620": [
+   "reader"
+  ],
+  "PXD016637": [
+   "reader"
+  ],
+  "PXD017104": [
+   "reader"
+  ],
+  "PXD017116": [
+   "reader"
+  ],
+  "PXD017794": [
+   "failed read"
+  ],
+  "PXD020470": [
+   "failed read"
+  ],
+  "PXD022054": [
+   "reader"
+  ],
+  "PXD022859": [
+   "reader"
+  ],
+  "PXD023087": [
+   "failed read"
+  ],
+  "PXD023542": [
+   "reader"
+  ],
+  "PXD024130": [
+   "failed read"
+  ],
+  "PXD024347": [
+   "reader"
+  ],
+  "PXD026775": [
+   "reader"
+  ],
+  "PXD027240": [
+   "reader"
+  ],
+  "PXD028842": [
+   "reader"
+  ],
+  "PXD029753": [
+   "reader"
+  ],
+  "PXD029954": [
+   "reader"
+  ],
+  "PXD030932": [
+   "failed read"
+  ],
+  "PXD032218": [
+   "reader"
+  ],
+  "PXD033661": [
+   "reader"
+  ],
+  "PXD034184": [
+   "reader"
+  ],
+  "PXD034258": [
+   "decoding"
+  ],
+  "PXD035726": [
+   "reader"
+  ],
+  "PXD035770": [
+   "reader"
+  ],
+  "PXD035780": [
+   "reader"
+  ],
+  "PXD036800": [
+   "reader"
+  ],
+  "PXD036962": [
+   "reader"
+  ],
+  "PXD037506": [
+   "reader"
+  ],
+  "PXD038040": [
+   "reader"
+  ],
+  "PXD038155": [
+   "reader"
+  ],
+  "PXD038301": [
+   "reader"
+  ],
+  "PXD038908": [
+   "decoding",
+   "macOS file"
+  ],
+  "PXD039443": [
+   "reader"
+  ],
+  "PXD040449": [
+   "failed read"
+  ],
+  "PXD040456": [
+   "reader"
+  ],
+  "PXD040974": [
+   "reader"
+  ],
+  "PXD041182": [
+   "decoding"
+  ],
+  "PXD041339": [
+   "macOS file",
+   "decoding"
+  ],
+  "PXD041795": [
+   "reader"
+  ],
+  "PXD041928": [
+   "failed read"
+  ],
+  "PXD042859": [
+   "reader"
+  ],
+  "PXD042867": [
+   "reader"
+  ],
+  "PXD043370": [
+   "failed read"
+  ],
+  "PXD045017": [
+   "reader"
+  ],
+  "PXD045261": [
+   "reader"
+  ],
+  "PXD046524": [
+   "reader"
+  ],
+  "PXD047101": [
+   "failed read"
+  ],
+  "PXD048093": [
+   "failed read"
+  ],
+  "PXD048558": [
+   "decoding"
+  ],
+  "PXD048966": [
+   "failed read"
+  ],
+  "PXD048985": [
+   "reader"
+  ],
+  "PXD050049": [
+   "failed read"
+  ],
+  "PXD050265": [
+   "reader"
+  ],
+  "PXD051271": [
+   "failed read"
+  ],
+  "PXD051678": [
+   "reader"
+  ],
+  "PXD054457": [
+   "reader"
+  ],
+  "PXD054919": [
+   "failed read"
+  ],
+  "PXD054961": [
+   "reader"
+  ],
+  "PXD055348": [
+   "macOS file",
+   "decoding"
+  ],
+  "PXD057678": [
+   "failed read"
+  ],
+  "PXD057814": [
+   "failed read"
+  ],
+  "PXD057972": [
+   "reader"
+  ],
+  "PXD057989": [
+   "reader"
+  ],
+  "PXD057994": [
+   "reader"
+  ],
+  "PXD058050": [
+   "failed read"
+  ],
+  "PXD058053": [
+   "failed read"
+  ],
+  "PXD058283": [
+   "reader"
+  ],
+  "PXD058381": [
+   "reader"
+  ],
+  "PXD058703": [
+   "failed read"
+  ],
+  "PXD058750": [
+   "failed read"
+  ],
+  "PXD059039": [
+   "failed read"
+  ],
+  "PXD060977": [
+   "reader"
+  ],
+  "PXD062815": [
+   "failed read"
+  ],
+  "PXD062864": [
+   "failed read"
+  ],
+  "PXD063043": [
+   "reader"
+  ],
+  "PXD063561": [
+   "reader"
+  ],
+  "PXD063745": [
+   "macOS file"
+  ],
+  "PXD064468": [
+   "failed read",
+   "line endings"
+  ],
+  "PXD064519": [
+   "reader"
+  ],
+  "PXD064580": [
+   "reader"
+  ],
+  "PXD065519": [
+   "reader"
+  ],
+  "PXD067282": [
+   "macOS file",
+   "decoding"
+  ],
+  "PXD068676": [
+   "failed read",
+   "line endings"
+  ],
+  "PXD068994": [
+   "failed read",
+   "line endings"
+  ],
+  "PXD070586": [
+   "failed read"
+  ],
+  "PXD070622": [
+   "reader"
+  ],
+  "PXD070994": [
+   "reader"
+  ],
+  "PXD071139": [
+   "failed read",
+   "line endings"
+  ],
+  "PXD073843": [
+   "failed read"
+  ],
+  "PXD073865": [
+   "failed read"
+  ],
+  "PXD076818": [
+   "macOS file",
+   "decoding"
+  ],
+  "PXD080805": [
+   "reader"
+  ],
+  "PXD080817": [
+   "macOS file",
+   "decoding"
+  ]
+ }
+}

@@ -74,7 +74,6 @@ ALLOWED_MISSING = (
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "valuescale/corpus/score_test.py",  # the raw-or-log plan's B3/B7 one-time scorer (research/benchmark/protocol-value-scale.md)
     "valuescale/baselines.py",  # the raw-or-log plan's B4 baseline rules (research/value-scale-plan.md)
-    "valuescale/corpus/cleanup_20261106.json",  # written by the corpus runner's cleanup-selection, before B3's third visit
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
     "data/profiles/",  # the gene profile shards, written only into dist/site/ by scripts/build_pages_site.py
     # The film's project writes these, all gitignored (docs/web/motion.md)
