@@ -1,0 +1,34 @@
+{
+  "step": "b3_revisit2",
+  "written": "2026-11-06, after the clean-up's code (76d490a) and before cleanup-selection's header probe or the third visit ran. The selection's local part (103 records) was counted from the walk's log and the local tables' headers and encodings while writing this; no value of a drawn deposit was read.",
+  "about": "B3's third visit (research/value-scale-plan.md, B3; research/benchmark/protocol-value-scale.md, amendment 3): the records the clean-up of 2026-11-06 touches, visited again with the fixed tools, in their places in the log. No detector statistic, gate or verdict is computed on any drawn deposit. Not edited after the run: a difference is reported.",
+  "faults": {
+    "line_endings": "a lone CR (Excel's 'CSV (Macintosh)') did not end a line in the service's parser, the site's check or the corpus header reader, so csv said 'new-line character seen in unquoted field': 5 failed reads and 1 unparseable (PXD005285)",
+    "maxquant_without_gene_names": "a MaxQuant table needed both 'Majority protein IDs' and 'Gene names', spelled so. Without them it fell to the plain-matrix reader and failed on its first text column: 52 tables without 'Gene names', PXD001608 whose first column is a sample, and PXD054457 in MaxQuant 1.0 to 1.2's title case (54)",
+    "spectronaut_without_pg_genes": "a Spectronaut pivot needed PG.Genes: PXD057989, PXD034184 and PXD054961 have none, PXD065519 has 'Genes' without the 'PG.' prefix, and PXD038040 is peptide-level",
+    "macos_files": "a macOS companion file ('._' name, or under __MACOSX/) was chosen as the table: 7 records",
+    "decoding": "the long-report readers read UTF-8 only: 3 Spectronaut long reports in Windows-1252 (PXD041182, PXD048558, PXD034258). PXD038908's decode failure was its macOS file",
+    "utf16_headers": "the header reader read UTF-16 as UTF-8. None was seen: such a header names no quantity column, so its record says too few columns with 0"
+  },
+  "selection": {
+    "rule": "research/notebooks/value_scale_corpus.py, cleanup_reasons and cmd_cleanup_selection: a failed read (fetch failed, no file list); a detail holding csv's new-line error or a UnicodeDecodeError; a chosen file or member that is a macOS companion; a local matrix-kind table that is not UTF-8, or whose header gets another reader now than before the clean-up (_reader_before_cleanup); and a 'too few columns' record with 0 quantity columns whose header, read again now, names some",
+    "local_part": {"records": 103, "reader": 61, "failed read": 31, "decoding": 9, "macOS file": 7, "line endings": 6},
+    "reader_moved": "61: the 54 MaxQuant tables (4 whose headers show a SILAC search and 1 a TMT search; 49 others, 29 calibration and 20 test, one with Perseus annotation rows), the 5 Spectronaut pivots, and 2 kept Spectronaut pivots whose only identifier column is PG.ProteinGroups (PXD046524 calibration, PXD037506 test)",
+    "probe": "the 199 'too few columns' records with 0 quantity columns have their headers read again, the header alone; one of them is already chosen, as a macOS file",
+    "written_to": "valuescale/corpus/cleanup_20261106.json, by cleanup-selection, before the third visit"
+  },
+  "expected": {
+    "probe": "no expectation on how many of the 199 headers now name a quantity column, as no UTF-16 header was seen. Any that does is visited again",
+    "line_endings": "none of the 6 fails with csv's new-line error again. PXD005285 and at least 4 of the 5 failed reads reach a later rule: kept, or a skip reason other than fetch failed",
+    "maxquant": "none of the 54 fails on text in a MaxQuant annotation column. The 5 whose headers show a SILAC (4) or TMT (1) search are refused by name, on the header. At least 44 of the other 49 are kept",
+    "spectronaut": "PXD057989, PXD034184, PXD054961 and PXD065519 are read: kept, or a later rule. PXD038040 is refused in words as peptide-level",
+    "kept_two": "PXD046524 and PXD037506 stay kept with the same label, row count and column count; their cells are named by run",
+    "macos_files": "none of the 7 chooses a macOS companion file again",
+    "decoding": "the 3 Windows-1252 Spectronaut long reports no longer fail on decoding",
+    "failed_reads_otherwise": "the 10 damaged archives, the 3 missing MassIVE folders and the 1 dataset not on the host fail again as before. The 4 '550 Failed to open file' and the 8 MassIVE listings that failed after retries: no expectation (the servers' side)",
+    "nothing_else": "no record outside the selection changes; the log keeps the frame's order; each revisited record keeps its earlier outcomes in revisited_from and its reasons in revisited_for",
+    "corpus": "S1 and S2 still meet 59 in both splits; S3 stays short and pools with S2; still no real log table",
+    "report": "every B3 row keeps its pass or fail, with B3_frame failing as the owner accepted. B3_audit stays the rank-based sample's, not redrawn"
+  },
+  "audit": "every table this visit keeps that was not kept before is judged under b3.json's audit_rubric, by subagents, with Claude rereading every disagreement and every tenth agreement. It is recorded in audit.json under its own key, 'cleanup', with the verdicts beside the others. Expected: at least 90% agree, as B3_audit asked. A disagreement is excluded, as before"
+}
