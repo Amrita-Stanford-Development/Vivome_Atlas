@@ -1,5 +1,60 @@
 {
- "about": "B3's hand audit (research/benchmark/protocol-value-scale.md): a seeded 20% of each split's kept deposits, drawn by sha256('20261103:audit:' + accession). Packets (data/incoming/value-scale-corpus/audit/) give headers, the table's place in the deposit and the methods, never values. The first packets cut the column list at 120 names, the file list at 300 and misread parquet headers: the 53 they affected were judged again on rebuilt packets, and both judgements agreed on all 53. Claude reread the one disagreement and every tenth agreement.",
+ "about": "B3's hand audit (research/benchmark/protocol-value-scale.md): a seeded 20% of each split's kept deposits, drawn by sha256('20261103:audit:' + accession). Packets (data/incoming/value-scale-corpus/audit/) give headers, the table's place in the deposit and the methods, never values. The first packets cut the column list at 120 names, the file list at 300 and misread parquet headers: the 53 they affected were judged again on rebuilt packets, and both judgements agreed on all 53. Claude reread the one disagreement and every tenth agreement. 'cleanup' lists the tables B3's third visit added (2026-11-06; valuescale/bank/expectations/b3_revisit2.json), 29 calibration and 20 test. Each was judged under the same rubric, its verdict beside the sample's (packet: 'third visit (the tables it added)'). Claude reread the one disagreement, the four doubts, two close calls a judge named, and every tenth agreement in accession order.",
+ "cleanup": {
+  "calibration": [
+   "PXD001608",
+   "PXD008707",
+   "PXD014438",
+   "PXD016603",
+   "PXD016620",
+   "PXD016637",
+   "PXD017104",
+   "PXD022859",
+   "PXD023542",
+   "PXD024347",
+   "PXD029954",
+   "PXD033661",
+   "PXD034184",
+   "PXD035770",
+   "PXD035780",
+   "PXD036962",
+   "PXD038040",
+   "PXD038155",
+   "PXD041339",
+   "PXD042859",
+   "PXD042867",
+   "PXD045261",
+   "PXD054457",
+   "PXD057972",
+   "PXD057994",
+   "PXD063043",
+   "PXD064519",
+   "PXD064580",
+   "PXD070994"
+  ],
+  "test": [
+   "PXD022054",
+   "PXD026775",
+   "PXD027240",
+   "PXD028842",
+   "PXD029753",
+   "PXD032218",
+   "PXD035726",
+   "PXD036800",
+   "PXD039443",
+   "PXD040456",
+   "PXD040974",
+   "PXD041795",
+   "PXD045017",
+   "PXD050265",
+   "PXD054961",
+   "PXD057989",
+   "PXD058283",
+   "PXD058381",
+   "PXD060977",
+   "PXD065519"
+  ]
+ },
  "sample": {
   "calibration": [
    "PXD000809",
@@ -97,6 +152,23 @@
    "reason": "Native MaxQuant proteinGroups.txt with Intensity columns; Perseus is named only for the later bioinformatics analysis.",
    "reread": "Claude reread: agrees; MaxQuant txt output in a search-result archive, Intensity columns (no LFQ), Perseus only for analysis."
   },
+  "PXD001608": {
+   "agrees": false,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Annotation rows under the header (1) ... #!{Type}E",
+   "reason": "Disagree line 1: the annotation row under the header is a Perseus #!{Type} row, so this proteinGroups.txt was saved from Perseus and is not MaxQuant's own output, which the linear label rests on.",
+   "reread": "Claude reread: agrees with the disagreement. The annotation row under the header is '#!{Type}E ...', so CombinedTxtFiles.zip's proteinGroups.txt was saved from Perseus (the rubric's first line). That is also why its first column is a sample: Perseus moved MaxQuant's columns."
+  },
+  "PXD008707": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "member `txt/proteinGroups.txt` ... Annotation rows under the header (0) ... Mass spectra were searched with MaxQuant36 v1.5.1.2",
+   "reason": "Agree: MaxQuant's own proteinGroups.txt in its txt folder, no Perseus row, no scale step in the names, and the methods describe no transformation of the deposited table (silence is agreement)."
+  },
   "PXD010149": {
    "agrees": true,
    "doubt": false,
@@ -121,6 +193,14 @@
    "quote": "Table: `proteinGroups.txt`; 20 columns, 1414 rows. ... LFQ intensity (20): LFQ intensity DC_TNFa, ... Downstream analysis of proteomic data was performed by Perseus software (version 1.6.0.7).",
    "reason": "Native MaxQuant proteinGroups.txt with LFQ intensity columns, no annotation rows, and the methods place all further processing in Perseus downstream."
   },
+  "PXD014438": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "proteinGroups_BALF_MaxQuant_Search.txt ... The analysis to identify differentially expressed proteins were completed using PECA procedure",
+   "reason": "Agree: the file name names the MaxQuant search, not a scale step; no Perseus row; PECA is analysis after the software and the methods do not say the deposited table holds any transformation."
+  },
   "PXD015430": {
    "agrees": true,
    "doubt": false,
@@ -136,6 +216,40 @@
    "packet": "rebuilt (second judgement)",
    "quote": "Table: `imaconly_multiconsensus_-1_Proteins.txt`; 33 columns, 33605 rows. ... Abundance (33): Abundance: F1: 126, Control, ...",
    "reason": "Proteome Discoverer 2.3 Proteins.txt read on its plain 'Abundance:' columns (the Scaled, Normalized, Ratio and log2 Ratio columns are separate); 'imaconly' names the IMAC fractions, not a scale step, and the methods describe no transformation of the deposited table."
+  },
+  "PXD016603": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Raw MS data files were processed using MaxQuant [version 1.6.7.0] ... Processed data was uploaded in the Perseus software and R(3.6.1) to perform bioinformatical analyses.",
+   "reason": "Agree: plain proteinGroups.txt next to mqpar.xml, no Perseus row; Perseus and R are placed in the analysis after MaxQuant without saying the deposited table holds their output."
+  },
+  "PXD016620": {
+   "agrees": true,
+   "doubt": true,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Further statistical and bioinformatics analysis was performed by Perseus software (v. 1.5.3.2). We uploaded modified ‘proteingroups.txt’ file produced from MaxQuant ... After loading the data ... Each LFQ intensities were transformed log2 values.",
+   "reason": "Agree under 'agree otherwise': the log2 step is placed in Perseus after loading, and the methods do not say the deposited proteinGroups.txt holds it; no Perseus row in the table. Close because the methods name the table ('proteingroups.txt') and call it 'modified' before upload, though the modification described is filtering, not a scale change.",
+   "reread": "Claude reread: agrees. The 'modified' proteinGroups.txt the methods load into Perseus was filtered (reverse, contaminant and site-only hits removed, a valid-value filter); filtering is not a scale step. The log2 is done in Perseus after loading."
+  },
+  "PXD016637": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Identification and quantification of TMT-labeled cellular proteins ... Spectra data were log-transformed ... BALF samples were quantified in label-free quantification (LFQ) mode",
+   "reason": "Agree: the log-transform sentence belongs to the Scaffold TMT cellular data, not to the deposited MaxQuant proteinGroups.txt (BALF, LFQ), which sits with summary.txt and parameters.txt and has no Perseus row; PECA/limma is later analysis."
+  },
+  "PXD017104": {
+   "agrees": true,
+   "doubt": true,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Label-free quantification was performed by Intensity-based absolute quantification (iBAQ). Quantile normalization was performed to ensure each sample has the same distribution.",
+   "reason": "Agree: the methods do not say the deposited searchresult.zip proteinGroups.txt holds the quantile-normalised values, and the table has MaxQuant's own columns with no Perseus row. Close because quantile normalisation is not a MaxQuant step and the methods do not place it explicitly after the software.",
+   "reread": "Claude reread: agrees. Quantile normalisation is not a MaxQuant step, and the methods do not say searchresult.zip's proteinGroups.txt holds it; the table keeps MaxQuant's columns and has no Perseus row. Silence is agreement."
   },
   "PXD017672": {
    "agrees": true,
@@ -178,6 +292,14 @@
    "reason": "The log2 and median subtraction are Perseus analysis applied to the MaxQuant output; the deposited proteinGroups.txt is that native output with LFQ intensity columns.",
    "reread": "Claude reread: agrees; MaxQuant proteinGroups.txt beside mqpar.xml and peptides.txt."
   },
+  "PXD022054": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `Maxquant_Results_txt.zip`, member `txt/proteinGroups.txt` ... Subsequent analysis was then carried out using the Proteus R package",
+   "reason": "Neither the archive nor the member name names a scale step. The later analysis is in R after the software and is not said to be held in the deposited table, so 'agree otherwise' applies."
+  },
   "PXD022350": {
    "agrees": true,
    "doubt": false,
@@ -185,6 +307,31 @@
    "packet": "rebuilt (second judgement)",
    "quote": "Table: `proteinGroups_EV1.txt`; 27 columns, 5059 rows. ... IBAQ values LFQ (label-free) intensities were calculated using the in-built algorithms.",
    "reason": "Native MaxQuant proteinGroups (EV1 is a dataset suffix) with LFQ intensity columns computed by MaxQuant's in-built algorithm; no annotation rows and no later transformation described."
+  },
+  "PXD022859": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "proteinGroups_Human_HOMD.txt ... label-free quantification was set using the MaxLFQ algorithm",
+   "reason": "Agree: 'Human_HOMD' names the search database (human and oral microbiome), not a scale step; no Perseus row; the methods describe only the MaxQuant LFQ run."
+  },
+  "PXD023542": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Next, the output file was loaded to Perseus. ... LFQ intensities were normalized to logarithmic scale, and missing values were imputed from normal distribution.",
+   "reason": "Agree under 'agree otherwise': the log and imputation are placed in Perseus after MaxQuant; the deposited NSP1_txt/proteinGroups.txt has no Perseus row and the methods do not say it holds those steps."
+  },
+  "PXD024347": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "member `MQ_Clinical/proteinGroups.txt` ... Quantification of protein concentrations was performed using the Total Protein Approach",
+   "reason": "Agree: MaxQuant's own proteinGroups.txt in its output folder, no Perseus row, no scale step in the names; the Total Protein Approach is later analysis not said to be in the deposited table.",
+   "reread": "Claude reread (every tenth agreement): agrees. MQ_Clinical.zip's proteinGroups.txt, LFQ intensity columns; the Total Protein Approach is the later quantification of concentrations."
   },
   "PXD025057": {
    "agrees": true,
@@ -194,6 +341,22 @@
    "quote": "Table: `MQ_search_results.zip`, member `proteinGroups.txt`; ... Intensity (24): Intensity 220_Nsco_1820_CG_IP_B1, ... The resulting data was visualized using ggplot2 (9) within R.",
    "reason": "Native MaxQuant proteinGroups.txt inside the MaxQuant results archive, read on the Intensity family (no LFQ columns present); R is used only for plotting."
   },
+  "PXD026775": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "identified and quantified by MaxQuant label-free quantification software ... For any subsequent analyses like Partial least squares-discriminant analysis (PLS-DA), the overall protein intensity was estimated as a sum of MaxQuant label-free quantification values",
+   "reason": "The LFQ values are MaxQuant's own output, and the later summing is analysis that is not said to be in the deposited table. There are no annotation rows and no scale word in the file name."
+  },
+  "PXD027240": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Data were analyzed using MaxQuant 1.6.3.4 ... Annotation rows under the header (0)",
+   "reason": "A plain proteinGroups.txt deposited with the other MaxQuant txt outputs. No transformation is described, and silence is agreement."
+  },
   "PXD028371": {
    "agrees": true,
    "doubt": false,
@@ -202,6 +365,14 @@
    "quote": "Label free data were analysed with the following softares: MaxQuant/Perseus/R",
    "reason": "The methods name no transformation of the deposited table, and the lone proteinGroups.txt has native MaxQuant LFQ intensity columns with no Perseus annotation rows."
   },
+  "PXD028842": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `ProteinIDdata.zip`, member `proteinGroups.txt` ... LFQ was performed with match-between-runs enabled.",
+   "reason": "'ProteinIDdata' names no scale step, and LFQ is MaxQuant's own normalisation in its run. There are no annotation rows and no deposited-table transformation."
+  },
   "PXD029202": {
    "agrees": true,
    "doubt": false,
@@ -209,6 +380,23 @@
    "packet": "rebuilt (second judgement)",
    "quote": "LFQ algorithm implemented was used for protein quantification through MaxQuant software, statistical analysis was performed by Perseus v1.6.14.0, SPSS 26.0 and Graph Prism v8.0 software.",
    "reason": "Native MaxQuant proteinGroups.txt with LFQ intensity; the FOT conversion and log2 z-scores are placed in the analysis, not in the deposited table."
+  },
+  "PXD029753": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "the generated output is reanalyzed with an R script including a set of functions implemented in the R package SRMService ... the R package Limma is applied for statistical testing",
+   "reason": "The reanalysis is in R after MaxQuant and is not said to be in the deposited proteinGroups.txt. The table sits among the full MaxQuant txt set with no annotation rows, so 'agree otherwise' applies."
+  },
+  "PXD029954": {
+   "agrees": true,
+   "doubt": true,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "SARS-CoV-2 protein identification and quantification data were extracted and normalised to the levels of proteins encoded by the ORF1ab gene. ... Statistical analysis of the normalised LFQ data was performed using Prism 7",
+   "reason": "Agree: the normalisation is applied to the extracted SARS-CoV-2 protein data for the Prism statistics, not said to be in the deposited proteinGroups table; no Perseus row and the file name carries only a date. Close because the methods mention 'normalised LFQ data' and the table carries non-standard 'Protein name, Gene name' columns, suggesting some editing after MaxQuant.",
+   "reread": "Claude reread: agrees. The normalisation to ORF1ab's proteins is of the extracted SARS-CoV-2 proteins, for Prism. The file name carries a date and the infection, no scale step."
   },
   "PXD030049": {
    "agrees": true,
@@ -225,6 +413,15 @@
    "packet": "rebuilt (second judgement)",
    "quote": "For the data evaluation in Perseus, data was grouped and filtered according to missing values. ... Data was log2 transformed and imputation was performed according normal distribution",
    "reason": "Log2 and imputation are Perseus evaluation steps; the deposited member MQ_search_plasma_txt/proteinGroups.txt is native MaxQuant output with LFQ intensity columns and no Perseus rows."
+  },
+  "PXD032218": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "LFQ protein intensities of high confidence interactors were bait normalized and missing values were imputed with the median of biological replicates ... Two sided t test and p values",
+   "reason": "The bait normalisation and imputation are downstream analysis of an interactor subset. The methods do not say the deposited proteinGroups.txt holds them, and it keeps all 1273 MaxQuant rows with no annotation rows. Neither proteinGroups.txt nor proteinGroups_frac.txt names a scale step.",
+   "reread": "Claude reread (a close call the judge named): agrees. Bait normalisation and imputation are of the high-confidence interactors' LFQ intensities; the deposited proteinGroups.txt keeps all 1273 rows, with no Perseus row."
   },
   "PXD032750": {
    "agrees": true,
@@ -250,6 +447,14 @@
    "quote": "Further analysis was performed using a custom pipeline developed in R (3.6.1), which utilizes the LFQ intensity values in the MaxQuant output file proteinGroups.txt.",
    "reason": "The methods call the deposited proteinGroups.txt the MaxQuant output; imputation and limma happen afterwards in R."
   },
+  "PXD033661": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "protein identification and quantitation were performed using the MaxQuant-Andromeda software suite (version 1.6.3.4)",
+   "reason": "Agree: plain proteinGroups.txt deposited with the whole MaxQuant txt output (summary.txt, parameters.txt, evidence.txt), no Perseus row; later R and STRING steps are analysis not said to be in the deposited table."
+  },
   "PXD034013": {
    "agrees": true,
    "doubt": false,
@@ -259,6 +464,14 @@
    "reason": "Native MaxQuant txt folder output with LFQ intensity columns; the methods describe nothing after MaxQuant.",
    "reread": "Claude reread: agrees; MaxQuant txt.zip, LFQ intensity columns, no transformation named."
   },
+  "PXD034184": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Protein_Real_Sample_Report.xls ... DIA data were analyzed with Spectronaut 14.9 with default settings as follows: ... cross run normalization, enabled",
+   "reason": "Agree: a Spectronaut report with PG.Quantity columns and no Perseus row; cross-run normalisation is Spectronaut's own in its run, and no scale step is named in the file name or methods for the deposited table."
+  },
   "PXD035199": {
    "agrees": true,
    "doubt": false,
@@ -266,6 +479,31 @@
    "packet": "rebuilt (second judgement)",
    "quote": "Table: `txt_191008.zip`, member `proteinGroups.txt`; LFQ intensity (45): LFQ intensity 1AT1, LFQ intensity 1AT2, LFQ intensity 1AT3",
    "reason": "A native MaxQuant proteinGroups.txt in a txt output zip, with no annotation rows and methods silent on any transformation of the deposited table."
+  },
+  "PXD035726": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "MaxQuant label-free quantification (LFQ) without the FastLFQ option was used for initial protein and peptide intensity normalization.",
+   "reason": "The only normalisation described is MaxQuant's own LFQ in its run, which counts as the software's own output. The archive name 'MaxQuant-search-results-and-parameters.zip' names no scale step, and there are no annotation rows."
+  },
+  "PXD035770": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... MaxQuant software (version 1.5.3.30) was used to analyze MS raw files.",
+   "reason": "A plain MaxQuant proteinGroups.txt with no Perseus rows, no scale word in the name, and methods that describe only the MaxQuant run, so no disagree line applies (agree otherwise).",
+   "reread": "Claude reread (every tenth agreement): agrees. A plain MaxQuant proteinGroups.txt, Intensity columns (no LFQ), no Perseus row; the methods describe only the MaxQuant run and a contaminant filter."
+  },
+  "PXD035780": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... The quantified abundances were based on intensity values and were normalized to the total peptide amount. ... with MaxQuant version 1.5.3.30 involved in the workflow.",
+   "reason": "The normalisation the methods name is Proteome Discoverer's own, applied in its run, and the table is MaxQuant's proteinGroups.txt with no Perseus rows or scale word, so it counts as the software's own output (agree otherwise)."
   },
   "PXD036519": {
    "agrees": true,
@@ -283,6 +521,22 @@
    "quote": "For Succinyl-K peptides, raw files were processed with MaxQuant (v 1.6.17.0) using the standard settings",
    "reason": "proteinGroups.txt sits among MaxQuant's other txt outputs with native LFQ intensity columns; no transformation of it is described."
   },
+  "PXD036800": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Protein fold changes were computed based on Intensity values reported in the proteinGroups.txt file. A set of functions implemented in the R package SRMService [39] was used ... to normalize the data with a modified robust z-score transformation",
+   "reason": "The methods name proteinGroups.txt as the input to the R analysis. They place the z-score normalisation in R afterwards and do not say the deposited table holds it, so 'agree otherwise' applies. 'proteinGroups.zip' names no scale step."
+  },
+  "PXD036962": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... Data processing (MaxQuant, Version: 1.6.2.6) ... Quantification: label-free quantification (LFQ)",
+   "reason": "A MaxQuant proteinGroups.txt with MaxQuant's own LFQ, no Perseus rows, and no transformation of the deposited table in the methods (agree otherwise)."
+  },
   "PXD037660": {
    "agrees": true,
    "doubt": false,
@@ -298,6 +552,22 @@
    "packet": "rebuilt (second judgement)",
    "quote": "Differential protein expression analysis was performed using the R-package prolfqua. Only proteins identified by at least two peptides were included into the analysis. First, protein abundances were log2 transformed.",
    "reason": "The log2 step is in the prolfqua R analysis after FragPipe; the chosen combined_protein.tsv has only native FragPipe columns (MaxLFQ/Unique/Total Intensity, spectral counts) and no annotation rows."
+  },
+  "PXD038040": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `20211222_133602_FFPE-Turin-directDIA_Report.xls` ... EG.NormalizationFactor ... processed with Spectronaut 15.1.210713.50606 using the directDIA workflow ... the absence of imputation for the missing values.",
+   "reason": "A Spectronaut report whose file name names no later step. Its normalisation-factor columns are Spectronaut's own normalisation, and the methods rule out imputation, so no disagree line applies."
+  },
+  "PXD038155": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `Results.zip`, member `proteinGroups.txt` ... Annotation rows under the header (0) ... Perseus software was used to transform protein data into log 2, apply quality criteria of at least two unique peptides and 50% of valid values, and impute missing values",
+   "reason": "The log2 and imputation the methods describe are placed in Perseus, after the software, and nothing says the deposited table holds them. The member is MaxQuant's proteinGroups.txt with no #!{Type} rows, so lines 1 and 3 do not apply (agree otherwise)."
   },
   "PXD038196": {
    "agrees": true,
@@ -323,6 +593,15 @@
    "quote": "Match between runs and LFQ quantification were enabled. Other parameters were used as pre-set in the software.",
    "reason": "MaxQuant's own LFQ output in txt_TS2/proteinGroups.txt; the methods describe no later transformation of the deposited table."
   },
+  "PXD039443": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Protein abundance was determined from the intensity of top two unique peptides. Intensity values were median normalized and imputed using random sampling from a normal distribution generated 1% less intense values. ANOVA statistical tests were performed",
+   "reason": "The median normalisation and imputation belong to the statistical analysis and are not tied to the deposited proteinGroups.txt, which has no annotation rows and keeps the MaxQuant columns. Neither the table nor folder name names a scale step.",
+   "reread": "Claude reread (a close call the judge named): agrees. The median normalisation and imputation are the ANOVA's preparation; proteinGroups.txt is MaxQuant's own, with no Perseus row."
+  },
   "PXD039540": {
    "agrees": false,
    "doubt": true,
@@ -332,6 +611,14 @@
    "reason": "The chosen table sits in an R results archive under a folder named for global normalization, a scale-changing step after MaxQuant named in the member path; close because its columns are MaxQuant's native set and it may be an unchanged copy of the input.",
    "reread": "Claude reread: agrees with the disagreement. The table is a member of R_result.zip in b_analysis_global_normalization/, a folder named for a normalisation after MaxQuant (the rubric's name rule); MaxQuant_result_txt.zip (678 MB) is over the 500 MB archive bar, which is why this member was the candidate."
   },
+  "PXD040456": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups_IAV_APMS.txt` ... Annotation rows under the header (0) ... Detailed protocol including descriptions of sample harvest, preparation and MS measurements is available in the Materials and Methods of the parent manuscript.",
+   "reason": "A plain MaxQuant proteinGroups table with LFQ intensity columns, no Perseus #! rows, and no scale step in its name. The methods say nothing about a transformation, and silence is agreement."
+  },
   "PXD040811": {
    "agrees": true,
    "doubt": false,
@@ -339,6 +626,47 @@
    "packet": "rebuilt (second judgement)",
    "quote": "processed with MaxQuant (version 2.0.3.1.) using the default settings and label-free quantification (LFQ) (LFQ min ratio count 2, normalization type classic)",
    "reason": "The only normalisation named is MaxQuant's own LFQ, and proteinGroups.txt sits beside mqpar.xml, evidence.txt and summary.txt as MaxQuant's native output."
+  },
+  "PXD040974": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `220622_DR_251_Sf_MQ.zip`, member `proteinGroups.txt` ... Annotation rows under the header (0) ... Mass spectrometric raw data was processed using MaxQuant.",
+   "reason": "The MaxQuant proteinGroups.txt sits inside a zip whose name ('_MQ') names only the software. There are no annotation rows, and the methods describe no transformation of the deposited table."
+  },
+  "PXD041339": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "member `DIANN/P4097_libfree_output-first-pass.pg_matrix.tsv` ... Data processing and analysis were performed using R (version 4.1.2). ... The protein intensities were log2-transformed. Missing values were imputed ... normalized using cyclicloess",
+   "reason": "The log2, imputation and cyclicloess steps happen in the R analysis after DIA-NN, and nothing says the deposited pg_matrix holds them. 'first-pass' is DIA-NN's own naming, not a scale step (agree otherwise)."
+  },
+  "PXD041795": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Protein fold changes were computed based on peptide intensity values reported in the MaxQuant-generated peptides.txt file ... Non-zero intensities are log2 transformed and modified using robust z-score transformation.",
+   "reason": "The log2 and z-score steps belong to the authors' later mixed-model analysis of peptides.txt. They are not said to be in the deposited proteinGroups.txt, which has no annotation rows and a plain name, so 'agree otherwise' applies.",
+   "reread": "Claude reread (every tenth agreement): agrees. proteinGroups.txt with LFQ intensity columns; the log2 and robust z-score are of peptides.txt, in the authors' mixed model."
+  },
+  "PXD042859": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `search/proteinGroups.txt` ... Annotation rows under the header (0)",
+   "reason": "A MaxQuant proteinGroups.txt in a 'search' folder, with no Perseus rows and no scale word. The announcement says nothing about processing, and silence is agreement."
+  },
+  "PXD042867": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `raw/Maxquant_results/txt/proteinGroups.txt` ... Annotation rows under the header (0)",
+   "reason": "The table sits in MaxQuant's own txt output folder. 'raw' and 'Maxquant_results' name no later scale step, there are no Perseus rows, and the announcement is silent on processing (agree otherwise)."
   },
   "PXD043293": {
    "agrees": true,
@@ -364,6 +692,22 @@
    "packet": "rebuilt (second judgement)",
    "quote": "Table: `txt_SN.zip`, member `txt/proteinGroups.txt`; 30 columns, 1548 rows. ... Relative protein amounts were determined by the MaxLFQ algorithm with a minimum ratio count of two.",
    "reason": "Native MaxQuant txt-folder proteinGroups.txt with MaxLFQ columns; no post-software transformation is mentioned."
+  },
+  "PXD045017": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... none ... PhosphoSTYSites.txt ... evidence.txt ... parameters.txt ... peptides.txt ... proteinGroups.txt ... summary.txt",
+   "reason": "The table is the standard proteinGroups.txt in a full MaxQuant txt output set, with no Perseus rows. The methods cover only LC-MS acquisition, and silence is agreement."
+  },
+  "PXD045261": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... MaxQuant label-free quantification (LFQ) without the FastLFQ option was used for initial protein and peptide intensity normalisation. ... For partial least squares – discrimination analysis (PLS-DA) ... the data were centred, scaled",
+   "reason": "The normalisation is MaxQuant's own LFQ. The per-peptide-length intensity and the centring and scaling are analysis steps for PLS-DA, and nothing says the deposited proteinGroups.txt holds them (agree otherwise)."
   },
   "PXD045547": {
    "agrees": true,
@@ -405,6 +749,14 @@
    "quote": "Table: `proteinGroups.txt`; 20 columns, 3300 rows. Intensity (20): Intensity 01, Intensity 02, Intensity 03",
    "reason": "A native MaxQuant proteinGroups.txt (Intensity columns, no LFQ) with no annotation rows; the methods only say MaxQuant v1.5.7.4 was used and name no transformation."
   },
+  "PXD050265": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "member `MaxQuant/combined/txt/proteinGroups.txt` ... Label-free quantification was performed with MaxQuant software ... Label-free quantification and matching between runs were enabled.",
+   "reason": "The table sits in MaxQuant's own combined/txt output folder, with no annotation rows. The methods name only MaxQuant's LFQ, which is the software's own normalisation."
+  },
   "PXD050990": {
    "agrees": true,
    "doubt": false,
@@ -437,6 +789,22 @@
    "packet": "rebuilt (second judgement)",
    "quote": "Data was filtered by q-value 0.01 and local regression normalization was used for the cross-run normalization. ... The data was further processed in R where relative abundance values were log2 transformed",
    "reason": "Native Spectronaut pivot report (PG.Quantity) with its run's own normalisation; Excel filtering and log2 in R are later analysis steps."
+  },
+  "PXD054457": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `search/proteinGroups.txt` ... Annotation rows under the header (0) ... Here we used a recently developed combinatorial search algorithm implemented in the MGVB toolset",
+   "reason": "No Perseus rows, no scale word in the path, and no transformation of the deposited table in the announcement, so no disagree line applies. Outside the rubric: the headers are not MaxQuant's usual ones ('LFQ Intensity', 'Contaminant', 'Slice Average'), the table looks like MGVB writing in MaxQuant's layout, and the parser found 0 LFQ columns because of the capital 'I'."
+  },
+  "PXD054961": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `20240524_161031_PTDM_serum_Report.tsv` ... Annotation rows under the header (0) ... Proteome analysis, PCA and hierarchical clustering were performed using Perseus",
+   "reason": "A Spectronaut-style Report.tsv with PG.Quantity columns and no #! rows. Perseus is placed in the later analysis, not said to have produced the deposited table. The methods' mention of 'Proteome Discover' is not a rubric criterion."
   },
   "PXD055784": {
    "agrees": true,
@@ -494,6 +862,31 @@
    "quote": "The protein level quantification (report.pg_matrix.tsv) and peptide level quantitation files (report.pr_matrix.tsv) are provided in the folder \"DIANN_Results.\"",
    "reason": "The methods name the deposited report.pg_matrix.tsv as DIA-NN's own protein-level output."
   },
+  "PXD057972": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `search/proteinGroups.txt` ... Annotation rows under the header (0)",
+   "reason": "A MaxQuant proteinGroups.txt in a 'search' folder with no Perseus rows or scale word. The announcement is silent on processing, and silence is agreement."
+  },
+  "PXD057989": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "member `resultados_expsinrepeticiones/SOL2024018_Report_IMSMI_quantity (Pivot).tsv` ... Differentially expressed proteins ... were identified using the Metaboanalyst platform",
+   "reason": "The folder name ('results, experiments without repetitions') and the member name ('Report ... quantity (Pivot)') name no scale step. Metaboanalyst is later analysis, not said to be applied to the deposited table."
+  },
+  "PXD057994": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `search/lung_twt_search/proteinGroups.txt` ... Annotation rows under the header (0) ... Glycoproteomics analysis of triple wild-type lung adenocarcinoma tissue samples",
+   "reason": "'lung_twt_search' names the sample set (triple wild-type) and the search, not a scale step. There are no Perseus rows and the announcement is silent on processing (agree otherwise).",
+   "reread": "Claude reread (every tenth agreement): agrees. search/lung_twt_search/ names the sample set and the search; the announcement is silent on processing."
+  },
   "PXD058054": {
    "agrees": true,
    "doubt": false,
@@ -510,6 +903,22 @@
    "quote": "DIA file was processed in Spectronaut using a default setting.",
    "reason": "This is Spectronaut's own timestamped report (with its .params file), its value columns are PG.Quantity, and no later step is named.",
    "reread": "Claude reread: agrees; Spectronaut report .xls beside its .params and the .sne, default settings."
+  },
+  "PXD058283": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... All raw mass spectrometry data were processed with MaxQuant version 1.6.10.43 ... label-free quantification enabled with a minimum ratio count of 2",
+   "reason": "The table is MaxQuant's own proteinGroups.txt, with no Perseus rows. The only normalisation named is MaxQuant's LFQ, the software's own output."
+  },
+  "PXD058381": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... All raw mass spectrometry data were analysed with MaxQuant version 1.6.10.43 ... label-free quantification enabled",
+   "reason": "The table is MaxQuant's own proteinGroups.txt, with no annotation rows and no scale step in its name. Only MaxQuant's LFQ is described."
   },
   "PXD058818": {
    "agrees": true,
@@ -543,6 +952,14 @@
    "quote": "ProteinGroups.txt table from MQ output was analyzed using a homemade R Studio pipeline and a moderated t-test statistics from an empirical Bayes method was used.",
    "reason": "The deposited proteinGroups_APEX_TBC1D22B_RQ_BT549.txt is the MaxQuant output (the suffix names the experiment) with LFQ intensity columns; R is downstream analysis."
   },
+  "PXD060977": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Perseus was used to analyze label-free quantitation data generated in MaxQuant. All peak areas were log2(x) transformed and missing values were imputed separately for each sample",
+   "reason": "The log2 and imputation steps are placed in the Perseus analysis after MaxQuant. Nothing says the deposited proteinGroups.txt holds them, and the table has no #! rows (Annotation rows under the header (0)), so 'agree otherwise' applies."
+  },
   "PXD061430": {
    "agrees": true,
    "doubt": false,
@@ -559,6 +976,14 @@
    "quote": "Table: `20240513_MS024_E2_S25-48_supernatant_DIAnn_report.tsv`; 71 columns, 2753 rows; quantity PG.MaxLFQ.",
    "reason": "A native DIA-NN long report read on PG.MaxLFQ; the RT-dependent cross-run normalisation is DIA-NN's own, and FragPipe-Analyst log2 fold changes are later analysis."
   },
+  "PXD063043": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups_MaxQuant.txt` ... Annotation rows under the header (0) ... raw data files were analyzed using MaxQuant software (Version 2.1.2.0) ... Label-free quantification (LFQ) option was checked",
+   "reason": "The file name only adds the software's name, which is not a scale step. There are no Perseus rows, and the methods describe only the MaxQuant run with its own LFQ (agree otherwise)."
+  },
   "PXD064286": {
    "agrees": true,
    "doubt": false,
@@ -567,6 +992,22 @@
    "quote": "Table: `search/report.pg_matrix.tsv`; 45 columns, 5104 rows; quantity None.",
    "reason": "DIA-NN report.pg_matrix.tsv in the search folder alongside DIA-NN's log, stats and pipeline files; native output."
   },
+  "PXD064519": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Annotation rows under the header (0) ... The standard text file “proteinsGroup.txt” output from MaxQuant was loaded into Perseus ... Next the LFQ intensity values were log (log2x) transformed ... The resulting filtered matrixes were exported as .txt files",
+   "reason": "The log2 transform and imputation happen in Perseus after MaxQuant on a loaded copy. The deposited proteinGroups.txt has no #!{Type} rows and keeps the MaxQuant columns, so 'agree otherwise' applies. No disagree line is met."
+  },
+  "PXD064580": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "The output file (proteinGroups.txt) generated by MaxQuant was analyzed using Perseus software ... Data were log-transformed (base 10) and normalized using the Pareto scaling method.",
+   "reason": "The log10 and Pareto scaling are placed in the Perseus analysis of the MaxQuant output, and the methods do not say the deposited table holds them. There are no annotation rows, so 'agree otherwise' applies."
+  },
   "PXD065392": {
    "agrees": true,
    "doubt": false,
@@ -574,6 +1015,15 @@
    "packet": "first (layout only changed)",
    "quote": "Table: `20240814_allreps-TOM-fragpipe.zip`, member `20240814_allreps-TOM/combined_protein.tsv`; 20 columns, 4224 rows; quantity None.",
    "reason": "This is FragPipe's native combined_protein.tsv with Intensity and MaxLFQ Intensity columns, and no transformation is named."
+  },
+  "PXD065519": {
+   "agrees": true,
+   "doubt": true,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `20210609_132128_Edinburgh_ARDS_follow-up_Report.xls` ... Normalized intensity values were obtained by dividing the intensity values of each protein detected in a sample by the total sum intensity detected for that particular sample.",
+   "reason": "Close call. The methods describe a total-sum scaling step without saying where it was applied, so it might describe the deposited values. They do not say the deposited Spectronaut Report.xls (PG.Quantity columns, .setup.txt alongside) holds it, so rule 3 does not apply and the table stays the software's own export.",
+   "reread": "Claude reread: agrees. The table is named as Spectronaut names its report (date_time_experiment_Report.xls), beside its .setup.txt. The methods' total-sum division is not placed in the deposited report."
   },
   "PXD067204": {
    "agrees": true,
@@ -623,6 +1073,14 @@
    "packet": "first (layout only changed)",
    "quote": "Table: `Cassette.pg_matrix.tsv`; 27 columns, 901 rows; quantity None.",
    "reason": "A native DIA-NN 2.0 pg_matrix name and header, and the methods describe only the DIA-NN run."
+  },
+  "PXD070994": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "third visit (the tables it added)",
+   "quote": "Table: `proteinGroups.txt` ... Annotation rows under the header (0) ... searched using VEMS and MaxQuant",
+   "reason": "A plain MaxQuant proteinGroups.txt with no Perseus rows and no scale step in its name. The methods say nothing about transforming it, and silence is agreement."
   },
   "PXD071177": {
    "agrees": true,

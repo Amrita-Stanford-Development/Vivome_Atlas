@@ -4,7 +4,10 @@ The report beside this file is generated. These notes explain it against
 `valuescale/bank/expectations/b3.json`. That file was written before the
 frame was built and was not edited after the run. Two sections were added
 to it later, each committed before the run it covers: `revisit` (a727c39)
-and `audit_rubric` (5a3b44a).
+and `audit_rubric` (5a3b44a). The clean-up's third visit has its own
+expectations, `valuescale/bank/expectations/b3_revisit2.json` (`3963fcd`),
+also written before it ran. The report and the counts below are as after
+that visit.
 
 No detector statistic, gate or verdict was computed on any drawn deposit.
 
@@ -93,14 +96,17 @@ these tables is not yet known.
   repository. 50.6% fall in calibration.
 - **The walk:** it listed 10,000 deposits in the frame's order (5,051
   calibration, 4,949 test) and kept 402: 188 in calibration and 214 in
-  test. 368 come from PRIDE and 34 from MassIVE.
-- **After the audit:** 401 are kept. One test deposit, PXD039540, is
-  excluded (see below).
+  test.
+- **The third visit** (the clean-up, 2026-11-06; see below) kept 49 more,
+  29 in calibration and 20 in test. 451 are kept now: 217 in calibration
+  and 234 in test. 412 come from PRIDE and 39 from MassIVE.
+- **After the audit:** 449 are kept. Two deposits are excluded: PXD039540
+  (test) and PXD001608 (calibration, one of the third visit's; see below).
 - **Labels:** every kept table is labelled linear. None is labelled log.
-- **Software:** MaxQuant 211, DIA-NN 119, Spectronaut 54, FragPipe 12,
-  Proteome Discoverer 5.
-- **Layouts:** 330 wide tables, 45 Spectronaut pivots, 18 long DIA-NN
-  reports and 9 long Spectronaut reports.
+- **Software, after the audit:** MaxQuant 253, DIA-NN 120, Spectronaut 59,
+  FragPipe 12, Proteome Discoverer 5.
+- **Layouts, after the audit:** 372 wide tables, 50 Spectronaut pivots, 18
+  long DIA-NN reports and 9 long Spectronaut reports.
 - **Where the tables are:** each kept deposit's parsed table is in
   `data/incoming/value-scale-corpus/<accession>/table.npz`, ready for B4.
 
@@ -110,37 +116,42 @@ counts after the audit:
 
 | Stratum | Calibration | Test | Quota |
 |---|---|---|---|
-| S1, 20 or more columns | 188 | 214 (213 after the audit) | 59 |
-| S2, 50 or more columns | 62 | 61 | 59 |
+| S1, 20 or more columns | 216 | 233 | 59 |
+| S2, 50 or more columns | 67 | 65 | 59 |
 | S3, 301 or more columns | 3 | 8 | 59 |
 
-Why the 10,000 listed deposits were skipped or kept:
+Before the third visit these were 188 and 213, 62 and 61, and 3 and 8.
+
+Why the 10,000 listed deposits were skipped or kept, after the third visit:
 
 | Outcome | Deposits |
 |---|---|
-| no candidate table | 7,773 |
-| too few columns | 1,557 |
-| kept | 402 |
-| unparseable | 160 |
+| no candidate table | 7,776 |
+| too few columns | 1,568 |
+| kept | 451 |
+| unparseable | 96 |
 | too large (one file over 500 MB) | 69 |
-| fetch failed | 19 |
+| too few rows | 14 |
+| fetch failed | 14 |
 | no file list | 12 |
-| too few rows | 8 |
 
-64 of the 160 unparseable tables were refused on their header alone, as
-SILAC or TMT MaxQuant searches, in the parser's own words.
+69 of the 96 unparseable tables were refused on their header alone, as
+SILAC or TMT MaxQuant searches, in the parser's own words. 11 more were
+refused so on their full read: they were walked before the header refusal.
+The other 16 are under "Found after the third visit", below.
 
 ## Rows that pass as expected
 
-- **B3_records:** all 402 kept records have their file's URL, size and
+- **B3_records:** all 451 kept records have their file's URL, size and
   sha256 (for an archive member, the member's own sha256). Each parses
   into at least 20 columns and 200 rows, and has a label with its quote.
 - **B3_quota_S1 and B3_quota_S2:** met in both splits.
 - **B3_quota_S3:** short, as expected (see below).
 - **B3_stop:** the walk stopped at 10,000 listed, because S3 could not be
   met.
-- **B3_yield:** 4.02 kept per 100 listed (expected 3 to 15).
-- **B3_skips:** "no candidate" is the most common outcome, at 77.7% of
+- **B3_yield:** 4.51 kept per 100 listed, 4.02 before the third visit
+  (expected 3 to 15).
+- **B3_skips:** "no candidate" is the most common outcome, at 77.8% of
   listed deposits (expected over half).
 - **B3_real_log:** fewer than 59 real log tables in each split. In fact
   there are none (see below).
@@ -148,6 +159,8 @@ SILAC or TMT MaxQuant searches, in the parser's own words.
   MaxQuant).
 - **B3_audit:** 80 of 81 agree, 98.8% (expected at least 90%, hoped for at
   least 95%).
+- **B3_audit_cleanup:** 48 of the 49 tables the third visit added agree,
+  98.0% (b3_revisit2.json asked at least 90%).
 - **B3_sealed:** no sealed accession was listed or opened.
 - **B3_no_statistic:** a test, run in the valuescale suite: the draw imports
   none of the detector's gates, statistics, scores or methods.
@@ -270,6 +283,49 @@ The second visit covered 93 records: 78 fetch failed and 15 no file list.
 Every expectation was met. The visited records keep their first outcome as
 `revisited_from`.
 
+## The third visit (the clean-up)
+
+The clean-up of 2026-11-06 fixed the faults in our own code that the walk
+met (`76d490a`, then a code review's fixes in `3b4f162`), and visited the
+103 records they touch a third time (`valuescale/corpus/cleanup_20261106.json`).
+Its expectations, `valuescale/bank/expectations/b3_revisit2.json`, were
+committed before the visit. A dated note in it, `changed_before_the_run`,
+records the review's changes, also made before the visit.
+
+Before, the 103 were 69 unparseable, 19 fetch failed, 12 no file list, 2
+kept and 1 too few columns. After, 51 are kept (49 of them new), 14 fetch
+failed, 12 too few columns, 12 no file list, 6 too few rows, 5 unparseable
+(the SILAC and TMT searches) and 3 no candidate.
+
+| Group | Expected | Found |
+|---|---|---|
+| header probe, 199 headers | no expectation | none names a quantity column now |
+| line endings, 6 | none fails on a new-line again; PXD005285 and at least 4 of the 5 failed reads reach a later rule | none does; all 6 reach one (3 too few columns, 3 no candidate) |
+| MaxQuant, 54 | none fails on text in an annotation column; the 4 SILAC and 1 TMT searches refused by name, on the header; at least 44 of the other 49 kept | none does; refused so; **43 kept** |
+| Spectronaut, 5 | read, PXD038040 too (by the dated note) | all 5 kept |
+| the 2 kept pivots that change reader | the same label, rows and columns | the same |
+| macOS files, 7 | none chosen again | none: 1 kept, 6 too few columns |
+| Windows-1252 long reports, 3 | no decoding failure | none: all 3 too few columns |
+| damaged archives 10, missing MassIVE folders 3, not on the host 1 | fail again | fail again |
+| "550 Failed to open" 4, MassIVE listings 8 | no expectation | fail again |
+| any other record | unchanged, the order kept, earlier outcomes kept | so |
+| the corpus | S1 and S2 still meet 59; S3 short, pooled with S2; no real log table | so |
+| the report | every B3 row keeps its pass or fail | so; B3_frame still fails, as accepted |
+
+**One row fails: MaxQuant, 43 kept against at least 44.** The other 6 of
+the 49 stop at the row bar of 200: PXD002127, PXD003185, PXD017116,
+PXD063561, PXD070622 and PXD080805. They are small tables. Their files hold
+26 to 276 data rows. The reader leaves out what MaxQuant marks as a
+contaminant, a reverse hit or identified only by site, as it does in a
+table with gene names, and that leaves 1 to 110. This was counted from the
+identifier and flag columns, not from the values. The parser is right. The
+expected count was a guess made without row counts. The expectation stands
+as written, and the row goes to the owner.
+
+The visited records keep their earlier outcomes in `revisited_from`, nested
+when the second visit had already replaced one, and their reasons in
+`revisited_for`.
+
 ## The audit
 
 - **The sample:** a seeded 20% of each split's kept deposits, 38 in
@@ -315,24 +371,81 @@ normalisation is Spectronaut's.
 - PXD048456: the columns name runs DRIX033, the raw files DRIX055;
 - PXD073754: the columns look like DIA-NN 2.x, but the methods say 1.8.1.
 
+**The third visit's 49 tables** were judged the same way
+(b3_revisit2.json, `audit`). Fresh subagents used the same rubric, on
+packets built as the rebuilt ones were. 48 agree (98.0%; at least 90% was
+asked). Claude reread the disagreement, the four verdicts marked doubt, two
+close calls a judge named, and every tenth agreement in accession order
+(4). All eleven verdicts stand.
+
+- **The disagreement: PXD001608, excluded.** Its proteinGroups.txt, in
+  `CombinedTxtFiles.zip`, has a Perseus annotation row ("#!{Type}E ...")
+  under its header, so it was saved from Perseus: the rubric's first line.
+  That is also why its first column is a sample.
+- **The doubts, all agreements:**
+  - PXD016620: the methods load a "modified" proteinGroups.txt into
+    Perseus, but the change is a filter, and the log2 is done in Perseus;
+  - PXD017104: a quantile normalisation, not placed in the deposited
+    table;
+  - PXD029954: a normalisation of the viral proteins alone;
+  - PXD065519: a total-sum scaling, not placed in Spectronaut's own
+    report.
+- **A side note, PXD054457:** it is in MaxQuant 1.0 to 1.2's spelling, with
+  "LFQ Intensity" columns. The parser's quantity patterns are
+  case-sensitive, so it read the "Intensity" columns, not LFQ. Both are
+  MaxQuant's own linear output, so the label stands. It is the only such
+  table among the 291 local MaxQuant tables.
+
 ## Reads that still fail
 
-31 deposits are skipped because a read failed even after the second visit.
+26 deposits are skipped because a read failed even after the third visit.
 They are counted under the two skip reasons b3.json added to the
 protocol's list. A failed read says nothing about a table's values, so
 these skips do not lean the labels either way.
 
-- **Fetch failed, 19:**
+- **Fetch failed, 14:**
   - 10 archives that zipfile cannot open (damaged or truncated in the
     repository);
-  - 5 tables whose lines end in a lone CR, which our readers refused until
-    the clean-up (`76d490a`);
   - 4 files PRIDE's FTP lists but will not open ("550 Failed to open
     file").
 - **No file list, 12:**
   - 8 MassIVE listings the server cut off on every one of 5 tries;
   - 3 MassIVE folders that do not exist;
   - 1 dataset not on MassIVE's FTP host.
+
+The 5 tables whose lines end in a lone CR read now: 2 have too few columns
+and 3 deposits have no candidate table.
+
+## Found after the third visit
+
+The 27 unparseable tables the clean-up did not select were read again for
+their structure alone: sizes, first bytes, delimiters and identifier
+columns, never a value.
+
+- **11 SILAC or TMT MaxQuant searches,** refused in words on their full
+  read.
+- **6 are the files' own:**
+  - two files of zero bytes in PRIDE itself (PXD055195, PXD055196);
+  - a pg_matrix with no data rows (PXD046550);
+  - a Spectronaut report named "Perseus_filtered_Imputed" (PXD084424);
+  - a placeholder proteinGroups.txt, "PRM no search was performed"
+    (PXD063781);
+  - a DIA-NN report with decimal points and decimal commas mixed in its
+    rows (PXD062541).
+- **7 are faults in our own code, not yet fixed:**
+  - a DIA-NN pg_matrix whose Genes column is empty (its FASTA gave no gene
+    names) is refused, though Protein.Group names every row by UniProt
+    accessions: PXD064789 (test), PXD070147 and PXD059079 (calibration). It
+    is the DIA-NN twin of MaxQuant without "Gene names";
+  - the delimiter is chosen from the header alone, so a tab-separated
+    pg_matrix whose run names hold commas is split on commas: PXD053397
+    (test) and PXD053298 (calibration). The service, the site's check and
+    the corpus header reader share this rule;
+  - an empty archive member was chosen as the table: PXD056559 (test) and
+    PXD046085 (calibration).
+- **3 write decimal commas,** as Spectronaut does under a European locale:
+  two long reports (PXD047604, PXD036850) and a pivot (PXD043761). Reading
+  them needs a rule that tells a decimal comma from a thousands separator.
 
 ## PRIDE's speed
 
@@ -379,8 +492,19 @@ a stop below 10,000, are no longer needed, because the walk finished at
    The fixes are in `76d490a`. The expectations are in
    `valuescale/bank/expectations/b3_revisit2.json` and protocol amendment 3
    (`3963fcd`). The selection is 103 records (`05f544d`); the header probe
-   added none.
+   added none. The visit's results are under "The third visit", above.
 3. **The 8,813 deposits the walk did not list stay unlisted,** as a
    reserve. If B4's calibration shows the method must change, the
    calibration split becomes design data and fresh calibration is drawn
    from the reserve. The test split stays sealed either way.
+
+## Asked of the owner after the third visit
+
+1. **Accept the MaxQuant row's miss** (43 kept against at least 44), as
+   explained under "The third visit".
+2. **The 7 faults found after the visit:** fix them, test first, with a
+   fourth visit of their records and expectations written first, or go to
+   B4 with them as stated limits.
+3. **Decimal commas:** read them, or refuse them in words.
+4. **PXD054457's "LFQ Intensity":** match MaxQuant's quantity columns in any
+   case, or leave it.

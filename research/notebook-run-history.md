@@ -3252,6 +3252,54 @@ detector statistic touches them (protocol
   species match was case-sensitive, which missed 4 more. The frame is
   right. It goes to the owner, who accepted it on 2026-11-06.
 
+### 76. The raw-or-log framework, Phase B, B3's third visit: the clean-up, 2026-11-06
+
+**Why:** before B4 scores anything on the calibration split, every failure
+B3's walk met that was caused by our own code, not by the files, is fixed
+and its records are visited again (the owner's choice, 2026-11-06; protocol
+amendment 3).
+
+**What was built:**
+- The faults, fixed test first in the service's parser, the site's file
+  check and the corpus tool (`76d490a`):
+  - lone-CR line endings;
+  - MaxQuant tables without "Gene names", named by their majority protein
+    IDs, and MaxQuant 1.0 to 1.2's title-case names;
+  - Spectronaut pivots without PG.Genes or the "PG." prefix;
+  - macOS companion files, never chosen;
+  - Windows-1252 long reports, read as the service reads an upload.
+- A code review's fixes before the visit ran (`3b4f162`):
+  - the refusal of peptide-level Spectronaut pivots dropped, since the
+    parser read them before;
+  - the MaxQuant test narrowed, so a plain matrix reads as before;
+  - the corpus readers refuse what the service refuses as not text.
+- The visit: `revisit --cleanup` over the 103 records the fixes touch
+  (`valuescale/corpus/cleanup_20261106.json`), against
+  `valuescale/bank/expectations/b3_revisit2.json`, written first.
+- The 49 tables it added were judged by subagents under B3's audit rubric
+  (`valuescale/corpus/audit.json`, `cleanup`).
+
+**Results** (`research/notebook-outputs/value_scale_b3/`, report and notes):
+- 49 tables added (29 calibration, 20 test). 48 agree under the audit
+  rubric; PXD001608, saved from Perseus, is excluded.
+- 449 tables kept after the audit, 216 in calibration and 233 in test, all
+  linear. S2 holds 67 and 65; S3 is still short (3 and 8) and pools with
+  S2. Still no real log table.
+- Every expectation was met but one. 43 of the 49 MaxQuant tables read were
+  kept, against at least 44. The other 6 are small files (26 to 276 rows, 1
+  to 110 after MaxQuant's contaminant, reverse and site-only rows), so the
+  expectation was wrong, not the parser. It goes to the owner.
+- Every report row keeps its pass or fail. B3_frame still fails, as the
+  owner accepted. B3_audit_cleanup passes (98.0%).
+- The 27 unparseable tables the clean-up did not select were read for
+  their structure. 11 are SILAC or TMT searches and 6 are the files' own.
+  7 are faults of our own, not yet fixed:
+  - DIA-NN with an empty Genes column, 3;
+  - the delimiter chosen from the header alone, 2;
+  - an empty archive member chosen, 2.
+
+  3 more write decimal commas. These go to the owner.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

@@ -7,7 +7,7 @@ Phase B, as of 2026-11-06:
 - **B1, the cost study:** done, with its failed row accepted by the owner (`8608c11`, `ab18152`).
 - **B2, the method:** done, with its failures accepted by the owner (`0e147eb`, `19d79eb`).
 - **B3, the corpus:** run (`5c9e521`), with its failed row accepted by the owner on 2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
-- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`, not yet deployed. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed. A code review's fixes came before the visit ran: the refusal of peptide-level Spectronaut pivots is dropped, as the parser read them before, and the MaxQuant test is narrowed so a plain matrix reads as before (protocol amendment 3; `b3_revisit2.json`, `changed_before_the_run`). The selection is unchanged. Then the visit.
+- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`, not yet deployed. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed. A code review's fixes came before the visit ran: the refusal of peptide-level Spectronaut pivots is dropped, as the parser read them before, and the MaxQuant test is narrowed so a plain matrix reads as before (protocol amendment 3; `b3_revisit2.json`, `changed_before_the_run`). The selection is unchanged. The visit ran on 2026-11-06: 49 tables added, 48 kept after their audit, and every expectation met but one, the MaxQuant count (43 kept against at least 44: six small tables). Seven more faults in our own code were found after it; they wait for the owner (B3 notes, "Found after the third visit").
 - **B4 to B7:** not started.
 
 Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 75).
@@ -246,13 +246,13 @@ This is the framework's front end; the default reading is unchanged.
 - **No stratifying by software or instrument.** The protocol drew from the whole frame instead: 18,813 human PRIDE and MassIVE deposits of 2020–2026, in a seeded order, each deposit's first candidate table, split into calibration and test by hash, with quotas by column count.
 - **Diagnostics on both splits.** They read records, quotas and the audit only. No detector statistic, gate or verdict was computed on either split.
 - **The result:**
-  - 10,000 deposits listed and 402 linear tables kept; 401 after the audit (188 calibration, 213 test);
-  - S1 and S2 meet 59 in both splits; S3 (3 and 8) pools with S2 into "50 to 2,000" (62 and 61);
+  - 10,000 deposits listed and 402 linear tables kept; 401 after the audit (188 calibration, 213 test). After the clean-up's third visit, 451 kept and 449 after the audit (216 calibration, 233 test);
+  - S1 and S2 meet 59 in both splits; S3 (3 and 8) pools with S2 into "50 to 2,000" (67 and 65 after the third visit, 62 and 61 before);
   - no real log table, so the log class is calibrated on constructed variants alone;
-  - the hand audit agrees on 80 of 81.
+  - the hand audit agrees on 80 of 81, and on 48 of the third visit's 49.
 - **The hand audit was judged by subagents** under a rubric committed before any packet was made. Claude reread the disagreement and every tenth agreement.
 - **One failed row, B3_frame:** the expected count was made with the csv module and an exact-case species match. The owner accepted it on 2026-11-06.
-- **The clean-up before B4** (owner, 2026-11-06; protocol amendment 3): the faults in our own code that the walk met, fixed test first (`76d490a`), and a third visit of the 103 records they touch (`valuescale/bank/expectations/b3_revisit2.json`, `valuescale/corpus/cleanup_20261106.json`).
+- **The clean-up before B4** (owner, 2026-11-06; protocol amendment 3): the faults in our own code that the walk met, fixed test first (`76d490a`), and a third visit of the 103 records they touch (`valuescale/bank/expectations/b3_revisit2.json`, `valuescale/corpus/cleanup_20261106.json`). It ran on 2026-11-06 and added 49 tables, of which the audit excluded one (PXD001608, saved from Perseus). One expectation failed: 43 MaxQuant tables kept against at least 44, because six are small.
 
 ### B4. The package: `valuescale/` (placeholder name)
 

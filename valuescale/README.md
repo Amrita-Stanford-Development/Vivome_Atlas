@@ -74,8 +74,9 @@ Phase B, B3, the corpus (`corpus/`, not shipped):
 - `audit.json`: the hand audit's sample (a seeded 20% of each split's kept
   tables) and its verdicts.
 
-B3's result: 10,000 deposits listed, 401 linear tables kept after the audit
-(188 calibration, 213 test), and no real log table. Each kept table is parsed
+B3's result, after the clean-up's third visit: 10,000 deposits listed, 449
+linear tables kept after the audit (216 calibration, 233 test), and no real
+log table. Each kept table is parsed
 into `data/incoming/value-scale-corpus/<accession>/table.npz`, which is not
 tracked.
 
