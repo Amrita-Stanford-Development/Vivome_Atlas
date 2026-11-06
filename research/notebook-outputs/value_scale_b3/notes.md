@@ -166,11 +166,23 @@ the index while frame.py was being written, and the counting made two
 mistakes. Together they account for exactly the 10 extra deposits:
 
 - **6 PRIDE deposits** (PXD054297, PXD061890, PXD064897, PXD065947,
-  PXD066290, PXD069739). The count read the index with Python's csv
-  module. Stray quotes in some titles made it merge each of these records
-  into its neighbour, so they went uncounted. frame.py splits the index at
-  each record's own GetDataset link and reads all six (a ruling in the
-  ledger, made before the frame was built).
+  PXD066290, PXD069739). Each has a line break inside its title in the
+  index file. For example, PXD061890's title "MDM2 degradation overcomes
+  feedback regulation of p53 signaling in Merkel cell carcinoma" breaks
+  after "Merkel cell".
+  - The count read the index with Python's csv module, which starts a new
+    row at every line break. Each of these records became two broken rows.
+    The first holds only the accession and the start of the title. The
+    second starts with the rest of the title, so its repository and species
+    sit one column off. Neither row was counted.
+  - In the whole index, 34 records are split this way: 57,944 records read
+    as 57,978 rows. 6 of them are human PRIDE deposits of 2020 to 2026.
+  - frame.py joins each record's lines back together at its own GetDataset
+    link (a ruling made before the frame was built), and reads all six.
+  - Corrected on 2026-11-06: an earlier version of these notes, and the
+    message of commit `5c9e521`, said stray quote marks made the csv
+    module merge records. Every record holds quote marks (its web links),
+    and the csv module merged none; the cause is the line break.
 - **4 MassIVE deposits** (PXD003148, PXD011903, PXD054458, PXD058144). Their
   species is written "homo sapiens" or "Homo Sapiens". The count matched
   "Homo sapiens" letter for letter. frame.py ignores letter case.

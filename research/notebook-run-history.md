@@ -3245,9 +3245,10 @@ detector statistic touches them (protocol
   revisit was met. The 53 affected packets were judged again, and both
   judgements agreed.
 - One row fails: B3_frame. The frame keeps 18,869 deposits, against 18,859
-  expected. The expected count was made with the csv module, which merged
-  6 records, and with a species match that was case-sensitive, which missed
-  4. The frame is right. It goes to the owner.
+  expected. The expected count was made with the csv module, which split
+  6 records in two at a line break in their title and so missed them. Its
+  species match was case-sensitive, which missed 4 more. The frame is
+  right. It goes to the owner.
 
 ## The throughline
 
