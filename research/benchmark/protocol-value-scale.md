@@ -233,3 +233,75 @@ Written before any calibration or test deposit was fetched or read.
 - **Decided by:** the owner, 2026-11-03.
 - **Effect on scoring:** none. "Can't tell" was already counted by B1's
   reading.
+
+### 2. 2026-11-06: how B3 found and read the tables
+
+Written after B3's walk (plan B3). No detector statistic, gate or verdict
+had been computed on any calibration or test deposit.
+
+The walk differs from "Tables" and "Labels" above in the ways below. Claude
+decided each one during B3, as a ruling in the plan's ledger, and made it
+test first. Each was committed in code before the deposits it touches were
+read, except the second visit, whose expectations were committed before it
+ran. Most are also recorded in `valuescale/bank/expectations/b3.json`.
+
+None of them changes the order of candidates, which table is a deposit's
+first candidate, or how a table is labelled. They change how files are
+found and read, and they add two skip reasons.
+
+- **Reading files (b3.json, before any frame deposit was listed):** PRIDE
+  files are read over FTP from ftp.pride.ebi.ac.uk, with at most 8
+  connections; its HTTPS took 15 to 30 s to a first byte. MassIVE is read
+  over FTP with TLS, with at most 4. The file lists come as in step 1.
+- **MassIVE's old host (`f08b8c5`):** 899 of the frame's 1,507 MassIVE rows
+  name ftp://massive.ucsd.edu, which no longer answers. Each such dataset is
+  listed in its folder on massive-ftp.ucsd.edu. A dataset not on that host
+  is "no file list".
+- **Zipped raw instrument data is not listed (`0f3bf58`):** `*.d.zip`,
+  `*.raw.zip`, `*.wiff.zip`, `*.mzML.zip`, `*.mgf.zip` and the like never
+  hold a protein table. One MassIVE deposit had 421 of them. No record in
+  the walk's log chose such a file.
+- **Too large (b3.json, before the run):** a single file over 500 MB, the
+  archives' bar. The text above names no bar for single files.
+- **An archive member is fetched alone (`7c5e319`):** the member's bytes and
+  the archive's central directory are fetched by range, and zipfile checks
+  the member's CRC.
+  - The record carries the member's size and sha256, and the archive's URL
+    and listed size. It does not carry the archive's sha256.
+  - This narrows step 4's "every fetch records URL, size and sha256": the
+    table itself is pinned by its own sha256. All 113 kept archive members
+    carry one.
+- **The parser's refusal on a header (`0c5ed21`):** a MaxQuant table that the
+  service's parser refuses on its header alone (a SILAC or TMT search) is
+  "unparseable", in the parser's own words, without the full fetch. This
+  goes beyond step 4's "header lines may be read to count columns".
+  - Checked on the 56 wide tables already fetched: the same outcome on all
+    56, and the same words on the 11 refused.
+  - 64 deposits were refused on their header, and 11 earlier ones after a
+    full fetch.
+- **Two skip reasons beyond the list (b3.json):** "no file list", when a
+  listing fails after retries, and "fetch failed".
+- **A second visit of failed reads (`bfd6451`; expectations `a727c39`):**
+  - Why: a transfer that PRIDE's FTP ended early had been taken as complete,
+    and MassIVE's "530" at an anonymous login was not tried again.
+  - After the walk stopped, every record whose read failed was visited once
+    more, in its place in the log, keeping the outcome it replaced
+    (`revisited_from`). 36 of the 93 are now kept.
+- **Readers:** Proteome Discoverer tables and long reports are read by
+  `valuescale/corpus/tables.py`, not `extract.py` as step 4 says.
+- **Labels (b3.json):** the names of the chosen value columns only. A log
+  needs "log2", "log10", "log(" or "ln(" in such a name; a bare "log" does
+  not count. The unclear words are ratio, z-score, zscore, imput, scaled,
+  centred, centered, quantile, vsn and combat.
+- **The hand audit (b3.json `audit_rubric`, `5a3b44a`; `edd0281`):**
+  - Subagents judged each packet under a rubric committed before any packet
+    was made. Claude reread the disagreement and every tenth agreement.
+  - A packet holds the table's headers (with any Perseus annotation rows),
+    its place in the deposit and the methods. It never holds values.
+  - The first packets cut the column and file lists short and misread
+    parquet headers. The 53 they affected were judged again on rebuilt
+    packets, and both judgements agreed on all 53.
+- **Effect on scoring:** none on the rules above. The tables differ only in
+  which deposits could be read.
+- **Shown to the owner:** in B3's notes
+  (`research/notebook-outputs/value_scale_b3/notes.md`) and here.

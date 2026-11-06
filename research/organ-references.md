@@ -4,13 +4,24 @@ Planned 2026-10-17 and 2026-10-18 with the owner; Track I in
 `research/todo.md`. Where this conflicts with older plans, this file wins for
 organ work.
 
-**Status, 2026-10-18:**
+**Status, 2026-11-06:**
+- **Paused (owner, 2026-11-03).** Organ work waits until the raw-or-log
+  framework (`research/value-scale-plan.md`) is finished. The next organ
+  step is then discussed with the owner.
 - **The large intestine is closed, NO GO as built.** The owner's decision:
   document every failure and move to the next organ. "The large intestine's
   outcome" lists them all.
-- **The lung missed narrowly, NO GO as built.** G1 committed 73.4% against
-  75%, and G3's LungMAP check gave AUROC 0.62 against 0.8. See "The lung's
-  outcome".
+- **The lung is NO GO as built, in both versions:**
+  - v1 narrowly: G1 committed 73.4% against 75%, and G3's LungMAP check
+    gave AUROC 0.62 against 0.8 ("The lung's outcome");
+  - v2 on the fresh G3: AUROC 0.764 against 0.8 ("The lung v2's outcome").
+- **The lymph node is NO GO as built, in all three versions:**
+  - v1 on G3 ("The lymph node's outcome");
+  - v2 by 0.18 points: narrow uploads were 89.82% correct when committed,
+    against 90 ("The lymph node v2's outcome");
+  - v3 by 0.01 points, at 89.99% ("Version 3").
+- **The three locked tests stay sealed:** PXD052341 (colon), MSV000094189
+  (lung) and PXD042367 (lymph node).
 - The rest of this file is the plan as it was run.
 
 ## Why
@@ -773,7 +784,8 @@ Run history, entries 49 to 52; the records are under
    kept them. A unit test caught it, and it is fixed.
 6. **A service bug, live:** the DIA-NN parser read DIA-NN 1.8's `Protein.Ids`
    column as a cell, so 1.8 protein tables could not be uploaded. It is fixed
-   with a test (`service/pipeline/alignment.py`) but not yet deployed.
+   with a test (`service/pipeline/alignment.py`; `d3ca02a`), deployed on
+   2026-10-21.
 7. **A service limit:** the identifier map covers blood's 9,002 genes only,
    so colon uploads lost every colon gene (2,446).
    - Each organ now builds its own map from HGNC; blood's is reproduced

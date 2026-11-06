@@ -8,6 +8,83 @@ and `audit_rubric` (5a3b44a).
 
 No detector statistic, gate or verdict was computed on any drawn deposit.
 
+## What B3 is, in plain words
+
+**Where it fits.** Phase B builds the automatic raw-or-log detector, for
+uploaders who don't know whether their protein table holds raw (linear) or
+logged values. It is to come with a measured promise: "a real linear table
+is missed at most 5% of the time, and the same for log". The steps:
+- B0 wrote the rules;
+- B1 measured what each mistake costs;
+- B2 built the detector on the bank of known tables;
+- B3 gathers fresh tables with known answers;
+- B4 sets the thresholds on half of them;
+- B5 to B7 wire it in, check the assembly, and score the other half once
+  before it goes live.
+
+**Why it was needed.** The detector was tuned on the bank, so the bank
+cannot also prove its error rate. The promise needs tables the detector has
+never seen, whose answer is already known. With α = δ = 0.05, 59 is the
+smallest number per size group and half for which the promise can be made
+at all.
+
+**How it worked:**
+1. **The list.** Every human PRIDE and MassIVE deposit of 2020 to 2026 in
+   ProteomeXchange's index, without the sealed sets and anything this
+   project had already used: 18,813 deposits.
+2. **No picking.** The list was shuffled with a fixed seed. Each deposit
+   went to calibration or test by a fixed coin flip (a hash of its
+   accession). The walk went down the list in order and took each
+   deposit's *first* table by a fixed rule. It kept the table when it had
+   at least 20 columns and 200 rows and could be read. Nobody chose which
+   tables went in: tables chosen for looking clean would make the promise
+   look better than it is for real uploads.
+3. **Answers from where a table came from, never from its numbers.**
+   - A program's own output (MaxQuant's proteinGroups.txt, DIA-NN's
+     pg_matrix and so on) is linear, because those programs write linear
+     intensities.
+   - A column named "log2 …" is log.
+   - Labels read from the values would only test whether the detector
+     agrees with a reading of the same kind of evidence it uses.
+4. **A hand check of the labels.** A random 20% were judged from their file
+   names, folders, column names and methods text, again never their
+   values. The check catches, for example, a table normalised by someone
+   and saved under MaxQuant's name.
+5. **Size groups.** Thresholds are set separately for 20 to 49 columns, 50
+   to 300, and 301 to 2,000. Each needs 59 tables in each half.
+
+Calibration sets the thresholds in B4. The test half is not scored until B7,
+and then once. B3 computed no detector number, so how the detector does on
+these tables is not yet known.
+
+## What the findings mean
+
+- **The promise can be made for two size groups, not three.** Only 11
+  tables reached 301 columns, as expected: large single-cell-style tables
+  are rare in public deposits. A table with 500 columns gets the "50 to
+  2,000" promise, learned mostly from smaller tables. B2 found that the
+  detector's measures don't drift with size, which supports this, but it is
+  an assumption.
+- **The pooled group is only just full** (62 and 61, against 59). If B4 has
+  to drop more than 3 calibration or 2 test tables with 50 or more columns,
+  it goes back to the owner before calibration.
+- **The labels can be trusted:** 80 of 81 passed the hand check.
+- **The promise is an average over the corpus's software mix:** MaxQuant
+  211, DIA-NN 119, Spectronaut 54, FragPipe 12, Proteome Discoverer 5. A
+  software with few tables could fare worse without the average showing
+  it.
+- **No real log table was found.** The log side's promise rests on log
+  copies made from linear tables, so it means "log files that look like a
+  plain log of a program's output". Real log files are often normalised,
+  imputed or batch-corrected as well. B2 already saw a heavily imputed log
+  table read as linear. This is why the site asks uploaders for the reading
+  (B5), and why the detector's reply must say so to those who don't know.
+- **The one failed row is a miscount in the expectation,** not a fault in
+  the data (below).
+- **The read fixes did not change how a table was judged.** Every
+  prediction for the second visit held. A failed read says nothing about a
+  table's values.
+
 ## The corpus
 
 - **The frame:** 18,813 deposits. These are human PRIDE and MassIVE
@@ -261,3 +338,9 @@ a stop below 10,000, are no longer needed, because the walk finished at
 
 1. **Accept B3_frame's failure:** the expected count was wrong, as
    explained above.
+2. **For review, no decision needed:**
+   - the protocol's amendment 2 lists every way B3 found and read the
+     tables that differs from the protocol's text. Each was Claude's ruling
+     during the walk;
+   - `research/benchmark/side-tests.md` amendment 25 records the detector's
+     sealed test and calibration deposits.

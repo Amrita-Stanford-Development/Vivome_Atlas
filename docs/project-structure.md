@@ -54,7 +54,7 @@ Vivome_Atlas/
 │   └── tests/                unittest suite, with golden fixtures
 │
 ├── valuescale/               RAW OR LOG: a self-contained package (imports nothing from service/)
-│   ├── corpus/               the diagnostic bank: bank.json, fetch, extract, labelled variants, the denylist
+│   ├── corpus/               not shipped: the diagnostic bank, and B3's calibration and test corpus
 │   ├── bank/expectations/    each step's expected outcomes, written before the step runs
 │   └── tests/                unittest suite
 │

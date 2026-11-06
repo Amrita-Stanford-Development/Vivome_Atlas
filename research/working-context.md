@@ -17,12 +17,48 @@ Before changing anything, read [CLAUDE.md](../CLAUDE.md). Before a roadmap
 task, read [todo.md](todo.md) and [roadmap.md](roadmap.md), whose latest
 revision is at the top.
 
+## Where things stand (2026-11-06)
+
+This section is the current state. "Where things stand (2026-10-27)" below
+it, and the sections further down ("Where things stand (2026-10-05)",
+"Next", "Open after Track D"), are kept as history. The changelog in
+[todo.md](todo.md) and the run history have the detail.
+
+- **The active work: the raw-or-log framework** (since 2026-10-28;
+  [value-scale-plan.md](value-scale-plan.md), approved by the owner). The
+  service's Stage 0 read small-scale linear protein tables as log
+  (PXD064083). The fix is a self-contained package, `valuescale/`, built
+  step by step. Each step's expectations are written before it runs, and
+  each step ends with diagnostic runs on a bank of real tables.
+  - **Done:**
+    - Step 1, the bank;
+    - Phase A, the uploader can state the reading;
+    - A2, what a 0 means;
+    - the float64 z-score;
+    - B0 (the protocol), B1 (what each mistake costs) and B2 (the method).
+  - **B3, the corpus, was run on 2026-11-05:** 401 fresh public linear
+    tables for calibration and the sealed test, and no real log table. One
+    row waits for the owner's acceptance before B4, the calibration
+    ([notes](notebook-outputs/value_scale_b3/notes.md)).
+  - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
+    The detector serves those who don't know. The pop-up's design is
+    agreed with the owner before B5.
+- **Deployed 2026-11-03:** Cloud Run revision `vivome-atlas-00008-xqq`
+  (from `c390036`), then the site. These brought Phase A and A2 (the Values
+  and Zeros menus) and the float64 z-score. `check_space.py`: 0 of 238
+  cells differ. The model is still v4.1.
+- **Organ references are paused** (owner, 2026-11-03) until the raw-or-log
+  framework is finished; then the next organ step is discussed. Every organ
+  so far is NO GO as built
+  ([organ-references.md](organ-references.md), "Status").
+- **The product comes before the manuscript** (owner, 2026-10-28). Plans
+  carry no paper, preprint or venue steps.
+- **The Google Cloud free trial** ends about 2027-01-14: "Activate full
+  account" before then.
+
 ## Where things stand (2026-10-27)
 
-The sections further down ("Where things stand (2026-10-05)", "Next",
-"Open after Track D") describe early October and are kept as history.
-This section is the current state. The changelog in [todo.md](todo.md) and
-the run history have the detail.
+Kept as history; the section above is the current state.
 
 - **Release:**
   - atlas 0.6.0 (tag `atlas-v0.6.0`), serving model v4.1
@@ -328,8 +364,10 @@ Following the publication plan below:
 - **Long runs go in the owner's own terminal window.** Claude Code
   background tasks stop after 2 hours or when the session ends.
 - **Deleting.** List what you'd delete and get approval first.
-- **Before committing:** run all three suites, and keep
-  `docs/file-index.md` current.
+- **Before committing:** run all four suites (CLAUDE.md, "Tests"), and
+  keep `docs/file-index.md` current.
+- **Before moving to a plan's next step:** go through every doc that
+  touches the work, so that none is out of date (owner, 2026-11-06).
 - **Summaries the owner asks for "for online Claude"** go in the chat as
   plain text, not as an artifact.
 - **Don't commit `.impeccable/`**, the design tool's cache.

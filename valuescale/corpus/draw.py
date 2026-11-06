@@ -16,6 +16,9 @@ Each deposit's outcome is one line of the walk's log, written in the frame's
 order whatever finishes first, so a stopped walk resumes where it stopped.
 The walk stops when every quota is met in both splits (QUOTA linear
 deposits reaching each stratum), or after LIMIT deposits have been listed.
+Once it has stopped, each record whose read failed (fetch failed, no file
+list) can be visited once more in its place (revisit), keeping the outcome
+it replaces.
 
 The network and the parser come in as Tools, so the walk is tested without
 either; research/notebooks/value_scale_corpus.py supplies the real ones.

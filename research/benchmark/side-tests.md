@@ -469,6 +469,30 @@ isolation:
     committed.
   - PXD064083 is now development data.
 
+### Amendment 25, 2026-11-06: the raw-or-log detector's deposits
+
+The raw-or-log framework (`research/value-scale-plan.md`; protocol
+`research/benchmark/protocol-value-scale.md`) gives public protein deposits
+roles for its detector alone. Its B3 step drew them on 2026-11-04 and 05
+(`valuescale/corpus/walk.jsonl`).
+
+- **The detector's sealed test:** the 213 test-split tables kept after B3's
+  audit (outcome kept, split test, PXD039540 excluded).
+  - No detector statistic, gate or verdict is computed on them until its
+    one scoring (plan B7).
+  - From plan B5, the service runs the detector on every protein upload.
+    So from then until that scoring, none of these deposits is uploaded to
+    the service or the site, or used here as a development set or side
+    test.
+- **The detector's calibration set:** the 188 calibration-split tables. They
+  are not sealed, but they are fitting data for the detector (plan B4).
+- **The rest of the 10,000 deposits B3 listed** had their file lists read,
+  and some had a header or table fetched. No cell-type label or answer was
+  read. They are no longer "unopened" in the sense of the list below.
+- **None of this register's sets was touched:** the frame dropped every
+  identifier in a tracked file at the protocol's commit (`26519a8`). No
+  accession named here was listed by the walk.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a

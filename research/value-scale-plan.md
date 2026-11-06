@@ -1,6 +1,15 @@
 # Plan: a calibrated raw-or-log detector for uploads, built as a reusable framework
 
-Status: approved by the owner on 2026-10-28. Step 1 (the diagnostic bank) is done and its two explained failures accepted (`research/notebook-outputs/value_scale_step1/notes.md`). Phase A, with the zeros choice (A2) and the float64 z-score its diagnostics called for, is built and was deployed on 2026-11-03 (`research/todo.md`). Phase B is next, and nothing in it is built yet.
+Status: approved by the owner on 2026-10-28. Step 1 (the diagnostic bank) is done and its two explained failures accepted (`research/notebook-outputs/value_scale_step1/notes.md`). Phase A, with the zeros choice (A2) and the float64 z-score its diagnostics called for, is built and was deployed on 2026-11-03 (`research/todo.md`).
+
+Phase B, as of 2026-11-06:
+- **B0, the protocol:** done (`26519a8`).
+- **B1, the cost study:** done, with its failed row accepted by the owner (`8608c11`, `ab18152`).
+- **B2, the method:** done, with its failures accepted by the owner (`0e147eb`, `19d79eb`).
+- **B3, the corpus:** run (`5c9e521`). One row, B3_frame, waits for the owner's acceptance (`research/notebook-outputs/value_scale_b3/notes.md`).
+- **B4 to B7:** not started.
+
+Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 75).
 
 ## Context
 
@@ -205,6 +214,23 @@ This is the framework's front end; the default reading is unchanged.
 - **Conformal code:** in simulation (1,000 repeats with known distributions), per-class coverage is ≥ 1−α, and the umbrella rule keeps P(error > α) ≤ δ.
 - **Verdicts:** every bank table's verdict is right, or it is "can't tell" with the reason shown.
 
+**As built (2026-11-03; `valuescale/bank/expectations/b2.json`, `research/notebook-outputs/value_scale_b2/notes.md`):**
+- **One score per class, not two p-values at α/2.** Two scores at α/2 would need 146 deposits per class and stratum, and one needs 59 (protocol, "The claim"). The score is the smaller of:
+  - a typicality rank: the k = 3 nearest design rows;
+  - the probability of a ridge logistic regression (λ = 1).
+
+  Both are fitted on design rows, with the deposit left out.
+- **The negatives gate** fires at 1% or more of the observed values.
+- **A per-protein-normalised table** (row-median spread below 0.1) is "can't tell", with that reason.
+- **level_spread** ranks spreads at float32 precision, so exact ties survive rescaling.
+- **The strata** are 20–49, 50–300 and 301–2,000 columns (protocol).
+- **The code was written in B2**, though B4 lists it below: `gates.py`, `statistics.py`, `conformal.py`, `score.py` and `method.py`. The method has to exist as code to be diagnosed.
+- **The owner accepted four failures** on 2026-11-04:
+  - the gates' prediction list was incomplete;
+  - drift's side prediction failed;
+  - the imputed log table is read linear, and pxd043355_pd "unlike either";
+  - the variants.
+
 ### B3. The corpus, protein v1 (for the 5% guarantee)
 
 - **Linear class:** about 60 calibration and about 60 test deposits, freshly drawn with a seed from PRIDE and MassIVE projects of 2020–2026 that hold processed tables, stratified by software and instrument. Only processed tables are fetched. Bank accessions are excluded.
@@ -214,6 +240,17 @@ This is the framework's front end; the default reading is unchanged.
   - every record has its sha256, parses, and has its quote;
   - each stratum holds at least 59 deposits;
   - the hand audit's agreement rate is recorded.
+
+**As run (2026-11-04 to 05; `valuescale/bank/expectations/b3.json`, `research/notebook-outputs/value_scale_b3/notes.md`, protocol amendment 2):**
+- **No stratifying by software or instrument.** The protocol drew from the whole frame instead: 18,813 human PRIDE and MassIVE deposits of 2020–2026, in a seeded order, each deposit's first candidate table, split into calibration and test by hash, with quotas by column count.
+- **Diagnostics on both splits.** They read records, quotas and the audit only. No detector statistic, gate or verdict was computed on either split.
+- **The result:**
+  - 10,000 deposits listed and 402 linear tables kept; 401 after the audit (188 calibration, 213 test);
+  - S1 and S2 meet 59 in both splits; S3 (3 and 8) pools with S2 into "50 to 2,000" (62 and 61);
+  - no real log table, so the log class is calibrated on constructed variants alone;
+  - the hand audit agrees on 80 of 81.
+- **The hand audit was judged by subagents** under a rubric committed before any packet was made. Claude reread the disagreement and every tenth agreement.
+- **One failed row, B3_frame:** the expected count was made with the csv module and an exact-case species match. It waits for the owner's acceptance before B4.
 
 ### B4. The package: `valuescale/` (placeholder name)
 
@@ -233,6 +270,12 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
   - the denylist;
   - the readers agree with `parse_matrix_csv`;
   - nothing imports `service`.
+
+**Already in place before B4 (2026-11-06):**
+- B2 wrote `gates.py`, `statistics.py`, `conformal.py` (with the strata), `score.py` and `method.py` (`assess`), with their tests. It also wrote `corpus/strata.py`, which makes the subsamples and constructed log variants that calibration needs.
+- B3 wrote `corpus/frame.py`, `remote.py`, `tables.py` and `draw.py`, plus `frame.json`, `walk.jsonl` and `audit.json`. Each kept table is parsed into `data/incoming/value-scale-corpus/<accession>/table.npz`.
+- The nothing-imports-`service` test exists (`test_independence.py`).
+- B4 adds what is still missing: `detect`/`apply`, `report.py`, the calibration JSON, `baselines.py`, `score_test.py` and the no-gaps candidate gate.
 
 ### B5. Wiring it into the service
 
@@ -280,7 +323,7 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
   3. `scripts/build_manuscript.py`: the site's Stage 0 sentence at `web/manuscript.html:298-299`.
   4. `scripts/build_figures.py`: `methods_reading.py`.
 - **Docs:**
-  - `CLAUDE.md`, `README.md` and `docs/project-structure.md`: the tree entry, a "where a file goes" row, and a fourth test suite, `python -m unittest discover -s valuescale/tests -t .`;
+  - `CLAUDE.md`, `README.md` and `docs/project-structure.md`: already have the tree entry, the "where a file goes" row and the fourth test suite (since Step 1); B7 updates them for the detector going live;
   - `docs/file-index.md`;
   - `docs/service/projection-api.md`;
   - the model card: limit 8 removed;
@@ -302,7 +345,8 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
 
 ## Verification
 
-- **Every step:** `node --test`, `python -m unittest discover -s scripts` and `python -m unittest discover -s service/tests -t .`, run with `/c/Users/amarn/miniforge3/envs/vivome/python.exe`. From B4, also `python -m unittest discover -s valuescale/tests -t .`.
+- **Every step:** `node --test`, `python -m unittest discover -s scripts`, `python -m unittest discover -s service/tests -t .` and `python -m unittest discover -s valuescale/tests -t .` (the package's suite has run since Step 1), with `/c/Users/amarn/miniforge3/envs/vivome/python.exe`.
+- **Before the next step starts:** a run through every doc that touches the work, so that none is out of date (owner, 2026-11-06).
 - **Every step's diagnostic report:** all rows pass, or the owner has accepted each explained failure, before the next step starts.
 - **End to end:**
   - D3, A, B5 and B6 traces agree where they should;

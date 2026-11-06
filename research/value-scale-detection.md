@@ -49,6 +49,19 @@ are binding; this is their summary.
   the design split is everything already looked at, and calibration and
   test are split by the deposit's hash.
 
+**As built in B2 (2026-11-03; `research/notebook-outputs/value_scale_b2/notes.md`):**
+- **The score:** for each class, the smaller of a typicality rank (the 3
+  nearest design rows) and a ridge logistic probability.
+- **The negatives gate** fires at 1% of observed values.
+- **A per-protein-normalised table** is "can't tell".
+- **The strata** are 20–49, 50–300 and 301–2,000 columns.
+
+**The corpus as drawn in B3 (2026-11-05; `research/notebook-outputs/value_scale_b3/notes.md`):**
+- 10,000 deposits listed, and 401 linear tables kept after the hand audit.
+- The 301+ stratum pools with 50–300.
+- No real log table was found, so the log class is calibrated on
+  constructed log variants alone.
+
 ## The question
 
 Stage 0 (`service/pipeline/alignment.py`, `detect_and_transform_value_scale`)

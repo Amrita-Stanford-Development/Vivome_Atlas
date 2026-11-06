@@ -479,14 +479,14 @@ When you add, move or delete a file, update its line in the same commit.
 
 ## valuescale/ — is a table still linear, or already log? (a self-contained package)
 
-- `valuescale/README.md` — what the package is for, what is built (Step 1, the diagnostic bank), its commands
-- `valuescale/__init__.py` — the package's docstring and version; it imports nothing from `service/`
+- `valuescale/README.md` — what the package is for, where Phase B stands, what is built (Step 1's bank, B2's method, B3's corpus), its commands
+- `valuescale/__init__.py` — the package's docstring (what is built so far) and version; it imports nothing from `service/`
 - `valuescale/gates.py` — the detector's gates: a real share of negatives (1% or more) means already transformed, non-negative integers with 20 or more distinct values mean counts; stray negatives and ties at a cell's minimum are made missing
 - `valuescale/statistics.py` — the detector's statistics: per-cell Bowley and Moors skewness and the tail ratio, the level–spread Spearman correlation (missing ranked lowest), and the side features; each unchanged by its classes' nuisances
 - `valuescale/conformal.py` — the conformal code: the strata, the umbrella order statistic and threshold, the rehearsal threshold, exact binomial and Clopper–Pearson calculations, the answer set and verdict
 - `valuescale/score.py` — the class scores: a typicality rank (k nearest design rows) and the probability of a ridge logistic regression, fitted on design rows grouped by deposit, combined by their minimum; the model as JSON
 - `valuescale/method.py` — the method end to end (`assess`): gates, statistics, class scores, answer set, with a reason for "can't tell" and "unlike either"
-- `valuescale/corpus/__init__.py` — the corpus subpackage: the bank and, later, the calibration corpus
+- `valuescale/corpus/__init__.py` — the corpus subpackage, never shipped: the diagnostic bank (the design split) and B3's calibration and test corpus
 - `valuescale/corpus/bank.json` — the diagnostic bank: 37 real tables, each labelled linear or log from provenance (documentation, a column or layer name, or the authors' code, quoted) before any statistic was computed, with its cases, source and parser path
 - `valuescale/corpus/bank-files.json` — every bank source file's size and sha256, recorded by `fetch.py`
 - `valuescale/corpus/fetch.py` — downloads the bank's tables (ranged, resumable) into `data/incoming/value-scale-bank/` and records or checks every source file's sha256
@@ -496,9 +496,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `valuescale/corpus/strata.py` — the protocol's strata, one seeded subsample per stratum, and the constructed log variant of a linear subsample (log2, log10, ln, or log2(x + 1) when the median positive value is at least 10)
 - `valuescale/corpus/frame.py` — the draw's frame: ProteomeXchange's index of 2026-11-03 parsed, cut to human PRIDE and MassIVE deposits of 2020–2026, the sealed and tracked accessions dropped (MassIVE under PXD and MSV), sorted and shuffled with the protocol's seed, each deposit's split by its hash
 - `valuescale/corpus/frame.json` — the draw's frame as built by `frame.py`: the index's sha256, the counts, the dropped accessions, each MassIVE row's MSV identifier and FTP folder, and the 18,813 deposits in the draw's order with their splits
-- `valuescale/corpus/remote.py` — a deposit's files listed and read remotely: the PRIDE Archive API, MassIVE's FTP folder over TLS (three levels deep), range reads, zip archives listed and their members' first bytes read through range requests, resumable downloads
+- `valuescale/corpus/remote.py` — a deposit's files listed and read remotely: the PRIDE Archive API's file list and PRIDE's FTP, MassIVE's FTP folder over TLS (three levels deep; an old-host folder found on the current host), range reads, a cut-short transfer resumed, MassIVE's 530 tried again, zip archives listed and a member fetched alone through range requests, resumable downloads on a few connections per file
 - `valuescale/corpus/tables.py` — B3's tables: candidate names, report headers (Spectronaut or DIA-NN), the protocol's one table per deposit, quantity columns from a header, the Proteome Discoverer and long-report readers, and the provenance labels (linear with its software's quote, log, unclear)
-- `valuescale/corpus/draw.py` — B3's walk over the frame: each deposit listed, its table chosen, sized, header-checked, fetched with its sha256, parsed and labelled; the log in the frame's order, resumable; the quotas and the stop rule
+- `valuescale/corpus/draw.py` — B3's walk over the frame: each deposit listed, its table chosen, sized, header-checked (too few columns, or a table the parser refuses on its header), fetched with its sha256, parsed and labelled; the log in the frame's order, resumable; the quotas and the stop rule; the second visit of failed reads
 - `valuescale/corpus/walk.jsonl` — B3's walk log: one line per listed deposit in the frame's order, with its outcome (kept, or the reason it was skipped) and, when kept, its file's URL, size and sha256, its parse's columns and rows, its label and quote, and the strata it reaches; a failed read visited again carries the outcome it replaced (revisited_from)
 - `valuescale/corpus/audit.json` — B3's hand audit: the seeded 20% sample of each split's kept deposits, and each one's verdict (agrees, with the packet's deciding words and a reason)
 - `valuescale/bank/expectations/b1.json` — B1's expected outcomes and decision rules (what each mistake costs: v4.1 on every bank table read linear, log with zeros measured and log with zeros missing; the invariants, refusals, the cost's direction and size, zeros, accuracy where labels exist; the rules that fix the "can't tell" reading and the zeros policy), written before the cost study existed
@@ -516,9 +516,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `valuescale/tests/test_conformal.py` — the binomial, the umbrella k and threshold, the rehearsal threshold, Clopper–Pearson, the answer set
 - `valuescale/tests/test_strata.py` — strata bounds, the protocol's seed, subsamples and the constructed log variant
 - `valuescale/tests/test_frame.py` — the frame: index records with broken titles and stray bytes, the cut, the denylist under both MassIVE identifiers, the seeded order and the hash split
-- `valuescale/tests/test_remote.py` — remote listing and reading without the network: PRIDE pages, a MassIVE folder's depth, zip archives through range requests, header lines
+- `valuescale/tests/test_remote.py` — remote listing and reading without the network: PRIDE pages, a MassIVE folder's depth and old host, zip archives and members through range requests, header lines, a cut-short transfer resumed, a read that never progresses failing, 530 tried again and 550 not
 - `valuescale/tests/test_tables.py` — candidate names and order, report headers, quantity columns, the Proteome Discoverer and long-report readers, the labels
-- `valuescale/tests/test_draw.py` — the walk with fake tools: every skip reason, the header check before a fetch, a kept record, the sealed refusal, the log's order, the limit, resuming, the quota stop; no detector module imported
+- `valuescale/tests/test_draw.py` — the walk with fake tools: every skip reason, the header checks before a fetch (too few columns, the parser's refusal word for word), a kept record, the sealed refusal, the log's order, the limit, resuming, the quota stop, a slow deposit not holding up the rest, the second visit; the runner's downloads, its parsed table's place and its audit packets (headers, never values); no detector module imported
 - `valuescale/tests/test_score.py` — the class scores: typical rows, rows like neither, missing features, linear-only features, deposits left out, JSON round trip
 - `valuescale/tests/test_method.py` — the method end to end: linear and log tables, a gate, too few columns, no spread, reasons
 - `valuescale/tests/test_independence.py` — the shipped modules import numpy and the standard library only, and nothing imports the service
@@ -1079,7 +1079,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/value_scale_b2/notes.md` — B2's notes, written after the run: what the method gets right, the two faults fixed after the first run, the failures that remain, for the owner
 - `research/notebook-outputs/value_scale_b3/report.md` — B3's report: b3.json's rows from the walk's log and the audit, the quotas by split and stratum, the outcomes
 - `research/notebook-outputs/value_scale_b3/report.json` — the same run in full
-- `research/notebook-outputs/value_scale_b3/notes.md` — B3's notes, written after the run: the corpus drawn, the faults fixed during the walk, the audit, the failures for the owner
+- `research/notebook-outputs/value_scale_b3/notes.md` — B3's notes, written after the run: B3 in plain words and what its findings mean, the corpus drawn, each row against b3.json, the faults fixed during the walk, the second visit, the audit, the failures for the owner
 - `research/notebook-outputs/value_scale_phaseA2/report.md` — Phase A2's diagnostic report: per table the automatic reply against the baseline and the zeros choice, the answers it changes; the app's answers; the review's fixes
 - `research/notebook-outputs/value_scale_phaseA2/notes.md` — Phase A2's notes, written after the run: the two fixes the first runs called for, what saying a 0 is not measured changes
 - `research/notebook-outputs/value_scale_phaseA2/report.json` — the same run in full

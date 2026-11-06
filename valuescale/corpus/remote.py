@@ -7,12 +7,18 @@
   that PRIDE refuses 16 connections at once: at most 8 are open.
 - MassIVE: the dataset's FTP folder, listed with ftplib over explicit TLS
   (what `curl --ssl-reqd` does) down to three folder levels below the root;
-  at most 4 connections.
+  at most 4 connections. An older announcement's folder on
+  ftp://massive.ucsd.edu is found on the current host (massive_root).
 - Every FTP read opens a connection in one of its host's slots and closes
-  it after; a large file comes in 8 MiB ranges on several connections,
-  resumable.
+  it after; a large file comes in 8 MiB ranges on STREAMS connections,
+  resumable, so the walk's other deposits keep the host's other slots.
+- A transfer the server ends early is resumed where it stopped, on a new
+  connection, and fails after 5 attempts in a row that bring nothing
+  (ftp_read). A failed connection is tried again, and so is MassIVE's "530"
+  at an anonymous login; any other FTP 5xx answer is final (_retry).
 - A zip archive is listed, and a member's first bytes read, through range
   requests: zipfile reads a RangeFile, which fetches the blocks it touches.
+  A member is fetched alone, without the rest of the archive (fetch_member).
 
 Every URL passes denylist.check before it is opened.
 """

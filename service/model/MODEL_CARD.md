@@ -258,12 +258,10 @@ committed before any data file was read, and the set was scored once
    tables: 6 of its 28 linear tables
    (`research/notebook-outputs/value_scale_step1/`). v4.1 still told T
    from B on PXD064083 (above), but such a table is not read as intended.
-   With this repository's service, send it as raw intensities (the
-   request's `value_scale` `"linear"`; on the Atlas page, Values: Raw
-   intensities); the hosted service and site get the choice with their
-   next deploy. Until then, take its log2 before uploading and leave each 0
-   empty (not detected). A detector with a measured error rate is being
-   built (`research/value-scale-plan.md`).
+   Send such a table as raw intensities: the request's `value_scale`
+   `"linear"`, or on the Atlas page, Values: Raw intensities. The hosted
+   service and site have offered the choice since 2026-11-03. A detector
+   with a measured error rate is being built (`research/value-scale-plan.md`).
 
 ## v3.1: the T1 NB2 ensemble
 

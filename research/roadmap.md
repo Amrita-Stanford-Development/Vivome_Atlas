@@ -14,6 +14,19 @@ service code (`pipeline.py`, `assignment.py`, `alignment.py`, `smoothing.py`,
 
 ---
 
+## Revision, 2026-11-06
+
+Where it conflicts with older sections below, this section wins.
+
+- **The active work since 2026-10-28** is the raw-or-log framework
+  (`research/value-scale-plan.md`, approved by the owner). Its status is
+  in `research/todo.md`. It is not one of the tracks below. It answers a
+  fault found on PXD064083: the service's Stage 0 read small-scale linear
+  tables as log.
+- **Organ references (Track I) are paused** (owner, 2026-11-03) until the
+  raw-or-log framework is finished. Every organ built so far is NO GO as
+  built (`research/organ-references.md`, "Status").
+
 ## Revision, 2026-10-18
 
 Where it conflicts with older sections below, this section wins.
