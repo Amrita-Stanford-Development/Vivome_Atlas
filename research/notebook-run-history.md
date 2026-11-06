@@ -3037,7 +3037,9 @@ three candidates were dropped, each with its reason in the bank.
 **Results** (`research/notebook-outputs/value_scale_step1/`, report and notes):
 - D1, the bank: 35 of 37 pass. The two failures are the bank's listing of
   MSV000099294's layout, not the parser. The owner accepted them, the
-  listing was corrected, and both pass a re-run of D1.
+  listing was corrected, and both pass a re-run of D1. (Since 2026-11-06,
+  `76d490a`, the parser reads them as Spectronaut's again, with the same
+  values; see the step's notes.)
 - D2, today's Stage 0 rule: all 9 log tables read correctly; **6 of the 28
   linear tables read as log**: PXD064083 (known) and, new, MSV000099294's
   single cells (Spectronaut) and Furtwangler's TMTpro S/N layers. Linear
@@ -3248,7 +3250,7 @@ detector statistic touches them (protocol
   expected. The expected count was made with the csv module, which split
   6 records in two at a line break in their title and so missed them. Its
   species match was case-sensitive, which missed 4 more. The frame is
-  right. It goes to the owner.
+  right. It goes to the owner, who accepted it on 2026-11-06.
 
 ## The throughline
 

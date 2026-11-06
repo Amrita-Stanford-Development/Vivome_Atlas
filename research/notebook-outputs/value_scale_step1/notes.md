@@ -19,6 +19,13 @@ The owner accepted both failures on 2026-10-28, and the listing in
 the two tables after the fix, both pass. The report beside this file is the
 run before the fix and still shows them as failures.
 
+Since the clean-up of 2026-11-06 (`76d490a`), the parser reads a pivot
+named only by `PG.ProteinGroups` as Spectronaut's. So these two tables take
+the Spectronaut path again. Their cells are named by run; their values and
+matched genes are the same (they hold no 0). `bank.json` still says
+`matrix`, so a re-run of D1 would show `layout_as_listed` false for both
+(`research/benchmark/protocol-value-scale.md`, amendment 3).
+
 ## D2: today's rule misreads 6 of the 28 real linear tables
 
 Every one of the 9 real log tables was read correctly. Of the 28 real linear

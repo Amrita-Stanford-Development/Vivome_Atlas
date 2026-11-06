@@ -100,7 +100,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-cell-browser.test.js` — the cell browser: every cell in one group, the group order, each sort, search, escaping
 - `web/tests/atlas-view-controls.test.js` — the view controls: Your cells only with an answer on the map, and each control asking the right part of the page
 - `web/tests/atlas-type-labels.test.js` — names on the map: hidden and off-screen types get none, no two overlap, the larger type wins
-- `web/tests/atlas-file-check.test.js` — the file check on Node Blobs: tabs, commas, CRLF, empty and header-only files, headers longer than a slice, the real PBMC240 report (238 cells), the limits
+- `web/tests/atlas-file-check.test.js` — the file check on Node Blobs: tabs, commas, CRLF and lone-CR line endings, empty and header-only files, the layout chosen by the service's header tests in its order (MaxQuant without gene names or in title case, Spectronaut without PG.Genes), the service's refusals on a header, its column names pinned to alignment.py, headers longer than a slice, the real PBMC240 report (238 cells), the limits
 - `web/tests/atlas-service.test.js` — the service client with a fake transport: ready, busy (Retry-After 30, or hidden from the page), refused (413, 400), unreachable, not ready, timeout, cancel; the remembered address; the default address is the workflow data's
 - `web/tests/atlas-landing.test.js` — the landing run end to end on stand-ins for the page, three.js and the stage: the recorded example to the settled view, Skip and Replay, a file checked, sent and landed, a service on another map, busy, unreachable, refused in the browser
 - `web/tests/atlas-upload.test.js` — the flight path's ends, arc and fan, the shaders on the CPU's constants, uniform arrays in vertex shaders only, the layer's clock, switches and per-cell mask on a stand-in for three.js, every illustration step seamless, in two tones, with equal bins
@@ -192,7 +192,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_sorted_cd4cd8.py` — the sorted CD4/CD8 test's scripts: frozen sha256s equal the protocol's and still hold, rule 5's mapping, scoring over the sorted types only, refusal of a labels file with another sha256 and of a second scoring
 - `service/tests/test_config.py` — the supported-class constant must match the classes with real protein coverage
 - `service/tests/test_scope2_labels.py` — every copy of SCoPE2's labels must match the curated source (`research/benchmark/scope2_labels/corrected_labels.csv`)
-- `service/tests/test_alignment.py` — Stage 1 tests
+- `service/tests/test_alignment.py` — Stage 1 tests: every layout's reader and the header tests that choose it, line endings, refusals, value scale, alignment
 - `service/tests/test_smoothing.py` — Stage 2 tests
 - `service/tests/test_encoder.py` — Stage 3 tests, including the TorchScript-vs-eager equivalence check
 - `service/tests/test_assignment.py` — Stage 4 tests
@@ -518,9 +518,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `valuescale/tests/test_conformal.py` — the binomial, the umbrella k and threshold, the rehearsal threshold, Clopper–Pearson, the answer set
 - `valuescale/tests/test_strata.py` — strata bounds, the protocol's seed, subsamples and the constructed log variant
 - `valuescale/tests/test_frame.py` — the frame: index records with broken titles and stray bytes, the cut, the denylist under both MassIVE identifiers, the seeded order and the hash split
-- `valuescale/tests/test_remote.py` — remote listing and reading without the network: PRIDE pages, a MassIVE folder's depth and old host, zip archives and members through range requests, header lines, a cut-short transfer resumed, a read that never progresses failing, 530 tried again and 550 not
-- `valuescale/tests/test_tables.py` — candidate names and order, report headers, quantity columns, the Proteome Discoverer and long-report readers, the labels
-- `valuescale/tests/test_draw.py` — the walk with fake tools: every skip reason, the header checks before a fetch (too few columns, the parser's refusal word for word), a kept record, the sealed refusal, the log's order, the limit, resuming, the quota stop, a slow deposit not holding up the rest, the second visit; the runner's downloads, its parsed table's place and its audit packets (headers, never values); no detector module imported
+- `valuescale/tests/test_remote.py` — remote listing and reading without the network: PRIDE pages, a MassIVE folder's depth and old host, zip archives and members through range requests, header lines (lone CR, UTF-16 by its byte order mark), a cut-short transfer resumed, a read that never progresses failing, 530 tried again and 550 not
+- `valuescale/tests/test_tables.py` — candidate names and order (never a macOS companion file), report headers, quantity columns, the Proteome Discoverer and long-report readers, text decoded as the service decodes an upload, the labels
+- `valuescale/tests/test_draw.py` — the walk with fake tools: every skip reason, the header checks before a fetch (too few columns, the parser's refusal word for word), a kept record, the sealed refusal, the log's order, the limit, resuming, the quota stop, a slow deposit not holding up the rest, the revisits (of failed reads, or of a chosen set, keeping earlier visits); the runner's downloads, its parsed table's place and its audit packets (headers, never values); no detector module imported
 - `valuescale/tests/test_score.py` — the class scores: typical rows, rows like neither, missing features, linear-only features, deposits left out, JSON round trip
 - `valuescale/tests/test_method.py` — the method end to end: linear and log tables, a gate, too few columns, no spread, reasons
 - `valuescale/tests/test_independence.py` — the shipped modules import numpy and the standard library only, and nothing imports the service

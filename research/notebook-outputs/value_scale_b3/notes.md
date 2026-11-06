@@ -325,7 +325,8 @@ these skips do not lean the labels either way.
 - **Fetch failed, 19:**
   - 10 archives that zipfile cannot open (damaged or truncated in the
     repository);
-  - 5 tables whose lines end in a lone CR, which the csv reader refuses;
+  - 5 tables whose lines end in a lone CR, which our readers refused until
+    the clean-up (`76d490a`);
   - 4 files PRIDE's FTP lists but will not open ("550 Failed to open
     file").
 - **No file list, 12:**
@@ -346,7 +347,7 @@ saved the most time. The faster routes raised earlier, EBI's Aspera tool or
 a stop below 10,000, are no longer needed, because the walk finished at
 10,000.
 
-## For the owner
+## Asked of the owner (answered below)
 
 1. **Accept B3_frame's failure:** the expected count was wrong, as
    explained above.
@@ -373,6 +374,11 @@ a stop below 10,000, are no longer needed, because the walk finished at
    - every record these touch, and B3's 31 remaining failed reads, visited
      a third time, with the expectations committed first;
    - every table this adds judged under the audit rubric.
+
+   The fixes are in `76d490a`. The expectations are in
+   `valuescale/bank/expectations/b3_revisit2.json` and protocol amendment 3
+   (`3963fcd`). The selection is 103 records (`05f544d`); the header probe
+   added none.
 3. **The 8,813 deposits the walk did not list stay unlisted,** as a
    reserve. If B4's calibration shows the method must change, the
    calibration split becomes design data and fresh calibration is drawn

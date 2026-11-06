@@ -7,14 +7,14 @@ Phase B, as of 2026-11-06:
 - **B1, the cost study:** done, with its failed row accepted by the owner (`8608c11`, `ab18152`).
 - **B2, the method:** done, with its failures accepted by the owner (`0e147eb`, `19d79eb`).
 - **B3, the corpus:** run (`5c9e521`), with its failed row accepted by the owner on 2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
-- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met are fixed (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports), and every record they touch, with B3's 31 failed reads, is visited a third time.
+- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`, not yet deployed. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed, and the visit is running.
 - **B4 to B7:** not started.
 
 Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 75).
 
 ## Context
 
-Stage 0 of the service (`service/pipeline/alignment.py:347-402`, `detect_and_transform_value_scale`) decides whether a protein upload still needs a log. Its rule is "no negative value and a non-zero median above 50 means linear". It read PXD064083's linear values (median 7, max 211,481, about 45% zeros) as log. No log2 was taken, and the zeros were treated as measured values.
+Stage 0 of the service (`service/pipeline/alignment.py`, `detect_and_transform_value_scale`) decides whether a protein upload still needs a log. Its rule is "no negative value and a non-zero median above 50 means linear". It read PXD064083's linear values (median 7, max 211,481, about 45% zeros) as log. No log2 was taken, and the zeros were treated as measured values.
 
 What the research found (`research/value-scale-detection.md`, plus the 2026-10-28 searches):
 - **Every tool uses a hand-set threshold.** Each automatic rule found (GEO2R, CIBERSORT, scGPT, ExpressAnalyst, Omics Playground, ProteoPy, Gemma) is a size threshold set by hand, with no published error rate.
@@ -252,6 +252,7 @@ This is the framework's front end; the default reading is unchanged.
   - the hand audit agrees on 80 of 81.
 - **The hand audit was judged by subagents** under a rubric committed before any packet was made. Claude reread the disagreement and every tenth agreement.
 - **One failed row, B3_frame:** the expected count was made with the csv module and an exact-case species match. The owner accepted it on 2026-11-06.
+- **The clean-up before B4** (owner, 2026-11-06; protocol amendment 3): the faults in our own code that the walk met, fixed test first (`76d490a`), and a third visit of the 103 records they touch (`valuescale/bank/expectations/b3_revisit2.json`, `valuescale/corpus/cleanup_20261106.json`).
 
 ### B4. The package: `valuescale/` (placeholder name)
 
@@ -288,9 +289,9 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
 - The site's `valueScaleText` covers the new verdicts. "Can't tell" and "unlike either" show a warning beside the scale menu.
 - The site asks for the reading when a protein file is chosen: raw intensities, already log, or "I don't know", which runs the detector. Uploaders mostly know (owner, 2026-11-04). The design is agreed with the owner before it is built.
 - **Tests:**
-  - the tiny-matrix and uniform-random tests in `test_alignment.py` (412-472) move to `median_rule` / `apply_reading`;
+  - the tests in `test_alignment.py`'s `DetectAndTransformValueScaleTests` move to `median_rule` / `apply_reading`;
   - new log-normal cases: PXD064083-like, 45% zeros, log2, log10 and +10 offsets, ratio tables, too-small-to-tell;
-  - `test_pxd064083.py:157` → `apply_reading`.
+  - `test_pxd064083.py`'s `AmendmentOneTests` → `apply_reading`.
 - **Diagnostics B5:** the full stage-by-stage trace on every bank table, compared with D3:
   - PBMC240 reads linear, on the 50-cell slice and on all 238 cells;
   - SCoPE2 reads log;

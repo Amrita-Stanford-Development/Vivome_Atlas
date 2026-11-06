@@ -105,6 +105,11 @@ become the gene identifiers, DIA-NN's other annotation columns
 excluded from the cell columns, and each remaining column's Windows
 raw-file-path header is cleaned to its basename without `.raw`.
 
+The service tests a file's header in this order: MaxQuant, Spectronaut,
+FragPipe LFQ, DIA-NN (a "Genes" column), FragPipe TMT (a "Gene" column),
+else a plain matrix. The site's check uses the same order. So a header with
+"Genes" and "<run>.PG.Quantity" columns is read as Spectronaut's.
+
 Four more protein tables are read as their software writes them
 (`service/pipeline/alignment.py`):
 - **Spectronaut's protein-group pivot report** (it has "<run>.PG.Quantity"

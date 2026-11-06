@@ -40,8 +40,10 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     tables for calibration and the sealed test, and no real log table. Its one
     failed row was accepted by the owner on 2026-11-06
     ([notes](notebook-outputs/value_scale_b3/notes.md)). Before B4, the
-    calibration: the faults in our own code that B3's walk met are fixed,
-    and every record they touch is visited a third time.
+    calibration: the faults in our own code that B3's walk met are fixed
+    (`76d490a`; the service and site changes are not deployed and wait for
+    the owner's OK), and the 103 records they touch are visited a third
+    time.
   - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
     The detector serves those who don't know. The pop-up's design is
     agreed with the owner before B5.

@@ -325,12 +325,13 @@ because of the files. The owner chose to fix all of them before B4
     accessions, with decoys and contaminants left out;
   - a Spectronaut pivot is named by PG.Genes, else its protein groups, else
     its accessions, with or without the "PG." prefix. A peptide-level report
-    is refused;
+    is refused on its header, before the full fetch, as amendment 2's
+    MaxQuant refusal is;
   - a macOS companion file ("._", or under `__MACOSX/`) is never a
     candidate;
-  - Proteome Discoverer tables and long reports are decoded as the service
-    decodes an upload (UTF-16 by its byte order mark, UTF-8, else
-    Windows-1252).
+  - every table is decoded as the service decodes an upload (UTF-16 by its
+    byte order mark, UTF-8, else Windows-1252), and the header reader knows
+    UTF-16 by its byte order mark.
 - **Effect on step 4** ("eligible when it parses ... with the service's
   parser"): the wording stands, and the parser reads more tables. A table
   it read before is read as before, with one exception: a Spectronaut pivot
@@ -342,7 +343,8 @@ because of the files. The owner chose to fix all of them before B4
   - On the diagnostic bank it touches MSV000099294's two tables. Their values
     are identical (they hold no 0), and only their cells' names change.
     `valuescale/corpus/bank.json`, frozen on 2026-10-28, still lists their
-    layout as "matrix".
+    layout as "matrix", so a re-run of D1 would show `layout_as_listed`
+    false for them.
 - **A third visit:** every record the fixes touch is visited again, in its
   place in the log. It keeps its earlier outcomes (`revisited_from`) and its
   reasons (`revisited_for`).
