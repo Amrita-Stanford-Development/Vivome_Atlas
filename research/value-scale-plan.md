@@ -6,7 +6,8 @@ Phase B, as of 2026-11-06:
 - **B0, the protocol:** done (`26519a8`).
 - **B1, the cost study:** done, with its failed row accepted by the owner (`8608c11`, `ab18152`).
 - **B2, the method:** done, with its failures accepted by the owner (`0e147eb`, `19d79eb`).
-- **B3, the corpus:** run (`5c9e521`). One row, B3_frame, waits for the owner's acceptance (`research/notebook-outputs/value_scale_b3/notes.md`).
+- **B3, the corpus:** run (`5c9e521`), with its failed row accepted by the owner on 2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
+- **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met are fixed (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports), and every record they touch, with B3's 31 failed reads, is visited a third time.
 - **B4 to B7:** not started.
 
 Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 75).
@@ -250,7 +251,7 @@ This is the framework's front end; the default reading is unchanged.
   - no real log table, so the log class is calibrated on constructed variants alone;
   - the hand audit agrees on 80 of 81.
 - **The hand audit was judged by subagents** under a rubric committed before any packet was made. Claude reread the disagreement and every tenth agreement.
-- **One failed row, B3_frame:** the expected count was made with the csv module and an exact-case species match. It waits for the owner's acceptance before B4.
+- **One failed row, B3_frame:** the expected count was made with the csv module and an exact-case species match. The owner accepted it on 2026-11-06.
 
 ### B4. The package: `valuescale/` (placeholder name)
 

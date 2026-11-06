@@ -18,8 +18,8 @@ expectations written before it runs (`bank/expectations/`):
 - **B1, what each mistake costs:** on "can't tell" the service reads linear;
 - **B2, the method** (below);
 - **B3, the corpus** (below);
-- **B4, calibration**, next. It waits for the owner to accept B3's one
-  failed row (`research/notebook-outputs/value_scale_b3/notes.md`).
+- **B4, calibration**, next, after the clean-up the owner chose on
+  2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
 
 The service still uses its median rule until B5 wires this package in. Each
 step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,

@@ -37,9 +37,11 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     - the float64 z-score;
     - B0 (the protocol), B1 (what each mistake costs) and B2 (the method).
   - **B3, the corpus, was run on 2026-11-05:** 401 fresh public linear
-    tables for calibration and the sealed test, and no real log table. One
-    row waits for the owner's acceptance before B4, the calibration
-    ([notes](notebook-outputs/value_scale_b3/notes.md)).
+    tables for calibration and the sealed test, and no real log table. Its one
+    failed row was accepted by the owner on 2026-11-06
+    ([notes](notebook-outputs/value_scale_b3/notes.md)). Before B4, the
+    calibration: the faults in our own code that B3's walk met are fixed,
+    and every record they touch is visited a third time.
   - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
     The detector serves those who don't know. The pop-up's design is
     agreed with the owner before B5.

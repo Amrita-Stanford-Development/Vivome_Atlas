@@ -189,8 +189,8 @@ mistakes. Together they account for exactly the 10 extra deposits:
 
 Recounting with the csv module and the exact-case match gives 17,346 PRIDE
 and 1,513 MassIVE: 18,859, the expected number exactly. The frame itself
-reads the index correctly. **The owner is asked to accept this row's
-failure before B4.**
+reads the index correctly. The owner accepted this row's failure on
+2026-11-06 (below).
 
 ## S3 is short, as designed
 
@@ -356,3 +356,24 @@ a stop below 10,000, are no longer needed, because the walk finished at
      during the walk;
    - `research/benchmark/side-tests.md` amendment 25 records the detector's
      sealed test and calibration deposits.
+
+## The owner's decisions (2026-11-06)
+
+1. **B3_frame's failure is accepted,** as explained above.
+2. **A clean-up before B4.** It began with the line endings. The same
+   day the owner widened it to every fault in our own code that B3's walk
+   met:
+   - fixed test first, in the service's parser, the site's file check and
+     the corpus tool: lone-CR line endings; MaxQuant tables without "Gene
+     names" (named by their protein IDs), and MaxQuant 1.0 to 1.2's
+     title-case names; Spectronaut pivots without PG.Genes or without the
+     "PG." prefix, with peptide-level reports refused in words; macOS
+     companion files ("._"), never chosen again; long reports in
+     Windows-1252, read as the service reads an upload;
+   - every record these touch, and B3's 31 remaining failed reads, visited
+     a third time, with the expectations committed first;
+   - every table this adds judged under the audit rubric.
+3. **The 8,813 deposits the walk did not list stay unlisted,** as a
+   reserve. If B4's calibration shows the method must change, the
+   calibration split becomes design data and fresh calibration is drawn
+   from the reserve. The test split stays sealed either way.
