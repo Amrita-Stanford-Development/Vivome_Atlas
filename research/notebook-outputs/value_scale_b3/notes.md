@@ -320,7 +320,8 @@ contaminant, a reverse hit or identified only by site, as it does in a
 table with gene names, and that leaves 1 to 110. This was counted from the
 identifier and flag columns, not from the values. The parser is right. The
 expected count was a guess made without row counts. The expectation stands
-as written, and the row goes to the owner.
+as written. The owner accepted the miss on 2026-11-07, after a closer look
+(below, "The owner's decisions after the third visit").
 
 The visited records keep their earlier outcomes in `revisited_from`, nested
 when the second visit had already replaced one, and their reasons in
@@ -498,7 +499,7 @@ a stop below 10,000, are no longer needed, because the walk finished at
    calibration split becomes design data and fresh calibration is drawn
    from the reserve. The test split stays sealed either way.
 
-## Asked of the owner after the third visit
+## Asked of the owner after the third visit (answered below)
 
 1. **Accept the MaxQuant row's miss** (43 kept against at least 44), as
    explained under "The third visit".
@@ -508,3 +509,35 @@ a stop below 10,000, are no longer needed, because the walk finished at
 3. **Decimal commas:** read them, or refuse them in words.
 4. **PXD054457's "LFQ Intensity":** match MaxQuant's quantity columns in any
    case, or leave it.
+
+## The owner's decisions after the third visit (2026-11-07)
+
+1. **The MaxQuant row's miss is accepted,** after a closer look at the six
+   tables. Each is small because of what was measured, and the reader leaves
+   out only MaxQuant's own contaminant, reverse and site-only rows, as in
+   every MaxQuant table. Deposit names and file sizes only:
+
+   | Table | Split | Experiment | Rows in the file | Read |
+   |---|---|---|---|---|
+   | PXD002127 | calibration | the phosphoproteome of PINK1 in HEK293 cells | 276 | 110 |
+   | PXD003185 | calibration | an in vitro kinase assay on recombinant FLNc | 98 | 18 |
+   | PXD017116 | test | the vitreous body in diabetic retinopathy | 102 | 87 |
+   | PXD063561 | test | purified engineered albumin variants | 26 | 1 |
+   | PXD070622 | test | the protein corona of lipid nanoparticles | 91 | 72 |
+   | PXD080805 | calibration | the paleoproteomics of teeth | 43 | 6 |
+
+   Two follow the walk's fixed rules, which stay as they are:
+   - PXD063561 holds a larger table, `txt_exp1/proteinGroups_Jeannette_P10524-P10559.txt`
+     (2.7 MB), which the walk's name order passes over;
+   - PXD002127's other archive is 549 MB, over the 500 MB bar. Its table
+     would reach 247 rows if the 137 site-only rows were kept.
+2. **The seven faults found after the third visit are fixed,** test first,
+   in the service, the site's check and the corpus tool. A fourth visit of
+   the records they touch follows, with its expectations written first.
+3. **A table with decimal commas is refused in clear words:** the refusal
+   says what the file holds and asks for a decimal point. A reading that
+   took "1,234" for 1.234, or the reverse, would be a thousandfold error,
+   the very mistake the detector is for.
+4. **MaxQuant's quantity columns are matched in any case,** so PXD054457
+   is read from its "LFQ Intensity" columns. It is visited again with the
+   seven.
