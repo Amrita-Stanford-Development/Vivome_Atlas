@@ -73,6 +73,7 @@ ALLOWED_MISSING = (
     "research/notebook-outputs/v52_phase4/",  # likewise, for v5.2
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "valuescale/corpus/score_test.py",  # the raw-or-log plan's B3/B7 one-time scorer (research/benchmark/protocol-value-scale.md)
+    "valuescale/calibration/protein-v1.json",  # written by B4's calibration (protocol amendment 5); removed from here when it exists
     "valuescale/baselines.py",  # the raw-or-log plan's B4 baseline rules (research/value-scale-plan.md)
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
     "data/profiles/",  # the gene profile shards, written only into dist/site/ by scripts/build_pages_site.py

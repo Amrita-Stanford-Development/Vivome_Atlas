@@ -436,3 +436,85 @@ fix them and visit their records a fourth time (2026-11-07; B3's notes,
   ledger.
 - **Effect on scoring:** none on the rules. The corpus gains the tables the
   service reads.
+
+### 5. 2026-11-07: before calibration, the class score is the probability alone
+
+Written before B4 computed any detector statistic, gate or verdict on a
+calibration or test deposit. Every number below comes from the design
+split (B2's report) or from the walk's records (columns, labels), never
+from a calibration or test value.
+
+- **What was found, on design data.** B2's class score is the smaller of
+  a typicality rank and the classifier's probability. The rank is the share
+  of the class's design rows, each scored with its deposit left out, that
+  are at least as far from the rest as the table is. It is 0 for a table
+  farther from the design rows than any design row is from the others.
+  - With 18 design deposits, that is about one new deposit in 19.
+    pxd043355_pd scored exactly 0 with its deposit left out.
+  - The threshold is the k-th smallest calibration score. In the pooled
+    stratum, 68 deposits give k = 1, so the threshold is the lowest score.
+    About 3.6 zeros are expected among 68, and the chance of none is
+    about 3%.
+  - A threshold of 0 puts the class in every answer set. Every table
+    would be "can't tell", or no table would be "log".
+- **The change (chosen by the owner, 2026-11-07):** a class's score is the
+  classifier's probability of that class alone: B2's ridge logistic
+  regression, fitted on B2's design rows, unchanged (39 linear and 50 log
+  rows from 18 deposits). Class y joins the set when its probability
+  reaches its threshold. "The claim" and the threshold rule are unchanged.
+- **Typicality becomes a warning.** The distance to the 3 nearest design
+  rows and its rank are still computed and reported. When the rank is 0
+  for every class in the answer set (for an empty set, for both classes),
+  the reply warns that the table is unlike the tables the detector was
+  built on. The warning never changes the set.
+- **"Can't tell" and "unlike either" with one probability.** The linear
+  and log probabilities add up to 1.
+  - When the two thresholds add up to 1 or less, a probability between
+    them gives both readings: "can't tell".
+  - When they add up to more than 1, such a probability gives neither:
+    "unlike either".
+  - Both are read linear (B1), as before.
+- **The no-gaps rule, decided on design data before any calibration
+  score.** A table with no missing value after the gates' clean-up is
+  "can't tell": it may have been filled in (imputed), which can make a log
+  table look linear. A log table filtered to the proteins seen in every
+  cell has no missing value either.
+  - It runs after the gates and the size, no-spread and per-protein rules.
+  - On the bank, only furtwangler_log2_imputed has no missing value
+    (B2's notes).
+  - The rule stays if B4's design run confirms that
+    (`valuescale/bank/expectations/b4.json`, B4_no_gaps). Otherwise the
+    owner decides, before calibration.
+- **How calibration scores** (Claude's rulings, in the plan's ledger):
+  - **Every calibration subsample is scored,** with its constructed log
+    variant, whatever a gate or rule would answer. The features are
+    computed on the cleaned values: non-finite values, negatives and the
+    ties at each cell's minimum made missing, as for a table no gate
+    decides.
+    - A gate or rule gives such a table its true class, or "can't tell".
+      A kept linear table holds no negative (Labels), and a log of a
+      linear table is not whole numbers.
+    - So the bound holds over every table, and n counts every deposit.
+  - **A subsample with no per-cell statistic scores 0.** None is
+    expected.
+  - **Pooling.** S3 holds 3 calibration deposits, so it pools with S2
+    into "S2+S3" (50 to 2,000 columns).
+    - A deposit that reaches S3 has two subsamples there. Its score is
+      the smaller of the two, so each deposit counts once.
+  - **n and k, per class:** S1 has n = 218, so k = 6. S2+S3 has n = 68,
+    so k = 1.
+  - **The log class** is the constructed variants alone: the calibration
+    split holds no real log table.
+- **Frozen** in `valuescale/calibration/protein-v1.json`: the design model;
+  the thresholds with their n and k; α and δ; and the calibration corpus
+  manifest (each deposit's accession, file sha256, columns and rows) with
+  its sha256.
+- **The test (B7)** scores each subsample the same way, with the same
+  pooling. A test deposit that reaches S3 misses in "S2+S3" when either of
+  its two subsamples misses.
+- **Effect on scoring:** "The claim", the splits, the strata and "Scoring
+  (once)" are unchanged. "Unlike either" now means that neither
+  probability reaches its bar. The foreign tables' power is reported for
+  "unlike either" and for the warning.
+- **Decided by:** the owner (the score), 2026-11-07. Claude decided the
+  rest, as rulings in the plan's ledger.
