@@ -27,13 +27,17 @@
    "PXD054457",
    "PXD057972",
    "PXD057994",
+   "PXD059079",
    "PXD063043",
    "PXD064519",
    "PXD064580",
+   "PXD070147",
    "PXD070994"
   ],
   "test": [
    "PXD022054",
+   "PXD022575",
+   "PXD023508",
    "PXD026775",
    "PXD027240",
    "PXD028842",
@@ -47,11 +51,13 @@
    "PXD041795",
    "PXD045017",
    "PXD050265",
+   "PXD053397",
    "PXD054961",
    "PXD057989",
    "PXD058283",
    "PXD058381",
    "PXD060977",
+   "PXD064789",
    "PXD065519"
   ]
  },
@@ -308,6 +314,15 @@
    "quote": "Table: `proteinGroups_EV1.txt`; 27 columns, 5059 rows. ... IBAQ values LFQ (label-free) intensities were calculated using the in-built algorithms.",
    "reason": "Native MaxQuant proteinGroups (EV1 is a dataset suffix) with LFQ intensity columns computed by MaxQuant's in-built algorithm; no annotation rows and no later transformation described."
   },
+  "PXD022575": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "fourth visit (the tables it added)",
+   "quote": "Table: `MI_hCASMC_Donor_1_2_Proteins.txt` ... Abundance: F34: 126, Sample, 0.5 , Normal, Donor1 ... Annotation rows under the header (0) ... none",
+   "reason": "The value columns are Proteome Discoverer's own 'Abundance:' columns in its Proteins.txt export, with no Perseus #!{Type} row (line 1), no scale step in the file name (line 2), and nothing in the methods about transforming the deposited table (line 3). The 'Abundances (Scaled)' and 'Abundances (Normalized)' columns are other columns from the software's own run, and silence is agreement.",
+   "reread": "Claude reread: agrees. MI_hCASMC_Donor_1_2_Proteins.txt is Proteome Discoverer's own export, read from its 'Abundance:' columns (TMT channels 126 to 131 of four files); its 'Abundances (Scaled)' and '(Normalized)' columns are not read. No Perseus row; the methods are silent on the table."
+  },
   "PXD022859": {
    "agrees": true,
    "doubt": false,
@@ -315,6 +330,15 @@
    "packet": "third visit (the tables it added)",
    "quote": "proteinGroups_Human_HOMD.txt ... label-free quantification was set using the MaxLFQ algorithm",
    "reason": "Agree: 'Human_HOMD' names the search database (human and oral microbiome), not a scale step; no Perseus row; the methods describe only the MaxQuant LFQ run."
+  },
+  "PXD023508": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "fourth visit (the tables it added)",
+   "quote": "Table: `20190118_Proteins.txt` ... Abundance: F10: Sample, EXP01, Healthy-BRCA-NEG ... Annotation rows under the header (0) ... label free quantitation (LFQ) was performed using peak intensity for unique and razor peptide of each protein",
+   "reason": "The table is the Proteome Discoverer 2.2 Proteins.txt export with raw 'Abundance:' value columns, no Perseus annotation rows (line 1), and no scale step in its name (line 2). The methods describe only the software's own LFQ (line 3 does not apply). The sibling file 'Normalized_protein_abundance.xlsx' is a different file, not the judged table.",
+   "reread": "Claude reread: agrees. 20190118_Proteins.txt is Proteome Discoverer 2.2's export, read from its 'Abundance:' columns; the deposit's Normalized_protein_abundance.xlsx is another file. The methods: 'label free quantitation (LFQ) was performed using peak intensity'."
   },
   "PXD023542": {
    "agrees": true,
@@ -782,6 +806,15 @@
    "reason": "A native DIA-NN 1.8.1 pg_matrix with no scale word in its name; R analysis comes later.",
    "reread": "Claude reread: agrees; DIA-NN 1.8.1 pg_matrix beside its pr_matrix and unique_genes_matrix."
   },
+  "PXD053397": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "fourth visit (the tables it added)",
+   "quote": "Table: `report-first-pass.pg_matrix.tsv` ... Annotation rows under the header (0) ... none ... Protein levels were determined as a MAXLFQ value estimated by DIA-NN.",
+   "reason": "'first-pass' names DIA-NN's own first search pass, not a step after the software that changes the scale (not log, normalised, imputed, batch-corrected, scaled, z-scored or processed); no Perseus rows, and the methods describe DIA-NN's own MaxLFQ, which counts as its own output.",
+   "reread": "Claude reread: agrees. report-first-pass.pg_matrix.tsv is DIA-NN's own first-pass matrix, written beside report.pg_matrix.tsv; 'first-pass' is not a scale step. The methods: 'Protein levels were determined as a MAXLFQ value estimated by DIA-NN'. Its runs' folder, 'Cont,BLM,MTX,miR', is the comma that split it before the separator fix."
+  },
   "PXD053422": {
    "agrees": true,
    "doubt": false,
@@ -794,9 +827,18 @@
    "agrees": true,
    "doubt": false,
    "judged_by": "a subagent, under b3.json's audit_rubric",
-   "packet": "third visit (the tables it added)",
-   "quote": "Table: `search/proteinGroups.txt` ... Annotation rows under the header (0) ... Here we used a recently developed combinatorial search algorithm implemented in the MGVB toolset",
-   "reason": "No Perseus rows, no scale word in the path, and no transformation of the deposited table in the announcement, so no disagree line applies. Outside the rubric: the headers are not MaxQuant's usual ones ('LFQ Intensity', 'Contaminant', 'Slice Average'), the table looks like MGVB writing in MaxQuant's layout, and the parser found 0 LFQ columns because of the capital 'I'."
+   "packet": "fourth visit (rebuilt: its LFQ Intensity columns now read)",
+   "quote": "Table: `search/proteinGroups.txt` ... LFQ Intensity 231-c-m1 ... Intensity 231-c-m1 ... Annotation rows under the header (0) ... none",
+   "reason": "A standard MaxQuant proteinGroups.txt with its own LFQ intensity and Intensity columns. There are no Perseus annotation rows (line 1), the folder 'search' names no scale step (line 2), and the methods say nothing about transforming the deposited table (line 3). Silence is agreement.",
+   "replaces": {
+    "agrees": true,
+    "doubt": false,
+    "judged_by": "a subagent, under b3.json's audit_rubric",
+    "packet": "third visit (the tables it added)",
+    "quote": "Table: `search/proteinGroups.txt` ... Annotation rows under the header (0) ... Here we used a recently developed combinatorial search algorithm implemented in the MGVB toolset",
+    "reason": "No Perseus rows, no scale word in the path, and no transformation of the deposited table in the announcement, so no disagree line applies. Outside the rubric: the headers are not MaxQuant's usual ones ('LFQ Intensity', 'Contaminant', 'Slice Average'), the table looks like MGVB writing in MaxQuant's layout, and the parser found 0 LFQ columns because of the capital 'I'."
+   },
+   "reread": "Claude reread: agrees. search/proteinGroups.txt, read now from its 60 'LFQ Intensity' columns, with no Perseus row and no scale word in its path; the methods name the MGVB toolset's search and are silent on the table. As the first judge noted, the headers look like MGVB writing in MaxQuant's layout; either way it is a search program's own output, which is what the label rests on."
   },
   "PXD054961": {
    "agrees": true,
@@ -928,6 +970,15 @@
    "quote": "Table: `proteinGroups_matching_pre_20_40_30_180.txt`; 29 columns, 1321 rows. ... LFQ intensity (29): LFQ intensity 1_+180_Ex, ...",
    "reason": "Renamed MaxQuant proteinGroups with native columns; the file name names a sample set, not a scale-changing step."
   },
+  "PXD059079": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "fourth visit (the tables it added)",
+   "quote": "Table: `Result_pg_matrix.tsv` ... Annotation rows under the header (0) ... none ... Single-cell data obtained from FAIMS-Ascend were analyzed using DIA-NN (Ver 1.8.0) ... Cross-normalization was disabled.",
+   "reason": "A DIA-NN pg_matrix with no Perseus rows and no scale step in its name ('Result' is not one); the methods describe only DIA-NN settings and say nothing of a log, scaling or imputation of the deposited table, so silence is agreement.",
+   "reread": "Claude reread: agrees. Result_pg_matrix.tsv is DIA-NN 1.8.0's matrix (the methods: 'Cross-normalization was disabled'), with no Perseus row and no scale word in its name. Spectronaut is named for the benchmark data, not this table."
+  },
   "PXD060145": {
    "agrees": true,
    "doubt": false,
@@ -1008,6 +1059,15 @@
    "quote": "The output file (proteinGroups.txt) generated by MaxQuant was analyzed using Perseus software ... Data were log-transformed (base 10) and normalized using the Pareto scaling method.",
    "reason": "The log10 and Pareto scaling are placed in the Perseus analysis of the MaxQuant output, and the methods do not say the deposited table holds them. There are no annotation rows, so 'agree otherwise' applies."
   },
+  "PXD064789": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "fourth visit (the tables it added)",
+   "quote": "Table: `TINRES.pg_matrix.tsv` ... Annotation rows under the header (0) ... none ... The protein groups file from the DIA-NN output was annotated and utilized for downstream bioinformatics analysis within the R environment.",
+   "reason": "DIA-NN's own pg_matrix, its other columns are DIA-NN's five, and there are no Perseus rows; 'annotated' is not a scale step, and the R analysis is placed downstream without saying the deposited table holds it, so 'agree otherwise' applies.",
+   "reread": "Claude reread: agrees. TINRES.pg_matrix.tsv keeps DIA-NN's five annotation columns, no Perseus row; its 2,319 rows fit the methods' '2320 protein groups (henceforth proteins) before filtering', so it is DIA-NN's unfiltered output. 'Annotated' and the R analysis come after."
+  },
   "PXD065392": {
    "agrees": true,
    "doubt": false,
@@ -1073,6 +1133,15 @@
    "packet": "first (layout only changed)",
    "quote": "Table: `Cassette.pg_matrix.tsv`; 27 columns, 901 rows; quantity None.",
    "reason": "A native DIA-NN 2.0 pg_matrix name and header, and the methods describe only the DIA-NN run."
+  },
+  "PXD070147": {
+   "agrees": true,
+   "doubt": false,
+   "judged_by": "a subagent, under b3.json's audit_rubric",
+   "packet": "fourth visit (the tables it added)",
+   "quote": "Table: `report.pg_matrix.tsv` ... Annotation rows under the header (0) ... none ... Data was processed using DIA-NN with library-free search ... Differential expression analysis, pathway enrichment, and dimensionality reduction performed using standard bioinformatics tools.",
+   "reason": "DIA-NN's own pg_matrix name with no Perseus rows and no scale word in the name (the deposit's report.log.txt is DIA-NN's run log, not this table); the methods place the statistics after the software without saying the deposited table holds them, so 'agree otherwise' applies.",
+   "reread": "Claude reread: agrees. report.pg_matrix.tsv is DIA-NN's own matrix, with DIA-NN's five annotation columns and no Perseus row; report.log.txt beside it is DIA-NN's run log. The differential expression is placed in 'standard bioinformatics tools', after the software."
   },
   "PXD070994": {
    "agrees": true,

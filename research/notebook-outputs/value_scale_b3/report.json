@@ -1,16 +1,16 @@
 {
- "after_audit": 449,
- "kept": 451,
+ "after_audit": 455,
+ "kept": 457,
  "listed": 10000,
  "quotas": {
   "calibration": {
-   "S1": 216,
-   "S2": 67,
+   "S1": 218,
+   "S2": 68,
    "S3": 3
   },
   "test": {
-   "S1": 233,
-   "S2": 65,
+   "S1": 237,
+   "S2": 67,
    "S3": 8
   }
  },
@@ -26,10 +26,10 @@
   },
   "B3_audit_cleanup": {
    "found": {
-    "added": 49,
-    "agree": 48,
-    "judged": 49,
-    "rate": 0.9796
+    "added": 55,
+    "agree": 54,
+    "judged": 55,
+    "rate": 0.9818
    },
    "pass": true
   },
@@ -45,15 +45,15 @@
   },
   "B3_quota_S1": {
    "found": {
-    "calibration": 216,
-    "test": 233
+    "calibration": 218,
+    "test": 237
    },
    "pass": true
   },
   "B3_quota_S2": {
    "found": {
-    "calibration": 67,
-    "test": 65
+    "calibration": 68,
+    "test": 67
    },
    "pass": true
   },
@@ -69,7 +69,7 @@
    "pass": true
   },
   "B3_records": {
-   "found": "451 of 451 kept records complete",
+   "found": "457 of 457 kept records complete",
    "incomplete": [],
    "pass": true
   },
@@ -80,22 +80,22 @@
   "B3_skips": {
    "found": {
     "fetch failed": 14,
-    "kept": 451,
-    "no candidate": 7776,
+    "kept": 457,
+    "no candidate": 7777,
     "no file list": 12,
     "too few columns": 1568,
     "too few rows": 14,
     "too large": 69,
-    "unparseable": 96
+    "unparseable": 89
    },
    "pass": true
   },
   "B3_software": {
    "found": {
-    "DIA-NN": 120,
+    "DIA-NN": 124,
     "FragPipe": 12,
     "MaxQuant": 253,
-    "Proteome Discoverer": 5,
+    "Proteome Discoverer": 7,
     "Spectronaut": 59
    },
    "pass": true
@@ -105,7 +105,7 @@
    "pass": true
   },
   "B3_yield": {
-   "found": 4.51,
+   "found": 4.57,
    "pass": true
   }
  },

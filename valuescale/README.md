@@ -68,14 +68,14 @@ Phase B, B3, the corpus (`corpus/`, not shipped):
   parser lacks, and the provenance labels.
 - `draw.py`: the walk, its log in the frame's order (`walk.jsonl`), the
   quotas and the stop rule, and the revisits: of failed reads, or of a
-  chosen set (B3's third visit), each keeping what it replaced. The runner is
+  chosen set (B3's third and fourth visits), each keeping what it replaced. The runner is
   `research/notebooks/value_scale_corpus.py`, which brings the service's
   parser.
 - `audit.json`: the hand audit's sample (a seeded 20% of each split's kept
-  tables) and its verdicts.
+  tables), the tables the clean-up's visits added, and their verdicts.
 
-B3's result, after the clean-up's third visit: 10,000 deposits listed, 449
-linear tables kept after the audit (216 calibration, 233 test), and no real
+B3's result, after the clean-up's fourth visit: 10,000 deposits listed, 455
+linear tables kept after the audit (218 calibration, 237 test), and no real
 log table. Each kept table is parsed
 into `data/incoming/value-scale-corpus/<accession>/table.npz`, which is not
 tracked.
@@ -101,7 +101,10 @@ python research/notebooks/value_scale_corpus.py walk # B3: the walk (hours; resu
 python research/notebooks/value_scale_corpus.py revisit       # B3: failed reads again, once the walk has stopped
 python research/notebooks/value_scale_corpus.py cleanup-selection # B3: the records the clean-up of 2026-11-06 touches
 python research/notebooks/value_scale_corpus.py revisit --cleanup # B3: the third visit of those records
+python research/notebooks/value_scale_corpus.py fourth-visit-selection # B3: the records the fixes of 2026-11-07 touch
+python research/notebooks/value_scale_corpus.py revisit --fourth  # B3: the fourth visit of those records
 python research/notebooks/value_scale_corpus.py audit-sample  # B3: the hand audit's seeded sample
+python research/notebooks/value_scale_corpus.py audit-cleanup # B3: the tables the clean-up's visits added, to be judged
 python research/notebooks/value_scale_corpus.py audit-packets # B3: the audit's packets (headers and methods, never values)
 python research/notebooks/value_scale_corpus.py report        # B3: the report against b3.json
 python -m unittest discover -s valuescale/tests -t .

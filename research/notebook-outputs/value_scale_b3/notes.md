@@ -6,8 +6,9 @@ frame was built and was not edited after the run. Two sections were added
 to it later, each committed before the run it covers: `revisit` (a727c39)
 and `audit_rubric` (5a3b44a). The clean-up's third visit has its own
 expectations, `valuescale/bank/expectations/b3_revisit2.json` (`3963fcd`),
-also written before it ran. The report and the counts below are as after
-that visit.
+also written before it ran, and so has the fourth visit,
+`valuescale/bank/expectations/b3_revisit3.json` (`8016025`). The report and
+the counts below are as after the fourth visit.
 
 No detector statistic, gate or verdict was computed on any drawn deposit.
 
@@ -68,12 +69,14 @@ these tables is not yet known.
   2,000" promise, learned mostly from smaller tables. B2 found that the
   detector's measures don't drift with size, which supports this, but it is
   an assumption.
-- **The pooled group is only just full** (62 and 61, against 59). If B4 has
-  to drop more than 3 calibration or 2 test tables with 50 or more columns,
-  it goes back to the owner before calibration.
-- **The labels can be trusted:** 80 of 81 passed the hand check.
+- **The pooled group is just full** (68 and 67 after the clean-up's
+  visits, against 59; 62 and 61 after the walk). If B4 has to drop more
+  than 9 calibration or 8 test tables with 50 or more columns, it goes back
+  to the owner before calibration.
+- **The labels can be trusted:** 80 of 81 passed the hand check, and 54 of
+  the 55 tables the clean-up added.
 - **The promise is an average over the corpus's software mix:** MaxQuant
-  211, DIA-NN 119, Spectronaut 54, FragPipe 12, Proteome Discoverer 5. A
+  253, DIA-NN 124, Spectronaut 59, FragPipe 12, Proteome Discoverer 7. A
   software with few tables could fare worse without the average showing
   it.
 - **No real log table was found.** The log side's promise rests on log
@@ -98,14 +101,17 @@ these tables is not yet known.
   calibration, 4,949 test) and kept 402: 188 in calibration and 214 in
   test.
 - **The third visit** (the clean-up, 2026-11-06; see below) kept 49 more,
-  29 in calibration and 20 in test. 451 are kept now: 217 in calibration
-  and 234 in test. 412 come from PRIDE and 39 from MassIVE.
-- **After the audit:** 449 are kept. Two deposits are excluded: PXD039540
-  (test) and PXD001608 (calibration, one of the third visit's; see below).
+  29 in calibration and 20 in test.
+- **The fourth visit** (2026-11-07; see below) kept 6 more, 2 in
+  calibration and 4 in test. 457 are kept now: 219 in calibration and 238
+  in test. 418 come from PRIDE and 39 from MassIVE.
+- **After the audit:** 455 are kept, 218 in calibration and 237 in test.
+  Two deposits are excluded: PXD039540 (test) and PXD001608 (calibration,
+  one of the third visit's; see below).
 - **Labels:** every kept table is labelled linear. None is labelled log.
-- **Software, after the audit:** MaxQuant 253, DIA-NN 120, Spectronaut 59,
-  FragPipe 12, Proteome Discoverer 5.
-- **Layouts, after the audit:** 372 wide tables, 50 Spectronaut pivots, 18
+- **Software, after the audit:** MaxQuant 253, DIA-NN 124, Spectronaut 59,
+  FragPipe 12, Proteome Discoverer 7.
+- **Layouts, after the audit:** 378 wide tables, 50 Spectronaut pivots, 18
   long DIA-NN reports and 9 long Spectronaut reports.
 - **Where the tables are:** each kept deposit's parsed table is in
   `data/incoming/value-scale-corpus/<accession>/table.npz`, ready for B4.
@@ -116,41 +122,45 @@ counts after the audit:
 
 | Stratum | Calibration | Test | Quota |
 |---|---|---|---|
-| S1, 20 or more columns | 216 | 233 | 59 |
-| S2, 50 or more columns | 67 | 65 | 59 |
+| S1, 20 or more columns | 218 | 237 | 59 |
+| S2, 50 or more columns | 68 | 67 | 59 |
 | S3, 301 or more columns | 3 | 8 | 59 |
 
 Before the third visit these were 188 and 213, 62 and 61, and 3 and 8.
+After it, 216 and 233, 67 and 65, and 3 and 8.
 
-Why the 10,000 listed deposits were skipped or kept, after the third visit:
+Why the 10,000 listed deposits were skipped or kept, after the fourth
+visit:
 
 | Outcome | Deposits |
 |---|---|
-| no candidate table | 7,776 |
+| no candidate table | 7,777 |
 | too few columns | 1,568 |
-| kept | 451 |
-| unparseable | 96 |
+| kept | 457 |
+| unparseable | 89 |
 | too large (one file over 500 MB) | 69 |
 | too few rows | 14 |
 | fetch failed | 14 |
 | no file list | 12 |
 
-69 of the 96 unparseable tables were refused on their header alone, as
+69 of the 89 unparseable tables were refused on their header alone, as
 SILAC or TMT MaxQuant searches, in the parser's own words. 11 more were
 refused so on their full read: they were walked before the header refusal.
-The other 16 are under "Found after the third visit", below.
+The other 9 are the files' own: the six under "Found after the third
+visit", below, and the three tables with decimal commas, now refused in
+those words.
 
 ## Rows that pass as expected
 
-- **B3_records:** all 451 kept records have their file's URL, size and
+- **B3_records:** all 457 kept records have their file's URL, size and
   sha256 (for an archive member, the member's own sha256). Each parses
   into at least 20 columns and 200 rows, and has a label with its quote.
 - **B3_quota_S1 and B3_quota_S2:** met in both splits.
 - **B3_quota_S3:** short, as expected (see below).
 - **B3_stop:** the walk stopped at 10,000 listed, because S3 could not be
   met.
-- **B3_yield:** 4.51 kept per 100 listed, 4.02 before the third visit
-  (expected 3 to 15).
+- **B3_yield:** 4.57 kept per 100 listed; 4.02 before the third visit and
+  4.51 after it (expected 3 to 15).
 - **B3_skips:** "no candidate" is the most common outcome, at 77.8% of
   listed deposits (expected over half).
 - **B3_real_log:** fewer than 59 real log tables in each split. In fact
@@ -159,8 +169,9 @@ The other 16 are under "Found after the third visit", below.
   MaxQuant).
 - **B3_audit:** 80 of 81 agree, 98.8% (expected at least 90%, hoped for at
   least 95%).
-- **B3_audit_cleanup:** 48 of the 49 tables the third visit added agree,
-  98.0% (b3_revisit2.json asked at least 90%).
+- **B3_audit_cleanup:** 54 of the 55 tables the third and fourth visits
+  added agree, 98.2% (b3_revisit2.json and b3_revisit3.json asked at least
+  90%). After the third visit alone it was 48 of 49.
 - **B3_sealed:** no sealed accession was listed or opened.
 - **B3_no_statistic:** a test, run in the valuescale suite: the draw imports
   none of the detector's gates, statistics, scores or methods.
@@ -211,11 +222,10 @@ S3 holds 3 linear deposits in calibration and 8 in test, against a quota of
 59. The protocol plans for this: S3 pools with S2 into one stratum, "50 to
 2,000", and the detector's reply names the pooled stratum.
 
-The pooled stratum's counts are the S2 row: 62 in calibration and 61 in
-test. That clears 59 by only 3 and 2. The audit's one exclusion has 24
-columns, so it touches S1 only. If B4 ever has to drop more than 3
-calibration tables or 2 test tables with 50 or more columns, the pooled
-stratum falls short. The protocol says a short S1 or S2 goes to the owner
+The pooled stratum's counts are the S2 row: 68 in calibration and 67 in
+test after the clean-up's visits (62 and 61 after the walk). That clears 59
+by 9 and 8. If B4 ever has to drop more than 9 calibration tables or 8 test
+tables with 50 or more columns, the pooled stratum falls short. The protocol says a short S1 or S2 goes to the owner
 before calibration, and it would come back to you then.
 
 ## No real log tables
@@ -395,11 +405,14 @@ close calls a judge named, and every tenth agreement in accession order
   "LFQ Intensity" columns. The parser's quantity patterns are
   case-sensitive, so it read the "Intensity" columns, not LFQ. Both are
   MaxQuant's own linear output, so the label stands. It is the only such
-  table among the 291 local MaxQuant tables.
+  table among the 291 local MaxQuant tables. The patterns match in any case
+  since 2026-11-07; the fourth visit read its LFQ columns, and its rebuilt
+  packet was judged again (below).
 
 ## Reads that still fail
 
-26 deposits are skipped because a read failed even after the third visit.
+26 deposits are skipped because a read failed even after the third visit
+(the fourth visited none of them).
 They are counted under the two skip reasons b3.json added to the
 protocol's list. A failed read says nothing about a table's values, so
 these skips do not lean the labels either way.
@@ -433,7 +446,8 @@ columns, never a value.
     (PXD063781);
   - a DIA-NN report with decimal points and decimal commas mixed in its
     rows (PXD062541).
-- **7 are faults in our own code, not yet fixed:**
+- **7 were faults in our own code,** fixed since (`8016025`; "The fourth
+  visit", below):
   - a DIA-NN pg_matrix whose Genes column is empty (its FASTA gave no gene
     names) is refused, though Protein.Group names every row by UniProt
     accessions: PXD064789 (test), PXD070147 and PXD059079 (calibration). It
@@ -447,6 +461,75 @@ columns, never a value.
 - **3 write decimal commas,** as Spectronaut does under a European locale:
   two long reports (PXD047604, PXD036850) and a pivot (PXD043761). Reading
   them needs a rule that tells a decimal comma from a thousands separator.
+  The owner chose to refuse them in clear words (below).
+
+## The fourth visit
+
+The fixes of 2026-11-07 (`8016025`), test first in the service's parser,
+the site's file check and the corpus tool:
+- a DIA-NN matrix whose Genes column is empty on every row is named by its
+  protein groups; a short row is still refused;
+- the separator is chosen from the header and the line under it, so a
+  tab-separated matrix whose run names hold commas is split on its tabs;
+- an archive member of 0 bytes is never the table;
+- a number written with a decimal comma is refused, in words that say what
+  the file holds and ask for a decimal point;
+- MaxQuant's quantity columns are matched in any case.
+
+Its expectations, `valuescale/bank/expectations/b3_revisit3.json`, and
+protocol amendment 4 were committed with the fixes, before the selection
+and the visit ran.
+
+**The selection** (`valuescale/corpus/cleanup_20261107.json`, `42a8b96`):
+the 13 records the fixes touch, found in the walk's log and the local
+tables' first lines, and 2 from a header probe. The probe read again the
+headers of the 1,584 records the walk had decided on a wide header alone.
+1,583 could be read, and 2 decide otherwise now: PXD022575 and PXD023508,
+Proteome Discoverer tables in the test split. Their column names hold
+commas ("Abundance: F34: 126, Sample, 0.5 , Normal, Donor1"), so the
+header-only rule split them on commas and found no quantity column.
+
+**The visit.** Before, the 15 were 12 unparseable, 2 too few columns and 1
+kept. After, 7 are kept (6 of them new), 5 unparseable, 2 too few columns
+and 1 no candidate.
+
+| Group | Expected | Found |
+|---|---|---|
+| header probe, 1,584 headers | at least 90% readable, at most 10 decide otherwise | 1,583 readable, 2 decide otherwise |
+| protein groups, 4 | PXD064789, PXD070147 and PXD059079 read (kept, or a later rule); PXD046550 refused by name | the three kept (92, 33 and 144 columns); PXD046550 refused so, as a matrix with no row |
+| separator, 2 | neither fails on "fewer than the header's" again | PXD053397 kept (25 columns); PXD053298 too few columns (18) |
+| empty member, 2 | no member of 0 bytes chosen again | PXD056559 too few columns (the proteinGroups.txt in another of its archives); PXD046085 no candidate |
+| decimal comma, 4 | all unparseable, "a number written with a comma" | so, each naming the column and the cell it refused |
+| MaxQuant case, PXD054457 | kept, linear, the same rows and columns, read from "LFQ Intensity" | so: 4,990 rows, 60 columns, from its 60 LFQ columns |
+| the 2 headers read again | no expectation for each | both kept (24 and 80 columns) |
+| any other record | unchanged, the order kept, earlier outcomes and reasons kept | so |
+| the corpus | S1 and S2 still meet 59; S3 short, pooled with S2; no real log table | so |
+| the report | every B3 row keeps its pass or fail; B3_audit_cleanup covers both visits' tables | so; B3_frame still fails, as accepted |
+
+Every expectation was met. Which of MaxQuant's two families PXD054457 is
+read from was checked by running the service's parser on it twice, once as
+it stands and once limited to the "LFQ intensity" columns: the two reads
+are the same. Only that was printed, no value. The refusals of decimal
+commas quote the one cell refused, as the service's refusal of an upload
+does; the walk's log quoted such a cell before as well.
+
+**The audit.** The 6 new tables and PXD054457's rebuilt packet (the old
+one moved aside, not deleted) were judged by two fresh subagents under the
+same rubric, not told the first verdict. All 7 agree, none in doubt.
+Claude reread all 7, since with fewer than ten there is no tenth
+agreement. All stand:
+- the four DIA-NN matrices are DIA-NN's own; PXD064789's 2,319 rows fit
+  its methods' "2320 protein groups ... before filtering", and PXD053397's
+  runs' folder, "Cont,BLM,MTX,miR", is the comma that split it before;
+- the two Proteome Discoverer tables are read from their "Abundance:"
+  columns, not their "Abundances (Scaled)" or "(Normalized)" ones;
+- PXD054457's methods name the MGVB toolset's search, and its headers look
+  like MGVB writing in MaxQuant's layout, as the first judge noted. Either
+  way it is a search program's own output, which is what the label rests
+  on. Its new verdict replaces the third visit's, which is kept inside it
+  (`replaces`).
+
+54 of the clean-up's 55 tables agree, 98.2%.
 
 ## PRIDE's speed
 
@@ -534,6 +617,10 @@ a stop below 10,000, are no longer needed, because the walk finished at
 2. **The seven faults found after the third visit are fixed,** test first,
    in the service, the site's check and the corpus tool. A fourth visit of
    the records they touch follows, with its expectations written first.
+
+   The fixes and the expectations are in `8016025` (protocol amendment 4),
+   the selection in `42a8b96`. The visit's results are under "The fourth
+   visit", above. The service's and the site's fixes are not deployed yet.
 3. **A table with decimal commas is refused in clear words:** the refusal
    says what the file holds and asks for a decimal point. A reading that
    took "1,234" for 1.234, or the reverse, would be a thousandfold error,

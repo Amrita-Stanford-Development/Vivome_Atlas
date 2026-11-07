@@ -43,10 +43,12 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     calibration, the faults in our own code that B3's walk met were fixed
     (`76d490a`, `3b4f162`; the service and site changes are not deployed and
     wait for the owner's OK). The 103 records they touch were visited a third
-    time on 2026-11-06: 449 tables are kept after the audit (216
-    calibration, 233 test). One MaxQuant expectation missed (accepted by the
+    time on 2026-11-06. One MaxQuant expectation missed (accepted by the
     owner), and seven more faults of our own were found after the visit.
-    The owner chose to fix them, with a fourth visit (2026-11-07).
+    The owner chose to fix them, with a fourth visit: fixed in `8016025`
+    (not deployed either), and the 15 records they touch visited on
+    2026-11-07, every expectation met. 455 tables are kept after the audit
+    (218 calibration, 237 test).
   - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
     The detector serves those who don't know. The pop-up's design is
     agreed with the owner before B5.

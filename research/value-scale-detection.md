@@ -57,8 +57,8 @@ are binding; this is their summary.
 - **The strata** are 20–49, 50–300 and 301–2,000 columns.
 
 **The corpus as drawn in B3 (2026-11-05; `research/notebook-outputs/value_scale_b3/notes.md`):**
-- 10,000 deposits listed, and 449 linear tables kept after the hand audit
-  and the clean-up's third visit (216 calibration, 233 test).
+- 10,000 deposits listed, and 455 linear tables kept after the hand audit
+  and the clean-up's third and fourth visits (218 calibration, 237 test).
 - The 301+ stratum pools with 50–300.
 - No real log table was found, so the log class is calibrated on
   constructed log variants alone.

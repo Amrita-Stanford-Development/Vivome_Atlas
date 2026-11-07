@@ -3300,6 +3300,46 @@ amendment 3).
 
   3 more write decimal commas. These go to the owner.
 
+### 77. The raw-or-log framework, Phase B, B3's fourth visit, 2026-11-07
+
+**Why:** the third visit's records showed seven more faults in our own
+code. The owner accepted the MaxQuant row's miss and chose to fix the
+seven, to refuse decimal commas in clear words and to match MaxQuant's
+quantity columns in any case, then to visit the records these touch
+(protocol amendment 4).
+
+**What was built:**
+- The fixes, test first in the service's parser, the site's file check
+  and the corpus tool (`8016025`):
+  - a DIA-NN matrix with an empty Genes column, named by its protein
+    groups;
+  - the separator chosen from the header and the line under it;
+  - an empty archive member, never the table;
+  - decimal commas refused in words;
+  - MaxQuant's quantity columns matched in any case.
+- The expectations, `valuescale/bank/expectations/b3_revisit3.json`,
+  committed with the fixes.
+- The selection, `fourth-visit-selection` (`42a8b96`): the 13 records the
+  fixes touch, and a probe that read again the 1,584 headers the walk had
+  decided on alone. 2 decide otherwise now. 15 records in
+  `valuescale/corpus/cleanup_20261107.json`.
+- The visit, `revisit --fourth`. The 6 tables it added, and PXD054457's
+  rebuilt packet, were judged by subagents under B3's audit rubric.
+
+**Results** (`research/notebook-outputs/value_scale_b3/`, report and notes):
+- Every expectation was met. 7 of the 15 are kept, 6 of them new
+  (PXD070147 and PXD059079 in calibration; PXD064789, PXD053397, PXD022575
+  and PXD023508 in test). PXD054457 is read now from its LFQ Intensity
+  columns, with the same rows and columns. The 4 decimal-comma tables are
+  refused in the new words.
+- All 7 judged tables agree. The clean-up's tables agree on 54 of 55
+  (98.2%).
+- 455 tables kept after the audit, 218 in calibration and 237 in test, all
+  linear. S2 holds 68 and 67; S3 is still short (3 and 8) and pools with
+  S2. Still no real log table.
+- Every report row keeps its pass or fail. B3_frame still fails, as the
+  owner accepted.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

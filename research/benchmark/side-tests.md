@@ -474,18 +474,19 @@ isolation:
 The raw-or-log framework (`research/value-scale-plan.md`; protocol
 `research/benchmark/protocol-value-scale.md`) gives public protein deposits
 roles for its detector alone. Its B3 step drew them on 2026-11-04 and 05,
-and its clean-up visited 103 of them again on 2026-11-06
-(`valuescale/corpus/walk.jsonl`).
+and its clean-up visited 103 of them again on 2026-11-06 and 15 on
+2026-11-07 (`valuescale/corpus/walk.jsonl`).
 
-- **The detector's sealed test:** the 233 test-split tables kept after B3's
-  audit and its third visit (outcome kept, split test, PXD039540 excluded).
+- **The detector's sealed test:** the 237 test-split tables kept after B3's
+  audit and its third and fourth visits (outcome kept, split test,
+  PXD039540 excluded).
   - No detector statistic, gate or verdict is computed on them until its
     one scoring (plan B7).
   - From plan B5, the service runs the detector on every protein upload.
     So from then until that scoring, none of these deposits is uploaded to
     the service or the site, or used here as a development set or side
     test.
-- **The detector's calibration set:** the 216 calibration-split tables kept
+- **The detector's calibration set:** the 218 calibration-split tables kept
   after the audit (PXD001608 excluded). They
   are not sealed, but they are fitting data for the detector (plan B4).
 - **The rest of the 10,000 deposits B3 listed** had their file lists read,
