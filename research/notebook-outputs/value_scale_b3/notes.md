@@ -620,7 +620,9 @@ a stop below 10,000, are no longer needed, because the walk finished at
 
    The fixes and the expectations are in `8016025` (protocol amendment 4),
    the selection in `42a8b96`. The visit's results are under "The fourth
-   visit", above. The service's and the site's fixes are not deployed yet.
+   visit", above. The service's and the site's fixes were deployed on
+   2026-11-07 with the owner's OK (Cloud Run revision
+   `vivome-atlas-00009-hcz`, then the site; `research/todo.md`).
 3. **A table with decimal commas is refused in clear words:** the refusal
    says what the file holds and asks for a decimal point. A reading that
    took "1,234" for 1.234, or the reverse, would be a thousandfold error,

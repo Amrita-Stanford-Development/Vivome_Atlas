@@ -41,21 +41,22 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     failed row was accepted by the owner on 2026-11-06
     ([notes](notebook-outputs/value_scale_b3/notes.md)). Before B4, the
     calibration, the faults in our own code that B3's walk met were fixed
-    (`76d490a`, `3b4f162`; the service and site changes are not deployed and
-    wait for the owner's OK). The 103 records they touch were visited a third
+    (`76d490a`, `3b4f162`). The 103 records they touch were visited a third
     time on 2026-11-06. One MaxQuant expectation missed (accepted by the
     owner), and seven more faults of our own were found after the visit.
-    The owner chose to fix them, with a fourth visit: fixed in `8016025`
-    (not deployed either), and the 15 records they touch visited on
-    2026-11-07, every expectation met. 455 tables are kept after the audit
-    (218 calibration, 237 test).
+    The owner chose to fix them, with a fourth visit: fixed in `8016025`,
+    and the 15 records they touch visited on 2026-11-07, every expectation
+    met. 455 tables are kept after the audit (218 calibration, 237 test).
   - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
     The detector serves those who don't know. The pop-up's design is
     agreed with the owner before B5.
-- **Deployed 2026-11-03:** Cloud Run revision `vivome-atlas-00008-xqq`
-  (from `c390036`), then the site. These brought Phase A and A2 (the Values
-  and Zeros menus) and the float64 z-score. `check_space.py`: 0 of 238
-  cells differ. The model is still v4.1.
+- **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
+  (from `decb812`), then the site. These brought the clean-up's fixes to
+  the parser and the site's file check (lone-CR line endings, MaxQuant,
+  Spectronaut and DIA-NN tables without gene names, the separator, decimal
+  commas refused in words). Phase A and A2 (the Values and Zeros menus) and
+  the float64 z-score have been live since 2026-11-03. `check_space.py`: 0
+  of 238 cells differ. The model is still v4.1.
 - **Organ references are paused** (owner, 2026-11-03) until the raw-or-log
   framework is finished; then the next organ step is discussed. Every organ
   so far is NO GO as built
