@@ -123,6 +123,15 @@ class CandidateTests(unittest.TestCase):
         got, _ = self.first([_f("x.raw"), _f("report.tsv")], {"report.tsv": ["QC"]})
         self.assertIsNone(got)
 
+    def test_an_empty_archive_member_is_never_the_table(self):
+        # PXD046085 and PXD056559: a member of 0 bytes was chosen, and nothing could be read from it
+        from valuescale.corpus.remote import Member
+        files = [_f("DIANN_libfree.zip", size=10)]
+        members = [Member("DIANN_libfree/a-first-pass.pg_matrix.tsv", 0), Member("DIANN_libfree/a.pg_matrix.tsv", 900)]
+        got = tables.first_candidate(files, lambda e: None, lambda f: members)
+        self.assertEqual(got.entry.member, "DIANN_libfree/a.pg_matrix.tsv")
+        self.assertIsNone(tables.first_candidate(files, lambda e: None, lambda f: members[:1]))
+
 
 class CountTests(unittest.TestCase):
     def test_quantity_columns_from_a_header(self):
@@ -137,6 +146,11 @@ class CountTests(unittest.TestCase):
         self.assertEqual(tables.quantity_columns("proteome_discoverer", "wide", pd_), 2)
         self.assertEqual(tables.quantity_columns("spectronaut", "spectronaut_pivot", SPECTRONAUT_PIVOT), 1)
         self.assertIsNone(tables.quantity_columns("diann_report", "long", DIANN_REPORT))
+
+    def test_maxquant_quantity_columns_are_counted_in_any_case(self):
+        # PXD054457, MaxQuant 1.0 to 1.2, as the parser reads them
+        old = ["Majority Protein IDs", "Gene Names", "LFQ Intensity A", "LFQ Intensity B", "LFQ Intensity C"]
+        self.assertEqual(tables.quantity_columns("maxquant", "wide", old), 3)
 
 
 class ReaderTests(unittest.TestCase):
@@ -154,6 +168,13 @@ class ReaderTests(unittest.TestCase):
         t = tables.read_proteome_discoverer(path)
         self.assertEqual((t.ids, t.cells), (["G1", "P2", "G3"], ["F1: A", "F2: B"]))
         np.testing.assert_array_equal(t.values, [[1.5e6, np.nan], [3, 4], [5, 6]])
+
+    def test_a_tab_separated_table_whose_names_hold_commas_is_split_on_its_tabs(self):
+        # the separator as the service's parser chooses it (remote.delimiter), not by the header's count alone
+        path = self.write("y_Proteins.txt", "Accession\tAbundance: F1: A, a, b, c\tAbundance: F2: B, d, e, f\n"
+                          "P1\t1\t2\n")
+        t = tables.read_proteome_discoverer(path)
+        self.assertEqual((t.ids, t.cells), (["P1"], ["F1: A, a, b, c", "F2: B, d, e, f"]))
 
     def test_a_dia_nn_long_report_on_maxlfq(self):
         path = self.write("report.tsv", "Run\tProtein.Group\tGenes\tPG.Quantity\tPG.MaxLFQ\n"
@@ -178,6 +199,13 @@ class ReaderTests(unittest.TestCase):
     def test_text_where_a_number_belongs_is_unreadable(self):
         path = self.write("r.tsv", "R.FileName\tPG.ProteinGroups\tPG.Quantity\nA\tP1\tabc\n")
         with self.assertRaises(ValueError):
+            tables.read_long(path, "spectronaut_long")
+
+    def test_a_number_written_with_a_comma_is_refused_in_words(self):
+        # PXD047604, PXD036850: Spectronaut's long reports under a European locale, as the service refuses
+        path = self.write("r.tsv", "R.FileName\tPG.ProteinGroups\tPG.Quantity\nA\tP1\t5\nB\tP1\t8329,325\n")
+        with self.assertRaisesRegex(ValueError, "'PG.Quantity' holds '8329,325', a number written with a comma.*"
+                                                "decimal point"):
             tables.read_long(path, "spectronaut_long")
 
     def write_bytes(self, name, data):

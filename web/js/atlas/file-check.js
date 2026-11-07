@@ -35,8 +35,9 @@ const FRAGPIPE_REFERENCE_PREFIXES = ['RefInt_', 'RefDInt_'];
 // columns it finds (service/pipeline/alignment.py); every other column
 // is annotation. FragPipe's unique, total and razor intensities summarise the
 // same sample; MaxQuant SILAC and TMT searches are refused, as the service
-// refuses them.
-const MAXQUANT_QUANTITIES = [/^LFQ intensity (.+)$/, /^Intensity (.+)$/];
+// refuses them. MaxQuant's are known in any case (MaxQuant 1.0 to 1.2 wrote
+// "LFQ Intensity").
+const MAXQUANT_QUANTITIES = [/^LFQ intensity (.+)$/i, /^Intensity (.+)$/i];
 const FRAGPIPE_LFQ_QUANTITIES = [
   /^(?!Combined )(.+) MaxLFQ Intensity$/,
   /^(?!Combined )(.+?)(?<! MaxLFQ)(?<! Unique)(?<! Total)(?<! Razor) Intensity$/,
@@ -68,6 +69,11 @@ const QUANTITIES = { spectronaut: SPECTRONAUT_QUANTITIES, maxquant: MAXQUANT_QUA
 
 // The service's missing values (service/pipeline/alignment.py, _MISSING_VALUES).
 const MISSING_VALUES = new Set(['', 'NA', 'Filtered', 'NaN']);
+// A number written with a comma, which the service refuses in words: a
+// decimal comma ("8329,325", as Spectronaut and Excel write under a European
+// locale) or a thousands separator ("1,234") cannot be told apart
+// (service/pipeline/alignment.py, _COMMA_NUMBER).
+const COMMA_NUMBER = /^[+-]?\d[\d.,]*,\d+(?:[eE][+-]?\d+)?$/;
 
 // Which header fields are cells, by the layout: the first of the layout's
 // quantity columns the header has (Spectronaut, MaxQuant, FragPipe LFQ), or
@@ -125,11 +131,13 @@ export async function countNonEmptyLines(blob, { encoding = 'utf-8', separator =
 // The same count, and with `columns` (the cell columns' positions in a data
 // row) what the rows below the header hold there: how many entries, empty
 // (as the service reads missing values, or not a number), 0 and negative,
-// and the smallest and largest number.
+// and the smallest and largest number; and the first number written with a
+// comma (its position and text), or null.
 async function scanLines(blob, { encoding = 'utf-8', separator = null, columns = null } = {}) {
   const reader = blob.stream().getReader();
   const decoder = new TextDecoder(encoding);
   const values = { entries: 0, empty: 0, zeros: 0, negatives: 0, min: null, max: null };
+  let comma = null;
   let count = 0;
   let tail = '';
   // the file's own separator alone (",," in a CSV) holds nothing either, as the service reads it
@@ -142,6 +150,7 @@ async function scanLines(blob, { encoding = 'utf-8', separator = null, columns =
       values.entries += 1;
       if (!Number.isFinite(x)) {
         values.empty += 1;
+        if (comma === null && COMMA_NUMBER.test(text)) comma = { column: i, text };
         continue;
       }
       if (x === 0) values.zeros += 1;
@@ -167,7 +176,7 @@ async function scanLines(blob, { encoding = 'utf-8', separator = null, columns =
   }
   tail += decoder.decode();
   take(tail);
-  return { lines: count, values: columns ? values : null };
+  return { lines: count, values: columns ? values : null, comma };
 }
 
 // A file's values in one plain sentence (checkFile's `values`), or null.
@@ -263,14 +272,25 @@ export function splitFields(line, separator) {
   }
 }
 
-// The header's separator (a tab when it has more tabs than commas, as the
-// service decides), its fields, and how many of them are not cells: the
-// identifier column, the known annotation columns, and blank names.
-export function parseHeader(line) {
+// The separator, as the service chooses it (service/pipeline/alignment.py
+// _delimiter): a tab when the header has more tabs than commas, unless the
+// next data line keeps the other one's count and not this one's. A
+// tab-separated table whose names hold commas (DIA-NN's run paths, for one)
+// has more commas than tabs in its header, and its rows keep the tabs.
+export function chooseSeparator(line, nextLine = null) {
+  const count = (text, s) => text.split(s).length - 1;
+  const byCount = count(line, '\t') > count(line, ',') ? '\t' : ',';
+  if (nextLine === null || nextLine === undefined) return byCount;
+  const kept = ['\t', ','].filter((s) => count(line, s) > 0 && count(nextLine, s) === count(line, s));
+  return kept.length === 1 ? kept[0] : byCount;
+}
+
+// The header's separator (chooseSeparator, from the header and the first
+// data line under it when given), its fields, and how many of them are not
+// cells: the identifier column, the known annotation columns, and blank names.
+export function parseHeader(line, nextLine = null) {
   const text = String(line ?? '');
-  const tabs = text.split('\t').length - 1;
-  const commas = text.split(',').length - 1;
-  const separator = tabs > commas ? '\t' : ',';
+  const separator = chooseSeparator(text, nextLine);
   const fields = splitFields(text, separator);
   // the service's header tests, in its order (service/pipeline/alignment.py header_layout)
   const maxquant = isMaxquant(fields);
@@ -298,7 +318,9 @@ export async function checkFile(blob, name = blob?.name ?? '') {
   let lines = await readLines(blob, { count, maxBytes: HEADER_LIMIT_BYTES, encoding });
   const header = lines[0] ?? '';
   if (header.trim() === '') throw new Error('The file has no header row.');
-  let parsed = parseHeader(header);
+  // the first line under the header that holds anything, past Perseus's rows
+  const nextLine = lines.slice(1).find((l) => l.trim() !== '' && !isPerseusRow(l)) ?? null;
+  let parsed = parseHeader(header, nextLine);
   if (parsed.refusal) throw new Error(parsed.refusal);
   if (parsed.format === 'matrix') {
     // 50 rows to judge, reading on past Perseus and blank rows if need be
@@ -322,6 +344,12 @@ export async function checkFile(blob, name = blob?.name ?? '') {
   const scan = await scanLines(blob, { encoding, separator: parsed.separator, columns });
   const features = scan.lines - 1;
   if (features < 1) throw new Error('The file has a header row but no feature rows.');
+  if (scan.comma) {
+    const name = fields[parsed.corner === 'missing' ? scan.comma.column - 1 : scan.comma.column];
+    throw new Error(`Column "${name}" holds "${scan.comma.text}", a number written with a comma. The service reads `
+      + 'numbers with a decimal point and no thousands separator: export the table again with a point as the '
+      + 'decimal mark (Spectronaut and Excel take it from the computer\'s region settings).');
+  }
   return {
     name, size: blob.size, separator: parsed.separator, columns: parsed.columns,
     annotation: parsed.annotation, format: parsed.format, features, cells: parsed.cellEstimate, values: scan.values,

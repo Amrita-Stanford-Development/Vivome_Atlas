@@ -346,3 +346,31 @@ test('Perseus annotation rows are not feature rows', async () => {
   const check = await checkFile(blob(`${header}\n#!{Type}E\tT\tE\tE\n#!{C:Group}\t\tA\tB\nP1\tGENE1\t100\t200\n`));
   assert.equal(check.features, 1);
 });
+
+test('a tab-separated file whose names hold commas is split on its tabs, as the service splits it', async () => {
+  // PXD053397, PXD053298: DIA-NN's run names hold commas, so the header has more commas than tabs
+  const header = ['Protein.Group', 'Protein.Ids', 'Protein.Names', 'Genes', 'First.Protein.Description',
+    'D:\\runs\\a,b,c,d,e.raw', 'D:\\runs\\f,g,h,i,j.raw'].join('\t');
+  const row = 'P04637\tP04637\tP53_HUMAN\tTP53\t\t10\t20';
+  assert.equal(parseHeader(header).separator, ',', 'the header alone says comma');
+  assert.deepEqual(parseHeader(header, row), { separator: '\t', columns: 7, annotation: 5, cellEstimate: 2, format: 'diann' });
+  const check = await checkFile(blob(`${header}\n#!{Type}E\n\n${row}\nP02768\tP02768\tALBU_HUMAN\tALB\t\t5\t\n`));
+  assert.deepEqual([check.separator, check.cells, check.features], ['\t', 2, 2]);
+  // the next line decides only when it keeps one separator's count and not the other's
+  assert.equal(parseHeader('gene,cell\tA,cell\tB,cellC', 'GENE1,1,2,3').separator, ',');
+  assert.equal(parseHeader('gene,cellA,cellB', '"GENE1, a name",1,2').separator, ',');
+});
+
+test('MaxQuant\'s quantity columns are known in any case, as the service knows them', () => {
+  // PXD054457, MaxQuant 1.0 to 1.2
+  const old = ['Majority Protein IDs', 'Gene Names', 'LFQ Intensity S1', 'LFQ Intensity S2', 'Contaminant'].join('\t');
+  assert.deepEqual(parseHeader(old), { separator: '\t', columns: 5, annotation: 3, cellEstimate: 2, format: 'maxquant' });
+});
+
+test('a number written with a comma is refused in words, as the service refuses it', async () => {
+  // PXD047604, PXD036850, PXD043761: Spectronaut under a European locale writes "8329,325"
+  await assert.rejects(checkFile(blob('gene\tS1\tS2\nTP53\t1\t2\nALB\t8329,325\t1\n')),
+    { message: /^Column "S1" holds "8329,325", a number written with a comma\..*decimal point/ });
+  await assert.rejects(checkFile(blob('gene,S1,S2\nTP53,2,"1,234"\n')), { message: /^Column "S2" holds "1,234"/ });
+  await assert.rejects(checkFile(blob('S1,S2\nTP53,1,"2,5"\n')), { message: /^Column "S2" holds "2,5"/ }, 'R\'s layout');
+});

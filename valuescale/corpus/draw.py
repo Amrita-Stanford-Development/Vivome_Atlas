@@ -18,8 +18,9 @@ The walk stops when every quota is met in both splits (QUOTA linear
 deposits reaching each stratum), or after LIMIT deposits have been listed.
 Once it has stopped, records can be visited again in their places
 (revisit): each whose read failed (fetch failed, no file list), or a chosen
-set (B3's third visit, valuescale/corpus/cleanup_20261106.json). Each keeps
-the record it replaces as revisited_from, an earlier visit nested inside.
+set (B3's third visit, valuescale/corpus/cleanup_20261106.json; its fourth,
+valuescale/corpus/cleanup_20261107.json). Each keeps the record it replaces
+as revisited_from, an earlier visit and its reasons nested inside.
 
 The network and the parser come in as Tools, so the walk is tested without
 either; research/notebooks/value_scale_corpus.py supplies the real ones.
@@ -195,11 +196,13 @@ def revisit(log: Path, tools: Tools, root: Path, workers: int = 4, visit_fn=visi
             outcomes=FAILED_READS, select: Callable | None = None) -> list[dict]:
     """Each record whose read failed is visited again with the walk's tools as
     they now are, in its place in the log; the outcome it replaces is kept as
-    revisited_from, with any earlier revisit's revisited_from inside it. B3's
+    revisited_from, with any earlier revisit's revisited_from and
+    revisited_for (its reasons) inside it. B3's
     walk returned a short FTP read as whole until 2026-11-05, so a transfer
     PRIDE ended early was logged as fetch failed. `select(record)`, when
-    given, chooses the records instead (B3's third visit: the records the
-    clean-up of 2026-11-06 touches). The log is rewritten once, at the end: a
+    given, chooses the records instead (B3's third and fourth visits: the
+    records the fixes of 2026-11-06 and 2026-11-07 touch). The log is
+    rewritten once, at the end: a
     revisit that stops part way leaves it as it was. Not to be run while the
     walk is writing the log."""
     records = [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -210,8 +213,9 @@ def revisit(log: Path, tools: Tools, root: Path, workers: int = 4, visit_fn=visi
         done = {}
         for i in todo:
             before = {"outcome": records[i]["outcome"], "detail": records[i].get("detail")}
-            if "revisited_from" in records[i]:
-                before["revisited_from"] = records[i]["revisited_from"]
+            for key in ("revisited_for", "revisited_from"):  # an earlier visit's reasons and what it replaced
+                if key in records[i]:
+                    before[key] = records[i][key]
             done[i] = {**futures[i].result(), "revisited_from": before}
     for i, record in done.items():
         records[i] = record

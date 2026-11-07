@@ -373,3 +373,66 @@ because of the files. The owner chose to fix all of them before B4
   above, as rulings in the plan's ledger.
 - **Effect on scoring:** none on the rules. The corpus gains the tables the
   service reads.
+
+### 4. 2026-11-07: faults found after the third visit, and a fourth visit
+
+Written after the fixes' code and before the fourth visit ran. No detector
+statistic, gate or verdict had been computed on any calibration or test
+deposit.
+
+The third visit's records showed more faults of our own: tables the walk
+could not read, or read wrongly, because of the service's parser or the
+corpus tool (B3's notes, "Found after the third visit"). The owner chose to
+fix them and visit their records a fourth time (2026-11-07; B3's notes,
+"The owner's decisions after the third visit").
+
+- **What changed, test first, in the service's parser, the site's file
+  check and the corpus tool:**
+  - a DIA-NN matrix whose Genes column is empty on every row is named by
+    its protein groups (Protein.Group), and a row too short for its header
+    is refused, as in any table. A matrix with gene names still leaves out
+    its rows without one;
+  - the separator is chosen from the header and the line under it. The
+    header's larger count decides, as before, unless the next line keeps
+    exactly one separator's count. DIA-NN names its runs by their paths,
+    and a path may hold commas, so a tab-separated matrix had more commas
+    than tabs in its header. The corpus's long and Proteome Discoverer
+    readers, which broke a tie for tabs, now share the parser's rule;
+  - an archive member of 0 bytes is never a candidate;
+  - a number written with a decimal comma is refused in clear words. It is
+    not read: "8,329" could be a thousands separator. Chosen by the owner;
+  - MaxQuant's quantity columns are known in any case. MaxQuant 1.0 to 1.2
+    wrote "LFQ Intensity". Chosen by the owner.
+- **Effect on step 4** ("eligible when it parses ... with the service's
+  parser"): the wording stands, and the parser reads more tables. A table
+  it read before is read as before, with two exceptions:
+  - a MaxQuant table whose LFQ columns were spelled "LFQ Intensity" is now
+    read from them, not from its "Intensity" columns. In B3's corpus this
+    is PXD054457 (calibration, kept);
+  - a table whose separator changes. In B3's corpus none of these had been
+    read before.
+- **A fourth visit:** every record the fixes touch is visited again, in its
+  place in the log. It keeps its earlier outcomes (`revisited_from`, with
+  the third visit's `revisited_for` inside it) and its new reasons
+  (`revisited_for`).
+  - The selection rule and the expectations are in
+    `valuescale/bank/expectations/b3_revisit3.json`, committed before the
+    run.
+  - The selection itself is written to
+    `valuescale/corpus/cleanup_20261107.json` before the visit.
+  - The records the walk decided on a wide table's header alone (too few
+    columns, or refused on the header) have their headers read again,
+    the header alone. Each whose header now decides otherwise is visited.
+- **The audit:** the rank-based sample is not redrawn. Every table the
+  fourth visit adds is judged under the same rubric. It is recorded with
+  the third visit's additions, under the same key.
+- **A stated limit:** as in amendment 3, a "no candidate" record keeps no
+  file list. A report whose header was split on the wrong separator could
+  only be found by listing those deposits again. A long report's column
+  names are the software's own (DIA-NN's and Spectronaut's), without
+  commas, so its separator does not change.
+- **Decided by:** the owner, 2026-11-07 (the scope, the comma refusal, and
+  any case). Claude decided the rules above, as rulings in the plan's
+  ledger.
+- **Effect on scoring:** none on the rules. The corpus gains the tables the
+  service reads.

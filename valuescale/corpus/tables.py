@@ -44,6 +44,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from valuescale.corpus import remote
 from valuescale.corpus.remote import File
 
 KINDS = ("diann_matrix", "fragpipe", "maxquant", "spectronaut", "proteome_discoverer", "diann_report")
@@ -64,7 +65,7 @@ BANK = Path(__file__).with_name("bank.json")
 DIA_NN_ANNOTATION = frozenset({"Protein.Group", "Protein.Ids", "Protein.Names", "Genes",
                                "First.Protein.Description", "N.Sequences", "N.Proteotypic.Sequences"})
 MAXQUANT_IDS = "majority protein ids"  # MaxQuant's protein-group column, in any case
-MAXQUANT_QUANTITIES = (r"^LFQ intensity (.+)$", r"^Intensity (.+)$")
+MAXQUANT_QUANTITIES = (r"(?i)^LFQ intensity (.+)$", r"(?i)^Intensity (.+)$")  # any case: MaxQuant 1.0 to 1.2
 FRAGPIPE_LFQ_MARKERS = ("Gene", "Combined Total Peptides")
 FRAGPIPE_LFQ_QUANTITIES = (r"^(?!Combined )(.+) MaxLFQ Intensity$",
                            r"^(?!Combined )(.+?)(?<! MaxLFQ)(?<! Unique)(?<! Total)(?<! Razor) Intensity$")
@@ -178,6 +179,8 @@ def first_candidate(files: list[File], columns_of, members_of) -> Candidate | No
     for f, found in zip(archives, listed):
         for m in found:
             name, size = (m, 0) if isinstance(m, str) else (m.name, m.size)
+            if not isinstance(m, str) and size == 0:
+                continue  # an empty member holds no table (PXD046085, PXD056559)
             if not name.endswith("/") and name_kind(name) not in (None, "archive"):
                 members.append(Entry(f, name, size))
     return _first(members, columns_of)
@@ -201,12 +204,26 @@ def quantity_columns(kind: str, layout: str, columns) -> int | None:
     raise ValueError(kind)
 
 
+# A number written with a comma, refused in words as the service refuses it
+# (service/pipeline/alignment.py, _COMMA_NUMBER): a decimal comma and a
+# thousands separator cannot be told apart.
+COMMA_NUMBER = r"[+-]?\d[\d.,]*,\d+(?:[eE][+-]?\d+)?"
+
+
 def _numbers(frame: pd.DataFrame) -> np.ndarray:
-    """Text to float: the missing spellings become NaN; any other text raises."""
+    """Text to float: the missing spellings become NaN; a number written with
+    a comma, or any other text, raises."""
     cleaned = frame.apply(lambda s: s.str.strip()).where(lambda d: ~d.isin(MISSING))
     try:
         return cleaned.astype(np.float64).to_numpy()
     except ValueError as exc:
+        for column in cleaned.columns:
+            found = cleaned[column].dropna()
+            found = found[found.str.fullmatch(COMMA_NUMBER)]
+            if len(found):
+                raise ValueError(f"column {column!r} holds {found.iloc[0]!r}, a number written with a comma. The "
+                                 "parser reads numbers with a decimal point and no thousands separator, as the "
+                                 "service does") from None
         raise ValueError(f"text where a number belongs: {exc}") from None
 
 
@@ -258,9 +275,19 @@ def read_text(path: Path) -> str:
 
 
 def _sep(path: Path, encoding: str) -> str:
-    with path.open("r", encoding=encoding, errors="replace") as fh:
-        line = fh.readline()
-    return "\t" if line.count("\t") >= line.count(",") else ","
+    """The separator, as the service's parser chooses it (remote.delimiter):
+    from the header, and the first line under it that holds anything."""
+    with path.open("r", encoding=encoding, errors="replace", newline="") as fh:
+        line = fh.readline().rstrip("\r\n")
+        following = None
+        for _ in range(64):
+            nxt = fh.readline()
+            if not nxt:
+                break
+            if nxt.strip() and not nxt.lstrip('"').startswith("#!{"):
+                following = nxt.rstrip("\r\n")
+                break
+    return remote.delimiter(line, following)
 
 
 def read_proteome_discoverer(path: Path) -> Table:

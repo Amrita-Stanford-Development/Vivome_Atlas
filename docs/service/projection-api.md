@@ -103,7 +103,10 @@ become the gene identifiers, DIA-NN's other annotation columns
 (`Protein.Group`, `Protein.Ids` from DIA-NN 1.8, `Protein.Names`,
 `First.Protein.Description`, `N.Sequences`, `N.Proteotypic.Sequences`) are
 excluded from the cell columns, and each remaining column's Windows
-raw-file-path header is cleaned to its basename without `.raw`.
+raw-file-path header is cleaned to its basename without `.raw`. A row
+without a gene is left out. When no row has one, as in a search without
+gene annotation, every row is named by its `Protein.Group` instead, and a
+row too short for the header is refused, as in any table.
 
 The service tests a file's header in this order: MaxQuant, Spectronaut,
 FragPipe LFQ, DIA-NN (a "Genes" column), FragPipe TMT (a "Gene" column),
@@ -126,7 +129,8 @@ Four more protein tables are read as their software writes them
 - **MaxQuant's `proteinGroups.txt`** (it has "Majority protein IDs" and
   "Gene names", spelled so; or "Majority protein IDs" in any case, as
   MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs", and an "Intensity
-  <sample>" or "LFQ intensity <sample>" column):
+  <sample>" or "LFQ intensity <sample>" column, also in any case, as those
+  versions wrote "LFQ Intensity"):
   - "Gene names" gives the identifiers. A table without that column is named
     by its "Majority protein IDs": UniProt accessions, with decoy (`REV__`)
     and contaminant (`CON__`) members left out and a FASTA header
@@ -159,6 +163,10 @@ read as missing.
   binary file is refused (400), saying what to send instead. So is UTF-16
   that ends in half a character: the file was cut off, perhaps mid-number.
 - Lines may end in LF, CRLF, or a lone CR (Excel's "CSV (Macintosh)").
+- The separator is a tab or a comma: whichever the header holds more of,
+  unless the first data line keeps exactly one of their counts. That one is
+  the separator: DIA-NN names its runs by their file paths, a path may hold
+  commas, and its rows keep the tabs.
 - Perseus's annotation rows (`#!{...}`) are skipped, and so are rows that
   hold nothing but white space or separators.
 - A plain matrix written by R without the corner field over its row names
@@ -172,6 +180,11 @@ read as missing.
 **Refused (400), with a message naming the problem:**
 - a table with text where a number belongs (the message names the column
   and lists the layouts the service reads);
+- a number written with a decimal comma, such as `8329,325` (Spectronaut
+  and Excel take the decimal mark from the computer's region settings). The
+  message names the column and asks for the table to be exported again with
+  a point: a comma could also be a thousands separator, so it is not
+  guessed;
 - a row too short for its header (the message names the line).
 
 ```json

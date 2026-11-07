@@ -5,12 +5,18 @@ diagnostics against valuescale/bank/expectations/b3.json. The clean-up of
 2026-11-06 (protocol amendment 3): cleanup-selection chooses the records
 its fixes touch, revisit --cleanup visits them a third time, and
 audit-cleanup lists the tables that visit adds for the audit, against
-valuescale/bank/expectations/b3_revisit2.json.
+valuescale/bank/expectations/b3_revisit2.json. The fourth visit (2026-11-07,
+protocol amendment 4): fourth-visit-selection chooses the records the fixes
+found after the third visit touch, revisit --fourth visits them, against
+valuescale/bank/expectations/b3_revisit3.json, and audit-cleanup then lists
+the tables either visit added.
 
     python research/notebooks/value_scale_corpus.py walk [--workers 4]
     python research/notebooks/value_scale_corpus.py revisit [--workers 4]
     python research/notebooks/value_scale_corpus.py cleanup-selection [--workers 4]
     python research/notebooks/value_scale_corpus.py revisit --cleanup [--workers 4]
+    python research/notebooks/value_scale_corpus.py fourth-visit-selection [--workers 4]
+    python research/notebooks/value_scale_corpus.py revisit --fourth [--workers 4]
     python research/notebooks/value_scale_corpus.py audit-sample
     python research/notebooks/value_scale_corpus.py audit-cleanup
     python research/notebooks/value_scale_corpus.py audit-packets
@@ -69,7 +75,8 @@ def check_patterns() -> None:
         raise SystemExit("valuescale/corpus/tables.py's DIA-NN annotation columns differ from the parser's")
     if tables.MAXQUANT_IDS != alignment._MAXQUANT_IDS:
         raise SystemExit("valuescale/corpus/tables.py's MaxQuant column differs from the parser's")
-
+    if tables.COMMA_NUMBER != alignment._COMMA_NUMBER.pattern:
+        raise SystemExit("valuescale/corpus/tables.py's comma-number pattern differs from the parser's")
 
 def _safe(path: str) -> Path:
     return Path(*[re.sub(r'[<>:"|?*\\]', "_", part) or "_" for part in path.split("/") if part not in ("", ".", "..")])
@@ -203,8 +210,16 @@ def cmd_walk(args) -> int:
 def cmd_revisit(args) -> int:
     """The walk's failed reads, visited again once the walk has stopped; with
     --cleanup, the records in CLEANUP instead, each with its reasons as
-    revisited_for."""
+    revisited_for; with --fourth, the records in FOURTH."""
     check_patterns()
+    if getattr(args, "fourth", False):
+        chosen = json.loads(FOURTH.read_text(encoding="utf-8"))["records"]
+        done = sorted(r["accession"] for r in _records()
+                      if r["accession"] in chosen and r.get("revisited_for") == chosen[r["accession"]])
+        if done:  # a record the third visit took may be taken again, by its own new reasons
+            raise SystemExit(f"the fourth visit is made once: {len(done)} chosen records already hold its reasons "
+                             f"({', '.join(done[:5])})")
+        return _visit_chosen(chosen, args.workers)
     if not args.cleanup:
         before = Counter(r["outcome"] for r in _records() if r["outcome"] in draw.FAILED_READS)
         records = draw.revisit(LOG, make_tools(frame.load()), DATA, workers=args.workers)
@@ -216,12 +231,18 @@ def cmd_revisit(args) -> int:
     if done:  # a second run would nest the third visit inside a fourth
         raise SystemExit(f"the third visit is made once: {len(done)} chosen records already hold revisited_for "
                          f"({', '.join(done[:5])})")
+    return _visit_chosen(chosen, args.workers)
+
+
+def _visit_chosen(chosen: dict, workers: int) -> int:
+    """The chosen records visited again in their places, each with its
+    reasons as revisited_for."""
     tools = make_tools(frame.load())
     before = Counter(r["outcome"] for r in _records() if r["accession"] in chosen)
 
     def visit_fn(acc, repo, split, tools, root):
         return {**draw.visit(acc, repo, split, tools, root), "revisited_for": chosen[acc]}
-    records = draw.revisit(LOG, tools, DATA, workers=args.workers, visit_fn=visit_fn,
+    records = draw.revisit(LOG, tools, DATA, workers=workers, visit_fn=visit_fn,
                            select=lambda r: r["accession"] in chosen)
     now = Counter(r["outcome"] for r in records if r["accession"] in chosen)
     print(f"revisited {sum(before.values())} ({dict(before)}): now {dict(now)}")
@@ -323,6 +344,125 @@ def cmd_cleanup_selection(args) -> int:
     return 0
 
 
+# The fourth visit (owner, 2026-11-07): the faults of our own found after the
+# third visit (research/notebook-outputs/value_scale_b3/notes.md, "Found after
+# the third visit") and the owner's two rulings with them, fixed in the
+# parser, the site's check and the corpus tool: a DIA-NN matrix without gene
+# names is named by its protein groups; the separator is chosen from the
+# header and the line under it; an empty archive member is never the table; a
+# number written with a comma is refused in words; MaxQuant's quantity
+# columns are known in any case. FOURTH lists the records these touch;
+# revisit --fourth visits those again.
+FOURTH = REPO / "valuescale" / "corpus" / "cleanup_20261107.json"
+_COMMA_IN_DETAIL = re.compile("'" + tables.COMMA_NUMBER + "'")
+
+
+def _separator_before(r: dict, header_line: str) -> str:
+    """The separator before 2026-11-07, from the header line alone: the
+    parser's (a tab when there are more tabs than commas), and the long and
+    Proteome Discoverer readers' (a tab when there are as many or more)."""
+    tabs, commas = header_line.count("\t"), header_line.count(",")
+    if r.get("layout") in ("long", "spectronaut_long") or r.get("kind") == "proteome_discoverer":
+        return "\t" if tabs >= commas else ","
+    return "\t" if tabs > commas else ","
+
+
+def _first_lines(path: Path) -> tuple[str, str | None]:
+    """The header line, and the first line under it that holds anything past
+    Perseus's rows: read for their separators alone."""
+    with path.open("r", encoding=tables.text_encoding(path), errors="replace", newline="") as fh:
+        header = fh.readline().rstrip("\r\n")
+        for _ in range(64):
+            line = fh.readline()
+            if not line:
+                break
+            if line.strip() and not line.lstrip('"').startswith("#!{"):
+                return header, line.rstrip("\r\n")
+    return header, None
+
+
+def fourth_visit_reasons(r: dict) -> list:
+    """Why the fixes of 2026-11-07 touch a record, from the log and the local
+    table's first lines (their separators and names, never their values)."""
+    reasons = []
+    detail = str(r.get("detail") or "")
+    if r["outcome"] == "unparseable" and "no row has an identifier in 'Genes'" in detail:
+        reasons.append("protein groups")
+    if r["outcome"] == "unparseable" and _COMMA_IN_DETAIL.search(detail):
+        reasons.append("decimal comma")
+    if r.get("member") and r.get("member_bytes") == 0:
+        reasons.append("empty member")
+    if r.get("file") and "empty member" not in reasons:
+        path = _local_table(r)
+        if path.exists() and path.suffix.lower() != ".parquet":
+            header_line, following = _first_lines(path)
+            if _separator_before(r, header_line) != remote.delimiter(header_line, following):
+                reasons.append("separator")
+            header, _ = _header_lines(path, 0)
+            exact = [re.compile(p.pattern.replace("(?i)", "")) for p in alignment._MAXQUANT_QUANTITIES]
+            if alignment.header_layout(header) == "maxquant" and any(
+                    p.match(h) and not e.match(h) for p, e in zip(alignment._MAXQUANT_QUANTITIES, exact) for h in header):
+                reasons.append("quantity case")
+    return reasons
+
+
+def _header_decision_now(r: dict, tools: draw.Tools) -> str | None:
+    """What the walk decides now from a wide table's header alone (draw.visit,
+    step 4): too few columns, unparseable (refused on the header), or fetch.
+    None when the header cannot be read now: that is the server's, not the
+    fault's."""
+    denylist.check(r["accession"])
+    entry = tables.Entry(remote.File(r["file"], r["listed_bytes"], r["url"]), r.get("member"), 0)
+    try:
+        header = tools.header(entry)
+    except denylist.SealedData:
+        raise
+    except Exception:  # noqa: BLE001 - as _zero_columns_header_now
+        return None
+    if not header:
+        return None
+    n = tables.quantity_columns(r["kind"], r["layout"], header)
+    if n is not None and n < draw.MIN_COLUMNS:
+        return "too few columns"
+    try:
+        tools.refuse(tables.Candidate(r["kind"], r["layout"], entry, ()), header)
+    except denylist.SealedData:
+        raise
+    except Exception:  # noqa: BLE001 - the parser's refusal, in its own words
+        return "unparseable"
+    return "fetch"
+
+
+def cmd_fourth_visit_selection(args) -> int:
+    """FOURTH: each record the fixes of 2026-11-07 touch, with its reasons,
+    from the log and the local tables; and each record the walk decided on a
+    wide table's header alone (too few columns, or refused on the header),
+    with its header read again (the header alone): the separator rule and
+    MaxQuant's names in any case change what the reader makes of a header,
+    and those headers were never kept."""
+    check_patterns()
+    records = _records()
+    chosen = {r["accession"]: why for r in records if (why := fourth_visit_reasons(r))}
+    judged = [r for r in records if (r["outcome"] == "too few columns" and "header_columns" in r)
+              or r.get("refused_on") == "header"]
+    tools = make_tools(frame.load())
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        now = list(pool.map(lambda r: _header_decision_now(r, tools), judged))
+    for r, decision in zip(judged, now):
+        if decision is not None and decision != r["outcome"]:
+            chosen.setdefault(r["accession"], []).append("header")
+    out = {"about": "The records the fixes of 2026-11-07 touch, each with its reasons "
+                    "(research/notebooks/value_scale_corpus.py fourth-visit-selection; revisit --fourth visits them).",
+           "reasons": dict(Counter(x for v in chosen.values() for x in v).most_common()),
+           "probe": {"read": len(judged),
+                     "now_differs": sum(1 for r, d in zip(judged, now) if d is not None and d != r["outcome"]),
+                     "now_unreadable": sum(1 for d in now if d is None)},
+           "records": dict(sorted(chosen.items()))}
+    FOURTH.write_bytes((json.dumps(out, indent=1, sort_keys=True) + "\n").encode("utf-8"))
+    print(json.dumps({k: out[k] for k in ("reasons", "probe")}), len(chosen))
+    return 0
+
+
 def _records() -> list[dict]:
     return [json.loads(x) for x in LOG.read_text(encoding="utf-8").splitlines() if x.strip()]
 
@@ -347,17 +487,19 @@ def cmd_audit_sample(args) -> int:
         raise SystemExit(f"{AUDIT} already holds the sample; it is drawn once (b3_revisit2.json's audit)")
     existing["sample"] = sample
     existing.setdefault("verdicts", {})
-    AUDIT.write_bytes((json.dumps(existing, indent=1, sort_keys=True) + "\n").encode("utf-8"))
+    AUDIT.write_bytes((json.dumps(existing, indent=1, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8"))
     print({k: len(v) for k, v in sample.items()})
     return 0
 
 
 def newly_kept(records) -> dict:
-    """By split, the tables the clean-up's third visit kept that no earlier
-    visit had kept."""
+    """By split, the tables the clean-up's visits (the third and the fourth)
+    kept that no visit before the clean-up had kept. An outcome a clean-up
+    visit gave carries its reasons (revisited_for), so a table the third
+    visit added stays added when the fourth reads it again."""
     def kept_before(prior):
         while prior:
-            if prior.get("outcome") == "kept":
+            if prior.get("outcome") == "kept" and "revisited_for" not in prior:
                 return True
             prior = prior.get("revisited_from")
         return False
@@ -373,7 +515,7 @@ def cmd_audit_cleanup(args) -> int:
     judged under b3.json's rubric (b3_revisit2.json's audit)."""
     audit = json.loads(AUDIT.read_text(encoding="utf-8"))
     audit["cleanup"] = newly_kept(_records())
-    AUDIT.write_bytes((json.dumps(audit, indent=1, sort_keys=True) + "\n").encode("utf-8"))
+    AUDIT.write_bytes((json.dumps(audit, indent=1, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8"))
     print({k: len(v) for k, v in audit["cleanup"].items()})
     return 0
 
@@ -389,19 +531,27 @@ def _local_table(r: dict) -> Path:
 def _header_lines(path: Path, most: int = 12) -> tuple[list, list]:
     """The table's header, and the Perseus annotation rows ("#!{...") right
     under it: a table saved from Perseus keeps MaxQuant's column names
-    whatever it did to the values. No value row is read past them. A parquet
-    table's header is its schema's column names."""
+    whatever it did to the values. The first row past them is read for its
+    separators alone, as the parser reads it (remote.delimiter: a tab-separated
+    header whose names hold commas is split on its tabs); no value is
+    returned. A parquet table's header is its schema's column names."""
     if path.suffix.lower() == ".parquet":
         import pyarrow.parquet as pq
         return list(pq.ParquetFile(path).schema_arrow.names), []
     with path.open("r", encoding=tables.text_encoding(path), errors="replace", newline="") as fh:
-        header = remote.first_line_fields(fh.readline().encode("utf-8")) or []
-        notes = []
-        for _ in range(most):
-            line = fh.readline().rstrip("\r\n")
-            if not line.startswith("#!{"):
+        lines = [fh.readline()]
+        for _ in range(64):  # up to the first line that holds anything past Perseus's rows
+            line = fh.readline()
+            lines.append(line)
+            if not line or (line.strip() and not line.startswith("#!{")):
                 break
-            notes.append(line)
+    header = remote.first_line_fields("".join(lines).encode("utf-8")) or []
+    notes = []
+    for line in lines[1:most + 1]:
+        line = line.rstrip("\r\n")
+        if not line.startswith("#!{"):
+            break
+        notes.append(line)
     return header, notes
 
 
@@ -546,7 +696,7 @@ def report(records, record, audit) -> dict:
                      "pass": bool(judged) and len(judged) == len(sample) and agree / len(judged) >= 0.9},
         "B3_sealed": {"found": sealed_seen, "pass": not sealed_seen},
     }
-    if "cleanup" in audit:  # the tables the third visit added (b3_revisit2.json's audit)
+    if "cleanup" in audit:  # the tables the clean-up's visits added (b3_revisit2.json, b3_revisit3.json)
         added = [a for s in audit["cleanup"].values() for a in s]
         judged_added = [a for a in added if a in audit_verdicts]
         agree_added = sum(1 for a in judged_added if audit_verdicts[a].get("agrees"))
@@ -562,7 +712,8 @@ def render(rep: dict) -> str:
     lines = ["# B3 diagnostics: the corpus", "",
              "Generated by `research/notebooks/value_scale_corpus.py report` from `valuescale/corpus/walk.jsonl`,",
              "`frame.json` and `audit.json`, against `valuescale/bank/expectations/b3.json` (B3_audit_cleanup:",
-             "`b3_revisit2.json`, the third visit). No detector statistic was computed on any drawn deposit.", "",
+             "`b3_revisit2.json` and `b3_revisit3.json`, the third and fourth visits). No detector statistic was",
+             "computed on any drawn deposit.", "",
              f"Listed {rep['listed']}; kept {rep['kept']}; after the audit {rep['after_audit']}.", "",
              "| Row | Pass | Found |", "|---|---|---|"]
     for name, row in rep["rows"].items():
@@ -589,14 +740,18 @@ def main() -> int:
     r = sub.add_parser("revisit")
     r.add_argument("--workers", type=int, default=8)
     r.add_argument("--cleanup", action="store_true", help="the records cleanup-selection chose")
+    r.add_argument("--fourth", action="store_true", help="the records fourth-visit-selection chose")
     c = sub.add_parser("cleanup-selection")
     c.add_argument("--workers", type=int, default=4)
+    f = sub.add_parser("fourth-visit-selection")
+    f.add_argument("--workers", type=int, default=4)
     sub.add_parser("audit-sample")
     sub.add_parser("audit-cleanup")
     sub.add_parser("audit-packets")
     sub.add_parser("report")
     args = parser.parse_args()
     return {"walk": cmd_walk, "revisit": cmd_revisit, "cleanup-selection": cmd_cleanup_selection,
+            "fourth-visit-selection": cmd_fourth_visit_selection,
             "audit-sample": cmd_audit_sample, "audit-cleanup": cmd_audit_cleanup,
             "audit-packets": cmd_audit_packets, "report": cmd_report}[args.cmd](args)
 

@@ -266,6 +266,17 @@ class HeaderTests(unittest.TestCase):
     def test_a_header_cut_mid_line_is_not_a_header(self):
         self.assertIsNone(remote.first_line_fields(b"A\tB\tC"))
 
+    def test_a_tab_separated_header_whose_names_hold_commas_is_split_on_its_tabs(self):
+        # PXD053397, PXD053298: DIA-NN's run names hold commas; the next line keeps the header's tabs, and
+        # the service splits it so (service/pipeline/alignment.py _delimiter)
+        header = b"Protein.Group\tGenes\tD:\\r\\a,b,c,d.raw\tD:\\r\\e,f,g,h.raw"
+        fields = ["Protein.Group", "Genes", "D:\\r\\a,b,c,d.raw", "D:\\r\\e,f,g,h.raw"]
+        self.assertEqual(remote.first_line_fields(header + b"\r\nP1\tTP53\t1\t2\r\n"), fields)
+        self.assertEqual(remote.first_line_fields(header + b"\n#!{Type}E\tE\n\nP1\tTP53\t1\t2\n"), fields)
+        # without a whole next line in the bytes, the header alone decides, as before
+        self.assertEqual(len(remote.first_line_fields(header + b"\r\nP1\tTP53")), 7)
+        self.assertEqual(remote.first_line_fields(b"A,B\tb,C\n1,2,3\n"), ["A", "B\tb", "C"])
+
     def test_a_line_may_end_in_a_lone_cr(self):
         # Excel's "CSV (Macintosh)"; B3's walk met six such tables
         self.assertEqual(remote.first_line_fields(b"A\tB\tC\r1\t2\t3\r"), ["A", "B", "C"])

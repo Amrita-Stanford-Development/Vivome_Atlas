@@ -103,8 +103,9 @@ _MISSING_VALUES = frozenset({"", "NA", "Filtered", "NaN"})
 # any case (MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs" and "Gene
 # Names"): flag columns that mark decoys, contaminants and site-only groups
 # with "+", and per-sample quantities. "LFQ intensity <sample>" is read when
-# any is above 0, else "Intensity <sample>"; 0 is MaxQuant's "not
-# quantified". "Gene names" name the rows. A table without that column
+# any is above 0, else "Intensity <sample>", both in any case (MaxQuant 1.0
+# to 1.2 wrote "LFQ Intensity"); 0 is MaxQuant's "not quantified". "Gene
+# names" name the rows. A table without that column
 # (MaxQuant writes it only when its FASTA parse rules find gene names; 52 of
 # B3's corpus tables) is named by its majority protein IDs instead, UniProt
 # accessions gene_ids.py resolves: decoy (REV__) and contaminant (CON__)
@@ -126,7 +127,7 @@ _MAXQUANT_SPELLINGS = {_MAXQUANT_IDS: "Majority protein IDs", _MAXQUANT_GENES: "
 _MAXQUANT_LEFT_OUT = ("REV__", "CON__")
 _FASTA_ACCESSION = re.compile(r"^(?:sp|tr)\|([^|]+)\|")
 _MAXQUANT_FLAGS = frozenset({"Only identified by site", "Reverse", "Potential contaminant", "Contaminant"})
-_MAXQUANT_QUANTITIES = (re.compile(r"^LFQ intensity (.+)$"), re.compile(r"^Intensity (.+)$"))
+_MAXQUANT_QUANTITIES = (re.compile(r"(?i)^LFQ intensity (.+)$"), re.compile(r"(?i)^Intensity (.+)$"))
 _MAXQUANT_SILAC = re.compile(r"^Ratio [HML]/[HML]")
 _MAXQUANT_TMT_PREFIX = "Reporter intensity"
 
@@ -179,14 +180,55 @@ _CORNER_LABELS = frozenset({
 })
 
 
+# A number written with a comma: a decimal comma ("8329,325", as Spectronaut
+# and Excel write under a European locale) or a thousands separator
+# ("1,234"). The two cannot be told apart, and taking one for the other is a
+# thousandfold error, so the table is refused and the refusal says why.
+_COMMA_NUMBER = re.compile(r"[+-]?\d[\d.,]*,\d+(?:[eE][+-]?\d+)?")
+
+
 def _number(text: str, column: str) -> float:
     if text in _MISSING_VALUES:
         return np.nan
     try:
         return float(text)
     except ValueError:
+        if _COMMA_NUMBER.fullmatch(text.strip()):
+            raise UnreadableMatrix(
+                f"column {column!r} holds {text[:40]!r}, a number written with a comma. The service reads "
+                "numbers with a decimal point and no thousands separator: export the table again with a point "
+                "as the decimal mark (Spectronaut and Excel take it from the computer's region settings).") from None
         raise UnreadableMatrix(f"column {column!r} holds text ({text[:40]!r}) where a number belongs. "
                                f"The service reads {_READABLE_LAYOUTS}.") from None
+
+
+def _next_data_line(text: str, start: int, most: int = 64) -> "str | None":
+    """The first line from `start` that holds anything, past Perseus's
+    annotation rows; None when there is none within `most` lines."""
+    for _ in range(most):
+        if start >= len(text):
+            return None
+        end = text.find("\n", start)
+        end = len(text) if end < 0 else end
+        line, start = text[start:end], end + 1
+        if line.strip() and not line.lstrip('"').startswith("#!{"):
+            return line
+    return None
+
+
+def _delimiter(first_line: str, next_line: "str | None") -> str:
+    """A tab or a comma. The header decides by which it has more of, unless
+    the next line keeps the other one's count and not this one's: a
+    tab-separated table whose names hold commas (DIA-NN's run paths, for
+    one) has more commas than tabs in its header, and its rows keep the
+    header's tabs. The site's file check (web/js/atlas/file-check.js
+    parseHeader) and the corpus header reader (valuescale/corpus/remote.py
+    first_line_fields) choose the same way."""
+    by_count = "\t" if first_line.count("\t") > first_line.count(",") else ","
+    if next_line is None:
+        return by_count
+    kept = [d for d in ("\t", ",") if first_line.count(d) and next_line.count(d) == first_line.count(d)]
+    return kept[0] if len(kept) == 1 else by_count
 
 
 def _short_row(line: int, fields: int, header: list[str]) -> UnreadableMatrix:
@@ -352,7 +394,7 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     if "\r" in text:  # Windows ends a line with CRLF, Excel's "CSV (Macintosh)" with a lone CR
         text = text.replace("\r\n", "\n").replace("\r", "\n")
     first_line = text.split("\n", 1)[0]
-    delimiter = "\t" if first_line.count("\t") > first_line.count(",") else ","
+    delimiter = _delimiter(first_line, _next_data_line(text, len(first_line) + 1))
     reader = csv.reader(io.StringIO(text), delimiter=delimiter)
     header = next(reader)
     # Perseus writes annotation rows ("#!{Type}...") under the header.
@@ -420,17 +462,31 @@ def parse_matrix_csv(text: str) -> RawMatrix:
     needed = max([gene_col_idx] + cell_col_indices)
     gene_names: list[str] = []
     rows: list[list[float]] = []
+    # DIA-NN leaves Genes empty when its FASTA gives no gene names. When no row
+    # has one, the rows are named by Protein.Group instead, UniProt accessions
+    # gene_ids.py resolves, as a MaxQuant table without "Gene names" is named
+    # by its protein IDs. A table with gene names leaves out the rows without
+    # one, as before, and their values are not read. Named by its protein
+    # group, a row too short for the header is refused, as in any table.
+    group_idx = header.index("Protein.Group") if is_dia_nn_report and "Protein.Group" in header else None
+    unnamed: list[tuple[int, list[str]]] = []
     for line, row in lines:
         if not any(field.strip() for field in row):
             continue  # white space alone holds nothing (the browser's check skips it too)
-        if len(row) <= needed:
-            if len(row) > gene_col_idx and not row[gene_col_idx]:
-                continue
-            raise _short_row(line, len(row), header)
-        if not row[gene_col_idx]:
+        if len(row) > gene_col_idx and not row[gene_col_idx]:
+            if group_idx is not None and not gene_names and len(row) > group_idx and row[group_idx]:
+                unnamed.append((line, row))
             continue
+        if len(row) <= needed:
+            raise _short_row(line, len(row), header)
         gene_names.append(row[gene_col_idx])
         rows.append([_number(row[i], header[i]) for i in cell_col_indices])
+    if not rows and unnamed:
+        for line, row in unnamed:
+            if len(row) <= needed:
+                raise _short_row(line, len(row), header)
+        gene_names = [row[group_idx] for _, row in unnamed]
+        rows = [[_number(row[i], header[i]) for i in cell_col_indices] for _, row in unnamed]
     if not rows:
         column = header[gene_col_idx] if gene_col_idx < len(header) and header[gene_col_idx].strip() else "the first column"
         raise UnreadableMatrix(f"no row has an identifier in {column!r}, so no protein or gene can be named. "

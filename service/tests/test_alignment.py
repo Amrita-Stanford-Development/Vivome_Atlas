@@ -140,6 +140,73 @@ class ParseMatrixCsvTests(unittest.TestCase):
         np.testing.assert_array_equal(raw.values, [[11, 21], [np.nan, 31], [4, 5]])
         self.assertEqual(alignment.header_layout(header), "maxquant")
 
+    def test_maxquant_quantity_columns_are_known_in_any_case(self):
+        # PXD054457, MaxQuant 1.0 to 1.2: "LFQ Intensity <sample>" is read before "Intensity <sample>", as
+        # MaxQuant's later spelling is
+        header = ["Majority Protein IDs", "Gene Names", "Intensity S1", "Intensity S2", "LFQ Intensity S1",
+                  "LFQ Intensity S2", "Contaminant"]
+        rows = [["P1", "GENE1", "100", "200", "11", "21", ""], ["P2", "GENE2", "300", "0", "31", "0", ""]]
+        raw = alignment.parse_matrix_csv("\n".join(["\t".join(header)] + ["\t".join(r) for r in rows]))
+        self.assertEqual(alignment.header_layout(header), "maxquant")
+        self.assertEqual(raw.cell_ids, ["S1", "S2"])
+        np.testing.assert_array_equal(raw.values, [[11, 21], [31, np.nan]])
+
+    def test_a_tab_separated_table_whose_names_hold_commas_is_split_on_its_tabs(self):
+        # PXD053397, PXD053298: DIA-NN's run names hold commas, so the header has more commas than tabs, but
+        # its rows keep the header's tabs
+        header = "Protein.Group\tProtein.Ids\tProtein.Names\tGenes\tFirst.Protein.Description\t" \
+                 "D:\\runs\\a,b,c,d,e.raw\tD:\\runs\\f,g,h,i,j.raw"
+        self.assertGreater(header.count(","), header.count("\t"))
+        text = header + "\n" + "P04637\tP04637\tP53_HUMAN\tTP53\t\t10\t20\n" + "P02768\tP02768\tALBU_HUMAN\tALB\t\t5\t\n"
+        raw = alignment.parse_matrix_csv(text)
+        self.assertEqual(raw.gene_names, ["TP53", "ALB"])
+        self.assertEqual(raw.cell_ids, ["a,b,c,d,e", "f,g,h,i,j"])
+        np.testing.assert_array_equal(raw.values, [[10, 20], [5, np.nan]])
+
+    def test_the_header_alone_still_chooses_when_the_next_line_does_not_say_otherwise(self):
+        # a comma-separated file with a tab in a name, and one whose values are quoted with commas in them
+        raw = alignment.parse_matrix_csv("gene,cell\tA,cell\tB,cellC\nGENE1,1,2,3\n")
+        self.assertEqual(raw.cell_ids, ["cell\tA", "cell\tB", "cellC"])
+        raw = alignment.parse_matrix_csv('gene,cellA,cellB\n"GENE1, a name",1,2\n')
+        self.assertEqual((raw.gene_names, raw.cell_ids), (["GENE1, a name"], ["cellA", "cellB"]))
+        raw = alignment.parse_matrix_csv("gene\tcellA\tcellB\n#!{Type}E\tE\n\nGENE1\t1\t2\n")
+        self.assertEqual(raw.cell_ids, ["cellA", "cellB"])
+
+    def test_a_dia_nn_matrix_without_gene_names_is_named_by_its_protein_groups(self):
+        # PXD064789, PXD070147, PXD059079: DIA-NN leaves Genes empty when its FASTA gives no gene names;
+        # gene_ids.py resolves the UniProt accessions, as for a MaxQuant table without "Gene names"
+        header = "Protein.Group\tProtein.Ids\tProtein.Names\tGenes\tFirst.Protein.Description\tS1\tS2"
+        text = header + "\nP04637\tP04637\t\t\t\t10\t20\nP02768;P02769\tP02768;P02769\t\t\t\t5\t\n"
+        raw = alignment.parse_matrix_csv(text)
+        self.assertEqual(raw.gene_names, ["P04637", "P02768;P02769"])
+        self.assertEqual(raw.cell_ids, ["S1", "S2"])
+        np.testing.assert_array_equal(raw.values, [[10, 20], [5, np.nan]])
+
+    def test_a_dia_nn_matrix_named_by_its_protein_groups_still_refuses_a_short_row(self):
+        # every row is named by Protein.Group, so a cut-off row is refused as in any table with names,
+        # not left out as a row without a gene is
+        header = "Protein.Group\tProtein.Ids\tProtein.Names\tGenes\tFirst.Protein.Description\tS1\tS2"
+        text = header + "\nP04637\tP04637\t\t\t\t10\t20\nP02768\tP02768\t\t\t\t5\n"
+        with self.assertRaisesRegex(alignment.UnreadableMatrix, "line 3 has 6 fields, fewer than the header's 7"):
+            alignment.parse_matrix_csv(text)
+
+    def test_a_dia_nn_matrix_with_gene_names_still_leaves_out_its_rows_without_one(self):
+        header = "Protein.Group\tProtein.Ids\tProtein.Names\tGenes\tFirst.Protein.Description\tS1\tS2"
+        text = header + "\nP99999\tP99999\t\t\t\tnot a number\t1\nP04637\tP04637\t\tTP53\t\t10\t20\n"
+        raw = alignment.parse_matrix_csv(text)
+        self.assertEqual(raw.gene_names, ["TP53"])
+        np.testing.assert_array_equal(raw.values, [[10, 20]])
+
+    def test_a_number_written_with_a_comma_is_refused_in_words(self):
+        # PXD047604, PXD036850, PXD043761: Spectronaut under a European locale writes "8329,325"
+        for text in ["gene\tS1\tS2\nTP53\t8329,325\t1,5E+3\n", 'gene,S1,S2\nTP53,"1,234",2\n']:
+            with self.assertRaises(alignment.UnreadableMatrix) as caught:
+                alignment.parse_matrix_csv(text)
+            message = str(caught.exception)
+            self.assertIn("comma", message)
+            self.assertIn("decimal point", message)
+            self.assertIn("'S1'", message)
+
     def test_an_old_maxquant_table_with_title_case_names_is_read(self):
         # MaxQuant 1.0 to 1.2 wrote "Majority Protein IDs", "Gene Names" and a "Contaminant" flag (PXD054457)
         header = ["Protein IDs", "Majority Protein IDs", "Gene Names", "Intensity", "Intensity a", "Intensity b",
@@ -348,8 +415,9 @@ class UploadLayoutTests(unittest.TestCase):
         self.assertEqual(raw.gene_names, ["GENE1"])
 
     def test_a_table_without_any_identifier_is_refused_by_name(self):
-        # a DIA-NN report whose Genes column is blank on every row (a FASTA without GN= fields)
-        text = "Protein.Group\tProtein.Names\tGenes\ta.raw\tb.raw\nP1\tN1\t\t1.0\t2.0\nP2\tN2\t\t3.0\t4.0\n"
+        # a DIA-NN report whose Genes and Protein.Group are blank on every row (with Genes alone blank, a
+        # FASTA without GN= fields, its rows are named by Protein.Group)
+        text = "Protein.Group\tProtein.Names\tGenes\ta.raw\tb.raw\n\tN1\t\t1.0\t2.0\n\tN2\t\t3.0\t4.0\n"
         with self.assertRaises(alignment.UnreadableMatrix) as caught:
             alignment.parse_matrix_csv(text)
         self.assertIn("'Genes'", str(caught.exception))

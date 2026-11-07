@@ -212,6 +212,22 @@ class RevisitTests(unittest.TestCase):
         self.assertEqual(records[4]["revisited_from"], {"outcome": "unparseable", "detail": "was unparseable"})
         self.assertEqual([json.loads(x) for x in self.log.read_text(encoding="utf-8").splitlines()], records)
 
+    def test_a_visits_reasons_are_kept_inside_when_a_later_visit_replaces_it(self):
+        # B3's fourth visit takes PXD054457 again, which the third visit took for its reader
+        def third(acc, repo, split, tools, root):
+            return {"accession": acc, "repo": repo, "split": split, "outcome": "kept", "revisited_for": ["reader"]}
+
+        def fourth(acc, repo, split, tools, root):
+            return {"accession": acc, "repo": repo, "split": split, "outcome": "kept",
+                    "revisited_for": ["quantity case"]}
+        chosen = lambda r: r["accession"] == "PXD000105"  # noqa: E731
+        draw.revisit(self.log, _tools(), self.dir, visit_fn=third, select=chosen)
+        records = draw.revisit(self.log, _tools(), self.dir, visit_fn=fourth, select=chosen)
+        self.assertEqual(records[4]["revisited_for"], ["quantity case"])
+        self.assertEqual(records[4]["revisited_from"], {"outcome": "kept", "detail": None, "revisited_for": ["reader"],
+                                                        "revisited_from": {"outcome": "unparseable",
+                                                                           "detail": "was unparseable"}})
+
     def test_a_revisit_that_stops_part_way_leaves_the_log_as_it_was(self):
         def visit_fn(acc, repo, split, tools, root):
             raise RuntimeError("stopped")
@@ -325,6 +341,159 @@ class CleanupRunnerTests(unittest.TestCase):
         self.assertIn("PXD000001", str(caught.exception))
         self.assertEqual(log.read_bytes(), line)
 
+    def test_the_fourth_visit_is_made_once(self):
+        """A record the third visit took may be taken again; a second fourth visit may not."""
+        from types import SimpleNamespace
+        from unittest import mock
+        runner = self.runner()
+        folder = Path(tempfile.mkdtemp())
+        log, chosen = folder / "walk.jsonl", folder / "cleanup.json"
+        line = (json.dumps({"accession": "PXD000001", "outcome": "kept", "revisited_for": ["quantity case"],
+                            "revisited_from": {"outcome": "kept", "revisited_for": ["reader"]}}) + "\n").encode("utf-8")
+        log.write_bytes(line)
+        chosen.write_bytes(json.dumps({"records": {"PXD000001": ["quantity case"]}}).encode("utf-8"))
+        with mock.patch.object(runner, "LOG", log), mock.patch.object(runner, "FOURTH", chosen), \
+                mock.patch.object(runner, "make_tools", side_effect=AssertionError("visited")):
+            with self.assertRaises(SystemExit) as caught:
+                runner.cmd_revisit(SimpleNamespace(cleanup=False, fourth=True, workers=1))
+        self.assertIn("PXD000001", str(caught.exception))
+        self.assertEqual(log.read_bytes(), line)
+        third = (json.dumps({"accession": "PXD000001", "outcome": "kept", "revisited_for": ["reader"]}) + "\n")
+        log.write_bytes(third.encode("utf-8"))
+        with mock.patch.object(runner, "LOG", log), mock.patch.object(runner, "FOURTH", chosen), \
+                mock.patch.object(runner, "make_tools", side_effect=AssertionError("visited")):
+            with self.assertRaisesRegex(AssertionError, "visited"):  # the guard lets it through
+                runner.cmd_revisit(SimpleNamespace(cleanup=False, fourth=True, workers=1))
+
+    def test_the_fourth_visit_chooses_what_the_fixes_of_2026_11_07_touch(self):
+        from unittest import mock
+        runner = self.runner()
+        folder = Path(tempfile.mkdtemp())
+        files = {
+            "commas": b"Protein.Group\tGenes\tD:\\r\\a,b,c,d.raw\tD:\\r\\e,f,g,h.raw\nP1\tTP53\t1\t2\n",
+            "plain": b"Protein.Group\tGenes\ta.raw\tb.raw\nP1\tTP53\t1\t2\n",
+            "case": b"Majority Protein IDs\tGene Names\tIntensity a\tLFQ Intensity a\nP1\tG1\t1\t2\n",
+            "tie": b"R.FileName\tPG.ProteinGroups,PG.Quantity\nA\n",  # one tab, one comma; the next line keeps neither
+        }
+        for name, data in files.items():
+            (folder / name).write_bytes(data)
+        records = [
+            {"accession": "PXD1", "outcome": "unparseable", "file": "commas", "kind": "diann_matrix", "layout": "wide",
+             "detail": "UnreadableMatrix: line 2 has 1 fields, fewer than the header's 7"},
+            {"accession": "PXD2", "outcome": "kept", "file": "plain", "kind": "diann_matrix", "layout": "wide"},
+            {"accession": "PXD3", "outcome": "unparseable", "file": "plain", "kind": "diann_matrix", "layout": "wide",
+             "detail": "UnreadableMatrix: no row has an identifier in 'Genes', so no protein or gene can be named."},
+            {"accession": "PXD4", "outcome": "unparseable", "file": "x.zip", "member": "a.pg_matrix.tsv", "member_bytes": 0,
+             "kind": "diann_matrix", "layout": "wide", "detail": "StopIteration: "},
+            {"accession": "PXD5", "outcome": "unparseable", "file": "plain", "kind": "spectronaut", "layout": "spectronaut_long",
+             "detail": "ValueError: text where a number belongs: could not convert string to float: '8329,325'"},
+            {"accession": "PXD6", "outcome": "kept", "file": "case", "kind": "maxquant", "layout": "wide"},
+            # the long readers broke a tie for tabs, the parser for commas, as the separator rule does now
+            {"accession": "PXD7", "outcome": "kept", "file": "tie", "kind": "spectronaut", "layout": "spectronaut_long"},
+            {"accession": "PXD9", "outcome": "unparseable", "file": "tie", "kind": "diann_matrix", "layout": "wide"},
+            {"accession": "PXD8", "outcome": "no candidate"},
+        ]
+        with mock.patch.object(runner, "_local_table", side_effect=lambda r: folder / (r.get("member") or r["file"])):
+            got = {r["accession"]: runner.fourth_visit_reasons(r) for r in records}
+        self.assertEqual(got, {"PXD1": ["separator"], "PXD2": [], "PXD3": ["protein groups"], "PXD4": ["empty member"],
+                               "PXD5": ["decimal comma"], "PXD6": ["quantity case"], "PXD7": ["separator"], "PXD9": [],
+                               "PXD8": []})
+
+    def test_the_runner_refuses_to_run_when_a_copied_pattern_drifts(self):
+        from unittest import mock
+        runner = self.runner()
+        runner.check_patterns()  # in step today
+        with mock.patch.object(runner.tables, "COMMA_NUMBER", r"\d+,\d+"):
+            with self.assertRaisesRegex(SystemExit, "comma-number"):
+                runner.check_patterns()
+
+    def test_the_corpus_separator_rule_is_the_service_parsers(self):
+        # valuescale/corpus/remote.py delimiter copies service/pipeline/alignment.py _delimiter (the
+        # package imports no service code; the runner holds both)
+        runner = self.runner()
+        cases = [("A\tB\tC", "1\t2\t3"), ("A,B,C", "1,2,3"), ("A\tB,b\tC,c", "1\t2\t3"), ("A,B\tb,C", "1,2,3"),
+                 ("A\tB,C", "1"), ("A\tB,C", None), ("A,B", "1\t2"), ("A", "1"), ("A\tB", "1,2\t3"),
+                 ('A,"B\tb",C', '1,"x\ty",3'), ("A\tB,C,D", "1\t2,3"), ("", None)]
+        for first, following in cases:
+            self.assertEqual(runner.remote.delimiter(first, following), runner.alignment._delimiter(first, following),
+                             (first, following))
+
+    def test_the_tables_the_clean_up_added_are_those_no_visit_before_it_kept(self):
+        """A table the third visit added stays added when the fourth visit
+        reads it again; a table kept before the clean-up is never added."""
+        runner = self.runner()
+        records = [
+            # walked unparseable, kept by the third visit, kept again by the fourth
+            {"accession": "PXD1", "split": "calibration", "outcome": "kept", "revisited_for": ["quantity case"],
+             "revisited_from": {"outcome": "kept", "revisited_for": ["reader"],
+                                "revisited_from": {"outcome": "unparseable"}}},
+            # kept by the walk, read again by the third visit
+            {"accession": "PXD2", "split": "test", "outcome": "kept", "revisited_for": ["reader"],
+             "revisited_from": {"outcome": "kept"}},
+            # a failed read kept by the second visit (no reasons), read again by the fourth
+            {"accession": "PXD3", "split": "test", "outcome": "kept", "revisited_for": ["separator"],
+             "revisited_from": {"outcome": "kept", "revisited_from": {"outcome": "fetch failed"}}},
+            # added by the fourth visit
+            {"accession": "PXD4", "split": "test", "outcome": "kept", "revisited_for": ["protein groups"],
+             "revisited_from": {"outcome": "unparseable"}},
+            # the second visit alone: not the clean-up's
+            {"accession": "PXD5", "split": "test", "outcome": "kept", "revisited_from": {"outcome": "fetch failed"}},
+            # added by the third visit, refused by the fourth
+            {"accession": "PXD6", "split": "test", "outcome": "unparseable", "revisited_for": ["decimal comma"],
+             "revisited_from": {"outcome": "kept", "revisited_for": ["decoding"],
+                                "revisited_from": {"outcome": "unparseable"}}},
+        ]
+        self.assertEqual(runner.newly_kept(records), {"calibration": ["PXD1"], "test": ["PXD4"]})
+
+    def test_a_header_is_judged_now_as_the_walk_judges_it(self):
+        """What the walk decides from a wide table's header alone, read again
+        with the reader as it now is."""
+        runner = self.runner()
+        lfq = ["Majority protein IDs", "Gene names"] + [f"LFQ intensity s{i}" for i in range(25)]
+        headers = {"few": lfq[:10], "many": lfq, "silac": lfq + [f"Ratio H/L s{i}" for i in range(25)], "none": None}
+
+        def header(entry):
+            if entry.file.path == "broken":
+                raise OSError("550 Failed to open file")
+            return headers[entry.file.path]
+        tools = runner.draw.Tools(None, header, None, None, None, header,
+                                  runner.make_tools({"massive": {}}).refuse)
+        rec = {"accession": "PXD000001", "kind": "maxquant", "layout": "wide", "listed_bytes": 10, "url": "ftp://x/f"}
+        got = {name: runner._header_decision_now({**rec, "file": name}, tools)
+               for name in ("few", "many", "silac", "none", "broken")}
+        self.assertEqual(got, {"few": "too few columns", "many": "fetch", "silac": "unparseable",
+                               "none": None, "broken": None})
+
+    def test_the_fourth_selection_reads_again_each_header_the_walk_judged_alone(self):
+        """A record decided on its header alone is chosen when its header now
+        decides otherwise; one that cannot be read now is the server's."""
+        from types import SimpleNamespace
+        from unittest import mock
+        runner = self.runner()
+        out = Path(tempfile.mkdtemp()) / "fourth.json"
+        records = [{"accession": "PXD000001", "outcome": "too few columns", "header_columns": 4},
+                   {"accession": "PXD000002", "outcome": "too few columns", "header_columns": 12},
+                   {"accession": "PXD000003", "outcome": "unparseable", "refused_on": "header"},
+                   {"accession": "PXD000004", "outcome": "too few columns", "header_columns": 0},
+                   {"accession": "PXD000005", "outcome": "too few columns", "columns": 3},  # parsed: read locally
+                   {"accession": "PXD000006", "outcome": "kept"}]
+        now = {"PXD000001": "too few columns", "PXD000002": "fetch", "PXD000003": "unparseable", "PXD000004": None}
+        asked = []
+
+        def decision(r, tools):
+            asked.append(r["accession"])
+            return now[r["accession"]]
+        with mock.patch.object(runner, "_records", return_value=records), \
+                mock.patch.object(runner, "fourth_visit_reasons", return_value=[]), \
+                mock.patch.object(runner, "make_tools"), mock.patch.object(runner.frame, "load"), \
+                mock.patch.object(runner, "_header_decision_now", side_effect=decision), \
+                mock.patch.object(runner, "FOURTH", out):
+            runner.cmd_fourth_visit_selection(SimpleNamespace(workers=1))
+        written = json.loads(out.read_text(encoding="utf-8"))
+        self.assertEqual(sorted(asked), ["PXD000001", "PXD000002", "PXD000003", "PXD000004"])
+        self.assertEqual(written["records"], {"PXD000002": ["header"]})
+        self.assertEqual(written["probe"], {"read": 4, "now_differs": 1, "now_unreadable": 1})
+
 
 class ParsedTablePlaceTests(unittest.TestCase):
     def test_the_parsed_table_lands_in_the_deposits_own_folder_however_deep_its_file(self):
@@ -371,6 +540,11 @@ class AuditPacketTests(unittest.TestCase):
         plain = path.with_name("plain.txt")
         plain.write_bytes(b"Protein IDs\tIntensity a\nP1\t100\n")
         self.assertEqual(runner._header_lines(plain), (["Protein IDs", "Intensity a"], []))
+        # PXD053397: a tab-separated header whose names hold commas is split on its tabs, as the parser splits it
+        commas = path.with_name("report.pg_matrix.tsv")
+        commas.write_bytes(b"Protein.Group\tGenes\tD:\\r\\a,b,c,d.raw\tD:\\r\\e,f,g,h.raw\nP1\tTP53\t1\t2\n")
+        self.assertEqual(runner._header_lines(commas)[0], ["Protein.Group", "Genes", "D:\\r\\a,b,c,d.raw",
+                                                           "D:\\r\\e,f,g,h.raw"])
 
     def test_a_parquet_tables_header_is_its_schemas_column_names(self):
         """The audit's packets for DIA-NN report.parquet tables showed binary or

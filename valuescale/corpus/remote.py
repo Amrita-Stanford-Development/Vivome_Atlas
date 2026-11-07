@@ -429,8 +429,23 @@ def first_line_fields(data: bytes) -> list[str] | None:
     if end is None:
         return None
     line = text[: end.start()]
-    delimiter = "\t" if line.count("\t") > line.count(",") else ","
-    return next(csv.reader([line], delimiter=delimiter))
+    whole = re.split(r"\r\n|\r|\n", text[end.end():])[:-1][:64]  # the lines after it that end in the bytes
+    following = next((x for x in whole if x.strip() and not x.lstrip('"').startswith("#!{")), None)
+    return next(csv.reader([line], delimiter=delimiter(line, following)))
+
+
+def delimiter(first_line: str, next_line: str | None) -> str:
+    """A tab or a comma, as the service's parser chooses it
+    (service/pipeline/alignment.py _delimiter): the header's larger count,
+    unless the next line keeps the other one's count and not this one's. A
+    tab-separated table whose names hold commas (DIA-NN's run paths) has more
+    commas than tabs in its header, and its rows keep the tabs. Without the
+    next line, the header alone decides."""
+    by_count = "\t" if first_line.count("\t") > first_line.count(",") else ","
+    if next_line is None:
+        return by_count
+    kept = [d for d in ("\t", ",") if first_line.count(d) and next_line.count(d) == first_line.count(d)]
+    return kept[0] if len(kept) == 1 else by_count
 
 
 def sha256(path: Path) -> str:
