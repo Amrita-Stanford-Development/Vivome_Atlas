@@ -2,15 +2,16 @@
 
 Status: approved by the owner on 2026-10-28. Step 1 (the diagnostic bank) is done and its two explained failures accepted (`research/notebook-outputs/value_scale_step1/notes.md`). Phase A, with the zeros choice (A2) and the float64 z-score its diagnostics called for, is built and was deployed on 2026-11-03 (`research/todo.md`).
 
-Phase B, as of 2026-11-06:
+Phase B, as of 2026-11-07:
 - **B0, the protocol:** done (`26519a8`).
 - **B1, the cost study:** done, with its failed row accepted by the owner (`8608c11`, `ab18152`).
 - **B2, the method:** done, with its failures accepted by the owner (`0e147eb`, `19d79eb`).
 - **B3, the corpus:** run (`5c9e521`), with its failed row accepted by the owner on 2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
 - **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed. A code review's fixes came before the visit ran: the refusal of peptide-level Spectronaut pivots is dropped, as the parser read them before, and the MaxQuant test is narrowed so a plain matrix reads as before (protocol amendment 3; `b3_revisit2.json`, `changed_before_the_run`). The selection is unchanged. The visit ran on 2026-11-06: 49 tables added, 48 kept after their audit, and every expectation met but one, the MaxQuant count (43 kept against at least 44: six small tables). Seven more faults in our own code were found after it (B3 notes, "Found after the third visit"). The owner accepted the miss and chose (2026-11-07) to fix the seven, refuse decimal commas in clear words and match MaxQuant's quantity columns in any case, then visit the records these touch a fourth time. Those fixes are in `8016025` with the fourth visit's expectations (`b3_revisit3.json`, protocol amendment 4). The fixes in `76d490a`, `3b4f162` and `8016025` were deployed on 2026-11-07 with the owner's OK, from `decb812`: the service (Cloud Run revision `vivome-atlas-00009-hcz`), then the site. The selection is 15 records (`42a8b96`). The visit ran on 2026-11-07: 6 tables added, all 6 kept after their audit, and every expectation met.
-- **B4 to B7:** not started.
+- **B4, the calibration:** run on 2026-11-07 (`27b43dd`, then the run). The score became the probability alone before any calibration score (protocol amendment 5, `36ec352`). The design part's no-gaps row failed in one place; the owner accepted it and chose to fix a fault of ours it showed first (`research/notebook-outputs/value_scale_b4/notes.md`). Every other row passes. `valuescale/calibration/protein-v1.json` holds the thresholds.
+- **B5 to B7:** not started. B5's pop-up is designed with the owner first.
 
-Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 75).
+Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 78).
 
 ## Context
 
@@ -279,6 +280,15 @@ A new top-level folder. It uses numpy only and imports nothing from `service/`.
 - B3 wrote `corpus/frame.py`, `remote.py`, `tables.py` and `draw.py`, plus `frame.json`, `walk.jsonl` and `audit.json`. Each kept table is parsed into `data/incoming/value-scale-corpus/<accession>/table.npz`.
 - The nothing-imports-`service` test exists (`test_independence.py`).
 - B4 adds what is still missing: `detect`/`apply`, `report.py`, the calibration JSON, `baselines.py`, `score_test.py` and the no-gaps candidate gate.
+
+**As built (2026-11-07; `research/notebook-outputs/value_scale_b4/notes.md`):**
+- **The score** is the class probability alone (protocol amendment 5, decided by the owner before any calibration score). The typicality rank is reported, and the reply warns when a table is farther from the design tables than any of them is from the rest. A table with no missing value is "can't tell".
+- **The calibration** (`valuescale/corpus/calibrate.py`, run by `research/notebooks/value_scale_calibrate.py`) scores every calibration subsample and its constructed log variant, whatever a gate would answer. S3 pools with S2 into one stratum, "S2+S3", where a deposit keeps its smaller score. `valuescale/calibration/protein-v1.json` holds, per stratum and class, the threshold with its n and k: S1 (n = 218, k = 6) and S2+S3 (n = 68, k = 1).
+- **`detect`** chooses the stratum by column count. Over 2,000 columns it uses S2+S3's thresholds, with a note and without the guarantee. On "can't tell" and "unlike either" its reading is linear (B1).
+- **`apply`** reads the values as the service's `apply_reading` does, and `baselines.py`'s median-50 is the service's `median_rule`. `service/tests/test_valuescale_in_step.py` keeps both in step, since the package never imports the service.
+- **`baselines.py`** copies each rule from its source at a pinned commit. Missing values are left out of every statistic, and a table with none observed gets no answer. CIBERSORT's rule (a maximum below 50 means log) is taken from two public copies of its R script (v1.04), which agree, since the official script needs registration; only that one check is re-implemented.
+- **`score_test.py`** (not shipped) refuses a second run through `valuescale/corpus/test_scored.json`, and `--rehearse` scores the calibration split instead.
+- **The bank's missing-value variants:** a fault of ours made them copies of the table for 8 bank tables stored column-first. It was fixed test first in B4 (`valuescale/corpus/variants.py`); B2's report stays its record.
 
 ### B5. Wiring it into the service
 

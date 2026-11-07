@@ -47,6 +47,15 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     The owner chose to fix them, with a fourth visit: fixed in `8016025`,
     and the 15 records they touch visited on 2026-11-07, every expectation
     met. 455 tables are kept after the audit (218 calibration, 237 test).
+  - **B4, the calibration, was run on 2026-11-07**
+    ([notes](notebook-outputs/value_scale_b4/notes.md)). Before any
+    calibration score, the owner made the class score the probability alone
+    (protocol amendment 5). The design part's no-gaps row failed in one
+    place; the owner accepted it and had a fault of ours fixed first. Every
+    other row passes. The thresholds are in
+    `valuescale/calibration/protein-v1.json`. A log table about 90% missing
+    can be read linear, with the warning. The service still uses its median
+    rule; B5 wires the package in. Not deployed, nothing to deploy yet.
   - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
     The detector serves those who don't know. The pop-up's design is
     agreed with the owner before B5.

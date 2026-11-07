@@ -18,8 +18,8 @@ expectations written before it runs (`bank/expectations/`):
 - **B1, what each mistake costs:** on "can't tell" the service reads linear;
 - **B2, the method** (below);
 - **B3, the corpus** (below);
-- **B4, calibration**, next, after the clean-up the owner chose on
-  2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
+- **B4, calibration** (below), with the score as amended before any
+  calibration score (protocol amendment 5).
 
 The service still uses its median rule until B5 wires this package in. Each
 step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,
@@ -47,12 +47,17 @@ Phase B, B2, the method (numpy and the standard library only):
 - `statistics.py`: shape statistics unchanged by each class's nuisance
   (per-cell skew, kurtosis and tail, and how a protein's spread follows its
   level).
-- `score.py`: one score per class, the smaller of a typicality rank and a
-  probability, fitted on design tables grouped by deposit.
+- `score.py`: one score per class, the probability of a ridge logistic
+  regression fitted on design tables grouped by deposit (B2 took the
+  smaller of it and a typicality rank; amendment 5 keeps the rank as a
+  warning only).
 - `conformal.py`: thresholds with a guarantee (the umbrella order
   statistic), exact intervals, the answer set.
 - `method.py`: `assess`, from a table to a verdict (linear, log, can't
-  tell, unlike either) with its reason.
+  tell, unlike either) with its reason; since B4, a table with no missing
+  value gets "can't tell" (it may have been filled in), and a warning says
+  when a table is farther from the design tables than any of them is from
+  the rest.
 - `corpus/strata.py`: the protocol's size groups (strata), one seeded
   subsample per stratum, and the constructed log variant of a linear
   subsample, for B4.
@@ -80,11 +85,34 @@ log table. Each kept table is parsed
 into `data/incoming/value-scale-corpus/<accession>/table.npz`, which is not
 tracked.
 
+Phase B, B4, the package and its calibration:
+- `__init__.py`: `detect(matrix)` returns a scale report (`report.py`): the
+  verdict, the answer set, the reading to use (linear when the detector
+  can't tell, as B1 found cheaper), the stratum, the probabilities and
+  thresholds, the warning and the guarantee. `apply(matrix, reading)` reads
+  the values as the service reads a protein table.
+- `calibrated.py` reads the frozen calibration, `calibration/protein-v1.json`:
+  per stratum (S1, 20 to 49 columns; S2+S3, 50 to 2,000) and class, the
+  umbrella threshold with its n and k, the design model, and the calibration
+  corpus's manifest.
+- `baselines.py`: the rules other tools use (GEO2R, ExpressAnalyst, scGPT,
+  Omics Playground, ProteoPy, Gemma, CellTypist, CIBERSORT) and the
+  service's median-50, each copied from its source at a pinned commit.
+- Not shipped: `corpus/calibrate.py` builds the calibration from the
+  calibration split; `corpus/score_test.py` scores the sealed test once
+  (B7), and `--rehearse` runs it on the calibration split instead.
+
+B4's result (2026-11-07): `protein-v1`, from the 218 calibration deposits.
+In S1 (20 to 49 columns) linear is in the answer from a probability of
+0.812 and log from 0.931; in S2+S3 (50 to 2,000 columns), from 0.114 and
+0.919. Every expectation was met but one, the no-gaps rule's, which the
+owner accepted (`research/notebook-outputs/value_scale_b4/notes.md`).
+
 `bank/expectations/` holds each step's expected outcomes, written before the
 step runs. Each step has its own runner in `research/notebooks/`:
 `value_scale_diagnostics.py` (Step 1, Phase A, A2 and the z-score step),
-`value_scale_cost.py` (B1), `value_scale_method.py` (B2) and
-`value_scale_corpus.py` (B3).
+`value_scale_cost.py` (B1), `value_scale_method.py` (B2),
+`value_scale_corpus.py` (B3) and `value_scale_calibrate.py` (B4).
 
 ## Commands
 
@@ -107,6 +135,9 @@ python research/notebooks/value_scale_corpus.py audit-sample  # B3: the hand aud
 python research/notebooks/value_scale_corpus.py audit-cleanup # B3: the tables the clean-up's visits added, to be judged
 python research/notebooks/value_scale_corpus.py audit-packets # B3: the audit's packets (headers and methods, never values)
 python research/notebooks/value_scale_corpus.py report        # B3: the report against b3.json
+python research/notebooks/value_scale_calibrate.py --part design    # B4: B2's model refitted, the no-gaps rule (bank only)
+python research/notebooks/value_scale_calibrate.py --part calibrate # B4: writes calibration/protein-v1.json once, then the checks
+python -m valuescale.corpus.score_test --rehearse OUT.json   # B4: the test's scorer, on the calibration split
 python -m unittest discover -s valuescale/tests -t .
 ```
 

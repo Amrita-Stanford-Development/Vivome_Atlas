@@ -63,6 +63,19 @@ are binding; this is their summary.
 - No real log table was found, so the log class is calibrated on
   constructed log variants alone.
 
+**As amended and calibrated in B4 (2026-11-07; protocol amendment 5;
+`research/notebook-outputs/value_scale_b4/notes.md`):**
+- **The score** is the probability alone. The typicality rank would have
+  given S2+S3 a threshold of 0, so it only warns now ("unlike the tables
+  this detector was built on").
+- **A table with no missing value** is "can't tell", since it may have been
+  filled in.
+- **The thresholds** (`valuescale/calibration/protein-v1.json`, 218
+  deposits): linear 0.812 and log 0.931 in S1 (20 to 49 columns); 0.114 and
+  0.919 in S2+S3 (50 to 2,000).
+- **A known gap:** a log table with about 90% of its values missing can be
+  read linear, with the warning.
+
 ## The question
 
 Stage 0 (`service/pipeline/alignment.py`, `detect_and_transform_value_scale`)

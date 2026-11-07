@@ -54,7 +54,8 @@ Vivome_Atlas/
 │   └── tests/                unittest suite, with golden fixtures
 │
 ├── valuescale/               RAW OR LOG: a self-contained package (imports nothing from service/)
-│   ├── corpus/               not shipped: the diagnostic bank, and B3's calibration and test corpus
+│   ├── calibration/          the frozen calibrations detect() reads (protein-v1.json, written once by B4)
+│   ├── corpus/               not shipped: the diagnostic bank, B3's corpus, B4's calibration builder and the test's scorer
 │   ├── bank/expectations/    each step's expected outcomes, written before the step runs
 │   └── tests/                unittest suite
 │

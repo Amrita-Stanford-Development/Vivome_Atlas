@@ -3340,6 +3340,47 @@ quantity columns in any case, then to visit the records these touch
 - Every report row keeps its pass or fail. B3_frame still fails, as the
   owner accepted.
 
+### 78. The raw-or-log framework, Phase B, B4: the calibration, 2026-11-07
+
+**Why:** the detector needs its thresholds set on fresh tables, so that a
+right reading is left out at most 5% of the time with 95% confidence, and a
+package around it that other researchers can use.
+
+**What was decided first:** on design data, B2's score (the smaller of a
+typicality rank and the probability) would have given S2+S3 a threshold of
+0. The owner chose the probability alone (protocol amendment 5, `36ec352`):
+typicality becomes a warning, and a table with no missing value gets
+"can't tell". The expectations, `valuescale/bank/expectations/b4.json`,
+were written then, before B4's code.
+
+**What was built** (test first; `27b43dd`):
+- `valuescale.detect` and `apply`, the scale report, the calibration's
+  reader;
+- the baselines of eight other tools and median-50, each copied from its
+  source at a pinned commit;
+- the calibration builder (`valuescale/corpus/calibrate.py`) and the
+  test's one-time scorer (`valuescale/corpus/score_test.py`);
+- the notebook, `research/notebooks/value_scale_calibrate.py`, in two parts.
+
+**Results** (`research/notebook-outputs/value_scale_b4/`, report and notes):
+- The design part: B2's model refitted is identical. B4_no_gaps failed:
+  besides the imputed table, the rule also decides
+  furtwangler_log2/per_protein_median, whose gaps (stored as 0) become
+  values. It also showed a fault of ours: the missing-value variants of the
+  8 bank tables stored column-first were copies of the table. The owner
+  chose "Accept, fix, calibrate". The fault was fixed test first, and the
+  design part re-run (the first run kept).
+- The calibration, `valuescale/calibration/protein-v1.json`, from 218
+  deposits:
+  - S1 (20 to 49 columns, n = 218, k = 6): linear 0.812, log 0.931;
+  - S2+S3 (50 to 2,000 columns, n = 68, k = 1): linear 0.114, log 0.919.
+- Every other row passes. The bank's tables all get their expected
+  answers. 16 of 571 variants are given the other reading alone (2.8%).
+  The new wrong ones are a 90%-missing DIA-NN table's log variants, read
+  linear, and two ratio variants; the warning fires on all of them.
+- PBMC240 reads linear in S2+S3 in 0.07 s. The scorer's rehearsal on the
+  calibration split ran end to end and wrote no mark.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

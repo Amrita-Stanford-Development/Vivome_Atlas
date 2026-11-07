@@ -489,6 +489,9 @@ and its clean-up visited 103 of them again on 2026-11-06 and 15 on
 - **The detector's calibration set:** the 218 calibration-split tables kept
   after the audit (PXD001608 excluded). They
   are not sealed, but they are fitting data for the detector (plan B4).
+  B4 set the detector's thresholds on them on 2026-11-07
+  (`valuescale/calibration/protein-v1.json`), so they cannot test it. The
+  test split is still unscored.
 - **The rest of the 10,000 deposits B3 listed** had their file lists read,
   and some had a header or table fetched. No cell-type label or answer was
   read. They are no longer "unopened" in the sense of the list below.

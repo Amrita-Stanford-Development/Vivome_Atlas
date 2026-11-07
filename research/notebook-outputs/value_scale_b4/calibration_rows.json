@@ -1,0 +1,5786 @@
+{
+ "calibration": "protein-v1",
+ "corpus_sha256": "16ebf9548e2bd13aa9d946b3d847b614b73e95f1387b9a0f6a280ed983541f17",
+ "rows": [
+  {
+   "accession": "PXD000809",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9912876366780811,
+   "typicality": 0.8461538461538461
+  },
+  {
+   "accession": "PXD000809",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9877106459592795,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD001889",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9966236870512784,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD001889",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.988126432255756,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD002235",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9996250143295298,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD002235",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.993648912831444,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD003632",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9977706822621625,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD003632",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9864465779870542,
+   "typicality": 0.58
+  },
+  {
+   "accession": "PXD003632",
+   "stratum": "S2",
+   "columns": 64,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9981782376396798,
+   "typicality": 0.46153846153846156
+  },
+  {
+   "accession": "PXD003632",
+   "stratum": "S2",
+   "columns": 64,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9872969656775439,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD005425",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9995522539433183,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD005425",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9706032867279322,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD005514",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9803293319638082,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD005514",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9308735764624807,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD006396",
+   "stratum": "S1",
+   "columns": 46,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9982108171391515,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD006396",
+   "stratum": "S1",
+   "columns": 46,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9917700155823498,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD006396",
+   "stratum": "S2",
+   "columns": 69,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9982839497334738,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD006396",
+   "stratum": "S2",
+   "columns": 69,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9912796156326068,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD006770",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999428662587176,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD006770",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.965615570714892,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD006770",
+   "stratum": "S2",
+   "columns": 58,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.999897638987624,
+   "typicality": 0.05128205128205128
+  },
+  {
+   "accession": "PXD006770",
+   "stratum": "S2",
+   "columns": 58,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9700496092424097,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD008012",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9799931885884834,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD008012",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9451290391223122,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD008707",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.8574173793512978,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD008707",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9863031108523459,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD009791",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9773225511676001,
+   "typicality": 0.4358974358974359
+  },
+  {
+   "accession": "PXD009791",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9575930838488262,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD009792",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9900227269142395,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD009792",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.997413323132785,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD010149",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999994040340694,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD010149",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.993051833195831,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD010576",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.98313638053295,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD010576",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9937641745050559,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD011835",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9986899571346638,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD011835",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9544203301860581,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD011993",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9972925248298848,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD011993",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.995780374420318,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD012172",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9966585650176771,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD012172",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9685816911005941,
+   "typicality": 0.2
+  },
+  {
+   "accession": "PXD014251",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9948459003621566,
+   "typicality": 0.6410256410256411
+  },
+  {
+   "accession": "PXD014251",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9825982579576615,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD014438",
+   "stratum": "S1",
+   "columns": 49,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9993539058028575,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD014438",
+   "stratum": "S1",
+   "columns": 49,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9682843789085007,
+   "typicality": 0.12
+  },
+  {
+   "accession": "PXD014438",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9994013273294634,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD014438",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9665844209041526,
+   "typicality": 0.2
+  },
+  {
+   "accession": "PXD014503",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9984162136470056,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD014503",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.8774610473855065,
+   "typicality": 0.22
+  },
+  {
+   "accession": "PXD016488",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9998675626752913,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD016488",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9598888500410868,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD016603",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.982389422358771,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD016603",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9732726124970383,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD016620",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999997711437542,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD016620",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9792967346452885,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD016637",
+   "stratum": "S1",
+   "columns": 43,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9993029399921591,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD016637",
+   "stratum": "S1",
+   "columns": 43,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9595260569369928,
+   "typicality": 0.08
+  },
+  {
+   "accession": "PXD016637",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9993382821819403,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD016637",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9630847945145052,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD017104",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9958781336991962,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD017104",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9958143951289166,
+   "typicality": 0.46
+  },
+  {
+   "accession": "PXD017344",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9745948945397439,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD017344",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9865911967394337,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD017672",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9775381798984807,
+   "typicality": 0.7948717948717948
+  },
+  {
+   "accession": "PXD017672",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9912190126186085,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD018903",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9933123268544799,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD018903",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9938593494641368,
+   "typicality": 0.22
+  },
+  {
+   "accession": "PXD019395",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9938125865184564,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD019395",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9087144628108755,
+   "typicality": 0.2
+  },
+  {
+   "accession": "PXD019708",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9979576731082508,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD019708",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9490455292784574,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD020740",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9992530161227332,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD020740",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9726680312170394,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD020740",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9991698203616488,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD020740",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.978555320934441,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD022350",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9980185171402566,
+   "typicality": 0.05128205128205128
+  },
+  {
+   "accession": "PXD022350",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9752712978184521,
+   "typicality": 0.98
+  },
+  {
+   "accession": "PXD022561",
+   "stratum": "S1",
+   "columns": 36,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9795415747314629,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD022561",
+   "stratum": "S1",
+   "columns": 36,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9879149901149746,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD022859",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999488535762233,
+   "typicality": 0.07692307692307693
+  },
+  {
+   "accession": "PXD022859",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9599107900626576,
+   "typicality": 0.46
+  },
+  {
+   "accession": "PXD023542",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9918865238970705,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD023542",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9502115292999118,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD023690",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.999889664406554,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD023690",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9946659768578424,
+   "typicality": 0.4
+  },
+  {
+   "accession": "PXD023952",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9938997248443848,
+   "typicality": 0.5897435897435898
+  },
+  {
+   "accession": "PXD023952",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9969009952974933,
+   "typicality": 0.76
+  },
+  {
+   "accession": "PXD024051",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999121399038406,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD024051",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9445884480598662,
+   "typicality": 0.42
+  },
+  {
+   "accession": "PXD024347",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999993336340338,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD024347",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9837720209550215,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD024939",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9989913114283924,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD024939",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9872752008581046,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD025250",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9990970357045653,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD025250",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9714067582760211,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD025547",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9998802970853758,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD025547",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9867974575340005,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD025547",
+   "stratum": "S2",
+   "columns": 89,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9998888334580585,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD025547",
+   "stratum": "S2",
+   "columns": 89,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9886788707187913,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD025867",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9971098448457559,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD025867",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9485783460117158,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD026784",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9832822597074424,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD026784",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9907225591559741,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD026784",
+   "stratum": "S2",
+   "columns": 60,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9897107311698587,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD026784",
+   "stratum": "S2",
+   "columns": 60,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9887181762166964,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD026842",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9959726014502777,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD026842",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9704687887079538,
+   "typicality": 0.88
+  },
+  {
+   "accession": "PXD026842",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9955328960147052,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD026842",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9708287442811706,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD027217",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.997164661348563,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD027217",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9424193348702279,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD027265",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9843277624020422,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD027265",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9697900199309764,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD027265",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9845145864706127,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD027265",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9724598662652203,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD027282",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9818274303348155,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD027282",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9916285870813546,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD027525",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9968006186301215,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD027525",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9869625549880505,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD027572",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9735491713832578,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD027572",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9900186457234506,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD027849",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999929635616283,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD027849",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9959789415814624,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD027849",
+   "stratum": "S2",
+   "columns": 74,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999939235024717,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD027849",
+   "stratum": "S2",
+   "columns": 74,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9964896123790524,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD028034",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9929021760725038,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD028034",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9809573389068741,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD028175",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9906877359758903,
+   "typicality": 0.717948717948718
+  },
+  {
+   "accession": "PXD028175",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9805643159247075,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD028276",
+   "stratum": "S1",
+   "columns": 42,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9877732400177073,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD028276",
+   "stratum": "S1",
+   "columns": 42,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9625395369273559,
+   "typicality": 0.2
+  },
+  {
+   "accession": "PXD028276",
+   "stratum": "S2",
+   "columns": 63,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9884454352290243,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD028276",
+   "stratum": "S2",
+   "columns": 63,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9526731642912283,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD028438",
+   "stratum": "S1",
+   "columns": 48,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9848988720033711,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD028438",
+   "stratum": "S1",
+   "columns": 48,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9869325037851965,
+   "typicality": 0.72
+  },
+  {
+   "accession": "PXD028438",
+   "stratum": "S2",
+   "columns": 77,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9889185838124074,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD028438",
+   "stratum": "S2",
+   "columns": 77,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9868831842189619,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD029343",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9912729247378288,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD029343",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9878210684800552,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD029869",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9579182622169173,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD029869",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9587467648839161,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD029954",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9965540495624081,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD029954",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.990108933979822,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD030049",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9747365092274212,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD030049",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9946893654554569,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD030307",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "no gaps",
+   "score": 0.11407806476623195,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD030307",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": "no gaps",
+   "score": 0.9979471008934633,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD030307",
+   "stratum": "S2",
+   "columns": 74,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "no gaps",
+   "score": 0.11421918456398616,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD030307",
+   "stratum": "S2",
+   "columns": 74,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": "no gaps",
+   "score": 0.9978537085528413,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD030334",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999991153704301,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD030334",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9540715069244755,
+   "typicality": 0.22
+  },
+  {
+   "accession": "PXD030775",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9885828431381998,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD030775",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9972839864136075,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD031455",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9727015901311561,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD031455",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9682848274447432,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD031828",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9993703654129671,
+   "typicality": 0.5384615384615384
+  },
+  {
+   "accession": "PXD031828",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9824158355568843,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD031928",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9993081836902294,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD031928",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9624188411826035,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD031928",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9989257389416976,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD031928",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9699861921787682,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD032051",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9959243795393413,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD032051",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9563486163668596,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD032781",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9900379419112849,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD032781",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.993828038994573,
+   "typicality": 0.28
+  },
+  {
+   "accession": "PXD033012",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9980001722115132,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD033012",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9419225973165128,
+   "typicality": 0.96
+  },
+  {
+   "accession": "PXD033012",
+   "stratum": "S2",
+   "columns": 63,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9982356004164897,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD033012",
+   "stratum": "S2",
+   "columns": 63,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.944107031399167,
+   "typicality": 0.96
+  },
+  {
+   "accession": "PXD033661",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999023445351495,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD033661",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9776426191203053,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD034013",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9913050858959871,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD034013",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9825094202101703,
+   "typicality": 0.92
+  },
+  {
+   "accession": "PXD034184",
+   "stratum": "S1",
+   "columns": 48,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999999303059323,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD034184",
+   "stratum": "S1",
+   "columns": 48,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9844430304834564,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD035770",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999860725766083,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD035770",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9740519986259703,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD035780",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.999999858519059,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD035780",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9352735066545288,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD036074",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9957308321931794,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD036074",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9958745208398522,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD036297",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.986524439838603,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD036297",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9967783755304513,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD036432",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9493649537872632,
+   "typicality": 0.8205128205128205
+  },
+  {
+   "accession": "PXD036432",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9967418119987033,
+   "typicality": 0.96
+  },
+  {
+   "accession": "PXD036468",
+   "stratum": "S1",
+   "columns": 42,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.6681001669834054,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD036468",
+   "stratum": "S1",
+   "columns": 42,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9949599770068196,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD036468",
+   "stratum": "S2",
+   "columns": 168,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.7213330105482842,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD036468",
+   "stratum": "S2",
+   "columns": 168,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9967962826011653,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD036468",
+   "stratum": "S3",
+   "columns": 329,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.7294070277425668,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD036468",
+   "stratum": "S3",
+   "columns": 329,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9962321569482473,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD036519",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9584680215693542,
+   "typicality": 0.8717948717948718
+  },
+  {
+   "accession": "PXD036519",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9926007787191592,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD036782",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9894160407971258,
+   "typicality": 0.6410256410256411
+  },
+  {
+   "accession": "PXD036782",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9474584920187656,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD036962",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9961615301192634,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD036962",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9951964616137657,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD037164",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9998343596892355,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD037164",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9749216048653665,
+   "typicality": 0.42
+  },
+  {
+   "accession": "PXD037483",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999999904089506,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD037483",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9562330959777875,
+   "typicality": 0.24
+  },
+  {
+   "accession": "PXD038011",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9996079660048689,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD038011",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9957530423488096,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD038040",
+   "stratum": "S1",
+   "columns": 46,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.12471291940009521,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD038040",
+   "stratum": "S1",
+   "columns": 46,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9976854309523029,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD038040",
+   "stratum": "S2",
+   "columns": 56,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.12733028946670943,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD038040",
+   "stratum": "S2",
+   "columns": 56,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9973768569070278,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD038155",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9972319862041611,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD038155",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9332637189658394,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD038155",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.997417940773564,
+   "typicality": 0.5384615384615384
+  },
+  {
+   "accession": "PXD038155",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9399719457851845,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD038196",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9886709254958974,
+   "typicality": 0.5641025641025641
+  },
+  {
+   "accession": "PXD038196",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.994239951995745,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD038332",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9048774508256696,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD038332",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9892733367906118,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD038493",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9897003051002775,
+   "typicality": 0.6666666666666666
+  },
+  {
+   "accession": "PXD038493",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9932258967269687,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD038674",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.999664989999527,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD038674",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9536071292662682,
+   "typicality": 0.26
+  },
+  {
+   "accession": "PXD039066",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9324404181169413,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD039066",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.8415902965322858,
+   "typicality": 0.08
+  },
+  {
+   "accession": "PXD040000",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9690864612948219,
+   "typicality": 0.8461538461538461
+  },
+  {
+   "accession": "PXD040000",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9703329305557723,
+   "typicality": 0.96
+  },
+  {
+   "accession": "PXD040226",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "no gaps",
+   "score": 0.9975652579051025,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD040226",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": "no gaps",
+   "score": 0.9972011399547804,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD041337",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9995024798687913,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD041337",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.996610008035239,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD041337",
+   "stratum": "S2",
+   "columns": 191,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9995212634679359,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD041337",
+   "stratum": "S2",
+   "columns": 191,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9966797994094888,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD041339",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9980691174213685,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD041339",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.97657935868683,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD041686",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9518909103448845,
+   "typicality": 0.9743589743589743
+  },
+  {
+   "accession": "PXD041686",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9909433108918028,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD041751",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999876983153569,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD041751",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9816613196929582,
+   "typicality": 0.88
+  },
+  {
+   "accession": "PXD041751",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999928786235,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD041751",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9815812775343666,
+   "typicality": 0.94
+  },
+  {
+   "accession": "PXD042045",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9898514346924747,
+   "typicality": 0.05128205128205128
+  },
+  {
+   "accession": "PXD042045",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9785462244077275,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD042415",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9720111304965521,
+   "typicality": 0.7948717948717948
+  },
+  {
+   "accession": "PXD042415",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9501928051263308,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD042773",
+   "stratum": "S1",
+   "columns": 33,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999992469844031,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD042773",
+   "stratum": "S1",
+   "columns": 33,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9623822176372326,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD042822",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9948303565774208,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD042822",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9907580380301441,
+   "typicality": 0.24
+  },
+  {
+   "accession": "PXD042859",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9963157880034461,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD042859",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9953706462493086,
+   "typicality": 0.72
+  },
+  {
+   "accession": "PXD042867",
+   "stratum": "S1",
+   "columns": 34,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9965583287748756,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD042867",
+   "stratum": "S1",
+   "columns": 34,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.995242501513715,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD043293",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9962991377815485,
+   "typicality": 0.5384615384615384
+  },
+  {
+   "accession": "PXD043293",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9913430756829595,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD043338",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9855806573731504,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD043338",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9864443089262042,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD043338",
+   "stratum": "S2",
+   "columns": 123,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9876599279278595,
+   "typicality": 0.6666666666666666
+  },
+  {
+   "accession": "PXD043338",
+   "stratum": "S2",
+   "columns": 123,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9876481759098981,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD043536",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8891705661561502,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD043536",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9884865481836203,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD044031",
+   "stratum": "S1",
+   "columns": 44,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.999763809789948,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD044031",
+   "stratum": "S1",
+   "columns": 44,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9794079221468812,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD044031",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9998384070691186,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD044031",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9787091832639404,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD044594",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9260425124023325,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD044594",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9974169648343846,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD044677",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.6382347320119359,
+   "typicality": 0.23076923076923078
+  },
+  {
+   "accession": "PXD044677",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9913104895478156,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD045261",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9375919685879407,
+   "typicality": 0.7948717948717948
+  },
+  {
+   "accession": "PXD045261",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9555597767438705,
+   "typicality": 0.48
+  },
+  {
+   "accession": "PXD045783",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9672746258072147,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD045783",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9885019286852927,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD045783",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9677673567158057,
+   "typicality": 0.20512820512820512
+  },
+  {
+   "accession": "PXD045783",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9879590564018047,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD045888",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9611547862326425,
+   "typicality": 0.9487179487179487
+  },
+  {
+   "accession": "PXD045888",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.984406422366759,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD045888",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9577231612841449,
+   "typicality": 0.8205128205128205
+  },
+  {
+   "accession": "PXD045888",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9855320434522087,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD045926",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9937182424134002,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD045926",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.91403375091715,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD045926",
+   "stratum": "S2",
+   "columns": 57,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9939054265833264,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD045926",
+   "stratum": "S2",
+   "columns": 57,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.918920726730421,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD046524",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "no gaps",
+   "score": 0.9699952289950655,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD046524",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": "no gaps",
+   "score": 0.9965387465085142,
+   "typicality": 0.4
+  },
+  {
+   "accession": "PXD046570",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9045216956918668,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD046570",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9961558987415959,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD046731",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999845065650685,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD046731",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9765335135460343,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD046940",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9811732984957338,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD046940",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.972443251694456,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD046991",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9999970806255721,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD046991",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9282193470030384,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD047451",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8546530614407265,
+   "typicality": 0.8205128205128205
+  },
+  {
+   "accession": "PXD047451",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9961277643559183,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD047657",
+   "stratum": "S1",
+   "columns": 43,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9988335952651372,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD047657",
+   "stratum": "S1",
+   "columns": 43,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9688906166176059,
+   "typicality": 0.22
+  },
+  {
+   "accession": "PXD047657",
+   "stratum": "S2",
+   "columns": 68,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9991094888097313,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD047657",
+   "stratum": "S2",
+   "columns": 68,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9714272286137458,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD047857",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9996665771692435,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD047857",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9721720932062294,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD048179",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9993781898513989,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD048179",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.970622808568292,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD048179",
+   "stratum": "S2",
+   "columns": 67,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9997998751139665,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD048179",
+   "stratum": "S2",
+   "columns": 67,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9642376967066982,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD048456",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9979194913405205,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD048456",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9935941826053888,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD050095",
+   "stratum": "S1",
+   "columns": 34,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9447115153662153,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD050095",
+   "stratum": "S1",
+   "columns": 34,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.996192440639053,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD050220",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999680060873285,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD050220",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9594060669124668,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD050220",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.999974578290024,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD050220",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9628357527658341,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD050990",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9597372544450523,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD050990",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9853481695296393,
+   "typicality": 0.58
+  },
+  {
+   "accession": "PXD051453",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9965259648536665,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD051453",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9908302387247838,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD051852",
+   "stratum": "S1",
+   "columns": 49,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9998799588217236,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD051852",
+   "stratum": "S1",
+   "columns": 49,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9932842236156599,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD051852",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9998784491503309,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD051852",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9932955442925735,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD051859",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999993967512493,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD051859",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9911367226260078,
+   "typicality": 0.44
+  },
+  {
+   "accession": "PXD051859",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999993369107295,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD051859",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9913799951565574,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD052612",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9922471528484527,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD052612",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9756792295894307,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD052612",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9916390032258996,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD052612",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9766003685387502,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD052867",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9819352022935108,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD052867",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9643324466672196,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD053053",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.911150938863778,
+   "typicality": 0.6153846153846154
+  },
+  {
+   "accession": "PXD053053",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9778870838205864,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD053053",
+   "stratum": "S2",
+   "columns": 161,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.897121247878567,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD053053",
+   "stratum": "S2",
+   "columns": 161,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9899426395048827,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD053053",
+   "stratum": "S3",
+   "columns": 1499,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.897262970091643,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD053053",
+   "stratum": "S3",
+   "columns": 1499,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9892486431636821,
+   "typicality": 0.2
+  },
+  {
+   "accession": "PXD053147",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9854578339577367,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD053147",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9930032694670186,
+   "typicality": 0.3
+  },
+  {
+   "accession": "PXD053147",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9858372080584099,
+   "typicality": 0.20512820512820512
+  },
+  {
+   "accession": "PXD053147",
+   "stratum": "S2",
+   "columns": 50,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.993171218002101,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD053422",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9977010949196194,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD053422",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9951865683401551,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD054083",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9928849579973452,
+   "typicality": 0.6153846153846154
+  },
+  {
+   "accession": "PXD054083",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9694348878622959,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD054180",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9604816229555513,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD054180",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9777561099570895,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD054457",
+   "stratum": "S1",
+   "columns": 47,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.987758414070774,
+   "typicality": 0.6410256410256411
+  },
+  {
+   "accession": "PXD054457",
+   "stratum": "S1",
+   "columns": 47,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.980281841309662,
+   "typicality": 0.72
+  },
+  {
+   "accession": "PXD054457",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9848384654563892,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD054457",
+   "stratum": "S2",
+   "columns": 52,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9849623940951543,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD055821",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9885033861518915,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD055821",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9853802880550897,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD055821",
+   "stratum": "S2",
+   "columns": 58,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9886030910266311,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD055821",
+   "stratum": "S2",
+   "columns": 58,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9848264227261584,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD055827",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 1.0,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD055827",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9743530460029566,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD055986",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999664531464874,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD055986",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.99356052106356,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD055986",
+   "stratum": "S2",
+   "columns": 91,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999696116824939,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD055986",
+   "stratum": "S2",
+   "columns": 91,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9939427215866228,
+   "typicality": 0.88
+  },
+  {
+   "accession": "PXD056331",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8376069021515598,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD056331",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.996969521494195,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD056428",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9767906827761567,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD056428",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9804358370556528,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD056493",
+   "stratum": "S1",
+   "columns": 34,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9818595480527329,
+   "typicality": 0.717948717948718
+  },
+  {
+   "accession": "PXD056493",
+   "stratum": "S1",
+   "columns": 34,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.991591442374744,
+   "typicality": 0.42
+  },
+  {
+   "accession": "PXD056664",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9985478267087208,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD056664",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9916539698721517,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD056664",
+   "stratum": "S2",
+   "columns": 82,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9986044384742951,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD056664",
+   "stratum": "S2",
+   "columns": 82,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.991583891486431,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD057120",
+   "stratum": "S1",
+   "columns": 46,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.999891472677925,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD057120",
+   "stratum": "S1",
+   "columns": 46,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9617852939412176,
+   "typicality": 0.16
+  },
+  {
+   "accession": "PXD057120",
+   "stratum": "S2",
+   "columns": 85,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9998083084081011,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD057120",
+   "stratum": "S2",
+   "columns": 85,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.964976551343124,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD057491",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9830262279493045,
+   "typicality": 0.9487179487179487
+  },
+  {
+   "accession": "PXD057491",
+   "stratum": "S1",
+   "columns": 41,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9901697574435179,
+   "typicality": 0.92
+  },
+  {
+   "accession": "PXD057491",
+   "stratum": "S2",
+   "columns": 53,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9803680238655944,
+   "typicality": 0.9487179487179487
+  },
+  {
+   "accession": "PXD057491",
+   "stratum": "S2",
+   "columns": 53,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9898621835767276,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD057503",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999899159271206,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD057503",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9868984467855197,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD057707",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.98856966842947,
+   "typicality": 0.6410256410256411
+  },
+  {
+   "accession": "PXD057707",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9402997101594784,
+   "typicality": 0.08
+  },
+  {
+   "accession": "PXD057738",
+   "stratum": "S1",
+   "columns": 43,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9966133397928414,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD057738",
+   "stratum": "S1",
+   "columns": 43,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9975283673902426,
+   "typicality": 0.1
+  },
+  {
+   "accession": "PXD057738",
+   "stratum": "S2",
+   "columns": 95,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9968920598639677,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD057738",
+   "stratum": "S2",
+   "columns": 95,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9976878793597072,
+   "typicality": 0.14
+  },
+  {
+   "accession": "PXD057796",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9947853822617901,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD057796",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9851034662402025,
+   "typicality": 0.9
+  },
+  {
+   "accession": "PXD057796",
+   "stratum": "S2",
+   "columns": 82,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9580160015824529,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD057796",
+   "stratum": "S2",
+   "columns": 82,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9910738745934806,
+   "typicality": 0.98
+  },
+  {
+   "accession": "PXD057955",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8122001389621207,
+   "typicality": 0.5897435897435898
+  },
+  {
+   "accession": "PXD057955",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9898066977506678,
+   "typicality": 0.4
+  },
+  {
+   "accession": "PXD057955",
+   "stratum": "S2",
+   "columns": 89,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8210587681374684,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD057955",
+   "stratum": "S2",
+   "columns": 89,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9895218209403748,
+   "typicality": 0.74
+  },
+  {
+   "accession": "PXD057972",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9923668419384923,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD057972",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9702790606173992,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD057994",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9737741913059582,
+   "typicality": 0.7948717948717948
+  },
+  {
+   "accession": "PXD057994",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9740878971530968,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD058054",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9781111035319691,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD058054",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9908020874695873,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD058255",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "no gaps",
+   "score": 1.0,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD058255",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": "no gaps",
+   "score": 0.9936348529741942,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD058255",
+   "stratum": "S2",
+   "columns": 74,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "no gaps",
+   "score": 1.0,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD058255",
+   "stratum": "S2",
+   "columns": 74,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": "no gaps",
+   "score": 0.9941910229449868,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD058457",
+   "stratum": "S1",
+   "columns": 44,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9849867045785963,
+   "typicality": 0.7692307692307693
+  },
+  {
+   "accession": "PXD058457",
+   "stratum": "S1",
+   "columns": 44,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9795908832733147,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD058457",
+   "stratum": "S2",
+   "columns": 85,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9842494152725342,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD058457",
+   "stratum": "S2",
+   "columns": 85,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9816592936028965,
+   "typicality": 0.72
+  },
+  {
+   "accession": "PXD058995",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.995741208139555,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD058995",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9711734724054812,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD058999",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9141500352841074,
+   "typicality": 0.8717948717948718
+  },
+  {
+   "accession": "PXD058999",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9905279942486355,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD059079",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.7430463661271283,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD059079",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9931502767823716,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD059079",
+   "stratum": "S2",
+   "columns": 102,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8332550740354807,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD059079",
+   "stratum": "S2",
+   "columns": 102,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9929036285324758,
+   "typicality": 0.2
+  },
+  {
+   "accession": "PXD059544",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9937682722571567,
+   "typicality": 0.5897435897435898
+  },
+  {
+   "accession": "PXD059544",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.99612560604815,
+   "typicality": 0.94
+  },
+  {
+   "accession": "PXD059613",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9887011256752603,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD059613",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9860511338453382,
+   "typicality": 0.22
+  },
+  {
+   "accession": "PXD060060",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9991310641476785,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD060060",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9586771131895684,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD060060",
+   "stratum": "S2",
+   "columns": 62,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9992785016130462,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD060060",
+   "stratum": "S2",
+   "columns": 62,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9602568719485449,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD060089",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9997974987933358,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD060089",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9625624339339831,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD060089",
+   "stratum": "S2",
+   "columns": 71,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9997847445792761,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD060089",
+   "stratum": "S2",
+   "columns": 71,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9677639621580393,
+   "typicality": 0.7
+  },
+  {
+   "accession": "PXD060145",
+   "stratum": "S1",
+   "columns": 42,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9995080408899946,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD060145",
+   "stratum": "S1",
+   "columns": 42,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9786180690799714,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD060304",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999479027375461,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD060304",
+   "stratum": "S1",
+   "columns": 24,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9914715466250452,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD060457",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9944784646817328,
+   "typicality": 0.5384615384615384
+  },
+  {
+   "accession": "PXD060457",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9702801474668745,
+   "typicality": 0.46
+  },
+  {
+   "accession": "PXD060484",
+   "stratum": "S1",
+   "columns": 47,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999504618772329,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD060484",
+   "stratum": "S1",
+   "columns": 47,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.978501259032533,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD060484",
+   "stratum": "S2",
+   "columns": 57,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999569602430726,
+   "typicality": 0.05128205128205128
+  },
+  {
+   "accession": "PXD060484",
+   "stratum": "S2",
+   "columns": 57,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9810122845374637,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD061071",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.971654284836228,
+   "typicality": 0.8974358974358975
+  },
+  {
+   "accession": "PXD061071",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9955337732344283,
+   "typicality": 0.98
+  },
+  {
+   "accession": "PXD061430",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.988172801397924,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD061430",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9535086722069515,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD061751",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9998711385438052,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD061751",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9469829291744305,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD061751",
+   "stratum": "S2",
+   "columns": 57,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9997178772193457,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD061751",
+   "stratum": "S2",
+   "columns": 57,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9575616439885383,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD061942",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9831244985957249,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD061942",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.982702654511429,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD061942",
+   "stratum": "S2",
+   "columns": 70,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9883166604885656,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD061942",
+   "stratum": "S2",
+   "columns": 70,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.983308991624573,
+   "typicality": 0.92
+  },
+  {
+   "accession": "PXD062376",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9991744056126496,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD062376",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.97618542223037,
+   "typicality": 0.98
+  },
+  {
+   "accession": "PXD062696",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9070003439917396,
+   "typicality": 0.7692307692307693
+  },
+  {
+   "accession": "PXD062696",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9794925261833591,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD062859",
+   "stratum": "S1",
+   "columns": 47,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9943268791427432,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD062859",
+   "stratum": "S1",
+   "columns": 47,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9587975522346852,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD062859",
+   "stratum": "S2",
+   "columns": 103,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9914950630223356,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD062859",
+   "stratum": "S2",
+   "columns": 103,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.936814523593295,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD062998",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9849681652521257,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD062998",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.978128497492874,
+   "typicality": 0.5
+  },
+  {
+   "accession": "PXD062998",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9835563139151804,
+   "typicality": 0.7948717948717948
+  },
+  {
+   "accession": "PXD062998",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9762743909024258,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD063043",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.999357027711443,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD063043",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9730131287004616,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD063245",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999993953785054,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD063245",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9876490696180066,
+   "typicality": 0.76
+  },
+  {
+   "accession": "PXD063406",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9935787465320488,
+   "typicality": 0.5641025641025641
+  },
+  {
+   "accession": "PXD063406",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9946464879987753,
+   "typicality": 0.52
+  },
+  {
+   "accession": "PXD063406",
+   "stratum": "S2",
+   "columns": 77,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9935366639680078,
+   "typicality": 0.5384615384615384
+  },
+  {
+   "accession": "PXD063406",
+   "stratum": "S2",
+   "columns": 77,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9957741864408421,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD063813",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8473030315761599,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD063813",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9964669986272818,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD064286",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9309413778288637,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD064286",
+   "stratum": "S1",
+   "columns": 35,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9896045495736023,
+   "typicality": 0.68
+  },
+  {
+   "accession": "PXD064519",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9847069098998135,
+   "typicality": 0.6153846153846154
+  },
+  {
+   "accession": "PXD064519",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9684289628919033,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD064580",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999968410729699,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD064580",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9627729533668176,
+   "typicality": 0.64
+  },
+  {
+   "accession": "PXD064962",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9989409957138774,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD064962",
+   "stratum": "S1",
+   "columns": 31,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.990511427950837,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD064962",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.998785864736743,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD064962",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9917896366962381,
+   "typicality": 0.42
+  },
+  {
+   "accession": "PXD065233",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9714480049124405,
+   "typicality": 0.8717948717948718
+  },
+  {
+   "accession": "PXD065233",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9956679262172704,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD065389",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9953511276313735,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD065389",
+   "stratum": "S1",
+   "columns": 29,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9885349215844139,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD065583",
+   "stratum": "S1",
+   "columns": 38,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8928923931482043,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD065583",
+   "stratum": "S1",
+   "columns": 38,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9958142686027317,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD065583",
+   "stratum": "S2",
+   "columns": 104,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8962771180882892,
+   "typicality": 0.05128205128205128
+  },
+  {
+   "accession": "PXD065583",
+   "stratum": "S2",
+   "columns": 104,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9960795896533393,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD065666",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9717915804128751,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD065666",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9969627450015657,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD066214",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9921521948562978,
+   "typicality": 0.10256410256410256
+  },
+  {
+   "accession": "PXD066214",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9953437461699474,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD066214",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9929245085893573,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD066214",
+   "stratum": "S2",
+   "columns": 54,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9933983346296539,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD066625",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.924710757316602,
+   "typicality": 0.8717948717948718
+  },
+  {
+   "accession": "PXD066625",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9838248068785432,
+   "typicality": 0.52
+  },
+  {
+   "accession": "PXD067161",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9476203084627777,
+   "typicality": 0.7948717948717948
+  },
+  {
+   "accession": "PXD067161",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9886551122527173,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD067161",
+   "stratum": "S2",
+   "columns": 62,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9466072775078017,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD067161",
+   "stratum": "S2",
+   "columns": 62,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.99123319732745,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD067204",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.972680411256583,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD067204",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9881654254580194,
+   "typicality": 0.58
+  },
+  {
+   "accession": "PXD067204",
+   "stratum": "S2",
+   "columns": 72,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9651810472420281,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD067204",
+   "stratum": "S2",
+   "columns": 72,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.992472676079024,
+   "typicality": 0.62
+  },
+  {
+   "accession": "PXD067951",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 1.0,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD067951",
+   "stratum": "S1",
+   "columns": 32,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9420673554707115,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD067951",
+   "stratum": "S2",
+   "columns": 151,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 1.0,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD067951",
+   "stratum": "S2",
+   "columns": 151,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9441587885993807,
+   "typicality": 0.1
+  },
+  {
+   "accession": "PXD068012",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9963218496820893,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD068012",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.973022165990735,
+   "typicality": 0.28
+  },
+  {
+   "accession": "PXD068460",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9890543096700102,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD068460",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9950366317762274,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD068582",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9981197074282168,
+   "typicality": 0.6923076923076923
+  },
+  {
+   "accession": "PXD068582",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9690831620109815,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD069842",
+   "stratum": "S1",
+   "columns": 36,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999759420659112,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD069842",
+   "stratum": "S1",
+   "columns": 36,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9859799087251715,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD069869",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9599551952322878,
+   "typicality": 0.5128205128205128
+  },
+  {
+   "accession": "PXD069869",
+   "stratum": "S1",
+   "columns": 28,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9936120524341975,
+   "typicality": 0.24
+  },
+  {
+   "accession": "PXD069885",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9660672316772829,
+   "typicality": 0.9743589743589743
+  },
+  {
+   "accession": "PXD069885",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9689362938879521,
+   "typicality": 0.36
+  },
+  {
+   "accession": "PXD070147",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9785136635672798,
+   "typicality": 0.5897435897435898
+  },
+  {
+   "accession": "PXD070147",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9737417615108747,
+   "typicality": 0.96
+  },
+  {
+   "accession": "PXD070221",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9981068216151072,
+   "typicality": 0.7435897435897436
+  },
+  {
+   "accession": "PXD070221",
+   "stratum": "S1",
+   "columns": 25,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9786875299762734,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD070464",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9669365442090255,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD070464",
+   "stratum": "S1",
+   "columns": 40,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9952148035065593,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD070464",
+   "stratum": "S2",
+   "columns": 58,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.96519011012337,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD070464",
+   "stratum": "S2",
+   "columns": 58,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9952246590631121,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD070470",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9984846180111357,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD070470",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9366292740072587,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD070470",
+   "stratum": "S2",
+   "columns": 56,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.998804781790356,
+   "typicality": 0.2564102564102564
+  },
+  {
+   "accession": "PXD070470",
+   "stratum": "S2",
+   "columns": 56,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9420229839164416,
+   "typicality": 0.38
+  },
+  {
+   "accession": "PXD070994",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": "counts",
+   "score": 0.9976752881724061,
+   "typicality": 0.48717948717948717
+  },
+  {
+   "accession": "PXD070994",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9940035460677719,
+   "typicality": 0.8
+  },
+  {
+   "accession": "PXD071177",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9539088415247321,
+   "typicality": 0.8717948717948718
+  },
+  {
+   "accession": "PXD071177",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9946595935012533,
+   "typicality": 0.88
+  },
+  {
+   "accession": "PXD071580",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9285004353846462,
+   "typicality": 0.1282051282051282
+  },
+  {
+   "accession": "PXD071580",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9940131565244337,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD071670",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999258102050286,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD071670",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9853705126651333,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD072598",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9555011212125686,
+   "typicality": 0.9487179487179487
+  },
+  {
+   "accession": "PXD072598",
+   "stratum": "S1",
+   "columns": 22,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9745175113543999,
+   "typicality": 0.58
+  },
+  {
+   "accession": "PXD073034",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9934319382790198,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD073034",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9967552521127923,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD073034",
+   "stratum": "S2",
+   "columns": 75,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9933935469557892,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD073034",
+   "stratum": "S2",
+   "columns": 75,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9971770984527857,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD073205",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9929822005817723,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD073205",
+   "stratum": "S1",
+   "columns": 30,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9939294640288124,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD073581",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.99999632066136,
+   "typicality": 0.02564102564102564
+  },
+  {
+   "accession": "PXD073581",
+   "stratum": "S1",
+   "columns": 23,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9370081776562627,
+   "typicality": 0.92
+  },
+  {
+   "accession": "PXD073581",
+   "stratum": "S2",
+   "columns": 121,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9999992527256297,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD073581",
+   "stratum": "S2",
+   "columns": 121,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9324966308581509,
+   "typicality": 1.0
+  },
+  {
+   "accession": "PXD074156",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9985162082739285,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD074156",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9779975222796038,
+   "typicality": 0.54
+  },
+  {
+   "accession": "PXD074256",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9696554198110775,
+   "typicality": 0.05128205128205128
+  },
+  {
+   "accession": "PXD074256",
+   "stratum": "S1",
+   "columns": 20,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9895673778604054,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD077039",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.8727397505896528,
+   "typicality": 0.6410256410256411
+  },
+  {
+   "accession": "PXD077039",
+   "stratum": "S1",
+   "columns": 21,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9895189715221497,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD077039",
+   "stratum": "S2",
+   "columns": 244,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9608781734711492,
+   "typicality": 0.3076923076923077
+  },
+  {
+   "accession": "PXD077039",
+   "stratum": "S2",
+   "columns": 244,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9912921226724511,
+   "typicality": 0.84
+  },
+  {
+   "accession": "PXD077039",
+   "stratum": "S3",
+   "columns": 320,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9310942131900533,
+   "typicality": 0.38461538461538464
+  },
+  {
+   "accession": "PXD077039",
+   "stratum": "S3",
+   "columns": 320,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9913596502557366,
+   "typicality": 0.86
+  },
+  {
+   "accession": "PXD079292",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9899476119668216,
+   "typicality": 0.15384615384615385
+  },
+  {
+   "accession": "PXD079292",
+   "stratum": "S1",
+   "columns": 37,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.995487431683914,
+   "typicality": 0.1
+  },
+  {
+   "accession": "PXD079292",
+   "stratum": "S2",
+   "columns": 85,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9899682892795435,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD079292",
+   "stratum": "S2",
+   "columns": 85,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9957735971573991,
+   "typicality": 0.18
+  },
+  {
+   "accession": "PXD079564",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.994973049220293,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD079564",
+   "stratum": "S1",
+   "columns": 39,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.998087871711942,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD080843",
+   "stratum": "S1",
+   "columns": 45,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9899793755889171,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD080843",
+   "stratum": "S1",
+   "columns": 45,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9974209672778657,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD080843",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9881966975895137,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD080843",
+   "stratum": "S2",
+   "columns": 51,
+   "label": "log",
+   "form": "constructed log10",
+   "decided_by": null,
+   "score": 0.9973188120226242,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD082023",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9792767688180738,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD082023",
+   "stratum": "S1",
+   "columns": 26,
+   "label": "log",
+   "form": "constructed log2p1",
+   "decided_by": null,
+   "score": 0.9961156682567723,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD082653",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9849569814647913,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD082653",
+   "stratum": "S1",
+   "columns": 27,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9968361371600646,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD082653",
+   "stratum": "S2",
+   "columns": 75,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9848212064267216,
+   "typicality": 0.0
+  },
+  {
+   "accession": "PXD082653",
+   "stratum": "S2",
+   "columns": 75,
+   "label": "log",
+   "form": "constructed ln",
+   "decided_by": null,
+   "score": 0.9974318264957697,
+   "typicality": 0.06
+  },
+  {
+   "accession": "PXD083082",
+   "stratum": "S1",
+   "columns": 38,
+   "label": "linear",
+   "form": "as deposited",
+   "decided_by": null,
+   "score": 0.9983889179170007,
+   "typicality": 0.1794871794871795
+  },
+  {
+   "accession": "PXD083082",
+   "stratum": "S1",
+   "columns": 38,
+   "label": "log",
+   "form": "constructed log2",
+   "decided_by": null,
+   "score": 0.9913838415896359,
+   "typicality": 0.62
+  }
+ ]
+}
