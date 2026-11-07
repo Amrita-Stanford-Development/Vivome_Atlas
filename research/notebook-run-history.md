@@ -3380,6 +3380,12 @@ were written then, before B4's code.
   linear, and two ratio variants; the warning fires on all of them.
 - PBMC240 reads linear in S2+S3 in 0.07 s. The scorer's rehearsal on the
   calibration split ran end to end and wrote no mark.
+- A code review after the run found four faults in the test's scorer,
+  none of which touched a number. In the real run, the foreign tables would
+  have come from test deposits, and an empty rehearsal path would have
+  scored the test. The coverage curve cut on the wrong probability. A
+  failed real run left no trace. Each was fixed test first. The calibration
+  part, run again, left the calibration and every answer unchanged.
 
 ## The throughline
 

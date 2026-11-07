@@ -46,7 +46,9 @@ computed on a calibration or test deposit. Two parts, run in order:
   first call in this process with the calibration's cache cleared, so it
   includes reading protein-v1.json, not the TSV.
 - B4_rehearsal: `python -m valuescale.corpus.score_test --rehearse` as its
-  own process, end to end on the calibration split.
+  own process, end to end on the calibration split; neither of the test's
+  marks (test_started.json, test_scored.json) nor its results file may
+  exist before or after.
 - Writes report.md, report.json, calibration_rows.json (every calibration
   subsample's score) and rehearsal.json in
   research/notebook-outputs/value_scale_b4/.
@@ -385,10 +387,11 @@ def check_detect() -> tuple[bool, dict]:
 
 def check_rehearsal() -> tuple[bool, dict]:
     out = OUT / "rehearsal.json"
-    before = score_test.TEST_SCORED.exists()
+    records_of_the_test = (score_test.TEST_SCORED, score_test.TEST_STARTED, score_test.RESULTS)
+    before = any(p.exists() for p in records_of_the_test)
     t0 = time.time()
     run = subprocess.run([sys.executable, "-m", "valuescale.corpus.score_test", "--rehearse", str(out)], cwd=REPO)
-    after = score_test.TEST_SCORED.exists()
+    after = any(p.exists() for p in records_of_the_test)
     detail = {"returncode": run.returncode, "seconds": round(time.time() - t0), "marked_before": before,
               "marked_after": after}
     if run.returncode != 0 or not out.exists():

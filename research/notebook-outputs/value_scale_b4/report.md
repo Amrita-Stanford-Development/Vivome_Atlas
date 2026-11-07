@@ -1,6 +1,6 @@
 # B4: the calibration of the protein detector
 
-Run 2026-11-07T16:53:21 (267 s; the design part 2026-11-07T16:43:05, 182 s), by research/notebooks/value_scale_calibrate.py. Expectations: valuescale/bank/expectations/b4.json, written before the run.
+Run 2026-11-07T17:15:01 (274 s; the design part 2026-11-07T16:43:05, 182 s), by research/notebooks/value_scale_calibrate.py. Expectations: valuescale/bank/expectations/b4.json, written before the run.
 
 | Row | Result | Expected |
 |---|---|---|
@@ -107,7 +107,7 @@ Variants: 16 of 571 labelled variants given the other class alone (2.8%); 44 ver
 
 ## PBMC240
 
-3100 x 238: linear in S2+S3, 0.066 s.
+3100 x 238: linear in S2+S3, 0.086 s.
 
 > For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).
 

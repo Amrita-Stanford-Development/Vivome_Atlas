@@ -172,6 +172,47 @@ say nothing about the test.
 - Grouped by software and by instrument family. Nothing was written to
   `valuescale/corpus/test_scored.json`.
 
+## The code review, and the re-run
+
+A fresh reviewer read B4's code after the run. Several things were checked
+and found right, among them:
+- the detector gives each calibration subsample the same probability it
+  was calibrated on (467 subsamples, difference 0);
+- the model equals B2's;
+- the umbrella k and the exact intervals are right.
+
+It found four faults in the test's scorer, `score_test.py`, which B7 runs
+once. None changes a number above.
+- **The foreign tables:** in the real run they would have been made from
+  test deposits; the protocol says calibration deposits only. They are now
+  made from the calibration split in both modes.
+- **The rehearsal's output file:** an empty `--rehearse` would have scored
+  the sealed test and marked it scored. So would a path onto the test's
+  mark or results. These are now refused before anything is read.
+- **The risk-against-coverage curve** cut on the larger of the two
+  probabilities, not the probability of the reading given. It now uses the
+  reading's own probability.
+- **A real run that fails midway** left no trace and could have been run
+  again after a code change. Before it reads any test table it now writes
+  `valuescale/corpus/test_started.json`, with the commit it runs on, and
+  refuses to run while that file exists. A baseline that fails on a table
+  is now recorded as an error for that table, and the run goes on.
+
+Each fix was made test first. The tests that call the scorer's `main`
+replace every reader of test values, so even the red run could not score
+the test.
+
+The calibration part was then run again on the fixed scorer (commit
+`b20c477` with the fixes not yet committed, as `rehearsal.json` records).
+- `protein-v1.json` matched the fresh build and was left as it is.
+- `calibration_rows.json` came out byte-identical.
+- Every answer, tally and threshold is unchanged. What changed: the
+  curve's coverage at cuts of 0.5 to 0.8 (0.964 to 0.962), each baseline's
+  error count (0 on every table), the foreign tables' deposit lists (218
+  calibration deposits), the commit, and the times.
+
+The reviewer's minor points are in the plan's ledger.
+
 ## For the owner
 
 1. **The sparse-log gap.** A log table with about 90% of its values missing

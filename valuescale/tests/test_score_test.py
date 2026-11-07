@@ -9,6 +9,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 
@@ -88,10 +89,15 @@ class SplitTests(unittest.TestCase):
         cls.cal = _calibration()
         cls.tables = {f"PXD{i}": _linear(cells=30 if i % 2 else 70, seed=200 + i) for i in range(6)}
         cls.records = [{"accession": a, "columns": v.shape[1], "rows": v.shape[0], "label": "linear",
-                        "software": "DIA-NN" if i % 2 else "MaxQuant", "split": "calibration", "outcome": "kept"}
+                        "software": "DIA-NN" if i % 2 else "MaxQuant", "split": "test", "outcome": "kept"}
                        for i, (a, v) in enumerate(cls.tables.items())]
-        cls.result = score_test.score_split(cls.records, lambda r: cls.tables[r["accession"]], cls.cal,
-                                            instrument_of={"PXD0": "Q Exactive"}, foreign=True)
+        cls.calibration_tables = {f"CAL{i}": _linear(cells=30, seed=300 + i) for i in range(2)}
+        cls.foreign_records = [{"accession": a, "columns": v.shape[1], "rows": v.shape[0], "label": "linear",
+                                "software": "MaxQuant", "split": "calibration", "outcome": "kept"}
+                               for a, v in cls.calibration_tables.items()]
+        every = {**cls.tables, **cls.calibration_tables}
+        cls.result = score_test.score_split(cls.records, lambda r: every[r["accession"]], cls.cal,
+                                            instrument_of={"PXD0": "Q Exactive"}, foreign_records=cls.foreign_records)
 
     def test_every_deposit_is_counted_once_per_class_and_calibrated_stratum(self):
         by = self.result["by_calibrated_stratum"]
@@ -109,13 +115,52 @@ class SplitTests(unittest.TestCase):
         from valuescale import baselines
         for name in baselines.BASELINES:
             b = self.result["baselines"][name]["linear"]
-            self.assertEqual(b["wrong"] + b["right"] + b["no_answer"], 6, name)
+            self.assertEqual(b["wrong"] + b["right"] + b["no_answer"] + b["error"], 6, name)
+            self.assertEqual(b["error"], 0, name)
 
     def test_foreign_tables_and_groupings_are_reported(self):
         self.assertEqual(set(self.result["foreign"]), {"zscore_proteins", "presence", "percentile_ranks"})
         self.assertIn("MaxQuant", self.result["by_software"])
         self.assertIn("Orbitrap", self.result["by_instrument"])
         self.assertIn("not stated", self.result["by_instrument"])
+
+    def test_the_foreign_tables_come_from_the_calibration_deposits_alone(self):
+        # the protocol: foreign tables are made from calibration deposits only,
+        # whichever split is scored (review I1)
+        for name, f in self.result["foreign"].items():
+            self.assertEqual(f["deposits"], ["CAL0", "CAL1"], name)
+            self.assertEqual(f["n"], 2, name)
+
+    def test_a_test_deposit_is_refused_as_a_foreign_source(self):
+        with self.assertRaisesRegex(ValueError, "calibration deposits only"):
+            score_test.score_split([], lambda r: self.tables[r["accession"]], self.cal,
+                                   foreign_records=self.records[:1])
+
+    def test_a_baseline_that_raises_is_recorded_and_the_run_goes_on(self):
+        from valuescale import baselines
+
+        def boom(values):
+            raise RuntimeError("an unforeseen table")
+
+        with mock.patch.dict(baselines.BASELINES, {"boom": boom}):
+            result = score_test.score_split(self.records[:2], lambda r: self.tables[r["accession"]], self.cal)
+        self.assertEqual(result["baselines"]["boom"]["linear"],
+                         {"right": 0, "wrong": 0, "no_answer": 0, "error": 2})
+        self.assertIn("RuntimeError", result["tables"][0]["baselines"]["boom"])
+
+
+class RiskCoverageTests(unittest.TestCase):
+    def test_an_answer_counts_at_a_cut_by_the_probability_of_the_class_it_gives(self):
+        rows = [
+            {"set": ["linear"], "probabilities": {"linear": 0.15, "log": 0.85}, "outcome": "wrong"},
+            {"set": ["linear"], "probabilities": {"linear": 0.70, "log": 0.30}, "outcome": "right"},
+            {"set": ["log"], "probabilities": None, "outcome": "right"},  # a gate's answer
+            {"set": ["linear", "log"], "probabilities": {"linear": 0.9, "log": 0.95}, "outcome": "cant_tell"},
+        ]
+        curve = score_test.risk_coverage(rows, cuts=(0.5, 0.8))
+        # at 0.5 the {linear} answer at 0.15 is not counted (review I3), the gate's is
+        self.assertEqual(curve["0.5"], {"coverage": 0.5, "risk": 0.0})
+        self.assertEqual(curve["0.8"], {"coverage": 0.25, "risk": 0.0})
 
 
 class OnceTests(unittest.TestCase):
@@ -128,10 +173,83 @@ class OnceTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, "once"):
                 score_test.check_not_scored(mark)
 
+    def test_a_scoring_that_started_and_did_not_finish_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            mark, started = Path(d) / "test_scored.json", Path(d) / "test_started.json"
+            score_test.mark_started(started, {"commit": "abc"})
+            self.assertEqual(json.loads(started.read_text())["commit"], "abc")
+            with self.assertRaisesRegex(SystemExit, "started"):
+                score_test.check_not_scored(mark, started)
+
     def test_the_rehearsal_reads_only_the_calibration_split(self):
         records = [{"accession": "A", "split": "calibration"}, {"accession": "B", "split": "test"}]
         self.assertEqual([r["accession"] for r in score_test.split_records(records, "calibration")], ["A"])
         self.assertEqual([r["accession"] for r in score_test.split_records(records, "test")], ["B"])
+
+
+class MainTests(unittest.TestCase):
+    """main() with every reader of test values replaced: nothing here can
+    score the sealed test, even against code without the fixes."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        d = Path(self.dir.name)
+        self.scored_with = []
+        fake_cal = mock.Mock(id="test-v0", corpus_sha256="0" * 64)
+
+        def scored_records(walk, audit, split):
+            return [{"accession": f"{split}-1", "split": split, "label": "linear"}]
+
+        def score_split(records, values_of, cal, instrument_of=None, foreign_records=None, progress=None, **kw):
+            self.scored_with.append({"splits": sorted({r["split"] for r in records}),
+                                     "started_mark": (d / "test_started.json").exists()})
+            return {"deposits": len(records), "subsamples": 0}
+
+        self.patches = [
+            mock.patch.object(score_test, "TEST_SCORED", d / "test_scored.json"),
+            mock.patch.object(score_test, "TEST_STARTED", d / "test_started.json"),
+            mock.patch.object(score_test, "RESULTS", d / "results.json"),
+            mock.patch.object(score_test, "scored_records", scored_records),
+            mock.patch.object(score_test, "score_split", score_split),
+            mock.patch.object(score_test, "_values_of", mock.Mock(side_effect=AssertionError("values read"))),
+            mock.patch.object(score_test, "instruments", mock.Mock(return_value={})),
+            mock.patch.object(score_test, "_commit", mock.Mock(return_value={"commit": "abc", "clean": True})),
+            mock.patch.object(score_test.calibrated, "load", mock.Mock(return_value=fake_cal)),
+        ]
+        for p in self.patches:
+            p.start()
+        self.d = d
+
+    def tearDown(self):
+        for p in reversed(self.patches):
+            p.stop()
+        self.dir.cleanup()
+
+    def test_an_empty_or_reserved_rehearsal_path_is_refused_before_anything_is_read(self):
+        for out in ("", "  ", str(self.d / "test_scored.json"), str(self.d / "test_started.json"),
+                    str(self.d / "results.json")):
+            with self.assertRaises(SystemExit, msg=repr(out)):
+                score_test.main(["--rehearse", out])
+        self.assertEqual(self.scored_with, [])
+        self.assertFalse((self.d / "test_scored.json").exists() or (self.d / "test_started.json").exists())
+
+    def test_a_rehearsal_scores_the_calibration_split_and_marks_nothing(self):
+        out = self.d / "rehearsal.json"
+        score_test.main(["--rehearse", str(out)])
+        self.assertEqual(self.scored_with, [{"splits": ["calibration"], "started_mark": False}])
+        self.assertTrue(out.exists())
+        self.assertFalse((self.d / "test_scored.json").exists() or (self.d / "test_started.json").exists()
+                         or (self.d / "results.json").exists())
+
+    def test_the_real_run_marks_its_start_before_scoring_and_its_end_after(self):
+        score_test.main([])
+        self.assertEqual(self.scored_with, [{"splits": ["test"], "started_mark": True}])
+        scored = json.loads((self.d / "test_scored.json").read_text())
+        self.assertTrue(scored["scored"])
+        self.assertEqual(scored["commit"], "abc")
+        self.assertEqual(json.loads((self.d / "results.json").read_text())["split"], "test")
+        with self.assertRaisesRegex(SystemExit, "once"):
+            score_test.main([])
 
 
 if __name__ == "__main__":

@@ -4,9 +4,13 @@
     python -m valuescale.corpus.score_test --rehearse OUT.json   # B4: the calibration split, a rehearsal
     python -m valuescale.corpus.score_test                       # B7: the sealed test, once
 
-**Once.** The real run writes TEST_SCORED when it has scored the test, and
-refuses to run while that file exists. The rehearsal reads the calibration
-split only and never writes it: its output checks the code, not the method.
+**Once.** Before it reads any test table, the real run writes TEST_STARTED
+with the commit it runs on; when it has scored the test it writes
+TEST_SCORED. It refuses to run while either file exists, so a run that
+stopped midway (a power loss, an error) is not repeated silently: the
+owner decides. The rehearsal reads the calibration split only and writes
+neither file, and its output file may not be either of them or the test's
+results: its output checks the code, not the method.
 
 **What is scored**, for each deposit of the split (the walk's kept tables,
 less those the hand audit disagreed with):
@@ -32,12 +36,16 @@ less those the hand audit disagreed with):
   "unlike either" are read linear, B1) against median-50, with the exact
   one-sided McNemar test, paired by table;
 - every baseline (valuescale/baselines.py) on the same whole tables and on
-  each one's constructed log variant;
-- risk against coverage on the subsamples, by software and by instrument
-  family;
-- the foreign tables' answers (made from calibration deposits only, as the
-  protocol says): each S1 subsample z-scored per protein, as 0/1 presence,
-  and as per-protein percentile ranks.
+  each one's constructed log variant; a baseline that raises on a table is
+  recorded as an error for that table, and the run goes on;
+- risk against coverage on the subsamples: at each cut, the answers of one
+  class whose probability for that class reaches the cut (a gate's answer
+  always counts), and the share of them that are wrong; by software and by
+  instrument family;
+- the foreign tables' answers, made from calibration deposits only (the
+  protocol), whichever split is scored: each calibration deposit's S1
+  subsample z-scored per protein, as 0/1 presence, and as per-protein
+  percentile ranks.
 
 Not shipped; imports nothing from the service.
 """
@@ -47,6 +55,7 @@ import argparse
 import json
 import math
 import re
+import subprocess
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime
@@ -65,9 +74,11 @@ REPO = CORPUS.parents[1]
 DATA = REPO / "data" / "incoming" / "value-scale-corpus"
 INDEX = DATA / "px_index_2026-11-03.tsv"
 TEST_SCORED = CORPUS / "test_scored.json"
+TEST_STARTED = CORPUS / "test_started.json"
 RESULTS = REPO / "research" / "benchmark" / "value-scale-test" / "results.json"
 OUTCOMES = ("right", "wrong", "cant_tell", "unlike_either")
 CLASSES = {"linear": "linear", "constructed_log": "log", "real_log": "log"}
+CLASS_READINGS = ("linear", "log")
 COVERAGE_CUTS = (0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)
 FAMILIES = (("Orbitrap", r"orbitrap|exactive|exploris|astral|fusion|lumos|eclipse|ltq|velos|elite"),
             ("timsTOF", r"timstof|tims tof"),
@@ -173,6 +184,33 @@ def _foreign(values: np.ndarray) -> dict[str, np.ndarray]:
     return {"zscore_proteins": z, "presence": presence, "percentile_ranks": ranks}
 
 
+def _answer(rule: Callable[[np.ndarray], str | None], values: np.ndarray):
+    """A baseline's answer, or "error: ..." when it raises on the table."""
+    try:
+        return rule(values)
+    except Exception as e:  # noqa: BLE001 - one table's error is a result, not the end of the run
+        return f"error: {type(e).__name__}: {e}"[:300]
+
+
+def _is_error(answer) -> bool:
+    return isinstance(answer, str) and answer.startswith("error:")
+
+
+def risk_coverage(rows: list[Mapping], cuts=COVERAGE_CUTS) -> dict:
+    """At each cut c: the answers holding one class whose probability for
+    that class is at least c (a gate's answer, with no probability, always
+    counts), as a share of all rows (coverage), and the share of those that
+    are wrong (risk)."""
+    curve = {}
+    for c in cuts:
+        answered = [row for row in rows if len(row["set"]) == 1 and (
+            row["probabilities"] is None or row["probabilities"][row["set"][0]] >= c)]
+        wrong = sum(row["outcome"] == "wrong" for row in answered)
+        curve[str(c)] = {"coverage": len(answered) / len(rows) if rows else None,
+                         "risk": wrong / len(answered) if answered else None}
+    return curve
+
+
 def _row(r: Mapping, stratum: str, cls: str, report, form: str) -> dict:
     return {"accession": r["accession"], "stratum": stratum, "class": cls, "form": form, "columns": report.columns,
             "software": r.get("software"), "verdict": report.verdict, "set": list(report.set),
@@ -181,9 +219,16 @@ def _row(r: Mapping, stratum: str, cls: str, report, form: str) -> dict:
 
 
 def score_split(records: list[Mapping], values_of: Callable[[Mapping], np.ndarray], cal: calibrated.Calibration,
-                instrument_of: Mapping[str, str] | None = None, foreign: bool = False,
+                instrument_of: Mapping[str, str] | None = None, foreign_records: list[Mapping] | None = None,
                 progress: Callable[[str], None] | None = None) -> dict:
+    """The split's results; the foreign tables, when `foreign_records` is
+    given, are made from those records, which must all be calibration
+    deposits."""
     instrument_of = instrument_of or {}
+    if foreign_records is not None:
+        outside = [r["accession"] for r in foreign_records if r.get("split") != "calibration"]
+        if outside:
+            raise ValueError(f"foreign tables are made from calibration deposits only (the protocol); not {outside[:5]}")
     rows, tables, foreign_rows = [], [], defaultdict(list)
     for i, r in enumerate(records):
         values = np.asarray(values_of(r), dtype=np.float64)
@@ -199,21 +244,24 @@ def score_split(records: list[Mapping], values_of: Callable[[Mapping], np.ndarra
                 form, logged = strata.constructed_log(sub, r["accession"], s)
                 rows.append(_row(r, s, "linear", valuescale.detect(sub, cal), "as deposited"))
                 rows.append(_row(r, s, "constructed_log", valuescale.detect(logged, cal), f"constructed {form}"))
-                if foreign and s == "S1":
-                    for name, v in _foreign(sub).items():
-                        rep = valuescale.detect(v, cal)
-                        foreign_rows[name].append({"accession": r["accession"], "verdict": rep.verdict,
-                                                   "gate": rep.gate, "warning": rep.warning is not None})
             form, full_log = strata.constructed_log(values, r["accession"], "S1")
             whole = valuescale.detect(values, cal)
             tables.append({"accession": r["accession"], "software": r.get("software"),
                            "detector": whole.reading, "verdict": whole.verdict,
-                           "baselines": {name: f(values) for name, f in baselines.BASELINES.items()},
+                           "baselines": {name: _answer(f, values) for name, f in baselines.BASELINES.items()},
                            "log_form": form,
-                           "log_baselines": {name: f(full_log) for name, f in baselines.BASELINES.items()},
+                           "log_baselines": {name: _answer(f, full_log) for name, f in baselines.BASELINES.items()},
                            "log_detector": valuescale.detect(full_log, cal).reading})
         if progress:
             progress(f"{i + 1}/{len(records)} {r['accession']}")
+    for r in foreign_records or ():
+        if r.get("label") != "linear":
+            continue
+        sub, _ = strata.subsample(np.asarray(values_of(r), dtype=np.float64), r["accession"], "S1")
+        for name, v in _foreign(sub).items():
+            rep = valuescale.detect(v, cal)
+            foreign_rows[name].append({"accession": r["accession"], "verdict": rep.verdict,
+                                       "gate": rep.gate, "warning": rep.warning is not None})
 
     member_of = {m: name for name, members in calibrate.POOLS.items() for m in members}
     by_cal = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
@@ -244,29 +292,24 @@ def score_split(records: list[Mapping], values_of: Callable[[Mapping], np.ndarra
         res = {}
         for key, truth, field in (("linear", "linear", "baselines"), ("constructed_log", "log", "log_baselines")):
             readings = [t[field][name] for t in tables]
-            res[key] = {"right": sum(x == truth for x in readings), "no_answer": sum(x is None for x in readings),
-                        "wrong": sum(x is not None and x != truth for x in readings)}
+            res[key] = {"right": sum(x == truth for x in readings), "wrong": sum(x in CLASS_READINGS and x != truth
+                                                                               for x in readings),
+                        "no_answer": sum(x is None for x in readings), "error": sum(_is_error(x) for x in readings)}
         out["baselines"][name] = res
     out["detector_on_whole_tables"] = {
         "linear": dict(Counter(t["detector"] for t in tables)),
         "constructed_log": dict(Counter(t["log_detector"] for t in tables))}
 
-    curve = {}
-    for c_cut in COVERAGE_CUTS:
-        answered = [row for row in rows if len(row["set"]) == 1 and (
-            row["probabilities"] is None or max(row["probabilities"].values()) >= c_cut)]
-        wrong = sum(row["outcome"] == "wrong" for row in answered)
-        curve[str(c_cut)] = {"coverage": len(answered) / len(rows) if rows else None,
-                             "risk": wrong / len(answered) if answered else None}
-    out["risk_coverage"] = curve
+    out["risk_coverage"] = risk_coverage(rows)
     by_sw, by_inst = defaultdict(lambda: defaultdict(list)), defaultdict(lambda: defaultdict(list))
     for row in rows:
         by_sw[row["software"] or "not stated"][row["class"]].append(row["outcome"])
         by_inst[instrument_family(instrument_of.get(row["accession"], ""))][row["class"]].append(row["outcome"])
     out["by_software"] = {k: {c: tally(o) for c, o in v.items()} for k, v in sorted(by_sw.items())}
     out["by_instrument"] = {k: {c: tally(o) for c, o in v.items()} for k, v in sorted(by_inst.items())}
-    if foreign:
-        out["foreign"] = {name: {"n": len(fr), "verdicts": dict(Counter(f["verdict"] for f in fr)),
+    if foreign_records is not None:
+        out["foreign"] = {name: {"n": len(fr), "deposits": sorted(f["accession"] for f in fr),
+                                 "verdicts": dict(Counter(f["verdict"] for f in fr)),
                                  "gates": dict(Counter(f["gate"] or "none" for f in fr)),
                                  "warned": sum(f["warning"] for f in fr)} for name, fr in foreign_rows.items()}
     out["rows"] = rows
@@ -274,15 +317,49 @@ def score_split(records: list[Mapping], values_of: Callable[[Mapping], np.ndarra
     return out
 
 
-def check_not_scored(mark: Path = TEST_SCORED) -> None:
+def check_not_scored(mark: Path | None = None, started: Path | None = None) -> None:
+    """Refuses when the test has been scored, or a scoring started and did
+    not finish (`started` defaults to TEST_STARTED's name beside `mark`)."""
+    mark = TEST_SCORED if mark is None else mark
+    started = mark.with_name(TEST_STARTED.name) if started is None else started
     if mark.exists():
         raise SystemExit(f"the sealed test is scored once, and {mark} says it has been: "
                          f"{json.loads(mark.read_text(encoding='utf-8')).get('scored_at')}")
+    if started.exists():
+        about = json.loads(started.read_text(encoding="utf-8"))
+        raise SystemExit(f"a scoring of the sealed test started at {about.get('started_at')} on commit "
+                         f"{about.get('commit')} and did not finish ({started}); the owner decides what follows")
+
+
+def _write_mark(path: Path, data: Mapping) -> None:
+    path.write_text(json.dumps(dict(data), indent=1) + "\n", encoding="utf-8", newline="\n")
+
+
+def mark_started(mark: Path, about: Mapping) -> None:
+    _write_mark(mark, {"started": True, "started_at": datetime.now().isoformat(timespec="seconds"), **about})
 
 
 def mark_scored(mark: Path, about: Mapping) -> None:
-    mark.write_text(json.dumps({"scored": True, "scored_at": datetime.now().isoformat(timespec="seconds"),
-                                **about}, indent=1) + "\n", encoding="utf-8", newline="\n")
+    _write_mark(mark, {"scored": True, "scored_at": datetime.now().isoformat(timespec="seconds"), **about})
+
+
+def _commit() -> dict:
+    """The commit this runs on, and whether the working tree is clean."""
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True).stdout.strip()
+    return {"commit": git("rev-parse", "HEAD"), "clean": git("status", "--porcelain") == ""}
+
+
+def _rehearsal_out(text: str) -> Path:
+    """The rehearsal's output file: never empty, never a file that records
+    the sealed test."""
+    if not text.strip():
+        raise SystemExit("--rehearse needs the file to write the rehearsal into")
+    out = Path(text)
+    reserved = {p.resolve() for p in (TEST_SCORED, TEST_STARTED, RESULTS)}
+    if out.resolve() in reserved:
+        raise SystemExit(f"--rehearse would write over {out}, which records the sealed test; choose another file")
+    return out
 
 
 def _clean(v):
@@ -304,25 +381,30 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--rehearse", metavar="OUT", help="score the calibration split instead, into OUT")
     args = parser.parse_args(argv)
+    rehearse = args.rehearse is not None
+    if rehearse:
+        out = _rehearsal_out(args.rehearse)
+    else:
+        check_not_scored(TEST_SCORED, TEST_STARTED)
+        out = RESULTS
+    split = "calibration" if rehearse else "test"
     walk = [json.loads(line) for line in (CORPUS / "walk.jsonl").read_text(encoding="utf-8").splitlines() if line]
     audit = json.loads((CORPUS / "audit.json").read_text(encoding="utf-8"))
-    split = "calibration" if args.rehearse else "test"
-    if not args.rehearse:
-        check_not_scored()
     cal = calibrated.load()
     records = scored_records(walk, audit, split)
+    foreign_records = scored_records(walk, audit, "calibration")
     inst = instruments(INDEX.read_bytes()) if INDEX.exists() else {}
-    result = score_split(records, _values_of, cal, instrument_of=inst, foreign=True,
+    about = {"calibration": cal.id, "calibration_corpus_sha256": cal.corpus_sha256, **_commit()}
+    if not rehearse:
+        mark_started(TEST_STARTED, {**about, "deposits": len(records)})
+    result = score_split(records, _values_of, cal, instrument_of=inst, foreign_records=foreign_records,
                          progress=lambda s: print(s, flush=True))
-    result = {"split": split, "rehearsal": bool(args.rehearse), "calibration": cal.id,
-              "calibration_corpus_sha256": cal.corpus_sha256, "run": datetime.now().isoformat(timespec="seconds"),
+    result = {"split": split, "rehearsal": rehearse, **about, "run": datetime.now().isoformat(timespec="seconds"),
               **result}
-    out = Path(args.rehearse) if args.rehearse else RESULTS
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(_clean(result), indent=1) + "\n", encoding="utf-8", newline="\n")
-    if not args.rehearse:
-        mark_scored(TEST_SCORED, {"calibration": cal.id, "calibration_corpus_sha256": cal.corpus_sha256,
-                                  "results": RESULTS.relative_to(REPO).as_posix()})
+    if not rehearse:
+        mark_scored(TEST_SCORED, {**about, "results": out.as_posix()})
     print(f"wrote {out}")
     return 0
 
