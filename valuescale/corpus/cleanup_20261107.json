@@ -1,0 +1,63 @@
+{
+ "about": "The records the fixes of 2026-11-07 touch, each with its reasons (research/notebooks/value_scale_corpus.py fourth-visit-selection; revisit --fourth visits them).",
+ "probe": {
+  "now_differs": 2,
+  "now_unreadable": 1,
+  "read": 1584
+ },
+ "reasons": {
+  "decimal comma": 4,
+  "empty member": 2,
+  "header": 2,
+  "protein groups": 4,
+  "quantity case": 1,
+  "separator": 2
+ },
+ "records": {
+  "PXD022575": [
+   "header"
+  ],
+  "PXD023508": [
+   "header"
+  ],
+  "PXD036850": [
+   "decimal comma"
+  ],
+  "PXD043761": [
+   "decimal comma"
+  ],
+  "PXD046085": [
+   "empty member"
+  ],
+  "PXD046550": [
+   "protein groups"
+  ],
+  "PXD047604": [
+   "decimal comma"
+  ],
+  "PXD053298": [
+   "separator"
+  ],
+  "PXD053397": [
+   "separator"
+  ],
+  "PXD054457": [
+   "quantity case"
+  ],
+  "PXD056559": [
+   "empty member"
+  ],
+  "PXD059079": [
+   "protein groups"
+  ],
+  "PXD062541": [
+   "decimal comma"
+  ],
+  "PXD064789": [
+   "protein groups"
+  ],
+  "PXD070147": [
+   "protein groups"
+  ]
+ }
+}
