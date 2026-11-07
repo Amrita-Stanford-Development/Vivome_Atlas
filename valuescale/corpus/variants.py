@@ -49,8 +49,11 @@ def induce_missing(values: np.ndarray, target: float, rng: np.random.Generator, 
     """Removes observed values with a chance that falls with log intensity
     (logit-linear, Li & Smyth 2023), until about `target` of all entries are
     missing. `log_values` gives each entry's log intensity (the same table on
-    a log scale); a table already more missing than `target` is unchanged."""
-    out = np.array(values, dtype=np.float64)
+    a log scale); a table already more missing than `target` is unchanged.
+    The copy is row-first (C order) whatever the input's order, so the
+    values removed through its flat view reach it (B4 found a column-first
+    table came back unchanged)."""
+    out = np.array(values, dtype=np.float64, order="C")
     observed = ~np.isnan(out) & ~np.isnan(log_values)
     have = 1.0 - observed.mean()
     if have >= target or not observed.any():

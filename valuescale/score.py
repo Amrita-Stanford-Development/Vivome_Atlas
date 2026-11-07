@@ -1,7 +1,15 @@
 """The class scores: how much a table looks like each class.
 
 One score per class (research/benchmark/protocol-value-scale.md, "The
-claim"), combining two kinds, by a rule fixed on the design split before any
+claim"). **Since protocol amendment 5 (2026-11-07, before any calibration
+statistic), a class's score is the discriminative probability alone**
+(`class_scores`). The typicality part below is still computed, and the
+reply warns when it is 0 (valuescale/method.py), but it no longer enters
+the score. The design rank floors at 0 for any table farther from the
+design rows than every one of them, and at the umbrella threshold's k = 1
+one such calibration table would have put its class in every answer set.
+
+B2 combined the two kinds by a rule fixed on the design split before any
 calibration statistic (valuescale/bank/expectations/b2.json):
 
 - **Typicality:** the distance from the table's features to the class's
@@ -13,13 +21,14 @@ calibration statistic (valuescale/bank/expectations/b2.json):
 - **Discriminative:** a ridge logistic regression of log against linear on
   the features both classes share, standardised by the pooled median and
   IQR/1.349, a missing feature at 0 (the median).
-- **Combination:** the typicality distance becomes a design rank for class
-  y, the share of class y's design rows (each scored with its deposit left
-  out) at least as far from the rest; the class score is the smaller of that
-  rank and the probability of class y. A table must look like class y, and
-  not clearly like the other class. (The probability is not ranked: design
-  rows are so confidently classed that a rank would score 0 for any table
-  less extreme than all of them, however clearly it belongs to y.)
+- **Combination (B2, replaced by amendment 5):** the typicality distance
+  becomes a design rank for class y, the share of class y's design rows
+  (each scored with its deposit left out) at least as far from the rest;
+  B2's class score was the smaller of that rank and the probability of
+  class y. (The probability is not ranked: design rows are so confidently
+  classed that a rank would score 0 for any table less extreme than all of
+  them, however clearly it belongs to y.) `class_parts` still gives the
+  rank, as `typicality`.
 
 Thresholds on the class scores come from valuescale/conformal.py.
 """
@@ -200,13 +209,11 @@ def class_parts(features: Mapping[str, float], model: Model) -> dict[str, dict[s
 
 
 def class_scores(features: Mapping[str, float], model: Model) -> dict[str, float]:
-    return {y: min(p["typicality"], p["discriminative"]) for y, p in class_parts(features, model).items()}
+    """Each class's score: its probability (protocol amendment 5)."""
+    return {y: p["probability"] for y, p in class_parts(features, model).items()}
 
 
 def design_scores(model: Model) -> dict[str, list[float]]:
-    """Each class's design rows' own scores, deposit left out."""
-    out = {}
-    for y in CLASSES:
-        ref = model.reference[y]
-        out[y] = [min(_typicality_rank(model, y, d), p) for d, p in zip(ref["typicality"], ref["discriminative"])]
-    return out
+    """Each class's design rows' own scores, deposit left out: their
+    probabilities of their own class."""
+    return {y: list(model.reference[y]["discriminative"]) for y in CLASSES}

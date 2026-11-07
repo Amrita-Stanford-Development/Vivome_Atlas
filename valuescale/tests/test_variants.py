@@ -54,6 +54,18 @@ class VariantTests(unittest.TestCase):
         kept = ~np.isnan(out)
         self.assertLess(np.median(np.log2(self.linear[removed])), np.median(np.log2(self.linear[kept])))
 
+    def test_a_table_stored_column_first_gets_the_same_missing_values(self):
+        # a table parsed cells x genes and transposed is Fortran-ordered; B4
+        # found its missing_40 and missing_70 were copies of the table
+        column_first = np.asfortranarray(self.linear)
+        self.assertTrue(column_first.flags.f_contiguous and not column_first.flags.c_contiguous)
+        for source, label in ((self.linear, "linear"), (np.log2(self.linear), "log")):
+            row = {n: v for n, v, _ in variants.variants("t", np.ascontiguousarray(source), label)}
+            col = {n: v for n, v, _ in variants.variants("t", np.asfortranarray(source), label)}
+            for name in ("missing_40", "missing_70"):
+                self.assertAlmostEqual(np.isnan(col[name]).mean(), int(name[-2:]) / 100, delta=0.02, msg=name)
+                np.testing.assert_array_equal(col[name], row[name], err_msg=f"{label} {name}")
+
     def test_variants_are_the_same_on_every_run(self):
         again = {name: v for name, v, _ in variants.variants("t", self.linear, "linear")}
         for name, (v, _) in self.made.items():

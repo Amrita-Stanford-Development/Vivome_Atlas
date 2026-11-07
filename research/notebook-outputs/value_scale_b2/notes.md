@@ -146,3 +146,20 @@ The two fixes after the first run are in the plan's ledger as rulings.
    7.9%. A log table filtered to the proteins seen in every cell has none
    either, so the rule is decided on design data, before any calibration
    score is computed.
+
+## Found in B4 (2026-11-07)
+
+B4's design part found a fault in our own code that this run did not see.
+`induce_missing` (valuescale/corpus/variants.py) wrote its missing values
+into a temporary copy whenever a table is stored column-first (Fortran
+order). Eight bank tables are: fulcher_tmt, furtwangler_batchcorr,
+furtwangler_batchcorr_norm, furtwangler_log2, furtwangler_log2_imputed,
+furtwangler_log2_nan, furtwangler_log2fc_nan and furtwangler_log2_raw_sn.
+Their missing_40 and missing_70 variants were exact copies of the table.
+So 16 of this run's 571 labelled variants tested nothing new, and
+B2_drift's medians for those two variants include 16 copies.
+
+This report stays as the run's record. With the owner's choice ("Accept,
+fix, calibrate"), the fault was fixed test first, and B4 scores the real
+variants (its report and notes, in research/notebook-outputs/value_scale_b4/). The design
+rows, the model and the calibration do not use these variants.

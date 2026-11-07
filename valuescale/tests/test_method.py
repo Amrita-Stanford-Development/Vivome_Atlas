@@ -71,6 +71,55 @@ class MethodTests(unittest.TestCase):
         if far["verdict"] in ("cant_tell", "unlike_either"):
             self.assertTrue(far["reason"])
 
+    def test_a_table_with_no_missing_value_is_cant_tell(self):
+        # protocol amendment 5: it may have been filled in (imputed)
+        x = _linear(seed=94)
+        full = np.where(np.isnan(x), np.nanmedian(x), x)
+        a = method.assess(np.log2(full), self.model, self.thresholds)
+        self.assertEqual((a["gate"], a["verdict"]), (None, "cant_tell"))
+        self.assertEqual(a["reason"], method.NO_GAPS_REASON)
+        self.assertEqual(a["set"], ["linear", "log"])
+
+    def test_the_gates_come_before_the_no_gaps_rule(self):
+        counts = np.random.default_rng(3).integers(1, 400, size=(300, 30)).astype(float)
+        self.assertEqual(method.assess(counts, self.model, self.thresholds)["gate"], "counts")
+
+    def test_the_score_is_the_probability_and_the_set_follows_it(self):
+        a = method.assess(_linear(seed=93), self.model, self.thresholds)
+        for y in ("linear", "log"):
+            self.assertEqual(a["scores"][y], a["parts"][y]["probability"])
+            self.assertEqual(y in a["set"], a["scores"][y] >= self.thresholds[y])
+
+    def test_cant_tell_and_unlike_either_name_the_probabilities(self):
+        x = _linear(seed=92)
+        low = method.assess(x, self.model, {"linear": 0.0, "log": 0.0})
+        self.assertEqual(low["verdict"], "cant_tell")
+        self.assertIn("linear probability", low["reason"])
+        high = method.assess(x, self.model, {"linear": 1.01, "log": 1.01})
+        self.assertEqual(high["verdict"], "unlike_either")
+        self.assertIn("log probability", high["reason"])
+
+    def test_a_table_unlike_the_design_rows_is_warned_but_its_set_is_kept(self):
+        x = _linear(seed=91)
+        x[:, ::2] *= 1e4  # wildly uneven columns: far from every design row
+        a = method.assess(x, self.model, self.thresholds)
+        self.assertEqual([a["parts"][y]["typicality"] for y in ("linear", "log")], [0.0, 0.0])
+        self.assertEqual(a["warning"], method.UNLIKE_DESIGN_WARNING)
+        self.assertEqual(a["set"], [y for y in ("linear", "log") if a["scores"][y] >= self.thresholds[y]])
+        self.assertIsNone(method.assess(_linear(seed=90), self.model, self.thresholds)["warning"])
+
+    def test_calibration_scores_a_table_a_gate_decides(self):
+        counts = np.random.default_rng(3).integers(1, 400, size=(300, 30)).astype(float)
+        parts = method.calibration_parts(counts, self.model)
+        self.assertIsNotNone(parts)
+        self.assertAlmostEqual(parts["linear"]["probability"] + parts["log"]["probability"], 1.0, places=12)
+        centred = np.random.default_rng(1).normal(0, 1, size=(300, 30))
+        self.assertIsNotNone(method.calibration_parts(centred, self.model))
+
+    def test_calibration_parts_are_none_without_per_cell_statistics(self):
+        presence = np.where(np.isnan(_linear()), 0.0, 1.0)
+        self.assertIsNone(method.calibration_parts(presence, self.model))
+
 
 if __name__ == "__main__":
     unittest.main()

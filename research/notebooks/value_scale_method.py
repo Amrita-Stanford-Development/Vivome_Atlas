@@ -14,6 +14,13 @@ until B3, so no guarantee is claimed).
 
 Writes research/notebook-outputs/value_scale_b2/report.md and report.json.
 
+Since protocol amendment 5 (B4) the package's class score is the
+probability alone, a table with no missing value gets "can't tell", and
+the bank's missing-value variants reach a column-first table too, so a
+re-run of this notebook gives the amended method's answers, not the B2
+report's. That report stays the record of its run; B4's notebook
+(value_scale_calibrate.py) reuses this one's tables, design rows and models.
+
     python research/notebooks/value_scale_method.py
 """
 from __future__ import annotations

@@ -96,7 +96,37 @@ class CleanUpTests(unittest.TestCase):
         x[1, 0] = 0.0
         before = x.copy()
         gates.gate(x)
+        gates.clean(x)
         np.testing.assert_array_equal(x, before)
+
+
+class CleanTests(unittest.TestCase):
+    """clean() is the clean-up a table gets when no gate decides it, applied
+    whatever the gates would say: calibration scores every subsample on it
+    (protocol amendment 5)."""
+
+    def test_it_is_the_clean_up_of_a_table_no_gate_decides(self):
+        x = _lognormal()
+        x[:3, 0] = 0.0
+        x[5, 5] = -1.0  # one stray negative
+        np.testing.assert_array_equal(gates.clean(x), gates.gate(x).values)
+
+    def test_a_table_the_negatives_gate_decides_still_loses_its_negatives(self):
+        centred = np.random.default_rng(1).normal(0, 1, size=(200, 30))
+        self.assertEqual(gates.gate(centred).gate, "negatives")
+        cleaned = gates.clean(centred)
+        self.assertFalse((cleaned[~np.isnan(cleaned)] < 0).any())
+
+    def test_a_table_the_counts_gate_decides_still_loses_its_ties_at_the_minimum(self):
+        counts = np.random.default_rng(2).integers(0, 400, size=(300, 30)).astype(float)
+        counts[:5, 0] = 0.0
+        self.assertEqual(gates.gate(counts).gate, "counts")
+        self.assertTrue(np.isnan(gates.clean(counts)[:5, 0]).all())
+
+    def test_non_finite_values_are_missing(self):
+        x = _lognormal()
+        x[0, 0] = np.inf
+        self.assertTrue(np.isnan(gates.clean(x)[0, 0]))
 
 
 if __name__ == "__main__":

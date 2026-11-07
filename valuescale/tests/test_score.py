@@ -1,5 +1,7 @@
-"""The class scores: typicality and discriminative design ranks, combined by
-their minimum, fitted on design rows grouped by deposit."""
+"""The class scores: since protocol amendment 5, a class's score is the
+classifier's probability of it; the typicality distance and its design rank
+are still computed, for the reply's warning. Fitted on design rows grouped
+by deposit."""
 from __future__ import annotations
 
 import json
@@ -41,11 +43,16 @@ class ScoreTests(unittest.TestCase):
         self.assertGreater(s["log"], 0.3)
         self.assertLess(s["linear"], 0.05)
 
-    def test_a_row_like_neither_scores_low_for_both(self):
+    def test_a_row_like_neither_is_atypical_for_both(self):
         far = {k: v * 5 + 3 for k, v in self.centre["log"].items()}
-        s = score.class_scores(far, self.model)
-        self.assertLess(s["linear"], 0.05)
-        self.assertLess(s["log"], 0.05)
+        parts = score.class_parts(far, self.model)
+        self.assertEqual(parts["linear"]["typicality"], 0.0)
+        self.assertEqual(parts["log"]["typicality"], 0.0)
+
+    def test_the_two_scores_add_up_to_one(self):
+        for f in (self.centre["linear"], self.centre["log"], {k: v * 5 + 3 for k, v in self.centre["log"].items()}):
+            s = score.class_scores(f, self.model)
+            self.assertAlmostEqual(s["linear"] + s["log"], 1.0, places=12)
 
     def test_a_missing_feature_is_allowed(self):
         f = dict(self.centre["linear"], level_spread=math.nan)
@@ -59,11 +66,19 @@ class ScoreTests(unittest.TestCase):
         self.assertNotEqual(a["linear"]["distance"], b["linear"]["distance"])
         self.assertEqual(a["linear"]["probability"], b["linear"]["probability"])
 
-    def test_the_score_is_the_smaller_part(self):
-        parts = score.class_parts(self.centre["linear"], self.model)
-        scores = score.class_scores(self.centre["linear"], self.model)
+    def test_the_score_is_the_probability_alone(self):
+        # protocol amendment 5: typicality warns, it never enters the score
+        far = {k: v * 5 + 3 for k, v in self.centre["log"].items()}
+        for f in (self.centre["linear"], far):
+            parts = score.class_parts(f, self.model)
+            scores = score.class_scores(f, self.model)
+            for y in ("linear", "log"):
+                self.assertEqual(scores[y], parts[y]["probability"])
+
+    def test_design_scores_are_the_design_rows_own_probabilities(self):
+        d = score.design_scores(self.model)
         for y in ("linear", "log"):
-            self.assertEqual(scores[y], min(parts[y]["typicality"], parts[y]["discriminative"]))
+            self.assertEqual(d[y], self.model.reference[y]["discriminative"])
 
     def test_design_scores_leave_the_deposit_out(self):
         rows = list(self.rows)

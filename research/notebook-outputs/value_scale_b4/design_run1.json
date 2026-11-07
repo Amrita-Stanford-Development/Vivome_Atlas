@@ -1,0 +1,47 @@
+{
+ "step": "b4",
+ "part": "design",
+ "run": "2026-11-07T07:27:42",
+ "seconds": 163,
+ "rows": {
+  "B4_model": {
+   "pass": true,
+   "design_rows": 89,
+   "linear_rows": 39,
+   "log_rows": 50,
+   "deposits": 18,
+   "differences": []
+  },
+  "B4_no_gaps": {
+   "pass": false,
+   "condition_holds": [
+    "furtwangler_log2_imputed"
+   ],
+   "rule_decides": [
+    "furtwangler_log2_imputed"
+   ],
+   "variants_seen": 691,
+   "variants_decided": [
+    "furtwangler_log2/per_protein_median",
+    "furtwangler_log2_imputed/times_1e-6",
+    "furtwangler_log2_imputed/times_1e-3",
+    "furtwangler_log2_imputed/times_1e3",
+    "furtwangler_log2_imputed/per_cell_cpm",
+    "furtwangler_log2_imputed/per_cell_percent",
+    "furtwangler_log2_imputed/log2",
+    "furtwangler_log2_imputed/log10",
+    "furtwangler_log2_imputed/ln",
+    "furtwangler_log2_imputed/log2_plus1_after_min",
+    "furtwangler_log2_imputed/log2_plus10",
+    "furtwangler_log2_imputed/log2_minus_min",
+    "furtwangler_log2_imputed/log2_times_0.5",
+    "furtwangler_log2_imputed/log2_zeros_imputed",
+    "furtwangler_log2_imputed/subsample_20",
+    "furtwangler_log2_imputed/subsample_50",
+    "furtwangler_log2_imputed/subsample_300",
+    "furtwangler_log2_imputed/missing_40",
+    "furtwangler_log2_imputed/missing_70"
+   ]
+  }
+ }
+}

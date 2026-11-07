@@ -14,6 +14,10 @@ Values are genes x cells, NaN where missing. In order:
    and imputation spikes. Ties and minima are unchanged by x -> c*x and by
    x -> a + c*x, so the clean-up is too.
 
+`clean` applies steps 1, 2's making-missing and 4 to any table, whatever the
+gates would say: calibration scores every subsample on it (protocol
+amendment 5).
+
 The numbers are the B2 expectations' (valuescale/bank/expectations/b2.json):
 real transformed tables are 15 to 50% negative, while a log2 of a linear
 table on a small scale is 1 to 2% negative (the values below 1).
@@ -66,3 +70,15 @@ def gate(values: np.ndarray) -> GateResult:
     ties = _ties_at_minimum(x)
     x[ties] = np.nan
     return GateResult(None, None, x, share, stray, int(bad.sum()), int(ties.sum()))
+
+
+def clean(values: np.ndarray) -> np.ndarray:
+    """The values cleaned as for a table no gate decides (non-finite values,
+    negatives and ties at a cell's minimum made missing), whatever the gates
+    would say. Calibration scores every subsample on these, gated or not
+    (research/benchmark/protocol-value-scale.md, amendment 5)."""
+    x = np.array(values, dtype=np.float64)
+    x[~np.isfinite(x)] = np.nan
+    x[x < 0] = np.nan
+    x[_ties_at_minimum(x)] = np.nan
+    return x
