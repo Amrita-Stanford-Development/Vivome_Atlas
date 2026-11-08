@@ -30,12 +30,25 @@ Content-Type: multipart/form-data
 ```
 
 **`modality`** says what the matrix measures:
-- **`"prot"`:** protein intensities, linear or log. A linear upload is
-  found and log2-transformed (`value_scale` in the response). The rule
-  reads a linear table on a small scale (non-zero median under 50) as log;
-  the request can say so instead (`value_scale`, below).
+- **`"prot"`:** protein intensities, raw or already log. Unless the request
+  states the reading (`value_scale`, below), the service's calibrated check
+  reads the table (`valuescale/`, B4; `research/value-scale-b5-design.md`):
+  - a table it reads as raw ("linear") is log2-transformed, each 0 made
+    missing ("not detected");
+  - a table it reads as log is used as it is;
+  - when it cannot tell, or finds the table unlike both, the table is read
+    as raw, the cheaper mistake (B1's cost study);
+  - under a log reading a 0 is not measured, unless `zeros` says otherwise,
+    or the table is centred (at least `valuescale.gates.NEGATIVE_SHARE`, 1%,
+    of its observed values negative), where a 0 is a value;
+  - its own raw reading of a table that holds negative values is answered
+    400, with a `reason` (below): no intensity is negative, so the file
+    contradicts itself, and a refusal costs one more Send where a wrong
+    guess would be silent.
 - **`"rna"`:** expects log-normalised expression, as the reference's own RNA
-  is (the atlas h5ad's `X`, log1p of normalised counts). In RNA a 0 is a
+  is (the atlas h5ad's `X`, log1p of normalised counts). RNA is read by the
+  median rule (`service/model/canonical_preprocessing.json`): linear when no
+  observed value is negative and their median is over 50. In RNA a 0 is a
   measured value, so it votes on the scale. Raw counts are usually not
   transformed:
   - their median, zeros included, is under the linear-scale threshold of
@@ -45,25 +58,29 @@ Content-Type: multipart/form-data
   Normalise and log1p counts before uploading.
 
 **`value_scale`** states a protein upload's scale, instead of leaving it to
-the rule (`research/value-scale-plan.md`, Phase A):
-- **`"auto"`, empty or no field:** the rule reads it, as always; the reply
-  is unchanged.
+the service (`research/value-scale-plan.md`, Phase A; the site asks the
+uploader, B5):
+- **`"auto"`, empty or no field:** the service's check reads it (above).
 - **`"linear"`:** raw intensities: each 0 is made missing and log2 is taken
   of the rest. A table with a negative value is answered 400 (no intensity
-  is negative), with a `reason`.
+  is negative), with the `reason` "Choose Already log, or I don't know, for
+  this file."
 - **`"log"`:** already log: the values are used as they are.
 
 Any other value is answered 400 naming the three, and so is `"linear"` or
 `"log"` with `modality` `"rna"` (an RNA upload's scale is always read by the
-rule). The response's `value_scale` then also carries `stated`.
+rule). The response's `value_scale` then also carries `stated`; the check
+still runs, and its verdict is still reported.
 
 **`zeros`** says what a 0 in an already-log table means, with `value_scale`
 `"log"`:
-- **`"auto"`, empty or no field:** a 0 counts as a measured value, as always.
+- **`"auto"`, empty or no field:** a 0 is not measured, so it is made
+  missing (B1), unless the table is centred, where it is a value (the
+  owner's choice, 2026-11-08: B1's evidence came from tables without
+  negative values).
 - **`"missing"`:** a 0 is not measured (a table that writes "not seen" as 0),
   so it is made missing.
-- **`"measured"`:** a 0 is a real value; the same as `"auto"` today, but
-  stated.
+- **`"measured"`:** a 0 is a real value.
 
 Without `value_scale` `"log"` it is answered 400: read as raw intensities,
 every 0 is "not detected", since log2 of 0 does not exist, and with
@@ -196,7 +213,10 @@ read as missing.
   "n_features_unmatched" : "<int>",
   "value_scale"          : {"detected": "linear" | "log" | "unknown", "transformed": "<bool>",
                             "stated": "linear" | "log" (only when the request stated one),
-                            "zeros": "missing" | "measured" (only when the request said it)},
+                            "zeros": "missing" | "measured" (only when the request said it),
+                            "verdict": "linear" | "log" | "cant_tell" | "unlike_either" | "unknown" (protein),
+                            "zeros_read": "missing" | "measured" (protein, when a value was observed),
+                            "evidence": {"<the check's report>"} (protein, when a value was observed)},
   "label_space"          : {"restricted_to_supported_classes": "<bool>", "candidate_classes": ["<string>", "..."]},
   "gene_id_resolution"   : {"matched": "<int>", "unmapped": "<int>", "ambiguous": "<int>",
                             "unmapped_identifiers": ["<string>", "..."], "ambiguous_identifiers": ["<string>", "..."]},
@@ -281,19 +301,39 @@ The default allows the site served locally on port 8000. The service also
 answers CORS preflights, including Chrome's Private Network Access check.
 
 **`value_scale`** (additive, not yet in a strict reading of the contract
-above — see `service/README.md`) reports whether the upload was detected as
-linear-scale intensity data (e.g. a raw DIA-NN report, values in the
-hundreds to tens of thousands) and log2-transformed before anything else
-touched it. `"detected": "log"` means the upload already looked log-scale
-and was left alone; `"unknown"` means the upload had no observed values at
-all. The detection rule and its threshold are in
-`service/model/canonical_preprocessing.json`. With a stated reading
-(`value_scale` in the request), `detected` is still the rule's reading,
-`stated` is the request's, and `transformed` follows the stated one: a
-reply with `"detected": "log", "transformed": true, "stated": "linear"` read
-raw intensities the rule would have taken as log. A table with no observed
-value stays `"unknown"`, untransformed, whatever was stated; the stated
-reading is still echoed.
+above — see `service/README.md`) reports how the upload's values were read
+before anything else touched them, and whether they were log2-transformed:
+- **`detected`:** the service's own reading. For protein, the check's
+  "linear" or "log", or "linear" when it could not tell; for RNA, the
+  median rule's (`service/model/canonical_preprocessing.json`). `"unknown"`
+  means the upload had no observed values at all.
+- **`stated`:** the request's reading, when it stated one. `transformed`
+  follows it: a reply with `"detected": "log", "transformed": true,
+  "stated": "linear"` read raw intensities the service would have taken as
+  log. A table with no observed value stays `"unknown"`, untransformed,
+  whatever was stated; the stated reading is still echoed.
+- **`verdict`** (protein): the check's own answer, "linear", "log",
+  "cant_tell" (both readings fit), "unlike_either" (neither does), or
+  "unknown" with no observed value.
+- **`zeros_read`** (protein): what a 0 was read as under the applied
+  reading, "missing" or "measured" (always "missing" under a raw reading).
+- **`evidence`** (protein): the check's report, `valuescale.ScaleReport`
+  as JSON (`valuescale/report.py`): `verdict`, `reading`, `set`,
+  `stratum`, `columns`, `rows`, `gate`, `reason`, `warning`,
+  `probabilities`, `thresholds`, `typicality`, `statistics`,
+  `calibration`, `guarantee` and `notes`. A number that is not finite is
+  `null`, so the reply stays strict JSON.
+
+The service's own raw reading of a protein table with negative values is
+answered 400:
+`{"error": "<n> values are negative, so they are not raw intensities, yet the service's check ...", "reason": "If the values are already log, choose Already log. If they are raw intensities, remove the negative values and send the file again."}`.
+
+`config.VALUE_SCALE_METHOD` ("calibrated") picks how a protein table left
+to the service is read. "median" is the rule before B5, with its reply
+exactly as it was (no `verdict`, `zeros_read` or `evidence`; a 0 under a
+log reading measured); the frozen test scripts keep it by name
+(`alignment.scale_method`). It is a constant, not a request field: going
+back is a joint redeploy of the service and the site.
 
 **`gene_id_resolution`** reports how the upload's own feature identifiers
 (gene symbols, Ensembl gene IDs, UniProt accessions, or a DIA-NN-style

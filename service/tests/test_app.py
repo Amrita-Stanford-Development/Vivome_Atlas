@@ -403,6 +403,49 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         lines += [g + "," + ",".join(f"{v:.3f}" for v in row) for g, row in zip(feature_genes[:100], values)]
         return "\n".join(lines).encode()
 
+    def _lognormal_matrix(self, feature_genes, negatives=0):
+        """Raw intensities the calibrated check reads as raw, 30% missing (a
+        table with no gap is "can't tell": it may have been filled in), with
+        `negatives` values made negative."""
+        rng = np.random.default_rng(7)
+        values = np.exp2(rng.normal(14, 3, size=(300, 1)) + rng.normal(0, 0.7, size=(300, 25)))
+        values[rng.random(values.shape) < 0.3] = np.nan
+        observed = np.flatnonzero(~np.isnan(values))
+        values.flat[rng.choice(observed, size=negatives, replace=False)] *= -1
+        lines = ["gene," + ",".join(f"c{i}" for i in range(25))]
+        lines += [g + "," + ",".join("" if np.isnan(v) else f"{v:.3f}" for v in row)
+                  for g, row in zip(feature_genes[:300], values)]
+        return "\n".join(lines).encode()
+
+    def test_an_unsure_raw_reading_of_negatives_is_refused_in_clear_words(self):
+        matrix = self._lognormal_matrix(self._install_synthetic_bundle(), negatives=2)
+        url = f"{self.base_url}/api/project"
+        status, payload = _post_multipart(url, b"prot", matrix)
+        self.assertEqual(status, 400)
+        self.assertIn("negative", payload["error"])
+        self.assertEqual(payload["reason"], alignment.UNDECIDED_NEGATIVES_REASON)
+        status, payload = _post_multipart(url, b"prot", matrix, {"value_scale": b"linear"})
+        self.assertEqual((status, payload["reason"]), (400, "Choose Already log, or I don't know, for this file."))
+
+    def test_a_protein_reply_says_the_checks_verdict(self):
+        matrix = self._lognormal_matrix(self._install_synthetic_bundle())
+        url = f"{self.base_url}/api/project"
+        status, prot = _post_multipart(url, b"prot", matrix)
+        self.assertEqual(status, 200)
+        self.assertEqual((prot["value_scale"]["verdict"], prot["value_scale"]["zeros_read"]), ("linear", "missing"))
+        self.assertEqual(prot["value_scale"]["evidence"]["verdict"], "linear")
+        status, rna = _post_multipart(url, b"rna", matrix)
+        self.assertEqual(status, 200)
+        for key in ("verdict", "zeros_read", "evidence"):
+            self.assertNotIn(key, rna["value_scale"])
+
+    def test_the_reply_is_strict_json_with_the_evidence(self):
+        matrix = self._lognormal_matrix(self._install_synthetic_bundle())
+        status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", matrix)
+        self.assertEqual(status, 200)
+        self.assertIn("evidence", payload["value_scale"])
+        json.dumps(payload, allow_nan=False)  # NaN or Infinity anywhere would raise
+
     def test_a_stated_value_scale_is_applied_and_said_in_the_reply(self):
         """Phase A's stated fields on top of the median rule, as above."""
         with alignment.scale_method("median"):

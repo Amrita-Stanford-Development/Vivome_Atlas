@@ -113,6 +113,9 @@ def _parse_bool_field(value: bytes | None) -> bool:
 
 VALUE_SCALE_CHOICES = ("auto", *alignment.READINGS)
 ZEROS_CHOICES = ("auto", *alignment.ZEROS)
+# The advice when a stated raw reading meets negative values; when the reading
+# was the service's own, the refusal carries its own (alignment.NotIntensities).
+STATED_LINEAR_REASON = "Choose Already log, or I don't know, for this file."
 
 
 def _parse_value_scale_field(value: bytes | None, modality: str) -> str | None:
@@ -390,8 +393,8 @@ class ProjectionHandler(BaseHTTPRequestHandler):
             try:
                 result = pipeline.run_projection(bundle, raw, restrict_to_supported_classes=restrict, modality=modality,
                                                  stated_scale=stated_scale, stated_zeros=stated_zeros)
-            except alignment.NotIntensities as exc:  # a linear reading stated for a log or centred table
-                self._send_json(400, {"error": str(exc), "reason": "Choose Already log, or Automatic, for this file."})
+            except alignment.NotIntensities as exc:  # a raw reading of a table with negative values
+                self._send_json(400, {"error": str(exc), "reason": exc.reason or STATED_LINEAR_REASON})
                 return
             except Exception:  # noqa: BLE001 — a malformed upload must not 500 silently
                 logger.exception("projection failed")
