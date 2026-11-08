@@ -1,0 +1,53 @@
+{
+  "step": "b5",
+  "written": "2026-11-08, after B5's code (commits e23afcc to c36cdbd) and before its diagnostics ran on the bank",
+  "about": "B5 (research/value-scale-b5-design.md; build plan research/value-scale-b5-plan.md, Task 7): Stage 0 reads a protein table the request leaves to the service with the calibrated check (valuescale.detect, calibration protein-v1): its linear or log, else linear; under a log reading a 0 is not measured unless the request says otherwise or the table is centred (negative values at least valuescale.gates.NEGATIVE_SHARE, 0.01, of the observed ones); the service's own raw reading of a table with negatives is refused. The predictions below are derived from B4's bank verdicts (research/notebook-outputs/value_scale_b4/report.json, 'bank', scored on the tables as traced) and step 1's D1 zero and negative shares and D3 readings (research/notebook-outputs/value_scale_step1/report.json). Not edited after the run: a row that differs is reported and explained in notes.md.",
+  "tables": "the 30 bank tables Phase A traced (traced_table: validation passed, at most 2,000 cells drawn with D3's seed); the 7 with fewer than 20 cells are refused by validation, before Stage 0, as before",
+  "pipeline": "v4.1, pipeline.run_projection; 'calibrated' is config.VALUE_SCALE_METHOD's default; 'median' is the same code under alignment.scale_method('median'), the rule before B5, run in the same process as the baseline for the comparison",
+  "B5_pbmc240": "PBMC240's DIA-NN table is read linear by the check: verdict linear, detected linear, transformed, zeros_read missing, on the golden fixtures' 50-cell slice (service/tests/test_golden_fixtures._load_pbmc240_50) and on all 238 cells (the bank's pbmc240_diann, the site's example file service/examples/pbmc240_proteins_raw.tsv). Its reply equals the median method's on every frozen key.",
+  "B5_scope2": "SCoPE2's export is read log by the negatives gate: verdict log, gate negatives, not transformed, zeros_read measured (centred; it has no 0), on the bank's scope2_export and on the golden fixtures' 50-cell slice (_load_scope2_50). Its reply equals the median method's on every frozen key.",
+  "B5_pxd064083": {
+    "predicted": "pxd064083_t and pxd064083_b are read linear (verdict linear, transformed), where the median rule read them log (their non-zero median is under 50). This is their label's reading.",
+    "tabled": "their answers under the check (levels, abstention reasons, top labels) against D3's under the median rule; reported, not judged. The intake for the PXD064083 test itself keeps the median rule (benchmark/pxd064083_intake.py SCALE_METHOD), so this changes nothing that test measures."
+  },
+  "B5_verdicts": {
+    "what": "each traced table's value_scale.verdict equals its B4 bank verdict, and evidence.calibration is protein-v1",
+    "predicted": {
+      "linear": ["pbmc240_diann", "kabatnik_cra_timstofultra", "kabatnik_c3_region", "pxd073250_diann", "pxd077946_diann_genes", "zamore_diann", "pxd064083_t", "pxd064083_b", "dusszachniewicz_maxquant", "herrera2025_fragpipe", "lungmap_bpd_fragpipe", "msv000099294_hmc3", "msv000099294_microglia", "pxd061052_spectronaut", "pxd043355_pd", "fulcher_tmt", "furtwangler_batchcorr", "furtwangler_batchcorr_norm", "pxd049412_a549_singlecells", "brunner_mq_singlecells", "krull_singlecells", "hu2023_pd_k562"],
+      "log": ["scope2_export", "khoury_column_normalized", "furtwangler_log2", "furtwangler_log2_nan", "furtwangler_log2fc_nan", "furtwangler_log2_raw_sn", "cptac_ccrcc_tumor"],
+      "cant_tell": ["furtwangler_log2_imputed (reason: no value is missing)"]
+    },
+    "warning": "only pxd043355_pd carries the typicality warning, as in B4"
+  },
+  "B5_frozen_keys": {
+    "what": "each traced table's reply under the calibrated method against the median method's, on every key the reply had before B5 (everything but value_scale.verdict, zeros_read and evidence)",
+    "unchanged": "21 tables: every frozen key equal, the cells byte for byte: pbmc240_diann, kabatnik_cra_timstofultra, kabatnik_c3_region, pxd073250_diann, pxd077946_diann_genes, zamore_diann, dusszachniewicz_maxquant, herrera2025_fragpipe, lungmap_bpd_fragpipe, pxd061052_spectronaut, pxd043355_pd, fulcher_tmt, scope2_export, khoury_column_normalized, furtwangler_log2_nan, furtwangler_log2fc_nan, pxd049412_a549_singlecells, brunner_mq_singlecells, krull_singlecells, hu2023_pd_k562, cptac_ccrcc_tumor. Their reading is the same either way and, under a log reading, they have no 0, or are centred (scope2_export, furtwangler_log2fc_nan, cptac_ccrcc_tumor); krull_singlecells' few 0s are read as raw intensities, not detected, either way.",
+    "changed": {
+      "pxd064083_t": "reading log to linear: the check reads its label's reading; the median rule's non-zero median is under 50",
+      "pxd064083_b": "reading log to linear, as pxd064083_t",
+      "msv000099294_hmc3": "reading log to linear: the check reads its label's reading; the median rule read it log",
+      "msv000099294_microglia": "reading log to linear, as msv000099294_hmc3",
+      "furtwangler_batchcorr": "reading log to linear: labelled linear, the median rule read it log (68% of its values are 0, which do not vote)",
+      "furtwangler_batchcorr_norm": "reading log to linear, as furtwangler_batchcorr",
+      "furtwangler_log2_imputed": "reading log to linear: the check cannot tell (no value is missing, B4's no-gaps rule) and reads it raw, the undecided reading; it is a log table, so this reading is wrong: the cost B4 accepted for imputed log tables, now said in the receipt and the results card",
+      "furtwangler_log2": "zeros measured to not measured: read log either way, no negative value, 68% of its values 0 (B1's rule)",
+      "furtwangler_log2_raw_sn": "zeros measured to not measured, as furtwangler_log2"
+    },
+    "changed_fields": "for the seven reading changes, value_scale.detected becomes linear and transformed true; for the two zeros changes, detected and transformed are unchanged. In all nine the cells change; how many answers change is reported, not judged."
+  },
+  "B5_rna": "RNA is unchanged: each traced table sent with modality rna gets a reply under the calibrated method byte-identical (canonical JSON) to the median method's, with no verdict, zeros_read or evidence. (The plan's 'RNA fixtures against Phase A's baseline' made concrete: the service has no RNA fixtures and Phase A's baseline holds protein replies only.)",
+  "B5_invariants": "on every traced table, under the calibrated automatic reading: no infinity after Stage 0; exactly the expected values made missing (the infinities, plus every 0 when the reading is raw or zeros_applied is missing); the alignment and z-score checks of step 1's D3 (the z-score invariant included, since the z-score step); _prepare_query matches the trace; the encoder's input finite; and v4.2's protein query reads the table as Stage 0 did (with c36cdbd). Every cell answered or abstained with a reason.",
+  "B5_time": "valuescale.detect takes under 3 s on every traced table on this PC; the slowest (expected among the 2,000-cell tables) is named with its time.",
+  "B5_refusals": "no traced bank table is refused by Stage 0 under the calibrated method: none holds a few negative values (the scratch probe of 2026-11-08: each has none, or 44 to 50%). The 7 small tables are refused by validation, as before.",
+  "B5_app": {
+    "what": "the request the site sends for a file the uploader does not know about (no value_scale, no zeros), to service.app's handler in this process (b4_through_the_app's pattern: a table traced on a subsample is sent as that subsample and compared with the pipeline's reply to it as parsed back)",
+    "tables": ["pbmc240_diann (unchanged, linear)", "scope2_export (log, centred)", "pxd064083_t (reading changed)", "furtwangler_log2 (zeros changed; sent as its 2,000-cell subsample)"],
+    "predicted": [
+      "each: 200, equal to pipeline.run_projection's reply, with verdict, zeros_read and evidence",
+      "GET /api/status still lists the value_scale choices auto, linear and log and the zeros choices auto, missing and measured",
+      "pbmc240_diann with two observed values made negative and no value_scale: 400, the error naming 2 negative values and the service's check, the reason alignment.UNDECIDED_NEGATIVES_REASON",
+      "the same file with value_scale linear: 400, reason 'Choose Already log, or I don't know, for this file.'",
+      "the same file with value_scale log: 200 (a stated log reading of negative values is used as it is)"
+    ]
+  }
+}

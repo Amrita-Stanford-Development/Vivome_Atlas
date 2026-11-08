@@ -75,7 +75,6 @@ ALLOWED_MISSING = (
     "valuescale/corpus/test_scored.json",  # written once by valuescale/corpus/score_test.py when the sealed test is scored (plan B7)
     "valuescale/corpus/test_started.json",  # written by valuescale/corpus/score_test.py before it reads any test table (plan B7)
     # Files B5 will create (research/value-scale-b5-plan.md); each comes off this list when it exists
-    "valuescale/bank/expectations/b5.json",
     "research/notebook-outputs/value_scale_b5/",
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
     "data/profiles/",  # the gene profile shards, written only into dist/site/ by scripts/build_pages_site.py
