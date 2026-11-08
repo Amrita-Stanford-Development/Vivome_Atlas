@@ -7,6 +7,7 @@ the few rules it copies are pinned to the service's own here
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 import numpy as np
 
@@ -59,6 +60,27 @@ class CalibratedReadingInStepTests(unittest.TestCase):
         table as valuescale's report does (research/value-scale-b5-design.md)."""
         from valuescale import report
         self.assertEqual(config.VALUE_SCALE_UNDECIDED_READING, report.UNDECIDED_READING)
+
+
+SITE_PANELS = Path(__file__).resolve().parents[2] / "web" / "js" / "panels.js"
+
+
+class SiteReasonsInStepTests(unittest.TestCase):
+    def test_the_sites_reason_prefixes_are_the_packages(self):
+        """The receipt says three of the check's reasons in plain words, matched
+        by how each starts (web/js/panels.js CHECK_REASONS); each is how
+        valuescale.method's own reason starts."""
+        from valuescale import method
+        site = SITE_PANELS.read_text(encoding="utf-8")
+        source = Path(method.__file__).read_text(encoding="utf-8")
+        for prefix, reason in (("too few columns", None), ("per-protein normalised", method.PER_PROTEIN_REASON),
+                               ("no value is missing", method.NO_GAPS_REASON)):
+            with self.subTest(prefix=prefix):
+                self.assertIn(f"['{prefix}', ", site)
+                if reason is None:
+                    self.assertIn(f'"reason": "{prefix}"', source)
+                else:
+                    self.assertTrue(reason.startswith(prefix), reason)
 
 
 # The scripts of the tests not yet scored whose protocols were frozen under the

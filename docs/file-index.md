@@ -188,7 +188,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `service/tests/test_v4_gate.py` — Track G's gate for v4 as a test (`benchmark/v4_dev_gate.py`)
 - `service/tests/test_v41_gate.py` — v4.1's gate as a test (`benchmark/v41_dev_gate.py`)
 - `service/tests/test_v42.py` — v4.2, the default since 0.5.0: its protein query, its protein means as its spec says, equal to v4.1 where its correlation term is flat and on every RNA upload, and its served best guess equal to its notebook's on every development dataset
-- `service/tests/test_valuescale_in_step.py` — the rules `valuescale` copies from the service, kept in step: its median-50 baseline against `median_rule`, and `valuescale.apply` against `apply_reading` (here, since `valuescale` never imports the service)
+- `service/tests/test_valuescale_in_step.py` — the rules `valuescale` copies from the service, kept in step: its median-50 baseline against `median_rule`, `valuescale.apply` against `apply_reading`, the undecided reading against the service's, and the site's three reason prefixes against the package's reasons (here, since `valuescale` never imports the service); and B5's frozen scripts keep the median rule by name
 - `service/tests/test_workflow_trace.py` — the Workflow page's trace against a fresh run of the served model on the PBMC240 example
 - `service/tests/test_fusion.py` — v4's math (class-balanced statistics, masked correlation, fusion, the smoothing mix), the agreement gate, v4.1's gate-on encoder weight, the fused guess joining v3.1's sets beside v3.1's guess, spec checks and loading refusals (v4 and v4.1)
 - `service/tests/test_baselines_labels.py` — the corrected baselines' `--labels`: the join of a label set onto the benchmark's RNA cells by cell, refusing a misaligned or short table, and runs kept apart from the original ones
@@ -433,7 +433,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/test_build_manifest.py` — unit tests for the manifest builder
 - `scripts/test_build_workflow.py` — `web/data/workflow.json` is the builder's output, within its budget, built for the manifest's release; its records and cross-checks
 - `scripts/build_pages_site.py` — assembles the public site for Cloudflare Pages in `dist/` (a copy of `web/` without files over 25 MiB, a 404 page, redirects for renamed pages, the gene profiles as gzipped float32 shards, the beta's sign-in with its invited emails, and optionally the R2-backed large files)
-- `scripts/test_deploy_rehearse.py` — tests for the deploy scripts: `rehearse.py` reads the Dockerfile's settings and stays local and without the secret; `build_space.py --help` builds nothing
+- `scripts/test_deploy_rehearse.py` — tests for the deploy scripts: `rehearse.py` reads the Dockerfile's settings and stays local and without the secret; `build_space.py --help` builds nothing; the staged service carries `valuescale/` and its calibration
 - `scripts/test_build_pages_site.py` — unit tests for the Pages site builder
 - `scripts/beta_access.py` — manages the beta's sign-in: the invited emails (`~/.vivome-beta/emails.txt`) and the password's Pages secrets
 - `scripts/test_beta_access.py` — tests for `beta_access.py`: the hash the gate checks, generated passwords, the email list, the secrets set
