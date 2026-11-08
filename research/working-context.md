@@ -17,7 +17,7 @@ Before changing anything, read [CLAUDE.md](../CLAUDE.md). Before a roadmap
 task, read [todo.md](todo.md) and [roadmap.md](roadmap.md), whose latest
 revision is at the top.
 
-## Where things stand (2026-11-06)
+## Where things stand (2026-11-08)
 
 This section is the current state. "Where things stand (2026-10-27)" below
 it, and the sections further down ("Where things stand (2026-10-05)",
@@ -54,11 +54,16 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     place; the owner accepted it and had a fault of ours fixed first. Every
     other row passes. The thresholds are in
     `valuescale/calibration/protein-v1.json`. A log table about 90% missing
-    can be read linear, with the warning. The service still uses its median
-    rule; B5 wires the package in. Not deployed, nothing to deploy yet.
-  - **Uploaders will be asked their file's reading** (owner, 2026-11-04).
-    The detector serves those who don't know. The pop-up's design is
-    agreed with the owner before B5.
+    can be read linear, with the warning.
+  - **B5, the detector in the service, was built and run on the bank on
+    2026-11-08** ([notes](notebook-outputs/value_scale_b5/notes.md);
+    design agreed with the owner, `value-scale-b5-design.md`). Stage 0 reads
+    a protein table the request leaves to it with the detector, and the
+    site asks the uploader first (raw, log, or "I don't know"). RNA and the
+    frozen tests keep the median rule. Nine of ten rows pass. B5_verdicts
+    failed on the typicality warning alone (the prediction took B4's
+    left-out warning for the shipped detector's), for the owner. Not
+    deployed: the site and the service go live together after B7.
 - **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
   (from `decb812`), then the site. These brought the clean-up's fixes to
   the parser and the site's file check (lone-CR line endings, MaxQuant,

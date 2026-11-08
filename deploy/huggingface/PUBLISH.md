@@ -56,7 +56,9 @@ projects one upload at a time (settings in `Dockerfile`). Its address is
 - `Dockerfile`: the image (Python 3.11, CPU torch) and the service's settings.
 - `space_card.md`: the Space's public page, written to the Space as `README.md`.
 - `build_space.py`: stages the Space in the gitignored folder
-  `deploy/huggingface/space`: the service package, only the served version's model files
+  `deploy/huggingface/space`: the service package, the raw-or-log package
+  `valuescale/` with its shipped calibration (Stage 0 reads protein tables
+  with it), only the served version's model files
   (found by loading the bundle and projecting the PBMC240 example), the
   Dockerfile, the card, `requirements.txt` pinned to the building
   interpreter's versions, a `.gitattributes` putting files over 10 MB in Git

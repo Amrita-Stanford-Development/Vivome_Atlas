@@ -8,6 +8,7 @@ checked against the expectations written before it ran
     python research/notebooks/value_scale_diagnostics.py --step phaseA
     python research/notebooks/value_scale_diagnostics.py --step phaseA2
     python research/notebooks/value_scale_diagnostics.py --step zscore
+    python research/notebooks/value_scale_diagnostics.py --step b5
 
 Step 1:
 - D1, the bank itself: each source file matches its recorded sha256, parses
@@ -33,6 +34,10 @@ Phase A (the request may state the scale, value_scale):
 - The z-score step (the float64 z-score and the near-constant rule): the
   invariant under every reading, the genes zeroed, and the replies against
   Phase A's baseline.
+- B5 (Stage 0 reads a protein table with the calibrated check, valuescale):
+  each traced table's verdict against B4's, its reply against the median
+  method's on the frozen keys, RNA unchanged, the invariants, the check's
+  time, refusals, and the same through the app (expectations/b5.json).
 
 Writes research/notebook-outputs/value_scale_<step>/report.md (expected
 against observed, one row per table) and report.json.
@@ -60,6 +65,7 @@ import numpy as np
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
+import valuescale  # noqa: E402
 from service import app, config  # noqa: E402
 from service.pipeline import alignment, fusion, gene_ids, pipeline, smoothing, validation  # noqa: E402
 from valuescale.corpus import extract, fetch, variants  # noqa: E402
@@ -437,7 +443,7 @@ def _reading_invariants(bundle, raw: alignment.RawMatrix, stated: str | None, pr
         inv = {"no_inf_after_stage0": not np.isinf(scaled).any()}
         made_missing = int((np.isnan(scaled) & ~np.isnan(values0)).sum())
         infinities = int(np.isinf(values0).sum())
-        zeros_missing = scale.transformed or zeros == "missing"
+        zeros_missing = scale.transformed or scale.zeros_applied == "missing"  # zeros, under the median method
         inv["stage0_missing_as_expected"] = made_missing == (int((values0 == 0).sum()) + infinities if zeros_missing
                                                              else infinities)
         collapsed = alignment.collapse_duplicate_genes(alignment.RawMatrix(raw.gene_names, raw.cell_ids, scaled))
@@ -939,9 +945,261 @@ def zscore_step() -> None:
     print(f"wrote {(out / 'report.md').relative_to(REPO).as_posix()}")
 
 
+# ---------------------------------------------------------------- B5
+
+B5_APP_TABLES = ("pbmc240_diann", "scope2_export", "pxd064083_t", "furtwangler_log2")
+ADDED = ("verdict", "zeros_read", "evidence")  # the reply's fields since B5
+
+
+def _frozen(reply_text: str) -> str:
+    """A reply without B5's fields: what it had before B5."""
+    reply = json.loads(reply_text)
+    for key in ADDED:
+        reply["value_scale"].pop(key, None)
+    return canonical(reply)
+
+
+def _differing_fields(a: dict, b: dict) -> list[str]:
+    keys = sorted(set(a) | set(b))
+    out = [k for k in keys if k != "value_scale" and a.get(k) != b.get(k)]
+    out += [f"value_scale.{k}" for k in sorted(set(a["value_scale"]) | set(b["value_scale"]))
+            if a["value_scale"].get(k) != b["value_scale"].get(k)]
+    return out
+
+
+def _with_negatives(raw: alignment.RawMatrix, n: int) -> alignment.RawMatrix:
+    values = raw.values.copy()
+    for i, j in np.argwhere(np.isfinite(values) & (values > 0))[:n]:
+        values[i, j] = -values[i, j]
+    return alignment.RawMatrix(raw.gene_names, raw.cell_ids, values)
+
+
+def b5_through_the_app(bank: dict, traced: dict, reply_of) -> list[dict]:
+    """B5_app: the request the site sends when the uploader does not know (no
+    value_scale, no zeros), to service.app's handler in this process, as
+    b4_through_the_app sends a subsample."""
+    server = ThreadingHTTPServer(("127.0.0.1", 0), app.ProjectionHandler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{server.server_port}"
+    url = f"{base}/api/project"
+    rows = []
+    try:
+        with urllib.request.urlopen(f"{base}/api/status", timeout=600) as response:
+            status = json.loads(response.read()).get("value_scale", {})
+        rows.append({"check": "GET /api/status lists auto, linear and log, and the zeros choices",
+                     "pass": status.get("choices") == ["auto", "linear", "log"]
+                     and status.get("zeros") == ["auto", "missing", "measured"]})
+        entries = {e["id"]: e for e in bank["entries"]}
+        for table in B5_APP_TABLES:
+            raw = traced[table]
+            whole, _, upload = load_entry(entries[table])
+            if len(raw.cell_ids) == len(whole.cell_ids):
+                sent, how, reply = upload.read_bytes(), "its file", reply_of(raw)
+            else:
+                sent, how = matrix_tsv(raw), f"its {len(raw.cell_ids):,}-cell subsample"
+                parsed = alignment.parse_matrix_csv(sent.decode("utf-8"))
+                assert np.array_equal(parsed.values, raw.values, equal_nan=True), "the subsample reads back exactly"
+                reply = reply_of(parsed)
+            code, payload = _post(url, {"modality": b"prot"}, sent)
+            payload.pop("warnings", None)
+            has = code == 200 and all(k in payload.get("value_scale", {}) for k in ADDED)
+            rows.append({"check": f"{table} ({how}), nothing stated: 200, equal to pipeline.run_projection's reply, "
+                                  "with verdict, zeros_read and evidence",
+                         "pass": has and canonical(payload) == reply, "status": code,
+                         "error": payload.get("error") if code != 200 else None})
+        negative = matrix_tsv(_with_negatives(traced["pbmc240_diann"], 2))
+        code, payload = _post(url, {"modality": b"prot"}, negative)
+        rows.append({"check": "pbmc240_diann with 2 values made negative, nothing stated: 400, naming them and the "
+                              "service's check, with UNDECIDED_NEGATIVES_REASON",
+                     "pass": code == 400 and payload.get("error", "").startswith("2 values are negative")
+                     and "the service's check" in payload.get("error", "")
+                     and payload.get("reason") == alignment.UNDECIDED_NEGATIVES_REASON,
+                     "status": code, "error": payload.get("error"), "reason": payload.get("reason")})
+        code, payload = _post(url, {"modality": b"prot", "value_scale": b"linear"}, negative)
+        rows.append({"check": "the same, value_scale linear: 400 with the stated reading's reason",
+                     "pass": code == 400 and payload.get("reason") == app.STATED_LINEAR_REASON,
+                     "status": code, "error": payload.get("error"), "reason": payload.get("reason")})
+        code, payload = _post(url, {"modality": b"prot", "value_scale": b"log"}, negative)
+        rows.append({"check": "the same, value_scale log: 200", "pass": code == 200, "status": code,
+                     "error": payload.get("error") if code != 200 else None})
+    finally:
+        server.shutdown()
+        server.server_close()
+    return rows
+
+
+def b5_step() -> None:
+    bank = fetch.load_bank()
+    expect = json.loads((EXPECTATIONS / "b5.json").read_text(encoding="utf-8"))
+    out = OUT / "value_scale_b5"
+    out.mkdir(parents=True, exist_ok=True)
+    b4 = {r["id"]: r for r in json.loads((OUT / "value_scale_b4" / "report.json").read_text(encoding="utf-8"))["bank"]}
+    d3 = {r["id"]: r for r in json.loads((OUT / "value_scale_step1" / "report.json").read_text(encoding="utf-8"))["D3"]}
+    bundle = pipeline.load_bundle(VERSION)
+    protein_genes = pipeline.load_bundle("v4.2").protein_genes
+    changed_expected = expect["B5_frozen_keys"]["changed"]
+    started = time.time()
+
+    def reply(raw, method, modality="prot"):
+        with warnings.catch_warnings(), alignment.scale_method(method):
+            warnings.simplefilter("ignore", RuntimeWarning)
+            return canonical(pipeline.run_projection(bundle, raw, modality=modality))
+
+    rows, traced = [], {}
+    for entry in bank["entries"]:
+        raw = traced_table(entry, load_entry(entry)[0])
+        row = {"id": entry["id"], "label": entry["label"]}
+        if raw is None:
+            row.update(refused="validation")
+            rows.append(row)
+            continue
+        traced[entry["id"]] = raw
+        t0 = time.perf_counter()
+        report = valuescale.detect(alignment.finite_or_missing(raw.values))
+        seconds = time.perf_counter() - t0
+        try:
+            cal = reply(raw, "calibrated")
+        except alignment.NotIntensities as exc:
+            row.update(refused="stage0", error=str(exc), detect_seconds=round(seconds, 3))
+            rows.append(row)
+            continue
+        med = reply(raw, "median")
+        rna_cal, rna_med = reply(raw, "calibrated", "rna"), reply(raw, "median", "rna")
+        c, m = json.loads(cal), json.loads(med)
+        scale = c["value_scale"]
+        same = _frozen(cal) == med
+        with alignment.scale_method("calibrated"):
+            invariants = _reading_invariants(bundle, raw, None, protein_genes)
+        invariants["every_cell_answered_or_abstained"] = all(x.get("label") is not None or x.get("abstain_reason")
+                                                             for x in c["cells"])
+        before = [answer_of(x) for x in m["cells"]]
+        after = [answer_of(x) for x in c["cells"]]
+        row.update(
+            refused=None, cells=len(raw.cell_ids), detect_seconds=round(seconds, 3),
+            verdict=scale.get("verdict"), b4_verdict=b4[entry["id"]]["verdict"], gate=scale["evidence"].get("gate"),
+            reason=scale["evidence"].get("reason"), warning=bool(scale["evidence"].get("warning")),
+            calibration=scale["evidence"].get("calibration"),
+            median_reads=m["value_scale"]["detected"], detected=scale["detected"], transformed=scale["transformed"],
+            zeros_read=scale.get("zeros_read"), frozen_keys_equal=same,
+            fields_differing=[] if same else _differing_fields(json.loads(_frozen(cal)), m),
+            answers_changed=sum(a != b for a, b in zip(before, after)),
+            answered={"median": sum(not a.startswith("no answer") for a in before),
+                      "calibrated": sum(not a.startswith("no answer") for a in after)},
+            summary=summary_of(c), median_summary=summary_of(m),
+            rna_identical=rna_cal == rna_med and not any(k in json.loads(rna_cal)["value_scale"] for k in ADDED),
+            invariants=invariants, invariants_failed=[k for k, ok in invariants.items() if not ok])
+        rows.append(row)
+        print(f"  B5 {entry['id']}: {row['median_reads']}->{row['detected']} verdict {row['verdict']} zeros "
+              f"{row['zeros_read']} frozen {'same' if same else 'CHANGED'} answers changed {row['answers_changed']} "
+              f"rna {'same' if row['rna_identical'] else 'DIFFERS'} invariants "
+              f"{'ok' if not row['invariants_failed'] else row['invariants_failed']} ({seconds:.2f} s)", flush=True)
+
+    print("the golden fixtures' 50-cell slices", flush=True)
+    from service.tests.test_golden_fixtures import _load_pbmc240_50, _load_scope2_50
+    slices = {}
+    for name, loader in (("pbmc240_50", _load_pbmc240_50), ("scope2_50", _load_scope2_50)):
+        raw = loader()
+        _, s = alignment.detect_and_transform_value_scale(raw.values)
+        cal, med = reply(raw, "calibrated"), reply(raw, "median")
+        slices[name] = {"verdict": s.verdict, "gate": (s.evidence or {}).get("gate"), "detected": s.detected,
+                        "transformed": s.transformed, "zeros_read": s.zeros_read, "frozen_keys_equal": _frozen(cal) == med}
+
+    print("B5_app, through the app", flush=True)
+    app_rows = b5_through_the_app(bank, traced, lambda raw: reply(raw, "calibrated"))
+
+    by = {r["id"]: r for r in rows}
+    ok = [r for r in rows if r["refused"] is None]
+    changed = {r["id"] for r in ok if not r["frozen_keys_equal"]}
+    reading_changes = {k for k, v in changed_expected.items() if v.startswith("reading")}
+    verdicts = expect["B5_verdicts"]["predicted"]
+    predicted_verdict = {i.split(" (")[0]: v for v, ids in verdicts.items() for i in ids}
+    p, s = by.get("pbmc240_diann", {}), by.get("scope2_export", {})
+    results = {
+        "B5_pbmc240": (p.get("verdict"), p.get("detected"), p.get("transformed"), p.get("zeros_read"),
+                       p.get("frozen_keys_equal")) == ("linear", "linear", True, "missing", True)
+        and (slices["pbmc240_50"]["verdict"], slices["pbmc240_50"]["transformed"],
+             slices["pbmc240_50"]["frozen_keys_equal"]) == ("linear", True, True),
+        "B5_scope2": (s.get("verdict"), s.get("gate"), s.get("transformed"), s.get("zeros_read"),
+                      s.get("frozen_keys_equal")) == ("log", "negatives", False, "measured", True)
+        and (slices["scope2_50"]["verdict"], slices["scope2_50"]["transformed"],
+             slices["scope2_50"]["frozen_keys_equal"]) == ("log", False, True),
+        "B5_pxd064083": all(by.get(t, {}).get("verdict") == "linear" and by.get(t, {}).get("transformed")
+                            for t in ("pxd064083_t", "pxd064083_b")),
+        "B5_verdicts": all(r["verdict"] == predicted_verdict.get(r["id"]) == r["b4_verdict"]
+                           and r["calibration"] == "protein-v1" for r in ok)
+        and {r["id"] for r in ok if r["warning"]} == {"pxd043355_pd"},
+        "B5_frozen_keys": changed == set(changed_expected)
+        and all(by[t]["detected"] == "linear" and by[t]["transformed"] for t in reading_changes)
+        and all((by[t]["detected"], by[t]["transformed"], by[t]["zeros_read"]) == ("log", False, "missing")
+                for t in set(changed_expected) - reading_changes),
+        "B5_rna": all(r["rna_identical"] for r in ok),
+        "B5_invariants": all(not r["invariants_failed"] for r in ok),
+        "B5_time": max(r["detect_seconds"] for r in ok) < 3,
+        "B5_refusals": not [r for r in rows if r["refused"] == "stage0"]
+        and len([r for r in rows if r["refused"] == "validation"]) == 7,
+        "B5_app": all(r["pass"] for r in app_rows),
+    }
+    slowest = max(ok, key=lambda r: r["detect_seconds"])
+    payload = {"step": "b5", "run": datetime.now().isoformat(timespec="seconds"), "pipeline_version": VERSION,
+               "method": config.VALUE_SCALE_METHOD, "seconds": round(time.time() - started),
+               "results": results, "slowest_detect": {"id": slowest["id"], "seconds": slowest["detect_seconds"]},
+               "slices": slices, "tables": rows, "app": app_rows}
+    (out / "report.json").write_bytes((json.dumps(payload, indent=1, default=str) + "\n").encode("utf-8"))
+    (out / "report.md").write_bytes(report_b5(payload, d3).encode("utf-8"))
+    print(f"wrote {(out / 'report.md').relative_to(REPO).as_posix()}")
+
+
+def report_b5(payload: dict, d3: dict) -> str:
+    rows, results = payload["tables"], payload["results"]
+    ok = [r for r in rows if r["refused"] is None]
+    lines = ["# Value-scale diagnostics, B5: Stage 0 with the calibrated check", "",
+             f"Run {datetime.now().strftime('%Y-%m-%d %H:%M')} by research/notebooks/value_scale_diagnostics.py "
+             f"({payload['seconds']:,} s). Expectations: valuescale/bank/expectations/b5.json, written before the run. "
+             "Baseline: the same code under the median method (alignment.scale_method), in the same run. Explained in "
+             "notes.md beside this file.", "",
+             "## The rows", "",
+             _md_table(["row", "result"], [[k, "PASS" if v else "FAIL"] for k, v in results.items()]), "",
+             f"The slowest check: {payload['slowest_detect']['id']}, {payload['slowest_detect']['seconds']} s.", "",
+             f"## Every traced table ({len(ok)})", "",
+             _md_table(["table", "label", "cells", "B4 verdict", "verdict", "median rule read", "now read", "a 0 read as",
+                        "frozen keys", "answers changed", "answered median/check", "RNA", "invariants", "check s"],
+                       [[r["id"], r["label"], r["cells"], r["b4_verdict"], r["verdict"], r["median_reads"],
+                         r["detected"], r["zeros_read"],
+                         "equal" if r["frozen_keys_equal"] else "changed: " + ", ".join(r["fields_differing"]),
+                         r["answers_changed"], f"{r['answered']['median']}/{r['answered']['calibrated']}",
+                         "same" if r["rna_identical"] else "DIFFERS",
+                         "ok" if not r["invariants_failed"] else ", ".join(r["invariants_failed"]), r["detect_seconds"]]
+                        for r in ok]), ""]
+    refused = [r for r in rows if r["refused"]]
+    lines += ["## Refused", "", _md_table(["table", "by", "error"],
+                                         [[r["id"], r["refused"], r.get("error", "fewer than 20 cells")] for r in refused]), ""]
+    lines += ["## The golden fixtures' 50-cell slices", "",
+              _md_table(["slice", "verdict", "gate", "read", "transformed", "a 0 read as", "frozen keys"],
+                        [[k, v["verdict"], v["gate"], v["detected"], v["transformed"], v["zeros_read"],
+                          "equal" if v["frozen_keys_equal"] else "changed"] for k, v in payload["slices"].items()]), ""]
+    lines += ["## PXD064083 against D3 (reported, not judged)", ""]
+    for t in ("pxd064083_t", "pxd064083_b"):
+        r = next((x for x in ok if x["id"] == t), None)
+        if r is None:
+            continue
+        lines += [f"**{t}**, {r['cells']} cells:", "",
+                  _md_table(["", "levels", "no answer, by reason", "top labels"],
+                            [["D3 (median rule, read log)", d3[t]["answers"]["levels"], d3[t]["answers"]["abstain_reasons"],
+                              d3[t]["answers"]["top_labels"]],
+                             ["B5 (the check, read linear)", r["summary"]["levels"], r["summary"]["abstain_reasons"],
+                              r["summary"]["top_labels"]]]), ""]
+    lines += [f"## B5_app, through the app: {sum(r['pass'] for r in payload['app'])} of {len(payload['app'])} pass", "",
+              _md_table(["check", "status", "result"],
+                        [[r["check"], r.get("status", ""), "PASS" if r["pass"] else "FAIL"
+                          + (f" ({r.get('error')}; {r.get('reason')})" if r.get("error") else "")]
+                         for r in payload["app"]]), ""]
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2, "zscore": zscore_step}
+    steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2, "zscore": zscore_step,
+             "b5": b5_step}
     parser.add_argument("--step", choices=tuple(steps), required=True)
     args = parser.parse_args()
     steps[args.step]()

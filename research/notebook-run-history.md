@@ -3387,6 +3387,57 @@ were written then, before B4's code.
   failed real run left no trace. Each was fixed test first. The calibration
   part, run again, left the calibration and every answer unchanged.
 
+### 79. The raw-or-log framework, Phase B, B5: the detector in the service, 2026-11-08
+
+**Why:** the service read small-scale linear protein tables as log
+(PXD064083). B4's calibrated detector reads them right, so Stage 0 now uses
+it for a protein table whose reading the request leaves to the service.
+The site asks the uploader first. B5 is not deployed: the site and the
+service go live together after B7.
+
+**What was decided first** (with the owner, `research/value-scale-b5-design.md`):
+- "can't tell" and "unlike either" read as raw (B1);
+- a 0 is not measured under either reading, except in a centred log table;
+- the service's own raw reading of a table with negative values is refused
+  in clear words;
+- the sealed and frozen tests keep the median rule.
+
+The expectations, `valuescale/bank/expectations/b5.json`, were written
+after the code and before the step that runs them (`f936cae`).
+
+**What was built** (test first; `e23afcc` to `c36cdbd`, plan
+`research/value-scale-b5-plan.md`):
+- the service's calibrated reading, `config.VALUE_SCALE_METHOD` and
+  `alignment.scale_method`;
+- the reply's `verdict`, `zeros_read` and `evidence`, allowed beside the
+  frozen fixtures;
+- the refusal's reasons;
+- the frozen scripts' `SCALE_METHOD`;
+- the Space's staging of the package;
+- the site's question pop-up, its receipt and results-card texts.
+
+The run itself is the b5 step of
+`research/notebooks/value_scale_diagnostics.py`. It sends each of the 30
+traced bank tables through v4.1 twice in one process: under the calibrated
+method, and under the median method as the baseline.
+
+**Results** (`research/notebook-outputs/value_scale_b5/`, report and notes):
+- Nine of ten rows pass.
+- PBMC240 reads linear and SCoPE2 log; both reply as before on every
+  frozen key. Both PXD064083 tables read linear.
+- 21 tables reply as before. The 9 predicted change:
+  - 8 now read as their label says;
+  - the imputed log table reads linear on "can't tell";
+  - two Furtwangler log tables read a 0 as not measured.
+- RNA replies are byte-identical. Every stage invariant holds. The check
+  takes 0.54 s at most. Through the app, each reply equals the pipeline's,
+  and the negative-values refusal says what to do.
+- **Failed, B5_verdicts, on the warning alone.** Every verdict is B4's,
+  but pxd043355_pd's typicality warning, which B4 gave with its deposit
+  left out of the model, does not fire under the shipped model. That model
+  was fitted with the deposit (a probe: typicality 0.74 against 0). The
+  prediction was wrong, not the code. For the owner.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

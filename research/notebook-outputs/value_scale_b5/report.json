@@ -1,0 +1,3816 @@
+{
+ "step": "b5",
+ "run": "2026-11-08T23:10:45",
+ "pipeline_version": "v4.1",
+ "method": "calibrated",
+ "seconds": 275,
+ "results": {
+  "B5_pbmc240": true,
+  "B5_scope2": true,
+  "B5_pxd064083": true,
+  "B5_verdicts": false,
+  "B5_frozen_keys": true,
+  "B5_rna": true,
+  "B5_invariants": true,
+  "B5_time": true,
+  "B5_refusals": true,
+  "B5_app": true
+ },
+ "slowest_detect": {
+  "id": "furtwangler_log2_imputed",
+  "seconds": 0.537
+ },
+ "slices": {
+  "pbmc240_50": {
+   "verdict": "linear",
+   "gate": null,
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true
+  },
+  "scope2_50": {
+   "verdict": "log",
+   "gate": "negatives",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "measured",
+   "frozen_keys_equal": true
+  }
+ },
+ "tables": [
+  {
+   "id": "pbmc240_diann",
+   "label": "linear",
+   "refused": null,
+   "cells": 238,
+   "detect_seconds": 0.052,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 174,
+    "calibrated": 174
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 238,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.993346701476229,
+       "log": 0.006653298523770952
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 3098,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4445265789073685,
+       "cell_bowley_iqr": 0.0710072837373974,
+       "column_sum_cv": 0.9217123121716937,
+       "decades": 1.8400745241928895,
+       "level_spread": 0.8427222987222988,
+       "missing_share": 0.6277891401880313,
+       "moors": 2.09228930333374,
+       "row_median_spread": 3.018809491940843,
+       "tail": 40.137833916884794
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 238,
+    "n_features_matched": 2996,
+    "levels": {
+     "class": 5,
+     "group": 54,
+     "lineage": 115
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 59,
+     "outside_supported_region": 4,
+     "coverage_too_low": 1
+    },
+    "top_labels": {
+     "lymphoid": 93,
+     "T cell": 51,
+     "myeloid": 22,
+     "b cell": 4,
+     "monocyte/macrophage": 3
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 238,
+    "n_features_matched": 2996,
+    "levels": {
+     "class": 5,
+     "group": 54,
+     "lineage": 115
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 59,
+     "outside_supported_region": 4,
+     "coverage_too_low": 1
+    },
+    "top_labels": {
+     "lymphoid": 93,
+     "T cell": 51,
+     "myeloid": 22,
+     "b cell": 4,
+     "monocyte/macrophage": 3
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "kabatnik_cra_timstofultra",
+   "label": "linear",
+   "refused": null,
+   "cells": 25,
+   "detect_seconds": 0.018,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 10,
+    "calibrated": 10
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 25,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9054421461068709,
+       "log": 0.09455785389312912
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 7883,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4713462022986085,
+       "cell_bowley_iqr": 0.016387959390520512,
+       "column_sum_cv": 0.03177307113858572,
+       "decades": 1.8431413022712324,
+       "level_spread": 0.83935272187078,
+       "missing_share": 0.07944691107446404,
+       "moors": 2.1410598461152963,
+       "row_median_spread": 7.026478641262759,
+       "tail": 21.02716141969721
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 0.9743589743589743,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 25,
+    "n_features_matched": 6260,
+    "levels": {
+     "class": 2,
+     "lineage": 8
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 15
+    },
+    "top_labels": {
+     "lymphoid": 6,
+     "erythrocyte": 2,
+     "myeloid": 2
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 25,
+    "n_features_matched": 6260,
+    "levels": {
+     "class": 2,
+     "lineage": 8
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 15
+    },
+    "top_labels": {
+     "lymphoid": 6,
+     "erythrocyte": 2,
+     "myeloid": 2
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "kabatnik_c3_region",
+   "label": "linear",
+   "refused": null,
+   "cells": 27,
+   "detect_seconds": 0.008,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 13,
+    "calibrated": 13
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 27,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9123541398003865,
+       "log": 0.08764586019961348
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 4762,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4655438016838128,
+       "cell_bowley_iqr": 0.02592651416709496,
+       "column_sum_cv": 0.1753665333071443,
+       "decades": 1.6344696347054704,
+       "level_spread": 0.6467891664910039,
+       "missing_share": 0.20584254981567035,
+       "moors": 2.1911781106512063,
+       "row_median_spread": 4.0974842751942315,
+       "tail": 21.254896126321
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 0.9743589743589743,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 27,
+    "n_features_matched": 4120,
+    "levels": {
+     "lineage": 12,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 12,
+     "outside_supported_region": 2
+    },
+    "top_labels": {
+     "lymphoid": 7,
+     "myeloid": 5,
+     "T cell": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 27,
+    "n_features_matched": 4120,
+    "levels": {
+     "lineage": 12,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 12,
+     "outside_supported_region": 2
+    },
+    "top_labels": {
+     "lymphoid": 7,
+     "myeloid": 5,
+     "T cell": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd073250_diann",
+   "label": "linear",
+   "refused": null,
+   "cells": 557,
+   "detect_seconds": 0.174,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 170,
+    "calibrated": 170
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 557,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9822314595861693,
+       "log": 0.017768540413830726
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 5923,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.395181009388212,
+       "cell_bowley_iqr": 0.08403744578974415,
+       "column_sum_cv": 0.9972444610274792,
+       "decades": 1.4721391654901597,
+       "level_spread": 0.5787297336999807,
+       "missing_share": 0.8988030411829127,
+       "moors": 1.9966773376583635,
+       "row_median_spread": 2.9004522068334944,
+       "tail": 26.327902272921797
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 557,
+    "n_features_matched": 5185,
+    "levels": {
+     "class": 19,
+     "lineage": 139,
+     "group": 12
+    },
+    "abstain_reasons": {
+     "coverage_too_low": 187,
+     "ambiguous_between_classes": 159,
+     "outside_supported_region": 41
+    },
+    "top_labels": {
+     "myeloid": 135,
+     "neutrophil": 11,
+     "monocyte/macrophage": 8,
+     "erythrocyte": 6,
+     "T cell": 4
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 557,
+    "n_features_matched": 5185,
+    "levels": {
+     "class": 19,
+     "lineage": 139,
+     "group": 12
+    },
+    "abstain_reasons": {
+     "coverage_too_low": 187,
+     "ambiguous_between_classes": 159,
+     "outside_supported_region": 41
+    },
+    "top_labels": {
+     "myeloid": 135,
+     "neutrophil": 11,
+     "monocyte/macrophage": 8,
+     "erythrocyte": 6,
+     "T cell": 4
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd077946_diann_genes",
+   "label": "linear",
+   "refused": null,
+   "cells": 40,
+   "detect_seconds": 0.01,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 20,
+    "calibrated": 20
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 40,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9088580236580699,
+       "log": 0.0911419763419301
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 3271,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.402392523102389,
+       "cell_bowley_iqr": 0.04297113264961394,
+       "column_sum_cv": 0.7289470397078485,
+       "decades": 1.612916627453795,
+       "level_spread": 0.567495245197731,
+       "missing_share": 0.45064964842555794,
+       "moors": 2.098032877957962,
+       "row_median_spread": 2.1499215175419253,
+       "tail": 19.95056593937638
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 40,
+    "n_features_matched": 3201,
+    "levels": {
+     "lineage": 10,
+     "class": 1,
+     "group": 9
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 19,
+     "outside_supported_region": 1
+    },
+    "top_labels": {
+     "T cell": 9,
+     "lymphoid": 8,
+     "myeloid": 2,
+     "plasma cell": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 40,
+    "n_features_matched": 3201,
+    "levels": {
+     "lineage": 10,
+     "class": 1,
+     "group": 9
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 19,
+     "outside_supported_region": 1
+    },
+    "top_labels": {
+     "T cell": 9,
+     "lymphoid": 8,
+     "myeloid": 2,
+     "plasma cell": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "zamore_diann",
+   "label": "linear",
+   "refused": null,
+   "cells": 30,
+   "detect_seconds": 0.008,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 26,
+    "calibrated": 26
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 30,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9873621631316348,
+       "log": 0.0126378368683652
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 3300,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4911537416980698,
+       "cell_bowley_iqr": 0.027886134892826098,
+       "column_sum_cv": 0.35148818399560916,
+       "decades": 2.0920368716626436,
+       "level_spread": 0.6978480660351545,
+       "missing_share": 0.28475757575757576,
+       "moors": 2.096663917779379,
+       "row_median_spread": 4.101299834989239,
+       "tail": 44.04373851600605
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 30,
+    "n_features_matched": 3019,
+    "levels": {
+     "class": 7,
+     "group": 9,
+     "lineage": 10
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 4
+    },
+    "top_labels": {
+     "myeloid": 10,
+     "T cell": 9,
+     "b cell": 7
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 30,
+    "n_features_matched": 3019,
+    "levels": {
+     "class": 7,
+     "group": 9,
+     "lineage": 10
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 4
+    },
+    "top_labels": {
+     "myeloid": 10,
+     "T cell": 9,
+     "b cell": 7
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd064083_t",
+   "label": "linear",
+   "refused": null,
+   "cells": 78,
+   "detect_seconds": 0.017,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 36,
+   "answered": {
+    "median": 47,
+    "calibrated": 40
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 78,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9738175619803775,
+       "log": 0.026182438019622452
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 2505,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4519822126384636,
+       "cell_bowley_iqr": 0.050659321145278435,
+       "column_sum_cv": 0.5601728674205106,
+       "decades": 1.6712281856424518,
+       "level_spread": 0.71394122994123,
+       "missing_share": 0.43867137519832133,
+       "moors": 1.998130328116474,
+       "row_median_spread": 2.976323166525925,
+       "tail": 33.787398257092306
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 78,
+    "n_features_matched": 2305,
+    "levels": {
+     "lineage": 19,
+     "class": 2,
+     "group": 19
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 34,
+     "outside_supported_region": 3,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "T cell": 19,
+     "lymphoid": 15,
+     "myeloid": 4,
+     "erythrocyte": 2
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 78,
+    "n_features_matched": 2305,
+    "levels": {
+     "class": 8,
+     "lineage": 19,
+     "group": 20
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 28,
+     "no_confident_label": 3
+    },
+    "top_labels": {
+     "T cell": 20,
+     "lymphoid": 18,
+     "erythrocyte": 5,
+     "neutrophil": 3,
+     "myeloid": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd064083_b",
+   "label": "linear",
+   "refused": null,
+   "cells": 70,
+   "detect_seconds": 0.015,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 27,
+   "answered": {
+    "median": 20,
+    "calibrated": 26
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 70,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9683491576839325,
+       "log": 0.03165084231606748
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 2508,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4197828079916043,
+       "cell_bowley_iqr": 0.06709909185290425,
+       "column_sum_cv": 0.897810880001795,
+       "decades": 1.6383174018735196,
+       "level_spread": 0.6943551343551344,
+       "missing_share": 0.4658008658008658,
+       "moors": 1.9033552907989568,
+       "row_median_spread": 2.5736794005260215,
+       "tail": 36.811138071223425
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 70,
+    "n_features_matched": 2305,
+    "levels": {
+     "lineage": 14,
+     "group": 6,
+     "class": 6
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 44
+    },
+    "top_labels": {
+     "lymphoid": 13,
+     "T cell": 5,
+     "b cell": 5,
+     "myeloid": 1,
+     "monocyte/macrophage": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 70,
+    "n_features_matched": 2305,
+    "levels": {
+     "group": 3,
+     "lineage": 14,
+     "class": 3
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 48,
+     "outside_supported_region": 2
+    },
+    "top_labels": {
+     "lymphoid": 8,
+     "myeloid": 6,
+     "monocyte/macrophage": 2,
+     "b cell": 2,
+     "neutrophil": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd021882_maxquant",
+   "label": "linear",
+   "refused": "validation"
+  },
+  {
+   "id": "dusszachniewicz_maxquant",
+   "label": "linear",
+   "refused": null,
+   "cells": 45,
+   "detect_seconds": 0.009,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": "counts",
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 20,
+    "calibrated": 20
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 45,
+      "gate": "counts",
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": null,
+      "reading": "linear",
+      "reason": null,
+      "rows": 9978,
+      "set": [
+       "linear"
+      ],
+      "statistics": null,
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": null,
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 45,
+    "n_features_matched": 6721,
+    "levels": {
+     "lineage": 14,
+     "class": 6
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 20,
+     "outside_supported_region": 3,
+     "no_confident_label": 2
+    },
+    "top_labels": {
+     "lymphoid": 13,
+     "b cell": 5,
+     "plasma cell": 1,
+     "myeloid": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 45,
+    "n_features_matched": 6721,
+    "levels": {
+     "lineage": 14,
+     "class": 6
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 20,
+     "outside_supported_region": 3,
+     "no_confident_label": 2
+    },
+    "top_labels": {
+     "lymphoid": 13,
+     "b cell": 5,
+     "plasma cell": 1,
+     "myeloid": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "herrera2025_fragpipe",
+   "label": "linear",
+   "refused": null,
+   "cells": 91,
+   "detect_seconds": 0.032,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 38,
+    "calibrated": 38
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 91,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9968645172227981,
+       "log": 0.0031354827772018656
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 4937,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.5407225303182969,
+       "cell_bowley_iqr": 0.039591236124419726,
+       "column_sum_cv": 0.5729118990909872,
+       "decades": 2.2595631338581894,
+       "level_spread": 0.8492282732282733,
+       "missing_share": 0.4687591120647633,
+       "moors": 2.2293386376876136,
+       "row_median_spread": 1.0251031430714308,
+       "tail": 45.06331414316009
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 91,
+    "n_features_matched": 4207,
+    "levels": {
+     "lineage": 20,
+     "group": 8,
+     "class": 10
+    },
+    "abstain_reasons": {
+     "outside_supported_region": 15,
+     "ambiguous_between_classes": 37,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "myeloid": 20,
+     "monocyte/macrophage": 6,
+     "erythrocyte": 5,
+     "neutrophil": 5,
+     "T cell": 2
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 91,
+    "n_features_matched": 4207,
+    "levels": {
+     "lineage": 20,
+     "group": 8,
+     "class": 10
+    },
+    "abstain_reasons": {
+     "outside_supported_region": 15,
+     "ambiguous_between_classes": 37,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "myeloid": 20,
+     "monocyte/macrophage": 6,
+     "erythrocyte": 5,
+     "neutrophil": 5,
+     "T cell": 2
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "lungmap_bpd_fragpipe",
+   "label": "linear",
+   "refused": null,
+   "cells": 20,
+   "detect_seconds": 0.017,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 10,
+    "calibrated": 10
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 20,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9720842988391708,
+       "log": 0.027915701160829164
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 5074,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4495187513979716,
+       "cell_bowley_iqr": 0.09513265956887573,
+       "column_sum_cv": 0.3531174793645122,
+       "decades": 1.4692320450102188,
+       "level_spread": 0.64795811995812,
+       "missing_share": 0.7214525029562475,
+       "moors": 1.964145193210752,
+       "row_median_spread": 2.8521681962621668,
+       "tail": 24.460397677530118
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 20,
+    "n_features_matched": 4479,
+    "levels": {
+     "lineage": 7,
+     "group": 1,
+     "class": 2
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 10
+    },
+    "top_labels": {
+     "myeloid": 7,
+     "plasma cell": 2,
+     "monocyte/macrophage": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 20,
+    "n_features_matched": 4479,
+    "levels": {
+     "lineage": 7,
+     "group": 1,
+     "class": 2
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 10
+    },
+    "top_labels": {
+     "myeloid": 7,
+     "plasma cell": 2,
+     "monocyte/macrophage": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "msv000099294_hmc3",
+   "label": "linear",
+   "refused": null,
+   "cells": 47,
+   "detect_seconds": 0.013,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 10,
+   "answered": {
+    "median": 16,
+    "calibrated": 15
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 47,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9348254087684142,
+       "log": 0.06517459123158578
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 3300,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4175744321956305,
+       "cell_bowley_iqr": 0.027463136265083066,
+       "column_sum_cv": 0.17312091487108694,
+       "decades": 1.5922403019431615,
+       "level_spread": 0.7881568881568881,
+       "missing_share": 0.35107672469374596,
+       "moors": 2.0138670865641117,
+       "row_median_spread": 2.366660100051027,
+       "tail": 24.612228292273326
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 0.9487179487179487,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 47,
+    "n_features_matched": 3018,
+    "levels": {
+     "lineage": 7,
+     "class": 4,
+     "group": 4
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 30,
+     "coverage_too_low": 1,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "lymphoid": 6,
+     "T cell": 4,
+     "neutrophil": 3,
+     "myeloid": 1,
+     "erythrocyte": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 47,
+    "n_features_matched": 3018,
+    "levels": {
+     "lineage": 7,
+     "class": 2,
+     "group": 7
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 28,
+     "coverage_too_low": 1,
+     "outside_supported_region": 2
+    },
+    "top_labels": {
+     "T cell": 7,
+     "lymphoid": 4,
+     "myeloid": 3,
+     "neutrophil": 2
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "msv000099294_microglia",
+   "label": "linear",
+   "refused": null,
+   "cells": 57,
+   "detect_seconds": 0.01,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 11,
+   "answered": {
+    "median": 19,
+    "calibrated": 14
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 57,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9850806018544209,
+       "log": 0.014919398145579113
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 2178,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4055106747581967,
+       "cell_bowley_iqr": 0.03895298965514332,
+       "column_sum_cv": 0.9154660390796683,
+       "decades": 1.4561469876172435,
+       "level_spread": 0.7328922759530683,
+       "missing_share": 0.5705781901954151,
+       "moors": 1.9601763285526492,
+       "row_median_spread": 1.4042976400173575,
+       "tail": 39.29167598413724
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 57,
+    "n_features_matched": 1877,
+    "levels": {
+     "lineage": 4,
+     "class": 9,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 30,
+     "outside_supported_region": 3,
+     "coverage_too_low": 10
+    },
+    "top_labels": {
+     "erythrocyte": 9,
+     "lymphoid": 2,
+     "myeloid": 2,
+     "T cell": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 57,
+    "n_features_matched": 1877,
+    "levels": {
+     "lineage": 6,
+     "class": 13
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 26,
+     "outside_supported_region": 2,
+     "coverage_too_low": 10
+    },
+    "top_labels": {
+     "erythrocyte": 13,
+     "myeloid": 3,
+     "lymphoid": 3
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd061052_spectronaut",
+   "label": "linear",
+   "refused": null,
+   "cells": 29,
+   "detect_seconds": 0.008,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 7,
+    "calibrated": 7
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 29,
+      "gate": null,
+      "guarantee": "For tables like the 218 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9999142488674122,
+       "log": 8.575113258781291e-05
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 3642,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.5962461726528716,
+       "cell_bowley_iqr": 0.015789268148820423,
+       "column_sum_cv": 0.28565419885442445,
+       "decades": 2.9243459624205665,
+       "level_spread": 0.8874715434715436,
+       "missing_share": 0.19348974606601146,
+       "moors": 2.751957839026068,
+       "row_median_spread": 4.1382774516688405,
+       "tail": 86.46926765495922
+      },
+      "stratum": "S1",
+      "thresholds": {
+       "linear": 0.8122001389621207,
+       "log": 0.9308735764624807
+      },
+      "typicality": {
+       "linear": 0.2564102564102564,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 29,
+    "n_features_matched": 3260,
+    "levels": {
+     "class": 6,
+     "lineage": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 21,
+     "outside_supported_region": 1
+    },
+    "top_labels": {
+     "erythrocyte": 4,
+     "neutrophil": 2,
+     "lymphoid": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 29,
+    "n_features_matched": 3260,
+    "levels": {
+     "class": 6,
+     "lineage": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 21,
+     "outside_supported_region": 1
+    },
+    "top_labels": {
+     "erythrocyte": 4,
+     "neutrophil": 2,
+     "lymphoid": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd043355_pd",
+   "label": "linear",
+   "refused": null,
+   "cells": 59,
+   "detect_seconds": 0.021,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 26,
+    "calibrated": 26
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 59,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9974748124119726,
+       "log": 0.002525187588027499
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 5728,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.5765246485854159,
+       "cell_bowley_iqr": 0.03335611081800727,
+       "column_sum_cv": 2.963899390187908,
+       "decades": 2.1574403472193744,
+       "level_spread": 0.7991051951051953,
+       "missing_share": 0.5990258971688287,
+       "moors": 2.2987491195819936,
+       "row_median_spread": 6.802345247459304,
+       "tail": 34.637330112743825
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 0.7435897435897436,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 59,
+    "n_features_matched": 5495,
+    "levels": {
+     "class": 25,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 23,
+     "outside_supported_region": 10
+    },
+    "top_labels": {
+     "erythrocyte": 17,
+     "plasma cell": 8,
+     "B cell": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 59,
+    "n_features_matched": 5495,
+    "levels": {
+     "class": 25,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 23,
+     "outside_supported_region": 10
+    },
+    "top_labels": {
+     "erythrocyte": 17,
+     "plasma cell": 8,
+     "B cell": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "fulcher_tmt",
+   "label": "linear",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.301,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 1357,
+    "calibrated": 1357
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.998808192288513,
+       "log": 0.001191807711487004
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 1661,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4931303393068226,
+       "cell_bowley_iqr": 0.06259680948385865,
+       "column_sum_cv": 0.38722355957457416,
+       "decades": 2.4628727105274892,
+       "level_spread": 0.9107791765568142,
+       "missing_share": 0.5941195063214931,
+       "moors": 2.0311601978920093,
+       "row_median_spread": 6.822736509554539,
+       "tail": 59.01934797378239
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 1654,
+    "levels": {
+     "group": 299,
+     "lineage": 875,
+     "class": 183
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 444,
+     "coverage_too_low": 179,
+     "outside_supported_region": 19,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "lymphoid": 448,
+     "myeloid": 427,
+     "T cell": 292,
+     "b cell": 116,
+     "plasma cell": 64
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 2000,
+    "n_features_matched": 1654,
+    "levels": {
+     "group": 299,
+     "lineage": 875,
+     "class": 183
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 444,
+     "coverage_too_low": 179,
+     "outside_supported_region": 19,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "lymphoid": 448,
+     "myeloid": 427,
+     "T cell": 292,
+     "b cell": 116,
+     "plasma cell": 64
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "scope2_export",
+   "label": "log",
+   "refused": null,
+   "cells": 1490,
+   "detect_seconds": 0.042,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": "negatives",
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "measured",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 789,
+    "calibrated": 789
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 1490,
+      "gate": "negatives",
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": null,
+      "reading": "log",
+      "reason": null,
+      "rows": 2935,
+      "set": [
+       "log"
+      ],
+      "statistics": null,
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": null,
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "measured"
+    },
+    "n_cells": 1490,
+    "n_features_matched": 2907,
+    "levels": {
+     "group": 247,
+     "lineage": 518,
+     "class": 24
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 657,
+     "no_confident_label": 44
+    },
+    "top_labels": {
+     "myeloid": 464,
+     "T cell": 247,
+     "lymphoid": 54,
+     "neutrophil": 12,
+     "erythrocyte": 12
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 1490,
+    "n_features_matched": 2907,
+    "levels": {
+     "group": 247,
+     "lineage": 518,
+     "class": 24
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 657,
+     "no_confident_label": 44
+    },
+    "top_labels": {
+     "myeloid": 464,
+     "T cell": 247,
+     "lymphoid": 54,
+     "neutrophil": 12,
+     "erythrocyte": 12
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "khoury_column_normalized",
+   "label": "log",
+   "refused": null,
+   "cells": 1651,
+   "detect_seconds": 0.47,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 1535,
+    "calibrated": 1535
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 1651,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.015297901018277216,
+       "log": 0.9847020989817228
+      },
+      "reading": "log",
+      "reason": null,
+      "rows": 3732,
+      "set": [
+       "log"
+      ],
+      "statistics": {
+       "bowley": 0.09514588140657344,
+       "cell_bowley_iqr": 0.04514490853594573,
+       "column_sum_cv": 0.061939330255109976,
+       "decades": 0.23721725918299655,
+       "level_spread": -0.7777793257793257,
+       "missing_share": 0.5874157595870637,
+       "moors": 1.2595788993303274,
+       "row_median_spread": 1.9808437193130344,
+       "tail": 2.5799473671940816
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 0.0,
+       "log": 1.0
+      },
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "missing"
+    },
+    "n_cells": 1651,
+    "n_features_matched": 3110,
+    "levels": {
+     "group": 639,
+     "lineage": 707,
+     "class": 189
+    },
+    "abstain_reasons": {
+     "no_confident_label": 3,
+     "ambiguous_between_classes": 110,
+     "outside_supported_region": 3
+    },
+    "top_labels": {
+     "T cell": 632,
+     "myeloid": 414,
+     "lymphoid": 293,
+     "b cell": 179,
+     "plasma cell": 8
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 1651,
+    "n_features_matched": 3110,
+    "levels": {
+     "group": 639,
+     "lineage": 707,
+     "class": 189
+    },
+    "abstain_reasons": {
+     "no_confident_label": 3,
+     "ambiguous_between_classes": 110,
+     "outside_supported_region": 3
+    },
+    "top_labels": {
+     "T cell": 632,
+     "myeloid": 414,
+     "lymphoid": 293,
+     "b cell": 179,
+     "plasma cell": 8
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_batchcorr",
+   "label": "linear",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.453,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 1243,
+   "answered": {
+    "median": 792,
+    "calibrated": 672
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.8662113944866233,
+       "log": 0.13378860551337668
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 2934,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.44658708613407644,
+       "cell_bowley_iqr": 0.05833670254593987,
+       "column_sum_cv": 0.2246392547811988,
+       "decades": 1.3852119447612814,
+       "level_spread": 0.8733013528179323,
+       "missing_share": 0.6838070892978868,
+       "moors": 1.5483046367767574,
+       "row_median_spread": 3.0167603236907956,
+       "tail": 6.120879624240612
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.06
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "group": 387,
+     "lineage": 261,
+     "class": 24
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1170,
+     "outside_supported_region": 157,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "monocyte/macrophage": 351,
+     "myeloid": 221,
+     "lymphoid": 40,
+     "T cell": 35,
+     "plasma cell": 13
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 358,
+     "group": 245,
+     "class": 189
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1105,
+     "outside_supported_region": 39,
+     "no_confident_label": 64
+    },
+    "top_labels": {
+     "myeloid": 337,
+     "monocyte/macrophage": 163,
+     "neutrophil": 116,
+     "T cell": 82,
+     "erythrocyte": 72
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_batchcorr_norm",
+   "label": "linear",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.399,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 1125,
+   "answered": {
+    "median": 634,
+    "calibrated": 803
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.8604097075960149,
+       "log": 0.13959029240398507
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 2934,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4473468424548235,
+       "cell_bowley_iqr": 0.05773265554896512,
+       "column_sum_cv": 0.0782551015865378,
+       "decades": 1.3866134847431464,
+       "level_spread": 0.8432706268498941,
+       "missing_share": 0.6834601226993865,
+       "moors": 1.5475778913951432,
+       "row_median_spread": 2.8097509656845276,
+       "tail": 6.129526847946198
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.06
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "group": 334,
+     "lineage": 431,
+     "class": 38
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1165,
+     "outside_supported_region": 30,
+     "no_confident_label": 2
+    },
+    "top_labels": {
+     "T cell": 299,
+     "lymphoid": 267,
+     "myeloid": 164,
+     "monocyte/macrophage": 34,
+     "plasma cell": 18
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 190,
+     "group": 209,
+     "class": 235
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1271,
+     "outside_supported_region": 5,
+     "no_confident_label": 90
+    },
+    "top_labels": {
+     "T cell": 207,
+     "myeloid": 145,
+     "neutrophil": 123,
+     "erythrocyte": 103,
+     "lymphoid": 45
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_log2",
+   "label": "log",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.435,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells"
+   ],
+   "answers_changed": 1100,
+   "answered": {
+    "median": 524,
+    "calibrated": 806
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.015286758166167314,
+       "log": 0.9847132418338327
+      },
+      "reading": "log",
+      "reason": null,
+      "rows": 2934,
+      "set": [
+       "log"
+      ],
+      "statistics": {
+       "bowley": 0.12457467654046475,
+       "cell_bowley_iqr": 0.07313881387293428,
+       "column_sum_cv": 0.08885973351943258,
+       "decades": 0.5005466938500198,
+       "level_spread": -0.8002154854575476,
+       "missing_share": 0.683885991820041,
+       "moors": 1.0931705546795678,
+       "row_median_spread": 2.460038153809151,
+       "tail": 1.7295569508405344
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 0.0,
+       "log": 1.0
+      },
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 421,
+     "group": 347,
+     "class": 38
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1158,
+     "outside_supported_region": 35,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "T cell": 312,
+     "lymphoid": 256,
+     "myeloid": 165,
+     "monocyte/macrophage": 35,
+     "plasma cell": 15
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 183,
+     "group": 133,
+     "class": 208
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1390,
+     "outside_supported_region": 19,
+     "no_confident_label": 67
+    },
+    "top_labels": {
+     "myeloid": 150,
+     "T cell": 121,
+     "neutrophil": 100,
+     "erythrocyte": 92,
+     "lymphoid": 33
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_log2_imputed",
+   "label": "log",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.537,
+   "verdict": "cant_tell",
+   "b4_verdict": "cant_tell",
+   "gate": null,
+   "reason": "no value is missing: the table may have been filled in (imputed), and filled-in values can make a log table look linear",
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells",
+    "value_scale.detected",
+    "value_scale.transformed"
+   ],
+   "answers_changed": 54,
+   "answered": {
+    "median": 488,
+    "calibrated": 480
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": null,
+      "reading": "linear",
+      "reason": "no value is missing: the table may have been filled in (imputed), and filled-in values can make a log table look linear",
+      "rows": 2934,
+      "set": [
+       "linear",
+       "log"
+      ],
+      "statistics": {
+       "bowley": 0.3474580695328339,
+       "cell_bowley_iqr": 0.02567681771129221,
+       "column_sum_cv": 0.004330222090607741,
+       "decades": 0.46515067138351684,
+       "level_spread": 0.5807706194821788,
+       "missing_share": 0.0,
+       "moors": 1.6449964943352828,
+       "row_median_spread": 4.907674477043515,
+       "tail": 3.6848981761187583
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": null,
+      "verdict": "cant_tell",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "cant_tell",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 163,
+     "group": 306,
+     "class": 11
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1505,
+     "no_confident_label": 9,
+     "outside_supported_region": 6
+    },
+    "top_labels": {
+     "T cell": 306,
+     "myeloid": 103,
+     "lymphoid": 60,
+     "neutrophil": 8,
+     "erythrocyte": 3
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 159,
+     "group": 312,
+     "class": 17
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1492,
+     "no_confident_label": 13,
+     "outside_supported_region": 7
+    },
+    "top_labels": {
+     "T cell": 312,
+     "myeloid": 101,
+     "lymphoid": 58,
+     "neutrophil": 11,
+     "erythrocyte": 6
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_log2_nan",
+   "label": "log",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.371,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 801,
+    "calibrated": 801
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.015414072764135978,
+       "log": 0.984585927235864
+      },
+      "reading": "log",
+      "reason": null,
+      "rows": 2934,
+      "set": [
+       "log"
+      ],
+      "statistics": {
+       "bowley": 0.1237238898729671,
+       "cell_bowley_iqr": 0.07231717503092654,
+       "column_sum_cv": 0.0894902133328695,
+       "decades": 0.500139132000714,
+       "level_spread": -0.7955492912973693,
+       "missing_share": 0.6841755282890252,
+       "moors": 1.0936026615791299,
+       "row_median_spread": 2.453857542742826,
+       "tail": 1.728740637685001
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 0.0,
+       "log": 1.0
+      },
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 443,
+     "group": 318,
+     "class": 40
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1174,
+     "outside_supported_region": 23,
+     "no_confident_label": 2
+    },
+    "top_labels": {
+     "T cell": 294,
+     "lymphoid": 280,
+     "myeloid": 163,
+     "monocyte/macrophage": 24,
+     "plasma cell": 18
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 443,
+     "group": 318,
+     "class": 40
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1174,
+     "outside_supported_region": 23,
+     "no_confident_label": 2
+    },
+    "top_labels": {
+     "T cell": 294,
+     "lymphoid": 280,
+     "myeloid": 163,
+     "monocyte/macrophage": 24,
+     "plasma cell": 18
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_log2fc_nan",
+   "label": "log",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.054,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": "negatives",
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "measured",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 793,
+    "calibrated": 793
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": "negatives",
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": null,
+      "reading": "log",
+      "reason": null,
+      "rows": 2934,
+      "set": [
+       "log"
+      ],
+      "statistics": null,
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": null,
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "measured"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 433,
+     "group": 320,
+     "class": 40
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1173,
+     "outside_supported_region": 33,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "T cell": 295,
+     "lymphoid": 276,
+     "myeloid": 157,
+     "monocyte/macrophage": 25,
+     "plasma cell": 19
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 433,
+     "group": 320,
+     "class": 40
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 1173,
+     "outside_supported_region": 33,
+     "no_confident_label": 1
+    },
+    "top_labels": {
+     "T cell": 295,
+     "lymphoid": 276,
+     "myeloid": 157,
+     "monocyte/macrophage": 25,
+     "plasma cell": 19
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "furtwangler_log2_raw_sn",
+   "label": "log",
+   "refused": null,
+   "cells": 2000,
+   "detect_seconds": 0.403,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "missing",
+   "frozen_keys_equal": false,
+   "fields_differing": [
+    "best_guess_rule",
+    "cells"
+   ],
+   "answers_changed": 1302,
+   "answered": {
+    "median": 946,
+    "calibrated": 975
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 2000,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.013346520421690822,
+       "log": 0.9866534795783092
+      },
+      "reading": "log",
+      "reason": null,
+      "rows": 2934,
+      "set": [
+       "log"
+      ],
+      "statistics": {
+       "bowley": 0.0770483091304699,
+       "cell_bowley_iqr": 0.07067470899362743,
+       "column_sum_cv": 0.20146315022054237,
+       "decades": 0.5544323064203203,
+       "level_spread": -0.6880553309363735,
+       "missing_share": 0.6834262099522835,
+       "moors": 1.103999819992172,
+       "row_median_spread": 1.071666627931299,
+       "tail": 1.646632181263867
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 0.0,
+       "log": 1.0
+      },
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "missing"
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "lineage": 399,
+     "group": 566,
+     "class": 10
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 954,
+     "outside_supported_region": 62,
+     "no_confident_label": 9
+    },
+    "top_labels": {
+     "monocyte/macrophage": 513,
+     "myeloid": 376,
+     "T cell": 52,
+     "lymphoid": 23,
+     "neutrophil": 10
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 2000,
+    "n_features_matched": 2734,
+    "levels": {
+     "group": 284,
+     "class": 141,
+     "lineage": 521
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 995,
+     "outside_supported_region": 25,
+     "no_confident_label": 34
+    },
+    "top_labels": {
+     "myeloid": 493,
+     "monocyte/macrophage": 250,
+     "neutrophil": 67,
+     "erythrocyte": 64,
+     "T cell": 34
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd049412_hela250pg",
+   "label": "linear",
+   "refused": "validation"
+  },
+  {
+   "id": "pxd049412_a549_singlecells",
+   "label": "linear",
+   "refused": null,
+   "cells": 50,
+   "detect_seconds": 0.02,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 5,
+    "calibrated": 5
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 50,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.99490210427956,
+       "log": 0.005097895720439982
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 5755,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.5342009280808185,
+       "cell_bowley_iqr": 0.05012737675454837,
+       "column_sum_cv": 1.2564292617361916,
+       "decades": 2.2772822946306874,
+       "level_spread": 0.683971127971128,
+       "missing_share": 0.45082189400521283,
+       "moors": 2.420221913660143,
+       "row_median_spread": 3.2821299335649594,
+       "tail": 38.554965530443134
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 50,
+    "n_features_matched": 5623,
+    "levels": {
+     "group": 1,
+     "lineage": 3,
+     "class": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 34,
+     "coverage_too_low": 7,
+     "outside_supported_region": 4
+    },
+    "top_labels": {
+     "lymphoid": 3,
+     "T cell": 1,
+     "plasma cell": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 50,
+    "n_features_matched": 5623,
+    "levels": {
+     "group": 1,
+     "lineage": 3,
+     "class": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 34,
+     "coverage_too_low": 7,
+     "outside_supported_region": 4
+    },
+    "top_labels": {
+     "lymphoid": 3,
+     "T cell": 1,
+     "plasma cell": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "pxd069060_diann_report",
+   "label": "linear",
+   "refused": "validation"
+  },
+  {
+   "id": "quantms_pxd004452_ibaq",
+   "label": "linear",
+   "refused": "validation"
+  },
+  {
+   "id": "quantms_pxd004452_ribaq",
+   "label": "log",
+   "refused": "validation"
+  },
+  {
+   "id": "brunner_diann_1ng",
+   "label": "linear",
+   "refused": "validation"
+  },
+  {
+   "id": "brunner_mq_singlecells",
+   "label": "linear",
+   "refused": null,
+   "cells": 51,
+   "detect_seconds": 0.026,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 3,
+    "calibrated": 3
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 51,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9916817596861024,
+       "log": 0.008318240313897645
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 8228,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.6117535482438107,
+       "cell_bowley_iqr": 0.08087754053137342,
+       "column_sum_cv": 0.4843266254351846,
+       "decades": 2.4456153633053606,
+       "level_spread": 0.7026833056557548,
+       "missing_share": 0.602531289618424,
+       "moors": 2.4053781456776986,
+       "row_median_spread": 0.9679797061216675,
+       "tail": 20.590233306403167
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 51,
+    "n_features_matched": 5956,
+    "levels": {
+     "lineage": 3
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 44,
+     "coverage_too_low": 4
+    },
+    "top_labels": {
+     "lymphoid": 2,
+     "myeloid": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 51,
+    "n_features_matched": 5956,
+    "levels": {
+     "lineage": 3
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 44,
+     "coverage_too_low": 4
+    },
+    "top_labels": {
+     "lymphoid": 2,
+     "myeloid": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "krull_singlecells",
+   "label": "linear",
+   "refused": null,
+   "cells": 143,
+   "detect_seconds": 0.018,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 48,
+    "calibrated": 48
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 143,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9996332780739106,
+       "log": 0.00036672192608949185
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 1409,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.4061303699057096,
+       "cell_bowley_iqr": 0.0949516864299425,
+       "column_sum_cv": 0.37121846658997326,
+       "decades": 1.7698945041934628,
+       "level_spread": 0.5969637222092263,
+       "missing_share": 0.615464024974316,
+       "moors": 2.4457435534814387,
+       "row_median_spread": 1.3737884169386334,
+       "tail": 83.0985127586607
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 0.8205128205128205,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 143,
+    "n_features_matched": 1146,
+    "levels": {
+     "class": 12,
+     "lineage": 29,
+     "group": 7
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 88,
+     "outside_supported_region": 4,
+     "coverage_too_low": 3
+    },
+    "top_labels": {
+     "myeloid": 17,
+     "lymphoid": 12,
+     "erythrocyte": 10,
+     "T cell": 7,
+     "plasma cell": 2
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 143,
+    "n_features_matched": 1146,
+    "levels": {
+     "class": 12,
+     "lineage": 29,
+     "group": 7
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 88,
+     "outside_supported_region": 4,
+     "coverage_too_low": 3
+    },
+    "top_labels": {
+     "myeloid": 17,
+     "lymphoid": 12,
+     "erythrocyte": 10,
+     "T cell": 7,
+     "plasma cell": 2
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "cong_mq_singlecells",
+   "label": "linear",
+   "refused": "validation"
+  },
+  {
+   "id": "hu2023_pd_k562",
+   "label": "linear",
+   "refused": null,
+   "cells": 72,
+   "detect_seconds": 0.007,
+   "verdict": "linear",
+   "b4_verdict": "linear",
+   "gate": null,
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 4,
+    "calibrated": 4
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "linear",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 72,
+      "gate": null,
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": {
+       "linear": 0.9370650096586275,
+       "log": 0.06293499034137257
+      },
+      "reading": "linear",
+      "reason": null,
+      "rows": 1409,
+      "set": [
+       "linear"
+      ],
+      "statistics": {
+       "bowley": 0.5200693902788059,
+       "cell_bowley_iqr": 0.024704485230177542,
+       "column_sum_cv": 0.25154039472280454,
+       "decades": 2.1908349902140887,
+       "level_spread": 0.9395277963463798,
+       "missing_share": 0.1193813579370712,
+       "moors": 2.122195479128759,
+       "row_median_spread": 4.798014595058224,
+       "tail": 20.63171581924469
+      },
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": {
+       "linear": 1.0,
+       "log": 0.0
+      },
+      "verdict": "linear",
+      "warning": null
+     },
+     "transformed": true,
+     "verdict": "linear",
+     "zeros_read": "missing"
+    },
+    "n_cells": 72,
+    "n_features_matched": 1354,
+    "levels": {
+     "lineage": 3,
+     "class": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 46,
+     "outside_supported_region": 22
+    },
+    "top_labels": {
+     "lymphoid": 2,
+     "plasma cell": 1,
+     "myeloid": 1
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "linear",
+     "transformed": true
+    },
+    "n_cells": 72,
+    "n_features_matched": 1354,
+    "levels": {
+     "lineage": 3,
+     "class": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 46,
+     "outside_supported_region": 22
+    },
+    "top_labels": {
+     "lymphoid": 2,
+     "plasma cell": 1,
+     "myeloid": 1
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  },
+  {
+   "id": "cptac_ccrcc_tumor",
+   "label": "log",
+   "refused": null,
+   "cells": 110,
+   "detect_seconds": 0.009,
+   "verdict": "log",
+   "b4_verdict": "log",
+   "gate": "negatives",
+   "reason": null,
+   "warning": false,
+   "calibration": "protein-v1",
+   "median_reads": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "measured",
+   "frozen_keys_equal": true,
+   "fields_differing": [],
+   "answers_changed": 0,
+   "answered": {
+    "median": 47,
+    "calibrated": 47
+   },
+   "summary": {
+    "value_scale": {
+     "detected": "log",
+     "evidence": {
+      "calibration": "protein-v1",
+      "columns": 110,
+      "gate": "negatives",
+      "guarantee": "For tables like the 68 calibration deposits of this stratum (public processed protein tables, linear as deposited, and constructed logs of them), the right reading is missing from the answer at most 5% of the time, with 95% confidence (protein-v1).",
+      "notes": [],
+      "probabilities": null,
+      "reading": "log",
+      "reason": null,
+      "rows": 11710,
+      "set": [
+       "log"
+      ],
+      "statistics": null,
+      "stratum": "S2+S3",
+      "thresholds": {
+       "linear": 0.11421918456398616,
+       "log": 0.918920726730421
+      },
+      "typicality": null,
+      "verdict": "log",
+      "warning": null
+     },
+     "transformed": false,
+     "verdict": "log",
+     "zeros_read": "measured"
+    },
+    "n_cells": 110,
+    "n_features_matched": 7486,
+    "levels": {
+     "lineage": 24,
+     "class": 22,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 46,
+     "outside_supported_region": 8,
+     "no_confident_label": 9
+    },
+    "top_labels": {
+     "lymphoid": 16,
+     "plasma cell": 10,
+     "erythrocyte": 9,
+     "myeloid": 8,
+     "neutrophil": 3
+    }
+   },
+   "median_summary": {
+    "value_scale": {
+     "detected": "log",
+     "transformed": false
+    },
+    "n_cells": 110,
+    "n_features_matched": 7486,
+    "levels": {
+     "lineage": 24,
+     "class": 22,
+     "group": 1
+    },
+    "abstain_reasons": {
+     "ambiguous_between_classes": 46,
+     "outside_supported_region": 8,
+     "no_confident_label": 9
+    },
+    "top_labels": {
+     "lymphoid": 16,
+     "plasma cell": 10,
+     "erythrocyte": 9,
+     "myeloid": 8,
+     "neutrophil": 3
+    }
+   },
+   "rna_identical": true,
+   "invariants": {
+    "no_inf_after_stage0": true,
+    "stage0_missing_as_expected": true,
+    "mask_sum_equals_observed": true,
+    "zscore_mean0_sd1": true,
+    "prepare_query_matches_trace": true,
+    "encoder_input_finite": true,
+    "protein_query_reads_as_stage0": true,
+    "every_cell_answered_or_abstained": true
+   },
+   "invariants_failed": []
+  }
+ ],
+ "app": [
+  {
+   "check": "GET /api/status lists auto, linear and log, and the zeros choices",
+   "pass": true
+  },
+  {
+   "check": "pbmc240_diann (its file), nothing stated: 200, equal to pipeline.run_projection's reply, with verdict, zeros_read and evidence",
+   "pass": true,
+   "status": 200,
+   "error": null
+  },
+  {
+   "check": "scope2_export (its file), nothing stated: 200, equal to pipeline.run_projection's reply, with verdict, zeros_read and evidence",
+   "pass": true,
+   "status": 200,
+   "error": null
+  },
+  {
+   "check": "pxd064083_t (its file), nothing stated: 200, equal to pipeline.run_projection's reply, with verdict, zeros_read and evidence",
+   "pass": true,
+   "status": 200,
+   "error": null
+  },
+  {
+   "check": "furtwangler_log2 (its 2,000-cell subsample), nothing stated: 200, equal to pipeline.run_projection's reply, with verdict, zeros_read and evidence",
+   "pass": true,
+   "status": 200,
+   "error": null
+  },
+  {
+   "check": "pbmc240_diann with 2 values made negative, nothing stated: 400, naming them and the service's check, with UNDECIDED_NEGATIVES_REASON",
+   "pass": true,
+   "status": 400,
+   "error": "2 values are negative, so they are not raw intensities, yet the service's check reads the rest as raw",
+   "reason": "If the values are already log, choose Already log. If they are raw intensities, remove the negative values and send the file again."
+  },
+  {
+   "check": "the same, value_scale linear: 400 with the stated reading's reason",
+   "pass": true,
+   "status": 400,
+   "error": "2 values are negative, so they are not raw intensities: the table is already on a log scale, or centred",
+   "reason": "Choose Already log, or I don't know, for this file."
+  },
+  {
+   "check": "the same, value_scale log: 200",
+   "pass": true,
+   "status": 200,
+   "error": null
+  }
+ ]
+}

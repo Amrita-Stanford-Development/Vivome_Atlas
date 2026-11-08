@@ -74,8 +74,6 @@ ALLOWED_MISSING = (
     "research/benchmark/sorted_cd4cd8/",  # written once, when sorted CD4/CD8 data is scored (protocol-sorted-cd4cd8.md)
     "valuescale/corpus/test_scored.json",  # written once by valuescale/corpus/score_test.py when the sealed test is scored (plan B7)
     "valuescale/corpus/test_started.json",  # written by valuescale/corpus/score_test.py before it reads any test table (plan B7)
-    # Files B5 will create (research/value-scale-b5-plan.md); each comes off this list when it exists
-    "research/notebook-outputs/value_scale_b5/",
     "dist/",  # the Pages build output (scripts/build_pages_site.py), gitignored
     "data/profiles/",  # the gene profile shards, written only into dist/site/ by scripts/build_pages_site.py
     # The film's project writes these, all gitignored (docs/web/motion.md)

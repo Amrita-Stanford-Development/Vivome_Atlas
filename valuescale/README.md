@@ -21,8 +21,13 @@ expectations written before it runs (`bank/expectations/`):
 - **B4, calibration** (below), with the score as amended before any
   calibration score (protocol amendment 5).
 
-The service still uses its median rule until B5 wires this package in. Each
-step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,
+- **B5, the service** (`research/value-scale-b5-design.md`): Stage 0 reads
+  a protein table the request leaves to the service with `detect`
+  (`service/pipeline/alignment.py`), and the site asks the uploader first.
+  It is built and checked on the bank (`research/notebook-outputs/value_scale_b5/`),
+  and goes live with the site after B7.
+
+Each step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,
 and its entry is in `research/notebook-run-history.md`.
 
 ## What is built

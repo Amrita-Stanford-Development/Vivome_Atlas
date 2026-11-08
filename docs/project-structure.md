@@ -16,8 +16,9 @@ dependencies, like the service; it renders the stills the website's Motion
 page shows, so `web/` keeps no build step.
 
 The raw-or-log package (`valuescale/`) decides whether an uploaded table
-still needs a log. It imports nothing from `service/`, so it can become its
-own package later; its plan is `research/value-scale-plan.md`.
+still needs a log; the service's Stage 0 reads protein tables with it. It
+imports nothing from `service/`, so it can become its own package later;
+its plan is `research/value-scale-plan.md`.
 
 `docs/` explains how the products work. `scripts/` builds and checks the
 repository. For a one-line description of every file, see

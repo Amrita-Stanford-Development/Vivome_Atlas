@@ -140,19 +140,38 @@ differences are rounding. In float32 the mean of a gene whose few values
 differ by far less than their level was off by up to 0.0016
 (`research/notebook-outputs/value_scale_zscore/`).
 
+**Stage 0 reads a protein table with the calibrated check** (B5;
+`research/value-scale-b5-design.md`): `valuescale.detect`, the raw-or-log
+package (`../valuescale/`), with its shipped calibration. Its "linear" or
+"log" is the reading; on "can't tell" or "unlike either" the table is read
+as raw (`config.VALUE_SCALE_UNDECIDED_READING`, B1's cheaper mistake).
+Under a log reading a 0 is not measured, unless the request says otherwise
+or the table is centred (at least `valuescale.gates.NEGATIVE_SHARE` of its
+observed values negative), where it is a value. The service's own raw
+reading of a table with negative values is refused, with a reason for the
+reply. The reply's `value_scale` names the check's `verdict`, what a 0 was
+read as (`zeros_read`) and the check's report (`evidence`). RNA keeps the
+median rule (`alignment.median_rule`). `config.VALUE_SCALE_METHOD`
+("calibrated", or "median" for the rule before B5, exactly as it was) is
+read at call time; `alignment.scale_method` sets it for a block, and the
+scripts of the tests whose protocols were frozen under the median rule
+keep it by name (`SCALE_METHOD`, guarded in
+`tests/test_valuescale_in_step.py`). The frozen fixtures are compared on
+their frozen keys (`tests/test_pipeline_versions.py`
+`FIELDS_ADDED_SINCE_FREEZING`) and never regenerated.
+
 **A request may state a protein upload's value scale** (form field
 `value_scale`: `auto`, `linear` or `log`, and with `log` what a 0 means,
 `zeros`: `missing` or `measured`; see
-[`../docs/service/projection-api.md`](../docs/service/projection-api.md)).
-Stage 0's median rule reads linear tables on a small scale as log
-(`research/notebook-outputs/value_scale_step1/`), so the user can say which
-the file is. `alignment.median_rule` is the rule, `alignment.apply_reading`
-applies a reading, and `detect_and_transform_value_scale` runs both, with
-the stated reading winning. Every version receives them as `stated_scale`
-and `stated_zeros` (`pipeline.run_projection`, which refuses either on an
-RNA upload), v4.2's protein query included. With no field,
-Stage 0 and the reply are unchanged byte for byte
-(`research/notebook-outputs/value_scale_phaseA/`).
+[`../docs/service/projection-api.md`](../docs/service/projection-api.md)),
+so the uploader can say which the file is; the site asks them as they
+choose it. `alignment.apply_reading` applies a reading, and
+`detect_and_transform_value_scale` runs the check and the reading, with
+the stated reading winning; the check's verdict is still reported. Every
+version receives them as `stated_scale` and `stated_zeros`
+(`pipeline.run_projection`, which refuses either on an RNA upload), v4.2's
+protein query included (it reads a 0 as Stage 0 applied it,
+`ValueScale.zeros_applied`).
 
 **Pipeline versions.** `config.PIPELINE_VERSION` (env
 `VIVOME_PIPELINE_VERSION`) chooses which bundle loads, and with it the label

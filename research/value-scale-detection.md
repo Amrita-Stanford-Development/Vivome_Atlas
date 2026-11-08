@@ -79,10 +79,13 @@ are binding; this is their summary.
 ## The question
 
 Stage 0 (`service/pipeline/alignment.py`, `detect_and_transform_value_scale`)
-decides whether a protein upload still needs a log. Today: no negative value
-and a non-zero median above 50 (`config.LINEAR_SCALE_MEDIAN_THRESHOLD`) means
-linear. PXD064083's linear values (median 7 and 8, up to 211,481, 44% and 47%
-zeros) were read as log.
+decides whether a protein upload still needs a log. Before B5 the rule was
+the same for every upload: no negative value and a non-zero median above 50
+(`config.LINEAR_SCALE_MEDIAN_THRESHOLD`) means linear. PXD064083's linear
+values (median 7 and 8, up to 211,481, 44% and 47% zeros) were read as log.
+Since B5 (built 2026-11-08; live with B7), a protein table whose reading the
+request leaves to the service is read by this detector, and RNA keeps the
+rule.
 
 **Only "log needed or not" matters here.** Every gene is z-scored within the
 upload before the model sees it (`alignment.zscore_per_gene`), which removes
