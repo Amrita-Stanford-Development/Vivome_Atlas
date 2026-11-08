@@ -51,5 +51,22 @@ class BuildSpaceHelpTests(unittest.TestCase):
         self.assertEqual(caught.exception.code, 0)
 
 
+class BuildSpaceFilesTests(unittest.TestCase):
+    """Stage 0 reads a protein table with the raw-or-log package (B5), so the
+    staged service carries the package and its shipped calibration."""
+
+    def test_the_space_carries_the_raw_or_log_package(self):
+        spec = importlib.util.spec_from_file_location("build_space", REPO / "deploy" / "huggingface" / "build_space.py")
+        build_space = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(build_space)
+        files = {p.relative_to(REPO).as_posix() for p in build_space.package_files()}
+        for name in ("valuescale/__init__.py", "valuescale/method.py", "valuescale/calibration/protein-v1.json",
+                     "service/pipeline/alignment.py"):
+            self.assertIn(name, files)
+        self.assertFalse([f for f in files if "/tests/" in f or "/corpus/" in f or "/bank/" in f], "no tests or data")
+        dockerfile = (REPO / "deploy" / "huggingface" / "Dockerfile").read_text(encoding="utf-8")
+        self.assertIn("COPY --chown=user valuescale ./valuescale", dockerfile)
+
+
 if __name__ == "__main__":
     unittest.main()

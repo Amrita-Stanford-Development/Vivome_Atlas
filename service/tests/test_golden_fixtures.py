@@ -75,8 +75,14 @@ class GoldenFixtureTestsBase:
                                             restrict_to_supported_classes=True)
 
     def test_dataset_level_fields_match(self):
-        for key in ("model_version", "n_cells", "n_features_matched", "n_features_unmatched", "value_scale"):
+        for key in ("model_version", "n_cells", "n_features_matched", "n_features_unmatched"):
             self.assertEqual(self.fresh[key], self.golden[key], f"field {key!r} changed")
+        # value_scale on the golden file's keys; the only fields added since are
+        # the calibrated check's (B5; test_pipeline_versions.FIELDS_ADDED_SINCE_FREEZING)
+        from service.tests.test_pipeline_versions import FIELDS_ADDED_SINCE_FREEZING
+        fresh, golden = self.fresh["value_scale"], self.golden["value_scale"]
+        self.assertEqual({k: fresh.get(k) for k in golden}, golden, "field 'value_scale' changed")
+        self.assertLessEqual(set(fresh) - set(golden), set(FIELDS_ADDED_SINCE_FREEZING["response.value_scale"]))
         # The release number moves with every release; the frozen behaviour does not.
         self.assertEqual(self.fresh["atlas_version"], config.ATLAS_VERSION)
 

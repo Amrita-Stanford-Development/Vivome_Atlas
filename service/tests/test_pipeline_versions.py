@@ -26,9 +26,18 @@ FIXTURES = Path(__file__).resolve().parent / "fixtures"
 REPO = Path(__file__).resolve().parents[2]
 
 
+# Fields a reply has gained since its files were frozen, by where they sit.
+# Every frozen key is still compared; only these may be added (B5: the
+# calibrated check's verdict, what a 0 was read as, and its report;
+# research/value-scale-b5-design.md).
+FIELDS_ADDED_SINCE_FREEZING = {"response.value_scale": ("verdict", "zeros_read", "evidence")}
+
+
 def assert_same(test, fresh, frozen, where="response"):
     if isinstance(frozen, dict):
-        test.assertEqual(sorted(fresh), sorted(frozen), f"{where}: keys changed")
+        added = FIELDS_ADDED_SINCE_FREEZING.get(where, ())
+        test.assertEqual(sorted(k for k in fresh if not (k in added and k not in frozen)), sorted(frozen),
+                         f"{where}: keys changed")
         for key in frozen:
             assert_same(test, fresh[key], frozen[key], f"{where}.{key}")
     elif isinstance(frozen, list):
@@ -55,6 +64,18 @@ CHANGED_SINCE_FREEZING = {
     ("pbmc240", "default"): {42: {"label": "cd4-positive, alpha-beta t cell", "abstained": False}},
 }
 ANSWER_FIELDS = ("label", "label_set", "confidence", "abstained", "abstain_reason")
+
+
+class AssertSameTests(unittest.TestCase):
+    def test_only_the_listed_fields_may_be_added(self):
+        frozen = {"n_cells": 2, "value_scale": {"detected": "linear", "transformed": True}}
+        added = {"n_cells": 2, "value_scale": {"detected": "linear", "transformed": True, "verdict": "linear"}}
+        assert_same(self, added, frozen)
+        for fresh in ({"n_cells": 2, "value_scale": {"detected": "linear", "transformed": True, "other": 1}},
+                      {"n_cells": 2, "value_scale": {"detected": "linear"}},
+                      {"n_cells": 2, "value_scale": {"detected": "linear", "transformed": True}, "verdict": "x"}):
+            with self.subTest(fresh=fresh), self.assertRaises(AssertionError):
+                assert_same(self, fresh, frozen)
 
 
 class V3IsUnchangedTests(unittest.TestCase):
@@ -452,9 +473,12 @@ class StatedValueScaleTests(unittest.TestCase):
     stating the rule's own reading changes nothing else in the reply."""
 
     def test_every_version_applies_and_reports_the_stated_reading(self):
+        """Phase A's stated reading on top of the median rule; the calibrated
+        method's is in test_alignment's CalibratedValueScaleTests."""
+        from service.pipeline import alignment
         raw = _load_pbmc240_50()  # raw DIA-NN intensities: the rule reads linear
         for version in ("v3", "v3.1", "v4.1", "v4.2"):
-            with self.subTest(version=version):
+            with self.subTest(version=version), alignment.scale_method("median"):
                 bundle = pipeline.load_bundle(version)
                 reply = lambda **kw: json.loads(json.dumps(pipeline.run_projection(bundle, raw, **kw)))  # noqa: E731
                 auto = reply()

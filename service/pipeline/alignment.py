@@ -16,6 +16,7 @@ see abstention.py for where low coverage actually gets acted on.
 """
 from __future__ import annotations
 
+import contextlib
 import csv
 import io
 import itertools
@@ -27,6 +28,7 @@ from pathlib import PureWindowsPath
 
 import numpy as np
 
+import valuescale
 from service import config
 from service.pipeline import gene_ids
 
@@ -500,15 +502,41 @@ ZEROS = ("missing", "measured")  # what a 0 means, stated with a log reading (ze
 
 
 class NotIntensities(ValueError):
-    """A linear reading was stated for values that cannot be intensities."""
+    """A linear reading of values that cannot be intensities. `reason` is the
+    advice the reply gives, when the reading was the service's own (B5)."""
+
+    def __init__(self, message: str, reason: str | None = None):
+        super().__init__(message)
+        self.reason = reason
+
+
+# The advice when the service's own reading is raw but the table holds a few
+# negative values (research/value-scale-b5-design.md, the owner's choice: refuse
+# in clear words rather than guess).
+UNDECIDED_NEGATIVES_REASON = ("If the values are already log, choose Already log. If they are raw intensities, "
+                              "remove the negative values and send the file again.")
+# What the check found, for that refusal's message, by its verdict.
+FOUND = {
+    "linear": "the service's check reads the rest as raw",
+    "cant_tell": "the service's check could not tell whether the rest are raw or log",
+    "unlike_either": "the service's check found the rest unlike both raw and log tables",
+}
 
 
 @dataclass(frozen=True)
 class ValueScale:
-    detected: str  # "linear" | "log" | "unknown" (no observed values at all): the rule's reading
+    detected: str  # "linear" | "log" | "unknown" (no observed values at all): the method's reading
     transformed: bool
-    stated: str | None = None  # the reading the request stated, or None when it left it to the rule
+    stated: str | None = None  # the reading the request stated, or None when it left it to the service
     zeros: str | None = None  # what the request said a 0 means (ZEROS), with a stated log reading
+    # The calibrated method's (B5): the check's verdict ("linear", "log",
+    # "cant_tell", "unlike_either", or "unknown" with no observed value), what
+    # a 0 was read as under the applied reading ("missing" or "measured"), and
+    # the check's report (valuescale.ScaleReport.to_json()). None under the
+    # median method, so its reply is unchanged.
+    verdict: str | None = None
+    zeros_read: str | None = None
+    evidence: dict | None = None
 
     @property
     def reading(self) -> str:
@@ -524,6 +552,9 @@ class ValueScale:
             out["stated"] = self.stated
         if self.zeros is not None:
             out["zeros"] = self.zeros
+        for key in ("verdict", "zeros_read", "evidence"):
+            if getattr(self, key) is not None:
+                out[key] = getattr(self, key)
         return out
 
 
@@ -582,12 +613,56 @@ def apply_reading(values: np.ndarray, reading: str, zeros: str | None = None) ->
     return transformed
 
 
+@contextlib.contextmanager
+def scale_method(method: str):
+    """config.VALUE_SCALE_METHOD set to `method` for the block, and restored
+    after it (the frozen test scripts keep "median" by name)."""
+    if method not in config.VALUE_SCALE_METHODS:
+        raise ValueError(f"no such way to read the values: {method!r} ({' or '.join(config.VALUE_SCALE_METHODS)})")
+    before = config.VALUE_SCALE_METHOD
+    config.VALUE_SCALE_METHOD = method
+    try:
+        yield
+    finally:
+        config.VALUE_SCALE_METHOD = before
+
+
+def _calibrated_reading(values: np.ndarray, stated: str | None, zeros: str | None) -> tuple[np.ndarray, ValueScale]:
+    """A protein table (finite or NaN) read by the calibrated check, unless
+    the request stated a reading (detect_and_transform_value_scale)."""
+    observed = values[~np.isnan(values)]
+    if not observed.size:
+        scale = ValueScale(detected="unknown", transformed=False, stated=stated, zeros=zeros, verdict="unknown")
+        return apply_reading(values, "unknown", zeros), scale
+    report = valuescale.detect(values)
+    verdict = report.verdict
+    detected = verdict if verdict in ("linear", "log") else config.VALUE_SCALE_UNDECIDED_READING
+    reading = stated or detected
+    negative = int((observed < 0).sum())
+    if reading == "linear":
+        zeros_read = "missing"
+        if negative and stated is None:
+            raise NotIntensities(f"{negative:,} {'value is' if negative == 1 else 'values are'} negative, so they are "
+                                 f"not raw intensities, yet {FOUND[verdict]}", reason=UNDECIDED_NEGATIVES_REASON)
+    elif zeros is not None:
+        zeros_read = zeros
+    else:
+        # B1: a protein 0 is "not measured"; in a centred log table (the
+        # negatives gate's share) it is a value (the owner, 2026-11-08)
+        centred = negative / observed.size >= valuescale.gates.NEGATIVE_SHARE
+        zeros_read = "measured" if centred else "missing"
+    out = apply_reading(values, reading, zeros_read if reading == "log" else None)
+    return out, ValueScale(detected=detected, transformed=reading == "linear", stated=stated, zeros=zeros,
+                           verdict=verdict, zeros_read=zeros_read, evidence=report.to_json())
+
+
 def detect_and_transform_value_scale(
     raw_values: np.ndarray,
     median_threshold: float = config.LINEAR_SCALE_MEDIAN_THRESHOLD,
     zeros_vote: bool = False,
     stated: str | None = None,
     zeros: str | None = None,
+    method: str | None = None,
 ) -> tuple[np.ndarray, ValueScale]:
     """raw_values: (n_raw_genes, n_cells), NaN for missing (this dataset's
     raw units, before any z-scoring). A DIA-NN or similar linear-intensity
@@ -618,7 +693,24 @@ def detect_and_transform_value_scale(
     "measured") says what a 0 in the table means; under a linear reading a 0
     is always "not detected", and the rule's reading is not known in
     advance, so `zeros` needs `stated` "log".
+
+    Two methods read a table the request leaves to the service
+    (research/value-scale-b5-design.md). `method` None reads
+    config.VALUE_SCALE_METHOD at call time. "median" is the rule above,
+    exactly as it always was; RNA (`zeros_vote`) always uses it. "calibrated"
+    (protein's default) reads it with the calibrated check, valuescale.detect
+    (B4): its "linear" or "log", else config.VALUE_SCALE_UNDECIDED_READING
+    (raw). Under a log reading a 0 is "not measured" (B1) unless the request
+    says otherwise, or the table is centred (negative values at least
+    valuescale.gates.NEGATIVE_SHARE of the observed ones), where it is a
+    value. The service's own raw reading of a table with a negative value is
+    refused (NotIntensities, with a `reason` for the reply), as a stated one
+    is. The reply then also names the check's verdict, what a 0 was read as,
+    and the check's report (ValueScale.response).
     """
+    method = config.VALUE_SCALE_METHOD if method is None else method
+    if method not in config.VALUE_SCALE_METHODS:
+        raise ValueError(f"no such way to read the values: {method!r} ({' or '.join(config.VALUE_SCALE_METHODS)})")
     if stated is not None and stated not in READINGS:
         raise ValueError(f"the value scale must be linear or log (or left to the service), got {stated!r}")
     if zeros is not None and zeros not in ZEROS:
@@ -627,6 +719,8 @@ def detect_and_transform_value_scale(
         raise ValueError("what a 0 means can be said only with a log reading: read as raw intensities, every 0 is "
                          "not detected")
     raw_values = finite_or_missing(raw_values)
+    if method == "calibrated" and not zeros_vote:
+        return _calibrated_reading(raw_values, stated, zeros)
     scale = ValueScale(detected=median_rule(raw_values, median_threshold, zeros_vote), transformed=False, stated=stated,
                        zeros=zeros)
     scale = replace(scale, transformed=scale.reading == "linear")

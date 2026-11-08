@@ -1,6 +1,8 @@
 # The VivOME projection service as a Hugging Face Space (Docker SDK, CPU).
 # deploy/huggingface/build_space.py copies this file to the Space's root with
-# the service package, the served version's model files and requirements.txt.
+# the service package, the raw-or-log package (valuescale/, which Stage 0
+# reads protein tables with), the served version's model files and
+# requirements.txt.
 FROM python:3.11-slim
 
 # libgomp: the OpenMP runtime torch's and faiss's CPU builds use.
@@ -33,6 +35,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=user service ./service
+COPY --chown=user valuescale ./valuescale
 COPY --chown=user space_manifest.json .
 USER user
 EXPOSE 7860

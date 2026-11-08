@@ -53,5 +53,13 @@ class MedianRuleInStepTests(unittest.TestCase):
                 self.assertEqual(baselines.median_50(x), None if expected == "unknown" else expected)
 
 
+class CalibratedReadingInStepTests(unittest.TestCase):
+    def test_the_undecided_reading_is_the_packages(self):
+        """B5: on "can't tell" or "unlike either" the service reads a protein
+        table as valuescale's report does (research/value-scale-b5-design.md)."""
+        from valuescale import report
+        self.assertEqual(config.VALUE_SCALE_UNDECIDED_READING, report.UNDECIDED_READING)
+
+
 if __name__ == "__main__":
     unittest.main()

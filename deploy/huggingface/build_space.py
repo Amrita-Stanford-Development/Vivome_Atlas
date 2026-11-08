@@ -8,7 +8,8 @@ are found, not listed by hand: this script loads that version's bundle and
 projects the PBMC240 example, unrestricted and restricted, with an audit hook
 recording every file opened under the model folder, then copies exactly those.
 With them go the service's Python package (no tests, no examples), the
-Dockerfile, the Space card (space_card.md, as README.md), requirements.txt
+raw-or-log package valuescale/ with its shipped calibration (no tests, corpus
+or bank), the Dockerfile, the Space card (space_card.md, as README.md), requirements.txt
 pinned to this interpreter's versions (torch as its CPU build), and a
 .gitattributes that puts every file over 10 MB in Git LFS.
 space_manifest.json lists every file with its size and sha256, the commit it
@@ -83,6 +84,13 @@ def package_files() -> list[Path]:
     service = REPO / "service"
     files = [service / "__init__.py", service / "app.py", service / "config.py"]
     files += sorted((service / "pipeline").glob("*.py"))
+    # Stage 0 reads a protein table with the raw-or-log package (B5): its
+    # modules and the calibration it ships, not its tests, corpus or bank.
+    valuescale = REPO / "valuescale"
+    sys.path.insert(0, str(REPO))
+    from valuescale import calibrated
+    files += sorted(valuescale.glob("*.py"))
+    files.append(calibrated.CALIBRATION_DIR / f"{calibrated.DEFAULT}.json")
     return files
 
 

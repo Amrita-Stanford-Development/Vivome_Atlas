@@ -614,41 +614,41 @@ class AlignToFeatureSpaceTests(unittest.TestCase):
 class DetectAndTransformValueScaleTests(unittest.TestCase):
     def test_linear_scale_is_detected_and_log2_transformed(self):
         raw = np.array([[100.0, 4000.0, 20000.0]])
-        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        transformed, scale = alignment.detect_and_transform_value_scale(raw, method="median")
         self.assertEqual(scale.detected, "linear")
         self.assertTrue(scale.transformed)
         np.testing.assert_allclose(transformed, np.log2(raw))
 
     def test_already_log_scale_is_not_transformed(self):
         raw = np.array([[1.0, 2.0, 3.0]])
-        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        transformed, scale = alignment.detect_and_transform_value_scale(raw, method="median")
         self.assertEqual(scale.detected, "log")
         self.assertFalse(scale.transformed)
         np.testing.assert_array_equal(transformed, raw)
 
     def test_any_negative_value_prevents_the_transform_even_with_a_high_median(self):
         raw = np.array([[-5.0, 4000.0, 20000.0]])
-        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        transformed, scale = alignment.detect_and_transform_value_scale(raw, method="median")
         self.assertEqual(scale.detected, "log")
         self.assertFalse(scale.transformed)
         np.testing.assert_array_equal(transformed, raw)
 
     def test_zero_is_treated_as_not_detected_not_log2_of_zero(self):
         raw = np.array([[0.0, 4000.0, 20000.0]])
-        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        transformed, scale = alignment.detect_and_transform_value_scale(raw, method="median")
         self.assertTrue(scale.transformed)
         self.assertTrue(np.isnan(transformed[0, 0]))
         self.assertFalse(np.isnan(transformed[0, 1]))
 
     def test_nan_entries_are_ignored_by_detection_and_left_nan(self):
         raw = np.array([[np.nan, 4000.0, 20000.0]])
-        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        transformed, scale = alignment.detect_and_transform_value_scale(raw, method="median")
         self.assertEqual(scale.detected, "linear")
         self.assertTrue(np.isnan(transformed[0, 0]))
 
     def test_no_observed_values_at_all_is_unknown_not_a_crash(self):
         raw = np.array([[np.nan, np.nan]])
-        transformed, scale = alignment.detect_and_transform_value_scale(raw)
+        transformed, scale = alignment.detect_and_transform_value_scale(raw, method="median")
         self.assertEqual(scale.detected, "unknown")
         self.assertFalse(scale.transformed)
 
@@ -661,7 +661,7 @@ class DetectAndTransformValueScaleTests(unittest.TestCase):
         wouldn't flag as linear-scale at all, which would defeat the test."""
         log_values = np.array([[7.0, 8.5, 6.0, 10.0]])
         linear_values = 2 ** log_values
-        transformed_linear, scale = alignment.detect_and_transform_value_scale(linear_values)
+        transformed_linear, scale = alignment.detect_and_transform_value_scale(linear_values, method="median")
         self.assertTrue(scale.transformed)
         np.testing.assert_allclose(transformed_linear, log_values, atol=1e-5)
 
@@ -675,7 +675,7 @@ class StatedValueScaleTests(unittest.TestCase):
     SMALL_LINEAR = np.array([[0.0, 3.0, 7.0, 211.0], [5.0, 0.0, 9.0, 12.0]], dtype=np.float32)
 
     def test_a_stated_linear_reading_takes_log2_where_the_rule_reads_log(self):
-        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="linear")
+        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="linear", method="median")
         self.assertEqual((scale.detected, scale.transformed, scale.stated), ("log", True, "linear"))
         nonzero = self.SMALL_LINEAR != 0
         np.testing.assert_allclose(out[nonzero], np.log2(self.SMALL_LINEAR[nonzero]))
@@ -716,9 +716,9 @@ class StatedValueScaleTests(unittest.TestCase):
 
     def test_the_reply_names_the_stated_reading_only_when_one_was_stated(self):
         values = np.array([[1.0, 2.0]])
-        _, auto = alignment.detect_and_transform_value_scale(values)
+        _, auto = alignment.detect_and_transform_value_scale(values, method="median")
         self.assertEqual(auto.response(), {"detected": "log", "transformed": False})
-        _, stated = alignment.detect_and_transform_value_scale(values, stated="linear")
+        _, stated = alignment.detect_and_transform_value_scale(values, stated="linear", method="median")
         self.assertEqual(stated.response(), {"detected": "log", "transformed": True, "stated": "linear"})
 
     def test_the_rule_and_the_reading_are_separate_steps(self):
@@ -730,7 +730,7 @@ class StatedValueScaleTests(unittest.TestCase):
         self.assertTrue(np.isnan(alignment.apply_reading(values, "linear")[values == 0]).all())
 
     def test_a_log_reading_may_say_a_zero_is_not_measured(self):
-        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="missing")
+        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="missing", method="median")
         self.assertEqual((scale.reading, scale.transformed, scale.zeros), ("log", False, "missing"))
         zero = self.SMALL_LINEAR == 0
         self.assertTrue(np.isnan(out[zero]).all())
@@ -738,8 +738,8 @@ class StatedValueScaleTests(unittest.TestCase):
         self.assertEqual(scale.response(), {"detected": "log", "transformed": False, "stated": "log", "zeros": "missing"})
 
     def test_a_zero_said_to_be_measured_is_read_as_a_log_reading_reads_it(self):
-        plain, _ = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log")
-        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="measured")
+        plain, _ = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", method="median")
+        out, scale = alignment.detect_and_transform_value_scale(self.SMALL_LINEAR, stated="log", zeros="measured", method="median")
         np.testing.assert_array_equal(out, plain)
         self.assertEqual(scale.response()["zeros"], "measured")
 
@@ -775,6 +775,142 @@ class StatedValueScaleTests(unittest.TestCase):
         self.assertIsNone(scale.stated)
         self.assertEqual(scale.reading, "log")
         self.assertEqual(alignment.ValueScale("log", True, "linear").reading, "linear")
+
+
+def _linear_table(rows=300, cols=25, seed=7):
+    """Lognormal raw intensities with 30% missing, as
+    test_valuescale_in_step._tables() builds them."""
+    rng = np.random.default_rng(seed)
+    x = np.exp2(rng.normal(14, 3, size=(rows, 1)) + rng.normal(0, 0.7, size=(rows, cols)))
+    x[rng.random(x.shape) < 0.3] = np.nan
+    return x
+
+
+def _with_zeros(x, share, seed=11):
+    rng = np.random.default_rng(seed)
+    return np.where(rng.random(x.shape) < share, 0.0, x)
+
+
+def _centred_table():
+    logged = np.log2(_linear_table())
+    return logged - np.nanmedian(logged, axis=0, keepdims=True)
+
+
+class CalibratedValueScaleTests(unittest.TestCase):
+    """B5: a protein table the request leaves to the service is read by the
+    calibrated check (valuescale.detect); research/value-scale-b5-design.md."""
+
+    def test_a_linear_table_is_read_by_the_check(self):
+        out, scale = alignment.detect_and_transform_value_scale(_linear_table())
+        self.assertEqual((scale.verdict, scale.detected, scale.transformed), ("linear", "linear", True))
+        self.assertEqual(scale.zeros_read, "missing")
+        self.assertEqual(scale.evidence["verdict"], "linear")
+        reply = scale.response()
+        for key in ("verdict", "zeros_read", "evidence"):
+            self.assertIn(key, reply)
+        self.assertNotIn("stated", reply)
+        self.assertNotIn("zeros", reply)
+
+    def test_a_log_table_reads_its_zeros_as_not_measured(self):
+        table = _with_zeros(np.log2(_linear_table()), 0.1)
+        zero = table == 0
+        self.assertTrue(zero.any())
+        out, scale = alignment.detect_and_transform_value_scale(table)
+        self.assertEqual((scale.detected, scale.zeros_read, scale.transformed), ("log", "missing", False))
+        self.assertTrue(np.isnan(out[zero]).all())
+        out, scale = alignment.detect_and_transform_value_scale(table, stated="log", zeros="measured")
+        self.assertTrue((out[zero] == 0).all())
+        self.assertEqual(scale.zeros_read, "measured")
+
+    def test_a_centred_log_tables_zeros_are_measured(self):
+        table = _with_zeros(_centred_table(), 0.005)
+        zero = table == 0
+        self.assertTrue(zero.any())
+        out, scale = alignment.detect_and_transform_value_scale(table)
+        self.assertEqual((scale.detected, scale.zeros_read), ("log", "measured"))
+        self.assertTrue((out[zero] == 0).all())
+        out, scale = alignment.detect_and_transform_value_scale(table, stated="log", zeros="missing")
+        self.assertTrue(np.isnan(out[zero]).all())
+        self.assertEqual(scale.zeros_read, "missing")
+
+    def test_the_size_rule_edge(self):
+        narrow = np.random.default_rng(3).uniform(1, 30, size=(300, 19))
+        _, scale = alignment.detect_and_transform_value_scale(narrow)
+        self.assertEqual((scale.verdict, scale.detected, scale.transformed), ("cant_tell", "linear", True))
+        _, scale = alignment.detect_and_transform_value_scale(_linear_table(cols=20))
+        self.assertEqual(scale.verdict, "linear")
+
+    def test_a_stated_reading_wins_and_the_check_is_reported(self):
+        out, scale = alignment.detect_and_transform_value_scale(_linear_table(), stated="log")
+        self.assertEqual((scale.detected, scale.stated, scale.transformed), ("linear", "log", False))
+        self.assertEqual(scale.verdict, "linear")
+
+    @staticmethod
+    def _a_few_negatives():
+        table = _linear_table()
+        rng = np.random.default_rng(5)
+        observed = np.argwhere(~np.isnan(table))
+        pick = observed[rng.choice(len(observed), size=int(0.005 * len(observed)), replace=False)]
+        table[pick[:, 0], pick[:, 1]] *= -1
+        return table, len(pick)
+
+    def test_a_few_negatives_under_the_services_own_raw_reading_are_refused(self):
+        table, n = self._a_few_negatives()
+        with self.assertRaises(alignment.NotIntensities) as caught:
+            alignment.detect_and_transform_value_scale(table)
+        self.assertIn(f"{n:,} values are negative", str(caught.exception))
+        self.assertIn("the service's check", str(caught.exception))
+        self.assertEqual(caught.exception.reason, alignment.UNDECIDED_NEGATIVES_REASON)
+
+    def test_a_stated_raw_reading_of_negatives_keeps_todays_refusal(self):
+        table, _ = self._a_few_negatives()
+        with self.assertRaises(alignment.NotIntensities) as caught:
+            alignment.detect_and_transform_value_scale(table, stated="linear")
+        self.assertIsNone(caught.exception.reason)
+        self.assertIn("not raw intensities: the table is already on a log scale, or centred", str(caught.exception))
+
+    def test_a_table_with_many_negatives_is_read_log_not_refused(self):
+        out, scale = alignment.detect_and_transform_value_scale(_centred_table())
+        self.assertEqual((scale.verdict, scale.transformed), ("log", False))
+
+    def test_degenerate_tables_get_a_reading(self):
+        one_value = np.full((100, 25), np.nan)
+        one_value[3, 4] = 12.0
+        tables = {"one row": _linear_table(rows=1), "all 0": np.zeros((100, 25)), "all 7": np.full((100, 25), 7.0),
+                  "one value": one_value}
+        for name, table in tables.items():
+            with self.subTest(table=name):
+                _, scale = alignment.detect_and_transform_value_scale(table)
+                self.assertIn(scale.verdict, ("linear", "log", "cant_tell", "unlike_either", "unknown"))
+
+    def test_no_observed_value_is_unknown_and_the_check_is_not_called(self):
+        from unittest import mock
+        with mock.patch("valuescale.detect", side_effect=AssertionError("the check was called")):
+            _, scale = alignment.detect_and_transform_value_scale(np.full((10, 25), np.nan))
+        self.assertEqual((scale.detected, scale.verdict), ("unknown", "unknown"))
+        self.assertIsNone(scale.evidence)
+
+    def test_rna_and_the_median_method_reply_as_today(self):
+        table = _linear_table()
+        _, rna = alignment.detect_and_transform_value_scale(table, zeros_vote=True)
+        self.assertEqual(rna.response(), {"detected": "linear", "transformed": True})
+        _, median = alignment.detect_and_transform_value_scale(table, method="median")
+        self.assertEqual(median.response(), {"detected": "linear", "transformed": True})
+        logged = _with_zeros(np.log2(table), 0.1)
+        out, scale = alignment.detect_and_transform_value_scale(logged, method="median")
+        self.assertEqual(scale.response(), {"detected": "log", "transformed": False})
+        self.assertTrue((out[logged == 0] == 0).all(), "the median rule keeps a log table's 0 values")
+
+    def test_the_method_is_read_at_call_time(self):
+        from service import config
+        before = config.VALUE_SCALE_METHOD
+        with alignment.scale_method("median"):
+            _, scale = alignment.detect_and_transform_value_scale(_linear_table())
+        self.assertNotIn("verdict", scale.response())
+        self.assertEqual(config.VALUE_SCALE_METHOD, before)
+        with self.assertRaises(ValueError):
+            with alignment.scale_method("other"):
+                pass
 
 
 if __name__ == "__main__":

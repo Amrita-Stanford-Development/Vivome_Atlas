@@ -13,7 +13,7 @@ from unittest.mock import patch
 import numpy as np
 
 from service import app, config
-from service.pipeline import coordinates, pipeline, reference
+from service.pipeline import alignment, coordinates, pipeline, reference
 from service.tests import fixtures
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
@@ -362,6 +362,12 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
                                                   "zeros": ["auto", "missing", "measured"]})
 
     def test_with_a_log_reading_a_request_may_say_a_zero_is_not_measured(self):
+        """Phase A's stated fields on top of the median rule (the test server
+        runs in this process, so scale_method reaches it)."""
+        with alignment.scale_method("median"):
+            self._with_a_log_reading_a_request_may_say_a_zero_is_not_measured()
+
+    def _with_a_log_reading_a_request_may_say_a_zero_is_not_measured(self):
         matrix = self._small_linear_matrix(self._install_synthetic_bundle())
         lines = matrix.decode().split("\n")
         lines[1] = ",".join([lines[1].split(",")[0], "0"] + lines[1].split(",")[2:])  # one 0
@@ -398,6 +404,11 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         return "\n".join(lines).encode()
 
     def test_a_stated_value_scale_is_applied_and_said_in_the_reply(self):
+        """Phase A's stated fields on top of the median rule, as above."""
+        with alignment.scale_method("median"):
+            self._a_stated_value_scale_is_applied_and_said_in_the_reply()
+
+    def _a_stated_value_scale_is_applied_and_said_in_the_reply(self):
         matrix = self._small_linear_matrix(self._install_synthetic_bundle())
         url = f"{self.base_url}/api/project"
         status, auto = _post_multipart(url, b"prot", matrix)

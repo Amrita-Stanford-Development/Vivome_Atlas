@@ -233,6 +233,19 @@ PROVISIONAL_CONSTANTS = ("MIN_OBSERVED_GENES",)
 # commonly has and linear-scale intensity data cannot.
 LINEAR_SCALE_MEDIAN_THRESHOLD = 50.0
 
+# Stage 0 — how a protein table the request leaves to the service is read
+# (research/value-scale-b5-design.md). "calibrated": by valuescale.detect, the
+# calibrated check (B4); "median": by the median rule above, which RNA always
+# uses. A constant, not a live switch: the way back is a joint redeploy of the
+# service and the site. alignment.scale_method sets it for a block (the frozen
+# test scripts keep "median" by name).
+VALUE_SCALE_METHODS = ("calibrated", "median")
+VALUE_SCALE_METHOD = "calibrated"
+# On "can't tell" or "unlike either" the table is read as raw: the cheaper
+# mistake by B1's cost study (valuescale.report.UNDECIDED_READING, pinned in
+# service/tests/test_valuescale_in_step.py).
+VALUE_SCALE_UNDECIDED_READING = "linear"
+
 # Stages 1 and 2 — a gene whose observed values agree to about five
 # significant digits (spread at most this share of its largest absolute
 # value) is constant but for rounding, and z-scores to 0 like a constant gene

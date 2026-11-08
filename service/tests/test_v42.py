@@ -37,7 +37,12 @@ class ProteinQueryTests(unittest.TestCase):
     def test_it_reads_the_table_as_stage_0_decided(self):
         """fusion.project passes Stage 0's value scale, so a stated linear
         reading reaches the protein query too: it reads the table as Stage 0's
-        log2 values, a 0 missing (research/value-scale-plan.md, Phase A)."""
+        log2 values, a 0 missing (research/value-scale-plan.md, Phase A). A
+        3-cell table the median rule reads log, so under that rule."""
+        with alignment.scale_method("median"):
+            self._it_reads_the_table_as_stage_0_decided()
+
+    def _it_reads_the_table_as_stage_0_decided(self):
         raw = alignment.RawMatrix(gene_names=["CD8A", "GNLY"], cell_ids=["a", "b", "c"],
                                   values=np.array([[2.0, 8.0, 0.0], [4.0, 16.0, 64.0]], dtype=np.float32))
         genes = ("CD8A", "GNLY")
