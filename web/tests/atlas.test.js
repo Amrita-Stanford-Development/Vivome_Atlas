@@ -77,6 +77,14 @@ test('with an answer on the map, Your data is the file’s card above the setup'
   assert.match(tab, /\$\('data-setup'\)\.hidden = shown && !setupWanted/);
 });
 
+test('the file’s card has a note for how the values were read, under its first line', () => {
+  const card = html.slice(html.indexOf('id="results-card"'), html.indexOf('id="data-setup"'));
+  assert.match(card, /<p class="panel-note" id="results-note"><\/p>\s*<p class="panel-note atlas-scale-note" id="results-scale-note" hidden><\/p>/);
+  const tab = read('js/atlas/data-tab.js');
+  assert.match(tab, /const note = run \? scaleNote\(run\.receipt\) : null;/);
+  assert.match(tab, /\$\('results-scale-note'\)\.hidden = !shown \|\| !note;/);
+});
+
 test('every number slot on the Your data tab has a measured record', async () => {
   const { wfFact } = await import('../js/workflow-data.js');
   const workflow = JSON.parse(read('data/workflow.json'));

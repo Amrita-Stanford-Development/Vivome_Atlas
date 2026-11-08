@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
-  buildAnswerKey, buildAtlasCellCard, buildExampleSummary, buildOutcomeChips, buildReceipt,
+  buildAnswerKey, buildAtlasCellCard, buildExampleSummary, buildOutcomeChips, buildReceipt, scaleNote,
 } from '../js/atlas/atlas-panels.js';
 import { outcomeCounts, receiptFromResponse, receiptFromWorkflow, responseToCells, traceToCells } from '../js/atlas/answers.js';
 import { escapeHtml } from '../js/panels.js';
@@ -129,6 +129,42 @@ test('the receipt warns when the service did not take what the visitor said a 0 
   const ok = clean(buildReceipt(receiptFromResponse({ n_cells: 5, value_scale: taken }, { scaleAsked: 'log', zerosAsked: 'missing' })));
   assert.match(ok, /Already on a log scale, each 0 read as not measured\. You chose this/);
   assert.ok(!ok.includes('did not take'));
+});
+
+test('the receipt says what the service’s check found', () => {
+  const scale = { detected: 'linear', transformed: true, verdict: 'cant_tell', zeros_read: 'missing',
+    evidence: { verdict: 'cant_tell', warning: 'unlike', reason: 'too few columns' } };
+  const html = clean(buildReceipt(receiptFromResponse({ n_cells: 5, value_scale: scale })));
+  assert.match(html, /Values<\/dt><dd>Linear intensities, log2-transformed\. The service&#39;s check could not tell raw from log, so it read them as raw\. Too few cells to tell\. The table is unlike the tables the check was built on: check the reading\.<\/dd>/);
+});
+
+test('scaleNote shows only for the service’s own unsure or unusual reading', () => {
+  const UNSURE = 'The service could not tell whether your values are raw or log, and read them as raw. '
+    + 'If they are already log, send the file again and choose Already log.';
+  const UNUSUAL = "Your table is unlike the tables the service's check was built on, so check how its values were read.";
+  const of = (scale) => scaleNote(receiptFromResponse({ n_cells: 5, value_scale: scale }));
+  const raw = { detected: 'linear', transformed: true, zeros_read: 'missing' };
+  const checked = (verdict, ev = {}, extra = {}) => ({ ...raw, verdict, evidence: { verdict, warning: null, reason: null, ...ev }, ...extra });
+
+  assert.equal(of(checked('cant_tell', { reason: 'too few columns' })), UNSURE);
+  assert.equal(of(checked('unlike_either', { reason: 'no spread' })), UNSURE);
+  assert.equal(of(checked('cant_tell', { warning: 'unlike' })), UNSURE, 'unsure says more than the warning');
+  assert.equal(of(checked('linear', { warning: 'unlike its design tables' })), UNUSUAL);
+  assert.equal(of(checked('log', { warning: '<b>x</b>' }, { detected: 'log', transformed: false })), UNUSUAL, 'the warning is never echoed');
+
+  assert.equal(of(checked('linear')), null, 'a sure reading, like its design tables');
+  assert.equal(of(checked('log', {}, { detected: 'log', transformed: false })), null);
+  assert.equal(of(checked('linear', { warning: '' })), null);
+  assert.equal(of({ ...raw, verdict: 'linear' }), null, 'no evidence');
+  assert.equal(of({ ...raw, verdict: 'linear', evidence: 'unlike' }), null);
+  assert.equal(of({ detected: 'unknown', transformed: false, verdict: 'unknown', evidence: null }), null, 'no values');
+  assert.equal(of({ detected: 'linear', transformed: true }), null, 'RNA, or a service older than the check');
+  assert.equal(of({ detected: 'log', transformed: false, stated: 'log' }), null);
+  assert.equal(of(checked('cant_tell', { warning: 'unlike' }, { stated: 'linear' })), null, 'the visitor chose the reading');
+  assert.equal(of(checked('unlike_either', {}, { stated: 'log', transformed: false })), null);
+  assert.equal(of(checked('<b>x</b>', { warning: 'unlike' })), null, 'a verdict the page does not know');
+  assert.equal(scaleNote(receiptFromWorkflow(workflow)), null, 'the recorded example');
+  for (const empty of [null, undefined, {}, receiptFromResponse({})]) assert.equal(scaleNote(empty), null);
 });
 
 test('the receipt folds to one line: whose file, how many cells, which model', () => {

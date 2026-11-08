@@ -241,24 +241,59 @@ const cellsOf = (result) => (Array.isArray(result?.cells) ? result.cells : []);
 const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(1)}%` : '');
 
 // How the service read the file's values (the response's value_scale): the
-// reading it applied, what a 0 was read as when the visitor said it (zeros),
-// and, when the visitor chose the reading (stated), whether the service on
-// its own reads them the same way. null for a value_scale this page does not
-// know.
+// reading it applied, what a 0 was read as, and who decided. When the
+// visitor chose the reading (stated), whether the service on its own reads
+// them the same way. A protein reply since B5 also carries the check's
+// verdict, what a 0 was read as (zeros_read) and its evidence
+// (research/value-scale-b5-design.md, "After Send"); a reply without a
+// verdict (RNA, or an older service) reads as before. null for a
+// value_scale this page does not know.
 const SCALE_READ = { linear: 'Linear intensities, log2-transformed', log: 'Already on a log scale' };
 const SCALE_ALONE = { linear: 'linear intensities', log: 'already on a log scale' };
 const ZEROS_READ = { missing: ', each 0 read as not measured', measured: ', each 0 read as a measured value' };
+// What the service's check found, when it decided the reading itself.
+const CHECK_FOUND = {
+  linear: ", as the service's check read them.",
+  log: ", as the service's check read them.",
+  cant_tell: ". The service's check could not tell raw from log, so it read them as raw.",
+  unlike_either: ". The service's check found them unlike both raw and log tables, so it read them as raw.",
+};
+// The check's reasons the page says in plain words, by the start of the
+// reason (valuescale/method.py); the reason itself is never shown. Others
+// (the probabilities against their thresholds) stay in the reply.
+const CHECK_REASONS = [
+  ['too few columns', ' Too few cells to tell.'],
+  ['per-protein normalised', " Each protein's level was removed, so its shape cannot tell."],
+  ['no value is missing', ' No value is missing: the table may have been filled in.'],
+];
+const CHECK_WARNING = ' The table is unlike the tables the check was built on: check the reading.';
+const filled = (v) => typeof v === 'string' && v !== '';
 
 export function valueScaleText(scale) {
   if (!scale || typeof scale !== 'object') return null;
   if (scale.detected === 'unknown') return 'No values to read';
   if (!Object.hasOwn(SCALE_ALONE, scale.detected ?? '')) return null;
-  const zeros = Object.hasOwn(ZEROS_READ, scale.zeros ?? '') ? ZEROS_READ[scale.zeros] : '';
-  const read = SCALE_READ[scale.transformed ? 'linear' : 'log'] + zeros;
-  if (!Object.hasOwn(SCALE_ALONE, scale.stated ?? '')) return read;
-  return scale.stated === scale.detected
-    ? `${read}. You chose this; the service reads them so too.`
-    : `${read}. You chose this; on its own the service reads them as ${SCALE_ALONE[scale.detected]}.`;
+  const verdict = Object.hasOwn(CHECK_FOUND, scale.verdict ?? '') ? scale.verdict : null;
+  const stated = Object.hasOwn(SCALE_ALONE, scale.stated ?? '') ? scale.stated : null;
+  // What a 0 was read as: what the visitor said, else what the service read under a log reading.
+  const zerosSaid = Object.hasOwn(ZEROS_READ, scale.zeros ?? '') ? scale.zeros : null;
+  const zerosRead = verdict && !scale.transformed && Object.hasOwn(ZEROS_READ, scale.zeros_read ?? '') ? scale.zeros_read : null;
+  const zeros = zerosSaid ?? zerosRead;
+  const read = SCALE_READ[scale.transformed ? 'linear' : 'log'] + (zeros ? ZEROS_READ[zeros] : '');
+  if (!verdict) {
+    if (!stated) return read;
+    return stated === scale.detected
+      ? `${read}. You chose this; the service reads them so too.`
+      : `${read}. You chose this; on its own the service reads them as ${SCALE_ALONE[scale.detected]}.`;
+  }
+  let text;
+  if (!stated) text = read + CHECK_FOUND[verdict];
+  else if (!Object.hasOwn(SCALE_ALONE, verdict)) text = `${read}. You chose this; on its own the service could not tell.`;
+  else if (stated === verdict) text = `${read}. You chose this; the service reads them so too.`;
+  else text = `${read}. You chose this; on its own the service reads them as ${SCALE_ALONE[verdict]}.`;
+  const evidence = scale.evidence && typeof scale.evidence === 'object' ? scale.evidence : {};
+  const reason = filled(evidence.reason) ? CHECK_REASONS.find(([start]) => evidence.reason.startsWith(start)) : null;
+  return text + (reason ? reason[1] : '') + (filled(evidence.warning) ? CHECK_WARNING : '');
 }
 
 export function buildProjectionSummary(result) {
@@ -269,7 +304,7 @@ export function buildProjectionSummary(result) {
   const spaceText = space?.restricted_to_supported_classes
     ? `Restricted to ${candidates.map(escapeHtml).join(', ')}`
     : `All ${formatCount(candidates.length)} reference classes`;
-  const scaleText = valueScaleText(result?.value_scale) ?? textOrPending(null);
+  const scaleText = textOrPending(valueScaleText(result?.value_scale));
   return `
     <dl class="model-card">
       ${cardField('Cells', formatCount(result?.n_cells))}

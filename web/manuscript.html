@@ -295,9 +295,11 @@
                 <li>Gene names resolve through a frozen, offline HGNC table (symbols, Ensembl and UniProt
                     accessions); a protein group naming several genes is dropped as ambiguous.
                     <span class="ev-src"><code>service/pipeline/gene_ids.py</code></span></li>
-                <li>A matrix with no negative values and a median observed value above
+                <li>A protein matrix is read as raw intensities (log2-transformed) or as already log, as its
+                    uploader chooses, or else by the service's check of its numbers. An RNA matrix with no
+                    negative values and a median observed value above
                     <span data-ms="wf_scale_threshold"></span> is read as linear and log2-transformed.
-                    <span class="ev-src"><code>service/pipeline/alignment.py</code>, <code>service/config.py</code></span></li>
+                    <span class="ev-src"><code>service/pipeline/alignment.py</code>, <code>service/config.py</code>, <code>valuescale/</code></span></li>
                 <li>Rows naming the same gene merge by each cell's median of their observed values.
                     <span class="ev-src"><code>service/pipeline/alignment.py</code></span></li>
                 <li>A cell with fewer than <span data-ms="wf_floor"></span> observed genes gets no answer

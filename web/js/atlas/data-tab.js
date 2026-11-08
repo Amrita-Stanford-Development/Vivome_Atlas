@@ -8,6 +8,7 @@ import { PENDING_LABEL, formatCount, isMeasured, loadManifest } from '../manifes
 import { buildSupportedLabelSpace, errorPanel, escapeHtml } from '../panels.js';
 import { loadWorkflow, wfFact } from '../workflow-data.js';
 import { coordinatesCompatible } from './answers.js';
+import { scaleNote } from './atlas-panels.js';
 import { valueFactsText } from './file-check.js';
 import { explainFailure, rememberServiceUrl, serviceUrlFrom } from './service-client.js';
 
@@ -155,10 +156,15 @@ export function mountDataTab({ landing, client, service, acceptsFiles = true }) 
     $('results-card').hidden = !shown;
     $('data-setup').hidden = shown && !setupWanted;
     $('send-another').hidden = !shown || setupWanted;
+    // When the service read the values on its own and its check was unsure,
+    // or found the table unusual: said on the card, not only in the receipt.
+    const note = run ? scaleNote(run.receipt) : null;
+    $('results-scale-note').hidden = !shown || !note;
     if (shown) {
       $('results-note').textContent = run.source === 'recorded'
         ? 'The recorded example: answers from the served model, no file sent.'
         : `${formatCount(run.cells.length)} cells from ${st.file?.name ?? 'your file'}.`;
+      $('results-scale-note').textContent = note ?? '';
       setHtml($('outcome-chips'), landing.chips());
       $('download').hidden = run.source !== 'service';
       // Replay and Clear wait for the landing to end.

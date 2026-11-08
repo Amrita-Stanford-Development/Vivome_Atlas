@@ -115,8 +115,15 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
   disabled and shows Automatic. The file's check lists its values' range,
   zeros, empties and negatives (`valueFactsText` in `file-check.js`) to
   help the choice. The receipt and About this answer say how the values
-  were read and whether it was the visitor's choice (`valueScaleText` in
-  `web/js/panels.js`). A reply without `stated` or `zeros` to a choice came
+  were read and who decided: the visitor, or the service's check, with what
+  the check found (its verdict, what a 0 was read as, three of its reasons
+  in plain words, and its warning that the table is unlike the tables it was
+  built on) (`valueScaleText` in `web/js/panels.js`). A reply without the
+  check's verdict (RNA, or a service older than the check) reads as before.
+  When the service read the values on its own and its check could not
+  decide, or gave the warning, a note on the file's card says so, under its
+  first line and outside the folding receipt (`scaleNote` in
+  `atlas-panels.js`). A reply without `stated` or `zeros` to a choice came
   from a service older than the choice, and the receipt says it was not
   taken. Changing either menu after the service turned the file down offers
   Send again (`OPTIONS_CHANGED` in `director.js`).

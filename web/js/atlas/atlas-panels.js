@@ -153,6 +153,26 @@ function scaleLine(receipt) {
   return e(read);
 }
 
+// The note on the file's card when the service read the values on its own
+// and its check could not decide, or found the table unlike the tables it
+// was built on (research/value-scale-b5-design.md, "After Send"): outside
+// the folding receipt, so it is seen. Plain text (data-tab.js sets it as
+// textContent), or null: for a reading the visitor chose, and for a reply
+// without the check's verdict.
+const UNSURE_NOTE = 'The service could not tell whether your values are raw or log, and read them as raw. '
+  + 'If they are already log, send the file again and choose Already log.';
+const UNUSUAL_NOTE = "Your table is unlike the tables the service's check was built on, so check how its values were read.";
+
+export function scaleNote(receipt) {
+  const scale = receipt?.scale;
+  if (!scale || typeof scale !== 'object') return null;
+  if (!['linear', 'log', 'cant_tell', 'unlike_either'].includes(scale.verdict)) return null;
+  if (['linear', 'log'].includes(scale.stated)) return null;
+  if (scale.verdict === 'cant_tell' || scale.verdict === 'unlike_either') return UNSURE_NOTE;
+  const warning = scale.evidence && typeof scale.evidence === 'object' ? scale.evidence.warning : null;
+  return typeof warning === 'string' && warning !== '' ? UNUSUAL_NOTE : null;
+}
+
 // What came back for a file (answers.js, receiptFromResponse or
 // receiptFromWorkflow): how many cells, how many genes matched the shared
 // list, how the values were read, whether the second opinion was used, and

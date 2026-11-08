@@ -239,6 +239,9 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .given-row.is-off .browse-swatch, .given-row.is-off .atlas-glyph { opacity: 0.35; }
 .given-only { flex: none; font-size: 11.5px; padding: 2px 8px; }
 .highlight-item { margin-top: 12px; font-size: 13px; }
+/* The file's card says when the service's check was unsure how the values
+   are written: in ink on the accent's tint, so it is not passed over. */
+.atlas-scale-note { color: var(--ink); background: var(--accent-tint); border-radius: var(--r-well); padding: 8px 12px; margin-top: 8px; }
 .service-line.is-ready { color: var(--prot-ink); }
 .service-line.is-down { color: var(--error); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }

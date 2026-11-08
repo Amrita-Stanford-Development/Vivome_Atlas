@@ -301,6 +301,79 @@ test('valueScaleText says what a 0 was read as, when the visitor said it', () =>
     'Already on a log scale. You chose this; the service reads them so too.', 'a zeros value the page does not know is left out');
 });
 
+test('valueScaleText says what the check found', () => {
+  // A protein reply since B5 (docs/service/projection-api.md): the check's verdict, what a 0 was read as, its evidence.
+  const raw = { detected: 'linear', transformed: true, zeros_read: 'missing' };
+  const evidence = (verdict, extra = {}) => ({ verdict, warning: null, reason: null, ...extra });
+  const checked = (verdict, extra = {}, ev = {}) => ({ ...raw, verdict, evidence: evidence(verdict, ev), ...extra });
+
+  // The service's check decided.
+  assert.equal(valueScaleText(checked('linear')), "Linear intensities, log2-transformed, as the service's check read them.");
+  assert.equal(valueScaleText(checked('log', { detected: 'log', transformed: false })),
+    "Already on a log scale, each 0 read as not measured, as the service's check read them.");
+  assert.equal(valueScaleText(checked('log', { detected: 'log', transformed: false, zeros_read: 'measured' })),
+    "Already on a log scale, each 0 read as a measured value, as the service's check read them.", 'a centred table');
+  assert.equal(valueScaleText(checked('cant_tell')),
+    "Linear intensities, log2-transformed. The service's check could not tell raw from log, so it read them as raw.");
+  assert.equal(valueScaleText(checked('unlike_either')),
+    "Linear intensities, log2-transformed. The service's check found them unlike both raw and log tables, so it read them as raw.");
+
+  // The visitor chose.
+  const chose = (stated, verdict, extra = {}) => checked(verdict, { stated, ...(stated === 'log' ? { transformed: false } : {}), ...extra });
+  assert.equal(valueScaleText(chose('log', 'cant_tell')),
+    'Already on a log scale, each 0 read as not measured. You chose this; on its own the service could not tell.');
+  assert.equal(valueScaleText(chose('linear', 'unlike_either')),
+    'Linear intensities, log2-transformed. You chose this; on its own the service could not tell.');
+  assert.equal(valueScaleText(chose('linear', 'linear')), 'Linear intensities, log2-transformed. You chose this; the service reads them so too.');
+  assert.equal(valueScaleText(chose('log', 'linear')),
+    'Already on a log scale, each 0 read as not measured. You chose this; on its own the service reads them as linear intensities.');
+  assert.equal(valueScaleText(chose('linear', 'log', { detected: 'log' })),
+    'Linear intensities, log2-transformed. You chose this; on its own the service reads them as already on a log scale.');
+  assert.equal(valueScaleText(chose('log', 'log', { detected: 'log', zeros: 'measured', zeros_read: 'measured' })),
+    'Already on a log scale, each 0 read as a measured value. You chose this; the service reads them so too.');
+  assert.equal(valueScaleText(chose('log', 'log', { detected: 'log', zeros: 'missing', zeros_read: 'measured' })),
+    'Already on a log scale, each 0 read as not measured. You chose this; the service reads them so too.', 'what the visitor said a 0 means comes first');
+
+  // The warning, and the reasons the page knows.
+  const WARNING = ' The table is unlike the tables the check was built on: check the reading.';
+  assert.equal(valueScaleText(checked('linear', {}, { warning: 'unlike its design tables' })),
+    `Linear intensities, log2-transformed, as the service's check read them.${WARNING}`);
+  assert.equal(valueScaleText(checked('linear', {}, { warning: '' })), "Linear intensities, log2-transformed, as the service's check read them.");
+  const unsure = "Linear intensities, log2-transformed. The service's check could not tell raw from log, so it read them as raw.";
+  assert.equal(valueScaleText(checked('cant_tell', {}, { reason: 'too few columns' })), `${unsure} Too few cells to tell.`);
+  assert.equal(valueScaleText(checked('cant_tell', {}, { reason: "per-protein normalised: each protein's level was removed, so its shape cannot tell" })),
+    `${unsure} Each protein's level was removed, so its shape cannot tell.`);
+  assert.equal(valueScaleText(checked('cant_tell', {}, { reason: 'no value is missing: the table may have been filled in (imputed)' })),
+    `${unsure} No value is missing: the table may have been filled in.`);
+  for (const other of ['no spread', 'p(log) 0.31 under its threshold', 'the reason: too few columns']) {
+    assert.equal(valueScaleText(checked('cant_tell', {}, { reason: other })), unsure, `${other}: not shown`);
+  }
+  assert.equal(valueScaleText(checked('cant_tell', {}, { reason: 'too few columns', warning: 'unlike' })), `${unsure} Too few cells to tell.${WARNING}`,
+    'the reason follows the verdict, the warning ends the line');
+  assert.equal(valueScaleText({ ...chose('log', 'cant_tell'), evidence: evidence('cant_tell', { reason: 'too few columns' }) }),
+    'Already on a log scale, each 0 read as not measured. You chose this; on its own the service could not tell. Too few cells to tell.');
+
+  // The reason and the warning are matched, never echoed.
+  const tagged = valueScaleText(checked('cant_tell', {}, { reason: 'too few columns<b>x</b>', warning: '<b>w</b>' }));
+  assert.equal(tagged, `${unsure} Too few cells to tell.${WARNING}`);
+  assert.equal(valueScaleText(checked('cant_tell', {}, { reason: '<b>too few columns</b>' })), unsure);
+
+  // Anything the page does not know is left out, and a reply without a verdict reads as today.
+  assert.equal(valueScaleText(checked('<b>x</b>')), 'Linear intensities, log2-transformed', 'an unknown verdict: today\'s text');
+  assert.equal(valueScaleText(checked('log', { detected: 'log', transformed: false, zeros_read: '<b>x</b>' })),
+    "Already on a log scale, as the service's check read them.");
+  assert.equal(valueScaleText({ ...checked('linear'), evidence: 'none' }), "Linear intensities, log2-transformed, as the service's check read them.");
+  assert.equal(valueScaleText({ detected: 'log', transformed: false, zeros_read: 'missing' }), 'Already on a log scale', 'no verdict: today');
+  assert.equal(valueScaleText({ detected: 'unknown', transformed: false, verdict: 'unknown', evidence: null }), 'No values to read');
+});
+
+test('the projection summary escapes how the values were read', () => {
+  const p = projection();
+  p.value_scale = { detected: 'linear', transformed: true, verdict: 'cant_tell', zeros_read: 'missing',
+    evidence: { verdict: 'cant_tell', warning: null, reason: "per-protein normalised: each protein's level was removed" } };
+  assert.match(buildProjectionSummary(p), /could not tell raw from log, so it read them as raw\. Each protein&#39;s level was removed/);
+});
+
 test('the projection summary says a stated reading', () => {
   const stated = projection();
   stated.value_scale = { detected: 'log', transformed: true, stated: 'linear' };
