@@ -85,6 +85,58 @@ test('the file’s card has a note for how the values were read, under its first
   assert.match(tab, /\$\('results-scale-note'\)\.hidden = !shown \|\| !note;/);
 });
 
+test('the page asks how the values are written', () => {
+  const dialog = html.match(/<dialog id="scale-question"[^>]*>[\s\S]*?<\/dialog>/)?.[0];
+  assert.ok(dialog, 'a native dialog');
+  assert.ok(html.indexOf(dialog) > html.indexOf('</main>') && html.indexOf(dialog) < html.indexOf('</body>'), 'after main, before </body>');
+  assert.match(dialog, /^<dialog id="scale-question" class="[^"]+" aria-labelledby="scale-question-title">/);
+  assert.match(dialog, /<h2 id="scale-question-title" tabindex="-1">Are these values raw intensities, or already log\?<\/h2>/);
+  assert.match(dialog, /<h2 id="scale-question-zeros-title" tabindex="-1" hidden>What does a 0 mean in this file\?<\/h2>/);
+  assert.match(dialog, /<button type="button" class="drawer-close" id="scale-question-close" aria-label="Close">&times;<\/button>/);
+  for (const id of ['scale-question-file', 'scale-question-facts', 'scale-question-readings', 'scale-question-zeros']) {
+    assert.match(dialog, new RegExp(`id="${id}"`), id);
+  }
+  const buttons = (attr) => [...dialog.matchAll(new RegExp(`<button type="button" class="btn btn-quiet" data-${attr}="([a-z]+)">([^<]+)</button>`, 'g'))]
+    .map((m) => [m[1], m[2]]);
+  assert.deepEqual(buttons('reading'), [
+    ['linear', 'Raw intensities: the service takes log2'],
+    ['log', 'Already log: used as they are'],
+    ['auto', "I don't know: the service checks the numbers"],
+  ]);
+  assert.deepEqual(buttons('zeros'), [
+    ['missing', 'Not measured: the protein was not seen'],
+    ['measured', 'Measured: a 0 is a real value'],
+    ['auto', "I don't know: the service decides"],
+  ]);
+  assert.doesNotMatch(dialog, /autofocus/, 'no answer chosen in advance');
+  const words = dialog.replace(/<[^>]+>/g, ' ');
+  assert.ok(!words.includes('—'), 'no em dash');
+  for (const word of [/calibrated/i, /state of the art/i, /\bdeployed\b/i]) assert.ok(!word.test(words), `banned: ${word}`);
+  assert.doesNotMatch(words, /\d{2,}/, 'no rule constant: the facts are the file’s own');
+
+  // The menus stay the one place the choice lives.
+  const options = (id) => [...html.match(new RegExp(`<select id="${id}"[\\s\\S]*?</select>`))[0]
+    .matchAll(/<option value="([a-z]+)">([^<]+)<\/option>/g)].map((m) => [m[1], m[2]]);
+  assert.deepEqual(options('value-scale'), [
+    ['auto', "I don't know: the service checks the numbers"],
+    ['linear', 'Raw intensities: the service takes log2'],
+    ['log', 'Already log: used as they are'],
+  ]);
+  assert.deepEqual(options('zeros'), [
+    ['auto', "I don't know: a 0 is not measured, unless the values are centred"],
+    ['missing', 'Not measured: a 0 means the protein was not seen'],
+    ['measured', 'Measured: a 0 is a real value'],
+  ]);
+  assert.ok(!main.includes('Automatic'), 'Automatic is renamed');
+
+  // Asked when the visitor chooses a file: never for the example.
+  const tab = read('js/atlas/data-tab.js');
+  assert.match(tab, /const modalityMenu = \$\('modality'\);/);
+  assert.match(tab, /if \(asksScale\(\{ modality: modalityMenu\.value, check \}\)\) ask\(check\);/);
+  assert.equal((tab.match(/\bchoose\(file\)/g) ?? []).length, 2, 'the picker and the drop');
+  assert.doesNotMatch(read('js/atlas/landing.js'), /scale-question|asksScale/);
+});
+
 test('every number slot on the Your data tab has a measured record', async () => {
   const { wfFact } = await import('../js/workflow-data.js');
   const workflow = JSON.parse(read('data/workflow.json'));

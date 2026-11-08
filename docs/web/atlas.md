@@ -31,14 +31,15 @@ Pure modules have no DOM and are covered by `node --test`
 | `director.js` (pure) | The page's state machine (below) |
 | `file-check.js` (pure) | Checks a file in the browser (header, cells, rows, and its values' range, zeros, empties and negatives) against the service's limits; it counts cells the way the service reads each layout (a plain matrix, DIA-NN, Spectronaut, MaxQuant, FragPipe LFQ or TMT), choosing the layout by the service's header tests in its order. It refuses what the service refuses on a header (a MaxQuant SILAC or TMT search). A line may end in LF, CRLF or a lone CR. The separator is chosen as the service chooses it, from the header and the first data line, and a number written with a decimal comma is refused in the service's words |
 | `service-client.js` | The service's address, its status and project calls (upload progress, Retry-After, timeouts), plain-words failures |
-| `atlas-panels.js` (pure) | The cell card, the receipt, the answer key, the outcome chips, the example's summary |
+| `atlas-panels.js` (pure) | The cell card, the receipt, the file card's note when the service's check was unsure of the values' reading, the answer key, the outcome chips, the example's summary |
+| `scale-question.js` (pure) | What the pop-up asks about a protein file's values (whether to ask, whether to ask what a 0 means), the file's line, and what the Values and Zeros menus are set to |
 | `cell-browser.js` (pure) | The projected cells grouped by the answer each was given (one group per type, family, branch, reason for no answer, and not placed), their order (sorted by confidence, file order or likeness; searched by name), and the drawer's browser |
 | `stage.js` | Renderer, camera and orbit rig (drag to turn, right-drag to move, wheel to zoom, glide, slow turn until touched), one render loop that draws only when something changed, and the visitor's dot size (every layer sizes and picks its dots by `pixelScale`) |
 | `reference-layer.js` | All reference cells as one `THREE.Points`, shaded as small spheres; filters, dimming and highlighting a set of types (a selected cell's possible types) are uniform writes |
 | `upload-layer.js` | Uploaded cells: their flights, answer looks, landing flash and ripple, and the neighbour glow, all moved by the GPU on one clock; a per-cell mask hides the cells of a type the visitor hid |
 | `illustration.js` | The waiting illustration of the service's six steps |
 | `landing.js` | Runs the state machine on the stage's clock: the file's cloud, the illustration, the receipt, the flights, the camera, the results, and Play from the first cell once the cells have landed |
-| `data-tab.js` | The Your data tab. With an answer on the map it is the file's card (answer filters, Replay, Download, Clear, Send another file); otherwise the setup: the service line, the example, the file controls, and, folded, what it can label and an own copy's address |
+| `data-tab.js` | The Your data tab. With an answer on the map it is the file's card (answer filters, Replay, Download, Clear, Send another file); otherwise the setup: the service line, the example, the file controls, and, folded, what it can label and an own copy's address. It opens the pop-up that asks how a protein file's values are written |
 | `gene-profile.js` | A clicked reference cell's gene profile: one shard from `data/profiles/` on the public site, else streamed from the large CSVs; says so when this copy of the site has neither |
 | `explore-tab.js` | Counts, the RNA and protein switches, the cell-type list (also the colour key) |
 | `view-controls.js` | In Explore: the visitor's cells while an answer is on the map (a switch, the answer filters, the types given with Only, and the highlight of a selected cell's types), names on the map, dimming the reference, the dot size |
@@ -108,13 +109,30 @@ the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
 - **Limits** come from the service's status when it gives them, else from the
   Workflow data's service records.
 - **Values** (`#value-scale`, protein only) and **Zeros** (`#zeros`, with
-  Already log): Automatic sends no field, so the service reads the scale
-  itself; Raw intensities or Already log sends `value_scale` `linear` or
-  `log`, and Not measured or Measured sends `zeros` `missing` or `measured`
+  Already log) are the one place the choice lives. "I don't know: the
+  service checks the numbers" sends no field, so the service's check reads
+  the scale; "Raw intensities: the service takes log2" or "Already log: used
+  as they are" sends `value_scale` `linear` or `log`. For Zeros, "I don't
+  know: a 0 is not measured, unless the values are centred" sends no field,
+  and "Not measured" or "Measured" sends `zeros` `missing` or `measured`
   (`docs/service/projection-api.md`). A menu that does not apply is
-  disabled and shows Automatic. The file's check lists its values' range,
+  disabled and shows I don't know. The file's check lists its values' range,
   zeros, empties and negatives (`valueFactsText` in `file-check.js`) to
-  help the choice. The receipt and About this answer say how the values
+  help the choice.
+- **The pop-up** (`#scale-question`, a native dialog; `scale-question.js`,
+  wired in `data-tab.js`) asks "Are these values raw intensities, or already
+  log?" once, when a protein file is picked or dropped on the map and its
+  check passed. It does not open for an RNA file (Modality when the check
+  finishes), for the example, for a file the check stops, or for a file
+  whose check another file overtook. It shows the file's name, feature rows
+  and cells and its facts line, then three answers, none chosen in advance
+  (focus is on the question): Raw intensities, Already log, I don't know.
+  After Already log, a file with a 0 is asked "What does a 0 mean in this
+  file?" (Not measured, Measured, I don't know). Escape or the close button
+  is I don't know for the open question, keeping a reading already chosen.
+  The answers set the two menus, as if chosen there, and focus goes to
+  Send; nothing is sent until Send.
+- **After Send**, the receipt and About this answer say how the values
   were read and who decided: the visitor, or the service's check, with what
   the check found (its verdict, what a 0 was read as, three of its reasons
   in plain words, and its warning that the table is unlike the tables it was

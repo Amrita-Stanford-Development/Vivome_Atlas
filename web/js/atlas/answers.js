@@ -89,7 +89,7 @@ export function outcomeCounts(cells) {
 // What the receipt shows when an answer arrives: the service's own numbers.
 // scaleAsked is the reading the visitor chose for the values (atlas.html's
 // #value-scale) and zerosAsked what they said a 0 means (#zeros); null for
-// Automatic.
+// I don't know.
 export function receiptFromResponse(r, { scaleAsked = null, zerosAsked = null } = {}) {
   return {
     source: 'service',

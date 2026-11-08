@@ -68,7 +68,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/atlas/overlay.js` — the Atlas page's loading screen, error panel and tooltip
 - `web/js/atlas/main.js` — the Atlas page's entry point: loads the reference, wires the modules and the two tabs
 - `web/js/atlas/landing.js` — the Atlas page's landing: runs the state machine on the stage's clock, from the file's sheet through the waiting illustration and the receipt to the flights, the camera and the results
-- `web/js/atlas/data-tab.js` — the Atlas page's Your data tab: the file's card while an answer is shown; otherwise the service line and address, the example, the file controls, the supported label space
+- `web/js/atlas/data-tab.js` — the Atlas page's Your data tab: the file's card while an answer is shown; otherwise the service line and address, the example, the file controls, the supported label space; the pop-up that asks how a protein file's values are written
+- `web/js/atlas/scale-question.js` — the Atlas page's question about a protein file's values: whether to ask it and whether to ask what a 0 means, the file's line, and what the Values and Zeros menus are set to (pure)
 - `web/js/atlas/choreography.js` — the Atlas page's upload timing: the six waiting steps and their finish, the fly-in schedule level by level, the receipt, fly-in and settle timeline, the camera pose that frames the cells, reduced motion (pure)
 - `web/js/atlas/director.js` — the Atlas page's upload flow as one state machine: checking, sending, busy retries, the recorded example, the guided landing, exploring, failures (pure)
 - `web/js/atlas/file-check.js` — what the browser can tell about an upload before sending it: the header read in slices, rows counted by streaming (a line may end in LF, CRLF or a lone CR), the separator (from the header and the first data line, as the service chooses it), the layout by the service's header tests in its order (MaxQuant, Spectronaut, FragPipe, DIA-NN), the cell count, the service's refusals on a header and of a number written with a decimal comma, the service's limits (pure)
@@ -89,7 +90,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/landing.test.js` — the landing's facts all exist, its copy follows the site rules, and nothing is drawn in front of its title
 - `web/tests/workflow.test.js` — the Workflow page against the real files: every number slot measured, copy rules, chapters, escaping, palette, service address, no model maths in the browser
 - `web/tests/reel.test.js` — the storyboard's timing, cues, slots and copy rules; the camera, water and cards; the stills and the film match the current records; the compositions and docs match the storyboard
-- `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser, its layout at high zoom
+- `web/tests/atlas.test.js` — the Atlas page: markup only, its modules' copy rules, no model maths in the browser, its layout at high zoom, the pop-up's markup and the menus' words
+- `web/tests/atlas-scale-question.test.js` — the question about a protein file's values: when it is asked, what a 0 means only for a file with one, the menus' values, the file's line, and the pop-up on a stand-in page (its two steps, Escape and the close button, the picker and the drop)
 - `web/tests/atlas-map-keys.test.js` — the Atlas map by keyboard: the arrows turn it, Shift and the arrows move it, + and - zoom, Enter opens the cell at the centre; the map takes focus and says how
 - `web/tests/atlas-example.test.js` — the deployed PBMC240 example is byte-identical to the `service/examples/` copy, under Cloudflare Pages' 25 MiB file limit, and a DIA-NN report with a Genes column
 - `web/tests/atlas-choreography.test.js` — the fly-in fits its window for 1 to 2,000 cells in one level or four, level order and gaps, the landing timeline, the waiting loop and its finish, the camera pose, reduced motion

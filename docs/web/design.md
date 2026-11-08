@@ -211,6 +211,12 @@ white halo card, and a drawer that slides over the viewer's right side
   (About this answer, Answers, Cells) open and close, under Download and
   Clear. While the drawer is open, the corner buttons and Replay move into
   the space left of it.
+- **The values question.** A protein file, once chosen, is asked whether
+  its values are raw or already log in a native dialog: a sheet over the
+  dimmed page with the question, the file's own facts and the answers as
+  equal quiet buttons, none chosen in advance. When the service's own
+  reading was unsure, the file's card says so in ink on the accent's tint,
+  not folded away.
 - **The sidebar after an answer.** Your data becomes the file's card
   (answer filters, Replay, Download, Clear, Send another file); the setup
   returns with Send another file or Clear. Explore gains Your cells (a

@@ -570,6 +570,25 @@ body.atlas-page { height: 100vh; overflow: hidden; }
 .drawer-close:hover { background: var(--accent-tint); }
 .drawer-body { flex: 1; overflow-y: auto; padding: 12px 18px 18px; font-size: 14px; }
 
+/* ---- the question about a protein file's values ----
+   A native dialog, a sheet over a dimmed page: the question, the file's own
+   facts, and the answers as equal quiet buttons, none chosen in advance. */
+
+.scale-question {
+    width: min(460px, calc(100vw - 48px));
+    padding: 22px 24px 24px;
+    color: var(--ink-soft);
+}
+.scale-question::backdrop { background: rgba(var(--shade), 0.35); }
+.scale-question-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.scale-question-head h2 { flex: 1; margin: 0; font-size: 17px; line-height: 1.35; color: var(--ink); }
+/* The question takes focus so no answer is chosen in advance; it is not a control, so no ring. */
+.scale-question-head h2:focus { outline: none; }
+.scale-question-file { margin: 0; font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.scale-question .panel-note { margin-top: 4px; }
+.scale-question-answers { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.scale-question-answers .btn { justify-content: flex-start; text-align: left; }
+
 .gene-profile-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .gene-profile-table th {
     position: sticky;

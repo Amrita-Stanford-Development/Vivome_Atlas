@@ -157,13 +157,13 @@
                     </select>
                     <label for="value-scale">Values (protein)</label>
                     <select id="value-scale" class="well">
-                        <option value="auto">Automatic: the service reads the scale from the numbers</option>
+                        <option value="auto">I don't know: the service checks the numbers</option>
                         <option value="linear">Raw intensities: the service takes log2</option>
                         <option value="log">Already log: used as they are</option>
                     </select>
                     <label for="zeros">Zeros (files already log)</label>
                     <select id="zeros" class="well">
-                        <option value="auto">Automatic: a 0 counts as a measured value</option>
+                        <option value="auto">I don't know: a 0 is not measured, unless the values are centred</option>
                         <option value="missing">Not measured: a 0 means the protein was not seen</option>
                         <option value="measured">Measured: a 0 is a real value</option>
                     </select>
@@ -245,6 +245,26 @@ python -m service.app</pre>
             </div>
         </div>
     </main>
+
+    <dialog id="scale-question" class="scale-question sheet" aria-labelledby="scale-question-title">
+        <div class="scale-question-head">
+            <h2 id="scale-question-title" tabindex="-1">Are these values raw intensities, or already log?</h2>
+            <h2 id="scale-question-zeros-title" tabindex="-1" hidden>What does a 0 mean in this file?</h2>
+            <button type="button" class="drawer-close" id="scale-question-close" aria-label="Close">&times;</button>
+        </div>
+        <p class="scale-question-file" id="scale-question-file"></p>
+        <p class="panel-note" id="scale-question-facts"></p>
+        <div class="scale-question-answers" id="scale-question-readings" role="group" aria-labelledby="scale-question-title">
+            <button type="button" class="btn btn-quiet" data-reading="linear">Raw intensities: the service takes log2</button>
+            <button type="button" class="btn btn-quiet" data-reading="log">Already log: used as they are</button>
+            <button type="button" class="btn btn-quiet" data-reading="auto">I don't know: the service checks the numbers</button>
+        </div>
+        <div class="scale-question-answers" id="scale-question-zeros" role="group" aria-labelledby="scale-question-zeros-title" hidden>
+            <button type="button" class="btn btn-quiet" data-zeros="missing">Not measured: the protein was not seen</button>
+            <button type="button" class="btn btn-quiet" data-zeros="measured">Measured: a 0 is a real value</button>
+            <button type="button" class="btn btn-quiet" data-zeros="auto">I don't know: the service decides</button>
+        </div>
+    </dialog>
 
     <script type="module" src="js/background.js"></script>
     <script type="module" src="js/atlas/main.js"></script>
