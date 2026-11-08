@@ -182,13 +182,13 @@ def protein_query(raw, genes, scale=None) -> tuple[np.ndarray, np.ndarray]:
     gene's rows merged by per-cell median, each gene z-scored over its observed
     values within the upload; unobserved entries 0 with mask 0. `scale` is
     Stage 0's alignment.ValueScale for this upload, so the table is read as
-    Stage 0 read it, a stated reading included; without it, Stage 0's rule
-    reads the table here."""
+    Stage 0 read it, a stated reading included, and a 0 as Stage 0 read it
+    (ValueScale.zeros_applied); without it, Stage 0 reads the table here."""
     from service.pipeline import alignment
     if scale is None:
         values, _ = alignment.detect_and_transform_value_scale(raw.values)
     else:
-        values = alignment.apply_reading(alignment.finite_or_missing(raw.values), scale.reading, scale.zeros)
+        values = alignment.apply_reading(alignment.finite_or_missing(raw.values), scale.reading, scale.zeros_applied)
     index = {g: i for i, g in enumerate(genes)}
     x = np.full((len(raw.cell_ids), len(genes)), np.nan, np.float64)
     rows: dict[int, list[int]] = {}

@@ -61,6 +61,21 @@ class ProteinQueryTests(unittest.TestCase):
         _, scale = alignment.detect_and_transform_value_scale(raw.values, stated="log", zeros="missing")
         self.assertEqual(fusion.protein_query(raw, ("CD8A", "GNLY"), scale)[1][2, 0], 0, "the 0 is not measured")
 
+    def test_it_reads_a_zero_as_stage_0_read_it_on_its_own(self):
+        """B5: under a log reading the service reads a 0 as not measured when
+        the request says nothing (alignment, the calibrated method), so the
+        protein query reads it so too."""
+        rng = np.random.default_rng(7)
+        values = rng.normal(14, 3, size=(300, 1)) + rng.normal(0, 0.7, size=(300, 25))  # log2 intensities
+        values[rng.random(values.shape) < 0.3] = np.nan
+        values[0, 2] = 0.0
+        raw = alignment.RawMatrix(gene_names=["CD8A"] + [f"G{i}" for i in range(299)],
+                                  cell_ids=[f"c{i}" for i in range(25)], values=values.astype(np.float32))
+        scaled, scale = alignment.detect_and_transform_value_scale(raw.values)
+        self.assertEqual((scale.reading, scale.zeros, scale.zeros_read), ("log", None, "missing"))
+        self.assertTrue(np.isnan(scaled[0, 2]))
+        self.assertEqual(fusion.protein_query(raw, ("CD8A",), scale)[1][2, 0], 0, "the 0 is not measured")
+
     def test_stage_0_s_automatic_scale_gives_exactly_the_values_it_gave_before(self):
         raw = _load_pbmc240_50()  # float32, read linear: log2 must be taken in float32 as Stage 0 takes it
         raw = alignment.RawMatrix(raw.gene_names, raw.cell_ids, np.where(raw.values > 3e4, np.inf, raw.values))

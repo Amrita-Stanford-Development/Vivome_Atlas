@@ -543,6 +543,12 @@ class ValueScale:
         """The reading Stage 0 applied: the stated one, else the rule's."""
         return self.detected if self.detected == "unknown" or self.stated is None else self.stated
 
+    @property
+    def zeros_applied(self) -> str | None:
+        """What Stage 0 told apply_reading a 0 means: the calibrated method's
+        own reading of it (zeros_read), else the request's (zeros)."""
+        return self.zeros if self.zeros_read is None else self.zeros_read
+
     def response(self) -> dict:
         """The reply's value_scale. `stated` and `zeros` appear only when the
         request said them, so a reply to a request that says neither is
