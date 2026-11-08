@@ -307,6 +307,56 @@ test('what a 0 means is sent when the visitor said it', async () => {
   }
 });
 
+test('the example is sent with no stated reading, whatever the menus hold', async () => {
+  // The menus carry the last file's answers; the raw example sent as Already log would be misread.
+  let sent = null;
+  const client = {
+    async project(url, form, { onUpload }) {
+      sent = { valueScale: form.get('value_scale'), zeros: form.get('zeros'), name: form.get('matrix').name };
+      onUpload(1);
+      return responseFromTrace();
+    },
+  };
+  const { landing, tick } = setup({ client, options: () => ({ modality: 'prot', valueScale: 'log', zeros: 'missing' }) });
+  await landing.sendExample();
+  await settleMicrotasks();
+  tickUntil(landing, tick, 'interactive');
+  assert.deepEqual(sent, { valueScale: null, zeros: null, name: 'pbmc240_proteins_raw.tsv' });
+  assert.equal(landing.run.receipt.scaleAsked, null);
+  assert.equal(landing.run.receipt.zerosAsked, null);
+
+  // A file the visitor chose, with the same menus, is sent as they say: even one named like the example.
+  const bytes = readFileSync(new URL('../data/examples/pbmc240_proteins_raw.tsv', import.meta.url));
+  await landing.chooseFile(new File([bytes], 'pbmc240_proteins_raw.tsv'));
+  landing.send();
+  await settleMicrotasks();
+  tickUntil(landing, tick, 'interactive');
+  assert.deepEqual(sent, { valueScale: 'log', zeros: 'missing', name: 'pbmc240_proteins_raw.tsv' });
+  assert.equal(landing.run.receipt.scaleAsked, 'log');
+  assert.equal(landing.run.receipt.zerosAsked, 'missing');
+});
+
+test('the example tried again after a failure is still sent for the service to read', async () => {
+  const sent = [];
+  const client = {
+    async project(url, form, { onUpload }) {
+      sent.push(form.get('value_scale'));
+      if (sent.length === 1) throw Object.assign(new Error('No answer.'), { kind: 'network' });
+      onUpload(1);
+      return responseFromTrace();
+    },
+  };
+  const { els, landing, tick } = setup({ client, options: () => ({ modality: 'prot', valueScale: 'linear' }) });
+  await landing.sendExample();
+  for (let i = 0; i < 20 && landing.state.name !== 'failed'; i += 1) await settleMicrotasks();
+  assert.equal(landing.state.name, 'failed');
+  const retry = { target: { closest: (sel) => (sel === '[data-retry]' ? {} : null) } };
+  els.get('status-card').listeners.click.forEach((f) => f(retry));
+  await settleMicrotasks();
+  tickUntil(landing, tick, 'interactive');
+  assert.deepEqual(sent, [null, null]);
+});
+
 test('a service on another map lists cells without placing them', async () => {
   const response = { ...responseFromTrace(), pipeline_version: 'v5.2' };
   const client = { async project(url, form, { onUpload }) { onUpload(1); return response; } };

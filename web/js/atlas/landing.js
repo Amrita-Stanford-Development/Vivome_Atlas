@@ -64,6 +64,7 @@ export function createLanding({
   let sheet = null;         // { bench, anchor, n }
   let run = null;           // the results being shown
   let workflow = null;      // the recorded example, loaded on demand
+  let exampleFile = null;   // the example file sendExample made, sent for the service to read
   let grid = null;          // RNA reference cells, for the neighbour glow
   let lastStatus = '';
   let lastKey = '';
@@ -615,11 +616,14 @@ export function createLanding({
 
   async function request() {
     const { file } = st;
-    const { modality, valueScale = 'auto', zeros = 'auto' } = options();
+    const { modality, ...chosen } = options();
+    // A reading the visitor chose for the values, and with Already log what a
+    // 0 means; I don't know sends nothing, so the service's check reads them.
+    // The example is always sent for the service to read: the menus carry the
+    // last file's answers (research/value-scale-b5-design.md, Non-goals).
+    const { valueScale = 'auto', zeros = 'auto' } = file === exampleFile ? {} : chosen;
     const form = new FormData();
     form.append('modality', modality);
-    // A reading the visitor chose for the values, and with Already log what a
-    // 0 means; Automatic sends nothing, as the page did before the choice existed.
     if (valueScale !== 'auto') form.append('value_scale', valueScale);
     if (zeros !== 'auto') form.append('zeros', zeros);
     form.append('matrix', file, file.name);
@@ -794,7 +798,8 @@ export function createLanding({
     watchExample,
     // The example is sent only if the visitor chose nothing while it loaded:
     // a file they chose meanwhile stays theirs. The service's limits arriving
-    // in the meantime change nothing. A load that fails says so.
+    // in the meantime change nothing. A load that fails says so. It asks
+    // nothing, and is sent with no stated reading (request).
     async sendExample() {
       const before = st;
       const changed = () => st.name !== before.name || st.file !== before.file;
@@ -813,7 +818,8 @@ export function createLanding({
         return;
       }
       if (changed()) return;
-      const check = await chooseFile(new File([blob], name, { type: 'text/tab-separated-values' }));
+      exampleFile = new File([blob], name, { type: 'text/tab-separated-values' });
+      const check = await chooseFile(exampleFile);
       if (check?.ok) send();
     },
     // The service's limits arrived or changed after a file was checked

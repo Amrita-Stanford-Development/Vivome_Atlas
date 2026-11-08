@@ -98,7 +98,10 @@ timing stays as the landing began.
 **The example.** "Watch the example" replays the PBMC240 file traced through
 the served model (`web/data/workflow.json`, `trace.cells`): no file is sent.
 "Send the example file" sends `web/data/examples/pbmc240_proteins_raw.tsv`
-(a byte-exact copy of `service/examples/`) to the service like any upload.
+(a byte-exact copy of `service/examples/`) to the service like any upload,
+but it asks nothing and is always sent with no `value_scale` or `zeros`,
+whatever the Values and Zeros menus hold (they carry the last file's
+answers), so the service's check reads it.
 
 ## The service
 
