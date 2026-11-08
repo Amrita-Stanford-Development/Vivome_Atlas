@@ -3426,7 +3426,7 @@ method, and under the median method as the baseline.
 - PBMC240 reads linear and SCoPE2 log; both reply as before on every
   frozen key. Both PXD064083 tables read linear.
 - 21 tables reply as before. The 9 predicted change:
-  - 8 now read as their label says;
+  - 6 now read as their label says;
   - the imputed log table reads linear on "can't tell";
   - two Furtwangler log tables read a 0 as not measured.
 - RNA replies are byte-identical. Every stage invariant holds. The check

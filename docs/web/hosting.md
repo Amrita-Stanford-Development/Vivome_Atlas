@@ -59,6 +59,13 @@ cd dist && npx wrangler@4 pages deploy site --project-name vivome-atlas --branch
 `--branch main` publishes to the production address. Another branch name
 gives a preview address. The first sign-in is `npx wrangler@4 login`.
 
+**Until B7, the site and the service are published together.** The site
+on `integration/v4` asks a protein uploader raw or log and words what the
+service's check found (B5, `research/value-scale-b5-design.md`). The live
+service (Cloud Run revision `vivome-atlas-00009-hcz`) still reads with the
+median rule, so publishing the site alone would show words the service
+does not match. Both go live after B7 (`research/value-scale-plan.md`).
+
 ## The beta sign-in
 
 The site is a closed beta. Every path, the pages, the data files and the

@@ -66,7 +66,13 @@ Nine of ten rows pass.
   it; the row checks which tables change, not which fields.
 - **B5_rna passes.** Sent as RNA, every traced table's reply under the
   calibrated method is byte-identical to the median method's, with no
-  verdict, zeros_read or evidence.
+  verdict, zeros_read or evidence. RNA takes the median rule under both
+  methods, so the row shows that the switch leaves RNA alone; it does not
+  compare with the code before B5. The final review did that, in a probe
+  outside the repo: 9aa98dd's `alignment.py` against B5's on 2,400 calls
+  (RNA under both methods, the median method with and without a stated
+  reading, values with NaN and infinity) gave the same bytes, replies and
+  errors.
 - **B5_invariants passes.** Every stage invariant holds on all 30 tables
   under the calibrated automatic reading, v4.2's protein query included.
   Every cell is answered or abstains with a reason.
@@ -126,9 +132,11 @@ method's reply. An answer is a cell's label or its reason for no answer.
 | furtwangler_log2 | 2,000 | 1,100 | 524 → 806 | a 0 not measured |
 | furtwangler_log2_raw_sn | 2,000 | 1,302 | 946 → 975 | a 0 not measured |
 
-- **Eight of the nine move to their label's reading.** That is what B5 is
-  for. Whether more cells are answered depends on the table, and the run
-  judges none of it (b5.json: "reported, not judged").
+- **Six of the nine move to their label's reading.** That is what B5 is
+  for. With the two zeros changes, which were read log, as labelled, before
+  and after, eight of the nine are read as their label says. Whether more
+  cells are answered depends on the table, and the run judges none of it
+  (b5.json: "reported, not judged").
 - **The one wrong reading is the imputed log table.** The check cannot
   tell, since no value is missing, so the table is read as raw. That is
   the cost B4 accepted for filled-in log tables. Its answers change little

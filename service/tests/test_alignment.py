@@ -1,3 +1,5 @@
+import json
+import math
 import unittest
 
 import numpy as np
@@ -834,10 +836,14 @@ class CalibratedValueScaleTests(unittest.TestCase):
         self.assertEqual(scale.zeros_read, "missing")
 
     def test_the_size_rule_edge(self):
-        narrow = np.random.default_rng(3).uniform(1, 30, size=(300, 19))
-        _, scale = alignment.detect_and_transform_value_scale(narrow)
+        """The same raw table at 19 columns and at 20: under 20 the check has
+        no calibrated stratum, so it cannot tell and the table reads raw; at
+        20 it is scored."""
+        wide = _linear_table(cols=20)
+        _, scale = alignment.detect_and_transform_value_scale(wide[:, :19])
         self.assertEqual((scale.verdict, scale.detected, scale.transformed), ("cant_tell", "linear", True))
-        _, scale = alignment.detect_and_transform_value_scale(_linear_table(cols=20))
+        self.assertEqual(scale.evidence["reason"], "too few columns")
+        _, scale = alignment.detect_and_transform_value_scale(wide)
         self.assertEqual(scale.verdict, "linear")
 
     def test_a_stated_reading_wins_and_the_check_is_reported(self):
@@ -882,6 +888,27 @@ class CalibratedValueScaleTests(unittest.TestCase):
             with self.subTest(table=name):
                 _, scale = alignment.detect_and_transform_value_scale(table)
                 self.assertIn(scale.verdict, ("linear", "log", "cant_tell", "unlike_either", "unknown"))
+                json.dumps(scale.response(), allow_nan=False)  # the reply's part is strict JSON
+
+    def test_an_undefined_statistic_reaches_the_reply_as_null(self):
+        """A constant table's statistics are undefined (NaN) in the check's
+        report; the reply's value_scale is still strict JSON, each such
+        number null (the app sends it with json.dumps as it is)."""
+        import valuescale
+
+        def numbers(v):
+            if isinstance(v, dict):
+                return [y for x in v.values() for y in numbers(x)]
+            if isinstance(v, (list, tuple)):
+                return [y for x in v for y in numbers(x)]
+            return [float(v)] if isinstance(v, (float, np.floating)) else []
+
+        table = np.full((100, 25), 7.0)
+        report = valuescale.detect(table)
+        undefined = [v for k in report.__dataclass_fields__ for v in numbers(getattr(report, k)) if not math.isfinite(v)]
+        self.assertTrue(undefined, "the constant table's report holds an undefined number")
+        _, scale = alignment.detect_and_transform_value_scale(table)
+        json.dumps(scale.response(), allow_nan=False)  # NaN or Infinity anywhere would raise
 
     def test_no_observed_value_is_unknown_and_the_check_is_not_called(self):
         from unittest import mock

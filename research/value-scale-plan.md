@@ -326,7 +326,7 @@ The design agreed with the owner, the pop-up included, is `research/value-scale-
 - **B6's staging.** `build_space.py` and the Dockerfile already carry `valuescale/` and the shipped calibration, done early since the Space would not run without them.
 - **The diagnostics.** Run on the bank against `valuescale/bank/expectations/b5.json`. Nine of ten rows pass:
   - 21 tables reply as before on every frozen key;
-  - the 9 predicted change: 7 readings (8 tables now read as their label says, the imputed log table read linear on "can't tell") and 2 changes of what a 0 means;
+  - the 9 predicted change: 7 readings (6 tables now read as their label says, the imputed log table read linear on "can't tell") and 2 changes of what a 0 means (both read log, as labelled, before and after);
   - RNA is byte-identical;
   - detection takes 0.54 s at most.
 - **The failed row.** B5_verdicts failed on the typicality warning alone. Every verdict is B4's, but the warning B4 gave pxd043355_pd with its deposit left out does not fire with the shipped model, which was fitted with it.
