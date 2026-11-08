@@ -59,6 +59,11 @@ PUBLIC = REPO / "data" / "incoming" / "public_sets"
 DOWNLOADS = REPO / "research" / "benchmark" / "public-sets-downloads.json"
 PROTOCOL = REPO / "research" / "benchmark" / "protocol-colon-pxd052341.md"
 SET = "pxd052341"
+# Stage 0's method for this test: its protocol was frozen under the median rule
+# (research/benchmark/protocol-colon-pxd052341.md, sealed), and B5 changes nothing it measures;
+# moving it to the calibrated method is a dated amendment, the owner's
+# (research/value-scale-b5-design.md).
+SCALE_METHOD = "median"
 INPUTS = ("Post2025_PXD052341/DVP_data.pg_matrix.tsv", "Post2025_PXD052341/Post_et_al_organoid_DVP_metadata.tsv")
 # rule 5: the five groups and the reference classes each sums over
 GROUPS = {
@@ -275,7 +280,7 @@ def rehearsal_files(directory: Path) -> tuple[Path, Path, dict]:
                     **REHEARSAL, "pools": len(meta) - len(decoys), "decoys": len(decoys)}
 
 
-def main(argv: "list[str] | None" = None) -> None:
+def _main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rehearse", action="store_true", help="RNA pseudobulk in the deposit's format")
     parser.add_argument("--labels", action="store_true", help="unsealing only: build the label map, once")
@@ -314,6 +319,11 @@ def main(argv: "list[str] | None" = None) -> None:
     source = {rel: _check_download(rel) for rel in INPUTS}
     record = intake(labels, matrix, out, candidate_dir(False), source)
     print(json.dumps(record["candidate"], indent=1))
+
+
+def main(argv: "list[str] | None" = None) -> None:
+    with alignment.scale_method(SCALE_METHOD):
+        _main(argv)
 
 
 if __name__ == "__main__":

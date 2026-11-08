@@ -38,9 +38,15 @@ from benchmark.heldout_intake import facts, write_labels
 from benchmark.khoury2026_embed import refuse_overrides
 from benchmark.sorted_cd4cd8_intake import benchmark_matrix, sha256
 from benchmark.organ_baselines import organ_matrix
+from service.pipeline import alignment
 
 PROTOCOL = REPO / "research" / "benchmark" / "protocol-lung-msv000094189.md"
 SET = "msv000094189"
+# Stage 0's method for this test: its protocol was frozen under the median rule
+# (research/benchmark/protocol-lung-msv000094189.md, sealed), and B5 changes nothing it measures;
+# moving it to the calibrated method is a dated amendment, the owner's
+# (research/value-scale-b5-design.md).
+SCALE_METHOD = "median"
 INPUTS = ("LungMAP2025_MSV000094189/proteinGroups.txt", "LungMAP2025_MSV000094189/Protein_metadata.csv",
           "LungMAP2025_MSV000094189/summary.txt")
 LINEAGES = ("epithelial", "endothelial", "stromal", "immune")
@@ -208,7 +214,7 @@ def rehearsal_files(directory: Path) -> tuple[Path, dict]:
                   **REHEARSAL, "pools": len(cols) - 2, "decoys": 2}
 
 
-def main(argv: "list[str] | None" = None) -> None:
+def _main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rehearse", action="store_true")
     parser.add_argument("--labels", action="store_true")
@@ -246,6 +252,11 @@ def main(argv: "list[str] | None" = None) -> None:
     labels = pd.read_csv(out / "label_map.csv", keep_default_na=False)
     source = {rel: _check_download(rel) for rel in INPUTS}
     print(json.dumps(intake(labels, matrix, out, candidate_dir(False), source)["candidate"], indent=1))
+
+
+def main(argv: "list[str] | None" = None) -> None:
+    with alignment.scale_method(SCALE_METHOD):
+        _main(argv)
 
 
 if __name__ == "__main__":

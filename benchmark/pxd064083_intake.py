@@ -70,6 +70,11 @@ from service.pipeline import alignment, gene_ids, reference
 NAME = "pxd064083"
 REPO = datasets.REPO
 PROTOCOL = "research/benchmark/protocol-pxd064083.md"
+# Stage 0's method for this test: its protocol was frozen under the median rule
+# (research/benchmark/protocol-pxd064083.md: its primary reads these small linear values as log by
+# that rule), and B5 changes nothing it measures; moving it to the calibrated method is a dated
+# amendment, the owner's (research/value-scale-b5-design.md).
+SCALE_METHOD = "median"
 FOLDER = REPO / "data" / "incoming" / "public_sets" / "PXD064083"
 FILES = {"T": "SEARCH_T.xlsx", "B": "SEARCH_B.xlsx"}  # each lineage's search output (protocol, "Data")
 RECEIPT = REPO / "research" / "benchmark" / "pxd064083" / "receipt.json"
@@ -172,7 +177,7 @@ def merged_rows(table: Table, samples: list[str]) -> tuple[dict, dict, str]:
     rule, here for every row). Returns {gene: values}, {gene: first
     identifier} and the scale detected."""
     sub = table.raw(samples)
-    values, scale = alignment.detect_and_transform_value_scale(np.asarray(sub.values, dtype=np.float32))
+    values, scale = alignment.detect_and_transform_value_scale(np.asarray(sub.values, dtype=np.float32), method=SCALE_METHOD)
     rows: dict[str, list[int]] = {}
     names: dict[str, str] = {}
     for i, (name, symbol) in enumerate(zip(sub.gene_names, gene_ids.resolve_to_feature_symbols(sub.gene_names))):
@@ -334,7 +339,7 @@ def rehearse(out: Path) -> tuple[dict, pd.DataFrame, dict]:
                             "files_sha256": {p.name: sha256(p) for p in paths.values()}, **info}
 
 
-def main(argv: "list[str] | None" = None) -> None:
+def _main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     step = parser.add_mutually_exclusive_group()
     step.add_argument("--rehearse", action="store_true", help="Fulcher 2026, development data")
@@ -405,6 +410,11 @@ def main(argv: "list[str] | None" = None) -> None:
     tables = {lin: read_table(FOLDER / n) for lin, n in FILES.items()}
     record = intake(tables, labels, out, {"inputs_sha256": inputs, "label_map_sha256": sha256(out / "label_map.csv")})
     print(json.dumps({"facts": record["label_free_facts"], "merge": record["merge"]}, indent=2))
+
+
+def main(argv: "list[str] | None" = None) -> None:
+    with alignment.scale_method(SCALE_METHOD):
+        _main(argv)
 
 
 if __name__ == "__main__":

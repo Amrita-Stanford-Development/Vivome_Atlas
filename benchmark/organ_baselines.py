@@ -52,6 +52,12 @@ from organ_reference import bundle as organ_bundle  # noqa: E402
 RNA_CELLS = 30000
 K = 30
 SEED = 0
+# Stage 0's method for this test: its protocol was frozen under the median rule (the sealed organ
+# tests' research/benchmark/protocol-ln-pxd042367.md and protocol-lung-msv000094189.md, rule 8:
+# the query on the service's log scale as their intakes read it), and B5 changes nothing it
+# measures; moving it to the calibrated method is a dated amendment, the owner's
+# (research/value-scale-b5-design.md).
+SCALE_METHOD = "median"
 NONE = "(none)"  # a sample a baseline cannot score; wrong for the lung, left out of the lymph node's AUROC
 
 
@@ -59,7 +65,7 @@ def organ_matrix(raw: alignment.RawMatrix, candidate: Path) -> np.ndarray:
     """The upload over the candidate's feature genes (samples x genes), on the
     service's log scale, a gene's rows merged by median, NaN where unmeasured.
     The intake saves it as query_organ.npz."""
-    values, _ = alignment.detect_and_transform_value_scale(raw.values)
+    values, _ = alignment.detect_and_transform_value_scale(raw.values, method=SCALE_METHOD)
     genes = pd.read_csv(candidate / "feature_space_genes.csv")["gene"].astype(str).str.upper().tolist()
     index = {g: i for i, g in enumerate(genes)}
     with organ_bundle.gene_map(candidate):
@@ -214,13 +220,18 @@ def run(organ: str, rehearse: bool) -> dict:
     return result
 
 
-def main(argv: "list[str] | None" = None) -> None:
+def _main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("organ", choices=("ln", "lung"))
     parser.add_argument("--rehearse", action="store_true")
     args = parser.parse_args(argv)
     r = run(args.organ, args.rehearse)
     print(json.dumps({k: v for k, v in r.items() if k in ("correlation", "pca_knn")}, indent=1, default=str))
+
+
+def main(argv: "list[str] | None" = None) -> None:
+    with alignment.scale_method(SCALE_METHOD):
+        _main(argv)
 
 
 if __name__ == "__main__":

@@ -51,6 +51,11 @@ from service.pipeline import alignment
 
 PROTOCOL = REPO / "research" / "benchmark" / "protocol-ln-pxd042367.md"
 SET = "pxd042367"
+# Stage 0's method for this test: its protocol was frozen under the median rule
+# (research/benchmark/protocol-ln-pxd042367.md, sealed), and B5 changes nothing it measures;
+# moving it to the calibrated method is a dated amendment, the owner's
+# (research/value-scale-b5-design.md).
+SCALE_METHOD = "median"
 INPUTS = ("Coscia2023_PXD042367/DIANN_results_Fig4.rar",)
 TAR = Path(r"C:\Windows\System32\tar.exe")
 WORDS = {"germinal centre": ("dz", "lz", "gz", "gc", "dark", "light", "grey", "gray"),
@@ -216,7 +221,7 @@ def rehearsal_files(directory: Path) -> tuple[Path, dict]:
                   **REHEARSAL, "regions": 3 * REHEARSAL["regions_per_kind"], "epithelium_decoys": 4, "blanks": 1}
 
 
-def main(argv: "list[str] | None" = None) -> None:
+def _main(argv: "list[str] | None" = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rehearse", action="store_true")
     parser.add_argument("--labels", action="store_true")
@@ -257,6 +262,11 @@ def main(argv: "list[str] | None" = None) -> None:
     source = {rel: _check_download(rel) for rel in INPUTS}
     matrix = [p for p in (out / "archive").rglob("*.tsv") if "pg" in p.name.lower() and "matrix" in p.name.lower()][0]
     print(json.dumps(intake(labels, matrix, out, candidate_dir(False), source)["candidate"], indent=1))
+
+
+def main(argv: "list[str] | None" = None) -> None:
+    with alignment.scale_method(SCALE_METHOD):
+        _main(argv)
 
 
 if __name__ == "__main__":

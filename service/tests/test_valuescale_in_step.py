@@ -61,5 +61,32 @@ class CalibratedReadingInStepTests(unittest.TestCase):
         self.assertEqual(config.VALUE_SCALE_UNDECIDED_READING, report.UNDECIDED_READING)
 
 
+# The scripts of the tests not yet scored whose protocols were frozen under the
+# median rule: B5 changes nothing they measure (research/value-scale-b5-design.md,
+# "Who keeps the median rule"); moving one is a dated amendment, the owner's.
+FROZEN_SCRIPTS = ("benchmark.sorted_cd4cd8_intake", "benchmark.pxd064083_intake", "benchmark.organ_baselines",
+                  "benchmark.colon_heldout_intake", "benchmark.lung_heldout_intake", "benchmark.ln_heldout_intake")
+
+
+class FrozenScriptsTests(unittest.TestCase):
+    def test_the_frozen_scripts_keep_the_median_rule(self):
+        import importlib
+        import inspect
+        import re
+        for name in FROZEN_SCRIPTS:
+            with self.subTest(script=name):
+                module = importlib.import_module(name)
+                self.assertEqual(module.SCALE_METHOD, "median")
+                source = inspect.getsource(module)
+                for call in re.finditer(r"detect_and_transform_value_scale\(", source):
+                    depth, end = 1, call.end()
+                    while depth:
+                        depth += {"(": 1, ")": -1}.get(source[end], 0)
+                        end += 1
+                    self.assertIn("method=SCALE_METHOD", source[call.end():end], "a direct call names the method")
+                main = inspect.getsource(module.main)
+                self.assertIn("with alignment.scale_method(SCALE_METHOD):", main, "main runs under the median rule")
+
+
 if __name__ == "__main__":
     unittest.main()

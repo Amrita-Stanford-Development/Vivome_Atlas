@@ -63,6 +63,11 @@ FROZEN = {
 }
 MODELS = {"v31": "v3.1", "v41": "v4.1", "v42": "v4.2", "v52": "v5.2"}  # table name -> pipeline version
 MARKERS = ("CD8A", "CD8B", "CD4")
+# Stage 0's method for this test: its protocol was frozen under the median rule
+# (research/benchmark/protocol-sorted-cd4cd8.md, the sealed external test), and B5 changes nothing
+# it measures; moving it to the calibrated method is a dated amendment, the owner's
+# (research/value-scale-b5-design.md).
+SCALE_METHOD = "median"
 # Each marker by its symbol or its UniProt accession, as an upload may name it.
 # CD8B is outside the service's gene map, so the map cannot be used for this.
 MARKER_IDS = {"CD8A": {"CD8A", "P01732"}, "CD8B": {"CD8B", "P10966"}, "CD4": {"CD4", "P01730"}}
@@ -109,7 +114,7 @@ def marker_facts(raw: alignment.RawMatrix) -> dict:
     accession. Values are on the service's scale first, so a 0 in a linear
     upload is "not detected", as the service reads it."""
     groups = [{p.strip().upper().split("-")[0] for p in str(g).split(";") if p.strip()} for g in raw.gene_names]
-    values, _ = alignment.detect_and_transform_value_scale(np.asarray(raw.values, dtype=np.float32))
+    values, _ = alignment.detect_and_transform_value_scale(np.asarray(raw.values, dtype=np.float32), method=SCALE_METHOD)
     facts = {}
     for marker in MARKERS:
         rows = [i for i, g in enumerate(groups) if g & MARKER_IDS[marker]]
@@ -122,7 +127,7 @@ def benchmark_matrix(raw: alignment.RawMatrix) -> np.ndarray:
     """The baselines' query matrix: cells x benchmark genes, on the log scale
     the service would use, a gene's rows merged by per-cell median, NaN where
     the gene is not measured."""
-    values, _ = alignment.detect_and_transform_value_scale(raw.values)
+    values, _ = alignment.detect_and_transform_value_scale(raw.values, method=SCALE_METHOD)
     symbols = gene_ids.resolve_to_feature_symbols(raw.gene_names)
     genes = datasets.benchmark_gene_space()
     index = {g: i for i, g in enumerate(genes)}
@@ -151,7 +156,7 @@ def received(matrix: Path, cells: Path | None) -> alignment.RawMatrix:
     return alignment.RawMatrix(gene_names=raw.gene_names, cell_ids=keep, values=raw.values[:, columns])
 
 
-def main(argv: list[str] | None = None) -> None:
+def _main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser()
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--rehearse", action="store_true", help="Fulcher 2026's upload, a development dataset")
@@ -194,6 +199,11 @@ def main(argv: list[str] | None = None) -> None:
                           if p.suffix in (".csv", ".txt", ".npz")}}
     (out / "intake.json").write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"facts": facts, "runs": runs}, indent=2))
+
+
+def main(argv: list[str] | None = None) -> None:
+    with alignment.scale_method(SCALE_METHOD):
+        _main(argv)
 
 
 if __name__ == "__main__":
