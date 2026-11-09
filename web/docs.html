@@ -34,6 +34,273 @@
             we took to build and test it, what each step found, and the decisions made along the
             way.</p>
         <div id="docs-error" role="alert"></div>
+
+        <section class="docs-home-part" aria-labelledby="docs-howto-title">
+            <h2 id="docs-howto-title">How to read a topic</h2>
+            <p class="docs-intro">The section is split into topics. Each topic is one page with the same tabs,
+                and every number on it comes from the project's own results files.</p>
+            <dl class="docs-howto">
+                <div class="glass">
+                    <dt>How it works</dt>
+                    <dd>The ideas, in short chapters with labelled figures. Start here.</dd>
+                </div>
+                <div class="glass">
+                    <dt>What we did</dt>
+                    <dd>Every step in order, each with what we expected before it ran, what it found, and
+                        what the owner decided.</dd>
+                </div>
+                <div class="glass">
+                    <dt>Words</dt>
+                    <dd>Every term the topic uses, explained in a line or two.</dd>
+                </div>
+            </dl>
+        </section>
+
+        <section class="docs-home-part" aria-labelledby="docs-topics-title">
+            <h2 id="docs-topics-title">The topics</h2>
+            <p class="docs-intro">Raw or log is written. The others follow, one at a time, each read and agreed
+                by the owner before it goes up. Each card is dated by its first and last milestone on the
+                timeline below.</p>
+            <ul class="docs-cards">
+                <li class="docs-card glass" id="topic-raw-or-log">
+                    <h3><a href="docs-raw-or-log.html">Raw or log</a></h3>
+                    <p>How the service tells whether a protein table holds raw values or logs, and every step
+                        we took to build and test that.</p>
+                    <p class="docs-card-meta"><time datetime="2026-10-28">2026-10-28</time> to <time datetime="2026-11-09">2026-11-09</time><span class="bead">In progress</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-model">
+                    <h3>The cell model and its versions</h3>
+                    <p>What the model does with a cell, how it answers or says it can't tell, and what each
+                        version changed.</p>
+                    <p class="docs-card-meta"><time datetime="2026-10-01">2026-10-01</time> to <time datetime="2026-10-17">2026-10-17</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-data">
+                    <h3>The data</h3>
+                    <p>The reference cells and the protein datasets, and the role each one plays: development,
+                        held out, or kept unused.</p>
+                    <p class="docs-card-meta"><time datetime="2026-10-04">2026-10-04</time> to <time datetime="2026-10-27">2026-10-27</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-testing">
+                    <h3>Testing the model</h3>
+                    <p>Fair comparisons, the baselines and the sealed tests, and what the evidence supports so
+                        far.</p>
+                    <p class="docs-card-meta"><time datetime="2026-09-23">2026-09-23</time> to <time datetime="2026-10-27">2026-10-27</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-organs">
+                    <h3>Other organs</h3>
+                    <p>References for organs beyond blood: how each was built and tested, and what went
+                        wrong.</p>
+                    <p class="docs-card-meta"><time datetime="2026-10-18">2026-10-18</time> to <time datetime="2026-11-03">2026-11-03</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-service">
+                    <h3>The upload service</h3>
+                    <p>What happens to an uploaded file, stage by stage, and where the service runs.</p>
+                    <p class="docs-card-meta"><time datetime="2026-09-24">2026-09-24</time> to <time datetime="2026-10-21">2026-10-21</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-website">
+                    <h3>The website</h3>
+                    <p>Each page and what it is for, and the rule that no number on it is made up.</p>
+                    <p class="docs-card-meta"><time datetime="2025-08-17">2025-08-17</time> to <time datetime="2026-10-26">2026-10-26</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+                <li class="docs-card glass" id="topic-how-we-work">
+                    <h3>How we work</h3>
+                    <p>The rules every step keeps, such as expectations written first and each test scored
+                        once, and when each one came in.</p>
+                    <p class="docs-card-meta"><time datetime="2026-10-03">2026-10-03</time> to <time datetime="2026-10-28">2026-10-28</time><span class="bead bead-open">Coming next</span></p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="docs-home-part" aria-labelledby="docs-timeline-title">
+            <h2 id="docs-timeline-title">The timeline</h2>
+            <p class="docs-intro">The project's milestones, oldest first, each with the topic it belongs to.
+                A milestone of a written topic opens its step.</p>
+            <div class="docs-timeline-sheet sheet">
+            <ol class="docs-timeline">
+                <li class="docs-milestone" data-source="research/benchmark/known-limitations.md">
+                    <time datetime="2025-08-17">2025-08-17</time>
+                    <span class="docs-milestone-topic">The website</span>
+                    <p>The repository's first commit, <code>307e483</code>: the atlas's data and its first
+                        pages.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-09-23">2026-09-23</time>
+                    <span class="docs-milestone-topic">Testing the model</span>
+                    <p>The benchmark rebuilt under fixed rules, so every method is compared fairly.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-09-24">2026-09-24</time>
+                    <span class="docs-milestone-topic">The upload service</span>
+                    <p>The service's encoder fixed: run end to end on SCoPE2, it now gives the model's own
+                        embedding.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-09-29">2026-09-29</time>
+                    <span class="docs-milestone-topic">Testing the model</span>
+                    <p>The benchmark scored again over several seeds: the lead over scANVI belonged to the
+                        one seed that shipped, not to the model's design, and the records were corrected.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-09-30">2026-09-30</time>
+                    <span class="docs-milestone-topic">The website</span>
+                    <p>The redesign began: the living background and the card with the blue halo became
+                        every page's look.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-09-30">2026-09-30</time>
+                    <span class="docs-milestone-topic">Testing the model</span>
+                    <p>The Khoury set registered as a sealed final test, its labels locked away.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-01">2026-10-01</time>
+                    <span class="docs-milestone-topic">The cell model and its versions</span>
+                    <p>v3.1 became the service's default: an ensemble of models that answers at several
+                        levels, with a best guess.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-02">2026-10-02</time>
+                    <span class="docs-milestone-topic">The website</span>
+                    <p>The public site went live on Cloudflare Pages.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-03">2026-10-03</time>
+                    <span class="docs-milestone-topic">Testing the model</span>
+                    <p>The Khoury set unsealed and scored once.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-03">2026-10-03</time>
+                    <span class="docs-milestone-topic">How we work</span>
+                    <p>A review of the baselines, asked for by the owner, found our own setup had held them
+                        back. The corrections were committed before any corrected result was scored.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-04">2026-10-04</time>
+                    <span class="docs-milestone-topic">The data</span>
+                    <p>SCoPE2's labels corrected: our copy had macrophage and monocyte swapped on every cell.
+                        Every table that used them was scored again.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-04">2026-10-04</time>
+                    <span class="docs-milestone-topic">The cell model and its versions</span>
+                    <p>v4 passed its gate: v3.1's answers, with v4's best guess beside them, served on
+                        request.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-06">2026-10-06</time>
+                    <span class="docs-milestone-topic">The cell model and its versions</span>
+                    <p>v4.1: the encoder's weight chosen on the Fulcher set under fixed rules, then checked
+                        once on the Khoury set.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/benchmark/side-tests.md">
+                    <time datetime="2026-10-15">2026-10-15</time>
+                    <span class="docs-milestone-topic">The data</span>
+                    <p>The data's roles set: most of it became development data, a fixed part was held out
+                        as the internal test, and external testing waits for sorted cells.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-15">2026-10-15</time>
+                    <span class="docs-milestone-topic">The cell model and its versions</span>
+                    <p>v4.1 made the service's default.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-16">2026-10-16</time>
+                    <span class="docs-milestone-topic">The cell model and its versions</span>
+                    <p>v4.2 served.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-16">2026-10-16</time>
+                    <span class="docs-milestone-topic">The website</span>
+                    <p>The Workflow page: how VivOME works from start to end, following one real run.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-17">2026-10-17</time>
+                    <span class="docs-milestone-topic">The cell model and its versions</span>
+                    <p>v4.1 served again, after v4.2 fell short on the Khoury set.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-18">2026-10-18</time>
+                    <span class="docs-milestone-topic">Other organs</span>
+                    <p>Organ references began, the large intestine first. It closed NO GO the same day.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-20">2026-10-20</time>
+                    <span class="docs-milestone-topic">Other organs</span>
+                    <p>The second versions of the lung and the lymph node: both NO GO, each by one gate.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-21">2026-10-21</time>
+                    <span class="docs-milestone-topic">The upload service</span>
+                    <p>The service's revision 00006-rkt went live on Cloud Run, then the site, after
+                        reviews of their security and speed.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-26">2026-10-26</time>
+                    <span class="docs-milestone-topic">The website</span>
+                    <p>The beta's sign-in: an invited email and one password in front of every page.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-27">2026-10-27</time>
+                    <span class="docs-milestone-topic">The data</span>
+                    <p>The requests to two labs for their sorted cells, the planned external test, checked
+                        and sent.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-27">2026-10-27</time>
+                    <span class="docs-milestone-topic">Testing the model</span>
+                    <p>PXD064083, sorted single T and B cells, scored once as a sealed test: it passed.</p>
+                </li>
+                <li class="docs-milestone" data-step="step1">
+                    <time datetime="2026-10-28">2026-10-28</time>
+                    <span class="docs-milestone-topic">Raw or log</span>
+                    <p><a href="docs-raw-or-log.html#did-step1">The raw-or-log plan approved</a>, and Step 1
+                        gathered the bank of real tables.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/value-scale-plan.md">
+                    <time datetime="2026-10-28">2026-10-28</time>
+                    <span class="docs-milestone-topic">How we work</span>
+                    <p>Diagnostics first: the raw-or-log work begins with a bank of real tables, and every
+                        step after it ends with runs on that bank, against expectations written before.</p>
+                </li>
+                <li class="docs-milestone" data-step="phase_a">
+                    <time datetime="2026-11-03">2026-11-03</time>
+                    <span class="docs-milestone-topic">Raw or log</span>
+                    <p><a href="docs-raw-or-log.html#did-phase-a">Phase A went live</a>: an uploader can say
+                        how their file is written.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/organ-references.md">
+                    <time datetime="2026-11-03">2026-11-03</time>
+                    <span class="docs-milestone-topic">Other organs</span>
+                    <p>Organ work paused until the raw-or-log work is finished.</p>
+                </li>
+                <li class="docs-milestone" data-step="b4">
+                    <time datetime="2026-11-07">2026-11-07</time>
+                    <span class="docs-milestone-topic">Raw or log</span>
+                    <p><a href="docs-raw-or-log.html#did-b4">B4 set the detector's thresholds</a>.</p>
+                </li>
+                <li class="docs-milestone" data-step="b7">
+                    <time datetime="2026-11-09">2026-11-09</time>
+                    <span class="docs-milestone-topic">Raw or log</span>
+                    <p><a href="docs-raw-or-log.html#did-b7">B7 scored the sealed test once</a>: the promise
+                        broke for small log tables, and the owner chose rework, then a fresh test.</p>
+                </li>
+            </ol>
+            </div>
+        </section>
+
+        <section class="docs-home-part" aria-labelledby="docs-records-title">
+            <h2 id="docs-records-title">Where the full records are</h2>
+            <p class="docs-intro">This section is written from the project's own records, and each step names
+                the files it draws on. The records themselves are in the repository:</p>
+            <ul class="docs-records">
+                <li><code>research/todo.md</code>: the work list, and its changelog, one dated row for each
+                    piece of work.</li>
+                <li><code>research/notebook-run-history.md</code>: the run history, an entry for each run,
+                    with what it found.</li>
+                <li><code>research/</code>: the plans, the protocols of the tests, and each run's notes and
+                    report.</li>
+                <li><code>docs/</code>: how each part of the site and the service works today.</li>
+            </ul>
+        </section>
     </main>
 
     <footer class="site-footer">

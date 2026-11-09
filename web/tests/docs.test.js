@@ -407,3 +407,113 @@ test('every record in the data is shown somewhere in the section', () => {
   const unused = Object.keys(docs.records).filter((key) => !shown.has(key));
   assert.deepEqual(unused, [], 'records no page shows');
 });
+
+// ---- the home ----
+
+// The section's topics, in the order the home shows them. A written topic is
+// web/docs-<id>.html; the others are cards that say they come next.
+const TOPICS = [
+  ['raw-or-log', 'Raw or log'],
+  ['model', 'The cell model and its versions'],
+  ['data', 'The data'],
+  ['testing', 'Testing the model'],
+  ['organs', 'Other organs'],
+  ['service', 'The upload service'],
+  ['website', 'The website'],
+  ['how-we-work', 'How we work'],
+];
+const TIME = /<time datetime="([^"]+)">([^<]+)<\/time>/g;
+
+function homeCards() {
+  return [...read(HOME).matchAll(/<li class="docs-card[^"]*" id="topic-([a-z-]+)">([\s\S]*?)<\/li>/g)].map(([, id, body]) => ({
+    id, body, title: plainText(body.match(/<h3>([\s\S]*?)<\/h3>/)?.[1] ?? ''),
+  }));
+}
+
+function milestones() {
+  const list = read(HOME).match(/<ol class="docs-timeline">([\s\S]*?)<\/ol>/);
+  assert.ok(list, 'the home has no timeline');
+  return [...list[1].matchAll(/<li class="docs-milestone" data-(step|source)="([^"]+)">([\s\S]*?)<\/li>/g)].map(([, kind, ref, body]) => ({
+    kind, ref, body,
+    dates: [...body.matchAll(TIME)],
+    topic: plainText(body.match(/<span class="docs-milestone-topic">([\s\S]*?)<\/span>/)?.[1] ?? ''),
+  }));
+}
+
+test('the home says how to read a topic: its tabs, in order', () => {
+  const howto = read(HOME).match(/<dl class="docs-howto">([\s\S]*?)<\/dl>/);
+  assert.ok(howto, 'the home does not say how to read a topic');
+  const named = [...howto[1].matchAll(/<dt>([^<]+)<\/dt>/g)].map((m) => decode(m[1]));
+  for (const page of TOPIC_PAGES) {
+    const tabs = [...read(page).matchAll(/<button type="button" role="tab"[^>]*>([^<]+)<\/button>/g)].map((m) => decode(m[1]));
+    assert.deepEqual(named, tabs, page);
+  }
+});
+
+test('the home: one card per topic, in order; a written topic links to its page, the rest come next', () => {
+  const cards = homeCards();
+  assert.deepEqual(cards.map(({ id, title }) => [id, title]), TOPICS);
+  for (const { id, body } of cards) {
+    const page = `docs-${id}.html`;
+    const links = [...body.matchAll(/<a href="([^"]+)"/g)].map((m) => m[1]);
+    if (DOCS_PAGES.includes(page)) {
+      assert.deepEqual(links, [page], `${id}: a written topic's card links to its page, once`);
+      assert.doesNotMatch(body, /Coming next/, id);
+    } else {
+      assert.deepEqual(links, [], `${id}: a topic not yet written links nowhere`);
+      assert.match(body, /<span class="bead bead-open">Coming next<\/span>/, `${id} does not say it comes next`);
+      assert.ok(!existsSync(new URL(`../${page}`, import.meta.url)), `${page} exists, but its card says it comes next`);
+    }
+  }
+  for (const page of TOPIC_PAGES) assert.ok(cards.some(({ id }) => `docs-${id}.html` === page), `${page} has no card on the home`);
+});
+
+test('the home: the timeline runs forward, and every milestone is in the records', () => {
+  const todo = readFileSync(new URL('../../research/todo.md', import.meta.url), 'utf8');
+  const titles = new Set(TOPICS.map(([, title]) => title));
+  const all = milestones();
+  assert.ok(all.length > 0);
+  let last = '';
+  for (const { kind, ref, body, dates, topic } of all) {
+    assert.equal(dates.length, 1, `${ref}: a milestone has one date`);
+    const [, when, shown] = dates[0];
+    assert.equal(when, shown);
+    assert.match(when, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(when >= last, `${when} comes before ${last}`);
+    last = when;
+    assert.ok(titles.has(topic), `${when}: "${topic}" is not a topic`);
+    if (kind === 'step') {
+      // docs.json's steps are Raw or log's; the milestone opens its entry.
+      const step = docs.steps[ref];
+      assert.ok(step, `${when}: no step ${ref}`);
+      assert.ok(step.dates.includes(when), `${when} is not one of ${ref}'s dates`);
+      assert.equal(topic, 'Raw or log', ref);
+      assert.ok(body.includes(`href="docs-raw-or-log.html#did-${ref.replace(/_/g, '-')}"`), `${ref}: the milestone does not open its step`);
+    } else if (ref === 'research/todo.md') {
+      assert.match(todo, new RegExp(`^\\| ${when}(?: to [0-9-]+)? \\|`, 'm'), `${when}: no changelog row of that date`);
+    } else {
+      const source = new URL(`../../${ref}`, import.meta.url);
+      assert.ok(existsSync(source), `${ref} does not exist`);
+      assert.ok(readFileSync(source, 'utf8').includes(when), `${ref} does not hold ${when}`);
+    }
+  }
+});
+
+test('the home: each card is dated by the first and last of its milestones', () => {
+  const all = milestones();
+  for (const { title, body } of homeCards()) {
+    const dates = all.filter((m) => m.topic === title).map((m) => m.dates[0][1]).sort();
+    assert.ok(dates.length > 0, `${title}: no milestone on the timeline`);
+    const span = dates[0] === dates.at(-1) ? [dates[0]] : [dates[0], dates.at(-1)];
+    assert.deepEqual([...body.matchAll(TIME)].map((m) => m[1]), span, title);
+  }
+});
+
+test('a link from one Docs page to another lands on that page, and on the part it names', () => {
+  for (const page of DOCS_PAGES) {
+    for (const [, target, part] of read(page).matchAll(/href="(docs[a-z-]*\.html)(?:#([^"]*))?"/g)) {
+      assert.ok(DOCS_PAGES.includes(target), `${page}: ${target} is not a Docs page`);
+      if (part) assert.ok(read(target).includes(` id="${part}"`), `${page}: ${target}#${part} leads nowhere`);
+    }
+  }
+});
