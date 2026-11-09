@@ -62,7 +62,11 @@ projects one upload at a time (settings in `Dockerfile`). Its address is
   (found by loading the bundle and projecting the PBMC240 example), the
   Dockerfile, the card, `requirements.txt` pinned to the building
   interpreter's versions, a `.gitattributes` putting files over 10 MB in Git
-  LFS, and `space_manifest.json` (every file's sha256 and the commit).
+  LFS, and `space_manifest.json` (every file's sha256, the commit, and
+  whether `service/`, `valuescale/` or `deploy/` had uncommitted changes).
+  Last, a fresh interpreter imports every staged module of the two packages
+  from the staged folder alone and loads the calibration; a piece left out
+  stops the build.
 - `check_space.py`: posts the PBMC240 example to a running service, as the
   site does, and compares every cell with this repository's own run.
 - `rehearse.py`: starts this repository's service locally with the

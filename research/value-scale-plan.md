@@ -10,9 +10,10 @@ Phase B, as of 2026-11-07:
 - **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed. A code review's fixes came before the visit ran: the refusal of peptide-level Spectronaut pivots is dropped, as the parser read them before, and the MaxQuant test is narrowed so a plain matrix reads as before (protocol amendment 3; `b3_revisit2.json`, `changed_before_the_run`). The selection is unchanged. The visit ran on 2026-11-06: 49 tables added, 48 kept after their audit, and every expectation met but one, the MaxQuant count (43 kept against at least 44: six small tables). Seven more faults in our own code were found after it (B3 notes, "Found after the third visit"). The owner accepted the miss and chose (2026-11-07) to fix the seven, refuse decimal commas in clear words and match MaxQuant's quantity columns in any case, then visit the records these touch a fourth time. Those fixes are in `8016025` with the fourth visit's expectations (`b3_revisit3.json`, protocol amendment 4). The fixes in `76d490a`, `3b4f162` and `8016025` were deployed on 2026-11-07 with the owner's OK, from `decb812`: the service (Cloud Run revision `vivome-atlas-00009-hcz`), then the site. The selection is 15 records (`42a8b96`). The visit ran on 2026-11-07: 6 tables added, all 6 kept after their audit, and every expectation met.
 - **B4, the calibration:** run on 2026-11-07 (`27b43dd`, then the run). The score became the probability alone before any calibration score (protocol amendment 5, `36ec352`). The design part's no-gaps row failed in one place; the owner accepted it and chose to fix a fault of ours it showed first (`research/notebook-outputs/value_scale_b4/notes.md`). Every other row passes. `valuescale/calibration/protein-v1.json` holds the thresholds.
 - **B5, the service and the site:** designed with the owner (2026-11-08): `research/value-scale-b5-design.md`; the build plan is `research/value-scale-b5-plan.md`. Built and run on the bank on 2026-11-08 (`research/notebook-outputs/value_scale_b5/notes.md`). Nine of ten rows pass; B5_verdicts failed on the typicality warning alone (the prediction took B4's left-out warning for the shipped detector's); the owner accepted it (2026-11-09). Not deployed: the site and the service go live together after B7.
-- **B6 and B7:** not started.
+- **B6, the deploy assembly:** built and run on 2026-11-09 (`research/notebook-outputs/value_scale_b6/notes.md`). All seven rows pass: the staged Space, run on its own, replies as this repository's service does on every bank table. One fault was found after the run (the import check wrote bytecode into the staged folder) and fixed test first (`8449d14`). Not deployed.
+- **B7:** not started. The sealed test is scored once, so B7 starts with the owner's go-ahead.
 
-Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 79).
+Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 80).
 
 ## Context
 
@@ -343,6 +344,19 @@ The design agreed with the owner, the pop-up included, is `research/value-scale-
 - **Added by the owner's decisions on B5 (2026-11-09):**
   - the receipt names what a 0 was read as only when the table holds a 0;
   - a test of the calibrated method with a stated reading, across the model versions (the B5 final review's suggestion).
+
+**As built (2026-11-09; `research/notebook-outputs/value_scale_b6/notes.md`):**
+- **The build** (`11a59a8`). `build_space.uncommitted_changes` covers `service/`, `valuescale/` and `deploy/`. `build_space.import_check` imports every staged module of the two packages from the staged folder alone, in a fresh interpreter (`-I -B`), and loads the calibration; a piece left out stops the build. `scripts/test_deploy_rehearse.py` `BuildSpaceChecksTests` covers both.
+- **The owner's B5 items** (`11a59a8`):
+  - `zeros_read` is set only when the table holds a 0 (`alignment._calibrated_reading`), and the receipt follows it (`web/js/panels.js` `valueScaleText`);
+  - `StatedValueScaleTests.test_every_version_applies_and_reports_the_calibrated_stated_reading`.
+- **The diagnostics** (`--step b6`, against `valuescale/bank/expectations/b6.json`). Each side runs in its own fresh interpreter with the hosted settings: the Space from `deploy/huggingface/space` alone, the repository's service from the repository root. All seven rows pass:
+  - the pipeline's replies on the 30 traced tables are byte-identical, 60 of 60, and validation's errors on the 7 small tables, 7 of 7;
+  - through both servers, `/api/status` and the 66 requests for the 33 files under 31 MiB are identical, as are the negative-values cases;
+  - `zeros_read` appears on the 8 tables that hold a 0;
+  - every reply summary equals B5's, but for `zeros_read`.
+- **Found after the run.** The import check ran without `-B`, so the staged folder held bytecode its manifest does not list. It was fixed test first (`8449d14`), and the Space rebuilt clean.
+- **B5's step, run again,** would now fail B5_pbmc240, B5_scope2 and B5_app, which expect `zeros_read` on tables with no 0. B5's report stays the record of its run.
 - **Done early, in B5** (the Space would not run without it): `package_files()` stages `valuescale/*.py` and the shipped calibration, the Dockerfile copies `valuescale/`, and `scripts/test_deploy_rehearse.py` `BuildSpaceFilesTests` covers both. B6 adds the `git status` check, the import check on the assembled Space and the diagnostics.
 
 ### B7. Sealed test, the owner's OK, then deploy

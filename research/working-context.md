@@ -64,7 +64,14 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     failed on the typicality warning alone (the prediction took B4's
     left-out warning for the shipped detector's); the owner accepted it
     on 2026-11-09. Not deployed: the site and the service go live together
-    after B7. Next: B6, the assembled Space.
+    after B7.
+  - **B6, the deploy assembly, was built and run on 2026-11-09**
+    ([notes](notebook-outputs/value_scale_b6/notes.md)). The staged Space,
+    run on its own with the hosted settings, replies as this repository's
+    service does on every bank table. All seven rows pass. The reply and
+    the receipt name what a 0 was read as only when the table holds a 0
+    (the owner). Not deployed. Next: B7, the sealed test, scored once,
+    with the owner's go-ahead.
 - **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
   (from `decb812`), then the site. These brought the clean-up's fixes to
   the parser and the site's file check (lone-CR line endings, MaxQuant,

@@ -1,0 +1,1238 @@
+{
+ "step": "b6",
+ "run": "2026-11-09T11:57:14",
+ "pipeline_version": "v4.1",
+ "seconds": 683,
+ "results": {
+  "B6_build": true,
+  "B6_isolated": true,
+  "B6_pipeline": true,
+  "B6_status": true,
+  "B6_app": true,
+  "B6_zeros": true,
+  "B6_since_b5": true
+ },
+ "build": {
+  "exit": 0,
+  "printed": "v4.1: 32 model files (582 MB), 32 Python files (31 modules import from the staged folder alone), 10 in Git LFS; total 583 MB in deploy/huggingface/space/",
+  "stderr_tail": [],
+  "modules": 31,
+  "commit": "fdf31f576fcbcdad17085bf5fc0017fbde522b1d",
+  "head": "fdf31f576fcbcdad17085bf5fc0017fbde522b1d",
+  "uncommitted_changes": false,
+  "pipeline_version": "v4.1",
+  "staged_files": 64,
+  "differing": [],
+  "valuescale_files": [
+   "valuescale/__init__.py",
+   "valuescale/baselines.py",
+   "valuescale/calibrated.py",
+   "valuescale/calibration/protein-v1.json",
+   "valuescale/conformal.py",
+   "valuescale/gates.py",
+   "valuescale/method.py",
+   "valuescale/report.py",
+   "valuescale/score.py",
+   "valuescale/statistics.py"
+  ],
+  "valuescale_expected": [
+   "valuescale/__init__.py",
+   "valuescale/baselines.py",
+   "valuescale/calibrated.py",
+   "valuescale/calibration/protein-v1.json",
+   "valuescale/conformal.py",
+   "valuescale/gates.py",
+   "valuescale/method.py",
+   "valuescale/report.py",
+   "valuescale/score.py",
+   "valuescale/statistics.py"
+  ]
+ },
+ "children": {
+  "pipeline": {
+   "space": {
+    "exit": 0,
+    "where": {
+     "service": "D:\\Project\\Vivome\\Vivome_Atlas\\deploy\\huggingface\\space\\service\\__init__.py",
+     "valuescale": "D:\\Project\\Vivome\\Vivome_Atlas\\deploy\\huggingface\\space\\valuescale\\__init__.py"
+    },
+    "stderr_tail": []
+   },
+   "repo": {
+    "exit": 0,
+    "where": {
+     "service": "D:\\Project\\Vivome\\Vivome_Atlas\\service\\__init__.py",
+     "valuescale": "D:\\Project\\Vivome\\Vivome_Atlas\\valuescale\\__init__.py"
+    },
+    "stderr_tail": []
+   }
+  },
+  "where": {
+   "pipeline space": {
+    "service": "D:\\Project\\Vivome\\Vivome_Atlas\\deploy\\huggingface\\space\\service\\__init__.py",
+    "valuescale": "D:\\Project\\Vivome\\Vivome_Atlas\\deploy\\huggingface\\space\\valuescale\\__init__.py"
+   },
+   "pipeline repo": {
+    "service": "D:\\Project\\Vivome\\Vivome_Atlas\\service\\__init__.py",
+    "valuescale": "D:\\Project\\Vivome\\Vivome_Atlas\\valuescale\\__init__.py"
+   },
+   "server space": {
+    "service": "D:\\Project\\Vivome\\Vivome_Atlas\\deploy\\huggingface\\space\\service\\__init__.py",
+    "valuescale": "D:\\Project\\Vivome\\Vivome_Atlas\\deploy\\huggingface\\space\\valuescale\\__init__.py"
+   },
+   "server repo": {
+    "service": "D:\\Project\\Vivome\\Vivome_Atlas\\service\\__init__.py",
+    "valuescale": "D:\\Project\\Vivome\\Vivome_Atlas\\valuescale\\__init__.py"
+   }
+  }
+ },
+ "status": {
+  "space": {
+   "status": "ready",
+   "atlas_version": "0.6.0",
+   "model_version": "v4.1 (v4 with the correlation term weighted more where it is used; chosen on Fulcher 2026)",
+   "pipeline_version": "v4.1",
+   "limits": {
+    "max_cells": 2000,
+    "max_upload_mb": 31.0,
+    "concurrent_projections": 1
+   },
+   "value_scale": {
+    "choices": [
+     "auto",
+     "linear",
+     "log"
+    ],
+    "modalities": [
+     "prot"
+    ],
+    "zeros": [
+     "auto",
+     "missing",
+     "measured"
+    ]
+   }
+  },
+  "repo": {
+   "status": "ready",
+   "atlas_version": "0.6.0",
+   "model_version": "v4.1 (v4 with the correlation term weighted more where it is used; chosen on Fulcher 2026)",
+   "pipeline_version": "v4.1",
+   "limits": {
+    "max_cells": 2000,
+    "max_upload_mb": 31.0,
+    "concurrent_projections": 1
+   },
+   "value_scale": {
+    "choices": [
+     "auto",
+     "linear",
+     "log"
+    ],
+    "modalities": [
+     "prot"
+    ],
+    "zeros": [
+     "auto",
+     "missing",
+     "measured"
+    ]
+   }
+  }
+ },
+ "tables": [
+  {
+   "id": "pbmc240_diann",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 238,
+   "mib": 2.63,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "kabatnik_cra_timstofultra",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 25,
+   "mib": 2.12,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "kabatnik_c3_region",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 27,
+   "mib": 0.91,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd073250_diann",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 557,
+   "mib": 5.79,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd077946_diann_genes",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 40,
+   "mib": 0.62,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "zamore_diann",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 30,
+   "mib": 0.85,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd064083_t",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 78,
+   "mib": 2.11,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd064083_b",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 70,
+   "mib": 1.84,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd021882_maxquant",
+   "label": "linear",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 15,
+   "mib": 6.62,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 15 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "dusszachniewicz_maxquant",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 45,
+   "mib": 90.24,
+   "over_limit": true,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true
+  },
+  {
+   "id": "herrera2025_fragpipe",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 91,
+   "mib": 6.5,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "lungmap_bpd_fragpipe",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 20,
+   "mib": 2.69,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "msv000099294_hmc3",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 47,
+   "mib": 2.0,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "msv000099294_microglia",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 57,
+   "mib": 1.23,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd061052_spectronaut",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 29,
+   "mib": 4.76,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd043355_pd",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 59,
+   "mib": 1.63,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "fulcher_tmt",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 15.65,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "scope2_export",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 1490,
+   "mib": 53.16,
+   "over_limit": true,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": null,
+   "same_as_b5": true
+  },
+  {
+   "id": "khoury_column_normalized",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 1651,
+   "mib": 44.44,
+   "over_limit": true,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": null,
+   "same_as_b5": true
+  },
+  {
+   "id": "furtwangler_batchcorr",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 26.86,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "furtwangler_batchcorr_norm",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 26.97,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 26.94,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2_imputed",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 60.97,
+   "over_limit": true,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "cant_tell",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true
+  },
+  {
+   "id": "furtwangler_log2_nan",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 23.1,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2fc_nan",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 26.18,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "measured",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "furtwangler_log2_raw_sn",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its 2,000-cell subsample",
+   "cells": 2000,
+   "mib": 26.75,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd049412_hela250pg",
+   "label": "linear",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 3,
+   "mib": 1.94,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 3 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd049412_a549_singlecells",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 50,
+   "mib": 15.06,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "pxd069060_diann_report",
+   "label": "linear",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 12,
+   "mib": 0.13,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 12 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "quantms_pxd004452_ibaq",
+   "label": "linear",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 4,
+   "mib": 0.36,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 4 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "quantms_pxd004452_ribaq",
+   "label": "log",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 4,
+   "mib": 0.36,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 4 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "brunner_diann_1ng",
+   "label": "linear",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 15,
+   "mib": 0.78,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 15 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "brunner_mq_singlecells",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 51,
+   "mib": 25.64,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "krull_singlecells",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 143,
+   "mib": 0.71,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": "missing",
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "cong_mq_singlecells",
+   "label": "linear",
+   "refused": "validation",
+   "sent_as": "its file",
+   "cells": 7,
+   "mib": 1.52,
+   "over_limit": false,
+   "pipeline_identical": {
+    "validation": true
+   },
+   "validation_error": "upload has 7 cell(s); at least 20 are required \u2014 smoothing and per-upload statistics need a real population to work from.",
+   "app": {
+    "prot": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    },
+    "rna": {
+     "space": 400,
+     "repo": 400,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "hu2023_pd_k562",
+   "label": "linear",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 72,
+   "mib": 0.95,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "linear",
+   "detected": "linear",
+   "transformed": true,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  },
+  {
+   "id": "cptac_ccrcc_tumor",
+   "label": "log",
+   "refused": null,
+   "sent_as": "its file",
+   "cells": 110,
+   "mib": 18.47,
+   "over_limit": false,
+   "pipeline_identical": {
+    "prot": true,
+    "rna": true
+   },
+   "verdict": "log",
+   "detected": "log",
+   "transformed": false,
+   "zeros_read": null,
+   "same_as_b5": true,
+   "app": {
+    "prot": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    },
+    "rna": {
+     "space": 200,
+     "repo": 200,
+     "identical": true
+    }
+   }
+  }
+ ],
+ "cases": [
+  {
+   "case": "nothing stated",
+   "space": {
+    "status": 400,
+    "sha256": "dc01ae8904fab6d59cebc812732073c2cd999cbe399cea3e6f1e19be509d12ba",
+    "error": "2 values are negative, so they are not raw intensities, yet the service's check reads the rest as raw",
+    "reason": "If the values are already log, choose Already log. If they are raw intensities, remove the negative values and send the file again."
+   },
+   "repo": {
+    "status": 400,
+    "sha256": "dc01ae8904fab6d59cebc812732073c2cd999cbe399cea3e6f1e19be509d12ba",
+    "error": "2 values are negative, so they are not raw intensities, yet the service's check reads the rest as raw",
+    "reason": "If the values are already log, choose Already log. If they are raw intensities, remove the negative values and send the file again."
+   },
+   "identical": true
+  },
+  {
+   "case": "value_scale linear",
+   "space": {
+    "status": 400,
+    "sha256": "bdb69f108e6c260e7e2bd679ce819a940d5a4a0f7f1216e3e89277bdf019b0d2",
+    "error": "2 values are negative, so they are not raw intensities: the table is already on a log scale, or centred",
+    "reason": "Choose Already log, or I don't know, for this file."
+   },
+   "repo": {
+    "status": 400,
+    "sha256": "bdb69f108e6c260e7e2bd679ce819a940d5a4a0f7f1216e3e89277bdf019b0d2",
+    "error": "2 values are negative, so they are not raw intensities: the table is already on a log scale, or centred",
+    "reason": "Choose Already log, or I don't know, for this file."
+   },
+   "identical": true
+  },
+  {
+   "case": "value_scale log",
+   "space": {
+    "status": 200,
+    "sha256": "912efaa9957fa2217c0f457972afa3ef8ad16d7133008a6e2777a781f90016a8",
+    "error": null,
+    "reason": null
+   },
+   "repo": {
+    "status": 200,
+    "sha256": "912efaa9957fa2217c0f457972afa3ef8ad16d7133008a6e2777a781f90016a8",
+    "error": null,
+    "reason": null
+   },
+   "identical": true
+  },
+  {
+   "case": "value_scale log, zeros measured",
+   "space": {
+    "status": 200,
+    "sha256": "ea7acc20fcd0ef62c09465e747ec7f535a4eb83da5a790893560ff14f4838dc9",
+    "error": null,
+    "reason": null
+   },
+   "repo": {
+    "status": 200,
+    "sha256": "ea7acc20fcd0ef62c09465e747ec7f535a4eb83da5a790893560ff14f4838dc9",
+    "error": null,
+    "reason": null
+   },
+   "identical": true
+  }
+ ]
+}

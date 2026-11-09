@@ -26,6 +26,11 @@ expectations written before it runs (`bank/expectations/`):
   (`service/pipeline/alignment.py`), and the site asks the uploader first.
   It is built and checked on the bank (`research/notebook-outputs/value_scale_b5/`),
   and goes live with the site after B7.
+- **B6, the deploy assembly:** `deploy/huggingface/build_space.py` stages
+  this package's modules and its shipped calibration with the service, and
+  imports them from the staged folder alone. The staged Space replies as
+  the repository's service does on every bank table
+  (`research/notebook-outputs/value_scale_b6/`).
 
 Each step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,
 and its entry is in `research/notebook-run-history.md`.

@@ -3438,6 +3438,47 @@ method, and under the median method as the baseline.
   was fitted with the deposit (a probe: typicality 0.74 against 0). The
   prediction was wrong, not the code. The owner accepted it on 2026-11-09.
 
+### 80. The raw-or-log framework, Phase B, B6: the deploy assembly, 2026-11-09
+
+**Why:** the live service is built from the folder
+`deploy/huggingface/build_space.py` stages, not from the repository. B5
+added a package the service now needs (`valuescale/` and its
+calibration), so B6 checks that the staged folder, run on its own, is this
+repository's service.
+
+**What was built first** (test first, `11a59a8`):
+- `build_space.py`: the manifest's record of uncommitted changes covers
+  `valuescale/`, and an import check runs on the staged folder;
+- the owner's decisions on B5 (2026-11-09): `zeros_read` only when the
+  table holds a 0, and the receipt with it;
+- a test of the calibrated check with a stated reading across v3, v3.1,
+  v4.1 and v4.2.
+
+The expectations, `valuescale/bank/expectations/b6.json`, were written
+after the code and before the step (`6a809bc`; the step `fdf31f5`).
+
+**The run** (`research/notebooks/value_scale_diagnostics.py --step b6`,
+683 s):
+- it builds the Space;
+- it then runs each side in its own fresh interpreter (`-I -B`) with the
+  hosted settings: the Space from the staged folder alone, the
+  repository's service from the repository root.
+
+**Results** (`research/notebook-outputs/value_scale_b6/`, report and notes):
+- All seven rows pass.
+- The build imports 31 modules from the staged folder alone. Its 64
+  files under `service/` and `valuescale/` equal the repository's.
+- The pipelines' replies on the 30 traced tables are byte-identical (60
+  of 60, protein and RNA), as are validation's errors on the 7 small
+  tables.
+- The servers' `/api/status` and their 66 replies for the 33 files under
+  31 MiB are identical, as are the negative-values cases.
+- `zeros_read` is on the 8 tables that hold a 0. Every reply summary is
+  B5's, but for `zeros_read`.
+- **Found after the run:** the import check wrote bytecode into the
+  staged folder, which its manifest does not list. It was fixed test first
+  (`8449d14`), and the Space rebuilt clean. The replies were not affected.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of
