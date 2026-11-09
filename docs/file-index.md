@@ -81,6 +81,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/manifest.js` — loads, validates and formats the manifest; `isMeasured()` is the one guard on displaying a number
 - `web/js/panels.js` — pure builders that turn manifest records into HTML strings for each page's panels
 - `web/tests/fixtures.js` — shared manifest fixture for the JS tests, including a `<script>` class name that proves escaping
+- `web/tests/site-pages.js` — the site's pages listed once for the tests that walk them (header, beta gate, motion switch, colours): the Docs pages, the page without a footer or water, each page's error element, its current nav link, and every stylesheet
 - `web/tests/manifest.test.js` — tests for `manifest.js`: validation, formatting, the measured/pending guard
 - `web/tests/panels.test.js` — tests for `panels.js`: every panel builder, and HTML escaping
 - `web/tests/contrast.test.js` — text colours at 4.5:1 or better on every background, form fields' edges at 3:1, off controls readable, decorative numbers hidden, the RNA and protein text colours the same on pages and canvases, grey text on the moving field or liquid glass in the soft grey

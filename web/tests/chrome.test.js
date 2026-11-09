@@ -1,22 +1,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { CANONICAL, PAGES, WITHOUT_FOOTER, WITHOUT_WATER, PAGE_ERRORS, currentLink } from './site-pages.js';
 
 // The site header and footer are static markup copied into every page (no JS
 // injection, so no layout shift and they work without JS). This pins the
 // copies together: after removing the one aria-current marker, every page's
 // header and footer must be byte-identical to the landing page's.
-const CANONICAL = 'index.html';
-const PAGES = ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html'];
-// The atlas is a full-window app view, so it carries the header but no footer.
-const WITHOUT_FOOTER = new Set(['atlas.html']);
 
 const read = (page) => readFileSync(new URL(`../${page}`, import.meta.url), 'utf8');
 const block = (html, tag, cls) => {
   const match = html.match(new RegExp(`<${tag} class="${cls}[^"]*">[\\s\\S]*?</${tag}>`));
   return match && match[0];
 };
-const normalise = (html) => html.replace(/ aria-current="page"/g, '');
+const normalise = (html) => html.replace(/ aria-current="(page|true)"/g, '');
 
 for (const [tag, cls] of [['header', 'site-header'], ['footer', 'site-footer']]) {
   test(`every page carries the same ${cls}`, () => {
@@ -34,9 +31,11 @@ for (const [tag, cls] of [['header', 'site-header'], ['footer', 'site-footer']])
 test('each page marks exactly its own nav link as current', () => {
   for (const page of PAGES) {
     const header = block(read(page), 'header', 'site-header');
-    const current = [...header.matchAll(/href="([^"]+)"[^>]*aria-current="page"/g)].map((m) => m[1]);
-    // The landing is reached from the wordmark, not a nav link.
-    const expected = page === 'index.html' ? [] : [page];
+    const current = [...header.matchAll(/href="([^"]+)"[^>]*aria-current="(page|true)"/g)].map((m) => [m[1], m[2]]);
+    // The landing is reached from the wordmark, not a nav link. A Docs topic
+    // page marks the Docs link, which is not the page itself: "true", not "page".
+    const link = currentLink(page);
+    const expected = link === null ? [] : [[link, link === page ? 'page' : 'true']];
     assert.deepEqual(current, expected, `${page} marks ${JSON.stringify(current)} as current`);
   }
 });
@@ -65,14 +64,14 @@ test('the living water is behind every page but the atlas', () => {
     const field = html.indexOf('src="js/background.js"');
     const water = html.indexOf('src="js/biofield.js"');
     assert.ok(field > 0, `${page} has no background.js`);
-    if (page === 'atlas.html') assert.equal(water, -1, 'atlas.html should not load the living water');
+    if (WITHOUT_WATER.has(page)) assert.equal(water, -1, `${page} should not load the living water`);
     else assert.ok(water > field, `${page} should load js/biofield.js after js/background.js`);
   }
 });
 
 test('no page hides a control from screen readers while it can still take focus', () => {
   const focusable = /<(button|input|select|textarea|summary)\b|<a\s[^>]*href=/;
-  for (const page of ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html']) {
+  for (const page of PAGES) {
     const html = read(page);
     for (const m of html.matchAll(/<([a-z0-9]+)\b[^>]*\baria-hidden="true"[^>]*>/g)) {
       let depth = 1;
@@ -89,7 +88,7 @@ test('no page hides a control from screen readers while it can still take focus'
 });
 
 test('a page-level error, written when a load fails, is announced', () => {
-  for (const [page, id] of [['manuscript.html', 'ms-error'], ['motion.html', 'reel-error'], ['workflow.html', 'sync-banner']]) {
+  for (const [page, id] of PAGE_ERRORS) {
     assert.match(read(page), new RegExp(`<div id="${id}" role="alert"></div>`), page);
   }
 });

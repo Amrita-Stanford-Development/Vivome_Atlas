@@ -6,6 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { PROT, PROT_INK, RNA, RNA_INK } from '../js/scene-kit.js';
+import { PAGES, STYLESHEETS } from './site-pages.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const css = read('css/page.css');
@@ -75,7 +76,7 @@ test('the canvas scenes use the same text colours as the pages', () => {
 });
 
 test('no text is drawn in the bright RNA or protein colours', () => {
-  for (const page of ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html']) {
+  for (const page of PAGES) {
     const html = read(page);
     for (const m of html.matchAll(/<text\b[^>]*>/g)) {
       assert.doesNotMatch(m[0], new RegExp(`fill="(${RNA}|${PROT})"`, 'i'), `${page}: ${m[0].slice(0, 80)}`);
@@ -87,8 +88,8 @@ test('no text is drawn in the bright RNA or protein colours', () => {
       assert.fail(`${file}: ${m[0].slice(0, 90)}`);
     }
   }
-  for (const sheet of ['workflow.css', 'atlas.css']) {
-    assert.doesNotMatch(read(`css/${sheet}`), /\bcolor: var\(--(rna|prot)\)/, sheet);
+  for (const sheet of STYLESHEETS) {
+    assert.doesNotMatch(read(sheet), /\bcolor: var\(--(rna|prot)\)/, sheet);
   }
 });
 

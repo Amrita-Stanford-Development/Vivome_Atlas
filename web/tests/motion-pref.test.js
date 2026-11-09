@@ -3,6 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { PAGES, STYLESHEETS } from './site-pages.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -61,7 +62,7 @@ test('a remembered pause, or the system setting, starts still', async () => {
 });
 
 test('every page has the switch, and every moving part reads it', () => {
-  for (const page of ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html']) {
+  for (const page of PAGES) {
     assert.match(read(page), /<button type="button" class="motion-toggle" aria-pressed="false">Pause motion<\/button>/, page);
   }
   for (const file of ['js/background.js', 'js/biofield.js']) {
@@ -76,7 +77,7 @@ test('every page has the switch, and every moving part reads it', () => {
   assert.match(read('js/atlas/landing.js'), /setStill\(on\) \{/);
   assert.match(read('css/page.css'), /html\.motion-off \*/);
   // Each stylesheet's reduced-motion rules have their switch copy.
-  for (const sheet of ['css/page.css', 'css/story.css', 'css/workflow.css', 'css/atlas.css']) {
+  for (const sheet of STYLESHEETS) {
     const css = read(sheet);
     const blocks = css.match(/@media \(prefers-reduced-motion: reduce\)/g)?.length ?? 0;
     const copies = css.match(/^\s*(html)?\.(js)?\.?motion-off /gm)?.length ?? 0;

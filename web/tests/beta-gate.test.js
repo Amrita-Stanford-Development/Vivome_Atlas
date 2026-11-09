@@ -7,6 +7,7 @@ import {
   COOKIE, EMAILS, SESSION_DAYS, onRequest, passwordMatches, safeNext, sessionEmail, sessionValue, signInPage,
   withBetaHeader,
 } from '../../deploy/pages/beta-gate.js';
+import { PAGES } from './site-pages.js';
 
 const PASSWORD = 'correct horse battery staple';
 // scripts/beta_access.py's password_hash(PASSWORD, bytes.fromhex(...)), so the
@@ -142,15 +143,14 @@ test('pages gain the Beta mark and Sign out in their own header only; other file
 test('the real pages carry the header the gate looks for', async () => {
   const { readFileSync, readdirSync } = await import('node:fs');
   const web = new URL('../', import.meta.url);
-  const pages = ['index.html', 'atlas.html', 'workflow.html', 'manuscript.html', 'motion.html'];
-  for (const name of pages) {
+  for (const name of PAGES) {
     const out = withBetaHeader(readFileSync(new URL(name, web), 'utf8'));
     assert.match(out, /class="beta-mark">Beta</, name);
     assert.match(out, /href="\/__beta\/signout">Sign out</, name);
   }
-  const others = readdirSync(web).filter((n) => n.endsWith('.html') && !pages.includes(n));
+  const others = readdirSync(web).filter((n) => n.endsWith('.html') && !PAGES.includes(n));
   for (const name of others) {
     const html = readFileSync(new URL(name, web), 'utf8');
-    if (html.includes('class="site-header')) assert.fail(`${name} has the site header: add it to this test's pages`);
+    if (html.includes('class="site-header')) assert.fail(`${name} has the site header: add it to PAGES in web/tests/site-pages.js`);
   }
 });
