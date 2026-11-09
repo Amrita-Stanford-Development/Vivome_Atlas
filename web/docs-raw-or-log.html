@@ -44,6 +44,542 @@
 
         <section id="how" role="tabpanel" aria-labelledby="tab-how" class="docs-panel">
             <h2 class="docs-panel-title">How it works</h2>
+            <div class="docs-chapters">
+                <nav class="docs-toc glass" aria-label="Chapters">
+                    <ol>
+                        <li><a href="#how-problem">The problem: two ways to write one table</a></li>
+                        <li><a href="#how-asking">Asking the uploader first</a></li>
+                        <li><a href="#how-reading">How the detector reads a table</a></li>
+                        <li><a href="#how-promise">How sure it is: the promise</a></li>
+                        <li><a href="#how-tables">Where the tables came from</a></li>
+                        <li><a href="#how-testing">How we tested it</a></li>
+                        <li><a href="#how-found">What the test found</a></li>
+                        <li><a href="#how-next">What comes next</a></li>
+                    </ol>
+                </nav>
+                <div class="docs-chapter-body sheet">
+
+                    <article id="how-problem" class="docs-chapter">
+                        <h3>The problem: two ways to write one table</h3>
+                        <p>A protein table has one row per protein and one column per cell. Each number
+                            says how much of that protein the instrument saw in that cell.</p>
+                        <p>Software writes those numbers in one of two ways. <a href="#words-raw">Raw</a>
+                            values, also called linear, are the amounts themselves: twice the protein, about
+                            twice the number. <a href="#words-log">Log</a> values are the same amounts after
+                            taking a logarithm, which turns multiplying into adding, so each doubling adds
+                            the same step. Both are common, and a file rarely says which it holds.</p>
+                        <figure class="docs-fig">
+                            <svg class="docs-svg" viewBox="0 0 640 170" role="img" aria-label="One protein's amounts on two lines. Written raw, the small amounts crowd together and the large ones spread far apart. Written as log, each doubling is the same step.">
+                                <text x="0" y="40" font-size="13" font-weight="600" fill="#1D2B36">Raw</text>
+                                <line x1="70" y1="36" x2="620" y2="36" stroke="#858585"/>
+                                <text x="0" y="124" font-size="13" font-weight="600" fill="#1D2B36">Log</text>
+                                <line x1="70" y1="120" x2="620" y2="120" stroke="#858585"/>
+                                <g stroke="#E4E3DE">
+                                    <line x1="70" y1="36" x2="70" y2="120"/><line x1="74.33" y1="36" x2="148.57" y2="120"/>
+                                    <line x1="82.99" y1="36" x2="227.14" y2="120"/><line x1="100.31" y1="36" x2="305.71" y2="120"/>
+                                    <line x1="134.96" y1="36" x2="384.29" y2="120"/><line x1="204.25" y1="36" x2="462.86" y2="120"/>
+                                    <line x1="342.83" y1="36" x2="541.43" y2="120"/><line x1="620" y1="36" x2="620" y2="120"/>
+                                </g>
+                                <g fill="#0066A3">
+                                    <circle cx="70" cy="36" r="5"/><circle cx="74.33" cy="36" r="5"/><circle cx="82.99" cy="36" r="5"/>
+                                    <circle cx="100.31" cy="36" r="5"/><circle cx="134.96" cy="36" r="5"/><circle cx="204.25" cy="36" r="5"/>
+                                    <circle cx="342.83" cy="36" r="5"/><circle cx="620" cy="36" r="5"/>
+                                    <circle cx="70" cy="120" r="5"/><circle cx="148.57" cy="120" r="5"/><circle cx="227.14" cy="120" r="5"/>
+                                    <circle cx="305.71" cy="120" r="5"/><circle cx="384.29" cy="120" r="5"/><circle cx="462.86" cy="120" r="5"/>
+                                    <circle cx="541.43" cy="120" r="5"/><circle cx="620" cy="120" r="5"/>
+                                </g>
+                                <text x="70" y="62" font-size="12" fill="#666666">small amounts crowd together</text>
+                                <text x="620" y="62" font-size="12" fill="#666666" text-anchor="end">large amounts spread far apart</text>
+                                <text x="345" y="148" font-size="12" fill="#666666" text-anchor="middle">each doubling is the same step</text>
+                            </svg>
+                            <figcaption><span class="bead bead-open docs-illustration">Illustration</span> The same
+                                amounts, each double the one before, written raw (top) and as log (bottom).</figcaption>
+                        </figure>
+                        <p>The service needs log values. Its first step, <a href="#words-stage-0">Stage 0</a>,
+                            decides which kind it was given and takes the log of raw values. Read a log table
+                            as raw and it takes a second log; read a raw table as log and it takes none.
+                            Nothing fails loudly: every answer after it is quietly a little off.</p>
+                        <p>How much, we measured in B1 by reading the bank's tables the wrong way on purpose.
+                            For a typical log table read as raw, <span data-docs="rl_b1_log_as_linear"></span>
+                            of its cells' <a href="#words-best-guess">best guesses</a> changed. For a typical
+                            raw table read as log, <span data-docs="rl_b1_linear_as_log"></span> changed.</p>
+                        <h4>The old rule</h4>
+                        <p>Before this work the service used one rule for every table: no negative value and
+                            a <a href="#words-median">median</a> above <span data-docs="rl_median_rule"></span>
+                            means raw. It is still the rule on the live site. The trouble is that size depends
+                            on units, and units differ between instruments and software; many raw tables are
+                            rescaled to small numbers. In Step 1 the rule misread
+                            <span data-docs="rl_step1_linear_misread"></span> of the bank's
+                            <span data-docs="rl_step1_linear"></span> raw tables. PXD064083 was among them: its
+                            values are raw, with a median of about <span data-docs="rl_pxd064083_median"></span>.</p>
+                        <figure class="docs-fig">
+                            <div class="docs-figure" data-docs-figure="old_rule"></div>
+                            <figcaption>What the old rule read wrongly among the bank's tables: raw tables
+                                written on a small scale. It read every log table right.</figcaption>
+                            <details class="curious docs-numbers"><summary>The numbers</summary>
+                                <ul>
+                                    <li>Raw tables: <span data-docs="rl_step1_linear_misread"></span> of
+                                        <span data-docs="rl_step1_linear"></span> read as log.</li>
+                                    <li>Log tables: <span data-docs="rl_step1_log_misread"></span> of
+                                        <span data-docs="rl_step1_log"></span> read as raw.</li>
+                                    <li>The rule: raw when the median is above <span data-docs="rl_median_rule"></span>.</li>
+                                </ul>
+                            </details>
+                        </figure>
+                        <details class="curious"><summary>For the curious: why the log's base does not matter</summary>
+                            <p>Before the model sees a table, the service turns each gene's values into
+                                <a href="#words-z-score">z-scores</a>: it takes away the gene's average and
+                                divides by its spread. Log values in another base differ only by a fixed factor,
+                                and a number added to every value only moves the average, so both vanish in the
+                                z-score. One question is left: does this table still need a log?</p>
+                        </details>
+                        <p class="docs-source">From <code>research/notebook-outputs/value_scale_b1/report.json</code>,
+                            <code>research/notebook-outputs/value_scale_step1/report.json</code> and
+                            <code>research/value-scale-detection.md</code>.</p>
+                    </article>
+
+                    <article id="how-asking" class="docs-chapter">
+                        <h3>Asking the uploader first</h3>
+                        <p>The surest way to know is to ask: most people who upload a table know how their
+                            software wrote it.</p>
+                        <h4>Live since 2026-11-03: the Values and Zeros menus</h4>
+                        <p>In Phase A the Atlas page's upload tab gained a Values menu: Automatic, Raw
+                            intensities, or Already log. A reading you choose is used as given, and the receipt
+                            says who decided. Automatic still uses the old rule. Phase A2 added a Zeros menu for
+                            files already log, since a zero there can mean “not measured” or be a real
+                            value.</p>
+                        <h4>Built, not yet live: the pop-up</h4>
+                        <p>In B5 we built a pop-up that asks as soon as a protein file is chosen. Its answers
+                            are Raw intensities, Already log and I don't know. “I don't know” hands the question to the detector, which this
+                            topic is about. For a file already log with a zero in it, the pop-up then asks
+                            what a zero means. Closing it counts as “I don't know”.</p>
+                        <figure class="docs-fig">
+                            <svg class="docs-svg" viewBox="0 0 640 196" role="img" aria-label="A sketch of the pop-up: the file's name and what the check found, the question are these values raw intensities, or already log, and its buttons: Raw intensities, Already log, I don't know.">
+                                <rect x="40" y="6" width="560" height="182" rx="14" fill="#FFFFFF" stroke="#858585"/>
+                                <text x="64" y="38" font-size="12" fill="#666666">your file's name, its proteins and cells, and what the check saw in its values</text>
+                                <text x="64" y="70" font-size="15" font-weight="600" fill="#1D2B36">Are these values raw intensities, or already log?</text>
+                                <rect x="64" y="92" width="160" height="40" rx="10" fill="#ECEBE7" stroke="#858585"/>
+                                <text x="144" y="117" font-size="13" fill="#1D2B36" text-anchor="middle">Raw intensities</text>
+                                <rect x="240" y="92" width="160" height="40" rx="10" fill="#ECEBE7" stroke="#858585"/>
+                                <text x="320" y="117" font-size="13" fill="#1D2B36" text-anchor="middle">Already log</text>
+                                <rect x="416" y="92" width="160" height="40" rx="10" fill="#ECEBE7" stroke="#858585"/>
+                                <text x="496" y="117" font-size="13" fill="#1D2B36" text-anchor="middle">I don't know</text>
+                                <text x="144" y="156" font-size="11.5" fill="#666666" text-anchor="middle">the service takes log2</text>
+                                <text x="320" y="156" font-size="11.5" fill="#666666" text-anchor="middle">used as they are</text>
+                                <text x="496" y="156" font-size="11.5" fill="#666666" text-anchor="middle">the service checks the numbers</text>
+                            </svg>
+                            <figcaption><span class="bead bead-open docs-illustration">Illustration</span> The
+                                pop-up as designed in B5, sketched. It goes live with the detector.</figcaption>
+                        </figure>
+                        <p>The detector is still needed: some uploaders do not know, and a file can be passed
+                            on without its history. After a run, the receipt says what was decided and by
+                            whom, and a note on the results says so when the check could not tell.</p>
+                        <p class="docs-source">From <code>research/value-scale-plan.md</code> and
+                            <code>research/value-scale-b5-design.md</code>.</p>
+                    </article>
+
+                    <article id="how-reading" class="docs-chapter">
+                        <h3>How the detector reads a table</h3>
+                        <p>The detector looks at the shape of the numbers, never at their size.</p>
+                        <h4>First, two gates</h4>
+                        <p>Some tables settle the question by definition, so plain rules, the
+                            <a href="#words-gate">gates</a>, come first:</p>
+                        <ul>
+                            <li>a real share of negative values: an amount cannot be negative, so the values
+                                are already log, or <a href="#words-centred">centred</a>;</li>
+                            <li>every value a whole number, with enough different values: these are counts,
+                                so raw.</li>
+                        </ul>
+                        <p>A few stray negatives are set aside as missing, so they cannot trip the first gate.
+                            Some tables the detector will not judge, and it says why: fewer than
+                            <span data-docs="rl_s1_lo"></span> cells, too few to tell; each protein's level
+                            taken away; or no value missing at all, since the table may have been filled in.
+                            Each of those is “can't tell”.</p>
+                        <h4>Then, the shape</h4>
+                        <p>It measures things that do not change when every value is multiplied by the same
+                            number, so units and rescaling cannot fool it. These are
+                            <a href="#words-scale-free">scale-free measures</a>:</p>
+                        <ul>
+                            <li>how lopsided each cell's values are: raw values have a long tail of large
+                                amounts, log values sit closer to even;</li>
+                            <li>how far the top values reach past the middle ones;</li>
+                            <li>whether a protein's spread grows with its level. In raw values it does, because
+                                measuring errors are a share of the amount; after a log it does not.</li>
+                        </ul>
+                        <h4>A probability, then the answer</h4>
+                        <p>A simple model, fitted on the bank's tables and their
+                            <a href="#words-variant">variants</a>, turns those measures into a
+                            <a href="#words-probability">probability</a> that the table is raw, and one that it
+                            is log. Each reading whose probability clears its
+                            <a href="#words-threshold">threshold</a> joins the answer:</p>
+                        <ul>
+                            <li>raw only: the service takes the log;</li>
+                            <li>log only: the values are used as given;</li>
+                            <li>both: <a href="#words-cant-tell">“can't tell”</a>;</li>
+                            <li>neither: <a href="#words-unlike-either">“unlike either”</a>.</li>
+                        </ul>
+                        <p>On “can't tell” and “unlike either” the service reads the table as raw and says so,
+                            because B1 found it the cheaper mistake.</p>
+                        <figure class="docs-fig">
+                            <svg class="docs-svg" viewBox="0 0 640 236" role="img" aria-label="From a table to an answer: the gates first, which settle negatives as log and counts as raw; then the shape measures; then a probability for each reading; then the thresholds, which give the answer.">
+                                <g fill="#FFFFFF" stroke="#858585">
+                                    <rect x="0" y="10" width="112" height="44" rx="10"/>
+                                    <rect x="146" y="10" width="112" height="44" rx="10"/>
+                                    <rect x="292" y="10" width="148" height="44" rx="10"/>
+                                    <rect x="474" y="10" width="148" height="44" rx="10"/>
+                                    <rect x="474" y="104" width="148" height="44" rx="10"/>
+                                </g>
+                                <g font-size="13" fill="#1D2B36" text-anchor="middle">
+                                    <text x="56" y="37">Your table</text>
+                                    <text x="202" y="37">Gates</text>
+                                    <text x="366" y="37">Shape measures</text>
+                                    <text x="548" y="37">Probabilities</text>
+                                    <text x="548" y="131">Thresholds</text>
+                                </g>
+                                <g stroke="#1D2B36" stroke-width="1.4" fill="none">
+                                    <path d="M112 32 H140 M134 27 L140 32 L134 37"/>
+                                    <path d="M258 32 H286 M280 27 L286 32 L280 37"/>
+                                    <path d="M440 32 H468 M462 27 L468 32 L462 37"/>
+                                    <path d="M548 54 V98 M543 92 L548 98 L553 92"/>
+                                    <path d="M474 126 H446 M452 121 L446 126 L452 131"/>
+                                </g>
+                                <g font-size="11.5" fill="#666666" text-anchor="middle">
+                                    <text x="202" y="74">settled by rule:</text>
+                                    <text x="202" y="90">negatives, log</text>
+                                    <text x="202" y="106">counts, raw</text>
+                                </g>
+                                <text x="430" y="104" font-size="13" font-weight="600" fill="#1D2B36" text-anchor="end">The answer</text>
+                                <g font-size="12" fill="#1D2B36" text-anchor="end">
+                                    <text x="430" y="130">raw only: the service takes the log</text>
+                                    <text x="430" y="152">log only: used as given</text>
+                                    <text x="430" y="174">both: “can't tell”, read as raw, with a note</text>
+                                    <text x="430" y="196">neither: “unlike either”, read as raw, with a warning</text>
+                                </g>
+                            </svg>
+                            <figcaption><span class="bead bead-open docs-illustration">Illustration</span> From a
+                                table to an answer, step by step.</figcaption>
+                        </figure>
+                        <details class="curious"><summary>For the curious: the measures and the model</summary>
+                            <p>The measures are each cell's Bowley and Moors skewness, a tail ratio (how far the
+                                top reaches past the middle, against the spread of the middle half), and the rank
+                                correlation between each protein's level and its spread, with missing values
+                                ranked lowest. Side measures include the share of values missing. The model is a
+                                ridge logistic regression.</p>
+                            <p>A <a href="#words-typicality">typicality</a> score, the distance to the nearest
+                                design tables, was planned as part of the score. In B4, before any calibration
+                                score was computed, it became a warning only: it would have set one threshold to
+                                zero (a protocol amendment).</p>
+                        </details>
+                        <p class="docs-source">From <code>research/value-scale-detection.md</code> and
+                            <code>research/benchmark/protocol-value-scale.md</code>.</p>
+                    </article>
+
+                    <article id="how-promise" class="docs-chapter">
+                        <h3>How sure it is: the promise</h3>
+                        <p>In plain words: for each kind of table, raw or log, and each size group, the right
+                            reading is left out of the answer at most <span data-docs="rl_alpha"></span> of the
+                            time, and we are <span data-docs="rl_confidence"></span> sure of that. This is
+                            <a href="#words-promise">the promise</a>.</p>
+                        <p>Left out means a miss: the answer is the wrong reading alone, or “unlike either”.
+                            “Can't tell” is not a miss, since the right reading is still in the answer.</p>
+                        <h4>Size groups</h4>
+                        <p>Small tables are harder to read, so the promise is kept for each
+                            <a href="#words-size-group">size group</a> on its own: S1, from
+                            <span data-docs="rl_s1_lo"></span> to <span data-docs="rl_s1_hi"></span> cells; S2,
+                            from <span data-docs="rl_s2_lo"></span> to <span data-docs="rl_s2_hi"></span>; S3,
+                            from <span data-docs="rl_s3_lo"></span> to <span data-docs="rl_s3_hi"></span>. S3 had
+                            too few tables, so it joins S2 as S2+S3. A table with more cells than that uses
+                            S2+S3's thresholds, without the promise.</p>
+                        <h4>How a threshold is set</h4>
+                        <p>Take the calibration tables whose answer is log and score each one: the model's
+                            probability that it is log. Sort the scores from low to high and take
+                            <a href="#words-k-th">the k-th smallest</a> as the log threshold. A new log table
+                            then falls below it, and is missed, only about as often as the calibration tables
+                            did. The raw threshold is set the same way, from the raw tables.</p>
+                        <figure class="docs-fig">
+                            <svg class="docs-svg" viewBox="0 0 640 132" role="img" aria-label="Calibration tables of one kind, sorted by score from low to high. The threshold sits at the k-th smallest score: tables scoring lower are missed, the rest are kept.">
+                                <line x1="40" y1="60" x2="620" y2="60" stroke="#858585"/>
+                                <g fill="#FFFFFF" stroke="#1D2B36" stroke-width="1.5">
+                                    <circle cx="62" cy="60" r="6"/><circle cx="118" cy="60" r="6"/><circle cx="160" cy="60" r="6"/>
+                                </g>
+                                <g fill="#0066A3">
+                                    <circle cx="214" cy="60" r="6"/><circle cx="270" cy="60" r="6"/><circle cx="336" cy="60" r="6"/>
+                                    <circle cx="384" cy="60" r="6"/><circle cx="424" cy="60" r="6"/><circle cx="456" cy="60" r="6"/>
+                                    <circle cx="482" cy="60" r="6"/><circle cx="504" cy="60" r="6"/><circle cx="524" cy="60" r="6"/>
+                                    <circle cx="542" cy="60" r="6"/><circle cx="558" cy="60" r="6"/><circle cx="572" cy="60" r="6"/>
+                                    <circle cx="585" cy="60" r="6"/><circle cx="597" cy="60" r="6"/><circle cx="608" cy="60" r="6"/>
+                                </g>
+                                <line x1="214" y1="30" x2="214" y2="92" stroke="#1D2B36" stroke-dasharray="5 4"/>
+                                <text x="214" y="20" font-size="12" fill="#1D2B36" text-anchor="middle">the threshold: the k-th smallest score</text>
+                                <text x="40" y="112" font-size="12" fill="#666666">lower scores: below the threshold, missed</text>
+                                <text x="620" y="112" font-size="12" fill="#666666" text-anchor="end">higher scores: kept</text>
+                            </svg>
+                            <figcaption><span class="bead bead-open docs-illustration">Illustration</span>
+                                Calibration tables of one kind, sorted by score, with the threshold marked.</figcaption>
+                        </figure>
+                        <h4>Why a group needs <span data-docs="rl_min_n"></span> tables</h4>
+                        <p>Say the smallest score is the threshold. The promise then fails only if more than
+                            <span data-docs="rl_alpha"></span> of log tables score lower, and yet every
+                            calibration table happened to score above. With <span data-docs="rl_min_n"></span>
+                            tables, the chance of that is under <span data-docs="rl_delta"></span>. With fewer,
+                            no threshold can keep the promise. More tables allow a larger k, so a lower share
+                            of tables is missed by chance.</p>
+                        <h4>The thresholds in use</h4>
+                        <ul>
+                            <li>S1, from <span data-docs="rl_s1_n"></span> calibration tables, with k
+                                <span data-docs="rl_s1_k"></span>: raw <span data-docs="rl_s1_linear_cut"></span>,
+                                log <span data-docs="rl_s1_log_cut"></span>.</li>
+                            <li>S2+S3, from <span data-docs="rl_s23_n"></span> tables, with k
+                                <span data-docs="rl_s23_k"></span>: raw <span data-docs="rl_s23_linear_cut"></span>,
+                                log <span data-docs="rl_s23_log_cut"></span>.</li>
+                        </ul>
+                        <details class="curious"><summary>For the curious: conformal prediction and the umbrella k</summary>
+                            <p>This is split conformal prediction with one threshold per class and size group.
+                                The k is the umbrella order statistic of Neyman–Pearson classification: the
+                                largest k for which the chance of a miss rate above α is at most δ. With the
+                                smallest score as the threshold, that chance is one minus α multiplied by itself
+                                n times, and <span data-docs="rl_min_n"></span> is the smallest n that brings it
+                                to δ or below.</p>
+                        </details>
+                        <p class="docs-source">From <code>valuescale/calibration/protein-v1.json</code>,
+                            <code>valuescale/conformal.py</code> and
+                            <code>research/benchmark/protocol-value-scale.md</code>.</p>
+                    </article>
+
+                    <article id="how-tables" class="docs-chapter">
+                        <h3>Where the tables came from</h3>
+                        <h4>The bank</h4>
+                        <p><a href="#words-bank">The bank</a> came first, in Step 1:
+                            <span data-docs="rl_step1_tables"></span> real public tables, each with its answer
+                            known from its documentation, chosen to cover the cases the detector must handle:
+                            different software and instruments, raw values on a small scale, centred and
+                            filled-in log tables. Every step was checked on the bank before the next began.</p>
+                        <h4>The corpus</h4>
+                        <p>Calibration and the sealed test needed many more tables, drawn by rule, not by hand.
+                            This is the <a href="#words-corpus">corpus</a>, collected in B3:</p>
+                        <ul>
+                            <li>the <a href="#words-frame">frame</a>: <span data-docs="rl_b3_frame"></span> public
+                                human <a href="#words-deposit">deposits</a> in
+                                <a href="#words-pride-massive">PRIDE and MassIVE</a> from recent years, put in a
+                                fixed random order before any was opened;</li>
+                            <li>each deposit goes to calibration or to the test by a
+                                <a href="#words-hash-split">hash split</a> of its accession;</li>
+                            <li>walking that order, we listed <span data-docs="rl_b3_listed"></span> deposits and
+                                took each one's first table that looked usable; <span data-docs="rl_b3_no_candidate"></span>
+                                had none;</li>
+                            <li>each table's label, raw or log, came from its software's documentation before any
+                                statistic was computed (a <a href="#words-provenance">provenance label</a>), and a
+                                <a href="#words-hand-audit">hand audit</a> of a sample agreed on
+                                <span data-docs="rl_b3_audit_agree"></span> of <span data-docs="rl_b3_audit_judged"></span>;</li>
+                            <li><span data-docs="rl_b3_kept"></span> tables were kept, and
+                                <span data-docs="rl_b3_after_audit"></span> after the audit:
+                                <span data-docs="rl_b3_calibration"></span> for calibration and
+                                <span data-docs="rl_b3_test"></span> for the test;</li>
+                            <li>the other <span data-docs="rl_b3_reserve"></span> deposits were never listed. They
+                                are the <a href="#words-reserve">reserve</a>, kept for a fresh test.</li>
+                        </ul>
+                        <figure class="docs-fig">
+                            <div class="docs-figure" data-docs-figure="corpus_funnel"></div>
+                            <figcaption>From the frame of deposits to the tables for calibration and the sealed
+                                test. The two parts have their own scales: deposits above, tables below.</figcaption>
+                            <details class="curious docs-numbers"><summary>The numbers</summary>
+                                <ul>
+                                    <li>The frame: <span data-docs="rl_b3_frame"></span> deposits.</li>
+                                    <li>Listed: <span data-docs="rl_b3_listed"></span>; the reserve, never listed:
+                                        <span data-docs="rl_b3_reserve"></span>.</li>
+                                    <li>Tables kept: <span data-docs="rl_b3_kept"></span>; after the hand audit:
+                                        <span data-docs="rl_b3_after_audit"></span>.</li>
+                                    <li>Calibration: <span data-docs="rl_b3_calibration"></span>; the sealed test:
+                                        <span data-docs="rl_b3_test"></span>.</li>
+                                </ul>
+                            </details>
+                        </figure>
+                        <h4>No real log table</h4>
+                        <p>Not one table in the corpus was labelled log by its documentation. So we make each
+                            raw table's log copy ourselves, a <a href="#words-constructed-log">constructed log</a>,
+                            and the log side of the promise is tested on those. That is a stated limit of this
+                            work.</p>
+                        <h4>The clean-up</h4>
+                        <p>The walk met faults in our own reading code: unusual line endings, column names,
+                            file encodings, decimal commas. We fixed them, each with a test written first, and
+                            then visited the tables they touched again, twice. The fixes went live on
+                            2026-11-07.</p>
+                        <details class="curious"><summary>For the curious: how the draw was kept fair</summary>
+                            <p>The order and the split were fixed before any table was opened, so nobody could
+                                steer which deposit landed where. Quotas by number of cells kept each size group
+                                filled. The audit was done by AI helpers under a rubric committed before any
+                                table was shown to them, and Claude read every disagreement again, with a share
+                                of the agreements.</p>
+                        </details>
+                        <p class="docs-source">From <code>valuescale/corpus/frame.json</code>,
+                            <code>research/notebook-outputs/value_scale_b3/report.json</code> and
+                            <code>research/value-scale-plan.md</code>.</p>
+                    </article>
+
+                    <article id="how-testing" class="docs-chapter">
+                        <h3>How we tested it</h3>
+                        <h4>Sealed, then scored once</h4>
+                        <p>The <span data-docs="rl_b3_test"></span> test tables were not scored until the
+                            method was fixed. Before the scoring we wrote down what we expected, in a file
+                            committed first. The scorer writes a <a href="#words-marks">mark</a> before it reads
+                            any test table and another after, and refuses to run while either exists. So the
+                            <a href="#words-sealed-test">sealed test</a> runs once, and nobody can try again
+                            until it looks good.</p>
+                        <h4>Checking the promise</h4>
+                        <p>For each group we count the misses and ask: what is the smallest miss rate this
+                            count fits, at <span data-docs="rl_confidence"></span> confidence? That is the
+                            <a href="#words-lower-bound">lower bound</a>. If even the lower bound is above
+                            <span data-docs="rl_alpha"></span>, the promise is contradicted.</p>
+                        <p>A count a little above the promise can still fit it.
+                            <span data-docs="rl_b7_s1_linear_miss"></span> misses of
+                            <span data-docs="rl_b7_s1_linear_n"></span> is
+                            <span data-docs="rl_b7_s1_linear_rate"></span>, but its lower bound is
+                            <span data-docs="rl_b7_s1_linear_lower"></span>, under
+                            <span data-docs="rl_alpha"></span>: a table set that size could miss that many by
+                            chance while keeping the promise.</p>
+                        <h4>Against the old rule</h4>
+                        <p>On the raw test tables, we asked whether the detector misreads fewer than the old
+                            rule. <a href="#words-mcnemar">McNemar's test</a> answers that from the tables where
+                            the two disagree.</p>
+                        <details class="curious"><summary>For the curious: the statistics</summary>
+                            <p>The bounds are one-sided Clopper–Pearson bounds. The McNemar test is exact and
+                                one-sided. The protocol and its amendments fixed all of it before the test was
+                                opened.</p>
+                        </details>
+                        <p class="docs-source">From <code>research/benchmark/protocol-value-scale.md</code> and
+                            <code>research/notebook-outputs/value_scale_b7/notes.md</code>.</p>
+                    </article>
+
+                    <article id="how-found" class="docs-chapter">
+                        <h3>What the test found</h3>
+                        <p>The test was scored once, on 2026-11-09. The promise held in every group but one:
+                            small log tables.</p>
+                        <ul>
+                            <li>S1, raw: <span data-docs="rl_b7_s1_linear_miss"></span> missed of
+                                <span data-docs="rl_b7_s1_linear_n"></span>, lower bound
+                                <span data-docs="rl_b7_s1_linear_lower"></span>. Holds.</li>
+                            <li>S1, log: <span data-docs="rl_b7_s1_log_miss"></span> missed of
+                                <span data-docs="rl_b7_s1_log_n"></span>, lower bound
+                                <span data-docs="rl_b7_s1_log_lower"></span>. Broken.</li>
+                            <li>S2+S3, raw: <span data-docs="rl_b7_s23_linear_miss"></span> missed of
+                                <span data-docs="rl_b7_s23_linear_n"></span>. Holds.</li>
+                            <li>S2+S3, log: <span data-docs="rl_b7_s23_log_miss"></span> missed of
+                                <span data-docs="rl_b7_s23_log_n"></span>, lower bound
+                                <span data-docs="rl_b7_s23_log_lower"></span>. Holds.</li>
+                        </ul>
+                        <figure class="docs-fig">
+                            <div class="docs-figure" data-docs-figure="guarantee"></div>
+                            <figcaption>The sealed test, group by group: the share missed (bar) and its lower
+                                bound (circle) against the promise (dashed line). A filled circle is above the
+                                promise: broken there.</figcaption>
+                            <details class="curious docs-numbers"><summary>The numbers</summary>
+                                <ul>
+                                    <li>The promise: at most <span data-docs="rl_alpha"></span> missed.</li>
+                                    <li>S1, raw: <span data-docs="rl_b7_s1_linear_miss"></span> of
+                                        <span data-docs="rl_b7_s1_linear_n"></span>
+                                        (<span data-docs="rl_b7_s1_linear_rate"></span>), lower bound
+                                        <span data-docs="rl_b7_s1_linear_lower"></span>.</li>
+                                    <li>S1, log: <span data-docs="rl_b7_s1_log_miss"></span> of
+                                        <span data-docs="rl_b7_s1_log_n"></span>
+                                        (<span data-docs="rl_b7_s1_log_rate"></span>), lower bound
+                                        <span data-docs="rl_b7_s1_log_lower"></span>.</li>
+                                    <li>S2+S3, raw: <span data-docs="rl_b7_s23_linear_miss"></span> of
+                                        <span data-docs="rl_b7_s23_linear_n"></span>
+                                        (<span data-docs="rl_b7_s23_linear_rate"></span>), lower bound
+                                        <span data-docs="rl_b7_s23_linear_lower"></span>.</li>
+                                    <li>S2+S3, log: <span data-docs="rl_b7_s23_log_miss"></span> of
+                                        <span data-docs="rl_b7_s23_log_n"></span>
+                                        (<span data-docs="rl_b7_s23_log_rate"></span>), lower bound
+                                        <span data-docs="rl_b7_s23_log_lower"></span>.</li>
+                                </ul>
+                            </details>
+                        </figure>
+                        <h4>Against the old rule</h4>
+                        <p>On the raw tables, the detector misread <span data-docs="rl_b7_detector_wrong"></span>
+                            and the old rule <span data-docs="rl_b7_median_wrong"></span>. They disagreed on
+                            <span data-docs="rl_b7_discordant"></span> tables, all in the detector's favour, but
+                            so few could go that way by chance: p = <span data-docs="rl_b7_p"></span>. The
+                            comparison is not won. On the whole log tables, the detector read
+                            <span data-docs="rl_b7_whole_log_as_log"></span> of
+                            <span data-docs="rl_b7_tables"></span> as log, and the old rule
+                            <span data-docs="rl_b7_whole_log_median"></span>.</p>
+                        <h4>Why, looked at after the test</h4>
+                        <p>What follows was found after the scoring. It explains the result; it does not change
+                            it.</p>
+                        <ul>
+                            <li><span data-docs="rl_ph_faulty"></span> test tables were faulty:
+                                <span data-docs="rl_ph_empty"></span> empty, and
+                                <span data-docs="rl_ph_mislabelled"></span> a log table labelled raw. With them set
+                                aside, small log tables still miss <span data-docs="rl_ph_s1_log_miss"></span> of
+                                <span data-docs="rl_ph_s1_log_n"></span>, lower bound
+                                <span data-docs="rl_ph_s1_log_lower"></span>: still broken.</li>
+                            <li>Every remaining miss there is a table with <span data-docs="rl_ph_band1_lo"></span>
+                                or more of its values missing. The more values a log table is missing, the lower
+                                the model's probability that it is log. This is
+                                <a href="#words-sparse-log-gap">the sparse-log gap</a>.</li>
+                            <li>Calibration held few such tables, and they scored well: under the threshold,
+                                <span data-docs="rl_ph_cal_below"></span> of <span data-docs="rl_ph_cal_scored"></span>
+                                in calibration, against <span data-docs="rl_ph_test_below"></span> of
+                                <span data-docs="rl_ph_test_scored"></span> in the test.</li>
+                        </ul>
+                        <figure class="docs-fig">
+                            <div class="docs-figure" data-docs-figure="missing_bands"></div>
+                            <figcaption>Small log tables under the threshold, by the share of their values
+                                missing: calibration (pale bars) beside the test (blue bars). Looked at after the test.</figcaption>
+                            <details class="curious docs-numbers"><summary>The numbers</summary>
+                                <table class="docs-table">
+                                    <thead><tr><th scope="col">Values missing</th><th scope="col">Calibration: under the threshold</th><th scope="col">Test: under the threshold</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><span data-docs="rl_ph_band0_lo"></span> to <span data-docs="rl_ph_band0_hi"></span></td><td><span data-docs="rl_ph_band0_cal_below"></span> of <span data-docs="rl_ph_band0_cal_tables"></span></td><td><span data-docs="rl_ph_band0_test_below"></span> of <span data-docs="rl_ph_band0_test_tables"></span></td></tr>
+                                        <tr><td><span data-docs="rl_ph_band1_lo"></span> to <span data-docs="rl_ph_band1_hi"></span></td><td><span data-docs="rl_ph_band1_cal_below"></span> of <span data-docs="rl_ph_band1_cal_tables"></span></td><td><span data-docs="rl_ph_band1_test_below"></span> of <span data-docs="rl_ph_band1_test_tables"></span></td></tr>
+                                        <tr><td><span data-docs="rl_ph_band2_lo"></span> to <span data-docs="rl_ph_band2_hi"></span></td><td><span data-docs="rl_ph_band2_cal_below"></span> of <span data-docs="rl_ph_band2_cal_tables"></span></td><td><span data-docs="rl_ph_band2_test_below"></span> of <span data-docs="rl_ph_band2_test_tables"></span></td></tr>
+                                        <tr><td><span data-docs="rl_ph_band3_lo"></span> to <span data-docs="rl_ph_band3_hi"></span></td><td><span data-docs="rl_ph_band3_cal_below"></span> of <span data-docs="rl_ph_band3_cal_tables"></span></td><td><span data-docs="rl_ph_band3_test_below"></span> of <span data-docs="rl_ph_band3_test_tables"></span></td></tr>
+                                        <tr><td><span data-docs="rl_ph_band4_lo"></span> to <span data-docs="rl_ph_band4_hi"></span></td><td><span data-docs="rl_ph_band4_cal_below"></span> of <span data-docs="rl_ph_band4_cal_tables"></span></td><td><span data-docs="rl_ph_band4_test_below"></span> of <span data-docs="rl_ph_band4_test_tables"></span></td></tr>
+                                    </tbody>
+                                </table>
+                            </details>
+                        </figure>
+                        <h4>What it means for an uploader</h4>
+                        <p>The detector is not live. The live site uses the old rule, unless you choose Raw
+                            intensities or Already log yourself. Had the detector gone live as it is, a small log
+                            table with many values missing could have been read as raw and its log taken twice,
+                            though most such misses answer “unlike either”, so the page would have warned.</p>
+                        <p class="docs-source">From <code>research/benchmark/value-scale-test/results.json</code>,
+                            <code>research/notebook-outputs/value_scale_b7/posthoc.json</code> and
+                            <code>research/notebook-outputs/value_scale_b7/notes.md</code>.</p>
+                    </article>
+
+                    <article id="how-next" class="docs-chapter">
+                        <h3>What comes next</h3>
+                        <p>The owner decided on 2026-11-09: rework the detector on development data, then draw
+                            a fresh calibration and a fresh sealed test from the reserve. The live service stays
+                            as it is meanwhile. This second round is protein v2, in steps R1 to R7.</p>
+                        <ul>
+                            <li><strong>R1, the corpus checks.</strong> An empty table is refused. A table
+                                labelled raw whose values look log goes to the hand audit, which keeps, corrects or
+                                drops its label.</li>
+                            <li><strong>R2, the method study</strong>, on development data only. Two candidates:
+                                thresholds set apart for tables with many values missing, or a model that missing
+                                values do not move. The rule for choosing is written before either is scored.</li>
+                            <li><strong>R3, protocol v2</strong>, committed before any reserve deposit is
+                                listed.</li>
+                            <li><strong>R4, the fresh draw</strong> from the reserve, with R1's checks.</li>
+                            <li><strong>R5, calibration v2.</strong></li>
+                            <li><strong>R6, the service and the site</strong> read with protein-v2, and the reply's
+                                sentence about the promise is written to be true of each group.</li>
+                            <li><strong>R7, sealed test v2</strong>, scored once with the owner's go-ahead.</li>
+                        </ul>
+                        <p>What stays from v1: the promise, the size groups, the frame and its rules, the
+                            constructed logs, and v1's record exactly as it is. The detector goes live only after
+                            R7, the site and the service together, with the owner's OK. The sealed test of v2 is
+                            still to come: <span data-docs="rl_v2_test"></span>.</p>
+                        <p>Later, Phase C does the same for RNA tables.</p>
+                        <p class="docs-source">From <code>research/value-scale-v2-plan.md</code> and
+                            <code>research/value-scale-plan.md</code>.</p>
+                    </article>
+
+                </div>
+            </div>
         </section>
 
         <section id="did" role="tabpanel" aria-labelledby="tab-did" class="docs-panel">
@@ -53,7 +589,7 @@
         <section id="words" role="tabpanel" aria-labelledby="tab-words" class="docs-panel">
             <h2 class="docs-panel-title">Words</h2>
             <p class="docs-intro">The words this topic uses, in plain language, from A to Z.</p>
-            <div class="glossary">
+            <div class="glossary sheet">
                 <dl>
                     <dt id="words-bank">The bank</dt>
                     <dd>The <span data-docs="rl_step1_tables"></span> real public tables we gathered in

@@ -372,7 +372,7 @@
    "value": 0.064534,
    "status": "measured",
    "basis": "research/benchmark/value-scale-test/results.json: all_subsamples > constructed_log > miss_lower",
-   "format": "fixed3"
+   "format": "pct1"
   },
   "rl_b7_pooled_log_miss": {
    "value": 28,
@@ -402,7 +402,7 @@
    "value": 0.029472,
    "status": "measured",
    "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > linear > miss_lower",
-   "format": "fixed3"
+   "format": "pct1"
   },
   "rl_b7_s1_linear_miss": {
    "value": 12,
@@ -426,7 +426,7 @@
    "value": 0.063681,
    "status": "measured",
    "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > constructed_log > miss_lower",
-   "format": "fixed3"
+   "format": "pct1"
   },
   "rl_b7_s1_log_miss": {
    "value": 22,
@@ -450,7 +450,7 @@
    "value": 0.0,
    "status": "measured",
    "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > linear > miss_lower",
-   "format": "fixed3"
+   "format": "pct1"
   },
   "rl_b7_s23_linear_miss": {
    "value": 0,
@@ -474,7 +474,7 @@
    "value": 0.029865,
    "status": "measured",
    "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > constructed_log > miss_lower",
-   "format": "fixed3"
+   "format": "pct1"
   },
   "rl_b7_s23_log_miss": {
    "value": 5,
@@ -888,7 +888,7 @@
    "value": 0.057362,
    "status": "measured",
    "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: guarantee_faulty_set_aside > S1 constructed_log > lower",
-   "format": "fixed3"
+   "format": "pct1"
   },
   "rl_ph_s1_log_miss": {
    "value": 20,

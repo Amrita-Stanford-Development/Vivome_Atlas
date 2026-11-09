@@ -303,7 +303,7 @@ const plainText = (markup) => decode(markup.replace(/<[^>]*>/g, ' ')).replace(/\
 test('Words: each term once, in alphabetical order, each with its own address', () => {
   for (const page of TOPIC_PAGES) {
     const words = panel(read(page), 'words');
-    assert.match(words, /<div class="glossary">\s*<dl>/, page);
+    assert.match(words, /<div class="glossary sheet">\s*<dl>/, page);
     const terms = [...words.matchAll(/<dt id="(words-[a-z0-9]+(?:-[a-z0-9]+)*)">([\s\S]*?)<\/dt>\s*<dd>/g)];
     assert.equal(terms.length, (words.match(/<dt\b/g) ?? []).length, `${page}: a term without an address or a definition`);
     assert.equal(terms.length, (words.match(/<dd>/g) ?? []).length, `${page}: a term with two definitions`);
@@ -324,4 +324,42 @@ test('every link inside a Docs page lands on something on that page', () => {
       assert.ok(ids.has(target), `${page}: #${target} leads nowhere`);
     }
   }
+});
+
+test('How it works: the side list links every chapter, in order, by its title', () => {
+  const expected = {
+    'docs-raw-or-log.html': ['how-problem', 'how-asking', 'how-reading', 'how-promise', 'how-tables', 'how-testing', 'how-found', 'how-next'],
+  };
+  for (const page of TOPIC_PAGES) {
+    const how = panel(read(page), 'how');
+    const toc = how.match(/<nav class="docs-toc glass" aria-label="Chapters">([\s\S]*?)<\/nav>/);
+    assert.ok(toc, `${page}: no chapter list`);
+    const links = [...toc[1].matchAll(/<a href="#([^"]+)">([\s\S]*?)<\/a>/g)].map((m) => [m[1], plainText(m[2])]);
+    const chapters = [...how.matchAll(/<article id="([^"]+)" class="docs-chapter">\s*<h3>([\s\S]*?)<\/h3>/g)].map((m) => [m[1], plainText(m[2])]);
+    assert.deepEqual(chapters.map(([id]) => id), expected[page], page);
+    assert.deepEqual(links, chapters, `${page}: the side list and the chapters differ`);
+    assert.equal((how.match(/<article\b/g) ?? []).length, chapters.length, `${page}: an article that is not a chapter`);
+    for (const [id] of chapters) assert.deepEqual(tabForHash(`#${id}`), { tab: 'how', target: id, open: false });
+  }
+});
+
+test('every figure is drawn from the data or marked an illustration; a data figure lists its numbers', () => {
+  const used = new Set();
+  for (const page of DOCS_PAGES) {
+    for (const [fig] of read(page).matchAll(/<figure class="docs-fig">[\s\S]*?<\/figure>/g)) {
+      const data = /data-docs-figure="/.test(fig);
+      const drawn = /<span class="bead bead-open docs-illustration">Illustration<\/span>/.test(fig);
+      assert.ok(data !== drawn, `${page}: a figure must be one or the other: ${fig.slice(0, 90)}`);
+      assert.match(fig, /<figcaption>/, page);
+      if (data) {
+        assert.match(fig, /<details class="curious docs-numbers"><summary>The numbers<\/summary>/, page);
+        for (const [, name] of fig.matchAll(/data-docs-figure="(\w+)"/g)) used.add(name);
+      } else {
+        assert.match(fig, /<svg class="docs-svg" viewBox="0 0 \d+ \d+" role="img" aria-label="[^"]+">/, page);
+        assert.doesNotMatch(fig, /data-docs="/, `${page}: an illustration holds no data`);
+      }
+    }
+    assert.equal((read(page).match(/<figure\b/g) ?? []).length, (read(page).match(/<figure class="docs-fig">/g) ?? []).length, page);
+  }
+  assert.deepEqual([...used].sort(), Object.keys(FIGURES).sort(), 'every data figure is shown somewhere');
 });
