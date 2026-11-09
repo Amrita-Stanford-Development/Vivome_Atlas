@@ -51,6 +51,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/workflow-data.js` — loading, checking and reading web/data/workflow.json: records, the followed cell, the gene lookup, the class colours, the service's steps in plain words (pure)
 - `web/js/figures.js` — the Manuscript page's figures: each fills its slot beside the result it supports, with its legend, sources, downloads and the numbers it draws (from `web/figures/index.json`)
 - `web/js/manuscript-data.js` — loading, checking and reading web/data/manuscript.json: the record formats, the caveat tags, the slots and their basis (pure)
+- `web/js/docs.js` — the Docs pages' script: a topic page's tabs and addresses (#did-b7 opens that step), then the numbers and figures from web/data/docs.json, or the error and Pending
 - `web/js/docs-data.js` — loading, checking and reading web/data/docs.json: a record's text and basis, the slots, the records each data figure draws, and the tabs' addresses and keys (pure)
 - `web/js/docs-svg.js` — the Docs section's data figures, from web/data/docs.json: what the old rule misread, the corpus funnel, the sealed test against the promise, the missing-value bands (pure)
 - `web/js/workflow-panels.js` — the Workflow page's HTML builders: snippets, recipe, cell card, probability and guess tables, the ladder, held-out cards, the service card (pure)

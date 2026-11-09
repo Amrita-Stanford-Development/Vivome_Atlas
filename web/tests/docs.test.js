@@ -245,3 +245,40 @@ test('every slot names a record and is empty in the markup; every figure is one 
     for (const name of figures) assert.ok(Object.hasOwn(FIGURES, name), `${page}: no figure named ${name}`);
   }
 });
+
+// ---- the page script (web/js/docs.js) ----
+
+test('each Docs page runs the Docs script last, after the water', () => {
+  for (const page of DOCS_PAGES) {
+    const scripts = [...read(page).matchAll(/<script type="module" src="([^"]+)"><\/script>/g)].map((m) => m[1]);
+    assert.deepEqual(scripts, ['js/background.js', 'js/biofield.js', 'js/docs.js'], page);
+  }
+});
+
+test('the script writes numbers and figures only through the guarded helpers, and a failed load shows the error and Pending', () => {
+  const js = read('js/docs.js');
+  assert.match(js, /import \{ PENDING_LABEL \} from '\.\/manifest\.js';/);
+  assert.match(js, /import \{ errorPanel \} from '\.\/panels\.js';/);
+  assert.match(js, /from '\.\/docs-data\.js';/);
+  assert.match(js, /import \{ drawFigure \} from '\.\/docs-svg\.js';/);
+  // Every markup the script writes is a record's escaped text, a figure, or the error panel.
+  const writes = [...js.matchAll(/\.innerHTML = ([^;]+);/g)].map((m) => m[1].trim());
+  assert.ok(writes.length >= 3);
+  for (const w of writes) assert.match(w, /^(docsFact|drawFigure|errorPanel)\(/, `innerHTML = ${w}`);
+  assert.match(js, /\.title = docsBasis\(docs, el\.dataset\.docs\)/);
+  assert.match(js, /\.catch\(\(err\) => \{[\s\S]*?\$\('docs-error'\)\.innerHTML = errorPanel\(err\);[\s\S]*?textContent = PENDING_LABEL/);
+});
+
+test('the tabs follow the address without adding to the history, and show only once they work', () => {
+  const js = read('js/docs.js');
+  assert.match(js, /history\.replaceState\(null, '', `#\$\{/);
+  assert.doesNotMatch(js, /location\.hash =/, 'setting the hash would add a history entry and jump');
+  assert.match(js, /addEventListener\('hashchange'/);
+  assert.match(js, /nextTab\(/);
+  assert.match(js, /tabForHash\(/);
+  // The list is shown, and the panel headings hidden, only after the wiring.
+  const wired = js.indexOf("addEventListener('keydown'");
+  assert.ok(wired > 0);
+  assert.ok(js.indexOf('list.hidden = false') > wired);
+  assert.ok(js.indexOf("classList.add('docs-tabbed')") > wired);
+});
