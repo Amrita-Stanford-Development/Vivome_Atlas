@@ -70,8 +70,14 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     run on its own with the hosted settings, replies as this repository's
     service does on every bank table. All seven rows pass. The reply and
     the receipt name what a 0 was read as only when the table holds a 0
-    (the owner). Not deployed. Next: B7, the sealed test, scored once,
-    with the owner's go-ahead.
+    (the owner). Not deployed.
+  - **B7, the sealed test, was scored once on 2026-11-09**
+    ([notes](notebook-outputs/value_scale_b7/notes.md)). The guarantee is
+    contradicted for log tables of 20 to 49 cells (22 misses of 237) and
+    holds for the other three. The detector misreads fewer linear tables
+    than median-50 (1 against 4), but not significantly (p = 0.125). It
+    misses log tables with many missing values. The test is spent. Not
+    deployed: the owner decides what follows.
 - **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
   (from `decb812`), then the site. These brought the clean-up's fixes to
   the parser and the site's file check (lone-CR line endings, MaxQuant,

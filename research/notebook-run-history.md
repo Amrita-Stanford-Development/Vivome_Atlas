@@ -3479,6 +3479,52 @@ after the code and before the step (`6a809bc`; the step `fdf31f5`).
   staged folder, which its manifest does not list. It was fixed test first
   (`8449d14`), and the Space rebuilt clean. The replies were not affected.
 
+### 81. The raw-or-log framework, Phase B, B7: the sealed test, scored once, 2026-11-09
+
+**Why:** the detector's guarantee says that for each true class and
+cell-count stratum, the true class is missing from its answer at most 5% of
+the time. Only fresh deposits, never scored, can test that. The owner gave
+the go-ahead on 2026-11-09.
+
+**Before the scoring** (`e90d080`): `valuescale/bank/expectations/b7.json`
+and its judge, `research/notebooks/value_scale_diagnostics.py --step b7`.
+No test value was read.
+
+**The run:** `valuescale/corpus/score_test.py`, once, from a clean tree at
+`e90d080` (62 s). It wrote `valuescale/corpus/test_started.json` before
+reading any test table, then
+`research/benchmark/value-scale-test/results.json` and
+`valuescale/corpus/test_scored.json`. 237 deposits, 624 subsamples.
+
+**Results** (`research/notebook-outputs/value_scale_b7/`, report and
+notes; `research/benchmark/results.md`):
+- **The guarantee is contradicted for constructed logs of 20 to 49 cells:**
+  22 misses of 237, a one-sided lower bound of 0.064. It holds for linear
+  tables there (12 of 237) and for both classes at 50 cells or more (0 and
+  5 of 67).
+- **The primary comparison is not supported:** the detector misreads 1 of
+  the 237 linear tables and median-50 4; p = 0.125.
+- **On the whole constructed logs,** the detector reads 215 of 237 log and
+  median-50 235.
+- **Six of eleven rows pass.** Risk against coverage and the foreign tables
+  are as predicted.
+
+**After the run** (`research/notebooks/value_scale_b7_posthoc.py`):
+- **Three test tables are faulty:**
+  - PXD022054 and PXD047898 are empty;
+  - PXD066316 is a log2 table labelled linear.
+
+  Set aside, S1's log misses are 20 of 234 (lower bound 0.057), still
+  contradicted.
+- **The remaining S1 log misses are all on tables with half or more of
+  their values missing.** The test holds more low scores there than
+  calibration did (20 of 234 against 5 of 214).
+- **No difference in how the two splits were handled was found:** the
+  rehearsal reproduces every calibration score.
+
+The test is spent (`research/benchmark/side-tests.md`, amendment 26).
+Nothing is deployed; what follows is the owner's decision.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

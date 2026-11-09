@@ -1,0 +1,9 @@
+{
+ "started": true,
+ "started_at": "2026-11-09T12:23:52",
+ "calibration": "protein-v1",
+ "calibration_corpus_sha256": "16ebf9548e2bd13aa9d946b3d847b614b73e95f1387b9a0f6a280ed983541f17",
+ "commit": "e90d0801c2725480769ca2d28a183067c4a516a8",
+ "clean": true,
+ "deposits": 237
+}

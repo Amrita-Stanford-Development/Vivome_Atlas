@@ -11,9 +11,9 @@ Phase B, as of 2026-11-07:
 - **B4, the calibration:** run on 2026-11-07 (`27b43dd`, then the run). The score became the probability alone before any calibration score (protocol amendment 5, `36ec352`). The design part's no-gaps row failed in one place; the owner accepted it and chose to fix a fault of ours it showed first (`research/notebook-outputs/value_scale_b4/notes.md`). Every other row passes. `valuescale/calibration/protein-v1.json` holds the thresholds.
 - **B5, the service and the site:** designed with the owner (2026-11-08): `research/value-scale-b5-design.md`; the build plan is `research/value-scale-b5-plan.md`. Built and run on the bank on 2026-11-08 (`research/notebook-outputs/value_scale_b5/notes.md`). Nine of ten rows pass; B5_verdicts failed on the typicality warning alone (the prediction took B4's left-out warning for the shipped detector's); the owner accepted it (2026-11-09). Not deployed: the site and the service go live together after B7.
 - **B6, the deploy assembly:** built and run on 2026-11-09 (`research/notebook-outputs/value_scale_b6/notes.md`). All seven rows pass: the staged Space, run on its own, replies as this repository's service does on every bank table. One fault was found after the run (the import check wrote bytecode into the staged folder) and fixed test first (`8449d14`). Not deployed.
-- **B7:** not started. The sealed test is scored once, so B7 starts with the owner's go-ahead.
+- **B7, the sealed test:** scored once on 2026-11-09 with the owner's go-ahead (`research/notebook-outputs/value_scale_b7/notes.md`; `research/benchmark/results.md`). The guarantee is contradicted for constructed log tables of 20 to 49 cells (22 misses of 237, one-sided lower bound 0.064) and holds for the other three. The primary comparison is not supported (p = 0.125). Six of eleven rows pass. Not deployed; what follows is the owner's decision.
 
-Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 80).
+Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 81).
 
 ## Context
 
@@ -381,6 +381,21 @@ The design agreed with the owner, the pop-up included, is `research/value-scale-
   - `service/model/canonical_preprocessing.json`;
   - `research/todo.md`.
 - The service deploy needs the owner's explicit permission. The live check repeats Phase A's, with the new verdicts.
+
+**As run (2026-11-09; `research/notebook-outputs/value_scale_b7/notes.md`):**
+- **The scoring.** `valuescale/bank/expectations/b7.json` and the judge (`--step b7`) were committed first (`e90d080`). `score_test.py` then ran once from that clean commit, in 62 s, and wrote `valuescale/corpus/test_started.json`, `research/benchmark/value-scale-test/results.json` and `valuescale/corpus/test_scored.json`.
+- **The rows.** Six of eleven pass: the run and its marks, the counts, the primary comparison (its counts as predicted; support was not predicted), risk against coverage, the real log row and the foreign tables. Five fail:
+  - **B7_guarantee:** contradicted for constructed logs in S1, 22 misses of 237;
+  - **B7_miss_ranges:** S1 log 22 and S2+S3 log 5, above their ranges;
+  - **B7_wrong:** 4 constructed-log subsamples of 50 cells or more read linear alone;
+  - **B7_whole_log:** 215 of 237 whole constructed logs read log, against 95% or more;
+  - **B7_baselines:** on three faulty tables alone.
+- **The primary comparison:** the detector misreads 1 linear table and median-50 4. p = 0.125, so the hypothesis is not supported.
+- **Post hoc** (`research/notebooks/value_scale_b7_posthoc.py`):
+  - three test tables are faulty: two are empty, and one log2 table is labelled linear;
+  - with them set aside, S1's log misses are 20 of 234, still contradicted;
+  - every remaining S1 log miss is on a table with half or more of its values missing, the sparse-log gap B4 saw on the bank.
+- **Not deployed.** The test is spent, so its deposits are development data (`research/benchmark/side-tests.md`, amendment 26). The regeneration and the deploy above wait for the owner's decision.
 
 ## Phase C: the RNA module, and a 1% guarantee
 

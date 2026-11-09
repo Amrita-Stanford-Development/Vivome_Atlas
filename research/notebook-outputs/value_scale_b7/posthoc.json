@@ -1,0 +1,256 @@
+{
+ "written": "after the one scoring; post hoc, not a test result",
+ "cleanup": {
+  "calibration": {
+   "clean-up": {
+    "n": 30,
+    "miss": 0
+   },
+   "rest": {
+    "n": 188,
+    "miss": 5
+   }
+  },
+  "test": {
+   "clean-up": {
+    "n": 24,
+    "miss": 3
+   },
+   "rest": {
+    "n": 213,
+    "miss": 19
+   }
+  }
+ },
+ "kept_tables": 457,
+ "rehearsal_scores_equal_calibration": [
+  283,
+  283
+ ],
+ "faulty_tables": [
+  {
+   "accession": "PXD047898",
+   "split": "test",
+   "software": "FragPipe",
+   "fault": "empty",
+   "detail": "no observed value in 219 rows x 36 columns"
+  },
+  {
+   "accession": "PXD022054",
+   "split": "test",
+   "software": "MaxQuant",
+   "fault": "empty",
+   "detail": "no observed value in 371 rows x 32 columns"
+  },
+  {
+   "accession": "PXD066316",
+   "split": "test",
+   "software": "Spectronaut",
+   "fault": "log values labelled linear",
+   "detail": "values 7.96 to 26.76, median 15.02"
+  }
+ ],
+ "s1_log_threshold": 0.9308735764624807,
+ "tail": {
+  "calibration": {
+   "scored": 214,
+   "below": 5,
+   "bands": [
+    {
+     "band": [
+      0.0,
+      0.5
+     ],
+     "tables": 138,
+     "below": 0
+    },
+    {
+     "band": [
+      0.5,
+      0.6
+     ],
+     "tables": 31,
+     "below": 1
+    },
+    {
+     "band": [
+      0.6,
+      0.7
+     ],
+     "tables": 17,
+     "below": 0
+    },
+    {
+     "band": [
+      0.7,
+      0.8
+     ],
+     "tables": 19,
+     "below": 2
+    },
+    {
+     "band": [
+      0.8,
+      1.0
+     ],
+     "tables": 9,
+     "below": 2
+    }
+   ],
+   "spearman_missing": -0.839106880961888
+  },
+  "test": {
+   "scored": 234,
+   "below": 20,
+   "bands": [
+    {
+     "band": [
+      0.0,
+      0.5
+     ],
+     "tables": 146,
+     "below": 0
+    },
+    {
+     "band": [
+      0.5,
+      0.6
+     ],
+     "tables": 34,
+     "below": 2
+    },
+    {
+     "band": [
+      0.6,
+      0.7
+     ],
+     "tables": 22,
+     "below": 7
+    },
+    {
+     "band": [
+      0.7,
+      0.8
+     ],
+     "tables": 19,
+     "below": 6
+    },
+    {
+     "band": [
+      0.8,
+      1.0
+     ],
+     "tables": 13,
+     "below": 5
+    }
+   ],
+   "spearman_missing": -0.8513132175923271
+  },
+  "fisher_one_sided_p": 0.0031952909633264828,
+  "ks_p": 0.5672223429613158
+ },
+ "guarantee_as_scored": {
+  "S1 linear": {
+   "n": 237,
+   "miss": 12,
+   "rate": 0.05063291139240506,
+   "lower": 0.029472269625897926,
+   "contradicted": false
+  },
+  "S1 constructed_log": {
+   "n": 237,
+   "miss": 22,
+   "rate": 0.09282700421940929,
+   "lower": 0.06368055225965283,
+   "contradicted": true
+  },
+  "S2+S3 linear": {
+   "n": 67,
+   "miss": 0,
+   "rate": 0.0,
+   "lower": 0.0,
+   "contradicted": false
+  },
+  "S2+S3 constructed_log": {
+   "n": 67,
+   "miss": 5,
+   "rate": 0.07462686567164178,
+   "lower": 0.02986450216110874,
+   "contradicted": false
+  }
+ },
+ "guarantee_faulty_set_aside": {
+  "S1 linear": {
+   "n": 234,
+   "miss": 9,
+   "rate": 0.038461538461538464,
+   "lower": 0.02020892949612469,
+   "contradicted": false
+  },
+  "S1 constructed_log": {
+   "n": 234,
+   "miss": 20,
+   "rate": 0.08547008547008547,
+   "lower": 0.05736163493268548,
+   "contradicted": true
+  },
+  "S2+S3 linear": {
+   "n": 67,
+   "miss": 0,
+   "rate": 0.0,
+   "lower": 0.0,
+   "contradicted": false
+  },
+  "S2+S3 constructed_log": {
+   "n": 67,
+   "miss": 5,
+   "rate": 0.07462686567164178,
+   "lower": 0.02986450216110874,
+   "contradicted": false
+  }
+ },
+ "primary_as_scored": {
+  "tables": 237,
+  "detector_wrong": 1,
+  "median_50_wrong": 4,
+  "detector_only_right": 3,
+  "median_50_only_right": 0,
+  "p_value": 0.125,
+  "discordant": [
+   {
+    "accession": "PXD022054",
+    "detector": "linear",
+    "median_50": null
+   },
+   {
+    "accession": "PXD047898",
+    "detector": "linear",
+    "median_50": null
+   },
+   {
+    "accession": "PXD057989",
+    "detector": "linear",
+    "median_50": "log"
+   }
+  ],
+  "whole_constructed_log_read_log": 215,
+  "whole_constructed_log_read_log_median_50": 235
+ },
+ "primary_faulty_set_aside": {
+  "tables": 234,
+  "detector_wrong": 0,
+  "median_50_wrong": 1,
+  "detector_only_right": 1,
+  "median_50_only_right": 0,
+  "p_value": 0.5,
+  "discordant": [
+   {
+    "accession": "PXD057989",
+    "detector": "linear",
+    "median_50": "log"
+   }
+  ],
+  "whole_constructed_log_read_log": 214,
+  "whole_constructed_log_read_log_median_50": 234
+ }
+}

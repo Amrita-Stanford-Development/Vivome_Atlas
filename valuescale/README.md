@@ -24,13 +24,17 @@ expectations written before it runs (`bank/expectations/`):
 - **B5, the service** (`research/value-scale-b5-design.md`): Stage 0 reads
   a protein table the request leaves to the service with `detect`
   (`service/pipeline/alignment.py`), and the site asks the uploader first.
-  It is built and checked on the bank (`research/notebook-outputs/value_scale_b5/`),
-  and goes live with the site after B7.
+  It is built and checked on the bank (`research/notebook-outputs/value_scale_b5/`).
+  It is not deployed.
 - **B6, the deploy assembly:** `deploy/huggingface/build_space.py` stages
   this package's modules and its shipped calibration with the service, and
   imports them from the staged folder alone. The staged Space replies as
   the repository's service does on every bank table
   (`research/notebook-outputs/value_scale_b6/`).
+- **B7, the sealed test,** scored once (`corpus/score_test.py`). The
+  guarantee is contradicted for log tables of 20 to 49 cells and holds for
+  the other three classes and strata (`research/benchmark/results.md`;
+  `research/notebook-outputs/value_scale_b7/`).
 
 Each step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,
 and its entry is in `research/notebook-run-history.md`.

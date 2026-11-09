@@ -1,0 +1,37 @@
+{
+ "step": "b7",
+ "run": "2026-11-09T12:25:09",
+ "results_file": "research/benchmark/value-scale-test/results.json",
+ "started": {
+  "started": true,
+  "started_at": "2026-11-09T12:23:52",
+  "calibration": "protein-v1",
+  "calibration_corpus_sha256": "16ebf9548e2bd13aa9d946b3d847b614b73e95f1387b9a0f6a280ed983541f17",
+  "commit": "e90d0801c2725480769ca2d28a183067c4a516a8",
+  "clean": true,
+  "deposits": 237
+ },
+ "scored": {
+  "scored": true,
+  "scored_at": "2026-11-09T12:24:54",
+  "calibration": "protein-v1",
+  "calibration_corpus_sha256": "16ebf9548e2bd13aa9d946b3d847b614b73e95f1387b9a0f6a280ed983541f17",
+  "commit": "e90d0801c2725480769ca2d28a183067c4a516a8",
+  "clean": true,
+  "results": "D:/Project/Vivome/Vivome_Atlas/research/benchmark/value-scale-test/results.json"
+ },
+ "seconds": 62,
+ "results": {
+  "B7_once": true,
+  "B7_counts": true,
+  "B7_guarantee": false,
+  "B7_miss_ranges": false,
+  "B7_wrong": false,
+  "B7_primary": true,
+  "B7_whole_log": false,
+  "B7_baselines": false,
+  "B7_risk": true,
+  "B7_real_log": true,
+  "B7_foreign": true
+ }
+}

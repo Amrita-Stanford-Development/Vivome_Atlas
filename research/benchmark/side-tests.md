@@ -499,6 +499,26 @@ and its clean-up visited 103 of them again on 2026-11-06 and 15 on
   identifier in a tracked file at the protocol's commit (`26519a8`). No
   accession named here was listed by the walk.
 
+### Amendment 26, 2026-11-09: the raw-or-log detector's sealed test is spent
+
+- **Scored once on 2026-11-09** (`valuescale/corpus/score_test.py`, commit
+  `e90d080`; run history entry 81; `research/benchmark/results.md`). The
+  guarantee is contradicted for constructed log tables of 20 to 49 cells
+  (22 misses of 237, one-sided lower bound 0.064) and holds for the other
+  three classes and strata. The primary comparison against median-50 is
+  not supported (p = 0.125).
+- **Its 237 deposits are development data now,** as every spent test is.
+  So are the 218 calibration deposits, which cannot test the detector.
+  Three of the test's tables are faulty: PXD022054 and PXD047898 are
+  empty, and PXD066316 is a log2 table labelled linear
+  (`research/notebook-outputs/value_scale_b7/notes.md`).
+- **The reserve:** the 8,813 deposits of the frame B3's walk did not list
+  stay unlisted. A fresh calibration and sealed test for a revised
+  detector would come from them (B3's notes).
+- **None of this register's other sets was touched:** the frame dropped
+  every identifier in a tracked file at the protocol's commit, as
+  amendment 25 records.
+
 ### Alternatives kept unused, for future tests or future development
 
 Nothing below has been downloaded or opened, so each can still serve as a
@@ -507,6 +527,9 @@ comes from here. Keep this list current.
 
 - **Downloaded, sealed, in reserve:** PXD061065 (277 single glioblastoma
   neutrophils after QC; amendment 3).
+- **For the raw-or-log detector:** the 8,813 frame deposits B3's walk did
+  not list, unlisted (amendment 26). Its calibration and test deposits are
+  spent.
 - **Data requests, sent by the owner from 2026-10-27** (none had gone out
   before; `research/benchmark/protocol-sorted-cd4cd8.md`, amendment 6):
   Krisp et al. (sorted CD4, CD8, CD19, CD14 single cells; the main test) and

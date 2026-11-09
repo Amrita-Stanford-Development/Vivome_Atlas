@@ -1883,7 +1883,73 @@ guesses are the service's own response. v4.1's recorded scores reproduce to
   say so beside v4.2's development gain; whether to keep serving v4.2 is the
   owner's decision.
 
-## Two protocols, not a chosen one
+## The raw-or-log detector's sealed test (protein v1)
+
+The detector (`research/value-scale-plan.md`) answers a protein table with a
+set of readings: linear, log, both ("can't tell") or neither ("unlike
+either"). Its guarantee: for each true class and cell-count stratum, the
+true class is missing from the set at most 5% of the time, with 95%
+confidence over the calibration draw
+([protocol-value-scale.md](protocol-value-scale.md)). The sealed test was
+scored once on 2026-11-09 (`valuescale/corpus/score_test.py`, commit
+`e90d080`, a clean tree) with the calibration
+`valuescale/calibration/protein-v1.json`. The record is
+[value-scale-test/results.json](value-scale-test/results.json); run
+history, entry 81. 237 public deposits, all labelled linear: each table and
+its constructed log variant, 624 subsamples.
+
+**The guarantee, one outcome per deposit** (a miss: the true class absent
+from the set):
+
+| stratum | class | n | right | wrong | can't tell | unlike either | miss rate [95% CI] | one-sided lower | guarantee |
+|---|---|---|---|---|---|---|---|---|---|
+| S1 (20 to 49 cells) | linear | 237 | 224 | 1 | 1 | 11 | 0.051 [0.026, 0.087] | 0.030 | holds |
+| S1 | constructed log | 237 | 214 | 0 | 1 | 22 | 0.093 [0.059, 0.137] | **0.064** | **contradicted** |
+| S2+S3 (50 or more) | linear | 67 | 67 | 0 | 0 | 0 | 0.000 [0.000, 0.054] | 0.000 | holds |
+| S2+S3 | constructed log | 67 | 62 | 3 | 0 | 2 | 0.075 [0.025, 0.166] | 0.030 | holds |
+
+- **The primary comparison is not supported.** On the 237 linear tables,
+  whole, the detector gives the wrong reading on 1 and median-50 (today's
+  rule) on 4. 3 tables are discordant, all in the detector's favour; exact
+  one-sided McNemar p = 0.125, against α 0.05.
+- **On the whole constructed logs,** the detector reads 215 of 237 log and
+  median-50 235. The service reads "unlike either" as linear (B1), so it
+  would take the log of the other 22 again, with a warning.
+- **Every baseline on the same whole tables:** GEO2R, ExpressAnalyst, Omics
+  Playground, ProteoPy, CIBERSORT and median-50 read 235 of the constructed
+  logs log; scGPT and CellTypist read 222 and 220 of them linear; Gemma
+  gives no answer on 123. On the linear tables, every baseline reads 233 to
+  235 linear.
+- **Risk against coverage** (subsamples): the share of one-class answers
+  that are wrong is at most 0.0019 at every cut; coverage is 0.934 at 0.5
+  and 0.526 at 0.99.
+- **By software** (subsamples): the highest miss rates are FragPipe's
+  constructed logs (4 of 11) and Spectronaut's linear tables (7 of 33).
+  MaxQuant's constructed logs miss 16 of 166, and DIA-NN's 8 of 96. By
+  instrument, timsTOF's constructed logs miss 10 of 66.
+- **Real against constructed log tables:** the test split holds no table
+  labelled real log, so they cannot be compared.
+- **Foreign tables** (the calibration deposits made foreign): z-scored per
+  protein, 218 log; 0/1 presence, 218 "unlike either"; percentile ranks,
+  185 "can't tell" and 33 log.
+
+**What the misses are (post hoc;
+`research/notebook-outputs/value_scale_b7/posthoc.md`):**
+- Three test tables the corpus should not have kept: two are empty
+  (PXD022054, PXD047898), and one labelled linear holds log2 values
+  (PXD066316, values 7.96 to 26.76). With them set aside, S1's constructed
+  logs miss 20 of 234 (lower bound 0.057, still contradicted), and the
+  primary comparison has one discordant table (p = 0.5).
+- Every remaining S1 log miss is on a table with half or more of its values
+  missing. The detector's log probability falls as the missing share rises
+  (Spearman −0.85). The test holds more low scores there than calibration
+  did (20 of 234 under the threshold, against 5 of 214; KS p = 0.57 for the
+  whole distributions).
+
+**What it does not show:** uploads to the site, which are single-cell
+tables. The result is for public processed protein tables like those drawn
+(protocol, "What a result means").
+
 
 Per the repository owner's explicit instruction: the choice between the
 shared kNN-classifier rule and native nearest-centroid is **not** made
