@@ -1,0 +1,27 @@
+{
+  "step": "b6",
+  "written": "2026-11-09, after B6's code (11a59a8) and before its diagnostics existed",
+  "about": "B6 (research/value-scale-plan.md, Deploy assembly): the Space that deploy/huggingface/build_space.py stages in deploy/huggingface/space, the folder the service is deployed from (deploy/huggingface/PUBLISH.md), run on its own and compared with this repository's service. B6's code: space_manifest.json's uncommitted_changes covers valuescale/, an import check runs on the staged folder, and the reply's value_scale.zeros_read is set only when the table holds a 0 (the owner, 2026-11-09). The predictions come from B5's report (research/notebook-outputs/value_scale_b5/report.json) and a scratch probe of the bank's inputs on 2026-11-09: each table's upload size, and whether its traced table holds an observed 0. No reply was computed for it. Not edited after the run: a row that differs is reported and explained in notes.md.",
+  "tables": "the bank's 37 tables (valuescale/corpus/bank.json): the 30 that Phase A traced (traced_table: validation passed, at most 2,000 cells drawn with D3's seed), and the 7 that validation refuses (fewer than 20 cells)",
+  "how": "each side runs in its own fresh interpreter (python -I -B), with the hosted settings (the ENV lines of deploy/huggingface/Dockerfile, as deploy/huggingface/rehearse.py hosted_env reads them; every other VIVOME_ setting removed). The staged Space has only deploy/huggingface/space on its path, and the repository's service only the repository root. One side runs at a time.",
+  "B6_build": "build_space.py, run by the step from a clean tree, exits 0. Its import check imports 31 modules (service/: 22, valuescale/: 9) from the staged folder alone. space_manifest.json names the commit the step ran at, with uncommitted_changes false and pipeline_version v4.1. Every staged file under service/ and valuescale/ is byte-identical to the repository's. The staged valuescale/ holds its 9 modules and calibration/protein-v1.json, and nothing else: no tests, corpus or bank.",
+  "B6_isolated": "in every child, service and valuescale are imported from that child's own root: the Space's from deploy/huggingface/space, the repository's from the repository root",
+  "B6_pipeline": "pipeline.run_projection (v4.1) on each of the 30 traced tables, as protein with nothing stated and as RNA: the Space's reply is byte-identical (canonical JSON) to the repository's, 60 of 60. On the 7 small tables, validation's error is identical, 7 of 7.",
+  "B6_status": "GET /api/status: the Space's reply equals the repository's: status ready, pipeline_version v4.1, limits max_cells 2000, max_upload_mb 31.0 and concurrent_projections 1, the value_scale choices auto, linear and log, and the zeros choices auto, missing and measured",
+  "B6_app": {
+    "what": "each bank file whose upload fits the hosted 31 MiB, sent as the site sends a file whose reading the uploader does not know (modality prot with no value_scale, and modality rna), to the Space's server and to the repository's: status and body identical",
+    "sent": "33 files: the 26 traced tables whose upload fits (as its file, or as a 2,000-cell subsample the way b5_through_the_app sends one), and the 7 small tables",
+    "left_to_B6_pipeline": "4 uploads are over 31 MiB: dusszachniewicz_maxquant (90.2 MiB), scope2_export (53.2), khoury_column_normalized (44.4), and furtwangler_log2_imputed's 2,000-cell subsample (61.0). Both servers refuse such an upload for its size before reading it, and B6_status shows the limit is the same on both",
+    "predicted": "66 of 66 identical: the 26 tables 200 under both modalities, the 7 small tables 400 (fewer than 20 cells)",
+    "cases": "pbmc240_diann with 2 observed values made negative: with nothing stated, 400 with alignment.UNDECIDED_NEGATIVES_REASON; with value_scale linear, 400 with app.STATED_LINEAR_REASON; with value_scale log, 200; with value_scale log and zeros measured, 200. Each identical between the two servers"
+  },
+  "B6_zeros": {
+    "what": "the Space's protein replies (B6_pipeline) carry value_scale.zeros_read only for the traced tables that hold an observed 0 (the probe): 8 of 30",
+    "predicted": {
+      "missing": ["pxd064083_t", "pxd064083_b", "furtwangler_batchcorr", "furtwangler_batchcorr_norm", "krull_singlecells", "furtwangler_log2", "furtwangler_log2_raw_sn"],
+      "measured": ["furtwangler_log2fc_nan (log, centred)"]
+    },
+    "absent": "the other 22, which hold no 0, among them pbmc240_diann and scope2_export (B5's receipt said zeros_read missing and measured for these)"
+  },
+  "B6_since_b5": "for each traced table, the Space's protein reply summary (summary_of: value_scale, cells, features matched, levels, reasons for no answer, top labels) equals B5's in its report.json, but for value_scale.zeros_read, which is now absent on the 22 tables with no 0. No production code other than zeros_read changed between B5's run (947329e) and B6's code (11a59a8)."
+}
