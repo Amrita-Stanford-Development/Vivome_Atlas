@@ -60,7 +60,6 @@ ALLOWED_MISSING = (
     "Atlas/Data/",
     "benchmark/PROTOCOL.md",
     "web/plots/",  # the original-model plots, removed 2026-09-30
-    "web/docs.html",  # the Docs section's home, written next; taken off this list once it exists
     "web/home.html",  # the Dashboard, removed 2026-10-17; named in research/todo.md's changelog
     "web/js/hero.js",  # the landing's 3D hero, removed 2026-10-17; likewise
     "web/data/whats_new.json",  # the Dashboard's announcements, removed 2026-10-17; likewise

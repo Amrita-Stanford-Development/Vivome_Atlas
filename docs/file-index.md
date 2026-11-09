@@ -19,6 +19,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/README.md` — how to serve the site and what each folder under `web/` holds
 - `web/index.html` — landing page: the title panel on the first screen, then seven sections of white and liquid-glass cards, and the finale
 - `web/atlas.html` — the Atlas page's markup: the 3D reference (RNA + protein) with its controls and drawer; its code is `web/js/atlas/`
+- `web/docs.html` — the Docs section's home: what the section is, how to read a topic, the topic cards and the project's timeline
+- `web/docs-raw-or-log.html` — the Docs topic Raw or log: how it works, what we did, step by step, and the words it uses, in three tabs
 - `web/manuscript.html` — the Manuscript page: an evidence bank for a journal paper on the served model, in MCP's sections (methods and why each part is there, the atlas's cross-modal support and alignment diagnostics, the benchmark tables, the internal held-out test, failure modes, what was tried and not kept, open items); every number a record
 - `web/motion.html` — the Motion page: the product film in a native player, then its storyboard, each scene's still beside its words, voice-over, motion and sound
 - `web/workflow.html` — the Workflow page: how VivOME works start to end, 13 chapters following one PBMC240 run, a film mode
@@ -27,8 +29,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/preview-water.html` — preview, not linked from the site: every water effect side by side over the same objects
 - `web/css/story.css` — the landing's layout: the title panel, the sections and card grids, the scroll reveals, phones and reduced motion
 - `web/css/workflow.css` — the Workflow page's layout: the two-column scroll story, the followed-cell picker, the film bar and theatre, reduced motion and print
+- `web/css/docs.css` — the Docs section's layout: the way back to its home, a topic page's panels, the figures
 - `web/css/reel.css` — the Motion page's layout
-- `web/css/page.css` — the design system: tokens, the glass/well/sheet/bead components, site header and footer, the panel styling contract
+- `web/css/page.css` — the design system: tokens, the glass/well/sheet/bead components, site header and footer, the tabs, folds and glossary the Docs pages use, the panel styling contract
 - `web/css/atlas.css` — the Atlas page's app shell: sidebar, viewer card, overlays, drawer, gene-profile table
 - `web/js/background.js` — the living background: the animated cell and strand canvas behind every page
 - `web/js/biofield.js` — the living water above it, behind every page but the atlas: the 3D objects in a soft gel, with a wake that follows the pointer

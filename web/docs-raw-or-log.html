@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw or log · Docs · VivOME</title>
+    <meta name="description" content="How VivOME tells whether an uploaded protein table holds raw values or log values: how it works, every step we took and what each one found, and the words it uses, in plain language.">
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="workflow.html">Workflow</a>
+                <a href="manuscript.html">Manuscript</a>
+                <a href="motion.html">Motion</a>
+                <a href="docs.html" aria-current="true">Docs</a>
+            </nav>
+            <button type="button" class="motion-toggle" aria-pressed="false">Pause motion</button>
+        </div>
+    </header>
+
+    <main id="main" class="page docs-page">
+        <nav class="docs-crumb" aria-label="Breadcrumb"><a href="docs.html">Docs</a></nav>
+        <h1 class="page-title">Raw or log</h1>
+        <p class="lede">A protein table can hold its values raw or as logs, and the service has to
+            know which before it reads a single cell. This topic tells how VivOME finds out, what we
+            did to build and test that, and what we found.</p>
+        <div id="docs-error" role="alert"></div>
+
+        <div class="tabs" role="tablist" aria-label="Raw or log" hidden>
+            <button type="button" role="tab" id="tab-how" aria-controls="how" aria-selected="true">How it works</button>
+            <button type="button" role="tab" id="tab-did" aria-controls="did" aria-selected="false" tabindex="-1">What we did</button>
+            <button type="button" role="tab" id="tab-words" aria-controls="words" aria-selected="false" tabindex="-1">Words</button>
+        </div>
+
+        <section id="how" role="tabpanel" aria-labelledby="tab-how" class="docs-panel">
+            <h2 class="docs-panel-title">How it works</h2>
+        </section>
+
+        <section id="did" role="tabpanel" aria-labelledby="tab-did" class="docs-panel">
+            <h2 class="docs-panel-title">What we did</h2>
+        </section>
+
+        <section id="words" role="tabpanel" aria-labelledby="tab-words" class="docs-panel">
+            <h2 class="docs-panel-title">Words</h2>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="manuscript.html">Manuscript</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module" src="js/biofield.js"></script>
+</body>
+</html>

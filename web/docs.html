@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs · VivOME</title>
+    <meta name="description" content="Everything we did on VivOME, and how it works, in plain words: one topic at a time, each with how it works, a dated record of what we did and found, and the words it uses.">
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header glass">
+        <div class="site-header-inner">
+            <a class="wordmark" href="index.html" aria-label="VivOME home">Viv<span class="cut">OME</span></a>
+            <nav class="site-nav" aria-label="Main">
+                <a href="atlas.html">Atlas</a>
+                <a href="workflow.html">Workflow</a>
+                <a href="manuscript.html">Manuscript</a>
+                <a href="motion.html">Motion</a>
+                <a href="docs.html" aria-current="page">Docs</a>
+            </nav>
+            <button type="button" class="motion-toggle" aria-pressed="false">Pause motion</button>
+        </div>
+    </header>
+
+    <main id="main" class="page docs-page">
+        <h1 class="page-title">Everything we did, and how it works</h1>
+        <p class="lede">The record of this project in plain words: what each part does, every step
+            we took to build and test it, what each step found, and the decisions made along the
+            way.</p>
+        <div id="docs-error" role="alert"></div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <span class="wordmark">Viv<span class="cut">OME</span></span>
+            <span>A versioned atlas of RNA and protein in single cells.</span>
+            <nav aria-label="Footer">
+                <a href="manuscript.html">Manuscript</a>
+            </nav>
+            <span>&copy; 2026 VivOME</span>
+        </div>
+    </footer>
+
+    <script type="module" src="js/background.js"></script>
+    <script type="module" src="js/biofield.js"></script>
+</body>
+</html>

@@ -394,7 +394,8 @@
         white-space: nowrap;
     }
     .site-nav a:hover { background: var(--accent-tint); color: var(--ink); }
-    .site-nav a[aria-current="page"] {
+    /* "page" on the page itself; "true" on a page inside a section (a Docs topic marks Docs). */
+    .site-nav a[aria-current] {
         color: var(--ink);
         background: var(--well);
         box-shadow: inset 1px 1px 3px rgba(var(--shade), 0.14);
@@ -472,6 +473,48 @@
         .sheet { padding: 20px 18px; }
         .lede { font-size: 16px; }
     }
+
+    /* ---- reading parts the Docs section uses, for any page (docs/web/design.md) ---- */
+
+    /* Tabs: a pressed-in row of buttons; the chosen one is a raised paper chip.
+       A page sends its tab list hidden and its script shows it once the tabs
+       work, so without JavaScript every panel simply shows in order. */
+    .tabs {
+        display: inline-grid;
+        grid-auto-flow: column;
+        gap: 4px;
+        padding: 4px;
+        margin-bottom: 24px;
+        background: var(--well);
+        box-shadow: inset 2px 2px 5px rgba(var(--shade), 0.13), inset -1px -1px 0 rgba(255, 255, 255, 0.9);
+        border-radius: var(--r-well);
+    }
+    .tabs[hidden] { display: none; }
+    .tabs [role="tab"] {
+        font: inherit;
+        font-size: 14.5px;
+        font-weight: 500;
+        padding: 8px 18px;
+        border: 0;
+        border-radius: 8px;
+        background: none;
+        color: var(--ink-soft);
+        cursor: pointer;
+    }
+    .tabs [role="tab"]:hover { color: var(--ink); }
+    .tabs [role="tab"][aria-selected="true"] { background: var(--paper); color: var(--ink); box-shadow: 1px 2px 5px rgba(var(--shade), 0.16); }
+
+    /* For the curious: a fold for the technical detail under a plain account. */
+    .curious { margin: 12px 0 18px; padding-left: 14px; border-left: 3px solid var(--line); }
+    .curious > summary { cursor: pointer; font-weight: 500; font-size: 14.5px; color: var(--accent); }
+    .curious[open] > summary { margin-bottom: 10px; }
+    .curious > :not(summary) { font-size: 14.5px; }
+
+    /* A glossary: each term, then what it means in plain words, in one column. */
+    .glossary dl { max-width: 72ch; }
+    .glossary dt { margin-top: 18px; font-weight: 600; font-size: 15.5px; scroll-margin-top: 96px; }
+    .glossary dt:first-child { margin-top: 0; }
+    .glossary dd { margin: 3px 0 0; font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
 
     /* ---- styling contract for web/js/panels.js output ---- */
 

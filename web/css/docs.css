@@ -1,0 +1,29 @@
+/* The Docs section (web/docs.html, the home, and one web/docs-<topic>.html per
+   topic): the way back to the home, the panels behind a topic page's tabs,
+   and the figures. The tabs, the "For the curious" folds and the glossary
+   are shared components in page.css. The section's rules are in
+   docs/web/docs.md. */
+
+.docs-page { max-width: 1060px; }
+
+.docs-crumb { font-size: 14px; margin-bottom: 6px; }
+.docs-crumb a { color: var(--accent); text-decoration: none; }
+.docs-crumb a:hover { text-decoration: underline; }
+
+/* A topic page's panels. Without JavaScript all three show in order, each
+   under its own heading; once the tabs work, the tab names the panel and its
+   heading is kept for screen readers only. */
+.docs-panel { scroll-margin-top: 96px; }
+.docs-tabbed .docs-panel-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* A data figure (web/js/docs-svg.js), mounted into an empty slot. */
+.docs-figure { margin: 18px 0 6px; }
+.docs-svg { display: block; width: 100%; height: auto; max-width: 720px; }
+.docs-svg text { font-family: var(--font); }

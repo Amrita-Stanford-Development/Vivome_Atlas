@@ -4,7 +4,7 @@
 import { readdirSync } from 'node:fs';
 
 // The Docs section: its home, then one page per topic.
-export const DOCS_PAGES = [];
+export const DOCS_PAGES = ['docs.html', 'docs-raw-or-log.html'];
 
 export const PAGES = ['index.html', 'atlas.html', 'manuscript.html', 'workflow.html', 'motion.html', ...DOCS_PAGES];
 
