@@ -137,10 +137,14 @@ answers), so the service's check reads it.
   Send; nothing is sent until Send.
 - **After Send**, the receipt and About this answer say how the values
   were read and who decided: the visitor, or the service's check, with what
-  the check found (its verdict, what a 0 was read as, three of its reasons
-  in plain words, and its warning that the table is unlike the tables it was
-  built on) (`valueScaleText` in `web/js/panels.js`). A reply without the
-  check's verdict (RNA, or a service older than the check) reads as before.
+  the check found (its verdict, three of its reasons in plain words, and its
+  warning that the table is unlike the tables it was built on)
+  (`valueScaleText` in `web/js/panels.js`). Under a log reading they also
+  say what a 0 was read as, but only when the file holds a 0. With no 0 in
+  the file they say nothing of 0s, even when the visitor answered what a 0
+  means (the owner, 2026-11-09; the reply's `zeros_read` comes only then).
+  A reply without the check's verdict (RNA, or a service older than the
+  check) reads as before.
   When the service read the values on its own and its check could not
   decide, or gave the warning, a note on the file's card says so, under its
   first line and outside the folding receipt (`scaleNote` in

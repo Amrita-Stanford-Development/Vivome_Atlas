@@ -64,9 +64,15 @@ gives a preview address. The first sign-in is `npx wrangler@4 login`.
 service's check found (B5, `research/value-scale-b5-design.md`). The live
 service (Cloud Run revision `vivome-atlas-00009-hcz`) still reads with the
 median rule, so publishing the site alone would show words the service
-does not match. B7's sealed test contradicted the detector's guarantee for
-one class, so neither goes live until the owner decides
-(`research/notebook-outputs/value_scale_b7/notes.md`).
+does not match.
+
+B7's sealed test contradicted the detector's guarantee for log tables of 20
+to 49 cells (`research/notebook-outputs/value_scale_b7/notes.md`). The
+owner chose a second round, protein v2 (`research/value-scale-v2-plan.md`).
+So:
+- the site and the service on `integration/v4` go live together, after
+  protein v2's sealed test (its R7), and only with the owner's OK;
+- until then, a site fix that cannot wait goes on a branch without B5.
 
 ## The beta sign-in
 

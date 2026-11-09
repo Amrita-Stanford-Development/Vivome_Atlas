@@ -17,8 +17,11 @@ page shows, so `web/` keeps no build step.
 
 The raw-or-log package (`valuescale/`) decides whether an uploaded table
 still needs a log; the service's Stage 0 reads protein tables with it. It
-imports nothing from `service/`, so it can become its own package later;
-its plan is `research/value-scale-plan.md`.
+imports nothing from `service/`, so it can become its own package later.
+Its plan is `research/value-scale-plan.md`, and its second round, protein
+v2, is `research/value-scale-v2-plan.md`. The live service reads with the
+median rule until protein v2's sealed test is scored and the owner
+releases it (`docs/web/hosting.md`).
 
 `docs/` explains how the products work. `scripts/` builds and checks the
 repository. For a one-line description of every file, see

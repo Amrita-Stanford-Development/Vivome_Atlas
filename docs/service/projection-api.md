@@ -324,6 +324,12 @@ before anything else touched them, and whether they were log2-transformed:
   `probabilities`, `thresholds`, `typicality`, `statistics`,
   `calibration`, `guarantee` and `notes`. A number that is not finite is
   `null`, so the reply stays strict JSON.
+  - `guarantee` is the sentence protein-v1's calibration gives for the
+    table's stratum: the right reading is missing at most 5% of the time.
+  - B7's sealed test contradicted it for constructed log tables of 20 to
+    49 cells (`research/benchmark/results.md`).
+  - Protein v2 rewrites it before this reply goes live
+    (`research/value-scale-v2-plan.md`, R6).
 
 The service's own raw reading of a protein table with negative values is
 answered 400:

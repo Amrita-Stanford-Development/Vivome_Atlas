@@ -74,6 +74,13 @@ the work is done; `scripts/test_build_manuscript.py` pins that set.
 data, then the manuscript data, so all three are built for one release
 (`built_for`). The page refuses to mix files from different releases.
 
+The workflow and manuscript data record each source file's sha256 as the
+file is on disk. The repository stores text with LF
+(`docs/setup-windows.md`), and a fresh checkout gets LF. So before a
+rebuild on Windows, a source that a script rewrote with CRLF is made LF
+again. Otherwise its hash differs from a fresh checkout's, and
+`scripts/test_build_manuscript.py` fails there.
+
 The builder refuses to run if the manifest's model is not v4.1: when the
 served model changes, the page's wording changes with it, and the builder
 is updated in the same commit.
