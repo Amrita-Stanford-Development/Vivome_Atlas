@@ -150,7 +150,8 @@ or the table is centred (at least `valuescale.gates.NEGATIVE_SHARE` of its
 observed values negative), where it is a value. The service's own raw
 reading of a table with negative values is refused, with a reason for the
 reply. The reply's `value_scale` names the check's `verdict`, what a 0 was
-read as (`zeros_read`) and the check's report (`evidence`). RNA keeps the
+read as (`zeros_read`, when the table holds a 0) and the check's report
+(`evidence`). RNA keeps the
 median rule (`alignment.median_rule`). `config.VALUE_SCALE_METHOD`
 ("calibrated", or "median" for the rule before B5, exactly as it was) is
 read at call time; `alignment.scale_method` sets it for a block, and the

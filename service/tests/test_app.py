@@ -432,7 +432,8 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         url = f"{self.base_url}/api/project"
         status, prot = _post_multipart(url, b"prot", matrix)
         self.assertEqual(status, 200)
-        self.assertEqual((prot["value_scale"]["verdict"], prot["value_scale"]["zeros_read"]), ("linear", "missing"))
+        self.assertEqual(prot["value_scale"]["verdict"], "linear")
+        self.assertNotIn("zeros_read", prot["value_scale"], "the table holds no 0")
         self.assertEqual(prot["value_scale"]["evidence"]["verdict"], "linear")
         status, rna = _post_multipart(url, b"rna", matrix)
         self.assertEqual(status, 200)

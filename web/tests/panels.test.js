@@ -367,6 +367,23 @@ test('valueScaleText says what the check found', () => {
   assert.equal(valueScaleText({ detected: 'unknown', transformed: false, verdict: 'unknown', evidence: null }), 'No values to read');
 });
 
+test('valueScaleText names what a 0 was read as only when the table holds a 0', () => {
+  // The owner, 2026-11-09 (research/notebook-outputs/value_scale_b5/notes.md): a reply with the
+  // check's verdict carries zeros_read only when the table holds a 0.
+  const evidence = (verdict) => ({ verdict, warning: null, reason: null });
+  const noZero = { detected: 'log', transformed: false, verdict: 'log', evidence: evidence('log') };
+  assert.equal(valueScaleText(noZero), "Already on a log scale, as the service's check read them.");
+  assert.equal(valueScaleText({ ...noZero, stated: 'log', zeros: 'missing' }),
+    'Already on a log scale. You chose this; the service reads them so too.', 'what the visitor said a 0 means is not repeated');
+  assert.equal(valueScaleText({ ...noZero, stated: 'log', zeros: 'measured', verdict: 'cant_tell', evidence: evidence('cant_tell') }),
+    'Already on a log scale. You chose this; on its own the service could not tell.');
+  assert.equal(valueScaleText({ ...noZero, stated: 'log', zeros: 'missing', zeros_read: 'missing' }),
+    'Already on a log scale, each 0 read as not measured. You chose this; the service reads them so too.', 'a table with a 0');
+  // A reply without a verdict (RNA, or a service before B5) says what the visitor said, as before.
+  assert.equal(valueScaleText({ detected: 'log', transformed: false, stated: 'log', zeros: 'missing' }),
+    'Already on a log scale, each 0 read as not measured. You chose this; the service reads them so too.');
+});
+
 test('the projection summary escapes how the values were read', () => {
   const p = projection();
   p.value_scale = { detected: 'linear', transformed: true, verdict: 'cant_tell', zeros_read: 'missing',

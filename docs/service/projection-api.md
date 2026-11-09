@@ -215,7 +215,7 @@ read as missing.
                             "stated": "linear" | "log" (only when the request stated one),
                             "zeros": "missing" | "measured" (only when the request said it),
                             "verdict": "linear" | "log" | "cant_tell" | "unlike_either" | "unknown" (protein),
-                            "zeros_read": "missing" | "measured" (protein, when a value was observed),
+                            "zeros_read": "missing" | "measured" (protein, when the table holds a 0),
                             "evidence": {"<the check's report>"} (protein, when a value was observed)},
   "label_space"          : {"restricted_to_supported_classes": "<bool>", "candidate_classes": ["<string>", "..."]},
   "gene_id_resolution"   : {"matched": "<int>", "unmapped": "<int>", "ambiguous": "<int>",
@@ -317,6 +317,7 @@ before anything else touched them, and whether they were log2-transformed:
   "unknown" with no observed value.
 - **`zeros_read`** (protein): what a 0 was read as under the applied
   reading, "missing" or "measured" (always "missing" under a raw reading).
+  Only when the table holds a 0: with none there is nothing to read.
 - **`evidence`** (protein): the check's report, `valuescale.ScaleReport`
   as JSON (`valuescale/report.py`): `verdict`, `reading`, `set`,
   `stratum`, `columns`, `rows`, `gate`, `reason`, `warning`,

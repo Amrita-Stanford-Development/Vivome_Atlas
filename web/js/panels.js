@@ -244,9 +244,9 @@ const share = (count, total) => (total > 0 ? `${((count / total) * 100).toFixed(
 // reading it applied, what a 0 was read as, and who decided. When the
 // visitor chose the reading (stated), whether the service on its own reads
 // them the same way. A protein reply since B5 also carries the check's
-// verdict, what a 0 was read as (zeros_read) and its evidence
-// (research/value-scale-b5-design.md, "After Send"); a reply without a
-// verdict (RNA, or an older service) reads as before. null for a
+// verdict, what a 0 was read as (zeros_read, when the table holds a 0) and
+// its evidence (research/value-scale-b5-design.md, "After Send"); a reply
+// without a verdict (RNA, or an older service) reads as before. null for a
 // value_scale this page does not know.
 const SCALE_READ = { linear: 'Linear intensities, log2-transformed', log: 'Already on a log scale' };
 const SCALE_ALONE = { linear: 'linear intensities', log: 'already on a log scale' };
@@ -275,10 +275,12 @@ export function valueScaleText(scale) {
   if (!Object.hasOwn(SCALE_ALONE, scale.detected ?? '')) return null;
   const verdict = Object.hasOwn(CHECK_FOUND, scale.verdict ?? '') ? scale.verdict : null;
   const stated = Object.hasOwn(SCALE_ALONE, scale.stated ?? '') ? scale.stated : null;
-  // What a 0 was read as: what the visitor said, else what the service read under a log reading.
-  const zerosSaid = Object.hasOwn(ZEROS_READ, scale.zeros ?? '') ? scale.zeros : null;
-  const zerosRead = verdict && !scale.transformed && Object.hasOwn(ZEROS_READ, scale.zeros_read ?? '') ? scale.zeros_read : null;
-  const zeros = zerosSaid ?? zerosRead;
+  // What a 0 was read as: what the visitor said, else what the service read under a log reading. A reply
+  // with the check's verdict carries zeros_read only when the table holds a 0, and says nothing of a 0
+  // otherwise (the owner, 2026-11-09).
+  const zerosRead = verdict && Object.hasOwn(ZEROS_READ, scale.zeros_read ?? '') ? scale.zeros_read : null;
+  const zerosSaid = Object.hasOwn(ZEROS_READ, scale.zeros ?? '') && (!verdict || zerosRead) ? scale.zeros : null;
+  const zeros = zerosSaid ?? (scale.transformed ? null : zerosRead);
   const read = SCALE_READ[scale.transformed ? 'linear' : 'log'] + (zeros ? ZEROS_READ[zeros] : '');
   if (!verdict) {
     if (!stated) return read;

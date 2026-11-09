@@ -803,9 +803,11 @@ class CalibratedValueScaleTests(unittest.TestCase):
     calibrated check (valuescale.detect); research/value-scale-b5-design.md."""
 
     def test_a_linear_table_is_read_by_the_check(self):
-        out, scale = alignment.detect_and_transform_value_scale(_linear_table())
+        table = _with_zeros(_linear_table(), 0.02)  # some software writes "not measured" as 0
+        out, scale = alignment.detect_and_transform_value_scale(table)
         self.assertEqual((scale.verdict, scale.detected, scale.transformed), ("linear", "linear", True))
         self.assertEqual(scale.zeros_read, "missing")
+        self.assertTrue(np.isnan(out[table == 0]).all())
         self.assertEqual(scale.evidence["verdict"], "linear")
         reply = scale.response()
         for key in ("verdict", "zeros_read", "evidence"):
@@ -823,6 +825,31 @@ class CalibratedValueScaleTests(unittest.TestCase):
         out, scale = alignment.detect_and_transform_value_scale(table, stated="log", zeros="measured")
         self.assertTrue((out[zero] == 0).all())
         self.assertEqual(scale.zeros_read, "measured")
+
+    def test_a_table_with_no_0_is_not_told_what_a_0_was_read_as(self):
+        """The owner, 2026-11-09 (B5's notes): the reply names what a 0 was
+        read as only when the table holds a 0; the rest of the reading is
+        unchanged."""
+        centred = _centred_table()
+        centred[centred == 0] = 0.001  # a column's median is one of its values
+        tables = {"linear": _linear_table(), "log": np.log2(_linear_table()), "centred": centred}
+        for name, table in tables.items():
+            self.assertFalse((table[~np.isnan(table)] == 0).any(), name)
+            for kw in ({}, {"stated": "log", "zeros": "missing"}, {"stated": "log", "zeros": "measured"}):
+                with self.subTest(table=name, **kw):
+                    out, scale = alignment.detect_and_transform_value_scale(table, **kw)
+                    self.assertIsNone(scale.zeros_read)
+                    reply = scale.response()
+                    self.assertNotIn("zeros_read", reply)
+                    self.assertIn("verdict", reply)
+                    self.assertEqual(reply.get("zeros"), kw.get("zeros"), "the request's own words are kept")
+                    if scale.reading == "log":
+                        np.testing.assert_array_equal(out, table)
+        one = np.log2(_linear_table())
+        one[0, 0] = 0.0
+        out, scale = alignment.detect_and_transform_value_scale(one)
+        self.assertEqual(scale.zeros_read, "missing", "one 0 is enough")
+        self.assertTrue(np.isnan(out[0, 0]))
 
     def test_a_centred_log_tables_zeros_are_measured(self):
         table = _with_zeros(_centred_table(), 0.005)

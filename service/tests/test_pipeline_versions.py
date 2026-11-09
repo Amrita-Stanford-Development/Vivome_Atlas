@@ -495,6 +495,35 @@ class StatedValueScaleTests(unittest.TestCase):
                 self.assertEqual(measured, other, "under a log reading a 0 already counts as measured")
                 self.assertEqual(reply(stated_scale="log", stated_zeros="missing")["value_scale"]["zeros"], "missing")
 
+    def test_every_version_applies_and_reports_the_calibrated_stated_reading(self):
+        """B5's calibrated check under each version (B5's final review; the
+        owner, 2026-11-09): stating the check's own reading adds only
+        `stated`; stating the other reading applies it, while the verdict and
+        the report stay the check's own."""
+        raw = _load_pbmc240_50()  # raw DIA-NN intensities with no 0: the check reads linear
+        self.assertEqual(config.VALUE_SCALE_METHOD, "calibrated")
+        coordinates = lambda r: [c["coordinates"] for c in r["cells"]]  # noqa: E731
+        for version in ("v3", "v3.1", "v4.1", "v4.2"):
+            with self.subTest(version=version):
+                bundle = pipeline.load_bundle(version)
+                reply = lambda **kw: json.loads(json.dumps(pipeline.run_projection(bundle, raw, **kw)))  # noqa: E731
+                auto = reply()
+                scale = auto["value_scale"]
+                self.assertEqual((scale["detected"], scale["transformed"], scale["verdict"]), ("linear", True, "linear"))
+                self.assertNotIn("zeros_read", scale, "the table holds no 0")
+                same = reply(stated_scale="linear")
+                self.assertEqual(same["value_scale"].pop("stated"), "linear")
+                self.assertEqual(same, auto)
+                other = reply(stated_scale="log")
+                self.assertEqual({k: other["value_scale"][k] for k in ("detected", "transformed", "stated", "verdict")},
+                                 {"detected": "linear", "transformed": False, "stated": "log", "verdict": "linear"})
+                self.assertEqual(other["value_scale"]["evidence"], scale["evidence"], "the check's report is its own")
+                self.assertNotEqual(coordinates(other), coordinates(auto))
+                for zeros in ("missing", "measured"):
+                    said = reply(stated_scale="log", stated_zeros=zeros)
+                    self.assertEqual(said["value_scale"].pop("zeros"), zeros)
+                    self.assertEqual(said, other, "with no 0 in the table, what a 0 means changes nothing")
+
     def test_an_rna_upload_s_scale_is_never_stated(self):
         raw = _load_pbmc240_50()
         bundle = pipeline.load_bundle("v4.1")

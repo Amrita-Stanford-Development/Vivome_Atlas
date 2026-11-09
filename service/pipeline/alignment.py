@@ -531,9 +531,10 @@ class ValueScale:
     zeros: str | None = None  # what the request said a 0 means (ZEROS), with a stated log reading
     # The calibrated method's (B5): the check's verdict ("linear", "log",
     # "cant_tell", "unlike_either", or "unknown" with no observed value), what
-    # a 0 was read as under the applied reading ("missing" or "measured"), and
-    # the check's report (valuescale.ScaleReport.to_json()). None under the
-    # median method, so its reply is unchanged.
+    # a 0 was read as under the applied reading ("missing" or "measured"; None
+    # when the table holds no 0, the owner, 2026-11-09), and the check's
+    # report (valuescale.ScaleReport.to_json()). None under the median method,
+    # so its reply is unchanged.
     verdict: str | None = None
     zeros_read: str | None = None
     evidence: dict | None = None
@@ -658,6 +659,8 @@ def _calibrated_reading(values: np.ndarray, stated: str | None, zeros: str | Non
         centred = negative / observed.size >= valuescale.gates.NEGATIVE_SHARE
         zeros_read = "measured" if centred else "missing"
     out = apply_reading(values, reading, zeros_read if reading == "log" else None)
+    if not (observed == 0).any():
+        zeros_read = None  # no 0 to read: the reply does not name what a 0 was read as (the owner, 2026-11-09)
     return out, ValueScale(detected=detected, transformed=reading == "linear", stated=stated, zeros=zeros,
                            verdict=verdict, zeros_read=zeros_read, evidence=report.to_json())
 

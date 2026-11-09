@@ -68,5 +68,52 @@ class BuildSpaceFilesTests(unittest.TestCase):
         self.assertIn("COPY --chown=user valuescale ./valuescale", dockerfile)
 
 
+def _build_space():
+    spec = importlib.util.spec_from_file_location("build_space", REPO / "deploy" / "huggingface" / "build_space.py")
+    build_space = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(build_space)
+    return build_space
+
+
+class BuildSpaceChecksTests(unittest.TestCase):
+    """B6 (research/value-scale-plan.md): the manifest's record of uncommitted
+    changes covers valuescale/, and the staged packages import on their own."""
+
+    def test_the_uncommitted_changes_check_covers_the_raw_or_log_package(self):
+        from unittest import mock
+        build_space = _build_space()
+        with mock.patch.object(build_space, "git", return_value="") as git:
+            self.assertFalse(build_space.uncommitted_changes())
+        args = git.call_args.args
+        self.assertEqual(args[:3], ("status", "--porcelain", "--"))
+        self.assertEqual(set(args[3:]), {"service", "valuescale", "deploy"})
+        with mock.patch.object(build_space, "git", return_value=" M valuescale/method.py"):
+            self.assertTrue(build_space.uncommitted_changes())
+
+    def _staged(self, tmp, leave_out=()):
+        import shutil
+        build_space = _build_space()
+        for source in build_space.package_files():
+            rel = source.relative_to(REPO).as_posix()
+            if rel not in leave_out:
+                (Path(tmp) / rel).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, Path(tmp) / rel)
+        return build_space
+
+    def test_the_import_check_passes_on_the_staged_packages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            build_space = self._staged(tmp)
+            build_space.import_check(Path(tmp))
+
+    def test_the_import_check_stops_on_a_piece_left_out(self):
+        for left_out, named in (("valuescale/method.py", "'method'"),
+                                ("valuescale/calibration/protein-v1.json", "protein-v1")):
+            with self.subTest(left_out=left_out), tempfile.TemporaryDirectory() as tmp:
+                build_space = self._staged(tmp, leave_out=(left_out,))
+                with self.assertRaises(SystemExit) as caught:
+                    build_space.import_check(Path(tmp))
+                self.assertIn(named, str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

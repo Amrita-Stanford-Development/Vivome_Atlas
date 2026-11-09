@@ -13,7 +13,10 @@ or bank), the Dockerfile, the Space card (space_card.md, as README.md), requirem
 pinned to this interpreter's versions (torch as its CPU build), and a
 .gitattributes that puts every file over 10 MB in Git LFS.
 space_manifest.json lists every file with its size and sha256, the commit it
-was built from, and whether service/ or deploy/ had uncommitted changes.
+was built from, and whether service/, valuescale/ or deploy/ had uncommitted
+changes. Last, a fresh interpreter imports every staged module of the two
+packages from the staged folder alone and loads the calibration (B6): a
+piece left out stops the build.
 
 A previous build is replaced, except a .git folder (a clone of the Space).
 
@@ -40,6 +43,25 @@ EXAMPLE = REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv"
 LFS_BYTES = 10 * 1024 * 1024  # Hugging Face refuses plain git files over 10 MB
 PINNED = ("numpy", "pandas", "scipy", "scikit-learn", "POT", "faiss-cpu")
 TORCH_INDEX = "https://download.pytorch.org/whl/cpu"
+SOURCES = ("service", "valuescale", "deploy")  # what the staged Space is built from
+# Run with -I in a fresh interpreter: the staged folder is the only place the
+# two packages can come from, and every module of theirs must load.
+IMPORT_CHECK = """\
+import importlib, pathlib, sys
+space = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(space))
+names = sorted({".".join(p.relative_to(space).with_suffix("").parts).removesuffix(".__init__")
+                for package in ("service", "valuescale") for p in (space / package).rglob("*.py")})
+for name in names:
+    importlib.import_module(name)
+from valuescale import calibrated
+calibrated.load()
+outside = sorted(n for n, m in sys.modules.items() if n.split(".")[0] in ("service", "valuescale")
+                 and getattr(m, "__file__", None) and not pathlib.Path(m.__file__).resolve().is_relative_to(space))
+if outside:
+    raise SystemExit("imported from outside the staged Space: " + ", ".join(outside))
+print(len(names))
+"""
 
 
 def dockerfile_setting(name: str) -> str:
@@ -106,6 +128,23 @@ def git(*args: str) -> str:
     return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True, check=True).stdout.strip()
 
 
+def uncommitted_changes() -> bool:
+    """Whether service/, valuescale/ or deploy/ holds a change not committed."""
+    return bool(git("status", "--porcelain", "--", *SOURCES))
+
+
+def import_check(space: Path) -> int:
+    """Every staged module of service/ and valuescale/ imported from `space`
+    alone, and the shipped calibration loaded, in a fresh interpreter (-I);
+    the number of modules. A module or file left out stops the build."""
+    result = subprocess.run([sys.executable, "-I", "-c", IMPORT_CHECK, str(space)], cwd=space,
+                            capture_output=True, text=True)
+    if result.returncode:
+        last = (result.stderr.strip().splitlines() or ["no message"])[-1]
+        raise SystemExit(f"the staged Space does not import on its own: {last}")
+    return int(result.stdout.split()[-1])
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -148,12 +187,14 @@ def main(argv: "list[str] | None" = None) -> None:
     manifest = {
         "pipeline_version": version, "model_version": model_version, "atlas_version": config.ATLAS_VERSION,
         "commit": git("rev-parse", "HEAD"),
-        "uncommitted_changes": bool(git("status", "--porcelain", "--", "service", "deploy")),
+        "uncommitted_changes": uncommitted_changes(),
         "files": {p.relative_to(OUT).as_posix(): {"bytes": p.stat().st_size, "sha256": sha256(p)} for p in files},
     }
     write(OUT / "space_manifest.json", json.dumps(manifest, indent=2) + "\n")
+    modules = import_check(OUT)
     model_bytes = sum(p.stat().st_size for p in data)
-    print(f"{version}: {len(data)} model files ({model_bytes / 2**20:.0f} MB), {len(package_files())} Python files, "
+    print(f"{version}: {len(data)} model files ({model_bytes / 2**20:.0f} MB), {len(package_files())} Python files "
+          f"({modules} modules import from the staged folder alone), "
           f"{len(large)} in Git LFS; total {sum(p.stat().st_size for p in files) / 2**20:.0f} MB in "
           f"{OUT.relative_to(REPO).as_posix()}/")
 
