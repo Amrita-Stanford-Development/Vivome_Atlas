@@ -105,6 +105,15 @@ class BuildSpaceChecksTests(unittest.TestCase):
             build_space = self._staged(tmp)
             build_space.import_check(Path(tmp))
 
+    def test_the_import_check_leaves_the_staged_folder_as_its_manifest_lists_it(self):
+        """No bytecode: the check runs after space_manifest.json is written,
+        and the image is built from the folder (PYTHONDONTWRITEBYTECODE)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            build_space = self._staged(tmp)
+            before = sorted(p.relative_to(tmp).as_posix() for p in Path(tmp).rglob("*"))
+            build_space.import_check(Path(tmp))
+            self.assertEqual(sorted(p.relative_to(tmp).as_posix() for p in Path(tmp).rglob("*")), before)
+
     def test_the_import_check_stops_on_a_piece_left_out(self):
         for left_out, named in (("valuescale/method.py", "'method'"),
                                 ("valuescale/calibration/protein-v1.json", "protein-v1")):

@@ -44,7 +44,7 @@ LFS_BYTES = 10 * 1024 * 1024  # Hugging Face refuses plain git files over 10 MB
 PINNED = ("numpy", "pandas", "scipy", "scikit-learn", "POT", "faiss-cpu")
 TORCH_INDEX = "https://download.pytorch.org/whl/cpu"
 SOURCES = ("service", "valuescale", "deploy")  # what the staged Space is built from
-# Run with -I in a fresh interpreter: the staged folder is the only place the
+# Run with -I -B in a fresh interpreter: the staged folder is the only place the
 # two packages can come from, and every module of theirs must load.
 IMPORT_CHECK = """\
 import importlib, pathlib, sys
@@ -135,9 +135,10 @@ def uncommitted_changes() -> bool:
 
 def import_check(space: Path) -> int:
     """Every staged module of service/ and valuescale/ imported from `space`
-    alone, and the shipped calibration loaded, in a fresh interpreter (-I);
-    the number of modules. A module or file left out stops the build."""
-    result = subprocess.run([sys.executable, "-I", "-c", IMPORT_CHECK, str(space)], cwd=space,
+    alone, and the shipped calibration loaded, in a fresh interpreter (-I),
+    writing no bytecode (-B: the folder stays as space_manifest.json lists
+    it); the number of modules. A module or file left out stops the build."""
+    result = subprocess.run([sys.executable, "-I", "-B", "-c", IMPORT_CHECK, str(space)], cwd=space,
                             capture_output=True, text=True)
     if result.returncode:
         last = (result.stderr.strip().splitlines() or ["no message"])[-1]
