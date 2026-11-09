@@ -9,7 +9,7 @@ Phase B, as of 2026-11-07:
 - **B3, the corpus:** run (`5c9e521`), with its failed row accepted by the owner on 2026-11-06 (`research/notebook-outputs/value_scale_b3/notes.md`).
 - **Before B4** (owner, 2026-11-06): the faults in our own code that B3's walk met (lone-CR line endings, MaxQuant tables without "Gene names", Spectronaut pivots without PG.Genes, macOS companion files, Windows-1252 reports). They are fixed in `76d490a`. The third visit's expectations (`3963fcd`) and its 103 records (`05f544d`) are committed. A code review's fixes came before the visit ran: the refusal of peptide-level Spectronaut pivots is dropped, as the parser read them before, and the MaxQuant test is narrowed so a plain matrix reads as before (protocol amendment 3; `b3_revisit2.json`, `changed_before_the_run`). The selection is unchanged. The visit ran on 2026-11-06: 49 tables added, 48 kept after their audit, and every expectation met but one, the MaxQuant count (43 kept against at least 44: six small tables). Seven more faults in our own code were found after it (B3 notes, "Found after the third visit"). The owner accepted the miss and chose (2026-11-07) to fix the seven, refuse decimal commas in clear words and match MaxQuant's quantity columns in any case, then visit the records these touch a fourth time. Those fixes are in `8016025` with the fourth visit's expectations (`b3_revisit3.json`, protocol amendment 4). The fixes in `76d490a`, `3b4f162` and `8016025` were deployed on 2026-11-07 with the owner's OK, from `decb812`: the service (Cloud Run revision `vivome-atlas-00009-hcz`), then the site. The selection is 15 records (`42a8b96`). The visit ran on 2026-11-07: 6 tables added, all 6 kept after their audit, and every expectation met.
 - **B4, the calibration:** run on 2026-11-07 (`27b43dd`, then the run). The score became the probability alone before any calibration score (protocol amendment 5, `36ec352`). The design part's no-gaps row failed in one place; the owner accepted it and chose to fix a fault of ours it showed first (`research/notebook-outputs/value_scale_b4/notes.md`). Every other row passes. `valuescale/calibration/protein-v1.json` holds the thresholds.
-- **B5, the service and the site:** designed with the owner (2026-11-08): `research/value-scale-b5-design.md`; the build plan is `research/value-scale-b5-plan.md`. Built and run on the bank on 2026-11-08 (`research/notebook-outputs/value_scale_b5/notes.md`). Nine of ten rows pass; B5_verdicts failed on the typicality warning alone (the prediction took B4's left-out warning for the shipped detector's), for the owner. Not deployed: the site and the service go live together after B7.
+- **B5, the service and the site:** designed with the owner (2026-11-08): `research/value-scale-b5-design.md`; the build plan is `research/value-scale-b5-plan.md`. Built and run on the bank on 2026-11-08 (`research/notebook-outputs/value_scale_b5/notes.md`). Nine of ten rows pass; B5_verdicts failed on the typicality warning alone (the prediction took B4's left-out warning for the shipped detector's); the owner accepted it (2026-11-09). Not deployed: the site and the service go live together after B7.
 - **B6 and B7:** not started.
 
 Where a step was built differently from its text below, an "As built" note under the step says so. The binding rules are the protocol and its amendments. Each step's run is in `research/notebook-run-history.md` (entries 69 to 79).
@@ -329,7 +329,7 @@ The design agreed with the owner, the pop-up included, is `research/value-scale-
   - the 9 predicted change: 7 readings (6 tables now read as their label says, the imputed log table read linear on "can't tell") and 2 changes of what a 0 means (both read log, as labelled, before and after);
   - RNA is byte-identical;
   - detection takes 0.54 s at most.
-- **The failed row.** B5_verdicts failed on the typicality warning alone. Every verdict is B4's, but the warning B4 gave pxd043355_pd with its deposit left out does not fire with the shipped model, which was fitted with it.
+- **The failed row.** B5_verdicts failed on the typicality warning alone. Every verdict is B4's, but the warning B4 gave pxd043355_pd with its deposit left out does not fire with the shipped model, which was fitted with it. The owner accepted it (2026-11-09).
 
 ### B6. Deploy assembly
 
@@ -340,6 +340,9 @@ The design agreed with the owner, the pop-up included, is `research/value-scale-
 - `deploy/huggingface/Dockerfile` gains `COPY --chown=user valuescale ./valuescale`.
 - A test in `scripts/` covers both.
 - **Diagnostics B6:** the assembled Space, run in a subprocess, gives replies identical to the repo's service on every bank table.
+- **Added by the owner's decisions on B5 (2026-11-09):**
+  - the receipt names what a 0 was read as only when the table holds a 0;
+  - a test of the calibrated method with a stated reading, across the model versions (the B5 final review's suggestion).
 - **Done early, in B5** (the Space would not run without it): `package_files()` stages `valuescale/*.py` and the shipped calibration, the Dockerfile copies `valuescale/`, and `scripts/test_deploy_rehearse.py` `BuildSpaceFilesTests` covers both. B6 adds the `git status` check, the import check on the assembled Space and the diagnostics.
 
 ### B7. Sealed test, the owner's OK, then deploy

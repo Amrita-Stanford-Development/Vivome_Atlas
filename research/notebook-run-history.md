@@ -3436,7 +3436,7 @@ method, and under the median method as the baseline.
   but pxd043355_pd's typicality warning, which B4 gave with its deposit
   left out of the model, does not fire under the shipped model. That model
   was fitted with the deposit (a probe: typicality 0.74 against 0). The
-  prediction was wrong, not the code. For the owner.
+  prediction was wrong, not the code. The owner accepted it on 2026-11-09.
 
 ## The throughline
 

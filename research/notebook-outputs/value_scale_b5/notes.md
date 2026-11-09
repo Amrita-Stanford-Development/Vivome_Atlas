@@ -171,3 +171,13 @@ On the B-cell table:
   the code. Accept it, or say what to do.
 - Everything else is as b5.json predicted.
 - B5 is not deployed. The site and the service go live together after B7.
+
+## The owner's decisions (2026-11-09)
+
+1. **B5_verdicts's failure is accepted,** as explained above.
+2. **The receipt names what a 0 was read as only when the table holds a
+   0.** Today a log table with no 0 is still told "each 0 read as not
+   measured". Changed in B6, test first.
+3. **B6 adds a test of the calibrated method with a stated reading, across
+   the model versions,** as the final review suggested. Today that test is
+   pinned to the median method.

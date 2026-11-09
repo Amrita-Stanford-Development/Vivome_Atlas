@@ -62,8 +62,9 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     site asks the uploader first (raw, log, or "I don't know"). RNA and the
     frozen tests keep the median rule. Nine of ten rows pass. B5_verdicts
     failed on the typicality warning alone (the prediction took B4's
-    left-out warning for the shipped detector's), for the owner. Not
-    deployed: the site and the service go live together after B7.
+    left-out warning for the shipped detector's); the owner accepted it
+    on 2026-11-09. Not deployed: the site and the service go live together
+    after B7. Next: B6, the assembled Space.
 - **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
   (from `decb812`), then the site. These brought the clean-up's fixes to
   the parser and the site's file check (lone-CR line endings, MaxQuant,
