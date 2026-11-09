@@ -10,6 +10,7 @@ checked against the expectations written before it ran
     python research/notebooks/value_scale_diagnostics.py --step zscore
     python research/notebooks/value_scale_diagnostics.py --step b5
     python research/notebooks/value_scale_diagnostics.py --step b6     # from a clean tree: it builds the Space
+    python research/notebooks/value_scale_diagnostics.py --step b7     # after score_test.py's one scoring
 
 Step 1:
 - D1, the bank itself: each source file matches its recorded sha256, parses
@@ -46,6 +47,10 @@ Phase A (the request may state the scale, value_scale):
   /api/status, every bank file that fits the upload limit through both
   servers, zeros_read, and the reply summaries against B5's
   (expectations/b6.json).
+- B7 (the sealed test): valuescale/corpus/score_test.py scores it once;
+  this step reads only its output (results.json and its two marks) and
+  judges it against expectations/b7.json, both committed before the
+  scoring.
 
 Writes research/notebook-outputs/value_scale_<step>/report.md (expected
 against observed, one row per table) and report.json.
@@ -1519,10 +1524,146 @@ def report_b6(payload: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------- B7
+
+B7_CLASSES = ("linear", "constructed_log")
+B7_POOLS = ("S1", "S2+S3")
+
+
+def _read_mark(path: Path) -> dict | None:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def b7_judge(result: dict, started: dict | None, scored: dict | None) -> dict:
+    """b7.json's rows on score_test.py's output (results.json) and its marks."""
+    cal, subs = result["by_calibrated_stratum"], result["all_subsamples"]
+    primary, whole, base = result["primary"], result["detector_on_whole_tables"], result["baselines"]
+    rc, foreign = result["risk_coverage"], result.get("foreign", {})
+    n = result["deposits"]
+
+    def tally(pool, cls):
+        return cal.get(pool, {}).get(cls, {})
+
+    return {
+        "B7_once": started is not None and scored is not None and started.get("clean") is True
+        and started.get("deposits") == 237 and started.get("commit") == result.get("commit") == scored.get("commit")
+        and result.get("rehearsal") is False and result.get("split") == "test",
+        "B7_counts": n == 237 and result["subsamples"] == 624 and "real_log" not in subs
+        and all(tally("S1", c).get("n") == 237 and tally("S2+S3", c).get("n") == 67 for c in B7_CLASSES)
+        and all(subs.get(c, {}).get("n") == 312 for c in B7_CLASSES),
+        "B7_guarantee": all(tally(p, c).get("guarantee_contradicted") is False for p in B7_POOLS for c in B7_CLASSES),
+        "B7_miss_ranges": all(2 <= tally("S1", c).get("miss", -1) <= 12 for c in B7_CLASSES)
+        and all(0 <= tally("S2+S3", c).get("miss", -1) <= 4 for c in B7_CLASSES),
+        "B7_wrong": all(subs.get(c, {}).get("counts", {}).get("wrong", 99) <= 2 for c in B7_CLASSES),
+        "B7_primary": primary["tables"] == 237 and primary["detector_right"] >= 236
+        and 2 <= primary["median_50_wrong"] <= 8,
+        "B7_whole_log": whole["constructed_log"].get("log", 0) >= 0.95 * n,
+        "B7_baselines": all(base[b]["linear"]["right"] == n for b in base if b not in ("median_50", "gemma"))
+        and base["gemma"]["linear"]["wrong"] <= 2
+        and all(base[b]["constructed_log"]["wrong"] >= 0.85 * n for b in ("scgpt", "celltypist"))
+        and 0.40 * n <= base["gemma"]["constructed_log"]["no_answer"] <= 0.65 * n
+        and all(base[b]["constructed_log"]["right"] >= n - 2
+                for b in ("geo2r", "expressanalyst", "omics_playground", "proteopy", "cibersort", "median_50"))
+        and all(base[b][k]["error"] == 0 for b in base for k in B7_CLASSES),
+        "B7_risk": all(v["risk"] is None or v["risk"] <= 0.01 for v in rc.values())
+        and 0.93 <= (rc["0.5"]["coverage"] or 0) <= 0.98,
+        "B7_real_log": "real_log" not in subs,
+        "B7_foreign": {k: (v["n"], v["verdicts"], v["warned"]) for k, v in foreign.items()}
+        == {"zscore_proteins": (218, {"log": 218}, 0), "presence": (218, {"unlike_either": 218}, 0),
+            "percentile_ranks": (218, {"cant_tell": 185, "log": 33}, 15)},
+    }
+
+
+def b7_step(results_path: Path | None = None, out: Path | None = None) -> None:
+    """Judges score_test.py's one scoring of the sealed test against b7.json;
+    reads its output only (results.json and the two marks), never a table."""
+    from valuescale.corpus import score_test
+    results_path = score_test.RESULTS if results_path is None else results_path
+    out = OUT / "value_scale_b7" if out is None else out
+    result = json.loads(results_path.read_text(encoding="utf-8"))
+    started, scored = _read_mark(score_test.TEST_STARTED), _read_mark(score_test.TEST_SCORED)
+    rows = b7_judge(result, started, scored)
+    seconds = None
+    if started and scored:
+        seconds = round((datetime.fromisoformat(scored["scored_at"])
+                         - datetime.fromisoformat(started["started_at"])).total_seconds())
+    payload = {"step": "b7", "run": datetime.now().isoformat(timespec="seconds"),
+               "results_file": results_path.relative_to(REPO).as_posix() if results_path.is_relative_to(REPO)
+               else str(results_path), "started": started, "scored": scored, "seconds": seconds, "results": rows}
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "report.json").write_bytes((json.dumps(payload, indent=1) + "\n").encode("utf-8"))
+    (out / "report.md").write_bytes(report_b7(payload, result).encode("utf-8"))
+    print(f"wrote {(out / 'report.md').as_posix()}")
+
+
+def _rate(t: dict, key: str) -> str:
+    r = t["rates"][key]
+    if r["rate"] is None:
+        return ""
+    lo, hi = r["interval"]
+    return f"{r['rate']:.3f} [{lo:.3f}, {hi:.3f}]"
+
+
+def _tally_rows(groups: dict) -> list[list]:
+    return [[g, c, t["n"], t["counts"]["right"], t["counts"]["wrong"], t["counts"]["cant_tell"],
+             t["counts"]["unlike_either"], t["miss"], _rate(t, "miss"),
+             f"{t['miss_lower']:.4f}" if t["miss_lower"] is not None else "",
+             "CONTRADICTED" if t["guarantee_contradicted"] else "holds"]
+            for g, classes in groups.items() for c, t in classes.items()]
+
+
+def report_b7(payload: dict, result: dict) -> str:
+    tally_head = ["group", "class", "n", "right", "wrong", "can't tell", "unlike either", "miss",
+                  "miss rate [95% CI]", "one-sided lower", "guarantee (alpha 0.05)"]
+    primary = result["primary"]
+    lines = ["# Value-scale diagnostics, B7: the sealed test, scored once", "",
+             f"Judged {datetime.now().strftime('%Y-%m-%d %H:%M')} by research/notebooks/value_scale_diagnostics.py "
+             f"from {payload['results_file']}, written by valuescale/corpus/score_test.py"
+             + (f" ({payload['seconds']} s, commit {payload['started']['commit'][:7]})" if payload["seconds"] is not None
+                else " (no marks: not the sealed test's scoring)")
+             + ". Expectations: valuescale/bank/expectations/b7.json, written before the scoring. Explained in notes.md "
+             "beside this file.", "",
+             "## The rows", "",
+             _md_table(["row", "result"], [[k, "PASS" if v else "FAIL"] for k, v in payload["results"].items()]), "",
+             f"## Per calibrated stratum, one outcome per deposit ({result['deposits']} deposits, "
+             f"{result['subsamples']} subsamples)", "",
+             _md_table(tally_head, _tally_rows(result["by_calibrated_stratum"])), "",
+             "## Per protocol stratum, one outcome per subsample", "",
+             _md_table(tally_head, _tally_rows(result["by_stratum"])), "",
+             "## All subsamples", "",
+             _md_table(tally_head, _tally_rows({"all": result["all_subsamples"]})), "",
+             "## The primary comparison: the linear tables, whole", "",
+             f"- The detector reads {primary['detector_right']} of {primary['tables']} linear "
+             f"({primary['detector_wrong']} wrong); median-50 reads {primary['median_50_right']} linear "
+             f"({primary['median_50_wrong']} wrong).",
+             f"- Right by the detector alone: {primary['detector_only_right']}; by median-50 alone: "
+             f"{primary['median_50_only_right']}. Exact one-sided McNemar p = {primary['p_value']:.4f}.",
+             f"- The detector's readings of the whole tables: {result['detector_on_whole_tables']['linear']}; of their "
+             f"constructed logs: {result['detector_on_whole_tables']['constructed_log']}.", "",
+             "## Every baseline on the same whole tables", "",
+             _md_table(["rule", "linear: right", "wrong", "no answer", "error", "constructed log: right", "wrong",
+                        "no answer", "error"],
+                       [[name, *(b[k][f] for k in B7_CLASSES for f in ("right", "wrong", "no_answer", "error"))]
+                        for name, b in result["baselines"].items()]), "",
+             "## Risk against coverage (subsamples)", "",
+             _md_table(["cut", "coverage", "risk"],
+                       [[c, f"{v['coverage']:.3f}" if v["coverage"] is not None else "",
+                         f"{v['risk']:.4f}" if v["risk"] is not None else ""] for c, v in result["risk_coverage"].items()]),
+             "", "## By software", "",
+             _md_table(tally_head, _tally_rows(result["by_software"])), "",
+             "## By instrument family", "",
+             _md_table(tally_head, _tally_rows(result["by_instrument"])), "",
+             "## The foreign tables (calibration deposits)", "",
+             _md_table(["kind", "n", "verdicts", "gates", "warned"],
+                       [[k, v["n"], v["verdicts"], v["gates"], v["warned"]] for k, v in result.get("foreign", {}).items()]),
+             ""]
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2, "zscore": zscore_step,
-             "b5": b5_step, "b6": b6_step}
+             "b5": b5_step, "b6": b6_step, "b7": b7_step}
     parser.add_argument("--step", choices=tuple(steps), required=True)
     args = parser.parse_args()
     steps[args.step]()

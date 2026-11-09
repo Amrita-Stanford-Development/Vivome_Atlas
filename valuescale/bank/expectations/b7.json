@@ -1,0 +1,29 @@
+{
+  "step": "b7",
+  "written": "2026-11-09, before the sealed test is scored: no detector statistic, gate or verdict has been computed on a test deposit (research/benchmark/side-tests.md, amendment 25)",
+  "about": "B7 (research/value-scale-plan.md): valuescale/corpus/score_test.py scores the raw-or-log detector's sealed test once, under research/benchmark/protocol-value-scale.md ('Scoring (once)' and amendment 5), with the shipped calibration valuescale/calibration/protein-v1.json. The predictions come from B4's calibration (n and k per class and stratum), its rehearsal on the calibration split (research/notebook-outputs/value_scale_b4/rehearsal.json, in-sample, so it checks the code, not the method), and the test split's committed records (labels, columns, software; valuescale/corpus/walk.jsonl and audit.json). No test value was read. The rows are judged by research/notebooks/value_scale_diagnostics.py --step b7, committed with this file before the scoring. Not edited after the run: a row that differs is reported and explained in notes.md.",
+  "test": "the 237 test-split deposits kept after B3's audit and visits, all labelled linear (none of the four sealed accessions of this register's other tests is among them). Strata reached: S1 237, S2 67, S3 8; S3 pools with S2 into S2+S3 (amendment 5), so S2+S3 has 67 deposits, 8 of them with two subsamples. Software: MaxQuant 132, DIA-NN 63, Spectronaut 28, FragPipe 9, Proteome Discoverer 5.",
+  "B7_once": "score_test.py, run from a clean tree, writes valuescale/corpus/test_started.json (the commit, clean true, 237 deposits) before it reads any test table, then research/benchmark/value-scale-test/results.json and valuescale/corpus/test_scored.json. It finishes without an error. It is not run again.",
+  "B7_counts": "237 deposits and 624 subsamples: per class (linear, constructed log), 312 (237 in S1, 67 in S2, 8 in S3). One outcome per deposit per calibrated stratum: n = 237 in S1 and 67 in S2+S3, for each class. No real log row.",
+  "B7_guarantee": {
+    "predicted": "not contradicted for either class in either calibrated stratum: the one-sided 95% lower bound of each miss rate is at most 0.05",
+    "what_contradicts": "19 or more misses of 237 in S1, or 7 or more of 67 in S2+S3 (Clopper-Pearson, conformal.clopper_pearson_lower)",
+    "expected_misses": "a fresh deposit misses about as often as a calibration score falls under the k-th smallest of n: k/(n+1), 6/219 = 2.7% in S1 (about 6 of 237) and 1/69 = 1.4% in S2+S3 (about 1 of 67, a little more since 8 deposits miss when either subsample does). Predicted ranges: S1 2 to 12 misses per class, S2+S3 0 to 4 per class."
+  },
+  "B7_wrong": "few subsamples get the other class alone: 0 to 2 per class over all 624 subsamples (the rehearsal had none). Most misses are 'unlike either'.",
+  "B7_primary": {
+    "what": "the 237 linear test tables, whole: the share the detector gives the wrong reading ('can't tell' and 'unlike either' read linear, B1) against median-50, exact one-sided McNemar, paired by table, alpha 0.05",
+    "predicted": "the detector reads 236 or 237 of them linear. Median-50 misreads 2 to 8 (the rehearsal: 4 of 218, the small-scale tables it reads as log). With every discordant table favouring the detector, p = 0.5 to the power of their number: below 0.05 from 5 such tables. Whether the hypothesis is supported is not predicted; about 4 are expected, which gives p near 0.06."
+  },
+  "B7_whole_log": "the detector on each linear table's whole constructed log variant reads 95% or more of them log (the rehearsal: 210 of 218), the rest linear",
+  "B7_baselines": {
+    "linear": "on the whole linear tables, every baseline reads all 237 linear but median-50 (B7_primary) and Gemma (at most 2 wrong)",
+    "constructed_log": "on their constructed logs: scGPT and CellTypist read 85% or more of them linear (their rules look for log1p of small values); Gemma gives no answer on 40% to 65%; GEO2R, ExpressAnalyst, Omics Playground, ProteoPy, CIBERSORT and median-50 read 235 or more of 237 log",
+    "errors": "no baseline raises on any table"
+  },
+  "B7_risk": "risk against coverage on the subsamples: the risk (the share of one-class answers that are wrong) is at most 0.01 at every cut; coverage is 0.93 to 0.98 at the cut of 0.5 and falls as the cut rises",
+  "B7_real_log": "the test split holds no real log table, so real log rates are not reported, and constructed against real log tables cannot be compared on the test (a limitation, as in calibration)",
+  "B7_foreign": "the foreign tables are made from the 218 calibration deposits with the detector's code unchanged since the rehearsal (b20c477), so they equal the rehearsal's: z-scored per protein, 218 log; 0/1 presence, 218 'unlike either'; percentile ranks, 185 'can't tell' and 33 log, 15 with the warning",
+  "B7_groups": "results by software and by instrument family (from ProteomeXchange's index), reported, not judged",
+  "B7_time": "about a minute and a half (the rehearsal took 74 s), reported, not judged"
+}
