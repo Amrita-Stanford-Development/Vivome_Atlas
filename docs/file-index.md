@@ -49,6 +49,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/figures.js` — the Manuscript page's figures: each fills its slot beside the result it supports, with its legend, sources, downloads and the numbers it draws (from `web/figures/index.json`)
 - `web/js/manuscript-data.js` — loading, checking and reading web/data/manuscript.json: the record formats, the caveat tags, the slots and their basis (pure)
 - `web/js/docs-data.js` — loading, checking and reading web/data/docs.json: a record's text and basis, the slots, the records each data figure draws, and the tabs' addresses and keys (pure)
+- `web/js/docs-svg.js` — the Docs section's data figures, from web/data/docs.json: what the old rule misread, the corpus funnel, the sealed test against the promise, the missing-value bands (pure)
 - `web/js/workflow-panels.js` — the Workflow page's HTML builders: snippets, recipe, cell card, probability and guess tables, the ladder, held-out cards, the service card (pure)
 - `web/js/workflow-svg.js` — static SVG figures for the Workflow page: histogram, heatmap, bars, Sankey, tree, UpSet, graph, ROC (pure)
 - `web/js/workflow-layout.js` — layout maths for the Workflow page: scales, histogram bars, Sankey, the class compass, colour ramps, the 3D view (pure)
@@ -117,6 +118,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
 - `web/tests/figures.test.js` — the figures on the Manuscript page: every slot has a figure and every figure a slot in its section, with its files; legends and numbers escaped
 - `web/tests/docs.test.js` — the Docs section against the real files: the data valid, records in their formats and escaped, Pending when pending, every figure's records measured, the tabs' addresses and keys
+- `web/tests/docs-svg.test.js` — the Docs section's figures against the real data: labelled images, Pending rather than NaN, no number in their words that is not a record, the promise marked broken exactly where the lower bound is above it, the funnel's parts adding up
 - `web/tests/manuscript.test.js` — the Manuscript page against the real files: every slot measured but the open items, no typed metric, copy rules, caveat tags, contents links, the current model's benchmark rows only, the cross-modal support and alignment panels mounted in Results from the manifest (Pending when a record is pending)
 - `web/tests/timeline.test.js` — the film's clock: chapter lengths, locate, beats, reduced-motion steps, the address
 - `web/tests/workflow-layout.test.js` — the Workflow page's layout maths and static figures: rotation, Sankey conservation, colour ramps, ROC snapping, hatching, escaping
