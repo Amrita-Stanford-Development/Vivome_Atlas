@@ -812,6 +812,12 @@
    "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > scored",
    "format": "count"
   },
+  "rl_ph_cal_sparse": {
+   "value": 76,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands, the tables of the bands from 0.5 up (half or more of their values missing)",
+   "format": "count"
+  },
   "rl_ph_cleanup_test_miss": {
    "value": 3,
    "status": "measured",
@@ -930,6 +936,12 @@
    "value": 234,
    "status": "measured",
    "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > scored",
+   "format": "count"
+  },
+  "rl_ph_test_sparse": {
+   "value": 88,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands, the tables of the bands from 0.5 up (half or more of their values missing)",
    "format": "count"
   },
   "rl_pxd064083_median": {

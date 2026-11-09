@@ -360,6 +360,10 @@ def b7(r: DocsRecords) -> None:
         for split, short in (("calibration", "cal"), ("test", "test")):
             r.at(f"rl_ph_band{i}_{short}_tables", POSTHOC, ("tail", split, "bands", i, "tables"), "count")
             r.at(f"rl_ph_band{i}_{short}_below", POSTHOC, ("tail", split, "bands", i, "below"), "count")
+    for split, short in (("calibration", "cal"), ("test", "test")):
+        sparse = sum(b["tables"] for b in tail[split]["bands"] if b["band"][0] >= 0.5)
+        r.put(f"rl_ph_{short}_sparse", sparse,
+              f"{base}: tail > {split} > bands, the tables of the bands from 0.5 up (half or more of their values missing)", "count")
     for side in ("clean-up", "rest"):
         key = "cleanup" if side == "clean-up" else "rest"
         r.at(f"rl_ph_{key}_test_miss", POSTHOC, ("cleanup", "test", side, "miss"), "count")

@@ -274,6 +274,9 @@ test('the script writes numbers and figures only through the guarded helpers, an
   for (const w of writes) assert.match(w, /^(docsFact|drawFigure|errorPanel)\(/, `innerHTML = ${w}`);
   assert.match(js, /\.title = docsBasis\(docs, el\.dataset\.docs\)/);
   assert.match(js, /\.catch\(\(err\) => \{[\s\S]*?\$\('docs-error'\)\.innerHTML = errorPanel\(err\);[\s\S]*?textContent = PENDING_LABEL/);
+  // A figure is never left a blank gap under its caption: on a failed load it reads Pending too.
+  const failed = js.slice(js.indexOf('.catch((err) => {'));
+  assert.match(failed, /document\.querySelectorAll\('\[data-docs-figure\]'\)\) el\.textContent = PENDING_LABEL;/, 'a failed load leaves the figures blank');
 });
 
 test('the tabs follow the address without adding to the history, and show only once they work', () => {

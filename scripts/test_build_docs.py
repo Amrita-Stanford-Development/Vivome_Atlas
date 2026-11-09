@@ -97,6 +97,15 @@ class TestDocs(unittest.TestCase):
                          (5, 214, 20, 234))
         self.assertEqual((r["rl_ph_faulty"], r["rl_ph_empty"], r["rl_ph_mislabelled"]), (3, 2, 1))
 
+    def test_the_tables_half_or_more_missing_add_up_the_bands_from_one_half(self):
+        r = self.r
+        for short in ("cal", "test"):
+            bands = [i for i in range(r["rl_ph_bands"]) if r[f"rl_ph_band{i}_lo"] >= 0.5]
+            self.assertEqual(r[f"rl_ph_{short}_sparse"], sum(r[f"rl_ph_band{i}_{short}_tables"] for i in bands))
+        # research/notebook-outputs/value_scale_b7/notes.md: "the 76 calibration tables with half or more of
+        # their values missing"
+        self.assertEqual((r["rl_ph_cal_sparse"], r["rl_ph_test_sparse"]), (76, 88))
+
     def test_the_corpus_funnel_adds_up(self):
         r = self.r
         self.assertEqual(r["rl_b3_frame"], load("valuescale/corpus/frame.json")["counts"]["frame"])

@@ -192,8 +192,8 @@
                         </ul>
                         <p>A few stray negatives are set aside as missing, so they cannot trip the first gate.
                             Some tables the detector will not judge, and it says why: fewer than
-                            <span data-docs="rl_s1_lo"></span> cells, too few to tell; each protein's level
-                            taken away; or no value missing at all, since the table may have been filled in.
+                            <span data-docs="rl_s1_lo"></span> cells, too few to tell; each protein divided
+                            by, or centred on, its own level; or no value missing at all, since the table may have been filled in.
                             Each of those is “can't tell”.</p>
                         <h4>Then, the shape</h4>
                         <p>It measures things that do not change when every value is multiplied by the same
@@ -518,10 +518,14 @@
                                 or more of its values missing. The more values a log table is missing, the lower
                                 the model's probability that it is log. This is
                                 <a href="#words-sparse-log-gap">the sparse-log gap</a>.</li>
-                            <li>Calibration held few such tables, and they scored well: under the threshold,
-                                <span data-docs="rl_ph_cal_below"></span> of <span data-docs="rl_ph_cal_scored"></span>
-                                in calibration, against <span data-docs="rl_ph_test_below"></span> of
-                                <span data-docs="rl_ph_test_scored"></span> in the test.</li>
+                            <li>Both sides held many such tables: <span data-docs="rl_ph_cal_sparse"></span> of the
+                                <span data-docs="rl_ph_cal_scored"></span> in calibration, and
+                                <span data-docs="rl_ph_test_sparse"></span> of the
+                                <span data-docs="rl_ph_test_scored"></span> in the test. What differed is how they
+                                scored: under the threshold, <span data-docs="rl_ph_cal_below"></span> of
+                                <span data-docs="rl_ph_cal_scored"></span> in calibration, against
+                                <span data-docs="rl_ph_test_below"></span> of <span data-docs="rl_ph_test_scored"></span>
+                                in the test.</li>
                         </ul>
                         <figure class="docs-fig">
                             <div class="docs-figure" data-docs-figure="missing_bands"></div>
@@ -1075,7 +1079,8 @@
                     <dt id="words-calibration">Calibration</dt>
                     <dd>Setting the <a href="#words-threshold">thresholds</a> from tables whose answer is
                         known, so that the <a href="#words-promise">promise</a> holds. The calibration
-                        tables are used for nothing else.</dd>
+                        tables and the test's are kept apart: a deposit is in one or the other, never
+                        both.</dd>
                     <dt id="words-cant-tell">“Can't tell”</dt>
                     <dd>The answer when both readings clear their thresholds: the table could be either.
                         The service then reads it as raw, says so, and the uploader can choose the other

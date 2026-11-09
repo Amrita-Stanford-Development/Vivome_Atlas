@@ -104,4 +104,5 @@ mountTabs();
 loadDocs().then(fill).catch((err) => {
   $('docs-error').innerHTML = errorPanel(err);
   for (const el of document.querySelectorAll('[data-docs]')) el.textContent = PENDING_LABEL;
+  for (const el of document.querySelectorAll('[data-docs-figure]')) el.textContent = PENDING_LABEL;
 });
