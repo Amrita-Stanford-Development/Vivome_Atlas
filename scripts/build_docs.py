@@ -318,6 +318,7 @@ def b7(r: DocsRecords) -> None:
     assert median_log == r.json(POSTHOC)["primary_as_scored"]["whole_constructed_log_read_log_median_50"]
     r.put("rl_b7_whole_log_median", median_log, f"{base}: tables whose constructed log median-50 reads log", "count")
     r.at("rl_b7_coverage_half", RESULTS, ("risk_coverage", "0.5", "coverage"), "pct1")
+    r.at("rl_b7_risk_half", RESULTS, ("risk_coverage", "0.5", "risk"), "pct2")
     path = report("b7")
     passed, judged = count_passed(r.json(path)["results"])
     r.put("rl_b7_rows_pass", passed, f"{rel(path)}: results passed", "count")

@@ -386,6 +386,12 @@
    "basis": "research/benchmark/value-scale-test/results.json: all_subsamples > constructed_log > n",
    "format": "count"
   },
+  "rl_b7_risk_half": {
+   "value": 0.001715,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: risk_coverage > 0.5 > risk",
+   "format": "pct2"
+  },
   "rl_b7_rows": {
    "value": 11,
    "status": "measured",

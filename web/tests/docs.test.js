@@ -3,7 +3,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import {
   DOCS_SCHEMA, FIGURES, TABS, docsBasis, docsFact, docsRecord, docsText, nextTab, tabForHash, validateDocs,
 } from '../js/docs-data.js';
@@ -30,8 +30,9 @@ const decode = (s) => s.replace(/&(?:[a-z]+|#\d+|#x[0-9a-f]+);/gi, (e) => {
   return e;
 });
 
-// A <code> that is a path, a commit hash or an identifier: no spaces, at least one letter.
-const CODE_NAME = /^(?=\S*[A-Za-z_])[\w./#*-]+$/;
+// A <code> that is a path, a commit hash or an identifier: no spaces, at least
+// one letter; or a short commit hash, whose seven hex digits can all be digits.
+const CODE_NAME = /^(?:(?=\S*[A-Za-z_])[\w./#*-]+|[0-9a-f]{7})$/;
 
 // The page's title and description, then inside <main> its text, with the
 // labels of its parts (aria-label, title, alt), as a reader or a screen
@@ -197,12 +198,14 @@ test('the number guard catches a typed number in any form, and lets names throug
     '<div aria-label="12 tables"></div>', '<svg role="img"><text x="1" y="2">n = 59</text></svg>',
     '<p><code>0.05</code></p>', '<p>the third group</p>', '<img alt="a figure of 4 groups" src="x.png">',
     '<p>&#53;0 tables</p>', '<p title="about 7">a table</p>', '<p>Three of them</p>',
+    '<p><code>801602</code></p>', '<p><code>80160255</code></p>',
   ];
   for (const html of caught) assert.ok(typedNumbers(`<main>${html}</main>`).length > 0, html);
   const names = [
     '<p>On 2026-11-09, B7 tested S1 and S2+S3; R1 to R7 follow Step 1 and Phase A2.</p>',
     '<p>PXD064083, v4.1, protein-v2, revision 00009-hcz, log2 and log10, median-50, PBMC240, SCoPE2.</p>',
     '<p><code>valuescale/calibration/protein-v1.json</code> at <code>214fc58</code>, <code>rl_b7_s1_log_miss</code>.</p>',
+    '<p>commits <code>8016025</code> and <code>B3_frame</code></p>',
     '<p>Two gates, one answer, both kinds, often.</p><span data-docs="rl_alpha"></span>',
   ];
   for (const html of names) assert.deepEqual(typedNumbers(`<main>${html}</main>`), [], html);
@@ -362,4 +365,45 @@ test('every figure is drawn from the data or marked an illustration; a data figu
     assert.equal((read(page).match(/<figure\b/g) ?? []).length, (read(page).match(/<figure class="docs-fig">/g) ?? []).length, page);
   }
   assert.deepEqual([...used].sort(), Object.keys(FIGURES).sort(), 'every data figure is shown somewhere');
+});
+
+const PARTS = ['What we did', 'Why', 'What we expected', 'What we found', 'What you decided', "Where it's kept"];
+
+test('What we did: one entry per step, in order, each with its parts, its own dates and its files', () => {
+  const did = panel(read('docs-raw-or-log.html'), 'did');
+  const steps = [...did.matchAll(/<details id="did-([a-z0-9]+(?:-[a-z0-9]+)*)" class="docs-step">([\s\S]*?)<\/details>/g)];
+  assert.deepEqual(steps.map(([, id]) => id.replace(/-/g, '_')), Object.keys(docs.steps));
+  assert.equal((did.match(/<details\b/g) ?? []).length, steps.length + (did.match(/<details class="curious/g) ?? []).length);
+  for (const [, id, body] of steps) {
+    const step = docs.steps[id.replace(/-/g, '_')];
+    const summary = body.match(/^\s*<summary>([\s\S]*?)<\/summary>/);
+    assert.ok(summary && /<time /.test(summary[1]), `${id}: no date in its summary`);
+    for (const [, when, shown] of body.matchAll(/<time datetime="([^"]+)">([^<]+)<\/time>/g)) {
+      assert.equal(when, shown, id);
+      assert.ok(step.dates.includes(when), `${id}: ${when} is not one of its dates`);
+    }
+    const parts = [...body.matchAll(/<dt>([^<]+)<\/dt>\s*<dd( class="[^"]*")?>([\s\S]*?)<\/dd>/g)];
+    assert.deepEqual(parts.map(([, name]) => decode(name)), PARTS, id);
+    assert.equal(parts[4][2], ' class="docs-decided"', `${id}: what you decided is marked`);
+    assert.equal(parts[5][2], ' class="docs-kept"', id);
+    const kept = parts[5][3];
+    const codes = [...kept.matchAll(/<code>([^<]+)<\/code>/g)].map((m) => m[1]);
+    const rest = plainText(kept.replace(/<code>[^<]*<\/code>/g, ' '));
+    assert.match(rest, /^(?:(?:commits?|and|to|,|;)\s*)*$/i, `${id}: only paths and commits where it is kept, not "${rest}"`);
+    for (const path of [step.report, step.expectations, step.notes].filter(Boolean)) {
+      assert.ok(codes.includes(path), `${id}: ${path} is not named where it is kept`);
+    }
+    for (const c of codes) {
+      assert.ok(/^[0-9a-f]{7}$/.test(c) || existsSync(new URL(`../../${c}`, import.meta.url)), `${id}: ${c} is neither a file nor a commit`);
+    }
+  }
+});
+
+test('every record in the data is shown somewhere in the section', () => {
+  const shown = new Set(Object.values(FIGURES).flat());
+  for (const page of DOCS_PAGES) {
+    for (const [, key] of read(page).matchAll(/data-docs="([^"]+)"/g)) shown.add(key);
+  }
+  const unused = Object.keys(docs.records).filter((key) => !shown.has(key));
+  assert.deepEqual(unused, [], 'records no page shows');
 });

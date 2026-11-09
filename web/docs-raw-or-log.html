@@ -360,7 +360,8 @@
                         <ul>
                             <li>the <a href="#words-frame">frame</a>: <span data-docs="rl_b3_frame"></span> public
                                 human <a href="#words-deposit">deposits</a> in
-                                <a href="#words-pride-massive">PRIDE and MassIVE</a> from recent years, put in a
+                                <a href="#words-pride-massive">PRIDE and MassIVE</a> announced from 2020-01-01 to
+                                2026-10-31, put in a
                                 fixed random order before any was opened;</li>
                             <li>each deposit goes to calibration or to the test by a
                                 <a href="#words-hash-split">hash split</a> of its accession;</li>
@@ -584,6 +585,479 @@
 
         <section id="did" role="tabpanel" aria-labelledby="tab-did" class="docs-panel">
             <h2 class="docs-panel-title">What we did</h2>
+            <p class="docs-intro">Every step, in order. Open one to read what we did, why, what we expected
+                before it ran, what it found, what you decided, and where its files are.</p>
+            <div class="docs-steps sheet">
+
+                <details id="did-step1" class="docs-step">
+                    <summary><time datetime="2026-10-28">2026-10-28</time><span class="docs-step-title">Step 1: the bank of real tables</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Gathered <span data-docs="rl_step1_tables"></span> public tables whose answer, raw or
+                            log, is stated in their software's documentation or their paper, each chosen for a case
+                            the detector must handle. Then ran the old rule, and the whole service stage by stage,
+                            on every one.</dd>
+                        <dt>Why</dt>
+                        <dd>Every later step needed a fixed set of real tables to be checked on before it moved on.
+                            That was your first rule for this work: diagnostics first.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before the run: the old rule would misread the raw tables written on a small
+                            scale; every table would parse as listed; every stage of the service would keep its
+                            checks.</dd>
+                        <dt>What we found</dt>
+                        <dd>The old rule misread <span data-docs="rl_step1_linear_misread"></span> of the
+                            <span data-docs="rl_step1_linear"></span> raw tables, PXD064083 among them, and
+                            <span data-docs="rl_step1_log_misread"></span> of the <span data-docs="rl_step1_log"></span>
+                            log tables. <span data-docs="rl_step1_d3_pass"></span> of the
+                            <span data-docs="rl_step1_tables"></span> tables kept every check of the service's stages,
+                            or were refused as the service refuses them. The report said all of them: a counting
+                            fault hid rounding errors in the z-score, found in Phase A. Two tables failed only
+                            because the bank's own listing named their layout wrongly.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">You approved the plan on 2026-10-28, and the same day accepted both
+                            listing failures; the listing was corrected.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_step1/report.json</code>,
+                            <code>valuescale/bank/expectations/step1.json</code>,
+                            <code>research/notebook-outputs/value_scale_step1/notes.md</code>,
+                            <code>valuescale/corpus/bank.json</code>; commit <code>40d83f4</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-phase-a" class="docs-step">
+                    <summary><time datetime="2026-10-28">2026-10-28</time><span class="docs-step-title">Phase A: you say how your file is written</span><span class="bead">Live since <time datetime="2026-11-03">2026-11-03</time></span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Gave the service a way to be told the reading: the request's <code>value_scale</code>
+                            and the Atlas page's Values menu (Automatic, Raw intensities, Already log). The receipt
+                            says who decided. Automatic kept the old rule.</dd>
+                        <dt>Why</dt>
+                        <dd>The surest fix for a misread is to ask, and asking needs no new statistics.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: an automatic reply unchanged to the byte; a stated reading applied and
+                            said back; a raw reading refused on exactly the tables with negative values.</dd>
+                        <dt>What we found</dt>
+                        <dd>The automatic reply was unchanged on <span data-docs="rl_pa_same"></span> of
+                            <span data-docs="rl_pa_traced"></span> traced tables, and through the app
+                            <span data-docs="rl_pa_app_pass"></span> of <span data-docs="rl_pa_app"></span> checks
+                            passed. Its checks also found the z-score's rounding errors (the z-score fix, below).</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">You put it live on 2026-11-03: the service first, then the site.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_phaseA/report.json</code>,
+                            <code>valuescale/bank/expectations/phaseA.json</code>,
+                            <code>research/notebook-outputs/value_scale_phaseA/notes.md</code>; commits
+                            <code>3af5251</code>, <code>13b51b1</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-phase-a2" class="docs-step">
+                    <summary><time datetime="2026-10-28">2026-10-28</time><span class="docs-step-title">Phase A2: what a zero means</span><span class="bead">Live since <time datetime="2026-11-03">2026-11-03</time></span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Added the request's <code>zeros</code> and the Zeros menu, for files already log: there a
+                            zero can mean “not measured” or be a real value.</dd>
+                        <dt>Why</dt>
+                        <dd>Many tools write a zero for a protein they did not see. Read as a real value, it drags
+                            the gene's average down.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: a table with no zero gives the same answers; saying a zero is not
+                            measured changes the answers most where zeros stand for missing values.</dd>
+                        <dt>What we found</dt>
+                        <dd>Every check passed, after two fixes the first runs called for. On Furtwangler's log2
+                            table, where <span data-docs="rl_pa2_fl_zero_share"></span> of the values are zeros,
+                            reading them as not measured lifted the cells answered from
+                            <span data-docs="rl_pa2_fl_measured"></span> to <span data-docs="rl_pa2_fl_missing"></span>
+                            of <span data-docs="rl_pa2_fl_cells"></span>.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">You asked for it on 2026-10-28, with “do all the fixes”, and it went
+                            live with Phase A on 2026-11-03.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_phaseA2/report.json</code>,
+                            <code>valuescale/bank/expectations/phaseA2.json</code>,
+                            <code>research/notebook-outputs/value_scale_phaseA2/notes.md</code>; commit
+                            <code>e4dc0c2</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-zscore" class="docs-step">
+                    <summary><time datetime="2026-10-28">2026-10-28</time><span class="docs-step-title">The z-score fix</span><span class="bead">Live since <time datetime="2026-11-03">2026-11-03</time></span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Computed each gene's <a href="#words-z-score">z-score</a> in <code>float64</code>
+                            instead of <code>float32</code>, and set a gene that is constant but for rounding to
+                            zero.</dd>
+                        <dt>Why</dt>
+                        <dd>Phase A's checks found the old z-score slightly off on genes whose few values differ by
+                            far less than their level, and pure noise on a gene constant but for its last bits.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: the z-score check holds on every table; answers change only slightly,
+                            and accepting the change is your decision.</dd>
+                        <dt>What we found</dt>
+                        <dd>The check held on all <span data-docs="rl_z_traced"></span> traced tables. Answers were
+                            unchanged on <span data-docs="rl_z_same"></span> of them; the largest move of any cell's
+                            coordinates was <span data-docs="rl_z_largest_move"></span>. Two recorded results moved:
+                            one cell per dataset in v3's frozen replies, and the Workflow page's example, which was
+                            traced again.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">You accepted both moves on 2026-10-28, and the fix went live with
+                            Phase A on 2026-11-03.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_zscore/report.json</code>,
+                            <code>valuescale/bank/expectations/zscore.json</code>,
+                            <code>research/notebook-outputs/value_scale_zscore/notes.md</code>; commit
+                            <code>c390036</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b0" class="docs-step">
+                    <summary><time datetime="2026-11-03">2026-11-03</time><span class="docs-step-title">B0: the rules, written before any new data</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Wrote the protocol: where the tables would come from and in what order, how they split
+                            into calibration and test, how each gets its label, the promise (α
+                            <span data-docs="rl_alpha"></span>, δ <span data-docs="rl_delta"></span>), the size
+                            groups, and the deposits never to open.</dd>
+                        <dt>Why</dt>
+                        <dd>Rules fixed before the data cannot be bent to fit it.</dd>
+                        <dt>What we expected</dt>
+                        <dd>No run: B0 sets what the later steps must show, such as at least
+                            <span data-docs="rl_min_n"></span> tables per kind and size group.</dd>
+                        <dt>What we found</dt>
+                        <dd>The plan asked for two scores per reading, each held to half of α, but had sized the
+                            corpus for one. One combined score per reading keeps the need at
+                            <span data-docs="rl_min_n"></span> tables per group; two would have needed far more.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">On 2026-10-28: protein first, then RNA, and a promise at
+                            <span data-docs="rl_alpha"></span> now, made stronger later. On 2026-11-03: the
+                            go-ahead for Phase B.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/benchmark/protocol-value-scale.md</code>,
+                            <code>research/value-scale-detection.md</code>; commit <code>26519a8</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b1" class="docs-step">
+                    <summary><time datetime="2026-11-03">2026-11-03</time><span class="docs-step-title">B1: what a wrong reading costs</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Ran the served model, v4.1, on the bank with each table read right and read wrong, both
+                            ways, and with zeros counted as values or as missing.</dd>
+                        <dt>Why</dt>
+                        <dd>To learn which mistake is worse, so that “can't tell” falls on the cheaper side, and what
+                            a protein zero should mean.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before, among others: a log table read as raw would change at most
+                            <span data-docs="rl_b1_expected_log_as_linear"></span> of its best guesses.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b1_rows_pass"></span> of <span data-docs="rl_b1_rows"></span> rows
+                            passed. A typical log table read as raw changed
+                            <span data-docs="rl_b1_log_as_linear"></span> of its best guesses
+                            (<span data-docs="rl_b1_n_log"></span> tables); a raw table read as log,
+                            <span data-docs="rl_b1_linear_as_log"></span> (<span data-docs="rl_b1_n_linear"></span>
+                            tables). So on “can't tell” the service reads raw, and a protein zero counts as missing
+                            under both readings. The failed row was that first number, set by one deposit's stem
+                            cells, processed several ways.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">On 2026-11-03 you accepted the failed row, and dropped a planned
+                            message saying the choice “barely matters”: on the bank it would have been wrong on most
+                            of the tables it fired on.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b1/report.json</code>,
+                            <code>valuescale/bank/expectations/b1.json</code>,
+                            <code>research/notebook-outputs/value_scale_b1/notes.md</code>; commits
+                            <code>8608c11</code>, <code>ab18152</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b2" class="docs-step">
+                    <summary><time datetime="2026-11-03">2026-11-03</time> to <time datetime="2026-11-04">2026-11-04</time><span class="docs-step-title">B2: the method</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Wrote the detector's code: the gates, the scale-free measures, one score per reading,
+                            and the conformal code. Fitted it on the bank's <span data-docs="rl_b2_deposits"></span>
+                            deposits (<span data-docs="rl_b2_linear_rows"></span> raw and
+                            <span data-docs="rl_b2_log_rows"></span> log design rows), and checked it with each
+                            deposit left out.</dd>
+                        <dt>Why</dt>
+                        <dd>The method had to exist as code to be checked, and it was checked on the bank alone,
+                            before any new data.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before, among others: raw and log bank tables would separate on the score, with
+                            a separation (AUC, where one is perfect) of at least
+                            <span data-docs="rl_b2_expected_auc"></span>.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b2_rows_pass"></span> of <span data-docs="rl_b2_rows"></span> rows
+                            passed. The separation was <span data-docs="rl_b2_auc"></span>. The small-scale raw tables
+                            the old rule misreads were read raw, and every real log table log but one, a filled-in
+                            table. <span data-docs="rl_b2_variants_wrong"></span> of
+                            <span data-docs="rl_b2_variants"></span> variants were read wrong.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">On 2026-11-04 you accepted the remaining failures, and decided the
+                            site will ask uploaders for their reading, since most know it.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b2/report.json</code>,
+                            <code>valuescale/bank/expectations/b2.json</code>,
+                            <code>research/notebook-outputs/value_scale_b2/notes.md</code>; commits
+                            <code>0e147eb</code>, <code>19d79eb</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b3" class="docs-step">
+                    <summary><time datetime="2026-11-04">2026-11-04</time> to <time datetime="2026-11-07">2026-11-07</time><span class="docs-step-title">B3: collecting the tables, and the clean-up</span><span class="bead">Fixes live since <time datetime="2026-11-07">2026-11-07</time></span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Built the frame from ProteomeXchange's index of <span data-docs="rl_b3_index"></span>
+                            records: <span data-docs="rl_b3_frame"></span> human PRIDE and MassIVE deposits, in a
+                            fixed random order. Walked it, listing <span data-docs="rl_b3_listed"></span>, and kept
+                            each deposit's first usable table with its provenance label; a hand audit checked a
+                            sample, and reads that had failed were tried once more. Then came the clean-up: we
+                            fixed the faults in our own reading code that the walk met, and visited the records
+                            they touch again, in two rounds, with the expectations of each written first.</dd>
+                        <dt>Why</dt>
+                        <dd>Calibration and the sealed test need many real tables, drawn by rule.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: every record with its checksum, parsed and with its quote; each size
+                            group with at least <span data-docs="rl_min_n"></span> deposits in each split; the
+                            audit's agreement recorded. No detector statistic computed on either split.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b3_rows_pass"></span> of <span data-docs="rl_b3_rows"></span> rows
+                            passed. <span data-docs="rl_b3_kept"></span> tables were kept, and
+                            <span data-docs="rl_b3_after_audit"></span> after the audit
+                            (<span data-docs="rl_b3_calibration"></span> calibration,
+                            <span data-docs="rl_b3_test"></span> test); the audit agreed on
+                            <span data-docs="rl_b3_audit_agree"></span> of <span data-docs="rl_b3_audit_judged"></span>.
+                            S3 was short and joined S2. No table was labelled real log. The failed row, <code>B3_frame</code>,
+                            was the expectation's own mistake: its count matched the species' name letter for
+                            letter, while the frame rightly ignores letter case.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">On 2026-11-06 you accepted the failed row, chose to fix every fault in
+                            our own code that the walk met before B4, and kept the
+                            <span data-docs="rl_b3_reserve"></span> unlisted deposits as a reserve. On 2026-11-07,
+                            after the clean-up's first round, you accepted its one missed expectation after a closer
+                            look at the tables, chose to fix the faults found after it with a second round, and chose
+                            to refuse a table with decimal commas in clear words. The service's and the site's fixes
+                            went live that day.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b3/report.json</code>,
+                            <code>valuescale/bank/expectations/b3.json</code>,
+                            <code>research/notebook-outputs/value_scale_b3/notes.md</code>,
+                            <code>valuescale/corpus/frame.json</code>; commits <code>5c9e521</code>,
+                            <code>76d490a</code>, <code>3b4f162</code>, <code>8016025</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b4" class="docs-step">
+                    <summary><time datetime="2026-11-07">2026-11-07</time><span class="docs-step-title">B4: setting the thresholds</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Finished the package (reading a table, its report, the old rules written again for
+                            comparison, and the test scorer that runs once), then ran the calibration: scored every
+                            calibration table and its constructed log, and set each threshold.</dd>
+                        <dt>Why</dt>
+                        <dd>The thresholds are what make the promise true.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before, among others: the no-gaps rule, which calls a table with no value
+                            missing “can't tell”, fires on exactly one bank table, a filled-in one; and the scorer's
+                            rehearsal runs end to end and writes nothing that marks the test as scored.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b4_rows_pass"></span> of <span data-docs="rl_b4_rows"></span> rows
+                            passed. The thresholds: S1 raw <span data-docs="rl_s1_linear_cut"></span>, log
+                            <span data-docs="rl_s1_log_cut"></span>; S2+S3 raw
+                            <span data-docs="rl_s23_linear_cut"></span>, log <span data-docs="rl_s23_log_cut"></span>.
+                            Reading a table took <span data-docs="rl_b4_detect_seconds"></span> seconds. The
+                            rehearsal on the <span data-docs="rl_b4_reh_tables"></span> calibration tables took
+                            <span data-docs="rl_b4_rehearsal_seconds"></span> seconds: the detector misread
+                            <span data-docs="rl_b4_reh_detector_wrong"></span> raw tables and the old rule
+                            <span data-docs="rl_b4_reh_median_wrong"></span>, and it read
+                            <span data-docs="rl_b4_reh_whole_log"></span> of the constructed logs as log. It also
+                            showed <a href="#words-sparse-log-gap">the sparse-log gap</a>: a log table with most of
+                            its values missing can be read raw, with the warning.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">Before any calibration score, you made the score the probability
+                            alone (a protocol amendment). For the failed row, the no-gaps rule firing on more than
+                            that one table, you chose “Accept, fix, calibrate”: accept the extra firing, first fix a
+                            fault of ours it showed in the bank's variants, then calibrate.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b4/report.json</code>,
+                            <code>valuescale/bank/expectations/b4.json</code>,
+                            <code>research/notebook-outputs/value_scale_b4/notes.md</code>,
+                            <code>research/notebook-outputs/value_scale_b4/rehearsal.json</code>,
+                            <code>valuescale/calibration/protein-v1.json</code>; commits <code>36ec352</code>,
+                            <code>27b43dd</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b5" class="docs-step">
+                    <summary><time datetime="2026-11-08">2026-11-08</time> to <time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">B5: the detector in the service, and the pop-up</span><span class="bead bead-open">Not live</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Wired the detector into <a href="#words-stage-0">Stage 0</a> for a protein table whose
+                            reading the uploader leaves to the service; RNA keeps the old rule. Built the pop-up that
+                            asks the uploader first, and the receipt's words for each answer.</dd>
+                        <dt>Why</dt>
+                        <dd>Most uploaders know their reading, so the site asks them first; the detector serves
+                            those who do not.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: the tables whose reading should not change reply as before, the
+                            predicted ones change, RNA replies are unchanged to the byte, and reading a table takes
+                            a few seconds at most.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b5_rows_pass"></span> of <span data-docs="rl_b5_rows"></span> rows
+                            passed, and the slowest reading took <span data-docs="rl_b5_slowest_seconds"></span>
+                            seconds. The failed row: one table's typicality warning, which the prediction took from
+                            B4's check with that deposit left out, does not fire with the model as shipped.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">The pop-up and its words were designed with you on 2026-11-08. On
+                            2026-11-09 you accepted the failed row, and added two items to B6.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b5/report.json</code>,
+                            <code>valuescale/bank/expectations/b5.json</code>,
+                            <code>research/notebook-outputs/value_scale_b5/notes.md</code>,
+                            <code>research/value-scale-b5-design.md</code>; commits <code>e23afcc</code> to
+                            <code>c36cdbd</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b6" class="docs-step">
+                    <summary><time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">B6: ready to go live</span><span class="bead bead-open">Not live</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Assembled the service as it would go live, with the detector and its calibration, and
+                            ran that copy on its own against the repository's service on every bank table. Added
+                            your two items from B5.</dd>
+                        <dt>Why</dt>
+                        <dd>What goes live must behave exactly as what was tested.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: the same replies, table by table, through the pipeline and through the
+                            server.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b6_rows_pass"></span> of <span data-docs="rl_b6_rows"></span> rows
+                            passed. One fault was found after the run: the import check left Python's compiled
+                            files in the assembled copy. It was fixed, with its test written first.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">Nothing was needed: every row passed. It stayed off the live site,
+                            since the site and the service were to go live together after B7.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b6/report.json</code>,
+                            <code>valuescale/bank/expectations/b6.json</code>,
+                            <code>research/notebook-outputs/value_scale_b6/notes.md</code>; commits
+                            <code>11a59a8</code>, <code>8449d14</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-b7" class="docs-step">
+                    <summary><time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">B7: the sealed test, scored once</span><span class="bead bead-open">Not live</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Committed the expectations and their judge, then ran the scorer once, on the
+                            <span data-docs="rl_b7_deposits"></span> test deposits
+                            (<span data-docs="rl_b7_subsamples"></span> subsamples), in
+                            <span data-docs="rl_b7_seconds"></span> seconds, from a clean copy of that commit. It wrote
+                            its <a href="#words-marks">marks</a> before and after, so it can never run again.</dd>
+                        <dt>Why</dt>
+                        <dd>To find out whether the promise holds on tables the detector had never seen.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: in S1 the misses would fall between
+                            <span data-docs="rl_b7_expected_s1_low"></span> and
+                            <span data-docs="rl_b7_expected_s1_high"></span>, and
+                            <span data-docs="rl_b7_expected_contradict_s1"></span> or more would mark the promise
+                            broken; <span data-docs="rl_b7_expected_whole_log"></span> or more of the whole log
+                            tables would read as log.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_b7_rows_pass"></span> of <span data-docs="rl_b7_rows"></span> rows
+                            passed. The promise broke for small log tables:
+                            <span data-docs="rl_b7_s1_log_miss"></span> misses of
+                            <span data-docs="rl_b7_s1_log_n"></span>, lower bound
+                            <span data-docs="rl_b7_s1_log_lower"></span>. It held in the other groups. Over every
+                            subsample, log tables missed <span data-docs="rl_b7_pooled_log_miss"></span> of
+                            <span data-docs="rl_b7_pooled_log_n"></span>, lower bound
+                            <span data-docs="rl_b7_pooled_log_lower"></span>. On whole tables the detector read
+                            <span data-docs="rl_b7_whole_linear_as_linear"></span> of the
+                            <span data-docs="rl_b7_tables"></span> raw tables as raw, and
+                            <span data-docs="rl_b7_whole_log_as_log"></span> of the logs as log
+                            (<span data-docs="rl_b7_whole_log_as_linear"></span> as raw). The comparison with the
+                            old rule was not won: p = <span data-docs="rl_b7_p"></span>. Answering only when its
+                            probability passed one half, it answered <span data-docs="rl_b7_coverage_half"></span>
+                            of the time, and <span data-docs="rl_b7_risk_half"></span> of those answers were wrong.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">You gave the go-ahead for the one scoring on 2026-11-09.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b7/report.json</code>,
+                            <code>valuescale/bank/expectations/b7.json</code>,
+                            <code>research/notebook-outputs/value_scale_b7/notes.md</code>,
+                            <code>research/benchmark/value-scale-test/results.json</code>; commit
+                            <code>e90d080</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-decision" class="docs-step">
+                    <summary><time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">Your decision: rework, then a fresh test</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Looked at the misses after the test, and put the choices to you.</dd>
+                        <dt>Why</dt>
+                        <dd>The protocol releases nothing by itself: you decide from the results.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Nothing was predicted. This was looked at after the test; it explains the result and
+                            does not change it.</dd>
+                        <dt>What we found</dt>
+                        <dd><span data-docs="rl_ph_faulty"></span> test tables were faulty
+                            (<span data-docs="rl_ph_empty"></span> empty, <span data-docs="rl_ph_mislabelled"></span> a
+                            log table labelled raw). With them set aside, small raw tables miss
+                            <span data-docs="rl_ph_s1_linear_miss"></span> of <span data-docs="rl_ph_s1_linear_n"></span>
+                            and small log tables <span data-docs="rl_ph_s1_log_miss"></span> of
+                            <span data-docs="rl_ph_s1_log_n"></span>, still broken; on raw tables the detector misreads
+                            <span data-docs="rl_ph_detector_wrong"></span> and the old rule
+                            <span data-docs="rl_ph_median_wrong"></span> (p = <span data-docs="rl_ph_p"></span>). The
+                            more values a log table is missing, the lower its log probability (rank correlation
+                            <span data-docs="rl_ph_spearman_cal"></span> in calibration,
+                            <span data-docs="rl_ph_spearman_test"></span> in the test). No difference in how the two
+                            sides were handled was found: the rehearsal gives back
+                            <span data-docs="rl_ph_rehearsal_same"></span> calibration scores exactly, and the
+                            deposits the clean-up added miss <span data-docs="rl_ph_cleanup_test_miss"></span> of
+                            <span data-docs="rl_ph_cleanup_test_n"></span>, against
+                            <span data-docs="rl_ph_rest_test_miss"></span> of <span data-docs="rl_ph_rest_test_n"></span>
+                            for the rest.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">The choices were: use the detector's single answers, with the old
+                            rule where it cannot place a table; rework, then a fresh test; ask only, keeping the old
+                            rule; or put it live as built, without the promise. On 2026-11-09 you chose rework, then a
+                            fresh test. The live service stays as it is.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/notebook-outputs/value_scale_b7/notes.md</code>,
+                            <code>research/notebook-outputs/value_scale_b7/posthoc.json</code>,
+                            <code>research/notebook-outputs/value_scale_b7/posthoc.md</code>; commit
+                            <code>abb5852</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-v2" class="docs-step">
+                    <summary><time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">Protein v2: the plan</span><span class="bead bead-open">Not started</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Wrote the plan for the second round, steps R1 to R7, for your approval. No step has
+                            started.</dd>
+                        <dt>Why</dt>
+                        <dd>B7 showed where the method is weak, and a fresh test needs fresh tables: from the
+                            reserve, or a wider frame if you choose one.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Each step writes its expectations before it runs. R1's are planned already: of the tables B3
+                            kept, exactly the empty ones, PXD022054 and PXD047898, refused, and exactly the
+                            mislabelled one, PXD066316, sent to the hand audit.</dd>
+                        <dt>What we found</dt>
+                        <dd>Nothing yet. Its sealed test is still to come: <span data-docs="rl_v2_test"></span>.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">On 2026-11-09: the method study weighs two candidates and chooses by a
+                            rule written first; the corpus refuses empty tables, and sends a table whose values look
+                            log under a raw label to the hand audit.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>research/value-scale-v2-plan.md</code>; commit
+                            <code>923a307</code></dd>
+                    </dl>
+                </details>
+
+            </div>
         </section>
 
         <section id="words" role="tabpanel" aria-labelledby="tab-words" class="docs-panel">
