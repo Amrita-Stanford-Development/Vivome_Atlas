@@ -240,3 +240,23 @@ below 64 (99th percentile). It found three, all in the test split:
   B3's walk did not list stay in reserve, unlisted, for a fresh calibration
   and test (`research/notebook-outputs/value_scale_b3/notes.md`).
 - **What follows is the owner's decision.**
+
+## The owner's decision (2026-11-09)
+
+Asked with four choices:
+- the detector's single answers, with median-50 when it cannot place a
+  table;
+- rework, then a fresh test;
+- ask only, keeping median-50;
+- ship as built, with the claim removed.
+
+The owner chose **rework, then a fresh test**:
+- the live service stays as it is (revision 00009-hcz, median-50);
+- the detector is reworked on development data: tables with many missing
+  values, and the corpus checks that let in empty tables and a log table
+  labelled linear;
+- a fresh calibration and sealed test are then drawn from the reserve of
+  8,813 unlisted deposits.
+
+The plan for it is written and agreed before any work starts. B7's
+commits were pushed with the owner's OK (`abb5852`).
