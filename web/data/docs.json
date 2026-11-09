@@ -1,0 +1,1233 @@
+{
+ "schema_version": "1",
+ "built_for": {
+  "atlas_version": "0.6.0",
+  "model_name": "VivOME v4.1"
+ },
+ "sources": {
+  "research/benchmark/protocol-value-scale.md": "4bfe2e8b33caec25ec9fa52745a925a7b5f43e3a2cafbc763285fab6fc13c4d9",
+  "research/benchmark/value-scale-test/results.json": "e40da852d00de5d3714ae949f12e0fac9dcea9d23b42a76372d22d0fbcc63318",
+  "research/notebook-outputs/value_scale_b1/notes.md": "bcc99a6a207acad386bc256f424277c65599b7f1b41d4877b0fce2fe24817041",
+  "research/notebook-outputs/value_scale_b1/report.json": "5bb33aca76b8d00eaee1b6a9e269a6b970536ae7f0ba725af731b9f02cd13cd3",
+  "research/notebook-outputs/value_scale_b2/notes.md": "b2788f1108a44ef5d4a578e22feab3b3af8cd7008ba2f38557ed46aa58609e93",
+  "research/notebook-outputs/value_scale_b2/report.json": "3f3d4954b2915e837b7e487b392936c1fea72ca72659fad65f195782464f2b4a",
+  "research/notebook-outputs/value_scale_b3/notes.md": "dec2971d224958767d8f18389f78ce16d3c34a9fd7a1ed0d4fb4385445622e25",
+  "research/notebook-outputs/value_scale_b3/report.json": "1cb8a036c27a45a60d74a4f86028a5c917efe05bb7bc7764ae512dd6336919cb",
+  "research/notebook-outputs/value_scale_b4/notes.md": "3a6919facc28835cf5f476d9a566a78abb48adad25f405afff1d6e5c9135d2d4",
+  "research/notebook-outputs/value_scale_b4/rehearsal.json": "6847369bdd20b38da307d1cc38415d27336f8370e7a92bc0b5caabb7427dc069",
+  "research/notebook-outputs/value_scale_b4/report.json": "066b44ce6b0220ad75ca7a1e25521ae9cbeda0ee82fcaa4b72264abbb167cd3f",
+  "research/notebook-outputs/value_scale_b5/notes.md": "33ec92c3aa2c91a5b05747a00f0f66ff667ec2e6aaf4ea24ea57da7cc47dd829",
+  "research/notebook-outputs/value_scale_b5/report.json": "495c31d448d8e65411d063cc3bffac27c796a20b3fc52dde6000dbe60cc26dd8",
+  "research/notebook-outputs/value_scale_b6/notes.md": "b02ed62e6243ff05e22520d482623986f472e83e6c5052e6746dc7a352562421",
+  "research/notebook-outputs/value_scale_b6/report.json": "ef2a802f3b81451e9d747807d4ee74ee66686e7a2d8e23e318dcc866efcc401e",
+  "research/notebook-outputs/value_scale_b7/notes.md": "dee1baa187c4a74b3341d1feb762c92295d0f4be0cc37ce4a19a7789f801e442",
+  "research/notebook-outputs/value_scale_b7/posthoc.json": "fa51f10bcbe64066e25420798b44735e0b169cb853b4722e9d23d5213e0f6a00",
+  "research/notebook-outputs/value_scale_b7/report.json": "18d42dba2439d52cabb72a544a9d5a1b2578169aa37966e0fd46dd608d2a23ac",
+  "research/notebook-outputs/value_scale_phaseA/notes.md": "8ff2fb2b1de0007a663a3cc4db549fb200deb7433a727e3605ff5bc897c2c839",
+  "research/notebook-outputs/value_scale_phaseA/report.json": "5e0d9f53ff8f4497b72caf99845235f0ad0631873683bf29d298e111b640e3af",
+  "research/notebook-outputs/value_scale_phaseA2/notes.md": "7eb0f76cd56509690e38522690e20e3a2e25f6a55372df80a410166d28c8b3bc",
+  "research/notebook-outputs/value_scale_phaseA2/report.json": "574e256284a685bb6ee25c999e1c20019efd2805d1547bc5ee7b26987374ca82",
+  "research/notebook-outputs/value_scale_step1/notes.md": "69eaba32263621a834bb5980fe3523bbb047f8e4e20f11a889809b01ad886afd",
+  "research/notebook-outputs/value_scale_step1/report.json": "3a16d49b5226b7580a9cb900df7fbc77add2cb33cfda6bf626590c144f10d618",
+  "research/notebook-outputs/value_scale_zscore/notes.md": "3e125ba37933d881fd662015a1f4acbec909c6b44a1f6b5b8317842e2b78c2c6",
+  "research/notebook-outputs/value_scale_zscore/report.json": "29a9feb6d07aca97f7cde6eafb681104abec10699189d97f7cf452d563aef8f0",
+  "research/value-scale-plan.md": "e328ee10cb9a81d5f415a75920b1e166558f0c665a1d016ceaf8fbb8ecf140c1",
+  "research/value-scale-v2-plan.md": "9e7bbd19bc17be0f592b6701dd851a0e93b312ef9160f1ec36d8a509adc4be88",
+  "service/config.py": "bb5a2463d7b17b6ee9b9b53ba2000f73c3bbd156ca507c726ba9adc45b78f605",
+  "valuescale/bank/expectations/b1.json": "e3898c9f3ee89bb503a847868d4639cf3f88aebe8f0cff1151bddb1bf21263db",
+  "valuescale/bank/expectations/b2.json": "d98402e46d1b24373a828121cf6bd1a6fcf85900570a05508a6b88a0900ade41",
+  "valuescale/bank/expectations/b3.json": "509aa8357c9e1e72576b143972a2cd1bda7105e258ad956bb3e9b5b0ca3b1e96",
+  "valuescale/bank/expectations/b4.json": "f2f0161830d7b8ce84bde15bbe95c41c78b0747116d8e32c96ff3c5ccc4a32e0",
+  "valuescale/bank/expectations/b5.json": "09780dbd9844f90be26f495f3c7be2ec2791ab3d52fd83ced86e74ccd63ab11d",
+  "valuescale/bank/expectations/b6.json": "4d279bcbe110edfbf925922af9c5eba61af4503db091e09c9a96debbbb95def1",
+  "valuescale/bank/expectations/b7.json": "42ea04b4752ef56297dbe80a67e4f7619df6dda2e6fdbaa12dd053fa94728308",
+  "valuescale/bank/expectations/phaseA.json": "b3d13fd81b4316d21d2c6be6d8d2777df07e078dfe86ea9120c3e042fd953954",
+  "valuescale/bank/expectations/phaseA2.json": "99f48b51708369ce2fcfef0ff8640a9d212964349542459cafab5d5f0531cd3d",
+  "valuescale/bank/expectations/step1.json": "471bdfe345fce165339a1351a96f0128c5b582eb4fc7d29f0ddb5a833793db6f",
+  "valuescale/bank/expectations/zscore.json": "9a1c70ec43475f4d89b6f0b1d59b338146d85daa88f017230a577189836becd8",
+  "valuescale/calibration/protein-v1.json": "399812d2cdf52cb2ddfd47abe5c335769ff0a49fdfd6f97c7d0fbd61e23aabd0",
+  "valuescale/conformal.py": "7086f684d24de89d7e356515e1b1e0e686cd66357dd9c1025384827a6f923767",
+  "valuescale/corpus/frame.json": "519bc234e41a88859e41d219ed5ba1aac5cba893eef9fe690f95ba6e0b2652b9"
+ },
+ "records": {
+  "rl_alpha": {
+   "value": 0.05,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: alpha",
+   "format": "percent"
+  },
+  "rl_b1_expected_log_as_linear": {
+   "value": 0.1,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/b1.json: rows > B1_log_read_linear_small, written before the run",
+   "format": "pct1"
+  },
+  "rl_b1_linear_as_log": {
+   "value": 0.22,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b1/report.json: rows > B1_direction > median_linear_read_as_log",
+   "format": "pct1"
+  },
+  "rl_b1_log_as_linear": {
+   "value": 0.124,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b1/report.json: rows > B1_direction > median_log_read_linear",
+   "format": "pct1"
+  },
+  "rl_b1_n_linear": {
+   "value": 23,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b1/report.json: rows > B1_direction > n_linear",
+   "format": "count"
+  },
+  "rl_b1_n_log": {
+   "value": 5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b1/report.json: rows > B1_direction > n_log",
+   "format": "count"
+  },
+  "rl_b1_rows": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b1/report.json: rows judged",
+   "format": "count"
+  },
+  "rl_b1_rows_pass": {
+   "value": 5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b1/report.json: rows passed",
+   "format": "count"
+  },
+  "rl_b2_auc": {
+   "value": 0.9923,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_separation > auc",
+   "format": "fixed3"
+  },
+  "rl_b2_deposits": {
+   "value": 18,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_design_size > deposits",
+   "format": "count"
+  },
+  "rl_b2_expected_auc": {
+   "value": 0.95,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/b2.json: rows > B2_separation, written before the run",
+   "format": "fixed2"
+  },
+  "rl_b2_linear_rows": {
+   "value": 39,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_design_size > linear_rows",
+   "format": "count"
+  },
+  "rl_b2_log_rows": {
+   "value": 50,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_design_size > log_rows",
+   "format": "count"
+  },
+  "rl_b2_rows": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows judged (the design size is reported, not judged)",
+   "format": "count"
+  },
+  "rl_b2_rows_pass": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows passed",
+   "format": "count"
+  },
+  "rl_b2_variants": {
+   "value": 571,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_verdicts_variants > labelled",
+   "format": "count"
+  },
+  "rl_b2_variants_wrong": {
+   "value": 17,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_verdicts_variants > wrong",
+   "format": "count"
+  },
+  "rl_b3_after_audit": {
+   "value": 455,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: after_audit",
+   "format": "count"
+  },
+  "rl_b3_audit_agree": {
+   "value": 80,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_audit > found > agree",
+   "format": "count"
+  },
+  "rl_b3_audit_judged": {
+   "value": 81,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_audit > found > judged",
+   "format": "count"
+  },
+  "rl_b3_calibration": {
+   "value": 218,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: quotas > calibration > S1",
+   "format": "count"
+  },
+  "rl_b3_frame": {
+   "value": 18813,
+   "status": "measured",
+   "basis": "valuescale/corpus/frame.json: counts > frame",
+   "format": "count"
+  },
+  "rl_b3_index": {
+   "value": 57944,
+   "status": "measured",
+   "basis": "valuescale/corpus/frame.json: counts > index_records",
+   "format": "count"
+  },
+  "rl_b3_kept": {
+   "value": 457,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: kept",
+   "format": "count"
+  },
+  "rl_b3_listed": {
+   "value": 10000,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: listed",
+   "format": "count"
+  },
+  "rl_b3_no_candidate": {
+   "value": 7777,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_skips > found > no candidate",
+   "format": "count"
+  },
+  "rl_b3_reserve": {
+   "value": 8813,
+   "status": "measured",
+   "basis": "valuescale/corpus/frame.json: counts > frame, less research/notebook-outputs/value_scale_b3/report.json: listed",
+   "format": "count"
+  },
+  "rl_b3_rows": {
+   "value": 13,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows judged",
+   "format": "count"
+  },
+  "rl_b3_rows_pass": {
+   "value": 12,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows passed",
+   "format": "count"
+  },
+  "rl_b3_test": {
+   "value": 237,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: quotas > test > S1",
+   "format": "count"
+  },
+  "rl_b4_detect_seconds": {
+   "value": 0.086,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/report.json: rows > B4_detect > seconds",
+   "format": "plain"
+  },
+  "rl_b4_reh_detector_wrong": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/rehearsal.json: primary > detector_wrong",
+   "format": "count"
+  },
+  "rl_b4_reh_median_wrong": {
+   "value": 4,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/rehearsal.json: primary > median_50_wrong",
+   "format": "count"
+  },
+  "rl_b4_reh_tables": {
+   "value": 218,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/rehearsal.json: primary > tables",
+   "format": "count"
+  },
+  "rl_b4_reh_whole_log": {
+   "value": 210,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/rehearsal.json: detector_on_whole_tables > constructed_log > log",
+   "format": "count"
+  },
+  "rl_b4_rehearsal_seconds": {
+   "value": 82,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/report.json: rows > B4_rehearsal > seconds",
+   "format": "count"
+  },
+  "rl_b4_rows": {
+   "value": 12,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/report.json: rows judged",
+   "format": "count"
+  },
+  "rl_b4_rows_pass": {
+   "value": 11,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b4/report.json: rows passed",
+   "format": "count"
+  },
+  "rl_b5_rows": {
+   "value": 10,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: results judged",
+   "format": "count"
+  },
+  "rl_b5_rows_pass": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: results passed",
+   "format": "count"
+  },
+  "rl_b5_slowest_seconds": {
+   "value": 0.537,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: slowest_detect > seconds",
+   "format": "plain"
+  },
+  "rl_b6_rows": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b6/report.json: results judged",
+   "format": "count"
+  },
+  "rl_b6_rows_pass": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b6/report.json: results passed",
+   "format": "count"
+  },
+  "rl_b7_coverage_half": {
+   "value": 0.934295,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: risk_coverage > 0.5 > coverage",
+   "format": "pct1"
+  },
+  "rl_b7_deposits": {
+   "value": 237,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: deposits",
+   "format": "count"
+  },
+  "rl_b7_detector_wrong": {
+   "value": 1,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: primary > detector_wrong",
+   "format": "count"
+  },
+  "rl_b7_discordant": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: primary, the tables only one reading gets right",
+   "format": "count"
+  },
+  "rl_b7_expected_contradict_s1": {
+   "value": 19,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/b7.json: B7_guarantee > what_contradicts, written before the run",
+   "format": "count"
+  },
+  "rl_b7_expected_s1_high": {
+   "value": 12,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/b7.json: B7_guarantee > expected_misses, written before the run",
+   "format": "count"
+  },
+  "rl_b7_expected_s1_low": {
+   "value": 2,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/b7.json: B7_guarantee > expected_misses, written before the run",
+   "format": "count"
+  },
+  "rl_b7_expected_whole_log": {
+   "value": 0.95,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/b7.json: B7_whole_log, written before the run",
+   "format": "percent"
+  },
+  "rl_b7_median_wrong": {
+   "value": 4,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: primary > median_50_wrong",
+   "format": "count"
+  },
+  "rl_b7_p": {
+   "value": 0.125,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: primary > p_value",
+   "format": "fixed3"
+  },
+  "rl_b7_pooled_log_lower": {
+   "value": 0.064534,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: all_subsamples > constructed_log > miss_lower",
+   "format": "fixed3"
+  },
+  "rl_b7_pooled_log_miss": {
+   "value": 28,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: all_subsamples > constructed_log > miss",
+   "format": "count"
+  },
+  "rl_b7_pooled_log_n": {
+   "value": 312,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: all_subsamples > constructed_log > n",
+   "format": "count"
+  },
+  "rl_b7_rows": {
+   "value": 11,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/report.json: results judged",
+   "format": "count"
+  },
+  "rl_b7_rows_pass": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/report.json: results passed",
+   "format": "count"
+  },
+  "rl_b7_s1_linear_lower": {
+   "value": 0.029472,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > linear > miss_lower",
+   "format": "fixed3"
+  },
+  "rl_b7_s1_linear_miss": {
+   "value": 12,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > linear > miss",
+   "format": "count"
+  },
+  "rl_b7_s1_linear_n": {
+   "value": 237,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > linear > n",
+   "format": "count"
+  },
+  "rl_b7_s1_linear_rate": {
+   "value": 0.050633,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > linear, miss / n",
+   "format": "pct1"
+  },
+  "rl_b7_s1_log_lower": {
+   "value": 0.063681,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > constructed_log > miss_lower",
+   "format": "fixed3"
+  },
+  "rl_b7_s1_log_miss": {
+   "value": 22,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > constructed_log > miss",
+   "format": "count"
+  },
+  "rl_b7_s1_log_n": {
+   "value": 237,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > constructed_log > n",
+   "format": "count"
+  },
+  "rl_b7_s1_log_rate": {
+   "value": 0.092827,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S1 > constructed_log, miss / n",
+   "format": "pct1"
+  },
+  "rl_b7_s23_linear_lower": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > linear > miss_lower",
+   "format": "fixed3"
+  },
+  "rl_b7_s23_linear_miss": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > linear > miss",
+   "format": "count"
+  },
+  "rl_b7_s23_linear_n": {
+   "value": 67,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > linear > n",
+   "format": "count"
+  },
+  "rl_b7_s23_linear_rate": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > linear, miss / n",
+   "format": "pct1"
+  },
+  "rl_b7_s23_log_lower": {
+   "value": 0.029865,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > constructed_log > miss_lower",
+   "format": "fixed3"
+  },
+  "rl_b7_s23_log_miss": {
+   "value": 5,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > constructed_log > miss",
+   "format": "count"
+  },
+  "rl_b7_s23_log_n": {
+   "value": 67,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > constructed_log > n",
+   "format": "count"
+  },
+  "rl_b7_s23_log_rate": {
+   "value": 0.074627,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: by_calibrated_stratum > S2+S3 > constructed_log, miss / n",
+   "format": "pct1"
+  },
+  "rl_b7_seconds": {
+   "value": 62,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/report.json: seconds",
+   "format": "count"
+  },
+  "rl_b7_subsamples": {
+   "value": 624,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: subsamples",
+   "format": "count"
+  },
+  "rl_b7_tables": {
+   "value": 237,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: primary > tables",
+   "format": "count"
+  },
+  "rl_b7_whole_linear_as_linear": {
+   "value": 236,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: detector_on_whole_tables > linear > linear",
+   "format": "count"
+  },
+  "rl_b7_whole_log_as_linear": {
+   "value": 22,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: detector_on_whole_tables > constructed_log > linear",
+   "format": "count"
+  },
+  "rl_b7_whole_log_as_log": {
+   "value": 215,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: detector_on_whole_tables > constructed_log > log",
+   "format": "count"
+  },
+  "rl_b7_whole_log_median": {
+   "value": 235,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: tables whose constructed log median-50 reads log",
+   "format": "count"
+  },
+  "rl_confidence": {
+   "value": 0.95,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: 1 - delta",
+   "format": "percent"
+  },
+  "rl_delta": {
+   "value": 0.05,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: delta",
+   "format": "percent"
+  },
+  "rl_median_rule": {
+   "value": 50,
+   "status": "measured",
+   "basis": "service/config.py: LINEAR_SCALE_MEDIAN_THRESHOLD",
+   "format": "count"
+  },
+  "rl_min_n": {
+   "value": 59,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: rows > B2_conformal > umbrella_k, the smallest n with a k",
+   "format": "count"
+  },
+  "rl_pa2_fl_cells": {
+   "value": 2000,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA2/report.json: furtwangler_log2 > cells",
+   "format": "count"
+  },
+  "rl_pa2_fl_measured": {
+   "value": 524,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA2/report.json: furtwangler_log2 > answered",
+   "format": "count"
+  },
+  "rl_pa2_fl_missing": {
+   "value": 806,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA2/report.json: furtwangler_log2 > answered",
+   "format": "count"
+  },
+  "rl_pa2_fl_zero_share": {
+   "value": 0.6839,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA2/report.json: furtwangler_log2 > zero_share",
+   "format": "pct1"
+  },
+  "rl_pa_app": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA/report.json: app checks",
+   "format": "count"
+  },
+  "rl_pa_app_pass": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA/report.json: app checks passed",
+   "format": "count"
+  },
+  "rl_pa_same": {
+   "value": 30,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA/report.json: tables whose automatic reply equals the baseline (every A1 check)",
+   "format": "count"
+  },
+  "rl_pa_traced": {
+   "value": 30,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_phaseA/report.json: tables traced (not refused)",
+   "format": "count"
+  },
+  "rl_ph_band0_cal_below": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 0 > below",
+   "format": "count"
+  },
+  "rl_ph_band0_cal_tables": {
+   "value": 138,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 0 > tables",
+   "format": "count"
+  },
+  "rl_ph_band0_hi": {
+   "value": 0.5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 0 > band > 1",
+   "format": "percent"
+  },
+  "rl_ph_band0_lo": {
+   "value": 0.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 0 > band > 0",
+   "format": "percent"
+  },
+  "rl_ph_band0_test_below": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 0 > below",
+   "format": "count"
+  },
+  "rl_ph_band0_test_tables": {
+   "value": 146,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 0 > tables",
+   "format": "count"
+  },
+  "rl_ph_band1_cal_below": {
+   "value": 1,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 1 > below",
+   "format": "count"
+  },
+  "rl_ph_band1_cal_tables": {
+   "value": 31,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 1 > tables",
+   "format": "count"
+  },
+  "rl_ph_band1_hi": {
+   "value": 0.6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 1 > band > 1",
+   "format": "percent"
+  },
+  "rl_ph_band1_lo": {
+   "value": 0.5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 1 > band > 0",
+   "format": "percent"
+  },
+  "rl_ph_band1_test_below": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 1 > below",
+   "format": "count"
+  },
+  "rl_ph_band1_test_tables": {
+   "value": 34,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 1 > tables",
+   "format": "count"
+  },
+  "rl_ph_band2_cal_below": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 2 > below",
+   "format": "count"
+  },
+  "rl_ph_band2_cal_tables": {
+   "value": 17,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 2 > tables",
+   "format": "count"
+  },
+  "rl_ph_band2_hi": {
+   "value": 0.7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 2 > band > 1",
+   "format": "percent"
+  },
+  "rl_ph_band2_lo": {
+   "value": 0.6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 2 > band > 0",
+   "format": "percent"
+  },
+  "rl_ph_band2_test_below": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 2 > below",
+   "format": "count"
+  },
+  "rl_ph_band2_test_tables": {
+   "value": 22,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 2 > tables",
+   "format": "count"
+  },
+  "rl_ph_band3_cal_below": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 3 > below",
+   "format": "count"
+  },
+  "rl_ph_band3_cal_tables": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 3 > tables",
+   "format": "count"
+  },
+  "rl_ph_band3_hi": {
+   "value": 0.8,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 3 > band > 1",
+   "format": "percent"
+  },
+  "rl_ph_band3_lo": {
+   "value": 0.7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 3 > band > 0",
+   "format": "percent"
+  },
+  "rl_ph_band3_test_below": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 3 > below",
+   "format": "count"
+  },
+  "rl_ph_band3_test_tables": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 3 > tables",
+   "format": "count"
+  },
+  "rl_ph_band4_cal_below": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 4 > below",
+   "format": "count"
+  },
+  "rl_ph_band4_cal_tables": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 4 > tables",
+   "format": "count"
+  },
+  "rl_ph_band4_hi": {
+   "value": 1.0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 4 > band > 1",
+   "format": "percent"
+  },
+  "rl_ph_band4_lo": {
+   "value": 0.8,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands > 4 > band > 0",
+   "format": "percent"
+  },
+  "rl_ph_band4_test_below": {
+   "value": 5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 4 > below",
+   "format": "count"
+  },
+  "rl_ph_band4_test_tables": {
+   "value": 13,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > bands > 4 > tables",
+   "format": "count"
+  },
+  "rl_ph_bands": {
+   "value": 5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > bands",
+   "format": "count"
+  },
+  "rl_ph_cal_below": {
+   "value": 5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > below",
+   "format": "count"
+  },
+  "rl_ph_cal_scored": {
+   "value": 214,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > scored",
+   "format": "count"
+  },
+  "rl_ph_cleanup_test_miss": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: cleanup > test > clean-up > miss",
+   "format": "count"
+  },
+  "rl_ph_cleanup_test_n": {
+   "value": 24,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: cleanup > test > clean-up > n",
+   "format": "count"
+  },
+  "rl_ph_detector_wrong": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: primary_faulty_set_aside > detector_wrong",
+   "format": "count"
+  },
+  "rl_ph_empty": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: faulty_tables, empty",
+   "format": "count"
+  },
+  "rl_ph_faulty": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: faulty_tables",
+   "format": "count"
+  },
+  "rl_ph_median_wrong": {
+   "value": 1,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: primary_faulty_set_aside > median_50_wrong",
+   "format": "count"
+  },
+  "rl_ph_mislabelled": {
+   "value": 1,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: faulty_tables, log values labelled linear",
+   "format": "count"
+  },
+  "rl_ph_p": {
+   "value": 0.5,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: primary_faulty_set_aside > p_value",
+   "format": "fixed3"
+  },
+  "rl_ph_rehearsal_same": {
+   "value": 283,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: rehearsal_scores_equal_calibration",
+   "format": "count"
+  },
+  "rl_ph_rest_test_miss": {
+   "value": 19,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: cleanup > test > rest > miss",
+   "format": "count"
+  },
+  "rl_ph_rest_test_n": {
+   "value": 213,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: cleanup > test > rest > n",
+   "format": "count"
+  },
+  "rl_ph_s1_linear_miss": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: guarantee_faulty_set_aside > S1 linear > miss",
+   "format": "count"
+  },
+  "rl_ph_s1_linear_n": {
+   "value": 234,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: guarantee_faulty_set_aside > S1 linear > n",
+   "format": "count"
+  },
+  "rl_ph_s1_log_lower": {
+   "value": 0.057362,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: guarantee_faulty_set_aside > S1 constructed_log > lower",
+   "format": "fixed3"
+  },
+  "rl_ph_s1_log_miss": {
+   "value": 20,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: guarantee_faulty_set_aside > S1 constructed_log > miss",
+   "format": "count"
+  },
+  "rl_ph_s1_log_n": {
+   "value": 234,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: guarantee_faulty_set_aside > S1 constructed_log > n",
+   "format": "count"
+  },
+  "rl_ph_spearman_cal": {
+   "value": -0.839107,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > calibration > spearman_missing",
+   "format": "fixed2"
+  },
+  "rl_ph_spearman_test": {
+   "value": -0.851313,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > spearman_missing",
+   "format": "fixed2"
+  },
+  "rl_ph_test_below": {
+   "value": 20,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > below",
+   "format": "count"
+  },
+  "rl_ph_test_scored": {
+   "value": 234,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b7/posthoc.json: tail > test > scored",
+   "format": "count"
+  },
+  "rl_pxd064083_median": {
+   "value": 6.9903,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D1 pxd064083_t > median_nonzero",
+   "format": "integer"
+  },
+  "rl_s1_hi": {
+   "value": 49,
+   "status": "measured",
+   "basis": "valuescale/conformal.py: STRATA S1",
+   "format": "count"
+  },
+  "rl_s1_k": {
+   "value": 6,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 0 > k > linear",
+   "format": "count"
+  },
+  "rl_s1_linear_cut": {
+   "value": 0.8122,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 0 > thresholds > linear",
+   "format": "fixed3"
+  },
+  "rl_s1_lo": {
+   "value": 20,
+   "status": "measured",
+   "basis": "valuescale/conformal.py: STRATA S1",
+   "format": "count"
+  },
+  "rl_s1_log_cut": {
+   "value": 0.930874,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 0 > thresholds > log",
+   "format": "fixed3"
+  },
+  "rl_s1_n": {
+   "value": 218,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 0 > n > linear",
+   "format": "count"
+  },
+  "rl_s23_k": {
+   "value": 1,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 1 > k > linear",
+   "format": "count"
+  },
+  "rl_s23_linear_cut": {
+   "value": 0.114219,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 1 > thresholds > linear",
+   "format": "fixed3"
+  },
+  "rl_s23_log_cut": {
+   "value": 0.918921,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 1 > thresholds > log",
+   "format": "fixed3"
+  },
+  "rl_s23_n": {
+   "value": 68,
+   "status": "measured",
+   "basis": "valuescale/calibration/protein-v1.json: strata > 1 > n > linear",
+   "format": "count"
+  },
+  "rl_s2_hi": {
+   "value": 300,
+   "status": "measured",
+   "basis": "valuescale/conformal.py: STRATA S2",
+   "format": "count"
+  },
+  "rl_s2_lo": {
+   "value": 50,
+   "status": "measured",
+   "basis": "valuescale/conformal.py: STRATA S2",
+   "format": "count"
+  },
+  "rl_s3_hi": {
+   "value": 2000,
+   "status": "measured",
+   "basis": "valuescale/conformal.py: STRATA S3",
+   "format": "count"
+  },
+  "rl_s3_lo": {
+   "value": 301,
+   "status": "measured",
+   "basis": "valuescale/conformal.py: STRATA S3",
+   "format": "count"
+  },
+  "rl_step1_d3_pass": {
+   "value": 33,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D3, tables refused or with no invariant false (not the pass_ field)",
+   "format": "count"
+  },
+  "rl_step1_linear": {
+   "value": 28,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D2, the linear tables as deposited",
+   "format": "count"
+  },
+  "rl_step1_linear_misread": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D2, the linear tables as deposited that the old rule misread",
+   "format": "count"
+  },
+  "rl_step1_log": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D2, the log tables as deposited",
+   "format": "count"
+  },
+  "rl_step1_log_misread": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D2, the log tables as deposited that the old rule misread",
+   "format": "count"
+  },
+  "rl_step1_tables": {
+   "value": 37,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D1, one row per bank table",
+   "format": "count"
+  },
+  "rl_v2_test": {
+   "value": null,
+   "status": "pending",
+   "phase": "Protein v2, R7",
+   "note": "the fresh sealed test is scored once, after R1 to R6 (research/value-scale-v2-plan.md)"
+  },
+  "rl_z_largest_move": {
+   "value": 0.0801,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_zscore/report.json: the largest largest_coordinate_change",
+   "format": "fixed3"
+  },
+  "rl_z_same": {
+   "value": 29,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_zscore/report.json: tables with no answer changed",
+   "format": "count"
+  },
+  "rl_z_traced": {
+   "value": 30,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_zscore/report.json: tables traced (not refused)",
+   "format": "count"
+  }
+ },
+ "steps": {
+  "step1": {
+   "report": "research/notebook-outputs/value_scale_step1/report.json",
+   "expectations": "valuescale/bank/expectations/step1.json",
+   "notes": "research/notebook-outputs/value_scale_step1/notes.md",
+   "run": "2026-10-28",
+   "expected": "2026-10-28",
+   "dates": [
+    "2026-10-28",
+    "2026-11-03",
+    "2026-11-06"
+   ]
+  },
+  "phase_a": {
+   "report": "research/notebook-outputs/value_scale_phaseA/report.json",
+   "expectations": "valuescale/bank/expectations/phaseA.json",
+   "notes": "research/notebook-outputs/value_scale_phaseA/notes.md",
+   "run": "2026-10-28",
+   "expected": "2026-10-28",
+   "dates": [
+    "2026-10-28",
+    "2026-11-03"
+   ]
+  },
+  "phase_a2": {
+   "report": "research/notebook-outputs/value_scale_phaseA2/report.json",
+   "expectations": "valuescale/bank/expectations/phaseA2.json",
+   "notes": "research/notebook-outputs/value_scale_phaseA2/notes.md",
+   "run": "2026-10-28",
+   "expected": "2026-10-28",
+   "dates": [
+    "2026-10-28",
+    "2026-11-03"
+   ]
+  },
+  "zscore": {
+   "report": "research/notebook-outputs/value_scale_zscore/report.json",
+   "expectations": "valuescale/bank/expectations/zscore.json",
+   "notes": "research/notebook-outputs/value_scale_zscore/notes.md",
+   "run": "2026-10-28",
+   "expected": "2026-10-28",
+   "dates": [
+    "2026-10-28",
+    "2026-11-03"
+   ]
+  },
+  "b0": {
+   "report": null,
+   "expectations": null,
+   "notes": "research/benchmark/protocol-value-scale.md",
+   "expected": "2026-11-03",
+   "dates": [
+    "2020-01-01",
+    "2026-10-28",
+    "2026-10-31",
+    "2026-11-03",
+    "2026-11-06",
+    "2026-11-07"
+   ]
+  },
+  "b1": {
+   "report": "research/notebook-outputs/value_scale_b1/report.json",
+   "expectations": "valuescale/bank/expectations/b1.json",
+   "notes": "research/notebook-outputs/value_scale_b1/notes.md",
+   "run": "2026-11-03",
+   "expected": "2026-11-03",
+   "dates": [
+    "2026-11-03"
+   ]
+  },
+  "b2": {
+   "report": "research/notebook-outputs/value_scale_b2/report.json",
+   "expectations": "valuescale/bank/expectations/b2.json",
+   "notes": "research/notebook-outputs/value_scale_b2/notes.md",
+   "run": "2026-11-03",
+   "expected": "2026-11-03",
+   "dates": [
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-07"
+   ]
+  },
+  "b3": {
+   "report": "research/notebook-outputs/value_scale_b3/report.json",
+   "expectations": "valuescale/bank/expectations/b3.json",
+   "notes": "research/notebook-outputs/value_scale_b3/notes.md",
+   "expected": "2026-11-04",
+   "dates": [
+    "2020-01-01",
+    "2026-10-31",
+    "2026-11-04",
+    "2026-11-06",
+    "2026-11-07"
+   ]
+  },
+  "b4": {
+   "report": "research/notebook-outputs/value_scale_b4/report.json",
+   "expectations": "valuescale/bank/expectations/b4.json",
+   "notes": "research/notebook-outputs/value_scale_b4/notes.md",
+   "run": "2026-11-07",
+   "expected": "2026-11-07",
+   "dates": [
+    "2026-11-07"
+   ]
+  },
+  "b5": {
+   "report": "research/notebook-outputs/value_scale_b5/report.json",
+   "expectations": "valuescale/bank/expectations/b5.json",
+   "notes": "research/notebook-outputs/value_scale_b5/notes.md",
+   "run": "2026-11-08",
+   "expected": "2026-11-08",
+   "dates": [
+    "2026-11-08",
+    "2026-11-09"
+   ]
+  },
+  "b6": {
+   "report": "research/notebook-outputs/value_scale_b6/report.json",
+   "expectations": "valuescale/bank/expectations/b6.json",
+   "notes": "research/notebook-outputs/value_scale_b6/notes.md",
+   "run": "2026-11-09",
+   "expected": "2026-11-09",
+   "dates": [
+    "2026-11-09"
+   ]
+  },
+  "b7": {
+   "report": "research/notebook-outputs/value_scale_b7/report.json",
+   "expectations": "valuescale/bank/expectations/b7.json",
+   "notes": "research/notebook-outputs/value_scale_b7/notes.md",
+   "run": "2026-11-09",
+   "expected": "2026-11-09",
+   "dates": [
+    "2026-11-09"
+   ]
+  },
+  "decision": {
+   "report": null,
+   "expectations": null,
+   "notes": "research/notebook-outputs/value_scale_b7/notes.md",
+   "dates": [
+    "2026-11-09"
+   ]
+  },
+  "v2": {
+   "report": null,
+   "expectations": null,
+   "notes": "research/value-scale-v2-plan.md",
+   "dates": [
+    "2026-11-09"
+   ]
+  }
+ }
+}

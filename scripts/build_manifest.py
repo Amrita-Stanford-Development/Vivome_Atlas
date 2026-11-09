@@ -1008,6 +1008,10 @@ def main() -> None:
     import build_manuscript
     size = build_manuscript.write(build_manuscript.build(manifest, workflow))
     print(f"Wrote {build_workflow.rel(build_manuscript.OUTPUT)} ({size:,} bytes)")
+    # The Docs section's records, for the same release.
+    import build_docs
+    size = build_docs.write(build_docs.build(manifest))
+    print(f"Wrote {build_workflow.rel(build_docs.OUTPUT)} ({size:,} bytes)")
 
 
 if __name__ == "__main__":
