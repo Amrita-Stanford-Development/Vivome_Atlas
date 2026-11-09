@@ -9,6 +9,7 @@ checked against the expectations written before it ran
     python research/notebooks/value_scale_diagnostics.py --step phaseA2
     python research/notebooks/value_scale_diagnostics.py --step zscore
     python research/notebooks/value_scale_diagnostics.py --step b5
+    python research/notebooks/value_scale_diagnostics.py --step b6     # from a clean tree: it builds the Space
 
 Step 1:
 - D1, the bank itself: each source file matches its recorded sha256, parses
@@ -38,6 +39,13 @@ Phase A (the request may state the scale, value_scale):
   each traced table's verdict against B4's, its reply against the median
   method's on the frozen keys, RNA unchanged, the invariants, the check's
   time, refusals, and the same through the app (expectations/b5.json).
+- B6 (the deploy assembly): deploy/huggingface/build_space.py stages the
+  Space, which then runs on its own, in a fresh interpreter with the hosted
+  settings, against this repository's service run the same way: the build
+  and its import check, the pipeline's replies on every traced table, GET
+  /api/status, every bank file that fits the upload limit through both
+  servers, zeros_read, and the reply summaries against B5's
+  (expectations/b6.json).
 
 Writes research/notebook-outputs/value_scale_<step>/report.md (expected
 against observed, one row per table) and report.json.
@@ -47,10 +55,14 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import importlib.util
 import io
 import json
+import os
 import re
+import subprocess
 import sys
+import tempfile
 import threading
 import time
 import urllib.error
@@ -1196,10 +1208,321 @@ def report_b5(payload: dict, d3: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------- B6
+
+SPACE = REPO / "deploy" / "huggingface" / "space"
+FORM_SLACK = 4096  # bytes of the multipart form around a file
+
+# Every B6 child runs this first (python -I -B -c): its root is the only place
+# service and valuescale can come from, and it says where they came from.
+B6_CHILD = """\
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(root))
+import service, valuescale
+where = {m.__name__: str(pathlib.Path(m.__file__).resolve()) for m in (service, valuescale)}
+if not all(pathlib.Path(p).is_relative_to(root) for p in where.values()):
+    raise SystemExit("not imported from " + str(root) + ": " + json.dumps(where))
+print(json.dumps(where), flush=True)
+"""
+# The pipeline on each table saved in argv[2] (.npz), its replies to argv[3].
+B6_PIPELINE = B6_CHILD + """\
+import warnings
+import numpy as np
+from service.pipeline import alignment, pipeline, validation
+tables, out = pathlib.Path(sys.argv[2]), pathlib.Path(sys.argv[3])
+bundle = pipeline.load_bundle("v4.1")
+canonical = lambda r: json.dumps(json.loads(json.dumps(r)), sort_keys=True)
+for path in sorted(tables.glob("*.npz")):
+    with np.load(path, allow_pickle=False) as z:
+        raw = alignment.RawMatrix([str(g) for g in z["genes"]], [str(c) for c in z["cells"]], z["values"])
+    result = {}
+    try:
+        validation.validate(raw)
+    except validation.ValidationError as exc:
+        result["validation"] = str(exc)
+    else:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            for modality in ("prot", "rna"):
+                result[modality] = canonical(pipeline.run_projection(bundle, raw, modality=modality))
+    (out / (path.stem + ".json")).write_bytes(json.dumps(result).encode("utf-8"))
+"""
+# The service's server, as the Dockerfile's CMD starts it (python -m service.app).
+B6_SERVER = B6_CHILD + """\
+import runpy
+runpy.run_module("service.app", run_name="__main__", alter_sys=True)
+"""
+
+
+def _rehearse():
+    spec = importlib.util.spec_from_file_location("rehearse", REPO / "deploy" / "huggingface" / "rehearse.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _b6_env(port: int | None = None) -> dict:
+    """This environment without any VIVOME_ setting, with the hosted ones
+    (and, for a server, 127.0.0.1:port without the site's secret)."""
+    base = {k: v for k, v in os.environ.items() if not k.startswith("VIVOME_")}
+    rehearse = _rehearse()
+    return rehearse.rehearsal_env(port, base) if port else {**base, **rehearse.hosted_env()}
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _where(lines: list[str]) -> dict | None:
+    """The child's first line: where it imported service and valuescale from."""
+    for line in lines:
+        try:
+            found = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(found, dict) and set(found) == {"service", "valuescale"}:
+            return found
+    return None
+
+
+def b6_build() -> dict:
+    """B6_build: build_space.py from this tree, and what it staged."""
+    run = subprocess.run([sys.executable, str(REPO / "deploy" / "huggingface" / "build_space.py")], cwd=REPO,
+                         capture_output=True, text=True)
+    printed = run.stdout.strip().splitlines()[-1] if run.stdout.strip() else ""
+    found = re.search(r"\((\d+) modules import from the staged folder alone\)", printed)
+    manifest = json.loads((SPACE / "space_manifest.json").read_text(encoding="utf-8")) if run.returncode == 0 else {}
+    staged = {p: f for p, f in manifest.get("files", {}).items() if p.split("/")[0] in ("service", "valuescale")}
+    differing = [p for p, f in staged.items() if not (REPO / p).is_file() or _sha256_file(REPO / p) != f["sha256"]]
+    head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO, capture_output=True, text=True, check=True).stdout
+    return {"exit": run.returncode, "printed": printed,
+            "stderr_tail": run.stderr.strip().splitlines()[-3:] if run.returncode else [],
+            "modules": int(found.group(1)) if found else None, "commit": manifest.get("commit"), "head": head.strip(),
+            "uncommitted_changes": manifest.get("uncommitted_changes"),
+            "pipeline_version": manifest.get("pipeline_version"), "staged_files": len(staged), "differing": differing,
+            "valuescale_files": sorted(p for p in staged if p.startswith("valuescale/")),
+            "valuescale_expected": sorted([f"valuescale/{p.name}" for p in (REPO / "valuescale").glob("*.py")]
+                                          + ["valuescale/calibration/protein-v1.json"])}
+
+
+def b6_pipeline(root: Path, tables: Path, out: Path) -> dict:
+    """B6_pipeline's side for one root: every saved table through its pipeline."""
+    out.mkdir(parents=True, exist_ok=True)
+    run = subprocess.run([sys.executable, "-I", "-B", "-c", B6_PIPELINE, str(root), str(tables), str(out)], cwd=root,
+                         env=_b6_env(), capture_output=True, text=True)
+    return {"exit": run.returncode, "where": _where(run.stdout.splitlines()),
+            "stderr_tail": run.stderr.strip().splitlines()[-3:] if run.returncode else []}
+
+
+def b6_server(root: Path, requests: list) -> dict:
+    """B6_status and B6_app's side for one root: its server, started as the
+    Dockerfile starts it with the hosted settings, and every request sent to it."""
+    rehearse = _rehearse()
+    port = rehearse.free_port()
+    base = f"http://127.0.0.1:{port}"
+    replies = {}
+    with tempfile.TemporaryFile() as log:
+        server = subprocess.Popen([sys.executable, "-I", "-B", "-u", "-c", B6_SERVER, str(root)], cwd=root,
+                                  env=_b6_env(port), stdout=log, stderr=subprocess.STDOUT)
+        try:
+            rehearse.wait_until_ready(base, server)
+            with urllib.request.urlopen(f"{base}/api/status", timeout=600) as response:
+                status = json.loads(response.read())
+            for key, fields, matrix in requests:
+                code, payload = _post(f"{base}/api/project", fields, matrix())
+                replies[key] = {"status": code, "sha256": hashlib.sha256(canonical(payload).encode("utf-8")).hexdigest(),
+                                "error": payload.get("error") if code != 200 else None,
+                                "reason": payload.get("reason") if code != 200 else None}
+        finally:
+            server.terminate()
+            server.wait(timeout=60)
+        log.seek(0)
+        lines = log.read().decode("utf-8", "replace").splitlines()
+    return {"status": status, "replies": replies, "where": _where(lines)}
+
+
+def b6_step() -> None:
+    bank = fetch.load_bank()
+    expect = json.loads((EXPECTATIONS / "b6.json").read_text(encoding="utf-8"))
+    out = OUT / "value_scale_b6"
+    out.mkdir(parents=True, exist_ok=True)
+    b5 = {r["id"]: r for r in json.loads((OUT / "value_scale_b5" / "report.json").read_text(encoding="utf-8"))["tables"]}
+    started = time.time()
+
+    print("B6_build: build_space.py", flush=True)
+    build = b6_build()
+    print(f"  {build['printed']}", flush=True)
+
+    limit = int(float(_rehearse().hosted_env()["VIVOME_MAX_UPLOAD_MB"]) * 2**20)
+    rows, requests, traced = [], [], {}
+    with tempfile.TemporaryDirectory() as tmp:
+        tables = Path(tmp) / "tables"
+        tables.mkdir()
+        for entry in bank["entries"]:
+            whole, _, upload = load_entry(entry)
+            raw = traced_table(entry, whole)
+            row = {"id": entry["id"], "label": entry["label"], "refused": "validation" if raw is None else None}
+            kept = whole if raw is None else raw
+            if raw is not None:
+                traced[entry["id"]] = raw
+            np.savez(tables / f"{entry['id']}.npz", genes=np.array(kept.gene_names), cells=np.array(kept.cell_ids),
+                     values=kept.values)
+            if raw is None or len(raw.cell_ids) == len(whole.cell_ids):
+                row["sent_as"], size = "its file", upload.stat().st_size
+                matrix = (lambda path=upload: path.read_bytes())
+            else:
+                row["sent_as"] = f"its {len(raw.cell_ids):,}-cell subsample"
+                matrix = (lambda r=raw: matrix_tsv(r))
+                size = len(matrix())
+            row.update(cells=len(kept.cell_ids), mib=round(size / 2**20, 2), over_limit=size + FORM_SLACK > limit)
+            if not row["over_limit"]:
+                for modality in ("prot", "rna"):
+                    requests.append((f"{entry['id']}|{modality}", {"modality": modality.encode()}, matrix))
+            rows.append(row)
+        negative = matrix_tsv(_with_negatives(traced["pbmc240_diann"], 2))
+        cases = {"nothing stated": {"modality": b"prot"},
+                 "value_scale linear": {"modality": b"prot", "value_scale": b"linear"},
+                 "value_scale log": {"modality": b"prot", "value_scale": b"log"},
+                 "value_scale log, zeros measured": {"modality": b"prot", "value_scale": b"log", "zeros": b"measured"}}
+        requests += [(f"case|{name}", fields, (lambda m=negative: m)) for name, fields in cases.items()]
+
+        sides = {"space": SPACE, "repo": REPO}
+        pipe = {}
+        for side, root in sides.items():
+            print(f"B6_pipeline: {side}", flush=True)
+            pipe[side] = b6_pipeline(root, tables, Path(tmp) / side)
+        results_of = {side: {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in (Path(tmp) / side).glob("*.json")}
+                      for side in sides}
+        serve = {}
+        for side, root in sides.items():
+            print(f"B6_app: {side}'s server, {len(requests)} requests", flush=True)
+            serve[side] = b6_server(root, requests)
+
+        for row in rows:
+            space, repo = results_of["space"].get(row["id"], {}), results_of["repo"].get(row["id"], {})
+            if row["refused"]:
+                row["pipeline_identical"] = {"validation": "validation" in space and space == repo}
+                row["validation_error"] = space.get("validation")
+            else:
+                row["pipeline_identical"] = {m: m in space and space.get(m) == repo.get(m) for m in ("prot", "rna")}
+                reply = json.loads(space["prot"]) if "prot" in space else {"value_scale": {}, "cells": []}
+                scale = reply["value_scale"]
+                row.update(verdict=scale.get("verdict"), detected=scale.get("detected"),
+                           transformed=scale.get("transformed"), zeros_read=scale.get("zeros_read"))
+                if "prot" in space:
+                    now = summary_of(reply)
+                    before = json.loads(json.dumps(b5[row["id"]]["summary"]))
+                    now["value_scale"].pop("zeros_read", None)
+                    before["value_scale"].pop("zeros_read", None)
+                    row["same_as_b5"] = now == before
+            if not row["over_limit"]:
+                row["app"] = {m: {side: serve[side]["replies"][f"{row['id']}|{m}"]["status"] for side in sides}
+                              | {"identical": serve["space"]["replies"][f"{row['id']}|{m}"]
+                                 == serve["repo"]["replies"][f"{row['id']}|{m}"]} for m in ("prot", "rna")}
+            print(f"  {row['id']}: pipeline {row['pipeline_identical']} app "
+                  f"{ {m: v['identical'] for m, v in row.get('app', {}).items()} or 'over the limit'} "
+                  f"zeros_read {row.get('zeros_read')}", flush=True)
+
+    case_rows = [{"case": name, **{side: serve[side]["replies"][f"case|{name}"] for side in sides},
+                  "identical": serve["space"]["replies"][f"case|{name}"] == serve["repo"]["replies"][f"case|{name}"]}
+                 for name in cases]
+    ok = [r for r in rows if not r["refused"]]
+    small = [r for r in rows if r["refused"]]
+    sent = [r for r in rows if not r["over_limit"]]
+    zeros = expect["B6_zeros"]["predicted"]
+    predicted_zeros = {i.split(" (")[0]: v for v, ids in zeros.items() for i in ids}
+    status = serve["space"]["status"]
+    wheres = {f"pipeline {s}": pipe[s]["where"] for s in sides} | {f"server {s}": serve[s]["where"] for s in sides}
+    case = {c["case"]: c for c in case_rows}
+    results = {
+        "B6_build": build["exit"] == 0 and build["modules"] == 31 and build["commit"] == build["head"]
+        and build["uncommitted_changes"] is False and build["pipeline_version"] == "v4.1" and not build["differing"]
+        and build["valuescale_files"] == build["valuescale_expected"],
+        "B6_isolated": all(w is not None for w in wheres.values())
+        and all(Path(p).is_relative_to(sides[k.split()[1]].resolve()) for k, w in wheres.items() if w for p in w.values()),
+        "B6_pipeline": all(pipe[s]["exit"] == 0 for s in sides) and len(ok) == 30 and len(small) == 7
+        and all(all(r["pipeline_identical"].values()) for r in rows),
+        "B6_status": status == serve["repo"]["status"] and status.get("status") == "ready"
+        and status.get("pipeline_version") == "v4.1"
+        and status.get("limits") == {"max_cells": 2000, "max_upload_mb": 31.0, "concurrent_projections": 1}
+        and status.get("value_scale", {}).get("choices") == ["auto", "linear", "log"]
+        and status.get("value_scale", {}).get("zeros") == ["auto", "missing", "measured"],
+        "B6_app": len(sent) == 33 and all(r["app"][m]["identical"] for r in sent for m in ("prot", "rna"))
+        and all(r["app"][m]["space"] == (400 if r["refused"] else 200) for r in sent for m in ("prot", "rna"))
+        and {r["id"] for r in rows if r["over_limit"]} == {"dusszachniewicz_maxquant", "scope2_export",
+                                                         "khoury_column_normalized", "furtwangler_log2_imputed"}
+        and all(c["identical"] for c in case_rows)
+        and (case["nothing stated"]["space"]["status"], case["nothing stated"]["space"]["reason"])
+        == (400, alignment.UNDECIDED_NEGATIVES_REASON)
+        and (case["value_scale linear"]["space"]["status"], case["value_scale linear"]["space"]["reason"])
+        == (400, app.STATED_LINEAR_REASON)
+        and case["value_scale log"]["space"]["status"] == 200
+        and case["value_scale log, zeros measured"]["space"]["status"] == 200,
+        "B6_zeros": all(r["zeros_read"] == predicted_zeros.get(r["id"]) for r in ok),
+        "B6_since_b5": all(r.get("same_as_b5") for r in ok),
+    }
+    payload = {"step": "b6", "run": datetime.now().isoformat(timespec="seconds"), "pipeline_version": VERSION,
+               "seconds": round(time.time() - started), "results": results, "build": build,
+               "children": {"pipeline": pipe, "where": wheres}, "status": {s: serve[s]["status"] for s in sides},
+               "tables": rows, "cases": case_rows}
+    (out / "report.json").write_bytes((json.dumps(payload, indent=1, default=str) + "\n").encode("utf-8"))
+    (out / "report.md").write_bytes(report_b6(payload).encode("utf-8"))
+    print(f"wrote {(out / 'report.md').relative_to(REPO).as_posix()}")
+
+
+def report_b6(payload: dict) -> str:
+    rows, results, build = payload["tables"], payload["results"], payload["build"]
+    yes = lambda v: "same" if v else "DIFFERS"  # noqa: E731
+    lines = ["# Value-scale diagnostics, B6: the staged Space against this repository's service", "",
+             f"Run {datetime.now().strftime('%Y-%m-%d %H:%M')} by research/notebooks/value_scale_diagnostics.py "
+             f"({payload['seconds']:,} s). Expectations: valuescale/bank/expectations/b6.json, written before the run. "
+             "Each side ran in its own fresh interpreter with the hosted settings: the Space from "
+             "deploy/huggingface/space alone, the repository's service from the repository root. Explained in "
+             "notes.md beside this file.", "",
+             "## The rows", "",
+             _md_table(["row", "result"], [[k, "PASS" if v else "FAIL"] for k, v in results.items()]), "",
+             "## The build", "",
+             f"- build_space.py exit {build['exit']}: {build['printed']}",
+             f"- space_manifest.json: commit {build['commit']} (HEAD {build['head']}), uncommitted_changes "
+             f"{build['uncommitted_changes']}, pipeline_version {build['pipeline_version']}",
+             f"- {build['staged_files']} staged files under service/ and valuescale/; differing from the repository's: "
+             f"{build['differing'] or 'none'}",
+             f"- the staged valuescale/: {', '.join(build['valuescale_files'])}", "",
+             "## Where each child imported from", "",
+             _md_table(["child", "service", "valuescale"],
+                       [[k, (w or {}).get("service"), (w or {}).get("valuescale")]
+                        for k, w in payload["children"]["where"].items()]), "",
+             f"## Every bank table ({len(rows)})", "",
+             _md_table(["table", "label", "cells", "sent as", "MiB", "pipeline prot", "pipeline rna",
+                        "app prot (Space/repo)", "app rna (Space/repo)", "verdict", "a 0 read as", "summary vs B5"],
+                       [[r["id"], r["label"], r["cells"], r["sent_as"], r["mib"],
+                         yes(r["pipeline_identical"].get("prot", r["pipeline_identical"].get("validation"))),
+                         yes(r["pipeline_identical"].get("rna", r["pipeline_identical"].get("validation"))),
+                         *(["over 31 MiB, not sent"] * 2 if r["over_limit"] else
+                           [f"{r['app'][m]['space']}/{r['app'][m]['repo']} {yes(r['app'][m]['identical'])}"
+                            for m in ("prot", "rna")]),
+                         r.get("verdict", "refused by validation"), r.get("zeros_read"),
+                         "" if r["refused"] else yes(r.get("same_as_b5"))]
+                        for r in rows]), "",
+             "## pbmc240_diann with 2 values made negative, through both servers", "",
+             _md_table(["request", "Space", "repo", "identical", "reason"],
+                       [[c["case"], c["space"]["status"], c["repo"]["status"], yes(c["identical"]),
+                         c["space"].get("reason") or ""] for c in payload["cases"]]), "",
+             "## GET /api/status", "",
+             f"- the Space: `{json.dumps(payload['status']['space'], sort_keys=True)}`",
+             f"- the repository: `{json.dumps(payload['status']['repo'], sort_keys=True)}`", ""]
+    return "\n".join(lines) + "\n"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     steps = {"step1": step1, "phaseA-baseline": phase_a_baseline, "phaseA": phase_a, "phaseA2": phase_a2, "zscore": zscore_step,
-             "b5": b5_step}
+             "b5": b5_step, "b6": b6_step}
     parser.add_argument("--step", choices=tuple(steps), required=True)
     args = parser.parse_args()
     steps[args.step]()
