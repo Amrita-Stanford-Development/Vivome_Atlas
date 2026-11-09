@@ -78,7 +78,8 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     than median-50 (1 against 4), but not significantly (p = 0.125). It
     misses log tables with many missing values. The test is spent. Not
     deployed. The owner chose a rework, then a fresh test from the
-    reserve; the live service stays as it is. The plan comes first.
+    reserve; the live service stays as it is. The plan comes first:
+    [protein v2](value-scale-v2-plan.md), for the owner's approval.
 - **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
   (from `decb812`), then the site. These brought the clean-up's fixes to
   the parser and the site's file check (lone-CR line endings, MaxQuant,
