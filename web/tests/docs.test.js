@@ -57,6 +57,7 @@ const ALLOWED = [
   /\bS2\+S3\b/g, /\bS[1-3]\b/g,       // the size groups
   /\bB[0-7]\b/g, /\bR[1-7]\b/g,       // the steps of protein v1 and protein v2
   /\bStep 1\b/g, /\bA2\b/g,           // the bank, and Phase A2
+  /\bStage 0\b/g,                     // the service's first stage, by name
   /\bv\d+(?:\.\d+)*\b/g,              // a version: v4.1, protein-v2
   /\b\d{5}-[a-z]{3}\b/g,              // a service revision, such as 00009-hcz
   /\blog(?:2|10)\b/g, /\bmedian-50\b/g, /\bPBMC240\b/g, /\bSCoPE2\b/g,
@@ -182,7 +183,10 @@ test('each Docs page loads the shared styles and its own, and has exactly one h1
 test('the words follow the site copy rules, in code too', () => {
   for (const page of DOCS_PAGES) {
     for (const words of readerWords(read(page))) {
-      for (const banned of BANNED) assert.doesNotMatch(words, banned, page);
+      for (const banned of BANNED) {
+        const m = banned.exec(words);
+        assert.equal(m, null, m && `${page}: "${words.slice(Math.max(0, m.index - 30), m.index + 30).replace(/\s+/g, ' ')}"`);
+      }
     }
   }
 });
@@ -281,4 +285,43 @@ test('the tabs follow the address without adding to the history, and show only o
   assert.ok(wired > 0);
   assert.ok(js.indexOf('list.hidden = false') > wired);
   assert.ok(js.indexOf("classList.add('docs-tabbed')") > wired);
+});
+
+// ---- inside a topic page ----
+
+// A panel's markup. Panels hold articles and folds, never a nested section,
+// so a panel ends at the first </section>.
+function panel(html, id) {
+  const start = html.indexOf(`<section id="${id}" role="tabpanel"`);
+  assert.ok(start >= 0, `no ${id} panel`);
+  const body = html.slice(start, html.indexOf('</section>', start));
+  assert.equal(body.indexOf('<section', 1), -1, `the ${id} panel holds a nested section`);
+  return body;
+}
+const plainText = (markup) => decode(markup.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
+
+test('Words: each term once, in alphabetical order, each with its own address', () => {
+  for (const page of TOPIC_PAGES) {
+    const words = panel(read(page), 'words');
+    assert.match(words, /<div class="glossary">\s*<dl>/, page);
+    const terms = [...words.matchAll(/<dt id="(words-[a-z0-9]+(?:-[a-z0-9]+)*)">([\s\S]*?)<\/dt>\s*<dd>/g)];
+    assert.equal(terms.length, (words.match(/<dt\b/g) ?? []).length, `${page}: a term without an address or a definition`);
+    assert.equal(terms.length, (words.match(/<dd>/g) ?? []).length, `${page}: a term with two definitions`);
+    assert.ok(terms.length >= 30, `${page}: only ${terms.length} terms`);
+    const key = (t) => plainText(t).toLowerCase().replace(/["“”]/g, '').replace(/^the /, '');
+    assert.equal(new Set(terms.map(([, id]) => id)).size, terms.length, `${page}: an address used twice`);
+    const keys = terms.map(([, , t]) => key(t));
+    assert.equal(new Set(keys).size, keys.length, `${page}: a term defined twice`);
+    assert.deepEqual(keys, [...keys].sort((a, b) => a.localeCompare(b, 'en')), `${page}: terms out of order`);
+  }
+});
+
+test('every link inside a Docs page lands on something on that page', () => {
+  for (const page of DOCS_PAGES) {
+    const html = read(page);
+    const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+    for (const [, target] of html.matchAll(/href="#([^"]*)"/g)) {
+      assert.ok(ids.has(target), `${page}: #${target} leads nowhere`);
+    }
+  }
 });

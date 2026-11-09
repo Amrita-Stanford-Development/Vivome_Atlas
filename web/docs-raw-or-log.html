@@ -52,6 +52,150 @@
 
         <section id="words" role="tabpanel" aria-labelledby="tab-words" class="docs-panel">
             <h2 class="docs-panel-title">Words</h2>
+            <p class="docs-intro">The words this topic uses, in plain language, from A to Z.</p>
+            <div class="glossary">
+                <dl>
+                    <dt id="words-bank">The bank</dt>
+                    <dd>The <span data-docs="rl_step1_tables"></span> real public tables we gathered in
+                        Step 1, each with its answer, raw or log, known from its
+                        documentation. Every later step was checked on them before the next one began.</dd>
+                    <dt id="words-best-guess">Best guess</dt>
+                    <dd>The cell type the model ranks first for a cell. When a table is read the wrong way,
+                        some best guesses change: that is how we measured what a wrong reading costs.</dd>
+                    <dt id="words-calibration">Calibration</dt>
+                    <dd>Setting the <a href="#words-threshold">thresholds</a> from tables whose answer is
+                        known, so that the <a href="#words-promise">promise</a> holds. The calibration
+                        tables are used for nothing else.</dd>
+                    <dt id="words-cant-tell">“Can't tell”</dt>
+                    <dd>The answer when both readings clear their thresholds: the table could be either.
+                        The service then reads it as raw, says so, and the uploader can choose the other
+                        reading and send it again.</dd>
+                    <dt id="words-centred">Centred table</dt>
+                    <dd>A log table with each protein's average taken away, so its values sit around zero
+                        and many are negative. A zero in such a table is a real value.</dd>
+                    <dt id="words-constructed-log">Constructed log</dt>
+                    <dd>A log table we make ourselves by taking the log of a raw table. The corpus held no
+                        public table labelled log, so the log side was tested this way.</dd>
+                    <dt id="words-corpus">Corpus</dt>
+                    <dd>The large set of public tables collected in B3 for calibration
+                        and the sealed test.</dd>
+                    <dt id="words-deposit">Deposit and accession</dt>
+                    <dd>A deposit is one study's data in a public store. Its accession is its name there,
+                        such as PXD064083.</dd>
+                    <dt id="words-design-data">Design data</dt>
+                    <dd>The tables the method was built and fitted on: the bank and its variants.</dd>
+                    <dt id="words-development-data">Development data</dt>
+                    <dd>Tables we may look at, try ideas on and change things for. A test, once scored,
+                        becomes development data.</dd>
+                    <dt id="words-foreign">Foreign table</dt>
+                    <dd>A table that is neither raw nor log, such as z-scores, present-or-absent marks or
+                        ranks. Used to check that the detector answers “unlike either” when it should.</dd>
+                    <dt id="words-frame">Frame</dt>
+                    <dd>The full list of deposits the corpus could be drawn from, put in a fixed random
+                        order before any was opened: <span data-docs="rl_b3_frame"></span> deposits.</dd>
+                    <dt id="words-gate">Gate</dt>
+                    <dd>A plain rule checked before any statistics, for cases that settle the answer by
+                        definition: a real share of negative values means log; whole-number counts mean
+                        raw.</dd>
+                    <dt id="words-hand-audit">Hand audit</dt>
+                    <dd>A second reading of the documentation behind a sample of tables, to check their
+                        labels. In B3 it was done by AI helpers under rules written before they started;
+                        Claude read every disagreement again, and a share of the agreements.</dd>
+                    <dt id="words-hash-split">Hash split</dt>
+                    <dd>How each deposit was sent to calibration or to the test: by a fixed scramble of its
+                        accession, so nobody chose, and a deposit always lands on the same side.</dd>
+                    <dt id="words-k-th">The k-th smallest</dt>
+                    <dd>How a threshold is set: sort the calibration tables' scores from low to high and
+                        take the one in place k. The number of tables fixes k, so the promise holds.</dd>
+                    <dt id="words-log">Log values</dt>
+                    <dd>Numbers after taking a logarithm. A log turns multiplying into adding: each
+                        doubling of a protein adds the same step. Many tools write log values, most often
+                        log2.</dd>
+                    <dt id="words-lower-bound">Lower bound</dt>
+                    <dd>The smallest miss rate a test result fits, at <span data-docs="rl_confidence"></span>
+                        confidence. If even that is above <span data-docs="rl_alpha"></span>, the promise is
+                        contradicted.</dd>
+                    <dt id="words-marks">Marks</dt>
+                    <dd>The two files the test scorer writes: one before it reads any test table, one after
+                        it scores them. While either exists, it refuses to run again.</dd>
+                    <dt id="words-mcnemar">McNemar's test</dt>
+                    <dd>A test for two methods judged on the same tables. It looks only at the tables where
+                        they disagree, and asks whether one wins those more often than chance would.</dd>
+                    <dt id="words-median">Median</dt>
+                    <dd>The middle value: half the values are below it and half above.</dd>
+                    <dt id="words-missing">Missing value</dt>
+                    <dd>A protein that was not measured in a cell. Some tools leave the place empty, others
+                        write a zero, so what a zero means has to be known too.</dd>
+                    <dt id="words-old-rule">The old rule (median-50)</dt>
+                    <dd>The rule the service used before this work, and still uses on the live site: a
+                        table with no negative value whose median is above
+                        <span data-docs="rl_median_rule"></span> is read as raw, and any other as log.</dd>
+                    <dt id="words-pride-massive">PRIDE and MassIVE</dt>
+                    <dd>The two big public stores of proteomics data our deposits come from.</dd>
+                    <dt id="words-probability">Probability</dt>
+                    <dd>Here, the model's estimate, between zero and one, that a table is raw, and that it
+                        is log.</dd>
+                    <dt id="words-promise">The promise (α and δ)</dt>
+                    <dd>The detector's guarantee: for each kind of table and each size group, the right
+                        reading is left out of the answer at most α of the time (here
+                        <span data-docs="rl_alpha"></span>). δ is how often, at most, the calibration could
+                        have been unlucky enough to break that (here <span data-docs="rl_delta"></span>), so
+                        we are <span data-docs="rl_confidence"></span> sure of it.</dd>
+                    <dt id="words-provenance">Provenance label</dt>
+                    <dd>A table's answer, raw or log, taken from what its software's documentation or its
+                        paper says about the file, and fixed before any statistic is computed on it.</dd>
+                    <dt id="words-raw">Raw (linear) values</dt>
+                    <dd>The numbers the software writes for how much of each protein it saw, before any log
+                        is taken: twice the protein gives about twice the number. Also called linear
+                        intensities.</dd>
+                    <dt id="words-real-log">Real log</dt>
+                    <dd>A log table written by its own software or authors, not made by us. The bank holds
+                        a few; the corpus found none.</dd>
+                    <dt id="words-rehearsal">Rehearsal</dt>
+                    <dd>A dry run of the test scorer on the calibration tables, to check its code before
+                        the one real scoring.</dd>
+                    <dt id="words-reserve">Reserve</dt>
+                    <dd>The <span data-docs="rl_b3_reserve"></span> deposits of the frame that B3 never
+                        listed. They stay unopened, for a fresh test.</dd>
+                    <dt id="words-scale-free">Scale-free measure</dt>
+                    <dd>A number about a table's shape that does not change when every value is multiplied
+                        by the same number, or, for log values, when the same number is added to each. Units
+                        cannot fool it.</dd>
+                    <dt id="words-sealed-test">Sealed test</dt>
+                    <dd>Tables kept unopened until the method is fixed, then scored once, against
+                        expectations written before.</dd>
+                    <dt id="words-size-group">Size group (stratum)</dt>
+                    <dd>Tables grouped by their number of cells (columns): S1 from
+                        <span data-docs="rl_s1_lo"></span> to <span data-docs="rl_s1_hi"></span>, S2 from
+                        <span data-docs="rl_s2_lo"></span> to <span data-docs="rl_s2_hi"></span>, S3 from
+                        <span data-docs="rl_s3_lo"></span> to <span data-docs="rl_s3_hi"></span>. S3 had too
+                        few tables of its own, so its tables join S2's for calibration, as S2+S3.</dd>
+                    <dt id="words-sparse-log-gap">The sparse-log gap</dt>
+                    <dd>The detector's weak point: a log table with many values missing can look raw to it.
+                        B4 saw it on the bank, and B7 found it in the test.</dd>
+                    <dt id="words-spent-test">Spent test</dt>
+                    <dd>A test that has been scored. Once we have seen its answers it cannot test again, so
+                        it becomes development data.</dd>
+                    <dt id="words-stage-0">Stage 0</dt>
+                    <dd>The service's first step with an uploaded table: deciding raw or log, and taking the
+                        log when the values are raw. Every later step works on log values.</dd>
+                    <dt id="words-threshold">Threshold</dt>
+                    <dd>The lowest probability a reading needs to stay in the answer. Each reading in each
+                        size group has its own, set by calibration.</dd>
+                    <dt id="words-typicality">Typicality warning</dt>
+                    <dd>A note in the reply when a table is farther from the tables the detector was built
+                        on than any of them is from the rest. Since B4 it no longer changes the answer.</dd>
+                    <dt id="words-unlike-either">“Unlike either”</dt>
+                    <dd>The answer when neither reading clears its threshold. The service reads the table as
+                        raw, with a warning.</dd>
+                    <dt id="words-variant">Variant</dt>
+                    <dd>A changed copy of a table, with a known answer: multiplied, logged, cut to fewer
+                        cells, with values taken away. Variants check that the measures behave.</dd>
+                    <dt id="words-z-score">z-score</dt>
+                    <dd>A value minus its gene's average, divided by its spread. The service z-scores every
+                        gene before the model sees it, which removes any log base.</dd>
+                </dl>
+            </div>
         </section>
     </main>
 

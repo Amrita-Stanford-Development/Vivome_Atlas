@@ -27,3 +27,6 @@
 .docs-figure { margin: 18px 0 6px; }
 .docs-svg { display: block; width: 100%; height: auto; max-width: 720px; }
 .docs-svg text { font-family: var(--font); }
+
+/* A panel's opening line. */
+.docs-intro { font-size: 15.5px; color: var(--ink-soft); max-width: 64ch; margin-bottom: 20px; }
