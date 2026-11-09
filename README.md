@@ -76,6 +76,7 @@ line for every file.
 | `manuscript.html` | Evidence bank for a journal paper on the served model, with the atlas's cross-modal support, the alignment diagnostics and the benchmark tables |
 | `workflow.html` | How VivOME works start to end, following one cell of the PBMC240 example |
 | `motion.html` | The storyboard for a film about VivOME: each scene's rendered still beside its words, voice-over, motion and sound (`motion/` renders the stills; [docs/web/motion.md](docs/web/motion.md)) |
+| `docs.html`, `docs-*.html` | Docs: everything we did, in plain words. The home has a card per topic and the project's timeline; each topic page has How it works, What we did and Words ([docs/web/docs.md](docs/web/docs.md)) |
 | `miscellaneous.html` | Intentionally blank (former roadmap page) |
 | `preview-biocells.html`, `preview-water.html` | Close-ups of the background's cells and water effects; not linked from the site |
 

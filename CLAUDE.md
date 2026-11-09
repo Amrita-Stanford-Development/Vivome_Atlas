@@ -88,7 +88,9 @@ Regenerate the manifest and commit it:
 python scripts/build_manifest.py
 ```
 
-It also rebuilds `web/data/workflow.json`, the Workflow page's data. When
+It also rebuilds `web/data/workflow.json`, the Workflow page's data, then
+`web/data/manuscript.json`, the Manuscript page's, and `web/data/docs.json`,
+the Docs section's ([docs/web/docs.md](docs/web/docs.md)). When
 the served model changes, run `python scripts/trace_workflow.py` first
 ([docs/web/workflow.md](docs/web/workflow.md)). When a result a figure
 draws changes, redraw the figures with `scripts/build_figures.py` in the

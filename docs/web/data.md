@@ -16,6 +16,7 @@ Latent embeddings and metadata, latent dim 128.
 | `organs/<organ>/metadata_RNA.csv` | One organ's map: `orig_index` (the row of its bundle's `reference_metadata.csv`), `class_idx` (in the index's class order) and `PC1`-`PC3`, from its coordinate member's reference latents through its bundle's own PCA |
 | `atlas_manifest.json` | Generated — see [manifest.md](manifest.md) |
 | `workflow.json` | Generated with the manifest, for the Workflow page: a trace of the PBMC240 example through the served model, an atlas sample, the gene space, the training recipe, the evaluation records; see [workflow.md](workflow.md) |
+| `docs.json` | Generated with the manifest (`scripts/build_docs.py`), for the Docs section: every number its pages show, each with its basis, and each step's report, expectations, notes and dates; see [docs.md](docs.md) |
 
 RNA metadata columns: `latent_dim, modality, orig_index, class_idx,
 class_name, lineage, PC1, PC2, PC3`.

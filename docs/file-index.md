@@ -570,6 +570,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `docs/web/motion.md` — the Motion page and the film: how the stills are made, where their numbers come from, the full script
 - `docs/web/atlas.md` — the Atlas page: its modules, how it draws and picks, and where its data comes from
 - `docs/web/manuscript.md` — the Manuscript page: its sections, the evidence-line format and caveat tags, where its numbers come from, rebuilding them
+- `docs/web/docs.md` — the Docs section: its pages, a topic page's tabs and addresses, where its numbers come from and the number guard, its figures and data, the home, adding a step or a topic
 - `docs/web/data.md` — the site's data files, Git LFS, what ships and what doesn't
 - `docs/web/design.md` — the design system: the world, the four UI objects, colour meanings, type, motif, copy rules, where new results land
 - `docs/webpage_concept.md` — the site concept the redesign follows: intro, landing, scroll story, dashboard, tools

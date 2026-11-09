@@ -264,14 +264,28 @@ where it stands once the camera has come to rest, and fades out before the
 camera travels on through the water to the next; the water's objects keep
 their size as it does.
 
+## The Docs section
+
+`web/docs.html` and one `web/docs-<topic>.html` per topic record everything
+we did, in plain words, for any reader ([docs.md](docs.md)). The home is a
+row of glass cards, one per topic, and the project's timeline on a sheet: a
+date, a line with an accent dot, then the topic and what happened. A topic
+page has three tabs (How it works, What we did, Words), a shared component
+in `page.css` beside the "For the curious" fold and the glossary. How it
+works keeps its list of chapters in view at the side; What we did is a fold
+per step, and in each one what the owner decided carries the accent's tint,
+so it is easy to find. Figures use the ink, the greys and the accent only.
+
 ## Shared chrome
 
 The header (the wordmark, the tool links, then the Pause motion switch)
 and the footer are static
 markup copied into each page, so they work without JS and don't shift the
 layout. `web/tests/chrome.test.js` pins every copy byte-identical to
-`web/index.html`'s, apart from the one `aria-current="page"` marker. Change
-one, change all, and add a new page to the test's `PAGES` list.
+`web/index.html`'s, apart from the one `aria-current` marker: `"page"` on a
+page's own link, or `"true"` on the Docs link of a Docs topic page. Change
+one, change all, and add a new page to `PAGES` in `web/tests/site-pages.js`,
+the list every test that walks the pages reads.
 
 **Pause motion** (`web/js/motion-pref.js`) is a button with
 `aria-pressed`. Pressed, the site is as still as under the system's
@@ -295,3 +309,4 @@ when a release does.
 | Benchmark rows | `manifest.benchmark` | the Manuscript page's benchmark tables |
 | A served model's trace, the gene space, the training recipe, the evaluation records | `web/data/workflow.json` (`scripts/build_workflow.py`, built with the manifest) | the Workflow page ([workflow.md](workflow.md)) |
 | The served model's evidence for a paper: development, post-hoc and held-out results, diagnoses, designs not kept | `web/data/manuscript.json` (`scripts/build_manuscript.py`, built with the manifest) | the Manuscript page ([manuscript.md](manuscript.md)) |
+| A step's results, for the record in plain words: its report, expectations and notes | `web/data/docs.json` (`scripts/build_docs.py`, built with the manifest) | the Docs section's topic pages ([docs.md](docs.md)) |

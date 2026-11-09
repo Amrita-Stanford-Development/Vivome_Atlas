@@ -35,6 +35,7 @@ Vivome_Atlas/
 │
 ├── web/                      THE WEBSITE: serve this folder as-is
 │   ├── *.html                one file per page: index, atlas, workflow, manuscript, motion,
+│   │                         the Docs home (docs) and one docs-<topic> per topic,
 │   │                         miscellaneous (blank on purpose), and two unlinked previews
 │   ├── css/                  shared styling (page.css) and per-page styles
 │   ├── js/                   ES modules; manifest.js and panels.js are pure
@@ -42,7 +43,7 @@ Vivome_Atlas/
 │   ├── figures/              the Manuscript's figures: SVG, CSV and index.json, from scripts/build_figures.py
 │   ├── motion/frames/        the Motion page's stills and their sidecar, from motion/scripts/stills.mjs
 │   ├── data/                 what the pages load: atlas_manifest.json, workflow.json, manuscript.json,
-│   │                         cell metadata, embeddings, and examples/ (the example upload)
+│   │                         docs.json, cell metadata, embeddings, and examples/ (the example upload)
 │   └── tests/                node --test suites for js/
 │
 ├── service/                  THE PROJECTION API: Python, POST /api/project
@@ -98,6 +99,7 @@ Vivome_Atlas/
 | You are adding… | Put it in | And also |
 |---|---|---|
 | A page, style, or front-end module | `web/` | a test in `web/tests/` if it's a JS module |
+| A step or a topic of the Docs section | `web/docs-<topic>.html`, its numbers as records in `scripts/build_docs.py` | a new page in `DOCS_PAGES` (`web/tests/site-pages.js`); see [web/docs.md](web/docs.md) |
 | A number the site displays | `scripts/build_manifest.py`, which writes `web/data/atlas_manifest.json` | never hard-code it in HTML — see [web/manifest.md](web/manifest.md) |
 | A pipeline stage or service behaviour | `service/pipeline/` | a test in `service/tests/`; a constant in `service/config.py` |
 | A file the server loads | `service/model/runtime/` | a path constant in `service/config.py` |

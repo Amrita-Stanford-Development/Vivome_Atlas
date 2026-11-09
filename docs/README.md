@@ -22,6 +22,7 @@ and read [CLAUDE.md](../CLAUDE.md) before changing anything.
 | [web/workflow.md](web/workflow.md) | The Workflow page: what each chapter shows, where its numbers come from, the film, rebuilding its data |
 | [web/motion.md](web/motion.md) | The Motion page and the film: the storyboard, how the stills are rendered with HyperFrames, Manim and FFmpeg, where their numbers come from, the full script |
 | [web/atlas.md](web/atlas.md) | The Atlas page: its modules, how it draws and picks cells, where its data comes from |
+| [web/docs.md](web/docs.md) | The Docs section: its pages, a topic's tabs and addresses, where its numbers come from, the number guard, adding a step or a topic |
 | [web/design.md](web/design.md) | The design system: the world, the four UI objects, colour meanings, copy rules |
 | [webpage_concept.md](webpage_concept.md) | The site concept the redesign follows: intro, landing, scroll story, dashboard, tools |
 
