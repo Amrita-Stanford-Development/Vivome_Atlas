@@ -82,15 +82,47 @@ a record.
 
 ## Figures
 
+Every `figure.docs-fig` is one of three kinds, and the test checks which:
+
 - **A data figure** is `<div class="docs-figure" data-docs-figure="NAME">`
   inside a `figure.docs-fig`, drawn by `drawFigure` in `web/js/docs-svg.js`
-  from the records `FIGURES` names for it (`docs-data.js`). Each has a
-  "The numbers" fold that gives its numbers in words.
+  from the records `FIGURES` names for it (`docs-data.js`), and for a
+  figure of many values from its series (`FIGURE_SERIES`, below). Each has
+  a "The numbers" fold that gives its numbers in words. Its own words hold
+  no number but a record's text or an axis label of its series.
 - **An illustration** is a static inline `svg.docs-svg` with `role="img"`
   and an `aria-label`, and no slots, marked with the Illustration bead.
+- **A screenshot** is one
+  `<img class="docs-shot" src="img/docs/FILE" width="W" height="H" alt="…" loading="lazy">`.
+  Its file and size are those `web/img/docs/index.json` records, and its
+  caption opens with the bead that index gives it: "Screenshot: live" for
+  a picture of the live commit, "Screenshot: not live" for one of the
+  working tree. Its `alt` passes the number guard, so it says in words what
+  the picture shows. Every listed screenshot is shown, and the folder holds
+  nothing else.
 
-The figures use the ink, the greys and the accent only. A broken promise
-is marked by a filled marker and the words, never by colour alone.
+The figures use the ink, the greys and the accent only. Where the sealed
+test contradicts the promise, the figure says "contradicted" and fills the
+marker, never by colour alone; elsewhere it says "not contradicted", since
+a test that does not contradict the promise has not proved it.
+
+### Screenshots
+
+`node scripts/docs_screenshots.mjs` takes them again (about half a minute).
+It needs Node and the PC's Edge, no package: it starts Edge headless with a
+DevTools port and drives it over Node's own WebSocket. It serves two copies
+of `web/`: the working tree, and the live site's files read from git at
+`LIVE_SITE`, the commit live today (`git show`, nothing checked out). Each
+shot is taken at twice its size, as WebP, in light colours with motion
+reduced; the menus are opened out in a copy beside the real ones so every
+choice shows.
+
+When the live site changes, set `LIVE_SITE` to the new live commit and run
+it again. A picture's numbers are the site's own: the pop-up's are what
+`checkFile`, `questionFile` and `valueFactsText` compute from the example
+file, which `docs.test.js` computes again and compares with the text
+`index.json` recorded. Screenshots are pictures for the pages, never a
+check of them: the owner still looks at the pages by hand.
 
 ## The data: `web/data/docs.json`
 
@@ -104,12 +136,21 @@ it also runs on its own. It holds:
   once, and its basis says it was written before the run;
 - `steps`: each step's report, expectations, notes, run and dates, which
   the page's test checks every entry against;
+- `series`: the many values a data figure draws, each with its basis: the
+  bank's medians (the old rule's dot plot), the example file's values as
+  two histograms and its spread by level, and S1's lowest log scores in
+  calibration and in the test. An axis's labels are written into the
+  series as `ticks`, so the figure types none. `docsSeries` hands a figure
+  its series only when every number in it is finite, and the figure says
+  Pending otherwise;
 - `sources`, each source file's sha256, and `built_for`, the manifest's
   release.
 
 `scripts/test_build_docs.py` rebuilds it byte for byte and checks its
-budget, its formats, the pending set, and the headline numbers against
-their sources.
+budget (80,000 bytes), its formats, the pending set, and the headline
+numbers against their sources. It checks the series too: the histograms
+count every value, the old rule's line gives each bank table its recorded
+reading, and S1's log threshold is the k-th smallest calibration score.
 
 ## The home
 

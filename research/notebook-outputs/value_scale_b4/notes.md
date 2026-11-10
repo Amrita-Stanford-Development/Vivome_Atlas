@@ -121,6 +121,11 @@ manifest of the 218 calibration deposits (corpus sha256 `16ebf954…`).
 | B4_detect | pass | PBMC240 (3,100 × 238): linear in S2+S3, with the guarantee, in 0.07 s |
 | B4_rehearsal | pass | the scorer ran end to end on the calibration split in 74 s; every count adds up; no mark written |
 
+**Corrected 2026-11-10** (the Docs run-through): the two times above are
+the first run's. The re-run after the code review (below) wrote its own
+into `report.json`: B4_detect in 0.086 s and the rehearsal in 82 s. Both
+rows still pass, and nothing else in them changed.
+
 ## What the bank shows
 
 - **Two bank tables changed answer from B2,** both as expected:

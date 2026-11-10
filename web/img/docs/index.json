@@ -1,0 +1,35 @@
+{
+ "about": "The Docs section's screenshots, written by scripts/docs_screenshots.mjs. Pictures for the page, never a check of it.",
+ "live_site": "decb812",
+ "shots": [
+  {
+   "file": "upload-menus-live.webp",
+   "site": "live",
+   "commit": "decb812",
+   "shows": "The Atlas page, Your data tab, as it is live: the Values and Zeros menus of the Send a matrix panel, opened out to show every choice.",
+   "width": 624,
+   "height": 280,
+   "scale": 2,
+   "numbers": []
+  },
+  {
+   "file": "popup-branch.webp",
+   "site": "branch",
+   "commit": "the working tree",
+   "shows": "The Atlas page on the branch, not live: the pop-up that opens as a protein file is chosen, here the repository's example file.",
+   "width": 484,
+   "height": 340,
+   "scale": 2,
+   "text": {
+    "file": "pbmc240_proteins_raw.tsv: 3,100 feature rows, 238 cells",
+    "facts": "From 0.9615 to 175,558,000; 0.0% are 0 and 62.8% are empty; none is negative."
+   },
+   "numbers": [
+    {
+     "where": "the file line and the facts below it",
+     "from": "web/js/atlas/file-check.js (checkFile, valueFactsText) and web/js/atlas/scale-question.js (questionFile), on web/data/examples/pbmc240_proteins_raw.tsv"
+    }
+   ]
+  }
+ ]
+}

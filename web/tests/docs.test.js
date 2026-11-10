@@ -7,6 +7,8 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import {
   DOCS_SCHEMA, FIGURES, TABS, docsBasis, docsFact, docsRecord, docsText, nextTab, tabForHash, validateDocs,
 } from '../js/docs-data.js';
+import { checkFile, valueFactsText } from '../js/atlas/file-check.js';
+import { questionFile } from '../js/atlas/scale-question.js';
 import { DOCS_PAGES } from './site-pages.js';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
@@ -85,7 +87,7 @@ test('the committed docs data is valid, and a file of another schema or missing 
   assert.equal(validateDocs(docs), docs);
   assert.equal(docs.schema_version, DOCS_SCHEMA);
   assert.throws(() => validateDocs({ ...docs, schema_version: '0' }), /schema_version/);
-  for (const key of ['built_for', 'sources', 'records', 'steps']) {
+  for (const key of ['built_for', 'sources', 'records', 'steps', 'series']) {
     const { [key]: _, ...without } = docs;
     assert.throws(() => validateDocs(without), new RegExp(key));
   }
@@ -349,25 +351,76 @@ test('How it works: the side list links every chapter, in order, by its title', 
   }
 });
 
-test('every figure is drawn from the data or marked an illustration; a data figure lists its numbers', () => {
+// The section's screenshots (scripts/docs_screenshots.mjs) and what the
+// script recorded of each: which site it shows, its size, the text in it.
+const SHOTS = JSON.parse(read('img/docs/index.json'));
+const SHOT_IMG = /<img class="docs-shot" src="img\/docs\/([^"]+)" width="(\d+)" height="(\d+)" alt="([^"]+)" loading="lazy">/;
+const shotBead = (shot) => (shot.site === 'live'
+  ? '<span class="bead docs-shot-bead">Screenshot: live</span>'
+  : '<span class="bead bead-open docs-shot-bead">Screenshot: not live</span>');
+
+test('every figure is drawn from the data, marked an illustration, or a screenshot; a data figure lists its numbers', () => {
   const used = new Set();
   for (const page of DOCS_PAGES) {
     for (const [fig] of read(page).matchAll(/<figure class="docs-fig">[\s\S]*?<\/figure>/g)) {
       const data = /data-docs-figure="/.test(fig);
       const drawn = /<span class="bead bead-open docs-illustration">Illustration<\/span>/.test(fig);
-      assert.ok(data !== drawn, `${page}: a figure must be one or the other: ${fig.slice(0, 90)}`);
+      const shot = /<img\b/.test(fig);
+      assert.equal(data + drawn + shot, 1, `${page}: a figure must be one kind: ${fig.slice(0, 90)}`);
       assert.match(fig, /<figcaption>/, page);
       if (data) {
         assert.match(fig, /<details class="curious docs-numbers"><summary>The numbers<\/summary>/, page);
         for (const [, name] of fig.matchAll(/data-docs-figure="(\w+)"/g)) used.add(name);
-      } else {
+      } else if (drawn) {
         assert.match(fig, /<svg class="docs-svg" viewBox="0 0 \d+ \d+" role="img" aria-label="[^"]+">/, page);
         assert.doesNotMatch(fig, /data-docs="/, `${page}: an illustration holds no data`);
+      } else {
+        assert.match(fig, SHOT_IMG, `${page}: a screenshot is one image, sized, with words for a screen reader`);
+        assert.equal((fig.match(/<img\b/g) ?? []).length, 1, page);
       }
     }
     assert.equal((read(page).match(/<figure\b/g) ?? []).length, (read(page).match(/<figure class="docs-fig">/g) ?? []).length, page);
+    assert.equal((read(page).match(/<img\b/g) ?? []).length, [...read(page).matchAll(/<figure class="docs-fig">[\s\S]*?<\/figure>/g)]
+      .filter(([fig]) => /<img\b/.test(fig)).length, `${page}: an image outside a figure`);
   }
   assert.deepEqual([...used].sort(), Object.keys(FIGURES).sort(), 'every data figure is shown somewhere');
+});
+
+test('a screenshot is a file the screenshot script wrote, labelled live or not live as it recorded, and each one is shown', () => {
+  const shots = new Map(SHOTS.shots.map((s) => [s.file, s]));
+  assert.match(SHOTS.live_site, /^[0-9a-f]{7}$/);
+  for (const s of shots.values()) {
+    assert.ok(['live', 'branch'].includes(s.site), s.file);
+    if (s.site === 'live') assert.equal(s.commit, SHOTS.live_site, `${s.file}: a live screenshot shows the live commit`);
+    assert.ok(Array.isArray(s.numbers), `${s.file}: the numbers in the picture are accounted for`);
+  }
+  const files = readdirSync(new URL('../img/docs/', import.meta.url)).filter((n) => n !== 'index.json').sort();
+  assert.deepEqual(files, [...shots.keys()].sort(), 'web/img/docs holds exactly the screenshots index.json lists');
+  const shown = new Set();
+  for (const page of DOCS_PAGES) {
+    for (const [fig] of read(page).matchAll(/<figure class="docs-fig">[\s\S]*?<\/figure>/g)) {
+      const img = fig.match(SHOT_IMG);
+      if (!img) continue;
+      const [, file, width, height] = img;
+      const shot = shots.get(file);
+      assert.ok(shot, `${page}: ${file} is not in web/img/docs/index.json`);
+      assert.deepEqual([Number(width), Number(height)], [shot.width, shot.height], `${page}: ${file} shown at another size`);
+      const caption = fig.match(/<figcaption>([\s\S]*?)<\/figcaption>/)[1];
+      assert.ok(caption.trimStart().startsWith(shotBead(shot)), `${page}: ${file}'s caption does not open with "${shotBead(shot)}"`);
+      shown.add(file);
+    }
+  }
+  assert.deepEqual([...shown].sort(), [...shots.keys()].sort(), 'every screenshot is shown somewhere');
+});
+
+test('the numbers in the pop-up screenshot are what the site computes from the example file', async () => {
+  const shot = SHOTS.shots.find((s) => s.file === 'popup-branch.webp');
+  assert.ok(shot?.text, 'the pop-up screenshot records its text');
+  const name = 'pbmc240_proteins_raw.tsv';
+  const bytes = readFileSync(new URL(`../data/examples/${name}`, import.meta.url));
+  const check = await checkFile(new Blob([bytes]), name);
+  assert.equal(shot.text.file, questionFile(check));
+  assert.equal(shot.text.facts, valueFactsText(check.values));
 });
 
 const PARTS = ['What we did', 'Why', 'What we expected', 'What we found', 'What you decided', "Where it's kept"];

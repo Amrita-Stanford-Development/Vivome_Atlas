@@ -6,8 +6,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { FIGURES, docsText } from '../js/docs-data.js';
-import { drawFigure, guaranteeSvg, corpusFunnelSvg, missingBandsSvg, oldRuleSvg } from '../js/docs-svg.js';
+import { FIGURES, FIGURE_SERIES, docsText } from '../js/docs-data.js';
+import {
+  drawFigure, guaranteeSvg, corpusFunnelSvg, missingBandsSvg, oldRuleSvg, exampleValuesSvg, exampleSpreadSvg,
+  s1ScoresSvg, s1ScoresTestSvg,
+} from '../js/docs-svg.js';
 
 const docs = JSON.parse(readFileSync(new URL('../data/docs.json', import.meta.url), 'utf8'));
 const pendingDocs = { records: Object.fromEntries(Object.keys(docs.records).map((k) => [k, { value: null, status: 'pending', note: 'n' }])) };
@@ -34,28 +37,40 @@ test('a figure whose records are pending says Pending and draws nothing from the
   }
 });
 
-test('the figures type no number: every number in their words is a record', () => {
+// A series' axis labels, written by the builder from the data's range.
+const tickLabels = (node) => (node && typeof node === 'object'
+  ? [...(Array.isArray(node.ticks) ? node.ticks.map((t) => t.label) : []),
+    ...Object.values(node).flatMap((v) => (v && typeof v === 'object' && !Array.isArray(v) ? tickLabels(v) : []))]
+  : []);
+
+test('the figures type no number: every number in their words is a record, or an axis label of their series', () => {
   for (const [name, keys] of Object.entries(FIGURES)) {
-    const shown = keys.map((k) => docsText(docs, k)).sort((a, b) => b.length - a.length);
+    const labels = FIGURE_SERIES[name] ? tickLabels(docs.series[FIGURE_SERIES[name]]) : [];
+    const shown = [...keys.map((k) => docsText(docs, k)), ...labels].sort((a, b) => b.length - a.length);
     for (const w of words(drawFigure(name, docs))) {
       let left = unescape(w);
       for (const s of shown) left = left.split(s).join(' ');
-      left = left.replace(/\bS2\+S3\b|\bS[123]\b/g, ' ');
+      left = left.replace(/\bS2\+S3\b|\bS[123]\b|\blog(?:2|10)\b/g, ' ');
       assert.doesNotMatch(left, /\d/, `${name}: "${w}" holds a number that is not a record`);
     }
   }
 });
 
-test('the promise is marked broken exactly where the lower bound is above it', () => {
+// A test can contradict the promise; one that does not, has not proved it.
+const contradicted = (svg) => (svg.match(/>contradicted<\/text>/g) ?? []).length;
+const notContradicted = (svg) => (svg.match(/>not contradicted<\/text>/g) ?? []).length;
+
+test('the promise is marked contradicted exactly where the lower bound is above it', () => {
   const real = guaranteeSvg(docs);
-  assert.equal((real.match(/promise broken/g) ?? []).length, 1);
-  assert.equal((real.match(/promise holds/g) ?? []).length, 3);
+  assert.equal(contradicted(real), 1);
+  assert.equal(notContradicted(real), 3);
+  assert.doesNotMatch(words(real).join(' '), /holds|broken/, 'a test that does not contradict the promise has not shown it holds');
   assert.match(real, /data-group="s1_log" data-broken="true"/);
   const changed = structuredClone(docs);
   changed.records.rl_b7_s23_log_lower.value = 0.06;
-  assert.equal((guaranteeSvg(changed).match(/promise broken/g) ?? []).length, 2);
+  assert.equal(contradicted(guaranteeSvg(changed)), 2);
   changed.records.rl_b7_s1_log_lower.value = 0.05;   // equal to the promise is not above it
-  assert.equal((guaranteeSvg(changed).match(/promise broken/g) ?? []).length, 1);
+  assert.equal(contradicted(guaranteeSvg(changed)), 1);
   // The line sits at alpha on the same scale as the rates.
   const line = real.match(/<line class="docs-promise" x1="([\d.]+)"/);
   const rate = real.match(/data-group="s1_log"[^>]*data-x0="([\d.]+)" data-per-unit="([\d.]+)"/);
@@ -88,4 +103,46 @@ test('the old rule figure shows each kind of table and how many it misread', () 
   const svg = oldRuleSvg(docs);
   assert.match(svg, new RegExp(`${docsText(docs, 'rl_step1_linear_misread')} of ${docsText(docs, 'rl_step1_linear')}`));
   assert.match(svg, new RegExp(`${docsText(docs, 'rl_step1_log_misread')} of ${docsText(docs, 'rl_step1_log')}`));
+});
+
+test('the old rule figure draws every bank table once, filled exactly where the rule read it wrongly', () => {
+  const svg = oldRuleSvg(docs);
+  const dots = [...svg.matchAll(/data-table="([^"]+)" data-misread="(true|false)"/g)];
+  assert.equal(dots.length, docs.records.rl_step1_tables.value);
+  assert.equal(new Set(dots.map((d) => d[1])).size, dots.length, 'each table once');
+  const filled = dots.filter((d) => d[2] === 'true').length;
+  assert.equal(filled, docs.records.rl_step1_linear_misread.value + docs.records.rl_step1_log_misread.value);
+  assert.match(unescape(svg), new RegExp(`the old rule's line: ${docsText(docs, 'rl_median_rule')}`));
+});
+
+test('the example table figure draws a bar for each step of each histogram', () => {
+  const svg = exampleValuesSvg(docs);
+  const bars = (svg.match(/<rect /g) ?? []).length;
+  const ex = docs.series.example_values;
+  assert.equal(bars, ex.raw.counts.length + ex.log2.counts.length);
+  assert.match(svg, new RegExp(`and ${docsText(docs, 'rl_ex_beyond')} larger values`));
+});
+
+test('the spread figure climbs for raw values and stays near its start after a log', () => {
+  const svg = exampleSpreadSvg(docs);
+  const lines = [...svg.matchAll(/<polyline [^>]*points="([^"]+)"/g)].map((m) => m[1].split(' ').map((p) => Number(p.split(',')[1])));
+  assert.equal(lines.length, 2);
+  const [raw, log] = lines;
+  for (let i = 1; i < raw.length; i += 1) assert.ok(raw[i] <= raw[i - 1], 'raw climbs (a smaller y is higher)');
+  assert.ok(raw[0] - raw[raw.length - 1] > 60, 'and far');
+  assert.ok(Math.max(...log) - Math.min(...log) < 20, 'log stays near level');
+});
+
+test('the score figures fill exactly the tables under the threshold, and the threshold is the k-th calibration score', () => {
+  const k = docs.records.rl_s1_k.value;
+  const cal = s1ScoresSvg(docs);
+  const under = (svg, split) => (svg.match(new RegExp(`data-split="${split}" data-under="true"`, 'g')) ?? []).length;
+  assert.equal(under(cal, 'calibration'), docs.records.rl_ph_cal_below.value);
+  assert.equal(under(cal, 'test'), 0);
+  const line = Number(cal.match(/class="docs-threshold" x1="[\d.]+" y1="([\d.]+)"/)[1]);
+  const marks = [...cal.matchAll(/data-split="calibration" data-under="(?:true|false)" cx="[\d.]+" cy="([\d.]+)"/g)].map((m) => Number(m[1]));
+  assert.ok(Math.abs(marks[k - 1] - line) < 0.02, 'score number k sits on the line');
+  const both = s1ScoresTestSvg(docs);
+  assert.equal(under(both, 'calibration'), docs.records.rl_ph_cal_below.value);
+  assert.equal(under(both, 'test'), docs.records.rl_sc_test_below.value);
 });

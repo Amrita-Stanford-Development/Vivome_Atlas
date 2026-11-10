@@ -7,7 +7,7 @@
 
 import { escapeHtml } from './panels.js';
 import { isMeasured } from './manifest.js';
-import { docsRecord, docsText } from './docs-data.js';
+import { docsRecord, docsSeries, docsText } from './docs-data.js';
 import { linear } from './workflow-layout.js';
 
 const INK = '#1D2B36';
@@ -29,33 +29,212 @@ const svg = (h, label, body) =>
 const text = (x, y, words, { size = 12, fill = INK, anchor = 'start', weight = 400 } = {}) =>
   `<text x="${n2(x)}" y="${n2(y)}" font-size="${size}" fill="${fill}" text-anchor="${anchor}"${weight !== 400 ? ` font-weight="${weight}"` : ''}>${escapeHtml(words)}</text>`;
 
+// A figure whose data is not there says so, and draws nothing.
+const pendingSvg = (what) => svg(60, `${what}: Pending`, text(0, 30, 'Pending', { fill: FAINT }));
+
 // ---- what the old rule read wrongly in the bank (Step 1) ----
 
+// A dot for each bank table at its median measured value, on a scale where
+// each labelled step is a hundred times the last, raw tables above, log tables
+// below, and the old rule's line at its median. A table the rule read wrongly
+// is a filled dot, one it read right a ring. A log table with negative values
+// has no place on the scale (the rule reads it as log whatever its median), so
+// it sits in a box of its own at the left.
 export function oldRuleSvg(docs) {
-  const rows = [
-    { label: 'Raw (linear) tables', n: 'rl_step1_linear', wrong: 'rl_step1_linear_misread', reads: 'read as log' },
-    { label: 'Log tables', n: 'rl_step1_log', wrong: 'rl_step1_log_misread', reads: 'read as raw' },
+  const series = docsSeries(docs, 'bank_medians');
+  if (!series || !isMeasured(docsRecord(docs, 'rl_median_rule'))) return pendingSvg('The bank\'s tables and the old rule');
+  const left = 150;
+  const right = WIDTH - 10;
+  const x = (v) => left + ((Math.log10(v) - series.lo_exp) / (series.hi_exp - series.lo_exp)) * (right - left);
+  const lanes = [
+    { label: 'raw', title: 'Raw tables', n: 'rl_step1_linear', wrong: 'rl_step1_linear_misread', reads: 'read as log', y: 64 },
+    { label: 'log', title: 'Log tables', n: 'rl_step1_log', wrong: 'rl_step1_log_misread', reads: 'read as raw', y: 140 },
   ];
-  const left = 170;
-  const plot = 300;
-  const max = Math.max(1, ...rows.map((r) => value(docs, r.n) ?? 0));
-  const x = linear([0, max], [0, plot]);
-  let body = text(0, 14, `The old rule: raw when the middle value is above ${say(docs, 'rl_median_rule')}`, { weight: 600 });
-  rows.forEach((r, i) => {
-    const y = 34 + i * 34;
-    const n = value(docs, r.n) ?? 0;
-    const wrong = value(docs, r.wrong) ?? 0;
-    body += text(left - 8, y + 13, r.label, { anchor: 'end' })
-      + `<rect data-bar="${r.n}" x="${left}" y="${y}" width="${n2(x(n))}" height="18" rx="2" fill="${PALE}"/>`
-      + `<rect data-bar="${r.wrong}" x="${left}" y="${y}" width="${n2(x(wrong))}" height="18" rx="2" fill="${INK}"/>`;
-    const note = isMeasured(docsRecord(docs, r.n)) && isMeasured(docsRecord(docs, r.wrong))
-      ? `${say(docs, r.wrong)} of ${say(docs, r.n)} ${r.reads}` : 'Pending';
-    body += text(left + x(n) + 8, y + 13, note, { fill: FAINT });
-  });
-  body += `<rect x="${left}" y="106" width="12" height="10" fill="${INK}"/>` + text(left + 18, 115, 'read wrongly', { size: 11, fill: FAINT })
-    + `<rect x="${left + 110}" y="106" width="12" height="10" fill="${PALE}"/>` + text(left + 128, 115, 'read right', { size: 11, fill: FAINT });
-  return svg(124, 'What the old rule read wrongly among the bank\'s tables, raw and log', body);
+  let body = text(0, 14, 'Each bank table\'s median measured value', { weight: 600 });
+  const rx = n2(x(value(docs, 'rl_median_rule')));
+  body += `<line class="docs-rule" x1="${rx}" y1="24" x2="${rx}" y2="198" stroke="${INK}" stroke-dasharray="5 4"/>`
+    + text(rx + 6, 34, `the old rule's line: ${say(docs, 'rl_median_rule')}`, { size: 11.5 })
+    + text(rx - 6, 194, 'below it: read as log', { size: 11, fill: FAINT, anchor: 'end' })
+    + text(rx + 6, 194, 'above it: read as raw', { size: 11, fill: FAINT });
+  for (const lane of lanes) {
+    body += text(left - 12, lane.y + 4, lane.title, { anchor: 'end' })
+      + `<line x1="${left}" y1="${lane.y}" x2="${right}" y2="${lane.y}" stroke="${LINE}"/>`;
+    const rows = series.rows.filter((r) => r.label === lane.label && !r.negatives).sort((a, b) => a.median - b.median);
+    // Dots closer than a dot's width stack upwards, so each one shows.
+    const placed = [];
+    for (const r of rows) {
+      const cx = x(r.median);
+      let level = 0;
+      while (placed.some((p) => p.level === level && Math.abs(p.cx - cx) < 9)) level += 1;
+      placed.push({ cx, level });
+      body += `<circle data-table="${escapeHtml(r.id)}" data-misread="${r.misread}" cx="${n2(cx)}" cy="${lane.y - level * 9}" r="4.2" `
+        + `fill="${r.misread ? INK : '#FFFFFF'}" stroke="${r.misread ? INK : ACCENT}" stroke-width="1.5"/>`;
+    }
+    const note = isMeasured(docsRecord(docs, lane.n)) && isMeasured(docsRecord(docs, lane.wrong))
+      ? `${say(docs, lane.wrong)} of ${say(docs, lane.n)} ${lane.reads}` : 'Pending';
+    body += text(left - 12, lane.y + 18, note, { anchor: 'end', size: 11, fill: FAINT });
+  }
+  // The log tables with negative values, in their own box under their lane.
+  const neg = series.rows.filter((r) => r.negatives);
+  if (neg.length) {
+    const by = lanes[1].y + 16;
+    body += `<rect x="${left}" y="${by}" width="${neg.length * 11 + 132}" height="20" rx="4" fill="none" stroke="${LINE}"/>`;
+    neg.forEach((r, i) => {
+      body += `<circle data-table="${escapeHtml(r.id)}" data-misread="${r.misread}" cx="${left + 10 + i * 11}" cy="${by + 10}" r="4.2" `
+        + `fill="${r.misread ? INK : '#FFFFFF'}" stroke="${r.misread ? INK : ACCENT}" stroke-width="1.5"/>`;
+    });
+    body += text(left + 8 + neg.length * 11, by + 14, 'with negative values', { size: 11, fill: FAINT });
+  }
+  // The scale, with its labels from the series.
+  body += `<line x1="${left}" y1="208" x2="${right}" y2="208" stroke="${FAINT}"/>`;
+  for (const t of series.ticks) {
+    const tx = n2(x(t.value));
+    body += `<line x1="${tx}" y1="208" x2="${tx}" y2="213" stroke="${FAINT}"/>` + text(tx, 226, t.label, { size: 11, fill: FAINT, anchor: 'middle' });
+  }
+  body += `<circle cx="${left + 4}" cy="246" r="4.2" fill="${INK}" stroke="${INK}" stroke-width="1.5"/>`
+    + text(left + 14, 250, 'read wrongly by the old rule', { size: 11, fill: FAINT })
+    + `<circle cx="${left + 214}" cy="246" r="4.2" fill="#FFFFFF" stroke="${ACCENT}" stroke-width="1.5"/>`
+    + text(left + 224, 250, 'read right', { size: 11, fill: FAINT });
+  return svg(258, 'Each bank table\'s median measured value, raw tables and log tables, against the old rule\'s line: the raw tables written on a small scale fall below it and are read as log', body);
 }
+
+// ---- one real table, raw and as log (the Atlas page's example) ----
+
+function histogram(h, top, left, width, height, fill) {
+  const max = Math.max(1, ...h.counts);
+  const lo = h.edges[0];
+  const hi = h.edges[h.edges.length - 1];
+  const x = (v) => left + ((v - lo) / (hi - lo)) * width;
+  let out = '';
+  h.counts.forEach((c, i) => {
+    const bh = (c / max) * height;
+    const w = Math.max(0.5, x(h.edges[i + 1]) - x(h.edges[i]) - 1);
+    out += `<rect x="${n2(x(h.edges[i]) + 0.5)}" y="${n2(top + height - bh)}" width="${n2(w)}" height="${n2(bh)}" fill="${fill}"/>`;
+  });
+  out += `<line x1="${left}" y1="${top + height}" x2="${left + width}" y2="${top + height}" stroke="${FAINT}"/>`;
+  for (const t of h.ticks) {
+    const tx = n2(x(t.value));
+    out += `<line x1="${tx}" y1="${top + height}" x2="${tx}" y2="${top + height + 5}" stroke="${FAINT}"/>`
+      + text(tx, top + height + 18, t.label, { size: 11, fill: FAINT, anchor: 'middle' });
+  }
+  return out;
+}
+
+export function exampleValuesSvg(docs) {
+  const series = docsSeries(docs, 'example_values');
+  if (!series) return pendingSvg('The example table\'s values');
+  const left = 40;
+  const width = WIDTH - 80;
+  let body = text(0, 14, 'Written raw: how many values fall at each size', { weight: 600 })
+    + histogram(series.raw, 26, left, width, 110, ACCENT);
+  const beyond = isMeasured(docsRecord(docs, 'rl_ex_beyond')) && isMeasured(docsRecord(docs, 'rl_ex_max'))
+    ? `and ${say(docs, 'rl_ex_beyond')} larger values, up to ${say(docs, 'rl_ex_max')}, beyond the right edge` : 'Pending';
+  body += text(WIDTH - 40, 62, 'almost every value crowds into the first few bars', { size: 11.5, fill: FAINT, anchor: 'end' })
+    + text(WIDTH - 40, 80, beyond, { size: 11.5, fill: FAINT, anchor: 'end' });
+  body += text(0, 196, 'The same values as log2: each step of one is a doubling', { weight: 600 })
+    + histogram(series.log2, 208, left, width, 110, INK);
+  body += text(WIDTH - 40, 244, 'one hump, close to even on both sides', { size: 11.5, fill: FAINT, anchor: 'end' });
+  return svg(346, 'One real protein table\'s values: written raw, they crowd at the left with a long thin tail; as log2, they form one even hump', body);
+}
+
+// ---- spread against level in the same table ----
+
+export function exampleSpreadSvg(docs) {
+  const series = docsSeries(docs, 'example_spread');
+  if (!series || !isMeasured(docsRecord(docs, 'rl_ex_spread_raw')) || !isMeasured(docsRecord(docs, 'rl_ex_spread_log'))) {
+    return pendingSvg('Spread against level');
+  }
+  const left = 70;
+  const right = WIDTH - 170;
+  const top = 34;
+  const height = 170;
+  const hi = Math.log10(series.ticks[series.ticks.length - 1].value);
+  const y = (v) => top + height - (Math.log10(v) / hi) * height;
+  const n = series.raw.length;
+  const x = (i) => left + (i / (n - 1)) * (right - left);
+  let body = text(0, 14, 'How spread out each group\'s values are, as a multiple of the quietest group\'s', { weight: 600 });
+  for (const t of series.ticks) {
+    const ty = n2(y(t.value));
+    body += `<line x1="${left}" y1="${ty}" x2="${right}" y2="${ty}" stroke="${LINE}"/>`
+      + text(left - 8, ty + 4, t.label, { size: 11, fill: FAINT, anchor: 'end' });
+  }
+  const line = (vals, colour, dashed, square) => {
+    let out = `<polyline fill="none" stroke="${colour}" stroke-width="2"${dashed ? ' stroke-dasharray="6 4"' : ''} `
+      + `points="${vals.map((v, i) => `${n2(x(i))},${n2(y(v))}`).join(' ')}"/>`;
+    vals.forEach((v, i) => {
+      out += square
+        ? `<rect x="${n2(x(i) - 3.5)}" y="${n2(y(v) - 3.5)}" width="7" height="7" fill="${colour}"/>`
+        : `<circle cx="${n2(x(i))}" cy="${n2(y(v))}" r="3.5" fill="${colour}"/>`;
+    });
+    return out;
+  };
+  body += line(series.raw, ACCENT, false, false) + line(series.log, INK, true, true);
+  body += text(right + 12, y(series.raw[n - 1]) + 4, `raw: ${say(docs, 'rl_ex_spread_raw')} times`, { size: 12 })
+    + text(right + 12, y(series.log[n - 1]) + 4, `log2: ${say(docs, 'rl_ex_spread_log')} times`, { size: 12 });
+  body += text(left, top + height + 20, 'quietest proteins', { size: 11, fill: FAINT })
+    + text(right, top + height + 20, 'busiest proteins', { size: 11, fill: FAINT, anchor: 'end' })
+    + text((left + right) / 2, top + height + 20, 'groups of proteins, by level', { size: 11, fill: FAINT, anchor: 'middle' });
+  const ly = top + height + 44;
+  body += `<circle cx="${left + 4}" cy="${ly - 4}" r="3.5" fill="${ACCENT}"/>` + text(left + 14, ly, 'raw values, solid line', { size: 11, fill: FAINT })
+    + `<rect x="${left + 180}" y="${ly - 7.5}" width="7" height="7" fill="${INK}"/>` + text(left + 194, ly, 'log2 values, dashed line', { size: 11, fill: FAINT });
+  return svg(ly + 10, 'In the same table, the busiest proteins\' raw values are spread far wider than the quietest\'s; after a log2 the spread is about the same in every group', body);
+}
+
+// ---- the lowest scores of S1's log tables, against the threshold ----
+
+const SCORES_KEYS = ['rl_s1_log_cut', 'rl_s1_k', 'rl_ph_cal_below'];
+const SCORES_TEST_KEYS = ['rl_s1_log_cut', 'rl_ph_cal_below', 'rl_sc_test_below'];
+
+function scoresSvg(docs, withTest) {
+  const series = docsSeries(docs, 's1_log_scores');
+  const keys = withTest ? SCORES_TEST_KEYS : SCORES_KEYS;
+  if (!series || !keys.every((k) => isMeasured(docsRecord(docs, k)))) return pendingSvg('The lowest scores of the small log tables');
+  const cut = value(docs, 'rl_s1_log_cut');
+  const left = 74;
+  const right = WIDTH - 20;
+  const top = 46;
+  const height = 190;
+  const all = withTest ? [...series.calibration, ...series.test] : series.calibration;
+  const lo = Math.floor(Math.min(...all) * 50) / 50;
+  const hi = Math.ceil(Math.max(...all) * 50) / 50;
+  const y = (v) => top + height - ((v - lo) / (hi - lo)) * height;
+  const n = Math.max(series.calibration.length, withTest ? series.test.length : 0);
+  const x = (i) => left + 10 + (i / (n - 1)) * (right - left - 20);
+  const cy = n2(y(cut));
+  let body = text(0, 14, withTest ? 'The lowest scores of the small log tables: calibration and the sealed test'
+    : 'The lowest scores of the small log tables in calibration', { weight: 600 })
+    + text(0, 31, 'Each mark is one table: the model\'s probability that it is log, lowest first', { size: 11.5, fill: FAINT });
+  body += `<line class="docs-threshold" x1="${left}" y1="${cy}" x2="${right}" y2="${cy}" stroke="${INK}" stroke-dasharray="5 4"/>`
+    + text(right, cy - 7, `the threshold: ${say(docs, 'rl_s1_log_cut')}`, { size: 11.5, anchor: 'end' })
+    + text(left, top + height + 18, 'lowest score', { size: 11, fill: FAINT })
+    + text(right, top + height + 18, 'higher scores', { size: 11, fill: FAINT, anchor: 'end' })
+    + text(left - 10, top + 8, 'surer', { size: 11, fill: FAINT, anchor: 'end' })
+    + text(left - 10, top + height, 'less sure', { size: 11, fill: FAINT, anchor: 'end' });
+  const mark = (split, v, i) => {
+    const under = v < cut;
+    return split === 'calibration'
+      ? `<circle data-split="calibration" data-under="${under}" cx="${n2(x(i))}" cy="${n2(y(v))}" r="4.5" fill="${under ? INK : '#FFFFFF'}" stroke="${INK}" stroke-width="1.4"/>`
+      : `<rect data-split="test" data-under="${under}" x="${n2(x(i) - 4.5)}" y="${n2(y(v) - 4.5)}" width="9" height="9" fill="${under ? ACCENT : '#FFFFFF'}" stroke="${ACCENT}" stroke-width="1.4"/>`;
+  };
+  series.calibration.forEach((v, i) => { body += mark('calibration', v, i); });
+  if (withTest) series.test.forEach((v, i) => { body += mark('test', v, i); });
+  const ly = top + height + 42;
+  if (withTest) {
+    body += `<circle cx="${left + 4}" cy="${ly - 4}" r="4.5" fill="${INK}" stroke="${INK}"/>`
+      + text(left + 14, ly, `calibration (circles): ${say(docs, 'rl_ph_cal_below')} under the threshold`, { size: 11.5 })
+      + `<rect x="${left + 294}" y="${ly - 8.5}" width="9" height="9" fill="${ACCENT}" stroke="${ACCENT}"/>`
+      + text(left + 310, ly, `sealed test (squares): ${say(docs, 'rl_sc_test_below')} under it`, { size: 11.5 })
+      + text(left, ly + 19, 'filled: under the threshold, so the log reading is left out of the answer', { size: 11, fill: FAINT });
+    return svg(ly + 28, 'The lowest scores of the small log tables: in calibration a few fall under the threshold; in the sealed test many more do, most of them only a little under', body);
+  }
+  body += `<circle cx="${left + 4}" cy="${ly - 4}" r="4.5" fill="${INK}" stroke="${INK}"/>`
+    + text(left + 14, ly, `filled: ${say(docs, 'rl_ph_cal_below')} under the threshold`, { size: 11.5 })
+    + text(left + 200, ly, `the threshold is score number ${say(docs, 'rl_s1_k')}, counting from the lowest`, { size: 11.5, fill: FAINT });
+  return svg(ly + 12, 'The lowest scores of the small log tables in calibration, lowest first, with the threshold at the k-th of them', body);
+}
+
+export const s1ScoresSvg = (docs) => scoresSvg(docs, false);
+export const s1ScoresTestSvg = (docs) => scoresSvg(docs, true);
 
 // ---- where the tables came from (B3) ----
 
@@ -149,7 +328,7 @@ export function guaranteeSvg(docs) {
     const noteX = left + plot + 14;
     if (known) {
       body += text(noteX, y + 10, `${say(docs, `rl_b7_${g}_miss`)} of ${say(docs, `rl_b7_${g}_n`)} missed, lower bound ${say(docs, `rl_b7_${g}_lower`)}`, { size: 11.5, fill: FAINT })
-        + text(noteX, y + 25, broken ? 'promise broken' : 'promise holds', { size: 11.5, fill: INK, weight: broken ? 600 : 400 });
+        + text(noteX, y + 25, broken ? 'contradicted' : 'not contradicted', { size: 11.5, fill: INK, weight: broken ? 600 : 400 });
     } else {
       body += text(noteX, y + 14, 'Pending', { size: 11.5, fill: FAINT });
     }
@@ -203,6 +382,10 @@ export function missingBandsSvg(docs) {
 
 const BUILDERS = {
   old_rule: oldRuleSvg,
+  example_values: exampleValuesSvg,
+  example_spread: exampleSpreadSvg,
+  s1_scores: s1ScoresSvg,
+  s1_scores_test: s1ScoresTestSvg,
   corpus_funnel: corpusFunnelSvg,
   guarantee: guaranteeSvg,
   missing_bands: missingBandsSvg,

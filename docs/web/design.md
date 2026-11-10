@@ -275,6 +275,9 @@ in `page.css` beside the "For the curious" fold and the glossary. How it
 works keeps its list of chapters in view at the side; What we did is a fold
 per step, and in each one what the owner decided carries the accent's tint,
 so it is easy to find. Figures use the ink, the greys and the accent only.
+A screenshot sits in a thin line-coloured frame with rounded corners, never
+wider than its chapter, under a bead that says whether it shows the live
+site or not.
 
 ## Shared chrome
 

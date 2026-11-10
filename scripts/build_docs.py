@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import ast
 import json
+import math
 import re
 from pathlib import Path
 
@@ -39,7 +40,7 @@ from build_workflow import REPO, rel, sha256
 OUTPUT = REPO / "web" / "data" / "docs.json"
 MANIFEST = REPO / "web" / "data" / "atlas_manifest.json"
 SCHEMA_VERSION = "1"
-SIZE_BUDGET = 60_000  # bytes; scripts/test_build_docs.py enforces it
+SIZE_BUDGET = 80_000  # bytes; scripts/test_build_docs.py enforces it
 
 NO = REPO / "research" / "notebook-outputs"
 EXPECT = REPO / "valuescale" / "bank" / "expectations"
@@ -49,10 +50,14 @@ PLAN_V2 = REPO / "research" / "value-scale-v2-plan.md"
 CALIBRATION = REPO / "valuescale" / "calibration" / "protein-v1.json"
 CONFORMAL = REPO / "valuescale" / "conformal.py"
 CONFIG = REPO / "service" / "config.py"
+GATES = REPO / "valuescale" / "gates.py"
+VALIDATION = REPO / "service" / "pipeline" / "validation.py"
 FRAME = REPO / "valuescale" / "corpus" / "frame.json"
 RESULTS = REPO / "research" / "benchmark" / "value-scale-test" / "results.json"
 REHEARSAL = NO / "value_scale_b4" / "rehearsal.json"
 POSTHOC = NO / "value_scale_b7" / "posthoc.json"
+# The example protein table: the Atlas page's example, the bank's pbmc240_diann.
+EXAMPLE = REPO / "service" / "examples" / "pbmc240_proteins_raw.tsv"
 ISO = re.compile(r"(?<!\d)20\d\d-\d\d-\d\d(?!\d)")
 
 
@@ -104,10 +109,10 @@ class DocsRecords(Records):
         """A number an expectations file states in words, written before the run."""
         words = dig(self.json(path), keys)
         found = re.findall(pattern, words)
-        assert len(found) == 1, f"{rel(path)}: {pattern!r} matches {len(found)} times in {' > '.join(keys)}"
+        assert len(found) == 1, f"{rel(path)}: {pattern!r} matches {len(found)} times in {' > '.join(map(str, keys))}"
         value = float(found[0]) * scale
         value = int(value) if fmt == "count" else round(value, 6)
-        self.put(key, value, f"{rel(path)}: {' > '.join(keys)}, written before the run", fmt)
+        self.put(key, value, f"{rel(path)}: {' > '.join(map(str, keys))}, written before the run", fmt)
 
 
 def count_passed(rows: dict) -> tuple[int, int]:
@@ -124,6 +129,14 @@ def constants(r: DocsRecords) -> None:
     rule = re.findall(r"^LINEAR_SCALE_MEDIAN_THRESHOLD = ([\d.]+)", config, re.M)
     assert len(rule) == 1
     r.put("rl_median_rule", int(float(rule[0])), f"{rel(CONFIG)}: LINEAR_SCALE_MEDIAN_THRESHOLD", "count")
+
+    def constant(path, name):
+        found = re.findall(rf"^{name} = ([\d.]+)", r.text(path), re.M)
+        assert len(found) == 1, f"{rel(path)}: {name}"
+        return float(found[0])
+    r.put("rl_gate_negative_share", constant(GATES, "NEGATIVE_SHARE"), f"{rel(GATES)}: NEGATIVE_SHARE", "percent")
+    r.put("rl_gate_counts", int(constant(GATES, "MIN_DISTINCT_COUNTS")), f"{rel(GATES)}: MIN_DISTINCT_COUNTS", "count")
+    r.put("rl_service_min_cells", int(constant(VALIDATION, "MIN_CELLS_REFUSE")), f"{rel(VALIDATION)}: MIN_CELLS_REFUSE", "count")
 
     cal = r.json(CALIBRATION)
     r.at("rl_alpha", CALIBRATION, ("alpha",), "percent")
@@ -206,6 +219,15 @@ def phase_a(r: DocsRecords) -> None:
           f"{base}: tables with no answer changed", "count")
     r.put("rl_z_largest_move", max(t["largest_coordinate_change"] for t in traced),
           f"{base}: the largest largest_coordinate_change", "fixed3")
+    worst = max(traced, key=lambda t: t["answers_changed"])
+    assert sum(1 for t in traced if t["answers_changed"]) == 1, "one table changed answers"
+    r.put("rl_z_worst_changed", worst["answers_changed"], f"{base}: {worst['id']} > answers_changed", "count")
+    r.put("rl_z_worst_cells", worst["cells"], f"{base}: {worst['id']} > cells", "count")
+    x = EXPECT / "zscore.json"
+    r.quoted("rl_z_expected_move", x, ("Z3_replies_against_the_baseline", "predicted", 2), r"less than (0\.\d+)", "plain")
+    bound = r.records["rl_z_expected_move"]["value"]
+    r.put("rl_z_moved_tables", sum(1 for t in traced if t["largest_coordinate_change"] > bound),
+          f"{base}: tables whose largest_coordinate_change is above the predicted bound", "count")
 
 
 # ---- B1 to B6 ----
@@ -247,6 +269,14 @@ def b1_to_b6(r: DocsRecords) -> None:
     assert sum(skips.values()) == rep["listed"] == rep["rows"]["B3_stop"]["found"]
     r.put("rl_b3_reserve", frame["frame"] - rep["listed"], f"{rel(FRAME)}: counts > frame, less {base}: listed", "count")
     r.at("rl_b3_no_candidate", path, ("rows", "B3_skips", "found", "no candidate"), "count")
+    r.at("rl_b3_too_few_columns", path, ("rows", "B3_skips", "found", "too few columns"), "count")
+    other = {k: v for k, v in skips.items() if k not in ("kept", "no candidate", "too few columns")}
+    r.put("rl_b3_other_skips", sum(other.values()),
+          f"{base}: rows > B3_skips > found, {', '.join(sorted(other))}", "count")
+    for tool, key in (("MaxQuant", "maxquant"), ("DIA-NN", "diann"), ("Spectronaut", "spectronaut"),
+                      ("FragPipe", "fragpipe"), ("Proteome Discoverer", "pd")):
+        r.at(f"rl_b3_sw_{key}", path, ("rows", "B3_software", "found", tool), "count")
+    assert sum(rep["rows"]["B3_software"]["found"].values()) == rep["after_audit"], "the tables after the audit"
     r.at("rl_b3_kept", path, ("kept",), "count")
     r.at("rl_b3_after_audit", path, ("after_audit",), "count")
     r.at("rl_b3_calibration", path, ("quotas", "calibration", "S1"), "count")
@@ -377,6 +407,200 @@ def b7(r: DocsRecords) -> None:
            f"the fresh sealed test is scored once, after R1 to R6 ({rel(PLAN_V2)})")
 
 
+# ---- the series the data figures draw ----
+#
+# A figure that shows many values (a table's spread of values, the lowest
+# scores) draws them from a series: the values, worked out here from a
+# committed file, with its basis. The words around a figure, and every number
+# a figure writes, stay records; an axis's labels are part of its series.
+
+GROUPED = "{:,}"
+
+
+def number_words(value: float) -> str:
+    """An axis label: a whole number with thousands grouped, or millions and billions in words."""
+    for size, word in ((10**9, "billion"), (10**6, "million")):
+        if value >= size:
+            return f"{GROUPED.format(round(value / size))} {word}"
+    return GROUPED.format(round(value))
+
+
+def bank_medians(r: DocsRecords) -> dict:
+    """Each bank table's median measured value, its kind, and how the old rule read it (Step 1)."""
+    path = report("step1")
+    rep = r.json(path)
+    recorded = {t["id"]: t["detected"] for t in rep["D2"] if t["variant"] == "original"}
+    rule = r.records["rl_median_rule"]["value"]
+    rows = []
+    for t in rep["D1"]:
+        label = "raw" if t["label"] == "linear" else "log"
+        negatives = t["negative_share"] > 0
+        median = round(t["median_nonzero"], 4)
+        reads = "log" if negatives or median <= rule else "raw"
+        assert reads == ("raw" if recorded[t["id"]] == "linear" else "log"), f"{t['id']}: the rule as drawn"
+        rows.append({"id": t["id"], "label": label, "negatives": negatives, "median": median,
+                     "misread": reads != label})
+    rows.sort(key=lambda row: (row["label"] != "raw", row["negatives"], row["median"]))
+    shown = [row["median"] for row in rows if not row["negatives"]]
+    lo, hi = math.floor(math.log10(min(shown))), math.ceil(math.log10(max(shown)))
+    return {
+        "basis": f"{rel(path)}: D1 median_nonzero and negative_share, D2 the original tables' reading",
+        "lo_exp": lo, "hi_exp": hi,
+        "ticks": [{"value": 10**e, "label": number_words(10**e)} for e in range(lo, hi + 1, 2)],
+        "rows": rows,
+    }
+
+
+def example_table(r: DocsRecords) -> tuple[dict, dict]:
+    """The example protein table (PBMC240, in the bank as pbmc240_diann): every
+    measured value, raw and as log2, and each protein's spread against its level."""
+    text = r.text(EXAMPLE)
+    lines = text.splitlines()
+    header = lines[0].split("\t")
+    first = header.index("N.Proteotypic.Sequences") + 1
+    cells = len(header) - first
+    proteins = []
+    for line in lines[1:]:
+        fields = line.split("\t")[first:]
+        assert len(fields) == cells, "every row has a value or a blank for every cell"
+        values = [float(x) for x in fields if x.strip()]
+        assert all(v > 0 for v in values), "the example holds no 0 and no negative"
+        proteins.append(values)
+    values = sorted(v for p in proteins for v in p)
+    n = len(values)
+    base = f"{rel(EXAMPLE)}: every measured value (a blank is not measured)"
+    r.put("rl_ex_cells", cells, f"{rel(EXAMPLE)}: the columns after N.Proteotypic.Sequences", "count")
+    r.put("rl_ex_proteins", len(proteins), f"{rel(EXAMPLE)}: rows", "count")
+    r.put("rl_ex_values", n, base, "count")
+    median = (values[(n - 1) // 2] + values[n // 2]) / 2
+    r.put("rl_ex_median", round(median), f"{base}, the median", "count")
+    r.put("rl_ex_max", round(values[-1]), f"{base}, the largest", "count")
+    r.put("rl_ex_log2_median", round(math.log2(median), 6), f"{base}, log2 of the median", "fixed2")
+
+    # Raw: equal steps up to a round number above the 99th percentile; the
+    # few larger values are counted, not drawn.
+    q99 = values[int(0.99 * n)]
+    step = 10 ** math.floor(math.log10(q99))
+    top = math.ceil(q99 / step) * step
+    width = top / 25
+    raw_edges = [round(i * width, 6) for i in range(26)]
+    raw_counts = [0] * 25
+    beyond = 0
+    for v in values:
+        if v > top:
+            beyond += 1
+        else:
+            raw_counts[min(int(v // width), 24)] += 1
+    r.put("rl_ex_beyond", beyond, f"{base}, above the raw histogram's right edge", "count")
+    # Log2: steps of a half, a doubling every two steps.
+    logs = [math.log2(v) for v in values]
+    lo, hi = math.floor(min(logs)), math.ceil(max(logs))
+    log_edges = [lo + i / 2 for i in range((hi - lo) * 2 + 1)]
+    log_counts = [0] * (len(log_edges) - 1)
+    for x in logs:
+        log_counts[min(int((x - lo) * 2), len(log_counts) - 1)] += 1
+    first_tick = math.ceil(lo / 4) * 4
+    hist = {
+        "basis": base,
+        "raw": {"edges": raw_edges, "counts": raw_counts,
+                "ticks": [{"value": t, "label": number_words(t)} for t in range(0, int(top) + 1, int(step))]},
+        "log2": {"edges": log_edges, "counts": log_counts,
+                 "ticks": [{"value": t, "label": str(t)} for t in range(first_tick, hi + 1, 4)]},
+    }
+
+    # Spread against level: the proteins measured in at least a tenth of the
+    # cells, in ten groups of equal size from the quietest to the busiest
+    # (by their raw mean); each group's typical spread (the median of its
+    # proteins' standard deviations), raw and in log2, as a multiple of the
+    # quietest group's.
+    def sd(xs):
+        m = sum(xs) / len(xs)
+        return math.sqrt(sum((x - m) ** 2 for x in xs) / (len(xs) - 1))
+
+    def median_of(xs):
+        xs = sorted(xs)
+        return (xs[(len(xs) - 1) // 2] + xs[len(xs) // 2]) / 2
+
+    kept = sorted((p for p in proteins if len(p) >= cells / 10), key=lambda p: sum(p) / len(p))
+    groups = 10
+    size = len(kept) // groups
+    raw_sd, log_sd = [], []
+    for g in range(groups):
+        members = kept[g * size:(g + 1) * size] if g < groups - 1 else kept[g * size:]
+        raw_sd.append(median_of([sd(p) for p in members]))
+        log_sd.append(median_of([sd([math.log2(v) for v in p]) for p in members]))
+    raw_ratio = [round(x / raw_sd[0], 4) for x in raw_sd]
+    log_ratio = [round(x / log_sd[0], 4) for x in log_sd]
+    r.put("rl_ex_spread_proteins", len(kept), f"{rel(EXAMPLE)}: the proteins measured in at least a tenth of the cells", "count")
+    r.put("rl_ex_spread_groups", groups, f"{rel(EXAMPLE)}: those proteins in groups of equal size by their raw mean", "count")
+    r.put("rl_ex_spread_raw", round(raw_ratio[-1]), f"{rel(EXAMPLE)}: the busiest group's typical raw spread, against the quietest's", "count")
+    r.put("rl_ex_spread_log", round(log_ratio[-1], 2), f"{rel(EXAMPLE)}: the same, in log2", "fixed2")
+    top_ratio = 10 ** math.ceil(math.log10(raw_ratio[-1]))
+    spread = {
+        "basis": f"{rel(EXAMPLE)}: each protein measured in at least a tenth of the cells, its standard deviation raw and in log2",
+        "raw": raw_ratio, "log": log_ratio,
+        "ticks": [{"value": 10**e, "label": f"{number_words(10**e)}×"} for e in range(0, round(math.log10(top_ratio)) + 1)],
+    }
+    return hist, spread
+
+
+def s1_log_scores(r: DocsRecords) -> dict:
+    """The lowest log probabilities of S1's constructed logs: calibration (the
+    rehearsal, which gives back the calibration's scores) and the sealed test."""
+    def scores(path):
+        rows = [row for row in r.json(path)["rows"] if row["stratum"] == "S1" and row["class"] == "constructed_log"]
+        scored = sorted(row["probabilities"]["log"] for row in rows if row["probabilities"])
+        return rows, scored
+    _, cal = scores(REHEARSAL)
+    test_rows, test = scores(RESULTS)
+    s1 = r.json(CALIBRATION)["strata"][0]
+    assert s1["name"] == "S1"
+    threshold, k = s1["thresholds"]["log"], s1["k"]["log"]
+    assert cal[k - 1] == threshold, "the threshold is the k-th smallest calibration score"
+    below = sum(x < threshold for x in test)
+    unscored = sum(1 for row in test_rows if not row["probabilities"] and row["outcome"] == "unlike_either")
+    assert below == r.records["rl_ph_test_below"]["value"]
+    assert below + unscored == r.records["rl_b7_s1_log_miss"]["value"]
+    shown = 30
+    r.put("rl_sc_shown", shown, "the lowest scores each side of the figure shows", "count")
+    r.put("rl_sc_test_below", below, f"{rel(RESULTS)}: rows, S1 constructed logs scored under the threshold", "count")
+    r.put("rl_sc_test_unscored", unscored, f"{rel(RESULTS)}: rows, S1 constructed logs with no score (no spread)", "count")
+    r.put("rl_sc_test_lowest", round(test[0], 6), f"{rel(RESULTS)}: rows, the lowest S1 constructed-log score", "fixed3")
+    r.put("rl_sc_test_highest_miss", round(max(x for x in test if x < threshold), 6),
+          f"{rel(RESULTS)}: rows, the highest S1 constructed-log score under the threshold", "fixed3")
+    return {
+        "basis": f"{rel(REHEARSAL)} and {rel(RESULTS)}: rows, S1 constructed logs, probabilities > log",
+        "calibration": [round(x, 6) for x in cal[:shown]],
+        "test": [round(x, 6) for x in test[:shown]],
+    }
+
+
+def worked_examples(r: DocsRecords) -> None:
+    """The measures on one real table and its log copy (B2's design rows), and
+    one table read start to finish by the detector as shipped (B5)."""
+    path = report("b2")
+    design = r.json(path)["design"]
+    pair = {row["form"]: row for row in design if row["id"] == "pbmc240_diann" and row["stratum"] == "S1"}
+    raw, log = pair["as deposited"], next(v for k, v in pair.items() if k.startswith("constructed"))
+    r.put("rl_ex_s1_columns", raw["columns"], f"{rel(path)}: design, pbmc240_diann S1 > columns", "count")
+    for name in ("bowley", "tail", "level_spread"):
+        r.put(f"rl_ex_{name}_raw", raw["features"][name], f"{rel(path)}: design, pbmc240_diann S1 as deposited > {name}", "fixed2")
+        r.put(f"rl_ex_{name}_log", log["features"][name], f"{rel(path)}: design, pbmc240_diann S1 {log['form']} > {name}", "fixed2")
+
+    path = report("b5")
+    t = next(row for row in r.json(path)["tables"] if row["id"] == "pxd064083_t")
+    ev = t["summary"]["value_scale"]["evidence"]
+    assert t["median_reads"] == "log" and ev["verdict"] == "linear" and ev["set"] == ["linear"]
+    assert ev["stratum"] == "S2+S3" and ev["gate"] is None
+    base = f"{rel(path)}: tables, pxd064083_t"
+    r.put("rl_wx_cells", t["cells"], f"{base} > cells", "count")
+    r.put("rl_wx_raw_p", ev["probabilities"]["linear"], f"{base} > evidence > probabilities > linear", "fixed3")
+    r.put("rl_wx_log_p", ev["probabilities"]["log"], f"{base} > evidence > probabilities > log", "fixed3")
+    r.put("rl_wx_changed", t["answers_changed"], f"{base} > answers_changed", "count")
+    s23 = r.json(CALIBRATION)["strata"][1]
+    assert s23["name"] == "S2+S3" and ev["thresholds"] == s23["thresholds"], "B5 read it with protein-v1"
+
+
 # ---- the steps, and the dates each one's records hold ----
 
 def status_line(plan: str, prefix: str) -> str:
@@ -434,6 +658,14 @@ def build(manifest: dict | None = None) -> dict:
     phase_a(r)
     b1_to_b6(r)
     b7(r)
+    worked_examples(r)
+    values, spread = example_table(r)
+    series = {
+        "bank_medians": bank_medians(r),
+        "example_spread": spread,
+        "example_values": values,
+        "s1_log_scores": s1_log_scores(r),
+    }
     told = steps(r)
     return {
         "schema_version": SCHEMA_VERSION,
@@ -441,6 +673,7 @@ def build(manifest: dict | None = None) -> dict:
         "sources": {rel(p): sha256(p) for p in sorted(r.sources, key=rel)},
         "records": dict(sorted(r.records.items())),
         "steps": told,
+        "series": series,
     }
 
 

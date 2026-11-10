@@ -53,7 +53,11 @@
 /* A figure: the drawing, its caption, and for a data figure its numbers in words. */
 .docs-fig { margin: 22px 0; }
 .docs-fig figcaption { font-size: 14px; color: var(--ink-soft); margin-top: 8px; max-width: 68ch; }
-.docs-illustration { margin-right: 6px; vertical-align: 1px; }
+.docs-illustration,
+.docs-shot-bead { margin-right: 6px; vertical-align: 1px; }
+/* A screenshot (scripts/docs_screenshots.mjs), taken at twice the size it is
+   shown, so it stays sharp; never wider than the chapter. */
+.docs-shot { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; }
 .docs-numbers { margin-top: 8px; }
 .docs-table { border-collapse: collapse; font-size: 14px; }
 .docs-table th { text-align: left; font-weight: 500; font-size: 13px; color: var(--ink-faint); padding: 0 16px 6px 0; border-bottom: 1px solid var(--line); }

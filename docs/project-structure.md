@@ -42,6 +42,7 @@ Vivome_Atlas/
 │   │   └── atlas/            the Atlas page: the 3D viewer, the Explore tab, the Your data tab
 │   ├── figures/              the Manuscript's figures: SVG, CSV and index.json, from scripts/build_figures.py
 │   ├── motion/frames/        the Motion page's stills and their sidecar, from motion/scripts/stills.mjs
+│   ├── img/docs/             the Docs section's screenshots and their sidecar, from scripts/docs_screenshots.mjs
 │   ├── data/                 what the pages load: atlas_manifest.json, workflow.json, manuscript.json,
 │   │                         docs.json, cell metadata, embeddings, and examples/ (the example upload)
 │   └── tests/                node --test suites for js/

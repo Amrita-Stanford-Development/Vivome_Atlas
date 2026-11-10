@@ -29,7 +29,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/preview-water.html` — preview, not linked from the site: every water effect side by side over the same objects
 - `web/css/story.css` — the landing's layout: the title panel, the sections and card grids, the scroll reveals, phones and reduced motion
 - `web/css/workflow.css` — the Workflow page's layout: the two-column scroll story, the followed-cell picker, the film bar and theatre, reduced motion and print
-- `web/css/docs.css` — the Docs section's layout: the way back to its home, a topic page's panels, the figures
+- `web/css/docs.css` — the Docs section's layout: the way back to its home, a topic page's panels, the figures and screenshots
 - `web/css/reel.css` — the Motion page's layout
 - `web/css/page.css` — the design system: tokens, the glass/well/sheet/bead components, site header and footer, the tabs, folds and glossary the Docs pages use, the panel styling contract
 - `web/css/atlas.css` — the Atlas page's app shell: sidebar, viewer card, overlays, drawer, gene-profile table
@@ -53,7 +53,7 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/js/manuscript-data.js` — loading, checking and reading web/data/manuscript.json: the record formats, the caveat tags, the slots and their basis (pure)
 - `web/js/docs.js` — the Docs pages' script: a topic page's tabs and addresses (#did-b7 opens that step), then the numbers and figures from web/data/docs.json, or the error and Pending
 - `web/js/docs-data.js` — loading, checking and reading web/data/docs.json: a record's text and basis, the slots, the records each data figure draws, and the tabs' addresses and keys (pure)
-- `web/js/docs-svg.js` — the Docs section's data figures, from web/data/docs.json: what the old rule misread, the corpus funnel, the sealed test against the promise, the missing-value bands (pure)
+- `web/js/docs-svg.js` — the Docs section's data figures, from web/data/docs.json: the bank's medians against the old rule, the example file's values and spread, the S1 log scores against their threshold, the corpus funnel, the sealed test against the promise, the missing-value bands (pure)
 - `web/js/workflow-panels.js` — the Workflow page's HTML builders: snippets, recipe, cell card, probability and guess tables, the ladder, held-out cards, the service card (pure)
 - `web/js/workflow-svg.js` — static SVG figures for the Workflow page: histogram, heatmap, bars, Sankey, tree, UpSet, graph, ROC (pure)
 - `web/js/workflow-layout.js` — layout maths for the Workflow page: scales, histogram bars, Sankey, the class compass, colour ramps, the 3D view (pure)
@@ -121,8 +121,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/tests/atlas-spatial.test.js` — the Atlas page's geometry: the default view, grid search against brute force, picking, the file's sheet, label placement
 - `web/tests/atlas-answers.test.js` — uploaded cells from a response and from the recorded example: outcomes, looks, which services place their cells, the receipt
 - `web/tests/figures.test.js` — the figures on the Manuscript page: every slot has a figure and every figure a slot in its section, with its files; legends and numbers escaped
-- `web/tests/docs.test.js` — the Docs section against the real files: the data valid, records in their formats and escaped, Pending when pending, every figure's records measured, the tabs' addresses and keys
-- `web/tests/docs-svg.test.js` — the Docs section's figures against the real data: labelled images, Pending rather than NaN, no number in their words that is not a record, the promise marked broken exactly where the lower bound is above it, the funnel's parts adding up
+- `web/tests/docs.test.js` — the Docs section against the real files: the data valid, records in their formats and escaped, Pending when pending, every figure's records measured, each screenshot listed, sized and labelled live or not live, the pop-up's numbers recomputed from the example file, the tabs' addresses and keys
+- `web/tests/docs-svg.test.js` — the Docs section's figures against the real data: labelled images, Pending rather than NaN, no number in their words that is not a record, the promise marked contradicted exactly where the lower bound is above it, the funnel's parts adding up, each dot, bar and line drawn from its series
 - `web/tests/manuscript.test.js` — the Manuscript page against the real files: every slot measured but the open items, no typed metric, copy rules, caveat tags, contents links, the current model's benchmark rows only, the cross-modal support and alignment panels mounted in Results from the manifest (Pending when a record is pending)
 - `web/tests/timeline.test.js` — the film's clock: chapter lengths, locate, beats, reduced-motion steps, the address
 - `web/tests/workflow-layout.test.js` — the Workflow page's layout maths and static figures: rotation, Sankey conservation, colour ramps, ROC snapping, hatching, escaping
@@ -135,7 +135,10 @@ When you add, move or delete a file, update its line in the same commit.
 - `web/data/examples/pbmc240_proteins_raw.tsv` — byte-identical copy of `service/examples/pbmc240_proteins_raw.tsv` (CRLF, kept by `.gitattributes`), the example file the Atlas page's Your data tab sends
 - `web/figures/*` — generated by `scripts/build_figures.py`: each figure's SVG (what the page shows), its CSV (every number drawn, with its source file and field), and `index.json` (titles, legends, alt text, sections, sources)
 - `web/data/manuscript.json` — generated by `scripts/build_manuscript.py` (run by `scripts/build_manifest.py`); the Manuscript page's records, built for the manifest's release
-- `web/data/docs.json` — generated by `scripts/build_docs.py` (run by `scripts/build_manifest.py`); the Docs section's records, every number its pages show, and each told step's records and dates
+- `web/data/docs.json` — generated by `scripts/build_docs.py` (run by `scripts/build_manifest.py`); the Docs section's records, every number its pages show, each told step's records and dates, and the series its data figures draw
+- `web/img/docs/upload-menus-live.webp` — generated by `scripts/docs_screenshots.mjs`: the Atlas page's Values and Zeros menus as they are live (the commit named in `index.json`), for the Raw or log page
+- `web/img/docs/popup-branch.webp` — generated by `scripts/docs_screenshots.mjs`: the pop-up B5 built, not live, opened on the example file, for the Raw or log page
+- `web/img/docs/index.json` — generated by `scripts/docs_screenshots.mjs`: each screenshot's site (live or branch), commit, size, what it shows, its text, and where the numbers in it come from
 - `web/data/metadata_RNA_lat128.csv` — RNA cell metadata (85,233 rows): class, lineage, 3-PC coordinates in v3.1's coordinate space (`scripts/export_atlas_coordinates.py`)
 - `web/data/organs/tabula_sapiens.json` — every organ of Tabula Sapiens v2: name, file and size from its Figshare record (`scripts/tabula_sapiens_organs.py`)
 - `web/data/organs/index.json` — the organ maps on offer: each organ's name, class order and hierarchy, cell count, bundle MANIFEST sha256 and gate record (`scripts/export_atlas_coordinates.py --organ`)
@@ -410,7 +413,8 @@ When you add, move or delete a file, update its line in the same commit.
 - `scripts/build_manuscript.py` — builds `web/data/manuscript.json` from committed results and the Workflow page's records, standard library only; run by `scripts/build_manifest.py`
 - `scripts/test_build_manuscript.py` — `web/data/manuscript.json` is the builder's output, within its budget, built for the manifest's release; every record measured or pending, headline figures pinned
 - `scripts/build_docs.py` — builds `web/data/docs.json` from committed results (the raw-or-log steps' reports, the sealed test, the calibration, the corpus frame), code constants read without importing, and predictions quoted from the expectations; standard library only; run by `scripts/build_manifest.py`
-- `scripts/test_build_docs.py` — `web/data/docs.json` is the builder's output, within its budget, built for the manifest's release; every record measured or pending; headline figures pinned; the funnel adds up; Step 1's invariant count and B4's timings from the data; the code's constants agree; each step's records and dates
+- `scripts/test_build_docs.py` — `web/data/docs.json` is the builder's output, within its budget, built for the manifest's release; every record measured or pending; headline figures pinned; the funnel adds up; Step 1's invariant count and B4's timings from the data; the code's constants agree; each step's records and dates; the series finite, from their sources, and in agreement with the records
+- `scripts/docs_screenshots.mjs` — the Docs section's screenshots: drives the PC's Edge, headless, over its DevTools port (Node only, no package), on two local servers, the working tree and the live commit read from git; writes `web/img/docs/` and its `index.json`. Pictures for the pages, never a check of them
 - `scripts/trace_workflow.py` — traces the PBMC240 example through the served model's own functions for the Workflow page, checking every cell against `run_projection`
 - `scripts/tabula_sapiens_organs.py` — writes the list of Tabula Sapiens v2's organs from its Figshare record, for the manifest's `organs`
 - `scripts/export_atlas_coordinates.py` — writes the site's atlas coordinates from the served v3.1 model, so projected cells land on the displayed atlas; with --organ, the organ maps in `web/data/organs/`

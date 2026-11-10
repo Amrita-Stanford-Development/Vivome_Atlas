@@ -104,8 +104,8 @@
                 </li>
                 <li class="docs-card glass" id="topic-how-we-work">
                     <h3>How we work</h3>
-                    <p>The rules every step keeps, such as expectations written first and each test scored
-                        once, and when each one came in.</p>
+                    <p>The rules every step keeps, such as expectations written first and each sealed test
+                        scored once, and when each one came in.</p>
                     <p class="docs-card-meta"><time datetime="2026-10-03">2026-10-03</time> to <time datetime="2026-10-28">2026-10-28</time><span class="bead bead-open">Coming next</span></p>
                 </li>
             </ul>
@@ -126,19 +126,21 @@
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-09-23">2026-09-23</time>
                     <span class="docs-milestone-topic">Testing the model</span>
-                    <p>The benchmark rebuilt under fixed rules, so every method is compared fairly.</p>
+                    <p>The benchmark rebuilt under fixed rules, meant to compare every method fairly. Later
+                        reviews found faults in how we had set up some of the baselines.</p>
                 </li>
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-09-24">2026-09-24</time>
                     <span class="docs-milestone-topic">The upload service</span>
-                    <p>The service's encoder fixed: run end to end on SCoPE2, it now gives the model's own
-                        embedding.</p>
+                    <p>The service's encoder fixed: run end to end on SCoPE2, it came close to the model's
+                        own embedding. With the data's preparation fixed the next day, it matched exactly.</p>
                 </li>
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-09-29">2026-09-29</time>
                     <span class="docs-milestone-topic">Testing the model</span>
-                    <p>The benchmark scored again over several seeds: the lead over scANVI belonged to the
-                        one seed that shipped, not to the model's design, and the records were corrected.</p>
+                    <p>The benchmark scored again over several seeds: the lead over scANVI under the shared
+                        restricted rule belonged to the one seed that shipped, not to the model's design,
+                        though v3 still won reliably without the restriction. The records were corrected.</p>
                 </li>
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-09-30">2026-09-30</time>
@@ -177,10 +179,10 @@
                     <time datetime="2026-10-04">2026-10-04</time>
                     <span class="docs-milestone-topic">The data</span>
                     <p>SCoPE2's labels corrected: our copy had macrophage and monocyte swapped on every cell.
-                        Every table that used them was scored again.</p>
+                        Every SCoPE2 table we could recompute was scored again.</p>
                 </li>
-                <li class="docs-milestone" data-source="research/todo.md">
-                    <time datetime="2026-10-04">2026-10-04</time>
+                <li class="docs-milestone" data-source="research/working-context.md">
+                    <time datetime="2026-10-05">2026-10-05</time>
                     <span class="docs-milestone-topic">The cell model and its versions</span>
                     <p>v4 passed its gate: v3.1's answers, with v4's best guess beside them, served on
                         request.</p>
@@ -188,8 +190,9 @@
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-10-06">2026-10-06</time>
                     <span class="docs-milestone-topic">The cell model and its versions</span>
-                    <p>v4.1: the encoder's weight chosen on the Fulcher set under fixed rules, then checked
-                        once on the Khoury set.</p>
+                    <p>v4.1: the encoder's weight chosen on the Fulcher set under fixed rules. It was then
+                        looked at once on the Khoury set, which had already been scored, so only after the
+                        fact.</p>
                 </li>
                 <li class="docs-milestone" data-source="research/benchmark/side-tests.md">
                     <time datetime="2026-10-15">2026-10-15</time>
@@ -201,6 +204,17 @@
                     <time datetime="2026-10-15">2026-10-15</time>
                     <span class="docs-milestone-topic">The cell model and its versions</span>
                     <p>v4.1 made the service's default.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/benchmark/side-tests.md">
+                    <time datetime="2026-10-16">2026-10-16</time>
+                    <span class="docs-milestone-topic">Testing the model</span>
+                    <p>The internal held-out test scored once, and spent: it became development data.</p>
+                </li>
+                <li class="docs-milestone" data-source="research/todo.md">
+                    <time datetime="2026-10-16">2026-10-16</time>
+                    <span class="docs-milestone-topic">The upload service</span>
+                    <p>The service moved to Google Cloud Run, and the site was pointed at it
+                        (<code>335c18b</code>).</p>
                 </li>
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-10-16">2026-10-16</time>
@@ -242,7 +256,7 @@
                     <time datetime="2026-10-27">2026-10-27</time>
                     <span class="docs-milestone-topic">The data</span>
                     <p>The requests to two labs for their sorted cells, the planned external test, checked
-                        and sent.</p>
+                        against the papers and handed to the owner to send.</p>
                 </li>
                 <li class="docs-milestone" data-source="research/todo.md">
                     <time datetime="2026-10-27">2026-10-27</time>
@@ -258,8 +272,8 @@
                 <li class="docs-milestone" data-source="research/value-scale-plan.md">
                     <time datetime="2026-10-28">2026-10-28</time>
                     <span class="docs-milestone-topic">How we work</span>
-                    <p>Diagnostics first: the raw-or-log work begins with a bank of real tables, and every
-                        step after it ends with runs on that bank, against expectations written before.</p>
+                    <p>Diagnostics first: the raw-or-log work begins with a bank of real tables, and most
+                        steps after it end with runs on that bank, against expectations written before.</p>
                 </li>
                 <li class="docs-milestone" data-step="phase_a">
                     <time datetime="2026-11-03">2026-11-03</time>
@@ -280,8 +294,9 @@
                 <li class="docs-milestone" data-step="b7">
                     <time datetime="2026-11-09">2026-11-09</time>
                     <span class="docs-milestone-topic">Raw or log</span>
-                    <p><a href="docs-raw-or-log.html#did-b7">B7 scored the sealed test once</a>: the promise
-                        broke for small log tables, and the owner chose rework, then a fresh test.</p>
+                    <p><a href="docs-raw-or-log.html#did-b7">B7 scored the sealed test once</a>: it
+                        contradicted the promise for small log tables, and the owner chose rework, then a fresh
+                        test.</p>
                 </li>
             </ol>
             </div>
@@ -294,8 +309,8 @@
             <ul class="docs-records">
                 <li><code>research/todo.md</code>: the work list, and its changelog, one dated row for each
                     piece of work.</li>
-                <li><code>research/notebook-run-history.md</code>: the run history, an entry for each run,
-                    with what it found.</li>
+                <li><code>research/notebook-run-history.md</code>: the run history, an entry for most runs,
+                    with what each found.</li>
                 <li><code>research/</code>: the plans, the protocols of the tests, and each run's notes and
                     report.</li>
                 <li><code>docs/</code>: how each part of the site and the service works today.</li>

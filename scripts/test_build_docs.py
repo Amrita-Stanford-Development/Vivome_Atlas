@@ -173,6 +173,90 @@ class TestDocs(unittest.TestCase):
         self.assertEqual(steps["b7"]["run"], "2026-11-09")
         self.assertEqual(steps["step1"]["expected"], "2026-10-28")
 
+    # ---- the series the data figures draw ----
+
+    def test_the_series_name_their_file_and_hold_only_finite_numbers(self):
+        series = self.d["series"]
+        self.assertEqual(sorted(series), ["bank_medians", "example_spread", "example_values", "s1_log_scores"])
+
+        def numbers(node):
+            if isinstance(node, bool):
+                return []
+            if isinstance(node, (int, float)):
+                return [node]
+            if isinstance(node, dict):
+                return [x for v in node.values() for x in numbers(v)]
+            if isinstance(node, list):
+                return [x for v in node for x in numbers(v)]
+            return []
+        for name, s in series.items():
+            self.assertTrue(s["basis"], name)
+            for path in re.findall(r"[\w./-]+\.(?:json|tsv)", s["basis"]):
+                self.assertIn(path, self.d["sources"], f"{name}: {path}")
+            for x in numbers(s):
+                self.assertTrue(math.isfinite(x), name)
+            for tick in s.get("ticks", []):
+                self.assertIsInstance(tick["label"], str, name)
+
+    def test_the_bank_medians_are_step_1_s_and_the_old_rule_reads_them_as_recorded(self):
+        rep = load("research/notebook-outputs/value_scale_step1/report.json")
+        rows = self.d["series"]["bank_medians"]["rows"]
+        self.assertEqual(len(rows), self.r["rl_step1_tables"])
+        d1 = {t["id"]: t for t in rep["D1"]}
+        recorded = {t["id"]: t["detected"] for t in rep["D2"] if t["variant"] == "original"}
+        rule = self.r["rl_median_rule"]
+        for row in rows:
+            t = d1[row["id"]]
+            self.assertEqual(row["label"], "raw" if t["label"] == "linear" else "log")
+            self.assertEqual(row["negatives"], t["negative_share"] > 0)
+            self.assertEqual(row["median"], round(t["median_nonzero"], 4))
+            # The rule as the figure draws it gives the reading Step 1 recorded.
+            reads = "log" if row["negatives"] or row["median"] <= rule else "raw"
+            self.assertEqual(reads, "raw" if recorded[row["id"]] == "linear" else "log", row["id"])
+            self.assertEqual(row["misread"], reads != row["label"], row["id"])
+        self.assertEqual(sum(r["misread"] for r in rows if r["label"] == "raw"), self.r["rl_step1_linear_misread"])
+
+    def test_the_example_table_s_histograms_count_every_measured_value(self):
+        ex = self.d["series"]["example_values"]
+        raw, log = ex["raw"], ex["log2"]
+        self.assertEqual(sum(raw["counts"]) + self.r["rl_ex_beyond"], self.r["rl_ex_values"])
+        self.assertEqual(sum(log["counts"]), self.r["rl_ex_values"])
+        for h in (raw, log):
+            self.assertEqual(len(h["edges"]), len(h["counts"]) + 1)
+            self.assertEqual(h["edges"], sorted(h["edges"]))
+        step1 = {t["id"]: t for t in load("research/notebook-outputs/value_scale_step1/report.json")["D1"]}
+        self.assertEqual(self.r["rl_ex_cells"], step1["pbmc240_diann"]["cells"])
+        # The figure reads every row of the file, as the Atlas page's check does (3,100); the
+        # service's parser keeps 3,098 of them, so Step 1's median differs a little.
+        self.assertEqual(self.r["rl_ex_proteins"], 3100)
+        self.assertEqual(step1["pbmc240_diann"]["proteins"], 3098)
+        self.assertLess(abs(self.r["rl_ex_median"] / step1["pbmc240_diann"]["median_nonzero"] - 1), 0.005)
+
+    def test_the_example_s_spread_climbs_with_level_raw_and_stays_level_after_a_log(self):
+        sp = self.d["series"]["example_spread"]
+        self.assertEqual(len(sp["raw"]), len(sp["log"]))
+        self.assertEqual(sp["raw"][0], 1)
+        self.assertEqual(sp["log"][0], 1)
+        # The page's words: the raw spread climbs, the log spread stays about level.
+        self.assertEqual(sp["raw"], sorted(sp["raw"]))
+        self.assertGreater(sp["raw"][-1], 10)
+        self.assertTrue(all(0.5 < x < 2 for x in sp["log"]))
+        self.assertEqual(self.r["rl_ex_spread_raw"], round(sp["raw"][-1]))
+        self.assertEqual(self.r["rl_ex_spread_log"], round(sp["log"][-1], 2))
+
+    def test_the_s1_log_threshold_is_the_kth_smallest_calibration_score(self):
+        sc = self.d["series"]["s1_log_scores"]
+        cal, test = sc["calibration"], sc["test"]
+        self.assertEqual(cal, sorted(cal))
+        self.assertEqual(test, sorted(test))
+        k = self.r["rl_s1_k"]
+        self.assertEqual(cal[k - 1], round(self.r["rl_s1_log_cut"], 6))
+        threshold = cal[k - 1]
+        self.assertEqual(sum(x < threshold for x in cal), self.r["rl_ph_cal_below"])
+        self.assertEqual(sum(x < threshold for x in test), self.r["rl_ph_test_below"])
+        self.assertEqual(self.r["rl_sc_test_below"] + self.r["rl_sc_test_unscored"], self.r["rl_b7_s1_log_miss"])
+        self.assertGreater(len(test), self.r["rl_sc_test_below"], "the figure shows every test score under the line")
+
     def test_it_reads_no_numpy_and_imports_no_valuescale(self):
         tree = ast.parse((bd.REPO / "scripts/build_docs.py").read_text(encoding="utf-8"))
         names = {a.name.split(".")[0] for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}

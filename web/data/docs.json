@@ -13,7 +13,7 @@
   "research/notebook-outputs/value_scale_b2/report.json": "3f3d4954b2915e837b7e487b392936c1fea72ca72659fad65f195782464f2b4a",
   "research/notebook-outputs/value_scale_b3/notes.md": "dec2971d224958767d8f18389f78ce16d3c34a9fd7a1ed0d4fb4385445622e25",
   "research/notebook-outputs/value_scale_b3/report.json": "1cb8a036c27a45a60d74a4f86028a5c917efe05bb7bc7764ae512dd6336919cb",
-  "research/notebook-outputs/value_scale_b4/notes.md": "3a6919facc28835cf5f476d9a566a78abb48adad25f405afff1d6e5c9135d2d4",
+  "research/notebook-outputs/value_scale_b4/notes.md": "04b6f182e646b47918d1e6b4d34534687fd2e93281ef12b35417712688d1805e",
   "research/notebook-outputs/value_scale_b4/rehearsal.json": "6847369bdd20b38da307d1cc38415d27336f8370e7a92bc0b5caabb7427dc069",
   "research/notebook-outputs/value_scale_b4/report.json": "066b44ce6b0220ad75ca7a1e25521ae9cbeda0ee82fcaa4b72264abbb167cd3f",
   "research/notebook-outputs/value_scale_b5/notes.md": "33ec92c3aa2c91a5b05747a00f0f66ff667ec2e6aaf4ea24ea57da7cc47dd829",
@@ -34,6 +34,8 @@
   "research/value-scale-plan.md": "e328ee10cb9a81d5f415a75920b1e166558f0c665a1d016ceaf8fbb8ecf140c1",
   "research/value-scale-v2-plan.md": "9e7bbd19bc17be0f592b6701dd851a0e93b312ef9160f1ec36d8a509adc4be88",
   "service/config.py": "bb5a2463d7b17b6ee9b9b53ba2000f73c3bbd156ca507c726ba9adc45b78f605",
+  "service/examples/pbmc240_proteins_raw.tsv": "10bb38331870bf395ef6e646c23cbb85923224bcf32a7d2484695ee8ac83d9c1",
+  "service/pipeline/validation.py": "09fb2a9e894d0347445aad74423561512e8fdd5f5b146f2d38e62f9faf281c00",
   "valuescale/bank/expectations/b1.json": "e3898c9f3ee89bb503a847868d4639cf3f88aebe8f0cff1151bddb1bf21263db",
   "valuescale/bank/expectations/b2.json": "d98402e46d1b24373a828121cf6bd1a6fcf85900570a05508a6b88a0900ade41",
   "valuescale/bank/expectations/b3.json": "509aa8357c9e1e72576b143972a2cd1bda7105e258ad956bb3e9b5b0ca3b1e96",
@@ -47,7 +49,8 @@
   "valuescale/bank/expectations/zscore.json": "9a1c70ec43475f4d89b6f0b1d59b338146d85daa88f017230a577189836becd8",
   "valuescale/calibration/protein-v1.json": "399812d2cdf52cb2ddfd47abe5c335769ff0a49fdfd6f97c7d0fbd61e23aabd0",
   "valuescale/conformal.py": "7086f684d24de89d7e356515e1b1e0e686cd66357dd9c1025384827a6f923767",
-  "valuescale/corpus/frame.json": "519bc234e41a88859e41d219ed5ba1aac5cba893eef9fe690f95ba6e0b2652b9"
+  "valuescale/corpus/frame.json": "519bc234e41a88859e41d219ed5ba1aac5cba893eef9fe690f95ba6e0b2652b9",
+  "valuescale/gates.py": "2bd4c0582ffa4444573e7b7ddf812e889022c1fb870f2ef23c9d29c3b26e443e"
  },
  "records": {
   "rl_alpha": {
@@ -206,6 +209,12 @@
    "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_skips > found > no candidate",
    "format": "count"
   },
+  "rl_b3_other_skips": {
+   "value": 198,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_skips > found, fetch failed, no file list, too few rows, too large, unparseable",
+   "format": "count"
+  },
   "rl_b3_reserve": {
    "value": 8813,
    "status": "measured",
@@ -224,10 +233,46 @@
    "basis": "research/notebook-outputs/value_scale_b3/report.json: rows passed",
    "format": "count"
   },
+  "rl_b3_sw_diann": {
+   "value": 124,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_software > found > DIA-NN",
+   "format": "count"
+  },
+  "rl_b3_sw_fragpipe": {
+   "value": 12,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_software > found > FragPipe",
+   "format": "count"
+  },
+  "rl_b3_sw_maxquant": {
+   "value": 253,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_software > found > MaxQuant",
+   "format": "count"
+  },
+  "rl_b3_sw_pd": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_software > found > Proteome Discoverer",
+   "format": "count"
+  },
+  "rl_b3_sw_spectronaut": {
+   "value": 59,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_software > found > Spectronaut",
+   "format": "count"
+  },
   "rl_b3_test": {
    "value": 237,
    "status": "measured",
    "basis": "research/notebook-outputs/value_scale_b3/report.json: quotas > test > S1",
+   "format": "count"
+  },
+  "rl_b3_too_few_columns": {
+   "value": 1568,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b3/report.json: rows > B3_skips > found > too few columns",
    "format": "count"
   },
   "rl_b4_detect_seconds": {
@@ -552,6 +597,126 @@
    "value": 0.05,
    "status": "measured",
    "basis": "valuescale/calibration/protein-v1.json: delta",
+   "format": "percent"
+  },
+  "rl_ex_beyond": {
+   "value": 2486,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: every measured value (a blank is not measured), above the raw histogram's right edge",
+   "format": "count"
+  },
+  "rl_ex_bowley_log": {
+   "value": 0.0492,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 constructed ln > bowley",
+   "format": "fixed2"
+  },
+  "rl_ex_bowley_raw": {
+   "value": 0.4279,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 as deposited > bowley",
+   "format": "fixed2"
+  },
+  "rl_ex_cells": {
+   "value": 238,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: the columns after N.Proteotypic.Sequences",
+   "format": "count"
+  },
+  "rl_ex_level_spread_log": {
+   "value": -0.5179,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 constructed ln > level_spread",
+   "format": "fixed2"
+  },
+  "rl_ex_level_spread_raw": {
+   "value": 0.7654,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 as deposited > level_spread",
+   "format": "fixed2"
+  },
+  "rl_ex_log2_median": {
+   "value": 12.224074,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: every measured value (a blank is not measured), log2 of the median",
+   "format": "fixed2"
+  },
+  "rl_ex_max": {
+   "value": 175558000,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: every measured value (a blank is not measured), the largest",
+   "format": "count"
+  },
+  "rl_ex_median": {
+   "value": 4784,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: every measured value (a blank is not measured), the median",
+   "format": "count"
+  },
+  "rl_ex_proteins": {
+   "value": 3100,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: rows",
+   "format": "count"
+  },
+  "rl_ex_s1_columns": {
+   "value": 29,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 > columns",
+   "format": "count"
+  },
+  "rl_ex_spread_groups": {
+   "value": 10,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: those proteins in groups of equal size by their raw mean",
+   "format": "count"
+  },
+  "rl_ex_spread_log": {
+   "value": 0.91,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: the same, in log2",
+   "format": "fixed2"
+  },
+  "rl_ex_spread_proteins": {
+   "value": 2053,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: the proteins measured in at least a tenth of the cells",
+   "format": "count"
+  },
+  "rl_ex_spread_raw": {
+   "value": 67,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: the busiest group's typical raw spread, against the quietest's",
+   "format": "count"
+  },
+  "rl_ex_tail_log": {
+   "value": 2.7148,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 constructed ln > tail",
+   "format": "fixed2"
+  },
+  "rl_ex_tail_raw": {
+   "value": 42.8876,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b2/report.json: design, pbmc240_diann S1 as deposited > tail",
+   "format": "fixed2"
+  },
+  "rl_ex_values": {
+   "value": 274703,
+   "status": "measured",
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: every measured value (a blank is not measured)",
+   "format": "count"
+  },
+  "rl_gate_counts": {
+   "value": 20,
+   "status": "measured",
+   "basis": "valuescale/gates.py: MIN_DISTINCT_COUNTS",
+   "format": "count"
+  },
+  "rl_gate_negative_share": {
+   "value": 0.01,
+   "status": "measured",
+   "basis": "valuescale/gates.py: NEGATIVE_SHARE",
    "format": "percent"
   },
   "rl_median_rule": {
@@ -1034,6 +1199,42 @@
    "basis": "valuescale/conformal.py: STRATA S3",
    "format": "count"
   },
+  "rl_sc_shown": {
+   "value": 30,
+   "status": "measured",
+   "basis": "the lowest scores each side of the figure shows",
+   "format": "count"
+  },
+  "rl_sc_test_below": {
+   "value": 20,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: rows, S1 constructed logs scored under the threshold",
+   "format": "count"
+  },
+  "rl_sc_test_highest_miss": {
+   "value": 0.929082,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: rows, the highest S1 constructed-log score under the threshold",
+   "format": "fixed3"
+  },
+  "rl_sc_test_lowest": {
+   "value": 0.77568,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: rows, the lowest S1 constructed-log score",
+   "format": "fixed3"
+  },
+  "rl_sc_test_unscored": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/benchmark/value-scale-test/results.json: rows, S1 constructed logs with no score (no spread)",
+   "format": "count"
+  },
+  "rl_service_min_cells": {
+   "value": 20,
+   "status": "measured",
+   "basis": "service/pipeline/validation.py: MIN_CELLS_REFUSE",
+   "format": "count"
+  },
   "rl_step1_d3_pass": {
    "value": 33,
    "status": "measured",
@@ -1076,11 +1277,47 @@
    "phase": "Protein v2, R7",
    "note": "the fresh sealed test is scored once, after R1 to R6 (research/value-scale-v2-plan.md)"
   },
+  "rl_wx_cells": {
+   "value": 78,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: tables, pxd064083_t > cells",
+   "format": "count"
+  },
+  "rl_wx_changed": {
+   "value": 36,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: tables, pxd064083_t > answers_changed",
+   "format": "count"
+  },
+  "rl_wx_log_p": {
+   "value": 0.026182438019622452,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: tables, pxd064083_t > evidence > probabilities > log",
+   "format": "fixed3"
+  },
+  "rl_wx_raw_p": {
+   "value": 0.9738175619803775,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_b5/report.json: tables, pxd064083_t > evidence > probabilities > linear",
+   "format": "fixed3"
+  },
+  "rl_z_expected_move": {
+   "value": 0.01,
+   "status": "measured",
+   "basis": "valuescale/bank/expectations/zscore.json: Z3_replies_against_the_baseline > predicted > 2, written before the run",
+   "format": "plain"
+  },
   "rl_z_largest_move": {
    "value": 0.0801,
    "status": "measured",
    "basis": "research/notebook-outputs/value_scale_zscore/report.json: the largest largest_coordinate_change",
    "format": "fixed3"
+  },
+  "rl_z_moved_tables": {
+   "value": 6,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_zscore/report.json: tables whose largest_coordinate_change is above the predicted bound",
+   "format": "count"
   },
   "rl_z_same": {
    "value": 29,
@@ -1092,6 +1329,18 @@
    "value": 30,
    "status": "measured",
    "basis": "research/notebook-outputs/value_scale_zscore/report.json: tables traced (not refused)",
+   "format": "count"
+  },
+  "rl_z_worst_cells": {
+   "value": 47,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_zscore/report.json: msv000099294_hmc3 > cells",
+   "format": "count"
+  },
+  "rl_z_worst_changed": {
+   "value": 3,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_zscore/report.json: msv000099294_hmc3 > answers_changed",
    "format": "count"
   }
  },
@@ -1197,7 +1446,8 @@
    "run": "2026-11-07",
    "expected": "2026-11-07",
    "dates": [
-    "2026-11-07"
+    "2026-11-07",
+    "2026-11-10"
    ]
   },
   "b5": {
@@ -1245,6 +1495,647 @@
    "notes": "research/value-scale-v2-plan.md",
    "dates": [
     "2026-11-09"
+   ]
+  }
+ },
+ "series": {
+  "bank_medians": {
+   "basis": "research/notebook-outputs/value_scale_step1/report.json: D1 median_nonzero and negative_share, D2 the original tables' reading",
+   "lo_exp": 0,
+   "hi_exp": 9,
+   "ticks": [
+    {
+     "value": 1,
+     "label": "1"
+    },
+    {
+     "value": 100,
+     "label": "100"
+    },
+    {
+     "value": 10000,
+     "label": "10,000"
+    },
+    {
+     "value": 1000000,
+     "label": "1 million"
+    },
+    {
+     "value": 100000000,
+     "label": "100 million"
+    }
+   ],
+   "rows": [
+    {
+     "id": "msv000099294_microglia",
+     "label": "raw",
+     "negatives": false,
+     "median": 3.93,
+     "misread": true
+    },
+    {
+     "id": "msv000099294_hmc3",
+     "label": "raw",
+     "negatives": false,
+     "median": 5.7525,
+     "misread": true
+    },
+    {
+     "id": "pxd064083_t",
+     "label": "raw",
+     "negatives": false,
+     "median": 6.9903,
+     "misread": true
+    },
+    {
+     "id": "pxd064083_b",
+     "label": "raw",
+     "negatives": false,
+     "median": 7.9171,
+     "misread": true
+    },
+    {
+     "id": "furtwangler_batchcorr_norm",
+     "label": "raw",
+     "negatives": false,
+     "median": 10.6345,
+     "misread": true
+    },
+    {
+     "id": "furtwangler_batchcorr",
+     "label": "raw",
+     "negatives": false,
+     "median": 10.7627,
+     "misread": true
+    },
+    {
+     "id": "pxd049412_a549_singlecells",
+     "label": "raw",
+     "negatives": false,
+     "median": 267.5581,
+     "misread": false
+    },
+    {
+     "id": "krull_singlecells",
+     "label": "raw",
+     "negatives": false,
+     "median": 547.0395,
+     "misread": false
+    },
+    {
+     "id": "pxd049412_hela250pg",
+     "label": "raw",
+     "negatives": false,
+     "median": 605.1326,
+     "misread": false
+    },
+    {
+     "id": "kabatnik_c3_region",
+     "label": "raw",
+     "negatives": false,
+     "median": 1001.025,
+     "misread": false
+    },
+    {
+     "id": "pxd077946_diann_genes",
+     "label": "raw",
+     "negatives": false,
+     "median": 2558.99,
+     "misread": false
+    },
+    {
+     "id": "pxd073250_diann",
+     "label": "raw",
+     "negatives": false,
+     "median": 3143.8201,
+     "misread": false
+    },
+    {
+     "id": "pbmc240_diann",
+     "label": "raw",
+     "negatives": false,
+     "median": 4780.3198,
+     "misread": false
+    },
+    {
+     "id": "brunner_diann_1ng",
+     "label": "raw",
+     "negatives": false,
+     "median": 9162.9297,
+     "misread": false
+    },
+    {
+     "id": "pxd061052_spectronaut",
+     "label": "raw",
+     "negatives": false,
+     "median": 10662.5723,
+     "misread": false
+    },
+    {
+     "id": "hu2023_pd_k562",
+     "label": "raw",
+     "negatives": false,
+     "median": 11908.2178,
+     "misread": false
+    },
+    {
+     "id": "pxd043355_pd",
+     "label": "raw",
+     "negatives": false,
+     "median": 16962.5273,
+     "misread": false
+    },
+    {
+     "id": "kabatnik_cra_timstofultra",
+     "label": "raw",
+     "negatives": false,
+     "median": 38036.8516,
+     "misread": false
+    },
+    {
+     "id": "herrera2025_fragpipe",
+     "label": "raw",
+     "negatives": false,
+     "median": 41783.2812,
+     "misread": false
+    },
+    {
+     "id": "brunner_mq_singlecells",
+     "label": "raw",
+     "negatives": false,
+     "median": 140730.0,
+     "misread": false
+    },
+    {
+     "id": "fulcher_tmt",
+     "label": "raw",
+     "negatives": false,
+     "median": 241512.375,
+     "misread": false
+    },
+    {
+     "id": "pxd069060_diann_report",
+     "label": "raw",
+     "negatives": false,
+     "median": 390449.5,
+     "misread": false
+    },
+    {
+     "id": "zamore_diann",
+     "label": "raw",
+     "negatives": false,
+     "median": 640916.0,
+     "misread": false
+    },
+    {
+     "id": "cong_mq_singlecells",
+     "label": "raw",
+     "negatives": false,
+     "median": 2486150.0,
+     "misread": false
+    },
+    {
+     "id": "quantms_pxd004452_ibaq",
+     "label": "raw",
+     "negatives": false,
+     "median": 8642764.0,
+     "misread": false
+    },
+    {
+     "id": "lungmap_bpd_fragpipe",
+     "label": "raw",
+     "negatives": false,
+     "median": 22832846.0,
+     "misread": false
+    },
+    {
+     "id": "pxd021882_maxquant",
+     "label": "raw",
+     "negatives": false,
+     "median": 25550500.0,
+     "misread": false
+    },
+    {
+     "id": "dusszachniewicz_maxquant",
+     "label": "raw",
+     "negatives": false,
+     "median": 348350016.0,
+     "misread": false
+    },
+    {
+     "id": "furtwangler_log2_imputed",
+     "label": "log",
+     "negatives": false,
+     "median": 2.4327,
+     "misread": false
+    },
+    {
+     "id": "furtwangler_log2",
+     "label": "log",
+     "negatives": false,
+     "median": 3.5403,
+     "misread": false
+    },
+    {
+     "id": "furtwangler_log2_nan",
+     "label": "log",
+     "negatives": false,
+     "median": 3.5403,
+     "misread": false
+    },
+    {
+     "id": "furtwangler_log2_raw_sn",
+     "label": "log",
+     "negatives": false,
+     "median": 3.6893,
+     "misread": false
+    },
+    {
+     "id": "quantms_pxd004452_ribaq",
+     "label": "log",
+     "negatives": false,
+     "median": 4.4998,
+     "misread": false
+    },
+    {
+     "id": "khoury_column_normalized",
+     "label": "log",
+     "negatives": false,
+     "median": 10.6378,
+     "misread": false
+    },
+    {
+     "id": "scope2_export",
+     "label": "log",
+     "negatives": true,
+     "median": -0.0008,
+     "misread": false
+    },
+    {
+     "id": "furtwangler_log2fc_nan",
+     "label": "log",
+     "negatives": true,
+     "median": 0.0123,
+     "misread": false
+    },
+    {
+     "id": "cptac_ccrcc_tumor",
+     "label": "log",
+     "negatives": true,
+     "median": 0.0508,
+     "misread": false
+    }
+   ]
+  },
+  "example_spread": {
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: each protein measured in at least a tenth of the cells, its standard deviation raw and in log2",
+   "raw": [
+    1.0,
+    1.5932,
+    2.0909,
+    2.8195,
+    3.8741,
+    5.2641,
+    7.4105,
+    11.5478,
+    18.2561,
+    66.5323
+   ],
+   "log": [
+    1.0,
+    1.0108,
+    0.9495,
+    0.9577,
+    0.9849,
+    0.9818,
+    1.0099,
+    0.9768,
+    0.9024,
+    0.9082
+   ],
+   "ticks": [
+    {
+     "value": 1,
+     "label": "1×"
+    },
+    {
+     "value": 10,
+     "label": "10×"
+    },
+    {
+     "value": 100,
+     "label": "100×"
+    }
+   ]
+  },
+  "example_values": {
+   "basis": "service/examples/pbmc240_proteins_raw.tsv: every measured value (a blank is not measured)",
+   "raw": {
+    "edges": [
+     0.0,
+     20000.0,
+     40000.0,
+     60000.0,
+     80000.0,
+     100000.0,
+     120000.0,
+     140000.0,
+     160000.0,
+     180000.0,
+     200000.0,
+     220000.0,
+     240000.0,
+     260000.0,
+     280000.0,
+     300000.0,
+     320000.0,
+     340000.0,
+     360000.0,
+     380000.0,
+     400000.0,
+     420000.0,
+     440000.0,
+     460000.0,
+     480000.0,
+     500000.0
+    ],
+    "counts": [
+     232517,
+     19985,
+     7511,
+     3893,
+     2199,
+     1254,
+     870,
+     646,
+     611,
+     467,
+     366,
+     267,
+     250,
+     192,
+     158,
+     145,
+     149,
+     122,
+     110,
+     101,
+     97,
+     86,
+     76,
+     70,
+     75
+    ],
+    "ticks": [
+     {
+      "value": 0,
+      "label": "0"
+     },
+     {
+      "value": 100000,
+      "label": "100,000"
+     },
+     {
+      "value": 200000,
+      "label": "200,000"
+     },
+     {
+      "value": 300000,
+      "label": "300,000"
+     },
+     {
+      "value": 400000,
+      "label": "400,000"
+     },
+     {
+      "value": 500000,
+      "label": "500,000"
+     }
+    ]
+   },
+   "log2": {
+    "edges": [
+     -1.0,
+     -0.5,
+     0.0,
+     0.5,
+     1.0,
+     1.5,
+     2.0,
+     2.5,
+     3.0,
+     3.5,
+     4.0,
+     4.5,
+     5.0,
+     5.5,
+     6.0,
+     6.5,
+     7.0,
+     7.5,
+     8.0,
+     8.5,
+     9.0,
+     9.5,
+     10.0,
+     10.5,
+     11.0,
+     11.5,
+     12.0,
+     12.5,
+     13.0,
+     13.5,
+     14.0,
+     14.5,
+     15.0,
+     15.5,
+     16.0,
+     16.5,
+     17.0,
+     17.5,
+     18.0,
+     18.5,
+     19.0,
+     19.5,
+     20.0,
+     20.5,
+     21.0,
+     21.5,
+     22.0,
+     22.5,
+     23.0,
+     23.5,
+     24.0,
+     24.5,
+     25.0,
+     25.5,
+     26.0,
+     26.5,
+     27.0,
+     27.5,
+     28.0
+    ],
+    "counts": [
+     0,
+     1,
+     0,
+     0,
+     0,
+     1,
+     0,
+     2,
+     10,
+     18,
+     29,
+     64,
+     66,
+     104,
+     140,
+     222,
+     390,
+     795,
+     1648,
+     3264,
+     6393,
+     11198,
+     17373,
+     23894,
+     28502,
+     30121,
+     29135,
+     27160,
+     24494,
+     19359,
+     13388,
+     10026,
+     7832,
+     5711,
+     4078,
+     2473,
+     1728,
+     1239,
+     797,
+     621,
+     400,
+     356,
+     378,
+     395,
+     471,
+     326,
+     51,
+     14,
+     7,
+     6,
+     5,
+     6,
+     4,
+     4,
+     0,
+     2,
+     2,
+     0
+    ],
+    "ticks": [
+     {
+      "value": 0,
+      "label": "0"
+     },
+     {
+      "value": 4,
+      "label": "4"
+     },
+     {
+      "value": 8,
+      "label": "8"
+     },
+     {
+      "value": 12,
+      "label": "12"
+     },
+     {
+      "value": 16,
+      "label": "16"
+     },
+     {
+      "value": 20,
+      "label": "20"
+     },
+     {
+      "value": 24,
+      "label": "24"
+     },
+     {
+      "value": 28,
+      "label": "28"
+     }
+    ]
+   }
+  },
+  "s1_log_scores": {
+   "basis": "research/notebook-outputs/value_scale_b4/rehearsal.json and research/benchmark/value-scale-test/results.json: rows, S1 constructed logs, probabilities > log",
+   "calibration": [
+    0.84159,
+    0.877461,
+    0.908714,
+    0.914034,
+    0.928219,
+    0.930874,
+    0.933264,
+    0.935274,
+    0.936629,
+    0.937008,
+    0.9403,
+    0.941923,
+    0.942067,
+    0.942419,
+    0.944588,
+    0.945129,
+    0.946983,
+    0.947458,
+    0.948578,
+    0.949046,
+    0.950193,
+    0.950212,
+    0.953509,
+    0.953607,
+    0.954072,
+    0.95442,
+    0.95556,
+    0.956233,
+    0.956349,
+    0.957593
+   ],
+   "test": [
+    0.77568,
+    0.788307,
+    0.854452,
+    0.856603,
+    0.872541,
+    0.877502,
+    0.877568,
+    0.890914,
+    0.898483,
+    0.90426,
+    0.906185,
+    0.908419,
+    0.913457,
+    0.916039,
+    0.918954,
+    0.91966,
+    0.920683,
+    0.921326,
+    0.924928,
+    0.929082,
+    0.931249,
+    0.937467,
+    0.939041,
+    0.94133,
+    0.943834,
+    0.944253,
+    0.944959,
+    0.94589,
+    0.947034,
+    0.948632
    ]
   }
  }

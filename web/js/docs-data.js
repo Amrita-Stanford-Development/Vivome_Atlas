@@ -9,7 +9,7 @@ import { escapeHtml } from './panels.js';
 import { formatManuscript } from './manuscript-data.js';
 
 export const DOCS_SCHEMA = '1';
-const REQUIRED_KEYS = ['schema_version', 'built_for', 'sources', 'records', 'steps'];
+const REQUIRED_KEYS = ['schema_version', 'built_for', 'sources', 'records', 'steps', 'series'];
 
 export function validateDocs(docs) {
   if (!docs || typeof docs !== 'object') throw new Error('Docs data is not an object');
@@ -51,12 +51,38 @@ export function docsBasis(docs, key) {
   return record?.note ?? 'no record';
 }
 
+// A figure's many values (scripts/build_docs.py, "the series"): the series by
+// name when every number in it is finite, or null, and the figure says Pending.
+export function docsSeries(docs, name) {
+  const series = docs?.series?.[name];
+  if (!series || typeof series !== 'object') return null;
+  const finite = (node) => {
+    if (typeof node === 'number') return Number.isFinite(node);
+    if (Array.isArray(node)) return node.length > 0 && node.every(finite);
+    if (node && typeof node === 'object') return Object.values(node).every(finite);
+    return typeof node === 'string' || typeof node === 'boolean';
+  };
+  return finite(series) ? series : null;
+}
+
 // The records each data figure draws (the builders in docs-svg.js), so a test can
-// check that every one exists and that every record is shown somewhere.
+// check that every one exists and that every record is shown somewhere; and the
+// series it draws, whose axis labels are the only other words it may write.
 const GROUPS = ['s1_linear', 's1_log', 's23_linear', 's23_log'];
 const BANDS = [0, 1, 2, 3, 4];
+export const FIGURE_SERIES = {
+  old_rule: 'bank_medians',
+  example_values: 'example_values',
+  example_spread: 'example_spread',
+  s1_scores: 's1_log_scores',
+  s1_scores_test: 's1_log_scores',
+};
 export const FIGURES = {
   old_rule: ['rl_median_rule', 'rl_step1_linear', 'rl_step1_linear_misread', 'rl_step1_log', 'rl_step1_log_misread'],
+  example_values: ['rl_ex_values', 'rl_ex_beyond', 'rl_ex_max'],
+  example_spread: ['rl_ex_spread_raw', 'rl_ex_spread_log'],
+  s1_scores: ['rl_s1_log_cut', 'rl_s1_k', 'rl_ph_cal_below'],
+  s1_scores_test: ['rl_s1_log_cut', 'rl_ph_cal_below', 'rl_sc_test_below'],
   corpus_funnel: ['rl_b3_frame', 'rl_b3_listed', 'rl_b3_reserve', 'rl_b3_kept', 'rl_b3_after_audit',
     'rl_b3_calibration', 'rl_b3_test'],
   guarantee: ['rl_alpha', ...GROUPS.flatMap((g) => ['n', 'miss', 'rate', 'lower'].map((f) => `rl_b7_${g}_${f}`))],
