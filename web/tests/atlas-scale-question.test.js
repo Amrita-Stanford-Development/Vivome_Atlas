@@ -220,3 +220,15 @@ test('the pop-up opens for a picked or dropped protein file only', async () => {
     assert.equal(t.dialog.opened, 1, 'a file dropped on the map is asked about too');
   } finally { t.restore(); }
 });
+
+test('the pop-up sits in the middle of the window: its own margin undoes the page reset', () => {
+  // page.css resets every margin to 0 (@layer base), and an author rule beats
+  // the browser's own `dialog:modal { margin: auto }`, which is what centres a
+  // modal dialog. Without a margin of its own the pop-up opens in the corner.
+  const reset = readFileSync(new URL('../css/page.css', import.meta.url), 'utf8');
+  assert.match(reset, /\*\s*\{\s*margin:\s*0;/, 'the reset this test is about');
+  const css = readFileSync(new URL('../css/atlas.css', import.meta.url), 'utf8');
+  const rule = css.match(/^\.scale-question\s*\{([^}]*)\}/m);
+  assert.ok(rule, 'atlas.css styles .scale-question');
+  assert.match(rule[1], /(?:^|;|\s)margin:\s*auto;/, 'the dialog sets margin: auto');
+});

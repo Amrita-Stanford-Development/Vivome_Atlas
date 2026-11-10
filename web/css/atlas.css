@@ -575,6 +575,9 @@ body.atlas-page { height: 100vh; overflow: hidden; }
    facts, and the answers as equal quiet buttons, none chosen in advance. */
 
 .scale-question {
+    /* page.css resets every margin to 0, which would pin the dialog to the
+       corner; auto puts it back in the middle of the window. */
+    margin: auto;
     width: min(460px, calc(100vw - 48px));
     padding: 22px 24px 24px;
     color: var(--ink-soft);
