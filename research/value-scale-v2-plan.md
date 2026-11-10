@@ -4,6 +4,15 @@ Planned on 2026-11-09, after B7 (`research/value-scale-plan.md`;
 `research/notebook-outputs/value_scale_b7/notes.md`). Written for the owner's
 approval before any work starts.
 
+Status: approved by the owner on 2026-11-09 ("yes approved, push them and
+start R1"); R2 waits for the owner's go-ahead ("dont R2 yet", 2026-11-09).
+- **R1, the corpus checks:** done on 2026-11-10 (`56421b1`, the run on
+  `4b521d0`; `research/notebook-outputs/value_scale_r1/notes.md`). Every
+  expectation met: of B3's 457 kept tables, exactly the two empty ones
+  refused and exactly PXD066316 flagged. The service and the Atlas page now
+  refuse an upload with no observed value; not live.
+- **R2 to R7:** not started.
+
 ## Why
 
 B7's sealed test contradicted the detector's guarantee for log tables of

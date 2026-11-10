@@ -15,7 +15,7 @@ FORMATS = {"count", "percent", "plain", "integer", "fixed2", "fixed3", "fixed4",
 # The records the pages show as Pending on purpose: work not done yet.
 PENDING_ON_PURPOSE = {"rl_v2_test"}
 STEP_IDS = ["step1", "phase_a", "phase_a2", "zscore", "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7",
-            "decision", "v2"]
+            "decision", "v2", "r1"]
 ISO = re.compile(r"(?<!\d)20\d\d-\d\d-\d\d(?!\d)")
 
 
@@ -116,6 +116,26 @@ class TestDocs(unittest.TestCase):
         self.assertEqual((r["rl_b3_frame"], r["rl_b3_listed"], r["rl_b3_reserve"]), (18813, 10000, 8813))
         self.assertEqual((r["rl_b3_kept"], r["rl_b3_after_audit"], r["rl_b3_calibration"], r["rl_b3_test"]),
                          (457, 455, 218, 237))
+
+    def test_r1_s_records_are_its_report_s(self):
+        """Protein v2, R1: the checks find exactly B7's faulty tables, and the
+        flag's rule fires on every log bank table and on no linear one."""
+        r = self.r
+        rep = load("research/notebook-outputs/value_scale_r1/report.json")
+        self.assertEqual(rep["corpus"]["empty"], ["PXD022054", "PXD047898"])
+        self.assertEqual(list(rep["corpus"]["flagged"]), ["PXD066316"])
+        self.assertEqual((r["rl_r1_kept"], r["rl_r1_empty"], r["rl_r1_flagged"], r["rl_r1_ceiling"]), (457, 2, 1, 64))
+        self.assertEqual((r["rl_r1_flag_min"], r["rl_r1_flag_median"], r["rl_r1_flag_max"]), (7.96281, 15.0249, 26.7629))
+        self.assertEqual((r["rl_r1_bank"], r["rl_r1_bank_log"], r["rl_r1_bank_log_fired"]), (37, 9, 9))
+        self.assertEqual((r["rl_r1_bank_linear"], r["rl_r1_bank_linear_fired"]), (28, 0))
+        self.assertEqual(r["rl_r1_bank_log"] + r["rl_r1_bank_linear"], r["rl_r1_bank"])
+        self.assertEqual((r["rl_r1_rows_pass"], r["rl_r1_rows"]), (7, 7))
+        self.assertEqual(rep["results"]["R1_bank_linear"], "recorded")
+        self.assertEqual(r["rl_r1_kept"], r["rl_b3_kept"])
+        self.assertEqual(r["rl_r1_empty"], r["rl_ph_empty"])
+        step = self.d["steps"]["r1"]
+        self.assertEqual((step["expected"], step["run"]), ("2026-11-10", "2026-11-10"))
+        self.assertFalse(rep["uncommitted_changes"])
 
     def test_step_1_s_invariant_count_comes_from_the_rows_not_the_pass_field(self):
         # The report's pass_ field missed a NumPy False written as "False";

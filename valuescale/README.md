@@ -36,6 +36,14 @@ expectations written before it runs (`bank/expectations/`):
   the other three classes and strata (`research/benchmark/results.md`;
   `research/notebook-outputs/value_scale_b7/`).
 
+Protein v2 (`research/value-scale-v2-plan.md`, approved 2026-11-09)
+reworks the detector, then draws a fresh calibration and sealed test:
+- **R1, the corpus checks:** the walk refuses an empty table and flags a
+  table labelled linear whose values look log for the hand audit
+  (`corpus/draw.py`). On B3's kept tables they find exactly B7's faulty
+  three (`research/notebook-outputs/value_scale_r1/`).
+- **R2 to R7:** not started.
+
 Each step's report and notes are in `research/notebook-outputs/value_scale_<step>/`,
 and its entry is in `research/notebook-run-history.md`.
 
@@ -87,11 +95,18 @@ Phase B, B3, the corpus (`corpus/`, not shipped):
   parser lacks, and the provenance labels.
 - `draw.py`: the walk, its log in the frame's order (`walk.jsonl`), the
   quotas and the stop rule, and the revisits: of failed reads, or of a
-  chosen set (B3's third and fourth visits), each keeping what it replaced. The runner is
+  chosen set (B3's third and fourth visits), each keeping what it replaced.
+  Since R1 of protein v2, a table with no observed value (every entry
+  missing, infinite or 0) is refused as `empty`, and a kept table labelled
+  linear whose observed values are 99% under 64 carries `looks_log`, its
+  value range, and goes to the audit; its label stands. B3's log predates
+  both. The runner is
   `research/notebooks/value_scale_corpus.py`, which brings the service's
   parser.
 - `audit.json`: the hand audit's sample (a seeded 20% of each split's kept
-  tables), the tables the clean-up's visits added, and their verdicts.
+  tables), the tables the clean-up's visits added, and their verdicts. A
+  later sample also takes every flagged table, and its packet shows that
+  table's value range.
 
 B3's result, after the clean-up's fourth visit: 10,000 deposits listed, 455
 linear tables kept after the audit (218 calibration, 237 test), and no real
@@ -126,7 +141,8 @@ owner accepted (`research/notebook-outputs/value_scale_b4/notes.md`).
 step runs. Each step has its own runner in `research/notebooks/`:
 `value_scale_diagnostics.py` (Step 1, Phase A, A2 and the z-score step),
 `value_scale_cost.py` (B1), `value_scale_method.py` (B2),
-`value_scale_corpus.py` (B3) and `value_scale_calibrate.py` (B4).
+`value_scale_corpus.py` (B3), `value_scale_calibrate.py` (B4) and
+`value_scale_r1.py` (protein v2's R1).
 
 ## Commands
 
@@ -147,11 +163,12 @@ python research/notebooks/value_scale_corpus.py fourth-visit-selection # B3: the
 python research/notebooks/value_scale_corpus.py revisit --fourth  # B3: the fourth visit of those records
 python research/notebooks/value_scale_corpus.py audit-sample  # B3: the hand audit's seeded sample
 python research/notebooks/value_scale_corpus.py audit-cleanup # B3: the tables the clean-up's visits added, to be judged
-python research/notebooks/value_scale_corpus.py audit-packets # B3: the audit's packets (headers and methods, never values)
+python research/notebooks/value_scale_corpus.py audit-packets # B3: the audit's packets (headers and methods; values only for a flagged table)
 python research/notebooks/value_scale_corpus.py report        # B3: the report against b3.json
 python research/notebooks/value_scale_calibrate.py --part design    # B4: B2's model refitted, the no-gaps rule (bank only)
 python research/notebooks/value_scale_calibrate.py --part calibrate # B4: writes calibration/protein-v1.json once, then the checks
 python -m valuescale.corpus.score_test --rehearse OUT.json   # B4: the test's scorer, on the calibration split
+python research/notebooks/value_scale_r1.py                  # protein v2, R1: the corpus checks on B3's tables and the bank
 python -m unittest discover -s valuescale/tests -t .
 ```
 

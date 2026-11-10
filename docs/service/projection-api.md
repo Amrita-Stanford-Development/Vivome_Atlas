@@ -202,7 +202,12 @@ read as missing.
   message names the column and asks for the table to be exported again with
   a point: a comma could also be a thousands separator, so it is not
   guessed;
-- a row too short for its header (the message names the line).
+- a row too short for its header (the message names the line);
+- a table with no observed value: every entry empty, infinite or 0
+  (`validation.NO_VALUES`; R1 of protein v2, `research/value-scale-v2-plan.md`).
+  Before, it was answered 200 with no label for any cell, or, a table of 0s
+  under the median rule, with a label for every cell. Not yet live: the
+  live revision still answers it 200.
 
 ```json
 200 Response
@@ -306,7 +311,9 @@ before anything else touched them, and whether they were log2-transformed:
 - **`detected`:** the service's own reading. For protein, the check's
   "linear" or "log", or "linear" when it could not tell; for RNA, the
   median rule's (`service/model/canonical_preprocessing.json`). `"unknown"`
-  means the upload had no observed values at all.
+  means the table had no observed values at all. The server refuses such
+  an upload before Stage 0 (above), so only `pipeline.run_projection`
+  called directly can return it.
 - **`stated`:** the request's reading, when it stated one. `transformed`
   follows it: a reply with `"detected": "log", "transformed": true,
   "stated": "linear"` read raw intensities the service would have taken as

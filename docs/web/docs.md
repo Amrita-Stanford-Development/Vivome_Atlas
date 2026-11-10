@@ -179,7 +179,9 @@ Part of that step's doc run-through:
 
 1. its records and its entry in `steps`, in `scripts/build_docs.py`, with a
    check in `scripts/test_build_docs.py`; then rebuild with
-   `scripts/build_manifest.py`;
+   `scripts/build_manifest.py`. A step's dates include its plan's status
+   line: `research/value-scale-plan.md` for Step 1 to B7,
+   `research/value-scale-v2-plan.md` for protein v2's R steps;
 2. its `details.docs-step` at the end of the topic's What we did;
 3. How it works, where the step changes it, and Words, for a new term;
 4. a milestone on the home's timeline, if it is one;

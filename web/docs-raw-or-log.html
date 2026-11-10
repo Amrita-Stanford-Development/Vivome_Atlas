@@ -247,11 +247,13 @@
                             lowest, so units cannot fool the clean-up either.</p>
                         <h4>The tables it will not judge</h4>
                         <p>Before the detector runs, the service refuses a table with fewer than
-                            <span data-docs="rl_service_min_cells"></span> cells: too few to read. Then the
-                            detector sets a few kinds of table aside, each with its reason in words:</p>
+                            <span data-docs="rl_service_min_cells"></span> cells: too few to read. Since R1 it
+                            also refuses an <a href="#words-empty">empty table</a>, every entry empty or zero, which
+                            holds nothing to read; that refusal is built, not live. Then the detector sets a few
+                            kinds of table aside, each with its reason in words:</p>
                         <ul>
-                            <li>no spread at all, nothing left to measure in any cell, as in an empty table:
-                                <a href="#words-unlike-either">“unlike either”</a>;</li>
+                            <li>no spread at all, nothing left to measure in any cell, as in a table of one value
+                                repeated: <a href="#words-unlike-either">“unlike either”</a>;</li>
                             <li>each protein divided by, or centred on, its own level: its shape can no longer
                                 tell, so <a href="#words-cant-tell">“can't tell”</a>;</li>
                             <li>no value missing at all: the table may have been filled in, and filled-in values
@@ -548,6 +550,17 @@
                             touched again, in two rounds. Decimal commas were different: those are the files'
                             own, and such a table is now refused in clear words. The service's and the site's
                             fixes went live on 2026-11-07.</p>
+                        <h4>The checks added after the test</h4>
+                        <p>B3's walk read no value of a table before its label: the label came from the
+                            documentation alone, and the audit saw headers and methods, never values. That let in
+                            <span data-docs="rl_ph_faulty"></span> faulty tables, found only after the test
+                            (<a href="#how-found">What the test found</a>). Since R1 of protein v2, the walk
+                            refuses an <a href="#words-empty">empty table</a>. A table labelled raw whose values
+                            look log, all but the highest one percent under <span data-docs="rl_r1_ceiling"></span>,
+                            keeps its label but goes to the hand audit, which now sees its range of values and
+                            keeps, corrects or drops the label. Run on the <span data-docs="rl_r1_kept"></span>
+                            tables B3 kept, the checks find exactly the faulty ones. They will run on the fresh
+                            draw at R4.</p>
                         <details class="curious"><summary>For the curious: how the draw was kept fair</summary>
                             <p>The order and the split were fixed before any table was opened, so nobody could
                                 steer which deposit landed where. Quotas by number of cells kept each size group
@@ -558,6 +571,7 @@
                         <p class="docs-source">From <code>valuescale/corpus/frame.json</code>,
                             <code>valuescale/corpus/strata.py</code>,
                             <code>research/notebook-outputs/value_scale_b3/report.json</code>,
+                            <code>research/notebook-outputs/value_scale_r1/report.json</code>,
                             <code>research/benchmark/protocol-value-scale.md</code> and
                             <code>research/value-scale-plan.md</code>.</p>
                     </article>
@@ -731,12 +745,13 @@
                         <p>The owner decided on 2026-11-09: rework the detector on development data, then draw
                             a fresh calibration and a fresh sealed test from the reserve, or from a wider frame if
                             the owner chooses one at R3. The live service stays as it is meanwhile. This second
-                            round is protein v2, in steps R1 to R7. Its plan awaits the owner's approval: no
-                            step has started.</p>
+                            round is protein v2, in steps R1 to R7. The owner approved its plan on 2026-11-09.
+                            R1 is done; R2 starts when the owner says so.</p>
                         <ul>
-                            <li><strong>R1, the corpus checks.</strong> An empty table is refused. A table
-                                labelled raw whose values look log goes to the hand audit, which keeps, corrects or
-                                drops its label.</li>
+                            <li><strong>R1, the corpus checks</strong>, done on 2026-11-10. An empty table is
+                                refused, by the walk and by the service. A table labelled raw whose values look log
+                                goes to the hand audit, which keeps, corrects or drops its label
+                                (<a href="#did-r1">what R1 found</a>).</li>
                             <li><strong>R2, the method study</strong>, on development data only. Two candidates:
                                 thresholds set apart for tables with many values missing, or a model that missing
                                 values do not move. The rule for choosing is written before either is scored.</li>
@@ -753,7 +768,8 @@
                             R7, the site and the service together, with the owner's OK. The sealed test of v2 is
                             still to come: <span data-docs="rl_v2_test"></span>.</p>
                         <p>Later, Phase C does the same for RNA tables.</p>
-                        <p class="docs-source">From <code>research/value-scale-v2-plan.md</code> and
+                        <p class="docs-source">From <code>research/value-scale-v2-plan.md</code>,
+                            <code>research/notebook-outputs/value_scale_r1/notes.md</code> and
                             <code>research/value-scale-plan.md</code>.</p>
                     </article>
                 </div>
@@ -1154,15 +1170,15 @@
                         <dd>Written before: in S1 the misses would fall between
                             <span data-docs="rl_b7_expected_s1_low"></span> and
                             <span data-docs="rl_b7_expected_s1_high"></span>, and
-                            <span data-docs="rl_b7_expected_contradict_s1"></span> or more would mark the promise
-                            broken; <span data-docs="rl_b7_expected_whole_log"></span> or more of the whole log
+                            <span data-docs="rl_b7_expected_contradict_s1"></span> or more would contradict the
+                            promise; <span data-docs="rl_b7_expected_whole_log"></span> or more of the whole log
                             tables would read as log.</dd>
                         <dt>What we found</dt>
                         <dd><span data-docs="rl_b7_rows_pass"></span> of <span data-docs="rl_b7_rows"></span> rows
-                            passed. The promise broke for small log tables:
+                            passed. The test contradicted the promise for small log tables:
                             <span data-docs="rl_b7_s1_log_miss"></span> misses of
                             <span data-docs="rl_b7_s1_log_n"></span>, lower bound
-                            <span data-docs="rl_b7_s1_log_lower"></span>. It held in the other groups. Over every
+                            <span data-docs="rl_b7_s1_log_lower"></span>. The test did not contradict it in the other groups. Over every
                             subsample, log tables missed <span data-docs="rl_b7_pooled_log_miss"></span> of
                             <span data-docs="rl_b7_pooled_log_n"></span>, lower bound
                             <span data-docs="rl_b7_pooled_log_lower"></span>. On whole tables the detector read
@@ -1202,7 +1218,7 @@
                             log table labelled raw). With them set aside, small raw tables miss
                             <span data-docs="rl_ph_s1_linear_miss"></span> of <span data-docs="rl_ph_s1_linear_n"></span>
                             and small log tables <span data-docs="rl_ph_s1_log_miss"></span> of
-                            <span data-docs="rl_ph_s1_log_n"></span>, still broken; on raw tables the detector misreads
+                            <span data-docs="rl_ph_s1_log_n"></span>, still a contradiction; on raw tables the detector misreads
                             <span data-docs="rl_ph_detector_wrong"></span> and the old rule
                             <span data-docs="rl_ph_median_wrong"></span> (p = <span data-docs="rl_ph_p"></span>). The
                             more values a log table is missing, the lower its log probability (rank correlation
@@ -1228,11 +1244,10 @@
                 </details>
 
                 <details id="did-v2" class="docs-step">
-                    <summary><time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">Protein v2: the plan</span><span class="bead bead-open">Not started</span></summary>
+                    <summary><time datetime="2026-11-09">2026-11-09</time><span class="docs-step-title">Protein v2: the plan</span></summary>
                     <dl class="docs-step-parts">
                         <dt>What we did</dt>
-                        <dd>Wrote the plan for the second round, steps R1 to R7, for your approval. No step has
-                            started.</dd>
+                        <dd>Wrote the plan for the second round, steps R1 to R7, for your approval.</dd>
                         <dt>Why</dt>
                         <dd>B7 showed where the method is weak, and a fresh test needs fresh tables: from the
                             reserve, or a wider frame if you choose one.</dd>
@@ -1241,14 +1256,63 @@
                             kept, exactly the empty ones, PXD022054 and PXD047898, refused, and exactly the
                             mislabelled one, PXD066316, sent to the hand audit.</dd>
                         <dt>What we found</dt>
-                        <dd>Nothing yet. Its sealed test is still to come: <span data-docs="rl_v2_test"></span>.</dd>
+                        <dd>R1 has run (<a href="#did-r1">its entry</a>, below). Its sealed test is still to
+                            come: <span data-docs="rl_v2_test"></span>.</dd>
                         <dt>What you decided</dt>
                         <dd class="docs-decided">On 2026-11-09: the method study weighs two candidates and chooses by a
                             rule written first; the corpus refuses empty tables, and sends a table whose values look
-                            log under a raw label to the hand audit.</dd>
+                            log under a raw label to the hand audit. The same day you approved the plan, started
+                            R1, and asked that R2 wait.</dd>
                         <dt>Where it's kept</dt>
                         <dd class="docs-kept"><code>research/value-scale-v2-plan.md</code>; commit
                             <code>923a307</code></dd>
+                    </dl>
+                </details>
+
+                <details id="did-r1" class="docs-step">
+                    <summary><time datetime="2026-11-10">2026-11-10</time><span class="docs-step-title">R1: the corpus checks</span><span class="bead bead-open">Not live</span></summary>
+                    <dl class="docs-step-parts">
+                        <dt>What we did</dt>
+                        <dd>Added two checks to the walk that collects tables. An <a href="#words-empty">empty
+                            table</a>, with no measured value, is now refused. A table labelled raw whose values
+                            look log, all but the highest one percent under <span data-docs="rl_r1_ceiling"></span>,
+                            keeps its label but goes to the hand audit, and its packet shows its range of values.
+                            We ran both checks on the <span data-docs="rl_r1_kept"></span> tables B3 kept and on the
+                            bank's <span data-docs="rl_r1_bank"></span>. The upload service and the Atlas page now
+                            turn away a file with no measured value too, in the same words.</dd>
+                        <dt>Why</dt>
+                        <dd>The sealed test held tables B3 should not have kept: <span data-docs="rl_ph_empty"></span>
+                            empty, and <span data-docs="rl_ph_mislabelled"></span> log table labelled raw. An empty
+                            table says nothing about its scale. A rule on the values alone cannot settle a label,
+                            since a raw table can have small values, so a person reads the deposit's own record and
+                            decides.</dd>
+                        <dt>What we expected</dt>
+                        <dd>Written before: of the tables B3 kept, exactly PXD022054 and PXD047898 refused as empty,
+                            and exactly PXD066316 flagged. On the bank, no table empty, and the rule firing on every
+                            table labelled log, a check that it catches what it should. The service and the page
+                            refuse an upload with no measured value. Before, the service answered one with no label
+                            for any cell, or, for a table of zeros under the old rule, a label for every cell.</dd>
+                        <dt>What we found</dt>
+                        <dd>All <span data-docs="rl_r1_rows_pass"></span> of <span data-docs="rl_r1_rows"></span> rows
+                            passed. The checks refused exactly the <span data-docs="rl_r1_empty"></span> empty tables,
+                            and flagged exactly <span data-docs="rl_r1_flagged"></span>, PXD066316, its values from
+                            <span data-docs="rl_r1_flag_min"></span> to <span data-docs="rl_r1_flag_max"></span> with
+                            median <span data-docs="rl_r1_flag_median"></span>. On the bank, the rule fired on
+                            <span data-docs="rl_r1_bank_log_fired"></span> of the
+                            <span data-docs="rl_r1_bank_log"></span> log tables and on
+                            <span data-docs="rl_r1_bank_linear_fired"></span> of the
+                            <span data-docs="rl_r1_bank_linear"></span> raw ones, PXD064083's included: a raw table
+                            with a small middle value still has its highest values far above the ceiling. So the
+                            audit should have little extra to read.</dd>
+                        <dt>What you decided</dt>
+                        <dd class="docs-decided">On 2026-11-09 you approved the plan and started R1, and asked that R2
+                            wait. R2, the method study, starts when you say so.</dd>
+                        <dt>Where it's kept</dt>
+                        <dd class="docs-kept"><code>valuescale/bank/expectations/r1.json</code>,
+                            <code>research/notebook-outputs/value_scale_r1/report.json</code>,
+                            <code>research/notebook-outputs/value_scale_r1/notes.md</code>; commits
+                            <code>6a101d8</code>, <code>56421b1</code>, <code>ae9221f</code> and
+                            <code>4b521d0</code></dd>
                     </dl>
                 </details>
 
@@ -1300,6 +1364,10 @@
                     <dt id="words-development-data">Development data</dt>
                     <dd>Tables we may look at, try ideas on and change things for. A test, once scored,
                         becomes development data.</dd>
+                    <dt id="words-empty">Empty table</dt>
+                    <dd>A table with no measured value: every entry is empty or zero. It says nothing about
+                        whether its values are raw or log. Since R1 the walk refuses one, and the service turns
+                        one away in words (built, not live).</dd>
                     <dt id="words-foreign">Foreign table</dt>
                     <dd>A table that is neither raw nor log, such as z-scores, present-or-absent marks or
                         ranks. Used to check that the detector answers “unlike either” when it should.</dd>

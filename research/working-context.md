@@ -79,7 +79,16 @@ it, and the sections further down ("Where things stand (2026-10-05)",
     misses log tables with many missing values. The test is spent. Not
     deployed. The owner chose a rework, then a fresh test from the
     reserve; the live service stays as it is. The plan comes first:
-    [protein v2](value-scale-v2-plan.md), for the owner's approval.
+    [protein v2](value-scale-v2-plan.md), approved by the owner on
+    2026-11-09.
+  - **Protein v2, R1, the corpus checks, done on 2026-11-10**
+    ([notes](notebook-outputs/value_scale_r1/notes.md)). The walk refuses
+    an empty table and sends a table labelled linear whose values look log
+    (99% under 64) to the hand audit. On B3's 457 kept tables they find
+    exactly B7's faulty three; on the bank the flag fires on every log
+    table and no linear one. The service and the Atlas page refuse an
+    upload with no observed value. Not deployed. R2 waits for the owner's
+    go-ahead.
 - **Deployed 2026-11-07:** Cloud Run revision `vivome-atlas-00009-hcz`
   (from `decb812`), then the site. These brought the clean-up's fixes to
   the parser and the site's file check (lone-CR line endings, MaxQuant,

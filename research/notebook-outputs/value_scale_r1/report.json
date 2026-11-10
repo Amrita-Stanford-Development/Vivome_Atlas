@@ -1,0 +1,501 @@
+{
+ "step": "r1",
+ "run": "2026-11-10T17:27:57",
+ "commit": "4b521d0817f4f3bba37ebf7c586d03a4a8af514f",
+ "uncommitted_changes": false,
+ "seconds": 24,
+ "expectations": "valuescale/bank/expectations/r1.json",
+ "log_ceiling": 64.0,
+ "results": {
+  "R1_empty": true,
+  "R1_flag": true,
+  "R1_bank_empty": true,
+  "R1_bank_control": true,
+  "R1_bank_linear": "recorded",
+  "R1_service": true,
+  "R1_site": true,
+  "R1_walk": true
+ },
+ "corpus": {
+  "kept": 457,
+  "labels": {
+   "linear": 457
+  },
+  "empty": [
+   "PXD022054",
+   "PXD047898"
+  ],
+  "flagged": {
+   "PXD066316": {
+    "min": 7.96281,
+    "median": 15.0249,
+    "p99": 21.7527,
+    "max": 26.7629,
+    "split": "test",
+    "software": "Spectronaut",
+    "shape": [
+     5842,
+     27
+    ]
+   }
+  }
+ },
+ "bank": [
+  {
+   "id": "pbmc240_diann",
+   "label": "linear",
+   "shape": [
+    3098,
+    238
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "kabatnik_cra_timstofultra",
+   "label": "linear",
+   "shape": [
+    7883,
+    25
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "kabatnik_c3_region",
+   "label": "linear",
+   "shape": [
+    4762,
+    27
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd073250_diann",
+   "label": "linear",
+   "shape": [
+    5923,
+    557
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd077946_diann_genes",
+   "label": "linear",
+   "shape": [
+    3271,
+    40
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "zamore_diann",
+   "label": "linear",
+   "shape": [
+    3300,
+    30
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd064083_t",
+   "label": "linear",
+   "shape": [
+    2505,
+    78
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd064083_b",
+   "label": "linear",
+   "shape": [
+    2508,
+    70
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd021882_maxquant",
+   "label": "linear",
+   "shape": [
+    3817,
+    15
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "dusszachniewicz_maxquant",
+   "label": "linear",
+   "shape": [
+    9978,
+    45
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "herrera2025_fragpipe",
+   "label": "linear",
+   "shape": [
+    4937,
+    91
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "lungmap_bpd_fragpipe",
+   "label": "linear",
+   "shape": [
+    5074,
+    20
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "msv000099294_hmc3",
+   "label": "linear",
+   "shape": [
+    3300,
+    47
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "msv000099294_microglia",
+   "label": "linear",
+   "shape": [
+    2178,
+    57
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd061052_spectronaut",
+   "label": "linear",
+   "shape": [
+    3642,
+    29
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd043355_pd",
+   "label": "linear",
+   "shape": [
+    5728,
+    59
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "fulcher_tmt",
+   "label": "linear",
+   "shape": [
+    1661,
+    2343
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "scope2_export",
+   "label": "log",
+   "shape": [
+    2935,
+    1490
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": -2.59706,
+    "median": -0.000753969,
+    "p99": 0.701741,
+    "max": 3.02124
+   }
+  },
+  {
+   "id": "khoury_column_normalized",
+   "label": "log",
+   "shape": [
+    3732,
+    1651
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": 0.425883,
+    "median": 10.6378,
+    "p99": 16.54,
+    "max": 26.3985
+   }
+  },
+  {
+   "id": "furtwangler_batchcorr",
+   "label": "linear",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "furtwangler_batchcorr_norm",
+   "label": "linear",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "furtwangler_log2",
+   "label": "log",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": 0.717993,
+    "median": 3.54034,
+    "p99": 7.05145,
+    "max": 10.914
+   }
+  },
+  {
+   "id": "furtwangler_log2_imputed",
+   "label": "log",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": 0.717993,
+    "median": 2.43268,
+    "p99": 6.51101,
+    "max": 10.914
+   }
+  },
+  {
+   "id": "furtwangler_log2_nan",
+   "label": "log",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": 0.717993,
+    "median": 3.54034,
+    "p99": 7.05145,
+    "max": 10.914
+   }
+  },
+  {
+   "id": "furtwangler_log2fc_nan",
+   "label": "log",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": -5.56251,
+    "median": 0.0122709,
+    "p99": 1.08622,
+    "max": 7.9187
+   }
+  },
+  {
+   "id": "furtwangler_log2_raw_sn",
+   "label": "log",
+   "shape": [
+    2934,
+    2506
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": 0.137504,
+    "median": 3.6893,
+    "p99": 7.67313,
+    "max": 11.9288
+   }
+  },
+  {
+   "id": "pxd049412_hela250pg",
+   "label": "linear",
+   "shape": [
+    6014,
+    3
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd049412_a549_singlecells",
+   "label": "linear",
+   "shape": [
+    5755,
+    50
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "pxd069060_diann_report",
+   "label": "linear",
+   "shape": [
+    1844,
+    12
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "quantms_pxd004452_ibaq",
+   "label": "linear",
+   "shape": [
+    8657,
+    4
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "quantms_pxd004452_ribaq",
+   "label": "log",
+   "shape": [
+    8657,
+    4
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": 1.51726,
+    "median": 4.49975,
+    "p99": 7.34822,
+    "max": 9.00385
+   }
+  },
+  {
+   "id": "brunner_diann_1ng",
+   "label": "linear",
+   "shape": [
+    4339,
+    15
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "brunner_mq_singlecells",
+   "label": "linear",
+   "shape": [
+    8228,
+    51
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "krull_singlecells",
+   "label": "linear",
+   "shape": [
+    1409,
+    143
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "cong_mq_singlecells",
+   "label": "linear",
+   "shape": [
+    1726,
+    7
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "hu2023_pd_k562",
+   "label": "linear",
+   "shape": [
+    1409,
+    72
+   ],
+   "empty": false,
+   "looks_log": null
+  },
+  {
+   "id": "cptac_ccrcc_tumor",
+   "label": "log",
+   "shape": [
+    11710,
+    110
+   ],
+   "empty": false,
+   "looks_log": {
+    "min": -5.26098,
+    "median": 0.0507743,
+    "p99": 1.02672,
+    "max": 4.71111
+   }
+  }
+ ],
+ "tests": {
+  "R1_walk": {
+   "command": "python.exe -m unittest valuescale.tests.test_draw.VisitTests valuescale.tests.test_draw.LooksLogAuditTests",
+   "exit": 0,
+   "tail": [
+    "................",
+    "----------------------------------------------------------------------",
+    "Ran 16 tests in 0.021s",
+    "",
+    "OK"
+   ]
+  },
+  "R1_service": {
+   "command": "python.exe -m unittest service.tests.test_validation.ValidateValuesTests service.tests.test_app.ProjectionHandlerHttpTests.test_a_table_with_no_observed_value_is_400_saying_why",
+   "exit": 0,
+   "tail": [
+    "  warnings.warn(",
+    "C:\\Users\\amarn\\miniforge3\\envs\\vivome\\Lib\\site-packages\\torch\\jit\\_trace.py:1145: DeprecationWarning: `torch.jit.trace_method` is deprecated. Please switch to `torch.compile` or `torch.export`.",
+    "  warnings.warn(",
+    ".",
+    "----------------------------------------------------------------------",
+    "Ran 4 tests in 1.181s",
+    "",
+    "OK"
+   ]
+  },
+  "R1_site": {
+   "command": "node --test --test-name-pattern=no observed value web/tests/atlas-file-check.test.js",
+   "exit": 0,
+   "tail": [
+    "\u2139 tests 1",
+    "\u2139 suites 0",
+    "\u2139 pass 1",
+    "\u2139 fail 0",
+    "\u2139 cancelled 0",
+    "\u2139 skipped 0",
+    "\u2139 todo 0",
+    "\u2139 duration_ms 78.9579"
+   ]
+  }
+ }
+}

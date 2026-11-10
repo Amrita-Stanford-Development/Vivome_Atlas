@@ -70,7 +70,8 @@ def notes(step: str) -> Path:
 
 
 # The steps the "What we did" tab tells, in order: (id, the folder and
-# expectations name, the plan's status line it is told in).
+# expectations name, the plan's status line it is told in: protein v2's
+# plan for the R steps, the first plan's for the rest).
 STEPS = (
     ("step1", "step1", "Status:"),
     ("phase_a", "phaseA", "Status:"),
@@ -86,6 +87,7 @@ STEPS = (
     ("b7", "b7", "- **B7,"),
     ("decision", None, None),
     ("v2", None, None),
+    ("r1", "r1", "- **R1,"),
 )
 
 
@@ -407,6 +409,29 @@ def b7(r: DocsRecords) -> None:
            f"the fresh sealed test is scored once, after R1 to R6 ({rel(PLAN_V2)})")
 
 
+def r1(r: DocsRecords) -> None:
+    """Protein v2, R1: the corpus checks on B3's kept tables and the bank."""
+    path = report("r1")
+    rep = r.json(path)
+    base = rel(path)
+    corpus, bank = rep["corpus"], rep["bank"]
+    r.at("rl_r1_kept", path, ("corpus", "kept"), "count")
+    r.put("rl_r1_empty", len(corpus["empty"]), f"{base}: corpus > empty", "count")
+    r.put("rl_r1_flagged", len(corpus["flagged"]), f"{base}: corpus > flagged", "count")
+    r.at("rl_r1_ceiling", path, ("log_ceiling",), "count")
+    for key in ("min", "median", "max"):
+        r.at(f"rl_r1_flag_{key}", path, ("corpus", "flagged", "PXD066316", key), "fixed2")
+    r.put("rl_r1_bank", len(bank), f"{base}: bank", "count")
+    for label, short in (("log", "log"), ("linear", "linear")):
+        tables = [b for b in bank if b["label"] == label]
+        r.put(f"rl_r1_bank_{short}", len(tables), f"{base}: bank, labelled {label}", "count")
+        r.put(f"rl_r1_bank_{short}_fired", sum(1 for b in tables if b["looks_log"]),
+              f"{base}: bank, labelled {label}, the flag's rule fires", "count")
+    judged = [v for v in rep["results"].values() if isinstance(v, bool)]  # R1_bank_linear is recorded, not judged
+    r.put("rl_r1_rows_pass", sum(judged), f"{base}: results passed", "count")
+    r.put("rl_r1_rows", len(judged), f"{base}: results judged (R1_bank_linear is recorded only)", "count")
+
+
 # ---- the series the data figures draw ----
 #
 # A figure that shows many values (a table's spread of values, the lowest
@@ -603,16 +628,16 @@ def worked_examples(r: DocsRecords) -> None:
 
 # ---- the steps, and the dates each one's records hold ----
 
-def status_line(plan: str, prefix: str) -> str:
+def status_line(path: Path, plan: str, prefix: str) -> str:
     lines = [line for line in plan.splitlines() if line.startswith(prefix)]
-    assert len(lines) == 1, f"{rel(PLAN)}: {len(lines)} lines start {prefix!r}"
+    assert len(lines) == 1, f"{rel(path)}: {len(lines)} lines start {prefix!r}"
     return lines[0]
 
 
 def steps(r: DocsRecords) -> dict:
-    plan = r.text(PLAN)
     out = {}
     for sid, name, prefix in STEPS:
+        plan_path = PLAN_V2 if re.fullmatch(r"r\d", sid) else PLAN
         step = {"report": None, "expectations": None, "notes": None}
         found: set[str] = set()
         if name is not None:
@@ -644,7 +669,7 @@ def steps(r: DocsRecords) -> dict:
             step["notes"] = rel(PLAN_V2)
             found |= set(ISO.findall(r.text(PLAN_V2)))
         if prefix is not None:
-            found |= set(ISO.findall(status_line(plan, prefix)))
+            found |= set(ISO.findall(status_line(plan_path, r.text(plan_path), prefix)))
         step["dates"] = sorted(found)
         out[sid] = step
     return out
@@ -658,6 +683,7 @@ def build(manifest: dict | None = None) -> dict:
     phase_a(r)
     b1_to_b6(r)
     b7(r)
+    r1(r)
     worked_examples(r)
     values, spread = example_table(r)
     series = {

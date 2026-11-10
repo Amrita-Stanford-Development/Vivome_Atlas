@@ -1146,6 +1146,9 @@ When you add, move or delete a file, update its line in the same commit.
 - `research/notebook-outputs/value_scale_b7/notes.md` — B7's notes, written after the scoring: B7 in plain words, each row against b7.json, what the misses are, what it means for an uploader
 - `research/notebook-outputs/value_scale_b7/posthoc.md` — B7's probe (value_scale_b7_posthoc.py): the faulty test tables, the constructed-log tail by missing share, the results with the faulty tables set aside
 - `research/notebook-outputs/value_scale_b7/posthoc.json` — the same probe as data
+- `research/notebook-outputs/value_scale_r1/report.md` — protein v2's R1 report: r1.json's rows, the empty and flagged tables among B3's kept tables, each bank table under both checks, and the step's tests
+- `research/notebook-outputs/value_scale_r1/report.json` — the same run as data, with the commit it ran on
+- `research/notebook-outputs/value_scale_r1/notes.md` — R1's notes, written after the run: R1 in plain words, what was built test first, what the service did before, each row against r1.json, what it shows, the owner's decisions
 - `research/notebook-outputs/value_scale_phaseA2/report.md` — Phase A2's diagnostic report: per table the automatic reply against the baseline and the zeros choice, the answers it changes; the app's answers; the review's fixes
 - `research/notebook-outputs/value_scale_phaseA2/notes.md` — Phase A2's notes, written after the run: the two fixes the first runs called for, what saying a 0 is not measured changes
 - `research/notebook-outputs/value_scale_phaseA2/report.json` — the same run in full

@@ -3525,6 +3525,45 @@ notes; `research/benchmark/results.md`):
 The test is spent (`research/benchmark/side-tests.md`, amendment 26).
 Nothing is deployed; what follows is the owner's decision.
 
+### 82. Protein v2, R1: the corpus checks, 2026-11-10
+
+**Why:** B7's sealed test held three tables B3's walk should not have
+kept: two empty (PXD022054, PXD047898) and a log2 table labelled linear
+(PXD066316). Protein v2 (`research/value-scale-v2-plan.md`, approved by
+the owner on 2026-11-09) adds the walk's missing checks before any fresh
+table is drawn.
+
+**What was built** (test first, `56421b1`; the expectations,
+`valuescale/bank/expectations/r1.json`, before it, `6a101d8`):
+- the walk refuses a parsed table with no observed value (every entry
+  missing, infinite or 0) as `empty`, after the size checks and before the
+  label;
+- a kept table labelled linear whose observed values are 99% under 64
+  carries `looks_log`, its value range. The audit's sample takes every
+  flagged table, and a flagged table's packet shows its range. The label
+  stands;
+- the service's validation refuses an upload with no observed value (a
+  400, `NO_VALUES`), and the Atlas page's check turns such a file down
+  before sending it, in the same words. Before, the service answered 200:
+  every cell without an answer, or, a table of 0s under the live median
+  rule, a label for every cell.
+
+**The run** (`research/notebooks/value_scale_r1.py`, 24 s, on `4b521d0`):
+both checks on B3's 457 kept tables (their stored parse) and on the bank's
+37 tables, and the step's tests by name.
+
+**Results** (`research/notebook-outputs/value_scale_r1/`, report and notes):
+- Every expectation met (7 of 7 rows, and one recorded).
+- Exactly PXD022054 and PXD047898 are empty, and exactly PXD066316 is
+  flagged (7.96 to 26.76, median 15.02).
+- On the bank, the flag's rule fires on all 9 log tables (a positive
+  control, centred ones included) and on none of the 28 linear ones,
+  PXD064083's included: a small-median linear table still reaches far
+  above 64.
+- B3's records are unchanged; the checks apply to R4's walk.
+
+Not deployed. R2 waits for the owner's go-ahead.
+
 ## The throughline
 
 Seventeen notebooks built end to end, three existing ones worked inside of. None of

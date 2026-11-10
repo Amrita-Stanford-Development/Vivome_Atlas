@@ -27,12 +27,14 @@
   "research/notebook-outputs/value_scale_phaseA/report.json": "5e0d9f53ff8f4497b72caf99845235f0ad0631873683bf29d298e111b640e3af",
   "research/notebook-outputs/value_scale_phaseA2/notes.md": "7eb0f76cd56509690e38522690e20e3a2e25f6a55372df80a410166d28c8b3bc",
   "research/notebook-outputs/value_scale_phaseA2/report.json": "574e256284a685bb6ee25c999e1c20019efd2805d1547bc5ee7b26987374ca82",
+  "research/notebook-outputs/value_scale_r1/notes.md": "2249d8434743e0cd34b77a27a20065bd1a9eed8aa87019fd9b519b4c428882d0",
+  "research/notebook-outputs/value_scale_r1/report.json": "09232727f66eda8a4d9856aba182d5daed570af66e4e7ff5f5e45688434d8d35",
   "research/notebook-outputs/value_scale_step1/notes.md": "69eaba32263621a834bb5980fe3523bbb047f8e4e20f11a889809b01ad886afd",
   "research/notebook-outputs/value_scale_step1/report.json": "3a16d49b5226b7580a9cb900df7fbc77add2cb33cfda6bf626590c144f10d618",
   "research/notebook-outputs/value_scale_zscore/notes.md": "3e125ba37933d881fd662015a1f4acbec909c6b44a1f6b5b8317842e2b78c2c6",
   "research/notebook-outputs/value_scale_zscore/report.json": "29a9feb6d07aca97f7cde6eafb681104abec10699189d97f7cf452d563aef8f0",
   "research/value-scale-plan.md": "e328ee10cb9a81d5f415a75920b1e166558f0c665a1d016ceaf8fbb8ecf140c1",
-  "research/value-scale-v2-plan.md": "9e7bbd19bc17be0f592b6701dd851a0e93b312ef9160f1ec36d8a509adc4be88",
+  "research/value-scale-v2-plan.md": "1c1f535b12d917cc56da36e1dde729a3071ae2d7ebafbf19143224480043a0db",
   "service/config.py": "bb5a2463d7b17b6ee9b9b53ba2000f73c3bbd156ca507c726ba9adc45b78f605",
   "service/examples/pbmc240_proteins_raw.tsv": "10bb38331870bf395ef6e646c23cbb85923224bcf32a7d2484695ee8ac83d9c1",
   "service/pipeline/validation.py": "88ad48c21b3ef9dfbc9f1d794164d3242bfb5fb522c221f6862fb62380244eb2",
@@ -45,6 +47,7 @@
   "valuescale/bank/expectations/b7.json": "42ea04b4752ef56297dbe80a67e4f7619df6dda2e6fdbaa12dd053fa94728308",
   "valuescale/bank/expectations/phaseA.json": "b3d13fd81b4316d21d2c6be6d8d2777df07e078dfe86ea9120c3e042fd953954",
   "valuescale/bank/expectations/phaseA2.json": "99f48b51708369ce2fcfef0ff8640a9d212964349542459cafab5d5f0531cd3d",
+  "valuescale/bank/expectations/r1.json": "f76d609cae8912612e8c5a4d6fab4d7c3a101b92126926a7a71d22ff5b738ff8",
   "valuescale/bank/expectations/step1.json": "471bdfe345fce165339a1351a96f0128c5b582eb4fc7d29f0ddb5a833793db6f",
   "valuescale/bank/expectations/zscore.json": "9a1c70ec43475f4d89b6f0b1d59b338146d85daa88f017230a577189836becd8",
   "valuescale/calibration/protein-v1.json": "399812d2cdf52cb2ddfd47abe5c335769ff0a49fdfd6f97c7d0fbd61e23aabd0",
@@ -1115,6 +1118,90 @@
    "basis": "research/notebook-outputs/value_scale_step1/report.json: D1 pxd064083_t > median_nonzero",
    "format": "integer"
   },
+  "rl_r1_bank": {
+   "value": 37,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: bank",
+   "format": "count"
+  },
+  "rl_r1_bank_linear": {
+   "value": 28,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: bank, labelled linear",
+   "format": "count"
+  },
+  "rl_r1_bank_linear_fired": {
+   "value": 0,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: bank, labelled linear, the flag's rule fires",
+   "format": "count"
+  },
+  "rl_r1_bank_log": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: bank, labelled log",
+   "format": "count"
+  },
+  "rl_r1_bank_log_fired": {
+   "value": 9,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: bank, labelled log, the flag's rule fires",
+   "format": "count"
+  },
+  "rl_r1_ceiling": {
+   "value": 64,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: log_ceiling",
+   "format": "count"
+  },
+  "rl_r1_empty": {
+   "value": 2,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: corpus > empty",
+   "format": "count"
+  },
+  "rl_r1_flag_max": {
+   "value": 26.7629,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: corpus > flagged > PXD066316 > max",
+   "format": "fixed2"
+  },
+  "rl_r1_flag_median": {
+   "value": 15.0249,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: corpus > flagged > PXD066316 > median",
+   "format": "fixed2"
+  },
+  "rl_r1_flag_min": {
+   "value": 7.96281,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: corpus > flagged > PXD066316 > min",
+   "format": "fixed2"
+  },
+  "rl_r1_flagged": {
+   "value": 1,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: corpus > flagged",
+   "format": "count"
+  },
+  "rl_r1_kept": {
+   "value": 457,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: corpus > kept",
+   "format": "count"
+  },
+  "rl_r1_rows": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: results judged (R1_bank_linear is recorded only)",
+   "format": "count"
+  },
+  "rl_r1_rows_pass": {
+   "value": 7,
+   "status": "measured",
+   "basis": "research/notebook-outputs/value_scale_r1/report.json: results passed",
+   "format": "count"
+  },
   "rl_s1_hi": {
    "value": 49,
    "status": "measured",
@@ -1494,7 +1581,19 @@
    "expectations": null,
    "notes": "research/value-scale-v2-plan.md",
    "dates": [
-    "2026-11-09"
+    "2026-11-09",
+    "2026-11-10"
+   ]
+  },
+  "r1": {
+   "report": "research/notebook-outputs/value_scale_r1/report.json",
+   "expectations": "valuescale/bank/expectations/r1.json",
+   "notes": "research/notebook-outputs/value_scale_r1/notes.md",
+   "run": "2026-11-10",
+   "expected": "2026-11-10",
+   "dates": [
+    "2026-11-09",
+    "2026-11-10"
    ]
   }
  },
