@@ -98,7 +98,7 @@ def bank_part() -> list[dict]:
 def run_tests() -> dict:
     out = {}
     for row, command in TESTS.items():
-        done = subprocess.run(command, cwd=REPO, capture_output=True, text=True)
+        done = subprocess.run(command, cwd=REPO, capture_output=True, encoding="utf-8", errors="replace")  # node writes UTF-8
         tail = (done.stdout + done.stderr).strip().splitlines()[-8:]
         out[row] = {"command": " ".join(Path(c).name if c == sys.executable else c for c in command),
                     "exit": done.returncode, "tail": tail}
