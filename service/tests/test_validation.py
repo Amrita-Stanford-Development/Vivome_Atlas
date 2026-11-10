@@ -62,5 +62,41 @@ class ValidateCellCountTests(unittest.TestCase):
         self.assertFalse(warnings.low_cell_count)
 
 
+class ValidateValuesTests(unittest.TestCase):
+    """A table with no observed value is refused in words (R1 of protein v2,
+    research/value-scale-v2-plan.md): before, it was answered with every cell
+    left without an answer, or, a table of 0s under the median rule, with a
+    label for every cell."""
+
+    def _filled(self, *entries):
+        import numpy as np
+        cells = [f"c{i}" for i in range(25)]
+        values = np.resize(np.array(entries, dtype=float), (3, len(cells)))
+        return alignment.RawMatrix(gene_names=["A1BG", "TP53", "EGFR"], cell_ids=cells, values=values)
+
+    def test_every_entry_empty_or_0_is_refused_saying_why(self):
+        import numpy as np
+        for entries in ((np.nan,), (0.0,), (np.nan, 0.0), (np.inf, -np.inf, 0.0)):
+            with self.assertRaises(validation.ValidationError) as caught:
+                validation.validate_values(self._filled(*entries))
+            self.assertEqual(str(caught.exception), validation.NO_VALUES)
+        self.assertIn("empty or 0", validation.NO_VALUES)
+
+    def test_one_observed_value_is_enough_and_a_negative_one_counts(self):
+        import numpy as np
+        validation.validate_values(self._filled(np.nan, 0.0, 0.0, 7.5))
+        validation.validate_values(self._filled(np.nan, -1.2))
+
+    def test_validate_refuses_it_after_the_cell_count(self):
+        import numpy as np
+        with self.assertRaises(validation.ValidationError) as caught:
+            validation.validate(self._filled(np.nan), _tiny_map())
+        self.assertEqual(str(caught.exception), validation.NO_VALUES)
+        few = alignment.RawMatrix(gene_names=["A1BG"], cell_ids=["c1", "c2"], values=np.full((1, 2), np.nan))
+        with self.assertRaises(validation.ValidationError) as caught:
+            validation.validate(few, _tiny_map())
+        self.assertIn("at least 20", str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -35,7 +35,7 @@
   "research/value-scale-v2-plan.md": "9e7bbd19bc17be0f592b6701dd851a0e93b312ef9160f1ec36d8a509adc4be88",
   "service/config.py": "bb5a2463d7b17b6ee9b9b53ba2000f73c3bbd156ca507c726ba9adc45b78f605",
   "service/examples/pbmc240_proteins_raw.tsv": "10bb38331870bf395ef6e646c23cbb85923224bcf32a7d2484695ee8ac83d9c1",
-  "service/pipeline/validation.py": "09fb2a9e894d0347445aad74423561512e8fdd5f5b146f2d38e62f9faf281c00",
+  "service/pipeline/validation.py": "88ad48c21b3ef9dfbc9f1d794164d3242bfb5fb522c221f6862fb62380244eb2",
   "valuescale/bank/expectations/b1.json": "e3898c9f3ee89bb503a847868d4639cf3f88aebe8f0cff1151bddb1bf21263db",
   "valuescale/bank/expectations/b2.json": "d98402e46d1b24373a828121cf6bd1a6fcf85900570a05508a6b88a0900ade41",
   "valuescale/bank/expectations/b3.json": "509aa8357c9e1e72576b143972a2cd1bda7105e258ad956bb3e9b5b0ca3b1e96",

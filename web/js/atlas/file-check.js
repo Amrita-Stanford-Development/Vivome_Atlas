@@ -367,10 +367,16 @@ function limitValue(limit) {
 const MB = 1024 * 1024;
 const FORM_ROOM = 64 * 1024;
 const SPLIT_ADVICE = 'Split the cells at random into smaller files, so each is still a mix of cell types.';
+// The service's refusal of a table with no observed value, in its words
+// (service/pipeline/validation.py, NO_VALUES; R1 of protein v2).
+export const NO_VALUES = 'Every value in the table is empty or 0, so there is nothing to label: check that the file '
+  + 'holds the measured values, one row per protein or gene and one column per cell.';
 
 // Whether a checked file fits the service: at most max_cells cells and
 // max_upload_mb megabytes, at least min_cells cells (service/config.py,
-// service/pipeline/validation.py). Each problem is one plain sentence.
+// service/pipeline/validation.py), and at least one value that is neither
+// empty nor 0 (validation.py, validate_values). Each problem is one plain
+// sentence.
 export function checkLimits(check, limits = {}) {
   const problems = [];
   const maxCells = limitValue(limits?.max_cells);
@@ -390,5 +396,7 @@ export function checkLimits(check, limits = {}) {
     const close = check.size <= maxMb * MB ? ', and the form around the file needs a little room' : '';
     problems.push(`The file is ${(check.size / MB).toFixed(1)} MB; the service takes at most ${formatCount(maxMb)} MB per upload${close}. ${SPLIT_ADVICE}`);
   }
+  const values = check?.values;
+  if (values?.entries > 0 && values.empty + values.zeros >= values.entries) problems.push(NO_VALUES);
   return { ok: problems.length === 0, problems };
 }

@@ -13,7 +13,7 @@ from unittest.mock import patch
 import numpy as np
 
 from service import app, config
-from service.pipeline import alignment, coordinates, pipeline, reference
+from service.pipeline import alignment, coordinates, pipeline, reference, validation
 from service.tests import fixtures
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
@@ -319,6 +319,22 @@ class ProjectionHandlerHttpTests(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertIn("'Description'", payload["error"])
         self.assertIn("MaxQuant proteinGroups.txt", payload["error"])
+
+    def test_a_table_with_no_observed_value_is_400_saying_why(self):
+        """R1 of protein v2: every entry empty, or every entry 0, was answered
+        200, with no answer for any cell, or under the median rule with a
+        label for every cell."""
+        feature_genes = self._install_synthetic_bundle()
+        cells = [f"c{i}" for i in range(25)]
+        for entry in (b"", b"NA", b"0"):
+            matrix = b"gene," + ",".join(cells).encode() + b"\n" + b"".join(
+                g.encode() + b"," + b",".join([entry] * len(cells)) + b"\n" for g in feature_genes[:100])
+            for method in config.VALUE_SCALE_METHODS:
+                for modality in (b"prot", b"rna"):
+                    with alignment.scale_method(method):
+                        status, payload = _post_multipart(f"{self.base_url}/api/project", modality, matrix)
+                    self.assertEqual((status, payload), (400, {"error": validation.NO_VALUES}),
+                                     (entry, method, modality))
 
     def test_a_malformed_restriction_option_is_400(self):
         status, payload = _post_multipart(f"{self.base_url}/api/project", b"prot", b"gene,c1\nA1BG,1.0\n",

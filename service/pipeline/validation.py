@@ -5,16 +5,21 @@ that's ambiguous or too small rather than silently guessing at it or
 scoring something meaningless. Value-scale detection already exists from
 A2 (`alignment.detect_and_transform_value_scale`) — this module does not
 duplicate it, only orientation and cell-count checks, which are genuinely
-new.
+new, and the refusal of a table with no observed value (R1 of protein v2,
+research/value-scale-v2-plan.md).
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 
+import numpy as np
+
 from service.pipeline import alignment, gene_ids
 
 MIN_CELLS_REFUSE = 20
 MIN_CELLS_WARN = 100
+NO_VALUES = ("every value in the table is empty or 0, so there is nothing to label: check that the file holds "
+             "the measured values, one row per protein or gene and one column per cell")
 
 
 class ValidationError(ValueError):
@@ -69,9 +74,24 @@ def validate_cell_count(raw: alignment.RawMatrix) -> ValidationWarnings:
     return ValidationWarnings(low_cell_count=n_cells < MIN_CELLS_WARN)
 
 
+def validate_values(raw: alignment.RawMatrix) -> None:
+    """Refuses a table with no observed value: every entry empty, infinite
+    or 0. In protein a 0 is "not detected"; a table of 0s read as log is
+    one constant; in RNA every count is 0. Either way no cell has anything
+    to place, and the answer was every cell without a label, or under the
+    median rule a table of 0s read as log and a label for every cell. One
+    observed value, negative or not, is enough to pass."""
+    values = np.asarray(raw.values)
+    if not (np.isfinite(values) & (values != 0)).any():
+        raise ValidationError(NO_VALUES)
+
+
 def validate(raw: alignment.RawMatrix, gene_map: gene_ids.GeneIdMap | None = None) -> ValidationWarnings:
     """The one call site wires: orientation first (a wrong-orientation
     upload makes the cell count meaningless too, since "cells" would
-    actually be genes), then cell count."""
+    actually be genes), then cell count, then whether any value is
+    observed."""
     validate_orientation(raw, gene_map)
-    return validate_cell_count(raw)
+    warnings = validate_cell_count(raw)
+    validate_values(raw)
+    return warnings

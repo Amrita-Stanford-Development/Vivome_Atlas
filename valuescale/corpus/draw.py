@@ -10,7 +10,11 @@ For each deposit, in the frame's order:
    MaxQuant search) is unparseable without it, in the parser's own words;
 5. fetch it, with its size and sha256 (fetch failed);
 6. parse it (unparseable), then at least 20 columns and 200 rows;
-7. label it (tables.label; unclear label).
+7. a table that holds no observed value is empty (R1 of protein v2);
+8. label it (tables.label; unclear label);
+9. a kept table labelled linear whose observed values look log (99% of
+   them under LOG_CEILING) carries looks_log, its value range, and goes to
+   the hand audit (R1). Its label stands, and nothing is refused for it.
 
 Each deposit's outcome is one line of the walk's log, written in the frame's
 order whatever finishes first, so a stopped walk resumes where it stopped.
@@ -24,7 +28,13 @@ as revisited_from, an earlier visit and its reasons nested inside.
 
 The network and the parser come in as Tools, so the walk is tested without
 either; research/notebooks/value_scale_corpus.py supplies the real ones.
-No statistic of a table's values is computed here.
+No detector statistic of a table's values is computed here. Three facts of
+its values are read, none of them a reading of its scale from its shape:
+whether any is observed (empty), the label's refusal of a negative value
+(tables.label), and a linear table's value range with its 99th percentile
+(looks_log), which sends it to the audit and changes nothing else. An
+observed value is finite and not 0: a protein table writes "not detected"
+as 0 or leaves it empty (research/value-scale-v2-plan.md, R1).
 """
 from __future__ import annotations
 
@@ -44,6 +54,8 @@ LIMIT = 10_000
 MIN_COLUMNS, MIN_ROWS = 20, 200
 SPLITS = ("calibration", "test")
 LOOKAHEAD = 64  # deposits in flight per worker: a report that takes 20 minutes must not hold up the rest
+LOG_CEILING = 64.0  # 2**6: the 99th percentile of a log2 table's values is well under it, a linear table's far above
+LOOK_LOG_QUANTILE = 0.99
 
 
 class Parsed(NamedTuple):
@@ -61,6 +73,38 @@ class Tools(NamedTuple):
     parse: Callable  # (Candidate, local path) -> Parsed
     header: Callable  # (Entry) -> a wide table's header fields, or None
     refuse: Callable | None = None  # (Candidate, header) -> raises where the parser refuses the header itself
+
+
+def _observed(values: np.ndarray) -> np.ndarray:
+    v = np.asarray(values, dtype=np.float64)
+    return v[np.isfinite(v) & (v != 0)]
+
+
+def empty(values: np.ndarray) -> bool:
+    """No observed value: every entry missing, infinite or 0. Such a table
+    says nothing about its scale (B7's PXD022054 and PXD047898)."""
+    return _observed(values).size == 0
+
+
+def _figure(x) -> float:
+    return float(f"{float(x):.6g}")
+
+
+def looks_log(values: np.ndarray) -> dict | None:
+    """The observed values' range (smallest, median, 99th percentile,
+    largest) when 99% of them are under LOG_CEILING, else None. Read only of
+    a table labelled linear: there it means the label may be wrong (B7's
+    PXD066316, log2 values under a linear label), or the table is a
+    small-scale linear one, like PXD064083's (median about 7), which the
+    audit keeps."""
+    observed = _observed(values)
+    if not observed.size:
+        return None
+    p99 = np.quantile(observed, LOOK_LOG_QUANTILE)
+    if not p99 < LOG_CEILING:
+        return None
+    return {"min": _figure(observed.min()), "median": _figure(np.median(observed)), "p99": _figure(p99),
+            "max": _figure(observed.max())}
 
 
 def _short(exc: BaseException) -> str:
@@ -126,10 +170,14 @@ def visit(accession: str, repo: str, split: str, tools: Tools, root: Path) -> di
         return {**out, "outcome": "too few columns"}
     if rows < MIN_ROWS:
         return {**out, "outcome": "too few rows"}
+    if empty(parsed.values):
+        return {**out, "outcome": "empty"}
     lab, quote = tables.label(cand.kind, parsed.cells, parsed.values, parsed.tmt_integrator)
     if lab == "unclear":
         return {**out, "outcome": "unclear label", "detail": quote}
-    return {**out, "outcome": "kept", "label": lab, "quote": quote, "strata": strata_reached(columns)}
+    flag = looks_log(parsed.values) if lab == "linear" else None
+    return {**out, "outcome": "kept", "label": lab, "quote": quote, "strata": strata_reached(columns),
+            **({"looks_log": flag} if flag else {})}
 
 
 def quotas(records) -> dict:

@@ -469,12 +469,16 @@ def _records() -> list[dict]:
 
 def audit_sample(records) -> dict:
     """A seeded 20% of each split's labelled deposits, drawn in the frame's
-    order by sha256("20261103:audit:" + accession)."""
+    order by sha256("20261103:audit:" + accession), and every one the walk
+    flagged as linear with values that look log (draw.looks_log; R1 of
+    protein v2). B3's walk flagged none: the flag came after it."""
     out = {}
     for split in draw.SPLITS:
-        labelled = sorted((r["accession"] for r in records if r["outcome"] == "kept" and r["split"] == split),
+        kept = [r for r in records if r["outcome"] == "kept" and r["split"] == split]
+        labelled = sorted((r["accession"] for r in kept),
                           key=lambda a: hashlib.sha256(f"20261103:audit:{a}".encode()).hexdigest())
-        out[split] = sorted(labelled[:max(1, round(AUDIT_SHARE * len(labelled)))]) if labelled else []
+        seeded = labelled[:max(1, round(AUDIT_SHARE * len(labelled)))] if labelled else []
+        out[split] = sorted(set(seeded) | {r["accession"] for r in kept if r.get("looks_log")})
     return out
 
 
@@ -616,10 +620,44 @@ def _methods(r: dict, record: dict) -> str:
     return "\n\n".join([*found, *desc])[:20000]
 
 
+def _values_section(r: dict) -> str | None:
+    """A flagged table's value range (draw.looks_log), for the auditor to
+    weigh against its provenance; None for any other table, whose packet
+    shows no value."""
+    v = r.get("looks_log")
+    if not v:
+        return None
+    return (f"## The values (flagged: 99% of the observed values are under {draw.LOG_CEILING:g})\n\n"
+            f"Smallest {v['min']:g}, median {v['median']:g}, 99th percentile {v['p99']:g}, largest {v['max']:g} "
+            "(an observed value is finite and not 0).\n\n"
+            "Log2 intensities lie in about this range; raw ones mostly far above it, though a small-scale linear "
+            "table can lie in it too. Keep the label when the provenance says linear, relabel the table when the "
+            "provenance says log, or exclude it when the provenance cannot tell.")
+
+
+def _packet(r: dict, split: str, header: list, notes: list, names: list, methods: str) -> str:
+    """One deposit's packet: its label, the table's place in the deposit, the
+    table's column names, its Perseus rows, a flagged table's value range,
+    the deposit's file names, and its methods text."""
+    text = [f"# {r['accession']} ({split}, {r['repo']})", "",
+            f"Label by script: **{r['label']}** ({r['software']}, {r['kind']}, layout {r['layout']}).",
+            f"Table: `{r['file']}`" + (f", member `{r['member']}`" if r.get("member") else "")
+            + f"; {r['columns']} columns, {r['rows']} rows"
+            + (f"; value column {r['quantity']}." if r.get("quantity") else "."), "",
+            _columns_section(r["kind"], r["layout"], header), "",
+            f"## Annotation rows under the header ({len(notes)})", "",
+            "\n".join(n[:300] for n in notes) or "none", ""]
+    values = _values_section(r)
+    if values:
+        text += [values, ""]
+    text += [_files_section(names), "", "## Methods", "", methods]
+    return "\n".join(text) + "\n"
+
+
 def cmd_audit_packets(args) -> int:
-    """For each sampled deposit: its label, the table's place in the deposit,
-    the table's column names (never its values), the deposit's file names,
-    and its methods text. Written to data/incoming/value-scale-corpus/audit/."""
+    """For each sampled deposit, its packet (_packet): the table's column
+    names, never its values, but for a table the walk flagged, whose value
+    range is shown. Written to data/incoming/value-scale-corpus/audit/."""
     records = {r["accession"]: r for r in _records()}
     record = frame.load()
     audit = json.loads(AUDIT.read_text(encoding="utf-8"))
@@ -634,17 +672,7 @@ def cmd_audit_packets(args) -> int:
             r = records[acc]
             header, notes = _header_lines(_local_table(r))
             names = sorted(f.path for f in tools.list_files(acc, r["repo"]))
-            text = [f"# {acc} ({split}, {r['repo']})", "",
-                    f"Label by script: **{r['label']}** ({r['software']}, {r['kind']}, layout {r['layout']}).",
-                    f"Table: `{r['file']}`" + (f", member `{r['member']}`" if r.get("member") else "")
-                    + f"; {r['columns']} columns, {r['rows']} rows"
-                    + (f"; value column {r['quantity']}." if r.get("quantity") else "."), "",
-                    _columns_section(r["kind"], r["layout"], header), "",
-                    f"## Annotation rows under the header ({len(notes)})", "",
-                    "\n".join(n[:300] for n in notes) or "none", "",
-                    _files_section(names), "",
-                    "## Methods", "", _methods(r, record)]
-            path.write_bytes(("\n".join(text) + "\n").encode("utf-8"))
+            path.write_bytes(_packet(r, split, header, notes, names, _methods(r, record)).encode("utf-8"))
             print(f"  {acc}", flush=True)
     return 0
 

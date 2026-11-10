@@ -6,9 +6,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
-  DIANN_ANNOTATIONS, HEADER_BYTES, HEADER_LIMIT_BYTES, MAXQUANT_IDS, SPECTRONAUT_IDS, checkFile, checkLimits,
+  DIANN_ANNOTATIONS, HEADER_BYTES, HEADER_LIMIT_BYTES, MAXQUANT_IDS, NO_VALUES, SPECTRONAUT_IDS, checkFile, checkLimits,
   countNonEmptyLines, parseHeader, readHeaderLine, splitFields, valueFactsText,
 } from '../js/atlas/file-check.js';
+import { asksScale } from '../js/atlas/scale-question.js';
 
 const workflow = JSON.parse(readFileSync(new URL('../data/workflow.json', import.meta.url), 'utf8'));
 const blob = (text) => new Blob([text]);
@@ -252,6 +253,33 @@ test('the limits, as numbers or as the workflow data records them', () => {
   assert.deepEqual(checkLimits({ cells: 99999, size: 1e12 }, null), { ok: true, problems: [] });
   const pending = { max_cells: { value: null, status: 'pending' }, min_cells: { value: 20, status: 'measured' } };
   assert.deepEqual(checkLimits({ cells: 99999, size: 1 }, pending), { ok: true, problems: [] });
+});
+
+test('a file with no observed value is turned down before it is sent, in the service\'s words', async () => {
+  // R1 of protein v2 (research/value-scale-v2-plan.md): the check passed such
+  // a file, a protein one was asked raw or log, and the service answered 200.
+  const cells = Array.from({ length: 25 }, (_, i) => `c${i}`);
+  const file = (entries) => blob(`gene,${cells.join(',')}\n${['A1BG', 'TP53', 'EGFR']
+    .map((g, row) => [g, ...cells.map((_, i) => entries[(row * cells.length + i) % entries.length])].join(','))
+    .join('\n')}\n`);
+  for (const entries of [[''], ['NA'], ['0'], ['NaN', '0', '']]) {
+    const check = await checkFile(file(entries));
+    const verdict = checkLimits(check, { min_cells: 20 });
+    assert.deepEqual(verdict, { ok: false, problems: [NO_VALUES] }, entries.join('|'));
+    assert.equal(asksScale({ modality: 'prot', check: { ...check, ...verdict } }), false, 'no question about its values');
+  }
+  // One observed value, negative or not, is enough.
+  for (const one of ['7.5', '-1.2']) {
+    const check = await checkFile(file(['', '0', ...Array(70).fill(''), one]));
+    assert.deepEqual(checkLimits(check, { min_cells: 20 }), { ok: true, problems: [] }, one);
+  }
+  // A check that could not read the values does not turn the file down.
+  assert.deepEqual(checkLimits({ cells: 25, size: 10, values: null }, { min_cells: 20 }), { ok: true, problems: [] });
+  // The service's sentence (service/pipeline/validation.py), as a sentence.
+  const py = readFileSync(new URL('../../service/pipeline/validation.py', import.meta.url), 'utf8');
+  const said = [...py.match(/^NO_VALUES = \(([\s\S]*?)\)$/m)[1].matchAll(/"([^"]*)"/g)].map((m) => m[1]).join('');
+  assert.equal(NO_VALUES, `${said[0].toUpperCase()}${said.slice(1)}.`);
+  assert.ok(!NO_VALUES.includes('\u2014'));
 });
 
 test('a table written by R without the corner field counts every header field as a cell, as the service reads it', async () => {

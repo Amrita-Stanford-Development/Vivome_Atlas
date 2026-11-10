@@ -112,6 +112,70 @@ class VisitTests(unittest.TestCase):
         with self.assertRaises(Exception):
             self.visit("PXD042367")
 
+    def _with_values(self, values, names=None):
+        names = names or [f"s{i}" for i in range(values.shape[1])]
+        return _tools()._replace(parse=lambda cand, path: draw.Parsed(names, values))
+
+    def test_a_table_with_no_value_but_0_or_missing_is_empty(self):
+        """R1 (research/value-scale-v2-plan.md): B7's test held two such tables,
+        PXD022054 and PXD047898, kept and labelled linear."""
+        for fill in (np.nan, 0.0, np.inf):
+            values = np.full((300, 40), fill)
+            values[::3] = np.nan
+            r = self.visit("PXD000013", self._with_values(values))
+            self.assertEqual((r["outcome"], r["columns"], r["rows"]), ("empty", 40, 300), fill)
+            self.assertNotIn("label", r)
+
+    def test_an_empty_table_too_small_for_the_walk_keeps_its_size_outcome(self):
+        self.assertEqual(self.visit("PXD000013", self._with_values(np.full((150, 40), np.nan)))["outcome"],
+                         "too few rows")
+        self.assertEqual(self.visit("PXD000013", self._with_values(np.full((300, 12), np.nan)))["outcome"],
+                         "too few columns")
+
+    def test_one_observed_value_is_enough_and_a_negative_one_counts(self):
+        values = np.full((300, 40), np.nan)
+        values[5, 7] = 1000.0
+        self.assertEqual(self.visit("PXD000013", self._with_values(values))["outcome"], "kept")
+        values[5, 7] = -1.0
+        self.assertEqual(self.visit("PXD000013", self._with_values(values))["outcome"], "unclear label")
+
+    def test_a_kept_linear_table_whose_values_look_log_carries_its_range(self):
+        """PXD066316, a Spectronaut table labelled linear, held log2 values
+        (7.96 to 26.76): it goes to the hand audit with its range."""
+        values = np.tile(np.linspace(8.0, 27.0, 300)[:, None], (1, 40))
+        values[0, 0] = np.nan
+        values[1, 1] = 0.0
+        r = self.visit("PXD000013", self._with_values(values))
+        self.assertEqual((r["outcome"], r["label"]), ("kept", "linear"))
+        observed = values[np.isfinite(values) & (values != 0)]
+        self.assertEqual(r["looks_log"], {"min": 8.0, "median": float(f"{np.median(observed):.6g}"),
+                                          "p99": float(f"{np.quantile(observed, 0.99):.6g}"), "max": 27.0})
+        json.dumps(r, allow_nan=False)
+
+    def test_a_linear_table_with_99_percent_under_64_is_flagged_and_at_64_is_not(self):
+        under = np.full((300, 40), 10.0)
+        under[:2] = 1e6  # 80 of 12,000 values: under 1%
+        self.assertIn("looks_log", self.visit("PXD000013", self._with_values(under)))
+        at = np.full((300, 40), 64.0)
+        self.assertNotIn("looks_log", self.visit("PXD000013", self._with_values(at)))
+        raw = np.full((300, 40), 10.0)
+        raw[:4] = 1e6  # 160 of 12,000: over 1%
+        self.assertNotIn("looks_log", self.visit("PXD000013", self._with_values(raw)))
+
+    def test_a_table_labelled_log_is_not_flagged(self):
+        values = np.full((300, 40), 20.0)
+        r = self.visit("PXD000013", self._with_values(values, [f"log2 LFQ intensity s{i}" for i in range(40)]))
+        self.assertEqual((r["outcome"], r["label"]), ("kept", "log"))
+        self.assertNotIn("looks_log", r)
+
+    def test_the_checks_read_observed_values_only(self):
+        values = np.full((300, 40), 5.0)
+        self.assertTrue(draw.empty(np.array([[np.nan, 0.0], [np.inf, -np.inf]])))
+        self.assertFalse(draw.empty(np.array([[np.nan, -2.0]])))
+        self.assertIsNone(draw.looks_log(np.full((3, 3), np.nan)))
+        self.assertEqual(draw.looks_log(values)["p99"], 5.0)
+        self.assertEqual(draw.LOG_CEILING, 64.0)
+
 
 class WalkTests(unittest.TestCase):
     def setUp(self):
@@ -581,6 +645,54 @@ class AuditPacketTests(unittest.TestCase):
         long = runner._columns_section("diann_report", "long", ["Run", "Protein.Group", "PG.MaxLFQ", "PG.Quantity"])
         self.assertIn("PG.MaxLFQ", long)
         self.assertIn("runs are rows", long)
+
+
+def _runner():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("value_scale_corpus", REPO / "research/notebooks/value_scale_corpus.py")
+    runner = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(runner)
+    return runner
+
+
+class LooksLogAuditTests(unittest.TestCase):
+    """R1: a table labelled linear whose values look log goes to the hand
+    audit, and its packet shows its value range beside its headers."""
+
+    def test_the_audit_sample_takes_every_flagged_table_besides_its_seeded_share(self):
+        runner = _runner()
+        records = [{"accession": f"PXD{i:06d}", "split": "calibration" if i % 2 else "test", "outcome": "kept",
+                    "label": "linear"} for i in range(40)]
+        records.append({"accession": "PXD999999", "split": "test", "outcome": "unclear label"})
+        plain = runner.audit_sample(records)
+        outside = [r for r in records if r["outcome"] == "kept" and r["accession"] not in plain[r["split"]]]
+        for r in outside[:3]:
+            r["looks_log"] = {"min": 8.0, "median": 15.0, "p99": 21.8, "max": 26.8}
+        flagged = runner.audit_sample(records)
+        for split in draw.SPLITS:
+            want = sorted(set(plain[split]) | {r["accession"] for r in outside[:3] if r["split"] == split})
+            self.assertEqual(flagged[split], want)
+
+    def test_a_flagged_tables_packet_shows_its_range_and_an_unflagged_ones_no_value(self):
+        runner = _runner()
+        r = {"accession": "PXD066316", "repo": "PRIDE", "label": "linear", "software": "Spectronaut",
+             "kind": "spectronaut", "layout": "spectronaut_pivot", "file": "Report_proteingroups.txt", "member": None,
+             "columns": 27, "rows": 5842, "quantity": None}
+        header = ["PG.ProteinGroups"] + [f"[{i}] run{i}.raw.PG.Quantity" for i in range(27)]
+        plain = runner._packet(r, "test", header, [], ["Report_proteingroups.txt"], "Methods text.")
+        flagged = runner._packet({**r, "looks_log": {"min": 7.96281, "median": 15.0249, "p99": 21.7527,
+                                                     "max": 26.7629}}, "test", header, [], ["Report_proteingroups.txt"],
+                                 "Methods text.")
+        self.assertNotIn("## The values", plain)
+        self.assertNotIn("21.7527", plain)
+        self.assertIn("## The values", flagged)
+        for number in ("7.96281", "15.0249", "21.7527", "26.7629"):
+            self.assertIn(number, flagged)
+        self.assertIn("under 64", flagged)
+        self.assertLess(flagged.index("## Value columns"), flagged.index("## The values"))
+        self.assertLess(flagged.index("## The values"), flagged.index("## Methods"))
+        self.assertTrue(plain.startswith("# PXD066316 (test, PRIDE)"))
+        self.assertIn("Methods text.", plain)
 
 
 class NoStatisticTests(unittest.TestCase):
