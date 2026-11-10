@@ -22,6 +22,7 @@ From the repository root, with the vivome environment.
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import time
@@ -158,7 +159,8 @@ def markdown(payload: dict) -> str:
                      f"{'fires' if f else 'does not fire'} | " + " | ".join(cells) + " |")
     lines += ["", "## The step's tests", ""]
     for row, t in payload["tests"].items():
-        lines += [f"- {row}: `{t['command']}`, exit {t['exit']}; " + (t["tail"][-1] if t["tail"] else "")]
+        said = [x.strip() for x in t["tail"] if re.match(r"\s*(Ran \d+ tests?|OK|FAILED|ℹ (tests|pass|fail) \d+)", x)]
+        lines += [f"- {row}: `{t['command']}`, exit {t['exit']}; " + "; ".join(said)]
     return "\n".join(lines) + "\n"
 
 
